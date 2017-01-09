@@ -18,11 +18,12 @@ The plugin comes from Stock Management Labs, creators that have combined over 25
 
 While preparing for the development stage, the team has tested and tried several inventory management products and plugins. We can now say with full confidence that the complete ATUM product will be unrivalled in every category. 
 
-= Available Features =
+= AVAILABLE FEATURES =
   
 
 **See everything in one place**
-
+	
+	
 Our ground-breaking Stock Central will let the user see every "simple" product and every important detail of the company's "simple" product range. The free version of the Stock Central includes:
 
 * All items on one screen with a smooth mouse wheel or touchpad scrolling.
@@ -52,7 +53,7 @@ Our ground-breaking Stock Central will let the user see every "simple" product a
 
 Currently, we don't include variable products in the free version of the ATUM plugin. Our premium users will have an advanced control of the whole product hierarchy of WooCommerce. 
 
-= Premium Features =
+= PREMIUM FEATURES =
   
 
 **Advanced Stock Management**
@@ -85,10 +86,11 @@ To fill the uncomfortable stock loss and organise the outside factors ATUM is eq
 * Complete multiple warehouse damage or stock movement recordings with an automatic inventory editing.
 * Control your logistic partners and record any "lost in post" products.
 
-= PRO Features =
+= PRO FEATURES =
   
 
 **An Ultimate WooCommerce Companion**
+	
 Our PRO version of ATUM will be a must for any serious business running their shops using the all-around excellent WooCommerce plugin. The complete inventory management on all levels, multiple stock managers or warehouse workers with full restriction controls, customizable reporting and graphical overview, simple and very comfortable stock taking, crucial stock forecasting for any business size and all this connected directly to our great stock central.
 
 **IMPORTANT! - All our PRO users will receive any individual plugins or features that we build for ATUM completely FREE of charge and without any restrictions. When we say that the PRO ATUM plugin is limitless, we mean it!**
