@@ -160,7 +160,7 @@ Our team is still working on the launch of the main site, but you can get hold o
 
 = Is the ATUM plugin available in different languages? =
 
-At present the only language available is English, but we are planning several translations. If you are interested on working with us and translate the plugin to your language, don't hesitate and do it here. We are offering a lifetime PRO subscription to every translator.
+At present the only language available is English, but we are planning several translations. If you are interested on working with us and translate the plugin to your language, don't hesitate and do it [here](https://github.com/StockManagementLabs/atum-stock-manager-for-woocommerce "GitHub"). We are offering a lifetime PRO subscription to every translator.
 
 == Screenshots ==
 
