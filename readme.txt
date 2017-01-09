@@ -188,4 +188,7 @@ At present the only language available is English, but we are planning several t
 = 1.0.2 =
 * Updated readme.txt
 
+= 1.0.3 =
+* Bug fixes
+
 
