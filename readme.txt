@@ -4,7 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ The plugin comes from Stock Management Labs, creators that have combined over 25
 While preparing for the development stage, the team has tested and tried several inventory management products and plugins. We can now say with full confidence that the complete ATUM product will be unrivalled in every category. 
 
 = Available Features =
+
 
 **See everything in one place**
 Our ground-breaking Stock Central will let the user see every "simple" product and every important detail of the company's "simple" product range. The free version of the Stock Central includes:
@@ -45,14 +46,16 @@ Our ground-breaking Stock Central will let the user see every "simple" product a
 
 * EOQ - Economic Order Quantity Calculator (in development) - In corporate finance, economic order quantity (EOQ) is the order quantity that minimizes the total holding costs and ordering costs. It is one of the oldest classical production scheduling models.
 * Web-Based Invoice Generator (in development) - complete invoice customization, direct sending and without any monthly limits. Also, all your invoices are saved securely in one place.
-* Ground-Breaking Mobile Application for iOS, Android and Windows phones. (in development) � Smooth connection to your ATUM Stock Central, Easy stock counting options. 
+* Ground-Breaking Mobile Application for iOS, Android and Windows phones. (in development) - Smooth connection to your ATUM Stock Central, Easy stock counting options.
 
 
 Currently, we don't include variable products in the free version of the ATUM plugin. Our premium users will have an advanced control of the whole product hierarchy of WooCommerce. 
 
 = Premium Features =
 
+
 **Advanced Stock Management**
+
 Our Premium users have access to the fully featured ATUM Stock Central. Planned to be released in February 2017 by giving users addition tools to those available in our free version:
 
 * Full Variable, External & Affiliate Products support.
@@ -64,6 +67,7 @@ Our Premium users have access to the fully featured ATUM Stock Central. Planned 
 
 
 **Custom Product Levels**
+
 Manage your product range with ease by implementing our trademark feature of advanced product levels. Are you a distributor, wholesaler or a standard manufacturer, or you sell several product modifications? No need to look any further as ATUM Premium will give you the complete control.
 
 * ATUM's unique family hierarchy - select parent products and create custom relationships between child products and variations.
@@ -72,6 +76,7 @@ Manage your product range with ease by implementing our trademark feature of adv
 
 
 **Stock Logs & Archives**
+
 To fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
 * Create custom product reservations (future needs, VIP reserves, etc.)
@@ -81,12 +86,14 @@ To fill the uncomfortable stock loss and organise the outside factors ATUM is eq
 
 = PRO Features =
 
+
 **An Ultimate WooCommerce Companion**
 Our PRO version of ATUM will be a must for any serious business running their shops using the all-around excellent WooCommerce plugin. The complete inventory management on all levels, multiple stock managers or warehouse workers with full restriction controls, customizable reporting and graphical overview, simple and very comfortable stock taking, crucial stock forecasting for any business size and all this connected directly to our great stock central.
 
 **IMPORTANT! - All our PRO users will receive any individual plugins or features that we build for ATUM completely FREE of charge and without any restrictions. When we say that the PRO ATUM plugin is limitless, we mean it!**
 
 **(confirmed) Upcoming Plugins & Features:**
+
 * Purchase Orders for WooCommerce
 * Amazon Inventory Integration Management
 * eBay Inventory Integration Management
@@ -101,21 +108,25 @@ Use our feature request form [here](http://www.stockmanagementlabs.com "Stock Ma
 == Installation ==
 
 **From your WordPress dashboard**
-1. Visit 'Plugins > Add New'.
-2. Search for 'ATUM Stock Manager for WooCommerce'.
-3. Activate ATUM from your Plugins page.
+
+1.  Visit 'Plugins > Add New'.
+2.  Search for 'ATUM Stock Manager for WooCommerce'.
+3.  Activate ATUM from your Plugins page.
  
 **From WordPress.org**
-1. Download ATUM.
-2. Upload the 'atum' directory to your `/wp-content/plugins/` directory, using your favorite method (FTP, SFTP, SCP, etc).
-3. Activate ATUM from your Plugins page.
+
+1.  Download ATUM.
+2.  Upload the 'atum' directory to your `/wp-content/plugins/` directory, using your favorite method (FTP, SFTP, SCP, etc).
+3.  Activate ATUM from your Plugins page.
 
 **Once Activated**
+
 Open the stock central menu and follow the message at the top of the page or activate the stock control from the 'Settings > Stock Central' menu. You will not see any items in the Stock Central view unless you enable the "Manage Stock" functionality at the product level. ATUM will enable the complete stock management for you. The plugin will remember your original settings in case you decide to deactivate the plugin later. ATUM will ask you if you'd like to return to your original setting at this stage.
 
 If you'd like to see only selected products, leave the ATUM stock control option disabled. You will need to enable/disable the stock control of each product from their product listing page (Inventory Tab).
 
 **Once Configured**
+
 * ATUM was designed to give the user overall control of the full WooCommerce inventory from one screen. Stock Central can be completely configured, and individual columns that are not part of the free version disabled.
 * We have prepared the Stock Central help section that will guide every user through the individual column functionality. 
 * Our team has prepared the preview of confirmed features that will be available in out Premium and PRO version. You can find these by opening any of the inactive menu pages.
