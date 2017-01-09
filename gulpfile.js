@@ -1,0 +1,279 @@
+// Load all the modules from package.json
+var gulp         = require('gulp'),
+    plumber      = require('gulp-plumber'),
+    gulpif       = require('gulp-if'),
+    watch        = require('gulp-watch'),
+    livereload   = require('gulp-livereload'),
+    //jshint       = require('gulp-jshint'),
+    //stylish      = require('jshint-stylish'),
+    //uglify       = require('gulp-uglify'),
+    //rename       = require('gulp-rename'),
+    notify       = require('gulp-notify'),
+    wrap         = require('gulp-wrap'),
+    //include      = require('gulp-include'),
+    sass         = require('gulp-sass'),
+    sourcemaps   = require('gulp-sourcemaps'),
+    imagemin     = require('gulp-imagemin'),
+    zip          = require('gulp-zip'),
+	composer     = require('gulp-composer'),
+	filter       = require('gulp-filter');
+
+// Plugin version
+var version = '1.0.0';
+
+// Global config
+var config = {
+	
+	assetsDir : './assets',
+
+	devUrl    : 'http://stockmanagementlabs.dev',
+	production: false,
+
+	// decorate
+	decorate: {
+
+		templateJS: [
+			'/** \n',
+			' * ATUM Stock Manager for WooCommerce JS \n',
+			' * @version ' + version + ' \n',
+			' * @author Salva Machí and Jose Piera \n',
+			' *\n',
+			' * Author URI: https://sispixels.com/ \n',
+			' * License : (c)2017 Stock Management Labs \n',
+			' */ \n',
+			'\n;(function($) { \n \t\'use strict\';\n\n',
+			'<%= contents %>\n\n',
+			'})(jQuery);\njQuery.noConflict();'
+		].join(''),
+
+		templateCSS: [
+			'/** \n',
+			' * ATUM Stock Manager for WooCommerce CSS \n',
+			' * @version ' + version + ' \n',
+			' * @author Salva Machí and Jose Piera \n',
+			' *\n',
+			' * Author URI: https://sispixels.com/ \n',
+			' * License : (c)2017 Stock Management Labs \n',
+			' */ \n',
+			'\n<%= contents %>\n'
+		].join('')
+
+	}
+};
+
+// CLI options
+var enabled = {
+	// Enable static asset revisioning when `--production`
+	rev: config.production,
+	// Disable source maps when `--production`
+	maps: !config.production,
+	// Fail styles task on error when `--production`
+	failStyleTask: config.production,
+	// Fail due to JSHint warnings only when `--production`
+	failJSHint: config.production,
+	// Strip debug statments from javascript when `--production`
+	stripJSDebug: config.production
+};
+
+
+// Default error handler
+var onError = function (err) {
+	console.log('An error occured:', err.message);
+	this.emit('end');
+}
+
+
+// Jshint outputs any kind of javascript problems you might have
+// Only checks javascript files inside /src directory
+/*gulp.task('jshint', function () {
+	return gulp.src('./js/src/*.js')
+		.pipe(jshint())
+		.pipe(jshint.reporter(stylish))
+		.pipe(jshint.reporter('fail'));
+});*/
+
+
+// Concatenates all JS files and creates two versions: normal and minified.
+// It's dependent on the jshint task to succeed.
+/*gulp.task('scripts', ['jshint'], function () {
+	return gulp.src([
+			'./js/src/scripts.js'
+		])
+		.pipe(include())
+		.pipe(rename({basename: 'scripts'}))
+		.pipe(wrap(config.decorate.templateJS))
+		.pipe(gulp.dest('./js/dist'))
+		// Normal done, time to create the minified javascript (scripts.min.js)
+		// remove the following 3 lines if you don't want it
+		.pipe(uglify())
+		.pipe(rename({suffix: '.min'}))
+		.pipe(gulp.dest('./js/dist'))
+		.pipe(notify({message: 'scripts task complete'}))
+		.pipe(livereload());
+});*/
+
+// As with javascripts this task creates two files, the regular and
+// the minified one. It automatically reloads browser as well.
+var options = {
+
+	sass: {
+		errLogToConsole: !enabled.failStyleTask,
+		outputStyle    : !config.production ? 'expanded' : 'compressed',
+		//precision      : 10,
+		includePaths   : [
+			'.',
+			config.assetsDir + '/scss'
+		]
+		//imagePath: 'assets/img'
+	}
+
+};
+
+//
+// sass tasks
+//---------------
+
+gulp.task('sass', function () {
+
+	var destDir = config.assetsDir + '/css';
+
+	return gulp.src([
+			config.assetsDir + '/scss/*.scss'
+		])
+		.pipe(plumber({errorHandler: onError}))
+		.pipe( gulpif(enabled.maps, sourcemaps.init()) )
+		.pipe(sass(options.sass))
+		.pipe(wrap(config.decorate.templateCSS))
+		.pipe( gulpif(enabled.maps, sourcemaps.write('.', {
+				sourceRoot: 'assets/scss/'
+			}))
+		)
+		.pipe(gulp.dest(destDir))
+		.pipe(notify({message: 'sass task complete'}))
+		.pipe(filter("**/*.css"))
+		.pipe(livereload());
+
+});
+
+//
+// Optimize Images
+// ---------------
+
+gulp.task('images', function () {
+	return gulp.src('./images/**/*')
+		.pipe(imagemin({progressive: true, svgoPlugins: [{removeViewBox: false}]}))
+		.pipe(gulp.dest('./images'))
+		.pipe(notify({message: 'Images task complete'}));
+});
+
+//
+// Composer packages installation
+// ------------------------------
+
+gulp.task('composer::install', function () {
+	// Installation + optimization
+	composer({ cwd: '.', o: true });
+});
+
+gulp.task('composer::update', function () {
+	// Update + optinmization
+	composer('update', {cwd: '.', o: true});
+});
+
+gulp.task('composer::optimize', function () {
+	// Just optimization (classmap autoloader array generation)
+	composer('dumpautoload', {cwd: '.', optimize: true});
+});
+
+//
+// Plugin ZIP packaging
+// -------------------
+
+gulp.task('build::free', ['composer::optimize'], function () {
+	return gulp.src([
+		'/**/*',
+		'!./bower_components/**',
+		'!./node_modules/**',
+		'!./releases/**/*',
+		'!*.map',
+		'!./pro/**',
+		'!./premium/**'
+	])
+		.pipe(gulp.dest('releases/free/' + version + '/'));
+});
+
+gulp.task('zip::free', ['build::free'], function () {
+	return gulp.src('releases/free/' + version + '/')
+		.pipe(zip('atum.zip'))
+		.pipe(gulp.dest('releases/'));
+});
+
+gulp.task( 'buil::zip::free', ['build::free', 'zip::free'] );
+
+gulp.task('zip::premium', function () {
+	return gulp.src([
+		'/**/*',
+		'!bower_components',
+		'!node_modules',
+		'!*.map',
+	    '!pro'
+	], {base: "."})
+		.pipe(composer('dumpautoload', {cwd: '.', optimize: true}))
+		.pipe(zip('atum-pro.zip'))
+		.pipe(gulp.dest('.'));
+});
+
+gulp.task('zip::pro', function () {
+	return gulp.src([
+		'/**/*',
+		'!bower_components',
+		'!node_modules',
+		'!*.map'
+	], {base: "."})
+		.pipe(composer('dumpautoload', {cwd: '.', optimize: true}))
+		.pipe(zip('atum-premium.zip'))
+		.pipe(gulp.dest('.'));
+});
+
+
+//
+// Start the livereload server and watch files for changes
+// -------------------------------------------------------
+
+gulp.task('watch', function () {
+
+	livereload.listen();
+
+	// don't listen to whole js folder, it'll create an infinite loop
+	//gulp.watch(['./assets/js/**/*.js', '!./assets/js/dist/*.min.js'], ['scripts'])
+
+	gulp.watch(config.assetsDir + '/scss/**/*.scss', ['sass']);
+	
+	gulp.watch('./assets/images/**/*', ['images']);
+
+	gulp.watch([
+
+		// PHP files
+		'./**/*.php',
+
+		// JS files
+		config.assetsDir + '/js/**/*.js',
+
+		// Images
+		config.assetsDir + '/images/**/*',
+
+		// Excludes
+		'!' + config.assetsDir + '/js/**/*.min.js',
+		'!bower_components',
+		'!node_modules',
+
+	]).on('change', function (file) {
+		// reload browser whenever any PHP, SCSS, JS or image file changes
+		livereload.changed(file);
+	});
+});
+
+// Do nothing in this task, just triggers the dependent 'watch'
+gulp.task('default', ['watch'], function () {
+	
+});

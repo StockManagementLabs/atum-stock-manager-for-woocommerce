@@ -1,0 +1,183 @@
+//
+// Go Premium Pricing Tables
+//--------------------------
+
+.pricing-atum {
+	@include flexbox;
+	@include flex-wrap(wrap);
+	@include flex-justify-content(center);
+	width: 100%;
+	margin: 0 auto 3em;
+	
+	.pricing-item {
+		position: relative;
+		@include flexbox;
+		@include flex-direction(column);
+		@include flex-basis(30%);
+		text-align: center;
+		margin: 1em;
+		cursor: default;
+		color: $pricing-body-color;
+		border-radius: 8px;
+		
+		@media screen and (max-width: 996px) {
+			@include flex-basis(46%);
+			
+			&.free {
+				.pricing-body {
+					@include flex-grow(1);
+				}
+			}
+		}
+		
+		@media screen and (max-width: 674px) {
+			@include flex-basis(100%);
+		}
+	}
+	
+	.pricing-header {
+		padding: 2em 0;
+		border-top-left-radius: 8px;
+		border-top-right-radius: 8px;
+		position: relative;
+		
+		&:after {
+			top: 100%;
+			left: 50%;
+			border: 10px solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+			margin-left: -10px;
+		}
+		
+		.plan {
+			font-weight: 100;
+			margin-top: -10px;
+		}
+	}
+	
+	.pricing-body {
+		padding: 2em;
+		border-bottom-left-radius: 8px;
+		border-bottom-right-radius: 8px;
+		box-shadow: 0 5px 20px rgba(0,0,0,0.05), 0 15px 30px -10px rgba(0,0,0,0.3);
+	}
+	
+	.pricing-title {
+		font-size: 2em;
+		margin: 0.5em 0;
+		color: $pricing-body-color;
+		font-weight: 100;
+		letter-spacing: 2px;
+	}
+	
+	.pricing-subtitle {
+		margin: 0.5em 0 0;
+		font-size: 2.2em;
+		line-height: 1.1;
+	}
+	
+	.pricing-sentence {
+		font-weight: bold;
+		text-transform: uppercase;
+		font-size: 1.1em;
+		
+		i {
+			font-size: 1.6em;
+		}
+	}
+	
+	.pricing-features {
+		margin: -0.85em 0 0;
+		padding: 0 1.25em 1.3em;
+		border-bottom: 1px solid;
+		font-size: 1.1em;
+		line-height: 1.2;
+		
+		&:last-of-type {
+			border: none;
+		}
+	}
+	
+	.pricing-action {
+		color: inherit;
+		border: none;
+		font-weight: bold;
+		margin-top: 2em;
+		display: inline-block;
+		padding: 1em;
+		text-transform: uppercase;
+		border-radius: 5px;
+		background: #000;
+		text-decoration: none;
+		@include transition(background 0.3s);
+		
+		&:hover, &:focus {
+			background: #BD3C3C;
+			outline: none;
+		}
+	}
+	
+	.free {
+		.pricing-header, .pricing-body {
+			@include gradient-vertical($pricing-free-start, $pricing-free-end);
+		}
+		
+		.pricing-header {
+			&:after {
+				border-top-color: $pricing-free-end;
+			}
+		}
+		
+		.pricing-features {
+			color: lighten($pricing-free-end, 30%);
+			border-bottom-color: lighten($pricing-free-end, 18%);
+		}
+	}
+	
+	.premium {
+		.pricing-header, .pricing-body {
+			@include gradient-vertical($pricing-premium-start, $pricing-premium-end);
+		}
+		
+		.pricing-header {
+			&:after {
+				border-top-color: $pricing-premium-end;
+			}
+			
+			.plan {
+				color: lighten($pricing-premium-end, 20%);
+			}
+		}
+		
+		.pricing-features {
+			color: lighten($pricing-premium-end, 30%);
+			border-bottom-color: lighten($pricing-premium-end, 12%);
+		}
+	}
+	
+	.pro {
+		.pricing-header, .pricing-body {
+			@include gradient-vertical($pricing-pro-start, $pricing-pro-end);
+		}
+		
+		.pricing-header {
+			&:after {
+				border-top-color: $pricing-pro-end;
+			}
+			
+			.plan {
+				color: lighten($pricing-pro-end, 20%);
+			}
+		}
+		
+		.pricing-features {
+			color: lighten($pricing-pro-end, 30%);
+			border-bottom-color: lighten($pricing-pro-end, 15%);
+		}
+	}
+	
+}

@@ -1,0 +1,821 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
+"POT-Creation-Date: 2017-01-03 12:47+0100\n"
+"PO-Revision-Date: 2017-01-03 12:45+0100\n"
+"Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
+"Language-Team: Sispixels <salvamb@sispixels.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: atum.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: classes/Bootstrap.php:72
+#, php-format
+msgid "%s plugin can only be called once"
+msgstr ""
+
+#: classes/Bootstrap.php:106
+#, php-format
+msgid "%s requires WooCommerce to be activated"
+msgstr ""
+
+#: classes/Bootstrap.php:125
+msgid ""
+"You need to enable WooCommerce 'Manage Stock' option for ATUM plugin to work."
+msgstr ""
+
+#: classes/Bootstrap.php:133
+#, php-format
+msgid "Go to %sWooCommerce inventory settings%s to fix this."
+msgstr ""
+
+#: classes/Bootstrap.php:147
+#, php-format
+msgid "%s requires WooCommerce version 2.5 or greater"
+msgstr ""
+
+#: classes/Bootstrap.php:182 classes/Bootstrap.php:187 classes/Inc/Ajax.php:91
+#: classes/Inc/Ajax.php:97 classes/Inc/Init.php:365 classes/Inc/Init.php:371
+#: classes/Settings/Settings.php:405 classes/Settings/Settings.php:411
+#: classes/StockCentral/StockCentral.php:161
+#: classes/StockCentral/StockCentral.php:167
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:656
+#, php-format
+msgid " with query '%s'"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:790
+#, php-format
+msgid "1 item"
+msgid_plural "%s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: classes/Components/AtumListTable.php:835
+#, php-format
+msgid ""
+"%1$s plugin can bulk-enable all your items for stock management at the "
+"product level. %1$s will save your original settings if you decide to go "
+"back later or uninstall the plugin."
+msgstr ""
+
+#: classes/Components/AtumListTable.php:836
+msgid "Enable ATUM's Manage Stock option"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:845
+msgid "Dismiss"
+msgstr ""
+
+#: classes/Inc/HelpPointers.php:192
+msgid "Close"
+msgstr ""
+
+#: classes/Inc/Init.php:104 classes/Inc/Init.php:105 classes/Inc/Init.php:115
+#: classes/Settings/Settings.php:88 views/stock-central.php:11
+msgid "Stock Central"
+msgstr ""
+
+#: classes/Inc/Init.php:120 views/go-premium.php:77
+msgid "Product Levels"
+msgstr ""
+
+#: classes/Inc/Init.php:123
+msgid "Stock Redistribution"
+msgstr ""
+
+#: classes/Inc/Init.php:126 views/go-premium.php:148
+msgid "Stock Takes"
+msgstr ""
+
+#: classes/Inc/Init.php:129
+msgid "Reports"
+msgstr ""
+
+#: classes/Inc/Init.php:132
+msgid "Graphs"
+msgstr ""
+
+#: classes/Inc/Init.php:135
+msgid "Stock Forecast"
+msgstr ""
+
+#: classes/Inc/Init.php:138 views/go-premium.php:86
+msgid "Stock Logs"
+msgstr ""
+
+#: classes/Inc/Init.php:141
+msgid "Financials"
+msgstr ""
+
+#: classes/Inc/Init.php:144 views/go-premium.php:191
+msgid "Profit & Loss"
+msgstr ""
+
+#: classes/Inc/Init.php:147 classes/Inc/Init.php:150
+msgid "Purchase Orders"
+msgstr ""
+
+#: classes/Inc/Init.php:156 views/go-premium.php:208
+msgid "Import/Export"
+msgstr ""
+
+#: classes/Inc/Init.php:159
+msgid "Settings"
+msgstr ""
+
+#: classes/Inc/Init.php:333
+msgid "ATUM Quick Help"
+msgstr ""
+
+#: classes/Inc/Init.php:334
+msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
+msgstr ""
+
+#: classes/Inc/Init.php:344
+msgid "ATUM Screen Setup"
+msgstr ""
+
+#: classes/Inc/Init.php:345
+msgid "Click the 'Screen Options' tab to setup your table view preferences."
+msgstr ""
+
+#: classes/Settings/Settings.php:84 classes/StockCentral/StockCentral.php:109
+msgid "General"
+msgstr ""
+
+#: classes/Settings/Settings.php:85
+msgid "General Options"
+msgstr ""
+
+#: classes/Settings/Settings.php:89
+msgid "Stock Central Options"
+msgstr ""
+
+#: classes/Settings/Settings.php:96
+msgid "Enable Filter Autosearch"
+msgstr ""
+
+#: classes/Settings/Settings.php:97
+msgid ""
+"When enabled, the manual search button disappears. Disable this function if "
+"you don't use or find the automatic search feature helpful."
+msgstr ""
+
+#: classes/Settings/Settings.php:103
+msgid "Products per Page"
+msgstr ""
+
+#: classes/Settings/Settings.php:104
+msgid ""
+"Controls the amount of products displayed per page across the ATUM plugin. "
+"Please note, you can set this value within the 'Screen Options' tab on every "
+"page. Enter '-1' to remove the pagination and display all products on one "
+"page (not recommended if you have many products)."
+msgstr ""
+
+#: classes/Settings/Settings.php:110
+msgid "Manage Stock"
+msgstr ""
+
+#: classes/Settings/Settings.php:111
+msgid ""
+"Activate this option to override all WooCommerce inventory configurations."
+msgstr ""
+
+#: classes/Settings/Settings.php:117
+msgid "Days to Re-Order"
+msgstr ""
+
+#: classes/Settings/Settings.php:118
+msgid ""
+"This value sets the number of days a user needs to replenish the stock "
+"levels. It controls the 'Low Stock' indicator within the 'Stock Central' "
+"page."
+msgstr ""
+
+#: classes/Settings/Settings.php:192
+msgid ""
+"Would you want to restore the 'Manage Stock' status of all products to their "
+"original state?"
+msgstr ""
+
+#: classes/Settings/Settings.php:193
+msgid "<p>Select 'NO' to keep all the products in the current state.</p>"
+msgstr ""
+
+#: classes/Settings/Settings.php:194
+msgid "Yes, restore them"
+msgstr ""
+
+#: classes/Settings/Settings.php:195
+msgid "No, keep them"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:99
+msgid "Thumb"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:100
+#: views/help-tabs/stock-central-product-details.php:28
+msgid "Product Name"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:101
+#: views/help-tabs/stock-central-product-details.php:32
+msgid "SKU"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:102
+#: views/help-tabs/stock-central-product-details.php:36
+msgid "ID"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:103
+#: views/help-tabs/stock-central-product-details.php:40
+msgid "Product Level"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:104
+#: views/help-tabs/stock-central-stock-counters.php:20
+msgid "Current Stock"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:105
+#: views/help-tabs/stock-central-stock-counters.php:24
+msgid "Inbound Stock"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:106
+#: views/help-tabs/stock-central-stock-counters.php:28
+msgid "Stock on Hold"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:107
+#: views/help-tabs/stock-central-stock-counters.php:32
+msgid "Reserved Stock"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:108
+#: views/help-tabs/stock-central-stock-counters.php:36
+msgid "Back Orders"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:109
+msgid "Sold Today"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:110
+#: views/help-tabs/stock-central-stock-negatives.php:20
+msgid "Customer Returns"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:111
+#: views/help-tabs/stock-central-stock-negatives.php:24
+msgid "Warehouse Damages"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:112
+#: views/help-tabs/stock-central-stock-negatives.php:28
+msgid "Lost in Post"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:113
+#: views/help-tabs/stock-central-stock-selling-manager.php:20
+msgid "Sales Last 14 Days"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:114
+#: views/help-tabs/stock-central-stock-selling-manager.php:24
+msgid "Sales Last 7 Days"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:115
+#: views/help-tabs/stock-central-stock-selling-manager.php:28
+msgid "Stock will Last (Days)"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:116
+#: views/help-tabs/stock-central-stock-selling-manager.php:32
+msgid "Out of Stock for (Days)"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:117
+#: views/help-tabs/stock-central-stock-selling-manager.php:36
+msgid "Lost Sales"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:118
+#: views/help-tabs/stock-central-stock-selling-manager.php:40
+msgid "Stock Indicator"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:124
+#: classes/StockCentral/StockCentral.php:113
+msgid "Product Details"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:128
+#: classes/StockCentral/StockCentral.php:117
+msgid "Stock Counters"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:139
+#: classes/StockCentral/StockCentral.php:121
+msgid "Stock Negatives"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:143
+#: classes/StockCentral/StockCentral.php:125
+msgid "Stock Selling Manager"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:174
+msgid "Filter by"
+msgstr ""
+
+#: views/go-premium.php:18
+msgid "Basic"
+msgstr ""
+
+#: views/go-premium.php:20
+msgid "FREE"
+msgstr ""
+
+#: views/go-premium.php:26
+msgid "Basic Stock Central"
+msgstr ""
+
+#: views/go-premium.php:30
+msgid ""
+"Current Stock Volume, Stock on Hold, Sold Today, Sales Volume Preview, Stock "
+"Prediction and Stock Indicators."
+msgstr ""
+
+#: views/go-premium.php:34 views/go-premium.php:68 views/go-premium.php:121
+msgid "Free Online Tools"
+msgstr ""
+
+#: views/go-premium.php:38
+msgid ""
+"EOQ - Economic Order Quantity Calculator, Web-Based Invoice Generator, "
+"Mobile APP for iOS, Android and Windows PHONES."
+msgstr ""
+
+#: views/go-premium.php:41
+msgid "Already Installed"
+msgstr ""
+
+#: views/go-premium.php:50
+msgid "Premium"
+msgstr ""
+
+#: views/go-premium.php:51 views/go-premium.php:104
+msgid "Monthly Plan"
+msgstr ""
+
+#: views/go-premium.php:52
+msgid "Coming February 2017"
+msgstr ""
+
+#: views/go-premium.php:58
+msgid "Advanced Stock Central"
+msgstr ""
+
+#: views/go-premium.php:62
+msgid ""
+"Product Levels, Current Stock Volume, Stock on Hold and Sold Today Preview, "
+"Stock Negatives, Sales Volume Previews, \n"
+"\t\t\t\t\t\t  Stock Prediction and Monitoring, Lost Sales and Stock Levels "
+"Indicator.<br>Advanced Filtering, Help and Screen Options.<br>\n"
+"\t\t\t\t\t\t  Stock Management Control per Product."
+msgstr ""
+
+#: views/go-premium.php:72
+msgid ""
+"EOQ - Economic Order Quantity Calculator, Web-Based Invoice Generator, "
+"Mobile APP for iOS, Android and Windows PHONES.<br>\n"
+"\t\t\t\t\t\t  Online Support, PDF training."
+msgstr ""
+
+#: views/go-premium.php:81
+msgid ""
+"Detailed Product Level Controls - Unique ATUM family hierarchy for advanced "
+"product management. Parent and Child product with variations management, \n"
+"\t\t\t\t\t\t  Unit allocations for wholesale and basic manufacturing, Stock "
+"redistribution on all warehouse levels."
+msgstr ""
+
+#: views/go-premium.php:90
+msgid ""
+"Create product reservations; Customer returns logs with details and refund "
+"notifications, Warehouse damage recording with automatic stock editing, \n"
+"\t\t\t\t\t\t  Lost post recordings with close carrier monitoring."
+msgstr ""
+
+#: views/go-premium.php:94 views/go-premium.php:215
+msgid "Choose plan"
+msgstr ""
+
+#: views/go-premium.php:103
+msgid "PRO"
+msgstr ""
+
+#: views/go-premium.php:105
+msgid "Coming Summer 2017"
+msgstr ""
+
+#: views/go-premium.php:111
+msgid "Ultimate Stock Central"
+msgstr ""
+
+#: views/go-premium.php:115
+msgid ""
+"Product Levels, Current Stock Volume, Stock on Hold and Sold Today Preview, "
+"Stock Negatives, Sales Volume Previews, Stock Prediction and Monitoring, \n"
+"\t\t\t\t\t\t  Lost Sales and Stock Levels Indicator.<br>Advanced Filtering, "
+"Help and Screen Options. Plus an ultimate one click control connected to "
+"finances, \n"
+"\t\t\t\t\t\t  purchase orders, sales controls and multichannel stores."
+msgstr ""
+
+#: views/go-premium.php:125
+msgid ""
+"EOQ - Economic Order Quantity Calculator, Web-Based Invoice Generator, "
+"Mobile APP for iOS, Android and Windows PHONES.<br>\n"
+"\t\t\t\t\t\t  Online Support, PDF training. eBooks and Loyalty discounts!"
+msgstr ""
+
+#: views/go-premium.php:130
+msgid "Extended Product Levels"
+msgstr ""
+
+#: views/go-premium.php:134
+msgid ""
+"Advanced Product Level Controls - Unique ATUM family hierarchy for advanced "
+"product management. Parent and Child product with variations management, \n"
+"\t\t\t\t\t\t  Advanced Unit allocations for wholesale and advanced "
+"manufacturing, Stock redistribution on all warehouse levels with mulitple "
+"warehouses in mind."
+msgstr ""
+
+#: views/go-premium.php:139
+msgid "Stock Logs +"
+msgstr ""
+
+#: views/go-premium.php:143
+msgid ""
+"Create product reservations; Customer returns logs with details and refund "
+"notifications, Warehouse damage recording with automatic stock editing, \n"
+"\t\t\t\t\t\t  Lost post recordings with close carrier monitoring. PRO "
+"performance controls and statistics."
+msgstr ""
+
+#: views/go-premium.php:152
+msgid ""
+"Advanced stock takes with an automatic stock value calculation. Regular and "
+"irregular stock and inventory take. Fully customizable stock taking "
+"templates with optional product sorting. \n"
+"\t\t\t\t\t\t  Choose the time of counting with full restriction control over "
+"user access. Automatic notifications of stock variations or anomalies."
+msgstr ""
+
+#: views/go-premium.php:157
+msgid "Cutting Edge Reports"
+msgstr ""
+
+#: views/go-premium.php:161 views/go-premium.php:170
+msgid ""
+"Full stock and inventory reports exported to a pdf or an Excel file or "
+"selected reports by in stock, out of stock, simple, variable, discontinued "
+"or any other type of products. \n"
+"\t\t\t\t\t\t  Back-dated reports and customizable reports by stock value, "
+"stock levels, best-selling, most profitable and much more."
+msgstr ""
+
+#: views/go-premium.php:166
+msgid "State of the Art Graphs"
+msgstr ""
+
+#: views/go-premium.php:175
+msgid "Detailed Stock Forecast"
+msgstr ""
+
+#: views/go-premium.php:179
+msgid ""
+"Advanced quantitative forecasting, safety stock management, automated "
+"ordering and optimisation, efficient replenishment including seasonality "
+"trends based on personal requirements or historical data."
+msgstr ""
+
+#: views/go-premium.php:183
+msgid "Impeccable Finances"
+msgstr ""
+
+#: views/go-premium.php:187
+msgid ""
+"Ideal product price estimation, desired profit margin calculation, custom "
+"period turnover simulation and much more."
+msgstr ""
+
+#: views/go-premium.php:195
+msgid ""
+"Our inventory management goes beyond! Summarise the revenue, costs and "
+"expenses incurred during a given period, usually a fiscal quarter or year. \n"
+"\t\t\t\t\t\t  Our PRO users will have the option to see their business "
+"performance by a simple press of a button."
+msgstr ""
+
+#: views/go-premium.php:200
+msgid "Phenomenal Purchase Order System"
+msgstr ""
+
+#: views/go-premium.php:204
+msgid ""
+"Advanced purchase order management with integrated supplier creation, fully "
+"automated user notification with the option of email automation. "
+"Downloadable and customisable pdf generation."
+msgstr ""
+
+#: views/go-premium.php:212
+msgid ""
+"Full inventory import an Excel CSV file and customisable export to a high-"
+"resolution pdf or an Excel CSV."
+msgstr ""
+
+#: views/help-tabs/stock-central-general.php:11
+msgid "Welcome to the ATUM's Stock Central!"
+msgstr ""
+
+#: views/help-tabs/stock-central-general.php:12
+msgid "Thank you very much for installing this great plugin."
+msgstr ""
+
+#: views/help-tabs/stock-central-general.php:13
+msgid ""
+"We are glad you would like to take your business to the next level and have "
+"chosen ATUM to help you do just that. What you see in front of you is the "
+"basic version with some important indicators. You will find every available "
+"feature explained in this guide. Feel free to browse each section and in "
+"case you fail to locate the answer you are looking for, don't hesitate to "
+"click the 'Visit our Support Page' link on this page."
+msgstr ""
+
+#: views/help-tabs/stock-central-general.php:14
+msgid ""
+"Our team is working hard on the development of the Premium and PRO version, "
+"so if you feel your business has outgrown the basic features follow the 'Go "
+"Premium or PRO!' link on this page."
+msgstr ""
+
+#: views/help-tabs/stock-central-general.php:15
+msgid ""
+"For the whole Stock Management Labs™ team, we wish you a successful and "
+"profitable growth."
+msgstr ""
+
+#: views/help-tabs/stock-central-help-sidebar.php:12
+msgid "Go Premium or PRO!"
+msgstr ""
+
+#: views/help-tabs/stock-central-help-sidebar.php:13
+msgid "Visit our Support Page"
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:14
+#: views/help-tabs/stock-central-stock-counters.php:14
+#: views/help-tabs/stock-central-stock-negatives.php:14
+#: views/help-tabs/stock-central-stock-selling-manager.php:14
+msgid "COLUMN"
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:15
+#: views/help-tabs/stock-central-stock-counters.php:15
+#: views/help-tabs/stock-central-stock-negatives.php:15
+#: views/help-tabs/stock-central-stock-selling-manager.php:15
+msgid "DEFINITION"
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:20
+msgid "Checkbox"
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:21
+msgid ""
+"Select an item you would like to work with, amend or filter. After "
+"completing your selection chose one of the advanced options available at the "
+"top right of the page (selections and advanced options are only available in "
+"PRO version of the plugin)."
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:25
+msgid "Product small image preview."
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:29
+msgid ""
+"The first twenty characters of the product name. Hover your mouse over the "
+"name to see the full content. (PRO users will be able to choose the amount "
+"of characters displayed. This option is editable in Settings)."
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:33
+msgid ""
+"An SKU, or Stock Keeping Unit, is a number assigned to a product by the "
+"store admin to identify the price, product options and manufacturer of the "
+"merchandise. An SKU is used to track inventory in your retail store. They "
+"are critical in helping you maintain a profitable retail business. It is not "
+"necessary to use SKUs in the basic/free version of ATUM. However, we "
+"recommend the introduction of SKUs in your store to take the full advantage "
+"of ATUM's features."
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:37
+msgid ""
+"A WooCommerce Product ID is sometimes needed when using shortcodes, widgets "
+"and links. ATUM's stock central page will display the appropriate ID of the "
+"product in this column."
+msgstr ""
+
+#: views/help-tabs/stock-central-product-details.php:41
+msgid ""
+"Product levels are critical in helping the stock central correctly calculate "
+"all your stock levels. We use family hierarchy in ATUM and divide products "
+"into \"parent\" and \"child\". All the items are 'child' products by "
+"default. You can set the product levels in the \"Product Levels\" section. "
+"(This feature is only available in Premium and PRO version)."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:21
+msgid ""
+"The current stock represents the amount of products available to order at "
+"the moment the stock central was last refreshed. This counter value equals "
+"the value shown in the 'Products' page of WooCommerce."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:25
+msgid ""
+"Inbound stock counter represents the amount of products ordered by the store "
+"admin or manager. This feature is not available in 'Basic' ATUM interface. "
+"Premium and PRO users will be able to add inbound stock using the 'Purchase "
+"Order' menu. The 'Purchase Orders' system will amend the inbound stock "
+"indicator automatically."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:29
+msgid ""
+"The 'Stock on Hold' value is an important indicator for stores that allow "
+"customers to add items to their baskets and leave them there unattended for "
+"a while. Products left in baskets are still physically in the warehouse, but "
+"not included in the 'Current Stock' indicator. You can set the time of the "
+"product being held by a customer under 'WooCommerce' - 'Settings' - "
+"'Products' and the 'Inventory' tab."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:33
+msgid ""
+"There are times when the store owner needs to reserve or set aside small or "
+"significant amount of stock. Occasions like special events, customer "
+"reservations or quality checks will find this feature very handy. Premium "
+"and PRO users will take advantage of this feature by creating reserve logs "
+"in the 'Stock Logs' section. ATUM plugin will then automatically deduct the "
+"reserved stock value from the 'Current Stock' indicator."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:37
+msgid ""
+"Every WooCommerce product has an 'Allow Back Orders' option within the "
+"product page. It will give customers the opportunity to place an order even "
+"when the product is out of stock. The 'Back Orders' indicator will display "
+"the amount of items required by customers."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:40
+msgid "Sold today"
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-counters.php:41
+msgid ""
+"The value represents the number of products sold during the day. Sold "
+"products are only items which status changed to completed. Items that are "
+"sold, but pending payment will show in the 'Stock on Hold' indicator instead."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-negatives.php:21
+msgid ""
+" We don't think there is a store owner that wants to see products returning "
+"to the warehouse. However, in case there is an item coming back from the "
+"customer our Premium, and PRO users have the option to create a log entry in "
+"the 'Customer Returns' tab within the 'Stock Log' menu. Depending on the "
+"item condition, the ATUM plugin will then add the item back in for further "
+"sale or create an 'Unsellable Return' entry."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-negatives.php:25
+msgid ""
+"n the unlikely event of a warehouse or in-house damage, the Premium, or PRO "
+"user has the option to create an entry under the 'Warehouse Damages' tab "
+"within the 'Stock Log' menu. The ATUM plugin will, according to the log, "
+"remove the stock amount from the 'Current Stock' indicator."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-negatives.php:29
+msgid ""
+"Premium and PRO user can create a log entry under the 'Lost in Post' tab "
+"within the 'Stock Log' menu for all items that have gone missing on the "
+"route to the customer. This indicator represents a valuable control of the "
+"performance of postal carriers."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-selling-manager.php:21
+msgid ""
+"Our Premium and PRO users will value this performance indicator as a tool "
+"that allows them to see the actual sales of the product within the last 14 "
+"days (current day not included)."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-selling-manager.php:25
+msgid ""
+"Our Premium and PRO users will value this performance indicator as a tool "
+"that allows them to see the actual sales of the product within the last 7 "
+"days (current day not included)."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-selling-manager.php:29
+msgid ""
+"Very valuable Premium and PRO feature that will tell the user the average "
+"amount of days that a product will keep 'in stock' status. By default, we "
+"base this indicator on sales for the past seven days (current day not "
+"included). However, the Premium and PRO users have the option to set the "
+"number of days under the 'Stock Control' within the 'Settings' menu."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-selling-manager.php:33
+msgid ""
+"This indicator shows the number of days the item has the 'Out of Stock' "
+"status. Store owners can more accurately monitor the effectiveness of their "
+"ordering. PRO users will have the option to let the ATUM plugin take care of "
+"all order management."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-selling-manager.php:37
+msgid ""
+"Our users will want to see this figure as close to zero as possible. The "
+"formula calculates the volume of sales that store owner would make if the "
+"item stayed in stock. By default, we take the average sales for the last "
+"seven days the item was in stock and time them by the number of days the "
+"item is out of stock. Premium and PRO users have the option to set the "
+"number of days for the 'average sales' calculation under the 'Settings' menu."
+msgstr ""
+
+#: views/help-tabs/stock-central-stock-selling-manager.php:41
+msgid ""
+"Very similar indicator to the default feature of WooCommerce. The user can "
+"see green, yellow or red icon according to the stock level of an item. "
+"Product with sufficient amount of stock will show a green icon. The yellow "
+"icon will mark any items running low in stock, and the red icon will "
+"indicate all the items that have the 'out of stock' status."
+msgstr ""
+
+#: views/settings-page.php:15
+msgid "ATUM Settings"
+msgstr ""
+
+#: views/stock-central.php:20
+msgid "Search products..."
+msgstr ""
+
+#: views/stock-central.php:23
+msgid "Search"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "ATUM Stock Manager for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "http://www.stockmanagementlabs.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "The ultimate stock management plugin for serious WooCommerce sellers"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Stock Management Labs"
+msgstr ""

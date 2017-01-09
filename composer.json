@@ -1,0 +1,19 @@
+{
+	"name": "atum",
+	"description": "ATUM Stock Management",
+	"license": "Copyrighted",
+	"minimum-stability": "dev",
+	"prefer-stable"    : true,
+	"preferred-install": "dist",
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
+
+	},
+	"autoload": {
+		"psr-4": {
+			"Atum\\": "classes/"
+		}
+	}
+}

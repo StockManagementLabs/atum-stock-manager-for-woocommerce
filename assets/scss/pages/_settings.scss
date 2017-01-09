@@ -1,0 +1,52 @@
+//
+// Atum Settings
+//---------------
+
+#atum-settings {
+	margin-left: 20px;
+	margin-top: 30px;
+	
+	th {
+		vertical-align: middle;
+	}
+}
+
+.atum-setting-info {
+	margin-right: 20px;
+	
+	.dashicons {
+		line-height: 30px;
+		width: 16px;
+		height: 16px;
+		font-size: 16px;
+	}
+	
+	&:hover {
+		color: $brand-success;
+	}
+}
+
+// Sweet alert customizations
+.swal2-container {
+	z-index: 100000;
+	
+	.swal2-content, .swal2-title {
+		margin-bottom: $grid-gutter-width;
+	}
+	
+	.swal2-title {
+		line-height: 1.3;
+		font-size: 23px;
+	}
+	
+	p {
+		font-size: 15px;
+		text-align: center;
+	}
+	
+	button {
+		&:focus {
+			outline: none;
+		}
+	}
+}

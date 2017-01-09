@@ -1,0 +1,266 @@
+//
+// Atum List Tables
+//------------------
+
+.overlay {
+	position: relative;
+	
+	&:before {
+		content: '';
+		@include overlay;
+	}
+}
+
+.atum-loading {
+	@include loader;
+}
+
+.atum-list-wrapper {
+	padding-bottom: 20px;
+	width: 100%;
+	
+	.search-box {
+		input[type=search] {
+			margin-right: 0;
+			width: 187px;
+		}
+	}
+	
+	.search-submit {
+		margin-left: 4px;
+	}
+	
+	.tablenav-pages, .search-box {
+		position: relative;
+		
+		.atum-loading {
+			left: -30px;
+			top: 4px;
+		}
+	}
+	
+	.alignleft.actions, .subsubsub {
+		position: relative;
+		
+		.atum-loading {
+			right: -30px;
+			top: 6px;
+		}
+	}
+	
+	.actions-wrapper {
+		.filter-text {
+			display: inline;
+			float: left;
+			line-height: 28px;
+			padding-right: 10px;
+		}
+	}
+	
+}
+
+.atum-table-wrapper {
+	
+	// JScrollpane
+	.jspContainer {
+		overflow: hidden;
+		position: relative;
+	}
+	
+	.jspPane {
+		position: absolute;
+	}
+	
+	.jspVerticalBar, .jspCap, .jspArrow {
+		display: none;
+	}
+	
+	.jspHorizontalBar {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 16px;
+		
+		.jspCap {
+			float: left;
+		}
+		
+		.jspTrack, .jspDrag {
+			float: left;
+			height: 100%;
+		}
+		
+		.jspArrow {
+			width: 16px;
+			float: left;
+			height: 100%;
+		}
+	}
+	
+	.jspTrack {
+		background: rgba($gray, 0.2);
+		position: relative;
+	}
+	
+	.jspDrag {
+		background: $gray;
+		position: relative;
+		top: 0;
+		left: 0;
+		cursor: pointer;
+	}
+	
+	.jspCorner {
+		background: $gray-light;
+		float: left;
+		height: 100%;
+	}
+	
+}
+
+.atum-list-table {
+	margin-bottom: 15px;
+	
+	thead .item-heads, tfoot {
+		th {
+			padding: 3px 5px;
+			line-height: 1.1;
+			font-size: 13px;
+			min-width: 50px;
+		}
+	}
+	
+	.group {
+		th {
+			font-weight: bold;
+			
+			&:nth-child(even) {
+				background-color: $gray-light;
+			}
+		}
+	}
+	
+	thead .group th .atum-loading {
+		position: static;
+		display: inline-block;
+		margin-left: 15px;
+		width: 10px;
+		height: 10px;
+	}
+	
+	.column-_sku, .column-title {
+		white-space: nowrap;
+	}
+	
+	.cell {
+		&-green {
+			color: $brand-success;
+		}
+		
+		&-yellow {
+			color: $brand-warning;
+		}
+		
+		&-red {
+			color: $brand-danger;
+		}
+	}
+	
+	td {
+		vertical-align: middle;
+		
+		&.pro-version {
+			background-color: $gray;
+		}
+		
+		&.ID {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+	}
+	
+	#title {
+		min-width: 124px;
+	}
+	
+	#_sku {
+		min-width: 60px;
+	}
+	
+	#calc_stock_out_days {
+		min-width: 56px;
+	}
+	
+	.column-calc_stock_indicator {
+		.dashicons {
+			font-size: 1.5em;
+		}
+	}
+	
+	.atum-title-small {
+		display: none;
+	}
+	
+	@media screen and (max-width: 782px) {
+		.group {
+			display: none;
+		}
+		
+		.column-thumb {
+			display: none;
+			
+			&:before {
+				content: none;
+			}
+		}
+		
+		tr:not(.inline-edit-row):not(.no-items) td.column-thumb:not(.column-primary)::before {
+			content: none;
+		}
+		
+		.tips {
+			display: none;
+		}
+		
+		.atum-title-small {
+			display: block;
+		}
+		
+		td.thumb.column-thumb {
+			text-align: left;
+		}
+	}
+}
+
+// Manage Stock notice
+.notice-management-stock{
+	@include flexbox;
+	@include flex-align-items(center);
+	
+	.manage-message {
+		position: relative;
+		@include flex-grow(1);
+	}
+	
+	.atum-loading {
+		margin-left: 5px;
+		margin-top: 3px;
+	}
+}
+
+// Help Tabs
+.contextual-help-tabs-wrap {
+	padding: 20px;
+	
+	table {
+		tr {
+			td {
+				&:first-child {
+					width: 20%;
+				}
+			}
+		}
+	}
+}
+

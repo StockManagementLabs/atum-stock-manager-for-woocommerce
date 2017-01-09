@@ -1,0 +1,55 @@
+//
+// Global Variables
+//------------------
+
+// Paths
+$icon-font-path:                        "../fonts/";
+$img-path:                              "../images/";
+
+// Grid settings
+$main-sm-columns:                       12;
+$sidebar-sm-columns:                    4;
+$grid-gutter-width:                     30px;
+
+$max-width-limit:                       1280px;
+
+// Colors
+$brand-primary:                         #0073AA;
+$brand-info:                            #E3E8F5;
+$brand-warning:                         #FEC007;
+$brand-danger:                          #EF4D5A;
+$brand-success:                         #00B050;
+
+$gray:                                  #C1C1C1;
+$gray-light:                            #F9F9F9;
+
+// Media queries breakpoints
+$screen-xs:                             480px;
+$screen-xs-min:                         $screen-xs;
+
+// Small screen / tablet
+$screen-sm:                             768px;
+$screen-sm-min:                         $screen-sm;
+
+// Medium screen / desktop
+$screen-md:                             992px;
+$screen-md-min:                         $screen-md;
+
+// Large screen / wide desktop
+$screen-lg:                             1200px;
+$screen-lg-min:                         $screen-lg;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max:                         ($screen-sm-min - 1);
+$screen-sm-max:                         ($screen-md-min - 1);
+$screen-md-max:                         ($screen-lg-min - 1);
+
+
+// Pricing tables
+$pricing-free-start:                    #00bef2;
+$pricing-free-end:                      #2d8aef;
+$pricing-premium-start:                 #9926af;
+$pricing-premium-end:                   #6739b6;
+$pricing-pro-start:                     #f26621;
+$pricing-pro-end:                       #ea4335;
+$pricing-body-color:                    #FFF;

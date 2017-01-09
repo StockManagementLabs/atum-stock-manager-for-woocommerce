@@ -1,0 +1,27 @@
+{
+	"name": "atum",
+	"version": "1.0.1",
+	"author": "Salva Machí and Jose Piera - https://sispixels.com",
+	"homepage": "https://stockmanagementlabs.com",
+	"private": true,
+	"repository": {
+		"type": "git"
+	},
+	"license": "Copyrighted",
+	"devDependencies": {
+		"gulp": "latest",
+		"gulp-filter": "latest",
+		"gulp-if": "latest",
+		"gulp-imagemin": "latest",
+		"gulp-livereload": "latest",
+		"gulp-notify": "latest",
+		"gulp-plumber": "latest",
+		"gulp-sass": "latest",
+		"gulp-sourcemaps": "latest",
+		"gulp-watch": "latest",
+		"imagemin-pngcrush": "latest",
+		"gulp-composer": "latest",
+		"gulp-zip": "latest",
+		"gulp-wrap": "latest"
+	}
+}
