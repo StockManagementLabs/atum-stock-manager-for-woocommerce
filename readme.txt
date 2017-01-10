@@ -4,7 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,7 +44,7 @@ Our ground-breaking Stock Central will let the user see every "simple" product a
 * Intelligent settings for easy inventory/stock management.
 
 
-**Every user has an option to become a VIP by registering FREE on our website. Apart from a great support, each member can then take advantage of these fantastic features:**
+**Every user has an option to create an account by registering FREE on our website. Apart from a great support, each registered user can then take advantage of these fantastic features:**
 
 * EOQ - Economic Order Quantity Calculator (in development) - In corporate finance, economic order quantity (EOQ) is the order quantity that minimizes the total holding costs and ordering costs. It is one of the oldest classical production scheduling models.
 * Web-Based Invoice Generator (in development) - complete invoice customization, direct sending and without any monthly limits. Also, all your invoices are saved securely in one place.
@@ -182,13 +182,11 @@ At present the only language available is English, but we are planning several t
 = 1.0.0. =
 * The first public release of ATUM plugin.
 
-= 1.0.1 =
-* Bug fixes.
-
-= 1.0.2 =
-* Updated readme.txt
-
 = 1.0.3 =
-* Bug fixes
+* Updated readme.txt
+* Minor fixes.
+
+= 1.0.4 =
+* Minor fixes.
 
 

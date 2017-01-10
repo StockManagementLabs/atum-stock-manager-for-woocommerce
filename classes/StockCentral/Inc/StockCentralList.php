@@ -532,20 +532,20 @@ class StockCentralList extends AtumListTable {
 			'low_stock' => 'Low Stock'
 		);
 		
-		$url = esc_url( add_query_arg( 'page', Globals::ATUM_UI_SLUG ), admin_url() );
+		$url = esc_url( add_query_arg( 'page', Globals::ATUM_UI_SLUG , admin_url()) );
 		
 		foreach ( $views_name as $key => $text ) {
 			
 			$id = '';
 			if ( $key != 'all_stock' ) {
-				$url = esc_url( add_query_arg( array( 'v_filter' => $key ), $url ) );
+				$view_url = esc_url( add_query_arg( array( 'v_filter' => $key ), $url ) );
 				$id  = ' id="' . $key . '"';
 			}
 			
 			$class = ( $key == $v_filter || ( ! $v_filter && $key == 'all_stock' ) ) ? ' class="current"' : '';
 			$count = $this->count_views[ 'count_' . ( ( $key == 'all_stock' ) ? 'all' : $key ) ];
 			
-			$views[ $key ] = '<a' . $id . $class . ' href="' . $url . '"><span>' . $text . ' (' . $count . ')</span></a>';
+			$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '"><span>' . $text . ' (' . $count . ')</span></a>';
 		}
 		
 		return apply_filters( 'atum/stock_central_list/view_filters', $views );
