@@ -683,9 +683,14 @@ class StockCentralList extends AtumListTable {
 				'post_type'      => $this->post_type,
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
-				'meta_key'       => '_stock',
-				'meta_value'     => 0,
-				'meta_compare'   => '>',
+				'meta_query' => array(
+					array(
+						'key' => '_stock',
+						'value'   => 0,
+						'type'    => 'numeric',
+						'compare' => '>',
+					),
+				),
 				'post__in'       => $posts
 			);
 			
