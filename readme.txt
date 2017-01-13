@@ -4,7 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,5 +188,8 @@ At present the only language available is English, but we are planning several t
 
 = 1.0.6 =
 * Minor fixes.
+
+= 1.0.7 =
+* Help support link update.
 
 
