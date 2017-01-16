@@ -188,6 +188,12 @@
 		min-width: 60px;
 	}
 	
+	.column-calc_type {
+		.wc-type {
+			padding-left: $grid-gutter-width/2;
+		}
+	}
+	
 	#calc_stock_out_days {
 		min-width: 56px;
 	}

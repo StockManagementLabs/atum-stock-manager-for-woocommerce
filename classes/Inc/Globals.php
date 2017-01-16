@@ -19,9 +19,10 @@ abstract class Globals {
 	
 	/**
 	 * The product types allowed
+	 * For now the "external" products are excluded as WC doesn't add stock control fields to them
 	 * @var array
 	 */
-	private static $product_types = array('simple');
+	private static $product_types = array('simple', 'variable', 'grouped');
 	
 	/**
 	 * The meta key where is stored the out of stock date

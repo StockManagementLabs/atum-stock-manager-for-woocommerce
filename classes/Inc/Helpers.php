@@ -499,6 +499,7 @@ final class Helpers {
 				)
 			)
 		);
+		
 		$products = new \WP_Query( $args );
 		
 		update_option( ATUM_PREFIX . 'restore_option_stock', $products->posts );

@@ -73,7 +73,7 @@
 						
 					}).resize();
 					
-					// Add tooltip
+					// Add tooltips
 					this.tooltip();
 					
 					// Hide/Show/colspan column groups
@@ -123,29 +123,32 @@
 						self.update(data, $elem);
 					});
 					
-					// Page number input and search input
+					// Ajax filters binding
 					if (ajaxSearchEnabled === 'yes') {
 						
 						$listWrapper.on('keyup', '.atum-post-search', function (e) {
-							self.key_up(e, $(this).closest('.search-box'));
+							self.keyUp(e, $(this).closest('.search-box'));
 						});
 						
-						$listWrapper.on('change', '.dropdown_product_cat', function (e) {
-							self.key_up(e, $(this).closest('.alignleft.actions'));
+						$listWrapper.on('change', '#filter-by-date, .dropdown_product_cat, #dropdown_product_type', function (e) {
+							self.keyUp(e, $(this).closest('.actions'));
 						});
 					}
+					// Non-ajax filters binding
 					else {
 						
 						$listWrapper.on('click', '.search-category, .search-submit', function () {
-							var data      = {
-								    paged   : parseInt($listWrapper.find('.current-page').val()) || '1',
+							
+							var page      = $listWrapper.find('.current-page').val() || 1,
+							    data      = {
+								    paged   : parseInt(page),
 								    order   : atumListTable.order || 'desc',
 								    orderby : atumListTable.orderby || 'date',
 								    v_filter: $listWrapper.find('.subsubsub a.current').attr('id') || '',
 								    s       : $search.val() || ''
 							    },
 							    $this     = $(this),
-							    elemClass = ($this.is('.search-category')) ? '.alignleft.actions' : '.search-box';
+							    elemClass = ($this.is('.search-category')) ? '.actions' : '.search-box';
 							
 							stockCentralTable.update(data, $this.closest(elemClass));
 							
@@ -153,8 +156,9 @@
 						
 					}
 					
+					// Pagination text box
 					$listWrapper.on('keyup', '.current-page', function (e) {
-						self.key_up(e, $(this).closest('.tablenav-pages'));
+						self.keyUp(e, $(this).closest('.tablenav-pages'));
 					});
 					
 					// Checkbox columns
@@ -231,7 +235,7 @@
 					
 				},
 				
-				key_up: function (e, $elem) {
+				keyUp: function (e, $elem) {
 					
 					var delay = 500;
 					
@@ -312,10 +316,11 @@
 					data = $.extend({
 						token      : atumListTable.nonce,
 						action     : 'atum_fetch_stock_central_list',
-						// We will modify next two values for show/hide columns
 						per_page   : perPage,
-						selected   : $inputSelectedIds.val(),
-						product_cat: $('.dropdown_product_cat').val() || ''
+						//selected   : $inputSelectedIds.val(),
+						category   : $listWrapper.find('.dropdown_product_cat').val() || '',
+						m          : $listWrapper.find('#filter-by-date').val() || '',
+						type       : $listWrapper.find('#dropdown_product_type').val() || '',
 					}, data);
 					
 					postTypeTableAjax = $.ajax({
@@ -397,7 +402,6 @@
 					});
 					
 				},
-				
 				
 				/**
 				 * Filter the URL Query to extract variables

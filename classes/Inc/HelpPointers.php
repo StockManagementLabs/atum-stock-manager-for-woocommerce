@@ -172,7 +172,7 @@ class HelpPointers {
 
 		?>
 		<script type="text/javascript">
-			jQuery( function($) {
+			(function ($) {
 				var WPHelpPointer = <?php echo json_encode( $pointers ) ?>;
 	
 				$.each(WPHelpPointer.pointers, function(i) {

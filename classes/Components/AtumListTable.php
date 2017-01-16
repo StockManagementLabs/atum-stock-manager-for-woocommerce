@@ -1,11 +1,11 @@
 <?php
 /**
- * @package            Atum
- * @subpackage         Inc
- * @author             Salva Machí and Jose Piera - https://sispixels.com
+ * @package         Atum
+ * @subpackage      Inc
+ * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       (c)2017 Stock Management Labs
  *
- * @since              0.0.1
+ * @since           0.0.1
  *
  * Extends WP_List_Table to display the stock management table
  */
@@ -114,14 +114,13 @@ class AtumListTable extends \WP_List_Table {
 	 * @since 0.0.1
 	 *
 	 * @param array|string $args          {
-	 *                                    Array or string of arguments.
+	 *      Array or string of arguments.
 	 *
-	 * @type array         $table_columns The table columns for the list table
-	 * @type array         $group_members The column grouping members
-	 * @type bool          $show_cb       Optional. Whether to show the row selector checkbox as first table column
-	 * @type int           $per_page      Optional. The number of posts to show per page (-1 for no pagination)
-	 * @type array         $selected      Optional. The posts selected on the list table
-	 * @type array         $taxonomies    Optional. The list of taxonomies to filter by
+	 *      @type array         $table_columns The table columns for the list table
+	 *      @type array         $group_members The column grouping members
+	 *      @type bool          $show_cb       Optional. Whether to show the row selector checkbox as first table column
+	 *      @type int           $per_page      Optional. The number of posts to show per page (-1 for no pagination)
+	 *      @type array         $selected      Optional. The posts selected on the list table
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -356,14 +355,20 @@ class AtumListTable extends \WP_List_Table {
 		 * Tax filter
 		 */
 		if ( $this->taxonomies ) {
-			$args['tax_query'] = apply_filters( 'atum/atum_list_table/taxonomies', $this->taxonomies );
+			$args['tax_query'] = (array) apply_filters( 'atum/atum_list_table/taxonomies', $this->taxonomies );
 		}
 		
 		/*
-		 * Category filter
+		 * Months filter
 		 */
-		if ( ! empty( $_REQUEST['category'] ) ) {
-			$args['category_name'] = $_REQUEST['category'];
+		if ( ! empty( $_REQUEST['m']) ) {
+			$month = esc_attr($_REQUEST['m']);
+			$args['date_query'] = array(
+				array(
+					'year' => substr($month, 0, 4),
+					'month' => substr($month, -2)
+				)
+			);
 		}
 		
 		/*
@@ -501,7 +506,7 @@ class AtumListTable extends \WP_List_Table {
 		}
 		
 		$this->data['v_filter'] = '';
-		$allow_query            = TRUE;
+		$allow_query = TRUE;
 		
 		/*
 	     * REQUIRED. Register our pagination options & calculations.

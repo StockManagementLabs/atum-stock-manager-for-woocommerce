@@ -1,11 +1,11 @@
 <?php
 /**
- * @package           Atum\StockCentral
- * @subpackage        Inc
- * @author            Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      (c)2017 Stock Management Labs
+ * @package         Atum\StockCentral
+ * @subpackage      Inc
+ * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @copyright       (c)2017 Stock Management Labs
  *
- * @since             0.0.1
+ * @since           0.0.1
  */
 
 namespace Atum\StockCentral\Inc;
@@ -22,42 +22,36 @@ class StockCentralList extends AtumListTable {
 	
 	/**
 	 * The post type used to build the table (WooCommerce product)
-	 *
 	 * @var string
 	 */
 	protected $post_type = 'product';
 	
 	/**
 	 * Current product used
-	 *
 	 * @var \WC_Product
 	 */
 	protected $product;
 	
 	/**
 	 * No stock Threshold
-	 *
 	 * @var int
 	 */
 	protected $no_stock;
 	
 	/**
 	 * Day of consult
-	 *
 	 * @var date
 	 */
 	protected $day;
 	
 	/**
 	 * Sale days from settings
-	 *
 	 * @var int
 	 */
 	protected $last_days;
 	
 	/**
 	 * Values for the calculated columns form current page products
-	 *
 	 * @var array
 	 */
 	protected $calc_columns = array();
@@ -70,40 +64,33 @@ class StockCentralList extends AtumListTable {
 	 * @since 0.0.1
 	 *
 	 * @param array|string $args       {
-	 *                                 Array or string of arguments.
+	 *      Array or string of arguments.
 	 *
-	 * @type array         $selected   Optional. The posts selected on the list table
-	 * @type bool          $show_cb    Optional. Whether to show the row selector checkbox as first table column
-	 * @type int           $per_page   Optional. The number of posts to show per page (-1 for no pagination)
-	 * @type array         $taxonomies Optional. The list of taxonomies to filter by
+	 *      @type array         $selected   Optional. The posts selected on the list table
+	 *      @type bool          $show_cb    Optional. Whether to show the row selector checkbox as first table column
+	 *      @type int           $per_page   Optional. The number of posts to show per page (-1 for no pagination)
 	 * }
 	 */
 	public function __construct( $args ) {
 		
 		$this->no_stock = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		
-		// TODO: Allow to specify the day of consult in constructor atts
+		// TODO: Allow to specify the day of query in constructor atts
 		$this->day       = Helpers::date_format( time(), TRUE );
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		
-		// TODO: Free version: just display simple products
-		// TODO: GET THE TAXONOMIES FROM THE ARGS AND MUST BE A SIMPLE ARRAY OF TAXOMONY SLUGS
-		$this->taxonomies = array(
-			array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => Globals::get_product_types()
-				)
-			)
+		$this->taxonomies[] = array(
+			'taxonomy' => 'product_type',
+			'field'    => 'slug',
+			'terms'    => Globals::get_product_types()
 		);
 		
 		$args['table_columns'] = array(
-			'thumb'                => '<span class="wc-image">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'                => '<span class="wc-image tips" data-tip="' . __('Image', ATUM_TEXT_DOMAIN) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_product_level'   => __( 'Product Level', ATUM_TEXT_DOMAIN ),
+			'calc_type'            => '<span class="wc-type tips" data-tip="' . __( 'Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_stock'           => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'            => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
@@ -125,7 +112,7 @@ class StockCentralList extends AtumListTable {
 		$args['group_members'] = array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'thumb', '_sku', 'ID', 'calc_product_level', 'title' )
+				'members' => array( 'thumb', '_sku', 'ID', 'calc_type', 'title' )
 			),
 			'stock-counters'        => array(
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
@@ -170,19 +157,67 @@ class StockCentralList extends AtumListTable {
 		
 		if ( $which == 'top' ) {
 			
-			echo '<div class="alignleft actions">';
-			$selected = ( ! empty( $_REQUEST['product_cat'] ) ) ? esc_attr( $_REQUEST['product_cat'] ) : '';
+			echo '<div class="alignleft actions"><div class="actions-wrapper">';
 			
-			echo '<div class="actions-wrapper">';
-			echo '<div class="filter-text">' . __( 'Filter by', ATUM_TEXT_DOMAIN ) . '</div>';
+			// Months filtering
+			$this->months_dropdown('product');
 			
+			// Category filtering
 			wc_product_dropdown_categories( array(
 				'show_count' => 0,
-				'selected'   => $selected,
+				'selected'   => ( ! empty( $_REQUEST['category'] ) ) ? esc_attr( $_REQUEST['category'] ) : '',
 			) );
 			
+			// Type filtering
+			$terms   = get_terms( 'product_type' );
+			$type    = ( isset( $_REQUEST['type'] ) ) ? esc_attr( $_REQUEST['type'] ) : '';
+			$output  = '<select name="product_type" id="dropdown_product_type">';
+			$output .= '<option value=""' . selected($type, '', FALSE) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
+			
+			foreach ( $terms as $term ) {
+				
+				if ( 'external' == $term->name ) {
+					continue;
+				}
+				
+				$output .= '<option value="' . sanitize_title( $term->name ) . '"' . selected( $term->slug, $type, FALSE ) . '>';
+				
+				switch ( $term->name ) {
+					case 'grouped' :
+						$output .= __( 'Grouped product', ATUM_TEXT_DOMAIN );
+						break;
+					/*case 'external' :
+						$output .= __( 'External/Affiliate product', ATUM_TEXT_DOMAIN );
+						break;*/
+					case 'variable' :
+						$output .= __( 'Variable product', ATUM_TEXT_DOMAIN );
+						break;
+					case 'simple' :
+						$output .= __( 'Simple product', ATUM_TEXT_DOMAIN );
+						break;
+					default :
+						// Assuming that we have other types in future
+						$output .= ucfirst( $term->name );
+						break;
+				}
+				
+				$output .= '</option>';
+				
+				if ( 'simple' == $term->name ) {
+					
+					$output .= '<option value="downloadable"' . selected( 'downloadable', $type, FALSE ) . '> &rarr; '
+					           . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
+					
+					$output .= '<option value="virtual"' . selected( 'virtual', $type, FALSE ) . '> &rarr; '
+					           . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
+				}
+			}
+			
+			$output .= '</select>';
+			echo $output;
+			
 			if ( Helpers::get_option( 'enable_ajax_filter', 'yes' ) == 'no' ) {
-				echo '<input type="submit" name="filter_action" class="button search-category" value="Filter">';
+				echo '<input type="submit" name="filter_action" class="button search-category" value="' . __('Filter', ATUM_TEXT_DOMAIN) . '">';
 			}
 			
 			echo '</div></div>';
@@ -219,6 +254,27 @@ class StockCentralList extends AtumListTable {
 	}
 	
 	/**
+	 * Column for product type
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return string
+	 */
+	protected function column_calc_type( $item ) {
+		
+		$type = $this->product->get_type();
+		$product_types = wc_get_product_types();
+		
+		if ( isset($product_types[$type]) ) {
+			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_types[$type] . '"></span>' );
+		}
+		
+		return '';
+	}
+	
+	/**
 	 * Column for stock amount
 	 *
 	 * @since  0.0.1
@@ -229,10 +285,7 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected function column_calc_stock( $item ) {
 		
-		// With external we don't have stock
-		$stock = ( $this->product->product_type == 'external' ) ? 'EXT' : intval( $this->product->get_total_stock() );
-		
-		return apply_filters( 'atum/stock_central_list/column_stock', $stock );
+		return apply_filters( 'atum/stock_central_list/column_stock', intval( $this->product->get_total_stock() ) );
 		
 	}
 	
@@ -247,39 +300,32 @@ class StockCentralList extends AtumListTable {
 	 * @param string   $primary
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
+			
+		$stock = intval( $this->product->get_total_stock() );
 		
-		if ( $this->product->product_type == 'external' ) {
-			// With external we don't have stock
-			$content = 'EXT';
+		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
+		if ( $stock <= 0 ) {
+			// no stock
+			$classes .= ' cell-red';
+			$content = '<span class="dashicons dashicons-dismiss"></span>';
 		}
-		else {
+		elseif ( isset( $this->calc_columns[ $this->product->id ]['sold_last_days'] ) ) {
 			
-			$stock = intval( $this->product->get_total_stock() );
-			
-			// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
-			if ( $stock <= 0 ) {
-				// no stock
-				$classes .= ' cell-red';
-				$content = '<span class="dashicons dashicons-dismiss"></span>';
-			}
-			elseif ( isset( $this->calc_columns[ $this->product->id ]['sold_last_days'] ) ) {
-				
-				// stock ok
-				if ( $stock >= $this->calc_columns[ $this->product->id ]['sold_last_days'] ) {
-					$classes .= ' cell-green';
-					$content = '<span class="dashicons dashicons-yes"></span>';
-				}
-				// stock low
-				else {
-					$classes .= ' cell-yellow';
-					$content = '<span class="dashicons dashicons-warning"></span>';
-				}
-				
-			}
-			else {
+			// stock ok
+			if ( $stock >= $this->calc_columns[ $this->product->id ]['sold_last_days'] ) {
 				$classes .= ' cell-green';
 				$content = '<span class="dashicons dashicons-yes"></span>';
 			}
+			// stock low
+			else {
+				$classes .= ' cell-yellow';
+				$content = '<span class="dashicons dashicons-warning"></span>';
+			}
+			
+		}
+		else {
+			$classes .= ' cell-green';
+			$content = '<span class="dashicons dashicons-yes"></span>';
 		}
 		
 		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
@@ -407,28 +453,20 @@ class StockCentralList extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_will_last( $item ) {
+			
+		// TODO: FOR THE FREE VERSION IS FIXED TO 7 DAYS AVERAGE
+		$will_last = '--';
+		$sales     = $this->column_calc_sales7( $item );
+		$stock     = intval( $this->product->get_total_stock() );
 		
-		// We can't manage the stock for external products
-		if ( $this->product->product_type == 'external' ) {
-			$will_last = 'EXT';
+		if ( $stock > 0 && $sales > 0 ) {
+			$will_last = ceil( $stock / ( $sales / 7 ) );
 		}
-		else {
-			
-			// TODO: FOR THE FREE VERSION IS FIXED TO 7 DAYS AVERAGE
-			$will_last = '--';
-			$sales     = $this->column_calc_sales7( $item );
-			$stock     = intval( $this->product->get_total_stock() );
-			
-			if ( $stock > 0 && $sales > 0 ) {
-				$will_last = ceil( $stock / ( $sales / 7 ) );
-			}
-			elseif ( $stock > 0 ) {
-				$will_last = '>30';
-			}
-			
+		elseif ( $stock > 0 ) {
+			$will_last = '>30';
 		}
 		
-		return apply_filters( "atum/stock_central_list/column_stock_will_last_days", $will_last );
+		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last );
 		
 	}
 	
@@ -559,16 +597,24 @@ class StockCentralList extends AtumListTable {
 	 */
 	public function prepare_items() {
 		
-		// Add product category to the tax query if needed
-		if ( ! empty( $_REQUEST['product_cat'] ) ) {
-			$this->taxonomies = array(
-				array(
-					'taxonomy' => 'product_cat',
-					'field'    => 'slug',
-					'terms'    => $_REQUEST['product_cat']
-				),
-				$this->taxonomies,
+		// Add product category to the tax query
+		if ( ! empty( $_REQUEST['category'] ) ) {
+			$this->taxonomies[] = array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => esc_attr( $_REQUEST['category'] )
 			);
+		}
+		
+		// Change the product type tax query (initialized in constructor) to the current queried type
+		if ( ! empty( $_REQUEST['type'] ) ) {
+			
+			foreach($this->taxonomies as $index => $taxonomy) {
+				if ($taxonomy['taxonomy'] == 'product_type') {
+					$this->taxonomies[$index]['terms'] = esc_attr( $_REQUEST['type'] );
+				}
+			}
+			
 		}
 		
 		parent::prepare_items();

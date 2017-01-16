@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Inbound stock counter represents the amount of products ordered by the store admin or manager. This feature is not available in 'Basic' ATUM interface. Premium and PRO users will be able to add inbound stock using the 'Purchase Order' menu. The 'Purchase Orders' system will amend the inbound stock indicator automatically.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Inbound stock counter represents the volume of products that have been ordered in by the store admin or manager. Our Premium users will be able to add inbound stock manually using the 'Stock Logs' menu. PRO users will be able to add inbound stock using the 'Purchase Orders' plugin.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock on Hold', ATUM_TEXT_DOMAIN ) ?></strong></td>
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Sold today', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "The value represents the number of products sold during the day. Sold products are only items which status changed to completed. Items that are sold, but pending payment will show in the 'Stock on Hold' indicator instead.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "The value represents the number of products sold during the day. Sold products are items included in 'completed' orders only. Items already sold, but pending payment will show in the 'Stock on Hold' column instead.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>

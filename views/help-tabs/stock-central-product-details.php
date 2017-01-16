@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die;
 	<tbody>
 		<tr>
 			<td><strong><?php _e( 'Checkbox', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( 'Select an item you would like to work with, amend or filter. After completing your selection chose one of the advanced options available at the top right of the page (selections and advanced options are only available in PRO version of the plugin).', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php printf( __( "Select an item you would like to work with, amend or filter. We introduce new filters and functions often, however, if you think we should add one urgently, don't hesitate to let us know %shere%s.", ATUM_TEXT_DOMAIN ), '<a href="http://www.stockmanagementlabs.com/feature-request" target="_blank">', '</a>' ) ?></td>
 		</tr>
 		<tr>
 			<td><span class="dashicons dashicons-format-image"></span></td>
@@ -37,8 +37,8 @@ defined( 'ABSPATH' ) or die;
 			<td><?php _e( "A WooCommerce Product ID is sometimes needed when using shortcodes, widgets and links. ATUM's stock central page will display the appropriate ID of the product in this column.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
-			<td><strong><?php _e( 'Product Level', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Product levels are critical in helping the stock central correctly calculate all your stock levels. We use family hierarchy in ATUM and divide products into \"parent\" and \"child\". All the items are 'child' products by default. You can set the product levels in the \"Product Levels\" section. (This feature is only available in Premium and PRO version).", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><strong><?php _e( 'Product Type', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php _e( 'This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>

@@ -22,11 +22,11 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Warehouse Damages', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "n the unlikely event of a warehouse or in-house damage, the Premium, or PRO user has the option to create an entry under the 'Warehouse Damages' tab within the 'Stock Log' menu. The ATUM plugin will, according to the log, remove the stock amount from the 'Current Stock' indicator.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "In the unlikely event of a warehouse or in-house damages, the Premium, and PRO users have the option to create an entry under the 'Warehouse Damages' tab within the 'Stock Log' menu. The ATUM plugin will, per the log, remove the damaged stock from the product's stock value.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Lost in Post', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Premium and PRO user can create a log entry under the 'Lost in Post' tab within the 'Stock Log' menu for all items that have gone missing on the route to the customer. This indicator represents a valuable control of the performance of postal carriers.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Premium and PRO users can create a log entry under the 'Lost in Post' tab within the 'Stock Log' menu for all items that have gone missing on the route to the customer. This indicator helps to control the performance of postal carriers as well as the work of dispatch departments.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>

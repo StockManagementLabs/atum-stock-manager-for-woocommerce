@@ -242,15 +242,17 @@ class Init {
 	 */
 	public function hide_manage_stock() {
 		
-		// TODO: only for free version??
-		?>
-		<script type="text/javascript">
-			(function ($) {
-				'use strict';
-				$('._manage_stock_field').removeClass('show_if_simple').find('.checkbox').prop('checked', true);
-			})(jQuery);
-		</script>
+		// The external products don't have stock
+		$product_type = wp_get_post_terms( get_the_ID(), 'product_type', array('fields' => 'names') );
+		
+		if ( ! is_wp_error($product_type) && ! in_array('external', $product_type) ) : ?>
+			<script type="text/javascript">
+				(function ($) {
+					$('._manage_stock_field').removeClass('show_if_simple show_if_variable').hide().find('.checkbox').prop('checked', true);
+				})(jQuery);
+			</script>
 		<?php
+		endif;
 		
 	}
 	
