@@ -579,6 +579,9 @@ class StockCentralList extends AtumListTable {
 				$view_url = esc_url( add_query_arg( array( 'v_filter' => $key ), $url ) );
 				$id  = ' id="' . $key . '"';
 			}
+			else {
+				$view_url = $url;
+			}
 			
 			$class = ( $key == $v_filter || ( ! $v_filter && $key == 'all_stock' ) ) ? ' class="current"' : '';
 			$count = $this->count_views[ 'count_' . ( ( $key == 'all_stock' ) ? 'all' : $key ) ];
