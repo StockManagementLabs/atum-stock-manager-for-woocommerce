@@ -256,7 +256,7 @@ class StockCentralList extends AtumListTable {
 	/**
 	 * Column for product type
 	 *
-	 * @since 1.0.1
+	 * @since 1.1.0
 	 *
 	 * @param \WP_Post $item The WooCommerce product post
 	 *
@@ -268,7 +268,24 @@ class StockCentralList extends AtumListTable {
 		$product_types = wc_get_product_types();
 		
 		if ( isset($product_types[$type]) ) {
-			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_types[$type] . '"></span>' );
+			
+			$product_tip = $product_types[$type];
+			
+			if ($type == 'simple') {
+				
+				if ( $this->product->is_downloadable() ) {
+					$type = 'downloadable';
+					$product_tip = __('Downloadable', ATUM_TEXT_DOMAIN);
+				}
+				elseif ( $this->product->is_virtual() ) {
+					$type = 'virtual';
+					$product_tip = __('Virtual', ATUM_TEXT_DOMAIN);
+				}
+				
+			}
+			
+			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>' );
+			
 		}
 		
 		return '';
