@@ -76,6 +76,7 @@
 .atum-list-wrapper {
   padding-bottom: 20px;
   width: 100%;
+  overflow: hidden;
 }
 
 .atum-list-wrapper .search-box input[type=search] {
@@ -198,6 +199,45 @@
   white-space: nowrap;
 }
 
+.atum-list-table tr.expanded {
+  -webkit-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+
+.atum-list-table tr.expanded.variable {
+  background-color: #0073AA;
+}
+
+.atum-list-table tr.expanded.group {
+  background-color: #FEC007;
+}
+
+.atum-list-table tr.expanded td {
+  color: #FFF;
+}
+
+.atum-list-table tr.expanded .column-calc_type .has-child:before {
+  content: "\e004";
+  color: #FFF;
+}
+
+.atum-list-table tr.variation {
+  background-color: #aae4ff;
+}
+
+.atum-list-table tr.variation:nth-child(even) {
+  background-color: #d3f1ff;
+}
+
+.atum-list-table tr.grouped {
+  background-color: #ffe9aa;
+}
+
+.atum-list-table tr.grouped:nth-child(even) {
+  background-color: #fff4d2;
+}
+
 .atum-list-table .cell-green {
   color: #00B050;
 }
@@ -233,6 +273,15 @@
 
 .atum-list-table .column-calc_type .wc-type {
   padding-left: 15px;
+}
+
+.atum-list-table .column-calc_type .has-child {
+  color: #0073AA;
+  cursor: pointer;
+}
+
+.atum-list-table .column-calc_type .has-child:hover:before {
+  content: "\e005";
 }
 
 .atum-list-table #calc_stock_out_days {

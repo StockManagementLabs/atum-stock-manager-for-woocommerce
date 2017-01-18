@@ -161,6 +161,23 @@
 						self.keyUp(e, $(this).closest('.tablenav-pages'));
 					});
 					
+					// Variation products expanding/collapsing
+					$listWrapper.on('click', '.product-type.has-child', function() {
+						
+						var typeClass      = $(this).hasClass('variable') ? 'variable' : 'group',
+						    $expandebleRow = $(this).closest('tr').toggleClass('expanded ' + typeClass),
+						    $nextRow       = $expandebleRow.next();
+						
+						do {
+							$nextRow.toggle();
+							$nextRow = $nextRow.next();
+						} while ( $nextRow.hasClass('variation') || $nextRow.hasClass('grouped') );
+						
+						// Reload the scrollbar
+						self.reloadScrollbar();
+						
+					});
+					
 					// Checkbox columns
 					// pro version
 					/*postsList.on('change', 'input[type=checkbox]', function(){
@@ -233,6 +250,11 @@
 						jScrollApi  = $scrollPane.data('jsp');
 					});
 					
+				},
+				
+				reloadScrollbar: function() {
+					jScrollApi.destroy();
+					this.addScrollBar();
 				},
 				
 				keyUp: function (e, $elem) {
@@ -387,8 +409,7 @@
 							}
 							
 							// Re-add the scrollbar
-							jScrollApi.destroy();
-							self.addScrollBar();
+							self.reloadScrollbar();
 							
 							// Add selected class to rows
 							//pro version

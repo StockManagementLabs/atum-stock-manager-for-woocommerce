@@ -169,60 +169,6 @@ class AtumListTable extends \WP_List_Table {
 	}
 	
 	/**
-	 * The default column (when no specific column method found)
-	 *
-	 * @since 0.0.1
-	 *
-	 * @param object $item
-	 * @param string $column_name
-	 *
-	 * @return string|bool
-	 */
-	protected function column_default( $item, $column_name ) {
-		
-		// Check if it's a hidden meta key (will start with underscore)
-		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $item->ID, $column_name, TRUE ) : '--';
-		
-		return apply_filters( "atum/atum_list_table/column_default_$column_name", $column_item );
-		
-	}
-	
-	/**
-	 * Post ID column
-	 *
-	 * @since  0.0.1
-	 *
-	 * @param object $item
-	 *
-	 * @return int
-	 */
-	protected function column_ID( $item ) {
-		
-		return apply_filters( 'atum/atum_list_table/column_ID', $item->ID );
-	}
-	
-	/**
-	 * Post title column
-	 *
-	 * @since  0.0.1
-	 *
-	 * @param object $item
-	 *
-	 * @return string
-	 */
-	protected function column_title( $item ) {
-		
-		$title = $item->post_title;
-		
-		if ( strlen( $title ) > 20 ) {
-			$title = '<span class="tips" data-tip="' . $title . '" data-placement="right">' . trim( substr( $title, 0, 20 ) ) .
-			         '...</span><span class="atum-title-small">' . $title . '</span>';
-		}
-		
-		return apply_filters( 'atum/atum_list_table/column_title', $title );
-	}
-	
-	/**
 	 * Column selector checkbox: Pro version
 	 *
 	 * @since  0.0.1

@@ -231,12 +231,64 @@ class StockCentralList extends AtumListTable {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item The WooCommerce product post
 	 */
 	public function single_row( $item ) {
 		
 		$this->product = wc_get_product( $item );
 		parent::single_row( $item );
+		
+		// Add the children products under each variable and grouped product
+		$type = $this->product->product_type;
+		if ( in_array($type, ['variable', 'grouped']) ) {
+			
+			$product_class = '\\WC_Product_' . ucfirst($type);
+			$parent_product = new $product_class($this->product->id);
+			$child_products = $parent_product->get_children();
+			
+			if ( ! empty($child_products) ) {
+				foreach ($child_products as $child_id) {
+					$this->product = wc_get_product($child_id);
+					$this->single_expandable_row($this->product->post, ($type == 'grouped' ? $type : 'variation'));
+				}
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Generates content for a expandable row on the table
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 * @param string   $type The type of product
+	 */
+	public function single_expandable_row( $item, $type ) {
+		echo '<tr class="' . $type . '" style="display: none">';
+		$this->single_row_columns( $item );
+		echo '</tr>';
+	}
+	
+	/**
+	 * The default column (when no specific column method found)
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param \WP_Post $item          The WooCommerce product post
+	 * @param string   $column_name   The current column name
+	 *
+	 * @return string|bool
+	 */
+	protected function column_default( $item, $column_name ) {
+		
+		// Check if it's a hidden meta key (will start with underscore)
+		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $id, $column_name, TRUE ) : '--';
+		
+		return apply_filters( "atum/atum_list_table/column_default_$column_name", $column_item );
+		
 	}
 	
 	/**
@@ -244,13 +296,60 @@ class StockCentralList extends AtumListTable {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item The WooCommerce product post
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	protected function column_thumb( $item ) {
 		
 		return apply_filters( 'atum/stock_central_list/column_thumb', $this->product->get_image( 'thumbnail' ) );
+	}
+	
+	/**
+	 * Post title column
+	 *
+	 * @since  0.0.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return string
+	 */
+	protected function column_title( $item ) {
+		
+		$title = '';
+		if ( $this->product->product_type == 'variation' ) {
+			
+			$attributes = wc_get_product_variation_attributes($this->product->variation_id);
+			if ( ! empty($attributes) ) {
+				$title = ucfirst( implode(' ', $attributes) );
+			}
+			
+		}
+		else {
+			$title = $item->post_title;
+		}
+		
+		if ( strlen( $title ) > 20 ) {
+			$title = '<span class="tips" data-tip="' . $title . '" data-placement="right">' . trim( substr( $title, 0, 20 ) ) .
+			         '...</span><span class="atum-title-small">' . $title . '</span>';
+		}
+		
+		return apply_filters( 'atum/stock_central_list/column_title', $title );
+	}
+	
+	/**
+	 * Post ID column
+	 *
+	 * @since  0.0.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return int
+	 */
+	protected function column_ID( $item ) {
+		
+		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		return apply_filters( 'atum/stock_central_list/column_ID', $id );
 	}
 	
 	/**
@@ -271,17 +370,29 @@ class StockCentralList extends AtumListTable {
 			
 			$product_tip = $product_types[$type];
 			
-			if ($type == 'simple') {
+			switch ( $type ) {
+				case 'simple':
+					
+					if ( $this->product->is_downloadable() ) {
+						$type = 'downloadable';
+						$product_tip = __('Downloadable', ATUM_TEXT_DOMAIN);
+					}
+					elseif ( $this->product->is_virtual() ) {
+						$type = 'virtual';
+						$product_tip = __('Virtual', ATUM_TEXT_DOMAIN);
+					}
+					
+			        break;
 				
-				if ( $this->product->is_downloadable() ) {
-					$type = 'downloadable';
-					$product_tip = __('Downloadable', ATUM_TEXT_DOMAIN);
-				}
-				elseif ( $this->product->is_virtual() ) {
-					$type = 'virtual';
-					$product_tip = __('Virtual', ATUM_TEXT_DOMAIN);
-				}
-				
+				case 'variable':
+				case 'grouped':
+					
+					if ( $this->product->has_child() ) {
+						$type .= ' has-child';
+						$product_tip .= '<br>' . __('(click to show/hide the children)', ATUM_TEXT_DOMAIN);
+					}
+					
+					break;
 			}
 			
 			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>' );

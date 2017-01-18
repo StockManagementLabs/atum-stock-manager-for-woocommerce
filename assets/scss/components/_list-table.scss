@@ -18,6 +18,7 @@
 .atum-list-wrapper {
 	padding-bottom: 20px;
 	width: 100%;
+	overflow: hidden;
 	
 	.search-box {
 		input[type=search] {
@@ -153,6 +154,51 @@
 		white-space: nowrap;
 	}
 	
+	tr {
+		
+		&.expanded {
+			@include transition(all 0.1s ease-in-out);
+			
+			&.variable {
+				background-color: $brand-primary;
+			}
+			
+			&.group {
+				background-color: $brand-warning;
+			}
+			
+			td {
+				color: #FFF;
+			}
+			
+			.column-calc_type {
+				.has-child {
+					&:before {
+						content: "\e004";
+						color: #FFF;
+					}
+				}
+			}
+		}
+		
+		&.variation {
+			background-color: lighten($brand-primary, 50%);
+			
+			&:nth-child(even) {
+				background-color: lighten($brand-primary, 58%);
+			}
+		}
+		
+		&.grouped {
+			background-color: lighten($brand-warning, 32%);
+			
+			&:nth-child(even) {
+				background-color: lighten($brand-warning, 40%);
+			}
+		}
+		
+	}
+	
 	.cell {
 		&-green {
 			color: $brand-success;
@@ -191,6 +237,17 @@
 	.column-calc_type {
 		.wc-type {
 			padding-left: $grid-gutter-width/2;
+		}
+		
+		.has-child {
+			color: $brand-primary;
+			cursor: pointer;
+			
+			&:hover {
+				&:before {
+					content: "\e005";
+				}
+			}
 		}
 	}
 	
