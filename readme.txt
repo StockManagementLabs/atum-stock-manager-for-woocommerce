@@ -207,16 +207,20 @@ Our team is still working on the launch of the main site, but you can get hold o
 == Changelog ==
 
 = 1.0.0. =
+
 * The first public release of ATUM plugin.
 
 = 1.0.3 =
+
 * Updated readme.txt
 * Minor fixes.
 
 = 1.0.6 =
+
 * Minor fixes.
 
 = 1.0.7 =
+
 * Help support link update.
 
 = 1.1.0 =
@@ -229,3 +233,16 @@ Changes:
 * Updated the readme.txt with "up to date" development progress.
 * Updated screenshots with "up to date" features.
 
+= 1.1.1 =
+
+Changes:
+
+* Manage WooCommerce "Manage Stock" option for product variations.
+* Disable WooCommerce "Manage Stock" option instead of hiding it.
+* Updated strings in language template file.
+* New dismissable welcome notice.
+* The premium columns are now hidden by default on Stock Central
+
+Fixes:
+
+* Minor fixes.
