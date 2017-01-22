@@ -51,16 +51,14 @@ The free version of the Stock Central includes:
 * EOQ - Economic Order Quantity Calculator (in development) - In corporate finance, economic order quantity (EOQ) is the order quantity that minimizes the total holding costs and ordering costs. It is one of the oldest classical production scheduling models.
 * Web-Based Invoice Generator (in development) - complete invoice customization, direct sending and without any monthly limits. Also, all your invoices are saved securely in one place.
 * Ground-Breaking Mobile Application for iOS, Android and Windows phones. (in development) - Smooth connection to your ATUM Stock Central, Easy stock counting options.
-
-
-Currently, we don't include variable products in the free version of the ATUM plugin. Our premium users will have an advanced control of the whole product hierarchy of WooCommerce. 
+ 
 
 = PREMIUM FEATURES =
   
 
 **Advanced Stock Management**
 
-Our Premium users have access to the fully featured ATUM Stock Central. Planned to be released in February 2017 by giving users addition tools to those available in our free version:
+Our Premium users have access to the fully featured ATUM Stock Central. Planned to be released in February 2017 by giving users additional tools to those available in our free version:
 
 * Full control of all WooCommerce product types.
 * Individual alphabetical or numerical column sorting.
@@ -98,14 +96,14 @@ Our PRO version of ATUM will be a must for any serious business! Every feature t
 * The complete inventory management for WooCommerce on all levels.
 * Multiple stock managers or warehouse employees with fully editable restriction controls (let your people see only the pages or features you want).
 * Customizable reporting and graphical overview of all WooCommerce stock movements.
-* Simple and very comfortable "stock taking". Use paper counting and upload your results or simply scan your WooCommerce inventory using your phone.
+* Simple and very comfortable "stock-taking". Use paper counting and upload your results or simply scan your WooCommerce inventory using your phone.
 * Crucial stock forecasting for any business size and all this connected directly to our great stock central.
 * Direct uploads of your WooCommerce inventory levels to the most popular accounting software like Xero, Sage, QuickBooks, Zoho, FreeAgent or KashFlow.
 
 **When we say that the PRO ATUM plugin is limitless, we mean it!**
 	
 	
-**Our team is in for may extensions and plugin for WooCommerce. Every active PRO subscriber will receive any work we develop entirely FREE for the whole time they use ATUM PRO.**
+**Our team is in for many extensions and plugin for WooCommerce. Every active PRO subscriber will receive any work we develop entirely FREE for the whole time they use ATUM PRO.**
 	
 	
 **(CONFIRMED) Upcoming Plugins & Features:**
@@ -159,17 +157,9 @@ This version of the ATUM plugin is completely free and designed to suit user tha
 
 Our Premium version is due to be launched in February 2017 and the PRO version in summer 2017.
 
-= Does it display all product types? =
-
-The free version of ATUM only works with simple/grouped products. We have an advanced control of variable products planned for our Premium and PRO users.
-
 = How do I control only selected products? =
 
 To control and view only selected products in Stock Central, disable the stock control option in 'Settings > Stock Central'. You will then need to enable the stock control option for each product you want to see in Stock Central individually. Our Premium and PRO users can do this quickly from the main Stock Central screen.
-
-= Does it support product variations? =
-
-Product variations are not supported by the free version of ATUM. We have an advanced feature for variable products prepared for our Premium and PRO users.
 
 = I have a problem, who do I contact? =
 
