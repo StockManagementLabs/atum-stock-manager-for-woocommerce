@@ -71,7 +71,7 @@ class StockCentral {
 	}
 	
 	/**
-	 * Save products per page option.
+	 * Save products per page option
 	 *
 	 * @since 0.0.2
 	 *
@@ -88,8 +88,8 @@ class StockCentral {
 	
 	
 	/**
-	 * Enable Screen options creating the list table before the Screen option panel is rendered table and enable
-	 * Per page option to Screen options. Also adds help tabs and help sidebar
+	 * Enable Screen options creating the list table before the Screen option panel is rendered and enable
+	 * "per page" option. Also add help tabs and help sidebar
 	 *
 	 * @since 0.0.2
 	 */
@@ -101,6 +101,7 @@ class StockCentral {
 			'default' => $this->per_page,
 			'option'  => 'products_per_page'
 		);
+		
 		add_screen_option( $option, $args );
 		
 		$help_tabs = array(
@@ -137,20 +138,48 @@ class StockCentral {
 		
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/stock-central-help-sidebar' ) );
 		
+		// TODO: THIS SHOULD BE OVERRIDDEN ON THE PREMIUM VERSION
+		// Hide some table columns by default on the free version
+		add_filter( 'default_hidden_columns', array($this, 'hide_premium_columns'), 10, 2 );
+		
 		$this->list = new StockCentralList( array('per_page' => $this->per_page) );
 		
 	}
 	
 	/**
-	 * Display help tabs content getting it form a view
+	 * Display the help tabs' content
 	 *
 	 * @since 0.0.2
+	 *
+	 * @param \WP_Screen $screen    The current screen
+	 * @param array      $tab       The current help tab
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 		
 		Helpers::load_view( 'help-tabs/stock-central-' . $tab['name'] );
 	}
 	
+	/**
+	 * Hide some columns by default (Only for free version)
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param array      $hidden    The array of coolumns to show
+	 * @param \WP_Screen $screen    The current screen
+	 *
+	 * @return array
+	 */
+	public function hide_premium_columns($hidden, $screen) {
+		
+		return array(
+			'calc_inbound',
+			'calc_reserved',
+			'calc_returns',
+			'calc_damages',
+			'calc_lost_post',
+			'calc_sold_lost_sales'
+		);
+	}
 	
 	/****************************
 	 * Instance methods

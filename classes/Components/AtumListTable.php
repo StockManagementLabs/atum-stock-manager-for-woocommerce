@@ -102,9 +102,9 @@ class AtumListTable extends \WP_List_Table {
 	protected $count_views = array();
 	
 	/**
-	 * User meta key to control if the current user has dismissed the "Manage Stock" notice
+	 * User meta key to control the current user dismissed notices
 	 */
-	const DISMISS_MANAGE_STOCK = ATUM_PREFIX . 'dismiss_notice_manage_stock';
+	const DISMISSED_NOTICES = 'atum_dismissed_notices';
 	
 	/**
 	 * Constructor
@@ -158,9 +158,11 @@ class AtumListTable extends \WP_List_Table {
 		
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		
+		$user_dismissed_notices = Helpers::get_dismissed_notices();
+		
 		if (
 			Helpers::get_option( 'manage_stock', 'no' ) == 'no' &&
-			get_user_meta( get_current_user_id(), self::DISMISS_MANAGE_STOCK, TRUE ) != 'yes'
+			( !$user_dismissed_notices || ! isset($user_dismissed_notices['manage_stock']) || $user_dismissed_notices['manage_stock'] != 'yes' )
 		) {
 			
 			add_action( 'admin_notices', array( $this, 'add_manage_stock_notice' ) );
@@ -650,7 +652,7 @@ class AtumListTable extends \WP_List_Table {
 	}
 	
 	/**
-	 * Gets the array needed to print html group columns in the Table
+	 * Gets the array needed to print html group columns in the table
 	 *
 	 * @since 0.0.1
 	 *
@@ -673,11 +675,14 @@ class AtumListTable extends \WP_List_Table {
 				}
 			}
 			
-			$response[] = array(
-				'name'    => $name,
-				'title'   => $group['title'],
-				'colspan' => $counter,
-			);
+			// Add the group only if there are columns within
+			if ($counter) {
+				$response[] = array(
+					'name'    => $name,
+					'title'   => $group['title'],
+					'colspan' => $counter
+				);
+			}
 		}
 		
 		return $response;
@@ -805,19 +810,11 @@ class AtumListTable extends \WP_List_Table {
 	 */
 	public function add_manage_stock_notice() {
 		
-		$class   = 'notice notice-warning notice-management-stock';
-		$message = sprintf( __( '%1$s plugin can bulk-enable all your items for stock management at the product level. %1$s will save your original settings if you decide to go back later or uninstall the plugin.', ATUM_TEXT_DOMAIN ), strtoupper( ATUM_TEXT_DOMAIN ) );
-		$link    = __( "Enable ATUM's Manage Stock option", ATUM_TEXT_DOMAIN );
-		
 		?>
-		<div class="<?php echo $class ?>" data-nonce="<?php echo wp_create_nonce( ATUM_PREFIX . 'manage-stock-notice' ) ?>">
+		<div class="notice notice-warning atum-notice notice-management-stock is-dismissible" data-nonce="<?php echo wp_create_nonce( ATUM_PREFIX . 'manage-stock-notice' ) ?>">
 			<p class="manage-message">
-				<?php echo $message ?>
-				<button type="button" class="add-manage-option button button-primary button-small"><?php echo $link ?></button>
-			</p>
-			
-			<p class="manage-dismiss">
-				<a href="#"><?php _e( 'Dismiss', ATUM_TEXT_DOMAIN ) ?></a>
+				<?php printf( __( '%1$s plugin can bulk-enable all your items for stock management at the product level. %1$s will save your original settings if you decide to go back later or uninstall the plugin.', ATUM_TEXT_DOMAIN ), strtoupper( ATUM_TEXT_DOMAIN ) ) ?>
+				<button type="button" class="add-manage-option button button-primary button-small"><?php _e( "Enable ATUM's Manage Stock option", ATUM_TEXT_DOMAIN ) ?></button>
 			</p>
 		</div>
 		<?php

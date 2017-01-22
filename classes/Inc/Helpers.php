@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumListTable;
 use Atum\Settings\Settings;
 
 
@@ -466,16 +467,19 @@ final class Helpers {
 	}
 	
 	/**
-	 * Activate Atum Management Stock Option
+	 * Activate ATUM Management Stock Option
 	 *
 	 * @since 0.1.0
 	 */
 	public static function activate_manage_stock_option() {
 		
+		$product_types = Globals::get_product_types();
+		$post_types = ( in_array('variable', $product_types) ) ? array('product', 'product_variation') : 'product';
+		
 		// Save the options
 		// Don't mind type product. They never have yes
 		$args     = array(
-			'post_type'      => 'product',
+			'post_type'      => $post_types,
 			'fields'         => 'ids',
 			'posts_per_page' => - 1,
 			'meta_query'     => array(
@@ -490,12 +494,13 @@ final class Helpers {
 					'value' => 'no'
 				)
 			),
-			// TODO: FREE VERSION
+			// The external products are not stockable
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'product_type',
 					'field'    => 'slug',
-					'terms'    => Globals::get_product_types()
+					'terms'    => 'external',
+					'operator' => 'NOT IN'
 				)
 			)
 		);
@@ -504,7 +509,7 @@ final class Helpers {
 		
 		update_option( ATUM_PREFIX . 'restore_option_stock', $products->posts );
 		
-		//set all to yes
+		// Set all products to yes
 		foreach ( $products->posts as $product ) {
 			update_post_meta( $product, '_manage_stock', 'yes' );
 		}
@@ -528,4 +533,37 @@ final class Helpers {
 		
 		return date_i18n( 'Y-m-d H:i:s', $date );
 	}
+	
+	/**
+	 * Add a notice to the list of dismissed notices for the current user
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param string $notice    The notice key
+	 *
+	 * @return int|bool
+	 */
+	public static function dismiss_notice ($notice) {
+		
+		$current_user_id = get_current_user_id();
+		$user_dismissed_notices = self::get_dismissed_notices($current_user_id);
+		$user_dismissed_notices[$notice] = 'yes';
+		
+		return update_user_meta($current_user_id, AtumListTable::DISMISSED_NOTICES, $user_dismissed_notices);
+	}
+	
+	/**
+	 * Get the list of ATUM's dismissed notices for the current user
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param int $user_id  The ID of the user to retrieve the dismissed notices from
+	 *
+	 * @return array|bool
+	 */
+	public static function get_dismissed_notices ($user_id = NULL) {
+		$user_id = ($user_id) ? absint($user_id) : get_current_user_id();
+		return apply_filters( 'atum/dismissed_notices', get_user_meta($user_id, AtumListTable::DISMISSED_NOTICES, TRUE) );
+	}
+	
 }

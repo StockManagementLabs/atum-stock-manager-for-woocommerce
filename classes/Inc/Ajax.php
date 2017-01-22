@@ -34,6 +34,9 @@ final class Ajax {
 		
 		// Ajax callback for Management Stock notice
 		add_action( 'wp_ajax_atum_manage_stock_notice', array( $this, 'manage_stock_notice' ) );
+		
+		// Ajax callback for welcome notice dismissal
+		add_action( 'wp_ajax_atum_welcome_notice', array( $this, 'welcome_notice' ) );
 	}
 	
 	/**
@@ -58,7 +61,7 @@ final class Ajax {
 	}
 	
 	/**
-	 * Handle the ajax requests send by the Atum List table notices
+	 * Handle the ajax requests sent by the Atum's "Manage Stock" notice
 	 *
 	 * @since 0.1.0
 	 */
@@ -74,9 +77,22 @@ final class Ajax {
 		}
 		// Dismiss the notice permanently
 		elseif ( $action == 'dismiss') {
-			update_user_meta(get_current_user_id(), AtumListTable::DISMISS_MANAGE_STOCK, 'yes');
+			Helpers::dismiss_notice('manage_stock');
 		}
 		
+		wp_die();
+		
+	}
+	
+	/**
+	 * Handle the ajax requests sent by the Atum's "Welcome" notice
+	 *
+	 * @since 1.1.1
+	 */
+	public function welcome_notice() {
+		
+		check_ajax_referer( 'dismiss-welcome-notice', 'token' );
+		Helpers::dismiss_notice('welcome');
 		wp_die();
 		
 	}

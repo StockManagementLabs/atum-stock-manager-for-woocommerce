@@ -57,6 +57,12 @@ class StockCentralList extends AtumListTable {
 	protected $calc_columns = array();
 	
 	/**
+	 * Whether the currently displayed product is an expandable child product
+	 * @var bool
+	 */
+	protected $is_child = FALSE;
+	
+	/**
 	 * Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args.
@@ -143,6 +149,8 @@ class StockCentralList extends AtumListTable {
 		);
 		
 		parent::__construct( $args );
+		
+		add_action( 'admin_notices', array( $this, 'add_premium_columns_notice' ) );
 		
 	}
 	
@@ -248,12 +256,16 @@ class StockCentralList extends AtumListTable {
 			
 			if ( ! empty($child_products) ) {
 				foreach ($child_products as $child_id) {
+					$this->is_child = TRUE;
 					$this->product = wc_get_product($child_id);
 					$this->single_expandable_row($this->product->post, ($type == 'grouped' ? $type : 'variation'));
 				}
 			}
 			
 		}
+		
+		// Reset the child value
+		$this->is_child = FALSE;
 		
 	}
 	
@@ -366,14 +378,20 @@ class StockCentralList extends AtumListTable {
 		$type = $this->product->get_type();
 		$product_types = wc_get_product_types();
 		
-		if ( isset($product_types[$type]) ) {
+		if ( isset($product_types[$type]) || $this->is_child ) {
 			
-			$product_tip = $product_types[$type];
+			if ( ! $this->is_child ) {
+				$product_tip = $product_types[ $type ];
+			}
 			
 			switch ( $type ) {
 				case 'simple':
 					
-					if ( $this->product->is_downloadable() ) {
+					if ($this->is_child) {
+						$type = 'grouped-item';
+						$product_tip = __('Group Item', ATUM_TEXT_DOMAIN);
+					}
+					elseif ( $this->product->is_downloadable() ) {
 						$type = 'downloadable';
 						$product_tip = __('Downloadable', ATUM_TEXT_DOMAIN);
 					}
@@ -387,11 +405,20 @@ class StockCentralList extends AtumListTable {
 				case 'variable':
 				case 'grouped':
 					
-					if ( $this->product->has_child() ) {
+					if ($this->is_child) {
+						$type = 'grouped-item';
+						$product_tip = __('Group Item', ATUM_TEXT_DOMAIN);
+					}
+					elseif ( $this->product->has_child() ) {
 						$type .= ' has-child';
 						$product_tip .= '<br>' . __('(click to show/hide the children)', ATUM_TEXT_DOMAIN);
 					}
 					
+					break;
+					
+				case 'variation':
+					
+					$product_tip = __('Variation', ATUM_TEXT_DOMAIN);
 					break;
 			}
 			
@@ -888,7 +915,7 @@ class StockCentralList extends AtumListTable {
 			if ( $this->count_views['count_in_stock'] ) {
 				
 				$low_stock_transient = 'stock_central_list_low_stock_' . Helpers::get_transient_identifier( $args );
-				$result              = Helpers::get_transient( $low_stock_transient );
+				$result = Helpers::get_transient( $low_stock_transient );
 				
 				if ( ! $result ) {
 					
@@ -929,6 +956,29 @@ class StockCentralList extends AtumListTable {
 			}
 			
 		}
+		
+	}
+	
+	/**
+	 * Add a notice the first time the user enter the Stock Central informing about disabled columns
+	 *
+	 * @since 1.1.0
+	 */
+	public function add_premium_columns_notice() {
+		
+		$user_dismissed_notices = Helpers::get_dismissed_notices();
+		
+		if ( !$user_dismissed_notices || ! isset($user_dismissed_notices['welcome']) || $user_dismissed_notices['welcome'] != 'yes' ):
+			?>
+			<div class="notice notice-info atum-notice welcome-notice is-dismissible" data-nonce="<?php echo wp_create_nonce('dismiss-welcome-notice') ?>">
+				<p>
+					<?php _e("Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this great plugin.", ATUM_TEXT_DOMAIN) ?><br><br>
+					<?php _e("We have disabled some inactive columns by default as these are only available for future upgrades or our Premium and PRO users. If you'd like to preview them, please, use the display menu in the top corner.", ATUM_TEXT_DOMAIN)  ?><br><br>
+					<?php _e('Thank you very much for using ATUM as your inventory manager.') ?>
+				</p>
+			</div>
+			<?php
+		endif;
 		
 	}
 	

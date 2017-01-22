@@ -248,7 +248,8 @@ class Init {
 		if ( ! is_wp_error($product_type) && ! in_array('external', $product_type) && ! in_array('grouped', $product_type) ) : ?>
 			<script type="text/javascript">
 				(function ($) {
-					$('._manage_stock_field').removeClass('show_if_simple show_if_variable').hide().find('.checkbox').prop('checked', true);
+					$('._manage_stock_field').find('.checkbox').prop({'checked': true, 'disabled': true})
+						.siblings('.description').text('<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM**', ATUM_TEXT_DOMAIN) ?>');
 				})(jQuery);
 			</script>
 		<?php

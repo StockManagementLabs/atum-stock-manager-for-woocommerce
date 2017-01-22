@@ -10,9 +10,9 @@
 	
 	$(function () {
 		
-		/****************************
-		 * Stock Central List
-		 ****************************/
+		//-------------------
+		// Stock Central List
+		//-------------------
 		var postTypeTableAjax = '';
 		
 		$('.atum-list-wrapper').each(function () {
@@ -452,10 +452,10 @@
 			
 		});
 		
-		/***************************
-		 * Management Stock notice
-		 ***************************/
-		var $notice    = $('.notice-management-stock'),
+		//-------------------------
+		// Management Stock notice
+		//-------------------------
+		var $notice    = $('.atum-notice.notice-management-stock'),
 		    noticeAjax = '';
 		
 		var noticeAction = {
@@ -463,13 +463,12 @@
 			init: function () {
 				var self = this;
 				
-				$notice.find('.add-manage-option').click(function () {
+				$notice.find('.add-manage-option').click( function () {
 					$(this).after('<span class="atum-loading" />');
 					self.send('manage');
 				});
 				
-				$notice.find('.manage-dismiss a').click(function (e) {
-					e.preventDefault();
+				$notice.click('.notice-dismiss', function () {
 					self.send('dismiss');
 				});
 				
@@ -503,6 +502,23 @@
 		
 		noticeAction.init();
 		
+		//----------------
+		// Welcome notice
+		//----------------
+		$('.atum-notice.welcome-notice').click('.notice-dismiss', function() {
+			
+			var $welcomeNotice = $(this);
+			
+			$.ajax({
+				url     : ajaxurl,
+				method  : 'POST',
+				data    : {
+					token : $welcomeNotice.data('nonce'),
+					action: 'atum_welcome_notice',
+				}
+			});
+			
+		});
 		
 	});
 	

@@ -276,12 +276,23 @@
 }
 
 .atum-list-table .column-calc_type .has-child {
-  color: #0073AA;
   cursor: pointer;
+}
+
+.atum-list-table .column-calc_type .has-child.variable {
+  color: #0073AA;
+}
+
+.atum-list-table .column-calc_type .has-child.grouped {
+  color: #FEC007;
 }
 
 .atum-list-table .column-calc_type .has-child:hover:before {
   content: "\e005";
+}
+
+.atum-list-table .column-calc_type .variation:before, .atum-list-table .column-calc_type .grouped-item:before {
+  content: "\e039";
 }
 
 .atum-list-table #calc_stock_out_days {
@@ -320,7 +331,7 @@
   }
 }
 
-.notice-management-stock {
+.atum-notice {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -332,7 +343,7 @@
   align-items: center;
 }
 
-.notice-management-stock .manage-message {
+.atum-notice .manage-message {
   position: relative;
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
@@ -341,7 +352,16 @@
   flex-grow: 1;
 }
 
-.notice-management-stock .atum-loading {
+.atum-notice .notice-dismiss {
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.atum-notice .atum-loading {
   margin-left: 5px;
   margin-top: 3px;
 }

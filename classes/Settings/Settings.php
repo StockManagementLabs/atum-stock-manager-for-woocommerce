@@ -76,7 +76,7 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		
-		//TODO: May this be changed to init???
+		// TODO: Should this be changed to init???
 		add_filter( "pre_update_option_" . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
 		
 		$this->sections = array(

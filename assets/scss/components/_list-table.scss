@@ -240,13 +240,26 @@
 		}
 		
 		.has-child {
-			color: $brand-primary;
 			cursor: pointer;
+			
+			&.variable {
+				color: $brand-primary;
+			}
+			
+			&.grouped {
+				color: $brand-warning;
+			}
 			
 			&:hover {
 				&:before {
 					content: "\e005";
 				}
+			}
+		}
+		
+		.variation, .grouped-item {
+			&:before {
+				content: "\e039";
 			}
 		}
 	}
@@ -297,13 +310,18 @@
 }
 
 // Manage Stock notice
-.notice-management-stock{
+.atum-notice {
 	@include flexbox;
 	@include flex-align-items(center);
 	
 	.manage-message {
 		position: relative;
 		@include flex-grow(1);
+	}
+	
+	.notice-dismiss {
+		top: 50%;
+		@include transform(translateY(-50%));
 	}
 	
 	.atum-loading {
