@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-01-16 19:08+0100\n"
+"POT-Creation-Date: 2017-01-22 15:17+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -45,27 +45,27 @@ msgstr ""
 msgid "%s requires WooCommerce version 2.5 or greater"
 msgstr ""
 
-#: classes/Bootstrap.php:182 classes/Bootstrap.php:187 classes/Inc/Ajax.php:91
-#: classes/Inc/Ajax.php:97 classes/Inc/Init.php:365 classes/Inc/Init.php:371
+#: classes/Bootstrap.php:182 classes/Bootstrap.php:187 classes/Inc/Ajax.php:107
+#: classes/Inc/Ajax.php:113 classes/Inc/Init.php:394 classes/Inc/Init.php:400
 #: classes/Settings/Settings.php:405 classes/Settings/Settings.php:411
-#: classes/StockCentral/StockCentral.php:161
-#: classes/StockCentral/StockCentral.php:167
+#: classes/StockCentral/StockCentral.php:190
+#: classes/StockCentral/StockCentral.php:196
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:684
+#: classes/Components/AtumListTable.php:632
 #, php-format
 msgid " with query '%s'"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:818
+#: classes/Components/AtumListTable.php:769
 #, php-format
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Components/AtumListTable.php:863
+#: classes/Components/AtumListTable.php:816
 #, php-format
 msgid ""
 "%1$s plugin can bulk-enable all your items for stock management at the "
@@ -73,12 +73,8 @@ msgid ""
 "back later or uninstall the plugin."
 msgstr ""
 
-#: classes/Components/AtumListTable.php:864
+#: classes/Components/AtumListTable.php:817
 msgid "Enable ATUM's Manage Stock option"
-msgstr ""
-
-#: classes/Components/AtumListTable.php:874
-msgid "Dismiss"
 msgstr ""
 
 #: classes/Inc/HelpPointers.php:192
@@ -138,23 +134,27 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: classes/Inc/Init.php:333
+#: classes/Inc/Init.php:255 classes/Inc/Init.php:277
+msgid "**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**"
+msgstr ""
+
+#: classes/Inc/Init.php:362
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Init.php:334
+#: classes/Inc/Init.php:363
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Init.php:344
+#: classes/Inc/Init.php:373
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Init.php:345
+#: classes/Inc/Init.php:374
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Settings/Settings.php:84 classes/StockCentral/StockCentral.php:109
+#: classes/Settings/Settings.php:84 classes/StockCentral/StockCentral.php:110
 msgid "General"
 msgstr ""
 
@@ -226,157 +226,185 @@ msgstr ""
 msgid "No, keep them"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:83
+#: classes/StockCentral/Inc/StockCentralList.php:95
 msgid "Image"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:83
+#: classes/StockCentral/Inc/StockCentralList.php:95
 msgid "Thumb"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:84
+#: classes/StockCentral/Inc/StockCentralList.php:96
 #: views/help-tabs/stock-central-product-details.php:28
 msgid "Product Name"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:85
+#: classes/StockCentral/Inc/StockCentralList.php:97
 #: views/help-tabs/stock-central-product-details.php:32
 msgid "SKU"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:86
+#: classes/StockCentral/Inc/StockCentralList.php:98
 #: views/help-tabs/stock-central-product-details.php:36
 msgid "ID"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:87
+#: classes/StockCentral/Inc/StockCentralList.php:99
 msgid "Type"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:88
+#: classes/StockCentral/Inc/StockCentralList.php:100
 #: views/help-tabs/stock-central-stock-counters.php:20
 msgid "Current Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:89
+#: classes/StockCentral/Inc/StockCentralList.php:101
 #: views/help-tabs/stock-central-stock-counters.php:24
 msgid "Inbound Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:90
+#: classes/StockCentral/Inc/StockCentralList.php:102
 #: views/help-tabs/stock-central-stock-counters.php:28
 msgid "Stock on Hold"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:91
+#: classes/StockCentral/Inc/StockCentralList.php:103
 #: views/help-tabs/stock-central-stock-counters.php:32
 msgid "Reserved Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:92
+#: classes/StockCentral/Inc/StockCentralList.php:104
 #: views/help-tabs/stock-central-stock-counters.php:36
 msgid "Back Orders"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:93
+#: classes/StockCentral/Inc/StockCentralList.php:105
 msgid "Sold Today"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:94
+#: classes/StockCentral/Inc/StockCentralList.php:106
 #: views/help-tabs/stock-central-stock-negatives.php:20
 msgid "Customer Returns"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:95
+#: classes/StockCentral/Inc/StockCentralList.php:107
 #: views/help-tabs/stock-central-stock-negatives.php:24
 msgid "Warehouse Damages"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:96
+#: classes/StockCentral/Inc/StockCentralList.php:108
 #: views/help-tabs/stock-central-stock-negatives.php:28
 msgid "Lost in Post"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:97
+#: classes/StockCentral/Inc/StockCentralList.php:109
 #: views/help-tabs/stock-central-stock-selling-manager.php:20
 msgid "Sales Last 14 Days"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:98
+#: classes/StockCentral/Inc/StockCentralList.php:110
 #: views/help-tabs/stock-central-stock-selling-manager.php:24
 msgid "Sales Last 7 Days"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:99
+#: classes/StockCentral/Inc/StockCentralList.php:111
 #: views/help-tabs/stock-central-stock-selling-manager.php:28
 msgid "Stock will Last (Days)"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:100
+#: classes/StockCentral/Inc/StockCentralList.php:112
 #: views/help-tabs/stock-central-stock-selling-manager.php:32
 msgid "Out of Stock for (Days)"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:101
+#: classes/StockCentral/Inc/StockCentralList.php:113
 #: views/help-tabs/stock-central-stock-selling-manager.php:36
 msgid "Lost Sales"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:102
+#: classes/StockCentral/Inc/StockCentralList.php:114
 #: views/help-tabs/stock-central-stock-selling-manager.php:40
 msgid "Stock Indicator"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:108
-#: classes/StockCentral/StockCentral.php:113
+#: classes/StockCentral/Inc/StockCentralList.php:120
+#: classes/StockCentral/StockCentral.php:114
 msgid "Product Details"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:112
-#: classes/StockCentral/StockCentral.php:117
+#: classes/StockCentral/Inc/StockCentralList.php:124
+#: classes/StockCentral/StockCentral.php:118
 msgid "Stock Counters"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:123
-#: classes/StockCentral/StockCentral.php:121
+#: classes/StockCentral/Inc/StockCentralList.php:135
+#: classes/StockCentral/StockCentral.php:122
 msgid "Stock Negatives"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:127
-#: classes/StockCentral/StockCentral.php:125
+#: classes/StockCentral/Inc/StockCentralList.php:139
+#: classes/StockCentral/StockCentral.php:126
 msgid "Stock Selling Manager"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:169
+#: classes/StockCentral/Inc/StockCentralList.php:183
 msgid "Show all product types"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:177
+#: classes/StockCentral/Inc/StockCentralList.php:195
 msgid "Grouped product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:180
-msgid "External/Affiliate product"
-msgstr ""
-
-#: classes/StockCentral/Inc/StockCentralList.php:183
+#: classes/StockCentral/Inc/StockCentralList.php:201
 msgid "Variable product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:186
+#: classes/StockCentral/Inc/StockCentralList.php:204
 msgid "Simple product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:199
+#: classes/StockCentral/Inc/StockCentralList.php:217
+#: classes/StockCentral/Inc/StockCentralList.php:396
 msgid "Downloadable"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:202
+#: classes/StockCentral/Inc/StockCentralList.php:220
+#: classes/StockCentral/Inc/StockCentralList.php:400
 msgid "Virtual"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:210
+#: classes/StockCentral/Inc/StockCentralList.php:228
 msgid "Filter"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:392
+#: classes/StockCentral/Inc/StockCentralList.php:410
+msgid "Group Item"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:414
+msgid "(click to show/hide the children)"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:421
+msgid "Variation"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:975
+msgid ""
+"Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this "
+"great plugin."
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:976
+msgid ""
+"We have disabled some inactive columns by default as these are only "
+"available for future upgrades or our Premium and PRO users. If you'd like to "
+"preview them, please, use the display menu in the top corner."
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:977
+msgid "Thank you very much for using ATUM as your inventory manager."
 msgstr ""
 
 #: views/go-premium.php:18

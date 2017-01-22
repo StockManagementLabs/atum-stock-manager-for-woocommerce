@@ -273,7 +273,7 @@ class Init {
 		<script type="text/javascript">
 			(function ($) {
 				$('.variable_manage_stock').each(function() {
-					$(this).prop('disabled', true)
+					$(this).prop({'checked': true, 'disabled': true})
 						.siblings('.woocommerce-help-tip').attr('data-tip', '<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**', ATUM_TEXT_DOMAIN) ?>');
 				});
 			})(jQuery);
