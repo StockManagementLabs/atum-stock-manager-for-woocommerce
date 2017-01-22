@@ -226,8 +226,11 @@ class Init {
 	 */
 	public function manage_stock_hooks() {
 		
-		// Hide WooCommerce manage stock option for individual products
-		add_action( 'woocommerce_product_options_stock', array( $this, 'hide_manage_stock' ) );
+		// Disable WooCommerce manage stock option for individual products
+		add_action( 'woocommerce_product_options_stock', array( $this, 'disable_manage_stock' ) );
+		
+		// Disable WooCommerce manage stock option for product variations
+		add_action( 'woocommerce_ajax_admin_get_variations_args', array($this, 'disable_variation_manage_stock'));
 		
 		// Set to yes the WooCommerce _manage_stock meta key for individual products
 		add_action( 'added_post_meta', array( $this, 'save_manage_stock' ), 10, 4 );
@@ -236,11 +239,11 @@ class Init {
 	}
 	
 	/**
-	 * Hide the WooCommerce "Manage Stock" checkbox for simple products
+	 * Disable the WooCommerce "Manage Stock" checkbox for simple products
 	 *
 	 * @since 0.1.0
 	 */
-	public function hide_manage_stock() {
+	public function disable_manage_stock() {
 		
 		// The external products don't have stock and the grouped depends on its own products' stock
 		$product_type = wp_get_post_terms( get_the_ID(), 'product_type', array('fields' => 'names') );
@@ -249,12 +252,35 @@ class Init {
 			<script type="text/javascript">
 				(function ($) {
 					$('._manage_stock_field').find('.checkbox').prop({'checked': true, 'disabled': true})
-						.siblings('.description').text('<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM**', ATUM_TEXT_DOMAIN) ?>');
+						.siblings('.description').text('<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**', ATUM_TEXT_DOMAIN) ?>');
 				})(jQuery);
 			</script>
-		<?php
-		endif;
+		<?php endif;
 		
+	}
+	
+	/**
+	 * Disable the WooCommerce "Manage Stock" checkbox for simple products
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function disable_variation_manage_stock ($args) {
+		
+		?>
+		<script type="text/javascript">
+			(function ($) {
+				$('.variable_manage_stock').each(function() {
+					$(this).prop('disabled', true)
+						.siblings('.woocommerce-help-tip').attr('data-tip', '<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**', ATUM_TEXT_DOMAIN) ?>');
+				});
+			})(jQuery);
+		</script>
+		<?php
+		
+		return $args;
 	}
 	
 	/**
