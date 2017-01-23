@@ -116,11 +116,8 @@ class Init {
 				'callback' => array( $this, 'load_stock_central' ),
 				'slug'     => 'stock-central'
 			),
-			'product-levels'  => array(
+			/*'product-levels'  => array(
 				'title' => __( 'Product Levels', ATUM_TEXT_DOMAIN ),
-			),
-			'stock-redist'    => array(
-				'title' => __( 'Stock Redistribution', ATUM_TEXT_DOMAIN ),
 			),
 			'stock-takes'     => array(
 				'title' => __( 'Stock Takes', ATUM_TEXT_DOMAIN ),
@@ -149,12 +146,12 @@ class Init {
 			'purchase-orders' => array(
 				'title' => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
 			),
-			/*'the-mobile-app' => array(
+			'the-mobile-app' => array(
 				'title' => __('The Mobile App', ATUM_TEXT_DOMAIN),
-			),*/
+			),
 			'import-export'   => array(
 				'title' => __( 'Import/Export', ATUM_TEXT_DOMAIN ),
-			),
+			),*/
 			'settings'        => array(
 				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this, 'load_settings' ),
