@@ -439,8 +439,8 @@ class StockCentralList extends AtumListTable {
 	 * @return string|int
 	 */
 	protected function column_calc_stock( $item ) {
-		
-		return apply_filters( 'atum/stock_central_list/column_stock', intval( $this->product->get_total_stock() ) );
+
+		return apply_filters( 'atum/stock_central_list/column_stock', Helpers::get_product_stock($this->product) );
 		
 	}
 	
@@ -456,7 +456,7 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 			
-		$stock = intval( $this->product->get_total_stock() );
+		$stock = Helpers::get_product_stock($this->product);
 		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if ( $stock <= 0 ) {
@@ -612,7 +612,7 @@ class StockCentralList extends AtumListTable {
 		// TODO: FOR THE FREE VERSION IS FIXED TO 7 DAYS AVERAGE
 		$will_last = '--';
 		$sales     = $this->column_calc_sales7( $item );
-		$stock     = intval( $this->product->get_total_stock() );
+		$stock     = Helpers::get_product_stock($this->product);
 		
 		if ( $stock > 0 && $sales > 0 ) {
 			$will_last = ceil( $stock / ( $sales / 7 ) );
