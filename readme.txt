@@ -231,7 +231,10 @@ Changes:
 * Disable WooCommerce "Manage Stock" option instead of hiding it.
 * Updated strings in language template file.
 * New dismissable welcome notice.
-* The premium columns are now hidden by default on Stock Central
+* The premium columns are now hidden by default on Stock Central.
+* Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
+* Display for the Grouped products the stock amount of the child product with the lowest stock.
+* Disabled the non available ATUM submenus.
 
 Fixes:
 
