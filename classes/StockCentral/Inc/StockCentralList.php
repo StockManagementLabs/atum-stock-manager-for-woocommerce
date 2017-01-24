@@ -61,6 +61,13 @@ class StockCentralList extends AtumListTable {
 	 * @var bool
 	 */
 	protected $is_child = FALSE;
+
+	/**
+	 * Whether or not the current product should do the calculations for the columns
+	 * @var bool
+	 */
+	protected $allow_calcs = TRUE;
+
 	
 	/**
 	 * Constructor
@@ -244,10 +251,13 @@ class StockCentralList extends AtumListTable {
 	public function single_row( $item ) {
 		
 		$this->product = wc_get_product( $item );
+		$type = $this->product->product_type;
+		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
+
 		parent::single_row( $item );
 		
 		// Add the children products under each variable and grouped product
-		$type = $this->product->product_type;
+
 		if ( in_array($type, ['variable', 'grouped']) ) {
 			
 			$product_class = '\\WC_Product_' . ucfirst($type);
@@ -255,6 +265,9 @@ class StockCentralList extends AtumListTable {
 			$child_products = $parent_product->get_children();
 			
 			if ( ! empty($child_products) ) {
+
+				$this->allow_calcs = TRUE;
+
 				foreach ($child_products as $child_id) {
 					$this->is_child = TRUE;
 					$this->product = wc_get_product($child_id);
@@ -297,7 +310,7 @@ class StockCentralList extends AtumListTable {
 		
 		// Check if it's a hidden meta key (will start with underscore)
 		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
-		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $id, $column_name, TRUE ) : '--';
+		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $id, $column_name, TRUE ) : '&mdash;';
 		
 		return apply_filters( "atum/atum_list_table/column_default_$column_name", $column_item );
 		
@@ -443,7 +456,8 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected function column_calc_stock( $item ) {
 
-		return apply_filters( 'atum/stock_central_list/column_stock', Helpers::get_product_stock($this->product) );
+		$stock = ($this->allow_calcs) ? intval( $this->product->get_total_stock() ) : '&mdash;';
+		return apply_filters( 'atum/stock_central_list/column_stock', $stock );
 		
 	}
 	
@@ -459,10 +473,13 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 			
-		$stock = Helpers::get_product_stock($this->product);
+		$stock = intval( $this->product->get_total_stock() );
 		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
-		if ( $stock <= 0 ) {
+		if (! $this->allow_calcs) {
+			$content = '&mdash;';
+		}
+		elseif ( $stock <= 0 ) {
 			// no stock
 			$classes .= ' cell-red';
 			$content = '<span class="dashicons dashicons-dismiss"></span>';
@@ -503,21 +520,27 @@ class StockCentralList extends AtumListTable {
 	 * @return int
 	 */
 	protected function column_calc_hold( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = '&mdash;';
+		}
+		else {
 		
-		$column_item = 0;
-		$orders      = Helpers::get_orders( array( 'order_status' => 'wc-on-hold, wc-processing' ) );
-		
-		foreach ( $orders as $order ) {
-			
-			$products = $order->get_items();
-			
-			foreach ( $products as $product ) {
-				if ( $item->ID == $product['product_id'] ) {
-					$column_item += $product['qty'];
+			$column_item = 0;
+			$orders = Helpers::get_orders( array( 'order_status' => 'wc-on-hold, wc-processing' ) );
+
+			foreach ( $orders as $order ) {
+
+				$products = $order->get_items();
+
+				foreach ( $products as $product ) {
+					if ( $item->ID == $product['product_id'] ) {
+						$column_item += $product['qty'];
+					}
+
 				}
-				
+
 			}
-			
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_hold', $column_item );
@@ -533,15 +556,22 @@ class StockCentralList extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_back_orders( $item ) {
-		
-		$column_item = '---';
-		if ( $this->product->backorders_allowed() ) {
-			
-			$stock_quantity = $this->product->get_stock_quantity();
-			if ( $stock_quantity < $this->no_stock ) {
-				$column_item = $this->no_stock - $stock_quantity;
+
+		if (! $this->allow_calcs) {
+			$column_item = '&mdash;';
+		}
+		else {
+
+			$column_item = 'n/a';
+			if ( $this->product->backorders_allowed() ) {
+
+				$stock_quantity = $this->product->get_stock_quantity();
+				if ( $stock_quantity < $this->no_stock ) {
+					$column_item = $this->no_stock - $stock_quantity;
+				}
+
 			}
-			
+
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_back_orders', $column_item );
@@ -558,10 +588,15 @@ class StockCentralList extends AtumListTable {
 	 * @return int
 	 */
 	protected function column_calc_sold_today( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = '&mdash;';
+		}
+		else {
+			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_today'];
+		}
 		
-		$return = ( empty( $this->calc_columns[ $item->ID ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_today'];
-		
-		return apply_filters( 'atum/stock_central_list/column_sold_today', $return );
+		return apply_filters( 'atum/stock_central_list/column_sold_today', $column_item );
 		
 	}
 	
@@ -575,11 +610,15 @@ class StockCentralList extends AtumListTable {
 	 * @return int
 	 */
 	protected function column_calc_sales7( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = '&mdash;';
+		}
+		else {
+			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_7'];
+		}
 		
-		
-		$return = ( empty( $this->calc_columns[ $item->ID ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_7'];
-		
-		return apply_filters( "atum/stock_central_list/column_sold_last_7_days", $return );
+		return apply_filters( "atum/stock_central_list/column_sold_last_7_days", $column_item );
 		
 	}
 	
@@ -593,10 +632,15 @@ class StockCentralList extends AtumListTable {
 	 * @return int
 	 */
 	protected function column_calc_sales14( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = '&mdash;';
+		}
+		else {
+			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_14'];
+		}
 		
-		$return = ( empty( $this->calc_columns[ $item->ID ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_14'];
-		
-		return apply_filters( "atum/stock_central_list/column_sold_last_14_days", $return );
+		return apply_filters( "atum/stock_central_list/column_sold_last_14_days", $column_item );
 		
 	}
 	
@@ -613,15 +657,18 @@ class StockCentralList extends AtumListTable {
 	protected function column_calc_will_last( $item ) {
 			
 		// TODO: FOR THE FREE VERSION IS FIXED TO 7 DAYS AVERAGE
-		$will_last = '--';
-		$sales     = $this->column_calc_sales7( $item );
-		$stock     = Helpers::get_product_stock($this->product);
-		
-		if ( $stock > 0 && $sales > 0 ) {
-			$will_last = ceil( $stock / ( $sales / 7 ) );
-		}
-		elseif ( $stock > 0 ) {
-			$will_last = '>30';
+		$will_last = '&mdash;';
+
+		if ($this->allow_calcs) {
+			$sales = $this->column_calc_sales7( $item );
+			$stock = Helpers::get_product_stock( $this->product );
+
+			if ( $stock > 0 && $sales > 0 ) {
+				$will_last = ceil( $stock / ( $sales / 7 ) );
+			}
+			elseif ( $stock > 0 ) {
+				$will_last = '>30';
+			}
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last );
@@ -638,18 +685,20 @@ class StockCentralList extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_stock_out_days( $item ) {
-		
-		// Check if the current product has the "Out of stock" date recorded
-		$out_of_stock_date = get_post_meta( $item->ID, Globals::get_out_of_stock_date_key(), TRUE );
-		if ( $out_of_stock_date ) {
-			$out_date_time = new \DateTime( $out_of_stock_date );
-			$now_date_time = new \DateTime( 'now' );
-			$interval      = date_diff( $out_date_time, $now_date_time );
-			
-			return $interval->days;
+
+		if ($this->allow_calcs) {
+			// Check if the current product has the "Out of stock" date recorded
+			$out_of_stock_date = get_post_meta( $item->ID, Globals::get_out_of_stock_date_key(), TRUE );
+			if ( $out_of_stock_date ) {
+				$out_date_time = new \DateTime( $out_of_stock_date );
+				$now_date_time = new \DateTime( 'now' );
+				$interval      = date_diff( $out_date_time, $now_date_time );
+
+				return $interval->days;
+			}
 		}
 		
-		return '--';
+		return '&mdash;';
 		
 	}
 	
