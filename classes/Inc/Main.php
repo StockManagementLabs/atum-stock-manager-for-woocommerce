@@ -228,6 +228,7 @@ class Main {
 		
 		// Disable WooCommerce manage stock option for individual products
 		add_action( 'woocommerce_product_options_stock', array( $this, 'disable_manage_stock' ) );
+		add_action( 'woocommerce_product_options_stock_fields', array( $this, 'add_manage_stock' ) );
 		
 		// Disable WooCommerce manage stock option for product variations
 		add_action( 'woocommerce_ajax_admin_get_variations_args', array($this, 'disable_variation_manage_stock'));
@@ -262,7 +263,7 @@ class Main {
 		// The external products don't have stock and the grouped depends on its own products' stock
 		$product_type = wp_get_post_terms( get_the_ID(), 'product_type', array('fields' => 'names') );
 		
-		if ( ! is_wp_error($product_type) && ! in_array('external', $product_type) && ! in_array('grouped', $product_type) ) : ?>
+		if ( ! is_wp_error($product_type) && ! in_array('external', $product_type) ) : ?>
 			<script type="text/javascript">
 				(function ($) {
 					var $manageStockField = $('._manage_stock_field');
@@ -326,10 +327,7 @@ class Main {
 			<script type="text/javascript">
 				jQuery('._manage_stock_field').addClass('show_if_grouped');
 
-				<?php
-				// When creating a new product
-				// NOTE: The "wp-menu-arrow" is a WP built-in class that adds "display: none!important" so doesn't conflict with WC JS
-				if ($product->post->post_status == 'auto-draft'): ?>
+				<?php // NOTE: The "wp-menu-arrow" is a WP built-in class that adds "display: none!important" so doesn't conflict with WC JS ?>
 				jQuery('#product-type').change(function() {
 					var productType = jQuery(this).val();
 					if (productType === 'grouped' || productType === 'external') {
@@ -339,7 +337,8 @@ class Main {
 						jQuery('.stock_fields').removeClass('wp-menu-arrow');
 					}
 				});
-				<?php elseif ( in_array($product->product_type, ['grouped', 'external'] ) ): ?>
+
+				<?php if ( in_array($product->product_type, ['grouped', 'external'] ) ): ?>
 				jQuery('.stock_fields').addClass('wp-menu-arrow');
 				<?php endif; ?>
 			</script>
