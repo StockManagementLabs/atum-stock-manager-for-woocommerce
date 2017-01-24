@@ -265,8 +265,14 @@ class Main {
 		if ( ! is_wp_error($product_type) && ! in_array('external', $product_type) && ! in_array('grouped', $product_type) ) : ?>
 			<script type="text/javascript">
 				(function ($) {
-					$('._manage_stock_field').find('.checkbox').prop({'checked': true, 'disabled': true})
+					var $manageStockField = $('._manage_stock_field');
+					$manageStockField.find('.checkbox').prop({'checked': true, 'readonly': true})
 						.siblings('.description').text('<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**', ATUM_TEXT_DOMAIN) ?>');
+
+					$manageStockField.children().click(function(e) {
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					});
 				})(jQuery);
 			</script>
 		<?php endif;
@@ -287,8 +293,13 @@ class Main {
 		<script type="text/javascript">
 			(function ($) {
 				$('.variable_manage_stock').each(function() {
-					$(this).prop({'checked': true, 'disabled': true})
-						.siblings('.woocommerce-help-tip').attr('data-tip', '<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**', ATUM_TEXT_DOMAIN) ?>');
+					$(this).prop({'checked': true, 'readonly': true})
+						.siblings('.woocommerce-help-tip').attr('data-tip', '<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>');
+
+					$(this).click(function(e) {
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					});
 				});
 			})(jQuery);
 		</script>
@@ -381,7 +392,7 @@ class Main {
 	 *
 	 * @since 0.1.3
 	 *
-	 * @param \WC_Product $product    The product that is being changed
+	 * @param \WC_Product $product    The product being changed
 	 */
 	public function record_out_of_stock_date ($product) {
 		
