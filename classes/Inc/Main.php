@@ -267,7 +267,7 @@ class Main {
 				(function ($) {
 					var $manageStockField = $('._manage_stock_field');
 					$manageStockField.find('.checkbox').prop({'checked': true, 'readonly': true})
-						.siblings('.description').text('<?php _e('**THE STOCK IS CURRENTLY MANAGED BY ATUM PLUGIN**', ATUM_TEXT_DOMAIN) ?>');
+						.siblings('.description').html('<strong>**<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>**</strong>');
 
 					$manageStockField.children().click(function(e) {
 						e.stopImmediatePropagation();
