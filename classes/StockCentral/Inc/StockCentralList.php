@@ -389,15 +389,15 @@ class StockCentralList extends AtumListTable {
 					
 					if ($this->is_child) {
 						$type = 'grouped-item';
-						$product_tip = __('Group Item', ATUM_TEXT_DOMAIN);
+						$product_tip = __('Grouped item', ATUM_TEXT_DOMAIN);
 					}
 					elseif ( $this->product->is_downloadable() ) {
 						$type = 'downloadable';
-						$product_tip = __('Downloadable', ATUM_TEXT_DOMAIN);
+						$product_tip = __('Downloadable product', ATUM_TEXT_DOMAIN);
 					}
 					elseif ( $this->product->is_virtual() ) {
 						$type = 'virtual';
-						$product_tip = __('Virtual', ATUM_TEXT_DOMAIN);
+						$product_tip = __('Virtual product', ATUM_TEXT_DOMAIN);
 					}
 					
 			        break;
@@ -407,11 +407,14 @@ class StockCentralList extends AtumListTable {
 					
 					if ($this->is_child) {
 						$type = 'grouped-item';
-						$product_tip = __('Group Item', ATUM_TEXT_DOMAIN);
+						$product_tip = __('Grouped item', ATUM_TEXT_DOMAIN);
 					}
 					elseif ( $this->product->has_child() ) {
+						$product_tip .= '<br>' . sprintf(
+							__('(click to show/hide the %s)', ATUM_TEXT_DOMAIN),
+							( ($type == 'grouped') ? __('Grouped items', ATUM_TEXT_DOMAIN) : __('Variations', ATUM_TEXT_DOMAIN) )
+						);
 						$type .= ' has-child';
-						$product_tip .= '<br>' . __('(click to show/hide the children)', ATUM_TEXT_DOMAIN);
 					}
 					
 					break;
