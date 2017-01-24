@@ -26,7 +26,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Inc\\Ajax' => __DIR__ . '/../..' . '/classes/Inc/Ajax.php',
         'Atum\\Inc\\Globals' => __DIR__ . '/../..' . '/classes/Inc/Globals.php',
         'Atum\\Inc\\Helpers' => __DIR__ . '/../..' . '/classes/Inc/Helpers.php',
-        'Atum\\Inc\\Init' => __DIR__ . '/../..' . '/classes/Inc/Init.php',
+        'Atum\\Inc\\Main' => __DIR__ . '/../..' . '/classes/Inc/Main.php',
         'Atum\\Settings\\Settings' => __DIR__ . '/../..' . '/classes/Settings/Settings.php',
         'Atum\\StockCentral\\Inc\\HelpPointers' => __DIR__ . '/../..' . '/classes/Inc/HelpPointers.php',
         'Atum\\StockCentral\\Inc\\StockCentralList' => __DIR__ . '/../..' . '/classes/StockCentral/Inc/StockCentralList.php',

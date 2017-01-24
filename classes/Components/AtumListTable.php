@@ -310,6 +310,7 @@ class AtumListTable extends \WP_List_Table {
 		 * Months filter
 		 */
 		if ( ! empty( $_REQUEST['m']) ) {
+
 			$month = esc_attr($_REQUEST['m']);
 			$args['date_query'] = array(
 				array(
@@ -317,6 +318,7 @@ class AtumListTable extends \WP_List_Table {
 					'month' => substr($month, -2)
 				)
 			);
+
 		}
 		
 		/*
@@ -324,12 +326,12 @@ class AtumListTable extends \WP_List_Table {
 		 */
 		if ( Helpers::get_option( 'manage_stock', 'no' ) == 'no' ) {
 			
-			//Only products with the _manage_stock meta set to yes
+			// Only products with the _manage_stock meta set to yes
 			$args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
 					'key'   => '_manage_stock',
-					'value' => 'yes',
+					'value' => 'yes'
 				),
 			);
 		}
@@ -343,10 +345,10 @@ class AtumListTable extends \WP_List_Table {
 			
 			// meta value, for now only have _sku to search. Obviating meta_value_num possibility
 			if ( substr( $_REQUEST['orderby'], 0, 1 ) == '_' ) {
-				$args['orderby']  = "meta_value";
+				$args['orderby']  = 'meta_value';
 				$args['meta_key'] = $_REQUEST['orderby'];
 			}
-			//Calculated field... Transients with WP_QUERY left join???
+			// Calculated field... Transients with WP_QUERY left join???
 			elseif ( strpos( $_REQUEST['orderby'], 'calc_' ) === 0 ) {
 				
 			}

@@ -11,7 +11,7 @@ return array(
     'Atum\\Inc\\Ajax' => $baseDir . '/classes/Inc/Ajax.php',
     'Atum\\Inc\\Globals' => $baseDir . '/classes/Inc/Globals.php',
     'Atum\\Inc\\Helpers' => $baseDir . '/classes/Inc/Helpers.php',
-    'Atum\\Inc\\Init' => $baseDir . '/classes/Inc/Init.php',
+    'Atum\\Inc\\Main' => $baseDir . '/classes/Inc/Main.php',
     'Atum\\Settings\\Settings' => $baseDir . '/classes/Settings/Settings.php',
     'Atum\\StockCentral\\Inc\\HelpPointers' => $baseDir . '/classes/Inc/HelpPointers.php',
     'Atum\\StockCentral\\Inc\\StockCentralList' => $baseDir . '/classes/StockCentral/Inc/StockCentralList.php',

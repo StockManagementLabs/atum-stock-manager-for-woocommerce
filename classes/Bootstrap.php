@@ -14,7 +14,7 @@ namespace Atum;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Ajax;
-use Atum\Inc\Init;
+use Atum\Inc\Main;
 
 
 class Bootstrap {
@@ -79,7 +79,7 @@ class Bootstrap {
 			}
 			
 			// Bootstrap the plugin
-			Init::get_instance();
+			Main::get_instance();
 			$this->bootstrapped = TRUE;
 			
 		} catch (\Exception $e) {
