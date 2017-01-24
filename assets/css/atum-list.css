@@ -374,4 +374,20 @@
   width: 20%;
 }
 
+.contextual-help-tabs-wrap .dashicons-format-image {
+  font-size: 18px;
+}
+
+.contextual-help-tabs-wrap .wc-type:before {
+  font-family: WooCommerce;
+  content: "\e006";
+  font-size: 18px;
+  top: 0;
+  speak: none;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  left: 0;
+}
+
 /*# sourceMappingURL=atum-list.css.map */
