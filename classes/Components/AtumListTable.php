@@ -466,14 +466,14 @@ class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $_REQUEST['v_filter'] ) ) {
 			
 			$this->data['v_filter'] = esc_attr( $_REQUEST['v_filter'] );
-			$allow_query            = FALSE;
+			$allow_query = FALSE;
 			
 			foreach ( $this->id_views as $key => $post_ids ) {
 				
 				if ( $this->data['v_filter'] == $key && ! empty($post_ids) ) {
 
-					// Add the variable products' containers again to the query
-					$args['post__in'] = $first_args['query_args']['post__in'] = ( ! empty($this->variable_products) ) ? $this->get_variable_containers($post_ids) : $post_ids;
+					// Add the parent products again to the query
+					$args['post__in'] = $first_args['query_args']['post__in'] = ( ! empty($this->variable_products) || ! empty($this->grouped_products) ) ? $this->get_parents($post_ids) : $post_ids;
 					$allow_query = TRUE;
 					$found_posts = $this->count_views["count_$key"];
 

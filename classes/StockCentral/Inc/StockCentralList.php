@@ -69,10 +69,16 @@ class StockCentralList extends AtumListTable {
 	protected $allow_calcs = TRUE;
 
 	/**
-	 * The array of available variable products' IDs
+	 * The array of published Variable products' IDs
 	 * @var array
 	 */
 	protected $variable_products = array();
+
+	/**
+	 * The array of published Grouped products' IDs
+	 * @var array
+	 */
+	protected $grouped_products = array();
 	
 	/**
 	 * Constructor
@@ -261,8 +267,7 @@ class StockCentralList extends AtumListTable {
 
 		parent::single_row( $item );
 		
-		// Add the children products under each variable and grouped product
-
+		// Add the children products of each Variable and Grouped product
 		if ( in_array($type, ['variable', 'grouped']) ) {
 			
 			$product_class = '\\WC_Product_' . ucfirst($type);
@@ -275,7 +280,7 @@ class StockCentralList extends AtumListTable {
 
 				foreach ($child_products as $child_id) {
 
-					// Exclude some children if there is a "Views Filter" enabled
+					// Exclude some children if there is a "Views Filter" active
 					if ( ! empty($_REQUEST['v_filter']) ) {
 
 						$v_filter = esc_attr( $_REQUEST['v_filter'] );
@@ -784,7 +789,7 @@ class StockCentralList extends AtumListTable {
 	protected function get_views() {
 		
 		$views    = array();
-		$v_filter = ( ! empty( $_GET['v_filter'] ) ) ? esc_attr( $_GET['v_filter'] ) : 'all_stock';
+		$v_filter = ( ! empty( $_REQUEST['v_filter'] ) ) ? esc_attr( $_REQUEST['v_filter'] ) : 'all_stock';
 		
 		$views_name = array(
 			'all_stock' => 'All',
@@ -800,7 +805,7 @@ class StockCentralList extends AtumListTable {
 			$id = '';
 			if ( $key != 'all_stock' ) {
 				$view_url = esc_url( add_query_arg( array( 'v_filter' => $key ), $url ) );
-				$id  = ' id="' . $key . '"';
+				$id = ' id="' . $key . '"';
 			}
 			else {
 				$view_url = $url;
@@ -950,13 +955,41 @@ class StockCentralList extends AtumListTable {
 		}
 		
 		$this->count_views['count_all'] = count( $posts );
-		$variations = $this->get_variations();
 
-		// Add the variations to the posts list
-		if ($variations) {
-			// The variables are just containers and don't count for the list views
-			$this->count_views['count_all'] += ( count($variations) - count($this->variable_products) );
-			$posts = array_merge( array_diff( $posts, $this->variable_products ), $variations);
+		$variations = '';
+		foreach($this->taxonomies as $index => $taxonomy) {
+
+			if ( $taxonomy['taxonomy'] == 'product_type' ) {
+
+				if ( in_array('variable', (array) $taxonomy['terms']) ) {
+
+					$variations = $this->get_children( 'variable', 'product_variation' );
+
+					// Add the Variations to the posts list
+					if ( $variations ) {
+						// The Variable products are just containers and don't count for the list views
+						$this->count_views['count_all'] += ( count( $variations ) - count( $this->variable_products ) );
+						$posts = array_merge( array_diff( $posts, $this->variable_products ), $variations );
+					}
+
+				}
+
+				if ( in_array('grouped', (array) $taxonomy['terms']) ) {
+
+					$group_items = $this->get_children( 'grouped' );
+
+					// Add the Group Items to the posts list
+					if ( $group_items ) {
+						// The Grouped products are just containers and don't count for the list views
+						$this->count_views['count_all'] += ( count( $group_items ) - count( $this->grouped_products ) );
+						$posts = array_merge( array_diff( $posts, $this->grouped_products ), $group_items );
+					}
+
+				}
+
+				break;
+			}
+
 		}
 		
 		if ( $posts ) {
@@ -1043,16 +1076,19 @@ class StockCentralList extends AtumListTable {
 	}
 
 	/**
-	 * Get all the available variations for the published variable products
+	 * Get all the available children products for the published parent products (Variable and Grouped)
 	 *
 	 * @since 1.1.1
 	 *
+	 * @param string $parent_type   The parent product type
+	 * @param string $post_type     Optional. The children post type
+	 *
 	 * @return array|bool
 	 */
-	private function get_variations() {
+	private function get_children($parent_type, $post_type = 'product') {
 
-		// Get the published_variables first
-		$variables_args = array(
+		// Get the published Variables first
+		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
 			'posts_per_page' => - 1,
@@ -1061,30 +1097,35 @@ class StockCentralList extends AtumListTable {
 				array(
 					'taxonomy' => 'product_type',
 					'field'    => 'slug',
-					'terms'    => 'variable'
+					'terms'    => $parent_type
 				)
 			)
 		);
 
-		$variables = new \WP_Query($variables_args);
+		$parents = new \WP_Query($parent_args);
 
-		if ($variables->found_posts) {
+		if ($parents->found_posts) {
 
 			// Save them to be used when preparing the list query
-			$this->variable_products = $variables->posts;
+			if ($parent_type == 'variable') {
+				$this->variable_products = $parents->posts;
+			}
+			else {
+				$this->grouped_products = $parents->posts;
+			}
 
-			$variations_args = array (
-				'post_type' => 'product_variation',
-				'post_status' => 'publish',
-				'posts_per_page' => -1,
-				'fields' => 'ids',
-				'post_parent__in' => $variables->posts
+			$children_args = array(
+				'post_type'       => $post_type,
+				'post_status'     => 'publish',
+				'posts_per_page'  => - 1,
+				'fields'          => 'ids',
+				'post_parent__in' => $parents->posts
 			);
 
-			$variations = new \WP_Query( apply_filters( 'atum/stock_central_list/get_variations', $variations_args ) );
+			$children = new \WP_Query( apply_filters( 'atum/stock_central_list/get_children', $children_args ) );
 
-			if ($variations->found_posts) {
-				return $variations->posts;
+			if ($children->found_posts) {
+				return $children->posts;
 			}
 
 		}
@@ -1094,27 +1135,30 @@ class StockCentralList extends AtumListTable {
 	}
 
 	/**
-	 * Get the variable parents from a list of product IDs
+	 * Get the parent products from a list of product IDs
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param array $product_ids
+	 * @param array $product_ids  The array of children product IDs
 	 *
 	 * @return array
 	 */
-	protected function get_variable_containers ($product_ids) {
+	protected function get_parents ($product_ids) {
 
-		// Filter the variables that are parent of the current values
-		$variables = array();
+		// Filter the parents of the current values
+		$parents = array();
 		foreach ($product_ids as $product_id) {
 			$product = wc_get_product($product_id);
 
-			if ($product->product_type == 'variation') {
-				$variables[] = $product->parent->id;
+			if ( ! empty($product->parent) ) {
+				$parents[] = $product->parent->id;
+			}
+			elseif ($product->post->post_parent) {
+				$parents[] = $product->post->post_parent;
 			}
 		}
 
-		return array_merge( $product_ids, array_unique($variables) );
+		return array_merge( $product_ids, array_unique($parents) );
 
 	}
 	
