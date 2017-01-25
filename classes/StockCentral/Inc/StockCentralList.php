@@ -68,6 +68,11 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected $allow_calcs = TRUE;
 
+	/**
+	 * The array of available variable products' IDs
+	 * @var array
+	 */
+	protected $variable_products = array();
 	
 	/**
 	 * Constructor
@@ -269,6 +274,17 @@ class StockCentralList extends AtumListTable {
 				$this->allow_calcs = TRUE;
 
 				foreach ($child_products as $child_id) {
+
+					// Exclude some children if there is a "Views Filter" enabled
+					if ( ! empty($_REQUEST['v_filter']) ) {
+
+						$v_filter = esc_attr( $_REQUEST['v_filter'] );
+						if ( ! in_array($child_id, $this->id_views[ $v_filter ]) ) {
+							continue;
+						}
+
+					}
+
 					$this->is_child = TRUE;
 					$this->product = wc_get_product($child_id);
 					$this->single_expandable_row($this->product->post, ($type == 'grouped' ? $type : 'variation'));
@@ -562,7 +578,7 @@ class StockCentralList extends AtumListTable {
 		}
 		else {
 
-			$column_item = 'n/a';
+			$column_item = '--';
 			if ( $this->product->backorders_allowed() ) {
 
 				$stock_quantity = $this->product->get_stock_quantity();
@@ -661,7 +677,7 @@ class StockCentralList extends AtumListTable {
 
 		if ($this->allow_calcs) {
 			$sales = $this->column_calc_sales7( $item );
-			$stock = Helpers::get_product_stock( $this->product );
+			$stock = $this->product->get_total_stock();
 
 			if ( $stock > 0 && $sales > 0 ) {
 				$will_last = ceil( $stock / ( $sales / 7 ) );
@@ -896,52 +912,65 @@ class StockCentralList extends AtumListTable {
 			'count_low_stock' => 0
 		);
 		
-		$posts_meta_query = $data = array();
+		// Get all the IDs in the two queries with no pagination
+		$args['query_args']['fields']         = 'ids';
+		$args['query_args']['posts_per_page'] = - 1;
+		unset( $args['query_args']['paged'] );
 		
-		// Get all ID's in the two queries without posts_per_page
-		$args['args']['fields']         = 'ids';
-		$args['args']['posts_per_page'] = - 1;
-		unset( $args['args']['paged'] );
-		
-		$all_transient = 'stock_central_list_all_' . Helpers::get_transient_identifier( $args['args'] );
+		$all_transient = 'stock_central_list_all_' . Helpers::get_transient_identifier( $args['query_args'] );
 		$posts         = Helpers::get_transient( $all_transient );
 		
 		if ( ! $posts ) {
-			$posts_query = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/all', $args['args'] ) );
+
+			$posts = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/all', $args['query_args'] ) );
+			$posts = $posts->posts;
 			
 			if ( isset( $args['meta'] ) ) {
 				
-				unset( $args['args']['s'] );
+				unset( $args['query_args']['s'] );
 				
-				if ( array_key_exists( 'meta_query', $args['args'] ) ) {
-					$args['args']['meta_query'][] = $args['meta'];
+				if ( array_key_exists( 'meta_query', $args['query_args'] ) ) {
+					$args['query_args']['meta_query'][] = $args['meta'];
 				}
 				else {
-					$args['args']['meta_query'] = $args['meta'];
+					$args['query_args']['meta_query'] = $args['meta'];
 				}
 				
-				$posts_meta_query = new \WP_Query( $args['args'] );
-				$posts_meta_query = $posts_meta_query->posts;
+				$posts_meta_query = new \WP_Query( $args['query_args'] );
+
+				if ($posts_meta_query->found_posts) {
+					$posts = array_merge( $posts, $posts_meta_query->posts );
+				}
 				
 			}
 			
-			// post__in from now
-			$posts = array_merge( $posts_query->posts, $posts_meta_query );
+			// Save it as a transient to improve the performance
 			Helpers::set_transient( $all_transient, $posts );
+
 		}
 		
 		$this->count_views['count_all'] = count( $posts );
+		$variations = $this->get_variations();
+
+		// Add the variations to the posts list
+		if ($variations) {
+			// The variables are just containers and don't count for the list views
+			$this->count_views['count_all'] += ( count($variations) - count($this->variable_products) );
+			$posts = array_merge( array_diff( $posts, $this->variable_products ), $variations);
+		}
 		
 		if ( $posts ) {
+
+			$post_types = ($variations) ? array($this->post_type, 'product_variation') : $this->post_type;
 			
-			// products in stock
+			// Products in stock
 			$args = array(
-				'post_type'      => $this->post_type,
+				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
-				'meta_query' => array(
+				'meta_query'     => array(
 					array(
-						'key' => '_stock',
+						'key'     => '_stock',
 						'value'   => 0,
 						'type'    => 'numeric',
 						'compare' => '>',
@@ -951,17 +980,17 @@ class StockCentralList extends AtumListTable {
 			);
 			
 			$in_stock_transient = 'stock_central_list_in_stock_' . Helpers::get_transient_identifier( $args );
-			$posts_new          = Helpers::get_transient( $in_stock_transient );
+			$posts_stock = Helpers::get_transient( $in_stock_transient );
 			
-			if ( ! $posts_new ) {
-				$posts_new = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/in_stock', $args ) );
-				Helpers::set_transient( $in_stock_transient, $posts_new );
+			if ( ! $posts_stock ) {
+				$posts_stock = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/in_stock', $args ) );
+				Helpers::set_transient( $in_stock_transient, $posts_stock );
 			}
 			
-			$this->id_views['in_stock']          = $posts_new->posts;
-			$this->count_views['count_in_stock'] = count( $posts_new->posts );
+			$this->id_views['in_stock']          = $posts_stock->posts;
+			$this->count_views['count_in_stock'] = count( $posts_stock->posts );
 			
-			$this->id_views['out_stock']          = array_diff( $posts, $posts_new->posts );
+			$this->id_views['out_stock']          = array_diff( $posts, $posts_stock->posts );
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'];
 			
 			if ( $this->count_views['count_in_stock'] ) {
@@ -973,26 +1002,28 @@ class StockCentralList extends AtumListTable {
 					
 					// Products in LOW stock
 					$str_sales = "(SELECT			   
-				    (SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_product_id' AND order_item_id = `item`.`order_item_id`) AS IDs,
-				    SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`)) AS qty
-					FROM `{$wpdb->posts}` AS `order`
-					    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
-						INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
-					WHERE (`order`.`post_type` = 'shop_order'
-					    AND `order`.`post_status` ='wc-completed' AND `item`.`order_item_type` ='line_item'
-					    AND `order_meta`.`meta_key` = '_completed_date'
-					    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-$this->last_days days" ) . "')
-					GROUP BY IDs) AS sales";
+					    (SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_product_id' AND order_item_id = `item`.`order_item_id`) AS IDs,
+					    SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`)) AS qty
+						FROM `{$wpdb->posts}` AS `order`
+						    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
+							INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
+						WHERE (`order`.`post_type` = 'shop_order'
+						    AND `order`.`post_status` = 'wc-completed' AND `item`.`order_item_type` ='line_item'
+						    AND `order_meta`.`meta_key` = '_completed_date'
+						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-$this->last_days days" ) . "')
+						GROUP BY IDs) AS sales";
+
+					$low_stock_post_types = ($variations) ? "('product', 'product_variation')" : "('product')";
 					
 					$str_states = "(SELECT `{$wpdb->posts}`.`ID`,
-					IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
-						CAST( IF( LENGTH(`{$wpdb->postmeta}`.`meta_value`) = 0 , 0, `{$wpdb->postmeta}`.`meta_value`) AS DECIMAL(10,2) ), TRUE, FALSE) AS state
-					FROM `{$wpdb->posts}`
-					    LEFT JOIN `{$wpdb->postmeta}` ON (`{$wpdb->posts}`.`ID` = `{$wpdb->postmeta}`.`post_id`)
-					    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
-					WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
-			            AND `{$wpdb->posts}`.`post_type` ='product' 
-			            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_new->posts ) . ")) )) AS states";
+						IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
+							CAST( IF( LENGTH(`{$wpdb->postmeta}`.`meta_value`) = 0 , 0, `{$wpdb->postmeta}`.`meta_value`) AS DECIMAL(10,2) ), TRUE, FALSE) AS state
+						FROM `{$wpdb->posts}`
+						    LEFT JOIN `{$wpdb->postmeta}` ON (`{$wpdb->posts}`.`ID` = `{$wpdb->postmeta}`.`post_id`)
+						    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
+						WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
+				            AND `{$wpdb->posts}`.`post_type` IN " . $low_stock_post_types . "
+				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_stock->posts ) . ")) )) AS states";
 					
 					$str_sql = apply_filters( 'atum/stock_central_list/set_views_data/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
 					
@@ -1009,6 +1040,82 @@ class StockCentralList extends AtumListTable {
 			
 		}
 		
+	}
+
+	/**
+	 * Get all the available variations for the published variable products
+	 *
+	 * @since 1.1.1
+	 *
+	 * @return array|bool
+	 */
+	private function get_variations() {
+
+		// Get the published_variables first
+		$variables_args = array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => - 1,
+			'fields'         => 'ids',
+			'tax_query'      => array(
+				array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => 'variable'
+				)
+			)
+		);
+
+		$variables = new \WP_Query($variables_args);
+
+		if ($variables->found_posts) {
+
+			// Save them to be used when preparing the list query
+			$this->variable_products = $variables->posts;
+
+			$variations_args = array (
+				'post_type' => 'product_variation',
+				'post_status' => 'publish',
+				'posts_per_page' => -1,
+				'fields' => 'ids',
+				'post_parent__in' => $variables->posts
+			);
+
+			$variations = new \WP_Query( apply_filters( 'atum/stock_central_list/get_variations', $variations_args ) );
+
+			if ($variations->found_posts) {
+				return $variations->posts;
+			}
+
+		}
+
+		return FALSE;
+
+	}
+
+	/**
+	 * Get the variable parents from a list of product IDs
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param array $product_ids
+	 *
+	 * @return array
+	 */
+	protected function get_variable_containers ($product_ids) {
+
+		// Filter the variables that are parent of the current values
+		$variables = array();
+		foreach ($product_ids as $product_id) {
+			$product = wc_get_product($product_id);
+
+			if ($product->product_type == 'variation') {
+				$variables[] = $product->parent->id;
+			}
+		}
+
+		return array_merge( $product_ids, array_unique($variables) );
+
 	}
 	
 	/**

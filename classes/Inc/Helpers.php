@@ -251,37 +251,6 @@ final class Helpers {
 		return $result;
 		
 	}
-
-	/**
-	 * Get the stock quantity for a WC product
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param \WC_Product $product
-	 *
-	 * @return int
-	 */
-	public static function get_product_stock( \WC_Product $product) {
-
-		// WC is summing all the stock quantities of the children of a grouped item
-		// and it should display the stock of the child with less stock instead
-		if ($product->get_type() == 'grouped' && $product->has_child() ) {
-
-			$stock = 0;
-			foreach ( $product->get_children() as $child_id ) {
-				$child_product = wc_get_product($child_id);
-				$child_stock = $child_product->get_stock_quantity();
-				$stock = (! $stock) ? $child_stock : min($stock, $child_stock);
-			}
-
-		}
-		else {
-			$stock = $product->get_total_stock();
-		}
-
-		return intval($stock);
-
-	}
 	
 	/**
 	 * Set a transient adding ATUM stuff to unequivocal identify it
@@ -292,12 +261,12 @@ final class Helpers {
 	 * @param   mixed  $value      Value to store
 	 * @param   int    $expiration Time until expiration in seconds
 	 *
-	 * @return  bool    False if value was not set and true if value was set.
+	 * @return  bool  False if value was not set and true if value was set.
 	 *
 	 */
 	public static function set_transient( $transient, $value, $expiration = 0 ) {
 		
-		return set_transient( ATUM_PREFIX . $transient, $value, $expiration );
+		return (ATUM_DEBUG !== TRUE) ? set_transient( ATUM_PREFIX . $transient, $value, $expiration ) : FALSE;
 	}
 	
 	/**
@@ -307,13 +276,11 @@ final class Helpers {
 	 *
 	 * @param   string $transient Transient simple name
 	 *
-	 * @return  mixed|bool  The value set in atum_set_transient or false f the transient does not exist,
-	 *                      does not have a value, or has expired.
-	 *
+	 * @return  mixed|bool  The atum transient value or false if the transient does not exist or debug mode is on
 	 */
 	public static function get_transient( $transient ) {
 		
-		return get_transient( ATUM_PREFIX . $transient );
+		return (ATUM_DEBUG !== TRUE) ? get_transient( ATUM_PREFIX . $transient ) : FALSE;
 	}
 	
 	/**

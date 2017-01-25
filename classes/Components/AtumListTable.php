@@ -291,9 +291,9 @@ class AtumListTable extends \WP_List_Table {
 		 * REQUIRED. Build an array to be used by the class for column headers.
 		 */
 		$this->_column_headers = array( $columns, $hidden, $sortable );
-		
+
 		$args = array(
-			'post_type'      => $this->post_type,
+			'post_type'      => array($this->post_type),
 			'post_status'    => 'publish',
 			'posts_per_page' => $this->per_page,
 			'paged'          => $this->get_pagenum()
@@ -405,7 +405,7 @@ class AtumListTable extends \WP_List_Table {
 		}
 		
 		// Save args
-		$first_args['args'] = $args;
+		$first_args['query_args'] = $args;
 		
 		// Search the term in the custom fields columns too
 		if ( ! empty( $_REQUEST['s'] ) ) {
@@ -450,7 +450,7 @@ class AtumListTable extends \WP_List_Table {
 			
 		}
 		
-		// Views Filters and calculate totals
+		// Build "Views Filters" and calculate totals
 		if ( is_callable( array( $this, 'set_views_data' ) ) ) {
 			$this->set_views_data( $first_args );
 		}
@@ -468,13 +468,15 @@ class AtumListTable extends \WP_List_Table {
 			$this->data['v_filter'] = esc_attr( $_REQUEST['v_filter'] );
 			$allow_query            = FALSE;
 			
-			foreach ( $this->id_views as $key => $value ) {
+			foreach ( $this->id_views as $key => $post_ids ) {
 				
-				if ( $this->data['v_filter'] == $key && $value ) {
-					$args['post__in']               = $value;
-					$first_args['args']['post__in'] = $value;
-					$allow_query                    = TRUE;
-					$found_posts                    = $this->count_views["count_$key"];
+				if ( $this->data['v_filter'] == $key && ! empty($post_ids) ) {
+
+					// Add the variable products' containers again to the query
+					$args['post__in'] = $first_args['query_args']['post__in'] = ( ! empty($this->variable_products) ) ? $this->get_variable_containers($post_ids) : $post_ids;
+					$allow_query = TRUE;
+					$found_posts = $this->count_views["count_$key"];
+
 				}
 				
 			}
@@ -482,7 +484,7 @@ class AtumListTable extends \WP_List_Table {
 		
 		if ( $allow_query ) {
 			
-			$posts_query = new \WP_Query( $first_args['args'] );
+			$posts_query = new \WP_Query( $first_args['query_args'] );
 			
 			if ( isset( $first_args['meta'] ) ) {
 				$posts_meta_query = new \WP_Query( $args );
@@ -533,22 +535,21 @@ class AtumListTable extends \WP_List_Table {
 			<table class="wp-list-table atum-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>">
 				
 				<thead>
-				<?php $this->print_group_columns(); ?>
-				<tr class="item-heads">
-					<?php $this->print_column_headers(); ?>
-				</tr>
+					<?php $this->print_group_columns(); ?>
+
+					<tr class="item-heads">
+						<?php $this->print_column_headers(); ?>
+					</tr>
 				</thead>
 				
-				<tbody id="the-list"<?php if ( $singular ) {
-					echo " data-wp-lists='list:$singular'";
-				} ?>>
-				<?php $this->display_rows_or_placeholder(); ?>
+				<tbody id="the-list"<?php if ( $singular ) echo " data-wp-lists='list:$singular'"; ?>>
+					<?php $this->display_rows_or_placeholder(); ?>
 				</tbody>
 				
 				<tfoot>
-				<tr>
-					<?php $this->print_column_headers( FALSE ); ?>
-				</tr>
+					<tr>
+						<?php $this->print_column_headers( FALSE ); ?>
+					</tr>
 				</tfoot>
 			
 			</table>
@@ -635,7 +636,7 @@ class AtumListTable extends \WP_List_Table {
 		}
 		
 		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
-			//TODO: Correct href???
+			// TODO: Correct href???
 			echo '<p><a href="post-new.php?post_type=' . $this->post_type . '" class="adapta-button green">' . $post_type_obj->labels->add_new . '</a></p>';
 		}
 		
