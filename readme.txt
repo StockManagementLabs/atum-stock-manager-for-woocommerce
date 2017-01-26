@@ -1,7 +1,7 @@
 === ATUM Stock Manager for WooCommerce ===
 
 Contributors: stockmanagementlabs, salvamb, japiera
-Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce
+Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.7.1
 Stable tag: 1.1.1
@@ -163,7 +163,7 @@ To control and view only selected products in Stock Central, disable the stock c
 
 = I have a problem, who do I contact? =
 
-Our team is still working on the launch of the main site, but you can get hold of us by sending us a message on skype or on Facebook (user: 'stockmanagementlabs').
+Our team is currently working on the launch of the ATUM website, but you can get hold of us many different ways. Please, open a [support ticket](https://stockmanagementlabs.ticksy.com/) or leave a post in the [support forum](https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce). Alternatively, send us a message on Skype or Facebook (user: "stockmanagementlabs").
 
 = Is the ATUM plugin available in different languages? =
 
@@ -177,9 +177,6 @@ From the 1.1.0 update of ATUM stock manager for WooCommerce, we support Simple, 
 
 Product variations are now supported at a basic level. We have an advanced feature for variable products prepared for our Premium and PRO users.
 
-= I have a problem, who do I contact? =
-
-Our team is still working on the launch of the main site, but you can get hold of us by sending us a message on Skype or Facebook (user: "stockmanagementlabs"). From version 1.1.0. you can submit a support ticket to our team directly by visiting this [page](https://stockmanagementlabs.ticksy.com/ "Support Page").
 
 == Screenshots ==
 
@@ -234,8 +231,7 @@ Changes:
 * New dismissable welcome notice.
 * The premium columns are now hidden by default on Stock Central.
 * Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
-* Display for the Grouped products the stock amount of the child product with the lowest stock.
-* Disabled the non available ATUM submenus.
+* Disabled the non-available ATUM submenus.
 * Improve Stock Central queries to adapt to product variations and grouped items.
 
 Fixes:
