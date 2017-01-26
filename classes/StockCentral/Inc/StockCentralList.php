@@ -265,9 +265,9 @@ class StockCentralList extends AtumListTable {
 		$type = $this->product->product_type;
 
 		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
-		if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
+		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
 			return;
-		}
+		}*/
 
 		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
 		parent::single_row( $item );
@@ -958,10 +958,10 @@ class StockCentralList extends AtumListTable {
 			Helpers::set_transient( $all_transient, $posts );
 
 		}
-		
+
 		$this->count_views['count_all'] = count( $posts );
 
-		$variations = '';
+		$variations = $group_items = '';
 		foreach($this->taxonomies as $index => $taxonomy) {
 
 			if ( $taxonomy['taxonomy'] == 'product_type' ) {
@@ -974,7 +974,7 @@ class StockCentralList extends AtumListTable {
 					if ( $variations ) {
 						// The Variable products are just containers and don't count for the list views
 						$this->count_views['count_all'] += ( count( $variations ) - count( $this->variable_products ) );
-						$posts = array_merge( array_diff( $posts, $this->variable_products ), $variations );
+						$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
 					}
 
 				}
@@ -987,7 +987,8 @@ class StockCentralList extends AtumListTable {
 					if ( $group_items ) {
 						// The Grouped products are just containers and don't count for the list views
 						$this->count_views['count_all'] += ( count( $group_items ) - count( $this->grouped_products ) );
-						$posts = array_merge( array_diff( $posts, $this->grouped_products ), $group_items );
+						$posts = array_unique( array_merge( array_diff( $posts, $this->grouped_products ), $group_items ) );
+
 					}
 
 				}
@@ -1025,8 +1026,13 @@ class StockCentralList extends AtumListTable {
 				Helpers::set_transient( $in_stock_transient, $posts_stock );
 			}
 			
-			$this->id_views['in_stock']          = $posts_stock->posts;
+			$this->id_views['in_stock'] = $posts_stock->posts;
 			$this->count_views['count_in_stock'] = count( $posts_stock->posts );
+
+			// As the Group items are being displayed multiple times, we should count them multiple times too
+			if ($group_items) {
+				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_stock->posts) );
+			}
 			
 			$this->id_views['out_stock']          = array_diff( $posts, $posts_stock->posts );
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'];

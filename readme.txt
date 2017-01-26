@@ -234,7 +234,6 @@ Changes:
 * Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
 * Display for the Grouped products the stock amount of the child product with the lowest stock.
 * Disabled the non available ATUM submenus.
-* Hide from Stock Central the products that were set as "hidden from catalog" and are part of a Grouped Product.
 * Improve Stock Central queries to adapt to product variations and grouped items.
 
 Fixes:
