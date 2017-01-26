@@ -219,8 +219,7 @@ Changes:
 
 * Added WooCommerce product filters to Stock Central.
 * Added link to ATUM ticket support.
-* All types of WooCommerce products are available now in Stock Central.
-* Updated the readme.txt with "up to date" development progress.
+* All types of stockable WooCommerce products are available now in Stock Central.
 * Updated screenshots with "up to date" features.
 
 = 1.1.1 =
@@ -235,6 +234,8 @@ Changes:
 * Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
 * Display for the Grouped products the stock amount of the child product with the lowest stock.
 * Disabled the non available ATUM submenus.
+* Hide from Stock Central the products that were set as "hidden from catalog" and are part of a Grouped Product.
+* Improve Stock Central queries to adapt to product variations and grouped items.
 
 Fixes:
 

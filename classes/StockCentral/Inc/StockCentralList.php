@@ -263,8 +263,13 @@ class StockCentralList extends AtumListTable {
 		
 		$this->product = wc_get_product( $item );
 		$type = $this->product->product_type;
-		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
 
+		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
+		if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
+			return;
+		}
+
+		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
 		parent::single_row( $item );
 		
 		// Add the children products of each Variable and Grouped product
@@ -1076,7 +1081,7 @@ class StockCentralList extends AtumListTable {
 	}
 
 	/**
-	 * Get all the available children products for the published parent products (Variable and Grouped)
+	 * Get all the available children products of the published parent products (Variable and Grouped)
 	 *
 	 * @since 1.1.1
 	 *
@@ -1150,9 +1155,11 @@ class StockCentralList extends AtumListTable {
 		foreach ($product_ids as $product_id) {
 			$product = wc_get_product($product_id);
 
+			// For Variations
 			if ( ! empty($product->parent) ) {
 				$parents[] = $product->parent->id;
 			}
+			// For Group Items
 			elseif ($product->post->post_parent) {
 				$parents[] = $product->post->post_parent;
 			}
