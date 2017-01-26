@@ -1030,7 +1030,7 @@ class StockCentralList extends AtumListTable {
 			$this->count_views['count_in_stock'] = count( $posts_stock->posts );
 
 			// As the Group items are being displayed multiple times, we should count them multiple times too
-			if ($group_items) {
+			if ($group_items && ( empty($_REQUEST['type']) || $_REQUEST['type'] != 'grouped' )) {
 				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_stock->posts) );
 			}
 			
