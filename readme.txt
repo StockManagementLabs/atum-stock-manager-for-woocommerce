@@ -183,15 +183,17 @@ Our team is still working on the launch of the main site, but you can get hold o
 
 == Screenshots ==
 
-1. ATUM Stock Central view for WooCommerce Products
-2. Let ATUM warn you about any low stock items on one screen.
-3. Take full control of your screen - Screen Options.
-4. Anything you need to know? - ATUM's Help is there for you.
-5. General Settings - activate the automatic search feature.
-6. Stock Central Settings - Important options in one place.
-7. Full Menu Preview for our Premium and PRO users.
-8. Full Stock Central Preview for our Premium and PRO users.
-9. Preview of all confirmed features - We add new features regularly. 
+1.  ATUM Stock Central Overview.
+2.  ATUM Stock Central - Variable Product - Expandable Container.
+3.  ATUM Stock Central - Grouped Product - Expandable Container.
+4.  Help Section - Product Details.
+5.  Help Section - ATUM Welcome Screen.
+6.  Help Section - Stock Counters.
+7.  Help Section - Stock Negatives.
+8.  Help Section - Stock Selling Manager.
+9.  ATUM - Taking Over Stock Control.
+10. ATUM Settings - General
+11. ATUM Settings - Stock Central
 
 
 == Changelog ==

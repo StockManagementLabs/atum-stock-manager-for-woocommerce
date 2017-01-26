@@ -114,7 +114,7 @@ class StockCentralList extends AtumListTable {
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'            => '<span class="wc-type tips" data-tip="' . __( 'Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'            => '<span class="wc-type tips" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_stock'           => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'            => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
@@ -1029,7 +1029,7 @@ class StockCentralList extends AtumListTable {
 			$this->id_views['in_stock'] = $posts_stock->posts;
 			$this->count_views['count_in_stock'] = count( $posts_stock->posts );
 
-			// As the Group items are being displayed multiple times, we should count them multiple times too
+			// As the Group items might be displayed multiple times, we should count them multiple times too
 			if ($group_items && ( empty($_REQUEST['type']) || $_REQUEST['type'] != 'grouped' )) {
 				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_stock->posts) );
 			}
@@ -1189,7 +1189,7 @@ class StockCentralList extends AtumListTable {
 			<div class="notice notice-info atum-notice welcome-notice is-dismissible" data-nonce="<?php echo wp_create_nonce('dismiss-welcome-notice') ?>">
 				<p>
 					<?php _e("Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this great plugin.", ATUM_TEXT_DOMAIN) ?><br><br>
-					<?php _e("We have disabled some inactive columns by default as these are only available for future upgrades or our Premium and PRO users. If you'd like to preview them, please, use the display menu in the top corner.", ATUM_TEXT_DOMAIN)  ?><br><br>
+					<?php _e("We have disabled some inactive columns by default as these are only available for future upgrades or our Premium and PRO users. If you'd like to preview them, please, use the Screen Options in the top corner.", ATUM_TEXT_DOMAIN)  ?><br><br>
 					<?php _e('Thank you very much for using ATUM as your inventory manager.') ?>
 				</p>
 			</div>

@@ -94,15 +94,15 @@ class StockCentral {
 	 * @since 0.0.2
 	 */
 	public function screen_options() {
-		
-		$option = 'per_page';
+
+		// Add "Products per page" screen option
 		$args   = array(
-			'label'   => 'Products per page',
+			'label'   => __('Products per page', ATUM_TEXT_DOMAIN),
 			'default' => $this->per_page,
 			'option'  => 'products_per_page'
 		);
 		
-		add_screen_option( $option, $args );
+		add_screen_option( 'per_page', $args );
 		
 		$help_tabs = array(
 			array(
