@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-01-26 16:48+0100\n"
+"POT-Creation-Date: 2017-02-02 20:53+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -45,27 +45,35 @@ msgstr ""
 msgid "%s requires WooCommerce version 2.5 or greater"
 msgstr ""
 
-#: classes/Bootstrap.php:182 classes/Bootstrap.php:187 classes/Inc/Ajax.php:107
-#: classes/Inc/Ajax.php:113 classes/Inc/Main.php:473 classes/Inc/Main.php:479
+#: classes/Bootstrap.php:182 classes/Bootstrap.php:187 classes/Inc/Ajax.php:137
+#: classes/Inc/Ajax.php:143 classes/Inc/Main.php:473 classes/Inc/Main.php:479
 #: classes/Settings/Settings.php:405 classes/Settings/Settings.php:411
 #: classes/StockCentral/StockCentral.php:190
 #: classes/StockCentral/StockCentral.php:196
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:635
+#: classes/Components/AtumListTable.php:569
+msgid "Set the stock quantity"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:570
+msgid "Set"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:637
 #, php-format
 msgid " with query '%s'"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:772
+#: classes/Components/AtumListTable.php:774
 #, php-format
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Components/AtumListTable.php:819
+#: classes/Components/AtumListTable.php:821
 #, php-format
 msgid ""
 "%1$s plugin can bulk-enable all your items for stock management at the "
@@ -73,8 +81,20 @@ msgid ""
 "back later or uninstall the plugin."
 msgstr ""
 
-#: classes/Components/AtumListTable.php:820
+#: classes/Components/AtumListTable.php:822
 msgid "Enable ATUM's Manage Stock option"
+msgstr ""
+
+#: classes/Inc/Ajax.php:113
+msgid "Error updating the stock."
+msgstr ""
+
+#: classes/Inc/Ajax.php:120
+msgid "No valid product."
+msgstr ""
+
+#: classes/Inc/Ajax.php:126
+msgid "Stock saved."
 msgstr ""
 
 #: classes/Inc/HelpPointers.php:192
@@ -362,20 +382,24 @@ msgstr ""
 msgid "Variation"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:1191
+#: classes/StockCentral/Inc/StockCentralList.php:488
+msgid "Click to edit the stock quantity"
+msgstr ""
+
+#: classes/StockCentral/Inc/StockCentralList.php:1197
 msgid ""
 "Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this "
 "great plugin."
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:1192
+#: classes/StockCentral/Inc/StockCentralList.php:1198
 msgid ""
 "We have disabled some inactive columns by default as these are only "
 "available for future upgrades or our Premium and PRO users. If you'd like to "
 "preview them, please, use the Screen Options in the top corner."
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:1193
+#: classes/StockCentral/Inc/StockCentralList.php:1199
 msgid "Thank you very much for using ATUM as your inventory manager."
 msgstr ""
 

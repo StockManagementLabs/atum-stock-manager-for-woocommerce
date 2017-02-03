@@ -264,6 +264,11 @@
 		}
 	}
 	
+	.set-stock {
+		cursor: pointer;
+		color: $brand-primary;
+	}
+	
 	#calc_stock_out_days {
 		min-width: 56px;
 	}

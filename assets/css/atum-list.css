@@ -7,6 +7,161 @@
  * License : (c)2017 Stock Management Labs 
  */ 
 
+.popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99999999;
+  display: none;
+  max-width: 276px;
+  padding: 1px;
+  background-color: #FFF;
+  background-clip: padding-box;
+  border: 1px solid #CCC;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.popover.top {
+  margin-top: -10px;
+}
+
+.popover.right {
+  margin-left: 10px;
+}
+
+.popover.bottom {
+  margin-top: 10px;
+}
+
+.popover.left {
+  margin-left: -10px;
+}
+
+.popover-title {
+  margin: 0;
+  padding: 6px 14px;
+  font-size: 14px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ebebeb;
+  border-radius: 5px 5px 0 0;
+}
+
+.atum-list-table .popover-title {
+  text-align: center;
+}
+
+.popover-content {
+  padding: 9px 14px;
+}
+
+.popover > .popover-arrow, .popover > .popover-arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.popover > .popover-arrow {
+  border-width: 11px;
+}
+
+.popover > .popover-arrow:after {
+  border-width: 10px;
+  content: "";
+}
+
+.popover.top > .popover-arrow {
+  left: 50%;
+  margin-left: -11px;
+  border-bottom-width: 0;
+  border-top-color: #999999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  bottom: -11px;
+}
+
+.popover.top > .popover-arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -10px;
+  border-bottom-width: 0;
+  border-top-color: #FFF;
+}
+
+.popover.right > .popover-arrow {
+  top: 50%;
+  left: -11px;
+  margin-top: -11px;
+  border-left-width: 0;
+  border-right-color: #999999;
+  border-right-color: rgba(0, 0, 0, 0.25);
+}
+
+.popover.right > .popover-arrow:after {
+  content: " ";
+  left: 1px;
+  bottom: -10px;
+  border-left-width: 0;
+  border-right-color: #FFF;
+}
+
+.popover.bottom > .popover-arrow {
+  left: 50%;
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: #999999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  top: -11px;
+}
+
+.popover.bottom > .popover-arrow:after {
+  content: " ";
+  top: 1px;
+  margin-left: -10px;
+  border-top-width: 0;
+  border-bottom-color: #FFF;
+}
+
+.popover.left > .popover-arrow {
+  top: 50%;
+  right: -11px;
+  margin-top: -11px;
+  border-right-width: 0;
+  border-left-color: #999999;
+  border-left-color: rgba(0, 0, 0, 0.25);
+}
+
+.popover.left > .popover-arrow:after {
+  content: " ";
+  right: 1px;
+  border-right-width: 0;
+  border-left-color: #FFF;
+  bottom: -10px;
+}
+
+.atum-list-table .popover .popover-content {
+  text-align: center;
+}
+
+.popover .popover-content > input[type=number], .popover .popover-content > .button {
+  display: inline-block;
+  vertical-align: middle;
+  height: 30px;
+}
+
+.popover .popover-content > input[type=number] {
+  width: 75%;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.popover .popover-content > button {
+  margin-left: 3px;
+}
+
 .overlay {
   position: relative;
 }
@@ -293,6 +448,11 @@
 
 .atum-list-table .column-calc_type .variation:before, .atum-list-table .column-calc_type .grouped-item:before {
   content: "\e039";
+}
+
+.atum-list-table .set-stock {
+  cursor: pointer;
+  color: #0073AA;
 }
 
 .atum-list-table #calc_stock_out_days {

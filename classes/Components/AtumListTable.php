@@ -564,8 +564,10 @@ class AtumListTable extends \WP_List_Table {
 			'perpage'    => $this->per_page,
 			'order'      => $this->_pagination_args['order'],
 			'orderby'    => $this->_pagination_args['orderby'],
-			'nonce'      => wp_create_nonce( 'atum-post-type-table-nonce' ),
+			'nonce'      => wp_create_nonce( 'atum-list-table-nonce' ),
 			'ajaxfilter' => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setStock'   => __('Set the stock quantity', ATUM_TEXT_DOMAIN),
+			'setButton'  => __('Set', ATUM_TEXT_DOMAIN)
 		), $this->data ) );
 		
 		do_action( 'atum/atum_list_table/after_display', $this );

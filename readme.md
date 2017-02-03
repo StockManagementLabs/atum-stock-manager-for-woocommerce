@@ -12,7 +12,7 @@ The ultimate stock management plugin for serious WooCommerce Sellers.
 
 == Description ==
 
-ATUM is an advanced stock management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
+ATUM is an advanced stock management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.  
 
 ATUM stock manager for WooCommerce comes from Stock Management Labs™, creators that have combined over 25 years of experience in inventory management. The team is working very closely with a bunch of professional developers since October 2016. The aim is to create the complete product that will take care of all business needs.
 
@@ -135,7 +135,7 @@ One of the most important ways of controlling the inventory in any business is i
 * Multichannel Inventory Pro
 * eBay Sync
 * eBay Sync Pro
-* Amazon Sync
+* Amazon Sync 
 * Amazon Sync Pro
 * Live UK Deals Sync
 * Live UK Deals Sync PRO
@@ -168,7 +168,7 @@ One of the most important ways of controlling the inventory in any business is i
 * Delivery Notes Pro
 * Drop-shipping
 * Drop-shipping Pro
-* ATUM Fulfilment
+* ATUM Fulfilment 
 * ATUM Fulfilment PRO
 * Distribution Central
 * Distribution Central PRO
@@ -206,7 +206,7 @@ If you'd like to see only selected products, leave the ATUM stock control option
 **Once Configured**
 
 * ATUM was designed to give the user overall control of the full WooCommerce inventory from one screen. Stock Central can be completely configured, and individual columns that are not part of the free version disabled.
-* We have prepared the Stock Central help section that will guide every user through the individual column functionality.
+* We have prepared the Stock Central help section that will guide every user through the individual column functionality. 
 * Our team has prepared the preview of confirmed features that will be available in out Premium and PRO version. You can find these by opening any of the inactive menu pages.
 
 == Frequently Asked Questions ==

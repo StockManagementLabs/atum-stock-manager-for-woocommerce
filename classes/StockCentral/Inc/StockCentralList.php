@@ -381,7 +381,7 @@ class StockCentralList extends AtumListTable {
 		}
 		
 		if ( strlen( $title ) > 20 ) {
-			$title = '<span class="tips" data-tip="' . $title . '" data-placement="right">' . trim( substr( $title, 0, 20 ) ) .
+			$title = '<span class="tips" data-tip="' . $title . '">' . trim( substr( $title, 0, 20 ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 		
@@ -482,7 +482,14 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected function column_calc_stock( $item ) {
 
-		$stock = ($this->allow_calcs) ? intval( $this->product->get_total_stock() ) : '&mdash;';
+		$stock = '&mdash;';
+		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id :$item->ID;
+
+		if ($this->allow_calcs) {
+			$stock = '<span class="set-stock tips" data-tip="' . __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ) . '" data-position="top" data-item="' . $product_id . '">' .
+			         intval( $this->product->get_total_stock() ) . '</span>';
+		}
+
 		return apply_filters( 'atum/stock_central_list/column_stock', $stock );
 		
 	}
