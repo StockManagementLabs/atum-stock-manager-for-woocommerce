@@ -1,12 +1,4 @@
-# ATUM Stock Manager for WooCommerce
-
-Contributors: stockmanagementlabs, salvamb, japiera
-Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
-Requires at least: 4.6
-Tested up to: 4.7.2
-Stable tag: 1.1.2
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+# [ATUM Stock Manager for WooCommerce](http://www.stockmanagementlabs.com)
 
 The ultimate stock management plugin for serious WooCommerce Sellers.
 
