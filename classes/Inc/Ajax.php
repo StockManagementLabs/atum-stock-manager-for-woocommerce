@@ -35,8 +35,11 @@ final class Ajax {
 		// Ajax callback for Management Stock notice
 		add_action( 'wp_ajax_atum_manage_stock_notice', array( $this, 'manage_stock_notice' ) );
 		
-		// Ajax callback for welcome notice dismissal
+		// Welcome notice dismissal
 		add_action( 'wp_ajax_atum_welcome_notice', array( $this, 'welcome_notice' ) );
+
+		// Set the stock quantity from stock central list
+		add_action( 'wp_ajax_atum_update_stock', array( $this, 'update_item_stock' ) );
 	}
 	
 	/**
@@ -46,7 +49,7 @@ final class Ajax {
 	 */
 	public function fetch_stock_central_list() {
 		
-		check_ajax_referer( 'atum-post-type-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 		
 		//pro version
 		//$selected = Sanitize::sanitize_post_type_selector($_REQUEST['selected']);
@@ -95,6 +98,33 @@ final class Ajax {
 		Helpers::dismiss_notice('welcome');
 		wp_die();
 		
+	}
+
+	/**
+	 * Update the stock for any product within the Stock Central list
+	 *
+	 * @since 1.1.2
+	 */
+	public function update_item_stock () {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		if ( empty($_POST['item']) || ! isset($_POST['stock']) ) {
+			wp_send_json_error( __('Error updating the stock.', ATUM_TEXT_DOMAIN) );
+		}
+
+		$product_id = absint($_POST['item']);
+		$product = wc_get_product($product_id);
+
+		if ( !$product || ! is_a($product, '\WC_Product') ) {
+			wp_send_json_error( __('No valid product.', ATUM_TEXT_DOMAIN) );
+		}
+
+		$stock = intval($_POST['stock']);
+		wc_update_product_stock($product_id, $stock);
+
+		wp_send_json_success( __('Stock saved.', ATUM_TEXT_DOMAIN) );
+
 	}
 	
 	

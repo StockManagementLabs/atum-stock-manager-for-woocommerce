@@ -53,3 +53,21 @@ $pricing-premium-end:                   #6739b6;
 $pricing-pro-start:                     #f26621;
 $pricing-pro-end:                       #ea4335;
 $pricing-body-color:                    #FFF;
+
+// Popovers
+$popover-bg:                            #FFF;
+$popover-max-width:                     276px;
+$popover-border-color:                  rgba(0,0,0,.2);
+$popover-fallback-border-color:         #CCC;
+$popover-border-radius:                 6px;
+
+$popover-title-bg:                      darken($popover-bg, 3%);
+
+$popover-arrow-width:                   10px;
+$popover-arrow-color:                   $popover-bg;
+
+$popover-arrow-outer-width:             ($popover-arrow-width + 1);
+$popover-arrow-outer-color:             fade_in($popover-border-color, 0.05);
+$popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%);
+
+$zindex-popover:                        99999999;
