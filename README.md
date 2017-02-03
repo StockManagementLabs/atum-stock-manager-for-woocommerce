@@ -209,7 +209,7 @@ If you'd like to see only selected products, leave the ATUM stock control option
 * We have prepared the Stock Central help section that will guide every user through the individual column functionality. 
 * Our team has prepared the preview of confirmed features that will be available in out Premium and PRO version. You can find these by opening any of the inactive menu pages.
 
-### Frequently Asked Questions
+## Frequently Asked Questions
 
 #### Is ATUM plugin FREE?
 
@@ -244,7 +244,7 @@ From the 1.1.0 update of ATUM stock manager for WooCommerce, we support Simple, 
 Product variations are now supported at a basic level. We have an advanced feature for variable products prepared for our Premium and PRO users.
 
 
-### Changelog
+## Changelog
 
 **1.0.0.**
 
