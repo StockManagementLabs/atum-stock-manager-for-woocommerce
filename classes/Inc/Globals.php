@@ -15,7 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 
-abstract class Globals {
+final class Globals {
 	
 	/**
 	 * The product types allowed
@@ -31,11 +31,10 @@ abstract class Globals {
 	private static $out_of_stock_date_key = '_out_of_stock_date';
 	
 	/**
-	 * The Atum admin page slug
+	 * The ATUM admin page slug
 	 */
 	const ATUM_UI_SLUG = 'atum-stock-central';
-	
-	
+
 	
 	/**
 	 * Getter for the $out_of_stock_date_key property

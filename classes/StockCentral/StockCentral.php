@@ -199,7 +199,6 @@ class StockCentral {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @static
 	 * @return StockCentral instance
 	 */
 	public static function get_instance() {

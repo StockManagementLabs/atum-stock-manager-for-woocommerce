@@ -21,14 +21,16 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
     );
 
     public static $classMap = array (
+        'Atum\\Addons\\Addons' => __DIR__ . '/../..' . '/classes/Addons/Addons.php',
+        'Atum\\Addons\\Updater' => __DIR__ . '/../..' . '/classes/Addons/Updater.php',
         'Atum\\Bootstrap' => __DIR__ . '/../..' . '/classes/Bootstrap.php',
         'Atum\\Components\\AtumListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTable.php',
+        'Atum\\Components\\HelpPointers' => __DIR__ . '/../..' . '/classes/Components/HelpPointers.php',
         'Atum\\Inc\\Ajax' => __DIR__ . '/../..' . '/classes/Inc/Ajax.php',
         'Atum\\Inc\\Globals' => __DIR__ . '/../..' . '/classes/Inc/Globals.php',
         'Atum\\Inc\\Helpers' => __DIR__ . '/../..' . '/classes/Inc/Helpers.php',
         'Atum\\Inc\\Main' => __DIR__ . '/../..' . '/classes/Inc/Main.php',
         'Atum\\Settings\\Settings' => __DIR__ . '/../..' . '/classes/Settings/Settings.php',
-        'Atum\\StockCentral\\Inc\\HelpPointers' => __DIR__ . '/../..' . '/classes/Inc/HelpPointers.php',
         'Atum\\StockCentral\\Inc\\StockCentralList' => __DIR__ . '/../..' . '/classes/StockCentral/Inc/StockCentralList.php',
         'Atum\\StockCentral\\StockCentral' => __DIR__ . '/../..' . '/classes/StockCentral/StockCentral.php',
     );

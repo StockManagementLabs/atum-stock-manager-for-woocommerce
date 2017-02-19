@@ -798,7 +798,9 @@ class AtumListTable extends \WP_List_Table {
 			wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
 			
 			wp_register_style( 'atum-list', ATUM_URL . '/assets/css/atum-list.css', FALSE, ATUM_VERSION );
-			wp_register_script( 'atum', ATUM_URL . '/assets/js/atum.js', array( 'jquery', 'jquery-tiptip', 'jscrollpane' ), ATUM_VERSION, TRUE );
+
+			$min = (! ATUM_DEBUG) ? '.min' : '';
+			wp_register_script( 'atum', ATUM_URL . "/assets/js/atum$min.js", array( 'jquery', 'jquery-tiptip', 'jscrollpane' ), ATUM_VERSION, TRUE );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'atum-list' );

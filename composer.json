@@ -1,6 +1,6 @@
 {
-	"name": "atum",
-	"description": "ATUM Stock Management",
+	"name": "atum-stock-manager-for-woocommerce",
+	"description": "ATUM Stock Manager for WooCommerce",
 	"license": "Copyrighted",
 	"minimum-stability": "dev",
 	"prefer-stable"    : true,

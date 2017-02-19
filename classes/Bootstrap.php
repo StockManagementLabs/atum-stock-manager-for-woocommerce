@@ -75,7 +75,6 @@ class Bootstrap {
 			// Check that the plugin dependencies are present
 			if ( is_admin() ) {
 				$this->check_dependencies();
-				Ajax::get_instance();
 			}
 			
 			// Bootstrap the plugin
@@ -190,7 +189,6 @@ class Bootstrap {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @static
 	 * @return Bootstrap instance
 	 */
 	public static function get_instance() {

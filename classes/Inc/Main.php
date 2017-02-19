@@ -14,8 +14,9 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Addons\Addons;
+use Atum\Components\HelpPointers;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\HelpPointers;
 use Atum\StockCentral\StockCentral;
 
 
@@ -31,15 +32,25 @@ class Main {
 	 * The Settings page object
 	 * @var Settings
 	 */
-	private $sp;
+	private $sp_obj;
 	
 	/**
 	 * The Stock central object
 	 * @var StockCentral
 	 */
-	private $sc;
-	
-	
+	private $sc_obj;
+
+	/**
+	 * The Addons object
+	 * @var Addons
+	 */
+	private $ad_obj;
+
+	/**
+	 * Singleton constructor
+	 *
+	 * @since 0.0.1
+	 */
 	private function __construct() {
 		
 		if ( is_admin() ) {
@@ -47,16 +58,16 @@ class Main {
 			// Add the menus
 			add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
 			
-			// Initialization checks
-			add_action( 'init', array( $this, 'load' ) );
+			// Initialize
+			add_action( 'init', array( $this, 'admin_load' ) );
 			
-			// Check if ATUM has enabled the "Manage Stock" option
+			// Check if ATUM has the "Manage Stock" option enabled
 			if ( Helpers::get_option( 'manage_stock', 'no' ) == 'yes' ) {
 				add_action( 'init', array( $this, 'atum_manage_stock_hooks' ) );
 			}
 			else {
 
-				// Delete ATUM's transients
+				// Delete ATUM's transients on saving WC products
 				add_action( 'save_post_product', array($this, 'delete_transients') );
 
 				// Add the WC stock management option to grouped products
@@ -76,7 +87,7 @@ class Main {
 	 *
 	 * @since 0.0.3
 	 */
-	public function load() {
+	public function admin_load() {
 		
 		// Delete transients if this is first execution after upgrade
 		$db_version = get_option( ATUM_PREFIX . 'version' );
@@ -88,13 +99,18 @@ class Main {
 		
 		// Load language files
 		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' );
-		
-		// Add notice if Atum manege stock isn't active
-		$this->sp = Settings::get_instance();
-		$this->sc = StockCentral::get_instance();
-		
+
+		// Load dependencies
+		Ajax::get_instance();
+		$this->sp_obj = Settings::get_instance();
+		$this->sc_obj = StockCentral::get_instance();
+		$this->ad_obj = Addons::get_instance();
+
 		// Add the help pointers
-		add_action( 'admin_enqueue_scripts', array($this, 'setup_help_pointers') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
+
+		// Add the footer text to ATUM pages
+		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 		
 	}
 	
@@ -109,114 +125,50 @@ class Main {
 		add_menu_page(
 			__( 'Stock Central', ATUM_TEXT_DOMAIN ),
 			__( 'Stock Central', ATUM_TEXT_DOMAIN ),
-			'manage_options',
+			'manage_woocommerce',
 			Globals::ATUM_UI_SLUG,
 			'',
 			'dashicons-chart-area',
-			58
+			58 // Add the menu after WC Products
 		);
 		
 		$menu_items = apply_filters( 'atum/admin/menu_items', array(
 			'stock-central'   => array(
 				'title'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this, 'load_stock_central' ),
+				'callback' => array( $this->sc_obj, 'display' ),
 				'slug'     => 'stock-central'
 			),
-			/*'product-levels'  => array(
-				'title' => __( 'Product Levels', ATUM_TEXT_DOMAIN ),
-			),
-			'stock-takes'     => array(
-				'title' => __( 'Stock Takes', ATUM_TEXT_DOMAIN ),
-			),
-			'reports'         => array(
-				'title' => __( 'Reports', ATUM_TEXT_DOMAIN ),
-			),
-			'graphs'          => array(
-				'title' => __( 'Graphs', ATUM_TEXT_DOMAIN ),
-			),
-			'stock-forecast'  => array(
-				'title' => __( 'Stock Forecast', ATUM_TEXT_DOMAIN ),
-			),
-			'stock-log'       => array(
-				'title' => __( 'Stock Logs', ATUM_TEXT_DOMAIN ),
-			),
-			'financials'      => array(
-				'title' => __( 'Financials', ATUM_TEXT_DOMAIN ),
-			),
-			'profit-loss'     => array(
-				'title' => __( 'Profit & Loss', ATUM_TEXT_DOMAIN ),
-			),
-			'purchase-orders' => array(
-				'title' => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
-			),
-			'purchase-orders' => array(
-				'title' => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
-			),
-			'the-mobile-app' => array(
-				'title' => __('The Mobile App', ATUM_TEXT_DOMAIN),
-			),
-			'import-export'   => array(
-				'title' => __( 'Import/Export', ATUM_TEXT_DOMAIN ),
-			),*/
 			'settings'        => array(
 				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this, 'load_settings' ),
+				'callback' => array( $this->sp_obj, 'display' ),
 				'slug'     => 'settings'
+			),
+			'addons'  => array(
+				'title' => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
+				'callback' => array( $this->ad_obj, 'load_addons_page' ),
+				'slug'     => 'addons'
 			)
 		) );
 		
 		// Build the submenu items
 		foreach ( $menu_items as $key => $menu_item ) {
 			
-			$slug = ( ! isset( $menu_item['slug'] ) ) ? 'go-premium' : $menu_item['slug'];
+			$slug = $menu_item['slug'];
 			
 			if ( strpos( $slug, ATUM_TEXT_DOMAIN ) === FALSE ) {
 				$slug = ATUM_TEXT_DOMAIN . "-$slug";
 			}
 			
-			$callback = ( ! empty( $menu_item['callback'] ) && is_callable( $menu_item['callback'] ) ) ? $menu_item['callback'] : array( $this, 'load_go_premium_page' );
-			
 			add_submenu_page(
 				Globals::ATUM_UI_SLUG,
 				$menu_item['title'],
 				$menu_item['title'],
-				'manage_options',
+				'manage_woocommerce',
 				$slug,
-				$callback
+				$menu_item['callback']
 			);
 		}
 		
-	}
-	
-	/**
-	 * Load the Stock Central page
-	 *
-	 * @since 0.0.1
-	 */
-	public function load_stock_central() {
-		
-		$this->sc->display();
-	}
-	
-	/**
-	 * Load the Settings page
-	 *
-	 * @since 0.0.1
-	 */
-	public function load_settings() {
-		
-		$this->sp->display();
-	}
-	
-	/**
-	 * Load the Go Premium pricing tables in the free version
-	 *
-	 * @since 0.0.2
-	 */
-	public function load_go_premium_page() {
-		
-		wp_enqueue_style( 'go-premium', ATUM_URL . 'assets/css/go-premium.css', FALSE, ATUM_VERSION );
-		Helpers::load_view( 'go-premium' );
 	}
 	
 	/**
@@ -325,7 +277,7 @@ class Main {
 		// Show the "Manage Stock" checkbox on Grouped products and hide the other stock fields
 		if ( $product && is_a($product, '\\WC_Product') ) : ?>
 			<script type="text/javascript">
-				jQuery('._manage_stock_field').addClass('show_if_grouped');
+				jQuery('._manage_stock_field').addClass('show_if_grouped show_if_product-part show_if_raw-material');
 
 				<?php // NOTE: The "wp-menu-arrow" is a WP built-in class that adds "display: none!important" so doesn't conflict with WC JS ?>
 				jQuery('#product-type').change(function() {
@@ -462,6 +414,46 @@ class Main {
 		new HelpPointers( $pointers );
 		
 	}
+
+	/**
+	 * Change the admin footer text on ATUM admin pages
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param  string $footer_text
+	 * @return string
+	 */
+	public function admin_footer_text( $footer_text ) {
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		$current_screen = get_current_screen();
+
+		if ( isset( $current_screen->id ) && $current_screen->parent_base == Globals::ATUM_UI_SLUG ) {
+
+			// Change the footer text
+			if ( ! get_option( 'atum_admin_footer_text_rated' ) ) {
+
+				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;&#9733;&#9733;%s rating. A huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
+				wc_enqueue_js( "
+					jQuery( 'a.wc-rating-link' ).click( function() {
+						jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );
+						jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
+					});
+				" );
+
+			}
+			else {
+				$footer_text = __( 'Thank you for trusting in <strong>ATUM</strong> for managing your stock.', ATUM_TEXT_DOMAIN );
+			}
+
+		}
+
+		return $footer_text;
+
+	}
 	
 	
 	/****************************
@@ -482,7 +474,6 @@ class Main {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @static
 	 * @return Main instance
 	 */
 	public static function get_instance() {

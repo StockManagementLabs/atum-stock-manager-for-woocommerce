@@ -1,7 +1,7 @@
 <?php
 /**
- * @package        Atum\StockCentral
- * @subpackage     Inc
+ * @package        Atum
+ * @subpackage     Components
  * @author         Salva Machí and Jose Piera - https://sispixels.com
  * @copyright      (c)2017 Stock Management Labs
  *
@@ -31,7 +31,7 @@
  *                        );
  *
  *      // Now we instantiate the class and pass our pointers array to the constructor
- *      $my_pointers = new \Atum\StockCentral\Inc\HelpPointers($pointers);
+ *      $my_pointers = new \Atum\Components\HelpPointers($pointers);
  *    }
  *
  * @author Tim Debo <tim@rawcreativestudios.com>
@@ -40,7 +40,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Atum\StockCentral\Inc;
+namespace Atum\Components;
 
 
 class HelpPointers {

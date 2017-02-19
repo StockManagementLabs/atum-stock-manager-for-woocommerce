@@ -14,19 +14,18 @@ var gulp         = require('gulp'),
     sass         = require('gulp-sass'),
     sourcemaps   = require('gulp-sourcemaps'),
     imagemin     = require('gulp-imagemin'),
-    zip          = require('gulp-zip'),
 	composer     = require('gulp-composer'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.0.0';
+var version = '1.2.0';
 
 // Global config
 var config = {
 	
 	assetsDir : './assets',
 
-	devUrl    : 'http://stockmanagementlabs.dev',
+	devUrl    : 'http://atum.dev',
 	production: false,
 
 	// decorate
@@ -183,56 +182,6 @@ gulp.task('composer::update', function () {
 gulp.task('composer::optimize', function () {
 	// Just optimization (classmap autoloader array generation)
 	composer('dumpautoload', {cwd: '.', optimize: true});
-});
-
-//
-// Plugin ZIP packaging
-// -------------------
-
-gulp.task('build::free', ['composer::optimize'], function () {
-	return gulp.src([
-		'/**/*',
-		'!./bower_components/**',
-		'!./node_modules/**',
-		'!./releases/**/*',
-		'!*.map',
-		'!./pro/**',
-		'!./premium/**'
-	])
-		.pipe(gulp.dest('releases/free/' + version + '/'));
-});
-
-gulp.task('zip::free', ['build::free'], function () {
-	return gulp.src('releases/free/' + version + '/')
-		.pipe(zip('atum.zip'))
-		.pipe(gulp.dest('releases/'));
-});
-
-gulp.task( 'buil::zip::free', ['build::free', 'zip::free'] );
-
-gulp.task('zip::premium', function () {
-	return gulp.src([
-		'/**/*',
-		'!bower_components',
-		'!node_modules',
-		'!*.map',
-	    '!pro'
-	], {base: "."})
-		.pipe(composer('dumpautoload', {cwd: '.', optimize: true}))
-		.pipe(zip('atum-pro.zip'))
-		.pipe(gulp.dest('.'));
-});
-
-gulp.task('zip::pro', function () {
-	return gulp.src([
-		'/**/*',
-		'!bower_components',
-		'!node_modules',
-		'!*.map'
-	], {base: "."})
-		.pipe(composer('dumpautoload', {cwd: '.', optimize: true}))
-		.pipe(zip('atum-premium.zip'))
-		.pipe(gulp.dest('.'));
 });
 
 

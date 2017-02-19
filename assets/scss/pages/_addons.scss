@@ -1,0 +1,218 @@
+//
+// Atum add-ons
+//---------------
+
+.atum-addons {
+	
+	h1 {
+		margin-bottom: $grid-gutter-width/2;
+	}
+	
+	a {
+		text-decoration: none;
+	}
+	
+	@media all and (min-width: 481px) {
+		.themes {
+			@include flexbox;
+			@include flex-wrap(wrap);
+			@include flex-align-items(flex-start);
+		}
+	}
+	
+	.theme {
+		
+		.theme-screenshot {
+			cursor: default;
+		}
+		
+		.theme-name {
+			position: relative;
+			cursor: default;
+		}
+		
+		.theme-actions {
+			height: 39px;
+			right: 27px;
+			
+			&.valid, &.invalid, &.inactive {
+				opacity: 1;
+				
+				span {
+					display: inline-block;
+					margin-top: 7px;
+					font-size: 12px;
+					color: #FFF;
+					font-weight: normal;
+				}
+			}
+			
+			&.valid {
+				background-color: $brand-success;
+				
+				&:not(.not-installed) {
+					+ .show-key {
+						i {
+							color: $brand-success;
+						}
+					}
+				}
+			}
+			
+			&.inactive {
+				background-color: $brand-warning;
+			}
+			
+			&.not-installed {
+				background-color: transparent;
+			}
+			
+		}
+		
+		&:hover {
+			.theme-actions {
+				&.no-key {
+					display: none;
+				}
+			}
+		}
+		
+		.show-key {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			height: 49px;
+			padding: 0 3px;
+			border-left: 1px solid rgba(#000, 0.05);
+			cursor: pointer;
+			
+			&, i {
+				@include transition(all 0.2s ease-in-out);
+			}
+			
+			i {
+				font-size: 15px;
+				padding-top: 17px;
+				color: $brand-primary;
+			}
+			
+			&:hover {
+				background-color: lighten($brand-primary, 10%);
+				
+				i {
+					color: #FFF !important;
+				}
+			}
+			
+		}
+		
+		.more-details {
+			border-radius: 0;
+		}
+		
+		.addon-key {
+			display: none;
+			
+			.wrapper {
+				@include flexbox;
+				@include flex-wrap(nowrap);
+				@include flex-align-items(center);
+				padding: 5px;
+				border-top: 1px solid #DDD;
+				position: relative;
+			}
+			
+			input[type=text] {
+				width: 80%;
+				margin-right: 4px;
+				height: 28px;
+				border-radius: 3px;
+				font-size: 12px;
+				border-radius: 0;
+				
+				&:focus {
+					box-shadow: none;
+				}
+				
+				&.valid {
+					border-color: $brand-success;
+				}
+				
+				&.inactive {
+					border-color: $brand-warning;
+				}
+				
+				&.invalid {
+					border-color: $brand-danger;
+				}
+			}
+			
+		}
+		
+		.button {
+			border: none;
+			box-shadow: none;
+			text-shadow: none;
+			font-weight: normal;
+			background-color: $brand-primary;
+			color: #FFF;
+			border-radius: 0;
+			@include transition(all 0.2s ease-in-out);
+			
+			&:disabled {
+				background-color: $brand-primary !important;
+				text-shadow: none !important;
+				color: #FFF !important;
+				opacity: 0.6;
+			}
+			
+			&:hover {
+				background-color: lighten($brand-primary, 10%);
+			}
+		}
+		
+		&.active {
+			.addon-key {
+				background-color: #23282d;
+				border-top-color: lighten(#23282d, 25%);
+			}
+		}
+		
+		.atum-loading {
+			right: 20px;
+			top: 7px;
+			@include loader(18px, #0073AA, 3px, 1s);
+		}
+		
+		@media only screen and (max-width: 780px) {
+			
+			.button {
+				margin-bottom: 0;
+			}
+			
+			input[type=text] {
+				height: 29px;
+			}
+			
+			.theme-actions {
+				display: block;
+				
+				&.valid, &.invalid, &.inactive {
+					span {
+						margin-top: 10px;
+					}
+				}
+				
+				.button {
+					margin: 5px 0 0;
+				}
+			}
+			
+		}
+		
+		
+		
+	}
+	
+}
+

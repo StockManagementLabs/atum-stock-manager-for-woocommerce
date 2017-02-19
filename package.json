@@ -1,8 +1,8 @@
 {
-	"name": "atum",
-	"version": "1.0.1",
+	"name": "ATUM",
+	"version": "1.2.0",
 	"author": "Salva Machí and Jose Piera - https://sispixels.com",
-	"homepage": "https://stockmanagementlabs.com",
+	"homepage": "https://www.stockmanagementlabs.com",
 	"private": true,
 	"repository": {
 		"type": "git"
@@ -21,7 +21,6 @@
 		"gulp-watch": "latest",
 		"imagemin-pngcrush": "latest",
 		"gulp-composer": "latest",
-		"gulp-zip": "latest",
 		"gulp-wrap": "latest"
 	}
 }

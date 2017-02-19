@@ -1,13 +1,13 @@
 <?php
 /**
  * @package     Atum
- * @subpackage  Inc
+ * @subpackage  Settings
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   (c)2017 Stock Management Labs
  *
  * @since       0.0.2
  *
- * Build and display the plugin settings page
+ * Build and display the ATUM settings page
  */
 
 namespace Atum\Settings;
@@ -26,16 +26,16 @@ class Settings {
 	private static $instance;
 	
 	/**
-	 * Store sections structure
+	 * Tabs and sections structure
 	 * @var array
 	 */
-	private $sections;
+	private $tabs;
 	
 	/**
-	 * Default active section
+	 * Default active tab
 	 * @var string
 	 */
-	private $active_section = 'general';
+	private $active_tab = 'general';
 	
 	/**
 	 * Store field structure and default values for the settings page
@@ -79,14 +79,18 @@ class Settings {
 		// TODO: Should this be changed to init???
 		add_filter( "pre_update_option_" . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
 		
-		$this->sections = array(
+		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
-				'name'     => __( 'General Options', ATUM_TEXT_DOMAIN )
+				'sections' => array(
+					'general' => __( 'General Options', ATUM_TEXT_DOMAIN )
+				)
 			),
 			'stock_central' => array(
 				'tab_name' => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-				'name'     => __( 'Stock Central Options', ATUM_TEXT_DOMAIN )
+				'sections' => array(
+					'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN )
+				)
 			)
 		);
 		
@@ -130,16 +134,15 @@ class Settings {
 	 */
 	public function display() {
 		
-		
 		$this->options = $this->get_settings( Helpers::get_options(), $this->defaults );
 		
-		if ( isset( $_GET['section'] ) ) {
-			$this->active_section = $_GET['section'];
+		if ( isset( $_GET['tab'] ) ) {
+			$this->active_tab = $_GET['tab'];
 		}
-		
+
 		Helpers::load_view( 'settings-page', array(
-			'sections' => $this->sections,
-			'active'   => $this->active_section
+			'tabs'   => $this->tabs,
+			'active' => $this->active_tab
 		) );
 	}
 	
@@ -184,9 +187,13 @@ class Settings {
 			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
 			wp_register_style( 'atum-settings', ATUM_URL . 'assets/css/atum-settings.css', FALSE, ATUM_VERSION );
+
 			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
-			wp_register_script( 'atum-settings', ATUM_URL . 'assets/js/atum.settings.js', array( 'jquery', 'switchery', 'jquery-tiptip', 'sweetalert2' ), ATUM_VERSION );
+			Helpers::maybe_es6_promise();
+
+			$min = (! ATUM_DEBUG) ? '.min' : '';
+			wp_register_script( 'atum-settings', ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'jquery-tiptip', 'sweetalert2' ), ATUM_VERSION );
 			
 			wp_localize_script( 'atum-settings', 'atumSettings', array(
 				'stockMsgTitle' => __( "Would you want to restore the 'Manage Stock' status of all products to their original state?", ATUM_TEXT_DOMAIN ),
@@ -199,7 +206,11 @@ class Settings {
 			wp_enqueue_style( 'switchery' );
 			wp_enqueue_style( 'sweetalert2' );
 			wp_enqueue_style( 'atum-settings' );
-			
+
+			if ( wp_script_is('es6-promise', 'registered') ) {
+				wp_enqueue_script( 'es6-promise' );
+			}
+
 			wp_enqueue_script( 'atum-settings' );
 			
 		}
@@ -216,22 +227,25 @@ class Settings {
 		do_action( 'atum/settings/before_register_settings', $this );
 		
 		// Add the sections
-		foreach ( $this->sections as $section => $atts ) {
-			
-			add_settings_section(
-				ATUM_PREFIX . "setting_$section",                   // ID
-				( empty( $atts['name'] ) ) ? '' : $atts['name'],    // Title
-				FALSE,                                              // Callback
-				ATUM_PREFIX . "setting_$section"                    // Page
-			
-			);
-			
-			// Register the settings
-			register_setting(
-				ATUM_PREFIX . "setting_$section",                   // Option group
-				self::OPTION_NAME,                                  // Option name
-				array( $this, 'sanitize' )
-			);
+		foreach ( $this->tabs as $tab => $tab_data ) {
+
+			foreach ($tab_data['sections'] as $section_key => $section_name) {
+
+				add_settings_section(
+					ATUM_PREFIX . "setting_$section_key",    // ID
+					$section_name,                           // Title
+					FALSE,                                   // Callback
+					ATUM_PREFIX . "setting_$section_key"     // Page
+				);
+
+				// Register the settings
+				register_setting(
+					ATUM_PREFIX . "setting_$section_key",    // Option group
+					self::OPTION_NAME,                       // Option name
+					array( $this, 'sanitize' )               // Sanitization callback
+				);
+
+			}
 			
 		}
 		
@@ -273,7 +287,10 @@ class Settings {
 			foreach ( $this->defaults as $key => $atts ) {
 				
 				// Only current section
-				if ( $atts['section'] == $input['settings_section'] ) {
+				if (
+					! empty( $this->tabs[ $input['settings_section'] ] ) &&
+					in_array( $atts['section'], array_keys( $this->tabs[ $input['settings_section'] ]['sections'] ) )
+				) {
 					
 					switch ( $this->defaults[ $key ]['type'] ) {
 						
@@ -283,6 +300,10 @@ class Settings {
 						
 						case 'number':
 							$this->options[ $key ] = ( isset( $input[ $key ] ) ) ? intval( $input[ $key ] ) : $atts['default'];
+							break;
+
+						default:
+							$this->options[ $key ] = ( isset( $input[ $key ] ) ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
 							break;
 					}
 					
@@ -302,21 +323,39 @@ class Settings {
 	
 	
 	/**
-	 * Get the settings option array and print a integer
+	 * Get the settings option array and print a text field
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args  Field arguments
+	 */
+	public function display_text( $args ) {
+		
+		$output = $this->get_label( $args ) . sprintf(
+				'<input class="atum-settings-input regular-text" type="text" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+				$this->options[ $args['id'] ]
+			);
+		
+		echo apply_filters( 'atum/settings/display_text', $output, $args );
+		
+	}
+
+	/**
+	 * Get the settings option array and print a number field
 	 *
 	 * @since 0.0.2
 	 *
 	 * @param array $args  Field arguments
 	 */
 	public function display_number( $args ) {
-		
+
 		$output = $this->get_label( $args ) . sprintf(
 				'<input class="atum-settings-input" type="number" min="1" step="1" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
 				$this->options[ $args['id'] ]
 			);
-		
+
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
-		
+
 	}
 	
 	
@@ -394,7 +433,7 @@ class Settings {
 		
 		return $new_value;
 	}
-	
+
 	
 	/****************************
 	 * Instance methods
@@ -414,7 +453,6 @@ class Settings {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @static
 	 * @return Settings instance
 	 */
 	public static function get_instance() {

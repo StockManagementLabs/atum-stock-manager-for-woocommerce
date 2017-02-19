@@ -307,7 +307,6 @@ final class Helpers {
 	public static function delete_transients() {
 		
 		global $wpdb;
-		
 		return $wpdb->query( "DELETE FROM {$wpdb->options} WHERE `option_name` LIKE '_transient_" . ATUM_PREFIX . "%'" );
 	}
 	
@@ -531,6 +530,38 @@ final class Helpers {
 		
 		return date_i18n( 'Y-m-d H:i:s', $date );
 	}
+
+	/**
+	 * Check whether a specific plugin is installed
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $plugin        The plugin name/slug
+	 * @param string $by            Optional. It can be cheched by 'slug' or by 'name'
+	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data
+	 *
+	 * @return bool|array
+	 */
+	public static function is_plugin_installed ($plugin, $by = 'slug', $return_bool = TRUE) {
+
+		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
+
+			// Get the plugin slug from its path
+			if ($by == 'slug') {
+				$installed_plugin_key = explode( DIRECTORY_SEPARATOR, $plugin_file )[0];
+			}
+			else {
+				$installed_plugin_key = $plugin_data['Title'];
+			}
+
+			if ($installed_plugin_key == $plugin) {
+				return ($return_bool) ? TRUE : array($plugin_file => $plugin_data);
+			}
+		}
+
+		return FALSE;
+
+	}
 	
 	/**
 	 * Add a notice to the list of dismissed notices for the current user
@@ -563,5 +594,25 @@ final class Helpers {
 		$user_id = ($user_id) ? absint($user_id) : get_current_user_id();
 		return apply_filters( 'atum/dismissed_notices', get_user_meta($user_id, AtumListTable::DISMISSED_NOTICES, TRUE) );
 	}
-	
+
+	/**
+	 * Check whether or not register the ES6 promise script
+	 * This is only required for SweetAlert2 on IE<12
+	 *
+	 * @since 1.2.0
+	 */
+	public static function maybe_es6_promise () {
+
+		global $is_IE;
+		// ES6 Polyfill (only for IE<12). Required by SweetAlert2
+		if ($is_IE){
+			$version = array();
+			preg_match("/MSIE ([0-9]{1,}[\.0-9]{0,})/", $_SERVER['HTTP_USER_AGENT'], $version);
+			if ( ! empty($version) && intval($version[1]) < 12 ) {
+				wp_register_script( 'es6-promise', ATUM_URL . 'assets/js/vendor/es6-promise.auto.min.js', [], ATUM_VERSION, TRUE );
+			}
+		}
+
+	}
+
 }
