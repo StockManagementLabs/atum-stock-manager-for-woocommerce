@@ -1,9 +1,9 @@
 <?php
 /**
  * @package         Atum
- * @subpackage      Inc
+ * @subpackage      Components
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       (c)2017 Stock Management Labs
+ * @copyright       ©2017 Stock Management Labs™
  *
  * @since           0.0.1
  *
@@ -17,19 +17,17 @@ defined( 'ABSPATH' ) or die;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
-
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class AtumListTable extends \WP_List_Table {
-	
+abstract class AtumListTable extends \WP_List_Table {
+
 	/**
 	 * The post type used to build the table (WooCommerce product)
-	 *
 	 * @var string
 	 */
-	protected $post_type;
+	protected $post_type = 'product';
 	
 	/**
 	 * The table columns
@@ -57,7 +55,7 @@ class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $group_members;
+	protected $group_members = array();
 	
 	/**
 	 * Elements per page (in order to obviate option default)
@@ -116,11 +114,11 @@ class AtumListTable extends \WP_List_Table {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array         $table_columns The table columns for the list table
-	 *      @type array         $group_members The column grouping members
-	 *      @type bool          $show_cb       Optional. Whether to show the row selector checkbox as first table column
-	 *      @type int           $per_page      Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array         $selected      Optional. The posts selected on the list table
+	 *      @type array  $table_columns The table columns for the list table
+	 *      @type array  $group_members The column grouping members
+	 *      @type bool   $show_cb       Optional. Whether to show the row selector checkbox as first table column
+	 *      @type int    $per_page      Optional. The number of posts to show per page (-1 for no pagination)
+	 *      @type array  $selected      Optional. The posts selected on the list table
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -133,8 +131,10 @@ class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = ( is_array( $args['selected'] ) ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
-		
-		$this->group_members = $args['group_members'];
+
+		if ( ! empty($args['group_members']) ) {
+			$this->group_members = $args['group_members'];
+		}
 		
 		// Add the checkbox column to the table if enabled
 		$this->table_columns = ( $args['show_cb'] == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
@@ -146,12 +146,11 @@ class AtumListTable extends \WP_List_Table {
 			return FALSE;
 		}
 		
-		// Set WP_List_Table defaults
+		// Set \WP_List_Table defaults
 		$args = array_merge( array(
 			'singular' => strtolower( $post_type_obj->labels->singular_name ),
 			'plural'   => strtolower( $post_type_obj->labels->name ),
-			'ajax'     => TRUE,
-			'screen'   => 'toplevel_page_' . ATUM_TEXT_DOMAIN . '-stock-central'
+			'ajax'     => TRUE
 		), $args );
 		
 		parent::__construct( $args );
@@ -171,7 +170,7 @@ class AtumListTable extends \WP_List_Table {
 	}
 	
 	/**
-	 * Column selector checkbox: Pro version
+	 * Column selector checkbox
 	 *
 	 * @since  0.0.1
 	 *
@@ -566,7 +565,7 @@ class AtumListTable extends \WP_List_Table {
 			'orderby'    => $this->_pagination_args['orderby'],
 			'nonce'      => wp_create_nonce( 'atum-list-table-nonce' ),
 			'ajaxfilter' => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setStock'   => __('Set the stock quantity', ATUM_TEXT_DOMAIN),
+			'setValue'   => __('Set the %% value', ATUM_TEXT_DOMAIN),
 			'setButton'  => __('Set', ATUM_TEXT_DOMAIN)
 		), $this->data ) );
 		
@@ -790,23 +789,19 @@ class AtumListTable extends \WP_List_Table {
 	 * @param string $hook
 	 */
 	public function enqueue_scripts( $hook ) {
-		
-		// toplevel_page_atum-stock-central is the unique value for now
-		if ( strpos( $hook, ATUM_TEXT_DOMAIN ) !== FALSE ) {
 			
-			wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION );
-			wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
-			
-			wp_register_style( 'atum-list', ATUM_URL . '/assets/css/atum-list.css', FALSE, ATUM_VERSION );
+		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION );
+		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
 
-			$min = (! ATUM_DEBUG) ? '.min' : '';
-			wp_register_script( 'atum', ATUM_URL . "/assets/js/atum$min.js", array( 'jquery', 'jquery-tiptip', 'jscrollpane' ), ATUM_VERSION, TRUE );
-			
-			wp_enqueue_style( 'woocommerce_admin_styles' );
-			wp_enqueue_style( 'atum-list' );
-			wp_enqueue_script( 'jscrollpane' );
-			wp_enqueue_script( 'atum' );
-		}
+		wp_register_style( 'atum-list', ATUM_URL . '/assets/css/atum-list.css', FALSE, ATUM_VERSION );
+
+		$min = (! ATUM_DEBUG) ? '.min' : '';
+		wp_register_script( 'atum', ATUM_URL . "/assets/js/atum$min.js", array( 'jquery', 'jquery-tiptip', 'jscrollpane' ), ATUM_VERSION, TRUE );
+
+		wp_enqueue_style( 'woocommerce_admin_styles' );
+		wp_enqueue_style( 'atum-list' );
+		wp_enqueue_script( 'jscrollpane' );
+		wp_enqueue_script( 'atum' );
 		
 	}
 	
