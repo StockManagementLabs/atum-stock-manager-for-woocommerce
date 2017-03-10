@@ -3,7 +3,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      (c)2017 Stock Management Labs
+ * @copyright      ©2017 Stock Management Labs™
  *
  * @since          0.0.1
  *
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\StockCentralList;
+use Atum\StockCentral\Inc\ListTable;
 
 
 final class Ajax {
@@ -29,7 +29,7 @@ final class Ajax {
 	
 	private function __construct() {
 		
-		// Ajax callback for Stock Central List
+		// Ajax callback for ListTable components
 		add_action( 'wp_ajax_atum_fetch_stock_central_list', array( $this, 'fetch_stock_central_list' ) );
 		
 		// Ajax callback for Management Stock notice
@@ -41,12 +41,14 @@ final class Ajax {
 		// Save the rate link click on the ATUM pages footer
 		add_action( 'wp_ajax_atum_rated', array($this, 'rated') );
 
+		// Set the meta for items on ListTable components
+		add_action( 'wp_ajax_atum_update_meta', array( $this, 'update_item_meta' ) );
+
 		// Manage addon licenses
 		add_action( 'wp_ajax_atum_validate_license', array($this, 'validate_license') );
 		add_action( 'wp_ajax_atum_activate_license', array($this, 'activate_license') );
 		add_action( 'wp_ajax_atum_deactivate_license', array($this, 'deactivate_license') );
 		add_action( 'wp_ajax_atum_install_addon', array($this, 'install_addon') );
-
 
 	}
 	
@@ -57,13 +59,13 @@ final class Ajax {
 	 */
 	public function fetch_stock_central_list() {
 		
-		check_ajax_referer( 'atum-post-type-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 		
 		$per_page = ( ! empty($_REQUEST['per_page']) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_stock', $this );
 		
-		$list = new StockCentralList( compact('per_page') );
+		$list = new ListTable( compact('per_page') );
 		$list->ajax_response();
 		
 	}
@@ -115,6 +117,57 @@ final class Ajax {
 
 		update_option( 'atum_admin_footer_text_rated', 1 );
 		wp_die();
+	}
+
+	/**
+	 * Update the meta values for any product within the ListTable components
+	 *
+	 * @since 1.1.2
+	 */
+	public function update_item_meta () {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		if ( empty($_POST['item']) || ! isset($_POST['value']) || empty($_POST['meta']) ) {
+			wp_send_json_error( __('Error updating the column value.', ATUM_TEXT_DOMAIN) );
+		}
+
+		$product_id = absint($_POST['item']);
+		$product = wc_get_product($product_id);
+
+		if ( !$product || ! is_a($product, '\WC_Product') ) {
+			wp_send_json_error( __('No valid product.', ATUM_TEXT_DOMAIN) );
+		}
+
+		$meta = esc_attr($_POST['meta']);
+
+		switch ( $meta ) {
+			case 'stock':
+
+				$stock = intval($_POST['value']);
+				wc_update_product_stock($product_id, $stock);
+		        break;
+
+			case 'regular_price':
+			case 'sale_price':
+			case 'purchase_price':
+
+				$price = floatval($_POST['value']);
+
+				if ($meta == 'sale_price') {
+					$regular_price = $product->get_regular_price();
+
+					if ($regular_price < $price) {
+						wp_send_json_error( __('Please enter in a value less than the regular price.', ATUM_TEXT_DOMAIN) );
+					}
+				}
+
+				update_post_meta( $product_id, '_' . $meta , $price );
+				break;
+		}
+
+		wp_send_json_success( __('Value saved.', ATUM_TEXT_DOMAIN) );
+
 	}
 
 	/**

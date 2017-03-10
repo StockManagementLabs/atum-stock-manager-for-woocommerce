@@ -20,7 +20,7 @@
 			var $listWrapper      = $(this),
 			    $atumTable        = $listWrapper.find('.atum-list-table'),
 			    postsList         = $listWrapper.find('#the-list'),
-			    $inputSelectedIds = $listWrapper.find('.atum_selected_ids'),
+			    //$inputSelectedIds = $listWrapper.find('.atum_selected_ids'),
 			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('#products_per_page'),
 			    $search           = $listWrapper.find('.atum-post-search'),
 			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
@@ -129,13 +129,15 @@
 					// Ajax filters binding
 					if (ajaxSearchEnabled === 'yes') {
 						
-						$listWrapper.on('keyup', '.atum-post-search', function (e) {
+						// The search event is triggered when cliking on the clear field button within the seach input
+						$listWrapper.on('keyup paste search', '.atum-post-search', function (e) {
 							self.keyUp(e, $(this).closest('.search-box'));
-						});
+						})
 						
-						$listWrapper.on('change', '#filter-by-date, .dropdown_product_cat, #dropdown_product_type', function (e) {
+						.on('change', '#filter-by-date, .dropdown_product_cat, #dropdown_product_type', function (e) {
 							self.keyUp(e, $(this).closest('.actions'));
 						});
+						
 					}
 					// Non-ajax filters binding
 					else {
@@ -160,12 +162,12 @@
 					}
 					
 					// Pagination text box
-					$listWrapper.on('keyup', '.current-page', function (e) {
+					$listWrapper.on('keyup paste', '.current-page', function (e) {
 						self.keyUp(e, $(this).closest('.tablenav-pages'));
-					});
+					})
 					
 					// Variation products expanding/collapsing
-					$listWrapper.on('click', '.product-type.has-child', function() {
+					.on('click', '.product-type.has-child', function() {
 						
 						var typeClass      = $(this).hasClass('variable') ? 'variable' : 'group',
 						    $expandebleRow = $(this).closest('tr').toggleClass('expanded ' + typeClass),
@@ -328,15 +330,15 @@
 				 */
 				setFieldPopover: function () {
 					
-					var self = this;
-					
-					// Set stock amount for listed products
-					$('.set-stock').each(function() {
+					// Set meta value for listed products
+					$('.set-meta').each(function() {
 						
-						var $stockCell = $(this);
-						$stockCell.popover({
-							title    : atumListTable.setStock,
-							content  : '<input type="number" min="0" step="1" value="' + $stockCell.text() + '">' +
+						var $metaCell = $(this),
+						    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase();
+						
+						$metaCell.popover({
+							title    : atumListTable.setValue.replace('%%', currentColumnText),
+							content  : '<input type="number" min="0" step="1" value="' + $metaCell.text() + '">' +
 									   '<button type="button" class="set button button-primary button-small">' + atumListTable.setButton + '</button>',
 							html     : true,
 							template : '<div class="popover" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
@@ -347,7 +349,7 @@
 					});
 					
 					// Focus on the input field
-					$('.set-stock').on('shown.bs.popover', function () {
+					$('.set-meta').on('shown.bs.popover', function () {
 						$(this).siblings('.popover').find('input[type=number]').focus();
 					});
 					
@@ -355,11 +357,11 @@
 					$listWrapper.click( function(e) {
 						
 						var $target = $(e.target);
-						if ($target.hasClass('set-stock')) {
-							$('.set-stock').not($target).popover('hide');
+						if ($target.hasClass('set-meta')) {
+							$('.set-meta').not($target).popover('hide');
 						}
 						else if ( !$target.hasClass('popover') && !$target.parent().hasClass('popover') && !$target.parent().hasClass('popover-content')) {
-							$('.set-stock').popover('hide');
+							$('.set-meta').popover('hide');
 						}
 					});
 					
@@ -367,7 +369,7 @@
 					$listWrapper.on('click', '.popover button.set', function() {
 						
 						var $button = $(this),
-							$setStock = $button.closest('.popover').siblings('.set-stock');
+							$setMeta = $button.closest('.popover').siblings('.set-meta');
 						
 						$.ajax({
 							url     : ajaxurl,
@@ -375,9 +377,10 @@
 							dataType: 'json',
 							data    : {
 								token : atumListTable.nonce,
-								action: 'atum_update_stock',
-								item  : $setStock.data('item'),
-								stock : $button.siblings('input[type=number]').val()
+								action: 'atum_update_meta',
+								item  : $setMeta.data('item'),
+								meta  : $setMeta.data('meta'),
+								value : $button.siblings('input[type=number]').val()
 							},
 							beforeSend: function() {
 								
@@ -402,7 +405,7 @@
 								});
 								
 								if (response.success) {
-									$setStock.popover('hide');
+									$setMeta.popover('hide');
 									$('.atum-post-search').keyup();
 								}
 							}
@@ -437,7 +440,7 @@
 					
 					data = $.extend({
 						token      : atumListTable.nonce,
-						action     : 'atum_fetch_stock_central_list',
+						action     : $listWrapper.data('action'),
 						per_page   : perPage,
 						//selected   : $inputSelectedIds.val(),
 						category   : $listWrapper.find('.dropdown_product_cat').val() || '',
