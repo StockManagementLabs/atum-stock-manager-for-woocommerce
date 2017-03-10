@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-02-17 11:29+0100\n"
+"POT-Creation-Date: 2017-03-10 18:00+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -20,89 +20,105 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: classes/Addons/Addons.php:110
+#: classes/Addons/Addons.php:115
 msgid "Error!"
 msgstr ""
 
-#: classes/Addons/Addons.php:111
+#: classes/Addons/Addons.php:116
 msgid "Success!"
 msgstr ""
 
-#: classes/Addons/Addons.php:112
+#: classes/Addons/Addons.php:117
 msgid "Activated!"
 msgstr ""
 
-#: classes/Addons/Addons.php:113
+#: classes/Addons/Addons.php:118
 msgid "License Activation"
 msgstr ""
 
-#: classes/Addons/Addons.php:114 classes/Addons/Addons.php:384
+#: classes/Addons/Addons.php:119 classes/Addons/Addons.php:397
 msgid "Activate"
 msgstr ""
 
-#: classes/Addons/Addons.php:115
+#: classes/Addons/Addons.php:120
 msgid "Your add-on license has been activated."
 msgstr ""
 
-#: classes/Addons/Addons.php:116
+#: classes/Addons/Addons.php:121
+msgid "Limited Deactivations!"
+msgstr ""
+
+#: classes/Addons/Addons.php:122
+msgid "You are allowed to deactivate a license a max of 2 times."
+msgstr ""
+
+#: classes/Addons/Addons.php:123
 msgid "OK"
 msgstr ""
 
-#: classes/Addons/Addons.php:117
+#: classes/Addons/Addons.php:124
+msgid "Cancel"
+msgstr ""
+
+#: classes/Addons/Addons.php:125
+msgid "Continue"
+msgstr ""
+
+#: classes/Addons/Addons.php:126
 msgid "Please enter a valid add-on license key."
 msgstr ""
 
-#: classes/Addons/Addons.php:213
+#: classes/Addons/Addons.php:222
 #, php-format
 msgid "Something failed getting the ATUM's add-ons list: %s"
 msgstr ""
 
-#: classes/Addons/Addons.php:221
+#: classes/Addons/Addons.php:230
 msgid "Something failed getting the ATUM's add-ons list"
 msgstr ""
 
-#: classes/Addons/Addons.php:377
+#: classes/Addons/Addons.php:389
 msgid "Validate"
 msgstr ""
 
-#: classes/Addons/Addons.php:390
+#: classes/Addons/Addons.php:403
 msgid "Deactivate"
 msgstr ""
 
-#: classes/Addons/Addons.php:421
+#: classes/Addons/Addons.php:434
 msgid "The download link is not valid"
 msgstr ""
 
-#: classes/Addons/Addons.php:483
+#: classes/Addons/Addons.php:496
 #, php-format
 msgid ""
 "ATUM %s could not be installed (%s). Please download it from your account "
 "and install it manually."
 msgstr ""
 
-#: classes/Addons/Addons.php:513
+#: classes/Addons/Addons.php:526
 #, php-format
 msgid ""
 "ATUM %s was installed but could not be activated. %sPlease activate it "
 "manually by clicking here.%s"
 msgstr ""
 
-#: classes/Addons/Addons.php:525
+#: classes/Addons/Addons.php:538
 #, php-format
 msgid "The ATUM %s addon was installed and activated successfully."
 msgstr ""
 
-#: classes/Addons/Addons.php:533
+#: classes/Addons/Addons.php:546
 #, php-format
 msgid "The ATUM %s addon was installed successfully."
 msgstr ""
 
-#: classes/Addons/Addons.php:613 classes/Addons/Addons.php:619
-#: classes/Bootstrap.php:181 classes/Bootstrap.php:186 classes/Inc/Ajax.php:424
-#: classes/Inc/Ajax.php:430 classes/Inc/Main.php:465 classes/Inc/Main.php:471
-#: classes/Settings/Settings.php:444 classes/Settings/Settings.php:450
-#: classes/StockCentral/StockCentral.php:190
-#: classes/StockCentral/StockCentral.php:196
+#: classes/Addons/Addons.php:626 classes/Addons/Addons.php:632
+#: classes/Bootstrap.php:181 classes/Bootstrap.php:186 classes/Inc/Ajax.php:477
+#: classes/Inc/Ajax.php:483 classes/Inc/Main.php:476 classes/Inc/Main.php:482
+#: classes/Settings/Settings.php:442 classes/Settings/Settings.php:448
+#: classes/StockCentral/StockCentral.php:164
+#: classes/StockCentral/StockCentral.php:170
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -152,27 +168,28 @@ msgstr ""
 msgid "%s requires WooCommerce version 2.5 or greater"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:569
-msgid "Set the stock quantity"
+#: classes/Components/AtumListTable.php:568
+#, php-format
+msgid "Set the %% value"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:570
+#: classes/Components/AtumListTable.php:569
 msgid "Set"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:637
+#: classes/Components/AtumListTable.php:636
 #, php-format
 msgid " with query '%s'"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:774
+#: classes/Components/AtumListTable.php:773
 #, php-format
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Components/AtumListTable.php:823
+#: classes/Components/AtumListTable.php:818
 #, php-format
 msgid ""
 "%1$s plugin can bulk-enable all your items for stock management at the "
@@ -180,7 +197,7 @@ msgid ""
 "back later or uninstall the plugin."
 msgstr ""
 
-#: classes/Components/AtumListTable.php:824
+#: classes/Components/AtumListTable.php:819
 msgid "Enable ATUM's Manage Stock option"
 msgstr ""
 
@@ -188,30 +205,46 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: classes/Inc/Ajax.php:133 classes/Inc/Ajax.php:241 classes/Inc/Ajax.php:336
-#: classes/Inc/Ajax.php:391
-msgid "An error occurred, please try again later."
+#: classes/Inc/Ajax.php:132
+msgid "Error updating the column value."
 msgstr ""
 
-#: classes/Inc/Ajax.php:136
-msgid "This license is not valid."
+#: classes/Inc/Ajax.php:139
+msgid "No valid product."
 msgstr ""
 
-#: classes/Inc/Ajax.php:142
-msgid "ATUM API error"
-msgstr ""
-
-#: classes/Inc/Ajax.php:157
-msgid "Your add-on license was saved."
+#: classes/Inc/Ajax.php:161
+msgid "Please enter in a value less than the regular price."
 msgstr ""
 
 #: classes/Inc/Ajax.php:169
+msgid "Value saved."
+msgstr ""
+
+#: classes/Inc/Ajax.php:186 classes/Inc/Ajax.php:294 classes/Inc/Ajax.php:389
+#: classes/Inc/Ajax.php:444
+msgid "An error occurred, please try again later."
+msgstr ""
+
+#: classes/Inc/Ajax.php:189
+msgid "This license is not valid."
+msgstr ""
+
+#: classes/Inc/Ajax.php:195
+msgid "ATUM API error"
+msgstr ""
+
+#: classes/Inc/Ajax.php:210
+msgid "Your add-on license was saved."
+msgstr ""
+
+#: classes/Inc/Ajax.php:222
 msgid ""
 "You've reached your license activation limit for this add-on.<br>Please "
 "contact the Stock Management Labs support team."
 msgstr ""
 
-#: classes/Inc/Ajax.php:178
+#: classes/Inc/Ajax.php:231
 #, php-format
 msgid ""
 "Your license is valid.<br>After the activation you will have %s remaining "
@@ -222,109 +255,109 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Inc/Ajax.php:191 classes/Inc/Ajax.php:266
+#: classes/Inc/Ajax.php:244 classes/Inc/Ajax.php:319
 #, php-format
 msgid "Your license key expired on %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:199
+#: classes/Inc/Ajax.php:252
 msgid "This license has been disabled"
 msgstr ""
 
-#: classes/Inc/Ajax.php:222
+#: classes/Inc/Ajax.php:275
 msgid "No addon name provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:226
+#: classes/Inc/Ajax.php:279
 msgid "Please enter a valid addon license key"
 msgstr ""
 
-#: classes/Inc/Ajax.php:273
+#: classes/Inc/Ajax.php:326
 msgid "Your license key has been disabled."
 msgstr ""
 
-#: classes/Inc/Ajax.php:278
+#: classes/Inc/Ajax.php:331
 msgid "Invalid license."
 msgstr ""
 
-#: classes/Inc/Ajax.php:284
+#: classes/Inc/Ajax.php:337
 msgid "Your license is not active for this URL."
 msgstr ""
 
-#: classes/Inc/Ajax.php:289
+#: classes/Inc/Ajax.php:342
 #, php-format
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:294
+#: classes/Inc/Ajax.php:347
 msgid "Your license key has reached its activation limit."
 msgstr ""
 
-#: classes/Inc/Ajax.php:318
+#: classes/Inc/Ajax.php:371
 msgid "Your license has been activated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:362
+#: classes/Inc/Ajax.php:415
 msgid "Your license has been deactivated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:368
+#: classes/Inc/Ajax.php:421
 #, php-format
 msgid ""
 "You've reached the limit of allowed deactivations for this license. Please "
 "%sopen a support ticket%s to request the deactivation."
 msgstr ""
 
-#: classes/Inc/Main.php:126 classes/Inc/Main.php:127 classes/Inc/Main.php:137
+#: classes/Inc/Main.php:137 classes/Inc/Main.php:138 classes/Inc/Main.php:148
 #: classes/Settings/Settings.php:90 views/stock-central.php:11
 msgid "Stock Central"
 msgstr ""
 
-#: classes/Inc/Main.php:142
+#: classes/Inc/Main.php:153
 msgid "Settings"
 msgstr ""
 
-#: classes/Inc/Main.php:147
+#: classes/Inc/Main.php:158
 msgid "Add-ons"
 msgstr ""
 
-#: classes/Inc/Main.php:223 classes/Inc/Main.php:250
+#: classes/Inc/Main.php:234 classes/Inc/Main.php:261
 msgid "The stock is currently managed by ATUM plugin"
 msgstr ""
 
-#: classes/Inc/Main.php:393
+#: classes/Inc/Main.php:404
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Main.php:394
+#: classes/Inc/Main.php:405
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Main.php:404
+#: classes/Inc/Main.php:415
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Main.php:405
+#: classes/Inc/Main.php:416
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Inc/Main.php:439
+#: classes/Inc/Main.php:450
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%s rating. A huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Main.php:439
+#: classes/Inc/Main.php:450
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Main.php:449
+#: classes/Inc/Main.php:460
 msgid ""
 "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
-#: classes/Settings/Settings.php:84 classes/StockCentral/StockCentral.php:110
+#: classes/Settings/Settings.php:84 classes/StockCentral/StockCentral.php:83
 msgid "General"
 msgstr ""
 
@@ -396,208 +429,228 @@ msgstr ""
 msgid "No, keep them"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:113
+#: classes/StockCentral/Inc/ListTable.php:107
 msgid "Image"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:113
+#: classes/StockCentral/Inc/ListTable.php:107
 msgid "Thumb"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:114
+#: classes/StockCentral/Inc/ListTable.php:108
 #: views/help-tabs/stock-central-product-details.php:24
 msgid "Product Name"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:115
+#: classes/StockCentral/Inc/ListTable.php:109
 #: views/help-tabs/stock-central-product-details.php:28
 msgid "SKU"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:116
+#: classes/StockCentral/Inc/ListTable.php:110
 #: views/help-tabs/stock-central-product-details.php:32
 msgid "ID"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:117
+#: classes/StockCentral/Inc/ListTable.php:111
 #: views/help-tabs/stock-central-product-details.php:36
 msgid "Product Type"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:118
+#: classes/StockCentral/Inc/ListTable.php:112
+msgid "Regular Price"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:113
+msgid "Sale Price"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:114
+msgid "Purchase Price"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:115
 #: views/help-tabs/stock-central-stock-counters.php:20
 msgid "Current Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:119
+#: classes/StockCentral/Inc/ListTable.php:116
 #: views/help-tabs/stock-central-stock-counters.php:24
 msgid "Inbound Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:120
+#: classes/StockCentral/Inc/ListTable.php:117
 #: views/help-tabs/stock-central-stock-counters.php:28
 msgid "Stock on Hold"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:121
+#: classes/StockCentral/Inc/ListTable.php:118
 #: views/help-tabs/stock-central-stock-counters.php:32
 msgid "Reserved Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:122
+#: classes/StockCentral/Inc/ListTable.php:119
 #: views/help-tabs/stock-central-stock-counters.php:36
 msgid "Back Orders"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:123
+#: classes/StockCentral/Inc/ListTable.php:120
 msgid "Sold Today"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:124
+#: classes/StockCentral/Inc/ListTable.php:121
 #: views/help-tabs/stock-central-stock-negatives.php:20
 msgid "Customer Returns"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:125
+#: classes/StockCentral/Inc/ListTable.php:122
 #: views/help-tabs/stock-central-stock-negatives.php:24
 msgid "Warehouse Damages"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:126
+#: classes/StockCentral/Inc/ListTable.php:123
 #: views/help-tabs/stock-central-stock-negatives.php:28
 msgid "Lost in Post"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:127
+#: classes/StockCentral/Inc/ListTable.php:124
 #: views/help-tabs/stock-central-stock-selling-manager.php:20
 msgid "Sales Last 14 Days"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:128
+#: classes/StockCentral/Inc/ListTable.php:125
 #: views/help-tabs/stock-central-stock-selling-manager.php:24
 msgid "Sales Last 7 Days"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:129
+#: classes/StockCentral/Inc/ListTable.php:126
 #: views/help-tabs/stock-central-stock-selling-manager.php:28
 msgid "Stock will Last (Days)"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:130
+#: classes/StockCentral/Inc/ListTable.php:127
 #: views/help-tabs/stock-central-stock-selling-manager.php:32
 msgid "Out of Stock for (Days)"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:131
+#: classes/StockCentral/Inc/ListTable.php:128
 #: views/help-tabs/stock-central-stock-selling-manager.php:36
 msgid "Lost Sales"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:132
+#: classes/StockCentral/Inc/ListTable.php:129
 #: views/help-tabs/stock-central-stock-selling-manager.php:40
 msgid "Stock Indicator"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:138
-#: classes/StockCentral/StockCentral.php:114
+#: classes/StockCentral/Inc/ListTable.php:135
+#: classes/StockCentral/StockCentral.php:87
 msgid "Product Details"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:142
-#: classes/StockCentral/StockCentral.php:118
+#: classes/StockCentral/Inc/ListTable.php:139
+#: classes/StockCentral/StockCentral.php:91
 msgid "Stock Counters"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:153
-#: classes/StockCentral/StockCentral.php:122
+#: classes/StockCentral/Inc/ListTable.php:150
+#: classes/StockCentral/StockCentral.php:95
 msgid "Stock Negatives"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:157
-#: classes/StockCentral/StockCentral.php:126
+#: classes/StockCentral/Inc/ListTable.php:154
+#: classes/StockCentral/StockCentral.php:99
 msgid "Stock Selling Manager"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:201
+#: classes/StockCentral/Inc/ListTable.php:200
 msgid "Show all product types"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:213
+#: classes/StockCentral/Inc/ListTable.php:212
 msgid "Grouped product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:219
+#: classes/StockCentral/Inc/ListTable.php:218
 msgid "Variable product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:222
+#: classes/StockCentral/Inc/ListTable.php:221
 msgid "Simple product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:235
+#: classes/StockCentral/Inc/ListTable.php:234
 msgid "Downloadable"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:238
+#: classes/StockCentral/Inc/ListTable.php:237
 msgid "Virtual"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:246
+#: classes/StockCentral/Inc/ListTable.php:245
 msgid "Filter"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:431
-#: classes/StockCentral/Inc/StockCentralList.php:449
+#: classes/StockCentral/Inc/ListTable.php:430
+#: classes/StockCentral/Inc/ListTable.php:448
 msgid "Grouped item"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:435
+#: classes/StockCentral/Inc/ListTable.php:434
 msgid "Downloadable product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:439
+#: classes/StockCentral/Inc/ListTable.php:438
 msgid "Virtual product"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:453
+#: classes/StockCentral/Inc/ListTable.php:452
 #, php-format
 msgid "(click to show/hide the %s)"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:454
+#: classes/StockCentral/Inc/ListTable.php:453
 msgid "Grouped items"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:454
+#: classes/StockCentral/Inc/ListTable.php:453
 msgid "Variations"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:463
+#: classes/StockCentral/Inc/ListTable.php:462
 msgid "Variation"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:489
+#: classes/StockCentral/Inc/ListTable.php:488
+msgid "Click to edit the regular price"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:512
+msgid "Click to edit the sale price"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:536
 msgid "Click to edit the stock quantity"
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:1198
+#: classes/StockCentral/Inc/ListTable.php:1241
 msgid ""
 "Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this "
 "great plugin."
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:1199
+#: classes/StockCentral/Inc/ListTable.php:1242
 msgid ""
 "We have disabled some inactive columns by default as these are only "
 "available for future upgrades or our Premium and PRO users. If you'd like to "
 "preview them, please, use the Screen Options in the top corner."
 msgstr ""
 
-#: classes/StockCentral/Inc/StockCentralList.php:1200
+#: classes/StockCentral/Inc/ListTable.php:1243
 msgid "Thank you very much for using ATUM as your inventory manager."
 msgstr ""
 
-#: classes/StockCentral/StockCentral.php:100
+#: classes/StockCentral/StockCentral.php:73
 msgid "Products per page"
 msgstr ""
 
@@ -633,7 +686,11 @@ msgstr ""
 msgid "invalid key"
 msgstr ""
 
-#: views/addons.php:64
+#: views/addons.php:61
+msgid "Show/Hide the license key"
+msgstr ""
+
+#: views/addons.php:69
 msgid "Enter the addon license key..."
 msgstr ""
 
@@ -889,5 +946,5 @@ msgid "The ultimate stock management plugin for serious WooCommerce sellers"
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "Stock Management Labs"
+msgid "Stock Management Labs™"
 msgstr ""
