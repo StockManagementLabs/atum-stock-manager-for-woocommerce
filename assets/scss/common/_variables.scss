@@ -3,62 +3,62 @@
 //------------------
 
 // Paths
-$icon-font-path:                        "../fonts/";
-$img-path:                              "../images/";
+$icon-font-path:                        "../fonts/" !default;
+$img-path:                              "../images/" !default;
 
 // Grid settings
-$main-sm-columns:                       12;
-$sidebar-sm-columns:                    4;
-$grid-gutter-width:                     30px;
+$main-sm-columns:                       12 !default;
+$sidebar-sm-columns:                    4 !default;
+$grid-gutter-width:                     30px !default;
 
-$max-width-limit:                       1280px;
+$max-width-limit:                       1280px !default;
 
 // Colors
-$brand-primary:                         #0073AA;
-$brand-info:                            #E3E8F5;
-$brand-warning:                         #FEC007;
-$brand-danger:                          #EF4D5A;
-$brand-success:                         #00B050;
+$brand-primary:                         #0073AA !default;
+$brand-info:                            #E3E8F5 !default;
+$brand-warning:                         #FEC007 !default;
+$brand-danger:                          #EF4D5A !default;
+$brand-success:                         #00B050 !default;
 
-$gray:                                  #C1C1C1;
-$gray-light:                            #F9F9F9;
+$gray:                                  #C1C1C1 !default;
+$gray-light:                            #F9F9F9 !default;
 
 // Media queries breakpoints
-$screen-xs:                             480px;
-$screen-xs-min:                         $screen-xs;
+$screen-xs:                             480px !default;
+$screen-xs-min:                         $screen-xs !default;
 
 // Small screen / tablet
-$screen-sm:                             768px;
-$screen-sm-min:                         $screen-sm;
+$screen-sm:                             768px !default;
+$screen-sm-min:                         $screen-sm !default;
 
 // Medium screen / desktop
-$screen-md:                             992px;
-$screen-md-min:                         $screen-md;
+$screen-md:                             992px !default;
+$screen-md-min:                         $screen-md !default;
 
 // Large screen / wide desktop
-$screen-lg:                             1200px;
-$screen-lg-min:                         $screen-lg;
+$screen-lg:                             1200px !default;
+$screen-lg-min:                         $screen-lg !default;
 
 // So media queries don't overlap when required, provide a maximum
-$screen-xs-max:                         ($screen-sm-min - 1);
-$screen-sm-max:                         ($screen-md-min - 1);
-$screen-md-max:                         ($screen-lg-min - 1);
+$screen-xs-max:                         ($screen-sm-min - 1) !default;
+$screen-sm-max:                         ($screen-md-min - 1) !default;
+$screen-md-max:                         ($screen-lg-min - 1) !default;
 
 
 // Popovers
-$popover-bg:                            #FFF;
-$popover-max-width:                     276px;
-$popover-border-color:                  rgba(0,0,0,.2);
-$popover-fallback-border-color:         #CCC;
-$popover-border-radius:                 6px;
+$popover-bg:                            #FFF !default;
+$popover-max-width:                     276px !default;
+$popover-border-color:                  rgba(0,0,0,.2) !default;
+$popover-fallback-border-color:         #CCC !default;
+$popover-border-radius:                 6px !default;
 
-$popover-title-bg:                      darken($popover-bg, 3%);
+$popover-title-bg:                      darken($popover-bg, 3%) !default;
 
-$popover-arrow-width:                   10px;
-$popover-arrow-color:                   $popover-bg;
+$popover-arrow-width:                   10px !default;
+$popover-arrow-color:                   $popover-bg !default;
 
-$popover-arrow-outer-width:             ($popover-arrow-width + 1);
-$popover-arrow-outer-color:             fade_in($popover-border-color, 0.05);
-$popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%);
+$popover-arrow-outer-width:             ($popover-arrow-width + 1) !default;
+$popover-arrow-outer-color:             fade_in($popover-border-color, 0.05) !default;
+$popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%) !default;
 
-$zindex-popover:                        99999999;
+$zindex-popover:                        99999999 !default;

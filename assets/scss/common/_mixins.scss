@@ -180,6 +180,13 @@
 	@include transform(translateY(-50%));
 }
 
+// Ellipsis overflow
+@mixin text-overflow() {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 // Overlay
 @mixin overlay($bg-color: rgba(0, 0, 0, .7), $opacity: .7) {
 	position: absolute;
