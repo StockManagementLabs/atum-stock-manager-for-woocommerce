@@ -3,7 +3,7 @@
  * @package         Atum
  * @subpackage      Addons
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       (c)2017 Stock Management Labs
+ * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.2.0
  *
@@ -56,17 +56,22 @@ class Addons {
 		// Get all the installed addons
 		self::$addons = apply_filters('atum/addons/setup', self::$addons);
 
-		add_action( 'plugins_loaded', array($this, 'init_addons'), 100 );
+		// Initialize the addons
+		add_action( 'after_setup_theme', array($this, 'init_addons'), 99 );
 
-		// Automatic updates for addons
-		add_action( 'admin_init', array($this, 'check_addons_updates'), 0 );
+		if ( is_admin() ) {
 
-		// Disable SSL verification in order to prevent addon download failures
-		add_filter( 'http_request_args', array($this, 'http_request_args'), 10, 2 );
+			// Automatic updates for addons
+			add_action( 'admin_init', array( $this, 'check_addons_updates' ), 0 );
 
-		// Allow downloading files from local servers while developing
-		if (ATUM_DEBUG) {
-			add_filter('http_request_host_is_external', '__return_true');
+			// Disable SSL verification in order to prevent addon download failures
+			add_filter( 'http_request_args', array( $this, 'http_request_args' ), 10, 2 );
+
+			// Allow downloading files from local servers while developing
+			if ( ATUM_DEBUG ) {
+				add_filter( 'http_request_host_is_external', '__return_true' );
+			}
+
 		}
 
 	}
@@ -81,9 +86,9 @@ class Addons {
 		if ( ! empty(self::$addons) ) {
 			foreach (self::$addons as $addon) {
 
-				// Load the addon. Each addon should auto-instantiate itself on its bootstrap class
-				if ( ! empty($addon['path']) && file_exists($addon['path']) ) {
-					require $addon['path'];
+				// Load the addon. Each addon should have a callback method for bootstraping
+				if ( ! empty( $addon['bootstrap'] ) && is_callable( $addon['bootstrap'] ) ) {
+					call_user_func( $addon['bootstrap'] );
 				}
 
 			}
