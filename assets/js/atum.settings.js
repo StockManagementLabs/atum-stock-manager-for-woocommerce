@@ -19,7 +19,7 @@
 				'attribute'      : 'data-tip',
 				'fadeIn'         : 50,
 				'fadeOut'        : 50,
-				'delay'          : 200.,
+				'delay'          : 200,
 				'defaultPosition': 'right'
 			});
 		}
