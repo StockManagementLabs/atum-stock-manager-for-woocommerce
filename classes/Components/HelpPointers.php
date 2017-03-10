@@ -3,7 +3,7 @@
  * @package        Atum
  * @subpackage     Components
  * @author         Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      (c)2017 Stock Management Labs
+ * @copyright      ©2017 Stock Management Labs™
  *
  * @since          0.1.6
  *

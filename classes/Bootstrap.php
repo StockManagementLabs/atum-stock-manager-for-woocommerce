@@ -2,7 +2,7 @@
 /**
  * @package     Atum
  * @author      Salva Machí <salvamb@sispixels.com>
- * @copyright   (c)2017 Stock Management Labs
+ * @copyright   ©2017 Stock Management Labs™
  *
  * @since 0.0.1
  *

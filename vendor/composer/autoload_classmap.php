@@ -9,6 +9,7 @@ return array(
     'Atum\\Addons\\Addons' => $baseDir . '/classes/Addons/Addons.php',
     'Atum\\Addons\\Updater' => $baseDir . '/classes/Addons/Updater.php',
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
+    'Atum\\Components\\AtumListPage' => $baseDir . '/classes/Components/AtumListPage.php',
     'Atum\\Components\\AtumListTable' => $baseDir . '/classes/Components/AtumListTable.php',
     'Atum\\Components\\HelpPointers' => $baseDir . '/classes/Components/HelpPointers.php',
     'Atum\\Inc\\Ajax' => $baseDir . '/classes/Inc/Ajax.php',
@@ -16,6 +17,6 @@ return array(
     'Atum\\Inc\\Helpers' => $baseDir . '/classes/Inc/Helpers.php',
     'Atum\\Inc\\Main' => $baseDir . '/classes/Inc/Main.php',
     'Atum\\Settings\\Settings' => $baseDir . '/classes/Settings/Settings.php',
-    'Atum\\StockCentral\\Inc\\StockCentralList' => $baseDir . '/classes/StockCentral/Inc/StockCentralList.php',
+    'Atum\\StockCentral\\Inc\\ListTable' => $baseDir . '/classes/StockCentral/Inc/ListTable.php',
     'Atum\\StockCentral\\StockCentral' => $baseDir . '/classes/StockCentral/StockCentral.php',
 );

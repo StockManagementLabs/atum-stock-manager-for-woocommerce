@@ -1,11 +1,11 @@
 <?php
 /**
- * @package           Atum
- * @subpackage        Inc
- * @author            Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      (c)2017 Stock Management Labs
+ * @package        Atum
+ * @subpackage     Inc
+ * @author         Salva Machí and Jose Piera - https://sispixels.com
+ * @copyright      ©2017 Stock Management Labs™
  *
- * @since             0.0.1
+ * @since          0.0.1
  *
  * Helper functions
  */
@@ -329,11 +329,19 @@ final class Helpers {
 		if ( substr( $file, - 4 ) != '.php' ) {
 			$file .= '.php';
 		}
-		
-		$file_path = ATUM_PATH . "views/$file";
-		
-		if ( ! is_file( $file_path ) ) {
-			return FALSE;
+
+		// Allow using full paths as view name
+		if ( is_file($file) ) {
+			$file_path = $file;
+		}
+		else {
+
+			$file_path = ATUM_PATH . "views/$file";
+
+			if ( ! is_file( $file_path ) ) {
+				return FALSE;
+			}
+
 		}
 		
 		if ( ! empty( $args ) && is_array( $args ) ) {

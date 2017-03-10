@@ -3,7 +3,7 @@
  * @package         Atum\StockCentral
  * @subpackage      Inc
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       (c)2017 Stock Management Labs
+ * @copyright       ©2017 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -18,20 +18,14 @@ use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
 
-class StockCentralList extends AtumListTable {
-	
-	/**
-	 * The post type used to build the table (WooCommerce product)
-	 * @var string
-	 */
-	protected $post_type = 'product';
+class ListTable extends AtumListTable {
 	
 	/**
 	 * Current product used
 	 * @var \WC_Product
 	 */
 	protected $product;
-	
+
 	/**
 	 * No stock Threshold
 	 * @var int
@@ -115,6 +109,9 @@ class StockCentralList extends AtumListTable {
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'            => '<span class="wc-type tips" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_regular_price'   => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'calc_sale_price'      => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'calc_purchase_price'  => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
 			'calc_stock'           => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'            => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
@@ -136,7 +133,7 @@ class StockCentralList extends AtumListTable {
 		$args['group_members'] = array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'thumb', '_sku', 'ID', 'calc_type', 'title' )
+				'members' => array( 'thumb', '_sku', 'ID', 'calc_type', 'title', 'calc_regular_price', 'calc_sale_price', 'calc_purchase_price' )
 			),
 			'stock-counters'        => array(
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
@@ -165,7 +162,7 @@ class StockCentralList extends AtumListTable {
 				)
 			),
 		);
-		
+
 		parent::__construct( $args );
 		
 		add_action( 'admin_notices', array( $this, 'add_premium_columns_notice' ) );
@@ -197,12 +194,14 @@ class StockCentralList extends AtumListTable {
 			// Type filtering
 			$terms   = get_terms( 'product_type' );
 			$type    = ( isset( $_REQUEST['type'] ) ) ? esc_attr( $_REQUEST['type'] ) : '';
+			$allowed_types = apply_filters( 'atum/stock_central_list/allowed_type_filters', Globals::get_product_types() );
+
 			$output  = '<select name="product_type" id="dropdown_product_type">';
 			$output .= '<option value=""' . selected($type, '', FALSE) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
 			
 			foreach ( $terms as $term ) {
 				
-				if ( 'external' == $term->name ) {
+				if ( ! in_array($term->slug, $allowed_types) ) {
 					continue;
 				}
 				
@@ -338,7 +337,7 @@ class StockCentralList extends AtumListTable {
 		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $id, $column_name, TRUE ) : '&mdash;';
 		
-		return apply_filters( "atum/atum_list_table/column_default_$column_name", $column_item );
+		return apply_filters( "atum/stock_central_list/column_default_$column_name", $column_item );
 		
 	}
 	
@@ -353,7 +352,7 @@ class StockCentralList extends AtumListTable {
 	 */
 	protected function column_thumb( $item ) {
 		
-		return apply_filters( 'atum/stock_central_list/column_thumb', $this->product->get_image( 'thumbnail' ) );
+		return apply_filters( 'atum/stock_central_list/column_thumb', $this->product->get_image( [40, 40] ) );
 	}
 	
 	/**
@@ -472,6 +471,54 @@ class StockCentralList extends AtumListTable {
 	}
 	
 	/**
+	 * Column for regular price
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return float
+	 */
+	protected function column_calc_regular_price( $item ) {
+
+		$regular_price = '&mdash;';
+		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+
+		if ($this->allow_calcs) {
+			$regular_price = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ) .
+			                 '" data-position="top" data-item="' . $product_id . '" data-meta="regular_price">' .
+			                 floatval( $this->product->get_regular_price() ) . '</span>';
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_regular_price', $regular_price );
+		
+	}
+
+	/**
+	 * Column for sale price
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return float
+	 */
+	protected function column_calc_sale_price( $item ) {
+
+		$sale_price = '&mdash;';
+		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+
+		if ($this->allow_calcs) {
+			$sale_price = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ) .
+			              '" data-position="top" data-item="' . $product_id . '" data-meta="sale_price">' .
+			              floatval( $this->product->get_sale_price() ) . '</span>';
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_sale_price', $sale_price );
+
+	}
+
+	/**
 	 * Column for stock amount
 	 *
 	 * @since  0.0.1
@@ -483,15 +530,16 @@ class StockCentralList extends AtumListTable {
 	protected function column_calc_stock( $item ) {
 
 		$stock = '&mdash;';
-		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id :$item->ID;
+		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 
 		if ($this->allow_calcs) {
-			$stock = '<span class="set-stock tips" data-tip="' . __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ) . '" data-position="top" data-item="' . $product_id . '">' .
+			$stock = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ) .
+			         '" data-position="top" data-item="' . $product_id . '" data-meta="stock">' .
 			         intval( $this->product->get_total_stock() ) . '</span>';
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_stock', $stock );
-		
+
 	}
 	
 	/**
@@ -736,13 +784,13 @@ class StockCentralList extends AtumListTable {
 	}
 	
 	/**
-	 * Get the amount of items sold since $date_start or between $date_start and $date_end
+	 * Get the items' sales since $date_start or between $date_start and $date_end
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $items      Array of Product IDs we want to calculate sell
-	 * @param string $date_start The date from which start the items sold calculations
-	 * @param string $date_end   Optional. The max date to calculate the items sold
+	 * @param array  $items      Array of Product IDs we want to calculate sales from
+	 * @param string $date_start The date from when to start the items' sales calculations
+	 * @param string $date_end   Optional. The max date to calculate the items' sales
 	 *
 	 * @return array
 	 */
@@ -758,16 +806,11 @@ class StockCentralList extends AtumListTable {
 		if ( $orders ) {
 			
 			global $wpdb;
-			
 			$orders   = implode( ',', $orders );
 			$products = implode( ',', $items );
-			
-			
-			$str_sql = "SELECT 
-				   SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`  
-				    ,`META_PROD_ID`.`meta_value` AS `PROD_ID`
-				FROM
-				    `{$wpdb->posts}` AS `ORDERS`
+
+			$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
+				FROM `{$wpdb->posts}` AS `ORDERS`
 				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
 				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
 				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_ID`
@@ -1026,22 +1069,22 @@ class StockCentralList extends AtumListTable {
 			);
 			
 			$in_stock_transient = 'stock_central_list_in_stock_' . Helpers::get_transient_identifier( $args );
-			$posts_stock = Helpers::get_transient( $in_stock_transient );
+			$posts_in_stock = Helpers::get_transient( $in_stock_transient );
 			
-			if ( ! $posts_stock ) {
-				$posts_stock = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/in_stock', $args ) );
-				Helpers::set_transient( $in_stock_transient, $posts_stock );
+			if ( ! $posts_in_stock ) {
+				$posts_in_stock = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/in_stock', $args ) );
+				Helpers::set_transient( $in_stock_transient, $posts_in_stock );
 			}
 			
-			$this->id_views['in_stock'] = $posts_stock->posts;
-			$this->count_views['count_in_stock'] = count( $posts_stock->posts );
+			$this->id_views['in_stock'] = $posts_in_stock->posts;
+			$this->count_views['count_in_stock'] = count( $posts_in_stock->posts );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too
 			if ($group_items && ( empty($_REQUEST['type']) || $_REQUEST['type'] != 'grouped' )) {
-				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_stock->posts) );
+				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_in_stock->posts) );
 			}
 			
-			$this->id_views['out_stock']          = array_diff( $posts, $posts_stock->posts );
+			$this->id_views['out_stock']          = array_diff( $posts, $posts_in_stock->posts );
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'];
 			
 			if ( $this->count_views['count_in_stock'] ) {
@@ -1059,7 +1102,7 @@ class StockCentralList extends AtumListTable {
 						    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
 							INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
 						WHERE (`order`.`post_type` = 'shop_order'
-						    AND `order`.`post_status` = 'wc-completed' AND `item`.`order_item_type` ='line_item'
+						    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
 						    AND `order_meta`.`meta_key` = '_completed_date'
 						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-$this->last_days days" ) . "')
 						GROUP BY IDs) AS sales";
@@ -1074,7 +1117,7 @@ class StockCentralList extends AtumListTable {
 						    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
 						WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
 				            AND `{$wpdb->posts}`.`post_type` IN " . $low_stock_post_types . "
-				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_stock->posts ) . ")) )) AS states";
+				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_in_stock->posts ) . ")) )) AS states";
 					
 					$str_sql = apply_filters( 'atum/stock_central_list/set_views_data/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
 					

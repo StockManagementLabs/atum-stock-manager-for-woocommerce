@@ -11,7 +11,7 @@
  * Plugin URI:        http://www.stockmanagementlabs.com/
  * Description:       The ultimate stock management plugin for serious WooCommerce sellers
  * Version:           1.2.0
- * Author:            Stock Management Labs
+ * Author:            Stock Management Labs™
  * Author URI:        http://www.stockmanagementlabs.com/
  * Contributors:      Salva Machí and Jose Piera - https://sispixels.com
  * Requires at least: 4.4

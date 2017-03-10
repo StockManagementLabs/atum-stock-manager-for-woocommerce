@@ -3,7 +3,7 @@
  * @package     Atum
  * @subpackage  Settings
  * @author      Salva Machí and Jose Piera - https://sispixels.com
- * @copyright   (c)2017 Stock Management Labs
+ * @copyright   ©2017 Stock Management Labs™
  *
  * @since       0.0.2
  *
@@ -69,16 +69,16 @@ class Settings {
 	 * The default number of diaplayed posts per page
 	 */
 	const DEFAULT_POSTS_PER_PAGE = 20;
-	
-	
+
+	/**
+	 * Settings singleton constructor
+	 */
 	private function __construct() {
-		
+
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
-		// TODO: Should this be changed to init???
-		add_filter( "pre_update_option_" . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
-		
+		add_filter( 'pre_update_option_' . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
+
 		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
@@ -93,7 +93,7 @@ class Settings {
 				)
 			)
 		);
-		
+
 		$this->defaults = array(
 			'enable_ajax_filter' => array(
 				'section' => 'general',
@@ -124,7 +124,7 @@ class Settings {
 				'default' => self::DEFAULT_SALE_DAYS
 			)
 		);
-		
+
 	}
 	
 	/**
@@ -224,9 +224,8 @@ class Settings {
 	 */
 	public function register_settings() {
 		
-		do_action( 'atum/settings/before_register_settings', $this );
-		
-		// Add the sections
+		// Add the tabs
+		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs );
 		foreach ( $this->tabs as $tab => $tab_data ) {
 
 			foreach ($tab_data['sections'] as $section_key => $section_name) {
@@ -250,6 +249,7 @@ class Settings {
 		}
 		
 		// Add the fields
+		$this->defaults = (array) apply_filters( 'atum/settings/defaults', $this->defaults );
 		foreach ( $this->defaults as $field => $options ) {
 			
 			$options['id'] = $field;
@@ -263,8 +263,6 @@ class Settings {
 				$options
 			);
 		}
-		
-		do_action( 'atum/settings/after_register_settings', $this );
 		
 	}
 	

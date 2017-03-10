@@ -3,7 +3,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       (c)2017 Stock Management Labs
+ * @copyright       ©2017 Stock Management Labs™
  *
  * @since           0.0.1
  *
@@ -58,7 +58,7 @@ class Main {
 			// Add the menus
 			add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
 			
-			// Initialize
+			// Load dependencies
 			add_action( 'init', array( $this, 'admin_load' ) );
 			
 			// Check if ATUM has the "Manage Stock" option enabled
@@ -76,14 +76,26 @@ class Main {
 			}
 			
 		}
+
+		// Load ATUM add-ons
+		add_action( 'setup_theme', array( $this, 'load_addons' ) );
 		
 		// Save the date when any product goes out of stock
 		add_action( 'woocommerce_product_set_stock' , array($this, 'record_out_of_stock_date'), 20 );
 		
 	}
+
+	/**
+	 * Load the ATUM add-ons
+	 *
+	 * @since 1.1.2
+	 */
+	public function load_addons () {
+		$this->ad_obj = Addons::get_instance();
+	}
 	
 	/**
-	 * Load plugin dependencies and performs initial checkings
+	 * Load admin plugin dependencies and performs initial checkings
 	 *
 	 * @since 0.0.3
 	 */
@@ -104,7 +116,6 @@ class Main {
 		Ajax::get_instance();
 		$this->sp_obj = Settings::get_instance();
 		$this->sc_obj = StockCentral::get_instance();
-		$this->ad_obj = Addons::get_instance();
 
 		// Add the help pointers
 		add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
@@ -129,14 +140,14 @@ class Main {
 			Globals::ATUM_UI_SLUG,
 			'',
 			'dashicons-chart-area',
-			58 // Add the menu after WC Products
+			58 // Add the menu just after the WC Products
 		);
 		
 		$menu_items = apply_filters( 'atum/admin/menu_items', array(
 			'stock-central'   => array(
 				'title'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this->sc_obj, 'display' ),
-				'slug'     => 'stock-central'
+				'slug'     => Globals::ATUM_UI_SLUG
 			),
 			'settings'        => array(
 				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),

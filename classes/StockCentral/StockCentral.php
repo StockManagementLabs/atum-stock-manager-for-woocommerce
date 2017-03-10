@@ -3,7 +3,7 @@
  * @package         Atum
  * @subpackage      StockCentral
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       (c)2017 Stock Management Labs
+ * @copyright       ©2017 Stock Management Labs™
  *
  * @since           0.0.1
  *
@@ -13,13 +13,14 @@ namespace Atum\StockCentral;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumListPage;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\StockCentralList;
+use Atum\StockCentral\Inc\ListTable;
 
 
-class StockCentral {
+class StockCentral extends AtumListPage {
 	
 	/**
 	 * The singleton instance holder
@@ -28,30 +29,18 @@ class StockCentral {
 	private static $instance;
 	
 	/**
-	 * Table rows per page
-	 * @var int
-	 */
-	protected $per_page;
-	
-	/**
-	 * The list
-	 * @var StockCentralList
-	 */
-	protected $list;
-	
-	/**
 	 * StockCentral singleton constructor
 	 *
 	 * @since 0.0.1
 	 */
 	private function __construct() {
 		
-		$user_option = get_user_meta( wp_get_current_user()->ID, 'products_per_page', TRUE );
-		
+		$user_option = get_user_meta( get_current_user_id(), 'products_per_page', TRUE );
 		$this->per_page = ( $user_option ) ? $user_option : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 		
 		add_action( 'load-toplevel_page_' . Globals::ATUM_UI_SLUG, array( $this, 'screen_options' ) );
-		add_filter( 'set-screen-option', array( $this, 'set_screen_option' ), 10, 3 );
+
+		parent::init_hooks();
 		
 	}
 	
@@ -62,30 +51,14 @@ class StockCentral {
 	 */
 	public function display() {
 		
-		$this->list->prepare_items();
+		parent::display();
+
 		Helpers::load_view( 'stock-central', array(
 			'list' => $this->list,
 			'ajax' => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 		) );
 		
 	}
-	
-	/**
-	 * Save products per page option
-	 *
-	 * @since 0.0.2
-	 *
-	 * @param bool|int $status Screen option value. Default false to skip.
-	 * @param string   $option The option name.
-	 * @param int      $value  The number of rows to use.
-	 *
-	 * @return mixed
-	 */
-	public static function set_screen_option( $status, $option, $value ) {
-		
-		return $value;
-	}
-	
 	
 	/**
 	 * Enable Screen options creating the list table before the Screen option panel is rendered and enable
@@ -109,19 +82,19 @@ class StockCentral {
 				'name'  => 'general',
 				'title' => __( 'General', ATUM_TEXT_DOMAIN ),
 			),
-			'product_details'       => array(
+			array(
 				'name'  => 'product-details',
 				'title' => __( 'Product Details', ATUM_TEXT_DOMAIN ),
 			),
-			'stock_count'           => array(
+			array(
 				'name'  => 'stock-counters',
 				'title' => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
 			),
-			'stock_negatives'       => array(
+			array(
 				'name'  => 'stock-negatives',
 				'title' => __( 'Stock Negatives', ATUM_TEXT_DOMAIN ),
 			),
-			'stock_selling_manager' => array(
+			array(
 				'name'  => 'stock-selling-manager',
 				'title' => __( 'Stock Selling Manager', ATUM_TEXT_DOMAIN ),
 			),
@@ -142,7 +115,7 @@ class StockCentral {
 		// Hide some table columns by default on the free version
 		add_filter( 'default_hidden_columns', array($this, 'hide_premium_columns'), 10, 2 );
 		
-		$this->list = new StockCentralList( array('per_page' => $this->per_page) );
+		$this->list = new ListTable( array( 'per_page' => $this->per_page) );
 		
 	}
 	
@@ -172,6 +145,7 @@ class StockCentral {
 	public function hide_premium_columns($hidden, $screen) {
 		
 		return array(
+			'calc_purchase_price',
 			'calc_inbound',
 			'calc_reserved',
 			'calc_returns',
