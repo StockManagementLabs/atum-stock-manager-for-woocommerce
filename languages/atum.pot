@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-03-10 18:00+0100\n"
+"POT-Creation-Date: 2017-03-12 10:27+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -115,7 +115,7 @@ msgstr ""
 
 #: classes/Addons/Addons.php:626 classes/Addons/Addons.php:632
 #: classes/Bootstrap.php:181 classes/Bootstrap.php:186 classes/Inc/Ajax.php:477
-#: classes/Inc/Ajax.php:483 classes/Inc/Main.php:476 classes/Inc/Main.php:482
+#: classes/Inc/Ajax.php:483 classes/Inc/Main.php:548 classes/Inc/Main.php:554
 #: classes/Settings/Settings.php:442 classes/Settings/Settings.php:448
 #: classes/StockCentral/StockCentral.php:164
 #: classes/StockCentral/StockCentral.php:170
@@ -308,51 +308,55 @@ msgid ""
 "%sopen a support ticket%s to request the deactivation."
 msgstr ""
 
-#: classes/Inc/Main.php:137 classes/Inc/Main.php:138 classes/Inc/Main.php:148
+#: classes/Inc/Main.php:145 classes/Inc/Main.php:146 classes/Inc/Main.php:156
 #: classes/Settings/Settings.php:90 views/stock-central.php:11
 msgid "Stock Central"
 msgstr ""
 
-#: classes/Inc/Main.php:153
+#: classes/Inc/Main.php:161
 msgid "Settings"
 msgstr ""
 
-#: classes/Inc/Main.php:158
+#: classes/Inc/Main.php:166
 msgid "Add-ons"
 msgstr ""
 
-#: classes/Inc/Main.php:234 classes/Inc/Main.php:261
+#: classes/Inc/Main.php:242 classes/Inc/Main.php:269
 msgid "The stock is currently managed by ATUM plugin"
 msgstr ""
 
-#: classes/Inc/Main.php:404
+#: classes/Inc/Main.php:414 classes/Inc/Main.php:423
+msgid "Purchase price"
+msgstr ""
+
+#: classes/Inc/Main.php:476
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Main.php:405
+#: classes/Inc/Main.php:477
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Main.php:415
+#: classes/Inc/Main.php:487
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Main.php:416
+#: classes/Inc/Main.php:488
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Inc/Main.php:450
+#: classes/Inc/Main.php:522
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%s rating. A huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Main.php:450
+#: classes/Inc/Main.php:522
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Main.php:460
+#: classes/Inc/Main.php:532
 msgid ""
 "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
@@ -629,24 +633,28 @@ msgstr ""
 msgid "Click to edit the sale price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:536
+#: classes/StockCentral/Inc/ListTable.php:538
+msgid "Click to edit the purchase price"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:562
 msgid "Click to edit the stock quantity"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:1241
+#: classes/StockCentral/Inc/ListTable.php:1267
 msgid ""
 "Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this "
 "great plugin."
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:1242
+#: classes/StockCentral/Inc/ListTable.php:1268
 msgid ""
 "We have disabled some inactive columns by default as these are only "
 "available for future upgrades or our Premium and PRO users. If you'd like to "
 "preview them, please, use the Screen Options in the top corner."
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:1243
+#: classes/StockCentral/Inc/ListTable.php:1269
 msgid "Thank you very much for using ATUM as your inventory manager."
 msgstr ""
 
