@@ -485,9 +485,17 @@ class ListTable extends AtumListTable {
 		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 
 		if ($this->allow_calcs) {
-			$regular_price = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ) .
-			                 '" data-position="top" data-item="' . $product_id . '" data-meta="regular_price">' .
-			                 floatval( $this->product->get_regular_price() ) . '</span>';
+
+			$regular_price_value = $this->product->get_regular_price();
+			$regular_price_value = ( is_numeric($regular_price_value) ) ? $regular_price_value : $regular_price;
+
+			$regular_price = $this->get_editable_column(
+				$product_id,
+				'regular_price',
+				$regular_price_value,
+				__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
+			);
+
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_regular_price', $regular_price );
@@ -509,9 +517,17 @@ class ListTable extends AtumListTable {
 		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 
 		if ($this->allow_calcs) {
-			$sale_price = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ) .
-			              '" data-position="top" data-item="' . $product_id . '" data-meta="sale_price">' .
-			              floatval( $this->product->get_sale_price() ) . '</span>';
+
+			$sale_price_value = $this->product->get_sale_price();
+			$sale_price_value = ( is_numeric($sale_price_value) ) ? $sale_price_value : $sale_price;
+
+			$sale_price = $this->get_editable_column(
+				$product_id,
+				'sale_price',
+				$sale_price_value,
+				__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN )
+			);
+
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_sale_price', $sale_price );
@@ -529,15 +545,20 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_purchase_price( $item ) {
 
+		$purchase_price = '&mdash;';
 		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 
-		$purchase_price = get_post_meta($product_id, '_purchase_price', TRUE);
-		$purchase_price = ($purchase_price !== FALSE) ? floatval($purchase_price) : '&mdash;';
-
 		if ($this->allow_calcs) {
-			$purchase_price = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ) .
-			              '" data-position="top" data-item="' . $product_id . '" data-meta="purchase_price">' .
-		                  $purchase_price . '</span>';
+
+			$purchase_price_value = get_post_meta($product_id, '_purchase_price', TRUE);
+			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? $purchase_price_value : $purchase_price;
+
+			$purchase_price = $this->get_editable_column(
+				$product_id,
+				'purchase_price',
+				$purchase_price_value,
+				__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
+			);
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price );
@@ -559,9 +580,12 @@ class ListTable extends AtumListTable {
 		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 
 		if ($this->allow_calcs) {
-			$stock = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ) .
-			         '" data-position="top" data-item="' . $product_id . '" data-meta="stock">' .
-			         intval( $this->product->get_total_stock() ) . '</span>';
+			$stock = $this->get_editable_column(
+				$product_id,
+				'stock',
+				intval( $this->product->get_total_stock() ),
+				__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
+			);
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_stock', $stock );

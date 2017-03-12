@@ -222,6 +222,26 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		return 'title';
 	}
+
+	/**
+	 * Create an editable meta cell
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int    $post_id           The current post ID
+	 * @param string $meta_key          The meta key name (without initial underscore) to be saved
+	 * @param mixed  $value             The new value for the meta key cell
+	 * @param string $tooltip           The informational tooltip text
+	 * @param string $tooltip_position  Where to place the tooltip
+	 *
+	 * @return string
+	 */
+	protected function get_editable_column ($post_id, $meta_key, $value, $tooltip, $tooltip_position = 'top') {
+
+		return '<span class="set-meta tips" data-tip="' . $tooltip . '" data-position="' . $tooltip_position .
+		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '">' . $value . '</span>';
+
+	}
 	
 	/**
 	 * All columns are sortable by default except cb and thumbnail
