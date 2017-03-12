@@ -656,11 +656,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), esc_attr( $_REQUEST['s'] ) );
 		}
 		
-		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
-			// TODO: Correct href???
-			echo '<p><a href="post-new.php?post_type=' . $this->post_type . '" class="adapta-button green">' . $post_type_obj->labels->add_new . '</a></p>';
-		}
-		
 	}
 	
 	/**
