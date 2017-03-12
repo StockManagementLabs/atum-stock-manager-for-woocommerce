@@ -519,6 +519,32 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 * Column for purchase price
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return float
+	 */
+	protected function column_calc_purchase_price( $item ) {
+
+		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+
+		$purchase_price = get_post_meta($product_id, '_purchase_price', TRUE);
+		$purchase_price = ($purchase_price !== FALSE) ? floatval($purchase_price) : '&mdash;';
+
+		if ($this->allow_calcs) {
+			$purchase_price = '<span class="set-meta tips" data-tip="' . __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ) .
+			              '" data-position="top" data-item="' . $product_id . '" data-meta="purchase_price">' .
+		                  $purchase_price . '</span>';
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price );
+
+	}
+
+	/**
 	 * Column for stock amount
 	 *
 	 * @since  0.0.1

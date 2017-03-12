@@ -343,7 +343,8 @@
 							html     : true,
 							template : '<div class="popover" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
 							placement: 'bottom',
-							trigger  : 'click'
+							trigger  : 'click',
+							container: 'body'
 						});
 						
 					});
@@ -360,16 +361,18 @@
 						if ($target.hasClass('set-meta')) {
 							$('.set-meta').not($target).popover('hide');
 						}
-						else if ( !$target.hasClass('popover') && !$target.parent().hasClass('popover') && !$target.parent().hasClass('popover-content')) {
+						else {
 							$('.set-meta').popover('hide');
 						}
+						
 					});
 					
 					// Send the ajax request when clicking the "Set" button
-					$listWrapper.on('click', '.popover button.set', function() {
+					$('body').on('click', '.popover button.set', function() {
 						
 						var $button = $(this),
-							$setMeta = $button.closest('.popover').siblings('.set-meta');
+						    popoverId = $button.closest('.popover').attr('id'),
+							$setMeta = $('[aria-describedby="' + popoverId + '"]');
 						
 						$.ajax({
 							url     : ajaxurl,
@@ -383,7 +386,7 @@
 								value : $button.siblings('input[type=number]').val()
 							},
 							beforeSend: function() {
-								
+								$button.prop('disabled', true);
 							},
 							success : function(response) {
 								
@@ -407,6 +410,9 @@
 								if (response.success) {
 									$setMeta.popover('hide');
 									$('.atum-post-search').keyup();
+								}
+								else {
+									$button.prop('disabled', false);
 								}
 							}
 						});

@@ -74,6 +74,14 @@ class Main {
 				add_action( 'init', array( $this, 'wc_manage_stock_hooks' ) );
 
 			}
+
+			// Add the purchase price to WC products
+			add_action( 'woocommerce_product_options_pricing', array($this, 'add_purchase_price_meta') );
+			add_action( 'woocommerce_variation_options_pricing', array($this, 'add_purchase_price_meta'), 10, 3 );
+
+			// Save the product purchase price meta
+			add_action( 'save_post_product', array($this, 'save_purchase_price') );
+			add_action( 'woocommerce_update_product_variation', array($this, 'save_purchase_price') );
 			
 		}
 
@@ -386,6 +394,70 @@ class Main {
 	 */
 	public function delete_transients($product_id) {
 		Helpers::delete_transients();
+	}
+
+	/**
+	 * Add the purchase price field to WC's product data meta box
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int      $loop             Only for variations. The loop item number
+	 * @param array    $variation_data   Only for variations. The variation item data
+	 * @param \WP_Post $variation        Only for variations. The variation product
+	 */
+	public function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
+
+		if ( empty($variation) ) {
+
+			woocommerce_wp_text_input( array(
+				'id'        => '_purchase_price',
+			    'label'     => __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')',
+			    'data_type' => 'price'
+			) );
+
+		}
+		else {
+
+			?>
+			<p class="form-row form-row-first">
+				<label><?php echo __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
+				<input type="text" size="5" name="variable_purchase_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( get_post_meta($variation->ID, '_purchase_price', TRUE) ) ?>" class="wc_input_price" />
+			</p>
+			<?php
+
+		}
+
+	}
+
+	/**
+	 * Save the purchase price meta on product post savings
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $post_id
+	 */
+	public function save_purchase_price ($post_id) {
+
+		// Product variations
+		if ( isset($_POST['variable_purchase_price']) ) {
+			$purchase_price = (string) isset( $_POST['variable_purchase_price'] ) ? wc_clean( reset($_POST['variable_purchase_price']) ) : '';
+			update_post_meta( $post_id, '_purchase_price', '' === $purchase_price ? '' : wc_format_decimal( $purchase_price ) );
+		}
+		else {
+
+			$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+
+			if ( in_array( $product_type, array( 'variable', 'grouped' ) ) ) {
+				// Variable and grouped products have no prices
+				update_post_meta( $post_id, '_purchase_price', '' );
+			}
+			else {
+				$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+				update_post_meta( $post_id, '_purchase_price', '' === $purchase_price ? '' : wc_format_decimal( $purchase_price ) );
+			}
+
+		}
+
 	}
 	
 	/**
