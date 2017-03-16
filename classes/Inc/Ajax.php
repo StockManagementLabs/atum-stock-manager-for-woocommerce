@@ -149,20 +149,54 @@ final class Ajax {
 		        break;
 
 			case 'regular_price':
-			case 'sale_price':
 			case 'purchase_price':
 
-				$price = floatval($_POST['value']);
+				$price = wc_format_decimal($_POST['value']);
+				update_post_meta( $product_id, '_' . $meta , $price );
+				break;
 
-				if ($meta == 'sale_price') {
-					$regular_price = $product->get_regular_price();
+			case 'sale_price':
 
-					if ($regular_price < $price) {
-						wp_send_json_error( __('Please enter in a value less than the regular price.', ATUM_TEXT_DOMAIN) );
+				$sale_price = wc_format_decimal($_POST['value']);
+				$regular_price = $product->get_regular_price();
+
+				if ($regular_price < $sale_price) {
+					wp_send_json_error( __('Please enter in a value lower than the regular price.', ATUM_TEXT_DOMAIN) );
+				}
+
+				// Check for sale dates
+				if ( ! empty($_POST['extraMeta']) ) {
+
+					$extra_meta = array_map('wc_clean', $_POST['extraMeta']);
+					$date_from = $extra_meta['_sale_price_dates_from'];
+					$date_to = $extra_meta['_sale_price_dates_to'];
+
+					update_post_meta( $product_id, '_sale_price_dates_from', $date_from ? strtotime( $date_from ) : '' );
+					update_post_meta( $product_id, '_sale_price_dates_to', $date_to ? strtotime( $date_to ) : '' );
+
+					if ( $date_to && ! $date_from ) {
+						$date_from = date( 'Y-m-d' );
+						update_post_meta( $product_id, '_sale_price_dates_from', strtotime( $date_from ) );
+					}
+
+					// Update price if on sale
+					if ( '' !== $sale_price && $date_to && $date_from ) {
+						update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
+					}
+					elseif ( '' !== $sale_price && $date_from && strtotime( $date_from ) <= strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+						update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
+					}
+					else {
+						update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
+					}
+
+					if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+						update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
+						update_post_meta( $product_id, '_sale_price_dates_from', '' );
+						update_post_meta( $product_id, '_sale_price_dates_to', '' );
 					}
 				}
 
-				update_post_meta( $product_id, '_' . $meta , $price );
 				break;
 		}
 

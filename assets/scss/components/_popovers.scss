@@ -151,20 +151,42 @@
 			text-align: center;
 		}
 		
-		> input[type=number], > .button {
+		> input[type=number], > input[type=text], > .button {
 			display: inline-block;
 			vertical-align: middle;
 			height: 30px;
+			font-size: 14px;
 		}
 		
-		> input[type=number] {
+		> input[type=number], > input[type=text] {
 			width: 75%;
 			text-align: center;
 			border-radius: 3px;
 		}
 		
-		> button {
+		> .button {
 			margin-left: 3px;
+			
+			&:disabled {
+				color: $gray-light !important;
+				opacity: 0.6;
+			}
+		}
+		
+	}
+	
+	// Popover with extra meta fields
+	&.with-meta {
+		
+		.popover-content {
+			input, button {
+				width: 100%;
+				margin: 3px 0;
+			}
+			
+			hr {
+				border-color: $brand-info;
+			}
 		}
 		
 	}

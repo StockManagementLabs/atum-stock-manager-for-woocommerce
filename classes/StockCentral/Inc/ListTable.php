@@ -73,6 +73,12 @@ class ListTable extends AtumListTable {
 	 * @var array
 	 */
 	protected $grouped_products = array();
+
+	/**
+	 * Whether to load the jQuery UI datepicker script (for sale price dates)
+	 * @var bool
+	 */
+	protected $load_datepicker = TRUE;
 	
 	/**
 	 * Constructor
@@ -337,7 +343,7 @@ class ListTable extends AtumListTable {
 		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $id, $column_name, TRUE ) : '&mdash;';
 		
-		return apply_filters( "atum/stock_central_list/column_default_$column_name", $column_item );
+		return apply_filters( "atum/stock_central_list/column_default_$column_name", $column_item, $item, $this->product );
 		
 	}
 	
@@ -352,7 +358,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_thumb( $item ) {
 		
-		return apply_filters( 'atum/stock_central_list/column_thumb', $this->product->get_image( [40, 40] ) );
+		return apply_filters( 'atum/stock_central_list/column_thumb', $this->product->get_image( [40, 40] ), $item, $this->product );
 	}
 	
 	/**
@@ -384,7 +390,7 @@ class ListTable extends AtumListTable {
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_title', $title );
+		return apply_filters( 'atum/stock_central_list/column_title', $title, $item, $this->product );
 	}
 	
 	/**
@@ -399,7 +405,7 @@ class ListTable extends AtumListTable {
 	protected function column_ID( $item ) {
 		
 		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
-		return apply_filters( 'atum/stock_central_list/column_ID', $id );
+		return apply_filters( 'atum/stock_central_list/column_ID', $id, $item, $this->product );
 	}
 	
 	/**
@@ -463,7 +469,7 @@ class ListTable extends AtumListTable {
 					break;
 			}
 			
-			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>' );
+			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>', $item, $this->product );
 			
 		}
 		
@@ -487,18 +493,21 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			$regular_price_value = $this->product->get_regular_price();
-			$regular_price_value = ( is_numeric($regular_price_value) ) ? $regular_price_value : $regular_price;
+			$regular_price_value = ( is_numeric($regular_price_value) ) ? $this->format_price($regular_price_value) : $regular_price;
 
-			$regular_price = $this->get_editable_column(
-				$product_id,
-				'regular_price',
-				$regular_price_value,
-				__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
+			$args = array(
+				'post_id'  => $product_id,
+				'meta_key' => 'regular_price',
+				'value'    => $regular_price_value,
+				'symbol'   => get_woocommerce_currency_symbol(),
+				'tooltip'  => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
 			);
+
+			$regular_price = $this->get_editable_column($args);
 
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_regular_price', $regular_price );
+		return apply_filters( 'atum/stock_central_list/column_regular_price', $regular_price, $item, $this->product );
 		
 	}
 
@@ -519,18 +528,43 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			$sale_price_value = $this->product->get_sale_price();
-			$sale_price_value = ( is_numeric($sale_price_value) ) ? $sale_price_value : $sale_price;
+			$sale_price_value = ( is_numeric($sale_price_value) ) ? $this->format_price($sale_price_value) : $sale_price;
+			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+			$sale_price_dates_to   = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 
-			$sale_price = $this->get_editable_column(
-				$product_id,
-				'sale_price',
-				$sale_price_value,
-				__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN )
+			$args = array(
+				'post_id'    => $product_id,
+				'meta_key'   => 'sale_price',
+				'value'      => $sale_price_value,
+				'symbol'     => get_woocommerce_currency_symbol(),
+				'tooltip'    => __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+				'extra_meta' => array(
+					array(
+						'name'        => '_sale_price_dates_from',
+						'type'        => 'text',
+						'placeholder' => _x( 'Sale date from...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
+						'value'       => $sale_price_dates_from,
+						'maxlength'   => 10,
+						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+						'class'       => 'datepicker from'
+					),
+					array(
+						'name'        => '_sale_price_dates_to',
+						'type'        => 'text',
+						'placeholder' => _x( 'Sale date to...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
+						'value'       => $sale_price_dates_to,
+						'maxlength'   => 10,
+						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+						'class'       => 'datepicker to'
+					)
+				)
 			);
+
+			$sale_price = $this->get_editable_column($args);
 
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_sale_price', $sale_price );
+		return apply_filters( 'atum/stock_central_list/column_sale_price', $sale_price, $item, $this->product );
 
 	}
 
@@ -551,17 +585,20 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			$purchase_price_value = get_post_meta($product_id, '_purchase_price', TRUE);
-			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? $purchase_price_value : $purchase_price;
+			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? $this->format_price($purchase_price_value) : $purchase_price;
 
-			$purchase_price = $this->get_editable_column(
-				$product_id,
-				'purchase_price',
-				$purchase_price_value,
-				__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
+			$args = array(
+				'post_id'  => $product_id,
+				'meta_key' => 'purchase_price',
+				'value'    => $purchase_price_value,
+				'symbol'   => get_woocommerce_currency_symbol(),
+				'tooltip'  => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
 			);
+
+			$purchase_price = $this->get_editable_column($args);
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price );
+		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
 
 	}
 
@@ -580,15 +617,18 @@ class ListTable extends AtumListTable {
 		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 
 		if ($this->allow_calcs) {
-			$stock = $this->get_editable_column(
-				$product_id,
-				'stock',
-				intval( $this->product->get_total_stock() ),
-				__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
+
+			$args = array(
+				'post_id'  => $product_id,
+				'meta_key' => 'stock',
+				'value'    => intval( $this->product->get_total_stock() ),
+				'tooltip'  => __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
 			);
+
+			$stock = $this->get_editable_column($args);
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_stock', $stock );
+		return apply_filters( 'atum/stock_central_list/column_stock', $stock, $item, $this->product );
 
 	}
 	
@@ -636,7 +676,8 @@ class ListTable extends AtumListTable {
 		
 		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
 		
-		echo '<td ' . $data . $classes . '>' . apply_filters( 'atum/stock_central_list/column_stock', $content ) .
+		echo '<td ' . $data . $classes . '>' .
+		     apply_filters( 'atum/stock_central_list/column_stock_indicator', $content, $item, $this->product ) .
 		     $this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>';
 		
 	}
@@ -674,7 +715,7 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_hold', $column_item );
+		return apply_filters( 'atum/stock_central_list/column_hold', $column_item, $item, $this->product );
 	}
 	
 	/**
@@ -727,7 +768,7 @@ class ListTable extends AtumListTable {
 			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_today'];
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_sold_today', $column_item );
+		return apply_filters( 'atum/stock_central_list/column_sold_today', $column_item, $item, $this->product );
 		
 	}
 	
@@ -749,7 +790,7 @@ class ListTable extends AtumListTable {
 			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_7'];
 		}
 		
-		return apply_filters( "atum/stock_central_list/column_sold_last_7_days", $column_item );
+		return apply_filters( "atum/stock_central_list/column_sold_last_7_days", $column_item, $item, $this->product );
 		
 	}
 	
@@ -771,7 +812,7 @@ class ListTable extends AtumListTable {
 			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_14'];
 		}
 		
-		return apply_filters( "atum/stock_central_list/column_sold_last_14_days", $column_item );
+		return apply_filters( "atum/stock_central_list/column_sold_last_14_days", $column_item, $item, $this->product );
 		
 	}
 	
@@ -802,7 +843,7 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last );
+		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last, $item, $this->product );
 		
 	}
 	

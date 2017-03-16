@@ -146,20 +146,35 @@
   text-align: center;
 }
 
-.popover .popover-content > input[type=number], .popover .popover-content > .button {
+.popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
   display: inline-block;
   vertical-align: middle;
   height: 30px;
+  font-size: 14px;
 }
 
-.popover .popover-content > input[type=number] {
+.popover .popover-content > input[type=number], .popover .popover-content > input[type=text] {
   width: 75%;
   text-align: center;
   border-radius: 3px;
 }
 
-.popover .popover-content > button {
+.popover .popover-content > .button {
   margin-left: 3px;
+}
+
+.popover .popover-content > .button:disabled {
+  color: #F9F9F9 !important;
+  opacity: 0.6;
+}
+
+.popover.with-meta .popover-content input, .popover.with-meta .popover-content button {
+  width: 100%;
+  margin: 3px 0;
+}
+
+.popover.with-meta .popover-content hr {
+  border-color: #E3E8F5;
 }
 
 .overlay {

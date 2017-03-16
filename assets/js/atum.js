@@ -330,18 +330,42 @@
 				 */
 				setFieldPopover: function () {
 					
+					var self = this;
+					
 					// Set meta value for listed products
 					$('.set-meta').each(function() {
 						
-						var $metaCell = $(this),
-						    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase();
+						var $metaCell         = $(this),
+						    symbol            = $metaCell.data('symbol') || '',
+						    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase(),
+						    inputValue        = $metaCell.text().replace(symbol, ''),
+						    $input            = $('<input />', {type: 'number', min: '0', step: '1', value: inputValue, class: 'meta-amt'}),
+						    $setButton        = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: atumListTable.setButton}),
+						    extraMeta         = $metaCell.data('extra-meta'),
+						    $extraFields      = '',
+							popoverClass      = '';
 						
+						// Check whether to add extra fields to the popover
+						if (typeof extraMeta !== 'undefined') {
+							
+							popoverClass = ' with-meta';
+							$extraFields = $('<hr>');
+							
+							$.each(extraMeta, function(index, metaAtts) {
+								$extraFields = $extraFields.add($('<input />', metaAtts));
+							});
+							
+						}
+						
+						var $content = ($extraFields.length) ? $input.add($extraFields).add($setButton) : $input.add($setButton);
+						
+						// Create the meta edit popover
 						$metaCell.popover({
 							title    : atumListTable.setValue.replace('%%', currentColumnText),
-							content  : '<input type="number" min="0" step="1" value="' + $metaCell.text() + '">' +
-									   '<button type="button" class="set button button-primary button-small">' + atumListTable.setButton + '</button>',
+							content  : $content,
 							html     : true,
-							template : '<div class="popover" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+							template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
+									   '<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
 							placement: 'bottom',
 							trigger  : 'click',
 							container: 'body'
@@ -351,40 +375,49 @@
 					
 					// Focus on the input field
 					$('.set-meta').on('shown.bs.popover', function () {
-						$(this).siblings('.popover').find('input[type=number]').focus();
+						$('.popover').find('.meta-amt').focus();
+						self.setDatePickers();
 					});
 					
 					// Hide other popovers
 					$listWrapper.click( function(e) {
 						
-						var $target = $(e.target);
-						if ($target.hasClass('set-meta')) {
-							$('.set-meta').not($target).popover('hide');
-						}
-						else {
-							$('.set-meta').popover('hide');
-						}
+						var $target = $(e.target),
+						    $selector = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
+						
+						$selector.popover('hide');
 						
 					});
 					
 					// Send the ajax request when clicking the "Set" button
 					$('body').on('click', '.popover button.set', function() {
 						
-						var $button = $(this),
-						    popoverId = $button.closest('.popover').attr('id'),
-							$setMeta = $('[aria-describedby="' + popoverId + '"]');
+						var $button   = $(this),
+						    $popover  = $button.closest('.popover'),
+						    popoverId = $popover.attr('id'),
+						    $setMeta  = $('[aria-describedby="' + popoverId + '"]'),
+						    data      = {
+							    token : atumListTable.nonce,
+							    action: 'atum_update_meta',
+							    item  : $setMeta.data('item'),
+							    meta  : $setMeta.data('meta'),
+							    value : $button.siblings('.meta-amt').val()
+						    },
+						    extraMeta = {};
+						
+						if ($popover.hasClass('with-meta')) {
+							$button.siblings('input').not('.meta-amt').each(function(index, elem) {
+								extraMeta[elem.name] = $(elem).val();
+							});
+							
+							data.extraMeta = extraMeta;
+						}
 						
 						$.ajax({
 							url     : ajaxurl,
 							method  : 'POST',
 							dataType: 'json',
-							data    : {
-								token : atumListTable.nonce,
-								action: 'atum_update_meta',
-								item  : $setMeta.data('item'),
-								meta  : $setMeta.data('meta'),
-								value : $button.siblings('input[type=number]').val()
-							},
+							data    : data,
 							beforeSend: function() {
 								$button.prop('disabled', true);
 							},
@@ -419,6 +452,32 @@
 						
 					});
 										
+				},
+				
+				/**
+				 * Add the jQuery UI datepicker to input fields
+				 */
+				setDatePickers: function() {
+				
+					var $datepickers = $('.datepicker').datepicker({
+						defaultDate: '',
+						dateFormat: 'yy-mm-dd',
+						numberOfMonths: 1,
+						showButtonPanel: true,
+						onSelect: function( selectedDate ) {
+							
+							var $this = $(this);
+							if ($this.hasClass('from') || $this.hasClass('to')) {
+								var option = $this.hasClass('from') ? 'minDate' : 'maxDate',
+									instance = $this.data('datepicker'),
+									date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+								
+								$datepickers.not(this).datepicker('option', option, date);
+							}
+							
+						}
+					});
+					
 				},
 				
 				/**

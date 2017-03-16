@@ -228,18 +228,37 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int    $post_id           The current post ID
-	 * @param string $meta_key          The meta key name (without initial underscore) to be saved
-	 * @param mixed  $value             The new value for the meta key cell
-	 * @param string $tooltip           The informational tooltip text
-	 * @param string $tooltip_position  Where to place the tooltip
+	 * @param array $args {
+	 *      Array of arguments.
+	 *
+	 *      @type int    $post_id           The current post ID
+	 *      @type string $meta_key          The meta key name (without initial underscore) to be saved
+	 *      @type mixed  $value             The new value for the meta key cell
+	 *      @type string $symbol            Whether to add any symbol to value
+	 *      @type string $tooltip           The informational tooltip text
+	 *      @type array  $extra_meta        Any extra fields will be appended to the popover (as JSON array)
+	 *      @type string $tooltip_position  Where to place the tooltip
+	 * }
 	 *
 	 * @return string
 	 */
-	protected function get_editable_column ($post_id, $meta_key, $value, $tooltip, $tooltip_position = 'top') {
+	protected function get_editable_column ($args) {
+
+		extract( wp_parse_args( $args, array(
+			'post_id'          => NULL,
+			'meta_key'         => '',
+			'value'            => '',
+			'symbol'           => '',
+			'tooltip'          => '',
+			'extra_meta'       => array(),
+			'tooltip_position' => 'top'
+		) ) );
+
+		$extra_meta_data = ( ! empty($extra_meta) ) ? ' data-extra-meta="' . htmlspecialchars( json_encode($extra_meta), ENT_QUOTES, 'UTF-8') . '"' : '';
+		$symbol_data = ( ! empty($symbol) ) ? ' data-symbol="' . esc_attr($symbol) . '"' : '';
 
 		return '<span class="set-meta tips" data-tip="' . $tooltip . '" data-position="' . $tooltip_position .
-		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '">' . $value . '</span>';
+		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '"' . $symbol_data . $extra_meta_data . '>' . $value . '</span>';
 
 	}
 	
@@ -796,6 +815,25 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_send_json( $response );
 		
 	}
+
+	/**
+	 * Get the price formatted with no HTML tags
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param float $price
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	protected function format_price($price, $args = array()) {
+
+		// Do not add zeros as decimals
+		add_filter('woocommerce_price_trim_zeros', '__return_true');
+		$price = wc_price($price, $args);
+		return strip_tags($price);
+
+	}
 	
 	/**
 	 * Enqueue the required scripts
@@ -809,6 +847,16 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
 
 		wp_register_style( 'atum-list', ATUM_URL . '/assets/css/atum-list.css', FALSE, ATUM_VERSION );
+
+		if ( isset($this->load_datepicker) && $this->load_datepicker === TRUE ) {
+			global $wp_scripts;
+			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
+			wp_deregister_style('jquery-ui-style');
+			wp_register_style( 'jquery-ui-style', '//code.jquery.com/ui/' . $jquery_version . '/themes/excite-bike/jquery-ui.min.css', array(), $jquery_version );
+
+			wp_enqueue_style('jquery-ui-style');
+			wp_enqueue_script('jquery-ui-datepicker');
+		}
 
 		$min = (! ATUM_DEBUG) ? '.min' : '';
 		wp_register_script( 'atum', ATUM_URL . "/assets/js/atum$min.js", array( 'jquery', 'jquery-tiptip', 'jscrollpane' ), ATUM_VERSION, TRUE );
