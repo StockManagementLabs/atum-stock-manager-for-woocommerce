@@ -1185,17 +1185,17 @@ class ListTable extends AtumListTable {
 				
 				if ( ! $result ) {
 					
-					// Products in LOW stock
+					// Products in LOW stock (compare last seven days average sales per day * re-order days with current stock )
 					$str_sales = "(SELECT			   
 					    (SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_product_id' AND order_item_id = `item`.`order_item_id`) AS IDs,
-					    SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`)) AS qty
+					    CEIL(SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`))/7*$this->last_days) AS qty
 						FROM `{$wpdb->posts}` AS `order`
 						    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
 							INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
 						WHERE (`order`.`post_type` = 'shop_order'
 						    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
 						    AND `order_meta`.`meta_key` = '_completed_date'
-						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-$this->last_days days" ) . "')
+						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-7 days" ) . "')
 						GROUP BY IDs) AS sales";
 
 					$low_stock_post_types = ($variations) ? "('product', 'product_variation')" : "('product')";
