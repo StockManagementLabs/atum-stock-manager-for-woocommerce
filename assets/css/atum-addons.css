@@ -72,7 +72,11 @@
 }
 
 .atum-addons .theme .theme-screenshot {
+  position: relative;
   cursor: default;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 .atum-addons .theme .theme-name {
@@ -117,6 +121,14 @@
   display: none;
 }
 
+.atum-addons .theme:hover .more-details {
+  opacity: 0 !important;
+}
+
+.atum-addons .theme:hover .theme-screenshot:hover .more-details {
+  opacity: 1 !important;
+}
+
 .atum-addons .theme .show-key {
   position: absolute;
   right: 0;
@@ -149,6 +161,15 @@
 
 .atum-addons .theme .more-details {
   border-radius: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .atum-addons .theme .addon-key {

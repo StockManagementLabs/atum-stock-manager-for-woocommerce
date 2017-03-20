@@ -29,14 +29,13 @@ use Atum\Addons\Addons;
 					<div class="theme <?php if ($addon_status['installed'] && $addon_status['status'] == 'valid') echo 'active' ?>" data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
 
 						<?php if ( ! empty($addon['info']['thumbnail']) ) : ?>
-							<div class="theme-screenshot">
-								<img src="<?php echo $addon['info']['thumbnail'] ?>" alt="" />
-							</div>
+						<div class="theme-screenshot" style="background-image: url(<?php echo $addon['info']['thumbnail'] ?>)">
 						<?php else : ?>
-							<div class="theme-screenshot blank"></div>
+						<div class="theme-screenshot blank">
 						<?php endif ?>
 
-						<a class="more-details" href="<?php echo $addon['info']['link'] ?>" target="_blank"><?php _e( 'Add-on Details', ATUM_TEXT_DOMAIN ); ?></a>
+							<a class="more-details" href="<?php echo $addon['info']['link'] ?>" target="_blank"><?php _e( 'Add-on Details', ATUM_TEXT_DOMAIN ); ?></a>
+						</div>
 
 						<h2 class="theme-name">
 

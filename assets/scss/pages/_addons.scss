@@ -23,7 +23,11 @@
 	.theme {
 		
 		.theme-screenshot {
+			position: relative;
 			cursor: default;
+			background-size: cover !important;
+			background-position: center !important;;
+			background-repeat: no-repeat !important;
 		}
 		
 		.theme-name {
@@ -75,6 +79,18 @@
 					display: none;
 				}
 			}
+			
+			.more-details {
+				opacity: 0 !important;
+			}
+			
+			.theme-screenshot {
+				&:hover {
+					.more-details {
+						opacity: 1 !important;
+					}
+				}
+			}
 		}
 		
 		.show-key {
@@ -108,6 +124,9 @@
 		
 		.more-details {
 			border-radius: 0;
+			top: 50%;
+			@include transform(translateY(-50%));
+			@include transition(opacity 0.3s ease-in-out);
 		}
 		
 		.addon-key {
