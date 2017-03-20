@@ -199,8 +199,7 @@ If you'd like to see only selected products, leave the ATUM stock control option
 **Once Configured**
 
 * ATUM was designed to give the user overall control of the full WooCommerce inventory from one screen. Stock Central can be completely configured, and individual columns that are not part of the free version disabled.
-* We have prepared the Stock Central help section that will guide every user through the individual column functionality. 
-* Our team has prepared the preview of confirmed features that will be available in out Premium and PRO version. You can find these by opening any of the inactive menu pages.
+* We have prepared the Stock Central help section that will guide every user through the individual column functionality.
 
 ## Frequently Asked Questions
 
