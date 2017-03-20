@@ -36,5 +36,17 @@ defined( 'ABSPATH' ) or die;
 			<td><span class="wc-type" title="<?php _e( 'Product Type', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php _e( 'This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
+		<tr>
+			<td><strong><?php _e( 'Regular Price', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php _e( "You can configure the product price in this column. After you click the 'Set' button, the product price will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
+		</tr>
+		<tr>
+			<td><strong><?php _e( 'Sale Price', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php _e( "You can configure the sale price of your product. Enter the date range for your sale or leave the date empty for a continuous sale price. After clicking the 'Set' button, the change will automatically update in your store.", ATUM_TEXT_DOMAIN ) ?></td>
+		</tr>
+		<tr>
+			<td><strong><?php _e( 'Purchase Price', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php _e( "You can configure the purchase price of the product. After you click the 'Set' button, the product price will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
+		</tr>
 	</tbody>
 </table>
