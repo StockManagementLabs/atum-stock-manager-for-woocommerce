@@ -46,6 +46,7 @@
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0;
+  text-align: center;
 }
 
 .atum-list-table .popover-title {
@@ -365,8 +366,12 @@
   height: 10px;
 }
 
-.atum-list-table .column-_sku, .atum-list-table .column-title {
+.atum-list-table th.sortable {
   white-space: nowrap;
+}
+
+.atum-list-table th.sortable a {
+  padding: 0;
 }
 
 .atum-list-table tr.expanded {
@@ -428,17 +433,12 @@
   background-color: #C1C1C1;
 }
 
-.atum-list-table td.ID {
-  padding-left: 20px;
-  padding-right: 20px;
+.atum-list-table td.column-title {
+  min-width: 150px;
 }
 
-.atum-list-table #title {
-  min-width: 124px;
-}
-
-.atum-list-table #_sku {
-  min-width: 60px;
+.atum-list-table td.column-sku {
+  min-width: 70px;
 }
 
 .atum-list-table .column-calc_type .wc-type {

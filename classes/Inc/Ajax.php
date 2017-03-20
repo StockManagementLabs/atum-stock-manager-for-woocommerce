@@ -198,6 +198,13 @@ final class Ajax {
 				}
 
 				break;
+
+			// Any other text meta
+			default:
+
+				$meta_value = esc_attr($_POST['value']);
+				update_post_meta( $product_id, '_' . $meta , $meta_value );
+				break;
 		}
 
 		wp_send_json_success( __('Value saved.', ATUM_TEXT_DOMAIN) );

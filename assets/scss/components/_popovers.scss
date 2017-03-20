@@ -42,6 +42,7 @@
 	background-color: $popover-title-bg;
 	border-bottom: 1px solid darken($popover-title-bg, 5%);
 	border-radius: ($popover-border-radius - 1) ($popover-border-radius - 1) 0 0;
+	text-align: center;
 	
 	.atum-list-table & {
 		text-align: center;

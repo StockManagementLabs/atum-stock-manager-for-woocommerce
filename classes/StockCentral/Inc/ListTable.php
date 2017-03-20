@@ -112,7 +112,7 @@ class ListTable extends AtumListTable {
 		$args['table_columns'] = array(
 			'thumb'                => '<span class="wc-image tips" data-tip="' . __('Image', ATUM_TEXT_DOMAIN) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'            => '<span class="wc-type tips" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_regular_price'   => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
@@ -341,7 +341,15 @@ class ListTable extends AtumListTable {
 		
 		// Check if it's a hidden meta key (will start with underscore)
 		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
-		$column_item = ( substr( $column_name, 0, 1 ) == '_' ) ? get_post_meta( $id, $column_name, TRUE ) : '&mdash;';
+		$column_item = '';
+
+		if ( substr( $column_name, 0, 1 ) == '_' ) {
+			$column_item = get_post_meta( $id, $column_name, TRUE );
+		}
+
+		if ($column_item === '' || $column_item === FALSE) {
+			$column_item = '&mdash;';
+		}
 		
 		return apply_filters( "atum/stock_central_list/column_default_$column_name", $column_item, $item, $this->product );
 		
@@ -394,6 +402,31 @@ class ListTable extends AtumListTable {
 	}
 	
 	/**
+	 * Product SKU column
+	 *
+	 * @since  1.1.2
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return string
+	 */
+	protected function column_sku( $item ) {
+
+		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$sku = get_post_meta( $id, '_sku', TRUE );
+
+		$args = array(
+			'post_id'    => $id,
+			'meta_key'   => 'sku',
+			'value'      => ( $sku ) ? $sku : '&mdash;',
+			'input_type' => 'text',
+			'tooltip'    => __( 'Click to edit the SKU', ATUM_TEXT_DOMAIN )
+		);
+
+		return apply_filters( 'atum/stock_central_list/column_sku', $this->get_editable_column($args), $item, $this->product );
+	}
+
+	/**
 	 * Post ID column
 	 *
 	 * @since  0.0.1
@@ -403,7 +436,7 @@ class ListTable extends AtumListTable {
 	 * @return int
 	 */
 	protected function column_ID( $item ) {
-		
+
 		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
 		return apply_filters( 'atum/stock_central_list/column_ID', $id, $item, $this->product );
 	}

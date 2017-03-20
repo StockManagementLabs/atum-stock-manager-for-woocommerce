@@ -244,6 +244,11 @@ From the 1.1.0 update of ATUM stock manager for WooCommerce, we support Simple, 
 
 Product variations are now supported at a basic level. We have an advanced feature for variable products prepared for our Premium and PRO users.
 
+= I have updated the ATUM plugin to the last version and I can't see the new functionality =
+
+If you are using some kind of cache system, try to purge the cache or ask your hosting provider to do it.
+Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) to clear your browser cache.
+
 
 == Screenshots ==
 
@@ -313,6 +318,7 @@ Changes:
 * Added the ability to set the stock quantity to any product from the Stock Central list.
 * Added the ability to edit the Regular Price, the Sale Price and the Purchase price directly from Stock Central.
 * Added the ability to enter Purchase Price of the product and fully edit this value directly from Stock Central.
+* Added the ability to edit the SKU of the product directly from Stock Central.
 * New Add-ons page from where to manage all the available ATUM add-ons.
 * ATUM add-ons key handling and auto-update system integrated into WordPress updates.
 * Updated readme.txt

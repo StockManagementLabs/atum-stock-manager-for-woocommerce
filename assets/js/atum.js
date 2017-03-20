@@ -338,12 +338,25 @@
 						var $metaCell         = $(this),
 						    symbol            = $metaCell.data('symbol') || '',
 						    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase(),
-						    inputValue        = $metaCell.text().replace(symbol, ''),
-						    $input            = $('<input />', {type: 'number', min: '0', step: '1', value: inputValue, class: 'meta-amt'}),
-						    $setButton        = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: atumListTable.setButton}),
-						    extraMeta         = $metaCell.data('extra-meta'),
-						    $extraFields      = '',
-							popoverClass      = '';
+						    inputType         = $metaCell.data('input-type') || 'number',
+						    inputAtts         = {
+							    type : $metaCell.data('input-type') || 'number',
+							    value: $metaCell.text().replace(symbol, '').replace('—', ''),
+							    class: 'meta-value'
+						    };
+						
+						if (inputType === 'number') {
+							inputAtts.min = '0';
+							// Allow decimals only for the pricing fields for now
+							inputAtts.step = (symbol) ? '0.1' : '1';
+						}
+						
+						
+						var $input       = $('<input />', inputAtts),
+						    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: atumListTable.setButton}),
+						    extraMeta    = $metaCell.data('extra-meta'),
+						    $extraFields = '',
+							popoverClass = '';
 						
 						// Check whether to add extra fields to the popover
 						if (typeof extraMeta !== 'undefined') {
@@ -375,7 +388,7 @@
 					
 					// Focus on the input field
 					$('.set-meta').on('shown.bs.popover', function () {
-						$('.popover').find('.meta-amt').focus();
+						$('.popover').find('.meta-value').focus();
 						self.setDatePickers();
 					});
 					
@@ -390,7 +403,7 @@
 					});
 					
 					// Send the ajax request when clicking the "Set" button
-					$('body').on('click', '.popover button.set', function() {
+					$('body').on('click', '.popover button.set', function(e) {
 						
 						var $button   = $(this),
 						    $popover  = $button.closest('.popover'),
@@ -401,12 +414,12 @@
 							    action: 'atum_update_meta',
 							    item  : $setMeta.data('item'),
 							    meta  : $setMeta.data('meta'),
-							    value : $button.siblings('.meta-amt').val()
+							    value : $button.siblings('.meta-value').val()
 						    },
 						    extraMeta = {};
 						
 						if ($popover.hasClass('with-meta')) {
-							$button.siblings('input').not('.meta-amt').each(function(index, elem) {
+							$button.siblings('input').not('.meta-value').each(function(index, elem) {
 								extraMeta[elem.name] = $(elem).val();
 							});
 							

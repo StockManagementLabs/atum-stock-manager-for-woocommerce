@@ -236,6 +236,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *      @type mixed  $value             The new value for the meta key cell
 	 *      @type string $symbol            Whether to add any symbol to value
 	 *      @type string $tooltip           The informational tooltip text
+	 *      @type string $input_type        The input type field to use to edit the column value
 	 *      @type array  $extra_meta        Any extra fields will be appended to the popover (as JSON array)
 	 *      @type string $tooltip_position  Where to place the tooltip
 	 * }
@@ -250,6 +251,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'value'            => '',
 			'symbol'           => '',
 			'tooltip'          => '',
+			'input_type'       => 'number',
 			'extra_meta'       => array(),
 			'tooltip_position' => 'top'
 		) ) );
@@ -257,8 +259,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		$extra_meta_data = ( ! empty($extra_meta) ) ? ' data-extra-meta="' . htmlspecialchars( json_encode($extra_meta), ENT_QUOTES, 'UTF-8') . '"' : '';
 		$symbol_data = ( ! empty($symbol) ) ? ' data-symbol="' . esc_attr($symbol) . '"' : '';
 
-		return '<span class="set-meta tips" data-tip="' . $tooltip . '" data-position="' . $tooltip_position .
-		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '"' . $symbol_data . $extra_meta_data . '>' . $value . '</span>';
+		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-position="' . $tooltip_position .
+		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '"' . $symbol_data . $extra_meta_data .
+		       ' data-input-type="' . $input_type . '">' . $value . '</span>';
+
+
+		return apply_filters('atum/list_table/editable_column', $editable_col, $args);
 
 	}
 	

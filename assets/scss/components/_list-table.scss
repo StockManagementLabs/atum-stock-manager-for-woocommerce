@@ -150,8 +150,12 @@
 		height: 10px;
 	}
 	
-	.column-_sku, .column-title {
+	th.sortable {
 		white-space: nowrap;
+		
+		a {
+			padding: 0;
+		}
 	}
 	
 	tr {
@@ -220,18 +224,13 @@
 			background-color: $gray;
 		}
 		
-		&.ID {
-			padding-left: 20px;
-			padding-right: 20px;
+		&.column-title {
+			min-width: 150px;
 		}
-	}
-	
-	#title {
-		min-width: 124px;
-	}
-	
-	#_sku {
-		min-width: 60px;
+		
+		&.column-sku {
+			min-width: 70px;
+		}
 	}
 	
 	.column-calc_type {
