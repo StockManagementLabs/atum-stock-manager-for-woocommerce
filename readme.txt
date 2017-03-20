@@ -31,6 +31,7 @@ The free version of the Stock Central includes:
 * All items on one screen with a smooth mouse wheel or touchpad scrolling.
 * WooCommerce Products' image thumbnails for easier identification.
 * Short products name overview including the products' ID and SKU.
+* Quickly edit the Product Price and Product Sale Price directly from Stock Central main screen.
 * The current stock level of every WooCommerce product in the shop's database.
 * One click stock volume edit right from the main Stock Central screen.
 * Stock on hold value to preview the number of back-orders pending.
@@ -310,5 +311,14 @@ Fixes:
 Changes:
 
 * Added the ability to set the stock quantity to any product from the Stock Central list.
+* Added the ability to edit the Regular Price, the Sale Price and the Purchase price directly from Stock Central.
+* Added the ability to enter Purchase Price of the product and fully edit this value directly from Stock Central.
+* New Add-ons page from where to manage all the available ATUM add-ons.
+* ATUM add-ons key handling and auto-update system integrated into WordPress updates.
 * Updated readme.txt
 * Updated strings in language template file.
+
+Fixes:
+
+* Refactory and performance improvements.
+* Low stock formula improved.
