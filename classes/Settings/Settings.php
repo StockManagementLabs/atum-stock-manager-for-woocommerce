@@ -105,7 +105,7 @@ class Settings {
 			'posts_per_page'     => array(
 				'section' => 'stock_central',
 				'name'    => __( 'Products per Page', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Controls the amount of products displayed per page across the ATUM plugin. Please note, you can set this value within the 'Screen Options' tab on every page. Enter '-1' to remove the pagination and display all products on one page (not recommended if you have many products).", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Controls the number of products displayed per page within the Stock Central screen. Please note, you can set this value within the 'Screen Options' tab as well. Enter '-1' to remove the pagination and display all available products on one page (not recommended if your store contains a large number of products as it may affect the performance).", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => self::DEFAULT_POSTS_PER_PAGE
 			),

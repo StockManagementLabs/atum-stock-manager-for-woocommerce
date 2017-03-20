@@ -10,6 +10,6 @@ defined( 'ABSPATH' ) or die;
 ?>
 <h2><?php _e("Welcome to the ATUM's Stock Central!", ATUM_TEXT_DOMAIN) ?></h2>
 <p><?php _e('Thank you very much for installing this great plugin.', ATUM_TEXT_DOMAIN) ?></p>
-<p><?php _e("We are glad you would like to take your business to the next level and have chosen ATUM to help you do just that. What you see in front of you is the basic version with some important indicators. You will find every available feature explained in this guide. Feel free to browse each section and in case you fail to locate the answer you are looking for, don't hesitate to click the 'Visit our Support Page' link on this page.", ATUM_TEXT_DOMAIN) ?></p>
+<p><?php _e("We are glad you have chosen the ATUM plugin to take your business to the next level. Within the screen bellow, you can see the current version of our Stock Central with some essential tools and indicators. This help menu will inform you about the functions of all individual columns. If you come across anything, you'd like to explain, have a question or suggestion, do not hesitate to use the 'Visit WP Support Forum' link on this page.", ATUM_TEXT_DOMAIN) ?></p>
 <p><?php _e("Our team is working hard on the development of the Premium and PRO version, so if you feel your business has outgrown the basic features follow the 'Go Premium or PRO!' link on this page.", ATUM_TEXT_DOMAIN) ?></p>
 <p><?php _e('For the whole Stock Management Labs™ team, we wish you a successful and profitable growth.', ATUM_TEXT_DOMAIN) ?></p>
