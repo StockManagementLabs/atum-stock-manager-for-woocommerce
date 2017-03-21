@@ -22,11 +22,11 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Product Name', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( 'The first twenty characters of the product name. Hover your mouse over the name to see the full content. (PRO users will be able to choose the amount of characters displayed. This option is editable in Settings).', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( 'The first twenty characters of the product name. Hover your mouse over the name to see the full content.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'SKU', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "An SKU, or Stock Keeping Unit, is a number assigned to a product by the store admin to identify the price, product options and manufacturer of the merchandise. An SKU is used to track inventory in your retail store. They are critical in helping you maintain a profitable retail business. It is not necessary to use SKUs in the basic/free version of ATUM. However, we recommend the introduction of SKUs in your store to take the full advantage of ATUM's features.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "An SKU, or Stock Keeping Unit, is a code assigned to a product by the store admin to identify the price, product options and manufacturer of the merchandise. An SKU is used to track inventory in your retail store. They are critical in helping you maintain a profitable retail business. We recommend the introduction of SKUs in your store to take the full advantage of ATUM's features.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'ID', ATUM_TEXT_DOMAIN ) ?></strong></td>

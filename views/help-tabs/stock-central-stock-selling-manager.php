@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Feature that will tell the user the average amount of days that a product will keep 'in stock' status. By default, we base this indicator on sales for the past seven days (We do not include the current day sales). However, the Premium and PRO users will have the option to set the number of days under the 'Stock Central' tab within the 'Settings' menu.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "A feature that will tell the user the average amount of days that a product will keep 'in stock' status. By default, we base this indicator on sales for the past seven days (We do not include the current day sales).", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ) ?></strong></td>
@@ -34,11 +34,11 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Lost Sales', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Our users will want to see this figure as close to zero as possible. The formula calculates the volume of products that store owner would sell if the item stayed in stock. By default, we take the average sales for the last seven days the item was in stock. We time the result by the number of days the item is out of stock. Premium and PRO users have the option to edit the number of days for the for this calculation under the 'Settings' menu.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Our users will want to see this figure as close to zero as possible. The formula calculates the volume of products that store owner would sell if the item stayed in stock. By default, we take the average sales for the last seven days the item was in stock. We time the result by the number of days the item is out of stock.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock Indicator', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Very similar indicator to the default feature of WooCommerce. The user can see green, yellow or red icon according to the stock level of an item. Product with sufficient amount of stock will show a green icon. The yellow icon will mark any items running low in stock, and the red icon will indicate all the items that have the 'out of stock' status.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Very similar indicator to the default feature of WooCommerce. The user can see green, yellow or red icon according to the stock level of an item. Product with sufficient amount of stock will show a green icon. The yellow icon will mark any items running low in stock, and the red icon will indicate all the items that have the 'out of stock' status. We use the average sales for the past 7 days as default for calculation.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>

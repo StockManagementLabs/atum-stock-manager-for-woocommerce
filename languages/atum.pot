@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-03-20 20:16+0100\n"
+"POT-Creation-Date: 2017-03-21 18:08+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -788,17 +788,15 @@ msgstr ""
 #: views/help-tabs/stock-central-product-details.php:25
 msgid ""
 "The first twenty characters of the product name. Hover your mouse over the "
-"name to see the full content. (PRO users will be able to choose the amount "
-"of characters displayed. This option is editable in Settings)."
+"name to see the full content."
 msgstr ""
 
 #: views/help-tabs/stock-central-product-details.php:29
 msgid ""
-"An SKU, or Stock Keeping Unit, is a number assigned to a product by the "
-"store admin to identify the price, product options and manufacturer of the "
+"An SKU, or Stock Keeping Unit, is a code assigned to a product by the store "
+"admin to identify the price, product options and manufacturer of the "
 "merchandise. An SKU is used to track inventory in your retail store. They "
-"are critical in helping you maintain a profitable retail business. It is not "
-"necessary to use SKUs in the basic/free version of ATUM. However, we "
+"are critical in helping you maintain a profitable retail business. We "
 "recommend the introduction of SKUs in your store to take the full advantage "
 "of ATUM's features."
 msgstr ""
@@ -838,17 +836,15 @@ msgstr ""
 
 #: views/help-tabs/stock-central-stock-counters.php:21
 msgid ""
-"The current stock represents the amount of products available to order at "
-"the moment the stock central was last refreshed. This counter value equals "
-"the value shown in the 'Products' page of WooCommerce."
+"The current stock represents the number of products available to order "
+"(values update on the Stock Central refresh)."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-counters.php:25
 msgid ""
 "Inbound stock counter represents the volume of products that have been "
-"ordered in by the store admin or manager. Our Premium users will be able to "
-"add inbound stock manually using the 'Stock Logs' menu. PRO users will be "
-"able to add inbound stock using the 'Purchase Orders' plugin."
+"ordered in by the store admin or manager. You can add inbound stock manually "
+"using the 'Stock Logs' add-on."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-counters.php:29
@@ -863,12 +859,11 @@ msgstr ""
 
 #: views/help-tabs/stock-central-stock-counters.php:33
 msgid ""
-"There are times when the store owner needs to reserve or set aside small or "
-"significant amount of stock. Occasions like special events, customer "
-"reservations or quality checks will find this feature very handy. Premium "
-"and PRO users will take advantage of this feature by creating reserve logs "
-"in the 'Stock Logs' section. ATUM plugin will then automatically deduct the "
-"reserved stock value from the 'Current Stock' indicator."
+"There are times when the store owner needs to reserve or set aside a small "
+"or significant amount of stock. Occasions like special events, customer "
+"reservations or quality checks will find this feature very handy. Stock Logs "
+"add-on can automatically deduct the reserved stock value from the 'Current "
+"Stock' indicator."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-counters.php:37
@@ -892,9 +887,9 @@ msgstr ""
 
 #: views/help-tabs/stock-central-stock-negatives.php:21
 msgid ""
-" We don't think there is a store owner that wants to see products returning "
+"We don't think there is a store owner that wants to see products returning "
 "to the warehouse. However, in case there is an item coming back from the "
-"customer our Premium, and PRO users have the option to create a log entry in "
+"customer store owner can use the Stock Logs add-on to create a log entry in "
 "the 'Customer Returns' tab within the 'Stock Log' menu. Depending on the "
 "item condition, the ATUM plugin will then add the item back in for further "
 "sale or create an 'Unsellable Return' entry."
@@ -902,18 +897,18 @@ msgstr ""
 
 #: views/help-tabs/stock-central-stock-negatives.php:25
 msgid ""
-"In the unlikely event of a warehouse or in-house damages, the Premium, and "
-"PRO users have the option to create an entry under the 'Warehouse Damages' "
-"tab within the 'Stock Log' menu. The ATUM plugin will, per the log, remove "
-"the damaged stock from the product's stock value."
+"In the unlikely event of a warehouse or in-house damages, the Stock Logs add-"
+"on have the option to create an entry under the 'Warehouse Damages' tab "
+"within the 'Stock Log' menu. The ATUM plugin will, per the log, remove the "
+"damaged stock from the product's stock value."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-negatives.php:29
 msgid ""
-"Premium and PRO users can create a log entry under the 'Lost in Post' tab "
-"within the 'Stock Log' menu for all items that have gone missing on the "
-"route to the customer. This indicator helps to control the performance of "
-"postal carriers as well as the work of dispatch departments."
+"Stock Logs add-on can create a log entry under the 'Lost in Post' tab within "
+"the 'Stock Log' menu for all items that have gone missing on the route to "
+"the customer. This indicator helps to control the performance of postal "
+"carriers as well as the work of dispatch departments."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-selling-manager.php:21
@@ -932,11 +927,9 @@ msgstr ""
 
 #: views/help-tabs/stock-central-stock-selling-manager.php:29
 msgid ""
-"Feature that will tell the user the average amount of days that a product "
+"A feature that will tell the user the average amount of days that a product "
 "will keep 'in stock' status. By default, we base this indicator on sales for "
-"the past seven days (We do not include the current day sales). However, the "
-"Premium and PRO users will have the option to set the number of days under "
-"the 'Stock Central' tab within the 'Settings' menu."
+"the past seven days (We do not include the current day sales)."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-selling-manager.php:33
@@ -953,8 +946,7 @@ msgid ""
 "formula calculates the volume of products that store owner would sell if the "
 "item stayed in stock. By default, we take the average sales for the last "
 "seven days the item was in stock. We time the result by the number of days "
-"the item is out of stock. Premium and PRO users have the option to edit the "
-"number of days for the for this calculation under the 'Settings' menu."
+"the item is out of stock."
 msgstr ""
 
 #: views/help-tabs/stock-central-stock-selling-manager.php:41
@@ -963,7 +955,8 @@ msgid ""
 "see green, yellow or red icon according to the stock level of an item. "
 "Product with sufficient amount of stock will show a green icon. The yellow "
 "icon will mark any items running low in stock, and the red icon will "
-"indicate all the items that have the 'out of stock' status."
+"indicate all the items that have the 'out of stock' status. We use the "
+"average sales for the past 7 days as default for calculation."
 msgstr ""
 
 #: views/settings-page.php:15
