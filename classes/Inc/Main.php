@@ -238,7 +238,7 @@ class Main {
 			<script type="text/javascript">
 				(function ($) {
 					var $manageStockField = $('._manage_stock_field');
-					$manageStockField.find('.checkbox').prop({'checked': true, 'readonly': true})
+					$manageStockField.find('.checkbox').prop({'checked': true, 'readonly': true}).css('pointer-events', 'none')
 						.siblings('.description').html('<strong>**<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>**</strong>');
 
 					$manageStockField.children().click(function(e) {
