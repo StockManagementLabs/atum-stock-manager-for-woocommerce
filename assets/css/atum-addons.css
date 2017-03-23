@@ -125,6 +125,14 @@
   opacity: 0 !important;
 }
 
+.atum-addons .theme:hover .theme-screenshot:hover .addon-details {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -o-transform: translateY(0);
+  -ms-transform: translateY(0);
+  transform: translateY(0);
+}
+
 .atum-addons .theme:hover .theme-screenshot:hover .more-details {
   opacity: 1 !important;
 }
@@ -170,6 +178,58 @@
   -webkit-transition: opacity 0.3s ease-in-out;
   -o-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
+}
+
+.atum-addons .theme .addon-details {
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  color: #FFF;
+  padding: 10px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  transform: translateY(-100%);
+  -webkit-transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  -o-transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.atum-addons .theme .addon-details > p {
+  height: 65%;
+  overflow: hidden;
+}
+
+.atum-addons .theme .addon-details .more-details {
+  position: static;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition-delay: 0.2s;
+  transition-delay: 0.2s;
+  display: block;
 }
 
 .atum-addons .theme .addon-key {

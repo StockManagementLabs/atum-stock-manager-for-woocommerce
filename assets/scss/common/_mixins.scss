@@ -24,6 +24,11 @@
 	transition: $transition;
 }
 
+@mixin transition-delay($transition-delay) {
+	-webkit-transition-delay: $transition-delay;
+	transition-delay: $transition-delay;
+}
+
 @mixin keyframes($animationName) {
 	@-webkit-keyframes #{$animationName} {
 		$browser: '-webkit-' !global;

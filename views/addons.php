@@ -24,7 +24,9 @@ use Atum\Addons\Addons;
 			<div class="themes wp-clearfix">
 				<?php foreach ($addons as $addon):
 
-					$addon_status = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] ); ?>
+					$addon_status = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] );
+					$more_details_link = '<a class="more-details" href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
+					?>
 
 					<div class="theme <?php if ($addon_status['installed'] && $addon_status['status'] == 'valid') echo 'active' ?>" data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
 
@@ -34,7 +36,16 @@ use Atum\Addons\Addons;
 						<div class="theme-screenshot blank">
 						<?php endif ?>
 
-							<a class="more-details" href="<?php echo $addon['info']['link'] ?>" target="_blank"><?php _e( 'Add-on Details', ATUM_TEXT_DOMAIN ); ?></a>
+							<?php if ( ! empty( $addon['info']['excerpt'] ) ): ?>
+							<div class="addon-details">
+								<p><?php echo $addon['info']['excerpt'] ?></p>
+
+								<?php echo $more_details_link ?>
+							</div>
+							<?php else:
+								echo $more_details_link;
+							endif ?>
+
 						</div>
 
 						<h2 class="theme-name">

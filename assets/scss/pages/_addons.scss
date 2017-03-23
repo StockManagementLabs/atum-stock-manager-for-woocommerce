@@ -86,6 +86,10 @@
 			
 			.theme-screenshot {
 				&:hover {
+					.addon-details {
+						@include transform(translateY(0));
+					}
+					
 					.more-details {
 						opacity: 1 !important;
 					}
@@ -127,6 +131,33 @@
 			top: 50%;
 			@include transform(translateY(-50%));
 			@include transition(opacity 0.3s ease-in-out);
+		}
+		
+		.addon-details {
+			top: 0;
+			bottom: 0;
+			background-color: rgba(#000, 0.7);
+			position: absolute;
+			color: #FFF;
+			padding: 10px;
+			@include flexbox;
+			@include flex-wrap(wrap);
+			@include flex-justify-content(center);
+			@include flex-align-items(center);
+			@include transform(translateY(-100%));
+			@include transition(transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955));
+			
+			> p {
+				height: 65%;
+				overflow: hidden;
+			}
+			
+			.more-details {
+				position: static;
+				@include transform(none);
+				@include transition-delay(0.2s);
+				display: block;
+			}
 		}
 		
 		.addon-key {
