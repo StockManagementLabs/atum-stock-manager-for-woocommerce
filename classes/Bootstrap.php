@@ -157,7 +157,7 @@ class Bootstrap {
 		
 		if ( ! empty($this->admin_message ) ) {
 			
-			$plugin_data = get_plugin_data(ATUM_PATH . 'atum.php');
+			$plugin_data = get_plugin_data(ATUM_PATH . 'atum-stock-manager-for-woocommerce.php');
 			$plugin_name = (! empty($plugin_data['Name']) ) ? $plugin_data['Name'] : ucfirst(ATUM_TEXT_DOMAIN);
 			?>
 			<div class="error fade">
