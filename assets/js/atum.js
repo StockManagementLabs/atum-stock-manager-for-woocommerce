@@ -334,56 +334,7 @@
 					
 					// Set meta value for listed products
 					$('.set-meta').each(function() {
-						
-						var $metaCell         = $(this),
-						    symbol            = $metaCell.data('symbol') || '',
-						    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase(),
-						    inputType         = $metaCell.data('input-type') || 'number',
-						    inputAtts         = {
-							    type : $metaCell.data('input-type') || 'number',
-							    value: $metaCell.text().replace(symbol, '').replace('—', ''),
-							    class: 'meta-value'
-						    };
-						
-						if (inputType === 'number') {
-							inputAtts.min = '0';
-							// Allow decimals only for the pricing fields for now
-							inputAtts.step = (symbol) ? '0.1' : '1';
-						}
-						
-						
-						var $input       = $('<input />', inputAtts),
-						    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: atumListTable.setButton}),
-						    extraMeta    = $metaCell.data('extra-meta'),
-						    $extraFields = '',
-							popoverClass = '';
-						
-						// Check whether to add extra fields to the popover
-						if (typeof extraMeta !== 'undefined') {
-							
-							popoverClass = ' with-meta';
-							$extraFields = $('<hr>');
-							
-							$.each(extraMeta, function(index, metaAtts) {
-								$extraFields = $extraFields.add($('<input />', metaAtts));
-							});
-							
-						}
-						
-						var $content = ($extraFields.length) ? $input.add($extraFields).add($setButton) : $input.add($setButton);
-						
-						// Create the meta edit popover
-						$metaCell.popover({
-							title    : atumListTable.setValue.replace('%%', currentColumnText),
-							content  : $content,
-							html     : true,
-							template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
-									   '<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-							placement: 'bottom',
-							trigger  : 'click',
-							container: 'body'
-						});
-						
+						self.bindPopover($(this));
 					});
 					
 					// Focus on the input field
@@ -395,10 +346,16 @@
 					// Hide other popovers
 					$listWrapper.click( function(e) {
 						
+						//debugger;
 						var $target = $(e.target),
 						    $selector = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
 						
-						$selector.popover('hide');
+						$selector = $selector.filter('[aria-describedby]');
+						
+						if ($selector.length) {
+							$selector.filter('[aria-describedby]').popover('destroy');
+							self.bindPopover($selector);
+						}
 						
 					});
 					
@@ -468,28 +425,85 @@
 				},
 				
 				/**
+				 * Bind the edit column popovers
+				 */
+				bindPopover: function($metaCell) {
+					
+					var symbol            = $metaCell.data('symbol') || '',
+					    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase(),
+					    inputType         = $metaCell.data('input-type') || 'number',
+					    inputAtts         = {
+						    type : $metaCell.data('input-type') || 'number',
+						    value: $metaCell.text().replace(symbol, '').replace('—', ''),
+						    class: 'meta-value'
+					    };
+					
+					if (inputType === 'number') {
+						inputAtts.min = '0';
+						// Allow decimals only for the pricing fields for now
+						inputAtts.step = (symbol) ? '0.1' : '1';
+					}
+					
+					
+					var $input       = $('<input />', inputAtts),
+					    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: atumListTable.setButton}),
+					    extraMeta    = $metaCell.data('extra-meta'),
+					    $extraFields = '',
+					    popoverClass = '';
+					
+					// Check whether to add extra fields to the popover
+					if (typeof extraMeta !== 'undefined') {
+						
+						popoverClass = ' with-meta';
+						$extraFields = $('<hr>');
+						
+						$.each(extraMeta, function(index, metaAtts) {
+							$extraFields = $extraFields.add($('<input />', metaAtts));
+						});
+						
+					}
+					
+					var $content = ($extraFields.length) ? $input.add($extraFields).add($setButton) : $input.add($setButton);
+					
+					// Create the meta edit popover
+					$metaCell.popover({
+						title    : atumListTable.setValue.replace('%%', currentColumnText),
+						content  : $content,
+						html     : true,
+						template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
+						'<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+						placement: 'bottom',
+						trigger  : 'click',
+						container: 'body'
+					});
+					
+				},
+				
+				/**
 				 * Add the jQuery UI datepicker to input fields
 				 */
 				setDatePickers: function() {
 				
-					var $datepickers = $('.datepicker').datepicker({
-						defaultDate: '',
-						dateFormat: 'yy-mm-dd',
-						numberOfMonths: 1,
-						showButtonPanel: true,
-						onSelect: function( selectedDate ) {
-							
-							var $this = $(this);
-							if ($this.hasClass('from') || $this.hasClass('to')) {
-								var option = $this.hasClass('from') ? 'minDate' : 'maxDate',
-									instance = $this.data('datepicker'),
-									date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+					if (typeof $.fn.datepicker !== 'undefined') {
+						var $datepickers = $('.datepicker').datepicker({
+							defaultDate    : '',
+							dateFormat     : 'yy-mm-dd',
+							numberOfMonths : 1,
+							showButtonPanel: true,
+							onSelect       : function (selectedDate) {
 								
-								$datepickers.not(this).datepicker('option', option, date);
+								var $this = $(this);
+								if ($this.hasClass('from') || $this.hasClass('to')) {
+									var option   = $this.hasClass('from') ? 'minDate' : 'maxDate',
+									    instance = $this.data('datepicker'),
+									    date     = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+									
+									$datepickers.not(this).datepicker('option', option, date);
+								}
+								
 							}
-							
-						}
-					});
+						});
+					}
 					
 				},
 				
