@@ -428,6 +428,7 @@
 
 .atum-list-table td {
   vertical-align: middle;
+  padding: 6px 5px;
 }
 
 .atum-list-table td.pro-version {
