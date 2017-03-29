@@ -131,7 +131,7 @@ class ListTable extends AtumListTable {
 			'calc_sales7'          => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
 			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'  => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_sold_lost_sales' => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'calc_lost_sales' => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
 			'calc_stock_indicator' => __( 'Stock Indicator', ATUM_TEXT_DOMAIN ),
 		);
 		
@@ -163,7 +163,7 @@ class ListTable extends AtumListTable {
 					'calc_sales7',
 					'calc_will_last',
 					'calc_stock_out_days',
-					'calc_sold_lost_sales',
+					'calc_lost_sales',
 					'calc_stock_indicator'
 				)
 			),
@@ -905,6 +905,45 @@ class ListTable extends AtumListTable {
 		
 		return '&mdash;';
 		
+	}
+
+	/**
+	 * Column for lost sales
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int|string
+	 */
+	protected function column_calc_lost_sales( $item ) {
+
+		if ($this->allow_calcs) {
+
+			$out_of_stock_date = get_post_meta( $item->ID, Globals::get_out_of_stock_date_key(), TRUE );
+
+			if ($out_of_stock_date) {
+
+				$days_out_of_stock = $this->column_calc_stock_out_days($item);
+
+				if ( is_numeric( $days_out_of_stock ) ) {
+
+					// Get the average sales for the past 7 days when in stock
+					$average_date_start = Helpers::date_format( $out_of_stock_date . ' -1 week' );
+					$total_sales = $this->get_sold_last_days( array($item->ID), $average_date_start, $out_of_stock_date);
+					$average_seven_days = ($total_sales) ? $total_sales / 7 : 0;
+
+					$price = $this->product->get_regular_price();
+
+					return $days_out_of_stock * $average_seven_days * $price;
+				}
+
+			}
+
+		}
+
+		return '&mdash;';
+
 	}
 	
 	/**
