@@ -430,7 +430,7 @@
 				bindPopover: function($metaCell) {
 					
 					var symbol            = $metaCell.data('symbol') || '',
-					    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text().toLowerCase(),
+					    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text(),
 					    inputType         = $metaCell.data('input-type') || 'number',
 					    inputAtts         = {
 						    type : $metaCell.data('input-type') || 'number',
