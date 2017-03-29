@@ -57,6 +57,9 @@ class Main {
 			
 			// Add the menus
 			add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
+
+			// Add the ATUM menu to admin bar
+			add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
 			
 			// Load dependencies
 			add_action( 'init', array( $this, 'admin_load' ) );
@@ -188,6 +191,23 @@ class Main {
 			);
 		}
 		
+	}
+
+	/**
+	 * Add theme options menu item to Admin Bar
+	 *
+	 * @since 1.2.0
+	 */
+	public function add_admin_bar_menu() {
+
+		global $wp_admin_bar;
+
+		$wp_admin_bar->add_node( array(
+			'id' => Globals::ATUM_UI_SLUG,
+			'title' => '<span class="ab-icon dashicons-chart-area"></span><span class="ab-label">' . __('ATUM Stock', ATUM_TEXT_DOMAIN) . '</span>',
+			'href' => admin_url( 'admin.php?page=' . Globals::ATUM_UI_SLUG )
+		));
+
 	}
 	
 	/**
