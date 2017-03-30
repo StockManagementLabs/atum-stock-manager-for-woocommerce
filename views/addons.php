@@ -26,6 +26,7 @@ use Atum\Addons\Addons;
 
 					$addon_status = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] );
 					$more_details_link = '<a class="more-details" href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
+					$is_coming_soon_addon = $addon['info']['coming_soon'];
 					?>
 
 					<div class="theme <?php if ($addon_status['installed'] && $addon_status['status'] == 'valid') echo 'active' ?>" data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
@@ -52,8 +53,13 @@ use Atum\Addons\Addons;
 
 							<?php echo $addon['info']['title'] ?>
 
-							<div class="theme-actions <?php echo ($addon_status['key']) ? $addon_status['status'] : 'no-key' ?><?php if($addon_status['status'] == 'valid' && !$addon_status['installed']) echo ' not-installed' ?>">
-								<?php if ( $addon_status['status'] == 'valid' ): ?>
+							<div class="theme-actions <?php echo ($addon_status['key']) ? $addon_status['status'] : 'no-key' ?>
+								<?php if($addon_status['status'] == 'valid' && !$addon_status['installed']) echo ' not-installed' ?>
+								<?php if($is_coming_soon_addon) echo ' coming-soon' ?>">
+
+								<?php if ($is_coming_soon_addon): ?>
+									<span><?php _e('coming soon', ATUM_TEXT_DOMAIN) ?></span>
+								<?php elseif ( $addon_status['status'] == 'valid' ): ?>
 
 									<?php if ( ! $addon_status['installed'] ): ?>
 										<button type="button" title="<?php esc_attr_e('Click to install', ATUM_TEXT_DOMAIN) ?>" class="button install-addon"><?php _e('Install', ATUM_TEXT_DOMAIN) ?></button>
@@ -68,18 +74,22 @@ use Atum\Addons\Addons;
 								<?php endif ?>
 							</div>
 
+							<?php if (!$is_coming_soon_addon): ?>
 							<div class="show-key" title="<?php _e('Show/Hide the license key', ATUM_TEXT_DOMAIN) ?>">
 								<i class="dashicons dashicons-admin-network"></i>
 							</div>
+							<?php endif ?>
 
 						</h2>
 
+						<?php if (!$is_coming_soon_addon): ?>
 						<div class="addon-key">
 							<div class="wrapper">
 								<input type="text" autocomplete="false" spellcheck="false" class="<?php if ($addon_status['key']) echo $addon_status['status'] ?>" value="<?php echo $addon_status['key'] ?>" placeholder="<?php _e('Enter the addon license key...', ATUM_TEXT_DOMAIN) ?>">
 								<button type="button" class="button <?php echo $addon_status['button_class'] ?>" data-action="<?php echo $addon_status['button_action'] ?>"><?php echo $addon_status['button_text'] ?></button>
 							</div>
 						</div>
+						<?php endif ?>
 
 					</div>
 

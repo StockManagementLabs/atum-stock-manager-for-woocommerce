@@ -71,6 +71,11 @@
 				background-color: transparent;
 			}
 			
+			&.coming-soon {
+				background-color: lighten($brand-primary, 10%);
+				right: 0;
+			}
+			
 		}
 		
 		&:hover {
