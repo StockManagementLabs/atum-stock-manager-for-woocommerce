@@ -39,7 +39,7 @@
 			height: 39px;
 			right: 27px;
 			
-			&.valid, &.invalid, &.inactive {
+			&.valid, &.invalid, &.inactive, &.coming-soon {
 				opacity: 1;
 				
 				span {
@@ -80,7 +80,7 @@
 		
 		&:hover {
 			.theme-actions {
-				&.no-key {
+				&.no-key:not(.coming-soon) {
 					display: none;
 				}
 			}

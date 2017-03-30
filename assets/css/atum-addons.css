@@ -89,11 +89,11 @@
   right: 27px;
 }
 
-.atum-addons .theme .theme-actions.valid, .atum-addons .theme .theme-actions.invalid, .atum-addons .theme .theme-actions.inactive {
+.atum-addons .theme .theme-actions.valid, .atum-addons .theme .theme-actions.invalid, .atum-addons .theme .theme-actions.inactive, .atum-addons .theme .theme-actions.coming-soon {
   opacity: 1;
 }
 
-.atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span {
+.atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span, .atum-addons .theme .theme-actions.coming-soon span {
   display: inline-block;
   margin-top: 7px;
   font-size: 12px;
@@ -122,7 +122,7 @@
   right: 0;
 }
 
-.atum-addons .theme:hover .theme-actions.no-key {
+.atum-addons .theme:hover .theme-actions.no-key:not(.coming-soon) {
   display: none;
 }
 
