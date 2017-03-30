@@ -748,7 +748,7 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_hold', $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_stock_hold', $column_item, $item, $this->product );
 	}
 	
 	/**
@@ -823,7 +823,7 @@ class ListTable extends AtumListTable {
 			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_7'];
 		}
 		
-		return apply_filters( "atum/stock_central_list/column_sold_last_7_days", $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $column_item, $item, $this->product );
 		
 	}
 	
@@ -845,7 +845,7 @@ class ListTable extends AtumListTable {
 			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_14'];
 		}
 		
-		return apply_filters( "atum/stock_central_list/column_sold_last_14_days", $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $column_item, $item, $this->product );
 		
 	}
 	
@@ -891,7 +891,10 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_stock_out_days( $item ) {
 
+		$out_of_stock_days = '&mdash;';
+
 		if ($this->allow_calcs) {
+
 			// Check if the current product has the "Out of stock" date recorded
 			$out_of_stock_date = get_post_meta( $item->ID, Globals::get_out_of_stock_date_key(), TRUE );
 			if ( $out_of_stock_date ) {
@@ -899,11 +902,12 @@ class ListTable extends AtumListTable {
 				$now_date_time = new \DateTime( 'now' );
 				$interval      = date_diff( $out_date_time, $now_date_time );
 
-				return $interval->days;
+				$out_of_stock_days = $interval->days;
 			}
+
 		}
 		
-		return '&mdash;';
+		return apply_filters( 'atum/stock_central_list/column_stock_out_days', $out_of_stock_days, $item, $this->product );
 		
 	}
 
@@ -917,6 +921,8 @@ class ListTable extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_lost_sales( $item ) {
+
+		$lost_sales = '&mdash;';
 
 		if ($this->allow_calcs) {
 
@@ -935,14 +941,14 @@ class ListTable extends AtumListTable {
 
 					$price = $this->product->get_regular_price();
 
-					return $days_out_of_stock * $average_seven_days * $price;
+					$lost_sales = $this->format_price( $days_out_of_stock * $average_seven_days * $price );
 				}
 
 			}
 
 		}
 
-		return '&mdash;';
+		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product );
 
 	}
 	
