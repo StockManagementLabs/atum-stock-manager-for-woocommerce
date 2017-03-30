@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-03-21 18:08+0100\n"
+"POT-Creation-Date: 2017-03-30 19:39+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -115,8 +115,8 @@ msgstr ""
 
 #: classes/Addons/Addons.php:626 classes/Addons/Addons.php:632
 #: classes/Bootstrap.php:181 classes/Bootstrap.php:186 classes/Inc/Ajax.php:518
-#: classes/Inc/Ajax.php:524 classes/Inc/Main.php:548 classes/Inc/Main.php:554
-#: classes/Settings/Settings.php:442 classes/Settings/Settings.php:448
+#: classes/Inc/Ajax.php:524 classes/Inc/Main.php:627 classes/Inc/Main.php:633
+#: classes/Settings/Settings.php:450 classes/Settings/Settings.php:456
 #: classes/StockCentral/StockCentral.php:164
 #: classes/StockCentral/StockCentral.php:170
 msgid "Cheatin&#8217; huh?"
@@ -308,86 +308,99 @@ msgid ""
 "%sopen a support ticket%s to request the deactivation."
 msgstr ""
 
-#: classes/Inc/Main.php:145 classes/Inc/Main.php:146 classes/Inc/Main.php:156
-#: classes/Settings/Settings.php:90 views/stock-central.php:11
+#: classes/Inc/Main.php:126 classes/Inc/Main.php:184
+#: classes/Settings/Settings.php:91 views/stock-central.php:11
 msgid "Stock Central"
 msgstr ""
 
-#: classes/Inc/Main.php:161
+#: classes/Inc/Main.php:131
 msgid "Settings"
 msgstr ""
 
-#: classes/Inc/Main.php:166
+#: classes/Inc/Main.php:136
 msgid "Add-ons"
 msgstr ""
 
-#: classes/Inc/Main.php:242 classes/Inc/Main.php:269
+#: classes/Inc/Main.php:185
+msgid "ATUM Inventory"
+msgstr ""
+
+#: classes/Inc/Main.php:321 classes/Inc/Main.php:348
 msgid "The stock is currently managed by ATUM plugin"
 msgstr ""
 
-#: classes/Inc/Main.php:414 classes/Inc/Main.php:423
+#: classes/Inc/Main.php:493 classes/Inc/Main.php:502
 msgid "Purchase price"
 msgstr ""
 
-#: classes/Inc/Main.php:476
+#: classes/Inc/Main.php:555
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Main.php:477
+#: classes/Inc/Main.php:556
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Main.php:487
+#: classes/Inc/Main.php:566
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Main.php:488
+#: classes/Inc/Main.php:567
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Inc/Main.php:522
+#: classes/Inc/Main.php:601
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%s rating. A huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Main.php:522
+#: classes/Inc/Main.php:601
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Main.php:532
+#: classes/Inc/Main.php:611
 msgid ""
 "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
-#: classes/Settings/Settings.php:84 classes/StockCentral/StockCentral.php:83
+#: classes/Settings/Settings.php:85 classes/StockCentral/StockCentral.php:83
 msgid "General"
 msgstr ""
 
-#: classes/Settings/Settings.php:86
+#: classes/Settings/Settings.php:87
 msgid "General Options"
 msgstr ""
 
-#: classes/Settings/Settings.php:92
+#: classes/Settings/Settings.php:93
 msgid "Stock Central Options"
 msgstr ""
 
-#: classes/Settings/Settings.php:100
+#: classes/Settings/Settings.php:101
 msgid "Enable Filter Autosearch"
 msgstr ""
 
-#: classes/Settings/Settings.php:101
+#: classes/Settings/Settings.php:102
 msgid ""
 "When enabled, the manual search button disappears. Disable this function if "
 "you don't use or find the automatic search feature helpful."
 msgstr ""
 
-#: classes/Settings/Settings.php:107
+#: classes/Settings/Settings.php:108
+msgid "Enable Admin Bar menu"
+msgstr ""
+
+#: classes/Settings/Settings.php:109
+msgid ""
+"When enabled, the ATUM menu will be accessible through the WP admin bar."
+msgstr ""
+
+#: classes/Settings/Settings.php:115
 msgid "Products per Page"
 msgstr ""
 
-#: classes/Settings/Settings.php:108
+#: classes/Settings/Settings.php:116
 msgid ""
 "Controls the number of products displayed per page within the Stock Central "
 "screen. Please note, you can set this value within the 'Screen Options' tab "
@@ -396,41 +409,41 @@ msgid ""
 "of products as it may affect the performance)."
 msgstr ""
 
-#: classes/Settings/Settings.php:114
+#: classes/Settings/Settings.php:122
 msgid "Manage Stock"
 msgstr ""
 
-#: classes/Settings/Settings.php:115
+#: classes/Settings/Settings.php:123
 msgid ""
 "Activate this option to override all WooCommerce inventory configurations."
 msgstr ""
 
-#: classes/Settings/Settings.php:121
+#: classes/Settings/Settings.php:129
 msgid "Days to Re-Order"
 msgstr ""
 
-#: classes/Settings/Settings.php:122
+#: classes/Settings/Settings.php:130
 msgid ""
 "This value sets the number of days a user needs to replenish the stock "
 "levels. It controls the 'Low Stock' indicator within the 'Stock Central' "
 "page."
 msgstr ""
 
-#: classes/Settings/Settings.php:199
+#: classes/Settings/Settings.php:207
 msgid ""
 "Would you want to restore the 'Manage Stock' status of all products to their "
 "original state?"
 msgstr ""
 
-#: classes/Settings/Settings.php:200
+#: classes/Settings/Settings.php:208
 msgid "<p>Select 'NO' to keep all the products in the current state.</p>"
 msgstr ""
 
-#: classes/Settings/Settings.php:201
+#: classes/Settings/Settings.php:209
 msgid "Yes, restore them"
 msgstr ""
 
-#: classes/Settings/Settings.php:202
+#: classes/Settings/Settings.php:210
 msgid "No, keep them"
 msgstr ""
 
@@ -659,20 +672,20 @@ msgstr ""
 msgid "Click to edit the stock quantity"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:1365
+#: classes/StockCentral/Inc/ListTable.php:1410
 msgid ""
 "Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this "
 "great plugin."
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:1366
+#: classes/StockCentral/Inc/ListTable.php:1411
 msgid ""
 "We have disabled some inactive columns by default as these are only "
 "available for future upgrades or our Premium and PRO users. If you'd like to "
 "preview them, please, use the Screen Options in the top corner."
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:1367
+#: classes/StockCentral/Inc/ListTable.php:1412
 msgid "Thank you very much for using ATUM as your inventory manager."
 msgstr ""
 
@@ -688,35 +701,39 @@ msgstr ""
 msgid "Visit Add-ons Store"
 msgstr ""
 
-#: views/addons.php:37
+#: views/addons.php:28
 msgid "Add-on Details"
 msgstr ""
 
-#: views/addons.php:48
+#: views/addons.php:61
+msgid "coming soon"
+msgstr ""
+
+#: views/addons.php:65
 msgid "Click to install"
 msgstr ""
 
-#: views/addons.php:48
+#: views/addons.php:65
 msgid "Install"
 msgstr ""
 
-#: views/addons.php:50
+#: views/addons.php:67
 msgid "installed"
 msgstr ""
 
-#: views/addons.php:54
+#: views/addons.php:71
 msgid "inactive key"
 msgstr ""
 
-#: views/addons.php:56
+#: views/addons.php:73
 msgid "invalid key"
 msgstr ""
 
-#: views/addons.php:60
+#: views/addons.php:78
 msgid "Show/Hide the license key"
 msgstr ""
 
-#: views/addons.php:68
+#: views/addons.php:88
 msgid "Enter the addon license key..."
 msgstr ""
 
@@ -731,7 +748,7 @@ msgstr ""
 #: views/help-tabs/stock-central-general.php:13
 msgid ""
 "We are glad you have chosen the ATUM plugin to take your business to the "
-"next level. Within the screen bellow, you can see the current version of our "
+"next level. Within the screen below, you can see the current version of our "
 "Stock Central with some essential tools and indicators. This help menu will "
 "inform you about the functions of all individual columns. If you come across "
 "anything, you'd like to explain, have a question or suggestion, do not "
@@ -739,13 +756,6 @@ msgid ""
 msgstr ""
 
 #: views/help-tabs/stock-central-general.php:14
-msgid ""
-"Our team is working hard on the development of the Premium and PRO version, "
-"so if you feel your business has outgrown the basic features follow the 'Go "
-"Premium or PRO!' link on this page."
-msgstr ""
-
-#: views/help-tabs/stock-central-general.php:15
 msgid ""
 "For the whole Stock Management Labs™ team, we wish you a successful and "
 "profitable growth."
