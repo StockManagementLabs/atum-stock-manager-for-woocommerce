@@ -27,6 +27,12 @@ class Main {
 	 * @var Main
 	 */
 	private static $instance;
+
+	/**
+	 * The ATUM menu items
+	 * @var array
+	 */
+	private $menu_items = array();
 	
 	/**
 	 * The Settings page object
@@ -57,9 +63,6 @@ class Main {
 			
 			// Add the menus
 			add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
-
-			// Add the ATUM menu to admin bar
-			add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
 			
 			// Load dependencies
 			add_action( 'init', array( $this, 'admin_load' ) );
@@ -88,6 +91,12 @@ class Main {
 			
 		}
 
+		// Load front stuff
+		add_action( 'init', array($this, 'load'), 11 );
+
+		// Add the ATUM menu to admin bar
+		add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
+
 		// Load ATUM add-ons
 		add_action( 'setup_theme', array( $this, 'load_addons' ) );
 		
@@ -103,6 +112,33 @@ class Main {
 	 */
 	public function load_addons () {
 		$this->ad_obj = Addons::get_instance();
+	}
+
+	/**
+	 * Initialize the front stuff
+	 *
+	 * @since 1.2.0
+	 */
+	public function load() {
+
+		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array(
+			'stock-central'   => array(
+				'title'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
+				'callback' => array( $this->sc_obj, 'display' ),
+				'slug'     => Globals::ATUM_UI_SLUG
+			),
+			'settings'        => array(
+				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
+				'callback' => array( $this->sp_obj, 'display' ),
+				'slug'     => 'settings'
+			),
+			'addons'  => array(
+				'title' => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
+				'callback' => array( $this->ad_obj, 'load_addons_page' ),
+				'slug'     => 'addons'
+			)
+		) );
+
 	}
 	
 	/**
@@ -146,49 +182,39 @@ class Main {
 		// Add the main menu item
 		add_menu_page(
 			__( 'Stock Central', ATUM_TEXT_DOMAIN ),
-			__( 'Stock Central', ATUM_TEXT_DOMAIN ),
+			__( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 			'manage_woocommerce',
 			Globals::ATUM_UI_SLUG,
 			'',
 			'dashicons-chart-area',
 			58 // Add the menu just after the WC Products
 		);
-		
-		$menu_items = apply_filters( 'atum/admin/menu_items', array(
-			'stock-central'   => array(
-				'title'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->sc_obj, 'display' ),
-				'slug'     => Globals::ATUM_UI_SLUG
-			),
-			'settings'        => array(
-				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->sp_obj, 'display' ),
-				'slug'     => 'settings'
-			),
-			'addons'  => array(
-				'title' => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->ad_obj, 'load_addons_page' ),
-				'slug'     => 'addons'
-			)
-		) );
+
+		// Overwrite the main menu item hook name set by add_menu_page to avoid conflicts with translations
+		global $admin_page_hooks;
+		$admin_page_hooks[Globals::ATUM_UI_SLUG] = Globals::ATUM_UI_HOOK;
 		
 		// Build the submenu items
-		foreach ( $menu_items as $key => $menu_item ) {
-			
-			$slug = $menu_item['slug'];
-			
-			if ( strpos( $slug, ATUM_TEXT_DOMAIN ) === FALSE ) {
-				$slug = ATUM_TEXT_DOMAIN . "-$slug";
+		if ( ! empty($this->menu_items) ) {
+
+			foreach ( $this->menu_items as $key => $menu_item ) {
+
+				$slug = $menu_item['slug'];
+
+				if ( strpos( $slug, ATUM_TEXT_DOMAIN ) === FALSE ) {
+					$slug = ATUM_TEXT_DOMAIN . "-$slug";
+				}
+
+				add_submenu_page(
+					Globals::ATUM_UI_SLUG,
+					$menu_item['title'],
+					$menu_item['title'],
+					'manage_woocommerce',
+					$slug,
+					$menu_item['callback']
+				);
 			}
-			
-			add_submenu_page(
-				Globals::ATUM_UI_SLUG,
-				$menu_item['title'],
-				$menu_item['title'],
-				'manage_woocommerce',
-				$slug,
-				$menu_item['callback']
-			);
+
 		}
 		
 	}
@@ -200,13 +226,46 @@ class Main {
 	 */
 	public function add_admin_bar_menu() {
 
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		if ( Helpers::get_option( 'enable_admin_bar_menu', 'yes' ) != 'yes' ) {
+			return;
+		}
+
 		global $wp_admin_bar;
 
+		// Add the main menu item
 		$wp_admin_bar->add_node( array(
 			'id' => Globals::ATUM_UI_SLUG,
-			'title' => '<span class="ab-icon dashicons-chart-area"></span><span class="ab-label">' . __('ATUM Stock', ATUM_TEXT_DOMAIN) . '</span>',
+			'title' => '<span class="ab-icon dashicons-chart-area"></span><span class="ab-label">ATUM</span>',
 			'href' => admin_url( 'admin.php?page=' . Globals::ATUM_UI_SLUG )
-		));
+		) );
+
+		$submenu_items = (array) apply_filters('atum/admin/top_bar/menu_items', $this->menu_items);
+
+		// Build the submenu items
+		if ( ! empty($submenu_items) ) {
+
+			foreach ( $submenu_items as $key => $menu_item ) {
+
+				$slug = $menu_item['slug'];
+
+				if ( strpos( $slug, ATUM_TEXT_DOMAIN ) === FALSE ) {
+					$slug = ATUM_TEXT_DOMAIN . "-$slug";
+				}
+
+				$wp_admin_bar->add_node( array(
+					'id'     => "$slug-item",
+					'parent' => Globals::ATUM_UI_SLUG,
+					'title'  => $menu_item['title'],
+					'href'   => admin_url( "admin.php?page=$slug" )
+				) );
+
+			}
+
+		}
 
 	}
 	

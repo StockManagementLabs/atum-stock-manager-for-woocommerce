@@ -35,6 +35,11 @@ final class Globals {
 	 */
 	const ATUM_UI_SLUG = 'atum-stock-central';
 
+	/**
+	 * The ATUM pages hook name
+	 */
+	const ATUM_UI_HOOK = 'atum-inventory';
+
 	
 	/**
 	 * Getter for the $out_of_stock_date_key property

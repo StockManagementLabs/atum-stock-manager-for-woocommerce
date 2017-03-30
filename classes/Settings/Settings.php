@@ -14,6 +14,7 @@ namespace Atum\Settings;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
 
@@ -102,6 +103,13 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
+			'enable_admin_bar_menu' => array(
+				'section' => 'general',
+				'name'    => __( 'Enable Admin Bar menu', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, the ATUM menu will be accessible through the WP admin bar.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes'
+			),
 			'posts_per_page'     => array(
 				'section' => 'stock_central',
 				'name'    => __( 'Products per Page', ATUM_TEXT_DOMAIN ),
@@ -182,7 +190,7 @@ class Settings {
 	 */
 	public function enqueue_scripts( $hook ) {
 		
-		if ( $hook == 'stock-central_page_atum-settings' ) {
+		if ( $hook == Globals::ATUM_UI_HOOK . '_page_atum-settings' ) {
 			
 			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
