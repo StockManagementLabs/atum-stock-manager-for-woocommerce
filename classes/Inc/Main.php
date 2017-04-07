@@ -186,7 +186,7 @@ class Main {
 			'manage_woocommerce',
 			Globals::ATUM_UI_SLUG,
 			'',
-			'dashicons-chart-area',
+			ATUM_URL . 'assets/images/atum-icon.svg',
 			58 // Add the menu just after the WC Products
 		);
 
@@ -239,7 +239,7 @@ class Main {
 		// Add the main menu item
 		$wp_admin_bar->add_node( array(
 			'id' => Globals::ATUM_UI_SLUG,
-			'title' => '<span class="ab-icon dashicons-chart-area"></span><span class="ab-label">ATUM</span>',
+			'title' => '<span class="ab-icon"><img src="' . ATUM_URL . 'assets/images/atum-icon.svg" style="padding-top: 2px"></span><span class="ab-label">ATUM</span>',
 			'href' => admin_url( 'admin.php?page=' . Globals::ATUM_UI_SLUG )
 		) );
 

@@ -210,11 +210,11 @@
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
-  -webkit-transform: translateY(-100%);
-  -moz-transform: translateY(-100%);
-  -o-transform: translateY(-100%);
-  -ms-transform: translateY(-100%);
-  transform: translateY(-100%);
+  -webkit-transform: translateY(-101%);
+  -moz-transform: translateY(-101%);
+  -o-transform: translateY(-101%);
+  -ms-transform: translateY(-101%);
+  transform: translateY(-101%);
   -webkit-transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   -o-transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);

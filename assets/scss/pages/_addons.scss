@@ -149,7 +149,7 @@
 			@include flex-wrap(wrap);
 			@include flex-justify-content(center);
 			@include flex-align-items(center);
-			@include transform(translateY(-100%));
+			@include transform(translateY(-101%));
 			@include transition(transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955));
 			
 			> p {
