@@ -444,7 +444,12 @@
 }
 
 .atum-list-table .column-calc_type .wc-type {
-  padding-left: 15px;
+  width: 20px;
+  margin-left: 0;
+}
+
+.atum-list-table .column-calc_type .col-product-details .wc-type {
+  margin: 0 auto;
 }
 
 .atum-list-table .column-calc_type .has-child {
