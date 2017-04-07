@@ -267,7 +267,7 @@ class ListTable extends AtumListTable {
 	public function single_row( $item ) {
 		
 		$this->product = wc_get_product( $item );
-		$type = $this->product->product_type;
+		$type = $this->product->get_type();
 
 		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
 		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
@@ -281,7 +281,7 @@ class ListTable extends AtumListTable {
 		if ( in_array($type, ['variable', 'grouped']) ) {
 			
 			$product_class = '\\WC_Product_' . ucfirst($type);
-			$parent_product = new $product_class($this->product->id);
+			$parent_product = new $product_class( $this->product->get_id() );
 			$child_products = $parent_product->get_children();
 			
 			if ( ! empty($child_products) ) {
@@ -302,7 +302,7 @@ class ListTable extends AtumListTable {
 
 					$this->is_child = TRUE;
 					$this->product = wc_get_product($child_id);
-					$this->single_expandable_row($this->product->post, ($type == 'grouped' ? $type : 'variation'));
+					$this->single_expandable_row($this->product, ($type == 'grouped' ? $type : 'variation'));
 				}
 			}
 			
@@ -338,11 +338,11 @@ class ListTable extends AtumListTable {
 	 * @return string|bool
 	 */
 	protected function column_default( $item, $column_name ) {
-		
-		// Check if it's a hidden meta key (will start with underscore)
-		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+
+		$id = $this->get_current_product_id($this->product);
 		$column_item = '';
 
+		// Check if it's a hidden meta key (will start with underscore)
 		if ( substr( $column_name, 0, 1 ) == '_' ) {
 			$column_item = get_post_meta( $id, $column_name, TRUE );
 		}
@@ -381,16 +381,16 @@ class ListTable extends AtumListTable {
 	protected function column_title( $item ) {
 		
 		$title = '';
-		if ( $this->product->product_type == 'variation' ) {
+		if ( $this->product->get_type() == 'variation' ) {
 			
-			$attributes = wc_get_product_variation_attributes($this->product->variation_id);
+			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id($this->product) );
 			if ( ! empty($attributes) ) {
 				$title = ucfirst( implode(' ', $attributes) );
 			}
 			
 		}
 		else {
-			$title = $item->post_title;
+			$title = $this->product->get_title();
 		}
 		
 		if ( strlen( $title ) > 20 ) {
@@ -412,7 +412,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_sku( $item ) {
 
-		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$id = $this->get_current_product_id($this->product);
 		$sku = get_post_meta( $id, '_sku', TRUE );
 
 		$args = array(
@@ -436,9 +436,7 @@ class ListTable extends AtumListTable {
 	 * @return int
 	 */
 	protected function column_ID( $item ) {
-
-		$id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
-		return apply_filters( 'atum/stock_central_list/column_ID', $id, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_ID', $this->get_current_product_id($this->product), $item, $this->product );
 	}
 	
 	/**
@@ -521,7 +519,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_regular_price( $item ) {
 
 		$regular_price = '&mdash;';
-		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
 
@@ -556,7 +554,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sale_price( $item ) {
 
 		$sale_price = '&mdash;';
-		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
 
@@ -613,7 +611,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_purchase_price( $item ) {
 
 		$purchase_price = '&mdash;';
-		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
 
@@ -647,14 +645,14 @@ class ListTable extends AtumListTable {
 	protected function column_calc_stock( $item ) {
 
 		$stock = '&mdash;';
-		$product_id = ($this->product->product_type == 'variation') ? $this->product->variation_id : $item->ID;
+		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
 
 			$args = array(
 				'post_id'  => $product_id,
 				'meta_key' => 'stock',
-				'value'    => intval( $this->product->get_total_stock() ),
+				'value'    => intval( $this->product->get_stock_quantity() ),
 				'tooltip'  => __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
 			);
 
@@ -677,7 +675,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 			
-		$stock = intval( $this->product->get_total_stock() );
+		$stock = intval( $this->product->get_stock_quantity() );
 		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if (! $this->allow_calcs) {
@@ -688,10 +686,10 @@ class ListTable extends AtumListTable {
 			$classes .= ' cell-red';
 			$content = '<span class="dashicons dashicons-dismiss"></span>';
 		}
-		elseif ( isset( $this->calc_columns[ $this->product->id ]['sold_last_days'] ) ) {
+		elseif ( isset( $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) ) {
 			
 			// stock ok
-			if ( $stock >= $this->calc_columns[ $this->product->id ]['sold_last_days'] ) {
+			if ( $stock >= $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) {
 				$classes .= ' cell-green';
 				$content = '<span class="dashicons dashicons-yes"></span>';
 			}
@@ -739,7 +737,7 @@ class ListTable extends AtumListTable {
 				$products = $order->get_items();
 
 				foreach ( $products as $product ) {
-					if ( $item->ID == $product['product_id'] ) {
+					if ( $this->product->get_id() == $product['product_id'] ) {
 						$column_item += $product['qty'];
 					}
 
@@ -798,7 +796,7 @@ class ListTable extends AtumListTable {
 			$column_item = '&mdash;';
 		}
 		else {
-			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_today'];
+			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_today', $column_item, $item, $this->product );
@@ -820,7 +818,7 @@ class ListTable extends AtumListTable {
 			$column_item = '&mdash;';
 		}
 		else {
-			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_7'];
+			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $column_item, $item, $this->product );
@@ -842,7 +840,7 @@ class ListTable extends AtumListTable {
 			$column_item = '&mdash;';
 		}
 		else {
-			$column_item = ( empty( $this->calc_columns[ $item->ID ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $item->ID ]['sold_14'];
+			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $column_item, $item, $this->product );
@@ -866,7 +864,7 @@ class ListTable extends AtumListTable {
 
 		if ($this->allow_calcs) {
 			$sales = $this->column_calc_sales7( $item );
-			$stock = $this->product->get_total_stock();
+			$stock = $this->product->get_stock_quantity();
 
 			if ( $stock > 0 && $sales > 0 ) {
 				$will_last = ceil( $stock / ( $sales / 7 ) );
@@ -896,7 +894,7 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			// Check if the current product has the "Out of stock" date recorded
-			$out_of_stock_date = get_post_meta( $item->ID, Globals::get_out_of_stock_date_key(), TRUE );
+			$out_of_stock_date = get_post_meta( $this->product->get_id(), Globals::get_out_of_stock_date_key(), TRUE );
 			if ( $out_of_stock_date ) {
 				$out_date_time = new \DateTime( $out_of_stock_date );
 				$now_date_time = new \DateTime( 'now' );
@@ -926,7 +924,7 @@ class ListTable extends AtumListTable {
 
 		if ($this->allow_calcs) {
 
-			$out_of_stock_date = get_post_meta( $item->ID, Globals::get_out_of_stock_date_key(), TRUE );
+			$out_of_stock_date = get_post_meta( $this->product->get_id(), Globals::get_out_of_stock_date_key(), TRUE );
 
 			if ($out_of_stock_date) {
 
@@ -936,7 +934,7 @@ class ListTable extends AtumListTable {
 
 					// Get the average sales for the past 7 days when in stock
 					$average_date_start = Helpers::date_format( $out_of_stock_date . ' -1 week' );
-					$total_sales = $this->get_sold_last_days( array($item->ID), $average_date_start, $out_of_stock_date);
+					$total_sales = $this->get_sold_last_days( [ $this->product->get_id() ], $average_date_start, $out_of_stock_date);
 					$average_seven_days = ($total_sales) ? $total_sales / 7 : 0;
 
 					$price = $this->product->get_regular_price();

@@ -388,7 +388,7 @@ class Main {
 					}
 				});
 
-				<?php if ( in_array($product->product_type, ['grouped', 'external'] ) ): ?>
+				<?php if ( in_array($product->get_type(), ['grouped', 'external'] ) ): ?>
 				jQuery('.stock_fields').addClass('wp-menu-arrow');
 				<?php endif; ?>
 			</script>
@@ -414,7 +414,7 @@ class Main {
 		if ( $meta_key == '_manage_stock' && $meta_value == 'no' ) {
 			$product = wc_get_product( $product_id );
 			
-			if ( $product && in_array( $product->product_type, Globals::get_product_types() ) ) {
+			if ( $product && in_array( $product->get_type(), Globals::get_product_types() ) ) {
 				remove_action( 'update_post_metadata', array($this, 'save_manage_stock') );
 
 				if ( Helpers::get_option( 'manage_stock', 'no' ) == 'yes' ) {
@@ -445,18 +445,19 @@ class Main {
 	 */
 	public function record_out_of_stock_date ($product) {
 		
-		if ( in_array($product->product_type, Globals::get_product_types()) ) {
+		if ( in_array($product->get_type(), Globals::get_product_types()) ) {
 			
 			$current_stock = $product->get_stock_quantity();
 			$out_of_stock_date_key = Globals::get_out_of_stock_date_key();
+			$product_id = $product->get_id();
 			
 			if (!$current_stock) {
-				update_post_meta( $product->id, $out_of_stock_date_key, Helpers::date_format( time(), TRUE ) );
+				update_post_meta( $product_id, $out_of_stock_date_key, Helpers::date_format( time(), TRUE ) );
 				Helpers::delete_transients();
 			}
-			elseif ( get_post_meta( $product->id, $out_of_stock_date_key, TRUE ) ) {
+			elseif ( get_post_meta( $product_id, $out_of_stock_date_key, TRUE ) ) {
 				// Meta key not needed anymore for this product
-				delete_post_meta( $product->id, $out_of_stock_date_key );
+				delete_post_meta( $product_id, $out_of_stock_date_key );
 				Helpers::delete_transients();
 			}
 			

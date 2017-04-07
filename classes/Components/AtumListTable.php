@@ -309,10 +309,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
 	 */
 	protected function get_bulk_actions() {
-		
-		$actions = array();
-		
-		return apply_filters( 'atum/atum_list_table/bulk_actions', $actions );
+		return apply_filters( 'atum/atum_list_table/bulk_actions', array() );
 	}
 	
 	/**
@@ -693,6 +690,30 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_table_classes() {
 		
 		return array( 'widefat', 'striped', $this->_args['plural'] );
+	}
+
+	/**
+	 * A wrapper to get the right product ID (or variation ID)
+	 *
+	 * @since 1.2.1
+	 *
+	 * @param \WC_Product $product
+	 *
+	 * @return int
+	 */
+	protected function get_current_product_id($product) {
+
+		if ( $product->get_type() == 'variation' ) {
+			/**
+			 * @deprecated
+			 * The get_variation_id() method was deprecated in WC 3.0.0
+			 * In newer versions the get_id() method always be the variation_id if it's a variation
+			 */
+			return ( version_compare( WC()->version, '3.0.0', '<' ) == -1 ) ? $product->get_variation_id() : $product->get_id();
+		}
+
+		return $product->get_id();
+
 	}
 	
 	/**
