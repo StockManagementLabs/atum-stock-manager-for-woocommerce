@@ -164,6 +164,8 @@ final class Ajax {
 					wp_send_json_error( __('Please enter in a value lower than the regular price.', ATUM_TEXT_DOMAIN) );
 				}
 
+				update_post_meta( $product_id, '_sale_price', $sale_price );
+
 				// Check for sale dates
 				if ( ! empty($_POST['extraMeta']) ) {
 
