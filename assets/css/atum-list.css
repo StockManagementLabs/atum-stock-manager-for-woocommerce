@@ -426,20 +426,20 @@
   color: #EF4D5A;
 }
 
-.atum-list-table td {
+.atum-list-table td, .atum-list-table th {
   vertical-align: middle;
   padding: 6px 5px;
 }
 
-.atum-list-table td.pro-version {
+.atum-list-table td.pro-version, .atum-list-table th.pro-version {
   background-color: #C1C1C1;
 }
 
-.atum-list-table td.column-title {
+.atum-list-table td.column-title, .atum-list-table th.column-title {
   min-width: 150px;
 }
 
-.atum-list-table td.column-sku {
+.atum-list-table td.column-sku, .atum-list-table th.column-sku {
   min-width: 70px;
 }
 

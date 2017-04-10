@@ -44,6 +44,15 @@ $screen-xs-max:                         ($screen-sm-min - 1) !default;
 $screen-sm-max:                         ($screen-md-min - 1) !default;
 $screen-md-max:                         ($screen-lg-min - 1) !default;
 
+// Tooltips
+$zindex-tooltip:                        1070 !default;
+$tooltip-max-width:                     200px !default;
+$tooltip-color:                         #fff !default;
+$tooltip-bg:                            #000 !default;
+$tooltip-opacity:                       .9 !default;
+
+$tooltip-arrow-width:                   5px !default;
+$tooltip-arrow-color:                   $tooltip-bg !default;
 
 // Popovers
 $popover-bg:                            #FFF !default;
