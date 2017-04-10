@@ -3,8 +3,8 @@
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.7.2
-Stable tag: 1.1.2
+Tested up to: 4.7.3
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,7 +48,7 @@ The free version of the Stock Central includes:
 * Intelligent settings for easy inventory/stock management.
 
 
-**Every user has an option to create an account on our website [stockmanagementlabs.com](http://www.stockmanagementlabs.com "Stock Management Labs"). Registration is free and apart from an excellent support; each registered user can take advantage of these fantastic features:**
+**Every user has an option to create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs"). Registration is free and apart from an excellent support; each registered user can take advantage of these fantastic features:**
 
 * EOQ - Economic Order Quantity Calculator (in development) - In corporate finance, economic order quantity (EOQ) is the order quantity that minimises the total holding costs and ordering costs. It is one of the oldest classical production scheduling models.
 * Web-Based Invoice Generator (in development) - complete invoice customisation, direct sending and without any monthly limits. Also, all your invoices are saved securely in one place.
@@ -182,7 +182,7 @@ One of the most important ways of controlling the inventory in any business is i
 
 
 
-**Can’t see an add-on for your business? Use our feature request form [here](http://www.stockmanagementlabs.com "Stock Management Labs") to give our team a hint or suggestion. All requested features will get discussed and voted for on our website. The most valuable will jump the line in the development planner.**
+**Can’t see an add-on for your business? Use our feature request form [here](https://www.stockmanagementlabs.com "Stock Management Labs") to give our team a hint or suggestion. All requested features will get discussed and voted for on our website. The most valuable will jump the line in the development planner.**
 
 == Installation ==
 
@@ -310,7 +310,7 @@ Fixes:
 
 * Minor fixes.
 
-= 1.1.2 =
+= 1.2.1 =
 
 Changes:
 

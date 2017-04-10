@@ -1,4 +1,4 @@
-# [ATUM Stock Manager for WooCommerce](http://www.stockmanagementlabs.com)
+# [ATUM Stock Manager for WooCommerce](https://www.stockmanagementlabs.com)
 
 The ultimate stock management plugin for serious WooCommerce Sellers.
 
@@ -40,7 +40,7 @@ The free version of the Stock Central includes:
 * Intelligent settings for easy inventory/stock management.
 
 
-**Every user has an option to create an account on our website [stockmanagementlabs.com](http://www.stockmanagementlabs.com "Stock Management Labs"). Registration is free and apart from an excellent support; each registered user can take advantage of these fantastic features:**
+**Every user has an option to create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs"). Registration is free and apart from an excellent support; each registered user can take advantage of these fantastic features:**
 
 * EOQ - Economic Order Quantity Calculator (in development) - In corporate finance, economic order quantity (EOQ) is the order quantity that minimises the total holding costs and ordering costs. It is one of the oldest classical production scheduling models.
 * Web-Based Invoice Generator (in development) - complete invoice customisation, direct sending and without any monthly limits. Also, all your invoices are saved securely in one place.
@@ -174,7 +174,7 @@ One of the most important ways of controlling the inventory in any business is i
 
 
 
-**Can’t see an add-on for your business? Use our feature request form [here](http://www.stockmanagementlabs.com "Stock Management Labs") to give our team a hint or suggestion. All requested features will get discussed and voted for on our website. The most valuable will jump the line in the development planner.**
+**Can’t see an add-on for your business? Use our feature request form [here](https://www.stockmanagementlabs.com "Stock Management Labs") to give our team a hint or suggestion. All requested features will get discussed and voted for on our website. The most valuable will jump the line in the development planner.**
 
 ## Installation
 
@@ -286,7 +286,7 @@ Fixes:
 
 * Minor fixes.
 
-**1.1.2**
+**1.2.1**
 
 Changes:
 
