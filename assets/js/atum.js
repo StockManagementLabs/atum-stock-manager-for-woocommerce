@@ -335,16 +335,16 @@
 					// Hide other popovers
 					$listWrapper.click( function(e) {
 						
-						//debugger;
-						var $target = $(e.target),
+						var $target   = $(e.target),
 						    $selector = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
 						
-						$selector = $selector.filter('[aria-describedby]');
-						
-						if ($selector.length) {
-							$selector.filter('[aria-describedby]').popover('destroy');
-							self.bindPopover($selector);
-						}
+						$selector.each(function() {
+							var $this = $(this);
+							if ($this.data('bs.popover') !== 'undefined') {
+								$this.popover('destroy');
+								self.bindPopover($this);
+							}
+						});
 						
 					});
 					
@@ -414,7 +414,7 @@
 				},
 				
 				/**
-				 * Bind the edit column popovers
+				 * Bind the editable column's popovers
 				 */
 				bindPopover: function($metaCell) {
 					
