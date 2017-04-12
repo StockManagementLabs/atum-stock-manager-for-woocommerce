@@ -306,20 +306,9 @@
 				 */
 				tooltip: function () {
 					
-					if (typeof $.fn.tipTip === 'function') {
-						
-						$('.tips').each(function() {
-							
-							$(this).tipTip({
-								attribute: 'data-tip',
-								fadeIn   : 50,
-								fadeOut  : 50,
-								delay    : 200,
-								defaultPosition: $(this).data('position') || 'bottom'
-							});
-							
-						});
-					}
+					$('[data-toggle="tooltip"]').tooltip({
+						html: true
+					});
 					
 				},
 				

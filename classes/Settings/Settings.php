@@ -201,7 +201,7 @@ class Settings {
 			Helpers::maybe_es6_promise();
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
-			wp_register_script( 'atum-settings', ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'jquery-tiptip', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_script( 'atum-settings', ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2' ), ATUM_VERSION );
 			
 			wp_localize_script( 'atum-settings', 'atumSettings', array(
 				'stockMsgTitle' => __( "Would you want to restore the 'Manage Stock' status of all products to their original state?", ATUM_TEXT_DOMAIN ),
@@ -396,7 +396,7 @@ class Settings {
 		
 		if ( array_key_exists( 'desc', $args ) ) {
 			
-			$label = '<span class="atum-setting-info tips" data-tip="'
+			$label = '<span class="atum-setting-info tips" data-toggle="tooltip" title="'
 			         . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '"><i class="dashicons dashicons-editor-help '
 			         . $args['id'] . '""></i></span>';
 		}

@@ -345,7 +345,8 @@ class Main {
 			(function ($) {
 				$('.variable_manage_stock').each(function() {
 					$(this).prop({'checked': true, 'readonly': true})
-						.siblings('.woocommerce-help-tip').attr('data-tip', '<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>');
+						.siblings('.woocommerce-help-tip')
+						.attr('data-tip', '<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>');
 
 					$(this).click(function(e) {
 						e.stopImmediatePropagation();

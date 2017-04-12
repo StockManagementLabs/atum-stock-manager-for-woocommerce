@@ -108,13 +108,13 @@ class ListTable extends AtumListTable {
 			'field'    => 'slug',
 			'terms'    => Globals::get_product_types()
 		);
-		
+
 		$args['table_columns'] = array(
-			'thumb'                => '<span class="wc-image tips" data-tip="' . __('Image', ATUM_TEXT_DOMAIN) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'                => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'            => '<span class="wc-type tips" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_regular_price'   => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'calc_sale_price'      => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'calc_purchase_price'  => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
@@ -131,7 +131,7 @@ class ListTable extends AtumListTable {
 			'calc_sales7'          => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
 			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'  => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_lost_sales' => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'calc_lost_sales'      => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
 			'calc_stock_indicator' => __( 'Stock Indicator', ATUM_TEXT_DOMAIN ),
 		);
 		
@@ -394,7 +394,7 @@ class ListTable extends AtumListTable {
 		}
 		
 		if ( strlen( $title ) > 20 ) {
-			$title = '<span class="tips" data-tip="' . $title . '">' . trim( substr( $title, 0, 20 ) ) .
+			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( substr( $title, 0, 20 ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 		
@@ -500,7 +500,7 @@ class ListTable extends AtumListTable {
 					break;
 			}
 			
-			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>', $item, $this->product );
+			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-toggle="tooltip" title="' . $product_tip . '"></span>', $item, $this->product );
 			
 		}
 		
