@@ -184,7 +184,6 @@
 					});
 					
 					// Checkbox columns
-					// pro version
 					/*postsList.on('change', 'input[type=checkbox]', function(){
 					 
 					 var selectedIds =  $inputSelectedIds.val(),
@@ -223,7 +222,6 @@
 					 });*/
 					
 					// Check all checkbox
-					// pro version
 					/*$listWrapper.on('change', '.manage-column input[type=checkbox]', function(){
 					 
 					 var listCheckboxes = $('input[type=checkbox]', postsList);
@@ -328,8 +326,10 @@
 					
 					// Focus on the input field
 					$('.set-meta').on('shown.bs.popover', function () {
-						$('.popover').find('.meta-value').focus();
+						var $activePopover = $('.popover');
+						$activePopover.find('.meta-value').focus();
 						self.setDatePickers();
+						$(this).attr('data-popover', $activePopover.attr('id'));
 					});
 					
 					// Hide other popovers
@@ -342,6 +342,7 @@
 							var $this = $(this);
 							if ($this.data('bs.popover') !== 'undefined') {
 								$this.popover('destroy');
+								$this.removeAttr('data-popover');
 								self.bindPopover($this);
 							}
 						});
@@ -354,7 +355,7 @@
 						var $button   = $(this),
 						    $popover  = $button.closest('.popover'),
 						    popoverId = $popover.attr('id'),
-						    $setMeta  = $('[aria-describedby="' + popoverId + '"]'),
+						    $setMeta  = $('[data-popover="' + popoverId + '"]'),
 						    data      = {
 							    token : atumListTable.nonce,
 							    action: 'atum_update_meta',
@@ -597,7 +598,6 @@
 							self.reloadScrollbar();
 							
 							// Add selected class to rows
-							//pro version
 							//$('input[type=checkbox]:checked', postsList).closest('tr').addClass('selected');
 							
 						},
