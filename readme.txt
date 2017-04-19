@@ -4,13 +4,15 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.7.3
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 The ultimate stock management plugin for serious WooCommerce Sellers.
 
 == Description ==
+
+[youtube https://www.youtube.com/embed/Qc9-tgYNy_c?rel=0&amp;showinfo=0?ecver=2 ]
 
 ATUM is an advanced stock management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -251,18 +253,22 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 == Screenshots ==
 
-1.  ATUM Stock Central Overview.
-2.  ATUM Stock Central - Variable Product - Expandable Container.
-3.  ATUM Stock Central - Grouped Product - Expandable Container.
-4.  Help Section - Product Details.
-5.  Help Section - ATUM Welcome Screen.
-6.  Help Section - Stock Counters.
-7.  Help Section - Stock Negatives.
-8.  Help Section - Stock Selling Manager.
-9.  ATUM - Taking Over Stock Control.
-10. ATUM Settings - General
-11. ATUM Settings - Stock Central
-12. Changing the stock amount in Stock Central
+1.  New Menu Design with Easy Access to Individual Feature
+2.  New Admin Bar Menu for Easier and Quicker Inventory Control
+3.  Extended Stock Central Control Including New Filters
+4.  Full Control of the Stock Central View
+5.  HELP Section for Easier Understanding of the Stock Central
+6.  On and OFF Automatic Product Search Feature
+7.  Grouped Products Are Included in the Stock Central Interface
+8.  Variable Products within the Stock Central Interface
+9.  One Click SKU Edit Directly in Stock Cental
+10. One Click Regular Price Edit Directly in Stock Cental
+11. One Click Sale Price Edit Directly in Stock Cental
+12. One Click Purchase Price Edit Directly in Stock Cental
+13. One Click Stock Quantity Edit Directly in Stock Cental
+14. General Settigns for the Stock Central Interface
+15. Advanced Settigns for the Stock Central Interface
+16. Brand New Add-Ons Screen For Further Shop Control
 
 
 == Changelog ==
@@ -327,3 +333,14 @@ Fixes:
 
 * Refactory and performance improvements.
 * Low stock formula improved.
+
+= 1.2.2 =
+
+Changes:
+
+* Switched jQuery plugin for tooltips from tiptip to Bootstrap's tooltip.
+* Updated readme.txt
+
+Fixes:
+
+* Fixed issue in the "Lost Sales" column.

@@ -303,3 +303,14 @@ Fixes:
 
 * Refactory and performance improvements.
 * Low stock formula improved.
+
+**1.2.2**
+
+Changes:
+
+* Switched jQuery plugin for tooltips from tiptip to Bootstrap's tooltip.
+* Updated readme.txt
+
+Fixes:
+
+* Fixed issue in the "Lost Sales" column.
