@@ -934,8 +934,16 @@ class ListTable extends AtumListTable {
 
 					// Get the average sales for the past 7 days when in stock
 					$average_date_start = Helpers::date_format( $out_of_stock_date . ' -1 week' );
-					$total_sales = $this->get_sold_last_days( [ $this->product->get_id() ], $average_date_start, $out_of_stock_date);
-					$average_seven_days = ($total_sales) ? $total_sales / 7 : 0;
+					$sold_last_days = $this->get_sold_last_days( [ $this->product->get_id() ], $average_date_start, $out_of_stock_date);
+					$average_seven_days = 0;
+
+					if ( ! empty($sold_last_days) ) {
+						$sold_last_days = reset($sold_last_days);
+
+						if ( ! empty($sold_last_days['QTY']) && $sold_last_days['QTY'] > 0 ) {
+							$average_seven_days = $sold_last_days['QTY'] / 7;
+						}
+					}
 
 					$price = $this->product->get_regular_price();
 
