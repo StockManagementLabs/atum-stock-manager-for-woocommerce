@@ -552,6 +552,10 @@
   min-width: 150px;
 }
 
+.atum-list-table td.column-title > span, .atum-list-table th.column-title > span {
+  white-space: nowrap;
+}
+
 .atum-list-table td.column-sku, .atum-list-table th.column-sku {
   min-width: 70px;
 }

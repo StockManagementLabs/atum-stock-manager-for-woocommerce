@@ -228,6 +228,10 @@
 		
 		&.column-title {
 			min-width: 150px;
+			
+			> span {
+				white-space: nowrap;
+			}
 		}
 		
 		&.column-sku {
