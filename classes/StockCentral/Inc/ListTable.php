@@ -1387,12 +1387,16 @@ class ListTable extends AtumListTable {
 			$product = wc_get_product($product_id);
 
 			// For Variations
-			if ( ! empty($product->parent) ) {
-				$parents[] = $product->parent->id;
+			if ( is_a($product, 'WC_Product_Variation') ) {
+				$parents[] = $product->get_parent_id();
 			}
-			// For Group Items
-			elseif ($product->post->post_parent) {
-				$parents[] = $product->post->post_parent;
+			// For Group Items (these have the grouped ID as post_parent property)
+			else {
+				$product_post = get_post( $product_id );
+
+				if ($product_post->post_parent) {
+					$parents[] = $product_post->post_parent;
+				}
 			}
 		}
 
