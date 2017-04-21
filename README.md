@@ -314,3 +314,14 @@ Changes:
 Fixes:
 
 * Fixed issue in the "Lost Sales" column.
+
+**1.2.2.1**
+
+Changes:
+
+* Updated readme.txt
+
+Fixes:
+
+* Fixed comaptibility with WooCommerce 3.0.4.
+* Minor fixes.
