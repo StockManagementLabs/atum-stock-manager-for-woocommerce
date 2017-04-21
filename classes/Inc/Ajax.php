@@ -60,12 +60,15 @@ final class Ajax {
 	public function fetch_stock_central_list() {
 		
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
-		
-		$per_page = ( ! empty($_REQUEST['per_page']) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+
+		$args = array(
+			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
+			'screen'   => 'toplevel_page-' . Globals::ATUM_UI_SLUG
+		);
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_stock', $this );
 		
-		$list = new ListTable( compact('per_page') );
+		$list = new ListTable( $args );
 		$list->ajax_response();
 		
 	}
