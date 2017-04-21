@@ -155,7 +155,7 @@
 							    $this     = $(this),
 							    elemClass = ($this.is('.search-category')) ? '.actions' : '.search-box';
 							
-							stockCentralTable.update(data, $this.closest(elemClass));
+							self.update(data, $this.closest(elemClass));
 							
 						});
 						
@@ -262,7 +262,8 @@
 				
 				keyUp: function (e, $elem) {
 					
-					var delay = 500;
+					var self  = this,
+					    delay = 500;
 					
 					/*
 					 * If user hit enter, we don't want to submit the form
@@ -292,7 +293,7 @@
 					window.clearTimeout(timer);
 					
 					timer = window.setTimeout(function () {
-						stockCentralTable.update(data, $elem);
+						self.update(data, $elem);
 					}, delay);
 					
 				},
@@ -553,8 +554,7 @@
 							// Add the requested rows
 							if (typeof response.rows !== 'undefined' && response.rows.length) {
 								postsList.html(response.rows);
-								stockCentralTable.tooltip();
-								stockCentralTable.setFieldPopover();
+								self.setFieldPopover();
 							}
 							
 							// Update column headers for sorting
@@ -596,6 +596,9 @@
 							
 							// Re-add the scrollbar
 							self.reloadScrollbar();
+							
+							// Re-add tooltips
+							self.tooltip();
 							
 							// Add selected class to rows
 							//$('input[type=checkbox]:checked', postsList).closest('tr').addClass('selected');
