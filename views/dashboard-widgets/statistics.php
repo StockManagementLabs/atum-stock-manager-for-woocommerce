@@ -10,7 +10,47 @@ defined( 'ABSPATH' ) or die;
 
 <div class="atum-statistics-widget">
 
-	<div class="atum-table left table-current-month">
+	<div class="atum-table left table-today">
+		<table>
+			<thead>
+			<tr>
+				<th colspan="2"><?php _e('Sold Today', ATUM_TEXT_DOMAIN) ?></th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr>
+				<td><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></td>
+				<td class="amt"><?php echo $stats_today['earnings'] ?></td>
+			</tr>
+			<tr>
+				<td><?php _e('Products', ATUM_TEXT_DOMAIN) ?></td>
+				<td class="amt"><?php echo $stats_today['products'] ?></td>
+			</tr>
+			</tbody>
+		</table>
+
+		<table>
+			<thead>
+			<tr>
+				<th colspan="2"><?php _e('Lost Sales Today', ATUM_TEXT_DOMAIN) ?></th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr>
+				<td><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></td>
+				<td class="amt"><?php echo $stats_today['lost_earnings'] ?></td>
+			</tr>
+			<tr>
+				<td><?php _e('Products', ATUM_TEXT_DOMAIN) ?></td>
+				<td class="amt"><?php echo $stats_today['lost_products'] ?></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="atum-table right table-current-month">
 		<table>
 			<thead>
 				<tr>
@@ -45,46 +85,6 @@ defined( 'ABSPATH' ) or die;
 				<tr>
 					<td><?php _e('Products', ATUM_TEXT_DOMAIN) ?></td>
 					<td class="amt"><?php echo $stats_this_month['lost_products'] ?></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<div class="atum-table right table-today">
-		<table>
-			<thead>
-				<tr>
-					<th colspan="2"><?php _e('Sold Today', ATUM_TEXT_DOMAIN) ?></th>
-				</tr>
-			</thead>
-
-			<tbody>
-				<tr>
-					<td><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt"><?php echo $stats_today['earnings'] ?></td>
-				</tr>
-				<tr>
-					<td><?php _e('Products', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt"><?php echo $stats_today['products'] ?></td>
-				</tr>
-			</tbody>
-		</table>
-
-		<table>
-			<thead>
-				<tr>
-					<th colspan="2"><?php _e('Lost Sales Today', ATUM_TEXT_DOMAIN) ?></th>
-				</tr>
-			</thead>
-
-			<tbody>
-				<tr>
-					<td><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt"><?php echo $stats_today['lost_earnings'] ?></td>
-				</tr>
-				<tr>
-					<td><?php _e('Products', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt"><?php echo $stats_today['lost_products'] ?></td>
 				</tr>
 			</tbody>
 		</table>
@@ -135,15 +135,15 @@ defined( 'ABSPATH' ) or die;
 				</tr>
 				<tr>
 					<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt">$0.00</td>
+					<td class="amt"><?php echo $orders_revenue_this_month ?></td>
 				</tr>
 				<tr>
 					<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt">$0.00</td>
+					<td class="amt"><?php echo $orders_revenue_this_week ?></td>
 				</tr>
 				<tr>
 					<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
-					<td class="amt">$0.00</td>
+					<td class="amt"><?php echo $orders_revenue_today ?></td>
 				</tr>
 			</tbody>
 		</table>

@@ -113,6 +113,9 @@ class Statistics extends DashboardWidget {
 
 		$order_status = apply_filters( 'atum/dashboard_statistics/order_status', 'wc-processing, wc-completed' );
 
+		/**
+		 * Orders this year
+		 */
 		$args = array(
 			'order_status'     => $order_status,
 			'order_date_start' => strtotime( 'first day of January 00:00:00' )
@@ -129,6 +132,9 @@ class Statistics extends DashboardWidget {
 
 		$orders_revenue_this_year = Helpers::format_price($orders_revenue_this_year);
 
+		/**
+		 * Orders this month
+		 */
 		$args = array(
 			'order_status'     => $order_status,
 			'order_date_start' => $first_day_of_month->getTimestamp()
@@ -136,7 +142,17 @@ class Statistics extends DashboardWidget {
 
 		$orders_this_month = Helpers::get_orders($args);
 		$orders_amount_this_month = count($orders_this_month);
+		$orders_revenue_this_month = 0;
 
+		foreach ($orders_this_month as $order) {
+			$orders_revenue_this_month += floatval( $order->get_total() );
+		}
+
+		$orders_revenue_this_month = Helpers::format_price($orders_revenue_this_month);
+
+		/**
+		 * Orders this week
+		 */
 		$args = array(
 			'order_status'     => $order_status,
 			'order_date_start' => strtotime( 'Monday this week 00:00:00' )
@@ -144,7 +160,17 @@ class Statistics extends DashboardWidget {
 
 		$orders_this_week = Helpers::get_orders($args);
 		$orders_amount_this_week = count($orders_this_week);
+		$orders_revenue_this_week = 0;
 
+		foreach ($orders_this_week as $order) {
+			$orders_revenue_this_week += floatval( $order->get_total() );
+		}
+
+		$orders_revenue_this_week = Helpers::format_price($orders_revenue_this_week);
+
+		/**
+		 * Orders today
+		 */
 		$args = array(
 			'order_status'     => $order_status,
 			'order_date_start' => $today->getTimestamp()
@@ -152,6 +178,13 @@ class Statistics extends DashboardWidget {
 
 		$orders_today = Helpers::get_orders($args);
 		$orders_amount_today = count($orders_today);
+		$orders_revenue_today = 0;
+
+		foreach ($orders_today as $order) {
+			$orders_revenue_today += floatval( $order->get_total() );
+		}
+
+		$orders_revenue_today = Helpers::format_price($orders_revenue_today);
 
 		// Stock indicators
 		$stock_counters = $this->get_stock_levels();
