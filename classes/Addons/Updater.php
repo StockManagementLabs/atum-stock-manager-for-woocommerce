@@ -384,7 +384,7 @@ class Updater {
 			$request->banners = maybe_unserialize( $request->banners );
 		}
 
-		if( ! empty( $request ) ) {
+		if( ! empty( $request->sections ) ) {
 			foreach( $request->sections as $key => $section ) {
 				$request->$key = (array) $section;
 			}

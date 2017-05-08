@@ -524,7 +524,7 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			$regular_price_value = $this->product->get_regular_price();
-			$regular_price_value = ( is_numeric($regular_price_value) ) ? $this->format_price($regular_price_value) : $regular_price;
+			$regular_price_value = ( is_numeric($regular_price_value) ) ? Helpers::format_price($regular_price_value, ['trim_zeros' => TRUE]) : $regular_price;
 
 			$args = array(
 				'post_id'  => $product_id,
@@ -559,7 +559,7 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			$sale_price_value = $this->product->get_sale_price();
-			$sale_price_value = ( is_numeric($sale_price_value) ) ? $this->format_price($sale_price_value) : $sale_price;
+			$sale_price_value = ( is_numeric($sale_price_value) ) ? Helpers::format_price($sale_price_value, ['trim_zeros'=> TRUE]) : $sale_price;
 			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 			$sale_price_dates_to   = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 
@@ -616,7 +616,7 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			$purchase_price_value = get_post_meta($product_id, '_purchase_price', TRUE);
-			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? $this->format_price($purchase_price_value) : $purchase_price;
+			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? Helpers::format_price($purchase_price_value, ['trim_zeros' => TRUE]) : $purchase_price;
 
 			$args = array(
 				'post_id'  => $product_id,
@@ -889,21 +889,13 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_stock_out_days( $item ) {
 
-		$out_of_stock_days = '&mdash;';
+		$out_of_stock_days = '';
 
 		if ($this->allow_calcs) {
-
-			// Check if the current product has the "Out of stock" date recorded
-			$out_of_stock_date = get_post_meta( $this->product->get_id(), Globals::get_out_of_stock_date_key(), TRUE );
-			if ( $out_of_stock_date ) {
-				$out_date_time = new \DateTime( $out_of_stock_date );
-				$now_date_time = new \DateTime( 'now' );
-				$interval      = date_diff( $out_date_time, $now_date_time );
-
-				$out_of_stock_days = $interval->days;
-			}
-
+			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product->get_id() );
 		}
+
+		$out_of_stock_days = ( is_numeric($out_of_stock_days) ) ? $out_of_stock_days : '&mdash;';
 		
 		return apply_filters( 'atum/stock_central_list/column_stock_out_days', $out_of_stock_days, $item, $this->product );
 		
@@ -920,93 +912,16 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_lost_sales( $item ) {
 
-		$lost_sales = '&mdash;';
+		$lost_sales = '';
 
 		if ($this->allow_calcs) {
-
-			$out_of_stock_date = get_post_meta( $this->product->get_id(), Globals::get_out_of_stock_date_key(), TRUE );
-
-			if ($out_of_stock_date) {
-
-				$days_out_of_stock = $this->column_calc_stock_out_days($item);
-
-				if ( is_numeric( $days_out_of_stock ) ) {
-
-					// Get the average sales for the past 7 days when in stock
-					$average_date_start = Helpers::date_format( $out_of_stock_date . ' -1 week' );
-					$sold_last_days = $this->get_sold_last_days( [ $this->product->get_id() ], $average_date_start, $out_of_stock_date);
-					$average_seven_days = 0;
-
-					if ( ! empty($sold_last_days) ) {
-						$sold_last_days = reset($sold_last_days);
-
-						if ( ! empty($sold_last_days['QTY']) && $sold_last_days['QTY'] > 0 ) {
-							$average_seven_days = $sold_last_days['QTY'] / 7;
-						}
-					}
-
-					$price = $this->product->get_regular_price();
-
-					$lost_sales = $this->format_price( $days_out_of_stock * $average_seven_days * $price );
-				}
-
-			}
-
+			$lost_sales = Helpers::get_product_lost_sales( $this->product->get_id() );
 		}
+
+		$lost_sales = ( is_numeric($lost_sales) ) ? Helpers::format_price( $lost_sales, ['trim_zeros' => TRUE] ) : '&mdash;';
 
 		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product );
 
-	}
-	
-	/**
-	 * Get the items' sales since $date_start or between $date_start and $date_end
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $items      Array of Product IDs we want to calculate sales from
-	 * @param string $date_start The date from when to start the items' sales calculations
-	 * @param string $date_end   Optional. The max date to calculate the items' sales
-	 *
-	 * @return array
-	 */
-	private function get_sold_last_days( $items, $date_start, $date_end = '' ) {
-		
-		$items_sold = array();
-		$orders     = Helpers::get_orders( array(
-			'order_status'         => 'wc-processing, wc-completed',
-			'completed_date_start' => $date_start,
-			'completed_date_end'   => $date_end
-		), TRUE );
-		
-		if ( $orders ) {
-			
-			global $wpdb;
-			$orders   = implode( ',', $orders );
-			$products = implode( ',', $items );
-
-			$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
-				FROM `{$wpdb->posts}` AS `ORDERS`
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
-				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_ID`
-				        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_QTY`
-				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-				WHERE (`ORDERS`.`ID` IN ($orders)
-				    AND `META_PROD_ID`.`meta_value` IN ($products)
-				    AND `META_PROD_ID`.`meta_key` = '_product_id'
-				    AND `META_PROD_QTY`.`meta_key` = '_qty')
-				GROUP BY `META_PROD_ID`.`meta_value`
-				HAVING (`QTY` IS NOT NULL);";
-			
-			$result = $wpdb->get_results( $str_sql, ARRAY_A );
-			if ( $result ) {
-				$items_sold = $result;
-			}
-		}
-		
-		return $items_sold;
-		
 	}
 	
 	/**
@@ -1079,9 +994,11 @@ class ListTable extends AtumListTable {
 		}
 		
 		parent::prepare_items();
+
+		$date_end = strtotime( $this->day );
 		
 		// Set array with calculated columns
-		$rows = $this->get_sold_last_days( $this->current_products, $this->day );
+		$rows = Helpers::get_sold_last_days( $this->current_products, $date_end );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1089,10 +1006,9 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		$date_start = Helpers::date_format( $this->day . ' -1 week' );
-		$date_end   = $this->day;
-		
-		$rows = $this->get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$date_start = strtotime( $this->day . ' -1 week' );
+
+		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1100,10 +1016,8 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		$date_start = Helpers::date_format( $this->day . ' -2 weeks' );
-		$date_end   = $this->day;
-		
-		$rows = $this->get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$date_start = strtotime( $this->day . ' -2 weeks' );
+		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1111,10 +1025,8 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		$date_start = Helpers::date_format( "-$this->last_days days" );
-		$date_end   = $this->day;
-		
-		$rows = $this->get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$date_start = strtotime( "-$this->last_days days" );
+		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1153,7 +1065,7 @@ class ListTable extends AtumListTable {
 		unset( $args['query_args']['paged'] );
 		
 		$all_transient = 'stock_central_list_all_' . Helpers::get_transient_identifier( $args['query_args'] );
-		$posts         = Helpers::get_transient( $all_transient );
+		$posts = Helpers::get_transient( $all_transient );
 		
 		if ( ! $posts ) {
 
@@ -1278,7 +1190,7 @@ class ListTable extends AtumListTable {
 							INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
 						WHERE (`order`.`post_type` = 'shop_order'
 						    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
-						    AND `order_meta`.`meta_key` = '_completed_date'
+						    AND `order_meta`.`meta_key` = '_paid_date'
 						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-7 days" ) . "')
 						GROUP BY IDs) AS sales";
 

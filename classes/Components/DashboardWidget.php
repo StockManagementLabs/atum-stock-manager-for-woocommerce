@@ -1,0 +1,175 @@
+<?php
+/**
+ * @package         Atum
+ * @subpackage      Components
+ * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @copyright       ©2017 Stock Management Labs™
+ *
+ * @since           1.2.3
+ *
+ * The class resposible to add a new widget to the WP Dashboard
+ */
+
+namespace Atum\Components;
+
+defined( 'ABSPATH' ) or die;
+
+
+abstract class DashboardWidget {
+
+	/**
+	 * The id of this widget
+	 * @var string
+	 */
+	protected $id;
+
+	/**
+	 * The widget title
+	 * @var string
+	 */
+	protected $title;
+
+	/**
+	 * Whether the current widget has the config settings enabled
+	 * @var bool
+	 */
+	protected $has_config = TRUE;
+
+
+	/**
+	 * DashboardWidget constructor
+	 *
+	 * @param string $widget_title  The title for the widget
+	 */
+	public function __construct($widget_title) {
+
+		$this->title = $widget_title;
+		add_action( 'wp_dashboard_setup', array($this,'init') );
+
+	}
+
+	/**
+	 * Hook to wp_dashboard_setup to add the widget
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param array $widget_options   Associative array of options & default values for this widget
+	 */
+	public function init( $widget_options = array() ) {
+
+		// Register widget settings
+		$this->update_dashboard_widget_options(
+			$this->id,                  // The  widget id
+			$widget_options,            // Associative array of options & default values
+			TRUE                        // Add only (will not update existing options)
+		);
+
+		// Register the widget
+		wp_add_dashboard_widget(
+			$this->id,                                              // A unique slug/ID
+			$this->title,                                           // Visible name for the widget
+			array($this, 'widget'),                                 // Callback for the main widget content
+			($this->has_config) ? array($this, 'config') : NULL     // Optional callback for widget configuration content
+		);
+
+	}
+
+	/**
+	 * Load the widget view
+	 *
+	 * @since 1.2.3
+	 */
+	abstract public function widget();
+
+	/**
+	 * Load widget config view
+	 * This is what will display when an admin clicks
+	 *
+	 * @since 1.2.3
+	 */
+	public function config() {
+
+	}
+
+	/**
+	 * Gets the options for a widget of the specified name
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param string $widget_id  Optional. If provided, will only get options for the specified widget
+	 * @return mixed An associative array containing the widget's options and values. False if no opts
+	 */
+	protected function get_dashboard_widget_options( $widget_id = '' ) {
+
+		// Fetch ALL dashboard widget options from the db
+		$opts = get_option( 'dashboard_widget_options' );
+
+		// If no widget is specified, return everything
+		if ( empty( $widget_id ) ) {
+			return $opts;
+		}
+
+		// If we request a widget and it exists, return it
+		if ( isset( $opts[$widget_id] ) ) {
+			return $opts[ $widget_id ];
+		}
+
+		// Something went wrong
+		return FALSE;
+
+	}
+
+	/**
+	 * Gets one specific option for the specified widget
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param string $widget_id
+	 * @param string $option
+	 * @param string $default
+	 *
+	 * @return string
+	 */
+	protected function get_widget_option( $widget_id, $option, $default = '' ) {
+
+		$opts = $this->get_dashboard_widget_options($widget_id);
+
+		// If widget opts dont exist, return false
+		if ( ! $opts ) {
+			return FALSE;
+		}
+
+		// Otherwise fetch the option or use default
+		if ( ! empty($opts[$option]) ) {
+			return $opts[ $option ];
+		}
+
+		return ( isset( $default ) ) ? $default : FALSE;
+
+	}
+
+	/**
+	 * Saves an array of options for a single dashboard widget to the database
+	 * Can also be used to define default values for a widget
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param string $widget_id     The name of the widget being updated
+	 * @param array  $args          An associative array of options being saved
+	 * @param bool   $add_only      If true, options will not be added if widget options already exist
+	 */
+	protected function update_dashboard_widget_options( $widget_id , $args = array(), $add_only = false ) {
+
+		// Fetch ALL dashboard widget options from the db...
+		$opts = get_option( 'dashboard_widget_options' );
+
+		// Get just our widget's options, or set empty array
+		$w_opts = ( isset( $opts[$widget_id] ) ) ? $opts[$widget_id] : array();
+		$opts[$widget_id] = ( $add_only ) ? array_merge($args, $w_opts) : array_merge($w_opts, $args);
+
+		// Save the entire widgets array back to the db
+		update_option('dashboard_widget_options', $opts);
+
+	}
+	
+}

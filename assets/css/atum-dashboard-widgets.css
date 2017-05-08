@@ -1,0 +1,88 @@
+/** 
+ * ATUM Stock Manager for WooCommerce CSS 
+ * @version 1.2.0 
+ * @author Salva Machí and Jose Piera 
+ *
+ * Author URI: https://sispixels.com/ 
+ * License : (c)2017 Stock Management Labs 
+ */ 
+
+.atum-statistics-widget .atum-table {
+  width: 50%;
+}
+
+.atum-statistics-widget .atum-table table {
+  width: 100%;
+  padding: 5px;
+}
+
+.atum-statistics-widget .atum-table.right {
+  float: right;
+}
+
+.atum-statistics-widget .atum-table.left {
+  float: left;
+}
+
+.atum-statistics-widget .atum-table th {
+  font-weight: 300;
+  padding-bottom: 5px;
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px solid #E3E8F5;
+  width: 100%;
+}
+
+.atum-statistics-widget .atum-table td {
+  padding: 3px 0;
+}
+
+.atum-statistics-widget .atum-table td.amt {
+  text-align: right;
+}
+
+.atum-statistics-widget .atum-table tbody tr:first-child td {
+  padding-top: 10px;
+}
+
+.atum-statistics-widget .stock-counters {
+  margin-top: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.atum-statistics-widget .stock-counters .stock-indicator {
+  width: 33.33%;
+  text-align: center;
+}
+
+.atum-statistics-widget .circle {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.atum-statistics-widget .circle strong {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 21px;
+}
+
+.atum-statistics-widget .circle span {
+  display: block;
+  margin-top: 10px;
+}
+
+/*# sourceMappingURL=atum-dashboard-widgets.css.map */

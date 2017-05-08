@@ -1,0 +1,81 @@
+//
+// Atum Dashboard Widget
+//----------------------
+
+.atum-statistics-widget {
+	
+	.atum-table {
+		width: 50%;
+		
+		table {
+			width: 100%;
+			padding: 5px;
+		}
+		
+		&.right {
+			float: right;
+		}
+		
+		&.left {
+			float: left;
+		}
+		
+		th {
+			font-weight: 300;
+			padding-bottom: 5px;
+			text-align: left;
+			text-transform: uppercase;
+			border-bottom: 1px solid $brand-info;
+			width: 100%;
+		}
+		
+		td {
+			padding: 3px 0;
+			&.amt {
+				text-align: right;
+			}
+		}
+		
+		tbody {
+			tr {
+				&:first-child {
+					td {
+						padding-top: 10px;
+					}
+				}
+			}
+		}
+	}
+	
+	.stock-counters {
+		margin-top: $grid-gutter-width;
+		@include flexbox;
+		
+		.stock-indicator {
+			width: 33.33%;
+			text-align: center;
+		}
+	}
+	
+	.circle {
+		display: inline-block;
+		position: relative;
+		text-align: center;
+		line-height: 1.2;
+		
+		strong {
+			@include vertical-align-absolute;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			line-height: 40px;
+			font-size: 21px;
+		}
+		
+		span {
+			display: block;
+			margin-top: 10px;
+		}
+	}
+	
+}

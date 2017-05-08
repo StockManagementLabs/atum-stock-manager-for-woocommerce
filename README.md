@@ -243,50 +243,39 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
-**1.0.0.**
+*1.2.3 - 2017-05-08*
 
-* The first public release of ATUM plugin.
+Features:
 
-**1.0.3**
-
-* Updated readme.txt
-* Minor fixes.
-
-**1.0.6**
-
-* Minor fixes.
-
-**1.0.7**
-
-* Help support link update.
-
-**1.1.0**
-
-Changes:
-
-* Added WooCommerce product filters to Stock Central.
-* Added link to ATUM ticket support.
-* All types of stockable WooCommerce products are available now in Stock Central.
-* Updated screenshots with "up to date" features.
-
-**1.1.1**
-
-Changes:
-
-* Manage WooCommerce "Manage Stock" option for product variations.
-* Disable WooCommerce "Manage Stock" option instead of hiding it.
-* Updated strings in language template file.
-* New dismissable welcome notice.
-* The premium columns are now hidden by default on Stock Central.
-* Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
-* Disabled the non-available ATUM submenus.
-* Improve Stock Central queries to adapt to product variations and grouped items.
+* New "Dashboard Statistics" widget.
 
 Fixes:
 
+* Fixed issue with Processing Orders not being counted.
+
+**1.2.2.1 - 2017-04-21**
+
+Changes:
+
+* Updated readme.txt
+
+Fixes:
+
+* Fixed comaptibility with WooCommerce 3.0.4.
 * Minor fixes.
 
-**1.2.1**
+**1.2.2 - 2017-04-19**
+
+Changes:
+
+* Switched jQuery plugin for tooltips from tiptip to Bootstrap's tooltip.
+* Updated readme.txt
+
+Fixes:
+
+* Fixed issue in the "Lost Sales" column.
+
+**1.2.1 - 2017-04-10**
 
 Changes:
 
@@ -304,24 +293,45 @@ Fixes:
 * Refactory and performance improvements.
 * Low stock formula improved.
 
-**1.2.2**
+**1.1.1 - 2017-01-26**
 
 Changes:
 
-* Switched jQuery plugin for tooltips from tiptip to Bootstrap's tooltip.
-* Updated readme.txt
+* Manage WooCommerce "Manage Stock" option for product variations.
+* Disable WooCommerce "Manage Stock" option instead of hiding it.
+* Updated strings in language template file.
+* New dismissable welcome notice.
+* The premium columns are now hidden by default on Stock Central.
+* Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
+* Disabled the non-available ATUM submenus.
+* Improve Stock Central queries to adapt to product variations and grouped items.
 
 Fixes:
 
-* Fixed issue in the "Lost Sales" column.
-
-**1.2.2.1**
-
-Changes:
-
-* Updated readme.txt
-
-Fixes:
-
-* Fixed comaptibility with WooCommerce 3.0.4.
 * Minor fixes.
+
+**1.1.0 - 2017-01-26**
+
+Changes:
+
+* Added WooCommerce product filters to Stock Central.
+* Added link to ATUM ticket support.
+* All types of stockable WooCommerce products are available now in Stock Central.
+* Updated screenshots with "up to date" features.
+
+**1.0.7 - 2017-01-13**
+
+* Help support link update.
+
+**1.0.6 - 2017-01-11**
+
+* Minor fixes.
+
+**1.0.3 - 2017-01-09**
+
+* Updated readme.txt
+* Minor fixes.
+
+**1.0.0 - 2017-01-09**
+
+* The first public release of ATUM plugin.

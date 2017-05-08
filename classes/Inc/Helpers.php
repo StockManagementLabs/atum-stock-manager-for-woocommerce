@@ -73,44 +73,58 @@ final class Helpers {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param array|string    $atts                 optional {
+	 * @param array|string    $atts         Optional {
 	 *
-	 * @type string           $order_type           Comma-separated list of order's post types
-	 * @type string           $order_status         Comma-separated list of order's post statuses
-	 * @type mixed            $orders_in            Array, integer o comma-separated list of order's IDs we want to get
-	 * @type int              $number_orders        Max number of orders (-1 gets all)
-	 * @type string           $meta_key             Key of the meta field to filter/order (depending of orderby value)
-	 * @type string|int|float $meta_value           Value of the meta field to filter/order(depending of orderby value)
-	 * @type string           $meta_type            Meta key type. Default value is 'CHAR'
-	 * @type string           $meta_compare         Operator to test the meta value when filtering (', '!=', '>', '>=', '<', '<=',
-	 *                                                   'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS',
-	 *                                                   'REGEXP', 'NOT REGEXP' or 'RLIKE'. Default value is '='.)
-	 * @type string           $order                ASC/DESC, default to DESC
-	 * @type string           $orderby              Field used to sort results (see WP_QUERY). Default to date (post_date)
-	 * @type string           $completed_date_start If has value returns order with the meta _completed_date after the value
-	 * @type string           $completed_date_end   Needs completed_date_start. If has value returns order with the
-	 *                                                   meta _completed_date before the date (default next day)
+	 *  @type string     $order_type         Comma-separated list of order's post types
+	 *  @type string     $order_status       Comma-separated list of order's post statuses
+	 *  @type mixed      $orders_in          Array, integer o comma-separated list of order's IDs we want to get
+	 *  @type int        $number_orders      Max number of orders (-1 gets all)
+	 *  @type string     $meta_key           Key of the meta field to filter/order (depending of orderby value)
+	 *  @type mixed      $meta_value         Value of the meta field to filter/order(depending of orderby value)
+	 *  @type string     $meta_type          Meta key type. Default value is 'CHAR'
+	 *  @type string     $meta_compare       Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
+	 *  @type string     $order              ASC/DESC, default to DESC
+	 *  @type string     $orderby            Field used to sort results (see WP_QUERY). Default to date (post_date)
+	 *  @type int        $order_date_start   If has value, filters the orders between the WC meta _completed_date or _paid_date and the $order_date_end (must be in UNIX timestamp format)
+	 *  @type int        $order_date_end     Requires $order_date_start. If has value, filters the orders completed/processed before this date (must be in UNIX timestamp format). Default: next day
+	 *
 	 * }
 	 *
-	 * @param boolean         $return_ids           If TRUE, returns an array of ID's (default FALSE)
+	 * @param boolean   $return_ids          If TRUE, returns an array of ID's (default FALSE)
 	 *
 	 * @return array
 	 */
 	public static function get_orders( $atts = array(), $return_ids = FALSE ) {
-		
-		extract( (array) apply_filters( 'atum/helpers/get_orders/params', wp_parse_args( $atts, array(
-			'order_type'           => '',
-			'post_status'          => '',
-			'orders_in'            => '',
-			'number_orders'        => - 1,
-			'meta_key'             => '',
-			'meta_value'           => '',
-			'meta_type'            => '',
-			'meta_compare'         => '',
-			'order'                => '',
-			'orderby'              => '',
-			'completed_date_start' => '',
-			'completed_date_end'   => '',
+
+		/**
+		 * Extract params
+		 *
+		 * @var string  $order_type
+		 * @var string  $order_status
+		 * @var mixed   $orders_in
+		 * @var int     $number_orders
+		 * @var string  $meta_key
+		 * @var mixed   $meta_value
+		 * @var string  $meta_type
+		 * @var string  $meta_compare
+		 * @var string  $order
+		 * @var string  $orderby
+		 * @var int     $order_date_start
+		 * @var int     $order_date_end
+		 */
+		extract( (array) apply_filters( 'atum/get_orders/params', wp_parse_args( $atts, array(
+			'order_type'       => '',
+			'post_status'      => '',
+			'orders_in'        => '',
+			'number_orders'    => - 1,
+			'meta_key'         => '',
+			'meta_value'       => '',
+			'meta_type'        => '',
+			'meta_compare'     => '',
+			'order'            => '',
+			'orderby'          => '',
+			'order_date_start' => '',
+			'order_date_end'   => '',
 		) ) ) );
 		
 		// WP_Query arguments
@@ -194,20 +208,20 @@ final class Helpers {
 			$args['orderby'] = esc_attr( $orderby );
 		}
 		
-		// WooCommerce adds the _completed_date meta key to the orders once are completed, so we can use it to filter by date
-		$completed_date_start = strtotime( $completed_date_start );
-		if ( $completed_date_start ) {
+		// WooCommerce adds the _completed_date and _paid_date meta keys to the orders once are completed,
+		// so we can use it to filter by date
+		if ( $order_date_start ) {
+
+			$wc_date_meta_key = ( in_array('wc-processing', $args['post_status']) ) ? '_paid_date' : '_completed_date';
 			
-			$completed_date_end = strtotime( $completed_date_end );
-			
-			if ( $completed_date_end ) {
+			if ( $order_date_end ) {
 				
 				$args['meta_query'][] = array(
-					'key'     => '_completed_date',
+					'key'     => $wc_date_meta_key,
 					'compare' => 'BETWEEN',
 					'value'   => array(
-						self::date_format( $completed_date_start, TRUE ),
-						self::date_format( $completed_date_end, TRUE )
+						self::date_format( $order_date_start, TRUE ),
+						self::date_format( $order_date_end, TRUE )
 					),
 					'type'    => 'DATETIME'
 				);
@@ -216,9 +230,9 @@ final class Helpers {
 			else {
 				
 				$args['meta_query'][] = array(
-					'key'     => '_completed_date',
+					'key'     => $wc_date_meta_key,
 					'compare' => '>=',
-					'value'   => self::date_format( $completed_date_start, TRUE ),
+					'value'   => self::date_format( $order_date_start, TRUE ),
 					'type'    => 'DATETIME'
 				);
 				
@@ -250,6 +264,217 @@ final class Helpers {
 		
 		return $result;
 		
+	}
+
+	/**
+	 * Get all the available children products of the published parent products (Variable and Grouped)
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param string $parent_type   The parent product type
+	 * @param string $post_type     Optional. The children post type
+	 *
+	 * @return array|bool
+	 */
+	private function get_children($parent_type, $post_type = 'product') {
+
+		// Get the published Variables first
+		$parent_args = array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => - 1,
+			'fields'         => 'ids',
+			'tax_query'      => array(
+				array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => $parent_type
+				)
+			)
+		);
+
+		$parents = new \WP_Query($parent_args);
+
+		if ($parents->found_posts) {
+
+			// Save them to be used when preparing the list query
+			if ($parent_type == 'variable') {
+				$this->variable_products = $parents->posts;
+			}
+			else {
+				$this->grouped_products = $parents->posts;
+			}
+
+			$children_args = array(
+				'post_type'       => $post_type,
+				'post_status'     => 'publish',
+				'posts_per_page'  => - 1,
+				'fields'          => 'ids',
+				'post_parent__in' => $parents->posts
+			);
+
+			$children = new \WP_Query( apply_filters( 'atum/stock_central_list/get_children', $children_args ) );
+
+			if ($children->found_posts) {
+				return $children->posts;
+			}
+
+		}
+
+		return FALSE;
+
+	}
+
+	/**
+	 * Get the items' sales since $date_start or between $date_start and $date_end
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param array  $items      Array of Product IDs we want to calculate sales from
+	 * @param int    $date_start The date from when to start the items' sales calculations (must be in UNIX timestamp format)
+	 * @param int    $date_end   Optional. The max date to calculate the items' sales (must be in UNIX timestamp format)
+	 *
+	 * @return array
+	 */
+	public static function get_sold_last_days( $items, $date_start, $date_end = NULL ) {
+
+		$items_sold = array();
+		$args = array(
+			'order_status'     => apply_filters( 'atum/sold_last_days/order_status', 'wc-processing, wc-completed' ),
+			'order_date_start' => $date_start,
+			'order_date_end'   => $date_end
+		);
+
+		$orders = self::get_orders( $args, TRUE );
+
+		if ( $orders ) {
+
+			global $wpdb;
+			$orders   = implode( ',', $orders );
+			$products = implode( ',', $items );
+
+			$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
+				FROM `{$wpdb->posts}` AS `ORDERS`
+				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
+				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
+				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_ID`
+				        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
+				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_QTY`
+				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
+				WHERE (`ORDERS`.`ID` IN ($orders)
+				    AND `META_PROD_ID`.`meta_value` IN ($products)
+				    AND `META_PROD_ID`.`meta_key` = '_product_id'
+				    AND `META_PROD_QTY`.`meta_key` = '_qty')
+				GROUP BY `META_PROD_ID`.`meta_value`
+				HAVING (`QTY` IS NOT NULL);";
+
+			$result = $wpdb->get_results( $str_sql, ARRAY_A );
+
+			if ( $result ) {
+				$items_sold = $result;
+			}
+
+		}
+
+		return $items_sold;
+
+	}
+
+	/**
+	 * Get the lost sales of a specified product during the last days
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param int $product_id   The product ID to calculate the lost sales
+	 * @param int $days         Optional. By default the calculation is made for 7 days average
+	 *
+	 * @return bool|float       Returns the lost sales or FALSE if never had lost sales
+	 */
+	public static function get_product_lost_sales ($product_id, $days = 7) {
+
+		$lost_sales = FALSE;
+		$out_of_stock_date = get_post_meta( $product_id, Globals::get_out_of_stock_date_key(), TRUE );
+
+		if ($out_of_stock_date && $days > 0) {
+
+			$days_out_of_stock = self::get_product_out_of_stock_days($product_id);
+
+			if ( is_numeric( $days_out_of_stock ) ) {
+
+				// Get the average sales for the past days when in stock
+				$days = absint($days);
+				$average_date_start = strtotime( $out_of_stock_date . " -{$days} days" );
+				$sold_last_days = self::get_sold_last_days( [ $product_id ], $average_date_start, strtotime($out_of_stock_date) );
+				$lost_sales = 0;
+
+				if ( ! empty($sold_last_days) ) {
+					$sold_last_days = reset($sold_last_days);
+
+					if ( ! empty($sold_last_days['QTY']) && $sold_last_days['QTY'] > 0 ) {
+
+						$average_sales = $sold_last_days['QTY'] / $days;
+						$product = wc_get_product($product_id);
+						$price = $product->get_regular_price();
+
+						$lost_sales = $days_out_of_stock * $average_sales * $price;
+
+					}
+				}
+			}
+
+		}
+
+		return $lost_sales;
+
+	}
+
+	/**
+	 * Get the number of days that a product was "Out of Stock"
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param int $product_id   The product ID
+	 *
+	 * @return bool|int         Returns the number of days or FALSE if is not "Out of Stock"
+	 */
+	public static function get_product_out_of_stock_days ($product_id) {
+
+		$out_of_stock_days = FALSE;
+
+		// Check if the current product has the "Out of stock" date recorded
+		$out_of_stock_date = get_post_meta($product_id, Globals::get_out_of_stock_date_key(), TRUE );
+
+		if ( $out_of_stock_date ) {
+			$out_date_time = new \DateTime( $out_of_stock_date );
+			$now_date_time = new \DateTime( 'now' );
+			$interval      = date_diff( $out_date_time, $now_date_time );
+
+			$out_of_stock_days = $interval->days;
+		}
+
+		return $out_of_stock_days;
+
+	}
+
+	/**
+	 * Get the price formatted with no HTML tags
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param float $price  The price number to format
+	 * @param array $args   The format configuration array
+	 *
+	 * @return string
+	 */
+	public static function format_price ($price, $args = array()) {
+
+		// Do not add zeros as decimals
+		if ( ! empty( $args['trim_zeros'] ) && $args['trim_zeros'] == TRUE ) {
+			add_filter( 'woocommerce_price_trim_zeros', '__return_true' );
+		}
+
+		return apply_filters('atum/format_price', strip_tags( wc_price( $price, $args ) ) );
+
 	}
 	
 	/**
@@ -322,8 +547,8 @@ final class Helpers {
 	 */
 	public static function load_view( $view, $args = [ ] ) {
 		
-		$file = apply_filters( "atum/helpers/load_view/$view", $view );
-		$args = apply_filters( "atum/helpers/load_view_args/$view", $args );
+		$file = apply_filters( "atum/load_view/$view", $view );
+		$args = apply_filters( "atum/load_view_args/$view", $args );
 		
 		// whether or not .php was added
 		if ( substr( $file, - 4 ) != '.php' ) {
@@ -398,12 +623,12 @@ final class Helpers {
 		$option         = ( isset( $global_options[ $name ] ) ) ? $global_options[ $name ] : $default;
 		
 		if ( $echo ) {
-			echo apply_filters( "atum/helpers/print_option/$name", $option );
+			echo apply_filters( "atum/print_option/$name", $option );
 			
 			return;
 		}
 		
-		return apply_filters( "atum/helpers/get_option/$name", $option );
+		return apply_filters( "atum/get_option/$name", $option );
 		
 	}
 	
@@ -427,7 +652,7 @@ final class Helpers {
 			$global_options = array();
 		}
 		
-		return apply_filters( 'atum/helpers/get_options', $global_options );
+		return apply_filters( 'atum/get_options', $global_options );
 		
 	}
 	
@@ -465,7 +690,7 @@ final class Helpers {
 		
 		$old_value = ( isset( $global_options[ $name ] ) ) ? $global_options[ $name ] : FALSE;
 		
-		$global_options[ $name ] = apply_filters( "atum/helpers/update_option/$name", $value, $old_value );
+		$global_options[ $name ] = apply_filters( "atum/update_option/$name", $value, $old_value );
 		
 		update_option( Settings::OPTION_NAME, $global_options );
 		

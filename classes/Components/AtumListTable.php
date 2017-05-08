@@ -533,8 +533,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			
 			$posts = array_merge( $selected_posts, $posts_query->posts, $posts_meta_query );
-			
-			$this->current_products = array_map( create_function( '$o', 'return $o->ID;' ), $posts );
+			$this->current_products = wp_list_pluck($posts, 'ID');
 			
 			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page );
 			
@@ -544,7 +543,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		/**
-		 * REQUIRED. Save the sorted data to the items property, where can be used by the rest of the class
+		 * REQUIRED!!!
+		 * Save the sorted data to the items property, where can be used by the rest of the class
 		 */
 		$this->items = apply_filters( 'atum/atum_list_table/items', $posts );
 		
@@ -841,25 +841,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		wp_send_json( $response );
 		
-	}
-
-	/**
-	 * Get the price formatted with no HTML tags
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param float $price
-	 * @param array $args
-	 *
-	 * @return string
-	 */
-	protected function format_price($price, $args = array()) {
-
-		// Do not add zeros as decimals
-		add_filter('woocommerce_price_trim_zeros', '__return_true');
-		$price = wc_price($price, $args);
-		return strip_tags($price);
-
 	}
 	
 	/**
