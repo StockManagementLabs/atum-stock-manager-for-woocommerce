@@ -267,65 +267,6 @@ final class Helpers {
 	}
 
 	/**
-	 * Get all the available children products of the published parent products (Variable and Grouped)
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param string $parent_type   The parent product type
-	 * @param string $post_type     Optional. The children post type
-	 *
-	 * @return array|bool
-	 */
-	private function get_children($parent_type, $post_type = 'product') {
-
-		// Get the published Variables first
-		$parent_args = array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => $parent_type
-				)
-			)
-		);
-
-		$parents = new \WP_Query($parent_args);
-
-		if ($parents->found_posts) {
-
-			// Save them to be used when preparing the list query
-			if ($parent_type == 'variable') {
-				$this->variable_products = $parents->posts;
-			}
-			else {
-				$this->grouped_products = $parents->posts;
-			}
-
-			$children_args = array(
-				'post_type'       => $post_type,
-				'post_status'     => 'publish',
-				'posts_per_page'  => - 1,
-				'fields'          => 'ids',
-				'post_parent__in' => $parents->posts
-			);
-
-			$children = new \WP_Query( apply_filters( 'atum/stock_central_list/get_children', $children_args ) );
-
-			if ($children->found_posts) {
-				return $children->posts;
-			}
-
-		}
-
-		return FALSE;
-
-	}
-
-	/**
 	 * Get the items' sales since $date_start or between $date_start and $date_end
 	 *
 	 * @since 1.2.3
@@ -345,15 +286,17 @@ final class Helpers {
 			'order_date_end'   => $date_end
 		);
 
-		$orders = self::get_orders( $args, TRUE );
+		if ( ! empty($items) ) {
 
-		if ( $orders ) {
+			$orders = self::get_orders( $args, TRUE );
 
-			global $wpdb;
-			$orders   = implode( ',', $orders );
-			$products = implode( ',', $items );
+			if ( ! empty( $orders ) ) {
 
-			$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
+				global $wpdb;
+				$orders   = implode( ',', $orders );
+				$products = implode( ',', $items );
+
+				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
 				FROM `{$wpdb->posts}` AS `ORDERS`
 				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
 				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
@@ -368,10 +311,12 @@ final class Helpers {
 				GROUP BY `META_PROD_ID`.`meta_value`
 				HAVING (`QTY` IS NOT NULL);";
 
-			$result = $wpdb->get_results( $str_sql, ARRAY_A );
+				$result = $wpdb->get_results( $str_sql, ARRAY_A );
 
-			if ( $result ) {
-				$items_sold = $result;
+				if ( $result ) {
+					$items_sold = $result;
+				}
+
 			}
 
 		}
