@@ -243,6 +243,13 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.3.2 - 2017-05-12*
+
+Fixes:
+
+* Fixed issue with latest version of Bootstrap's Popover.
+* Fixed issue with the empty ATUM List Tables.
+
 *1.2.3 - 2017-05-08*
 
 Features:

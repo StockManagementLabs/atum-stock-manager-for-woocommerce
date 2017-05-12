@@ -4,7 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.7.4
-Stable tag: 1.2.3.1
+Stable tag: 1.2.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -272,6 +272,13 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 
 == Changelog ==
+
+= 1.2.3.2 - 2017-05-12 =
+
+Fixes:
+
+* Fixed issue with latest version of Bootstrap's Popover.
+* Fixed issue with the empty ATUM List Tables.
 
 = 1.2.3 - 2017-05-08 =
 
