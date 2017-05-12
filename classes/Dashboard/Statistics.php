@@ -236,12 +236,26 @@ class Statistics extends DashboardWidget {
 
 			}
 
-			$stats['earnings'] = strip_tags( wc_price( $stats['earnings'] ) );
-
 		}
+
+		$stats['earnings'] = $this->format_price( $stats['earnings'] );
+		$stats['lost_earnings'] = $this->format_price( $stats['lost_earnings'] );
 
 		return $stats;
 
+	}
+
+	/**
+	 * Format a price as currency
+	 *
+	 * @since 1.2.3.2
+	 *
+	 * @param float $price
+	 *
+	 * @return string
+	 */
+	private function format_price ($price) {
+		return strip_tags( wc_price( $price ) );
 	}
 
 	/**
