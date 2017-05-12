@@ -20,7 +20,6 @@
 			var $listWrapper      = $(this),
 			    $atumTable        = $listWrapper.find('.atum-list-table'),
 			    postsList         = $listWrapper.find('#the-list'),
-			    //$inputSelectedIds = $listWrapper.find('.atum_selected_ids'),
 			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('#products_per_page'),
 			    $search           = $listWrapper.find('.atum-post-search'),
 			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
@@ -37,11 +36,6 @@
 				 * the pagination input field. The links contain all the information we
 				 * need concerning the wanted page number or ordering, so we'll just
 				 * parse the URL to extract these variables.
-				 *
-				 * The page number input is trickier: it has no URL so we have to find a
-				 * way around. We'll use the hidden inputs added in $inputSelectedIds
-				 * to recover the ordering variables, and the default paged input added
-				 * automatically by WordPress.
 				 */
 				init: function () {
 					
@@ -183,60 +177,6 @@
 						
 					});
 					
-					// Checkbox columns
-					/*postsList.on('change', 'input[type=checkbox]', function(){
-					 
-					 var selectedIds =  $inputSelectedIds.val(),
-					 currentId = $(this).val();
-					 
-					 // Convert the comma-separated list to array of IDs
-					 selectedIds = (selectedIds.length) ? selectedIds.split(',') : [];
-					 
-					 if ( $(this).is(':checked') ){
-					 
-					 if ( $.inArray(currentId, selectedIds) === -1 ){
-					 selectedIds.push(currentId);
-					 $(this).closest('tr').addClass('selected');
-					 }
-					 
-					 }
-					 else{
-					 
-					 $.each(selectedIds, function(index, elem){
-					 
-					 if (elem === currentId){
-					 selectedIds.splice(index, 1);
-					 return false; // Do not continue
-					 }
-					 
-					 });
-					 
-					 $(this).closest('tr').removeClass('selected');
-					 
-					 }
-					 
-					 $inputSelectedIds.val(  selectedIds.join(',') ).trigger('change');
-					 $('#the-list.ui-sortable').sortable('destroy').removeClass('ui-sortable');
-					 self.bindSortable();
-					 
-					 });*/
-					
-					// Check all checkbox
-					/*$listWrapper.on('change', '.manage-column input[type=checkbox]', function(){
-					 
-					 var listCheckboxes = $('input[type=checkbox]', postsList);
-					 if ($(this).is(':checked')){
-					 listCheckboxes.attr('checked', 'checked').change();
-					 }
-					 else{
-					 listCheckboxes.removeAttr('checked').change();
-					 }
-					 
-					 });
-					 
-					 // Add selected class to rows
-					 $('input[type=checkbox]:checked', postsList).closest('tr').addClass('selected');*/
-					
 				},
 				
 				addScrollBar: function() {
@@ -325,33 +265,41 @@
 						self.bindPopover($(this));
 					});
 					
-					// Focus on the input field
+					// Focus on the input field and set a reference to the popover to the editable column
 					$('.set-meta').on('shown.bs.popover', function () {
-						var $activePopover = $('.popover');
+						var $activePopover = $('.popover.in');
 						$activePopover.find('.meta-value').focus();
 						self.setDatePickers();
 						$(this).attr('data-popover', $activePopover.attr('id'));
 					});
 					
-					// Hide other popovers
+					// Hide any other opened popover
 					$listWrapper.click( function(e) {
 						
 						var $target   = $(e.target),
+						    // If we are clicking on a editable col, get the other opened popover, if not, get all the opened popovers
 						    $selector = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
 						
-						$selector.each(function() {
-							var $this = $(this);
-							if ($this.data('bs.popover') !== 'undefined') {
-								$this.popover('destroy');
-								$this.removeAttr('data-popover');
-								self.bindPopover($this);
-							}
+						// Get only the columns with an opened popover
+						$selector = $selector.filter(function() {
+							return $(this).data('bs.popover') !== 'undefined' && ($(this).data('bs.popover').inState || false) && $(this).data('bs.popover').inState.click === true;
 						});
+						
+						if ($selector.length) {
+							$selector.popover('destroy');
+							$selector.removeAttr('data-popover');
+							
+							// Give a small lapse to complete the 'fadeOut' animation before re-binding
+							setTimeout(function() {
+								self.bindPopover($selector);
+							}, 300);
+							
+						}
 						
 					});
 					
 					// Send the ajax request when clicking the "Set" button
-					$('body').on('click', '.popover button.set', function(e) {
+					$('body').on('click', '.popover button.set', function() {
 						
 						var $button   = $(this),
 						    $popover  = $button.closest('.popover'),
@@ -374,42 +322,54 @@
 							data.extraMeta = extraMeta;
 						}
 						
-						$.ajax({
-							url     : ajaxurl,
-							method  : 'POST',
-							dataType: 'json',
-							data    : data,
-							beforeSend: function() {
-								$button.prop('disabled', true);
-							},
-							success : function(response) {
-								
-								var noticeClass    = (response.success) ? 'updated' : 'error',
-								    $stockNotice   = $('<div class="' + noticeClass + ' notice is-dismissible"><p><strong>' + response.data + '</strong></p></div>').hide(),
-								    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
-								
-								$listWrapper.siblings('.notice').remove();
-								$listWrapper.before($stockNotice.append($dismissButton));
-								$stockNotice.slideDown(100);
-								
-								$dismissButton.on( 'click.wp-dismiss-notice', function(e) {
-									e.preventDefault();
-									$stockNotice.fadeTo( 100, 0, function() {
-										$stockNotice.slideUp( 100, function() {
-											$stockNotice.remove();
+						// Avoid repeating Ajax calls
+						if (typeof $.atumDoingAjax === 'undefined') {
+							
+							$.atumDoingAjax = $.ajax({
+								url       : ajaxurl,
+								method    : 'POST',
+								dataType  : 'json',
+								data      : data,
+								beforeSend: function () {
+									$button.prop('disabled', true);
+								},
+								success   : function (response) {
+									
+									var noticeClass    = (response.success) ? 'updated' : 'error',
+									    $stockNotice   = $('<div class="' + noticeClass + ' notice is-dismissible"><p><strong>' + response.data + '</strong></p></div>').hide(),
+									    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
+									
+									$listWrapper.siblings('.notice').remove();
+									$listWrapper.before($stockNotice.append($dismissButton));
+									$stockNotice.slideDown(100);
+									
+									$dismissButton.on('click.wp-dismiss-notice', function (e) {
+										e.preventDefault();
+										$stockNotice.fadeTo(100, 0, function () {
+											$stockNotice.slideUp(100, function () {
+												$stockNotice.remove();
+											});
 										});
 									});
-								});
-								
-								if (response.success) {
-									$setMeta.popover('hide');
-									$('.atum-post-search').keyup();
-								}
-								else {
+									
+									if (response.success) {
+										$setMeta.popover('hide');
+										$('.atum-post-search').keyup();
+									}
+									else {
+										$button.prop('disabled', false);
+									}
+									
+									$.atumDoingAjax = undefined;
+									
+								},
+								error: function() {
+									$.atumDoingAjax = undefined;
 									$button.prop('disabled', false);
 								}
-							}
-						});
+							});
+							
+						}
 						
 					});
 										
@@ -525,7 +485,6 @@
 						token      : atumListTable.nonce,
 						action     : $listWrapper.data('action'),
 						per_page   : perPage,
-						//selected   : $inputSelectedIds.val(),
 						category   : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m          : $listWrapper.find('#filter-by-date').val() || '',
 						type       : $listWrapper.find('#dropdown_product_type').val() || '',
@@ -599,9 +558,6 @@
 							
 							// Re-add tooltips
 							self.tooltip();
-							
-							// Add selected class to rows
-							//$('input[type=checkbox]:checked', postsList).closest('tr').addClass('selected');
 							
 						},
 						error     : function () {
@@ -747,13 +703,16 @@
 
 jQuery.noConflict();
 
-/*!
- * Bootstrap v3.3.7 (http://getbootstrap.com)
+/**!
+ * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2017 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ *
+ * IMPORTANT NOTE: new 3.3.7 version has an issue with Popovers that won't be fixed
+ * @see: https://github.com/twbs/bootstrap/issues/20511
  */
 
 /*!
- * Popover and Tooltip plugins
+ * Popover, Tooltip and Transition plugins
  */
-+function(t){"use strict";var e=t.fn.jquery.split(" ")[0].split(".");if(e[0]<2&&e[1]<9||1==e[0]&&9==e[1]&&e[2]<1||e[0]>3)throw new Error("Bootstrap's JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4")}(jQuery),+function(t){"use strict";function e(e){return this.each(function(){var i=t(this),n=i.data("bs.tooltip"),r="object"==typeof e&&e;!n&&/destroy|hide/.test(e)||(n||i.data("bs.tooltip",n=new o(this,r)),"string"==typeof e&&n[e]())})}var o=function(t,e){this.type=null,this.options=null,this.enabled=null,this.timeout=null,this.hoverState=null,this.$element=null,this.inState=null,this.init("tooltip",t,e)};o.VERSION="3.3.7",o.TRANSITION_DURATION=150,o.DEFAULTS={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:!1,container:!1,viewport:{selector:"body",padding:0}},o.prototype.init=function(e,o,i){if(this.enabled=!0,this.type=e,this.$element=t(o),this.options=this.getOptions(i),this.$viewport=this.options.viewport&&t(t.isFunction(this.options.viewport)?this.options.viewport.call(this,this.$element):this.options.viewport.selector||this.options.viewport),this.inState={click:!1,hover:!1,focus:!1},this.$element[0]instanceof document.constructor&&!this.options.selector)throw new Error("`selector` option must be specified when initializing "+this.type+" on the window.document object!");for(var n=this.options.trigger.split(" "),r=n.length;r--;){var s=n[r];if("click"==s)this.$element.on("click."+this.type,this.options.selector,t.proxy(this.toggle,this));else if("manual"!=s){var p="hover"==s?"mouseenter":"focusin",a="hover"==s?"mouseleave":"focusout";this.$element.on(p+"."+this.type,this.options.selector,t.proxy(this.enter,this)),this.$element.on(a+"."+this.type,this.options.selector,t.proxy(this.leave,this))}}this.options.selector?this._options=t.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},o.prototype.getDefaults=function(){return o.DEFAULTS},o.prototype.getOptions=function(e){return e=t.extend({},this.getDefaults(),this.$element.data(),e),e.delay&&"number"==typeof e.delay&&(e.delay={show:e.delay,hide:e.delay}),e},o.prototype.getDelegateOptions=function(){var e={},o=this.getDefaults();return this._options&&t.each(this._options,function(t,i){o[t]!=i&&(e[t]=i)}),e},o.prototype.enter=function(e){var o=e instanceof this.constructor?e:t(e.currentTarget).data("bs."+this.type);return o||(o=new this.constructor(e.currentTarget,this.getDelegateOptions()),t(e.currentTarget).data("bs."+this.type,o)),e instanceof t.Event&&(o.inState["focusin"==e.type?"focus":"hover"]=!0),o.tip().hasClass("in")||"in"==o.hoverState?void(o.hoverState="in"):(clearTimeout(o.timeout),o.hoverState="in",o.options.delay&&o.options.delay.show?void(o.timeout=setTimeout(function(){"in"==o.hoverState&&o.show()},o.options.delay.show)):o.show())},o.prototype.isInStateTrue=function(){for(var t in this.inState)if(this.inState[t])return!0;return!1},o.prototype.leave=function(e){var o=e instanceof this.constructor?e:t(e.currentTarget).data("bs."+this.type);return o||(o=new this.constructor(e.currentTarget,this.getDelegateOptions()),t(e.currentTarget).data("bs."+this.type,o)),e instanceof t.Event&&(o.inState["focusout"==e.type?"focus":"hover"]=!1),o.isInStateTrue()?void 0:(clearTimeout(o.timeout),o.hoverState="out",o.options.delay&&o.options.delay.hide?void(o.timeout=setTimeout(function(){"out"==o.hoverState&&o.hide()},o.options.delay.hide)):o.hide())},o.prototype.show=function(){var e=t.Event("show.bs."+this.type);if(this.hasContent()&&this.enabled){this.$element.trigger(e);var i=t.contains(this.$element[0].ownerDocument.documentElement,this.$element[0]);if(e.isDefaultPrevented()||!i)return;var n=this,r=this.tip(),s=this.getUID(this.type);this.setContent(),r.attr("id",s),this.$element.attr("aria-describedby",s),this.options.animation&&r.addClass("fade");var p="function"==typeof this.options.placement?this.options.placement.call(this,r[0],this.$element[0]):this.options.placement,a=/\s?auto?\s?/i,l=a.test(p);l&&(p=p.replace(a,"")||"top"),r.detach().css({top:0,left:0,display:"block"}).addClass(p).data("bs."+this.type,this),this.options.container?r.appendTo(this.options.container):r.insertAfter(this.$element),this.$element.trigger("inserted.bs."+this.type);var h=this.getPosition(),u=r[0].offsetWidth,c=r[0].offsetHeight;if(l){var f=p,d=this.getPosition(this.$viewport);p="bottom"==p&&h.bottom+c>d.bottom?"top":"top"==p&&h.top-c<d.top?"bottom":"right"==p&&h.right+u>d.width?"left":"left"==p&&h.left-u<d.left?"right":p,r.removeClass(f).addClass(p)}var v=this.getCalculatedOffset(p,h,u,c);this.applyPlacement(v,p);var g=function(){var t=n.hoverState;n.$element.trigger("shown.bs."+n.type),n.hoverState=null,"out"==t&&n.leave(n)};t.support.transition&&this.$tip.hasClass("fade")?r.one("bsTransitionEnd",g).emulateTransitionEnd(o.TRANSITION_DURATION):g()}},o.prototype.applyPlacement=function(e,o){var i=this.tip(),n=i[0].offsetWidth,r=i[0].offsetHeight,s=parseInt(i.css("margin-top"),10),p=parseInt(i.css("margin-left"),10);isNaN(s)&&(s=0),isNaN(p)&&(p=0),e.top+=s,e.left+=p,t.offset.setOffset(i[0],t.extend({using:function(t){i.css({top:Math.round(t.top),left:Math.round(t.left)})}},e),0),i.addClass("in");var a=i[0].offsetWidth,l=i[0].offsetHeight;"top"==o&&l!=r&&(e.top=e.top+r-l);var h=this.getViewportAdjustedDelta(o,e,a,l);h.left?e.left+=h.left:e.top+=h.top;var u=/top|bottom/.test(o),c=u?2*h.left-n+a:2*h.top-r+l,f=u?"offsetWidth":"offsetHeight";i.offset(e),this.replaceArrow(c,i[0][f],u)},o.prototype.replaceArrow=function(t,e,o){this.arrow().css(o?"left":"top",50*(1-t/e)+"%").css(o?"top":"left","")},o.prototype.setContent=function(){var t=this.tip(),e=this.getTitle();t.find(".tooltip-inner")[this.options.html?"html":"text"](e),t.removeClass("fade in top bottom left right")},o.prototype.hide=function(e){function i(){"in"!=n.hoverState&&r.detach(),n.$element&&n.$element.removeAttr("aria-describedby").trigger("hidden.bs."+n.type),e&&e()}var n=this,r=t(this.$tip),s=t.Event("hide.bs."+this.type);return this.$element.trigger(s),s.isDefaultPrevented()?void 0:(r.removeClass("in"),t.support.transition&&r.hasClass("fade")?r.one("bsTransitionEnd",i).emulateTransitionEnd(o.TRANSITION_DURATION):i(),this.hoverState=null,this)},o.prototype.fixTitle=function(){var t=this.$element;(t.attr("title")||"string"!=typeof t.attr("data-original-title"))&&t.attr("data-original-title",t.attr("title")||"").attr("title","")},o.prototype.hasContent=function(){return this.getTitle()},o.prototype.getPosition=function(e){e=e||this.$element;var o=e[0],i="BODY"==o.tagName,n=o.getBoundingClientRect();null==n.width&&(n=t.extend({},n,{width:n.right-n.left,height:n.bottom-n.top}));var r=window.SVGElement&&o instanceof window.SVGElement,s=i?{top:0,left:0}:r?null:e.offset(),p={scroll:i?document.documentElement.scrollTop||document.body.scrollTop:e.scrollTop()},a=i?{width:t(window).width(),height:t(window).height()}:null;return t.extend({},n,p,a,s)},o.prototype.getCalculatedOffset=function(t,e,o,i){return"bottom"==t?{top:e.top+e.height,left:e.left+e.width/2-o/2}:"top"==t?{top:e.top-i,left:e.left+e.width/2-o/2}:"left"==t?{top:e.top+e.height/2-i/2,left:e.left-o}:{top:e.top+e.height/2-i/2,left:e.left+e.width}},o.prototype.getViewportAdjustedDelta=function(t,e,o,i){var n={top:0,left:0};if(!this.$viewport)return n;var r=this.options.viewport&&this.options.viewport.padding||0,s=this.getPosition(this.$viewport);if(/right|left/.test(t)){var p=e.top-r-s.scroll,a=e.top+r-s.scroll+i;p<s.top?n.top=s.top-p:a>s.top+s.height&&(n.top=s.top+s.height-a)}else{var l=e.left-r,h=e.left+r+o;l<s.left?n.left=s.left-l:h>s.right&&(n.left=s.left+s.width-h)}return n},o.prototype.getTitle=function(){var t,e=this.$element,o=this.options;return t=e.attr("data-original-title")||("function"==typeof o.title?o.title.call(e[0]):o.title)},o.prototype.getUID=function(t){do t+=~~(1e6*Math.random());while(document.getElementById(t));return t},o.prototype.tip=function(){if(!this.$tip&&(this.$tip=t(this.options.template),1!=this.$tip.length))throw new Error(this.type+" `template` option must consist of exactly 1 top-level element!");return this.$tip},o.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".tooltip-arrow")},o.prototype.enable=function(){this.enabled=!0},o.prototype.disable=function(){this.enabled=!1},o.prototype.toggleEnabled=function(){this.enabled=!this.enabled},o.prototype.toggle=function(e){var o=this;e&&(o=t(e.currentTarget).data("bs."+this.type),o||(o=new this.constructor(e.currentTarget,this.getDelegateOptions()),t(e.currentTarget).data("bs."+this.type,o))),e?(o.inState.click=!o.inState.click,o.isInStateTrue()?o.enter(o):o.leave(o)):o.tip().hasClass("in")?o.leave(o):o.enter(o)},o.prototype.destroy=function(){var t=this;clearTimeout(this.timeout),this.hide(function(){t.$element.off("."+t.type).removeData("bs."+t.type),t.$tip&&t.$tip.detach(),t.$tip=null,t.$arrow=null,t.$viewport=null,t.$element=null})};var i=t.fn.tooltip;t.fn.tooltip=e,t.fn.tooltip.Constructor=o,t.fn.tooltip.noConflict=function(){return t.fn.tooltip=i,this}}(jQuery),+function(t){"use strict";function e(e){return this.each(function(){var i=t(this),n=i.data("bs.popover"),r="object"==typeof e&&e;!n&&/destroy|hide/.test(e)||(n||i.data("bs.popover",n=new o(this,r)),"string"==typeof e&&n[e]())})}var o=function(t,e){this.init("popover",t,e)};if(!t.fn.tooltip)throw new Error("Popover requires tooltip.js");o.VERSION="3.3.7",o.DEFAULTS=t.extend({},t.fn.tooltip.Constructor.DEFAULTS,{placement:"right",trigger:"click",content:"",template:'<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'}),o.prototype=t.extend({},t.fn.tooltip.Constructor.prototype),o.prototype.constructor=o,o.prototype.getDefaults=function(){return o.DEFAULTS},o.prototype.setContent=function(){var t=this.tip(),e=this.getTitle(),o=this.getContent();t.find(".popover-title")[this.options.html?"html":"text"](e),t.find(".popover-content").children().detach().end()[this.options.html?"string"==typeof o?"html":"append":"text"](o),t.removeClass("fade top bottom left right in"),t.find(".popover-title").html()||t.find(".popover-title").hide()},o.prototype.hasContent=function(){return this.getTitle()||this.getContent()},o.prototype.getContent=function(){var t=this.$element,e=this.options;return t.attr("data-content")||("function"==typeof e.content?e.content.call(t[0]):e.content)},o.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".arrow")};var i=t.fn.popover;t.fn.popover=e,t.fn.popover.Constructor=o,t.fn.popover.noConflict=function(){return t.fn.popover=i,this}}(jQuery),+function(t){"use strict";function e(){var t=document.createElement("bootstrap"),e={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"};for(var o in e)if(void 0!==t.style[o])return{end:e[o]};return!1}t.fn.emulateTransitionEnd=function(e){var o=!1,i=this;t(this).one("bsTransitionEnd",function(){o=!0});var n=function(){o||t(i).trigger(t.support.transition.end)};return setTimeout(n,e),this},t(function(){t.support.transition=e(),t.support.transition&&(t.event.special.bsTransitionEnd={bindType:t.support.transition.end,delegateType:t.support.transition.end,handle:function(e){return t(e.target).is(this)?e.handleObj.handler.apply(this,arguments):void 0}})})}(jQuery);
++function($){"use strict";function transitionEnd(){var el=document.createElement("bootstrap");var transEndEventNames={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"};for(var name in transEndEventNames){if(el.style[name]!==undefined){return{end:transEndEventNames[name]}}}return false}$.fn.emulateTransitionEnd=function(duration){var called=false;var $el=this;$(this).one("bsTransitionEnd",function(){called=true});var callback=function(){if(!called)$($el).trigger($.support.transition.end)};setTimeout(callback,duration);return this};$(function(){$.support.transition=transitionEnd();if(!$.support.transition)return;$.event.special.bsTransitionEnd={bindType:$.support.transition.end,delegateType:$.support.transition.end,handle:function(e){if($(e.target).is(this))return e.handleObj.handler.apply(this,arguments)}}})}(jQuery);+function($){"use strict";var Tooltip=function(element,options){this.type=null;this.options=null;this.enabled=null;this.timeout=null;this.hoverState=null;this.$element=null;this.inState=null;this.init("tooltip",element,options)};Tooltip.VERSION="3.3.6";Tooltip.TRANSITION_DURATION=150;Tooltip.DEFAULTS={animation:true,placement:"top",selector:false,template:'<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:false,container:false,viewport:{selector:"body",padding:0}};Tooltip.prototype.init=function(type,element,options){this.enabled=true;this.type=type;this.$element=$(element);this.options=this.getOptions(options);this.$viewport=this.options.viewport&&$($.isFunction(this.options.viewport)?this.options.viewport.call(this,this.$element):this.options.viewport.selector||this.options.viewport);this.inState={click:false,hover:false,focus:false};if(this.$element[0]instanceof document.constructor&&!this.options.selector){throw new Error("`selector` option must be specified when initializing "+this.type+" on the window.document object!")}var triggers=this.options.trigger.split(" ");for(var i=triggers.length;i--;){var trigger=triggers[i];if(trigger=="click"){this.$element.on("click."+this.type,this.options.selector,$.proxy(this.toggle,this))}else if(trigger!="manual"){var eventIn=trigger=="hover"?"mouseenter":"focusin";var eventOut=trigger=="hover"?"mouseleave":"focusout";this.$element.on(eventIn+"."+this.type,this.options.selector,$.proxy(this.enter,this));this.$element.on(eventOut+"."+this.type,this.options.selector,$.proxy(this.leave,this))}}this.options.selector?this._options=$.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()};Tooltip.prototype.getDefaults=function(){return Tooltip.DEFAULTS};Tooltip.prototype.getOptions=function(options){options=$.extend({},this.getDefaults(),this.$element.data(),options);if(options.delay&&typeof options.delay=="number"){options.delay={show:options.delay,hide:options.delay}}return options};Tooltip.prototype.getDelegateOptions=function(){var options={};var defaults=this.getDefaults();this._options&&$.each(this._options,function(key,value){if(defaults[key]!=value)options[key]=value});return options};Tooltip.prototype.enter=function(obj){var self=obj instanceof this.constructor?obj:$(obj.currentTarget).data("bs."+this.type);if(!self){self=new this.constructor(obj.currentTarget,this.getDelegateOptions());$(obj.currentTarget).data("bs."+this.type,self)}if(obj instanceof $.Event){self.inState[obj.type=="focusin"?"focus":"hover"]=true}if(self.tip().hasClass("in")||self.hoverState=="in"){self.hoverState="in";return}clearTimeout(self.timeout);self.hoverState="in";if(!self.options.delay||!self.options.delay.show)return self.show();self.timeout=setTimeout(function(){if(self.hoverState=="in")self.show()},self.options.delay.show)};Tooltip.prototype.isInStateTrue=function(){for(var key in this.inState){if(this.inState[key])return true}return false};Tooltip.prototype.leave=function(obj){var self=obj instanceof this.constructor?obj:$(obj.currentTarget).data("bs."+this.type);if(!self){self=new this.constructor(obj.currentTarget,this.getDelegateOptions());$(obj.currentTarget).data("bs."+this.type,self)}if(obj instanceof $.Event){self.inState[obj.type=="focusout"?"focus":"hover"]=false}if(self.isInStateTrue())return;clearTimeout(self.timeout);self.hoverState="out";if(!self.options.delay||!self.options.delay.hide)return self.hide();self.timeout=setTimeout(function(){if(self.hoverState=="out")self.hide()},self.options.delay.hide)};Tooltip.prototype.show=function(){var e=$.Event("show.bs."+this.type);if(this.hasContent()&&this.enabled){this.$element.trigger(e);var inDom=$.contains(this.$element[0].ownerDocument.documentElement,this.$element[0]);if(e.isDefaultPrevented()||!inDom)return;var that=this;var $tip=this.tip();var tipId=this.getUID(this.type);this.setContent();$tip.attr("id",tipId);this.$element.attr("aria-describedby",tipId);if(this.options.animation)$tip.addClass("fade");var placement=typeof this.options.placement=="function"?this.options.placement.call(this,$tip[0],this.$element[0]):this.options.placement;var autoToken=/\s?auto?\s?/i;var autoPlace=autoToken.test(placement);if(autoPlace)placement=placement.replace(autoToken,"")||"top";$tip.detach().css({top:0,left:0,display:"block"}).addClass(placement).data("bs."+this.type,this);this.options.container?$tip.appendTo(this.options.container):$tip.insertAfter(this.$element);this.$element.trigger("inserted.bs."+this.type);var pos=this.getPosition();var actualWidth=$tip[0].offsetWidth;var actualHeight=$tip[0].offsetHeight;if(autoPlace){var orgPlacement=placement;var viewportDim=this.getPosition(this.$viewport);placement=placement=="bottom"&&pos.bottom+actualHeight>viewportDim.bottom?"top":placement=="top"&&pos.top-actualHeight<viewportDim.top?"bottom":placement=="right"&&pos.right+actualWidth>viewportDim.width?"left":placement=="left"&&pos.left-actualWidth<viewportDim.left?"right":placement;$tip.removeClass(orgPlacement).addClass(placement)}var calculatedOffset=this.getCalculatedOffset(placement,pos,actualWidth,actualHeight);this.applyPlacement(calculatedOffset,placement);var complete=function(){var prevHoverState=that.hoverState;that.$element.trigger("shown.bs."+that.type);that.hoverState=null;if(prevHoverState=="out")that.leave(that)};$.support.transition&&this.$tip.hasClass("fade")?$tip.one("bsTransitionEnd",complete).emulateTransitionEnd(Tooltip.TRANSITION_DURATION):complete()}};Tooltip.prototype.applyPlacement=function(offset,placement){var $tip=this.tip();var width=$tip[0].offsetWidth;var height=$tip[0].offsetHeight;var marginTop=parseInt($tip.css("margin-top"),10);var marginLeft=parseInt($tip.css("margin-left"),10);if(isNaN(marginTop))marginTop=0;if(isNaN(marginLeft))marginLeft=0;offset.top+=marginTop;offset.left+=marginLeft;$.offset.setOffset($tip[0],$.extend({using:function(props){$tip.css({top:Math.round(props.top),left:Math.round(props.left)})}},offset),0);$tip.addClass("in");var actualWidth=$tip[0].offsetWidth;var actualHeight=$tip[0].offsetHeight;if(placement=="top"&&actualHeight!=height){offset.top=offset.top+height-actualHeight}var delta=this.getViewportAdjustedDelta(placement,offset,actualWidth,actualHeight);if(delta.left)offset.left+=delta.left;else offset.top+=delta.top;var isVertical=/top|bottom/.test(placement);var arrowDelta=isVertical?delta.left*2-width+actualWidth:delta.top*2-height+actualHeight;var arrowOffsetPosition=isVertical?"offsetWidth":"offsetHeight";$tip.offset(offset);this.replaceArrow(arrowDelta,$tip[0][arrowOffsetPosition],isVertical)};Tooltip.prototype.replaceArrow=function(delta,dimension,isVertical){this.arrow().css(isVertical?"left":"top",50*(1-delta/dimension)+"%").css(isVertical?"top":"left","")};Tooltip.prototype.setContent=function(){var $tip=this.tip();var title=this.getTitle();$tip.find(".tooltip-inner")[this.options.html?"html":"text"](title);$tip.removeClass("fade in top bottom left right")};Tooltip.prototype.hide=function(callback){var that=this;var $tip=$(this.$tip);var e=$.Event("hide.bs."+this.type);function complete(){if(that.hoverState!="in")$tip.detach();that.$element.removeAttr("aria-describedby").trigger("hidden.bs."+that.type);callback&&callback()}this.$element.trigger(e);if(e.isDefaultPrevented())return;$tip.removeClass("in");$.support.transition&&$tip.hasClass("fade")?$tip.one("bsTransitionEnd",complete).emulateTransitionEnd(Tooltip.TRANSITION_DURATION):complete();this.hoverState=null;return this};Tooltip.prototype.fixTitle=function(){var $e=this.$element;if($e.attr("title")||typeof $e.attr("data-original-title")!="string"){$e.attr("data-original-title",$e.attr("title")||"").attr("title","")}};Tooltip.prototype.hasContent=function(){return this.getTitle()};Tooltip.prototype.getPosition=function($element){$element=$element||this.$element;var el=$element[0];var isBody=el.tagName=="BODY";var elRect=el.getBoundingClientRect();if(elRect.width==null){elRect=$.extend({},elRect,{width:elRect.right-elRect.left,height:elRect.bottom-elRect.top})}var elOffset=isBody?{top:0,left:0}:$element.offset();var scroll={scroll:isBody?document.documentElement.scrollTop||document.body.scrollTop:$element.scrollTop()};var outerDims=isBody?{width:$(window).width(),height:$(window).height()}:null;return $.extend({},elRect,scroll,outerDims,elOffset)};Tooltip.prototype.getCalculatedOffset=function(placement,pos,actualWidth,actualHeight){return placement=="bottom"?{top:pos.top+pos.height,left:pos.left+pos.width/2-actualWidth/2}:placement=="top"?{top:pos.top-actualHeight,left:pos.left+pos.width/2-actualWidth/2}:placement=="left"?{top:pos.top+pos.height/2-actualHeight/2,left:pos.left-actualWidth}:{top:pos.top+pos.height/2-actualHeight/2,left:pos.left+pos.width}};Tooltip.prototype.getViewportAdjustedDelta=function(placement,pos,actualWidth,actualHeight){var delta={top:0,left:0};if(!this.$viewport)return delta;var viewportPadding=this.options.viewport&&this.options.viewport.padding||0;var viewportDimensions=this.getPosition(this.$viewport);if(/right|left/.test(placement)){var topEdgeOffset=pos.top-viewportPadding-viewportDimensions.scroll;var bottomEdgeOffset=pos.top+viewportPadding-viewportDimensions.scroll+actualHeight;if(topEdgeOffset<viewportDimensions.top){delta.top=viewportDimensions.top-topEdgeOffset}else if(bottomEdgeOffset>viewportDimensions.top+viewportDimensions.height){delta.top=viewportDimensions.top+viewportDimensions.height-bottomEdgeOffset}}else{var leftEdgeOffset=pos.left-viewportPadding;var rightEdgeOffset=pos.left+viewportPadding+actualWidth;if(leftEdgeOffset<viewportDimensions.left){delta.left=viewportDimensions.left-leftEdgeOffset}else if(rightEdgeOffset>viewportDimensions.right){delta.left=viewportDimensions.left+viewportDimensions.width-rightEdgeOffset}}return delta};Tooltip.prototype.getTitle=function(){var title;var $e=this.$element;var o=this.options;title=$e.attr("data-original-title")||(typeof o.title=="function"?o.title.call($e[0]):o.title);return title};Tooltip.prototype.getUID=function(prefix){do prefix+=~~(Math.random()*1e6);while(document.getElementById(prefix));return prefix};Tooltip.prototype.tip=function(){if(!this.$tip){this.$tip=$(this.options.template);if(this.$tip.length!=1){throw new Error(this.type+" `template` option must consist of exactly 1 top-level element!")}}return this.$tip};Tooltip.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".tooltip-arrow")};Tooltip.prototype.enable=function(){this.enabled=true};Tooltip.prototype.disable=function(){this.enabled=false};Tooltip.prototype.toggleEnabled=function(){this.enabled=!this.enabled};Tooltip.prototype.toggle=function(e){var self=this;if(e){self=$(e.currentTarget).data("bs."+this.type);if(!self){self=new this.constructor(e.currentTarget,this.getDelegateOptions());$(e.currentTarget).data("bs."+this.type,self)}}if(e){self.inState.click=!self.inState.click;if(self.isInStateTrue())self.enter(self);else self.leave(self)}else{self.tip().hasClass("in")?self.leave(self):self.enter(self)}};Tooltip.prototype.destroy=function(){var that=this;clearTimeout(this.timeout);this.hide(function(){that.$element.off("."+that.type).removeData("bs."+that.type);if(that.$tip){that.$tip.detach()}that.$tip=null;that.$arrow=null;that.$viewport=null})};function Plugin(option){return this.each(function(){var $this=$(this);var data=$this.data("bs.tooltip");var options=typeof option=="object"&&option;if(!data&&/destroy|hide/.test(option))return;if(!data)$this.data("bs.tooltip",data=new Tooltip(this,options));if(typeof option=="string")data[option]()})}var old=$.fn.tooltip;$.fn.tooltip=Plugin;$.fn.tooltip.Constructor=Tooltip;$.fn.tooltip.noConflict=function(){$.fn.tooltip=old;return this}}(jQuery);+function($){"use strict";var Popover=function(element,options){this.init("popover",element,options)};if(!$.fn.tooltip)throw new Error("Popover requires tooltip.js");Popover.VERSION="3.3.6";Popover.DEFAULTS=$.extend({},$.fn.tooltip.Constructor.DEFAULTS,{placement:"right",trigger:"click",content:"",template:'<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});Popover.prototype=$.extend({},$.fn.tooltip.Constructor.prototype);Popover.prototype.constructor=Popover;Popover.prototype.getDefaults=function(){return Popover.DEFAULTS};Popover.prototype.setContent=function(){var $tip=this.tip();var title=this.getTitle();var content=this.getContent();$tip.find(".popover-title")[this.options.html?"html":"text"](title);$tip.find(".popover-content").children().detach().end()[this.options.html?typeof content=="string"?"html":"append":"text"](content);$tip.removeClass("fade top bottom left right in");if(!$tip.find(".popover-title").html())$tip.find(".popover-title").hide()};Popover.prototype.hasContent=function(){return this.getTitle()||this.getContent()};Popover.prototype.getContent=function(){var $e=this.$element;var o=this.options;return $e.attr("data-content")||(typeof o.content=="function"?o.content.call($e[0]):o.content)};Popover.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".arrow")};function Plugin(option){return this.each(function(){var $this=$(this);var data=$this.data("bs.popover");var options=typeof option=="object"&&option;if(!data&&/destroy|hide/.test(option))return;if(!data)$this.data("bs.popover",data=new Popover(this,options));if(typeof option=="string")data[option]()})}var old=$.fn.popover;$.fn.popover=Plugin;$.fn.popover.Constructor=Popover;$.fn.popover.noConflict=function(){$.fn.popover=old;return this}}(jQuery);
