@@ -1086,7 +1086,8 @@ class Log extends AtumModel {
 	 * @return bool
 	 */
 	public function is_editable() {
-		return apply_filters( 'atum/inventory_logs/log/is_editable', $this->get_status() == 'pending', $this );
+		$log_status = $this->get_status();
+		return apply_filters( 'atum/inventory_logs/log/is_editable', !$log_status || $log_status == 'pending', $this );
 	}
 
 	/**
@@ -1104,8 +1105,8 @@ class Log extends AtumModel {
 			return 0;
 		}
 
-		$user                 = get_user_by( 'id', get_current_user_id() );
-		$comment_author       = $user->display_name;
+		$user = get_user_by( 'id', get_current_user_id() );
+		$comment_author = $user->display_name;
 		$comment_author_email = $user->user_email;
 
 		$commentdata = apply_filters( 'atum/inventory_logs/log/note_data', array(
