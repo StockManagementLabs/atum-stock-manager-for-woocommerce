@@ -39,22 +39,15 @@ class Bootstrap {
 	
 	const ALREADY_BOOTSTRAPED = 1;
 	const DEPENDENCIES_UNSATISFIED = 2;
-	
 
+	/**
+	 * Bootstrap constructor
+	 *
+	 * @since 0.0.2
+	 */
 	private function __construct() {
-
-		// Disregard WP AJAX 'heartbeat' calls. Why waste resources?
-		if ( is_admin() && isset( $_POST['action'] ) && $_POST['action'] == 'heartbeat' ) {
-
-			// Hook, for purists.
-			if ( ! has_action( 'atum/admin/ajax/heartbeat' ) ) {
-				do_action( 'atum/admin/ajax/heartbeat' );
-			}
-
-			return;
-		}
 		
-		// Ensure that WooCommerce is already loaded before start the bootstrap
+		// Ensure that WooCommerce is already loaded before starting the bootstrap
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );
 
 	}
@@ -167,8 +160,6 @@ class Bootstrap {
 			</div>
 			<?php
 		}
-		
-		// TODO: ADD NOTICES FOR NON-REGISTERED PRO/PREMIUM VERSIONS
 		
 	}
 	

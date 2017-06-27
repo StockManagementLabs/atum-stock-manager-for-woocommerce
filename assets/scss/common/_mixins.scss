@@ -192,6 +192,31 @@
 	white-space: nowrap;
 }
 
+// Placeholder text
+@mixin placeholder($color: $input-color-placeholder) {
+	// Firefox
+	&::-moz-placeholder {
+		color: $color;
+		opacity: 1; // Override Firefox's unusual default opacity
+	}
+	&:-ms-input-placeholder { color: $color; } // Internet Explorer 10+
+	&::-webkit-input-placeholder  { color: $color; } // Safari and Chrome
+}
+
+// Clearfix
+@mixin clearfix() {
+	*zoom: 1;
+	
+	&:before, &:after {
+		content: ' ';
+		display: table;
+	}
+	
+	&:after {
+		clear: both;
+	}
+}
+
 // Overlay
 @mixin overlay($bg-color: rgba(0, 0, 0, .7), $opacity: .7) {
 	position: absolute;
@@ -203,7 +228,6 @@
 	right: 0;
 	z-index: 1;
 }
-
 
 // Loading Spinner
 @mixin loader($size: 15px, $color: #0073AA, $border-size: 2px, $duration: 1s) {
@@ -247,7 +271,6 @@
 	}
 }
 
-
 // Vertical gradient, from top to bottom
 //
 // Creates two color stops, start and end, by specifying a color and position for each color stop.
@@ -264,9 +287,57 @@
 	background-color: $color;
 	
 	&[href] {
-		&:hover,
-		&:focus {
+		&:hover, &:focus {
 			background-color: darken($color, 10%);
 		}
 	}
+}
+
+// Dashicons
+@mixin icon_dashicons( $glyph: '\f333' ) {
+	font-family: 'Dashicons';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	text-indent: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	content: $glyph;
+}
+
+// WooCommerce icons
+@mixin icon_woocommerce( $glyph: '\e001' ) {
+	font-family: 'WooCommerce';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	text-indent: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	content: $glyph;
+}
+
+// Icon replacement
+@mixin ir() {
+	display: block;
+	text-indent: -9999px;
+	position: relative;
+	height: 1em;
+	width: 1em;
 }

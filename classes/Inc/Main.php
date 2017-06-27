@@ -19,6 +19,7 @@ use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
+use Atum\InventoryLogs\InventoryLogs;
 
 
 class Main {
@@ -64,6 +65,10 @@ class Main {
 			
 			// Add the menus
 			add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
+
+			// Reorder the admin submenus
+			add_filter( 'custom_menu_order', '__return_true' );
+			add_filter( 'menu_order', array($this, 'set_menu_order') );
 			
 			// Load dependencies
 			add_action( 'init', array( $this, 'admin_load' ) );
@@ -117,6 +122,7 @@ class Main {
 
 	/**
 	 * Initialize the front stuff
+	 * This will execute as a priority 11 within the "init" hook
 	 *
 	 * @since 1.2.0
 	 */
@@ -140,6 +146,9 @@ class Main {
 			)
 		) );
 
+		// Load the Inventory Logs
+		InventoryLogs::get_instance();
+
 	}
 	
 	/**
@@ -148,13 +157,14 @@ class Main {
 	 * @since 0.0.3
 	 */
 	public function admin_load() {
-		
-		// Delete transients if this is first execution after upgrade
+
 		$db_version = get_option( ATUM_PREFIX . 'version' );
 		
-		if ( $db_version != ATUM_VERSION ) {
-			Helpers::delete_transients();
-			update_option( ATUM_PREFIX . 'version', ATUM_VERSION );
+		if ( version_compare($db_version, ATUM_VERSION, '!=') ) {
+
+			// Do upgrade tasks
+			new Upgrade($db_version);
+
 		}
 		
 		// Load language files
@@ -164,7 +174,8 @@ class Main {
 		Ajax::get_instance();
 		$this->sp_obj = Settings::get_instance();
 		$this->sc_obj = StockCentral::get_instance();
-		$stats_widget = new Statistics( __('ATUM Statistics', ATUM_TEXT_DOMAIN) );
+
+		new Statistics( __('ATUM Statistics', ATUM_TEXT_DOMAIN) );
 
 		// Add the help pointers
 		add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
@@ -221,7 +232,50 @@ class Main {
 			}
 
 		}
+
+		do_action('atum/after_adding_menu');
 		
+	}
+
+	/**
+	 * Set the ATUM admin menu's order
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param array $menu_order
+	 *
+	 * @return array
+	 */
+	public function set_menu_order ($menu_order) {
+
+		global $submenu;
+
+		if ( ! empty($submenu) && ! empty( $submenu[ Globals::ATUM_UI_SLUG ] ) ) {
+
+			// Place the "Settings" and "Add-ons" submenus always at the las 2 positions
+			$menu_items = $submenu[ Globals::ATUM_UI_SLUG ];
+			$last_values = [ ATUM_TEXT_DOMAIN . '-settings', ATUM_TEXT_DOMAIN . '-addons'];
+
+			usort($menu_items, function ($a, $b) use ($last_values) {
+
+				if ( ! empty( array_intersect($a, $last_values) ) && ! empty( array_intersect($b, $last_values) )  ) {
+					// The Add-ons will be the last item
+					return ( in_array(ATUM_TEXT_DOMAIN . '-addons', $a) ) ? 1 : -1;
+				}
+				elseif ( ! empty( array_intersect($a, $last_values) )  ) {
+					return 1;
+				}
+
+				return -1;
+
+			});
+
+			$submenu[ Globals::ATUM_UI_SLUG ] = apply_filters( 'atum/menu_order', $menu_items );
+
+		}
+
+		return $menu_order;
+
 	}
 
 	/**
@@ -253,6 +307,22 @@ class Main {
 		// Build the submenu items
 		if ( ! empty($submenu_items) ) {
 
+			// Place the "Settings" and "Add-ons" submenus always at the las 2 positions
+			$last_values = ['settings', 'addons'];
+
+			uksort($submenu_items, function ($a, $b) use ($last_values) {
+
+				if ( in_array($a, $last_values) && in_array($b, $last_values) ) {
+					return ($a == 'addons') ? 1 : -1;
+				}
+				elseif ( in_array($a, $last_values) ) {
+					return 1;
+				}
+
+				return -1;
+
+			});
+
 			foreach ( $submenu_items as $key => $menu_item ) {
 
 				$slug = $menu_item['slug'];
@@ -261,11 +331,13 @@ class Main {
 					$slug = ATUM_TEXT_DOMAIN . "-$slug";
 				}
 
+				$href = ( isset( $menu_item['href'] ) ) ? $menu_item['href'] : "admin.php?page=$slug";
+
 				$wp_admin_bar->add_node( array(
 					'id'     => "$slug-item",
 					'parent' => Globals::ATUM_UI_SLUG,
 					'title'  => $menu_item['title'],
-					'href'   => admin_url( "admin.php?page=$slug" )
+					'href'   => admin_url( $href )
 				) );
 
 			}

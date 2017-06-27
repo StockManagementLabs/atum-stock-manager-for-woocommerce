@@ -1,0 +1,1304 @@
+//
+// Atum Meta Boxes
+//------------------
+
+.blockUI.blockOverlay {
+	
+	&:before {
+		content: '';
+		@include overlay($opacity: 1);
+	}
+	
+	&:after {
+		content: '';
+		top: 45%;
+		left: 0;
+		right: 0;
+		margin: auto;
+		@include loader(30px, $brand-info, 3px);
+		
+		.note & {
+			top: 38%;
+			@include loader(25px, $brand-info);
+		}
+	}
+	
+}
+
+//
+// Backbone modal dialog
+//-----------------------
+.wc-backbone-modal {
+	
+	* {
+		box-sizing: border-box;
+	}
+	
+	.wc-backbone-modal-content {
+		position: fixed;
+		background: #fff;
+		z-index: 100000;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 500px;
+		
+		article {
+			overflow: auto;
+		}
+	}
+	
+	&.wc-backbone-modal-shipping-method-settings {
+		.wc-backbone-modal-content {
+			width: 75%;
+			min-width: 500px;
+		}
+	}
+	
+	.select2-container {
+		width: 100% !important;
+	}
+}
+
+.wc-backbone-modal-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	min-height: 360px;
+	background: #000;
+	opacity: 0.7;
+	z-index: 99900;
+}
+
+.wc-backbone-modal-main {
+	padding-bottom: 55px;
+	
+	header,
+	article {
+		display: block;
+		position: relative;
+	}
+	
+	.wc-backbone-modal-header {
+		height: auto;
+		background: #fcfcfc;
+		padding: 1em 1.5em;
+		border-bottom: 1px solid #ddd;
+		
+		h1 {
+			margin: 0;
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 1.5em;
+		}
+		
+		.modal-close-link {
+			cursor: pointer;
+			color: #777;
+			height: 54px;
+			width: 54px;
+			padding: 0;
+			position: absolute;
+			top: 0;
+			right: 0;
+			text-align: center;
+			border: 0;
+			border-left: 1px solid #ddd;
+			background-color: transparent;
+			-webkit-transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
+			transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
+			
+			&::before {
+				font: normal 22px/50px 'dashicons' !important;
+				color: #666;
+				display: block;
+				content: '\f335';
+				font-weight: 300;
+			}
+			
+			&:hover, &:focus {
+				background: #ddd;
+				border-color: #ccc;
+				color: #000;
+			}
+			
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+	
+	article {
+		padding: 1.5em;
+		
+		p {
+			margin: 1.5em 0;
+			
+			&:first-child {
+				margin-top: 0;
+			}
+			
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+		
+		.pagination {
+			padding: 10px 0 0;
+			text-align: center;
+		}
+	}
+	
+	footer {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 100;
+		padding: 1em 1.5em;
+		background: #fcfcfc;
+		border-top: 1px solid #dfdfdf;
+		box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
+		
+		.inner {
+			float: right;
+			line-height: 23px;
+			
+			.button {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+//
+// Select2
+//---------
+
+.select2-drop, .select2-dropdown {
+	z-index: 999999 !important;
+}
+
+.select2-results {
+	line-height: 1.5em;
+	
+	.select2-results__option, .select2-results__group {
+		margin: 0;
+		padding: 8px;
+	}
+}
+
+.select2-dropdown {
+	border-color: #DDD;
+}
+
+.select2-dropdown--below {
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.select2-dropdown--above {
+	box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.select2-container {
+	
+	.select2-selection__rendered.ui-sortable li {
+		cursor: move;
+	}
+	
+	.select2-selection {
+		border-color: #DDD;
+	}
+	
+	.select2-search__field {
+		min-width: 150px;
+	}
+	
+	.select2-selection--single {
+		height: 32px;
+		
+		.select2-selection__rendered {
+			line-height: 32px;
+			padding-right: 24px;
+		}
+		
+		.select2-selection__arrow {
+			right: 3px;
+			height: 30px;
+		}
+		
+	}
+	
+	.select2-selection--multiple {
+		min-height: 28px;
+		border-radius: 0;
+		line-height: 1.5;
+		
+		li {
+			margin: 0;
+		}
+		
+		.select2-selection__choice {
+			padding: 2px 6px;
+		}
+	}
+	
+	.select2-selection__clear {
+		color: #999;
+		margin-top: -1px;
+	}
+	
+	.select2-search--inline {
+		
+		.select2-search__field {
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			padding: 3px 0;
+		}
+		
+	}
+	
+	&, .selection, .select2-selection--single {
+		&:focus {
+			outline: none;
+		}
+	}
+	
+}
+
+//
+// Help tip
+//---------
+
+.atum-help-tip {
+	color: #666;
+	display: inline-block;
+	font-size: 1.1em;
+	font-style: normal;
+	height: 16px;
+	line-height: 16px;
+	position: relative;
+	vertical-align: middle;
+	width: 16px;
+	
+	&::after {
+		@include icon_dashicons( '\f223' );
+		cursor: help;
+	}
+}
+
+h2 .atum-help-tip {
+	margin-top: -5px;
+	margin-left: 0.25em;
+}
+
+//
+// Inventory Logs' data meta box
+//---------------------------
+
+#log_data {
+	padding: 23px 24px 12px;
+	
+	h2 {
+		margin: 0;
+		font-size: 21px;
+		line-height: 1.2;
+		text-shadow: 1px 1px 1px #fff;
+		padding: 0;
+	}
+	
+	h3 {
+		font-size: 14px;
+	}
+	
+	h3, h4 {
+		color: #333;
+		margin: 1.33em 0 0
+	}
+	
+	p {
+		&.log_number {
+			margin: 0;
+			line-height: 1.6em;
+			font-size: 16px;
+		}
+	}
+	
+	.log_data_column_container {
+		clear: both;
+		margin-top: $grid-gutter-width/2;
+	}
+	
+	.log_data_column {
+		width: 32%;
+		padding: 0 2% 0 0;
+		float: left;
+		
+		@media only screen and (max-width: 1280px) {
+			width: 48%;
+			
+			&:first-child {
+				width: 100%;
+			}
+		}
+		
+		> h3 {
+			span {
+				display: block;
+			}
+		}
+		
+		&:last-child {
+			padding-right: 0;
+		}
+		
+		p {
+			padding: 0 !important;
+			
+			&.none_set {
+				color: #999
+			}
+		}
+		
+		.address {
+			strong {
+				display: block;
+			}
+		}
+		
+		.form-field {
+			float: left;
+			clear: left;
+			width: 48%;
+			padding: 0;
+			margin: 9px 0 0;
+			color: #777;
+			
+			label {
+				display: block;
+				padding: 0 0 3px;
+			}
+			
+			input, select, textarea {
+				width: 100%;
+			}
+			
+			.select2-container {
+				width: 100% !important;
+			}
+			
+			.date-picker {
+				width: 50%;
+			}
+			
+			.hour, .minute {
+				width: 3.5em;
+			}
+			
+			small {
+				display: block;
+				margin: 5px 0 0;
+				color: #999;
+			}
+			
+			&.log-editor {
+				margin-top: $grid-gutter-width/2;
+				
+				label {
+					margin-bottom: -$grid-gutter-width;
+				}
+			}
+			
+		}
+		
+		._billing_address_2_field, ._billing_last_name_field, ._billing_phone_field, ._billing_postcode_field,
+		._billing_state_field, ._shipping_address_2_field, ._shipping_last_name_field, ._shipping_postcode_field,
+		._shipping_state_field, .form-field.last {
+			float: right;
+			clear: right;
+		}
+		
+		._billing_company_field, ._shipping_company_field, ._transaction_id_field, .form-field-wide {
+			width: 100%;
+			clear: both;
+			
+			.wc-customer-search, .wc-enhanced-select, input, select, textarea {
+				width: 100%;
+			}
+		}
+		
+		div.edit_address {
+			display: none;
+			zoom:1;
+			padding-right: 1px;
+		}
+		
+		.wc-customer-user, .wc-log-status {
+			label {
+				a {
+					float: right;
+				}
+			}
+		}
+		
+		a.edit_address {
+			width: 14px;
+			height: 0;
+			padding: 14px 0 0;
+			margin: 0 0 0 6px;
+			overflow: hidden;
+			position: relative;
+			color: #999;
+			border: 0;
+			float: right;
+			
+			&:focus, &:hover {
+				color: #000;
+			}
+			
+			&:after {
+				position: absolute;
+				top: 0;
+				left: 0;
+				text-align: center;
+				vertical-align: top;
+				line-height: 14px;
+				font-size: 14px;
+				font-weight: 400;
+				-webkit-font-smoothing: antialiased;
+				font-family: Dashicons;
+				content: '\f464';
+			}
+		}
+		
+		.billing-same-as-shipping, .load_customer_billing, .load_customer_shipping {
+			font-size: 13px;
+			display: inline-block;
+			font-weight: 400;
+		}
+		
+		.load_customer_shipping {
+			margin-right: .3em;
+		}
+		
+	}
+	
+}
+
+//
+// Inventory Log's actions meta box
+//------------------------------
+
+.log_actions {
+	margin: 0;
+	overflow: hidden;
+	zoom: 1;
+	
+	li {
+		padding: 6px 0;
+		margin: 0;
+		line-height: 1.6em;
+		float: left;
+		width: 50%;
+		text-align: center;
+		
+		a {
+			float: none;
+			text-align: center;
+			text-decoration: underline;
+		}
+		
+		&.wide {
+			width: auto;
+			float: none;
+			clear: both;
+			padding: 6px;
+			text-align: left;
+			overflow: hidden;
+		}
+		
+		#delete-action {
+			line-height: 25px;
+			vertical-align: middle;
+			text-align: left;
+			float: left;
+		}
+		
+		.save_log {
+			float: right;
+		}
+		
+		&#actions {
+			overflow: hidden;
+			
+			.button {
+				width: 24px;
+				box-sizing: border-box;
+				float: right;
+			}
+			
+			select {
+				width: 225px;
+				box-sizing: border-box;
+				float: left;
+			}
+		}
+	}
+}
+
+//
+// Inventory Log's notes meta box
+//----------------------------
+
+#atum_inventory_log_notes {
+	.inside {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+ul.log_notes {
+	padding: 2px 0 0;
+	
+	li {
+		padding: 0 10px;
+		
+		.note_content {
+			padding: 10px;
+			background: #EFEFEF;
+			position: relative;
+			
+			p {
+				margin: 0;
+				padding: 0;
+				word-wrap: break-word;
+			}
+		}
+		
+		p.meta {
+			padding: 10px;
+			color: #999;
+			margin: 0;
+			font-size: 11px;
+			
+			.exact-date {
+				border-bottom: 1px dotted #999;
+			}
+		}
+		
+		a.delete_note {
+			color: $brand-danger;
+		}
+		
+		.note_content::after {
+			content: '';
+			display: block;
+			position: absolute;
+			bottom: -10px;
+			left: 20px;
+			width: 0;
+			height: 0;
+			border-width: 10px 10px 0 0;
+			border-style: solid;
+			border-color: #EFEFEF transparent;
+		}
+	}
+	
+}
+
+.add_note {
+	border-top: 1px solid #DDD;
+	padding: 10px 10px 0;
+	
+	h4 {
+		margin-top: 5px !important;
+	}
+	
+	#add_log_note {
+		width: 100%;
+		height: 50px;
+	}
+}
+
+//
+// Inventory Log's items meta box
+//----------------------------
+
+#atum_inventory_log_items {
+	
+	.inside {
+		display: block !important;
+		margin: 0;
+		padding: 0;
+		background: #fefefe;
+	}
+	
+	.atum-log-data-row {
+		border-bottom: 1px solid #dfdfdf;
+		padding: 1.5em 2em;
+		background: #f8f8f8;
+		@include clearfix;
+		line-height: 2em;
+		text-align: right;
+		
+		p {
+			margin: 0;
+			line-height: 2em;
+		}
+		
+		.atum-used-coupons {
+			text-align: left;
+			
+			.tips {
+				display: inline-block;
+			}
+		}
+		
+	}
+	
+	.atum-used-coupons {
+		float: left;
+		width: 50%;
+	}
+	
+	.atum-log-totals {
+		float: right;
+		width: 50%;
+		margin: 0;
+		padding: 0;
+		text-align: right;
+		
+		.amount {
+			font-weight: 700;
+		}
+		
+		.label {
+			vertical-align: top;
+		}
+		
+		.total {
+			font-size: 1em !important;
+			width: 10em;
+			margin: 0 0 0 0.5em;
+			box-sizing: border-box;
+			
+			input[type='text'] {
+				width: 96%;
+				float: right;
+			}
+		}
+		
+		.refunded-total {
+			color: $brand-danger;
+		}
+	}
+	
+	.refund-actions {
+		margin-top: 5px;
+		padding-top: 12px;
+		border-top: 1px solid #dfdfdf;
+		
+		.button {
+			float: right;
+			margin-left: 4px;
+		}
+		
+		.cancel-action {
+			float: left;
+			margin-left: 0;
+		}
+	}
+	
+	.atum-log-item-bulk-edit {
+		.cancel-action {
+			float: left;
+			margin-left: 0;
+		}
+	}
+	
+	.add_meta {
+		margin-left: 0 !important;
+	}
+	
+	h3 small {
+		color: #999;
+	}
+	
+	.amount {
+		white-space: nowrap;
+	}
+	
+	.add-items {
+		.description {
+			margin-right: 10px;
+		}
+		
+		.button {
+			float: left;
+			margin-right: 0.25em;
+		}
+		
+		.button-primary {
+			float: none;
+			margin-right: 0;
+		}
+	}
+	
+	.hndle, .handlediv {
+		display: none;
+	}
+	
+	.atum_log_items_wrapper {
+		margin: 0;
+		overflow-x: auto;
+		
+		table.atum_log_items {
+			width: 100%;
+			background: #fff;
+			
+			thead {
+				
+				th {
+					text-align: left;
+					padding: 1em;
+					font-weight: normal;
+					color: #999;
+					background: #f8f8f8;
+					-webkit-touch-callout: none;
+					-webkit-user-select: none;
+					-khtml-user-select: none;
+					-moz-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+					
+					&.sortable {
+						cursor: pointer;
+					}
+					
+					&:last-child {
+						padding-right: 2em;
+					}
+					
+					&:first-child {
+						padding-left: 2em;
+					}
+					
+					.atum-arrow {
+						float: right;
+						position: relative;
+						margin-right: -1em;
+					}
+				}
+				
+			}
+			
+			tbody th, td {
+				padding: 1.5em 1em 1em;
+				text-align: left;
+				line-height: 1.5em;
+				vertical-align: top;
+				border-bottom: 1px solid #f8f8f8;
+				
+				textarea {
+					width: 100%;
+				}
+				
+				select {
+					width: 50%;
+				}
+				
+				input, textarea {
+					font-size: 14px;
+					padding: 4px;
+					color: #555;
+				}
+				
+				&:last-child {
+					padding-right: 2em;
+				}
+				
+				&:first-child {
+					padding-left: 2em;
+				}
+				
+			}
+			
+			tbody tr {
+				
+				td {
+					cursor: pointer;
+				}
+				
+				&.selected {
+					background: #f5ebf3;
+					
+					td {
+						border-color: #e6cce1;
+						opacity: 0.8;
+					}
+				}
+				
+			}
+			
+			tbody tr:last-child td {
+				border-bottom: 1px solid #dfdfdf;
+			}
+			
+			tbody tr:first-child td {
+				border-top: 8px solid #f8f8f8;
+			}
+			
+			tbody#order_line_items tr:first-child td {
+				border-top: none;
+			}
+			
+			td.thumb {
+				text-align: left;
+				width: 38px;
+				padding-bottom: 1.5em;
+				
+				.atum-log-item-thumbnail {
+					width: 38px;
+					height: 38px;
+					border: 2px solid #e8e8e8;
+					background: #f8f8f8;
+					color: #ccc;
+					position: relative;
+					font-size: 21px;
+					display: block;
+					text-align: center;
+					
+					&::before {
+						@include icon_dashicons( '\f128' );
+						width: 38px;
+						line-height: 38px;
+						display: block;
+					}
+					
+					img {
+						width: 100%;
+						height: 100%;
+						margin: 0;
+						padding: 0;
+						position: relative;
+					}
+					
+				}
+				
+			}
+			
+			td.name {
+				.atum-log-item-sku, .atum-log-item-variation {
+					display: block;
+					margin-top: 0.5em;
+					font-size: 0.92em !important;
+					color: #888;
+				}
+			}
+			
+			.item {
+				min-width: 200px;
+			}
+			
+			.center, .variation-id {
+				text-align: center;
+			}
+			
+			.cost, .tax, .quantity, .line_cost, .line_tax, .tax_class, .item_cost {
+				text-align: right;
+				
+				label {
+					white-space: nowrap;
+					color: #999;
+					font-size: 0.833em;
+					
+					input {
+						display: inline;
+					}
+				}
+				
+				input {
+					width: 70px;
+					vertical-align: middle;
+					text-align: right;
+				}
+				
+				select {
+					width: 85px;
+					height: 26px;
+					vertical-align: middle;
+					font-size: 1em;
+				}
+				
+				.split-input {
+					display: inline-block;
+					background: #fff;
+					border: 1px solid #ddd;
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+					margin: 1px 0;
+					min-width: 80px;
+					overflow: hidden;
+					line-height: 1em;
+					text-align: right;
+					
+					div.input {
+						width: 100%;
+						box-sizing: border-box;
+						
+						label {
+							font-size: 0.75em;
+							padding: 4px 6px 0;
+							color: #555;
+							display: block;
+						}
+						
+						input {
+							width: 100%;
+							box-sizing: border-box;
+							border: 0;
+							box-shadow: none;
+							margin: 0;
+							padding: 0 6px 4px;
+							color: #555;
+							background: transparent;
+							
+							@include placeholder(#ddd);
+						}
+						
+					}
+					
+					div.input:first-child {
+						border-bottom: 1px dashed #ddd;
+						background: #fff;
+						
+						label, input {
+							color: #ccc;
+						}
+						
+					}
+					
+				}
+				
+				.view {
+					white-space: nowrap;
+				}
+				
+				.edit {
+					text-align: left;
+				}
+				
+				small.times, del, .atum-log-item-taxes, .atum-log-item-discount, .atum-log-item-refund-fields {
+					font-size: 0.92em !important;
+					color: #888;
+				}
+				
+				.atum-log-item-taxes, .atum-log-item-refund-fields {
+					margin: 0;
+					label {
+						display: block;
+					}
+				}
+				
+				.atum-log-item-discount {
+					display: block;
+					margin-top: 0.5em;
+				}
+				
+				small.times {
+					margin-right: 0.25em;
+				}
+				
+			}
+			
+			.quantity {
+				text-align: center;
+				
+				input {
+					text-align: center;
+					width: 50px;
+				}
+				
+			}
+			
+			span.subtotal {
+				opacity: 0.5;
+			}
+			
+			td, th {
+				&.tax_class {
+					text-align: left;
+				}
+			}
+			
+			.calculated {
+				border-color: #ae8ca2;
+				border-style: dotted;
+			}
+			
+			table.meta {
+				width: 100%;
+			}
+			
+			table.meta, table.display_meta {
+				margin: 0.5em 0 0;
+				font-size: 0.92em !important;
+				color: #888;
+				
+				tr {
+					
+					th {
+						border: 0;
+						padding: 0 4px 0.5em 0;
+						line-height: 1.5em;
+						width: 20%;
+					}
+					
+					td {
+						padding: 0 4px 0.5em 0;
+						border: 0;
+						line-height: 1.5em;
+						
+						input {
+							width: 100%;
+							margin: 0;
+							position: relative;
+							border-bottom: 0;
+							box-shadow: none;
+						}
+						
+						textarea {
+							width: 100%;
+							height: 4em;
+							margin: 0;
+							box-shadow: none;
+						}
+						
+						input:focus + textarea {
+							border-top-color: #999;
+						}
+						
+						p {
+							margin: 0 0 0.5em;
+							line-height: 1.5em;
+						}
+						
+						p:last-child {
+							margin: 0;
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			.refund_by {
+				border-bottom: 1px dotted #999;
+			}
+			
+			tr {
+				
+				&.fee, &.refund, &.shipping {
+					.thumb {
+						div {
+							display: block;
+							text-indent: -9999px;
+							position: relative;
+							height: 1em;
+							width: 1em;
+							font-size: 1.5em;
+							line-height: 1em;
+							vertical-align: middle;
+							margin: 0;
+							
+							&:before {
+								color: #ccc;
+							}
+						}
+					}
+				}
+				
+				&.fee {
+					.thumb div {
+						&:before {
+							@include icon_woocommerce( '\e007' );
+						}
+					}
+				}
+				
+				&.refund {
+					.thumb div {
+						&:before {
+							@include icon_woocommerce( '\e014' );
+						}
+					}
+				}
+				
+				&.shipping {
+					.thumb div {
+						&:before {
+							@include icon_woocommerce( '\e01a' );
+						}
+					}
+					
+					.shipping_method_name, .shipping_method {
+						width: 100%;
+						margin: 0 0 0.5em;
+					}
+				}
+				
+			}
+			
+			th.line_tax {
+				white-space: nowrap;
+			}
+			
+			th.line_tax, td.line_tax {
+				
+				.delete-log-tax {
+					display: block;
+					text-indent: -9999px;
+					position: relative;
+					height: 1em;
+					width: 1em;
+					float: right;
+					font-size: 14px;
+					visibility: hidden;
+					margin: 3px -18px 0 0;
+					
+					&:before {
+						@include icon_dashicons( '\f153' );
+						color: #999;
+					}
+					
+					&:hover {
+						&:before {
+							color: $brand-danger;
+						}
+					}
+				}
+				
+				&:hover {
+					.delete-log-tax {
+						visibility: visible;
+					}
+				}
+				
+			}
+			
+			small.refunded {
+				display: block;
+				color: $brand-danger;
+				white-space: nowrap;
+				margin-top: 0.5em;
+				
+				&:before {
+					@include icon_dashicons( '\f171' );
+					position: relative;
+					top: auto;
+					left: auto;
+					margin: -1px 4px 0 0;
+					vertical-align: middle;
+					line-height: 1em;
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	.atum-log-edit-line-item {
+		padding-left: 0;
+	}
+	
+	.atum-log-edit-line-item-actions {
+		width: 44px;
+		text-align: right;
+		padding-left: 0;
+		vertical-align: middle;
+		
+		a {
+			color: #ccc;
+			display: inline-block;
+			cursor: pointer;
+			padding: 0 0 0.5em;
+			margin: 0 0 0 12px;
+			vertical-align: middle;
+			text-decoration: none;
+			line-height: 16px;
+			width: 16px;
+			overflow: hidden;
+			
+			&:before {
+				margin: 0;
+				padding: 0;
+				font-size: 16px;
+				width: 16px;
+				height: 16px;
+			}
+			
+			&:hover {
+				&:before {
+					color: #999;
+				}
+			}
+			
+			&:first-child {
+				margin-left: 0;
+			}
+			
+		}
+		
+		.edit-log-item {
+			&:before {
+				@include icon_dashicons( '\f464' );
+				position: relative;
+			}
+			
+			&:focus {
+				box-shadow: none;
+			}
+		}
+		
+		.delete-log-item, .delete_refund {
+			
+			&:before {
+				@include icon_dashicons( '\f158' );
+				position: relative;
+			}
+			
+			&:hover {
+				&:before {
+					color: $brand-danger;
+				}
+			}
+			
+			&:focus {
+				box-shadow: none;
+			}
+			
+		}
+		
+	}
+	
+	tbody tr .atum-log-edit-line-item-actions {
+		visibility: hidden;
+	}
+	
+	tbody tr:hover .atum-log-edit-line-item-actions {
+		visibility: visible;
+	}
+	
+	.atum-log-totals .atum-log-edit-line-item-actions {
+		width: 1.5em;
+		visibility: visible !important;
+		
+		a {
+			padding: 0;
+		}
+	}
+}

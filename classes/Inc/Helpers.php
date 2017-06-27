@@ -297,19 +297,19 @@ final class Helpers {
 				$products = implode( ',', $items );
 
 				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
-				FROM `{$wpdb->posts}` AS `ORDERS`
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
-				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_ID`
-				        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_QTY`
-				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-				WHERE (`ORDERS`.`ID` IN ($orders)
-				    AND `META_PROD_ID`.`meta_value` IN ($products)
-				    AND `META_PROD_ID`.`meta_key` = '_product_id'
-				    AND `META_PROD_QTY`.`meta_key` = '_qty')
-				GROUP BY `META_PROD_ID`.`meta_value`
-				HAVING (`QTY` IS NOT NULL);";
+							FROM `{$wpdb->posts}` AS `ORDERS`
+							    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
+							        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
+							    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_ID`
+							        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
+							    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_QTY`
+							        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
+							WHERE (`ORDERS`.`ID` IN ($orders)
+							    AND `META_PROD_ID`.`meta_value` IN ($products)
+							    AND `META_PROD_ID`.`meta_key` = '_product_id'
+							    AND `META_PROD_QTY`.`meta_key` = '_qty')
+							GROUP BY `META_PROD_ID`.`meta_value`
+							HAVING (`QTY` IS NOT NULL);";
 
 				$result = $wpdb->get_results( $str_sql, ARRAY_A );
 
@@ -418,7 +418,7 @@ final class Helpers {
 			add_filter( 'woocommerce_price_trim_zeros', '__return_true' );
 		}
 
-		return apply_filters('atum/format_price', strip_tags( wc_price( $price, $args ) ) );
+		return apply_filters('atum/format_price', strip_tags( wc_price( round($price, 2), $args ) ) );
 
 	}
 	
@@ -790,6 +790,44 @@ final class Helpers {
 				wp_register_script( 'es6-promise', ATUM_URL . 'assets/js/vendor/es6-promise.auto.min.js', [], ATUM_VERSION, TRUE );
 			}
 		}
+
+	}
+
+	/**
+	 * Trim inputs and arrays
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param  string/array $value value/s to trim
+	 *
+	 * @return mixed
+	 */
+	public static function trim_input( $value ) {
+
+		if ( is_object( $value ) ) {
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+
+			$return = array();
+
+			foreach ( $value as $k => $v ) {
+
+				if ( is_object( $v ) ) {
+					$return[$k] = $v;
+					continue;
+				}
+
+				$return[$k] = is_array( $v ) ? self::trim_input( $v ) : trim( $v );
+
+			}
+
+			return $return;
+
+		}
+
+		return trim( $value );
 
 	}
 

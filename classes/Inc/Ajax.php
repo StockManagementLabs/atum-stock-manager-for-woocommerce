@@ -15,8 +15,14 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
+use Atum\InventoryLogs\InventoryLogs;
+use Atum\InventoryLogs\Items\LogItemFee;
+use Atum\InventoryLogs\Items\LogItemShipping;
+use Atum\InventoryLogs\Items\LogItemTax;
 use Atum\Settings\Settings;
 use Atum\StockCentral\Inc\ListTable;
+use Atum\InventoryLogs\Models\Log;
+use Atum\InventoryLogs\Models\LogItemModel;
 
 
 final class Ajax {
@@ -49,6 +55,27 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_activate_license', array($this, 'activate_license') );
 		add_action( 'wp_ajax_atum_deactivate_license', array($this, 'deactivate_license') );
 		add_action( 'wp_ajax_atum_install_addon', array($this, 'install_addon') );
+
+		// Search for WooCommerce orders from Inventory Logs
+		add_action( 'wp_ajax_atum_json_search_orders', array( $this, 'search_wc_orders' ) );
+
+		// Add and delete Inventory Log's notes
+		add_action( 'wp_ajax_atum_add_log_note', array( $this, 'add_inventory_log_note' ) );
+		add_action( 'wp_ajax_atum_delete_log_note', array( $this, 'delete_inventory_log_note' ) );
+
+		// Inventory Log items meta box actions
+		add_action( 'wp_ajax_atum_load_log_items', array( $this, 'load_log_items' ) );
+		add_action( 'wp_ajax_atum_add_log_item', array( $this, 'add_log_item' ) );
+		add_action( 'wp_ajax_atum_add_log_fee', array( $this, 'add_log_fee' ) );
+		add_action( 'wp_ajax_atum_add_log_shipping', array( $this, 'add_log_shipping' ) );
+		add_action( 'wp_ajax_atum_add_log_tax', array( $this, 'add_log_tax' ) );
+		add_action( 'wp_ajax_atum_remove_log_item', array( $this, 'remove_log_item' ) );
+		add_action( 'wp_ajax_atum_remove_log_tax', array( $this, 'remove_log_tax' ) );
+		add_action( 'wp_ajax_atum_calc_line_taxes', array( $this, 'calc_line_taxes' ) );
+		add_action( 'wp_ajax_atum_save_log_items', array( $this, 'save_log_items' ) );
+
+		// Update the Inventory Log status
+		add_action( 'wp_ajax_atum_mark_log_status', array( $this, 'mark_log_status' ) );
 
 	}
 	
@@ -512,7 +539,434 @@ final class Ajax {
 		wp_send_json_error($default_error);
 
 	}
-	
+
+	/**
+	 * Seach for WooCommerce orders through Inventory Logs' enhanced select
+	 *
+	 * @since 1.2.4
+	 */
+	public function search_wc_orders() {
+
+		check_ajax_referer( 'search-products', 'security' );
+
+		ob_start();
+
+		$order_id = absint( $_GET['term'] );
+
+		if ( empty( $order_id ) ) {
+			wp_die();
+		}
+
+		$wc_order = wc_get_order($order_id);
+
+		if ( empty( $wc_order ) ) {
+			wp_die();
+		}
+
+		wp_send_json( [$order_id => __('Order #', ATUM_TEXT_DOMAIN) . $order_id] );
+
+	}
+
+	/**
+	 * Add a note to an Inventory Log
+	 *
+	 * @since 1.2.4
+	 */
+	public function add_inventory_log_note() {
+
+		check_ajax_referer( 'add-log-note', 'security' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( -1 );
+		}
+
+		$post_id   = absint( $_POST['post_id'] );
+		$note      = wp_kses_post( trim( stripslashes( $_POST['note'] ) ) );
+
+		if ( $post_id ) {
+
+			$log = new Log($post_id);
+			$comment_id = $log->add_note( $note );
+
+			?>
+			<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
+				<div class="note_content">
+					<?php echo wpautop( wptexturize( $note ) ) ?>
+				</div>
+
+				<p class="meta">
+					<a href="#" class="delete_note"><?php _e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
+				</p>
+			</li>
+			<?php
+
+		}
+
+		wp_die();
+
+	}
+
+	/**
+	 * Delete a note from an Inventory Log
+	 *
+	 * @since 1.2.4
+	 */
+	public function delete_inventory_log_note() {
+
+		check_ajax_referer( 'delete-log-note', 'security' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( -1 );
+		}
+
+		$note_id = absint( $_POST['note_id'] );
+
+		if ( $note_id ) {
+			wp_delete_comment( $note_id );
+		}
+
+		wp_die();
+
+	}
+
+	/**
+	 * Load inventory log items
+	 *
+	 * @since 1.2.4
+	 */
+	public function load_log_items() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( -1 );
+		}
+
+		$log_id = absint( $_POST['log_id'] );
+		$log    = new Log( $log_id );
+
+		Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+
+		wp_die();
+
+	}
+
+	/**
+	 * Add inventory log item
+	 *
+	 * @since 1.2.4
+	 *
+	 * @throws \Exception
+	 */
+	public function add_log_item() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] )  ) {
+			wp_die( -1 );
+		}
+
+		try {
+
+			$log_id       = absint( $_POST['log_id'] );
+			$log          = new Log( $log_id );
+			$items_to_add = wp_parse_id_list( is_array( $_POST['item_to_add'] ) ? $_POST['item_to_add'] : array( $_POST['item_to_add'] ) );
+			$html         = '';
+
+			if ( ! $log ) {
+				throw new \Exception( __( 'Invalid log', ATUM_TEXT_DOMAIN ) );
+			}
+
+			foreach ( $items_to_add as $item_to_add ) {
+
+				if ( ! in_array( get_post_type( $item_to_add ), array( 'product', 'product_variation' ) ) ) {
+					continue;
+				}
+
+				$item_id = $log->add_product( wc_get_product( $item_to_add ) );
+				$log_item_args = array(
+					'log_item_id'   => $item_id,
+					'log_item_type' => 'line_item'
+				);
+				$item = apply_filters( 'atum/ajax/log_item', $log->get_log_item( (object) $log_item_args ), $item_id );
+				$class = 'new_row';
+
+				// Load template
+				$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item', compact('log', 'item', 'item_id', 'class') );
+
+			}
+
+			wp_send_json_success( array( 'html' => $html ) );
+
+		} catch ( \Exception $e ) {
+			wp_send_json_error( array( 'error' => $e->getMessage() ) );
+		}
+
+	}
+
+	/**
+	 * Add inventory log fee
+	 *
+	 * @since 1.2.4
+	 */
+	public function add_log_fee() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] ) ) {
+			wp_die( -1 );
+		}
+
+		try {
+
+			$log_id = absint( $_POST['log_id'] );
+			$log    = new Log( $log_id );
+
+			$item = new LogItemFee();
+			$item->set_log_id( $log_id );
+			$item_id = $item->save();
+
+			// Load template
+			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item-fee', compact('log', 'item', 'item_id') );
+
+			wp_send_json_success( array( 'html' => $html ) );
+
+		} catch ( \Exception $e ) {
+			wp_send_json_error( array( 'error' => $e->getMessage() ) );
+		}
+	}
+
+	/**
+	 * Add inventory log shipping cost
+	 *
+	 * @since 1.2.4
+	 */
+	public function add_log_shipping() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] )  ) {
+			wp_die( -1 );
+		}
+
+		try {
+
+			$log_id = absint( $_POST['log_id'] );
+			$log    = new Log( $log_id );
+
+			$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
+
+			// Add new shipping
+			$item = new LogItemShipping();
+			$item->set_shipping_rate( new \WC_Shipping_Rate() );
+			$item->set_log_id( $log_id );
+			$item_id = $item->save();
+
+			// Load template
+			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item-shipping', compact('log', 'item', 'item_id', 'shipping_methods') );
+
+			wp_send_json_success( array( 'html' => $html ) );
+
+		} catch ( Exception $e ) {
+			wp_send_json_error( array( 'error' => $e->getMessage() ) );
+		}
+
+	}
+
+	/**
+	 * Add inventory log tax
+	 *
+	 * @since 1.2.4
+	 */
+	public function add_log_tax() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] )  ) {
+			wp_die( -1 );
+		}
+
+		try {
+
+			$log_id  = absint( $_POST['log_id'] );
+			$log     = new Log( $log_id );
+			$rate_id = absint( $_POST['rate_id'] );
+
+			// Add new tax
+			$item = new LogItemTax();
+			$item->set_rate( $rate_id );
+			$item->set_log_id( $log_id );
+			$item_id = $item->save();
+
+			// Load template
+			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/items', compact('log') );
+
+			wp_send_json_success( array( 'html' => $html ) );
+
+		} catch ( Exception $e ) {
+			wp_send_json_error( array( 'error' => $e->getMessage() ) );
+		}
+
+	}
+
+	/**
+	 * Remove a inventory log item
+	 *
+	 * @since 1.2.4
+	 */
+	public function remove_log_item() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( -1 );
+		}
+
+		$log_id  = absint( $_POST['log_id'] );
+		$log_item_ids = $_POST['log_item_ids'];
+
+		if ( ! is_array( $log_item_ids ) && is_numeric( $log_item_ids ) ) {
+			$log_item_ids = array( $log_item_ids );
+		}
+
+		if ( ! empty($log_item_ids) ) {
+
+			$log = new Log( $log_id );
+
+			foreach ( $log_item_ids as $id ) {
+				$log->remove_item( absint($id) );
+			}
+
+			$log->save_items();
+		}
+
+		wp_die();
+
+	}
+
+	/**
+	 * Remove a inventory log tax
+	 *
+	 * @since 1.2.4
+	 */
+	public function remove_log_tax() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( -1 );
+		}
+
+		$log_id  = absint( $_POST['log_id'] );
+		$rate_id = absint( $_POST['rate_id'] );
+		$log = new Log( $log_id );
+		$log->remove_item($rate_id);
+		$log->save_items();
+
+		// Load template
+		Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+
+		wp_die();
+
+	}
+
+	/**
+	 * Calc inventory logs line taxes
+	 *
+	 * @since 1.2.4
+	 */
+	public function calc_line_taxes() {
+
+		check_ajax_referer( 'calc-totals', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( -1 );
+		}
+
+		$log_id = absint( $_POST['log_id'] );
+		/*$calculate_tax_args = array(
+			'country'  => strtoupper( wc_clean( $_POST['country'] ) ),
+			'state'    => strtoupper( wc_clean( $_POST['state'] ) ),
+			'postcode' => strtoupper( wc_clean( $_POST['postcode'] ) ),
+			'city'     => strtoupper( wc_clean( $_POST['city'] ) ),
+		);*/
+
+		// Parse the jQuery serialized items
+		$items = array();
+		parse_str( $_POST['items'], $items );
+
+		// Grab the order and recalc taxes
+		$log = new Log($log_id);
+		$log->save_log_items($items);
+		$log->calculate_taxes();
+		$log->calculate_totals( FALSE );
+
+		// Load template
+		Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+
+		wp_die();
+
+	}
+
+	/**
+	 * Save inventory log items
+	 *
+	 * @since 1.2.4
+	 */
+	public static function save_log_items() {
+
+		check_ajax_referer( 'log-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( -1 );
+		}
+
+		if ( isset( $_POST['log_id'], $_POST['items'] ) ) {
+
+			$log_id = absint( $_POST['log_id'] );
+
+			// Parse the jQuery serialized items
+			$items = array();
+			parse_str( $_POST['items'], $items );
+
+			// Save order items
+			$log = new Log( $log_id );
+			$log->save_log_items($items);
+
+			// Return HTML items
+			Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+
+		}
+
+		wp_die();
+
+	}
+
+	/**
+	 * Mark an inventory log with a status
+	 * NOTE: This callback is not being triggered through an Ajax request, just a normal HTTP request
+	 *
+	 * @since 1.2.4
+	 */
+	public static function mark_log_status() {
+
+		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-mark-log-status' ) ) {
+
+			$status = sanitize_text_field( $_GET['status'] );
+			$log  = new Log( absint( $_GET['log_id'] ) );
+
+			if ( $log && in_array($status, array_keys( Log::get_statuses() ) ) ) {
+				$log->update_status( $status );
+				do_action( 'atum/inventory_logs/log_edit_status', $log->get_id(), $status );
+			}
+
+		}
+
+		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php?post_type=' . InventoryLogs::POST_TYPE ) );
+		exit;
+
+	}
+
 	
 	/****************************
 	 * Instance methods

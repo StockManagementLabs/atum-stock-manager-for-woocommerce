@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Inbound stock counter represents the volume of products that have been ordered in by the store admin or manager. You can add inbound stock manually using the 'Stock Logs' add-on.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Inbound stock counter represents the volume of products that have been ordered in by the store admin or manager. You can add inbound stock manually using the 'Inventory Logs' add-on.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock on Hold', ATUM_TEXT_DOMAIN ) ?></strong></td>
@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Reserved Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "There are times when the store owner needs to reserve or set aside a small or significant amount of stock. Occasions like special events, customer reservations or quality checks will find this feature very handy. Stock Logs add-on can automatically deduct the reserved stock value from the 'Current Stock' indicator.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "There are times when the store owner needs to reserve or set aside a small or significant amount of stock. Occasions like special events, customer reservations or quality checks will find this feature very handy. Inventory Logs add-on can automatically deduct the reserved stock value from the 'Current Stock' indicator.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Back Orders', ATUM_TEXT_DOMAIN ) ?></strong></td>

@@ -236,7 +236,7 @@
 		.atum-loading {
 			right: 20px;
 			top: 7px;
-			@include loader(18px, #0073AA, 3px, 1s);
+			@include loader(18px, $brand-primary, 3px, 1s);
 		}
 		
 		@media only screen and (max-width: 780px) {
