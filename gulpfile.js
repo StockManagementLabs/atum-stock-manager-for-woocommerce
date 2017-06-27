@@ -18,7 +18,7 @@ var gulp         = require('gulp'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.2.3';
+var version = '1.2.4';
 
 // Global config
 var config = {
@@ -35,7 +35,7 @@ var config = {
 			'/** \n',
 			' * ATUM Stock Manager for WooCommerce JS \n',
 			' * @version ' + version + ' \n',
-			' * @author Salva Machí and Jose Piera \n',
+			' * @authors Salva Machí and Jose Piera \n',
 			' *\n',
 			' * Author URI: https://sispixels.com/ \n',
 			' * License : (c)2017 Stock Management Labs \n',
@@ -49,7 +49,7 @@ var config = {
 			'/** \n',
 			' * ATUM Stock Manager for WooCommerce CSS \n',
 			' * @version ' + version + ' \n',
-			' * @author Salva Machí and Jose Piera \n',
+			' * @authors Salva Machí and Jose Piera \n',
 			' *\n',
 			' * Author URI: https://sispixels.com/ \n',
 			' * License : (c)2017 Stock Management Labs \n',
