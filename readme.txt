@@ -1,34 +1,33 @@
 === ATUM Stock Manager for WooCommerce ===
 
 Contributors: stockmanagementlabs, salvamb, japiera
-Tags: stock, inventory, stock management, inventory management, woocommerce, stock manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
+Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.7.4
-Stable tag: 1.2.3.2
+Tested up to: 4.8
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The ultimate stock management plugin for serious WooCommerce Sellers.
+The ultimate inventory management plugin for WooCommerce.
 
 == Description ==
 
 https://www.youtube.com/watch?v=3jrNHT3MrRg
 
-ATUM is an advanced stock management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
+ATUM is an advanced inventory management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
-ATUM stock manager for WooCommerce comes from Stock Management Labs™, creators that have combined over 25 years of experience in inventory management. The team is working very closely with a bunch of professional developers since October 2016. The aim is to create the complete product that will take care of all business needs.
+ATUM comes from Stock Management Labs™, creators that have combined over 25 years of experience in inventory management. The team is working very closely with a bunch of professional developers since October 2016. The aim is to create the complete product that will take care of all business needs.
 
 In the preparation process for the development stage, we have tested and tried the most popular WooCommerce and cloud inventory management products and plugins in the world. With full confidence, we believe that the complete ATUM product will be unrivalled in every category.
 
 = AVAILABLE FEATURES =
-  
+
 
 **See everything in one place**
-	
-	
-Our ground-breaking Stock Central lets users see every WooCommerce product and its associated stock movements on one fully automated inventory page.
 
-The free version of the Stock Central includes:
+
+Our ground-breaking Stock Central lets users see every WooCommerce product and its associated inventory movements on one fully automated inventory page.
+
 
 * All items on one screen with a smooth mouse wheel or touchpad scrolling.
 * WooCommerce Products' image thumbnails for easier identification.
@@ -48,6 +47,7 @@ The free version of the Stock Central includes:
 * Advanced search with an auto-fill feature.
 * "In stock", "out of stock", "low stock" and product category filter.
 * Intelligent settings for easy inventory/stock management.
+* NEW - Dashboard Statistics.
 
 
 **Every user has an option to create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs"). Registration is free and apart from an excellent support; each registered user can take advantage of these fantastic features:**
@@ -55,22 +55,22 @@ The free version of the Stock Central includes:
 * EOQ - Economic Order Quantity Calculator (in development) - In corporate finance, economic order quantity (EOQ) is the order quantity that minimises the total holding costs and ordering costs. It is one of the oldest classical production scheduling models.
 * Web-Based Invoice Generator (in development) - complete invoice customisation, direct sending and without any monthly limits. Also, all your invoices are saved securely in one place.
 * Ground-Breaking Mobile Application for iOS, Android and Windows phones. (in development) - Smooth connection and secure stock counting options.
- 
+
 
 = Coming to ATUM =
 
-**The spine of ATUM stock manager for WooCommerce is downloadable add-ons. At the current development stage, our team has prepared blueprints for more than 60. We are building the plugin to suit everyone, and with the help of add-ons, we will make sure that your shop is not unnecessary overloaded by functionalities you don't need.  The next big release comes in the form of Premium Subscription. Premium bundle includes six great add-ons capable of handling any B2C shop. We will release each of these add-ons individually as well.**
-  
+**The spine of ATUM inventory manager for WooCommerce is downloadable add-ons. At the current development stage, our team has prepared blueprints for more than 60. We are building the plugin to suit everyone, and with the help of add-ons, we will make sure that your shop is not unnecessary overloaded by functionalities you don't need.  The next big release comes in the form of Premium Subscription. Premium bundle includes six great add-ons capable of handling any B2C shop. We will release each of these add-ons individually as well.**
+
 
 = PREMIUM Subscription =
 
 **Advanced Stock Management**
 
-Our Premium users can take advantage of the ATUM Stock Manager including six powerful add-ons.
+Our Premium users can take advantage of the ATUM Inventory Manager including six powerful add-ons.
 
-* Dashboard Statistics
-* Product Levels
-* Stock Logs
+* Dashboard Statistics - FREE EDITION RELEASED AND PART OF ATUM
+* Product Levels - RELEASED
+* Inventory Logs - CLOSE TO COMPLETION
 * User Restrictions
 * Data Export
 * Stock Takes
@@ -90,7 +90,7 @@ Product levels add-on introduces an advanced product control. ATUM inventory man
 * Brand new Manufacturing Central - see all your Raw Materials and Product Parts on one screen. ATUM will tell you the amount you have available as well as the volume you have already used, but not yet sold.
 
 
-**Stock Logs**
+**Inventory Logs**
 
 To fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
@@ -114,15 +114,15 @@ Export your full inventory into PDF or CSV file for further use. Store owners ne
 
 One of the most important ways of controlling the inventory in any business is its regular counting and the comparison to real sales. The Stock Takes add-on gives you the tools to keep on top of your day to day inventory management. Print the stock counting sheets or download in PDF or CSV format. Let your staff do the counting or count the chosen inventory yourself. Enter the results into ATUM manually or upload the completed CSV file. After a successful submission, compare the results with the current numbers.
 
-  
+
 
 **The premium subscription is just the beginning.**
-	
-	
+
+
 **(CONFIRMED) Upcoming Add-ons:**
 
 * Product Levels Pro
-* Stock Logs Pro
+* Inventory Logs Pro
 * Product Costing
 * Product Costing Pro
 * Wholesale
@@ -193,7 +193,7 @@ One of the most important ways of controlling the inventory in any business is i
 1.  Visit `Plugins > Add New`.
 2.  Search for 'ATUM Stock Manager for WooCommerce'.
 3.  Activate ATUM from your Plugins page.
- 
+
 **From WordPress.org**
 
 1.  Download ATUM.
@@ -269,6 +269,7 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 14. General Settigns for the Stock Central Interface
 15. Advanced Settigns for the Stock Central Interface
 16. Brand New Add-Ons Screen For Further Shop Control
+17. Dashboard Statistics
 
 
 == Changelog ==

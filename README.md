@@ -1,6 +1,6 @@
 # [ATUM Stock Manager for WooCommerce](https://www.stockmanagementlabs.com)
 
-The ultimate stock management plugin for serious WooCommerce Sellers.
+The ultimate inventory management plugin for serious WooCommerce Sellers.
 
 ## Description
 
@@ -60,7 +60,7 @@ Our Premium users can take advantage of the ATUM Stock Manager including six pow
 
 * Dashboard Statistics
 * Product Levels
-* Stock Logs
+* Inventory Logs
 * User Restrictions
 * Data Export
 * Stock Takes
@@ -80,7 +80,7 @@ Product levels add-on introduces an advanced product control. ATUM inventory man
 * Brand new Manufacturing Central - see all your Raw Materials and Product Parts on one screen. ATUM will tell you the amount you have available as well as the volume you have already used, but not yet sold.
 
 
-**Stock Logs**
+**Inventory Logs**
 
 To fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
@@ -112,7 +112,7 @@ One of the most important ways of controlling the inventory in any business is i
 **(CONFIRMED) Upcoming Add-ons:**
 
 * Product Levels Pro
-* Stock Logs Pro
+* Inventory Logs Pro
 * Product Costing
 * Product Costing Pro
 * Wholesale
