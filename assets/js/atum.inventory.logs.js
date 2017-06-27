@@ -515,6 +515,7 @@
 						deferred.push($.ajax({
 							url : ajaxurl,
 							data: {
+								log_id      : atumInventoryLogs.post_id,
 								log_item_ids: delete_items,
 								action      : 'atum_remove_log_item',
 								security    : atumInventoryLogs.log_item_nonce
