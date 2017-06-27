@@ -192,7 +192,7 @@ class LogItemModel extends AtumModel {
 		}*/
 
 		// Read the log item props from db
-		switch ( $data->log_item_type ) {
+		switch ( $this->log_item->get_type() ) {
 
 			case 'line_item':
 
