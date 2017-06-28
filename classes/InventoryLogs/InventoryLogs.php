@@ -183,12 +183,13 @@ class InventoryLogs {
 			self::TAXONOMY,
 			array( self::POST_TYPE ),
 			apply_filters( 'atum/inventory_logs/taxonomy_args_log_type', array(
-				'hierarchical'      => FALSE,
-				'show_ui'           => FALSE,
-				'show_in_nav_menus' => FALSE,
-				'query_var'         => is_admin(),
-				'rewrite'           => FALSE,
-				'public'            => FALSE
+				'hierarchical'          => FALSE,
+				'show_ui'               => FALSE,
+				'show_in_nav_menus'     => FALSE,
+				'query_var'             => is_admin(),
+				'rewrite'               => FALSE,
+				'public'                => FALSE,
+				'update_count_callback' => array( $this, 'log_term_recount' ),
 			) )
 		);
 
@@ -225,6 +226,49 @@ class InventoryLogs {
 		foreach ( $log_statuses as $log_status => $values ) {
 			register_post_status( $log_status, $values );
 		}
+	}
+
+	/**
+	 * Method for recounting log terms (types)
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param array  $terms
+	 * @param string $taxonomy
+	 */
+	public function log_term_recount( $terms, $taxonomy ) {
+
+		global $wpdb;
+
+		// Custom version of the WP "_update_post_term_count()" function
+		$object_types = (array) $taxonomy->object_type;
+
+		foreach ( $object_types as &$object_type ) {
+			list( $object_type ) = explode( ':', $object_type );
+		}
+
+		$object_types = array_unique( $object_types );
+
+		if ( $object_types ) {
+			$object_types = esc_sql( array_filter( $object_types, 'post_type_exists' ) );
+		}
+
+		foreach ( (array) $terms as $term ) {
+			$count = 0;
+
+			// Count all the logs with one of the log statuses (atum_pending or atum_completed)
+			if ( $object_types ) {
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('atum_pending', 'atum_completed') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
+			}
+
+			/** This action is documented in wp-includes/taxonomy.php */
+			do_action( 'edit_term_taxonomy', $term, $taxonomy->name );
+			$wpdb->update( $wpdb->term_taxonomy, compact( 'count' ), array( 'term_taxonomy_id' => $term ) );
+
+			/** This action is documented in wp-includes/taxonomy.php */
+			do_action( 'edited_term_taxonomy', $term, $taxonomy->name );
+		}
+
 	}
 
 	/**
@@ -422,6 +466,7 @@ class InventoryLogs {
 				'name'            => self::TAXONOMY,
 				'orderby'         => 'name',
 				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? $_GET[ self::TAXONOMY ] : '',
+				'hierarchical'    => FALSE,
 				'show_count'      => TRUE,
 				'hide_empty'      => FALSE,
 				'value_field'     => 'slug'
