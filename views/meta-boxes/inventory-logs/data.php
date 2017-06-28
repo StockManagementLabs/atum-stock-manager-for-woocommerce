@@ -13,13 +13,15 @@
 
 defined( 'ABSPATH' ) or die;
 
+$log_status = $log->get_status();
+
 ?>
 <style type="text/css">#post-body-content, #titlediv { display:none }</style>
 
 <div class="panel-wrap">
 
 	<input name="post_title" type="hidden" value="<?php echo empty( $log->get_title() ) ? __( 'Inventory Log', ATUM_TEXT_DOMAIN ) : esc_attr( $log->get_title() ); ?>" />
-	<input name="post_status" type="hidden" value="publish" />
+	<input name="post_status" type="hidden" value="<?php echo ($log_status) ? ATUM_PREFIX . $log_status : 'atum_pending' ?>" />
 
 	<div id="log_data" class="panel">
 
@@ -65,7 +67,7 @@ defined( 'ABSPATH' ) or die;
 				</p>
 
 				<p class="form-field form-field-wide damage-date<?php if ($log_type != 'warehouse-damage') echo ' hidden' ?>" data-dependency="log_type:warehouse-damage">
-					<label for="damage_date"><?php _e( 'Return date:', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="damage_date"><?php _e( 'Date of damage:', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php $damage_date = $log->get_damage_date() ?>
 					<input type="text" class="date-picker" name="log_damage_date" id="log_damage_date" maxlength="10" value="<?php echo ($damage_date) ? date_i18n( 'Y-m-d', strtotime($damage_date) ) : '' ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/inventory_logs/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="log_damage_date_hour" id="log_damage_date_hour" min="0" max="23" step="1" value="<?php echo ($damage_date) ? date_i18n( 'H', strtotime($damage_date) ) : '' ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})" />:
@@ -88,7 +90,6 @@ defined( 'ABSPATH' ) or die;
 					<select id="log_status" name="log_status" class="wc-enhanced-select">
 						<?php
 						$statuses = $log::get_statuses();
-						$log_status = $log->get_status();
 						foreach ( $statuses as $status => $status_name ): ?>
 							<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $log_status ) ?>><?php echo esc_html( $status_name ) ?></option>
 						<?php endforeach; ?>
