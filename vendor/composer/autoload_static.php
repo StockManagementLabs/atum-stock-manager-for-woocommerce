@@ -41,7 +41,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\InventoryLogs\\Items\\LogItemProduct' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemProduct.php',
         'Atum\\InventoryLogs\\Items\\LogItemShipping' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemShipping.php',
         'Atum\\InventoryLogs\\Items\\LogItemTax' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemTax.php',
-        'Atum\\InventoryLogs\\Items\\LogItemTrait' => __DIR__ . '/../..' . '/classes/Atum/InventoryLogs/Items/LogItemTrait.php',
+        'Atum\\InventoryLogs\\Items\\LogItemTrait' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemTrait.php',
         'Atum\\InventoryLogs\\Models\\Log' => __DIR__ . '/../..' . '/classes/InventoryLogs/Models/Log.php',
         'Atum\\InventoryLogs\\Models\\LogItemModel' => __DIR__ . '/../..' . '/classes/InventoryLogs/Models/LogItemModel.php',
         'Atum\\Settings\\Settings' => __DIR__ . '/../..' . '/classes/Settings/Settings.php',

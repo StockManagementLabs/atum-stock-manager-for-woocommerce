@@ -26,7 +26,7 @@ return array(
     'Atum\\InventoryLogs\\Items\\LogItemProduct' => $baseDir . '/classes/InventoryLogs/Items/LogItemProduct.php',
     'Atum\\InventoryLogs\\Items\\LogItemShipping' => $baseDir . '/classes/InventoryLogs/Items/LogItemShipping.php',
     'Atum\\InventoryLogs\\Items\\LogItemTax' => $baseDir . '/classes/InventoryLogs/Items/LogItemTax.php',
-    'Atum\\InventoryLogs\\Items\\LogItemTrait' => $baseDir . '/classes/Atum/InventoryLogs/Items/LogItemTrait.php',
+    'Atum\\InventoryLogs\\Items\\LogItemTrait' => $baseDir . '/classes/InventoryLogs/Items/LogItemTrait.php',
     'Atum\\InventoryLogs\\Models\\Log' => $baseDir . '/classes/InventoryLogs/Models/Log.php',
     'Atum\\InventoryLogs\\Models\\LogItemModel' => $baseDir . '/classes/InventoryLogs/Models/LogItemModel.php',
     'Atum\\Settings\\Settings' => $baseDir . '/classes/Settings/Settings.php',
