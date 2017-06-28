@@ -725,7 +725,7 @@ class Log extends AtumModel {
 					'state'     => $args['state'],
 					'postcode'  => $args['postcode'],
 					'city'      => $args['city'],
-					'tax_class' => $tax_class,
+					'tax_class' => $tax_class
 				) );
 
 				$total = $item->get_total();
@@ -1508,7 +1508,7 @@ class Log extends AtumModel {
 			if ( $group = $this->type_to_group( $type ) ) {
 
 				// Don't use array_merge here because keys are numeric
-				$items = ( isset( $this->items[ $group ] ) ) ? array_filter( $items + $this->items[ $group ] ) : array();
+				$items = ( isset( $this->items[ $group ] ) ) ? array_filter( $items + $this->items[ $group ] ) : $items;
 			}
 
 		}

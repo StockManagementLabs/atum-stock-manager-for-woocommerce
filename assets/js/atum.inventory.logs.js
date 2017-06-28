@@ -338,7 +338,7 @@
 					
 					atum_log_items.block();
 					
-					var country  = '',
+					/*var country  = '',
 					    state    = '',
 					    postcode = '',
 					    city     = '';
@@ -355,16 +355,16 @@
 						state    = $( '#_billing_state' ).val();
 						postcode = $( '#_billing_postcode' ).val();
 						city     = $( '#_billing_city' ).val();
-					}
+					}*/
 					
 					var data = {
 						action  : 'atum_calc_line_taxes',
 						log_id  : atumInventoryLogs.post_id,
 						items   : $('table.atum_log_items :input[name], .atum-log-totals-items :input[name]').serialize(),
-						country : country,
+						/*country : country,
 						state   : state,
 						postcode: postcode,
-						city    : city,
+						city    : city,*/
 						security: atumInventoryLogs.calc_totals_nonce
 					};
 					
