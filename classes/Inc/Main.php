@@ -161,10 +161,8 @@ class Main {
 		$db_version = get_option( ATUM_PREFIX . 'version' );
 		
 		if ( version_compare($db_version, ATUM_VERSION, '!=') ) {
-
 			// Do upgrade tasks
-			new Upgrade($db_version);
-
+			new Upgrade( $db_version ? $db_version : '0.0.1' );
 		}
 		
 		// Load language files
