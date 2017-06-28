@@ -38,7 +38,6 @@ $thumbnail    = $product ? apply_filters( 'atum/inventory_logs/log/item_thumbnai
 					echo esc_html( $item->get_variation_id() );
 				}
 				else {
-					/* translators: %s: variation id */
 					printf( esc_html__( '%s (No longer exists)', ATUM_TEXT_DOMAIN ), $item->get_variation_id() );
 				}
 

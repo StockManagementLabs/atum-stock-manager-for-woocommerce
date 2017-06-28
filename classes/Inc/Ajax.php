@@ -884,6 +884,7 @@ final class Ajax {
 		}
 
 		$log_id = absint( $_POST['log_id'] );
+
 		/*$calculate_tax_args = array(
 			'country'  => strtoupper( wc_clean( $_POST['country'] ) ),
 			'state'    => strtoupper( wc_clean( $_POST['state'] ) ),
