@@ -33,6 +33,15 @@ class LogItemShipping extends \WC_Order_Item_Shipping {
 	);
 
 	/**
+	 * Meta keys reserved for internal use
+	 * @var array
+	 */
+	protected $internal_meta_keys = array( '_method_id', '_cost', '_total_tax', '_taxes', '_log_id' );
+
+	// Load the shared methods
+	use LogItemTrait;
+
+	/**
 	 * Saves an item's meta data to the database
 	 * Runs after both create and update, so $id will be set
 	 *
@@ -50,8 +59,5 @@ class LogItemShipping extends \WC_Order_Item_Shipping {
 		$this->log_item_model->save_meta( $save_values );
 
 	}
-
-	// Load the common methods
-	use LogItemTrait;
 
 }

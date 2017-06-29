@@ -113,6 +113,11 @@ trait LogItemTrait {
 
 		foreach ( $this->meta_data as $key => $meta ) {
 
+			// Bypass any internal meta key
+			if ( $this->is_internal_meta($meta->key) ) {
+				continue;
+			}
+
 			// Delete
 			if ( empty( $meta->value ) ) {
 
@@ -174,6 +179,19 @@ trait LogItemTrait {
 	 */
 	public function set_log_id( $value ) {
 		$this->set_prop( 'log_id', absint( $value ) );
+	}
+
+	/**
+	 * Check if the specified meta key is a reeserved internal meta key
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param string $meta_key
+	 *
+	 * @return bool
+	 */
+	public function is_internal_meta ($meta_key) {
+		return in_array($meta_key, $this->internal_meta_keys);
 	}
 
 }

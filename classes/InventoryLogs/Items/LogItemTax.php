@@ -31,6 +31,11 @@ class LogItemTax extends \WC_Order_Item_Tax {
 		'log_id'             => 0
 	);
 
+	protected $internal_meta_keys = array( '_rate_id', '_label', '_compound', '_tax_amount', '_shipping_tax_amount', '_log_id' );
+
+	// Load the shared methods
+	use LogItemTrait;
+
 	/**
 	 * Saves an item's meta data to the database
 	 * Runs after both create and update, so $id will be set
@@ -50,8 +55,5 @@ class LogItemTax extends \WC_Order_Item_Tax {
 		$this->log_item_model->save_meta( $save_values );
 
 	}
-
-	// Load the common methods
-	use LogItemTrait;
 
 }

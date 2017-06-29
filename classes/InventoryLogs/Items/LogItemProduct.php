@@ -38,6 +38,15 @@ class LogItemProduct extends \WC_Order_Item_Product {
 	);
 
 	/**
+	 * Meta keys reserved for internal use
+	 * @var array
+	 */
+	protected $internal_meta_keys = array( '_product_id', '_variation_id', '_qty', '_tax_class', '_line_subtotal', '_line_subtotal_tax', '_line_total', '_line_tax', '_line_tax_data', '_log_id' );
+
+	// Load the shared methods
+	use LogItemTrait;
+
+	/**
 	 * Saves an item's meta data to the database
 	 * Runs after both create and update, so $id will be set
 	 *
@@ -60,8 +69,5 @@ class LogItemProduct extends \WC_Order_Item_Product {
 		$this->log_item_model->save_meta( $save_values );
 
 	}
-
-	// Load the common methods
-	use LogItemTrait;
 
 }
