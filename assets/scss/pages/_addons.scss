@@ -63,6 +63,12 @@
 				}
 			}
 			
+			&.invalid {
+				span {
+					color: $brand-danger;
+				}
+			}
+			
 			&.inactive {
 				background-color: $brand-warning;
 			}

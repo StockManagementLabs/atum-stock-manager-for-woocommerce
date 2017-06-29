@@ -51,11 +51,24 @@ use Atum\Addons\Addons;
 
 						<h2 class="theme-name">
 
-							<?php echo $addon['info']['title'] ?>
+							<?php
+							echo $addon['info']['title'];
 
-							<div class="theme-actions <?php echo ($addon_status['key']) ? $addon_status['status'] : 'no-key' ?>
-								<?php if($addon_status['status'] == 'valid' && !$addon_status['installed']) echo ' not-installed' ?>
-								<?php if($is_coming_soon_addon) echo ' coming-soon' ?>">
+							$addon_classes = array();
+
+							if ($is_coming_soon_addon) {
+								$addon_classes[] = 'coming-soon';
+							}
+							else {
+								$addon_classes[] = ($addon_status['key']) ? $addon_status['status'] : 'no-key';
+							}
+
+							if ( $addon_status['status'] == 'valid' && !$addon_status['installed'] ) {
+								$addon_classes[] = 'not-installed';
+							}
+							?>
+
+							<div class="theme-actions <?php echo implode(' ', $addon_classes) ?>">
 
 								<?php if ($is_coming_soon_addon): ?>
 									<span><?php _e('coming soon', ATUM_TEXT_DOMAIN) ?></span>

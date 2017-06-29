@@ -109,6 +109,10 @@
   color: #00B050;
 }
 
+.atum-addons .theme .theme-actions.invalid span {
+  color: #EF4D5A;
+}
+
 .atum-addons .theme .theme-actions.inactive {
   background-color: #FEC007;
 }
