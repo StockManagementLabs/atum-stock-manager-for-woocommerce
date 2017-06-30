@@ -20,6 +20,7 @@
 				
 				this.$container = $( '#atum_inventory_log_items' );
 				this.stupidtable.init();
+				this.isEditable = $('#log_is_editable').val();
 				
 				// Bind events
 				this.$container
@@ -733,7 +734,7 @@
 				var $logOrder = $('#log_order'),
 				    orderId   = $logOrder.val();
 				
-				if (!orderId) {
+				if (!orderId || atum_log_items.isEditable == 'false') {
 					return false;
 				}
 				

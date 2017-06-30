@@ -22,6 +22,7 @@ $log_status = $log->get_status();
 
 	<input name="post_title" type="hidden" value="<?php echo empty( $log->get_title() ) ? __( 'Inventory Log', ATUM_TEXT_DOMAIN ) : esc_attr( $log->get_title() ); ?>" />
 	<input name="post_status" type="hidden" value="<?php echo ($log_status) ? ATUM_PREFIX . $log_status : 'atum_pending' ?>" />
+	<input type="hidden" id="log_is_editable" value="<?php echo ( $log->is_editable() ) ? 'true' : 'false' ?>">
 
 	<div id="log_data" class="panel">
 
