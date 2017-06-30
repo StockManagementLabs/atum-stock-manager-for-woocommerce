@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumException;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\Settings\Settings;
 use Atum\StockCentral\Inc\ListTable;
@@ -672,7 +673,7 @@ final class Ajax {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @throws \Exception
+	 * @throws AtumException
 	 */
 	public function add_log_item() {
 
@@ -690,7 +691,7 @@ final class Ajax {
 			$html         = '';
 
 			if ( ! $log ) {
-				throw new \Exception( __( 'Invalid log', ATUM_TEXT_DOMAIN ) );
+				throw new AtumException( 'invalid_log', __( 'Invalid log', ATUM_TEXT_DOMAIN ) );
 			}
 
 			foreach ( $items_to_add as $item_to_add ) {
@@ -711,7 +712,7 @@ final class Ajax {
 
 			wp_send_json_success( array( 'html' => $html ) );
 
-		} catch ( \Exception $e ) {
+		} catch ( AtumException $e ) {
 			wp_send_json_error( array( 'error' => $e->getMessage() ) );
 		}
 
@@ -721,6 +722,8 @@ final class Ajax {
 	 * Add inventory log fee
 	 *
 	 * @since 1.2.4
+	 *
+	 * @throws AtumException
 	 */
 	public function add_log_fee() {
 
@@ -744,7 +747,7 @@ final class Ajax {
 
 			wp_send_json_success( array( 'html' => $html ) );
 
-		} catch ( \Exception $e ) {
+		} catch ( AtumException $e ) {
 			wp_send_json_error( array( 'error' => $e->getMessage() ) );
 		}
 	}
@@ -753,6 +756,8 @@ final class Ajax {
 	 * Add inventory log shipping cost
 	 *
 	 * @since 1.2.4
+	 *
+	 * @throws AtumException
 	 */
 	public function add_log_shipping() {
 
@@ -778,7 +783,7 @@ final class Ajax {
 
 			wp_send_json_success( array( 'html' => $html ) );
 
-		} catch ( Exception $e ) {
+		} catch ( AtumException $e ) {
 			wp_send_json_error( array( 'error' => $e->getMessage() ) );
 		}
 
@@ -788,6 +793,8 @@ final class Ajax {
 	 * Add inventory log tax
 	 *
 	 * @since 1.2.4
+	 *
+	 * @throws AtumException
 	 */
 	public function add_log_tax() {
 
@@ -811,7 +818,7 @@ final class Ajax {
 
 			wp_send_json_success( array( 'html' => $html ) );
 
-		} catch ( Exception $e ) {
+		} catch ( AtumException $e ) {
 			wp_send_json_error( array( 'error' => $e->getMessage() ) );
 		}
 

@@ -14,6 +14,7 @@ namespace Atum\InventoryLogs\Models;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumException;
 use Atum\Components\AtumModel;
 use Atum\Inc\Helpers;
 
@@ -179,7 +180,7 @@ class LogItemModel extends AtumModel {
 		}
 
 		if ( ! $data ) {
-			throw new \Exception( __( 'Invalid log item', ATUM_TEXT_DOMAIN ) );
+			throw new AtumException( 'invalid_log_item', __( 'Invalid log item', ATUM_TEXT_DOMAIN ) );
 		}
 
 		$this->log_item->set_log_id($data->log_id);

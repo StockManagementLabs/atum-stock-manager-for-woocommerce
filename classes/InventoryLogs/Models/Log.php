@@ -226,13 +226,13 @@ class Log extends AtumModel {
 	/**
 	 * Add a product line item to the log
 	 *
+	 * @since 1.2.4
+	 *
 	 * @param  \WC_Product  $product
 	 * @param  int          $qty
 	 * @param  array        $args
 	 *
 	 * @return LogItemProduct The product item added to Log
-	 *
-	 * @throws \Exception
 	 */
 	public function add_product( $product, $qty = 1, $args = array() ) {
 
@@ -1292,7 +1292,7 @@ class Log extends AtumModel {
 	 *
 	 * @throws AtumException
 	 */
-	protected function error( $code, $message, $http_status_code = 400, $data = array() ) {
+	public function error( $code, $message, $http_status_code = 400, $data = array() ) {
 		throw new AtumException( $code, $message, $http_status_code, $data );
 	}
 
@@ -1666,6 +1666,8 @@ class Log extends AtumModel {
 	 * @param object $item
 	 *
 	 * @return \WC_Order_Item|false if not found
+	 *
+	 * @throws AtumException
 	 */
 	public function get_log_item( $item = NULL ) {
 
@@ -1731,7 +1733,7 @@ class Log extends AtumModel {
 
 				try {
 					return new $classname( $id );
-				} catch ( \Exception $e ) {
+				} catch ( AtumException $e ) {
 					return FALSE;
 				}
 
@@ -1808,7 +1810,7 @@ class Log extends AtumModel {
 	 *
 	 * @param string $value
 	 *
-	 * @throws Exception
+	 * @throws AtumException
 	 */
 	public function set_currency( $value ) {
 
@@ -1826,8 +1828,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_discount_total( $value ) {
 		$this->set_meta( '_discount_total', wc_format_decimal( $value ) );
@@ -1839,8 +1839,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_discount_tax( $value ) {
 		$this->set_meta( '_discount_tax', wc_format_decimal( $value ) );
@@ -1852,8 +1850,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_shipping_total( $value ) {
 		$this->set_meta( '_shipping_total', wc_format_decimal( $value ) );
@@ -1865,8 +1861,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_shipping_tax( $value ) {
 		$this->set_meta( '_shipping_tax', wc_format_decimal( $value ) );
@@ -1879,8 +1873,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_cart_tax( $value ) {
 		$this->set_meta( '_cart_tax', wc_format_decimal( $value ) );
@@ -1894,8 +1886,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	protected function set_total_tax( $value ) {
 		$this->set_meta( '_total_tax', wc_format_decimal( $value ) );
@@ -1907,8 +1897,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param float $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_total( $value ) {
 		$this->set_meta( '_total', wc_format_decimal( $value, wc_get_price_decimals() ) );
@@ -1920,8 +1908,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param string $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_status( $value ) {
 		$this->set_meta( '_status', wc_clean( $value ) );
@@ -1933,8 +1919,6 @@ class Log extends AtumModel {
 	 * @since 1.2.4
 	 *
 	 * @param string $value
-	 *
-	 * @throws AtumException
 	 */
 	public function set_description( $value ) {
 

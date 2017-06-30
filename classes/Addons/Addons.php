@@ -14,6 +14,7 @@ namespace Atum\Addons;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumException;
 use Atum\Inc\Helpers;
 
 
@@ -420,6 +421,8 @@ class Addons {
 	 * @param $download_link        The link to download the addon zip file
 	 *
 	 * @return array    An array with the result and the message
+	 *
+	 * @throws AtumException
 	 */
 	public static function install_addon ($addon_name, $addon_slug, $download_link) {
 
@@ -461,13 +464,13 @@ class Addons {
 				$download = $upgrader->download_package( $download_link );
 
 				if ( is_wp_error( $download ) ) {
-					throw new \Exception( $download->get_error_message() );
+					throw new AtumException( 'addon_download_error', $download->get_error_message() );
 				}
 
 				$working_dir = $upgrader->unpack_package( $download, TRUE );
 
 				if ( is_wp_error( $working_dir ) ) {
-					throw new \Exception( $working_dir->get_error_message() );
+					throw new AtumException( 'addon_unpack_error', $working_dir->get_error_message() );
 				}
 
 				$result = $upgrader->install_package( array(
@@ -483,12 +486,12 @@ class Addons {
 				) );
 
 				if ( is_wp_error( $result ) ) {
-					throw new \Exception( $result->get_error_message() );
+					throw new AtumException( 'addon_not_installed', $result->get_error_message() );
 				}
 
 				$activate = TRUE;
 
-			} catch ( \Exception $e ) {
+			} catch ( AtumException $e ) {
 
 				return array(
 					'success' => FALSE,
@@ -515,10 +518,10 @@ class Addons {
 				$result = activate_plugin( $plugin );
 
 				if ( is_wp_error( $result ) ) {
-					throw new \Exception( $result->get_error_message() );
+					throw new AtumException( 'addon_activation_error', $result->get_error_message() );
 				}
 
-			} catch ( \Exception $e ) {
+			} catch ( AtumException $e ) {
 
 				return array(
 					'success' => FALSE,

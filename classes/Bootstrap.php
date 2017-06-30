@@ -13,6 +13,7 @@ namespace Atum;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumException;
 use Atum\Inc\Ajax;
 use Atum\Inc\Main;
 
@@ -56,13 +57,15 @@ class Bootstrap {
 	 * Initial checking and plugin bootstrap
 	 *
 	 * @since 0.0.2
+	 *
+	 * @throws AtumException
 	 */
 	public function maybe_bootstrap () {
 		
 		try {
 			
 			if ( $this->bootstrapped ) {
-				throw new Exception( __( '%s plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
+				throw new AtumException( 'already_bootstrapped', __( '%s plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
 			}
 			
 			// Check that the plugin dependencies are present
@@ -74,7 +77,7 @@ class Bootstrap {
 			Main::get_instance();
 			$this->bootstrapped = TRUE;
 			
-		} catch (\Exception $e) {
+		} catch (AtumException $e) {
 			
 			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
 				$this->admin_message = $e->getMessage();
@@ -89,13 +92,14 @@ class Bootstrap {
 	 * Check the plugin dependencies before bootstrapping
 	 *
 	 * @since 0.0.2
-	 * @throws \Exception
+	 *
+	 * @throws AtumException
 	 */
 	private function check_dependencies() {
 		
 		// WooCommerce required
 		if ( ! function_exists( 'WC' ) ) {
-			throw new \Exception( __( '%s requires WooCommerce to be activated', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'woocommerce_disabled', __( '%s requires WooCommerce to be activated', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 		// WooCommerce "Manage Stock" option must be enabled
 		else {
@@ -128,7 +132,7 @@ class Bootstrap {
 					);
 				}
 				
-				throw new \Exception( $stock_option_msg, self::DEPENDENCIES_UNSATISFIED );
+				throw new AtumException( 'woocommerce_manage_stock_disabled', $stock_option_msg, self::DEPENDENCIES_UNSATISFIED );
 				
 			}
 			
@@ -136,7 +140,7 @@ class Bootstrap {
 		
 		// WooCommerce version greater than 2.5 required
 		if ( version_compare( WC()->version, '2.5', '<' ) ) {
-			throw new \Exception( __( '%s requires WooCommerce version 2.5 or greater', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'woocommerce_min_version_required', __( '%s requires WooCommerce version 2.5 or greater', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 		
 	}
