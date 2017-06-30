@@ -16,13 +16,9 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\InventoryLogs\InventoryLogs;
-use Atum\InventoryLogs\Items\LogItemFee;
-use Atum\InventoryLogs\Items\LogItemShipping;
-use Atum\InventoryLogs\Items\LogItemTax;
 use Atum\Settings\Settings;
 use Atum\StockCentral\Inc\ListTable;
 use Atum\InventoryLogs\Models\Log;
-use Atum\InventoryLogs\Models\LogItemModel;
 
 
 final class Ajax {
@@ -76,6 +72,9 @@ final class Ajax {
 
 		// Update the Inventory Log status
 		add_action( 'wp_ajax_atum_mark_log_status', array( $this, 'mark_log_status' ) );
+
+		// Import order items to Log
+		add_action( 'wp_ajax_atum_import_order_items', array( $this, 'import_order_items' ) );
 
 	}
 	
@@ -557,13 +556,30 @@ final class Ajax {
 			wp_die();
 		}
 
-		$wc_order = wc_get_order($order_id);
+		// Get all the orders with IDs starting with the provided number
+		global $wpdb;
+		$max_results = absint( apply_filters('atum/ajax/search_wc_orders/max_results', 10) );
 
-		if ( empty( $wc_order ) ) {
+		$query = $wpdb->prepare(
+			"SELECT ID from {$wpdb->posts} WHERE post_type = 'shop_order' 
+			AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
+			AND ID LIKE %s LIMIT %d",
+			"$order_id%",
+			$max_results
+		);
+
+		$order_ids = $wpdb->get_col($query);
+
+		if ( empty( $order_ids ) ) {
 			wp_die();
 		}
 
-		wp_send_json( [$order_id => __('Order #', ATUM_TEXT_DOMAIN) . $order_id] );
+		$order_results = array();
+		foreach ($order_ids as $order_id) {
+			$order_results[$order_id] = __('Order #', ATUM_TEXT_DOMAIN) . $order_id;
+		}
+
+		wp_send_json( $order_results );
 
 	}
 
@@ -683,16 +699,13 @@ final class Ajax {
 					continue;
 				}
 
-				$item_id = $log->add_product( wc_get_product( $item_to_add ) );
-				$log_item_args = array(
-					'log_item_id'   => $item_id,
-					'log_item_type' => 'line_item'
-				);
-				$item = apply_filters( 'atum/ajax/log_item', $log->get_log_item( (object) $log_item_args ), $item_id );
+				// Add the product to the Log
+				$item = $log->add_product( wc_get_product( $item_to_add ) );
+				$item_id = $item->get_id();
 				$class = 'new_row';
 
 				// Load template
-				$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item', compact('log', 'item', 'item_id', 'class') );
+				$html .= Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item', compact('log', 'item', 'item_id', 'class') );
 
 			}
 
@@ -719,12 +732,12 @@ final class Ajax {
 
 		try {
 
-			$log_id = absint( $_POST['log_id'] );
-			$log    = new Log( $log_id );
+			$log_id  = absint( $_POST['log_id'] );
+			$log     = new Log( $log_id );
 
-			$item = new LogItemFee();
-			$item->set_log_id( $log_id );
-			$item_id = $item->save();
+			// Add a fee line item
+			$item    = $log->add_fee();
+			$item_id = $item->get_id();
 
 			// Load template
 			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item-fee', compact('log', 'item', 'item_id') );
@@ -756,11 +769,9 @@ final class Ajax {
 
 			$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
 
-			// Add new shipping
-			$item = new LogItemShipping();
-			$item->set_shipping_rate( new \WC_Shipping_Rate() );
-			$item->set_log_id( $log_id );
-			$item_id = $item->save();
+			// Add new shipping cost line item
+			$item    = $log->add_shipping_cost();
+			$item_id = $item->get_id();
 
 			// Load template
 			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item-shipping', compact('log', 'item', 'item_id', 'shipping_methods') );
@@ -793,10 +804,7 @@ final class Ajax {
 			$rate_id = absint( $_POST['rate_id'] );
 
 			// Add new tax
-			$item = new LogItemTax();
-			$item->set_rate( $rate_id );
-			$item->set_log_id( $log_id );
-			$item_id = $item->save();
+			$log->add_tax($rate_id);
 
 			// Load template
 			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/items', compact('log') );
@@ -914,7 +922,7 @@ final class Ajax {
 	 *
 	 * @since 1.2.4
 	 */
-	public static function save_log_items() {
+	public function save_log_items() {
 
 		check_ajax_referer( 'log-item', 'security' );
 
@@ -944,12 +952,85 @@ final class Ajax {
 	}
 
 	/**
+	 * Import the order items to the current Log after linking an order
+	 *
+	 * @since 1.2.4
+	 */
+	public function import_order_items() {
+
+		check_ajax_referer( 'import-order-items', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( -1 );
+		}
+
+		if ( isset( $_POST['log_id'], $_POST['order_id'] ) ) {
+
+			$log_id = absint( $_POST['log_id'] );
+			$order_id = absint( $_POST['order_id'] );
+
+			$order = wc_get_order($order_id);
+
+			if ( ! empty($order) ) {
+
+				$items = $order->get_items( array( 'line_item', 'fee', 'shipping', 'tax' ) );
+
+				if ( ! empty($items) ) {
+
+					$log = new Log( $log_id );
+
+					try {
+
+						// The log only can have one tax applied, so check if already has one
+						$current_tax = $log->get_items('tax');
+
+						foreach ($items as $item) {
+
+							if ( is_a($item, '\WC_Order_Item_Product') ) {
+								$log_item = $log->add_product( wc_get_product( $item->get_product_id() ), $item->get_quantity() );
+							}
+							elseif ( is_a($item, '\WC_Order_Item_Fee') ) {
+								$log_item = $log->add_fee($item);
+							}
+							elseif ( is_a($item, '\WC_Order_Item_Shipping') ) {
+								$log_item = $log->add_shipping_cost($item);
+							}
+							elseif ( empty($current_tax) && is_a($item, '\WC_Order_Item_Tax') ) {
+								$log_item = $log->add_tax( $item->get_rate_id(), $item );
+							}
+
+							// Add the order ID as item's custom meta
+							$log_item->add_meta_data('_order_id', $order_id, TRUE);
+							$log_item->save_meta_data();
+
+						}
+
+						// Load template
+						$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/items', compact('log') );
+
+						wp_send_json_success( array( 'html' => $html ) );
+
+					} catch ( Exception $e ) {
+						wp_send_json_error( array( 'error' => $e->getMessage() ) );
+					}
+
+				}
+
+			}
+
+		}
+
+		wp_die(-1);
+
+	}
+
+	/**
 	 * Mark an inventory log with a status
 	 * NOTE: This callback is not being triggered through an Ajax request, just a normal HTTP request
 	 *
 	 * @since 1.2.4
 	 */
-	public static function mark_log_status() {
+	public function mark_log_status() {
 
 		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-mark-log-status' ) ) {
 

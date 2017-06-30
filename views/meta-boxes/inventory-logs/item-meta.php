@@ -28,8 +28,13 @@ $hidden_log_item_meta = apply_filters( 'atum/inventory_logs/log/hidden_log_item_
 
 		<table cellspacing="0" class="display_meta">
 			<?php foreach ( $meta_data as $meta_id => $meta ) :
+
 				if ( in_array( $meta->key, $hidden_log_item_meta ) ) {
 					continue;
+				}
+
+				if ($meta->display_key == '_order_id') {
+					$meta->display_key = '<strong>' . __('Order ID', ATUM_TEXT_DOMAIN) . '</strong>';
 				}
 				?>
 				<tr>

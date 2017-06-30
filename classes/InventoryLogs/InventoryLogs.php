@@ -944,22 +944,24 @@ class InventoryLogs {
 				wp_register_script( 'atum-inventory-logs', ATUM_URL . 'assets/js/atum.inventory.logs.js', $wc_dependencies, ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-inventory-logs', 'atumInventoryLogs', array(
-					'add_log_note_nonce'      => wp_create_nonce( 'add-log-note' ),
-					'delete_log_note_nonce'   => wp_create_nonce( 'delete-log-note' ),
-					'delete_note'             => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
-					'post_id'                 => isset( $post->ID ) ? $post->ID : '',
-					'log_item_nonce'          => wp_create_nonce( 'log-item' ),
-					'rounding_precision'      => wc_get_rounding_precision(),
-					'mon_decimal_point'       => wc_get_price_decimal_separator(),
-					'remove_item_notice'      => __( "Are you sure you want to remove this item?", ATUM_TEXT_DOMAIN ),
-					'delete_tax_notice'       => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
-					'calc_totals'             => __( 'Recalculate totals? This will calculate taxes based on the store base country and update totals.', ATUM_TEXT_DOMAIN ),
-					'calc_totals_nonce'       => wp_create_nonce( 'calc-totals' ),
-					'tax_based_on'            => esc_attr( get_option( 'woocommerce_tax_based_on' ) ),
-					'remove_item_meta'        => __( 'Remove this item meta?', ATUM_TEXT_DOMAIN ),
-					'tax_rate_already_exists' => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
-					'placeholder_name'        => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
-					'placeholder_value'       => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
+					'add_log_note_nonce'       => wp_create_nonce( 'add-log-note' ),
+					'delete_log_note_nonce'    => wp_create_nonce( 'delete-log-note' ),
+					'delete_note'              => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
+					'post_id'                  => isset( $post->ID ) ? $post->ID : '',
+					'log_item_nonce'           => wp_create_nonce( 'log-item' ),
+					'rounding_precision'       => wc_get_rounding_precision(),
+					'mon_decimal_point'        => wc_get_price_decimal_separator(),
+					'remove_item_notice'       => __( 'Are you sure you want to remove this item?', ATUM_TEXT_DOMAIN ),
+					'delete_tax_notice'        => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
+					'calc_totals'              => __( 'Recalculate totals? This will calculate taxes based on the store base country and update totals.', ATUM_TEXT_DOMAIN ),
+					'calc_totals_nonce'        => wp_create_nonce( 'calc-totals' ),
+					'tax_based_on'             => esc_attr( get_option( 'woocommerce_tax_based_on' ) ),
+					'remove_item_meta'         => __( 'Remove this item meta?', ATUM_TEXT_DOMAIN ),
+					'tax_rate_already_exists'  => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
+					'placeholder_name'         => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
+					'placeholder_value'        => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
+					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this Log?', ATUM_TEXT_DOMAIN ),
+					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' )
 				) );
 
 				wp_enqueue_script( 'atum-inventory-logs' );

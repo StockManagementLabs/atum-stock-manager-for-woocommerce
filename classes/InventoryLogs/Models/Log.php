@@ -18,7 +18,9 @@ use Atum\Components\AtumException;
 use Atum\Components\AtumModel;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
+use Atum\InventoryLogs\Items\LogItemShipping;
 use Atum\InventoryLogs\Items\LogItemTax;
 
 
@@ -222,37 +224,13 @@ class Log extends AtumModel {
 	}
 
 	/**
-	 * Remove item from the log
-	 *
-	 * @since 1.2.4
-	 *
-	 * @param int $item_id
-	 *
-	 * @return void|bool
-	 */
-	public function remove_item( $item_id ) {
-
-		$item = $this->get_item( $item_id );
-
-		if ( ! $item || ! ( $items_key = $this->get_items_key( $item ) ) ) {
-			return FALSE;
-		}
-
-		// Unset and remove later
-		$this->items_to_delete[] = $item;
-		unset( $this->items[ $items_key ][ $item->get_id() ] );
-
-	}
-
-	/**
-	 * Add a product line item to the log. This is the only line item type with
-	 * it's own method because it saves looking up order amounts (costs are added up for you)
+	 * Add a product line item to the log
 	 *
 	 * @param  \WC_Product  $product
 	 * @param  int          $qty
 	 * @param  array        $args
 	 *
-	 * @return int Order item ID
+	 * @return LogItemProduct The product item added to Log
 	 *
 	 * @throws \Exception
 	 */
@@ -288,7 +266,116 @@ class Log extends AtumModel {
 		$item->save();
 		$this->add_item( $item, 'line_item' );
 
-		return $item->get_id();
+		return $item;
+
+	}
+
+	/**
+	 * Add a fee item to the Log
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param \WC_Order_Item_Fee $fee   Optional. Fee item to import
+	 *
+	 * @return LogItemFee  The fee item added to the Log
+	 */
+	public function add_fee (\WC_Order_Item_Fee $fee = NULL) {
+
+		$item = new LogItemFee();
+		$item->set_log_id( $this->id );
+
+		if ($fee) {
+			$item->set_tax_status( $fee->get_tax_status() );
+			$item->set_taxes( $fee->get_taxes() );
+			$item->set_tax_class( $fee->get_tax_class() );
+			$item->set_total( $fee->get_total() );
+		}
+
+		$item->save();
+		$this->add_item( $item, 'fee' );
+
+		return $item;
+
+	}
+
+	/**
+	 * Add a shipping cost item to the Log
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param \WC_Order_Item_Shipping $shipping  Optional. Shipping cost item to import
+	 *
+	 * @return LogItemShipping  The shipping cost item added to the Log
+	 */
+	public function add_shipping_cost (\WC_Order_Item_Shipping $shipping = NULL) {
+
+		$item = new LogItemShipping();
+		$item->set_shipping_rate( new \WC_Shipping_Rate() );
+		$item->set_log_id( $this->id );
+
+		if ($shipping) {
+			$item->set_method_id( $shipping->get_method_id() );
+			$item->set_total( $shipping->get_total() );
+			$item->set_taxes( $shipping->get_taxes() );
+			$item->set_method_title( $shipping->get_method_title() );
+		}
+
+		$item->save();
+		$this->add_item( $item, 'shipping' );
+
+		return $item;
+
+	}
+
+	/**
+	 * Add a tax item to the Log
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param int $rate_id
+	 * @param \WC_Order_Item_Tax $tax Optional. Tax item to import
+	 *
+	 * @return LogItemTax  The tax item added to the Log
+	 */
+	public function add_tax ($rate_id, \WC_Order_Item_Tax $tax = NULL ) {
+
+		$item = new LogItemTax();
+		$item->set_rate( $rate_id );
+		$item->set_log_id( $this->id );
+
+		if ($tax) {
+			$item->set_name( $tax->get_name() );
+			$item->set_tax_total( $tax->get_tax_total() );
+			$item->set_shipping_tax_total( $tax->get_shipping_tax_total() );
+		}
+
+		$item->save();
+		$this->add_item( $item, 'tax' );
+
+		return $item;
+
+	}
+
+	/**
+	 * Remove item from the log
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param int $item_id
+	 *
+	 * @return void|bool
+	 */
+	public function remove_item( $item_id ) {
+
+		$item = $this->get_log_item( $item_id );
+
+		if ( ! $item || ! ( $items_key = $this->get_items_key( $item ) ) ) {
+			return FALSE;
+		}
+
+		// Unset and remove later
+		$this->items_to_delete[] = $item;
+		unset( $this->items[ $items_key ][ $item->get_id() ] );
 
 	}
 

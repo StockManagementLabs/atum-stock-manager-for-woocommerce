@@ -66,6 +66,9 @@
 				// Trigger log type dependent fields
 				$('#log_type').change(this.toggleExtraFields);
 				
+				// Ask for importing the order items after linking an order
+				$('#log_order').change(this.importOrderItems);
+				
 			},
 			
 			block: function() {
@@ -86,24 +89,41 @@
 			
 			reload_items: function() {
 				
+				this.load_items_table({
+					log_id  : atumInventoryLogs.post_id,
+					action  : 'atum_load_log_items',
+					security: atumInventoryLogs.log_item_nonce
+				});
+			},
+			
+			load_items_table: function(data, dataType) {
+				
 				var self = this;
 				this.block();
+				dataType = (typeof dataType !== 'undefined') ? dataType : 'html';
 				
 				$.ajax({
 					url:  ajaxurl,
-					data: {
-						log_id  : atumInventoryLogs.post_id,
-						action  : 'atum_load_log_items',
-						security: atumInventoryLogs.log_item_nonce
-					},
+					data: data,
+					dataType: dataType,
 					type: 'POST',
 					success: function( response ) {
-						self.$container.find( '.inside' ).empty().append( response );
-						self.reloadTooltips();
+						
+						if ( (typeof response === 'object' && response.success === true) || typeof response !== 'object') {
+							var itemsTable = (dataType === 'html') ? response : response.data.html;
+							self.$container.find( '.inside' ).empty().append( itemsTable );
+							self.reloadTooltips();
+							self.stupidtable.init();
+						}
+						else if (typeof response === 'object' && response.success === false) {
+							window.alert( response.data.error );
+						}
+						
 						self.unblock();
-						self.stupidtable.init();
+						
 					}
 				});
+				
 			},
 			
 			// When the qty is changed, increase or decrease costs
@@ -280,16 +300,14 @@
 					
 					atum_log_items.block();
 					
-					var data = {
-						log_id      : atumInventoryLogs.post_id,
-						log_item_ids: log_item_id,
-						action      : 'atum_remove_log_item',
-						security    : atumInventoryLogs.log_item_nonce
-					};
-					
 					$.ajax({
 						url:     ajaxurl,
-						data:    data,
+						data:    {
+							log_id      : atumInventoryLogs.post_id,
+							log_item_ids: log_item_id,
+							action      : 'atum_remove_log_item',
+							security    : atumInventoryLogs.log_item_nonce
+						},
 						type:    'POST',
 						success: function() {
 							$item.remove();
@@ -306,26 +324,13 @@
 				
 				if ( window.confirm( atumInventoryLogs.delete_tax_notice ) ) {
 					
-					atum_log_items.block();
-					
-					var data = {
+					atum_log_items.load_items_table({
 						action  : 'atum_remove_log_tax',
 						rate_id : $(this).attr('data-rate_id'),
 						log_id  : atumInventoryLogs.post_id,
 						security: atumInventoryLogs.log_item_nonce
-					};
-					
-					$.ajax({
-						url:  ajaxurl,
-						data: data,
-						type: 'POST',
-						success: function( response ) {
-							atum_log_items.$container.find( '.inside' ).empty().append( response );
-							atum_log_items.reloadTooltips();
-							atum_log_items.unblock();
-							atum_log_items.stupidtable.init();
-						}
 					});
+					
 				}
 				
 				return false;
@@ -335,8 +340,6 @@
 			recalculate: function() {
 				
 				if ( window.confirm( atumInventoryLogs.calc_totals ) ) {
-					
-					atum_log_items.block();
 					
 					/*var country  = '',
 					    state    = '',
@@ -357,28 +360,17 @@
 						city     = $( '#_billing_city' ).val();
 					}*/
 					
-					var data = {
+					atum_log_items.load_items_table({
 						action  : 'atum_calc_line_taxes',
 						log_id  : atumInventoryLogs.post_id,
 						items   : $('table.atum_log_items :input[name], .atum-log-totals-items :input[name]').serialize(),
 						/*country : country,
-						state   : state,
-						postcode: postcode,
-						city    : city,*/
+						 state   : state,
+						 postcode: postcode,
+						 city    : city,*/
 						security: atumInventoryLogs.calc_totals_nonce
-					};
-					
-					$.ajax({
-						url:  ajaxurl,
-						data: data,
-						type: 'POST',
-						success: function( response ) {
-							atum_log_items.$container.find( '.inside' ).empty().append( response );
-							atum_log_items.reloadTooltips();
-							atum_log_items.unblock();
-							atum_log_items.stupidtable.init();
-						}
 					});
+					
 				}
 				
 				return false;
@@ -387,25 +379,11 @@
 			
 			save_line_items: function() {
 				
-				var data = {
+				atum_log_items.load_items_table({
 					log_id  : atumInventoryLogs.post_id,
 					items   : $('table.atum_log_items :input[name], .atum-log-totals-items :input[name]').serialize(),
 					action  : 'atum_save_log_items',
 					security: atumInventoryLogs.log_item_nonce
-				};
-				
-				atum_log_items.block();
-				
-				$.ajax({
-					url:  ajaxurl,
-					data: data,
-					type: 'POST',
-					success: function( response ) {
-						atum_log_items.$container.find( '.inside' ).empty().append( response );
-						atum_log_items.reloadTooltips();
-						atum_log_items.unblock();
-						atum_log_items.stupidtable.init();
-					}
 				});
 				
 				$(this).trigger( 'items_saved' );
@@ -690,35 +668,12 @@
 					// Test if already exists
 					if ( -1 === $.inArray( rate_id, rates ) ) {
 						
-						atum_log_items.block();
-						
-						var data = {
+						atum_log_items.load_items_table({
 							action  : 'atum_add_log_tax',
 							rate_id : rate_id,
 							log_id  : atumInventoryLogs.post_id,
 							security: atumInventoryLogs.log_item_nonce
-						};
-						
-						$.ajax({
-							url      : ajaxurl,
-							data     : data,
-							dataType : 'json',
-							type     : 'POST',
-							success  : function( response ) {
-								
-								if ( response.success ) {
-									atum_log_items.$container.find( '.inside' ).empty().append( response.data.html );
-									atum_log_items.reloadTooltips();
-									atum_log_items.stupidtable.init();
-								}
-								else {
-									window.alert( response.data.error );
-								}
-								
-								atum_log_items.unblock();
-								
-							}
-						});
+						}, 'json');
 						
 					}
 					else {
@@ -770,6 +725,30 @@
 						}
 					}
 				});
+			
+			},
+			
+			importOrderItems: function() {
+				
+				var $logOrder = $('#log_order'),
+				    orderId   = $logOrder.val();
+				
+				if (!orderId) {
+					return false;
+				}
+				
+				var	c = confirm(atumInventoryLogs.import_order_items);
+				
+				if (c === true) {
+					
+					atum_log_items.load_items_table({
+						action     : 'atum_import_order_items',
+						order_id   : orderId,
+						log_id     : atumInventoryLogs.post_id,
+						security   : atumInventoryLogs.import_order_items_nonce
+					}, 'json');
+					
+				}
 			
 			}
 		};

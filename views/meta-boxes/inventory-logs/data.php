@@ -100,7 +100,8 @@ $log_status = $log->get_status();
 					<label for="customer_user"><?php _e( 'Order:', ATUM_TEXT_DOMAIN ) ?></label>
 
 					<select class="wc-product-search" id="log_order" name="log_order" data-allow_clear="true" data-action="atum_json_search_orders"
-							data-placeholder="<?php esc_attr_e( 'Search by Order ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false" data-selected="">
+							data-placeholder="<?php esc_attr_e( 'Search by Order ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"
+							data-selected="" data-minimum_input_length="1">
 						<?php if ( ! empty($order) ): ?>
 						<option value="<?php echo esc_attr( $order->get_id() ); ?>" selected="selected"><?php echo __('Order #', ATUM_TEXT_DOMAIN) . $order->get_id() ?></option>
 						<?php endif; ?>
