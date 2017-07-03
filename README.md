@@ -243,6 +243,16 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.4 - 2017-06-30*
+
+Features:
+
+* New "Inventory Logs" component.
+
+Fixes:
+
+* Upgrade systems that have no ATUM version stored in db.
+
 *1.2.3.2 - 2017-05-12*
 
 Fixes:
