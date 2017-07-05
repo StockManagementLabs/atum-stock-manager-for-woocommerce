@@ -3,13 +3,14 @@
 	"description": "ATUM Stock Manager for WooCommerce",
 	"license": "Copyrighted",
 	"minimum-stability": "dev",
-	"prefer-stable"    : true,
+	"prefer-stable": true,
 	"preferred-install": "dist",
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=5.4.0",
+		"mpdf/mpdf": "^6.1.3",
+		"phpoffice/phpexcel": "^1.8.1"
 	},
 	"require-dev": {
-
 	},
 	"autoload": {
 		"psr-4": {
