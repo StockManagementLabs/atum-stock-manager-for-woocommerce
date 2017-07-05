@@ -854,7 +854,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION );
 		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
 
-		wp_register_style( 'atum-list', ATUM_URL . '/assets/css/atum-list.css', FALSE, ATUM_VERSION );
+		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', FALSE, ATUM_VERSION );
 
 		if ( isset($this->load_datepicker) && $this->load_datepicker === TRUE ) {
 			global $wp_scripts;
@@ -867,7 +867,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		$min = (! ATUM_DEBUG) ? '.min' : '';
-		wp_register_script( 'atum', ATUM_URL . "/assets/js/atum$min.js", array( 'jquery', 'jscrollpane' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum', ATUM_URL . "assets/js/atum$min.js", array( 'jquery', 'jscrollpane' ), ATUM_VERSION, TRUE );
 
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'atum-list' );

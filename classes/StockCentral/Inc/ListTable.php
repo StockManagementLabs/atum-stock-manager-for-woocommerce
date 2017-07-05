@@ -198,54 +198,7 @@ class ListTable extends AtumListTable {
 			) );
 			
 			// Type filtering
-			$terms   = get_terms( 'product_type' );
-			$type    = ( isset( $_REQUEST['type'] ) ) ? esc_attr( $_REQUEST['type'] ) : '';
-			$allowed_types = apply_filters( 'atum/stock_central_list/allowed_type_filters', Globals::get_product_types() );
-
-			$output  = '<select name="product_type" id="dropdown_product_type">';
-			$output .= '<option value=""' . selected($type, '', FALSE) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
-			
-			foreach ( $terms as $term ) {
-				
-				if ( ! in_array($term->slug, $allowed_types) ) {
-					continue;
-				}
-				
-				$output .= '<option value="' . sanitize_title( $term->name ) . '"' . selected( $term->slug, $type, FALSE ) . '>';
-				
-				switch ( $term->name ) {
-					case 'grouped' :
-						$output .= __( 'Grouped product', ATUM_TEXT_DOMAIN );
-						break;
-					/*case 'external' :
-						$output .= __( 'External/Affiliate product', ATUM_TEXT_DOMAIN );
-						break;*/
-					case 'variable' :
-						$output .= __( 'Variable product', ATUM_TEXT_DOMAIN );
-						break;
-					case 'simple' :
-						$output .= __( 'Simple product', ATUM_TEXT_DOMAIN );
-						break;
-					default :
-						// Assuming that we have other types in future
-						$output .= ucfirst( $term->name );
-						break;
-				}
-				
-				$output .= '</option>';
-				
-				if ( 'simple' == $term->name ) {
-					
-					$output .= '<option value="downloadable"' . selected( 'downloadable', $type, FALSE ) . '> &rarr; '
-					           . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
-					
-					$output .= '<option value="virtual"' . selected( 'virtual', $type, FALSE ) . '> &rarr; '
-					           . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
-				}
-			}
-			
-			$output .= '</select>';
-			echo $output;
+			echo Helpers::product_types_dropdown( ( isset( $_REQUEST['type'] ) ) ? esc_attr( $_REQUEST['type'] ) : '' );
 			
 			if ( Helpers::get_option( 'enable_ajax_filter', 'yes' ) == 'no' ) {
 				echo '<input type="submit" name="filter_action" class="button search-category" value="' . __('Filter', ATUM_TEXT_DOMAIN) . '">';
