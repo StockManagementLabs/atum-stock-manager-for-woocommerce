@@ -1003,7 +1003,7 @@ final class Ajax {
 								$log_item = $log->add_shipping_cost($item);
 							}
 							elseif ( empty($current_tax) && is_a($item, '\WC_Order_Item_Tax') ) {
-								$log_item = $log->add_tax( $item->get_rate_id(), $item );
+								$log_item = $log->add_tax( array( 'rate_id' => $item->get_rate_id() ), $item );
 							}
 
 							// Add the order ID as item's custom meta
