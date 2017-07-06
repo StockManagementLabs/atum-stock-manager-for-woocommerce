@@ -1,84 +1,27 @@
 <?php
 /**
- * @package         Atum\StockCentral
- * @subpackage      Inc
+ * @package         Atum\DataExport
+ * @subpackage      Reports
  * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       ©2017 Stock Management Labs™
  *
- * @since           0.0.1
+ * @since           1.2.5
+ *
+ * Extends the Stock Central's List Table and exports only the table as Excel report
+ * @uses "phpoffice/phpexcel"
  */
 
-namespace Atum\StockCentral\Inc;
+namespace Atum\DataExport\Reports;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
+use Atum\StockCentral\Inc\ListTable;
 
 
-class ListTable extends AtumListTable {
-	
-	/**
-	 * Current product used
-	 * @var \WC_Product
-	 */
-	protected $product;
-
-	/**
-	 * No stock Threshold
-	 * @var int
-	 */
-	protected $no_stock;
-	
-	/**
-	 * Day of consult
-	 * @var date
-	 */
-	protected $day;
-	
-	/**
-	 * Sale days from settings
-	 * @var int
-	 */
-	protected $last_days;
-	
-	/**
-	 * Values for the calculated columns form current page products
-	 * @var array
-	 */
-	protected $calc_columns = array();
-	
-	/**
-	 * Whether the currently displayed product is an expandable child product
-	 * @var bool
-	 */
-	protected $is_child = FALSE;
-
-	/**
-	 * Whether or not the current product should do the calculations for the columns
-	 * @var bool
-	 */
-	protected $allow_calcs = TRUE;
-
-	/**
-	 * The array of published Variable products' IDs
-	 * @var array
-	 */
-	protected $variable_products = array();
-
-	/**
-	 * The array of published Grouped products' IDs
-	 * @var array
-	 */
-	protected $grouped_products = array();
-
-	/**
-	 * Whether to load the jQuery UI datepicker script (for sale price dates)
-	 * @var bool
-	 */
-	protected $load_datepicker = TRUE;
+class ExcelReport extends ListTable {
 
 	/**
 	 * Constructor
@@ -1173,122 +1116,6 @@ class ListTable extends AtumListTable {
 			}
 			
 		}
-		
-	}
-
-	/**
-	 * Get all the available children products of the published parent products (Variable and Grouped)
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param string $parent_type   The parent product type
-	 * @param string $post_type     Optional. The children post type
-	 *
-	 * @return array|bool
-	 */
-	protected function get_children($parent_type, $post_type = 'product') {
-
-		// Get the published Variables first
-		$parent_args = array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => $parent_type
-				)
-			)
-		);
-
-		$parents = new \WP_Query($parent_args);
-
-		if ($parents->found_posts) {
-
-			// Save them to be used when preparing the list query
-			if ($parent_type == 'variable') {
-				$this->variable_products = $parents->posts;
-			}
-			else {
-				$this->grouped_products = $parents->posts;
-			}
-
-			$children_args = array(
-				'post_type'       => $post_type,
-				'post_status'     => 'publish',
-				'posts_per_page'  => - 1,
-				'fields'          => 'ids',
-				'post_parent__in' => $parents->posts
-			);
-
-			$children = new \WP_Query( apply_filters( 'atum/stock_central_list/get_children', $children_args ) );
-
-			if ($children->found_posts) {
-				return $children->posts;
-			}
-
-		}
-
-		return FALSE;
-
-	}
-
-	/**
-	 * Get the parent products from a list of product IDs
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param array $product_ids  The array of children product IDs
-	 *
-	 * @return array
-	 */
-	protected function get_parents ($product_ids) {
-
-		// Filter the parents of the current values
-		$parents = array();
-		foreach ($product_ids as $product_id) {
-			$product = wc_get_product($product_id);
-
-			// For Variations
-			if ( is_a($product, 'WC_Product_Variation') ) {
-				$parents[] = $product->get_parent_id();
-			}
-			// For Group Items (these have the grouped ID as post_parent property)
-			else {
-				$product_post = get_post( $product_id );
-
-				if ($product_post->post_parent) {
-					$parents[] = $product_post->post_parent;
-				}
-			}
-		}
-
-		return array_merge( $product_ids, array_unique($parents) );
-
-	}
-	
-	/**
-	 * Add a notice the first time the user enter the Stock Central informing about disabled columns
-	 *
-	 * @since 1.1.0
-	 */
-	public function add_premium_columns_notice() {
-		
-		$user_dismissed_notices = Helpers::get_dismissed_notices();
-		
-		if ( !$user_dismissed_notices || ! isset($user_dismissed_notices['welcome']) || $user_dismissed_notices['welcome'] != 'yes' ):
-			?>
-			<div class="notice notice-info atum-notice welcome-notice is-dismissible" data-nonce="<?php echo wp_create_nonce('dismiss-welcome-notice') ?>">
-				<p>
-					<?php _e("Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this great plugin.", ATUM_TEXT_DOMAIN) ?><br><br>
-					<?php _e("We have disabled some inactive columns by default as these are only available for future upgrades or our Premium and PRO users. If you'd like to preview them, please, use the Screen Options in the top corner.", ATUM_TEXT_DOMAIN)  ?><br><br>
-					<?php _e('Thank you very much for using ATUM as your inventory manager.') ?>
-				</p>
-			</div>
-			<?php
-		endif;
 		
 	}
 	

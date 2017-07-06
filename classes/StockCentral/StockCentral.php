@@ -110,8 +110,7 @@ class StockCentral extends AtumListPage {
 		}
 		
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/stock-central-help-sidebar' ) );
-		
-		// TODO: THIS SHOULD BE OVERRIDDEN ON THE PREMIUM VERSION
+
 		// Hide some table columns by default on the free version
 		add_filter( 'default_hidden_columns', array($this, 'hide_premium_columns'), 10, 2 );
 		

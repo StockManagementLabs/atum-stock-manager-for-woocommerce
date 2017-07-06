@@ -1,17 +1,19 @@
 <?php
 /**
  * @package         Atum
- * @subpackage      Components
+ * @subpackage      DataExport
  * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.2.5
  *
  * The class resposible to export the ATUM data to downloadable files
+ * @uses "mpdf/mpdf"
  */
 
-namespace Atum\Components;
+namespace Atum\DataExport;
 
+use Atum\DataExport\Reports\HtmlReport;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
@@ -120,13 +122,47 @@ class DataExport {
 
 		check_ajax_referer( 'atum-data-export-nonce', 'token' );
 
+		// Define the path for our custom mPDF fonts configuration file
+		define('_MPDF_SYSTEM_TTFONTS_CONFIG', ATUM_PATH . 'config/mpdf-fonts.php');
+
 		$mpdf = new \mPDF( 'utf-8', 'A4-L' );
 		$common_stylesheet = file_get_contents( ABSPATH . 'wp-admin/css/common.css');
 		$mpdf->WriteHTML($common_stylesheet, 1);
 		$atum_stylesheet = file_get_contents( ATUM_PATH . 'assets/css/atum-list.css');
 		$mpdf->WriteHTML($atum_stylesheet, 1);
-		$mpdf->WriteHTML( Helpers::load_view_to_string('data-export/report-pdf') );
+		$mpdf->WriteHTML( $this->generate_html_report() );
 		echo $mpdf->Output();
+
+	}
+
+	/**
+	 * Generate a full HTML data report
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param array $settings {
+	 *      Optional. Configuration array for the report.
+	 *
+	 *      @type int $per_page   Optional. The number of posts to show per page (-1 for no pagination)
+	 * }
+	 *
+	 * @return string   The HTML table report
+	 */
+	private function generate_html_report( $settings = array() ) {
+
+		$defaults = array(
+			'per_page' => -1
+		);
+
+		$settings = (array) apply_filters( 'atum/data_export/html_report_settings', wp_parse_args($defaults, $settings) );
+
+		ob_start();
+
+		$html_list_table = new HtmlReport($settings);
+		$html_list_table->prepare_items();
+		$html_list_table->display();
+
+		return ob_get_clean();
 
 	}
 

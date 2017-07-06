@@ -15,9 +15,9 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
-use Atum\Components\DataExport;
 use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
+use Atum\DataExport\DataExport;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
 use Atum\InventoryLogs\InventoryLogs;
