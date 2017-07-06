@@ -213,7 +213,7 @@ class Log extends AtumModel {
 		// Set parent
 		$item->set_log_id( $this->id );
 
-		// Append new row with generated temporary ID
+		// Append new item with generated temporary ID
 		if ( $item_id = $item->get_id() ) {
 			$this->items[ $items_key ][ $item_id ] = $item;
 		}
@@ -279,7 +279,7 @@ class Log extends AtumModel {
 	 *
 	 * @return LogItemFee  The fee item added to the Log
 	 */
-	public function add_fee (\WC_Order_Item_Fee $fee = NULL) {
+	public function add_fee ( \WC_Order_Item_Fee $fee = NULL ) {
 
 		$item = new LogItemFee();
 		$item->set_log_id( $this->id );
@@ -307,7 +307,7 @@ class Log extends AtumModel {
 	 *
 	 * @return LogItemShipping  The shipping cost item added to the Log
 	 */
-	public function add_shipping_cost (\WC_Order_Item_Shipping $shipping = NULL) {
+	public function add_shipping_cost ( \WC_Order_Item_Shipping $shipping = NULL ) {
 
 		$item = new LogItemShipping();
 		$item->set_shipping_rate( new \WC_Shipping_Rate() );
@@ -332,21 +332,48 @@ class Log extends AtumModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param int $rate_id
+	 * @param array $values {
+	 *      The array of tax values to add to the created tax item
+	 *
+	 *      @type int    $rate_id            The tax rate ID
+	 *      @type string $name               The tax item name
+	 *      @type float  $tax_total          The tax total
+	 *      @type float  $shipping_tax_total The shipping tax total
+	 *
+	 * }
 	 * @param \WC_Order_Item_Tax $tax Optional. Tax item to import
 	 *
-	 * @return LogItemTax  The tax item added to the Log
+	 * @return LogItemTax|bool  The tax item added to the Log or false if the required rate_id value is not passed
 	 */
-	public function add_tax ($rate_id, \WC_Order_Item_Tax $tax = NULL ) {
+	public function add_tax ( array $values, \WC_Order_Item_Tax $tax = NULL ) {
+
+		if ( empty( $values['rate_id'] ) ) {
+			return FALSE;
+		}
 
 		$item = new LogItemTax();
-		$item->set_rate( $rate_id );
+		$item->set_rate( $values['rate_id'] );
 		$item->set_log_id( $this->id );
 
 		if ($tax) {
 			$item->set_name( $tax->get_name() );
 			$item->set_tax_total( $tax->get_tax_total() );
 			$item->set_shipping_tax_total( $tax->get_shipping_tax_total() );
+		}
+		else {
+
+			if ( isset($values['name']) ) {
+				$item->set_name( $values['name'] );
+			}
+
+			if ( isset($values['tax_total']) ) {
+				$item->set_tax_total( $values['tax_total'] );
+			}
+
+			if ( isset($values['shipping_tax_total']) ) {
+				$item->set_shipping_tax_total( $values['shipping_tax_total'] );
+			}
+
 		}
 
 		$item->save();
@@ -749,11 +776,11 @@ class Log extends AtumModel {
 		// New taxes
 		foreach ( $new_rate_ids as $tax_rate_id ) {
 
-			$item = new LogItemTax();
-			$item->set_rate( $tax_rate_id );
-			$item->set_tax_total( isset( $cart_taxes[ $tax_rate_id ] ) ? $cart_taxes[ $tax_rate_id ] : 0 );
-			$item->set_shipping_tax_total( ! empty( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] : 0 );
-			$this->add_item( $item );
+			$this->add_tax( array(
+				'rate_id'            => $tax_rate_id,
+				'tax_total'          => isset( $cart_taxes[ $tax_rate_id ] ) ? $cart_taxes[ $tax_rate_id ] : 0,
+				'shipping_tax_total' => ! empty( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] : 0
+			) );
 
 		}
 

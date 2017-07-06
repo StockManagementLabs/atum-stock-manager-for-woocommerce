@@ -1165,18 +1165,9 @@ h2 .atum-help-tip {
 }
 
 #log_data .log_data_column {
-  width: 32%;
+  width: 100%;
   padding: 0 2% 0 0;
   float: left;
-}
-
-@media only screen and (max-width: 1280px) {
-  #log_data .log_data_column {
-    width: 48%;
-  }
-  #log_data .log_data_column:first-child {
-    width: 100%;
-  }
 }
 
 #log_data .log_data_column > h3 span {
