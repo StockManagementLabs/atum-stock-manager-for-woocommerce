@@ -69,28 +69,28 @@ final class Helpers {
 	}
 	
 	/**
-	 * Returns an array with the orders filtered by the atts array attributes
+	 * Returns an array with the orders filtered by the atts array
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param array|string    $atts         Optional {
+	 * @param array|string $atts {
+	 *      Optional. Filters for the orders' query.
 	 *
-	 *  @type string     $order_type         Comma-separated list of order's post types
-	 *  @type string     $order_status       Comma-separated list of order's post statuses
-	 *  @type mixed      $orders_in          Array, integer o comma-separated list of order's IDs we want to get
-	 *  @type int        $number_orders      Max number of orders (-1 gets all)
-	 *  @type string     $meta_key           Key of the meta field to filter/order (depending of orderby value)
-	 *  @type mixed      $meta_value         Value of the meta field to filter/order(depending of orderby value)
-	 *  @type string     $meta_type          Meta key type. Default value is 'CHAR'
-	 *  @type string     $meta_compare       Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
-	 *  @type string     $order              ASC/DESC, default to DESC
-	 *  @type string     $orderby            Field used to sort results (see WP_QUERY). Default to date (post_date)
-	 *  @type int        $order_date_start   If has value, filters the orders between the WC meta _completed_date or _paid_date and the $order_date_end (must be in UNIX timestamp format)
-	 *  @type int        $order_date_end     Requires $order_date_start. If has value, filters the orders completed/processed before this date (must be in UNIX timestamp format). Default: next day
-	 *
+	 *      @type string $order_type        Comma-separated list of order's post types
+	 *      @type string $order_status      Comma-separated list of order's post statuses
+	 *      @type mixed  $orders_in         Array, integer o comma-separated list of order's IDs we want to get
+	 *      @type int    $number_orders     Max number of orders (-1 gets all)
+	 *      @type string $meta_key          Key of the meta field to filter/order (depending of orderby value)
+	 *      @type mixed  $meta_value        Value of the meta field to filter/order(depending of orderby value)
+	 *      @type string $meta_type         Meta key type. Default value is 'CHAR'
+	 *      @type string $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
+	 *      @type string $order             ASC/DESC, default to DESC
+	 *      @type string $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date)
+	 *      @type int    $order_date_start  If has value, filters the orders between the WC meta _completed_date or _paid_date and the $order_date_end (must be in UNIX timestamp format)
+	 *      @type int    $order_date_end    Requires $order_date_start. If has value, filters the orders completed/processed before this date (must be in UNIX timestamp format). Default: next day
 	 * }
 	 *
-	 * @param boolean   $return_ids          If TRUE, returns an array of ID's (default FALSE)
+	 * @param boolean $return_ids   Optional. If TRUE, returns an array of ID's (default FALSE)
 	 *
 	 * @return array
 	 */

@@ -111,10 +111,6 @@ class StockCentral extends AtumListPage {
 		
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/stock-central-help-sidebar' ) );
 		
-		// TODO: THIS SHOULD BE OVERRIDDEN ON THE PREMIUM VERSION
-		// Hide some table columns by default on the free version
-		add_filter( 'default_hidden_columns', array($this, 'hide_premium_columns'), 10, 2 );
-		
 		$this->list = new ListTable( array( 'per_page' => $this->per_page) );
 		
 	}
@@ -131,29 +127,7 @@ class StockCentral extends AtumListPage {
 		
 		Helpers::load_view( 'help-tabs/stock-central-' . $tab['name'] );
 	}
-	
-	/**
-	 * Hide some columns by default (Only for free version)
-	 *
-	 * @since 1.1.0
-	 *
-	 * @param array      $hidden    The array of coolumns to show
-	 * @param \WP_Screen $screen    The current screen
-	 *
-	 * @return array
-	 */
-	public function hide_premium_columns($hidden, $screen) {
-		
-		return array(
-			'calc_purchase_price',
-			'calc_inbound',
-			'calc_reserved',
-			'calc_returns',
-			'calc_damages',
-			'calc_lost_post',
-			'calc_sold_lost_sales'
-		);
-	}
+
 	
 	/****************************
 	 * Instance methods

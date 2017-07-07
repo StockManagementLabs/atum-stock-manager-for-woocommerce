@@ -103,6 +103,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * User meta key to control the current user dismissed notices
 	 */
 	const DISMISSED_NOTICES = 'atum_dismissed_notices';
+
+	/**
+	 * Value for empty columns
+	 */
+	const EMPTY_COL = '&mdash;';
 	
 	/**
 	 * Constructor
@@ -773,7 +778,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		return FALSE;
 	}
-	
 	
 	/**
 	 * Handle an incoming ajax request
