@@ -15,6 +15,8 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\InventoryLogs;
+use Atum\InventoryLogs\Models\Log;
 use Atum\Settings\Settings;
 
 
@@ -126,7 +128,7 @@ class ListTable extends AtumListTable {
 			'calc_sold_today'      => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'calc_returns'         => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'calc_damages'         => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_post'       => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'calc_lost_in_post'       => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'calc_sales14'         => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
 			'calc_sales7'          => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
 			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
@@ -154,7 +156,7 @@ class ListTable extends AtumListTable {
 			),
 			'stock-negatives'       => array(
 				'title'   => __( 'Stock Negatives', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'calc_returns', 'calc_damages', 'calc_lost_post' )
+				'members' => array( 'calc_returns', 'calc_damages', 'calc_lost_in_post' )
 			),
 			'stock-selling-manager' => array(
 				'title'   => __( 'Stock Selling Manager', ATUM_TEXT_DOMAIN ),
@@ -170,8 +172,6 @@ class ListTable extends AtumListTable {
 		);
 
 		parent::__construct( $args );
-		
-		add_action( 'admin_notices', array( $this, 'add_premium_columns_notice' ) );
 		
 	}
 	
@@ -301,7 +301,7 @@ class ListTable extends AtumListTable {
 		}
 
 		if ($column_item === '' || $column_item === FALSE) {
-			$column_item = '&mdash;';
+			$column_item = self::EMPTY_COL;
 		}
 		
 		return apply_filters( "atum/stock_central_list/column_default_$column_name", $column_item, $item, $this->product );
@@ -371,7 +371,7 @@ class ListTable extends AtumListTable {
 		$args = array(
 			'post_id'    => $id,
 			'meta_key'   => 'sku',
-			'value'      => ( $sku ) ? $sku : '&mdash;',
+			'value'      => ( $sku ) ? $sku : self::EMPTY_COL,
 			'input_type' => 'text',
 			'tooltip'    => __( 'Click to edit the SKU', ATUM_TEXT_DOMAIN )
 		);
@@ -471,7 +471,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_regular_price( $item ) {
 
-		$regular_price = '&mdash;';
+		$regular_price = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
@@ -506,7 +506,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_sale_price( $item ) {
 
-		$sale_price = '&mdash;';
+		$sale_price = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
@@ -563,7 +563,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_purchase_price( $item ) {
 
-		$purchase_price = '&mdash;';
+		$purchase_price = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
@@ -597,7 +597,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_stock( $item ) {
 
-		$stock = '&mdash;';
+		$stock = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
 
 		if ($this->allow_calcs) {
@@ -632,7 +632,7 @@ class ListTable extends AtumListTable {
 		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if (! $this->allow_calcs) {
-			$content = '&mdash;';
+			$content = self::EMPTY_COL;
 		}
 		elseif ( $stock <= 0 ) {
 			// no stock
@@ -678,7 +678,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_hold( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = '&mdash;';
+			$column_item = self::EMPTY_COL;
 		}
 		else {
 		
@@ -701,6 +701,27 @@ class ListTable extends AtumListTable {
 		
 		return apply_filters( 'atum/stock_central_list/column_stock_hold', $column_item, $item, $this->product );
 	}
+
+	/**
+	 * Column for reserved stock: sums the items within "Reserved Stock" logs
+	 *
+	 * @since  1.2.4
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int
+	 */
+	protected function column_calc_reserved( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = self::EMPTY_COL;
+		}
+		else {
+			$column_item = $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $column_item, $item, $this->product );
+	}
 	
 	/**
 	 * Column for back orders amount: show amount if items pending to serve and without existences
@@ -714,7 +735,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_back_orders( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = '&mdash;';
+			$column_item = self::EMPTY_COL;
 		}
 		else {
 
@@ -730,7 +751,7 @@ class ListTable extends AtumListTable {
 
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_back_orders', $column_item );
+		return apply_filters( 'atum/stock_central_list/column_back_orders', $column_item, $item, $this->product );
 		
 	}
 	
@@ -746,7 +767,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sold_today( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = '&mdash;';
+			$column_item = self::EMPTY_COL;
 		}
 		else {
 			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
@@ -754,6 +775,69 @@ class ListTable extends AtumListTable {
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_today', $column_item, $item, $this->product );
 		
+	}
+
+	/**
+	 * Column for customer returns: sums the items within "Reserved Stock" logs
+	 *
+	 * @since  1.2.4
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int
+	 */
+	protected function column_calc_returns( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = self::EMPTY_COL;
+		}
+		else {
+			$column_item = $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $column_item, $item, $this->product );
+	}
+
+	/**
+	 * Column for warehouse damages: sums the items within "Warehouse Damage" logs
+	 *
+	 * @since  1.2.4
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int
+	 */
+	protected function column_calc_damages( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = self::EMPTY_COL;
+		}
+		else {
+			$column_item = $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $column_item, $item, $this->product );
+	}
+
+	/**
+	 * Column for lost in post: sums the items within "Lost in Post" logs
+	 *
+	 * @since  1.2.4
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int
+	 */
+	protected function column_calc_lost_in_post( $item ) {
+
+		if (! $this->allow_calcs) {
+			$column_item = self::EMPTY_COL;
+		}
+		else {
+			$column_item = $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $column_item, $item, $this->product );
 	}
 	
 	/**
@@ -768,7 +852,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sales7( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = '&mdash;';
+			$column_item = self::EMPTY_COL;
 		}
 		else {
 			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
@@ -790,7 +874,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sales14( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = '&mdash;';
+			$column_item = self::EMPTY_COL;
 		}
 		else {
 			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
@@ -813,7 +897,7 @@ class ListTable extends AtumListTable {
 	protected function column_calc_will_last( $item ) {
 			
 		// TODO: FOR THE FREE VERSION IS FIXED TO 7 DAYS AVERAGE
-		$will_last = '&mdash;';
+		$will_last = self::EMPTY_COL;
 
 		if ($this->allow_calcs) {
 			$sales = $this->column_calc_sales7( $item );
@@ -848,7 +932,7 @@ class ListTable extends AtumListTable {
 			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product->get_id() );
 		}
 
-		$out_of_stock_days = ( is_numeric($out_of_stock_days) ) ? $out_of_stock_days : '&mdash;';
+		$out_of_stock_days = ( is_numeric($out_of_stock_days) ) ? $out_of_stock_days : self::EMPTY_COL;
 		
 		return apply_filters( 'atum/stock_central_list/column_stock_out_days', $out_of_stock_days, $item, $this->product );
 		
@@ -871,7 +955,7 @@ class ListTable extends AtumListTable {
 			$lost_sales = Helpers::get_product_lost_sales( $this->product->get_id() );
 		}
 
-		$lost_sales = ( is_numeric($lost_sales) ) ? Helpers::format_price( $lost_sales, ['trim_zeros' => TRUE] ) : '&mdash;';
+		$lost_sales = ( is_numeric($lost_sales) ) ? Helpers::format_price( $lost_sales, ['trim_zeros' => TRUE] ) : self::EMPTY_COL;
 
 		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product );
 
@@ -1223,7 +1307,7 @@ class ListTable extends AtumListTable {
 				'post_parent__in' => $parents->posts
 			);
 
-			$children = new \WP_Query( apply_filters( 'atum/stock_central_list/get_children', $children_args ) );
+			$children = new \WP_Query( apply_filters( 'atum/stock_central_list/get_children_args', $children_args ) );
 
 			if ($children->found_posts) {
 				return $children->posts;
@@ -1268,28 +1352,80 @@ class ListTable extends AtumListTable {
 		return array_merge( $product_ids, array_unique($parents) );
 
 	}
-	
+
 	/**
-	 * Add a notice the first time the user enter the Stock Central informing about disabled columns
+	 * Get the Inventory Log item quantity for a specific type of log
 	 *
-	 * @since 1.1.0
+	 * @since 1.2.4
+	 *
+	 * @type string $log_type   Type of log
+	 * @type int    $item_id    Item (WC Product) ID to check
+	 * @type string $log_status Optional. Log status (completed or pending)
+	 *
+	 * @return int
 	 */
-	public function add_premium_columns_notice() {
-		
-		$user_dismissed_notices = Helpers::get_dismissed_notices();
-		
-		if ( !$user_dismissed_notices || ! isset($user_dismissed_notices['welcome']) || $user_dismissed_notices['welcome'] != 'yes' ):
-			?>
-			<div class="notice notice-info atum-notice welcome-notice is-dismissible" data-nonce="<?php echo wp_create_nonce('dismiss-welcome-notice') ?>">
-				<p>
-					<?php _e("Welcome to ATUM Stock Central, we hope you'll enjoy and benefit from this great plugin.", ATUM_TEXT_DOMAIN) ?><br><br>
-					<?php _e("We have disabled some inactive columns by default as these are only available for future upgrades or our Premium and PRO users. If you'd like to preview them, please, use the Screen Options in the top corner.", ATUM_TEXT_DOMAIN)  ?><br><br>
-					<?php _e('Thank you very much for using ATUM as your inventory manager.') ?>
-				</p>
-			</div>
-			<?php
-		endif;
-		
+	protected function get_log_item_qty( $log_type, $item_id, $log_status = 'pending' ) {
+
+		$args = array(
+			'post_type'      => InventoryLogs::POST_TYPE,
+			'posts_per_page' => - 1,
+			'fields'         => 'ids'
+		);
+
+		$qty = 0;
+
+		// Filter by log type meta key
+		$log_types = Log::get_types();
+
+		if ( ! in_array( $log_type, array_keys($log_types) ) ) {
+			return $qty;
+		}
+
+		$args['meta_query'] = array(
+			array(
+				'key'     => '_type',
+				'value'   => $log_type
+			)
+		);
+
+		// Filter by log status
+		if ( strpos($log_status, ATUM_PREFIX) === FALSE ) {
+			$log_status = ATUM_PREFIX . $log_status;
+		}
+
+		$args['post_status'] = $log_status;
+		$log_ids = get_posts( apply_filters('atum/stock_central_list/get_log_items_args', $args) );
+
+		if ( ! empty($log_ids) ) {
+
+			global $wpdb;
+
+			foreach ($log_ids as $log_id) {
+
+				// Get the _qty meta for the specified product in the specified log
+				$query = $wpdb->prepare(
+					"SELECT meta_value 				  
+					 FROM {$wpdb->prefix}atum_log_itemmeta lm
+		             JOIN {$wpdb->prefix}atum_log_items li
+		             ON lm.log_item_id = li.log_item_id
+					 WHERE log_id = %d AND log_item_type = %s 
+					 AND meta_key = '_qty' AND lm.log_item_id IN (
+					 	SELECT log_item_id FROM {$wpdb->prefix}atum_log_itemmeta 
+					 	WHERE meta_key = '_product_id' AND meta_value = %d
+					 )",
+					$log_id,
+					'line_item',
+					$item_id
+				);
+
+				$qty += $wpdb->get_var($query);
+
+			}
+
+		}
+
+		return absint( $qty );
+
 	}
 	
 }
