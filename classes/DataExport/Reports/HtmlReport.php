@@ -7,14 +7,13 @@
  *
  * @since           1.2.5
  *
- * Extends the Stock Central's List Table and exports only the table as HTML report
+ * Extends the Stock Central's List Table and exports it as HTML report
  */
 
 namespace Atum\DataExport\Reports;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Inc\Helpers;
 use Atum\StockCentral\Inc\ListTable;
 
 
@@ -46,14 +45,104 @@ class HtmlReport extends ListTable {
 	 *
 	 * @since 1.2.5
 	 */
-	protected function display_tablenav( $which ) {}
+	protected function display_tablenav( $which ) {
+		// Table nav not needed in reports
+	}
 	
 	/**
 	 * @inheritdoc
 	 *
 	 * @since 1.2.5
 	 */
-	protected function extra_tablenav( $which ) {}
+	protected function extra_tablenav( $which ) {
+		// Extra table nav not needed in reports
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.2.5
+	 */
+	protected function row_actions( $actions, $always_visible = false ) {
+		// Row actions not needed in reports
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.2.5
+	 */
+	protected function handle_row_actions( $item, $column_name, $primary ) {
+		// Row actions not needed in reports
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.2.5
+	 */
+	protected function get_sortable_columns() {
+		return array();
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.2.5
+	 */
+	public function single_row( $item ) {
+
+		$this->product = wc_get_product( $item );
+		$type = $this->product->get_type();
+
+		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
+		$row_style = '';
+
+		// mPDF has problems reading multiple classes so we have to add the row bg color inline
+		if (!$this->allow_calcs) {
+			$row_color = ($type == 'grouped') ? '#FEC007' : '#0073AA';
+			$row_style .= ' style="background-color:' . $row_color . '" class="expanded"';
+		}
+
+		echo '<tr' . $row_style . '>';
+		$this->single_row_columns( $item );
+		echo '</tr>';
+
+		// Add the children products of each Variable and Grouped product
+		if ( in_array($type, ['variable', 'grouped']) ) {
+
+			$product_class = '\\WC_Product_' . ucfirst($type);
+			$parent_product = new $product_class( $this->product->get_id() );
+			$child_products = $parent_product->get_children();
+
+			if ( ! empty($child_products) ) {
+
+				$this->allow_calcs = TRUE;
+
+				foreach ($child_products as $child_id) {
+
+					// Exclude some children if there is a "Views Filter" active
+					if ( ! empty($_REQUEST['v_filter']) ) {
+
+						$v_filter = esc_attr( $_REQUEST['v_filter'] );
+						if ( ! in_array($child_id, $this->id_views[ $v_filter ]) ) {
+							continue;
+						}
+
+					}
+
+					$this->is_child = TRUE;
+					$this->product = wc_get_product($child_id);
+					$this->single_expandable_row($this->product, ($type == 'grouped' ? $type : 'variation'));
+				}
+			}
+
+		}
+
+		// Reset the child value
+		$this->is_child = FALSE;
+
+	}
 	
 	/**
 	 * @inheritdoc
@@ -61,6 +150,7 @@ class HtmlReport extends ListTable {
 	 * @since 1.2.5
 	 */
 	public function single_expandable_row( $item, $type ) {
+		// Show the child columns expanded in reports
 		echo '<tr class="' . $type . '">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
@@ -143,7 +233,8 @@ class HtmlReport extends ListTable {
 	 * @since 1.2.5
 	 */
 	protected function get_views() {
-		return apply_filters( 'atum/data_export/html_report_views' );
+		// Views not needed in reports
+		return apply_filters( 'atum/data_export/html_report_views', array() );
 	}
 	
 	/**
@@ -188,6 +279,8 @@ class HtmlReport extends ListTable {
 	 *
 	 * @since 1.2.5
 	 */
-	protected function set_views_data( $args ) {}
+	protected function set_views_data( $args ) {
+		// Bypass the set_views_data method overriding it
+	}
 	
 }
