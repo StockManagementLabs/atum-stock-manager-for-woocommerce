@@ -9,6 +9,7 @@ return array(
     'Atum\\Addons\\Addons' => $baseDir . '/classes/Addons/Addons.php',
     'Atum\\Addons\\Updater' => $baseDir . '/classes/Addons/Updater.php',
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
+    'Atum\\Components\\AtumComments' => $baseDir . '/classes/Components/AtumComments.php',
     'Atum\\Components\\AtumException' => $baseDir . '/classes/Components/AtumException.php',
     'Atum\\Components\\AtumListPage' => $baseDir . '/classes/Components/AtumListPage.php',
     'Atum\\Components\\AtumListTable' => $baseDir . '/classes/Components/AtumListTable.php',

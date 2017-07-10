@@ -13,8 +13,8 @@ namespace Atum;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumComments;
 use Atum\Components\AtumException;
-use Atum\Inc\Ajax;
 use Atum\Inc\Main;
 
 
@@ -48,7 +48,7 @@ class Bootstrap {
 	 */
 	private function __construct() {
 		
-		// Ensure that WooCommerce is already loaded before starting the bootstrap
+		// Check all the requirements before bootstraping
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );
 
 	}
@@ -65,13 +65,15 @@ class Bootstrap {
 		try {
 			
 			if ( $this->bootstrapped ) {
-				throw new AtumException( 'already_bootstrapped', __( '%s plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
+				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
 			}
+
+			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
+			// in queries when any dependency is not met
+			AtumComments::get_instance();
 			
-			// Check that the plugin dependencies are present
-			if ( is_admin() ) {
-				$this->check_dependencies();
-			}
+			// Check that the plugin dependencies are met
+			$this->check_dependencies();
 			
 			// Bootstrap the plugin
 			Main::get_instance();
@@ -99,7 +101,7 @@ class Bootstrap {
 		
 		// WooCommerce required
 		if ( ! function_exists( 'WC' ) ) {
-			throw new AtumException( 'woocommerce_disabled', __( '%s requires WooCommerce to be activated', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'woocommerce_disabled', __( 'ATUM requires WooCommerce to be activated', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 		// WooCommerce "Manage Stock" option must be enabled
 		else {
@@ -127,7 +129,7 @@ class Bootstrap {
 				) {
 					$stock_option_msg .= ' ' . sprintf(
 						__( 'Go to %sWooCommerce inventory settings%s to fix this.', ATUM_TEXT_DOMAIN ),
-						'<a href="' . admin_url( "admin.php?$woo_inventory_page" ) . '">',
+						'<a href="' . self_admin_url( "admin.php?$woo_inventory_page" ) . '">',
 						'</a>'
 					);
 				}
@@ -138,9 +140,20 @@ class Bootstrap {
 			
 		}
 		
-		// WooCommerce version greater than 2.5 required
+		// Minimum PHP version required: 5.4
+		if ( version_compare( phpversion(), '5.4', '<' ) ) {
+			throw new AtumException( 'php_min_version_required', __( 'ATUM requires PHP version 5.4 or greater (recommended 5.6 or 7). Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+		}
+
+		// Minimum WordPress version required: 4.0
+		global $wp_version;
+		if ( version_compare( $wp_version, '4.0', '<' ) ) {
+			throw new AtumException( 'wordpress_min_version_required', sprintf( __( 'ATUM requires Wordpress version 4.0 or greater. Please, %supdate now%s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url('update-core.php?force-check=1') ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
+		}
+
+		// Minimum WooCommerce version required: 2.5
 		if ( version_compare( WC()->version, '2.5', '<' ) ) {
-			throw new AtumException( 'woocommerce_min_version_required', __( '%s requires WooCommerce version 2.5 or greater', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version 2.5 or greater. Please, %supdate now%s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url('update-core.php?force-check=1') ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
 		}
 		
 	}
@@ -152,21 +165,16 @@ class Bootstrap {
 	 */
 	public function show_bootstrap_warning() {
 		
-		if ( ! empty($this->admin_message ) ) {
-			
-			$plugin_data = get_plugin_data(ATUM_PATH . 'atum-stock-manager-for-woocommerce.php');
-			$plugin_name = (! empty($plugin_data['Name']) ) ? $plugin_data['Name'] : ucfirst(ATUM_TEXT_DOMAIN);
-			?>
+		if ( ! empty($this->admin_message ) ): ?>
 			<div class="error fade">
 				<p>
-					<strong><?php echo sprintf($this->admin_message, $plugin_name); ?></strong>
+					<strong><?php echo $this->admin_message ?></strong>
 				</p>
 			</div>
-			<?php
-		}
+		<?php endif;
 		
 	}
-	
+
 	
 	/****************************
 	 * Instance methods
