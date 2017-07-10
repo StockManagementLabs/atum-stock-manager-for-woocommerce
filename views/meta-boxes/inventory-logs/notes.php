@@ -17,7 +17,13 @@ $args = array(
 	'type'      => 'log_note',
 );
 
+// Bypass the AtumComments filter to get rid of log notes comments from queries
+$atum_comments = \Atum\Components\AtumComments::get_instance();
+remove_filter( 'comments_clauses', array( $atum_comments, 'exclude_log_notes' ) );
+
 $notes = get_comments( $args );
+
+add_filter( 'comments_clauses', array( $atum_comments, 'exclude_log_notes' ) );
 
 ?>
 <ul class="log_notes">

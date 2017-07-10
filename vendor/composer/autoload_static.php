@@ -24,6 +24,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Addons\\Addons' => __DIR__ . '/../..' . '/classes/Addons/Addons.php',
         'Atum\\Addons\\Updater' => __DIR__ . '/../..' . '/classes/Addons/Updater.php',
         'Atum\\Bootstrap' => __DIR__ . '/../..' . '/classes/Bootstrap.php',
+        'Atum\\Components\\AtumComments' => __DIR__ . '/../..' . '/classes/Components/AtumComments.php',
         'Atum\\Components\\AtumException' => __DIR__ . '/../..' . '/classes/Components/AtumException.php',
         'Atum\\Components\\AtumListPage' => __DIR__ . '/../..' . '/classes/Components/AtumListPage.php',
         'Atum\\Components\\AtumListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTable.php',
