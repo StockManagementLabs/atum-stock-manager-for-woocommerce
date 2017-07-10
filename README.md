@@ -203,6 +203,13 @@ If you'd like to see only selected products, leave the ATUM stock control option
 
 ## Frequently Asked Questions
 
+#### What are the minimum ATUM requirements?
+
+ATUM requires PHP version 5.6 or greater, but our recommended environment is the same as WordPress:
+[https://wordpress.org/about/requirements/](https://wordpress.org/about/requirements/).
+
+Also, we recommend to having WooCommerce always up-to-date.
+
 #### Is ATUM plugin FREE?
 
 This version of the ATUM plugin is completely free and will stay as such. It has been designed to suit most users that need regular inventory control from one screen.
@@ -243,11 +250,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
-*1.2.4 - 2017-06-30*
+*1.2.4 - 2017-07-10*
 
 Features:
 
 * New "Inventory Logs" component.
+* Added calculations for "Reserved Stock", "Customer Returns", "Warehaouse Damages" and "Lost in Post" columns to "Stock Central".
 
 Fixes:
 
