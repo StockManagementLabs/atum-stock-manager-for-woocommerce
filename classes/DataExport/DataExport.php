@@ -126,12 +126,24 @@ class DataExport {
 		define('_MPDF_SYSTEM_TTFONTS_CONFIG', ATUM_PATH . 'config/mpdf-fonts.php');
 
 		$mpdf = new \mPDF( 'utf-8', 'A4-L' );
+
 		$common_stylesheet = file_get_contents( ABSPATH . 'wp-admin/css/common.css');
 		$mpdf->WriteHTML($common_stylesheet, 1);
+
+		$wc_admin_stylesheet = file_get_contents( WC_ABSPATH . 'assets/css/admin.css');
+		$mpdf->WriteHTML($wc_admin_stylesheet, 1);
+
 		$atum_stylesheet = file_get_contents( ATUM_PATH . 'assets/css/atum-list.css');
 		$mpdf->WriteHTML($atum_stylesheet, 1);
+
 		$mpdf->WriteHTML( $this->generate_html_report() );
+
 		echo $mpdf->Output();
+
+		/*echo '<style>' . $common_stylesheet . $wc_admin_stylesheet . $atum_stylesheet . '</style>';
+		echo $this->generate_html_report();
+		die( );*/
+
 
 	}
 

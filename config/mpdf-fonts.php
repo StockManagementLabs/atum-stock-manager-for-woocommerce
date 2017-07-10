@@ -6,7 +6,7 @@
 // e.g. on Windows: define("_MPDF_SYSTEM_TTFONTS", 'C:/Windows/Fonts/');
 
 if ( ! defined('_MPDF_SYSTEM_TTFONTS') ) {
-	define('_MPDF_SYSTEM_TTFONTS', '../assets/fonts/');
+	define('_MPDF_SYSTEM_TTFONTS', ATUM_PATH . 'assets/fonts/');
 }
 
 // Optionally set font(s) (names as defined below in $this->fontdata) to use for missing characters
