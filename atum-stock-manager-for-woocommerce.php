@@ -15,7 +15,7 @@
  * Author URI:        https://www.stockmanagementlabs.com/
  * Contributors:      Salva Machí and Jose Piera - https://sispixels.com
  * Requires at least: 4.4
- * Tested up to:      4.7.4
+ * Tested up to:      4.8
  * Text Domain:       atum
  * Domain Path:       /languages
  * License:           GPLv2 or later
