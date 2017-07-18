@@ -1,5 +1,5 @@
 /**
- * Atum Stock Management
+ * Atum List Tables
  *
  * @copyright Stock Management Labs ©2017
  * @since 0.0.1
@@ -227,8 +227,7 @@
 					 * Now the timer comes to use: we wait half a second after
 					 * the user stopped typing to actually send the call. If
 					 * we don't, the keyup event will trigger instantly and
-					 * thus may cause duplicate calls before sending the intended
-					 * value
+					 * thus may cause duplicate calls before sending the intended value
 					 */
 					window.clearTimeout(timer);
 					
@@ -496,6 +495,7 @@
 						dataType  : 'json',
 						data      : data,
 						beforeSend: function () {
+							$listWrapper.addClass('loading-data');
 							$atumTable.addClass('overlay');
 							$elem.append('<div class="atum-loading"></div>');
 						},
@@ -503,6 +503,7 @@
 						success   : function (response) {
 							
 							postTypeTableAjax = '';
+							$listWrapper.removeClass('loading-data');
 							$atumTable.removeClass('overlay');
 							$('.atum-loading').remove();
 							
@@ -518,22 +519,22 @@
 							
 							// Update column headers for sorting
 							if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-								$('thead tr.item-heads, tfoot tr', $listWrapper).html(response.column_headers);
+								$listWrapper.find('thead tr.item-heads, tfoot tr').html(response.column_headers);
 							}
 							
 							if (typeof response.views !== 'undefined' && response.views.length) {
-								$('.subsubsub', $listWrapper).replaceWith(response.views);
+								$listWrapper.find('.subsubsub').replaceWith(response.views);
 							}
 							
 							if (typeof response.pagination !== 'undefined') {
 								
 								// Update pagination for navigation
 								if (response.pagination.top.length) {
-									$('.tablenav.top .tablenav-pages', $listWrapper).html($(response.pagination.top).html());
+									$listWrapper.find('.tablenav.top .tablenav-pages').html( $(response.pagination.top).html() );
 								}
 								
 								if (response.pagination.bottom.length) {
-									$('.tablenav.bottom .tablenav-pages', $listWrapper).html($(response.pagination.bottom).html());
+									$listWrapper.find('.tablenav.bottom .tablenav-pages').html( $(response.pagination.bottom).html() );
 								}
 								
 							}

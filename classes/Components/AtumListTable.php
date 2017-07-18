@@ -543,7 +543,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->display_tablenav( 'bottom' );
 		
 		// Prepare data
-		wp_localize_script( 'atum', 'atumListTable', array_merge( array(
+		wp_localize_script( 'atum-list', 'atumListTable', array_merge( array(
 			'page'       => ( isset( $_REQUEST['page'] ) ) ? absint( $_REQUEST['page'] ) : 1,
 			'perpage'    => $this->per_page,
 			'order'      => $this->_pagination_args['order'],
@@ -862,12 +862,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		$min = (! ATUM_DEBUG) ? '.min' : '';
-		wp_register_script( 'atum', ATUM_URL . "assets/js/atum$min.js", array( 'jquery', 'jscrollpane' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", array( 'jquery', 'jscrollpane' ), ATUM_VERSION, TRUE );
 
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'atum-list' );
 		wp_enqueue_script( 'jscrollpane' );
-		wp_enqueue_script( 'atum' );
+		wp_enqueue_script( 'atum-list' );
 		
 	}
 	

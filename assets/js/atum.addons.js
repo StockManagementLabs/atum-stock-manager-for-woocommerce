@@ -1,7 +1,7 @@
 /**
  * Atum Addons
  *
- * @copyright Stock Management Labs (c)2017
+ * @copyright Stock Management Labs ©2017
  * @since 1.2.0
  */
 (function ($) {
