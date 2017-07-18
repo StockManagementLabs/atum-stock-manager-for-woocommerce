@@ -40,12 +40,24 @@
 		}
 	}
 	
-	.alignleft.actions, .subsubsub {
+	.subsubsub {
 		position: relative;
 		
 		.atum-loading {
-			right: -30px;
-			top: 3px;
+			right: -25px;
+			top: 4px;
+		}
+	}
+	
+	&.loading-data {
+		.alignleft.actions {
+			position: relative;
+			overflow: visible;
+			
+			.atum-loading {
+				right: -15px;
+				top: 7px;
+			}
 		}
 	}
 	
