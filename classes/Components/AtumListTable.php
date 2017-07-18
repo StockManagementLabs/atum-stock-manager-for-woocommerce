@@ -77,6 +77,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $taxonomies = array();
+
+	/**
+	 * Extra meta args for the list query
+	 *
+	 * @var array
+	 */
+	protected $extra_meta = array();
 	
 	/**
 	 * Data for send to client side
@@ -159,7 +166,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		), $args );
 		
 		parent::__construct( $args );
-		
+
+		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		
 		$user_dismissed_notices = Helpers::get_dismissed_notices();
@@ -339,7 +347,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
 		$args = array(
-			'post_type'      => array($this->post_type),
+			'post_type'      => $this->post_type,
 			'post_status'    => 'publish',
 			'posts_per_page' => $this->per_page,
 			'paged'          => $this->get_pagenum()
@@ -368,18 +376,22 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		/*
-		 * Check if the plugin manage all products stock
+		 * Check if the plugin manage all the products stocks
 		 */
 		if ( Helpers::get_option( 'manage_stock', 'no' ) == 'no' ) {
 			
 			// Only products with the _manage_stock meta set to yes
-			$args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'   => '_manage_stock',
-					'value' => 'yes'
-				),
+			$args['meta_query'][] = array(
+				'key'   => '_manage_stock',
+				'value' => 'yes'
 			);
+		}
+
+		/*
+		 * Extra meta args
+		 */
+		if ( ! empty($this->extra_meta) ) {
+			$args['meta_query'][] = $this->extra_meta;
 		}
 		
 		/*
@@ -408,33 +420,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * Searching
 		 */
 		if ( ! empty( $_REQUEST['s'] ) ) {
-			
-			// Search based on post_type id
-			if ( is_numeric( $_REQUEST['s'] ) ) {
-				
-				$post_id = absint( $_REQUEST['s'] );
-				switch ( get_post_type( $post_id ) ) {
-					
-					case $this->post_type :
-						$post_ids = array( $post_id );
-						break;
-					
-					default:
-						$post_ids = FALSE;
-						break;
-				}
-				
-				if ( $post_ids ) {
-					$meta_query = array( 'post__in' => $post_ids );
-					$args       = array_merge( $args, $meta_query );
-				}
-				
-			}
-			// Search by text
-			else {
-				$args = array_merge( $args, array( 's' => esc_attr( $_REQUEST['s'] ) ) );
-			}
-			
+			$args['s'] = esc_attr( $_REQUEST['s'] );
 		}
 		elseif ( ! empty( $this->selected ) ) {
 			
@@ -450,55 +436,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			
 		}
 		
-		// Save args
-		$first_args['query_args'] = $args;
-		
-		// Search the term in the custom fields columns too
-		if ( ! empty( $_REQUEST['s'] ) ) {
-			
-			$meta_key_args = array(
-				'relation' => 'OR'
-			);
-			
-			foreach ( $columns as $key => $label ) {
-				
-				// Only get the meta keys (_ as first char)
-				if ( strpos( $key, '_' ) === 0 ) {
-					
-					$meta_key = array(
-						'key'   => $key,
-						'value' => $_REQUEST['s']
-					);
-					
-					if ( is_numeric( $_REQUEST['s'] ) ) {
-						$meta_key['type'] = 'numeric';
-					}
-					else {
-						$meta_key['compare'] = 'LIKE';
-					}
-					
-					$meta_key_args[] = $meta_key;
-					
-				}
-				
-			}
-			
-			unset( $args['s'] );
-			
-			if ( isset( $args['meta_query'] ) ) {
-				$args['meta_query'][] = $meta_key_args;
-			}
-			else {
-				$args['meta_query'] = $meta_key_args;
-			}
-			
-			$first_args['meta'] = $meta_key_args;
-			
-		}
-		
 		// Build "Views Filters" and calculate totals
 		if ( is_callable( array( $this, 'set_views_data' ) ) ) {
-			$this->set_views_data( $first_args );
+			$this->set_views_data( $args );
 		}
 		
 		$this->data['v_filter'] = '';
@@ -519,7 +459,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				if ( $this->data['v_filter'] == $key && ! empty($post_ids) ) {
 
 					// Add the parent products again to the query
-					$args['post__in'] = $first_args['query_args']['post__in'] = ( ! empty($this->variable_products) || ! empty($this->grouped_products) ) ? $this->get_parents($post_ids) : $post_ids;
+					$args['post__in'] = ( ! empty($this->variable_products) || ! empty($this->grouped_products) ) ? $this->get_parents($post_ids) : $post_ids;
 					$allow_query = TRUE;
 					$found_posts = $this->count_views["count_$key"];
 
@@ -529,15 +469,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		if ( $allow_query ) {
+
+			// Setup the WP query
+			global $wp_query;
+			wp( $args );
+			$wp_query = new \WP_Query( $args );
 			
-			$posts_query = new \WP_Query( $first_args['query_args'] );
-			
-			if ( isset( $first_args['meta'] ) ) {
-				$posts_meta_query = new \WP_Query( $args );
-				$posts_meta_query = $posts_meta_query->posts;
-			}
-			
-			$posts = array_merge( $selected_posts, $posts_query->posts, $posts_meta_query );
+			$posts = array_merge( $selected_posts, $wp_query->posts );
 			$this->current_products = wp_list_pluck($posts, 'ID');
 			
 			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page );
@@ -778,6 +716,59 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		return FALSE;
 	}
+
+	/**
+	 * Search by SKU or ID for products
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param string $where
+	 *
+	 * @return string
+	 */
+	public function product_search( $where ) {
+
+		global $pagenow, $wpdb, $wp;
+
+		/**
+		 * Changed the WooCommerce's "product_search" filter to allow Ajax requests
+		 * @see \\WC_Admin_Post_Types\product_search
+		 */
+		if (
+			! in_array( $pagenow, array('edit.php', 'admin-ajax.php') ) || ! is_search() ||
+		    ! isset( $wp->query_vars['s'] ) || 'product' != $wp->query_vars['post_type']
+		) {
+			return $where;
+		}
+
+		$search_ids = array();
+		$terms      = explode( ',', $wp->query_vars['s'] );
+
+		foreach ( $terms as $term ) {
+
+			if ( is_numeric( $term ) ) {
+				$search_ids[] = $term;
+			}
+
+			// Attempt to get a SKU
+			$sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_sku' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
+			$sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
+
+			if ( sizeof( $sku_to_id ) > 0 ) {
+				$search_ids = array_merge( $search_ids, $sku_to_id );
+			}
+
+		}
+
+		$search_ids = array_filter( array_unique( array_map( 'absint', $search_ids ) ) );
+
+		if ( sizeof( $search_ids ) > 0 ) {
+			$where = str_replace( 'AND (((', "AND ( ({$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")) OR ((", $where );
+		}
+
+		return $where;
+
+	}
 	
 	/**
 	 * Handle an incoming ajax request
@@ -896,5 +887,49 @@ abstract class AtumListTable extends \WP_List_Table {
 		</div>
 		<?php
 	}
-	
+
+	/**
+	 * Getter for the table_columns property
+	 *
+	 * @since 1.2.5
+	 *
+	 * @return array
+	 */
+	public function get_table_columns() {
+		return $this->table_columns;
+	}
+
+	/**
+	 * Setter for the table_columns property
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param array $table_columns
+	 */
+	public function set_table_columns( $table_columns ) {
+		$this->table_columns = $table_columns;
+	}
+
+	/**
+	 * Getter for the group_members property
+	 *
+	 * @since 1.2.5
+	 *
+	 * @return array
+	 */
+	public function get_group_members() {
+		return $this->group_members;
+	}
+
+	/**
+	 * Setter for the group_members property
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param array $group_members
+	 */
+	public function set_group_members( $group_members ) {
+		$this->group_members = $group_members;
+	}
+
 }

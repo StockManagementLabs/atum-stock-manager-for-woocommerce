@@ -172,7 +172,7 @@ final class Helpers {
 		
 		$args['posts_per_page'] = ( $number_orders ) ? $number_orders : - 1;
 		
-		// Filter/Order by a meta key
+		// Filter/Order by meta key
 		if ( $meta_key ) {
 			
 			$meta_query = array(
