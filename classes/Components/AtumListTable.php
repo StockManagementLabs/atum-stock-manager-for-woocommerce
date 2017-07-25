@@ -516,7 +516,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		?>
 		<div class="atum-table-wrapper">
-			<table class="wp-list-table atum-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>">
+			<table class="wp-list-table atum-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>"
+				data-currency-pos="<?php echo get_option( 'woocommerce_currency_pos', 'left' ) ?>">
 				
 				<thead>
 					<?php $this->print_group_columns(); ?>
@@ -537,6 +538,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				</tfoot>
 			
 			</table>
+			
+			<input type="hidden" name="atum-column-edits" id="atum-column-edits" value="">
 		</div>
 		<?php
 		
@@ -544,14 +547,15 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		// Prepare data
 		wp_localize_script( 'atum-list', 'atumListTable', array_merge( array(
-			'page'       => ( isset( $_REQUEST['page'] ) ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'    => $this->per_page,
-			'order'      => $this->_pagination_args['order'],
-			'orderby'    => $this->_pagination_args['orderby'],
-			'nonce'      => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter' => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'   => __('Set the %% value', ATUM_TEXT_DOMAIN),
-			'setButton'  => __('Set', ATUM_TEXT_DOMAIN)
+			'page'        => ( isset( $_REQUEST['page'] ) ) ? absint( $_REQUEST['page'] ) : 1,
+			'perpage'     => $this->per_page,
+			'order'       => $this->_pagination_args['order'],
+			'orderby'     => $this->_pagination_args['orderby'],
+			'nonce'       => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxfilter'  => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'    => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'   => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'saveButton'  => __( 'Save Data', ATUM_TEXT_DOMAIN )
 		), $this->data ) );
 		
 		do_action( 'atum/atum_list_table/after_display', $this );

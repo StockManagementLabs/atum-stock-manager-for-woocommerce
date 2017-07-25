@@ -19,7 +19,7 @@
 			
 			var $listWrapper      = $(this),
 			    $atumTable        = $listWrapper.find('.atum-list-table'),
-			    postsList         = $listWrapper.find('#the-list'),
+			    $editInput        = $listWrapper.find('#atum-column-edits'),
 			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('#products_per_page'),
 			    $search           = $listWrapper.find('.atum-post-search'),
 			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
@@ -30,18 +30,15 @@
 			var stockCentralTable = {
 				
 				/**
-				 * Register our triggers
-				 *
-				 * We want to capture clicks on specific links, but also value change in
-				 * the pagination input field. The links contain all the information we
-				 * need concerning the wanted page number or ordering, so we'll just
-				 * parse the URL to extract these variables.
+				 * Register our events and initialize the UI
 				 */
 				init: function () {
 					
 					var self = this;
 					
-					// Add the table scrollbar
+					//
+					// Init. Table Scrollbar
+					//----------------------
 					this.addScrollBar();
 					
 					$(window).resize(function() {
@@ -67,13 +64,50 @@
 						
 					}).resize();
 					
-					// Add tooltips
+					//
+					// Init. Tooltips
+					//---------------
 					this.tooltip();
 					
-					// Add popovers
+					//
+					// Init. Popovers
+					//---------------
 					this.setFieldPopover();
 					
-					// Hide/Show/colspan column groups
+					// Hide any other opened popover before opening a new one
+					$listWrapper.click( function(e) {
+						
+						var $target   = $(e.target),
+						    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all
+						    $metaCell = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
+						
+						// Get only the cells with an opened popover
+						$metaCell = $metaCell.filter(function() {
+							return $(this).data('bs.popover') !== 'undefined' && ($(this).data('bs.popover').inState || false) && $(this).data('bs.popover').inState.click === true;
+						});
+						
+						self.destroyPopover($metaCell);
+						
+					});
+					
+					// Popover's "Set" button
+					$('body').on('click', '.popover button.set', function() {
+						
+						var $button   = $(this),
+						    $popover  = $button.closest('.popover'),
+						    popoverId = $popover.attr('id'),
+						    $setMeta  = $('[data-popover="' + popoverId + '"]');
+						
+						if ($setMeta.length) {
+							self.maybeAddSaveButton();
+							self.updateEditedColsInput($setMeta, $popover);
+						}
+						
+					});
+					
+					//
+					// Hide/Show/Colspan column groups
+					//--------------------------------
 					$('#adv-settings .metabox-prefs input').change(function () {
 						$listWrapper.find('thead .group th').each(function () {
 							
@@ -90,7 +124,9 @@
 						});
 					});
 					
-					// Pagination links, sortable link
+					//
+					// Pagination links, Sortable link
+					//--------------------------------
 					$listWrapper.on('click', '.tablenav-pages a, .manage-column.sortable a, .manage-column.sorted a, .subsubsub a', function (e) {
 						
 						e.preventDefault();
@@ -103,7 +139,6 @@
 						if (!$elem.length) {
 							$elem = $this.closest('.tablenav-pages ');
 							if (!$elem.length) {
-								
 								var $group = '.' + $this.find('span[class*=col-]').attr('class').replace('col-', '');
 								$elem = $this.closest('.wp-list-table').find($group);
 							}
@@ -120,20 +155,23 @@
 						self.update(data, $elem);
 					});
 					
-					// Ajax filters binding
+					//
+					// Ajax filters
+					//-------------
 					if (ajaxSearchEnabled === 'yes') {
 						
 						// The search event is triggered when cliking on the clear field button within the seach input
 						$listWrapper.on('keyup paste search', '.atum-post-search', function (e) {
 							self.keyUp(e, $(this).closest('.search-box'));
 						})
-						
 						.on('change', '#filter-by-date, .dropdown_product_cat, #dropdown_product_type', function (e) {
 							self.keyUp(e, $(this).closest('.actions'));
 						});
 						
 					}
-					// Non-ajax filters binding
+					//
+					// Non-ajax filters
+					//-----------------
 					else {
 						
 						$listWrapper.on('click', '.search-category, .search-submit', function () {
@@ -155,12 +193,15 @@
 						
 					}
 					
+					//
 					// Pagination text box
+					//--------------------
 					$listWrapper.on('keyup paste', '.current-page', function (e) {
 						self.keyUp(e, $(this).closest('.tablenav-pages'));
 					})
-					
-					// Variation products expanding/collapsing
+					//
+					// Expanding/Collapsing variable products
+					//---------------------------------------
 					.on('click', '.product-type.has-child', function() {
 						
 						var typeClass      = $(this).hasClass('variable') ? 'variable' : 'group',
@@ -177,8 +218,45 @@
 						
 					});
 					
+					//
+					// Global save for edited cells
+					//-----------------------------
+					$('body').on('click', '#atum-update-list', function() {
+						self.saveData($(this));
+					});
+					
+					//
+					// Warn the user about unsaved changes before navigatig away
+					//----------------------------------------------------------
+					$(window).bind('beforeunload', function() {
+						
+						if (!$editInput.val()) {
+							return;
+						}
+						
+						// Prevent multiple prompts - seen on Chrome and IE
+						if (navigator.userAgent.toLowerCase().match(/msie|chrome/)) {
+							
+							if (window.aysHasPrompted) {
+								return;
+							}
+							
+							window.aysHasPrompted = true;
+							window.setTimeout(function() {
+								window.aysHasPrompted = false;
+							}, 900);
+							
+						}
+						
+						return false;
+						
+					});
+					
 				},
 				
+				/**
+				 * Add the horizontal scroll bar to the table
+				 */
 				addScrollBar: function() {
 					
 					// Wait until the thumbs are loaded and enable JScrollpane
@@ -195,11 +273,20 @@
 					
 				},
 				
+				/**
+				 * Reload the scrollbar
+				 */
 				reloadScrollbar: function() {
 					jScrollApi.destroy();
 					this.addScrollBar();
 				},
 				
+				/**
+				 * Search box keyUp event callback
+				 *
+				 * @param object e      The event data object
+				 * @param object $elem  The search input box
+				 */
 				keyUp: function (e, $elem) {
 					
 					var self  = this,
@@ -239,8 +326,6 @@
 				
 				/**
 				 * Enable tooltips
-				 *
-				 * @since 0.0.8
 				 */
 				tooltip: function () {
 					
@@ -252,130 +337,34 @@
 				
 				/**
 				 * Enable "Set Field" popovers
-				 *
-				 * @since 1.1.2
 				 */
-				setFieldPopover: function () {
+				setFieldPopover: function ($metaCells) {
 					
 					var self = this;
 					
+					if (typeof $metaCells === 'undefined') {
+						$metaCells = $('.set-meta');
+					}
+					
 					// Set meta value for listed products
-					$('.set-meta').each(function() {
+					$metaCells.each(function() {
 						self.bindPopover($(this));
 					});
 					
 					// Focus on the input field and set a reference to the popover to the editable column
-					$('.set-meta').on('shown.bs.popover', function () {
+					$metaCells.on('shown.bs.popover', function () {
 						var $activePopover = $('.popover.in');
 						$activePopover.find('.meta-value').focus();
 						self.setDatePickers();
 						$(this).attr('data-popover', $activePopover.attr('id'));
-					});
-					
-					// Hide any other opened popover
-					$listWrapper.click( function(e) {
-						
-						var $target   = $(e.target),
-						    // If we are clicking on a editable col, get the other opened popover, if not, get all the opened popovers
-						    $selector = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
-						
-						// Get only the columns with an opened popover
-						$selector = $selector.filter(function() {
-							return $(this).data('bs.popover') !== 'undefined' && ($(this).data('bs.popover').inState || false) && $(this).data('bs.popover').inState.click === true;
-						});
-						
-						if ($selector.length) {
-							$selector.popover('destroy');
-							$selector.removeAttr('data-popover');
-							
-							// Give a small lapse to complete the 'fadeOut' animation before re-binding
-							setTimeout(function() {
-								self.bindPopover($selector);
-							}, 300);
-							
-						}
-						
-					});
-					
-					// Send the ajax request when clicking the "Set" button
-					$('body').on('click', '.popover button.set', function() {
-						
-						var $button   = $(this),
-						    $popover  = $button.closest('.popover'),
-						    popoverId = $popover.attr('id'),
-						    $setMeta  = $('[data-popover="' + popoverId + '"]'),
-						    data      = {
-							    token : atumListTable.nonce,
-							    action: 'atum_update_meta',
-							    item  : $setMeta.data('item'),
-							    meta  : $setMeta.data('meta'),
-							    value : $button.siblings('.meta-value').val()
-						    },
-						    extraMeta = {};
-						
-						if ($popover.hasClass('with-meta')) {
-							$button.siblings('input').not('.meta-value').each(function(index, elem) {
-								extraMeta[elem.name] = $(elem).val();
-							});
-							
-							data.extraMeta = extraMeta;
-						}
-						
-						// Avoid repeating Ajax calls
-						if (typeof $.atumDoingAjax === 'undefined') {
-							
-							$.atumDoingAjax = $.ajax({
-								url       : ajaxurl,
-								method    : 'POST',
-								dataType  : 'json',
-								data      : data,
-								beforeSend: function () {
-									$button.prop('disabled', true);
-								},
-								success   : function (response) {
-									
-									var noticeClass    = (response.success) ? 'updated' : 'error',
-									    $stockNotice   = $('<div class="' + noticeClass + ' notice is-dismissible"><p><strong>' + response.data + '</strong></p></div>').hide(),
-									    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
-									
-									$listWrapper.siblings('.notice').remove();
-									$listWrapper.before($stockNotice.append($dismissButton));
-									$stockNotice.slideDown(100);
-									
-									$dismissButton.on('click.wp-dismiss-notice', function (e) {
-										e.preventDefault();
-										$stockNotice.fadeTo(100, 0, function () {
-											$stockNotice.slideUp(100, function () {
-												$stockNotice.remove();
-											});
-										});
-									});
-									
-									if (response.success) {
-										$setMeta.popover('hide');
-										$('.atum-post-search').keyup();
-									}
-									else {
-										$button.prop('disabled', false);
-									}
-									
-									$.atumDoingAjax = undefined;
-									
-								},
-								error: function() {
-									$.atumDoingAjax = undefined;
-									$button.prop('disabled', false);
-								}
-							});
-							
-						}
-						
 					});
 										
 				},
 				
 				/**
 				 * Bind the editable column's popovers
+				 * 
+				 * @param object $metaCell The cell where the popover will be attached
 				 */
 				bindPopover: function($metaCell) {
 					
@@ -421,12 +410,33 @@
 						content  : $content,
 						html     : true,
 						template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
-						'<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+								   '<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
 						placement: 'bottom',
 						trigger  : 'click',
 						container: 'body'
 					});
 					
+				},
+				
+				/**
+				 * Destroy a popover attached to a specified table cell
+				 *
+				 * @param object $metaCell The table cell where is attached the visible popover
+				 */
+				destroyPopover: function($metaCell) {
+					
+					if ($metaCell.length) {
+						var self = this;
+						$metaCell.popover('destroy');
+						$metaCell.removeAttr('data-popover');
+						
+						// Give a small lapse to complete the 'fadeOut' animation before re-binding
+						setTimeout(function() {
+							self.setFieldPopover($metaCell);
+						}, 300);
+						
+					}
+				
 				},
 				
 				/**
@@ -455,6 +465,138 @@
 						});
 					}
 					
+				},
+				
+				/**
+				 * Every time a cell is edited, update the input value
+				 *
+				 * @param object $metaCell  The table cell that is being edited
+				 * @param object $popover   The popover attached to the above cell
+				 */
+				updateEditedColsInput: function($metaCell, $popover) {
+					
+					var editedCols = $editInput.val(),
+					    itemId     = $metaCell.data('item'),
+					    meta       = $metaCell.data('meta'),
+					    symbol     = $metaCell.data('symbol') || '',
+					    value      = (symbol) ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
+					    newValue   = $popover.find('.meta-value').val();
+					
+					// Update the cell value
+					this.setCellValue($metaCell, newValue);
+					
+					// Initialize the JSON object
+					if (editedCols) {
+						editedCols = $.parseJSON(editedCols);
+					}
+					
+					editedCols = editedCols || {};
+					
+					if (!editedCols.hasOwnProperty(itemId)) {
+						editedCols[itemId] = {};
+					}
+					
+					if (!editedCols[itemId].hasOwnProperty(meta)) {
+						editedCols[itemId][meta] = {};
+					}
+					
+					// Add the meta value to the object
+					editedCols[itemId][meta] = newValue;
+					
+					// Add the extra meta data (if any)
+					if ($popover.hasClass('with-meta')) {
+						
+						var extraMeta = $metaCell.data('extra-meta');
+						
+						$popover.find('input').not('.meta-value').each(function(index, input) {
+							
+							var value = $(input).val();
+							editedCols[itemId][input.name] = value;
+							
+							// Save the meta values in the cell data for future uses
+							if (typeof extraMeta === 'object') {
+								$.each(extraMeta, function (index, elem) {
+									if (elem.name === input.name) {
+										extraMeta[index]['value'] = value;
+										return false;
+									}
+								});
+							}
+							
+						});
+						
+					}
+					
+					$editInput.val( JSON.stringify(editedCols) );
+					this.destroyPopover($metaCell);
+					
+				},
+				
+				/**
+				 * Check if we need to add the Update button
+				 */
+				maybeAddSaveButton: function() {
+				
+					var $tableTitle = $listWrapper.siblings('.wp-heading-inline');
+					if (!$tableTitle.find('#atum-update-list').length) {
+						$tableTitle.append( $('<button/>', {id: 'atum-update-list', class: 'page-title-action button-primary', text: atumListTable.saveButton}) );
+					}
+				
+				},
+				
+				/**
+				 * Save the edited columns
+				 *
+				 * @param object $button The "Save Data" button
+				 */
+				saveData: function($button) {
+					
+					if (typeof $.atumDoingAjax === 'undefined') {
+						
+						var self = this;
+						
+						$.atumDoingAjax = $.ajax({
+							url       : ajaxurl,
+							method    : 'POST',
+							dataType  : 'json',
+							data      : {
+								token : atumListTable.nonce,
+								action: 'atum_update_data',
+								data  : $editInput.val()
+							},
+							beforeSend: function () {
+								$button.prop('disabled', true);
+								self.addOverlay($button.parent());
+							},
+							success   : function (response) {
+								
+								if (typeof response === 'object') {
+									var noticeType = (response.success) ? 'updated' : 'error';
+									self.addNotice(noticeType, response.data);
+								}
+								
+								if (response.success) {
+									$button.remove();
+									$('.atum-loading').remove();
+									$editInput.val('');
+									self.update();
+								}
+								else {
+									$button.prop('disabled', false);
+								}
+								
+								$.atumDoingAjax = undefined;
+								
+							},
+							error: function() {
+								$.atumDoingAjax = undefined;
+								$button.prop('disabled', false);
+								self.removeOverlay();
+							}
+						});
+						
+					}
+				
 				},
 				
 				/**
@@ -487,7 +629,7 @@
 						category   : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m          : $listWrapper.find('#filter-by-date').val() || '',
 						type       : $listWrapper.find('#dropdown_product_type').val() || '',
-					}, data);
+					}, data || {});
 					
 					postTypeTableAjax = $.ajax({
 						
@@ -495,25 +637,21 @@
 						dataType  : 'json',
 						data      : data,
 						beforeSend: function () {
-							$listWrapper.addClass('loading-data');
-							$atumTable.addClass('overlay');
-							$elem.append('<div class="atum-loading"></div>');
+							self.addOverlay($elem);
 						},
 						// Handle the successful result
 						success   : function (response) {
 							
 							postTypeTableAjax = '';
-							$listWrapper.removeClass('loading-data');
-							$atumTable.removeClass('overlay');
-							$('.atum-loading').remove();
 							
 							if (typeof response === 'undefined' || !response) {
 								return false;
 							}
 							
-							// Add the requested rows
+							// Update table with the coming rows
 							if (typeof response.rows !== 'undefined' && response.rows.length) {
-								postsList.html(response.rows);
+								$listWrapper.find('#the-list').html(response.rows);
+								self.restoreMeta();
 								self.setFieldPopover();
 							}
 							
@@ -543,13 +681,11 @@
 								
 								// Update extra table nav for navigation
 								if (response.extra_t_n.top.length) {
-									$listWrapper.find('.tablenav.top .actions')
-										.replaceWith(response.extra_t_n.top);
+									$listWrapper.find('.tablenav.top .actions').replaceWith(response.extra_t_n.top);
 								}
 								
 								if (response.extra_t_n.bottom.length) {
-									$listWrapper.find('.tablenav.bottom .actions')
-										.replaceWith(response.extra_t_n.bottom);
+									$listWrapper.find('.tablenav.bottom .actions').replaceWith(response.extra_t_n.bottom);
 								}
 								
 							}
@@ -560,10 +696,11 @@
 							// Re-add tooltips
 							self.tooltip();
 							
+							self.removeOverlay();
+							
 						},
 						error     : function () {
-							$atumTable.removeClass('overlay');
-							$('.atum-loading').remove();
+							self.removeOverlay();
 						}
 					});
 					
@@ -589,6 +726,119 @@
 						}
 					}
 					return false;
+				},
+				
+				/**
+				 * Add the overlay effect while loading data
+				 *
+				 * @param object $elem The element used to place the loading spinner
+				 */
+				addOverlay: function($elem) {
+					$listWrapper.addClass('loading-data');
+					$atumTable.addClass('overlay');
+					
+					if (typeof $elem !== 'undefined' && $elem.length) {
+						$elem.append('<div class="atum-loading"></div>');
+					}
+				},
+				
+				/**
+				 * Remove the overlay effect once the data is fully loaded
+				 */
+				removeOverlay: function() {
+					$listWrapper.removeClass('loading-data');
+					$atumTable.removeClass('overlay');
+					$('.atum-loading').remove();
+				},
+				
+				/**
+				 * Set the table cell value with right format
+				 *
+				 * @param object        $metaCell  The cell where will go the value
+				 * @param string|number value      The value to set in the cell
+				 */
+				setCellValue: function($metaCell, value) {
+					
+					var symbol      = $metaCell.data('symbol') || '',
+					    currencyPos = $atumTable.data('currency-pos');
+					
+					if (symbol) {
+						value = (currencyPos === 'left') ? symbol + value : value + symbol;
+					}
+					
+					$metaCell.text(value);
+					
+				},
+				
+				/**
+				 * Restore the edited meta after loading new table rows
+				 */
+				restoreMeta: function() {
+					
+					var self       = this,
+						editedCols = $editInput.val();
+					
+					if (editedCols) {
+						
+						editedCols = $.parseJSON(editedCols);
+						$.each( editedCols, function(itemId, meta) {
+							
+							// Filter the meta cell that was previously edited
+							var $metaCell = $('.set-meta[data-item="' + itemId + '"]');
+							if ($metaCell.length) {
+								$.each(meta, function(key, value) {
+									
+									$metaCell = $metaCell.filter('[data-meta="' + key + '"]');
+									if ($metaCell.length) {
+										self.setCellValue($metaCell, value);
+										
+										// Add the extra meta too
+										var extraMeta = $metaCell.data('extra-meta');
+										if (typeof extraMeta === 'object') {
+											$.each(extraMeta, function(index, extraMetaObj) {
+												
+												// Restore the extra meta from the edit input
+												if (editedCols[itemId].hasOwnProperty(extraMetaObj.name)) {
+													extraMeta[index]['value'] = editedCols[itemId][extraMetaObj.name];
+												}
+												
+											});
+											
+											$metaCell.data('extra-meta', extraMeta);
+										}
+									}
+								});
+							}
+							
+						});
+					}
+				
+				},
+				
+				/**
+				 * Add a notice after saving data
+				 *
+				 * @param string type The notice type. Can be "updated" or "error"
+				 * @param string msg  The message
+				 */
+				addNotice: function(type, msg) {
+					
+					var $stockNotice   = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
+					    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
+					
+					$listWrapper.siblings('.notice').remove();
+					$listWrapper.before($stockNotice.append($dismissButton));
+					$stockNotice.slideDown(100);
+					
+					$dismissButton.on('click.wp-dismiss-notice', function (e) {
+						e.preventDefault();
+						$stockNotice.fadeTo(100, 0, function () {
+							$stockNotice.slideUp(100, function () {
+								$stockNotice.remove();
+							});
+						});
+					});
+					
 				}
 			};
 			
