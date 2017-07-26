@@ -2,6 +2,7 @@
 // Atum Data Export
 //-----------------
 
+// Export Tab
 #atum-export-link-wrap {
 	float: right;
 	height: 28px;
@@ -16,11 +17,112 @@
 	margin: 0;
 	padding: 8px 20px 12px;
 	position: relative;
+	
+	legend, h5 {
+		margin: 0;
+		padding: 8px 0;
+		font-size: 13px;
+		font-weight: 600;	
+	}
+	
+	fieldset {
+		margin-bottom: 10px;
+	}
+	
+	.product-type, .product-categories {
+		width: auto;
+		float: left;
+		margin-right: $grid-gutter-width;
+	}
+
 }
 
-#atum-export-wrap legend, #atum-export-wrap h5 {
-	margin: 0;
-	padding: 8px 0;
-	font-size: 13px;
-	font-weight: 600;
+
+// Reports
+.atum-report {
+	padding-top: $grid-gutter-width/2;
+	
+	.report-header {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: $grid-gutter-width/2;
+		vertical-align: top;
+		
+		.report-data, .report-details {
+			padding: $grid-gutter-width/2;
+			border-top: 2px solid $gray;
+			border-bottom: 2px solid $gray;
+		}
+		
+		.report-data {
+			border-left: 2px solid $gray;
+			
+		}
+		
+		.report-details {
+			border-right: 2px solid $gray;
+		}
+		
+		.space {
+			width: 20px;
+		}
+		
+		.inventory-resume {
+			padding: $grid-gutter-width/2;
+			border: 2px solid $brand-warning;
+		}
+		
+		h5 {
+			margin: 0;
+			text-transform: uppercase;
+			font-size: 13px;
+		}
+		
+		p {
+			color: $gray-dark;
+		}
+		
+		.warning-color {
+			color: $brand-warning;
+		}
+		
+		.success-color {
+			color: $brand-success;
+		}
+		
+		.danger-color {
+			color: $brand-danger;
+		}
+		
+	}
+	
+	.atum-list-table {
+		thead {
+			th {
+				background-color: #FFF;
+			}
+		}
+		
+		tbody {
+			td {
+				vertical-align: middle;
+			}
+		}
+	}
+
+	h1 {
+		color: $brand-primary;
+		text-transform: uppercase;
+		font-size: 38px;
+		font-weight: bold;
+		margin-top: 10px;
+	}
+	
+	h3 {
+		font-size: 24px;
+		font-weight: normal;
+		color: $gray;
+		margin-top: 5px;
+	}
+	
 }

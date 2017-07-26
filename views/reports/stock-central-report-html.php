@@ -34,10 +34,9 @@ $title_color = 'color: #333;';
 					<h5 style="<?php echo $report_header_title_stl . $title_color ?>"><?php _e('Report Details', ATUM_TEXT_DOMAIN) ?></h5><br>
 
 					<p style="<?php echo $report_header_p ?>">
-						<?php printf( __('Dates: %s', ATUM_TEXT_DOMAIN), '' ) ?><br>
-						<?php printf( __('Categories: %s', ATUM_TEXT_DOMAIN), '' ) ?><br>
-						<?php printf( __('Product Types: %s', ATUM_TEXT_DOMAIN), '' ) ?><br>
-						<?php printf( __('Columns: %s', ATUM_TEXT_DOMAIN), '' ) ?>
+						<?php printf( __('Categories: %s', ATUM_TEXT_DOMAIN), ! empty($category) ? $category : __('All', ATUM_TEXT_DOMAIN) ) ?><br>
+						<?php printf( __('Product Types: %s', ATUM_TEXT_DOMAIN), ! empty($product_type) ? $product_type : __('All', ATUM_TEXT_DOMAIN) ) ?><br>
+						<?php printf( __('Columns: %d of %d', ATUM_TEXT_DOMAIN), $columns, $max_columns ) ?>
 					</p>
 				</td>
 
@@ -47,10 +46,10 @@ $title_color = 'color: #333;';
 					<h5 style="<?php echo $report_header_title_stl . $warning_color ?>"><?php _e('Inventory Resume', ATUM_TEXT_DOMAIN) ?></h5><br>
 
 					<p>
-						<?php printf( _n('Total: %d item', 'Total: %d items', 0, ATUM_TEXT_DOMAIN), 0 ) ?><br>
-						<span style="color: #00B050;"><?php printf( _n('In Stock: %d item', 'In Stock: %d items', 0, ATUM_TEXT_DOMAIN), 0 ) ?></span><br>
-						<span style="color: #EF4D5A;"><?php printf( _n('Out of Stock: %d item', 'Out of Stock: %d items', 0, ATUM_TEXT_DOMAIN), 0 ) ?></span><br>
-						<?php printf( _n('Low Stock: %d item', 'Low Stock: %d items', 0, ATUM_TEXT_DOMAIN), 0 ) ?><br>
+						<?php printf( _n('Total: %d item', 'Total: %d items', $count_views['count_all'], ATUM_TEXT_DOMAIN), $count_views['count_all'] ) ?><br>
+						<span style="color: #00B050;"><?php printf( _n('In Stock: %d item', 'In Stock: %d items', $count_views['count_in_stock'], ATUM_TEXT_DOMAIN), $count_views['count_in_stock'] ) ?></span><br>
+						<span style="color: #EF4D5A;"><?php printf( _n('Out of Stock: %d item', 'Out of Stock: %d items', $count_views['count_out_stock'], ATUM_TEXT_DOMAIN), $count_views['count_out_stock'] ) ?></span><br>
+						<?php printf( _n('Low Stock: %d item', 'Low Stock: %d items', $count_views['count_low_stock'], ATUM_TEXT_DOMAIN), $count_views['count_low_stock'] ) ?><br>
 					</p>
 				</td>
 

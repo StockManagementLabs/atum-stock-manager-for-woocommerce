@@ -34,17 +34,7 @@
 			// Export button
 			$(this.element).on('submit', '#atum-export-settings', function(e) {
 				e.preventDefault();
-				
-				var $exportForm  = $(this),
-				    outputFormat = $exportForm.find('input[name="output-format"]:checked').val();
-				
-				if (!outputFormat || outputFormat === undefined) {
-					alert(atumExport.chooseFormat);
-				}
-				else {
-				    self.downloadReport();
-				}
-				
+				self.downloadReport();
 			});
 			
 		},
@@ -63,11 +53,18 @@
 			$tabContent.find('form').attr('id', 'atum-export-settings');
 			$tabContent.find('.screen-options').remove();
 			$tabContent.find('input[type=submit]').val(atumExport.submitTitle);
+			$tabContent.find('#screenoptionnonce').remove();
 			
 			// Add a new fieldset for product type selection
 			var $typeFieldset = $('<fieldset class="product-type" />');
 			$typeFieldset.append('<legend>' + atumExport.productTypesTitle + '</legend>');
 			$typeFieldset.append(atumExport.productTypes);
+			$typeFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			
+			// Add a new fieldset for product category selection
+			var $typeFieldset = $('<fieldset class="product-category" />');
+			$typeFieldset.append('<legend>' + atumExport.categoriesTitle + '</legend>');
+			$typeFieldset.append(atumExport.categories);
 			$typeFieldset.insertAfter( $tabContent.find('fieldset').last() );
 			
 			// Add a new fieldset for format output
@@ -78,6 +75,7 @@
 				$formatFieldset.append('<label><input type="radio" name="output-format" value="' + key + '">' + value + '</label>');
 			});
 			
+			$formatFieldset.find('input[name=output-format]').first().prop('checked', true);
 			$formatFieldset.insertAfter( $tabContent.find('fieldset').last() );
 			
 			$tab.attr('id', 'atum-export-link-wrap')
@@ -91,12 +89,25 @@
 			
 			// Use the WP's screenMeta toggleEvent method
 			$('#show-export-settings-link').click(screenMeta.toggleEvent);
+			
+			this.$exportForm = $(this.element).find('#atum-export-settings');
 		
 		},
 		
 		// Download the report
 		downloadReport: function() {
-			window.open(ajaxurl + '?action=atum_export_data&token=' + atumExport.exportNonce, '_blank');
+			
+			$('#export-file-downloader').remove();
+			
+			/*var $iframe = $('<iframe/>', {
+				id  : 'export-file-downloader',
+				src : ajaxurl + '?action=atum_export_data&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize()
+			});
+			
+			$iframe.appendTo('body');*/
+			
+			window.open(ajaxurl + '?action=atum_export_data&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize(), '_blank');
+		
 		}
 		
 	} );

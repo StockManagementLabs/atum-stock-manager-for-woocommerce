@@ -14,30 +14,19 @@ namespace Atum\DataExport\Reports;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Helpers;
 use Atum\StockCentral\Inc\ListTable;
 
 
 class HtmlReport extends ListTable {
 
 	/**
-	 * Constructor
-	 *
-	 * The child class should call this constructor from its own constructor to override the default $args.
+	 * @inheritdoc
 	 *
 	 * @since 1.2.5
-	 *
-	 * @param array|string $args {
-	 *      Array or string of arguments.
-	 *
-	 *      @type array $selected   Optional. The posts selected on the list table
-	 *      @type bool  $show_cb    Optional. Whether to show the row selector checkbox as first table column
-	 *      @type int   $per_page   Optional. The number of posts to show per page (-1 for no pagination)
-	 * }
 	 */
-	public function __construct( $args ) {
-
+	public function __construct( $args = array() ) {
 		parent::__construct( $args );
-		
 	}
 
 	/**
@@ -236,29 +225,6 @@ class HtmlReport extends ListTable {
 		// Views not needed in reports
 		return apply_filters( 'atum/data_export/html_report_views', array() );
 	}
-	
-	/**
-	 * @inheritDoc
-	 *
-	 * @since 1.2.5
-	 */
-	public function prepare_items() {
-
-		// TODO: ADD THE EXPORT FILTERS TO THE $_REQUEST
-		
-		// Add product category to the tax query
-		if ( ! empty( $_REQUEST['category'] ) ) {
-
-		}
-		
-		// Change the product type tax query (initialized in constructor) to the current queried type
-		if ( ! empty( $_REQUEST['type'] ) ) {
-
-		}
-		
-		parent::prepare_items();
-		
-	}
 
 	/**
 	 * @inheritdoc
@@ -267,10 +233,54 @@ class HtmlReport extends ListTable {
 	 */
 	public function display() {
 
-		// Add the report header
-
-
+		// Add the report template
+		ob_start();
 		parent::display();
+
+		// The title column cannot be disabled, so we must add 1 to the count
+		$columns = count($this->table_columns) + 1;
+		$max_columns = count($this->_args['table_columns']);
+		$count_views = $this->count_views;
+
+		if ( ! empty($_REQUEST['product_type']) ) {
+
+			$type =  esc_attr( $_REQUEST['product_type'] );
+			switch ($type) {
+				case 'grouped' :
+					$product_type = __( 'Grouped', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'variable' :
+					$product_type = __( 'Variable', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'simple' :
+					$product_type = __( 'Simple', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'downloadable' :
+					$product_type = __( 'Downloadable', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'virtual' :
+					$product_type = __( 'Virtual', ATUM_TEXT_DOMAIN );
+					break;
+
+				// Assuming that we'll have other types in future
+				default :
+					$product_type = ucfirst( $type );
+					break;
+			}
+
+		}
+
+		if ( ! empty($_REQUEST['product_cat']) ) {
+			$category = ucfirst( esc_attr($_REQUEST['product_cat']) );
+		}
+
+		$report = ob_get_clean();
+
+		Helpers::load_view('reports/stock-central-report-html', compact('report', 'columns', 'max_columns', 'product_type', 'category', 'count_views'));
 
 	}
 	
@@ -279,8 +289,8 @@ class HtmlReport extends ListTable {
 	 *
 	 * @since 1.2.5
 	 */
-	protected function set_views_data( $args ) {
+	/*protected function set_views_data( $args ) {
 		// Bypass the set_views_data method overriding it
-	}
+	}*/
 	
 }

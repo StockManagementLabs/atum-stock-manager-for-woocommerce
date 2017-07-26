@@ -194,11 +194,11 @@ class ListTable extends AtumListTable {
 			// Category filtering
 			wc_product_dropdown_categories( array(
 				'show_count' => 0,
-				'selected'   => ( ! empty( $_REQUEST['category'] ) ) ? esc_attr( $_REQUEST['category'] ) : '',
+				'selected'   => ( ! empty( $_REQUEST['product_cat'] ) ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
 			) );
 			
 			// Type filtering
-			echo Helpers::product_types_dropdown( ( isset( $_REQUEST['type'] ) ) ? esc_attr( $_REQUEST['type'] ) : '' );
+			echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 			
 			if ( Helpers::get_option( 'enable_ajax_filter', 'yes' ) == 'no' ) {
 				echo '<input type="submit" name="filter_action" class="button search-category" value="' . __('Filter', ATUM_TEXT_DOMAIN) . '">';
@@ -1011,21 +1011,23 @@ class ListTable extends AtumListTable {
 	public function prepare_items() {
 		
 		// Add product category to the tax query
-		if ( ! empty( $_REQUEST['category'] ) ) {
+		if ( ! empty( $_REQUEST['product_cat'] ) ) {
 			$this->taxonomies[] = array(
 				'taxonomy' => 'product_cat',
 				'field'    => 'slug',
-				'terms'    => esc_attr( $_REQUEST['category'] )
+				'terms'    => esc_attr( $_REQUEST['product_cat'] )
 			);
 		}
 		
 		// Change the product type tax query (initialized in constructor) to the current queried type
-		if ( ! empty( $_REQUEST['type'] ) ) {
+		if ( ! empty( $_REQUEST['product_type'] ) ) {
+
+			$type = esc_attr( $_REQUEST['product_type'] );
 			
 			foreach($this->taxonomies as $index => $taxonomy) {
+
 				if ($taxonomy['taxonomy'] == 'product_type') {
 
-					$type = esc_attr( $_REQUEST['type'] );
 					if ( in_array($type, ['downloadable', 'virtual']) ) {
 						$this->taxonomies[$index]['terms'] = 'simple';
 
@@ -1036,11 +1038,12 @@ class ListTable extends AtumListTable {
 
 					}
 					else {
-						$this->taxonomies[$index]['terms'] = esc_attr( $_REQUEST['type'] );
+						$this->taxonomies[$index]['terms'] = $type;
 					}
 
 					break;
 				}
+
 			}
 			
 		}
@@ -1207,7 +1210,7 @@ class ListTable extends AtumListTable {
 			$this->count_views['count_in_stock'] = count( $posts_in_stock->posts );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too
-			if ($group_items && ( empty($_REQUEST['type']) || $_REQUEST['type'] != 'grouped' )) {
+			if ($group_items && ( empty($_REQUEST['product_type']) || $_REQUEST['product_type'] != 'grouped' )) {
 				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_in_stock->posts) );
 			}
 

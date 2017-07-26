@@ -164,7 +164,7 @@
 						$listWrapper.on('keyup paste search', '.atum-post-search', function (e) {
 							self.keyUp(e, $(this).closest('.search-box'));
 						})
-						.on('change', '#filter-by-date, .dropdown_product_cat, #dropdown_product_type', function (e) {
+						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type', function (e) {
 							self.keyUp(e, $(this).closest('.actions'));
 						});
 						
@@ -623,12 +623,12 @@
 					}
 					
 					data = $.extend({
-						token      : atumListTable.nonce,
-						action     : $listWrapper.data('action'),
-						per_page   : perPage,
-						category   : $listWrapper.find('.dropdown_product_cat').val() || '',
-						m          : $listWrapper.find('#filter-by-date').val() || '',
-						type       : $listWrapper.find('#dropdown_product_type').val() || '',
+						token       : atumListTable.nonce,
+						action      : $listWrapper.data('action'),
+						per_page    : perPage,
+						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
+						m           : $listWrapper.find('#filter-by-date').val() || '',
+						product_type: $listWrapper.find('.dropdown_product_type').val() || '',
 					}, data || {});
 					
 					postTypeTableAjax = $.ajax({
