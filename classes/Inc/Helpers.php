@@ -172,7 +172,7 @@ final class Helpers {
 		
 		$args['posts_per_page'] = ( $number_orders ) ? $number_orders : - 1;
 		
-		// Filter/Order by a meta key
+		// Filter/Order by meta key
 		if ( $meta_key ) {
 			
 			$meta_query = array(
@@ -828,6 +828,69 @@ final class Helpers {
 		}
 
 		return trim( $value );
+
+	}
+
+	/**
+	 * Builds a product type dowpdown for filtering purposes
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param string $selected  The pre-selected option
+	 * @param string $class     The dropdown class name
+	 *
+	 * @return string
+	 */
+	public static function product_types_dropdown($selected = '', $class = 'dropdown_product_type') {
+
+		$terms = get_terms( 'product_type' );
+		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
+
+		$output  = '<select name="product_type" class="' . $class . '">';
+		$output .= '<option value=""' . selected($selected, '', FALSE) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
+
+		foreach ( $terms as $term ) {
+
+			if ( ! in_array($term->slug, $allowed_types) ) {
+				continue;
+			}
+
+			$output .= '<option value="' . sanitize_title( $term->name ) . '"' . selected( $term->slug, $selected, FALSE ) . '>';
+
+			switch ( $term->name ) {
+				case 'grouped' :
+					$output .= __( 'Grouped product', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'variable' :
+					$output .= __( 'Variable product', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'simple' :
+					$output .= __( 'Simple product', ATUM_TEXT_DOMAIN );
+					break;
+
+				// Assuming that we'll have other types in future
+				default :
+					$output .= ucfirst( $term->name );
+					break;
+			}
+
+			$output .= '</option>';
+
+			if ( 'simple' == $term->name ) {
+
+				$output .= '<option value="downloadable"' . selected( 'downloadable', $selected, FALSE ) . '> &rarr; '
+				           . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
+
+				$output .= '<option value="virtual"' . selected( 'virtual', $selected, FALSE ) . '> &rarr; '
+				           . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
+			}
+		}
+
+		$output .= '</select>';
+
+		return $output;
 
 	}
 

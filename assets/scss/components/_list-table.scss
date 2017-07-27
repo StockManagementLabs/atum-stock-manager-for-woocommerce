@@ -15,6 +15,29 @@
 	@include loader;
 }
 
+h1.wp-heading-inline {
+	line-height: 1.5;
+	position: relative;
+	
+	#atum-update-list {
+		margin-left: 5px;
+		border-radius: 0;
+		vertical-align: middle;
+		
+		&:active {
+			color: #FFF;
+			padding: 0 10px 1px;
+			box-shadow: 0 1px 0 #006799;
+		}
+	}
+	
+	.atum-loading {
+		display: inline-block;
+		top: 16px;
+		margin-left: 10px;
+	}
+}
+
 .atum-list-wrapper {
 	padding-bottom: 20px;
 	width: 100%;
@@ -40,12 +63,24 @@
 		}
 	}
 	
-	.alignleft.actions, .subsubsub {
+	.subsubsub {
 		position: relative;
 		
 		.atum-loading {
-			right: -30px;
-			top: 3px;
+			right: -25px;
+			top: 4px;
+		}
+	}
+	
+	&.loading-data {
+		.alignleft.actions {
+			position: relative;
+			overflow: visible;
+			
+			.atum-loading {
+				right: -15px;
+				top: 7px;
+			}
 		}
 	}
 	

@@ -44,8 +44,8 @@ final class Ajax {
 		// Save the rate link click on the ATUM pages footer
 		add_action( 'wp_ajax_atum_rated', array($this, 'rated') );
 
-		// Set the meta for items on ListTable components
-		add_action( 'wp_ajax_atum_update_meta', array( $this, 'update_item_meta' ) );
+		// Set the edited meta data for items on ListTable components
+		add_action( 'wp_ajax_atum_update_data', array( $this, 'update_list_data' ) );
 
 		// Manage addon licenses
 		add_action( 'wp_ajax_atum_validate_license', array($this, 'validate_license') );
@@ -150,96 +150,111 @@ final class Ajax {
 	}
 
 	/**
-	 * Update the meta values for any product within the ListTable components
+	 * Update the meta values for the edited ListTable columns
 	 *
 	 * @since 1.1.2
 	 */
-	public function update_item_meta () {
+	public function update_list_data () {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
-		if ( empty($_POST['item']) || ! isset($_POST['value']) || empty($_POST['meta']) ) {
-			wp_send_json_error( __('Error updating the column value.', ATUM_TEXT_DOMAIN) );
+		if ( empty($_POST['data']) ) {
+			wp_send_json_error( __('Error saving the table data.', ATUM_TEXT_DOMAIN) );
 		}
 
-		$product_id = absint($_POST['item']);
-		$product = wc_get_product($product_id);
+		$data = json_decode( stripslashes($_POST['data']), TRUE );
 
-		if ( !$product || ! is_a($product, '\WC_Product') ) {
-			wp_send_json_error( __('No valid product.', ATUM_TEXT_DOMAIN) );
+		if ( empty($data) ) {
+			wp_send_json_error( __('Error saving the table data.', ATUM_TEXT_DOMAIN) );
 		}
 
-		$meta = esc_attr($_POST['meta']);
+		foreach ($data as $product_id => &$product_meta) {
 
-		switch ( $meta ) {
-			case 'stock':
+			$product = wc_get_product( $product_id );
 
-				$stock = intval($_POST['value']);
-				wc_update_product_stock($product_id, $stock);
-		        break;
+			if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
+				continue;
+			}
 
-			case 'regular_price':
-			case 'purchase_price':
+			foreach ($product_meta as $meta_key => &$meta_value) {
 
-				$price = wc_format_decimal($_POST['value']);
-				update_post_meta( $product_id, '_' . $meta , $price );
-				break;
+				$meta_key = esc_attr($meta_key);
 
-			case 'sale_price':
+				switch ( $meta_key ) {
 
-				$sale_price = wc_format_decimal($_POST['value']);
-				$regular_price = $product->get_regular_price();
+					case 'stock':
 
-				if ($regular_price < $sale_price) {
-					wp_send_json_error( __('Please enter in a value lower than the regular price.', ATUM_TEXT_DOMAIN) );
+						$stock = intval($meta_value);
+						wc_update_product_stock( $product_id, $stock );
+						break;
+
+					case 'regular_price':
+					case 'purchase_price':
+
+						$price = wc_format_decimal($meta_value);
+						update_post_meta( $product_id, '_' . $meta_key, $price );
+						break;
+
+					case 'sale_price':
+
+						$sale_price    = wc_format_decimal($meta_value);
+						$regular_price = $product->get_regular_price();
+
+						// The sale price cannot be higher than the regular price
+						if ( $regular_price >= $sale_price ) {
+							update_post_meta( $product_id, '_sale_price', $sale_price );
+						}
+
+						// Check for sale dates
+						if ( isset( $data[$product_id]['_sale_price_dates_from'], $data[$product_id]['_sale_price_dates_to'] ) ) {
+
+							$date_from = wc_clean( $data[ $product_id ]['_sale_price_dates_from'] );
+							$date_to   = wc_clean( $data[ $product_id ]['_sale_price_dates_to'] );
+
+							update_post_meta( $product_id, '_sale_price_dates_from', $date_from ? strtotime( $date_from ) : '' );
+							update_post_meta( $product_id, '_sale_price_dates_to', $date_to ? strtotime( $date_to ) : '' );
+
+							// Ensure these meta keys are not handled on next iterations
+							unset( $data[$product_id]['_sale_price_dates_from'], $data[$product_id]['_sale_price_dates_to'] );
+
+							if ( $date_to && ! $date_from ) {
+								$date_from = date( 'Y-m-d' );
+								update_post_meta( $product_id, '_sale_price_dates_from', strtotime( $date_from ) );
+							}
+
+							// Update price if on sale
+							if ( '' !== $sale_price && $date_to && $date_from ) {
+								update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
+							}
+							elseif ( '' !== $sale_price && $date_from && strtotime( $date_from ) <= strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+								update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
+							}
+							else {
+								update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
+							}
+
+							if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+								update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
+								update_post_meta( $product_id, '_sale_price_dates_from', '' );
+								update_post_meta( $product_id, '_sale_price_dates_to', '' );
+							}
+
+						}
+
+						break;
+
+					// Any other text meta
+					default:
+
+						update_post_meta( $product_id, '_' . $meta_key, esc_attr($meta_value) );
+						break;
 				}
 
-				update_post_meta( $product_id, '_sale_price', $sale_price );
+			}
 
-				// Check for sale dates
-				if ( ! empty($_POST['extraMeta']) ) {
-
-					$extra_meta = array_map('wc_clean', $_POST['extraMeta']);
-					$date_from = $extra_meta['_sale_price_dates_from'];
-					$date_to = $extra_meta['_sale_price_dates_to'];
-
-					update_post_meta( $product_id, '_sale_price_dates_from', $date_from ? strtotime( $date_from ) : '' );
-					update_post_meta( $product_id, '_sale_price_dates_to', $date_to ? strtotime( $date_to ) : '' );
-
-					if ( $date_to && ! $date_from ) {
-						$date_from = date( 'Y-m-d' );
-						update_post_meta( $product_id, '_sale_price_dates_from', strtotime( $date_from ) );
-					}
-
-					// Update price if on sale
-					if ( '' !== $sale_price && $date_to && $date_from ) {
-						update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
-					}
-					elseif ( '' !== $sale_price && $date_from && strtotime( $date_from ) <= strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
-						update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
-					}
-					else {
-						update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
-					}
-
-					if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
-						update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
-						update_post_meta( $product_id, '_sale_price_dates_from', '' );
-						update_post_meta( $product_id, '_sale_price_dates_to', '' );
-					}
-				}
-
-				break;
-
-			// Any other text meta
-			default:
-
-				$meta_value = esc_attr($_POST['value']);
-				update_post_meta( $product_id, '_' . $meta , $meta_value );
-				break;
 		}
 
-		wp_send_json_success( __('Value saved.', ATUM_TEXT_DOMAIN) );
+		wp_send_json_success( __('Data saved.', ATUM_TEXT_DOMAIN) );
 
 	}
 

@@ -291,6 +291,118 @@
   border-color: #E3E8F5;
 }
 
+#atum-export-link-wrap {
+  float: right;
+  height: 28px;
+  margin: 0 0 0 6px;
+  border: 1px solid #ddd;
+  border-top: none;
+  background: #fff;
+  box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.1);
+}
+
+#atum-export-wrap {
+  margin: 0;
+  padding: 8px 20px 12px;
+  position: relative;
+}
+
+#atum-export-wrap legend, #atum-export-wrap h5 {
+  margin: 0;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#atum-export-wrap fieldset {
+  margin-bottom: 10px;
+}
+
+#atum-export-wrap .product-type, #atum-export-wrap .product-categories {
+  width: auto;
+  float: left;
+  margin-right: 30px;
+}
+
+.atum-report {
+  padding-top: 15px;
+}
+
+.atum-report .report-header {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  vertical-align: top;
+}
+
+.atum-report .report-header .report-data, .atum-report .report-header .report-details {
+  padding: 15px;
+  border-top: 2px solid #C1C1C1;
+  border-bottom: 2px solid #C1C1C1;
+}
+
+.atum-report .report-header .report-data {
+  border-left: 2px solid #C1C1C1;
+}
+
+.atum-report .report-header .report-details {
+  border-right: 2px solid #C1C1C1;
+}
+
+.atum-report .report-header .space {
+  width: 20px;
+}
+
+.atum-report .report-header .inventory-resume {
+  padding: 15px;
+  border: 2px solid #FEC007;
+}
+
+.atum-report .report-header h5 {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.atum-report .report-header p {
+  color: #333333;
+}
+
+.atum-report .report-header .warning-color {
+  color: #FEC007;
+}
+
+.atum-report .report-header .success-color {
+  color: #00B050;
+}
+
+.atum-report .report-header .danger-color {
+  color: #EF4D5A;
+}
+
+.atum-report .atum-list-table thead th {
+  background-color: #FFF;
+}
+
+.atum-report .atum-list-table tbody td {
+  vertical-align: middle;
+}
+
+.atum-report h1 {
+  color: #0073AA;
+  text-transform: uppercase;
+  font-size: 38px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.atum-report h3 {
+  font-size: 24px;
+  font-weight: normal;
+  color: #C1C1C1;
+  margin-top: 5px;
+}
+
 .overlay {
   position: relative;
 }
@@ -357,6 +469,29 @@
   }
 }
 
+h1.wp-heading-inline {
+  line-height: 1.5;
+  position: relative;
+}
+
+h1.wp-heading-inline #atum-update-list {
+  margin-left: 5px;
+  border-radius: 0;
+  vertical-align: middle;
+}
+
+h1.wp-heading-inline #atum-update-list:active {
+  color: #FFF;
+  padding: 0 10px 1px;
+  box-shadow: 0 1px 0 #006799;
+}
+
+h1.wp-heading-inline .atum-loading {
+  display: inline-block;
+  top: 16px;
+  margin-left: 10px;
+}
+
 .atum-list-wrapper {
   padding-bottom: 20px;
   width: 100%;
@@ -381,13 +516,23 @@
   top: 4px;
 }
 
-.atum-list-wrapper .alignleft.actions, .atum-list-wrapper .subsubsub {
+.atum-list-wrapper .subsubsub {
   position: relative;
 }
 
-.atum-list-wrapper .alignleft.actions .atum-loading, .atum-list-wrapper .subsubsub .atum-loading {
-  right: -30px;
-  top: 3px;
+.atum-list-wrapper .subsubsub .atum-loading {
+  right: -25px;
+  top: 4px;
+}
+
+.atum-list-wrapper.loading-data .alignleft.actions {
+  position: relative;
+  overflow: visible;
+}
+
+.atum-list-wrapper.loading-data .alignleft.actions .atum-loading {
+  right: -15px;
+  top: 7px;
 }
 
 .atum-list-wrapper .actions-wrapper .filter-text {

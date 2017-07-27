@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Sold today', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "The value represents the number of products sold during the day. Sold products are items included in 'completed' orders only. Items already sold, but pending payment will show in the 'Stock on Hold' column instead.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "The value represents the number of products sold during the day. Sold products are items included in 'completed' and 'processing' orders only. Items already sold, but pending payment will show in the 'Stock on Hold' column instead.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>

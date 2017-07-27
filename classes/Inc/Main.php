@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Addons\Addons;
 use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
+use Atum\DataExport\DataExport;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
 use Atum\InventoryLogs\InventoryLogs;
@@ -173,7 +174,9 @@ class Main {
 		$this->sp_obj = Settings::get_instance();
 		$this->sc_obj = StockCentral::get_instance();
 
+		// Load extra components
 		new Statistics( __('ATUM Statistics', ATUM_TEXT_DOMAIN) );
+		new DataExport();
 
 		// Add the help pointers
 		add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );

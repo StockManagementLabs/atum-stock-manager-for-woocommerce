@@ -35,9 +35,7 @@ abstract class AtumListPage {
 	 * @since 1.1.2
 	 */
 	protected function init_hooks() {
-
 		add_filter( 'set-screen-option', array( $this, 'set_screen_option' ), 10, 3 );
-		
 	}
 	
 	/**
@@ -61,7 +59,6 @@ abstract class AtumListPage {
 	 * @return mixed
 	 */
 	public function set_screen_option( $status, $option, $value ) {
-		
 		return $value;
 	}
 
@@ -72,5 +69,20 @@ abstract class AtumListPage {
 	 * @since 1.1.2
 	 */
 	abstract public function screen_options();
+
+	/**
+	 * Setter for the AtumListTable object
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param AtumListTable $list
+	 */
+	public function set_list_table (AtumListTable $list) {
+
+		if ( is_a($list, '\Atum\Components\AtumListTable') ) {
+			$this->list = $list;
+		}
+
+	}
 	
 }
