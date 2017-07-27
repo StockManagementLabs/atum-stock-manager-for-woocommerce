@@ -974,10 +974,10 @@ class ListTable extends AtumListTable {
 		$v_filter = ( ! empty( $_REQUEST['v_filter'] ) ) ? esc_attr( $_REQUEST['v_filter'] ) : 'all_stock';
 		
 		$views_name = array(
-			'all_stock' => 'All',
-			'in_stock'  => 'In Stock',
-			'out_stock' => 'Out of Stock',
-			'low_stock' => 'Low Stock'
+			'all_stock' => __('All', ATUM_TEXT_DOMAIN),
+			'in_stock'  => __('In Stock', ATUM_TEXT_DOMAIN),
+			'out_stock' => __('Out of Stock', ATUM_TEXT_DOMAIN),
+			'low_stock' => __('Low Stock', ATUM_TEXT_DOMAIN)
 		);
 		
 		$url = esc_url( add_query_arg( 'page', Globals::ATUM_UI_SLUG , admin_url()) );
