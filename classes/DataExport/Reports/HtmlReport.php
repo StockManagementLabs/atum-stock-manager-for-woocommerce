@@ -27,6 +27,10 @@ class HtmlReport extends ListTable {
 	 */
 	public function __construct( $args = array() ) {
 		parent::__construct( $args );
+
+		// Add the font icons inline for thumb and product type columns
+		$this->table_columns['thumb'] = '<span class="wc-image" style="font-family: dashicons">&#xf128;</span>';
+		$this->table_columns['calc_type'] = '<span class="wc-type" style="font-family: woocommerce">&#xe006;</span>';
 	}
 
 	/**
@@ -72,6 +76,69 @@ class HtmlReport extends ListTable {
 	 */
 	protected function get_sortable_columns() {
 		return array();
+	}
+
+	/**
+	 * Column for product type
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return string
+	 */
+	protected function column_calc_type( $item ) {
+
+		$type = $this->product->get_type();
+		$product_types = wc_get_product_types();
+
+		if ( isset($product_types[$type]) || $this->is_child ) {
+
+			/**
+			 * @see https://rawgit.com/woothemes/woocommerce-icons/master/demo.html
+			 */
+			$icon_char = 'e006';
+
+			switch ( $type ) {
+				case 'simple':
+
+					if ($this->is_child) {
+						$type = 'grouped-item';
+						$icon_char = 'e039';
+
+					}
+					elseif ( $this->product->is_downloadable() ) {
+						$type = 'downloadable';
+						$icon_char = 'e001';
+					}
+					elseif ( $this->product->is_virtual() ) {
+						$type = 'virtual';
+						$icon_char = 'e000';
+					}
+
+					break;
+
+				case 'variable':
+				case 'grouped':
+
+					if ($this->is_child) {
+						$type = 'grouped-item';
+						$icon_char = 'e039';
+					}
+					elseif ( $this->product->has_child() ) {
+						$icon_char = ($type == 'grouped') ? 'e002' : 'e003';
+						$type .= ' has-child';
+					}
+
+					break;
+
+			}
+
+			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type ' . $type . '" style="font-family: woocommerce; font-size: 20px">&#x' . $icon_char . '</span>', $item, $this->product );
+
+		}
+
+		return '';
 	}
 
 	/**
@@ -172,12 +239,11 @@ class HtmlReport extends ListTable {
 	 * @inheritDoc
 	 *
 	 * @since 1.2.5
-	 *
-	 * @TODO: DO WE NEED TO OVERRIDE THIS METHOD?
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 			
 		$stock = intval( $this->product->get_stock_quantity() );
+		$dashicons_style = ' style="font-family: dashicons; font-size: 20px;"';
 		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if (! $this->allow_calcs) {
@@ -186,25 +252,25 @@ class HtmlReport extends ListTable {
 		elseif ( $stock <= 0 ) {
 			// no stock
 			$classes .= ' cell-red';
-			$content = '<span class="dashicons dashicons-dismiss"></span>';
+			$content = '<span class="dashicons dashicons-dismiss"' . $dashicons_style . '>&#xf153;</span>';
 		}
 		elseif ( isset( $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) ) {
 			
 			// stock ok
 			if ( $stock >= $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) {
 				$classes .= ' cell-green';
-				$content = '<span class="dashicons dashicons-yes"></span>';
+				$content = '<span class="dashicons dashicons-yes"' . $dashicons_style . '>&#xf147;</span>';
 			}
 			// stock low
 			else {
 				$classes .= ' cell-yellow';
-				$content = '<span class="dashicons dashicons-warning"></span>';
+				$content = '<span class="dashicons dashicons-warning"' . $dashicons_style . '>&#xf534;</span>';
 			}
 			
 		}
 		else {
 			$classes .= ' cell-green';
-			$content = '<span class="dashicons dashicons-yes"></span>';
+			$content = '<span class="dashicons dashicons-yes"' . $dashicons_style . '>&#xf147;</span>';
 		}
 		
 		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
@@ -283,14 +349,5 @@ class HtmlReport extends ListTable {
 		Helpers::load_view('reports/stock-central-report-html', compact('report', 'columns', 'max_columns', 'product_type', 'category', 'count_views'));
 
 	}
-	
-	/**
-	 * @inheritDoc
-	 *
-	 * @since 1.2.5
-	 */
-	/*protected function set_views_data( $args ) {
-		// Bypass the set_views_data method overriding it
-	}*/
 	
 }

@@ -97,9 +97,9 @@
 		// Download the report
 		downloadReport: function() {
 			
-			$('#export-file-downloader').remove();
+			/*$('#export-file-downloader').remove();
 			
-			/*var $iframe = $('<iframe/>', {
+			var $iframe = $('<iframe/>', {
 				id  : 'export-file-downloader',
 				src : ajaxurl + '?action=atum_export_data&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize()
 			});
