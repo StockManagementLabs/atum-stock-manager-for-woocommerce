@@ -33,7 +33,7 @@ $title_color = 'color: #333;';
 				<td class="report-details">
 					<h5 style="<?php echo $report_header_title_stl . $title_color ?>"><?php _e('Report Details', ATUM_TEXT_DOMAIN) ?></h5><br>
 
-					<p style="<?php echo $report_header_p ?>">
+					<p>
 						<?php printf( __('Categories: %s', ATUM_TEXT_DOMAIN), ! empty($category) ? $category : __('All', ATUM_TEXT_DOMAIN) ) ?><br>
 						<?php printf( __('Product Types: %s', ATUM_TEXT_DOMAIN), ! empty($product_type) ? $product_type : __('All', ATUM_TEXT_DOMAIN) ) ?><br>
 						<?php printf( __('Columns: %d of %d', ATUM_TEXT_DOMAIN), $columns, $max_columns ) ?>

@@ -26,6 +26,10 @@ class HtmlReport extends ListTable {
 	 * @since 1.2.5
 	 */
 	public function __construct( $args = array() ) {
+
+		// Avoid a PHP Notice error when loading the PDF report
+		$args['screen'] = 'toplevel_page_atum-stock-central';
+
 		parent::__construct( $args );
 
 		// Add the font icons inline for thumb and product type columns

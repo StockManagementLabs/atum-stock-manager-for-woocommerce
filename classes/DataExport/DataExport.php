@@ -258,9 +258,15 @@ class DataExport {
 		$html_list_table = new HtmlReport($report_settings);
 		$table_columns = $html_list_table->get_table_columns();
 		$group_members = $html_list_table->get_group_members();
+		$primary_column = $html_list_table->get_primary_column();
 
 		// Hide all the columns that were unchecked in export settings
 		foreach ($table_columns as $column_key => $column_title) {
+
+			// The primary column is not hideable
+			if ($column_key == $primary_column) {
+				continue;
+			}
 
 			if ( ! in_array( "$column_key-hide", array_keys($args) ) ) {
 				unset( $table_columns[$column_key] );
