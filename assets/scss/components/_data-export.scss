@@ -27,12 +27,24 @@
 	
 	fieldset {
 		margin-bottom: 10px;
-	}
-	
-	.product-type, .product-categories {
 		width: auto;
 		float: left;
 		margin-right: $grid-gutter-width;
+		
+		&.title-length {
+			clear: left;
+			
+			input[type=number] {
+				display: inline-block;
+				vertical-align: middle;
+				max-width: 58px;
+			}
+			
+			label {
+				margin-left: 5px;
+			}
+		}
+		
 	}
 
 }

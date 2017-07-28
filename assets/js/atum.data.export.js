@@ -37,6 +37,20 @@
 				self.downloadReport();
 			});
 			
+			// Disable max length option
+			$(this.element).on('change', '#disableMaxLength', function() {
+				
+				var $checkbox = $(this),
+					$input = $checkbox.parent().siblings('input[type=number]');
+				
+				if ($checkbox.is(':checked')) {
+					$input.prop('disabled', true);
+				}
+				else {
+					$input.prop('disabled', false);
+				}
+			});
+			
 		},
 		
 		// Duplicate the "Screen Options" tab
@@ -55,19 +69,26 @@
 			$tabContent.find('input[type=submit]').val(atumExport.submitTitle);
 			$tabContent.find('#screenoptionnonce').remove();
 			
-			// Add a new fieldset for product type selection
+			// Add a fieldset for product type selection
 			var $typeFieldset = $('<fieldset class="product-type" />');
 			$typeFieldset.append('<legend>' + atumExport.productTypesTitle + '</legend>');
 			$typeFieldset.append(atumExport.productTypes);
 			$typeFieldset.insertAfter( $tabContent.find('fieldset').last() );
 			
-			// Add a new fieldset for product category selection
-			var $typeFieldset = $('<fieldset class="product-category" />');
-			$typeFieldset.append('<legend>' + atumExport.categoriesTitle + '</legend>');
-			$typeFieldset.append(atumExport.categories);
-			$typeFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			// Add a fieldset for product category selection
+			var $catFieldset = $('<fieldset class="product-category" />');
+			$catFieldset.append('<legend>' + atumExport.categoriesTitle + '</legend>');
+			$catFieldset.append(atumExport.categories);
+			$catFieldset.insertAfter( $tabContent.find('fieldset').last() );
 			
-			// Add a new fieldset for format output
+			// Add a fieldset for title length setup
+			var $titleLengthFieldset = $('<fieldset class="title-length" />');
+			$titleLengthFieldset.append('<legend>' + atumExport.titleLength + '</legend>');
+			$titleLengthFieldset.append('<input type="number" step="1" min="0" name="title_max_length" value="' + atumExport.maxLength + '"> ');
+			$titleLengthFieldset.append('<label><input type="checkbox" id="disableMaxLength" value="yes">' + atumExport.disableMaxLength + '</label>');
+			$titleLengthFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			
+			// Add a fieldset for format output
 			var $formatFieldset = $('<fieldset class="output-format" />');
 			$formatFieldset.append('<legend>' + atumExport.outputFormatTitle + '</legend>');
 			
@@ -77,6 +98,9 @@
 			
 			$formatFieldset.find('input[name=output-format]').first().prop('checked', true);
 			$formatFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			
+			// Clearfix
+			$tabContent.find('.submit').before('<div class="clear"></div>');
 			
 			$tab.attr('id', 'atum-export-link-wrap')
 				.find('button').attr({

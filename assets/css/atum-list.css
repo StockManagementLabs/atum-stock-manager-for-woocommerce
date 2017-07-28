@@ -316,12 +316,23 @@
 
 #atum-export-wrap fieldset {
   margin-bottom: 10px;
-}
-
-#atum-export-wrap .product-type, #atum-export-wrap .product-categories {
   width: auto;
   float: left;
   margin-right: 30px;
+}
+
+#atum-export-wrap fieldset.title-length {
+  clear: left;
+}
+
+#atum-export-wrap fieldset.title-length input[type=number] {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 58px;
+}
+
+#atum-export-wrap fieldset.title-length label {
+  margin-left: 5px;
 }
 
 .atum-report {

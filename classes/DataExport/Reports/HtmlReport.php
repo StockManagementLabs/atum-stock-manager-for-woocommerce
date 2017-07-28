@@ -21,6 +21,12 @@ use Atum\StockCentral\Inc\ListTable;
 class HtmlReport extends ListTable {
 
 	/**
+	 * Max length for the product titles in reports
+	 * @var int
+	 */
+	protected $title_max_length;
+
+	/**
 	 * @inheritdoc
 	 *
 	 * @since 1.2.5
@@ -29,6 +35,10 @@ class HtmlReport extends ListTable {
 
 		// Avoid a PHP Notice error when loading the PDF report
 		$args['screen'] = 'toplevel_page_atum-stock-central';
+
+		if ( isset( $args['title_max_length'] ) ) {
+			$this->title_max_length = absint( $args['title_max_length'] );
+		}
 
 		parent::__construct( $args );
 
@@ -80,69 +90,6 @@ class HtmlReport extends ListTable {
 	 */
 	protected function get_sortable_columns() {
 		return array();
-	}
-
-	/**
-	 * Column for product type
-	 *
-	 * @since 1.2.5
-	 *
-	 * @param \WP_Post $item The WooCommerce product post
-	 *
-	 * @return string
-	 */
-	protected function column_calc_type( $item ) {
-
-		$type = $this->product->get_type();
-		$product_types = wc_get_product_types();
-
-		if ( isset($product_types[$type]) || $this->is_child ) {
-
-			/**
-			 * @see https://rawgit.com/woothemes/woocommerce-icons/master/demo.html
-			 */
-			$icon_char = 'e006';
-
-			switch ( $type ) {
-				case 'simple':
-
-					if ($this->is_child) {
-						$type = 'grouped-item';
-						$icon_char = 'e039';
-
-					}
-					elseif ( $this->product->is_downloadable() ) {
-						$type = 'downloadable';
-						$icon_char = 'e001';
-					}
-					elseif ( $this->product->is_virtual() ) {
-						$type = 'virtual';
-						$icon_char = 'e000';
-					}
-
-					break;
-
-				case 'variable':
-				case 'grouped':
-
-					if ($this->is_child) {
-						$type = 'grouped-item';
-						$icon_char = 'e039';
-					}
-					elseif ( $this->product->has_child() ) {
-						$icon_char = ($type == 'grouped') ? 'e002' : 'e003';
-						$type .= ' has-child';
-					}
-
-					break;
-
-			}
-
-			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: woocommerce; font-size: 20px">&#x' . $icon_char . '</span>', $item, $this->product );
-
-		}
-
-		return '';
 	}
 
 	/**
@@ -236,12 +183,75 @@ class HtmlReport extends ListTable {
 			$title = $this->product->get_title();
 
 			// Limit the title length to 20 characters
-			if ( strlen($title) > absint( apply_filters('atum/data_export/html_report/title_max_length', 20) ) ) {
-				$title = trim( substr( $title, 0, 20 ) ) . '...';
+			if ( $this->title_max_length && strlen($title) > $this->title_max_length ) {
+				$title = trim( substr( $title, 0, $this->title_max_length ) ) . '...';
 			}
 		}
 		
 		return apply_filters( 'atum/data_export/html_report/column_title', $title, $item, $this->product );
+	}
+
+	/**
+	 * Column for product type
+	 *
+	 * @since 1.2.5
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return string
+	 */
+	protected function column_calc_type( $item ) {
+
+		$type = $this->product->get_type();
+		$product_types = wc_get_product_types();
+
+		if ( isset($product_types[$type]) || $this->is_child ) {
+
+			/**
+			 * @see https://rawgit.com/woothemes/woocommerce-icons/master/demo.html
+			 */
+			$icon_char = 'e006';
+
+			switch ( $type ) {
+				case 'simple':
+
+					if ($this->is_child) {
+						$type = 'grouped-item';
+						$icon_char = 'e039';
+
+					}
+					elseif ( $this->product->is_downloadable() ) {
+						$type = 'downloadable';
+						$icon_char = 'e001';
+					}
+					elseif ( $this->product->is_virtual() ) {
+						$type = 'virtual';
+						$icon_char = 'e000';
+					}
+
+					break;
+
+				case 'variable':
+				case 'grouped':
+
+					if ($this->is_child) {
+						$type = 'grouped-item';
+						$icon_char = 'e039';
+					}
+					elseif ( $this->product->has_child() ) {
+						$icon_char = ($type == 'grouped') ? 'e002' : 'e003';
+						$type .= ' has-child';
+					}
+
+					break;
+
+			}
+
+			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: woocommerce; font-size: 20px">&#x' . $icon_char . '</span>', $item, $this->product );
+
+		}
+
+		return '';
 	}
 	
 	/**

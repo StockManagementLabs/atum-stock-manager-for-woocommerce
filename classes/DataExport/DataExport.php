@@ -75,6 +75,9 @@ class DataExport {
 				'productTypes'      => Helpers::product_types_dropdown(),
 				'categoriesTitle'   => __('Product Category', ATUM_TEXT_DOMAIN),
 				'categories'        => $product_categories,
+				'titleLength'       => __('Title Max Length (characters)', ATUM_TEXT_DOMAIN),
+				'maxLength'         => 20,
+				'disableMaxLength'  => __('Disable', ATUM_TEXT_DOMAIN),
 				'exportNonce'       => wp_create_nonce( 'atum-data-export-nonce' )
 			) );
 
@@ -235,7 +238,8 @@ class DataExport {
 
 		$mpdf->WriteHTML( $html_report );
 
-		echo $mpdf->Output();
+		$date_now = date_i18n('Y-m-d');
+		echo $mpdf->Output("atum-inventory-report-$date_now.pdf", 'I');
 
 	}
 
@@ -252,6 +256,10 @@ class DataExport {
 
 		$report_settings = (array) apply_filters( 'atum/data_export/html_report_settings', array( 'per_page' => -1 ) );
 		$args = (array) apply_filters( 'atum/data_export/export_args', $args );
+
+		if ( isset( $args['title_max_length'] ) ) {
+			$report_settings['title_max_length'] = $args['title_max_length'];
+		}
 
 		ob_start();
 

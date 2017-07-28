@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.5.1 - 2017-07-28*
+
+Features:
+
+* Added title max length setup for reports.
+
 *1.2.5 - 2017-07-27*
 
 Features:
