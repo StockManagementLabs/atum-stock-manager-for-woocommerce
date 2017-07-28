@@ -41,7 +41,7 @@ Our ground-breaking Stock Central lets users see every WooCommerce product and i
 
 **Every user has an option to create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs").**
 
-**For all features and videos visit [our feature page](https://www.stockmanagementlabs.com/features/ “ATUM Features“).**
+**For all features and videos visit [our feature page](https://www.stockmanagementlabs.com/features/ "ATUM Features").**
  
 
 **Advanced Stock Management**
