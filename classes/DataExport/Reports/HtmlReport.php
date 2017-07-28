@@ -138,7 +138,7 @@ class HtmlReport extends ListTable {
 
 			}
 
-			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type ' . $type . '" style="font-family: woocommerce; font-size: 20px">&#x' . $icon_char . '</span>', $item, $this->product );
+			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: woocommerce; font-size: 20px">&#x' . $icon_char . '</span>', $item, $this->product );
 
 		}
 
@@ -234,6 +234,11 @@ class HtmlReport extends ListTable {
 		}
 		else {
 			$title = $this->product->get_title();
+
+			// Limit the title length to 20 characters
+			if ( strlen($title) > absint( apply_filters('atum/data_export/html_report/title_max_length', 20) ) ) {
+				$title = trim( substr( $title, 0, 20 ) ) . '...';
+			}
 		}
 		
 		return apply_filters( 'atum/data_export/html_report/column_title', $title, $item, $this->product );
@@ -280,7 +285,7 @@ class HtmlReport extends ListTable {
 		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
 		
 		echo '<td ' . $data . $classes . '>' .
-		     apply_filters( 'atum/stock_central_list/column_stock_indicator', $content, $item, $this->product ) .
+		     apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) .
 		     $this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>';
 		
 	}
@@ -293,7 +298,7 @@ class HtmlReport extends ListTable {
 	 */
 	protected function get_views() {
 		// Views not needed in reports
-		return apply_filters( 'atum/data_export/html_report_views', array() );
+		return apply_filters( 'atum/data_export/html_report/views', array() );
 	}
 
 	/**
