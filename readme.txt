@@ -3,8 +3,8 @@
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.8
-Stable tag: 1.2.5.1
+Tested up to: 4.8.1
+Stable tag: 1.2.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -177,6 +177,7 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 Fixes:
 
 * Fixed add-on updater.
+* Removed unused mPDF files (clean up).
 
 = 1.2.5.1 - 2017-07-28 =
 

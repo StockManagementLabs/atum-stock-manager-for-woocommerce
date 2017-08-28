@@ -145,6 +145,7 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 Fixes:
 
 * Fixed add-on updater.
+* Removed unused mPDF files (clean up).
 
 *1.2.5.1 - 2017-07-28*
 
