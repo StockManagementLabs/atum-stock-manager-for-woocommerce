@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.5.2 - 2017-08-28*
+
+Fixes:
+
+* Fixed add-on updater.
+
 *1.2.5.1 - 2017-07-28*
 
 Features:

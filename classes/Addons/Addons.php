@@ -263,7 +263,7 @@ class Addons {
 	 */
 	public function http_request_args( $args, $url ) {
 		// If it is an https request and we are performing a package download, disable ssl verification
-		if ( strpos( $url, 'https://' ) !== FALSE && strpos( $url, 'package_download' ) !== FALSE && stpos( $url, self::ADDONS_STORE_URL) ) {
+		if ( strpos( $url, 'https://' ) !== FALSE && strpos( $url, 'package_download' ) !== FALSE && strpos( $url, self::ADDONS_STORE_URL ) !== FALSE ) {
 			$args['sslverify'] = FALSE;
 		}
 
