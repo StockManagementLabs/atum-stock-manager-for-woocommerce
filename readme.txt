@@ -172,6 +172,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 == Changelog ==
 
+= 1.2.5.3 - 2017-08-29 =
+
+Fixes:
+
+* Delete ATUM transients after saving any product's stock.
+
 = 1.2.5.2 - 2017-08-28 =
 
 Fixes:

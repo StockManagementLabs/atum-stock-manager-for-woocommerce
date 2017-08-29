@@ -186,6 +186,10 @@ final class Ajax {
 
 						$stock = intval($meta_value);
 						wc_update_product_stock( $product_id, $stock );
+
+						// Needed to clear transients and other stuff
+						do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock' , $product );
+
 						break;
 
 					case 'regular_price':

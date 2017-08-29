@@ -80,9 +80,6 @@ class Main {
 			}
 			else {
 
-				// Delete ATUM's transients on saving WC products
-				add_action( 'save_post_product', array($this, 'delete_transients') );
-
 				// Add the WC stock management option to grouped products
 				add_action( 'init', array( $this, 'wc_manage_stock_hooks' ) );
 
@@ -109,6 +106,10 @@ class Main {
 		
 		// Save the date when any product goes out of stock
 		add_action( 'woocommerce_product_set_stock' , array($this, 'record_out_of_stock_date'), 20 );
+
+		// Delete the views' transients after changing the stock of any product
+		add_action( 'woocommerce_product_set_stock' , array($this, 'delete_transients') );
+		add_action( 'woocommerce_variation_set_stock' , array($this, 'delete_transients') );
 		
 	}
 
@@ -543,15 +544,15 @@ class Main {
 		}
 		
 	}
-	
+
 	/**
-	 * Delete the ATUM transients after saving a product
+	 * Delete the ATUM transients after the product stock changes
 	 *
 	 * @since 0.1.5
 	 *
-	 * @param int $product_id   The product ID
+	 * @param \WC_Product $product   The product
 	 */
-	public function delete_transients($product_id) {
+	public function delete_transients($product) {
 		Helpers::delete_transients();
 	}
 
