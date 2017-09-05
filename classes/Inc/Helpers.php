@@ -114,7 +114,7 @@ final class Helpers {
 		 */
 		extract( (array) apply_filters( 'atum/get_orders/params', wp_parse_args( $atts, array(
 			'order_type'       => '',
-			'post_status'      => '',
+			'order_status'     => '',
 			'orders_in'        => '',
 			'number_orders'    => - 1,
 			'meta_key'         => '',
