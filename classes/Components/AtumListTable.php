@@ -200,6 +200,48 @@ abstract class AtumListTable extends \WP_List_Table {
 			$item->ID
 		);
 	}
+
+	/**
+	 * Column for stock indicators
+	 *
+	 * @since  0.0.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param string   $classes
+	 * @param string   $data
+	 * @param string   $primary
+	 */
+	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
+
+		$product_id = $this->product->get_id();
+
+		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
+		if ( isset($this->allow_calcs) && !$this->allow_calcs ) {
+			$content = self::EMPTY_COL;
+		}
+		// Out of stock
+		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
+			$classes .= ' cell-red';
+			$content = '<span class="dashicons dashicons-dismiss" data-toggle="tooltip" title="' . __('Out of Stock', ATUM_TEXT_DOMAIN) . '"></span>';
+		}
+		// Low Stock
+		elseif ( in_array($product_id, $this->id_views['low_stock']) ) {
+			$classes .= ' cell-yellow';
+			$content = '<span class="dashicons dashicons-warning" data-toggle="tooltip" title="' . __('Low Stock', ATUM_TEXT_DOMAIN) . '"></span>';
+		}
+		// In Stock
+		elseif ( in_array($product_id, $this->id_views['in_stock']) ) {
+			$classes .= ' cell-green';
+			$content = '<span class="dashicons dashicons-yes" data-toggle="tooltip" title="' . __('In Stock', ATUM_TEXT_DOMAIN) . '"></span>';
+		}
+
+		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
+
+		echo '<td ' . $data . $classes . '>' .
+		     apply_filters( 'atum/atum_list_table/column_stock_indicator', $content, $item, $this->product ) .
+		     $this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>';
+
+	}
 	
 	/**
 	 * REQUIRED! This method dictates the table's columns and titles.

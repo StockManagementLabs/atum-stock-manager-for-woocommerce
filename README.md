@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.5.4 - 2017-09-05*
+
+Fixes:
+
+* Fixed low stock indicator.
+
 *1.2.5.3 - 2017-08-29*
 
 Fixes:

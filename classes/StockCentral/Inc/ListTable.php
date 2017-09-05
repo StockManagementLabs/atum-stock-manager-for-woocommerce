@@ -102,7 +102,7 @@ class ListTable extends AtumListTable {
 		$this->no_stock = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		
 		// TODO: Allow to specify the day of query in constructor atts
-		$this->day       = Helpers::date_format( time(), TRUE );
+		$this->day       = Helpers::date_format( current_time('timestamp'), TRUE );
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		
 		$this->taxonomies[] = array(
@@ -614,56 +614,6 @@ class ListTable extends AtumListTable {
 
 		return apply_filters( 'atum/stock_central_list/column_stock', $stock, $item, $this->product );
 
-	}
-	
-	/**
-	 * Column for stock indicators
-	 *
-	 * @since  0.0.1
-	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
-	 * @param string   $classes
-	 * @param string   $data
-	 * @param string   $primary
-	 */
-	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
-			
-		$stock = intval( $this->product->get_stock_quantity() );
-		
-		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
-		if (! $this->allow_calcs) {
-			$content = self::EMPTY_COL;
-		}
-		elseif ( $stock <= 0 ) {
-			// no stock
-			$classes .= ' cell-red';
-			$content = '<span class="dashicons dashicons-dismiss"></span>';
-		}
-		elseif ( isset( $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) ) {
-			
-			// stock ok
-			if ( $stock >= $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) {
-				$classes .= ' cell-green';
-				$content = '<span class="dashicons dashicons-yes"></span>';
-			}
-			// stock low
-			else {
-				$classes .= ' cell-yellow';
-				$content = '<span class="dashicons dashicons-warning"></span>';
-			}
-			
-		}
-		else {
-			$classes .= ' cell-green';
-			$content = '<span class="dashicons dashicons-yes"></span>';
-		}
-		
-		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
-		
-		echo '<td ' . $data . $classes . '>' .
-		     apply_filters( 'atum/stock_central_list/column_stock_indicator', $content, $item, $this->product ) .
-		     $this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>';
-		
 	}
 	
 	/**
@@ -1226,7 +1176,7 @@ class ListTable extends AtumListTable {
 
 					// Products in LOW stock (compare last seven days average sales per day * re-order days with current stock )
 					$str_sales = "(SELECT			   
-					    (SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_product_id' AND order_item_id = `item`.`order_item_id`) AS IDs,
+					    (SELECT MAX(CAST( meta_value AS SIGNED )) AS q FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key IN('_product_id', '_variation_id') AND order_item_id = `item`.`order_item_id`) AS IDs,
 					    CEIL(SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`))/7*$this->last_days) AS qty
 						FROM `{$wpdb->posts}` AS `order`
 						    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
@@ -1234,7 +1184,7 @@ class ListTable extends AtumListTable {
 						WHERE (`order`.`post_type` = 'shop_order'
 						    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
 						    AND `order_meta`.`meta_key` = '_paid_date'
-						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-7 days" ) . "')
+						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
 						GROUP BY IDs) AS sales";
 
 					$low_stock_post_types = ($variations) ? "('product', 'product_variation')" : "('product')";

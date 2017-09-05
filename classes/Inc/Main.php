@@ -532,7 +532,7 @@ class Main {
 			$product_id = $product->get_id();
 			
 			if (!$current_stock) {
-				update_post_meta( $product_id, $out_of_stock_date_key, Helpers::date_format( time(), TRUE ) );
+				update_post_meta( $product_id, $out_of_stock_date_key, Helpers::date_format( current_time('timestamp'), TRUE ) );
 				Helpers::delete_transients();
 			}
 			elseif ( get_post_meta( $product_id, $out_of_stock_date_key, TRUE ) ) {

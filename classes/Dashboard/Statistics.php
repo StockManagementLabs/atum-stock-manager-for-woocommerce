@@ -360,7 +360,7 @@ class Statistics extends DashboardWidget {
 					WHERE (`order`.`post_type` = 'shop_order'
 					    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
 					    AND `order_meta`.`meta_key` = '_paid_date'
-					    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( "-7 days" ) . "')
+					    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
 					GROUP BY IDs) AS sales";
 
 				$low_stock_post_types = ($variations) ? "('product', 'product_variation')" : "('product')";
