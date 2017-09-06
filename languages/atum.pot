@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-09-06 19:12+0200\n"
+"POT-Creation-Date: 2017-09-06 19:32+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -116,8 +116,8 @@ msgstr ""
 #: classes/Addons/Addons.php:629 classes/Addons/Addons.php:635
 #: classes/Bootstrap.php:184 classes/Bootstrap.php:189
 #: classes/Components/AtumComments.php:158 classes/Components/AtumComments.php:163
-#: classes/Inc/Ajax.php:1085 classes/Inc/Ajax.php:1091 classes/Inc/Main.php:776
-#: classes/Inc/Main.php:782 classes/InventoryLogs/InventoryLogs.php:1241
+#: classes/Inc/Ajax.php:1085 classes/Inc/Ajax.php:1091 classes/Inc/Main.php:782
+#: classes/Inc/Main.php:788 classes/InventoryLogs/InventoryLogs.php:1241
 #: classes/InventoryLogs/InventoryLogs.php:1247 classes/Settings/Settings.php:457
 #: classes/Settings/Settings.php:463 classes/StockCentral/StockCentral.php:138
 #: classes/StockCentral/StockCentral.php:144
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Purchase price"
 msgstr ""
 
-#: classes/Inc/Main.php:645
+#: classes/Inc/Main.php:645 classes/Inc/Main.php:666
 msgid "Out of stock"
 msgstr ""
 
@@ -466,34 +466,34 @@ msgstr ""
 msgid "In stock"
 msgstr ""
 
-#: classes/Inc/Main.php:683
+#: classes/Inc/Main.php:689
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Main.php:684
+#: classes/Inc/Main.php:690
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Main.php:694
+#: classes/Inc/Main.php:700
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Main.php:695
+#: classes/Inc/Main.php:701
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Inc/Main.php:750
+#: classes/Inc/Main.php:756
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%s rating. A huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Main.php:750
+#: classes/Inc/Main.php:756
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Main.php:760
+#: classes/Inc/Main.php:766
 msgid "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
@@ -932,7 +932,7 @@ msgid "When enabled, the ATUM menu will be accessible through the WP admin bar."
 msgstr ""
 
 #: classes/Settings/Settings.php:115
-msgid "Show variations stock"
+msgid "Override 'Out of stock' Status"
 msgstr ""
 
 #: classes/Settings/Settings.php:116

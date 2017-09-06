@@ -659,7 +659,13 @@ class Main {
 
 			}
 
-			$stock_html = ( empty($stocks_list) ) ? '<mark class="outofstock">' . $stock_status . '</mark> (0)' : '<mark class="instock">' . $stock_status . '</mark> (' . implode(', ', $stocks_list) . ')';
+			if ( empty($stocks_list) ) {
+				$stock_html = '<mark class="outofstock">' . $stock_status . '</mark> (0)';
+			}
+			else {
+				$class = ( $stock_status == __('Out of stock', ATUM_TEXT_DOMAIN)  ) ? 'outofstock' : 'instock';
+				$stock_html = '<mark class="' . $class . '">' . $stock_status . '</mark> (' . implode(', ', $stocks_list) . ')';
+			}
 
 		}
 
