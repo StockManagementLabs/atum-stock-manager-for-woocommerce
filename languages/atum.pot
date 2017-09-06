@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-08-29 18:18+0200\n"
+"POT-Creation-Date: 2017-09-06 19:12+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -116,10 +116,10 @@ msgstr ""
 #: classes/Addons/Addons.php:629 classes/Addons/Addons.php:635
 #: classes/Bootstrap.php:184 classes/Bootstrap.php:189
 #: classes/Components/AtumComments.php:158 classes/Components/AtumComments.php:163
-#: classes/Inc/Ajax.php:1085 classes/Inc/Ajax.php:1091 classes/Inc/Main.php:729
-#: classes/Inc/Main.php:735 classes/InventoryLogs/InventoryLogs.php:1241
-#: classes/InventoryLogs/InventoryLogs.php:1247 classes/Settings/Settings.php:450
-#: classes/Settings/Settings.php:456 classes/StockCentral/StockCentral.php:138
+#: classes/Inc/Ajax.php:1085 classes/Inc/Ajax.php:1091 classes/Inc/Main.php:776
+#: classes/Inc/Main.php:782 classes/InventoryLogs/InventoryLogs.php:1241
+#: classes/InventoryLogs/InventoryLogs.php:1247 classes/Settings/Settings.php:457
+#: classes/Settings/Settings.php:463 classes/StockCentral/StockCentral.php:138
 #: classes/StockCentral/StockCentral.php:144
 msgid "Cheatin&#8217; huh?"
 msgstr ""
@@ -179,32 +179,50 @@ msgstr ""
 msgid "ATUM requires WooCommerce version 2.5 or greater. Please, %supdate now%s."
 msgstr ""
 
-#: classes/Components/AtumListTable.php:556
+#: classes/Components/AtumListTable.php:225
+#: classes/StockCentral/Inc/ListTable.php:929
+#: views/dashboard-widgets/statistics.php:200
+msgid "Out of Stock"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:230
+#: classes/StockCentral/Inc/ListTable.php:930
+#: views/dashboard-widgets/statistics.php:184
+msgid "Low Stock"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:235
+#: classes/StockCentral/Inc/ListTable.php:928
+#: views/dashboard-widgets/statistics.php:168
+msgid "In Stock"
+msgstr ""
+
+#: classes/Components/AtumListTable.php:598
 #, php-format
 msgid "Set the %% value"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:557
+#: classes/Components/AtumListTable.php:599
 msgid "Set"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:558
+#: classes/Components/AtumListTable.php:600
 msgid "Save Data"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:625
+#: classes/Components/AtumListTable.php:667
 #, php-format
 msgid " with query '%s'"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:833
+#: classes/Components/AtumListTable.php:875
 #, php-format
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Components/AtumListTable.php:888
+#: classes/Components/AtumListTable.php:930
 #, php-format
 msgid ""
 "%1$s plugin can bulk-enable all your items for stock management at the product "
@@ -212,7 +230,7 @@ msgid ""
 "uninstall the plugin."
 msgstr ""
 
-#: classes/Components/AtumListTable.php:889
+#: classes/Components/AtumListTable.php:931
 msgid "Enable ATUM's Manage Stock option"
 msgstr ""
 
@@ -278,11 +296,11 @@ msgstr ""
 msgid "Simple"
 msgstr ""
 
-#: classes/DataExport/Reports/HtmlReport.php:347 classes/Inc/Helpers.php:884
+#: classes/DataExport/Reports/HtmlReport.php:347 classes/Inc/Helpers.php:895
 msgid "Downloadable"
 msgstr ""
 
-#: classes/DataExport/Reports/HtmlReport.php:351 classes/Inc/Helpers.php:887
+#: classes/DataExport/Reports/HtmlReport.php:351 classes/Inc/Helpers.php:898
 msgid "Virtual"
 msgstr ""
 
@@ -395,79 +413,87 @@ msgstr ""
 msgid "Invalid log"
 msgstr ""
 
-#: classes/Inc/Helpers.php:850
+#: classes/Inc/Helpers.php:861
 msgid "Show all product types"
 msgstr ""
 
-#: classes/Inc/Helpers.php:862
+#: classes/Inc/Helpers.php:873
 msgid "Grouped product"
 msgstr ""
 
-#: classes/Inc/Helpers.php:866
+#: classes/Inc/Helpers.php:877
 msgid "Variable product"
 msgstr ""
 
-#: classes/Inc/Helpers.php:870
+#: classes/Inc/Helpers.php:881
 msgid "Simple product"
 msgstr ""
 
-#: classes/Inc/Main.php:135 classes/Inc/Main.php:202
+#: classes/Inc/Main.php:136 classes/Inc/Main.php:203
 #: classes/Settings/Settings.php:91 views/stock-central.php:12
 msgid "Stock Central"
 msgstr ""
 
-#: classes/Inc/Main.php:140
+#: classes/Inc/Main.php:141
 msgid "Settings"
 msgstr ""
 
-#: classes/Inc/Main.php:145
+#: classes/Inc/Main.php:146
 msgid "Add-ons"
 msgstr ""
 
-#: classes/Inc/Main.php:179
+#: classes/Inc/Main.php:180
 msgid "ATUM Statistics"
 msgstr ""
 
-#: classes/Inc/Main.php:203
+#: classes/Inc/Main.php:204
 msgid "ATUM Inventory"
 msgstr ""
 
-#: classes/Inc/Main.php:400 classes/Inc/Main.php:428
+#: classes/Inc/Main.php:401 classes/Inc/Main.php:429
 msgid "The stock is currently managed by ATUM plugin"
 msgstr ""
 
-#: classes/Inc/Main.php:574 classes/Inc/Main.php:583
+#: classes/Inc/Main.php:575 classes/Inc/Main.php:584
 msgid "Purchase price"
 msgstr ""
 
-#: classes/Inc/Main.php:636
+#: classes/Inc/Main.php:645
+msgid "Out of stock"
+msgstr ""
+
+#: classes/Inc/Main.php:656
+msgid "In stock"
+msgstr ""
+
+#: classes/Inc/Main.php:683
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Main.php:637
+#: classes/Inc/Main.php:684
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Main.php:647
+#: classes/Inc/Main.php:694
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Main.php:648
+#: classes/Inc/Main.php:695
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Inc/Main.php:703
+#: classes/Inc/Main.php:750
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%s rating. A huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Main.php:703
+#: classes/Inc/Main.php:750
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Main.php:713
+#: classes/Inc/Main.php:760
 msgid "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
@@ -906,10 +932,22 @@ msgid "When enabled, the ATUM menu will be accessible through the WP admin bar."
 msgstr ""
 
 #: classes/Settings/Settings.php:115
-msgid "Products per Page"
+msgid "Show variations stock"
 msgstr ""
 
 #: classes/Settings/Settings.php:116
+msgid ""
+"When enabled, the variations' stock status will be displayed in WooCommerce "
+"products' list for variable products. This overrides the 'Out of stock' status "
+"displayed by WooCommerce, when stock is managed at product level for variable "
+"products."
+msgstr ""
+
+#: classes/Settings/Settings.php:122
+msgid "Products per Page"
+msgstr ""
+
+#: classes/Settings/Settings.php:123
 msgid ""
 "Controls the number of products displayed per page within the Stock Central "
 "screen. Please note, you can set this value within the 'Screen Options' tab as "
@@ -918,39 +956,39 @@ msgid ""
 "it may affect the performance)."
 msgstr ""
 
-#: classes/Settings/Settings.php:122
+#: classes/Settings/Settings.php:129
 msgid "Manage Stock"
 msgstr ""
 
-#: classes/Settings/Settings.php:123
+#: classes/Settings/Settings.php:130
 msgid "Activate this option to override all WooCommerce inventory configurations."
 msgstr ""
 
-#: classes/Settings/Settings.php:129
+#: classes/Settings/Settings.php:136
 msgid "Days to Re-Order"
 msgstr ""
 
-#: classes/Settings/Settings.php:130
+#: classes/Settings/Settings.php:137
 msgid ""
 "This value sets the number of days a user needs to replenish the stock levels. "
 "It controls the 'Low Stock' indicator within the 'Stock Central' page."
 msgstr ""
 
-#: classes/Settings/Settings.php:207
+#: classes/Settings/Settings.php:214
 msgid ""
 "Would you want to restore the 'Manage Stock' status of all products to their "
 "original state?"
 msgstr ""
 
-#: classes/Settings/Settings.php:208
+#: classes/Settings/Settings.php:215
 msgid "<p>Select 'NO' to keep all the products in the current state.</p>"
 msgstr ""
 
-#: classes/Settings/Settings.php:209
+#: classes/Settings/Settings.php:216
 msgid "Yes, restore them"
 msgstr ""
 
-#: classes/Settings/Settings.php:210
+#: classes/Settings/Settings.php:217
 msgid "No, keep them"
 msgstr ""
 
@@ -1136,25 +1174,10 @@ msgstr ""
 msgid "Click to edit the stock quantity"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:977
+#: classes/StockCentral/Inc/ListTable.php:927
 #: views/reports/stock-central-report-html.php:37
 #: views/reports/stock-central-report-html.php:38
 msgid "All"
-msgstr ""
-
-#: classes/StockCentral/Inc/ListTable.php:978
-#: views/dashboard-widgets/statistics.php:168
-msgid "In Stock"
-msgstr ""
-
-#: classes/StockCentral/Inc/ListTable.php:979
-#: views/dashboard-widgets/statistics.php:200
-msgid "Out of Stock"
-msgstr ""
-
-#: classes/StockCentral/Inc/ListTable.php:980
-#: views/dashboard-widgets/statistics.php:184
-msgid "Low Stock"
 msgstr ""
 
 #: classes/StockCentral/StockCentral.php:73
