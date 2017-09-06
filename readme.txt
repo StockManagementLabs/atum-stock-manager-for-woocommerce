@@ -4,7 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.8.1
-Stable tag: 1.2.5.4
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ The ultimate inventory management plugin for WooCommerce.
 
 == Description ==
 
-https://www.youtube.com/watch?v=3jrNHT3MrRg
+https://www.youtube.com/watch?v=PWbjhEv_nKM
 
 ATUM is an advanced inventory management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -171,6 +171,13 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 
 == Changelog ==
+
+= 1.2.6 - 2017-09-06 =
+
+Features:
+
+* Added new setting to show the variations' stock status in WooCommerce products' list.
+* Refactory.
 
 = 1.2.5.4 - 2017-09-05 =
 

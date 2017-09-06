@@ -75,14 +75,12 @@ class Main {
 			add_action( 'init', array( $this, 'admin_load' ) );
 			
 			// Check if ATUM has the "Manage Stock" option enabled
-			if ( Helpers::get_option( 'manage_stock', 'no' ) == 'yes' ) {
+			if ( Helpers::is_atum_managing_stock() ) {
 				add_action( 'init', array( $this, 'atum_manage_stock_hooks' ) );
 			}
 			else {
-
 				// Add the WC stock management option to grouped products
 				add_action( 'init', array( $this, 'wc_manage_stock_hooks' ) );
-
 			}
 
 			// Add the purchase price to WC products
@@ -92,6 +90,9 @@ class Main {
 			// Save the product purchase price meta
 			add_action( 'save_post_product', array($this, 'save_purchase_price') );
 			add_action( 'woocommerce_update_product_variation', array($this, 'save_purchase_price') );
+
+			// Show the right stock status on WC products list when ATUM is managing the stock
+			add_filter( 'woocommerce_admin_stock_html', array($this, 'set_wc_products_list_stock_status'), 10, 2 );
 			
 		}
 
@@ -497,7 +498,7 @@ class Main {
 			if ( $product && in_array( $product->get_type(), Globals::get_product_types() ) ) {
 				remove_action( 'update_post_metadata', array($this, 'save_manage_stock') );
 
-				if ( Helpers::get_option( 'manage_stock', 'no' ) == 'yes' ) {
+				if ( Helpers::is_atum_managing_stock() ) {
 					$manage_stock = 'yes'; // Always enabled
 					Helpers::delete_transients();
 				}
@@ -617,6 +618,52 @@ class Main {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Sets the stock status in WooCommerce products' list when ATUM is managing the stock
+	 *
+	 * @since 1.2.6
+	 *
+	 * @param string      $stock_html   The HTML markup for the stock status
+	 * @param \WC_Product $the_product  The product that is currently checked
+	 *
+	 * @return string
+	 */
+	public function set_wc_products_list_stock_status($stock_html, $the_product) {
+
+		if (
+			Helpers::is_atum_managing_stock() &&
+			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
+			$the_product->get_type() == 'variable'
+		) {
+
+			// Get the variations
+			$variable_product = new \WC_Product_Variable( $the_product->get_id() );
+			$variations = $variable_product->get_children();
+			$stock_status = __('Out of stock', ATUM_TEXT_DOMAIN);
+			$stocks_list = array();
+
+			if ( ! empty($variations) ) {
+
+				foreach ($variations as $variation_id) {
+					$variation_product = wc_get_product($variation_id);
+					$variation_stock = $variation_product->get_stock_quantity();
+					$stocks_list[] = $variation_stock;
+
+					if ($variation_stock > 0) {
+						$stock_status = __('In stock', ATUM_TEXT_DOMAIN);
+					}
+				}
+
+			}
+
+			$stock_html = ( empty($stocks_list) ) ? '<mark class="outofstock">' . $stock_status . '</mark> (0)' : '<mark class="instock">' . $stock_status . '</mark> (' . implode(', ', $stocks_list) . ')';
+
+		}
+
+		return $stock_html;
 
 	}
 	

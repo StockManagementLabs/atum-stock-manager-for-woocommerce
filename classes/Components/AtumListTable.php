@@ -173,7 +173,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$user_dismissed_notices = Helpers::get_dismissed_notices();
 		
 		if (
-			Helpers::get_option( 'manage_stock', 'no' ) == 'no' &&
+			! Helpers::is_atum_managing_stock() &&
 			( !$user_dismissed_notices || ! isset($user_dismissed_notices['manage_stock']) || $user_dismissed_notices['manage_stock'] != 'yes' )
 		) {
 			
@@ -418,9 +418,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		/*
-		 * Check if the plugin manage all the products stocks
+		 * Check whether ATUM is managing the WC stock
 		 */
-		if ( Helpers::get_option( 'manage_stock', 'no' ) == 'no' ) {
+		if ( ! Helpers::is_atum_managing_stock() ) {
 			
 			// Only products with the _manage_stock meta set to yes
 			$args['meta_query'][] = array(

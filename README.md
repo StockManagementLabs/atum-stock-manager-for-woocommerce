@@ -140,6 +140,13 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.6 - 2017-09-06*
+
+Features:
+
+* Added new setting to show the variations' stock status in WooCommerce products' list.
+* Refactory.
+
 *1.2.5.4 - 2017-09-05*
 
 Fixes:

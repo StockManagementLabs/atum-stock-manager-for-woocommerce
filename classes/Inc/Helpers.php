@@ -600,6 +600,17 @@ final class Helpers {
 		return apply_filters( 'atum/get_options', $global_options );
 		
 	}
+
+	/**
+	 * Checks if ATUM is currently managing the WC stock
+	 *
+	 * @since 1.2.6
+	 *
+	 * @return bool
+	 */
+	public static function is_atum_managing_stock() {
+		return self::get_option( 'manage_stock', 'no' ) == 'yes';
+	}
 	
 	/**
 	 * Decode a JSON object stringified

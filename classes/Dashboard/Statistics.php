@@ -86,7 +86,7 @@ class Statistics extends DashboardWidget {
 			'fields' => 'ids'
 		);
 
-		if ( Helpers::get_option( 'manage_stock', 'no' ) == 'no' ) {
+		if ( ! Helpers::is_atum_managing_stock() ) {
 
 			// Only products with the _manage_stock meta set to yes
 			$args['meta_query'] = array(
