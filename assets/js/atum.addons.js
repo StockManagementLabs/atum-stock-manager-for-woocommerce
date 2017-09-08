@@ -61,7 +61,7 @@
 					action: 'atum_install_addon',
 					addon : $addonBlock.data('addon'),
 					slug  : $addonBlock.data('addon-slug'),
-					key   : $addonBlock.find('.addon-key > input').val()
+					key   : $addonBlock.find('.addon-key input').val()
 				},
 				beforeSend: function () {
 					atumBeforeAjax($button);
@@ -211,7 +211,7 @@
 		 */
 		function atumBeforeAjax($button) {
 			$('.theme').find('.button').prop('disabled', true);
-			$button.hide().after('<div class="atum-loading"></div>');
+			$button.css('visibility', 'hidden').after('<div class="atum-loading"></div>');
 		}
 		
 		/**
@@ -221,7 +221,7 @@
 		function atumAfterAjax($button) {
 			$('.atum-loading').remove();
 			$('.theme').find('.button').prop('disabled', false);
-			$button.show();
+			$button.css('visibility', 'visible');
 		}
 		
 	});

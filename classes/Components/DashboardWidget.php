@@ -52,17 +52,8 @@ abstract class DashboardWidget {
 	 * Hook to wp_dashboard_setup to add the widget
 	 *
 	 * @since 1.2.3
-	 *
-	 * @param array $widget_options   Associative array of options & default values for this widget
 	 */
-	public function init( $widget_options = array() ) {
-
-		// Register widget settings
-		$this->update_dashboard_widget_options(
-			$this->id,                  // The  widget id
-			$widget_options,            // Associative array of options & default values
-			TRUE                        // Add only (will not update existing options)
-		);
+	public function init() {
 
 		// Register the widget
 		wp_add_dashboard_widget(
@@ -83,7 +74,7 @@ abstract class DashboardWidget {
 
 	/**
 	 * Load widget config view
-	 * This is what will display when an admin clicks
+	 * This is what will display when an admin clicks "Configure" at widget header
 	 *
 	 * @since 1.2.3
 	 */
@@ -158,7 +149,7 @@ abstract class DashboardWidget {
 	 * @param array  $args          An associative array of options being saved
 	 * @param bool   $add_only      If true, options will not be added if widget options already exist
 	 */
-	protected function update_dashboard_widget_options( $widget_id , $args = array(), $add_only = false ) {
+	protected function update_dashboard_widget_options( $widget_id , $args = array(), $add_only = FALSE ) {
 
 		// Fetch ALL dashboard widget options from the db...
 		$opts = get_option( 'dashboard_widget_options' );

@@ -240,8 +240,8 @@
 		}
 		
 		.atum-loading {
-			right: 20px;
-			top: 7px;
+			right: 28px;
+			top: 11px;
 			@include loader(18px, $brand-primary, 3px, 1s);
 		}
 		

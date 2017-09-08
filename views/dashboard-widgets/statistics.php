@@ -109,6 +109,10 @@ defined( 'ABSPATH' ) or die;
 					<td class="amt"><?php echo $orders_amount_this_month ?></td>
 				</tr>
 				<tr>
+					<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $orders_amount_previous_month ?></td>
+				</tr>
+				<tr>
 					<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
 					<td class="amt"><?php echo $orders_amount_this_week ?></td>
 				</tr>
@@ -138,12 +142,83 @@ defined( 'ABSPATH' ) or die;
 					<td class="amt"><?php echo $orders_revenue_this_month ?></td>
 				</tr>
 				<tr>
+					<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $orders_revenue_previous_month ?></td>
+				</tr>
+				<tr>
 					<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
 					<td class="amt"><?php echo $orders_revenue_this_week ?></td>
 				</tr>
 				<tr>
 					<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
 					<td class="amt"><?php echo $orders_revenue_today ?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div style="clear: both"></div>
+
+	<div class="atum-table left table-promo-products">
+		<table>
+			<thead>
+				<tr>
+					<th colspan="2"><?php _e('Promo Products Sold', ATUM_TEXT_DOMAIN) ?></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_products_this_year ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_products_this_month ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_products_previous_month ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_products_this_week ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_products_today ?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="atum-table right table-promo-value">
+		<table>
+			<thead>
+				<tr>
+					<th colspan="2"><?php _e('Promo Value', ATUM_TEXT_DOMAIN) ?></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_value_this_year ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_value_this_month ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_value_previous_month ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_value_this_week ?></td>
+				</tr>
+				<tr>
+					<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
+					<td class="amt"><?php echo $promo_value_today ?></td>
 				</tr>
 			</tbody>
 		</table>

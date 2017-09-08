@@ -41,33 +41,105 @@ class Statistics extends DashboardWidget {
 	protected $grouped_products = array();
 
 	/**
-	 * Whether the current widget has the config settings enabled
-	 * @var bool
+	 * The widget default options
+	 * @var array
 	 */
-	protected $has_config = FALSE;
+	protected $widget_defaults = array(
+		'sold_today'            => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'earnings' => TRUE,
+				'products' => TRUE
+			)
+		),
+		'sold_this_month'       => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'earnings' => TRUE,
+				'products' => TRUE
+			)
+		),
+		'lost_sales_today'      => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'earnings' => TRUE,
+				'products' => TRUE
+			)
+		),
+		'lost_sales_this_month' => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'earnings' => TRUE,
+				'products' => TRUE
+			)
+		),
+		'orders_total'          => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'this_year'      => TRUE,
+				'this_month'     => TRUE,
+				'previous_month' => TRUE,
+				'this_week'      => TRUE,
+				'today'          => TRUE
+			)
+		),
+		'revenue'               => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'this_year'      => TRUE,
+				'this_month'     => TRUE,
+				'previous_month' => TRUE,
+				'this_week'      => TRUE,
+				'today'          => TRUE
+			)
+		),
+		'promo_products'        => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'this_year'      => TRUE,
+				'this_month'     => TRUE,
+				'previous_month' => TRUE,
+				'this_week'      => TRUE,
+				'today'          => TRUE
+			)
+		),
+		'promo_value'           => array(
+			'enabled' => TRUE,
+			'data'    => array(
+				'this_year'      => TRUE,
+				'this_month'     => TRUE,
+				'previous_month' => TRUE,
+				'this_week'      => TRUE,
+				'today'          => TRUE
+			)
+		),
+		'circle_stats'          => array(
+			'enabled' => TRUE
+		)
+	);
+
 
 	/**
-	 * Hook to wp_dashboard_setup to add the widget
-	 * NOTE: We only need to overwrite this method if we want to add default values to widget options
-	 *
-	 * @since 1.2.3
-	 *
-	 * @param array $widget_options   Associative array of options & default values for this widget
+	 * @inheritdoc
 	 */
-	public function init( $widget_options = array() ) {
+	public function init() {
 
-		$widget_options = array(
-			'example_number' => 42
+		$this->widget_defaults = apply_filters('atum/dashboard_statistics/widget_defaults', $this->widget_defaults );
+
+		// Register widget's default settings (if empty)
+		$this->update_dashboard_widget_options(
+			$this->id,                  // The  widget id
+			$this->widget_defaults,     // Associative array of options & default values
+			TRUE                        // Add only (will not update existing options)
 		);
 
-		parent::init($widget_options);
+		parent::init();
+
 	}
 
 
 	/**
-	 * Load the widget view
-	 *
-	 * @since 1.2.3
+	 * @inheritdoc
 	 */
 	public function widget() {
 
@@ -121,16 +193,8 @@ class Statistics extends DashboardWidget {
 			'order_date_start' => strtotime( 'first day of January 00:00:00' )
 		);
 
-		$orders_this_year = Helpers::get_orders($args);
-		$orders_amount_this_year = count($orders_this_year);
-		$orders_revenue_this_year = 0;
-
-		// TODO: REFACTORY TO EXTRACT ALL THE BELOW INFO FROM THIS YEAR'S ORDERS
-		foreach ($orders_this_year as $order) {
-			$orders_revenue_this_year += floatval( $order->get_total() );
-		}
-
-		$orders_revenue_this_year = Helpers::format_price($orders_revenue_this_year);
+		$orders_amount_this_year = $orders_revenue_this_year = $promo_products_this_year = $promo_value_this_year = 0;
+		$this->fill_order_data($args, $orders_amount_this_year, $orders_revenue_this_year, $promo_products_this_year, $promo_value_this_year);
 
 		/**
 		 * Orders this month
@@ -140,15 +204,20 @@ class Statistics extends DashboardWidget {
 			'order_date_start' => $first_day_of_month->getTimestamp()
 		);
 
-		$orders_this_month = Helpers::get_orders($args);
-		$orders_amount_this_month = count($orders_this_month);
-		$orders_revenue_this_month = 0;
+		$orders_amount_this_month = $orders_revenue_this_month = $promo_products_this_month = $promo_value_this_month = 0;
+		$this->fill_order_data($args, $orders_amount_this_month, $orders_revenue_this_month, $promo_products_this_month, $promo_value_this_month);
 
-		foreach ($orders_this_month as $order) {
-			$orders_revenue_this_month += floatval( $order->get_total() );
-		}
+		/**
+		 * Orders previous month
+		 */
+		$args = array(
+			'order_status'     => $order_status,
+			'order_date_start' => strtotime('first day of last month 00:00:00'),
+			'order_date_end'   => strtotime('last day of last month 23:59:59')
+		);
 
-		$orders_revenue_this_month = Helpers::format_price($orders_revenue_this_month);
+		$orders_amount_previous_month = $orders_revenue_previous_month = $promo_products_previous_month = $promo_value_previous_month = 0;
+		$this->fill_order_data($args, $orders_amount_previous_month, $orders_revenue_previous_month, $promo_products_previous_month, $promo_value_previous_month);
 
 		/**
 		 * Orders this week
@@ -158,15 +227,8 @@ class Statistics extends DashboardWidget {
 			'order_date_start' => strtotime( 'Monday this week 00:00:00' )
 		);
 
-		$orders_this_week = Helpers::get_orders($args);
-		$orders_amount_this_week = count($orders_this_week);
-		$orders_revenue_this_week = 0;
-
-		foreach ($orders_this_week as $order) {
-			$orders_revenue_this_week += floatval( $order->get_total() );
-		}
-
-		$orders_revenue_this_week = Helpers::format_price($orders_revenue_this_week);
+		$orders_amount_this_week = $orders_revenue_this_week = $promo_products_this_week = $promo_value_this_week = 0;
+		$this->fill_order_data($args, $orders_amount_this_week, $orders_revenue_this_week, $promo_products_this_week, $promo_value_this_week);
 
 		/**
 		 * Orders today
@@ -176,15 +238,8 @@ class Statistics extends DashboardWidget {
 			'order_date_start' => $today->getTimestamp()
 		);
 
-		$orders_today = Helpers::get_orders($args);
-		$orders_amount_today = count($orders_today);
-		$orders_revenue_today = 0;
-
-		foreach ($orders_today as $order) {
-			$orders_revenue_today += floatval( $order->get_total() );
-		}
-
-		$orders_revenue_today = Helpers::format_price($orders_revenue_today);
+		$orders_amount_today = $orders_revenue_today = $promo_products_today = $promo_value_today = 0;
+		$this->fill_order_data($args, $orders_amount_today, $orders_revenue_today, $promo_products_today, $promo_value_today);
 
 		// Stock indicators
 		$stock_counters = $this->get_stock_levels();
@@ -242,6 +297,50 @@ class Statistics extends DashboardWidget {
 		$stats['lost_earnings'] = $this->format_price( $stats['lost_earnings'] );
 
 		return $stats;
+
+	}
+
+	/**
+	 * Fill the order's values for every time window
+	 *
+	 * @since 1.2.7
+	 *
+	 * @param array $order_args
+	 * @param int   $orders_amt
+	 * @param float $revenue
+	 * @param int   $promo_products
+	 * @param float $promo_value
+	 */
+	private function fill_order_data($order_args, &$orders_amt, &$revenue, &$promo_products, &$promo_value) {
+
+		$orders = Helpers::get_orders($order_args);
+		$orders_amt = count($orders);
+
+		foreach ($orders as $order) {
+			/**
+			 * @var \WC_Order $order
+			 */
+			$revenue += floatval( $order->get_total() );
+
+			// Check if this order had discounts
+			$order_discount = $order->get_discount_total();
+
+			if ($order_discount) {
+				$promo_value += $order_discount;
+
+				$order_items = $order->get_items();
+
+				foreach ($order_items as $order_item) {
+					/**
+					 * @var \WC_Order_Item $order_item
+					 */
+					$promo_products += $order_item->get_quantity();
+				}
+			}
+		}
+
+		$revenue = Helpers::format_price($revenue);
+		$promo_value = Helpers::format_price($promo_value);
 
 	}
 
@@ -445,6 +544,57 @@ class Statistics extends DashboardWidget {
 		}
 
 		return FALSE;
+
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.2.7
+	 */
+	public function config() {
+
+		// Check if the settings' form is being submitted
+		if ( ! empty($_POST['atum_statistics']) && $_POST['atum_statistics'] == 'yes' ) {
+
+			// Save the settings
+			foreach ($this->widget_defaults as $section => $config) {
+
+				$this->widget_defaults[$section]['enabled'] = ${"$section"} = isset( $_POST[$section] ) && $_POST[$section];
+
+				if ( isset( $config['data'] ) ) {
+					foreach ( $config['data'] as $row => $status ) {
+						$this->widget_defaults[$section]['data'][$row] = ${"{$section}_{$row}"} = isset( $_POST["{$section}_{$row}"] ) && $_POST["{$section}_{$row}"];
+					}
+				}
+
+			}
+
+			// Update the new settings
+			$this->update_dashboard_widget_options( $this->id, $this->widget_defaults );
+
+		}
+		else {
+
+			$widget_options = $this->get_dashboard_widget_options( $this->id );
+
+			if ( ! empty( $widget_options ) ) {
+				foreach ( $widget_options as $section => $config ) {
+
+					${"$section"} = $config['enabled'];
+
+					if ( isset( $config['data'] ) ) {
+						foreach ( $config['data'] as $row => $status ) {
+							${"{$section}_{$row}"} = $status;
+						}
+					}
+
+				}
+			}
+
+		}
+
+		include ATUM_PATH . 'views/dashboard-widgets/statistics-config.php';
 
 	}
 
