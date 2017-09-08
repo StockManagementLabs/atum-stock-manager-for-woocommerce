@@ -140,6 +140,16 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.7 - 2017-09-08*
+
+Features:
+
+* Improved Dashboard Statistics widget (new sections and configuration).
+
+Fixes:
+
+* Fixed issue when trying to install add-ons directly from the Add-ons page.
+
 *1.2.6 - 2017-09-06*
 
 Features:
