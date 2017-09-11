@@ -86,8 +86,8 @@ final class Helpers {
 	 *      @type string $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
 	 *      @type string $order             ASC/DESC, default to DESC
 	 *      @type string $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date)
-	 *      @type int    $order_date_start  If has value, filters the orders between the WC meta _completed_date or _paid_date and the $order_date_end (must be in UNIX timestamp format)
-	 *      @type int    $order_date_end    Requires $order_date_start. If has value, filters the orders completed/processed before this date (must be in UNIX timestamp format). Default: next day
+	 *      @type int    $order_date_start  If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime)
+	 *      @type int    $order_date_end    Requires $order_date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now
 	 * }
 	 *
 	 * @param boolean $return_ids   Optional. If TRUE, returns an array of ID's (default FALSE)
@@ -109,11 +109,11 @@ final class Helpers {
 		 * @var string  $meta_compare
 		 * @var string  $order
 		 * @var string  $orderby
-		 * @var int     $order_date_start
-		 * @var int     $order_date_end
+		 * @var string  $order_date_start
+		 * @var string  $order_date_end
 		 */
 		extract( (array) apply_filters( 'atum/get_orders/params', wp_parse_args( $atts, array(
-			'order_type'       => '',
+			'order_type'       => 'shop_order',
 			'order_status'     => '',
 			'orders_in'        => '',
 			'number_orders'    => - 1,
@@ -144,7 +144,7 @@ final class Helpers {
 			}
 		}
 		
-		$args['post_type'] = ( ! empty( $valid_order_types ) ) ? $valid_order_types : $wc_order_types;
+		$args['post_type'] = $valid_order_types;
 		
 		// Post Status
 		$order_statuses       = explode( ', ', $order_status );
@@ -207,36 +207,15 @@ final class Helpers {
 		if ( ! empty( $orderby ) ) {
 			$args['orderby'] = esc_attr( $orderby );
 		}
-		
-		// WooCommerce adds the _completed_date and _paid_date meta keys to the orders once are completed,
-		// so we can use it to filter by date
+
+		// Filter by date
 		if ( $order_date_start ) {
 
-			$wc_date_meta_key = ( in_array('wc-processing', $args['post_status']) ) ? '_paid_date' : '_completed_date';
-			
-			if ( $order_date_end ) {
-				
-				$args['meta_query'][] = array(
-					'key'     => $wc_date_meta_key,
-					'compare' => 'BETWEEN',
-					'value'   => array(
-						self::date_format( $order_date_start, TRUE ),
-						self::date_format( $order_date_end, TRUE )
-					),
-					'type'    => 'DATETIME'
-				);
-				
-			}
-			else {
-				
-				$args['meta_query'][] = array(
-					'key'     => $wc_date_meta_key,
-					'compare' => '>=',
-					'value'   => self::date_format( $order_date_start, TRUE ),
-					'type'    => 'DATETIME'
-				);
-				
-			}
+			$args['date_query'][] = array(
+				'after'     => $order_date_start,
+				'before'    => $order_date_end ? $order_date_end : 'now',
+				'inclusive' => TRUE
+			);
 			
 		}
 		
@@ -348,8 +327,7 @@ final class Helpers {
 
 				// Get the average sales for the past days when in stock
 				$days = absint($days);
-				$average_date_start = strtotime( $out_of_stock_date . " -{$days} days" );
-				$sold_last_days = self::get_sold_last_days( [ $product_id ], $average_date_start, strtotime($out_of_stock_date) );
+				$sold_last_days = self::get_sold_last_days( [ $product_id ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
 				$lost_sales = 0;
 
 				if ( ! empty($sold_last_days) ) {

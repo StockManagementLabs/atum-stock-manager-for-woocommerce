@@ -1000,11 +1000,8 @@ class ListTable extends AtumListTable {
 		
 		parent::prepare_items();
 
-		$date_end = strtotime( $this->day );
-
 		// Calc products sold today (since midnight)
-		$date_start = strtotime('today');
-		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$rows = Helpers::get_sold_last_days( $this->current_products, 'today 00:00:00', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1013,8 +1010,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold during the last week
-		$date_start = strtotime( $this->day . ' -1 week' );
-		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$rows = Helpers::get_sold_last_days( $this->current_products, $this->day . ' -1 week', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1023,8 +1019,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold during the last 2 weeks
-		$date_start = strtotime( $this->day . ' -2 weeks' );
-		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$rows = Helpers::get_sold_last_days( $this->current_products, $this->day . ' -2 weeks', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -1033,8 +1028,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold the $last_days days
-		$date_start = strtotime( "-$this->last_days days" );
-		$rows = Helpers::get_sold_last_days( $this->current_products, $date_start, $date_end );
+		$rows = Helpers::get_sold_last_days( $this->current_products, "-$this->last_days days", $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
