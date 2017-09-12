@@ -85,6 +85,10 @@
   margin: 0;
 }
 
+.atum-statistics-widget .atum-table.config-table:last-of-type {
+  margin-bottom: 15px;
+}
+
 .atum-statistics-widget .stock-counters {
   margin-top: 30px;
   display: -webkit-box;
@@ -127,6 +131,10 @@
 
 .atum-statistics-widget .circle + div {
   font-size: 12px;
+}
+
+.atum-statistics-widget ~ p.submit {
+  text-align: right;
 }
 
 /*# sourceMappingURL=atum-dashboard-widgets.css.map */

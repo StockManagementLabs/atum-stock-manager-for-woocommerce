@@ -326,7 +326,7 @@ defined( 'ABSPATH' ) or die;
 
 	</div>
 
-	<?php if ( $widget_options['circle_stats'] ): ?>
+	<?php if ( $widget_options['circle_stats']['enabled'] ): ?>
 	<div class="stock-counters">
 
 		<?php
@@ -382,7 +382,7 @@ defined( 'ABSPATH' ) or die;
 
 </div>
 
-<?php if ( $widget_options['circle_stats'] ): ?>
+<?php if ( $widget_options['circle_stats']['enabled'] ): ?>
 <script type="text/javascript">
 	jQuery(function($){
 

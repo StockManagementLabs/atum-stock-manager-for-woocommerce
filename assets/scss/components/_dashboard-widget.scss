@@ -54,6 +54,7 @@
 		}
 		
 		&.config-table {
+			
 			th {
 				.th-wrap {
 					@include flexbox;
@@ -74,6 +75,11 @@
 			input[type=checkbox] {
 				margin: 0;
 			}
+			
+			&:last-of-type {
+				margin-bottom: $grid-gutter-width/2;
+			}
+			
 		}
 	}
 	
@@ -110,6 +116,10 @@
 		+ div {
 			font-size: 12px;
 		}
+	}
+	
+	~ p.submit {
+		text-align: right;
 	}
 	
 }
