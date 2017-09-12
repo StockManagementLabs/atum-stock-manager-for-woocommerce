@@ -127,12 +127,7 @@ class Statistics extends DashboardWidget {
 		$this->widget_defaults = apply_filters('atum/dashboard_statistics/widget_defaults', $this->widget_defaults );
 
 		// Register widget's default settings (if empty)
-		$this->update_dashboard_widget_options(
-			$this->id,                  // The  widget id
-			$this->widget_defaults,     // Associative array of options & default values
-			TRUE                        // Add only (will not update existing options)
-		);
-
+		$this->update_dashboard_widget_options( $this->widget_defaults, TRUE );
 		parent::init();
 
 	}
@@ -174,6 +169,8 @@ class Statistics extends DashboardWidget {
 		if ( empty($products) ) {
 			return;
 		}
+
+		$widget_options = $this->get_dashboard_widget_options();
 
 		// Do the calculations
 		$first_day_of_month = new \DateTime('first day of this month 00:00:00');
@@ -571,12 +568,12 @@ class Statistics extends DashboardWidget {
 			}
 
 			// Update the new settings
-			$this->update_dashboard_widget_options( $this->id, $this->widget_defaults );
+			$this->update_dashboard_widget_options( $this->widget_defaults );
 
 		}
 		else {
 
-			$widget_options = $this->get_dashboard_widget_options( $this->id );
+			$widget_options = $this->get_dashboard_widget_options();
 
 			if ( ! empty( $widget_options ) ) {
 				foreach ( $widget_options as $section => $config ) {

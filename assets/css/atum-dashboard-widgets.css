@@ -7,6 +7,17 @@
  * License : (c)2017 Stock Management Labs 
  */ 
 
+.atum-statistics-widget .stat-tables {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
 .atum-statistics-widget .atum-table {
   width: 50%;
 }
@@ -26,11 +37,12 @@
 
 .atum-statistics-widget .atum-table th {
   font-weight: 400;
-  padding-bottom: 5px;
+  padding: 5px;
   text-align: left;
   text-transform: uppercase;
   border-bottom: 1px solid #E3E8F5;
   width: 100%;
+  background-color: #FAFAFA;
 }
 
 .atum-statistics-widget .atum-table td {
@@ -111,6 +123,10 @@
 .atum-statistics-widget .circle span {
   display: block;
   margin-top: 10px;
+}
+
+.atum-statistics-widget .circle + div {
+  font-size: 12px;
 }
 
 /*# sourceMappingURL=atum-dashboard-widgets.css.map */

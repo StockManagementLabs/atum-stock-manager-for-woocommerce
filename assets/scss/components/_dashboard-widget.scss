@@ -4,6 +4,11 @@
 
 .atum-statistics-widget {
 	
+	.stat-tables {
+		@include flexbox;
+		@include flex-wrap(wrap);
+	}
+	
 	.atum-table {
 		width: 50%;
 		
@@ -22,11 +27,12 @@
 		
 		th {
 			font-weight: 400;
-			padding-bottom: 5px;
+			padding: 5px;
 			text-align: left;
 			text-transform: uppercase;
 			border-bottom: 1px solid $brand-info;
 			width: 100%;
+			background-color: #FAFAFA;
 		}
 		
 		td {
@@ -99,6 +105,10 @@
 		span {
 			display: block;
 			margin-top: 10px;
+		}
+		
+		+ div {
+			font-size: 12px;
 		}
 	}
 	

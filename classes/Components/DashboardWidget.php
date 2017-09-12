@@ -87,22 +87,17 @@ abstract class DashboardWidget {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param string $widget_id  Optional. If provided, will only get options for the specified widget
 	 * @return mixed An associative array containing the widget's options and values. False if no opts
 	 */
-	protected function get_dashboard_widget_options( $widget_id = '' ) {
+	protected function get_dashboard_widget_options() {
 
 		// Fetch ALL dashboard widget options from the db
 		$opts = get_option( 'dashboard_widget_options' );
 
-		// If no widget is specified, return everything
-		if ( empty( $widget_id ) ) {
-			return $opts;
-		}
 
 		// If we request a widget and it exists, return it
-		if ( isset( $opts[$widget_id] ) ) {
-			return $opts[ $widget_id ];
+		if ( isset( $opts[ $this->id ] ) ) {
+			return $opts[ $this->id ];
 		}
 
 		// Something went wrong
@@ -115,15 +110,14 @@ abstract class DashboardWidget {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param string $widget_id
 	 * @param string $option
 	 * @param string $default
 	 *
 	 * @return string
 	 */
-	protected function get_widget_option( $widget_id, $option, $default = '' ) {
+	protected function get_widget_option( $option, $default = '' ) {
 
-		$opts = $this->get_dashboard_widget_options($widget_id);
+		$opts = $this->get_dashboard_widget_options();
 
 		// If widget opts dont exist, return false
 		if ( ! $opts ) {
@@ -145,18 +139,17 @@ abstract class DashboardWidget {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param string $widget_id     The name of the widget being updated
-	 * @param array  $args          An associative array of options being saved
-	 * @param bool   $add_only      If true, options will not be added if widget options already exist
+	 * @param array  $args      An associative array of options being saved
+	 * @param bool   $add_only  If true, options will not be added if widget options already exist
 	 */
-	protected function update_dashboard_widget_options( $widget_id , $args = array(), $add_only = FALSE ) {
+	protected function update_dashboard_widget_options( $args = array(), $add_only = FALSE ) {
 
 		// Fetch ALL dashboard widget options from the db...
 		$opts = get_option( 'dashboard_widget_options' );
 
 		// Get just our widget's options, or set empty array
-		$w_opts = ( isset( $opts[$widget_id] ) ) ? $opts[$widget_id] : array();
-		$opts[$widget_id] = ( $add_only ) ? array_merge($args, $w_opts) : array_merge($w_opts, $args);
+		$w_opts = ( isset( $opts[ $this->id ] ) ) ? $opts[ $this->id ] : array();
+		$opts[ $this->id ] = ( $add_only ) ? array_merge($args, $w_opts) : array_merge($w_opts, $args);
 
 		// Save the entire widgets array back to the db
 		update_option('dashboard_widget_options', $opts);
