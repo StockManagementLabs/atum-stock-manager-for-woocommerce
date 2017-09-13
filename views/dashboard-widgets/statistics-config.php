@@ -141,12 +141,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-					<tr>
+					<?php /*<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
 							<input type="checkbox" name="orders_total_this_year" id="orders_total_this_year"<?php checked($orders_total_this_year, TRUE) ?> value="true">
 						</td>
-					</tr>
+					</tr>*/ ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
@@ -189,12 +189,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-					<tr>
+					<?php /*<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
 	                        <input type="checkbox" name="revenue_this_year" id="revenue_this_year"<?php checked($revenue_this_year, TRUE) ?> value="true">
 						</td>
-					</tr>
+					</tr>*/ ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
@@ -237,12 +237,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-					<tr>
+					<?php /*<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
 							<input type="checkbox" name="promo_products_this_year" id="promo_products_this_year"<?php checked($promo_products_this_year, TRUE) ?> value="true">
 						</td>
-					</tr>
+					</tr>*/ ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
@@ -285,12 +285,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-					<tr>
+					<?php /*<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">
 							<input type="checkbox" name="promo_value_this_year" id="promo_value_this_year"<?php checked($promo_value_this_year, TRUE) ?> value="true">
 						</td>
-					</tr>
+					</tr>*/ ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt">

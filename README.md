@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+*1.2.7.1 - 2017-09-13*
+
+Features:
+
+* Disabled "This Year" from dashboard statistics widget that was causing memory issues in sites with huge amount of orders.
+
 *1.2.7 - 2017-09-12*
 
 Features:

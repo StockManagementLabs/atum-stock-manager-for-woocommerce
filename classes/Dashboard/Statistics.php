@@ -26,7 +26,7 @@ class Statistics extends DashboardWidget {
 	 * The id of this widget
 	 * @var string
 	 */
-	protected $id = ATUM_PREFIX . 'dashboard_statistics_widget';
+	protected $id = ATUM_PREFIX . 'dashboard_statistics';
 
 	/**
 	 * The array of published Variable products' IDs
@@ -76,7 +76,7 @@ class Statistics extends DashboardWidget {
 		'orders_total'          => array(
 			'enabled' => TRUE,
 			'data'    => array(
-				'this_year'      => TRUE,
+				//'this_year'      => TRUE,
 				'this_month'     => TRUE,
 				'previous_month' => TRUE,
 				'this_week'      => TRUE,
@@ -86,7 +86,7 @@ class Statistics extends DashboardWidget {
 		'revenue'               => array(
 			'enabled' => TRUE,
 			'data'    => array(
-				'this_year'      => TRUE,
+				//'this_year'      => TRUE,
 				'this_month'     => TRUE,
 				'previous_month' => TRUE,
 				'this_week'      => TRUE,
@@ -96,7 +96,7 @@ class Statistics extends DashboardWidget {
 		'promo_products'        => array(
 			'enabled' => TRUE,
 			'data'    => array(
-				'this_year'      => TRUE,
+				//'this_year'      => TRUE,
 				'this_month'     => TRUE,
 				'previous_month' => TRUE,
 				'this_week'      => TRUE,
@@ -106,7 +106,7 @@ class Statistics extends DashboardWidget {
 		'promo_value'           => array(
 			'enabled' => TRUE,
 			'data'    => array(
-				'this_year'      => TRUE,
+				//'this_year'      => TRUE,
 				'this_month'     => TRUE,
 				'previous_month' => TRUE,
 				'this_week'      => TRUE,
@@ -185,13 +185,13 @@ class Statistics extends DashboardWidget {
 		/**
 		 * Orders this year
 		 */
-		$args = array(
+		/*$args = array(
 			'order_status'     => $order_status,
 			'order_date_start' => 'first day of January 00:00:00'
 		);
 
 		$orders_amount_this_year = $orders_revenue_this_year = $promo_products_this_year = $promo_value_this_year = 0;
-		$this->fill_order_data($args, $orders_amount_this_year, $orders_revenue_this_year, $promo_products_this_year, $promo_value_this_year);
+		$this->fill_order_data($args, $orders_amount_this_year, $orders_revenue_this_year, $promo_products_this_year, $promo_value_this_year);*/
 
 		/**
 		 * Orders this month

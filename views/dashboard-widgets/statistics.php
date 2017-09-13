@@ -137,12 +137,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php if ( $widget_options['orders_total']['data']['this_year'] ): ?>
+				<?php /*if ( $widget_options['orders_total']['data']['this_year'] ): ?>
 					<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt"><?php echo $orders_amount_this_year ?></td>
 					</tr>
-				<?php endif ?>
+				<?php endif*/ ?>
 
 				<?php if ( $widget_options['orders_total']['data']['this_month'] ): ?>
 					<tr>
@@ -187,12 +187,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php if ( $widget_options['revenue']['data']['this_year'] ): ?>
+				<?php /*if ( $widget_options['revenue']['data']['this_year'] ): ?>
 					<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt"><?php echo $orders_revenue_this_year ?></td>
 					</tr>
-				<?php endif ?>
+				<?php endif*/ ?>
 
 				<?php if ( $widget_options['revenue']['data']['this_month'] ): ?>
 					<tr>
@@ -236,12 +236,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php if ( $widget_options['promo_products']['data']['this_year'] ): ?>
+				<?php /*if ( $widget_options['promo_products']['data']['this_year'] ): ?>
 					<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt"><?php echo $promo_products_this_year ?></td>
 					</tr>
-				<?php endif ?>
+				<?php endif*/ ?>
 
 				<?php if ( $widget_options['promo_products']['data']['this_month'] ): ?>
 					<tr>
@@ -285,12 +285,12 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php if ( $widget_options['promo_value']['data']['this_year'] ): ?>
+				<?php /*if ( $widget_options['promo_value']['data']['this_year'] ): ?>
 					<tr>
 						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
 						<td class="amt"><?php echo $promo_value_this_year ?></td>
 					</tr>
-				<?php endif ?>
+				<?php endif*/ ?>
 
 				<?php if ( $widget_options['promo_value']['data']['this_month'] ): ?>
 					<tr>

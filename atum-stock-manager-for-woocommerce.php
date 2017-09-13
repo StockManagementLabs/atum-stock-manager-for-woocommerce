@@ -26,7 +26,7 @@
 defined( 'ABSPATH' ) or die;
 
 if ( ! defined('ATUM_VERSION') ) {
-	define( 'ATUM_VERSION', '1.2.7' );
+	define( 'ATUM_VERSION', '1.2.7.1' );
 }
 
 if ( ! defined('ATUM_PATH') ) {
