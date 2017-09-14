@@ -514,7 +514,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Setup the WP query
 			global $wp_query;
-			wp( $args );
 			$wp_query = new \WP_Query( $args );
 			
 			$posts = array_merge( $selected_posts, $wp_query->posts );

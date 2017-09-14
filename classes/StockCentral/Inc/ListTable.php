@@ -1072,7 +1072,6 @@ class ListTable extends AtumListTable {
 		if ( ! $posts ) {
 
 			global $wp_query;
-			wp( $args );
 			$wp_query = new \WP_Query( apply_filters( 'atum/stock_central_list/set_views_data/all', $args ) );
 			$posts = $wp_query->posts;
 
@@ -1084,7 +1083,8 @@ class ListTable extends AtumListTable {
 		$this->count_views['count_all'] = count( $posts );
 
 		$variations = $group_items = '';
-		$post_in = ( ! empty($args['s']) ) ? $posts : array();
+		// If it's a search or a product filtering, include only the filtered items to search for children
+		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) ) ? $posts : array();
 
 		foreach($this->taxonomies as $index => $taxonomy) {
 

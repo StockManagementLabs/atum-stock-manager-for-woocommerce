@@ -172,7 +172,14 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 == Changelog ==
 
-= 1.2.7.2 - 2017-09-13 =
+= 1.2.7.2 - 2017-09-14 =
+
+Fixes:
+
+* Compatibility issue with Salient theme.
+* List views' data was showing wrong figures when a product filter was active.
+
+= 1.2.7.1 - 2017-09-13 =
 
 Fixes:
 

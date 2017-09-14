@@ -567,6 +567,7 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-wrapper .subsubsub {
   position: relative;
+  margin-left: 3px;
 }
 
 .atum-list-wrapper .subsubsub .atum-loading {
