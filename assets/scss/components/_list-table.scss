@@ -188,10 +188,9 @@ h1.wp-heading-inline {
 	}
 	
 	th.sortable {
-		white-space: nowrap;
-		
 		a {
 			padding: 0;
+			@include flexbox;
 		}
 	}
 	

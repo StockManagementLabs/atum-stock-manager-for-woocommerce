@@ -675,12 +675,12 @@ h1.wp-heading-inline .atum-loading {
   height: 10px;
 }
 
-.atum-list-table th.sortable {
-  white-space: nowrap;
-}
-
 .atum-list-table th.sortable a {
   padding: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .atum-list-table tr.expanded {

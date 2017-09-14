@@ -85,7 +85,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Constructor
 	 *
-	 * The child class should call this constructor from its own constructor to override the default $args.
+	 * The child class should call this constructor to override the default $args.
 	 *
 	 * @since 0.0.1
 	 *

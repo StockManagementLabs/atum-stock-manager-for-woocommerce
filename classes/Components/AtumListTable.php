@@ -300,6 +300,16 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_editable_column ($args) {
 
+		/**
+		 * @var int    $post_id
+		 * @var string $meta_key
+		 * @var mixed  $value
+		 * @var string $symbol
+		 * @var string $tooltip
+		 * @var string $input_type
+		 * @var array  $extra_meta
+		 * @var string $tooltip_position
+		 */
 		extract( wp_parse_args( $args, array(
 			'post_id'          => NULL,
 			'meta_key'         => '',
@@ -342,11 +352,26 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_sortable_columns() {
 		
 		$not_sortable = array( 'thumb', 'cb' );
-		
-		$sortable_columns = array();
+		$sortable_columns = array(
+			'calc_regular_price' => array(
+				'calc_regular_price',
+				FALSE
+			),
+			'calc_sale_price' => array(
+				'calc_sale_price',
+				FALSE
+			),
+			'calc_purchase_price' => array(
+				'calc_purchase_price',
+				FALSE
+			),
+			'calc_stock' => array(
+				'calc_stock',
+				FALSE
+			)
+		);
 		
 		foreach ( $this->table_columns as $key => $column ) {
-			// Until next version we don't sort calc values...
 			if ( ! in_array( $key, $not_sortable ) && ! ( strpos( $key, 'calc_' ) === 0 ) ) {
 				$sortable_columns[ $key ] = array( $key, FALSE );
 			}
