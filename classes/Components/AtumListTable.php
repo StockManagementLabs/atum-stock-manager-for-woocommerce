@@ -352,24 +352,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_sortable_columns() {
 		
 		$not_sortable = array( 'thumb', 'cb' );
-		$sortable_columns = array(
-			'calc_regular_price' => array(
-				'calc_regular_price',
-				FALSE
-			),
-			'calc_sale_price' => array(
-				'calc_sale_price',
-				FALSE
-			),
-			'calc_purchase_price' => array(
-				'calc_purchase_price',
-				FALSE
-			),
-			'calc_stock' => array(
-				'calc_stock',
-				FALSE
-			)
-		);
+		$sortable_columns = array();
 		
 		foreach ( $this->table_columns as $key => $column ) {
 			if ( ! in_array( $key, $not_sortable ) && ! ( strpos( $key, 'calc_' ) === 0 ) ) {
@@ -468,12 +451,21 @@ abstract class AtumListTable extends \WP_List_Table {
 			
 			$args['order'] = $_REQUEST['order'];
 			
-			// meta value, for now only have _sku to search. Obviating meta_value_num possibility
+			// Columns starting by underscore are based in meta keys, so can be sorted
 			if ( substr( $_REQUEST['orderby'], 0, 1 ) == '_' ) {
-				$args['orderby']  = 'meta_value';
+
+				// All the meta key based columns are numeric except the SKU
+				if ( $_REQUEST['orderby'] == '_sku' ) {
+					$args['orderby']  = 'meta_value';
+				}
+				else {
+					$args['orderby']  = 'meta_value_num';
+				}
+
 				$args['meta_key'] = $_REQUEST['orderby'];
+
 			}
-			// Calculated field... Transients with WP_QUERY left join???
+			// Calculated column... Can be sorted?
 			elseif ( strpos( $_REQUEST['orderby'], 'calc_' ) === 0 ) {
 				
 			}

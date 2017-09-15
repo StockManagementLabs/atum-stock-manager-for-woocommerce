@@ -111,16 +111,19 @@ class ListTable extends AtumListTable {
 			'terms'    => Globals::get_product_types()
 		);
 
+		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys,
+		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
+		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
 			'thumb'                => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'calc_regular_price'   => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
-			'calc_sale_price'      => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
-			'calc_purchase_price'  => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-			'calc_stock'           => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_regular_price'       => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'_sale_price'          => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'_purchase_price'      => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'            => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'calc_reserved'        => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
@@ -128,7 +131,7 @@ class ListTable extends AtumListTable {
 			'calc_sold_today'      => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'calc_returns'         => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'calc_damages'         => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_in_post'       => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'calc_lost_in_post'    => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'calc_sales14'         => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
 			'calc_sales7'          => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
 			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
@@ -141,12 +144,12 @@ class ListTable extends AtumListTable {
 		$args['group_members'] = array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'thumb', '_sku', 'ID', 'calc_type', 'title', 'calc_regular_price', 'calc_sale_price', 'calc_purchase_price' )
+				'members' => array( 'thumb', '_sku', 'ID', 'calc_type', 'title', '_regular_price', '_sale_price', '_purchase_price' )
 			),
 			'stock-counters'        => array(
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
 				'members' => array(
-					'calc_stock',
+					'_stock',
 					'calc_inbound',
 					'calc_hold',
 					'calc_reserved',
@@ -363,7 +366,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column_sku( $item ) {
+	protected function column__sku( $item ) {
 
 		$id = $this->get_current_product_id($this->product);
 		$sku = get_post_meta( $id, '_sku', TRUE );
@@ -469,7 +472,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return float
 	 */
-	protected function column_calc_regular_price( $item ) {
+	protected function column__regular_price( $item ) {
 
 		$regular_price = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
@@ -504,7 +507,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return float
 	 */
-	protected function column_calc_sale_price( $item ) {
+	protected function column__sale_price( $item ) {
 
 		$sale_price = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
@@ -561,7 +564,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return float
 	 */
-	protected function column_calc_purchase_price( $item ) {
+	protected function column__purchase_price( $item ) {
 
 		$purchase_price = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);
@@ -595,7 +598,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string|int
 	 */
-	protected function column_calc_stock( $item ) {
+	protected function column__stock( $item ) {
 
 		$stock = self::EMPTY_COL;
 		$product_id = $this->get_current_product_id($this->product);

@@ -675,7 +675,7 @@ h1.wp-heading-inline .atum-loading {
   height: 10px;
 }
 
-.atum-list-table th.sortable a {
+.atum-list-table th.sortable a, .atum-list-table th.sorted a {
   padding: 0;
   display: -webkit-box;
   display: -webkit-flex;

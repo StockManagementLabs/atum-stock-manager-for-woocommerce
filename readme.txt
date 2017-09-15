@@ -172,6 +172,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 == Changelog ==
 
+= 1.2.8 - 2017-09-15 =
+
+Features:
+
+* Ability to sort list table columns by "Regular Price", "Sale Price", "Purchase Price" and "Current Stock".
+
 = 1.2.7.2 - 2017-09-14 =
 
 Fixes:

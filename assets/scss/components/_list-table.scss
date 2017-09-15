@@ -187,10 +187,12 @@ h1.wp-heading-inline {
 		height: 10px;
 	}
 	
-	th.sortable {
-		a {
-			padding: 0;
-			@include flexbox;
+	th {
+		&.sortable, &.sorted {
+			a {
+				padding: 0;
+				@include flexbox;
+			}
 		}
 	}
 	
