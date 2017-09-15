@@ -3,6 +3,8 @@
  *
  * @copyright Stock Management Labs ©2017
  * @since 0.0.1
+ *
+ * TODO: CREATE A JQUERY PLUGIN
  */
 
 (function ($) {
@@ -133,14 +135,17 @@
 						
 						// Simple way: use the URL to extract our needed variables
 						var query = this.search.substring(1),
-						    $this = $(this),
-						    $elem = $this.closest('.subsubsub');
+						    $this = $(this);
 						
-						if (!$elem.length) {
-							$elem = $this.closest('.tablenav-pages ');
-							if (!$elem.length) {
+						self.$animationElem = $this.closest('.subsubsub');
+						
+						if (!self.$animationElem.length) {
+							self.$animationElem = $this.closest('.tablenav-pages');
+							
+							// For sorting tables with group headers
+							if (!self.$animationElem.length && $this.find('span[class*=col-]').length) {
 								var $group = '.' + $this.find('span[class*=col-]').attr('class').replace('col-', '');
-								$elem = $this.closest('.wp-list-table').find($group);
+								self.$animationElem = $this.closest('.wp-list-table').find($group);
 							}
 						}
 						
@@ -152,7 +157,8 @@
 							s       : $search.val() || ''
 						};
 						
-						self.update(data, $elem);
+						self.update(data);
+						
 					});
 					
 					//
@@ -566,7 +572,8 @@
 							},
 							beforeSend: function () {
 								$button.prop('disabled', true);
-								self.addOverlay($button.parent());
+								self.$animationElem = $button.parent();
+								self.addOverlay();
 							},
 							success   : function (response) {
 								
@@ -604,9 +611,8 @@
 				 * Send the call and replace table parts with updated version!
 				 *
 				 * @param object data     The data to pass through AJAX
-				 * @param object $elem    Selector where will be added the spinner
 				 */
-				update: function (data, $elem) {
+				update: function (data) {
 					
 					var self = this,
 						perPage;
@@ -637,7 +643,7 @@
 						dataType  : 'json',
 						data      : data,
 						beforeSend: function () {
-							self.addOverlay($elem);
+							self.addOverlay();
 						},
 						// Handle the successful result
 						success   : function (response) {
@@ -730,15 +736,13 @@
 				
 				/**
 				 * Add the overlay effect while loading data
-				 *
-				 * @param object $elem The element used to place the loading spinner
 				 */
-				addOverlay: function($elem) {
+				addOverlay: function() {
 					$listWrapper.addClass('loading-data');
 					$atumTable.addClass('overlay');
 					
-					if (typeof $elem !== 'undefined' && $elem.length) {
-						$elem.append('<div class="atum-loading"></div>');
+					if (typeof this.$animationElem !== 'undefined' && this.$animationElem.length) {
+						this.$animationElem.append('<div class="atum-loading"></div>');
 					}
 				},
 				

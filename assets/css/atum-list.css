@@ -668,9 +668,10 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table thead .group th .atum-loading {
-  position: static;
+  position: relative;
   display: inline-block;
-  margin-left: 15px;
+  left: 15px;
+  top: 2px;
   width: 10px;
   height: 10px;
 }

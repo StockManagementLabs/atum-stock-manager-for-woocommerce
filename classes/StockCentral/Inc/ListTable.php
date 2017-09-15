@@ -111,7 +111,7 @@ class ListTable extends AtumListTable {
 			'terms'    => Globals::get_product_types()
 		);
 
-		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys,
+		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
