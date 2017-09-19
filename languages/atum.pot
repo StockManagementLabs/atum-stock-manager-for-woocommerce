@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-09-06 19:32+0200\n"
+"POT-Creation-Date: 2017-09-19 19:28+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -116,7 +116,7 @@ msgstr ""
 #: classes/Addons/Addons.php:629 classes/Addons/Addons.php:635
 #: classes/Bootstrap.php:184 classes/Bootstrap.php:189
 #: classes/Components/AtumComments.php:158 classes/Components/AtumComments.php:163
-#: classes/Inc/Ajax.php:1085 classes/Inc/Ajax.php:1091 classes/Inc/Main.php:782
+#: classes/Inc/Ajax.php:1090 classes/Inc/Ajax.php:1096 classes/Inc/Main.php:782
 #: classes/Inc/Main.php:788 classes/InventoryLogs/InventoryLogs.php:1241
 #: classes/InventoryLogs/InventoryLogs.php:1247 classes/Settings/Settings.php:457
 #: classes/Settings/Settings.php:463 classes/StockCentral/StockCentral.php:138
@@ -180,49 +180,49 @@ msgid "ATUM requires WooCommerce version 2.5 or greater. Please, %supdate now%s.
 msgstr ""
 
 #: classes/Components/AtumListTable.php:225
-#: classes/StockCentral/Inc/ListTable.php:929
-#: views/dashboard-widgets/statistics.php:200
+#: classes/StockCentral/Inc/ListTable.php:960
+#: views/dashboard-widgets/statistics.php:377
 msgid "Out of Stock"
 msgstr ""
 
 #: classes/Components/AtumListTable.php:230
-#: classes/StockCentral/Inc/ListTable.php:930
-#: views/dashboard-widgets/statistics.php:184
+#: classes/StockCentral/Inc/ListTable.php:961
+#: views/dashboard-widgets/statistics.php:361
 msgid "Low Stock"
 msgstr ""
 
 #: classes/Components/AtumListTable.php:235
-#: classes/StockCentral/Inc/ListTable.php:928
-#: views/dashboard-widgets/statistics.php:168
+#: classes/StockCentral/Inc/ListTable.php:959
+#: views/dashboard-widgets/statistics.php:345
 msgid "In Stock"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:598
+#: classes/Components/AtumListTable.php:599
 #, php-format
 msgid "Set the %% value"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:599
+#: classes/Components/AtumListTable.php:600
 msgid "Set"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:600
+#: classes/Components/AtumListTable.php:601
 msgid "Save Data"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:667
+#: classes/Components/AtumListTable.php:668
 #, php-format
 msgid " with query '%s'"
 msgstr ""
 
-#: classes/Components/AtumListTable.php:875
+#: classes/Components/AtumListTable.php:876
 #, php-format
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Components/AtumListTable.php:930
+#: classes/Components/AtumListTable.php:931
 #, php-format
 msgid ""
 "%1$s plugin can bulk-enable all your items for stock management at the product "
@@ -230,7 +230,7 @@ msgid ""
 "uninstall the plugin."
 msgstr ""
 
-#: classes/Components/AtumListTable.php:931
+#: classes/Components/AtumListTable.php:932
 msgid "Enable ATUM's Manage Stock option"
 msgstr ""
 
@@ -254,7 +254,7 @@ msgstr ""
 msgid "Output Format"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:74 classes/StockCentral/Inc/ListTable.php:119
+#: classes/DataExport/DataExport.php:74 classes/StockCentral/Inc/ListTable.php:122
 #: views/help-tabs/stock-central-product-details.php:36
 msgid "Product Type"
 msgstr ""
@@ -296,11 +296,11 @@ msgstr ""
 msgid "Simple"
 msgstr ""
 
-#: classes/DataExport/Reports/HtmlReport.php:347 classes/Inc/Helpers.php:895
+#: classes/DataExport/Reports/HtmlReport.php:347 classes/Inc/Helpers.php:871
 msgid "Downloadable"
 msgstr ""
 
-#: classes/DataExport/Reports/HtmlReport.php:351 classes/Inc/Helpers.php:898
+#: classes/DataExport/Reports/HtmlReport.php:351 classes/Inc/Helpers.php:874
 msgid "Virtual"
 msgstr ""
 
@@ -308,34 +308,34 @@ msgstr ""
 msgid "Error saving the table data."
 msgstr ""
 
-#: classes/Inc/Ajax.php:261
+#: classes/Inc/Ajax.php:266
 msgid "Data saved."
 msgstr ""
 
-#: classes/Inc/Ajax.php:278 classes/Inc/Ajax.php:386 classes/Inc/Ajax.php:481
-#: classes/Inc/Ajax.php:536
+#: classes/Inc/Ajax.php:283 classes/Inc/Ajax.php:391 classes/Inc/Ajax.php:486
+#: classes/Inc/Ajax.php:541
 msgid "An error occurred, please try again later."
 msgstr ""
 
-#: classes/Inc/Ajax.php:281
+#: classes/Inc/Ajax.php:286
 msgid "This license is not valid."
 msgstr ""
 
-#: classes/Inc/Ajax.php:287
+#: classes/Inc/Ajax.php:292
 msgid "ATUM API error"
 msgstr ""
 
-#: classes/Inc/Ajax.php:302
+#: classes/Inc/Ajax.php:307
 msgid "Your add-on license was saved."
 msgstr ""
 
-#: classes/Inc/Ajax.php:314
+#: classes/Inc/Ajax.php:319
 msgid ""
 "You've reached your license activation limit for this add-on.<br>Please contact "
 "the Stock Management Labs support team."
 msgstr ""
 
-#: classes/Inc/Ajax.php:323
+#: classes/Inc/Ajax.php:328
 #, php-format
 msgid ""
 "Your license is valid.<br>After the activation you will have %s remaining "
@@ -346,86 +346,86 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Inc/Ajax.php:336 classes/Inc/Ajax.php:411
+#: classes/Inc/Ajax.php:341 classes/Inc/Ajax.php:416
 #, php-format
 msgid "Your license key expired on %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:344
+#: classes/Inc/Ajax.php:349
 msgid "This license has been disabled"
 msgstr ""
 
-#: classes/Inc/Ajax.php:367
+#: classes/Inc/Ajax.php:372
 msgid "No addon name provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:371
+#: classes/Inc/Ajax.php:376
 msgid "Please enter a valid addon license key"
 msgstr ""
 
-#: classes/Inc/Ajax.php:418
+#: classes/Inc/Ajax.php:423
 msgid "Your license key has been disabled."
 msgstr ""
 
-#: classes/Inc/Ajax.php:423
+#: classes/Inc/Ajax.php:428
 msgid "Invalid license."
 msgstr ""
 
-#: classes/Inc/Ajax.php:429
+#: classes/Inc/Ajax.php:434
 msgid "Your license is not active for this URL."
 msgstr ""
 
-#: classes/Inc/Ajax.php:434
+#: classes/Inc/Ajax.php:439
 #, php-format
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:439
+#: classes/Inc/Ajax.php:444
 msgid "Your license key has reached its activation limit."
 msgstr ""
 
-#: classes/Inc/Ajax.php:463
+#: classes/Inc/Ajax.php:468
 msgid "Your license has been activated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:507
+#: classes/Inc/Ajax.php:512
 msgid "Your license has been deactivated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:513
+#: classes/Inc/Ajax.php:518
 #, php-format
 msgid ""
 "You've reached the limit of allowed deactivations for this license. Please "
 "%sopen a support ticket%s to request the deactivation."
 msgstr ""
 
-#: classes/Inc/Ajax.php:599 classes/InventoryLogs/InventoryLogs.php:587
+#: classes/Inc/Ajax.php:604 classes/InventoryLogs/InventoryLogs.php:587
 #: classes/InventoryLogs/InventoryLogs.php:737
 #: views/meta-boxes/inventory-logs/data.php:107
 msgid "Order #"
 msgstr ""
 
-#: classes/Inc/Ajax.php:634 views/meta-boxes/inventory-logs/notes.php:52
+#: classes/Inc/Ajax.php:639 views/meta-boxes/inventory-logs/notes.php:52
 msgid "Delete note"
 msgstr ""
 
-#: classes/Inc/Ajax.php:713
+#: classes/Inc/Ajax.php:718
 msgid "Invalid log"
 msgstr ""
 
-#: classes/Inc/Helpers.php:861
+#: classes/Inc/Helpers.php:837
 msgid "Show all product types"
 msgstr ""
 
-#: classes/Inc/Helpers.php:873
+#: classes/Inc/Helpers.php:849
 msgid "Grouped product"
 msgstr ""
 
-#: classes/Inc/Helpers.php:877
+#: classes/Inc/Helpers.php:853
 msgid "Variable product"
 msgstr ""
 
-#: classes/Inc/Helpers.php:881
+#: classes/Inc/Helpers.php:857
 msgid "Simple product"
 msgstr ""
 
@@ -826,62 +826,65 @@ msgstr ""
 msgid "Log updated and email sent."
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1179
+#: classes/InventoryLogs/Models/Log.php:1176
 #, php-format
 msgid "(includes %s)"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1352
+#: classes/InventoryLogs/Models/Log.php:1349
 msgid "Auto Draft"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1356
+#: classes/InventoryLogs/Models/Log.php:1353
 #, php-format
 msgid "Log &ndash; %s"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1356
+#: classes/InventoryLogs/Models/Log.php:1353
 msgctxt "Log date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1406
-#: classes/StockCentral/Inc/ListTable.php:126
+#: classes/InventoryLogs/Models/Log.php:1403
+#: classes/StockCentral/Inc/ListTable.php:129
+#: classes/StockCentral/Inc/ListTable.php:214
 #: views/help-tabs/stock-central-stock-counters.php:32
 msgid "Reserved Stock"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1407
-#: classes/StockCentral/Inc/ListTable.php:129
+#: classes/InventoryLogs/Models/Log.php:1404
+#: classes/StockCentral/Inc/ListTable.php:132
+#: classes/StockCentral/Inc/ListTable.php:217
 #: views/help-tabs/stock-central-stock-negatives.php:20
 msgid "Customer Returns"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1408
+#: classes/InventoryLogs/Models/Log.php:1405
 msgid "Warehouse Damage"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1409
-#: classes/StockCentral/Inc/ListTable.php:131
+#: classes/InventoryLogs/Models/Log.php:1406
+#: classes/StockCentral/Inc/ListTable.php:134
+#: classes/StockCentral/Inc/ListTable.php:219
 #: views/help-tabs/stock-central-stock-negatives.php:28
 msgid "Lost in Post"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1410
+#: classes/InventoryLogs/Models/Log.php:1407
 #: views/meta-boxes/inventory-logs/item-shipping.php:47
 #: views/meta-boxes/inventory-logs/item-shipping.php:49
 msgid "Other"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1435
+#: classes/InventoryLogs/Models/Log.php:1432
 msgid "Pending"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1436
+#: classes/InventoryLogs/Models/Log.php:1433
 msgid "Completed"
 msgstr ""
 
-#: classes/InventoryLogs/Models/Log.php:1845
+#: classes/InventoryLogs/Models/Log.php:1842
 msgid "Invalid currency code"
 msgstr ""
 
@@ -992,189 +995,198 @@ msgstr ""
 msgid "No, keep them"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:115
+#: classes/StockCentral/Inc/ListTable.php:118
 msgid "Image"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:115
+#: classes/StockCentral/Inc/ListTable.php:118
 msgid "Thumb"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:116
+#: classes/StockCentral/Inc/ListTable.php:119
 #: views/help-tabs/stock-central-product-details.php:24
 msgid "Product Name"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:117
+#: classes/StockCentral/Inc/ListTable.php:120
 #: views/help-tabs/stock-central-product-details.php:28
 msgid "SKU"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:118
+#: classes/StockCentral/Inc/ListTable.php:121
 #: views/help-tabs/stock-central-product-details.php:32
 msgid "ID"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:120
+#: classes/StockCentral/Inc/ListTable.php:123
 #: views/help-tabs/stock-central-product-details.php:40
 msgid "Regular Price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:121
+#: classes/StockCentral/Inc/ListTable.php:124
 #: views/help-tabs/stock-central-product-details.php:44
 msgid "Sale Price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:122
+#: classes/StockCentral/Inc/ListTable.php:125
 #: views/help-tabs/stock-central-product-details.php:48
 msgid "Purchase Price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:123
+#: classes/StockCentral/Inc/ListTable.php:126
 #: views/help-tabs/stock-central-stock-counters.php:20
 msgid "Current Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:124
+#: classes/StockCentral/Inc/ListTable.php:127
 #: views/help-tabs/stock-central-stock-counters.php:24
 msgid "Inbound Stock"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:125
+#: classes/StockCentral/Inc/ListTable.php:128
+#: classes/StockCentral/Inc/ListTable.php:213
 #: views/help-tabs/stock-central-stock-counters.php:28
 msgid "Stock on Hold"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:127
+#: classes/StockCentral/Inc/ListTable.php:130
+#: classes/StockCentral/Inc/ListTable.php:215
 #: views/help-tabs/stock-central-stock-counters.php:36
 msgid "Back Orders"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:128
-#: views/dashboard-widgets/statistics.php:17
+#: classes/StockCentral/Inc/ListTable.php:131
+#: classes/StockCentral/Inc/ListTable.php:216
+#: views/dashboard-widgets/statistics-config.php:20
+#: views/dashboard-widgets/statistics.php:21
 msgid "Sold Today"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:130
+#: classes/StockCentral/Inc/ListTable.php:133
+#: classes/StockCentral/Inc/ListTable.php:218
 #: views/help-tabs/stock-central-stock-negatives.php:24
 msgid "Warehouse Damages"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:132
+#: classes/StockCentral/Inc/ListTable.php:135
 #: views/help-tabs/stock-central-stock-selling-manager.php:20
 msgid "Sales Last 14 Days"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:133
+#: classes/StockCentral/Inc/ListTable.php:136
 #: views/help-tabs/stock-central-stock-selling-manager.php:24
 msgid "Sales Last 7 Days"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:134
+#: classes/StockCentral/Inc/ListTable.php:137
 #: views/help-tabs/stock-central-stock-selling-manager.php:28
 msgid "Stock will Last (Days)"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:135
+#: classes/StockCentral/Inc/ListTable.php:138
 #: views/help-tabs/stock-central-stock-selling-manager.php:32
 msgid "Out of Stock for (Days)"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:136
+#: classes/StockCentral/Inc/ListTable.php:139
 #: views/help-tabs/stock-central-stock-selling-manager.php:36
 msgid "Lost Sales"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:137
+#: classes/StockCentral/Inc/ListTable.php:140
 #: views/help-tabs/stock-central-stock-selling-manager.php:40
 msgid "Stock Indicator"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:143
+#: classes/StockCentral/Inc/ListTable.php:146
 #: classes/StockCentral/StockCentral.php:87
 msgid "Product Details"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:147
+#: classes/StockCentral/Inc/ListTable.php:150
 #: classes/StockCentral/StockCentral.php:91
 msgid "Stock Counters"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:158
+#: classes/StockCentral/Inc/ListTable.php:161
 #: classes/StockCentral/StockCentral.php:95
 msgid "Stock Negatives"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:162
+#: classes/StockCentral/Inc/ListTable.php:165
 #: classes/StockCentral/StockCentral.php:99
 msgid "Stock Selling Manager"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:204
+#: classes/StockCentral/Inc/ListTable.php:224
+msgid "Show all"
+msgstr ""
+
+#: classes/StockCentral/Inc/ListTable.php:232
 msgid "Filter"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:376
+#: classes/StockCentral/Inc/ListTable.php:406
 msgid "Click to edit the SKU"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:420
-#: classes/StockCentral/Inc/ListTable.php:438
+#: classes/StockCentral/Inc/ListTable.php:450
+#: classes/StockCentral/Inc/ListTable.php:468
 msgid "Grouped item"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:424
+#: classes/StockCentral/Inc/ListTable.php:454
 msgid "Downloadable product"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:428
+#: classes/StockCentral/Inc/ListTable.php:458
 msgid "Virtual product"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:442
+#: classes/StockCentral/Inc/ListTable.php:472
 #, php-format
 msgid "(click to show/hide the %s)"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:443
+#: classes/StockCentral/Inc/ListTable.php:473
 msgid "Grouped items"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:443
+#: classes/StockCentral/Inc/ListTable.php:473
 msgid "Variations"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:452
+#: classes/StockCentral/Inc/ListTable.php:482
 msgid "Variation"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:487
+#: classes/StockCentral/Inc/ListTable.php:517
 msgid "Click to edit the regular price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:524
+#: classes/StockCentral/Inc/ListTable.php:554
 msgid "Click to edit the sale price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:529
+#: classes/StockCentral/Inc/ListTable.php:559
 msgctxt "placeholder"
 msgid "Sale date from..."
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:538
+#: classes/StockCentral/Inc/ListTable.php:568
 msgctxt "placeholder"
 msgid "Sale date to..."
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:579
+#: classes/StockCentral/Inc/ListTable.php:609
 msgid "Click to edit the purchase price"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:609
+#: classes/StockCentral/Inc/ListTable.php:639
 msgid "Click to edit the stock quantity"
 msgstr ""
 
-#: classes/StockCentral/Inc/ListTable.php:927
+#: classes/StockCentral/Inc/ListTable.php:958
 #: views/reports/stock-central-report-html.php:37
 #: views/reports/stock-central-report-html.php:38
 msgid "All"
@@ -1228,58 +1240,109 @@ msgstr ""
 msgid "Enter the addon license key..."
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:23
-#: views/dashboard-widgets/statistics.php:42
-#: views/dashboard-widgets/statistics.php:63
-#: views/dashboard-widgets/statistics.php:82
+#: views/dashboard-widgets/statistics-config.php:29
+#: views/dashboard-widgets/statistics-config.php:57
+#: views/dashboard-widgets/statistics-config.php:87
+#: views/dashboard-widgets/statistics-config.php:115
+#: views/dashboard-widgets/statistics.php:28
+#: views/dashboard-widgets/statistics.php:54
+#: views/dashboard-widgets/statistics.php:86
+#: views/dashboard-widgets/statistics.php:112
 msgid "Earnings"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:27
-#: views/dashboard-widgets/statistics.php:46
-#: views/dashboard-widgets/statistics.php:67
-#: views/dashboard-widgets/statistics.php:86
+#: views/dashboard-widgets/statistics-config.php:35
+#: views/dashboard-widgets/statistics-config.php:63
+#: views/dashboard-widgets/statistics-config.php:93
+#: views/dashboard-widgets/statistics-config.php:121
+#: views/dashboard-widgets/statistics.php:35
+#: views/dashboard-widgets/statistics.php:61
+#: views/dashboard-widgets/statistics.php:93
+#: views/dashboard-widgets/statistics.php:119
 msgid "Products"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:36
+#: views/dashboard-widgets/statistics-config.php:48
+#: views/dashboard-widgets/statistics.php:47
 msgid "Lost Sales Today"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:57
+#: views/dashboard-widgets/statistics-config.php:78
+#: views/dashboard-widgets/statistics.php:79
 msgid "Sold This Month"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:76
+#: views/dashboard-widgets/statistics-config.php:106
+#: views/dashboard-widgets/statistics.php:105
 msgid "Lost Sales This Month"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:98
+#: views/dashboard-widgets/statistics-config.php:136
+#: views/dashboard-widgets/statistics.php:135
 msgid "Orders Total"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:104
-#: views/dashboard-widgets/statistics.php:133
-msgid "This Year"
-msgstr ""
-
-#: views/dashboard-widgets/statistics.php:108
-#: views/dashboard-widgets/statistics.php:137
+#: views/dashboard-widgets/statistics-config.php:151
+#: views/dashboard-widgets/statistics-config.php:199
+#: views/dashboard-widgets/statistics-config.php:247
+#: views/dashboard-widgets/statistics-config.php:295
+#: views/dashboard-widgets/statistics.php:149
+#: views/dashboard-widgets/statistics.php:199
+#: views/dashboard-widgets/statistics.php:248
+#: views/dashboard-widgets/statistics.php:297
 msgid "This Month"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:112
-#: views/dashboard-widgets/statistics.php:141
+#: views/dashboard-widgets/statistics-config.php:157
+#: views/dashboard-widgets/statistics-config.php:205
+#: views/dashboard-widgets/statistics-config.php:253
+#: views/dashboard-widgets/statistics-config.php:301
+#: views/dashboard-widgets/statistics.php:156
+#: views/dashboard-widgets/statistics.php:206
+#: views/dashboard-widgets/statistics.php:255
+#: views/dashboard-widgets/statistics.php:304
+msgid "Previous Month"
+msgstr ""
+
+#: views/dashboard-widgets/statistics-config.php:163
+#: views/dashboard-widgets/statistics-config.php:211
+#: views/dashboard-widgets/statistics-config.php:259
+#: views/dashboard-widgets/statistics-config.php:307
+#: views/dashboard-widgets/statistics.php:163
+#: views/dashboard-widgets/statistics.php:213
+#: views/dashboard-widgets/statistics.php:262
+#: views/dashboard-widgets/statistics.php:311
 msgid "This Week"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:116
-#: views/dashboard-widgets/statistics.php:145
+#: views/dashboard-widgets/statistics-config.php:169
+#: views/dashboard-widgets/statistics-config.php:217
+#: views/dashboard-widgets/statistics-config.php:265
+#: views/dashboard-widgets/statistics-config.php:313
+#: views/dashboard-widgets/statistics.php:170
+#: views/dashboard-widgets/statistics.php:220
+#: views/dashboard-widgets/statistics.php:269
+#: views/dashboard-widgets/statistics.php:318
 msgid "Today"
 msgstr ""
 
-#: views/dashboard-widgets/statistics.php:127
+#: views/dashboard-widgets/statistics-config.php:184
+#: views/dashboard-widgets/statistics.php:185
 msgid "Revenue"
+msgstr ""
+
+#: views/dashboard-widgets/statistics-config.php:232
+#: views/dashboard-widgets/statistics.php:234
+msgid "Promo Products Sold"
+msgstr ""
+
+#: views/dashboard-widgets/statistics-config.php:280
+#: views/dashboard-widgets/statistics.php:283
+msgid "Promo Value"
+msgstr ""
+
+#: views/dashboard-widgets/statistics-config.php:328
+msgid "Circle Stats"
 msgstr ""
 
 #: views/help-tabs/stock-central-general.php:11
