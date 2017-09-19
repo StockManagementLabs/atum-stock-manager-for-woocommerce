@@ -1,87 +1,84 @@
-=== ATUM Stock Manager for WooCommerce ===
+=== ATUM Inventory Management for WooCommerce ===
 
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.8.1
-Stable tag: 1.2.7.2
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The ultimate inventory management plugin for WooCommerce.
+Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical Sales, Inventory Levels, Promo Sales), Stock Central with Data Export, Inventory Logs (Reserved Stock, Lost In Post, Customer Returns, Inbound Stock, Warehouse Damages), One Page Updating, Quick Price Changes, Stock Levels Indicators.
 
 == Description ==
 
-https://www.youtube.com/watch?v=PWbjhEv_nKM
+= ATUM - Inventory Management for WooCommerce - Quick Overview =
 
-ATUM is an advanced inventory management plugin for WooCommerce. It is a must for every serious shop owner. The plugin gives you a complete overview of all your products from one page. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
-ATUM comes from Stock Management Labs™, creators that have combined over 25 years of experience in inventory management. The team is working very closely with a bunch of professional developers since October 2016. The aim is to create the complete product that will take care of all business needs.
+ATUM is becoming the most advanced WooCommerce inventory management tool in the Wordpress depository. Free of charge and the absolute must for every serious shop owner. Stock Central, the heart of ATUM, gives you the full overview of your business with capabilities of a quick change of every aspect of your WooCommerce inventory and prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
-In the preparation process for the development stage, we have tested and tried the most popular WooCommerce and cloud inventory management products and plugins in the world. With full confidence, we believe that the complete ATUM product will be unrivalled in every category.
+Stock Management Labs™, creators that have combined over 25 years of experience in inventory management, working very closely with a bunch of professional Wordpress developers since October 2016. The aim is to create the complete product that will take care of all business needs.
+
+In the preparation process for the development stage, we have tested and tried the most popular WooCommerce inventory management and cloud inventory management products and plugins in the world. With full confidence, we believe that ATUM will become unrivaled in every category.
+
 
 = AVAILABLE FEATURES =
 
 
-**See everything in one place**
+**Stock Central for WooCommerce Inventory Overview**
 
 
-Our ground-breaking Stock Central lets users see every WooCommerce product and its associated inventory movements on one fully automated inventory page.
+Our ground-breaking Stock Central lets users see, edit and update all WooCommerce products quickly and efficiently.
 
 
-* All items on one screen with a smooth mouse wheel or touchpad scrolling.
-* WooCommerce Products' image thumbnails for easier identification.
-* Short products name overview including the products' ID and SKU.
-* Quickly edit the Product Price and Product Sale Price including the date range directly from Stock Central main screen.
-* The current stock volume of every WooCommerce product in the shop's database.
-* One click stock volume edit right from the main Stock Central screen - now with bulk editing feature.
-* Stock on hold feature to preview the number of back-orders pending.
-* The full count of daily sales of every SKU unit in range.
-* Fourteen and seven days' summary of WooCommerce sales of every product.
-* Accurate stock availability prediction.
-* "Out of stock" indicator of every product for easier re-ordering management.
-* Coloured stock indicators to give users fair stock availability warnings.
-* Full-screen options to customise the visual appearance of Stock Central.
-* Complete "HELP" sections with detailed explanation of every feature.
-* Advanced search with an auto-fill feature - NOW IMPROVED AND FINE TUNED.
-* "In stock", "out of stock", "low stock" and product category filter.
+* All WooCommerce products on one screen with a smooth mouse wheel or touchpad scrolling.
+* Image thumbnails for easier identification of your WooCommerce Inventory.
+* Short product names overview including the products' ID and SKU. Change SKUs on the fly from one screen.
+* Quickly edit the Product Price and Product Sale Price including the date ranges of your sales. Now bulk editing available.
+* Change, edit or update the inventory of every WooCommerce product in your database. Changes immediately reflect the front-end of your site.
+* Weekly and Fortnightly Sales, Lost Sales and Inventory Level Indicators to help you with re-ordering plan.
+* Customise the visual appearance of Stock Central with the ability to add or remove any columns according to your business needs.
+* Complete "HELP" sections with the detailed explanation of every feature.
+* Advanced search with an auto-fill feature and fine-tuned performance.
+* Inventory / Stock filters, new product category filters, extra drop-down filters and new column sorting.
 * Intelligent settings for easy inventory/stock management.
-* NEW - Dashboard Statistics.
 
-**For all features and videos visit [our feature page](https://www.stockmanagementlabs.com/features/ "ATUM Features").**
+**Advanced Features - ATUM - WooCommerce Inventory Management**
 
-**Every user has an option to create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs").**
-
-
-**Advanced Stock Management**
-
-Now Available for FREE within your ATUM Inventory Management plugin:
+The ever-growing list of features available for free within the ATUM plugin.
 
 
 **Dashboard Statistics**
 
-Store owners most requested feature. Inventory and Sales summary in the WordPress dashboard. Feature, that makes the running of your business lot easier.
+The feature that makes the running of your business lot easier. Expand your Wordpress dashboard with lots of prominent business figures from sales and promos to inventory. Now with the ability to add or remove any data.
 
 
 
 **Inventory Logs**
 
-To fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
+Take control and record any inventory movements in your business.
 
 * Create custom product reservations (future needs, VIP reserves, etc.)
 * Don't lose track of customers' returns and record any loss of stock, refunds or add items back in with a simple click.
 * Control your logistics and record any "lost in post" products.
+* Take care of your unwanted warehouse damages and prevent them from happening in the future.
 
 
 
 **Data Export**
 
-Export your full inventory into PDF or CSV (CSV coming soon) file for further use. Store owners need the inventory reports for business meetings, budgeting or just simple business performance review.
+Export your full inventory into PDF or CSV (CSV coming soon) file for further use. Store owners need the inventory reports for business meetings, budgeting or just pure business performance review.
 
 
+**For all features and videos visit [our official feedback page](https://www.stockmanagementlabs.com/feedback/ “ATUM Feedback“).**
+
+
+**Every user may create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs"). to get the most out of ATUM**
 
 
 == Installation ==
+
+https://www.youtube.com/watch?v=PWbjhEv_nKM
 
 **From your WordPress dashboard**
 
@@ -97,7 +94,7 @@ Export your full inventory into PDF or CSV (CSV coming soon) file for further us
 
 **Once Activated**
 
-Open the ATUM Inventory menu and follow the message at the top of the page or activate the stock control from the `ATUM Inventory > Settings > Stock Central` tab. You will not see any items in the Stock Central view unless you enable the "Manage Stock" functionality at the product level. ATUM will enable the complete stock management for you. The plugin will remember your original settings in case you decide to deactivate the plugin later. ATUM will ask you if you'd like to return to your original setting at this stage.
+Open the stock central menu and follow the message at the top of the page or activate the stock control from the `Settings > Stock Central` menu. You will not see any items in the Stock Central view unless you enable the "Manage Stock" functionality at the product level. ATUM will enable the complete stock management for you. The plugin will remember your original settings in case you decide to deactivate the plugin later. ATUM will ask you if you'd like to return to your original setting at this stage.
 
 If you'd like to see only selected products, leave the ATUM stock control option disabled. You will need to enable/disable the stock control of each product from their product listing page (Inventory Tab).
 
@@ -121,7 +118,7 @@ This version of the ATUM plugin is completely free and will stay as such. It has
 
 = How do I control only selected products? =
 
-To control and view only selected products in Stock Central, disable the stock control option in `ATUM Inventory > Settings > Stock Central`. You will then need to enable the stock control option for each product you want to see in Stock Central individually.
+To control and view only selected products in Stock Central, disable the stock control option in `Settings > Stock Central`. You will then need to enable the stock control option for each product you want to see in Stock Central individually.
 
 = Can I quickly change the stock amount for individual products? =
 
@@ -159,24 +156,29 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 6.  On and OFF Automatic Product Search Feature
 7.  Grouped Products Are Included in the Stock Central Interface
 8.  Variable Products within the Stock Central Interface
-9.  One Click SKU Edit Directly in Stock Cental
-10. One Click Regular Price Edit Directly in Stock Cental
-11. One Click Sale Price Edit Directly in Stock Cental
-12. One Click Purchase Price Edit Directly in Stock Cental
-13. One Click Stock Quantity Edit Directly in Stock Cental
-14. General Settigns for the Stock Central Interface
-15. Advanced Settigns for the Stock Central Interface
+9.  One Click SKU Edit Directly in Stock Central
+10. One Click Regular Price Edit Directly in Stock Central
+11. One Click Sale Price Edit Directly in Stock Central
+12. One Click Purchase Price Edit Directly in Stock Central
+13. One Click Stock Quantity Edit Directly in Stock Central
+14. General Settings for the Stock Central Interface
+15. Advanced Settings for the Stock Central Interface
 16. Brand New Add-Ons Screen For Further Shop Control
 17. Dashboard Statistics
 
 
 == Changelog ==
 
-= 1.2.8 - 2017-09-15 =
+= 1.2.8 - 2017-09-19 =
 
 Features:
 
 * Ability to sort list table columns by "Regular Price", "Sale Price", "Purchase Price" and "Current Stock".
+* New dropdown for extra filters added to "Stock Central".
+
+Fixes:
+
+* Fixed issue when updating the regular price from "Stock Central".
 
 = 1.2.7.2 - 2017-09-14 =
 
@@ -253,7 +255,7 @@ Fixes:
 Features:
 
 * New "Inventory Logs" component.
-* Added calculations for "Reserved Stock", "Customer Returns", "Warehaouse Damages" and "Lost in Post" columns to "Stock Central".
+* Added calculations for "Reserved Stock", "Customer Returns", "Warehouse Damages" and "Lost in Post" columns to "Stock Central".
 
 Fixes:
 
@@ -323,7 +325,7 @@ Changes:
 * Manage WooCommerce "Manage Stock" option for product variations.
 * Disable WooCommerce "Manage Stock" option instead of hiding it.
 * Updated strings in language template file.
-* New dismissable welcome notice.
+* New dismiss-able welcome notice.
 * The premium columns are now hidden by default on Stock Central.
 * Added the "Manage Stock" option to Grouped products when ATUM is not managing the stock.
 * Disabled the non-available ATUM submenus.
