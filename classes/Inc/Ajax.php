@@ -184,8 +184,7 @@ final class Ajax {
 
 					case 'stock':
 
-						$stock = intval($meta_value);
-						wc_update_product_stock( $product_id, $stock );
+						$product->set_stock_quantity($meta_value);
 
 						// Needed to clear transients and other stuff
 						do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock' , $product );
@@ -193,10 +192,13 @@ final class Ajax {
 						break;
 
 					case 'regular_price':
-					case 'purchase_price':
 
-						$price = wc_format_decimal($meta_value);
-						update_post_meta( $product_id, '_' . $meta_key, $price );
+						$product->set_regular_price($meta_value);
+
+						if ( $meta_key == 'regular_price' && ! $product->is_on_sale('edit') ) {
+							$product->set_price($meta_value);
+						}
+
 						break;
 
 					case 'sale_price':
@@ -206,7 +208,7 @@ final class Ajax {
 
 						// The sale price cannot be higher than the regular price
 						if ( $regular_price >= $sale_price ) {
-							update_post_meta( $product_id, '_sale_price', $sale_price );
+							$product->set_sale_price($sale_price);
 						}
 
 						// Check for sale dates
@@ -215,36 +217,37 @@ final class Ajax {
 							$date_from = wc_clean( $data[ $product_id ]['_sale_price_dates_from'] );
 							$date_to   = wc_clean( $data[ $product_id ]['_sale_price_dates_to'] );
 
-							update_post_meta( $product_id, '_sale_price_dates_from', $date_from ? strtotime( $date_from ) : '' );
-							update_post_meta( $product_id, '_sale_price_dates_to', $date_to ? strtotime( $date_to ) : '' );
+							$product->set_date_on_sale_from( $date_from ? strtotime( $date_from ) : '' );
+							$product->set_date_on_sale_to( $date_to ? strtotime( $date_to ) : '' );
 
 							// Ensure these meta keys are not handled on next iterations
 							unset( $data[$product_id]['_sale_price_dates_from'], $data[$product_id]['_sale_price_dates_to'] );
 
 							if ( $date_to && ! $date_from ) {
 								$date_from = date( 'Y-m-d' );
-								update_post_meta( $product_id, '_sale_price_dates_from', strtotime( $date_from ) );
+								$product->set_date_on_sale_from( strtotime( $date_from ) );
 							}
 
 							// Update price if on sale
-							if ( '' !== $sale_price && $date_to && $date_from ) {
-								update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
-							}
-							elseif ( '' !== $sale_price && $date_from && strtotime( $date_from ) <= strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
-								update_post_meta( $product_id, '_price', wc_format_decimal( $sale_price ) );
+							if ( $product->is_on_sale('edit') ) {
+								$product->set_price($sale_price);
 							}
 							else {
-								update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
-							}
+								$product->set_price($regular_price);
 
-							if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
-								update_post_meta( $product_id, '_price', '' === $regular_price ? '' : wc_format_decimal( $regular_price ) );
-								update_post_meta( $product_id, '_sale_price_dates_from', '' );
-								update_post_meta( $product_id, '_sale_price_dates_to', '' );
+								if ( $date_to && strtotime( $date_to ) < current_time('timestamp') ) {
+									$product->set_date_on_sale_from('');
+									$product->set_date_on_sale_to('');
+								}
 							}
 
 						}
 
+						break;
+
+					case 'purchase_price':
+
+						update_post_meta( $product_id, '_' . $meta_key, wc_format_decimal($meta_value) );
 						break;
 
 					// Any other text meta
@@ -255,6 +258,8 @@ final class Ajax {
 				}
 
 			}
+
+			$product->save();
 
 		}
 
