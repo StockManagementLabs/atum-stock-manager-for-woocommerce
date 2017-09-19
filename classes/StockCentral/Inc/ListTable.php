@@ -221,7 +221,7 @@ class ListTable extends AtumListTable {
 					?>
 
 					<select name="extra_filter" class="dropdown_extra_filter">
-						<option value=""><?php _e( 'Extra filters', ATUM_TEXT_DOMAIN ) ?></option>
+						<option value=""><?php _e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 						<?php foreach ($extra_filters as $extra_filter => $label): ?>
 						<option value="<?php echo $extra_filter ?>"<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] == $extra_filter, TRUE ) ?>><?php echo $label ?></option>
@@ -1532,10 +1532,8 @@ class ListTable extends AtumListTable {
 			arsort($filtered_products);
 			$filtered_products = array_keys($filtered_products);
 
-			// Filter the query posts by these IDs and sort by quantity desc
+			// Filter the query posts by these IDs
 			$query->set( 'post__in', $filtered_products );
-			$query->set( 'orderby', 'post__in' );
-			$query->set( 'order', 'desc' );
 
 		}
 		// Force no results ("-1" never will be a post ID)
