@@ -411,21 +411,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		/*
-		 * Months filter
-		 */
-		if ( ! empty( $_REQUEST['m']) ) {
-
-			$month = esc_attr($_REQUEST['m']);
-			$args['date_query'] = array(
-				array(
-					'year' => substr($month, 0, 4),
-					'month' => substr($month, -2)
-				)
-			);
-
-		}
-		
-		/*
 		 * Check whether ATUM is managing the WC stock
 		 */
 		if ( ! Helpers::is_atum_managing_stock() ) {
@@ -466,9 +451,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 			// Calculated column... Can be sorted?
-			elseif ( strpos( $_REQUEST['orderby'], 'calc_' ) === 0 ) {
-				
-			}
+			/*elseif ( strpos( $_REQUEST['orderby'], 'calc_' ) === 0 ) {
+
+			}*/
 			// Standard Fields
 			else {
 				$args['orderby'] = $_REQUEST['orderby'];

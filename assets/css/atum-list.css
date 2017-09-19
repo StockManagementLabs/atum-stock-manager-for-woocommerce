@@ -723,6 +723,10 @@ h1.wp-heading-inline .atum-loading {
   background-color: #fff4d2;
 }
 
+.atum-list-table tr.no-items td {
+  padding: 10px 24px;
+}
+
 .atum-list-table .cell-green {
   color: #00B050;
 }

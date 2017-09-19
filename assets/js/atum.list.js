@@ -170,7 +170,7 @@
 						$listWrapper.on('keyup paste search', '.atum-post-search', function (e) {
 							self.keyUp(e, $(this).closest('.search-box'));
 						})
-						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type', function (e) {
+						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_extra_filter', function (e) {
 							self.keyUp(e, $(this).closest('.actions'));
 						});
 						
@@ -635,6 +635,7 @@
 						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m           : $listWrapper.find('#filter-by-date').val() || '',
 						product_type: $listWrapper.find('.dropdown_product_type').val() || '',
+						extra_filter: $listWrapper.find('.dropdown_extra_filter').val() || ''
 					}, data || {});
 					
 					postTypeTableAjax = $.ajax({

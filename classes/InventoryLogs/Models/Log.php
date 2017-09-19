@@ -86,15 +86,12 @@ class Log extends AtumModel {
 	 */
 	public function read_items( $type = ''  ) {
 
-		global $wpdb;
-
 		// Get from cache if available
 		$items = wp_cache_get( 'log-items-' . $this->id, 'inventory-logs' );
 
 		if ( FALSE === $items ) {
 
-			$query = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}atum_log_items WHERE log_id = %d ORDER BY log_item_id", $this->id );
-			$items = $wpdb->get_results( $query );
+			$items = Helpers::get_log_items($this->id);
 
 			if (! $items) {
 				return array();

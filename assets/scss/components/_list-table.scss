@@ -240,6 +240,12 @@ h1.wp-heading-inline {
 			}
 		}
 		
+		&.no-items {
+			td {
+				padding: 10px 24px;
+			}
+		}
+		
 	}
 	
 	.cell {

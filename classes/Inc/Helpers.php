@@ -15,6 +15,8 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumListTable;
+use Atum\InventoryLogs\InventoryLogs;
+use Atum\InventoryLogs\Models\Log;
 use Atum\Settings\Settings;
 
 
@@ -251,8 +253,8 @@ final class Helpers {
 	 * @since 1.2.3
 	 *
 	 * @param array  $items      Array of Product IDs we want to calculate sales from
-	 * @param int    $date_start The date from when to start the items' sales calculations (must be in UNIX timestamp format)
-	 * @param int    $date_end   Optional. The max date to calculate the items' sales (must be in UNIX timestamp format)
+	 * @param int    $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime)
+	 * @param int    $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime)
 	 *
 	 * @return array
 	 */
@@ -275,7 +277,7 @@ final class Helpers {
 				$orders   = implode( ',', $orders );
 				$products = implode( ',', $items );
 
-				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`,`META_PROD_ID`.`meta_value` AS `PROD_ID`
+				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
 							FROM `{$wpdb->posts}` AS `ORDERS`
 							    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
 							        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
@@ -285,16 +287,12 @@ final class Helpers {
 							        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
 							WHERE (`ORDERS`.`ID` IN ($orders)
 							    AND `META_PROD_ID`.`meta_value` IN ($products)
-							    AND `META_PROD_ID`.`meta_key` = '_product_id'
+							    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
 							    AND `META_PROD_QTY`.`meta_key` = '_qty')
 							GROUP BY `META_PROD_ID`.`meta_value`
 							HAVING (`QTY` IS NOT NULL);";
 
-				$result = $wpdb->get_results( $str_sql, ARRAY_A );
-
-				if ( $result ) {
-					$items_sold = $result;
-				}
+				$items_sold = $wpdb->get_results( $str_sql, ARRAY_A );
 
 			}
 
@@ -880,6 +878,71 @@ final class Helpers {
 		$output .= '</select>';
 
 		return $output;
+
+	}
+
+	/**
+	 * Get the inventory log's IDs
+	 *
+	 * @since 1.2.8
+	 *
+	 * @param string $type      The log type to query. Values: 'reserved-stock', 'customer-returns', 'warehouse-damage', 'lost-in-post', 'other'
+	 * @param string $status    Optional. The log status. Values: 'pending', 'completed'
+	 *
+	 * @return array|bool
+	 */
+	public static function get_logs($type, $status = '') {
+
+		// Filter by log type meta key
+		$log_types = Log::get_types();
+
+		if ( ! in_array( $type, array_keys($log_types) ) ) {
+			return FALSE;
+		}
+
+		$args = array(
+			'post_type'      => InventoryLogs::POST_TYPE,
+			'posts_per_page' => - 1,
+			'fields'         => 'ids',
+			'meta_query' =>  array(
+				array(
+					'key'   => '_type',
+					'value' => $type
+				)
+			)
+		);
+
+		// Filter by log status
+		if ($status) {
+			if ( strpos( $status, ATUM_PREFIX ) === FALSE ) {
+				$status = ATUM_PREFIX . $status;
+			}
+
+			$args['post_status'] = $status;
+		}
+		else {
+			$args['post_status'] = 'any';
+		}
+
+		return get_posts( apply_filters('atum/get_logs_args', $args) );
+
+	}
+
+	/**
+	 * Get all the log items within a specified log
+	 *
+	 * @since 1.2.8
+	 *
+	 * @param int $log_id   The Log ID
+	 *
+	 * @return object|null
+	 */
+	public static function get_log_items($log_id) {
+
+		global $wpdb;
+		$query = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}atum_log_items WHERE log_id = %d ORDER BY log_item_id", $log_id );
+
+		return $wpdb->get_results( $query );
 
 	}
 

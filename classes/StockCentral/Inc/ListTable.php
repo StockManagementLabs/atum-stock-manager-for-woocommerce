@@ -175,6 +175,11 @@ class ListTable extends AtumListTable {
 		);
 
 		parent::__construct( $args );
+
+		// Filtering with extra filters
+		if ( ! empty( $_REQUEST['extra_filter'] ) ) {
+			add_action( 'pre_get_posts', array($this, 'do_extra_filter') );
+		}
 		
 	}
 	
@@ -187,28 +192,50 @@ class ListTable extends AtumListTable {
 	 */
 	protected function extra_tablenav( $which ) {
 		
-		if ( $which == 'top' ) {
+		if ( $which == 'top' ): ?>
 			
-			echo '<div class="alignleft actions"><div class="actions-wrapper">';
-			
-			// Months filtering
-			$this->months_dropdown('product');
-			
-			// Category filtering
-			wc_product_dropdown_categories( array(
-				'show_count' => 0,
-				'selected'   => ( ! empty( $_REQUEST['product_cat'] ) ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
-			) );
-			
-			// Type filtering
-			echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
-			
-			if ( Helpers::get_option( 'enable_ajax_filter', 'yes' ) == 'no' ) {
-				echo '<input type="submit" name="filter_action" class="button search-category" value="' . __('Filter', ATUM_TEXT_DOMAIN) . '">';
-			}
-			
-			echo '</div></div>';
-		}
+			<div class="alignleft actions">
+				<div class="actions-wrapper">
+
+					<?php
+					// Category filtering
+					wc_product_dropdown_categories( array(
+						'show_count' => 0,
+						'selected'   => ( ! empty( $_REQUEST['product_cat'] ) ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
+					) );
+
+					// Product type filtering
+					echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
+
+					// Extra filters
+					$extra_filters = (array) apply_filters( 'atum/stock_central_list/extra_filters', array(
+						//'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+						'stock_on_hold'     => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+						'reserved_stock'    => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+						'back_orders'       => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+						'sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+						'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+						'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+						'lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN )
+					));
+					?>
+
+					<select name="extra_filter" class="dropdown_extra_filter">
+						<option value=""><?php _e( 'Extra filters', ATUM_TEXT_DOMAIN ) ?></option>
+
+						<?php foreach ($extra_filters as $extra_filter => $label): ?>
+						<option value="<?php echo $extra_filter ?>"<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] == $extra_filter, TRUE ) ?>><?php echo $label ?></option>
+						<?php endforeach; ?>
+					</select>
+
+					<?php if ( Helpers::get_option( 'enable_ajax_filter', 'yes' ) == 'no' ): ?>
+						<input type="submit" name="filter_action" class="button search-category" value="<?php _e('Filter', ATUM_TEXT_DOMAIN) ?>">
+					<?php endif; ?>
+
+				</div>
+			</div>
+
+		<?php endif;
 		
 	}
 	
@@ -696,6 +723,7 @@ class ListTable extends AtumListTable {
 			if ( $this->product->backorders_allowed() ) {
 
 				$stock_quantity = $this->product->get_stock_quantity();
+				$column_item = 0;
 				if ( $stock_quantity < $this->no_stock ) {
 					$column_item = $this->no_stock - $stock_quantity;
 				}
@@ -849,7 +877,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_will_last( $item ) {
 			
-		// TODO: FOR THE FREE VERSION IS FIXED TO 7 DAYS AVERAGE
+		// NOTE: FOR NOW IS FIXED TO 7 DAYS AVERAGE
 		$will_last = self::EMPTY_COL;
 
 		if ($this->allow_calcs) {
@@ -1324,35 +1352,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected function get_log_item_qty( $log_type, $item_id, $log_status = 'pending' ) {
 
-		$args = array(
-			'post_type'      => InventoryLogs::POST_TYPE,
-			'posts_per_page' => - 1,
-			'fields'         => 'ids'
-		);
-
 		$qty = 0;
-
-		// Filter by log type meta key
-		$log_types = Log::get_types();
-
-		if ( ! in_array( $log_type, array_keys($log_types) ) ) {
-			return $qty;
-		}
-
-		$args['meta_query'] = array(
-			array(
-				'key'     => '_type',
-				'value'   => $log_type
-			)
-		);
-
-		// Filter by log status
-		if ( strpos($log_status, ATUM_PREFIX) === FALSE ) {
-			$log_status = ATUM_PREFIX . $log_status;
-		}
-
-		$args['post_status'] = $log_status;
-		$log_ids = get_posts( apply_filters('atum/stock_central_list/get_log_items_args', $args) );
+		$log_ids = Helpers::get_logs($log_type, $log_status);
 
 		if ( ! empty($log_ids) ) {
 
@@ -1362,14 +1363,14 @@ class ListTable extends AtumListTable {
 
 				// Get the _qty meta for the specified product in the specified log
 				$query = $wpdb->prepare(
-					"SELECT meta_value 				  
+					"SELECT SUM(meta_value) 				  
 					 FROM {$wpdb->prefix}atum_log_itemmeta lm
 		             JOIN {$wpdb->prefix}atum_log_items li
 		             ON lm.log_item_id = li.log_item_id
 					 WHERE log_id = %d AND log_item_type = %s 
 					 AND meta_key = '_qty' AND lm.log_item_id IN (
 					 	SELECT log_item_id FROM {$wpdb->prefix}atum_log_itemmeta 
-					 	WHERE meta_key = '_product_id' AND meta_value = %d
+					 	WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
 					 )",
 					$log_id,
 					'line_item',
@@ -1383,6 +1384,222 @@ class ListTable extends AtumListTable {
 		}
 
 		return absint( $qty );
+
+	}
+
+	/**
+	 * Apply an extra filter to the current List Table query
+	 *
+	 * @since 1.2.8
+	 *
+	 * @param \WP_Query $query
+	 */
+	public function do_extra_filter($query) {
+
+		// Avoid calling the "pre_get_posts" again when querying orders
+		if ( $query->query_vars['post_type'] != 'product' ) {
+			return;
+		}
+
+		if ( ! empty($query->query_vars['post__in']) ) {
+			return;
+		}
+
+		$extra_filter = esc_attr( $_REQUEST['extra_filter'] );
+		$filtered_products = array();
+
+		switch ( $extra_filter ) {
+
+			case 'inbound_stock':
+
+		        break;
+
+			case 'stock_on_hold':
+
+				$orders = Helpers::get_orders( array( 'order_status' => 'wc-on-hold, wc-pending' ) );
+
+				foreach ( $orders as $order ) {
+
+					$products = $order->get_items();
+
+					foreach ( $products as $product ) {
+
+						if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
+							$filtered_products[ $product['product_id'] ] += $product['qty'];
+						}
+						else {
+							$filtered_products[ $product['product_id'] ] = $product['qty'];
+						}
+
+					}
+
+				}
+
+				break;
+
+			case 'reserved_stock':
+
+				// Get all the products within 'Reserved Stock' logs
+				$filtered_products = $this->get_log_products('reserved-stock', 'pending');
+				break;
+
+			case 'back_orders':
+
+				// Avoid infinite loop of recalls
+				remove_action( 'pre_get_posts', array($this, 'do_extra_filter') );
+
+				// Get all the products that allow back orders
+				$args = array(
+					'post_type'      => 'product',
+					'posts_per_page' => - 1,
+					'meta_key'       => '_backorders',
+					'meta_value'     => 'yes'
+				);
+				$products = get_posts($args);
+
+				foreach ($products as $product) {
+
+					$wc_product     = wc_get_product( $product->ID );
+					$back_orders    = 0;
+					$stock_quantity = $wc_product->get_stock_quantity();
+
+					if ( $stock_quantity < $this->no_stock ) {
+						$back_orders = $this->no_stock - $stock_quantity;
+					}
+
+					if ($back_orders) {
+						$filtered_products[ $wc_product->get_id() ] = $back_orders;
+					}
+
+				}
+
+				// Re-add the action
+				add_action( 'pre_get_posts', array($this, 'do_extra_filter') );
+
+				break;
+
+			case 'sold_today':
+
+				// Get the orders processed today
+				$atts = array(
+					'order_status'     => 'wc-processing, wc-completed',
+					'order_date_start' => 'today 00:00:00'
+				);
+				$today_orders = Helpers::get_orders($atts);
+
+				foreach ( $today_orders as $today_order ) {
+
+					$products = $today_order->get_items();
+
+					foreach ( $products as $product ) {
+
+						if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
+							$filtered_products[ $product['product_id'] ] += $product['qty'];
+						}
+						else {
+							$filtered_products[ $product['product_id'] ] = $product['qty'];
+						}
+
+					}
+
+				}
+
+				break;
+
+			case 'customer_returns':
+
+				// Get all the products within 'Customer Returns' logs
+				$filtered_products = $this->get_log_products('customer-returns', 'pending');
+				break;
+
+			case 'warehouse_damages':
+
+				// Get all the products within 'Warehouse Damage' logs
+				$filtered_products = $this->get_log_products('warehouse-damage', 'pending');
+				break;
+
+			case 'lost_in_post':
+
+				// Get all the products within 'Lost in Post' logs
+				$filtered_products = $this->get_log_products('lost-in-post', 'pending');
+				break;
+
+		}
+
+		if ( ! empty($filtered_products) ) {
+
+			// Order desc by quantity and get the ordered IDs
+			arsort($filtered_products);
+			$filtered_products = array_keys($filtered_products);
+
+			// Filter the query posts by these IDs and sort by quantity desc
+			$query->set( 'post__in', $filtered_products );
+			$query->set( 'orderby', 'post__in' );
+			$query->set( 'order', 'desc' );
+
+		}
+		// Force no results ("-1" never will be a post ID)
+		else {
+			$query->set( 'post__in', array(-1) );
+		}
+
+	}
+
+	/**
+	 * Get all the products with total quantity within a specific type of Log
+	 *
+	 * @since 1.2.8
+	 *
+	 * @param string $log_type
+	 * @param string $log_status
+	 *
+	 * @return array|bool
+	 */
+	protected function get_log_products($log_type, $log_status = '') {
+
+		$log_types = array_keys( Log::get_types() );
+
+		if ( ! in_array($log_type, $log_types) ) {
+			return FALSE;
+		}
+
+		$log_ids = Helpers::get_logs($log_type, $log_status);
+		$products = array();
+
+		if ( ! empty($log_ids) ) {
+
+			foreach ($log_ids as $log_id) {
+
+				$log_items = Helpers::get_log_items($log_id);
+
+				if ( ! empty($log_items) ) {
+
+					foreach ( $log_items as $log_item ) {
+
+						if ( $log_item->log_item_type == 'line_item' ) {
+
+							$qty          = absint( get_metadata( 'log_item', $log_item->log_item_id, '_qty', TRUE ) );
+							$variation_id = get_metadata( 'log_item', $log_item->log_item_id, '_variation_id', TRUE );
+							$product_id   = ( $variation_id ) ? $variation_id : get_metadata( 'log_item', $log_item->log_item_id, '_product_id', TRUE );
+
+							if ( isset( $products[ $product_id ] ) ) {
+								$products[ $product_id ] += $qty;
+							}
+							else {
+								$products[ $product_id ] = $qty;
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return $products;
 
 	}
 	
