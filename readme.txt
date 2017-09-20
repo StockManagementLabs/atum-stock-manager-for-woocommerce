@@ -3,7 +3,7 @@
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.8.1
+Tested up to: 4.8.2
 Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -70,7 +70,7 @@ Take control and record any inventory movements in your business.
 Export your full inventory into PDF or CSV (CSV coming soon) file for further use. Store owners need the inventory reports for business meetings, budgeting or just pure business performance review.
 
 
-**For all features and videos visit [our official feedback page](https://www.stockmanagementlabs.com/feedback/ “ATUM Feedback“).**
+**For all features and videos visit [our official feedback page](https://www.stockmanagementlabs.com/feedback/ "ATUM Feedback").**
 
 
 **Every user may create an account on our website [stockmanagementlabs.com](https://www.stockmanagementlabs.com "Stock Management Labs"). to get the most out of ATUM**
