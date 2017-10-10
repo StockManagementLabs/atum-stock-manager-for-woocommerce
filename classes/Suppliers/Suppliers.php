@@ -44,6 +44,12 @@ class Suppliers {
 		// Save the meta boxes
 		add_action( 'save_post_' . self::POST_TYPE , array( $this, 'save_meta_boxes' ) );
 
+		// Add the supplier selection to products
+		add_action( 'woocommerce_product_options_general_product_data', array($this, 'show_product_supplier_meta_box') );
+
+		// Save the product supplier meta box
+		add_action( 'save_post_product' , array( $this, 'save_product_supplier_meta_box' ) );
+
 		// Enqueue scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
@@ -207,6 +213,60 @@ class Suppliers {
 	}
 
 	/**
+	 * Displays the Supplier selector in WC products
+	 *
+	 * @since 1.3.0
+	 */
+	public function show_product_supplier_meta_box() {
+
+		$supplier_id = get_post_meta(get_the_ID(), '_supplier', TRUE);
+
+		if ($supplier_id) {
+			$supplier = get_post($supplier_id);
+		}
+		?>
+		<div class="options_group show_if_simple show_if_variable">
+			<p class="form-field _supplier_field">
+				<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
+
+				<select class="wc-product-search" id="_supplier" name="_supplier" style="width: 80%" data-allow_clear="true" data-action="atum_json_search_suppliers"
+					data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"
+					data-selected="" data-minimum_input_length="1">
+					<?php if ( ! empty($supplier) ): ?>
+						<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
+					<?php endif; ?>
+				</select>
+			</p>
+		</div>
+		<?php
+
+	}
+
+	/**
+	 * Save the product supplier meta box
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int $post_id    The post ID
+	 */
+	public function save_product_supplier_meta_box($post_id) {
+
+		if ( isset($_POST['_supplier']) ) {
+
+			$supplier = absint( $_POST['_supplier'] );
+
+			if ( ! $supplier ) {
+				delete_post_meta( $post_id, '_supplier' );
+			}
+			else {
+				update_post_meta( $post_id, '_supplier', $supplier );
+			}
+
+		}
+
+	}
+
+	/**
 	 * Enqueue the scripts
 	 *
 	 * @since 1.2.9
@@ -216,7 +276,7 @@ class Suppliers {
 	public function enqueue_scripts($hook) {
 
 		global $post_type;
-		if ($hook == 'post.php' && $post_type == self::POST_TYPE) {
+		if ( in_array($hook, ['post.php', 'post-new.php']) && $post_type == self::POST_TYPE) {
 			wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array(), ATUM_VERSION );
 			wp_enqueue_style( 'atum-suppliers' );
 
