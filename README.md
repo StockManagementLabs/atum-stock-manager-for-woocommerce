@@ -140,7 +140,13 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
-*1.2.8 - 2017-09-19*
+**1.2.8.1 - 2017-10-10**
+
+Fixes:
+
+* Fixed issue with hidden columns that were displayed in "Stock Central" after ajax filtering.
+
+**1.2.8 - 2017-09-19**
 
 Features:
 
@@ -151,20 +157,20 @@ Fixes:
 
 * Fixed issue when updating the regular price from "Stock Central".
 
-*1.2.7.2 - 2017-09-14*
+**1.2.7.2 - 2017-09-14**
 
 Fixes:
 
 * Compatibility issue with Salient theme.
 * List views' data was showing wrong figures when a product filter was active.
 
-*1.2.7.1 - 2017-09-13*
+**1.2.7.1 - 2017-09-13**
 
 Fixes:
 
 * Disabled "This Year" from dashboard statistics widget that was causing memory issues in sites with huge amount of orders.
 
-*1.2.7 - 2017-09-12*
+**1.2.7 - 2017-09-12**
 
 Features:
 
@@ -174,39 +180,39 @@ Fixes:
 
 * Fixed issue when trying to install add-ons directly from the Add-ons page.
 
-*1.2.6 - 2017-09-06*
+**1.2.6 - 2017-09-06**
 
 Features:
 
 * Added new setting to show the variations' stock status in WooCommerce products' list.
 * Refactory.
 
-*1.2.5.4 - 2017-09-05*
+**1.2.5.4 - 2017-09-05**
 
 Fixes:
 
 * Fixed low stock indicator.
 
-*1.2.5.3 - 2017-08-29*
+**1.2.5.3 - 2017-08-29**
 
 Fixes:
 
 * Delete ATUM transients after saving any product's stock.
 
-*1.2.5.2 - 2017-08-28*
+**1.2.5.2 - 2017-08-28**
 
 Fixes:
 
 * Fixed add-on updater.
 * Removed unused mPDF files (clean up).
 
-*1.2.5.1 - 2017-07-28*
+**1.2.5.1 - 2017-07-28**
 
 Features:
 
 * Added title max length setup for reports.
 
-*1.2.5 - 2017-07-27*
+**1.2.5 - 2017-07-27**
 
 Features:
 
@@ -221,7 +227,7 @@ Fixes:
 * Fixed calculation of "Stock on Hold" column.
 * Other minor fixes.
 
-*1.2.4 - 2017-07-10*
+**1.2.4 - 2017-07-10**
 
 Features:
 
@@ -232,14 +238,14 @@ Fixes:
 
 * Upgrade systems that have no ATUM version stored in db.
 
-*1.2.3.2 - 2017-05-12*
+**1.2.3.2 - 2017-05-12**
 
 Fixes:
 
 * Fixed issue with latest version of Bootstrap's Popover.
 * Fixed issue with the empty ATUM List Tables.
 
-*1.2.3 - 2017-05-08*
+**1.2.3 - 2017-05-08**
 
 Features:
 
