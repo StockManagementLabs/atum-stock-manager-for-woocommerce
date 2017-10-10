@@ -1,0 +1,238 @@
+//
+// ATUM Orders list pages
+//------------------------
+
+
+//
+// Tooltips
+//---------
+
+.tips {
+	cursor: help;
+	text-decoration: none;
+}
+
+img.tips {
+	padding: 5px 0 0;
+}
+
+#tiptip_holder {
+	display: none;
+	z-index: 8675309;
+	position: absolute;
+	top: 0;
+	/*rtl:ignore*/
+	left: 0;
+	
+	
+	&.tip_top {
+		padding-bottom: 5px;
+		
+		#tiptip_arrow_inner {
+			margin-top: -7px;
+			margin-left: -6px;
+			border-top-color: #333;
+		}
+	}
+	
+	&.tip_bottom {
+		padding-top: 5px;
+		
+		#tiptip_arrow_inner {
+			margin-top: -5px;
+			margin-left: -6px;
+			border-bottom-color: #333;
+		}
+	}
+	
+	&.tip_right {
+		padding-left: 5px;
+		
+		#tiptip_arrow_inner {
+			margin-top: -6px;
+			margin-left: -5px;
+			border-right-color: #333;
+		}
+	}
+	
+	&.tip_left {
+		padding-right: 5px;
+		
+		#tiptip_arrow_inner {
+			margin-top: -6px;
+			margin-left: -7px;
+			border-left-color: #333;
+		}
+	}
+}
+
+#tiptip_content {
+	color: #fff;
+	font-size: 0.8em;
+	max-width: 150px;
+	background: #333;
+	text-align: center;
+	border-radius: 3px;
+	padding: 0.618em 1em;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	
+	code {
+		padding: 1px;
+		background: #888;
+	}
+}
+
+#tiptip_arrow, #tiptip_arrow_inner {
+	position: absolute;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 6px;
+	height: 0;
+	width: 0;
+}
+
+//
+// List Table
+//-------------
+
+table.wp-list-table {
+	
+	.column-notes {
+		width: 48px;
+		text-align: center;
+		
+		img {
+			margin: 0 auto;
+			padding-top: 0 !important;
+		}
+	}
+	
+	.column-title {
+		width: 15%;
+		
+		time {
+			display: block;
+			color: #999;
+			margin: 3px 0;
+		}
+	}
+	
+	.column-actions {
+		width: 110px;
+		
+		a.button {
+			float: left;
+			margin: 0 4px 2px 0;
+			cursor: pointer;
+			padding: 3px 4px;
+			height: auto;
+			
+			img {
+				display: block;
+				width: 12px;
+				height: auto;
+			}
+		}
+	}
+	
+	.column-total, .column-date {
+		width: 9%;
+	}
+	
+	.column-status {
+		width: 45px;
+		text-align: center;
+		
+		mark {
+			@include ir();
+			background: none;
+			font-size: 1.4em;
+			margin: 0 auto;
+		}
+		
+		mark.pending, mark.completed {
+			&::after {
+				@include icon_woocommerce;
+			}
+		}
+		
+		mark.pending::after {
+			content: '\e012';
+			color: $brand-warning;
+		}
+		
+		mark.completed::after {
+			content: '\e015';
+			color: $brand-success;
+		}
+	}
+	
+	td.column-status {
+		padding-top: 9px;
+	}
+	
+	.column-notes {
+		.note-on {
+			@include ir();
+			margin: 0 auto;
+			color: #999;
+			
+			&::after {
+				@include icon_woocommerce( '\e027' );
+				line-height: 16px;
+			}
+		}
+	}
+	
+	.column-actions {
+		
+		.pending, .complete, .view{
+			@include ir();
+			padding: 0 !important;
+			height: 2em !important;
+			width: 2em;
+		}
+		
+		.pending::after {
+			@include icon_woocommerce( '\e00f' );
+			line-height: 1.85;
+		}
+		
+		.complete::after {
+			@include icon_dashicons( '\f147' );
+			line-height: 1.85;
+		}
+		
+		.view::after {
+			@include icon_dashicons( '\f177' );
+			line-height: 1.85;
+		}
+		
+	}
+	
+	img {
+		margin: 1px 2px;
+	}
+	
+	.row-actions, span.na {
+		color: #999;
+	}
+	
+	.notes_head, .notes_head, .status_head {
+		@include ir();
+		margin: 0 auto;
+		
+		&::after {
+			@include icon_woocommerce;
+		}
+	}
+	
+	.notes_head::after {
+		content: '\e028';
+	}
+	
+	.status_head::after {
+		content: '\e011';
+	}
+	
+}

@@ -18,9 +18,11 @@ use Atum\Addons\Addons;
 use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
 use Atum\DataExport\DataExport;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\Suppliers\Suppliers;
 
 
 class Main {
@@ -149,8 +151,41 @@ class Main {
 			)
 		) );
 
-		// Load the Inventory Logs
-		InventoryLogs::get_instance();
+		// Register the Locations taxonomy and link it to products
+		$labels = array(
+			'name'              => _x( 'Product Locations', 'taxonomy general name', ATUM_TEXT_DOMAIN ),
+			'singular_name'     => _x( 'Location', 'taxonomy singular name', ATUM_TEXT_DOMAIN ),
+			'search_items'      => __( 'Search locations', ATUM_TEXT_DOMAIN ),
+			'all_items'         => __( 'All locations', ATUM_TEXT_DOMAIN ),
+			'parent_item'       => __( 'Parent location', ATUM_TEXT_DOMAIN ),
+			'parent_item_colon' => __( 'Parent location:', ATUM_TEXT_DOMAIN ),
+			'edit_item'         => __( 'Edit location', ATUM_TEXT_DOMAIN ),
+			'update_item'       => __( 'Update location', ATUM_TEXT_DOMAIN ),
+			'add_new_item'      => __( 'Add new location', ATUM_TEXT_DOMAIN ),
+			'new_item_name'     => __( 'New location name', ATUM_TEXT_DOMAIN ),
+			'menu_name'         => __( 'Locations', ATUM_TEXT_DOMAIN ),
+		);
+
+		$args = apply_filters( 'atum/location_taxonomy_args', array(
+			'hierarchical' => TRUE,
+			'labels'       => $labels,
+			'show_ui'      => TRUE,
+			'query_var'    => is_admin(),
+			'rewrite'      => FALSE,
+			'public'       => FALSE
+		) );
+
+		register_taxonomy( ATUM_PREFIX . 'location', 'product', $args );
+
+
+		// Init the Inventory Logs
+		new InventoryLogs();
+
+		// Init Suppliers
+		Suppliers::get_instance();
+
+		// Init the Purchase Orders
+		new PurchaseOrders();
 
 	}
 	
@@ -261,8 +296,12 @@ class Main {
 
 			usort($menu_items, function ($a, $b) use ($last_values) {
 
-				if ( ! empty( array_intersect($a, $last_values) ) && ! empty( array_intersect($b, $last_values) )  ) {
-					// The Add-ons will be the last item
+				// The Stock Central menu must be at top
+				if ( in_array(Globals::ATUM_UI_SLUG, $b) ) {
+					return 1;
+				}
+				// The Add-ons will be the last item
+				elseif ( ! empty( array_intersect($a, $last_values) ) && ! empty( array_intersect($b, $last_values) )  ) {
 					return ( in_array(ATUM_TEXT_DOMAIN . '-addons', $a) ) ? 1 : -1;
 				}
 				elseif ( ! empty( array_intersect($a, $last_values) )  ) {
