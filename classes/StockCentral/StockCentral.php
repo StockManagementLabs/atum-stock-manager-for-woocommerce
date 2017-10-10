@@ -13,7 +13,7 @@ namespace Atum\StockCentral;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumListPage;
+use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;

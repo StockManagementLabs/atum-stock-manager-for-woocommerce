@@ -12,10 +12,10 @@ namespace Atum\StockCentral\Inc;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumListTable;
+use Atum\Components\AtumListTables\AtumListTable;
+use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Settings\Settings;
 
@@ -1364,12 +1364,12 @@ class ListTable extends AtumListTable {
 				// Get the _qty meta for the specified product in the specified log
 				$query = $wpdb->prepare(
 					"SELECT SUM(meta_value) 				  
-					 FROM {$wpdb->prefix}atum_log_itemmeta lm
-		             JOIN {$wpdb->prefix}atum_log_items li
-		             ON lm.log_item_id = li.log_item_id
-					 WHERE log_id = %d AND log_item_type = %s 
-					 AND meta_key = '_qty' AND lm.log_item_id IN (
-					 	SELECT log_item_id FROM {$wpdb->prefix}atum_log_itemmeta 
+					 FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
+		             JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " oi
+		             ON om.order_item_id = oi.order_item_id
+					 WHERE order_id = %d AND order_item_type = %s 
+					 AND meta_key = '_qty' AND om.order_item_id IN (
+					 	SELECT order_item_id FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
 					 	WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
 					 )",
 					$log_id,
@@ -1568,25 +1568,26 @@ class ListTable extends AtumListTable {
 
 			foreach ($log_ids as $log_id) {
 
-				$log_items = Helpers::get_log_items($log_id);
+				$log       = new Log( $log_id );
+				$log_items = $log->get_items();
 
 				if ( ! empty($log_items) ) {
 
 					foreach ( $log_items as $log_item ) {
 
-						if ( $log_item->log_item_type == 'line_item' ) {
+						if ( ! is_a($log_item, '\Atum\InventoryLogs\Items\LogItemProduct') ) {
+							continue;
+						}
 
-							$qty          = absint( get_metadata( 'log_item', $log_item->log_item_id, '_qty', TRUE ) );
-							$variation_id = get_metadata( 'log_item', $log_item->log_item_id, '_variation_id', TRUE );
-							$product_id   = ( $variation_id ) ? $variation_id : get_metadata( 'log_item', $log_item->log_item_id, '_product_id', TRUE );
+						$qty          = $log_item->get_quantity();
+						$variation_id = $log_item->get_variation_id();
+						$product_id   = ( $variation_id ) ? $variation_id : $log_item->get_product_id();
 
-							if ( isset( $products[ $product_id ] ) ) {
-								$products[ $product_id ] += $qty;
-							}
-							else {
-								$products[ $product_id ] = $qty;
-							}
-
+						if ( isset( $products[ $product_id ] ) ) {
+							$products[ $product_id ] += $qty;
+						}
+						else {
+							$products[ $product_id ] = $qty;
 						}
 
 					}

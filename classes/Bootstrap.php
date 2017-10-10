@@ -13,7 +13,7 @@ namespace Atum;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumComments;
+use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumException;
 use Atum\Inc\Main;
 
@@ -139,10 +139,10 @@ class Bootstrap {
 			}
 			
 		}
-		
-		// Minimum PHP version required: 5.4
-		if ( version_compare( phpversion(), '5.4', '<' ) ) {
-			throw new AtumException( 'php_min_version_required', __( 'ATUM requires PHP version 5.4 or greater (recommended 5.6 or 7). Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+
+		// Minimum PHP version required: 5.6
+		if ( version_compare( phpversion(), '5.6', '<' ) ) {
+			throw new AtumException( 'php_min_version_required', __( 'ATUM requires PHP version 5.6 or greater. Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 
 		// Minimum WordPress version required: 4.0

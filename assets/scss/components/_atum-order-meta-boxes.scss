@@ -1,0 +1,919 @@
+//
+// Atum Order Meta Boxes
+//-----------------------
+
+
+//
+// Data meta box
+//---------------
+
+#atum_order_data {
+	
+	.hndle, .handlediv {
+		display: none;
+	}
+	
+	.inside {
+		padding: 0;
+	}
+	
+	.panel {
+		padding: 23px 24px;
+		
+		h2 {
+			margin: 0;
+			font-size: 21px;
+			font-weight: 300;
+			line-height: 1.2;
+			text-shadow: 1px 1px 1px #FFF;
+			padding: 0;
+		}
+		
+		h3 {
+			font-size: 14px;
+		}
+		
+		h3, h4 {
+			color: #333;
+			margin: 1.33em 0 0
+		}
+		
+		p {
+			&.atum_order_number {
+				margin: 0;
+				line-height: 1.6em;
+				font-size: 16px;
+			}
+		}
+		
+		.atum_order_data_column_container {
+			clear: both;
+			margin-top: $grid-gutter-width/2;
+		}
+		
+		.atum_order_data_column {
+			width: 100%;
+			padding: 0 2% 0 0;
+			float: left;
+			
+			> h3 {
+				span {
+					display: block;
+				}
+			}
+			
+			&:last-child {
+				padding-right: 0;
+			}
+			
+			p {
+				padding: 0 !important;
+				
+				&.none_set {
+					color: #999
+				}
+			}
+			
+			.address {
+				strong {
+					display: block;
+				}
+			}
+			
+			.hour, .minute {
+				width: 3.5em;
+			}
+			
+		}
+		
+	}
+	
+}
+
+//
+// Actions meta box
+//------------------
+
+#atum_order_actions {
+	.atum-meta-box {
+		padding: 0;
+	}
+}
+
+.atum_order_actions {
+	margin: 0;
+	overflow: hidden;
+	zoom: 1;
+	
+	li {
+		padding: 6px 0;
+		margin: 0;
+		line-height: 1.6em;
+		float: left;
+		width: 50%;
+		text-align: center;
+		
+		a {
+			float: none;
+			text-align: center;
+			text-decoration: underline;
+		}
+		
+		&.wide {
+			width: auto;
+			float: none;
+			clear: both;
+			padding: 6px;
+			text-align: left;
+			overflow: hidden;
+		}
+		
+		#delete-action {
+			line-height: 25px;
+			vertical-align: middle;
+			text-align: left;
+			float: left;
+		}
+		
+		.save-atum-order {
+			float: right;
+		}
+		
+		&#actions {
+			overflow: hidden;
+			
+			.button {
+				width: 24px;
+				box-sizing: border-box;
+				float: right;
+			}
+			
+			select {
+				width: 225px;
+				box-sizing: border-box;
+				float: left;
+			}
+		}
+	}
+}
+
+//
+// Notes meta box
+//----------------
+
+#atum_order_notes {
+	.inside, .atum-meta-box {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+ul.atum_order_notes {
+	padding: 2px 0 0;
+	
+	li {
+		padding: 0 10px;
+		
+		.note_content {
+			padding: 10px;
+			background: #EFEFEF;
+			position: relative;
+			
+			p {
+				margin: 0;
+				padding: 0;
+				word-wrap: break-word;
+			}
+		}
+		
+		p.meta {
+			padding: 10px;
+			color: #999;
+			margin: 0;
+			font-size: 11px;
+			
+			.exact-date {
+				border-bottom: 1px dotted #999;
+			}
+		}
+		
+		a.delete_note {
+			color: $brand-danger;
+		}
+		
+		.note_content::after {
+			content: '';
+			display: block;
+			position: absolute;
+			bottom: -10px;
+			left: 20px;
+			width: 0;
+			height: 0;
+			border-width: 10px 10px 0 0;
+			border-style: solid;
+			border-color: #EFEFEF transparent;
+		}
+	}
+	
+}
+
+.add_note {
+	border-top: 1px solid #DDD;
+	padding: 10px 10px 0;
+	
+	h4 {
+		margin-top: 5px !important;
+	}
+	
+	#add_atum_order_note {
+		width: 100%;
+		height: 70px;
+		border-radius: 4px;
+		margin-top: 4px;
+		box-shadow: none;
+	}
+}
+
+//
+// Items meta box
+//----------------
+
+#atum_order_items {
+	
+	.inside {
+		display: block !important;
+		margin: 0;
+		padding: 0;
+		background: #fefefe;
+	}
+	
+	.atum-meta-box {
+		padding: 0;
+	}
+	
+	.atum-order-data-row {
+		border-bottom: 1px solid #dfdfdf;
+		padding: 1.5em 2em;
+		background: #f8f8f8;
+		@include clearfix;
+		line-height: 2em;
+		text-align: right;
+		
+		p {
+			margin: 0;
+			line-height: 2em;
+		}
+		
+		.atum-used-coupons {
+			text-align: left;
+			
+			.tips {
+				display: inline-block;
+			}
+		}
+		
+	}
+	
+	.atum-used-coupons {
+		float: left;
+		width: 50%;
+	}
+	
+	.atum-order-totals {
+		float: right;
+		width: 50%;
+		margin: 0;
+		padding: 0;
+		text-align: right;
+		
+		.amount {
+			font-weight: 700;
+		}
+		
+		.label {
+			vertical-align: top;
+		}
+		
+		.total {
+			font-size: 1em !important;
+			width: 10em;
+			margin: 0 0 0 0.5em;
+			box-sizing: border-box;
+			
+			input[type='text'] {
+				width: 96%;
+				float: right;
+			}
+		}
+		
+		.refunded-total {
+			color: $brand-danger;
+		}
+	}
+	
+	.refund-actions {
+		margin-top: 5px;
+		padding-top: 12px;
+		border-top: 1px solid #dfdfdf;
+		
+		.button {
+			float: right;
+			margin-left: 4px;
+		}
+		
+		.cancel-action {
+			float: left;
+			margin-left: 0;
+		}
+	}
+	
+	.atum-order-item-bulk-edit {
+		.cancel-action {
+			float: left;
+			margin-left: 0;
+		}
+	}
+	
+	.add_meta {
+		margin-left: 0 !important;
+	}
+	
+	h3 small {
+		color: #999;
+	}
+	
+	.amount {
+		white-space: nowrap;
+	}
+	
+	.add-items {
+		.description {
+			margin-right: 10px;
+		}
+		
+		.button {
+			float: left;
+			margin-right: 0.25em;
+		}
+		
+		.button-primary {
+			float: none;
+			margin-right: 0;
+		}
+	}
+	
+	.hndle, .handlediv {
+		display: none;
+	}
+	
+	.atum_order_items_wrapper {
+		margin: 0;
+		overflow-x: auto;
+		
+		table.atum_order_items {
+			width: 100%;
+			background: #fff;
+			
+			thead {
+				
+				th {
+					text-align: left;
+					padding: 1em;
+					font-weight: normal;
+					color: #999;
+					background: #f8f8f8;
+					-webkit-touch-callout: none;
+					-webkit-user-select: none;
+					-khtml-user-select: none;
+					-moz-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+					
+					&.sortable {
+						cursor: pointer;
+					}
+					
+					&:last-child {
+						padding-right: 2em;
+					}
+					
+					&:first-child {
+						padding-left: 2em;
+					}
+					
+					.atum-arrow {
+						float: right;
+						position: relative;
+						margin-right: -1em;
+					}
+				}
+				
+			}
+			
+			tbody th, td {
+				padding: 1.5em 1em 1em;
+				text-align: left;
+				line-height: 1.5em;
+				vertical-align: top;
+				border-bottom: 1px solid #f8f8f8;
+				
+				textarea {
+					width: 100%;
+				}
+				
+				select {
+					width: 50%;
+				}
+				
+				input, textarea {
+					font-size: 14px;
+					padding: 4px;
+					color: #555;
+				}
+				
+				&:last-child {
+					padding-right: 2em;
+				}
+				
+				&:first-child {
+					padding-left: 2em;
+				}
+				
+			}
+			
+			tbody tr {
+				
+				td {
+					cursor: pointer;
+				}
+				
+				&.selected {
+					background: #f5ebf3;
+					
+					td {
+						border-color: #e6cce1;
+						opacity: 0.8;
+					}
+				}
+				
+			}
+			
+			tbody tr:last-child td {
+				border-bottom: 1px solid #dfdfdf;
+			}
+			
+			tbody tr:first-child td {
+				border-top: 8px solid #f8f8f8;
+			}
+			
+			tbody#order_line_items tr:first-child td {
+				border-top: none;
+			}
+			
+			td.thumb {
+				text-align: left;
+				width: 38px;
+				padding-bottom: 1.5em;
+				
+				.atum-order-item-thumbnail {
+					width: 38px;
+					height: 38px;
+					border: 2px solid #e8e8e8;
+					background: #f8f8f8;
+					color: #ccc;
+					position: relative;
+					font-size: 21px;
+					display: block;
+					text-align: center;
+					
+					&::before {
+						@include icon_dashicons( '\f128' );
+						width: 38px;
+						line-height: 38px;
+						display: block;
+					}
+					
+					img {
+						width: 100%;
+						height: 100%;
+						margin: 0;
+						padding: 0;
+						position: relative;
+					}
+					
+				}
+				
+			}
+			
+			td.name {
+				.atum-order-item-sku, .atum-order-item-variation {
+					display: block;
+					margin-top: 0.5em;
+					font-size: 0.92em !important;
+					color: #888;
+				}
+			}
+			
+			.item {
+				min-width: 200px;
+			}
+			
+			.center, .variation-id {
+				text-align: center;
+			}
+			
+			.cost, .tax, .quantity, .line_cost, .line_tax, .tax_class, .item_cost {
+				text-align: right;
+				
+				label {
+					white-space: nowrap;
+					color: #999;
+					font-size: 0.833em;
+					
+					input {
+						display: inline;
+					}
+				}
+				
+				input {
+					width: 70px;
+					vertical-align: middle;
+					text-align: right;
+				}
+				
+				select {
+					width: 85px;
+					height: 26px;
+					vertical-align: middle;
+					font-size: 1em;
+				}
+				
+				.split-input {
+					display: inline-block;
+					background: #fff;
+					border: 1px solid #ddd;
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+					margin: 1px 0;
+					min-width: 80px;
+					overflow: hidden;
+					line-height: 1em;
+					text-align: right;
+					
+					div.input {
+						width: 100%;
+						box-sizing: border-box;
+						
+						label {
+							font-size: 0.75em;
+							padding: 4px 6px 0;
+							color: #555;
+							display: block;
+						}
+						
+						input {
+							width: 100%;
+							box-sizing: border-box;
+							border: 0;
+							box-shadow: none;
+							margin: 0;
+							padding: 0 6px 4px;
+							color: #555;
+							background: transparent;
+							
+							@include placeholder(#ddd);
+						}
+						
+					}
+					
+					div.input:first-child {
+						border-bottom: 1px dashed #ddd;
+						background: #fff;
+						
+						label, input {
+							color: #ccc;
+						}
+						
+					}
+					
+				}
+				
+				.view {
+					white-space: nowrap;
+				}
+				
+				.edit {
+					text-align: left;
+				}
+				
+				small.times, del, .atum-order-item-taxes, .atum-order-item-discount, .atum-order-item-refund-fields {
+					font-size: 0.92em !important;
+					color: #888;
+				}
+				
+				.atum-order-item-taxes, .atum-order-item-refund-fields {
+					margin: 0;
+					label {
+						display: block;
+					}
+				}
+				
+				.atum-order-item-discount {
+					display: block;
+					margin-top: 0.5em;
+				}
+				
+				small.times {
+					margin-right: 0.25em;
+				}
+				
+			}
+			
+			.quantity {
+				text-align: center;
+				
+				input {
+					text-align: center;
+					width: 50px;
+				}
+				
+			}
+			
+			span.subtotal {
+				opacity: 0.5;
+			}
+			
+			td, th {
+				&.tax_class {
+					text-align: left;
+				}
+			}
+			
+			.calculated {
+				border-color: #ae8ca2;
+				border-style: dotted;
+			}
+			
+			table.meta {
+				width: 100%;
+			}
+			
+			table.meta, table.display_meta {
+				margin: 0.5em 0 0;
+				font-size: 0.92em !important;
+				color: #888;
+				
+				tr {
+					
+					th {
+						border: 0;
+						padding: 0 4px 0.5em 0;
+						line-height: 1.5em;
+						width: 20%;
+					}
+					
+					td {
+						padding: 0 4px 0.5em 0;
+						border: 0;
+						line-height: 1.5em;
+						
+						input {
+							width: 100%;
+							margin: 0;
+							position: relative;
+							border-bottom: 0;
+							box-shadow: none;
+						}
+						
+						textarea {
+							width: 100%;
+							height: 4em;
+							margin: 0;
+							box-shadow: none;
+						}
+						
+						input:focus + textarea {
+							border-top-color: #999;
+						}
+						
+						p {
+							margin: 0 0 0.5em;
+							line-height: 1.5em;
+						}
+						
+						p:last-child {
+							margin: 0;
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			.refund_by {
+				border-bottom: 1px dotted #999;
+			}
+			
+			tr {
+				
+				&.fee, &.refund, &.shipping {
+					.thumb {
+						div {
+							display: block;
+							text-indent: -9999px;
+							position: relative;
+							height: 1em;
+							width: 1em;
+							font-size: 1.5em;
+							line-height: 1em;
+							vertical-align: middle;
+							margin: 0;
+							
+							&:before {
+								color: #ccc;
+							}
+						}
+					}
+				}
+				
+				&.fee {
+					.thumb div {
+						&:before {
+							@include icon_woocommerce( '\e007' );
+						}
+					}
+				}
+				
+				&.refund {
+					.thumb div {
+						&:before {
+							@include icon_woocommerce( '\e014' );
+						}
+					}
+				}
+				
+				&.shipping {
+					.thumb div {
+						&:before {
+							@include icon_woocommerce( '\e01a' );
+						}
+					}
+					
+					.shipping_method_name, .shipping_method {
+						width: 100%;
+						margin: 0 0 0.5em;
+					}
+				}
+				
+			}
+			
+			th.line_tax {
+				white-space: nowrap;
+			}
+			
+			th.line_tax, td.line_tax {
+				
+				.delete-atum-order-tax {
+					display: block;
+					text-indent: -9999px;
+					position: relative;
+					height: 1em;
+					width: 1em;
+					float: right;
+					font-size: 14px;
+					visibility: hidden;
+					margin: 3px -18px 0 0;
+					
+					&:before {
+						@include icon_dashicons( '\f153' );
+						color: #999;
+					}
+					
+					&:hover {
+						&:before {
+							color: $brand-danger;
+						}
+					}
+				}
+				
+				&:hover {
+					.delete-atum-order-tax {
+						visibility: visible;
+					}
+				}
+				
+			}
+			
+			small.refunded {
+				display: block;
+				color: $brand-danger;
+				white-space: nowrap;
+				margin-top: 0.5em;
+				
+				&:before {
+					@include icon_dashicons( '\f171' );
+					position: relative;
+					top: auto;
+					left: auto;
+					margin: -1px 4px 0 0;
+					vertical-align: middle;
+					line-height: 1em;
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	.atum-order-edit-line-item {
+		padding-left: 0;
+	}
+	
+	.atum-order-edit-line-item-actions {
+		width: 44px;
+		text-align: right;
+		padding-left: 0;
+		vertical-align: middle;
+		
+		a {
+			color: #ccc;
+			display: inline-block;
+			cursor: pointer;
+			padding: 0 0 0.5em;
+			margin: 0 0 0 12px;
+			vertical-align: middle;
+			text-decoration: none;
+			line-height: 16px;
+			width: 16px;
+			overflow: hidden;
+			
+			&:before {
+				margin: 0;
+				padding: 0;
+				font-size: 16px;
+				width: 16px;
+				height: 16px;
+			}
+			
+			&:hover {
+				&:before {
+					color: #999;
+				}
+			}
+			
+			&:first-child {
+				margin-left: 0;
+			}
+			
+		}
+		
+		.edit-atum-order-item {
+			&:before {
+				@include icon_dashicons( '\f464' );
+				position: relative;
+			}
+			
+			&:focus {
+				box-shadow: none;
+			}
+		}
+		
+		.delete-atum-order-item, .delete_refund {
+			
+			&:before {
+				@include icon_dashicons( '\f158' );
+				position: relative;
+			}
+			
+			&:hover {
+				&:before {
+					color: $brand-danger;
+				}
+			}
+			
+			&:focus {
+				box-shadow: none;
+			}
+			
+		}
+		
+	}
+	
+	tbody tr .atum-order-edit-line-item-actions {
+		visibility: hidden;
+	}
+	
+	tbody tr:hover .atum-order-edit-line-item-actions {
+		visibility: visible;
+	}
+	
+	.atum-order-totals .atum-order-edit-line-item-actions {
+		width: 1.5em;
+		visibility: visible !important;
+		
+		a {
+			padding: 0;
+		}
+	}
+}

@@ -16,10 +16,12 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumException;
+use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\Settings\Settings;
 use Atum\StockCentral\Inc\ListTable;
 use Atum\InventoryLogs\Models\Log;
+use Atum\Suppliers\Suppliers;
 
 
 final class Ajax {
@@ -53,29 +55,32 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_deactivate_license', array($this, 'deactivate_license') );
 		add_action( 'wp_ajax_atum_install_addon', array($this, 'install_addon') );
 
-		// Search for WooCommerce orders from Inventory Logs
+		// Search for WooCommerce orders from enhanced selects
 		add_action( 'wp_ajax_atum_json_search_orders', array( $this, 'search_wc_orders' ) );
 
-		// Add and delete Inventory Log's notes
-		add_action( 'wp_ajax_atum_add_log_note', array( $this, 'add_inventory_log_note' ) );
-		add_action( 'wp_ajax_atum_delete_log_note', array( $this, 'delete_inventory_log_note' ) );
+		// Search for Suppliers enhanced selects
+		add_action( 'wp_ajax_atum_json_search_suppliers', array( $this, 'search_suppliers' ) );
 
-		// Inventory Log items meta box actions
-		add_action( 'wp_ajax_atum_load_log_items', array( $this, 'load_log_items' ) );
-		add_action( 'wp_ajax_atum_add_log_item', array( $this, 'add_log_item' ) );
-		add_action( 'wp_ajax_atum_add_log_fee', array( $this, 'add_log_fee' ) );
-		add_action( 'wp_ajax_atum_add_log_shipping', array( $this, 'add_log_shipping' ) );
-		add_action( 'wp_ajax_atum_add_log_tax', array( $this, 'add_log_tax' ) );
-		add_action( 'wp_ajax_atum_remove_log_item', array( $this, 'remove_log_item' ) );
-		add_action( 'wp_ajax_atum_remove_log_tax', array( $this, 'remove_log_tax' ) );
-		add_action( 'wp_ajax_atum_calc_line_taxes', array( $this, 'calc_line_taxes' ) );
-		add_action( 'wp_ajax_atum_save_log_items', array( $this, 'save_log_items' ) );
+		// Add and delete ATUM Order notes
+		add_action( 'wp_ajax_atum_order_add_note', array( $this, 'add_atum_order_note' ) );
+		add_action( 'wp_ajax_atum_order_delete_note', array( $this, 'delete_atum_order_note' ) );
+
+		// ATUM Order items' meta box actions
+		add_action( 'wp_ajax_atum_order_load_items', array( $this, 'load_atum_order_items' ) );
+		add_action( 'wp_ajax_atum_order_add_item', array( $this, 'add_atum_order_item' ) );
+		add_action( 'wp_ajax_atum_order_add_fee', array( $this, 'add_atum_order_fee' ) );
+		add_action( 'wp_ajax_atum_order_add_shipping', array( $this, 'add_atum_order_shipping' ) );
+		add_action( 'wp_ajax_atum_order_add_tax', array( $this, 'add_atum_order_tax' ) );
+		add_action( 'wp_ajax_atum_order_remove_item', array( $this, 'remove_atum_order_item' ) );
+		add_action( 'wp_ajax_atum_order_remove_tax', array( $this, 'remove_atum_order_tax' ) );
+		add_action( 'wp_ajax_atum_order_calc_line_taxes', array( $this, 'calc_atum_order_line_taxes' ) );
+		add_action( 'wp_ajax_atum_order_save_items', array( $this, 'save_atum_order_items' ) );
 
 		// Update the Inventory Log status
-		add_action( 'wp_ajax_atum_mark_log_status', array( $this, 'mark_log_status' ) );
+		add_action( 'wp_ajax_atum_order_mark_status', array( $this, 'mark_atum_order_status' ) );
 
 		// Import order items to Log
-		add_action( 'wp_ajax_atum_import_order_items', array( $this, 'import_order_items' ) );
+		add_action( 'wp_ajax_atum_order_import_items', array( $this, 'import_wc_order_items' ) );
 
 	}
 	
@@ -565,7 +570,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Seach for WooCommerce orders through Inventory Logs' enhanced select
+	 * Seach for WooCommerce orders from enhanced selects
 	 *
 	 * @since 1.2.4
 	 */
@@ -609,37 +614,94 @@ final class Ajax {
 	}
 
 	/**
-	 * Add a note to an Inventory Log
+	 * Seach for Suppliers from enhanced selects
+	 *
+	 * @since 1.2.9
+	 */
+	public function search_suppliers() {
+
+		check_ajax_referer( 'search-products', 'security' );
+
+		ob_start();
+
+		if ( is_numeric( $_GET['term'] ) ) {
+
+			$supplier_id = absint( $_GET['term'] );
+			$where = "ID LIKE $supplier_id";
+
+		}
+		elseif ( ! empty( $_GET['term'] ) ) {
+
+			$supplier_name = esc_attr( $_GET['term'] );
+			$where = "post_title LIKE '$supplier_name%'";
+		}
+		else {
+			wp_die();
+		}
+
+		// Get all the orders with IDs starting with the provided number
+		global $wpdb;
+		$max_results = absint( apply_filters('atum/ajax/search_suppliers/max_results', 10) );
+
+		$query = $wpdb->prepare(
+			"SELECT ID, post_title from {$wpdb->posts} 
+			 WHERE post_type = %s AND " . $where . " LIMIT %d",
+			Suppliers::POST_TYPE,
+			$max_results
+		);
+
+		$suppliers = $wpdb->get_results($query);
+
+		if ( empty( $suppliers ) ) {
+			wp_die();
+		}
+
+		$supplier_results = array();
+		foreach ($suppliers as $supplier) {
+			$supplier_results[$supplier->ID] = $supplier->post_title;
+		}
+
+		wp_send_json( $supplier_results );
+
+	}
+
+	/**
+	 * Add a note to an ATUM Order
 	 *
 	 * @since 1.2.4
 	 */
-	public function add_inventory_log_note() {
+	public function add_atum_order_note() {
 
-		check_ajax_referer( 'add-log-note', 'security' );
+		check_ajax_referer( 'add-atum-order-note', 'security' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_die( -1 );
 		}
 
-		$post_id   = absint( $_POST['post_id'] );
-		$note      = wp_kses_post( trim( stripslashes( $_POST['note'] ) ) );
+		$post_id = absint( $_POST['post_id'] );
+		$note    = wp_kses_post( trim( stripslashes( $_POST['note'] ) ) );
 
 		if ( $post_id ) {
 
-			$log = new Log($post_id);
-			$comment_id = $log->add_note( $note );
+			$atum_order = Helpers::get_atum_order_model($post_id);
 
-			?>
-			<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
-				<div class="note_content">
-					<?php echo wpautop( wptexturize( $note ) ) ?>
-				</div>
+			if ( ! is_wp_error($atum_order) ) {
 
-				<p class="meta">
-					<a href="#" class="delete_note"><?php _e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
-				</p>
-			</li>
-			<?php
+				$comment_id = $atum_order->add_note( $note );
+
+				?>
+				<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
+					<div class="note_content">
+						<?php echo wpautop( wptexturize( $note ) ) ?>
+					</div>
+
+					<p class="meta">
+						<a href="#" class="delete_note"><?php _e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
+					</p>
+				</li>
+				<?php
+
+			}
 
 		}
 
@@ -648,13 +710,13 @@ final class Ajax {
 	}
 
 	/**
-	 * Delete a note from an Inventory Log
+	 * Delete a note from an ATUM Order
 	 *
 	 * @since 1.2.4
 	 */
-	public function delete_inventory_log_note() {
+	public function delete_atum_order_note() {
 
-		check_ajax_referer( 'delete-log-note', 'security' );
+		check_ajax_referer( 'delete-atum-order-note', 'security' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_die( -1 );
@@ -671,52 +733,63 @@ final class Ajax {
 	}
 
 	/**
-	 * Load inventory log items
+	 * Load ATUM Order items
 	 *
 	 * @since 1.2.4
 	 */
-	public function load_log_items() {
+	public function load_atum_order_items() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_die( -1 );
 		}
 
-		$log_id = absint( $_POST['log_id'] );
-		$log    = new Log( $log_id );
+		$atum_order_id = absint( $_POST['atum_order_id'] );
+		$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
 
-		Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+		if ( is_wp_error($atum_order) ) {
+			wp_die( -1 );
+		}
+
+		Helpers::load_view( 'meta-boxes/atum-order/items', compact('atum_order') );
 
 		wp_die();
 
 	}
 
 	/**
-	 * Add inventory log item
+	 * Add ATUM Order item
 	 *
 	 * @since 1.2.4
 	 *
 	 * @throws AtumException
 	 */
-	public function add_log_item() {
+	public function add_atum_order_item() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] )  ) {
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['atum_order_id'] )  ) {
 			wp_die( -1 );
 		}
 
 		try {
 
-			$log_id       = absint( $_POST['log_id'] );
-			$log          = new Log( $log_id );
+			$atum_order_id = absint( $_POST['atum_order_id'] );
+			$post_type     = get_post_type( $atum_order_id );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
+			}
+
+			if ( ! $atum_order ) {
+				$message = ($post_type == ATUM_PREFIX . 'inventory_log') ? __( 'Invalid log', ATUM_TEXT_DOMAIN ) : __( 'Invalid purchase order', ATUM_TEXT_DOMAIN );
+				throw new AtumException( 'invalid_atum_order', $message );
+			}
+
 			$items_to_add = wp_parse_id_list( is_array( $_POST['item_to_add'] ) ? $_POST['item_to_add'] : array( $_POST['item_to_add'] ) );
 			$html         = '';
-
-			if ( ! $log ) {
-				throw new AtumException( 'invalid_log', __( 'Invalid log', ATUM_TEXT_DOMAIN ) );
-			}
 
 			foreach ( $items_to_add as $item_to_add ) {
 
@@ -724,13 +797,13 @@ final class Ajax {
 					continue;
 				}
 
-				// Add the product to the Log
-				$item = $log->add_product( wc_get_product( $item_to_add ) );
+				// Add the product to the ATUM Order
+				$item    = $atum_order->add_product( wc_get_product( $item_to_add ) );
 				$item_id = $item->get_id();
-				$class = 'new_row';
+				$class   = 'new_row';
 
 				// Load template
-				$html .= Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item', compact('log', 'item', 'item_id', 'class') );
+				$html .= Helpers::load_view_to_string( 'meta-boxes/atum-order/item', compact('atum_order', 'item', 'item_id', 'class') );
 
 			}
 
@@ -743,31 +816,35 @@ final class Ajax {
 	}
 
 	/**
-	 * Add inventory log fee
+	 * Add ATUM Order fee
 	 *
 	 * @since 1.2.4
 	 *
 	 * @throws AtumException
 	 */
-	public function add_log_fee() {
+	public function add_atum_order_fee() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] ) ) {
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['atum_order_id'] ) ) {
 			wp_die( -1 );
 		}
 
 		try {
 
-			$log_id  = absint( $_POST['log_id'] );
-			$log     = new Log( $log_id );
+			$atum_order_id = absint( $_POST['atum_order_id'] );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
+			}
 
 			// Add a fee line item
-			$item    = $log->add_fee();
+			$item    = $atum_order->add_fee();
 			$item_id = $item->get_id();
 
 			// Load template
-			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item-fee', compact('log', 'item', 'item_id') );
+			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/item-fee', compact('atum_order', 'item', 'item_id') );
 
 			wp_send_json_success( array( 'html' => $html ) );
 
@@ -777,33 +854,37 @@ final class Ajax {
 	}
 
 	/**
-	 * Add inventory log shipping cost
+	 * Add ATUM Order shipping cost
 	 *
 	 * @since 1.2.4
 	 *
 	 * @throws AtumException
 	 */
-	public function add_log_shipping() {
+	public function add_atum_order_shipping() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] )  ) {
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['atum_order_id'] )  ) {
 			wp_die( -1 );
 		}
 
 		try {
 
-			$log_id = absint( $_POST['log_id'] );
-			$log    = new Log( $log_id );
+			$atum_order_id = absint( $_POST['atum_order_id'] );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
+			}
 
 			$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
 
 			// Add new shipping cost line item
-			$item    = $log->add_shipping_cost();
+			$item    = $atum_order->add_shipping_cost();
 			$item_id = $item->get_id();
 
 			// Load template
-			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/item-shipping', compact('log', 'item', 'item_id', 'shipping_methods') );
+			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/item-shipping', compact('atum_order', 'item', 'item_id', 'shipping_methods') );
 
 			wp_send_json_success( array( 'html' => $html ) );
 
@@ -814,31 +895,35 @@ final class Ajax {
 	}
 
 	/**
-	 * Add inventory log tax
+	 * Add ATUM Order tax
 	 *
 	 * @since 1.2.4
 	 *
 	 * @throws AtumException
 	 */
-	public function add_log_tax() {
+	public function add_atum_order_tax() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['log_id'] )  ) {
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! isset( $_POST['atum_order_id'] )  ) {
 			wp_die( -1 );
 		}
 
 		try {
 
-			$log_id  = absint( $_POST['log_id'] );
-			$log     = new Log( $log_id );
-			$rate_id = absint( $_POST['rate_id'] );
+			$atum_order_id = absint( $_POST['atum_order_id'] );
+			$rate_id       = absint( $_POST['rate_id'] );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
+			}
 
 			// Add new tax
-			$log->add_tax($rate_id);
+			$atum_order->add_tax($rate_id);
 
 			// Load template
-			$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/items', compact('log') );
+			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/items', compact('atum_order') );
 
 			wp_send_json_success( array( 'html' => $html ) );
 
@@ -849,34 +934,40 @@ final class Ajax {
 	}
 
 	/**
-	 * Remove a inventory log item
+	 * Remove an ATUM Order item
 	 *
 	 * @since 1.2.4
 	 */
-	public function remove_log_item() {
+	public function remove_atum_order_item() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( -1 );
 		}
 
-		$log_id  = absint( $_POST['log_id'] );
-		$log_item_ids = $_POST['log_item_ids'];
+		$atum_order_id       = absint( $_POST['atum_order_id'] );
+		$atum_order_item_ids = $_POST['atum_order_item_ids'];
 
-		if ( ! is_array( $log_item_ids ) && is_numeric( $log_item_ids ) ) {
-			$log_item_ids = array( $log_item_ids );
+		if ( ! is_array( $atum_order_item_ids ) && is_numeric( $atum_order_item_ids ) ) {
+			$atum_order_item_ids = array( $atum_order_item_ids );
 		}
 
-		if ( ! empty($log_item_ids) ) {
+		$atum_order_item_ids = array_unique( array_filter( array_map('absint', $atum_order_item_ids) ) );
 
-			$log = new Log( $log_id );
+		if ( ! empty($atum_order_item_ids) ) {
 
-			foreach ( $log_item_ids as $id ) {
-				$log->remove_item( absint($id) );
+			$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				wp_die( -1 );
 			}
 
-			$log->save_items();
+			foreach ( $atum_order_item_ids as $id ) {
+				$atum_order->remove_item( absint($id) );
+			}
+
+			$atum_order->save_items();
 		}
 
 		wp_die();
@@ -884,37 +975,42 @@ final class Ajax {
 	}
 
 	/**
-	 * Remove a inventory log tax
+	 * Remove an ATUM Order tax
 	 *
 	 * @since 1.2.4
 	 */
-	public function remove_log_tax() {
+	public function remove_atum_order_tax() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( -1 );
 		}
 
-		$log_id  = absint( $_POST['log_id'] );
-		$rate_id = absint( $_POST['rate_id'] );
-		$log = new Log( $log_id );
-		$log->remove_item($rate_id);
-		$log->save_items();
+		$atum_order_id = absint( $_POST['atum_order_id'] );
+		$rate_id       = absint( $_POST['rate_id'] );
+		$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+
+		if ( is_wp_error($atum_order) ) {
+			wp_die( -1 );
+		}
+
+		$atum_order->remove_item($rate_id);
+		$atum_order->save_items();
 
 		// Load template
-		Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+		Helpers::load_view( 'meta-boxes/atum-order/items', compact('atum_order') );
 
 		wp_die();
 
 	}
 
 	/**
-	 * Calc inventory logs line taxes
+	 * Calc ATUM Order line taxes
 	 *
 	 * @since 1.2.4
 	 */
-	public function calc_line_taxes() {
+	public function calc_atum_order_line_taxes() {
 
 		check_ajax_referer( 'calc-totals', 'security' );
 
@@ -922,7 +1018,7 @@ final class Ajax {
 			wp_die( -1 );
 		}
 
-		$log_id = absint( $_POST['log_id'] );
+		$atum_order_id = absint( $_POST['atum_order_id'] );
 
 		/*$calculate_tax_args = array(
 			'country'  => strtoupper( wc_clean( $_POST['country'] ) ),
@@ -935,46 +1031,55 @@ final class Ajax {
 		$items = array();
 		parse_str( $_POST['items'], $items );
 
+		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+
+		if ( is_wp_error($atum_order) ) {
+			wp_die( -1 );
+		}
+
 		// Grab the order and recalc taxes
-		$log = new Log($log_id);
-		$log->save_log_items($items);
-		$log->calculate_taxes();
-		$log->calculate_totals( FALSE );
+		$atum_order->save_order_items($items);
+		$atum_order->calculate_taxes();
+		$atum_order->calculate_totals( FALSE );
 
 		// Load template
-		Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+		Helpers::load_view( 'meta-boxes/atum-order/items', compact('atum_order') );
 
 		wp_die();
 
 	}
 
 	/**
-	 * Save inventory log items
+	 * Save ATUM Order items
 	 *
 	 * @since 1.2.4
 	 */
-	public function save_log_items() {
+	public function save_atum_order_items() {
 
-		check_ajax_referer( 'log-item', 'security' );
+		check_ajax_referer( 'atum-order-item', 'security' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( -1 );
 		}
 
-		if ( isset( $_POST['log_id'], $_POST['items'] ) ) {
+		if ( isset( $_POST['atum_order_id'], $_POST['items'] ) ) {
 
-			$log_id = absint( $_POST['log_id'] );
+			$atum_order_id = absint( $_POST['atum_order_id'] );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				wp_die( -1 );
+			}
 
 			// Parse the jQuery serialized items
 			$items = array();
 			parse_str( $_POST['items'], $items );
 
 			// Save order items
-			$log = new Log( $log_id );
-			$log->save_log_items($items);
+			$atum_order->save_order_items($items);
 
 			// Return HTML items
-			Helpers::load_view( 'meta-boxes/inventory-logs/items', compact('log') );
+			Helpers::load_view( 'meta-boxes/atum-order/items', compact('atum_order') );
 
 		}
 
@@ -983,11 +1088,11 @@ final class Ajax {
 	}
 
 	/**
-	 * Import the order items to the current Log after linking an order
+	 * Import the WC order items to the current ATUM Order after linking an order
 	 *
 	 * @since 1.2.4
 	 */
-	public function import_order_items() {
+	public function import_wc_order_items() {
 
 		check_ajax_referer( 'import-order-items', 'security' );
 
@@ -995,49 +1100,50 @@ final class Ajax {
 			wp_die( -1 );
 		}
 
-		if ( isset( $_POST['log_id'], $_POST['order_id'] ) ) {
+		if ( isset( $_POST['atum_order_id'], $_POST['wc_order_id'] ) ) {
 
-			$log_id = absint( $_POST['log_id'] );
-			$order_id = absint( $_POST['order_id'] );
+			$atum_order_id = absint( $_POST['atum_order_id'] );
+			$wc_order_id   = absint( $_POST['wc_order_id'] );
+			$wc_order      = wc_get_order( $wc_order_id );
 
-			$order = wc_get_order($order_id);
+			if ( ! empty($wc_order) ) {
 
-			if ( ! empty($order) ) {
-
-				$items = $order->get_items( array( 'line_item', 'fee', 'shipping', 'tax' ) );
+				$items = $wc_order->get_items( array( 'line_item', 'fee', 'shipping', 'tax' ) );
 
 				if ( ! empty($items) ) {
 
-					$log = new Log( $log_id );
+					// *** NOTE: FOR NOW THIS IS ONLY USED ON LOGS, IF NEEDS TO BE COMPATIBLE WITH OTHER
+					// ATUM ORDERS IN THE FUTURE, THIS WILL NEED REFACTORY ***
+					$atum_order = new Log( $atum_order_id );
 
 					try {
 
 						// The log only can have one tax applied, so check if already has one
-						$current_tax = $log->get_items('tax');
+						$current_tax = $atum_order->get_items('tax');
 
 						foreach ($items as $item) {
 
 							if ( is_a($item, '\WC_Order_Item_Product') ) {
-								$log_item = $log->add_product( wc_get_product( $item->get_product_id() ), $item->get_quantity() );
+								$log_item = $atum_order->add_product( wc_get_product( $item->get_product_id() ), $item->get_quantity() );
 							}
 							elseif ( is_a($item, '\WC_Order_Item_Fee') ) {
-								$log_item = $log->add_fee($item);
+								$log_item = $atum_order->add_fee($item);
 							}
 							elseif ( is_a($item, '\WC_Order_Item_Shipping') ) {
-								$log_item = $log->add_shipping_cost($item);
+								$log_item = $atum_order->add_shipping_cost($item);
 							}
 							elseif ( empty($current_tax) && is_a($item, '\WC_Order_Item_Tax') ) {
-								$log_item = $log->add_tax( array( 'rate_id' => $item->get_rate_id() ), $item );
+								$log_item = $atum_order->add_tax( array( 'rate_id' => $item->get_rate_id() ), $item );
 							}
 
 							// Add the order ID as item's custom meta
-							$log_item->add_meta_data('_order_id', $order_id, TRUE);
+							$log_item->add_meta_data('_order_id', $wc_order_id, TRUE);
 							$log_item->save_meta_data();
 
 						}
 
 						// Load template
-						$html = Helpers::load_view_to_string( 'meta-boxes/inventory-logs/items', compact('log') );
+						$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/items', compact('atum_order') );
 
 						wp_send_json_success( array( 'html' => $html ) );
 
@@ -1056,26 +1162,33 @@ final class Ajax {
 	}
 
 	/**
-	 * Mark an inventory log with a status
+	 * Mark an ATUM Order with a status
 	 * NOTE: This callback is not being triggered through an Ajax request, just a normal HTTP request
 	 *
 	 * @since 1.2.4
 	 */
-	public function mark_log_status() {
+	public function mark_atum_order_status() {
 
-		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-mark-log-status' ) ) {
+		$atum_order_id = absint( $_GET['atum_order_id'] );
+		$post_type     = get_post_type( $atum_order_id );
 
-			$status = sanitize_text_field( $_GET['status'] );
-			$log  = new Log( absint( $_GET['log_id'] ) );
+		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-order-mark-status' ) ) {
 
-			if ( $log && in_array($status, array_keys( Log::get_statuses() ) ) ) {
-				$log->update_status( $status );
-				do_action( 'atum/inventory_logs/log_edit_status', $log->get_id(), $status );
+			$status     = sanitize_text_field( $_GET['status'] );
+			$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+
+			if ( is_wp_error($atum_order) ) {
+				wp_die( -1 );
+			}
+
+			if ( $atum_order && in_array($status, array_keys( AtumOrderPostType::get_statuses() ) ) ) {
+				$atum_order->update_status( $status );
+				do_action( 'atum/atum_orders/edit_status', $atum_order->get_id(), $status );
 			}
 
 		}
 
-		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php?post_type=' . InventoryLogs::POST_TYPE ) );
+		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( "edit.php?post_type=$post_type" ) );
 		exit;
 
 	}

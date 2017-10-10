@@ -14,9 +14,12 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumListTable;
+use Atum\Components\AtumListTables\AtumListTable;
+use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 
 
@@ -882,6 +885,28 @@ final class Helpers {
 	}
 
 	/**
+	 * Output a dropdown to choose the ATUM Order status
+	 *
+	 * @since 1.2.9
+	 *
+	 * @param string $id        The select ID
+	 * @param string $value     The selected option
+	 */
+	public static function atum_order_status_dropdown($id, $value) {
+
+		?>
+		<select id="<?php echo $id ?>" name="<?php echo $id ?>" class="wc-enhanced-select">
+			<?php
+			$statuses = AtumOrderPostType::get_statuses();
+			foreach ( $statuses as $status => $status_name ): ?>
+				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+	}
+
+	/**
 	 * Get the inventory log's IDs
 	 *
 	 * @since 1.2.8
@@ -929,20 +954,53 @@ final class Helpers {
 	}
 
 	/**
-	 * Get all the log items within a specified log
+	 * Get all the order items within a specified ATUM Order
 	 *
-	 * @since 1.2.8
+	 * @since 1.2.9
 	 *
-	 * @param int $log_id   The Log ID
+	 * @param int $order_id   The ATUM Order ID
 	 *
 	 * @return object|null
 	 */
-	public static function get_log_items($log_id) {
+	public static function get_order_items($order_id) {
 
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}atum_log_items WHERE log_id = %d ORDER BY log_item_id", $log_id );
+		$query = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_id = %d ORDER BY order_item_id", $order_id );
 
 		return $wpdb->get_results( $query );
+
+	}
+
+	/**
+	 * Get the appropriate ATUM Order model
+	 *
+	 * @since 1.2.9
+	 *
+	 * @param int $atum_order_id
+	 *
+	 * @return AtumOrderModel|\WP_Error
+	 */
+	public static function get_atum_order_model($atum_order_id) {
+
+		$post_type = get_post_type($atum_order_id);
+
+		switch ( $post_type ) {
+			case InventoryLogs::POST_TYPE:
+
+				$model_class = '\Atum\InventoryLogs\Models\Log';
+				break;
+
+			case PurchaseOrders::POST_TYPE:
+
+				$model_class = '\Atum\PurchaseOrders\Models\PurchaseOrder';
+				break;
+		}
+
+		if ( !$model_class || ! class_exists($model_class) ) {
+			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
+		}
+
+		return new $model_class( $atum_order_id );
 
 	}
 

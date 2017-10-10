@@ -1,24 +1,24 @@
 <?php
 /**
- * @package         Atum\InventoryLogs
+ * @package         Atum\PurchaseOrders
  * @subpackage      Items
  * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       ©2017 Stock Management Labs™
  *
- * @since           1.2.4
+ * @since           1.2.9
  *
- * The model class for the Log Item Product objects
+ * The model class for the PO Item Product objects
  */
 
-namespace Atum\InventoryLogs\Items;
+namespace Atum\PurchaseOrders\Items;
 
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 
 
-class LogItemProduct extends AtumOrderItemProduct {
+class POItemProduct extends AtumOrderItemProduct {
 
-	use LogItemTrait;
+	use POItemTrait;
 
 }

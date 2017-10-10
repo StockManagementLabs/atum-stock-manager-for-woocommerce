@@ -1,30 +1,30 @@
 <?php
 /**
- * @package         Atum\InventoryLogs
+ * @package         Atum\PurchaseOrders
  * @subpackage      Items
  * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       ©2017 Stock Management Labs™
  *
- * @since           1.2.4
+ * @since           1.2.9
  *
- * Shared methods for the Log Item objects
+ * Shared methods for the PO Item objects
  */
 
-namespace Atum\InventoryLogs\Items;
+namespace Atum\PurchaseOrders\Items;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\InventoryLogs\Models\LogItem;
+use Atum\PurchaseOrders\Models\POItem;
 
 
-trait LogItemTrait {
+trait POItemTrait {
 
 	/**
 	 * @inheritdoc
 	 */
 	protected function load() {
 
-		$this->atum_order_item_model = new LogItem( $this );
+		$this->atum_order_item_model = new POItem( $this );
 		$this->atum_order_id = $this->atum_order_item_model->get_atum_order_id();
 		$this->read_meta_data();
 
