@@ -168,10 +168,12 @@
 						
 						// The search event is triggered when cliking on the clear field button within the seach input
 						$listWrapper.on('keyup paste search', '.atum-post-search', function (e) {
-							self.keyUp(e, $(this).closest('.search-box'));
+							self.$animationElem = $(this).closest('.search-box');
+							self.keyUp(e);
 						})
 						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_extra_filter', function (e) {
-							self.keyUp(e, $(this).closest('.actions'));
+							self.$animationElem = $(this).closest('.actions');
+							self.keyUp(e);
 						});
 						
 					}
@@ -193,7 +195,8 @@
 							    $this     = $(this),
 							    elemClass = ($this.is('.search-category')) ? '.actions' : '.search-box';
 							
-							self.update(data, $this.closest(elemClass));
+							self.$animationElem = $this.closest(elemClass);
+							self.update(data);
 							
 						});
 						
@@ -203,7 +206,8 @@
 					// Pagination text box
 					//--------------------
 					$listWrapper.on('keyup paste', '.current-page', function (e) {
-						self.keyUp(e, $(this).closest('.tablenav-pages'));
+						self.$animationElem = $(this).closest('.tablenav-pages');
+						self.keyUp(e);
 					})
 					//
 					// Expanding/Collapsing variable products
@@ -290,10 +294,9 @@
 				/**
 				 * Search box keyUp event callback
 				 *
-				 * @param object e      The event data object
-				 * @param object $elem  The search input box
+				 * @param object e  The event data object
 				 */
-				keyUp: function (e, $elem) {
+				keyUp: function (e) {
 					
 					var self  = this,
 					    delay = 500;
@@ -325,7 +328,7 @@
 					window.clearTimeout(timer);
 					
 					timer = window.setTimeout(function () {
-						self.update(data, $elem);
+						self.update(data);
 					}, delay);
 					
 				},
