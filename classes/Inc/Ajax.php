@@ -920,7 +920,7 @@ final class Ajax {
 			}
 
 			// Add new tax
-			$atum_order->add_tax($rate_id);
+			$atum_order->add_tax( array( 'rate_id' => $rate_id) );
 
 			// Load template
 			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/items', compact('atum_order') );
