@@ -173,7 +173,7 @@
 						})
 						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_extra_filter', function (e) {
 							self.$animationElem = $(this).closest('.actions');
-							self.keyUp(e);
+							self.keyUp(e, true);
 						});
 						
 					}
@@ -294,12 +294,14 @@
 				/**
 				 * Search box keyUp event callback
 				 *
-				 * @param object e  The event data object
+				 * @param object e       The event data object
+				 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
 				 */
-				keyUp: function (e) {
+				keyUp: function (e, noTimer) {
 					
-					var self  = this,
-					    delay = 500;
+					var self    = this,
+					    delay   = 500,
+					    noTimer = noTimer || false;
 					
 					/*
 					 * If user hit enter, we don't want to submit the form
@@ -319,17 +321,23 @@
 						s       : $search.val() || ''
 					};
 					
-					/*
-					 * Now the timer comes to use: we wait half a second after
-					 * the user stopped typing to actually send the call. If
-					 * we don't, the keyup event will trigger instantly and
-					 * thus may cause duplicate calls before sending the intended value
-					 */
-					window.clearTimeout(timer);
-					
-					timer = window.setTimeout(function () {
+					if (noTimer) {
 						self.update(data);
-					}, delay);
+					}
+					else {
+						/*
+						 * Now the timer comes to use: we wait half a second after
+						 * the user stopped typing to actually send the call. If
+						 * we don't, the keyup event will trigger instantly and
+						 * thus may cause duplicate calls before sending the intended value
+						 */
+						window.clearTimeout(timer);
+						
+						timer = window.setTimeout(function () {
+							self.update(data);
+						}, delay);
+						
+					}
 					
 				},
 				
