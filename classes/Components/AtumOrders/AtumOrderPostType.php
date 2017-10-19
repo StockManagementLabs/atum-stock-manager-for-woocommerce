@@ -64,6 +64,11 @@ abstract class AtumOrderPostType {
 		$wpdb->atum_order_itemmeta = $wpdb->prefix . self::ORDER_ITEM_META_TABLE;
 		$wpdb->tables[] = self::ORDER_ITEM_META_TABLE;
 
+		// Fix order_item_id name getting meta
+		add_filter( 'get_atum_order_item_metadata', array($this, 'sanitize_order_item_name') );
+		add_filter( 'update_atum_order_item_metadata', array($this, 'sanitize_order_item_name') );
+		add_filter( 'delete_atum_order_item_metadata', array($this, 'sanitize_order_item_name') );
+
 		// Add the custom columns to the post type list table
 		add_filter( 'manage_' . static::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
 		add_action( 'manage_' . static::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
@@ -367,7 +372,7 @@ abstract class AtumOrderPostType {
 				if ( $post->comment_count ) {
 
 					// check the status of the post
-					$status = ( 'trash' !== $post->post_status ) ? '' : 'post-trashed';
+					$status = ( 'trash' != $post->post_status ) ? '' : 'post-trashed';
 
 					$latest_notes = get_comments( array(
 						'post_id' => $post->ID,
@@ -386,6 +391,7 @@ abstract class AtumOrderPostType {
 					else {
 						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . __( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
 					}
+
 				}
 				else {
 					echo '<span class="na">&ndash;</span>';
@@ -742,7 +748,7 @@ abstract class AtumOrderPostType {
 		global $post_type, $pagenow;
 
 		// Bail out if not on Log list page
-		if ( 'edit.php' !== $pagenow || static::POST_TYPE !== $post_type ) {
+		if ( 'edit.php' != $pagenow || static::POST_TYPE != $post_type ) {
 			return;
 		}
 
@@ -787,6 +793,36 @@ abstract class AtumOrderPostType {
 	abstract public function post_updated_messages($messages);
 
 	/**
+	 * Add the hook to sanitize the order_item_id's column name
+	 *
+	 * @since 1.3.0
+	 */
+	public function sanitize_order_item_name() {
+		add_filter( 'sanitize_key', array($this, 'fix_order_item_id_column'), 10, 2 );
+		return null;
+	}
+
+	/**
+	 * Fix the order_item_id column name from atum_order_itemmeta table when getting meta
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $key
+	 * @param string $raw_key
+	 *
+	 * @return string
+	 */
+	public function fix_order_item_id_column($key, $raw_key) {
+
+		if ($key == 'atum_order_item_id') {
+			$key = 'order_item_id';
+		}
+
+		return $key;
+
+	}
+
+	/**
 	 * Enqueue the scripts
 	 *
 	 * @since 1.2.4
@@ -807,7 +843,16 @@ abstract class AtumOrderPostType {
 
 			if ( in_array( $hook, ['post-new.php', 'post.php'] ) ) {
 
+				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
+				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
+				Helpers::maybe_es6_promise();
+
+				wp_enqueue_style( 'sweetalert2' );
 				wp_enqueue_style( 'atum-orders' );
+
+				if ( wp_script_is('es6-promise', 'registered') ) {
+					wp_enqueue_script( 'es6-promise' );
+				}
 
 				// Enqueue the script with the required WooCommerce dependencies
 				$wc_dependencies = (array) apply_filters('atum/order_post_type/scripts/woocommerce_dependencies', array(
@@ -816,7 +861,8 @@ abstract class AtumOrderPostType {
 					'jquery-blockui',
 					'jquery-ui-datepicker',
 					'stupidtable',
-					'accounting'
+					'accounting',
+					'sweetalert2'
 				));
 
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/atum.orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
@@ -839,7 +885,17 @@ abstract class AtumOrderPostType {
 					'placeholder_name'         => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
 					'placeholder_value'        => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
 					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this Log?', ATUM_TEXT_DOMAIN ),
-					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' )
+					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' ),
+					'are_you_sure'             => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+					'increase_stock_msg'       => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
+					'decrease_stock_msg'       => __( 'This will decrease the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
+					'stock_increased'          => __( 'The stock was increased successfully', ATUM_TEXT_DOMAIN),
+					'stock_decreased'          => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN),
+					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
+					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
+					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
+					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN )
 				) );
 
 				wp_enqueue_script( 'atum-orders' );

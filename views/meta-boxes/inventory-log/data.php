@@ -306,7 +306,6 @@ $log_status = $atum_order->get_status();
 
 		</div>
 
-		<div class="clear"></div>
 	</div>
 
 </div>

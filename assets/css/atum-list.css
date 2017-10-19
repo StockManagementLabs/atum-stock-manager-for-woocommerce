@@ -760,13 +760,9 @@ h1.wp-heading-inline .atum-loading {
   min-width: 70px;
 }
 
-.atum-list-table .column-calc_type .wc-type {
-  width: 20px;
-  margin-left: 0;
-}
-
-.atum-list-table .column-calc_type .col-product-details .wc-type {
-  margin: 0 auto;
+.atum-list-table .column-calc_type {
+  max-width: 50px;
+  text-align: center;
 }
 
 .atum-list-table .column-calc_type .has-child {
@@ -796,6 +792,10 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table #calc_stock_out_days {
   min-width: 56px;
+}
+
+.atum-list-table .column-calc_stock_indicator {
+  text-align: center;
 }
 
 .atum-list-table .column-calc_stock_indicator .dashicons {

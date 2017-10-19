@@ -5,7 +5,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.8.2
-Stable tag: 1.2.9
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -221,6 +221,12 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
 == Changelog ==
+
+= 1.2.8.2 - 2017-10-16 =
+
+Fixes:
+
+* Fixed issue saving purchases price of variation products in Stock Central.
 
 
 = 1.2.8.1 - 2017-10-10 =

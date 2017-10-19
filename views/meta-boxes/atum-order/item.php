@@ -60,7 +60,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 				$currency = $atum_order->get_currency();
 				echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) );
 
-				if ( $item->get_subtotal() !== $item->get_total() ) {
+				if ( $item->get_subtotal() != $item->get_total() ) {
 					echo '<span class="atum-order-item-discount">-' . wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ) . '</span>';
 				}
 			?>
@@ -95,7 +95,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			<?php
 				echo wc_price( $item->get_total(), array( 'currency' => $currency ) );
 
-				if ( $item->get_subtotal() !== $item->get_total() ) {
+				if ( $item->get_subtotal() != $item->get_total() ) {
 					echo '<span class="atum-order-item-discount">-' . wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ) . '</span>';
 				}
 
@@ -144,7 +144,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 							echo '&ndash;';
 						}
 
-						if ( $item->get_subtotal() !== $item->get_total() ) {
+						if ( $item->get_subtotal() != $item->get_total() ) {
 							if ( '' === $tax_item_total ) {
 								echo '<span class="atum-order-item-discount">&ndash;</span>';
 							}

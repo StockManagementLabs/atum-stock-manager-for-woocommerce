@@ -127,11 +127,9 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 		</table>
 	</div>
 
-	<div class="atum-atum-order-data-row atum-atum-order-item-bulk-edit" style="display:none;">
+	<div class="atum-order-data-row atum-order-item-bulk-edit" style="display:none;">
 		<button type="button" class="button bulk-delete-items"><?php _e( 'Delete selected row(s)', ATUM_TEXT_DOMAIN ); ?></button>
-		<?php /*<button type="button" class="button bulk-decrease-stock"><?php _e( 'Reduce stock', ATUM_TEXT_DOMAIN ); ?></button>
-		<button type="button" class="button bulk-increase-stock"><?php _e( 'Increase stock', ATUM_TEXT_DOMAIN ); ?></button>*/ ?>
-		<?php do_action( 'atum/atum_order/item_bulk_actions', $atum_order ); ?>
+		<?php do_action( 'atum/atum_order/item_bulk_controls', $atum_order ); ?>
 	</div>
 
 	<div class="atum-order-data-row atum-order-totals-items atum-order-items-editable">
@@ -378,7 +376,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 								<?php
 								$rates = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_tax_rates ORDER BY tax_rate_name LIMIT 100" );
 
-								foreach ( $rates as $rate ) {
+								foreach ( $rates as $rate ):
 									echo '
 										<tr>
 											<td><input type="radio" id="add_atum_order_tax_' . absint( $rate->tax_rate_id ) . '" name="add_atum_order_tax" value="' . absint( $rate->tax_rate_id ) . '" /></td>
@@ -388,8 +386,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 											<td>' . WC_Tax::get_rate_percent( $rate ) . '</td>
 										</tr>
 									';
-								}
-								?>
+								endforeach; ?>
 							</table>
 
 							<?php if ( absint( $wpdb->get_var( "SELECT COUNT(tax_rate_id) FROM {$wpdb->prefix}woocommerce_tax_rates;" ) ) > 100 ) : ?>

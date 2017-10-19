@@ -37,9 +37,11 @@
 					.on( 'click', 'a.delete-atum-order-item', this.delete_item )
 					.on( 'click', 'tr.item, tr.fee, tr.shipping', this.select_row )
 					.on( 'click', 'tr.item :input, tr.fee :input, tr.shipping :input, tr.item a, tr.fee a, tr.shipping a', this.select_row_child )
+					
+					// Bulk actions
 					.on( 'click', 'button.bulk-delete-items', this.do_bulk_delete )
-					/*.on( 'click', 'button.bulk-increase-stock', this.do_bulk_increase_stock )
-					.on( 'click', 'button.bulk-decrease-stock', this.do_bulk_reduce_stock )*/
+					.on( 'click', 'button.bulk-increase-stock', this.do_bulk_increase_stock )
+					.on( 'click', 'button.bulk-decrease-stock', this.do_bulk_decrease_stock )
 					
 					// Qty
 					.on( 'change', 'input.quantity', this.quantity_changed )
@@ -97,7 +99,7 @@
 				});
 			},
 			
-			load_items_table: function(data, dataType) {
+			load_items_table: function(data, dataType, callback) {
 				
 				var self = this;
 				this.block();
@@ -117,10 +119,14 @@
 							self.stupidtable.init();
 						}
 						else if (typeof response === 'object' && response.success === false) {
-							window.alert(response.data.error);
+							self.showalert('error', atumOrder.error, response.data.error);
 						}
 						
 						self.unblock();
+						
+						if (typeof callback !== 'undefined') {
+							callback();
+						}
 						
 					}
 				});
@@ -230,7 +236,7 @@
 						$( 'table.atum_order_items tbody#atum_order_fee_line_items' ).append( response.data.html );
 					}
 					else {
-						window.alert( response.data.error );
+						this.showalert('error', atumOrder.error, response.data.error);
 					}
 					
 					atum_order_items.unblock();
@@ -257,7 +263,7 @@
 						$( 'table.atum_order_items tbody#atum_order_shipping_line_items' ).append( response.data.html );
 					}
 					else {
-						window.alert( response.data.error );
+						this.showalert('error', atumOrder.error, response.data.error);
 					}
 					
 					atum_order_items.unblock();
@@ -293,30 +299,43 @@
 			
 			delete_item: function() {
 				
-				var answer = window.confirm( atumOrder.remove_item_notice );
+				var $item              = $(this).closest('tr.item, tr.fee, tr.shipping'),
+				    atum_order_item_id = $item.attr('data-atum_order_item_id');
 				
-				if (answer) {
-					
-					var $item              = $(this).closest('tr.item, tr.fee, tr.shipping'),
-					    atum_order_item_id = $item.attr('data-atum_order_item_id');
-					
-					atum_order_items.block();
-					
-					$.ajax({
-						url    : ajaxurl,
-						data   : {
-							atum_order_id      : atumOrder.post_id,
-							atum_order_item_ids: atum_order_item_id,
-							action             : 'atum_order_remove_item',
-							security           : atumOrder.atum_order_item_nonce
-						},
-						type   : 'POST',
-						success: function () {
-							$item.remove();
-							atum_order_items.unblock();
-						}
-					});
-				}
+				swal({
+					text               : atumOrder.remove_item_notice,
+					type               : 'warning',
+					showCancelButton   : true,
+					confirmButtonText  : atumOrder.continue,
+					cancelButtonText   : atumOrder.cancel,
+					reverseButtons     : true,
+					allowOutsideClick  : false,
+					showLoaderOnConfirm: true,
+					preConfirm         : function () {
+						return new Promise(function (resolve, reject) {
+							
+							atum_order_items.block();
+							
+							$.ajax({
+								url    : ajaxurl,
+								data   : {
+									atum_order_id      : atumOrder.post_id,
+									atum_order_item_ids: atum_order_item_id,
+									action             : 'atum_order_remove_item',
+									security           : atumOrder.atum_order_item_nonce
+								},
+								type   : 'POST',
+								success: function () {
+									resolve();
+								}
+							});
+							
+						});
+					}
+				}).then(function () {
+					$item.remove();
+					atum_order_items.unblock();
+				}).catch(swal.noop);
 				
 				return false;
 				
@@ -324,16 +343,28 @@
 			
 			delete_tax: function() {
 				
-				if ( window.confirm( atumOrder.delete_tax_notice ) ) {
-					
-					atum_order_items.load_items_table({
-						action       : 'atum_order_remove_tax',
-						rate_id      : $(this).attr('data-rate_id'),
-						atum_order_id: atumOrder.post_id,
-						security     : atumOrder.atum_order_item_nonce
-					});
-					
-				}
+				swal({
+					text               : atumOrder.delete_tax_notice,
+					type               : 'warning',
+					showCancelButton   : true,
+					confirmButtonText  : atumOrder.continue,
+					cancelButtonText   : atumOrder.cancel,
+					reverseButtons     : true,
+					allowOutsideClick  : false,
+					showLoaderOnConfirm: true,
+					preConfirm         : function () {
+						return new Promise(function (resolve, reject) {
+							
+							atum_order_items.load_items_table({
+								action       : 'atum_order_remove_tax',
+								rate_id      : $(this).attr('data-rate_id'),
+								atum_order_id: atumOrder.post_id,
+								security     : atumOrder.atum_order_item_nonce
+							}, 'html', resolve);
+							
+						});
+					}
+				}).catch(swal.noop);
 				
 				return false;
 				
@@ -341,39 +372,28 @@
 			
 			recalculate: function() {
 				
-				if ( window.confirm( atumOrder.calc_totals ) ) {
-					
-					/*var country  = '',
-					    state    = '',
-					    postcode = '',
-					    city     = '';
-					
-					if ( 'shipping' === atumOrder.tax_based_on ) {
-						country  = $( '#_shipping_country' ).val();
-						state    = $( '#_shipping_state' ).val();
-						postcode = $( '#_shipping_postcode' ).val();
-						city     = $( '#_shipping_city' ).val();
+				swal({
+					text               : atumOrder.calc_totals,
+					type               : 'warning',
+					showCancelButton   : true,
+					confirmButtonText  : atumOrder.continue,
+					cancelButtonText   : atumOrder.cancel,
+					reverseButtons     : true,
+					allowOutsideClick  : false,
+					showLoaderOnConfirm: true,
+					preConfirm         : function () {
+						return new Promise(function (resolve, reject) {
+							
+							atum_order_items.load_items_table({
+								action       : 'atum_order_calc_line_taxes',
+								atum_order_id: atumOrder.post_id,
+								items        : $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
+								security     : atumOrder.calc_totals_nonce
+							}, 'html', resolve);
+							
+						});
 					}
-					
-					if ( 'billing' === atumOrder.tax_based_on || !country ) {
-						country  = $( '#_billing_country' ).val();
-						state    = $( '#_billing_state' ).val();
-						postcode = $( '#_billing_postcode' ).val();
-						city     = $( '#_billing_city' ).val();
-					}*/
-					
-					atum_order_items.load_items_table({
-						action       : 'atum_order_calc_line_taxes',
-						atum_order_id: atumOrder.post_id,
-						items        : $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
-						/*country : country,
-						 state   : state,
-						 postcode: postcode,
-						 city    : city,*/
-						security     : atumOrder.calc_totals_nonce
-					});
-					
-				}
+				}).catch(swal.noop);
 				
 				return false;
 				
@@ -418,11 +438,26 @@
 				
 				remove: function() {
 					
-					if ( window.confirm( atumOrder.remove_item_meta ) ) {
-						var $row = $(this).closest('tr');
-						$row.find(':input').val('');
-						$row.hide();
-					}
+					swal({
+						text               : atumOrder.remove_item_meta,
+						type               : 'warning',
+						showCancelButton   : true,
+						confirmButtonText  : atumOrder.continue,
+						cancelButtonText   : atumOrder.cancel,
+						reverseButtons     : true,
+						allowOutsideClick  : false,
+						preConfirm         : function () {
+							return new Promise(function (resolve, reject) {
+								
+								var $row = $(this).closest('tr');
+								$row.find(':input').val('');
+								$row.hide();
+								resolve();
+								
+							});
+						}
+					}).catch(swal.noop);
+					
 					return false;
 					
 				}
@@ -452,13 +487,7 @@
 							selected_product = true;
 						}
 					});
-					
-					/*if (selected_product) {
-						$('.bulk-increase-stock, .bulk-decrease-stock').show();
-					}
-					else {
-						$('.bulk-increase-stock, .bulk-decrease-stock').hide();
-					}*/
+			
 				}
 				else {
 					$('div.atum-order-item-bulk-edit').slideUp();
@@ -476,125 +505,148 @@
 				var $table = $('table.atum_order_items'),
 				    $rows  = $table.find('tr.selected');
 				
-				if ($rows.length && window.confirm(atumOrder.remove_item_notice)) {
+				if ($rows.length) {
 					
-					atum_order_items.block();
-					
-					var delete_items = [],
-					    deferred     = [];
-					
-					$.map($rows, function (row) {
-						
-						delete_items.push( parseInt($(row).data('atum_order_item_id'), 10) );
-						return;
-						
-					});
-					
-					if (delete_items.length) {
-						
-						deferred.push($.ajax({
-							url : ajaxurl,
-							data: {
-								atum_order_id      : atumOrder.post_id,
-								atum_order_item_ids: delete_items,
-								action             : 'atum_order_remove_item',
-								security           : atumOrder.atum_order_item_nonce
-							},
-							type: 'POST'
-						}));
-						
-					}
-					
-					if (deferred) {
-						
-						$.when.apply($, deferred).done(function () {
-							atum_order_items.reload_items();
-							atum_order_items.unblock();
-						});
-						
-					}
-					else {
+					swal({
+						text               : atumOrder.remove_item_notice,
+						type               : 'warning',
+						showCancelButton   : true,
+						confirmButtonText  : atumOrder.continue,
+						cancelButtonText   : atumOrder.cancel,
+						reverseButtons     : true,
+						allowOutsideClick  : false,
+						showLoaderOnConfirm: true,
+						preConfirm         : function () {
+							return new Promise(function (resolve, reject) {
+								
+								atum_order_items.block();
+								
+								var delete_items = [],
+								    deferred     = [];
+								
+								$.map($rows, function (row) {
+									delete_items.push( parseInt($(row).data('atum_order_item_id'), 10) );
+									return;
+								});
+								
+								if (delete_items.length) {
+									
+									deferred.push($.ajax({
+										url : ajaxurl,
+										data: {
+											atum_order_id      : atumOrder.post_id,
+											atum_order_item_ids: delete_items,
+											action             : 'atum_order_remove_item',
+											security           : atumOrder.atum_order_item_nonce
+										},
+										type: 'POST'
+									}));
+									
+								}
+								
+								if (deferred) {
+									
+									$.when.apply($, deferred).done(function () {
+										atum_order_items.reload_items();
+										resolve();
+									});
+									
+								}
+								else {
+									resolve();
+								}
+								
+							});
+						}
+					}).then(function () {
 						atum_order_items.unblock();
-					}
+					}).catch(swal.noop);
+					
 				}
 				
 			},
 			
-			/*do_bulk_increase_stock: function( e ) {
-				
+			do_bulk_increase_stock: function( e ) {
 				e.preventDefault();
-				atum_order_items.block();
-				
-				var $table     = $('table.atum_order_items'),
-				    $rows      = $table.find('tr.selected'),
-				    quantities = {},
-				    item_ids   = $.map($rows, function ($row) {
-					    return parseInt($($row).data('atum_order_item_id'), 10);
-				    });
-				
-				$rows.each(function () {
-					if ($(this).find('input.quantity').length) {
-						quantities[$(this).attr('data-atum_order_item_id')] = $(this).find('input.quantity').val();
-					}
-				});
-				
-				var data = {
-					atum_order_id      : atumOrder.post_id,
-					atum_order_item_ids: item_ids,
-					atum_order_item_qty: quantities,
-					action             : 'atum_increase_atum_order_item_stock',
-					security           : atumOrder.atum_order_item_nonce
-				};
-				
-				$.ajax({
-					url    : ajaxurl,
-					data   : data,
-					type   : 'POST',
-					success: function (response) {
-						window.alert(response);
-						atum_order_items.unblock();
-					}
-				});
-				
+				atum_order_items.bulk_change_stock('increase');
 			},
 			
-			do_bulk_reduce_stock: function( e ) {
-				
+			do_bulk_decrease_stock: function( e ) {
 				e.preventDefault();
+				atum_order_items.bulk_change_stock('decrease');
+			},
+			
+			bulk_change_stock: function(action) {
+				
 				atum_order_items.block();
 				
-				var $table     = $('table.atum_order_items'),
-				    $rows      = $table.find('tr.selected'),
-				    quantities = {},
-				    item_ids   = $.map($rows, function ($row) {
-					    return parseInt($($row).data('atum_order_item_id'), 10);
-				    });
-				
-				$rows.each(function () {
-					if ($(this).find('input.quantity').length) {
-						quantities[$(this).attr('data-atum_order_item_id')] = $(this).find('input.quantity').val();
+				swal({
+					title              : atumOrder.are_you_sure,
+					text               : (action === 'increase') ? atumOrder.increase_stock_msg : atumOrder.decrease_stock_msg,
+					type               : 'warning',
+					showCancelButton   : true,
+					confirmButtonText  : atumOrder.continue,
+					cancelButtonText   : atumOrder.cancel,
+					reverseButtons     : true,
+					allowOutsideClick  : false,
+					showLoaderOnConfirm: true,
+					preConfirm         : function () {
+						return new Promise(function (resolve, reject) {
+							
+							var $table     = $('table.atum_order_items'),
+							    $rows      = $table.find('tr.selected'),
+							    quantities = {},
+							    itemIds    = $.map($rows, function ($row) {
+								    return parseInt($($row).data('atum_order_item_id'), 10);
+							    });
+							
+							$rows.each(function () {
+								if ($(this).find('input.quantity').length) {
+									quantities[$(this).attr('data-atum_order_item_id')] = $(this).find('input.quantity').val();
+								}
+							});
+							
+							$.ajax({
+								url     : ajaxurl,
+								data    : {
+									atum_order_id      : atumOrder.post_id,
+									atum_order_item_ids: itemIds,
+									quantities         : quantities,
+									action             : 'atum_order_' + action + '_items_stock',
+									security           : atumOrder.atum_order_item_nonce
+								},
+								method  : 'POST',
+								dataType: 'json',
+								success : function (response) {
+									
+									if (response.success === true) {
+										resolve();
+									}
+									else {
+										reject(response.data);
+									}
+									
+								}
+							});
+							
+						});
 					}
+				}).then(function () {
+					
+					swal({
+						title            : atumOrder.done,
+						text             : (action === 'increase') ? atumOrder.stock_increased : atumOrder.stock_decreased,
+						type             : 'success',
+						confirmButtonText: atumOrder.ok
+					});
+					
+					atum_order_items.unblock();
+					
+				}, function (dismiss) {
+					atum_order_items.unblock();
 				});
-				
-				var data = {
-					id      : atumOrder.post_id,
-					item_ids: item_ids,
-					item_qty: quantities,
-					action  : 'atum_reduce_atum_order_item_stock',
-					security: atumOrder.atum_order_item_nonce
-				};
-				
-				$.ajax({
-					url    : ajaxurl,
-					data   : data,
-					type   : 'POST',
-					success: function (response) {
-						window.alert(response);
-						atum_order_items.unblock();
-					}
-				});
-				
-			},*/
+			
+			},
 			
 			backbone: {
 				
@@ -641,7 +693,7 @@
 								$( 'table.atum_order_items tbody#atum_order_line_items' ).append( response.data.html );
 							}
 							else {
-								window.alert( response.data.error );
+								this.showalert('error', atumOrder.error, response.data.error);
 							}
 							
 							atum_order_items.reloadTooltips();
@@ -678,7 +730,7 @@
 						
 					}
 					else {
-						window.alert( atumOrder.tax_rate_already_exists );
+						this.showalert('error', atumOrder.error, atumOrder.tax_rate_already_exists);
 					}
 				}
 			},
@@ -738,18 +790,38 @@
 					return false;
 				}
 				
-				var	c = confirm(atumOrder.import_order_items);
+				swal({
+					text               : atumOrder.import_order_items,
+					type               : 'warning',
+					showCancelButton   : true,
+					confirmButtonText  : atumOrder.continue,
+					cancelButtonText   : atumOrder.cancel,
+					reverseButtons     : true,
+					allowOutsideClick  : false,
+					preConfirm         : function () {
+						return new Promise(function (resolve, reject) {
+							
+							atum_order_items.load_items_table({
+								action       : 'atum_order_import_items',
+								wc_order_id  : orderId,
+								atum_order_id: atumOrder.post_id,
+								security     : atumOrder.import_order_items_nonce
+							}, 'json', resolve);
+							
+						});
+					}
+				}).catch(swal.noop);
+			
+			},
+			
+			showalert: function(type, title, message) {
 				
-				if (c === true) {
-					
-					atum_order_items.load_items_table({
-						action       : 'atum_order_import_items',
-						wc_order_id  : orderId,
-						atum_order_id: atumOrder.post_id,
-						security     : atumOrder.import_order_items_nonce
-					}, 'json');
-					
-				}
+				swal({
+					title: title,
+					text: message,
+					type: type,
+					confirmButtonText: atumOrder.ok
+				});
 			
 			}
 		};
@@ -808,28 +880,42 @@
 			
 			delete_note: function ($el) {
 				
-				if (window.confirm(atumOrder.delete_note)) {
-					
-					var $note = $el.closest('li.note');
-					
-					$note.block({
-						message   : null,
-						overlayCSS: {
-							background: '#fff',
-							opacity   : 0.6
-						}
-					});
-					
-					var data = {
-						action  : 'atum_order_delete_note',
-						note_id : $note.attr('rel'),
-						security: atumOrder.delete_note_nonce
-					};
-					
-					$.post(ajaxurl, data, function () {
-						$note.remove();
-					});
-				}
+				var $note = $el.closest('li.note');
+				
+				swal({
+					text              : atumOrder.delete_note,
+					type               : 'warning',
+					showCancelButton   : true,
+					confirmButtonText  : atumOrder.continue,
+					cancelButtonText   : atumOrder.cancel,
+					reverseButtons     : true,
+					allowOutsideClick  : false,
+					preConfirm         : function () {
+						return new Promise(function (resolve, reject) {
+							
+							$note.block({
+								message   : null,
+								overlayCSS: {
+									background: '#fff',
+									opacity   : 0.6
+								}
+							});
+							
+							var data = {
+								action  : 'atum_order_delete_note',
+								note_id : $note.attr('rel'),
+								security: atumOrder.delete_note_nonce
+							};
+							
+							$.post(ajaxurl, data, function () {
+								resolve();
+							});
+							
+						});
+					}
+				}).then(function () {
+					$note.remove();
+				}).catch(swal.noop);
 				
 				return false;
 			}
