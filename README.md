@@ -140,6 +140,28 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+**1.3.0 - 2017-10-20**
+
+Features:
+
+* New "Inbound Stock" module.
+* Added "Increase Stock" and "Decrease Stock" buttons to "Inventory Logs".
+* Added "Add to Stock" button to Purchase Order's products.
+
+**1.2.9 - 2017-10-19**
+
+Features:
+
+* New "Purchase Orders" module.
+* New "Suppliers" module.
+* Added "Locations" taxonomy to products.
+* Refactory of the ATUM Orders to be reused by other modules.
+
+Fixes:
+
+* Now it displays the "Stock Quantity" field on grouped products to be able to change the stock status when ATUM is managing the stock.
+* Display the spinner when filtering ATUM table lists.
+
 **1.2.8.2 - 2017-10-16**
 
 Fixes:
