@@ -43,7 +43,7 @@
 			padding: 0 0 3px;
 		}
 		
-		input, select, textarea {
+		> input, > select, > textarea {
 			width: 100%;
 		}
 		
@@ -79,11 +79,14 @@
 			width: 100%;
 			clear: both;
 			
-			.wc-customer-search, .wc-enhanced-select, input, select, textarea {
+			> .wc-customer-search, > .wc-enhanced-select, > input, > select, > textarea {
 				width: 100%;
 			}
 		}
 		
+		.wp-editor-area {
+			border: none;
+		}
 	}
 	
 }

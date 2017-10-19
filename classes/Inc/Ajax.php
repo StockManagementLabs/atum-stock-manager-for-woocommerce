@@ -17,9 +17,10 @@ defined( 'ABSPATH' ) or die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\InventoryLogs\InventoryLogs;
+use Atum\InboundStock\InboundStock;
+use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\ListTable;
+use Atum\StockCentral\Inc\ListTable as StockCentralListTable;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Suppliers\Suppliers;
 
@@ -33,9 +34,12 @@ final class Ajax {
 	private static $instance;
 	
 	private function __construct() {
-		
-		// Ajax callback for ListTable components
+
+		// Ajax callback for Stock Central ListTable
 		add_action( 'wp_ajax_atum_fetch_stock_central_list', array( $this, 'fetch_stock_central_list' ) );
+
+		// Ajax callback for Inbound Stock ListTable
+		add_action( 'wp_ajax_atum_fetch_inbound_stock_list', array( $this, 'fetch_inbound_stock_list' ) );
 		
 		// Ajax callback for Management Stock notice
 		add_action( 'wp_ajax_atum_manage_stock_notice', array( $this, 'manage_stock_notice' ) );
@@ -75,11 +79,13 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_order_remove_tax', array( $this, 'remove_atum_order_tax' ) );
 		add_action( 'wp_ajax_atum_order_calc_line_taxes', array( $this, 'calc_atum_order_line_taxes' ) );
 		add_action( 'wp_ajax_atum_order_save_items', array( $this, 'save_atum_order_items' ) );
+		add_action( 'wp_ajax_atum_order_increase_items_stock', array( $this, 'increase_atum_order_items_stock' ) );
+		add_action( 'wp_ajax_atum_order_decrease_items_stock', array( $this, 'decrease_atum_order_items_stock' ) );
 
-		// Update the Inventory Log status
+		// Update the ATUM Order status
 		add_action( 'wp_ajax_atum_order_mark_status', array( $this, 'mark_atum_order_status' ) );
 
-		// Import order items to Log
+		// Import WC order items to an Inventory Log
 		add_action( 'wp_ajax_atum_order_import_items', array( $this, 'import_wc_order_items' ) );
 
 	}
@@ -98,11 +104,32 @@ final class Ajax {
 			'screen'   => 'toplevel_page_' . Globals::ATUM_UI_SLUG
 		);
 		
-		do_action( 'atum/ajax/stock_central_list/before_fetch_stock', $this );
+		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
 		
-		$list = new ListTable( $args );
+		$list = new StockCentralListTable( $args );
 		$list->ajax_response();
 		
+	}
+
+	/**
+	 * Loads the Inbound Stock ListTable class and calls ajax_response method
+	 *
+	 * @since 1.3.0
+	 */
+	public function fetch_inbound_stock_list() {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		$args = array(
+			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
+			'screen'   => 'toplevel_page_' . InboundStock::UI_SLUG
+		);
+
+		do_action( 'atum/ajax/inbound_stock/before_fetch_list' );
+
+		$list = new InboundStockListTable( $args );
+		$list->ajax_response();
+
 	}
 	
 	/**
@@ -263,6 +290,9 @@ final class Ajax {
 				}
 
 			}
+
+			// Hack to prevent overwriting the purchase_price on variations
+			remove_action( 'woocommerce_update_product_variation', array(Main::get_instance(), 'save_purchase_price') );
 
 			$product->save();
 
@@ -1084,6 +1114,97 @@ final class Ajax {
 		}
 
 		wp_die();
+
+	}
+
+	/**
+	 * Increase the ATUM order products' stock by their quantity amount
+	 *
+	 * @since 1.3.0
+	 */
+	public function increase_atum_order_items_stock () {
+		$this->bulk_change_atum_order_items_stock('increase');
+	}
+
+	/**
+	 * Decrease the ATUM order products' stock by their quantity amount
+	 *
+	 * @since 1.3.0
+	 */
+	public function decrease_atum_order_items_stock () {
+		$this->bulk_change_atum_order_items_stock('decrease');
+	}
+
+	/**
+	 * Change the ATUM order products' stock by their quantity amount
+	 *
+	 * @since 1.3.0
+	 */
+	private function bulk_change_atum_order_items_stock ($action) {
+
+		check_ajax_referer( 'atum-order-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( __('You are not allowed to do this', ATUM_TEXT_DOMAIN) );
+		}
+
+		if ( ! isset($_POST['atum_order_id'], $_POST['atum_order_item_ids'], $_POST['quantities']) ) {
+			wp_send_json_error( __('Invalid data provided', ATUM_TEXT_DOMAIN) );
+		}
+
+		$atum_order_id       = absint( $_POST['atum_order_id'] );
+		$atum_order_item_ids = array_map( 'absint', $_POST['atum_order_item_ids'] );
+		$quantities          = array_map( 'absint', $_POST['quantities'] );
+
+		$atum_order       = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order_items = $atum_order->get_items();
+		$return           = array();
+
+		if ( $atum_order && ! empty( $atum_order_items ) && sizeof( $atum_order_item_ids ) > 0 ) {
+
+			foreach ( $atum_order_items as $item_id => $atum_order_item ) {
+
+				// Only increase the stock for selected items
+				if ( ! in_array( $item_id, $atum_order_item_ids ) ) {
+					continue;
+				}
+
+				$product = $atum_order_item->get_product();
+
+				if ( $product && $product->exists() && $product->managing_stock() && isset( $quantities[ $item_id ] ) && $quantities[ $item_id ] > 0 ) {
+
+					$old_stock    = $product->get_stock_quantity();
+					$stock_change = apply_filters( 'atum/ajax/restore_atum_order_stock_quantity', $quantities[ $item_id ], $item_id );
+					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
+					$item_name    = $product->get_sku() ? $product->get_sku() : $product->get_id();
+					$note         = sprintf(
+						__( 'Item %1$s stock %2$s from %3$s to %4$s.', ATUM_TEXT_DOMAIN ),
+						$item_name,
+						($action == 'increase') ? __('increased', ATUM_TEXT_DOMAIN) : __('decreased', ATUM_TEXT_DOMAIN),
+						$old_stock,
+						$new_quantity
+					);
+					$return[]     = $note;
+
+					$atum_order->add_note( $note );
+
+				}
+			}
+
+			do_action( 'atum/ajax/restore_atum_order_stock', $atum_order );
+
+			if ( empty( $return ) ) {
+
+				wp_send_json_error( sprintf(
+					__( 'No products had their stock %s - they may not have stock management enabled.', ATUM_TEXT_DOMAIN ),
+					($action == 'increase') ? __('increased', ATUM_TEXT_DOMAIN) : __('decreased', ATUM_TEXT_DOMAIN)  )
+				);
+
+			}
+
+		}
+
+		wp_send_json_success();
 
 	}
 

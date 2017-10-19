@@ -789,7 +789,7 @@
   padding: 0 0 3px;
 }
 
-.atum-meta-box .form-field input, .atum-meta-box .form-field select, .atum-meta-box .form-field textarea {
+.atum-meta-box .form-field > input, .atum-meta-box .form-field > select, .atum-meta-box .form-field > textarea {
   width: 100%;
 }
 
@@ -826,8 +826,12 @@
   clear: both;
 }
 
-.atum-meta-box .form-field.form-field-wide .wc-customer-search, .atum-meta-box .form-field.form-field-wide .wc-enhanced-select, .atum-meta-box .form-field.form-field-wide input, .atum-meta-box .form-field.form-field-wide select, .atum-meta-box .form-field.form-field-wide textarea {
+.atum-meta-box .form-field.form-field-wide > .wc-customer-search, .atum-meta-box .form-field.form-field-wide > .wc-enhanced-select, .atum-meta-box .form-field.form-field-wide > input, .atum-meta-box .form-field.form-field-wide > select, .atum-meta-box .form-field.form-field-wide > textarea {
   width: 100%;
+}
+
+.atum-meta-box .form-field .wp-editor-area {
+  border: none;
 }
 
 .wc-backbone-modal * {

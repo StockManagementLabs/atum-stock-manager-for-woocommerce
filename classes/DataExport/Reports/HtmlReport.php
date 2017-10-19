@@ -150,18 +150,6 @@ class HtmlReport extends ListTable {
 		$this->is_child = FALSE;
 
 	}
-	
-	/**
-	 * @inheritdoc
-	 *
-	 * @since 1.2.5
-	 */
-	public function single_expandable_row( $item, $type ) {
-		// Show the child columns expanded in reports
-		echo '<tr class="' . $type . '">';
-		$this->single_row_columns( $item );
-		echo '</tr>';
-	}
 
 	/**
 	 * @inheritdoc
@@ -300,7 +288,6 @@ class HtmlReport extends ListTable {
 		
 	}
 
-	
 	/**
 	 * @inheritDoc
 	 *

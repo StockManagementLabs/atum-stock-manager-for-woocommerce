@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+**1.2.8.2 - 2017-10-16**
+
+Fixes:
+
+* Fixed issue saving purchases price of variation products in Stock Central.
+
 **1.2.8.1 - 2017-10-10**
 
 Fixes:

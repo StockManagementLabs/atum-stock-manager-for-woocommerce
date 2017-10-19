@@ -284,17 +284,8 @@ h1.wp-heading-inline {
 	}
 	
 	.column-calc_type {
-		
-		.wc-type {
-			width: 20px;
-			margin-left: 0;
-		}
-		
-		.col-product-details {
-			.wc-type {
-				margin: 0 auto;
-			}
-		}
+		max-width: 50px;
+		text-align: center;
 		
 		.has-child {
 			cursor: pointer;
@@ -331,6 +322,8 @@ h1.wp-heading-inline {
 	}
 	
 	.column-calc_stock_indicator {
+		text-align: center;
+		
 		.dashicons {
 			font-size: 1.5em;
 		}

@@ -18,6 +18,7 @@ use Atum\Addons\Addons;
 use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
 use Atum\DataExport\DataExport;
+use Atum\InboundStock\InboundStock;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
@@ -46,10 +47,16 @@ class Main {
 	private $sp_obj;
 	
 	/**
-	 * The Stock central object
+	 * The Stock Central object
 	 * @var StockCentral
 	 */
 	private $sc_obj;
+
+	/**
+	 * The Inbound Stock object
+	 * @var InboundStock
+	 */
+	private $ib_obj;
 
 	/**
 	 * The Addons object
@@ -139,6 +146,11 @@ class Main {
 				'callback' => array( $this->sc_obj, 'display' ),
 				'slug'     => Globals::ATUM_UI_SLUG
 			),
+			'inbound-stock'   => array(
+				'title'    => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+				'callback' => array( $this->ib_obj, 'display' ),
+				'slug'     => InboundStock::UI_SLUG
+			),
 			'settings'        => array(
 				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this->sp_obj, 'display' ),
@@ -206,16 +218,17 @@ class Main {
 		// Load language files
 		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' );
 
-		// Load dependencies
+		// Load modules
 		Ajax::get_instance();
 		$this->sp_obj = Settings::get_instance();
 		$this->sc_obj = StockCentral::get_instance();
+		$this->ib_obj = InboundStock::get_instance();
 
 		// Load extra components
 		new Statistics( __('ATUM Statistics', ATUM_TEXT_DOMAIN) );
 		new DataExport();
 
-		// Add the help pointers
+		// Register the help pointers
 		add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
 
 		// Admin styles
@@ -501,15 +514,15 @@ class Main {
 				jQuery('#product-type').change(function() {
 					var productType = jQuery(this).val();
 					if (productType === 'grouped' || productType === 'external') {
-						jQuery('.stock_fields').addClass('wp-menu-arrow');
+						jQuery('._backorders_field').addClass('wp-menu-arrow');
 					}
 					else {
-						jQuery('.stock_fields').removeClass('wp-menu-arrow');
+						jQuery('._backorders_field').removeClass('wp-menu-arrow');
 					}
 				});
 
 				<?php if ( in_array($product->get_type(), ['grouped', 'external'] ) ): ?>
-				jQuery('.stock_fields').addClass('wp-menu-arrow');
+				jQuery('._backorders_field').addClass('wp-menu-arrow');
 				<?php endif; ?>
 			</script>
 		<?php endif;

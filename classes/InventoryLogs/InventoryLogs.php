@@ -219,7 +219,7 @@ class InventoryLogs extends AtumOrderPostType {
 			return $query;
 		}
 
-		if ( self::POST_TYPE !== $typenow ) {
+		if ( self::POST_TYPE != $typenow ) {
 			return $query;
 		}
 
@@ -257,7 +257,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 		global $pagenow, $wpdb;
 
-		if ( 'edit.php' != $pagenow || empty( $query->query_vars['s'] ) || self::POST_TYPE !== $query->query_vars['post_type'] ) {
+		if ( 'edit.php' != $pagenow || empty( $query->query_vars['s'] ) || self::POST_TYPE != $query->query_vars['post_type'] ) {
 			return;
 		}
 
@@ -457,7 +457,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	protected function get_current_atum_order($post_id) {
 
-		if ( ! $this->log || $this->log->get_id() !== $post_id ) {
+		if ( ! $this->log || $this->log->get_id() != $post_id ) {
 			$this->log = new Log( $post_id );
 		}
 

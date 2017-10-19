@@ -700,7 +700,7 @@ abstract class AtumOrderModel {
 					}
 
 					// If ID changed (new item saved to DB)...
-					if ( $item_id !== $item_key ) {
+					if ( $item_id != $item_key ) {
 						$this->items[ $item_group ][ $item_id ] = $item;
 					}
 
@@ -804,12 +804,12 @@ abstract class AtumOrderModel {
 		$statuses   = AtumOrderPostType::get_statuses();
 
 		// Only allow valid new status
-		if ( ! in_array( $new_status, array_keys($statuses) ) && 'trash' !== $new_status ) {
+		if ( ! in_array( $new_status, array_keys($statuses) ) && 'trash' != $new_status ) {
 			$new_status = 'pending';
 		}
 
 		// If the old status is set but unknown (e.g. draft) assume its pending for action usage
-		if ( $old_status && ! in_array( $old_status, array_keys($statuses) ) && 'trash' !== $old_status ) {
+		if ( $old_status && ! in_array( $old_status, array_keys($statuses) ) && 'trash' != $old_status ) {
 			$old_status = 'pending';
 		}
 
@@ -861,7 +861,7 @@ abstract class AtumOrderModel {
 			$tax_class  = $item->get_tax_class();
 			$tax_status = $item->get_tax_status();
 
-			if ( '0' !== $tax_class && 'taxable' === $tax_status && wc_tax_enabled() ) {
+			if ( '0' !== $tax_class && 'taxable' == $tax_status && wc_tax_enabled() ) {
 
 				$tax_rates = \WC_Tax::find_rates( array(
 					'country'   => $args['country'],

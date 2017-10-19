@@ -280,7 +280,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	protected function get_current_atum_order($post_id) {
 
-		if ( ! $this->po || $this->po->get_id() !== $post_id  ) {
+		if ( ! $this->po || $this->po->get_id() != $post_id  ) {
 			$this->po = new PurchaseOrder( $post_id );
 		}
 

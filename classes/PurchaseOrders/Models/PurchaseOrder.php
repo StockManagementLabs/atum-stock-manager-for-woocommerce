@@ -27,8 +27,20 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 
+		// Add the button for adding the inbound stock products to the WC stock
+		add_action('atum/atum_order/item_bulk_controls', array($this, 'add_stock_button') );
+
 		parent::__construct($id, $read_items);
 
+	}
+
+	/**
+	 * Add the button for adding the inbound stock products to the WC stock
+	 *
+	 * @since 1.3.0
+	 */
+	public function add_stock_button () {
+		?><button type="button" class="button bulk-increase-stock"><?php _e( 'Add to Stock', ATUM_TEXT_DOMAIN ); ?></button><?php
 	}
 
 	//---------
