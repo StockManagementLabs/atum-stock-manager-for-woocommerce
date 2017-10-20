@@ -387,6 +387,22 @@ abstract class AtumOrderItemModel {
 	}
 
 	/**
+	 * Get a meta_key value for the specified ATUM Order ID
+	 * Used externally
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int    $item_id
+	 * @param string $meta_key
+	 *
+	 * @return mixed
+	 */
+	public static function get_item_meta($item_id, $meta_key) {
+		self::sanitize_order_item_name();
+		return get_metadata( 'atum_order_item', $item_id, $meta_key, TRUE);
+	}
+
+	/**
 	 * Add the hook to sanitize the order_item_id's column name
 	 *
 	 * @since 1.3.0

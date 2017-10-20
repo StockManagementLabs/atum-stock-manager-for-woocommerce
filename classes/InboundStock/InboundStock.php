@@ -109,12 +109,9 @@ class InboundStock extends AtumListPage {
 	}
 	
 	/**
-	 * Enable Screen options creating the list table before the Screen option panel is rendered and enable
-	 * "per page" option. Also add help tabs and help sidebar
+	 * Enable Screen options creating the list table before the Screen option panel is rendered and enable "per page" option
 	 *
 	 * @since 1.3.0
-	 *
-	 * @TODO
 	 */
 	public function screen_options() {
 
@@ -127,57 +124,8 @@ class InboundStock extends AtumListPage {
 		
 		add_screen_option( 'per_page', $args );
 		
-		$help_tabs = array(
-			array(
-				'name'  => 'general',
-				'title' => __( 'General', ATUM_TEXT_DOMAIN ),
-			),
-			array(
-				'name'  => 'product-details',
-				'title' => __( 'Product Details', ATUM_TEXT_DOMAIN ),
-			),
-			array(
-				'name'  => 'stock-counters',
-				'title' => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
-			),
-			array(
-				'name'  => 'stock-negatives',
-				'title' => __( 'Stock Negatives', ATUM_TEXT_DOMAIN ),
-			),
-			array(
-				'name'  => 'stock-selling-manager',
-				'title' => __( 'Stock Selling Manager', ATUM_TEXT_DOMAIN ),
-			),
-		);
-		
-		$screen = get_current_screen();
-		
-		foreach ( $help_tabs as $help_tab ) {
-			$screen->add_help_tab( array_merge( array(
-				'id'       => ATUM_PREFIX . __CLASS__ . '_help_tabs_' . $help_tab['name'],
-				'callback' => array( $this, 'help_tabs_content' ),
-			), $help_tab ) );
-		}
-		
-		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/stock-central-help-sidebar' ) );
-		
 		$this->list = new ListTable( array( 'per_page' => $this->per_page) );
 		
-	}
-	
-	/**
-	 * Display the help tabs' content
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param \WP_Screen $screen    The current screen
-	 * @param array      $tab       The current help tab
-	 *
-	 * @TODO
-	 */
-	public function help_tabs_content( $screen, $tab ) {
-		
-		Helpers::load_view( 'help-tabs/stock-central-' . $tab['name'] );
 	}
 
 	

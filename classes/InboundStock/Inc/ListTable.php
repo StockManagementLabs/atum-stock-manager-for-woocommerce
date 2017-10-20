@@ -43,7 +43,8 @@ class ListTable extends AtumListTable {
 			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'    => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
-			'calc_date_expected'   => __( 'Date Expected', ATUM_TEXT_DOMAIN )
+			'calc_date_expected'   => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
+			'calc_purchase_order'  => __( 'PO', ATUM_TEXT_DOMAIN)
 		);
 
 		parent::__construct( $args );
@@ -69,6 +70,20 @@ class ListTable extends AtumListTable {
 	 */
 	protected function set_views_data( $args ) {
 		// No need to calculate views
+	}
+
+	protected function get_sortable_columns() {
+
+		$sortable_columns = parent::get_sortable_columns();
+
+		// Disable SKU sortable
+		if ( isset( $sortable_columns['_sku'] ) ) {
+			unset( $sortable_columns['_sku'] );
+		}
+
+		$sortable_columns['calc_purchase_order'] = array('PO', FALSE);
+		return apply_filters( 'atum/inbound_stock_list/sortable_columns', $sortable_columns );
+
 	}
 
 	/**
@@ -103,7 +118,7 @@ class ListTable extends AtumListTable {
 				return parent::column_calc_type($item);
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-toggle="tooltip" title="' . $product_tip . '"></span>', $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '" data-toggle="tooltip" title="' . $product_tip . '"></span>', $item, $this->product );
 
 	}
 
@@ -118,13 +133,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_inbound( $item ) {
 
-		// Get the quantity for the order item
-		$order_item_id = $item->po_item_id;
-
-		// TODO: CREATE AN EASIER WAY TO ACCESS ATUM ORDER ITEM PROPS
-		AtumOrderItemModel::sanitize_order_item_name();
-		$qty = get_metadata( 'atum_order_item', $order_item_id, '_qty', TRUE);
-
+		// Get the quantity for the ATUM Order Item
+		$qty = AtumOrderItemModel::get_item_meta($item->po_item_id, '_qty');
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
 
 	}
@@ -160,21 +170,73 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 * Column for purchase order
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return string
+	 */
+	protected function column_calc_purchase_order( $item ) {
+
+		$po_link = '<a href="' . get_edit_post_link( $item->po_id ) . '" target="_blank">' . $item->po_id . '</a>';
+		return apply_filters( 'atum/inbound_stock_list/column_purchase_order', $po_link, $item, $this->product );
+
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function prepare_items() {
 
 		global $wpdb;
 
+		$search_query = '';
+		if ( ! empty( $_REQUEST['s'] ) ) {
+
+			$search = esc_attr( $_REQUEST['s'] );
+
+			if ( is_numeric($search) ) {
+				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
+			}
+			else {
+				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'";
+			}
+
+		}
+
+		$order_by = 'ORDER BY `order_id`';
+		if ( ! empty(  $_REQUEST['orderby'] ) ) {
+
+			switch ( $_REQUEST['orderby'] ) {
+				case 'title':
+
+					$order_by = 'ORDER BY `order_item_name`';
+			        break;
+
+				case 'ID':
+
+					$order_by = 'ORDER BY oi.`order_item_id`';
+					break;
+
+
+			}
+
+		}
+
+		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], ['asc', 'desc']) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
+
 		$sql = $wpdb->prepare("
-			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id` 			
+			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
 			FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 			WHERE meta_key IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
 			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` = 'atum_pending'
+			$search_query
 			GROUP BY oi.`order_item_id`
-			ORDER BY oi.`order_item_id` DESC;",
+			$order_by $order;",
 			PurchaseOrders::POST_TYPE
 		);
 

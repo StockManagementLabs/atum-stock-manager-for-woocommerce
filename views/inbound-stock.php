@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) or die;
 		
 		<?php $list->views(); ?>
 
-		<?php /*
 		<p class="search-box">
 			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>">
 			
@@ -25,7 +24,6 @@ defined( 'ABSPATH' ) or die;
 				<input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">
 			<?php endif;?>
 		</p>
-        */ ?>
 		
 		<?php $list->display(); ?>
 		
