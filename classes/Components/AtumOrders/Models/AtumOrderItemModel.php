@@ -337,6 +337,7 @@ abstract class AtumOrderItemModel {
 			return $this->meta;
 		}
 
+		self::sanitize_order_item_name();
 		return get_metadata( 'atum_order_item', $this->id, $meta_key, $single);
 
 	}
@@ -359,6 +360,7 @@ abstract class AtumOrderItemModel {
 				$value = Helpers::trim_input($value);
 			}
 
+			self::sanitize_order_item_name();
 			update_metadata( 'atum_order_item', $this->id, $key, $value );
 		}
 
@@ -372,6 +374,7 @@ abstract class AtumOrderItemModel {
 	 * @param array $meta
 	 */
 	public function delete_meta( $meta ) {
+		self::sanitize_order_item_name();
 		delete_metadata_by_mid( 'atum_order_item', $meta->id );
 	}
 
@@ -381,6 +384,35 @@ abstract class AtumOrderItemModel {
 	 */
 	public function get_atum_order_id() {
 		return $this->atum_order_id;
+	}
+
+	/**
+	 * Add the hook to sanitize the order_item_id's column name
+	 *
+	 * @since 1.3.0
+	 */
+	public static function sanitize_order_item_name() {
+		add_filter( 'sanitize_key', array(__CLASS__, 'fix_order_item_id_column'), 10, 2 );
+	}
+
+	/**
+	 * Fix the order_item_id column name from atum_order_itemmeta table when getting meta
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $key
+	 * @param string $raw_key
+	 *
+	 * @return string
+	 */
+	public static function fix_order_item_id_column($key, $raw_key) {
+
+		if ($key == 'atum_order_item_id') {
+			$key = 'order_item_id';
+		}
+
+		return $key;
+
 	}
 
 }

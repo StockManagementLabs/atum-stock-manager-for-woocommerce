@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Inc\Globals;
 use Atum\PurchaseOrders\PurchaseOrders;
 
@@ -119,6 +120,9 @@ class ListTable extends AtumListTable {
 
 		// Get the quantity for the order item
 		$order_item_id = $item->po_item_id;
+
+		// TODO: CREATE AN EASIER WAY TO ACCESS ATUM ORDER ITEM PROPS
+		AtumOrderItemModel::sanitize_order_item_name();
 		$qty = get_metadata( 'atum_order_item', $order_item_id, '_qty', TRUE);
 
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );

@@ -64,45 +64,44 @@ abstract class AtumOrderPostType {
 		$wpdb->atum_order_itemmeta = $wpdb->prefix . self::ORDER_ITEM_META_TABLE;
 		$wpdb->tables[] = self::ORDER_ITEM_META_TABLE;
 
-		// Fix order_item_id name getting meta
-		add_filter( 'get_atum_order_item_metadata', array($this, 'sanitize_order_item_name') );
-		add_filter( 'update_atum_order_item_metadata', array($this, 'sanitize_order_item_name') );
-		add_filter( 'delete_atum_order_item_metadata', array($this, 'sanitize_order_item_name') );
+		if ( is_admin() ) {
 
-		// Add the custom columns to the post type list table
-		add_filter( 'manage_' . static::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
-		add_action( 'manage_' . static::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
-		add_filter( 'post_row_actions', array( $this, 'row_actions' ), 2, 100 );
-		add_filter( 'manage_edit-' . static::POST_TYPE . '_sortable_columns', array( $this, 'sortable_columns' ) );
-		add_filter( 'list_table_primary_column', array( $this, 'list_table_primary_column' ), 10, 2 );
+			// Add the custom columns to the post type list table
+			add_filter( 'manage_' . static::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
+			add_action( 'manage_' . static::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
+			add_filter( 'post_row_actions', array( $this, 'row_actions' ), 2, 100 );
+			add_filter( 'manage_edit-' . static::POST_TYPE . '_sortable_columns', array( $this, 'sortable_columns' ) );
+			add_filter( 'list_table_primary_column', array( $this, 'list_table_primary_column' ), 10, 2 );
 
-		// Filters and sorts the ATUM Orders' list tables
-		add_filter( 'request', array( $this, 'request_query' ) );
+			// Filters and sorts the ATUM Orders' list tables
+			add_filter( 'request', array( $this, 'request_query' ) );
 
-		// Add meta boxes to ATUM Order UI
-		add_action( 'add_meta_boxes_' . static::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
+			// Add meta boxes to ATUM Order UI
+			add_action( 'add_meta_boxes_' . static::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
 
-		// Save the meta boxes
-		add_action( 'save_post_' . static::POST_TYPE , array( $this, 'save_meta_boxes' ) );
+			// Save the meta boxes
+			add_action( 'save_post_' . static::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
-		// Disable post type view mode options
-		add_filter( 'view_mode_post_types', array( $this, 'disable_view_mode_options' ) );
+			// Disable post type view mode options
+			add_filter( 'view_mode_post_types', array( $this, 'disable_view_mode_options' ) );
 
-		// Disable Auto Save
-		add_action( 'admin_print_scripts', array( $this, 'disable_autosave' ) );
+			// Disable Auto Save
+			add_action( 'admin_print_scripts', array( $this, 'disable_autosave' ) );
 
-		// Post update messages
-		add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
+			// Post update messages
+			add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
 
-		// Bulk actions
-		add_filter( 'bulk_actions-edit-' . static::POST_TYPE, array( $this, 'add_bulk_actions' ) );
-		add_filter( 'handle_bulk_actions-edit-' . static::POST_TYPE, array( $this, 'handle_bulk_actions' ), 10, 3 );
-		add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
-		add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ), 10, 2 );
+			// Bulk actions
+			add_filter( 'bulk_actions-edit-' . static::POST_TYPE, array( $this, 'add_bulk_actions' ) );
+			add_filter( 'handle_bulk_actions-edit-' . static::POST_TYPE, array( $this, 'handle_bulk_actions' ), 10, 3 );
+			add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
+			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ), 10, 2 );
 
-		// Enqueue scripts
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'admin_footer', array($this, 'print_scripts') );
+			// Enqueue scripts
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			add_action( 'admin_footer', array( $this, 'print_scripts' ) );
+
+		}
 
 	}
 
@@ -791,36 +790,6 @@ abstract class AtumOrderPostType {
 	 * @return array
 	 */
 	abstract public function post_updated_messages($messages);
-
-	/**
-	 * Add the hook to sanitize the order_item_id's column name
-	 *
-	 * @since 1.3.0
-	 */
-	public function sanitize_order_item_name() {
-		add_filter( 'sanitize_key', array($this, 'fix_order_item_id_column'), 10, 2 );
-		return null;
-	}
-
-	/**
-	 * Fix the order_item_id column name from atum_order_itemmeta table when getting meta
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $key
-	 * @param string $raw_key
-	 *
-	 * @return string
-	 */
-	public function fix_order_item_id_column($key, $raw_key) {
-
-		if ($key == 'atum_order_item_id') {
-			$key = 'order_item_id';
-		}
-
-		return $key;
-
-	}
 
 	/**
 	 * Enqueue the scripts
