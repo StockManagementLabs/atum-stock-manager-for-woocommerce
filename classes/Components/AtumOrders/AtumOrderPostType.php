@@ -860,6 +860,8 @@ abstract class AtumOrderPostType {
 					'decrease_stock_msg'       => __( 'This will decrease the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
 					'stock_increased'          => __( 'The stock was increased successfully', ATUM_TEXT_DOMAIN),
 					'stock_decreased'          => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN),
+					'confirm_purchase_price'   => __( 'Do you want to set the purchase price of this product to {{number}}?', ATUM_TEXT_DOMAIN),
+					'purchase_price_changed'   => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN),
 					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
 					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),

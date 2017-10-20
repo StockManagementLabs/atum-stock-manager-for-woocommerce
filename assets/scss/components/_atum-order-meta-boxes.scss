@@ -655,6 +655,12 @@ ul.atum_order_notes {
 			
 			table.meta {
 				width: 100%;
+				
+				button {
+					padding-left: 7px;
+					padding-right: 7px;
+					font-size: 12px;
+				}
 			}
 			
 			table.meta, table.display_meta {

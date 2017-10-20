@@ -60,7 +60,8 @@
 					
 					// Meta
 					.on( 'click', 'button.add-atum-order-item-meta', this.item_meta.add )
-					.on( 'click', 'button.remove-atum-order-item-meta', this.item_meta.remove );
+					.on( 'click', 'button.remove-atum-order-item-meta', this.item_meta.remove )
+					.on( 'click', 'button.set-purchase-price', this.item_meta.set_purchase_price );
 				
 				$( document.body )
 					.on( 'wc_backbone_modal_loaded', this.backbone.init )
@@ -459,6 +460,60 @@
 					}).catch(swal.noop);
 					
 					return false;
+					
+				},
+				
+				set_purchase_price: function(e) {
+					
+					var $item         = $(e.target).closest('.item'),
+					    purchasePrice = parseFloat($item.find('.line_total').val() || 0);
+					
+					swal({
+						html               : atumOrder.confirm_purchase_price.replace('{{number}}', '<strong>' + purchasePrice + '</strong>'),
+						type               : 'question',
+						showCancelButton   : true,
+						confirmButtonText  : atumOrder.continue,
+						cancelButtonText   : atumOrder.cancel,
+						reverseButtons     : true,
+						allowOutsideClick  : false,
+						showLoaderOnConfirm: true,
+						preConfirm         : function () {
+							return new Promise(function (resolve, reject) {
+								
+								$.ajax({
+									url    : ajaxurl,
+									data   : {
+										atum_order_id      : atumOrder.post_id,
+										atum_order_item_id : $item.data('atum_order_item_id'),
+										purchase_price     : purchasePrice,
+										action             : 'atum_order_change_purchase_price',
+										security           : atumOrder.atum_order_item_nonce
+									},
+									type   : 'POST',
+									dataType: 'json',
+									success: function (response) {
+										
+										if (response.success === false) {
+											reject(response.data);
+										}
+										else {
+											resolve();
+										}
+									}
+								});
+								
+							});
+						}
+					}).then(function() {
+						
+						swal({
+							title            : atumOrder.done,
+							text             : atumOrder.purchase_price_changed,
+							type             : 'success',
+							confirmButtonText: atumOrder.ok
+						});
+						
+					}).catch(swal.noop);
 					
 				}
 			},

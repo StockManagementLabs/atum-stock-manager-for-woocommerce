@@ -70,7 +70,10 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="4"><button class="add-atum-order-item-meta button"><?php _e( 'Add&nbsp;meta', ATUM_TEXT_DOMAIN ); ?></button></td>
+				<td colspan="4">
+					<button class="add-atum-order-item-meta button"><?php _e( 'Add&nbsp;meta', ATUM_TEXT_DOMAIN ); ?></button>
+					<?php do_action( 'atum/atum_order/item_meta_controls', $item ); ?>
+				</td>
 			</tr>
 		</tfoot>
 	</table>

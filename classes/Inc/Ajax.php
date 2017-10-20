@@ -81,6 +81,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_order_save_items', array( $this, 'save_atum_order_items' ) );
 		add_action( 'wp_ajax_atum_order_increase_items_stock', array( $this, 'increase_atum_order_items_stock' ) );
 		add_action( 'wp_ajax_atum_order_decrease_items_stock', array( $this, 'decrease_atum_order_items_stock' ) );
+		add_action( 'wp_ajax_atum_order_change_purchase_price', array( $this, 'change_atum_order_item_purchase_price' ) );
 
 		// Update the ATUM Order status
 		add_action( 'wp_ajax_atum_order_mark_status', array( $this, 'mark_atum_order_status' ) );
@@ -1203,6 +1204,37 @@ final class Ajax {
 			}
 
 		}
+
+		wp_send_json_success();
+
+	}
+
+	/**
+	 * Change the purchase price of a product within a PO
+	 *
+	 * @since 1.3.0
+	 */
+	public function change_atum_order_item_purchase_price() {
+
+		check_ajax_referer( 'atum-order-item', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( __('You are not allowed to do this', ATUM_TEXT_DOMAIN) );
+		}
+
+		if ( ! isset($_POST['atum_order_id'], $_POST['atum_order_item_id'], $_POST['purchase_price']) ) {
+			wp_send_json_error( __('Invalid data provided', ATUM_TEXT_DOMAIN) );
+		}
+
+		$atum_order = Helpers::get_atum_order_model( absint($_POST['atum_order_id']) );
+		$atum_order_item = $atum_order->get_item( absint($_POST['atum_order_item_id']) );
+		$product = wc_get_product( $atum_order_item->get_product_id() );
+
+		if ( ! is_a($product, '\WC_Product') ) {
+			wp_send_json_error( __('Product not found', ATUM_TEXT_DOMAIN) );
+		}
+
+		update_post_meta( $product->get_id(), '_purchase_price', floatval( $_POST['purchase_price'] ) );
 
 		wp_send_json_success();
 
