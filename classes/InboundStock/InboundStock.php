@@ -84,11 +84,11 @@ class InboundStock extends AtumListPage {
 		if ($plugin_page == self::UI_SLUG) {
 
 			$sql = $wpdb->prepare("
-				SELECT meta_value, order_id 
+				SELECT `meta_value`, `order_id` 
 				FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
-				WHERE meta_key IN ('_product_id', '_variation_id') AND order_item_type = 'line_item' 
+				WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
 				AND p.`post_type` = %s AND meta_value > 0
 				ORDER BY oi.`order_item_id` DESC;",
 				PurchaseOrders::POST_TYPE

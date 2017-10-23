@@ -17,6 +17,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
+use Atum\PurchaseOrders\PurchaseOrders;
 
 
 class ListTable extends AtumListTable {
@@ -142,7 +143,7 @@ class ListTable extends AtumListTable {
 
 		// Extra filters
 		$extra_filters = (array) apply_filters( 'atum/stock_central_list/extra_filters', array(
-			//'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'stock_on_hold'     => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'reserved_stock'    => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
 			'back_orders'       => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
@@ -291,6 +292,45 @@ class ListTable extends AtumListTable {
 	}
 	
 	/**
+	 * Column for inbound stock: shows sum of inbound stock within Purchase Orders.
+	 *
+	 * @since  1.3.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int
+	 */
+	protected function column_calc_inbound( $item ) {
+
+		$inbound_stock = self::EMPTY_COL;
+
+		if ($this->allow_calcs) {
+
+			// Calculate the inbound stock from pending purchase orders
+			global $wpdb;
+
+			$sql = $wpdb->prepare("
+				SELECT SUM(oim2.`meta_value`) AS quantity 			
+				FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
+				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
+				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
+				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` = 'atum_pending' AND oim2.`meta_key` = '_qty'	
+				GROUP BY oim.`meta_value`;",
+				PurchaseOrders::POST_TYPE,
+				$this->product->get_id()
+			);
+
+			$inbound_stock = $wpdb->get_col($sql);
+			$inbound_stock = ( ! empty($inbound_stock) ) ? reset($inbound_stock) : 0;
+
+		}
+		
+		return apply_filters( 'atum/stock_central_list/column_inbound_stock', $inbound_stock, $item, $this->product );
+	}
+
+	/**
 	 * Column for stock on hold: show amount of items with pending payment.
 	 *
 	 * @since  0.0.1
@@ -301,12 +341,11 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_hold( $item ) {
 
-		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
-		}
-		else {
-		
-			$column_item = 0;
+		$stock_on_hold = self::EMPTY_COL;
+
+		if ($this->allow_calcs) {
+
+			$stock_on_hold = 0;
 			$orders = Helpers::get_orders( array( 'order_status' => 'wc-on-hold, wc-pending' ) );
 
 			foreach ( $orders as $order ) {
@@ -315,15 +354,15 @@ class ListTable extends AtumListTable {
 
 				foreach ( $products as $product ) {
 					if ( $this->product->get_id() == $product['product_id'] ) {
-						$column_item += $product['qty'];
+						$stock_on_hold += $product['qty'];
 					}
 
 				}
 
 			}
 		}
-		
-		return apply_filters( 'atum/stock_central_list/column_stock_hold', $column_item, $item, $this->product );
+
+		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
 	}
 
 	/**
@@ -337,14 +376,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_reserved( $item ) {
 
-		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
-		}
-		else {
-			$column_item = $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $column_item, $item, $this->product );
+		$reserved_stock = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
+		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product );
 	}
 	
 	/**
@@ -358,25 +391,24 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_back_orders( $item ) {
 
-		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
-		}
-		else {
+		$back_orders = self::EMPTY_COL;
 
-			$column_item = '--';
+		if ($this->allow_calcs) {
+
+			$back_orders = '--';
 			if ( $this->product->backorders_allowed() ) {
 
 				$stock_quantity = $this->product->get_stock_quantity();
-				$column_item = 0;
+				$back_orders = 0;
 				if ( $stock_quantity < $this->no_stock ) {
-					$column_item = $this->no_stock - $stock_quantity;
+					$back_orders = $this->no_stock - $stock_quantity;
 				}
 
 			}
 
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_back_orders', $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_back_orders', $back_orders, $item, $this->product );
 		
 	}
 	
@@ -392,13 +424,13 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sold_today( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
+			$sold_today = self::EMPTY_COL;
 		}
 		else {
-			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
+			$sold_today = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_sold_today', $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_today', $sold_today, $item, $this->product );
 		
 	}
 
@@ -413,14 +445,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_returns( $item ) {
 
-		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
-		}
-		else {
-			$column_item = $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $column_item, $item, $this->product );
+		$consumer_returns = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
+		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product );
 	}
 
 	/**
@@ -434,14 +460,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_damages( $item ) {
 
-		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
-		}
-		else {
-			$column_item = $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $column_item, $item, $this->product );
+		$warehouse_damages = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
+		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product );
 	}
 
 	/**
@@ -455,14 +475,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_lost_in_post( $item ) {
 
-		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
-		}
-		else {
-			$column_item = $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $column_item, $item, $this->product );
+		$lost_in_post = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
+		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
 	}
 	
 	/**
@@ -477,13 +491,13 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sales7( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
+			$sales7 = self::EMPTY_COL;
 		}
 		else {
-			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
+			$sales7 = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $sales7, $item, $this->product );
 		
 	}
 	
@@ -499,13 +513,13 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sales14( $item ) {
 
 		if (! $this->allow_calcs) {
-			$column_item = self::EMPTY_COL;
+			$sales14 = self::EMPTY_COL;
 		}
 		else {
-			$column_item = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
+			$sales14 = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $column_item, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $sales14, $item, $this->product );
 		
 	}
 	
@@ -705,6 +719,33 @@ class ListTable extends AtumListTable {
 		switch ( $extra_filter ) {
 
 			case 'inbound_stock':
+
+				// Get all the products within pending Purchase Orders
+				global $wpdb;
+
+				$sql = $wpdb->prepare("
+					SELECT MAX(CAST( oim.`meta_value` AS SIGNED )) AS product_id, SUM(oim2.`meta_value`) AS quantity 			
+					FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+					LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+					LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
+					LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
+					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
+					AND p.`post_type` = %s AND oim.`meta_value` > 0 AND `post_status` = 'atum_pending' AND oim2.`meta_key` = '_qty'	
+					GROUP BY oim.`meta_value`;",
+					PurchaseOrders::POST_TYPE
+				);
+
+				$product_results = $wpdb->get_results($sql, OBJECT_K);
+
+				if ( ! empty($product_results) ) {
+
+					array_walk($product_results, function(&$item) {
+						$item = $item->quantity;
+					});
+
+					$filtered_products = $product_results;
+
+				}
 
 		        break;
 
