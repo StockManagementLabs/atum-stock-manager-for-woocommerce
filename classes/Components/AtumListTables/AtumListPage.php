@@ -84,5 +84,5 @@ abstract class AtumListPage {
 		}
 
 	}
-	
+
 }

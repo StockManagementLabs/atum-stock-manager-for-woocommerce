@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Inbound stock counter represents the volume of products that have been ordered in by the store admin or manager. You can add inbound stock manually using the 'Inventory Logs' add-on.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Inbound stock counter represents the volume of products that have been ordered in, using the Purchase Order feature and are pending delivery.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock on Hold', ATUM_TEXT_DOMAIN ) ?></strong></td>

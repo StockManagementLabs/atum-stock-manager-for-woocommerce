@@ -68,6 +68,13 @@ class Bootstrap {
 				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
 			}
 
+			/**
+			 * @deprecated
+			 * Namespaces were changed in 1.3.0 and the class aliases may be deleted in future versions
+			 */
+			class_alias('\Atum\Components\AtumListTables\AtumListPage', '\Atum\Components\AtumListPage');
+			class_alias('\Atum\Components\AtumListTables\AtumListTable', '\Atum\Components\AtumListTable');
+
 			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
 			// in queries when any dependency is not met
 			AtumComments::get_instance();

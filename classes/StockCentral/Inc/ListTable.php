@@ -290,45 +290,6 @@ class ListTable extends AtumListTable {
 		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
 
 	}
-	
-	/**
-	 * Column for inbound stock: shows sum of inbound stock within Purchase Orders.
-	 *
-	 * @since  1.3.0
-	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
-	 *
-	 * @return int
-	 */
-	protected function column_calc_inbound( $item ) {
-
-		$inbound_stock = self::EMPTY_COL;
-
-		if ($this->allow_calcs) {
-
-			// Calculate the inbound stock from pending purchase orders
-			global $wpdb;
-
-			$sql = $wpdb->prepare("
-				SELECT SUM(oim2.`meta_value`) AS quantity 			
-				FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
-				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` = 'atum_pending' AND oim2.`meta_key` = '_qty'	
-				GROUP BY oim.`meta_value`;",
-				PurchaseOrders::POST_TYPE,
-				$this->product->get_id()
-			);
-
-			$inbound_stock = $wpdb->get_col($sql);
-			$inbound_stock = ( ! empty($inbound_stock) ) ? reset($inbound_stock) : 0;
-
-		}
-		
-		return apply_filters( 'atum/stock_central_list/column_inbound_stock', $inbound_stock, $item, $this->product );
-	}
 
 	/**
 	 * Column for stock on hold: show amount of items with pending payment.
