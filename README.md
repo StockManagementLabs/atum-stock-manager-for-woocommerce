@@ -140,13 +140,14 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
-**1.3.0 - 2017-10-20**
+**1.3.0 - 2017-10-23**
 
 Features:
 
 * New "Inbound Stock" module.
 * Added "Increase Stock" and "Decrease Stock" buttons to "Inventory Logs".
 * Added "Add to Stock" button to Purchase Order's products.
+* Added "Inbound  Stock" column and filter to "Stock Central".
 
 **1.2.9 - 2017-10-19**
 

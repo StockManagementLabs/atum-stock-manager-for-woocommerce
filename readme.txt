@@ -1,7 +1,6 @@
 === ATUM Inventory Management for WooCommerce ===
 
 Contributors: stockmanagementlabs, salvamb, japiera
-Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.8.2
@@ -222,13 +221,14 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
-= 1.3.0 - 2017-10-20 =
+= 1.3.0 - 2017-10-23 =
 
 Features:
 
 * New "Inbound Stock" module.
 * Added "Increase Stock" and "Decrease Stock" buttons to "Inventory Logs".
 * Added "Add to Stock" button to Purchase Order's products.
+* Added "Inbound  Stock" column and filter to "Stock Central".
 
 = 1.2.9 - 2017-10-19 =
 
