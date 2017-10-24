@@ -684,6 +684,14 @@ h1.wp-heading-inline .atum-loading {
   display: flex;
 }
 
+.atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sorted[class*="column-calc_"] a {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+}
+
 .atum-list-table tr.expanded {
   -webkit-transition: all 0.1s ease-in-out;
   -o-transition: all 0.1s ease-in-out;
@@ -760,6 +768,10 @@ h1.wp-heading-inline .atum-loading {
   min-width: 70px;
 }
 
+.atum-list-table td[class*="column-calc_"], .atum-list-table td.column-_stock, .atum-list-table td.column-_regular_price, .atum-list-table td.column-_sale_price, .atum-list-table td.column-_purchase_price, .atum-list-table th[class*="column-calc_"], .atum-list-table th.column-_stock, .atum-list-table th.column-_regular_price, .atum-list-table th.column-_sale_price, .atum-list-table th.column-_purchase_price {
+  text-align: center;
+}
+
 .atum-list-table .column-calc_type {
   max-width: 50px;
   text-align: center;
@@ -792,10 +804,6 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table #calc_stock_out_days {
   min-width: 56px;
-}
-
-.atum-list-table .column-calc_stock_indicator {
-  text-align: center;
 }
 
 .atum-list-table .column-calc_stock_indicator .dashicons {

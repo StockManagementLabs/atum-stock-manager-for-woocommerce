@@ -194,6 +194,12 @@ h1.wp-heading-inline {
 				padding: 0;
 				@include flexbox;
 			}
+			
+			&[class*="column-calc_"] {
+				a {
+					@include flex-justify-content(center);
+				}
+			}
 		}
 	}
 	
@@ -281,6 +287,11 @@ h1.wp-heading-inline {
 		&.column-sku {
 			min-width: 70px;
 		}
+		
+		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price, &.column-_purchase_price {
+			text-align: center;
+		}
+		
 	}
 	
 	.column-calc_type {
@@ -322,8 +333,6 @@ h1.wp-heading-inline {
 	}
 	
 	.column-calc_stock_indicator {
-		text-align: center;
-		
 		.dashicons {
 			font-size: 1.5em;
 		}
