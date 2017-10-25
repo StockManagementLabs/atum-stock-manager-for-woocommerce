@@ -151,22 +151,32 @@ class Suppliers {
 
 			case 'company_code':
 
-
+				echo get_post_meta( $post->ID, '_supplier_details_code', TRUE );
 				break;
 
 			case 'company_phone':
 
-
+				echo get_post_meta( $post->ID, '_supplier_details_phone', TRUE );
 				break;
 
 			case 'assigned_to':
 
+				$user_id = get_post_meta( $post->ID, '_default_settings_assigned_to', TRUE );
+
+				if ($user_id > 0) {
+					$user = get_user_by('id', $user_id);
+
+					if ($user) {
+						echo '<a href="' . get_edit_user_link($user_id) . '" target="_blank">' . $user->display_name . '</a>';
+					}
+
+				}
 
 				break;
 
 			case 'location':
 
-
+				echo get_post_meta( $post->ID, '_default_settings_location', TRUE );
 				break;
 
 		}
