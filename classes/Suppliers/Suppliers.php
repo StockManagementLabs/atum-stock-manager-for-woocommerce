@@ -303,7 +303,7 @@ class Suppliers {
 			$supplier = get_post($supplier_id);
 		}
 		?>
-		<div class="options_group show_if_simple show_if_variable">
+		<div class="options_group show_if_simple show_if_variable show_if_product-part show_if_raw-material">
 			<p class="form-field _supplier_field">
 				<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
 
