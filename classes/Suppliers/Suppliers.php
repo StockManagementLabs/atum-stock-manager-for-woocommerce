@@ -38,6 +38,10 @@ class Suppliers {
 
 		$this->register_post_type();
 
+		// Add columns to Suppliers list table
+		add_filter('manage_' . self::POST_TYPE . '_posts_columns', array($this, 'add_columns'));
+		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
+
 		// Add meta boxes to Supplier post UI
 		add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
 
@@ -104,6 +108,70 @@ class Suppliers {
 
 		// Register the Suppliers post type
 		register_post_type( self::POST_TYPE, $args );
+
+	}
+
+	/**
+	 * Set the columns for the Suppliers' list table
+	 *
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function add_columns($columns) {
+
+		unset($columns['date']);
+
+		$sup_columns = array(
+			'company_code'  => __( 'Code', ATUM_TEXT_DOMAIN ),
+			'company_phone' => __( 'Phone', ATUM_TEXT_DOMAIN ),
+			'assigned_to'   => __( 'Assigned To', ATUM_TEXT_DOMAIN ),
+			'location'      => __( 'Location', ATUM_TEXT_DOMAIN )
+		);
+
+		return array_merge($columns, $sup_columns);
+
+	}
+
+	/**
+	 * Output custom columns for Suppliers' list table
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $column
+	 *
+	 * @return bool True if the column is rendered or False if not
+	 */
+	public function render_columns($column) {
+
+		global $post;
+		$rendered = FALSE;
+
+		switch ( $column ) {
+
+			case 'company_code':
+
+
+				break;
+
+			case 'company_phone':
+
+
+				break;
+
+			case 'assigned_to':
+
+
+				break;
+
+			case 'location':
+
+
+				break;
+
+		}
+
+		return $rendered;
 
 	}
 

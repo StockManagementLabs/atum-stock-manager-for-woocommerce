@@ -74,6 +74,9 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Add the "Purchase Orders" link to the ATUM's admin bar menu
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
 
+		// Add the help tab to PO list page
+		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+
 	}
 
 	/**
@@ -286,6 +289,43 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		return $this->po;
 
+	}
+
+	/**
+	 * Add the help tab to the PO list page
+	 *
+	 * @since 1.3.0
+	 */
+	public function add_help_tab() {
+
+		$screen = get_current_screen();
+
+		if ($screen && strpos($screen->id, self::POST_TYPE) !== FALSE) {
+
+			$help_tabs = array(
+				array(
+					'name'  => 'columns',
+					'title' => __( 'Columns', ATUM_TEXT_DOMAIN ),
+				)
+			);
+
+			Helpers::add_help_tab($help_tabs, $this);
+
+		}
+
+	}
+
+	/**
+	 * Display the help tabs' content
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param \WP_Screen $screen    The current screen
+	 * @param array      $tab       The current help tab
+	 */
+	public function help_tabs_content( $screen, $tab ) {
+
+		Helpers::load_view( 'help-tabs/purchase-orders/' . $tab['name'] );
 	}
 
 }

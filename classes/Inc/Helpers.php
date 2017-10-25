@@ -1004,4 +1004,27 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Set the help tab for admin pages
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array  $help_tabs
+	 * @param Object $obj
+	 */
+	public static function add_help_tab($help_tabs, $obj) {
+
+		$screen = get_current_screen();
+
+		foreach ( $help_tabs as $help_tab ) {
+			$screen->add_help_tab( array_merge( array(
+				'id'       => ATUM_PREFIX . get_class($obj) . '_help_tabs_' . $help_tab['name'],
+				'callback' => array( $obj, 'help_tabs_content' ),
+			), $help_tab ) );
+		}
+
+		$screen->set_help_sidebar( self::load_view_to_string( 'help-tabs/help-sidebar' ) );
+
+	}
+
 }

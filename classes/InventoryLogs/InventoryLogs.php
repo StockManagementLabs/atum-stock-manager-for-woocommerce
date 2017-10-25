@@ -87,6 +87,8 @@ class InventoryLogs extends AtumOrderPostType {
 		add_filter( 'query_vars', array( $this, 'add_custom_query_var' ) );
 		add_action( 'parse_query', array( $this, 'log_search_custom_fields' ) );
 
+		// Add the help tab to Inventory Logs' list page
+		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 	}
 
 	/**
@@ -329,7 +331,7 @@ class InventoryLogs extends AtumOrderPostType {
 			'atum_order_title' => __( 'Log', ATUM_TEXT_DOMAIN ),
 			'type'             => __( 'Type', ATUM_TEXT_DOMAIN ),
 			'wc_order'         => __( 'Order', ATUM_TEXT_DOMAIN ),
-			'notes'            => '<span class="log-notes_head tips" data-tip="' . esc_attr__( 'Log Notes', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Notes', ATUM_TEXT_DOMAIN ) . '</span>',
+			'notes'            => '<span class="notes_head tips" data-tip="' . esc_attr__( 'Log Notes', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Notes', ATUM_TEXT_DOMAIN ) . '</span>',
 			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
 			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN )
@@ -463,6 +465,43 @@ class InventoryLogs extends AtumOrderPostType {
 
 		return $this->log;
 
+	}
+
+	/**
+	 * Add the help tab to the Inventory Logs' list page
+	 *
+	 * @since 1.3.0
+	 */
+	public function add_help_tab() {
+
+		$screen = get_current_screen();
+
+		if ($screen && strpos($screen->id, self::POST_TYPE) !== FALSE) {
+
+			$help_tabs = array(
+				array(
+					'name'  => 'columns',
+					'title' => __( 'Columns', ATUM_TEXT_DOMAIN ),
+				)
+			);
+
+			Helpers::add_help_tab($help_tabs, $this);
+
+		}
+
+	}
+
+	/**
+	 * Display the help tabs' content
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param \WP_Screen $screen    The current screen
+	 * @param array      $tab       The current help tab
+	 */
+	public function help_tabs_content( $screen, $tab ) {
+
+		Helpers::load_view( 'help-tabs/inventory-logs/' . $tab['name'] );
 	}
 
 }

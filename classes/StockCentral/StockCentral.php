@@ -109,7 +109,7 @@ class StockCentral extends AtumListPage {
 			), $help_tab ) );
 		}
 		
-		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/stock-central-help-sidebar' ) );
+		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/help-sidebar' ) );
 		
 		$this->list = new ListTable( array( 'per_page' => $this->per_page) );
 		
@@ -125,7 +125,7 @@ class StockCentral extends AtumListPage {
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 		
-		Helpers::load_view( 'help-tabs/stock-central-' . $tab['name'] );
+		Helpers::load_view( 'help-tabs/stock-central/' . $tab['name'] );
 	}
 
 	

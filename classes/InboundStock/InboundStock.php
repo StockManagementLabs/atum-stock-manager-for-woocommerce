@@ -47,9 +47,6 @@ class InboundStock extends AtumListPage {
 		// Initialize on admin page load
 		add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
-		// Reduce the products shown in List Table to those included within Purchase Orders
-		//add_action( 'pre_get_posts', array($this, 'filter_po_products') );
-
 		parent::init_hooks();
 		
 	}
@@ -69,44 +66,6 @@ class InboundStock extends AtumListPage {
 		) );
 		
 	}
-
-	/**
-	 * Filter the Inbound Stock products to only show those included within Purchase Orders
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param \WP_Query $query
-	 */
-	public function filter_po_products($query) {
-
-		global $plugin_page, $wpdb;
-
-		if ($plugin_page == self::UI_SLUG) {
-
-			$sql = $wpdb->prepare("
-				SELECT `meta_value`, `order_id` 
-				FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
-				WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-				AND p.`post_type` = %s AND meta_value > 0
-				ORDER BY oi.`order_item_id` DESC;",
-				PurchaseOrders::POST_TYPE
-			);
-
-			$po_products = $wpdb->get_results($sql);
-			$post_in = array(-1); // No results when no products were found within POs
-
-			if ( ! empty($po_products) ) {
-				$post_in = wp_list_pluck($po_products, 'meta_value');
-				$query->set( 'order_ids', wp_list_pluck($po_products, 'order_id') );
-			}
-
-			$query->set( 'post__in', $post_in );
-
-		}
-
-	}
 	
 	/**
 	 * Enable Screen options creating the list table before the Screen option panel is rendered and enable "per page" option
@@ -123,9 +82,32 @@ class InboundStock extends AtumListPage {
 		);
 		
 		add_screen_option( 'per_page', $args );
+
+		// Add the help tab
+		$help_tabs = array(
+			array(
+				'name'  => 'columns',
+				'title' => __( 'Columns', ATUM_TEXT_DOMAIN ),
+			)
+		);
+
+		Helpers::add_help_tab($help_tabs, $this);
 		
 		$this->list = new ListTable( array( 'per_page' => $this->per_page) );
 		
+	}
+
+	/**
+	 * Display the help tabs' content
+	 *
+	 * @since 0.0.2
+	 *
+	 * @param \WP_Screen $screen    The current screen
+	 * @param array      $tab       The current help tab
+	 */
+	public function help_tabs_content( $screen, $tab ) {
+
+		Helpers::load_view( 'help-tabs/inbound-stock/' . $tab['name'] );
 	}
 
 	
