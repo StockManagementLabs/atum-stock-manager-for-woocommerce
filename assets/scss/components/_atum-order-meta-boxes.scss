@@ -923,3 +923,39 @@ ul.atum_order_notes {
 		}
 	}
 }
+
+// Items blocker
+.items-blocker {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background: rgba(#000, .5);
+	z-index: 1;
+	
+	&, h3 {
+		left: 0;
+		right: 0;
+	}
+	
+	h3 {
+		color: #FFF;
+		font-size: 30px;
+		line-height: 1.3;
+		margin: 0;
+		padding: 0 $grid-gutter-width*2;
+		@include vertical-align-absolute;
+		text-align: center;
+	}
+	
+	&:not(.unblocked) {
+		+ .atum_order_items_wrapper {
+			#atum_order_line_items {
+				display: none;
+			}
+		}
+	}
+	
+	&.unblocked {
+		display: none;
+	}
+}

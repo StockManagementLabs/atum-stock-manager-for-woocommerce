@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Suppliers\Suppliers;
 
 
 class PurchaseOrder extends AtumOrderModel {
@@ -28,10 +29,16 @@ class PurchaseOrder extends AtumOrderModel {
 	public function __construct( $id = 0, $read_items = TRUE ) {
 
 		// Add the button for adding the inbound stock products to the WC stock
-		add_action('atum/atum_order/item_bulk_controls', array($this, 'add_stock_button') );
+		add_action( 'atum/atum_order/item_bulk_controls', array($this, 'add_stock_button') );
 
 		// Add the button for setting the purchase price to products within POs
-		add_action('atum/atum_order/item_meta_controls', array($this, 'set_purchase_price_button') );
+		add_action( 'atum/atum_order/item_meta_controls', array($this, 'set_purchase_price_button') );
+
+		// Add the items blocker div to the items metabox within ATUM orders with no supplier selected
+		add_action( 'atum/atum_order/before_items_meta_box', array($this, 'maybe_add_items_blocker') );
+
+		// Limit the results of the enhanced select search when adding products to the PO
+		add_filter( 'atum/atum_order/included_search_products', array($this, 'limit_searchable_products'), 10, 2 );
 
 		parent::__construct($id, $read_items);
 
@@ -53,6 +60,37 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function set_purchase_price_button () {
 		?><button type="button" class="button set-purchase-price"><?php _e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button><?php
+	}
+
+	/**
+	 * Add the items blocker div to the items metabox within ATUM orders with no supplier selected
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param PurchaseOrder $po
+	 */
+	public function maybe_add_items_blocker($po) {
+
+		$supplier = $po->get_supplier();
+		$unblocked = ($supplier) ? ' unblocked' : '';
+		echo '<div class="items-blocker' . $unblocked . '"><h3>' . __('Set the supplier and save the Purchase Order to be able to add items', ATUM_TEXT_DOMAIN) . '</h3></div>';
+
+	}
+
+	/**
+	 * Limit the results of the enhanced select search when adding products to the PO
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string        $products  A JSON array of product IDs to include
+	 * @param PurchaseOrder $po        The current Purchase Order
+	 *
+	 * @return string
+	 */
+	public function limit_searchable_products($products, $po) {
+
+		$products = Suppliers::get_supplier_products( $po->get_supplier(), 'ids' );
+		return json_encode($products);
 	}
 
 	//---------

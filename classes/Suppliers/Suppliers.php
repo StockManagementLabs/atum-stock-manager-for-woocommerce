@@ -363,6 +363,38 @@ class Suppliers {
 
 	}
 
+	/**
+	 * Get all the products linked to the specified supplier
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int    $supplier_id  The supplier ID
+	 * @param string $fields       Which fields to return (all or ids)
+	 *
+	 * @return array|bool
+	 */
+	public static function get_supplier_products($supplier_id, $fields = '') {
+
+		$supplier = get_post($supplier_id);
+
+		if ($supplier->post_type == self::POST_TYPE) {
+
+			$args = array(
+				'post_type'      => 'product',
+				'posts_per_page' => - 1,
+				'meta_key'       => '_supplier',
+				'meta_value_num' => $supplier_id,
+				'fields'         => $fields
+			);
+
+			return apply_filters( 'atum/suppliers/products', get_posts($args), $supplier );
+
+		}
+
+		return FALSE;
+
+	}
+
 
 	/****************************
 	 * Instance methods

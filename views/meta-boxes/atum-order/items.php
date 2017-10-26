@@ -30,9 +30,11 @@ $currency  = $atum_order->get_currency();
 $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 ?>
 
-<div class="atum-meta-box">
+<div class="atum-meta-box <?php echo $post_type->name ?>_items">
 
-	<div class="atum_order_items_wrapper atum-order-items-editable">
+	<?php do_action('atum/atum_order/before_items_meta_box', $atum_order) ?>
+
+	<div class="atum_order_items_wrapper">
 		<table cellpadding="0" cellspacing="0" class="atum_order_items">
 
 			<thead>
@@ -132,7 +134,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 		<?php do_action( 'atum/atum_order/item_bulk_controls', $atum_order ); ?>
 	</div>
 
-	<div class="atum-order-data-row atum-order-totals-items atum-order-items-editable">
+	<div class="atum-order-data-row atum-order-totals-items">
 		<?php
 		/*$coupons = $atum_order->get_items( array( 'coupon' ) );
 
@@ -332,7 +334,9 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 					<article>
 						<form action="" method="post">
-							<select class="wc-product-search" multiple="multiple" style="width: 50%;" id="add_item_id" name="add_atum_order_items[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>"></select>
+							<select class="wc-product-search" multiple="multiple" style="width: 50%;" id="add_item_id" name="add_atum_order_items[]"
+									data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+									data-include="<?php echo apply_filters('atum/atum_order/included_search_products', '', $atum_order) ?>"></select>
 						</form>
 					</article>
 
@@ -410,5 +414,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 		<div class="wc-backbone-modal-backdrop modal-close"></div>
 	</script>
+
+	<?php do_action('atum/atum_order/after_items_meta_box', $atum_order) ?>
 
 </div>

@@ -14,6 +14,8 @@
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Helpers;
+
 $po_status = $atum_order->get_status();
 
 ?>
@@ -23,7 +25,7 @@ $po_status = $atum_order->get_status();
 
 	<input name="post_title" type="hidden" value="<?php echo empty( $atum_order->get_title() ) ? __( 'Purchase Order', ATUM_TEXT_DOMAIN ) : esc_attr( $atum_order->get_title() ); ?>" />
 	<input name="post_status" type="hidden" value="<?php echo ($po_status) ? ATUM_PREFIX . $po_status : 'atum_pending' ?>" />
-	<input type="hidden" id="atum_ordere_is_editable" value="<?php echo ( $atum_order->is_editable() ) ? 'true' : 'false' ?>">
+	<input type="hidden" id="atum_order_is_editable" value="<?php echo ( $atum_order->is_editable() ) ? 'true' : 'false' ?>">
 
 	<div class="atum-meta-box panel">
 
@@ -35,13 +37,14 @@ $po_status = $atum_order->get_status();
 				<p class="form-field form-field-wide">
 					<label for="customer_user"><?php _e( 'Supplier:', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<select class="wc-product-search" id="supplier" name="supplier" data-allow_clear="true" data-action="atum_json_search_suppliers"
+					<select class="wc-product-search block-items" id="supplier" name="supplier" data-allow_clear="true" data-action="atum_json_search_suppliers"
 							data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"
 							data-selected="" data-minimum_input_length="1">
 						<?php if ( ! empty($supplier) ): ?>
-							<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
+							<option value="<?php echo $supplier->ID ?>" selected="selected"><?php echo $supplier->post_title ?></option>
 						<?php endif; ?>
 					</select>
+					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty($supplier) ) echo $supplier->ID ?>">
 				</p>
 
 				<p class="form-field">
@@ -53,7 +56,7 @@ $po_status = $atum_order->get_status();
 
 				<p class="form-field form-field-wide">
 					<label for="status"><?php _e( 'PO status:', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php \Atum\Inc\Helpers::atum_order_status_dropdown('status', $po_status) ?>
+					<?php Helpers::atum_order_status_dropdown('status', $po_status) ?>
 				</p>
 
 				<p class="form-field expected-at-location-date">
@@ -77,8 +80,8 @@ $po_status = $atum_order->get_status();
 				</div>
 
 				<?php do_action( 'atum/purchase_orders/after_po_details', $atum_order ); ?>
-			</div>
 
+			</div>
 		</div>
 
 	</div>

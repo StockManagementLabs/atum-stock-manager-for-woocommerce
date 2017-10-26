@@ -18,11 +18,13 @@
 			
 			init: function() {
 				
-				this.$container = $( '#atum_order_items' );
+				this.$container = $('#atum_order_items');
+				this.$itemsTable = $('table.atum_order_items');
 				this.stupidtable.init();
 				this.isEditable = $('#atum_order_is_editable').val();
+				this.askRemoval = true;
 				
-				// Bind events
+				// Bind items' events
 				this.$container
 					.on( 'click', 'button.add-line-item', this.add_line_item )
 					.on( 'click', '.cancel-action', this.cancel )
@@ -70,6 +72,9 @@
 				// Trigger ATUM order type dependent fields
 				$('#atum_order_type').change(this.toggleExtraFields);
 				
+				// Items' blockers
+				$('.atum_order_data_column_container').on( 'change', '.block-items', this.maybe_remove_items );
+				
 				// Ask for importing the order items after linking an order
 				$('#wc_order').change(this.importOrderItems);
 				
@@ -91,13 +96,13 @@
 				this.$container.unblock();
 			},
 			
-			reload_items: function() {
+			reload_items: function(callback) {
 				
 				this.load_items_table({
 					atum_order_id: atumOrder.post_id,
 					action       : 'atum_order_load_items',
 					security     : atumOrder.atum_order_item_nonce
-				});
+				}, 'html', callback);
 			},
 			
 			load_items_table: function(data, dataType, callback) {
@@ -234,7 +239,7 @@
 				$.post( ajaxurl, data, function( response ) {
 					
 					if ( response.success ) {
-						$( 'table.atum_order_items tbody#atum_order_fee_line_items' ).append( response.data.html );
+						atum_order_items.$itemsTable.find('tbody#atum_order_fee_line_items').append( response.data.html );
 					}
 					else {
 						this.showalert('error', atumOrder.error, response.data.error);
@@ -261,7 +266,7 @@
 				$.post( ajaxurl, data, function( response ) {
 					
 					if ( response.success ) {
-						$( 'table.atum_order_items tbody#atum_order_shipping_line_items' ).append( response.data.html );
+						atum_order_items.$itemsTable.find('tbody#atum_order_shipping_line_items').append( response.data.html );
 					}
 					else {
 						this.showalert('error', atumOrder.error, response.data.error);
@@ -554,16 +559,18 @@
 				e.stopPropagation();
 			},
 			
-			do_bulk_delete: function( e ) {
+			maybe_remove_items: function() {
 				
-				e.preventDefault();
-				var $table = $('table.atum_order_items'),
-				    $rows  = $table.find('tr.selected');
+				var $blocker      = $(this),
+				    newValue      = $blocker.val(),
+				    oldValue      = $blocker.siblings('.item-blocker-old-value').val(),
+				    $currentItems = atum_order_items.$itemsTable.find('tr.item');
 				
-				if ($rows.length) {
+				if ($currentItems.length && ( !newValue || (oldValue && newValue !== oldValue) )) {
 					
 					swal({
-						text               : atumOrder.remove_item_notice,
+						title              : atumOrder.are_you_sure,
+						text               : atumOrder.remove_all_items_notice,
 						type               : 'warning',
 						showCancelButton   : true,
 						confirmButtonText  : atumOrder.continue,
@@ -574,50 +581,124 @@
 						preConfirm         : function () {
 							return new Promise(function (resolve, reject) {
 								
-								atum_order_items.block();
-								
-								var delete_items = [],
-								    deferred     = [];
-								
-								$.map($rows, function (row) {
-									delete_items.push( parseInt($(row).data('atum_order_item_id'), 10) );
-									return;
-								});
-								
-								if (delete_items.length) {
-									
-									deferred.push($.ajax({
-										url : ajaxurl,
-										data: {
-											atum_order_id      : atumOrder.post_id,
-											atum_order_item_ids: delete_items,
-											action             : 'atum_order_remove_item',
-											security           : atumOrder.atum_order_item_nonce
-										},
-										type: 'POST'
-									}));
-									
-								}
-								
-								if (deferred) {
-									
-									$.when.apply($, deferred).done(function () {
-										atum_order_items.reload_items();
-										resolve();
-									});
-									
-								}
-								else {
-									resolve();
-								}
+								// Select all the item rows and delete them in bulk
+								$currentItems.addClass('selected');
+								atum_order_items.askRemoval = false;
+								atum_order_items.do_bulk_delete();
 								
 							});
 						}
 					}).then(function () {
-						atum_order_items.unblock();
-					}).catch(swal.noop);
+					
+						if (!newValue) {
+							$('.items-blocker').removeClass('unblocked');
+						}
+					
+					}, function (dismiss) {
+						
+						// Unbind, restore the value and rebind again
+						$blocker.unbind('change', atum_order_items.maybe_remove_items)
+								.val(oldValue).change()
+								.change( atum_order_items.maybe_remove_items );
+					
+					});
 					
 				}
+				else if (newValue !== oldValue) {
+					$('.items-blocker').removeClass('unblocked');
+				}
+			
+			},
+			
+			do_bulk_delete: function( e ) {
+				
+				if (typeof e !== 'undefined') {
+					e.preventDefault();
+				}
+				
+				var $rows    = atum_order_items.$itemsTable.find('tr.selected'),
+				    deferred = [];
+				
+				if ($rows.length) {
+					
+					if (atum_order_items.askRemoval === true) {
+						
+						swal({
+							text               : atumOrder.remove_item_notice,
+							type               : 'warning',
+							showCancelButton   : true,
+							confirmButtonText  : atumOrder.continue,
+							cancelButtonText   : atumOrder.cancel,
+							reverseButtons     : true,
+							allowOutsideClick  : false,
+							showLoaderOnConfirm: true,
+							preConfirm         : function () {
+								return new Promise(function (resolve, reject) {
+									
+									deferred = atum_order_items.bulk_delete_items($rows);
+									
+									if (deferred.length) {
+										$.when.apply($, deferred).done(function () {
+											atum_order_items.reload_items();
+											resolve();
+										});
+									}
+									else {
+										resolve();
+									}
+									
+								});
+							}
+						}).catch(swal.noop);
+						
+					}
+					else {
+						
+						deferred = atum_order_items.bulk_delete_items($rows);
+						atum_order_items.askRemoval = true;
+						
+						if (deferred.length) {
+							$.when.apply($, deferred).done(function () {
+								atum_order_items.reload_items(function () {
+									swal.close();
+								});
+							});
+						}
+						
+					}
+					
+				}
+				
+			},
+			
+			bulk_delete_items: function($rows) {
+				
+				atum_order_items.block();
+				
+				var delete_items = [],
+				    deferred     = [];
+				
+				$.map($rows, function (row) {
+					delete_items.push( parseInt($(row).data('atum_order_item_id'), 10) );
+					return;
+				});
+				
+				if (delete_items.length) {
+					
+					deferred.push( $.ajax({
+						url : ajaxurl,
+						data: {
+							atum_order_id      : atumOrder.post_id,
+							atum_order_item_ids: delete_items,
+							action             : 'atum_order_remove_item',
+							security           : atumOrder.atum_order_item_nonce
+						},
+						type: 'POST'
+					}) );
+					
+				}
+				
+				return deferred;
 				
 			},
 			
@@ -648,8 +729,7 @@
 					preConfirm         : function () {
 						return new Promise(function (resolve, reject) {
 							
-							var $table     = $('table.atum_order_items'),
-							    $rows      = $table.find('tr.selected'),
+							var $rows      = atum_order_items.$itemsTable.find('tr.selected'),
 							    quantities = {},
 							    itemIds    = $.map($rows, function ($row) {
 								    return parseInt($($row).data('atum_order_item_id'), 10);
@@ -745,7 +825,7 @@
 						$.post( ajaxurl, data, function( response ) {
 							
 							if ( response.success ) {
-								$( 'table.atum_order_items tbody#atum_order_line_items' ).append( response.data.html );
+								atum_order_items.$itemsTable.find('tbody#atum_order_line_items').append( response.data.html );
 							}
 							else {
 								this.showalert('error', atumOrder.error, response.data.error);
@@ -793,8 +873,8 @@
 			stupidtable: {
 				
 				init: function() {
-					$( '.atum_order_items' ).stupidtable();
-					$( '.atum_order_items' ).on( 'aftertablesort', this.add_arrows );
+					atum_order_items.$itemsTable.stupidtable();
+					atum_order_items.$itemsTable.on( 'aftertablesort', this.add_arrows );
 				},
 				
 				add_arrows: function( event, data ) {
