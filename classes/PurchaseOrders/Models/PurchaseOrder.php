@@ -58,8 +58,11 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.3.0
 	 */
-	public function set_purchase_price_button () {
-		?><button type="button" class="button set-purchase-price"><?php _e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button><?php
+	public function set_purchase_price_button ($item) {
+
+		if ($item->get_type() == 'line_item'):
+			?><button type="button" class="button set-purchase-price"><?php _e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button><?php
+		endif;
 	}
 
 	/**

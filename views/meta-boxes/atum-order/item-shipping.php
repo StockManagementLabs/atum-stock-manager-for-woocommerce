@@ -113,12 +113,12 @@ $currency = $atum_order->get_currency();
 
 	endif; ?>
 
-	<td class="atum-order-edit-line-item">
-		<?php if ( $atum_order->is_editable() ) : ?>
-			<div class="atum-order-edit-line-item-actions">
-				<a class="edit-atuim-order-item" href="#"></a><a class="delete-atum-order-item" href="#"></a>
-			</div>
-		<?php endif; ?>
+	<td class="atum-order-edit-line-item" width="1%">
+		<div class="atum-order-edit-line-item-actions">
+			<?php if ( $atum_order->is_editable() ) : ?>
+				<a class="edit-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
+			<?php endif; ?>
+		</div>
 	</td>
 </tr>
 <?php

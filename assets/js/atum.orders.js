@@ -19,7 +19,6 @@
 			init: function() {
 				
 				this.$container = $('#atum_order_items');
-				this.$itemsTable = $('table.atum_order_items');
 				this.stupidtable.init();
 				this.isEditable = $('#atum_order_is_editable').val();
 				this.askRemoval = true;
@@ -144,19 +143,19 @@
 				
 				var $row          = $(this).closest('tr.item'),
 				    qty           = $(this).val(),
-				    o_qty         = $(this).attr('data-qty'),
+				    o_qty         = $(this).data('qty'),
 				    line_total    = $('input.line_total', $row),
 				    line_subtotal = $('input.line_subtotal', $row);
 				
 				// Totals
-				var unit_total = accounting.unformat( line_total.attr( 'data-total' ), atumOrder.mon_decimal_point ) / o_qty;
+				var unit_total = accounting.unformat( line_total.data( 'total' ), atumOrder.mon_decimal_point ) / o_qty;
 				line_total.val(
 					parseFloat( accounting.formatNumber( unit_total * qty, atumOrder.rounding_precision, '' ) )
 						.toString()
 						.replace( '.', atumOrder.mon_decimal_point )
 				);
 				
-				var unit_subtotal = accounting.unformat( line_subtotal.attr( 'data-subtotal' ), atumOrder.mon_decimal_point ) / o_qty;
+				var unit_subtotal = accounting.unformat( line_subtotal.data( 'subtotal' ), atumOrder.mon_decimal_point ) / o_qty;
 				line_subtotal.val(
 					parseFloat( accounting.formatNumber( unit_subtotal * qty, atumOrder.rounding_precision, '' ) )
 						.toString()
@@ -168,9 +167,9 @@
 					
 					var $line_total_tax    = $(this),
 					    tax_id             = $line_total_tax.data('tax_id'),
-					    unit_total_tax     = accounting.unformat($line_total_tax.attr('data-total_tax'), atumOrder.mon_decimal_point) / o_qty,
+					    unit_total_tax     = accounting.unformat($line_total_tax.data('total_tax'), atumOrder.mon_decimal_point) / o_qty,
 					    $line_subtotal_tax = $('input.line_subtotal_tax[data-tax_id="' + tax_id + '"]', $row),
-					    unit_subtotal_tax  = accounting.unformat($line_subtotal_tax.attr('data-subtotal_tax'), atumOrder.mon_decimal_point) / o_qty;
+					    unit_subtotal_tax  = accounting.unformat($line_subtotal_tax.data('subtotal_tax'), atumOrder.mon_decimal_point) / o_qty;
 					
 					if ( 0 < unit_total_tax ) {
 						$line_total_tax.val(
@@ -208,7 +207,7 @@
 				$( '.atum-order-edit-line-item .atum-order-edit-line-item-actions' ).show();
 				
 				// Reload the items
-				if ( 'true' === $(this).attr('data-reload') ) {
+				if ( 'true' === $(this).data('reload') ) {
 					atum_order_items.reload_items();
 				}
 				
@@ -239,7 +238,7 @@
 				$.post( ajaxurl, data, function( response ) {
 					
 					if ( response.success ) {
-						atum_order_items.$itemsTable.find('tbody#atum_order_fee_line_items').append( response.data.html );
+						$('#atum_order_fee_line_items').append( response.data.html );
 					}
 					else {
 						this.showalert('error', atumOrder.error, response.data.error);
@@ -266,7 +265,7 @@
 				$.post( ajaxurl, data, function( response ) {
 					
 					if ( response.success ) {
-						atum_order_items.$itemsTable.find('tbody#atum_order_shipping_line_items').append( response.data.html );
+						$('#atum_order_shipping_line_items').append( response.data.html );
 					}
 					else {
 						this.showalert('error', atumOrder.error, response.data.error);
@@ -297,7 +296,7 @@
 				$this.closest( 'tr' ).find( '.edit' ).show();
 				$this.hide();
 				$('button.add-line-item').click();
-				$('button.cancel-action').attr( 'data-reload', true );
+				$('button.cancel-action').data( 'reload', true );
 				
 				return false;
 				
@@ -306,7 +305,7 @@
 			delete_item: function() {
 				
 				var $item              = $(this).closest('tr.item, tr.fee, tr.shipping'),
-				    atum_order_item_id = $item.attr('data-atum_order_item_id');
+				    atum_order_item_id = $item.data('atum_order_item_id');
 				
 				swal({
 					text               : atumOrder.remove_item_notice,
@@ -363,7 +362,7 @@
 							
 							atum_order_items.load_items_table({
 								action       : 'atum_order_remove_tax',
-								rate_id      : $(this).attr('data-rate_id'),
+								rate_id      : $(this).data('rate_id'),
 								atum_order_id: atumOrder.post_id,
 								security     : atumOrder.atum_order_item_nonce
 							}, 'html', resolve);
@@ -430,8 +429,8 @@
 					    index   = $items.find('tr').length + 1,
 					    $row    = '<tr data-meta_id="0">' +
 						    '<td>' +
-						    '<input type="text" placeholder="' + atumOrder.placeholder_name + '" name="meta_key[' + $item.attr('data-atum_order_item_id') + '][new-' + index + ']" />' +
-						    '<textarea placeholder="' + atumOrder.placeholder_value + '" name="meta_value[' + $item.attr('data-atum_order_item_id') + '][new-' + index + ']"></textarea>' +
+						    '<input type="text" placeholder="' + atumOrder.placeholder_name + '" name="meta_key[' + $item.data('atum_order_item_id') + '][new-' + index + ']" />' +
+						    '<textarea placeholder="' + atumOrder.placeholder_value + '" name="meta_value[' + $item.data('atum_order_item_id') + '][new-' + index + ']"></textarea>' +
 						    '</td>' +
 						    '<td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>' +
 						    '</tr>';
@@ -471,7 +470,8 @@
 				set_purchase_price: function(e) {
 					
 					var $item         = $(e.target).closest('.item'),
-					    purchasePrice = parseFloat($item.find('.line_total').val() || 0);
+					    qty           = parseFloat($item.find('input.quantity').val() || 1),
+					    purchasePrice = parseFloat($item.find('input.line_total').val() || 0) / qty;
 					
 					swal({
 						html               : atumOrder.confirm_purchase_price.replace('{{number}}', '<strong>' + purchasePrice + '</strong>'),
@@ -535,10 +535,21 @@
 					$row.addClass('selected');
 				}
 				
-				var $rows  = $table.find('tr.selected');
+				var $rows                = $table.find('tr.selected'),
+				    $editControlsWrapper = $('div.atum-order-item-bulk-edit');
 				
 				if ($rows.length) {
-					$('div.atum-order-item-bulk-edit').slideDown();
+					
+					// The Increase/Decrease stock buttons must be only visible when at least one product is selected
+					var $stockChangeButtons = $('.bulk-decrease-stock, .bulk-increase-stock');
+					if ($('table.atum_order_items').find('tr.item.selected').length) {
+						$stockChangeButtons.show();
+					}
+					else {
+						$stockChangeButtons.hide();
+					}
+					
+					$editControlsWrapper.slideDown();
 					
 					var selected_product = false;
 					
@@ -550,7 +561,7 @@
 			
 				}
 				else {
-					$('div.atum-order-item-bulk-edit').slideUp();
+					$editControlsWrapper.slideUp();
 				}
 				
 			},
@@ -564,7 +575,7 @@
 				var $blocker      = $(this),
 				    newValue      = $blocker.val(),
 				    oldValue      = $blocker.siblings('.item-blocker-old-value').val(),
-				    $currentItems = atum_order_items.$itemsTable.find('tr.item');
+				    $currentItems = $('table.atum_order_items').find('tr.item');
 				
 				if ($currentItems.length && ( !newValue || (oldValue && newValue !== oldValue) )) {
 					
@@ -616,7 +627,7 @@
 					e.preventDefault();
 				}
 				
-				var $rows    = atum_order_items.$itemsTable.find('tr.selected'),
+				var $rows    = $('table.atum_order_items').find('tr.selected'),
 				    deferred = [];
 				
 				if ($rows.length) {
@@ -729,7 +740,7 @@
 					preConfirm         : function () {
 						return new Promise(function (resolve, reject) {
 							
-							var $rows      = atum_order_items.$itemsTable.find('tr.selected'),
+							var $rows      = $('table.atum_order_items').find('tr.selected'),
 							    quantities = {},
 							    itemIds    = $.map($rows, function ($row) {
 								    return parseInt($($row).data('atum_order_item_id'), 10);
@@ -737,7 +748,7 @@
 							
 							$rows.each(function () {
 								if ($(this).find('input.quantity').length) {
-									quantities[$(this).attr('data-atum_order_item_id')] = $(this).find('input.quantity').val();
+									quantities[$(this).data('atum_order_item_id')] = $(this).find('input.quantity').val();
 								}
 							});
 							
@@ -825,7 +836,7 @@
 						$.post( ajaxurl, data, function( response ) {
 							
 							if ( response.success ) {
-								atum_order_items.$itemsTable.find('tbody#atum_order_line_items').append( response.data.html );
+								$('#atum_order_line_items').append( response.data.html );
 							}
 							else {
 								this.showalert('error', atumOrder.error, response.data.error);
@@ -873,8 +884,8 @@
 			stupidtable: {
 				
 				init: function() {
-					atum_order_items.$itemsTable.stupidtable();
-					atum_order_items.$itemsTable.on( 'aftertablesort', this.add_arrows );
+					$('table.atum_order_items').stupidtable();
+					$('table.atum_order_items').on( 'aftertablesort', this.add_arrows );
 				},
 				
 				add_arrows: function( event, data ) {
