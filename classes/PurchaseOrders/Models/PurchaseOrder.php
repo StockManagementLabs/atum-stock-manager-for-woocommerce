@@ -109,7 +109,7 @@ class PurchaseOrder extends AtumOrderModel {
 	public function product_search_message($po) {
 
 		$supplier = $po->get_supplier();
-		echo '<em class="alert">' . sprintf( __("Only products linked to '%s' supplier can be searched."), $supplier->post_title ) . '</em>';
+		echo '<em class="alert"><i class="dashicons dashicons-info"></i> ' . sprintf( __("Only products linked to '%s' supplier can be searched."), $supplier->post_title ) . '</em>';
 	}
 
 	//---------

@@ -400,7 +400,7 @@ class Suppliers {
 		if ($supplier->post_type == self::POST_TYPE) {
 
 			$args = array(
-				'post_type'      => 'product',
+				'post_type'      => array('product', 'product_variation'),
 				'posts_per_page' => - 1,
 				'fields'         => $fields,
 				'meta_query'     => array(
