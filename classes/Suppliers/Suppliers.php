@@ -50,9 +50,11 @@ class Suppliers {
 
 		// Add the supplier selection to products
 		add_action( 'woocommerce_product_options_general_product_data', array($this, 'show_product_supplier_meta_box') );
+		add_action( 'woocommerce_variation_options_pricing', array($this, 'show_product_supplier_meta_box'), 11, 3 );
 
 		// Save the product supplier meta box
 		add_action( 'save_post_product' , array( $this, 'save_product_supplier_meta_box' ) );
+		add_action( 'woocommerce_update_product_variation', array($this, 'save_product_supplier_meta_box') );
 
 		// Enqueue scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -294,29 +296,52 @@ class Suppliers {
 	 * Displays the Supplier selector in WC products
 	 *
 	 * @since 1.3.0
+	 *
+	 * @param int      $loop             Only for variations. The loop item number
+	 * @param array    $variation_data   Only for variations. The variation item data
+	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
-	public function show_product_supplier_meta_box() {
+	public function show_product_supplier_meta_box($loop = NULL, $variation_data = array(), $variation = NULL) {
 
-		$supplier_id = get_post_meta(get_the_ID(), '_supplier', TRUE);
+		global $post;
+
+		if ( empty($variation) ) {
+
+			$product = wc_get_product( $post->ID );
+
+			// Do not add the field to variable products (every variation will have its own)
+			if ( $product->get_type() == 'variable' ) {
+				return;
+			}
+
+		}
+
+		$product_id = empty($variation) ? $post->ID : $variation->ID;
+		$supplier_id = get_post_meta($product_id, '_supplier', TRUE);
 
 		if ($supplier_id) {
 			$supplier = get_post($supplier_id);
 		}
-		?>
+
+		if ( empty($variation) ): ?>
 		<div class="options_group show_if_simple show_if_variable show_if_product-part show_if_raw-material">
-			<p class="form-field _supplier_field">
+		<?php endif; ?>
+
+			<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-last' ?>">
 				<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
 
-				<select class="wc-product-search" id="_supplier" name="_supplier" style="width: 80%" data-allow_clear="true" data-action="atum_json_search_suppliers"
-					data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"
-					data-selected="" data-minimum_input_length="1">
+				<select class="wc-product-search" id="_supplier" name="_supplier" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
+					data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+					data-multiple="false" data-selected="" data-minimum_input_length="1">
 					<?php if ( ! empty($supplier) ): ?>
 						<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
 					<?php endif; ?>
 				</select>
 			</p>
+
+		<?php if ( empty($variation) ): ?>
 		</div>
-		<?php
+		<?php endif;
 
 	}
 
@@ -329,17 +354,12 @@ class Suppliers {
 	 */
 	public function save_product_supplier_meta_box($post_id) {
 
-		if ( isset($_POST['_supplier']) ) {
-
+		if ( ! empty($_POST['_supplier']) ) {
 			$supplier = absint( $_POST['_supplier'] );
-
-			if ( ! $supplier ) {
-				delete_post_meta( $post_id, '_supplier' );
-			}
-			else {
-				update_post_meta( $post_id, '_supplier', $supplier );
-			}
-
+			update_post_meta( $post_id, '_supplier', $supplier );
+		}
+		else {
+			delete_post_meta( $post_id, '_supplier' );
 		}
 
 	}
