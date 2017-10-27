@@ -95,7 +95,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function limit_searchable_products($products, $po) {
 
-		$products = Suppliers::get_supplier_products( $po->get_supplier(), 'ids' );
+		$products = Suppliers::get_supplier_products( $po->get_supplier('id'), 'ids' );
 		return json_encode($products);
 	}
 
@@ -142,16 +142,24 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @return \WP_Post|bool
+	 * @param string $return    Optional. The type of object to return. Possible values 'id' or 'post'
+	 *
+	 * @return \WP_Post|int|bool
 	 */
-	public function get_supplier() {
+	public function get_supplier($return = 'post') {
 
 		$supplier_id = $this->get_meta('_supplier');
 
 		if ($supplier_id) {
-			$supplier = get_post($supplier_id);
 
-			return $supplier;
+			if ($return == 'id') {
+				return $supplier_id;
+			}
+			else {
+				$supplier = get_post( $supplier_id );
+
+				return $supplier;
+			}
 		}
 
 		return FALSE;

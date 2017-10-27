@@ -382,9 +382,13 @@ class Suppliers {
 			$args = array(
 				'post_type'      => 'product',
 				'posts_per_page' => - 1,
-				'meta_key'       => '_supplier',
-				'meta_value_num' => $supplier_id,
-				'fields'         => $fields
+				'fields'         => $fields,
+				'meta_query'     => array(
+					array(
+						'key'   => '_supplier',
+						'value' => $supplier_id
+					)
+				)
 			);
 
 			return apply_filters( 'atum/suppliers/products', get_posts($args), $supplier );
