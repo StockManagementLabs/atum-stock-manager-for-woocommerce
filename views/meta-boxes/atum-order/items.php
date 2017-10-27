@@ -11,9 +11,6 @@ defined( 'ABSPATH' ) or die;
 
 global $wpdb;
 
-// Get the payment gateway
-//$payment_gateway = wc_get_payment_gateway_by_order( $order );
-
 // Get line items
 $line_items          = $atum_order->get_items( apply_filters( 'atum/atum_order/item_types', 'line_item' ) );
 $line_items_fee      = $atum_order->get_items( 'fee' );
@@ -112,20 +109,6 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 				?>
 			</tbody>
 
-			<?php /*
-			<tbody id="refunds">
-				<?php
-				if ( $refunds = $atum_order->get_refunds() ) {
-					foreach ( $refunds as $refund ) {
-						include( 'refunds.php' );
-					}
-
-					do_action( 'atum/atum_order/after_refunds', $atum_order->get_id() );
-				}
-				?>
-			</tbody>
-	        */ ?>
-
 		</table>
 	</div>
 
@@ -135,28 +118,6 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 	</div>
 
 	<div class="atum-order-data-row atum-order-totals-items">
-		<?php
-		/*$coupons = $atum_order->get_items( array( 'coupon' ) );
-
-		if ( $coupons ) {
-			?>
-			<div class="atum-used-coupons">
-				<ul class="atum_coupon_list">
-					<?php
-					echo '<li><strong>' . __( 'Coupon(s)', ATUM_TEXT_DOMAIN ) . '</strong></li>';
-
-					foreach ( $coupons as $item_id => $item ) {
-						$post_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item->get_code() ) );
-						$link    = $post_id ? add_query_arg( array( 'post' => $post_id, 'action' => 'edit' ), admin_url( 'post.php' ) ) : add_query_arg( array( 's' => $item->get_code(), 'post_status' => 'all', 'post_type' => 'shop_coupon' ), admin_url( 'edit.php' ) );
-
-						echo '<li class="code"><a href="' . esc_url( $link ) . '" data-toggle="tooltip" title="' . esc_attr( wc_price( $item->get_discount(), array( 'currency' => $currency ) ) ) . '"><span>' . esc_html( $item->get_code() ) . '</span></a></li>';
-					}
-					?>
-				</ul>
-			</div>
-			<?php
-		}*/
-		?>
 
 		<table class="atum-order-totals">
 			<tr>
@@ -173,14 +134,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 				<td class="label"><span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( sprintf('This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name )), ATUM_TEXT_DOMAIN ) ?>"></span> <?php _e( 'Shipping:', ATUM_TEXT_DOMAIN ); ?></td>
 				<td width="1%"></td>
 				<td class="total">
-					<?php
-					/*if ( ( $refunded = $atum_order->get_total_shipping_refunded() ) > 0 ) {
-						echo '<del>' . strip_tags( wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ) ) . '</del> <ins>' . wc_price( $atum_order->get_shipping_total() - $refunded, array( 'currency' => $currency ) ) . '</ins>';
-					}
-					else {*/
-						echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) );
-					//}
-					?>
+					<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); ?>
 				</td>
 			</tr>
 
@@ -192,14 +146,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 					<tr>
 						<td class="label"><?php echo $tax->label; ?>:</td>
 						<td width="1%"></td>
-						<td class="total"><?php
-							/*if ( ( $refunded = $atum_order->get_total_tax_refunded_by_rate_id( $tax->rate_id ) ) > 0 ) {
-								echo '<del>' . strip_tags( $tax->formatted_amount ) . '</del> <ins>' . wc_price( WC_Tax::round( $tax->amount, wc_get_price_decimals() ) - WC_Tax::round( $refunded, wc_get_price_decimals() ), array( 'currency' => $currency ) ) . '</ins>';
-							}
-							else {*/
-								echo $tax->formatted_amount;
-							//}
-							?></td>
+						<td class="total"><?php echo $tax->formatted_amount; ?></td>
 					</tr>
 				<?php endforeach;
 
@@ -216,16 +163,6 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 			</tr>
 
 			<?php do_action( 'atum/atum_order/totals_after_total', $atum_order->get_id() ); ?>
-
-			<?php /*if ( $atum_order->get_total_refunded() ) : ?>
-				<tr>
-					<td class="label refunded-total"><?php _e( 'Refunded', ATUM_TEXT_DOMAIN ); ?>:</td>
-					<td width="1%"></td>
-					<td class="total refunded-total">-<?php echo wc_price( $atum_order->get_total_refunded(), array( 'currency' => $currency ) ); ?></td>
-				</tr>
-			<?php endif; ?>
-
-			<?php do_action( 'atum/atum_order/totals_after_refunded', $atum_order->get_id() );*/ ?>
 
 		</table>
 
@@ -245,10 +182,6 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 				<button type="button" class="button add-atum-order-tax"><?php _e( 'Add tax', ATUM_TEXT_DOMAIN ); ?></button>
 			<?php endif;
 
-			/*if ( 0 < $atum_order->get_total() - $atum_order->get_total_refunded() || 0 < absint( $atum_order->get_item_count() - $atum_order->get_item_count_refunded() ) ) : ?>
-				<button type="button" class="button refund-items"><?php _e( 'Refund', ATUM_TEXT_DOMAIN ); ?></button>
-			<?php endif;*/
-
 			// allow adding custom buttons
 			do_action( 'atum/atum_order/add_action_buttons', $atum_order );
 
@@ -264,61 +197,11 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 		<button type="button" class="button add-atum-order-fee"><?php _e( 'Add fee', ATUM_TEXT_DOMAIN ); ?></button>
 		<button type="button" class="button add-atum-order-shipping"><?php _e( 'Add shipping cost', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php
-		// allow adding custom buttons
+		// Allow adding custom buttons
 		do_action( 'atum/atum_order/add_line_buttons', $atum_order ); ?>
 		<button type="button" class="button cancel-action"><?php _e( 'Cancel', ATUM_TEXT_DOMAIN ); ?></button>
 		<button type="button" class="button button-primary save-action"><?php _e( 'Save', ATUM_TEXT_DOMAIN ); ?></button>
 	</div>
-
-	<?php /*if ( 0 < $atum_order->get_total() - $atum_order->get_total_refunded() || 0 < absint( $atum_order->get_item_count() - $atum_order->get_item_count_refunded() ) ) : ?>
-
-		<div class="atum-order-data-row atum-order-refund-items atum-order-data-row-toggle" style="display: none;">
-			<table class="atum-order-totals">
-				<tr style="display:none;">
-					<td class="label"><label for="restock_refunded_items"><?php _e( 'Restock refunded items', ATUM_TEXT_DOMAIN ); ?>:</label></td>
-					<td class="total"><input type="checkbox" id="restock_refunded_items" name="restock_refunded_items" checked="checked" /></td>
-				</tr>
-				<tr>
-					<td class="label"><?php _e( 'Amount already refunded', ATUM_TEXT_DOMAIN ); ?>:</td>
-					<td class="total">-<?php echo wc_price( $atum_order->get_total_refunded(), array( 'currency' => $atum_order->get_currency() ) ); ?></td>
-				</tr>
-				<tr>
-					<td class="label"><?php _e( 'Total available to refund', ATUM_TEXT_DOMAIN ); ?>:</td>
-					<td class="total"><?php echo wc_price( $atum_order->get_total() - $atum_order->get_total_refunded(), array( 'currency' => $atum_order->get_currency() ) ); ?></td>
-				</tr>
-				<tr>
-					<td class="label"><label for="refund_amount"><?php _e( 'Refund amount', ATUM_TEXT_DOMAIN ); ?>:</label></td>
-					<td class="total">
-						<input type="text" class="text" id="refund_amount" name="refund_amount" class="wc_input_price" />
-						<div class="clear"></div>
-					</td>
-				</tr>
-				<tr>
-					<td class="label"><label for="refund_reason"><span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( 'Note: the refund reason will be visible by the customer.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php _e( 'Reason for refund (optional):', ATUM_TEXT_DOMAIN ); ?></label></td>
-					<td class="total">
-						<input type="text" class="text" id="refund_reason" name="refund_reason" />
-						<div class="clear"></div>
-					</td>
-				</tr>
-			</table>
-
-			<div class="clear"></div>
-
-			<div class="refund-actions">
-				<?php
-				$refund_amount            = '<span class="atum-order-refund-amount">' . wc_price( 0, array( 'currency' => $atum_order->get_currency() ) ) . '</span>';
-				$gateway_supports_refunds = false !== $payment_gateway && $payment_gateway->supports( 'refunds' );
-				$gateway_name             = false !== $payment_gateway ? ( ! empty( $payment_gateway->method_title ) ? $payment_gateway->method_title : $payment_gateway->get_title() ) : __( 'Payment gateway', ATUM_TEXT_DOMAIN );
-				?>
-				<button type="button" class="button <?php echo $gateway_supports_refunds ? 'button-primary do-api-refund' : 'disabled'; ?>" <?php echo $gateway_supports_refunds ? '' : 'data-toggle="tooltip" title="' . esc_attr__( 'The payment gateway used to place this order does not support automatic refunds.', ATUM_TEXT_DOMAIN ) . '"'; ?>><?php printf( __( 'Refund %1$s via %2$s', ATUM_TEXT_DOMAIN ), $refund_amount, $gateway_name ); ?></button>
-				<button type="button" class="button button-primary do-manual-refund" data-toggle="tooltip" title="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', ATUM_TEXT_DOMAIN ); ?>"><?php printf( __( 'Refund %s manually', ATUM_TEXT_DOMAIN ), $refund_amount ); ?></button>
-				<button type="button" class="button cancel-action"><?php _e( 'Cancel', ATUM_TEXT_DOMAIN ); ?></button>
-				<div class="clear"></div>
-			</div>
-
-		</div>
-
-	<?php endif;*/ ?>
 
 	<script type="text/template" id="tmpl-atum-modal-add-products">
 		<div class="wc-backbone-modal">
@@ -336,8 +219,8 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 						<?php do_action('atum/atum_order/before_product_search_modal', $atum_order); ?>
 						<form action="" method="post">
 							<select class="wc-product-search" multiple="multiple" style="width: 50%;" id="add_item_id" name="add_atum_order_items[]"
-									data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-									data-include="<?php echo apply_filters('atum/atum_order/included_search_products', '', $atum_order) ?>"></select>
+								data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+								data-include="<?php echo apply_filters('atum/atum_order/included_search_products', '', $atum_order) ?>"></select>
 						</form>
 					</article>
 
@@ -381,17 +264,15 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 								<?php
 								$rates = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_tax_rates ORDER BY tax_rate_name LIMIT 100" );
 
-								foreach ( $rates as $rate ):
-									echo '
-										<tr>
-											<td><input type="radio" id="add_atum_order_tax_' . absint( $rate->tax_rate_id ) . '" name="add_atum_order_tax" value="' . absint( $rate->tax_rate_id ) . '" /></td>
-											<td><label for="add_atum_order_tax_' . absint( $rate->tax_rate_id ) . '">' . WC_Tax::get_rate_label( $rate ) . '</label></td>
-											<td>' . ( isset( $classes_options[ $rate->tax_rate_class ] ) ? $classes_options[ $rate->tax_rate_class ] : '-' ) . '</td>
-											<td>' . WC_Tax::get_rate_code( $rate ) . '</td>
-											<td>' . WC_Tax::get_rate_percent( $rate ) . '</td>
-										</tr>
-									';
-								endforeach; ?>
+								foreach ( $rates as $rate ): ?>
+									<tr>
+										<td><input type="radio" id="add_atum_order_tax_<?php echo absint( $rate->tax_rate_id ) ?>" name="add_atum_order_tax" value="<?php echo absint( $rate->tax_rate_id ) ?>" /></td>
+										<td><label for="add_atum_order_tax_<?php echo absint( $rate->tax_rate_id ) ?>"><?php echo WC_Tax::get_rate_label( $rate ) ?></label></td>
+										<td><?php echo ( isset( $classes_options[ $rate->tax_rate_class ] ) ? $classes_options[ $rate->tax_rate_class ] : '-' ) ?></td>
+										<td><?php echo WC_Tax::get_rate_code( $rate ) ?></td>
+										<td><?php echo WC_Tax::get_rate_percent( $rate ) ?></td>
+									</tr>
+								<?php endforeach; ?>
 							</table>
 
 							<?php if ( absint( $wpdb->get_var( "SELECT COUNT(tax_rate_id) FROM {$wpdb->prefix}woocommerce_tax_rates;" ) ) > 100 ) : ?>

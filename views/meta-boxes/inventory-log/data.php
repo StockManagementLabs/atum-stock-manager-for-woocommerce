@@ -14,6 +14,8 @@
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Helpers;
+
 $log_status = $atum_order->get_status();
 
 ?>
@@ -88,7 +90,7 @@ $log_status = $atum_order->get_status();
 
 				<p class="form-field form-field-wide">
 					<label for="status"><?php _e( 'Log status:', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php \Atum\Inc\Helpers::atum_order_status_dropdown('status', $log_status) ?>
+					<?php Helpers::atum_order_status_dropdown('status', $log_status) ?>
 				</p>
 
 				<p class="form-field form-field-wide">
@@ -117,192 +119,6 @@ $log_status = $atum_order->get_status();
 
 				<?php do_action( 'atum/inventory_logs/after_log_details', $atum_order ); ?>
 			</div>
-
-			<?php /*if ( isset($billing_fields) ): ?>
-			<div class="log_data_column">
-				<h3>
-					<?php _e( 'Billing details', ATUM_TEXT_DOMAIN ); ?>
-					<a href="#" class="edit_address"><?php _e( 'Edit', ATUM_TEXT_DOMAIN ); ?></a>
-					<span>
-							<a href="#" class="load_customer_billing" style="display:none;"><?php _e( 'Load billing address', ATUM_TEXT_DOMAIN ); ?></a>
-						</span>
-				</h3>
-
-				<?php // Display values ?>
-				<div class="address">
-					<?php
-					if ( $wc_order->get_formatted_billing_address() ) {
-						echo '<p><strong>' . __( 'Address:', ATUM_TEXT_DOMAIN ) . '</strong>' . wp_kses( $wc_order->get_formatted_billing_address(), array( 'br' => array() ) ) . '</p>';
-					}
-					else {
-						echo '<p class="none_set"><strong>' . __( 'Address:', ATUM_TEXT_DOMAIN ) . '</strong> ' . __( 'No billing address set.', ATUM_TEXT_DOMAIN ) . '</p>';
-					}
-
-					foreach ( $billing_fields as $key => $field ) {
-						if ( isset( $field['show'] ) && false === $field['show'] ) {
-							continue;
-						}
-
-						$field_name = 'billing_' . $key;
-
-						if ( is_callable( array( $wc_order, 'get_' . $field_name ) ) ) {
-							$field_value = $wc_order->{"get_$field_name"}( 'edit' );
-						} else {
-							$field_value = $wc_order->get_meta( '_' . $field_name );
-						}
-
-						echo '<p><strong>' . esc_html( $field['label'] ) . ':</strong> ' . make_clickable( esc_html( $field_value ) ) . '</p>';
-					}
-					?>
-				</div>
-
-				<?php // Display form ?>
-				<div class="edit_address">
-
-					<?php
-					foreach ( $billing_fields as $key => $field ) {
-						if ( ! isset( $field['type'] ) ) {
-							$field['type'] = 'text';
-						}
-						if ( ! isset( $field['id'] ) ) {
-							$field['id'] = '_billing_' . $key;
-						}
-						switch ( $field['type'] ) {
-							case 'select' :
-								woocommerce_wp_select( $field );
-								break;
-							default :
-								woocommerce_wp_text_input( $field );
-								break;
-						}
-					}
-
-					?>
-					<p class="form-field form-field-wide">
-						<label><?php _e( 'Payment method:', ATUM_TEXT_DOMAIN ); ?></label>
-
-						<select name="_payment_method" id="_payment_method" class="first">
-							<option value=""><?php _e( 'N/A', ATUM_TEXT_DOMAIN ); ?></option>
-							<?php
-							$found_method 	= false;
-
-							foreach ( $payment_gateways as $gateway ) {
-								if ( 'yes' === $gateway->enabled ) {
-									echo '<option value="' . esc_attr( $gateway->id ) . '" ' . selected( $payment_method, $gateway->id, false ) . '>' . esc_html( $gateway->get_title() ) . '</option>';
-									if ( $payment_method == $gateway->id ) {
-										$found_method = true;
-									}
-								}
-							}
-
-							if ( ! $found_method && ! empty( $payment_method ) ) {
-								echo '<option value="' . esc_attr( $payment_method ) . '" selected="selected">' . __( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
-							}
-							else {
-								echo '<option value="other">' . __( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
-							}
-							?>
-						</select>
-					</p>
-
-					<?php woocommerce_wp_text_input( array( 'id' => '_transaction_id', 'label' => __( 'Transaction ID', ATUM_TEXT_DOMAIN ) ) ); ?>
-
-				</div>
-
-				<?php do_action( 'atum/inventory_logs/after_billing_address', $wc_order ); ?>
-			</div>
-			<?php endif;*/ ?>
-
-			<?php /* if ( isset($shipping_fields) ): ?>
-			<div class="order_data_column">
-
-				<h3>
-					<?php _e( 'Shipping details', ATUM_TEXT_DOMAIN ); ?>
-					<a href="#" class="edit_address"><?php _e( 'Edit', ATUM_TEXT_DOMAIN ); ?></a>
-					<span>
-							<a href="#" class="load_customer_shipping" style="display:none;"><?php _e( 'Load shipping address', ATUM_TEXT_DOMAIN ); ?></a>
-							<a href="#" class="billing-same-as-shipping" style="display:none;"><?php _e( 'Copy billing address', ATUM_TEXT_DOMAIN ); ?></a>
-						</span>
-				</h3>
-
-
-				<?php // Display values ?>
-				<div class="address">
-
-					<?php
-					if ( $wc_order->get_formatted_shipping_address() ) {
-						echo '<p><strong>' . __( 'Address:', ATUM_TEXT_DOMAIN ) . '</strong>' . wp_kses( $wc_order->get_formatted_shipping_address(), array( 'br' => array() ) ) . '</p>';
-					}
-					else {
-						echo '<p class="none_set"><strong>' . __( 'Address:', ATUM_TEXT_DOMAIN ) . '</strong> ' . __( 'No shipping address set.', ATUM_TEXT_DOMAIN ) . '</p>';
-					}
-
-					if ( ! empty( self::$shipping_fields ) ) {
-
-						foreach ( self::$shipping_fields as $key => $field ) {
-							if ( isset( $field['show'] ) && false === $field['show'] ) {
-								continue;
-							}
-
-							$field_name = 'shipping_' . $key;
-
-							if ( is_callable( array( $wc_order, 'get_' . $field_name ) ) ) {
-								$field_value = $wc_order->{"get_$field_name"}( 'edit' );
-							}
-							else {
-								$field_value = $wc_order->get_meta( '_' . $field_name );
-							}
-
-							echo '<p><strong>' . esc_html( $field['label'] ) . ':</strong> ' . make_clickable( esc_html( $field_value ) ) . '</p>';
-						}
-
-					}
-
-					if ( apply_filters( 'atum/inventory_logs/enable_log_notes_field', 'yes' == get_option( 'woocommerce_enable_order_comments', 'yes' ) ) && $log->post_excerpt ) {
-						echo '<p><strong>' . __( 'Customer provided note:', ATUM_TEXT_DOMAIN ) . '</strong> ' . nl2br( esc_html( $log->post_excerpt ) ) . '</p>';
-					}
-					?>
-
-				</div>
-
-				<?php // Display form ?>
-				<div class="edit_address">
-
-					<?php
-					if ( ! empty( self::$shipping_fields ) ) {
-						foreach ( self::$shipping_fields as $key => $field ) {
-							if ( ! isset( $field['type'] ) ) {
-								$field['type'] = 'text';
-							}
-							if ( ! isset( $field['id'] ) ) {
-								$field['id'] = '_shipping_' . $key;
-							}
-
-							switch ( $field['type'] ) {
-								case 'select' :
-									woocommerce_wp_select( $field );
-									break;
-								default :
-									woocommerce_wp_text_input( $field );
-									break;
-							}
-						}
-					}
-
-					if ( apply_filters( 'atum/inventory_logs/enable_log_notes_field', 'yes' == get_option( 'woocommerce_enable_order_comments', 'yes' ) ) ) {
-						?>
-						<p class="form-field form-field-wide"><label for="excerpt"><?php _e( 'Customer provided note', ATUM_TEXT_DOMAIN ) ?>:</label>
-							<textarea rows="1" cols="40" name="excerpt" tabindex="6" id="excerpt" placeholder="<?php esc_attr_e( "Customer's notes about the order", ATUM_TEXT_DOMAIN ); ?>"><?php echo wp_kses_post( $log->post_excerpt ); ?></textarea></p>
-						<?php
-					}
-					?>
-				</div>
-
-				<?php do_action( 'atum/inventory_logs/after_shipping_address', $wc_order ); ?>
-			</div>
-			<?php endif;*/ ?>
-
-
 
 		</div>
 

@@ -27,23 +27,22 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php
 			echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</a>' : '<div class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</div>';
 
-			if ( $product && $product->get_sku() ) {
-				echo '<div class="atum-order-item-sku"><strong>' . __( 'SKU:', ATUM_TEXT_DOMAIN ) . '</strong> ' . esc_html( $product->get_sku() ) . '</div>';
-			}
+			if ( $product && $product->get_sku() ): ?>
+				<div class="atum-order-item-sku"><strong><?php _e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
+			<?php endif;
 
-			if ( $item->get_variation_id() ) {
-				echo '<div class="atum-order-item-variation"><strong>' . __( 'Variation ID:', ATUM_TEXT_DOMAIN ) . '</strong> ';
+			if ( $item->get_variation_id() ) : ?>
+				<div class="atum-order-item-variation"><strong><?php _e( 'Variation ID:', ATUM_TEXT_DOMAIN ) ?></strong>
 
-				if ( 'product_variation' === get_post_type( $item->get_variation_id() ) ) {
-					echo esc_html( $item->get_variation_id() );
-				}
-				else {
-					printf( esc_html__( '%s (No longer exists)', ATUM_TEXT_DOMAIN ), $item->get_variation_id() );
-				}
+					<?php if ( 'product_variation' == get_post_type( $item->get_variation_id() ) ):
+						echo esc_html( $item->get_variation_id() );
+					else :
+						printf( esc_html__( '%s (No longer exists)', ATUM_TEXT_DOMAIN ), $item->get_variation_id() );
+					endif; ?>
 
-				echo '</div>';
-			}
-		?>
+				</div>
+			<?php endif; ?>
+
 		<input type="hidden" class="atum_order_item_id" name="atum_order_item_id[]" value="<?php echo esc_attr( $item_id ); ?>" />
 		<input type="hidden" name="atum_order_item_tax_class[<?php echo absint( $item_id ); ?>]" value="<?php echo esc_attr( $item->get_tax_class() ); ?>" />
 
@@ -60,34 +59,21 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 				$currency = $atum_order->get_currency();
 				echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) );
 
-				if ( $item->get_subtotal() != $item->get_total() ) {
-					echo '<span class="atum-order-item-discount">-' . wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ) . '</span>';
-				}
-			?>
+				if ( $item->get_subtotal() != $item->get_total() ) : ?>
+					<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ) ?></span>
+				<?php endif; ?>
 		</div>
 	</td>
 
 	<td class="quantity" width="1%">
 
 		<div class="view">
-			<?php
-				echo '<small class="times">&times;</small> ' . esc_html( $item->get_quantity() );
-
-				/*if ( $refunded_qty = $order->get_qty_refunded_for_item( $item_id ) ) {
-					echo '<small class="refunded">' . ( $refunded_qty * -1 ) . '</small>';
-				}*/
-			?>
+			<small class="times">&times;</small> <?php echo esc_html( $item->get_quantity() ); ?>
 		</div>
 
 		<div class="edit" style="display: none;">
 			<input type="number" step="<?php echo apply_filters( 'atum/atum_order/quantity_input_step', '1', $product ); ?>" min="0" autocomplete="off" name="atum_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" value="<?php echo esc_attr( $item->get_quantity() ); ?>" data-qty="<?php echo esc_attr( $item->get_quantity() ); ?>" size="4" class="quantity" />
 		</div>
-
-		<?php /*
-		<div class="refund" style="display: none;">
-			<input type="number" step="<?php echo apply_filters( 'atum/atum_order/quantity_input_step', '1', $product ); ?>" min="0" max="<?php echo $item->get_quantity(); ?>" autocomplete="off" name="refund_atum_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" size="4" class="refund_atum_order_item_qty" />
-		</div>
-        */ ?>
 
 	</td>
 	<td class="line_cost" width="1%" data-sort-value="<?php echo esc_attr( $item->get_total() ); ?>">
@@ -95,14 +81,9 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			<?php
 				echo wc_price( $item->get_total(), array( 'currency' => $currency ) );
 
-				if ( $item->get_subtotal() != $item->get_total() ) {
-					echo '<span class="atum-order-item-discount">-' . wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ) . '</span>';
-				}
-
-				/*if ( $refunded = $order->get_total_refunded_for_item( $item_id ) ) {
-					echo '<small class="refunded">' . wc_price( $refunded, array( 'currency' => $currency ) ) . '</small>';
-				}*/
-			?>
+				if ( $item->get_subtotal() != $item->get_total() ) : ?>
+					<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ) ?></span>
+				<?php endif; ?>
 		</div>
 
 		<div class="edit" style="display: none;">
@@ -119,11 +100,6 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			</div>
 		</div>
 
-		<?php /*
-		<div class="refund" style="display: none;">
-			<input type="text" name="refund_line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_total wc_input_price" />
-		</div>
-		*/ ?>
 	</td>
 
 	<?php
@@ -137,25 +113,19 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			<td class="line_tax" width="1%">
 				<div class="view">
 					<?php
-						if ( '' != $tax_item_total ) {
+						if ( '' != $tax_item_total ):
 							echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) );
-						}
-						else {
+						else:
 							echo '&ndash;';
-						}
+						endif;
 
-						if ( $item->get_subtotal() != $item->get_total() ) {
-							if ( '' === $tax_item_total ) {
-								echo '<span class="atum-order-item-discount">&ndash;</span>';
-							}
-							else {
-								echo '<span class="atum-order-item-discount">-' . wc_price( wc_round_tax_total( $tax_item_subtotal - $tax_item_total ), array( 'currency' => $currency ) ) . '</span>';
-							}
-						}
-
-						/*if ( $refunded = $order->get_tax_refunded_for_item( $item_id, $tax_item_id ) ) {
-							echo '<small class="refunded">' . wc_price( $refunded, array( 'currency' => $currency ) ) . '</small>';
-						}*/
+						if ( $item->get_subtotal() != $item->get_total() ):
+							if ( '' === $tax_item_total ) : ?>
+								<span class="atum-order-item-discount">&ndash;</span>
+							<?php else : ?>
+								<span class="atum-order-item-discount">-<?php echo wc_price( wc_round_tax_total( $tax_item_subtotal - $tax_item_total ), array( 'currency' => $currency ) ) ?></span>
+							<?php endif;
+						endif;
 					?>
 				</div>
 
@@ -173,11 +143,6 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 					</div>
 				</div>
 
-				<?php /*
-				<div class="refund" style="display: none;">
-					<input type="text" name="refund_line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_tax wc_input_price" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
-				</div>
-                */ ?>
 			</td>
 		<?php endforeach;
 

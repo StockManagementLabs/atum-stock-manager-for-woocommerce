@@ -37,24 +37,12 @@ $currency = $atum_order->get_currency();
 
 	<td class="line_cost" width="1%">
 		<div class="view">
-			<?php
-			echo wc_price( $item->get_total(), array( 'currency' => $currency ) );
-
-			/*if ( $refunded = $order->get_total_refunded_for_item( $item_id, 'fee' ) ) {
-				echo '<small class="refunded">-' . wc_price( $refunded, array( 'currency' => $currency ) ) . '</small>';
-			}*/
-			?>
+			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); ?>
 		</div>
 
 		<div class="edit" style="display: none;">
 			<input type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" />
 		</div>
-
-		<?php /*
-		<div class="refund" style="display: none;">
-			<input type="text" name="refund_line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_total wc_input_price" />
-		</div>
-        */ ?>
 	</td>
 
 	<?php
@@ -67,24 +55,12 @@ $currency = $atum_order->get_currency();
 			?>
 			<td class="line_tax" width="1%">
 				<div class="view">
-					<?php
-					echo ( '' !== $tax_item_total ) ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;';
-
-					/*if ( $refunded = $order->get_tax_refunded_for_item( $item_id, $tax_item_id, 'fee' ) ) {
-						echo '<small class="refunded">-' . wc_price( $refunded, array( 'currency' => $currency ) ) . '</small>';
-					}*/
-					?>
+					<?php echo ( '' !== $tax_item_total ) ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;'; ?>
 				</div>
 
 				<div class="edit" style="display: none;">
 					<input type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo ( isset( $tax_item_total ) ) ? esc_attr( wc_format_localized_price( $tax_item_total ) ) : ''; ?>" class="line_tax wc_input_price" />
 				</div>
-
-				<?php /*
-				<div class="refund" style="display: none;">
-					<input type="text" name="refund_line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_tax wc_input_price" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
-				</div>
-                */ ?>
 			</td>
 
 		<?php endforeach;

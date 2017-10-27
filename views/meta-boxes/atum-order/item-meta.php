@@ -29,18 +29,19 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 		<table cellspacing="0" class="display_meta">
 			<?php foreach ( $meta_data as $meta_id => $meta ) :
 
-				if ( in_array( $meta->key, $hidden_item_meta ) ) {
+				if ( in_array( $meta->key, $hidden_item_meta ) ) :
 					continue;
-				}
+				endif;
 
-				if ($meta->display_key == '_order_id') {
+				if ($meta->display_key == '_order_id') :
 					$meta->display_key = '<strong>' . __('Order ID', ATUM_TEXT_DOMAIN) . '</strong>';
-				}
+				endif;
 				?>
 				<tr>
 					<th><?php echo wp_kses_post( $meta->display_key ); ?>:</th>
 					<td><?php echo wp_kses_post( force_balance_tags( $meta->display_value ) ); ?></td>
 				</tr>
+
 			<?php endforeach; ?>
 		</table>
 
@@ -53,9 +54,10 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 			<?php if ( $meta_data = $item->get_formatted_meta_data( '' ) ) : ?>
 
 				<?php foreach ( $meta_data as $meta_id => $meta ) :
-					if ( in_array( $meta->key, $hidden_item_meta ) ) {
+
+					if ( in_array( $meta->key, $hidden_item_meta ) ) :
 						continue;
-					}
+					endif;
 					?>
 					<tr data-meta_id="<?php echo esc_attr( $meta_id ); ?>">
 						<td>
@@ -64,6 +66,7 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 						</td>
 						<td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>
 					</tr>
+
 				<?php endforeach; ?>
 
 			<?php endif; ?>
