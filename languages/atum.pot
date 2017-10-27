@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-10-26 18:33+0200\n"
+"POT-Creation-Date: 2017-10-27 09:10+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -508,7 +508,7 @@ msgstr ""
 
 #: classes/Components/AtumOrders/Models/AtumOrderModel.php:1413
 #: classes/InventoryLogs/Models/Log.php:62
-#: classes/PurchaseOrders/Models/PurchaseOrder.php:111
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:130
 msgid "Auto Draft"
 msgstr ""
 
@@ -1206,24 +1206,31 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: classes/PurchaseOrders/Models/PurchaseOrder.php:53
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:56
 msgid "Add to Stock"
 msgstr ""
 
-#: classes/PurchaseOrders/Models/PurchaseOrder.php:62
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:67
 msgid "Set purchase price"
 msgstr ""
 
-#: classes/PurchaseOrders/Models/PurchaseOrder.php:76
-msgid "Set the supplier and save the Purchase Order to be able to add items"
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:82
+msgid ""
+"Set the Supplier in the first field and hit the Create/Update button on the top "
+"right to add items."
 msgstr ""
 
-#: classes/PurchaseOrders/Models/PurchaseOrder.php:115
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:112
+#, php-format
+msgid "Only products linked to '%s' supplier can be searched."
+msgstr ""
+
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:134
 #, php-format
 msgid "PO &ndash; %s"
 msgstr ""
 
-#: classes/PurchaseOrders/Models/PurchaseOrder.php:115
+#: classes/PurchaseOrders/Models/PurchaseOrder.php:134
 msgctxt "PO date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
@@ -1938,8 +1945,8 @@ msgstr ""
 #: views/help-tabs/inventory-logs/columns.php:21
 msgid ""
 "This is the status of existing Inventory Logs. Orange clock means IL is in "
-"pending status. When this status is active all products within these ILs will "
-"reflect their totals in Stock Central. Green tick means IL is completed, "
+"'pending' status. When this status is active all products within these ILs will "
+"reflect their totals in Stock Central. The green tick means IL is 'completed,' "
 "products were rectified and stocks amended by the user. When this status is "
 "active, all products within are no longer reflected in Stock Central’s columns."
 msgstr ""
@@ -1978,12 +1985,12 @@ msgstr ""
 #: views/help-tabs/purchase-orders/columns.php:21
 msgid ""
 "This is the status of existing Purchase Orders. Orange clock means Purchase "
-"Order is in pending status. When this status is active all products within these "
-"POs will show in Inbound Stock list and reflect their totals in Stock Central. "
-"Green tick means PO is completed, products were delivered and added to stock by "
-"the user. When this status is active, all products within are no longer listed "
-"in Inbound Stock list and their totals not reflected in Stock Central’s Inbound "
-"Stock column."
+"Order is in 'pending' status. When this status is active all products within "
+"these POs will show in Inbound Stock list and reflect their totals in Stock "
+"Central. The green tick means PO is 'completed,' products were delivered and "
+"added to stock by the user. When this status is active, all products within are "
+"no longer listed in Inbound Stock list and their totals not reflected in Stock "
+"Central’s Inbound Stock column."
 msgstr ""
 
 #: views/help-tabs/purchase-orders/columns.php:25
@@ -2206,6 +2213,18 @@ msgstr ""
 msgid "Fee name"
 msgstr ""
 
+#: views/meta-boxes/atum-order/item-fee.php:97
+#: views/meta-boxes/atum-order/item-shipping.php:119
+#: views/meta-boxes/atum-order/item.php:189
+msgid "Edit item"
+msgstr ""
+
+#: views/meta-boxes/atum-order/item-fee.php:97
+#: views/meta-boxes/atum-order/item-shipping.php:119
+#: views/meta-boxes/atum-order/item.php:189
+msgid "Delete item"
+msgstr ""
+
 #: views/meta-boxes/atum-order/item-meta.php:37
 msgid "Order ID"
 msgstr ""
@@ -2255,14 +2274,6 @@ msgstr ""
 
 #: views/meta-boxes/atum-order/item.php:117
 msgid "After pre-tax discounts."
-msgstr ""
-
-#: views/meta-boxes/atum-order/item.php:189
-msgid "Edit item"
-msgstr ""
-
-#: views/meta-boxes/atum-order/item.php:189
-msgid "Delete item"
 msgstr ""
 
 #: views/meta-boxes/atum-order/items.php:43
@@ -2319,7 +2330,7 @@ msgid "These %s items are no longer editable."
 msgstr ""
 
 #: views/meta-boxes/atum-order/items.php:245
-#: views/meta-boxes/atum-order/items.php:362
+#: views/meta-boxes/atum-order/items.php:363
 msgid "Add tax"
 msgstr ""
 
@@ -2348,41 +2359,41 @@ msgid "Add products"
 msgstr ""
 
 #: views/meta-boxes/atum-order/items.php:331
-#: views/meta-boxes/atum-order/items.php:364
+#: views/meta-boxes/atum-order/items.php:365
 msgid "Close modal panel"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:338
+#: views/meta-boxes/atum-order/items.php:339
 msgid "Search for a product&hellip;"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:345
-#: views/meta-boxes/atum-order/items.php:407
+#: views/meta-boxes/atum-order/items.php:346
+#: views/meta-boxes/atum-order/items.php:408
 #: views/meta-boxes/atum-order/notes.php:76
 msgid "Add"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:374
+#: views/meta-boxes/atum-order/items.php:375
 msgid "Rate name"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:375
+#: views/meta-boxes/atum-order/items.php:376
 msgid "Tax class"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:376
+#: views/meta-boxes/atum-order/items.php:377
 msgid "Rate code"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:377
+#: views/meta-boxes/atum-order/items.php:378
 msgid "Rate %"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:398
+#: views/meta-boxes/atum-order/items.php:399
 msgid "Or, enter tax rate ID:"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:399
+#: views/meta-boxes/atum-order/items.php:400
 msgid "Optional"
 msgstr ""
 

@@ -1012,6 +1012,14 @@
   width: 100% !important;
 }
 
+.wc-backbone-modal .alert {
+  background-color: #5ecbff;
+  padding: 4px 6px;
+  display: block;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
 .wc-backbone-modal-backdrop {
   position: fixed;
   top: 0;

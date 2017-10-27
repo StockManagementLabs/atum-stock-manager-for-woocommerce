@@ -124,6 +124,15 @@
 	.select2-container {
 		width: 100% !important;
 	}
+	
+	.alert {
+		background-color: lighten($brand-primary, 35%);
+		padding: 4px 6px;
+		display: block;
+		font-size: 12px;
+		margin-bottom: 5px;
+	}
+	
 }
 
 .wc-backbone-modal-backdrop {

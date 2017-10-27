@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die;
 	<tbody>
 		<tr>
 			<td><strong><?php _e( 'PO Status', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "This is the status of existing Purchase Orders. Orange clock means Purchase Order is in pending status. When this status is active all products within these POs will show in Inbound Stock list and reflect their totals in Stock Central. Green tick means PO is completed, products were delivered and added to stock by the user. When this status is active, all products within are no longer listed in Inbound Stock list and their totals not reflected in Stock Central’s Inbound Stock column.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "This is the status of existing Purchase Orders. Orange clock means Purchase Order is in 'pending' status. When this status is active all products within these POs will show in Inbound Stock list and reflect their totals in Stock Central. The green tick means PO is 'completed,' products were delivered and added to stock by the user. When this status is active, all products within are no longer listed in Inbound Stock list and their totals not reflected in Stock Central’s Inbound Stock column.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'PO', ATUM_TEXT_DOMAIN ) ?></strong></td>

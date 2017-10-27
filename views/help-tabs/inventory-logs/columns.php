@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die;
 	<tbody>
 		<tr>
 			<td><strong><?php _e( 'Log Status', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "This is the status of existing Inventory Logs. Orange clock means IL is in pending status. When this status is active all products within these ILs will reflect their totals in Stock Central. Green tick means IL is completed, products were rectified and stocks amended by the user. When this status is active, all products within are no longer reflected in Stock Central’s columns.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "This is the status of existing Inventory Logs. Orange clock means IL is in 'pending' status. When this status is active all products within these ILs will reflect their totals in Stock Central. The green tick means IL is 'completed,' products were rectified and stocks amended by the user. When this status is active, all products within are no longer reflected in Stock Central’s columns.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Log', ATUM_TEXT_DOMAIN ) ?></strong></td>

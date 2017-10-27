@@ -195,9 +195,18 @@ h1.wp-heading-inline {
 				@include flexbox;
 			}
 			
-			&[class*="column-calc_"] {
+			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
+			&.column-_purchase_price, &.column-ID {
 				a {
 					@include flex-justify-content(center);
+					
+					> span {
+						float: none;
+						
+						&:first-child {
+							padding-left: 10px;
+						}
+					}
 				}
 			}
 		}
@@ -288,7 +297,8 @@ h1.wp-heading-inline {
 			min-width: 70px;
 		}
 		
-		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price, &.column-_purchase_price {
+		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
+		&.column-_purchase_price, &.column-ID {
 			text-align: center;
 		}
 		

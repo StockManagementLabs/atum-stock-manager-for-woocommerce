@@ -40,6 +40,9 @@ class PurchaseOrder extends AtumOrderModel {
 		// Limit the results of the enhanced select search when adding products to the PO
 		add_filter( 'atum/atum_order/included_search_products', array($this, 'limit_searchable_products'), 10, 2 );
 
+		// Add message before the PO product search
+		add_action( 'atum/atum_order/before_product_search_modal', array($this, 'product_search_message') );
+
 		parent::__construct($id, $read_items);
 
 	}
@@ -76,7 +79,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		$supplier = $po->get_supplier();
 		$unblocked = ($supplier) ? ' unblocked' : '';
-		echo '<div class="items-blocker' . $unblocked . '"><h3>' . __('Set the supplier and save the Purchase Order to be able to add items', ATUM_TEXT_DOMAIN) . '</h3></div>';
+		echo '<div class="items-blocker' . $unblocked . '"><h3>' . __('Set the Supplier in the first field and hit the Create/Update button on the top right to add items.', ATUM_TEXT_DOMAIN) . '</h3></div>';
 
 	}
 
@@ -94,6 +97,19 @@ class PurchaseOrder extends AtumOrderModel {
 
 		$products = Suppliers::get_supplier_products( $po->get_supplier(), 'ids' );
 		return json_encode($products);
+	}
+
+	/**
+	 * Add message before the PO product search
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param PurchaseOrder $po
+	 */
+	public function product_search_message($po) {
+
+		$supplier = $po->get_supplier();
+		echo '<em class="alert">' . sprintf( __("Only products linked to '%s' supplier can be searched."), $supplier->post_title ) . '</em>';
 	}
 
 	//---------

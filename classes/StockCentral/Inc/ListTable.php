@@ -258,40 +258,6 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Column for purchase price
-	 *
-	 * @since  1.2.0
-	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
-	 *
-	 * @return float
-	 */
-	protected function column__purchase_price( $item ) {
-
-		$purchase_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id($this->product);
-
-		if ($this->allow_calcs) {
-
-			$purchase_price_value = get_post_meta($product_id, '_purchase_price', TRUE);
-			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? Helpers::format_price($purchase_price_value, ['trim_zeros' => TRUE]) : $purchase_price;
-
-			$args = array(
-				'post_id'  => $product_id,
-				'meta_key' => 'purchase_price',
-				'value'    => $purchase_price_value,
-				'symbol'   => get_woocommerce_currency_symbol(),
-				'tooltip'  => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
-			);
-
-			$purchase_price = $this->get_editable_column($args);
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
-
-	}
-
-	/**
 	 * Column for stock on hold: show amount of items with pending payment.
 	 *
 	 * @since  0.0.1
