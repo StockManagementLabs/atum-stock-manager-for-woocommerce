@@ -89,6 +89,34 @@ class ListTable extends AtumListTable {
 	/**
 	 * @inheritdoc
 	 */
+	protected function column_title( $item ) {
+
+		if ( $this->product->get_type() == 'variation' ) {
+
+			$parent_data = $this->product->get_parent_data();
+			$title = $parent_data['title'];
+
+			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id($this->product) );
+			if ( ! empty($attributes) ) {
+				$title .= ' - ' . ucfirst( implode(' - ', $attributes) );
+			}
+
+		}
+		else {
+			$title = $this->product->get_title();
+		}
+
+		if ( strlen( $title ) > 20 ) {
+			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( substr( $title, 0, 20 ) ) .
+			         '...</span><span class="atum-title-small">' . $title . '</span>';
+		}
+
+		return apply_filters( 'atum/inbound_stock_list/column_title', $title, $item, $this->product );
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	protected function column__sku( $item, $editable = FALSE ) {
 		return parent::column__sku( $item, $editable );
 	}
