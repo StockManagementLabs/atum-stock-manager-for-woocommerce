@@ -1228,13 +1228,15 @@ final class Ajax {
 
 		$atum_order = Helpers::get_atum_order_model( absint($_POST['atum_order_id']) );
 		$atum_order_item = $atum_order->get_item( absint($_POST['atum_order_item_id']) );
-		$product = wc_get_product( $atum_order_item->get_product_id() );
+
+		$product_id = ( $atum_order_item->get_variation_id() ) ? $atum_order_item->get_variation_id() : $atum_order_item->get_product_id();
+		$product = wc_get_product($product_id);
 
 		if ( ! is_a($product, '\WC_Product') ) {
 			wp_send_json_error( __('Product not found', ATUM_TEXT_DOMAIN) );
 		}
 
-		update_post_meta( $product->get_id(), '_purchase_price', floatval( $_POST['purchase_price'] ) );
+		update_post_meta( $product_id, '_purchase_price', floatval( $_POST['purchase_price'] ) );
 
 		wp_send_json_success();
 
