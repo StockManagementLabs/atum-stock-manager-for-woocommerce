@@ -324,7 +324,7 @@ class Suppliers {
 		}
 
 		if ( empty($variation) ): ?>
-		<div class="options_group show_if_simple show_if_variable show_if_product-part show_if_raw-material">
+		<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
 		<?php endif; ?>
 
 			<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-last' ?>">
@@ -354,7 +354,8 @@ class Suppliers {
 	 */
 	public function save_product_supplier_meta_box($post_id) {
 
-		if ( ! empty($_POST['_supplier']) ) {
+		$product = wc_get_product($post_id);
+		if ( ! empty($_POST['_supplier']) && $product->get_type() != 'variable' ) {
 			$supplier = absint( $_POST['_supplier'] );
 			update_post_meta( $post_id, '_supplier', $supplier );
 		}
