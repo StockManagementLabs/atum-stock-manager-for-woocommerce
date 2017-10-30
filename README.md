@@ -140,7 +140,7 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
-**1.3.0 - 2017-10-23**
+**1.3.0 - 2017-10-31**
 
 Features:
 
@@ -148,6 +148,12 @@ Features:
 * Added "Increase Stock" and "Decrease Stock" buttons to "Inventory Logs".
 * Added "Add to Stock" button to Purchase Order's products.
 * Added "Inbound  Stock" column and filter to "Stock Central".
+* Added WPML compatibility.
+
+Fixes:
+
+* Minor fixes.
+* Refactory and performance improvements.
 
 **1.2.9 - 2017-10-19**
 

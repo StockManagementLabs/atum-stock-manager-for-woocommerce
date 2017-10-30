@@ -4,6 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.8.2
+Requires PHP: 5.6
 Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -11,14 +12,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical Sales, Inventory Levels, Promo Sales), Stock Central with Data Export, Inventory Logs (Reserved Stock, Lost In Post, Customer Returns, Inbound Stock, Warehouse Damages), One Page Updating, Quick Price Changes, Stock Levels Indicators.
 
 == Description ==
-
-= ATUM - Inventory Management for WooCommerce - Quick Overview =
-
-https://www.youtube.com/watch?v=CMb-F5wkk1g
-
-= ATUM - How To Show Products In Stock Central
-
-https://www.youtube.com/watch?v=k0dHqQnSX6A
 
 ATUM is becoming the most advanced WooCommerce inventory management tool in the Wordpress depository. Free of charge and the absolute must for every serious shop owner. Stock Central, the heart of ATUM, gives you the full overview of your business with capabilities of a quick change of every aspect of your WooCommerce inventory and prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -29,15 +22,34 @@ In the preparation process for the development stage, we have tested and tried t
 
 = AVAILABLE FEATURES =
 
+**NEW MEGA UPDATE 1.3.0**
 
-**Stock Central for WooCommerce Inventory Overview**
+Version 1.3.0 brings one of the most significant updates yet. ATUM has become more than just an inventory management plugin. Users can create Purchase Orders, setup Locations, and Suppliers. We are now bringing full WPML compatibility. Read further for the complete list of new features.
 
-https://youtu.be/SqUhaptEG9U
+* Inventory logs now allow you to increase or reduce WooCommerce stock.
+* Product Locations feature lets you create several storage locations per item.
+* Location hierarchy available too - create custom storage places within a location.
+* Add Suppliers feature - add new suppliers and save their data for more natural inventory management and ordering.
+* Set default and assign users or locations to individual suppliers.
+* Pair products with suppliers for quick selling stock re-ordering.
+* Set different suppliers to each variation.
+* Add Purchase Orders - create purchase orders for your sellable WooCommerce inventory.
+* Each purchase order belongs to previously created suppliers - a quick search for products has never been easier.
+* Add products to stock when you receive them at storage locations.
+* Add Purchase Prices - add individual purchase prices and prepare for monitoring your gross profits.
+* Purchase prices can be added from the Purchase Orders directly. No need to jump back to product edit.
+* Inbound Stock overview - keep an eye on all your inbound WooCommerce products.
+* Pending inbound stock reflects in Stock Central.
+* Direct Purchase Order editing from the inbound stock page.
+
+**ATUM Features - Stock Central - WooCommerce Inventory Overview**
+
+https://youtu.be/CMb-F5wkk1g
 
 
 Stock Central - Manage inventory at product level or how to display products in Stock Central?
 
-
+https://youtu.be/k0dHqQnSX6A
 
 
 Our ground-breaking Stock Central lets users see, edit and update all WooCommerce products quickly and efficiently.
@@ -72,19 +84,19 @@ The feature that makes the running of your business lot easier. Expand your Word
 
 Take control and record any inventory movements in your business.
 
-* Create custom product reservations (future needs, VIP reserves, etc.)
+Create custom product reservations (future needs, VIP reserves, etc.)
 
 https://www.youtube.com/watch?v=hTfSif0-ByI
 
-* Don't lose track of customers' returns and record any loss of stock, refunds or add items back in with a simple click.
+Don't lose track of customers' returns and record any loss of stock, refunds or add items back in with a simple click.
 
 https://www.youtube.com/watch?v=_GJcS1QyAVM
 
-* Control your logistics and record any "lost in post" products.
+Control your logistics and record any "lost in post" products.
 
 https://www.youtube.com/watch?v=_5Dwd_CmcQY
 
-* Take care of your unwanted warehouse damages and prevent them from happening in the future.
+Take care of your unwanted warehouse damages and prevent them from happening in the future.
 
 https://www.youtube.com/watch?v=rMqUlwKoeiA
 
@@ -169,11 +181,11 @@ Product variations are fully supported and editable from Stock Central. ATUM han
 If you are using some cache system, try to purge the cache or ask your hosting provider to do it.
 Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) to clear your browser cache.
 
-= The plugin won’t work < PHP 5.6 =
+= The plugin won't work < PHP 5.6 =
 
-We are very sorry, but the current version of the plugin needs PHP5.6+. Our team has tested it on PHP7 that is recommended by WordPress. Please, see the link here https://wordpress.org/about/requirements/
+We are very sorry, but the current version of the plugin needs PHP 5.6+. Our team has tested it on PHP7 that is recommended by WordPress. Please, see the link here https://wordpress.org/about/requirements/
 
-We do not plan any support for older PHP and PHP5.6 is the minimum.
+We do not plan any support for older PHP and version 5.6 is the minimum.
 
 = How/when can I get the pro version? And how much is it? =
 
@@ -196,15 +208,13 @@ Part 2 - HOW TO - Out of stock Instances in WooCommerce
 https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
-
-
 == Screenshots ==
 
-1.  New Menu Design with Easy Access to Individual Feature
+1.  New Menu Design with Easy Access to Individual Features
 2.  New Admin Bar Menu for Easier and Quicker Inventory Control
-3.  Extended Stock Central Control Including New Filters
-4.  Full Control of the Stock Central View
-5.  HELP Section for Easier Understanding of the Stock Central
+3.  Extended Stock Central Control (New Filters)
+4.  Full Control of the Stock Central View - Screen Options
+5.  HELP Section for Easier Understanding of Stock Central's Columns
 6.  On and OFF Automatic Product Search Feature
 7.  Grouped Products Are Included in the Stock Central Interface
 8.  Variable Products within the Stock Central Interface
@@ -216,12 +226,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 14. General Settings for the Stock Central Interface
 15. Advanced Settings for the Stock Central Interface
 16. Brand New Add-Ons Screen For Further Shop Control
-17. Dashboard Statistics
+17. New Editable Dashboard ATUM Statistics
+18. Inventory Logs - Preview of all Inventory Logs
+19. ADD New Log - Inventory Logs for WooCommerce
+20. Purchase Orders - Full List of Created Purchase Orders
+21. ADD New Purchase Order Screen - Control over your Incoming Items
+22. Suppliers - Preview of all Created Suppliers
+23. ADD New Supplier - Brand New Feature with Full Supplier Details
+24. Create Product Locations - Warehouse, Shelf, Page, etc.
+25. NEW Inbound Stock Preview - See All Yours Incoming Items
 
 
 == Changelog ==
 
-= 1.3.0 - 2017-10-23 =
+= 1.3.0 - 2017-10-31 =
 
 Features:
 
@@ -229,6 +247,12 @@ Features:
 * Added "Increase Stock" and "Decrease Stock" buttons to "Inventory Logs".
 * Added "Add to Stock" button to Purchase Order's products.
 * Added "Inbound  Stock" column and filter to "Stock Central".
+* Added WPML compatibility.
+
+Fixes:
+
+* Minor fixes.
+* Refactory and performance improvements.
 
 = 1.2.9 - 2017-10-19 =
 
