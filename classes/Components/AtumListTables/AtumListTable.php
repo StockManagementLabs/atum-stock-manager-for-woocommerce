@@ -1025,7 +1025,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	     * REQUIRED. Register our pagination options & calculations.
 		 */
 		$found_posts = isset( $this->count_views['count_all'] ) ? $this->count_views['count_all'] : 0;
-		
+		$num_children = isset( $this->count_views['count_children'] ) ? $this->count_views['count_children'] : 0;
+		$num_parent = isset( $this->count_views['count_parent'] ) ? $this->count_views['count_parent'] : 0;
+
 		if ( ! empty( $_REQUEST['v_filter'] ) ) {
 			
 			$this->data['v_filter'] = esc_attr( $_REQUEST['v_filter'] );
@@ -1054,7 +1056,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$posts = array_merge( $selected_posts, $wp_query->posts );
 			$this->current_products = wp_list_pluck($posts, 'ID');
 			
-			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page );
+			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( ($found_posts - $num_children + $num_parent) / $this->per_page );
 			
 		}
 		else {
@@ -1097,7 +1099,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->count_views = array(
 			'count_in_stock'  => 0,
 			'count_out_stock' => 0,
-			'count_low_stock' => 0
+			'count_low_stock' => 0,
+			'count_children'  => 0,
+			'count_parent'    => 0
 		);
 
 		// Get all the IDs in the two queries with no pagination
@@ -1135,9 +1139,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					// Add the Variations to the posts list
 					if ( $variations ) {
+
 						// The Variable products are just containers and don't count for the list views
-						$this->count_views['count_all'] += ( count( $variations ) - count( $this->variable_products ) );
+						$this->count_views['count_children'] += count( $variations );
+						$this->count_views['count_parent']   += count( $this->variable_products );
+						$this->count_views['count_all']      += ( count( $variations ) - count( $this->variable_products ) );
+
 						$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
+
 					}
 
 				}
@@ -1148,9 +1157,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					// Add the Group Items to the posts list
 					if ( $group_items ) {
+
 						// The Grouped products are just containers and don't count for the list views
-						$this->count_views['count_all'] += ( count( $group_items ) - count( $this->grouped_products ) );
+						$this->count_views['count_children'] += count( $group_items );
+						$this->count_views['count_parent']   += count( $this->grouped_products );
+						$this->count_views['count_all']      += ( count( $group_items ) - count( $this->grouped_products ) );
+
 						$posts = array_unique( array_merge( array_diff( $posts, $this->grouped_products ), $group_items ) );
+
 
 					}
 
