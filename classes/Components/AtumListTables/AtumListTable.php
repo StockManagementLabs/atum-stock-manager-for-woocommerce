@@ -134,6 +134,49 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $allow_calcs = TRUE;
 	
 	/**
+	 * Whether the WPML multicurrency option is active
+	 *
+	 * @var bool
+	 */
+	protected $is_wpml_multicurrency = FALSE;
+	
+	
+	/**
+	 * Current currency symbol
+	 *
+	 * @var string
+	 */
+	protected $current_currency;
+	
+	/**
+	 * Default currency symbol
+	 *
+	 * @var string
+	 */
+	protected $default_currency;
+	
+	/**
+	 * WooCommerce WPML if exists
+	 *
+	 * @var \woocommerce_wpml;
+	 */
+	protected $wpml;
+	
+	/**
+	 * Current product and currency custom prices (WPML Multi-currency custom product prices)
+	 *
+	 * @var array|bool
+	 */
+	protected $custom_prices = FALSE;
+	
+	/**
+	 * Original language product's id
+	 *
+	 * @var int
+	 */
+	protected $original_product_id;
+	
+	/**
 	 * User meta key to control the current user dismissed notices
 	 */
 	const DISMISSED_NOTICES = 'atum_dismissed_notices';
@@ -209,6 +252,26 @@ abstract class AtumListTable extends \WP_List_Table {
 			add_action( 'admin_notices', array( $this, 'add_manage_stock_notice' ) );
 		}
 		
+		$this->current_currency = $this->default_currency = get_woocommerce_currency();
+		// Do WPML Stuff
+		if (class_exists('\woocommerce_wpml')) {
+			
+			$this->wpml = \woocommerce_wpml::instance();
+			
+			if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
+				
+				$this->is_wpml_multicurrency = TRUE;
+				
+				global $sitepress;
+				$current_lang = $sitepress->get_current_language();
+				
+				if ( ! empty( $this->wpml->settings['default_currencies'][ $current_lang ] ) ) {
+					$this->current_currency = $this->wpml->settings['default_currencies'][ $current_lang ];
+				}
+			}
+		}
+		
+		
 	}
 
 	/**
@@ -265,6 +328,39 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param string   $type The type of product
 	 */
 	public function single_expandable_row( $item, $type ) {
+		
+		$this->custom_prices = FALSE;
+		
+		if ($this->is_wpml_multicurrency) {
+			
+			global $sitepress;
+			$this->original_product_id = $item->get_id();
+			
+			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->get_id(), 'post_'.$type), 'post_'.$type);
+			foreach($product_translations as $translation){
+				if( $translation->original ){
+					$this->original_product_id = $translation->element_id;
+					break;
+				}
+			}
+			
+			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
+				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
+				
+				if ( $custom_price_ui) {
+					
+					global $thepostid;
+					$keep_id = ($thepostid)? $thepostid : 0;
+					$thepostid = $this->original_product_id;
+					
+					$this->custom_prices = $custom_price_ui->get_currencies_info();
+					
+					$thepostid = $keep_id;
+				}
+			}
+			
+		}
+		
 		echo '<tr class="' . $type . '" style="display: none">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
@@ -609,12 +705,44 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->product = wc_get_product( $item );
 		$type = $this->product->get_type();
-
+		
+		$this->custom_prices = FALSE;
+		
+		// Do the WPM stuff
+		if ($this->is_wpml_multicurrency) {
+			
+			global $sitepress;
+			$this->original_product_id = $item->ID;
+			
+			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->ID, 'post_'.$this->post_type), 'post_'.$this->post_type);
+			foreach($product_translations as $translation){
+				if( $translation->original ){
+					$this->original_product_id = $translation->element_id;
+					break;
+				}
+			}
+			
+			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
+				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
+				
+				if ( $custom_price_ui) {
+					
+					global $thepostid;
+					$keep_id = ($thepostid)? $thepostid : 0;
+					$thepostid = $this->original_product_id;
+					
+					$this->custom_prices = $custom_price_ui->get_currencies_info();
+					
+					$thepostid = $keep_id;
+				}
+			}
+			
+		}
 		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
 		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
 			return;
 		}*/
-
+		
 		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
 		parent::single_row( $item );
 
@@ -712,6 +840,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *      @type string $input_type        The input type field to use to edit the column value
 	 *      @type array  $extra_meta        Any extra fields will be appended to the popover (as JSON array)
 	 *      @type string $tooltip_position  Where to place the tooltip
+	 *      @type string $is_custom         For prices, whether value is a WPML custom price value or not
+	 *      @type string $currency          Product prices currency
 	 * }
 	 *
 	 * @return string
@@ -727,6 +857,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var string $input_type
 		 * @var array  $extra_meta
 		 * @var string $tooltip_position
+		 * @var string $is_custom
+		 * @var string $currency
 		 */
 		extract( wp_parse_args( $args, array(
 			'post_id'          => NULL,
@@ -736,7 +868,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			'tooltip'          => '',
 			'input_type'       => 'number',
 			'extra_meta'       => array(),
-			'tooltip_position' => 'top'
+			'tooltip_position' => 'top',
+			'is_custom'        => 'no',
+			'currency'         => $this->default_currency
 		) ) );
 
 		$extra_meta_data = ( ! empty($extra_meta) ) ? ' data-extra-meta="' . htmlspecialchars( json_encode($extra_meta), ENT_QUOTES, 'UTF-8') . '"' : '';
@@ -744,7 +878,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$editable_col = '<span class="set-meta tips" data-toggle="tooltip" title="' . $tooltip . '" data-placement="' . $tooltip_position .
 		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '"' . $symbol_data . $extra_meta_data .
-		       ' data-input-type="' . $input_type . '">' . $value . '</span>';
+		       ' data-input-type="' . $input_type . '" data-custom="' . $is_custom . '" data-currency="' . $currency . '">' . $value . '</span>';
 
 
 		return apply_filters('atum/list_table/editable_column', $editable_col, $args);

@@ -203,99 +203,10 @@ final class Ajax {
 
 		foreach ($data as $product_id => &$product_meta) {
 
-			$product = wc_get_product( $product_id );
-
-			if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
-				continue;
-			}
-
-			foreach ($product_meta as $meta_key => &$meta_value) {
-
-				$meta_key = esc_attr($meta_key);
-
-				switch ( $meta_key ) {
-
-					case 'stock':
-
-						$product->set_stock_quantity($meta_value);
-
-						// Needed to clear transients and other stuff
-						do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock' , $product );
-
-						break;
-
-					case 'regular_price':
-
-						$product->set_regular_price($meta_value);
-
-						if ( $meta_key == 'regular_price' && ! $product->is_on_sale('edit') ) {
-							$product->set_price($meta_value);
-						}
-
-						break;
-
-					case 'sale_price':
-
-						$sale_price    = wc_format_decimal($meta_value);
-						$regular_price = $product->get_regular_price();
-
-						// The sale price cannot be higher than the regular price
-						if ( $regular_price >= $sale_price ) {
-							$product->set_sale_price($sale_price);
-						}
-
-						// Check for sale dates
-						if ( isset( $data[$product_id]['_sale_price_dates_from'], $data[$product_id]['_sale_price_dates_to'] ) ) {
-
-							$date_from = wc_clean( $data[ $product_id ]['_sale_price_dates_from'] );
-							$date_to   = wc_clean( $data[ $product_id ]['_sale_price_dates_to'] );
-
-							$product->set_date_on_sale_from( $date_from ? strtotime( $date_from ) : '' );
-							$product->set_date_on_sale_to( $date_to ? strtotime( $date_to ) : '' );
-
-							// Ensure these meta keys are not handled on next iterations
-							unset( $data[$product_id]['_sale_price_dates_from'], $data[$product_id]['_sale_price_dates_to'] );
-
-							if ( $date_to && ! $date_from ) {
-								$date_from = date( 'Y-m-d' );
-								$product->set_date_on_sale_from( strtotime( $date_from ) );
-							}
-
-							// Update price if on sale
-							if ( $product->is_on_sale('edit') ) {
-								$product->set_price($sale_price);
-							}
-							else {
-								$product->set_price($regular_price);
-
-								if ( $date_to && strtotime( $date_to ) < current_time('timestamp') ) {
-									$product->set_date_on_sale_from('');
-									$product->set_date_on_sale_to('');
-								}
-							}
-
-						}
-
-						break;
-
-					case 'purchase_price':
-
-						update_post_meta( $product_id, '_' . $meta_key, wc_format_decimal($meta_value) );
-						break;
-
-					// Any other text meta
-					default:
-
-						update_post_meta( $product_id, '_' . $meta_key, esc_attr($meta_value) );
-						break;
-				}
-
-			}
-
-			// Hack to prevent overwriting the purchase_price on variations
-			remove_action( 'woocommerce_update_product_variation', array(Main::get_instance(), 'save_purchase_price') );
-
-			$product->save();
+		
+			Helpers::update_product_meta( $product_id, $product_meta);
+			
+			Helpers::maybe_synchronize_translations_wpml( $product_id, $product_meta );
 
 		}
 

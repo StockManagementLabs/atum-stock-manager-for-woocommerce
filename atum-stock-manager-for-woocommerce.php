@@ -48,7 +48,7 @@ if ( ! defined('ATUM_PREFIX') ) {
 }
 
 if ( ! defined('ATUM_DEBUG') ) {
-	define( 'ATUM_DEBUG', FALSE );
+	define( 'ATUM_DEBUG', TRUE );
 }
 
 
