@@ -8,6 +8,22 @@
 	
 	th {
 		vertical-align: middle;
+		white-space: nowrap;
+	}
+	
+	input[type=text], input[type=number], select, textarea {
+		padding: 6px;
+		margin: 0;
+		border-radius: 4px;
+		height: auto;
+	}
+	
+	input[type=text], input[type=number] {
+		height: 32px;
+	}
+	
+	input[type=number] {
+		width: 60px;
 	}
 }
 
@@ -15,10 +31,12 @@
 	margin-right: 20px;
 	
 	.dashicons {
-		line-height: 30px;
+		display: inline-block;
+		vertical-align: middle;
 		width: 16px;
 		height: 16px;
 		font-size: 16px;
+		color: #666;
 	}
 	
 	&:hover {

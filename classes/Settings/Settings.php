@@ -345,9 +345,9 @@ class Settings {
 	public function display_text( $args ) {
 		
 		$output = $this->get_label( $args ) . sprintf(
-				'<input class="atum-settings-input regular-text" type="text" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
-				$this->options[ $args['id'] ]
-			);
+			'<input class="atum-settings-input regular-text" type="text" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+			$this->options[ $args['id'] ]
+		);
 		
 		echo apply_filters( 'atum/settings/display_text', $output, $args );
 		
@@ -363,9 +363,9 @@ class Settings {
 	public function display_number( $args ) {
 
 		$output = $this->get_label( $args ) . sprintf(
-				'<input class="atum-settings-input" type="number" min="1" step="1" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
-				$this->options[ $args['id'] ]
-			);
+			'<input class="atum-settings-input" type="number" min="1" step="1" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+			$this->options[ $args['id'] ]
+		);
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
 

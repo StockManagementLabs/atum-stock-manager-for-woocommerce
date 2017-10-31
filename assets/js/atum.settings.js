@@ -11,7 +11,7 @@
 		
 		// Enable switchers
 		$('.js-switch').each(function () {
-			var switcher = new Switchery(this);
+			var switcher = new Switchery(this, { size: 'small' });
 		});
 		
 		// Enable tooltips

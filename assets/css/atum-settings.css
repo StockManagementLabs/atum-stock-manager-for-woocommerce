@@ -165,6 +165,22 @@
 
 #atum-settings th {
   vertical-align: middle;
+  white-space: nowrap;
+}
+
+#atum-settings input[type=text], #atum-settings input[type=number], #atum-settings select, #atum-settings textarea {
+  padding: 6px;
+  margin: 0;
+  border-radius: 4px;
+  height: auto;
+}
+
+#atum-settings input[type=text], #atum-settings input[type=number] {
+  height: 32px;
+}
+
+#atum-settings input[type=number] {
+  width: 60px;
 }
 
 .atum-setting-info {
@@ -172,10 +188,12 @@
 }
 
 .atum-setting-info .dashicons {
-  line-height: 30px;
+  display: inline-block;
+  vertical-align: middle;
   width: 16px;
   height: 16px;
   font-size: 16px;
+  color: #666;
 }
 
 .atum-setting-info:hover {

@@ -239,6 +239,8 @@
   -webkit-transition-delay: 0.2s;
   transition-delay: 0.2s;
   display: block;
+  font-size: 12px;
+  padding: 10px 14px;
 }
 
 .atum-addons .theme .addon-key {
