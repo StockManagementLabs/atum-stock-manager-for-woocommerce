@@ -1026,5 +1026,209 @@ final class Helpers {
 		$screen->set_help_sidebar( self::load_view_to_string( 'help-tabs/help-sidebar' ) );
 
 	}
+	
+	/**
+	 * Update product meta translations if WPML is active
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int $product_id
+	 * @param array $product_meta
+	 */
+	public static function maybe_synchronize_translations_wpml( $product_id, &$product_meta) {
+	
+		if ( ! class_exists('\woocommerce_wpml')) {
+			return;
+		}
+		
+		global $sitepress;
+		
+		
+		$trid = $sitepress->get_element_trid( $product_id, 'post_product' );
+		$translations = $sitepress->get_element_translations( $trid, 'post_product', false, true );
+		
+		foreach( $translations as $translation ) {
+			if ( $translation->element_id != $product_id ) {
+				self::update_product_meta( $translation->element_id, $product_meta) ;
+			}
+		}
+	}
+	
+	/**
+	 * Update product meta from Stock Central List
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int   $product_id
+	 * @param array $product_meta
+	 */
+	public static function update_product_meta( $product_id, $product_meta ) {
+		
+		$product               = wc_get_product( $product_id );
+		$is_wpml_multicurrency = FALSE;
+		$original_product_id   = $product_id;
+		
+		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
+			return;
+		}
+
+		// Add WPML compatibility
+		if ( class_exists( '\woocommerce_wpml' ) ) {
+			
+			$wpml = \woocommerce_wpml::instance();
+			global $sitepress;
+			
+			if ( $wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
+
+				$is_wpml_multicurrency = TRUE;
+				$post_type             = get_post_type( $product_id );
+				$product_translations  = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+
+				foreach ( $product_translations as $translation ) {
+
+					if ( $translation->original ) {
+						$original_product_id = $translation->element_id;
+						break;
+					}
+
+				}
+				
+			}
+
+		}
+		
+		foreach ( $product_meta as $meta_key => &$meta_value ) {
+			
+			$meta_key = esc_attr( $meta_key );
+			
+			switch ( $meta_key ) {
+				
+				case 'stock':
+					
+					unset( $product_meta['stock_custom'], $product_meta['stock_currency'] );
+					$product->set_stock_quantity( $meta_value );
+					
+					// Needed to clear transients and other stuff
+					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product );
+					
+					break;
+				
+				case 'regular_price':
+					
+					if (  $is_wpml_multicurrency && isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
+							
+							$custom_prices                   = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['regular_price_currency'] );
+							$custom_prices['_regular_price'] = $meta_value;
+							
+							$wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['regular_price_currency'] );
+							
+						
+					} else {
+						$product->set_regular_price( $meta_value );
+						
+						if ( $meta_key == 'regular_price' && ! $product->is_on_sale( 'edit' ) ) {
+							$product->set_price( $meta_value );
+						}
+					}
+					
+					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
+					
+					break;
+				
+				case 'sale_price':
+					
+					if ( $is_wpml_multicurrency && isset( $product_meta['sale_price_custom'] ) && $product_meta['sale_price_custom'] == 'yes' ) {
+						
+						$custom_prices                = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['sale_price_currency'] );
+						$custom_prices['_sale_price'] = $meta_value;
+						
+						if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+							
+							$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
+							$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+							
+							$custom_prices['_sale_price_dates_from'] = ( $date_from ? strtotime( $date_from ) : '' );
+							$custom_prices['_sale_price_dates_to']   = ( $date_to ? strtotime( $date_to ) : '' );
+							
+							// Ensure these meta keys are not handled on next iterations
+							unset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] );
+						}
+						
+						$wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['sale_price_currency'] );
+						
+					}
+					else {
+						$sale_price    = wc_format_decimal( $meta_value );
+						$regular_price = $product->get_regular_price();
+						
+						// The sale price cannot be higher than the regular price
+						if ( $regular_price >= $sale_price ) {
+							$product->set_sale_price( $sale_price );
+						}
+						
+						// Check for sale dates
+						if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+							
+							$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
+							$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+							
+							$product->set_date_on_sale_from( $date_from ? strtotime( $date_from ) : '' );
+							$product->set_date_on_sale_to( $date_to ? strtotime( $date_to ) : '' );
+							
+							// Ensure these meta keys are not handled on next iterations
+							unset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] );
+							
+							if ( $date_to && ! $date_from ) {
+								$date_from = date( 'Y-m-d' );
+								$product->set_date_on_sale_from( strtotime( $date_from ) );
+							}
+							
+							// Update price if on sale
+							if ( $product->is_on_sale( 'edit' ) ) {
+								$product->set_price( $sale_price );
+							} else {
+								$product->set_price( $regular_price );
+								
+								if ( $date_to && strtotime( $date_to ) < current_time( 'timestamp' ) ) {
+									$product->set_date_on_sale_from( '' );
+									$product->set_date_on_sale_to( '' );
+								}
+							}
+							
+						}
+					}
+					
+					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
+					
+					break;
+				
+				case 'purchase_price':
+					
+					if (  $is_wpml_multicurrency && isset( $product_meta['purchase_price_custom'] ) && $product_meta['purchase_price_custom'] == 'yes' ) {
+						update_post_meta( $original_product_id, '_' . $meta_key . '_' . $product_meta['purchase_price_currency'], wc_format_decimal( $meta_value ) );
+					}
+					else {
+						update_post_meta( $product_id, '_' . $meta_key, wc_format_decimal( $meta_value ) );
+					}
+					
+					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
+					break;
+				
+				// Any other text meta
+				default:
+					
+					update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
+					unset( $product_meta[ '_' . $meta_key . '_custom' ], $product_meta[ '_' . $meta_key . 'currency' ] );
+					break;
+			}
+			
+		}
+		
+		// Hack to prevent overwriting the purchase_price on variations
+		remove_action( 'woocommerce_update_product_variation', array(Main::get_instance(), 'save_purchase_price') );
+		
+		$product->save();
+		
+	}
 
 }

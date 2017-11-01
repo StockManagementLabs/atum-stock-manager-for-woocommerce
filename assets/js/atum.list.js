@@ -496,6 +496,8 @@
 					    itemId     = $metaCell.data('item'),
 					    meta       = $metaCell.data('meta'),
 					    symbol     = $metaCell.data('symbol') || '',
+					    custom     = $metaCell.data('custom') || 'no',
+					    currency   = $metaCell.data('currency') || '',
 					    value      = (symbol) ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
 					    newValue   = $popover.find('.meta-value').val();
 					
@@ -519,6 +521,8 @@
 					
 					// Add the meta value to the object
 					editedCols[itemId][meta] = newValue;
+					editedCols[itemId][meta + '_custom'] = custom;
+					editedCols[itemId][meta + '_currency'] = currency;
 					
 					// Add the extra meta data (if any)
 					if ($popover.hasClass('with-meta')) {
