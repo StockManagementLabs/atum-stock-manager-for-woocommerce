@@ -103,12 +103,13 @@ class Main {
 			// Show the right stock status on WC products list when ATUM is managing the stock
 			add_filter( 'woocommerce_admin_stock_html', array($this, 'set_wc_products_list_stock_status'), 10, 2 );
 			
-			// Add purchase price to custom prices
-			add_filter( 'wcml_custom_prices_fields', array( $this, 'add_purchase_price_custom_prices' ) );
-			add_filter( 'wcml_custom_prices_fields_labels', array( $this, 'add_purchase_price_custom_prices_labels' ) );
-			add_filter( 'wcml_custom_prices_strings', array( $this, 'add_purchase_price_custom_prices_labels' ) );
-			add_filter( 'wcml_update_custom_prices_values', array( $this, 'sanitize_purchase_price_custom_prices' ), 10, 3 );
-			add_action( 'wcml_after_save_custom_prices', array( $this, 'save_purchase_price_custom_prices' ), 10, 4 );
+			// Add purchase price to WPML custom prices
+			add_filter( 'wcml_custom_prices_fields', array($this, 'wpml_add_purchase_price_to_custom_prices') );
+			add_filter( 'wcml_custom_prices_fields_labels', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
+			add_filter( 'wcml_custom_prices_strings', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
+			add_filter( 'wcml_update_custom_prices_values', array($this, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
+			add_action( 'wcml_after_save_custom_prices', array($this, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
+
 		}
 
 		// Load front stuff
@@ -658,6 +659,7 @@ class Main {
 	public function save_purchase_price ($post_id) {
 
 		$purchase_price = '';
+
 		// Product variations
 		if ( isset($_POST['variable_purchase_price']) ) {
 			$purchase_price = (string) isset( $_POST['variable_purchase_price'] ) ? wc_clean( reset($_POST['variable_purchase_price']) ) : '';
@@ -680,7 +682,7 @@ class Main {
 
 		}
 		
-		// Do WPML Stuff
+		// Add WPML compatibility
 		if (class_exists('\woocommerce_wpml')) {
 			
 			global $sitepress;
@@ -688,89 +690,89 @@ class Main {
 			
 			$post_type = get_post_type( $post_id );
 			
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($post_id, 'post_'.$post_type), 'post_'.$post_type);
+			$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid($post_id, "post_{$post_type}"), "post_{$post_type}" );
 			foreach($product_translations as $translation){
+
 				if( $translation->element_id !==  $post_id){
 					update_post_meta( $translation->element_id, '_purchase_price', $purchase_price);
 				}
+
 			}
+
 		}
 
 	}
 	
 	/**
-	 * Add purchase price to custom prices fields array
+	 * Add purchase price to WPML's custom price fields
 	 *
-	 * @since 1.3.0.1
+	 * @since 1.3.0
 	 *
-	 * @param array   $prices Custom prices fields
-	 * @param integer $product_id
+	 * @param array   $prices      Custom prices fields
+	 * @param integer $product_id  The product ID
 	 *
 	 * @return array
 	 */
-	public function add_purchase_price_custom_prices( $prices, $product_id ) {
+	public function wpml_add_purchase_price_to_custom_prices( $prices, $product_id ) {
 		
 		$prices[] = '_purchase_price';
-		
 		return $prices;
 	}
 	
 	/**
-	 * Add purchase price to custom prices fields labels array
+	 * Add purchase price to WPML's custom price fields labels
 	 *
-	 * @since 1.3.0.1
+	 * @since 1.3.0
 	 *
-	 * @param array   $labels Custom prices fields labels
-	 * @param integer $product_id
+	 * @param array   $labels       Custom prices fields labels
+	 * @param integer $product_id   The product ID
 	 *
 	 * @return array
 	 */
-	public function add_purchase_price_custom_prices_labels( $labels, $product_id ) {
+	public function wpml_add_purchase_price_to_custom_price_labels( $labels, $product_id ) {
 		
 		$labels['_purchase_price'] = __( 'Purchase Price', ATUM_TEXT_DOMAIN );
-		
 		return $labels;
 	}
 	
 	/**
-	 * Sanitize purchase prices
+	 * Sanitize WPML's purchase prices
 	 *
-	 * @since 1.3.0.1
+	 * @since 1.3.0
 	 *
-	 * @param array     $prices
-	 * @param string     $code
-	 * @param bool $variation_id
+	 * @param array  $prices
+	 * @param string $code
+	 * @param bool   $variation_id
 	 *
 	 * @return array
 	 */
-	public function sanitize_purchase_price_custom_prices( $prices, $code, $variation_id = false ) {
+	public function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
 	
 		if ($variation_id) {
-			$prices['_purchase_price'] = ( ! empty($_POST['_custom_variation_purchase_price'][$code][$variation_id]))? wc_format_decimal($_POST['_custom_variation_purchase_price'][$code][$variation_id]) : '';
+			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_variation_purchase_price'][$code][$variation_id]) ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][$code][$variation_id] ) : '';
 		}
 		else {
-			$prices['_purchase_price'] = ( ! empty($_POST['_custom_purchase_price'][$code]))? wc_format_decimal($_POST['_custom_purchase_price'][$code]) : '';
+			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_purchase_price'][$code]) )? wc_format_decimal( $_POST['_custom_purchase_price'][$code] ) : '';
 		}
-		
 	
 		return $prices;
 	}
 	
 	
 	/**
-	 * Save purchase price when custo prices enabled
+	 * Save WPML's purchase price when custom prices are enabled
 	 *
-	 * @since 1.3.0.1
+	 * @since 1.3.0
 	 *
-	 * @param int $post_id
-	 * @param $product_price
-	 * @param array $custom_prices
+	 * @param int    $post_id
+	 * @param float  $product_price
+	 * @param array  $custom_prices
 	 * @param string $code
 	 */
-	public function save_purchase_price_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
+	public function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
 	
-		if (isset($custom_prices[ '_purchase_price'])) {
-			update_post_meta( $post_id, '_purchase_price_' . $code, $custom_prices[ '_purchase_price'] );
+		if ( isset( $custom_prices[ '_purchase_price'] ) ) {
+			update_post_meta( $post_id, "_purchase_price_{$code}", $custom_prices['_purchase_price'] );
 		}
 	}
 

@@ -1030,7 +1030,7 @@ final class Helpers {
 	/**
 	 * Update product meta translations if WPML is active
 	 *
-	 * @since 1.3.0.1
+	 * @since 1.3.0
 	 *
 	 * @param int $product_id
 	 * @param array $product_meta
@@ -1057,7 +1057,7 @@ final class Helpers {
 	/**
 	 * Update product meta from Stock Central List
 	 *
-	 * @since 1.3.0.1
+	 * @since 1.3.0
 	 *
 	 * @param int   $product_id
 	 * @param array $product_meta
@@ -1071,26 +1071,30 @@ final class Helpers {
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
 		}
-		
+
+		// Add WPML compatibility
 		if ( class_exists( '\woocommerce_wpml' ) ) {
 			
 			$wpml = \woocommerce_wpml::instance();
 			global $sitepress;
 			
 			if ( $wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
-				
+
 				$is_wpml_multicurrency = TRUE;
-				
-				$post_type            = get_post_type( $product_id );
-				$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+				$post_type             = get_post_type( $product_id );
+				$product_translations  = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+
 				foreach ( $product_translations as $translation ) {
+
 					if ( $translation->original ) {
 						$original_product_id = $translation->element_id;
 						break;
 					}
+
 				}
 				
 			}
+
 		}
 		
 		foreach ( $product_meta as $meta_key => &$meta_value ) {
