@@ -124,8 +124,11 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$po_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : gmdate( 'Y-m-d H:i:s', strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' ) );
-		$expected_at_location_date = ( empty( $_POST['expected_at_location_date'] ) ) ? current_time( 'timestamp', TRUE ) : gmdate( 'Y-m-d H:i:s', strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' ) );
+		$po_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
+		$po_date = date_i18n('Y-m-d H:i:s', $po_date);
+
+		$expected_at_location_date = ( empty( $_POST['expected_at_location_date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' );
+		$expected_at_location_date = date_i18n( 'Y-m-d H:i:s', $expected_at_location_date);
 
 		$log->save_meta( array(
 			'_status'                    => esc_attr( $_POST['status'] ),

@@ -148,9 +148,11 @@ class InventoryLogs extends AtumOrderPostType {
 		 * @var string $return_date
 		 * @var string $damage_date
 		 */
-		$log_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : gmdate( 'Y-m-d H:i:s', strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' ) );
+		$log_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
+		$log_date = date_i18n( 'Y-m-d H:i:s', $log_date);
+
 		foreach ( ['reservation_date', 'return_date', 'damage_date'] as $date_field ) {
-			${$date_field} = ( empty( $_POST[$date_field] ) ) ? '' : gmdate( 'Y-m-d H:i:s', strtotime( $_POST[$date_field] . ' ' . (int) $_POST["{$date_field}_hour"] . ':' . (int) $_POST["{$date_field}_minute"] . ':00' ) );
+			${$date_field} = ( empty( $_POST[$date_field] ) ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[$date_field] . ' ' . (int) $_POST["{$date_field}_hour"] . ':' . (int) $_POST["{$date_field}_minute"] . ':00' ) );
 		}
 
 		$log->save_meta( array(

@@ -729,7 +729,7 @@ abstract class AtumOrderModel {
 		$status = $this->get_status();
 
 		$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-			'post_date'     => gmdate( 'Y-m-d H:i:s' ),
+			'post_date'     => date_i18n( 'Y-m-d H:i:s' ),
 			'post_date_gmt' => gmdate( 'Y-m-d H:i:s' ),
 			'post_type'     => $this->post->post_type,
 			'post_status'   => ( in_array($status, array_keys( AtumOrderPostType::get_statuses() )) ) ? ATUM_PREFIX . $status : 'publish',
