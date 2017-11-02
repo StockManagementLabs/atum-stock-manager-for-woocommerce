@@ -41,6 +41,13 @@ class Main {
 	private $menu_items = array();
 	
 	/**
+	 * The ATUM menu items order
+	 *
+	 * @var array
+	 */
+	private $menu_items_order = array();
+	
+	/**
 	 * The Settings page object
 	 * @var Settings
 	 */
@@ -151,24 +158,35 @@ class Main {
 			'stock-central'   => array(
 				'title'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this->sc_obj, 'display' ),
-				'slug'     => Globals::ATUM_UI_SLUG
+				'slug'     => Globals::ATUM_UI_SLUG,
+				'menu_order'    => '10'
 			),
 			'inbound-stock'   => array(
 				'title'    => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this->ib_obj, 'display' ),
-				'slug'     => InboundStock::UI_SLUG
+				'slug'     => InboundStock::UI_SLUG,
+				'menu_order'    => '20'
 			),
 			'settings'        => array(
 				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this->sp_obj, 'display' ),
-				'slug'     => 'settings'
+				'slug'     => 'settings',
+				'menu_order'    => '80'
 			),
 			'addons'  => array(
 				'title' => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
 				'callback' => array( $this->ad_obj, 'load_addons_page' ),
-				'slug'     => 'addons'
+				'slug'     => 'addons',
+				'menu_order'    => '90'
 			)
 		) );
+		
+		foreach ( $this->menu_items as $menu_item ) {
+			$this->menu_items_order[] = array(
+				'slug'       => $menu_item['slug'],
+				'menu_order' => ( empty( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
+			);
+		}
 
 		// Register the Locations taxonomy and link it to products
 		$labels = array(
@@ -313,22 +331,29 @@ class Main {
 			// Place the "Settings" and "Add-ons" submenus always at the las 2 positions
 			$menu_items = $submenu[ Globals::ATUM_UI_SLUG ];
 			$last_values = [ ATUM_TEXT_DOMAIN . '-settings', ATUM_TEXT_DOMAIN . '-addons'];
-
-			usort($menu_items, function ($a, $b) use ($last_values) {
-
-				// The Stock Central menu must be at top
-				if ( in_array(Globals::ATUM_UI_SLUG, $b) ) {
-					return 1;
+			
+			$this->menu_items_order = (array) apply_filters( 'atum/admin/menu_items_order', $this->menu_items_order );
+			
+			usort($menu_items, function ($a, $b) {
+				
+				$coincidences = 1;
+				
+				$a_slug = str_replace( ATUM_TEXT_DOMAIN . '-', '', $a[2], $coincidences);
+				$b_slug = str_replace( ATUM_TEXT_DOMAIN . '-', '', $b[2], $coincidences);
+				$a_position = $b_position = 99;
+				
+				foreach ( $this->menu_items_order as $menu_item ) {
+					
+					if ($menu_item['slug'] == $a_slug || ATUM_TEXT_DOMAIN . '-' .$a_slug  == $menu_item['slug']) {
+						$a_position = $menu_item['menu_order'];
+					}
+					if ($menu_item['slug'] == $b_slug ||  ATUM_TEXT_DOMAIN . '-' . $b_slug == $menu_item['slug']) {
+						$b_position = $menu_item['menu_order'];
+					}
 				}
-				// The Add-ons will be the last item
-				elseif ( ! empty( array_intersect($a, $last_values) ) && ! empty( array_intersect($b, $last_values) )  ) {
-					return ( in_array(ATUM_TEXT_DOMAIN . '-addons', $a) ) ? 1 : -1;
-				}
-				elseif ( ! empty( array_intersect($a, $last_values) )  ) {
-					return 1;
-				}
-
-				return -1;
+				
+				return (int)$a_position - (int)$b_position;
+				
 
 			});
 
@@ -368,22 +393,12 @@ class Main {
 
 		// Build the submenu items
 		if ( ! empty($submenu_items) ) {
+			
+			usort($submenu_items, function ($a, $b) {
+				
+				return (int) $a['menu_order'] - (int)$b['menu_order'];
 
-			// Place the "Settings" and "Add-ons" submenus always at the las 2 positions
-			$last_values = ['settings', 'addons'];
-
-			/*uksort($submenu_items, function ($a, $b) use ($last_values) {
-
-				if ( in_array($a, $last_values) && in_array($b, $last_values) ) {
-					return ($a == 'addons') ? 1 : -1;
-				}
-				elseif ( in_array($a, $last_values) ) {
-					return 1;
-				}
-
-				return -1;
-
-			});*/
+			});
 
 			foreach ( $submenu_items as $key => $menu_item ) {
 
