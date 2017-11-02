@@ -25,7 +25,13 @@ class Suppliers {
 	 * @var Suppliers
 	 */
 	private static $instance;
-
+	
+	/**
+	 * The post type labels
+	 * @var array
+	 */
+	protected $labels = array();
+	
 	/**
 	 * The Supplier post type name
 	 */
@@ -58,6 +64,9 @@ class Suppliers {
 
 		// Enqueue scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		
+		// Add the "Suppliers" link to the ATUM's admin bar menu
+		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12);
 	}
 
 	/**
@@ -72,7 +81,7 @@ class Suppliers {
 		// Minimum capability required
 		$is_user_allowed = current_user_can( 'manage_woocommerce' );
 
-		$labels = array(
+		$this->labels = array(
 			'name'                  => __( 'Suppliers', ATUM_TEXT_DOMAIN ),
 			'singular_name'         => _x( 'Supplier', self::POST_TYPE . ' post type singular name', ATUM_TEXT_DOMAIN ),
 			'add_new'               => __( 'Add New Supplier', ATUM_TEXT_DOMAIN ),
@@ -93,7 +102,7 @@ class Suppliers {
 		);
 
 		$args = apply_filters( 'atum/suppliers/post_type_args', wp_parse_args( array(
-			'labels'              => $labels,
+			'labels'              => $this->labels,
 			'description'         => __( 'This is where Suppliers are stored.', ATUM_TEXT_DOMAIN ),
 			'public'              => FALSE,
 			'show_ui'             => $is_user_allowed,
@@ -419,6 +428,29 @@ class Suppliers {
 		return FALSE;
 
 	}
+	
+	/**
+	 * Add the Suppliuers link to the ATUM's admin bar menu
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $atum_menus
+	 *
+	 * @return array
+	 */
+	public function add_admin_bar_link($atum_menus) {
+		
+		Helpers::array_insert($atum_menus, 4, array(
+			'suppliers' => array(
+				'slug'  => 'suppliers',
+				'title' => $this->labels['menu_name'],
+				'href'  => 'edit.php?post_type=' . self::POST_TYPE
+			)
+		));
+		
+		return $atum_menus;
+		
+	}
 
 
 	/****************************
@@ -439,7 +471,7 @@ class Suppliers {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @return Settings instance
+	 * @return Suppliers instance
 	 */
 	public static function get_instance() {
 

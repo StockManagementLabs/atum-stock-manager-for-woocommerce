@@ -25,11 +25,12 @@ class POItemProduct extends AtumOrderItemProduct {
 	 * @param int $item
 	 */
 	public function __construct( $item = 0 ) {
-
-		parent::__construct( $item );
-
+		
 		// Use the purchase price when adding products to a PO
 		add_filter( 'woocommerce_get_price_excluding_tax', array($this, 'use_purchase_price'), 10, 3);
+
+		parent::__construct( $item );
+		
 	}
 
 	use POItemTrait;

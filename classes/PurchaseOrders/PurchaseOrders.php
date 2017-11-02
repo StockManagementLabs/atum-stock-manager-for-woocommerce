@@ -72,7 +72,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		parent::__construct();
 
 		// Add the "Purchase Orders" link to the ATUM's admin bar menu
-		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
+		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 11 );
 
 		// Add the help tab to PO list page
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
@@ -264,12 +264,14 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_admin_bar_link($atum_menus) {
-
-		$atum_menus['purchase-orders'] = array(
-			'slug'  => 'purchase-orders',
-			'title' => $this->labels['menu_name'],
-			'href'  => 'edit.php?post_type=' . self::POST_TYPE
-		);
+		
+		Helpers::array_insert($atum_menus, 2, array(
+			'purchase-orders' => array(
+				'slug'  => 'purchase-orders',
+				'title' => $this->labels['menu_name'],
+				'href'  => 'edit.php?post_type=' . self::POST_TYPE
+			)
+		));
 
 		return $atum_menus;
 

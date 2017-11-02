@@ -372,7 +372,7 @@ class Main {
 			// Place the "Settings" and "Add-ons" submenus always at the las 2 positions
 			$last_values = ['settings', 'addons'];
 
-			uksort($submenu_items, function ($a, $b) use ($last_values) {
+			/*uksort($submenu_items, function ($a, $b) use ($last_values) {
 
 				if ( in_array($a, $last_values) && in_array($b, $last_values) ) {
 					return ($a == 'addons') ? 1 : -1;
@@ -383,7 +383,7 @@ class Main {
 
 				return -1;
 
-			});
+			});*/
 
 			foreach ( $submenu_items as $key => $menu_item ) {
 

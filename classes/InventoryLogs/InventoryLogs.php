@@ -438,16 +438,18 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @return array
 	 */
-	public function add_admin_bar_link($atum_menus) {
+	public function add_admin_bar_link( $atum_menus ) {
 
-		$atum_menus['inventory-logs'] = array(
-			'slug'  => 'inventory-logs',
-			'title' => $this->labels['menu_name'],
-			'href'  => 'edit.php?post_type=' . self::POST_TYPE
-		);
-
+		Helpers::array_insert($atum_menus, 1, array(
+			'inventory-logs' => array(
+				'slug'  => 'inventory-logs',
+				'title' => $this->labels['menu_name'],
+				'href'  => 'edit.php?post_type=' . self::POST_TYPE
+			)
+		));
+		
 		return $atum_menus;
-
+		
 	}
 
 	/**
