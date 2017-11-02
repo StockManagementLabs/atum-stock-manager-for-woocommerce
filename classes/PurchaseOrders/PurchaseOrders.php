@@ -80,7 +80,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		
 		$this->menu_item = array(
 			'purchase-orders' => array(
-				'slug'       => 'purchase-orders',
+				'slug'       => ATUM_TEXT_DOMAIN . '-purchase-orders',
 				'title'      => $this->labels['menu_name'],
 				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
 				'menu_order' => self::MENU_ORDER
@@ -286,11 +286,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_admin_bar_link($atum_menus) {
-		
-		Helpers::array_insert( $atum_menus, 2, $this->menu_item );
-
-		return $atum_menus;
-
+		return array_merge($atum_menus, $this->menu_item);
 	}
 	
 	/**
@@ -301,9 +297,9 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_item_order( $items_order ) {
-		
+
 		$items_order[] = array(
-			'slug' => 'edit.php?post_type=atum_purchase_order',
+			'slug'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER
 		);
 		

@@ -82,12 +82,12 @@ class InventoryLogs extends AtumOrderPostType {
 			'notes'   => __( 'Log Notes', ATUM_TEXT_DOMAIN ),
 			'actions' => __( 'Log Actions', ATUM_TEXT_DOMAIN )
 		);
-		
+
 		$this->menu_item = array(
 			'inventory-logs' => array(
-				'slug'  => 'inventory-logs',
-				'title' => $this->labels['menu_name'],
-				'href'  => 'edit.php?post_type=' . self::POST_TYPE,
+				'slug'       => ATUM_TEXT_DOMAIN . '-inventory-logs',
+				'title'      => $this->labels['menu_name'],
+				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
 				'menu_order' => self::MENU_ORDER
 			)
 		);
@@ -462,11 +462,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_admin_bar_link( $atum_menus ) {
-		
-		Helpers::array_insert( $atum_menus, 1, $this->menu_item );
-		
-		return $atum_menus;
-		
+		return array_merge($atum_menus, $this->menu_item);
 	}
 	
 	/**
@@ -477,9 +473,9 @@ class InventoryLogs extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_item_order( $items_order ) {
-		
+
 		$items_order[] = array(
-			'slug' => 'edit.php?post_type=atum_inventory_log',
+			'slug'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER
 		);
 		

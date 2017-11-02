@@ -155,29 +155,29 @@ class Main {
 	public function load() {
 
 		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array(
-			'stock-central'   => array(
-				'title'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->sc_obj, 'display' ),
-				'slug'     => Globals::ATUM_UI_SLUG,
-				'menu_order'    => '10'
+			'stock-central' => array(
+				'title'      => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
+				'callback'   => array( $this->sc_obj, 'display' ),
+				'slug'       => Globals::ATUM_UI_SLUG,
+				'menu_order' => 10
 			),
-			'inbound-stock'   => array(
-				'title'    => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->ib_obj, 'display' ),
-				'slug'     => InboundStock::UI_SLUG,
-				'menu_order'    => '20'
+			'inbound-stock' => array(
+				'title'      => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+				'callback'   => array( $this->ib_obj, 'display' ),
+				'slug'       => InboundStock::UI_SLUG,
+				'menu_order' => 20
 			),
-			'settings'        => array(
-				'title'    => __( 'Settings', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->sp_obj, 'display' ),
-				'slug'     => 'settings',
-				'menu_order'    => '80'
+			'settings'      => array(
+				'title'      => __( 'Settings', ATUM_TEXT_DOMAIN ),
+				'callback'   => array( $this->sp_obj, 'display' ),
+				'slug'       => ATUM_TEXT_DOMAIN . '-settings',
+				'menu_order' => 80
 			),
-			'addons'  => array(
-				'title' => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
-				'callback' => array( $this->ad_obj, 'load_addons_page' ),
-				'slug'     => 'addons',
-				'menu_order'    => '90'
+			'addons'        => array(
+				'title'      => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
+				'callback'   => array( $this->ad_obj, 'load_addons_page' ),
+				'slug'       => ATUM_TEXT_DOMAIN . '-addons',
+				'menu_order' => 90
 			)
 		) );
 		
@@ -328,32 +328,28 @@ class Main {
 
 		if ( ! empty($submenu) && ! empty( $submenu[ Globals::ATUM_UI_SLUG ] ) ) {
 
-			// Place the "Settings" and "Add-ons" submenus always at the las 2 positions
 			$menu_items = $submenu[ Globals::ATUM_UI_SLUG ];
-			$last_values = [ ATUM_TEXT_DOMAIN . '-settings', ATUM_TEXT_DOMAIN . '-addons'];
-			
 			$this->menu_items_order = (array) apply_filters( 'atum/admin/menu_items_order', $this->menu_items_order );
 			
 			usort($menu_items, function ($a, $b) {
-				
-				$coincidences = 1;
-				
-				$a_slug = str_replace( ATUM_TEXT_DOMAIN . '-', '', $a[2], $coincidences);
-				$b_slug = str_replace( ATUM_TEXT_DOMAIN . '-', '', $b[2], $coincidences);
+
+				$a_slug     = $a[2];
+				$b_slug     = $b[2];
 				$a_position = $b_position = 99;
 				
 				foreach ( $this->menu_items_order as $menu_item ) {
 					
-					if ($menu_item['slug'] == $a_slug || ATUM_TEXT_DOMAIN . '-' .$a_slug  == $menu_item['slug']) {
+					if ($menu_item['slug'] == $a_slug) {
 						$a_position = $menu_item['menu_order'];
 					}
-					if ($menu_item['slug'] == $b_slug ||  ATUM_TEXT_DOMAIN . '-' . $b_slug == $menu_item['slug']) {
+
+					if ($menu_item['slug'] == $b_slug) {
 						$b_position = $menu_item['menu_order'];
 					}
+
 				}
 				
-				return (int)$a_position - (int)$b_position;
-				
+				return floatval($a_position) - floatval($b_position);
 
 			});
 
@@ -384,9 +380,9 @@ class Main {
 
 		// Add the main menu item
 		$wp_admin_bar->add_node( array(
-			'id' => Globals::ATUM_UI_SLUG,
+			'id'    => Globals::ATUM_UI_SLUG,
 			'title' => '<span class="ab-icon"><img src="' . ATUM_URL . 'assets/images/atum-icon.svg" style="padding-top: 2px"></span><span class="ab-label">ATUM</span>',
-			'href' => admin_url( 'admin.php?page=' . Globals::ATUM_UI_SLUG )
+			'href'  => admin_url( 'admin.php?page=' . Globals::ATUM_UI_SLUG )
 		) );
 
 		$submenu_items = (array) apply_filters('atum/admin/top_bar/menu_items', $this->menu_items);
@@ -395,9 +391,7 @@ class Main {
 		if ( ! empty($submenu_items) ) {
 			
 			usort($submenu_items, function ($a, $b) {
-				
-				return (int) $a['menu_order'] - (int)$b['menu_order'];
-
+				return (int) $a['menu_order'] - (int) $b['menu_order'];
 			});
 
 			foreach ( $submenu_items as $key => $menu_item ) {

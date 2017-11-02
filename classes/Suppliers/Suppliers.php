@@ -53,12 +53,12 @@ class Suppliers {
 	 * Suppliers singleton constructor
 	 */
 	private function __construct() {
-		
-		$this->menu_item =array(
+
+		$this->menu_item = array(
 			'suppliers' => array(
-				'slug'  => 'suppliers',
-				'title' => _x( 'Suppliers', 'Admin menu name', ATUM_TEXT_DOMAIN ),
-				'href'  => 'edit.php?post_type=' . self::POST_TYPE,
+				'slug'       => ATUM_TEXT_DOMAIN . '-suppliers',
+				'title'      => _x( 'Suppliers', 'Admin menu name', ATUM_TEXT_DOMAIN ),
+				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
 				'menu_order' => self::MENU_ORDER
 			)
 		);
@@ -463,11 +463,7 @@ class Suppliers {
 	 * @return array
 	 */
 	public function add_admin_bar_link($atum_menus) {
-		
-		Helpers::array_insert($atum_menus, 4, $this->menu_item );
-		
-		return $atum_menus;
-		
+		return array_merge($atum_menus, $this->menu_item);
 	}
 	
 	/**
@@ -478,9 +474,9 @@ class Suppliers {
 	 * @return array
 	 */
 	public function add_item_order( $items_order ) {
-		
+
 		$items_order[] = array(
-			'slug' => 'edit.php?post_type=atum_supplier',
+			'slug'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER
 		);
 		

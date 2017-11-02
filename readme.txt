@@ -258,6 +258,7 @@ Features:
 * Added "Add to Stock" button to Purchase Order's products.
 * Added "Inbound  Stock" column and filter to "Stock Central".
 * Added WPML compatibility.
+* New method for ATUM menu ordering.
 
 Fixes:
 

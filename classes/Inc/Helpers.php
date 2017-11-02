@@ -1231,19 +1231,4 @@ final class Helpers {
 		
 	}
 	
-	/**
-	 * Inserts an array inside another array in a specific position, keeping the original key ( array_splice change the original key by 0)
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array   $array        Original array
-	 * @param int     $position     Position where $insert_array must be inserted
-	 * @param   array $insert_array The array to insert in $array
-	 */
-	public static function array_insert( &$array, $position, $insert_array ) {
-		
-		$first_array = array_splice( $array, 0, $position );
-		$array       = array_merge( $first_array, $insert_array, $array );
-	}
-	
 }
