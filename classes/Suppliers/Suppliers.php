@@ -36,14 +36,35 @@ class Suppliers {
 	 * The Supplier post type name
 	 */
 	const POST_TYPE = ATUM_PREFIX . 'supplier';
-
+	
+	/**
+	 * The menu order
+	 */
+	const MENU_ORDER = 35;
+	
+	/**
+	 * The menu item to add
+	 * @var array
+	 */
+	private $menu_item;
+	
+	
 	/**
 	 * Suppliers singleton constructor
 	 */
 	private function __construct() {
-
+		
+		$this->menu_item =array(
+			'suppliers' => array(
+				'slug'  => 'suppliers',
+				'title' => _x( 'Suppliers', 'Admin menu name', ATUM_TEXT_DOMAIN ),
+				'href'  => 'edit.php?post_type=' . self::POST_TYPE,
+				'menu_order' => self::MENU_ORDER
+			)
+		);
+		
 		$this->register_post_type();
-
+		
 		// Add columns to Suppliers list table
 		add_filter('manage_' . self::POST_TYPE . '_posts_columns', array($this, 'add_columns'));
 		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
@@ -67,6 +88,9 @@ class Suppliers {
 		
 		// Add the "Suppliers" link to the ATUM's admin bar menu
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12);
+		
+		// Add item order
+		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
 	}
 
 	/**
@@ -440,15 +464,27 @@ class Suppliers {
 	 */
 	public function add_admin_bar_link($atum_menus) {
 		
-		Helpers::array_insert($atum_menus, 4, array(
-			'suppliers' => array(
-				'slug'  => 'suppliers',
-				'title' => $this->labels['menu_name'],
-				'href'  => 'edit.php?post_type=' . self::POST_TYPE
-			)
-		));
+		Helpers::array_insert($atum_menus, 4, $this->menu_item );
 		
 		return $atum_menus;
+		
+	}
+	
+	/**
+	 * Add the current item menu order
+	 *
+	 * @param array $items_order
+	 *
+	 * @return array
+	 */
+	public function add_item_order( $items_order ) {
+		
+		$items_order[] = array(
+			'slug' => 'edit.php?post_type=atum_supplier',
+			'menu_order' => self::MENU_ORDER
+		);
+		
+		return $items_order;
 		
 	}
 

@@ -25,13 +25,23 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * The Purchase Order post type name
 	 */
 	const POST_TYPE = ATUM_PREFIX . 'purchase_order';
-
+	
+	/**
+	 * The menu order
+	 */
+	const MENU_ORDER = 30;
+	
 	/**
 	 * Will hold the current purchase order object
 	 * @var PurchaseOrder
 	 */
 	private $po;
-
+	
+	/**
+	 * The menu item to add
+	 * @var array
+	 */
+	private $menu_item;
 
 	/**
 	 * PurchaseOrders constructor
@@ -67,6 +77,15 @@ class PurchaseOrders extends AtumOrderPostType {
 			'notes'   => __( 'PO Notes', ATUM_TEXT_DOMAIN ),
 			'actions' => __( 'PO Actions', ATUM_TEXT_DOMAIN )
 		);
+		
+		$this->menu_item = array(
+			'purchase-orders' => array(
+				'slug'       => 'purchase-orders',
+				'title'      => $this->labels['menu_name'],
+				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
+				'menu_order' => self::MENU_ORDER
+			)
+		);
 
 		// Initialize
 		parent::__construct();
@@ -76,6 +95,9 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Add the help tab to PO list page
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+		
+		// Add item order
+		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
 
 	}
 
@@ -265,16 +287,28 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function add_admin_bar_link($atum_menus) {
 		
-		Helpers::array_insert($atum_menus, 2, array(
-			'purchase-orders' => array(
-				'slug'  => 'purchase-orders',
-				'title' => $this->labels['menu_name'],
-				'href'  => 'edit.php?post_type=' . self::POST_TYPE
-			)
-		));
+		Helpers::array_insert( $atum_menus, 2, $this->menu_item );
 
 		return $atum_menus;
 
+	}
+	
+	/**
+	 * Add the current item menu order
+	 *
+	 * @param array $items_order
+	 *
+	 * @return array
+	 */
+	public function add_item_order( $items_order ) {
+		
+		$items_order[] = array(
+			'slug' => 'edit.php?post_type=atum_purchase_order',
+			'menu_order' => self::MENU_ORDER
+		);
+		
+		return $items_order;
+		
 	}
 
 	/**
