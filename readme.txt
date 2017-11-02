@@ -31,10 +31,16 @@ Version 1.3.0 brings one of the most significant updates yet. ATUM has become mo
 * Inventory logs now allow you to increase or reduce WooCommerce stock.
 * Product Locations feature lets you create several storage locations per item.
 * Location hierarchy available too - create custom storage places within a location.
+
+https://youtu.be/K7tIFcjAGRI
+
 * Add Suppliers feature - add new suppliers and save their data for more natural inventory management and ordering.
 * Set default and assign users or locations to individual suppliers.
 * Pair products with suppliers for quick selling stock re-ordering.
 * Set different suppliers to each variation.
+
+https://youtu.be/O1jqufCBY5w
+
 * Add Purchase Orders - create purchase orders for your sellable WooCommerce inventory.
 * Each purchase order belongs to previously created suppliers - a quick search for products has never been easier.
 * Add products to stock when you receive them at storage locations.
@@ -43,6 +49,8 @@ Version 1.3.0 brings one of the most significant updates yet. ATUM has become mo
 * Inbound Stock overview - keep an eye on all your inbound WooCommerce products.
 * Pending inbound stock reflects in Stock Central.
 * Direct Purchase Order editing from the inbound stock page.
+
+https://youtu.be/0kr7XJvAbkE
 
 **ATUM Features - Stock Central - WooCommerce Inventory Overview**
 
@@ -241,7 +249,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
-= 1.3.0 - 2017-10-31 =
+= 1.3.0 - 2017-11-2 =
 
 Features:
 
