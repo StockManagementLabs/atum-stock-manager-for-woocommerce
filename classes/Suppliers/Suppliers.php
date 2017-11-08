@@ -387,14 +387,15 @@ class Suppliers {
 	 */
 	public function save_product_supplier_meta_box($post_id) {
 
-		$product = wc_get_product($post_id);
-		if ( ! empty($_POST['_supplier']) && $product->get_type() != 'variable' ) {
-			$supplier = absint( $_POST['_supplier'] );
-			update_post_meta( $post_id, '_supplier', $supplier );
+		$product  = wc_get_product( $post_id );
+
+		if ( $product->get_type() == 'variable' ) {
+			return;
 		}
-		else {
-			delete_post_meta( $post_id, '_supplier' );
-		}
+
+		// Always save the supplier meta (nevermind it has value or not) to be able to sort by it in List Tables
+		$supplier = ( ! empty($_POST['_supplier']) ) ? absint( $_POST['_supplier'] ) : '';
+		update_post_meta( $post_id, '_supplier', $supplier );
 
 	}
 
@@ -411,7 +412,6 @@ class Suppliers {
 		if ( in_array($hook, ['post.php', 'post-new.php']) && $post_type == self::POST_TYPE) {
 			wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array(), ATUM_VERSION );
 			wp_enqueue_style( 'atum-suppliers' );
-
 			wp_enqueue_script( 'wc-enhanced-select');
 		}
 
