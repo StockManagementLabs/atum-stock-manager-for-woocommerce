@@ -96,7 +96,7 @@ class ListTable extends AtumListTable {
 			$parent_data = $this->product->get_parent_data();
 			$title = $parent_data['title'];
 
-			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id($this->product) );
+			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id() );
 			if ( ! empty($attributes) ) {
 				$title .= ' - ' . ucfirst( implode(' - ', $attributes) );
 			}

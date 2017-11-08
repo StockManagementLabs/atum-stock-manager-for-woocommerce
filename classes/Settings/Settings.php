@@ -96,6 +96,13 @@ class Settings {
 		);
 
 		$this->defaults = array(
+			'manage_stock'          => array(
+				'section' => 'general',
+				'name'    => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Activate this option to override all WooCommerce inventory configurations.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no'
+			),
 			'enable_ajax_filter'    => array(
 				'section' => 'general',
 				'name'    => __( 'Enable Filter Autosearch', ATUM_TEXT_DOMAIN ),
@@ -123,13 +130,6 @@ class Settings {
 				'desc'    => __( "Controls the number of products displayed per page within the Stock Central screen. Please note, you can set this value within the 'Screen Options' tab as well. Enter '-1' to remove the pagination and display all available products on one page (not recommended if your store contains a large number of products as it may affect the performance).", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => self::DEFAULT_POSTS_PER_PAGE
-			),
-			'manage_stock'          => array(
-				'section' => 'stock_central',
-				'name'    => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Activate this option to override all WooCommerce inventory configurations.", ATUM_TEXT_DOMAIN ),
-				'type'    => 'switcher',
-				'default' => 'no'
 			),
 			'sale_days'             => array(
 				'section' => 'stock_central',

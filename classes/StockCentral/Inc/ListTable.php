@@ -68,6 +68,7 @@ class ListTable extends AtumListTable {
 		$args['table_columns'] = array(
 			'thumb'                => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'_supplier'            => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
@@ -95,7 +96,7 @@ class ListTable extends AtumListTable {
 		$args['group_members'] = array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'thumb', '_sku', 'ID', 'calc_type', 'title', '_regular_price', '_sale_price', '_purchase_price' )
+				'members' => array( 'thumb', 'title', '_supplier', '_sku', 'ID', 'calc_type', '_regular_price', '_sale_price', '_purchase_price' )
 			),
 			'stock-counters'        => array(
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
@@ -177,7 +178,7 @@ class ListTable extends AtumListTable {
 	protected function column__regular_price( $item ) {
 
 		$regular_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id($this->product);
+		$product_id = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
 			
@@ -235,37 +236,40 @@ class ListTable extends AtumListTable {
 	protected function column__sale_price( $item ) {
 
 		$sale_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id($this->product);
+		$product_id = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
-			
+
 			if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-				
-				$currency              = $this->current_currency;
-				$sale_price_value      = $this->custom_prices[ $currency ]['custom_price']['_sale_price'];
-				$symbol                = $this->custom_prices[ $currency ]['currency_symbol'];
+
+				$currency         = $this->current_currency;
+				$sale_price_value = $this->custom_prices[ $currency ]['custom_price']['_sale_price'];
+				$symbol           = $this->custom_prices[ $currency ]['currency_symbol'];
 				// Dates come already formatted
 				$sale_price_dates_from = $this->custom_prices[ $currency ]['sale_price_dates_from'];
 				$sale_price_dates_to   = $this->custom_prices[ $currency ]['sale_price_dates_to'];
-				$is_custom = 'yes';
-				
-			} else {
+				$is_custom             = 'yes';
+
+			}
+			else {
+
 				// WPML Multicurrency
-				if ($this->is_wpml_multicurrency && $product_id !== $this->original_product_id) {
-					$product = wc_get_product($this->original_product_id);
+				if ( $this->is_wpml_multicurrency && $product_id !== $this->original_product_id ) {
+					$product               = wc_get_product( $this->original_product_id );
 					$sale_price_value      = $product->get_sale_price();
 					$sale_price_dates_from = ( $date = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 					$sale_price_dates_to   = ( $date = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 				}
 				else {
-			$sale_price_value = $this->product->get_sale_price();
-			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
-			$sale_price_dates_to   = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+					$sale_price_value      = $this->product->get_sale_price();
+					$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+					$sale_price_dates_to   = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 				}
-				
-				$symbol                = get_woocommerce_currency_symbol();
-				$currency              = $this->default_currency;
+
+				$symbol    = get_woocommerce_currency_symbol();
+				$currency  = $this->default_currency;
 				$is_custom = 'no';
+
 			}
 			
 			$sale_price_value = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [
@@ -324,7 +328,7 @@ class ListTable extends AtumListTable {
 	protected function column__purchase_price( $item ) {
 
 		$purchase_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id($this->product);
+		$product_id = $this->get_current_product_id();
 
 		if ($this->allow_calcs) {
 			

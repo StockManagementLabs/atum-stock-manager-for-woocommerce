@@ -140,6 +140,13 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+**1.3.1 - 2017-11-8**
+
+Features:
+
+* Added "Supplier" column to "Stock Central".
+* Added "Supplier" filter to "Stock Central".
+
 **1.3.0 - 2017-10-31**
 
 Features:

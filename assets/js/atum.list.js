@@ -171,7 +171,7 @@
 							self.$animationElem = $(this).closest('.search-box');
 							self.keyUp(e);
 						})
-						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_extra_filter', function (e) {
+						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
 							self.$animationElem = $(this).closest('.actions');
 							self.keyUp(e, true);
 						});
@@ -650,6 +650,7 @@
 						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m           : $listWrapper.find('#filter-by-date').val() || '',
 						product_type: $listWrapper.find('.dropdown_product_type').val() || '',
+						supplier    : $listWrapper.find('.dropdown_supplier').val() || '',
 						extra_filter: $listWrapper.find('.dropdown_extra_filter').val() || ''
 					}, data || {});
 					

@@ -140,7 +140,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected $is_wpml_multicurrency = FALSE;
 	
-	
 	/**
 	 * Current currency symbol
 	 *
@@ -253,8 +252,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		$this->current_currency = $this->default_currency = get_woocommerce_currency();
+
 		// Do WPML Stuff
-		if (class_exists('\woocommerce_wpml')) {
+		if ( class_exists('\woocommerce_wpml') ) {
 			
 			$this->wpml = \woocommerce_wpml::instance();
 			
@@ -317,6 +317,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Product type filtering
 		echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 
+		// Supplier filtering
+		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '' );
+
 	}
 
 	/**
@@ -330,13 +333,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function single_expandable_row( $item, $type ) {
 		
 		$this->custom_prices = FALSE;
-		
+
+		// If WPML has Multi Currency enabled, the related info is saved in the original product
 		if ($this->is_wpml_multicurrency) {
 			
 			global $sitepress;
 			$this->original_product_id = $item->get_id();
 			
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->get_id(), 'post_'.$type), 'post_'.$type);
+			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->get_id(), "post_{$type}"), "post_{$type}");
+
 			foreach($product_translations as $translation){
 				if( $translation->original ){
 					$this->original_product_id = $translation->element_id;
@@ -345,6 +350,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			
 			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
+
 				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
 				
 				if ( $custom_price_ui) {
@@ -357,6 +363,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					
 					$thepostid = $keep_id;
 				}
+
 			}
 			
 		}
@@ -378,7 +385,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_default( $item, $column_name ) {
 
-		$id = $this->get_current_product_id($this->product);
+		$id = $this->get_current_product_id();
 		$column_item = '';
 
 		// Check if it's a hidden meta key (will start with underscore)
@@ -441,7 +448,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title = '';
 		if ( $this->product->get_type() == 'variation' ) {
 
-			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id($this->product) );
+			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id() );
 			if ( ! empty($attributes) ) {
 				$title = ucfirst( implode(' ', $attributes) );
 			}
@@ -460,6 +467,40 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Supplier column
+	 *
+	 * @since  1.3.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return string
+	 */
+	protected function column__supplier( $item ) {
+
+		$supplier    = self::EMPTY_COL;
+		$supplier_id = get_post_meta( $this->get_current_product_id(), '_supplier', TRUE );
+
+		if ($supplier_id) {
+
+			$supplier_post = get_post($supplier_id);
+
+			if ($supplier_post) {
+
+				$supplier     = $supplier_post->post_title;
+				$supplier_abb = ( strlen( $supplier ) > 20 ) ? trim( substr( $supplier, 0, 20 ) ) . '...' : $supplier;
+				$supplier_tooltip = sprintf( __('%s (ID: %d)', ATUM_TEXT_DOMAIN), $supplier, $supplier_id );
+
+				$supplier = '<span class="tips" data-toggle="tooltip" title="' . $supplier_tooltip . '">' . $supplier_abb . '</span>' .
+				            '<span class="atum-title-small">' . $supplier_tooltip . '</span>';
+
+			}
+
+		}
+
+		return apply_filters( 'atum/list_table/column_supplier', $supplier, $item, $this->product );
+	}
+
+	/**
 	 * Product SKU column
 	 *
 	 * @since  1.1.2
@@ -471,7 +512,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__sku( $item, $editable = TRUE ) {
 
-		$id = $this->get_current_product_id($this->product);
+		$id = $this->get_current_product_id();
 		$sku = get_post_meta( $id, '_sku', TRUE );
 		$sku = ($sku) ? $sku : self::EMPTY_COL;
 
@@ -503,7 +544,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function column_ID( $item ) {
-		return apply_filters( 'atum/list_table/column_ID', $this->get_current_product_id($this->product), $item, $this->product );
+		return apply_filters( 'atum/list_table/column_ID', $this->get_current_product_id(), $item, $this->product );
 	}
 
 	/**
@@ -586,7 +627,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__purchase_price( $item ) {
 
 		$purchase_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id($this->product);
+		$product_id = $this->get_current_product_id();
 
 		if ($this->allow_calcs) {
 
@@ -621,7 +662,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__stock( $item, $editable = TRUE ) {
 
 		$stock = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id($this->product);
+		$product_id = $this->get_current_product_id();
 
 		if ( ! isset($this->allow_calcs) || ( isset($this->allow_calcs) && $this->allow_calcs) ) {
 
@@ -1090,6 +1131,23 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		/*
+		 * Supplier filter
+		 */
+		if ( ! empty( $_REQUEST['supplier'] ) ) {
+
+			if ( ! empty($args['meta_query']) ) {
+				$args['meta_query']['relation'] = 'AND';
+			}
+
+			$args['meta_query'][] = array(
+				'key'   => '_supplier',
+				'value' => absint( $_REQUEST['supplier'] ),
+				'type'  => 'numeric'
+			);
+
+		}
+
+		/*
 		 * Extra meta args
 		 */
 		if ( ! empty($this->extra_meta) ) {
@@ -1158,9 +1216,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		/*
 	     * REQUIRED. Register our pagination options & calculations.
 		 */
-		$found_posts = isset( $this->count_views['count_all'] ) ? $this->count_views['count_all'] : 0;
+		$found_posts  = isset( $this->count_views['count_all'] ) ? $this->count_views['count_all'] : 0;
 		$num_children = isset( $this->count_views['count_children'] ) ? $this->count_views['count_children'] : 0;
-		$num_parent = isset( $this->count_views['count_parent'] ) ? $this->count_views['count_parent'] : 0;
+		$num_parent   = isset( $this->count_views['count_parent'] ) ? $this->count_views['count_parent'] : 0;
 
 		if ( ! empty( $_REQUEST['v_filter'] ) ) {
 			
@@ -1540,22 +1598,20 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.2.1
 	 *
-	 * @param \WC_Product $product
-	 *
 	 * @return int
 	 */
-	protected function get_current_product_id($product) {
+	protected function get_current_product_id() {
 
-		if ( $product->get_type() == 'variation' ) {
+		if ( $this->product->get_type() == 'variation' ) {
 			/**
 			 * @deprecated
 			 * The get_variation_id() method was deprecated in WC 3.0.0
 			 * In newer versions the get_id() method always be the variation_id if it's a variation
 			 */
-			return ( version_compare( WC()->version, '3.0.0', '<' ) == -1 ) ? $product->get_variation_id() : $product->get_id();
+			return ( version_compare( WC()->version, '3.0.0', '<' ) == -1 ) ? $this->product->get_variation_id() : $this->product->get_id();
 		}
 
-		return $product->get_id();
+		return $this->product->get_id();
 
 	}
 	

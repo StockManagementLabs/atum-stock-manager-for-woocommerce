@@ -161,7 +161,7 @@ class HtmlReport extends ListTable {
 		$title = '';
 		if ( $this->product->get_type() == 'variation' ) {
 			
-			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id($this->product) );
+			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id() );
 			if ( ! empty($attributes) ) {
 				$title = ucfirst( implode(' ', $attributes) );
 			}

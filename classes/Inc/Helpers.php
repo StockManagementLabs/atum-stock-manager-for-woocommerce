@@ -21,6 +21,7 @@ use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
+use Atum\Suppliers\Suppliers;
 
 
 final class Helpers {
@@ -822,7 +823,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Builds a product type dowpdown for filtering purposes
+	 * Builds a product type dowpdown for List Table filtering
 	 *
 	 * @since 1.2.5
 	 *
@@ -876,6 +877,43 @@ final class Helpers {
 				$output .= '<option value="virtual"' . selected( 'virtual', $selected, FALSE ) . '> &rarr; '
 				           . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
 			}
+		}
+
+		$output .= '</select>';
+
+		return $output;
+
+	}
+
+	/**
+	 * Builds a suppliers dowpdown for List Table filtering
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param string $selected  The pre-selected option
+	 * @param string $class     The dropdown class name
+	 *
+	 * @return string
+	 */
+	public static function suppliers_dropdown($selected = '', $class = 'dropdown_supplier') {
+
+		$args = array(
+			'post_type' => Suppliers::POST_TYPE,
+			'posts_per_page' => -1
+
+		);
+
+		$suppliers = get_posts( $args );
+
+		if ( empty($suppliers) ) {
+			return '';
+		}
+
+		$output  = '<select name="supplier" class="' . $class . '">';
+		$output .= '<option value=""' . selected($selected, '', FALSE) . '>' . __( 'Show all suppliers', ATUM_TEXT_DOMAIN ) . '</option>';
+
+		foreach ( $suppliers as $supplier ) {
+			$output .= '<option value="' . $supplier->ID . '"' . selected( $supplier->ID, $selected, FALSE ) . '>' . $supplier->post_title . '</option>';
 		}
 
 		$output .= '</select>';
