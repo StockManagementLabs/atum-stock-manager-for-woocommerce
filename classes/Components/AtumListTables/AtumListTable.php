@@ -431,7 +431,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_thumb( $item ) {
 
-		return apply_filters( 'atum/list_table/column_thumb', $this->product->get_image( [40, 40] ), $item, $this->product );
+		$product_id = $this->get_current_product_id();
+		$thumb = '<a href="' . get_edit_post_link($product_id) .'" target="_blank">' . $this->product->get_image( [40, 40] ) . '</a>';
+		return apply_filters( 'atum/list_table/column_thumb', $thumb, $item, $this->product );
 	}
 
 	/**
@@ -445,10 +447,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_title( $item ) {
 
-		$title = '';
+		$title      = '';
+		$product_id = $this->get_current_product_id();
+
 		if ( $this->product->get_type() == 'variation' ) {
 
-			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id() );
+			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {
 				$title = ucfirst( implode(' ', $attributes) );
 			}
@@ -462,6 +466,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( substr( $title, 0, 20 ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
+
+		$title = '<a href="' . get_edit_post_link($product_id) . '" target="_blank">' . $title . '</a>';
 
 		return apply_filters( 'atum/list_table/column_title', $title, $item, $this->product );
 	}

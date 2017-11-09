@@ -91,12 +91,14 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_title( $item ) {
 
+		$product_id = $this->get_current_product_id();
+
 		if ( $this->product->get_type() == 'variation' ) {
 
 			$parent_data = $this->product->get_parent_data();
 			$title = $parent_data['title'];
 
-			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id() );
+			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {
 				$title .= ' - ' . ucfirst( implode(' - ', $attributes) );
 			}
@@ -110,6 +112,8 @@ class ListTable extends AtumListTable {
 			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( substr( $title, 0, 20 ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
+
+		$title = '<a href="' . get_edit_post_link($product_id) . '" target="_blank">' . $title . '</a>';
 
 		return apply_filters( 'atum/inbound_stock_list/column_title', $title, $item, $this->product );
 	}
