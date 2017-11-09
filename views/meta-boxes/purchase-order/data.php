@@ -37,13 +37,7 @@ $po_status = $atum_order->get_status();
 				<p class="form-field form-field-wide">
 					<label for="customer_user"><?php _e( 'Supplier:', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<select class="wc-product-search block-items" id="supplier" name="supplier" data-allow_clear="true" data-action="atum_json_search_suppliers"
-							data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"
-							data-selected="" data-minimum_input_length="1">
-						<?php if ( ! empty($supplier) ): ?>
-							<option value="<?php echo $supplier->ID ?>" selected="selected"><?php echo $supplier->post_title ?></option>
-						<?php endif; ?>
-					</select>
+					<?php echo Helpers::suppliers_dropdown($supplier->ID, TRUE) ?>
 					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty($supplier) ) echo $supplier->ID ?>">
 				</p>
 

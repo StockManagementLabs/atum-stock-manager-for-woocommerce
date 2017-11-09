@@ -110,9 +110,16 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
+			'enhanced_suppliers_filter'    => array(
+				'section' => 'general',
+				'name'    => __( "Enhanced Suppliers' Filter", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabled, the List Tables Suppliers’ filter will be replaced by an advanced search box. Recommended for sites with many suppliers.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no'
+			),
 			'enable_admin_bar_menu' => array(
 				'section' => 'general',
-				'name'    => __( 'Enable Admin Bar menu', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Enable Admin Bar Menu', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, the ATUM menu will be accessible through the WP admin bar.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes'

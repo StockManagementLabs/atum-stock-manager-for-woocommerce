@@ -318,7 +318,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 
 		// Supplier filtering
-		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '' );
+		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option('enhanced_suppliers_filter', 'no') == 'yes' );
 
 	}
 
@@ -1206,9 +1206,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		// Build "Views Filters" and calculate totals
-		if ( is_callable( array( $this, 'set_views_data' ) ) ) {
-			$this->set_views_data( $args );
-		}
+		$this->set_views_data( $args );
 		
 		$this->data['v_filter'] = '';
 		$allow_query = TRUE;
@@ -1319,7 +1317,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$variations = $group_items = '';
 		// If it's a search or a product filtering, include only the filtered items to search for children
-		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) ) ? $posts : array();
+		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) || ! empty($_REQUEST['supplier']) ) ? $posts : array();
 
 		foreach($this->taxonomies as $index => $taxonomy) {
 

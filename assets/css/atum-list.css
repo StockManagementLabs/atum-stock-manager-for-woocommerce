@@ -586,11 +586,48 @@ h1.wp-heading-inline .atum-loading {
   top: 7px;
 }
 
+.atum-list-wrapper .actions-wrapper input, .atum-list-wrapper .actions-wrapper select, .atum-list-wrapper .actions-wrapper .select2-container {
+  height: 32px;
+  margin-bottom: 4px;
+  float: left;
+}
+
+.atum-list-wrapper .actions-wrapper .select2-container {
+  margin-top: 1px;
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.atum-list-wrapper .actions-wrapper .select2-container:focus, .atum-list-wrapper .actions-wrapper .select2-container *:focus {
+  outline: none;
+}
+
+.atum-list-wrapper .actions-wrapper .select2-container:focus .select2-selection {
+  box-shadow: 0 0 2px rgba(91, 157, 217, 0.8);
+  border-color: #5b9dd9;
+}
+
+.atum-list-wrapper .actions-wrapper .select2-container .select2-selection__placeholder {
+  color: #333333 !important;
+}
+
+.atum-list-wrapper .actions-wrapper .select2-container .select2-selection__arrow b {
+  border-top-color: #333333;
+}
+
 .atum-list-wrapper .actions-wrapper .filter-text {
   display: inline;
   float: left;
   line-height: 28px;
   padding-right: 10px;
+}
+
+.select2-dropdown .select2-results__option:focus {
+  outline: none;
+}
+
+.atum-table-wrapper {
+  clear: both;
 }
 
 .atum-table-wrapper .jspContainer {

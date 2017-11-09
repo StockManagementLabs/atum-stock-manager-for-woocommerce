@@ -890,35 +890,55 @@ final class Helpers {
 	 *
 	 * @since 1.3.1
 	 *
-	 * @param string $selected  The pre-selected option
-	 * @param string $class     The dropdown class name
+	 * @param string $selected  Optional. The pre-selected option
+	 * @param bool   $enhanced  Optional. Whether to show an enhanced select
+	 * @param string $class     Optional. The dropdown class name
 	 *
 	 * @return string
 	 */
-	public static function suppliers_dropdown($selected = '', $class = 'dropdown_supplier') {
+	public static function suppliers_dropdown($selected = '', $enhanced = FALSE, $class = 'dropdown_supplier') {
 
-		$args = array(
-			'post_type' => Suppliers::POST_TYPE,
-			'posts_per_page' => -1
+		ob_start();
 
-		);
+		if (!$enhanced):
 
-		$suppliers = get_posts( $args );
+			$args = array(
+				'post_type' => Suppliers::POST_TYPE,
+				'posts_per_page' => -1
 
-		if ( empty($suppliers) ) {
-			return '';
-		}
+			);
 
-		$output  = '<select name="supplier" class="' . $class . '">';
-		$output .= '<option value=""' . selected($selected, '', FALSE) . '>' . __( 'Show all suppliers', ATUM_TEXT_DOMAIN ) . '</option>';
+			$suppliers = get_posts( $args );
 
-		foreach ( $suppliers as $supplier ) {
-			$output .= '<option value="' . $supplier->ID . '"' . selected( $supplier->ID, $selected, FALSE ) . '>' . $supplier->post_title . '</option>';
-		}
+			if ( empty($suppliers) ) {
+				return '';
+			}
+			?>
 
-		$output .= '</select>';
+			<select name="supplier" class="<?php echo $class ?>">
+				<option value=""<?php selected( $selected, '' ) ?>><?php _e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
-		return $output;
+				<?php foreach ( $suppliers as $supplier ): ?>
+					<option value="<?php echo $supplier->ID ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo $supplier->post_title ?></option>
+				<?php endforeach; ?>
+			</select>
+
+		<?php else : ?>
+
+			<select class="wc-product-search <?php echo $class ?>" id="supplier" name="supplier" data-allow_clear="true"
+					data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+					data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 180px">
+				<?php if ( $selected ): $supplier = get_post($selected)?>
+					<option value="<?php echo $selected ?>" selected="selected"><?php echo $supplier->post_title ?></option>
+				<?php endif; ?>
+			</select>
+
+			<?php
+			wp_enqueue_script('wc-enhanced-select');
+
+		endif;
+
+		return ob_get_clean();
 
 	}
 

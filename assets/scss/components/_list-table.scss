@@ -87,17 +87,65 @@ h1.wp-heading-inline {
 	}
 	
 	.actions-wrapper {
+		
+		input, select, .select2-container {
+			height: 32px;
+			margin-bottom: 4px;
+			float: left;
+		}
+		
+		.select2-container {
+			margin-top: 1px;
+			margin-right: 5px;
+			font-size: 14px;
+			
+			&, * {
+				&:focus {
+					outline: none;
+				}
+			}
+			
+			&:focus {
+				.select2-selection {
+					box-shadow: 0 0 2px rgba($input-focus, .8);
+					border-color: $input-focus;
+				}
+			}
+			
+			.select2-selection__placeholder {
+				color: $gray-dark !important;
+			}
+			
+			.select2-selection__arrow {
+				b {
+					border-top-color: $gray-dark;
+				}
+			}
+		}
+		
+		
 		.filter-text {
 			display: inline;
 			float: left;
 			line-height: 28px;
 			padding-right: 10px;
 		}
+		
 	}
 	
 }
 
+// Enhanced Select fix
+.select2-dropdown {
+	.select2-results__option {
+		&:focus {
+			outline: none;
+		}
+	}
+}
+
 .atum-table-wrapper {
+	clear: both;
 	
 	// JScrollpane
 	.jspContainer {
