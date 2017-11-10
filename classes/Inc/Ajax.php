@@ -202,12 +202,15 @@ final class Ajax {
 		}
 
 		foreach ($data as $product_id => &$product_meta) {
-
 		
 			Helpers::update_product_meta( $product_id, $product_meta);
-			
 			Helpers::maybe_synchronize_translations_wpml( $product_id, $product_meta );
 
+		}
+
+		// If the first edit notice was already shown, save it as user meta
+		if ( ! empty($_POST['first_edit_key']) ) {
+			update_user_meta( get_current_user_id(), esc_attr($_POST['first_edit_key']), 1 );
 		}
 
 		wp_send_json_success( __('Data saved.', ATUM_TEXT_DOMAIN) );

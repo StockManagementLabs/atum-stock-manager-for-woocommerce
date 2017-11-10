@@ -561,6 +561,18 @@
 					var $tableTitle = $listWrapper.siblings('.wp-heading-inline');
 					if (!$tableTitle.find('#atum-update-list').length) {
 						$tableTitle.append( $('<button/>', {id: 'atum-update-list', class: 'page-title-action button-primary', text: atumListTable.saveButton}) );
+						
+						// Check whether to show the first edit popup
+						if (typeof swal === 'function' && typeof atumListTable.firstEditKey !== 'undefined') {
+							
+							swal({
+								title            : atumListTable.dataNotSaved,
+								text             : atumListTable.preventLossNotice,
+								type             : 'warning',
+								confirmButtonText: atumListTable.ok
+							});
+							
+						}
 					}
 				
 				},
@@ -574,17 +586,22 @@
 					
 					if (typeof $.atumDoingAjax === 'undefined') {
 						
-						var self = this;
+						var self = this,
+						    data = {
+							    token : atumListTable.nonce,
+							    action: 'atum_update_data',
+							    data  : $editInput.val()
+						    };
+						
+						if (typeof atumListTable.firstEditKey !== 'undefined') {
+							data.first_edit_key = atumListTable.firstEditKey;
+						}
 						
 						$.atumDoingAjax = $.ajax({
 							url       : ajaxurl,
 							method    : 'POST',
 							dataType  : 'json',
-							data      : {
-								token : atumListTable.nonce,
-								action: 'atum_update_data',
-								data  : $editInput.val()
-							},
+							data      : data,
 							beforeSend: function () {
 								$button.prop('disabled', true);
 								self.$animationElem = $button.parent();
@@ -609,11 +626,19 @@
 								
 								$.atumDoingAjax = undefined;
 								
+								if (typeof atumListTable.firstEditKey !== 'undefined') {
+									delete atumListTable.firstEditKey;
+								}
+								
 							},
 							error: function() {
 								$.atumDoingAjax = undefined;
 								$button.prop('disabled', false);
 								self.removeOverlay();
+								
+								if (typeof atumListTable.firstEditKey !== 'undefined') {
+									delete atumListTable.firstEditKey;
+								}
 							}
 						});
 						

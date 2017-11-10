@@ -135,7 +135,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	
 	/**
 	 * Whether the WPML multicurrency option is active
-	 *
 	 * @var bool
 	 */
 	protected $is_wpml_multicurrency = FALSE;
@@ -149,31 +148,33 @@ abstract class AtumListTable extends \WP_List_Table {
 	
 	/**
 	 * Default currency symbol
-	 *
 	 * @var string
 	 */
 	protected $default_currency;
 	
 	/**
 	 * WooCommerce WPML if exists
-	 *
 	 * @var \woocommerce_wpml;
 	 */
 	protected $wpml;
 	
 	/**
 	 * Current product and currency custom prices (WPML Multi-currency custom product prices)
-	 *
 	 * @var array|bool
 	 */
 	protected $custom_prices = FALSE;
 	
 	/**
 	 * Original language product's id
-	 *
 	 * @var int
 	 */
 	protected $original_product_id;
+
+	/**
+	 * The user meta key used for first edit popup
+	 * @var string
+	 */
+	protected $first_edit_key;
 	
 	/**
 	 * User meta key to control the current user dismissed notices
@@ -1502,19 +1503,29 @@ abstract class AtumListTable extends \WP_List_Table {
 		<?php
 		
 		$this->display_tablenav( 'bottom' );
-		
-		// Prepare data
-		wp_localize_script( 'atum-list', 'atumListTable', array_merge( array(
-			'page'        => ( isset( $_REQUEST['page'] ) ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'     => $this->per_page,
-			'order'       => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'     => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'       => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter'  => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'    => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'   => __( 'Set', ATUM_TEXT_DOMAIN ),
-			'saveButton'  => __( 'Save Data', ATUM_TEXT_DOMAIN )
-		), $this->data ) );
+
+		// Prepare JS vars
+		$vars = array(
+			'page'         => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
+			'perpage'      => $this->per_page,
+			'order'        => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'      => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'        => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxfilter'   => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'     => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'    => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'saveButton'   => __( 'Save Data', ATUM_TEXT_DOMAIN )
+		);
+
+		if ($this->first_edit_key) {
+			$vars['firstEditKey'] = $this->first_edit_key;
+			$vars['dataNotSaved'] = __('Data not saved', ATUM_TEXT_DOMAIN);
+			$vars['preventLossNotice'] = __("To prevent any loss of data, please, hit the 'SAVE DATA' button at top after you complete your edits.", ATUM_TEXT_DOMAIN);
+			$vars['ok'] = __('OK', ATUM_TEXT_DOMAIN);
+		}
+
+		$vars = apply_filters( 'atum/list_table/js_vars',  array_merge($vars, $this->data) );
+		wp_localize_script( 'atum-list', 'atumListTable', $vars );
 		
 		do_action( 'atum/list_table/after_display', $this );
 		
@@ -1821,8 +1832,29 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script('jquery-ui-datepicker');
 		}
 
+		$dependencies = array( 'jquery', 'jscrollpane' );
+
+		// If it's the first time the user edits the List Table, load the sweetalert to show the popup
+		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
+		if ( ! get_user_meta( get_current_user_id(), $first_edit_key, TRUE ) ) {
+
+			$this->first_edit_key = $first_edit_key;
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
+			Helpers::maybe_es6_promise();
+
+			wp_enqueue_style( 'sweetalert2' );
+			wp_enqueue_style( 'sweetalert2' );
+			$dependencies[] = 'sweetalert2';
+
+			if ( wp_script_is('es6-promise', 'registered') ) {
+				wp_enqueue_script( 'es6-promise' );
+			}
+
+		}
+
 		$min = (! ATUM_DEBUG) ? '.min' : '';
-		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", array( 'jquery', 'jscrollpane' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
 
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'atum-list' );
