@@ -91,6 +91,11 @@ class ListTable extends AtumListTable {
 			'calc_lost_sales'      => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
 			'calc_stock_indicator' => __( 'Stock Indicator', ATUM_TEXT_DOMAIN ),
 		);
+
+		// Hide the purchase price column if the current user has not the capability
+		if ( ! current_user_can(ATUM_PREFIX . 'view_purchase_price') ) {
+			unset( $args['table_columns']['_purchase_price'] );
+		}
 		
 		// TODO: Add group table functionality if some columns are invisible
 		$args['group_members'] = array(
@@ -313,56 +318,6 @@ class ListTable extends AtumListTable {
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_sale_price', $sale_price, $item, $this->product );
-
-		}
-
-	/**
-	 * Column for purchase price
-	 *
-	 * @since  1.2.0
-	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
-	 *
-	 * @return float
-	 */
-	protected function column__purchase_price( $item ) {
-
-		$purchase_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id();
-
-		if ($this->allow_calcs) {
-			
-			if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-				$currency            = $this->current_currency;
-				$purchase_price_value = $this->custom_prices[ $currency ]['custom_price']['_purchase_price'];
-				$symbol              = $this->custom_prices[ $currency ]['currency_symbol'];
-				$is_custom           = 'yes';
-			}
-			else {
-				
-				// Then meta is synchrinized between translations. Doesn't mind if current is original
-			$purchase_price_value = get_post_meta($product_id, '_purchase_price', TRUE);
-				$symbol = get_woocommerce_currency_symbol();
-				$currency = $this->default_currency;
-				$is_custom = 'no';
-			}
-			
-			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? Helpers::format_price($purchase_price_value, ['trim_zeros' => TRUE, 'currency' => $currency]) : $purchase_price;
-			
-			$args = array(
-				'post_id'  => $product_id,
-				'meta_key' => 'purchase_price',
-				'value'    => $purchase_price_value,
-				'symbol'    => $symbol,
-				'currency'  => $currency,
-				'is_custom' => $is_custom,
-				'tooltip'  => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
-			);
-			
-			$purchase_price = $this->get_editable_column($args);
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
 
 	}
 

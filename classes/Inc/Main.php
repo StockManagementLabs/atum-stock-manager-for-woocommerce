@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumCapabilities;
 use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
 use Atum\DataExport\DataExport;
@@ -162,10 +163,11 @@ class Main {
 				'menu_order' => 10
 			),
 			'inbound-stock' => array(
-				'title'      => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-				'callback'   => array( $this->ib_obj, 'display' ),
-				'slug'       => InboundStock::UI_SLUG,
-				'menu_order' => 20
+				'title'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+				'callback'     => array( $this->ib_obj, 'display' ),
+				'slug'         => InboundStock::UI_SLUG,
+				'menu_order'   => 20,
+				'capability'   => ATUM_PREFIX . 'view_inbound_stock'
 			),
 			'settings'      => array(
 				'title'      => __( 'Settings', ATUM_TEXT_DOMAIN ),
@@ -222,7 +224,9 @@ class Main {
 		Suppliers::get_instance();
 
 		// Init the Purchase Orders
-		new PurchaseOrders();
+		if ( current_user_can(ATUM_PREFIX . 'manage_po') ) {
+			new PurchaseOrders();
+		}
 
 	}
 	
@@ -244,6 +248,7 @@ class Main {
 		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' );
 
 		// Load modules
+		AtumCapabilities::get_instance();
 		Ajax::get_instance();
 		$this->sp_obj = Settings::get_instance();
 		$this->sc_obj = StockCentral::get_instance();
@@ -301,7 +306,7 @@ class Main {
 					Globals::ATUM_UI_SLUG,
 					$menu_item['title'],
 					$menu_item['title'],
-					'manage_woocommerce',
+					isset($menu_item['capability']) ? $menu_item['capability'] : 'manage_woocommerce',
 					$slug,
 					$menu_item['callback']
 				);
@@ -635,6 +640,10 @@ class Main {
 	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
 	public function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
+
+		if ( ! current_user_can( ATUM_PREFIX . 'edit_purchase_price') ) {
+			return;
+		}
 
 		if ( empty($variation) ) {
 

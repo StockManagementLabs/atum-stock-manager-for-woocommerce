@@ -566,7 +566,7 @@
 						if (typeof swal === 'function' && typeof atumListTable.firstEditKey !== 'undefined') {
 							
 							swal({
-								title            : atumListTable.dataNotSaved,
+								title            : atumListTable.important,
 								text             : atumListTable.preventLossNotice,
 								type             : 'warning',
 								confirmButtonText: atumListTable.ok

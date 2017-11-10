@@ -615,7 +615,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 			}
 
-			return apply_filters( 'atum/stock_central_list/column_type', '<span class="product-type tips ' . $type . '" data-toggle="tooltip" title="' . $product_tip . '"></span>', $item, $this->product );
+			return apply_filters( 'atum/list_table/column_type', '<span class="product-type tips ' . $type . '" data-toggle="tooltip" title="' . $product_tip . '"></span>', $item, $this->product );
 
 		}
 
@@ -634,19 +634,40 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__purchase_price( $item ) {
 
 		$purchase_price = self::EMPTY_COL;
+
+		if ( ! current_user_can(ATUM_PREFIX . 'view_purchase_price') ) {
+			return $purchase_price;
+		}
+
 		$product_id = $this->get_current_product_id();
 
 		if ($this->allow_calcs) {
 
-			$purchase_price_value = get_post_meta($product_id, '_purchase_price', TRUE);
-			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? Helpers::format_price($purchase_price_value, ['trim_zeros' => TRUE]) : $purchase_price;
+			if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
+				$currency             = $this->current_currency;
+				$purchase_price_value = $this->custom_prices[ $currency ]['custom_price']['_purchase_price'];
+				$symbol               = $this->custom_prices[ $currency ]['currency_symbol'];
+				$is_custom            = 'yes';
+			}
+			else {
+
+				// The meta is synced between translations. Doesn't matter whether the current is the original
+				$purchase_price_value = get_post_meta( $product_id, '_purchase_price', TRUE );
+				$symbol               = get_woocommerce_currency_symbol();
+				$currency             = $this->default_currency;
+				$is_custom            = 'no';
+			}
+
+			$purchase_price_value = ( is_numeric($purchase_price_value) ) ? Helpers::format_price($purchase_price_value, ['trim_zeros' => TRUE, 'currency' => $currency]) : $purchase_price;
 
 			$args = array(
-				'post_id'  => $product_id,
-				'meta_key' => 'purchase_price',
-				'value'    => $purchase_price_value,
-				'symbol'   => get_woocommerce_currency_symbol(),
-				'tooltip'  => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
+				'post_id'   => $product_id,
+				'meta_key'  => 'purchase_price',
+				'value'     => $purchase_price_value,
+				'symbol'    => $symbol,
+				'currency'  => $currency,
+				'is_custom' => $is_custom,
+				'tooltip'   => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
 			);
 
 			$purchase_price = $this->get_editable_column($args);
@@ -1519,8 +1540,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ($this->first_edit_key) {
 			$vars['firstEditKey'] = $this->first_edit_key;
-			$vars['dataNotSaved'] = __('Data not saved', ATUM_TEXT_DOMAIN);
-			$vars['preventLossNotice'] = __("To prevent any loss of data, please, hit the 'SAVE DATA' button at top after you complete your edits.", ATUM_TEXT_DOMAIN);
+			$vars['important'] = __('Important!', ATUM_TEXT_DOMAIN);
+			$vars['preventLossNotice'] = __("To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN);
 			$vars['ok'] = __('OK', ATUM_TEXT_DOMAIN);
 		}
 
