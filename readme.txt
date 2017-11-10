@@ -249,12 +249,22 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
-= 1.3.1 - 2017-11-8 =
+= 1.3.1 - 2017-11-10 =
 
 Features:
 
 * Added "Supplier" column to "Stock Central".
 * Added "Supplier" filter to "Stock Central".
+* Added some custom admin role capabilities (edit_purchase_price, view_purchase_price, manage_po and view_inbound_stock).
+* Added a popup notice that will show up in the first list table edit.
+* Added edit links to product name and thumb in list tables.
+* Added enhanced select option for Suppliers’ filter to Settings.
+
+Fixes:
+
+* Now it uses the order's sale price instead of product price for statistics widget calculations.
+* Always save the supplier meta in products (with or without value).
+
 
 = 1.3.0 - 2017-11-2 =
 
