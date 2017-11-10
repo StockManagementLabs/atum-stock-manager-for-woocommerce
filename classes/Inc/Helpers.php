@@ -281,7 +281,8 @@ final class Helpers {
 				$orders   = implode( ',', $orders );
 				$products = implode( ',', $items );
 
-				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
+				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
+							MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
 							FROM `{$wpdb->posts}` AS `ORDERS`
 							    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
 							        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
@@ -289,10 +290,12 @@ final class Helpers {
 							        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
 							    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_QTY`
 							        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
+						        INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_TOTAL`
+							        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
 							WHERE (`ORDERS`.`ID` IN ($orders)
 							    AND `META_PROD_ID`.`meta_value` IN ($products)
 							    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
-							    AND `META_PROD_QTY`.`meta_key` = '_qty')
+							    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
 							GROUP BY `META_PROD_ID`.`meta_value`
 							HAVING (`QTY` IS NOT NULL);";
 

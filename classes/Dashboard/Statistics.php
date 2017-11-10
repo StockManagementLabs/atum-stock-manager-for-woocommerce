@@ -274,8 +274,7 @@ class Statistics extends DashboardWidget {
 			foreach ( $products_sold as $row ) {
 
 				$stats['products'] += $row['QTY'];
-				$product = wc_get_product( $row['PROD_ID'] );
-				$stats['earnings'] += $row['QTY'] * $product->get_price();
+				$stats['earnings'] += floatval( $row['TOTAL'] );
 
 				if ( ! in_array($row['PROD_ID'], $lost_processed) ) {
 					$lost_sales = Helpers::get_product_lost_sales( $row['PROD_ID'], $days );
