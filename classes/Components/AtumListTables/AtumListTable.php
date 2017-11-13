@@ -319,7 +319,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 
 		// Supplier filtering
-		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option('enhanced_suppliers_filter', 'no') == 'yes' );
+		if ( current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+			echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
+		}
 
 	}
 
@@ -485,6 +487,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__supplier( $item ) {
 
 		$supplier    = self::EMPTY_COL;
+
+		if ( ! current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+			return $supplier;
+		}
+
 		$supplier_id = get_post_meta( $this->get_current_product_id(), '_supplier', TRUE );
 
 		if ($supplier_id) {
@@ -1161,7 +1168,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		/*
 		 * Supplier filter
 		 */
-		if ( ! empty( $_REQUEST['supplier'] ) ) {
+		if ( ! empty( $_REQUEST['supplier'] ) && current_user_can(ATUM_PREFIX . 'read_supplier') ) {
 
 			if ( ! empty($args['meta_query']) ) {
 				$args['meta_query']['relation'] = 'AND';

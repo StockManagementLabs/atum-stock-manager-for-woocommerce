@@ -31,7 +31,21 @@ class AtumCapabilities {
 		ATUM_PREFIX . 'edit_purchase_price',
 		ATUM_PREFIX . 'view_purchase_price',
 		ATUM_PREFIX . 'manage_po',
-		ATUM_PREFIX . 'view_inbound_stock'
+		ATUM_PREFIX . 'view_inbound_stock',
+		ATUM_PREFIX . 'edit_supplier',
+		ATUM_PREFIX . 'read_supplier',
+		ATUM_PREFIX . 'delete_supplier',
+		ATUM_PREFIX . 'edit_suppliers',
+		ATUM_PREFIX . 'edit_others_suppliers',
+		ATUM_PREFIX . 'publish_suppliers',
+		ATUM_PREFIX . 'read_private_suppliers',
+		ATUM_PREFIX . 'create_suppliers',
+		ATUM_PREFIX . 'delete_suppliers',
+		ATUM_PREFIX . 'delete_private_suppliers',
+		ATUM_PREFIX . 'delete_published_suppliers',
+		ATUM_PREFIX . 'delete_other_suppliers',
+		ATUM_PREFIX . 'edit_private_suppliers',
+		ATUM_PREFIX . 'edit_published_suppliers'
 	);
 
 	/**

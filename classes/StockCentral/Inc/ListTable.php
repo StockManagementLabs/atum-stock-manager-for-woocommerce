@@ -96,6 +96,11 @@ class ListTable extends AtumListTable {
 		if ( ! current_user_can(ATUM_PREFIX . 'view_purchase_price') ) {
 			unset( $args['table_columns']['_purchase_price'] );
 		}
+
+		// Hide the supplier column if the current user has not the capability
+		if ( ! current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+			unset( $args['table_columns']['_supplier'] );
+		}
 		
 		// TODO: Add group table functionality if some columns are invisible
 		$args['group_members'] = array(

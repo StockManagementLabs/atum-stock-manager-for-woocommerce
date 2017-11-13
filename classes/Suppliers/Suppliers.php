@@ -64,16 +64,33 @@ class Suppliers {
 		);
 		
 		$this->register_post_type();
-		
-		// Add columns to Suppliers list table
-		add_filter('manage_' . self::POST_TYPE . '_posts_columns', array($this, 'add_columns'));
-		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
 
-		// Add meta boxes to Supplier post UI
-		add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
+		if ( current_user_can(ATUM_PREFIX . 'read_supplier') ) {
 
-		// Save the meta boxes
-		add_action( 'save_post_' . self::POST_TYPE , array( $this, 'save_meta_boxes' ) );
+			// Add columns to Suppliers list table
+			add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
+			add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
+
+			// Add the "Suppliers" link to the ATUM's admin bar menu
+			add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12);
+
+			// Add item order
+			add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
+		}
+
+		if ( current_user_can(ATUM_PREFIX . 'edit_supplier') ) {
+
+			// Add meta boxes to Supplier post UI
+			add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
+
+			// Save the supplier's meta boxes
+			add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
+
+			// Enqueue scripts
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		}
 
 		// Add the supplier selection to products
 		add_action( 'woocommerce_product_options_general_product_data', array($this, 'show_product_supplier_meta_box') );
@@ -83,14 +100,8 @@ class Suppliers {
 		add_action( 'save_post_product' , array( $this, 'save_product_supplier_meta_box' ) );
 		add_action( 'woocommerce_update_product_variation', array($this, 'save_product_supplier_meta_box') );
 
-		// Enqueue scripts
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
-		// Add the "Suppliers" link to the ATUM's admin bar menu
-		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12);
-		
-		// Add item order
-		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
+
 	}
 
 	/**
@@ -139,7 +150,23 @@ class Suppliers {
 			'query_var'           => is_admin(),
 			'supports'            => array( 'title', 'thumbnail' ),
 			'has_archive'         => FALSE,
-		), $args ));
+			'capabilities'        => array(
+				'edit_post'              => ATUM_PREFIX . 'edit_supplier',
+				'read_post'              => ATUM_PREFIX . 'read_supplier',
+				'delete_post'            => ATUM_PREFIX . 'delete_supplier',
+				'edit_posts'             => ATUM_PREFIX . 'edit_suppliers',
+				'edit_others_posts'      => ATUM_PREFIX . 'edit_others_suppliers',
+				'publish_posts'          => ATUM_PREFIX . 'publish_suppliers',
+				'read_private_posts'     => ATUM_PREFIX . 'read_private_suppliers',
+				'create_posts'           => ATUM_PREFIX . 'create_suppliers',
+				'delete_posts'           => ATUM_PREFIX . 'delete_suppliers',
+				'delete_private_posts'   => ATUM_PREFIX . 'delete_private_suppliers',
+				'delete_published_posts' => ATUM_PREFIX . 'delete_published_suppliers',
+				'delete_other_posts'     => ATUM_PREFIX . 'delete_other_suppliers',
+				'edit_private_posts'     => ATUM_PREFIX . 'edit_private_suppliers',
+				'edit_published_posts'   => ATUM_PREFIX . 'edit_published_suppliers'
+			)
+		), $args ) );
 
 		// Register the Suppliers post type
 		register_post_type( self::POST_TYPE, $args );
@@ -356,25 +383,32 @@ class Suppliers {
 			$supplier = get_post($supplier_id);
 		}
 
-		if ( empty($variation) ): ?>
-		<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
-		<?php endif; ?>
+		// If the user is not allowed to edit Suppliers, display a hidden input
+		if ( ! current_user_can(ATUM_PREFIX . 'edit_supplier') ): ?>
+			<input type="hidden" id="_supplier" name="_supplier" value="<?php echo ( ! empty($supplier) ) ? esc_attr( $supplier->ID ) : '' ?>">
+		<?php else:
 
-			<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-last' ?>">
-				<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
+			if ( empty($variation) ): ?>
+			<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
+			<?php endif; ?>
 
-				<select class="wc-product-search" id="_supplier" name="_supplier" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
-					data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-					data-multiple="false" data-selected="" data-minimum_input_length="1">
-					<?php if ( ! empty($supplier) ): ?>
-						<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
-					<?php endif; ?>
-				</select>
-			</p>
+				<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-last' ?>">
+					<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
 
-		<?php if ( empty($variation) ): ?>
-		</div>
-		<?php endif;
+					<select class="wc-product-search" id="_supplier" name="_supplier" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
+						data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+						data-multiple="false" data-selected="" data-minimum_input_length="1">
+						<?php if ( ! empty($supplier) ): ?>
+							<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
+						<?php endif; ?>
+					</select>
+				</p>
+
+			<?php if ( empty($variation) ): ?>
+			</div>
+			<?php endif;
+
+		endif;
 
 	}
 
