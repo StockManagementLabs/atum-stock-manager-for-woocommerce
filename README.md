@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+**1.3.1.1 - 2017-11-14**
+
+Fixes:
+
+* Fixed issue that was preventing List Table's column sorting in sites with no Suppliers.
+
 **1.3.1 - 2017-11-10**
 
 Features:
