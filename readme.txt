@@ -21,6 +21,8 @@ Stock Management Labs™, creators that have combined over 25 years of experienc
 
 In the preparation process for the development stage, we have tested and tried the most popular WooCommerce inventory management and cloud inventory management products and plugins in the world. With full confidence, we believe that ATUM will become unrivalled in every category.
 
+**[FOR ALL THE LATEST UPDATES OR TUTORIALS VISIT OUR YOUTUBE CHANNEL HERE](https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA "Visit the Youtube channel")**
+
 
 = AVAILABLE FEATURES =
 
@@ -249,16 +251,23 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
+= 1.3.1.1 - 2017-11-14 =
+
+Fixes:
+
+* Fixed issue that was preventing List Table's column sorting in sites with no Suppliers.
+
 = 1.3.1 - 2017-11-10 =
 
 Features:
 
 * Added "Supplier" column to "Stock Central".
 * Added "Supplier" filter to "Stock Central".
-* Added some custom admin role capabilities (edit_purchase_price, view_purchase_price, manage_po and view_inbound_stock).
+* Added Enhanced search option for Suppliers’ filter to Settings. Important for users with many suppliers.
+* Added some custom admin role capabilities (edit_purchase_price, view_purchase_price, manage_po and view_inbound_stock,).
 * Added a popup notice that will show up in the first list table edit.
-* Added edit links to product name and thumb in list tables.
-* Added enhanced select option for Suppliers’ filter to Settings.
+* Added Product edit links to Products' names and thumbnails in Stock Central.
+
 
 Fixes:
 

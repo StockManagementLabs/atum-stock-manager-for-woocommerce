@@ -914,6 +914,7 @@ final class Helpers {
 			$suppliers = get_posts( $args );
 
 			if ( empty($suppliers) ) {
+				ob_end_flush();
 				return '';
 			}
 			?>

@@ -144,12 +144,15 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 Features:
 
+Features:
+
 * Added "Supplier" column to "Stock Central".
 * Added "Supplier" filter to "Stock Central".
-* Added some custom admin role capabilities (edit_purchase_price, view_purchase_price, manage_po and view_inbound_stock).
+* Added Enhanced search option for Suppliers’ filter to Settings. Important for users with many suppliers.
+* Added some custom admin role capabilities (edit_purchase_price, view_purchase_price, manage_po and view_inbound_stock,).
 * Added a popup notice that will show up in the first list table edit.
-* Added edit links to product name and thumb in list tables.
-* Added enhanced select option for Suppliers’ filter to Settings.
+* Added Product edit links to Products' names and thumbnails in Stock Central.
+
 
 Fixes:
 
@@ -165,6 +168,7 @@ Features:
 * Added "Add to Stock" button to Purchase Order's products.
 * Added "Inbound  Stock" column and filter to "Stock Central".
 * Added WPML compatibility.
+* New method for ATUM menu ordering.
 
 Fixes:
 
