@@ -210,11 +210,11 @@
 						self.keyUp(e);
 					})
 					//
-					// Expanding/Collapsing variable products
-					//---------------------------------------
+					// Expanding/Collapsing inheritable products
+					//-------------------------------------------
 					.on('click', '.product-type.has-child', function() {
 						
-						var typeClass      = $(this).hasClass('variable') ? 'variable' : 'group',
+						var typeClass      = $(this).hasClass('grouped') ? 'group' : 'variable',
 						    $expandebleRow = $(this).closest('tr').toggleClass('expanded ' + typeClass),
 						    $nextRow       = $expandebleRow.next();
 						

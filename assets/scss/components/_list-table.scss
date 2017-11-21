@@ -266,7 +266,7 @@ h1.wp-heading-inline {
 		&.expanded {
 			@include transition(all 0.1s ease-in-out);
 			
-			&.variable {
+			&.variable, &.variable-subscription {
 				background-color: $brand-primary;
 			}
 			
@@ -274,7 +274,7 @@ h1.wp-heading-inline {
 				background-color: $brand-warning;
 			}
 			
-			td {
+			td, a {
 				color: #FFF;
 			}
 			
@@ -360,8 +360,14 @@ h1.wp-heading-inline {
 		.has-child {
 			cursor: pointer;
 			
-			&.variable {
+			&.variable, &.variable-subscription {
 				color: $brand-primary;
+			}
+			
+			&.variable-subscription {
+				&:before {
+					content: "\e003";
+				}
 			}
 			
 			&.grouped {

@@ -744,7 +744,7 @@ h1.wp-heading-inline .atum-loading {
   transition: all 0.1s ease-in-out;
 }
 
-.atum-list-table tr.expanded.variable {
+.atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription {
   background-color: #0073AA;
 }
 
@@ -752,7 +752,7 @@ h1.wp-heading-inline .atum-loading {
   background-color: #FEC007;
 }
 
-.atum-list-table tr.expanded td {
+.atum-list-table tr.expanded td, .atum-list-table tr.expanded a {
   color: #FFF;
 }
 
@@ -827,8 +827,12 @@ h1.wp-heading-inline .atum-loading {
   cursor: pointer;
 }
 
-.atum-list-table .column-calc_type .has-child.variable {
+.atum-list-table .column-calc_type .has-child.variable, .atum-list-table .column-calc_type .has-child.variable-subscription {
   color: #0073AA;
+}
+
+.atum-list-table .column-calc_type .has-child.variable-subscription:before {
+  content: "\e003";
 }
 
 .atum-list-table .column-calc_type .has-child.grouped {

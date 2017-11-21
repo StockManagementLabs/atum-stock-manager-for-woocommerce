@@ -23,11 +23,11 @@ defined( 'ABSPATH' ) or die;
 class Upgrade {
 
 	/**
-	 * Upgrade singleton constructor
+	 * Upgrade constructor
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param string $db_version    The ATUM version saved in db as an option
+	 * @param string $db_version  The ATUM version saved in db as an option
 	 */
 	public function __construct($db_version) {
 

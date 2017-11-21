@@ -400,7 +400,6 @@ class Statistics extends DashboardWidget {
 			$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
 		}
 
-
 		$group_items = $this->get_children( 'grouped' );
 
 		// Add the Group Items to the posts list
@@ -408,6 +407,20 @@ class Statistics extends DashboardWidget {
 			// The Grouped products are just containers and don't count for the list views
 			$stock_counters['count_all'] += ( count( $group_items ) - count( $this->grouped_products ) );
 			$posts = array_unique( array_merge( array_diff( $posts, $this->grouped_products ), $group_items ) );
+
+		}
+
+		// WC Subscriptions compatibility
+		if ( class_exists('\WC_Subscriptions') ) {
+
+			$subscription_variations = $this->get_children( 'variable-subscription', 'product_variation' );
+
+			// Add the Variations to the posts list
+			if ( $subscription_variations ) {
+				// The Variable products are just containers and don't count for the list views
+				$stock_counters['count_all'] += ( count( $variations ) - count( $this->variable_products ) );
+				$posts                       = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
+			}
 
 		}
 
@@ -517,10 +530,10 @@ class Statistics extends DashboardWidget {
 
 			// Save them to be used when preparing the list query
 			if ($parent_type == 'variable') {
-				$this->variable_products = $parents->posts;
+				$this->variable_products = array_merge($this->variable_products, $parents->posts);
 			}
 			else {
-				$this->grouped_products = $parents->posts;
+				$this->grouped_products = array_merge($this->grouped_products, $parents->posts);
 			}
 
 			$children_args = array(

@@ -643,11 +643,11 @@ final class Helpers {
 	public static function activate_manage_stock_option() {
 		
 		$product_types = Globals::get_product_types();
-		$post_types = ( in_array('variable', $product_types) ) ? array('product', 'product_variation') : 'product';
+		$post_types = ( in_array('variable', $product_types) || in_array('variable-subscription', $product_types) ) ? array('product', 'product_variation') : 'product';
 		
 		// Save the options
-		// Don't mind type product. They never have yes
-		$args     = array(
+		// Don't take care of the type product. They never have "yes"
+		$args = array(
 			'post_type'      => $post_types,
 			'fields'         => 'ids',
 			'posts_per_page' => - 1,

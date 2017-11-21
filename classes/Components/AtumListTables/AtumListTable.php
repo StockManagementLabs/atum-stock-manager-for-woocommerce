@@ -15,6 +15,7 @@ namespace Atum\Components\AtumListTables;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
@@ -453,7 +454,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title      = '';
 		$product_id = $this->get_current_product_id();
 
-		if ( $this->product->get_type() == 'variation' ) {
+		if ( in_array( $this->product->get_type(), ['variation', 'subscription_variation'] ) ) {
 
 			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {
@@ -601,17 +602,20 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				case 'variable':
 				case 'grouped':
+				case 'variable-subscription': // WC Subscriptions compatibility
 
 					if ($this->is_child) {
 						$type = 'grouped-item';
 						$product_tip = __('Grouped item', ATUM_TEXT_DOMAIN);
 					}
 					elseif ( $this->product->has_child() ) {
+
 						$product_tip .= '<br>' . sprintf(
-								__('(click to show/hide the %s)', ATUM_TEXT_DOMAIN),
-								( ($type == 'grouped') ? __('Grouped items', ATUM_TEXT_DOMAIN) : __('Variations', ATUM_TEXT_DOMAIN) )
-							);
+							__('(click to show/hide the %s)', ATUM_TEXT_DOMAIN),
+							( ($type == 'grouped') ? __('Grouped items', ATUM_TEXT_DOMAIN) : __('Variations', ATUM_TEXT_DOMAIN) )
+						);
 						$type .= ' has-child';
+
 					}
 
 					break;
@@ -619,6 +623,12 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'variation':
 
 					$product_tip = __('Variation', ATUM_TEXT_DOMAIN);
+					break;
+
+				// WC Subscriptions compatibility
+				case 'subscription_variation':
+
+					$product_tip = __('Subscription Variation', ATUM_TEXT_DOMAIN);
 					break;
 			}
 
@@ -853,13 +863,13 @@ abstract class AtumListTable extends \WP_List_Table {
 			return;
 		}*/
 		
-		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
+		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
 		parent::single_row( $item );
 
-		// Add the children products of each Variable and Grouped product
-		if ( in_array($type, ['variable', 'grouped']) ) {
+		// Add the children products of each inheritable product type
+		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
 
-			$product_class = '\\WC_Product_' . ucfirst($type);
+			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
 			$parent_product = new $product_class( $this->product->get_id() );
 			$child_products = $parent_product->get_children();
 
@@ -1351,6 +1361,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->count_views['count_all'] = count( $posts );
 
 		$variations = $group_items = '';
+
 		// If it's a search or a product filtering, include only the filtered items to search for children
 		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) || ! empty($_REQUEST['supplier']) ) ? $posts : array();
 
@@ -1390,10 +1401,30 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$posts = array_unique( array_merge( array_diff( $posts, $this->grouped_products ), $group_items ) );
 
+					}
+
+				}
+
+				// WC Subscriptions compatibility
+				if ( class_exists('\WC_Subscriptions') && in_array('variable_subscription', (array) $taxonomy['terms']) ) {
+
+					$variations = $this->get_children( 'variable_subscription', $post_in, 'product_variation' );
+
+					// Add the Variations to the posts list
+					if ( $variations ) {
+
+						// The Variable products are just containers and don't count for the list views
+						$this->count_views['count_children'] += count( $variations );
+						$this->count_views['count_parent']   += count( $this->variable_products );
+						$this->count_views['count_all']      += ( count( $variations ) - count( $this->variable_products ) );
+
+						$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
 
 					}
 
 				}
+
+				do_action('atum/list_table/after_children_count', $taxonomy['terms'], $this);
 
 				break;
 			}
@@ -1990,10 +2021,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Save them to be used when preparing the list query
 			if ($parent_type == 'variable') {
-				$this->variable_products = $parents->posts;
+				$this->variable_products = array_merge($this->variable_products, $parents->posts);
 			}
 			else {
-				$this->grouped_products = $parents->posts;
+				$this->grouped_products = array_merge($this->grouped_products, $parents->posts);
 			}
 
 			$children_args = array(

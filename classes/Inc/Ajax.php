@@ -62,7 +62,7 @@ final class Ajax {
 		// Search for WooCommerce orders from enhanced selects
 		add_action( 'wp_ajax_atum_json_search_orders', array( $this, 'search_wc_orders' ) );
 
-		// Search for Suppliers enhanced selects
+		// Search for Suppliers from enhanced selects
 		add_action( 'wp_ajax_atum_json_search_suppliers', array( $this, 'search_suppliers' ) );
 
 		// Add and delete ATUM Order notes

@@ -370,7 +370,7 @@ class Suppliers {
 			$product = wc_get_product( $post->ID );
 
 			// Do not add the field to variable products (every variation will have its own)
-			if ( $product->get_type() == 'variable' ) {
+			if ( in_array( $product->get_type(), ['variable', 'variable-subscription'] ) ) {
 				return;
 			}
 
@@ -423,7 +423,7 @@ class Suppliers {
 
 		$product  = wc_get_product( $post_id );
 
-		if ( $product->get_type() == 'variable' ) {
+		if ( in_array( $product->get_type(), ['variable', 'variable-subscription'] ) ) {
 			return;
 		}
 

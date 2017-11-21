@@ -14,6 +14,7 @@ namespace Atum\DataExport\Reports;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Inc\ListTable;
 
@@ -102,7 +103,7 @@ class HtmlReport extends ListTable {
 		$this->product = wc_get_product( $item );
 		$type = $this->product->get_type();
 
-		$this->allow_calcs = ( in_array($type, ['variable', 'grouped']) ) ? FALSE : TRUE;
+		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
 		$row_style = '';
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline
@@ -116,9 +117,9 @@ class HtmlReport extends ListTable {
 		echo '</tr>';
 
 		// Add the children products of each Variable and Grouped product
-		if ( in_array($type, ['variable', 'grouped']) ) {
+		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
 
-			$product_class = '\\WC_Product_' . ucfirst($type);
+			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
 			$parent_product = new $product_class( $this->product->get_id() );
 			$child_products = $parent_product->get_children();
 
@@ -221,6 +222,7 @@ class HtmlReport extends ListTable {
 
 				case 'variable':
 				case 'grouped':
+				case 'variable-subscription': // WC Subscriptions compatibility
 
 					if ($this->is_child) {
 						$type = 'grouped-item';
@@ -324,6 +326,10 @@ class HtmlReport extends ListTable {
 
 				case 'variable' :
 					$product_type = __( 'Variable', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'variable-subscription' :
+					$product_type = __( 'Variable Subscription', ATUM_TEXT_DOMAIN );
 					break;
 
 				case 'simple' :

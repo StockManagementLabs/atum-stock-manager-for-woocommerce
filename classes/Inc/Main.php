@@ -471,7 +471,7 @@ class Main {
 				(function ($) {
 					var $manageStockField = $('._manage_stock_field');
 					$manageStockField.find('.checkbox').prop({'checked': true, 'readonly': true}).css('pointer-events', 'none')
-						.siblings('.description').html('<strong>**<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>**</strong>');
+						.siblings('.description').html('<strong><sup>**</sup><?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?><sup>**</sup></strong>');
 
 					$manageStockField.children().click(function(e) {
 						e.stopImmediatePropagation();
@@ -688,8 +688,8 @@ class Main {
 
 			$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
-			if ( in_array( $product_type, array( 'variable', 'grouped' ) ) ) {
-				// Variable and grouped products have no prices
+			if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
+				// Inheritable products have no prices
 				update_post_meta( $post_id, '_purchase_price', $purchase_price );
 			}
 			else {
@@ -809,11 +809,18 @@ class Main {
 		if (
 			Helpers::is_atum_managing_stock() &&
 			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
-			$the_product->get_type() == 'variable'
+			in_array( $the_product->get_type(), ['variable', 'variable-subscription'] )
 		) {
 
-			// Get the variations
-			$variable_product = new \WC_Product_Variable( $the_product->get_id() );
+			// WC Subscriptions compatibility
+			if ( class_exists('\WC_Subscriptions') && $the_product->get_type() == 'variable-subscription') {
+				$variable_product = new \WC_Product_Variable_Subscription( $the_product->get_id() );
+			}
+			else {
+				$variable_product = new \WC_Product_Variable( $the_product->get_id() );
+			}
+
+			// Get the variations within the variable
 			$variations = $variable_product->get_children();
 			$stock_status = __('Out of stock', ATUM_TEXT_DOMAIN);
 			$stocks_list = array();

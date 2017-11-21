@@ -22,7 +22,13 @@ final class Globals {
 	 * For now the "external" products are excluded as WC doesn't add stock control fields to them
 	 * @var array
 	 */
-	private static $product_types = array('simple', 'variable', 'grouped');
+	private static $product_types = ['simple', 'variable', 'grouped'];
+
+	/**
+	 * The product types that allow children
+	 * @var array
+	 */
+	private static $inheritable_product_types = ['variable', 'grouped'];
 	
 	/**
 	 * The meta key where is stored the out of stock date
@@ -58,7 +64,29 @@ final class Globals {
 	 * @return array
 	 */
 	public static function get_product_types() {
+
+		// Add WC Subscriptions compatibility
+		if ( class_exists('WC_Subscriptions') ) {
+			self::$product_types = array_merge( self::$product_types, ['subscription', 'variable-subscription'] );
+		}
+
 		return (array) apply_filters('atum/allowed_product_types', self::$product_types);
+	}
+
+	/**
+	 * Getter for the inheritable_product_types property
+	 *
+	 * @since 1.3.2
+	 * @return array
+	 */
+	public static function get_inheritable_product_types() {
+
+		// Add WC Subscriptions compatibility
+		if ( class_exists('WC_Subscriptions') ) {
+			self::$inheritable_product_types = array_merge( self::$inheritable_product_types, ['variable-subscription'] );
+		}
+
+		return (array) apply_filters('atum/allowed_inheritable_product_types', self::$inheritable_product_types);
 	}
 	
 }
