@@ -147,6 +147,19 @@ class Settings {
 			)
 		);
 
+		// WC Subscriptions compatibility
+		if ( class_exists('\WC_Subscriptions') ) {
+
+			$this->defaults['show_subscriptions'] = array(
+				'section' => 'stock_central',
+				'name'    => __( 'Show Subscription Products', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, the subscription products will be shown in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes'
+			);
+
+		}
+
 	}
 	
 	/**
