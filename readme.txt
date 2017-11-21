@@ -256,6 +256,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 Features:
 
 * Added compatibility with WooCommerce Subscriptions.
+* Settings - Show/Hide WC Subscriptions from ATUM Stock Central.
 
 = 1.3.1.1 - 2017-11-14 =
 

@@ -145,6 +145,7 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 Features:
 
 * Added compatibility with WooCommerce Subscriptions.
+* Settings - Show/Hide WC Subscriptions from ATUM Stock Central.
 
 **1.3.1.1 - 2017-11-14**
 
