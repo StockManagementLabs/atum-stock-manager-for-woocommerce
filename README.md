@@ -140,6 +140,12 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 ## Changelog
 
+**1.3.2 - 2017-11-21**
+
+Features:
+
+* Added compatibility with WooCommerce Subscriptions.
+
 **1.3.1.1 - 2017-11-14**
 
 Fixes:
