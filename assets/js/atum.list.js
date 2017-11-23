@@ -219,8 +219,36 @@
 						    $nextRow       = $expandebleRow.next();
 						
 						do {
-							$nextRow.toggle();
+							
+							// Emulate the slide animation in rows with this simple trick
+							if (!$nextRow.is(':visible')) {
+								$nextRow.show().find('td').wrapInner('<div class="hidden" />');
+								$nextRow.find('td > div.hidden').slideDown('fast');
+							}
+							else {
+								
+								$nextRow.find('td > div.hidden').slideUp('fast', function(){
+									
+									var $innerDiv = $(this),
+										$children = $innerDiv.children();
+									
+									$innerDiv.closest('tr').hide();
+									
+									// For HTML nodes
+									if ($children.length) {
+										$children.unwrap();
+									}
+									// For text nodes
+									else {
+										$innerDiv.closest('td').html($innerDiv.html());
+									}
+									
+								});
+								
+							}
+							
 							$nextRow = $nextRow.next();
+							
 						} while ( $nextRow.hasClass('variation') || $nextRow.hasClass('grouped') );
 						
 						// Reload the scrollbar
