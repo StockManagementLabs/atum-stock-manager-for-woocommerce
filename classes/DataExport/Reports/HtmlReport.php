@@ -209,13 +209,9 @@ class HtmlReport extends ListTable {
 	}
 
 	/**
-	 * Column for product type
+	 * @inheritdoc
 	 *
 	 * @since 1.2.5
-	 *
-	 * @param \WP_Post $item The WooCommerce product post
-	 *
-	 * @return string
 	 */
 	protected function column_calc_type( $item ) {
 
