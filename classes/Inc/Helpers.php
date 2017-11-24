@@ -468,12 +468,13 @@ final class Helpers {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param string $view View file that should be loaded
-	 * @param array  $args Variables that will be passed to the view
+	 * @param string $view                  View file that should be loaded
+	 * @param array  $args                  Optional. Variables that will be passed to the view
+	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
 	 *
 	 * @return void|bool
 	 */
-	public static function load_view( $view, $args = [ ] ) {
+	public static function load_view( $view, $args = [ ], $allow_theme_override = TRUE ) {
 		
 		$file = apply_filters( "atum/load_view/$view", $view );
 		$args = apply_filters( "atum/load_view_args/$view", $args );
@@ -481,6 +482,10 @@ final class Helpers {
 		// whether or not .php was added
 		if ( substr( $file, - 4 ) != '.php' ) {
 			$file .= '.php';
+		}
+
+		if ( $allow_theme_override ) {
+			$file = self::locate_template( array( $view ), $file );
 		}
 
 		// Allow using full paths as view name
@@ -515,17 +520,56 @@ final class Helpers {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param string $view View file that should be loaded
-	 * @param array  $args Variables that will be passed to the view
+	 * @param string $view                  View file that should be loaded
+	 * @param array  $args                  Optional. Variables that will be passed to the view
+	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
 	 *
 	 * @return View template string
 	 */
-	public static function load_view_to_string( $view, $args = [ ] ) {
+	public static function load_view_to_string( $view, $args = [ ], $allow_theme_override = TRUE ) {
 		
 		ob_start();
-		self::load_view( $view, $args );
+		self::load_view( $view, $args, $allow_theme_override );
 		
 		return ob_get_clean();
+	}
+
+	/**
+	 * Locate the template file, either in the current theme or the public views directory
+	 *
+	 * @since 1.3.3
+	 *
+	 * @param array   $possibilities
+	 * @param string  $default
+	 *
+	 * @return string
+	 */
+	protected static function locate_template( $possibilities, $default = '' ) {
+
+		$possibilities = apply_filters( 'atum/locate_template/possibilities', $possibilities );
+
+		// Check if the theme has an override for the template
+		$theme_overrides = array();
+
+		foreach ( $possibilities as $p ) {
+			$theme_overrides[] = Globals::TEMPLATE_DIR . "/$p";
+		}
+
+		if ( $found = locate_template( $theme_overrides, FALSE ) ) {
+			return $found;
+		}
+
+		// Check for it in the public directory
+		foreach ( $possibilities as $p ) {
+
+			if ( file_exists( ATUM_PATH . "views/$p" ) ) {
+				return ATUM_PATH . "views/$p";
+			}
+
+		}
+
+		// Not template found
+		return $default;
 	}
 	
 	/**

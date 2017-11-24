@@ -46,6 +46,10 @@ final class Globals {
 	 */
 	const ATUM_UI_HOOK = 'atum-inventory';
 
+	/**
+	 * Directory name to allow override of ATUM templates
+	 */
+	const TEMPLATE_DIR = 'atum';
 	
 	/**
 	 * Getter for the $out_of_stock_date_key property
