@@ -70,16 +70,20 @@
 			$tabContent.find('#screenoptionnonce').remove();
 			
 			// Add a fieldset for product type selection
-			var $typeFieldset = $('<fieldset class="product-type" />');
-			$typeFieldset.append('<legend>' + atumExport.productTypesTitle + '</legend>');
-			$typeFieldset.append(atumExport.productTypes);
-			$typeFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			if (typeof atumExport.productTypes !== 'undefined') {
+				var $typeFieldset = $('<fieldset class="product-type" />');
+				$typeFieldset.append('<legend>' + atumExport.productTypesTitle + '</legend>');
+				$typeFieldset.append(atumExport.productTypes);
+				$typeFieldset.insertAfter($tabContent.find('fieldset').last());
+			}
 			
 			// Add a fieldset for product category selection
-			var $catFieldset = $('<fieldset class="product-category" />');
-			$catFieldset.append('<legend>' + atumExport.categoriesTitle + '</legend>');
-			$catFieldset.append(atumExport.categories);
-			$catFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			if (typeof atumExport.categories !== 'undefined') {
+				var $catFieldset = $('<fieldset class="product-category" />');
+				$catFieldset.append('<legend>' + atumExport.categoriesTitle + '</legend>');
+				$catFieldset.append(atumExport.categories);
+				$catFieldset.insertAfter($tabContent.find('fieldset').last());
+			}
 			
 			// Add a fieldset for title length setup
 			var $titleLengthFieldset = $('<fieldset class="title-length" />');
@@ -130,8 +134,25 @@
 			
 			$iframe.appendTo('body');*/
 			
-			window.open(ajaxurl + '?action=atum_export_data&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize(), '_blank');
+			window.open(ajaxurl + '?action=atum_export_data&page=' + this.getUrlParameter('page') + '&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize(), '_blank');
 		
+		},
+		
+		// Helper to get parameters from the URL
+		getUrlParameter: function(name) {
+			
+			if (typeof URLSearchParams !== 'undefined') {
+				var urlParams = new URLSearchParams(window.location.search);
+				return urlParams.get(name);
+			}
+			// Deprecated: Only for old browsers non supporting URLSearchParams
+			else {
+				name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+				var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+				var results = regex.exec(window.location.search);
+				return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+			}
+			
 		}
 		
 	} );

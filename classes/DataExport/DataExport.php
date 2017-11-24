@@ -13,7 +13,6 @@
 
 namespace Atum\DataExport;
 
-use Atum\DataExport\Reports\HtmlReport;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
@@ -48,8 +47,9 @@ class DataExport {
 	 */
 	public function enqueue_scripts( $hook ) {
 
-		// Load the script on the "Stock Central" page
-		if ($hook == 'toplevel_page_' . Globals::ATUM_UI_SLUG ) {
+		// Load the script on the "Stock Central" page by default
+		$allowed_pages = (array) apply_filters( 'atum/data_export/allowed_pages', ['toplevel_page_' . Globals::ATUM_UI_SLUG] );
+		if ( in_array($hook, $allowed_pages) ) {
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
 			wp_register_script( 'atum-data-export', ATUM_URL . "assets/js/atum.data.export$min.js", array('jquery'), ATUM_VERSION, TRUE );
@@ -61,7 +61,7 @@ class DataExport {
 			) );
 			$product_categories = ob_get_clean();
 
-			wp_localize_script( 'atum-data-export', 'atumExport', array(
+			wp_localize_script( 'atum-data-export', 'atumExport', apply_filters( 'atum/data_export/js_settings', array(
 				'tabTitle'          => __( 'Export Data', ATUM_TEXT_DOMAIN ),
 				'submitTitle'       => __( 'Export', ATUM_TEXT_DOMAIN ),
 				'outputFormatTitle' => __( 'Output Format', ATUM_TEXT_DOMAIN ),
@@ -79,7 +79,7 @@ class DataExport {
 				'maxLength'         => 20,
 				'disableMaxLength'  => __('Disable', ATUM_TEXT_DOMAIN),
 				'exportNonce'       => wp_create_nonce( 'atum-data-export-nonce' )
-			) );
+			), $hook ));
 
 			wp_enqueue_script( 'atum-data-export' );
 
@@ -141,13 +141,14 @@ class DataExport {
 
 		check_ajax_referer( 'atum-data-export-nonce', 'token' );
 
-		$html_report = $this->generate_html_report($_GET);
+		$html_report  = $this->generate_html_report( $_GET );
+		$report_title = apply_filters( 'atum/data_export/report_title', __( 'ATUM Stock Central Report', ATUM_TEXT_DOMAIN ) );
 
 		// Landscape or Portrait format
 		$max_columns = (int) apply_filters('atum/data_export/max_portrait_cols', 12);
 		$format = $this->number_columns > $max_columns ? 'A4-L' : 'A4';
 		$mpdf = new \mPDF( 'utf-8', $format );
-		$mpdf->SetTitle( __('ATUM Stock Central Report', ATUM_TEXT_DOMAIN) );
+		$mpdf->SetTitle( $report_title );
 
 		// Add the icon fonts to mPDF
 		$fontdata = array(
@@ -174,7 +175,7 @@ class DataExport {
 		// Set the document header sections
 		$header = (array) apply_filters( 'atum/data_export/report_page_header', array(
 			'L'    => array(
-				'content'     => __( 'ATUM Stock Central Report', ATUM_TEXT_DOMAIN ),
+				'content'     => $report_title,
 				'font-size'   => 8,
 				'font-style'  => 'I',
 				'font-family' => 'serif',
@@ -263,10 +264,17 @@ class DataExport {
 
 		ob_start();
 
-		$html_list_table = new HtmlReport($report_settings);
-		$table_columns = $html_list_table->get_table_columns();
-		$group_members = $html_list_table->get_group_members();
-		$primary_column = $html_list_table->get_primary_column();
+		// Allow using other classes for the report
+		$html_report_class = apply_filters( 'atum/data_export/html_report_class', '\Atum\DataExport\Reports\HtmlReport');
+
+		if ( ! class_exists($html_report_class) ) {
+			wp_die( __('Report class not found', ATUM_TEXT_DOMAIN) );
+		}
+
+		$html_list_table = new $html_report_class( $report_settings );
+		$table_columns   = $html_list_table->get_table_columns();
+		$group_members   = $html_list_table->get_group_members();
+		$primary_column  = $html_list_table->get_primary_column();
 
 		// Hide all the columns that were unchecked in export settings
 		foreach ($table_columns as $column_key => $column_title) {
