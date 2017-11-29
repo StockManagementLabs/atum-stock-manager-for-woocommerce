@@ -337,7 +337,8 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function add_item_location_column_value($product, $item, $item_id ) {
 
-		$locations = wc_get_product_terms($product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY, array('fields' => 'names'));
+		$product_id = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
+		$locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array('fields' => 'names'));
 		$locations_list = ( ! empty($locations) ) ? implode(', ', $locations) : '';
 		?>
 		<td class="item_location"><?php echo $locations_list ?></td>
