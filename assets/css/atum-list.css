@@ -697,6 +697,12 @@ h1.wp-heading-inline .atum-loading {
   height: 42px;
 }
 
+.atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .dashicons {
+  font-size: 15px;
+  width: 1em;
+  height: 1em;
+}
+
 .atum-list-table .group th {
   font-weight: bold;
 }
@@ -845,6 +851,11 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table .column-calc_type .variation:before, .atum-list-table .column-calc_type .grouped-item:before {
   content: "\e039";
+}
+
+.atum-list-table .column-calc_type .product-part, .atum-list-table .column-calc_type .raw-material {
+  display: block;
+  padding-top: 6px;
 }
 
 .atum-list-table .set-meta {

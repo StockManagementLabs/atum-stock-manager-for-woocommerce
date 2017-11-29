@@ -215,6 +215,12 @@ h1.wp-heading-inline {
 			font-size: 13px;
 			min-width: 50px;
 			height: 42px;
+			
+			.dashicons {
+				font-size: 15px;
+				width: 1em;
+				height: 1em;
+			}
 		}
 	}
 	
@@ -385,6 +391,11 @@ h1.wp-heading-inline {
 			&:before {
 				content: "\e039";
 			}
+		}
+		
+		.product-part, .raw-material {
+			display: block;
+			padding-top: 6px;
 		}
 	}
 	
