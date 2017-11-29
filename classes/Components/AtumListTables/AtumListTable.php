@@ -327,6 +327,105 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Loads the current product
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 */
+	public function single_row( $item ) {
+
+		$this->product = wc_get_product( $item );
+		$type = $this->product->get_type();
+
+		$this->custom_prices = FALSE;
+
+		// Do the WPM stuff
+		if ($this->is_wpml_multicurrency) {
+
+			global $sitepress;
+			$this->original_product_id = $item->ID;
+
+			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->ID, 'post_'.$this->post_type), 'post_'.$this->post_type);
+			foreach($product_translations as $translation){
+				if( $translation->original ){
+					$this->original_product_id = $translation->element_id;
+					break;
+				}
+			}
+
+			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
+				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
+
+				if ( $custom_price_ui) {
+
+					global $thepostid;
+					$keep_id = ($thepostid)? $thepostid : 0;
+					$thepostid = $this->original_product_id;
+
+					$this->custom_prices = $custom_price_ui->get_currencies_info();
+
+					$thepostid = $keep_id;
+				}
+			}
+
+		}
+		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
+		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
+			return;
+		}*/
+
+		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
+
+		// Output the row
+		echo '<tr data-id="' . $this->get_current_product_id() . '">';
+		$this->single_row_columns( $item );
+		echo '</tr>';
+
+		// Add the children products of each inheritable product type
+		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+
+			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
+			$parent_product = new $product_class( $this->product->get_id() );
+			$child_products = $parent_product->get_children();
+
+			if ( ! empty($child_products) ) {
+
+				// If the post__in filter is applied, bypass the children that are not in the query var
+				$post_in = get_query_var('post__in');
+
+				$this->allow_calcs = TRUE;
+
+				foreach ($child_products as $child_id) {
+
+					if ( ! empty($post_in) && ! in_array($child_id, $post_in) ) {
+						continue;
+					}
+
+					// Exclude some children if there is a "Views Filter" active
+					if ( ! empty($_REQUEST['v_filter']) ) {
+
+						$v_filter = esc_attr( $_REQUEST['v_filter'] );
+						if ( ! in_array($child_id, $this->id_views[ $v_filter ]) ) {
+							continue;
+						}
+
+					}
+
+					$this->is_child = TRUE;
+					$this->product = wc_get_product($child_id);
+					$this->single_expandable_row($this->product, ($type == 'grouped' ? $type : 'variation'));
+				}
+			}
+
+		}
+
+		// Reset the child value
+		$this->is_child = FALSE;
+
+	}
+
+	/**
 	 * Generates content for a expandable row on the table
 	 *
 	 * @since 1.1.0
@@ -372,7 +471,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			
 		}
 		
-		echo '<tr class="' . $type . '" style="display: none">';
+		echo '<tr class="' . $type . '" style="display: none" data-id="' . $this->get_current_product_id() . '">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
 	}
@@ -811,101 +910,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo '<td ' . $data . $classes . '>' .
 		     apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product ) .
 		     $this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>';
-
-	}
-
-	/**
-	 * Loads the current product
-	 *
-	 * @since 0.0.1
-	 *
-	 * @param \WP_Post $item The WooCommerce product post
-	 */
-	public function single_row( $item ) {
-
-		$this->product = wc_get_product( $item );
-		$type = $this->product->get_type();
-		
-		$this->custom_prices = FALSE;
-		
-		// Do the WPM stuff
-		if ($this->is_wpml_multicurrency) {
-			
-			global $sitepress;
-			$this->original_product_id = $item->ID;
-			
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->ID, 'post_'.$this->post_type), 'post_'.$this->post_type);
-			foreach($product_translations as $translation){
-				if( $translation->original ){
-					$this->original_product_id = $translation->element_id;
-					break;
-				}
-			}
-			
-			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
-				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
-				
-				if ( $custom_price_ui) {
-					
-					global $thepostid;
-					$keep_id = ($thepostid)? $thepostid : 0;
-					$thepostid = $this->original_product_id;
-					
-					$this->custom_prices = $custom_price_ui->get_currencies_info();
-					
-					$thepostid = $keep_id;
-				}
-			}
-			
-		}
-		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
-		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
-			return;
-		}*/
-		
-		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
-		parent::single_row( $item );
-
-		// Add the children products of each inheritable product type
-		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
-
-			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
-			$parent_product = new $product_class( $this->product->get_id() );
-			$child_products = $parent_product->get_children();
-
-			if ( ! empty($child_products) ) {
-
-				// If the post__in filter is applied, bypass the children that are not in the query var
-				$post_in = get_query_var('post__in');
-
-				$this->allow_calcs = TRUE;
-
-				foreach ($child_products as $child_id) {
-
-					if ( ! empty($post_in) && ! in_array($child_id, $post_in) ) {
-						continue;
-					}
-
-					// Exclude some children if there is a "Views Filter" active
-					if ( ! empty($_REQUEST['v_filter']) ) {
-
-						$v_filter = esc_attr( $_REQUEST['v_filter'] );
-						if ( ! in_array($child_id, $this->id_views[ $v_filter ]) ) {
-							continue;
-						}
-
-					}
-
-					$this->is_child = TRUE;
-					$this->product = wc_get_product($child_id);
-					$this->single_expandable_row($this->product, ($type == 'grouped' ? $type : 'variation'));
-				}
-			}
-
-		}
-
-		// Reset the child value
-		$this->is_child = FALSE;
 
 	}
 	
