@@ -15,6 +15,8 @@ namespace Atum\PurchaseOrders;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 
@@ -98,6 +100,12 @@ class PurchaseOrders extends AtumOrderPostType {
 		
 		// Add item order
 		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
+		// Add a column to PO items table for product location
+		add_action( 'atum/atum_order/item_headers', array($this, 'add_item_location_column_header') );
+		add_action( 'atum/atum_order/item_values', array($this, 'add_item_location_column_value'), 10, 3 );
+		add_action( 'atum/atum_order/fee_item_values', array($this, 'add_item_location_column_empty'), 10, 3 );
+		add_action( 'atum/atum_order/shipping_item_values', array($this, 'add_item_location_column_empty'), 10, 3 );
 
 	}
 
@@ -305,6 +313,50 @@ class PurchaseOrders extends AtumOrderPostType {
 		
 		return $items_order;
 		
+	}
+
+	/**
+	 * Add the location column header to the ATUM order items table
+	 *
+	 * @since 1.3.3
+	 */
+	public function add_item_location_column_header() {
+		?>
+		<th class="item_location"><?php _e('Location', ATUM_TEXT_DOMAIN) ?></th>
+		<?php
+	}
+
+	/**
+	 * Add the location column values to the ATUM order items table
+	 *
+	 * @since 1.3.3
+	 *
+	 * @param \WC_Product           $product
+	 * @param AtumOrderItemProduct  $item
+	 * @param int                   $item_id
+	 */
+	public function add_item_location_column_value($product, $item, $item_id ) {
+
+		$locations = wc_get_product_terms($product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY, array('fields' => 'names'));
+		$locations_list = ( ! empty($locations) ) ? implode(', ', $locations) : '';
+		?>
+		<td class="item_location"><?php echo $locations_list ?></td>
+		<?php
+	}
+
+	/**
+	 * Add empty location column cells to all the items that are not products
+	 *
+	 * @since 1.3.3
+	 *
+	 * @param \WC_Product           $product
+	 * @param AtumOrderItemProduct  $item
+	 * @param int                   $item_id
+	 */
+	public function add_item_location_column_empty($product, $item, $item_id ) {
+		?>
+		<td class="item_location"></td>
+		<?php
 	}
 
 	/**

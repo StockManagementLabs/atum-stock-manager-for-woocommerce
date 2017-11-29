@@ -50,6 +50,11 @@ final class Globals {
 	 * Directory name to allow override of ATUM templates
 	 */
 	const TEMPLATE_DIR = 'atum';
+
+	/**
+	 * The products' location taxonomy name
+	 */
+	const PRODUCT_LOCATION_TAXONOMY =  ATUM_PREFIX . 'location';
 	
 	/**
 	 * Getter for the $out_of_stock_date_key property

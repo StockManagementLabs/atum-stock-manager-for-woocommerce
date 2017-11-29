@@ -214,7 +214,7 @@ class Main {
 			'public'       => FALSE
 		) );
 
-		register_taxonomy( ATUM_PREFIX . 'location', 'product', $args );
+		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
 
 		// Init the Inventory Logs

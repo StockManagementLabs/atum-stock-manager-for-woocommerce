@@ -39,13 +39,17 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 					<th class="item sortable" colspan="2" data-sort="string-ins">
 						<?php _e( 'Item', ATUM_TEXT_DOMAIN ); ?>
 					</th>
+
 					<?php do_action( 'atum/atum_order/item_headers', $atum_order ); ?>
+
 					<th class="item_cost sortable" data-sort="float">
 						<?php _e( 'Cost', ATUM_TEXT_DOMAIN ); ?>
 					</th>
+
 					<th class="quantity sortable" data-sort="int">
 						<?php _e( 'Qty', ATUM_TEXT_DOMAIN ); ?>
 					</th>
+
 					<th class="line_cost sortable" data-sort="float">
 						<?php _e( 'Total', ATUM_TEXT_DOMAIN ); ?>
 					</th>
