@@ -18,7 +18,7 @@ var gulp         = require('gulp'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.2.4';
+var version = '1.3.2';
 
 // Global config
 var config = {
@@ -38,7 +38,7 @@ var config = {
 			' * @authors Salva Machí and Jose Piera \n',
 			' *\n',
 			' * Author URI: https://sispixels.com/ \n',
-			' * License : (c)2017 Stock Management Labs \n',
+			' * License : ©2017 Stock Management Labs \n',
 			' */ \n',
 			'\n;(function($) { \n \t\'use strict\';\n\n',
 			'<%= contents %>\n\n',
@@ -52,7 +52,7 @@ var config = {
 			' * @authors Salva Machí and Jose Piera \n',
 			' *\n',
 			' * Author URI: https://sispixels.com/ \n',
-			' * License : (c)2017 Stock Management Labs \n',
+			' * License : ©2017 Stock Management Labs \n',
 			' */ \n',
 			'\n<%= contents %>\n'
 		].join('')
@@ -132,7 +132,7 @@ var options = {
 // sass tasks
 //---------------
 
-gulp.task('sass', function () {
+gulp.task('sass::atum', function () {
 
 	var destDir = config.assetsDir + '/css';
 
@@ -158,7 +158,7 @@ gulp.task('sass', function () {
 // Optimize Images
 // ---------------
 
-gulp.task('images', function () {
+gulp.task('images::atum', function () {
 	return gulp.src('./images/**/*')
 		.pipe(imagemin({progressive: true, svgoPlugins: [{removeViewBox: false}]}))
 		.pipe(gulp.dest('./images'))
@@ -189,16 +189,16 @@ gulp.task('composer::optimize', function () {
 // Start the livereload server and watch files for changes
 // -------------------------------------------------------
 
-gulp.task('watch', function () {
+gulp.task('watch::atum', function () {
 
 	livereload.listen();
 
 	// don't listen to whole js folder, it'll create an infinite loop
 	//gulp.watch(['./assets/js/**/*.js', '!./assets/js/dist/*.min.js'], ['scripts'])
 
-	gulp.watch(config.assetsDir + '/scss/**/*.scss', ['sass']);
+	gulp.watch(config.assetsDir + '/scss/**/*.scss', ['sass::atum']);
 	
-	gulp.watch('./assets/images/**/*', ['images']);
+	gulp.watch('./assets/images/**/*', ['images::atum']);
 
 	gulp.watch([
 
@@ -223,6 +223,6 @@ gulp.task('watch', function () {
 });
 
 // Do nothing in this task, just triggers the dependent 'watch'
-gulp.task('default', ['watch'], function () {
+gulp.task('default', ['watch::atum'], function () {
 	
 });
