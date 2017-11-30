@@ -32,6 +32,7 @@ $currency = $atum_order->get_currency();
 
 	<?php do_action( 'atum/atum_order/fee_item_values', null, $item, $item_id ); ?>
 
+	<td class="item_location">&nbsp;</td>
 	<td class="item_cost" width="1%">&nbsp;</td>
 	<td class="quantity" width="1%">&nbsp;</td>
 

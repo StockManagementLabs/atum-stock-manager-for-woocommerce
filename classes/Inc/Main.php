@@ -80,45 +80,69 @@ class Main {
 	private function __construct() {
 		
 		if ( is_admin() ) {
-			
-			// Add the menus
-			add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
-
-			// Reorder the admin submenus
-			add_filter( 'custom_menu_order', '__return_true' );
-			add_filter( 'menu_order', array($this, 'set_menu_order') );
-			
-			// Load dependencies
-			add_action( 'init', array( $this, 'admin_load' ) );
-			
-			// Check if ATUM has the "Manage Stock" option enabled
-			if ( Helpers::is_atum_managing_stock() ) {
-				add_action( 'init', array( $this, 'atum_manage_stock_hooks' ) );
-			}
-			else {
-				// Add the WC stock management option to grouped products
-				add_action( 'init', array( $this, 'wc_manage_stock_hooks' ) );
-			}
-
-			// Add the purchase price to WC products
-			add_action( 'woocommerce_product_options_pricing', array($this, 'add_purchase_price_meta') );
-			add_action( 'woocommerce_variation_options_pricing', array($this, 'add_purchase_price_meta'), 10, 3 );
-
-			// Save the product purchase price meta
-			add_action( 'save_post_product', array($this, 'save_purchase_price') );
-			add_action( 'woocommerce_update_product_variation', array($this, 'save_purchase_price') );
-
-			// Show the right stock status on WC products list when ATUM is managing the stock
-			add_filter( 'woocommerce_admin_stock_html', array($this, 'set_wc_products_list_stock_status'), 10, 2 );
-			
-			// Add purchase price to WPML custom prices
-			add_filter( 'wcml_custom_prices_fields', array($this, 'wpml_add_purchase_price_to_custom_prices') );
-			add_filter( 'wcml_custom_prices_fields_labels', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
-			add_filter( 'wcml_custom_prices_strings', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
-			add_filter( 'wcml_update_custom_prices_values', array($this, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
-			add_action( 'wcml_after_save_custom_prices', array($this, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
-
+			$this->register_admin_hooks();
 		}
+
+		$this->register_global_hooks();
+		
+	}
+
+	/**
+	 * Register the admin-side hooks
+	 *
+	 * @since 1.3.3
+	 */
+	protected function register_admin_hooks() {
+
+		// Add the menus
+		add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
+
+		// Reorder the admin submenus
+		add_filter( 'custom_menu_order', '__return_true' );
+		add_filter( 'menu_order', array($this, 'set_menu_order') );
+
+		// Load dependencies
+		add_action( 'init', array( $this, 'admin_load' ) );
+
+		// Check if ATUM has the "Manage Stock" option enabled
+		if ( Helpers::is_atum_managing_stock() ) {
+			add_action( 'init', array( $this, 'atum_manage_stock_hooks' ) );
+		}
+		else {
+			// Add the WC stock management option to grouped products
+			add_action( 'init', array( $this, 'wc_manage_stock_hooks' ) );
+		}
+
+		// Add the purchase price to WC products
+		add_action( 'woocommerce_product_options_pricing', array($this, 'add_purchase_price_meta') );
+		add_action( 'woocommerce_variation_options_pricing', array($this, 'add_purchase_price_meta'), 10, 3 );
+
+		// Save the product purchase price meta
+		add_action( 'save_post_product', array($this, 'save_purchase_price') );
+		add_action( 'woocommerce_update_product_variation', array($this, 'save_purchase_price') );
+
+		// Show the right stock status on WC products list when ATUM is managing the stock
+		add_filter( 'woocommerce_admin_stock_html', array($this, 'set_wc_products_list_stock_status'), 10, 2 );
+
+		// Add purchase price to WPML custom prices
+		add_filter( 'wcml_custom_prices_fields', array($this, 'wpml_add_purchase_price_to_custom_prices') );
+		add_filter( 'wcml_custom_prices_fields_labels', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_custom_prices_strings', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_update_custom_prices_values', array($this, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
+		add_action( 'wcml_after_save_custom_prices', array($this, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
+
+		// Add the location column to the items table in WC orders
+		add_action( 'woocommerce_admin_order_item_headers', array($this, 'wc_order_add_location_column_header') );
+		add_action( 'woocommerce_admin_order_item_values', array($this, 'wc_order_add_location_column_value'), 10, 3 );
+
+	}
+
+	/**
+	 * Register the global hooks
+	 *
+	 * @since 1.3.3
+	 */
+	protected function register_global_hooks() {
 
 		// Load front stuff
 		add_action( 'init', array($this, 'load'), 11 );
@@ -128,14 +152,14 @@ class Main {
 
 		// Load ATUM add-ons
 		add_action( 'setup_theme', array( $this, 'load_addons' ) );
-		
+
 		// Save the date when any product goes out of stock
 		add_action( 'woocommerce_product_set_stock' , array($this, 'record_out_of_stock_date'), 20 );
 
 		// Delete the views' transients after changing the stock of any product
 		add_action( 'woocommerce_product_set_stock' , array($this, 'delete_transients') );
 		add_action( 'woocommerce_variation_set_stock' , array($this, 'delete_transients') );
-		
+
 	}
 
 	/**
@@ -792,6 +816,45 @@ class Main {
 		if ( isset( $custom_prices[ '_purchase_price'] ) ) {
 			update_post_meta( $post_id, "_purchase_price_{$code}", $custom_prices['_purchase_price'] );
 		}
+	}
+
+	/**
+	 * Add the location to the items table in WC orders
+	 *
+	 * @since 1.3.3
+	 *
+	 * @param \WC_Order $wc_order
+	 */
+	public function wc_order_add_location_column_header($wc_order) {
+		?><th class="item_location sortable" data-sort="string-ins"><?php _e( 'Location', ATUM_TEXT_DOMAIN ); ?></th><?php
+	}
+
+	/**
+	 * Add the location to the items table in WC orders
+	 *
+	 * @since 1.3.3
+	 *
+	 * @param \WC_Product    $product
+	 * @param \WC_Order_Item $item
+	 * @param int            $item_id
+ 	 */
+	public function wc_order_add_location_column_value($product, $item, $item_id) {
+
+		if ($product) {
+			$product_id = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
+			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
+			$locations_list = ( ! empty( $locations ) ) ? implode( ', ', $locations ) : '&ndash;';
+		}
+
+		?>
+		<td class="item_location"<?php if ($product) echo ' data-sort-value="' . $locations_list . '"' ?>>
+			<?php if ($product): ?>
+			<div class="view"><?php echo $locations_list ?></div>
+			<?php else: ?>
+			&nbsp;
+			<?php endif; ?>
+		</td>
+		<?php
 	}
 
 	/**

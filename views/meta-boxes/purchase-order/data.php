@@ -37,7 +37,10 @@ $po_status = $atum_order->get_status();
 				<p class="form-field form-field-wide">
 					<label for="customer_user"><?php _e( 'Supplier:', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<?php echo Helpers::suppliers_dropdown($supplier->ID, TRUE) ?>
+					<?php
+					$supplier_id = ($supplier) ? $supplier->ID : '';
+					echo Helpers::suppliers_dropdown($supplier_id, TRUE);
+					?>
 					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty($supplier) ) echo $supplier->ID ?>">
 				</p>
 

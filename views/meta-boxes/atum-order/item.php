@@ -12,6 +12,8 @@
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Globals;
+
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
 $product      = $item->get_product();
@@ -51,7 +53,17 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php do_action( 'atum/atum_order/ater_item_meta', $item_id, $item, $product ) ?>
 	</td>
 
-	<?php do_action( 'atum/atum_order/item_values', $product, $item, absint( $item_id ) ); ?>
+	<?php
+	do_action( 'atum/atum_order/item_values', $product, $item, absint( $item_id ) );
+
+
+	$product_id     = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
+	$locations      = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
+	$locations_list = ( ! empty( $locations ) ) ? implode( ', ', $locations ) : '&ndash;';
+	?>
+	<td class="item_location"<?php if ($product) echo ' data-sort-value="' . $locations_list . '"' ?>>
+		<?php echo $locations_list ?>
+	</td>
 
 	<td class="item_cost" width="1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>">
 		<div class="view">
