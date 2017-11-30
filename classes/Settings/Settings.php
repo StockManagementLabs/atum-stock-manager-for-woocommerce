@@ -99,7 +99,7 @@ class Settings {
 			'manage_stock'          => array(
 				'section' => 'general',
 				'name'    => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Activate this option to override all WooCommerce inventory configurations.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Activate this option to manage/unmanage all your inventory at product level.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
