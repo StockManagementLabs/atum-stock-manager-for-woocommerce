@@ -95,7 +95,7 @@
 
 .atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span, .atum-addons .theme .theme-actions.coming-soon span {
   display: inline-block;
-  margin-top: 7px;
+  margin-top: 11px;
   font-size: 12px;
   color: #FFF;
   font-weight: normal;
