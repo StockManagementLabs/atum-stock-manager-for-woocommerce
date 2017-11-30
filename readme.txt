@@ -251,6 +251,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
+= 1.3.3 - 2017-11-30 =
+
+Features:
+
+* Added slide animation to expandable rows in List Tables.
+* Now supports theme override of ATUM views.
+* Improved Data Export module for reusing it in other ATUM modules.
+* Added location column to WC Orders, Purchase Orders and Inventory Logs.
+
+Fixes:
+
+* Fixed supplier column in exported report table.
+* Some refactory.
+
 = 1.3.2 - 2017-11-21 =
 
 Features:
