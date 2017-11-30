@@ -1936,7 +1936,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="notice notice-warning atum-notice notice-management-stock is-dismissible" data-nonce="<?php echo wp_create_nonce( ATUM_PREFIX . 'manage-stock-notice' ) ?>">
 			<p class="manage-message">
-				<?php printf( __( '%1$s plugin can bulk-enable all your items for stock management at the product level. %1$s will save your original settings if you decide to go back later or uninstall the plugin.', ATUM_TEXT_DOMAIN ), strtoupper( ATUM_TEXT_DOMAIN ) ) ?>
+				<?php printf( __( '%1$s plugin can bulk-enable all your items for stock management at the product level. %1$s will save your original settings if you decide to reverse them later. To do so, go to %1$s > Settings > General, deactivate the &quot;Manage Stock&quot; switch and confirm your action by pressing the &quot;Yes, restore them&quot; button.', ATUM_TEXT_DOMAIN ), strtoupper( ATUM_TEXT_DOMAIN ) ) ?>
 				<button type="button" class="add-manage-option button button-primary button-small"><?php _e( "Enable ATUM's Manage Stock option", ATUM_TEXT_DOMAIN ) ?></button>
 			</p>
 		</div>
