@@ -101,12 +101,24 @@ class ListTable extends AtumListTable {
 		if ( ! current_user_can(ATUM_PREFIX . 'read_supplier') ) {
 			unset( $args['table_columns']['_supplier'] );
 		}
-		
+
+		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
+
 		// TODO: Add group table functionality if some columns are invisible
-		$args['group_members'] = array(
+		$args['group_members'] = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'thumb', 'title', '_supplier', '_sku', 'ID', 'calc_type', '_regular_price', '_sale_price', '_purchase_price' )
+				'members' => array(
+					'thumb',
+					'title',
+					'_supplier',
+					'_sku',
+					'ID',
+					'calc_type',
+					'_regular_price',
+					'_sale_price',
+					'_purchase_price'
+				)
 			),
 			'stock-counters'        => array(
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
@@ -121,7 +133,11 @@ class ListTable extends AtumListTable {
 			),
 			'stock-negatives'       => array(
 				'title'   => __( 'Stock Negatives', ATUM_TEXT_DOMAIN ),
-				'members' => array( 'calc_returns', 'calc_damages', 'calc_lost_in_post' )
+				'members' => array(
+					'calc_returns',
+					'calc_damages',
+					'calc_lost_in_post'
+				)
 			),
 			'stock-selling-manager' => array(
 				'title'   => __( 'Stock Selling Manager', ATUM_TEXT_DOMAIN ),
@@ -133,8 +149,8 @@ class ListTable extends AtumListTable {
 					'calc_lost_sales',
 					'calc_stock_indicator'
 				)
-			),
-		);
+			)
+		) );
 		
 		parent::__construct( $args );
 
@@ -201,17 +217,20 @@ class ListTable extends AtumListTable {
 			
 			}
 			else {
+
 				// WPML Multicurrency
 				if ($this->is_wpml_multicurrency && $product_id !== $this->original_product_id) {
 					$product = wc_get_product($this->original_product_id);
 					$regular_price_value =  $product->get_regular_price();
 				}
 				else {
-			$regular_price_value = $this->product->get_regular_price();
+					$regular_price_value = $this->product->get_regular_price();
 				}
+
 				$symbol = get_woocommerce_currency_symbol();
 				$currency = $this->default_currency;
 				$is_custom = 'no';
+
 			}
 			
 			$regular_price_value = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency' => $currency] ) : $regular_price;
@@ -255,6 +274,7 @@ class ListTable extends AtumListTable {
 				$currency         = $this->current_currency;
 				$sale_price_value = $this->custom_prices[ $currency ]['custom_price']['_sale_price'];
 				$symbol           = $this->custom_prices[ $currency ]['currency_symbol'];
+
 				// Dates come already formatted
 				$sale_price_dates_from = $this->custom_prices[ $currency ]['sale_price_dates_from'];
 				$sale_price_dates_to   = $this->custom_prices[ $currency ]['sale_price_dates_to'];
@@ -282,10 +302,7 @@ class ListTable extends AtumListTable {
 
 			}
 			
-			$sale_price_value = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => $currency
-			] ) : $sale_price;
+			$sale_price_value = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency' => $currency ] ) : $sale_price;
 			
 			$args = array(
 				'post_id'    => $product_id,
