@@ -1106,7 +1106,7 @@ final class Ajax {
 				}
 			}
 
-			do_action( 'atum/ajax/restore_atum_order_stock', $atum_order );
+			do_action( "atum/ajax/{$action}_atum_order_stock", $atum_order );
 
 			if ( empty( $return ) ) {
 
