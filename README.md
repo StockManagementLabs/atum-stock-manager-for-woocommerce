@@ -213,6 +213,18 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.3.1 - 2017-12-04**
+
+Features:
+
+* Paint in red the edited and non saved List Table cells.
+
+Fixes:
+
+* Edited hook name for "Product Levels" add-on compatibility.
+* Fixed variation purchase price saving from WC product.
+* Add the variable product link on variation titles within "Stock Central" and "Inbound Stock" list tables.
+
 **1.3.3 - 2017-11-30**
 
 Features:
