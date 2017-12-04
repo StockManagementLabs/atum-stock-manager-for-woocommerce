@@ -560,6 +560,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$title = ucfirst( implode(' ', $attributes) );
 			}
 
+			// Get the variable product ID to get the right link
+			$product_id = $this->product->get_parent_id();
+
 		}
 		else {
 			$title = $this->product->get_title();
