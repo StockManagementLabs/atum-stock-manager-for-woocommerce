@@ -67,6 +67,19 @@ class ListTable extends AtumListTable {
 
 	/**
 	 * @inheritdoc
+	 *
+	 * @since  1.1.3.1
+	 */
+	protected function get_table_classes() {
+
+		$table_classes = parent::get_table_classes();
+		$table_classes[] = 'inbound-stock-list';
+
+		return $table_classes;
+	}
+
+	/**
+	 * @inheritdoc
 	 */
 	protected function set_views_data( $args ) {
 		// No need to calculate views

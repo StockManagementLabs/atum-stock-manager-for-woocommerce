@@ -191,6 +191,19 @@ class ListTable extends AtumListTable {
 		<?php
 
 	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since  1.1.4.2
+	 */
+	protected function get_table_classes() {
+
+		$table_classes = parent::get_table_classes();
+		$table_classes[] = 'stock-central-list';
+
+		return $table_classes;
+	}
 	
 	/**
 	 * Column for regular price
