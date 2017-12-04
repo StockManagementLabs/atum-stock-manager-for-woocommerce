@@ -255,7 +255,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 Features:
 
-* Paint in red the edited and non saved List Table cells.
+* Edited values in Stock Central have their font colour changed to red before the Save Data button is clicked. This is another reminder for users to save their changes before leaving the page.
 
 Fixes:
 
