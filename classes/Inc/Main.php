@@ -703,8 +703,8 @@ class Main {
 		$purchase_price = '';
 
 		// Product variations
-		if ( isset($_POST['variable_purchase_price']) ) {
-			$purchase_price = (string) isset( $_POST['variable_purchase_price'] ) ? wc_clean( reset($_POST['variable_purchase_price']) ) : '';
+		if ( isset($_POST['variation_purchase_price']) ) {
+			$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
 			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 			update_post_meta( $post_id, '_purchase_price', $purchase_price );
 		}
