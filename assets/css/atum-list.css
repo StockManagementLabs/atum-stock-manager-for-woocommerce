@@ -867,6 +867,10 @@ h1.wp-heading-inline .atum-loading {
   color: #0073AA;
 }
 
+.atum-list-table .set-meta.unsaved {
+  color: #EF4D5A;
+}
+
 .atum-list-table #calc_stock_out_days {
   min-width: 56px;
 }

@@ -406,6 +406,10 @@ h1.wp-heading-inline {
 	.set-meta {
 		cursor: pointer;
 		color: $brand-primary;
+		
+		&.unsaved {
+			color: $brand-danger;
+		}
 	}
 	
 	#calc_stock_out_days {

@@ -843,7 +843,7 @@
 						value = (currencyPos === 'left') ? symbol + value : value + symbol;
 					}
 					
-					$metaCell.text(value);
+					$metaCell.addClass('unsaved').text(value);
 					
 				},
 				
