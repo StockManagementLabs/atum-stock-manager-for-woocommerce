@@ -1069,7 +1069,7 @@ final class Ajax {
 
 		$atum_order_id       = absint( $_POST['atum_order_id'] );
 		$atum_order_item_ids = array_map( 'absint', $_POST['atum_order_item_ids'] );
-		$quantities          = array_map( 'woocommerce_stock_amount', $_POST['quantities'] );
+		$quantities          = array_map( 'wc_stock_amount', $_POST['quantities'] );
 
 		$atum_order       = Helpers::get_atum_order_model( $atum_order_id );
 		$atum_order_items = $atum_order->get_items();
