@@ -35,6 +35,12 @@ final class Globals {
 	 * @var string
 	 */
 	private static $out_of_stock_date_key = '_out_of_stock_date';
+
+	/**
+	 * The number of decimals specified in settings to round the stock quantities
+	 * @var int
+	 */
+	private static $stock_decimals;
 	
 	/**
 	 * The ATUM admin page slug
@@ -60,6 +66,7 @@ final class Globals {
 	 * Getter for the $out_of_stock_date_key property
 	 *
 	 * @since 0.1.4
+	 *
 	 * @return string
 	 */
 	public static function get_out_of_stock_date_key() {
@@ -70,6 +77,7 @@ final class Globals {
 	 * Getter for the product_types property
 	 *
 	 * @since 0.1.4
+	 *
 	 * @return array
 	 */
 	public static function get_product_types() {
@@ -86,6 +94,7 @@ final class Globals {
 	 * Getter for the inheritable_product_types property
 	 *
 	 * @since 1.3.2
+	 *
 	 * @return array
 	 */
 	public static function get_inheritable_product_types() {
@@ -96,6 +105,30 @@ final class Globals {
 		}
 
 		return (array) apply_filters('atum/allowed_inheritable_product_types', self::$inheritable_product_types);
+	}
+
+	/**
+	 * Getter for the Stock Decimals property
+	 *
+	 * @since 1.3.4
+	 *
+	 * @return int
+	 */
+	public static function get_stock_decimals() {
+		return (int) apply_filters( 'atum/stock_decimals', self::$stock_decimals);
+	}
+
+	/**
+	 * Setter for the Stock Decimals property
+	 *
+	 * @since 1.3.4
+	 *
+	 * @param int $stock_decimals
+	 *
+	 * @return int
+	 */
+	public static function set_stock_decimals($stock_decimals) {
+		self::$stock_decimals = absint($stock_decimals);
 	}
 	
 }

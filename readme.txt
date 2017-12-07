@@ -1,13 +1,13 @@
 === ATUM Inventory Management for WooCommerce ===
 
 Contributors: stockmanagementlabs, salvamb, japiera
-Tags: inventory, inventory management, stock management, woocommerce, inventory manager for woocommerce, stock management for woocommerce, inventory manager for woocommerce, inventory management for woocommerce, woocommerce stock, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
+Tags: inventory management, suppliers, purchase orders, inbound stock, statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.9.1
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.2.4
-Stable tag: 1.3.3.1
+WC tested up to: 3.2.5
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,8 @@ In the preparation process for the development stage, we have tested and tried t
 
 
 = AVAILABLE FEATURES =
+
+**NOW INCLUDED - SET THE DESIRED NUMBER OF DECIMAL PLACES IN STOCK QUANTITY FIELDS**
 
 **NEW MEGA UPDATE 1.3.0**
 
@@ -69,7 +71,9 @@ Our ground-breaking Stock Central lets users see, edit and update all WooCommerc
 
 * All WooCommerce products on one screen with a smooth mouse wheel or touchpad scrolling.
 * Image thumbnails for easier identification of your WooCommerce Inventory.
-* Short product names overview including the products' ID and SKU. Change SKUs on the fly from one screen.
+* Short product names overview including the products' ID and SKU. Change SKUs on the fly from one screen. Now with direct edit links.
+* Purchase prices now included with direct edit from the Stock Central page. WooCommerce inventory management was never easier.
+* Suppliers column and fully filtered product list by Suppliers name.
 * Quickly edit the Product Price and Product Sale Price including the date ranges of your sales. Now bulk editing available.
 * Change, edit or update the inventory of every WooCommerce product in your database. Changes immediately reflect the front-end of your site.
 * Weekly and Fortnightly Sales, Lost Sales and Inventory Level Indicators to help you with re-ordering plan.
@@ -250,6 +254,17 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
 == Changelog ==
+
+= 1.3.4 - 2017-12-07 =
+
+Features:
+
+* Allow decimals for stock quantities.
+* Added new setting to specify the number of decimal places allowed.
+
+Fixes:
+
+* Fixed variations list not showing when expanding variable products in some cases.
 
 = 1.3.3.1 - 2017-12-04 =
 

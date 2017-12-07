@@ -131,6 +131,13 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
+			'stock_quantity_decimals' => array(
+				'section' => 'general',
+				'name'    => __( 'Decimals in Stock Quantity', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enter the number of decimal places your shop needs in stock quantity fields.  Set 0 to keep or 1 and higher to override the default WooCommerce NO decimal setting.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => 0
+			),
 			'posts_per_page'        => array(
 				'section' => 'stock_central',
 				'name'    => __( 'Products per Page', ATUM_TEXT_DOMAIN ),

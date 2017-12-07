@@ -72,6 +72,7 @@ class Main {
 	 */
 	private $ad_obj;
 
+
 	/**
 	 * Singleton constructor
 	 *
@@ -250,6 +251,26 @@ class Main {
 		// Init the Purchase Orders
 		if ( current_user_can(ATUM_PREFIX . 'manage_po') ) {
 			new PurchaseOrders();
+		}
+
+		// Set the stock decimals setting globally
+		Globals::set_stock_decimals( Helpers::get_option('stock_quantity_decimals', 0) );
+
+		// Maybe allow decimals for WC products' stock quantity
+		if (Globals::get_stock_decimals() > 0) {
+
+			// Add min value to the quantity field (WC default = 1)
+			add_filter('woocommerce_quantity_input_min', array($this, 'stock_quantity_input_atts'));
+
+			// Add step value to the quantity field (WC default = 1)
+			add_filter('woocommerce_quantity_input_step', array($this, 'stock_quantity_input_atts'));
+
+			// Removes the WooCommerce filter, that is validating the quantity to be an int
+			remove_filter('woocommerce_stock_amount', 'intval');
+
+			// Replace the above filter with a custom one that validates the quantity to be a int or float and applies rounding
+			add_filter('woocommerce_stock_amount', array($this, 'round_stock_quantity'));
+
 		}
 
 	}
@@ -1012,6 +1033,39 @@ class Main {
 		}
 
 		return $footer_text;
+
+	}
+
+	/**
+	 * Set min and step value for the stock quantity input number field (WC default = 1)
+	 *
+	 * @since 1.3.4
+	 *
+	 * @param int $val
+	 *
+	 * @return float|int
+	 */
+	public function stock_quantity_input_atts($val) {
+		return 10 / pow(10, Globals::get_stock_decimals() + 1);
+	}
+
+	/**
+	 * Round the stock quantity according to the number of decimals specified in settings
+	 *
+	 * @since 1.3.4
+	 *
+	 * @param float|int $qty
+	 *
+	 * @return float|int
+	 */
+	public function round_stock_quantity($qty) {
+
+		if ( ! Globals::get_stock_decimals() ) {
+			return intval($qty);
+		}
+		else {
+			return round( floatval($qty), Globals::get_stock_decimals() );
+		}
 
 	}
 	

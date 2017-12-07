@@ -213,6 +213,17 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.4 - 2017-12-07**
+
+Features:
+
+* Allow decimals for stock quantities.
+* Added new setting to specify the number of decimal places allowed.
+
+Fixes:
+
+* Fixed variations list not showing when expanding variable products in some cases.
+
 **1.3.3.1 - 2017-12-04**
 
 Features:
