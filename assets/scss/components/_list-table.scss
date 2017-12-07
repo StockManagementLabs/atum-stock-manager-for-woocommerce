@@ -412,6 +412,13 @@ h1.wp-heading-inline {
 		}
 	}
 	
+	.highlight-danger {
+		background-color: $brand-danger;
+		color: #FFF;
+		padding: 2px 3px;
+		border-radius: 2px;
+	}
+	
 	#calc_stock_out_days {
 		min-width: 56px;
 	}
