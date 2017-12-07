@@ -813,7 +813,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! isset($this->allow_calcs) || ( isset($this->allow_calcs) && $this->allow_calcs) ) {
 
-			$stock = woocommerce_stock_amount( $this->product->get_stock_quantity() );
+			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 
 			if ($editable) {
 
