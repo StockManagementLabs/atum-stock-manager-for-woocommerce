@@ -218,6 +218,9 @@
 						    $expandebleRow = $(this).closest('tr').toggleClass('expanded ' + typeClass),
 						    $nextRow       = $expandebleRow.next();
 						
+						// Reload the scrollbar once the slide animation is completed
+						self.reloadScrollbar(210);
+						
 						do {
 							
 							// Emulate the slide animation in rows with this simple trick
@@ -250,9 +253,6 @@
 							$nextRow = $nextRow.next();
 							
 						} while ( $nextRow.hasClass('variation') || $nextRow.hasClass('grouped') );
-						
-						// Reload the scrollbar
-						self.reloadScrollbar();
 						
 					});
 					
@@ -313,10 +313,25 @@
 				
 				/**
 				 * Reload the scrollbar
+				 *
+				 * @param int creationDelay The time in miliseconds that will delay until adding the scroll bar again
 				 */
-				reloadScrollbar: function() {
+				reloadScrollbar: function(creationDelay) {
+					
+					var self = this;
 					jScrollApi.destroy();
-					this.addScrollBar();
+					
+					if (typeof creationDelay !== 'undefined' && creationDelay > 0) {
+					
+						setTimeout(function() {
+							self.addScrollBar();
+						}, creationDelay);
+						
+					}
+					else {
+						this.addScrollBar();
+					}
+					
 				},
 				
 				/**
