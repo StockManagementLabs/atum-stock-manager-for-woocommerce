@@ -271,6 +271,9 @@ class Main {
 			// Replace the above filter with a custom one that validates the quantity to be a int or float and applies rounding
 			add_filter('woocommerce_stock_amount', array($this, 'round_stock_quantity'));
 
+			// Customise the "Add to Cart" message to allow decimals in quantities
+			add_filter('wc_add_to_cart_message_html', array($this, 'add_to_cart_message'), 10, 2);
+
 		}
 
 	}
@@ -1066,6 +1069,42 @@ class Main {
 		else {
 			return round( floatval($qty), Globals::get_stock_decimals() );
 		}
+
+	}
+
+	/**
+	 * Customise the "Add to cart" messages to allow decimal places
+	 *
+	 * @since 1.3.4.1
+	 *
+	 * @param string $message
+	 * @param int|array $products
+	 *
+	 * @return string
+	 */
+	public function add_to_cart_message( $message, $products ) {
+
+		$titles = array();
+		$count  = 0;
+
+		foreach ( $products as $product_id => $qty ) {
+			$titles[] = ( $qty != 1 ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), strip_tags( get_the_title( $product_id ) ) );
+			$count   += $qty;
+		}
+
+		$titles     = array_filter( $titles );
+		$added_text = sprintf( _n( '%s has been added to your cart.', '%s have been added to your cart.', $count, ATUM_TEXT_DOMAIN ), wc_format_list_of_items( $titles ) );
+
+		// Output success messages
+		if ( 'yes' === get_option( 'woocommerce_cart_redirect_after_add' ) ) {
+			$return_to = apply_filters( 'woocommerce_continue_shopping_redirect', wc_get_raw_referer() ? wp_validate_redirect( wc_get_raw_referer(), FALSE ) : wc_get_page_permalink( 'shop' ) );
+			$message   = sprintf( '<a href="%s" class="button wc-forward">%s</a> %s', esc_url( $return_to ), esc_html__( 'Continue shopping', ATUM_TEXT_DOMAIN ), esc_html( $added_text ) );
+		}
+		else {
+			$message = sprintf( '<a href="%s" class="button wc-forward">%s</a> %s', esc_url( wc_get_page_permalink( 'cart' ) ), esc_html__( 'View cart', ATUM_TEXT_DOMAIN ), esc_html( $added_text ) );
+		}
+
+		return $message;
 
 	}
 	
