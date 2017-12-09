@@ -213,6 +213,13 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.4.1 - 2017-12-09**
+
+Fixes:
+
+* Set "min" and "step" attributes for input number fields in Settings.
+* Fixed "Add to Cart" message when using quantity decimals.
+
 **1.3.4 - 2017-12-07**
 
 Features:
