@@ -136,7 +136,10 @@ class Settings {
 				'name'    => __( 'Decimals in Stock Quantity', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enter the number of decimal places your shop needs in stock quantity fields.  Set 0 to keep or 1 and higher to override the default WooCommerce NO decimal setting.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
-				'default' => 0
+				'default' => 0,
+				'options'    => array(
+					'min' => 0
+				)
 			),
 			'posts_per_page'        => array(
 				'section' => 'stock_central',
@@ -389,8 +392,13 @@ class Settings {
 	 */
 	public function display_number( $args ) {
 
+		$step = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
+		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
+
 		$output = $this->get_label( $args ) . sprintf(
-			'<input class="atum-settings-input" type="number" min="1" step="1" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+			$min,
+			$step,
 			$this->options[ $args['id'] ]
 		);
 
