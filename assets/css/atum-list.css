@@ -946,6 +946,10 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-notice .atum-loading {
   margin-left: 5px;
+  margin-top: 5px;
+}
+
+.atum-notice .add-manage-option {
   margin-top: 3px;
 }
 

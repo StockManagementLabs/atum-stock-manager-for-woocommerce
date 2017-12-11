@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2017-12-09 12:33+0100\n"
+"POT-Creation-Date: 2017-12-11 20:03+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -127,7 +127,7 @@ msgstr ""
 #: classes/Components/AtumOrders/AtumComments.php:171
 #: classes/InboundStock/InboundStock.php:120
 #: classes/InboundStock/InboundStock.php:126 classes/Inc/Ajax.php:1272
-#: classes/Inc/Ajax.php:1278 classes/Inc/Main.php:1118 classes/Inc/Main.php:1124
+#: classes/Inc/Ajax.php:1278 classes/Inc/Main.php:1119 classes/Inc/Main.php:1125
 #: classes/Settings/Settings.php:492 classes/Settings/Settings.php:498
 #: classes/StockCentral/StockCentral.php:138
 #: classes/StockCentral/StockCentral.php:144 classes/Suppliers/Suppliers.php:528
@@ -1004,24 +1004,24 @@ msgstr ""
 msgid "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
-#: classes/Inc/Main.php:1091
+#: classes/Inc/Main.php:1092
 #, php-format
 msgctxt "Item name in quotes"
 msgid "&ldquo;%s&rdquo;"
 msgstr ""
 
-#: classes/Inc/Main.php:1096
+#: classes/Inc/Main.php:1097
 #, php-format
 msgid "%s has been added to your cart."
 msgid_plural "%s have been added to your cart."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Inc/Main.php:1101
+#: classes/Inc/Main.php:1102
 msgid "Continue shopping"
 msgstr ""
 
-#: classes/Inc/Main.php:1104
+#: classes/Inc/Main.php:1105
 msgid "View cart"
 msgstr ""
 
@@ -1938,6 +1938,12 @@ msgstr ""
 
 #: views/dashboard-widgets/statistics-config.php:328
 msgid "Circle Stats"
+msgstr ""
+
+#: views/dashboard-widgets/statistics.php:330
+msgid ""
+"Indicators of stock availability (ATUM Statistics count variations as individual "
+"products)"
 msgstr ""
 
 #: views/help-tabs/help-sidebar.php:12

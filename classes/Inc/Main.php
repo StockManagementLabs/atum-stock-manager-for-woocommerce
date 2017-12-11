@@ -260,10 +260,10 @@ class Main {
 		if (Globals::get_stock_decimals() > 0) {
 
 			// Add min value to the quantity field (WC default = 1)
-			add_filter('woocommerce_quantity_input_min', array($this, 'stock_quantity_input_atts'));
+			add_filter('woocommerce_quantity_input_min', array($this, 'stock_quantity_input_atts'), 10, 2);
 
 			// Add step value to the quantity field (WC default = 1)
-			add_filter('woocommerce_quantity_input_step', array($this, 'stock_quantity_input_atts'));
+			add_filter('woocommerce_quantity_input_step', array($this, 'stock_quantity_input_atts'), 10, 2);
 
 			// Removes the WooCommerce filter, that is validating the quantity to be an int
 			remove_filter('woocommerce_stock_amount', 'intval');
@@ -1044,11 +1044,12 @@ class Main {
 	 *
 	 * @since 1.3.4
 	 *
-	 * @param int $val
+	 * @param int         $value
+	 * @param \WC_Product $product
 	 *
 	 * @return float|int
 	 */
-	public function stock_quantity_input_atts($val) {
+	public function stock_quantity_input_atts($value, $product) {
 		return 10 / pow(10, Globals::get_stock_decimals() + 1);
 	}
 

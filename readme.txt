@@ -7,7 +7,7 @@ Tested up to: 4.9.1
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.2.5
-Stable tag: 1.3.4.1
+Stable tag: 1.3.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -254,6 +254,12 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
 == Changelog ==
+
+= 1.3.4.2 - 2017-12-12 =
+
+Fixes:
+
+* Count all the products that have the "In stock" status in "Statistics Widget" when ATUM is not managing the stock.
 
 = 1.3.4.1 - 2017-12-09 =
 

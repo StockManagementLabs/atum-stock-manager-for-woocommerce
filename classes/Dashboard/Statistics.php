@@ -419,7 +419,7 @@ class Statistics extends DashboardWidget {
 			if ( $subscription_variations ) {
 				// The Variable products are just containers and don't count for the list views
 				$stock_counters['count_all'] += ( count( $variations ) - count( $this->variable_products ) );
-				$posts                       = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
+				$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
 			}
 
 		}
@@ -432,17 +432,31 @@ class Statistics extends DashboardWidget {
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
+				'post_status'    => 'publish',
 				'fields'         => 'ids',
-				'meta_query'     => array(
-					array(
-						'key'     => '_stock',
-						'value'   => 0,
-						'type'    => 'numeric',
-						'compare' => '>',
-					),
-				),
 				'post__in'       => $posts
 			);
+
+			// If ATUM is not managing the stock, get those that have the stock status set as "In stock"
+			if ( ! Helpers::is_atum_managing_stock() ) {
+
+				$args['meta_query'][] = array(
+					'key'     => '_stock_status',
+					'value'   => 'instock',
+					'compare' => '='
+				);
+
+			}
+			else {
+
+				$args['meta_query'][] = array(
+					'key'     => '_stock',
+					'value'   => 0,
+					'type'    => 'numeric',
+					'compare' => '>'
+				);
+
+			}
 
 			$posts_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_statistics/stock_counters/in_stock', $args ) );
 			$stock_counters['count_in_stock'] = count( $posts_in_stock->posts );
