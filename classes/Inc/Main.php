@@ -577,21 +577,22 @@ class Main {
 		// Show the "Manage Stock" checkbox on Grouped products and hide the other stock fields
 		if ( $product && is_a($product, '\\WC_Product') ) : ?>
 			<script type="text/javascript">
+				var $backOrders = jQuery('._backorders_field');
 				jQuery('._manage_stock_field').addClass('show_if_grouped show_if_product-part show_if_raw-material');
 
 				<?php // NOTE: The "wp-menu-arrow" is a WP built-in class that adds "display: none!important" so doesn't conflict with WC JS ?>
 				jQuery('#product-type').change(function() {
 					var productType = jQuery(this).val();
 					if (productType === 'grouped' || productType === 'external') {
-						jQuery('._backorders_field').addClass('wp-menu-arrow');
+						$backOrders.addClass('wp-menu-arrow');
 					}
 					else {
-						jQuery('._backorders_field').removeClass('wp-menu-arrow');
+						$backOrders.removeClass('wp-menu-arrow');
 					}
 				});
 
 				<?php if ( in_array($product->get_type(), ['grouped', 'external'] ) ): ?>
-				jQuery('._backorders_field').addClass('wp-menu-arrow');
+				$backOrders.addClass('wp-menu-arrow');
 				<?php endif; ?>
 			</script>
 		<?php endif;
