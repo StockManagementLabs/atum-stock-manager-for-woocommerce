@@ -29,6 +29,12 @@ final class Globals {
 	 * @var array
 	 */
 	private static $inheritable_product_types = ['variable', 'grouped'];
+
+	/**
+	 * The child product types
+	 * @var array
+	 */
+	private static $child_product_types = ['variation'];
 	
 	/**
 	 * The meta key where is stored the out of stock date
@@ -105,6 +111,23 @@ final class Globals {
 		}
 
 		return (array) apply_filters('atum/allowed_inheritable_product_types', self::$inheritable_product_types);
+	}
+
+	/**
+	 * Getter for the child_product_types property
+	 *
+	 * @since 1.1.4.2
+	 *
+	 * @return array
+	 */
+	public static function get_child_product_types() {
+
+		// Add WC Subscriptions compatibility
+		if ( class_exists('WC_Subscriptions') && Helpers::get_option('show_subscriptions', 'yes') == 'yes' ) {
+			self::$child_product_types = array_merge( self::$child_product_types, ['subscription_variation'] );
+		}
+
+		return (array) apply_filters('atum/allowed_child_product_types', self::$child_product_types);
 	}
 
 	/**

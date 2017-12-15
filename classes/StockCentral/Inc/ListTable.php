@@ -371,21 +371,24 @@ class ListTable extends AtumListTable {
 
 		if ($this->allow_calcs) {
 
-			$stock_on_hold = 0;
-			$orders = Helpers::get_orders( array( 'order_status' => 'wc-on-hold, wc-pending' ) );
+			global $wpdb;
+			$product_id_key = ( in_array( $this->product->get_type(), Globals::get_child_product_types() ) ) ? '_variation_id' : '_product_id';
 
-			foreach ( $orders as $order ) {
+			$sql = $wpdb->prepare("
+				SELECT SUM(omq.`meta_value`) AS qty 
+				FROM `{$wpdb->prefix}woocommerce_order_items` oi			
+				LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
+				LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
+				WHERE `order_id` IN (
+					SELECT `ID` FROM $wpdb->posts WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
+				)
+				AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` = %s AND omp.`meta_value` = %d 
+				GROUP BY omp.`meta_value`",
+				$product_id_key,
+				$this->product->get_id()
+			);
 
-				$products = $order->get_items();
-
-				foreach ( $products as $product ) {
-					if ( $this->product->get_id() == $product['product_id'] ) {
-						$stock_on_hold += $product['qty'];
-					}
-
-				}
-
-			}
+			$stock_on_hold = wc_stock_amount( $wpdb->get_var($sql) );
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
@@ -739,6 +742,7 @@ class ListTable extends AtumListTable {
 			return;
 		}
 
+		global $wpdb;
 		$extra_filter = esc_attr( $_REQUEST['extra_filter'] );
 		$filtered_products = array();
 
@@ -747,17 +751,19 @@ class ListTable extends AtumListTable {
 			case 'inbound_stock':
 
 				// Get all the products within pending Purchase Orders
-				global $wpdb;
-
 				$sql = $wpdb->prepare("
-					SELECT MAX(CAST( oim.`meta_value` AS SIGNED )) AS product_id, SUM(oim2.`meta_value`) AS quantity 			
-					FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-					LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-					LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-					LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
-					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-					AND p.`post_type` = %s AND oim.`meta_value` > 0 AND `post_status` = 'atum_pending' AND oim2.`meta_key` = '_qty'	
-					GROUP BY oim.`meta_value`;",
+					SELECT product_id, SUM(qty) AS qty FROM (
+						SELECT MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty 
+						FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` oi			
+						LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
+						LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
+						WHERE `order_id` IN (
+							SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` = 'atum_pending'
+						)
+						AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
+						GROUP BY oi.order_item_id
+					) AS T 
+					GROUP BY product_id;",
 					PurchaseOrders::POST_TYPE
 				);
 
@@ -766,7 +772,7 @@ class ListTable extends AtumListTable {
 				if ( ! empty($product_results) ) {
 
 					array_walk($product_results, function(&$item) {
-						$item = $item->quantity;
+						$item = $item->qty;
 					});
 
 					$filtered_products = $product_results;
@@ -777,22 +783,30 @@ class ListTable extends AtumListTable {
 
 			case 'stock_on_hold':
 
-				$orders = Helpers::get_orders( array( 'order_status' => 'wc-on-hold, wc-pending' ) );
+				$sql = "
+					SELECT product_id, SUM(qty) AS qty FROM (
+						SELECT  MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty FROM `wp_woocommerce_order_items` oi			
+						LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
+						LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
+						WHERE `order_id` IN (
+							SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
+						)
+						AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item'
+						AND (omp.`meta_key` IN ('_product_id', '_variation_id' )) 
+						GROUP BY oi.`order_item_id`
+					) AS T 
+					GROUP BY product_id
+				";
 
-				foreach ( $orders as $order ) {
+				$product_results = $wpdb->get_results($sql, OBJECT_K);
 
-					$products = $order->get_items();
+				if ( ! empty($product_results) ) {
 
-					foreach ( $products as $product ) {
+					array_walk($product_results, function(&$item) {
+						$item = $item->qty;
+					});
 
-						if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
-							$filtered_products[ $product['product_id'] ] += $product['qty'];
-						}
-						else {
-							$filtered_products[ $product['product_id'] ] = $product['qty'];
-						}
-
-					}
+					$filtered_products = $product_results;
 
 				}
 
@@ -843,8 +857,8 @@ class ListTable extends AtumListTable {
 
 				// Get the orders processed today
 				$atts = array(
-					'order_status'     => 'wc-processing, wc-completed',
-					'order_date_start' => 'today 00:00:00'
+					'status'     => ['wc-processing', 'wc-completed'],
+					'date_start' => 'today 00:00:00'
 				);
 				$today_orders = Helpers::get_orders($atts);
 

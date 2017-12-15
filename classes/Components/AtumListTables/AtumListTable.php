@@ -553,7 +553,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title      = '';
 		$product_id = $this->get_current_product_id();
 
-		if ( in_array( $this->product->get_type(), ['variation', 'subscription_variation'] ) ) {
+		if ( in_array( $this->product->get_type(), Globals::get_child_product_types() ) ) {
 
 			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {

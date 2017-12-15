@@ -180,7 +180,7 @@ class Statistics extends DashboardWidget {
 		$stats_this_month = $this->get_stats( $products, 'first day of this month 00:00:00', $days_elapsed );
 		$stats_today = $this->get_stats( $products, 'today 00:00:00', 1 );
 
-		$order_status = apply_filters( 'atum/dashboard_statistics/order_status', 'wc-processing, wc-completed' );
+		$order_status = (array) apply_filters( 'atum/dashboard_statistics/order_status', ['wc-processing', 'wc-completed'] );
 
 		/**
 		 * Orders this year
@@ -197,8 +197,8 @@ class Statistics extends DashboardWidget {
 		 * Orders this month
 		 */
 		$args = array(
-			'order_status'     => $order_status,
-			'order_date_start' => 'first day of this month 00:00:00'
+			'status'     => $order_status,
+			'date_start' => 'first day of this month 00:00:00'
 		);
 
 		$orders_amount_this_month = $orders_revenue_this_month = $promo_products_this_month = $promo_value_this_month = 0;
@@ -208,9 +208,9 @@ class Statistics extends DashboardWidget {
 		 * Orders previous month
 		 */
 		$args = array(
-			'order_status'     => $order_status,
-			'order_date_start' => 'first day of last month 00:00:00',
-			'order_date_end'   => 'last day of last month 23:59:59'
+			'status'     => $order_status,
+			'date_start' => 'first day of last month 00:00:00',
+			'date_end'   => 'last day of last month 23:59:59'
 		);
 
 		$orders_amount_previous_month = $orders_revenue_previous_month = $promo_products_previous_month = $promo_value_previous_month = 0;
@@ -220,8 +220,8 @@ class Statistics extends DashboardWidget {
 		 * Orders this week
 		 */
 		$args = array(
-			'order_status'     => $order_status,
-			'order_date_start' => 'Monday this week 00:00:00'
+			'status'     => $order_status,
+			'date_start' => 'Monday this week 00:00:00'
 		);
 
 		$orders_amount_this_week = $orders_revenue_this_week = $promo_products_this_week = $promo_value_this_week = 0;
@@ -231,8 +231,8 @@ class Statistics extends DashboardWidget {
 		 * Orders today
 		 */
 		$args = array(
-			'order_status'     => $order_status,
-			'order_date_start' => 'today 00:00:00'
+			'status'     => $order_status,
+			'date_start' => 'today 00:00:00'
 		);
 
 		$orders_amount_today = $orders_revenue_today = $promo_products_today = $promo_value_today = 0;

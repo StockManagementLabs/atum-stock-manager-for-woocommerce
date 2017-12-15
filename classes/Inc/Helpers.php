@@ -82,56 +82,59 @@ final class Helpers {
 	 * @param array|string $atts {
 	 *      Optional. Filters for the orders' query.
 	 *
-	 *      @type string $order_type        Comma-separated list of order's post types
-	 *      @type string $order_status      Comma-separated list of order's post statuses
-	 *      @type mixed  $orders_in         Array, integer o comma-separated list of order's IDs we want to get
-	 *      @type int    $number_orders     Max number of orders (-1 gets all)
-	 *      @type string $meta_key          Key of the meta field to filter/order (depending of orderby value)
-	 *      @type mixed  $meta_value        Value of the meta field to filter/order(depending of orderby value)
-	 *      @type string $meta_type         Meta key type. Default value is 'CHAR'
-	 *      @type string $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
-	 *      @type string $order             ASC/DESC, default to DESC
-	 *      @type string $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date)
-	 *      @type int    $order_date_start  If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime)
-	 *      @type int    $order_date_end    Requires $order_date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now
+	 *      @type array|string  $type              Order post type(s)
+	 *      @type array|string  $status            Order status(es)
+	 *      @type array         $orders_in         Array of order's IDs we want to get
+	 *      @type int           $number            Max number of orders (-1 gets all)
+	 *      @type string        $meta_key          Key of the meta field to filter/order (depending of orderby value)
+	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending of orderby value)
+	 *      @type string        $meta_type         Meta key type. Default value is 'CHAR'
+	 *      @type string        $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
+	 *      @type string        $order             ASC/DESC, default to DESC
+	 *      @type string        $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date)
+	 *      @type int           $date_start        If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime)
+	 *      @type int           $date_end          Requires $date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now
+	 *      @type string        $fields            If empty will return all the order posts. For returning only IDs the value must be 'ids'
 	 * }
-	 *
-	 * @param boolean $return_ids   Optional. If TRUE, returns an array of ID's (default FALSE)
 	 *
 	 * @return array
 	 */
-	public static function get_orders( $atts = array(), $return_ids = FALSE ) {
+	public static function get_orders( $atts = array() ) {
+
+		$atts = (array) apply_filters( 'atum/get_orders/params', wp_parse_args( $atts, array(
+			'type'         => 'shop_order',
+			'status'       => '',
+			'orders_in'    => '',
+			'number'       => - 1,
+			'meta_key'     => '',
+			'meta_value'   => '',
+			'meta_type'    => '',
+			'meta_compare' => '',
+			'order'        => '',
+			'orderby'      => '',
+			'date_start'   => '',
+			'date_end'     => '',
+			'fields'       => ''
+		) ) );
 
 		/**
 		 * Extract params
 		 *
-		 * @var string  $order_type
-		 * @var string  $order_status
-		 * @var mixed   $orders_in
-		 * @var int     $number_orders
-		 * @var string  $meta_key
-		 * @var mixed   $meta_value
-		 * @var string  $meta_type
-		 * @var string  $meta_compare
-		 * @var string  $order
-		 * @var string  $orderby
-		 * @var string  $order_date_start
-		 * @var string  $order_date_end
+		 * @var array|string  $type
+		 * @var array|string  $status
+		 * @var array         $orders_in
+		 * @var int           $number
+		 * @var string        $meta_key
+		 * @var mixed         $meta_value
+		 * @var string        $meta_type
+		 * @var string        $meta_compare
+		 * @var string        $order
+		 * @var string        $orderby
+		 * @var string        $date_start
+		 * @var string        $date_end
+		 * @var string        $fields
 		 */
-		extract( (array) apply_filters( 'atum/get_orders/params', wp_parse_args( $atts, array(
-			'order_type'       => 'shop_order',
-			'order_status'     => '',
-			'orders_in'        => '',
-			'number_orders'    => - 1,
-			'meta_key'         => '',
-			'meta_value'       => '',
-			'meta_type'        => '',
-			'meta_compare'     => '',
-			'order'            => '',
-			'orderby'          => '',
-			'order_date_start' => '',
-			'order_date_end'   => '',
-		) ) ) );
+		extract($atts);
 		
 		// WP_Query arguments
 		$args = array(
@@ -139,8 +142,8 @@ final class Helpers {
 		);
 		
 		// Post Type
-		$order_types       = explode( ', ', $order_type );
 		$wc_order_types    = wc_get_order_types();
+		$order_types       = (array) $type;
 		$valid_order_types = array();
 		
 		// Validate order types
@@ -152,10 +155,10 @@ final class Helpers {
 		
 		$args['post_type'] = $valid_order_types;
 		
-		// Post Status
-		$order_statuses       = explode( ', ', $order_status );
+		// Order Status
 		$valid_order_statuses = array();
 		$wc_order_statuses    = array_keys( wc_get_order_statuses() );
+		$order_statuses       = (array) $status;
 		
 		// Validate post statuses
 		foreach ( $order_statuses as $os ) {
@@ -176,7 +179,7 @@ final class Helpers {
 			$args['post__in'] = array_map( 'absint', $orders_in );
 		}
 		
-		$args['posts_per_page'] = ( $number_orders ) ? $number_orders : - 1;
+		$args['posts_per_page'] = intval($number);
 		
 		// Filter/Order by meta key
 		if ( $meta_key ) {
@@ -215,19 +218,19 @@ final class Helpers {
 		}
 
 		// Filter by date
-		if ( $order_date_start ) {
+		if ( $date_start ) {
 
 			$args['date_query'][] = array(
-				'after'     => $order_date_start,
-				'before'    => $order_date_end ? $order_date_end : 'now',
+				'after'     => $date_start,
+				'before'    => $date_end ? $date_end : 'now',
 				'inclusive' => TRUE
 			);
 			
 		}
 		
-		//Return only ID's
-		if ( $return_ids ) {
-			$args['fields'] = 'ids';
+		// Return only ID's
+		if ( $fields ) {
+			$args['fields'] = $fields;
 		}
 		
 		$result = array();
@@ -235,7 +238,7 @@ final class Helpers {
 		
 		if ( $query->post_count > 0 ) {
 			
-			if ( $return_ids ) {
+			if ( $fields ) {
 				$result = $query->posts;
 			}
 			else {
@@ -265,43 +268,48 @@ final class Helpers {
 	public static function get_sold_last_days( $items, $date_start, $date_end = NULL ) {
 
 		$items_sold = array();
-		$args = array(
-			'order_status'     => apply_filters( 'atum/sold_last_days/order_status', 'wc-processing, wc-completed' ),
-			'order_date_start' => $date_start,
-			'order_date_end'   => $date_end
-		);
 
 		if ( ! empty($items) ) {
 
-			$orders = self::get_orders( $args, TRUE );
+			global $wpdb;
 
-			if ( ! empty( $orders ) ) {
+			// Prepare the SQL query to get the orders in the specified time window
+			$date_start = date_i18n( 'Y-m-d H:i:s', strtotime($date_start) );
+			$date_where = $wpdb->prepare("WHERE post_date >= %s", $date_start);
 
-				global $wpdb;
-				$orders   = implode( ',', $orders );
-				$products = implode( ',', $items );
-
-				$str_sql = "SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
-							MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
-							FROM `{$wpdb->posts}` AS `ORDERS`
-							    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
-							        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-							    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_ID`
-							        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-							    INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_QTY`
-							        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-						        INNER JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` AS `META_PROD_TOTAL`
-							        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
-							WHERE (`ORDERS`.`ID` IN ($orders)
-							    AND `META_PROD_ID`.`meta_value` IN ($products)
-							    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
-							    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
-							GROUP BY `META_PROD_ID`.`meta_value`
-							HAVING (`QTY` IS NOT NULL);";
-
-				$items_sold = $wpdb->get_results( $str_sql, ARRAY_A );
-
+			if ($date_end) {
+				$date_end   = date_i18n( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_where .= $wpdb->prepare( " AND post_date <= %s", $date_end );
 			}
+
+			$orders_query = "
+				SELECT ID FROM $wpdb->posts  
+				$date_where
+				AND post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-completed')				  
+			";
+
+			$products = implode( ',', $items );
+
+			$query = "
+				SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
+				MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
+				FROM `{$wpdb->posts}` AS `ORDERS`
+				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
+				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
+				    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID`
+				        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
+				    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY`
+				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
+			        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL`
+				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
+				WHERE (`ORDERS`.`ID` IN ($orders_query) AND `META_PROD_ID`.`meta_value` IN ($products)
+			    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
+			    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
+				GROUP BY `META_PROD_ID`.`meta_value`
+				HAVING (`QTY` IS NOT NULL);
+			";
+
+			$items_sold = $wpdb->get_results( $query, ARRAY_A );
 
 		}
 
