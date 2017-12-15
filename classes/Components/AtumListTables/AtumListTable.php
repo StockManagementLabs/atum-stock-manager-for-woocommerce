@@ -1765,21 +1765,21 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function product_search( $where ) {
 
-		global $pagenow, $wpdb, $wp;
+		global $pagenow, $wpdb;
 
 		/**
 		 * Changed the WooCommerce's "product_search" filter to allow Ajax requests
 		 * @see \\WC_Admin_Post_Types\product_search
 		 */
 		if (
-			! in_array( $pagenow, array('edit.php', 'admin-ajax.php') ) || ! is_search() ||
-		    ! isset( $wp->query_vars['s'] ) || 'product' != $wp->query_vars['post_type']
+			! in_array( $pagenow, array('edit.php', 'admin-ajax.php') ) ||
+		    ! isset( $_GET['s'], $_GET['action'] ) || strpos( $_GET['action'], ATUM_PREFIX ) === FALSE
 		) {
 			return $where;
 		}
 
 		$search_ids = array();
-		$terms      = explode( ',', $wp->query_vars['s'] );
+		$terms      = explode( ',', $_GET['s'] );
 
 		foreach ( $terms as $term ) {
 
