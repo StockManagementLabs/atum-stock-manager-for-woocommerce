@@ -785,7 +785,7 @@ class ListTable extends AtumListTable {
 
 				$sql = "
 					SELECT product_id, SUM(qty) AS qty FROM (
-						SELECT  MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty FROM `wp_woocommerce_order_items` oi			
+						SELECT  MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty FROM `{$wpdb->prefix}woocommerce_order_items` oi			
 						LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
 						LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 						WHERE `order_id` IN (
