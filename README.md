@@ -213,6 +213,15 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.5 - 2017-12-15**
+
+Fixes:
+
+* Count all the products that have the "In stock" status in "Statistics Widget" when ATUM is not managing the stock.
+* Improved performance for sites with big amount of orders.
+* Fixed List table search to find product SKUs and IDs.
+* Improved Stock Central’s extra filters performance.
+
 **1.3.4.1 - 2017-12-09**
 
 Fixes:
