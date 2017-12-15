@@ -744,171 +744,193 @@ class ListTable extends AtumListTable {
 
 		global $wpdb;
 		$extra_filter = esc_attr( $_REQUEST['extra_filter'] );
-		$filtered_products = array();
+		$sorted       = FALSE;
 
-		switch ( $extra_filter ) {
+		$extra_filter_transient = 'atum_list_table_extra_filter_' . Helpers::get_transient_identifier( $extra_filter );
+		$filtered_products      = Helpers::get_transient( $extra_filter_transient );
 
-			case 'inbound_stock':
+		if ( empty($filtered_products) ) {
 
-				// Get all the products within pending Purchase Orders
-				$sql = $wpdb->prepare("
-					SELECT product_id, SUM(qty) AS qty FROM (
-						SELECT MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty 
-						FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` oi			
-						LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
-						LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
-						WHERE `order_id` IN (
-							SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` = 'atum_pending'
-						)
-						AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
-						GROUP BY oi.order_item_id
-					) AS T 
-					GROUP BY product_id;",
-					PurchaseOrders::POST_TYPE
-				);
+			switch ( $extra_filter ) {
 
-				$product_results = $wpdb->get_results($sql, OBJECT_K);
+				case 'inbound_stock':
 
-				if ( ! empty($product_results) ) {
+					// Get all the products within pending Purchase Orders
+					$sql = $wpdb->prepare( "
+						SELECT product_id, SUM(qty) AS qty FROM (
+							SELECT MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty 
+							FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` oi			
+							LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
+							LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
+							WHERE `order_id` IN (
+								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` = 'atum_pending'
+							)
+							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
+							GROUP BY oi.order_item_id
+						) AS T 
+						GROUP BY product_id
+						ORDER by qty DESC;",
+						PurchaseOrders::POST_TYPE
+					);
 
-					array_walk($product_results, function(&$item) {
-						$item = $item->qty;
-					});
+					$product_results = $wpdb->get_results( $sql, OBJECT_K );
 
-					$filtered_products = $product_results;
+					if ( ! empty( $product_results ) ) {
 
-				}
+						array_walk( $product_results, function ( &$item ) {
 
-		        break;
+							$item = $item->qty;
+						} );
 
-			case 'stock_on_hold':
+						$filtered_products = $product_results;
+						$sorted            = TRUE;
 
-				$sql = "
-					SELECT product_id, SUM(qty) AS qty FROM (
-						SELECT  MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty FROM `{$wpdb->prefix}woocommerce_order_items` oi			
-						LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
-						LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
-						WHERE `order_id` IN (
-							SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
-						)
-						AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item'
-						AND (omp.`meta_key` IN ('_product_id', '_variation_id' )) 
-						GROUP BY oi.`order_item_id`
-					) AS T 
-					GROUP BY product_id
-				";
-
-				$product_results = $wpdb->get_results($sql, OBJECT_K);
-
-				if ( ! empty($product_results) ) {
-
-					array_walk($product_results, function(&$item) {
-						$item = $item->qty;
-					});
-
-					$filtered_products = $product_results;
-
-				}
-
-				break;
-
-			case 'reserved_stock':
-
-				// Get all the products within 'Reserved Stock' logs
-				$filtered_products = $this->get_log_products('reserved-stock', 'pending');
-				break;
-
-			case 'back_orders':
-
-				// Avoid infinite loop of recalls
-				remove_action( 'pre_get_posts', array($this, 'do_extra_filter') );
-
-				// Get all the products that allow back orders
-				$args = array(
-					'post_type'      => 'product',
-					'posts_per_page' => - 1,
-					'meta_key'       => '_backorders',
-					'meta_value'     => 'yes'
-				);
-				$products = get_posts($args);
-
-				foreach ($products as $product) {
-
-					$wc_product     = wc_get_product( $product->ID );
-					$back_orders    = 0;
-					$stock_quantity = $wc_product->get_stock_quantity();
-
-					if ( $stock_quantity < $this->no_stock ) {
-						$back_orders = $this->no_stock - $stock_quantity;
 					}
 
-					if ($back_orders) {
-						$filtered_products[ $wc_product->get_id() ] = $back_orders;
+					break;
+
+				case 'stock_on_hold':
+
+					$sql = "
+						SELECT product_id, SUM(qty) AS qty FROM (
+							SELECT  MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty FROM `{$wpdb->prefix}woocommerce_order_items` oi			
+							LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
+							LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
+							WHERE `order_id` IN (
+								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
+							)
+							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item'
+							AND (omp.`meta_key` IN ('_product_id', '_variation_id' )) 
+							GROUP BY oi.`order_item_id`
+						) AS T 
+						GROUP BY product_id
+						ORDER BY qty DESC;
+					";
+
+					$product_results = $wpdb->get_results( $sql, OBJECT_K );
+
+					if ( ! empty( $product_results ) ) {
+
+						array_walk( $product_results, function ( &$item ) {
+
+							$item = $item->qty;
+						} );
+
+						$filtered_products = $product_results;
+						$sorted            = TRUE;
+
 					}
 
-				}
+					break;
 
-				// Re-add the action
-				add_action( 'pre_get_posts', array($this, 'do_extra_filter') );
+				case 'reserved_stock':
 
-				break;
+					// Get all the products within 'Reserved Stock' logs
+					$filtered_products = $this->get_log_products( 'reserved-stock', 'pending' );
+					break;
 
-			case 'sold_today':
+				case 'back_orders':
 
-				// Get the orders processed today
-				$atts = array(
-					'status'     => ['wc-processing', 'wc-completed'],
-					'date_start' => 'today 00:00:00'
-				);
-				$today_orders = Helpers::get_orders($atts);
+					// Avoid infinite loop of recalls
+					remove_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 
-				foreach ( $today_orders as $today_order ) {
-
-					$products = $today_order->get_items();
+					// Get all the products that allow back orders
+					$args     = array(
+						'post_type'      => 'product',
+						'posts_per_page' => - 1,
+						'meta_key'       => '_backorders',
+						'meta_value'     => 'yes'
+					);
+					$products = get_posts( $args );
 
 					foreach ( $products as $product ) {
 
-						if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
-							$filtered_products[ $product['product_id'] ] += $product['qty'];
+						$wc_product     = wc_get_product( $product->ID );
+						$back_orders    = 0;
+						$stock_quantity = $wc_product->get_stock_quantity();
+
+						if ( $stock_quantity < $this->no_stock ) {
+							$back_orders = $this->no_stock - $stock_quantity;
 						}
-						else {
-							$filtered_products[ $product['product_id'] ] = $product['qty'];
+
+						if ( $back_orders ) {
+							$filtered_products[ $wc_product->get_id() ] = $back_orders;
 						}
 
 					}
 
+					// Re-add the action
+					add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
+
+					break;
+
+				case 'sold_today':
+
+					// Get the orders processed today
+					$atts         = array(
+						'status'     => [ 'wc-processing', 'wc-completed' ],
+						'date_start' => 'today 00:00:00'
+					);
+					$today_orders = Helpers::get_orders( $atts );
+
+					foreach ( $today_orders as $today_order ) {
+
+						$products = $today_order->get_items();
+
+						foreach ( $products as $product ) {
+
+							if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
+								$filtered_products[ $product['product_id'] ] += $product['qty'];
+							} else {
+								$filtered_products[ $product['product_id'] ] = $product['qty'];
+							}
+
+						}
+
+					}
+
+					break;
+
+				case 'customer_returns':
+
+					// Get all the products within 'Customer Returns' logs
+					$filtered_products = $this->get_log_products( 'customer-returns', 'pending' );
+					break;
+
+				case 'warehouse_damages':
+
+					// Get all the products within 'Warehouse Damage' logs
+					$filtered_products = $this->get_log_products( 'warehouse-damage', 'pending' );
+					break;
+
+				case 'lost_in_post':
+
+					// Get all the products within 'Lost in Post' logs
+					$filtered_products = $this->get_log_products( 'lost-in-post', 'pending' );
+					break;
+
+			}
+
+			if ( ! empty($filtered_products) ) {
+
+				// Order desc by quantity and get the ordered IDs
+				if ( ! $sorted ) {
+					arsort( $filtered_products );
 				}
 
-				break;
+				$filtered_products = array_keys( $filtered_products );
+			}
 
-			case 'customer_returns':
-
-				// Get all the products within 'Customer Returns' logs
-				$filtered_products = $this->get_log_products('customer-returns', 'pending');
-				break;
-
-			case 'warehouse_damages':
-
-				// Get all the products within 'Warehouse Damage' logs
-				$filtered_products = $this->get_log_products('warehouse-damage', 'pending');
-				break;
-
-			case 'lost_in_post':
-
-				// Get all the products within 'Lost in Post' logs
-				$filtered_products = $this->get_log_products('lost-in-post', 'pending');
-				break;
+			// Set the transient to expire in 60 seconds
+			Helpers::set_transient($extra_filter_transient, $filtered_products, 60);
 
 		}
 
+		// Filter the query posts by these IDs
 		if ( ! empty($filtered_products) ) {
 
-			// Order desc by quantity and get the ordered IDs
-			arsort($filtered_products);
-			$filtered_products = array_keys($filtered_products);
-
-			// Filter the query posts by these IDs
 			$query->set( 'post__in', $filtered_products );
+			$query->set( 'orderby', 'post__in' );
 
 		}
 		// Force no results ("-1" never will be a post ID)
