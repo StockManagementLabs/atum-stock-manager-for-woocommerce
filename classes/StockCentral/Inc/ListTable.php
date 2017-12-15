@@ -778,7 +778,6 @@ class ListTable extends AtumListTable {
 					if ( ! empty( $product_results ) ) {
 
 						array_walk( $product_results, function ( &$item ) {
-
 							$item = $item->qty;
 						} );
 
@@ -812,7 +811,6 @@ class ListTable extends AtumListTable {
 					if ( ! empty( $product_results ) ) {
 
 						array_walk( $product_results, function ( &$item ) {
-
 							$item = $item->qty;
 						} );
 
@@ -867,7 +865,7 @@ class ListTable extends AtumListTable {
 				case 'sold_today':
 
 					// Get the orders processed today
-					$atts         = array(
+					$atts = array(
 						'status'     => [ 'wc-processing', 'wc-completed' ],
 						'date_start' => 'today 00:00:00'
 					);
@@ -881,7 +879,8 @@ class ListTable extends AtumListTable {
 
 							if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
 								$filtered_products[ $product['product_id'] ] += $product['qty'];
-							} else {
+							}
+							else {
 								$filtered_products[ $product['product_id'] ] = $product['qty'];
 							}
 
