@@ -64,7 +64,7 @@ class AtumCapabilities {
 	 */
 	public function add_capabilities() {
 
-		$admin_roles = array( get_role('administrator'), get_role('manage_woocommerce') );
+		$admin_roles = (array) apply_filters('atum/capabilities/admin_roles', [ get_role('administrator') ] );
 
 		foreach ($admin_roles as $admin_role) {
 
