@@ -47,11 +47,6 @@ final class Globals {
 	 * @var int
 	 */
 	private static $stock_decimals;
-	
-	/**
-	 * The ATUM admin page slug
-	 */
-	const ATUM_UI_SLUG = 'atum-stock-central';
 
 	/**
 	 * The ATUM pages hook name

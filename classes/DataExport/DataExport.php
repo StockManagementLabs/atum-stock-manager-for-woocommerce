@@ -13,8 +13,8 @@
 
 namespace Atum\DataExport;
 
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\StockCentral\StockCentral;
 
 
 defined( 'ABSPATH' ) or die;
@@ -48,7 +48,7 @@ class DataExport {
 	public function enqueue_scripts( $hook ) {
 
 		// Load the script on the "Stock Central" page by default
-		$allowed_pages = (array) apply_filters( 'atum/data_export/allowed_pages', ['toplevel_page_' . Globals::ATUM_UI_SLUG] );
+		$allowed_pages = (array) apply_filters( 'atum/data_export/allowed_pages', ['toplevel_page_' . StockCentral::UI_SLUG] );
 		if ( in_array($hook, $allowed_pages) ) {
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';

@@ -20,6 +20,7 @@ use Atum\Components\HelpPointers;
 use Atum\Dashboard\Statistics;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
@@ -40,6 +41,12 @@ class Main {
 	 * @var array
 	 */
 	private $menu_items = array();
+
+	/**
+	 * The menu item that will be used as main (parent for all submenus)
+	 * @var array
+	 */
+	private static $main_menu_item = array();
 	
 	/**
 	 * The ATUM menu items order
@@ -47,30 +54,6 @@ class Main {
 	 * @var array
 	 */
 	private $menu_items_order = array();
-	
-	/**
-	 * The Settings page object
-	 * @var Settings
-	 */
-	private $sp_obj;
-	
-	/**
-	 * The Stock Central object
-	 * @var StockCentral
-	 */
-	private $sc_obj;
-
-	/**
-	 * The Inbound Stock object
-	 * @var InboundStock
-	 */
-	private $ib_obj;
-
-	/**
-	 * The Addons object
-	 * @var Addons
-	 */
-	private $ad_obj;
 
 
 	/**
@@ -169,7 +152,7 @@ class Main {
 	 * @since 1.1.2
 	 */
 	public function load_addons () {
-		$this->ad_obj = Addons::get_instance();
+		Addons::get_instance();
 	}
 
 	/**
@@ -180,40 +163,19 @@ class Main {
 	 */
 	public function load() {
 
-		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array(
-			'stock-central' => array(
-				'title'      => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-				'callback'   => array( $this->sc_obj, 'display' ),
-				'slug'       => Globals::ATUM_UI_SLUG,
-				'menu_order' => 10
-			),
-			'inbound-stock' => array(
-				'title'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-				'callback'     => array( $this->ib_obj, 'display' ),
-				'slug'         => InboundStock::UI_SLUG,
-				'menu_order'   => 20,
-				'capability'   => ATUM_PREFIX . 'view_inbound_stock'
-			),
-			'settings'      => array(
-				'title'      => __( 'Settings', ATUM_TEXT_DOMAIN ),
-				'callback'   => array( $this->sp_obj, 'display' ),
-				'slug'       => ATUM_TEXT_DOMAIN . '-settings',
-				'menu_order' => 80
-			),
-			'addons'        => array(
-				'title'      => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
-				'callback'   => array( $this->ad_obj, 'load_addons_page' ),
-				'slug'       => ATUM_TEXT_DOMAIN . '-addons',
-				'menu_order' => 90
-			)
-		) );
-		
+		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
+
 		foreach ( $this->menu_items as $menu_item ) {
 			$this->menu_items_order[] = array(
 				'slug'       => $menu_item['slug'],
 				'menu_order' => ( empty( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
 			);
 		}
+
+		// The first submenu will be the main (parent) menu too
+		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
+		self::$main_menu_item = reset( self::$main_menu_item );
+
 
 		// Register the Locations taxonomy and link it to products
 		$labels = array(
@@ -243,14 +205,20 @@ class Main {
 
 
 		// Init the Inventory Logs
-		new InventoryLogs();
+		if ( ModuleManager::is_module_active('inventory_logs') ) {
+			new InventoryLogs();
+		}
 
-		// Init Suppliers
-		Suppliers::get_instance();
+		if ( ModuleManager::is_module_active('purchase_orders') ) {
 
-		// Init the Purchase Orders
-		if ( current_user_can(ATUM_PREFIX . 'manage_po') ) {
-			new PurchaseOrders();
+			// Init Suppliers
+			Suppliers::get_instance();
+
+			// Init the Purchase Orders
+			if ( current_user_can( ATUM_PREFIX . 'manage_po' ) ) {
+				new PurchaseOrders();
+			}
+
 		}
 
 		// Set the stock decimals setting globally
@@ -279,7 +247,7 @@ class Main {
 	}
 	
 	/**
-	 * Load admin plugin dependencies and performs initial checkings
+	 * Load admin plugin dependencies and performs initializations
 	 *
 	 * @since 0.0.3
 	 */
@@ -289,25 +257,44 @@ class Main {
 		
 		if ( version_compare($db_version, ATUM_VERSION, '!=') ) {
 			// Do upgrade tasks
-			new Upgrade( $db_version ? $db_version : '0.0.1' );
+			new Upgrade( $db_version ?: '0.0.1' );
 		}
 		
 		// Load language files
 		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' );
 
-		// Load modules
+		//
+		// Load core modules
+		//-------------------
+
+		ModuleManager::get_instance();
 		AtumCapabilities::get_instance();
 		Ajax::get_instance();
-		$this->sp_obj = Settings::get_instance();
-		$this->sc_obj = StockCentral::get_instance();
-		$this->ib_obj = InboundStock::get_instance();
+		Settings::get_instance();
 
-		// Load extra components
-		new Statistics( __('ATUM Statistics', ATUM_TEXT_DOMAIN) );
-		new DataExport();
+		//
+		// Load extra modules
+		//--------------------
 
+		if ( ModuleManager::is_module_active('stock_central') ) {
+			StockCentral::get_instance();
+		}
+
+		if ( ModuleManager::is_module_active('purchase_orders') ) {
+			InboundStock::get_instance();
+		}
+
+		if ( ModuleManager::is_module_active('dashboard_statistics') ) {
+			new Statistics( __( 'ATUM Statistics', ATUM_TEXT_DOMAIN ) );
+		}
+
+		if ( ModuleManager::is_module_active('data_export') ) {
+			new DataExport();
+		}
+
+		// TODO: CREATE A FIRST-ACCESS TUTORIAL WITH HELP POINTERS (LIKE WC)
 		// Register the help pointers
-		add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
+		//add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
 
 		// Admin styles
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
@@ -326,10 +313,10 @@ class Main {
 		
 		// Add the main menu item
 		add_menu_page(
-			__( 'Stock Central', ATUM_TEXT_DOMAIN ),
+			self::$main_menu_item['title'],
 			__( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 			'manage_woocommerce',
-			Globals::ATUM_UI_SLUG,
+			self::$main_menu_item['slug'],
 			'',
 			ATUM_URL . 'assets/images/atum-icon.svg',
 			58 // Add the menu just after the WC Products
@@ -337,7 +324,7 @@ class Main {
 
 		// Overwrite the main menu item hook name set by add_menu_page to avoid conflicts with translations
 		global $admin_page_hooks;
-		$admin_page_hooks[Globals::ATUM_UI_SLUG] = Globals::ATUM_UI_HOOK;
+		$admin_page_hooks[ self::$main_menu_item['slug'] ] = Globals::ATUM_UI_HOOK;
 		
 		// Build the submenu items
 		if ( ! empty($this->menu_items) ) {
@@ -351,7 +338,7 @@ class Main {
 				}
 
 				add_submenu_page(
-					Globals::ATUM_UI_SLUG,
+					self::$main_menu_item['slug'],
 					$menu_item['title'],
 					$menu_item['title'],
 					isset($menu_item['capability']) ? $menu_item['capability'] : 'manage_woocommerce',
@@ -379,9 +366,9 @@ class Main {
 
 		global $submenu;
 
-		if ( ! empty($submenu) && ! empty( $submenu[ Globals::ATUM_UI_SLUG ] ) ) {
+		if ( ! empty($submenu) && ! empty( $submenu[ self::$main_menu_item['slug'] ] ) ) {
 
-			$menu_items = $submenu[ Globals::ATUM_UI_SLUG ];
+			$menu_items = $submenu[ self::$main_menu_item['slug'] ];
 			$this->menu_items_order = (array) apply_filters( 'atum/admin/menu_items_order', $this->menu_items_order );
 			
 			usort($menu_items, function ($a, $b) {
@@ -406,7 +393,7 @@ class Main {
 
 			});
 
-			$submenu[ Globals::ATUM_UI_SLUG ] = apply_filters( 'atum/menu_order', $menu_items );
+			$submenu[ self::$main_menu_item['slug'] ] = apply_filters( 'atum/menu_order', $menu_items );
 
 		}
 
@@ -433,9 +420,9 @@ class Main {
 
 		// Add the main menu item
 		$wp_admin_bar->add_node( array(
-			'id'    => Globals::ATUM_UI_SLUG,
+			'id'    => self::$main_menu_item['slug'],
 			'title' => '<span class="ab-icon"><img src="' . ATUM_URL . 'assets/images/atum-icon.svg" style="padding-top: 2px"></span><span class="ab-label">ATUM</span>',
-			'href'  => admin_url( 'admin.php?page=' . Globals::ATUM_UI_SLUG )
+			'href'  => admin_url( 'admin.php?page=' . self::$main_menu_item['slug'] )
 		) );
 
 		$submenu_items = (array) apply_filters('atum/admin/top_bar/menu_items', $this->menu_items);
@@ -459,7 +446,7 @@ class Main {
 
 				$wp_admin_bar->add_node( array(
 					'id'     => "$slug-item",
-					'parent' => Globals::ATUM_UI_SLUG,
+					'parent' => self::$main_menu_item['slug'],
 					'title'  => $menu_item['title'],
 					'href'   => admin_url( $href )
 				) );
@@ -730,7 +717,7 @@ class Main {
 		// Product variations
 		if ( isset($_POST['variation_purchase_price']) ) {
 			$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
-			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
+			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
 			update_post_meta( $post_id, '_purchase_price', $purchase_price );
 		}
 		else {
@@ -743,7 +730,7 @@ class Main {
 			}
 			else {
 				$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
-				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
+				$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
 				update_post_meta( $post_id, '_purchase_price', $purchase_price);
 			}
 
@@ -950,26 +937,34 @@ class Main {
 		
 		$pointers = array(
 			array(
-				'id'       => Globals::ATUM_UI_SLUG . '-help-tab',      // Unique id for this pointer
+				'id'       => self::$main_menu_item['slug'] . '-help-tab',      // Unique id for this pointer
 				'next'     => 'screen-tab',
-				'screen'   => 'toplevel_page_' . Globals::ATUM_UI_SLUG, // This is the page hook we want our pointer to show on
-				'target'   => '#contextual-help-link-wrap',             // The css selector for the pointer to be tied to, best to use ID's
+				'screen'   => 'toplevel_page_' . self::$main_menu_item['slug'], // This is the page hook we want our pointer to show on
+				'target'   => '#contextual-help-link-wrap',                     // The css selector for the pointer to be tied to, best to use ID's
 				'title'    => __('ATUM Quick Help', ATUM_TEXT_DOMAIN),
 				'content'  => __("Click the 'Help' tab to learn more about the ATUM's Stock Central.", ATUM_TEXT_DOMAIN),
 				'position' => array(
-					'edge'  => 'top',                                   // Top, bottom, left, right
-					'align' => 'left'                                   // Top, bottom, left, right, middle
+					'edge'  => 'top',                                           // Top, bottom, left, right
+					'align' => 'right'                                           // Top, bottom, left, right, middle
+				),
+				'arrow_position' => array(
+					'left' => 'auto',
+					'right' => '32px'
 				)
 			),
 			array(
-				'id'       => Globals::ATUM_UI_SLUG . '-screen-tab',
-				'screen'   => 'toplevel_page_' . Globals::ATUM_UI_SLUG,
+				'id'       => self::$main_menu_item['slug'] . '-screen-tab',
+				'screen'   => 'toplevel_page_' . self::$main_menu_item['slug'],
 				'target'   => '#screen-options-link-wrap',
 				'title'    => __('ATUM Screen Setup', ATUM_TEXT_DOMAIN),
 				'content'  => __("Click the 'Screen Options' tab to setup your table view preferences.", ATUM_TEXT_DOMAIN),
 				'position' => array(
 					'edge'  => 'top',
 					'align' => 'left'
+				),
+				'arrow_position' => array(
+					'left' => 'auto',
+					'right' => '166px'
 				)
 			)
 		);
@@ -1016,7 +1011,7 @@ class Main {
 
 		$current_screen = get_current_screen();
 
-		if ( isset( $current_screen->id ) && $current_screen->parent_base == Globals::ATUM_UI_SLUG ) {
+		if ( isset( $current_screen->id ) && $current_screen->parent_base == self::$main_menu_item['slug'] ) {
 
 			// Change the footer text
 			if ( ! get_option( 'atum_admin_footer_text_rated' ) ) {
@@ -1109,6 +1104,19 @@ class Main {
 		return $message;
 
 	}
+
+	/**
+	 * Getter for the main_menu_item prop
+	 *
+	 * @since 1.3.6
+	 *
+	 * @return array
+	 */
+	public static function get_main_menu_item() {
+
+		return self::$main_menu_item;
+	}
+
 	
 	
 	/****************************

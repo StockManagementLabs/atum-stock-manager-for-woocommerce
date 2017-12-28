@@ -42,6 +42,7 @@ return array(
     'Atum\\InventoryLogs\\Items\\LogItemTrait' => $baseDir . '/classes/InventoryLogs/Items/LogItemTrait.php',
     'Atum\\InventoryLogs\\Models\\Log' => $baseDir . '/classes/InventoryLogs/Models/Log.php',
     'Atum\\InventoryLogs\\Models\\LogItem' => $baseDir . '/classes/InventoryLogs/Models/LogItem.php',
+    'Atum\\Modules\\ModuleManager' => $baseDir . '/classes/Modules/ModuleManager.php',
     'Atum\\PurchaseOrders\\Items\\POItemFee' => $baseDir . '/classes/PurchaseOrders/Items/POItemFee.php',
     'Atum\\PurchaseOrders\\Items\\POItemProduct' => $baseDir . '/classes/PurchaseOrders/Items/POItemProduct.php',
     'Atum\\PurchaseOrders\\Items\\POItemShipping' => $baseDir . '/classes/PurchaseOrders/Items/POItemShipping.php',

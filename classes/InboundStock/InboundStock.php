@@ -33,6 +33,11 @@ class InboundStock extends AtumListPage {
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-inbound-stock';
+
+	/**
+	 * The menu order for this module
+	 */
+	const MENU_ORDER = 20;
 	
 	/**
 	 * InboundStock singleton constructor
@@ -41,14 +46,40 @@ class InboundStock extends AtumListPage {
 	 */
 	private function __construct() {
 		
-		$user_option = get_user_meta( get_current_user_id(), 'products_per_page', TRUE );
-		$this->per_page = ( $user_option ) ? $user_option : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+		$user_option = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'inbound_stock_products_per_page', TRUE );
+		$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+
+		// Add the module menu
+		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
 
 		// Initialize on admin page load
 		add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
 		parent::init_hooks();
 		
+	}
+
+	/**
+	 * Add the Inbound Stock menu
+	 *
+	 * @since 1.3.6
+	 *
+	 * @param array $menus
+	 *
+	 * @return array
+	 */
+	public function add_menu ($menus) {
+
+		$menus['inbound-stock'] = array(
+			'title'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'callback'     => array( $this, 'display' ),
+			'slug'         => self::UI_SLUG,
+			'menu_order'   => self::MENU_ORDER,
+			'capability'   => ATUM_PREFIX . 'view_inbound_stock'
+		);
+
+		return $menus;
+
 	}
 	
 	/**
@@ -78,7 +109,7 @@ class InboundStock extends AtumListPage {
 		$args   = array(
 			'label'   => __('Products per page', ATUM_TEXT_DOMAIN),
 			'default' => $this->per_page,
-			'option'  => 'products_per_page'
+			'option'  => ATUM_PREFIX . 'inbound_stock_products_per_page'
 		);
 		
 		add_screen_option( 'per_page', $args );

@@ -22,6 +22,7 @@ use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
 use Atum\StockCentral\Inc\ListTable as StockCentralListTable;
 use Atum\InventoryLogs\Models\Log;
+use Atum\StockCentral\StockCentral;
 use Atum\Suppliers\Suppliers;
 
 
@@ -102,7 +103,7 @@ final class Ajax {
 
 		$args = array(
 			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'screen'   => 'toplevel_page_' . Globals::ATUM_UI_SLUG
+			'screen'   => 'toplevel_page_' . StockCentral::UI_SLUG
 		);
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );

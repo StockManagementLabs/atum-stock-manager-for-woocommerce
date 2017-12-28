@@ -12,8 +12,10 @@
 
 namespace Atum\Suppliers;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\Inc\Main;
 
 
 defined( 'ABSPATH' ) or die;
@@ -65,42 +67,45 @@ class Suppliers {
 		
 		$this->register_post_type();
 
-		if ( current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+		// Admin Hooks
+		if ( is_admin() ) {
 
-			// Add columns to Suppliers list table
-			add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
-			add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
+			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 
-			// Add the "Suppliers" link to the ATUM's admin bar menu
-			add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12);
+				// Add columns to Suppliers list table
+				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
+				add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
 
-			// Add item order
-			add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+				// Add the "Suppliers" link to the ATUM's admin bar menu
+				add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12 );
+
+				// Add item order
+				add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
+			}
+
+			if ( AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
+
+				// Add meta boxes to Supplier post UI
+				add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
+
+				// Save the supplier's meta boxes
+				add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
+
+				// Enqueue scripts
+				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+			}
+
+			// Add the supplier selection to products
+			add_action( 'woocommerce_product_options_general_product_data', array( $this, 'show_product_supplier_meta_box' ) );
+			add_action( 'woocommerce_variation_options_pricing', array( $this, 'show_product_supplier_meta_box' ), 11, 3 );
+
+			// Save the product supplier meta box
+			add_action( 'save_post_product', array( $this, 'save_product_supplier_meta_box' ) );
+			add_action( 'woocommerce_update_product_variation', array( $this, 'save_product_supplier_meta_box' ) );
 
 		}
-
-		if ( current_user_can(ATUM_PREFIX . 'edit_supplier') ) {
-
-			// Add meta boxes to Supplier post UI
-			add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
-
-			// Save the supplier's meta boxes
-			add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
-
-			// Enqueue scripts
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		}
-
-		// Add the supplier selection to products
-		add_action( 'woocommerce_product_options_general_product_data', array($this, 'show_product_supplier_meta_box') );
-		add_action( 'woocommerce_variation_options_pricing', array($this, 'show_product_supplier_meta_box'), 11, 3 );
-
-		// Save the product supplier meta box
-		add_action( 'save_post_product' , array( $this, 'save_product_supplier_meta_box' ) );
-		add_action( 'woocommerce_update_product_variation', array($this, 'save_product_supplier_meta_box') );
-
-
 
 	}
 
@@ -115,6 +120,7 @@ class Suppliers {
 
 		// Minimum capability required
 		$is_user_allowed = current_user_can( 'manage_woocommerce' );
+		$main_menu_item  = Main::get_main_menu_item();
 
 		$this->labels = array(
 			'name'                  => __( 'Suppliers', ATUM_TEXT_DOMAIN ),
@@ -144,7 +150,7 @@ class Suppliers {
 			'publicly_queryable'  => FALSE,
 			'exclude_from_search' => TRUE,
 			'hierarchical'        => FALSE,
-			'show_in_menu'        => $is_user_allowed ? Globals::ATUM_UI_SLUG : FALSE,
+			'show_in_menu'        => $is_user_allowed ? $main_menu_item['slug'] : FALSE,
 			'show_in_nav_menus'   => FALSE,
 			'rewrite'             => FALSE,
 			'query_var'           => is_admin(),
@@ -383,10 +389,12 @@ class Suppliers {
 			$supplier = get_post($supplier_id);
 		}
 
-		// If the user is not allowed to edit Suppliers, display a hidden input
-		if ( ! current_user_can(ATUM_PREFIX . 'edit_supplier') ): ?>
+		// If the user is not allowed to edit Suppliers, add a hidden input
+		if ( ! AtumCapabilities::current_user_can('edit_supplier') ): ?>
 			<input type="hidden" id="_supplier" name="_supplier" value="<?php echo ( ! empty($supplier) ) ? esc_attr( $supplier->ID ) : '' ?>">
 		<?php else:
+
+			$field_name = ( empty($variation) ) ? '_supplier' : "variation_supplier[$loop]";
 
 			if ( empty($variation) ): ?>
 			<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
@@ -395,7 +403,7 @@ class Suppliers {
 				<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-last' ?>">
 					<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
 
-					<select class="wc-product-search" id="_supplier" name="_supplier" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
+					<select class="wc-product-search" id="_supplier" name="<?php echo $field_name ?>" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
 						data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 						data-multiple="false" data-selected="" data-minimum_input_length="1">
 						<?php if ( ! empty($supplier) ): ?>
@@ -427,8 +435,19 @@ class Suppliers {
 			return;
 		}
 
+		if ( isset($_POST['variation_supplier']) ) {
+			$supplier = reset($_POST['variation_supplier']);
+			$supplier = $supplier ? absint($supplier) : '';
+		}
+		elseif ( isset($_POST['_supplier']) ) {
+			$supplier = $_POST['_supplier'] ? absint( $_POST['_supplier'] ) : '';
+		}
+		else {
+			// If we are not saving the product from its edit page, do not continue
+			return;
+		}
+
 		// Always save the supplier meta (nevermind it has value or not) to be able to sort by it in List Tables
-		$supplier = ( ! empty($_POST['_supplier']) ) ? absint( $_POST['_supplier'] ) : '';
 		update_post_meta( $post_id, '_supplier', $supplier );
 
 	}

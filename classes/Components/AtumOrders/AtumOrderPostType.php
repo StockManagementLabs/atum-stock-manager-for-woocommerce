@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\Inc\Main;
 
 
 abstract class AtumOrderPostType {
@@ -116,6 +117,7 @@ abstract class AtumOrderPostType {
 
 		// Minimum capability required
 		$is_user_allowed = current_user_can( 'manage_woocommerce' );
+		$main_menu_item  = Main::get_main_menu_item();
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
@@ -124,7 +126,7 @@ abstract class AtumOrderPostType {
 			'show_ui'             => $is_user_allowed,
 			'publicly_queryable'  => FALSE,
 			'exclude_from_search' => TRUE,
-			'show_in_menu'        => $is_user_allowed ? Globals::ATUM_UI_SLUG : FALSE,
+			'show_in_menu'        => $is_user_allowed ? $main_menu_item['slug'] : FALSE,
 			'hierarchical'        => FALSE,
 			'show_in_nav_menus'   => FALSE,
 			'rewrite'             => FALSE,
@@ -334,10 +336,16 @@ abstract class AtumOrderPostType {
 
 				if ( $author ) {
 
-					$user     = get_user_by( 'id', $author );
-					$username = '<a href="user-edit.php?user_id=' . absint( $author ) . '">';
-					$username .= esc_html( ucwords( $user->display_name ) );
-					$username .= '</a>';
+					$user = get_user_by( 'id', $author );
+
+					if ( is_a($user, '\WP_User') ) {
+						$username = '<a href="user-edit.php?user_id=' . absint( $author ) . '">';
+						$username .= esc_html( ucwords( $user->display_name ) );
+						$username .= '</a>';
+					}
+					else {
+						$username = __('User not found', ATUM_TEXT_DOMAIN);
+					}
 
 				}
 				else {
@@ -349,10 +357,6 @@ abstract class AtumOrderPostType {
 					'<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . '</strong></a>',
 					$username
 				);
-
-				/*if ( $the_order->get_billing_email() ) {
-					echo '<small class="meta email"><a href="' . esc_url( 'mailto:' . $the_order->get_billing_email() ) . '">' . esc_html( $the_order->get_billing_email() ) . '</a></small>';
-				}*/
 
 				echo '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details', ATUM_TEXT_DOMAIN ) . '</span></button>';
 				$rendered = TRUE;
