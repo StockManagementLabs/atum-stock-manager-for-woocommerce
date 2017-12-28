@@ -124,7 +124,7 @@ class InboundStock extends AtumListPage {
 
 		Helpers::add_help_tab($help_tabs, $this);
 		
-		$this->list = new ListTable( array( 'per_page' => $this->per_page) );
+		$this->list = new ListTable( ['per_page' => $this->per_page] );
 		
 	}
 

@@ -296,8 +296,8 @@ class ListTable extends AtumListTable {
 
 			// Paginate the results (if needed)
 			if ($this->per_page != -1 && $found_posts > $this->per_page) {
-				$page = $this->get_pagenum();
-				$offset = ($page > 1) ? ($page - 1) + $this->per_page : 0;
+				$page   = $this->get_pagenum();
+				$offset = ( $page - 1 ) * $this->per_page;
 
 				$po_products = array_slice($po_products, $offset, $this->per_page);
 			}
