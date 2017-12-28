@@ -44,20 +44,24 @@ class StockCentral extends AtumListPage {
 	 * @since 0.0.1
 	 */
 	private function __construct() {
-		
-		$user_option = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'stock_central_products_per_page', TRUE );
-		$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
-		
-		add_action( 'load-toplevel_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
 		// Add the module menu
 		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
 
-		// Add the Stock Central settings
-		add_filter( 'atum/settings/tabs', array($this, 'add_settings_tab') );
-		add_filter( 'atum/settings/defaults', array($this, 'add_settings_defaults') );
+		if ( is_admin() ) {
 
-		parent::init_hooks();
+			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'stock_central_products_per_page', TRUE );
+			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+
+			add_action( 'load-toplevel_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
+
+			// Add the Stock Central settings
+			add_filter( 'atum/settings/tabs', array( $this, 'add_settings_tab' ) );
+			add_filter( 'atum/settings/defaults', array( $this, 'add_settings_defaults' ) );
+
+			parent::init_hooks();
+
+		}
 		
 	}
 

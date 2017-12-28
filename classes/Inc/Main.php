@@ -81,10 +81,6 @@ class Main {
 		// Add the menus
 		add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
 
-		// Reorder the admin submenus
-		add_filter( 'custom_menu_order', '__return_true' );
-		add_filter( 'menu_order', array($this, 'set_menu_order') );
-
 		// Load dependencies
 		add_action( 'init', array( $this, 'admin_load' ) );
 
@@ -128,14 +124,18 @@ class Main {
 	 */
 	protected function register_global_hooks() {
 
-		// Load front stuff
-		add_action( 'init', array($this, 'load'), 11 );
+		// Reorder the admin submenus
+		add_filter( 'custom_menu_order', '__return_true' );
+		add_filter( 'menu_order', array($this, 'set_menu_order') );
 
 		// Add the ATUM menu to admin bar
 		add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
 
-		// Load ATUM add-ons
-		add_action( 'setup_theme', array( $this, 'load_addons' ) );
+		// Load front stuff
+		add_action( 'init', array($this, 'load'), 11 );
+
+		// Load ATUM core modules
+		add_action( 'setup_theme', array( $this, 'load_core_modules' ) );
 
 		// Save the date when any product goes out of stock
 		add_action( 'woocommerce_product_set_stock' , array($this, 'record_out_of_stock_date'), 20 );
@@ -147,11 +147,13 @@ class Main {
 	}
 
 	/**
-	 * Load the ATUM add-ons
+	 * Load the ATUM core modules
 	 *
 	 * @since 1.1.2
 	 */
-	public function load_addons () {
+	public function load_core_modules () {
+		ModuleManager::get_instance();
+		AtumCapabilities::get_instance();
 		Addons::get_instance();
 	}
 
@@ -203,15 +205,21 @@ class Main {
 
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
+		//
+		// Load extra modules
+		//--------------------
 
-		// Init the Inventory Logs
+		if ( ModuleManager::is_module_active('stock_central') ) {
+			StockCentral::get_instance();
+		}
+
 		if ( ModuleManager::is_module_active('inventory_logs') ) {
 			new InventoryLogs();
 		}
 
 		if ( ModuleManager::is_module_active('purchase_orders') ) {
 
-			// Init Suppliers
+			// Init the Suppliers
 			Suppliers::get_instance();
 
 			// Init the Purchase Orders
@@ -408,13 +416,11 @@ class Main {
 	 */
 	public function add_admin_bar_menu() {
 
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			return;
-		}
-
 		if ( Helpers::get_option( 'enable_admin_bar_menu', 'yes' ) != 'yes' ) {
 			return;
 		}
+
+
 
 		global $wp_admin_bar;
 
