@@ -22,7 +22,7 @@
 			var $listWrapper      = $(this),
 			    $atumTable        = $listWrapper.find('.atum-list-table'),
 			    $editInput        = $listWrapper.find('#atum-column-edits'),
-			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('#products_per_page'),
+			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('.screen-per-page'),
 			    $search           = $listWrapper.find('.atum-post-search'),
 			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
 			    jScrollApi,

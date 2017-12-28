@@ -137,12 +137,6 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php /*if ( $widget_options['orders_total']['data']['this_year'] ): ?>
-					<tr>
-						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_amount_this_year ?></td>
-					</tr>
-				<?php endif*/ ?>
 
 				<?php if ( $widget_options['orders_total']['data']['this_month'] ): ?>
 					<tr>
@@ -187,12 +181,6 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php /*if ( $widget_options['revenue']['data']['this_year'] ): ?>
-					<tr>
-						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_revenue_this_year ?></td>
-					</tr>
-				<?php endif*/ ?>
 
 				<?php if ( $widget_options['revenue']['data']['this_month'] ): ?>
 					<tr>
@@ -236,12 +224,6 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php /*if ( $widget_options['promo_products']['data']['this_year'] ): ?>
-					<tr>
-						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_products_this_year ?></td>
-					</tr>
-				<?php endif*/ ?>
 
 				<?php if ( $widget_options['promo_products']['data']['this_month'] ): ?>
 					<tr>
@@ -285,12 +267,6 @@ defined( 'ABSPATH' ) or die;
 				</thead>
 
 				<tbody>
-				<?php /*if ( $widget_options['promo_value']['data']['this_year'] ): ?>
-					<tr>
-						<td><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_value_this_year ?></td>
-					</tr>
-				<?php endif*/ ?>
 
 				<?php if ( $widget_options['promo_value']['data']['this_month'] ): ?>
 					<tr>
@@ -327,7 +303,7 @@ defined( 'ABSPATH' ) or die;
 	</div>
 
 	<?php if ( $widget_options['circle_stats']['enabled'] ): ?>
-	<div class="stock-counters" data-toggle="tooltip" title="<?php _e('Indicators of stock availability (ATUM Statistics count variations as individual products)', ATUM_TEXT_DOMAIN) ?>">
+	<div class="stock-counters">
 
 		<?php
 		$in_stock = 0;
@@ -337,7 +313,7 @@ defined( 'ABSPATH' ) or die;
 		}
 		?>
 
-		<div class="stock-indicator">
+		<div class="stock-indicator" data-toggle="tooltip" title="<?php _e('Indicators of stock availability (ATUM Statistics count variations as individual products)', ATUM_TEXT_DOMAIN) ?>">
 			<div id="in-stock-circle" class="circle" data-thickness="11" data-size="100" data-value="<?php echo $in_stock ?>" data-stock="<?php echo $stock_counters['count_in_stock'] ?>" data-fill='{"gradient": ["greenyellow", "#00B050", "#00B050"], "gradientAngle": -1.15}'>
 				<strong></strong>
 			</div>
@@ -353,7 +329,7 @@ defined( 'ABSPATH' ) or die;
 		}
 		?>
 
-		<div class="stock-indicator">
+		<div class="stock-indicator" data-toggle="tooltip" title="<?php _e('Indicators of stock availability (ATUM Statistics count variations as individual products)', ATUM_TEXT_DOMAIN) ?>">
 			<div id="low-stock-circle" class="circle" data-thickness="11" data-size="100" data-value="<?php echo $low_stock ?>" data-stock="<?php echo $stock_counters['count_low_stock'] ?>" data-fill='{"gradient": ["deepskyblue", "#0073AA", "#0073AA"], "gradientAngle": -1.15}'>
 				<strong></strong>
 			</div>
@@ -369,7 +345,7 @@ defined( 'ABSPATH' ) or die;
 		}
 		?>
 
-		<div class="stock-indicator">
+		<div class="stock-indicator" data-toggle="tooltip" title="<?php _e('Indicators of stock availability (ATUM Statistics count variations as individual products)', ATUM_TEXT_DOMAIN) ?>">
 			<div id="out-of-stock-circle" class="circle" data-thickness="11" data-size="100" data-value="<?php echo $out_stock ?>" data-stock="<?php echo $stock_counters['count_out_stock'] ?>" data-fill='{"gradient": ["orange", "#EF4D5A", "#EF4D5A"], "gradientAngle": -1.15}'>
 				<strong></strong>
 			</div>

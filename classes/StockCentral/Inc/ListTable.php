@@ -12,11 +12,13 @@ namespace Atum\StockCentral\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -93,13 +95,17 @@ class ListTable extends AtumListTable {
 		);
 
 		// Hide the purchase price column if the current user has not the capability
-		if ( ! current_user_can(ATUM_PREFIX . 'view_purchase_price') ) {
+		if ( ! AtumCapabilities::current_user_can('view_purchase_price') ) {
 			unset( $args['table_columns']['_purchase_price'] );
 		}
 
 		// Hide the supplier column if the current user has not the capability
-		if ( ! current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
 			unset( $args['table_columns']['_supplier'] );
+		}
+
+		if ( ! ModuleManager::is_module_active('purchase_orders') ) {
+			unset( $args['table_columns']['calc_inbound'] );
 		}
 
 		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
@@ -977,7 +983,7 @@ class ListTable extends AtumListTable {
 
 						$qty          = $log_item->get_quantity();
 						$variation_id = $log_item->get_variation_id();
-						$product_id   = ( $variation_id ) ? $variation_id : $log_item->get_product_id();
+						$product_id   = $variation_id ?: $log_item->get_product_id();
 
 						if ( isset( $products[ $product_id ] ) ) {
 							$products[ $product_id ] += $qty;

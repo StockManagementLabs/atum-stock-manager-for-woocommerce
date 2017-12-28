@@ -14,9 +14,11 @@ namespace Atum\DataExport\Reports;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Inc\ListTable;
+use Atum\StockCentral\StockCentral;
 
 
 class HtmlReport extends ListTable {
@@ -35,7 +37,7 @@ class HtmlReport extends ListTable {
 	public function __construct( $args = array() ) {
 
 		// Avoid a PHP Notice error when loading the PDF report
-		$args['screen'] = 'toplevel_page_atum-stock-central';
+		$args['screen'] = 'toplevel_page_' . StockCentral::UI_SLUG;
 
 		if ( isset( $args['title_max_length'] ) ) {
 			$this->title_max_length = absint( $args['title_max_length'] );
@@ -189,7 +191,7 @@ class HtmlReport extends ListTable {
 
 		$supplier = self::EMPTY_COL;
 
-		if ( ! current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+		if ( ! AtumCapabilities::current_user_can('read_supplier') ) {
 			return $supplier;
 		}
 

@@ -20,7 +20,7 @@ $currency = $atum_order->get_currency();
 
 	<td class="name">
 		<div class="view">
-			<?php echo esc_html( $item->get_name() ? $item->get_name() : __( 'Fee', ATUM_TEXT_DOMAIN ) ); ?>
+			<?php echo esc_html( $item->get_name() ?: __( 'Fee', ATUM_TEXT_DOMAIN ) ); ?>
 		</div>
 
 		<div class="edit" style="display: none;">

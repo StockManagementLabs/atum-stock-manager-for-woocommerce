@@ -64,14 +64,31 @@ class AtumCapabilities {
 	 */
 	public function add_capabilities() {
 
-		$admin_role = get_role( 'administrator' );
+		$admin_roles = array( get_role('administrator'), get_role('manage_woocommerce') );
 
-		if ( is_a($admin_role, '\WP_Role') ) {
-			foreach ( $this->capabilities as $cap ) {
-				$admin_role->add_cap( $cap );
+		foreach ($admin_roles as $admin_role) {
+
+			if ( is_a( $admin_role, '\WP_Role' ) ) {
+				foreach ( $this->capabilities as $cap ) {
+					$admin_role->add_cap( $cap );
+				}
 			}
+
 		}
 
+	}
+
+	/**
+	 * Check whether the current user has ATUM capabilities
+	 *
+	 * @since 1.3.6
+	 *
+	 * @param string $capability
+	 *
+	 * @return bool
+	 */
+	public static function current_user_can($capability) {
+		return current_user_can(ATUM_PREFIX . $capability);
 	}
 
 	/****************************

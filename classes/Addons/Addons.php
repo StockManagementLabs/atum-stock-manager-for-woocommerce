@@ -48,6 +48,11 @@ class Addons {
 	const ADDONS_KEY_OPTION = ATUM_PREFIX . 'addons_keys';
 
 	/**
+	 * The menu order for this module
+	 */
+	const MENU_ORDER = 90;
+
+	/**
 	 * Singleton constructor
 	 *
 	 * @since 1.2.0
@@ -56,6 +61,9 @@ class Addons {
 
 		// Get all the installed addons
 		self::$addons = apply_filters('atum/addons/setup', self::$addons);
+
+		// Add the module menu
+		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
 
 		// Initialize the addons
 		add_action( 'after_setup_theme', array($this, 'init_addons'), 99 );
@@ -74,6 +82,28 @@ class Addons {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Add the Add-ons menu
+	 *
+	 * @since 1.3.6
+	 *
+	 * @param array $menus
+	 *
+	 * @return array
+	 */
+	public function add_menu ($menus) {
+
+		$menus['addons'] = array(
+			'title'      => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
+			'callback'   => array( $this, 'load_addons_page' ),
+			'slug'       => ATUM_TEXT_DOMAIN . '-addons',
+			'menu_order' => self::MENU_ORDER
+		);
+
+		return $menus;
 
 	}
 

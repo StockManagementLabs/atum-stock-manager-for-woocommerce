@@ -172,15 +172,17 @@ class HelpPointers {
 
 		?>
 		<script type="text/javascript">
-			(function ($) {
-				var WPHelpPointer = <?php echo json_encode( $pointers ) ?>;
+			jQuery(function ($) {
+
+				var ATUMHelpPointer = <?php echo json_encode( $pointers ) ?>;
 	
-				$.each(WPHelpPointer.pointers, function(i) {
-					wp_help_pointer_open(i);
+				$.each(ATUMHelpPointer.pointers, function(i) {
+					atum_help_pointer_open(i);
 				});
 	
-				function wp_help_pointer_open(i) {
-					pointer = WPHelpPointer.pointers[i];
+				function atum_help_pointer_open(i) {
+
+					var pointer = ATUMHelpPointer.pointers[i];
 					options = $.extend( pointer.options, {
 						close: function() {
 							$.post( ajaxurl, {

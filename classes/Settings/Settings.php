@@ -55,11 +55,21 @@ class Settings {
 	 * @var string
 	 */
 	private $restore_option_stock = 'yes';
+
+	/*
+	 * The admin page slug
+	 */
+	const UI_SLUG = 'atum-settings';
 	
 	/**
 	 * The option key name for the plugin settings
 	 */
 	const OPTION_NAME = ATUM_PREFIX . 'settings';
+
+	/**
+	 * The menu order for this module
+	 */
+	const MENU_ORDER = 80;
 	
 	/**
 	 * The sale days used when no value provided
@@ -80,17 +90,14 @@ class Settings {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_filter( 'pre_update_option_' . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
 
+		// Add the module menu
+		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
+
 		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN )
-				)
-			),
-			'stock_central' => array(
-				'tab_name' => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-				'sections' => array(
-					'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN )
 				)
 			)
 		);
@@ -140,20 +147,6 @@ class Settings {
 				'options'    => array(
 					'min' => 0
 				)
-			),
-			'posts_per_page'        => array(
-				'section' => 'stock_central',
-				'name'    => __( 'Products per Page', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Controls the number of products displayed per page within the Stock Central screen. Please note, you can set this value within the 'Screen Options' tab as well. Enter '-1' to remove the pagination and display all available products on one page (not recommended if your store contains a large number of products as it may affect the performance).", ATUM_TEXT_DOMAIN ),
-				'type'    => 'number',
-				'default' => self::DEFAULT_POSTS_PER_PAGE
-			),
-			'sale_days'             => array(
-				'section' => 'stock_central',
-				'name'    => __( 'Days to Re-Order', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Low Stock' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
-				'type'    => 'number',
-				'default' => self::DEFAULT_SALE_DAYS
 			)
 		);
 
@@ -169,6 +162,28 @@ class Settings {
 			);
 
 		}
+
+	}
+
+	/**
+	 * Add the Settings menu
+	 *
+	 * @since 1.3.6
+	 *
+	 * @param array $menus
+	 *
+	 * @return array
+	 */
+	public function add_menu ($menus) {
+
+		$menus['settings'] = array(
+			'title'      => __( 'Settings', ATUM_TEXT_DOMAIN ),
+			'callback'   => array( $this, 'display' ),
+			'slug'       => self::UI_SLUG,
+			'menu_order' => self::MENU_ORDER
+		);
+
+		return $menus;
 
 	}
 	
@@ -227,36 +242,40 @@ class Settings {
 	 */
 	public function enqueue_scripts( $hook ) {
 		
-		if ( $hook == Globals::ATUM_UI_HOOK . '_page_atum-settings' ) {
+		if ( in_array( $hook, [Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG] ) ) {
 			
 			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-			wp_register_style( 'atum-settings', ATUM_URL . 'assets/css/atum-settings.css', FALSE, ATUM_VERSION );
+			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', FALSE, ATUM_VERSION );
 
 			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
 			Helpers::maybe_es6_promise();
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
-			wp_register_script( 'atum-settings', ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2' ), ATUM_VERSION );
 			
-			wp_localize_script( 'atum-settings', 'atumSettings', array(
+			wp_localize_script( self::UI_SLUG, 'atumSettings', array(
 				'stockMsgTitle' => __( "Would you want to restore the 'Manage Stock' status of all products to their original state?", ATUM_TEXT_DOMAIN ),
 				'stockMsgText'  => __( "<p>Select 'NO' to keep all the products in the current state.</p>", ATUM_TEXT_DOMAIN ),
 				'restoreThem'   => __( 'Yes, restore them', ATUM_TEXT_DOMAIN ),
-				'keepThem'      => __( 'No, keep them', ATUM_TEXT_DOMAIN )
+				'keepThem'      => __( 'No, keep them', ATUM_TEXT_DOMAIN ),
+				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'unsavedData'   => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'continue'      => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
+				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN )
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'switchery' );
 			wp_enqueue_style( 'sweetalert2' );
-			wp_enqueue_style( 'atum-settings' );
+			wp_enqueue_style( self::UI_SLUG );
 
 			if ( wp_script_is('es6-promise', 'registered') ) {
 				wp_enqueue_script( 'es6-promise' );
 			}
 
-			wp_enqueue_script( 'atum-settings' );
+			wp_enqueue_script( self::UI_SLUG );
 			
 		}
 	}
@@ -270,7 +289,7 @@ class Settings {
 	public function register_settings() {
 		
 		// Add the tabs
-		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs );
+		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs);
 		foreach ( $this->tabs as $tab => $tab_data ) {
 
 			foreach ($tab_data['sections'] as $section_key => $section_name) {
@@ -294,7 +313,7 @@ class Settings {
 		}
 		
 		// Add the fields
-		$this->defaults = (array) apply_filters( 'atum/settings/defaults', $this->defaults );
+		$this->defaults = (array) apply_filters( 'atum/settings/defaults', $this->defaults);
 		foreach ( $this->defaults as $field => $options ) {
 			
 			$options['id'] = $field;
@@ -374,10 +393,10 @@ class Settings {
 	 */
 	public function display_text( $args ) {
 		
-		$output = $this->get_label( $args ) . sprintf(
+		$output = sprintf(
 			'<input class="atum-settings-input regular-text" type="text" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
 			$this->options[ $args['id'] ]
-		);
+		) . $this->get_label( $args );
 		
 		echo apply_filters( 'atum/settings/display_text', $output, $args );
 		
@@ -395,12 +414,12 @@ class Settings {
 		$step = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
 		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
 
-		$output = $this->get_label( $args ) . sprintf(
+		$output = sprintf(
 			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
 			$min,
 			$step,
 			$this->options[ $args['id'] ]
-		);
+		) . $this->get_label( $args );
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
 
@@ -416,9 +435,9 @@ class Settings {
 	 */
 	public function display_switcher( $args ) {
 		
-		$output = $this->get_label( $args ) . '<input type="checkbox" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME
+		$output = '<input type="checkbox" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME
 		          . '[' . $args['id'] . ']" value="yes" ' . checked( 'yes', $this->options[ $args['id'] ], FALSE )
-		          . 'class="js-switch atum-settings-input" style="display: none">';
+		          . 'class="js-switch atum-settings-input" style="display: none">' . $this->get_label( $args );
 		
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args );
 	}
@@ -437,10 +456,7 @@ class Settings {
 		$label = '';
 		
 		if ( array_key_exists( 'desc', $args ) ) {
-			
-			$label = '<span class="atum-setting-info tips" data-toggle="tooltip" title="'
-			         . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '"><i class="dashicons dashicons-editor-help '
-			         . $args['id'] . '""></i></span>';
+			$label = '<p class="atum-setting-info">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</p>';
 		}
 		
 		return $label;

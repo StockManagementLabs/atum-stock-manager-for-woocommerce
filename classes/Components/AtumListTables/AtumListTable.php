@@ -14,9 +14,11 @@ namespace Atum\Components\AtumListTables;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 
@@ -320,9 +322,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 
 		// Supplier filtering
-		if ( current_user_can(ATUM_PREFIX . 'read_supplier') ) {
-			echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
-		}
+		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
 
 	}
 
@@ -631,7 +631,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$id = $this->get_current_product_id();
 		$sku = get_post_meta( $id, '_sku', TRUE );
-		$sku = ($sku) ? $sku : self::EMPTY_COL;
+		$sku = $sku ?: self::EMPTY_COL;
 
 		if ($editable) {
 
@@ -1185,7 +1185,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		/*
 		 * Supplier filter
 		 */
-		if ( ! empty( $_REQUEST['supplier'] ) && current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can('read_supplier') ) {
 
 			if ( ! empty($args['meta_query']) ) {
 				$args['meta_query']['relation'] = 'AND';

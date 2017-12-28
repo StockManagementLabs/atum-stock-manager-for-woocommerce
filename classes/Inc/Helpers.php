@@ -14,11 +14,13 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
@@ -222,7 +224,7 @@ final class Helpers {
 
 			$args['date_query'][] = array(
 				'after'     => $date_start,
-				'before'    => $date_end ? $date_end : 'now',
+				'before'    => $date_end ?: 'now',
 				'inclusive' => TRUE
 			);
 			
@@ -953,6 +955,10 @@ final class Helpers {
 	 */
 	public static function suppliers_dropdown($selected = '', $enhanced = FALSE, $class = 'dropdown_supplier') {
 
+		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
+			return '';
+		}
+
 		ob_start();
 
 		if (!$enhanced):
@@ -1110,7 +1116,7 @@ final class Helpers {
 				break;
 		}
 
-		if ( !$model_class || ! class_exists($model_class) ) {
+		if ( ! isset($model_class) || ! class_exists($model_class) ) {
 			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
@@ -1229,20 +1235,22 @@ final class Helpers {
 				
 				case 'regular_price':
 					
-					if (  $is_wpml_multicurrency && isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
+					if ( isset($wpml) && $is_wpml_multicurrency && isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
 							
-							$custom_prices                   = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['regular_price_currency'] );
-							$custom_prices['_regular_price'] = $meta_value;
-							
-							$wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['regular_price_currency'] );
-							
-						
-					} else {
+						$custom_prices                   = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['regular_price_currency'] );
+						$custom_prices['_regular_price'] = $meta_value;
+
+						$wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['regular_price_currency'] );
+
+					}
+					else {
+
 						$product->set_regular_price( $meta_value );
 						
 						if ( $meta_key == 'regular_price' && ! $product->is_on_sale( 'edit' ) ) {
 							$product->set_price( $meta_value );
 						}
+
 					}
 					
 					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
@@ -1251,7 +1259,7 @@ final class Helpers {
 				
 				case 'sale_price':
 					
-					if ( $is_wpml_multicurrency && isset( $product_meta['sale_price_custom'] ) && $product_meta['sale_price_custom'] == 'yes' ) {
+					if ( isset($wpml) && $is_wpml_multicurrency && isset( $product_meta['sale_price_custom'] ) && $product_meta['sale_price_custom'] == 'yes' ) {
 						
 						$custom_prices                = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['sale_price_currency'] );
 						$custom_prices['_sale_price'] = $meta_value;
@@ -1272,6 +1280,7 @@ final class Helpers {
 						
 					}
 					else {
+
 						$sale_price    = wc_format_decimal( $meta_value );
 						$regular_price = $product->get_regular_price();
 						
@@ -1310,6 +1319,7 @@ final class Helpers {
 							}
 							
 						}
+
 					}
 					
 					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );

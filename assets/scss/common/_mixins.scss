@@ -29,6 +29,18 @@
 	transition-delay: $transition-delay;
 }
 
+@mixin transition-timing($transition-timing) {
+	-webkit-transition-timing-function: $transition-timing;
+	transition-timing-function: $transition-timing;
+}
+
+@mixin user-select($select) {
+	-webkit-user-select: $select;
+	-moz-user-select: $select;
+	-ms-user-select: $select; // IE10+
+	user-select: $select;
+}
+
 @mixin keyframes($animationName) {
 	@-webkit-keyframes #{$animationName} {
 		$browser: '-webkit-' !global;
