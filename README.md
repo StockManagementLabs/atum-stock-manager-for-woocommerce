@@ -213,6 +213,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.6 - 2017-12-29**
+
+Features:
+
+* New Ajax UI for the Settings page.
+* New Module Manager section to enable/disable ATUM modules independently.
+
+Fixes:
+
+* Prevent supplier from being removed of variation products when changing the stock within "Stock Central".
+* Fixed pagination in "Inbound Stock" page.
+* Refactory of ATUM menu system.
+* Other minor fixes.
+
 **1.3.5 - 2017-12-15**
 
 Fixes:
