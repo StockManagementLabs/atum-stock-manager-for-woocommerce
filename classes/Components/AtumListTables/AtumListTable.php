@@ -589,9 +589,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__supplier( $item ) {
 
-		$supplier    = self::EMPTY_COL;
+		$supplier = self::EMPTY_COL;
 
-		if ( ! current_user_can(ATUM_PREFIX . 'read_supplier') ) {
+		if ( ! AtumCapabilities::current_user_can('read_supplier') ) {
 			return $supplier;
 		}
 
@@ -754,7 +754,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$purchase_price = self::EMPTY_COL;
 
-		if ( ! current_user_can(ATUM_PREFIX . 'view_purchase_price') ) {
+		if ( ! AtumCapabilities::current_user_can('view_purchase_price') ) {
 			return $purchase_price;
 		}
 

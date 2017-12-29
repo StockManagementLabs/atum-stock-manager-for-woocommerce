@@ -28,24 +28,62 @@ class AtumCapabilities {
 	 * @var array
 	 */
 	private $capabilities = array(
-		ATUM_PREFIX . 'edit_purchase_price',
-		ATUM_PREFIX . 'view_purchase_price',
-		ATUM_PREFIX . 'manage_po',
-		ATUM_PREFIX . 'view_inbound_stock',
-		ATUM_PREFIX . 'edit_supplier',
-		ATUM_PREFIX . 'read_supplier',
-		ATUM_PREFIX . 'delete_supplier',
-		ATUM_PREFIX . 'edit_suppliers',
-		ATUM_PREFIX . 'edit_others_suppliers',
-		ATUM_PREFIX . 'publish_suppliers',
-		ATUM_PREFIX . 'read_private_suppliers',
-		ATUM_PREFIX . 'create_suppliers',
-		ATUM_PREFIX . 'delete_suppliers',
-		ATUM_PREFIX . 'delete_private_suppliers',
-		ATUM_PREFIX . 'delete_published_suppliers',
-		ATUM_PREFIX . 'delete_other_suppliers',
-		ATUM_PREFIX . 'edit_private_suppliers',
-		ATUM_PREFIX . 'edit_published_suppliers'
+
+		// Purchase price caps
+		'edit_purchase_price',
+		'view_purchase_price',
+
+		// Purchase Orders caps
+		'edit_purchase_order',
+		'read_purchase_order',
+		'delete_purchase_order',
+		'edit_purchase_orders',
+		'edit_others_purchase_orders',
+		'create_purchase_orders',
+		'delete_purchase_orders',
+		'delete_other_purchase_orders',
+
+		// Inventory Logs caps
+		'edit_inventory_log',
+		'read_inventory_log',
+		'delete_inventory_log',
+		'edit_inventory_logs',
+		'edit_others_inventory_logs',
+		'create_inventory_logs',
+		'delete_inventory_logs',
+		'delete_other_inventory_logs',
+
+		// Inbound Stock caps
+		'read_inbound_stock',
+
+		// Suppliers caps
+		'edit_supplier',
+		'read_supplier',
+		'delete_supplier',
+		'edit_suppliers',
+		'edit_others_suppliers',
+		'publish_suppliers',
+		'read_private_suppliers',
+		'create_suppliers',
+		'delete_suppliers',
+		'delete_private_suppliers',
+		'delete_published_suppliers',
+		'delete_other_suppliers',
+		'edit_private_suppliers',
+		'edit_published_suppliers',
+
+		// ATUM menus caps
+		'view_admin_menu',
+		'view_admin_bar_menu',
+
+		// ATUM Order notes caps
+		'read_order_notes',
+		'create_order_notes',
+		'delete_order_notes',
+
+		// Other caps
+		'export_data',
+		'view_statistics'
 	);
 
 	/**
@@ -54,15 +92,9 @@ class AtumCapabilities {
 	 * @since 1.3.1
 	 */
 	private function __construct() {
-		add_action( 'admin_init', array($this, 'add_capabilities') );
-	}
 
-	/**
-	 * Add the ATUM capabilities to admins
-	 *
-	 * @since 1.3.1
-	 */
-	public function add_capabilities() {
+		// Add the ATUM prefix to all the capabilities
+		$this->capabilities = preg_filter('/^/', ATUM_PREFIX, $this->capabilities);
 
 		$admin_roles = (array) apply_filters('atum/capabilities/admin_roles', [ get_role('administrator') ] );
 
@@ -90,6 +122,7 @@ class AtumCapabilities {
 	public static function current_user_can($capability) {
 		return current_user_can(ATUM_PREFIX . $capability);
 	}
+
 
 	/****************************
 	 * Instance methods

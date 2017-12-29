@@ -265,28 +265,32 @@ class Main {
 			StockCentral::get_instance();
 		}
 
-		if ( ModuleManager::is_module_active('purchase_orders') ) {
-			InboundStock::get_instance();
-		}
-
-		if ( ModuleManager::is_module_active('dashboard_statistics') ) {
+		if ( AtumCapabilities::current_user_can('read_statistics') && ModuleManager::is_module_active('dashboard_statistics') ) {
 			new Statistics( __( 'ATUM Statistics', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( ModuleManager::is_module_active('data_export') ) {
+		if ( AtumCapabilities::current_user_can('export_data') && ModuleManager::is_module_active('data_export') ) {
 			new DataExport();
 		}
 
-		if ( ModuleManager::is_module_active('inventory_logs') ) {
+		if ( AtumCapabilities::current_user_can('read_inventory_log') && ModuleManager::is_module_active('inventory_logs') ) {
 			new InventoryLogs();
 		}
 
 		if ( ModuleManager::is_module_active('purchase_orders') ) {
 
-			Suppliers::get_instance();
+			if ( AtumCapabilities::current_user_can('read_supplier') ) {
+				Suppliers::get_instance();
 
-			if ( AtumCapabilities::current_user_can('manage_po') ) {
-				new PurchaseOrders();
+				// The Suppliers is a dependency for Purchase Orders
+				if ( AtumCapabilities::current_user_can('read_purchase_order') ) {
+					new PurchaseOrders();
+
+					// The Purchase Orders is a dependency for Inbound Stock
+					if ( AtumCapabilities::current_user_can('read_inbound_stock') ) {
+						InboundStock::get_instance();
+					}
+				}
 			}
 
 		}
@@ -326,7 +330,7 @@ class Main {
 		add_menu_page(
 			self::$main_menu_item['title'],
 			__( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
-			'manage_woocommerce',
+			ATUM_PREFIX . 'view_admin_menu',
 			self::$main_menu_item['slug'],
 			'',
 			ATUM_URL . 'assets/images/atum-icon.svg',
@@ -352,7 +356,7 @@ class Main {
 					self::$main_menu_item['slug'],
 					$menu_item['title'],
 					$menu_item['title'],
-					isset($menu_item['capability']) ? $menu_item['capability'] : 'manage_woocommerce',
+					isset( $menu_item['capability'] ) ? $menu_item['capability'] : ATUM_PREFIX . 'view_admin_menu',
 					$slug,
 					$menu_item['callback']
 				);
@@ -1015,10 +1019,6 @@ class Main {
 	 * @return string
 	 */
 	public function admin_footer_text( $footer_text ) {
-
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			return;
-		}
 
 		$current_screen = get_current_screen();
 

@@ -44,30 +44,27 @@ class Suppliers {
 	 */
 	const MENU_ORDER = 35;
 	
-	/**
-	 * The menu item to add
-	 * @var array
-	 */
-	private $menu_item;
-	
 	
 	/**
 	 * Suppliers singleton constructor
 	 */
 	private function __construct() {
 
-		$this->menu_item = array(
-			'suppliers' => array(
-				'slug'       => ATUM_TEXT_DOMAIN . '-suppliers',
-				'title'      => _x( 'Suppliers', 'Admin menu name', ATUM_TEXT_DOMAIN ),
-				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
-				'menu_order' => self::MENU_ORDER
-			)
-		);
-		
-		$this->register_post_type();
+		// Register the Supplier post type
+		add_action( 'init', array($this, 'register_post_type') );
 
-		// Admin Hooks
+		// Global hooks
+		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+
+			// Add the "Suppliers" link to the ATUM's admin bar menu
+			add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12 );
+
+			// Add item order
+			add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
+		}
+
+		// Admin hooks
 		if ( is_admin() ) {
 
 			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
@@ -75,12 +72,6 @@ class Suppliers {
 				// Add columns to Suppliers list table
 				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
 				add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
-
-				// Add the "Suppliers" link to the ATUM's admin bar menu
-				add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12 );
-
-				// Add item order
-				add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
 
 			}
 
@@ -116,10 +107,10 @@ class Suppliers {
 	 *
 	 * @since 1.2.9
 	 */
-	private function register_post_type( $args = array() ) {
+	public function register_post_type( $args = array() ) {
 
 		// Minimum capability required
-		$is_user_allowed = current_user_can( 'manage_woocommerce' );
+		$is_user_allowed = AtumCapabilities::current_user_can( 'read_supplier' );
 		$main_menu_item  = Main::get_main_menu_item();
 
 		$this->labels = array(
@@ -516,7 +507,15 @@ class Suppliers {
 	 * @return array
 	 */
 	public function add_admin_bar_link($atum_menus) {
-		return array_merge($atum_menus, $this->menu_item);
+
+		$atum_menus['suppliers'] = array(
+			'slug'       => ATUM_TEXT_DOMAIN . '-suppliers',
+			'title'      => _x( 'Suppliers', 'Admin menu name', ATUM_TEXT_DOMAIN ),
+			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
+			'menu_order' => self::MENU_ORDER
+		);
+
+		return $atum_menus;
 	}
 	
 	/**

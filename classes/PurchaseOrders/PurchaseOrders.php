@@ -36,12 +36,22 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @var PurchaseOrder
 	 */
 	private $po;
-	
+
 	/**
-	 * The menu item to add
+	 * The capabilities used when registering the post type
 	 * @var array
 	 */
-	private $menu_item;
+	protected $capabilities = array(
+		'edit_post'              => 'edit_purchase_order',
+		'read_post'              => 'read_purchase_order',
+		'delete_post'            => 'delete_purchase_order',
+		'edit_posts'             => 'edit_purchase_orders',
+		'edit_others_posts'      => 'edit_others_purchase_orders',
+		'create_posts'           => 'create_purchase_orders',
+		'delete_posts'           => 'delete_purchase_orders',
+		'delete_other_posts'     => 'delete_other_purchase_orders'
+	);
+
 
 	/**
 	 * PurchaseOrders constructor
@@ -76,15 +86,6 @@ class PurchaseOrders extends AtumOrderPostType {
 			'data'    => __( 'PO Data', ATUM_TEXT_DOMAIN ),
 			'notes'   => __( 'PO Notes', ATUM_TEXT_DOMAIN ),
 			'actions' => __( 'PO Actions', ATUM_TEXT_DOMAIN )
-		);
-		
-		$this->menu_item = array(
-			'purchase-orders' => array(
-				'slug'       => ATUM_TEXT_DOMAIN . '-purchase-orders',
-				'title'      => $this->labels['menu_name'],
-				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
-				'menu_order' => self::MENU_ORDER
-			)
 		);
 
 		// Initialize
@@ -286,7 +287,15 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_admin_bar_link($atum_menus) {
-		return array_merge($atum_menus, $this->menu_item);
+
+		$atum_menus['purchase-orders'] = array(
+			'slug'       => ATUM_TEXT_DOMAIN . '-purchase-orders',
+			'title'      => $this->labels['menu_name'],
+			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
+			'menu_order' => self::MENU_ORDER
+		);
+
+		return $atum_menus;
 	}
 	
 	/**

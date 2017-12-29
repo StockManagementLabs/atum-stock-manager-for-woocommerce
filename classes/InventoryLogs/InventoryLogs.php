@@ -41,12 +41,22 @@ class InventoryLogs extends AtumOrderPostType {
 	 * @var Log
 	 */
 	private $log;
-	
+
 	/**
-	 * The menu item to add
+	 * The capabilities used when registering the post type
 	 * @var array
 	 */
-	private $menu_item;
+	protected $capabilities = array(
+		'edit_post'              => 'edit_inventory_log',
+		'read_post'              => 'read_inventory_log',
+		'delete_post'            => 'delete_inventory_log',
+		'edit_posts'             => 'edit_inventory_logs',
+		'edit_others_posts'      => 'edit_others_inventory_logs',
+		'create_posts'           => 'create_inventory_logs',
+		'delete_posts'           => 'delete_inventory_logs',
+		'delete_other_posts'     => 'delete_other_inventory_logs'
+	);
+
 
 	/**
 	 * InventoryLogs constructor
@@ -81,15 +91,6 @@ class InventoryLogs extends AtumOrderPostType {
 			'data'    => __( 'Log Data', ATUM_TEXT_DOMAIN ),
 			'notes'   => __( 'Log Notes', ATUM_TEXT_DOMAIN ),
 			'actions' => __( 'Log Actions', ATUM_TEXT_DOMAIN )
-		);
-
-		$this->menu_item = array(
-			'inventory-logs' => array(
-				'slug'       => ATUM_TEXT_DOMAIN . '-inventory-logs',
-				'title'      => $this->labels['menu_name'],
-				'href'       => 'edit.php?post_type=' . self::POST_TYPE,
-				'menu_order' => self::MENU_ORDER
-			)
 		);
 
 		// Initialize
@@ -462,7 +463,15 @@ class InventoryLogs extends AtumOrderPostType {
 	 * @return array
 	 */
 	public function add_admin_bar_link( $atum_menus ) {
-		return array_merge($atum_menus, $this->menu_item);
+
+		$atum_menus['inventory-logs'] = array(
+			'slug'       => ATUM_TEXT_DOMAIN . '-inventory-logs',
+			'title'      => $this->labels['menu_name'],
+			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
+			'menu_order' => self::MENU_ORDER
+		);
+
+		return $atum_menus;
 	}
 	
 	/**

@@ -14,6 +14,7 @@ namespace Atum\Components\AtumOrders\Models;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Helpers;
 
@@ -1244,7 +1245,7 @@ abstract class AtumOrderModel {
 	 */
 	public function add_note( $note ) {
 
-		if ( ! $this->id || ! is_user_logged_in() || ! current_user_can( 'manage_woocommerce' ) ) {
+		if ( ! $this->id || ! is_user_logged_in() || ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) {
 			return 0;
 		}
 

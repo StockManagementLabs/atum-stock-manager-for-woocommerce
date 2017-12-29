@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InboundStock\InboundStock;
@@ -175,10 +176,6 @@ final class Ajax {
 	 * @since 1.2.0
 	 */
 	public function rated() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die(-1);
-		}
-
 		update_option( 'atum_admin_footer_text_rated', 1 );
 		wp_die();
 	}
@@ -620,7 +617,7 @@ final class Ajax {
 
 		check_ajax_referer( 'add-atum-order-note', 'security' );
 
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+		if ( ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) {
 			wp_die( -1 );
 		}
 
@@ -664,7 +661,7 @@ final class Ajax {
 
 		check_ajax_referer( 'delete-atum-order-note', 'security' );
 
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+		if ( ! AtumCapabilities::current_user_can( 'delete_order_notes' ) ) {
 			wp_die( -1 );
 		}
 

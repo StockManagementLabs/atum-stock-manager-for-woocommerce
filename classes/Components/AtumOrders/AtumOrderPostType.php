@@ -14,8 +14,8 @@ namespace Atum\Components\AtumOrders;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 
@@ -35,6 +35,12 @@ abstract class AtumOrderPostType {
 	protected $metabox_labels = array();
 
 	/**
+	 * The capabilities used when registering the post type
+	 * @var array
+	 */
+	protected $capabilities = array();
+
+	/**
 	 * The ATUM Order items table name
 	 */
 	const ORDER_ITEMS_TABLE = ATUM_PREFIX . 'order_items';
@@ -52,13 +58,16 @@ abstract class AtumOrderPostType {
 	 */
 	public function __construct() {
 
-		// Register the post type
-		add_action( 'init', array($this, 'register_post_type') );
+		// Add the ATUM prefix to all the capabilities
+		$this->capabilities = preg_filter('/^/', ATUM_PREFIX, $this->capabilities);
 
 		// Add the ATUM Orders' meta table to wpdb
 		global $wpdb;
 		$wpdb->atum_order_itemmeta = $wpdb->prefix . self::ORDER_ITEM_META_TABLE;
 		$wpdb->tables[] = self::ORDER_ITEM_META_TABLE;
+
+		// Register the post type
+		add_action( 'init', array($this, 'register_post_type') );
 
 		if ( is_admin() ) {
 
@@ -108,10 +117,11 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.9
 	 */
-	private function register_post_type( $args = array() ) {
+	public function register_post_type( $args = array() ) {
 
 		// Minimum capability required
-		$is_user_allowed = current_user_can( 'manage_woocommerce' );
+		$read_capability = ( isset($this->capabilities['read_post']) ) ? $this->capabilities['read_post'] : 'manage_woocommerce';
+		$is_user_allowed = current_user_can($read_capability);
 		$main_menu_item  = Main::get_main_menu_item();
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
@@ -127,7 +137,8 @@ abstract class AtumOrderPostType {
 			'rewrite'             => FALSE,
 			'query_var'           => is_admin(),
 			'supports'            => array( 'title', 'comments', 'custom-fields' ),
-			'has_archive'         => FALSE
+			'has_archive'         => FALSE,
+			'capabilities'        => $this->capabilities
 		), $args ));
 
 		// Register the ATUM Order post type
@@ -355,7 +366,7 @@ abstract class AtumOrderPostType {
 
 			case 'notes':
 
-				if ( $post->comment_count ) {
+				if ( $post->comment_count && AtumCapabilities::current_user_can('read_order_notes') ) {
 
 					// check the status of the post
 					$status = ( 'trash' != $post->post_status ) ? '' : 'post-trashed';
@@ -544,14 +555,18 @@ abstract class AtumOrderPostType {
 		);
 
 		// Notes meta box
-		add_meta_box(
-			'atum_order_notes',
-			! empty( $this->metabox_labels['notes'] ) ? $this->metabox_labels['notes'] : __('Notes', ATUM_TEXT_DOMAIN),
-			array($this, 'show_notes_meta_box'),
-			static::POST_TYPE,
-			'side',
-			'default'
-		);
+		if ( AtumCapabilities::current_user_can('read_order_notes') ) {
+
+			add_meta_box(
+				'atum_order_notes',
+				! empty( $this->metabox_labels['notes'] ) ? $this->metabox_labels['notes'] : __( 'Notes', ATUM_TEXT_DOMAIN ),
+				array( $this, 'show_notes_meta_box' ),
+				static::POST_TYPE,
+				'side',
+				'default'
+			);
+
+		}
 
 		// Actions meta box
 		add_meta_box(

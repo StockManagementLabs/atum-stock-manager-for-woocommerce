@@ -79,7 +79,7 @@ class InboundStock extends AtumListPage {
 			'callback'     => array( $this, 'display' ),
 			'slug'         => self::UI_SLUG,
 			'menu_order'   => self::MENU_ORDER,
-			'capability'   => ATUM_PREFIX . 'view_inbound_stock'
+			'capability'   => ATUM_PREFIX . 'read_inbound_stock'
 		);
 
 		return $menus;
