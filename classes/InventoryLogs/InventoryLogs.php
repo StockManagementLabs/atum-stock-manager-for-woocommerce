@@ -95,6 +95,9 @@ class InventoryLogs extends AtumOrderPostType {
 		// Initialize
 		parent::__construct();
 
+		// Add item order
+		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
 		// Add the "Inventory Logs" link to the ATUM's admin bar menu
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
 
@@ -108,9 +111,6 @@ class InventoryLogs extends AtumOrderPostType {
 
 		// Add the help tab to Inventory Logs' list page
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
-		
-		// Add item order
-		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
 		
 	}
 

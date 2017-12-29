@@ -43,8 +43,10 @@ abstract class DashboardWidget {
 	 */
 	public function __construct($widget_title) {
 
-		$this->title = $widget_title;
-		add_action( 'wp_dashboard_setup', array($this,'init') );
+		if ( is_admin() ) {
+			$this->title = $widget_title;
+			add_action( 'wp_dashboard_setup', array( $this, 'init' ) );
+		}
 
 	}
 

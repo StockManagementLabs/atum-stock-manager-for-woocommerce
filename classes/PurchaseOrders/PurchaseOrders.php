@@ -15,8 +15,6 @@ namespace Atum\PurchaseOrders;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 
@@ -92,14 +90,14 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Initialize
 		parent::__construct();
 
+		// Add item order
+		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
 		// Add the "Purchase Orders" link to the ATUM's admin bar menu
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 11 );
 
 		// Add the help tab to PO list page
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
-		
-		// Add item order
-		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
 
 	}
 

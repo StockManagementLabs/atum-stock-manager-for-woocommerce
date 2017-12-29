@@ -52,13 +52,8 @@ abstract class AtumOrderPostType {
 	 */
 	public function __construct() {
 
-		$this->register_post_type();
-		$this->register_post_status();
-
-		// Register the taxomony only if needed by the custom post type
-		if ( defined('static::TAXONOMY') && ! empty(static::TAXONOMY) ) {
-			$this->register_taxonomy();
-		}
+		// Register the post type
+		add_action( 'init', array($this, 'register_post_type') );
 
 		// Add the ATUM Orders' meta table to wpdb
 		global $wpdb;
@@ -138,39 +133,8 @@ abstract class AtumOrderPostType {
 		// Register the ATUM Order post type
 		register_post_type( static::POST_TYPE, $args );
 
-	}
 
-	/**
-	 * Register the ATUM Order taxonomy
-	 *
-	 * @param array $args
-	 *
-	 * @since 1.2.9
-	 */
-	private function register_taxonomy( $args = array() ) {
-
-		$args = apply_filters( 'atum/order_post_type/taxonomy_args', wp_parse_args( array(
-			'hierarchical'          => FALSE,
-			'show_ui'               => FALSE,
-			'show_in_nav_menus'     => FALSE,
-			'query_var'             => is_admin(),
-			'rewrite'               => FALSE,
-			'public'                => FALSE,
-			'update_count_callback' => array( $this, 'order_term_recount' ),
-		), $args ));
-
-		// Register the hidden order type taxonomy (if used)
-		register_taxonomy( static::TAXONOMY, array( static::POST_TYPE ), $args );
-
-	}
-
-	/**
-	 * Register our custom post statuses, used for order status
-	 *
-	 * @since 1.2.9
-	 */
-	private function register_post_status() {
-
+		// Register the post statuses
 		$atum_statuses = (array) apply_filters( 'atum/order_post_type/register_post_statuses',
 			array(
 				ATUM_PREFIX . 'pending'   => array(
@@ -194,6 +158,25 @@ abstract class AtumOrderPostType {
 
 		foreach ( $atum_statuses as $atum_status => $values ) {
 			register_post_status( $atum_status, $values );
+		}
+
+
+		// Register the taxomony only if needed by the custom post type
+		if ( defined('static::TAXONOMY') && ! empty(static::TAXONOMY) ) {
+
+			$args = apply_filters( 'atum/order_post_type/taxonomy_args', wp_parse_args( array(
+				'hierarchical'          => FALSE,
+				'show_ui'               => FALSE,
+				'show_in_nav_menus'     => FALSE,
+				'query_var'             => is_admin(),
+				'rewrite'               => FALSE,
+				'public'                => FALSE,
+				'update_count_callback' => array( $this, 'order_term_recount' ),
+			), $args ));
+
+			// Register the hidden order type taxonomy (if used)
+			register_taxonomy( static::TAXONOMY, array( static::POST_TYPE ), $args );
+
 		}
 
 	}

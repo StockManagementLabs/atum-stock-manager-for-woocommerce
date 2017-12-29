@@ -79,7 +79,7 @@ class Main {
 	protected function register_admin_hooks() {
 
 		// Add the menus
-		add_action( 'admin_menu', array( $this, 'add_plugin_menu' ), 1 );
+		add_action( 'admin_menu', array( $this, 'create_menu' ), 1 );
 
 		// Load dependencies
 		add_action( 'init', array( $this, 'admin_load' ) );
@@ -131,11 +131,17 @@ class Main {
 		// Add the ATUM menu to admin bar
 		add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
 
-		// Load front stuff
+		// Load language files
+		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' );
+
+		// Create menu (priority must be lower than 10)
+		add_action( 'init', array($this, 'add_menu_items'), 1 );
+
+		// Load front stuff (priority must be higher than 10)
 		add_action( 'init', array($this, 'load'), 11 );
 
-		// Load ATUM core modules
-		add_action( 'setup_theme', array( $this, 'load_core_modules' ) );
+		// Load ATUM modules
+		add_action( 'setup_theme', array( $this, 'load_modules' ) );
 
 		// Save the date when any product goes out of stock
 		add_action( 'woocommerce_product_set_stock' , array($this, 'record_out_of_stock_date'), 20 );
@@ -147,17 +153,6 @@ class Main {
 	}
 
 	/**
-	 * Load the ATUM core modules
-	 *
-	 * @since 1.1.2
-	 */
-	public function load_core_modules () {
-		ModuleManager::get_instance();
-		AtumCapabilities::get_instance();
-		Addons::get_instance();
-	}
-
-	/**
 	 * Initialize the front stuff
 	 * This will execute as a priority 11 within the "init" hook
 	 *
@@ -165,21 +160,9 @@ class Main {
 	 */
 	public function load() {
 
-		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
-
-		foreach ( $this->menu_items as $menu_item ) {
-			$this->menu_items_order[] = array(
-				'slug'       => $menu_item['slug'],
-				'menu_order' => ( empty( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
-			);
-		}
-
-		// The first submenu will be the main (parent) menu too
-		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
-		self::$main_menu_item = reset( self::$main_menu_item );
-
-
+		//
 		// Register the Locations taxonomy and link it to products
+		//---------------------------------------------------------
 		$labels = array(
 			'name'              => _x( 'Product Locations', 'taxonomy general name', ATUM_TEXT_DOMAIN ),
 			'singular_name'     => _x( 'Location', 'taxonomy singular name', ATUM_TEXT_DOMAIN ),
@@ -205,29 +188,6 @@ class Main {
 
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
-		//
-		// Load extra modules
-		//--------------------
-
-		if ( ModuleManager::is_module_active('stock_central') ) {
-			StockCentral::get_instance();
-		}
-
-		if ( ModuleManager::is_module_active('inventory_logs') ) {
-			new InventoryLogs();
-		}
-
-		if ( ModuleManager::is_module_active('purchase_orders') ) {
-
-			// Init the Suppliers
-			Suppliers::get_instance();
-
-			// Init the Purchase Orders
-			if ( current_user_can( ATUM_PREFIX . 'manage_po' ) ) {
-				new PurchaseOrders();
-			}
-
-		}
 
 		// Set the stock decimals setting globally
 		Globals::set_stock_decimals( Helpers::get_option('stock_quantity_decimals', 0) );
@@ -267,16 +227,33 @@ class Main {
 			// Do upgrade tasks
 			new Upgrade( $db_version ?: '0.0.1' );
 		}
+
+		// TODO: CREATE A FIRST-ACCESS TUTORIAL WITH HELP POINTERS (LIKE WC)
+		// Register the help pointers
+		//add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
+
+		// Admin styles
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
+
+		// Add the footer text to ATUM pages
+		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 		
-		// Load language files
-		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' );
+	}
+
+	/**
+	 * Load the ATUM modules
+	 *
+	 * @since 1.1.2
+	 */
+	public function load_modules () {
 
 		//
 		// Load core modules
-		//-------------------
+		//--------------------
 
 		ModuleManager::get_instance();
 		AtumCapabilities::get_instance();
+		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();
 
@@ -300,24 +277,50 @@ class Main {
 			new DataExport();
 		}
 
-		// TODO: CREATE A FIRST-ACCESS TUTORIAL WITH HELP POINTERS (LIKE WC)
-		// Register the help pointers
-		//add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
+		if ( ModuleManager::is_module_active('inventory_logs') ) {
+			new InventoryLogs();
+		}
 
-		// Admin styles
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
+		if ( ModuleManager::is_module_active('purchase_orders') ) {
 
-		// Add the footer text to ATUM pages
-		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
-		
+			Suppliers::get_instance();
+
+			if ( AtumCapabilities::current_user_can('manage_po') ) {
+				new PurchaseOrders();
+			}
+
+		}
+
+	}
+
+	/**
+	 * Add items to the ATUM menu
+	 *
+	 * @since 1.3.6
+	 */
+	public function add_menu_items () {
+
+		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
+
+		foreach ( $this->menu_items as $menu_item ) {
+			$this->menu_items_order[] = array(
+				'slug'       => $menu_item['slug'],
+				'menu_order' => ( empty( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
+			);
+		}
+
+		// The first submenu will be the main (parent) menu too
+		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
+		self::$main_menu_item = reset( self::$main_menu_item );
+
 	}
 	
 	/**
-	 * Generate the plugin pages' menus
+	 * Generate the ATUM menu
 	 *
 	 * @since 0.0.1
 	 */
-	public function add_plugin_menu() {
+	public function create_menu() {
 		
 		// Add the main menu item
 		add_menu_page(
@@ -416,11 +419,13 @@ class Main {
 	 */
 	public function add_admin_bar_menu() {
 
-		if ( Helpers::get_option( 'enable_admin_bar_menu', 'yes' ) != 'yes' ) {
+		if ( ! AtumCapabilities::current_user_can('view_admin_bar_menu') ) {
 			return;
 		}
 
-
+		if ( Helpers::get_option( 'enable_admin_bar_menu', 'yes' ) != 'yes' ) {
+			return;
+		}
 
 		global $wp_admin_bar;
 
