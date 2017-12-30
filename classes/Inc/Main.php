@@ -265,7 +265,7 @@ class Main {
 			StockCentral::get_instance();
 		}
 
-		if ( AtumCapabilities::current_user_can('read_statistics') && ModuleManager::is_module_active('dashboard_statistics') ) {
+		if ( AtumCapabilities::current_user_can('view_statistics') && ModuleManager::is_module_active('dashboard_statistics') ) {
 			new Statistics( __( 'ATUM Statistics', ATUM_TEXT_DOMAIN ) );
 		}
 

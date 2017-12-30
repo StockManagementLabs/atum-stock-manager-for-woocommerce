@@ -255,6 +255,12 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
+= 1.3.6.1 - 2017-12-30 =
+
+Fixes:
+
+* Fixed statistics widget's capability name.
+
 = 1.3.6 - 2017-12-29 =
 
 Features:
