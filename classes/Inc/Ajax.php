@@ -534,7 +534,7 @@ final class Ajax {
 		$max_results = absint( apply_filters('atum/ajax/search_wc_orders/max_results', 10) );
 
 		$query = $wpdb->prepare(
-			"SELECT ID from {$wpdb->posts} WHERE post_type = 'shop_order' 
+			"SELECT DISTINCT ID from {$wpdb->posts} WHERE post_type = 'shop_order' 
 			AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
 			AND ID LIKE %s LIMIT %d",
 			"$order_id%",
@@ -587,7 +587,7 @@ final class Ajax {
 		$max_results = absint( apply_filters('atum/ajax/search_suppliers/max_results', 10) );
 
 		$query = $wpdb->prepare(
-			"SELECT ID, post_title from {$wpdb->posts} 
+			"SELECT DISTINCT ID, post_title from {$wpdb->posts} 
 			 WHERE post_type = %s AND " . $where . " LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results
