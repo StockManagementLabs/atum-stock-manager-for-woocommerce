@@ -13,10 +13,12 @@
 defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Globals;
+use Atum\Components\AtumCapabilities;
 
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
 $product      = $item->get_product();
+$product_id   = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
 ?>
@@ -32,6 +34,14 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			if ( $product && $product->get_sku() ): ?>
 				<div class="atum-order-item-sku"><strong><?php _e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
 			<?php endif;
+
+			if ( $product && AtumCapabilities::current_user_can('read_supplier') ):
+				$supplier_sku = get_post_meta($product_id, '_supplier_sku', TRUE);
+
+				if ($supplier_sku): ?>
+					<div class="atum-order-item-sku"><strong><?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $supplier_sku ) ?></div>
+				<?php endif;
+			endif;
 
 			if ( $item->get_variation_id() ) : ?>
 				<div class="atum-order-item-variation"><strong><?php _e( 'Variation ID:', ATUM_TEXT_DOMAIN ) ?></strong>
@@ -56,8 +66,6 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 	<?php
 	do_action( 'atum/atum_order/item_values', $product, $item, absint( $item_id ) );
 
-
-	$product_id     = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
 	$locations      = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
 	$locations_list = ( ! empty( $locations ) ) ? implode( ', ', $locations ) : '&ndash;';
 	?>
