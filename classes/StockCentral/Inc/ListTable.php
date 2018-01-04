@@ -72,6 +72,7 @@ class ListTable extends AtumListTable {
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_supplier'            => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'        => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'       => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
@@ -99,9 +100,10 @@ class ListTable extends AtumListTable {
 			unset( $args['table_columns']['_purchase_price'] );
 		}
 
-		// Hide the supplier column if the current user has not the capability
+		// Hide the supplier's columns if the current user has not the capability
 		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
 			unset( $args['table_columns']['_supplier'] );
+			unset( $args['table_columns']['_supplier_sku'] );
 		}
 
 		if ( ! ModuleManager::is_module_active('purchase_orders') ) {
@@ -119,6 +121,7 @@ class ListTable extends AtumListTable {
 					'title',
 					'_supplier',
 					'_sku',
+					'_supplier_sku',
 					'ID',
 					'calc_type',
 					'_regular_price',
