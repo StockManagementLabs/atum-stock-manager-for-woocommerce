@@ -1755,7 +1755,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Search by SKU or ID for products
+	 * Search products by SKU, Supplier's SKU or ID
 	 *
 	 * @since 1.2.5
 	 *
@@ -1787,12 +1787,16 @@ abstract class AtumListTable extends \WP_List_Table {
 				$search_ids[] = $term;
 			}
 
-			// Attempt to get a SKU
-			$sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_sku' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
-			$sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
+			// Attempt to get an SKU or Supplier's SKU
+			foreach (['sku', 'supplier_sku'] as $meta_key) {
 
-			if ( sizeof( $sku_to_id ) > 0 ) {
-				$search_ids = array_merge( $search_ids, $sku_to_id );
+				$sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_{$meta_key}' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
+				$sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
+
+				if ( sizeof( $sku_to_id ) > 0 ) {
+					$search_ids = array_merge( $search_ids, $sku_to_id );
+				}
+
 			}
 
 		}
