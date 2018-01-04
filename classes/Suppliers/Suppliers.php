@@ -69,9 +69,17 @@ class Suppliers {
 
 			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 
-				// Add columns to Suppliers list table
+				// Add custom columns to Suppliers' post type list table
 				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
 				add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
+
+				// Add the supplier's fields to products
+				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
+				add_action( 'woocommerce_product_options_inventory_product_data', array($this, 'add_product_supplier_fields') );
+
+				// Save the product supplier meta box
+				add_action( 'save_post_product', array( $this, 'save_product_supplier_fields' ) );
+				add_action( 'woocommerce_update_product_variation', array( $this, 'save_product_supplier_fields' ) );
 
 			}
 
@@ -87,14 +95,6 @@ class Suppliers {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 			}
-
-			// Add the supplier selection to products
-			add_action( 'woocommerce_product_options_general_product_data', array( $this, 'show_product_supplier_meta_box' ) );
-			add_action( 'woocommerce_variation_options_pricing', array( $this, 'show_product_supplier_meta_box' ), 11, 3 );
-
-			// Save the product supplier meta box
-			add_action( 'save_post_product', array( $this, 'save_product_supplier_meta_box' ) );
-			add_action( 'woocommerce_update_product_variation', array( $this, 'save_product_supplier_meta_box' ) );
 
 		}
 
@@ -350,7 +350,7 @@ class Suppliers {
 	}
 
 	/**
-	 * Displays the Supplier selector in WC products
+	 * Adds the Supplier fields in WC's product data meta box
 	 *
 	 * @since 1.3.0
 	 *
@@ -358,7 +358,7 @@ class Suppliers {
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
-	public function show_product_supplier_meta_box($loop = NULL, $variation_data = array(), $variation = NULL) {
+	public function add_product_supplier_fields ($loop = NULL, $variation_data = array(), $variation = NULL) {
 
 		global $post;
 
@@ -373,28 +373,42 @@ class Suppliers {
 
 		}
 
-		$product_id = empty($variation) ? $post->ID : $variation->ID;
-		$supplier_id = get_post_meta($product_id, '_supplier', TRUE);
+		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
+		$supplier_id  = get_post_meta( $product_id, '_supplier', TRUE );
+		$supplier_sku = get_post_meta( $product_id, '_supplier_sku', TRUE );
 
 		if ($supplier_id) {
 			$supplier = get_post($supplier_id);
 		}
 
 		// If the user is not allowed to edit Suppliers, add a hidden input
-		if ( ! AtumCapabilities::current_user_can('edit_supplier') ): ?>
-			<input type="hidden" id="_supplier" name="_supplier" value="<?php echo ( ! empty($supplier) ) ? esc_attr( $supplier->ID ) : '' ?>">
-		<?php else:
+		if ( ! AtumCapabilities::current_user_can('edit_supplier') ):
 
-			$field_name = ( empty($variation) ) ? '_supplier' : "variation_supplier[$loop]";
+			// Supplier ID
+			woocommerce_wp_hidden_input( array(
+				'id'    => '_supplier',
+				'value' => ( ! empty($supplier) ) ? esc_attr( $supplier->ID ) : ''
+			) );
+
+			// Supplier SKU
+			woocommerce_wp_hidden_input( array(
+				'id'    => '_supplier_sku',
+				'value' => $supplier_sku ?: ''
+			) );
+
+		else:
+
+			// Supplier ID
+			$suplier_field_name = empty($variation) ? '_supplier' : "variation_supplier[$loop]";
 
 			if ( empty($variation) ): ?>
 			<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
 			<?php endif; ?>
 
-				<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-last' ?>">
-					<label for="_supplier"><?php _e('Supplier') ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
+				<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-first' ?>">
+					<label for="_supplier"><?php _e('Supplier', ATUM_TEXT_DOMAIN) ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
 
-					<select class="wc-product-search" id="_supplier" name="<?php echo $field_name ?>" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
+					<select class="wc-product-search" id="_supplier" name="<?php echo $suplier_field_name ?>" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
 						data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 						data-multiple="false" data-selected="" data-minimum_input_length="1">
 						<?php if ( ! empty($supplier) ): ?>
@@ -403,8 +417,22 @@ class Suppliers {
 					</select>
 				</p>
 
-			<?php if ( empty($variation) ): ?>
-			</div>
+				<?php
+				// Supplier SKU
+				$supplier_sku_field_name = empty($variation) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
+
+				woocommerce_wp_text_input( array(
+					'id'            => '_supplier_sku',
+					'name'          => $supplier_sku_field_name,
+					'value'         => $supplier_sku ?: '',
+					'label'         => '<abbr title="' . __( "Supplier's Stock Keeping Unit", ATUM_TEXT_DOMAIN ) . '">' . __( "Supplier's SKU", ATUM_TEXT_DOMAIN ) . '</abbr>',
+					'desc_tip'      => TRUE,
+					'description'   => __( "Supplier's SKU refers to a Stock-keeping unit coming from the product's supplier, a unique identifier for each distinct product and service that can be purchased.", ATUM_TEXT_DOMAIN ),
+					'wrapper_class' =>  ( ! empty($variation) ) ? 'form-row form-row-last' : ''
+				) );
+
+			if ( empty($variation) ): ?>
+				</div>
 			<?php endif;
 
 		endif;
@@ -412,13 +440,13 @@ class Suppliers {
 	}
 
 	/**
-	 * Save the product supplier meta box
+	 * Save the product supplier fields
 	 *
 	 * @since 1.3.0
 	 *
 	 * @param int $post_id    The post ID
 	 */
-	public function save_product_supplier_meta_box($post_id) {
+	public function save_product_supplier_fields ($post_id) {
 
 		$product  = wc_get_product( $post_id );
 
@@ -426,20 +454,24 @@ class Suppliers {
 			return;
 		}
 
-		if ( isset($_POST['variation_supplier']) ) {
+		if ( isset($_POST['variation_supplier']) && isset($_POST['variation_supplier_sku']) ) {
 			$supplier = reset($_POST['variation_supplier']);
 			$supplier = $supplier ? absint($supplier) : '';
+
+			$supplier_sku = reset($_POST['variation_supplier_sku']);
 		}
-		elseif ( isset($_POST['_supplier']) ) {
-			$supplier = $_POST['_supplier'] ? absint( $_POST['_supplier'] ) : '';
+		elseif ( isset($_POST['_supplier']) && isset($_POST['_supplier_sku']) ) {
+			$supplier     = $_POST['_supplier'] ? absint( $_POST['_supplier'] ) : '';
+			$supplier_sku = esc_attr( $_POST['_supplier_sku'] );
 		}
 		else {
 			// If we are not saving the product from its edit page, do not continue
 			return;
 		}
 
-		// Always save the supplier meta (nevermind it has value or not) to be able to sort by it in List Tables
+		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
 		update_post_meta( $post_id, '_supplier', $supplier );
+		update_post_meta( $post_id, '_supplier_sku', $supplier_sku );
 
 	}
 
