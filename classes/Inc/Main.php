@@ -696,23 +696,27 @@ class Main {
 			return;
 		}
 
+		$field_title = __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')';
+
 		if ( empty($variation) ) {
 
 			woocommerce_wp_text_input( array(
 				'id'        => '_purchase_price',
-			    'label'     => __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')',
+			    'label'     => $field_title,
 			    'data_type' => 'price'
 			) );
 
 		}
 		else {
 
-			?>
-			<p class="form-row form-row-first">
-				<label><?php echo __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
-				<input type="text" size="5" name="variation_purchase_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( get_post_meta($variation->ID, '_purchase_price', TRUE) ) ?>" class="wc_input_price" />
-			</p>
-			<?php
+			woocommerce_wp_text_input( array(
+				'id'            => "variation_purchase_price_{$loop}",
+				'name'          => "variation_purchase_price[$loop]",
+				'value'         => get_post_meta($variation->ID, '_purchase_price', TRUE),
+				'label'         => $field_title,
+				'wrapper_class' => 'form-row form-row-first',
+				'data_type'     => 'price'
+			) );
 
 		}
 
