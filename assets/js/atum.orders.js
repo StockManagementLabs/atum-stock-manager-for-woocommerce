@@ -114,7 +114,7 @@
 					url     : ajaxurl,
 					data    : data,
 					dataType: dataType,
-					type    : 'POST',
+					method  : 'POST',
 					success : function (response) {
 						
 						if ((typeof response === 'object' && response.success === true) || typeof response !== 'object') {

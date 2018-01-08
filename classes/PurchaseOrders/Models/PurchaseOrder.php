@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
-use Atum\Suppliers\Suppliers;
 
 
 class PurchaseOrder extends AtumOrderModel {
@@ -36,9 +35,6 @@ class PurchaseOrder extends AtumOrderModel {
 
 		// Add the items blocker div to the items metabox within ATUM orders with no supplier selected
 		add_action( 'atum/atum_order/before_items_meta_box', array($this, 'maybe_add_items_blocker') );
-
-		// Limit the results of the enhanced select search when adding products to the PO
-		add_filter( 'atum/atum_order/included_search_products', array($this, 'limit_searchable_products'), 10, 2 );
 
 		// Add message before the PO product search
 		add_action( 'atum/atum_order/before_product_search_modal', array($this, 'product_search_message') );
@@ -84,22 +80,6 @@ class PurchaseOrder extends AtumOrderModel {
 		$unblocked = ($supplier) ? ' unblocked' : '';
 		echo '<div class="items-blocker' . $unblocked . '"><h3>' . __('Set the Supplier in the first field and hit the Create/Update button on the top right to add items.', ATUM_TEXT_DOMAIN) . '</h3></div>';
 
-	}
-
-	/**
-	 * Limit the results of the enhanced select search when adding products to the PO
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string        $products  A JSON array of product IDs to include
-	 * @param PurchaseOrder $po        The current Purchase Order
-	 *
-	 * @return string
-	 */
-	public function limit_searchable_products($products, $po) {
-
-		$products = Suppliers::get_supplier_products( $po->get_supplier('id'), 'ids' );
-		return json_encode($products);
 	}
 
 	/**

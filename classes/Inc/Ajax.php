@@ -61,6 +61,9 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_deactivate_license', array($this, 'deactivate_license') );
 		add_action( 'wp_ajax_atum_install_addon', array($this, 'install_addon') );
 
+		// Search for products from enhanced selects
+		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
+
 		// Search for WooCommerce orders from enhanced selects
 		add_action( 'wp_ajax_atum_json_search_orders', array( $this, 'search_wc_orders' ) );
 
@@ -509,6 +512,131 @@ final class Ajax {
 		}
 
 		wp_send_json_error($default_error);
+
+	}
+
+	/**
+	 * Seach for products from enhanced selects
+	 *
+	 * @since 1.3.7
+	 */
+	public function search_products() {
+
+		check_ajax_referer( 'search-products', 'security' );
+
+		ob_start();
+
+		$term = stripslashes( $_GET['term'] );
+
+		if ( empty( $term ) ) {
+			wp_die();
+		}
+
+		global $wpdb;
+
+		$like_term     = '%' . $wpdb->esc_like( $term ) . '%';
+		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', array( 'product', 'product_variation' ) );
+		$post_statuses = current_user_can( 'edit_private_products' ) ? array( 'private', 'publish' ) : array( 'publish' );
+		$type_join     = $type_where = $meta_join = $meta_where = array();
+		$join_counter  = 1;
+
+		// Search by meta keys
+		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', array( '_sku', ) ) );
+
+		if ( AtumCapabilities::current_user_can('read_supplier') ) {
+			$searched_metas[] = '_supplier_sku';
+		}
+
+		foreach ($searched_metas as $searched_meta) {
+			$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
+			$meta_where[] = $wpdb->prepare("OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term);
+			$join_counter++;
+		}
+
+		// Allow searching for other product types if needed
+		$searched_types = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_product_types', array() ) );
+		if ( ! empty($searched_types) ) {
+
+			foreach ($searched_types as $searched_type) {
+				$type_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
+				$type_where[] = "AND ( pm{$join_counter}.meta_key = '{$searched_type}' AND pm{$join_counter}.meta_value = 'yes' )";
+				$join_counter++;
+			}
+
+		}
+
+		$query = $wpdb->prepare( "
+			SELECT DISTINCT posts.ID FROM {$wpdb->posts} posts
+			" . implode("\n", $meta_join) . "
+			" . implode("\n", $type_join) . "
+			WHERE (
+				posts.post_title LIKE %s
+				OR posts.post_content LIKE %s
+				" . implode("\n", $meta_where) . "
+			)
+			AND posts.post_type IN ('" . implode( "','", $post_types ) . "')
+			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
+			" . implode("\n", $type_where) . "
+			ORDER BY posts.post_parent ASC, posts.post_title ASC
+			",
+			$like_term,
+			$like_term
+		);
+		$product_ids = $wpdb->get_col($query);
+
+		if ( is_numeric( $term ) ) {
+
+			$post_id   = absint( $term );
+			$post_type = get_post_type( $post_id );
+
+			if ( 'product_variation' == $post_type ) {
+				$product_ids[] = $post_id;
+			}
+			elseif ( 'product' == $post_type ) {
+				$product_ids[] = $post_id;
+			}
+
+			$product_ids[] = wp_get_post_parent_id( $post_id );
+
+		}
+
+		$ids = wp_parse_id_list( $product_ids );
+
+		if ( ! empty( $_GET['exclude'] ) ) {
+			$ids = array_diff( $ids, (array) $_GET['exclude'] );
+		}
+
+		$included = ( ! empty( $_GET['include'] ) ) ? array_map( 'absint', (array) $_GET['include'] ) : array();
+		$url      = parse_url( wp_get_referer() );
+		parse_str( $url['query'], $url_query );
+
+		if ( ! empty($url_query['post']) ) {
+
+			$po = Helpers::get_atum_order_model( absint( $url_query['post'] ) );
+
+			// The Purchase Orders only should allow products from the current PO's supplier
+			if ( is_a($po, '\Atum\PurchaseOrders\Models\PurchaseOrder') ) {
+				$included = array_merge($included, apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier('id'), 'ids' ) ));
+			}
+
+		}
+
+		if ( ! empty($included) ) {
+			$ids = array_intersect( $ids, $included );
+		}
+
+		if ( ! empty( $_GET['limit'] ) ) {
+			$ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
+		}
+
+		$product_objects = array_filter( array_map( 'wc_get_product', $ids ), 'wc_products_array_filter_editable' );
+		$products        = array();
+
+		foreach ( $product_objects as $product_object ) {
+			$products[ $product_object->get_id() ] = rawurldecode( $product_object->get_formatted_name() );
+		}
+
+		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $products ) );
 
 	}
 
