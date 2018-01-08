@@ -7,7 +7,7 @@ Tested up to: 4.9.1
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.2.6
-Stable tag: 1.3.6.1
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -255,6 +255,21 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
+= 1.3.7 - 2017-01-08 =
+
+Features:
+
+* Added Supplier SKU field to products.
+* Added Supplier SKU column to Purchase Orders and Inventory Logs.
+* Added Supplier SKU column to Stock Central.
+* Allow searching products by Supplier SKU within Purchase Orders and Inventory Logs.
+* Added suppliers info to the Stock Central’s help tab.
+
+Fixes:
+
+* Improved enhaced selects' ajax JSON search for products.
+* Fixed decimals format in purchase price of product variations.
+
 = 1.3.6.1 - 2017-12-30 =
 
 Fixes:
@@ -276,7 +291,6 @@ Fixes:
 * Refactory of ATUM menu system.
 * Fixed admin bar's ATUM menu in front end.
 * Other minor fixes.
-
 
 = 1.3.5 - 2017-12-15 =
 
