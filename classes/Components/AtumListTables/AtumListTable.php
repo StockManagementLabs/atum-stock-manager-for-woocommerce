@@ -605,9 +605,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ($supplier_post) {
 
-				$supplier     = $supplier_post->post_title;
-				$supplier_abb = ( strlen( $supplier ) > 20 ) ? trim( substr( $supplier, 0, 20 ) ) . '...' : $supplier;
-				$supplier_tooltip = sprintf( __('%s (ID: %d)', ATUM_TEXT_DOMAIN), $supplier, $supplier_id );
+				$supplier         = $supplier_post->post_title;
+				$supplier_length  = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
+				$supplier_abb     = ( strlen( $supplier ) > $supplier_length ) ? trim( substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
+				$supplier_tooltip = sprintf( __( '%s (ID: %d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
 
 				$supplier = '<span class="tips" data-toggle="tooltip" title="' . $supplier_tooltip . '">' . $supplier_abb . '</span>' .
 				            '<span class="atum-title-small">' . $supplier_tooltip . '</span>';
