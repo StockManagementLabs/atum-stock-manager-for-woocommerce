@@ -105,7 +105,13 @@ abstract class AtumOrderPostType {
 			// Enqueue scripts
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'admin_footer', array( $this, 'print_scripts' ) );
-
+			
+			if (class_exists('\woocommerce_wpml')) {
+				// Make Atum orders not translatable
+				add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box'));
+				add_action( 'init', array( $this, 'remove_language_switcher'), 12);
+			}
+			
 		}
 
 	}
@@ -912,6 +918,37 @@ abstract class AtumOrderPostType {
 
 		}
 
+	}
+	
+	/**
+	 * Remove WPML post type content setup box
+	 *
+	 * @since 1.3.3.1
+	 *
+	 */
+	public function hide_multilingual_content_setup_box() {
+		remove_meta_box('icl_div_config', convert_to_screen(static::POST_TYPE), 'normal');
+	}
+	
+	/**
+	 * Remove WPML language switcher if current one is an Atum Order post type screen
+	 *
+	 * @since 1.3.3.1
+	 *
+	 */
+	public function remove_language_switcher() {
+		
+		global $sitepress, $pagenow;
+		
+		$is_order_post_type = (isset( $_GET['post_type']) &&   $_GET['post_type'] == static::POST_TYPE) ? TRUE : FALSE;
+		$get_post      = isset( $_GET['post'] ) ? $_GET['post'] : false;
+		$is_order_edit = $get_post && $pagenow == 'post.php' && get_post_type( $get_post ) == static::POST_TYPE ;
+		
+		
+		if ( $is_order_post_type || $is_order_edit) {
+			remove_action( 'wp_before_admin_bar_render', array($sitepress, 'admin_language_switcher') );
+		}
+		
 	}
 
 	/**
