@@ -534,7 +534,7 @@ final class Ajax {
 
 		global $wpdb;
 
-		$like_term     = '%' . $wpdb->esc_like( $term ) . '%';
+		$like_term     = '%%' . $wpdb->esc_like( $term ) . '%%';
 		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', array( 'product', 'product_variation' ) );
 		$post_statuses = current_user_can( 'edit_private_products' ) ? array( 'private', 'publish' ) : array( 'publish' );
 		$type_join     = $type_where = $meta_join = $meta_where = array();
@@ -616,7 +616,17 @@ final class Ajax {
 
 			// The Purchase Orders only should allow products from the current PO's supplier
 			if ( is_a($po, '\Atum\PurchaseOrders\Models\PurchaseOrder') ) {
-				$included = array_merge($included, apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier('id'), 'ids' ) ));
+
+				$supplier_products = apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier('id'), 'ids' ) );
+
+				// If the PO supplier has no linked products, it must return an empty array
+				if ( empty($supplier_products) ) {
+					$ids = $included = array();
+				}
+				else {
+					$included = array_merge($included, $supplier_products);
+				}
+
 			}
 
 		}
@@ -693,6 +703,7 @@ final class Ajax {
 
 		check_ajax_referer( 'search-products', 'security' );
 
+		global $wpdb;
 		ob_start();
 
 		if ( is_numeric( $_GET['term'] ) ) {
@@ -703,20 +714,22 @@ final class Ajax {
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
 
-			$supplier_name = esc_attr( $_GET['term'] );
-			$where = "post_title LIKE '$supplier_name%'";
+			$supplier_name = $wpdb->esc_like( $_GET['term'] );
+			$where = "post_title LIKE '%%{$supplier_name}%%'";
 		}
 		else {
 			wp_die();
 		}
 
 		// Get all the orders with IDs starting with the provided number
-		global $wpdb;
-		$max_results = absint( apply_filters('atum/ajax/search_suppliers/max_results', 10) );
+		$max_results   = absint( apply_filters('atum/ajax/search_suppliers/max_results', 10) );
+		$post_statuses = AtumCapabilities::current_user_can('edit_private_suppliers' ) ? array( 'private', 'publish' ) : array( 'publish' );
 
 		$query = $wpdb->prepare(
-			"SELECT DISTINCT ID, post_title from {$wpdb->posts} 
-			 WHERE post_type = %s AND " . $where . " LIMIT %d",
+			"SELECT DISTINCT ID, post_title from $wpdb->posts 
+			 WHERE post_type = %s AND $where
+			 AND post_status IN ('" . implode( "','", $post_statuses ) . "')
+			 LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results
 		);
