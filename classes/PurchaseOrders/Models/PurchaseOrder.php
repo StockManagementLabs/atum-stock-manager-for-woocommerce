@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Suppliers\Suppliers;
 
 
 class PurchaseOrder extends AtumOrderModel {
@@ -76,9 +77,22 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function maybe_add_items_blocker($po) {
 
-		$supplier = $po->get_supplier();
-		$unblocked = ($supplier) ? ' unblocked' : '';
-		echo '<div class="items-blocker' . $unblocked . '"><h3>' . __('Set the Supplier in the first field and hit the Create/Update button on the top right to add items.', ATUM_TEXT_DOMAIN) . '</h3></div>';
+		$unblocked_class = '';
+		$message         = __( 'Set the Supplier in the first field and hit the Create/Update button on the top right to add items.', ATUM_TEXT_DOMAIN );
+		$supplier        = $po->get_supplier();
+
+		if ($supplier) {
+			$products = Suppliers::get_supplier_products( $supplier->ID, 'ids' );
+
+			if ( empty($products) ) {
+				$message = __( 'This Supplier has no products assigned yet.', ATUM_TEXT_DOMAIN );
+			}
+			else {
+				$unblocked_class = ' unblocked';
+			}
+		}
+
+		echo '<div class="items-blocker' . $unblocked_class . '"><h3>' . $message . '</h3></div>';
 
 	}
 
