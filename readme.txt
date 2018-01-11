@@ -7,7 +7,7 @@ Tested up to: 4.9.1
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.2.6
-Stable tag: 1.3.7
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -254,6 +254,24 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
 == Changelog ==
+
+= 1.3.8 - 2017-01-11 =
+
+Features:
+
+* Added uninstallation clean tasks.
+* Added a new option to Settings to allow users to clean all the ATUM when uninstalling.
+* Added Subtotal line to Purchase Orders.
+* Added filter to specify the List Tables’ product title length.
+* Added filter to edit the supplier name length in List Tables.
+
+Fixes:
+
+* Prevent WPML configuration for Atum Orders post types.
+* Fixed draft suppliers showing in Purchase Orders.
+* Fixed unblocked Purchase Orders’ items block for Suppliers with no products assigned.
+* Do not break the ATUM orders UI when an item product does not exists anymore.
+* Refactory.
 
 = 1.3.7 - 2017-01-08 =
 
