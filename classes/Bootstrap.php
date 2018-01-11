@@ -15,7 +15,12 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumException;
+use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Inc\Helpers;
 use Atum\Inc\Main;
+use Atum\InventoryLogs\InventoryLogs;
+use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Suppliers\Suppliers;
 
 
 class Bootstrap {
@@ -50,6 +55,9 @@ class Bootstrap {
 		
 		// Check all the requirements before bootstraping
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );
+
+		// Uninstallation tasks
+		register_uninstall_hook( ATUM_PATH . 'atum-stock-manager-for-woocommerce.php', array( __CLASS__, 'uninstall' ) );
 
 	}
 	
@@ -180,6 +188,61 @@ class Bootstrap {
 			</div>
 		<?php endif;
 		
+	}
+
+	/**
+	 * Uninstallation checks (this will run only once at plugin uninstallation)
+	 *
+	 * @since 1.3.7.1
+	 */
+	public static function uninstall() {
+
+		global $wpdb;
+
+		if ( Helpers::get_option('delete_data') == 'yes' ) {
+
+			$items_table    = $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE;
+			$itemmeta_table = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
+
+			// Delete the ATUM tables in db
+			$wpdb->query( "DROP TABLE IF EXISTS $items_table" );
+			$wpdb->query( "DROP TABLE IF EXISTS $itemmeta_table" );
+
+			// Delete all the posts of ATUM's custom post types and their meta
+			$atum_post_types = array(
+				PurchaseOrders::get_post_type(),
+				InventoryLogs::get_post_type(),
+				Suppliers::POST_TYPE
+			);
+
+			foreach ( $atum_post_types as $atum_post_type ) {
+
+				$args       = array(
+					'post_type'      => $atum_post_type,
+					'posts_per_page' => - 1,
+					'fields'         => 'ids',
+					'post_status'    => 'any'
+				);
+				$atum_posts = get_posts( $args );
+
+				if ( ! empty( $atum_posts ) ) {
+					$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN (" . implode( ',', $atum_posts ) . ")" );
+					$wpdb->delete( $wpdb->posts, array( 'post_type' => $atum_post_type ) );
+				}
+
+			}
+
+			// Delete all the ATUM order notes
+			$wpdb->query( "DELETE FROM $wpdb->comments WHERE comment_type LIKE '" . ATUM_PREFIX . "%'" );
+
+			// Delete the ATUM options
+			$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name IN ('" . ATUM_PREFIX . "version', '" . ATUM_PREFIX . "settings')" );
+
+			// Delete all the user meta related to ATUM
+			$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE '" . ATUM_PREFIX . "%'" );
+
+		}
+
 	}
 
 	
