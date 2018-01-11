@@ -150,13 +150,27 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 			<?php if ( wc_tax_enabled() ) :
 
-				foreach ( $atum_order->get_tax_totals() as $code => $tax ) : ?>
+				$tax_totals = $atum_order->get_tax_totals();
+
+				if ( ! empty($tax_totals) ):
+
+					foreach ( $tax_totals as $code => $tax ) : ?>
+						<tr>
+							<td class="label"><?php echo $tax->label; ?>:</td>
+							<td width="1%"></td>
+							<td class="total"><?php echo $tax->formatted_amount; ?></td>
+						</tr>
+					<?php endforeach; ?>
+
 					<tr>
-						<td class="label"><?php echo $tax->label; ?>:</td>
+						<td class="label"><?php _e( 'Subtotal', ATUM_TEXT_DOMAIN ) ?>:</td>
 						<td width="1%"></td>
-						<td class="total"><?php echo $tax->formatted_amount; ?></td>
+						<td class="total">
+							<?php echo $atum_order->get_formatted_total('', TRUE); ?>
+						</td>
 					</tr>
-				<?php endforeach;
+
+				<?php endif;
 
 			endif; ?>
 

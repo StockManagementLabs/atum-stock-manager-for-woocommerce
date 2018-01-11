@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Inc\Helpers;
 
 
@@ -348,7 +349,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @param \WC_Order_Item_Shipping $shipping  Optional. Shipping cost item to import
 	 *
-	 * @return \WC_Order_Item_Shipping  The shipping cost item added to the Log
+	 * @return \WC_Order_Item_Shipping  The shipping cost item added to the ATUM Order
 	 */
 	public function add_shipping_cost ( \WC_Order_Item_Shipping $shipping = NULL ) {
 
@@ -976,8 +977,8 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Calculate totals by looking at the contents of the log
-	 * Stores the totals and returns the log's final total
+	 * Calculate totals by looking at the contents of the ATUM Order
+	 * Stores the totals and returns the ATUM order's final total
 	 *
 	 * @since 1.2.4
 	 *
@@ -1033,9 +1034,9 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param LogItemProduct $item
-	 * @param bool           $inc_tax
-	 * @param bool           $round
+	 * @param AtumOrderItemProduct $item
+	 * @param bool                 $inc_tax
+	 * @param bool                 $round
 	 *
 	 * @return float
 	 */
@@ -1056,7 +1057,7 @@ abstract class AtumOrderModel {
 
 		}
 
-		return apply_filters( 'atum/inventory_logs/log/amount_item_subtotal', $subtotal, $this, $item, $inc_tax, $round );
+		return apply_filters( 'atum/orders/amount_item_subtotal', $subtotal, $this, $item, $inc_tax, $round );
 
 	}
 
@@ -1065,9 +1066,9 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param LogItemProduct $item
-	 * @param bool           $inc_tax
-	 * @param bool           $round
+	 * @param AtumOrderItemProduct $item
+	 * @param bool                 $inc_tax
+	 * @param bool                 $round
 	 *
 	 * @return float
 	 */
@@ -1088,7 +1089,7 @@ abstract class AtumOrderModel {
 
 		}
 
-		return apply_filters( 'atum/inventory_logs/log/amount_item_total', $total, $this, $item, $inc_tax, $round );
+		return apply_filters( 'atum/orders/amount_item_total', $total, $this, $item, $inc_tax, $round );
 
 	}
 
@@ -1109,7 +1110,7 @@ abstract class AtumOrderModel {
 			$total_discount += $this->get_discount_tax();
 		}
 
-		return apply_filters( 'atum/inventory_logs/log/get_total_discount', round( $total_discount, WC_ROUNDING_PRECISION ), $this );
+		return apply_filters( 'atum/orders/get_total_discount', round( $total_discount, WC_ROUNDING_PRECISION ), $this );
 
 	}
 
@@ -1128,7 +1129,7 @@ abstract class AtumOrderModel {
 			$subtotal += $item->get_subtotal();
 		}
 
-		return apply_filters( 'atum/inventory_logs/log/get_subtotal', (double) $subtotal, $this );
+		return apply_filters( 'atum/orders/get_subtotal', (double) $subtotal, $this );
 
 	}
 
@@ -1161,64 +1162,58 @@ abstract class AtumOrderModel {
 
 		}
 
-		if ( apply_filters( 'atum/inventory_logs/log/hide_zero_taxes', TRUE ) ) {
+		if ( apply_filters( 'atum/orders/hide_zero_taxes', TRUE ) ) {
 			$amounts    = array_filter( wp_list_pluck( $tax_totals, 'amount' ) );
 			$tax_totals = array_intersect_key( $tax_totals, $amounts );
 		}
 
-		return apply_filters( 'atum/inventory_logs/log/get_tax_totals', $tax_totals, $this );
+		return apply_filters( 'atum/orders/get_tax_totals', $tax_totals, $this );
 
 	}
 
 	/**
-	 * Gets log total - formatted for display
+	 * Gets ATUM order's total - formatted for display
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param  string $tax_display          Type of tax display
-	 * @param  bool   $display_refunded     Optional. If should include refunded value
+	 * @param  string $tax_display  Optional. Type of tax display
+	 * @param  bool   $subtotal     Optional. If should return the tax free Subtotal instead
 	 *
 	 * @return string
 	 */
-	public function get_formatted_total( $tax_display = '', $display_refunded = TRUE ) {
+	public function get_formatted_total( $tax_display = '', $subtotal = FALSE ) {
 
-		$formatted_total = wc_price( $this->get_total(), array( 'currency' => $this->get_currency() ) );
-		$log_total    = $this->get_total();
-		//$total_refunded = $this->get_total_refunded();
+		$amount = ($subtotal) ? $this->get_subtotal() : $this->get_total();
+		$formatted_total = wc_price( $amount, array( 'currency' => $this->get_currency() ) );
 		$tax_string     = '';
 
 		// Tax for inclusive prices
-		if ( wc_tax_enabled() && 'incl' == $tax_display ) {
+		if ( wc_tax_enabled() && 'incl' == $tax_display && ! $subtotal ) {
 
 			$tax_string_array = array();
 
 			if ( 'itemized' == get_option( 'woocommerce_tax_total_display' ) ) {
 
 				foreach ( $this->get_tax_totals() as $code => $tax ) {
-					$tax_amount         = /*( $total_refunded && $display_refunded ) ? wc_price( \WC_Tax::round( $tax->amount - $this->get_total_tax_refunded_by_rate_id( $tax->rate_id ) ), array( 'currency' => $this->get_currency() ) ) :*/ $tax->formatted_amount;
+					$tax_amount         = $tax->formatted_amount;
 					$tax_string_array[] = sprintf( '%s %s', $tax_amount, $tax->label );
 				}
 
 			}
 			else {
-				$tax_amount         = /*( $total_refunded && $display_refunded ) ? $this->get_total_tax() - $this->get_total_tax_refunded() :*/ $this->get_total_tax();
+				$tax_amount         = $this->get_total_tax();
 				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), WC()->countries->tax_or_vat() );
 			}
 
 			if ( ! empty( $tax_string_array ) ) {
-				$tax_string = ' <small class="includes_tax">' . sprintf( __( '(includes %s)', 'woocommerce' ), implode( ', ', $tax_string_array ) ) . '</small>';
+				$tax_string = ' <small class="includes_tax">' . sprintf( __( '(includes %s)', ATUM_TEXT_DOMAIN ), implode( ', ', $tax_string_array ) ) . '</small>';
 			}
 
 		}
 
-		/*if ( $total_refunded && $display_refunded ) {
-			$formatted_total = '<del>' . strip_tags( $formatted_total ) . '</del> <ins>' . wc_price( $log_total - $total_refunded, array( 'currency' => $this->get_currency() ) ) . $tax_string . '</ins>';
-		}
-		else {*/
 		$formatted_total .= $tax_string;
-		//}
 
-		return apply_filters( 'atum/inventory_logs/log/get_formatted_order_total', $formatted_total, $this, $tax_display, $display_refunded );
+		return apply_filters( 'atum/orders/get_formatted_total', $formatted_total, $this, $tax_display, $subtotal );
 
 	}
 
@@ -1630,7 +1625,7 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Return an array of fees within this log
+	 * Return an array of fees within this ATUM Order
 	 *
 	 * @since 1.2.4
 	 *
@@ -1641,7 +1636,7 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Return an array of taxes within this log
+	 * Return an array of taxes within this ATUM Order
 	 *
 	 * @since 1.2.4
 	 *
@@ -1652,7 +1647,7 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Return an array of shipping costs within this log
+	 * Return an array of shipping costs within this ATUM Order
 	 *
 	 * @since 1.2.4
 	 *
@@ -1663,7 +1658,7 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Get all tax classes for items in the log
+	 * Get all tax classes for items in the ATUM Order
 	 *
 	 * @since 1.2.4
 	 *
