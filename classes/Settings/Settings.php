@@ -147,7 +147,14 @@ class Settings {
 				'options'    => array(
 					'min' => 0
 				)
-			)
+			),
+			'delete_data' => array(
+				'section' => 'general',
+				'name'    => __( 'Delete data when uninstalling', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no'
+			),
 		);
 
 		// WC Subscriptions compatibility
@@ -278,8 +285,8 @@ class Settings {
 			wp_enqueue_script( self::UI_SLUG );
 			
 		}
+
 	}
-	
 	
 	/**
 	 * Register the settings using WP's Settings API
