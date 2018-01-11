@@ -17,7 +17,10 @@ use Atum\Components\AtumCapabilities;
 
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
-$product      = $item->get_product();
+$product = $item->get_product();
+
+if ( empty($product) ) return;
+
 $product_id   = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
