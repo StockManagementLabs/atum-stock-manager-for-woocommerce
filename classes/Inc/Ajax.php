@@ -846,8 +846,6 @@ final class Ajax {
 	 * Add ATUM Order item
 	 *
 	 * @since 1.2.4
-	 *
-	 * @throws AtumException
 	 */
 	public function add_atum_order_item() {
 
@@ -903,8 +901,6 @@ final class Ajax {
 	 * Add ATUM Order fee
 	 *
 	 * @since 1.2.4
-	 *
-	 * @throws AtumException
 	 */
 	public function add_atum_order_fee() {
 
@@ -941,8 +937,6 @@ final class Ajax {
 	 * Add ATUM Order shipping cost
 	 *
 	 * @since 1.2.4
-	 *
-	 * @throws AtumException
 	 */
 	public function add_atum_order_shipping() {
 
@@ -982,8 +976,6 @@ final class Ajax {
 	 * Add ATUM Order tax
 	 *
 	 * @since 1.2.4
-	 *
-	 * @throws AtumException
 	 */
 	public function add_atum_order_tax() {
 

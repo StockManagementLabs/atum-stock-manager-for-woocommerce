@@ -451,8 +451,6 @@ class Addons {
 	 * @param $download_link        The link to download the addon zip file
 	 *
 	 * @return array    An array with the result and the message
-	 *
-	 * @throws AtumException
 	 */
 	public static function install_addon ($addon_name, $addon_slug, $download_link) {
 

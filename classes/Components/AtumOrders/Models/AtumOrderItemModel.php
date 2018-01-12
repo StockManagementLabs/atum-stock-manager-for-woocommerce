@@ -73,10 +73,6 @@ abstract class AtumOrderItemModel {
 	 * Read a log item from the database
 	 *
 	 * @since 1.2.9
-	 *
-	 * @return object
-	 *
-	 * @throws AtumException
 	 */
 	protected function read() {
 

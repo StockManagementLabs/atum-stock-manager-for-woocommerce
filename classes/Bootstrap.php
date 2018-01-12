@@ -65,8 +65,6 @@ class Bootstrap {
 	 * Initial checking and plugin bootstrap
 	 *
 	 * @since 0.0.2
-	 *
-	 * @throws AtumException
 	 */
 	public function maybe_bootstrap () {
 		
@@ -78,7 +76,7 @@ class Bootstrap {
 
 			/**
 			 * @deprecated
-			 * Namespaces were changed in 1.3.0 and the class aliases may be deleted in future versions
+			 * Namespaces were changed in 1.3.0 and the class aliases may be deleted in the next major version
 			 */
 			class_alias('\Atum\Components\AtumListTables\AtumListPage', '\Atum\Components\AtumListPage');
 			class_alias('\Atum\Components\AtumListTables\AtumListTable', '\Atum\Components\AtumListTable');
