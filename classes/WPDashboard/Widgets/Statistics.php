@@ -1,7 +1,7 @@
 <?php
 /**
- * @package     Atum
- * @subpackage  Dashboard
+ * @package     Atum\WPDashboard
+ * @subpackage  Widgets
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2017 Stock Management Labs™
  *
@@ -10,17 +10,17 @@
  * Add the Statistics widget to the WP Dashboard
  */
 
-namespace Atum\Dashboard;
+namespace Atum\WPDashboard\Widgets;
 
-use Atum\Components\DashboardWidget;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
+use Atum\WPDashboard\WPDashboardWidget;
 
 
 defined( 'ABSPATH' ) or die;
 
-class Statistics extends DashboardWidget {
+class Statistics extends WPDashboardWidget {
 
 	/**
 	 * The id of this widget

@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) or die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\HelpPointers;
-use Atum\Dashboard\Statistics;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Modules\ModuleManager;
@@ -26,6 +25,7 @@ use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\Suppliers\Suppliers;
+use Atum\WPDashboard\Widgets\Statistics;
 
 
 class Main {

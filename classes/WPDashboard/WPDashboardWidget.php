@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Atum
- * @subpackage      Components
+ * @subpackage      WPDashboard
  * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       ©2017 Stock Management Labs™
  *
@@ -10,12 +10,12 @@
  * The class resposible to add a new widget to the WP Dashboard
  */
 
-namespace Atum\Components;
+namespace Atum\WPDashboard;
 
 defined( 'ABSPATH' ) or die;
 
 
-abstract class DashboardWidget {
+abstract class WPDashboardWidget {
 
 	/**
 	 * The id of this widget
