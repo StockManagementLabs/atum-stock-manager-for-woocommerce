@@ -279,14 +279,16 @@ abstract class AtumOrderModel {
 
 		if ( is_a( $product, '\WC_Product' )  ) {
 
+			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product );
+
 			$default_args = array(
 				'name'         => $product->get_name(),
 				'tax_class'    => $product->get_tax_class(),
 				'product_id'   => $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id(),
 				'variation_id' => $product->is_type( 'variation' ) ? $product->get_id() : 0,
 				'variation'    => $product->is_type( 'variation' ) ? $product->get_attributes() : array(),
-				'subtotal'     => wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ),
-				'total'        => wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ),
+				'subtotal'     => $product_price,
+				'total'        => $product_price,
 				'quantity'     => $qty
 			);
 

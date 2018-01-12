@@ -41,7 +41,7 @@ class PurchaseOrder extends AtumOrderModel {
 		add_action( 'atum/atum_order/before_product_search_modal', array($this, 'product_search_message') );
 		
 		// Use the purchase price when adding products to a PO
-		add_filter( 'woocommerce_get_price_excluding_tax', array($this, 'use_purchase_price'), 10, 3);
+		add_filter( 'atum/order/add_product/price', array($this, 'use_purchase_price'), 10, 3);
 		
 		parent::__construct($id, $read_items);
 
@@ -335,9 +335,9 @@ class PurchaseOrder extends AtumOrderModel {
 		}
 		
 		if ( $product->is_taxable() && wc_prices_include_tax() ) {
-			$tax_rates  = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
-			$taxes      = \WC_Tax::calc_tax( $price * $qty, $tax_rates, true );
-			$price      = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
+			$tax_rates = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
+			$taxes     = \WC_Tax::calc_tax( $price * $qty, $tax_rates, TRUE );
+			$price     = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
 		}
 		else {
 			$price = $price * $qty;
