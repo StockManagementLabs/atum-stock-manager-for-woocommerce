@@ -213,6 +213,12 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.8.1 - 2017-01-12**
+
+Fixes:
+
+* Fixed purchase price not being added for Purchase Order's products that had no regular price set.
+
 **1.3.8 - 2017-01-11**
 
 Features:
