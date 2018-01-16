@@ -32,6 +32,7 @@ return array(
     'Atum\\Inc\\Ajax' => $baseDir . '/classes/Inc/Ajax.php',
     'Atum\\Inc\\Globals' => $baseDir . '/classes/Inc/Globals.php',
     'Atum\\Inc\\Helpers' => $baseDir . '/classes/Inc/Helpers.php',
+    'Atum\\Inc\\Hooks' => $baseDir . '/classes/Inc/Hooks.php',
     'Atum\\Inc\\Main' => $baseDir . '/classes/Inc/Main.php',
     'Atum\\Inc\\Upgrade' => $baseDir . '/classes/Inc/Upgrade.php',
     'Atum\\InventoryLogs\\InventoryLogs' => $baseDir . '/classes/InventoryLogs/InventoryLogs.php',
