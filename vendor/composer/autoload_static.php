@@ -47,6 +47,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Inc\\Ajax' => __DIR__ . '/../..' . '/classes/Inc/Ajax.php',
         'Atum\\Inc\\Globals' => __DIR__ . '/../..' . '/classes/Inc/Globals.php',
         'Atum\\Inc\\Helpers' => __DIR__ . '/../..' . '/classes/Inc/Helpers.php',
+        'Atum\\Inc\\Hooks' => __DIR__ . '/../..' . '/classes/Inc/Hooks.php',
         'Atum\\Inc\\Main' => __DIR__ . '/../..' . '/classes/Inc/Main.php',
         'Atum\\Inc\\Upgrade' => __DIR__ . '/../..' . '/classes/Inc/Upgrade.php',
         'Atum\\InventoryLogs\\InventoryLogs' => __DIR__ . '/../..' . '/classes/InventoryLogs/InventoryLogs.php',
