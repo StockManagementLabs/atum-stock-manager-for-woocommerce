@@ -450,7 +450,7 @@ class Suppliers {
 
 		$product  = wc_get_product( $post_id );
 
-		if ( in_array( $product->get_type(), ['variable', 'variable-subscription'] ) ) {
+		if ( is_a($product, '\WC_Product') && in_array( $product->get_type(), ['variable', 'variable-subscription'] ) ) {
 			return;
 		}
 
