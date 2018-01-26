@@ -29,7 +29,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	/**
 	 * The menu order
 	 */
-	const MENU_ORDER = 30;
+	const MENU_ORDER = 3;
 	
 	/**
 	 * Will hold the current purchase order object

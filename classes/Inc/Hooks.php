@@ -12,6 +12,7 @@
 
 namespace Atum\Inc;
 
+defined( 'ABSPATH' ) or die;
 
 final class Hooks {
 

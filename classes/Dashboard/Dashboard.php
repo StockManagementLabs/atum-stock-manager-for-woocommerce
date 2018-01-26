@@ -12,6 +12,10 @@
 
 namespace Atum\Dashboard;
 
+defined( 'ABSPATH' ) or die;
+
+use Atum\Inc\Helpers;
+
 
 class Dashboard {
 
@@ -22,12 +26,221 @@ class Dashboard {
 	private static $instance;
 
 	/**
+	 * An array of ATUM Widget objects
+	 * @var array
+	 */
+	protected $widgets = array();
+
+	/**
+	 * If the current user has no specific setup, will load the default widgets layout
+	 * @var array
+	 */
+	private $default_widgets_layout = array(
+		ATUM_PREFIX . 'statistics_widget'    => array(
+			'x'      => 0,                              // X edge position
+			'y'      => 0,                              // Y edge position
+			'width'  => 12,                             // Width in columns (based in 12 columns)
+			'height' => 4                               // Height in rows
+		),
+		ATUM_PREFIX . 'sales_widget'         => array(
+			'x'      => 0,
+			'y'      => 4,
+			'width'  => 3,
+			'height' => 4
+		),
+		ATUM_PREFIX . 'lost_sales_widget'    => array(
+			'x'      => 3,
+			'y'      => 4,
+			'width'  => 3,
+			'height' => 4
+		),
+		ATUM_PREFIX . 'orders_widget'        => array(
+			'x'      => 6,
+			'y'      => 4,
+			'width'  => 3,
+			'height' => 4
+		),
+		ATUM_PREFIX . 'promo_sales_widget'   => array(
+			'x'      => 9,
+			'y'      => 4,
+			'width'  => 3,
+			'height' => 4
+		),
+		ATUM_PREFIX . 'stock_control_widget' => array(
+			'x'      => 0,
+			'y'      => 8,
+			'width'  => 6,
+			'height' => 4
+		),
+		ATUM_PREFIX . 'news_widget'          => array(
+			'x'      => 6,
+			'y'      => 8,
+			'width'  => 6,
+			'height' => 4
+		),
+		ATUM_PREFIX . 'videos_widget'        => array(
+			'x'      => 0,
+			'y'      => 12,
+			'width'  => 12,
+			'height' => 4
+		),
+	);
+
+	/**
+	 * Widgets' layout for the current user
+	 * @var array
+	 */
+	protected $user_widgets_layout = array();
+
+	/**
+	 * The ATUM Dashboard admin page slug
+	 */
+	const UI_SLUG = 'atum-dashboard';
+
+	/**
+	 * The menu order for this module
+	 */
+	const MENU_ORDER = 1;
+
+	/**
 	 * Dashboard constructor
 	 *
 	 * @since 1.3.9
 	 */
 	private function __construct() {
 
+		// Add the module menu
+		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
+
+		// Enqueue dashboard scripts
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+	}
+
+	/**
+	 * Add the Dashboard menu. Must be the first element in the array
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param array $menus
+	 *
+	 * @return array
+	 */
+	public function add_menu ($menus) {
+
+		$menus['dashboard'] = array(
+			'title'      => __( 'Dashboard', ATUM_TEXT_DOMAIN ),
+			'callback'   => array( $this, 'display' ),
+			'slug'       => self::UI_SLUG,
+			'menu_order' => self::MENU_ORDER
+		);
+
+		return $menus;
+
+	}
+
+	/**
+	 * Display the Stock Central admin page
+	 *
+	 * @since 1.3.9
+	 */
+	public function display() {
+
+		// Load all the available widgets
+		$this->load_widgets();
+
+		// Load the current user's layout
+		$user_id = get_current_user_id();
+		$this->user_widgets_layout = get_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', TRUE );
+
+		// If the current user has no layout, load the default and save it as user meta
+		if ( $this->user_widgets_layout == '' ) {
+			$this->user_widgets_layout = $this->default_widgets_layout;
+			self::save_user_widgets_layout($user_id, $this->user_widgets_layout);
+		}
+
+		Helpers::load_view( 'dashboard', array('widgets' => $this->widgets, 'layout' => $this->user_widgets_layout) );
+
+	}
+
+	/**
+	 * Load all the available widgets
+	 *
+	 * @since 1.3.9
+	 */
+	private function load_widgets() {
+
+		// Allow others to add paths to overwrite existing widgets or to create new ones
+		$widgets_paths = (array) apply_filters( 'atum/dashboard/widget_paths', [ trailingslashit( trailingslashit( dirname( __FILE__ ) ) . 'Widgets' ) ] );
+
+		foreach ($widgets_paths as $widgets_path) {
+
+			$widgets_dir = @scandir( $widgets_path );
+
+			if ( ! empty( $widgets_dir ) ) {
+
+				foreach ( $widgets_dir as $widget_name ) {
+
+					if ( in_array($widget_name, ['.', '..']) ) {
+						continue;
+					}
+
+					if ( is_file( $widgets_path . $widget_name ) ) {
+
+						$widget_name = __NAMESPACE__ . "\\Widgets\\" . str_replace( '.php', '', $widget_name );
+
+						// Load the widget (the class and file naming convention must follow PSR4 standards)
+						if ( class_exists( $widget_name ) ) {
+							$widget = new $widget_name();
+							$this->widgets[ $widget->get_id() ] = $widget;
+						}
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Enqueue the required scripts
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $hook
+	 */
+	public function enqueue_scripts( $hook ) {
+
+		if ( strpos($hook, self::UI_SLUG) !== FALSE ) {
+
+			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array(), ATUM_VERSION );
+			wp_enqueue_style( 'atum-dashboard' );
+
+			$min = (! ATUM_DEBUG) ? '.min' : '';
+			wp_register_script( 'lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'lodash'), ATUM_VERSION, TRUE );
+			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', array('gridstack'), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-dashboard', ATUM_URL . "assets/js/atum.dashboard{$min}.js", array('gridstack', 'gridstack-jquery-ui'), ATUM_VERSION, TRUE );
+
+			wp_enqueue_script( 'atum-dashboard' );
+
+		}
+
+	}
+
+	/**
+	 * Save the user's widgets layout as user meta
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param int   $user_id
+	 * @param array $layout
+	 */
+	public static function save_user_widgets_layout($user_id, $layout) {
+		update_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', $layout );
 	}
 
 

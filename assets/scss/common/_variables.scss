@@ -3,22 +3,38 @@
 //------------------
 
 // Paths
-$icon-font-path:                        "../fonts/" !default;
+$font-path:                             "../fonts/" !default;
 $img-path:                              "../images/" !default;
 
 // Grid settings
 $main-sm-columns:                       12 !default;
 $sidebar-sm-columns:                    4 !default;
 $grid-gutter-width:                     30px !default;
+$grid-columns:                          12 !default;
+$enable-grid-classes:                   true !default;
+$grid-breakpoints: (
+		xs: 0,
+		sm: 576px,
+		md: 768px,
+		lg: 992px,
+		xl: 1200px
+) !default;
+$container-max-widths: (
+		sm: 540px,
+		md: 720px,
+		lg: 960px,
+		xl: 1140px
+) !default;
+
 
 $max-width-limit:                       1280px !default;
 
 // Colors
-$brand-primary:                         #0073AA !default;
+$brand-primary:                         #00b8db !default;
 $brand-info:                            #E3E8F5 !default;
-$brand-warning:                         #FEC007 !default;
-$brand-danger:                          #EF4D5A !default;
-$brand-success:                         #00B050 !default;
+$brand-warning:                         #efaf00 !default;
+$brand-danger:                          #ff4848 !default;
+$brand-success:                         #82c342 !default;
 
 $gray:                                  #C1C1C1 !default;
 $gray-light:                            #F9F9F9 !default;
@@ -46,6 +62,11 @@ $screen-lg-min:                         $screen-lg !default;
 $screen-xs-max:                         ($screen-sm-min - 1) !default;
 $screen-sm-max:                         ($screen-md-min - 1) !default;
 $screen-md-max:                         ($screen-lg-min - 1) !default;
+
+// Buttons
+$btn-success:                           $brand-success !default;
+$btn-primary:                           $brand-primary !default;
+$btn-warning:                           $brand-warning !default;
 
 // Tooltips
 $zindex-tooltip:                        1070 !default;
@@ -75,3 +96,10 @@ $popover-arrow-outer-color:             fade_in($popover-border-color, 0.05) !de
 $popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%) !default;
 
 $zindex-popover:                        99999999 !default;
+
+// Widgets
+$widget-text:                           #AFAFAF !default;
+$widget-success:                        #69c61d !default;
+$widget-primary:                        $brand-primary !default;
+$widget-warning:                        $brand-warning !default;
+$widget-danger:                         $brand-danger !default;;

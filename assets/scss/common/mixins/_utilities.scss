@@ -1,0 +1,179 @@
+//
+// Utilities
+//----------
+
+// Vertical align using display: flex
+@mixin vertical-align-flex($vertical-center: center, $text-center: center) {
+	@include flexbox;
+	@include flex-direction(row);
+	@include flex-justify-content($text-center);
+	@include flex-align-items($vertical-center);
+}
+
+// Vertical aligng using display: table-cell
+@mixin vertical-align-table($text-center: false){
+	display: table-cell;
+	vertical-align: middle;
+	@if($text-center == true){
+		text-align: center;
+	}
+}
+
+// Vertical aligng using absolute positioning
+@mixin vertical-align-absolute{
+	position: absolute;
+	top: 50%;
+	@include transform(translateY(-50%));
+}
+
+// Ellipsis overflow
+@mixin text-overflow() {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// Placeholder text
+@mixin placeholder($color: $input-color-placeholder) {
+	// Firefox
+	&::-moz-placeholder {
+		color: $color;
+		opacity: 1; // Override Firefox's unusual default opacity
+	}
+	&:-ms-input-placeholder { color: $color; } // Internet Explorer 10+
+	&::-webkit-input-placeholder  { color: $color; } // Safari and Chrome
+}
+
+// Clearfix
+@mixin clearfix() {
+	&::after {
+		display: block;
+		clear: both;
+		content: "";
+	}
+}
+
+// Overlay
+@mixin overlay($bg-color: rgba(0, 0, 0, .7), $opacity: .7) {
+	position: absolute;
+	background-color: $bg-color;
+	opacity: $opacity;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
+}
+
+// Loading Spinner
+@mixin loader($size: 15px, $color: #0073AA, $border-size: 2px, $duration: 1s) {
+	width: $size;
+	height: $size;
+	border: $border-size solid rgba($color, 0.25);
+	border-top-color: $color;
+	border-radius: 50%;
+	position: absolute;
+	z-index: 50;
+	@include animation(loader-rotate $duration linear infinite);
+	@include loader-rotate-animation;
+}
+
+@mixin loader-rotate-animation {
+	@include keyframes('loader-rotate') {
+		from {
+			#{$browser}transform: rotate(0deg);
+		}
+		to {
+			#{$browser}transform: rotate(360deg);
+		}
+	}
+}
+
+@mixin loader-scale-animation {
+	@include keyframes('loader-rotate') {
+		0% {
+			#{$browser}transform: scale(0);
+			opacity: 0;
+		}
+		
+		50% {
+			opacity: 1;
+		}
+		
+		100% {
+			#{$browser}transform: scale(1);
+			opacity: 0;
+		}
+	}
+}
+
+// Vertical gradient, from top to bottom
+//
+// Creates two color stops, start and end, by specifying a color and position for each color stop.
+// Color stops are not available in IE9 and below.
+@mixin gradient-vertical($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+	background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);  // Safari 5.1-6, Chrome 10+
+	background-image: -o-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);  // Opera 12
+	background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
+}
+
+@mixin label-variant($color) {
+	background-color: $color;
+	
+	&[href] {
+		&:hover, &:focus {
+			background-color: darken($color, 10%);
+		}
+	}
+}
+
+// Dashicons
+@mixin icon_dashicons( $glyph: '\f333' ) {
+	font-family: 'Dashicons';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	text-indent: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	content: $glyph;
+}
+
+// WooCommerce icons
+@mixin icon_woocommerce( $glyph: '\e001' ) {
+	font-family: 'WooCommerce';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	text-indent: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	content: $glyph;
+}
+
+// Icon replacement
+@mixin ir() {
+	display: block;
+	text-indent: -9999px;
+	position: relative;
+	height: 1em;
+	width: 1em;
+}

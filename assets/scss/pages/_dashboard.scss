@@ -1,0 +1,326 @@
+//
+// Atum Dashboard
+//----------------
+
+$header-bg:                 #d5f2f8;
+$header-height:             300px;
+$card-border:               #e5e5e5;
+$card-bg:                   #FFF;
+$card-text:                 #afafaf;
+$add-widget-color:          #CCC;
+$widget-bg:                 #FFF;
+$widget-drag-icon:          #e1e1e1;
+$widget-controls:           $card-text;
+$widget-controls-hover:     #00b8db;
+
+
+.atum-dashboard {
+	margin-left: -20px;
+	text-align: center;
+	
+	a {
+		text-decoration: none;
+	}
+	
+	// Dashboard Header
+	.dash-header {
+		position: relative;
+		height: $header-height;
+		background: $header-bg url('#{$img-path}atum-dash-header-bg.png') center bottom;
+		background-size: cover;
+		@include vertical-align-flex();
+		@include flex-wrap(wrap);
+		
+		.dash-header-buttons {
+			position: absolute;
+			left: 0;
+			top: 0;
+			padding: $grid-gutter-width/2;
+		}
+		
+		img {
+			max-width: 320px;
+			margin-bottom: 5px;
+		}
+		
+		h3 {
+			font-size: 21px;
+			font-weight: 200;
+			width: 100%;
+			margin: 0;
+		}
+		
+		.dash-header-notice {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding-left: $grid-gutter-width/2;
+			padding-bottom: 5px;
+			font-size: 11px;
+			
+			span {
+				color: $brand-primary;
+			}
+			
+		}
+		
+	}
+	
+	// Dashboard Cards
+	.dash-cards {
+		@include flexbox;
+		
+		.dash-card {
+			margin: $grid-gutter-width $grid-gutter-width/2;
+			width: 33%;
+			border: 1px solid $card-border;
+			border-radius: 5px;
+			background: $card-bg center 1px;
+			background-size: cover;
+			position: relative;
+			overflow: hidden;
+			
+			&:first-child {
+				margin-left: $grid-gutter-width;
+			}
+			
+			&:last-child {
+				margin-right: $grid-gutter-width;
+			}
+			
+			.card-content {
+				width: 60%;
+				float: left;
+				text-align: left;
+				padding: $grid-gutter-width/2;
+				position: relative;
+				z-index: 1;
+				
+				h5, h2 {
+					margin: 5px 0;
+				}
+				
+				h2, p {
+					color: $card-text;
+					font-weight: 200;
+				}
+				
+				h5 {
+					font-size: 13px;
+					font-weight: bold;
+				}
+				
+				h2 {
+					font-size: 21px;
+				}
+				
+				p {
+					font-size: 10px;
+				}
+				
+				.btn {
+					margin-top: $grid-gutter-width/2;
+					display: inline-block;
+					padding: 4px 10px;
+					font-size: 10px;
+				}
+			}
+			
+			.card-img {
+				float: left;
+				width: 30%;
+				
+				img {
+					position: absolute;
+				}
+			}
+			
+			&.docs {
+				background-image: url('#{$img-path}card-docs-bg.png');
+				
+				.card-img {
+					img {
+						@include vertical-align-absolute;
+						right: 0;
+						max-width: 280px;
+					}
+				}
+			}
+			
+			&.add-ons {
+				background-image: url('#{$img-path}card-add-ons-bg.png');
+				
+				.card-img {
+					img {
+						max-width: 120px;
+						bottom: 0;
+						right: 10px;
+					}
+				}
+			}
+			
+			&.subscription {
+				background-image: url('#{$img-path}card-subscription-bg.png');
+				
+				.card-img {
+					img {
+						max-width: 80px;
+						top: $grid-gutter-width;
+						right: $grid-gutter-width;
+					}
+				}
+				
+				form {
+					clear: both;
+					width: 90%;
+					margin: auto;
+					
+					.input-group {
+						background-color: transparentize(#FFF, 0.34);
+						border-radius: 15px;
+						box-shadow: 0 0 0 3px transparentize(#FFF, 0.8);
+						@include flexbox;
+					}
+					
+					input[type=email] {
+						border: none;
+						box-shadow: none;
+						background: transparent;
+						padding: 7px 15px;
+						font-size: 10px;
+						font-weight: 300;
+						border-radius: 15px;
+						@include flex-grow(1);
+					}
+					
+					button {
+						font-size: 10px;
+					}
+					
+				}
+			}
+			
+		}
+		
+	}
+	
+	// Add Widget Zone
+	.add-dash-widget {
+		border: 1px dashed $add-widget-color;
+		border-radius: 5px;
+		margin: $grid-gutter-width $grid-gutter-width 0;
+		min-height: 180px;
+		@include vertical-align-flex();
+		cursor: pointer;
+		
+		i, h2 {
+			display: inline-block;
+			vertical-align: middle;
+			color: $add-widget-color;
+			@include transition(.15s ease-in-out);
+			@include user-select(none);
+		}
+		
+		i {
+			margin-right: 4px;
+			font-weight: bold;
+			font-size: 16px;
+		}
+		
+		&:hover {
+			i, h2 {
+				color: darken($add-widget-color, 40%);
+			}
+		}
+		
+		h2 {
+			font-size: 18px;
+			margin: 0;
+		}
+	}
+	
+	// Widgets
+	.atum-widgets {
+		padding: 0 $grid-gutter-width/2;
+	}
+	
+	.atum-widget {
+		margin-bottom: $grid-gutter-width;
+		
+		.widget-wrapper {
+			background-color: $widget-bg;
+			border-radius: 5px;
+			box-shadow: 0 3px 2px #eaeaea;
+		}
+		
+		.widget-header, .widget-body {
+			padding: $grid-gutter-width/2;
+		}
+		
+		.widget-header {
+			border-bottom: 1px solid $card-border;
+			text-align: left;
+			cursor: move;
+			position: relative;
+			@include flexbox;
+			@include flex-align-items(center);
+			
+			&:before {
+				content: '...';
+				color: $widget-drag-icon;
+				font-size: 63px;
+				@include vertical-align-absolute;
+				left: 17px;
+				letter-spacing: -4px;
+				@include transform(rotate(90deg) translateY(-50%));
+				@include transform-origin(top);
+			}
+			
+			h2, i {
+				@include user-select(none);
+			}
+			
+			h2 {
+				margin: 10px 10px 9px 15px;
+				font-size: 18px;
+				font-weight: bold;
+				@include flex-grow(1);
+			}
+			
+			i {
+				font-size: 20px;
+				color: $widget-controls;
+				display: inline-block;
+				cursor: pointer;
+				margin-left: 3px;
+				@include transition(color 0.2s ease-in-out);
+				
+				&:hover {
+					color: $widget-controls-hover;
+				}
+			}
+			
+		}
+		
+		.widget-body {
+		
+		}
+		
+		.widget-primary {
+			color: $widget-primary;
+		}
+		
+		.widget-success {
+			color: $widget-success;
+		}
+		
+		.widget-warrning {
+			color: $widget-warning;
+		}
+		
+		.widget-danger {
+			color: $widget-danger;
+		}
+	}
+	
+}

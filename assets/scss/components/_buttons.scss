@@ -1,0 +1,49 @@
+//
+// Buttons
+//---------
+
+.btn {
+	padding: 7px 12px;
+	border: none;
+	text-transform: uppercase;
+	cursor: pointer;
+	@include transition(.2s ease-in-out);
+	
+	&:focus {
+		outline: none;
+	}
+	
+	&.pill {
+		border-radius: 16px;
+	}
+}
+
+.btn-success {
+	color: #FFF;
+	background-color: $btn-success;
+	
+	&:hover {
+		color: #FFF;
+		background-color: transparentize($btn-success, 0.25);
+	}
+}
+
+.btn-primary {
+	color: #FFF;
+	background-color: $btn-primary;
+	
+	&:hover {
+		color: #FFF;
+		background-color: transparentize($btn-primary, 0.25);
+	}
+}
+
+.btn-warning {
+	color: #FFF;
+	background-color: $btn-warning;
+	
+	&:hover {
+		color: #FFF;
+		background-color: transparentize($btn-warning, 0.25);
+	}
+}

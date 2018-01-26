@@ -18,6 +18,7 @@ use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Dashboard\Dashboard;
 use Atum\InboundStock\InboundStock;
 use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
@@ -34,8 +35,14 @@ final class Ajax {
 	 * @var Ajax
 	 */
 	private static $instance;
-	
+
+	/**
+	 * Ajax constructor
+	 */
 	private function __construct() {
+
+		// Save ATUM Dashboard widgets' layout
+		add_action( 'wp_ajax_atum_save_dashboard_layout', array( $this, 'save_dashboard_layout' ) );
 
 		// Ajax callback for Stock Central ListTable
 		add_action( 'wp_ajax_atum_fetch_stock_central_list', array( $this, 'fetch_stock_central_list' ) );
@@ -93,6 +100,23 @@ final class Ajax {
 
 		// Import WC order items to an Inventory Log
 		add_action( 'wp_ajax_atum_order_import_items', array( $this, 'import_wc_order_items' ) );
+
+	}
+
+	/**
+	 * Save the ATUM Dashboard layout as user meta
+	 *
+	 * @since 1.3.9
+	 */
+	public function save_dashboard_layout() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		$layout = ( ! empty($_POST['layout']) ) ? $_POST['layout'] : array();
+		$user_id = get_current_user_id();
+		Dashboard::save_user_widgets_layout($user_id, $layout);
+
+		wp_die();
 
 	}
 	

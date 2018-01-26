@@ -1,0 +1,49 @@
+//
+// Utilities
+//----------
+
+// Brand colors
+.color- {
+	&primary {
+		color: $brand-primary;
+	}
+	
+	&info {
+		color: $brand-info;
+	}
+	
+	&success {
+		color: $brand-success;
+	}
+	
+	&warning {
+		color: $brand-warning;
+	}
+	
+	&danger {
+		color: $brand-danger;
+	}
+}
+
+// Brand backgrounds
+.bg- {
+	&primary {
+		background-color: $brand-primary;
+	}
+	
+	&info {
+		background-color: $brand-info;
+	}
+	
+	&success {
+		background-color: $brand-success;
+	}
+	
+	&warning {
+		background-color: $brand-warning;
+	}
+	
+	&danger {
+		background-color: $brand-danger;
+	}
+}

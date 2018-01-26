@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) or die;
 
 	<div class="form-field form-field-wide">
 		<label for="city"><?php _e('City', ATUM_TEXT_DOMAIN) ?></label>
-		<input type="text" id="city" name="billing_information[line_1]" value="<?php echo get_post_meta($supplier_id, '_billing_information_city', TRUE) ?>">
+		<input type="text" id="city" name="billing_information[city]" value="<?php echo get_post_meta($supplier_id, '_billing_information_city', TRUE) ?>">
 	</div>
 
 	<div class="form-field form-field-wide">

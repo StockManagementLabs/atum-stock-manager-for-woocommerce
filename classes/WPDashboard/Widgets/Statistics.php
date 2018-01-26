@@ -3,7 +3,7 @@
  * @package     Atum\WPDashboard
  * @subpackage  Widgets
  * @author      Salva Machí and Jose Piera - https://sispixels.com
- * @copyright   ©2017 Stock Management Labs™
+ * @copyright   ©2018 Stock Management Labs™
  *
  * @since       1.2.3
  *
@@ -12,13 +12,12 @@
 
 namespace Atum\WPDashboard\Widgets;
 
+defined( 'ABSPATH' ) or die;
+
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 use Atum\WPDashboard\WPDashboardWidget;
-
-
-defined( 'ABSPATH' ) or die;
 
 class Statistics extends WPDashboardWidget {
 
@@ -26,7 +25,7 @@ class Statistics extends WPDashboardWidget {
 	 * The id of this widget
 	 * @var string
 	 */
-	protected $id = ATUM_PREFIX . 'dashboard_statistics';
+	protected $id = ATUM_PREFIX . 'wp_dashboard_statistics';
 
 	/**
 	 * The array of published Variable products' IDs
@@ -120,11 +119,20 @@ class Statistics extends WPDashboardWidget {
 
 
 	/**
+	 * Statistics constructor
+	 */
+	public function __construct() {
+
+		$this->title = __( 'ATUM Statistics', ATUM_TEXT_DOMAIN );
+		parent::__construct();
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function init() {
 
-		$this->widget_defaults = apply_filters('atum/dashboard_statistics/widget_defaults', $this->widget_defaults );
+		$this->widget_defaults = apply_filters('atum/wp_dashboard_statistics/widget_defaults', $this->widget_defaults );
 
 		// Register widget's default settings (if empty)
 		$this->update_dashboard_widget_options( $this->widget_defaults, TRUE );
@@ -132,11 +140,10 @@ class Statistics extends WPDashboardWidget {
 
 	}
 
-
 	/**
 	 * @inheritdoc
 	 */
-	public function widget() {
+	public function render() {
 
 		// Get the products that will use for calculations
 		$args = array(
@@ -180,7 +187,7 @@ class Statistics extends WPDashboardWidget {
 		$stats_this_month = $this->get_stats( $products, 'first day of this month 00:00:00', $days_elapsed );
 		$stats_today = $this->get_stats( $products, 'today 00:00:00', 1 );
 
-		$order_status = (array) apply_filters( 'atum/dashboard_statistics/order_status', ['wc-processing', 'wc-completed'] );
+		$order_status = (array) apply_filters( 'atum/wp_dashboard_statistics/order_status', ['wc-processing', 'wc-completed'] );
 
 		/**
 		 * Orders this year
@@ -241,7 +248,7 @@ class Statistics extends WPDashboardWidget {
 		// Stock indicators
 		$stock_counters = $this->get_stock_levels();
 
-		include ATUM_PATH . 'views/dashboard-widgets/statistics.php';
+		include ATUM_PATH . 'views/wp-dashboard/statistics.php';
 
 	}
 
@@ -387,7 +394,7 @@ class Statistics extends WPDashboardWidget {
 			'count_all'       => 0
 		);
 
-		$posts = new \WP_Query( apply_filters( 'atum/dashboard_statistics/stock_counters/all', $args ) );
+		$posts = new \WP_Query( apply_filters( 'atum/wp_dashboard_statistics/stock_counters/all', $args ) );
 		$posts = $posts->posts;
 		$stock_counters['count_all'] = count( $posts );
 
@@ -458,7 +465,7 @@ class Statistics extends WPDashboardWidget {
 
 			}
 
-			$posts_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_statistics/stock_counters/in_stock', $args ) );
+			$posts_in_stock = new \WP_Query( apply_filters( 'atum/wp_dashboard_statistics/stock_counters/in_stock', $args ) );
 			$stock_counters['count_in_stock'] = count( $posts_in_stock->posts );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too
@@ -497,7 +504,7 @@ class Statistics extends WPDashboardWidget {
 			            AND `{$wpdb->posts}`.`post_type` IN " . $low_stock_post_types . "
 			            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_in_stock->posts ) . ")) )) AS states";
 
-				$str_sql = apply_filters( 'atum/dashboard_statistics/stock_counters/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
+				$str_sql = apply_filters( 'atum/wp_dashboard_statistics/stock_counters/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
 
 				$result = $wpdb->get_results( $str_sql );
 				$result = wp_list_pluck( $result, 'ID' );
@@ -558,7 +565,7 @@ class Statistics extends WPDashboardWidget {
 				'post_parent__in' => $parents->posts
 			);
 
-			$children = new \WP_Query( apply_filters( 'atum/dashboard_statistics/get_children', $children_args ) );
+			$children = new \WP_Query( apply_filters( 'atum/wp_dashboard_statistics/get_children', $children_args ) );
 
 			if ($children->found_posts) {
 				return $children->posts;
@@ -617,7 +624,7 @@ class Statistics extends WPDashboardWidget {
 
 		}
 
-		include ATUM_PATH . 'views/dashboard-widgets/statistics-config.php';
+		include ATUM_PATH . 'views/wp-dashboard/statistics-config.php';
 
 	}
 

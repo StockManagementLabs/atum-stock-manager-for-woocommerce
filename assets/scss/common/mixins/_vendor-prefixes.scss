@@ -1,0 +1,67 @@
+//
+// Vendor Prefixes
+//----------------
+
+@mixin animation($animation) {
+	-webkit-animation: $animation;
+	-moz-animation: $animation;
+	-o-animation: $animation;
+	animation: $animation;
+}
+
+@mixin transform($transform...) {
+	-webkit-transform: $transform;
+	-moz-transform: $transform;
+	-o-transform: $transform;
+	-ms-transform: $transform; // IE9 only
+	transform: $transform;
+}
+
+@mixin transform-origin($origin) {
+	-webkit-transform-origin: $origin;
+	-moz-transform-origin: $origin;
+	-ms-transform-origin: $origin; // IE9 only
+	transform-origin: $origin;
+}
+
+@mixin transition($transition...) {
+	-webkit-transition: $transition;
+	-o-transition: $transition;
+	transition: $transition;
+}
+
+@mixin transition-delay($transition-delay) {
+	-webkit-transition-delay: $transition-delay;
+	transition-delay: $transition-delay;
+}
+
+@mixin transition-timing($transition-timing) {
+	-webkit-transition-timing-function: $transition-timing;
+	transition-timing-function: $transition-timing;
+}
+
+@mixin user-select($select) {
+	-webkit-user-select: $select;
+	-moz-user-select: $select;
+	-ms-user-select: $select; // IE10+
+	user-select: $select;
+}
+
+@mixin keyframes($animationName) {
+	@-webkit-keyframes #{$animationName} {
+		$browser: '-webkit-' !global;
+		@content;
+	}
+	@-moz-keyframes #{$animationName} {
+		$browser: '-moz-' !global;
+		@content;
+	}
+	@-o-keyframes #{$animationName} {
+		$browser: '-o-' !global;
+		@content;
+	}
+	@keyframes #{$animationName} {
+		$browser: '' !global;
+		@content;
+	}
+} $browser: null;

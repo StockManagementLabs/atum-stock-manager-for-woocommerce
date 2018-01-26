@@ -62,7 +62,7 @@ class AtumComments {
 	 */
 	public function exclude_atum_order_notes( $clauses ) {
 		// *** The 'log_note' is deprecated and could be deleted in future versions ***
-		$clauses['where'] .= ( $clauses['where'] ? ' AND ' : '' ) . " comment_type NOT IN ('" . self::NOTES_KEY . "', 'log_note') ";
+		$clauses['where'] .= ( ! empty($clauses['where']) ? ' AND ' : '' ) . " comment_type NOT IN ('" . self::NOTES_KEY . "', 'log_note') ";
 		return $clauses;
 	}
 
@@ -77,7 +77,7 @@ class AtumComments {
 	 */
 	public function exclude_atum_order_notes_from_feed_where( $where ) {
 		// *** The 'log_note' is deprecated and could be deleted in future versions ***
-		return ( $where ? ' AND ' : '' ) . " comment_type NOT IN ('" . self::NOTES_KEY . "', 'log_note') ";
+		return ( ! empty($where) ? ' AND ' : '' ) . " comment_type NOT IN ('" . self::NOTES_KEY . "', 'log_note') ";
 	}
 
 	/**

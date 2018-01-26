@@ -3,7 +3,7 @@
  * @package         Atum
  * @subpackage      Modules
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.3.6
  *
@@ -24,7 +24,7 @@ class ModuleManager {
 	 */
 	private static $instance;
 
-	private $modules = ['stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'dashboard_statistics'];
+	private $modules = ['dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'wp_dashboard_statistics'];
 
 	/**
 	 * The current status of each module
@@ -81,6 +81,14 @@ class ModuleManager {
 	 */
 	public function add_settings_defaults ($defaults) {
 
+		$defaults['dashboard_module'] = array(
+			'section' => 'module_manager',
+			'name'    => __( 'Dashboard', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Enables/Disables the ATUM Dashboard module.', ATUM_TEXT_DOMAIN ),
+			'type'    => 'switcher',
+			'default' => 'yes'
+		);
+
 		$defaults['stock_central_module'] = array(
 			'section' => 'module_manager',
 			'name'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
@@ -113,10 +121,10 @@ class ModuleManager {
 			'default' => 'yes'
 		);
 
-		$defaults['dashboard_statistics_module'] = array(
+		$defaults['wp_dashboard_statistics_module'] = array(
 			'section' => 'module_manager',
-			'name'    => __( 'Dashboard Statistics Widget', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( 'Enables/Disables the Dashboard Statistics Widget module.', ATUM_TEXT_DOMAIN ),
+			'name'    => __( 'WP Dashboard Statistics Widget', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Enables/Disables the WordPress Dashboard Statistics Widget module.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'yes'
 		);

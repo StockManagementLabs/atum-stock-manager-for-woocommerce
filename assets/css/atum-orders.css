@@ -788,11 +788,11 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #00B050;
+  color: #82c342;
 }
 
 .swal2-container a:hover {
-  color: #00e367;
+  color: #9ccf69;
 }
 
 .blockUI.blockOverlay:before {
@@ -915,16 +915,12 @@
 
 .atum-meta-box {
   padding: 15px 10px;
-  *zoom: 1;
 }
 
-.atum-meta-box:before, .atum-meta-box:after {
-  content: ' ';
-  display: table;
-}
-
-.atum-meta-box:after {
+.atum-meta-box::after {
+  display: block;
   clear: both;
+  content: "";
 }
 
 .atum-meta-box .form-field {
@@ -1014,7 +1010,7 @@
 }
 
 .wc-backbone-modal .alert {
-  background-color: #5ecbff;
+  background-color: #8fedff;
   padding: 4px 6px;
   display: block;
   font-size: 12px;
@@ -1421,7 +1417,7 @@ ul.atum_order_notes li p.meta .exact-date {
 }
 
 ul.atum_order_notes li a.delete_note {
-  color: #EF4D5A;
+  color: #ff4848;
 }
 
 ul.atum_order_notes li .note_content::after {
@@ -1469,18 +1465,14 @@ ul.atum_order_notes li .note_content::after {
   border-bottom: 1px solid #dfdfdf;
   padding: 1.5em 2em;
   background: #f8f8f8;
-  *zoom: 1;
   line-height: 2em;
   text-align: right;
 }
 
-#atum_order_items .atum-order-data-row:before, #atum_order_items .atum-order-data-row:after {
-  content: ' ';
-  display: table;
-}
-
-#atum_order_items .atum-order-data-row:after {
+#atum_order_items .atum-order-data-row::after {
+  display: block;
   clear: both;
+  content: "";
 }
 
 #atum_order_items .atum-order-data-row p {
@@ -1530,7 +1522,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-totals .refunded-total {
-  color: #EF4D5A;
+  color: #ff4848;
 }
 
 #atum_order_items .refund-actions {
@@ -2056,7 +2048,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax .delete-atum-order-tax:hover:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax .delete-atum-order-tax:hover:before {
-  color: #EF4D5A;
+  color: #ff4848;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax:hover .delete-atum-order-tax, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax:hover .delete-atum-order-tax {
@@ -2065,7 +2057,7 @@ ul.atum_order_notes li .note_content::after {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items small.refunded {
   display: block;
-  color: #EF4D5A;
+  color: #ff4848;
   white-space: nowrap;
   margin-top: 0.5em;
 }
@@ -2180,7 +2172,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:hover:before, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:hover:before {
-  color: #EF4D5A;
+  color: #ff4848;
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:focus, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:focus {
@@ -2403,12 +2395,12 @@ table.wp-list-table .column-status mark.pending::after, table.wp-list-table .col
 
 table.wp-list-table .column-status mark.pending::after {
   content: '\e012';
-  color: #FEC007;
+  color: #efaf00;
 }
 
 table.wp-list-table .column-status mark.completed::after {
   content: '\e015';
-  color: #00B050;
+  color: #82c342;
 }
 
 table.wp-list-table td.column-status {

@@ -50,7 +50,7 @@ class Addons {
 	/**
 	 * The menu order for this module
 	 */
-	const MENU_ORDER = 90;
+	const MENU_ORDER = 81;
 
 	/**
 	 * Singleton constructor

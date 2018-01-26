@@ -1,6 +1,6 @@
 <?php
 /**
- * View for the Dashboard Statistics widget
+ * View for the WP Dashboard Statistics widget
  *
  * @since 1.2.3
  */

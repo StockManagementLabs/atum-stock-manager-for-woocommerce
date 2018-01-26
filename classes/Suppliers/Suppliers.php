@@ -3,7 +3,7 @@
  * @package     Atum
  * @subpackage  Suppliers
  * @author      Salva Machí and Jose Piera - https://sispixels.com
- * @copyright   ©2017 Stock Management Labs™
+ * @copyright   ©2018 Stock Management Labs™
  *
  * @since       1.2.9
  *
@@ -42,7 +42,7 @@ class Suppliers {
 	/**
 	 * The menu order
 	 */
-	const MENU_ORDER = 35;
+	const MENU_ORDER = 4;
 	
 	
 	/**
@@ -412,6 +412,7 @@ class Suppliers {
 						data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 						data-multiple="false" data-selected="" data-minimum_input_length="1">
 						<?php if ( ! empty($supplier) ): ?>
+							<option value=""></option>
 							<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
 						<?php endif; ?>
 					</select>
@@ -454,13 +455,13 @@ class Suppliers {
 			return;
 		}
 
-		if ( isset($_POST['variation_supplier']) && isset($_POST['variation_supplier_sku']) ) {
+		if ( isset($_POST['variation_supplier'], $_POST['variation_supplier_sku']) ) {
 			$supplier = reset($_POST['variation_supplier']);
 			$supplier = $supplier ? absint($supplier) : '';
 
 			$supplier_sku = reset($_POST['variation_supplier_sku']);
 		}
-		elseif ( isset($_POST['_supplier']) && isset($_POST['_supplier_sku']) ) {
+		elseif ( isset($_POST['_supplier'], $_POST['_supplier_sku']) ) {
 			$supplier     = $_POST['_supplier'] ? absint( $_POST['_supplier'] ) : '';
 			$supplier_sku = esc_attr( $_POST['_supplier_sku'] );
 		}

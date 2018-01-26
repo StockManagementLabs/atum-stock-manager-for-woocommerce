@@ -764,16 +764,12 @@
 
 .atum-meta-box {
   padding: 15px 10px;
-  *zoom: 1;
 }
 
-.atum-meta-box:before, .atum-meta-box:after {
-  content: ' ';
-  display: table;
-}
-
-.atum-meta-box:after {
+.atum-meta-box::after {
+  display: block;
   clear: both;
+  content: "";
 }
 
 .atum-meta-box .form-field {
@@ -863,7 +859,7 @@
 }
 
 .wc-backbone-modal .alert {
-  background-color: #5ecbff;
+  background-color: #8fedff;
   padding: 4px 6px;
   display: block;
   font-size: 12px;
