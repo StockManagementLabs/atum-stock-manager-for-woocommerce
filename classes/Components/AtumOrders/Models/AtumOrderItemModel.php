@@ -367,7 +367,7 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array $meta
+	 * @param object $meta
 	 */
 	public function delete_meta( $meta ) {
 		self::sanitize_order_item_name();
@@ -376,6 +376,7 @@ abstract class AtumOrderItemModel {
 
 	/**
 	 * Getter for the ATUM Order ID
+	 *
 	 * @return int
 	 */
 	public function get_atum_order_id() {
