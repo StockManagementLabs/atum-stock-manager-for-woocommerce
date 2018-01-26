@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Helpers;
+use Atum\Inc\Hooks;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 
 
@@ -99,6 +100,9 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Add the help tab to PO list page
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+
+		// Add the hooks for the Purchase Price field
+		Hooks::purchase_price_hooks();
 
 	}
 

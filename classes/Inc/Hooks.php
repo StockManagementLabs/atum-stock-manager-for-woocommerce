@@ -12,6 +12,9 @@
 
 namespace Atum\Inc;
 
+use Atum\Modules\ModuleManager;
+
+
 defined( 'ABSPATH' ) or die;
 
 final class Hooks {
@@ -32,23 +35,8 @@ final class Hooks {
 			add_action( 'init', array( __CLASS__, 'wc_manage_stock_hooks' ) );
 		}
 
-		// Add the purchase price to WC products
-		add_action( 'woocommerce_product_options_pricing', array(__CLASS__, 'add_purchase_price_meta') );
-		add_action( 'woocommerce_variation_options_pricing', array(__CLASS__, 'add_purchase_price_meta'), 10, 3 );
-
-		// Save the product purchase price meta
-		add_action( 'save_post_product', array(__CLASS__, 'save_purchase_price') );
-		add_action( 'woocommerce_update_product_variation', array(__CLASS__, 'save_purchase_price') );
-
 		// Show the right stock status on WC products list when ATUM is managing the stock
 		add_filter( 'woocommerce_admin_stock_html', array(__CLASS__, 'set_wc_products_list_stock_status'), 10, 2 );
-
-		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
-		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
 
 		// Add the location column to the items table in WC orders
 		add_action( 'woocommerce_admin_order_item_headers', array(__CLASS__, 'wc_order_add_location_column_header') );
@@ -103,6 +91,30 @@ final class Hooks {
 
 		// Allow saving the WooCommerce _manage_stock meta key for grouped products
 		add_action( 'update_post_metadata', array( __CLASS__, 'save_manage_stock' ), 10, 5 );
+
+	}
+
+	/**
+	 * Add hooks to show and save the Purchase Price field on products
+	 *
+	 * @since 1.3.8.3
+	 */
+	public static function purchase_price_hooks() {
+
+		// Add the purchase price to WC products
+		add_action( 'woocommerce_product_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ) );
+		add_action( 'woocommerce_variation_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ), 10, 3 );
+
+		// Save the product purchase price meta
+		add_action( 'save_post_product', array( __CLASS__, 'save_purchase_price' ) );
+		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
+
+		// Add purchase price to WPML custom prices
+		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
+		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
+		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
 
 	}
 
