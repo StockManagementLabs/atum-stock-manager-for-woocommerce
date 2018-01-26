@@ -213,6 +213,12 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ## Changelog
 
+**1.3.8.3 - 2018-01-26**
+
+Fixes:
+
+* Hide the Purchase Price field when the Purchase Orders module is disabled. 
+
 **1.3.8.2 - 2018-01-22**
 
 Fixes:

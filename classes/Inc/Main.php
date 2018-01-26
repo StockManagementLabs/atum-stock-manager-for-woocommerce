@@ -93,23 +93,8 @@ class Main {
 			add_action( 'init', array( $this, 'wc_manage_stock_hooks' ) );
 		}
 
-		// Add the purchase price to WC products
-		add_action( 'woocommerce_product_options_pricing', array($this, 'add_purchase_price_meta') );
-		add_action( 'woocommerce_variation_options_pricing', array($this, 'add_purchase_price_meta'), 10, 3 );
-
-		// Save the product purchase price meta
-		add_action( 'save_post_product', array($this, 'save_purchase_price') );
-		add_action( 'woocommerce_update_product_variation', array($this, 'save_purchase_price') );
-
 		// Show the right stock status on WC products list when ATUM is managing the stock
 		add_filter( 'woocommerce_admin_stock_html', array($this, 'set_wc_products_list_stock_status'), 10, 2 );
-
-		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array($this, 'wpml_add_purchase_price_to_custom_prices') );
-		add_filter( 'wcml_custom_prices_fields_labels', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_custom_prices_strings', array($this, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_update_custom_prices_values', array($this, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array($this, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
 
 		// Add the location column to the items table in WC orders
 		add_action( 'woocommerce_admin_order_item_headers', array($this, 'wc_order_add_location_column_header') );
@@ -505,6 +490,30 @@ class Main {
 		add_action( 'update_post_metadata', array( $this, 'save_manage_stock' ), 10, 5 );
 
 	}
+
+	/**
+	 * Add hooks to show and save the Purchase Price field on products
+	 *
+	 * @since 1.3.8.3
+	 */
+	public static function purchase_price_hooks() {
+
+		// Add the purchase price to WC products
+		add_action( 'woocommerce_product_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ) );
+		add_action( 'woocommerce_variation_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ), 10, 3 );
+
+		// Save the product purchase price meta
+		add_action( 'save_post_product', array( __CLASS__, 'save_purchase_price' ) );
+		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
+
+		// Add purchase price to WPML custom prices
+		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
+		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
+		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
+
+	}
 	
 	/**
 	 * Disable the WooCommerce "Manage Stock" checkbox for simple products
@@ -690,7 +699,7 @@ class Main {
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
-	public function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
+	public static function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
 
 		if ( ! current_user_can( ATUM_PREFIX . 'edit_purchase_price') ) {
 			return;
@@ -729,7 +738,7 @@ class Main {
 	 *
 	 * @param int $post_id
 	 */
-	public function save_purchase_price ($post_id) {
+	public static function save_purchase_price ($post_id) {
 
 		$purchase_price = '';
 
@@ -786,7 +795,7 @@ class Main {
 	 *
 	 * @return array
 	 */
-	public function wpml_add_purchase_price_to_custom_prices( $prices, $product_id ) {
+	public static function wpml_add_purchase_price_to_custom_prices( $prices, $product_id ) {
 		
 		$prices[] = '_purchase_price';
 		return $prices;
@@ -802,7 +811,7 @@ class Main {
 	 *
 	 * @return array
 	 */
-	public function wpml_add_purchase_price_to_custom_price_labels( $labels, $product_id ) {
+	public static function wpml_add_purchase_price_to_custom_price_labels( $labels, $product_id ) {
 		
 		$labels['_purchase_price'] = __( 'Purchase Price', ATUM_TEXT_DOMAIN );
 		return $labels;
@@ -819,7 +828,7 @@ class Main {
 	 *
 	 * @return array
 	 */
-	public function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
+	public static function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
 	
 		if ($variation_id) {
 			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_variation_purchase_price'][$code][$variation_id]) ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][$code][$variation_id] ) : '';
@@ -842,7 +851,7 @@ class Main {
 	 * @param array  $custom_prices
 	 * @param string $code
 	 */
-	public function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
+	public static function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
 	
 		if ( isset( $custom_prices[ '_purchase_price'] ) ) {
 			update_post_meta( $post_id, "_purchase_price_{$code}", $custom_prices['_purchase_price'] );
