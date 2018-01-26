@@ -864,7 +864,11 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table .set-meta {
   cursor: pointer;
-  color: #00b8db;
+  color: #0073aa;
+}
+
+.atum-list-table .set-meta:hover {
+  color: #00a0d2;
 }
 
 .atum-list-table .set-meta.unsaved {
