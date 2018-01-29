@@ -14,6 +14,7 @@ namespace Atum\WPDashboard\Widgets;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
@@ -132,7 +133,7 @@ class Statistics extends WPDashboardWidget {
 	 */
 	public function init() {
 
-		$this->widget_defaults = apply_filters('atum/wp_dashboard_statistics/widget_defaults', $this->widget_defaults );
+		$this->widget_defaults = apply_filters('atum/wp_dashboard/statistics_widget/defaults', $this->widget_defaults );
 
 		// Register widget's default settings (if empty)
 		$this->update_dashboard_widget_options( $this->widget_defaults, TRUE );
@@ -145,33 +146,7 @@ class Statistics extends WPDashboardWidget {
 	 */
 	public function render() {
 
-		// Get the products that will use for calculations
-		$args = array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'tax_query' => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => Globals::get_product_types()
-				)
-			),
-			'fields' => 'ids'
-		);
-
-		if ( ! Helpers::is_atum_managing_stock() ) {
-
-			// Only products with the _manage_stock meta set to yes
-			$args['meta_query'] = array(
-				array(
-					'key'   => '_manage_stock',
-					'value' => 'yes'
-				)
-			);
-		}
-
-		$products = get_posts($args);
+		$products = WidgetHelpers::get_all_product_ids();
 
 		if ( empty($products) ) {
 			return;
@@ -184,35 +159,47 @@ class Statistics extends WPDashboardWidget {
 		$today = new \DateTime('today 00:00:00');
 		$days_elapsed = $today->diff($first_day_of_month)->days;
 
-		$stats_this_month = $this->get_stats( $products, 'first day of this month 00:00:00', $days_elapsed );
-		$stats_today = $this->get_stats( $products, 'today 00:00:00', 1 );
+		$stats_this_month = WidgetHelpers::get_sales_stats( array(
+			'types'    => array( 'sales', 'lost_sales' ),
+			'products' => $products,
+			'date'     => 'first day of this month 00:00:00',
+			'days'     => $days_elapsed
+		) );
 
-		$order_status = (array) apply_filters( 'atum/wp_dashboard_statistics/order_status', ['wc-processing', 'wc-completed'] );
+		$stats_today = WidgetHelpers::get_sales_stats( array(
+			'types'    => array( 'sales', 'lost_sales' ),
+			'products' => $products,
+			'date'     => 'today 00:00:00',
+			'days'     => 1
+		) );
+
+		$order_status = (array) apply_filters( 'atum/wp_dashboard/statistics_widget/order_status', ['wc-processing', 'wc-completed'] );
 
 		/**
-		 * Orders this year
+		 * This year
+		 * NOTE: COMMENTED DUE TO BAD PERFORMANCE ON SITES WITH MANY ORDERS
 		 */
 		/*$args = array(
 			'order_status'     => $order_status,
 			'order_date_start' => 'first day of January 00:00:00'
 		);
 
-		$orders_amount_this_year = $orders_revenue_this_year = $promo_products_this_year = $promo_value_this_year = 0;
-		$this->fill_order_data($args, $orders_amount_this_year, $orders_revenue_this_year, $promo_products_this_year, $promo_value_this_year);*/
+		$promo_this_year = WidgetHelpers::get_promo_sales_stats($args);
+		$orders_this_year = WidgetHelpers::get_orders_stats($args);*/
 
 		/**
-		 * Orders this month
+		 * This month
 		 */
 		$args = array(
 			'status'     => $order_status,
 			'date_start' => 'first day of this month 00:00:00'
 		);
 
-		$orders_amount_this_month = $orders_revenue_this_month = $promo_products_this_month = $promo_value_this_month = 0;
-		$this->fill_order_data($args, $orders_amount_this_month, $orders_revenue_this_month, $promo_products_this_month, $promo_value_this_month);
+		$promo_this_month = WidgetHelpers::get_promo_sales_stats($args);
+		$orders_this_month = WidgetHelpers::get_orders_stats($args);
 
 		/**
-		 * Orders previous month
+		 * Previous month
 		 */
 		$args = array(
 			'status'     => $order_status,
@@ -220,144 +207,36 @@ class Statistics extends WPDashboardWidget {
 			'date_end'   => 'last day of last month 23:59:59'
 		);
 
-		$orders_amount_previous_month = $orders_revenue_previous_month = $promo_products_previous_month = $promo_value_previous_month = 0;
-		$this->fill_order_data($args, $orders_amount_previous_month, $orders_revenue_previous_month, $promo_products_previous_month, $promo_value_previous_month);
+		$promo_previous_month = WidgetHelpers::get_promo_sales_stats($args);
+		$orders_previous_month = WidgetHelpers::get_orders_stats($args);
 
 		/**
-		 * Orders this week
+		 * This week
 		 */
 		$args = array(
 			'status'     => $order_status,
 			'date_start' => 'Monday this week 00:00:00'
 		);
 
-		$orders_amount_this_week = $orders_revenue_this_week = $promo_products_this_week = $promo_value_this_week = 0;
-		$this->fill_order_data($args, $orders_amount_this_week, $orders_revenue_this_week, $promo_products_this_week, $promo_value_this_week);
+		$promo_this_week = WidgetHelpers::get_promo_sales_stats($args);
+		$orders_this_week = WidgetHelpers::get_orders_stats($args);
 
 		/**
-		 * Orders today
+		 * Today
 		 */
 		$args = array(
 			'status'     => $order_status,
 			'date_start' => 'today 00:00:00'
 		);
 
-		$orders_amount_today = $orders_revenue_today = $promo_products_today = $promo_value_today = 0;
-		$this->fill_order_data($args, $orders_amount_today, $orders_revenue_today, $promo_products_today, $promo_value_today);
+		$promo_today = WidgetHelpers::get_promo_sales_stats($args);
+		$orders_today = WidgetHelpers::get_orders_stats($args);
 
 		// Stock indicators
 		$stock_counters = $this->get_stock_levels();
 
 		include ATUM_PATH . 'views/wp-dashboard/statistics.php';
 
-	}
-
-	/**
-	 * Get the products statistics that were sold after the specified date
-	 *
-	 * @since 1.2.3
-	 *
-	 * @param array $products   The array of products to include in calculations
-	 * @param int   $date       The UNIX timestamp date
-	 * @param int   $days       The days used for lost sales calculations
-	 *
-	 * @return array
-	 */
-	private function get_stats ($products, $date, $days) {
-
-		// Initialize values
-		$stats = array(
-			'earnings'      => 0,
-			'products'      => 0,
-			'lost_earnings' => 0,
-			'lost_products' => 0
-		);
-
-		$products_sold = Helpers::get_sold_last_days( $products, $date );
-		$lost_processed = array();
-
-		if ( $products_sold ) {
-
-			foreach ( $products_sold as $row ) {
-
-				$stats['products'] += $row['QTY'];
-				$stats['earnings'] += floatval( $row['TOTAL'] );
-
-				if ( ! in_array($row['PROD_ID'], $lost_processed) ) {
-					$lost_sales = Helpers::get_product_lost_sales( $row['PROD_ID'], $days );
-
-					if ( is_numeric($lost_sales) ) {
-						$stats['lost_earnings'] += $lost_sales;
-						$lost_processed[] = $row['PROD_ID'];
-					}
-				}
-
-			}
-
-		}
-
-		$stats['earnings'] = $this->format_price( $stats['earnings'] );
-		$stats['lost_earnings'] = $this->format_price( $stats['lost_earnings'] );
-
-		return $stats;
-
-	}
-
-	/**
-	 * Fill the order's values for every time window
-	 *
-	 * @since 1.2.7
-	 *
-	 * @param array $order_args
-	 * @param int   $orders_amt
-	 * @param float $revenue
-	 * @param int   $promo_products
-	 * @param float $promo_value
-	 */
-	private function fill_order_data($order_args, &$orders_amt, &$revenue, &$promo_products, &$promo_value) {
-
-		$orders = Helpers::get_orders($order_args);
-		$orders_amt = count($orders);
-
-		foreach ($orders as $order) {
-			/**
-			 * @var \WC_Order $order
-			 */
-			$revenue += floatval( $order->get_total() );
-
-			// Check if this order had discounts
-			$order_discount = $order->get_discount_total();
-
-			if ($order_discount) {
-				$promo_value += $order_discount;
-
-				$order_items = $order->get_items();
-
-				foreach ($order_items as $order_item) {
-					/**
-					 * @var \WC_Order_Item $order_item
-					 */
-					$promo_products += $order_item->get_quantity();
-				}
-			}
-		}
-
-		$revenue = Helpers::format_price($revenue);
-		$promo_value = Helpers::format_price($promo_value);
-
-	}
-
-	/**
-	 * Format a price as currency
-	 *
-	 * @since 1.2.3.2
-	 *
-	 * @param float $price
-	 *
-	 * @return string
-	 */
-	private function format_price ($price) {
-		return strip_tags( wc_price( $price ) );
 	}
 
 	/**

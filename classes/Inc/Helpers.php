@@ -1309,7 +1309,8 @@ final class Helpers {
 							// Update price if on sale
 							if ( $product->is_on_sale( 'edit' ) ) {
 								$product->set_price( $sale_price );
-							} else {
+							}
+							else {
 								$product->set_price( $regular_price );
 								
 								if ( $date_to && strtotime( $date_to ) < current_time( 'timestamp' ) ) {

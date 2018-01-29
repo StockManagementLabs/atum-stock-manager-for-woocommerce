@@ -141,28 +141,28 @@ defined( 'ABSPATH' ) or die;
 				<?php if ( $widget_options['orders_total']['data']['this_month'] ): ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_amount_this_month ?></td>
+						<td class="amt"><?php echo $orders_this_month['orders'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['orders_total']['data']['previous_month'] ): ?>
 					<tr>
 						<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_amount_previous_month ?></td>
+						<td class="amt"><?php echo $orders_previous_month['orders'] ?></td>
 					</tr>
 				<?php endif; ?>
 
 				<?php if ( $widget_options['orders_total']['data']['this_week'] ): ?>
 					<tr>
 						<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_amount_this_week ?></td>
+						<td class="amt"><?php echo $orders_this_week['orders'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['orders_total']['data']['today'] ): ?>
 					<tr>
 						<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_amount_today ?></td>
+						<td class="amt"><?php echo $orders_today['orders'] ?></td>
 					</tr>
 				<?php endif ?>
 
@@ -185,28 +185,28 @@ defined( 'ABSPATH' ) or die;
 				<?php if ( $widget_options['revenue']['data']['this_month'] ): ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_revenue_this_month ?></td>
+						<td class="amt"><?php echo $orders_this_month['revenue'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['revenue']['data']['previous_month'] ): ?>
 					<tr>
 						<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_revenue_previous_month ?></td>
+						<td class="amt"><?php echo $orders_previous_month['revenue'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['revenue']['data']['this_week'] ): ?>
 					<tr>
 						<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_revenue_this_week ?></td>
+						<td class="amt"><?php echo $orders_this_week['revenue'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['revenue']['data']['today'] ): ?>
 					<tr>
 						<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $orders_revenue_today ?></td>
+						<td class="amt"><?php echo $orders_today['revenue'] ?></td>
 					</tr>
 				<?php endif ?>
 				</tbody>
@@ -228,28 +228,28 @@ defined( 'ABSPATH' ) or die;
 				<?php if ( $widget_options['promo_products']['data']['this_month'] ): ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_products_this_month ?></td>
+						<td class="amt"><?php echo $promo_this_month['products'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['promo_products']['data']['previous_month'] ): ?>
 					<tr>
 						<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_products_previous_month ?></td>
+						<td class="amt"><?php echo $promo_previous_month['products'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['promo_products']['data']['this_week'] ): ?>
 					<tr>
 						<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_products_this_week ?></td>
+						<td class="amt"><?php echo $promo_this_week['products'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['promo_products']['data']['today'] ): ?>
 					<tr>
 						<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_products_today ?></td>
+						<td class="amt"><?php echo $promo_today['products'] ?></td>
 					</tr>
 				<?php endif ?>
 				</tbody>
@@ -271,28 +271,28 @@ defined( 'ABSPATH' ) or die;
 				<?php if ( $widget_options['promo_value']['data']['this_month'] ): ?>
 					<tr>
 						<td><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_value_this_month ?></td>
+						<td class="amt"><?php echo $promo_this_month['value'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['promo_value']['data']['previous_month'] ): ?>
 					<tr>
 						<td><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_value_previous_month ?></td>
+						<td class="amt"><?php echo $promo_previous_month['value'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['promo_value']['data']['this_week'] ): ?>
 					<tr>
 						<td><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_value_this_week ?></td>
+						<td class="amt"><?php echo $promo_this_week['value'] ?></td>
 					</tr>
 				<?php endif ?>
 
 				<?php if ( $widget_options['promo_value']['data']['today'] ): ?>
 					<tr>
 						<td><?php _e('Today', ATUM_TEXT_DOMAIN) ?></td>
-						<td class="amt"><?php echo $promo_value_today ?></td>
+						<td class="amt"><?php echo $promo_today['value'] ?></td>
 					</tr>
 				<?php endif ?>
 				</tbody>
