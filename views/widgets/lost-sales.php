@@ -6,7 +6,7 @@
  */
 ?>
 
-<div class="stats-data-widget" data-widget="lost-sales-data">
+<div class="stats-data-widget" data-widget="sales_data">
 
 	<div class="data-filter">
 		<select>
@@ -15,15 +15,27 @@
 		</select>
 	</div>
 
-	<div class="data">
+	<div class="data" data-value="today">
 
-		<h3 class="widget-success">2.320 €</h3>
-		<h5>EARNINGS</h5>
+		<h3 class="widget-success"><?php echo $stats_today['lost_earnings'] ?></h3>
+		<h5><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 
-		<h3 class="widget-primary">866</h3>
-		<h5>PRODUCTS</h5>
+		<h3 class="widget-primary"><?php echo $stats_today['lost_products'] ?></h3>
+		<h5><?php _e('Products', ATUM_TEXT_DOMAIN) ?></h5>
+
+	</div>
+
+	<div class="data hidden" data-value="month">
+
+		<h3 class="widget-success"><?php echo $stats_this_month['lost_earnings'] ?></h3>
+		<h5><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></h5>
+
+		<hr>
+
+		<h3 class="widget-primary"><?php echo $stats_this_month['lost_products'] ?></h3>
+		<h5><?php _e('Products', ATUM_TEXT_DOMAIN) ?></h5>
 
 	</div>
 

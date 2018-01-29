@@ -15,6 +15,7 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Dashboard\WidgetHelpers;
 
 
 class LostSales extends AtumWidget {
@@ -46,7 +47,33 @@ class LostSales extends AtumWidget {
 	 * @inheritDoc
 	 */
 	public function render() {
+
+		$products = WidgetHelpers::get_all_product_ids();
+
+		if ( empty($products) ) {
+			return;
+		}
+
+		$first_day_of_month = new \DateTime('first day of this month 00:00:00');
+		$today = new \DateTime('today 00:00:00');
+		$days_elapsed = $today->diff($first_day_of_month)->days;
+
+		$stats_this_month = WidgetHelpers::get_sales_stats( array(
+			'types'    => array( 'lost_sales' ),
+			'products' => $products,
+			'date'     => 'first day of this month 00:00:00',
+			'days'     => $days_elapsed
+		) );
+
+		$stats_today = WidgetHelpers::get_sales_stats( array(
+			'types'    => array( 'lost_sales' ),
+			'products' => $products,
+			'date'     => 'today 00:00:00',
+			'days'     => 1
+		) );
+
 		include ATUM_PATH . 'views/widgets/lost-sales.php';
+
 	}
 
 	/**

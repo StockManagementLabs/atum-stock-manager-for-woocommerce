@@ -3,7 +3,7 @@
 // (https://github.com/hernansartorio/jquery-nice-select)
 //--------------------------------------------------------
 
-// Default variables
+// Scoped variables
 $font-size:                     14px;
 $font-size-small:               12px;
 
@@ -13,7 +13,6 @@ $dropdown-height:               42px;
 $dropdown-height-small:         36px;
 $dropdown-padding:              18px;
 
-$gray-dark:                     #444;
 $gray:                          #afafaf;
 $gray-light:                    #e1e1e1;
 $gray-lighter:                  #f6f6f6;
@@ -170,6 +169,7 @@ $arrow-color:                   $gray;
 		
 		&.selected {
 			font-weight: bold;
+			color: $gray-dark;
 		}
 		
 		&.disabled {

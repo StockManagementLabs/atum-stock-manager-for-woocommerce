@@ -27,6 +27,7 @@
 			this.$widgetsContainer = $(this.elem).find('.atum-widgets');
 			this.buildWidgetsGrid();
 			this.bindWidgetControls();
+			this.bindWidgetEvents();
 			this.buildNiceSelect();
 			
 		},
@@ -60,6 +61,23 @@
 			// Remove widget
 			$('.atum-widget').find('.widget-close').click(function() {
 				self.grid.removeWidget( $(this).closest('.atum-widget') );
+			});
+		
+		},
+		bindWidgetEvents: function() {
+			
+			var self = this;
+		
+			// Sales Data widgets
+			$('.stats-data-widget').find('select').change(function(e) {
+				e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
+				
+				var $select          = $(this),
+				    $widgetContainer = $select.closest('.stats-data-widget');
+				
+				$widgetContainer.find('.data:visible').hide();
+				$widgetContainer.find('[data-value="' + $select.val() + '"]').fadeIn('fast');
+				
 			});
 		
 		},

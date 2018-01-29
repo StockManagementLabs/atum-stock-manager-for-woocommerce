@@ -6,7 +6,7 @@
  */
 ?>
 
-<div class="stats-data-widget" data-widget="promo-sales-data">
+<div class="stats-data-widget" data-widget="sales_data">
 
 	<div class="data-filter">
 		<select>
@@ -17,15 +17,51 @@
 		</select>
 	</div>
 
-	<div class="data">
+	<div class="data" data-value="today">
 
-		<h3 class="widget-success">1.560 €</h3>
-		<h5>VALUE</h5>
+		<h3 class="widget-success"><?php echo $stats_today['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 
-		<h3 class="widget-primary">430</h3>
-		<h5>PRODUCTS</h5>
+		<h3 class="widget-primary"><?php echo $stats_today['products'] ?></h3>
+		<h5><?php _e('Products', ATUM_TEXT_DOMAIN) ?></h5>
+
+	</div>
+
+	<div class="data hidden" data-value="this_week">
+
+		<h3 class="widget-success"><?php echo $stats_this_week['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
+
+		<hr>
+
+		<h3 class="widget-primary"><?php echo $stats_this_week['products'] ?></h3>
+		<h5><?php _e('Products', ATUM_TEXT_DOMAIN) ?></h5>
+
+	</div>
+
+	<div class="data hidden" data-value="this_month">
+
+		<h3 class="widget-success"><?php echo $stats_this_month['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
+
+		<hr>
+
+		<h3 class="widget-primary"><?php echo $stats_this_month['products'] ?></h3>
+		<h5><?php _e('Products', ATUM_TEXT_DOMAIN) ?></h5>
+
+	</div>
+
+	<div class="data hidden" data-value="previous_month">
+
+		<h3 class="widget-success"><?php echo $stats_previous_month['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
+
+		<hr>
+
+		<h3 class="widget-primary"><?php echo $stats_previous_month['products'] ?></h3>
+		<h5><?php _e('Products', ATUM_TEXT_DOMAIN) ?></h5>
 
 	</div>
 

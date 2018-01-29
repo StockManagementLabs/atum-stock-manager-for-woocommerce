@@ -15,6 +15,7 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Dashboard\WidgetHelpers;
 
 
 class Orders extends AtumWidget {
@@ -46,7 +47,50 @@ class Orders extends AtumWidget {
 	 * @inheritDoc
 	 */
 	public function render() {
+
+		$products = WidgetHelpers::get_all_product_ids();
+
+		if ( empty($products) ) {
+			return;
+		}
+
+		$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', ['wc-processing', 'wc-completed'] );
+
+		/**
+		 * This month
+		 */
+		$stats_this_month = WidgetHelpers::get_orders_stats( array(
+			'status'     => $order_status,
+			'date_start' => 'first day of this month 00:00:00'
+		) );
+
+		/**
+		 * Previous month
+		 */
+		$stats_previous_month = WidgetHelpers::get_orders_stats( array(
+			'status'     => $order_status,
+			'date_start' => 'first day of last month 00:00:00',
+			'date_end'   => 'last day of last month 23:59:59'
+		) );
+
+		/**
+		 * This week
+		 */
+		$stats_this_week = WidgetHelpers::get_orders_stats( array(
+			'status'     => $order_status,
+			'date_start' => 'Monday this week 00:00:00'
+		) );
+
+		/**
+		 * Today
+		 */
+		$stats_today = WidgetHelpers::get_orders_stats( array(
+			'status'     => $order_status,
+			'date_start' => 'today 00:00:00'
+		) );
+
 		include ATUM_PATH . 'views/widgets/orders.php';
+
 	}
 
 	/**

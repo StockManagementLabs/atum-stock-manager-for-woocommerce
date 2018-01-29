@@ -15,6 +15,7 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Dashboard\WidgetHelpers;
 
 
 class Sales extends AtumWidget {
@@ -46,7 +47,27 @@ class Sales extends AtumWidget {
 	 * @inheritDoc
 	 */
 	public function render() {
+
+		$products = WidgetHelpers::get_all_product_ids();
+
+		if ( empty($products) ) {
+			return;
+		}
+
+		$stats_this_month = WidgetHelpers::get_sales_stats( array(
+			'types'    => array( 'sales' ),
+			'products' => $products,
+			'date'     => 'first day of this month 00:00:00'
+		) );
+
+		$stats_today = WidgetHelpers::get_sales_stats( array(
+			'types'    => array( 'sales' ),
+			'products' => $products,
+			'date'     => 'today 00:00:00'
+		) );
+
 		include ATUM_PATH . 'views/widgets/sales.php';
+
 	}
 
 	/**
