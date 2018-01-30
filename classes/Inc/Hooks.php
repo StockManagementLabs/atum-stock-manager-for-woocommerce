@@ -26,6 +26,9 @@ final class Hooks {
 	 */
 	public static function admin_hooks() {
 
+		// Add extra links to the plugin desc row
+		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
+
 		// Check if ATUM has the "Manage Stock" option enabled
 		if ( Helpers::is_atum_managing_stock() ) {
 			add_action( 'init', array( __CLASS__, 'atum_manage_stock_hooks' ) );
@@ -58,6 +61,31 @@ final class Hooks {
 		add_action( 'woocommerce_product_set_stock' , array(__CLASS__, 'delete_transients') );
 		add_action( 'woocommerce_variation_set_stock' , array(__CLASS__, 'delete_transients') );
 
+	}
+
+	/**
+	 * Show row meta on the plugin screen
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param array  $links   Plugin Row Meta
+	 * @param string $file    Plugin Base file
+	 *
+	 * @return	array
+	 */
+	public static function plugin_row_meta( $links, $file ) {
+
+		if ( ATUM_BASENAME == $file ) {
+			$row_meta = array(
+				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
+				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
+				'support'         => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Visit premium customer support', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
+			);
+
+			return array_merge( $links, $row_meta );
+		}
+
+		return $links;
 	}
 
 	/**
