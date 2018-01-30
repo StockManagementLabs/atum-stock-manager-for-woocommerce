@@ -103,7 +103,7 @@ abstract class AtumOrderPostType {
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ), 10, 2 );
 
 			// Enqueue scripts
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 			add_action( 'admin_footer', array( $this, 'print_scripts' ) );
 
 			// Make Atum orders not translatable

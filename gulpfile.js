@@ -26,7 +26,7 @@ var config = {
 	assetsDir : './assets',
 
 	devUrl    : 'http://atum.loc',
-	production: true,
+	production: false, // NOTE: the production tag was causing problems with CSS compression
 
 	// decorate
 	decorate: {

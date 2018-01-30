@@ -18,7 +18,7 @@
  * Tested up to:         4.9.2
  * Requires PHP:         5.6
  * WC requires at least: 3.0.0
- * WC tested up to:      3.2.6
+ * WC tested up to:      3.3.0
  * Text Domain:          atum
  * Domain Path:          /languages
  * License:              GPLv2 or later
@@ -38,6 +38,10 @@ if ( ! defined('ATUM_PATH') ) {
 
 if ( ! defined('ATUM_URL') ) {
 	define( 'ATUM_URL', plugin_dir_url( __FILE__ ) );
+}
+
+if ( ! defined('ATUM_BASENAME') ) {
+	define( 'ATUM_BASENAME', plugin_basename( __FILE__ ) );
 }
 
 if ( ! defined('ATUM_TEXT_DOMAIN') ) {
