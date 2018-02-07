@@ -9,8 +9,13 @@
 	cursor: pointer;
 	@include transition(.2s ease-in-out);
 	
+	&:hover, &:focus {
+		color: #FFF;
+	}
+	
 	&:focus {
 		outline: none;
+		box-shadow: none;
 	}
 	
 	&.pill {
@@ -23,7 +28,6 @@
 	background-color: $btn-success;
 	
 	&:hover {
-		color: #FFF;
 		background-color: transparentize($btn-success, 0.25);
 	}
 }
@@ -33,7 +37,6 @@
 	background-color: $btn-primary;
 	
 	&:hover {
-		color: #FFF;
 		background-color: transparentize($btn-primary, 0.25);
 	}
 }
@@ -43,7 +46,6 @@
 	background-color: $btn-warning;
 	
 	&:hover {
-		color: #FFF;
 		background-color: transparentize($btn-warning, 0.25);
 	}
 }

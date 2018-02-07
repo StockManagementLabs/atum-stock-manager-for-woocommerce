@@ -26,7 +26,7 @@ $widget-controls-hover:     #00b8db;
 	.dash-header {
 		position: relative;
 		height: $header-height;
-		background: $header-bg url('#{$img-path}atum-dash-header-bg.png') center bottom;
+		background: $header-bg url('#{$img-path}dashboard/header-bg.png') center bottom;
 		background-size: cover;
 		@include vertical-align-flex();
 		@include flex-wrap(wrap);
@@ -136,7 +136,7 @@ $widget-controls-hover:     #00b8db;
 			}
 			
 			&.docs {
-				background-image: url('#{$img-path}card-docs-bg.png');
+				background-image: url('#{$img-path}dashboard/card-docs-bg.png');
 				
 				.card-img {
 					img {
@@ -148,7 +148,7 @@ $widget-controls-hover:     #00b8db;
 			}
 			
 			&.add-ons {
-				background-image: url('#{$img-path}card-add-ons-bg.png');
+				background-image: url('#{$img-path}dashboard/card-add-ons-bg.png');
 				
 				.card-img {
 					img {
@@ -160,7 +160,7 @@ $widget-controls-hover:     #00b8db;
 			}
 			
 			&.subscription {
-				background-image: url('#{$img-path}card-subscription-bg.png');
+				background-image: url('#{$img-path}dashboard/card-subscription-bg.png');
 				
 				.card-img {
 					img {
@@ -303,7 +303,15 @@ $widget-controls-hover:     #00b8db;
 		}
 		
 		.widget-body {
-		
+			p.error {
+				color: $widget-text;
+				font-size: 17px;
+				@include vertical-align-absolute;
+				max-width: 85%;
+				margin: auto;
+				left: 0;
+				right: 0;
+			}
 		}
 		
 		.widget-primary {
@@ -314,7 +322,7 @@ $widget-controls-hover:     #00b8db;
 			color: $widget-success;
 		}
 		
-		.widget-warrning {
+		.widget-warning {
 			color: $widget-warning;
 		}
 		

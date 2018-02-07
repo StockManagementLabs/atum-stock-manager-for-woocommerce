@@ -54,7 +54,7 @@
 }
 
 // Overlay
-@mixin overlay($bg-color: rgba(0, 0, 0, .7), $opacity: .7) {
+@mixin overlay($bg-color: rgba(0, 0, 0, .7), $opacity: .7, $zindex: 1) {
 	position: absolute;
 	background-color: $bg-color;
 	opacity: $opacity;
@@ -62,18 +62,18 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
-	z-index: 1;
+	z-index: $zindex;
 }
 
 // Loading Spinner
-@mixin loader($size: 15px, $color: #0073AA, $border-size: 2px, $duration: 1s) {
+@mixin loader($size: 15px, $color: #0073AA, $border-size: 2px, $duration: 1s, $zindex: 50) {
 	width: $size;
 	height: $size;
 	border: $border-size solid rgba($color, 0.25);
 	border-top-color: $color;
 	border-radius: 50%;
 	position: absolute;
-	z-index: 50;
+	z-index: $zindex;
 	@include animation(loader-rotate $duration linear infinite);
 	@include loader-rotate-animation;
 }

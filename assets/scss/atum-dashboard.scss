@@ -9,7 +9,12 @@
 @import "components/gridstack";
 @import "components/buttons";
 @import "components/nice-select";
-
-@import "widgets/stats-data";
+@import "components/scrollbar";
+@import "components/utilities";
 
 @import "pages/dashboard";
+
+@import "widgets/stats-data";
+@import "widgets/stock-control";
+@import "widgets/videos";
+@import "widgets/news";
