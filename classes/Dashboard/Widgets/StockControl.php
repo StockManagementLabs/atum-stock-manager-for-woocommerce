@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
+use Atum\Inc\Helpers;
 
 
 class StockControl extends AtumWidget {
@@ -51,7 +52,7 @@ class StockControl extends AtumWidget {
 	public function render() {
 
 		$stock_counters = WidgetHelpers::get_stock_levels();
-		include ATUM_PATH . 'views/widgets/stock-control.php';
+		Helpers::load_view( 'widgets/stock-control', compact('stock_counters') );
 
 	}
 
