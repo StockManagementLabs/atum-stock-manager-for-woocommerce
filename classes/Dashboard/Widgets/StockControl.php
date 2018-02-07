@@ -15,6 +15,7 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Dashboard\WidgetHelpers;
 
 
 class StockControl extends AtumWidget {
@@ -32,6 +33,8 @@ class StockControl extends AtumWidget {
 
 		$this->title = __('Stock Control', ATUM_TEXT_DOMAIN);
 		parent::__construct();
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 	}
 
 	/**
@@ -46,7 +49,10 @@ class StockControl extends AtumWidget {
 	 * @inheritDoc
 	 */
 	public function render() {
+
+		$stock_counters = WidgetHelpers::get_stock_levels();
 		include ATUM_PATH . 'views/widgets/stock-control.php';
+
 	}
 
 	/**

@@ -1,0 +1,51 @@
+//
+// "Stock Control" widget
+//-----------------------
+
+.stock-control-widget {
+	@include flexbox;
+	padding-top: $grid-gutter-width;
+	
+	> div {
+		width: 50%;
+		padding: $grid-gutter-width $grid-gutter-width/2;
+	}
+	
+	.stock-data {
+	
+	}
+	
+	h3, h5 {
+		margin: 10px 0;
+		text-align: left;
+	}
+	
+	h3 {
+		font-size: 35px;
+		font-weight: bold;
+	}
+	
+	h5 {
+		font-size: 15px;
+		color: $widget-text;
+		font-weight: 100;
+		text-transform: uppercase;
+	}
+	
+	hr {
+		border: {
+			width: 1px;
+			color: transparentize(#000, 0.9);
+			bottom: none;
+		}
+		margin: $grid-gutter-width/2 0;
+	}
+	
+	@media all and (max-width: $screen-xs-min) {
+		@include flex-wrap(wrap);
+		
+		> div {
+			width: 100%;
+		}
+	}
+}

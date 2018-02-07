@@ -6,4 +6,27 @@
  */
 ?>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium blanditiis consequatur consequuntur eligendi enim error maiores, provident quidem quisquam reiciendis similique unde voluptatibus. Animi autem consectetur exercitationem molestiae officia, tempora?</p>
+<div class="stock-control-widget">
+
+	<div class="stock-data">
+
+		<h3 class="widget-success"><?php echo $stock_counters['count_in_stock'] ?></h3>
+		<h5><?php _e('In Stock', ATUM_TEXT_DOMAIN) ?></h5>
+
+		<hr>
+
+		<h3 class="widget-warning"><?php echo $stock_counters['count_low_stock'] ?></h3>
+		<h5><?php _e('Low Stock', ATUM_TEXT_DOMAIN) ?></h5>
+
+		<hr>
+
+		<h3 class="widget-danger"><?php echo $stock_counters['count_out_stock'] ?></h3>
+		<h5><?php _e('Out of Stock', ATUM_TEXT_DOMAIN) ?></h5>
+
+	</div>
+
+	<div class="stock-chart">
+		<canvas data-instock="<?php echo $stock_counters['count_in_stock'] ?>" data-outstock="<?php echo $stock_counters['count_out_stock'] ?>" data-lowstock="<?php echo $stock_counters['count_low_stock'] ?>" />
+	</div>
+
+</div>
