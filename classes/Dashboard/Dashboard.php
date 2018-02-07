@@ -82,7 +82,7 @@ class Dashboard {
 			'x'      => 0,
 			'y'      => 12,
 			'width'  => 12,
-			'height' => 4
+			'height' => 5
 		),
 	);
 
@@ -148,18 +148,9 @@ class Dashboard {
 
 		// Load all the available widgets
 		$this->load_widgets();
+		$user_widgets_layout = $this->get_user_widgets_layout();
 
-		// Load the current user's layout
-		$user_id = get_current_user_id();
-		$this->user_widgets_layout = get_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', TRUE );
-
-		// If the current user has no layout, load the default and save it as user meta
-		if ( $this->user_widgets_layout == '' ) {
-			$this->user_widgets_layout = $this->default_widgets_layout;
-			self::save_user_widgets_layout($user_id, $this->user_widgets_layout);
-		}
-
-		Helpers::load_view( 'dashboard', array('widgets' => $this->widgets, 'layout' => $this->user_widgets_layout) );
+		Helpers::load_view( 'dashboard', array('widgets' => $this->widgets, 'layout' => $user_widgets_layout) );
 
 	}
 
@@ -215,16 +206,52 @@ class Dashboard {
 
 		if ( strpos($hook, self::UI_SLUG) !== FALSE ) {
 
+			$user_widgets_layout = $this->get_user_widgets_layout();
+
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array(), ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
+			$dash_vars = array();
+
+			/*
+			 * Gridstack scripts
+			 */
 			wp_register_script( 'lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE );
 			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', array(), ATUM_VERSION, TRUE );
 			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'lodash'), ATUM_VERSION, TRUE );
 			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', array('gridstack'), ATUM_VERSION, TRUE );
-			wp_register_script( 'atum-dashboard', ATUM_URL . "assets/js/atum.dashboard{$min}.js", array('gridstack', 'gridstack-jquery-ui'), ATUM_VERSION, TRUE );
 
+			/*
+			 * Dependencies
+			 */
+			$deps = array('gridstack', 'gridstack-jquery-ui');
+
+			/*
+			 * Widgets scripts
+			 */
+			$widget_keys = array_keys($user_widgets_layout);
+
+			if ( in_array(ATUM_PREFIX . 'statistics_widget', $widget_keys) || in_array(ATUM_PREFIX . 'stock_control_widget', $widget_keys) ) {
+				wp_register_script( 'chart-js-bundle', ATUM_URL . 'assets/js/vendor/Chart.bundle.min.js', array(), ATUM_VERSION, TRUE );
+				$deps[] = 'chart-js-bundle';
+				$dash_vars = array(
+					'inStockLabel' => __('In Stock', ATUM_PREFIX),
+					'lowStockLabel' => __('Low Stock', ATUM_PREFIX),
+					'outStockLabel' => __('Out of Stock', ATUM_PREFIX),
+				);
+			}
+
+			if ( in_array(ATUM_PREFIX . 'videos_widget', $widget_keys) ) {
+				wp_register_script( 'jquery-scrollbar', ATUM_URL . 'assets/js/vendor/jquery.scrollbar.min.js', array('jquery'), ATUM_VERSION, TRUE );
+				$deps[] = 'jquery-scrollbar';
+			}
+
+			/*
+			 * ATUM Dashboard script
+			 */
+			wp_register_script( 'atum-dashboard', ATUM_URL . "assets/js/atum.dashboard{$min}.js", $deps, ATUM_VERSION, TRUE );
+			wp_localize_script( 'atum-dashboard', 'atumDashVars', $dash_vars );
 			wp_enqueue_script( 'atum-dashboard' );
 
 		}
@@ -241,6 +268,33 @@ class Dashboard {
 	 */
 	public static function save_user_widgets_layout($user_id, $layout) {
 		update_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', $layout );
+	}
+
+	/**
+	 * Getter for the user_widgets_layout prop
+	 *
+	 * @since 1.3.9
+	 *
+	 * @return array
+	 */
+	public function get_user_widgets_layout() {
+
+		if ( empty($this->user_widgets_layout) ) {
+
+			// Load the current user's layout
+			$user_id                   = get_current_user_id();
+			$this->user_widgets_layout = get_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', TRUE );
+
+			// If the current user has no layout, load the default and save it as user meta
+			if ( $this->user_widgets_layout == '' ) {
+				$this->user_widgets_layout = $this->default_widgets_layout;
+				self::save_user_widgets_layout( $user_id, $this->user_widgets_layout );
+			}
+
+		}
+
+		return $this->user_widgets_layout;
+
 	}
 
 

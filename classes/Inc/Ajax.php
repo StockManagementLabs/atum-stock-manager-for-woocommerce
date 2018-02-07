@@ -19,6 +19,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Dashboard\Dashboard;
+use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\InboundStock;
 use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
@@ -43,6 +44,9 @@ final class Ajax {
 
 		// Save ATUM Dashboard widgets' layout
 		add_action( 'wp_ajax_atum_save_dashboard_layout', array( $this, 'save_dashboard_layout' ) );
+
+		// Sort the videos within the Videos Widget
+		add_action( 'wp_ajax_atum_videos_widget_sorting', array( $this, 'videos_widget_sorting') );
 
 		// Ajax callback for Stock Central ListTable
 		add_action( 'wp_ajax_atum_fetch_stock_central_list', array( $this, 'fetch_stock_central_list' ) );
@@ -106,6 +110,8 @@ final class Ajax {
 	/**
 	 * Save the ATUM Dashboard layout as user meta
 	 *
+	 * @package Dashboard
+	 *
 	 * @since 1.3.9
 	 */
 	public function save_dashboard_layout() {
@@ -119,9 +125,34 @@ final class Ajax {
 		wp_die();
 
 	}
+
+	/**
+	 * Sort the videos within the Videos Widget
+	 *
+	 * @package    Dashboard
+	 * @subpackage Videos Widget
+	 *
+	 * @since 1.3.9
+	 */
+	public function videos_widget_sorting() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		if ( empty($_POST['sortby']) ) {
+			wp_die(-1);
+		}
+
+		ob_start();
+		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( $_POST['sortby'] ) );
+
+		wp_die( ob_get_clean() );
+
+	}
 	
 	/**
 	 * Loads the Stock Central ListTable class and calls ajax_response method
+	 *
+	 * @package Stock Central
 	 *
 	 * @since 0.0.1
 	 */
@@ -144,6 +175,8 @@ final class Ajax {
 	/**
 	 * Loads the Inbound Stock ListTable class and calls ajax_response method
 	 *
+	 * @package Inbound Stock
+	 *
 	 * @since 1.3.0
 	 */
 	public function fetch_inbound_stock_list() {
@@ -164,6 +197,8 @@ final class Ajax {
 	
 	/**
 	 * Handle the ajax requests sent by the Atum's "Manage Stock" notice
+	 *
+	 * @package ATUM List Tables
 	 *
 	 * @since 0.1.0
 	 */
@@ -189,6 +224,8 @@ final class Ajax {
 	/**
 	 * Handle the ajax requests sent by the Atum's "Welcome" notice
 	 *
+	 * @package ATUM List Tables
+	 *
 	 * @since 1.1.1
 	 */
 	public function welcome_notice() {
@@ -200,6 +237,8 @@ final class Ajax {
 	/**
 	 * Triggered when clicking the rating footer
 	 *
+	 * @package Main
+	 *
 	 * @since 1.2.0
 	 */
 	public function rated() {
@@ -210,9 +249,11 @@ final class Ajax {
 	/**
 	 * Update the meta values for the edited ListTable columns
 	 *
+	 * @package ATUM List Tables
+	 *
 	 * @since 1.1.2
 	 */
-	public function update_list_data () {
+	public function update_list_data() {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
@@ -244,6 +285,8 @@ final class Ajax {
 
 	/**
 	 * Validate an addon license key through API
+	 *
+	 * @package Add-ons
 	 *
 	 * @since 1.2.0
 	 */
@@ -338,6 +381,8 @@ final class Ajax {
 	/**
 	 * First check before validating|activating|deactivating an addon license
 	 *
+	 * @package Add-ons
+	 *
 	 * @since 1.2.0
 	 */
 	private function check_license_post_data () {
@@ -354,6 +399,8 @@ final class Ajax {
 
 	/**
 	 * Activate an addon license key through API
+	 *
+	 * @package Add-ons
 	 *
 	 * @since 1.2.0
 	 */
@@ -450,6 +497,8 @@ final class Ajax {
 	/**
 	 * Deactivate an addon license key through API
 	 *
+	 * @package Add-ons
+	 *
 	 * @since 1.2.0
 	 */
 	public function deactivate_license () {
@@ -504,6 +553,8 @@ final class Ajax {
 	/**
 	 * Install an addon from the addons page
 	 *
+	 * @package Add-ons
+	 *
 	 * @since 1.2.0
 	 */
 	public function install_addon () {
@@ -541,6 +592,8 @@ final class Ajax {
 
 	/**
 	 * Seach for products from enhanced selects
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.3.7
 	 */
@@ -677,6 +730,8 @@ final class Ajax {
 	/**
 	 * Seach for WooCommerce orders from enhanced selects
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function search_wc_orders() {
@@ -720,6 +775,8 @@ final class Ajax {
 
 	/**
 	 * Seach for Suppliers from enhanced selects
+	 *
+	 * @package Suppliers
 	 *
 	 * @since 1.2.9
 	 */
@@ -776,6 +833,8 @@ final class Ajax {
 	/**
 	 * Add a note to an ATUM Order
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function add_atum_order_note() {
@@ -820,6 +879,8 @@ final class Ajax {
 	/**
 	 * Delete a note from an ATUM Order
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function delete_atum_order_note() {
@@ -842,6 +903,8 @@ final class Ajax {
 
 	/**
 	 * Load ATUM Order items
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */
@@ -868,6 +931,8 @@ final class Ajax {
 
 	/**
 	 * Add ATUM Order item
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */
@@ -924,6 +989,8 @@ final class Ajax {
 	/**
 	 * Add ATUM Order fee
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function add_atum_order_fee() {
@@ -959,6 +1026,8 @@ final class Ajax {
 
 	/**
 	 * Add ATUM Order shipping cost
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */
@@ -999,6 +1068,8 @@ final class Ajax {
 	/**
 	 * Add ATUM Order tax
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function add_atum_order_tax() {
@@ -1035,6 +1106,8 @@ final class Ajax {
 
 	/**
 	 * Remove an ATUM Order item
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */
@@ -1077,6 +1150,8 @@ final class Ajax {
 	/**
 	 * Remove an ATUM Order tax
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function remove_atum_order_tax() {
@@ -1107,6 +1182,8 @@ final class Ajax {
 
 	/**
 	 * Calc ATUM Order line taxes
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */
@@ -1152,6 +1229,8 @@ final class Ajax {
 	/**
 	 * Save ATUM Order items
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.2.4
 	 */
 	public function save_atum_order_items() {
@@ -1190,6 +1269,8 @@ final class Ajax {
 	/**
 	 * Increase the ATUM order products' stock by their quantity amount
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.3.0
 	 */
 	public function increase_atum_order_items_stock () {
@@ -1199,6 +1280,8 @@ final class Ajax {
 	/**
 	 * Decrease the ATUM order products' stock by their quantity amount
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.3.0
 	 */
 	public function decrease_atum_order_items_stock () {
@@ -1207,6 +1290,8 @@ final class Ajax {
 
 	/**
 	 * Change the ATUM order products' stock by their quantity amount
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.3.0
 	 */
@@ -1281,6 +1366,8 @@ final class Ajax {
 	/**
 	 * Change the purchase price of a product within a PO
 	 *
+	 * @package ATUM Orders
+	 *
 	 * @since 1.3.0
 	 */
 	public function change_atum_order_item_purchase_price() {
@@ -1313,6 +1400,8 @@ final class Ajax {
 
 	/**
 	 * Import the WC order items to the current ATUM Order after linking an order
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */
@@ -1388,6 +1477,8 @@ final class Ajax {
 	/**
 	 * Mark an ATUM Order with a status
 	 * NOTE: This callback is not being triggered through an Ajax request, just a normal HTTP request
+	 *
+	 * @package ATUM Orders
 	 *
 	 * @since 1.2.4
 	 */

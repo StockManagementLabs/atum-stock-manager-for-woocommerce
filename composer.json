@@ -7,7 +7,9 @@
 	"preferred-install": "dist",
 	"require": {
 		"php": ">=5.4.0",
-		"mpdf/mpdf": "^6.1.4"
+		"mpdf/mpdf": "^6.1.4",
+		"madcoda/php-youtube-api": "^1.2",
+		"jimmiw/php-time-ago": "^2.0"
 	},
 	"require-dev": {
 	},

@@ -9,7 +9,14 @@
 	
 	// Create the defaults once
 	var pluginName = "atumDashboard",
-	    defaults   = {};
+	    defaults = {
+		    chartColors: {
+			    red   : '#ff4848',
+			    orange: '#efaf00',
+			    green : '#69c61d',
+			    blue  : '#00b8db'
+		    }
+	    };
 	
 	// The actual plugin constructor
 	function Plugin ( element, options ) {
@@ -27,7 +34,7 @@
 			this.$widgetsContainer = $(this.elem).find('.atum-widgets');
 			this.buildWidgetsGrid();
 			this.bindWidgetControls();
-			this.bindWidgetEvents();
+			this.initWidgets();
 			this.buildNiceSelect();
 			
 		},
@@ -51,6 +58,7 @@
 			// Bind events
 			$gridStackElem.on('change', function(event, items) {
 				self.saveWidgetsLayout();
+				self.addScrollBars();
 			});
 			
 		},
@@ -64,11 +72,13 @@
 			});
 		
 		},
-		bindWidgetEvents: function() {
+		initWidgets: function() {
 			
 			var self = this;
 		
-			// Sales Data widgets
+			/*
+			 * Sales Data widgets
+			 */
 			$('.stats-data-widget').find('select').change(function(e) {
 				e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
 				
@@ -79,6 +89,131 @@
 				$widgetContainer.find('[data-value="' + $select.val() + '"]').fadeIn('fast');
 				
 			});
+			
+			/*
+			 * Stock Control widget
+			 */
+			var $pieCanvas = $('.stock-chart').find('canvas'),
+			    pieChart   = new Chart( $pieCanvas.get(0).getContext('2d'), {
+				    type   : 'doughnut',
+				    data   : {
+					    datasets: [{
+						    data           : [
+							    $pieCanvas.data('lowstock'),
+							    $pieCanvas.data('outstock'),
+							    $pieCanvas.data('instock')
+						    ],
+						    backgroundColor: [
+							    self.settings.chartColors.orange,
+							    self.settings.chartColors.red,
+							    self.settings.chartColors.green,
+						    ]
+					    }],
+					    labels  : [
+						    atumDashVars.lowStockLabel,
+						    atumDashVars.outStockLabel,
+						    atumDashVars.inStockLabel,
+					    ]
+				    },
+				    options: {
+					    responsive         : true,
+					    legend             : false,
+					    maintainAspectRatio: false,
+					    animation          : {
+						    animateScale : true,
+						    animateRotate: true
+					    },
+					    cutoutPercentage   : 25
+				    }
+			    } );
+			
+			/*
+			 * Videos widget
+			 */
+			
+			var $videoWidget = $('.videos-widget');
+			
+			// Video Switcher
+			$videoWidget.find('article a').click(function(e) {
+				e.preventDefault();
+				
+				var $videoWrapper = $(this).closest('article'),
+				    $videoPlayer  = $videoWidget.find('.video-player');
+				
+				$videoWrapper.siblings('.active').removeClass('active');
+				$videoWrapper.addClass('active');
+				
+				$videoPlayer.find('iframe').attr('src', '//www.youtube.com/embed/' + $videoWrapper.data('video') + '?rel=0&modestbranding=1');
+				$videoPlayer.find('.video-title').text($videoWrapper.find('.video-title').text());
+				$videoPlayer.find('.video-meta').html($videoWrapper.find('.video-meta').html());
+				$videoPlayer.find('.video-desc').text($videoWrapper.find('.video-desc').text());
+			});
+			
+			// Video Layout Switcher
+			$videoWidget.find('.video-list-layout a').click(function(e) {
+				e.preventDefault();
+				var $button = $(this);
+				
+				if ($button.hasClass('active')) {
+					return false;
+				}
+				
+				$videoWidget.find('.video-list').attr('data-view', $button.data('view'));
+				$button.siblings('.active').removeClass('active');
+				$button.addClass('active');
+			});
+			
+			// Filter Videos
+			$videoWidget.find('.video-filter-by').change(function() {
+				
+				var filterBy = $(this).val(),
+				    $videos  = $videoWidget.find('article');
+				
+				if (filterBy === '') {
+					$videos.fadeIn('fast');
+				}
+				else {
+					$videos.not('.' + filterBy).hide();
+					$videos.filter('.' + filterBy).fadeIn('fast');
+				}
+				
+			});
+			
+			// Sort Videos
+			$videoWidget.find('.video-sort-by').change(function() {
+				
+				var sortBy         = $(this).val(),
+				    $videosWrapper = $videoWidget.find('.scroll-wrapper');
+				
+				$.ajax({
+					url: ajaxurl,
+					method: 'POST',
+					data: {
+						token: self.$widgetsContainer.data('nonce'),
+						action: 'atum_videos_widget_sorting',
+						sortby: sortBy
+					},
+					beforeSend: function() {
+						$videosWrapper.addClass('overlay');
+					},
+					success: function(response) {
+						
+						if (response != -1) {
+							$videosWrapper.children('.scrollbar-inner').html($(response).find('.scrollbar-inner').html());
+							$videoWidget.find('.video-filter-by').change();
+						}
+						
+						$videosWrapper.removeClass('overlay');
+					},
+					error: function() {
+						$videosWrapper.removeClass('overlay');
+					}
+				});
+			
+			});
+			
+			// List Scrollbars
+			this.addScrollBars();
 		
 		},
 		serializeLayout: function(items) {
@@ -120,6 +255,27 @@
 			
 			var $container = (typeof $widget !== 'undefined') ? $widget : this.$widgetsContainer;
 			$container.find('select').niceSelect();
+			
+		},
+		addScrollBars: function() {
+			
+			if ($('.scroll-wrapper').length) {
+				$('.scrollbar-inner').scrollbar('destroy');
+			}
+			
+			$('.scrollbar-inner').scrollbar({
+				disableBodyScroll: true,
+				onInit: function() {
+					
+					$('.scroll-wrapper').each(function () {
+						var $scrollWrapper = $(this),
+						    $currentWidget = $scrollWrapper.closest('.atum-widget');
+						
+						$scrollWrapper.css('max-height', $currentWidget.height() - $currentWidget.find('.widget-header').outerHeight() - 37  + 'px');
+					});
+					
+				}
+			});
 			
 		}
 	} );

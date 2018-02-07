@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) or die;
 		</div>
 
 		<div class="dash-header-logo">
-			<img src="<?php echo ATUM_URL ?>assets/images/atum-dash-header-logo.svg" alt="ATUM">
+			<img src="<?php echo ATUM_URL ?>assets/images/dashboard/header-logo.svg" alt="ATUM">
 			<h3><?php _e('Inventory Management for WooCommerce', ATUM_TEXT_DOMAIN) ?></h3>
 		</div>
 
@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) or die;
 			</div>
 
 			<div class="card-img">
-				<img src="<?php echo ATUM_URL ?>assets/images/card-docs-img.png">
+				<img src="<?php echo ATUM_URL ?>assets/images/dashboard/card-docs-img.png">
 			</div>
 
 		</div>
@@ -58,7 +58,7 @@ defined( 'ABSPATH' ) or die;
 			</div>
 
 			<div class="card-img">
-				<img src="<?php echo ATUM_URL ?>assets/images/card-add-ons-img.png">
+				<img src="<?php echo ATUM_URL ?>assets/images/dashboard/card-add-ons-img.png">
 			</div>
 
 		</div>
@@ -73,7 +73,7 @@ defined( 'ABSPATH' ) or die;
 			</div>
 
 			<div class="card-img">
-				<img src="<?php echo ATUM_URL ?>assets/images/card-subscription-img.png">
+				<img src="<?php echo ATUM_URL ?>assets/images/dashboard/card-subscription-img.png">
 			</div>
 
 			<form action="">
@@ -110,7 +110,7 @@ defined( 'ABSPATH' ) or die;
 
 						$widget_layout = array_merge($grid_item_defaults, $widget_layout); ?>
 
-						<div id="<?php echo $widget_id ?>" class="atum-widget grid-stack-item"<?php array_walk( $widget_layout, function($value, $key){ echo " data-gs-$key='$value'"; } ) ?>>
+						<div class="atum-widget <?php echo $widget_id ?> grid-stack-item"<?php array_walk( $widget_layout, function($value, $key){ echo " data-gs-$key='$value'"; } ) ?>>
 
 							<div class="widget-wrapper grid-stack-item-content">
 								<div class="widget-header">
