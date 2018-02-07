@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
+use Atum\Inc\Helpers;
 
 
 class LostSales extends AtumWidget {
@@ -72,7 +73,7 @@ class LostSales extends AtumWidget {
 			'days'     => 1
 		) );
 
-		include ATUM_PATH . 'views/widgets/lost-sales.php';
+		Helpers::load_view( 'widgets/lost-sales', compact('stats_this_month', 'stats_today') );
 
 	}
 

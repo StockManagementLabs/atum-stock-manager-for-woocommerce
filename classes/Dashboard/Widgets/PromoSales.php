@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
+use Atum\Inc\Helpers;
 
 
 class PromoSales extends AtumWidget {
@@ -89,7 +90,7 @@ class PromoSales extends AtumWidget {
 			'date_start' => 'today 00:00:00'
 		) );
 
-		include ATUM_PATH . 'views/widgets/promo-sales.php';
+		Helpers::load_view( 'widgets/promo-sales', compact('stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today') );
 
 	}
 
