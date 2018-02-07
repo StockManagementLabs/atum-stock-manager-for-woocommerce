@@ -1,34 +1,84 @@
 [
     {
-        "name": "setasign/fpdi",
-        "version": "1.6.2",
-        "version_normalized": "1.6.2.0",
+        "name": "jimmiw/php-time-ago",
+        "version": "2.0.3",
+        "version_normalized": "2.0.3.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/Setasign/FPDI.git",
-            "reference": "a6ad58897a6d97cc2d2cd2adaeda343b25a368ea"
+            "url": "https://github.com/jimmiw/php-time-ago.git",
+            "reference": "4173d20574a54d075ecb3fdca08cae0f1d2bd3db"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Setasign/FPDI/zipball/a6ad58897a6d97cc2d2cd2adaeda343b25a368ea",
-            "reference": "a6ad58897a6d97cc2d2cd2adaeda343b25a368ea",
+            "url": "https://api.github.com/repos/jimmiw/php-time-ago/zipball/4173d20574a54d075ecb3fdca08cae0f1d2bd3db",
+            "reference": "4173d20574a54d075ecb3fdca08cae0f1d2bd3db",
             "shasum": ""
         },
-        "suggest": {
-            "setasign/fpdf": "FPDI will extend this class but as it is also possible to use \"tecnickcom/tcpdf\" as an alternative there's no fixed dependency configured.",
-            "setasign/fpdi-fpdf": "Use this package to automatically evaluate dependencies to FPDF.",
-            "setasign/fpdi-tcpdf": "Use this package to automatically evaluate dependencies to TCPDF."
+        "require": {
+            "php": ">=5.6"
         },
-        "time": "2017-05-11T14:25:49+00:00",
+        "require-dev": {
+            "phpunit/dbunit": "2.0.*",
+            "phpunit/phpunit": "5.*@stable"
+        },
+        "time": "2018-01-16T20:50:11+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
+            "psr-0": {
+                "Westsworld": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jimmi Westerberg",
+                "homepage": "http://www.westsworld.dk",
+                "role": "Developer"
+            }
+        ],
+        "description": "Simple module, that displays the date in a \"time ago\" format",
+        "homepage": "https://github.com/jimmiw/php-time-ago",
+        "keywords": [
+            "distance of time",
+            "time ago",
+            "time ago in words"
+        ]
+    },
+    {
+        "name": "madcoda/php-youtube-api",
+        "version": "v1.2.4",
+        "version_normalized": "1.2.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/madcoda/php-youtube-api.git",
+            "reference": "886e3aa1789cd19ad0c7add239bd2967f3b5ad4d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/madcoda/php-youtube-api/zipball/886e3aa1789cd19ad0c7add239bd2967f3b5ad4d",
+            "reference": "886e3aa1789cd19ad0c7add239bd2967f3b5ad4d",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": ">=5.3"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.5 || ^5.0.5"
+        },
+        "time": "2017-04-13T09:47:50+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Madcoda\\Youtube\\": "src"
+            },
             "classmap": [
-                "filters/",
-                "fpdi.php",
-                "fpdf_tpl.php",
-                "fpdi_pdf_parser.php",
-                "pdf_context.php"
+                "src/compat.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -37,17 +87,16 @@
         ],
         "authors": [
             {
-                "name": "Jan Slabon",
-                "email": "jan.slabon@setasign.com",
-                "homepage": "https://www.setasign.com"
+                "name": "Madcoda",
+                "email": "jason@madcoda.com"
             }
         ],
-        "description": "FPDI is a collection of PHP classes facilitating developers to read pages from existing PDF documents and use them as templates in FPDF. Because it is also possible to use FPDI with TCPDF, there are no fixed dependencies defined. Please see suggestions for packages which evaluates the dependencies automatically.",
-        "homepage": "https://www.setasign.com/fpdi",
+        "description": "PHP wrapper for the Youtube Data API v3",
         "keywords": [
-            "fpdf",
-            "fpdi",
-            "pdf"
+            "api",
+            "madcoda",
+            "video",
+            "youtube"
         ]
     },
     {
@@ -101,6 +150,57 @@
             "pdf",
             "php",
             "utf-8"
+        ]
+    },
+    {
+        "name": "setasign/fpdi",
+        "version": "1.6.2",
+        "version_normalized": "1.6.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Setasign/FPDI.git",
+            "reference": "a6ad58897a6d97cc2d2cd2adaeda343b25a368ea"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Setasign/FPDI/zipball/a6ad58897a6d97cc2d2cd2adaeda343b25a368ea",
+            "reference": "a6ad58897a6d97cc2d2cd2adaeda343b25a368ea",
+            "shasum": ""
+        },
+        "suggest": {
+            "setasign/fpdf": "FPDI will extend this class but as it is also possible to use \"tecnickcom/tcpdf\" as an alternative there's no fixed dependency configured.",
+            "setasign/fpdi-fpdf": "Use this package to automatically evaluate dependencies to FPDF.",
+            "setasign/fpdi-tcpdf": "Use this package to automatically evaluate dependencies to TCPDF."
+        },
+        "time": "2017-05-11T14:25:49+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "filters/",
+                "fpdi.php",
+                "fpdf_tpl.php",
+                "fpdi_pdf_parser.php",
+                "pdf_context.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jan Slabon",
+                "email": "jan.slabon@setasign.com",
+                "homepage": "https://www.setasign.com"
+            }
+        ],
+        "description": "FPDI is a collection of PHP classes facilitating developers to read pages from existing PDF documents and use them as templates in FPDF. Because it is also possible to use FPDI with TCPDF, there are no fixed dependencies defined. Please see suggestions for packages which evaluates the dependencies automatically.",
+        "homepage": "https://www.setasign.com/fpdi",
+        "keywords": [
+            "fpdf",
+            "fpdi",
+            "pdf"
         ]
     }
 ]

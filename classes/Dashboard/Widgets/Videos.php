@@ -15,6 +15,8 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Inc\Helpers;
+use Madcoda\Youtube\Youtube;
 
 
 class Videos extends AtumWidget {
@@ -26,11 +28,27 @@ class Videos extends AtumWidget {
 	protected $id = ATUM_PREFIX . 'videos_widget';
 
 	/**
+	 * The video tags that will be used for video filtering
+	 * @var array
+	 */
+	protected static $video_tags = array();
+
+	/**
 	 * Videos constructor
 	 */
 	public function __construct() {
 
 		$this->title = __('Video Tutorials', ATUM_TEXT_DOMAIN);
+
+		self::$video_tags = (array) apply_filters( 'atum/dashboard/videos_widget/filter_tags', array(
+			'atum'                => __( 'ATUM', ATUM_TEXT_DOMAIN ),
+			'atum-product-levels' => __( 'ATUM Product Levels', ATUM_TEXT_DOMAIN ),
+			'features'            => __( 'Features', ATUM_TEXT_DOMAIN ),
+			'add-ons'             => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
+			'how-tos'             => __( 'How-tos', ATUM_TEXT_DOMAIN ),
+			'updates'             => __( 'Updates', ATUM_TEXT_DOMAIN )
+		) );
+
 		parent::__construct();
 	}
 
@@ -46,7 +64,64 @@ class Videos extends AtumWidget {
 	 * @inheritDoc
 	 */
 	public function render() {
-		include ATUM_PATH . 'views/widgets/videos.php';
+
+		Helpers::load_view( 'widgets/videos', self::get_filtered_videos() );
+
+	}
+
+	/**
+	 * Get the SML channel's videos from Youtube API
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $sort_by   Optional. The sorting parameter. Possible values: date, rating, relevance, title, viewCount
+	 *
+	 * @return array  An array with elements used within the video widget view (videos, first_video, channel, video_tags)
+	 */
+	public static function get_filtered_videos($sort_by = 'date') {
+
+		$video_data = array();
+
+		try {
+
+			// TODO: IMPLEMENT PAGINATION ONCE THE SML CHANNEL REACHES 50 VIDEOS
+
+			$youtube = new Youtube( array( 'key' => 'AIzaSyDFqjZKnJDQTDu8d-Ger27Z5lbqAx3yQpE' ) );
+
+			$params = array(
+				'q'          => '',
+				'type'       => 'video',
+				'channelId'  => 'UCcTNwTCU4X_UrIj_5TUkweA', // Stock Management Labs' channel ID
+				'part'       => 'id',
+				'maxResults' => 50,
+				'order'      => in_array($sort_by, ['date', 'rating', 'relevance', 'title', 'viewCount']) ? $sort_by : 'date'
+			);
+
+			$video_ids = $youtube->searchAdvanced( $params );
+
+			if ( ! empty($video_ids) ) {
+
+				$video_ids = wp_list_pluck($video_ids, 'id');
+				$filtered_vid_ids = array();
+
+				foreach ($video_ids as $video_id) {
+					$filtered_vid_ids[] = $video_id->videoId;
+				}
+
+				$video_data['videos'] = $youtube->getVideosInfo($filtered_vid_ids);
+				$video_data['first_video'] = reset( $video_data['videos'] );
+
+			}
+
+			$video_data['channel'] = $youtube->getChannelById('UCcTNwTCU4X_UrIj_5TUkweA');
+			$video_data['video_tags'] = self::$video_tags;
+
+		} catch (\Exception $e) {
+			error_log( $e->getMessage() );
+		}
+
+		return $video_data;
+
 	}
 
 	/**
