@@ -331,32 +331,35 @@ final class Hooks {
 	 */
 	public static function save_purchase_price ($post_id) {
 
-		$purchase_price = '';
+		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
-		// Product variations
-		if ( isset($_POST['variation_purchase_price']) ) {
-			$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
-			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
-			update_post_meta( $post_id, '_purchase_price', $purchase_price );
-		}
-		else {
+		// Variables, grouped and variations
+		if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
 
-			$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-
-			if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
-				// Inheritable products have no prices
-				update_post_meta( $post_id, '_purchase_price', $purchase_price );
+			// Inheritable products have no prices
+			if ( isset($_POST['_purchase_price']) ) {
+				update_post_meta( $post_id, '_purchase_price', '' );
 			}
-			else {
-				$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+			elseif ( isset($_POST['variation_purchase_price']) ) {
+
+				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
 				$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
-				update_post_meta( $post_id, '_purchase_price', $purchase_price);
+				update_post_meta( $post_id, '_purchase_price', $purchase_price );
+
 			}
+
+		}
+		// Rest of product types (Bypass if "_puchase_price" meta is not coming)
+		elseif ( isset($_POST['_purchase_price']) ) {
+
+			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
+			update_post_meta( $post_id, '_purchase_price', $purchase_price);
 
 		}
 
 		// Add WPML compatibility
-		if (class_exists('\woocommerce_wpml')) {
+		if ( isset($purchase_price) && class_exists('\woocommerce_wpml') ) {
 
 			global $sitepress;
 			$wpml = \woocommerce_wpml::instance();
