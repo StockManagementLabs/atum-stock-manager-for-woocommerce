@@ -26,7 +26,6 @@ use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\Suppliers\Suppliers;
-use Atum\WPDashboard\Widgets\Statistics;
 
 
 class Main {
@@ -215,10 +214,6 @@ class Main {
 
 		if ( ModuleManager::is_module_active('stock_central') ) {
 			StockCentral::get_instance();
-		}
-
-		if ( AtumCapabilities::current_user_can('view_statistics') && ModuleManager::is_module_active('wp_dashboard_statistics') ) {
-			new Statistics(); // WP Dashboard Statistics Widget
 		}
 
 		if ( AtumCapabilities::current_user_can('export_data') && ModuleManager::is_module_active('data_export') ) {

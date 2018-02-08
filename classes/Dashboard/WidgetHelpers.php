@@ -263,7 +263,7 @@ final class WidgetHelpers {
 			'count_all'       => 0
 		);
 
-		$posts = new \WP_Query( apply_filters( 'atum/wp_dashboard_statistics/stock_counters/all', $args ) );
+		$posts = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/all', $args ) );
 		$posts = $posts->posts;
 		$stock_counters['count_all'] = count( $posts );
 
@@ -334,7 +334,7 @@ final class WidgetHelpers {
 
 			}
 
-			$posts_in_stock = new \WP_Query( apply_filters( 'atum/wp_dashboard_statistics/stock_counters/in_stock', $args ) );
+			$posts_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
 			$stock_counters['count_in_stock'] = count( $posts_in_stock->posts );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too
@@ -373,7 +373,7 @@ final class WidgetHelpers {
 			            AND `{$wpdb->posts}`.`post_type` IN " . $low_stock_post_types . "
 			            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_in_stock->posts ) . ")) )) AS states";
 
-				$str_sql = apply_filters( 'atum/wp_dashboard_statistics/stock_counters/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
+				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
 
 				$result = $wpdb->get_results( $str_sql );
 				$result = wp_list_pluck( $result, 'ID' );
@@ -434,7 +434,7 @@ final class WidgetHelpers {
 				'post_parent__in' => $parents->posts
 			);
 
-			$children = new \WP_Query( apply_filters( 'atum/wp_dashboard_statistics/get_children', $children_args ) );
+			$children = new \WP_Query( apply_filters( 'atum/dashboard_widgets/get_children', $children_args ) );
 
 			if ($children->found_posts) {
 				return $children->posts;

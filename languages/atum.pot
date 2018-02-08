@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2018-02-08 10:11+0100\n"
+"POT-Creation-Date: 2018-02-08 11:30+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -133,8 +133,8 @@ msgstr ""
 #: classes/Dashboard/Dashboard.php:306 classes/Dashboard/Dashboard.php:311
 #: classes/InboundStock/InboundStock.php:155
 #: classes/InboundStock/InboundStock.php:161 classes/Inc/Ajax.php:1518
-#: classes/Inc/Ajax.php:1524 classes/Inc/Main.php:554 classes/Inc/Main.php:560
-#: classes/Modules/ModuleManager.php:181 classes/Modules/ModuleManager.php:187
+#: classes/Inc/Ajax.php:1524 classes/Inc/Main.php:549 classes/Inc/Main.php:555
+#: classes/Modules/ModuleManager.php:173 classes/Modules/ModuleManager.php:179
 #: classes/Settings/Settings.php:515 classes/Settings/Settings.php:521
 #: classes/StockCentral/StockCentral.php:237
 #: classes/StockCentral/StockCentral.php:243 classes/Suppliers/Suppliers.php:579
@@ -255,21 +255,18 @@ msgstr ""
 #: classes/Components/AtumListTables/AtumListTable.php:901
 #: classes/Components/AtumListTables/AtumListTable.php:1063
 #: classes/Dashboard/Dashboard.php:241 views/widgets/stock-control.php:24
-#: views/wp-dashboard/statistics.php:353
 msgid "Out of Stock"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:906
 #: classes/Components/AtumListTables/AtumListTable.php:1064
 #: classes/Dashboard/Dashboard.php:240 views/widgets/stock-control.php:19
-#: views/wp-dashboard/statistics.php:337
 msgid "Low Stock"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:911
 #: classes/Components/AtumListTables/AtumListTable.php:1062
 #: classes/Dashboard/Dashboard.php:239 views/widgets/stock-control.php:14
-#: views/wp-dashboard/statistics.php:321
 msgid "In Stock"
 msgstr ""
 
@@ -602,7 +599,6 @@ msgid "Sales"
 msgstr ""
 
 #: classes/Dashboard/Widgets/Statistics.php:34
-#: classes/WPDashboard/Widgets/Statistics.php:127
 msgid "ATUM Statistics"
 msgstr ""
 
@@ -1024,84 +1020,84 @@ msgstr ""
 msgid "View cart"
 msgstr ""
 
-#: classes/Inc/Main.php:136
+#: classes/Inc/Main.php:135
 msgctxt "taxonomy general name"
 msgid "Product Locations"
 msgstr ""
 
-#: classes/Inc/Main.php:137
+#: classes/Inc/Main.php:136
 msgctxt "taxonomy singular name"
 msgid "Location"
 msgstr ""
 
-#: classes/Inc/Main.php:138
+#: classes/Inc/Main.php:137
 msgid "Search locations"
 msgstr ""
 
-#: classes/Inc/Main.php:139
+#: classes/Inc/Main.php:138
 msgid "All locations"
 msgstr ""
 
-#: classes/Inc/Main.php:140
+#: classes/Inc/Main.php:139
 msgid "Parent location"
 msgstr ""
 
-#: classes/Inc/Main.php:141
+#: classes/Inc/Main.php:140
 msgid "Parent location:"
 msgstr ""
 
-#: classes/Inc/Main.php:142
+#: classes/Inc/Main.php:141
 msgid "Edit location"
 msgstr ""
 
-#: classes/Inc/Main.php:143
+#: classes/Inc/Main.php:142
 msgid "Update location"
 msgstr ""
 
-#: classes/Inc/Main.php:144
+#: classes/Inc/Main.php:143
 msgid "Add new location"
 msgstr ""
 
-#: classes/Inc/Main.php:145
+#: classes/Inc/Main.php:144
 msgid "New location name"
 msgstr ""
 
-#: classes/Inc/Main.php:146
+#: classes/Inc/Main.php:145
 msgid "Locations"
 msgstr ""
 
-#: classes/Inc/Main.php:284
+#: classes/Inc/Main.php:279
 msgid "ATUM Inventory"
 msgstr ""
 
-#: classes/Inc/Main.php:440
+#: classes/Inc/Main.php:435
 msgid "ATUM Quick Help"
 msgstr ""
 
-#: classes/Inc/Main.php:441
+#: classes/Inc/Main.php:436
 msgid "Click the 'Help' tab to learn more about the ATUM's Stock Central."
 msgstr ""
 
-#: classes/Inc/Main.php:455
+#: classes/Inc/Main.php:450
 msgid "ATUM Screen Setup"
 msgstr ""
 
-#: classes/Inc/Main.php:456
+#: classes/Inc/Main.php:451
 msgid "Click the 'Screen Options' tab to setup your table view preferences."
 msgstr ""
 
-#: classes/Inc/Main.php:516 views/dashboard.php:26
+#: classes/Inc/Main.php:511 views/dashboard.php:26
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%s rating. Huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Main.php:516 views/dashboard.php:26
+#: classes/Inc/Main.php:511 views/dashboard.php:26
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Main.php:526
+#: classes/Inc/Main.php:521
 msgid "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
@@ -1404,14 +1400,6 @@ msgstr ""
 
 #: classes/Modules/ModuleManager.php:119
 msgid "Enables/Disables the Data Export module."
-msgstr ""
-
-#: classes/Modules/ModuleManager.php:126
-msgid "WP Dashboard Statistics Widget"
-msgstr ""
-
-#: classes/Modules/ModuleManager.php:127
-msgid "Enables/Disables the WordPress Dashboard Statistics Widget module."
 msgstr ""
 
 #: classes/PurchaseOrders/Models/PurchaseOrder.php:56
@@ -1748,7 +1736,6 @@ msgstr ""
 
 #: classes/StockCentral/Inc/ListTable.php:86
 #: classes/StockCentral/Inc/ListTable.php:187
-#: views/wp-dashboard/statistics-config.php:20 views/wp-dashboard/statistics.php:21
 msgid "Sold Today"
 msgstr ""
 
@@ -2948,12 +2935,6 @@ msgstr ""
 
 #: views/widgets/lost-sales.php:13 views/widgets/orders.php:16
 #: views/widgets/promo-sales.php:16 views/widgets/sales.php:13
-#: views/wp-dashboard/statistics-config.php:169
-#: views/wp-dashboard/statistics-config.php:217
-#: views/wp-dashboard/statistics-config.php:265
-#: views/wp-dashboard/statistics-config.php:313
-#: views/wp-dashboard/statistics.php:164 views/wp-dashboard/statistics.php:208
-#: views/wp-dashboard/statistics.php:251 views/wp-dashboard/statistics.php:294
 msgid "Today"
 msgstr ""
 
@@ -2963,12 +2944,6 @@ msgstr ""
 
 #: views/widgets/lost-sales.php:21 views/widgets/lost-sales.php:33
 #: views/widgets/sales.php:21 views/widgets/sales.php:33
-#: views/wp-dashboard/statistics-config.php:29
-#: views/wp-dashboard/statistics-config.php:57
-#: views/wp-dashboard/statistics-config.php:87
-#: views/wp-dashboard/statistics-config.php:115
-#: views/wp-dashboard/statistics.php:28 views/wp-dashboard/statistics.php:54
-#: views/wp-dashboard/statistics.php:86 views/wp-dashboard/statistics.php:112
 msgid "Earnings"
 msgstr ""
 
@@ -2976,12 +2951,6 @@ msgstr ""
 #: views/widgets/promo-sales.php:28 views/widgets/promo-sales.php:40
 #: views/widgets/promo-sales.php:52 views/widgets/promo-sales.php:64
 #: views/widgets/sales.php:26 views/widgets/sales.php:38
-#: views/wp-dashboard/statistics-config.php:35
-#: views/wp-dashboard/statistics-config.php:63
-#: views/wp-dashboard/statistics-config.php:93
-#: views/wp-dashboard/statistics-config.php:121
-#: views/wp-dashboard/statistics.php:35 views/wp-dashboard/statistics.php:61
-#: views/wp-dashboard/statistics.php:93 views/wp-dashboard/statistics.php:119
 msgid "Products"
 msgstr ""
 
@@ -2990,39 +2959,19 @@ msgid "The Stock Management Labs news could not be loaded. Please try again late
 msgstr ""
 
 #: views/widgets/orders.php:13 views/widgets/promo-sales.php:13
-#: views/wp-dashboard/statistics-config.php:151
-#: views/wp-dashboard/statistics-config.php:199
-#: views/wp-dashboard/statistics-config.php:247
-#: views/wp-dashboard/statistics-config.php:295
-#: views/wp-dashboard/statistics.php:143 views/wp-dashboard/statistics.php:187
-#: views/wp-dashboard/statistics.php:230 views/wp-dashboard/statistics.php:273
 msgid "This Month"
 msgstr ""
 
 #: views/widgets/orders.php:14 views/widgets/promo-sales.php:14
-#: views/wp-dashboard/statistics-config.php:157
-#: views/wp-dashboard/statistics-config.php:205
-#: views/wp-dashboard/statistics-config.php:253
-#: views/wp-dashboard/statistics-config.php:301
-#: views/wp-dashboard/statistics.php:150 views/wp-dashboard/statistics.php:194
-#: views/wp-dashboard/statistics.php:237 views/wp-dashboard/statistics.php:280
 msgid "Previous Month"
 msgstr ""
 
 #: views/widgets/orders.php:15 views/widgets/promo-sales.php:15
-#: views/wp-dashboard/statistics-config.php:163
-#: views/wp-dashboard/statistics-config.php:211
-#: views/wp-dashboard/statistics-config.php:259
-#: views/wp-dashboard/statistics-config.php:307
-#: views/wp-dashboard/statistics.php:157 views/wp-dashboard/statistics.php:201
-#: views/wp-dashboard/statistics.php:244 views/wp-dashboard/statistics.php:287
 msgid "This Week"
 msgstr ""
 
 #: views/widgets/orders.php:23 views/widgets/orders.php:35
 #: views/widgets/orders.php:47 views/widgets/orders.php:59
-#: views/wp-dashboard/statistics-config.php:184
-#: views/wp-dashboard/statistics.php:179
 msgid "Revenue"
 msgstr ""
 
@@ -3094,45 +3043,6 @@ msgstr ""
 
 #: views/widgets/videos.php:105
 msgid "Subscribe Now"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:48 views/wp-dashboard/statistics.php:47
-msgid "Lost Sales Today"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:78 views/wp-dashboard/statistics.php:79
-msgid "Sold This Month"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:106
-#: views/wp-dashboard/statistics.php:105
-msgid "Lost Sales This Month"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:136
-#: views/wp-dashboard/statistics.php:135
-msgid "Orders Total"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:232
-#: views/wp-dashboard/statistics.php:222
-msgid "Promo Products Sold"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:280
-#: views/wp-dashboard/statistics.php:265
-msgid "Promo Value"
-msgstr ""
-
-#: views/wp-dashboard/statistics-config.php:328
-msgid "Circle Stats"
-msgstr ""
-
-#: views/wp-dashboard/statistics.php:316 views/wp-dashboard/statistics.php:332
-#: views/wp-dashboard/statistics.php:348
-msgid ""
-"Indicators of stock availability (ATUM Statistics count variations as individual "
-"products)"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

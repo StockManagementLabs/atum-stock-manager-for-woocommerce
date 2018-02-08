@@ -24,7 +24,7 @@ class ModuleManager {
 	 */
 	private static $instance;
 
-	private $modules = ['dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'wp_dashboard_statistics'];
+	private $modules = ['dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export'];
 
 	/**
 	 * The current status of each module
@@ -117,14 +117,6 @@ class ModuleManager {
 			'section' => 'module_manager',
 			'name'    => __( 'Data Export', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Data Export module.', ATUM_TEXT_DOMAIN ),
-			'type'    => 'switcher',
-			'default' => 'yes'
-		);
-
-		$defaults['wp_dashboard_statistics_module'] = array(
-			'section' => 'module_manager',
-			'name'    => __( 'WP Dashboard Statistics Widget', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( 'Enables/Disables the WordPress Dashboard Statistics Widget module.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'yes'
 		);
