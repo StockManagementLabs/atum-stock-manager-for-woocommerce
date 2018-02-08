@@ -15,6 +15,7 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Inc\Helpers;
 
 
 class Statistics extends AtumWidget {
@@ -46,7 +47,9 @@ class Statistics extends AtumWidget {
 	 * @inheritDoc
 	 */
 	public function render() {
-		include ATUM_PATH . 'views/widgets/statistics.php';
+
+		Helpers::load_view( 'widgets/statistics' );
+
 	}
 
 	/**
