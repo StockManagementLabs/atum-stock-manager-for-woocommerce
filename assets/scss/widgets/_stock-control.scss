@@ -11,8 +11,33 @@
 		padding: $grid-gutter-width $grid-gutter-width/2;
 	}
 	
-	.stock-data {
-	
+	.stock-chart {
+		
+		.stock-chart-tooltip {
+			opacity: 1;
+			position: absolute;
+			background: rgba(0, 0, 0, .7);
+			color: #FFF;
+			border-radius: 3px;
+			@include transition(all .1s ease);
+			pointer-events: none;
+			@include transform(translate(-50%, 0));
+			
+			table {
+				td {
+					white-space: nowrap;
+				}
+			}
+			
+		}
+		
+		.stock-chart-tooltip-key {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			margin-right: 10px;
+		}
+		
 	}
 	
 	h3, h5 {

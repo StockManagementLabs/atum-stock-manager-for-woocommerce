@@ -94,7 +94,7 @@
 			 * Stock Control widget
 			 */
 			var $pieCanvas = $('.stock-chart').find('canvas'),
-			    pieChart   = new Chart( $pieCanvas.get(0).getContext('2d'), {
+			    pieChart   = new Chart($pieCanvas.get(0).getContext('2d'), {
 				    type   : 'doughnut',
 				    data   : {
 					    datasets: [{
@@ -117,20 +117,84 @@
 				    },
 				    options: {
 					    responsive         : true,
-					    legend             : false,
+					    legend             : {
+						    display: false
+					    },
 					    maintainAspectRatio: false,
 					    animation          : {
 						    animateScale : true,
 						    animateRotate: true
 					    },
-					    cutoutPercentage   : 25
+					    cutoutPercentage   : 25,
+					    tooltips           : {
+						    enabled: false,
+						    custom: function(tooltip) {
+							
+							    // Tooltip Element
+							    var tooltipEl = $('.stock-chart-tooltip').get(0);
+							
+							    // Hide if no tooltip
+							    if (tooltip.opacity === 0) {
+								    tooltipEl.style.opacity = 0;
+								    return;
+							    }
+							
+							    // Set caret Position
+							    tooltipEl.classList.remove('above', 'below', 'no-transform');
+							
+							    if (tooltip.yAlign) {
+								    tooltipEl.classList.add(tooltip.yAlign);
+							    }
+							    else {
+								    tooltipEl.classList.add('no-transform');
+							    }
+							
+							    function getBody(bodyItem) {
+								    return bodyItem.lines;
+							    }
+							
+							    // Set Text
+							    if (tooltip.body) {
+								    var titleLines = tooltip.title || [];
+								    var bodyLines = tooltip.body.map(getBody);
+								
+								    var innerHtml = '<thead>';
+								
+								    titleLines.forEach(function(title) {
+									    innerHtml += '<tr><th>' + title + '</th></tr>';
+								    });
+								    innerHtml += '</thead><tbody>';
+								
+								    bodyLines.forEach(function(body, i) {
+									    var colors = tooltip.labelColors[i],
+									        style = 'background:' + colors.backgroundColor + '; border-color:' + colors.borderColor + '; border-width: 2px',
+									        span = '<span class="stock-chart-tooltip-key" style="' + style + '"></span>';
+									
+									    innerHtml += '<tr><td>' + span + body + '</td></tr>';
+								    });
+								    innerHtml += '</tbody>';
+								
+								    var tableRoot = tooltipEl.querySelector('table');
+								    tableRoot.innerHTML = innerHtml;
+							    }
+							
+							    var positionY = this._chart.canvas.offsetTop;
+							    var positionX = this._chart.canvas.offsetLeft;
+							
+							    // Display, position, and set styles for font
+							    tooltipEl.style.opacity = 1;
+							    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+							    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+							    tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+						    
+						    }
+					    }
 				    }
-			    } );
+			    });
 			
 			/*
 			 * Videos widget
 			 */
-			
 			var $videoWidget = $('.videos-widget');
 			
 			// Video Switcher
@@ -212,7 +276,7 @@
 			
 			});
 			
-			// List Scrollbars
+			// Lists' Scrollbars
 			this.addScrollBars();
 		
 		},

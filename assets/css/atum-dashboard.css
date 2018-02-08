@@ -3326,6 +3326,34 @@
   padding: 30px 15px;
 }
 
+.stock-control-widget .stock-chart .stock-chart-tooltip {
+  opacity: 1;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: #FFF;
+  border-radius: 3px;
+  -webkit-transition: all 0.1s ease;
+  -o-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0);
+  -moz-transform: translate(-50%, 0);
+  -o-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+}
+
+.stock-control-widget .stock-chart .stock-chart-tooltip table td {
+  white-space: nowrap;
+}
+
+.stock-control-widget .stock-chart .stock-chart-tooltip-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+}
+
 .stock-control-widget h3, .stock-control-widget h5 {
   margin: 10px 0;
   text-align: left;
