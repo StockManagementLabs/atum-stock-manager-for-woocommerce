@@ -62,7 +62,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_install_addon', array($this, 'install_addon') );
 
 		// Search for products from enhanced selects
-		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
+		//add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
 
 		// Search for WooCommerce orders from enhanced selects
 		add_action( 'wp_ajax_atum_json_search_orders', array( $this, 'search_wc_orders' ) );
@@ -520,7 +520,7 @@ final class Ajax {
 	 *
 	 * @since 1.3.7
 	 */
-	public function search_products() {
+	/*public function search_products() {
 
 		check_ajax_referer( 'search-products', 'security' );
 
@@ -648,7 +648,7 @@ final class Ajax {
 
 		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $products ) );
 
-	}
+	}*/
 
 	/**
 	 * Seach for WooCommerce orders from enhanced selects

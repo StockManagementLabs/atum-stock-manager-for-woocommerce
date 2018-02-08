@@ -242,7 +242,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 						<form action="" method="post">
 							<select class="wc-product-search" multiple="multiple" style="width: 50%;" id="add_item_id" name="add_atum_order_items[]"
 								data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-								data-action="atum_json_search_products"></select>
+								<?php //data-action="atum_json_search_products"?>></select>
 						</form>
 					</article>
 

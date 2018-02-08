@@ -107,6 +107,7 @@ class ListTable extends AtumListTable {
 		}
 
 		if ( ! ModuleManager::is_module_active('purchase_orders') ) {
+			unset( $args['table_columns']['_purchase_price'] );
 			unset( $args['table_columns']['calc_inbound'] );
 		}
 
