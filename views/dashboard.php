@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) or die;
 
 				<p><?php _e("Our team is working daily to document ATUM's fast-growing content. Browse our detailed tutorials, ask questions or share feature requests with our team.", ATUM_TEXT_DOMAIN) ?></p>
 
-				<a href="#" class="btn btn-primary pill"><?php _e('View Tutorials', ATUM_TEXT_DOMAIN) ?></a>
+				<a href="https://www.stockmanagementlabs.com/tutorials/" class="btn btn-primary pill" target="_blank"><?php _e('View Tutorials', ATUM_TEXT_DOMAIN) ?></a>
 			</div>
 
 			<div class="card-img">
@@ -54,7 +54,7 @@ defined( 'ABSPATH' ) or die;
 
 				<p><?php _e('Expand your inventory control with our premium add-ons. No storage is left unattended, no item uncounted and no production line inefficient.', ATUM_TEXT_DOMAIN) ?></p>
 
-				<a href="https://www.stockmanagementlabs.com/addons/" class="btn btn-success pill"><?php _e('View Add-ons', ATUM_TEXT_DOMAIN) ?></a>
+				<a href="https://www.stockmanagementlabs.com/addons/" class="btn btn-success pill" target="_blank"><?php _e('View Add-ons', ATUM_TEXT_DOMAIN) ?></a>
 			</div>
 
 			<div class="card-img">
@@ -76,10 +76,10 @@ defined( 'ABSPATH' ) or die;
 				<img src="<?php echo ATUM_URL ?>assets/images/dashboard/card-subscription-img.png">
 			</div>
 
-			<form action="">
+			<form action="https://stockmanagementlabs.us12.list-manage.com/subscribe/post?u=bc146f9acefd460717d243671&id=b0263fe4a6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 				<div class="input-group">
-					<input type="email" name="email" id="email" placeholder="<?php esc_attr_e('Enter your email address', ATUM_TEXT_DOMAIN) ?>">
-					<button type="submit" class="btn btn-warning pill"><?php _e('Subscribe', ATUM_TEXT_DOMAIN) ?></button>
+					<input type="email" name="EMAIL" id="mce-EMAIL"  placeholder="<?php esc_attr_e('Enter your email address', ATUM_TEXT_DOMAIN) ?>" required>
+					<button type="submit" class="btn btn-warning pill" name="subscribe" id="mc-embedded-subscribe"><?php _e('Subscribe', ATUM_TEXT_DOMAIN) ?></button>
 				</div>
 			</form>
 
