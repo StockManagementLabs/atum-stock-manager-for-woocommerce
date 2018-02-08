@@ -101,8 +101,12 @@ final class Globals {
 	public static function get_inheritable_product_types() {
 
 		// Add WC Subscriptions compatibility
-		if ( class_exists('WC_Subscriptions') && Helpers::get_option('show_subscriptions', 'yes') == 'yes' ) {
-			self::$inheritable_product_types = array_merge( self::$inheritable_product_types, ['variable-subscription'] );
+		if (
+			class_exists('WC_Subscriptions') &&
+			! in_array('variable-subscription', self::$inheritable_product_types) &&
+			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
+		) {
+			self::$inheritable_product_types[] = 'variable-subscription';
 		}
 
 		return (array) apply_filters('atum/allowed_inheritable_product_types', self::$inheritable_product_types);
@@ -118,8 +122,12 @@ final class Globals {
 	public static function get_child_product_types() {
 
 		// Add WC Subscriptions compatibility
-		if ( class_exists('WC_Subscriptions') && Helpers::get_option('show_subscriptions', 'yes') == 'yes' ) {
-			self::$child_product_types = array_merge( self::$child_product_types, ['subscription_variation'] );
+		if (
+			class_exists('WC_Subscriptions') &&
+			! in_array('subscription_variation', self::$child_product_types) &&
+			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
+		) {
+			self::$child_product_types[] = 'subscription_variation';
 		}
 
 		return (array) apply_filters('atum/allowed_child_product_types', self::$child_product_types);
