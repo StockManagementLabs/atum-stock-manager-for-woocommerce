@@ -7,7 +7,7 @@ Tested up to: 4.9.4
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.1
-Stable tag: 1.3.8.4
+Stable tag: 1.3.8.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -255,42 +255,67 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 == Changelog ==
 
-#####1.3.8.4
-`2018-02-08`
+---
 
-######Changes
+`1.3.8.5`
+
+*2018-02-19*
+
+**Fixes**
+
+* Catch the date conversion errors and continue when a wrong format is saved externally to the "out_of_stock_date" meta.
+
+---
+
+`1.3.8.4`
+
+*2018-02-08*
+
+**Changes**
 
 * Updated change log style to adapt it to the new page design in the Stock Management Labs website.
 
-######Fixes
+**Fixes**
 
-* Fixed issue that was removing the purchase price when adding a product to stock from Purchase Orders. 
+* Fixed issue that was removing the purchase price when adding a product to stock from Purchase Orders.
 
-#####1.3.8.3
-`2018-01-26`
+---
 
-######Fixes
+`1.3.8.3`
 
-* Hide the Purchase Price field when the Purchase Orders module is disabled. 
+*2018-01-26*
 
-#####1.3.8.2
-`2018-01-22`
+**Fixes**
 
-######Fixes
+* Hide the Purchase Price field when the Purchase Orders module is disabled.
+
+---
+
+`1.3.8.2`
+
+*2018-01-22*
+
+**Fixes**
 
 * Disabled Suppliers' SKU search within Purchase Orders and Inventory Logs temporarily due to low performance issues caused by WC database structure.
 
-#####1.3.8.1
-`2018-01-12`
+---
 
-######Fixes
+`1.3.8.1`
+
+*2018-01-12*
+
+**Fixes**
 
 * Fixed purchase price not being added for Purchase Order's products that had no regular price set.
 
-#####1.3.8
-`2017-01-11`
+---
 
-######Features
+`1.3.8`
+
+*2017-01-11*
+
+**Features**
 
 * Added uninstallation clean tasks.
 * Added a new option to Settings to allow users to clean all the ATUM when uninstalling.
@@ -298,7 +323,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Added filter to specify the List Tables’ product title length.
 * Added filter to edit the supplier name length in List Tables.
 
-######Fixes
+**Fixes**
 
 * Prevent WPML configuration for Atum Orders post types.
 * Fixed draft suppliers showing in Purchase Orders.
@@ -306,10 +331,13 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Do not break the ATUM orders UI when an item product does not exists anymore.
 * Refactory.
 
-#####1.3.7
-`2017-01-08`
+---
 
-######Features
+`1.3.7`
+
+*2017-01-08*
+
+**Features**
 
 * Added Supplier SKU field to products.
 * Added Supplier SKU column to Purchase Orders and Inventory Logs.
@@ -317,28 +345,34 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Allow searching products by Supplier SKU within Purchase Orders and Inventory Logs.
 * Added suppliers info to the Stock Central’s help tab.
 
-######Fixes
+**Fixes**
 
 * Improved enhaced selects' ajax JSON search for products.
 * Fixed decimals format in purchase price of product variations.
 
-#####1.3.6.1
-`2017-12-30`
+---
 
-######Fixes
+`1.3.6.1`
+
+*2017-12-30*
+
+**Fixes**
 
 * Fixed statistics widget's capability name.
 
-#####1.3.6
-`2017-12-29`
+---
 
-######Features
+`1.3.6`
+
+*2017-12-29*
+
+**Features**
 
 * New Ajax UI for the Settings page.
 * New Module Manager section to enable/disable ATUM modules independently.
 * Added new capabilities.
 
-######Fixes
+**Fixes**
 
 * Prevent supplier from being removed of variation products when changing the stock within "Stock Central".
 * Fixed pagination in "Inbound Stock" page.
@@ -346,83 +380,107 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Fixed admin bar's ATUM menu in front end.
 * Other minor fixes.
 
-#####1.3.5
-`2017-12-15`
+---
 
-######Fixes
+`1.3.5`
+
+*2017-12-15*
+
+**Fixes**
 
 * Count all the products that have the "In stock" status in "Statistics Widget" when ATUM is not managing the stock.
 * Improved performance for sites with big amount of orders.
 * Fixed List table search to find product SKUs and IDs.
 * Improved Stock Central’s extra filters performance.
 
-#####1.3.4.1
-`2017-12-09`
+---
 
-######Fixes
+`1.3.4.1`
+
+*2017-12-09*
+
+**Fixes**
 
 * Set "min" and "step" attributes for input number fields in Settings.
 * Fixed "Add to Cart" message when using quantity decimals.
 
-#####1.3.4
-`2017-12-07`
+---
 
-######Features
+`1.3.4`
+
+*2017-12-07*
+
+**Features**
 
 * Allow decimals for stock quantities.
 * Added new setting to specify the number of decimal places allowed.
 
-######Fixes
+**Fixes**
 
 * Fixed variations list not showing when expanding variable products in some cases.
 
-#####1.3.3.1
-`2017-12-04`
+---
 
-######Features
+`1.3.3.1`
+
+*2017-12-04*
+
+**Features**
 
 * Edited values in Stock Central have their font colour changed to red before the Save Data button is clicked. This is another reminder for users to save their changes before leaving the page.
 
-######Fixes
+**Fixes**
 
 * Edited hook name for "Product Levels" add-on compatibility.
 * Fixed variation purchase price saving from WC product.
 * Add the variable product link on variation titles within "Stock Central" and "Inbound Stock" list tables.
 
-#####1.3.3
-`2017-11-30`
+---
 
-######Features
+`1.3.3`
+
+*2017-11-30*
+
+**Features**
 
 * Added slide animation to expandable rows in List Tables.
 * Now supports theme override of ATUM views.
 * Improved Data Export module for reusing it in other ATUM modules.
 * Added location column to WC Orders, Purchase Orders and Inventory Logs.
 
-######Fixes
+**Fixes**
 
 * Fixed supplier column in exported report table.
 * Some refactory.
 
-#####1.3.2
-`2017-11-21`
+---
 
-######Features
+`1.3.2`
+
+*2017-11-21*
+
+**Features**
 
 * Added compatibility with WooCommerce Subscriptions.
 * Settings - Show/Hide WC Subscriptions from ATUM Stock Central.
 
-#####1.3.1.1
-`2017-11-14`
+---
 
-######Fixes
+`1.3.1.1`
+
+*2017-11-14*
+
+**Fixes**
 
 * Fixed issue that was preventing List Table's column sorting in sites with no Suppliers.
 
-#####1.3.1
-`2017-11-10`
+---
 
-######Features
+`1.3.1`
+
+*2017-11-10*
+
+**Features**
 
 * Added "Supplier" column to "Stock Central".
 * Added "Supplier" filter to "Stock Central".
@@ -432,16 +490,18 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Added Product edit links to Products' names and thumbnails in Stock Central.
 
 
-######Fixes
+**Fixes**
 
 * Now it uses the order's sale price instead of product price for statistics widget calculations.
 * Always save the supplier meta in products (with or without value).
 
+---
 
-#####1.3.0
-`2017-11-2`
+`1.3.0`
 
-######Features
+*2017-11-2*
+
+**Features**
 
 * New "Inbound Stock" module.
 * Added "Increase Stock" and "Decrease Stock" buttons to "Inventory Logs".
@@ -450,125 +510,163 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Added WPML compatibility.
 * New method for ATUM menu ordering.
 
-######Fixes
+**Fixes**
 
 * Minor fixes.
 * Refactory and performance improvements.
 
-#####1.2.9
-`2017-10-19`
+---
 
-######Features
+`1.2.9`
+
+*2017-10-19*
+
+**Features**
 
 * New "Purchase Orders" module.
 * New "Suppliers" module.
 * Added "Locations" taxonomy to products.
 * Refactory of the ATUM Orders to be reused by other modules.
 
-######Fixes
+**Fixes**
 
 * Now it displays the "Stock Quantity" field on grouped products to be able to change the stock status when ATUM is managing the stock.
 * Display the spinner when filtering ATUM table lists.
 
-#####1.2.8.2
-`2017-10-16`
+---
 
-######Fixes
+`1.2.8.2`
+
+*2017-10-16*
+
+**Fixes**
 
 * Fixed issue saving purchases price of variation products in "Stock Central".
 
+---
 
-#####1.2.8.1
-`2017-10-10`
+`1.2.8.1`
 
-######Fixes
+*2017-10-10*
+
+**Fixes**
 
 * Fixed issue with hidden columns that were displayed in "Stock Central" after ajax filtering.
 
-#####1.2.8
-`2017-09-19`
+---
 
-######Features
+`1.2.8`
+
+*2017-09-19*
+
+**Features**
 
 * Ability to sort list table columns by "Regular Price", "Sale Price", "Purchase Price" and "Current Stock".
 * New dropdown for extra filters added to "Stock Central".
 
-######Fixes
+**Fixes**
 
 * Fixed issue when updating the regular price from "Stock Central".
 
-#####1.2.7.2
-`2017-09-14`
+---
 
-######Fixes
+`1.2.7.2`
+
+*2017-09-14*
+
+**Fixes**
 
 * Compatibility issue with Salient theme.
 * List views' data was showing wrong figures when a product filter was active.
 
-#####1.2.7.1
-`2017-09-13`
+---
 
-######Fixes
+`1.2.7.1`
+
+*2017-09-13*
+
+**Fixes**
 
 * Disabled "This Year" from dashboard statistics widget that was causing memory issues in sites with huge amount of orders.
 
-#####1.2.7
-`2017-09-12`
+---
 
-######Features
+`1.2.7`
+
+*2017-09-12*
+
+**Features**
 
 * Improved Dashboard Statistics widget (new sections and configuration).
 
-######Fixes
+**Fixes**
 
 * Fixed issue when trying to install add-ons directly from the Add-ons page.
 
-#####1.2.6
-`2017-09-06`
+---
 
-######Features
+`1.2.6`
+
+*2017-09-06*
+
+**Features**
 
 * Added new setting to show the variations' stock status in WooCommerce products' list.
 * Refactory.
 
-#####1.2.5.4
-`2017-09-05`
+---
 
-######Fixes
+`1.2.5.4`
+
+*2017-09-05*
+
+**Fixes**
 
 * Fixed low stock indicator.
 
-#####1.2.5.3
-`2017-08-29`
+---
 
-######Fixes
+`1.2.5.3`
+
+*2017-08-29*
+
+**Fixes**
 
 * Delete ATUM transients after saving any product's stock.
 
-#####1.2.5.2
-`2017-08-28`
+---
 
-######Fixes
+`1.2.5.2`
+
+*2017-08-28*
+
+**Fixes**
 
 * Fixed add-on updater.
 * Removed unused mPDF files (clean up).
 
-#####1.2.5.1
-`2017-07-28`
+---
 
-######Features
+`1.2.5.1`
+
+*2017-07-28*
+
+**Features**
 
 * Added title max length setup for reports.
 
-#####1.2.5
-`2017-07-27`
+---
 
-######Features
+`1.2.5`
+
+*2017-07-27*
+
+**Features**
 
 * New "Data Export" component to generate reports from "Stock Central" data (PDF format available).
 * New global update button for editable List Tables (improved UX and performance while editing multiple products at once).
 
-######Fixes
+**Fixes**
 
 * Fixed issue when combining multiple filters in List Tables.
 * Fixed issue when trying to filter "Downloadable" or "Virtual" product types.
@@ -576,65 +674,83 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Fixed calculation of "Stock on Hold" column.
 * Other minor fixes.
 
-#####1.2.4
-`2017-07-10`
+---
 
-######Features
+`1.2.4`
+
+*2017-07-10*
+
+**Features**
 
 * New "Inventory Logs" component.
 * Added calculations for "Reserved Stock", "Customer Returns", "Warehouse Damages" and "Lost in Post" columns to "Stock Central".
 
-######Fixes
+**Fixes**
 
 * Upgrade systems that have no ATUM version stored in db.
 
-#####1.2.3.2
-`2017-05-12`
+---
 
-######Fixes
+`1.2.3.2`
+
+*2017-05-12*
+
+**Fixes**
 
 * Fixed issue with latest version of Bootstrap's Popover.
 * Fixed issue with the empty ATUM List Tables.
 
-#####1.2.3
-`2017-05-08`
+---
 
-######Features
+`1.2.3`
+
+*2017-05-08*
+
+**Features**
 
 * New "Dashboard Statistics" widget.
 
-######Fixes
+**Fixes**
 
 * Fixed issue with Processing Orders not being counted.
 
-#####1.2.2.1
-`2017-04-21`
+---
 
-######Changes
+`1.2.2.1`
+
+*2017-04-21*
+
+**Changes**
 
 * Updated readme.txt
 
-######Fixes
+**Fixes**
 
 * Fixed compatibility with WooCommerce 3.0.4.
 * Minor fixes.
 
-#####1.2.2
-`2017-04-19`
+---
 
-######Changes
+`1.2.2`
+
+*2017-04-19*
+
+**Changes**
 
 * Switched jQuery plugin for tooltips from tiptip to Bootstrap's tooltip.
 * Updated readme.txt
 
-######Fixes
+**Fixes**
 
 * Fixed issue in the "Lost Sales" column.
 
-#####1.2.1
-`2017-04-10`
+---
 
-######Changes
+`1.2.1`
+
+*2017-04-10*
+
+**Changes**
 
 * Added the ability to set the stock quantity to any product from the Stock Central list.
 * Added the ability to edit the Regular Price, the Sale Price and the Purchase price directly from Stock Central.
@@ -645,15 +761,18 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Updated readme.txt
 * Updated strings in language template file.
 
-######Fixes
+**Fixes**
 
 * Refactory and performance improvements.
 * Low stock formula improved.
 
-#####1.1.1
-`2017-01-26`
+---
 
-######Changes
+`1.1.1`
+
+*2017-01-26*
+
+**Changes**
 
 * Manage WooCommerce "Manage Stock" option for product variations.
 * Disable WooCommerce "Manage Stock" option instead of hiding it.
@@ -664,48 +783,63 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Disabled the non-available ATUM submenus.
 * Improve Stock Central queries to adapt to product variations and grouped items.
 
-######Fixes
+**Fixes**
 
 * Minor fixes.
 
-#####1.1.0
-`2017-01-26`
+---
 
-######Changes
+`1.1.0`
+
+*2017-01-26*
+
+**Changes**
 
 * Added WooCommerce product filters to Stock Central.
 * Added link to ATUM ticket support.
 * All types of stockable WooCommerce products are available now in Stock Central.
 * Updated screenshots with "up to date" features.
 
-#####1.0.7
-`2017-01-13`
+---
 
-######Changes
+`1.0.7`
+
+*2017-01-13*
+
+**Changes**
 
 * Help support link update.
 
-#####1.0.6
-`2017-01-11`
+---
 
-######Fixes
+`1.0.6`
+
+*2017-01-11*
+
+**Fixes**
 
 * Minor fixes.
 
-#####1.0.3
-`2017-01-09`
+---
 
-######Changes
+`1.0.3`
+
+*2017-01-09*
+
+**Changes**
 
 * Updated readme.txt
 
-######Fixes
+**Fixes**
 
 * Minor fixes.
 
-#####1.0.0
-`2017-01-09`
+---
 
-######Features
+`1.0.0`
+
+*2017-01-09*
+
+**Features**
 
 * The first public release of ATUM plugin.
