@@ -333,9 +333,6 @@
 				
 				var $select = $(this);
 				
-				$select.siblings('.nice-select.loading').removeClass('loading');
-				$select.next('.nice-select').addClass('loading');
-				
 				if (statsAjaxFiltering) {
 					statsAjaxFiltering.abort();
 				}
@@ -351,7 +348,8 @@
 					},
 					dataType  : 'json',
 					beforeSend: function () {
-					
+						$select.siblings('.nice-select.loading').removeClass('loading');
+						$select.next('.nice-select').addClass('loading');
 					},
 					success   : function (response) {
 						
@@ -387,6 +385,7 @@
 							
 							statsChartConfig.data.labels = self.getChartLabels(response.data.period);
 							statsChart.update();
+							$select.siblings('.nice-select.loading').removeClass('loading');
 							
 						}
 					}

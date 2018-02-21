@@ -15,6 +15,22 @@
 	.nice-select {
 		display: inline-block;
 		margin-right: 7px;
+		
+		&.loading {
+			@include transition(all 0.2s ease-in-out);
+			
+			.current {
+				position: relative;
+				padding-right: 10px;
+				
+				&:after {
+					content: '';
+					@include loader(10px);
+					top: 2px;
+					right: -8px;
+				}
+			}
+		}
 	}
 	
 	.chart-type {

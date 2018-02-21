@@ -3291,6 +3291,70 @@
   margin-right: 7px;
 }
 
+.statistics-widget .nice-select.loading {
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.statistics-widget .nice-select.loading .current {
+  position: relative;
+  padding-right: 10px;
+}
+
+.statistics-widget .nice-select.loading .current:after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(0, 115, 170, 0.25);
+  border-top-color: #0073AA;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+  top: 2px;
+  right: -8px;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .statistics-widget .chart-type svg {
   max-width: 32px;
   max-height: 32px;
