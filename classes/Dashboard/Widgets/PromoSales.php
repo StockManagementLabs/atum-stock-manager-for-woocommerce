@@ -49,12 +49,6 @@ class PromoSales extends AtumWidget {
 	 */
 	public function render() {
 
-		$products = WidgetHelpers::get_all_product_ids();
-
-		if ( empty($products) ) {
-			return;
-		}
-
 		$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', ['wc-processing', 'wc-completed'] );
 
 		/**
@@ -79,7 +73,7 @@ class PromoSales extends AtumWidget {
 		 */
 		$stats_this_week = WidgetHelpers::get_promo_sales_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'Monday this week 00:00:00'
+			'date_start' => 'this week 00:00:00'
 		) );
 
 		/**

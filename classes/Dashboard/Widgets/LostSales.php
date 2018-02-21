@@ -55,22 +55,17 @@ class LostSales extends AtumWidget {
 			return;
 		}
 
-		$first_day_of_month = new \DateTime('first day of this month 00:00:00');
-		$today = new \DateTime('today 00:00:00');
-		$days_elapsed = $today->diff($first_day_of_month)->days;
-
 		$stats_this_month = WidgetHelpers::get_sales_stats( array(
-			'types'    => array( 'lost_sales' ),
-			'products' => $products,
-			'date'     => 'first day of this month 00:00:00',
-			'days'     => $days_elapsed
+			'types'      => array( 'lost_sales' ),
+			'products'   => $products,
+			'date_start' => 'first day of this month 00:00:00'
 		) );
 
 		$stats_today = WidgetHelpers::get_sales_stats( array(
-			'types'    => array( 'lost_sales' ),
-			'products' => $products,
-			'date'     => 'today 00:00:00',
-			'days'     => 1
+			'types'      => array( 'lost_sales' ),
+			'products'   => $products,
+			'date_start' => 'today 00:00:00',
+			'days'       => 1
 		) );
 
 		Helpers::load_view( 'widgets/lost-sales', compact('stats_this_month', 'stats_today') );

@@ -56,15 +56,15 @@ class Sales extends AtumWidget {
 		}
 
 		$stats_this_month = WidgetHelpers::get_sales_stats( array(
-			'types'    => array( 'sales' ),
-			'products' => $products,
-			'date'     => 'first day of this month 00:00:00'
+			'types'      => array( 'sales' ),
+			'products'   => $products,
+			'date_start' => 'first day of this month 00:00:00'
 		) );
 
 		$stats_today = WidgetHelpers::get_sales_stats( array(
-			'types'    => array( 'sales' ),
-			'products' => $products,
-			'date'     => 'today 00:00:00'
+			'types'      => array( 'sales' ),
+			'products'   => $products,
+			'date_start' => 'today 00:00:00'
 		) );
 
 		Helpers::load_view( 'widgets/sales', compact('stats_this_month', 'stats_today') );
