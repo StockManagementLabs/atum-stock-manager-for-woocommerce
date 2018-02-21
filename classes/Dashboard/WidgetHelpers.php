@@ -79,21 +79,25 @@ final class WidgetHelpers {
 	 *  @param array $atts {
 	 *      Array of stats filter params
 	 *
-	 *      @type array  $types      An array of stats to get. Possible values: "sales" and/or "lost_sales"
-	 *      @type array  $products   The array of products to include in calculations
-	 *      @type string $date       The date from when to start the items' sales calculations (must be a string format convertible with strtotime)
-	 *      @type int    $days       The days used for lost sales calculations. Only required when asking for lost sales
+	 *      @type array  $types              An array of stats to get. Possible values: "sales" and/or "lost_sales"
+	 *      @type array  $products           The array of products to include in calculations
+	 *      @type string $date_start         The date from when to start the items' sales calculations (must be a string format convertible with strtotime)
+	 *      @type string $date_end           Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime)
+	 *      @type int    $days               Optional. The days used for lost sales calculations. Only used when asking for lost sales. If not passed will be calculated
+	 *      @type bool   $formatted_earnings Optional. Whether to return the earnings formatted as currency
 	 * }
 	 *
 	 * @return array
 	 */
-	public static function get_sales_stats ($atts) {
+	public static function get_sales_stats($atts) {
 
 		/**
 		 * @var array  $types
 		 * @var array  $products
-		 * @var string $date
+		 * @var string $date_start
+		 * @var string $date_end
 		 * @var int    $days
+		 * @var bool   $formatted_earnings
 		 */
 		extract($atts);
 		$stats = array();
@@ -109,7 +113,7 @@ final class WidgetHelpers {
 			$stats['lost_products'] = 0;
 		}
 
-		$products_sold = Helpers::get_sold_last_days( $products, $date );
+		$products_sold = Helpers::get_sold_last_days( $products, $date_start, ( isset($date_end) ? $date_end : NULL ) );
 		$lost_processed = array();
 
 		if ( $products_sold ) {
@@ -122,6 +126,13 @@ final class WidgetHelpers {
 				}
 
 				if ( in_array('lost_sales', $types) && ! in_array($row['PROD_ID'], $lost_processed) ) {
+
+					if ( ! isset($days) || $days <= 0 ) {
+						$date_days_start = new \DateTime( $date_start );
+						$date_days_end = new \DateTime( ( isset($date_end) ? $date_end : 'now' ) );
+						$days = $date_days_end->diff($date_days_start)->days;
+					}
+
 					$lost_sales = Helpers::get_product_lost_sales( $row['PROD_ID'], $days );
 
 					if ( is_numeric($lost_sales) ) {
@@ -135,11 +146,11 @@ final class WidgetHelpers {
 		}
 
 		if ( in_array('sales', $types) ) {
-			$stats['earnings'] = Helpers::format_price( $stats['earnings'] );
+			$stats['earnings'] = ( ! isset($formatted_earnings) || $formatted_earnings ) ? Helpers::format_price( $stats['earnings'] ) : round($stats['earnings'], 2);
 		}
 
 		if ( in_array('lost_sales', $types) ) {
-			$stats['lost_earnings'] = Helpers::format_price( $stats['lost_earnings'] );
+			$stats['lost_earnings'] = ( ! isset($formatted_earnings) || $formatted_earnings ) ? Helpers::format_price( $stats['lost_earnings'] ) : round($stats['lost_earnings'], 2);
 		}
 
 		return $stats;
@@ -151,13 +162,13 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.3.9
 	 *
-	 * @param array $order_args
+	 * @param array $order_args  See: Helpers::get_orders() param description
 	 *
 	 * @return array
 	 */
 	public static function get_promo_sales_stats ($order_args) {
 
-		// Initialize
+		// Initialize counters
 		$stats = array(
 			'value'    => 0,
 			'products' => 0
@@ -188,7 +199,7 @@ final class WidgetHelpers {
 			}
 		}
 
-		$stats['value'] = Helpers::format_price( $stats['value'] );
+		$stats['value'] = ( ! isset($order_args['formatted_earnings']) || $order_args['formatted_earnings'] ) ? Helpers::format_price( $stats['value'] ) : round($stats['value'], 2);
 
 		return $stats;
 
@@ -223,10 +234,228 @@ final class WidgetHelpers {
 
 		}
 
-		$stats['revenue'] = Helpers::format_price( $stats['revenue'] );
+		$stats['revenue'] = ( ! isset($order_args['formatted_earnings']) || $order_args['formatted_earnings'] ) ? Helpers::format_price( $stats['revenue'] ) : round($stats['revenue'], 2);
 
 		return $stats;
 
+	}
+
+	/**
+	 * Get the Sales data for the statistics chart
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
+	 * @type array  $types          Optional. An array of stats to get. Possible values: "sales" and/or "lost_sales"
+	 *
+	 * @return array
+	 */
+	public static function get_sales_chart_data( $time_window, $types = ['sales'] ) {
+
+		$products = self::get_all_product_ids();
+		$data     = $dataset = array();
+
+		if ( empty($products) ) {
+			return $dataset;
+		}
+
+		$period = self::get_chart_data_period( $time_window );
+
+		if ( !$period ) {
+			return $dataset;
+		}
+
+		$date_now    = new \DateTime();
+		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+
+		foreach ($period as $dt) {
+
+			$interval = date_diff($dt, $date_now);
+
+			// Bypass all the future dates
+			if ($interval->invert) {
+				break;
+			}
+
+			$data[] = self::get_sales_stats( array(
+				'types'              => $types,
+				'products'           => $products,
+				'date_start'         => $dt->format( 'Y-m-d H:i:s' ),
+				'date_end'           => ($period_time == 'year') ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
+				'formatted_earnings' => FALSE
+			) );
+		}
+
+		if ( ! empty($data) ) {
+
+			// The chart must use sales or lost_sales types (not both)
+			if ( in_array('sales', $types) ) {
+				$dataset['earnings'] = wp_list_pluck( $data, 'earnings' );
+				$dataset['products'] = wp_list_pluck( $data, 'products' );
+			}
+			elseif ( in_array('lost_sales', $types) ) {
+				$dataset['earnings'] = wp_list_pluck( $data, 'lost_earnings' );
+				$dataset['products'] = wp_list_pluck( $data, 'lost_products' );
+			}
+
+		}
+
+		return $dataset;
+
+	}
+
+	/**
+	 * Get the Promo Sales data for the statistics chart
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
+	 *
+	 * @return array
+	 */
+	public static function get_promo_sales_chart_data( $time_window ) {
+
+		$data   = $dataset = array();
+		$period = self::get_chart_data_period( $time_window );
+
+		if ( !$period ) {
+			return $dataset;
+		}
+
+		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$date_now     = new \DateTime();
+		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', ['wc-processing', 'wc-completed'] );
+
+		foreach ($period as $dt) {
+
+			$interval = date_diff($dt, $date_now);
+
+			// Bypass all the future dates
+			if ($interval->invert) {
+				break;
+			}
+
+			$data[] = self::get_promo_sales_stats( array(
+				'status'             => $order_status,
+				'date_start'         => $dt->format( 'Y-m-d H:i:s' ),
+				'date_end'           => ( $period_time == 'year' ) ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
+				'formatted_earnings' => FALSE
+			) );
+		}
+
+		if ( ! empty($data) ) {
+			$dataset['earnings'] = wp_list_pluck( $data, 'value' );
+			$dataset['products'] = wp_list_pluck( $data, 'products' );
+		}
+
+		return $dataset;
+
+	}
+
+	/**
+	 * Get the Orders data for the statistics chart
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
+	 *
+	 * @return array
+	 */
+	public static function get_orders_chart_data( $time_window ) {
+
+		$data   = $dataset = array();
+		$period = self::get_chart_data_period( $time_window );
+
+		if ( !$period ) {
+			return $dataset;
+		}
+
+		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$date_now     = new \DateTime();
+		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', ['wc-processing', 'wc-completed'] );
+
+		foreach ($period as $dt) {
+
+			$interval = date_diff($dt, $date_now);
+
+			// Bypass all the future dates
+			if ($interval->invert) {
+				break;
+			}
+
+			$data[] = self::get_orders_stats( array(
+				'status'             => $order_status,
+				'date_start'         => $dt->format( 'Y-m-d H:i:s' ),
+				'date_end'           => ( $period_time == 'year' ) ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
+				'formatted_earnings' => FALSE
+			) );
+		}
+
+		if ( ! empty($data) ) {
+			$dataset['earnings'] = wp_list_pluck( $data, 'revenue' );
+			$dataset['products'] = wp_list_pluck( $data, 'orders' );
+		}
+
+		return $dataset;
+
+	}
+
+	/**
+	 * Get the right chart data's date period for the specified time window
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *
+	 * @return void|\DatePeriod
+	 */
+	private static function get_chart_data_period($time_window) {
+
+		$which       = ( strpos( $time_window, 'previous' ) !== FALSE ) ? 'last' : 'this';
+		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$period      = NULL;
+
+		switch ( $period_time ) {
+			case 'year':
+				$period = self::get_date_period("first day of January $which year 00:00:00", "last day of December $which year 23:59:59", '1 month');
+				break;
+
+			case 'month':
+				$period = self::get_date_period( "first day of $which month 00:00:00", "last day of $which month 23:59:59" );
+				break;
+
+			case 'week':
+				$period = self::get_date_period("$which week 00:00:00", "$which week +6 days 23:59:59");
+				break;
+
+		}
+
+		return $period;
+
+	}
+
+	/**
+	 * Get a date period in a time window at the specified interval
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param string $date_start    The period's start date. Must be an string compatible with strtotime
+	 * @param string $date_end      The period's end date. Must be an string compatible with strtotime
+	 * @param string $interval      Optional. The period' interval. Must be an string compatible with strtotime
+	 *
+	 * @return \DatePeriod
+	 */
+	public static function get_date_period($date_start, $date_end, $interval = '1 day') {
+
+		$start    = new \DateTime( $date_start );
+		$interval = \DateInterval::createFromDateString( $interval );
+		$end      = new \DateTime( $date_end );
+		$date_period   = new \DatePeriod( $start, $interval, $end );
+
+		return $date_period;
 	}
 
 	/**
@@ -236,7 +465,7 @@ final class WidgetHelpers {
 	 *
 	 * @return array
 	 */
-	public static function get_stock_levels () {
+	public static function get_stock_levels() {
 
 		global $wpdb;
 

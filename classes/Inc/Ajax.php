@@ -19,6 +19,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Dashboard\Dashboard;
+use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\InboundStock;
 use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
@@ -44,6 +45,9 @@ final class Ajax {
 
 		// Save ATUM Dashboard widgets' layout
 		add_action( 'wp_ajax_atum_save_dashboard_layout', array( $this, 'save_dashboard_layout' ) );
+
+		// Change the Statistics widget chart data
+		add_action( 'wp_ajax_atum_statistics_widget_chart', array( $this, 'statistics_widget_chart') );
 
 		// Sort the videos within the Videos Widget
 		add_action( 'wp_ajax_atum_videos_widget_sorting', array( $this, 'videos_widget_sorting') );
@@ -127,10 +131,10 @@ final class Ajax {
 	}
 
 	/**
-	 * Sort the videos within the Videos Widget
+	 * Change the Statistics widget chart data
 	 *
 	 * @package    Dashboard
-	 * @subpackage Videos Widget
+	 * @subpackage Statistics Widget
 	 *
 	 * @since 1.3.9
 	 */
@@ -146,6 +150,77 @@ final class Ajax {
 		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( $_POST['sortby'] ) );
 
 		wp_die( ob_get_clean() );
+
+	}
+
+	/**
+	 * Sort the videos within the Videos Widget
+	 *
+	 * @package    Dashboard
+	 * @subpackage Videos Widget
+	 *
+	 * @since 1.3.9
+	 */
+	public function statistics_widget_chart() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		if ( empty($_POST['chart_data']) || empty($_POST['chart_period']) ) {
+			wp_send_json_error();
+		}
+
+		$chart_data   = esc_attr( $_POST['chart_data'] );
+		$chart_period = esc_attr( $_POST['chart_period'] );
+
+		switch ( $chart_data ) {
+			case 'sales':
+				$dataset = WidgetHelpers::get_sales_chart_data( $chart_period );
+				$legends  = array(
+					'earnings' => __( 'Earnings', ATUM_TEXT_DOMAIN ),
+					'products' => __( 'Products', ATUM_TEXT_DOMAIN )
+				);
+		        break;
+
+			case 'lost-sales':
+				$dataset = WidgetHelpers::get_sales_chart_data( $chart_period, ['lost_sales'] );
+				$legends  = array(
+					'earnings' => __( 'Earnings', ATUM_TEXT_DOMAIN ),
+					'products' => __( 'Products', ATUM_TEXT_DOMAIN )
+				);
+				break;
+
+			case 'promo-sales':
+				$dataset = WidgetHelpers::get_promo_sales_chart_data( $chart_period );
+				$legends  = array(
+					'earnings' => __( 'Value', ATUM_TEXT_DOMAIN ),
+					'products' => __( 'Products', ATUM_TEXT_DOMAIN )
+				);
+				break;
+
+			case 'orders':
+				$dataset = WidgetHelpers::get_orders_chart_data( $chart_period );
+				$legends  = array(
+					'earnings' => __( 'Revenue', ATUM_TEXT_DOMAIN ),
+					'products' => __( 'Orders', ATUM_TEXT_DOMAIN )
+				);
+				break;
+
+			default:
+				wp_send_json_error();
+				break;
+		}
+
+		if ( strpos($chart_period, 'year') !== FALSE ) {
+			$period = 'month';
+		}
+		elseif(  strpos($chart_period, 'month') !== FALSE ) {
+			$period = 'monthDay';
+		}
+		else {
+			$period = 'weekDay';
+		}
+
+		wp_send_json_success( compact('dataset', 'period', 'legends') );
 
 	}
 	

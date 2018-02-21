@@ -15,6 +15,7 @@ namespace Atum\Dashboard\Widgets;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
+use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
 
 
@@ -48,7 +49,16 @@ class Statistics extends AtumWidget {
 	 */
 	public function render() {
 
-		Helpers::load_view( 'widgets/statistics' );
+		// Get sales data
+		// TODO: GET THE RIGHT INITIAL CHART DATA FROM WIDGET CONFIG
+		$dataset = WidgetHelpers::get_sales_chart_data('this_year');
+		$period  = 'month';
+		$legends  = array(
+			'earnings' => __('Earnings', ATUM_TEXT_DOMAIN),
+			'products' => __('Products', ATUM_TEXT_DOMAIN)
+		);
+
+		Helpers::load_view( 'widgets/statistics', compact('dataset', 'period', 'legends') );
 
 	}
 

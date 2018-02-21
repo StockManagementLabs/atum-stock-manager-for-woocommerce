@@ -236,15 +236,49 @@ class Dashboard {
 				wp_register_script( 'chart-js-bundle', ATUM_URL . 'assets/js/vendor/Chart.bundle.min.js', array(), ATUM_VERSION, TRUE );
 				$deps[] = 'chart-js-bundle';
 				$dash_vars = array(
-					'inStockLabel' => __('In Stock', ATUM_PREFIX),
-					'lowStockLabel' => __('Low Stock', ATUM_PREFIX),
-					'outStockLabel' => __('Out of Stock', ATUM_PREFIX),
+					'inStockLabel'             => __( 'In Stock', ATUM_PREFIX ),
+					'lowStockLabel'            => __( 'Low Stock', ATUM_PREFIX ),
+					'outStockLabel'            => __( 'Out of Stock', ATUM_PREFIX ),
+					'months'                   => array(
+						__( 'January', ATUM_TEXT_DOMAIN ),
+						__( 'February', ATUM_TEXT_DOMAIN ),
+						__( 'March', ATUM_TEXT_DOMAIN ),
+						__( 'April', ATUM_TEXT_DOMAIN ),
+						__( 'May', ATUM_TEXT_DOMAIN ),
+						__( 'June', ATUM_TEXT_DOMAIN ),
+						__( 'July', ATUM_TEXT_DOMAIN ),
+						__( 'August', ATUM_TEXT_DOMAIN ),
+						__( 'September', ATUM_TEXT_DOMAIN ),
+						__( 'October', ATUM_TEXT_DOMAIN ),
+						__( 'November', ATUM_TEXT_DOMAIN ),
+						__( 'December', ATUM_TEXT_DOMAIN )
+					),
+					'days'                     => array(
+						__( 'Monday', ATUM_TEXT_DOMAIN ),
+						__( 'Tuesday', ATUM_TEXT_DOMAIN ),
+						__( 'Wednesday', ATUM_TEXT_DOMAIN ),
+						__( 'Thursday', ATUM_TEXT_DOMAIN ),
+						__( 'Friday', ATUM_TEXT_DOMAIN ),
+						__( 'Saturday', ATUM_TEXT_DOMAIN ),
+						__( 'Sunday', ATUM_TEXT_DOMAIN )
+					),
+					'numDaysCurMonth'          => date_i18n( 't' ),
+					'statsEarningsCurSymbol'   => get_woocommerce_currency_symbol(),
+					'statsEarningsCurPosition' => get_option('woocommerce_currency_pos')
 				);
 			}
 
 			if ( in_array(ATUM_PREFIX . 'videos_widget', $widget_keys) ) {
 				wp_register_script( 'jquery-scrollbar', ATUM_URL . 'assets/js/vendor/jquery.scrollbar.min.js', array('jquery'), ATUM_VERSION, TRUE );
 				$deps[] = 'jquery-scrollbar';
+			}
+
+			if ( in_array(ATUM_PREFIX . 'statistics_widget', $widget_keys) ) {
+				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
+				wp_enqueue_style( 'switchery' );
+				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
+				$deps[] = 'switchery';
+				$deps[] = 'jquery-ui-sortable';
 			}
 
 			/*
