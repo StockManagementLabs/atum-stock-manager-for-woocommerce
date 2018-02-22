@@ -7,7 +7,7 @@ Tested up to: 4.9.4
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.1
-Stable tag: 1.3.8.5
+Stable tag: 1.3.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -254,6 +254,21 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
 == Changelog ==
+
+---
+
+`1.3.9`
+
+*2018-02-22*
+
+Features
+
+* Added a new tab to Settings to allow users to fill their Store Details required for pdf generated Purchase Orders.
+* Added another action in Purchase Orders page to enable the user to generate a pdf of Purchase Orders.
+
+Fixes
+
+* Fixed issue that was showing all the products when adding items to a Purchase Order.
 
 ---
 

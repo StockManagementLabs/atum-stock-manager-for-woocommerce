@@ -215,6 +215,19 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.3.9`
+
+Features
+
+* Added a new tab to Settings to allow users to fill their Store Details required for pdf generated Purchase Orders.
+* Added another action in Purchase Orders page to enable the user to generate a pdf of Purchase Orders.
+
+Fixes
+
+* Fixed issue that was showing all the products when adding items to a Purchase Order.
+
+---
+
 `1.3.8.5`
 
 *2018-02-19*
