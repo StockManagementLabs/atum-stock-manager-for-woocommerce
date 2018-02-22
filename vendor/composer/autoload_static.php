@@ -41,6 +41,8 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Components\\HelpPointers' => __DIR__ . '/../..' . '/classes/Components/HelpPointers.php',
         'Atum\\Dashboard\\Statistics' => __DIR__ . '/../..' . '/classes/Dashboard/Statistics.php',
         'Atum\\DataExport\\DataExport' => __DIR__ . '/../..' . '/classes/DataExport/DataExport.php',
+        'Atum\\DataExport\\Models\\ModelInterface' => __DIR__ . '/../..' . '/classes/DataExport/Models/ModelInterface.php',
+        'Atum\\DataExport\\Models\\POModel' => __DIR__ . '/../..' . '/classes/DataExport/Models/POModel.php',
         'Atum\\DataExport\\Reports\\HtmlReport' => __DIR__ . '/../..' . '/classes/DataExport/Reports/HtmlReport.php',
         'Atum\\InboundStock\\InboundStock' => __DIR__ . '/../..' . '/classes/InboundStock/InboundStock.php',
         'Atum\\InboundStock\\Inc\\ListTable' => __DIR__ . '/../..' . '/classes/InboundStock/Inc/ListTable.php',

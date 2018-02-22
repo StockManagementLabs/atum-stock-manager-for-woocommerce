@@ -12,6 +12,8 @@
 		// Enable switchers
 		atumDoSwitchers();
 		
+		maybeRestoreEnhancedSelect();
+		
 		var $atumNav      = $('.atum-nav'),
 		    $atumSettings = $('#atum-settings');
 		
@@ -107,6 +109,20 @@
 			
 		});
 		
+		// Manage Shipping address switch
+		$atumSettings.on('change','#atum_same_ship_address', function() {
+			
+				if ( this.checked ) {
+					$('#atum_setting_shipping').slideUp();
+				}
+				else
+				{
+					$('#atum_setting_shipping').slideDown();
+				}
+		} ).find('#atum_same_ship_address').change();
+		
+		
+		
 		/**
 		 * Move to a new tab in the Settings nav bar
 		 */
@@ -120,6 +136,8 @@
 			$formSettingsWrapper.addClass('overlay');
 			$atumSettings.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				atumDoSwitchers();
+				maybeRestoreEnhancedSelect();
+				$atumSettings.find('#atum_same_ship_address').change();
 			});
 		
 		}
@@ -133,6 +151,14 @@
 				var switcher = new Switchery(this, { size: 'small' });
 			});
 		
+		}
+		
+		/**
+		 * Destroy and reload wc enhanced selects
+		 */
+		function maybeRestoreEnhancedSelect() {
+			$('.select2-container--open').remove();
+			$( 'body' ).trigger( 'wc-enhanced-select-init' );
 		}
 		
 	});

@@ -34,7 +34,7 @@ class PurchaseOrder extends AtumOrderModel {
 		// Add the button for setting the purchase price to products within POs
 		add_action( 'atum/atum_order/item_meta_controls', array($this, 'set_purchase_price_button') );
 
-		// Add the items blocker div to the items metabox within ATUM orders with no supplier selected
+		// Add the items blocker div to the items metabox within ATUM orders with _no supplier selected
 		add_action( 'atum/atum_order/before_items_meta_box', array($this, 'maybe_add_items_blocker') );
 
 		// Add message before the PO product search

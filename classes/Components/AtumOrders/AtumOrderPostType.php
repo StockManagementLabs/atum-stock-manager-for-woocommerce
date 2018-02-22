@@ -435,6 +435,7 @@ abstract class AtumOrderPostType {
 						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status=pending&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
 						'name'   => __( 'Mark as Pending', ATUM_TEXT_DOMAIN ),
 						'action' => 'pending',
+						'target' => '_self',
 					);
 
 				}
@@ -444,6 +445,7 @@ abstract class AtumOrderPostType {
 						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status=completed&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
 						'name'   => __( 'Mark as Completed', ATUM_TEXT_DOMAIN ),
 						'action' => 'complete',
+						'target' => '_self',
 					);
 
 				}
@@ -452,17 +454,18 @@ abstract class AtumOrderPostType {
 					'url'    => admin_url( "post.php?post={$post->ID}&action=edit" ),
 					'name'   => __( 'View', ATUM_TEXT_DOMAIN ),
 					'action' => 'view',
+					'target' => '_self',
 				);
 
 				$actions = apply_filters( 'atum/inventory_logs/admin_order_actions', $actions, $atum_order );
-
+				
 				foreach ( $actions as $action ) {
-					printf( '<a class="button %s tips" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
+					printf( '<a class="button %s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
 				}
-
+				
 				do_action( 'atum/order_post_type/admin_actions_end', $atum_order ); ?>
 				</p><?php
-
+				
 				break;
 
 		}

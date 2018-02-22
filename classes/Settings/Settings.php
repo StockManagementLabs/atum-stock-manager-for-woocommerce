@@ -87,11 +87,13 @@ class Settings {
 	private function __construct() {
 
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 		add_filter( 'pre_update_option_' . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
 
 		// Add the module menu
 		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
+		
+		$default_country = get_option('woocommerce_default_country');
 
 		$this->tabs = array(
 			'general'       => array(
@@ -99,7 +101,14 @@ class Settings {
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN )
 				)
-			)
+			),
+			'store' => array(
+				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
+				'sections' => array(
+					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
+					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN )
+				)
+			),
 		);
 
 		$this->defaults = array(
@@ -154,6 +163,104 @@ class Settings {
 				'desc'    => __( "Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
+			),
+			'company_name' => array(
+				'section' => 'company',
+				'name'    => __( 'Company Name', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Fill your company's name", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'tax_number' => array(
+				'section' => 'company',
+				'name'    => __( 'Tax/VAT Number', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Fill your company's Tax/VAT Number", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'address_1' => array(
+				'section' => 'company',
+				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The company's street address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'address_2' => array(
+				'section' => 'company',
+				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Optional additional info for the Address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'city' => array(
+				'section' => 'company',
+				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The city where your business is located", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'country' => array(
+				'section' => 'company',
+				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The country and state or province if any", ATUM_TEXT_DOMAIN ),
+				'type'    => 'wc_country',
+				'default' => $default_country
+			),
+			'zip' => array(
+				'section' => 'company',
+				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The postal code of your business", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'same_ship_address' => array(
+				'section' => 'company',
+				'name'    => __( "Use as Shipping Addres", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes'
+			),
+			'ship_to' => array(
+				'section' => 'shipping',
+				'name'    => __( 'Ship to name', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The ship to name that will appear in the Shipping address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'ship_address_1' => array(
+				'section' => 'shipping',
+				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The shipping street address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'ship_address_2' => array(
+				'section' => 'shipping',
+				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Optional additional info for the Shipping Address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'ship_city' => array(
+				'section' => 'shipping',
+				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The city where is your Shipping address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
+			),
+			'ship_country' => array(
+				'section' => 'shipping',
+				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The country and state or province if any", ATUM_TEXT_DOMAIN ),
+				'type'    => 'wc_country',
+				'default' => $default_country
+			),
+			'ship_zip' => array(
+				'section' => 'shipping',
+				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "The postal code of your Shipping address", ATUM_TEXT_DOMAIN ),
+				'type'    => 'text',
+				'default' => ''
 			),
 		);
 
@@ -260,7 +367,7 @@ class Settings {
 			Helpers::maybe_es6_promise();
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
 			
 			wp_localize_script( self::UI_SLUG, 'atumSettings', array(
 				'stockMsgTitle' => __( "Would you want to restore the 'Manage Stock' status of all products to their original state?", ATUM_TEXT_DOMAIN ),
@@ -430,6 +537,31 @@ class Settings {
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
 
+	}
+	
+	public function display_wc_country($args) {
+	
+		$country_setting = (string) $this->options[ $args['id']] ;
+		
+		if ( strstr( $country_setting, ':' ) ) {
+			$country_setting = explode( ':', $country_setting );
+			$country         = current( $country_setting );
+			$state           = end( $country_setting );
+		} else {
+			$country = $country_setting;
+			$state   = '*';
+		}
+		ob_start();
+		?>
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo  self::OPTION_NAME .'[' . $args['id'] . ']' ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ); ?>" class="wc-enhanced-select">
+					<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
+		</select>
+		<?php
+		
+		$result = ob_get_clean();
+		
+		echo apply_filters('atum/settings/display_wc_country', $result , $args);
+		
 	}
 	
 	
