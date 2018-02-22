@@ -2,7 +2,7 @@
 /**
  * View for the ATUM Dashboard News widget
  *
- * @since 1.3.9
+ * @since 1.4.0
  */
 ?>
 <div class="news-widget" data-widget="news">

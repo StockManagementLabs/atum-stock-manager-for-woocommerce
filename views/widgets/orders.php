@@ -2,7 +2,7 @@
 /**
  * View for the ATUM Dashboard Orders widget
  *
- * @since 1.3.9
+ * @since 1.4.0
  */
 ?>
 

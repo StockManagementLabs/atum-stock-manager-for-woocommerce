@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.3.9
+ * @since       1.4.0
  *
  * Videos Widget for ATUM Dashboard
  */
@@ -39,6 +39,8 @@ class Videos extends AtumWidget {
 	public function __construct() {
 
 		$this->title = __('Video Tutorials', ATUM_TEXT_DOMAIN);
+		$this->description = __("Live Feed from ATUM's YouTube Channel", ATUM_TEXT_DOMAIN);
+		$this->thumbnail = '';
 
 		self::$video_tags = (array) apply_filters( 'atum/dashboard/videos_widget/filter_tags', array(
 			'atum'                => __( 'ATUM', ATUM_TEXT_DOMAIN ),
@@ -72,7 +74,7 @@ class Videos extends AtumWidget {
 	/**
 	 * Get the SML channel's videos from Youtube API
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $sort_by   Optional. The sorting parameter. Possible values: date, rating, relevance, title, viewCount
 	 *

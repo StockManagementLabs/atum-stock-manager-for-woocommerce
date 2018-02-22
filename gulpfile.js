@@ -18,7 +18,7 @@ var gulp         = require('gulp'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.3.9';
+var version = '1.4.0';
 
 // Global config
 var config = {

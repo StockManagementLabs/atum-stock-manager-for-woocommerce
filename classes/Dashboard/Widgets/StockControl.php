@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.3.9
+ * @since       1.4.0
  *
  * Stock Control Widget for ATUM Dashboard
  */
@@ -33,9 +33,11 @@ class StockControl extends AtumWidget {
 	public function __construct() {
 
 		$this->title = __('Stock Control', ATUM_TEXT_DOMAIN);
+		$this->description = __('In, Low and Out of Stock Statistics', ATUM_TEXT_DOMAIN);
+		$this->thumbnail = '';
+
 		parent::__construct();
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 	}
 
 	/**

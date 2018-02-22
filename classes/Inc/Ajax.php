@@ -116,7 +116,7 @@ final class Ajax {
 	 *
 	 * @package Dashboard
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	public function save_dashboard_layout() {
 
@@ -136,7 +136,7 @@ final class Ajax {
 	 * @package    Dashboard
 	 * @subpackage Statistics Widget
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	public function videos_widget_sorting() {
 
@@ -159,7 +159,7 @@ final class Ajax {
 	 * @package    Dashboard
 	 * @subpackage Videos Widget
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	public function statistics_widget_chart() {
 

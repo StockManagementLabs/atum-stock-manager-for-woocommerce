@@ -2,7 +2,7 @@
 /**
  * View for the ATUM Dashboard Statistics widget
  *
- * @since 1.3.9
+ * @since 1.4.0
  */
 ?>
 

@@ -66,7 +66,7 @@ final class Hooks {
 	/**
 	 * Show row meta on the plugin screen
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param array  $links   Plugin Row Meta
 	 * @param string $file    Plugin Base file

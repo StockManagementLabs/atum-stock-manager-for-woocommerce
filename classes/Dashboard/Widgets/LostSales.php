@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.3.9
+ * @since       1.4.0
  *
  * Lost Sales Widget for ATUM Dashboard
  */
@@ -33,6 +33,9 @@ class LostSales extends AtumWidget {
 	public function __construct() {
 
 		$this->title = __('Lost Sales', ATUM_TEXT_DOMAIN);
+		$this->description = __('Periodic Lost Sales Statistics', ATUM_TEXT_DOMAIN);
+		$this->thumbnail = '';
+
 		parent::__construct();
 	}
 

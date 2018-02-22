@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.3.9
+ * @since       1.4.0
  *
  * News Widget for ATUM Dashboard
  */
@@ -32,6 +32,9 @@ class News extends AtumWidget {
 	public function __construct() {
 
 		$this->title = __('Latest News', ATUM_TEXT_DOMAIN);
+		$this->description = __('Live Feed about the Latest News and Blog Posts', ATUM_TEXT_DOMAIN);
+		$this->thumbnail = '';
+
 		parent::__construct();
 	}
 
@@ -70,7 +73,7 @@ class News extends AtumWidget {
 	/**
 	 * Change the feed cache limit to 7200 seconds (2 hours)
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return int
 	 */

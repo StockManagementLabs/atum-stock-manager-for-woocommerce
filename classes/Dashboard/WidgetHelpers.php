@@ -5,7 +5,7 @@
  * @author         Salva Machí and Jose Piera - https://sispixels.com
  * @copyright      ©2018 Stock Management Labs™
  *
- * @since          1.3.9
+ * @since          1.4.0
  *
  * Helper functions for Widgets
  */
@@ -36,7 +36,7 @@ final class WidgetHelpers {
 	/**
 	 * Get a list of all the products used for calculating stats
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return array
 	 */
@@ -74,7 +74,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the stats of products that were sold after the specified date
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 *  @param array $atts {
 	 *      Array of stats filter params
@@ -160,7 +160,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the promo sales stats within a specified time window
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param array $order_args  See: Helpers::get_orders() param description
 	 *
@@ -208,7 +208,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the orders stats within a specified time window
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param array $order_args
 	 *
@@ -243,7 +243,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the Sales data for the statistics chart
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $time_window   The time window that will specify the x axis in the chart
 	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
@@ -308,7 +308,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the Promo Sales data for the statistics chart
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $time_window   The time window that will specify the x axis in the chart
 	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
@@ -357,7 +357,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the Orders data for the statistics chart
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $time_window   The time window that will specify the x axis in the chart
 	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
@@ -406,7 +406,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the right chart data's date period for the specified time window
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $time_window   The time window that will specify the x axis in the chart
 	 *
@@ -440,7 +440,7 @@ final class WidgetHelpers {
 	/**
 	 * Get a date period in a time window at the specified interval
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $date_start    The period's start date. Must be an string compatible with strtotime
 	 * @param string $date_end      The period's end date. Must be an string compatible with strtotime
@@ -461,7 +461,7 @@ final class WidgetHelpers {
 	/**
 	 * Get the current stock levels
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return array
 	 */
@@ -619,7 +619,7 @@ final class WidgetHelpers {
 	/**
 	 * Get all the available children products of the published parent products (Variable and Grouped)
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $parent_type   The parent product type
 	 * @param string $post_type     Optional. The children post type

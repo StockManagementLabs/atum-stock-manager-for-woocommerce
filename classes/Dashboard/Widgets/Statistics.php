@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.3.9
+ * @since       1.4.0
  *
  * Statistics Widget for ATUM Dashboard
  */
@@ -33,6 +33,9 @@ class Statistics extends AtumWidget {
 	public function __construct() {
 
 		$this->title = __('ATUM Statistics', ATUM_TEXT_DOMAIN);
+		$this->description = __('Graphical Preview of Periodic Sales and Earnings', ATUM_TEXT_DOMAIN);
+		$this->thumbnail = '';
+
 		parent::__construct();
 	}
 
