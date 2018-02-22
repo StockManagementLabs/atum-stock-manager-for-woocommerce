@@ -215,6 +215,16 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.3.9.1`
+
+*2018-02-22*
+
+Fixes
+
+* Restored assets directory.
+
+---
+
 `1.3.9`
 
 Features
