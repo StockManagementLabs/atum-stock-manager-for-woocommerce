@@ -21,6 +21,7 @@
 	&.pill {
 		border-radius: 16px;
 	}
+	
 }
 
 .btn-success {
@@ -48,4 +49,9 @@
 	&:hover {
 		background-color: transparentize($btn-warning, 0.25);
 	}
+}
+
+.btn-sm {
+	padding: 5px 14px;
+	font-size: 9px;
 }

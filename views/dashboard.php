@@ -2,7 +2,7 @@
 /**
  * View for the Dashboard page
  *
- * @since 1.3.9
+ * @since 1.4.0
  */
 
 defined( 'ABSPATH' ) or die;
@@ -139,7 +139,26 @@ defined( 'ABSPATH' ) or die;
 	</section>
 
 	<section class="add-dash-widget">
-		<i class="lnr lnr-plus-circle"></i> <h2><?php _e('Add Widget here', ATUM_TEXT_DOMAIN) ?></h2>
+		<i class="lnr lnr-plus-circle"></i> <h2><?php _e('Add More Widgets', ATUM_TEXT_DOMAIN) ?></h2>
+
+		<script type="text/template" id="tmpl-atum-modal-add-widgets">
+			<ul class="widgets-list scrollbar-inner">
+				<?php foreach ($widgets as $widget_name => $widget): ?>
+				<li data-widget="<?php echo $widget_name ?>">
+					<img src="<?php echo $widget->get_thumbnail() ?>">
+
+					<div class="widget-details">
+						<h3><?php echo $widget->get_title() ?></h3>
+						<p><?php echo $widget->get_description() ?></p>
+					</div>
+
+					<div>
+						<button type="button" class="add-widget btn btn-primary btn-sm pill"><?php _e('Add Widget', ATUM_TEXT_DOMAIN) ?></button>
+					</div>
+				</li>
+				<?php endforeach; ?>
+			</ul>
+		</script>
 	</section>
 
 </div>

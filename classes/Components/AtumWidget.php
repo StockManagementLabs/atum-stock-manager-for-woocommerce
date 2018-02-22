@@ -5,7 +5,7 @@
  * @author          Salva Machí and Jose Piera - https://sispixels.com
  * @copyright       ©2018 Stock Management Labs™
  *
- * @since           1.3.9
+ * @since           1.4.0
  *
  * The abstact class that acts as a skeleton for all the ATUM Widgets
  */
@@ -27,7 +27,19 @@ abstract class AtumWidget {
 	 * The widget title
 	 * @var string
 	 */
-	protected $title;
+	protected $title = '';
+
+	/**
+	 * The widget description
+	 * @var string
+	 */
+	protected $description = '';
+
+	/**
+	 * The widget thumbnail URL (for the "Add Widget" popup)
+	 * @var string
+	 */
+	protected $thumbnail = '';
 
 	/**
 	 * Whether the current widget has the config settings enabled
@@ -57,14 +69,14 @@ abstract class AtumWidget {
 	/**
 	 * Widget initialization
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	abstract public function init();
 
 	/**
 	 * Load the widget view
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	abstract public function render();
 
@@ -72,14 +84,14 @@ abstract class AtumWidget {
 	 * Load widget config view
 	 * This is what will display when an admin clicks "Configure" at widget header
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	abstract public function config();
 
 	/**
 	 * Gets the options for a widget of the specified name
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return mixed An associative array containing the widget's options and values. False if no opts
 	 */
@@ -102,7 +114,7 @@ abstract class AtumWidget {
 	/**
 	 * Gets one specific option for the specified widget
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $option
 	 * @param string $default
@@ -131,7 +143,7 @@ abstract class AtumWidget {
 	 * Saves an array of options for a single dashboard widget to the database
 	 * Can also be used to define default values for a widget
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param array  $args      An associative array of options being saved
 	 * @param bool   $add_only  If true, options will not be added if widget options already exist
@@ -153,7 +165,7 @@ abstract class AtumWidget {
 	/**
 	 * Getter for the id prop
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return string
 	 */
@@ -165,7 +177,7 @@ abstract class AtumWidget {
 	/**
 	 * Getter for the title prop
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return string
 	 */
@@ -175,9 +187,33 @@ abstract class AtumWidget {
 	}
 
 	/**
+	 * Getter for the description prop
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return string
+	 */
+	public function get_description() {
+
+		return $this->description;
+	}
+
+	/**
+	 * Getter for the thumbnail prop
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return string
+	 */
+	public function get_thumbnail() {
+
+		return $this->thumbnail;
+	}
+
+	/**
 	 * Getter for the has_config prop
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return bool
 	 */

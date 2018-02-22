@@ -2,7 +2,7 @@
  * Atum Dashboard
  *
  * @copyright Stock Management Labs ©2018
- * @since 1.3.9
+ * @since 1.4.0
  */
 ;( function( $, window, document, undefined ) {
 	"use strict";
@@ -37,6 +37,7 @@
 			
 			this.$widgetsContainer = $(this.elem).find('.atum-widgets');
 			this.buildWidgetsGrid();
+			this.bindDashButtons();
 			this.bindWidgetControls();
 			this.initWidgets();
 			this.buildNiceSelect();
@@ -65,6 +66,28 @@
 				self.addScrollBars();
 			});
 			
+		},
+		bindDashButtons: function() {
+			
+			var self = this;
+		
+			// Add new widget
+			$('.add-dash-widget').click(function() {
+				
+				swal({
+					title            : atumDashVars.availableWidgets,
+					html             : $('#tmpl-atum-modal-add-widgets').html(),
+					showConfirmButton: false,
+					showCloseButton  : true,
+					customClass      : 'add-widget-popup',
+					width            : '620px',
+					onOpen           : function (elem) {
+						self.addScrollBars();
+					}
+				}).catch(swal.noop);
+			
+			});
+		
 		},
 		bindWidgetControls: function() {
 			

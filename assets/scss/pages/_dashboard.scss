@@ -212,6 +212,7 @@ $widget-controls-hover:     #00b8db;
 		min-height: 180px;
 		@include vertical-align-flex();
 		cursor: pointer;
+		@include transition(.15s ease-in-out);
 		
 		i, h2 {
 			display: inline-block;
@@ -228,8 +229,10 @@ $widget-controls-hover:     #00b8db;
 		}
 		
 		&:hover {
+			border-color: $widget-primary;
+			
 			i, h2 {
-				color: darken($add-widget-color, 40%);
+				color: $widget-primary;
 			}
 		}
 		
@@ -329,6 +332,77 @@ $widget-controls-hover:     #00b8db;
 		.widget-danger {
 			color: $widget-danger;
 		}
+	}
+	
+}
+
+// Add widget popup
+.add-widget-popup {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	min-height: 0 !important;
+	max-width: 98%;
+	
+	h2.swal2-title {
+		position: relative;
+		font-size: 17px;
+		text-align: left;
+		color: $gray-dark;
+		border-bottom: 1px solid $gray-light;
+		padding: 20px;
+		margin: -$grid-gutter-width/2 0 0;
+	}
+	
+	.swal2-close {
+		color: $gray-light;
+		font-weight: 200;
+		font-size: 32px;
+		line-height: 1.7;
+		
+		&:hover {
+			color: $gray;
+		}
+	}
+	
+	.widgets-list {
+		margin-top: $grid-gutter-width/2;
+		margin-bottom: 0;
+		margin-right: 8px;
+		padding-right: 5px;
+		max-height: 320px;
+		
+		li {
+			padding: $grid-gutter-width/2;
+			@include flexbox;
+			@include flex-align-items(center);
+		}
+		
+		.widget-details {
+			text-align: left;
+			margin: 0 10px;
+			@include flex-grow(1);
+			
+			h3 {
+				font-size: 15px;
+				margin: 0;
+			}
+			
+			p {
+				text-align: left;
+				font-size: 12px;
+				color: $widget-text;
+				margin-top: 4px;
+			}
+		}
+		
+		.add-widget {
+		
+		}
+		
+	}
+	
+	.scroll-element.scroll-y {
+		width: 5px;
 	}
 	
 }

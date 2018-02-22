@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.3.9
+ * @since       1.4.0
  *
  * The ATUM Dashboard main class
  */
@@ -105,7 +105,7 @@ class Dashboard {
 	/**
 	 * Dashboard constructor
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	private function __construct() {
 
@@ -120,7 +120,7 @@ class Dashboard {
 	/**
 	 * Add the Dashboard menu. Must be the first element in the array
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param array $menus
 	 *
@@ -142,7 +142,7 @@ class Dashboard {
 	/**
 	 * Display the Stock Central admin page
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	public function display() {
 
@@ -157,7 +157,7 @@ class Dashboard {
 	/**
 	 * Load all the available widgets
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 */
 	private function load_widgets() {
 
@@ -198,7 +198,7 @@ class Dashboard {
 	/**
 	 * Enqueue the required scripts
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param string $hook
 	 */
@@ -208,11 +208,14 @@ class Dashboard {
 
 			$user_widgets_layout = $this->get_user_widgets_layout();
 
-			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array(), ATUM_VERSION );
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array('sweetalert2'), ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
-			$dash_vars = array();
+			$dash_vars = array(
+				'availableWidgets' => __('Available Widgets', ATUM_TEXT_DOMAIN)
+			);
 
 			/*
 			 * Gridstack scripts
@@ -223,9 +226,20 @@ class Dashboard {
 			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', array('gridstack'), ATUM_VERSION, TRUE );
 
 			/*
+			 * SweetAlert 2
+			 */
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
+			Helpers::maybe_es6_promise();
+
+			/*
+			 * jQuery.scrollbar
+			 */
+			wp_register_script( 'jquery-scrollbar', ATUM_URL . 'assets/js/vendor/jquery.scrollbar.min.js', array('jquery'), ATUM_VERSION, TRUE );
+
+			/*
 			 * Dependencies
 			 */
-			$deps = array('gridstack', 'gridstack-jquery-ui');
+			$deps = array('gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-scrollbar');
 
 			/*
 			 * Widgets scripts
@@ -235,7 +249,7 @@ class Dashboard {
 			if ( in_array(ATUM_PREFIX . 'statistics_widget', $widget_keys) || in_array(ATUM_PREFIX . 'stock_control_widget', $widget_keys) ) {
 				wp_register_script( 'chart-js-bundle', ATUM_URL . 'assets/js/vendor/Chart.bundle.min.js', array(), ATUM_VERSION, TRUE );
 				$deps[] = 'chart-js-bundle';
-				$dash_vars = array(
+				$dash_vars = array_merge($dash_vars, array(
 					'inStockLabel'             => __( 'In Stock', ATUM_PREFIX ),
 					'lowStockLabel'            => __( 'Low Stock', ATUM_PREFIX ),
 					'outStockLabel'            => __( 'Out of Stock', ATUM_PREFIX ),
@@ -265,12 +279,7 @@ class Dashboard {
 					'numDaysCurMonth'          => date_i18n( 't' ),
 					'statsEarningsCurSymbol'   => get_woocommerce_currency_symbol(),
 					'statsEarningsCurPosition' => get_option('woocommerce_currency_pos')
-				);
-			}
-
-			if ( in_array(ATUM_PREFIX . 'videos_widget', $widget_keys) ) {
-				wp_register_script( 'jquery-scrollbar', ATUM_URL . 'assets/js/vendor/jquery.scrollbar.min.js', array('jquery'), ATUM_VERSION, TRUE );
-				$deps[] = 'jquery-scrollbar';
+				) );
 			}
 
 			if ( in_array(ATUM_PREFIX . 'statistics_widget', $widget_keys) ) {
@@ -295,7 +304,7 @@ class Dashboard {
 	/**
 	 * Save the user's widgets layout as user meta
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @param int   $user_id
 	 * @param array $layout
@@ -307,7 +316,7 @@ class Dashboard {
 	/**
 	 * Getter for the user_widgets_layout prop
 	 *
-	 * @since 1.3.9
+	 * @since 1.4.0
 	 *
 	 * @return array
 	 */

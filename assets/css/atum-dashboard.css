@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.3.9 
+ * @version 1.4.0 
  * @authors Salva Machí and Jose Piera 
  *
  * Author URI: https://sispixels.com/ 
@@ -2446,6 +2446,11 @@
   background-color: rgba(239, 175, 0, 0.75);
 }
 
+.btn-sm {
+  padding: 5px 14px;
+  font-size: 9px;
+}
+
 .nice-select {
   -webkit-tap-highlight-color: transparent;
   background-color: #fff;
@@ -2790,6 +2795,44 @@
   top: -12px;
 }
 
+.swal2-container {
+  z-index: 100000000;
+}
+
+.swal2-container .swal2-content, .swal2-container .swal2-title {
+  margin-bottom: 30px;
+}
+
+.swal2-container .swal2-title {
+  line-height: 1.3;
+  font-size: 23px;
+}
+
+.swal2-container p {
+  font-size: 15px;
+  text-align: center;
+}
+
+.swal2-container button, .swal2-container a {
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.swal2-container button:focus, .swal2-container a:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.swal2-container a {
+  text-decoration: none;
+  color: #82c342;
+}
+
+.swal2-container a:hover {
+  color: #9ccf69;
+}
+
 .color-primary {
   color: #00b8db;
 }
@@ -3111,6 +3154,9 @@
   -moz-align-items: center;
   align-items: center;
   cursor: pointer;
+  -webkit-transition: 0.15s ease-in-out;
+  -o-transition: 0.15s ease-in-out;
+  transition: 0.15s ease-in-out;
 }
 
 .atum-dashboard .add-dash-widget i, .atum-dashboard .add-dash-widget h2 {
@@ -3132,8 +3178,12 @@
   font-size: 16px;
 }
 
+.atum-dashboard .add-dash-widget:hover {
+  border-color: #00b8db;
+}
+
 .atum-dashboard .add-dash-widget:hover i, .atum-dashboard .add-dash-widget:hover h2 {
-  color: #666666;
+  color: #00b8db;
 }
 
 .atum-dashboard .add-dash-widget h2 {
@@ -3262,6 +3312,81 @@
 
 .atum-dashboard .atum-widget .widget-danger {
   color: #ff4848;
+}
+
+.add-widget-popup {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  min-height: 0 !important;
+  max-width: 98%;
+}
+
+.add-widget-popup h2.swal2-title {
+  position: relative;
+  font-size: 17px;
+  text-align: left;
+  color: #333333;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 20px;
+  margin: -15px 0 0;
+}
+
+.add-widget-popup .swal2-close {
+  color: #e1e1e1;
+  font-weight: 200;
+  font-size: 32px;
+  line-height: 1.7;
+}
+
+.add-widget-popup .swal2-close:hover {
+  color: #afafaf;
+}
+
+.add-widget-popup .widgets-list {
+  margin-top: 15px;
+  margin-bottom: 0;
+  margin-right: 8px;
+  padding-right: 5px;
+  max-height: 320px;
+}
+
+.add-widget-popup .widgets-list li {
+  padding: 15px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.add-widget-popup .widgets-list .widget-details {
+  text-align: left;
+  margin: 0 10px;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -moz-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.add-widget-popup .widgets-list .widget-details h3 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.add-widget-popup .widgets-list .widget-details p {
+  text-align: left;
+  font-size: 12px;
+  color: #AFAFAF;
+  margin-top: 4px;
+}
+
+.add-widget-popup .scroll-element.scroll-y {
+  width: 5px;
 }
 
 .statistics-widget {
