@@ -180,14 +180,14 @@ class Settings {
 			),
 			'address_1' => array(
 				'section' => 'company',
-				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "The company's street address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'address_2' => array(
 				'section' => 'company',
-				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Optional additional info for the Address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
@@ -215,28 +215,28 @@ class Settings {
 			),
 			'same_ship_address' => array(
 				'section' => 'company',
-				'name'    => __( "Use as Shipping Addres", ATUM_TEXT_DOMAIN ),
+				'name'    => __( "Use as Shipping Address", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
 			'ship_to' => array(
 				'section' => 'shipping',
-				'name'    => __( 'Ship to name', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Ship to Name', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "The ship to name that will appear in the Shipping address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_address_1' => array(
 				'section' => 'shipping',
-				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "The shipping street address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_address_2' => array(
 				'section' => 'shipping',
-				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Optional additional info for the Shipping Address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
