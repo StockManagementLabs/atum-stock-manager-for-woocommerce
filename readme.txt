@@ -6,8 +6,8 @@ Requires at least: 4.6
 Tested up to: 4.9.4
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.3.1
-Stable tag: 1.3.9.1
+WC tested up to: 3.3.3
+Stable tag: 1.3.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -254,6 +254,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 
 == Changelog ==
+
+---
+
+`1.3.9.2`
+
+*2018-02-23*
+
+Fixes
+
+* Fixed JS error in Purchase Orders page.
+* CSS fixes in settings page.
+* Avoid message when saving Settings.
+* Fixed Purchase Orders search.
+* Text grammar fixes in Settings page.
 
 ---
 

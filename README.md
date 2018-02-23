@@ -215,6 +215,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.3.9.2`
+
+*2018-02-23*
+
+Fixes
+
+* Fixed JS error in Purchase Orders page.
+* CSS fixes in settings page.
+* Avoid message when saving Settings.
+* Fixed Purchase Orders search.
+* Text grammar fixes in Settings page.
+
+---
+
 `1.3.9.1`
 
 *2018-02-22*
