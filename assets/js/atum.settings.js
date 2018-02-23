@@ -46,12 +46,16 @@
 				atumMoveToTab($navLink);
 			}
 			
-			
 		});
 		
 		// Set the dirty fields
 		$atumSettings.on('change', 'input, select, textarea', function () {
 			$(this).addClass('dirty');
+		});
+		
+		// Remove the dirty mark if the user tries to save
+		$atumSettings.on('click', 'input[type=submit]', function() {
+			$atumSettings.find('.dirty').removeClass('dirty');
 		});
 		
 		// Manage Stock switch
@@ -112,13 +116,12 @@
 		// Manage Shipping address switch
 		$atumSettings.on('change','#atum_same_ship_address', function() {
 			
-				if ( this.checked ) {
-					$('#atum_setting_shipping').slideUp();
-				}
-				else
-				{
-					$('#atum_setting_shipping').slideDown();
-				}
+			if ( this.checked ) {
+				$('#atum_setting_shipping').slideUp();
+			}
+			else {
+				$('#atum_setting_shipping').slideDown();
+			}
 		} ).find('#atum_same_ship_address').change();
 		
 		
