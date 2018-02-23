@@ -25,6 +25,12 @@ use Atum\PurchaseOrders\Models\PurchaseOrder;
 class PurchaseOrders extends AtumOrderPostType {
 
 	/**
+	 * The query var name used in list searches
+	 * @var string
+	 */
+	protected $search_label = ATUM_PREFIX . 'po_search';
+
+	/**
 	 * The Purchase Order post type name
 	 */
 	const POST_TYPE = ATUM_PREFIX . 'purchase_order';
