@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2018-02-08 11:30+0100\n"
+"POT-Creation-Date: 2018-02-24 14:02+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: classes/Addons/Addons.php:100 classes/Dashboard/Widgets/Videos.php:47
+#: classes/Addons/Addons.php:100 classes/Dashboard/Widgets/Videos.php:49
 #: classes/Inc/Hooks.php:81 views/dashboard.php:52
 msgid "Add-ons"
 msgstr ""
@@ -67,6 +67,7 @@ msgstr ""
 #: classes/Addons/Addons.php:155
 #: classes/Components/AtumOrders/AtumOrderPostType.php:875
 #: classes/Settings/Settings.php:273 views/meta-boxes/atum-order/items.php:224
+#: views/widgets/lost-sales-config.php:22
 msgid "Cancel"
 msgstr ""
 
@@ -130,10 +131,10 @@ msgstr ""
 #: classes/Components/AtumCapabilities.php:139
 #: classes/Components/AtumOrders/AtumComments.php:166
 #: classes/Components/AtumOrders/AtumComments.php:171
-#: classes/Dashboard/Dashboard.php:306 classes/Dashboard/Dashboard.php:311
+#: classes/Dashboard/Dashboard.php:419 classes/Dashboard/Dashboard.php:424
 #: classes/InboundStock/InboundStock.php:155
-#: classes/InboundStock/InboundStock.php:161 classes/Inc/Ajax.php:1518
-#: classes/Inc/Ajax.php:1524 classes/Inc/Main.php:549 classes/Inc/Main.php:555
+#: classes/InboundStock/InboundStock.php:161 classes/Inc/Ajax.php:1649
+#: classes/Inc/Ajax.php:1655 classes/Inc/Main.php:549 classes/Inc/Main.php:555
 #: classes/Modules/ModuleManager.php:173 classes/Modules/ModuleManager.php:179
 #: classes/Settings/Settings.php:515 classes/Settings/Settings.php:521
 #: classes/StockCentral/StockCentral.php:237
@@ -254,19 +255,19 @@ msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:901
 #: classes/Components/AtumListTables/AtumListTable.php:1063
-#: classes/Dashboard/Dashboard.php:241 views/widgets/stock-control.php:24
+#: classes/Dashboard/Dashboard.php:281 views/widgets/stock-control.php:24
 msgid "Out of Stock"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:906
 #: classes/Components/AtumListTables/AtumListTable.php:1064
-#: classes/Dashboard/Dashboard.php:240 views/widgets/stock-control.php:19
+#: classes/Dashboard/Dashboard.php:280 views/widgets/stock-control.php:19
 msgid "Low Stock"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:911
 #: classes/Components/AtumListTables/AtumListTable.php:1062
-#: classes/Dashboard/Dashboard.php:239 views/widgets/stock-control.php:14
+#: classes/Dashboard/Dashboard.php:279 views/widgets/stock-control.php:14
 msgid "In Stock"
 msgstr ""
 
@@ -566,67 +567,197 @@ msgstr ""
 msgid "Invalid currency code"
 msgstr ""
 
-#: classes/Components/HelpPointers.php:194 views/dashboard.php:121
+#: classes/Components/HelpPointers.php:194 views/widgets/widget-wrapper.php:19
 msgid "Close"
 msgstr ""
 
-#: classes/Dashboard/Dashboard.php:132 classes/Modules/ModuleManager.php:86
+#: classes/Dashboard/Dashboard.php:144 classes/Modules/ModuleManager.php:86
 msgid "Dashboard"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:243
+msgid "Available Widgets"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:283
+msgid "January"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:284
+msgid "February"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:285
+msgid "March"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:286
+msgid "April"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:287
+msgid "May"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:288
+msgid "June"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:289
+msgid "July"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:290
+msgid "August"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:291
+msgid "September"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:292
+msgid "October"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:293
+msgid "November"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:294
+msgid "December"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:297
+msgid "Monday"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:298
+msgid "Tuesday"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:299
+msgid "Wednesday"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:300
+msgid "Thursday"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:301
+msgid "Friday"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:302
+msgid "Saturday"
+msgstr ""
+
+#: classes/Dashboard/Dashboard.php:303
+msgid "Sunday"
 msgstr ""
 
 #: classes/Dashboard/Widgets/LostSales.php:35
 #: classes/StockCentral/Inc/ListTable.php:94
 #: views/help-tabs/stock-central/stock-selling-manager.php:36
+#: views/widgets/statistics.php:16
 msgid "Lost Sales"
+msgstr ""
+
+#: classes/Dashboard/Widgets/LostSales.php:36
+msgid "Periodic Lost Sales Statistics"
 msgstr ""
 
 #: classes/Dashboard/Widgets/News.php:34
 msgid "Latest News"
 msgstr ""
 
-#: classes/Dashboard/Widgets/Orders.php:35 views/widgets/orders.php:28
-#: views/widgets/orders.php:40 views/widgets/orders.php:52
-#: views/widgets/orders.php:64
+#: classes/Dashboard/Widgets/News.php:35
+msgid "Live Feed about the Latest News and Blog Posts"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Orders.php:35 classes/Inc/Ajax.php:260
+#: views/widgets/orders.php:28 views/widgets/orders.php:40
+#: views/widgets/orders.php:52 views/widgets/orders.php:64
+#: views/widgets/statistics.php:18
 msgid "Orders"
 msgstr ""
 
-#: classes/Dashboard/Widgets/PromoSales.php:35
+#: classes/Dashboard/Widgets/Orders.php:36
+msgid "Periodic Order and Revenue Statistics"
+msgstr ""
+
+#: classes/Dashboard/Widgets/PromoSales.php:35 views/widgets/statistics.php:17
 msgid "Promo Sales"
 msgstr ""
 
-#: classes/Dashboard/Widgets/Sales.php:35
+#: classes/Dashboard/Widgets/PromoSales.php:36
+msgid "Periodic Promo Orders and Revenue Statistics"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Sales.php:35 views/widgets/statistics.php:15
 msgid "Sales"
 msgstr ""
 
-#: classes/Dashboard/Widgets/Statistics.php:34
+#: classes/Dashboard/Widgets/Sales.php:36
+msgid "Periodic Sales Statistics"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Statistics.php:35
 msgid "ATUM Statistics"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Statistics.php:36
+msgid "Graphical Preview of Periodic Sales and Earnings"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Statistics.php:60 classes/Inc/Ajax.php:235
+#: classes/Inc/Ajax.php:243 views/widgets/lost-sales.php:21
+#: views/widgets/lost-sales.php:33 views/widgets/sales.php:21
+#: views/widgets/sales.php:33
+msgid "Earnings"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Statistics.php:61 classes/Inc/Ajax.php:236
+#: classes/Inc/Ajax.php:244 classes/Inc/Ajax.php:252
+#: views/widgets/lost-sales.php:26 views/widgets/lost-sales.php:38
+#: views/widgets/promo-sales.php:28 views/widgets/promo-sales.php:40
+#: views/widgets/promo-sales.php:52 views/widgets/promo-sales.php:64
+#: views/widgets/sales.php:26 views/widgets/sales.php:38
+msgid "Products"
 msgstr ""
 
 #: classes/Dashboard/Widgets/StockControl.php:35
 msgid "Stock Control"
 msgstr ""
 
+#: classes/Dashboard/Widgets/StockControl.php:36
+msgid "In, Low and Out of Stock Statistics"
+msgstr ""
+
 #: classes/Dashboard/Widgets/Videos.php:41
 msgid "Video Tutorials"
 msgstr ""
 
-#: classes/Dashboard/Widgets/Videos.php:44
-msgid "ATUM"
-msgstr ""
-
-#: classes/Dashboard/Widgets/Videos.php:45
-msgid "ATUM Product Levels"
+#: classes/Dashboard/Widgets/Videos.php:42
+msgid "Live Feed from ATUM's YouTube Channel"
 msgstr ""
 
 #: classes/Dashboard/Widgets/Videos.php:46
-msgid "Features"
+msgid "ATUM"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Videos.php:47
+msgid "ATUM Product Levels"
 msgstr ""
 
 #: classes/Dashboard/Widgets/Videos.php:48
+msgid "Features"
+msgstr ""
+
+#: classes/Dashboard/Widgets/Videos.php:50
 msgid "How-tos"
 msgstr ""
 
-#: classes/Dashboard/Widgets/Videos.php:49
+#: classes/Dashboard/Widgets/Videos.php:51
 msgid "Updates"
 msgstr ""
 
@@ -658,7 +789,7 @@ msgid "Product Category"
 msgstr ""
 
 #: classes/DataExport/DataExport.php:78
-msgid "Title Max Length (characters)"
+msgid "Product Name (number of characters)"
 msgstr ""
 
 #: classes/DataExport/DataExport.php:80
@@ -780,38 +911,61 @@ msgstr ""
 msgid "Variation Product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:261 classes/Inc/Ajax.php:267
+#: classes/Inc/Ajax.php:148 classes/Inc/Ajax.php:171
+msgid "Invalid widget"
+msgstr ""
+
+#: classes/Inc/Ajax.php:157
+msgid "That widget was already added to your dashboard"
+msgstr ""
+
+#: classes/Inc/Ajax.php:165
+msgid "That widget is not available"
+msgstr ""
+
+#: classes/Inc/Ajax.php:251 views/widgets/promo-sales.php:23
+#: views/widgets/promo-sales.php:35 views/widgets/promo-sales.php:47
+#: views/widgets/promo-sales.php:59
+msgid "Value"
+msgstr ""
+
+#: classes/Inc/Ajax.php:259 views/widgets/orders.php:23 views/widgets/orders.php:35
+#: views/widgets/orders.php:47 views/widgets/orders.php:59
+msgid "Revenue"
+msgstr ""
+
+#: classes/Inc/Ajax.php:392 classes/Inc/Ajax.php:398
 msgid "Error saving the table data."
 msgstr ""
 
-#: classes/Inc/Ajax.php:282
+#: classes/Inc/Ajax.php:413
 msgid "Data saved."
 msgstr ""
 
-#: classes/Inc/Ajax.php:301 classes/Inc/Ajax.php:413 classes/Inc/Ajax.php:510
-#: classes/Inc/Ajax.php:567
+#: classes/Inc/Ajax.php:432 classes/Inc/Ajax.php:544 classes/Inc/Ajax.php:641
+#: classes/Inc/Ajax.php:698
 msgid "An error occurred, please try again later."
 msgstr ""
 
-#: classes/Inc/Ajax.php:304
+#: classes/Inc/Ajax.php:435
 msgid "This license is not valid."
 msgstr ""
 
-#: classes/Inc/Ajax.php:310
+#: classes/Inc/Ajax.php:441
 msgid "ATUM API error"
 msgstr ""
 
-#: classes/Inc/Ajax.php:325
+#: classes/Inc/Ajax.php:456
 msgid "Your add-on license was saved."
 msgstr ""
 
-#: classes/Inc/Ajax.php:337
+#: classes/Inc/Ajax.php:468
 msgid ""
 "You've reached your license activation limit for this add-on.<br>Please contact "
 "the Stock Management Labs support team."
 msgstr ""
 
-#: classes/Inc/Ajax.php:346
+#: classes/Inc/Ajax.php:477
 #, php-format
 msgid ""
 "Your license is valid.<br>After the activation you will have %s remaining "
@@ -822,105 +976,105 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Inc/Ajax.php:359 classes/Inc/Ajax.php:438
+#: classes/Inc/Ajax.php:490 classes/Inc/Ajax.php:569
 #, php-format
 msgid "Your license key expired on %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:367
+#: classes/Inc/Ajax.php:498
 msgid "This license has been disabled"
 msgstr ""
 
-#: classes/Inc/Ajax.php:392
+#: classes/Inc/Ajax.php:523
 msgid "No addon name provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:396
+#: classes/Inc/Ajax.php:527
 msgid "Please enter a valid addon license key"
 msgstr ""
 
-#: classes/Inc/Ajax.php:445
+#: classes/Inc/Ajax.php:576
 msgid "Your license key has been disabled."
 msgstr ""
 
-#: classes/Inc/Ajax.php:450
+#: classes/Inc/Ajax.php:581
 msgid "Invalid license."
 msgstr ""
 
-#: classes/Inc/Ajax.php:456
+#: classes/Inc/Ajax.php:587
 msgid "Your license is not active for this URL."
 msgstr ""
 
-#: classes/Inc/Ajax.php:461
+#: classes/Inc/Ajax.php:592
 #, php-format
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:466
+#: classes/Inc/Ajax.php:597
 msgid "Your license key has reached its activation limit."
 msgstr ""
 
-#: classes/Inc/Ajax.php:490
+#: classes/Inc/Ajax.php:621
 msgid "Your license has been activated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:536
+#: classes/Inc/Ajax.php:667
 msgid "Your license has been deactivated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:542
+#: classes/Inc/Ajax.php:673
 #, php-format
 msgid ""
 "You've reached the limit of allowed deactivations for this license. Please "
 "%sopen a support ticket%s to request the deactivation."
 msgstr ""
 
-#: classes/Inc/Ajax.php:769 classes/InventoryLogs/InventoryLogs.php:295
+#: classes/Inc/Ajax.php:900 classes/InventoryLogs/InventoryLogs.php:295
 #: classes/InventoryLogs/InventoryLogs.php:402
 #: views/meta-boxes/inventory-log/data.php:103
 msgid "Order #"
 msgstr ""
 
-#: classes/Inc/Ajax.php:866 views/meta-boxes/atum-order/notes.php:55
+#: classes/Inc/Ajax.php:997 views/meta-boxes/atum-order/notes.php:55
 msgid "Delete note"
 msgstr ""
 
-#: classes/Inc/Ajax.php:958
+#: classes/Inc/Ajax.php:1089
 msgid "Invalid log"
 msgstr ""
 
-#: classes/Inc/Ajax.php:958
+#: classes/Inc/Ajax.php:1089
 msgid "Invalid purchase order"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1303 classes/Inc/Ajax.php:1378
+#: classes/Inc/Ajax.php:1434 classes/Inc/Ajax.php:1509
 msgid "You are not allowed to do this"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1307 classes/Inc/Ajax.php:1382
+#: classes/Inc/Ajax.php:1438 classes/Inc/Ajax.php:1513
 msgid "Invalid data provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1336
+#: classes/Inc/Ajax.php:1467
 #, php-format
 msgid "Item %1$s stock %2$s from %3$s to %4$s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1338 classes/Inc/Ajax.php:1355
+#: classes/Inc/Ajax.php:1469 classes/Inc/Ajax.php:1486
 msgid "increased"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1338 classes/Inc/Ajax.php:1355
+#: classes/Inc/Ajax.php:1469 classes/Inc/Ajax.php:1486
 msgid "decreased"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1354
+#: classes/Inc/Ajax.php:1485
 #, php-format
 msgid ""
 "No products had their stock %s - they may not have stock management enabled."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1392
+#: classes/Inc/Ajax.php:1523
 msgid "Product not found"
 msgstr ""
 
@@ -2063,12 +2217,16 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
-#: views/dashboard.php:120
-msgid "Widget Settings"
+#: views/dashboard.php:115
+msgid "Add More Widgets"
 msgstr ""
 
-#: views/dashboard.php:142
-msgid "Add Widget here"
+#: views/dashboard.php:130
+msgid "Add Widget"
+msgstr ""
+
+#: views/dashboard.php:131
+msgid "Added"
 msgstr ""
 
 #: views/help-tabs/help-sidebar.php:12
@@ -2591,7 +2749,7 @@ msgstr ""
 msgid "Add shipping cost"
 msgstr ""
 
-#: views/meta-boxes/atum-order/items.php:225
+#: views/meta-boxes/atum-order/items.php:225 views/widgets/lost-sales-config.php:21
 msgid "Save"
 msgstr ""
 
@@ -2933,25 +3091,19 @@ msgstr ""
 msgid "Update Settings"
 msgstr ""
 
-#: views/widgets/lost-sales.php:13 views/widgets/orders.php:16
-#: views/widgets/promo-sales.php:16 views/widgets/sales.php:13
+#: views/widgets/lost-sales-config.php:12
+msgid "Set the default time window"
+msgstr ""
+
+#: views/widgets/lost-sales-config.php:15 views/widgets/lost-sales.php:13
+#: views/widgets/orders.php:16 views/widgets/promo-sales.php:16
+#: views/widgets/sales.php:13
 msgid "Today"
 msgstr ""
 
-#: views/widgets/lost-sales.php:14 views/widgets/sales.php:14
+#: views/widgets/lost-sales-config.php:16 views/widgets/lost-sales.php:14
+#: views/widgets/sales.php:14
 msgid "Month"
-msgstr ""
-
-#: views/widgets/lost-sales.php:21 views/widgets/lost-sales.php:33
-#: views/widgets/sales.php:21 views/widgets/sales.php:33
-msgid "Earnings"
-msgstr ""
-
-#: views/widgets/lost-sales.php:26 views/widgets/lost-sales.php:38
-#: views/widgets/promo-sales.php:28 views/widgets/promo-sales.php:40
-#: views/widgets/promo-sales.php:52 views/widgets/promo-sales.php:64
-#: views/widgets/sales.php:26 views/widgets/sales.php:38
-msgid "Products"
 msgstr ""
 
 #: views/widgets/news.php:51
@@ -2959,25 +3111,42 @@ msgid "The Stock Management Labs news could not be loaded. Please try again late
 msgstr ""
 
 #: views/widgets/orders.php:13 views/widgets/promo-sales.php:13
+#: views/widgets/statistics.php:24
 msgid "This Month"
 msgstr ""
 
 #: views/widgets/orders.php:14 views/widgets/promo-sales.php:14
+#: views/widgets/statistics.php:25
 msgid "Previous Month"
 msgstr ""
 
 #: views/widgets/orders.php:15 views/widgets/promo-sales.php:15
+#: views/widgets/statistics.php:26
 msgid "This Week"
 msgstr ""
 
-#: views/widgets/orders.php:23 views/widgets/orders.php:35
-#: views/widgets/orders.php:47 views/widgets/orders.php:59
-msgid "Revenue"
+#: views/widgets/statistics.php:22
+msgid "This Year"
 msgstr ""
 
-#: views/widgets/promo-sales.php:23 views/widgets/promo-sales.php:35
-#: views/widgets/promo-sales.php:47 views/widgets/promo-sales.php:59
-msgid "Value"
+#: views/widgets/statistics.php:23
+msgid "Previous Year"
+msgstr ""
+
+#: views/widgets/statistics.php:27
+msgid "Previous Week"
+msgstr ""
+
+#: views/widgets/statistics.php:33
+msgid "Line Chart"
+msgstr ""
+
+#: views/widgets/statistics.php:42
+msgid "Area Chart"
+msgstr ""
+
+#: views/widgets/statistics.php:49
+msgid "Bar Chart"
 msgstr ""
 
 #: views/widgets/videos.php:17
@@ -3043,6 +3212,14 @@ msgstr ""
 
 #: views/widgets/videos.php:105
 msgid "Subscribe Now"
+msgstr ""
+
+#: views/widgets/videos.php:132
+msgid "The ATUM's Youtube videos could not be loaded. Please try again later."
+msgstr ""
+
+#: views/widgets/widget-wrapper.php:18
+msgid "Widget Settings"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
