@@ -36,11 +36,13 @@
 		init: function() {
 			
 			this.$widgetsContainer = $(this.elem).find('.atum-widgets');
+			this.$addWidgetModalContent = $(this.elem).find('#tmpl-atum-modal-add-widgets');
+			
 			this.buildWidgetsGrid();
 			this.bindDashButtons();
 			this.bindWidgetControls();
+			this.bindConfigControls();
 			this.initWidgets();
-			this.buildNiceSelect();
 			
 		},
 		buildWidgetsGrid: function() {
@@ -71,12 +73,12 @@
 			
 			var self = this;
 		
-			// Add new widget
+			// "Add more widgets" popup
 			$('.add-dash-widget').click(function() {
 				
 				swal({
 					title            : atumDashVars.availableWidgets,
-					html             : $('#tmpl-atum-modal-add-widgets').html(),
+					html             : self.$addWidgetModalContent.html(),
 					showConfirmButton: false,
 					showCloseButton  : true,
 					customClass      : 'add-widget-popup',
@@ -87,7 +89,43 @@
 				}).catch(swal.noop);
 			
 			});
+			
+			// Add widget
+			$('body').on('click', '.add-widget-popup .add-widget', function() {
+				
+				var $button    = $(this),
+				    widgetId = $button.closest('li').data('widget');
+				
+				$.ajax({
+					url       : ajaxurl,
+					method    : 'POST',
+					data      : {
+						token : self.$widgetsContainer.data('nonce'),
+						action: 'atum_dashboard_add_widget',
+						widget: widgetId
+					},
+					dataType  : 'json',
+					beforeSend: function () {
+					
+					},
+					success   : function (response) {
+						
+						if (typeof response === 'object' && response.success === true) {
+							var layout = response.data.layout;
+							self.grid.addWidget($(response.data.widget), null, null, layout.min, layout.height, true);
+							self.initWidgets([widgetId]);
+							$button.hide().siblings('.btn-info').show();
+							self.toggleModalTemplateButtons(widgetId);
+						}
+						
+					}
+				});
+				
+			});
 		
+		},
+		toggleModalTemplateButtons: function(widgetId) {
+			this.$addWidgetModalContent.find('[data-widget="' + widgetId + '"]').find('.add-widget').toggle().siblings('.btn-info').toggle();
 		},
 		bindWidgetControls: function() {
 			
@@ -95,331 +133,404 @@
 		
 			// Remove widget
 			$('.atum-widget').find('.widget-close').click(function() {
-				self.grid.removeWidget( $(this).closest('.atum-widget') );
+				var $widget = $(this).closest('.atum-widget');
+				self.grid.removeWidget($widget);
+				self.toggleModalTemplateButtons( $widget.data('gs-id') );
+			});
+			
+			// Widget settings
+			$('.atum-widget').find('.widget-settings').click(function() {
+				$(this).closest('.widget-wrapper').find('.widget-config').show().siblings().hide();
 			});
 		
 		},
-		initWidgets: function() {
+		bindConfigControls: function() {
+		
+			// Cancel config
+			$('.widget-config').find('.cancel-config').click(function() {
+				$(this).closest('.widget-wrapper').find('.widget-config').hide().siblings().show();
+			});
 			
-			var self = this;
+			// Save config
+			$('.widget-config').submit(function(e) {
+				e.preventDefault();
+				
+				console.log($(this).serialize());
+			});
+		
+		},
+		// If no widgets param is passed, all the widgets will be initialized
+		initWidgets: function(widgets) {
 			
 			/*
 			 * Statistics widget
 			 */
-			var $statsCanvas   = $('.statistics-widget').find('canvas'),
-			    statsCanvasCtx = $statsCanvas.get(0).getContext('2d'),
-			    chartData      = $statsCanvas.data('chartdata'),
-			    chartLabels    = this.getChartLabels( $statsCanvas.data('period') ),
-			    chartLegends   = $statsCanvas.data('legends'),
-			    gradientGreen  = statsCanvasCtx.createLinearGradient(0, 0, 1200, 0),
-			    gradientBlue   = statsCanvasCtx.createLinearGradient(0, 0, 1200, 0);
-			
-			gradientGreen.addColorStop(0, self.settings.chartColors.greenLight);
-			gradientGreen.addColorStop(1, self.settings.chartColors.greenTrans);
-			
-			gradientBlue.addColorStop(0, self.settings.chartColors.greenBlue);
-			gradientBlue.addColorStop(1, self.settings.chartColors.blueTrans);
-			
-			var statsDataSets    = [{
-				    id                  : 'earnings-chart',
-				    curSymbol           : atumDashVars.statsEarningsCurSymbol,
-				    curPosition         : atumDashVars.statsEarningsCurPosition,
-				    label               : chartLegends.earnings,
-				    data                : chartData.earnings || [],
-				    backgroundColor     : self.settings.chartColors.greenLight,
-				    borderColor         : gradientGreen,
-				    borderWidth         : 8,
-				    pointRadius         : 6,
-				    pointBackgroundColor: self.settings.chartColors.green,
-				    pointBorderColor    : '#FFF',
-				    pointBorderWidth    : 2,
-				    pointHoverRadius    : 6,
-				    tooltipBackground   : 'linear-gradient(135deg, ' + self.settings.chartColors.green + ', ' + self.settings.chartColors.greenLight + ')',
-				    fill                : false
-			    }, {
-				    id                  : 'products-chart',
-				    units               : '',
-				    label               : chartLegends.products,
-				    data                : chartData.products || [],
-				    backgroundColor     : self.settings.chartColors.greenBlue,
-				    borderColor         : gradientBlue,
-				    borderWidth         : 8,
-				    pointRadius         : 6,
-				    pointBackgroundColor: self.settings.chartColors.blue,
-				    pointBorderColor    : '#FFF',
-				    pointBorderWidth    : 2,
-				    pointHoverRadius    : 6,
-				    tooltipBackground   : 'linear-gradient(135deg, ' + self.settings.chartColors.blue + ', ' + self.settings.chartColors.greenBlue + ')',
-				    fill                : false
-			    }],
-			    statsChartConfig = {
-				    type   : 'line',
-				    data   : {
-					    labels  : chartLabels,
-					    datasets: statsDataSets
-				    },
-				    options: {
-					    responsive         : true,
-					    maintainAspectRatio: false,
-					    layout             : {
-						    padding: {
-							    top: 10
-						    }
-					    },
-					    legend             : {
-						    display: false
-					    },
-					    hover              : {
-						    mode     : 'nearest',
-						    intersect: true
-					    },
-					    scales             : {
-						    xAxes: [{
-							    gridLines: {
-								    display        : false,
-								    drawBorder     : false,
-								    drawOnChartArea: true,
-								    drawTicks      : true
-							    }
-						    }],
-						    yAxes: [{
-							    gridLines: {
-								    display        : true,
-								    drawBorder     : false,
-								    drawOnChartArea: true,
-								    drawTicks      : true
-							    }
-						    }]
-					    },
-					    tooltips           : {
-						    enabled  : false,
-						    mode     : 'nearest',
-						    intersect: false,
-						    custom   : function (tooltip) {
-							
-							    $(this._chart.canvas).css('cursor', 'pointer');
-							
-							    var positionY = this._chart.canvas.offsetTop;
-							    var positionX = this._chart.canvas.offsetLeft;
-							
-							    $('.stats-chart-tooltip').css({
-								    opacity: 0,
-							    });
-							
-							    if (!tooltip || !tooltip.opacity) {
-								    return;
-							    }
-							
-							    if (tooltip.dataPoints.length > 0) {
-								    tooltip.dataPoints.forEach(function (dataPoint) {
-									
-									    if (typeof statsDataSets[dataPoint.datasetIndex].curSymbol !== 'undefined') {
-										    var curSymbol   = statsDataSets[dataPoint.datasetIndex].curSymbol,
-										        curPosition = statsDataSets[dataPoint.datasetIndex].curPosition;
-										
-										    if (curPosition === 'left') {
-											    dataPoint.yLabel = curSymbol + dataPoint.yLabel;
-										    }
-										    else {
-											    dataPoint.yLabel += curSymbol;
-										    }
-									    }
-									
-									    var content  = dataPoint.yLabel,
-									        $tooltip = $('#stats-chart-tooltip-' + dataPoint.datasetIndex);
-									
-									    $tooltip.html(content);
-									    $tooltip.css({
-										    opacity   : 1,
-										    top       : positionY + dataPoint.y + 'px',
-										    left      : positionX + dataPoint.x + 'px',
-										    background: statsDataSets[dataPoint.datasetIndex].tooltipBackground
-									    });
-									
-								    });
-							    }
-							
-						    }
-					    }
-				    }
-			    },
-			    statsChart       = new Chart(statsCanvasCtx, statsChartConfig);
-			
-			// Enable switches
-			new Switchery($('#earnings-chart').get(0), {
-				size : 'small',
-				color: self.settings.chartColors.green
-			});
-			
-			new Switchery($('#products-chart').get(0), {
-				size : 'small',
-				color: self.settings.chartColors.blue
-			});
-			
-			// Hide/show charts with legend switches
-			$('#earnings-chart, #products-chart').change(function() {
-				
-				var $activeCharts  = $('.chart-legend').find('input:checkbox:checked'),
-				    activeDatasets = [];
-				
-				if ($activeCharts.length) {
-					
-					$activeCharts.each(function() {
-						var id = $(this).attr('id');
-						
-						$.each(statsDataSets, function(index, dataset) {
-							if (dataset.id === id) {
-								activeDatasets.push(dataset);
-								return false;
-							}
-						});
-					});
-					
-				}
-				
-				statsChartConfig.data.datasets = activeDatasets;
-				statsChart.update();
-			
-			});
-			
-			// Change chart type
-			$('.chart-type a').click(function(e) {
-				
-				e.preventDefault();
-				
-				var $chartTypeButton = $(this),
-					chartType        = $chartTypeButton.data('view');
-				
-				if ($chartTypeButton.hasClass('active')) {
-					return false;
-				}
-				
-				$chartTypeButton.siblings('.active').removeClass('active');
-				$chartTypeButton.addClass('active');
-				
-				if (chartType === 'bar') {
-					statsChartConfig.type = 'bar';
-				}
-				else {
-					
-					var fillingMode = chartType === 'line' ? false : 'start';
-					statsChartConfig.type = 'line';
-					
-					$.each(statsChartConfig.data.datasets, function(index, dataset) {
-						statsChartConfig.data.datasets[index].fill = fillingMode;
-					});
-				
-				}
-				
-				statsChart.destroy();
-				statsChart = new Chart(statsCanvasCtx, statsChartConfig);
-				
-			});
-			
-			// Sortable legends
-			// TODO: WHEN SWITCHING POSITIONS, THE DATA IS SHOWED WRONGLY
-			var $chartLegend = $('.chart-legend');
-			$chartLegend.sortable({
-				revert: true,
-				placeholder: 'legend-switch legend-placeholder',
-				forcePlaceholderSize: true,
-				update: function( event, ui ) {
-					
-					var sort = [];
-					
-					$chartLegend.find('input:checkbox').each(function() {
-						sort.push($(this).attr('id'));
-					});
-					
-					$.each(statsChartConfig.data.datasets, function(index, dataset) {
-						
-						if (statsChartConfig.data.datasets[index].id !== sort[index]) {
-							statsChartConfig.data.datasets.reverse();
-						}
-						
-					});
-					
-					statsChart.update();
-				
-				}
-			}).draggable({
-				connectToSortable: '.chart-legend',
-				helper: 'clone',
-				revert: 'invalid'
-			}).disableSelection();
-			
-			// Change chart data
-			var $chartFilter = $('.chart-filter'),
-			    statsAjaxFiltering;
-			
-			$chartFilter.find('select').change(function() {
-				
-				var $select = $(this);
-				
-				if (statsAjaxFiltering) {
-					statsAjaxFiltering.abort();
-				}
-				
-				statsAjaxFiltering = $.ajax({
-					url       : ajaxurl,
-					method    : 'POST',
-					data      : {
-						token       : self.$widgetsContainer.data('nonce'),
-						action      : 'atum_statistics_widget_chart',
-						chart_data  : $chartFilter.find('select.chart-data').val(),
-						chart_period: $chartFilter.find('select.chart-period').val()
-					},
-					dataType  : 'json',
-					beforeSend: function () {
-						$select.siblings('.nice-select.loading').removeClass('loading');
-						$select.next('.nice-select').addClass('loading');
-					},
-					success   : function (response) {
-						
-						if (typeof response === 'object' && response.success === true) {
-							
-							$.each(statsDataSets, function(index, dataset) {
-								
-								if (dataset.id === 'earnings-chart') {
-									
-									// Update the data
-									statsDataSets[index].data = typeof response.data.dataset !== 'undefined' && typeof response.data.dataset.earnings !== 'undefined' ? response.data.dataset.earnings : [];
-									
-									// Update the legend
-									if (typeof response.data.legends !== 'undefined' && typeof response.data.legends.earnings !== 'undefined') {
-										statsDataSets[index].label = response.data.legends.earnings;
-										$('#earnings-chart').siblings('label').text(response.data.legends.earnings);
-									}
-									
-								}
-								else {
-									
-									// Update the data
-									statsDataSets[index].data = typeof response.data.dataset !== 'undefined' && typeof response.data.dataset.products !== 'undefined' ? response.data.dataset.products : [];
-									
-									// Updated the legend
-									if (typeof response.data.legends !== 'undefined' && typeof response.data.legends.products !== 'undefined') {
-										statsDataSets[index].label = response.data.legends.products;
-										$('#products-chart').siblings('label').text(response.data.legends.products);
-									}
-									
-								}
-							});
-							
-							statsChartConfig.data.labels = self.getChartLabels(response.data.period);
-							statsChart.update();
-							$select.siblings('.nice-select.loading').removeClass('loading');
-							
-						}
-					}
-				});
-				
-			});
-			
+			if (typeof widgets === 'undefined' || $.inArray('atum_statistics_widget', widgets) > -1) {
+				this.initStatisticsWidget();
+			}
 		
 			/*
 			 * Sales Data widgets
 			 */
+			if (
+				typeof widgets === 'undefined' || $.inArray('atum_sales_widget', widgets) > -1 ||
+				$.inArray('atum_lost_sales_widget', widgets) > -1 || $.inArray('atum_orders_widget', widgets) > -1 ||
+				$.inArray('atum_promo_sales_widget', widgets) > -1
+			) {
+				this.initSalesStatsWidget();
+			}
+			
+			/*
+			 * Stock Control widget
+			 */
+			if (typeof widgets === 'undefined' || $.inArray('atum_stock_control_widget', widgets) > -1) {
+				this.initStockControlWidget();
+			}
+			
+			/*
+			 * Videos widget
+			 */
+			if (typeof widgets === 'undefined' || $.inArray('atum_videos_widget', widgets) > -1) {
+				this.initVideosWidget();
+			}
+			
+			// Lists' Scrollbars
+			this.addScrollBars();
+			
+			// Selects
+			this.buildNiceSelect();
+		
+		},
+		initStatisticsWidget: function() {
+			
+			// TODO: MOVE TO A NEW FILE (MODULE)
+			
+			var self              = this,
+			    $statisticsWidget = $('.statistics-widget');
+			
+			if ($statisticsWidget.length) {
+				
+				var $statsCanvas   = $statisticsWidget.find('canvas'),
+				    statsCanvasCtx = $statsCanvas.get(0).getContext('2d'),
+				    chartData      = $statsCanvas.data('chartdata'),
+				    chartLabels    = this.getChartLabels($statsCanvas.data('period')),
+				    chartLegends   = $statsCanvas.data('legends'),
+				    gradientGreen  = statsCanvasCtx.createLinearGradient(0, 0, 1200, 0),
+				    gradientBlue   = statsCanvasCtx.createLinearGradient(0, 0, 1200, 0);
+				
+				gradientGreen.addColorStop(0, self.settings.chartColors.greenLight);
+				gradientGreen.addColorStop(1, self.settings.chartColors.greenTrans);
+				
+				gradientBlue.addColorStop(0, self.settings.chartColors.greenBlue);
+				gradientBlue.addColorStop(1, self.settings.chartColors.blueTrans);
+				
+				var statsDataSets    = [{
+					    id                  : 'earnings-chart',
+					    curSymbol           : atumDashVars.statsEarningsCurSymbol,
+					    curPosition         : atumDashVars.statsEarningsCurPosition,
+					    label               : chartLegends.earnings,
+					    data                : chartData.earnings || [],
+					    backgroundColor     : self.settings.chartColors.greenLight,
+					    borderColor         : gradientGreen,
+					    borderWidth         : 8,
+					    pointRadius         : 6,
+					    pointBackgroundColor: self.settings.chartColors.green,
+					    pointBorderColor    : '#FFF',
+					    pointBorderWidth    : 2,
+					    pointHoverRadius    : 6,
+					    tooltipBackground   : 'linear-gradient(135deg, ' + self.settings.chartColors.green + ', ' + self.settings.chartColors.greenLight + ')',
+					    fill                : false
+				    }, {
+					    id                  : 'products-chart',
+					    units               : '',
+					    label               : chartLegends.products,
+					    data                : chartData.products || [],
+					    backgroundColor     : self.settings.chartColors.greenBlue,
+					    borderColor         : gradientBlue,
+					    borderWidth         : 8,
+					    pointRadius         : 6,
+					    pointBackgroundColor: self.settings.chartColors.blue,
+					    pointBorderColor    : '#FFF',
+					    pointBorderWidth    : 2,
+					    pointHoverRadius    : 6,
+					    tooltipBackground   : 'linear-gradient(135deg, ' + self.settings.chartColors.blue + ', ' + self.settings.chartColors.greenBlue + ')',
+					    fill                : false
+				    }],
+				    statsChartConfig = {
+					    type   : 'line',
+					    data   : {
+						    labels  : chartLabels,
+						    datasets: statsDataSets
+					    },
+					    options: {
+						    responsive         : true,
+						    maintainAspectRatio: false,
+						    layout             : {
+							    padding: {
+								    top: 10
+							    }
+						    },
+						    legend             : {
+							    display: false
+						    },
+						    hover              : {
+							    mode     : 'nearest',
+							    intersect: true
+						    },
+						    scales             : {
+							    xAxes: [{
+								    gridLines: {
+									    display        : false,
+									    drawBorder     : false,
+									    drawOnChartArea: true,
+									    drawTicks      : true
+								    }
+							    }],
+							    yAxes: [{
+								    gridLines: {
+									    display        : true,
+									    drawBorder     : false,
+									    drawOnChartArea: true,
+									    drawTicks      : true
+								    }
+							    }]
+						    },
+						    tooltips           : {
+							    enabled  : false,
+							    mode     : 'nearest',
+							    intersect: false,
+							    custom   : function (tooltip) {
+								
+								    $(this._chart.canvas).css('cursor', 'pointer');
+								
+								    var positionY = this._chart.canvas.offsetTop;
+								    var positionX = this._chart.canvas.offsetLeft;
+								
+								    $('.stats-chart-tooltip').css({
+									    opacity: 0,
+								    });
+								
+								    if (!tooltip || !tooltip.opacity) {
+									    return;
+								    }
+								
+								    if (tooltip.dataPoints.length > 0) {
+									    tooltip.dataPoints.forEach(function (dataPoint) {
+										
+										    if (typeof statsDataSets[dataPoint.datasetIndex].curSymbol !== 'undefined') {
+											    var curSymbol   = statsDataSets[dataPoint.datasetIndex].curSymbol,
+											        curPosition = statsDataSets[dataPoint.datasetIndex].curPosition;
+											
+											    if (curPosition === 'left') {
+												    dataPoint.yLabel = curSymbol + dataPoint.yLabel;
+											    }
+											    else {
+												    dataPoint.yLabel += curSymbol;
+											    }
+										    }
+										
+										    var content  = dataPoint.yLabel,
+										        $tooltip = $('#stats-chart-tooltip-' + dataPoint.datasetIndex);
+										
+										    $tooltip.html(content);
+										    $tooltip.css({
+											    opacity   : 1,
+											    top       : positionY + dataPoint.y + 'px',
+											    left      : positionX + dataPoint.x + 'px',
+											    background: statsDataSets[dataPoint.datasetIndex].tooltipBackground
+										    });
+										
+									    });
+								    }
+								
+							    }
+						    }
+					    }
+				    },
+				    statsChart       = new Chart(statsCanvasCtx, statsChartConfig);
+				
+				// Enable switches
+				new Switchery($('#earnings-chart').get(0), {
+					size : 'small',
+					color: self.settings.chartColors.green
+				});
+				
+				new Switchery($('#products-chart').get(0), {
+					size : 'small',
+					color: self.settings.chartColors.blue
+				});
+				
+				// Hide/show charts with legend switches
+				$('#earnings-chart, #products-chart').change(function (e) {
+					
+					e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
+					
+					var $activeCharts  = $('.chart-legend').find('input:checkbox:checked'),
+					    activeDatasets = [];
+					
+					if ($activeCharts.length) {
+						
+						$activeCharts.each(function () {
+							var id = $(this).attr('id');
+							
+							$.each(statsDataSets, function (index, dataset) {
+								if (dataset.id === id) {
+									activeDatasets.push(dataset);
+									return false;
+								}
+							});
+						});
+						
+					}
+					
+					statsChartConfig.data.datasets = activeDatasets;
+					statsChart.update();
+					
+				});
+				
+				// Change chart type
+				$('.chart-type a').click(function (e) {
+					
+					e.preventDefault();
+					
+					var $chartTypeButton = $(this),
+					    chartType        = $chartTypeButton.data('view');
+					
+					if ($chartTypeButton.hasClass('active')) {
+						return false;
+					}
+					
+					$chartTypeButton.siblings('.active').removeClass('active');
+					$chartTypeButton.addClass('active');
+					
+					if (chartType === 'bar') {
+						statsChartConfig.type = 'bar';
+					}
+					else {
+						
+						var fillingMode = chartType === 'line' ? false : 'start';
+						statsChartConfig.type = 'line';
+						
+						$.each(statsChartConfig.data.datasets, function (index, dataset) {
+							statsChartConfig.data.datasets[index].fill = fillingMode;
+						});
+						
+					}
+					
+					statsChart.destroy();
+					statsChart = new Chart(statsCanvasCtx, statsChartConfig);
+					
+				});
+				
+				// Sortable legends
+				// TODO: WHEN SWITCHING POSITIONS, THE DATA IS SHOWED WRONGLY
+				var $chartLegend = $('.chart-legend');
+				$chartLegend.sortable({
+					revert              : true,
+					placeholder         : 'legend-switch legend-placeholder',
+					forcePlaceholderSize: true,
+					update              : function (event, ui) {
+						
+						var sort = [];
+						
+						$chartLegend.find('input:checkbox').each(function () {
+							sort.push($(this).attr('id'));
+						});
+						
+						$.each(statsChartConfig.data.datasets, function (index, dataset) {
+							
+							if (statsChartConfig.data.datasets[index].id !== sort[index]) {
+								statsChartConfig.data.datasets.reverse();
+							}
+							
+						});
+						
+						statsChart.update();
+						
+					}
+				}).draggable({
+					connectToSortable: '.chart-legend',
+					helper           : 'clone',
+					revert           : 'invalid'
+				}).disableSelection();
+				
+				// Change chart data
+				var $chartFilter = $('.chart-filter'),
+				    statsAjaxFiltering;
+				
+				$chartFilter.find('select').change(function (e) {
+					
+					e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
+					
+					var $select = $(this);
+					
+					if (statsAjaxFiltering) {
+						statsAjaxFiltering.abort();
+					}
+					
+					statsAjaxFiltering = $.ajax({
+						url       : ajaxurl,
+						method    : 'POST',
+						data      : {
+							token       : self.$widgetsContainer.data('nonce'),
+							action      : 'atum_statistics_widget_chart',
+							chart_data  : $chartFilter.find('select.chart-data').val(),
+							chart_period: $chartFilter.find('select.chart-period').val()
+						},
+						dataType  : 'json',
+						beforeSend: function () {
+							$select.siblings('.nice-select.loading').removeClass('loading');
+							$select.next('.nice-select').addClass('loading');
+						},
+						success   : function (response) {
+							
+							if (typeof response === 'object' && response.success === true) {
+								
+								$.each(statsDataSets, function (index, dataset) {
+									
+									if (dataset.id === 'earnings-chart') {
+										
+										// Update the data
+										statsDataSets[index].data = typeof response.data.dataset !== 'undefined' && typeof response.data.dataset.earnings !== 'undefined' ? response.data.dataset.earnings : [];
+										
+										// Update the legend
+										if (typeof response.data.legends !== 'undefined' && typeof response.data.legends.earnings !== 'undefined') {
+											statsDataSets[index].label = response.data.legends.earnings;
+											$('#earnings-chart').siblings('label').text(response.data.legends.earnings);
+										}
+										
+									}
+									else {
+										
+										// Update the data
+										statsDataSets[index].data = typeof response.data.dataset !== 'undefined' && typeof response.data.dataset.products !== 'undefined' ? response.data.dataset.products : [];
+										
+										// Updated the legend
+										if (typeof response.data.legends !== 'undefined' && typeof response.data.legends.products !== 'undefined') {
+											statsDataSets[index].label = response.data.legends.products;
+											$('#products-chart').siblings('label').text(response.data.legends.products);
+										}
+										
+									}
+								});
+								
+								statsChartConfig.data.labels = self.getChartLabels(response.data.period);
+								statsChart.update();
+								$select.siblings('.nice-select.loading').removeClass('loading');
+								
+							}
+						}
+					});
+					
+				});
+				
+			}
+			
+		},
+		initSalesStatsWidget: function() {
+			
+			// TODO: MOVE TO A NEW FILE (MODULE)
+			
 			$('.stats-data-widget').find('select').change(function(e) {
 				e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
 				
@@ -430,113 +541,125 @@
 				$widgetContainer.find('[data-value="' + $select.val() + '"]').fadeIn('fast');
 				
 			});
+		
+		},
+		initStockControlWidget: function() {
 			
-			/*
-			 * Stock Control widget
-			 */
-			var $pieCanvas = $('.stock-chart').find('canvas'),
-			    pieChart   = new Chart($pieCanvas.get(0).getContext('2d'), {
-				    type   : 'doughnut',
-				    data   : {
-					    datasets: [{
-						    data           : [
-							    $pieCanvas.data('lowstock'),
-							    $pieCanvas.data('outstock'),
-							    $pieCanvas.data('instock')
-						    ],
-						    backgroundColor: [
-							    self.settings.chartColors.orange,
-							    self.settings.chartColors.red,
-							    self.settings.chartColors.green,
+			// TODO: MOVE TO A NEW FILE (MODULE)
+			
+			var self                = this,
+			    $stockControlWidget = $('.stock-chart');
+			
+			if ($stockControlWidget.length) {
+				
+				var $pieCanvas = $stockControlWidget.find('canvas'),
+				    pieChart   = new Chart($pieCanvas.get(0).getContext('2d'), {
+					    type   : 'doughnut',
+					    data   : {
+						    datasets: [{
+							    data           : [
+								    $pieCanvas.data('lowstock'),
+								    $pieCanvas.data('outstock'),
+								    $pieCanvas.data('instock')
+							    ],
+							    backgroundColor: [
+								    self.settings.chartColors.orange,
+								    self.settings.chartColors.red,
+								    self.settings.chartColors.green,
+							    ]
+						    }],
+						    labels  : [
+							    atumDashVars.lowStockLabel,
+							    atumDashVars.outStockLabel,
+							    atumDashVars.inStockLabel,
 						    ]
-					    }],
-					    labels  : [
-						    atumDashVars.lowStockLabel,
-						    atumDashVars.outStockLabel,
-						    atumDashVars.inStockLabel,
-					    ]
-				    },
-				    options: {
-					    responsive         : true,
-					    legend             : {
-						    display: false
 					    },
-					    maintainAspectRatio: false,
-					    animation          : {
-						    animateScale : true,
-						    animateRotate: true
-					    },
-					    cutoutPercentage   : 25,
-					    tooltips           : {
-						    enabled: false,
-						    custom: function(tooltip) {
-							
-							    // Tooltip Element
-							    var tooltipEl = $('.stock-chart-tooltip').get(0);
-							
-							    // Hide if no tooltip
-							    if (tooltip.opacity === 0) {
-								    tooltipEl.style.opacity = 0;
-								    return;
-							    }
-							
-							    // Set caret Position
-							    tooltipEl.classList.remove('above', 'below', 'no-transform');
-							
-							    if (tooltip.yAlign) {
-								    tooltipEl.classList.add(tooltip.yAlign);
-							    }
-							    else {
-								    tooltipEl.classList.add('no-transform');
-							    }
-							
-							    function getBody(bodyItem) {
-								    return bodyItem.lines;
-							    }
-							
-							    // Set Text
-							    if (tooltip.body) {
-								    var titleLines = tooltip.title || [];
-								    var bodyLines = tooltip.body.map(getBody);
+					    options: {
+						    responsive         : true,
+						    legend             : {
+							    display: false
+						    },
+						    maintainAspectRatio: false,
+						    animation          : {
+							    animateScale : true,
+							    animateRotate: true
+						    },
+						    cutoutPercentage   : 25,
+						    tooltips           : {
+							    enabled: false,
+							    custom : function (tooltip) {
 								
-								    var innerHtml = '<thead>';
+								    // Tooltip Element
+								    var tooltipEl = $('.stock-chart-tooltip').get(0);
 								
-								    titleLines.forEach(function(title) {
-									    innerHtml += '<tr><th>' + title + '</th></tr>';
-								    });
-								    innerHtml += '</thead><tbody>';
+								    // Hide if no tooltip
+								    if (tooltip.opacity === 0) {
+									    tooltipEl.style.opacity = 0;
+									    return;
+								    }
 								
-								    bodyLines.forEach(function(body, i) {
-									    var colors = tooltip.labelColors[i],
-									        style = 'background:' + colors.backgroundColor + '; border-color:' + colors.borderColor + '; border-width: 2px',
-									        span = '<span class="stock-chart-tooltip-key" style="' + style + '"></span>';
+								    // Set caret Position
+								    tooltipEl.classList.remove('above', 'below', 'no-transform');
+								
+								    if (tooltip.yAlign) {
+									    tooltipEl.classList.add(tooltip.yAlign);
+								    }
+								    else {
+									    tooltipEl.classList.add('no-transform');
+								    }
+								
+								    function getBody(bodyItem) {
+									    return bodyItem.lines;
+								    }
+								
+								    // Set Text
+								    if (tooltip.body) {
+									    var titleLines = tooltip.title || [];
+									    var bodyLines = tooltip.body.map(getBody);
 									
-									    innerHtml += '<tr><td>' + span + body + '</td></tr>';
-								    });
-								    innerHtml += '</tbody>';
+									    var innerHtml = '<thead>';
+									
+									    titleLines.forEach(function (title) {
+										    innerHtml += '<tr><th>' + title + '</th></tr>';
+									    });
+									    innerHtml += '</thead><tbody>';
+									
+									    bodyLines.forEach(function (body, i) {
+										    var colors = tooltip.labelColors[i],
+										        style  = 'background:' + colors.backgroundColor + '; border-color:' + colors.borderColor + '; border-width: 2px',
+										        span   = '<span class="stock-chart-tooltip-key" style="' + style + '"></span>';
+										
+										    innerHtml += '<tr><td>' + span + body + '</td></tr>';
+									    });
+									    innerHtml += '</tbody>';
+									
+									    var tableRoot = tooltipEl.querySelector('table');
+									    tableRoot.innerHTML = innerHtml;
+								    }
 								
-								    var tableRoot = tooltipEl.querySelector('table');
-								    tableRoot.innerHTML = innerHtml;
+								    var positionY = this._chart.canvas.offsetTop;
+								    var positionX = this._chart.canvas.offsetLeft;
+								
+								    // Display, position, and set styles for font
+								    tooltipEl.style.opacity = 1;
+								    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+								    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+								    tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+								
 							    }
-							
-							    var positionY = this._chart.canvas.offsetTop;
-							    var positionX = this._chart.canvas.offsetLeft;
-							
-							    // Display, position, and set styles for font
-							    tooltipEl.style.opacity = 1;
-							    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-							    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
-							    tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
-						    
 						    }
 					    }
-				    }
-			    });
+				    });
+				
+			}
+		
+		},
+		initVideosWidget: function () {
 			
-			/*
-			 * Videos widget
-			 */
-			var $videoWidget = $('.videos-widget');
+			// TODO: MOVE TO A NEW FILE (MODULE)
+			
+			var self         = this,
+				$videoWidget = $('.videos-widget');
 			
 			// Video Switcher
 			$videoWidget.find('article a').click(function(e) {
@@ -569,23 +692,15 @@
 			});
 			
 			// Filter Videos
-			$videoWidget.find('.video-filter-by').change(function() {
-				
-				var filterBy = $(this).val(),
-				    $videos  = $videoWidget.find('article');
-				
-				if (filterBy === '') {
-					$videos.fadeIn('fast');
-				}
-				else {
-					$videos.not('.' + filterBy).hide();
-					$videos.filter('.' + filterBy).fadeIn('fast');
-				}
-				
+			$videoWidget.find('.video-filter-by').change(function(e) {
+				e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
+				self.filterVideos($videoWidget);
 			});
 			
 			// Sort Videos
-			$videoWidget.find('.video-sort-by').change(function() {
+			$videoWidget.find('.video-sort-by').change(function(e) {
+				
+				e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
 				
 				var sortBy         = $(this).val(),
 				    $videosWrapper = $videoWidget.find('.scroll-wrapper');
@@ -605,7 +720,7 @@
 						
 						if (response != -1) {
 							$videosWrapper.children('.scrollbar-inner').html($(response).find('.scrollbar-inner').html());
-							$videoWidget.find('.video-filter-by').change();
+							self.filterVideos($videoWidget);
 						}
 						
 						$videosWrapper.removeClass('overlay');
@@ -614,11 +729,22 @@
 						$videosWrapper.removeClass('overlay');
 					}
 				});
-			
+				
 			});
 			
-			// Lists' Scrollbars
-			this.addScrollBars();
+		},
+		filterVideos: function($videoWidget) {
+			
+			var $videos  = $videoWidget.find('article'),
+			    filterBy = $videoWidget.find('.video-filter-by').val();
+			
+			if (filterBy === '') {
+				$videos.fadeIn('fast');
+			}
+			else {
+				$videos.not('.' + filterBy).hide();
+				$videos.filter('.' + filterBy).fadeIn('fast');
+			}
 		
 		},
 		serializeLayout: function(items) {
@@ -649,7 +775,7 @@
 				url    : ajaxurl,
 				method : 'POST',
 				data   : {
-					action: 'atum_save_dashboard_layout',
+					action: 'atum_dashboard_save_layout',
 					token : this.$widgetsContainer.data('nonce'),
 					layout: this.serializeLayout(this.grid.grid.nodes)
 				}
