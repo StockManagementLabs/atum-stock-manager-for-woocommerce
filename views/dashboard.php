@@ -96,40 +96,13 @@ defined( 'ABSPATH' ) or die;
 
 					if ( isset( $widgets[$widget_id] ) ):
 
-						/**
-						 * @var \Atum\Components\AtumWidget $widget
-						 */
-						$widget = $widgets[$widget_id];
+						$widget             = $widgets[ $widget_id ];
+						$grid_item_settings = $dashboard->get_widget_grid_item_defaults($widget_id);
+						$widget_layout      = array_merge( $grid_item_settings, $widget_layout );
 
-						$grid_item_defaults = (array) apply_filters( 'atum/dashboard/grid_item_defaults', array(
-							'id'         => $widget_id,
-							'min-width'  => 3,
-							'min-height' => 2,
-							'max-width'  => 12
-						) );
+						$dashboard->add_widget($widget, $widget_layout);
 
-						$widget_layout = array_merge($grid_item_defaults, $widget_layout); ?>
-
-						<div class="atum-widget <?php echo $widget_id ?> grid-stack-item"<?php array_walk( $widget_layout, function($value, $key){ echo " data-gs-$key='$value'"; } ) ?>>
-
-							<div class="widget-wrapper grid-stack-item-content">
-								<div class="widget-header">
-									<h2><?php echo $widget->get_title() ?></h2>
-
-									<span class="controls">
-										<i class="lnr lnr-cog widget-settings" title="<?php _e('Widget Settings', ATUM_TEXT_DOMAIN) ?>"></i>
-										<i class="lnr lnr-cross widget-close" title="<?php _e('Close', ATUM_TEXT_DOMAIN) ?>"></i>
-									</span>
-								</div>
-
-								<div class="widget-body">
-									<?php $widget->render(); ?>
-								</div>
-							</div>
-
-						</div>
-
-					<?php endif;
+					endif;
 
 				endforeach;
 
@@ -143,20 +116,23 @@ defined( 'ABSPATH' ) or die;
 
 		<script type="text/template" id="tmpl-atum-modal-add-widgets">
 			<ul class="widgets-list scrollbar-inner">
+
 				<?php foreach ($widgets as $widget_name => $widget): ?>
-				<li data-widget="<?php echo $widget_name ?>">
-					<img src="<?php echo $widget->get_thumbnail() ?>">
+					<li data-widget="<?php echo $widget_name ?>" class="<?php echo ( ! empty($layout) && is_array($layout) && ! in_array($widget_name, array_keys($layout)) ) ? 'not-added' : 'added' ?>">
+						<img src="<?php echo $widget->get_thumbnail() ?>">
 
-					<div class="widget-details">
-						<h3><?php echo $widget->get_title() ?></h3>
-						<p><?php echo $widget->get_description() ?></p>
-					</div>
+						<div class="widget-details">
+							<h3><?php echo $widget->get_title() ?></h3>
+							<p><?php echo $widget->get_description() ?></p>
+						</div>
 
-					<div>
-						<button type="button" class="add-widget btn btn-primary btn-sm pill"><?php _e('Add Widget', ATUM_TEXT_DOMAIN) ?></button>
-					</div>
-				</li>
+						<div>
+							<button type="button" class="add-widget btn btn-primary btn-sm pill"><?php _e('Add Widget', ATUM_TEXT_DOMAIN) ?></button>
+							<button type="button" class="btn btn-info btn-sm pill" disabled><i class="lnr lnr-checkmark-circle"></i> <?php _e('Added', ATUM_TEXT_DOMAIN) ?></button>
+						</div>
+					</li>
 				<?php endforeach; ?>
+
 			</ul>
 		</script>
 	</section>
