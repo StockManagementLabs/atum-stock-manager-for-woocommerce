@@ -32,9 +32,9 @@ class StockControl extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('Stock Control', ATUM_TEXT_DOMAIN);
-		$this->description = __('In, Low and Out of Stock Statistics', ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'Stock Control', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'In, Low and Out of Stock Statistics', ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-stock-control.png';
 
 		parent::__construct();
 
@@ -54,15 +54,18 @@ class StockControl extends AtumWidget {
 	public function render() {
 
 		$stock_counters = WidgetHelpers::get_stock_levels();
-		Helpers::load_view( 'widgets/stock-control', compact('stock_counters') );
+		$config = $this->get_config();
+
+		Helpers::load_view( 'widgets/stock-control', compact('stock_counters', 'config') );
 
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	public function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/stock-control-config' );
 	}
 
 }

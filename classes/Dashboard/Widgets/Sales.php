@@ -32,9 +32,9 @@ class Sales extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('Sales', ATUM_TEXT_DOMAIN);
-		$this->description = __('Periodic Sales Statistics', ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'Sales', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'Periodic Sales Statistics', ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-sales.png';
 
 		parent::__construct();
 	}
@@ -70,15 +70,18 @@ class Sales extends AtumWidget {
 			'date_start' => 'today 00:00:00'
 		) );
 
-		Helpers::load_view( 'widgets/sales', compact('stats_this_month', 'stats_today') );
+		$config = $this->get_config();
+
+		Helpers::load_view( 'widgets/sales', compact('stats_this_month', 'stats_today', 'config') );
 
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	public function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/sales-config' );
 	}
 
 }

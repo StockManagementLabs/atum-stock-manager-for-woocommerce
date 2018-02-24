@@ -85,8 +85,10 @@ abstract class AtumWidget {
 	 * This is what will display when an admin clicks "Configure" at widget header
 	 *
 	 * @since 1.4.0
+	 *
+	 * @return string
 	 */
-	abstract public function config();
+	abstract protected function get_config();
 
 	/**
 	 * Gets the options for a widget of the specified name

@@ -32,9 +32,9 @@ class Orders extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('Orders', ATUM_TEXT_DOMAIN);
-		$this->description = __('Periodic Order and Revenue Statistics', ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'Orders', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'Periodic Order and Revenue Statistics', ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-orders.png';
 
 		parent::__construct();
 	}
@@ -87,15 +87,18 @@ class Orders extends AtumWidget {
 			'date_start' => 'today 00:00:00'
 		) );
 
-		Helpers::load_view( 'widgets/orders', compact('stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today') );
+		$config = $this->get_config();
+
+		Helpers::load_view( 'widgets/orders', compact('stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today', 'config') );
 
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	public function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/orders-config' );
 	}
 
 }

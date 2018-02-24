@@ -5,7 +5,7 @@
  * @author      Salva Machí and Jose Piera - https://sispixels.com
  * @copyright   ©2018 Stock Management Labs™
  *
- * @since       1.4.0
+ * @since       1.3.9
  *
  * Lost Sales Widget for ATUM Dashboard
  */
@@ -32,9 +32,9 @@ class LostSales extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('Lost Sales', ATUM_TEXT_DOMAIN);
-		$this->description = __('Periodic Lost Sales Statistics', ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'Lost Sales', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'Periodic Lost Sales Statistics', ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-lost-sales.png';
 
 		parent::__construct();
 	}
@@ -71,15 +71,18 @@ class LostSales extends AtumWidget {
 			'days'       => 1
 		) );
 
-		Helpers::load_view( 'widgets/lost-sales', compact('stats_this_month', 'stats_today') );
+		$config = $this->get_config();
+
+		Helpers::load_view( 'widgets/lost-sales', compact('stats_this_month', 'stats_today', 'config') );
 
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	protected function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/lost-sales-config' );
 	}
 
 }

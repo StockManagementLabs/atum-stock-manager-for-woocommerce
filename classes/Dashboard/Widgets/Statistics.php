@@ -32,9 +32,9 @@ class Statistics extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('ATUM Statistics', ATUM_TEXT_DOMAIN);
-		$this->description = __('Graphical Preview of Periodic Sales and Earnings', ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'ATUM Statistics', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'Graphical Preview of Periodic Sales and Earnings', ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-statistics.png';
 
 		parent::__construct();
 	}
@@ -61,15 +61,18 @@ class Statistics extends AtumWidget {
 			'products' => __('Products', ATUM_TEXT_DOMAIN)
 		);
 
-		Helpers::load_view( 'widgets/statistics', compact('dataset', 'period', 'legends') );
+		$config = $this->get_config();
+
+		Helpers::load_view( 'widgets/statistics', compact('dataset', 'period', 'legends', 'config') );
 
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	public function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/statistics-config' );
 	}
 
 }

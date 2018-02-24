@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Components\AtumWidget;
 use Atum\Inc\Helpers;
 
 
@@ -35,7 +36,7 @@ class Dashboard {
 	 * If the current user has no specific setup, will load the default widgets layout
 	 * @var array
 	 */
-	private $default_widgets_layout = array(
+	private static $default_widgets_layout = array(
 		ATUM_PREFIX . 'statistics_widget'    => array(
 			'x'      => 0,                              // X edge position
 			'y'      => 0,                              // Y edge position
@@ -87,10 +88,21 @@ class Dashboard {
 	);
 
 	/**
+	 * Default settings for widget grid items
+	 * @var array
+	 */
+	protected $widget_grid_item_defaults = array(
+		'id'         => '',
+		'min-width'  => 3,
+		'min-height' => 2,
+		'max-width'  => 12
+	);
+
+	/**
 	 * Widgets' layout for the current user
 	 * @var array
 	 */
-	protected $user_widgets_layout = array();
+	protected static $user_widgets_layout = array();
 
 	/**
 	 * The ATUM Dashboard admin page slug
@@ -148,10 +160,24 @@ class Dashboard {
 
 		// Load all the available widgets
 		$this->load_widgets();
-		$user_widgets_layout = $this->get_user_widgets_layout();
+		$user_widgets_layout = self::get_user_widgets_layout();
 
-		Helpers::load_view( 'dashboard', array('widgets' => $this->widgets, 'layout' => $user_widgets_layout) );
+		Helpers::load_view( 'dashboard', array('widgets' => $this->widgets, 'layout' => $user_widgets_layout, 'dashboard' => $this) );
 
+	}
+
+	/**
+	 * Add a new widget to the Dashboard
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param AtumWidget $widget
+	 * @param array      $widget_layout
+	 */
+	public function add_widget($widget, $widget_layout) {
+
+		$widget_data = Helpers::array_to_data($widget_layout, 'gs-');
+		Helpers::load_view( 'widgets/widget-wrapper', compact('widget', 'widget_data') );
 	}
 
 	/**
@@ -159,7 +185,7 @@ class Dashboard {
 	 *
 	 * @since 1.4.0
 	 */
-	private function load_widgets() {
+	public function load_widgets() {
 
 		// Allow others to add paths to overwrite existing widgets or to create new ones
 		$widgets_paths = (array) apply_filters( 'atum/dashboard/widget_paths', [ trailingslashit( trailingslashit( dirname( __FILE__ ) ) . 'Widgets' ) ] );
@@ -206,7 +232,7 @@ class Dashboard {
 
 		if ( strpos($hook, self::UI_SLUG) !== FALSE ) {
 
-			$user_widgets_layout = $this->get_user_widgets_layout();
+			$user_widgets_layout = self::get_user_widgets_layout();
 
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array('sweetalert2'), ATUM_VERSION );
@@ -320,24 +346,68 @@ class Dashboard {
 	 *
 	 * @return array
 	 */
-	public function get_user_widgets_layout() {
+	public static function get_user_widgets_layout() {
 
-		if ( empty($this->user_widgets_layout) ) {
+		if ( empty(self::$user_widgets_layout) ) {
 
 			// Load the current user's layout
 			$user_id                   = get_current_user_id();
-			$this->user_widgets_layout = get_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', TRUE );
+			self::$user_widgets_layout = get_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', TRUE );
 
 			// If the current user has no layout, load the default and save it as user meta
-			if ( $this->user_widgets_layout == '' ) {
-				$this->user_widgets_layout = $this->default_widgets_layout;
-				self::save_user_widgets_layout( $user_id, $this->user_widgets_layout );
+			if ( self::$user_widgets_layout == '' ) {
+				self::$user_widgets_layout = self::get_default_widgets_layout();
+				self::save_user_widgets_layout( $user_id, self::$user_widgets_layout );
 			}
 
 		}
 
-		return $this->user_widgets_layout;
+		return self::$user_widgets_layout;
 
+	}
+
+	/**
+	 * Getter for the default_widgets_layout prop
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return array
+	 */
+	public static function get_default_widgets_layout() {
+
+		return apply_filters('atum/dashboard/default_widgets_layout', self::$default_widgets_layout);
+	}
+
+	/**
+	 * Getter for the widgets prop
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return array
+	 */
+	public function get_widgets() {
+
+		return $this->widgets;
+	}
+
+	/**
+	 * Getter for the widget_grid_item_defaults prop
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $widget_id  Optional. If passed, the widget ID will be set to the returning array
+	 *
+	 * @return array
+	 */
+	public function get_widget_grid_item_defaults($widget_id = '') {
+
+		$widget_grid_item_defaults = $this->widget_grid_item_defaults;
+
+		if ($widget_id) {
+			$widget_grid_item_defaults['id'] = $widget_id;
+		}
+
+		return apply_filters('atum/dashboard/widget_grid_item_defaults', $widget_grid_item_defaults);
 	}
 
 

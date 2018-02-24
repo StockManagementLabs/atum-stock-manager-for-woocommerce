@@ -38,9 +38,9 @@ class Videos extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('Video Tutorials', ATUM_TEXT_DOMAIN);
-		$this->description = __("Live Feed from ATUM's YouTube Channel", ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'Video Tutorials', ATUM_TEXT_DOMAIN );
+		$this->description = __( "Live Feed from ATUM's YouTube Channel", ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-videos.png';
 
 		self::$video_tags = (array) apply_filters( 'atum/dashboard/videos_widget/filter_tags', array(
 			'atum'                => __( 'ATUM', ATUM_TEXT_DOMAIN ),
@@ -67,7 +67,9 @@ class Videos extends AtumWidget {
 	 */
 	public function render() {
 
-		Helpers::load_view( 'widgets/videos', self::get_filtered_videos() );
+		$view_atts = array_merge( self::get_filtered_videos(), [ 'config' => $this->get_config() ] );
+
+		Helpers::load_view( 'widgets/videos', $view_atts );
 
 	}
 
@@ -129,8 +131,9 @@ class Videos extends AtumWidget {
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	public function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/videos-config' );
 	}
 
 }

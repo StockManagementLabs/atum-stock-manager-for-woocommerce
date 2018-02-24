@@ -31,9 +31,9 @@ class News extends AtumWidget {
 	 */
 	public function __construct() {
 
-		$this->title = __('Latest News', ATUM_TEXT_DOMAIN);
-		$this->description = __('Live Feed about the Latest News and Blog Posts', ATUM_TEXT_DOMAIN);
-		$this->thumbnail = '';
+		$this->title       = __( 'Latest News', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'Live Feed about the Latest News and Blog Posts', ATUM_TEXT_DOMAIN );
+		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-news.png';
 
 		parent::__construct();
 	}
@@ -66,7 +66,9 @@ class News extends AtumWidget {
 			$rss_items = $sml_feed->get_items( 0, $max_items );
 		}
 
-		Helpers::load_view( 'widgets/news', compact('max_items', 'rss_items') );
+		$config = $this->get_config();
+
+		Helpers::load_view( 'widgets/news', compact('max_items', 'rss_items', 'config') );
 
 	}
 
@@ -84,8 +86,9 @@ class News extends AtumWidget {
 	/**
 	 * @inheritDoc
 	 */
-	public function config() {
-		// TODO: Implement config() method.
+	public function get_config() {
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/news-config' );
 	}
 
 }
