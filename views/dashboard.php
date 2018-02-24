@@ -133,6 +133,9 @@ defined( 'ABSPATH' ) or die;
 					</li>
 				<?php endforeach; ?>
 
+				<li class="coming-soon">
+					<img src="<?php echo ATUM_URL ?>assets/images/dashboard/atum-widgets-coming-soon.png">
+				</li>
 			</ul>
 		</script>
 	</section>

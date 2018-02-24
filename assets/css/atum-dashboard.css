@@ -3464,6 +3464,10 @@
   border-radius: 4px;
 }
 
+.add-widget-popup .widgets-list .coming-soon img {
+  max-width: 100%;
+}
+
 .add-widget-popup .scroll-element.scroll-y {
   width: 5px;
 }

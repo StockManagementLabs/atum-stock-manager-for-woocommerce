@@ -460,6 +460,12 @@ $widget-controls-hover:     #00b8db;
 			border-radius: 4px;
 		}
 		
+		.coming-soon {
+			img {
+				max-width: 100%;
+			}
+		}
+		
 	}
 	
 	.scroll-element.scroll-y {
