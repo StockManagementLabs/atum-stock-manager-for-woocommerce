@@ -44,7 +44,10 @@ final class Ajax {
 	private function __construct() {
 
 		// Save ATUM Dashboard widgets' layout
-		add_action( 'wp_ajax_atum_save_dashboard_layout', array( $this, 'save_dashboard_layout' ) );
+		add_action( 'wp_ajax_atum_dashboard_save_layout', array( $this, 'save_dashboard_layout' ) );
+
+		// Add widgets to the ATUM Dashboard
+		add_action( 'wp_ajax_atum_dashboard_add_widget', array( $this, 'add_new_widget' ) );
 
 		// Change the Statistics widget chart data
 		add_action( 'wp_ajax_atum_statistics_widget_chart', array( $this, 'statistics_widget_chart') );
@@ -127,6 +130,59 @@ final class Ajax {
 		Dashboard::save_user_widgets_layout($user_id, $layout);
 
 		wp_die();
+
+	}
+
+	/**
+	 * Add a widget to the ATUM Dashboard
+	 *
+	 * @package Dashboard
+	 *
+	 * @since 1.4.0
+	 */
+	public function add_new_widget() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		if ( empty($_POST['widget']) ) {
+			wp_json_error( __('Invalid widget', ATUM_TEXT_DOMAIN) );
+		}
+
+		$widget_id = esc_attr( $_POST['widget'] );
+		$dashboard = Dashboard::get_instance();
+		$user_widgets_layout = Dashboard::get_user_widgets_layout();
+
+		// If the widget is already present in the user's dashboard, do not continue
+		if ( in_array( $widget_id, array_keys($user_widgets_layout) ) ) {
+			wp_send_json_error( __('That widget was already added to your dashboard', ATUM_TEXT_DOMAIN) );
+		}
+
+		$dashboard->load_widgets();
+		$available_widgets = $dashboard->get_widgets();
+
+		// If there is no widget with such name, do not continue
+		if ( ! in_array( $widget_id, array_keys($available_widgets) ) ) {
+			wp_send_json_error( __('That widget is not available', ATUM_TEXT_DOMAIN) );
+		}
+
+		$widget = $available_widgets[$widget_id];
+
+		if ( ! is_a($widget, '\Atum\Components\AtumWidget') ) {
+			wp_die( __('Invalid widget', ATUM_TEXT_DOMAIN) );
+		}
+
+		ob_start();
+
+		$grid_item_settings = $dashboard->get_widget_grid_item_defaults($widget_id);
+		$dashboard->add_widget($widget, $grid_item_settings);
+		$default_widgets_layout = Dashboard::get_default_widgets_layout();
+
+		$widget_data = array(
+			'layout' => $default_widgets_layout[$widget_id],
+			'widget' => ob_get_clean()
+		);
+
+		wp_send_json_success( $widget_data );
 
 	}
 
