@@ -10,7 +10,14 @@
 	@include transition(.2s ease-in-out);
 	
 	&:hover, &:focus {
-		color: #FFF;
+		&:not(:disabled) {
+			color: #FFF;
+		}
+	}
+	
+	&:disabled {
+		cursor: default;
+		opacity: 0.7;
 	}
 	
 	&:focus {
@@ -28,7 +35,7 @@
 	color: #FFF;
 	background-color: $btn-success;
 	
-	&:hover {
+	&:hover:not(:disabled) {
 		background-color: transparentize($btn-success, 0.25);
 	}
 }
@@ -37,7 +44,7 @@
 	color: #FFF;
 	background-color: $btn-primary;
 	
-	&:hover {
+	&:hover:not(:disabled) {
 		background-color: transparentize($btn-primary, 0.25);
 	}
 }
@@ -46,8 +53,26 @@
 	color: #FFF;
 	background-color: $btn-warning;
 	
-	&:hover {
+	&:hover:not(:disabled) {
 		background-color: transparentize($btn-warning, 0.25);
+	}
+}
+
+.btn-danger {
+	color: #FFF;
+	background-color: $btn-danger;
+	
+	&:hover:not(:disabled) {
+		background-color: transparentize($btn-danger, 0.25);
+	}
+}
+
+.btn-info {
+	color: $gray-dark;
+	background-color: $btn-info;
+	
+	&:hover:not(:disabled) {
+		background-color: transparentize($btn-info, 0.25);
 	}
 }
 

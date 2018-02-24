@@ -2406,8 +2406,13 @@
   transition: 0.2s ease-in-out;
 }
 
-.btn:hover, .btn:focus {
+.btn:hover:not(:disabled), .btn:focus:not(:disabled) {
   color: #FFF;
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.7;
 }
 
 .btn:focus {
@@ -2424,7 +2429,7 @@
   background-color: #82c342;
 }
 
-.btn-success:hover {
+.btn-success:hover:not(:disabled) {
   background-color: rgba(130, 195, 66, 0.75);
 }
 
@@ -2433,7 +2438,7 @@
   background-color: #00b8db;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background-color: rgba(0, 184, 219, 0.75);
 }
 
@@ -2442,8 +2447,26 @@
   background-color: #efaf00;
 }
 
-.btn-warning:hover {
+.btn-warning:hover:not(:disabled) {
   background-color: rgba(239, 175, 0, 0.75);
+}
+
+.btn-danger {
+  color: #FFF;
+  background-color: #ff4848;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: rgba(255, 72, 72, 0.75);
+}
+
+.btn-info {
+  color: #333333;
+  background-color: #E3E8F5;
+}
+
+.btn-info:hover:not(:disabled) {
+  background-color: rgba(227, 232, 245, 0.75);
 }
 
 .btn-sm {
@@ -2739,7 +2762,7 @@
 
 .scrollbar-inner > .scroll-element.scroll-x {
   bottom: 2px;
-  height: 8px;
+  height: 5px;
   left: 0;
   width: 100%;
 }
@@ -2748,7 +2771,7 @@
   height: 100%;
   right: 2px;
   top: 0;
-  width: 8px;
+  width: 5px;
 }
 
 .scrollbar-inner > .scroll-element .scroll-element_outer {
@@ -3282,6 +3305,10 @@
   color: #00b8db;
 }
 
+.atum-dashboard .atum-widget .widget-header i.widget-settings {
+  display: none;
+}
+
 .atum-dashboard .atum-widget .widget-body p.error {
   color: #AFAFAF;
   font-size: 17px;
@@ -3296,6 +3323,30 @@
   margin: auto;
   left: 0;
   right: 0;
+}
+
+.atum-dashboard .atum-widget .widget-config {
+  display: none;
+}
+
+.atum-dashboard .atum-widget .widget-config .form-field {
+  margin: 15px auto;
+}
+
+.atum-dashboard .atum-widget .widget-config .form-field label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.atum-dashboard .atum-widget .widget-config .form-field .nice-select {
+  width: 120px;
+  max-width: 98%;
+  margin: auto;
+}
+
+.atum-dashboard .atum-widget .widget-config .config-controls {
+  border-top: 1px solid #e1e1e1;
+  padding-top: 15px;
 }
 
 .atum-dashboard .atum-widget .widget-primary {
@@ -3321,6 +3372,10 @@
   max-width: 98%;
 }
 
+.add-widget-popup .swal2-content {
+  margin-bottom: 0;
+}
+
 .add-widget-popup h2.swal2-title {
   position: relative;
   font-size: 17px;
@@ -3343,15 +3398,17 @@
 }
 
 .add-widget-popup .widgets-list {
-  margin-top: 15px;
+  margin-top: 5px;
   margin-bottom: 0;
   margin-right: 8px;
   padding-right: 5px;
-  max-height: 320px;
+  max-height: 390px;
 }
 
 .add-widget-popup .widgets-list li {
-  padding: 15px;
+  width: 90%;
+  padding: 12px 0;
+  margin: auto;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3361,6 +3418,23 @@
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
+  border-bottom: 0.5px solid rgba(225, 225, 225, 0.5);
+}
+
+.add-widget-popup .widgets-list li:first-child {
+  padding-top: 3px;
+}
+
+.add-widget-popup .widgets-list li.added .add-widget {
+  display: none;
+}
+
+.add-widget-popup .widgets-list li.not-added .btn-info {
+  display: none;
+}
+
+.add-widget-popup .widgets-list li button, .add-widget-popup .widgets-list li button:hover, .add-widget-popup .widgets-list li button:focus, .add-widget-popup .widgets-list li button:active, .add-widget-popup .widgets-list li button.nice-select.open {
+  display: inline-block;
 }
 
 .add-widget-popup .widgets-list .widget-details {
@@ -3383,6 +3457,11 @@
   font-size: 12px;
   color: #AFAFAF;
   margin-top: 4px;
+}
+
+.add-widget-popup .widgets-list img {
+  max-width: 120px;
+  border-radius: 4px;
 }
 
 .add-widget-popup .scroll-element.scroll-y {

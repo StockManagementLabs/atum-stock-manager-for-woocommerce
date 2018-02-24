@@ -301,6 +301,11 @@ $widget-controls-hover:     #00b8db;
 				&:hover {
 					color: $widget-controls-hover;
 				}
+				
+				// TODO: For the next version
+				&.widget-settings {
+					display: none;
+				}
 			}
 			
 		}
@@ -314,6 +319,31 @@ $widget-controls-hover:     #00b8db;
 				margin: auto;
 				left: 0;
 				right: 0;
+			}
+		}
+		
+		// Widget config
+		.widget-config {
+			display: none;
+			
+			.form-field {
+				margin: $grid-gutter-width/2 auto;
+				
+				label {
+					display: block;
+					margin-bottom: 10px;
+				}
+				
+				.nice-select {
+					width: 120px;
+					max-width: 98%;
+					margin: auto;
+				}
+			}
+			
+			.config-controls {
+				border-top: 1px solid $gray-light;
+				padding-top: $grid-gutter-width/2;
 			}
 		}
 		
@@ -343,6 +373,10 @@ $widget-controls-hover:     #00b8db;
 	min-height: 0 !important;
 	max-width: 98%;
 	
+	.swal2-content {
+		margin-bottom: 0;
+	}
+	
 	h2.swal2-title {
 		position: relative;
 		font-size: 17px;
@@ -365,16 +399,42 @@ $widget-controls-hover:     #00b8db;
 	}
 	
 	.widgets-list {
-		margin-top: $grid-gutter-width/2;
+		margin-top: 5px;
 		margin-bottom: 0;
 		margin-right: 8px;
 		padding-right: 5px;
-		max-height: 320px;
+		max-height: 390px;
 		
 		li {
-			padding: $grid-gutter-width/2;
+			width: 90%;
+			padding: 12px 0;
+			margin: auto;
 			@include flexbox;
 			@include flex-align-items(center);
+			border-bottom: 0.5px solid transparentize($gray-light, 0.5);
+			
+			&:first-child {
+				padding-top: 3px;
+			}
+			
+			&.added {
+				.add-widget {
+					display: none;
+				}
+			}
+			
+			&.not-added {
+				.btn-info {
+					display: none;
+				}
+			}
+			
+			// Fix for strange shadow below button
+			button {
+				&, &:hover, &:focus, &:active {
+					display: inline-block;
+				}
+			}
 		}
 		
 		.widget-details {
@@ -395,8 +455,9 @@ $widget-controls-hover:     #00b8db;
 			}
 		}
 		
-		.add-widget {
-		
+		img {
+			max-width: 120px;
+			border-radius: 4px;
 		}
 		
 	}
