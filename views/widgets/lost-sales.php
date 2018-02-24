@@ -40,3 +40,5 @@
 	</div>
 
 </div>
+
+<?php echo $config ?>
