@@ -1355,5 +1355,22 @@ final class Helpers {
 		$product->save();
 		
 	}
+
+	/**
+	 * Converts an associative array to HTML data attributes
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array  $array   The array to convert
+	 * @param string $prefix  Optional. Prefix for the data key names
+	 *
+	 * @return string
+	 */
+	public static function array_to_data($array, $prefix = '') {
+
+		$data_array = array_map( function($key, $value) use ($prefix){ return "data-{$prefix}{$key}='$value'"; }, array_keys($array), $array );
+
+		return implode(' ', $data_array);
+	}
 	
 }
