@@ -43,50 +43,52 @@
 
 			</div>
 
-			<div class="scrollbar-inner">
-				<?php foreach ($videos as $index => $video):
+			<div class="scroll-box">
+				<div class="scroll-wrap">
+					<?php foreach ($videos as $index => $video):
 
-					$video_snippet = $video->snippet;
-					$tags = array_map('sanitize_title', $video_snippet->tags); ?>
+						$video_snippet = $video->snippet;
+						$tags = array_map('sanitize_title', $video_snippet->tags); ?>
 
-					<article class="<?php echo implode(' ', $tags) ?><?php if ($index == 0) echo ' active' ?>" data-video="<?php echo $video->id ?>">
+						<article class="<?php echo implode(' ', $tags) ?><?php if ($index == 0) echo ' active' ?>" data-video="<?php echo $video->id ?>">
 
-						<a href="#" class="video-thumb">
+							<a href="#" class="video-thumb">
 
-							<img src="<?php echo $video_snippet->thumbnails->medium->url ?>" alt="">
+								<img src="<?php echo $video_snippet->thumbnails->medium->url ?>" alt="">
 
-							<time>
-								<?php
-								$start = new \DateTime('@0'); // Unix epoch
-								$start->add( new \DateInterval($video->contentDetails->duration) );
-								echo $start->format('i:s');
-								?>
-							</time>
+								<time>
+									<?php
+									$start = new \DateTime('@0'); // Unix epoch
+									$start->add( new \DateInterval($video->contentDetails->duration) );
+									echo $start->format('i:s');
+									?>
+								</time>
 
-						</a>
+							</a>
 
-						<div class="video-details">
+							<div class="video-details">
 
-							<a href="#" class="video-title" title="<?php echo $video_snippet->title ?>"><?php echo $video_snippet->title ?></a>
+								<a href="#" class="video-title" title="<?php echo $video_snippet->title ?>"><?php echo $video_snippet->title ?></a>
 
-							<div class="video-meta">
-								<?php
-								printf( __('%d Views', ATUM_TEXT_DOMAIN), $video->statistics->viewCount );
+								<div class="video-meta">
+									<?php
+									printf( __('%d Views', ATUM_TEXT_DOMAIN), $video->statistics->viewCount );
 
-								$timeAgo = new \Westsworld\TimeAgo();
-								echo ' · ' . $timeAgo->inWords( $video_snippet->publishedAt );
-								?>
+									$timeAgo = new \Westsworld\TimeAgo();
+									echo ' · ' . $timeAgo->inWords( $video_snippet->publishedAt );
+									?>
+								</div>
+
+								<div class="video-desc">
+									<?php echo $video_snippet->description ?>
+								</div>
+
 							</div>
 
-							<div class="video-desc">
-								<?php echo $video_snippet->description ?>
-							</div>
+						</article>
 
-						</div>
-
-					</article>
-
-				<?php endforeach; ?>
+					<?php endforeach; ?>
+				</div>
 			</div>
 		</div>
 
@@ -95,11 +97,13 @@
 			<div class="channel-info">
 
 				<span>
-					<img src="<?php echo $channel->snippet->thumbnails->default->url ?>" alt="">
-					<h3>
-						<?php echo $channel->snippet->title ?>
-						<span class="subscriptions"><?php printf( '%d Subscriptions', $channel->statistics->subscriberCount ) ?></span>
-					</h3>
+					<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" target="_blank">
+						<img src="<?php echo $channel->snippet->thumbnails->default->url ?>" alt="">
+						<h3>
+							<?php echo $channel->snippet->title ?>
+							<span class="subscriptions"><?php printf( '%d Subscriptions', $channel->statistics->subscriberCount ) ?></span>
+						</h3>
+					</a>
 				</span>
 
 				<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" class="btn btn-primary pill channel-subscribe" target="_blank"><?php _e('Subscribe Now', ATUM_TEXT_DOMAIN) ?></a>

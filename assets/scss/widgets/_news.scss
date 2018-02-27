@@ -10,9 +10,11 @@
 
 .news-widget {
 	
-	.scrollbar-inner {
-		.scroll-content {
-			padding-right: 13px;
+	.scroll-box {
+		max-height: 350px;
+		
+		.scroll-wrap {
+			padding-right: 10px;
 		}
 	}
 	
