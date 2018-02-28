@@ -9,10 +9,19 @@ $card-bg:                   #FFF;
 $card-text:                 #afafaf;
 $add-widget-color:          #CCC;
 $widget-bg:                 #FFF;
-$widget-drag-icon:          #e1e1e1;
+$widget-icon:               #e1e1e1;
 $widget-controls:           $card-text;
 $widget-controls-hover:     #00b8db;
 
+
+// Style the WP notices
+body.toplevel_page_atum-dashboard {
+	#wpbody-content {
+		> .notice-error, > .notice-info, > .notice-success, > .notice-warning, > .error, > .updated, > .notice{
+			margin: 0 0 0 -20px;
+		}
+	}
+}
 
 .atum-dashboard {
 	margin-left: -20px;
@@ -36,11 +45,19 @@ $widget-controls-hover:     #00b8db;
 			left: 0;
 			top: 0;
 			padding: $grid-gutter-width/2;
+			
+			@media all and (max-width: $screen-sm-min) {
+				right: 0;
+			}
 		}
 		
 		img {
 			max-width: 320px;
 			margin-bottom: 5px;
+			
+			@media all and (max-width: $screen-xs-min) {
+				max-width: 220px;
+			}
 		}
 		
 		h3 {
@@ -48,6 +65,10 @@ $widget-controls-hover:     #00b8db;
 			font-weight: 200;
 			width: 100%;
 			margin: 0;
+			
+			@media all and (max-width: $screen-xs-min) {
+				font-size: 15px;
+			}
 		}
 		
 		.dash-header-notice {
@@ -62,17 +83,29 @@ $widget-controls-hover:     #00b8db;
 				color: $brand-primary;
 			}
 			
+			@media all and (max-width: $screen-sm-min) {
+				right: 0;
+			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				font-size: 10px;
+				line-height: 1.3;
+			}
+			
 		}
 		
 	}
 	
 	// Dashboard Cards
 	.dash-cards {
-		@include flexbox;
+		
+		@media all and (min-width: $screen-xs-max) {
+			@include flexbox;
+		}
 		
 		.dash-card {
-			margin: $grid-gutter-width $grid-gutter-width/2;
-			width: 33%;
+			margin: $grid-gutter-width $grid-gutter-width/4;
+			width: 33.3333%;
 			border: 1px solid $card-border;
 			border-radius: 5px;
 			background: $card-bg center 1px;
@@ -86,6 +119,17 @@ $widget-controls-hover:     #00b8db;
 			
 			&:last-child {
 				margin-right: $grid-gutter-width;
+			}
+			
+			@media all and (max-width: $screen-sm-min) {
+				margin-top: $grid-gutter-width/2;
+				margin-bottom: $grid-gutter-width/2;
+			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				width: 100%;
+				margin-left: 0 !important;
+				margin-right: 0 !important;
 			}
 			
 			.card-content {
@@ -124,6 +168,10 @@ $widget-controls-hover:     #00b8db;
 					padding: 4px 10px;
 					font-size: 10px;
 				}
+				
+				@media all and (max-width: $screen-sm-min) {
+					width: 91%;
+				}
 			}
 			
 			.card-img {
@@ -132,6 +180,10 @@ $widget-controls-hover:     #00b8db;
 				
 				img {
 					position: absolute;
+				}
+				
+				@media all and (max-width: $screen-sm-min) {
+					display: none;
 				}
 			}
 			
@@ -191,10 +243,18 @@ $widget-controls-hover:     #00b8db;
 						font-weight: 300;
 						border-radius: 15px;
 						@include flex-grow(1);
+						
+						@media all and (max-width: $screen-sm-min) {
+							padding: 6px 10px;
+						}
 					}
 					
 					button {
 						font-size: 10px;
+					}
+					
+					@media all and (max-width: $screen-xs-min) {
+						margin-bottom: $grid-gutter-width/2;
 					}
 					
 				}
@@ -270,7 +330,7 @@ $widget-controls-hover:     #00b8db;
 			
 			&:before {
 				content: '...';
-				color: $widget-drag-icon;
+				color: $widget-icon;
 				font-size: 63px;
 				@include vertical-align-absolute;
 				left: 17px;
@@ -362,6 +422,60 @@ $widget-controls-hover:     #00b8db;
 		.widget-danger {
 			color: $widget-danger;
 		}
+		
+		@media all and (max-width: $screen-sm-min) {
+			margin-bottom: $grid-gutter-width/2 !important;
+		}
+		
+		@media all and (max-width: $screen-xs-min) {
+			min-height: 345px !important;
+			
+			&.atum_statistics_widget {
+				min-height: 460px !important;
+			}
+			
+			&.atum_stock_control_widget {
+				min-height: 400px !important;
+			}
+			
+			&.atum_videos_widget {
+				min-height: 480px !important;
+			}
+			
+		}
+	}
+	
+	// Owl carousel styling
+	.owl-dots {
+		margin-top: -10px !important;
+		margin-bottom: $grid-gutter-width/2;
+		
+		.owl-dot {
+			span {
+				width: 8px;
+				height: 8px;
+				margin-right: 3px;
+				margin-left: 3px;
+				border: 1px solid $widget-icon;
+				background-color: transparent;
+				box-sizing: border-box;
+			}
+			
+			&.active {
+				span {
+					background-color: $widget-icon;
+				}
+			}
+		}
+	}
+	
+	.scroll-box {
+		overflow: hidden;
+	}
+	
+	.nicescroll-rails {
+		border-radius: 3px;
+		margin-left: 10px;
 	}
 	
 }
@@ -372,6 +486,7 @@ $widget-controls-hover:     #00b8db;
 	padding-right: 0 !important;
 	min-height: 0 !important;
 	max-width: 98%;
+	overflow: hidden;
 	
 	.swal2-content {
 		margin-bottom: 0;
@@ -417,6 +532,10 @@ $widget-controls-hover:     #00b8db;
 				padding-top: 3px;
 			}
 			
+			&:last-child {
+				border-bottom: none;
+			}
+			
 			&.added {
 				.add-widget {
 					display: none;
@@ -435,6 +554,13 @@ $widget-controls-hover:     #00b8db;
 					display: inline-block;
 				}
 			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				@include flex-wrap(wrap);
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+			
 		}
 		
 		.widget-details {
@@ -453,11 +579,21 @@ $widget-controls-hover:     #00b8db;
 				color: $widget-text;
 				margin-top: 4px;
 			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				padding-top: 10px;
+				margin-left: 0;
+				max-width: 70%;
+			}
 		}
 		
 		img {
 			max-width: 120px;
 			border-radius: 4px;
+			
+			@media all and (max-width: $screen-xs-min) {
+				max-width: 100%;
+			}
 		}
 		
 		.coming-soon {
@@ -468,8 +604,12 @@ $widget-controls-hover:     #00b8db;
 		
 	}
 	
-	.scroll-element.scroll-y {
-		width: 5px;
+}
+
+.swal2-container {
+	.nicescroll-rails {
+		border-radius: 3px;
+		margin-left: -$grid-gutter-width/2;
+		margin-top: 7px;
 	}
-	
 }

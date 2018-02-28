@@ -8,6 +8,20 @@
 
 <div class="statistics-widget">
 
+	<nav class="mobile-filter-nav">
+		<ul>
+			<li data-show-filter=".filter-controls">
+				<i class="lnr lnr-funnel"></i> <span><?php _e('Filters', ATUM_TEXT_DOMAIN) ?></span> <span class="status">+</span>
+			</li>
+			<li data-show-filter=".chart-type">
+				<i class="lnr lnr-chart-bars"></i> <span><?php _e('Chart Type', ATUM_TEXT_DOMAIN) ?></span> <span class="status">+</span>
+			</li>
+			<li data-show-filter=".chart-legend">
+				<i class="lnr lnr-layers"></i> <span><?php _e('Layers', ATUM_TEXT_DOMAIN) ?></span> <span class="status">+</span>
+			</li>
+		</ul>
+	</nav>
+
 	<div class="chart-filter">
 
 		<div class="filter-controls">

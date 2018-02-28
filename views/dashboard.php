@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
 		</div>
 	</section>
 
-	<section class="dash-cards">
+	<section class="dash-cards owl-carousel owl-theme">
 
 		<div class="dash-card docs">
 
@@ -115,28 +115,30 @@ defined( 'ABSPATH' ) or die;
 		<i class="lnr lnr-plus-circle"></i> <h2><?php _e('Add More Widgets', ATUM_TEXT_DOMAIN) ?></h2>
 
 		<script type="text/template" id="tmpl-atum-modal-add-widgets">
-			<ul class="widgets-list scrollbar-inner">
+			<div class="scroll-box">
+				<ul class="widgets-list">
 
-				<?php foreach ($widgets as $widget_name => $widget): ?>
-					<li data-widget="<?php echo $widget_name ?>" class="<?php echo ( ! empty($layout) && is_array($layout) && ! in_array($widget_name, array_keys($layout)) ) ? 'not-added' : 'added' ?>">
-						<img src="<?php echo $widget->get_thumbnail() ?>">
+					<?php foreach ($widgets as $widget_name => $widget): ?>
+						<li data-widget="<?php echo $widget_name ?>" class="<?php echo ( empty($layout) || ! is_array($layout) || ! in_array($widget_name, array_keys($layout)) ) ? 'not-added' : 'added' ?>">
+							<img src="<?php echo $widget->get_thumbnail() ?>">
 
-						<div class="widget-details">
-							<h3><?php echo $widget->get_title() ?></h3>
-							<p><?php echo $widget->get_description() ?></p>
-						</div>
+							<div class="widget-details">
+								<h3><?php echo $widget->get_title() ?></h3>
+								<p><?php echo $widget->get_description() ?></p>
+							</div>
 
-						<div>
-							<button type="button" class="add-widget btn btn-primary btn-sm pill"><?php _e('Add Widget', ATUM_TEXT_DOMAIN) ?></button>
-							<button type="button" class="btn btn-info btn-sm pill" disabled><i class="lnr lnr-checkmark-circle"></i> <?php _e('Added', ATUM_TEXT_DOMAIN) ?></button>
-						</div>
+							<div>
+								<button type="button" class="add-widget btn btn-primary btn-sm pill"><?php _e('Add Widget', ATUM_TEXT_DOMAIN) ?></button>
+								<button type="button" class="btn btn-info btn-sm pill" disabled><i class="lnr lnr-checkmark-circle"></i> <?php _e('Added', ATUM_TEXT_DOMAIN) ?></button>
+							</div>
+						</li>
+					<?php endforeach; ?>
+
+					<li class="coming-soon">
+						<img src="<?php echo ATUM_URL ?>assets/images/dashboard/atum-widgets-coming-soon.png">
 					</li>
-				<?php endforeach; ?>
-
-				<li class="coming-soon">
-					<img src="<?php echo ATUM_URL ?>assets/images/dashboard/atum-widgets-coming-soon.png">
-				</li>
-			</ul>
+				</ul>
+			</div>
 		</script>
 	</section>
 

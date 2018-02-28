@@ -235,7 +235,9 @@ class Dashboard {
 			$user_widgets_layout = self::get_user_widgets_layout();
 
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array('sweetalert2'), ATUM_VERSION );
+			wp_register_style( 'owl.carousel', ATUM_URL . 'assets/css/vendor/owl.carousel.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'owl.carousel.theme', ATUM_URL . 'assets/css/vendor/owl.theme.default.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array('sweetalert2', 'owl.carousel', 'owl.carousel.theme'), ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
@@ -258,14 +260,19 @@ class Dashboard {
 			Helpers::maybe_es6_promise();
 
 			/*
-			 * jQuery.scrollbar
+			 * NiceScroll
 			 */
-			wp_register_script( 'jquery-scrollbar', ATUM_URL . 'assets/js/vendor/jquery.scrollbar.min.js', array('jquery'), ATUM_VERSION, TRUE );
+			wp_register_script( 'jquery.nicescroll', ATUM_URL . 'assets/js/vendor/jquery.nicescroll.min.js', array('jquery'), ATUM_VERSION, TRUE );
+
+			/*
+			 * Owl Carousel
+			 */
+			wp_register_script( 'owl.carousel', ATUM_URL . 'assets/js/vendor/owl.carousel.min.js', array('jquery'), ATUM_VERSION, TRUE );
 
 			/*
 			 * Dependencies
 			 */
-			$deps = array('gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-scrollbar');
+			$deps = array('gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery.nicescroll', 'owl.carousel');
 
 			/*
 			 * Widgets scripts
@@ -351,7 +358,7 @@ class Dashboard {
 		if ( empty(self::$user_widgets_layout) ) {
 
 			// Load the current user's layout
-			$user_id                   = get_current_user_id();
+			$user_id = get_current_user_id();
 			self::$user_widgets_layout = get_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', TRUE );
 
 			// If the current user has no layout, load the default and save it as user meta

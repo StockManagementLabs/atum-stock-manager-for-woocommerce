@@ -13,8 +13,8 @@
 	.scroll-box {
 		max-height: 350px;
 		
-		.scroll-wrap {
-			padding-right: 10px;
+		@media all and (max-width: $screen-xs-min) {
+			max-height: 250px;
 		}
 	}
 	

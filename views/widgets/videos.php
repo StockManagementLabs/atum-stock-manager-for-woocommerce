@@ -43,14 +43,16 @@
 
 			</div>
 
-			<div class="scroll-box">
-				<div class="scroll-wrap">
+			<div class="video-list-wrapper">
+				<div class="carousel-nav-prev disabled"><i class="lnr lnr-chevron-left"></i></div>
+
+				<div class="scroll-box">
 					<?php foreach ($videos as $index => $video):
 
 						$video_snippet = $video->snippet;
 						$tags = array_map('sanitize_title', $video_snippet->tags); ?>
 
-						<article class="<?php echo implode(' ', $tags) ?><?php if ($index == 0) echo ' active' ?>" data-video="<?php echo $video->id ?>">
+						<article class="<?php echo implode(' ', $tags) ?><?php if ( (! defined('DOING_AJAX') || !DOING_AJAX) && $index == 0 ) echo ' active' ?>" data-video="<?php echo $video->id ?>">
 
 							<a href="#" class="video-thumb">
 
@@ -89,6 +91,8 @@
 
 					<?php endforeach; ?>
 				</div>
+
+				<div class="carousel-nav-next"><i class="lnr lnr-chevron-right"></i></div>
 			</div>
 		</div>
 

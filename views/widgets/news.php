@@ -10,43 +10,41 @@
 	<?php if ($max_items > 0) : ?>
 
 		<div class="scroll-box">
-			<div class="scroll-wrap">
-				<?php foreach ( $rss_items as $item ) : ?>
-					<article>
+			<?php foreach ( $rss_items as $item ) : ?>
+				<article>
 
-						<a href="<?php echo esc_url( $item->get_permalink() ) ?>" class="post-thumb">
+					<a href="<?php echo esc_url( $item->get_permalink() ) ?>" class="post-thumb">
+						<?php
+						$attachment = $item->get_enclosure();
+
+						if ( ! empty($attachment) && ! empty($attachment->link) ): ?>
+							<div class="thumb">
+								<div style="background-image: url('<?php echo $attachment->link ?>')"></div>
+							</div>
+						<?php endif ?>
+					</a>
+
+					<div class="post-details">
+
+						<a href="<?php echo esc_url( $item->get_permalink() ) ?>" class="post-title" title="<?php echo esc_attr( $item->get_title() ) ?>" target="_blank"><?php echo $item->get_title() ?></a>
+
+						<div class="post-meta">
 							<?php
-							$attachment = $item->get_enclosure();
+							echo $item->get_author()->name;
 
-							if ( ! empty($attachment) && ! empty($attachment->link) ): ?>
-								<div class="thumb">
-									<div style="background-image: url('<?php echo $attachment->link ?>')"></div>
-								</div>
-							<?php endif ?>
-						</a>
-
-						<div class="post-details">
-
-							<a href="<?php echo esc_url( $item->get_permalink() ) ?>" class="post-title" title="<?php echo esc_attr( $item->get_title() ) ?>" target="_blank"><?php echo $item->get_title() ?></a>
-
-							<div class="post-meta">
-								<?php
-								echo $item->get_author()->name;
-
-								$timeAgo = new \Westsworld\TimeAgo();
-								echo ' · ' . $timeAgo->inWords( $item->get_date() );
-								?>
-							</div>
-
-							<div class="post-excerpt">
-								<?php echo $item->get_content() ?>
-							</div>
-
+							$timeAgo = new \Westsworld\TimeAgo();
+							echo ' · ' . $timeAgo->inWords( $item->get_date() );
+							?>
 						</div>
 
-					</article>
-				<?php endforeach; ?>
-				</div>
+						<div class="post-excerpt">
+							<?php echo $item->get_content() ?>
+						</div>
+
+					</div>
+
+				</article>
+			<?php endforeach; ?>
 		</div>
 
 	<?php else: ?>

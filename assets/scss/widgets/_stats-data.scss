@@ -11,6 +11,10 @@
 		margin-top: $grid-gutter-width*2;
 		width: 100%;
 		@include flex-grow(1);
+		
+		@media all and (max-width: $screen-sm-min) {
+			margin-top: $grid-gutter-width/2;
+		}
 	}
 	
 	h3, h5 {
@@ -36,6 +40,14 @@
 			bottom: none;
 		}
 		margin: $grid-gutter-width 0;
+	}
+	
+	.nice-select {
+		@media all and (max-width: $screen-xs-min) {
+			font-size: 12px;
+			height: 36px;
+			line-height: 34px;
+		}
 	}
 	
 }

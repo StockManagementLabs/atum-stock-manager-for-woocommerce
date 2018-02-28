@@ -44,6 +44,63 @@
 			this.bindConfigControls();
 			this.initWidgets();
 			
+			$(window).resize(function() {
+				
+				var width      = $(window).width(),
+				    $dashCards = $('.dash-cards'),
+					$videoList = $('.video-list-wrapper');
+				
+				if (width <= 480) {
+					
+					// Apply the caousel to dashboard cards in mobiles
+					$dashCards.addClass('owl-carousel owl-theme').owlCarousel({
+						items       : 1,
+						margin      : 15,
+						//autoplay: true,
+						stagePadding: 30,
+					});
+					
+					var videoCarousel = $videoList.find('.scroll-box').addClass('owl-carousel owl-theme').owlCarousel({
+						items       : 2,
+						margin      : 1,
+						dots        : false,
+						stagePadding: 15
+					});
+					
+					// Video Carousel nav
+					var $videoNextNav = $videoList.find('.carousel-nav-next'),
+					    $videoPrevNav = $videoList.find('.carousel-nav-prev');
+					
+					$videoNextNav.click(function() {
+						videoCarousel.trigger('next.owl.carousel');
+					});
+					
+					$videoPrevNav.click(function() {
+						videoCarousel.trigger('prev.owl.carousel');
+					});
+					
+					videoCarousel.on('changed.owl.carousel', function(event) {
+						if (event.item.index === 0) {
+							$videoPrevNav.addClass('disabled');
+						}
+						else if (event.item.index === event.item.count - 2) {
+							$videoNextNav.addClass('disabled');
+						}
+						else {
+							$videoPrevNav.add($videoNextNav).removeClass('disabled');
+						}
+					});
+					
+				}
+				else {
+					
+					// Remove the carousel in screens wider than mobile
+					$('.owl-carousel').removeClass('owl-carousel owl-theme').trigger('destroy.owl.carousel');
+						
+				}
+			
+			}).resize();
+			
 		},
 		buildWidgetsGrid: function() {
 			
@@ -84,7 +141,15 @@
 					customClass      : 'add-widget-popup',
 					width            : '620px',
 					onOpen           : function (elem) {
-						self.addScrollBars();
+						
+						// Wait until the show animation is complete
+						setTimeout(function() {
+							self.addScrollBars($(elem));
+						}, 300);
+						
+					},
+					onClose          : function(elem) {
+						self.removeScrollBars($(elem));
 					}
 				}).catch(swal.noop);
 			
@@ -524,6 +589,25 @@
 					
 				});
 				
+				// Mobile filter nav
+				$statisticsWidget.find('.mobile-filter-nav li').click(function() {
+				
+					var $navItem = $(this);
+					
+					if ($navItem.hasClass('active')) {
+						$navItem.removeClass('active').find('.status').text('+');
+						$statisticsWidget.find('.chart-filter .visible-filter').removeClass('visible-filter');
+					}
+					else {
+						$navItem.siblings('.active').removeClass('active').find('.status').text('+');
+						$navItem.addClass('active').find('.status').text('-');
+						
+						$statisticsWidget.find('.chart-filter .visible-filter').removeClass('visible-filter');
+						$statisticsWidget.find( $navItem.data('show-filter') ).addClass('visible-filter');
+					}
+				
+				});
+				
 			}
 			
 		},
@@ -614,10 +698,9 @@
 								
 								    // Set Text
 								    if (tooltip.body) {
-									    var titleLines = tooltip.title || [];
-									    var bodyLines = tooltip.body.map(getBody);
-									
-									    var innerHtml = '<thead>';
+									    var titleLines = tooltip.title || [],
+									        bodyLines  = tooltip.body.map(getBody),
+									        innerHtml  = '<thead>';
 									
 									    titleLines.forEach(function (title) {
 										    innerHtml += '<tr><th>' + title + '</th></tr>';
@@ -662,19 +745,21 @@
 				$videoWidget = $('.videos-widget');
 			
 			// Video Switcher
-			$videoWidget.find('article a').click(function(e) {
+			$videoWidget.on('click', 'article a', function(e) {
 				e.preventDefault();
 				
-				var $videoWrapper = $(this).closest('article'),
-				    $videoPlayer  = $videoWidget.find('.video-player');
+				var $videoItem   = $(this).closest('article'),
+				    $videoPlayer = $videoWidget.find('.video-player'),
+				    videoId      = $videoItem.data('video');
 				
-				$videoWrapper.siblings('.active').removeClass('active');
-				$videoWrapper.addClass('active');
+				$videoItem.siblings('.active').removeClass('active');
+				$videoItem.addClass('active');
 				
-				$videoPlayer.find('iframe').attr('src', '//www.youtube.com/embed/' + $videoWrapper.data('video') + '?rel=0&modestbranding=1');
-				$videoPlayer.find('.video-title').text($videoWrapper.find('.video-title').text());
-				$videoPlayer.find('.video-meta').html($videoWrapper.find('.video-meta').html());
-				$videoPlayer.find('.video-desc').text($videoWrapper.find('.video-desc').text());
+				$videoPlayer.find('iframe').attr('src', '//www.youtube.com/embed/' + videoId + '?rel=0&modestbranding=1');
+				$videoPlayer.find('.video-title').text($videoItem.find('.video-title').text());
+				$videoPlayer.find('.video-meta').html($videoItem.find('.video-meta').html());
+				$videoPlayer.find('.video-desc').text($videoItem.find('.video-desc').text());
+				$videoItem.data('video', videoId);
 			});
 			
 			// Video Layout Switcher
@@ -687,6 +772,13 @@
 				}
 				
 				$videoWidget.find('.video-list').attr('data-view', $button.data('view'));
+				
+				self.removeScrollBars($videoWidget);
+				
+				setTimeout(function() {
+					self.addScrollBars($videoWidget);
+				}, 400);
+				
 				$button.siblings('.active').removeClass('active');
 				$button.addClass('active');
 			});
@@ -703,29 +795,29 @@
 				e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
 				
 				var sortBy         = $(this).val(),
-				    $videosWrapper = $videoWidget.find('.scroll-wrapper');
+				    $videosWrapper = $videoWidget.find('.scroll-box');
 				
 				$.ajax({
-					url: ajaxurl,
-					method: 'POST',
-					data: {
-						token: self.$widgetsContainer.data('nonce'),
+					url       : ajaxurl,
+					method    : 'POST',
+					data      : {
+						token : self.$widgetsContainer.data('nonce'),
 						action: 'atum_videos_widget_sorting',
 						sortby: sortBy
 					},
-					beforeSend: function() {
+					beforeSend: function () {
 						$videosWrapper.addClass('overlay');
 					},
-					success: function(response) {
+					success   : function (response) {
 						
 						if (response != -1) {
-							$videosWrapper.children('.scrollbar-inner').html($(response).find('.scrollbar-inner').html());
+							$videosWrapper.html($(response).find('.scroll-box').html());
 							self.filterVideos($videoWidget);
 						}
 						
 						$videosWrapper.removeClass('overlay');
 					},
-					error: function() {
+					error     : function () {
 						$videosWrapper.removeClass('overlay');
 					}
 				});
@@ -812,26 +904,38 @@
 			return chartLabels;
 			
 		},
-		addScrollBars: function() {
+		getScrollBars: function($elem) {
+			return (typeof $elem !== 'undefined') ? $elem.find('.scroll-box') : this.$widgetsContainer.find('.scroll-box');
+		},
+		addScrollBars: function($elem) {
 			
-			if ($('.scroll-wrapper').length) {
-				$('.scrollbar-inner').scrollbar('destroy');
+			var $boxSelector  = this.getScrollBars($elem);
+			
+			if ($boxSelector.length) {
+				$boxSelector.niceScroll({
+					cursorcolor       : '#e1e1e1',
+					cursoropacitymin  : 0.8,
+					cursorwidth       : '4px',
+					cursorborderradius: '3px',
+					background        : 'rgba(225, 225, 225, 0.3)',
+					bouncescroll      : false
+				});
 			}
 			
-			$('.scrollbar-inner').scrollbar({
-				disableBodyScroll: true,
-				onInit: function() {
-					
-					$('.scroll-wrapper').each(function () {
-						var $scrollWrapper = $(this),
-						    $currentWidget = $scrollWrapper.closest('.atum-widget');
-						
-						$scrollWrapper.css('max-height', $currentWidget.height() - $currentWidget.find('.widget-header').outerHeight() - 37  + 'px');
-					});
-					
-				}
-			});
+		},
+		removeScrollBars: function($elem) {
+			var $boxSelector = this.getScrollBars($elem);
 			
+			if ($boxSelector.length) {
+				$boxSelector.getNiceScroll().remove();
+			}
+		},
+		resizeScrollBars: function($elem) {
+			var $boxSelector = this.getScrollBars($elem);
+			
+			if ($boxSelector.length) {
+				$boxSelector.getNiceScroll().resize();
+			}
 		}
 	} );
 	
