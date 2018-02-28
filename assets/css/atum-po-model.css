@@ -1,0 +1,117 @@
+/** 
+ * ATUM Stock Manager for WooCommerce CSS 
+ * @version 1.3.2 
+ * @authors Salva Machí and Jose Piera 
+ *
+ * Author URI: https://sispixels.com/ 
+ * License : ©2017 Stock Management Labs 
+ */ 
+
+.po-wrapper {
+  width: calc(100% - 40px);
+  padding: 30px 20px 20px 20px;
+  font-size: 14px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.content-header .float-right {
+  text-align: right;
+  width: 250px;
+}
+
+.content-header .float-left {
+  width: 60%;
+}
+
+.content-header strong {
+  font-size: 20px;
+}
+
+.po-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 25px;
+  color: #0073AA;
+}
+
+.content-address .float-left {
+  width: 40%;
+}
+
+.content-address .float-right {
+  width: 40%;
+}
+
+.content-address h4 {
+  font-size: 18px;
+  background-color: #0073AA;
+  color: #FFF;
+  padding: 5px 10px;
+  margin: 0;
+}
+
+.content-lines {
+  padding: 0 20px;
+}
+
+.content-lines table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.content-lines .po-li-head {
+  background-color: #0073AA;
+}
+
+.content-lines .po-li-head th {
+  color: #FFF;
+}
+
+.content-lines th, .content-lines td {
+  font-size: 14px;
+  text-align: right;
+  width: 10%;
+  white-space: nowrap;
+  padding: 5px 10px;
+}
+
+.content-lines .description {
+  text-align: left;
+}
+
+.content-lines .qty {
+  text-align: center;
+}
+
+.content-lines td.total, .content-lines .po-lines tr:nth-child(even) td {
+  background-color: rgba(0, 115, 170, 0.1);
+}
+
+.content-totals .subtotal td {
+  border-top: 2px solid #0073AA;
+  padding-top: 20px;
+}
+
+.po-total .label, .po-total .total {
+  border-top: 2px solid #0073AA;
+  font-weight: bold;
+}
+
+.po-content {
+  border: 1px solid #DDDDDD;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/*# sourceMappingURL=atum-po-model.css.map */

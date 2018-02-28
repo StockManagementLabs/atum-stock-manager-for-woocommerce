@@ -18,7 +18,7 @@
  * Tested up to:         4.9.4
  * Requires PHP:         5.6
  * WC requires at least: 3.0.0
- * WC tested up to:      3.3.2
+ * WC tested up to:      3.3.3
  * Text Domain:          atum
  * Domain Path:          /languages
  * License:              GPLv2 or later

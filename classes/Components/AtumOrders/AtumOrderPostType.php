@@ -41,6 +41,12 @@ abstract class AtumOrderPostType {
 	protected $capabilities = array();
 
 	/**
+	 * The query var name used in list searches
+	 * @var string
+	 */
+	protected $search_label = 'atum_order';
+
+	/**
 	 * The ATUM Order items table name
 	 */
 	const ORDER_ITEMS_TABLE = ATUM_PREFIX . 'order_items';
@@ -111,6 +117,11 @@ abstract class AtumOrderPostType {
 				add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box'));
 				add_action( 'init', array( $this, 'remove_language_switcher'), 12);
 			}
+
+			// ATUM Orders search
+			add_filter( 'get_search_query', array( $this, 'search_label' ) );
+			add_filter( 'query_vars', array( $this, 'add_custom_search_query_var' ) );
+			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
 			
 		}
 
@@ -435,6 +446,7 @@ abstract class AtumOrderPostType {
 						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status=pending&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
 						'name'   => __( 'Mark as Pending', ATUM_TEXT_DOMAIN ),
 						'action' => 'pending',
+						'target' => '_self',
 					);
 
 				}
@@ -444,6 +456,7 @@ abstract class AtumOrderPostType {
 						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status=completed&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
 						'name'   => __( 'Mark as Completed', ATUM_TEXT_DOMAIN ),
 						'action' => 'complete',
+						'target' => '_self',
 					);
 
 				}
@@ -452,17 +465,18 @@ abstract class AtumOrderPostType {
 					'url'    => admin_url( "post.php?post={$post->ID}&action=edit" ),
 					'name'   => __( 'View', ATUM_TEXT_DOMAIN ),
 					'action' => 'view',
+					'target' => '_self',
 				);
 
-				$actions = apply_filters( 'atum/inventory_logs/admin_order_actions', $actions, $atum_order );
-
+				$actions = apply_filters( 'atum/order_post_type/admin_order_actions', $actions, $atum_order );
+				
 				foreach ( $actions as $action ) {
-					printf( '<a class="button %s tips" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
+					printf( '<a class="button %s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
 				}
-
+				
 				do_action( 'atum/order_post_type/admin_actions_end', $atum_order ); ?>
 				</p><?php
-
+				
 				break;
 
 		}
@@ -754,7 +768,7 @@ abstract class AtumOrderPostType {
 
 		global $post_type, $pagenow;
 
-		// Bail out if not on Log list page
+		// Bail out if not on ATUM Order's list page
 		if ( 'edit.php' != $pagenow || static::POST_TYPE != $post_type ) {
 			return;
 		}
@@ -861,7 +875,7 @@ abstract class AtumOrderPostType {
 					'tax_rate_already_exists'  => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
 					'placeholder_name'         => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
 					'placeholder_value'        => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
-					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this Log?', ATUM_TEXT_DOMAIN ),
+					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this?', ATUM_TEXT_DOMAIN ),
 					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' ),
 					'are_you_sure'             => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 					'increase_stock_msg'       => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
@@ -949,6 +963,127 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
+	 * Change the label when searching ATUM Orders
+	 *
+	 * @since 1.3.9.2
+	 *
+	 * @param mixed $query
+	 *
+	 * @return string
+	 */
+	public function search_label( $query ) {
+
+		global $pagenow, $typenow;
+
+		if ( 'edit.php' != $pagenow ) {
+			return $query;
+		}
+
+		if ( static::POST_TYPE != $typenow ) {
+			return $query;
+		}
+
+		if ( ! get_query_var( $this->search_label ) ) {
+			return $query;
+		}
+
+		return wp_unslash( $_GET['s'] );
+
+	}
+
+	/**
+	 * Query vars for ATUM Order's custom searches
+	 *
+	 * @since 1.3.9.2
+	 *
+	 * @param mixed $public_query_vars
+	 *
+	 * @return array
+	 */
+	public function add_custom_search_query_var( $public_query_vars ) {
+		$public_query_vars[] = $this->search_label;
+
+		return $public_query_vars;
+	}
+
+	/**
+	 * Search custom fields as well as content
+	 *
+	 * @since 1.3.9.2
+	 *
+	 * @param \WP_Query $query
+	 */
+	public function search_custom_fields( $query ) {
+
+		global $pagenow, $wpdb;
+
+		if ( 'edit.php' != $pagenow || empty( $query->query_vars['s'] ) || static::POST_TYPE != $query->query_vars['post_type'] ) {
+			return;
+		}
+
+		// Remove non-needed strings from search terms
+		// TODO: IF WE ADD MORE ATUM ORDER TYPES IT WOULD BE BETTER USING A FILTER HERE
+		$term = str_replace(
+			array(
+				__( 'Order #', ATUM_TEXT_DOMAIN ),
+				'Order #',
+				__( 'Purchase Order #', ATUM_TEXT_DOMAIN ),
+				'Purchase Order #',
+				__( 'PO #', ATUM_TEXT_DOMAIN ),
+				'PO #',
+				__( 'Log #', ATUM_TEXT_DOMAIN ),
+				'Log #',
+				'#'
+			),
+			'',
+			wc_clean( $_GET['s'] )
+		);
+
+		// Searches on meta data can be slow - this let you choose what fields to search
+		$search_fields = array_map( 'wc_clean', apply_filters( 'atum/order_post_type/search_fields', array('_order') ) );
+		$atum_order_ids = array();
+
+		if ( is_numeric( $term ) ) {
+			$atum_order_ids[] = absint( $term );
+		}
+
+		if ( ! empty( $search_fields ) ) {
+
+			$atum_order_ids = array_unique( array_merge(
+				$atum_order_ids,
+				$wpdb->get_col(
+					$wpdb->prepare( "SELECT DISTINCT p1.post_id FROM {$wpdb->postmeta} p1 WHERE p1.meta_value LIKE '%%%s%%'", $wpdb->esc_like($term) ) .
+					" AND p1.meta_key IN ('" . implode( "','", array_map( 'esc_sql', $search_fields ) ) . "')"
+				),
+				$wpdb->get_col(
+					$wpdb->prepare( "
+						SELECT order_id
+						FROM {$wpdb->prefix}" . self::ORDER_ITEMS_TABLE . "
+						WHERE order_item_name LIKE '%%%s%%'
+						",
+						$wpdb->esc_like($term)
+					)
+				)
+			) );
+
+		}
+
+		$atum_order_ids = apply_filters( 'atum/order_post_type/search_results', $atum_order_ids, $term, $search_fields );
+
+		if ( ! empty( $atum_order_ids ) ) {
+			// Remove "s" - we don't want to search ATUM Order names
+			unset( $query->query_vars['s'] );
+
+			// So we know we're doing this
+			$query->query_vars[ $this->search_label ] = TRUE;
+
+			// Search by found posts
+			$query->query_vars['post__in'] = array_merge( $atum_order_ids, array( 0 ) );
+		}
+
+	}
+
+	/**
 	 * Get the currently instantiated ATUM Order object (if any) or create a new one
 	 *
 	 * @since 1.2.9
@@ -982,7 +1117,7 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
-	 * Get the available Inventory Logs statuses
+	 * Get the available ATUM Order statuses
 	 *
 	 * @since 1.2.9
 	 *

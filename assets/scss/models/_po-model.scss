@@ -1,0 +1,111 @@
+.po-wrapper {
+	width: calc(100% - 40px);
+	padding: 30px 20px 20px 20px;
+	font-size: 14px;
+}
+
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+.label {
+	font-weight: bold;
+}
+
+.content-header {
+	.float-right {
+		text-align: right;
+		width: 250px;
+	}
+	.float-left {
+		width: 60%;
+	}
+	
+	strong {
+		font-size: 20px;
+	}
+}
+
+.po-title {
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-size: 25px;
+	color: $brand-primary
+	
+}
+
+
+.content-address {
+	.float-left {
+		width: 40%;
+	}
+	.float-right {
+		width: 40%;
+	}
+	h4 {
+		font-size: 18px;
+		background-color: $brand-primary;
+		color: #FFF;
+		padding: 5px 10px;
+		margin: 0;
+	}
+}
+
+.content-lines {
+	padding: 0 20px;
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		//border: 2px solid $brand-primary;
+	}
+	
+	.po-li-head {
+		background-color: $brand-primary;
+		th {
+			color: #FFF;
+		}
+	}
+	th, td {
+		font-size: 14px;
+		text-align: right;
+		width: 10%;
+		white-space: nowrap;
+		
+		padding: 5px 10px;
+		
+	}
+	.description {
+		text-align: left;
+	}
+	.qty {
+		text-align: center;
+	}
+	td.total, .po-lines tr:nth-child(even) td {
+		background-color: transparentize($brand-primary, .9);
+	}
+}
+
+.content-totals {
+	.subtotal td{
+		border-top: 2px solid $brand-primary;
+		padding-top: 20px;
+	}
+}
+.po-total {
+	.label, .total {
+		border-top: 2px solid $brand-primary;
+		font-weight: bold;
+	}
+	
+}
+
+.po-content {
+	border: 1px solid #DDDDDD;
+	padding: 10px;
+	margin-top: 10px;
+}

@@ -13,9 +13,9 @@
 
 namespace Atum\DataExport;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\StockCentral;
-
 
 defined( 'ABSPATH' ) or die;
 
@@ -35,7 +35,12 @@ class DataExport {
 
 		// Ajax action to export the ATUM data to file
 		add_action( 'wp_ajax_atum_export_data', array( $this, 'export_data' ) );
-
+		
+		// Generate pdf to an Atum Order
+		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );
+		
+		
+		
 	}
 
 	/**
@@ -320,6 +325,55 @@ class DataExport {
 
 		return ob_get_clean();
 
+	}
+	
+	
+	/**
+	 * Generate an Atum order pdf
+	 *
+	 * @since 1.3.9
+	 */
+	public function generate_order_pdf() {
+		
+		$atum_order_id = absint( $_GET['atum_order_id'] );
+		$document =  ! empty($_GET['document'])? esc_attr($_GET['document']) : '';
+		
+		if ( AtumCapabilities::current_user_can( 'export_data' ) && check_admin_referer( 'atum-order-pdf' ) && $document && $atum_order_id ) {
+			
+			$document_class = apply_filters( 'atum/data_export/html_report_class', '\Atum\DataExport\Models\\' . $document);
+			
+			if ( ! class_exists($document_class) ) {
+				wp_die( __('Document class not found', ATUM_TEXT_DOMAIN) );
+			}
+			
+			$interfaces = class_implements($document_class);
+			
+			if (isset($interfaces['\Atum\DataExport\Models\ModelInterface'])) {
+				wp_die( __('Document class doesn\'t implement Model\'s Interface', ATUM_TEXT_DOMAIN) );
+			}
+			
+			$model = new $document_class( $atum_order_id);
+			
+			$mpdf = new \mPDF( 'utf-8', 'A4' );
+			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
+			
+			$mpdf->default_available_fonts = $mpdf->available_unifonts;
+			
+			$css = $model->get_stylesheets();
+			
+			foreach ($css as $file) {
+				$stylesheet = file_get_contents( $file);
+				$mpdf->WriteHTML($stylesheet, 1);
+			}
+			
+			$mpdf->WriteHTML(  $model->get_content() );
+			
+				// Output a PDF file directly to the browser
+		$mpdf->Output("po-{$model->get_id()}.pdf", 'I');
+		
+			
+		}
+		
 	}
 
 }

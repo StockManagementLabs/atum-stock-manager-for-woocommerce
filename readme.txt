@@ -257,6 +257,55 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.3.9.2`
+
+*2018-02-23*
+
+Fixes
+
+* Fixed JS error in Purchase Orders page.
+* CSS fixes in settings page.
+* Avoid message when saving Settings.
+* Fixed Purchase Orders search.
+* Text grammar fixes in Settings page.
+
+---
+
+`1.3.9.1`
+
+*2018-02-22*
+
+Fixes
+
+* Restored assets directory.
+
+---
+
+`1.3.9`
+
+*2018-02-22*
+
+Features
+
+* Added a new tab to Settings to allow users to fill their Store Details required for pdf generated Purchase Orders.
+* Added another action in Purchase Orders page to enable the user to generate a pdf of Purchase Orders.
+
+Fixes
+
+* Fixed issue that was showing all the products when adding items to a Purchase Order.
+
+---
+
+`1.3.8.5`
+
+*2018-02-19*
+
+**Fixes**
+
+* Catch the date conversion errors and continue when a wrong format is saved externally to the "out_of_stock_date" meta.
+
+---
+
 `1.3.8.4`
 
 *2018-02-08*
