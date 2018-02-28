@@ -46,6 +46,9 @@ final class Ajax {
 		// Save ATUM Dashboard widgets' layout
 		add_action( 'wp_ajax_atum_dashboard_save_layout', array( $this, 'save_dashboard_layout' ) );
 
+		// Restore ATUM Dashboard widgets' default layout
+		add_action( 'wp_ajax_atum_dashboard_restore_layout', array( $this, 'restore_dashboard_layout' ) );
+
 		// Add widgets to the ATUM Dashboard
 		add_action( 'wp_ajax_atum_dashboard_add_widget', array( $this, 'add_new_widget' ) );
 
@@ -128,6 +131,24 @@ final class Ajax {
 		$layout = ( ! empty($_POST['layout']) ) ? $_POST['layout'] : array();
 		$user_id = get_current_user_id();
 		Dashboard::save_user_widgets_layout($user_id, $layout);
+
+		wp_die();
+
+	}
+
+	/**
+	 * Restore the default layout for the ATUM Dashboard
+	 *
+	 * @package Dashboard
+	 *
+	 * @since 1.4.0
+	 */
+	public function restore_dashboard_layout() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		$user_id = get_current_user_id();
+		Dashboard::restore_user_widgets_layout($user_id);
 
 		wp_die();
 

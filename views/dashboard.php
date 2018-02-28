@@ -14,6 +14,8 @@ defined( 'ABSPATH' ) or die;
 		<div class="dash-header-buttons">
 			<!--<a href="#" target="_blank" type="button" class="btn btn-success pill"><?php _e('Upgrade Now', ATUM_TEXT_DOMAIN) ?></a>-->
 			<a href="https://stockmanagementlabs.ticksy.com/" target="_blank" class="btn btn-primary pill"><?php _e('Get Support', ATUM_TEXT_DOMAIN) ?></a>
+
+			<button type="button" class="restore-defaults btn btn-warning" title="<?php _e('Restore widgets and layout to defaults', ATUM_TEXT_DOMAIN) ?>" data-toggle="tooltip" data-placement="bottom"><i class="lnr lnr-redo"></i></button>
 		</div>
 
 		<div class="dash-header-logo">

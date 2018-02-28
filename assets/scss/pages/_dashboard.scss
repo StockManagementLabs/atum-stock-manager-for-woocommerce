@@ -27,6 +27,14 @@ body.toplevel_page_atum-dashboard {
 	margin-left: -20px;
 	text-align: center;
 	
+	&.overlay {
+		&:before {
+			content: '';
+			@include overlay($zindex: 100);
+			left: -20px;
+		}
+	}
+	
 	a {
 		text-decoration: none;
 	}
@@ -43,11 +51,27 @@ body.toplevel_page_atum-dashboard {
 		.dash-header-buttons {
 			position: absolute;
 			left: 0;
+			right: 0;
 			top: 0;
 			padding: $grid-gutter-width/2;
+			text-align: left;
 			
 			@media all and (max-width: $screen-sm-min) {
 				right: 0;
+			}
+			
+			.restore-defaults {
+				position: absolute;
+				top:  8px;
+				right: $grid-gutter-width/2;
+				border-radius: 50%;
+				width: 36px;
+				height: 36px;
+				font-size: 18px;
+				
+				i {
+					margin-left: -1px;
+				}
 			}
 		}
 		

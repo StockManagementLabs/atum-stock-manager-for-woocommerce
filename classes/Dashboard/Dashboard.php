@@ -311,7 +311,11 @@ class Dashboard {
 					),
 					'numDaysCurMonth'          => date_i18n( 't' ),
 					'statsEarningsCurSymbol'   => get_woocommerce_currency_symbol(),
-					'statsEarningsCurPosition' => get_option('woocommerce_currency_pos')
+					'statsEarningsCurPosition' => get_option('woocommerce_currency_pos'),
+					'areYouSure'               => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+					'defaultsWillRestore'      => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
+					'continue'                 => __( 'Yes, restore it!', ATUM_TEXT_DOMAIN ),
+					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN )
 				) );
 			}
 
@@ -344,6 +348,17 @@ class Dashboard {
 	 */
 	public static function save_user_widgets_layout($user_id, $layout) {
 		update_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout', $layout );
+	}
+
+	/**
+	 * Delete the user's widgets layout meta to restore defaults
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param int   $user_id
+	 */
+	public static function restore_user_widgets_layout($user_id) {
+		delete_user_meta( $user_id, ATUM_PREFIX . 'dashboard_widgets_layout' );
 	}
 
 	/**
