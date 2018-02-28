@@ -514,12 +514,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function column_cb( $item ) {
-		
+
+		$id = $this->get_current_product_id();
+
 		return sprintf(
 			'<input type="checkbox"%s name="%s[]" value="%s">',
-			checked( in_array( $item->ID, $this->selected ), TRUE, FALSE ),
+			checked( in_array( $id, $this->selected ), TRUE, FALSE ),
 			$this->_args['singular'],
-			$item->ID
+			$id
 		);
 	}
 

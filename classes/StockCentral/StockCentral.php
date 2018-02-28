@@ -158,7 +158,7 @@ class StockCentral extends AtumListPage {
 		
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/help-sidebar' ) );
 		
-		$this->list = new ListTable( ['per_page' => $this->per_page] );
+		$this->list = new ListTable( ['per_page' => $this->per_page, 'show_cb' => TRUE] );
 		
 	}
 	
