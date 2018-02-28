@@ -215,6 +215,34 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.0`
+
+*2018-02-28*
+
+Features
+
+* (NEW) ATUM Dashboard.
+* "Statistics" widget for ATUM Dashboard.
+* "Sales" widget for ATUM Dashboard.
+* "Lost Sales" widget for ATUM Dashboard.
+* "Orders" widget for ATUM Dashboard.
+* "Promo Sales" widget for ATUM Dashboard.
+* "Stock Control" widget for ATUM Dashboard.
+* "News" widget for ATUM Dashboard.
+* "Video Tutorials" widget for ATUM Dashboard.
+
+Changes
+
+* Removed WP Dashboard Statistics widget.
+* Updated language file.
+
+Fixes
+
+* Refactory.
+* Fixed compatibility with WC 3.3.3.
+
+---
+
 `1.3.9.2`
 
 *2018-02-23*

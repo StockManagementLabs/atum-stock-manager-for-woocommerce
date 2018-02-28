@@ -1,0 +1,194 @@
+//
+// Nice Select
+// (https://github.com/hernansartorio/jquery-nice-select)
+//--------------------------------------------------------
+
+// Scoped variables
+$font-size:                     14px;
+$font-size-small:               12px;
+
+$dropdown-border-radius:        30px;
+$list-border-radius:            10px;
+$dropdown-height:               42px;
+$dropdown-height-small:         36px;
+$dropdown-padding:              18px;
+
+$gray:                          #afafaf;
+$gray-light:                    #e1e1e1;
+$gray-lighter:                  #f6f6f6;
+$primary-light:                 $gray;
+$arrow-color:                   $gray;
+
+
+// Style the dropdown
+.nice-select {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	background-color: #fff;
+	border-radius: $dropdown-border-radius;
+	border: solid 1px $gray-light;
+	box-sizing: border-box;
+	clear: both;
+	cursor: pointer;
+	display: block;
+	font-family: inherit;
+	font-size: $font-size;
+	font-weight: 100;
+	height: $dropdown-height;
+	line-height: $dropdown-height - 2;
+	outline: none;
+	padding-left: $dropdown-padding;
+	padding-right: $dropdown-padding + 12;
+	position: relative;
+	text-align: left !important;
+	@include transition(all 0.2s ease-in-out);
+	@include user-select(none);
+	white-space: nowrap;
+	width: auto;
+	color: $gray;
+	
+	&:hover, &:active, &:focus {
+		border-color: darken($gray-light, 10%);
+	}
+	
+	// Arrow
+	&:after {
+		border-bottom: 1px solid $arrow-color;
+		border-right: 1px solid $arrow-color;
+		content: '';
+		display: block;
+		height: 5px;
+		margin-top: -4px;
+		pointer-events: none;
+		position: absolute;
+		right: 12px;
+		top: 50%;
+		@include transform-origin(66% 66%);
+		@include transform(rotate(45deg));
+		@include transition(all 0.15s ease-in-out);
+		width: 5px;
+	}
+	
+	&.open {
+		@extend :active;
+		
+		&:after {
+			@include transform(rotate(-135deg));
+		}
+		
+		.list {
+			opacity: 1;
+			pointer-events: auto;
+			@include transform(scale(1) translateY(0));
+		}
+	}
+	
+	&.disabled {
+		border-color: lighten($gray-light, 2%);
+		color: $gray;
+		pointer-events: none;
+		
+		&:after {
+			border-color: lighten($arrow-color, 20%);
+		}
+	}
+	
+	// Modifiers
+	&.wide {
+		width: 100%;
+		
+		.list {
+			left: 0 !important;
+			right: 0 !important;
+		}
+	}
+	
+	&.right {
+		float: right;
+		
+		.list {
+			left: auto;
+			right: 0;
+		}
+	}
+	
+	&.small {
+		font-size: $font-size-small;
+		height: $dropdown-height-small;
+		line-height: $dropdown-height-small - 2;
+		
+		&:after {
+			height: 4px;
+			width: 4px;
+		}
+		
+		.option {
+			line-height: $dropdown-height-small - 2;
+			min-height: $dropdown-height-small - 2;
+		}
+	}
+	
+	// List and options
+	.list {
+		background-color: #fff;
+		border-radius: $list-border-radius;
+		box-shadow: 0 0 0 1px rgba($gray-dark, .11);
+		box-sizing: border-box;
+		margin-top: 4px;
+		opacity: 0;
+		overflow: hidden;
+		padding: 0;
+		pointer-events: none;
+		position: absolute;
+		top: 100%; left: 0;
+		@include transform-origin(50% 0);
+		@include transform(scale(.75) translateY(- $dropdown-height / 2));
+		@include transition(all .2s cubic-bezier(0.5, 0, 0, 1.25), opacity .15s ease-out);
+		z-index: 9;
+		
+		&:hover .option:not(:hover) {
+			background-color: transparent !important;
+		}
+	}
+	
+	.option {
+		cursor: pointer;
+		font-weight: 400;
+		line-height: $dropdown-height - 2;
+		list-style: none;
+		min-height: $dropdown-height - 2;
+		outline: none;
+		padding-left: $dropdown-padding;
+		padding-right: $dropdown-padding + 11;
+		margin: 0;
+		text-align: left;
+		@include transition(all 0.2s);
+		
+		&:hover, &.focus, &.selected.focus {
+			background-color: $gray-lighter;
+		}
+		
+		&.selected {
+			font-weight: bold;
+			color: $gray-dark;
+		}
+		
+		&.disabled {
+			background-color: transparent;
+			color: $gray;
+			cursor: default;
+		}
+	}
+}
+
+// Use display instead of opacity for IE <= 10
+.no-csspointerevents .nice-select {
+	.list {
+		display: none;
+	}
+	
+	&.open {
+		.list {
+			display: block;
+		}
+	}
+}

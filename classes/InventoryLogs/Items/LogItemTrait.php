@@ -25,7 +25,11 @@ trait LogItemTrait {
 	protected function load() {
 
 		$this->atum_order_item_model = new LogItem( $this );
-		$this->atum_order_id = $this->atum_order_item_model->get_atum_order_id();
+
+		if (! $this->atum_order_id) {
+			$this->atum_order_id = $this->atum_order_item_model->get_atum_order_id();
+		}
+
 		$this->read_meta_data();
 
 	}

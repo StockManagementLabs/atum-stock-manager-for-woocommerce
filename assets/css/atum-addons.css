@@ -1,10 +1,10 @@
 /** 
- * ATUM Stock Manager for WooCommerce CSS 
- * @version 1.3.2 
+ * ATUM Inventory Management for WooCommerce CSS 
+ * @version 1.4.0 
  * @authors Salva Machí and Jose Piera 
  *
  * Author URI: https://sispixels.com/ 
- * License : ©2017 Stock Management Labs 
+ * License : ©2018 Stock Management Labs 
  */ 
 
 .swal2-container {
@@ -38,11 +38,11 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #00B050;
+  color: #82c342;
 }
 
 .swal2-container a:hover {
-  color: #00e367;
+  color: #9ccf69;
 }
 
 .atum-addons h1 {
@@ -102,19 +102,19 @@
 }
 
 .atum-addons .theme .theme-actions.valid {
-  background-color: #00B050;
+  background-color: #82c342;
 }
 
 .atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
-  color: #00B050;
+  color: #82c342;
 }
 
 .atum-addons .theme .theme-actions.invalid span {
-  color: #EF4D5A;
+  color: #ff4848;
 }
 
 .atum-addons .theme .theme-actions.inactive {
-  background-color: #FEC007;
+  background-color: #efaf00;
 }
 
 .atum-addons .theme .theme-actions.not-installed {
@@ -122,7 +122,7 @@
 }
 
 .atum-addons .theme .theme-actions.coming-soon {
-  background-color: #0096dd;
+  background-color: #0fd9ff;
   right: 0;
 }
 
@@ -165,11 +165,11 @@
 .atum-addons .theme .show-key i {
   font-size: 15px;
   padding-top: 17px;
-  color: #0073AA;
+  color: #00b8db;
 }
 
 .atum-addons .theme .show-key:hover {
-  background-color: #0096dd;
+  background-color: #0fd9ff;
 }
 
 .atum-addons .theme .show-key:hover i {
@@ -280,15 +280,15 @@
 }
 
 .atum-addons .theme .addon-key input[type=text].valid {
-  border-color: #00B050;
+  border-color: #82c342;
 }
 
 .atum-addons .theme .addon-key input[type=text].inactive {
-  border-color: #FEC007;
+  border-color: #efaf00;
 }
 
 .atum-addons .theme .addon-key input[type=text].invalid {
-  border-color: #EF4D5A;
+  border-color: #ff4848;
 }
 
 .atum-addons .theme .button {
@@ -296,7 +296,7 @@
   box-shadow: none;
   text-shadow: none;
   font-weight: normal;
-  background-color: #0073AA;
+  background-color: #00b8db;
   color: #FFF;
   border-radius: 0;
   -webkit-transition: all 0.2s ease-in-out;
@@ -305,14 +305,14 @@
 }
 
 .atum-addons .theme .button:disabled {
-  background-color: #0073AA !important;
+  background-color: #00b8db !important;
   text-shadow: none !important;
   color: #FFF !important;
   opacity: 0.6;
 }
 
 .atum-addons .theme .button:hover {
-  background-color: #0096dd;
+  background-color: #0fd9ff;
 }
 
 .atum-addons .theme.active .addon-key {
@@ -325,8 +325,8 @@
   top: 11px;
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(0, 115, 170, 0.25);
-  border-top-color: #0073AA;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00b8db;
   border-radius: 50%;
   position: absolute;
   z-index: 50;

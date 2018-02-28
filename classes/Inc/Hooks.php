@@ -12,6 +12,10 @@
 
 namespace Atum\Inc;
 
+use Atum\Modules\ModuleManager;
+
+
+defined( 'ABSPATH' ) or die;
 
 final class Hooks {
 
@@ -22,6 +26,9 @@ final class Hooks {
 	 */
 	public static function admin_hooks() {
 
+		// Add extra links to the plugin desc row
+		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
+
 		// Check if ATUM has the "Manage Stock" option enabled
 		if ( Helpers::is_atum_managing_stock() ) {
 			add_action( 'init', array( __CLASS__, 'atum_manage_stock_hooks' ) );
@@ -31,23 +38,8 @@ final class Hooks {
 			add_action( 'init', array( __CLASS__, 'wc_manage_stock_hooks' ) );
 		}
 
-		// Add the purchase price to WC products
-		add_action( 'woocommerce_product_options_pricing', array(__CLASS__, 'add_purchase_price_meta') );
-		add_action( 'woocommerce_variation_options_pricing', array(__CLASS__, 'add_purchase_price_meta'), 10, 3 );
-
-		// Save the product purchase price meta
-		add_action( 'save_post_product', array(__CLASS__, 'save_purchase_price') );
-		add_action( 'woocommerce_update_product_variation', array(__CLASS__, 'save_purchase_price') );
-
 		// Show the right stock status on WC products list when ATUM is managing the stock
 		add_filter( 'woocommerce_admin_stock_html', array(__CLASS__, 'set_wc_products_list_stock_status'), 10, 2 );
-
-		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
-		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
 
 		// Add the location column to the items table in WC orders
 		add_action( 'woocommerce_admin_order_item_headers', array(__CLASS__, 'wc_order_add_location_column_header') );
@@ -69,6 +61,31 @@ final class Hooks {
 		add_action( 'woocommerce_product_set_stock' , array(__CLASS__, 'delete_transients') );
 		add_action( 'woocommerce_variation_set_stock' , array(__CLASS__, 'delete_transients') );
 
+	}
+
+	/**
+	 * Show row meta on the plugin screen
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array  $links   Plugin Row Meta
+	 * @param string $file    Plugin Base file
+	 *
+	 * @return	array
+	 */
+	public static function plugin_row_meta( $links, $file ) {
+
+		if ( ATUM_BASENAME == $file ) {
+			$row_meta = array(
+				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
+				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
+				'support'         => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Visit premium customer support', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
+			);
+
+			return array_merge( $links, $row_meta );
+		}
+
+		return $links;
 	}
 
 	/**
@@ -102,6 +119,30 @@ final class Hooks {
 
 		// Allow saving the WooCommerce _manage_stock meta key for grouped products
 		add_action( 'update_post_metadata', array( __CLASS__, 'save_manage_stock' ), 10, 5 );
+
+	}
+
+	/**
+	 * Add hooks to show and save the Purchase Price field on products
+	 *
+	 * @since 1.3.8.3
+	 */
+	public static function purchase_price_hooks() {
+
+		// Add the purchase price to WC products
+		add_action( 'woocommerce_product_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ) );
+		add_action( 'woocommerce_variation_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ), 10, 3 );
+
+		// Save the product purchase price meta
+		add_action( 'save_post_product', array( __CLASS__, 'save_purchase_price' ) );
+		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
+
+		// Add purchase price to WPML custom prices
+		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
+		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
+		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
 
 	}
 
@@ -290,32 +331,35 @@ final class Hooks {
 	 */
 	public static function save_purchase_price ($post_id) {
 
-		$purchase_price = '';
+		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
-		// Product variations
-		if ( isset($_POST['variation_purchase_price']) ) {
-			$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
-			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
-			update_post_meta( $post_id, '_purchase_price', $purchase_price );
-		}
-		else {
+		// Variables, grouped and variations
+		if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
 
-			$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-
-			if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
-				// Inheritable products have no prices
-				update_post_meta( $post_id, '_purchase_price', $purchase_price );
+			// Inheritable products have no prices
+			if ( isset($_POST['_purchase_price']) ) {
+				update_post_meta( $post_id, '_purchase_price', '' );
 			}
-			else {
-				$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+			elseif ( isset($_POST['variation_purchase_price']) ) {
+
+				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
 				$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
-				update_post_meta( $post_id, '_purchase_price', $purchase_price);
+				update_post_meta( $post_id, '_purchase_price', $purchase_price );
+
 			}
+
+		}
+		// Rest of product types (Bypass if "_puchase_price" meta is not coming)
+		elseif ( isset($_POST['_purchase_price']) ) {
+
+			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
+			update_post_meta( $post_id, '_purchase_price', $purchase_price);
 
 		}
 
 		// Add WPML compatibility
-		if (class_exists('\woocommerce_wpml')) {
+		if ( isset($purchase_price) && class_exists('\woocommerce_wpml') ) {
 
 			global $sitepress;
 			$wpml = \woocommerce_wpml::instance();

@@ -1,0 +1,53 @@
+//
+// "Stats Data" widgets
+//-----------------------
+
+.stats-data-widget {
+	@include flexbox;
+	@include flex-wrap(wrap);
+	@include flex-justify-content(center);
+	
+	.data {
+		margin-top: $grid-gutter-width*2;
+		width: 100%;
+		@include flex-grow(1);
+		
+		@media all and (max-width: $screen-sm-min) {
+			margin-top: $grid-gutter-width/2;
+		}
+	}
+	
+	h3, h5 {
+		margin: 10px 0;
+	}
+	
+	h3 {
+		font-size: 35px;
+		font-weight: bold;
+	}
+	
+	h5 {
+		font-size: 15px;
+		color: $widget-text;
+		font-weight: 100;
+		text-transform: uppercase;
+	}
+	
+	hr {
+		border: {
+			width: 1px;
+			color: transparentize(#000, 0.9);
+			bottom: none;
+		}
+		margin: $grid-gutter-width 0;
+	}
+	
+	.nice-select {
+		@media all and (max-width: $screen-xs-min) {
+			font-size: 12px;
+			height: 36px;
+			line-height: 34px;
+		}
+	}
+	
+}

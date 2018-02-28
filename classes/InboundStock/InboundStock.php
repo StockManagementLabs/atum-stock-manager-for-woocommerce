@@ -37,7 +37,7 @@ class InboundStock extends AtumListPage {
 	/**
 	 * The menu order for this module
 	 */
-	const MENU_ORDER = 20;
+	const MENU_ORDER = 4;
 	
 	/**
 	 * InboundStock singleton constructor

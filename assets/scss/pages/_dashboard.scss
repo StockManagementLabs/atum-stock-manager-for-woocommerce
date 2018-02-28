@@ -1,0 +1,654 @@
+//
+// Atum Dashboard
+//----------------
+
+$header-bg:                 #d5f2f8;
+$header-height:             300px;
+$card-border:               #e5e5e5;
+$card-bg:                   #FFF;
+$card-text:                 #afafaf;
+$add-widget-color:          #CCC;
+$widget-bg:                 #FFF;
+$widget-icon:               #e1e1e1;
+$widget-controls:           $card-text;
+$widget-controls-hover:     #00b8db;
+
+
+// Style the WP notices
+body.toplevel_page_atum-dashboard {
+	#wpbody-content {
+		> .notice-error, > .notice-info, > .notice-success, > .notice-warning, > .error, > .updated, > .notice{
+			margin: 0 0 0 -20px;
+		}
+	}
+}
+
+.atum-dashboard {
+	margin-left: -20px;
+	text-align: center;
+	
+	&.overlay {
+		&:before {
+			content: '';
+			@include overlay($zindex: 100);
+			left: -20px;
+		}
+	}
+	
+	a {
+		text-decoration: none;
+		
+		&:focus {
+			box-shadow: none;
+		}
+	}
+	
+	// Dashboard Header
+	.dash-header {
+		position: relative;
+		height: $header-height;
+		background: $header-bg url('#{$img-path}dashboard/header-bg.png') center bottom;
+		background-size: cover;
+		@include vertical-align-flex();
+		@include flex-wrap(wrap);
+		
+		.dash-header-buttons {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			padding: $grid-gutter-width/2;
+			text-align: left;
+			
+			@media all and (max-width: $screen-sm-min) {
+				right: 0;
+			}
+			
+			.restore-defaults {
+				position: absolute;
+				top:  8px;
+				right: $grid-gutter-width/2;
+				border-radius: 50%;
+				width: 36px;
+				height: 36px;
+				font-size: 18px;
+				
+				i {
+					margin-left: -1px;
+				}
+			}
+		}
+		
+		img {
+			max-width: 320px;
+			margin-bottom: 5px;
+			
+			@media all and (max-width: $screen-xs-min) {
+				max-width: 220px;
+			}
+		}
+		
+		h3 {
+			font-size: 21px;
+			font-weight: 200;
+			width: 100%;
+			margin: 0;
+			
+			@media all and (max-width: $screen-xs-min) {
+				font-size: 15px;
+			}
+		}
+		
+		.atum-version {
+			color: #FFF;
+			background-color: transparentize(#000, 0.9);
+			border-radius: 30px;
+			padding: 1px 15px;
+			font-weight: 100;
+			font-size: 12px;
+			margin-top: 10px;
+			display: inline-block;
+		}
+		
+		.dash-header-notice {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding-left: $grid-gutter-width/2;
+			padding-bottom: 5px;
+			font-size: 11px;
+			
+			span {
+				color: $brand-primary;
+			}
+			
+			@media all and (max-width: $screen-sm-min) {
+				right: 0;
+			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				font-size: 10px;
+				line-height: 1.3;
+			}
+			
+		}
+		
+	}
+	
+	// Dashboard Cards
+	.dash-cards {
+		
+		@media all and (min-width: $screen-xs-max) {
+			@include flexbox;
+		}
+		
+		.dash-card {
+			margin: $grid-gutter-width $grid-gutter-width/4;
+			width: 33.3333%;
+			border: 1px solid $card-border;
+			border-radius: 5px;
+			background: $card-bg center 1px;
+			background-size: cover;
+			position: relative;
+			overflow: hidden;
+			
+			&:first-child {
+				margin-left: $grid-gutter-width;
+			}
+			
+			&:last-child {
+				margin-right: $grid-gutter-width;
+			}
+			
+			@media all and (max-width: $screen-sm-min) {
+				margin-top: $grid-gutter-width/2;
+				margin-bottom: $grid-gutter-width/2;
+			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				width: 100%;
+				margin-left: 0 !important;
+				margin-right: 0 !important;
+			}
+			
+			.card-content {
+				width: 60%;
+				float: left;
+				text-align: left;
+				padding: $grid-gutter-width/2;
+				position: relative;
+				z-index: 1;
+				
+				h5, h2 {
+					margin: 5px 0;
+				}
+				
+				h2, p {
+					color: $card-text;
+					font-weight: 200;
+				}
+				
+				h5 {
+					font-size: 13px;
+					font-weight: bold;
+				}
+				
+				h2 {
+					font-size: 21px;
+				}
+				
+				p {
+					font-size: 10px;
+				}
+				
+				.btn {
+					margin-top: $grid-gutter-width/2;
+					display: inline-block;
+					padding: 4px 10px;
+					font-size: 10px;
+				}
+				
+				@media all and (max-width: $screen-sm-min) {
+					width: 91%;
+				}
+			}
+			
+			.card-img {
+				float: left;
+				width: 30%;
+				
+				img {
+					position: absolute;
+				}
+				
+				@media all and (max-width: $screen-sm-min) {
+					display: none;
+				}
+			}
+			
+			&.docs {
+				background-image: url('#{$img-path}dashboard/card-docs-bg.png');
+				
+				.card-img {
+					img {
+						@include vertical-align-absolute;
+						right: 0;
+						max-width: 280px;
+					}
+				}
+			}
+			
+			&.add-ons {
+				background-image: url('#{$img-path}dashboard/card-add-ons-bg.png');
+				
+				.card-img {
+					img {
+						max-width: 120px;
+						bottom: 0;
+						right: 10px;
+					}
+				}
+			}
+			
+			&.subscription {
+				background-image: url('#{$img-path}dashboard/card-subscription-bg.png');
+				
+				.card-img {
+					img {
+						max-width: 80px;
+						top: $grid-gutter-width;
+						right: $grid-gutter-width;
+					}
+				}
+				
+				form {
+					clear: both;
+					width: 90%;
+					margin: auto;
+					
+					.input-group {
+						background-color: transparentize(#FFF, 0.34);
+						border-radius: 15px;
+						box-shadow: 0 0 0 3px transparentize(#FFF, 0.8);
+						@include flexbox;
+					}
+					
+					input[type=email] {
+						border: none;
+						box-shadow: none;
+						background: transparent;
+						padding: 7px 15px;
+						font-size: 10px;
+						font-weight: 300;
+						border-radius: 15px;
+						@include flex-grow(1);
+						
+						@media all and (max-width: $screen-sm-min) {
+							padding: 6px 10px;
+						}
+					}
+					
+					button {
+						font-size: 10px;
+					}
+					
+					@media all and (max-width: $screen-xs-min) {
+						margin-bottom: $grid-gutter-width/2;
+					}
+					
+				}
+			}
+			
+		}
+		
+	}
+	
+	// Add Widget Zone
+	.add-dash-widget {
+		border: 1px dashed $add-widget-color;
+		border-radius: 5px;
+		margin: $grid-gutter-width $grid-gutter-width 0;
+		min-height: 180px;
+		@include vertical-align-flex();
+		cursor: pointer;
+		@include transition(.15s ease-in-out);
+		
+		i, h2 {
+			display: inline-block;
+			vertical-align: middle;
+			color: $add-widget-color;
+			@include transition(.15s ease-in-out);
+			@include user-select(none);
+		}
+		
+		i {
+			margin-right: 4px;
+			font-weight: bold;
+			font-size: 16px;
+		}
+		
+		&:hover {
+			border-color: $widget-primary;
+			
+			i, h2 {
+				color: $widget-primary;
+			}
+		}
+		
+		h2 {
+			font-size: 18px;
+			margin: 0;
+		}
+	}
+	
+	// Widgets
+	.atum-widgets {
+		padding: 0 $grid-gutter-width/2;
+	}
+	
+	.atum-widget {
+		margin-bottom: $grid-gutter-width;
+		
+		.widget-wrapper {
+			background-color: $widget-bg;
+			border-radius: 5px;
+			box-shadow: 0 3px 2px #eaeaea;
+		}
+		
+		.widget-header, .widget-body {
+			padding: $grid-gutter-width/2;
+		}
+		
+		.widget-header {
+			border-bottom: 1px solid $card-border;
+			text-align: left;
+			cursor: move;
+			position: relative;
+			@include flexbox;
+			@include flex-align-items(center);
+			
+			&:before {
+				content: '...';
+				color: $widget-icon;
+				font-size: 63px;
+				@include vertical-align-absolute;
+				left: 17px;
+				letter-spacing: -4px;
+				@include transform(rotate(90deg) translateY(-50%));
+				@include transform-origin(top);
+			}
+			
+			h2, i {
+				@include user-select(none);
+			}
+			
+			h2 {
+				margin: 10px 10px 9px 15px;
+				font-size: 18px;
+				font-weight: bold;
+				@include flex-grow(1);
+			}
+			
+			i {
+				font-size: 20px;
+				color: $widget-controls;
+				display: inline-block;
+				cursor: pointer;
+				margin-left: 3px;
+				@include transition(color 0.2s ease-in-out);
+				
+				&:hover {
+					color: $widget-controls-hover;
+				}
+				
+				// TODO: For the next version
+				&.widget-settings {
+					display: none;
+				}
+			}
+			
+		}
+		
+		.widget-body {
+			p.error {
+				color: $widget-text;
+				font-size: 17px;
+				@include vertical-align-absolute;
+				max-width: 85%;
+				margin: auto;
+				left: 0;
+				right: 0;
+			}
+		}
+		
+		// Widget config
+		.widget-config {
+			display: none;
+			
+			.form-field {
+				margin: $grid-gutter-width/2 auto;
+				
+				label {
+					display: block;
+					margin-bottom: 10px;
+				}
+				
+				.nice-select {
+					width: 120px;
+					max-width: 98%;
+					margin: auto;
+				}
+			}
+			
+			.config-controls {
+				border-top: 1px solid $gray-light;
+				padding-top: $grid-gutter-width/2;
+			}
+		}
+		
+		.widget-primary {
+			color: $widget-primary;
+		}
+		
+		.widget-success {
+			color: $widget-success;
+		}
+		
+		.widget-warning {
+			color: $widget-warning;
+		}
+		
+		.widget-danger {
+			color: $widget-danger;
+		}
+		
+		@media all and (max-width: $screen-sm-min) {
+			margin-bottom: $grid-gutter-width/2 !important;
+		}
+		
+		@media all and (max-width: $screen-xs-min) {
+			min-height: 345px !important;
+			
+			&.atum_statistics_widget {
+				min-height: 460px !important;
+			}
+			
+			&.atum_stock_control_widget {
+				min-height: 400px !important;
+			}
+			
+			&.atum_videos_widget {
+				min-height: 480px !important;
+			}
+			
+		}
+	}
+	
+	// Owl carousel styling
+	.owl-dots {
+		margin-top: -10px !important;
+		margin-bottom: $grid-gutter-width/2;
+		
+		.owl-dot {
+			span {
+				width: 8px;
+				height: 8px;
+				margin-right: 3px;
+				margin-left: 3px;
+				border: 1px solid $widget-icon;
+				background-color: transparent;
+				box-sizing: border-box;
+			}
+			
+			&.active {
+				span {
+					background-color: $widget-icon;
+				}
+			}
+		}
+	}
+	
+	.scroll-box {
+		overflow: hidden;
+	}
+	
+	.nicescroll-rails {
+		border-radius: 3px;
+		margin-left: 10px;
+	}
+	
+}
+
+// Add widget popup
+.add-widget-popup {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	min-height: 0 !important;
+	max-width: 98%;
+	overflow: hidden;
+	
+	.swal2-content {
+		margin-bottom: 0;
+	}
+	
+	h2.swal2-title {
+		position: relative;
+		font-size: 17px;
+		text-align: left;
+		color: $gray-dark;
+		border-bottom: 1px solid $gray-light;
+		padding: 20px;
+		margin: -$grid-gutter-width/2 0 0;
+	}
+	
+	.swal2-close {
+		color: $gray-light;
+		font-weight: 200;
+		font-size: 32px;
+		line-height: 1.7;
+		
+		&:hover {
+			color: $gray;
+		}
+	}
+	
+	.widgets-list {
+		margin-top: 5px;
+		margin-bottom: 0;
+		margin-right: 8px;
+		padding-right: 5px;
+		max-height: 390px;
+		
+		li {
+			width: 90%;
+			padding: 12px 0;
+			margin: auto;
+			@include flexbox;
+			@include flex-align-items(center);
+			border-bottom: 0.5px solid transparentize($gray-light, 0.5);
+			
+			&:first-child {
+				padding-top: 3px;
+			}
+			
+			&:last-child {
+				border-bottom: none;
+			}
+			
+			&.added {
+				.add-widget {
+					display: none;
+				}
+			}
+			
+			&.not-added {
+				.btn-info {
+					display: none;
+				}
+			}
+			
+			// Fix for strange shadow below button
+			button {
+				&, &:hover, &:focus, &:active {
+					display: inline-block;
+				}
+			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				@include flex-wrap(wrap);
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+			
+		}
+		
+		.widget-details {
+			text-align: left;
+			margin: 0 10px;
+			@include flex-grow(1);
+			
+			h3 {
+				font-size: 15px;
+				margin: 0;
+			}
+			
+			p {
+				text-align: left;
+				font-size: 12px;
+				color: $widget-text;
+				margin-top: 4px;
+			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				padding-top: 10px;
+				margin-left: 0;
+				max-width: 70%;
+			}
+		}
+		
+		img {
+			max-width: 120px;
+			border-radius: 4px;
+			
+			@media all and (max-width: $screen-xs-min) {
+				max-width: 100%;
+			}
+		}
+		
+		.coming-soon {
+			img {
+				max-width: 100%;
+			}
+		}
+		
+	}
+	
+}
+
+.swal2-container {
+	.nicescroll-rails {
+		border-radius: 3px;
+		margin-left: -$grid-gutter-width/2;
+		margin-top: 7px;
+	}
+}

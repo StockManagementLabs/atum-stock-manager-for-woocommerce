@@ -50,7 +50,7 @@ class Addons {
 	/**
 	 * The menu order for this module
 	 */
-	const MENU_ORDER = 90;
+	const MENU_ORDER = 81;
 
 	/**
 	 * Singleton constructor
@@ -134,11 +134,11 @@ class Addons {
 	 */
 	public function load_addons_page() {
 
-		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', FALSE, ATUM_VERSION );
+		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array('sweetalert2'), ATUM_VERSION );
 
 		$min = (! ATUM_DEBUG) ? '.min' : '';
-		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
+		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
 		Helpers::maybe_es6_promise();
 		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array('jquery', 'sweetalert2'), ATUM_VERSION );
 
@@ -168,7 +168,7 @@ class Addons {
 		wp_enqueue_script('atum-addons');
 
 		$args = array(
-			'addons' => $this->get_addons_list(),
+			'addons'      => $this->get_addons_list(),
 			'addons_keys' => self::get_keys()
 		);
 

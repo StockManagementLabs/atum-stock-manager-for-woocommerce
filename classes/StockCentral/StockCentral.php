@@ -3,7 +3,7 @@
  * @package         Atum
  * @subpackage      StockCentral
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  *
@@ -36,7 +36,7 @@ class StockCentral extends AtumListPage {
 	/**
 	 * The menu order for this module
 	 */
-	const MENU_ORDER = 1;
+	const MENU_ORDER = 2;
 	
 	/**
 	 * StockCentral singleton constructor
@@ -53,6 +53,8 @@ class StockCentral extends AtumListPage {
 			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'stock_central_products_per_page', TRUE );
 			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 
+			// Initialize on admin page load
+			add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 			add_action( 'load-toplevel_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
 			// Add the Stock Central settings
@@ -66,7 +68,7 @@ class StockCentral extends AtumListPage {
 	}
 
 	/**
-	 * Add the Stock Central menu. Must be the first element in the array
+	 * Add the Stock Central menu
 	 *
 	 * @since 1.3.6
 	 *

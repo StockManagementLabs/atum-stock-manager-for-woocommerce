@@ -40,7 +40,7 @@ class InventoryLogs extends AtumOrderPostType {
 	/**
 	 * The menu order
 	 */
-	const MENU_ORDER = 25;
+	const MENU_ORDER = 5;
 
 	/**
 	 * Will hold the current log object

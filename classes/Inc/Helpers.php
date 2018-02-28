@@ -830,7 +830,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Check whether or not register the ES6 promise script
+	 * Check whether or not register the ES6 promise polyfill
 	 * This is only required for SweetAlert2 on IE<12
 	 *
 	 * @since 1.2.0
@@ -843,7 +843,7 @@ final class Helpers {
 			$version = array();
 			preg_match("/MSIE ([0-9]{1,}[\.0-9]{0,})/", $_SERVER['HTTP_USER_AGENT'], $version);
 			if ( ! empty($version) && intval($version[1]) < 12 ) {
-				wp_register_script( 'es6-promise', ATUM_URL . 'assets/js/vendor/es6-promise.auto.min.js', [], ATUM_VERSION, TRUE );
+				wp_register_script( 'es6-promise', 'https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js', [], ATUM_VERSION, TRUE );
 			}
 		}
 
@@ -854,7 +854,7 @@ final class Helpers {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  string/array $value value/s to trim
+	 * @param string|array $value value(s) to trim
 	 *
 	 * @return mixed
 	 */
@@ -1317,7 +1317,8 @@ final class Helpers {
 							// Update price if on sale
 							if ( $product->is_on_sale( 'edit' ) ) {
 								$product->set_price( $sale_price );
-							} else {
+							}
+							else {
 								$product->set_price( $regular_price );
 								
 								if ( $date_to && strtotime( $date_to ) < current_time( 'timestamp' ) ) {
@@ -1361,6 +1362,23 @@ final class Helpers {
 		
 		$product->save();
 		
+	}
+
+	/**
+	 * Converts an associative array to HTML data attributes
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array  $array   The array to convert
+	 * @param string $prefix  Optional. Prefix for the data key names
+	 *
+	 * @return string
+	 */
+	public static function array_to_data($array, $prefix = '') {
+
+		$data_array = array_map( function($key, $value) use ($prefix){ return "data-{$prefix}{$key}='$value'"; }, array_keys($array), $array );
+
+		return implode(' ', $data_array);
 	}
 	
 }

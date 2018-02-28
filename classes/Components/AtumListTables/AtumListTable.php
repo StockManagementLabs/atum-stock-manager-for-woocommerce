@@ -1870,7 +1870,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		
 		if ( isset( $total_items ) ) {
-			$response['total_items_i18n'] = sprintf( _n( '1 item', '%s items', $total_items ), number_format_i18n( $total_items ) );
+			$response['total_items_i18n'] = sprintf( _n( '%s item', '%s items', $total_items ), number_format_i18n( $total_items ) );
 		}
 		
 		if ( isset( $total_pages ) ) {

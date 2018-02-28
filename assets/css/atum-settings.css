@@ -1,10 +1,10 @@
 /** 
- * ATUM Stock Manager for WooCommerce CSS 
- * @version 1.3.2 
+ * ATUM Inventory Management for WooCommerce CSS 
+ * @version 1.4.0 
  * @authors Salva Machí and Jose Piera 
  *
  * Author URI: https://sispixels.com/ 
- * License : ©2017 Stock Management Labs 
+ * License : ©2018 Stock Management Labs 
  */ 
 
 .swal2-container {
@@ -38,11 +38,11 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #00B050;
+  color: #82c342;
 }
 
 .swal2-container a:hover {
-  color: #00e367;
+  color: #9ccf69;
 }
 
 .atum-settings-wrapper h1 {
@@ -53,7 +53,7 @@
 
 .atum-settings-wrapper .atum-nav {
   border: none;
-  background-color: #0073AA;
+  background-color: #003742;
   border-radius: 6px;
   padding: 4px 15px;
   display: -webkit-box;
@@ -392,17 +392,18 @@
   padding: 11px 20px 9px;
   line-height: 1;
   height: auto;
-  background: #0073AA;
+  background: #00b8db;
   text-shadow: none;
   box-shadow: none;
+  border: none;
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 
 #atum-settings input[type=submit]:hover, #atum-settings input[type=submit]:active {
-  background-color: #0096dd;
-  border-color: #0096dd;
+  background-color: #0fd9ff;
+  border-color: #0fd9ff;
   -webkit-transform: none;
   -moz-transform: none;
   -o-transform: none;

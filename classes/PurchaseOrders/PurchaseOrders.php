@@ -17,8 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Helpers;
-use Atum\Inc\Main;
-use Atum\Modules\ModuleManager;
+use Atum\Inc\Hooks;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 
 
@@ -38,7 +37,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	/**
 	 * The menu order
 	 */
-	const MENU_ORDER = 30;
+	const MENU_ORDER = 3;
 	
 	/**
 	 * Will hold the current purchase order object
@@ -113,7 +112,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_filter('atum/inventory_logs/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
 
 		// Add the hooks for the Purchase Price field
-		Main::purchase_price_hooks();
+		Hooks::purchase_price_hooks();
 
 	}
 

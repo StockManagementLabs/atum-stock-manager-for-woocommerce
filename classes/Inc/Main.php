@@ -3,7 +3,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  *
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\HelpPointers;
-use Atum\Dashboard\Statistics;
+use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Modules\ModuleManager;
@@ -208,12 +208,12 @@ class Main {
 		// Load extra modules
 		//--------------------
 
-		if ( ModuleManager::is_module_active('stock_central') ) {
-			StockCentral::get_instance();
+		if ( ModuleManager::is_module_active('dashboard') ) {
+			Dashboard::get_instance();
 		}
 
-		if ( AtumCapabilities::current_user_can('view_statistics') && ModuleManager::is_module_active('dashboard_statistics') ) {
-			new Statistics( __( 'ATUM Statistics', ATUM_TEXT_DOMAIN ) );
+		if ( ModuleManager::is_module_active('stock_central') ) {
+			StockCentral::get_instance();
 		}
 
 		if ( AtumCapabilities::current_user_can('export_data') && ModuleManager::is_module_active('data_export') ) {
@@ -256,7 +256,7 @@ class Main {
 		foreach ( $this->menu_items as $menu_item ) {
 			$this->menu_items_order[] = array(
 				'slug'       => $menu_item['slug'],
-				'menu_order' => ( empty( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
+				'menu_order' => ( ! isset( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
 			);
 		}
 
@@ -477,8 +477,8 @@ class Main {
 
 		// Enqueue ATUM widgets styles for WP dashboard
 		if ( in_array( $screen_id, array( 'dashboard' ) ) ) {
-			wp_register_style( 'atum_admin_dashboard_styles', ATUM_URL . '/assets/css/atum-dashboard-widgets.css', array(), ATUM_VERSION );
-			wp_enqueue_style( 'atum_admin_dashboard_styles' );
+			wp_register_style( 'atum-wp-dashboard-widgets', ATUM_URL . '/assets/css/atum-wp-dashboard-widgets.css', array(), ATUM_VERSION );
+			wp_enqueue_style( 'atum-wp-dashboard-widgets' );
 
 			wp_register_script( 'circle-progress', ATUM_URL . 'assets/js/vendor/circle-progress.min.js', array('jquery'), ATUM_VERSION, TRUE );
 			wp_enqueue_script( 'circle-progress' );
@@ -500,10 +500,15 @@ class Main {
 
 		if ( isset( $current_screen->id ) && $current_screen->parent_base == self::$main_menu_item['slug'] ) {
 
+			// Load the footer text in all pages except the ATUM Dashboard
+			if ( strpos($current_screen->id, Dashboard::UI_SLUG) !== FALSE ) {
+				return '';
+			}
+
 			// Change the footer text
 			if ( ! get_option( 'atum_admin_footer_text_rated' ) ) {
 
-				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;&#9733;&#9733;%s rating. A huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
+				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %s&#9733;&#9733;&#9733;&#9733;&#9733;%s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
 				wc_enqueue_js( "
 					jQuery( 'a.wc-rating-link' ).click( function() {
 						jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );

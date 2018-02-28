@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Madcoda\\Youtube\\' => array($vendorDir . '/madcoda/php-youtube-api/src'),
     'Atum\\' => array($baseDir . '/classes'),
 );

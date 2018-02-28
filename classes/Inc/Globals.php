@@ -150,8 +150,6 @@ final class Globals {
 	 * @since 1.3.4
 	 *
 	 * @param int $stock_decimals
-	 *
-	 * @return int
 	 */
 	public static function set_stock_decimals($stock_decimals) {
 		self::$stock_decimals = absint($stock_decimals);

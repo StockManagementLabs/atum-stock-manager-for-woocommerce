@@ -1,0 +1,23 @@
+//
+// ATUM Dashboard
+//---------------
+
+@import "common/variables";
+@import "common/mixins";
+@import "common/animations";
+
+@import "components/linearicons";
+@import "components/gridstack";
+@import "components/buttons";
+@import "components/nice-select";
+@import "components/sweet-alert";
+@import "components/tooltip";
+@import "components/utilities";
+
+@import "pages/dashboard";
+
+@import "widgets/statistics";
+@import "widgets/stats-data";
+@import "widgets/stock-control";
+@import "widgets/videos";
+@import "widgets/news";

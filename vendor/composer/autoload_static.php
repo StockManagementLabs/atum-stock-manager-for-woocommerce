@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
 {
     public static $prefixLengthsPsr4 = array (
+        'M' => 
+        array (
+            'Madcoda\\Youtube\\' => 16,
+        ),
         'A' => 
         array (
             'Atum\\' => 5,
@@ -14,9 +18,23 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
     );
 
     public static $prefixDirsPsr4 = array (
+        'Madcoda\\Youtube\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/madcoda/php-youtube-api/src',
+        ),
         'Atum\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Westsworld' => 
+            array (
+                0 => __DIR__ . '/..' . '/jimmiw/php-time-ago/src',
+            ),
         ),
     );
 
@@ -37,9 +55,18 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Components\\AtumOrders\\Items\\AtumOrderItemTrait' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Items/AtumOrderItemTrait.php',
         'Atum\\Components\\AtumOrders\\Models\\AtumOrderItemModel' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Models/AtumOrderItemModel.php',
         'Atum\\Components\\AtumOrders\\Models\\AtumOrderModel' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Models/AtumOrderModel.php',
-        'Atum\\Components\\DashboardWidget' => __DIR__ . '/../..' . '/classes/Components/DashboardWidget.php',
+        'Atum\\Components\\AtumWidget' => __DIR__ . '/../..' . '/classes/Components/AtumWidget.php',
         'Atum\\Components\\HelpPointers' => __DIR__ . '/../..' . '/classes/Components/HelpPointers.php',
-        'Atum\\Dashboard\\Statistics' => __DIR__ . '/../..' . '/classes/Dashboard/Statistics.php',
+        'Atum\\Dashboard\\Dashboard' => __DIR__ . '/../..' . '/classes/Dashboard/Dashboard.php',
+        'Atum\\Dashboard\\WidgetHelpers' => __DIR__ . '/../..' . '/classes/Dashboard/WidgetHelpers.php',
+        'Atum\\Dashboard\\Widgets\\LostSales' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/LostSales.php',
+        'Atum\\Dashboard\\Widgets\\News' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/News.php',
+        'Atum\\Dashboard\\Widgets\\Orders' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Orders.php',
+        'Atum\\Dashboard\\Widgets\\PromoSales' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/PromoSales.php',
+        'Atum\\Dashboard\\Widgets\\Sales' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Sales.php',
+        'Atum\\Dashboard\\Widgets\\Statistics' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Statistics.php',
+        'Atum\\Dashboard\\Widgets\\StockControl' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/StockControl.php',
+        'Atum\\Dashboard\\Widgets\\Videos' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Videos.php',
         'Atum\\DataExport\\DataExport' => __DIR__ . '/../..' . '/classes/DataExport/DataExport.php',
         'Atum\\DataExport\\Models\\ModelInterface' => __DIR__ . '/../..' . '/classes/DataExport/Models/ModelInterface.php',
         'Atum\\DataExport\\Models\\POModel' => __DIR__ . '/../..' . '/classes/DataExport/Models/POModel.php',
@@ -86,6 +113,12 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'FilterLZW' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterLZW.php',
         'INDIC' => __DIR__ . '/..' . '/mpdf/mpdf/classes/indic.php',
         'MYANMAR' => __DIR__ . '/..' . '/mpdf/mpdf/classes/myanmar.php',
+        'Madcoda\\Youtube\\Constants' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/Constants.php',
+        'Madcoda\\Youtube\\Facades\\Youtube' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/Facades/Youtube.php',
+        'Madcoda\\Youtube\\Youtube' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/Youtube.php',
+        'Madcoda\\Youtube\\YoutubeServiceProviderLaravel4' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/YoutubeServiceProviderLaravel4.php',
+        'Madcoda\\Youtube\\YoutubeServiceProviderLaravel5' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/YoutubeServiceProviderLaravel5.php',
+        'Madcoda\\compat' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/compat.php',
         'OTLdump' => __DIR__ . '/..' . '/mpdf/mpdf/classes/otl_dump.php',
         'PDFBarcode' => __DIR__ . '/..' . '/mpdf/mpdf/classes/barcode.php',
         'SEA' => __DIR__ . '/..' . '/mpdf/mpdf/classes/sea.php',
@@ -93,6 +126,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'TTFontFile' => __DIR__ . '/..' . '/mpdf/mpdf/classes/ttfontsuni.php',
         'TTFontFile_Analysis' => __DIR__ . '/..' . '/mpdf/mpdf/classes/ttfontsuni_analysis.php',
         'UCDN' => __DIR__ . '/..' . '/mpdf/mpdf/classes/ucdn.php',
+        'Westsworld\\TimeAgo' => __DIR__ . '/..' . '/jimmiw/php-time-ago/src/Westsworld/TimeAgo.php',
         'bmp' => __DIR__ . '/..' . '/mpdf/mpdf/classes/bmp.php',
         'cssmgr' => __DIR__ . '/..' . '/mpdf/mpdf/classes/cssmgr.php',
         'directw' => __DIR__ . '/..' . '/mpdf/mpdf/classes/directw.php',
@@ -112,6 +146,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c::$classMap;
 
         }, null, ClassLoader::class);

@@ -18,27 +18,27 @@ var gulp         = require('gulp'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.3.2';
+var version = '1.4.0';
 
 // Global config
 var config = {
 	
 	assetsDir : './assets',
 
-	devUrl    : 'http://atum.dev',
-	production: false,
+	devUrl    : 'http://atum.loc',
+	production: false, // NOTE: the production tag was causing problems with CSS compression
 
 	// decorate
 	decorate: {
 
 		templateJS: [
 			'/** \n',
-			' * ATUM Stock Manager for WooCommerce JS \n',
+			' * ATUM Inventory Management for WooCommerce JS \n',
 			' * @version ' + version + ' \n',
 			' * @authors Salva Machí and Jose Piera \n',
 			' *\n',
 			' * Author URI: https://sispixels.com/ \n',
-			' * License : ©2017 Stock Management Labs \n',
+			' * License : ©2018 Stock Management Labs \n',
 			' */ \n',
 			'\n;(function($) { \n \t\'use strict\';\n\n',
 			'<%= contents %>\n\n',
@@ -47,12 +47,12 @@ var config = {
 
 		templateCSS: [
 			'/** \n',
-			' * ATUM Stock Manager for WooCommerce CSS \n',
+			' * ATUM Inventory Management for WooCommerce CSS \n',
 			' * @version ' + version + ' \n',
 			' * @authors Salva Machí and Jose Piera \n',
 			' *\n',
 			' * Author URI: https://sispixels.com/ \n',
-			' * License : ©2017 Stock Management Labs \n',
+			' * License : ©2018 Stock Management Labs \n',
 			' */ \n',
 			'\n<%= contents %>\n'
 		].join('')

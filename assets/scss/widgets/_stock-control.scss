@@ -1,0 +1,121 @@
+//
+// "Stock Control" widget
+//-----------------------
+
+.atum-widget.atum_stock_control_widget {
+	.widget-body {
+		@media all and (max-width: $screen-sm-min) {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+	}
+}
+
+.stock-control-widget {
+	@include flexbox;
+	padding-top: $grid-gutter-width;
+	
+	@media all and (max-width: $screen-sm-min) {
+		padding-top: $grid-gutter-width/2;
+	}
+	
+	> div {
+		width: 50%;
+		padding: $grid-gutter-width $grid-gutter-width/2;
+		
+		@media all and (max-width: $screen-sm-min) {
+			padding: $grid-gutter-width/2;
+		}
+	}
+	
+	.stock-chart {
+		
+		.stock-chart-tooltip {
+			opacity: 1;
+			position: absolute;
+			background: rgba(0, 0, 0, .7);
+			color: #FFF;
+			border-radius: 3px;
+			@include transition(all .1s ease);
+			pointer-events: none;
+			@include transform(translate(-50%, 0));
+			
+			table {
+				td {
+					white-space: nowrap;
+				}
+			}
+			
+		}
+		
+		.stock-chart-tooltip-key {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			margin-right: 10px;
+		}
+		
+	}
+	
+	h3, h5 {
+		margin: 10px 0;
+		text-align: left;
+	}
+	
+	h3 {
+		font-size: 35px;
+		font-weight: bold;
+		
+		@media all and (max-width: $screen-sm-min) {
+			float: right;
+		}
+		
+		@media all and (max-width: $screen-xs-min) {
+			font-size: 24px;
+			line-height: 0;
+		}
+	}
+	
+	h5 {
+		font-size: 15px;
+		color: $widget-text;
+		font-weight: 100;
+		text-transform: uppercase;
+		
+		@media all and (max-width: $screen-sm-min) {
+			float: left;
+		}
+		
+		@media all and (max-width: $screen-xs-min) {
+			font-size: 12px;
+			line-height: 1;
+		}
+	}
+	
+	hr {
+		border-top: 1px solid transparentize(#000, 0.9);
+		border-bottom: none;
+		margin: $grid-gutter-width/2 0;
+		
+		@media all and (max-width: $screen-sm-min) {
+			clear: both;
+			padding: $grid-gutter-width/3 0;
+			border-top: none;
+			border-bottom: 1px solid transparentize(#000, 0.9);
+		}
+		
+		@media all and (max-width: $screen-xs-min) {
+			padding: 3px 0;
+		}
+	}
+	
+	@media all and (max-width: $screen-xs-min) {
+		@include flex-wrap(wrap);
+		
+		> div {
+			width: 100%;
+			padding-top: 0;
+			padding-bottom: 5px;
+		}
+	}
+}

@@ -405,7 +405,11 @@ h1.wp-heading-inline {
 	
 	.set-meta {
 		cursor: pointer;
-		color: $brand-primary;
+		color: $link;
+		
+		&:hover {
+			color: $link-hover;
+		}
 		
 		&.unsaved {
 			color: $brand-danger;

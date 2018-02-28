@@ -80,7 +80,7 @@ class DataExport {
 				'productTypes'      => Helpers::product_types_dropdown(),
 				'categoriesTitle'   => __('Product Category', ATUM_TEXT_DOMAIN),
 				'categories'        => $product_categories,
-				'titleLength'       => __('Title Max Length (characters)', ATUM_TEXT_DOMAIN),
+				'titleLength'       => __('Product Name (number of characters)', ATUM_TEXT_DOMAIN),
 				'maxLength'         => 20,
 				'disableMaxLength'  => __('Disable', ATUM_TEXT_DOMAIN),
 				'exportNonce'       => wp_create_nonce( 'atum-data-export-nonce' )
