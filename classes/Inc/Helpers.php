@@ -383,11 +383,19 @@ final class Helpers {
 		$out_of_stock_date = get_post_meta($product_id, Globals::get_out_of_stock_date_key(), TRUE );
 
 		if ( $out_of_stock_date ) {
-			$out_date_time = new \DateTime( $out_of_stock_date );
-			$now_date_time = new \DateTime( 'now' );
-			$interval      = date_diff( $out_date_time, $now_date_time );
+			
+			try {
+				$out_date_time = new \DateTime( $out_of_stock_date );
+				$now_date_time = new \DateTime( 'now' );
+				$interval      = date_diff( $out_date_time, $now_date_time );
 
-			$out_of_stock_days = $interval->days;
+				$out_of_stock_days = $interval->days;
+
+			} catch(\Exception $e) {
+				error_log( __METHOD__ . ' || Product: ' . $product_id . ' || ' . $e->getMessage() );
+				return $out_of_stock_days;
+			}
+			
 		}
 
 		return $out_of_stock_days;

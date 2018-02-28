@@ -26,6 +26,8 @@ return array(
     'Atum\\Components\\HelpPointers' => $baseDir . '/classes/Components/HelpPointers.php',
     'Atum\\Dashboard\\Statistics' => $baseDir . '/classes/Dashboard/Statistics.php',
     'Atum\\DataExport\\DataExport' => $baseDir . '/classes/DataExport/DataExport.php',
+    'Atum\\DataExport\\Models\\ModelInterface' => $baseDir . '/classes/DataExport/Models/ModelInterface.php',
+    'Atum\\DataExport\\Models\\POModel' => $baseDir . '/classes/DataExport/Models/POModel.php',
     'Atum\\DataExport\\Reports\\HtmlReport' => $baseDir . '/classes/DataExport/Reports/HtmlReport.php',
     'Atum\\InboundStock\\InboundStock' => $baseDir . '/classes/InboundStock/InboundStock.php',
     'Atum\\InboundStock\\Inc\\ListTable' => $baseDir . '/classes/InboundStock/Inc/ListTable.php',

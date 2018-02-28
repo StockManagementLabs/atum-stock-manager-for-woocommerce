@@ -325,6 +325,10 @@
   margin-bottom: 20px;
 }
 
+#atum-settings .settings-section#atum_setting_shipping {
+  display: none;
+}
+
 #atum-settings .section-title {
   padding: 20px 30px;
   border-bottom: 2px solid #ececec;
@@ -396,9 +400,14 @@
   transition: all 0.2s ease-in-out;
 }
 
-#atum-settings input[type=submit]:hover {
+#atum-settings input[type=submit]:hover, #atum-settings input[type=submit]:active {
   background-color: #0096dd;
   border-color: #0096dd;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
 }
 
 .swal2-container {

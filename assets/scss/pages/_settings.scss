@@ -173,6 +173,10 @@ $settings-menu-active:      #FFF;
 		background-color: #FFF;
 		border-radius: 6px;
 		margin-bottom: $grid-gutter-width/1.5;
+		
+		&#atum_setting_shipping {
+			display: none;
+		}
 	}
 	
 	.section-title {
@@ -246,10 +250,12 @@ $settings-menu-active:      #FFF;
 		box-shadow: none;
 		@include transition(all 0.2s ease-in-out);
 		
-		&:hover {
+		&:hover, &:active {
 			background-color: lighten($brand-primary, 10%);
 			border-color: lighten($brand-primary, 10%);
+			@include transform(none);
 		}
+		
 	}
 	
 }

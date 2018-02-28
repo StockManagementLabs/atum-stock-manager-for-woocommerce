@@ -56,7 +56,7 @@ use Atum\Settings\Settings;
 
 					foreach ( (array) $wp_settings_sections[$page] as $section ): ?>
 
-						<div class="settings-section">
+						<div id="<?php echo $section['id']?>" class="settings-section">
 
 							<?php if ( $section['title'] ): ?>
 								<div class="section-title">

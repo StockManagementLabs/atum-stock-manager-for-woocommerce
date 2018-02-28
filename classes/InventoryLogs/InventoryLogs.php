@@ -22,6 +22,12 @@ use Atum\InventoryLogs\Models\Log;
 class InventoryLogs extends AtumOrderPostType {
 
 	/**
+	 * The query var name used in list searches
+	 * @var string
+	 */
+	protected $search_label = ATUM_PREFIX . 'log_search';
+
+	/**
 	 * The Inventory Log post type name
 	 */
 	const POST_TYPE = ATUM_PREFIX . 'inventory_log';
@@ -104,11 +110,6 @@ class InventoryLogs extends AtumOrderPostType {
 
 		// Add the filters to the post type list table
 		add_action( 'restrict_manage_posts', array($this, 'add_log_filters') );
-
-		// Log search
-		add_filter( 'get_search_query', array( $this, 'log_search_label' ) );
-		add_filter( 'query_vars', array( $this, 'add_custom_query_var' ) );
-		add_action( 'parse_query', array( $this, 'log_search_custom_fields' ) );
 
 		// Add the help tab to Inventory Logs' list page
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
@@ -226,122 +227,6 @@ class InventoryLogs extends AtumOrderPostType {
 				'value_field'     => 'slug'
 			) );
 
-		}
-
-	}
-
-	/**
-	 * Change the label when searching logs
-	 *
-	 * @since 1.2.4
-	 *
-	 * @param mixed $query
-	 *
-	 * @return string
-	 */
-	public function log_search_label( $query ) {
-
-		global $pagenow, $typenow;
-
-		if ( 'edit.php' != $pagenow ) {
-			return $query;
-		}
-
-		if ( self::POST_TYPE != $typenow ) {
-			return $query;
-		}
-
-		if ( ! get_query_var( 'log_search' ) ) {
-			return $query;
-		}
-
-		return wp_unslash( $_GET['s'] );
-
-	}
-
-	/**
-	 * Query vars for Log's custom searches
-	 *
-	 * @since 1.2.4
-	 *
-	 * @param mixed $public_query_vars
-	 *
-	 * @return array
-	 */
-	public function add_custom_query_var( $public_query_vars ) {
-		$public_query_vars[] = 'log_search';
-
-		return $public_query_vars;
-	}
-
-	/**
-	 * Search custom fields as well as content
-	 *
-	 * @since 1.2.4
-	 *
-	 * @param \WP_Query $query
-	 */
-	public function log_search_custom_fields( $query ) {
-
-		global $pagenow, $wpdb;
-
-		if ( 'edit.php' != $pagenow || empty( $query->query_vars['s'] ) || self::POST_TYPE != $query->query_vars['post_type'] ) {
-			return;
-		}
-
-		// Remove non-needed strings from search terms
-		$term = str_replace(
-			array(
-				__( 'Order #', ATUM_TEXT_DOMAIN ),
-				'Order #',
-				__( 'Log #', ATUM_TEXT_DOMAIN ),
-				'Log #',
-				'#'
-			),
-			'',
-			wc_clean( $_GET['s'] )
-		);
-
-		// Searches on meta data can be slow - this lets you choose what fields to search
-		$search_fields = array_map( 'wc_clean', apply_filters( 'atum/inventory_logs/log_search_fields', array('_order') ) );
-		$log_ids = array();
-
-		if ( is_numeric( $term ) ) {
-			$log_ids[] = absint( $term );
-		}
-
-		if ( ! empty( $search_fields ) ) {
-
-			$log_ids = array_unique( array_merge(
-				$log_ids,
-				$wpdb->get_col(
-					$wpdb->prepare( "SELECT DISTINCT p1.post_id FROM {$wpdb->postmeta} p1 WHERE p1.meta_value LIKE '%%%s%%'", $wpdb->esc_like($term) ) .
-					" AND p1.meta_key IN ('" . implode( "','", array_map( 'esc_sql', $search_fields ) ) . "')"
-				),
-				$wpdb->get_col(
-					$wpdb->prepare( "
-						SELECT order_id
-						FROM {$wpdb->prefix}" . self::ORDER_ITEMS_TABLE . " as log_items
-						WHERE order_item_name LIKE '%%%s%%'
-						",
-						$wpdb->esc_like($term)
-					)
-				)
-			) );
-
-		}
-
-		$log_ids = apply_filters( 'atum/inventory_logs/log_search_results', $log_ids, $term, $search_fields );
-
-		if ( ! empty( $log_ids ) ) {
-			// Remove "s" - we don't want to search log names
-			unset( $query->query_vars['s'] );
-
-			// So we know we're doing this
-			$query->query_vars['log_search'] = true;
-
-			// Search by found posts
-			$query->query_vars['post__in'] = array_merge( $log_ids, array( 0 ) );
 		}
 
 	}
