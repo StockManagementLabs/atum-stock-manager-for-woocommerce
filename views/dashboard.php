@@ -21,6 +21,7 @@ defined( 'ABSPATH' ) or die;
 		<div class="dash-header-logo">
 			<img src="<?php echo ATUM_URL ?>assets/images/dashboard/header-logo.svg" alt="ATUM">
 			<h3><?php _e('Inventory Management for WooCommerce', ATUM_TEXT_DOMAIN) ?></h3>
+			<a href="https://www.stockmanagementlabs.com/the-change-log/" target="_blank" class="atum-version">v<?php echo ATUM_VERSION ?></a>
 		</div>
 
 		<div class="dash-header-notice">

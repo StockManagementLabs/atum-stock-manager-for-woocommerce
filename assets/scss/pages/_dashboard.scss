@@ -37,6 +37,10 @@ body.toplevel_page_atum-dashboard {
 	
 	a {
 		text-decoration: none;
+		
+		&:focus {
+			box-shadow: none;
+		}
 	}
 	
 	// Dashboard Header
@@ -93,6 +97,17 @@ body.toplevel_page_atum-dashboard {
 			@media all and (max-width: $screen-xs-min) {
 				font-size: 15px;
 			}
+		}
+		
+		.atum-version {
+			color: #FFF;
+			background-color: transparentize(#000, 0.9);
+			border-radius: 30px;
+			padding: 1px 15px;
+			font-weight: 100;
+			font-size: 12px;
+			margin-top: 10px;
+			display: inline-block;
 		}
 		
 		.dash-header-notice {

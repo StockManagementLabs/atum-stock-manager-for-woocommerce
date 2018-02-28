@@ -38,12 +38,6 @@
 		}
 	}
 	
-	a {
-		&:focus {
-			box-shadow: none;
-		}
-	}
-	
 	.post-thumb {
 		position: relative;
 		margin-right: $grid-gutter-width/2;

@@ -131,12 +131,6 @@
 			}
 		}
 		
-		a {
-			&:focus {
-				box-shadow: none;
-			}
-		}
-		
 		.video-thumb {
 			position: relative;
 			margin-right: $grid-gutter-width/2;
@@ -338,12 +332,6 @@
 			
 			@media all and (max-width: $screen-xs-min) {
 				display: none;
-			}
-			
-			a {
-				&:focus {
-					box-shadow: none;
-				}
 			}
 			
 			> span {
