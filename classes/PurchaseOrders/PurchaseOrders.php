@@ -18,6 +18,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 
 
@@ -109,7 +110,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 		
 		// Add pdf Purchase Order print
-		add_filter('atum/inventory_logs/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
+		add_filter('atum/order_post_type/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
 
 		// Add the hooks for the Purchase Price field
 		Hooks::purchase_price_hooks();
@@ -401,7 +402,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		if ( AtumCapabilities::current_user_can( 'export_data' ) && ModuleManager::is_module_active( 'data_export' ) ) {
 			$actions['pdf'] = array(
 				'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_pdf&document=POModel&atum_order_id={$purchase_order->get_id()}" ), 'atum-order-pdf' ),
-				'name'   => __( 'Generate Pdf', ATUM_TEXT_DOMAIN ),
+				'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
 				'action' => 'pdf',
 				'target' => '_blank'
 			);
