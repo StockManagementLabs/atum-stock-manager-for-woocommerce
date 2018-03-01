@@ -26,25 +26,34 @@ In the preparation process for the development stage, we have tested and tried t
 
 = AVAILABLE FEATURES =
 
-**NOW INCLUDED - SET THE DESIRED NUMBER OF DECIMAL PLACES IN STOCK QUANTITY FIELDS**
+**NEW ATUM DASHBOARD UPDATE 1.4.0**
 
-**NEW MEGA UPDATE 1.3.0**
+The new ATUM Dashboard creates an entirely new and we felt a necessary connection between the creators and users. The dashboard aims to become everyday screen with a quick link to support, documentation and most importantly business stats. We have developed brand new widget section that can be personalised from every corner.
 
-Version 1.3.0 brings one of the most significant updates yet. ATUM has become more than just an inventory management plugin. Users can create Purchase Orders, setup Locations, and Suppliers. We are now bringing full WPML compatibility. Read further for the complete list of new features.
+* Business statistics of revenue and product sales. The user can filter the performance per period and choose from three graphical views.
+* Widgets for Sales, Lost Sales, Orders and Promo Sales.
+* Stock Control Widget for a better summary of In Stock, Low Stock and Out of Stock Products.
+* Latest News - direct link to our new blog where we discuss functions and new features coming to ATUM.
+* Full feed of our YouTube channel and video Tutorials that can be viewed directly in your WP admin.
+* Build for unlimited widget additions. Our team will develop widgets for every feature, so the user has the full freedom.
+
+
+https://www.youtube.com/watch?v=mrTOq1i6LD4
+
+
+**NOW INCLUDED - PDF FOR PURCHASE ORDERS - DOWNLOAD AND PRINT**
+
+https://www.youtube.com/watch?v=wW_aDwQN4x4&t=2s
+
+Version 1.3.0 brought one of the most significant updates yet. ATUM has become more than just an inventory management plugin. Users can create Purchase Orders, setup Locations, and Suppliers. We are now bringing full WPML compatibility. Read further for the complete list of new features.
 
 * Inventory logs now allow you to increase or reduce WooCommerce stock.
 * Product Locations feature lets you create several storage locations per item.
 * Location hierarchy available too - create custom storage places within a location.
-
-https://youtu.be/K7tIFcjAGRI
-
 * Add Suppliers feature - add new suppliers and save their data for more natural inventory management and ordering.
 * Set default and assign users or locations to individual suppliers.
 * Pair products with suppliers for quick selling stock re-ordering.
 * Set different suppliers to each variation.
-
-https://youtu.be/O1jqufCBY5w
-
 * Add Purchase Orders - create purchase orders for your sellable WooCommerce inventory.
 * Each purchase order belongs to previously created suppliers - a quick search for products has never been easier.
 * Add products to stock when you receive them at storage locations.
@@ -54,16 +63,15 @@ https://youtu.be/O1jqufCBY5w
 * Pending inbound stock reflects in Stock Central.
 * Direct Purchase Order editing from the inbound stock page.
 
-https://youtu.be/0kr7XJvAbkE
 
-**ATUM Features - Stock Central - WooCommerce Inventory Overview**
+**ATUM Features - Stock Central**
 
-https://youtu.be/CMb-F5wkk1g
+https://www.youtube.com/watch?v=iidJFMO6kOs
 
+https://www.youtube.com/watch?v=nRZn5W6-v4Y
 
-Stock Central - Manage inventory at product level or how to display products in Stock Central?
+https://www.youtube.com/watch?v=-2ezh0HfkDE
 
-https://youtu.be/k0dHqQnSX6A
 
 
 Our ground-breaking Stock Central lets users see, edit and update all WooCommerce products quickly and efficiently.
@@ -83,16 +91,10 @@ Our ground-breaking Stock Central lets users see, edit and update all WooCommerc
 * Inventory / Stock filters, new product category filters, extra drop-down filters and new column sorting.
 * Intelligent settings for easy inventory/stock management.
 
+
 **Advanced Features - ATUM - WooCommerce Inventory Management**
 
 The ever-growing list of features available for free within the ATUM plugin.
-
-
-**Dashboard Statistics**
-
-https://youtu.be/gAoS25Z6ixw
-
-The feature that makes the running of your business lot easier. Expand your Wordpress dashboard with lots of prominent business figures from sales and promos to inventory. Now with the ability to add or remove any data.
 
 
 
@@ -211,7 +213,7 @@ We released the core version of ATUM in January 2017, and the team is now workin
 
 We are glad to confirm that locations of storage such as warehouses will be a part of the free version. As of August September 2017, we have started to work on this feature including locations zones, etc.
 
-= I have all of the variations with the correct inventory quantities and see the green check mark 'in stock' when I display the variations. However, the product still shows 'Out of Stock' in the store. =
+= I have all of the variations with the correct inventory quantities and see the green check mark 'in stock' when I display the variations. However, the product still shows 'Out of Stock' in the store =
 
 WooCommerce stock instances are something we have already tackled. Please, watch the videos below to see all the steps to help you out.
 
