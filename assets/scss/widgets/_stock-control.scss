@@ -13,7 +13,7 @@
 
 .stock-control-widget {
 	@include flexbox;
-	padding-top: $grid-gutter-width;
+	padding-top: 5px;
 	
 	@media all and (max-width: $screen-sm-min) {
 		padding-top: $grid-gutter-width/2;

@@ -90,8 +90,10 @@
 
 	</div>
 
-	<canvas class="statistics-canvas" data-chartdata='<?php echo json_encode($dataset) ?>' data-period="<?php echo $period ?>" data-legends='<?php echo json_encode($legends) ?>'></canvas>
-	<div class="stats-chart-tooltip" id="stats-chart-tooltip-0"></div>
-	<div class="stats-chart-tooltip" id="stats-chart-tooltip-1"></div>
+	<div class="canvas-wrapper">
+		<canvas class="statistics-canvas" data-chartdata='<?php echo json_encode($dataset) ?>' data-period="<?php echo $period ?>" data-legends='<?php echo json_encode($legends) ?>'></canvas>
+		<div class="stats-chart-tooltip" id="stats-chart-tooltip-0"></div>
+		<div class="stats-chart-tooltip" id="stats-chart-tooltip-1"></div>
+	</div>
 
 </div>

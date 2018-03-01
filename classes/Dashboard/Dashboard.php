@@ -38,52 +38,60 @@ class Dashboard {
 	 */
 	private static $default_widgets_layout = array(
 		ATUM_PREFIX . 'statistics_widget'    => array(
-			'x'      => 0,                              // X edge position
-			'y'      => 0,                              // Y edge position
-			'width'  => 12,                             // Width in columns (based in 12 columns)
-			'height' => 4                               // Height in rows
+			'x'          => 0,                              // X edge position
+			'y'          => 0,                              // Y edge position
+			'width'      => 12,                             // Width in columns (based in 12 columns)
+			'height'     => 4,                              // Height in rows
+			'min-height' => 5                               // Min height in rows
 		),
 		ATUM_PREFIX . 'sales_widget'         => array(
-			'x'      => 0,
-			'y'      => 4,
-			'width'  => 3,
-			'height' => 4
+			'x'          => 0,
+			'y'          => 5,
+			'width'      => 3,
+			'height'     => 4,
+			'min-height' => 5
 		),
 		ATUM_PREFIX . 'lost_sales_widget'    => array(
-			'x'      => 3,
-			'y'      => 4,
-			'width'  => 3,
-			'height' => 4
+			'x'          => 3,
+			'y'          => 5,
+			'width'      => 3,
+			'height'     => 4,
+			'min-height' => 5
 		),
 		ATUM_PREFIX . 'orders_widget'        => array(
-			'x'      => 6,
-			'y'      => 4,
-			'width'  => 3,
-			'height' => 4
+			'x'          => 6,
+			'y'          => 5,
+			'width'      => 3,
+			'height'     => 4,
+			'min-height' => 5
 		),
 		ATUM_PREFIX . 'promo_sales_widget'   => array(
-			'x'      => 9,
-			'y'      => 4,
-			'width'  => 3,
-			'height' => 4
+			'x'          => 9,
+			'y'          => 5,
+			'width'      => 3,
+			'height'     => 4,
+			'min-height' => 5
 		),
 		ATUM_PREFIX . 'stock_control_widget' => array(
-			'x'      => 0,
-			'y'      => 8,
-			'width'  => 6,
-			'height' => 4
+			'x'          => 0,
+			'y'          => 10,
+			'width'      => 6,
+			'height'     => 4,
+			'min-height' => 5
 		),
 		ATUM_PREFIX . 'news_widget'          => array(
-			'x'      => 6,
-			'y'      => 8,
-			'width'  => 6,
-			'height' => 4
+			'x'          => 6,
+			'y'          => 10,
+			'width'      => 6,
+			'height'     => 4,
+			'min-height' => 5
 		),
 		ATUM_PREFIX . 'videos_widget'        => array(
-			'x'      => 0,
-			'y'      => 12,
-			'width'  => 12,
-			'height' => 5
+			'x'          => 0,
+			'y'          => 15,
+			'width'      => 12,
+			'height'     => 5,
+			'min-height' => 7
 		),
 	);
 
@@ -94,7 +102,6 @@ class Dashboard {
 	protected $widget_grid_item_defaults = array(
 		'id'         => '',
 		'min-width'  => 3,
-		'min-height' => 2,
 		'max-width'  => 12
 	);
 
