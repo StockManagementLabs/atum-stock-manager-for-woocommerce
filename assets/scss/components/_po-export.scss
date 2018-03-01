@@ -1,3 +1,8 @@
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+
 .po-wrapper {
 	width: calc(100% - 40px);
 	padding: 30px 20px 20px 20px;
@@ -35,7 +40,8 @@
 	margin-top: 0;
 	margin-bottom: 10px;
 	font-size: 25px;
-	color: $brand-primary
+	color: $brand-primary;
+	text-transform: uppercase;
 	
 }
 
@@ -53,6 +59,7 @@
 		color: #FFF;
 		padding: 5px 10px;
 		margin: 0;
+		text-transform: uppercase;
 	}
 }
 
@@ -68,6 +75,7 @@
 		background-color: $brand-primary;
 		th {
 			color: #FFF;
+			text-transform: uppercase;
 		}
 	}
 	th, td {
@@ -102,6 +110,11 @@
 		font-weight: bold;
 	}
 	
+}
+.content-description {
+	.label {
+		text-transform: uppercase;
+	}
 }
 
 .po-content {

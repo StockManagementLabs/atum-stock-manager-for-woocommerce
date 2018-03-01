@@ -111,7 +111,6 @@
 				handle                : '.widget-header',
 				alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
 				verticalMargin        : 30,
-				cellHeight            : 'auto',
 				resizable             : {
 					autoHide   : true,
 					handles    : 'se, sw',
@@ -123,6 +122,12 @@
 			$gridStackElem.on('change', function(event, items) {
 				self.saveWidgetsLayout();
 				self.addScrollBars();
+			});
+			
+			// Dynamic min height for widgets
+			$gridStackElem.on('resizestart', function (event, ui) {
+				var minHeight = ui.element.find('.widget-body').outerHeight() + ui.element.find('.widget-header').outerHeight();
+				ui.element.closest('.atum-widget').css('min-height', minHeight);
 			});
 			
 		},
@@ -189,7 +194,8 @@
 			});
 			
 			// Restore default layout and widgets
-			$('.restore-defaults').click(function() {
+			var $restoreDashDefaults = $('.restore-defaults');
+			$restoreDashDefaults.click(function() {
 				
 				swal({
 					title              : atumDashVars.areYouSure,
@@ -214,6 +220,7 @@
 								},
 								dataType  : 'json',
 								beforeSend: function () {
+									$restoreDashDefaults.tooltip('destroy');
 									$(self.elem).addClass('overlay');
 								},
 								success   : function () {

@@ -3,7 +3,9 @@
 //-----------------------
 
 .statistics-widget {
-	height: 260px;
+	height: 322px;
+	@include flexbox;
+	@include flex-wrap(wrap);
 	
 	.mobile-filter-nav {
 		display: none;
@@ -44,10 +46,11 @@
 	}
 	
 	.chart-filter {
+		width: 100%;
 		@include flexbox;
 		@include flex-align-items(center);
 		@include flex-justify-content(space-between);
-		margin-bottom: $grid-gutter-width*1.5;
+		margin-bottom: $grid-gutter-width/2;
 		
 		@media all and (max-width: $screen-sm-min) {
 			margin-bottom: $grid-gutter-width/2;
@@ -187,6 +190,11 @@
 			}
 		}
 		
+	}
+	
+	.canvas-wrapper {
+		width: 100%;
+		@include flex-grow(1);
 	}
 	
 	.statistics-canvas {

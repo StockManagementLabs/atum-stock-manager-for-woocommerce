@@ -147,8 +147,9 @@ body.toplevel_page_atum-dashboard {
 			width: 33.3333%;
 			border: 1px solid $card-border;
 			border-radius: 5px;
-			background: $card-bg center 1px;
-			background-size: cover;
+			background: $card-bg center 1px no-repeat;
+			background-size: contain;
+			background-position: bottom;
 			position: relative;
 			overflow: hidden;
 			

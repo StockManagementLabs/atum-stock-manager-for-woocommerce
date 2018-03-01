@@ -384,7 +384,7 @@ class HtmlReport extends ListTable {
 
 		$report = ob_get_clean();
 
-		Helpers::load_view('reports/stock-central-report-html', compact('report', 'columns', 'max_columns', 'product_type', 'category', 'count_views'));
+		Helpers::load_view('exports/stock-central-html', compact('report', 'columns', 'max_columns', 'product_type', 'category', 'count_views'));
 
 	}
 	

@@ -16,8 +16,10 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\DataExport\Models\POExport;
 use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 
 
@@ -109,7 +111,10 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 		
 		// Add pdf Purchase Order print
-		add_filter('atum/inventory_logs/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
+		add_filter('atum/order_post_type/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
+
+		// Generate Purchase Order's PDF
+		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );
 
 		// Add the hooks for the Purchase Price field
 		Hooks::purchase_price_hooks();
@@ -400,14 +405,48 @@ class PurchaseOrders extends AtumOrderPostType {
 		
 		if ( AtumCapabilities::current_user_can( 'export_data' ) && ModuleManager::is_module_active( 'data_export' ) ) {
 			$actions['pdf'] = array(
-				'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_pdf&document=POModel&atum_order_id={$purchase_order->get_id()}" ), 'atum-order-pdf' ),
-				'name'   => __( 'Generate Pdf', ATUM_TEXT_DOMAIN ),
+				'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_pdf&atum_order_id={$purchase_order->get_id()}" ), 'atum-order-pdf' ),
+				'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
 				'action' => 'pdf',
 				'target' => '_blank'
 			);
 		}
 		
 		return $actions;
+	}
+
+	/**
+	 * Generate an Atum order pdf
+	 *
+	 * @since 1.3.9
+	 */
+	public function generate_order_pdf() {
+
+		$atum_order_id = absint( $_GET['atum_order_id'] );
+
+		if ( AtumCapabilities::current_user_can( 'export_data' ) && check_admin_referer( 'atum-order-pdf' ) && $atum_order_id ) {
+
+			$po_export = new POExport( $atum_order_id);
+
+			$mpdf = new \mPDF( 'utf-8', 'A4' );
+			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
+
+			$mpdf->default_available_fonts = $mpdf->available_unifonts;
+
+			$css = $po_export->get_stylesheets();
+
+			foreach ($css as $file) {
+				$stylesheet = file_get_contents( $file);
+				$mpdf->WriteHTML($stylesheet, 1);
+			}
+
+			$mpdf->WriteHTML(  $po_export->get_content() );
+
+			// Output a PDF file directly to the browser
+			$mpdf->Output("po-{$po_export->get_id()}.pdf", 'I');
+
+		}
+
 	}
 
 }

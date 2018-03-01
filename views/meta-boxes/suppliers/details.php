@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) or die;
 ?>
 
 <div class="atum-meta-box supplier">
+
 	<p class="description"><?php _e('Provide basic information on this supplier.', ATUM_TEXT_DOMAIN) ?></p>
 
 	<div class="form-field form-field-wide">
@@ -60,10 +61,6 @@ defined( 'ABSPATH' ) or die;
 		<textarea id="description" name="supplier_details[description]" rows="5"><?php echo get_post_meta($supplier_id, '_supplier_details_description', TRUE) ?></textarea>
 	</div>
 
-	<div class="form-field form-field-wide">
-		<label for="tags"><?php _e('Tags', ATUM_TEXT_DOMAIN) ?></label>
-		<input type="text" id="tags" name="supplier_details[tags]" value="<?php echo get_post_meta($supplier_id, '_supplier_details_tags', TRUE) ?>">
-	</div>
 </div>
 
 
