@@ -130,7 +130,7 @@ class POExport extends PurchaseOrder {
 		
 		ob_start();
 
-		Helpers::load_view('reports/purchase-order-report-html', compact('po', 'total_text_colspan', 'post_type', 'currency', 'discount', 'desc_percent', 'taxes', 'n_taxes', 'line_items_fee', 'line_items_shipping'));
+		Helpers::load_view('exports/purchase-order-html', compact('po', 'total_text_colspan', 'post_type', 'currency', 'discount', 'desc_percent', 'taxes', 'n_taxes', 'line_items_fee', 'line_items_shipping'));
 
 		return ob_get_clean();
 		
