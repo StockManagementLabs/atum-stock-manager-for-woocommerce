@@ -179,9 +179,6 @@ class Main {
 		// Register the help pointers
 		//add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
 
-		// Admin styles
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
-
 		// Add the footer text to ATUM pages
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 		
@@ -463,27 +460,6 @@ class Main {
 		// Instantiate the class and pass our pointers array to the constructor
 		new HelpPointers( $pointers );
 		
-	}
-
-	/**
-	 * Enqueue styles on WP admin
-	 *
-	 * @since 1.2.3
-	 */
-	public function admin_styles() {
-
-		$screen    = get_current_screen();
-		$screen_id = $screen ? $screen->id : '';
-
-		// Enqueue ATUM widgets styles for WP dashboard
-		if ( in_array( $screen_id, array( 'dashboard' ) ) ) {
-			wp_register_style( 'atum-wp-dashboard-widgets', ATUM_URL . '/assets/css/atum-wp-dashboard-widgets.css', array(), ATUM_VERSION );
-			wp_enqueue_style( 'atum-wp-dashboard-widgets' );
-
-			wp_register_script( 'circle-progress', ATUM_URL . 'assets/js/vendor/circle-progress.min.js', array('jquery'), ATUM_VERSION, TRUE );
-			wp_enqueue_script( 'circle-progress' );
-		}
-
 	}
 
 	/**
