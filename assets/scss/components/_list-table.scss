@@ -44,6 +44,12 @@ h1.wp-heading-inline {
 	width: 100%;
 	overflow: hidden;
 	
+	a {
+		&:focus {
+			box-shadow: none;
+		}
+	}
+	
 	.search-box {
 		input[type=search] {
 			margin-right: 0;
@@ -400,6 +406,24 @@ h1.wp-heading-inline {
 		.product-part, .raw-material {
 			display: block;
 			padding-top: 6px;
+		}
+	}
+	
+	.column-calc_hierarchy {
+		.dashicons {
+			display: block;
+			text-indent: -9999px;
+			position: relative;
+			height: 1em;
+			width: 1em;
+			margin: 0 auto;
+			
+			&:before {
+				text-indent: 0;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
 		}
 	}
 	
