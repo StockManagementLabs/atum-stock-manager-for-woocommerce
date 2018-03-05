@@ -327,7 +327,7 @@ final class Hooks {
 	 *
 	 * @param int $post_id
 	 */
-	public static function save_purchase_price ($post_id) {
+	public static function save_purchase_price($post_id) {
 
 		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
@@ -340,8 +340,9 @@ final class Hooks {
 			}
 			elseif ( isset($_POST['variation_purchase_price']) ) {
 
-				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( reset($_POST['variation_purchase_price']) ) : '';
-				$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
+				$product_key    = array_search( $post_id, $_POST['variable_post_id'] );
+				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
+				$purchase_price = ( '' === $purchase_price ) ? '' : wc_format_decimal( $purchase_price );
 				update_post_meta( $post_id, '_purchase_price', $purchase_price );
 
 			}
