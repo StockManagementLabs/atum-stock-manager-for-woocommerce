@@ -456,8 +456,10 @@ class Suppliers {
 		}
 
 		if ( isset($_POST['variation_supplier'], $_POST['variation_supplier_sku']) ) {
-			$supplier = reset($_POST['variation_supplier']);
-			$supplier = $supplier ? absint($supplier) : '';
+
+			$product_key = array_search( $post_id, $_POST['variable_post_id'] );
+			$supplier    = $_POST['variation_supplier'][ $product_key ];
+			$supplier    = $supplier ? absint( $supplier ) : '';
 
 			$supplier_sku = reset($_POST['variation_supplier_sku']);
 		}

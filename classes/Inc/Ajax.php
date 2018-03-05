@@ -314,7 +314,7 @@ final class Ajax {
 
 		$args = array(
 			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'screen'   => 'toplevel_page_' . StockCentral::UI_SLUG
+			'screen'   => $_REQUEST['screen']
 		);
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
@@ -337,7 +337,7 @@ final class Ajax {
 
 		$args = array(
 			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'screen'   => 'toplevel_page_' . InboundStock::UI_SLUG
+			'screen'   => $_REQUEST['screen']
 		);
 
 		do_action( 'atum/ajax/inbound_stock/before_fetch_list' );
@@ -1562,7 +1562,7 @@ final class Ajax {
 
 		check_ajax_referer( 'import-order-items', 'security' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! AtumCapabilities::current_user_can('edit_inventory_log') ) {
 			wp_die( -1 );
 		}
 
@@ -1590,7 +1590,7 @@ final class Ajax {
 						foreach ($items as $item) {
 
 							if ( is_a($item, '\WC_Order_Item_Product') ) {
-								$log_item = $atum_order->add_product( wc_get_product( $item->get_product_id() ), $item->get_quantity() );
+								$log_item = $atum_order->add_product( $item->get_product(), $item->get_quantity() );
 							}
 							elseif ( is_a($item, '\WC_Order_Item_Fee') ) {
 								$log_item = $atum_order->add_fee($item);

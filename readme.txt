@@ -7,7 +7,7 @@ Tested up to: 4.9.4
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.3
-Stable tag: 1.4.0
+Stable tag: 1.4.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -259,9 +259,23 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.0.1`
+
+*2018-03-05*
+
+Fixes
+
+* CSS fixes for the Product Levels' BOM Hierarchy column.
+* Fixed hidden columns when using the ListTable search.
+* Fixed saving multiple ATUM custom meta at once on variations.
+* Fixed Log Reservation Date not saving.
+* Fixed importing variation products from WC order to Inventory Logs.
+
+---
+
 `1.4.0`
 
-*2018-02-28*
+*2018-03-01*
 
 Features
 

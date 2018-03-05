@@ -219,6 +219,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.0.1`
+
+*2018-03-05*
+
+Fixes
+
+* CSS fixes for the Product Levels' BOM Hierarchy column.
+* Fixed hidden columns when using the ListTable search.
+* Fixed saving multiple ATUM custom meta at once on variations.
+* Fixed Log Reservation Date not saving.
+* Fixed importing variation products from WC order to Inventory Logs.
+
+---
+
 `1.4.0`
 
 *2018-02-28*

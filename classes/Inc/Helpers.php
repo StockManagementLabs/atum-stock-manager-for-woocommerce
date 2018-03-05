@@ -1358,7 +1358,7 @@ final class Helpers {
 		}
 		
 		// Hack to prevent overwriting the purchase_price on variations
-		remove_action( 'woocommerce_update_product_variation', array(Main::get_instance(), 'save_purchase_price') );
+		remove_action( 'woocommerce_update_product_variation', array('\Atum\Inc\Hooks', 'save_purchase_price') );
 		
 		$product->save();
 		

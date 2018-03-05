@@ -69,7 +69,7 @@
 					.on( 'wc_backbone_modal_response', this.backbone.response );
 				
 				// Trigger ATUM order type dependent fields
-				$('#atum_order_type').change(this.toggleExtraFields);
+				$('#atum_order_type').change(this.toggleExtraFields).change();
 				
 				// Items' blockers
 				$('.atum_order_data_column_container').on( 'change', '.block-items', this.maybe_remove_items );

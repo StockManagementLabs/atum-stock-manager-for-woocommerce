@@ -134,7 +134,7 @@
 			
 			$iframe.appendTo('body');*/
 			
-			window.open(ajaxurl + '?action=atum_export_data&page=' + this.getUrlParameter('page') + '&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize(), '_blank');
+			window.open(ajaxurl + '?action=atum_export_data&page=' + this.getUrlParameter('page') + '&screen=' + atumExport.screen + '&token=' + atumExport.exportNonce + '&' + this.$exportForm.serialize(), '_blank');
 		
 		},
 		

@@ -548,6 +548,10 @@ h1.wp-heading-inline .atum-loading {
   overflow: hidden;
 }
 
+.atum-list-wrapper a:focus {
+  box-shadow: none;
+}
+
 .atum-list-wrapper .search-box input[type=search] {
   margin-right: 0;
   width: 187px;
@@ -860,6 +864,22 @@ h1.wp-heading-inline .atum-loading {
 .atum-list-table .column-calc_type .product-part, .atum-list-table .column-calc_type .raw-material {
   display: block;
   padding-top: 6px;
+}
+
+.atum-list-table .column-calc_hierarchy .dashicons {
+  display: block;
+  text-indent: -9999px;
+  position: relative;
+  height: 1em;
+  width: 1em;
+  margin: 0 auto;
+}
+
+.atum-list-table .column-calc_hierarchy .dashicons:before {
+  text-indent: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .atum-list-table .set-meta {
