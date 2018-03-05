@@ -60,8 +60,10 @@ class DataExport {
 				'option_select_text' => __( 'Show all categories', ATUM_TEXT_DOMAIN )
 			) );
 			$product_categories = ob_get_clean();
+			$screen = get_current_screen();
 
 			wp_localize_script( 'atum-data-export', 'atumExport', apply_filters( 'atum/data_export/js_settings', array(
+				'screen'            => $screen->id,
 				'tabTitle'          => __( 'Export Data', ATUM_TEXT_DOMAIN ),
 				'submitTitle'       => __( 'Export', ATUM_TEXT_DOMAIN ),
 				'outputFormatTitle' => __( 'Output Format', ATUM_TEXT_DOMAIN ),
@@ -260,6 +262,10 @@ class DataExport {
 
 		if ( isset( $args['title_max_length'] ) ) {
 			$report_settings['title_max_length'] = $args['title_max_length'];
+		}
+
+		if ( isset( $args['screen'] ) ) {
+			$report_settings['screen'] = $args['screen'];
 		}
 
 		ob_start();

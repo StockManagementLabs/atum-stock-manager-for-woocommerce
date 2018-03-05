@@ -714,6 +714,7 @@
 					data = $.extend({
 						token       : atumListTable.nonce,
 						action      : $listWrapper.data('action'),
+						screen      : $listWrapper.data('screen'),
 						per_page    : perPage,
 						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m           : $listWrapper.find('#filter-by-date').val() || '',

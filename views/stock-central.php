@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) or die;
 	</h1>
 	<hr class="wp-header-end">
 
-	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list">
+	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo $list->screen->id ?>">
 		
 		<?php $list->views(); ?>
 

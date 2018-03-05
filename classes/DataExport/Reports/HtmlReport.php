@@ -36,9 +36,6 @@ class HtmlReport extends ListTable {
 	 */
 	public function __construct( $args = array() ) {
 
-		// Avoid a PHP Notice error when loading the PDF report
-		$args['screen'] = 'toplevel_page_' . StockCentral::UI_SLUG;
-
 		if ( isset( $args['title_max_length'] ) ) {
 			$this->title_max_length = absint( $args['title_max_length'] );
 		}
