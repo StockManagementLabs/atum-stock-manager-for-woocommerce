@@ -12,10 +12,8 @@
 
 namespace Atum\Inc;
 
-use Atum\Modules\ModuleManager;
-
-
 defined( 'ABSPATH' ) or die;
+
 
 final class Hooks {
 
