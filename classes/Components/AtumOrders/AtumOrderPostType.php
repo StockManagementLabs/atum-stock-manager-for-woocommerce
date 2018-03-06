@@ -1125,7 +1125,7 @@ abstract class AtumOrderPostType {
 	 */
 	public static function get_statuses() {
 
-		return (array) apply_filters( 'atum/' . static::POST_TYPE . '/statuses', array(
+		return (array) apply_filters( 'atum/order_post_type/statuses', array(
 			'pending'   => __( 'Pending', ATUM_TEXT_DOMAIN ),
 			'completed' => __( 'Completed', ATUM_TEXT_DOMAIN )
 		) );

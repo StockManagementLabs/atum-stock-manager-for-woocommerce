@@ -21,6 +21,8 @@ use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
+use Atum\Suppliers\Suppliers;
+
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -83,11 +85,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $per_page;
 	
 	/**
-	 * Arrat with the id's of the products in current page
+	 * Array with the id's of the products in current page
 	 * @var array
 	 */
 	protected $current_products;
-	
+
+	/**
+	 * Used to include product variations in the Supplier filterings
+	 * @var array
+	 */
+	protected $supplier_variation_products = array();
+
 	/**
 	 * Taxonomies to filter by
 	 * @var array
@@ -1190,15 +1198,27 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can('read_supplier') ) {
 
+			$supplier = absint( $_REQUEST['supplier'] );
+
 			if ( ! empty($args['meta_query']) ) {
 				$args['meta_query']['relation'] = 'AND';
 			}
 
 			$args['meta_query'][] = array(
 				'key'   => '_supplier',
-				'value' => absint( $_REQUEST['supplier'] ),
+				'value' => $supplier,
 				'type'  => 'numeric'
 			);
+
+			// TODO: FILTERING BY SUPPLIER DOES NOT BRING VARIATIONS
+			// This query does not get product variations and as each variation may have a distinct supplier,
+			// we have to get them separately and to add their variables to the results
+			/*$this->supplier_variation_products = Suppliers::get_supplier_products($supplier, 'ids', 'product_variation');
+
+			if ( ! empty($this->supplier_variation_products) ) {
+				add_filter( 'atum/list_table/views_data_products', array($this, 'add_supplier_variables_to_query') );
+				add_filter( 'atum/list_table/views_data_variations', array($this, 'add_supplier_variations_to_query'), 10, 2 );
+			}*/
 
 		}
 
@@ -1325,6 +1345,49 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Add the supplier's variable products to the filtered query
+	 *
+	 * @since 1.4.0.2
+	 *
+	 * @param array $products
+	 *
+	 * @return array
+	 */
+	/*public function add_supplier_variables_to_query($products) {
+
+		foreach ($this->supplier_variation_products as $variation_id) {
+			$variation_product = wc_get_product( $variation_id );
+
+			if ( ! is_a($variation_product, '\WC_Product_Variation') ) {
+				continue;
+			}
+
+			$variable_id = $variation_product->get_parent_id();
+
+			if ( ! is_array($products) || ! in_array($variable_id, $products) ) {
+				$products[] = $variable_id;
+			}
+		}
+
+		return $products;
+	}*/
+
+	/**
+	 * Add the supplier's variation products to the filtered query
+	 *
+	 * @since 1.4.0.2
+	 *
+	 * @param array $variations
+	 * @param array $products
+	 *
+	 * @return array
+	 */
+	/*public function add_supplier_variations_to_query($variations, $products) {
+
+		return array_intersect($variations, $this->supplier_variation_products);
+	}*/
+
+	/**
 	 * Set views for table filtering and calculate total value counters for pagination
 	 *
 	 * @since 0.0.2
@@ -1355,25 +1418,28 @@ abstract class AtumListTable extends \WP_List_Table {
 		unset( $args['paged'] );
 
 		$all_transient = 'atum_list_table_all_' . Helpers::get_transient_identifier( $args );
-		$posts = Helpers::get_transient( $all_transient );
+		$products = Helpers::get_transient( $all_transient );
 
-		if ( ! $posts ) {
+		if ( ! $products ) {
 
 			global $wp_query;
 			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_args', $args ) );
-			$posts = $wp_query->posts;
+			$products = $wp_query->posts;
 
 			// Save it as a transient to improve the performance
-			Helpers::set_transient( $all_transient, $posts );
+			Helpers::set_transient( $all_transient, $products );
 
 		}
 
-		$this->count_views['count_all'] = count( $posts );
+		// Let others play here
+		$products = apply_filters( 'atum/list_table/views_data_products', $products );
+
+		$this->count_views['count_all'] = count( $products );
 
 		$variations = $group_items = '';
 
 		// If it's a search or a product filtering, include only the filtered items to search for children
-		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) || ! empty($_REQUEST['supplier']) ) ? $posts : array();
+		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) || ! empty($_REQUEST['supplier']) ) ? $products : array();
 
 		foreach($this->taxonomies as $index => $taxonomy) {
 
@@ -1381,7 +1447,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				if ( in_array('variable', (array) $taxonomy['terms']) ) {
 
-					$variations = $this->get_children( 'variable', $post_in, 'product_variation' );
+					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
 
 					// Add the Variations to the posts list
 					if ( $variations ) {
@@ -1391,7 +1457,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$this->count_views['count_parent']   += count( $this->variable_products );
 						$this->count_views['count_all']      += ( count( $variations ) - count( $this->variable_products ) );
 
-						$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
+						$products = array_unique( array_merge( array_diff( $products, $this->variable_products ), $variations ) );
 
 					}
 
@@ -1399,7 +1465,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				if ( in_array('grouped', (array) $taxonomy['terms']) ) {
 
-					$group_items = $this->get_children( 'grouped', $post_in );
+					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
 
 					// Add the Group Items to the posts list
 					if ( $group_items ) {
@@ -1409,7 +1475,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$this->count_views['count_parent']   += count( $this->grouped_products );
 						$this->count_views['count_all']      += ( count( $group_items ) - count( $this->grouped_products ) );
 
-						$posts = array_unique( array_merge( array_diff( $posts, $this->grouped_products ), $group_items ) );
+						$products = array_unique( array_merge( array_diff( $products, $this->grouped_products ), $group_items ) );
 
 					}
 
@@ -1428,7 +1494,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$this->count_views['count_parent']   += count( $this->variable_products );
 						$this->count_views['count_all']      += ( count( $variations ) - count( $this->variable_products ) );
 
-						$posts = array_unique( array_merge( array_diff( $posts, $this->variable_products ), $variations ) );
+						$products = array_unique( array_merge( array_diff( $products, $this->variable_products ), $variations ) );
 
 					}
 
@@ -1441,7 +1507,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		if ( $posts ) {
+		if ( $products ) {
 
 			$post_types = ($variations) ? array($this->post_type, 'product_variation') : $this->post_type;
 
@@ -1458,7 +1524,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						'compare' => '>',
 					),
 				),
-				'post__in'       => $posts
+				'post__in'       => $products
 			);
 
 			$in_stock_transient = 'atum_list_table_in_stock_' . Helpers::get_transient_identifier( $args );
@@ -1477,7 +1543,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_in_stock->posts) );
 			}
 
-			$this->id_views['out_stock']          = array_diff( $posts, $posts_in_stock->posts );
+			$this->id_views['out_stock']          = array_diff( $products, $posts_in_stock->posts );
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'];
 
 			if ( $this->count_views['count_in_stock'] ) {
