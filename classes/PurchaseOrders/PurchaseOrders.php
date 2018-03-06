@@ -111,7 +111,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 		
 		// Add pdf Purchase Order print
-		add_filter('atum/order_post_type/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
+		add_filter('atum/' . self::POST_TYPE . '/admin_order_actions', array( $this, 'add_generate_pdf'), 10, 2);
 
 		// Generate Purchase Order's PDF
 		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );

@@ -219,6 +219,17 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.0.2`
+
+*2018-03-06*
+
+Fixes
+
+* Removed Purchase Order’s PDF export button from Inventory Logs.
+* Refactory.
+
+---
+
 `1.4.0.1`
 
 *2018-03-05*

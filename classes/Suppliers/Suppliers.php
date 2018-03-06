@@ -501,19 +501,20 @@ class Suppliers {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int    $supplier_id  The supplier ID
-	 * @param string $fields       Which fields to return (all or ids)
+	 * @param int           $supplier_id  The supplier ID
+	 * @param string        $fields       Optional. Which fields to return (all or ids)
+	 * @param array|string  $post_type    Optional. The product post types to get
 	 *
 	 * @return array|bool
 	 */
-	public static function get_supplier_products($supplier_id, $fields = '') {
+	public static function get_supplier_products( $supplier_id, $fields = '', $post_type = ['product', 'product_variation'] ) {
 
 		$supplier = get_post($supplier_id);
 
 		if ($supplier->post_type == self::POST_TYPE) {
 
 			$args = array(
-				'post_type'      => array('product', 'product_variation'),
+				'post_type'      => $post_type,
 				'posts_per_page' => - 1,
 				'fields'         => $fields,
 				'meta_query'     => array(
