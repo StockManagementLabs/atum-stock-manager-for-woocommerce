@@ -435,7 +435,7 @@ abstract class AtumOrderPostType {
 
 				?><p><?php
 
-				do_action( 'atum/order_post_type/admin_actions_start', $atum_order );
+				do_action( 'atum/' . static::POST_TYPE . '/admin_actions_start', $atum_order );
 
 				$actions = array();
 				$status = $atum_order->get_status();
@@ -468,13 +468,13 @@ abstract class AtumOrderPostType {
 					'target' => '_self',
 				);
 
-				$actions = apply_filters( 'atum/order_post_type/admin_order_actions', $actions, $atum_order );
+				$actions = apply_filters( 'atum/' . static::POST_TYPE . '/admin_order_actions', $actions, $atum_order );
 				
 				foreach ( $actions as $action ) {
 					printf( '<a class="button %s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
 				}
 				
-				do_action( 'atum/order_post_type/admin_actions_end', $atum_order ); ?>
+				do_action( 'atum/' . static::POST_TYPE . '/admin_actions_end', $atum_order ); ?>
 				</p><?php
 				
 				break;
@@ -744,7 +744,7 @@ abstract class AtumOrderPostType {
 		foreach ( $ids as $id ) {
 			$atum_order = Helpers::get_atum_order_model( $id );
 			$atum_order->update_status( $new_status, sprintf( __( '%s status changed by bulk edit:', ATUM_TEXT_DOMAIN ), $this->labels['singular_name']), TRUE );
-			do_action( 'atum/order_post_type/edit_status', $id, $new_status );
+			do_action( 'atum/' . static::POST_TYPE . '/edit_status', $id, $new_status );
 			$changed++;
 		}
 
@@ -1040,7 +1040,7 @@ abstract class AtumOrderPostType {
 		);
 
 		// Searches on meta data can be slow - this let you choose what fields to search
-		$search_fields = array_map( 'wc_clean', apply_filters( 'atum/order_post_type/search_fields', array('_order') ) );
+		$search_fields = array_map( 'wc_clean', apply_filters( 'atum/' . static::POST_TYPE . '/search_fields', array('_order') ) );
 		$atum_order_ids = array();
 
 		if ( is_numeric( $term ) ) {
@@ -1068,7 +1068,7 @@ abstract class AtumOrderPostType {
 
 		}
 
-		$atum_order_ids = apply_filters( 'atum/order_post_type/search_results', $atum_order_ids, $term, $search_fields );
+		$atum_order_ids = apply_filters( 'atum/' . static::POST_TYPE . '/search_results', $atum_order_ids, $term, $search_fields );
 
 		if ( ! empty( $atum_order_ids ) ) {
 			// Remove "s" - we don't want to search ATUM Order names
@@ -1125,7 +1125,7 @@ abstract class AtumOrderPostType {
 	 */
 	public static function get_statuses() {
 
-		return (array) apply_filters( 'atum/order_post_type/statuses', array(
+		return (array) apply_filters( 'atum/' . static::POST_TYPE . '/statuses', array(
 			'pending'   => __( 'Pending', ATUM_TEXT_DOMAIN ),
 			'completed' => __( 'Completed', ATUM_TEXT_DOMAIN )
 		) );
