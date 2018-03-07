@@ -74,17 +74,61 @@
 	
 	.woocommerce_variations {
 		
-		.form-first-row, .form-last-row {
+		.form-row-first, .form-row-last {
 			.atum-field {
+				position: relative;
 				margin-top: 2px;
 				
 				input[type=text] {
 					margin-top: 0;
-					width: calc(48% - 31px) !important;
+					width: calc(100% - 33px) !important;
 				}
+				
+				.select2-container {
+					max-width: calc(100% - 33px) !important;
+				}
+				
+				.woocommerce-help-tip {
+					position: absolute;
+					top: -25px;
+					right: 0;
+				}
+				
 			}
 		}
 		
+		.atum-data-panel {
+			border-top: 1px solid #DDD;
+			padding-top: $grid-gutter-width/2;
+		}
+		
+		h3.atum-section-title {
+			border: 1px solid $brand-info;
+			background-color: transparentize($blue-light, .85);
+			color: #555;
+			text-transform: uppercase;
+			cursor: pointer;
+		}
+		
+		._atum_manage_stock_field {
+			margin: 25px 0;
+		}
+		
+		h4.atum-section-title {
+			margin-top: 20px;
+		}
+		
+		.switchery {
+			margin-left: 5px;
+		}
+		
 	}
+	
+	#atum_product_data {
+		.switchery {
+			float: left;
+		}
+	}
+	
 	
 }

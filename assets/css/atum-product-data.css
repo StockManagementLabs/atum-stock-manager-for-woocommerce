@@ -239,13 +239,53 @@
   border-color: #5B9DD9;
 }
 
-.product_data .woocommerce_variations .form-first-row .atum-field, .product_data .woocommerce_variations .form-last-row .atum-field {
+.product_data .woocommerce_variations .form-row-first .atum-field, .product_data .woocommerce_variations .form-row-last .atum-field {
+  position: relative;
   margin-top: 2px;
 }
 
-.product_data .woocommerce_variations .form-first-row .atum-field input[type=text], .product_data .woocommerce_variations .form-last-row .atum-field input[type=text] {
+.product_data .woocommerce_variations .form-row-first .atum-field input[type=text], .product_data .woocommerce_variations .form-row-last .atum-field input[type=text] {
   margin-top: 0;
-  width: calc(48% - 31px) !important;
+  width: calc(100% - 33px) !important;
+}
+
+.product_data .woocommerce_variations .form-row-first .atum-field .select2-container, .product_data .woocommerce_variations .form-row-last .atum-field .select2-container {
+  max-width: calc(100% - 33px) !important;
+}
+
+.product_data .woocommerce_variations .form-row-first .atum-field .woocommerce-help-tip, .product_data .woocommerce_variations .form-row-last .atum-field .woocommerce-help-tip {
+  position: absolute;
+  top: -25px;
+  right: 0;
+}
+
+.product_data .woocommerce_variations .atum-data-panel {
+  border-top: 1px solid #DDD;
+  padding-top: 15px;
+}
+
+.product_data .woocommerce_variations h3.atum-section-title {
+  border: 1px solid #E3E8F5;
+  background-color: rgba(213, 242, 248, 0.15);
+  color: #555;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.product_data .woocommerce_variations ._atum_manage_stock_field {
+  margin: 25px 0;
+}
+
+.product_data .woocommerce_variations h4.atum-section-title {
+  margin-top: 20px;
+}
+
+.product_data .woocommerce_variations .switchery {
+  margin-left: 5px;
+}
+
+.product_data #atum_product_data .switchery {
+  float: left;
 }
 
 /*# sourceMappingURL=atum-product-data.css.map */
