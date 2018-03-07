@@ -49,6 +49,14 @@ final class Globals {
 	private static $stock_decimals;
 
 	/**
+	 * The ATUM fields within the WC's Product Data meta box (ATUM Inventory tab)
+	 * @var array
+	 */
+	private static $product_tab_fields = array(
+		'_atum_manage_stock' => 'checkbox'
+	);
+
+	/**
 	 * The ATUM pages hook name
 	 */
 	const ATUM_UI_HOOK = 'atum-inventory';
@@ -153,6 +161,17 @@ final class Globals {
 	 */
 	public static function set_stock_decimals($stock_decimals) {
 		self::$stock_decimals = absint($stock_decimals);
+	}
+
+	/**
+	 * Getter for the Product Data Tab Fields property
+	 *
+	 * @since 1.4.1
+	 *
+	 * @return array
+	 */
+	public static function get_product_tab_fields() {
+		return (array) apply_filters( 'atum/product_tab_fields', self::$product_tab_fields );
 	}
 	
 }

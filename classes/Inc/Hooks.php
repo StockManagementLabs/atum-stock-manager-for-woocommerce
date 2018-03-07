@@ -28,9 +28,11 @@ final class Hooks {
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 
 		// Handle the ATUM customizations to the WC's Product Data meta box
-		add_filter( 'woocommerce_product_data_tabs', array( __CLASS__, 'add_atum_product_data_tab' ) );
-		add_action( 'woocommerce_product_data_panels', array( __CLASS__, 'atum_product_data_panel' ) );
-		add_action( 'save_post_product', array( __CLASS__, 'save_manage_stock' ) );
+		add_filter( 'woocommerce_product_data_tabs', array( __CLASS__, 'add_product_data_tab' ) );
+		add_action( 'woocommerce_product_data_panels', array( __CLASS__, 'add_product_data_tab_panel' ) );
+		add_action( 'woocommerce_product_after_variable_attributes', array(__CLASS__, 'add_product_variation_data_panel'), 9, 3 );
+		add_action( 'save_post_product', array( __CLASS__, 'save_product_data_panel' ) );
+		add_action( 'woocommerce_save_product_variation', array(__CLASS__, 'save_product_variation_data_panel' ), 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'enqueue_scripts') );
 
@@ -96,7 +98,10 @@ final class Hooks {
 		$post_type = get_post_type();
 
 		if ($post_type == 'product' && $hook == 'post.php') {
-			wp_enqueue_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array(), ATUM_VERSION );
+			wp_enqueue_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
+			wp_enqueue_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array('switchery'), ATUM_VERSION );
+
+			wp_enqueue_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array('jquery'), ATUM_VERSION, TRUE );
 		}
 
 	}
@@ -110,7 +115,7 @@ final class Hooks {
 	 *
 	 * @return array
 	 */
-	public static function add_atum_product_data_tab($data_tabs) {
+	public static function add_product_data_tab($data_tabs) {
 
 		// Add the ATUM tab to Simple and BOM products
 		$bom_tab = array(
@@ -130,23 +135,159 @@ final class Hooks {
 	}
 
 	/**
-	 * Add the fields to ATUM Inventory tab in WC's Product Data meta box
+	 * Add the fields to ATUM Inventory tab within WC's Product Data meta box
 	 *
 	 * @since 1.4.1
 	 */
-	public static function atum_product_data_panel() {
+	public static function add_product_data_tab_panel() {
 
-		?><div id="atum_product_data" class="panel woocommerce_options_panel hidden"><?php
+		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden"><?php
 
 			woocommerce_wp_checkbox( array(
 				'id'            => '_atum_manage_stock',
+				'name'          => 'atum_product_tab[_atum_manage_stock]',
 				'value'         => get_post_meta( get_the_ID(), '_atum_manage_stock', TRUE ),
+				'class'         => 'js-switch',
 				'wrapper_class' => 'show_if_simple show_if_variable show_if_grouped',
 				'label'         => __( 'Inventory Manager', ATUM_TEXT_DOMAIN ),
 				'description'   => __( 'Enable to use this product and its data within the ATUM interface', ATUM_TEXT_DOMAIN ),
+				'desc_tip'      => TRUE
 			) );
 
-		?></div><?php
+			// Allow other fields to be added to the ATUM panel
+			do_action('atum/after_product_data_panel');
+
+			?>
+			<script type="text/javascript">
+				jQuery(function($){
+					atumDoSwitchers();
+
+					$('#woocommerce-product-data').on('woocommerce_variations_loaded', function() {
+						atumDoSwitchers();
+					});
+				});
+
+				function atumDoSwitchers() {
+					jQuery('.js-switch').each(function () {
+						new Switchery(this, { size: 'small' });
+						jQuery(this).removeClass('js-switch');
+					});
+				}
+			</script>
+		</div><?php
+
+	}
+
+	/**
+	 * Add the Product Levels meta boxes to the Product variations
+	 *
+	 * @since 0.0.3
+	 *
+	 * @param int      $loop             The current item in the loop of variations
+	 * @param array    $variation_data   The current variation data
+	 * @param \WP_Post $variation        The variation post
+	 */
+	public static function add_product_variation_data_panel ($loop, $variation_data, $variation) {
+
+		?>
+		<div class="atum-data-panel">
+			<h3 class="atum-section-title"><?php _e('ATUM Inventory', ATUM_LEVELS_TEXT_DOMAIN) ?></h3>
+
+			<?php
+			woocommerce_wp_checkbox( array(
+				'id'          => "_atum_manage_stock_{$loop}",
+				'name'        => "variation_atum_tab[_atum_manage_stock][$loop]",
+				'value'       => get_post_meta( $variation->ID, '_atum_manage_stock', TRUE ),
+				'class'       => 'js-switch',
+				'label'       => __( 'Inventory Manager', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'Enable to use this product and its data within the ATUM interface', ATUM_TEXT_DOMAIN ),
+				'desc_tip'    => TRUE
+			) );
+
+			// Allow other fields to be added to the ATUM panel
+			do_action('atum/after_variation_product_data_panel', $loop, $variation_data, $variation); ?>
+		</div>
+		<?php
+
+	}
+
+	/**
+	 * Save all the fields within the Product Data's ATUM Inventory tab
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id               The saved product's ID
+	 * @param array $product_tab_values     Allow passing the values to save externally instead of getting them from $_POST
+	 */
+	public static function save_product_data_panel( $product_id, $product_tab_values = array() ) {
+
+		if ( empty($product_tab_values) && isset( $_POST['atum_product_tab'] ) ) {
+			$product_tab_values = $_POST['atum_product_tab'];
+		}
+
+		$product_tab_fields = Globals::get_product_tab_fields();
+
+		foreach ($product_tab_fields as $field_name => $field_type) {
+
+			// Sanitize the fields
+			$field_value = '';
+			switch ( $field_type ) {
+				case 'checkbox':
+
+					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : '';
+					break;
+
+				case 'number_int':
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = absint( $product_tab_values[ $field_name ] );
+					}
+					break;
+
+				case 'number_float':
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = floatval( $product_tab_values[ $field_name ] );
+					}
+					break;
+
+				case 'text':
+				default:
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = wc_clean( $product_tab_values[ $field_name ] );
+					}
+
+					break;
+			}
+
+			if ( $field_value ) {
+				update_post_meta($product_id, $field_name, $field_value);
+			}
+			else {
+				delete_post_meta($product_id, $field_name);
+			}
+
+		}
+
+	}
+
+	/**
+	 * Save all the fields within the Variation Product's ATUM Section
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $variation_id
+	 * @param int $i
+	 */
+	public static function save_product_variation_data_panel($variation_id, $i) {
+
+		if ( isset( $_POST['variation_atum_tab']['_atum_manage_stock'][$i] ) ) {
+			update_post_meta($variation_id, '_atum_manage_stock', 'yes');
+		}
+		else{
+			delete_post_meta($variation_id, '_atum_manage_stock');
+		}
 
 	}
 
@@ -175,42 +316,6 @@ final class Hooks {
 	}
 
 	/**
-	 * Fires immediately after adding/updating the manage stock metadata
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param int $product_id    The product ID
-	 *
-	 * @return NULL|bool         NULL to continue saving the meta key ($check is always NULL) or any other value to not continue
-	 */
-	public static function save_manage_stock( $product_id ) {
-
-		// TODO
-		if ( $meta_key == '_manage_stock' && $meta_value == 'no' ) {
-			$product = wc_get_product( $product_id );
-
-			if ( $product && in_array( $product->get_type(), Globals::get_product_types() ) ) {
-
-				if ( Helpers::is_atum_managing_stock() ) {
-					$manage_stock = 'yes'; // Always enabled
-					Helpers::delete_transients();
-				}
-				else {
-					$manage_stock = ( isset($_POST['_manage_stock']) && $_POST['_manage_stock'] == 'yes' ) ? 'yes' : 'no';
-				}
-
-				update_post_meta( $product_id, '_manage_stock', $manage_stock );
-
-				// Do not continue saving this meta key
-				return TRUE;
-			}
-		}
-
-		return $check;
-
-	}
-
-	/**
 	 * Add the purchase price field to WC's product data meta box
 	 *
 	 * @since 1.2.0
@@ -234,9 +339,9 @@ final class Hooks {
 		}
 		else {
 			$post_id       = $variation->ID;
-			$field_id      = "variation_purchase_price[$loop]";
-			$field_name    = "variation_purchase_price_{$loop}";
-			$wrapper_class = "$field_name form-row form-first-row";
+			$field_name    = "variation_purchase_price[$loop]";
+			$field_id      = "variation_purchase_price_{$loop}";
+			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
 		$field_value = wc_format_localized_price( get_post_meta( $post_id, '_purchase_price', TRUE ) );
