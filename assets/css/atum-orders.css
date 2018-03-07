@@ -679,7 +679,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: #FFF;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -788,7 +788,7 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82c342;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
@@ -1417,7 +1417,7 @@ ul.atum_order_notes li p.meta .exact-date {
 }
 
 ul.atum_order_notes li a.delete_note {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 ul.atum_order_notes li .note_content::after {
@@ -1522,7 +1522,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-totals .refunded-total {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .refund-actions {
@@ -2048,7 +2048,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax .delete-atum-order-tax:hover:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax .delete-atum-order-tax:hover:before {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax:hover .delete-atum-order-tax, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax:hover .delete-atum-order-tax {
@@ -2057,7 +2057,7 @@ ul.atum_order_notes li .note_content::after {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items small.refunded {
   display: block;
-  color: #ff4848;
+  color: #FF4848;
   white-space: nowrap;
   margin-top: 0.5em;
 }
@@ -2172,7 +2172,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:hover:before, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:hover:before {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:focus, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:focus {
@@ -2395,12 +2395,12 @@ table.wp-list-table .column-status mark.pending::after, table.wp-list-table .col
 
 table.wp-list-table .column-status mark.pending::after {
   content: '\e012';
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 table.wp-list-table .column-status mark.completed::after {
   content: '\e015';
-  color: #82c342;
+  color: #82C342;
 }
 
 table.wp-list-table td.column-status {

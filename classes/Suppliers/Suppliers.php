@@ -16,6 +16,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
+use Madcoda\compat;
 
 
 defined( 'ABSPATH' ) or die;
@@ -398,43 +399,10 @@ class Suppliers {
 
 		else:
 
-			// Supplier ID
-			$suplier_field_name = empty($variation) ? '_supplier' : "variation_supplier[$loop]";
+			$suplier_field_name      = empty( $variation ) ? '_supplier' : "variation_supplier[$loop]";
+			$supplier_sku_field_name = empty( $variation ) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
 
-			if ( empty($variation) ): ?>
-			<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
-			<?php endif; ?>
-
-				<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-first' ?>">
-					<label for="_supplier"><?php _e('Supplier', ATUM_TEXT_DOMAIN) ?></label> <?php echo wc_help_tip( __( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); ?>
-
-					<select class="wc-product-search" id="_supplier" name="<?php echo $suplier_field_name ?>" style="width: <?php echo ( empty($variation) ) ? 80 : 100 ?>%" data-allow_clear="true"
-						data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-						data-multiple="false" data-selected="" data-minimum_input_length="1">
-						<?php if ( ! empty($supplier) ): ?>
-							<option value=""></option>
-							<option value="<?php echo esc_attr( $supplier->ID ) ?>" selected="selected"><?php echo $supplier->post_title ?></option>
-						<?php endif; ?>
-					</select>
-				</p>
-
-				<?php
-				// Supplier SKU
-				$supplier_sku_field_name = empty($variation) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
-
-				woocommerce_wp_text_input( array(
-					'id'            => '_supplier_sku',
-					'name'          => $supplier_sku_field_name,
-					'value'         => $supplier_sku ?: '',
-					'label'         => '<abbr title="' . __( "Supplier's Stock Keeping Unit", ATUM_TEXT_DOMAIN ) . '">' . __( "Supplier's SKU", ATUM_TEXT_DOMAIN ) . '</abbr>',
-					'desc_tip'      => TRUE,
-					'description'   => __( "Supplier's SKU refers to a Stock-keeping unit coming from the product's supplier, a unique identifier for each distinct product and service that can be purchased.", ATUM_TEXT_DOMAIN ),
-					'wrapper_class' =>  ( ! empty($variation) ) ? 'form-row form-row-last' : ''
-				) );
-
-			if ( empty($variation) ): ?>
-				</div>
-			<?php endif;
+			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('suplier_field_name', 'variation', 'supplier', 'supplier_sku', 'supplier_sku_field_name'));
 
 		endif;
 

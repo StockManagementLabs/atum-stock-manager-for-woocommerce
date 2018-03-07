@@ -1,0 +1,90 @@
+//
+// Product Data meta box
+//----------------------
+
+.product_data {
+	
+	&_tabs {
+		.atum_tab {
+			
+			a {
+				&:before {
+					content: '' !important;
+					background-image: url("#{$img-path}atum-icon-mono.png");
+					width: 13px;
+					height: 13px;
+					background-size: cover;
+					@include vertical-align-absolute;
+				}
+				
+				> span {
+					padding-left: 13px;
+				}
+			}
+			
+		}
+	}
+	
+	.atum-field {
+		.input-group-text {
+			padding: 2px 7px;
+		}
+		
+		input[type=text] {
+			width: calc(80% - 31px) !important;
+			padding-top: 4px;
+			padding-bottom: 4px;
+			
+			&:focus {
+				box-shadow: none;
+				border-color: $input-focus;
+			}
+		}
+		
+		.select2-container, .select2-selection--single, .select2-selection__rendered {
+			&:focus {
+				box-shadow: none;
+				outline: none;
+			}
+		}
+		
+		.select2-container {
+			float: none;
+			max-width: calc(80% - 31px) !important;
+			
+			.select2-selection--single {
+				height: auto;
+				margin: 0;
+				font-size: $font-size-base;
+				
+				.select2-selection__rendered {
+					line-height: 1.8;
+				}
+				
+				.select2-selection__arrow {
+					height: 25px;
+				}
+				
+				&:focus {
+					border-color: $input-focus;
+				}
+			}
+		}
+	}
+	
+	.woocommerce_variations {
+		
+		.form-first-row, .form-last-row {
+			.atum-field {
+				margin-top: 2px;
+				
+				input[type=text] {
+					margin-top: 0;
+					width: calc(48% - 31px) !important;
+				}
+			}
+		}
+		
+	}
+	
+}

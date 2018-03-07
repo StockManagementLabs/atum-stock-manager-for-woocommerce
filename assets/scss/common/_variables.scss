@@ -6,6 +6,10 @@
 $font-path:                             "../fonts/" !default;
 $img-path:                              "../images/" !default;
 
+// Fonts
+$font-size-base:                        14px !default;
+$line-height-base:                      1.5 !default;
+
 // Grid settings
 $main-sm-columns:                       12 !default;
 $sidebar-sm-columns:                    4 !default;
@@ -30,19 +34,19 @@ $container-max-widths: (
 $max-width-limit:                       1280px !default;
 
 // Colors
-$brand-primary:                         #00b8db !default;
+$brand-primary:                         #00B8DB !default;
 $brand-info:                            #E3E8F5 !default;
-$brand-warning:                         #efaf00 !default;
-$brand-danger:                          #ff4848 !default;
-$brand-success:                         #82c342 !default;
+$brand-warning:                         #EFAF00 !default;
+$brand-danger:                          #FF4848 !default;
+$brand-success:                         #82C342 !default;
 
 $gray:                                  #C1C1C1 !default;
 $gray-light:                            #F9F9F9 !default;
 $gray-dark:                             #333333 !default;
+$blue-light:                            #D5F2F8 !default;
 
-$link:                                  #0073aa !default;
-$link-hover:                            #00a0d2 !default;
-$input-focus:                           #5b9dd9 !default;
+$link:                                  #0073AA !default;
+$link-hover:                            #00A0D2 !default;
 
 // Media queries breakpoints
 $screen-xs:                             480px !default;
@@ -76,7 +80,7 @@ $btn-info:                              $brand-info !default;
 $zindex-tooltip:                        1070 !default;
 $tooltip-max-width:                     200px !default;
 $tooltip-font-size:                     12px !default;
-$tooltip-color:                         #fff !default;
+$tooltip-color:                         #FFF !default;
 $tooltip-bg:                            #000 !default;
 $tooltip-opacity:                       .9 !default;
 
@@ -101,9 +105,19 @@ $popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 2
 
 $zindex-popover:                        99999999 !default;
 
+// Inputs
+$input-border-width:                    1px !default;
+$input-padding-y:                       .375rem !default;
+$input-padding-x:                       .75rem !default;
+$input-border-radius:                   0;
+$input-focus:                           #5B9DD9 !default;
+$input-group-addon-color:               $gray;
+$input-group-addon-bg:                  $blue-light;
+$input-border-color:                    #DDD;
+
 // Widgets
 $widget-text:                           #AFAFAF !default;
-$widget-success:                        #69c61d !default;
+$widget-success:                        #69C61D !default;
 $widget-primary:                        $brand-primary !default;
 $widget-warning:                        $brand-warning !default;
 $widget-danger:                         $brand-danger !default;

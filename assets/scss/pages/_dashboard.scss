@@ -2,16 +2,16 @@
 // Atum Dashboard
 //----------------
 
-$header-bg:                 #d5f2f8;
+$header-bg:                 $blue-light;
 $header-height:             300px;
 $card-border:               #e5e5e5;
 $card-bg:                   #FFF;
 $card-text:                 #afafaf;
 $add-widget-color:          #CCC;
-$widget-bg:                 #FFF;
+$widget-bg:                 $card-bg;
 $widget-icon:               #e1e1e1;
 $widget-controls:           $card-text;
-$widget-controls-hover:     #00b8db;
+$widget-controls-hover:     $brand-primary;
 
 
 // Style the WP notices

@@ -42,7 +42,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: #FFF;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -322,7 +322,7 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82c342;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
@@ -404,7 +404,7 @@
 
 .atum-report .report-header .inventory-resume {
   padding: 15px;
-  border: 2px solid #efaf00;
+  border: 2px solid #EFAF00;
 }
 
 .atum-report .report-header h5 {
@@ -418,15 +418,15 @@
 }
 
 .atum-report .report-header .warning-color {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-report .report-header .success-color {
-  color: #82c342;
+  color: #82C342;
 }
 
 .atum-report .report-header .danger-color {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-report .atum-list-table thead th {
@@ -438,7 +438,7 @@
 }
 
 .atum-report h1 {
-  color: #00b8db;
+  color: #00B8DB;
   text-transform: uppercase;
   font-size: 38px;
   font-weight: bold;
@@ -608,7 +608,7 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-wrapper .actions-wrapper .select2-container:focus .select2-selection {
   box-shadow: 0 0 2px rgba(91, 157, 217, 0.8);
-  border-color: #5b9dd9;
+  border-color: #5B9DD9;
 }
 
 .atum-list-wrapper .actions-wrapper .select2-container .select2-selection__placeholder {
@@ -755,11 +755,11 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .atum-list-table tr.expanded.group {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .atum-list-table tr.expanded td, .atum-list-table tr.expanded a {
@@ -792,15 +792,15 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table .cell-green {
-  color: #82c342;
+  color: #82C342;
 }
 
 .atum-list-table .cell-yellow {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-list-table .cell-red {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-list-table td, .atum-list-table th {
@@ -842,7 +842,7 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table .column-calc_type .has-child.variable, .atum-list-table .column-calc_type .has-child.variable-subscription {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-list-table .column-calc_type .has-child.variable-subscription:before {
@@ -850,7 +850,7 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table .column-calc_type .has-child.grouped {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-list-table .column-calc_type .has-child:hover:before {
@@ -884,19 +884,19 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table .set-meta {
   cursor: pointer;
-  color: #0073aa;
+  color: #0073AA;
 }
 
 .atum-list-table .set-meta:hover {
-  color: #00a0d2;
+  color: #00A0D2;
 }
 
 .atum-list-table .set-meta.unsaved {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-list-table .highlight-danger {
-  background-color: #ff4848;
+  background-color: #FF4848;
   color: #FFF;
   padding: 2px 3px;
   border-radius: 2px;
