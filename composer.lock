@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "jimmiw/php-time-ago",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jimmiw/php-time-ago.git",
-                "reference": "4173d20574a54d075ecb3fdca08cae0f1d2bd3db"
+                "reference": "59cf0aad5862d12217f944447875a24c63dd8645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jimmiw/php-time-ago/zipball/4173d20574a54d075ecb3fdca08cae0f1d2bd3db",
-                "reference": "4173d20574a54d075ecb3fdca08cae0f1d2bd3db",
+                "url": "https://api.github.com/repos/jimmiw/php-time-ago/zipball/59cf0aad5862d12217f944447875a24c63dd8645",
+                "reference": "59cf0aad5862d12217f944447875a24c63dd8645",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
                 "time ago",
                 "time ago in words"
             ],
-            "time": "2018-01-16T20:50:11+00:00"
+            "time": "2018-02-21T20:27:36+00:00"
         },
         {
             "name": "madcoda/php-youtube-api",

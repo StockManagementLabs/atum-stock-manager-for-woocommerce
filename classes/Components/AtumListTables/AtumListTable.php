@@ -145,7 +145,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $allow_calcs = TRUE;
 	
 	/**
-	 * Whether the WPML multicurrency option is active
+	 * Whether the WPML multicurrency option is active or not
 	 * @var bool
 	 */
 	protected $is_wpml_multicurrency = FALSE;
@@ -215,7 +215,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * }
 	 */
 	public function __construct( $args = array() ) {
-
+		
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		
 		$args = wp_parse_args( $args, array(
@@ -226,8 +226,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = ( is_array( $args['selected'] ) ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
-
-		if ( ! empty($args['group_members']) ) {
+		
+		if ( ! empty( $args['group_members'] ) ) {
 			$this->group_members = $args['group_members'];
 		}
 		
@@ -249,7 +249,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		), $args );
 		
 		parent::__construct( $args );
-
+		
 		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		
@@ -257,32 +257,30 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		if (
 			! Helpers::is_atum_managing_stock() &&
-			( !$user_dismissed_notices || ! isset($user_dismissed_notices['manage_stock']) || $user_dismissed_notices['manage_stock'] != 'yes' )
+			( ! $user_dismissed_notices || ! isset( $user_dismissed_notices['manage_stock'] ) || $user_dismissed_notices['manage_stock'] != 'yes' )
 		) {
 			
 			add_action( 'admin_notices', array( $this, 'add_manage_stock_notice' ) );
 		}
 		
-		$this->current_currency = $this->default_currency = get_woocommerce_currency();
-
+		$this->default_currency = get_woocommerce_currency();
+		
 		// Do WPML Stuff
-		if ( class_exists('\woocommerce_wpml') ) {
+		$wpml_config = Helpers::is_wpml_active();
+		
+		if ( $wpml_config ) {
 			
 			$this->wpml = \woocommerce_wpml::instance();
 			
-			if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
+			if ( $wpml_config == 2 ) {
 				
 				$this->is_wpml_multicurrency = TRUE;
-				
-				global $sitepress;
-				$current_lang = $sitepress->get_current_language();
-				
-				if ( ! empty( $this->wpml->settings['default_currencies'][ $current_lang ] ) ) {
-					$this->current_currency = $this->wpml->settings['default_currencies'][ $current_lang ];
-				}
+				$this->current_currency      = Helpers::get_lang_currency();
 			}
 		}
-		
+		else {
+			$this->current_currency = $this->default_currency;
+		}
 		
 	}
 

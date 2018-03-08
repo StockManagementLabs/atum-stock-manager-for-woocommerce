@@ -136,9 +136,9 @@ final class Hooks {
 		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
 
 		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
-		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
+		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices'), 10, 2 );
+		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels'), 10, 2 );
+		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels'), 10, 2 );
 		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
 		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
 
@@ -358,10 +358,9 @@ final class Hooks {
 		}
 
 		// Add WPML compatibility
-		if ( isset($purchase_price) && class_exists('\woocommerce_wpml') ) {
+		if ( isset($purchase_price) && Helpers::is_wpml_active() ) {
 
 			global $sitepress;
-			$wpml = \woocommerce_wpml::instance();
 
 			$post_type = get_post_type( $post_id );
 
