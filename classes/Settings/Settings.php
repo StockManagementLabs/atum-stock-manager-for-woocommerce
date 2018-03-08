@@ -49,12 +49,6 @@ class Settings {
 	 * @var array
 	 */
 	private $options;
-	
-	/**
-	 * keep value to restore WooCommerce manage_stock individual settings
-	 * @var string
-	 */
-	private $restore_option_stock = 'yes';
 
 	/*
 	 * The admin page slug
@@ -88,7 +82,6 @@ class Settings {
 
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
-		add_filter( 'pre_update_option_' . self::OPTION_NAME, array( $this, 'update_woo_manage_stock' ), 10, 3 );
 
 		// Add the module menu
 		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
@@ -112,13 +105,6 @@ class Settings {
 		);
 
 		$this->defaults = array(
-			'manage_stock'          => array(
-				'section' => 'general',
-				'name'    => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Activate this option to manage/unmanage all your inventory at product level.', ATUM_TEXT_DOMAIN ),
-				'type'    => 'switcher',
-				'default' => 'no'
-			),
 			'enable_ajax_filter'    => array(
 				'section' => 'general',
 				'name'    => __( 'Enable Filter Autosearch', ATUM_TEXT_DOMAIN ),
@@ -370,10 +356,6 @@ class Settings {
 			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
 			
 			wp_localize_script( self::UI_SLUG, 'atumSettings', array(
-				'stockMsgTitle' => __( "Would you want to restore the 'Manage Stock' status of all products to their original state?", ATUM_TEXT_DOMAIN ),
-				'stockMsgText'  => __( "<p>Select 'NO' to keep all the products in the current state.</p>", ATUM_TEXT_DOMAIN ),
-				'restoreThem'   => __( 'Yes, restore them', ATUM_TEXT_DOMAIN ),
-				'keepThem'      => __( 'No, keep them', ATUM_TEXT_DOMAIN ),
 				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'unsavedData'   => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
 				'continue'      => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
@@ -488,11 +470,6 @@ class Settings {
 			
 		}
 		
-		// It's not a setting, but it's needed.
-		if ( isset( $input['restore_option_stock'] ) ) {
-			$this->restore_option_stock = $input['restore_option_stock'];
-		}
-		
 		return apply_filters( 'atum/settings/sanitize', $this->options );
 		
 	}
@@ -599,42 +576,6 @@ class Settings {
 		}
 		
 		return $label;
-	}
-	
-	/**
-	 * "Save and replace" or "Load and restore" individual manage stock option from WooCommerce depending on $new_value value
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param array $new_value    For now, only interested in manage_stock. 'yes/no' When allow the user to let Atum manage stock
-	 * @param array $old_value
-	 * @param string $option_name
-	 *
-	 * @return array
-	 */
-	public function update_woo_manage_stock( $new_value, $old_value, $option_name ) {
-		
-		$ms_old_value = ( isset( $old_value['manage_stock'] ) && $old_value['manage_stock'] == 'yes' ) ? 'yes' : 'no';
-		$ms_vew_value = ( isset( $new_value['manage_stock'] ) && $new_value['manage_stock'] == 'yes' ) ? 'yes' : 'no';
-		
-		if ( $ms_old_value == 'no' && $ms_vew_value == 'yes' ) {
-			Helpers::activate_manage_stock_option();
-		}
-		elseif ( $ms_old_value == 'yes' && $ms_vew_value == 'no' && $this->restore_option_stock == 'yes' ) {
-			
-			$products = get_option( ATUM_PREFIX . 'restore_option_stock' );
-			delete_option( ATUM_PREFIX . 'restore_option_stock' );
-			
-			if ( $products && is_array( $products ) ) {
-				foreach ( $products as $product ) {
-					delete_post_meta( $product, '_manage_stock' );
-					delete_post_meta( $product, '_stock' );
-				}
-			}
-			
-		}
-		
-		return $new_value;
 	}
 
 	

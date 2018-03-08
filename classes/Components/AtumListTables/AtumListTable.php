@@ -252,17 +252,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
-		$user_dismissed_notices = Helpers::get_dismissed_notices();
-		
-		if (
-			! Helpers::is_atum_managing_stock() &&
-			( !$user_dismissed_notices || ! isset($user_dismissed_notices['manage_stock']) || $user_dismissed_notices['manage_stock'] != 'yes' )
-		) {
-			
-			add_action( 'admin_notices', array( $this, 'add_manage_stock_notice' ) );
-		}
-		
+
 		$this->current_currency = $this->default_currency = get_woocommerce_currency();
 
 		// Do WPML Stuff
@@ -1116,7 +1106,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function prepare_items() {
 		
-		/**
+		/*
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
@@ -1125,8 +1115,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$hidden              = get_hidden_columns( $this->screen );
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
 		
-		/**
-		 * REQUIRED. Build an array to be used by the class for column headers.
+		/*
+		 * REQUIRED. Build an array to be used by the class for column headers
 		 */
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
@@ -1134,7 +1124,13 @@ abstract class AtumListTable extends \WP_List_Table {
 			'post_type'      => $this->post_type,
 			'post_status'    => 'publish',
 			'posts_per_page' => $this->per_page,
-			'paged'          => $this->get_pagenum()
+			'paged'          => $this->get_pagenum(),
+			'meta_query'     => array(
+				array(
+					'key'   => '_atum_manage_stock',
+					'value' => 'yes'
+				)
+			)
 		);
 
 		/*
@@ -1181,18 +1177,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->taxonomies ) {
 			$args['tax_query'] = (array) apply_filters( 'atum/list_table/taxonomies', $this->taxonomies );
-		}
-		
-		/*
-		 * Check whether ATUM is managing the WC stock
-		 */
-		if ( ! Helpers::is_atum_managing_stock() ) {
-			
-			// Only products with the _manage_stock meta set to yes
-			$args['meta_query'][] = array(
-				'key'   => '_manage_stock',
-				'value' => 'yes'
-			);
 		}
 
 		/*
@@ -2002,23 +1986,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_enqueue_script( 'jscrollpane' );
 		wp_enqueue_script( 'atum-list' );
 		
-	}
-	
-	/**
-	 * Add notice warning if Atum manage stock option isn't enabled
-	 *
-	 * @since 0.1.0
-	 */
-	public function add_manage_stock_notice() {
-		
-		?>
-		<div class="notice notice-warning atum-notice notice-management-stock is-dismissible" data-nonce="<?php echo wp_create_nonce( ATUM_PREFIX . 'manage-stock-notice' ) ?>">
-			<p class="manage-message">
-				<?php printf( __( '%1$s plugin can bulk-enable all your items for stock management at the product level. %1$s will save your original settings if you decide to reverse them later. To do so, go to %1$s > Settings > General, deactivate the &quot;Manage Stock&quot; switch and confirm your action by pressing the &quot;Yes, restore them&quot; button.', ATUM_TEXT_DOMAIN ), strtoupper( ATUM_TEXT_DOMAIN ) ) ?>
-				<button type="button" class="add-manage-option button button-primary button-small"><?php _e( "Enable ATUM's Manage Stock option", ATUM_TEXT_DOMAIN ) ?></button>
-			</p>
-		</div>
-		<?php
 	}
 
 	/**

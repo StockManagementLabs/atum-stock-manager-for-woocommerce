@@ -647,14 +647,16 @@ final class Helpers {
 	}
 
 	/**
-	 * Checks if ATUM is currently managing the WC stock
+	 * Checks if ATUM is managing the WC stock for a specific product
 	 *
-	 * @since 1.2.6
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
 	 *
 	 * @return bool
 	 */
-	public static function is_atum_managing_stock() {
-		return self::get_option( 'manage_stock', 'no' ) == 'yes';
+	public static function is_atum_managing_stock($product_id) {
+		return get_post_meta( $product_id, '_atum_manage_stock', TRUE ) === 'yes';
 	}
 	
 	/**
@@ -695,55 +697,6 @@ final class Helpers {
 		
 		update_option( Settings::OPTION_NAME, $global_options );
 		
-	}
-	
-	/**
-	 * Activate ATUM Management Stock Option
-	 *
-	 * @since 0.1.0
-	 */
-	public static function activate_manage_stock_option() {
-		
-		$product_types = Globals::get_product_types();
-		$post_types = ( in_array('variable', $product_types) || in_array('variable-subscription', $product_types) ) ? array('product', 'product_variation') : 'product';
-		
-		// Save the options
-		// Don't take care of the type product. They never have "yes"
-		$args = array(
-			'post_type'      => $post_types,
-			'fields'         => 'ids',
-			'posts_per_page' => - 1,
-			'meta_query'     => array(
-				'relation' => 'OR',
-				array(
-					'key'     => '_manage_stock',
-					'compare' => 'NOT EXISTS',
-					'value'   => ''
-				),
-				array(
-					'key'   => '_manage_stock',
-					'value' => 'no'
-				)
-			),
-			// The external products are not stockable
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => 'external',
-					'operator' => 'NOT IN'
-				)
-			)
-		);
-		
-		$products = new \WP_Query( $args );
-		
-		update_option( ATUM_PREFIX . 'restore_option_stock', $products->posts );
-		
-		// Set all products to yes
-		foreach ( $products->posts as $product ) {
-			update_post_meta( $product, '_manage_stock', 'yes' );
-		}
 	}
 	
 	/**

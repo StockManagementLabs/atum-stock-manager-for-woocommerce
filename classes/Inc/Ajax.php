@@ -64,9 +64,6 @@ final class Ajax {
 		// Ajax callback for Inbound Stock ListTable
 		add_action( 'wp_ajax_atum_fetch_inbound_stock_list', array( $this, 'fetch_inbound_stock_list' ) );
 		
-		// Ajax callback for Management Stock notice
-		add_action( 'wp_ajax_atum_manage_stock_notice', array( $this, 'manage_stock_notice' ) );
-		
 		// Welcome notice dismissal
 		add_action( 'wp_ajax_atum_welcome_notice', array( $this, 'welcome_notice' ) );
 
@@ -345,32 +342,6 @@ final class Ajax {
 		$list = new InboundStockListTable( $args );
 		$list->ajax_response();
 
-	}
-	
-	/**
-	 * Handle the ajax requests sent by the Atum's "Manage Stock" notice
-	 *
-	 * @package ATUM List Tables
-	 *
-	 * @since 0.1.0
-	 */
-	public function manage_stock_notice() {
-		
-		check_ajax_referer( ATUM_PREFIX . 'manage-stock-notice', 'token' );
-		
-		$action = ( ! empty($_POST['data']) ) ? $_POST['data'] : '';
-		
-		// Enable stock management
-		if ($action == 'manage') {
-			Helpers::update_option('manage_stock', 'yes');
-		}
-		// Dismiss the notice permanently
-		elseif ( $action == 'dismiss') {
-			Helpers::dismiss_notice('manage_stock');
-		}
-		
-		wp_die();
-		
 	}
 	
 	/**

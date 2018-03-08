@@ -916,18 +916,18 @@
 				 */
 				addNotice: function(type, msg) {
 					
-					var $stockNotice   = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
+					var $notice   = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
 					    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
 					
 					$listWrapper.siblings('.notice').remove();
-					$listWrapper.before($stockNotice.append($dismissButton));
-					$stockNotice.slideDown(100);
+					$listWrapper.before($notice.append($dismissButton));
+					$notice.slideDown(100);
 					
 					$dismissButton.on('click.wp-dismiss-notice', function (e) {
 						e.preventDefault();
-						$stockNotice.fadeTo(100, 0, function () {
-							$stockNotice.slideUp(100, function () {
-								$stockNotice.remove();
+						$notice.fadeTo(100, 0, function () {
+							$notice.slideUp(100, function () {
+								$notice.remove();
 							});
 						});
 					});
@@ -949,56 +949,6 @@
 			stockCentralTable.init();
 			
 		});
-		
-		//-------------------------
-		// Management Stock notice
-		//-------------------------
-		var $notice    = $('.atum-notice.notice-management-stock'),
-		    noticeAjax = '';
-		
-		var noticeAction = {
-			
-			init: function () {
-				var self = this;
-				
-				$notice.find('.add-manage-option').click( function () {
-					$(this).after('<span class="atum-loading" />');
-					self.send('manage');
-				});
-				
-				$notice.click('.notice-dismiss', function () {
-					self.send('dismiss');
-				});
-				
-			},
-			
-			send: function (action) {
-				
-				if (noticeAjax && noticeAjax.readyState !== 4) {
-					noticeAjax.abort();
-				}
-				
-				noticeAjax = $.ajax({
-					url     : ajaxurl,
-					method  : 'POST',
-					data    : {
-						token : $notice.data('nonce'),
-						action: 'atum_manage_stock_notice',
-						data  : action
-					},
-					beforeSend: function() {
-						
-					},
-					success : function() {
-						location.reload();
-					}
-				});
-				
-			}
-			
-		};
-		
-		noticeAction.init();
 		
 		//----------------
 		// Welcome notice

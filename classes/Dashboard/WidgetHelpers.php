@@ -53,19 +53,14 @@ final class WidgetHelpers {
 					'terms'    => Globals::get_product_types()
 				)
 			),
-			'fields' => 'ids'
-		);
-
-		if ( ! Helpers::is_atum_managing_stock() ) {
-
-			// Only products with the _manage_stock meta set to yes
-			$args['meta_query'] = array(
+			'meta_query' => array(
 				array(
-					'key'   => '_manage_stock',
+					'key'   => '_atum_manage_stock',
 					'value' => 'yes'
 				)
-			);
-		}
+			),
+			'fields' => 'ids'
+		);
 
 		return get_posts($args);
 
@@ -539,29 +534,21 @@ final class WidgetHelpers {
 				'posts_per_page' => - 1,
 				'post_status'    => 'publish',
 				'fields'         => 'ids',
-				'post__in'       => $posts
+				'post__in'       => $posts,
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'   => '_atum_manage_stock',
+						'value' => 'yes'
+					),
+					array(
+						'key'     => '_stock',
+						'value'   => 0,
+						'type'    => 'numeric',
+						'compare' => '>'
+					)
+				)
 			);
-
-			// If ATUM is not managing the stock, get those that have the stock status set as "In stock"
-			if ( ! Helpers::is_atum_managing_stock() ) {
-
-				$args['meta_query'][] = array(
-					'key'     => '_stock_status',
-					'value'   => 'instock',
-					'compare' => '='
-				);
-
-			}
-			else {
-
-				$args['meta_query'][] = array(
-					'key'     => '_stock',
-					'value'   => 0,
-					'type'    => 'numeric',
-					'compare' => '>'
-				);
-
-			}
 
 			$posts_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
 			$stock_counters['count_in_stock'] = count( $posts_in_stock->posts );
