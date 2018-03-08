@@ -229,11 +229,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! empty($args['group_members']) ) {
 			$this->group_members = $args['group_members'];
+
+			if ( isset ($this->group_members['product-details']) && isset( $args['show_cb'] ) && $args['show_cb'] == TRUE ) {
+				array_unshift($this->group_members['product-details']['members'], 'cb');
+			}
 		}
 		
 		// Add the checkbox column to the table if enabled
-		$this->table_columns = ( $args['show_cb'] == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
-		$this->per_page      = $args['per_page'];
+		$this->table_columns = ( isset( $args['show_cb'] ) && $args['show_cb'] == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
+		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : get_option('posts_per_page');
 		
 		$post_type_obj = get_post_type_object( $this->post_type );
 		
