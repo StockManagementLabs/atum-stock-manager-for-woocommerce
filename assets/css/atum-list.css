@@ -590,36 +590,41 @@ h1.wp-heading-inline .atum-loading {
   top: 7px;
 }
 
-.atum-list-wrapper .actions-wrapper input, .atum-list-wrapper .actions-wrapper select, .atum-list-wrapper .actions-wrapper .select2-container {
+.atum-list-wrapper .actions.bulkactions {
+  padding-right: 0;
+}
+
+.atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
   height: 32px;
   margin-bottom: 4px;
+  margin-right: 2px;
   float: left;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container {
+.atum-list-wrapper .actions .select2-container {
   margin-top: 1px;
-  margin-right: 5px;
+  margin-right: 2px;
   font-size: 14px;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container:focus, .atum-list-wrapper .actions-wrapper .select2-container *:focus {
+.atum-list-wrapper .actions .select2-container:focus, .atum-list-wrapper .actions .select2-container *:focus {
   outline: none;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container:focus .select2-selection {
+.atum-list-wrapper .actions .select2-container:focus .select2-selection {
   box-shadow: 0 0 2px rgba(91, 157, 217, 0.8);
   border-color: #5B9DD9;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container .select2-selection__placeholder {
+.atum-list-wrapper .actions .select2-container .select2-selection__placeholder {
   color: #333333 !important;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container .select2-selection__arrow b {
+.atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
   border-top-color: #333333;
 }
 
-.atum-list-wrapper .actions-wrapper .filter-text {
+.atum-list-wrapper .actions .filter-text {
   display: inline;
   float: left;
   line-height: 28px;
@@ -746,6 +751,11 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table th.sortable[class*="column-calc_"] a > span:first-child, .atum-list-table th.sortable.column-_stock a > span:first-child, .atum-list-table th.sortable.column-_regular_price a > span:first-child, .atum-list-table th.sortable.column-_sale_price a > span:first-child, .atum-list-table th.sortable.column-_purchase_price a > span:first-child, .atum-list-table th.sortable.column-ID a > span:first-child, .atum-list-table th.sortable.column-_supplier_sku a > span:first-child, .atum-list-table th.sorted[class*="column-calc_"] a > span:first-child, .atum-list-table th.sorted.column-_stock a > span:first-child, .atum-list-table th.sorted.column-_regular_price a > span:first-child, .atum-list-table th.sorted.column-_sale_price a > span:first-child, .atum-list-table th.sorted.column-_purchase_price a > span:first-child, .atum-list-table th.sorted.column-ID a > span:first-child, .atum-list-table th.sorted.column-_supplier_sku a > span:first-child {
   padding-left: 10px;
+}
+
+.atum-list-table th.check-column input[type=checkbox] {
+  vertical-align: middle;
+  margin-top: 7px;
 }
 
 .atum-list-table tr.expanded {

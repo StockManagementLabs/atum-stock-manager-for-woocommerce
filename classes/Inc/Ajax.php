@@ -21,12 +21,10 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
-use Atum\InboundStock\InboundStock;
 use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
 use Atum\StockCentral\Inc\ListTable as StockCentralListTable;
 use Atum\InventoryLogs\Models\Log;
-use Atum\StockCentral\StockCentral;
 use Atum\Suppliers\Suppliers;
 
 
@@ -70,8 +68,11 @@ final class Ajax {
 		// Save the rate link click on the ATUM pages footer
 		add_action( 'wp_ajax_atum_rated', array($this, 'rated') );
 
-		// Set the edited meta data for items on ListTable components
+		// Save the edited meta data for items on ListTable components
 		add_action( 'wp_ajax_atum_update_data', array( $this, 'update_list_data' ) );
+
+		// Apply bulk actions on ListTable components
+		add_action( 'wp_ajax_atum_apply_bulk_action', array( $this, 'apply_bulk_action' ) );
 
 		// Manage addon licenses
 		add_action( 'wp_ajax_atum_validate_license', array($this, 'validate_license') );
@@ -310,7 +311,8 @@ final class Ajax {
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
 		$args = array(
-			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
+			'per_page' => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
+			'show_cb'  => ! empty( $_REQUEST['show_cb'] ) ? $_REQUEST['show_cb'] : FALSE,
 			'screen'   => $_REQUEST['screen']
 		);
 		
@@ -403,6 +405,50 @@ final class Ajax {
 		}
 
 		wp_send_json_success( __('Data saved.', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * Apply actions in bulk to the selected ListTable rows
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.4.1
+	 */
+	public function apply_bulk_action() {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		if ( empty($_POST['ids']) ) {
+			wp_send_json_error( __('No Items Selected.', ATUM_TEXT_DOMAIN) );
+		}
+
+		if ( empty($_POST['bulk_action']) ) {
+			wp_send_json_error( __('Invalid bulk action.', ATUM_TEXT_DOMAIN) );
+		}
+
+		$ids = array_map( 'absint', $_POST['ids'] );
+
+		switch ( $_POST['bulk_action'] ) {
+			case 'unmanage_stock':
+
+				foreach ($ids as $id) {
+					delete_post_meta($id, Globals::ATUM_MANAGE_STOCK_KEY);
+				}
+
+		        break;
+
+			case 'manage_stock':
+
+				foreach ($ids as $id) {
+					update_post_meta($id, Globals::ATUM_MANAGE_STOCK_KEY, 'yes');
+				}
+
+				break;
+		}
+
+
+		wp_send_json_success( __('Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN) );
 
 	}
 

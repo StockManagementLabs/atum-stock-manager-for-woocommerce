@@ -176,14 +176,14 @@ class Upgrade {
 		global $wpdb;
 
 		// Ensure that the meta keys were not added previously
-		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '_atum_manage_stock'" );
+		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::ATUM_MANAGE_STOCK_KEY . "'" );
 
 		if ($meta_count > 0) {
 			return;
 		}
 
 		$sql = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
-				SELECT DISTINCT post_id, '_atum_manage_stock', meta_value FROM $wpdb->postmeta 
+				SELECT DISTINCT post_id, '" . Globals::ATUM_MANAGE_STOCK_KEY . "', meta_value FROM $wpdb->postmeta 
 				WHERE meta_key = '_manage_stock' AND meta_value = 'yes'";
 
 		$wpdb->query($sql);

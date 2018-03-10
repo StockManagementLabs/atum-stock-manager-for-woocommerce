@@ -342,5 +342,14 @@ class ListTable extends AtumListTable {
 		$this->is_child = FALSE;
 
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function get_bulk_actions() {
+
+		// No bulk actions needed for Inbound Stock
+		return apply_filters( 'atum/inbound_stock_list/bulk_actions', array() );
+	}
 	
 }

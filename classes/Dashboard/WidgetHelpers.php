@@ -55,7 +55,7 @@ final class WidgetHelpers {
 			),
 			'meta_query' => array(
 				array(
-					'key'   => '_atum_manage_stock',
+					'key'   => Globals::ATUM_MANAGE_STOCK_KEY,
 					'value' => 'yes'
 				)
 			),
@@ -538,7 +538,7 @@ final class WidgetHelpers {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'   => '_atum_manage_stock',
+						'key'   => Globals::ATUM_MANAGE_STOCK_KEY,
 						'value' => 'yes'
 					),
 					array(

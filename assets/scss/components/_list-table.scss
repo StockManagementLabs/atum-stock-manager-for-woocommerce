@@ -92,17 +92,22 @@ h1.wp-heading-inline {
 		}
 	}
 	
-	.actions-wrapper {
+	.actions {
+		
+		&.bulkactions {
+			padding-right: 0;
+		}
 		
 		input, select, .select2-container {
 			height: 32px;
 			margin-bottom: 4px;
+			margin-right: 2px;
 			float: left;
 		}
 		
 		.select2-container {
 			margin-top: 1px;
-			margin-right: 5px;
+			margin-right: 2px;
 			font-size: 14px;
 			
 			&, * {
@@ -269,6 +274,13 @@ h1.wp-heading-inline {
 						}
 					}
 				}
+			}
+		}
+		
+		&.check-column {
+			input[type=checkbox] {
+				vertical-align: middle;
+				margin-top: 7px;
 			}
 		}
 	}

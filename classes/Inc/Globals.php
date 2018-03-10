@@ -35,12 +35,6 @@ final class Globals {
 	 * @var array
 	 */
 	private static $child_product_types = ['variation'];
-	
-	/**
-	 * The meta key where is stored the out of stock date
-	 * @var string
-	 */
-	private static $out_of_stock_date_key = '_out_of_stock_date';
 
 	/**
 	 * The number of decimals specified in settings to round the stock quantities
@@ -53,7 +47,7 @@ final class Globals {
 	 * @var array
 	 */
 	private static $product_tab_fields = array(
-		'_atum_manage_stock' => 'checkbox'
+		self::ATUM_MANAGE_STOCK_KEY => 'checkbox'
 	);
 
 	/**
@@ -70,17 +64,18 @@ final class Globals {
 	 * The products' location taxonomy name
 	 */
 	const PRODUCT_LOCATION_TAXONOMY =  ATUM_PREFIX . 'location';
-	
+
 	/**
-	 * Getter for the $out_of_stock_date_key property
-	 *
-	 * @since 0.1.4
-	 *
-	 * @return string
+	 * The meta key where is stored the atum stock management status
 	 */
-	public static function get_out_of_stock_date_key() {
-		return self::$out_of_stock_date_key;
-	}
+	const ATUM_MANAGE_STOCK_KEY = '_atum_manage_stock';
+
+	/**
+	 * The meta key where is stored the out of stock date
+	 */
+	const OUT_OF_STOCK_DATE_KEY = '_out_of_stock_date';
+	
+
 	
 	/**
 	 * Getter for the product_types property

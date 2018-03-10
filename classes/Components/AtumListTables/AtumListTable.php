@@ -18,10 +18,8 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
-use Atum\Suppliers\Suppliers;
 
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -186,6 +184,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var string
 	 */
 	protected $first_edit_key;
+
+	/**
+	 * Show the checkboxes in table rows
+	 * @var bool
+	 */
+	protected $show_cb = FALSE;
 	
 	/**
 	 * User meta key to control the current user dismissed notices
@@ -222,6 +226,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'show_cb'  => FALSE,
 			'per_page' => Settings::DEFAULT_POSTS_PER_PAGE,
 		) );
+
+		$this->show_cb = $args['show_cb'];
 		
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = ( is_array( $args['selected'] ) ) ? $args['selected'] : explode( ',', $args['selected'] );
@@ -230,14 +236,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty($args['group_members']) ) {
 			$this->group_members = $args['group_members'];
 
-			if ( isset ($this->group_members['product-details']) && isset( $args['show_cb'] ) && $args['show_cb'] == TRUE ) {
+			if ( isset ($this->group_members['product-details']) && $this->show_cb == TRUE ) {
 				array_unshift($this->group_members['product-details']['members'], 'cb');
 			}
 		}
 		
 		// Add the checkbox column to the table if enabled
-		$this->table_columns = ( isset( $args['show_cb'] ) && $args['show_cb'] == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
-		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : get_option('posts_per_page');
+		$this->table_columns = ( $this->show_cb == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
+		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 		
 		$post_type_obj = get_post_type_object( $this->post_type );
 		
@@ -1100,7 +1106,55 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
 	 */
 	protected function get_bulk_actions() {
-		return apply_filters( 'atum/list_table/bulk_actions', array() );
+
+		return apply_filters( 'atum/list_table/bulk_actions', array(
+			'unmanage_stock' => __( 'Unmanage Stock', ATUM_TEXT_DOMAIN )
+		) );
+	}
+
+	/**
+	 * Display the bulk actions dropdown
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $which The location of the bulk actions: 'top' or 'bottom'.
+	 *                      This is designated as optional for backward compatibility.
+	 */
+	protected function bulk_actions( $which = '' ) {
+
+		if ( is_null( $this->_actions ) ) {
+			$this->_actions = $this->get_bulk_actions();
+			$this->_actions = apply_filters( "atum/list_table/bulk_actions-{$this->screen->id}", $this->_actions );
+			$two = '';
+		}
+		else {
+			$two = '2';
+		}
+
+		if ( empty( $this->_actions ) ) {
+			return;
+		}
+		?>
+
+		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php _e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
+		<select name="action<?php echo $two ?>" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>">
+			<option value="-1"><?php _e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
+
+			<?php foreach ( $this->_actions as $name => $title ): ?>
+				<option value="<?php echo $name ?>"<?php if ('edit' === $name) echo ' class="hide-if-no-js"' ?>><?php echo $title ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+	}
+
+	/**
+	 * Adds the Bulk Actions' apply button to the List Table view
+	 *
+	 * @since 1.4.1
+	 */
+	public function add_apply_bulk_action_button() {
+		?><button type="button" class="apply-bulk-action page-title-action hidden"><?php _e('Apply Bulk Action', ATUM_TEXT_DOMAIN) ?></button><?php
 	}
 	
 	/**
@@ -1131,7 +1185,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'paged'          => $this->get_pagenum(),
 			'meta_query'     => array(
 				array(
-					'key'   => '_atum_manage_stock',
+					'key'   => Globals::ATUM_MANAGE_STOCK_KEY,
 					'value' => 'yes'
 				)
 			)
@@ -1631,22 +1685,25 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prepare JS vars
 		$vars = array(
-			'page'         => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'      => $this->per_page,
-			'order'        => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'      => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'        => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter'   => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'     => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'    => __( 'Set', ATUM_TEXT_DOMAIN ),
-			'saveButton'   => __( 'Save Data', ATUM_TEXT_DOMAIN )
+			'page'            => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
+			'perpage'         => $this->per_page,
+			'showCb'          => $this->show_cb,
+			'order'           => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'         => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'           => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxfilter'      => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'        => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'       => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'saveButton'      => __( 'Save Data', ATUM_TEXT_DOMAIN ),
+			'ok'              => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'noItemsSelected' => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
+			'selectItems'     => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN )
 		);
 
 		if ($this->first_edit_key) {
-			$vars['firstEditKey'] = $this->first_edit_key;
-			$vars['important'] = __('Important!', ATUM_TEXT_DOMAIN);
-			$vars['preventLossNotice'] = __("To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN);
-			$vars['ok'] = __('OK', ATUM_TEXT_DOMAIN);
+			$vars['firstEditKey']      = $this->first_edit_key;
+			$vars['important']         = __( 'Important!', ATUM_TEXT_DOMAIN );
+			$vars['preventLossNotice'] = __( "To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN );
 		}
 
 		$vars = apply_filters( 'atum/list_table/js_vars',  array_merge($vars, $this->data) );
@@ -1898,24 +1955,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		$headers = ob_get_clean();
 		
 		ob_start();
-		$this->extra_tablenav( 'top' );
+		$this->display_tablenav( 'top' );
 		$extra_tablenav_top = ob_get_clean();
 		
 		ob_start();
-		$this->pagination( 'top' );
-		$pagination_top = ob_get_clean();
-		
-		ob_start();
-		$this->extra_tablenav( 'bottom' );
+		$this->display_tablenav( 'bottom' );
 		$extra_tablenav_bottom = ob_get_clean();
 		
-		ob_start();
-		$this->pagination( 'bottom' );
-		$pagination_bottom = ob_get_clean();
-		
 		$response                         = array( 'rows' => $rows );
-		$response['pagination']['top']    = $pagination_top;
-		$response['pagination']['bottom'] = $pagination_bottom;
 		$response['extra_t_n']['top']     = $extra_tablenav_top;
 		$response['extra_t_n']['bottom']  = $extra_tablenav_bottom;
 		$response['column_headers']       = $headers;
@@ -1946,10 +1993,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function enqueue_scripts( $hook ) {
 			
-		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION );
-		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
+		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION, TRUE );
 
-		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', FALSE, ATUM_VERSION );
+		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array('woocommerce_admin_styles'), ATUM_VERSION );
 
 		if ( isset($this->load_datepicker) && $this->load_datepicker === TRUE ) {
 			global $wp_scripts;
@@ -1985,9 +2032,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$min = (! ATUM_DEBUG) ? '.min' : '';
 		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
 
-		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'atum-list' );
-		wp_enqueue_script( 'jscrollpane' );
 		wp_enqueue_script( 'atum-list' );
 		
 	}

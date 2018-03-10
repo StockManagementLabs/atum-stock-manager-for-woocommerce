@@ -24,6 +24,7 @@
 			    $editInput        = $listWrapper.find('#atum-column-edits'),
 			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('.screen-per-page'),
 			    $search           = $listWrapper.find('.atum-post-search'),
+				$bulkButton       = $('.apply-bulk-action'),
 			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
 			    jScrollApi,
 			    $scrollPane,
@@ -67,12 +68,12 @@
 					}).resize();
 					
 					//
-					// Init. Tooltips
+					// Init Tooltips
 					//---------------
 					this.tooltip();
 					
 					//
-					// Init. Popovers
+					// Init Popovers
 					//---------------
 					this.setFieldPopover();
 					
@@ -209,6 +210,7 @@
 						self.$animationElem = $(this).closest('.tablenav-pages');
 						self.keyUp(e);
 					})
+					
 					//
 					// Expanding/Collapsing inheritable products
 					//-------------------------------------------
@@ -254,6 +256,18 @@
 							
 						} while ( $nextRow.hasClass('variation') || $nextRow.hasClass('grouped') );
 						
+					})
+					
+					//
+					// Bulk actions dropdown
+					//----------------------
+					.on('change', '.bulkactions select', function() {
+						if ($(this).val() !== '-1') {
+							$bulkButton.show();
+						}
+						else {
+							$bulkButton.hide();
+						}
 					});
 					
 					//
@@ -261,6 +275,27 @@
 					//-----------------------------
 					$('body').on('click', '#atum-update-list', function() {
 						self.saveData($(this));
+					});
+					
+					//
+					// Apply Bulk Actions
+					//-------------------
+					$bulkButton.click(function() {
+					
+						if (!$listWrapper.find('.check-column input:checked').length) {
+							
+							swal({
+								title            : atumListTable.noItemsSelected,
+								text             : atumListTable.selectItems,
+								type             : 'info',
+								confirmButtonText: atumListTable.ok
+							});
+							
+						}
+						else {
+							self.applyBulk();
+						}
+						
 					});
 					
 					//
@@ -690,6 +725,62 @@
 				},
 				
 				/**
+				 * Apply a bulk action for the selected rows
+				 */
+				applyBulk: function() {
+					
+					var self          = this,
+					    $bulkButton   = $('.apply-bulk-action'),
+					    bulkAction    = $listWrapper.find('.bulkactions select').filter(function () {
+						    return $(this).val() !== '-1'
+					    }).val(),
+					    selectedItems = [];
+					
+					$listWrapper.find('tbody .check-column input:checkbox').filter(':checked').each(function() {
+						selectedItems.push($(this).val());
+					});
+					
+					$.ajax({
+						url       : ajaxurl,
+						method    : 'POST',
+						dataType  : 'json',
+						data: {
+							token      : atumListTable.nonce,
+							action     : 'atum_apply_bulk_action',
+							bulk_action: bulkAction,
+							ids        : selectedItems
+						},
+						beforeSend: function () {
+							$bulkButton.prop('disabled', true);
+							self.$animationElem = $bulkButton.parent();
+							self.addOverlay();
+						},
+						success   : function (response) {
+							
+							if (typeof response === 'object') {
+								var noticeType = (response.success) ? 'updated' : 'error';
+								self.addNotice(noticeType, response.data);
+							}
+							
+							if (response.success) {
+								$bulkButton.hide();
+								$('.atum-loading').remove();
+								self.update();
+							}
+							else {
+								$bulkButton.prop('disabled', false);
+							}
+							
+						},
+						error: function() {
+							$bulkButton.prop('disabled', false);
+							self.removeOverlay();
+						}
+					});
+				
+				},
+				
+				/**
 				 * AJAX call
 				 * Send the call and replace table parts with updated version!
 				 *
@@ -716,6 +807,7 @@
 						action      : $listWrapper.data('action'),
 						screen      : $listWrapper.data('screen'),
 						per_page    : perPage,
+						show_cb     : atumListTable.showCb,
 						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m           : $listWrapper.find('#filter-by-date').val() || '',
 						product_type: $listWrapper.find('.dropdown_product_type').val() || '',
@@ -756,28 +848,15 @@
 								$listWrapper.find('.subsubsub').replaceWith(response.views);
 							}
 							
-							if (typeof response.pagination !== 'undefined') {
-								
-								// Update pagination for navigation
-								if (response.pagination.top.length) {
-									$listWrapper.find('.tablenav.top .tablenav-pages').html( $(response.pagination.top).html() );
-								}
-								
-								if (response.pagination.bottom.length) {
-									$listWrapper.find('.tablenav.bottom .tablenav-pages').html( $(response.pagination.bottom).html() );
-								}
-								
-							}
-							
 							if (typeof response.extra_t_n !== 'undefined') {
 								
 								// Update extra table nav for navigation
 								if (response.extra_t_n.top.length) {
-									$listWrapper.find('.tablenav.top .actions').replaceWith(response.extra_t_n.top);
+									$listWrapper.find('.tablenav.top').replaceWith(response.extra_t_n.top);
 								}
 								
 								if (response.extra_t_n.bottom.length) {
-									$listWrapper.find('.tablenav.bottom .actions').replaceWith(response.extra_t_n.bottom);
+									$listWrapper.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
 								}
 								
 							}

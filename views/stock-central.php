@@ -10,7 +10,10 @@ defined( 'ABSPATH' ) or die;
 <div class="wrap">
 	<h1 class="wp-heading-inline">
 		<?php echo apply_filters( 'atum/stock_central/title', __('Stock Central', ATUM_TEXT_DOMAIN) ) ?>
+
+		<?php do_action('atum/list_table/page_title_buttons') ?>
 	</h1>
+
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo $list->screen->id ?>">

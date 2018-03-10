@@ -144,9 +144,9 @@ final class Hooks {
 		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden"><?php
 
 			woocommerce_wp_checkbox( array(
-				'id'            => '_atum_manage_stock',
-				'name'          => 'atum_product_tab[_atum_manage_stock]',
-				'value'         => get_post_meta( get_the_ID(), '_atum_manage_stock', TRUE ),
+				'id'            => Globals::ATUM_MANAGE_STOCK_KEY,
+				'name'          => 'atum_product_tab[' . Globals::ATUM_MANAGE_STOCK_KEY . ']',
+				'value'         => get_post_meta( get_the_ID(), Globals::ATUM_MANAGE_STOCK_KEY, TRUE ),
 				'class'         => 'js-switch',
 				'wrapper_class' => 'show_if_simple show_if_variable show_if_grouped',
 				'label'         => __( 'Inventory Manager', ATUM_TEXT_DOMAIN ),
@@ -195,9 +195,9 @@ final class Hooks {
 
 			<?php
 			woocommerce_wp_checkbox( array(
-				'id'          => "_atum_manage_stock_{$loop}",
-				'name'        => "variation_atum_tab[_atum_manage_stock][$loop]",
-				'value'       => get_post_meta( $variation->ID, '_atum_manage_stock', TRUE ),
+				'id'          => Globals::ATUM_MANAGE_STOCK_KEY . '_' . $loop,
+				'name'        => "variation_atum_tab[" . Globals::ATUM_MANAGE_STOCK_KEY . "][$loop]",
+				'value'       => get_post_meta( $variation->ID, Globals::ATUM_MANAGE_STOCK_KEY, TRUE ),
 				'class'       => 'js-switch',
 				'label'       => __( 'Inventory Manager', ATUM_TEXT_DOMAIN ),
 				'description' => __( 'Enable to use this product and its data within the ATUM interface', ATUM_TEXT_DOMAIN ),
@@ -282,11 +282,11 @@ final class Hooks {
 	 */
 	public static function save_product_variation_data_panel($variation_id, $i) {
 
-		if ( isset( $_POST['variation_atum_tab']['_atum_manage_stock'][$i] ) ) {
-			update_post_meta($variation_id, '_atum_manage_stock', 'yes');
+		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_MANAGE_STOCK_KEY ][ $i ] ) ) {
+			update_post_meta( $variation_id, Globals::ATUM_MANAGE_STOCK_KEY, 'yes' );
 		}
-		else{
-			delete_post_meta($variation_id, '_atum_manage_stock');
+		else {
+			delete_post_meta( $variation_id, Globals::ATUM_MANAGE_STOCK_KEY );
 		}
 
 	}
@@ -307,11 +307,11 @@ final class Hooks {
 		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
 
 		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
-		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
+		add_filter( 'wcml_custom_prices_fields', array( __CLASS__, 'wpml_add_purchase_price_to_custom_prices' ), 10, 2 );
+		add_filter( 'wcml_custom_prices_fields_labels', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
+		add_filter( 'wcml_custom_prices_strings', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
+		add_filter( 'wcml_update_custom_prices_values', array( __CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices' ), 10, 3 );
+		add_action( 'wcml_after_save_custom_prices', array( __CLASS__, 'wpml_save_purchase_price_in_custom_prices' ), 10, 4 );
 
 	}
 
@@ -596,7 +596,7 @@ final class Hooks {
 		if ( in_array($product->get_type(), Globals::get_product_types()) ) {
 
 			$current_stock = $product->get_stock_quantity();
-			$out_of_stock_date_key = Globals::get_out_of_stock_date_key();
+			$out_of_stock_date_key = Globals::OUT_OF_STOCK_DATE_KEY;
 			$product_id = $product->get_id();
 
 			if (!$current_stock) {

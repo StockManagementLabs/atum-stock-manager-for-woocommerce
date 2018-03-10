@@ -332,7 +332,7 @@ final class Helpers {
 	public static function get_product_lost_sales ($product_id, $days = 7) {
 
 		$lost_sales = FALSE;
-		$out_of_stock_date = get_post_meta( $product_id, Globals::get_out_of_stock_date_key(), TRUE );
+		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
 		if ($out_of_stock_date && $days > 0) {
 
@@ -380,7 +380,7 @@ final class Helpers {
 		$out_of_stock_days = FALSE;
 
 		// Check if the current product has the "Out of stock" date recorded
-		$out_of_stock_date = get_post_meta($product_id, Globals::get_out_of_stock_date_key(), TRUE );
+		$out_of_stock_date = get_post_meta($product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
 		if ( $out_of_stock_date ) {
 			
@@ -656,7 +656,7 @@ final class Helpers {
 	 * @return bool
 	 */
 	public static function is_atum_managing_stock($product_id) {
-		return get_post_meta( $product_id, '_atum_manage_stock', TRUE ) === 'yes';
+		return get_post_meta( $product_id, Globals::ATUM_MANAGE_STOCK_KEY, TRUE ) === 'yes';
 	}
 	
 	/**
