@@ -340,41 +340,32 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param \WP_Post $item The WooCommerce product post
 	 */
 	public function single_row( $item ) {
-
+		
 		$this->product = wc_get_product( $item );
-		$type = $this->product->get_type();
-
+		$type          = $this->product->get_type();
+		
 		$this->custom_prices = FALSE;
-
+		
 		// Do the WPM stuff
-		if ($this->is_wpml_multicurrency) {
-
-			global $sitepress;
-			$this->original_product_id = $item->ID;
-
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->ID, 'post_'.$this->post_type), 'post_'.$this->post_type);
-			foreach($product_translations as $translation){
-				if( $translation->original ){
-					$this->original_product_id = $translation->element_id;
-					break;
-				}
-			}
-
+		if ( $this->is_wpml_multicurrency ) {
+			
+			$this->original_product_id = Helpers::get_original_product_id( $item->ID, $this->post_type );
+			
 			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
-				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
-
-				if ( $custom_price_ui) {
-
+				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id );
+				
+				if ( $custom_price_ui ) {
+					
 					global $thepostid;
-					$keep_id = ($thepostid)? $thepostid : 0;
+					$keep_id   = ( $thepostid ) ? $thepostid : 0;
 					$thepostid = $this->original_product_id;
-
+					
 					$this->custom_prices = $custom_price_ui->get_currencies_info();
-
+					
 					$thepostid = $keep_id;
 				}
 			}
-
+			
 		}
 		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
 		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
@@ -446,17 +437,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// If WPML has Multi Currency enabled, the related info is saved in the original product
 		if ($this->is_wpml_multicurrency) {
 			
-			global $sitepress;
-			$this->original_product_id = $item->get_id();
-			
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->get_id(), "post_{$type}"), "post_{$type}");
-
-			foreach($product_translations as $translation){
-				if( $translation->original ){
-					$this->original_product_id = $translation->element_id;
-					break;
-				}
-			}
+			$this->original_product_id = Helpers::get_original_product_id($item->get_id(), $type);
 			
 			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
 

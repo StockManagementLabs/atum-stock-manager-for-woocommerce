@@ -1192,37 +1192,27 @@ final class Helpers {
 	 */
 	public static function update_product_meta( $product_id, $product_meta ) {
 		
-		$product               = wc_get_product( $product_id );
-		$original_product_id   = $product_id;
+		$product             = wc_get_product( $product_id );
+		$original_product_id = $product_id;
 		
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
 		}
 		
 		$wpml_config = self::is_wpml_active();
-
+		
 		// Add WPML compatibility
 		if ( $wpml_config ) {
 			
 			$wpml = \woocommerce_wpml::instance();
-			global $sitepress;
 			
 			if ( $wpml_config == 2 ) {
 				
-				$post_type             = get_post_type( $product_id );
-				$product_translations  = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
-
-				foreach ( $product_translations as $translation ) {
-
-					if ( $translation->original ) {
-						$original_product_id = $translation->element_id;
-						break;
-					}
-
-				}
+				$post_type           = get_post_type( $product_id );
+				$original_product_id = Helpers::get_original_product_id( $product_id, $post_type );
 				
 			}
-
+			
 		}
 		
 		foreach ( $product_meta as $meta_key => &$meta_value ) {
@@ -1358,7 +1348,7 @@ final class Helpers {
 		}
 		
 		// Hack to prevent overwriting the purchase_price on variations
-		remove_action( 'woocommerce_update_product_variation', array('\Atum\Inc\Hooks', 'save_purchase_price') );
+		remove_action( 'woocommerce_update_product_variation', array( '\Atum\Inc\Hooks', 'save_purchase_price' ) );
 		
 		$product->save();
 		
@@ -1412,7 +1402,7 @@ final class Helpers {
 	/**
 	 * Get a WPML language's currency
 	 *
-	 * since 1.4.1
+	 * @since 1.4.1
 	 *
 	 * @param string $lang Language. if not provided current language will be assumed
 	 *
@@ -1437,6 +1427,36 @@ final class Helpers {
 		}
 		
 		return $currency;
+		
+	}
+	
+	/**
+	 * Get the original product id from a translation
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 * @param     $post_type
+	 *
+	 * @return int
+	 */
+	public static function  get_original_product_id( $product_id = 0, $post_type) {
+		
+		if ($product_id) {
+			
+			global $sitepress;
+			
+			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($product_id, 'post_'.$post_type), 'post_'.$post_type);
+			foreach($product_translations as $translation){
+				if( $translation->original ){
+					$product_id = $translation->element_id;
+					break;
+				}
+			}
+		
+		}
+		
+		return $product_id;
 		
 	}
 	
