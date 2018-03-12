@@ -1440,20 +1440,22 @@ final class Helpers {
 	 *
 	 * @return int
 	 */
-	public static function  get_original_product_id( $product_id = 0, $post_type) {
+	public static function get_original_product_id( $product_id = 0, $post_type = '' ) {
 		
-		if ($product_id) {
+		if ( $product_id ) {
+			
+			$post_type = $post_type ? $post_type : get_post_type( $product_id );
 			
 			global $sitepress;
 			
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($product_id, 'post_'.$post_type), 'post_'.$post_type);
-			foreach($product_translations as $translation){
-				if( $translation->original ){
+			$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+			foreach ( $product_translations as $translation ) {
+				if ( $translation->original ) {
 					$product_id = $translation->element_id;
 					break;
 				}
 			}
-		
+			
 		}
 		
 		return $product_id;
