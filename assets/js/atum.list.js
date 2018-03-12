@@ -216,9 +216,8 @@
 					//-------------------------------------------
 					.on('click', '.product-type.has-child', function() {
 						
-						var typeClass      = $(this).hasClass('grouped') ? 'group' : 'variable',
-						    $expandebleRow = $(this).closest('tr').toggleClass('expanded ' + typeClass),
-						    $nextRow       = $expandebleRow.next();
+						var $expandableRow = $(this).closest('tr').toggleClass('expanded'),
+						    $nextRow       = $expandableRow.next();
 						
 						// Reload the scrollbar once the slide animation is completed
 						self.reloadScrollbar(210);
@@ -231,11 +230,11 @@
 								$nextRow.find('td > div.hidden').slideDown('fast');
 							}
 							else {
-								
-								$nextRow.find('td > div.hidden').slideUp('fast', function(){
+									
+								$nextRow.hide().find('td > div.hidden').each( function () {
 									
 									var $innerDiv = $(this),
-										$children = $innerDiv.children();
+									    $children = $innerDiv.children();
 									
 									$innerDiv.closest('tr').hide();
 									
@@ -249,6 +248,7 @@
 									}
 									
 								});
+								
 								
 							}
 							
@@ -803,16 +803,17 @@
 					}
 					
 					data = $.extend({
-						token       : atumListTable.nonce,
-						action      : $listWrapper.data('action'),
-						screen      : $listWrapper.data('screen'),
-						per_page    : perPage,
-						show_cb     : atumListTable.showCb,
-						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
-						m           : $listWrapper.find('#filter-by-date').val() || '',
-						product_type: $listWrapper.find('.dropdown_product_type').val() || '',
-						supplier    : $listWrapper.find('.dropdown_supplier').val() || '',
-						extra_filter: $listWrapper.find('.dropdown_extra_filter').val() || ''
+						token          : atumListTable.nonce,
+						action         : $listWrapper.data('action'),
+						screen         : $listWrapper.data('screen'),
+						per_page       : perPage,
+						show_cb        : atumListTable.showCb,
+						show_controlled: self.__query(location.search.substring(1), 'uncontrolled') || '',
+						product_cat    : $listWrapper.find('.dropdown_product_cat').val() || '',
+						m              : $listWrapper.find('#filter-by-date').val() || '',
+						product_type   : $listWrapper.find('.dropdown_product_type').val() || '',
+						supplier       : $listWrapper.find('.dropdown_supplier').val() || '',
+						extra_filter   : $listWrapper.find('.dropdown_extra_filter').val() || ''
 					}, data || {});
 					
 					postTypeTableAjax = $.ajax({
