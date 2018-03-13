@@ -1462,4 +1462,35 @@ final class Helpers {
 		
 	}
 	
+	/**
+	 * Get the product translation's ids
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 * @param     $post_type
+	 *
+	 * @return array
+	 */
+	public static function get_product_translations_ids( $product_id = 0, $post_type = '' ) {
+		
+		$translations = [];
+		
+		if ( $product_id ) {
+			
+			$post_type = $post_type ? $post_type : get_post_type( $product_id );
+			
+			global $sitepress;
+			
+			$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+			foreach ( $product_translations as $translation ) {
+				$translations[$translation->language_code] = $translation->element_id;
+			}
+			
+		}
+		
+		return $translations;
+		
+	}
+	
 }
