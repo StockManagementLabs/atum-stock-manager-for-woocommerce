@@ -222,37 +222,16 @@
 						// Reload the scrollbar once the slide animation is completed
 						if ($nextRow.length) {
 							$expandableRow.toggleClass('expanded');
-							self.reloadScrollbar(210);
+							self.reloadScrollbar(305);
 						}
 						
 						while ($nextRow.length) {
 							
-							// Emulate the slide animation in rows with this simple trick
 							if (!$nextRow.is(':visible')) {
-								$nextRow.show().find('td').wrapInner('<div class="hidden" />');
-								$nextRow.find('td > div.hidden').slideDown('fast');
+								$nextRow.show(300);
 							}
 							else {
-									
-								$nextRow.hide().find('td > div.hidden').each( function () {
-									
-									var $innerDiv = $(this),
-									    $children = $innerDiv.children();
-									
-									$innerDiv.closest('tr').hide();
-									
-									// For HTML nodes
-									if ($children.length) {
-										$children.unwrap();
-									}
-									// For text nodes
-									else {
-										$innerDiv.closest('td').html($innerDiv.html());
-									}
-									
-								});
-								
-								
+								$nextRow.hide(300);
 							}
 							
 							$nextRow = $nextRow.next('.expandable');
