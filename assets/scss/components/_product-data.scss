@@ -1,0 +1,135 @@
+//
+// Product Data meta box
+//----------------------
+
+.product_data {
+	
+	&_tabs {
+		.atum_tab {
+			
+			a {
+				&:before {
+					content: '' !important;
+					background-image: url("#{$img-path}atum-icon-mono.png");
+					width: 13px;
+					height: 13px;
+					background-size: cover;
+					@include vertical-align-absolute;
+				}
+				
+				> span {
+					padding-left: 13px;
+				}
+			}
+			
+		}
+	}
+	
+	.atum-field {
+		.input-group-text {
+			padding: 2px 7px;
+		}
+		
+		input[type=text] {
+			width: calc(80% - 31px) !important;
+			padding-top: 4px;
+			padding-bottom: 4px;
+			
+			&:focus {
+				box-shadow: none;
+				border-color: $input-focus;
+			}
+		}
+		
+		.select2-container, .select2-selection--single, .select2-selection__rendered {
+			&:focus {
+				box-shadow: none;
+				outline: none;
+			}
+		}
+		
+		.select2-container {
+			float: none;
+			max-width: calc(80% - 31px) !important;
+			
+			.select2-selection--single {
+				height: auto;
+				margin: 0;
+				font-size: $font-size-base;
+				
+				.select2-selection__rendered {
+					line-height: 1.8;
+				}
+				
+				.select2-selection__arrow {
+					height: 25px;
+				}
+				
+				&:focus {
+					border-color: $input-focus;
+				}
+			}
+		}
+	}
+	
+	.woocommerce_variations {
+		
+		.form-row-first, .form-row-last {
+			.atum-field {
+				position: relative;
+				margin-top: 2px;
+				
+				input[type=text] {
+					margin-top: 0;
+					width: calc(100% - 33px) !important;
+				}
+				
+				.select2-container {
+					max-width: calc(100% - 33px) !important;
+				}
+				
+				.woocommerce-help-tip {
+					position: absolute;
+					top: -25px;
+					right: 0;
+				}
+				
+			}
+		}
+		
+		.atum-data-panel {
+			border-top: 1px solid #DDD;
+			padding-top: $grid-gutter-width/2;
+		}
+		
+		h3.atum-section-title {
+			border: 1px solid $brand-info;
+			background-color: transparentize($blue-light, .85);
+			color: #555;
+			text-transform: uppercase;
+			cursor: default !important;
+			margin-bottom: $grid-gutter-width/2 !important;
+		}
+		
+		._atum_manage_stock_field {
+			margin: 25px 0;
+		}
+		
+		h4.atum-section-title {
+			margin-top: 20px;
+		}
+		
+		.switchery {
+			margin-left: 5px;
+		}
+		
+	}
+	
+	#atum_product_data {
+		.switchery {
+			float: left;
+		}
+	}
+	
+	
+}

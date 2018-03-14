@@ -24,6 +24,7 @@
 			    $editInput        = $listWrapper.find('#atum-column-edits'),
 			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('.screen-per-page'),
 			    $search           = $listWrapper.find('.atum-post-search'),
+				$bulkButton       = $('.apply-bulk-action'),
 			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
 			    jScrollApi,
 			    $scrollPane,
@@ -67,12 +68,12 @@
 					}).resize();
 					
 					//
-					// Init. Tooltips
+					// Init Tooltips
 					//---------------
 					this.tooltip();
 					
 					//
-					// Init. Popovers
+					// Init Popovers
 					//---------------
 					this.setFieldPopover();
 					
@@ -209,51 +210,68 @@
 						self.$animationElem = $(this).closest('.tablenav-pages');
 						self.keyUp(e);
 					})
+					
 					//
 					// Expanding/Collapsing inheritable products
 					//-------------------------------------------
 					.on('click', '.product-type.has-child', function() {
 						
-						var typeClass      = $(this).hasClass('grouped') ? 'group' : 'variable',
-						    $expandebleRow = $(this).closest('tr').toggleClass('expanded ' + typeClass),
-						    $nextRow       = $expandebleRow.next();
+						var $expandableRow = $(this).closest('tr'),
+						    $nextRow       = $expandableRow.next('.expandable');
 						
 						// Reload the scrollbar once the slide animation is completed
-						self.reloadScrollbar(210);
+						if ($nextRow.length) {
+							$expandableRow.toggleClass('expanded');
+							self.reloadScrollbar(305);
+						}
 						
-						do {
+						while ($nextRow.length) {
 							
-							// Emulate the slide animation in rows with this simple trick
 							if (!$nextRow.is(':visible')) {
-								$nextRow.show().find('td').wrapInner('<div class="hidden" />');
-								$nextRow.find('td > div.hidden').slideDown('fast');
+								$nextRow.show(300);
 							}
 							else {
-								
-								$nextRow.find('td > div.hidden').slideUp('fast', function(){
-									
-									var $innerDiv = $(this),
-										$children = $innerDiv.children();
-									
-									$innerDiv.closest('tr').hide();
-									
-									// For HTML nodes
-									if ($children.length) {
-										$children.unwrap();
-									}
-									// For text nodes
-									else {
-										$innerDiv.closest('td').html($innerDiv.html());
-									}
-									
-								});
-								
+								$nextRow.hide(300);
 							}
 							
-							$nextRow = $nextRow.next();
+							$nextRow = $nextRow.next('.expandable');
 							
-						} while ( $nextRow.hasClass('variation') || $nextRow.hasClass('grouped') );
+						}
 						
+					})
+					
+					//
+					// Bulk actions dropdown
+					//----------------------
+					.on('change', '.bulkactions select', function() {
+						if ($(this).val() !== '-1') {
+							$bulkButton.show();
+						}
+						else {
+							$bulkButton.hide();
+						}
+					})
+					
+					//
+					// Expandable rows' checkboxes
+					//----------------------------
+					.on('click', 'tr.variable .check-column input:checkbox, tr.group .check-column input:checkbox', function() {
+						
+						var $checkbox     = $(this),
+						    $containerRow = $checkbox.closest('tr'),
+							$nextRow      = $containerRow.next('.expandable');
+						
+						// If is not expanded, expand it
+						if (!$containerRow.hasClass('expanded')) {
+							$containerRow.find('.product-type.has-child').click();
+						}
+						
+						// Check/Uncheck all the children rows
+						while ($nextRow.length) {
+							$nextRow.find('.check-column input:checkbox').prop('checked', $checkbox.is(':checked'));
+							$nextRow = $nextRow.next('.expandable');
+						}
+					
 					});
 					
 					//
@@ -261,6 +279,27 @@
 					//-----------------------------
 					$('body').on('click', '#atum-update-list', function() {
 						self.saveData($(this));
+					});
+					
+					//
+					// Apply Bulk Actions
+					//-------------------
+					$bulkButton.click(function() {
+					
+						if (!$listWrapper.find('.check-column input:checked').length) {
+							
+							swal({
+								title            : atumListTable.noItemsSelected,
+								text             : atumListTable.selectItems,
+								type             : 'info',
+								confirmButtonText: atumListTable.ok
+							});
+							
+						}
+						else {
+							self.applyBulk();
+						}
+						
 					});
 					
 					//
@@ -659,7 +698,6 @@
 								
 								if (response.success) {
 									$button.remove();
-									$('.atum-loading').remove();
 									$editInput.val('');
 									self.update();
 								}
@@ -690,6 +728,61 @@
 				},
 				
 				/**
+				 * Apply a bulk action for the selected rows
+				 */
+				applyBulk: function() {
+					
+					var self          = this,
+					    $bulkButton   = $('.apply-bulk-action'),
+					    bulkAction    = $listWrapper.find('.bulkactions select').filter(function () {
+						    return $(this).val() !== '-1'
+					    }).val(),
+					    selectedItems = [];
+					
+					$listWrapper.find('tbody .check-column input:checkbox').filter(':checked').each(function() {
+						selectedItems.push($(this).val());
+					});
+					
+					$.ajax({
+						url       : ajaxurl,
+						method    : 'POST',
+						dataType  : 'json',
+						data: {
+							token      : atumListTable.nonce,
+							action     : 'atum_apply_bulk_action',
+							bulk_action: bulkAction,
+							ids        : selectedItems
+						},
+						beforeSend: function () {
+							$bulkButton.prop('disabled', true);
+							self.$animationElem = $bulkButton.parent();
+							self.addOverlay();
+						},
+						success   : function (response) {
+							
+							if (typeof response === 'object') {
+								var noticeType = (response.success) ? 'updated' : 'error';
+								self.addNotice(noticeType, response.data);
+							}
+							
+							if (response.success) {
+								$bulkButton.hide();
+								self.update();
+							}
+							else {
+								$bulkButton.prop('disabled', false);
+							}
+							
+						},
+						error: function() {
+							$bulkButton.prop('disabled', false);
+							self.removeOverlay();
+						}
+					});
+				
+				},
+				
+				/**
 				 * AJAX call
 				 * Send the call and replace table parts with updated version!
 				 *
@@ -712,15 +805,17 @@
 					}
 					
 					data = $.extend({
-						token       : atumListTable.nonce,
-						action      : $listWrapper.data('action'),
-						screen      : $listWrapper.data('screen'),
-						per_page    : perPage,
-						product_cat : $listWrapper.find('.dropdown_product_cat').val() || '',
-						m           : $listWrapper.find('#filter-by-date').val() || '',
-						product_type: $listWrapper.find('.dropdown_product_type').val() || '',
-						supplier    : $listWrapper.find('.dropdown_supplier').val() || '',
-						extra_filter: $listWrapper.find('.dropdown_extra_filter').val() || ''
+						token          : atumListTable.nonce,
+						action         : $listWrapper.data('action'),
+						screen         : $listWrapper.data('screen'),
+						per_page       : perPage,
+						show_cb        : atumListTable.showCb,
+						show_controlled: (self.__query(location.search.substring(1), 'uncontrolled') !== '1') ? 1 : 0,
+						product_cat    : $listWrapper.find('.dropdown_product_cat').val() || '',
+						m              : $listWrapper.find('#filter-by-date').val() || '',
+						product_type   : $listWrapper.find('.dropdown_product_type').val() || '',
+						supplier       : $listWrapper.find('.dropdown_supplier').val() || '',
+						extra_filter   : $listWrapper.find('.dropdown_extra_filter').val() || ''
 					}, data || {});
 					
 					postTypeTableAjax = $.ajax({
@@ -756,28 +851,15 @@
 								$listWrapper.find('.subsubsub').replaceWith(response.views);
 							}
 							
-							if (typeof response.pagination !== 'undefined') {
-								
-								// Update pagination for navigation
-								if (response.pagination.top.length) {
-									$listWrapper.find('.tablenav.top .tablenav-pages').html( $(response.pagination.top).html() );
-								}
-								
-								if (response.pagination.bottom.length) {
-									$listWrapper.find('.tablenav.bottom .tablenav-pages').html( $(response.pagination.bottom).html() );
-								}
-								
-							}
-							
 							if (typeof response.extra_t_n !== 'undefined') {
 								
 								// Update extra table nav for navigation
 								if (response.extra_t_n.top.length) {
-									$listWrapper.find('.tablenav.top .actions').replaceWith(response.extra_t_n.top);
+									$listWrapper.find('.tablenav.top').replaceWith(response.extra_t_n.top);
 								}
 								
 								if (response.extra_t_n.bottom.length) {
-									$listWrapper.find('.tablenav.bottom .actions').replaceWith(response.extra_t_n.bottom);
+									$listWrapper.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
 								}
 								
 							}
@@ -827,21 +909,20 @@
 				 * Add the overlay effect while loading data
 				 */
 				addOverlay: function() {
-					$listWrapper.addClass('loading-data');
-					$atumTable.addClass('overlay');
-					
-					if (typeof this.$animationElem !== 'undefined' && this.$animationElem.length) {
-						this.$animationElem.append('<div class="atum-loading"></div>');
-					}
+					$('.atum-table-wrapper').block({
+						message   : null,
+						overlayCSS: {
+							background: '#000',
+							opacity   : 0.5
+						}
+					});
 				},
 				
 				/**
 				 * Remove the overlay effect once the data is fully loaded
 				 */
-				removeOverlay: function() {
-					$listWrapper.removeClass('loading-data');
-					$atumTable.removeClass('overlay');
-					$('.atum-loading').remove();
+				removeOverlay: function() {;
+					$('.atum-table-wrapper').unblock();
 				},
 				
 				/**
@@ -916,18 +997,18 @@
 				 */
 				addNotice: function(type, msg) {
 					
-					var $stockNotice   = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
+					var $notice   = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
 					    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
 					
 					$listWrapper.siblings('.notice').remove();
-					$listWrapper.before($stockNotice.append($dismissButton));
-					$stockNotice.slideDown(100);
+					$listWrapper.before($notice.append($dismissButton));
+					$notice.slideDown(100);
 					
 					$dismissButton.on('click.wp-dismiss-notice', function (e) {
 						e.preventDefault();
-						$stockNotice.fadeTo(100, 0, function () {
-							$stockNotice.slideUp(100, function () {
-								$stockNotice.remove();
+						$notice.fadeTo(100, 0, function () {
+							$notice.slideUp(100, function () {
+								$notice.remove();
 							});
 						});
 					});
@@ -949,56 +1030,6 @@
 			stockCentralTable.init();
 			
 		});
-		
-		//-------------------------
-		// Management Stock notice
-		//-------------------------
-		var $notice    = $('.atum-notice.notice-management-stock'),
-		    noticeAjax = '';
-		
-		var noticeAction = {
-			
-			init: function () {
-				var self = this;
-				
-				$notice.find('.add-manage-option').click( function () {
-					$(this).after('<span class="atum-loading" />');
-					self.send('manage');
-				});
-				
-				$notice.click('.notice-dismiss', function () {
-					self.send('dismiss');
-				});
-				
-			},
-			
-			send: function (action) {
-				
-				if (noticeAjax && noticeAjax.readyState !== 4) {
-					noticeAjax.abort();
-				}
-				
-				noticeAjax = $.ajax({
-					url     : ajaxurl,
-					method  : 'POST',
-					data    : {
-						token : $notice.data('nonce'),
-						action: 'atum_manage_stock_notice',
-						data  : action
-					},
-					beforeSend: function() {
-						
-					},
-					success : function() {
-						location.reload();
-					}
-				});
-				
-			}
-			
-		};
-		
-		noticeAction.init();
 		
 		//----------------
 		// Welcome notice

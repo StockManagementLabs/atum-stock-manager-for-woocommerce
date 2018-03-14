@@ -1,9 +1,9 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
  * @version 1.4.0 
- * @authors Salva Machí and Jose Piera 
+ * @author Be Rebel  
  *
- * Author URI: https://sispixels.com/ 
+ * Author URI: https://berebel.io 
  * License : ©2018 Stock Management Labs 
  */ 
 
@@ -46,7 +46,7 @@ body {
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 25px;
-  color: #00b8db;
+  color: #00B8DB;
   text-transform: uppercase;
 }
 
@@ -60,7 +60,7 @@ body {
 
 .content-address h4 {
   font-size: 18px;
-  background-color: #00b8db;
+  background-color: #00B8DB;
   color: #FFF;
   padding: 5px 10px;
   margin: 0;
@@ -77,7 +77,7 @@ body {
 }
 
 .content-lines .po-li-head {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .content-lines .po-li-head th {
@@ -106,12 +106,12 @@ body {
 }
 
 .content-totals .subtotal td {
-  border-top: 2px solid #00b8db;
+  border-top: 2px solid #00B8DB;
   padding-top: 20px;
 }
 
 .po-total .label, .po-total .total {
-  border-top: 2px solid #00b8db;
+  border-top: 2px solid #00B8DB;
   font-weight: bold;
 }
 

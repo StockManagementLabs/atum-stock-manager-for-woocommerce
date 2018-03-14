@@ -2,8 +2,8 @@
 /**
  * @package         Atum\Components
  * @subpackage      AtumListTables
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  *
@@ -18,10 +18,8 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
-use Atum\Suppliers\Suppliers;
 
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -47,7 +45,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $table_columns;
-	
+
 	/**
 	 * The previously selected items
 	 * @var array
@@ -186,6 +184,18 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var string
 	 */
 	protected $first_edit_key;
+
+	/**
+	 * Show the checkboxes in table rows
+	 * @var bool
+	 */
+	protected $show_cb = FALSE;
+
+	/**
+	 * Whether to show products controlled by ATUM or not
+	 * @var bool
+	 */
+	protected $show_controlled = TRUE;
 	
 	/**
 	 * User meta key to control the current user dismissed notices
@@ -196,7 +206,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&mdash;';
-	
+
 	/**
 	 * Constructor
 	 *
@@ -207,83 +217,82 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns The table columns for the list table
-	 *      @type array  $group_members The column grouping members
-	 *      @type bool   $show_cb       Optional. Whether to show the row selector checkbox as first table column
-	 *      @type int    $per_page      Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected      Optional. The posts selected on the list table
+	 *      @type array  $table_columns    The table columns for the list table
+	 *      @type array  $group_members    The column grouping members
+	 *      @type bool   $show_cb          Optional. Whether to show the row selector checkbox as first table column
+	 *      @type bool   $show_controlled  Optional. Whether to show items controlled by ATUM or not
+	 *      @type int    $per_page         Optional. The number of posts to show per page (-1 for no pagination)
+	 *      @type array  $selected         Optional. The posts selected on the list table
 	 * }
 	 */
 	public function __construct( $args = array() ) {
 
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		
+
 		$args = wp_parse_args( $args, array(
-			'show_cb'  => FALSE,
-			'per_page' => Settings::DEFAULT_POSTS_PER_PAGE,
+			'show_cb'         => FALSE,
+			'show_controlled' => TRUE,
+			'per_page'        => Settings::DEFAULT_POSTS_PER_PAGE,
 		) );
-		
+
+		$this->show_cb         = $args['show_cb'];
+		$this->show_controlled = $args['show_controlled'];
+
 		if ( ! empty( $args['selected'] ) ) {
-			$this->selected = ( is_array( $args['selected'] ) ) ? $args['selected'] : explode( ',', $args['selected'] );
+			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
 
 		if ( ! empty($args['group_members']) ) {
 			$this->group_members = $args['group_members'];
+
+			if ( isset ($this->group_members['product-details']) && $this->show_cb == TRUE ) {
+				array_unshift($this->group_members['product-details']['members'], 'cb');
+			}
 		}
-		
+
 		// Add the checkbox column to the table if enabled
-		$this->table_columns = ( $args['show_cb'] == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
-		$this->per_page      = $args['per_page'];
-		
+		$this->table_columns = ( $this->show_cb == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
+		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+
 		$post_type_obj = get_post_type_object( $this->post_type );
-		
+
 		if ( ! $post_type_obj ) {
 			return FALSE;
 		}
-		
+
 		// Set \WP_List_Table defaults
 		$args = array_merge( array(
 			'singular' => strtolower( $post_type_obj->labels->singular_name ),
 			'plural'   => strtolower( $post_type_obj->labels->name ),
 			'ajax'     => TRUE
 		), $args );
-		
+
 		parent::__construct( $args );
 
 		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
-		$user_dismissed_notices = Helpers::get_dismissed_notices();
-		
-		if (
-			! Helpers::is_atum_managing_stock() &&
-			( !$user_dismissed_notices || ! isset($user_dismissed_notices['manage_stock']) || $user_dismissed_notices['manage_stock'] != 'yes' )
-		) {
-			
-			add_action( 'admin_notices', array( $this, 'add_manage_stock_notice' ) );
-		}
-		
+
 		$this->current_currency = $this->default_currency = get_woocommerce_currency();
 
 		// Do WPML Stuff
 		if ( class_exists('\woocommerce_wpml') ) {
-			
+
 			$this->wpml = \woocommerce_wpml::instance();
-			
+
 			if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
-				
+
 				$this->is_wpml_multicurrency = TRUE;
-				
+
 				global $sitepress;
 				$current_lang = $sitepress->get_current_language();
-				
+
 				if ( ! empty( $this->wpml->settings['default_currencies'][ $current_lang ] ) ) {
 					$this->current_currency = $this->wpml->settings['default_currencies'][ $current_lang ];
 				}
 			}
 		}
-		
-		
+
+
 	}
 
 	/**
@@ -327,10 +336,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		) );
 
 		// Product type filtering
-		echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 
 		// Supplier filtering
-		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
+		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
 
 	}
 
@@ -368,7 +377,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				if ( $custom_price_ui) {
 
 					global $thepostid;
-					$keep_id = ($thepostid)? $thepostid : 0;
+					$keep_id = $thepostid ? $thepostid : 0;
 					$thepostid = $this->original_product_id;
 
 					$this->custom_prices = $custom_price_ui->get_currencies_info();
@@ -383,19 +392,36 @@ abstract class AtumListTable extends \WP_List_Table {
 			return;
 		}*/
 
-		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
+		$this->allow_calcs = TRUE;
+		$row_class = '';
+
+		// Inheritable products do not allow calcs
+		if ( Helpers::is_inheritable_type($type) ) {
+			$this->allow_calcs = FALSE;
+			$class_type = $type == 'grouped' ? 'group' : 'variable';
+
+			$row_classes = array($class_type);
+
+			if ( Helpers::get_option( 'expandable_rows', 'no' ) == 'yes' ) {
+				$row_classes[] = 'expanded';
+			}
+			$row_class = ' class="' . implode(' ', $row_classes) . '"';
+		}
+		// If the product stock is not managed at product level by WC, block calcs too
+		elseif ( ! $this->product->managing_stock() )  {
+			$this->allow_calcs = FALSE;
+		}
 
 		// Output the row
-		echo '<tr data-id="' . $this->get_current_product_id() . '">';
+		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>';
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
 		// Add the children products of each inheritable product type
-		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+		if ( !$this->allow_calcs ) {
 
-			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
-			$parent_product = new $product_class( $this->product->get_id() );
-			$child_products = $parent_product->get_children();
+			$product_type = in_array($type, ['variable', 'variable-subcription']) ? 'product_variation' : 'product';
+			$child_products = $this->get_children($type, [  $this->product->get_id() ], $product_type );
 
 			if ( ! empty($child_products) ) {
 
@@ -438,8 +464,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post
-	 * @param string   $type The type of product
+	 * @param \WC_Product $item The WooCommerce product
+	 * @param string      $type The type of product
 	 */
 	public function single_expandable_row( $item, $type ) {
 		
@@ -478,8 +504,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			
 		}
+
+		$row_style = Helpers::get_option('expandable_rows', 'no') != 'yes' ? ' style="display: none"' : '';
 		
-		echo '<tr class="' . $type . '" style="display: none" data-id="' . $this->get_current_product_id() . '">';
+		echo '<tr class="expandable ' . $type . '"' . $row_style . ' data-id="' . $this->get_current_product_id() . '">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
 	}
@@ -522,12 +550,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function column_cb( $item ) {
-		
+
+		$id = $this->get_current_product_id();
+
 		return sprintf(
 			'<input type="checkbox"%s name="%s[]" value="%s">',
-			checked( in_array( $item->ID, $this->selected ), TRUE, FALSE ),
+			checked( in_array( $id, $this->selected ), TRUE, FALSE ),
 			$this->_args['singular'],
-			$item->ID
+			$id
 		);
 	}
 
@@ -561,7 +591,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title      = '';
 		$product_id = $this->get_current_product_id();
 
-		if ( in_array( $this->product->get_type(), Globals::get_child_product_types() ) ) {
+		if ( Helpers::is_child_type( $this->product->get_type() ) ) {
 
 			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {
@@ -901,7 +931,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if ( isset($this->allow_calcs) && !$this->allow_calcs ) {
-			$content = self::EMPTY_COL;
+
+			if ( ! Helpers::is_inheritable_type( $this->product->get_type() ) && ! $this->product->managing_stock() ) {
+				$classes .= ' cell-blue';
+				$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
+			}
+			else {
+				$content = self::EMPTY_COL;
+			}
+
 		}
 		// Out of stock
 		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
@@ -919,7 +957,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$content = '<span class="dashicons dashicons-yes" data-toggle="tooltip" title="' . __('In Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
 
-		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
+		$classes = $classes ? ' class="' . $classes . '"' : '';
 
 		echo '<td ' . $data . $classes . '>' .
 		     apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product ) .
@@ -944,7 +982,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		foreach ( $this->table_columns as $table => $slug ) {
 			$group = $this->search_group_columns( $table );
-			$result[ $table ] = ( $group ) ? "<span class='col-$group'>$slug</span>" : $slug;
+			$result[ $table ] = $group ? "<span class='col-$group'>$slug</span>" : $slug;
 		}
 		
 		return apply_filters( 'atum/list_table/columns', $result );
@@ -1104,7 +1142,63 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
 	 */
 	protected function get_bulk_actions() {
-		return apply_filters( 'atum/list_table/bulk_actions', array() );
+
+		$bulk_actions = array();
+
+		if ( isset($_GET['uncontrolled']) && $_GET['uncontrolled'] == 1 ) {
+			$bulk_actions['control_stock'] = __( 'Control Stock', ATUM_TEXT_DOMAIN );
+		}
+		else {
+			$bulk_actions['uncontrol_stock'] = __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN );
+		}
+
+		return apply_filters( 'atum/list_table/bulk_actions', $bulk_actions, $this );
+
+	}
+
+	/**
+	 * Display the bulk actions dropdown
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $which The location of the bulk actions: 'top' or 'bottom'.
+	 *                      This is designated as optional for backward compatibility.
+	 */
+	protected function bulk_actions( $which = '' ) {
+
+		if ( is_null( $this->_actions ) ) {
+			$this->_actions = $this->get_bulk_actions();
+			$this->_actions = apply_filters( "atum/list_table/bulk_actions-{$this->screen->id}", $this->_actions );
+			$two = '';
+		}
+		else {
+			$two = '2';
+		}
+
+		if ( empty( $this->_actions ) ) {
+			return;
+		}
+		?>
+
+		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php _e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
+		<select name="action<?php echo $two ?>" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>">
+			<option value="-1"><?php _e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
+
+			<?php foreach ( $this->_actions as $name => $title ): ?>
+				<option value="<?php echo $name ?>"<?php if ('edit' === $name) echo ' class="hide-if-no-js"' ?>><?php echo $title ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+	}
+
+	/**
+	 * Adds the Bulk Actions' apply button to the List Table view
+	 *
+	 * @since 1.4.1
+	 */
+	public function add_apply_bulk_action_button() {
+		?><button type="button" class="apply-bulk-action page-title-action hidden"><?php _e('Apply Bulk Action', ATUM_TEXT_DOMAIN) ?></button><?php
 	}
 	
 	/**
@@ -1114,26 +1208,57 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function prepare_items() {
 		
-		/**
+		/*
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
-		$selected_posts      = $posts_meta_query = $posts = array();
+		$posts               = array();
 		$sortable            = $this->get_sortable_columns();
 		$hidden              = get_hidden_columns( $this->screen );
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
 		
-		/**
-		 * REQUIRED. Build an array to be used by the class for column headers.
+		/*
+		 * REQUIRED. Build an array to be used by the class for column headers
 		 */
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
 		$args = array(
 			'post_type'      => $this->post_type,
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'posts_per_page' => $this->per_page,
 			'paged'          => $this->get_pagenum()
 		);
+
+		/*
+		 * Get Controlled or Uncontrolled items
+		 */
+		if ($this->show_controlled) {
+
+			$args['meta_query'] = array(
+				array(
+					'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
+					'value' => 'yes'
+				)
+			);
+
+		}
+		else {
+
+			$args['meta_query'] = array(
+				array(
+					'relation' => 'OR',
+					array(
+						'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
+						'compare' => 'NOT EXISTS'
+					),
+					array(
+						'key'   => Globals::IS_INHERITABLE_KEY,
+						'value' => 'yes'
+					)
+				)
+			);
+
+		}
 
 		/*
 		 * Tax filter
@@ -1179,18 +1304,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->taxonomies ) {
 			$args['tax_query'] = (array) apply_filters( 'atum/list_table/taxonomies', $this->taxonomies );
-		}
-		
-		/*
-		 * Check whether ATUM is managing the WC stock
-		 */
-		if ( ! Helpers::is_atum_managing_stock() ) {
-			
-			// Only products with the _manage_stock meta set to yes
-			$args['meta_query'][] = array(
-				'key'   => '_manage_stock',
-				'value' => 'yes'
-			);
 		}
 
 		/*
@@ -1266,19 +1379,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$args['s'] = esc_attr( $_REQUEST['s'] );
 		}
-		elseif ( ! empty( $this->selected ) ) {
-			
-			// Get first the selected posts that will be upper in the table
-			$filter_args = array(
-				'post__in' => $this->selected,
-				'orderby'  => 'post__in'
-			);
-			
-			$selected_posts_query = new \WP_Query( array_merge( $filter_args, $args ) );
-			$selected_posts       = $selected_posts_query->posts;
-			$args['post__not_in'] = $this->selected; // Exclude the selected posts from next query
-			
-		}
+
+		// Let others play
+		$args = apply_filters( 'atum/list_table/prepare_items/args', $args );
 		
 		// Build "Views Filters" and calculate totals
 		$this->set_views_data( $args );
@@ -1318,10 +1421,35 @@ abstract class AtumListTable extends \WP_List_Table {
 			global $wp_query;
 			$wp_query = new \WP_Query( $args );
 			
-			$posts = array_merge( $selected_posts, $wp_query->posts );
-			$this->current_products = wp_list_pluck($posts, 'ID');
-			
-			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( ($found_posts - $num_children + $num_parent) / $this->per_page );
+			$posts = $wp_query->posts;
+			$product_ids = wp_list_pluck($posts, 'ID');
+
+			// Check if there are some empty inheritable products within the resulting list and get rid of them
+			$wc_products = array_map('wc_get_product', $product_ids);
+			$num_children = $num_parent = 0;
+			foreach ($wc_products as $key => $wc_product) {
+
+				if ( Helpers::is_inheritable_type( $wc_product->get_type() ) ) {
+
+					$children = $this->get_num_children( $wc_product->get_id() );
+
+					if ( !$children ) {
+						unset( $posts[$key], $product_ids[$key] );
+
+						$found_posts--;
+					}
+					else {
+						$num_parent++;
+						$num_children += $children;
+					}
+
+				}
+
+			}
+
+			$found_posts = $found_posts + $num_children - $num_parent;
+			$this->current_products = $product_ids;
+			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page );
 			
 		}
 		else {
@@ -1507,9 +1635,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
+		// For the Uncontrolled items, we don't need to calculate stock totals
+		if (!$this->show_controlled) {
+			return;
+		}
+
 		if ( $products ) {
 
-			$post_types = ($variations) ? array($this->post_type, 'product_variation') : $this->post_type;
+			$post_types = $variations ? array($this->post_type, 'product_variation') : $this->post_type;
 
 			// Products in stock
 			$args = array(
@@ -1566,7 +1699,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
 						GROUP BY IDs) AS sales";
 
-					$low_stock_post_types = ($variations) ? "('product', 'product_variation')" : "('product')";
+					$low_stock_post_types = $variations ? "('product', 'product_variation')" : "('product')";
 
 					$str_states = "(SELECT `{$wpdb->posts}`.`ID`,
 						IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
@@ -1641,22 +1774,25 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prepare JS vars
 		$vars = array(
-			'page'         => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'      => $this->per_page,
-			'order'        => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'      => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'        => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter'   => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'     => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'    => __( 'Set', ATUM_TEXT_DOMAIN ),
-			'saveButton'   => __( 'Save Data', ATUM_TEXT_DOMAIN )
+			'page'            => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
+			'perpage'         => $this->per_page,
+			'showCb'          => $this->show_cb,
+			'order'           => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'         => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'           => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxfilter'      => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'        => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'       => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'saveButton'      => __( 'Save Data', ATUM_TEXT_DOMAIN ),
+			'ok'              => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'noItemsSelected' => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
+			'selectItems'     => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN )
 		);
 
 		if ($this->first_edit_key) {
-			$vars['firstEditKey'] = $this->first_edit_key;
-			$vars['important'] = __('Important!', ATUM_TEXT_DOMAIN);
-			$vars['preventLossNotice'] = __("To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN);
-			$vars['ok'] = __('OK', ATUM_TEXT_DOMAIN);
+			$vars['firstEditKey']      = $this->first_edit_key;
+			$vars['important']         = __( 'Important!', ATUM_TEXT_DOMAIN );
+			$vars['preventLossNotice'] = __( "To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN );
 		}
 
 		$vars = apply_filters( 'atum/list_table/js_vars',  array_merge($vars, $this->data) );
@@ -1908,24 +2044,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		$headers = ob_get_clean();
 		
 		ob_start();
-		$this->extra_tablenav( 'top' );
+		$this->display_tablenav( 'top' );
 		$extra_tablenav_top = ob_get_clean();
 		
 		ob_start();
-		$this->pagination( 'top' );
-		$pagination_top = ob_get_clean();
-		
-		ob_start();
-		$this->extra_tablenav( 'bottom' );
+		$this->display_tablenav( 'bottom' );
 		$extra_tablenav_bottom = ob_get_clean();
 		
-		ob_start();
-		$this->pagination( 'bottom' );
-		$pagination_bottom = ob_get_clean();
-		
 		$response                         = array( 'rows' => $rows );
-		$response['pagination']['top']    = $pagination_top;
-		$response['pagination']['bottom'] = $pagination_bottom;
 		$response['extra_t_n']['top']     = $extra_tablenav_top;
 		$response['extra_t_n']['bottom']  = $extra_tablenav_bottom;
 		$response['column_headers']       = $headers;
@@ -1956,10 +2082,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function enqueue_scripts( $hook ) {
 			
-		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION );
-		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION );
+		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION, TRUE );
 
-		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', FALSE, ATUM_VERSION );
+		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array('woocommerce_admin_styles'), ATUM_VERSION );
 
 		if ( isset($this->load_datepicker) && $this->load_datepicker === TRUE ) {
 			global $wp_scripts;
@@ -1971,7 +2097,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script('jquery-ui-datepicker');
 		}
 
-		$dependencies = array( 'jquery', 'jscrollpane' );
+		$dependencies = array( 'jquery', 'jscrollpane', 'jquery-blockui' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
@@ -1995,28 +2121,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$min = (! ATUM_DEBUG) ? '.min' : '';
 		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
 
-		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'atum-list' );
-		wp_enqueue_script( 'jscrollpane' );
 		wp_enqueue_script( 'atum-list' );
 		
-	}
-	
-	/**
-	 * Add notice warning if Atum manage stock option isn't enabled
-	 *
-	 * @since 0.1.0
-	 */
-	public function add_manage_stock_notice() {
-		
-		?>
-		<div class="notice notice-warning atum-notice notice-management-stock is-dismissible" data-nonce="<?php echo wp_create_nonce( ATUM_PREFIX . 'manage-stock-notice' ) ?>">
-			<p class="manage-message">
-				<?php printf( __( '%1$s plugin can bulk-enable all your items for stock management at the product level. %1$s will save your original settings if you decide to reverse them later. To do so, go to %1$s > Settings > General, deactivate the &quot;Manage Stock&quot; switch and confirm your action by pressing the &quot;Yes, restore them&quot; button.', ATUM_TEXT_DOMAIN ), strtoupper( ATUM_TEXT_DOMAIN ) ) ?>
-				<button type="button" class="add-manage-option button button-primary button-small"><?php _e( "Enable ATUM's Manage Stock option", ATUM_TEXT_DOMAIN ) ?></button>
-			</p>
-		</div>
-		<?php
 	}
 
 	/**
@@ -2079,7 +2186,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Get the published Variables first
 		$parent_args = array(
 			'post_type'      => 'product',
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 			'tax_query'      => array(
@@ -2095,7 +2202,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$parent_args['post__in'] = $post_in;
 		}
 
-		$parents = new \WP_Query($parent_args);
+		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
 
 		if ($parents->found_posts) {
 
@@ -2109,13 +2216,34 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$children_args = array(
 				'post_type'       => $post_type,
-				'post_status'     => 'publish',
+				'post_status'     => ['publish', 'private'],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
 				'post_parent__in' => $parents->posts
 			);
 
-			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children_args', $children_args ) );
+			if ($this->show_controlled) {
+
+				$children_args['meta_query'] = array(
+					array(
+						'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
+						'value' => 'yes'
+					)
+				);
+
+			}
+			else {
+
+				$children_args['meta_query'] = array(
+					array(
+						'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
+						'compare' => 'NOT EXISTS'
+					)
+				);
+
+			}
+
+			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 
 			if ($children->found_posts) {
 				return $children->posts;
@@ -2124,6 +2252,41 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return FALSE;
+
+	}
+
+	/**
+	 * Get the number of children for a given inheritable product
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 *
+	 * @return int
+	 */
+	protected function get_num_children($product_id) {
+
+		global $wpdb;
+
+		if ($this->show_controlled) {
+			$join = 'ID = post_id';
+			$where = "meta_key = '_atum_manage_stock' AND meta_value = 'yes'";
+		}
+		else {
+			$join = "(ID = post_id AND wp_postmeta.meta_key = '_atum_manage_stock')";
+			$where = 'post_id IS NULL';
+		}
+
+		$sql = $wpdb->prepare( "
+			SELECT COUNT(*) FROM $wpdb->posts 
+			LEFT JOIN wp_postmeta ON $join
+			WHERE post_type IN ('product', 'product_variation') AND post_parent = %d
+			AND $where
+		", $product_id);
+
+		$children_count = $wpdb->get_var($sql);
+
+		return $children_count;
 
 	}
 

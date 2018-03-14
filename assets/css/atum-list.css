@@ -1,9 +1,9 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
  * @version 1.4.0 
- * @authors Salva Machí and Jose Piera 
+ * @author Be Rebel  
  *
- * Author URI: https://sispixels.com/ 
+ * Author URI: https://berebel.io 
  * License : ©2018 Stock Management Labs 
  */ 
 
@@ -42,7 +42,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: #FFF;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -322,11 +322,121 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82c342;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
   color: #9ccf69;
+}
+
+.blockUI.blockOverlay:before {
+  display: none;
+}
+
+.blockUI.blockOverlay:after {
+  content: '';
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.note .blockUI.blockOverlay:after {
+  top: 38%;
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #atum-export-link-wrap {
@@ -404,7 +514,7 @@
 
 .atum-report .report-header .inventory-resume {
   padding: 15px;
-  border: 2px solid #efaf00;
+  border: 2px solid #EFAF00;
 }
 
 .atum-report .report-header h5 {
@@ -418,15 +528,15 @@
 }
 
 .atum-report .report-header .warning-color {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-report .report-header .success-color {
-  color: #82c342;
+  color: #82C342;
 }
 
 .atum-report .report-header .danger-color {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-report .atum-list-table thead th {
@@ -438,7 +548,7 @@
 }
 
 .atum-report h1 {
-  color: #00b8db;
+  color: #00B8DB;
   text-transform: uppercase;
   font-size: 38px;
   font-weight: bold;
@@ -450,72 +560,6 @@
   font-weight: normal;
   color: #C1C1C1;
   margin-top: 5px;
-}
-
-.overlay {
-  position: relative;
-}
-
-.overlay:before {
-  content: '';
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0.7;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-.atum-loading {
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(0, 115, 170, 0.25);
-  border-top-color: #0073AA;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 50;
-  -webkit-animation: loader-rotate 1s linear infinite;
-  -moz-animation: loader-rotate 1s linear infinite;
-  -o-animation: loader-rotate 1s linear infinite;
-  animation: loader-rotate 1s linear infinite;
-}
-
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@-moz-keyframes loader-rotate {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-  }
-}
-
-@-o-keyframes loader-rotate {
-  from {
-    -o-transform: rotate(0deg);
-  }
-  to {
-    -o-transform: rotate(360deg);
-  }
-}
-
-@keyframes loader-rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 h1.wp-heading-inline {
@@ -533,13 +577,6 @@ h1.wp-heading-inline #atum-update-list:active {
   color: #FFF;
   padding: 0 10px 1px;
   box-shadow: 0 1px 0 #006799;
-}
-
-h1.wp-heading-inline .atum-loading {
-  display: inline-block;
-  top: 1px;
-  margin-left: 10px;
-  position: relative;
 }
 
 .atum-list-wrapper {
@@ -565,61 +602,50 @@ h1.wp-heading-inline .atum-loading {
   position: relative;
 }
 
-.atum-list-wrapper .tablenav-pages .atum-loading, .atum-list-wrapper .search-box .atum-loading {
-  left: -30px;
-  top: 4px;
-}
-
 .atum-list-wrapper .subsubsub {
   position: relative;
   margin-left: 3px;
 }
 
-.atum-list-wrapper .subsubsub .atum-loading {
-  right: -25px;
-  top: 4px;
+.atum-list-wrapper .subsubsub a.current {
+  pointer-events: none;
 }
 
-.atum-list-wrapper.loading-data .alignleft.actions {
-  position: relative;
-  overflow: visible;
+.atum-list-wrapper .actions.bulkactions {
+  padding-right: 0;
 }
 
-.atum-list-wrapper.loading-data .alignleft.actions .atum-loading {
-  right: -15px;
-  top: 7px;
-}
-
-.atum-list-wrapper .actions-wrapper input, .atum-list-wrapper .actions-wrapper select, .atum-list-wrapper .actions-wrapper .select2-container {
+.atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
   height: 32px;
   margin-bottom: 4px;
+  margin-right: 2px;
   float: left;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container {
+.atum-list-wrapper .actions .select2-container {
   margin-top: 1px;
-  margin-right: 5px;
+  margin-right: 2px;
   font-size: 14px;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container:focus, .atum-list-wrapper .actions-wrapper .select2-container *:focus {
+.atum-list-wrapper .actions .select2-container:focus, .atum-list-wrapper .actions .select2-container *:focus {
   outline: none;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container:focus .select2-selection {
+.atum-list-wrapper .actions .select2-container:focus .select2-selection {
   box-shadow: 0 0 2px rgba(91, 157, 217, 0.8);
-  border-color: #5b9dd9;
+  border-color: #5B9DD9;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container .select2-selection__placeholder {
+.atum-list-wrapper .actions .select2-container .select2-selection__placeholder {
   color: #333333 !important;
 }
 
-.atum-list-wrapper .actions-wrapper .select2-container .select2-selection__arrow b {
+.atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
   border-top-color: #333333;
 }
 
-.atum-list-wrapper .actions-wrapper .filter-text {
+.atum-list-wrapper .actions .filter-text {
   display: inline;
   float: left;
   line-height: 28px;
@@ -715,15 +741,6 @@ h1.wp-heading-inline .atum-loading {
   background-color: #F9F9F9;
 }
 
-.atum-list-table thead .group th .atum-loading {
-  position: relative;
-  display: inline-block;
-  left: 15px;
-  top: 2px;
-  width: 10px;
-  height: 10px;
-}
-
 .atum-list-table th.sortable a, .atum-list-table th.sorted a {
   padding: 0;
   display: -webkit-box;
@@ -748,6 +765,11 @@ h1.wp-heading-inline .atum-loading {
   padding-left: 10px;
 }
 
+.atum-list-table th.check-column input[type=checkbox] {
+  vertical-align: middle;
+  margin-top: 7px;
+}
+
 .atum-list-table tr.expanded {
   -webkit-transition: all 0.1s ease-in-out;
   -o-transition: all 0.1s ease-in-out;
@@ -755,11 +777,11 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .atum-list-table tr.expanded.group {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .atum-list-table tr.expanded td, .atum-list-table tr.expanded a {
@@ -792,15 +814,19 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table .cell-green {
-  color: #82c342;
+  color: #82C342;
 }
 
 .atum-list-table .cell-yellow {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-list-table .cell-red {
-  color: #ff4848;
+  color: #FF4848;
+}
+
+.atum-list-table .cell-blue {
+  color: #00B8DB;
 }
 
 .atum-list-table td, .atum-list-table th {
@@ -842,7 +868,7 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table .column-calc_type .has-child.variable, .atum-list-table .column-calc_type .has-child.variable-subscription {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-list-table .column-calc_type .has-child.variable-subscription:before {
@@ -850,7 +876,7 @@ h1.wp-heading-inline .atum-loading {
 }
 
 .atum-list-table .column-calc_type .has-child.grouped {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-list-table .column-calc_type .has-child:hover:before {
@@ -884,19 +910,19 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table .set-meta {
   cursor: pointer;
-  color: #0073aa;
+  color: #0073AA;
 }
 
 .atum-list-table .set-meta:hover {
-  color: #00a0d2;
+  color: #00A0D2;
 }
 
 .atum-list-table .set-meta.unsaved {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-list-table .highlight-danger {
-  background-color: #ff4848;
+  background-color: #FF4848;
   color: #FFF;
   padding: 2px 3px;
   border-radius: 2px;
@@ -966,11 +992,6 @@ h1.wp-heading-inline .atum-loading {
   -o-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-}
-
-.atum-notice .atum-loading {
-  margin-left: 5px;
-  margin-top: 5px;
 }
 
 .atum-notice .add-manage-option {

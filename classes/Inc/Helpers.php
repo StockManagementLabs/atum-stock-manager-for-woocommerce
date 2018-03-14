@@ -2,8 +2,8 @@
 /**
  * @package        Atum
  * @subpackage     Inc
- * @author         Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      ©2017 Stock Management Labs™
+ * @author         Be Rebel - https://berebel.io
+ * @copyright      ©2018 Stock Management Labs™
  *
  * @since          0.0.1
  *
@@ -332,7 +332,7 @@ final class Helpers {
 	public static function get_product_lost_sales ($product_id, $days = 7) {
 
 		$lost_sales = FALSE;
-		$out_of_stock_date = get_post_meta( $product_id, Globals::get_out_of_stock_date_key(), TRUE );
+		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
 		if ($out_of_stock_date && $days > 0) {
 
@@ -380,7 +380,7 @@ final class Helpers {
 		$out_of_stock_days = FALSE;
 
 		// Check if the current product has the "Out of stock" date recorded
-		$out_of_stock_date = get_post_meta($product_id, Globals::get_out_of_stock_date_key(), TRUE );
+		$out_of_stock_date = get_post_meta($product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
 		if ( $out_of_stock_date ) {
 			
@@ -647,14 +647,42 @@ final class Helpers {
 	}
 
 	/**
-	 * Checks if ATUM is currently managing the WC stock
+	 * Checks if ATUM is managing the WC stock for a specific product
 	 *
-	 * @since 1.2.6
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
 	 *
 	 * @return bool
 	 */
-	public static function is_atum_managing_stock() {
-		return self::get_option( 'manage_stock', 'no' ) == 'yes';
+	public static function is_atum_managing_stock($product_id) {
+		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ) === 'yes';
+	}
+
+	/**
+	 * Checks whether the product type passed is an inheritable type
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
+	public static function is_inheritable_type($type) {
+		return in_array( $type, Globals::get_inheritable_product_types() );
+	}
+
+	/**
+	 * Checks whether the product type passed is a child type
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
+	public static function is_child_type($type) {
+		return in_array( $type, Globals::get_child_product_types() );
 	}
 	
 	/**
@@ -695,55 +723,6 @@ final class Helpers {
 		
 		update_option( Settings::OPTION_NAME, $global_options );
 		
-	}
-	
-	/**
-	 * Activate ATUM Management Stock Option
-	 *
-	 * @since 0.1.0
-	 */
-	public static function activate_manage_stock_option() {
-		
-		$product_types = Globals::get_product_types();
-		$post_types = ( in_array('variable', $product_types) || in_array('variable-subscription', $product_types) ) ? array('product', 'product_variation') : 'product';
-		
-		// Save the options
-		// Don't take care of the type product. They never have "yes"
-		$args = array(
-			'post_type'      => $post_types,
-			'fields'         => 'ids',
-			'posts_per_page' => - 1,
-			'meta_query'     => array(
-				'relation' => 'OR',
-				array(
-					'key'     => '_manage_stock',
-					'compare' => 'NOT EXISTS',
-					'value'   => ''
-				),
-				array(
-					'key'   => '_manage_stock',
-					'value' => 'no'
-				)
-			),
-			// The external products are not stockable
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => 'external',
-					'operator' => 'NOT IN'
-				)
-			)
-		);
-		
-		$products = new \WP_Query( $args );
-		
-		update_option( ATUM_PREFIX . 'restore_option_stock', $products->posts );
-		
-		// Set all products to yes
-		foreach ( $products->posts as $product ) {
-			update_post_meta( $product, '_manage_stock', 'yes' );
-		}
 	}
 	
 	/**
@@ -1379,6 +1358,27 @@ final class Helpers {
 		$data_array = array_map( function($key, $value) use ($prefix){ return "data-{$prefix}{$key}='$value'"; }, array_keys($array), $array );
 
 		return implode(' ', $data_array);
+	}
+
+	/**
+	 * Outputs the add-on to append/prepend to ATUM fields
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $side
+	 *
+	 * @return string
+	 */
+	public static function atum_field_input_addon($side = 'prepend') {
+
+		?>
+		<span class="input-group-<?php echo $side ?>" title="<?php _e('ATUM field', ATUM_TEXT_DOMAIN) ?>">
+			<span class="input-group-text">
+				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" alt="">
+			</span>
+		</span>
+		<?php
+
 	}
 	
 }

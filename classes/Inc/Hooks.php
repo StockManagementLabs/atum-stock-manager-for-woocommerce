@@ -2,7 +2,7 @@
 /**
  * @package         Atum
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.3.8.2
@@ -27,21 +27,21 @@ final class Hooks {
 		// Add extra links to the plugin desc row
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 
-		// Check if ATUM has the "Manage Stock" option enabled
-		if ( Helpers::is_atum_managing_stock() ) {
-			add_action( 'init', array( __CLASS__, 'atum_manage_stock_hooks' ) );
-		}
-		else {
-			// Add the WC stock management option to grouped products
-			add_action( 'init', array( __CLASS__, 'wc_manage_stock_hooks' ) );
-		}
+		// Handle the ATUM customizations to the WC's Product Data meta box
+		add_filter( 'woocommerce_product_data_tabs', array( __CLASS__, 'add_product_data_tab' ) );
+		add_action( 'woocommerce_product_data_panels', array( __CLASS__, 'add_product_data_tab_panel' ) );
+		add_action( 'woocommerce_product_after_variable_attributes', array(__CLASS__, 'add_product_variation_data_panel'), 9, 3 );
+		add_action( 'save_post_product', array( __CLASS__, 'save_product_data_panel' ), 11 );
+		add_action( 'woocommerce_save_product_variation', array(__CLASS__, 'save_product_variation_data_panel' ), 10, 2 );
+
+		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'enqueue_scripts') );
 
 		// Show the right stock status on WC products list when ATUM is managing the stock
-		add_filter( 'woocommerce_admin_stock_html', array(__CLASS__, 'set_wc_products_list_stock_status'), 10, 2 );
+		add_filter( 'woocommerce_admin_stock_html', array( __CLASS__, 'set_wc_products_list_stock_status' ), 10, 2 );
 
 		// Add the location column to the items table in WC orders
-		add_action( 'woocommerce_admin_order_item_headers', array(__CLASS__, 'wc_order_add_location_column_header') );
-		add_action( 'woocommerce_admin_order_item_values', array(__CLASS__, 'wc_order_add_location_column_value'), 10, 3 );
+		add_action( 'woocommerce_admin_order_item_headers', array( __CLASS__, 'wc_order_add_location_column_header' ) );
+		add_action( 'woocommerce_admin_order_item_values', array( __CLASS__, 'wc_order_add_location_column_value' ), 10, 3 );
 
 	}
 
@@ -87,36 +87,237 @@ final class Hooks {
 	}
 
 	/**
-	 * Add Hooks when Atum "Manage Stock" option is enabled
+	 * Enqueue the ATUM admin scripts
 	 *
-	 * @since 0.1.0
+	 * @since 1.4.1
+	 *
+	 * @param string $hook
 	 */
-	public static function atum_manage_stock_hooks() {
+	public static function enqueue_scripts($hook) {
 
-		// Disable WooCommerce manage stock option for individual products
-		add_action( 'woocommerce_product_options_stock', array( __CLASS__, 'disable_manage_stock' ) );
-		add_action( 'woocommerce_product_options_stock_fields', array( __CLASS__, 'add_manage_stock' ) );
+		$post_type = get_post_type();
 
-		// Disable WooCommerce manage stock option for product variations
-		add_action( 'woocommerce_ajax_admin_get_variations_args', array(__CLASS__, 'disable_variation_manage_stock'));
+		if ($post_type == 'product' && $hook == 'post.php') {
+			wp_enqueue_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
+			wp_enqueue_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array('switchery'), ATUM_VERSION );
 
-		// Set to yes the WooCommerce _manage_stock meta key for all the supported products
-		add_action( 'update_post_metadata', array( __CLASS__, 'save_manage_stock' ), 10, 5 );
+			wp_enqueue_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array('jquery'), ATUM_VERSION, TRUE );
+		}
 
 	}
 
 	/**
-	 * Add Hooks when WooCommerce is managing the individual products' stock
+	 * Filters the Product data tabs settings to add ATUM settings
 	 *
-	 * @since 1.1.1
+	 * @since 1.4.1
+	 *
+	 * @param array $data_tabs
+	 *
+	 * @return array
 	 */
-	public static function wc_manage_stock_hooks() {
+	public static function add_product_data_tab($data_tabs) {
 
-		// Add the WooCommerce manage stock option to grouped products
-		add_action( 'woocommerce_product_options_stock_fields', array( __CLASS__, 'add_manage_stock' ) );
+		// Add the ATUM tab to Simple and BOM products
+		$bom_tab = array(
+			'atum' => array(
+				'label'    => __( 'ATUM Inventory', ATUM_LEVELS_TEXT_DOMAIN ),
+				'target'   => 'atum_product_data',
+				'class'    => array( 'show_if_simple', 'show_if_variable', 'show_if_product-part', 'show_if_raw-material' ),
+				'priority' => 21
+			)
+		);
 
-		// Allow saving the WooCommerce _manage_stock meta key for grouped products
-		add_action( 'update_post_metadata', array( __CLASS__, 'save_manage_stock' ), 10, 5 );
+		// Insert the ATUM tab under Inventory tab
+		$data_tabs = array_merge( array_slice($data_tabs, 0, 2), $bom_tab, array_slice($data_tabs, 2) );
+
+		return $data_tabs;
+
+	}
+
+	/**
+	 * Add the fields to ATUM Inventory tab within WC's Product Data meta box
+	 *
+	 * @since 1.4.1
+	 */
+	public static function add_product_data_tab_panel() {
+
+		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden"><?php
+
+			$product_id = get_the_ID();
+			woocommerce_wp_checkbox( array(
+				'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
+				'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
+				'value'         => get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
+				'class'         => 'js-switch',
+				'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
+				'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
+				'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
+				'desc_tip'      => TRUE
+			) );
+			?>
+
+			<p class="form-field show_if_variable">
+				<label for="change_stock_control"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
+				<select name="change_stock_control" id="change_stock_control">
+					<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
+					<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
+				</select>
+				&nbsp;
+				<button type="button" class="button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
+
+				<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
+			</p>
+
+			<?php
+
+			// Allow other fields to be added to the ATUM panel
+			do_action('atum/after_product_data_panel');
+
+			?>
+			<script type="text/javascript">
+				jQuery(function($){
+					atumDoSwitchers();
+
+					$('#woocommerce-product-data').on('woocommerce_variations_loaded', function() {
+						atumDoSwitchers();
+					});
+				});
+
+				function atumDoSwitchers() {
+					jQuery('.js-switch').each(function () {
+						new Switchery(this, { size: 'small' });
+						jQuery(this).removeClass('js-switch');
+					});
+				}
+			</script>
+		</div><?php
+
+	}
+
+	/**
+	 * Add the Product Levels meta boxes to the Product variations
+	 *
+	 * @since 0.0.3
+	 *
+	 * @param int      $loop             The current item in the loop of variations
+	 * @param array    $variation_data   The current variation data
+	 * @param \WP_Post $variation        The variation post
+	 */
+	public static function add_product_variation_data_panel ($loop, $variation_data, $variation) {
+
+		?>
+		<div class="atum-data-panel">
+			<h3 class="atum-section-title"><?php _e('ATUM Inventory', ATUM_LEVELS_TEXT_DOMAIN) ?></h3>
+
+			<?php
+			woocommerce_wp_checkbox( array(
+				'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
+				'name'        => "variation_atum_tab[" . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
+				'value'       => get_post_meta( $variation->ID, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
+				'class'       => 'js-switch',
+				'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
+				'description' => __( "Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.", ATUM_TEXT_DOMAIN ),
+				'desc_tip'    => TRUE
+			) );
+
+			// Allow other fields to be added to the ATUM panel
+			do_action('atum/after_variation_product_data_panel', $loop, $variation_data, $variation); ?>
+		</div>
+		<?php
+
+	}
+
+	/**
+	 * Save all the fields within the Product Data's ATUM Inventory tab
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id               The saved product's ID
+	 * @param array $product_tab_values     Allow passing the values to save externally instead of getting them from $_POST
+	 */
+	public static function save_product_data_panel( $product_id, $product_tab_values = array() ) {
+
+		if ( empty($product_tab_values) && isset( $_POST['atum_product_tab'] ) ) {
+			$product_tab_values = $_POST['atum_product_tab'];
+		}
+
+		$product_tab_fields     = Globals::get_product_tab_fields();
+		$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
+
+		// Update the "_inehritable" meta key
+		if ($is_inheritable_product) {
+			update_post_meta($product_id, Globals::IS_INHERITABLE_KEY, 'yes');
+		}
+		else {
+			delete_post_meta($product_id, Globals::IS_INHERITABLE_KEY);
+		}
+
+		foreach ($product_tab_fields as $field_name => $field_type) {
+
+			// The ATUM's stock control must be always 'yes' for inheritable products
+			if ( $field_name == Globals::ATUM_CONTROL_STOCK_KEY && $is_inheritable_product ) {
+				update_post_meta($product_id, $field_name, 'yes');
+				continue;
+			}
+
+			// Sanitize the fields
+			$field_value = '';
+			switch ( $field_type ) {
+				case 'checkbox':
+
+					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : '';
+					break;
+
+				case 'number_int':
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = absint( $product_tab_values[ $field_name ] );
+					}
+					break;
+
+				case 'number_float':
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = floatval( $product_tab_values[ $field_name ] );
+					}
+					break;
+
+				case 'text':
+				default:
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = wc_clean( $product_tab_values[ $field_name ] );
+					}
+					break;
+			}
+
+			if ( $field_value ) {
+				update_post_meta($product_id, $field_name, $field_value);
+			}
+			else {
+				delete_post_meta($product_id, $field_name);
+			}
+
+		}
+
+	}
+
+	/**
+	 * Save all the fields within the Variation Product's ATUM Section
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $variation_id
+	 * @param int $i
+	 */
+	public static function save_product_variation_data_panel($variation_id, $i) {
+
+		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ) {
+			update_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+		}
+		else {
+			delete_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY );
+		}
 
 	}
 
@@ -136,146 +337,11 @@ final class Hooks {
 		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
 
 		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array(__CLASS__, 'wpml_add_purchase_price_to_custom_prices') );
-		add_filter( 'wcml_custom_prices_fields_labels', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_custom_prices_strings', array(__CLASS__, 'wpml_add_purchase_price_to_custom_price_labels') );
-		add_filter( 'wcml_update_custom_prices_values', array(__CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices'), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array(__CLASS__, 'wpml_save_purchase_price_in_custom_prices'), 10, 4 );
-
-	}
-
-	/**
-	 * Disable the WooCommerce "Manage Stock" checkbox for simple products
-	 *
-	 * @since 0.1.0
-	 */
-	public static function disable_manage_stock() {
-
-		// The external products don't have stock and the grouped depends on its own products' stock
-		$product_type = wp_get_post_terms( get_the_ID(), 'product_type', array('fields' => 'names') );
-
-		if ( ! is_wp_error($product_type) && ! in_array('external', $product_type) ) : ?>
-			<script type="text/javascript">
-				(function ($) {
-					var $manageStockField = $('._manage_stock_field');
-					$manageStockField.find('.checkbox').prop({'checked': true, 'readonly': true}).css('pointer-events', 'none')
-						.siblings('.description').html('<strong><sup>**</sup><?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?><sup>**</sup></strong>');
-
-					$manageStockField.children().click(function(e) {
-						e.stopImmediatePropagation();
-						e.preventDefault();
-					});
-				})(jQuery);
-			</script>
-		<?php endif;
-
-	}
-
-	/**
-	 * Add the WooCommerce's stock management checkbox to Grouped and External products
-	 *
-	 * @since 1.1.1
-	 */
-	public static function add_manage_stock () {
-
-		if ( get_post_type() != 'product' ) {
-			return;
-		}
-
-		$product = wc_get_product();
-
-		// Show the "Manage Stock" checkbox on Grouped products and hide the other stock fields
-		if ( $product && is_a($product, '\\WC_Product') ) : ?>
-			<script type="text/javascript">
-				var $backOrders = jQuery('._backorders_field');
-				jQuery('._manage_stock_field').addClass('show_if_grouped show_if_product-part show_if_raw-material');
-
-				<?php // NOTE: The "wp-menu-arrow" is a WP built-in class that adds "display: none!important" so doesn't conflict with WC JS ?>
-				jQuery('#product-type').change(function() {
-					var productType = jQuery(this).val();
-					if (productType === 'grouped' || productType === 'external') {
-						$backOrders.addClass('wp-menu-arrow');
-					}
-					else {
-						$backOrders.removeClass('wp-menu-arrow');
-					}
-				});
-
-				<?php if ( in_array($product->get_type(), ['grouped', 'external'] ) ): ?>
-				$backOrders.addClass('wp-menu-arrow');
-				<?php endif; ?>
-			</script>
-		<?php endif;
-
-	}
-
-	/**
-	 * Disable the WooCommerce "Manage Stock" checkbox for variation products
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param array $args
-	 * @return array
-	 */
-	public static function disable_variation_manage_stock ($args) {
-
-		?>
-		<script type="text/javascript">
-			(function ($) {
-				$('.variable_manage_stock').each(function() {
-					$(this).prop({'checked': true, 'readonly': true})
-						.siblings('.woocommerce-help-tip')
-						.attr('data-tip', '<?php _e('The stock is currently managed by ATUM plugin', ATUM_TEXT_DOMAIN) ?>');
-
-					$(this).click(function(e) {
-						e.stopImmediatePropagation();
-						e.preventDefault();
-					});
-				});
-			})(jQuery);
-		</script>
-		<?php
-
-		return $args;
-	}
-
-	/**
-	 * Fires immediately after adding/updating the manage stock metadata
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param mixed  $check         ID of updated metadata entry
-	 * @param int    $product_id    The product ID
-	 * @param string $meta_key      Meta key
-	 * @param mixed  $meta_value    Meta value
-	 * @param mixed  $prev_value    Previous valus for this meta field
-	 *
-	 * @return NULL|bool            NULL to continue saving the meta key ($check is always NULL) or any other value to not continue
-	 */
-	public static function save_manage_stock( $check, $product_id, $meta_key, $meta_value, $prev_value ) {
-
-		if ( $meta_key == '_manage_stock' && $meta_value == 'no' ) {
-			$product = wc_get_product( $product_id );
-
-			if ( $product && in_array( $product->get_type(), Globals::get_product_types() ) ) {
-				remove_action( 'update_post_metadata', array(__CLASS__, 'save_manage_stock') );
-
-				if ( Helpers::is_atum_managing_stock() ) {
-					$manage_stock = 'yes'; // Always enabled
-					Helpers::delete_transients();
-				}
-				else {
-					$manage_stock = ( isset($_POST['_manage_stock']) && $_POST['_manage_stock'] == 'yes' ) ? 'yes' : 'no';
-				}
-
-				update_post_meta( $product_id, '_manage_stock', $manage_stock );
-
-				// Do not continue saving this meta key
-				return TRUE;
-			}
-		}
-
-		return $check;
+		add_filter( 'wcml_custom_prices_fields', array( __CLASS__, 'wpml_add_purchase_price_to_custom_prices' ), 10, 2 );
+		add_filter( 'wcml_custom_prices_fields_labels', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
+		add_filter( 'wcml_custom_prices_strings', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
+		add_filter( 'wcml_update_custom_prices_values', array( __CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices' ), 10, 3 );
+		add_action( 'wcml_after_save_custom_prices', array( __CLASS__, 'wpml_save_purchase_price_in_custom_prices' ), 10, 4 );
 
 	}
 
@@ -297,26 +363,20 @@ final class Hooks {
 		$field_title = __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')';
 
 		if ( empty($variation) ) {
-
-			woocommerce_wp_text_input( array(
-				'id'        => '_purchase_price',
-				'label'     => $field_title,
-				'data_type' => 'price'
-			) );
-
+			$post_id       = get_the_ID();
+			$wrapper_class = '_purchase_price_field';
+			$field_id      = $field_name = '_purchase_price';
 		}
 		else {
-
-			woocommerce_wp_text_input( array(
-				'id'            => "variation_purchase_price_{$loop}",
-				'name'          => "variation_purchase_price[$loop]",
-				'value'         => get_post_meta($variation->ID, '_purchase_price', TRUE),
-				'label'         => $field_title,
-				'wrapper_class' => 'form-row form-row-first',
-				'data_type'     => 'price'
-			) );
-
+			$post_id       = $variation->ID;
+			$field_name    = "variation_purchase_price[$loop]";
+			$field_id      = "variation_purchase_price_{$loop}";
+			$wrapper_class = "$field_name form-row form-row-first";
 		}
+
+		$field_value = wc_format_localized_price( get_post_meta( $post_id, '_purchase_price', TRUE ) );
+
+		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value' ) );
 
 	}
 
@@ -332,7 +392,7 @@ final class Hooks {
 		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
 		// Variables, grouped and variations
-		if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
+		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
 			if ( isset($_POST['_purchase_price']) ) {
@@ -391,7 +451,6 @@ final class Hooks {
 	public static function set_wc_products_list_stock_status($stock_html, $the_product) {
 
 		if (
-			Helpers::is_atum_managing_stock() &&
 			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
 			in_array( $the_product->get_type(), ['variable', 'variable-subscription'] )
 		) {
@@ -412,9 +471,14 @@ final class Hooks {
 			if ( ! empty($variations) ) {
 
 				foreach ($variations as $variation_id) {
-					$variation_product = wc_get_product($variation_id);
-					$variation_stock = $variation_product->get_stock_quantity();
-					$stocks_list[] = $variation_stock;
+
+					if ( ! Helpers::is_atum_managing_stock($variation_id) ) {
+						continue;
+					}
+
+					$variation_product = wc_get_product( $variation_id );
+					$variation_stock   = $variation_product->get_stock_quantity();
+					$stocks_list[]     = $variation_stock;
 
 					if ($variation_stock > 0) {
 						$stock_status = __('In stock', ATUM_TEXT_DOMAIN);
@@ -562,7 +626,7 @@ final class Hooks {
 		if ( in_array($product->get_type(), Globals::get_product_types()) ) {
 
 			$current_stock = $product->get_stock_quantity();
-			$out_of_stock_date_key = Globals::get_out_of_stock_date_key();
+			$out_of_stock_date_key = Globals::OUT_OF_STOCK_DATE_KEY;
 			$product_id = $product->get_id();
 
 			if (!$current_stock) {

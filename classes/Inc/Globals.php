@@ -2,8 +2,8 @@
 /**
  * @package         Atum
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.1.4
  *
@@ -35,18 +35,20 @@ final class Globals {
 	 * @var array
 	 */
 	private static $child_product_types = ['variation'];
-	
-	/**
-	 * The meta key where is stored the out of stock date
-	 * @var string
-	 */
-	private static $out_of_stock_date_key = '_out_of_stock_date';
 
 	/**
 	 * The number of decimals specified in settings to round the stock quantities
 	 * @var int
 	 */
 	private static $stock_decimals;
+
+	/**
+	 * The ATUM fields within the WC's Product Data meta box (ATUM Inventory tab)
+	 * @var array
+	 */
+	private static $product_tab_fields = array(
+		self::ATUM_CONTROL_STOCK_KEY => 'checkbox'
+	);
 
 	/**
 	 * The ATUM pages hook name
@@ -62,17 +64,22 @@ final class Globals {
 	 * The products' location taxonomy name
 	 */
 	const PRODUCT_LOCATION_TAXONOMY =  ATUM_PREFIX . 'location';
-	
+
 	/**
-	 * Getter for the $out_of_stock_date_key property
-	 *
-	 * @since 0.1.4
-	 *
-	 * @return string
+	 * The meta key where is stored the atum stock management status
 	 */
-	public static function get_out_of_stock_date_key() {
-		return self::$out_of_stock_date_key;
-	}
+	const ATUM_CONTROL_STOCK_KEY = '_atum_manage_stock';
+
+	/**
+	 * The meta key where is stored the out of stock date
+	 */
+	const OUT_OF_STOCK_DATE_KEY = '_out_of_stock_date';
+
+	/**
+	 * The meta key name used for inheritable products (Grouped, Variables...)
+	 */
+	const IS_INHERITABLE_KEY = '_inheritable';
+
 	
 	/**
 	 * Getter for the product_types property
@@ -153,6 +160,17 @@ final class Globals {
 	 */
 	public static function set_stock_decimals($stock_decimals) {
 		self::$stock_decimals = absint($stock_decimals);
+	}
+
+	/**
+	 * Getter for the Product Data Tab Fields property
+	 *
+	 * @since 1.4.1
+	 *
+	 * @return array
+	 */
+	public static function get_product_tab_fields() {
+		return (array) apply_filters( 'atum/product_tab_fields', self::$product_tab_fields );
 	}
 	
 }

@@ -2,8 +2,8 @@
 /**
  * @package         Atum\StockCentral
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -48,6 +48,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected $load_datepicker = TRUE;
 
+
 	/**
 	 * @inheritdoc
 	 */
@@ -68,31 +69,31 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
-			'thumb'                => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'_supplier'            => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'        => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_regular_price'       => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
-			'_sale_price'          => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
-			'_purchase_price'      => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_hold'            => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
-			'calc_reserved'        => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'     => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
-			'calc_sold_today'      => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
-			'calc_returns'         => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
-			'calc_damages'         => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_in_post'    => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'calc_sales14'         => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
-			'calc_sales7'          => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
-			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_stock_out_days'  => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_lost_sales'      => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator' => __( 'Stock Indicator', ATUM_TEXT_DOMAIN ),
+			'thumb'                  => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'title'                  => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'_supplier'              => __( 'Supplier', ATUM_TEXT_DOMAIN ),
+			'_sku'                   => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'          => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'ID'                     => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'calc_type'              => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+			'calc_reserved'          => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+			'calc_back_orders'       => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'calc_sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+			'calc_returns'           => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+			'calc_damages'           => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+			'calc_lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'calc_sales14'           => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
+			'calc_sales7'            => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
+			'calc_will_last'         => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_stock_out_days'    => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_lost_sales'        => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'calc_stock_indicator'   => __( 'Stock Indicator', ATUM_TEXT_DOMAIN )
 		);
 
 		// Hide the purchase price column if the current user has not the capability
@@ -168,6 +169,9 @@ class ListTable extends AtumListTable {
 		if ( ! empty( $_REQUEST['extra_filter'] ) ) {
 			add_action( 'pre_get_posts', array($this, 'do_extra_filter') );
 		}
+
+		// Add the "Apply Bulk Action" button to the title section
+		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
 		
 	}
 
@@ -382,7 +386,7 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			global $wpdb;
-			$product_id_key = ( in_array( $this->product->get_type(), Globals::get_child_product_types() ) ) ? '_variation_id' : '_product_id';
+			$product_id_key = Helpers::is_child_type( $this->product->get_type() ) ? '_variation_id' : '_product_id';
 
 			$sql = $wpdb->prepare("
 				SELECT SUM(omq.`meta_value`) AS qty 

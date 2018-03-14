@@ -102,7 +102,7 @@ class HtmlReport extends ListTable {
 		$this->product = wc_get_product( $item );
 		$type = $this->product->get_type();
 
-		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
+		$this->allow_calcs = Helpers::is_inheritable_type($type) ? FALSE : TRUE;
 		$row_style = '';
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline
@@ -116,7 +116,7 @@ class HtmlReport extends ListTable {
 		echo '</tr>';
 
 		// Add the children products of each Variable and Grouped product
-		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+		if (!$this->allow_calcs) {
 
 			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
 			$parent_product = new $product_class( $this->product->get_id() );
@@ -279,7 +279,15 @@ class HtmlReport extends ListTable {
 		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if (! $this->allow_calcs) {
-			$content = '&mdash;';
+
+			if ( ! Helpers::is_inheritable_type( $this->product->get_type() ) && ! $this->product->managing_stock() ) {
+				$classes .= ' cell-blue';
+				$content = '<span class="dashicons dashicons-hidden"' . $dashicons_style . '>&#xf530;</span>';
+			}
+			else {
+				$content = '&mdash;';
+			}
+
 		}
 		elseif ( $stock <= 0 ) {
 			// no stock

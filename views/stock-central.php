@@ -10,7 +10,15 @@ defined( 'ABSPATH' ) or die;
 <div class="wrap">
 	<h1 class="wp-heading-inline">
 		<?php echo apply_filters( 'atum/stock_central/title', __('Stock Central', ATUM_TEXT_DOMAIN) ) ?>
+
+		<?php if ($is_uncontrolled_list): ?>
+			<?php _e('(Uncontrolled)', ATUM_TEXT_DOMAIN) ?>
+		<?php endif; ?>
+
+		<a href="<?php echo $sc_url ?>" class="toggle-managed page-title-action"><?php echo $is_uncontrolled_list ? __('Show Controlled', ATUM_TEXT_DOMAIN) : __('Show Uncontrolled', ATUM_TEXT_DOMAIN) ?></a>
+		<?php do_action('atum/list_table/page_title_buttons') ?>
 	</h1>
+
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo $list->screen->id ?>">

@@ -2,19 +2,6 @@
 // Atum List Tables
 //------------------
 
-.overlay {
-	position: relative;
-	
-	&:before {
-		content: '';
-		@include overlay;
-	}
-}
-
-.atum-loading {
-	@include loader;
-}
-
 h1.wp-heading-inline {
 	line-height: 1.5;
 	position: relative;
@@ -29,13 +16,6 @@ h1.wp-heading-inline {
 			padding: 0 10px 1px;
 			box-shadow: 0 1px 0 #006799;
 		}
-	}
-	
-	.atum-loading {
-		display: inline-block;
-		top: 1px;
-		margin-left: 10px;
-		position: relative;
 	}
 }
 
@@ -63,46 +43,35 @@ h1.wp-heading-inline {
 	
 	.tablenav-pages, .search-box {
 		position: relative;
-		
-		.atum-loading {
-			left: -30px;
-			top: 4px;
-		}
 	}
 	
 	.subsubsub {
 		position: relative;
 		margin-left: 3px;
 		
-		.atum-loading {
-			right: -25px;
-			top: 4px;
-		}
-	}
-	
-	&.loading-data {
-		.alignleft.actions {
-			position: relative;
-			overflow: visible;
-			
-			.atum-loading {
-				right: -15px;
-				top: 7px;
+		a {
+			&.current {
+				pointer-events: none;
 			}
 		}
 	}
 	
-	.actions-wrapper {
+	.actions {
+		
+		&.bulkactions {
+			padding-right: 0;
+		}
 		
 		input, select, .select2-container {
 			height: 32px;
 			margin-bottom: 4px;
+			margin-right: 2px;
 			float: left;
 		}
 		
 		.select2-container {
 			margin-top: 1px;
-			margin-right: 5px;
+			margin-right: 2px;
 			font-size: 14px;
 			
 			&, * {
@@ -240,15 +209,6 @@ h1.wp-heading-inline {
 		}
 	}
 	
-	thead .group th .atum-loading {
-		position: relative;
-		display: inline-block;
-		left: 15px;
-		top: 2px;
-		width: 10px;
-		height: 10px;
-	}
-	
 	th {
 		&.sortable, &.sorted {
 			a {
@@ -269,6 +229,13 @@ h1.wp-heading-inline {
 						}
 					}
 				}
+			}
+		}
+		
+		&.check-column {
+			input[type=checkbox] {
+				vertical-align: middle;
+				margin-top: 7px;
 			}
 		}
 	}
@@ -335,6 +302,10 @@ h1.wp-heading-inline {
 		
 		&-red {
 			color: $brand-danger;
+		}
+		
+		&-blue {
+			color: $brand-primary;
 		}
 	}
 	
@@ -505,11 +476,6 @@ h1.wp-heading-inline {
 	.notice-dismiss {
 		top: 50%;
 		@include transform(translateY(-50%));
-	}
-	
-	.atum-loading {
-		margin-left: 5px;
-		margin-top: 5px;
 	}
 	
 	.add-manage-option {

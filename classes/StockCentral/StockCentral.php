@@ -2,7 +2,7 @@
 /**
  * @package         Atum
  * @subpackage      StockCentral
- * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
@@ -17,7 +17,6 @@ use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\ListTable;
 
 
 class StockCentral extends AtumListPage {
@@ -98,9 +97,17 @@ class StockCentral extends AtumListPage {
 		
 		parent::display();
 
+		$sc_url = add_query_arg( 'page', self::UI_SLUG, admin_url('admin.php') );
+
+		if (!$this->is_uncontrolled_list) {
+			$sc_url = add_query_arg( 'uncontrolled', 1, $sc_url );
+		}
+
 		Helpers::load_view( 'stock-central', array(
-			'list' => $this->list,
-			'ajax' => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'list'                 => $this->list,
+			'ajax'                 => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'is_uncontrolled_list' => $this->is_uncontrolled_list,
+			'sc_url'               => $sc_url
 		) );
 		
 	}
@@ -114,13 +121,11 @@ class StockCentral extends AtumListPage {
 	public function screen_options() {
 
 		// Add "Products per page" to screen options tab
-		$args   = array(
-			'label'   => __('Products per page', ATUM_TEXT_DOMAIN),
+		add_screen_option( 'per_page', array(
+			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
 			'option'  => ATUM_PREFIX . 'stock_central_products_per_page'
-		);
-		
-		add_screen_option( 'per_page', $args );
+		) );
 		
 		$help_tabs = array(
 			array(
@@ -157,8 +162,13 @@ class StockCentral extends AtumListPage {
 		}
 		
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/help-sidebar' ) );
-		
-		$this->list = new ListTable( ['per_page' => $this->per_page] );
+
+		if ( isset($_GET['uncontrolled']) && $_GET['uncontrolled'] == 1 ) {
+			$this->is_uncontrolled_list = TRUE;
+		}
+
+		$list_class = $this->is_uncontrolled_list ? __NAMESPACE__ . '\Inc\UncontrolledListTable' : __NAMESPACE__ . '\Inc\ListTable';
+		$this->list = new $list_class( ['per_page' => $this->per_page, 'show_cb' => TRUE, 'show_controlled' => !$this->is_uncontrolled_list] );
 		
 	}
 	
@@ -221,6 +231,14 @@ class StockCentral extends AtumListPage {
 			'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Low Stock' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'number',
 			'default' => Settings::DEFAULT_SALE_DAYS
+		);
+
+		$defaults['expandable_rows'] = array(
+			'section' => 'stock_central',
+			'name'    => __( 'Expandable Rows', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Show variable and grouped products expanded (ON) or collapsed (OFF) by default.', ATUM_TEXT_DOMAIN ),
+			'type'    => 'switcher',
+			'default' => 'no'
 		);
 
 		return $defaults;

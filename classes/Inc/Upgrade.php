@@ -12,12 +12,11 @@
 
 namespace Atum\Inc;
 
+defined( 'ABSPATH' ) or die;
+
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
-
-
-defined( 'ABSPATH' ) or die;
 
 
 class Upgrade {
@@ -47,6 +46,12 @@ class Upgrade {
 		// ** version 1.2.9 ** Refactory to change the log table names to something more generic
 		if ( version_compare($db_version, '1.2.9', '<') ) {
 			$this->alter_order_item_tables();
+		}
+
+		// ** version 1.4.1 ** ATUM now uses its own way to manage the stock of the products
+		if ( version_compare($db_version, '1.4.1', '<') ) {
+			$this->set_individual_manage_stock();
+			$this->add_inheritable_meta();
 		}
 
 		/**********************
@@ -157,6 +162,65 @@ class Upgrade {
 			$wpdb->query( "ALTER TABLE $items_table CHANGE `log_id` `order_id` BIGINT UNSIGNED NOT NULL;" );
 			$wpdb->query( "ALTER TABLE $itemmeta_table CHANGE `log_item_id` `order_item_id` BIGINT UNSIGNED NOT NULL;" );
 			$wpdb->query( "ALTER TABLE $itemmeta_table DROP KEY `log_item_id`, ADD KEY order_item_id (order_item_id);" );
+
+		}
+
+	}
+
+	/**
+	 * Set the ATUM's manage stock meta key to all the products
+	 *
+	 * @since 1.4.1
+	 */
+	private function set_individual_manage_stock() {
+
+		global $wpdb;
+
+		// Ensure that the meta keys were not added previously
+		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "'" );
+
+		if ($meta_count > 0) {
+			return;
+		}
+
+		// Add the meta to all the products that had the WC's manage_stock enabled
+		$sql = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
+				SELECT DISTINCT post_id, '" . Globals::ATUM_CONTROL_STOCK_KEY . "', meta_value FROM $wpdb->postmeta 
+				WHERE meta_key = '_manage_stock' AND meta_value = 'yes'";
+
+		$wpdb->query($sql);
+
+	}
+
+	/**
+	 * Set the ATUM's inheritable meta key to all the inheritable products
+	 *
+	 * @since 1.4.1
+	 */
+	private function add_inheritable_meta() {
+
+		global $wpdb;
+
+		// Ensure that the meta keys were not added previously
+		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" );
+
+		if ($meta_count > 0) {
+			return;
+		}
+
+		foreach (Globals::get_inheritable_product_types() as $inheritable_product_type) {
+			$term = get_term_by('slug', $inheritable_product_type, 'product_type');
+
+			if ($term) {
+
+				// Add the meta to all the products that have the inheritable product type tax term set
+				$sql = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
+				SELECT DISTINCT object_id, '" . Globals::IS_INHERITABLE_KEY . "', 'yes' FROM $wpdb->term_relationships 
+				WHERE term_taxonomy_id = $term->term_taxonomy_id";
+
+				$wpdb->query($sql);
+
+			}
 
 		}
 

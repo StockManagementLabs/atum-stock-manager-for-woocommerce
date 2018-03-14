@@ -2,8 +2,8 @@
 /**
  * @package        Atum
  * @subpackage     Inc
- * @author         Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      ©2017 Stock Management Labs™
+ * @author         Be Rebel - https://berebel.io
+ * @copyright      ©2018 Stock Management Labs™
  *
  * @since          0.0.1
  *
@@ -21,12 +21,9 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
-use Atum\InboundStock\InboundStock;
 use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\ListTable as StockCentralListTable;
 use Atum\InventoryLogs\Models\Log;
-use Atum\StockCentral\StockCentral;
 use Atum\Suppliers\Suppliers;
 
 
@@ -64,17 +61,17 @@ final class Ajax {
 		// Ajax callback for Inbound Stock ListTable
 		add_action( 'wp_ajax_atum_fetch_inbound_stock_list', array( $this, 'fetch_inbound_stock_list' ) );
 		
-		// Ajax callback for Management Stock notice
-		add_action( 'wp_ajax_atum_manage_stock_notice', array( $this, 'manage_stock_notice' ) );
-		
 		// Welcome notice dismissal
 		add_action( 'wp_ajax_atum_welcome_notice', array( $this, 'welcome_notice' ) );
 
 		// Save the rate link click on the ATUM pages footer
 		add_action( 'wp_ajax_atum_rated', array($this, 'rated') );
 
-		// Set the edited meta data for items on ListTable components
+		// Save the edited meta data for items on ListTable components
 		add_action( 'wp_ajax_atum_update_data', array( $this, 'update_list_data' ) );
+
+		// Apply bulk actions on ListTable components
+		add_action( 'wp_ajax_atum_apply_bulk_action', array( $this, 'apply_bulk_action' ) );
 
 		// Manage addon licenses
 		add_action( 'wp_ajax_atum_validate_license', array($this, 'validate_license') );
@@ -313,13 +310,17 @@ final class Ajax {
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
 		$args = array(
-			'per_page' => ( ! empty( $_REQUEST['per_page'] ) ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'screen'   => $_REQUEST['screen']
+			'per_page'        => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
+			'show_cb'         => ! empty( $_REQUEST['show_cb'] ) ? (bool) $_REQUEST['show_cb'] : FALSE,
+			'show_controlled' => ! empty( $_REQUEST['show_controlled'] ) ? (bool) $_REQUEST['show_controlled'] : FALSE,
+			'screen'          => esc_attr( $_REQUEST['screen'] ),
 		);
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
-		
-		$list = new StockCentralListTable( $args );
+
+		$list_class = $args['show_controlled'] ? '\Atum\StockCentral\Inc\ListTable' : '\Atum\StockCentral\Inc\UncontrolledListTable';
+		$list       = new $list_class( $args );
+
 		$list->ajax_response();
 		
 	}
@@ -345,32 +346,6 @@ final class Ajax {
 		$list = new InboundStockListTable( $args );
 		$list->ajax_response();
 
-	}
-	
-	/**
-	 * Handle the ajax requests sent by the Atum's "Manage Stock" notice
-	 *
-	 * @package ATUM List Tables
-	 *
-	 * @since 0.1.0
-	 */
-	public function manage_stock_notice() {
-		
-		check_ajax_referer( ATUM_PREFIX . 'manage-stock-notice', 'token' );
-		
-		$action = ( ! empty($_POST['data']) ) ? $_POST['data'] : '';
-		
-		// Enable stock management
-		if ($action == 'manage') {
-			Helpers::update_option('manage_stock', 'yes');
-		}
-		// Dismiss the notice permanently
-		elseif ( $action == 'dismiss') {
-			Helpers::dismiss_notice('manage_stock');
-		}
-		
-		wp_die();
-		
 	}
 	
 	/**
@@ -432,6 +407,50 @@ final class Ajax {
 		}
 
 		wp_send_json_success( __('Data saved.', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * Apply actions in bulk to the selected ListTable rows
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.4.1
+	 */
+	public function apply_bulk_action() {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		if ( empty($_POST['ids']) ) {
+			wp_send_json_error( __('No Items Selected.', ATUM_TEXT_DOMAIN) );
+		}
+
+		if ( empty($_POST['bulk_action']) ) {
+			wp_send_json_error( __('Invalid bulk action.', ATUM_TEXT_DOMAIN) );
+		}
+
+		$ids = array_map( 'absint', $_POST['ids'] );
+
+		switch ( $_POST['bulk_action'] ) {
+			case 'uncontrol_stock':
+
+				foreach ($ids as $id) {
+					delete_post_meta($id, Globals::ATUM_CONTROL_STOCK_KEY);
+				}
+
+		        break;
+
+			case 'control_stock':
+
+				foreach ($ids as $id) {
+					update_post_meta($id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes');
+				}
+
+				break;
+		}
+
+
+		wp_send_json_success( __('Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN) );
 
 	}
 
@@ -1472,6 +1491,10 @@ final class Ajax {
 
 			foreach ( $atum_order_items as $item_id => $atum_order_item ) {
 
+				/**
+				 * @var \WC_Order_Item_Product $atum_order_item
+				 */
+
 				// Only increase the stock for selected items
 				if ( ! in_array( $item_id, $atum_order_item_ids ) ) {
 					continue;
@@ -1495,6 +1518,8 @@ final class Ajax {
 					$return[]     = $note;
 
 					$atum_order->add_note( $note );
+					$atum_order_item->update_meta_data('_stock_changed', TRUE);
+					$atum_order_item->save();
 
 				}
 			}

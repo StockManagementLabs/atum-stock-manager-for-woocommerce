@@ -1,9 +1,9 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
  * @version 1.4.0 
- * @authors Salva Machí and Jose Piera 
+ * @author Be Rebel  
  *
- * Author URI: https://sispixels.com/ 
+ * Author URI: https://berebel.io 
  * License : ©2018 Stock Management Labs 
  */ 
 
@@ -2603,7 +2603,7 @@
 
 .btn-success {
   color: #FFF;
-  background-color: #82c342;
+  background-color: #82C342;
 }
 
 .btn-success:hover:not(:disabled) {
@@ -2612,7 +2612,7 @@
 
 .btn-primary {
   color: #FFF;
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -2621,7 +2621,7 @@
 
 .btn-warning {
   color: #FFF;
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .btn-warning:hover:not(:disabled) {
@@ -2630,7 +2630,7 @@
 
 .btn-danger {
   color: #FFF;
-  background-color: #ff4848;
+  background-color: #FF4848;
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -2876,7 +2876,7 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82c342;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
@@ -2918,7 +2918,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: #FFF;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -2997,7 +2997,7 @@
 }
 
 .color-primary {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .color-info {
@@ -3005,19 +3005,19 @@
 }
 
 .color-success {
-  color: #82c342;
+  color: #82C342;
 }
 
 .color-warning {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .color-danger {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .bg-primary {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .bg-info {
@@ -3025,15 +3025,15 @@
 }
 
 .bg-success {
-  background-color: #82c342;
+  background-color: #82C342;
 }
 
 .bg-warning {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .bg-danger {
-  background-color: #ff4848;
+  background-color: #FF4848;
 }
 
 .embed-responsive {
@@ -3108,7 +3108,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .atum-dashboard .dash-header {
   position: relative;
   height: 300px;
-  background: #d5f2f8 url("../images/dashboard/header-bg.png") center bottom;
+  background: #D5F2F8 url("../images/dashboard/header-bg.png") center bottom;
   background-size: cover;
   display: -webkit-box;
   display: -webkit-flex;
@@ -3210,7 +3210,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-header .dash-header-notice span {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 @media all and (max-width: 768px) {
@@ -3463,11 +3463,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .add-dash-widget:hover {
-  border-color: #00b8db;
+  border-color: #00B8DB;
 }
 
 .atum-dashboard .add-dash-widget:hover i, .atum-dashboard .add-dash-widget:hover h2 {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-dashboard .add-dash-widget h2 {
@@ -3563,7 +3563,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .atum-widget .widget-header i:hover {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-dashboard .atum-widget .widget-header i.widget-settings {
@@ -3611,19 +3611,19 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .atum-widget .widget-primary {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-dashboard .atum-widget .widget-success {
-  color: #69c61d;
+  color: #69C61D;
 }
 
 .atum-dashboard .atum-widget .widget-warning {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-dashboard .atum-widget .widget-danger {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 @media all and (max-width: 768px) {
@@ -3859,7 +3859,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .mobile-filter-nav ul li:hover, .statistics-widget .mobile-filter-nav ul li.active {
-  color: #69c61d;
+  color: #69C61D;
 }
 
 .statistics-widget .mobile-filter-nav ul li span, .statistics-widget .mobile-filter-nav ul li i {
@@ -4020,7 +4020,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .chart-type a.active svg, .statistics-widget .chart-type a:hover svg {
-  fill: #efaf00;
+  fill: #EFAF00;
 }
 
 .statistics-widget .chart-legend {
@@ -4066,11 +4066,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .chart-legend .legend-switch #earnings-chart ~ label {
-  color: #69c61d;
+  color: #69C61D;
 }
 
 .statistics-widget .chart-legend .legend-switch #products-chart ~ label {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 @media all and (max-width: 768px) {
@@ -4509,7 +4509,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-list article.active a {
-  color: #00b8db;
+  color: #00B8DB;
   pointer-events: none;
 }
 
@@ -4570,7 +4570,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-list .video-title:hover {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 @media all and (max-width: 768px) {
@@ -4911,7 +4911,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .news-widget article.active a {
-  color: #00b8db;
+  color: #00B8DB;
   pointer-events: none;
 }
 
@@ -4955,7 +4955,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .news-widget .post-title:hover {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .news-widget .post-meta, .news-widget .post-excerpt {

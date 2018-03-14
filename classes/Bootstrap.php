@@ -116,7 +116,7 @@ class Bootstrap {
 		if ( ! function_exists( 'WC' ) ) {
 			throw new AtumException( 'woocommerce_disabled', __( 'ATUM requires WooCommerce to be activated', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
-		// WooCommerce "Manage Stock" option must be enabled
+		// WooCommerce "Manage Stock" global option must be enabled
 		else {
 			
 			$woo_inventory_page = 'page=wc-settings&tab=products&section=inventory';
@@ -133,7 +133,7 @@ class Bootstrap {
 			
 			if ($display_stock_option_notice) {
 				
-				$stock_option_msg = __( "You need to enable WooCommerce 'Manage Stock' option for ATUM plugin to work.");
+				$stock_option_msg = __( "You need to enable WooCommerce 'Manage Stock' option for ATUM plugin to work.", ATUM_TEXT_DOMAIN);
 				
 				if (
 					! isset( $_GET['page'] ) || $_GET['page'] != 'wc-settings' ||

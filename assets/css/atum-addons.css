@@ -1,9 +1,9 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
  * @version 1.4.0 
- * @authors Salva Machí and Jose Piera 
+ * @author Be Rebel  
  *
- * Author URI: https://sispixels.com/ 
+ * Author URI: https://berebel.io 
  * License : ©2018 Stock Management Labs 
  */ 
 
@@ -38,7 +38,7 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82c342;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
@@ -102,19 +102,19 @@
 }
 
 .atum-addons .theme .theme-actions.valid {
-  background-color: #82c342;
+  background-color: #82C342;
 }
 
 .atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
-  color: #82c342;
+  color: #82C342;
 }
 
 .atum-addons .theme .theme-actions.invalid span {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-addons .theme .theme-actions.inactive {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .atum-addons .theme .theme-actions.not-installed {
@@ -165,7 +165,7 @@
 .atum-addons .theme .show-key i {
   font-size: 15px;
   padding-top: 17px;
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-addons .theme .show-key:hover {
@@ -280,15 +280,15 @@
 }
 
 .atum-addons .theme .addon-key input[type=text].valid {
-  border-color: #82c342;
+  border-color: #82C342;
 }
 
 .atum-addons .theme .addon-key input[type=text].inactive {
-  border-color: #efaf00;
+  border-color: #EFAF00;
 }
 
 .atum-addons .theme .addon-key input[type=text].invalid {
-  border-color: #ff4848;
+  border-color: #FF4848;
 }
 
 .atum-addons .theme .button {
@@ -296,7 +296,7 @@
   box-shadow: none;
   text-shadow: none;
   font-weight: normal;
-  background-color: #00b8db;
+  background-color: #00B8DB;
   color: #FFF;
   border-radius: 0;
   -webkit-transition: all 0.2s ease-in-out;
@@ -305,7 +305,7 @@
 }
 
 .atum-addons .theme .button:disabled {
-  background-color: #00b8db !important;
+  background-color: #00B8DB !important;
   text-shadow: none !important;
   color: #FFF !important;
   opacity: 0.6;
@@ -326,7 +326,7 @@
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00b8db;
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;

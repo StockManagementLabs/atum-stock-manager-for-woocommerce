@@ -20,7 +20,8 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 	'_method_id',
 	'_cost',
 	'_total_tax',
-	'_taxes'
+	'_taxes',
+	'_stock_changed'
 ) );
 ?>
 <div class="view">

@@ -42,9 +42,9 @@ final class WidgetHelpers {
 	 */
 	public static function get_all_product_ids () {
 
-		$args = array(
+		$args = (array) apply_filters( 'atum/dashboard_widgets/get_all_product_ids/args', array(
 			'post_type'      => 'product',
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'posts_per_page' => -1,
 			'tax_query' => array(
 				array(
@@ -53,19 +53,14 @@ final class WidgetHelpers {
 					'terms'    => Globals::get_product_types()
 				)
 			),
-			'fields' => 'ids'
-		);
-
-		if ( ! Helpers::is_atum_managing_stock() ) {
-
-			// Only products with the _manage_stock meta set to yes
-			$args['meta_query'] = array(
+			'meta_query' => array(
 				array(
-					'key'   => '_manage_stock',
+					'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
 					'value' => 'yes'
 				)
-			);
-		}
+			),
+			'fields' => 'ids'
+		) );
 
 		return get_posts($args);
 
@@ -473,7 +468,7 @@ final class WidgetHelpers {
 
 		$args = array(
 			'post_type'      => 'product',
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'fields'         => 'ids',
 			'posts_per_page' => - 1,
 			'tax_query'      => array(
@@ -537,31 +532,23 @@ final class WidgetHelpers {
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
-				'post_status'    => 'publish',
+				'post_status'    => ['publish', 'private'],
 				'fields'         => 'ids',
-				'post__in'       => $posts
+				'post__in'       => $posts,
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
+						'value' => 'yes'
+					),
+					array(
+						'key'     => '_stock',
+						'value'   => 0,
+						'type'    => 'numeric',
+						'compare' => '>'
+					)
+				)
 			);
-
-			// If ATUM is not managing the stock, get those that have the stock status set as "In stock"
-			if ( ! Helpers::is_atum_managing_stock() ) {
-
-				$args['meta_query'][] = array(
-					'key'     => '_stock_status',
-					'value'   => 'instock',
-					'compare' => '='
-				);
-
-			}
-			else {
-
-				$args['meta_query'][] = array(
-					'key'     => '_stock',
-					'value'   => 0,
-					'type'    => 'numeric',
-					'compare' => '>'
-				);
-
-			}
 
 			$posts_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
 			$stock_counters['count_in_stock'] = count( $posts_in_stock->posts );
@@ -629,9 +616,9 @@ final class WidgetHelpers {
 	private static function get_children ($parent_type, $post_type = 'product') {
 
 		// Get the published Variables first
-		$parent_args = array(
+		$parent_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/parent_args', array(
 			'post_type'      => 'product',
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 			'tax_query'      => array(
@@ -641,9 +628,9 @@ final class WidgetHelpers {
 					'terms'    => $parent_type
 				)
 			)
-		);
+		) );
 
-		$parents = new \WP_Query($parent_args);
+		$parents = new \WP_Query( $parent_args );
 
 		if ($parents->found_posts) {
 
@@ -655,15 +642,15 @@ final class WidgetHelpers {
 				self::$grouped_products = array_merge(self::$grouped_products, $parents->posts);
 			}
 
-			$children_args = array(
+			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
 				'post_type'       => $post_type,
-				'post_status'     => 'publish',
+				'post_status'     => ['publish', 'private'],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
 				'post_parent__in' => $parents->posts
-			);
+			) );
 
-			$children = new \WP_Query( apply_filters( 'atum/dashboard_widgets/get_children', $children_args ) );
+			$children = new \WP_Query( $children_args );
 
 			if ($children->found_posts) {
 				return $children->posts;

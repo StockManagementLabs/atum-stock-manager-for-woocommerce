@@ -1,9 +1,9 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
  * @version 1.4.0 
- * @authors Salva Machí and Jose Piera 
+ * @author Be Rebel  
  *
- * Author URI: https://sispixels.com/ 
+ * Author URI: https://berebel.io 
  * License : ©2018 Stock Management Labs 
  */ 
 
@@ -679,7 +679,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: #FFF;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -788,7 +788,7 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82c342;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
@@ -796,15 +796,7 @@
 }
 
 .blockUI.blockOverlay:before {
-  content: '';
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 1;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
+  display: none;
 }
 
 .blockUI.blockOverlay:after {
@@ -911,6 +903,85 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.color-primary {
+  color: #00B8DB;
+}
+
+.color-info {
+  color: #E3E8F5;
+}
+
+.color-success {
+  color: #82C342;
+}
+
+.color-warning {
+  color: #EFAF00;
+}
+
+.color-danger {
+  color: #FF4848;
+}
+
+.bg-primary {
+  background-color: #00B8DB;
+}
+
+.bg-info {
+  background-color: #E3E8F5;
+}
+
+.bg-success {
+  background-color: #82C342;
+}
+
+.bg-warning {
+  background-color: #EFAF00;
+}
+
+.bg-danger {
+  background-color: #FF4848;
+}
+
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive::before {
+  display: block;
+  content: "";
+}
+
+.embed-responsive .embed-responsive-item, .embed-responsive iframe, .embed-responsive embed, .embed-responsive object, .embed-responsive video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-responsive-21by9::before {
+  padding-top: 42.85714%;
+}
+
+.embed-responsive-16by9::before {
+  padding-top: 56.25%;
+}
+
+.embed-responsive-4by3::before {
+  padding-top: 75%;
+}
+
+.embed-responsive-1by1::before {
+  padding-top: 100%;
 }
 
 .atum-meta-box {
@@ -1417,7 +1488,7 @@ ul.atum_order_notes li p.meta .exact-date {
 }
 
 ul.atum_order_notes li a.delete_note {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 ul.atum_order_notes li .note_content::after {
@@ -1522,7 +1593,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-totals .refunded-total {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .refund-actions {
@@ -1893,6 +1964,7 @@ ul.atum_order_notes li .note_content::after {
   padding: 0 4px 0.5em 0;
   line-height: 1.5em;
   width: 20%;
+  white-space: nowrap;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta tr td, #atum_order_items .atum_order_items_wrapper table.atum_order_items table.display_meta tr td {
@@ -2048,7 +2120,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax .delete-atum-order-tax:hover:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax .delete-atum-order-tax:hover:before {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax:hover .delete-atum-order-tax, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax:hover .delete-atum-order-tax {
@@ -2057,7 +2129,7 @@ ul.atum_order_notes li .note_content::after {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items small.refunded {
   display: block;
-  color: #ff4848;
+  color: #FF4848;
   white-space: nowrap;
   margin-top: 0.5em;
 }
@@ -2172,7 +2244,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:hover:before, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:hover:before {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:focus, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:focus {
@@ -2395,12 +2467,12 @@ table.wp-list-table .column-status mark.pending::after, table.wp-list-table .col
 
 table.wp-list-table .column-status mark.pending::after {
   content: '\e012';
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 table.wp-list-table .column-status mark.completed::after {
   content: '\e015';
-  color: #82c342;
+  color: #82C342;
 }
 
 table.wp-list-table td.column-status {
