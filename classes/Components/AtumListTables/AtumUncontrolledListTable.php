@@ -14,9 +14,6 @@ namespace Atum\Components\AtumListTables;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Inc\Globals;
-
-
 class AtumUncontrolledListTable extends AtumListTable {
 
 	/**
@@ -41,11 +38,6 @@ class AtumUncontrolledListTable extends AtumListTable {
 
 		return $views;
 	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function views() {}
 
 	/**
 	 * @inheritdoc

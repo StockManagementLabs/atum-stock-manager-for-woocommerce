@@ -464,8 +464,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post
-	 * @param string   $type The type of product
+	 * @param \WC_Product $item The WooCommerce product
+	 * @param string      $type The type of product
 	 */
 	public function single_expandable_row( $item, $type ) {
 		
@@ -1426,18 +1426,30 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Check if there are some empty inheritable products within the resulting list and get rid of them
 			$wc_products = array_map('wc_get_product', $product_ids);
+			$num_children = $num_parent = 0;
 			foreach ($wc_products as $key => $wc_product) {
 
 				if ( Helpers::is_inheritable_type( $wc_product->get_type() ) ) {
-					if ( ! $this->has_children( $wc_product->get_id() ) ) {
+
+					$children = $this->get_num_children( $wc_product->get_id() );
+
+					if ( !$children ) {
 						unset( $posts[$key], $product_ids[$key] );
+
+						$found_posts--;
 					}
+					else {
+						$num_parent++;
+						$num_children += $children;
+					}
+
 				}
 
 			}
 
+			$found_posts = $found_posts + $num_children - $num_parent;
 			$this->current_products = $product_ids;
-			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( ($found_posts - $num_children + $num_parent) / $this->per_page );
+			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page );
 			
 		}
 		else {
@@ -2244,15 +2256,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Check whether an inheritble product has children
+	 * Get the number of children for a given inheritable product
 	 *
 	 * @since 1.4.1
 	 *
 	 * @param int $product_id
 	 *
-	 * @return bool
+	 * @return int
 	 */
-	protected function has_children($product_id) {
+	protected function get_num_children($product_id) {
 
 		global $wpdb;
 
@@ -2274,7 +2286,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$children_count = $wpdb->get_var($sql);
 
-		return $children_count > 0;
+		return $children_count;
 
 	}
 
