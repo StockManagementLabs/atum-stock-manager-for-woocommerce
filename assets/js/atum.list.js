@@ -250,6 +250,28 @@
 						else {
 							$bulkButton.hide();
 						}
+					})
+					
+					//
+					// Expandable rows' checkboxes
+					//----------------------------
+					.on('click', 'tr.variable .check-column input:checkbox, tr.group .check-column input:checkbox', function() {
+						
+						var $checkbox     = $(this),
+						    $containerRow = $checkbox.closest('tr'),
+							$nextRow      = $containerRow.next('.expandable');
+						
+						// If is not expanded, expand it
+						if (!$containerRow.hasClass('expanded')) {
+							$containerRow.find('.product-type.has-child').click();
+						}
+						
+						// Check/Uncheck all the children rows
+						while ($nextRow.length) {
+							$nextRow.find('.check-column input:checkbox').prop('checked', $checkbox.is(':checked'));
+							$nextRow = $nextRow.next('.expandable');
+						}
+					
 					});
 					
 					//
