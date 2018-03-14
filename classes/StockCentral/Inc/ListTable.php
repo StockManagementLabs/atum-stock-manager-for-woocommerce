@@ -229,57 +229,32 @@ class ListTable extends AtumListTable {
 	 * @return float
 	 */
 	protected function column__regular_price( $item ) {
-
+		
 		$regular_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id();
+		$product_id    = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
 			
-			if ( !empty($this->custom_prices[$this->current_currency]) ) {
-				
-				$currency            = $this->current_currency;
-				$regular_price_value = $this->custom_prices[ $currency ]['custom_price']['_regular_price'];
-				$symbol              = $this->custom_prices[ $currency ]['currency_symbol'];
-				$is_custom           = 'yes';
+			$regular_price_value = $this->product->get_regular_price();
+			$regular_price_value = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->default_currency ] ) : $regular_price;
 			
-			}
-			else {
-
-				// WPML Multicurrency
-				if ($this->is_wpml_multicurrency && $product_id !== $this->original_product_id) {
-					$product = wc_get_product($this->original_product_id);
-					$regular_price_value =  $product->get_regular_price();
-				}
-				else {
-					$regular_price_value = $this->product->get_regular_price();
-				}
-
-				$symbol = get_woocommerce_currency_symbol();
-				$currency = $this->default_currency;
-				$is_custom = 'no';
-
-			}
-			
-			$regular_price_value = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency' => $currency] ) : $regular_price;
-			
-			$args = array(
-				'post_id'  => $product_id,
+			$args = apply_filters( 'atum/stock_central_list/args_regular_price', array(
+				'post_id' => $product_id,
 				'meta_key' => 'regular_price',
-				'value'    => $regular_price_value,
-				'symbol'    => $symbol,
-				'currency'  => $currency,
-				'is_custom' => $is_custom,
-				'tooltip'  => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
-			);
+				'value' => $regular_price_value,
+				'symbol' => get_woocommerce_currency_symbol(),
+				'currency' => $this->default_currency,
+				'tooltip' => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
+			) );
 			
 			$regular_price = $this->get_editable_column( $args );
 			
 		}
-
+		
 		return apply_filters( 'atum/stock_central_list/column_regular_price', $regular_price, $item, $this->product );
 		
 	}
-
+	
 	/**
 	 * Column for sale price
 	 *
@@ -295,49 +270,19 @@ class ListTable extends AtumListTable {
 		$product_id = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
-
-			if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-
-				$currency         = $this->current_currency;
-				$sale_price_value = $this->custom_prices[ $currency ]['custom_price']['_sale_price'];
-				$symbol           = $this->custom_prices[ $currency ]['currency_symbol'];
-
-				// Dates come already formatted
-				$sale_price_dates_from = $this->custom_prices[ $currency ]['sale_price_dates_from'];
-				$sale_price_dates_to   = $this->custom_prices[ $currency ]['sale_price_dates_to'];
-				$is_custom             = 'yes';
-
-			}
-			else {
-
-				// WPML Multicurrency
-				if ( $this->is_wpml_multicurrency && $product_id !== $this->original_product_id ) {
-					$product               = wc_get_product( $this->original_product_id );
-					$sale_price_value      = $product->get_sale_price();
-					$sale_price_dates_from = ( $date = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
-					$sale_price_dates_to   = ( $date = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
-				}
-				else {
-					$sale_price_value      = $this->product->get_sale_price();
-					$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
-					$sale_price_dates_to   = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
-				}
-
-				$symbol    = get_woocommerce_currency_symbol();
-				$currency  = $this->default_currency;
-				$is_custom = 'no';
-
-			}
 			
-			$sale_price_value = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency' => $currency ] ) : $sale_price;
+			$sale_price_value      = $this->product->get_sale_price();
+			$sale_price_value = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency' => $this->default_currency ] ) : $sale_price;
 			
-			$args = array(
-				'post_id'    => $product_id,
-				'meta_key'   => 'sale_price',
-				'value'      => $sale_price_value,
-				'symbol'     => $symbol,
-				'currency'   => $currency,
-				'is_custom'  => $is_custom,
+			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+			$sale_price_dates_to   = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+			
+			$args = apply_filters( 'atum/stock_central_list/args_sale_price', array(
+				'post_id'   => $product_id,
+				'meta_key'  => 'sale_price',
+				'value'     => $sale_price_value,
+				'symbol'    => get_woocommerce_currency_symbol(),
+				'currency'  => $this->default_currency,
 				
 				'tooltip'    => __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
 				'extra_meta' => array(
@@ -360,7 +305,7 @@ class ListTable extends AtumListTable {
 						'class'       => 'datepicker to'
 					)
 				)
-			);
+			) );
 			
 			$sale_price = $this->get_editable_column( $args );
 			
