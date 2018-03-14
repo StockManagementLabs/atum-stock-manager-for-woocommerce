@@ -1269,4 +1269,25 @@ final class Helpers {
 
 		return implode(' ', $data_array);
 	}
+	
+	/**
+	 * Outputs the add-on to append/prepend to ATUM fields
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $side
+	 *
+	 * @return string
+	 */
+	public static function atum_field_input_addon($side = 'prepend') {
+		
+		?>
+		<span class="input-group-<?php echo $side ?>" title="<?php _e('ATUM field', ATUM_TEXT_DOMAIN) ?>">
+			<span class="input-group-text">
+				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" alt="">
+			</span>
+		</span>
+		<?php
+		
+	}
 }
