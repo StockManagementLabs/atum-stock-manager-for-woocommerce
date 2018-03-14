@@ -905,6 +905,85 @@
   }
 }
 
+.color-primary {
+  color: #00B8DB;
+}
+
+.color-info {
+  color: #E3E8F5;
+}
+
+.color-success {
+  color: #82C342;
+}
+
+.color-warning {
+  color: #EFAF00;
+}
+
+.color-danger {
+  color: #FF4848;
+}
+
+.bg-primary {
+  background-color: #00B8DB;
+}
+
+.bg-info {
+  background-color: #E3E8F5;
+}
+
+.bg-success {
+  background-color: #82C342;
+}
+
+.bg-warning {
+  background-color: #EFAF00;
+}
+
+.bg-danger {
+  background-color: #FF4848;
+}
+
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive::before {
+  display: block;
+  content: "";
+}
+
+.embed-responsive .embed-responsive-item, .embed-responsive iframe, .embed-responsive embed, .embed-responsive object, .embed-responsive video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-responsive-21by9::before {
+  padding-top: 42.85714%;
+}
+
+.embed-responsive-16by9::before {
+  padding-top: 56.25%;
+}
+
+.embed-responsive-4by3::before {
+  padding-top: 75%;
+}
+
+.embed-responsive-1by1::before {
+  padding-top: 100%;
+}
+
 .atum-meta-box {
   padding: 15px 10px;
 }
@@ -1885,6 +1964,7 @@ ul.atum_order_notes li .note_content::after {
   padding: 0 4px 0.5em 0;
   line-height: 1.5em;
   width: 20%;
+  white-space: nowrap;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta tr td, #atum_order_items .atum_order_items_wrapper table.atum_order_items table.display_meta tr td {

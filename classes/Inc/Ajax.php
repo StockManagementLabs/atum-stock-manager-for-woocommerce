@@ -1491,6 +1491,10 @@ final class Ajax {
 
 			foreach ( $atum_order_items as $item_id => $atum_order_item ) {
 
+				/**
+				 * @var \WC_Order_Item_Product $atum_order_item
+				 */
+
 				// Only increase the stock for selected items
 				if ( ! in_array( $item_id, $atum_order_item_ids ) ) {
 					continue;
@@ -1514,6 +1518,8 @@ final class Ajax {
 					$return[]     = $note;
 
 					$atum_order->add_note( $note );
+					$atum_order_item->update_meta_data('_stock_changed', TRUE);
+					$atum_order_item->save();
 
 				}
 			}

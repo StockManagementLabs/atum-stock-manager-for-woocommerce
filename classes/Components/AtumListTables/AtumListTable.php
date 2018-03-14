@@ -934,7 +934,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( ! Helpers::is_inheritable_type( $this->product->get_type() ) && ! $this->product->managing_stock() ) {
 				$classes .= ' cell-blue';
-				$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('Not managed by WooCommerce', ATUM_TEXT_DOMAIN) . '"></span>';
+				$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
 			}
 			else {
 				$content = self::EMPTY_COL;

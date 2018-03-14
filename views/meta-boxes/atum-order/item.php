@@ -26,6 +26,7 @@ $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id()
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
 ?>
 <tr class="item <?php echo apply_filters( 'atum/atum_order/item_class', ( ! empty( $class ) ? $class : '' ), $item, $atum_order ); ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
+
 	<td class="thumb">
 		<?php echo '<div class="atum-order-item-thumbnail">' . wp_kses_post( $thumbnail ) . '</div>'; ?>
 	</td>
@@ -64,6 +65,16 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, $product ) ?>
 		<?php include( 'item-meta.php' ); ?>
 		<?php do_action( 'atum/atum_order/ater_item_meta', $item_id, $item, $product ) ?>
+
+		<div class="item_status">
+			<?php if ( ! $product->managing_stock() ): ?>
+				<i class="dashicons dashicons-hidden color-primary" data-toggle="tooltip" title="<?php _e("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) ?>"></i>
+			<?php endif; ?>
+
+			<?php if ( $item->get_meta('_stock_changed') ): ?>
+				<i class="dashicons dashicons-admin-settings color-warning" data-toggle="tooltip" title="<?php _e("This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN) ?>"></i>
+			<?php endif; ?>
+		</div>
 	</td>
 
 	<?php
