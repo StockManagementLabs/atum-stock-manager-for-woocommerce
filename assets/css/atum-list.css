@@ -329,6 +329,116 @@
   color: #9ccf69;
 }
 
+.blockUI.blockOverlay:before {
+  display: none;
+}
+
+.blockUI.blockOverlay:after {
+  content: '';
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.note .blockUI.blockOverlay:after {
+  top: 38%;
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #atum-export-link-wrap {
   float: right;
   height: 28px;
@@ -452,72 +562,6 @@
   margin-top: 5px;
 }
 
-.overlay {
-  position: relative;
-}
-
-.overlay:before {
-  content: '';
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0.7;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-.atum-loading {
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(0, 115, 170, 0.25);
-  border-top-color: #0073AA;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 50;
-  -webkit-animation: loader-rotate 1s linear infinite;
-  -moz-animation: loader-rotate 1s linear infinite;
-  -o-animation: loader-rotate 1s linear infinite;
-  animation: loader-rotate 1s linear infinite;
-}
-
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@-moz-keyframes loader-rotate {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-  }
-}
-
-@-o-keyframes loader-rotate {
-  from {
-    -o-transform: rotate(0deg);
-  }
-  to {
-    -o-transform: rotate(360deg);
-  }
-}
-
-@keyframes loader-rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 h1.wp-heading-inline {
   line-height: 1.5;
   position: relative;
@@ -533,13 +577,6 @@ h1.wp-heading-inline #atum-update-list:active {
   color: #FFF;
   padding: 0 10px 1px;
   box-shadow: 0 1px 0 #006799;
-}
-
-h1.wp-heading-inline .atum-loading {
-  display: inline-block;
-  top: 1px;
-  margin-left: 10px;
-  position: relative;
 }
 
 .atum-list-wrapper {
@@ -565,29 +602,9 @@ h1.wp-heading-inline .atum-loading {
   position: relative;
 }
 
-.atum-list-wrapper .tablenav-pages .atum-loading, .atum-list-wrapper .search-box .atum-loading {
-  left: -30px;
-  top: 4px;
-}
-
 .atum-list-wrapper .subsubsub {
   position: relative;
   margin-left: 3px;
-}
-
-.atum-list-wrapper .subsubsub .atum-loading {
-  right: -25px;
-  top: 4px;
-}
-
-.atum-list-wrapper.loading-data .alignleft.actions {
-  position: relative;
-  overflow: visible;
-}
-
-.atum-list-wrapper.loading-data .alignleft.actions .atum-loading {
-  right: -15px;
-  top: 7px;
 }
 
 .atum-list-wrapper .actions.bulkactions {
@@ -718,15 +735,6 @@ h1.wp-heading-inline .atum-loading {
 
 .atum-list-table .group th:nth-child(even) {
   background-color: #F9F9F9;
-}
-
-.atum-list-table thead .group th .atum-loading {
-  position: relative;
-  display: inline-block;
-  left: 15px;
-  top: 2px;
-  width: 10px;
-  height: 10px;
 }
 
 .atum-list-table th.sortable a, .atum-list-table th.sorted a {
@@ -976,11 +984,6 @@ h1.wp-heading-inline .atum-loading {
   -o-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-}
-
-.atum-notice .atum-loading {
-  margin-left: 5px;
-  margin-top: 5px;
 }
 
 .atum-notice .add-manage-option {

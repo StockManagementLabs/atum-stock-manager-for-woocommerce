@@ -2,19 +2,6 @@
 // Atum List Tables
 //------------------
 
-.overlay {
-	position: relative;
-	
-	&:before {
-		content: '';
-		@include overlay;
-	}
-}
-
-.atum-loading {
-	@include loader;
-}
-
 h1.wp-heading-inline {
 	line-height: 1.5;
 	position: relative;
@@ -29,13 +16,6 @@ h1.wp-heading-inline {
 			padding: 0 10px 1px;
 			box-shadow: 0 1px 0 #006799;
 		}
-	}
-	
-	.atum-loading {
-		display: inline-block;
-		top: 1px;
-		margin-left: 10px;
-		position: relative;
 	}
 }
 
@@ -63,33 +43,11 @@ h1.wp-heading-inline {
 	
 	.tablenav-pages, .search-box {
 		position: relative;
-		
-		.atum-loading {
-			left: -30px;
-			top: 4px;
-		}
 	}
 	
 	.subsubsub {
 		position: relative;
 		margin-left: 3px;
-		
-		.atum-loading {
-			right: -25px;
-			top: 4px;
-		}
-	}
-	
-	&.loading-data {
-		.alignleft.actions {
-			position: relative;
-			overflow: visible;
-			
-			.atum-loading {
-				right: -15px;
-				top: 7px;
-			}
-		}
 	}
 	
 	.actions {
@@ -243,15 +201,6 @@ h1.wp-heading-inline {
 				background-color: $gray-light;
 			}
 		}
-	}
-	
-	thead .group th .atum-loading {
-		position: relative;
-		display: inline-block;
-		left: 15px;
-		top: 2px;
-		width: 10px;
-		height: 10px;
 	}
 	
 	th {
@@ -517,11 +466,6 @@ h1.wp-heading-inline {
 	.notice-dismiss {
 		top: 50%;
 		@include transform(translateY(-50%));
-	}
-	
-	.atum-loading {
-		margin-left: 5px;
-		margin-top: 5px;
 	}
 	
 	.add-manage-option {

@@ -216,13 +216,16 @@
 					//-------------------------------------------
 					.on('click', '.product-type.has-child', function() {
 						
-						var $expandableRow = $(this).closest('tr').toggleClass('expanded'),
-						    $nextRow       = $expandableRow.next();
+						var $expandableRow = $(this).closest('tr'),
+						    $nextRow       = $expandableRow.next('.expandable');
 						
 						// Reload the scrollbar once the slide animation is completed
-						self.reloadScrollbar(210);
+						if ($nextRow.length) {
+							$expandableRow.toggleClass('expanded');
+							self.reloadScrollbar(210);
+						}
 						
-						do {
+						while ($nextRow.length) {
 							
 							// Emulate the slide animation in rows with this simple trick
 							if (!$nextRow.is(':visible')) {
@@ -252,9 +255,9 @@
 								
 							}
 							
-							$nextRow = $nextRow.next();
+							$nextRow = $nextRow.next('.expandable');
 							
-						} while ( $nextRow.hasClass('variation') || $nextRow.hasClass('grouped') );
+						}
 						
 					})
 					
@@ -694,7 +697,6 @@
 								
 								if (response.success) {
 									$button.remove();
-									$('.atum-loading').remove();
 									$editInput.val('');
 									self.update();
 								}
@@ -764,7 +766,6 @@
 							
 							if (response.success) {
 								$bulkButton.hide();
-								$('.atum-loading').remove();
 								self.update();
 							}
 							else {
@@ -808,7 +809,7 @@
 						screen         : $listWrapper.data('screen'),
 						per_page       : perPage,
 						show_cb        : atumListTable.showCb,
-						show_controlled: self.__query(location.search.substring(1), 'uncontrolled') || '',
+						show_controlled: self.__query(location.search.substring(1), 'uncontrolled') !== 1 || true,
 						product_cat    : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m              : $listWrapper.find('#filter-by-date').val() || '',
 						product_type   : $listWrapper.find('.dropdown_product_type').val() || '',
@@ -907,21 +908,20 @@
 				 * Add the overlay effect while loading data
 				 */
 				addOverlay: function() {
-					$listWrapper.addClass('loading-data');
-					$atumTable.addClass('overlay');
-					
-					if (typeof this.$animationElem !== 'undefined' && this.$animationElem.length) {
-						this.$animationElem.append('<div class="atum-loading"></div>');
-					}
+					$('.atum-table-wrapper').block({
+						message   : null,
+						overlayCSS: {
+							background: '#000',
+							opacity   : 0.5
+						}
+					});
 				},
 				
 				/**
 				 * Remove the overlay effect once the data is fully loaded
 				 */
-				removeOverlay: function() {
-					$listWrapper.removeClass('loading-data');
-					$atumTable.removeClass('overlay');
-					$('.atum-loading').remove();
+				removeOverlay: function() {;
+					$('.atum-table-wrapper').unblock();
 				},
 				
 				/**

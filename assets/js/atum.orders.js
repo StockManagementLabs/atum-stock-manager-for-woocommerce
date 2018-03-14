@@ -84,8 +84,8 @@
 				this.$container.block({
 					message   : null,
 					overlayCSS: {
-						background: '#fff',
-						opacity   : 0.6
+						background: '#000',
+						opacity   : 0.5
 					}
 				});
 				
@@ -1002,8 +1002,8 @@
 				this.$container.block({
 					message   : null,
 					overlayCSS: {
-						background: '#fff',
-						opacity   : 0.6
+						background: '#000',
+						opacity   : 0.5
 					}
 				});
 				
@@ -1042,8 +1042,8 @@
 							$note.block({
 								message   : null,
 								overlayCSS: {
-									background: '#fff',
-									opacity   : 0.6
+									background: '#000',
+									opacity   : 0.5
 								}
 							});
 							
