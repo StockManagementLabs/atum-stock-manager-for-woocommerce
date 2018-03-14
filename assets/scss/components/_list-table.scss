@@ -48,6 +48,12 @@ h1.wp-heading-inline {
 	.subsubsub {
 		position: relative;
 		margin-left: 3px;
+		
+		a {
+			&.current {
+				pointer-events: none;
+			}
+		}
 	}
 	
 	.actions {

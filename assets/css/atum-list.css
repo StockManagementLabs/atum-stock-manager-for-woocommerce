@@ -607,6 +607,10 @@ h1.wp-heading-inline #atum-update-list:active {
   margin-left: 3px;
 }
 
+.atum-list-wrapper .subsubsub a.current {
+  pointer-events: none;
+}
+
 .atum-list-wrapper .actions.bulkactions {
   padding-right: 0;
 }

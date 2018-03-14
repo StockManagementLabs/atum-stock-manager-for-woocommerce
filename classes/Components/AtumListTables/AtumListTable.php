@@ -239,7 +239,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->show_controlled = $args['show_controlled'];
 
 		if ( ! empty( $args['selected'] ) ) {
-			$this->selected = ( is_array( $args['selected'] ) ) ? $args['selected'] : explode( ',', $args['selected'] );
+			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
 
 		if ( ! empty($args['group_members']) ) {
@@ -336,10 +336,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		) );
 
 		// Product type filtering
-		echo Helpers::product_types_dropdown( ( isset( $_REQUEST['product_type'] ) ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '' );
 
 		// Supplier filtering
-		echo Helpers::suppliers_dropdown( ( isset( $_REQUEST['supplier'] ) ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
+		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) == 'yes' );
 
 	}
 
@@ -377,7 +377,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				if ( $custom_price_ui) {
 
 					global $thepostid;
-					$keep_id = ($thepostid)? $thepostid : 0;
+					$keep_id = $thepostid ? $thepostid : 0;
 					$thepostid = $this->original_product_id;
 
 					$this->custom_prices = $custom_price_ui->get_currencies_info();
@@ -957,7 +957,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$content = '<span class="dashicons dashicons-yes" data-toggle="tooltip" title="' . __('In Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
 
-		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
+		$classes = $classes ? ' class="' . $classes . '"' : '';
 
 		echo '<td ' . $data . $classes . '>' .
 		     apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product ) .
@@ -982,7 +982,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		foreach ( $this->table_columns as $table => $slug ) {
 			$group = $this->search_group_columns( $table );
-			$result[ $table ] = ( $group ) ? "<span class='col-$group'>$slug</span>" : $slug;
+			$result[ $table ] = $group ? "<span class='col-$group'>$slug</span>" : $slug;
 		}
 		
 		return apply_filters( 'atum/list_table/columns', $result );
@@ -1630,7 +1630,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $products ) {
 
-			$post_types = ($variations) ? array($this->post_type, 'product_variation') : $this->post_type;
+			$post_types = $variations ? array($this->post_type, 'product_variation') : $this->post_type;
 
 			// Products in stock
 			$args = array(
@@ -1687,7 +1687,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
 						GROUP BY IDs) AS sales";
 
-					$low_stock_post_types = ($variations) ? "('product', 'product_variation')" : "('product')";
+					$low_stock_post_types = $variations ? "('product', 'product_variation')" : "('product')";
 
 					$str_states = "(SELECT `{$wpdb->posts}`.`ID`,
 						IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
