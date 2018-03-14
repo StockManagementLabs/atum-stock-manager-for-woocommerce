@@ -75,7 +75,7 @@
 							
 							if ( $supplier_sku ): ?>
 								<br>
-								<span class="atum-order-item-sku" style="font-style: italic; color: #888; font-size: 12px ">
+								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
 									<?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
 								</span>
 							<?php endif;
