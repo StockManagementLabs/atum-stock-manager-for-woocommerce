@@ -810,7 +810,7 @@
 						screen         : $listWrapper.data('screen'),
 						per_page       : perPage,
 						show_cb        : atumListTable.showCb,
-						show_controlled: self.__query(location.search.substring(1), 'uncontrolled') !== 1 || true,
+						show_controlled: (self.__query(location.search.substring(1), 'uncontrolled') !== '1') ? 1 : 0,
 						product_cat    : $listWrapper.find('.dropdown_product_cat').val() || '',
 						m              : $listWrapper.find('#filter-by-date').val() || '',
 						product_type   : $listWrapper.find('.dropdown_product_type').val() || '',

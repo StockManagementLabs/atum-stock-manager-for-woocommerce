@@ -2,8 +2,8 @@
 /**
  * @package        Atum
  * @subpackage     Inc
- * @author         Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      ©2017 Stock Management Labs™
+ * @author         Be Rebel - https://berebel.io
+ * @copyright      ©2018 Stock Management Labs™
  *
  * @since          0.0.1
  *
@@ -656,7 +656,7 @@ final class Helpers {
 	 * @return bool
 	 */
 	public static function is_atum_managing_stock($product_id) {
-		return get_post_meta( $product_id, Globals::ATUM_MANAGE_STOCK_KEY, TRUE ) === 'yes';
+		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ) === 'yes';
 	}
 	
 	/**

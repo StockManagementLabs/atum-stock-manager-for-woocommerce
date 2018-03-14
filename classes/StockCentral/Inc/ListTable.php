@@ -2,8 +2,8 @@
 /**
  * @package         Atum\StockCentral
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -47,6 +47,7 @@ class ListTable extends AtumListTable {
 	 * @var bool
 	 */
 	protected $load_datepicker = TRUE;
+
 
 	/**
 	 * @inheritdoc

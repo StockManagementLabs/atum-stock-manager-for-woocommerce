@@ -2,8 +2,8 @@
 /**
  * @package         Atum
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.1.4
  *
@@ -47,7 +47,7 @@ final class Globals {
 	 * @var array
 	 */
 	private static $product_tab_fields = array(
-		self::ATUM_MANAGE_STOCK_KEY => 'checkbox'
+		self::ATUM_CONTROL_STOCK_KEY => 'checkbox'
 	);
 
 	/**
@@ -68,13 +68,17 @@ final class Globals {
 	/**
 	 * The meta key where is stored the atum stock management status
 	 */
-	const ATUM_MANAGE_STOCK_KEY = '_atum_manage_stock';
+	const ATUM_CONTROL_STOCK_KEY = '_atum_manage_stock';
 
 	/**
 	 * The meta key where is stored the out of stock date
 	 */
 	const OUT_OF_STOCK_DATE_KEY = '_out_of_stock_date';
-	
+
+	/**
+	 * The meta key name used for inheritable products (Grouped, Variables...)
+	 */
+	const IS_INHERITABLE_KEY = '_inheritable';
 
 	
 	/**

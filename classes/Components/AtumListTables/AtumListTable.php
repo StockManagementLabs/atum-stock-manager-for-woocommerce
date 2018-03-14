@@ -45,7 +45,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $table_columns;
-	
+
 	/**
 	 * The previously selected items
 	 * @var array
@@ -230,8 +230,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		$args = wp_parse_args( $args, array(
-			'show_cb'  => FALSE,
-			'per_page' => Settings::DEFAULT_POSTS_PER_PAGE,
+			'show_cb'         => FALSE,
+			'show_controlled' => TRUE,
+			'per_page'        => Settings::DEFAULT_POSTS_PER_PAGE,
 		) );
 
 		$this->show_cb         = $args['show_cb'];
@@ -391,12 +392,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			return;
 		}*/
 
-		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
-
+		$this->allow_calcs = TRUE;
 		$row_class = '';
+
 		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+			$this->allow_calcs = FALSE;
 			$class_type = $type == 'grouped' ? 'group' : 'variable';
-			$row_class = Helpers::get_option( 'expandable_rows', 'no' ) == 'yes' ? ' class="expanded ' . $class_type . '"' : '';
+
+			$row_classes = array($class_type);
+
+			if ( Helpers::get_option( 'expandable_rows', 'no' ) == 'yes' ) {
+				$row_classes[] = 'expanded';
+			}
+			$row_class = ' class="' . implode(' ', $row_classes) . '"';
 		}
 
 		// Output the row
@@ -405,7 +413,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo '</tr>';
 
 		// Add the children products of each inheritable product type
-		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+		if ( !$this->allow_calcs ) {
 
 			$product_type = in_array($type, ['variable', 'variable-subcription']) ? 'product_variation' : 'product';
 			$child_products = $this->get_children($type, [  $this->product->get_id() ], $product_type );
@@ -494,7 +502,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$row_style = Helpers::get_option('expandable_rows', 'no') != 'yes' ? ' style="display: none"' : '';
 		
-		echo '<tr class="' . $type . '"' . $row_style . ' data-id="' . $this->get_current_product_id() . '">';
+		echo '<tr class="expandable ' . $type . '"' . $row_style . ' data-id="' . $this->get_current_product_id() . '">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
 	}
@@ -1191,7 +1199,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
-		$selected_posts      = $posts_meta_query = $posts = array();
+		$posts               = array();
 		$sortable            = $this->get_sortable_columns();
 		$hidden              = get_hidden_columns( $this->screen );
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
@@ -1203,7 +1211,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$args = array(
 			'post_type'      => $this->post_type,
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'posts_per_page' => $this->per_page,
 			'paged'          => $this->get_pagenum()
 		);
@@ -1225,8 +1233,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$args['meta_query'] = array(
 				array(
-					'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
-					'compare' => 'NOT EXISTS'
+					'relation' => 'OR',
+					array(
+						'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
+						'compare' => 'NOT EXISTS'
+					),
+					array(
+						'key'   => Globals::IS_INHERITABLE_KEY,
+						'value' => 'yes'
+					)
 				)
 			);
 
@@ -1351,19 +1366,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$args['s'] = esc_attr( $_REQUEST['s'] );
 		}
-		elseif ( ! empty( $this->selected ) ) {
-			
-			// Get first the selected posts that will be upper in the table
-			$filter_args = array(
-				'post__in' => $this->selected,
-				'orderby'  => 'post__in'
-			);
-			
-			$selected_posts_query = new \WP_Query( array_merge( $filter_args, $args ) );
-			$selected_posts       = $selected_posts_query->posts;
-			$args['post__not_in'] = $this->selected; // Exclude the selected posts from next query
-			
-		}
+
+		// Let others play
+		$args = apply_filters( 'atum/list_table/prepare_items/args', $args );
 		
 		// Build "Views Filters" and calculate totals
 		$this->set_views_data( $args );
@@ -1396,9 +1401,6 @@ abstract class AtumListTable extends \WP_List_Table {
 				
 			}
 		}
-
-		// Check whether an inheritable product has some children that must be displayed and was not added to the list
-		// TODO
 		
 		if ( $allow_query ) {
 
@@ -1406,9 +1408,22 @@ abstract class AtumListTable extends \WP_List_Table {
 			global $wp_query;
 			$wp_query = new \WP_Query( $args );
 			
-			$posts = array_merge( $selected_posts, $wp_query->posts );
-			$this->current_products = wp_list_pluck($posts, 'ID');
-			
+			$posts = $wp_query->posts;
+			$product_ids = wp_list_pluck($posts, 'ID');
+
+			// Check if there are some empty inheritable products within the resulting list and get rid of them
+			$wc_products = array_map('wc_get_product', $product_ids);
+			foreach ($wc_products as $key => $wc_product) {
+
+				if ( in_array($wc_product->get_type(), Globals::get_inheritable_product_types() ) ) {
+					if ( ! $this->has_children( $wc_product->get_id() ) ) {
+						unset( $posts[$key], $product_ids[$key] );
+					}
+				}
+
+			}
+
+			$this->current_products = $product_ids;
 			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( ($found_posts - $num_children + $num_parent) / $this->per_page );
 			
 		}
@@ -2057,7 +2072,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script('jquery-ui-datepicker');
 		}
 
-		$dependencies = array( 'jquery', 'jscrollpane' );
+		$dependencies = array( 'jquery', 'jscrollpane', 'jquery-blockui' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
@@ -2146,7 +2161,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Get the published Variables first
 		$parent_args = array(
 			'post_type'      => 'product',
-			'post_status'    => 'publish',
+			'post_status'    => ['publish', 'private'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 			'tax_query'      => array(
@@ -2162,7 +2177,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$parent_args['post__in'] = $post_in;
 		}
 
-		$parents = new \WP_Query($parent_args);
+		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
 
 		if ($parents->found_posts) {
 
@@ -2176,7 +2191,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$children_args = array(
 				'post_type'       => $post_type,
-				'post_status'     => 'publish',
+				'post_status'     => ['publish', 'private'],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
 				'post_parent__in' => $parents->posts
@@ -2203,7 +2218,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children_args', $children_args ) );
+			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 
 			if ($children->found_posts) {
 				return $children->posts;
@@ -2212,6 +2227,41 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return FALSE;
+
+	}
+
+	/**
+	 * Check whether an inheritble product has children
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 *
+	 * @return bool
+	 */
+	protected function has_children($product_id) {
+
+		global $wpdb;
+
+		if ($this->show_controlled) {
+			$join = 'ID = post_id';
+			$where = "meta_key = '_atum_manage_stock' AND meta_value = 'yes'";
+		}
+		else {
+			$join = "(ID = post_id AND wp_postmeta.meta_key = '_atum_manage_stock')";
+			$where = 'post_id IS NULL';
+		}
+
+		$sql = $wpdb->prepare( "
+			SELECT COUNT(*) FROM $wpdb->posts 
+			LEFT JOIN wp_postmeta ON $join
+			WHERE post_type IN ('product', 'product_variation') AND post_parent = %d
+			AND $where
+		", $product_id);
+
+		$children_count = $wpdb->get_var($sql);
+
+		return $children_count > 0;
 
 	}
 

@@ -2,7 +2,7 @@
 /**
  * @package         Atum\Components
  * @subpackage      AtumListTables
- * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @author          Be Rebel - https://berebel.io
  * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.1.2
@@ -28,6 +28,12 @@ abstract class AtumListPage {
 	 * @var AtumListTable
 	 */
 	protected $list;
+
+	/**
+	 * Whether the currently displayed List Table is showing Controlled or Uncontrolled products
+	 * @var bool
+	 */
+	protected $is_uncontrolled_list = FALSE;
 	
 	/**
 	 * Initialize common hooks

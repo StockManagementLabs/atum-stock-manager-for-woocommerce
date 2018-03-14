@@ -236,7 +236,7 @@ class StockCentral extends AtumListPage {
 		$defaults['expandable_rows'] = array(
 			'section' => 'stock_central',
 			'name'    => __( 'Expandable Rows', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( 'Show variable and grouped products expanded or collapsed by default.', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Show variable and grouped products expanded (ON) or collapsed (OFF) by default.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'no'
 		);

@@ -2,8 +2,8 @@
 /**
  * @package        Atum
  * @subpackage     Inc
- * @author         Salva Machí and Jose Piera - https://sispixels.com
- * @copyright      ©2017 Stock Management Labs™
+ * @author         Be Rebel - https://berebel.io
+ * @copyright      ©2018 Stock Management Labs™
  *
  * @since          0.0.1
  *
@@ -23,7 +23,6 @@ use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Inc\ListTable as StockCentralListTable;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Suppliers\Suppliers;
 
@@ -311,14 +310,17 @@ final class Ajax {
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
 		$args = array(
-			'per_page' => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'show_cb'  => ! empty( $_REQUEST['show_cb'] ) ? $_REQUEST['show_cb'] : FALSE,
-			'screen'   => $_REQUEST['screen']
+			'per_page'        => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
+			'show_cb'         => ! empty( $_REQUEST['show_cb'] ) ? (bool) $_REQUEST['show_cb'] : FALSE,
+			'show_controlled' => ! empty( $_REQUEST['show_controlled'] ) ? (bool) $_REQUEST['show_controlled'] : FALSE,
+			'screen'          => esc_attr( $_REQUEST['screen'] ),
 		);
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
-		
-		$list = new StockCentralListTable( $args );
+
+		$list_class = $args['show_controlled'] ? '\Atum\StockCentral\Inc\ListTable' : '\Atum\StockCentral\Inc\UncontrolledListTable';
+		$list       = new $list_class( $args );
+
 		$list->ajax_response();
 		
 	}
@@ -430,18 +432,18 @@ final class Ajax {
 		$ids = array_map( 'absint', $_POST['ids'] );
 
 		switch ( $_POST['bulk_action'] ) {
-			case 'unmanage_stock':
+			case 'uncontrol_stock':
 
 				foreach ($ids as $id) {
-					delete_post_meta($id, Globals::ATUM_MANAGE_STOCK_KEY);
+					delete_post_meta($id, Globals::ATUM_CONTROL_STOCK_KEY);
 				}
 
 		        break;
 
-			case 'manage_stock':
+			case 'control_stock':
 
 				foreach ($ids as $id) {
-					update_post_meta($id, Globals::ATUM_MANAGE_STOCK_KEY, 'yes');
+					update_post_meta($id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes');
 				}
 
 				break;

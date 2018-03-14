@@ -2,7 +2,7 @@
 /**
  * @package         Atum
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.3.8.2
@@ -31,7 +31,7 @@ final class Hooks {
 		add_filter( 'woocommerce_product_data_tabs', array( __CLASS__, 'add_product_data_tab' ) );
 		add_action( 'woocommerce_product_data_panels', array( __CLASS__, 'add_product_data_tab_panel' ) );
 		add_action( 'woocommerce_product_after_variable_attributes', array(__CLASS__, 'add_product_variation_data_panel'), 9, 3 );
-		add_action( 'save_post_product', array( __CLASS__, 'save_product_data_panel' ) );
+		add_action( 'save_post_product', array( __CLASS__, 'save_product_data_panel' ), 11 );
 		add_action( 'woocommerce_save_product_variation', array(__CLASS__, 'save_product_variation_data_panel' ), 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'enqueue_scripts') );
@@ -122,7 +122,7 @@ final class Hooks {
 			'atum' => array(
 				'label'    => __( 'ATUM Inventory', ATUM_LEVELS_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
-				'class'    => array( 'show_if_simple', 'show_if_variable', 'show_if_grouped', 'show_if_product-part', 'show_if_raw-material' ),
+				'class'    => array( 'show_if_simple', 'show_if_variable', 'show_if_product-part', 'show_if_raw-material' ),
 				'priority' => 21
 			)
 		);
@@ -143,16 +143,32 @@ final class Hooks {
 
 		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden"><?php
 
+			$product_id = get_the_ID();
 			woocommerce_wp_checkbox( array(
-				'id'            => Globals::ATUM_MANAGE_STOCK_KEY,
-				'name'          => 'atum_product_tab[' . Globals::ATUM_MANAGE_STOCK_KEY . ']',
-				'value'         => get_post_meta( get_the_ID(), Globals::ATUM_MANAGE_STOCK_KEY, TRUE ),
+				'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
+				'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
+				'value'         => get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
 				'class'         => 'js-switch',
-				'wrapper_class' => 'show_if_simple show_if_variable show_if_grouped',
-				'label'         => __( 'Inventory Manager', ATUM_TEXT_DOMAIN ),
-				'description'   => __( 'Enable to use this product and its data within the ATUM interface', ATUM_TEXT_DOMAIN ),
+				'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
+				'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
+				'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
 				'desc_tip'      => TRUE
 			) );
+			?>
+
+			<p class="form-field show_if_variable">
+				<label for="change_stock_control"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
+				<select name="change_stock_control" id="change_stock_control">
+					<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
+					<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
+				</select>
+				&nbsp;
+				<button type="button" class="button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
+
+				<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
+			</p>
+
+			<?php
 
 			// Allow other fields to be added to the ATUM panel
 			do_action('atum/after_product_data_panel');
@@ -195,12 +211,12 @@ final class Hooks {
 
 			<?php
 			woocommerce_wp_checkbox( array(
-				'id'          => Globals::ATUM_MANAGE_STOCK_KEY . '_' . $loop,
-				'name'        => "variation_atum_tab[" . Globals::ATUM_MANAGE_STOCK_KEY . "][$loop]",
-				'value'       => get_post_meta( $variation->ID, Globals::ATUM_MANAGE_STOCK_KEY, TRUE ),
+				'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
+				'name'        => "variation_atum_tab[" . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
+				'value'       => get_post_meta( $variation->ID, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
 				'class'       => 'js-switch',
-				'label'       => __( 'Inventory Manager', ATUM_TEXT_DOMAIN ),
-				'description' => __( 'Enable to use this product and its data within the ATUM interface', ATUM_TEXT_DOMAIN ),
+				'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
+				'description' => __( "Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.", ATUM_TEXT_DOMAIN ),
 				'desc_tip'    => TRUE
 			) );
 
@@ -225,9 +241,24 @@ final class Hooks {
 			$product_tab_values = $_POST['atum_product_tab'];
 		}
 
-		$product_tab_fields = Globals::get_product_tab_fields();
+		$product_tab_fields   = Globals::get_product_tab_fields();
+		$is_inheritable_product = in_array( $_POST['product-type'], Globals::get_inheritable_product_types() );
+
+		// Update the "_inehritable" meta key
+		if ($is_inheritable_product) {
+			update_post_meta($product_id, Globals::IS_INHERITABLE_KEY, 'yes');
+		}
+		else {
+			delete_post_meta($product_id, Globals::IS_INHERITABLE_KEY);
+		}
 
 		foreach ($product_tab_fields as $field_name => $field_type) {
+
+			// The ATUM's stock control must be always 'yes' for inheritable products
+			if ( $field_name == Globals::ATUM_CONTROL_STOCK_KEY && $is_inheritable_product ) {
+				update_post_meta($product_id, $field_name, 'yes');
+				continue;
+			}
 
 			// Sanitize the fields
 			$field_value = '';
@@ -257,7 +288,6 @@ final class Hooks {
 					if ( isset( $product_tab_values[ $field_name ] ) ) {
 						$field_value = wc_clean( $product_tab_values[ $field_name ] );
 					}
-
 					break;
 			}
 
@@ -282,11 +312,11 @@ final class Hooks {
 	 */
 	public static function save_product_variation_data_panel($variation_id, $i) {
 
-		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_MANAGE_STOCK_KEY ][ $i ] ) ) {
-			update_post_meta( $variation_id, Globals::ATUM_MANAGE_STOCK_KEY, 'yes' );
+		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ) {
+			update_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
 		}
 		else {
-			delete_post_meta( $variation_id, Globals::ATUM_MANAGE_STOCK_KEY );
+			delete_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY );
 		}
 
 	}
