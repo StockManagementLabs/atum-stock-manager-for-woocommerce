@@ -225,7 +225,7 @@ final class Hooks {
 		</div>
 		<?php
 
-	}
+		}
 
 	/**
 	 * Save all the fields within the Product Data's ATUM Inventory tab
@@ -247,10 +247,10 @@ final class Hooks {
 		// Update the "_inehritable" meta key
 		if ($is_inheritable_product) {
 			update_post_meta($product_id, Globals::IS_INHERITABLE_KEY, 'yes');
-		}
-		else {
+					}
+					else {
 			delete_post_meta($product_id, Globals::IS_INHERITABLE_KEY);
-		}
+					}
 
 		foreach ($product_tab_fields as $field_name => $field_type) {
 
@@ -258,7 +258,7 @@ final class Hooks {
 			if ( $field_name == Globals::ATUM_CONTROL_STOCK_KEY && $is_inheritable_product ) {
 				update_post_meta($product_id, $field_name, 'yes');
 				continue;
-			}
+	}
 
 			// Sanitize the fields
 			$field_value = '';
@@ -279,7 +279,7 @@ final class Hooks {
 
 					if ( isset( $product_tab_values[ $field_name ] ) ) {
 						$field_value = floatval( $product_tab_values[ $field_name ] );
-					}
+	}
 					break;
 
 				case 'text':
@@ -314,12 +314,12 @@ final class Hooks {
 
 		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ) {
 			update_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
-		}
-		else {
+				}
+				else {
 			delete_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY );
-		}
+				}
 
-	}
+				}
 
 	/**
 	 * Add hooks to show and save the Purchase Price field on products
@@ -418,10 +418,9 @@ final class Hooks {
 		}
 
 		// Add WPML compatibility
-		if ( isset($purchase_price) && class_exists('\woocommerce_wpml') ) {
+		if ( isset($purchase_price) && Helpers::is_wpml_active() ) {
 
 			global $sitepress;
-			$wpml = \woocommerce_wpml::instance();
 
 			$post_type = get_post_type( $post_id );
 
@@ -477,8 +476,8 @@ final class Hooks {
 					}
 
 					$variation_product = wc_get_product( $variation_id );
-					$variation_stock   = $variation_product->get_stock_quantity();
-					$stocks_list[]     = $variation_stock;
+					$variation_stock = $variation_product->get_stock_quantity();
+					$stocks_list[] = $variation_stock;
 
 					if ($variation_stock > 0) {
 						$stock_status = __('In stock', ATUM_TEXT_DOMAIN);

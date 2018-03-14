@@ -111,11 +111,11 @@ abstract class AtumOrderPostType {
 			// Enqueue scripts
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 			add_action( 'admin_footer', array( $this, 'print_scripts' ) );
-
+			
 			// Make Atum orders not translatable
-			if (class_exists('\woocommerce_wpml')) {
-				add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box'));
-				add_action( 'init', array( $this, 'remove_language_switcher'), 12);
+			if ( Helpers::is_wpml_active() ) {
+				add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box' ) );
+				add_action( 'init', array( $this, 'remove_language_switcher' ), 12 );
 			}
 
 			// ATUM Orders search

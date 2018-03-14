@@ -1139,24 +1139,24 @@ final class Helpers {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int $product_id
+	 * @param int   $product_id
 	 * @param array $product_meta
 	 */
-	public static function maybe_synchronize_translations_wpml( $product_id, &$product_meta) {
-	
-		if ( ! class_exists('\woocommerce_wpml')) {
+	public static function maybe_synchronize_translations_wpml( $product_id, &$product_meta ) {
+		
+		if ( ! self::is_wpml_active() ) {
 			return;
 		}
 		
 		global $sitepress;
 		
 		
-		$trid = $sitepress->get_element_trid( $product_id, 'post_product' );
-		$translations = $sitepress->get_element_translations( $trid, 'post_product', false, true );
+		$trid         = $sitepress->get_element_trid( $product_id, 'post_product' );
+		$translations = $sitepress->get_element_translations( $trid, 'post_product', FALSE, TRUE );
 		
-		foreach( $translations as $translation ) {
+		foreach ( $translations as $translation ) {
 			if ( $translation->element_id != $product_id ) {
-				self::update_product_meta( $translation->element_id, $product_meta) ;
+				self::update_product_meta( $translation->element_id, $product_meta );
 			}
 		}
 	}
@@ -1171,37 +1171,27 @@ final class Helpers {
 	 */
 	public static function update_product_meta( $product_id, $product_meta ) {
 		
-		$product               = wc_get_product( $product_id );
-		$is_wpml_multicurrency = FALSE;
-		$original_product_id   = $product_id;
+		$product             = wc_get_product( $product_id );
+		$original_product_id = $product_id;
 		
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
 		}
-
+		
+		$wpml_config = self::is_wpml_active();
+		
 		// Add WPML compatibility
-		if ( class_exists( '\woocommerce_wpml' ) ) {
+		if ( $wpml_config ) {
 			
 			$wpml = \woocommerce_wpml::instance();
-			global $sitepress;
 			
-			if ( $wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
-
-				$is_wpml_multicurrency = TRUE;
-				$post_type             = get_post_type( $product_id );
-				$product_translations  = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
-
-				foreach ( $product_translations as $translation ) {
-
-					if ( $translation->original ) {
-						$original_product_id = $translation->element_id;
-						break;
-					}
-
-				}
+			if ( $wpml_config == 2 ) {
+				
+				$post_type           = get_post_type( $product_id );
+				$original_product_id = Helpers::get_original_product_id( $product_id, $post_type );
 				
 			}
-
+			
 		}
 		
 		foreach ( $product_meta as $meta_key => &$meta_value ) {
@@ -1222,22 +1212,22 @@ final class Helpers {
 				
 				case 'regular_price':
 					
-					if ( isset($wpml) && $is_wpml_multicurrency && isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
-							
+					if ( isset( $wpml ) && ( $wpml_config == 2 ) && isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
+						
 						$custom_prices                   = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['regular_price_currency'] );
 						$custom_prices['_regular_price'] = $meta_value;
-
+						
 						$wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['regular_price_currency'] );
-
+						
 					}
 					else {
-
+						
 						$product->set_regular_price( $meta_value );
 						
 						if ( $meta_key == 'regular_price' && ! $product->is_on_sale( 'edit' ) ) {
 							$product->set_price( $meta_value );
 						}
-
+						
 					}
 					
 					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
@@ -1246,7 +1236,7 @@ final class Helpers {
 				
 				case 'sale_price':
 					
-					if ( isset($wpml) && $is_wpml_multicurrency && isset( $product_meta['sale_price_custom'] ) && $product_meta['sale_price_custom'] == 'yes' ) {
+					if ( isset( $wpml ) && ( $wpml_config == 2 ) && isset( $product_meta['sale_price_custom'] ) && $product_meta['sale_price_custom'] == 'yes' ) {
 						
 						$custom_prices                = $wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['sale_price_currency'] );
 						$custom_prices['_sale_price'] = $meta_value;
@@ -1267,7 +1257,7 @@ final class Helpers {
 						
 					}
 					else {
-
+						
 						$sale_price    = wc_format_decimal( $meta_value );
 						$regular_price = $product->get_regular_price();
 						
@@ -1307,7 +1297,7 @@ final class Helpers {
 							}
 							
 						}
-
+						
 					}
 					
 					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
@@ -1316,7 +1306,7 @@ final class Helpers {
 				
 				case 'purchase_price':
 					
-					if (  $is_wpml_multicurrency && isset( $product_meta['purchase_price_custom'] ) && $product_meta['purchase_price_custom'] == 'yes' ) {
+					if ( ( $wpml_config == 2 ) && isset( $product_meta['purchase_price_custom'] ) && $product_meta['purchase_price_custom'] == 'yes' ) {
 						update_post_meta( $original_product_id, '_' . $meta_key . '_' . $product_meta['purchase_price_currency'], wc_format_decimal( $meta_value ) );
 					}
 					else {
@@ -1337,7 +1327,7 @@ final class Helpers {
 		}
 		
 		// Hack to prevent overwriting the purchase_price on variations
-		remove_action( 'woocommerce_update_product_variation', array('\Atum\Inc\Hooks', 'save_purchase_price') );
+		remove_action( 'woocommerce_update_product_variation', array( '\Atum\Inc\Hooks', 'save_purchase_price' ) );
 		
 		$product->save();
 		
@@ -1379,6 +1369,128 @@ final class Helpers {
 		</span>
 		<?php
 
+	}
+	
+	/**
+	 * Check if WPML is active and if so, check if multicurrency is active
+	 *
+	 * @since 1.4.1
+	 *
+	 * @return int 0 for WPML not active, 1 for WPML active. 2 for WPML and multicurrency both active
+	 */
+	public static function is_wpml_active() {
+		
+		$result = 0;
+		
+		if ( class_exists( '\woocommerce_wpml' ) ) {
+			
+			$wpml = \woocommerce_wpml::instance();
+			
+			if ( $wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
+				
+				$result = 2;
+				
+			}
+			else {
+				$result = 1;
+			}
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Get a WPML language's currency
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $lang Language. if not provided current language will be assumed
+	 *
+	 * @return string
+	 */
+	public static function get_lang_currency( $lang = '' ) {
+		
+		$currency = get_woocommerce_currency();
+		
+		if ( self::is_wpml_active() ) {
+			
+			global $sitepress;
+			
+			$wpml = \woocommerce_wpml::instance();
+			
+			$lang = $lang ? $lang : $sitepress->get_current_language();
+			
+			if ( ! empty( $wpml->settings['default_currencies'][ $lang ] ) ) {
+				$currency = $wpml->settings['default_currencies'][ $lang ];
+			}
+			
+		}
+		
+		return $currency;
+		
+	}
+	
+	/**
+	 * Get the original product id from a translation
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 * @param     $post_type
+	 *
+	 * @return int
+	 */
+	public static function get_original_product_id( $product_id = 0, $post_type = '' ) {
+		
+		if ( $product_id ) {
+			
+			$post_type = $post_type ? $post_type : get_post_type( $product_id );
+			
+			global $sitepress;
+			
+			$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+			foreach ( $product_translations as $translation ) {
+				if ( $translation->original ) {
+					$product_id = $translation->element_id;
+					break;
+				}
+			}
+			
+		}
+		
+		return $product_id;
+		
+	}
+	
+	/**
+	 * Get the product translation's ids
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 * @param     $post_type
+	 *
+	 * @return array
+	 */
+	public static function get_product_translations_ids( $product_id = 0, $post_type = '' ) {
+		
+		$translations = [];
+		
+		if ( $product_id ) {
+			
+			$post_type = $post_type ? $post_type : get_post_type( $product_id );
+			
+			global $sitepress;
+			
+			$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+			foreach ( $product_translations as $translation ) {
+				$translations[$translation->language_code] = $translation->element_id;
+			}
+			
+		}
+		
+		return $translations;
+		
 	}
 	
 }

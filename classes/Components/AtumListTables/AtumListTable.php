@@ -143,7 +143,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $allow_calcs = TRUE;
 	
 	/**
-	 * Whether the WPML multicurrency option is active
+	 * Whether the WPML multicurrency option is active or not
 	 * @var bool
 	 */
 	protected $is_wpml_multicurrency = FALSE;
@@ -217,12 +217,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns    The table columns for the list table
-	 *      @type array  $group_members    The column grouping members
-	 *      @type bool   $show_cb          Optional. Whether to show the row selector checkbox as first table column
+	 *      @type array  $table_columns The table columns for the list table
+	 *      @type array  $group_members The column grouping members
+	 *      @type bool   $show_cb       Optional. Whether to show the row selector checkbox as first table column
 	 *      @type bool   $show_controlled  Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page         Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected         Optional. The posts selected on the list table
+	 *      @type int    $per_page      Optional. The number of posts to show per page (-1 for no pagination)
+	 *      @type array  $selected      Optional. The posts selected on the list table
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -230,9 +230,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		$args = wp_parse_args( $args, array(
-			'show_cb'         => FALSE,
+			'show_cb'  => FALSE,
 			'show_controlled' => TRUE,
-			'per_page'        => Settings::DEFAULT_POSTS_PER_PAGE,
+			'per_page' => Settings::DEFAULT_POSTS_PER_PAGE,
 		) );
 
 		$this->show_cb         = $args['show_cb'];
@@ -247,7 +247,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( isset ($this->group_members['product-details']) && $this->show_cb == TRUE ) {
 				array_unshift($this->group_members['product-details']['members'], 'cb');
-			}
+		}
 		}
 
 		// Add the checkbox column to the table if enabled
@@ -275,24 +275,22 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->current_currency = $this->default_currency = get_woocommerce_currency();
 
 		// Do WPML Stuff
-		if ( class_exists('\woocommerce_wpml') ) {
-
+		$wpml_config = Helpers::is_wpml_active();
+		
+		if ( $wpml_config ) {
+			
 			$this->wpml = \woocommerce_wpml::instance();
-
-			if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
-
+			
+			if ( $wpml_config == 2 ) {
+				
 				$this->is_wpml_multicurrency = TRUE;
-
-				global $sitepress;
-				$current_lang = $sitepress->get_current_language();
-
-				if ( ! empty( $this->wpml->settings['default_currencies'][ $current_lang ] ) ) {
-					$this->current_currency = $this->wpml->settings['default_currencies'][ $current_lang ];
-				}
+				$this->current_currency      = Helpers::get_lang_currency();
 			}
 		}
-
-
+		else {
+			$this->current_currency = $this->default_currency;
+		}
+		
 	}
 
 	/**
@@ -351,41 +349,32 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param \WP_Post $item The WooCommerce product post
 	 */
 	public function single_row( $item ) {
-
+		
 		$this->product = wc_get_product( $item );
-		$type = $this->product->get_type();
-
+		$type          = $this->product->get_type();
+		
 		$this->custom_prices = FALSE;
-
+		
 		// Do the WPM stuff
-		if ($this->is_wpml_multicurrency) {
-
-			global $sitepress;
-			$this->original_product_id = $item->ID;
-
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->ID, 'post_'.$this->post_type), 'post_'.$this->post_type);
-			foreach($product_translations as $translation){
-				if( $translation->original ){
-					$this->original_product_id = $translation->element_id;
-					break;
-				}
-			}
-
+		if ( $this->is_wpml_multicurrency ) {
+			
+			$this->original_product_id = Helpers::get_original_product_id( $item->ID, $this->post_type );
+			
 			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
-				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id);
-
-				if ( $custom_price_ui) {
-
+				$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id );
+				
+				if ( $custom_price_ui ) {
+					
 					global $thepostid;
-					$keep_id = $thepostid ? $thepostid : 0;
+					$keep_id   = ( $thepostid ) ? $thepostid : 0;
 					$thepostid = $this->original_product_id;
-
+					
 					$this->custom_prices = $custom_price_ui->get_currencies_info();
-
+					
 					$thepostid = $keep_id;
 				}
 			}
-
+			
 		}
 		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
 		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
@@ -465,7 +454,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @since 1.1.0
 	 *
 	 * @param \WC_Product $item The WooCommerce product
-	 * @param string      $type The type of product
+	 * @param string   $type The type of product
 	 */
 	public function single_expandable_row( $item, $type ) {
 		
@@ -474,17 +463,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// If WPML has Multi Currency enabled, the related info is saved in the original product
 		if ($this->is_wpml_multicurrency) {
 			
-			global $sitepress;
-			$this->original_product_id = $item->get_id();
-			
-			$product_translations = $sitepress->get_element_translations($sitepress->get_element_trid($item->get_id(), "post_{$type}"), "post_{$type}");
-
-			foreach($product_translations as $translation){
-				if( $translation->original ){
-					$this->original_product_id = $translation->element_id;
-					break;
-				}
-			}
+			$this->original_product_id = Helpers::get_original_product_id($item->get_id(), $type);
 			
 			if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
 
@@ -937,8 +916,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
 			}
 			else {
-				$content = self::EMPTY_COL;
-			}
+			$content = self::EMPTY_COL;
+		}
 
 		}
 		// Out of stock
@@ -1774,15 +1753,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prepare JS vars
 		$vars = array(
-			'page'            => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'         => $this->per_page,
+			'page'         => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
+			'perpage'      => $this->per_page,
 			'showCb'          => $this->show_cb,
-			'order'           => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'         => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'           => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter'      => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'        => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'       => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'order'        => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'      => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'        => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxfilter'   => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'     => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'    => __( 'Set', ATUM_TEXT_DOMAIN ),
 			'saveButton'      => __( 'Save Data', ATUM_TEXT_DOMAIN ),
 			'ok'              => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'noItemsSelected' => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
@@ -1790,7 +1769,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		);
 
 		if ($this->first_edit_key) {
-			$vars['firstEditKey']      = $this->first_edit_key;
+			$vars['firstEditKey'] = $this->first_edit_key;
 			$vars['important']         = __( 'Important!', ATUM_TEXT_DOMAIN );
 			$vars['preventLossNotice'] = __( "To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN );
 		}
