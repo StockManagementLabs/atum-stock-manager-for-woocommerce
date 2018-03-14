@@ -90,6 +90,7 @@ body {
   text-align: right;
   width: 10%;
   white-space: nowrap;
+  vertical-align: top;
   padding: 5px 10px;
 }
 
