@@ -45,6 +45,7 @@ return array(
     'Atum\\Inc\\Hooks' => $baseDir . '/classes/Inc/Hooks.php',
     'Atum\\Inc\\Main' => $baseDir . '/classes/Inc/Main.php',
     'Atum\\Inc\\Upgrade' => $baseDir . '/classes/Inc/Upgrade.php',
+    'Atum\\Inc\\Wpml' => $baseDir . '/classes/Inc/Wpml.php',
     'Atum\\InventoryLogs\\InventoryLogs' => $baseDir . '/classes/InventoryLogs/InventoryLogs.php',
     'Atum\\InventoryLogs\\Items\\LogItemFee' => $baseDir . '/classes/InventoryLogs/Items/LogItemFee.php',
     'Atum\\InventoryLogs\\Items\\LogItemProduct' => $baseDir . '/classes/InventoryLogs/Items/LogItemProduct.php',

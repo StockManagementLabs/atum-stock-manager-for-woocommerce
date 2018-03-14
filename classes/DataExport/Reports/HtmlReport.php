@@ -101,6 +101,8 @@ class HtmlReport extends ListTable {
 
 		$this->product = wc_get_product( $item );
 		$type = $this->product->get_type();
+		
+		do_action('atum/list_table/before_single_row', $this->product, $this->post_type);
 
 		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
 		$row_style = '';
