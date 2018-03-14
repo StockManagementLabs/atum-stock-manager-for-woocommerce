@@ -269,7 +269,8 @@
   background-color: rgba(213, 242, 248, 0.15);
   color: #555;
   text-transform: uppercase;
-  cursor: pointer;
+  cursor: default !important;
+  margin-bottom: 15px !important;
 }
 
 .product_data .woocommerce_variations ._atum_manage_stock_field {

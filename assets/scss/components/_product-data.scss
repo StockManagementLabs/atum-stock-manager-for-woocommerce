@@ -107,7 +107,8 @@
 			background-color: transparentize($blue-light, .85);
 			color: #555;
 			text-transform: uppercase;
-			cursor: pointer;
+			cursor: default !important;
+			margin-bottom: $grid-gutter-width/2 !important;
 		}
 		
 		._atum_manage_stock_field {
