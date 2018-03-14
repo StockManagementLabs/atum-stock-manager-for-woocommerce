@@ -102,7 +102,7 @@ class HtmlReport extends ListTable {
 		$this->product = wc_get_product( $item );
 		$type = $this->product->get_type();
 
-		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
+		$this->allow_calcs = Helpers::is_inheritable_type($type) ? FALSE : TRUE;
 		$row_style = '';
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline
@@ -116,7 +116,7 @@ class HtmlReport extends ListTable {
 		echo '</tr>';
 
 		// Add the children products of each Variable and Grouped product
-		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+		if (!$this->allow_calcs) {
 
 			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
 			$parent_product = new $product_class( $this->product->get_id() );

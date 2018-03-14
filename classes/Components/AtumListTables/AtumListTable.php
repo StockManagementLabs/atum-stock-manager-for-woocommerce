@@ -395,7 +395,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->allow_calcs = TRUE;
 		$row_class = '';
 
-		if ( in_array( $type, Globals::get_inheritable_product_types() ) ) {
+		// Inheritable products do not allow calcs
+		if ( Helpers::is_inheritable_type($type) ) {
 			$this->allow_calcs = FALSE;
 			$class_type = $type == 'grouped' ? 'group' : 'variable';
 
@@ -405,6 +406,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				$row_classes[] = 'expanded';
 			}
 			$row_class = ' class="' . implode(' ', $row_classes) . '"';
+		}
+		// If the product stock is not managed at product level by WC, block calcs too
+		elseif ( ! $this->product->managing_stock() )  {
+			$this->allow_calcs = FALSE;
 		}
 
 		// Output the row
@@ -586,7 +591,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title      = '';
 		$product_id = $this->get_current_product_id();
 
-		if ( in_array( $this->product->get_type(), Globals::get_child_product_types() ) ) {
+		if ( Helpers::is_child_type( $this->product->get_type() ) ) {
 
 			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {
@@ -926,7 +931,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if ( isset($this->allow_calcs) && !$this->allow_calcs ) {
-			$content = self::EMPTY_COL;
+
+			if ( ! Helpers::is_inheritable_type( $this->product->get_type() ) && ! $this->product->managing_stock() ) {
+				$classes .= ' cell-blue';
+				$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('Not managed by WooCommerce', ATUM_TEXT_DOMAIN) . '"></span>';
+			}
+			else {
+				$content = self::EMPTY_COL;
+			}
+
 		}
 		// Out of stock
 		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
@@ -1415,7 +1428,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$wc_products = array_map('wc_get_product', $product_ids);
 			foreach ($wc_products as $key => $wc_product) {
 
-				if ( in_array($wc_product->get_type(), Globals::get_inheritable_product_types() ) ) {
+				if ( Helpers::is_inheritable_type( $wc_product->get_type() ) ) {
 					if ( ! $this->has_children( $wc_product->get_id() ) ) {
 						unset( $posts[$key], $product_ids[$key] );
 					}

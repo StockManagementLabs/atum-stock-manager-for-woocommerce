@@ -241,8 +241,8 @@ final class Hooks {
 			$product_tab_values = $_POST['atum_product_tab'];
 		}
 
-		$product_tab_fields   = Globals::get_product_tab_fields();
-		$is_inheritable_product = in_array( $_POST['product-type'], Globals::get_inheritable_product_types() );
+		$product_tab_fields     = Globals::get_product_tab_fields();
+		$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
 
 		// Update the "_inehritable" meta key
 		if ($is_inheritable_product) {
@@ -392,7 +392,7 @@ final class Hooks {
 		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
 		// Variables, grouped and variations
-		if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
+		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
 			if ( isset($_POST['_purchase_price']) ) {

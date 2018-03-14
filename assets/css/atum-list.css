@@ -1,9 +1,9 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
  * @version 1.4.0 
- * @authors Salva Machí and Jose Piera 
+ * @author Be Rebel  
  *
- * Author URI: https://sispixels.com/ 
+ * Author URI: https://berebel.io 
  * License : ©2018 Stock Management Labs 
  */ 
 
@@ -819,6 +819,10 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-table .cell-red {
   color: #FF4848;
+}
+
+.atum-list-table .cell-blue {
+  color: #00B8DB;
 }
 
 .atum-list-table td, .atum-list-table th {

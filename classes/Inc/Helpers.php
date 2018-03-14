@@ -658,6 +658,32 @@ final class Helpers {
 	public static function is_atum_managing_stock($product_id) {
 		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ) === 'yes';
 	}
+
+	/**
+	 * Checks whether the product type passed is an inheritable type
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
+	public static function is_inheritable_type($type) {
+		return in_array( $type, Globals::get_inheritable_product_types() );
+	}
+
+	/**
+	 * Checks whether the product type passed is a child type
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
+	public static function is_child_type($type) {
+		return in_array( $type, Globals::get_child_product_types() );
+	}
 	
 	/**
 	 * Decode a JSON object stringified

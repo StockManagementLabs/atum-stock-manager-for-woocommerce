@@ -386,7 +386,7 @@ class ListTable extends AtumListTable {
 		if ($this->allow_calcs) {
 
 			global $wpdb;
-			$product_id_key = ( in_array( $this->product->get_type(), Globals::get_child_product_types() ) ) ? '_variation_id' : '_product_id';
+			$product_id_key = Helpers::is_child_type( $this->product->get_type() ) ? '_variation_id' : '_product_id';
 
 			$sql = $wpdb->prepare("
 				SELECT SUM(omq.`meta_value`) AS qty 
