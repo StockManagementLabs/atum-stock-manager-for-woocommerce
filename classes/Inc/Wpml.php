@@ -96,25 +96,25 @@ class Wpml {
 	 */
 	public function add_hooks() {
 		
-		if (is_admin()) {
+		if ( is_admin() ) {
 			// Make Atum orders not translatable
 			add_action( 'atum/order_post_type/init', array( $this, 'add_atum_order_hooks' ) );
 			
 			// Load product data in AtumListTable
-			add_action('atum/list_table/before_single_row', array($this, 'load_wpml_product'), 10, 2);
-			add_action('atum/list_table/before_single_expandable_row', array($this, 'load_wpml_product'), 10, 2);
+			add_action( 'atum/list_table/before_single_row', array( $this, 'load_wpml_product' ), 10, 2 );
+			add_action( 'atum/list_table/before_single_expandable_row', array( $this, 'load_wpml_product' ), 10, 2 );
 			
 			// Hook into AtumListTable columns
-			add_filter('atum/list_table/editable_column', array( $this, 'add_custom_prices_arg' ), 10, 2);
-			add_filter('atum/stock_central_list/args_purchase_price', array( $this, 'add_custom_purchase_price'));
+			add_filter( 'atum/list_table/editable_column', array( $this, 'add_custom_prices_arg' ), 10, 2 );
+			add_filter( 'atum/stock_central_list/args_purchase_price', array( $this, 'add_custom_purchase_price' ) );
 			
 			// Hook into Stock Central ListTable columns
-			add_filter('atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price'));
-			add_filter('atum/stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price'));
+			add_filter( 'atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
+			add_filter( 'atum/stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ) );
 			
 			// Update product meta translations
-			add_filter('atum/product_meta', array( $this, 'update_multicurrency_translations_meta'), 10, 2);
-			add_action('atum/product_meta_updated', array( $this, 'update_translations_meta'), 10, 2);
+			add_filter( 'atum/product_meta', array( $this, 'update_multicurrency_translations_meta' ), 10, 2 );
+			add_action( 'atum/product_meta_updated', array( $this, 'update_translations_meta' ), 10, 2 );
 		}
 	
 	
