@@ -244,12 +244,22 @@
 					// Bulk actions dropdown
 					//----------------------
 					.on('change', '.bulkactions select', function() {
+						
+						self.updateBulkButton();
+						
 						if ($(this).val() !== '-1') {
 							$bulkButton.show();
 						}
 						else {
 							$bulkButton.hide();
 						}
+					})
+					
+					//
+					// Change the Bulk Button text when selecting boxes
+					//-------------------------------------------------
+					.on('change', '.check-column input:checkbox', function() {
+						self.updateBulkButton();
 					})
 					
 					//
@@ -1023,6 +1033,16 @@
 					$('.select2-container--open').remove();
 					$('body').trigger('wc-enhanced-select-init');
 					
+				},
+				
+				/**
+				 * Update the Bulk Button text depending on the number of checkboxes selected
+				 */
+				updateBulkButton: function() {
+					var numChecked = $listWrapper.find('.check-column input:checkbox:checked').length,
+					    buttonText = numChecked > 1 ? atumListTable.applyBulkAction : atumListTable.applyAction;
+					
+					$bulkButton.text(buttonText);
 				}
 			};
 			

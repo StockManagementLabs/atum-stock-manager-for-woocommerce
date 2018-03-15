@@ -1201,7 +1201,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @since 1.4.1
 	 */
 	public function add_apply_bulk_action_button() {
-		?><button type="button" class="apply-bulk-action page-title-action hidden"><?php _e('Apply Bulk Action', ATUM_TEXT_DOMAIN) ?></button><?php
+		?><button type="button" class="apply-bulk-action page-title-action hidden"></button><?php
 	}
 	
 	/**
@@ -1776,19 +1776,21 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prepare JS vars
 		$vars = array(
-			'page'         => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'      => $this->per_page,
+			'page'            => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
+			'perpage'         => $this->per_page,
 			'showCb'          => $this->show_cb,
-			'order'        => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'      => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'        => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter'   => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'     => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'    => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'order'           => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'         => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'           => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxfilter'      => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'        => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'       => __( 'Set', ATUM_TEXT_DOMAIN ),
 			'saveButton'      => __( 'Save Data', ATUM_TEXT_DOMAIN ),
 			'ok'              => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'noItemsSelected' => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
-			'selectItems'     => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN )
+			'selectItems'     => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
+			'applyBulkAction' => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
+			'applyAction'     => __( 'Apply Action', ATUM_TEXT_DOMAIN )
 		);
 
 		if ($this->first_edit_key) {
