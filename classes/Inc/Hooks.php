@@ -335,14 +335,7 @@ final class Hooks {
 		// Save the product purchase price meta
 		add_action( 'save_post_product', array( __CLASS__, 'save_purchase_price' ) );
 		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
-
-		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array( __CLASS__, 'wpml_add_purchase_price_to_custom_prices' ), 10, 2 );
-		add_filter( 'wcml_custom_prices_fields_labels', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
-		add_filter( 'wcml_custom_prices_strings', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
-		add_filter( 'wcml_update_custom_prices_values', array( __CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices' ), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array( __CLASS__, 'wpml_save_purchase_price_in_custom_prices' ), 10, 4 );
-
+		
 	}
 
 	/**
