@@ -396,10 +396,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			$row_class = ' class="' . implode(' ', $row_classes) . '"';
 		}
-		// If the product stock is not managed at product level by WC, block calcs too
-		elseif ( ! $this->product->managing_stock() )  {
-			$this->allow_calcs = FALSE;
-		}
 
 		// Output the row
 		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>';
@@ -829,9 +825,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__stock( $item, $editable = TRUE ) {
 
 		$stock = self::EMPTY_COL;
+
 		$product_id = $this->get_current_product_id();
 
-		if ( ! isset($this->allow_calcs) || ( isset($this->allow_calcs) && $this->allow_calcs) ) {
+		if ($this->allow_calcs) {
+
+			// Do not show the stock if the product is not managed by WC
+			if ( ! $this->product->managing_stock() )  {
+				return $stock;
+			}
 
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 
@@ -909,16 +911,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		$content = '';
 
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
-		if ( isset($this->allow_calcs) && !$this->allow_calcs ) {
-
-			if ( ! Helpers::is_inheritable_type( $this->product->get_type() ) && ! $this->product->managing_stock() ) {
-				$classes .= ' cell-blue';
-				$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
-			}
-			else {
+		if ( !$this->allow_calcs ) {
 			$content = self::EMPTY_COL;
 		}
-
+		// Stock not managed by WC
+		elseif( ! $this->product->managing_stock() ) {
+			$classes .= ' cell-blue';
+			$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
 		}
 		// Out of stock
 		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
@@ -1404,7 +1403,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$product_ids = wp_list_pluck($posts, 'ID');
 
 			// Check if there are some empty inheritable products within the resulting list and get rid of them
-			$wc_products = array_map('wc_get_product', $product_ids);
+			/*$wc_products = array_map('wc_get_product', $product_ids);
 			$num_children = $num_parent = 0;
 			foreach ($wc_products as $key => $wc_product) {
 
@@ -1424,7 +1423,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 
-			}
+			}*/
 
 			$found_posts = $found_posts + $num_children - $num_parent;
 			$this->current_products = $product_ids;
