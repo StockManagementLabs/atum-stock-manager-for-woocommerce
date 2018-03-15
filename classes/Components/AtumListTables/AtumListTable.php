@@ -240,25 +240,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		$this->current_currency = $this->default_currency = get_woocommerce_currency();
-
-		// Do WPML Stuff
-		$wpml_config = Helpers::is_wpml_active();
-		
-		if ( $wpml_config ) {
-			
-			$this->wpml = \woocommerce_wpml::instance();
-			
-			if ( $wpml_config == 2 ) {
-				
-				$this->is_wpml_multicurrency = TRUE;
-				$this->current_currency      = Helpers::get_lang_currency();
-			}
-		}
-		else {
-			$this->current_currency = $this->default_currency;
-		}
 		
 		$this->default_currency = get_woocommerce_currency();
 		
@@ -326,7 +307,30 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		do_action('atum/list_table/before_single_row', $this->product, $this->post_type);
 		
-		$this->allow_calcs = ( in_array( $type, Globals::get_inheritable_product_types() ) ) ? FALSE : TRUE;
+		// If a product is set as hidden from the catalog and is part of a Grouped product, don't display it on the list
+		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
+			return;
+		}*/
+		
+		$this->allow_calcs = TRUE;
+		$row_class = '';
+		
+		// Inheritable products do not allow calcs
+		if ( Helpers::is_inheritable_type($type) ) {
+			$this->allow_calcs = FALSE;
+			$class_type = $type == 'grouped' ? 'group' : 'variable';
+			
+			$row_classes = array($class_type);
+			
+			if ( Helpers::get_option( 'expandable_rows', 'no' ) == 'yes' ) {
+				$row_classes[] = 'expanded';
+			}
+			$row_class = ' class="' . implode(' ', $row_classes) . '"';
+		}
+		// If the product stock is not managed at product level by WC, block calcs too
+		elseif ( ! $this->product->managing_stock() )  {
+			$this->allow_calcs = FALSE;
+		}
 
 		// Output the row
 		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>';
@@ -386,6 +390,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function single_expandable_row( $item, $type ) {
 		
 		do_action('atum/list_table/before_single_expandable_row', $item, $this->post_type);
+		
+		$row_style = Helpers::get_option('expandable_rows', 'no') != 'yes' ? ' style="display: none"' : '';
 		
 		echo '<tr class="expandable ' . $type . '"' . $row_style . ' data-id="' . $this->get_current_product_id() . '">';
 		$this->single_row_columns( $item );
