@@ -141,32 +141,35 @@ final class Hooks {
 	 */
 	public static function add_product_data_tab_panel() {
 
-		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden"><?php
+		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
+			<div class="options_group"><?php
 
-			$product_id = get_the_ID();
-			woocommerce_wp_checkbox( array(
-				'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
-				'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-				'value'         => get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
-				'class'         => 'js-switch',
-				'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
-				'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-				'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
-				'desc_tip'      => TRUE
-			) );
-			?>
+				$product_id = get_the_ID();
+				woocommerce_wp_checkbox( array(
+					'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
+					'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
+					'value'         => get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
+					'class'         => 'js-switch',
+					'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
+					'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
+					'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
+					'desc_tip'      => TRUE
+				) );
+				?>
 
-			<p class="form-field show_if_variable">
-				<label for="change_stock_control"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
-				<select name="change_stock_control" id="change_stock_control">
-					<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
-					<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
-				</select>
-				&nbsp;
-				<button type="button" class="button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
+				<p class="form-field show_if_variable">
+					<label for="change_stock_control"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
+					<select name="change_stock_control" id="change_stock_control">
+						<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
+						<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
+					</select>
+					&nbsp;
+					<button type="button" class="button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
 
-				<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
-			</p>
+					<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
+				</p>
+
+			</div>
 
 			<?php
 

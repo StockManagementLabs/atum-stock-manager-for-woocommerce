@@ -830,6 +830,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table td, .atum-list-table th {
+  position: relative;
   vertical-align: middle;
   padding: 6px 5px;
 }
