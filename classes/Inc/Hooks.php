@@ -428,7 +428,6 @@ final class Hooks {
 	public static function set_wc_products_list_stock_status($stock_html, $the_product) {
 
 		if (
-			Helpers::is_atum_managing_stock() &&
 			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
 			in_array( $the_product->get_type(), ['variable', 'variable-subscription'] )
 		) {
