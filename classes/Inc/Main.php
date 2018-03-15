@@ -142,7 +142,7 @@ class Main {
 			'update_item'       => __( 'Update location', ATUM_TEXT_DOMAIN ),
 			'add_new_item'      => __( 'Add new location', ATUM_TEXT_DOMAIN ),
 			'new_item_name'     => __( 'New location name', ATUM_TEXT_DOMAIN ),
-			'menu_name'         => __( 'Locations', ATUM_TEXT_DOMAIN ),
+			'menu_name'         => __( 'ATUM Locations', ATUM_TEXT_DOMAIN ),
 		);
 
 		$args = apply_filters( 'atum/location_taxonomy_args', array(
