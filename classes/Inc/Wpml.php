@@ -20,12 +20,6 @@ defined( 'ABSPATH' ) or die;
 class Wpml {
 	
 	/**
-	 * The singleton instance holder
-	 * @var Wpml
-	 */
-	private static $instance;
-	
-	/**
 	 * Store current existent Atum Order Post Types
 	 *
 	 * @var array
@@ -77,7 +71,7 @@ class Wpml {
 	/**
 	 * Wpml constructor.
 	 */
-	private function __construct() {
+	public function __construct() {
 	
 		global $sitepress;
 		
@@ -628,33 +622,4 @@ class Wpml {
 		
 	}
 	
-	
-	/****************************
-	 * Instance methods
-	 ****************************/
-	public function __clone() {
-		
-		// cannot be cloned
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
-	}
-	
-	public function __sleep() {
-		
-		// cannot be serialized
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
-	}
-	
-	/**
-	 * Get Singleton instance
-	 *
-	 * @return Wpml instance
-	 */
-	public static function get_instance() {
-		
-		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
-			self::$instance = new self();
-		}
-		
-		return self::$instance;
-	}
 }

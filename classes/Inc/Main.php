@@ -205,7 +205,8 @@ class Main {
 		// Enable WPML module if needed
 		//------------------------------
 		if ( class_exists( '\woocommerce_wpml' ) ) {
-			Wpml::get_instance()->add_hooks();
+			$atum_wpml = new Wpml();
+			$atum_wpml->add_hooks();
 		}
 
 		//
