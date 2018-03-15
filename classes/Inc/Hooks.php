@@ -120,7 +120,7 @@ final class Hooks {
 		// Add the ATUM tab to Simple and BOM products
 		$bom_tab = array(
 			'atum' => array(
-				'label'    => __( 'ATUM Inventory', ATUM_LEVELS_TEXT_DOMAIN ),
+				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
 				'class'    => array( 'show_if_simple', 'show_if_variable', 'show_if_product-part', 'show_if_raw-material' ),
 				'priority' => 21
