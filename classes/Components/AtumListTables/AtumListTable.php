@@ -65,16 +65,40 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $group_members = array();
 
 	/**
-	 * The array of published Variable products' IDs
+	 * The array of IDs of variable products with children
 	 * @var array
 	 */
 	protected $variable_products = array();
 
 	/**
-	 * The array of published Grouped products' IDs
+	 * The array of IDs of available variable products
+	 * @var array
+	 */
+	protected $all_variable_products = array();
+
+	/**
+	 * The array of IDs of variable subscription products with children
+	 * @var array
+	 */
+	protected $variable_sc_products = array();
+
+	/**
+	 * The array of IDs of available variable subscription products
+	 * @var array
+	 */
+	protected $all_variable_sc_products = array();
+
+	/**
+	 * The array of IDs of variable products with children
 	 * @var array
 	 */
 	protected $grouped_products = array();
+
+	/**
+	 * The array of IDs of available grouped products
+	 * @var array
+	 */
+	protected $all_grouped_products = array();
 	
 	/**
 	 * Elements per page (in order to obviate option default)
@@ -1082,10 +1106,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		$v_filter = ( ! empty( $_REQUEST['v_filter'] ) ) ? esc_attr( $_REQUEST['v_filter'] ) : 'all_stock';
 
 		$views_name = array(
-			'all_stock' => __('All', ATUM_TEXT_DOMAIN),
-			'in_stock'  => __('In Stock', ATUM_TEXT_DOMAIN),
-			'out_stock' => __('Out of Stock', ATUM_TEXT_DOMAIN),
-			'low_stock' => __('Low Stock', ATUM_TEXT_DOMAIN)
+			'all_stock' => __( 'All', ATUM_TEXT_DOMAIN ),
+			'in_stock'  => __( 'In Stock', ATUM_TEXT_DOMAIN ),
+			'out_stock' => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
+			'low_stock' => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
+			'unmanaged' => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN )
 		);
 
 		global $plugin_page;
@@ -1371,8 +1396,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	     * REQUIRED. Register our pagination options & calculations.
 		 */
 		$found_posts  = isset( $this->count_views['count_all'] ) ? $this->count_views['count_all'] : 0;
-		$num_children = isset( $this->count_views['count_children'] ) ? $this->count_views['count_children'] : 0;
-		$num_parent   = isset( $this->count_views['count_parent'] ) ? $this->count_views['count_parent'] : 0;
 
 		if ( ! empty( $_REQUEST['v_filter'] ) ) {
 			
@@ -1403,29 +1426,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			$product_ids = wp_list_pluck($posts, 'ID');
 
 			// Check if there are some empty inheritable products within the resulting list and get rid of them
-			/*$wc_products = array_map('wc_get_product', $product_ids);
-			$num_children = $num_parent = 0;
-			foreach ($wc_products as $key => $wc_product) {
+			foreach ( array_map('wc_get_product', $product_ids) as $key => $wc_product ) {
 
-				if ( Helpers::is_inheritable_type( $wc_product->get_type() ) ) {
-
-					$children = $this->get_num_children( $wc_product->get_id() );
-
-					if ( !$children ) {
-						unset( $posts[$key], $product_ids[$key] );
-
-						$found_posts--;
-					}
-					else {
-						$num_parent++;
-						$num_children += $children;
-					}
-
+				if ( Helpers::is_inheritable_type( $wc_product->get_type() ) && ! $this->get_num_children( $wc_product->get_id() ) ) {
+					unset( $posts[$key], $product_ids[$key] );
 				}
 
-			}*/
+			}
 
-			$found_posts = $found_posts + $num_children - $num_parent;
 			$this->current_products = $product_ids;
 			$total_pages = ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page );
 			
@@ -1507,15 +1515,15 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->id_views = array(
 			'in_stock'  => [ ],
 			'out_stock' => [ ],
-			'low_stock' => [ ]
+			'low_stock' => [ ],
+			'unmanaged' => [ ]
 		);
 
 		$this->count_views = array(
 			'count_in_stock'  => 0,
 			'count_out_stock' => 0,
 			'count_low_stock' => 0,
-			'count_children'  => 0,
-			'count_parent'    => 0
+			'count_unmanaged' => 0
 		);
 
 		// Get all the IDs in the two queries with no pagination
@@ -1542,8 +1550,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->count_views['count_all'] = count( $products );
 
-		$variations = $group_items = '';
-
 		// If it's a search or a product filtering, include only the filtered items to search for children
 		$post_in = ( ! empty($args['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) || ! empty($_REQUEST['supplier']) ) ? $products : array();
 
@@ -1555,17 +1561,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
 
-					// Add the Variations to the posts list
-					if ( $variations ) {
-
-						// The Variable products are just containers and don't count for the list views
-						$this->count_views['count_children'] += count( $variations );
-						$this->count_views['count_parent']   += count( $this->variable_products );
-						$this->count_views['count_all']      += ( count( $variations ) - count( $this->variable_products ) );
-
-						$products = array_unique( array_merge( array_diff( $products, $this->variable_products ), $variations ) );
-
-					}
+					// Remove the empty variables from the array and add the variations
+					$products = array_unique( array_merge( array_diff( $products, $this->all_variable_products ), $variations ) );
 
 				}
 
@@ -1573,37 +1570,30 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
 
-					// Add the Group Items to the posts list
-					if ( $group_items ) {
-
-						// The Grouped products are just containers and don't count for the list views
-						$this->count_views['count_children'] += count( $group_items );
-						$this->count_views['count_parent']   += count( $this->grouped_products );
-						$this->count_views['count_all']      += ( count( $group_items ) - count( $this->grouped_products ) );
-
-						$products = array_unique( array_merge( array_diff( $products, $this->grouped_products ), $group_items ) );
-
-					}
+					// Remove the empty grouped from the array and add the group items
+					$products = array_unique( array_merge( array_diff( $products, $this->all_grouped_products ), $group_items ) );
 
 				}
 
 				// WC Subscriptions compatibility
 				if ( class_exists('\WC_Subscriptions') && in_array('variable_subscription', (array) $taxonomy['terms']) ) {
 
-					$variations = $this->get_children( 'variable_subscription', $post_in, 'product_variation' );
+					$sc_variations = $this->get_children( 'variable_subscription', $post_in, 'product_variation' );
 
-					// Add the Variations to the posts list
-					if ( $variations ) {
+					// Get the array of grouped products with no children
+					$diff = array_diff( $this->all_variable_sc_products, $this->variable_sc_products );
 
-						// The Variable products are just containers and don't count for the list views
-						$this->count_views['count_children'] += count( $variations );
-						$this->count_views['count_parent']   += count( $this->variable_products );
-						$this->count_views['count_all']      += ( count( $variations ) - count( $this->variable_products ) );
+					// Remove the empty variable subscriptions from the array and add the subscription variations
+					$products = array_unique( array_merge( array_diff( $products, $diff ), $sc_variations ) );
 
-						$products = array_unique( array_merge( array_diff( $products, $this->variable_products ), $variations ) );
+				}
 
-					}
+				// Re-count the resulting products
+				$this->count_views['count_all'] = count( $products );
 
+				// The grouped items must count once per group they belongs to and once individually
+				if ( ! empty($group_items) ) {
+					$this->count_views['count_all'] += count( $group_items );
 				}
 
 				do_action('atum/list_table/after_children_count', $taxonomy['terms'], $this);
@@ -1620,9 +1610,34 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $products ) {
 
-			$post_types = $variations ? array($this->post_type, 'product_variation') : $this->post_type;
+			$post_types = ( ! empty($variations) || ! empty($sc_variations) ) ? array($this->post_type, 'product_variation') : $this->post_type;
 
-			// Products in stock
+			/*
+			 * Unmanaged products
+			 */
+			$products_unmanaged = $wpdb->get_col( "
+				SELECT ID FROM $wpdb->posts
+				LEFT JOIN $wpdb->postmeta AS mt1 ON (ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
+				LEFT JOIN $wpdb->postmeta AS mt2 ON ID = mt2.post_id
+				WHERE post_type IN ('" . implode( "', '", $post_types ) . "')
+				AND (mt1.post_id IS NULL OR (mt2.meta_key = '_manage_stock' AND mt2.meta_value = 'no'))
+			" );
+
+			$this->id_views['unmanaged']          = $products_unmanaged;
+			$this->count_views['count_unmanaged'] = count( $products_unmanaged );
+
+			// Remove the unmanaged from the products list
+			if ( ! empty($products_unmanaged) && ! empty($products) ) {
+				$matching = array_intersect($products, $products_unmanaged);
+
+				if ( ! empty($matching) ) {
+					$products = array_diff( $products, $matching );
+				}
+			}
+
+			/*
+			 * Products in stock
+			 */
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
@@ -1639,32 +1654,33 @@ abstract class AtumListTable extends \WP_List_Table {
 			);
 
 			$in_stock_transient = 'atum_list_table_in_stock_' . Helpers::get_transient_identifier( $args );
-			$posts_in_stock = Helpers::get_transient( $in_stock_transient );
+			$products_in_stock = Helpers::get_transient( $in_stock_transient );
 
-			if ( ! $posts_in_stock ) {
-				$posts_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $args ) );
-				Helpers::set_transient( $in_stock_transient, $posts_in_stock );
+			if ( empty($products_in_stock) ) {
+				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $args ) );
+				Helpers::set_transient( $in_stock_transient, $products_in_stock );
 			}
 
-			$this->id_views['in_stock'] = $posts_in_stock->posts;
-			$this->count_views['count_in_stock'] = count( $posts_in_stock->posts );
+			$products_in_stock = $products_in_stock->posts;
+			$this->id_views['in_stock']          = $products_in_stock;
+			$this->count_views['count_in_stock'] = count( $products_in_stock );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too
-			if ($group_items && ( empty($_REQUEST['product_type']) || $_REQUEST['product_type'] != 'grouped' )) {
-				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $posts_in_stock->posts) );
+			if ( ! empty($group_items) && ( empty($_REQUEST['product_type']) || $_REQUEST['product_type'] != 'grouped' )) {
+				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $products_in_stock) );
 			}
 
-			$this->id_views['out_stock']          = array_diff( $products, $posts_in_stock->posts );
-			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'];
-
+			/*
+			 * Products with low stock
+			 */
 			if ( $this->count_views['count_in_stock'] ) {
 
 				$low_stock_transient = 'atum_list_table_low_stock_' . Helpers::get_transient_identifier( $args );
-				$result = Helpers::get_transient( $low_stock_transient );
+				$products_low_stock = Helpers::get_transient( $low_stock_transient );
 
-				if ( ! $result ) {
+				if ( ! $products_low_stock ) {
 
-					// Products in LOW stock (compare last seven days average sales per day * re-order days with current stock )
+					// Compare last seven days average sales per day * re-order days with current stock
 					$str_sales = "(SELECT			   
 					    (SELECT MAX(CAST( meta_value AS SIGNED )) AS q FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key IN('_product_id', '_variation_id') AND order_item_id = `item`.`order_item_id`) AS IDs,
 					    CEIL(SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`))/7*$this->last_days) AS qty
@@ -1687,20 +1703,28 @@ abstract class AtumListTable extends \WP_List_Table {
 						    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
 						WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
 				            AND `{$wpdb->posts}`.`post_type` IN " . $low_stock_post_types . "
-				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $posts_in_stock->posts ) . ")) )) AS states";
+				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $products_in_stock ) . ")) )) AS states";
 
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
 
-					$result = $wpdb->get_results( $str_sql );
-					$result = wp_list_pluck( $result, 'ID' );
-					Helpers::set_transient( $low_stock_transient, $result );
+					$products_low_stock = $wpdb->get_results( $str_sql );
+					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
+					Helpers::set_transient( $low_stock_transient, $products_low_stock );
 
 				}
 
-				$this->id_views['low_stock']          = $result;
-				$this->count_views['count_low_stock'] = count( $result );
+				$this->id_views['low_stock']          = $products_low_stock;
+				$this->count_views['count_low_stock'] = count( $products_low_stock );
 
 			}
+
+			/*
+			 * Products out of stock
+			 */
+			$products_out_stock = array_diff( $products, $products_in_stock );
+
+			$this->id_views['out_stock']          = $products_out_stock;
+			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'];
 
 		}
 
@@ -2184,19 +2208,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ($parents->found_posts) {
 
-			// Save them to be used when preparing the list query
 			if ($parent_type == 'variable') {
-				$this->variable_products = array_merge($this->variable_products, $parents->posts);
+				$this->all_variable_products = array_merge($this->all_variable_products, $parents->posts);
 			}
 			else {
-				$this->grouped_products = array_merge($this->grouped_products, $parents->posts);
+				$this->all_grouped_products = array_merge($this->all_grouped_products, $parents->posts);
 			}
 
 			$children_args = array(
 				'post_type'       => $post_type,
 				'post_status'     => ['publish', 'private'],
 				'posts_per_page'  => - 1,
-				'fields'          => 'ids',
 				'post_parent__in' => $parents->posts
 			);
 
@@ -2224,12 +2246,22 @@ abstract class AtumListTable extends \WP_List_Table {
 			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 
 			if ($children->found_posts) {
-				return $children->posts;
+
+				$parents_with_child = array_unique( wp_list_pluck($children->posts, 'post_parent') );
+
+				if ($parent_type == 'variable') {
+					$this->variable_products = array_merge($this->variable_products, $parents_with_child);
+				}
+				else {
+					$this->grouped_products = array_merge($this->grouped_products, $parents_with_child);
+				}
+
+				return wp_list_pluck($children->posts, 'ID');
 			}
 
 		}
 
-		return FALSE;
+		return array();
 
 	}
 
