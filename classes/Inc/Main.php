@@ -200,6 +200,14 @@ class Main {
 		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();
+		
+		//
+		// Enable WPML module if needed
+		//------------------------------
+		if ( class_exists( '\woocommerce_wpml' ) ) {
+			$atum_wpml = new Wpml();
+			$atum_wpml->add_hooks();
+		}
 
 		//
 		// Load extra modules

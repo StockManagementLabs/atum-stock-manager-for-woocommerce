@@ -65,9 +65,24 @@
 			</tr>
 		</thead>
 		<tbody class="po-lines">
-			<?php foreach ( $po->get_items() as $item ): ?>
+			<?php foreach ( $po->get_items() as $item ):?>
 				<tr class="po-line">
-					<td class="description"><?php echo $item->get_name() ?></td>
+					<td class="description"><?php echo $item->get_name() ?>
+						<?php
+						$product = $item->get_product();
+						if ( $product && \Atum\Components\AtumCapabilities::current_user_can( 'read_supplier' ) ):
+							$supplier_sku = get_post_meta( $product->get_id(), '_supplier_sku', TRUE );
+							
+							if ( $supplier_sku ): ?>
+								<br>
+								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
+									<?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
+								</span>
+							<?php endif;
+						endif;
+						?>
+						
+					</td>
 					<td class="qty"><?php echo $item->get_quantity() ?></td>
 					<td class="price"><?php echo wc_price( $po->get_item_subtotal( $item, FALSE, FALSE ), array( 'currency' => $currency ) ); ?></td>
 					<?php if ( $discount ): ?>

@@ -120,7 +120,7 @@ final class Hooks {
 		// Add the ATUM tab to Simple and BOM products
 		$bom_tab = array(
 			'atum' => array(
-				'label'    => __( 'ATUM Inventory', ATUM_LEVELS_TEXT_DOMAIN ),
+				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
 				'class'    => array( 'show_if_simple', 'show_if_variable', 'show_if_product-part', 'show_if_raw-material' ),
 				'priority' => 21
@@ -338,14 +338,7 @@ final class Hooks {
 		// Save the product purchase price meta
 		add_action( 'save_post_product', array( __CLASS__, 'save_purchase_price' ) );
 		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
-
-		// Add purchase price to WPML custom prices
-		add_filter( 'wcml_custom_prices_fields', array( __CLASS__, 'wpml_add_purchase_price_to_custom_prices' ), 10, 2 );
-		add_filter( 'wcml_custom_prices_fields_labels', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
-		add_filter( 'wcml_custom_prices_strings', array( __CLASS__, 'wpml_add_purchase_price_to_custom_price_labels' ), 10, 2 );
-		add_filter( 'wcml_update_custom_prices_values', array( __CLASS__, 'wpml_sanitize_purchase_price_in_custom_prices' ), 10, 3 );
-		add_action( 'wcml_after_save_custom_prices', array( __CLASS__, 'wpml_save_purchase_price_in_custom_prices' ), 10, 4 );
-
+		
 	}
 
 	/**
@@ -419,25 +412,10 @@ final class Hooks {
 			update_post_meta( $post_id, '_purchase_price', $purchase_price);
 
 		}
-
-		// Add WPML compatibility
-		if ( isset($purchase_price) && Helpers::is_wpml_active() ) {
-
-			global $sitepress;
-
-			$post_type = get_post_type( $post_id );
-
-			$product_translations = $sitepress->get_element_translations( $sitepress->get_element_trid($post_id, "post_{$post_type}"), "post_{$post_type}" );
-			foreach($product_translations as $translation){
-
-				if( $translation->element_id !==  $post_id){
-					update_post_meta( $translation->element_id, '_purchase_price', $purchase_price);
-				}
-
+		
+		if (isset($purchase_price)) {
+			do_action( 'atum/hooks/after_save_purchase_price', $post_id, $purchase_price );
 			}
-
-		}
-
 	}
 
 	/**
@@ -502,80 +480,7 @@ final class Hooks {
 		return $stock_html;
 
 	}
-
-	/**
-	 * Add purchase price to WPML's custom price fields
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array   $prices      Custom prices fields
-	 * @param integer $product_id  The product ID
-	 *
-	 * @return array
-	 */
-	public static function wpml_add_purchase_price_to_custom_prices( $prices, $product_id ) {
-
-		$prices[] = '_purchase_price';
-		return $prices;
-	}
-
-	/**
-	 * Add purchase price to WPML's custom price fields labels
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array   $labels       Custom prices fields labels
-	 * @param integer $product_id   The product ID
-	 *
-	 * @return array
-	 */
-	public static function wpml_add_purchase_price_to_custom_price_labels( $labels, $product_id ) {
-
-		$labels['_purchase_price'] = __( 'Purchase Price', ATUM_TEXT_DOMAIN );
-		return $labels;
-	}
-
-	/**
-	 * Sanitize WPML's purchase prices
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array  $prices
-	 * @param string $code
-	 * @param bool   $variation_id
-	 *
-	 * @return array
-	 */
-	public static function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
-
-		if ($variation_id) {
-			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_variation_purchase_price'][$code][$variation_id]) ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][$code][$variation_id] ) : '';
-		}
-		else {
-			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_purchase_price'][$code]) )? wc_format_decimal( $_POST['_custom_purchase_price'][$code] ) : '';
-		}
-
-		return $prices;
-	}
-
-
-	/**
-	 * Save WPML's purchase price when custom prices are enabled
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param int    $post_id
-	 * @param float  $product_price
-	 * @param array  $custom_prices
-	 * @param string $code
-	 */
-	public static function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
-
-		if ( isset( $custom_prices[ '_purchase_price'] ) ) {
-			update_post_meta( $post_id, "_purchase_price_{$code}", $custom_prices['_purchase_price'] );
-		}
-	}
-
+	
 	/**
 	 * Add the location to the items table in WC orders
 	 *
