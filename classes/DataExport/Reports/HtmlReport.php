@@ -282,7 +282,10 @@ class HtmlReport extends ListTable {
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if (! $this->allow_calcs) {
 
-			if ( ! Helpers::is_inheritable_type( $this->product->get_type() ) && ! $this->product->managing_stock() ) {
+			if (
+				! Helpers::is_inheritable_type( $this->product->get_type() ) &&
+				( ! $this->product->managing_stock() || 'parent' == $this->product->managing_stock() )
+			) {
 				$classes .= ' cell-blue';
 				$content = '<span class="dashicons dashicons-hidden"' . $dashicons_style . '>&#xf530;</span>';
 			}

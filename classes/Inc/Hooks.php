@@ -452,7 +452,7 @@ final class Hooks {
 
 				foreach ($variations as $variation_id) {
 
-					if ( ! Helpers::is_atum_managing_stock($variation_id) ) {
+					if ( ! Helpers::is_atum_controlling_stock($variation_id) ) {
 						continue;
 					}
 

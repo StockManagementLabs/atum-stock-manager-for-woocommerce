@@ -27,6 +27,123 @@ use Atum\Suppliers\Suppliers;
 
 
 final class Helpers {
+
+	/**
+	 * Set the help tab for admin pages
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array  $help_tabs
+	 * @param Object $obj
+	 */
+	public static function add_help_tab($help_tabs, $obj) {
+
+		$screen = get_current_screen();
+
+		foreach ( $help_tabs as $help_tab ) {
+			$screen->add_help_tab( array_merge( array(
+				'id'       => ATUM_PREFIX . get_class($obj) . '_help_tabs_' . $help_tab['name'],
+				'callback' => array( $obj, 'help_tabs_content' ),
+			), $help_tab ) );
+		}
+
+		$screen->set_help_sidebar( self::load_view_to_string( 'help-tabs/help-sidebar' ) );
+
+	}
+
+	/**
+	 * Converts an associative array to HTML data attributes
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array  $array   The array to convert
+	 * @param string $prefix  Optional. Prefix for the data key names
+	 *
+	 * @return string
+	 */
+	public static function array_to_data($array, $prefix = '') {
+
+		$data_array = array_map( function($key, $value) use ($prefix){ return "data-{$prefix}{$key}='$value'"; }, array_keys($array), $array );
+
+		return implode(' ', $data_array);
+	}
+
+	/**
+	 * Outputs the add-on to append/prepend to ATUM fields
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $side
+	 *
+	 * @return string
+	 */
+	public static function atum_field_input_addon($side = 'prepend') {
+
+		?>
+		<span class="input-group-<?php echo $side ?>" title="<?php _e('ATUM field', ATUM_TEXT_DOMAIN) ?>">
+			<span class="input-group-text">
+				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" alt="">
+			</span>
+		</span>
+		<?php
+
+	}
+
+	/**
+	 * Output a dropdown to choose the ATUM Order status
+	 *
+	 * @since 1.2.9
+	 *
+	 * @param string $id        The select ID
+	 * @param string $value     The selected option
+	 */
+	public static function atum_order_status_dropdown($id, $value) {
+
+		?>
+		<select id="<?php echo $id ?>" name="<?php echo $id ?>" class="wc-enhanced-select">
+			<?php
+			$statuses = AtumOrderPostType::get_statuses();
+			foreach ( $statuses as $status => $status_name ): ?>
+				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+	}
+
+	/**
+	 * Format a date to match the db format
+	 *
+	 * @since 0.1.3
+	 *
+	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true)
+	 * @param bool       $is_timestamp Whether the first param is a Unix timesptamp
+	 *
+	 * @return string                   The formatted date
+	 */
+	public static function date_format( $date, $is_timestamp = FALSE ) {
+
+		if ( ! $is_timestamp ) {
+			$date = strtotime( $date );
+		}
+
+		return date_i18n( 'Y-m-d H:i:s', $date );
+	}
+
+	/**
+	 * Decode a JSON object stringified
+	 *
+	 * @since 0.0.3
+	 *
+	 * @param string $string   The string to decode
+	 * @param bool   $as_array If return an associative array or an object
+	 *
+	 * @return array|object|bool
+	 */
+	public static function decode_json_string( $string, $as_array = TRUE ) {
+
+		return json_decode( str_replace( "'", '"', stripslashes( $string ) ), $as_array );
+	}
 	
 	/**
 	 * Prepare HTML data attributes
@@ -403,6 +520,93 @@ final class Helpers {
 	}
 
 	/**
+	 * Helper function to return a plugin option value.
+	 * If no value has been saved, it returns $default.
+	 * Needed because options are saved as serialized strings.
+	 *
+	 * @since   0.0.2
+	 *
+	 * @param string  $name    The option key to retrieve
+	 * @param mixed   $default The default value returned if the option was not found
+	 * @param boolean $echo    If the option has to be returned or printed
+	 *
+	 * @return mixed
+	 */
+	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
+
+		// Save it as a global variable to not get the value each time
+		global $global_options;
+
+		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
+		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+		$option         = ( isset( $global_options[ $name ] ) ) ? $global_options[ $name ] : $default;
+
+		if ( $echo ) {
+			echo apply_filters( "atum/print_option/$name", $option );
+
+			return;
+		}
+
+		return apply_filters( "atum/get_option/$name", $option );
+
+	}
+
+	/**
+	 * Helper function to return the entire plugin option value.
+	 * If no option has been saved, it returns empty array.
+	 *
+	 * @since   0.0.2
+	 *
+	 * @return array
+	 */
+	public static function get_options() {
+
+		// Save it as a global variable to not get the value each time
+		global $global_options;
+
+		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
+		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+
+		if ( ! $global_options ) {
+			$global_options = array();
+		}
+
+		return apply_filters( 'atum/get_options', $global_options );
+
+	}
+
+	/**
+	 * Get an array of products that are not managed by WC
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param array $post_types
+	 *
+	 * @return array
+	 */
+	public static function get_unmanaged_products($post_types) {
+
+		global $wpdb;
+
+		$unmng_join = apply_filters( 'atum/get_unmanaged_products/join_query', "
+			LEFT JOIN $wpdb->postmeta AS mt1 ON (ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
+			LEFT JOIN $wpdb->postmeta AS mt2 ON ID = mt2.post_id
+			LEFT JOIN $wpdb->postmeta AS mt3 ON ID = mt3.post_id		
+		" );
+
+		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', "
+			WHERE post_type IN ('" . implode( "', '", $post_types ) . "') AND post_status IN ('publish', 'private')
+			AND (mt1.post_id IS NULL OR (mt2.meta_key = '_manage_stock' AND mt2.meta_value = 'no'))
+			AND mt3.meta_key = '_atum_manage_stock' AND mt3.meta_value = 'yes'
+		" );
+
+		$sql = "SELECT DISTINCT ID FROM $wpdb->posts $unmng_join $unmng_where";
+
+		return $wpdb->get_col($sql);
+
+	}
+
+	/**
 	 * Get the price formatted with no HTML tags
 	 *
 	 * @since 1.2.3
@@ -476,7 +680,7 @@ final class Helpers {
 	 * @return int|bool The number of transients deleted on success or false on error
 	 */
 	public static function delete_transients() {
-		
+
 		global $wpdb;
 		return $wpdb->query( "DELETE FROM {$wpdb->options} WHERE `option_name` LIKE '_transient_" . ATUM_PREFIX . "%'" );
 	}
@@ -589,62 +793,6 @@ final class Helpers {
 		// Not template found
 		return $default;
 	}
-	
-	/**
-	 * Helper function to return a plugin option value.
-	 * If no value has been saved, it returns $default.
-	 * Needed because options are saved as serialized strings.
-	 *
-	 * @since   0.0.2
-	 *
-	 * @param string  $name    The option key to retrieve
-	 * @param mixed   $default The default value returned if the option was not found
-	 * @param boolean $echo    If the option has to be returned or printed
-	 *
-	 * @return mixed
-	 */
-	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
-		
-		// Save it as a global variable to not get the value each time
-		global $global_options;
-		
-		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
-		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
-		$option         = ( isset( $global_options[ $name ] ) ) ? $global_options[ $name ] : $default;
-		
-		if ( $echo ) {
-			echo apply_filters( "atum/print_option/$name", $option );
-			
-			return;
-		}
-		
-		return apply_filters( "atum/get_option/$name", $option );
-		
-	}
-	
-	/**
-	 * Helper function to return the entire plugin option value.
-	 * If no option has been saved, it returns empty array.
-	 *
-	 * @since   0.0.2
-	 *
-	 * @return array
-	 */
-	public static function get_options() {
-		
-		// Save it as a global variable to not get the value each time
-		global $global_options;
-		
-		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
-		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
-		
-		if ( ! $global_options ) {
-			$global_options = array();
-		}
-		
-		return apply_filters( 'atum/get_options', $global_options );
-		
-	}
 
 	/**
 	 * Checks if ATUM is managing the WC stock for a specific product
@@ -655,7 +803,7 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_atum_managing_stock($product_id) {
+	public static function is_atum_controlling_stock($product_id) {
 		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ) === 'yes';
 	}
 
@@ -685,20 +833,7 @@ final class Helpers {
 		return in_array( $type, Globals::get_child_product_types() );
 	}
 	
-	/**
-	 * Decode a JSON object stringified
-	 *
-	 * @since 0.0.3
-	 *
-	 * @param string $string   The string to decode
-	 * @param bool   $as_array If return an associative array or an object
-	 *
-	 * @return array|object|bool
-	 */
-	public static function decode_json_string( $string, $as_array = TRUE ) {
-		
-		return json_decode( str_replace( "'", '"', stripslashes( $string ) ), $as_array );
-	}
+
 	
 	/**
 	 * Helper function to update a theme plugin value.
@@ -725,24 +860,7 @@ final class Helpers {
 		
 	}
 	
-	/**
-	 * Format a date to match the db format
-	 *
-	 * @since 0.1.3
-	 *
-	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true)
-	 * @param bool       $is_timestamp Whether the first param is a Unix timesptamp
-	 *
-	 * @return string                   The formatted date
-	 */
-	public static function date_format( $date, $is_timestamp = FALSE ) {
-		
-		if ( ! $is_timestamp ) {
-			$date = strtotime( $date );
-		}
-		
-		return date_i18n( 'Y-m-d H:i:s', $date );
-	}
+
 
 	/**
 	 * Check whether a specific plugin is installed
@@ -991,27 +1109,7 @@ final class Helpers {
 
 	}
 
-	/**
-	 * Output a dropdown to choose the ATUM Order status
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param string $id        The select ID
-	 * @param string $value     The selected option
-	 */
-	public static function atum_order_status_dropdown($id, $value) {
 
-		?>
-		<select id="<?php echo $id ?>" name="<?php echo $id ?>" class="wc-enhanced-select">
-			<?php
-			$statuses = AtumOrderPostType::get_statuses();
-			foreach ( $statuses as $status => $status_name ): ?>
-				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
-			<?php endforeach; ?>
-		</select>
-		<?php
-
-	}
 
 	/**
 	 * Get the inventory log's IDs
@@ -1111,28 +1209,7 @@ final class Helpers {
 
 	}
 
-	/**
-	 * Set the help tab for admin pages
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array  $help_tabs
-	 * @param Object $obj
-	 */
-	public static function add_help_tab($help_tabs, $obj) {
 
-		$screen = get_current_screen();
-
-		foreach ( $help_tabs as $help_tab ) {
-			$screen->add_help_tab( array_merge( array(
-				'id'       => ATUM_PREFIX . get_class($obj) . '_help_tabs_' . $help_tab['name'],
-				'callback' => array( $obj, 'help_tabs_content' ),
-			), $help_tab ) );
-		}
-
-		$screen->set_help_sidebar( self::load_view_to_string( 'help-tabs/help-sidebar' ) );
-
-	}
 	
 	/**
 	 * Update product meta from Stock Central List
@@ -1145,8 +1222,7 @@ final class Helpers {
 	 */
 	public static function update_product_meta( $product_id, $product_meta, $skip_action = FALSE ) {
 		
-		$product             = wc_get_product( $product_id );
-		$original_product_id = $product_id;
+		$product = wc_get_product( $product_id );
 		
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
@@ -1253,41 +1329,5 @@ final class Helpers {
 		
 	}
 
-	/**
-	 * Converts an associative array to HTML data attributes
-	 *
-	 * @since 1.4.0
-	 *
-	 * @param array  $array   The array to convert
-	 * @param string $prefix  Optional. Prefix for the data key names
-	 *
-	 * @return string
-	 */
-	public static function array_to_data($array, $prefix = '') {
 
-		$data_array = array_map( function($key, $value) use ($prefix){ return "data-{$prefix}{$key}='$value'"; }, array_keys($array), $array );
-
-		return implode(' ', $data_array);
-	}
-	
-	/**
-	 * Outputs the add-on to append/prepend to ATUM fields
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param string $side
-	 *
-	 * @return string
-	 */
-	public static function atum_field_input_addon($side = 'prepend') {
-		
-		?>
-		<span class="input-group-<?php echo $side ?>" title="<?php _e('ATUM field', ATUM_TEXT_DOMAIN) ?>">
-			<span class="input-group-text">
-				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" alt="">
-			</span>
-		</span>
-		<?php
-		
-	}
 }

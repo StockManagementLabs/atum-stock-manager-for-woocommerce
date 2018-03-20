@@ -67,8 +67,8 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php do_action( 'atum/atum_order/ater_item_meta', $item_id, $item, $product ) ?>
 
 		<div class="item_status">
-			<?php if ( ! $product->managing_stock() ): ?>
-				<i class="dashicons dashicons-hidden color-primary" data-toggle="tooltip" title="<?php _e("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) ?>"></i>
+			<?php if ( ! $product->managing_stock() || 'parent' == $product->managing_stock() ): ?>
+				<i class="dashicons dashicons-hidden color-primary" data-toggle="tooltip" title="<?php _e("This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN) ?>"></i>
 			<?php endif; ?>
 
 			<?php if ( $item->get_meta('_stock_changed') ): ?>

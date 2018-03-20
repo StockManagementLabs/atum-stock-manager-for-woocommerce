@@ -747,7 +747,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ($this->allow_calcs) {
 
 			// Do not show the stock if the product is not managed by WC
-			if ( ! $this->product->managing_stock() )  {
+			if ( ! $this->product->managing_stock() || 'parent' == $this->product->managing_stock() )  {
 				return $stock;
 			}
 
@@ -831,7 +831,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$content = self::EMPTY_COL;
 		}
 		// Stock not managed by WC
-		elseif( ! $this->product->managing_stock() ) {
+		elseif( ! $this->product->managing_stock() || 'parent' == $this->product->managing_stock() ) {
 			$classes .= ' cell-blue';
 			$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
 		}
@@ -1468,11 +1468,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$sc_variations = $this->get_children( 'variable_subscription', $post_in, 'product_variation' );
 
-					// Get the array of grouped products with no children
-					$diff = array_diff( $this->all_variable_sc_products, $this->variable_sc_products );
-
 					// Remove the empty variable subscriptions from the array and add the subscription variations
-					$products = array_unique( array_merge( array_diff( $products, $diff ), $sc_variations ) );
+					$products = array_unique( array_merge( array_diff( $products, $this->all_variable_sc_products ), $sc_variations ) );
 
 				}
 
@@ -1503,13 +1500,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			/*
 			 * Unmanaged products
 			 */
-			$products_unmanaged = $wpdb->get_col( "
-				SELECT ID FROM $wpdb->posts
-				LEFT JOIN $wpdb->postmeta AS mt1 ON (ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
-				LEFT JOIN $wpdb->postmeta AS mt2 ON ID = mt2.post_id
-				WHERE post_type IN ('" . implode( "', '", $post_types ) . "')
-				AND (mt1.post_id IS NULL OR (mt2.meta_key = '_manage_stock' AND mt2.meta_value = 'no'))
-			" );
+
+			$products_unmanaged = Helpers::get_unmanaged_products($post_types);
 
 			$this->id_views['unmanaged']          = $products_unmanaged;
 			$this->count_views['count_unmanaged'] = count( $products_unmanaged );
@@ -1550,6 +1542,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$products_in_stock = $products_in_stock->posts;
+
 			$this->id_views['in_stock']          = $products_in_stock;
 			$this->count_views['count_in_stock'] = count( $products_in_stock );
 
