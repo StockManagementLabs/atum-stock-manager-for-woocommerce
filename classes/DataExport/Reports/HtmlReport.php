@@ -284,7 +284,7 @@ class HtmlReport extends ListTable {
 
 			if (
 				! Helpers::is_inheritable_type( $this->product->get_type() ) &&
-				( ! $this->product->managing_stock() || 'parent' == $this->product->managing_stock() )
+				( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() )
 			) {
 				$classes .= ' cell-blue';
 				$content = '<span class="dashicons dashicons-hidden"' . $dashicons_style . '>&#xf530;</span>';

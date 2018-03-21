@@ -747,7 +747,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ($this->allow_calcs) {
 
 			// Do not show the stock if the product is not managed by WC
-			if ( ! $this->product->managing_stock() || 'parent' == $this->product->managing_stock() )  {
+			if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() )  {
 				return $stock;
 			}
 
@@ -831,7 +831,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$content = self::EMPTY_COL;
 		}
 		// Stock not managed by WC
-		elseif( ! $this->product->managing_stock() || 'parent' == $this->product->managing_stock() ) {
+		elseif( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 			$classes .= ' cell-blue';
 			$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
 		}
@@ -1072,7 +1072,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php _e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
-		<select name="action<?php echo $two ?>" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>">
+		<select name="action<?php echo $two ?>" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
 			<option value="-1"><?php _e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ): ?>
