@@ -859,6 +859,10 @@ h1.wp-heading-inline #atum-update-list:active {
   cursor: pointer;
 }
 
+.atum-list-table .column-thumb {
+  height: 40px;
+}
+
 .atum-list-table .column-calc_type {
   max-width: 50px;
   text-align: center;
