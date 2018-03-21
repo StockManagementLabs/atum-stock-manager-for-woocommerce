@@ -1728,7 +1728,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			endif;
 			
 			$this->extra_tablenav( $which );
+
+			// Firefox fix to not preserve the pagination input value when reloading the page
+			ob_start();
 			$this->pagination( $which );
+			echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() );
 			?>
 			
 			<br class="clear"/>

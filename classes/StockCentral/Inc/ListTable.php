@@ -195,7 +195,7 @@ class ListTable extends AtumListTable {
 		));
 		?>
 
-		<select name="extra_filter" class="dropdown_extra_filter">
+		<select name="extra_filter" class="dropdown_extra_filter" autocomplete="off">
 			<option value=""><?php _e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ($extra_filters as $extra_filter => $label): ?>
@@ -236,15 +236,15 @@ class ListTable extends AtumListTable {
 		if ( $this->allow_calcs ) {
 			
 			$regular_price_value = $this->product->get_regular_price();
-			$regular_price_value = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->default_currency ] ) : $regular_price;
-			
+			$regular_price_value = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->default_currency ] ) : $regular_price;
+
 			$args = apply_filters( 'atum/stock_central_list/args_regular_price', array(
-				'post_id' => $product_id,
+				'post_id'  => $product_id,
 				'meta_key' => 'regular_price',
-				'value' => $regular_price_value,
-				'symbol' => get_woocommerce_currency_symbol(),
+				'value'    => $regular_price_value,
+				'symbol'   => get_woocommerce_currency_symbol(),
 				'currency' => $this->default_currency,
-				'tooltip' => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
+				'tooltip'  => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN )
 			) );
 			
 			$regular_price = $this->get_editable_column( $args );

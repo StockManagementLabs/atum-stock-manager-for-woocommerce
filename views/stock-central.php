@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) or die;
 		<?php $list->views(); ?>
 
 		<p class="search-box">
-			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>">
+			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
 			
 			<?php if ( $ajax == 'no' ):?>
 				<input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">

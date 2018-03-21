@@ -43,6 +43,9 @@ final class Hooks {
 		add_action( 'woocommerce_admin_order_item_headers', array( __CLASS__, 'wc_order_add_location_column_header' ) );
 		add_action( 'woocommerce_admin_order_item_values', array( __CLASS__, 'wc_order_add_location_column_value' ), 10, 3 );
 
+		// Firefox fix to not preserve the dropdown
+		add_filter( 'wp_dropdown_cats', array( __CLASS__, 'set_dropdown_autocomplete' ), 10, 2 );
+
 	}
 
 	/**
@@ -659,6 +662,26 @@ final class Hooks {
 		}
 
 		return $message;
+
+	}
+
+	/**
+	 * Firefox fix to not preserve the dropdown
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param string $dropdown
+	 * @param array  $args
+	 *
+	 * @return string
+	 */
+	public static function set_dropdown_autocomplete($dropdown, $args) {
+
+		if ($args['name'] == 'product_cat') {
+			$dropdown = str_replace('<select ', '<select autocomplete="off" ', $dropdown);
+		}
+
+		return $dropdown;
 
 	}
 
