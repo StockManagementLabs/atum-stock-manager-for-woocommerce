@@ -15,36 +15,55 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) or die;
 
 
-final class Hooks {
+class Hooks {
+
+	/**
+	 * The singleton instance holder
+	 * @var Hooks
+	 */
+	private static $instance;
+
+	/**
+	 * Hooks singleton constructor
+	 */
+	private function __construct() {
+
+		if ( is_admin() ) {
+			$this->register_admin_hooks();
+		}
+
+		$this->register_global_hooks();
+
+	}
 
 	/**
 	 * Register the admin-side hooks
 	 *
 	 * @since 1.3.8.2
 	 */
-	public static function admin_hooks() {
+	public function register_admin_hooks() {
 
 		// Add extra links to the plugin desc row
-		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 
 		// Handle the ATUM customizations to the WC's Product Data meta box
-		add_filter( 'woocommerce_product_data_tabs', array( __CLASS__, 'add_product_data_tab' ) );
-		add_action( 'woocommerce_product_data_panels', array( __CLASS__, 'add_product_data_tab_panel' ) );
-		add_action( 'woocommerce_product_after_variable_attributes', array(__CLASS__, 'add_product_variation_data_panel'), 9, 3 );
-		add_action( 'save_post_product', array( __CLASS__, 'save_product_data_panel' ), 11 );
-		add_action( 'woocommerce_save_product_variation', array(__CLASS__, 'save_product_variation_data_panel' ), 10, 2 );
+		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
+		add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_tab_panel' ) );
+		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_product_variation_data_panel' ), 9, 3 );
+		add_action( 'save_post_product', array( $this, 'save_product_data_panel' ), 11 );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_data_panel' ), 10, 2 );
 
-		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'enqueue_scripts') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts') );
 
 		// Show the right stock status on WC products list when ATUM is managing the stock
-		add_filter( 'woocommerce_admin_stock_html', array( __CLASS__, 'set_wc_products_list_stock_status' ), 10, 2 );
+		add_filter( 'woocommerce_admin_stock_html', array( $this, 'set_wc_products_list_stock_status' ), 10, 2 );
 
 		// Add the location column to the items table in WC orders
-		add_action( 'woocommerce_admin_order_item_headers', array( __CLASS__, 'wc_order_add_location_column_header' ) );
-		add_action( 'woocommerce_admin_order_item_values', array( __CLASS__, 'wc_order_add_location_column_value' ), 10, 3 );
+		add_action( 'woocommerce_admin_order_item_headers', array( $this, 'wc_order_add_location_column_header' ) );
+		add_action( 'woocommerce_admin_order_item_values', array( $this, 'wc_order_add_location_column_value' ), 10, 3 );
 
 		// Firefox fix to not preserve the dropdown
-		add_filter( 'wp_dropdown_cats', array( __CLASS__, 'set_dropdown_autocomplete' ), 10, 2 );
+		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
 	}
 
@@ -53,14 +72,17 @@ final class Hooks {
 	 *
 	 * @since 1.3.8.2
 	 */
-	public static function global_hooks() {
+	public function register_global_hooks() {
 
 		// Save the date when any product goes out of stock
-		add_action( 'woocommerce_product_set_stock' , array(__CLASS__, 'record_out_of_stock_date'), 20 );
+		add_action( 'woocommerce_product_set_stock' , array( $this, 'record_out_of_stock_date'), 20 );
+
+		// Set the stock decimals setting globally
+		add_action( 'init', array($this, 'stock_decimals'), 11 );
 
 		// Delete the views' transients after changing the stock of any product
-		add_action( 'woocommerce_product_set_stock' , array(__CLASS__, 'delete_transients') );
-		add_action( 'woocommerce_variation_set_stock' , array(__CLASS__, 'delete_transients') );
+		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
+		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
 	}
 
@@ -74,7 +96,7 @@ final class Hooks {
 	 *
 	 * @return	array
 	 */
-	public static function plugin_row_meta( $links, $file ) {
+	public function plugin_row_meta( $links, $file ) {
 
 		if ( ATUM_BASENAME == $file ) {
 			$row_meta = array(
@@ -96,7 +118,7 @@ final class Hooks {
 	 *
 	 * @param string $hook
 	 */
-	public static function enqueue_scripts($hook) {
+	public function enqueue_scripts($hook) {
 
 		$post_type = get_post_type();
 
@@ -118,7 +140,7 @@ final class Hooks {
 	 *
 	 * @return array
 	 */
-	public static function add_product_data_tab($data_tabs) {
+	public function add_product_data_tab($data_tabs) {
 
 		// Add the ATUM tab to Simple and BOM products
 		$bom_tab = array(
@@ -142,7 +164,7 @@ final class Hooks {
 	 *
 	 * @since 1.4.1
 	 */
-	public static function add_product_data_tab_panel() {
+	public function add_product_data_tab_panel() {
 
 		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
 			<div class="options_group"><?php
@@ -209,7 +231,7 @@ final class Hooks {
 	 * @param array    $variation_data   The current variation data
 	 * @param \WP_Post $variation        The variation post
 	 */
-	public static function add_product_variation_data_panel ($loop, $variation_data, $variation) {
+	public function add_product_variation_data_panel ($loop, $variation_data, $variation) {
 
 		?>
 		<div class="atum-data-panel">
@@ -241,9 +263,9 @@ final class Hooks {
 	 * @param int $product_id               The saved product's ID
 	 * @param array $product_tab_values     Allow passing the values to save externally instead of getting them from $_POST
 	 */
-	public static function save_product_data_panel( $product_id, $product_tab_values = array() ) {
+	public function save_product_data_panel( $product_id, $product_tab_values = array() ) {
 
-		if ( empty($product_tab_values) && isset( $_POST['atum_product_tab'] ) ) {
+		if ( empty( $product_tab_values ) && isset( $_POST['atum_product_tab'] ) ) {
 			$product_tab_values = $_POST['atum_product_tab'];
 		}
 
@@ -251,20 +273,20 @@ final class Hooks {
 		$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
 
 		// Update the "_inehritable" meta key
-		if ($is_inheritable_product) {
-			update_post_meta($product_id, Globals::IS_INHERITABLE_KEY, 'yes');
-					}
-					else {
-			delete_post_meta($product_id, Globals::IS_INHERITABLE_KEY);
-					}
+		if ( $is_inheritable_product ) {
+			update_post_meta( $product_id, Globals::IS_INHERITABLE_KEY, 'yes' );
+		}
+		else {
+			delete_post_meta( $product_id, Globals::IS_INHERITABLE_KEY );
+		}
 
-		foreach ($product_tab_fields as $field_name => $field_type) {
+		foreach ( $product_tab_fields as $field_name => $field_type ) {
 
 			// The ATUM's stock control must be always 'yes' for inheritable products
 			if ( $field_name == Globals::ATUM_CONTROL_STOCK_KEY && $is_inheritable_product ) {
-				update_post_meta($product_id, $field_name, 'yes');
+				update_post_meta( $product_id, $field_name, 'yes' );
 				continue;
-	}
+			}
 
 			// Sanitize the fields
 			$field_value = '';
@@ -285,7 +307,7 @@ final class Hooks {
 
 					if ( isset( $product_tab_values[ $field_name ] ) ) {
 						$field_value = floatval( $product_tab_values[ $field_name ] );
-	}
+					}
 					break;
 
 				case 'text':
@@ -298,10 +320,10 @@ final class Hooks {
 			}
 
 			if ( $field_value ) {
-				update_post_meta($product_id, $field_name, $field_value);
+				update_post_meta( $product_id, $field_name, $field_value );
 			}
 			else {
-				delete_post_meta($product_id, $field_name);
+				delete_post_meta( $product_id, $field_name );
 			}
 
 		}
@@ -316,31 +338,31 @@ final class Hooks {
 	 * @param int $variation_id
 	 * @param int $i
 	 */
-	public static function save_product_variation_data_panel($variation_id, $i) {
+	public function save_product_variation_data_panel($variation_id, $i) {
 
 		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ) {
 			update_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
-				}
-				else {
+		}
+		else {
 			delete_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY );
-				}
+		}
 
-				}
+	}
 
 	/**
 	 * Add hooks to show and save the Purchase Price field on products
 	 *
 	 * @since 1.3.8.3
 	 */
-	public static function purchase_price_hooks() {
+	public function purchase_price_hooks() {
 
 		// Add the purchase price to WC products
-		add_action( 'woocommerce_product_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ) );
-		add_action( 'woocommerce_variation_options_pricing', array( __CLASS__, 'add_purchase_price_meta' ), 10, 3 );
+		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_meta' ) );
+		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_meta' ), 10, 3 );
 
 		// Save the product purchase price meta
-		add_action( 'save_post_product', array( __CLASS__, 'save_purchase_price' ) );
-		add_action( 'woocommerce_update_product_variation', array( __CLASS__, 'save_purchase_price' ) );
+		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
+		add_action( 'woocommerce_update_product_variation', array( $this, 'save_purchase_price' ) );
 		
 	}
 
@@ -353,7 +375,7 @@ final class Hooks {
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
-	public static function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
+	public function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
 
 		if ( ! current_user_can( ATUM_PREFIX . 'edit_purchase_price') ) {
 			return;
@@ -386,7 +408,7 @@ final class Hooks {
 	 *
 	 * @param int $post_id
 	 */
-	public static function save_purchase_price($post_id) {
+	public function save_purchase_price($post_id) {
 
 		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 
@@ -431,7 +453,7 @@ final class Hooks {
 	 *
 	 * @return string
 	 */
-	public static function set_wc_products_list_stock_status($stock_html, $the_product) {
+	public function set_wc_products_list_stock_status($stock_html, $the_product) {
 
 		if (
 			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
@@ -491,7 +513,7 @@ final class Hooks {
 	 *
 	 * @param \WC_Order $wc_order
 	 */
-	public static function wc_order_add_location_column_header($wc_order) {
+	public function wc_order_add_location_column_header($wc_order) {
 		?><th class="item_location sortable" data-sort="string-ins"><?php _e( 'Location', ATUM_TEXT_DOMAIN ); ?></th><?php
 	}
 
@@ -504,7 +526,7 @@ final class Hooks {
 	 * @param \WC_Order_Item $item
 	 * @param int            $item_id
 	 */
-	public static function wc_order_add_location_column_value($product, $item, $item_id) {
+	public function wc_order_add_location_column_value($product, $item, $item_id) {
 
 		if ($product) {
 			$product_id = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
@@ -531,7 +553,7 @@ final class Hooks {
 	 *
 	 * @param \WC_Product $product    The product being changed
 	 */
-	public static function record_out_of_stock_date ($product) {
+	public function record_out_of_stock_date ($product) {
 
 		if ( in_array($product->get_type(), Globals::get_product_types()) ) {
 
@@ -560,7 +582,7 @@ final class Hooks {
 	 *
 	 * @param \WC_Product $product   The product
 	 */
-	public static function delete_transients($product) {
+	public function delete_transients($product) {
 		Helpers::delete_transients();
 	}
 
@@ -569,27 +591,27 @@ final class Hooks {
 	 *
 	 * @since 1.3.8.2
 	 */
-	public static function stock_decimals () {
+	public function stock_decimals () {
 
 		Globals::set_stock_decimals( Helpers::get_option('stock_quantity_decimals', 0) );
 
 		// Maybe allow decimals for WC products' stock quantity
-		if (Globals::get_stock_decimals() > 0) {
+		if ( Globals::get_stock_decimals() > 0 ) {
 
 			// Add min value to the quantity field (WC default = 1)
-			add_filter( 'woocommerce_quantity_input_min', array( __CLASS__, 'stock_quantity_input_atts' ), 10, 2 );
+			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
 
 			// Add step value to the quantity field (WC default = 1)
-			add_filter( 'woocommerce_quantity_input_step', array( __CLASS__, 'stock_quantity_input_atts' ), 10, 2 );
+			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
 
 			// Removes the WooCommerce filter, that is validating the quantity to be an int
 			remove_filter( 'woocommerce_stock_amount', 'intval' );
 
 			// Replace the above filter with a custom one that validates the quantity to be a int or float and applies rounding
-			add_filter( 'woocommerce_stock_amount', array( __CLASS__, 'round_stock_quantity' ) );
+			add_filter( 'woocommerce_stock_amount', array( $this, 'round_stock_quantity' ) );
 
 			// Customise the "Add to Cart" message to allow decimals in quantities
-			add_filter( 'wc_add_to_cart_message_html', array( __CLASS__, 'add_to_cart_message' ), 10, 2 );
+			add_filter( 'wc_add_to_cart_message_html', array( $this, 'add_to_cart_message' ), 10, 2 );
 
 		}
 
@@ -605,7 +627,7 @@ final class Hooks {
 	 *
 	 * @return float|int
 	 */
-	public static function stock_quantity_input_atts($value, $product) {
+	public function stock_quantity_input_atts($value, $product) {
 		return 10 / pow(10, Globals::get_stock_decimals() + 1);
 	}
 
@@ -618,7 +640,7 @@ final class Hooks {
 	 *
 	 * @return float|int
 	 */
-	public static function round_stock_quantity($qty) {
+	public function round_stock_quantity($qty) {
 
 		if ( ! Globals::get_stock_decimals() ) {
 			return intval($qty);
@@ -639,7 +661,7 @@ final class Hooks {
 	 *
 	 * @return string
 	 */
-	public static function add_to_cart_message( $message, $products ) {
+	public function add_to_cart_message( $message, $products ) {
 
 		$titles = array();
 		$count  = 0;
@@ -675,7 +697,7 @@ final class Hooks {
 	 *
 	 * @return string
 	 */
-	public static function set_dropdown_autocomplete($dropdown, $args) {
+	public function set_dropdown_autocomplete($dropdown, $args) {
 
 		if ($args['name'] == 'product_cat') {
 			$dropdown = str_replace('<select ', '<select autocomplete="off" ', $dropdown);
@@ -683,6 +705,36 @@ final class Hooks {
 
 		return $dropdown;
 
+	}
+
+
+	/****************************
+	 * Instance methods
+	 ****************************/
+	public function __clone() {
+
+		// cannot be cloned
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	public function __sleep() {
+
+		// cannot be serialized
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Get Singleton instance
+	 *
+	 * @return Hooks instance
+	 */
+	public static function get_instance() {
+
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 }

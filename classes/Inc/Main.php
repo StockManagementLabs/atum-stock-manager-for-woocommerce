@@ -65,19 +65,19 @@ class Main {
 	private function __construct() {
 		
 		if ( is_admin() ) {
-			$this->register_admin_hooks();
+			$this->main_admin_hooks();
 		}
 
-		$this->register_global_hooks();
+		$this->main_global_hooks();
 		
 	}
 
 	/**
-	 * Register the admin-side hooks
+	 * Register the Main admin-side hooks
 	 *
 	 * @since 1.3.3
 	 */
-	protected function register_admin_hooks() {
+	protected function main_admin_hooks() {
 
 		// Add the menus
 		add_action( 'admin_menu', array( $this, 'create_menu' ), 1 );
@@ -85,17 +85,14 @@ class Main {
 		// Load dependencies
 		add_action( 'init', array( $this, 'admin_load' ) );
 
-		// Load extra admin hooks
-		Hooks::admin_hooks();
-
 	}
 
 	/**
-	 * Register the global hooks
+	 * Register the Main global hooks
 	 *
 	 * @since 1.3.3
 	 */
-	protected function register_global_hooks() {
+	protected function main_global_hooks() {
 
 		// Reorder the admin submenus
 		add_filter( 'custom_menu_order', '__return_true' );
@@ -115,9 +112,6 @@ class Main {
 
 		// Load ATUM modules
 		add_action( 'setup_theme', array( $this, 'load_modules' ) );
-
-		// Load extra global hooks
-		Hooks::global_hooks();
 
 	}
 
@@ -157,9 +151,6 @@ class Main {
 
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
-		// Set the stock decimals setting globally
-		Hooks::stock_decimals();
-
 	}
 	
 	/**
@@ -198,6 +189,7 @@ class Main {
 
 		ModuleManager::get_instance();
 		AtumCapabilities::get_instance();
+		Hooks::get_instance();
 		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();

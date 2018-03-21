@@ -2,7 +2,7 @@
 /**
  * @package     Atum
  * @subpackage  Suppliers
- * @author      Salva Machí and Jose Piera - https://sispixels.com
+ * @author      Be Rebel - https://berebel.io
  * @copyright   ©2018 Stock Management Labs™
  *
  * @since       1.2.9
@@ -12,14 +12,12 @@
 
 namespace Atum\Suppliers;
 
+defined( 'ABSPATH' ) or die;
+
 use Atum\Components\AtumCapabilities;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
-use Madcoda\compat;
 
-
-defined( 'ABSPATH' ) or die;
 
 class Suppliers {
 

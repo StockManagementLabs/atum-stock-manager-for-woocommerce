@@ -1,8 +1,8 @@
 <?php
 /**
  * @package     Atum
- * @author      Salva Machí <salvamb@sispixels.com>
- * @copyright   ©2017 Stock Management Labs™
+ * @author      Be Rebel - https://berebel.io
+ * @copyright   ©2018 Stock Management Labs™
  *
  * @since 0.0.1
  *
@@ -73,13 +73,6 @@ class Bootstrap {
 			if ( $this->bootstrapped ) {
 				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
 			}
-
-			/**
-			 * @deprecated
-			 * Namespaces were changed in 1.3.0 and the class aliases may be deleted in the next major version
-			 */
-			class_alias('\Atum\Components\AtumListTables\AtumListPage', '\Atum\Components\AtumListPage');
-			class_alias('\Atum\Components\AtumListTables\AtumListTable', '\Atum\Components\AtumListTable');
 
 			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
 			// in queries when any dependency is not met

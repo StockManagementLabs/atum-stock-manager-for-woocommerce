@@ -117,7 +117,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );
 
 		// Add the hooks for the Purchase Price field
-		Hooks::purchase_price_hooks();
+		Hooks::get_instance()->purchase_price_hooks();
 
 	}
 

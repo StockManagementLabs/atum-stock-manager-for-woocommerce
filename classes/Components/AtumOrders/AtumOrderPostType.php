@@ -2,7 +2,7 @@
 /**
  * @package         Atum\Components
  * @subpackage      AtumOrders
- * @author          Salva Machí and Jose Piera - https://sispixels.com
+ * @author          Be Rebel - https://berebel.io
  * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.2.9
