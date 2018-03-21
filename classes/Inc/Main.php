@@ -20,6 +20,7 @@ use Atum\Components\HelpPointers;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
+use Atum\Integrations\Wpml;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
@@ -205,8 +206,7 @@ class Main {
 		// Enable WPML module if needed
 		//------------------------------
 		if ( class_exists( '\woocommerce_wpml' ) ) {
-			$atum_wpml = new Wpml();
-			$atum_wpml->add_hooks();
+			new Wpml();
 		}
 
 		//

@@ -79,7 +79,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Inc\\Hooks' => __DIR__ . '/../..' . '/classes/Inc/Hooks.php',
         'Atum\\Inc\\Main' => __DIR__ . '/../..' . '/classes/Inc/Main.php',
         'Atum\\Inc\\Upgrade' => __DIR__ . '/../..' . '/classes/Inc/Upgrade.php',
-        'Atum\\Inc\\Wpml' => __DIR__ . '/../..' . '/classes/Inc/Wpml.php',
+        'Atum\\Integrations\\Wpml' => __DIR__ . '/../..' . '/classes/Integrations/Wpml.php',
         'Atum\\InventoryLogs\\InventoryLogs' => __DIR__ . '/../..' . '/classes/InventoryLogs/InventoryLogs.php',
         'Atum\\InventoryLogs\\Items\\LogItemFee' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemFee.php',
         'Atum\\InventoryLogs\\Items\\LogItemProduct' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemProduct.php',
