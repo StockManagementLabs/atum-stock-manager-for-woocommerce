@@ -832,13 +832,40 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		// Stock not managed by WC
 		elseif( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
-			$classes .= ' cell-blue';
-			$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('Stock not managed by WC', ATUM_TEXT_DOMAIN) . '"></span>';
+
+			$wc_stock_status = $this->product->get_stock_status();
+
+			switch ( $wc_stock_status ) {
+				case 'instock':
+
+					$classes .= ' cell-green';
+					$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('In Stock (not managed by WC)', ATUM_TEXT_DOMAIN) . '"></span>';
+			        break;
+
+		        case 'outofstock':
+
+					$classes .= ' cell-red';
+					$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN) . '"></span>';
+			        break;
+
+				case 'onbackorder':
+					$classes .= ' cell-blue';
+					$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN) . '"></span>';
+					break;
+			}
+
 		}
 		// Out of stock
 		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
-			$classes .= ' cell-red';
-			$content = '<span class="dashicons dashicons-dismiss" data-toggle="tooltip" title="' . __('Out of Stock', ATUM_TEXT_DOMAIN) . '"></span>';
+
+			if ($this->product->backorders_allowed()) {
+				$content = '<span class="dashicons dashicons-visibility" data-toggle="tooltip" title="' . __('Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN) . '"></span>';
+			}
+			else {
+				$classes .= ' cell-red';
+				$content = '<span class="dashicons dashicons-dismiss" data-toggle="tooltip" title="' . __('Out of Stock', ATUM_TEXT_DOMAIN) . '"></span>';
+			}
+
 		}
 		// Low Stock
 		elseif ( in_array($product_id, $this->id_views['low_stock']) ) {
