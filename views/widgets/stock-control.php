@@ -39,7 +39,7 @@
 	</div>
 
 	<div class="stock-chart">
-		<canvas data-instock="<?php echo $stock_counters['count_in_stock'] ?>" data-outstock="<?php echo $stock_counters['count_out_stock'] ?>" data-lowstock="<?php echo $stock_counters['count_low_stock'] ?>"></canvas>
+		<canvas data-instock="<?php echo $stock_counters['count_in_stock'] ?>" data-outstock="<?php echo $stock_counters['count_out_stock'] ?>" data-lowstock="<?php echo $stock_counters['count_low_stock'] ?>" data-unmanaged="<?php echo $stock_counters['count_unmanaged'] ?>"></canvas>
 		<div class="stock-chart-tooltip">
 			<table></table>
 		</div>

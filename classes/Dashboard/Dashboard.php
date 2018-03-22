@@ -293,6 +293,7 @@ class Dashboard {
 					'inStockLabel'             => __( 'In Stock', ATUM_PREFIX ),
 					'lowStockLabel'            => __( 'Low Stock', ATUM_PREFIX ),
 					'outStockLabel'            => __( 'Out of Stock', ATUM_PREFIX ),
+					'unmanagedLabel'           => __( 'Unmanaged by WC', ATUM_PREFIX ),
 					'months'                   => array(
 						__( 'January', ATUM_TEXT_DOMAIN ),
 						__( 'February', ATUM_TEXT_DOMAIN ),

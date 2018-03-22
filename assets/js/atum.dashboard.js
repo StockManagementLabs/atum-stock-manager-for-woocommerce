@@ -702,18 +702,21 @@
 							    data           : [
 								    $pieCanvas.data('lowstock'),
 								    $pieCanvas.data('outstock'),
-								    $pieCanvas.data('instock')
+								    $pieCanvas.data('instock'),
+								    $pieCanvas.data('unmanaged')
 							    ],
 							    backgroundColor: [
 								    self.settings.chartColors.orange,
 								    self.settings.chartColors.red,
 								    self.settings.chartColors.green,
+								    self.settings.chartColors.blue
 							    ]
 						    }],
 						    labels  : [
 							    atumDashVars.lowStockLabel,
 							    atumDashVars.outStockLabel,
 							    atumDashVars.inStockLabel,
+							    atumDashVars.unmanagedLabel
 						    ]
 					    },
 					    options: {
