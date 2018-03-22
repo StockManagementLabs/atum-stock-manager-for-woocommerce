@@ -238,6 +238,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Added WPML compatibility for Unmanaged products filter.
 * Added button to variable products for changing the ATUM Control switch to all their variations at once.
 * Added Unmanaged products counter to Stock Control widget.
+* Added new icons to stock indicators column.
 
 **Changes**
 
@@ -250,6 +251,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Changed Locations' menu name.
 * Use all published products for Dashboard calculations.
 * Changed some Dashboard Widgets' texts.
+* Updated Stock Central's help tab content.
 
 **Fixes**
 
