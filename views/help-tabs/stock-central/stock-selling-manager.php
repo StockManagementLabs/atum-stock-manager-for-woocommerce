@@ -38,7 +38,15 @@ defined( 'ABSPATH' ) or die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock Indicator', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Very similar indicator to the default feature of WooCommerce. The user can see green, yellow or red icon according to the stock level of an item. Product with sufficient amount of stock will show a green icon. The yellow icon will mark any items running low in stock, and the red icon will indicate all the items that have the 'out of stock' status. We use the average sales for the past 7 days as default for calculation.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td>
+				<p><i class="dashicons dashicons-yes" style="color: #82C342"></i> <?php _e('Product In Stock and Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-dismiss" style="color: #FF4848"></i> <?php _e('Product Out of Stock and Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-warning" style="color: #EFAF00"></i> <?php _e('Product is Low Stock and Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-visibility"></i> <?php _e('Product is Out of Stock, but Managed by WC and Set to Back Orders.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-hidden" style="color: #82C342"></i> <?php _e('Product In Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-hidden" style="color: #FF4848"></i> <?php _e('Product Out of Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-hidden" style="color: #00B8DB"></i> <?php _e('Product set to Back Orders Only and Not Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+			</td>
 		</tr>
 	</tbody>
 </table>
