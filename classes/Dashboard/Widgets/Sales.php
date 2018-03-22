@@ -52,7 +52,10 @@ class Sales extends AtumWidget {
 	 */
 	public function render() {
 
-		$products = WidgetHelpers::get_all_product_ids();
+		// Get all the products IDs (including variations)
+		$products = Helpers::get_all_products( array(
+			'post_type' => [ 'product', 'product_variation' ]
+		) );
 
 		if ( empty($products) ) {
 			return;

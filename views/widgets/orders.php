@@ -19,8 +19,8 @@
 
 	<div class="data" data-value="today">
 
-		<h3 class="widget-success"><?php echo $stats_today['revenue'] ?></h3>
-		<h5><?php _e('Revenue', ATUM_TEXT_DOMAIN) ?></h5>
+		<h3 class="widget-success"><?php echo $stats_today['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 
@@ -31,8 +31,8 @@
 
 	<div class="data hidden" data-value="this_week">
 
-		<h3 class="widget-success"><?php echo $stats_this_week['revenue'] ?></h3>
-		<h5><?php _e('Revenue', ATUM_TEXT_DOMAIN) ?></h5>
+		<h3 class="widget-success"><?php echo $stats_this_week['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 
@@ -43,8 +43,8 @@
 
 	<div class="data hidden" data-value="this_month">
 
-		<h3 class="widget-success"><?php echo $stats_this_month['revenue'] ?></h3>
-		<h5><?php _e('Revenue', ATUM_TEXT_DOMAIN) ?></h5>
+		<h3 class="widget-success"><?php echo $stats_this_month['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 
@@ -55,8 +55,8 @@
 
 	<div class="data hidden" data-value="previous_month">
 
-		<h3 class="widget-success"><?php echo $stats_previous_month['revenue'] ?></h3>
-		<h5><?php _e('Revenue', ATUM_TEXT_DOMAIN) ?></h5>
+		<h3 class="widget-success"><?php echo $stats_previous_month['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 

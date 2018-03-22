@@ -77,8 +77,8 @@
 		<div class="chart-legend">
 
 			<span class="legend-switch">
-				<input type="checkbox" id="earnings-chart" checked value="on" class="js-switch">
-				<label for="earnings-chart"><?php echo $legends['earnings'] ?></label>
+				<input type="checkbox" id="value-chart" checked value="on" class="js-switch">
+				<label for="value-chart"><?php echo $legends['value'] ?></label>
 			</span>
 
 			<span class="legend-switch">

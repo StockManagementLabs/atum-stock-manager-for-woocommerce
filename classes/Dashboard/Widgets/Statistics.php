@@ -33,7 +33,7 @@ class Statistics extends AtumWidget {
 	public function __construct() {
 
 		$this->title       = __( 'ATUM Statistics', ATUM_TEXT_DOMAIN );
-		$this->description = __( 'Graphical Preview of Periodic Sales and Earnings', ATUM_TEXT_DOMAIN );
+		$this->description = __( 'Graphical Preview of Periodic Sales', ATUM_TEXT_DOMAIN );
 		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-statistics.png';
 
 		parent::__construct();
@@ -56,9 +56,9 @@ class Statistics extends AtumWidget {
 		// TODO: GET THE RIGHT INITIAL CHART DATA FROM WIDGET CONFIG
 		$dataset = WidgetHelpers::get_sales_chart_data('this_year');
 		$period  = 'month';
-		$legends  = array(
-			'earnings' => __('Earnings', ATUM_TEXT_DOMAIN),
-			'products' => __('Products', ATUM_TEXT_DOMAIN)
+		$legends = array(
+			'value'    => __( 'Sales', ATUM_TEXT_DOMAIN ),
+			'products' => __( 'Products', ATUM_TEXT_DOMAIN )
 		);
 
 		$config = $this->get_config();

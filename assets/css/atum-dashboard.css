@@ -4065,7 +4065,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   margin-left: 5px;
 }
 
-.statistics-widget .chart-legend .legend-switch #earnings-chart ~ label {
+.statistics-widget .chart-legend .legend-switch #value-chart ~ label {
   color: #69C61D;
 }
 

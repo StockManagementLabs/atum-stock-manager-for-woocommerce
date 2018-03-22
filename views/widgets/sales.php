@@ -17,8 +17,8 @@
 
 	<div class="data" data-value="today">
 
-		<h3 class="widget-success"><?php echo $stats_today['earnings'] ?></h3>
-		<h5><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></h5>
+		<h3 class="widget-success"><?php echo $stats_today['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 
@@ -29,8 +29,8 @@
 
 	<div class="data hidden" data-value="month">
 
-		<h3 class="widget-success"><?php echo $stats_this_month['earnings'] ?></h3>
-		<h5><?php _e('Earnings', ATUM_TEXT_DOMAIN) ?></h5>
+		<h3 class="widget-success"><?php echo $stats_this_month['value'] ?></h3>
+		<h5><?php _e('Value', ATUM_TEXT_DOMAIN) ?></h5>
 
 		<hr>
 

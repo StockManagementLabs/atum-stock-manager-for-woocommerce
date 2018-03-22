@@ -317,8 +317,8 @@ class Dashboard {
 						__( 'Sunday', ATUM_TEXT_DOMAIN )
 					),
 					'numDaysCurMonth'          => date_i18n( 't' ),
-					'statsEarningsCurSymbol'   => get_woocommerce_currency_symbol(),
-					'statsEarningsCurPosition' => get_option('woocommerce_currency_pos'),
+					'statsValueCurSymbol'      => get_woocommerce_currency_symbol(),
+					'statsValueCurPosition'    => get_option('woocommerce_currency_pos'),
 					'areYouSure'               => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 					'defaultsWillRestore'      => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
 					'continue'                 => __( 'Yes, restore it!', ATUM_TEXT_DOMAIN ),

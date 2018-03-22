@@ -208,10 +208,10 @@ final class Ajax {
 	}
 
 	/**
-	 * Change the Statistics widget chart data
+	 * Sort the videos within the Videos Widget
 	 *
 	 * @package    Dashboard
-	 * @subpackage Statistics Widget
+	 * @subpackage Videos Widget
 	 *
 	 * @since 1.4.0
 	 */
@@ -231,10 +231,10 @@ final class Ajax {
 	}
 
 	/**
-	 * Sort the videos within the Videos Widget
+	 * Change the Statistics widget chart data
 	 *
 	 * @package    Dashboard
-	 * @subpackage Videos Widget
+	 * @subpackage Statistics Widget
 	 *
 	 * @since 1.4.0
 	 */
@@ -253,7 +253,7 @@ final class Ajax {
 			case 'sales':
 				$dataset = WidgetHelpers::get_sales_chart_data( $chart_period );
 				$legends  = array(
-					'earnings' => __( 'Earnings', ATUM_TEXT_DOMAIN ),
+					'value'    => __( 'Sales', ATUM_TEXT_DOMAIN ),
 					'products' => __( 'Products', ATUM_TEXT_DOMAIN )
 				);
 		        break;
@@ -261,7 +261,7 @@ final class Ajax {
 			case 'lost-sales':
 				$dataset = WidgetHelpers::get_sales_chart_data( $chart_period, ['lost_sales'] );
 				$legends  = array(
-					'earnings' => __( 'Earnings', ATUM_TEXT_DOMAIN ),
+					'value'    => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
 					'products' => __( 'Products', ATUM_TEXT_DOMAIN )
 				);
 				break;
@@ -269,7 +269,7 @@ final class Ajax {
 			case 'promo-sales':
 				$dataset = WidgetHelpers::get_promo_sales_chart_data( $chart_period );
 				$legends  = array(
-					'earnings' => __( 'Value', ATUM_TEXT_DOMAIN ),
+					'value'    => __( 'Sales', ATUM_TEXT_DOMAIN ),
 					'products' => __( 'Products', ATUM_TEXT_DOMAIN )
 				);
 				break;
@@ -277,7 +277,7 @@ final class Ajax {
 			case 'orders':
 				$dataset = WidgetHelpers::get_orders_chart_data( $chart_period );
 				$legends  = array(
-					'earnings' => __( 'Revenue', ATUM_TEXT_DOMAIN ),
+					'value'    => __( 'Value', ATUM_TEXT_DOMAIN ),
 					'products' => __( 'Orders', ATUM_TEXT_DOMAIN )
 				);
 				break;

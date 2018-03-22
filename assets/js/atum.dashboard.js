@@ -348,11 +348,11 @@
 				gradientBlue.addColorStop(1, self.settings.chartColors.blueTrans);
 				
 				var statsDataSets    = [{
-					    id                  : 'earnings-chart',
-					    curSymbol           : atumDashVars.statsEarningsCurSymbol,
-					    curPosition         : atumDashVars.statsEarningsCurPosition,
-					    label               : chartLegends.earnings,
-					    data                : chartData.earnings || [],
+					    id                  : 'value-chart',
+					    curSymbol           : atumDashVars.statsValueCurSymbol,
+					    curPosition         : atumDashVars.statsValueCurPosition,
+					    label               : chartLegends.value,
+					    data                : chartData.value || [],
 					    backgroundColor     : self.settings.chartColors.greenLight,
 					    borderColor         : gradientGreen,
 					    borderWidth         : 8,
@@ -473,7 +473,7 @@
 				    statsChart       = new Chart(statsCanvasCtx, statsChartConfig);
 				
 				// Enable switches
-				new Switchery($('#earnings-chart').get(0), {
+				new Switchery($('#value-chart').get(0), {
 					size : 'small',
 					color: self.settings.chartColors.green
 				});
@@ -484,7 +484,7 @@
 				});
 				
 				// Hide/show charts with legend switches
-				$('#earnings-chart, #products-chart').change(function (e) {
+				$('#value-chart, #products-chart').change(function (e) {
 					
 					e.stopPropagation(); // Avoid event bubbling to not trigger the layout saving
 					
@@ -611,15 +611,15 @@
 								
 								$.each(statsDataSets, function (index, dataset) {
 									
-									if (dataset.id === 'earnings-chart') {
+									if (dataset.id === 'value-chart') {
 										
 										// Update the data
-										statsDataSets[index].data = typeof response.data.dataset !== 'undefined' && typeof response.data.dataset.earnings !== 'undefined' ? response.data.dataset.earnings : [];
+										statsDataSets[index].data = typeof response.data.dataset !== 'undefined' && typeof response.data.dataset.value !== 'undefined' ? response.data.dataset.value : [];
 										
 										// Update the legend
-										if (typeof response.data.legends !== 'undefined' && typeof response.data.legends.earnings !== 'undefined') {
-											statsDataSets[index].label = response.data.legends.earnings;
-											$('#earnings-chart').siblings('label').text(response.data.legends.earnings);
+										if (typeof response.data.legends !== 'undefined' && typeof response.data.legends.value !== 'undefined') {
+											statsDataSets[index].label = response.data.legends.value;
+											$('#value-chart').siblings('label').text(response.data.legends.value);
 										}
 										
 									}
