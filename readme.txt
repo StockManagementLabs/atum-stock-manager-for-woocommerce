@@ -269,7 +269,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Upgrade script for setting ATUM control switch to all managed products.
 * Upgrade script to set the _inheritable meta key to all inheritable products.
 * Added checkboxes to Stock Central.
-* Added Bulk Action to Stock Central for Control/Uncontrol products in bulk.
+* Added Bulk Action to Stock Central to Control/Uncontrol products in bulk.
 * Check all the children rows' checkboxes when selecting the expandable row checkbox.
 * Added status icons to Purchase Orders and Inventory Logs.
 * Added Supplier's SKU to Purchase Orders' PDF export.
