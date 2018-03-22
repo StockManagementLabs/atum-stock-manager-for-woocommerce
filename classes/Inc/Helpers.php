@@ -192,6 +192,38 @@ final class Helpers {
 		
 		return '';
 	}
+
+	/**
+	 * Get a list of all the products used for calculating stats
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	public static function get_all_products( $args = array() ) {
+
+		$defaults = array(
+			'post_type'      => 'product',
+			'post_status'    => [ 'publish', 'private' ],
+			'posts_per_page' => - 1,
+			'fields'         => 'ids'
+		);
+
+		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge($defaults, $args) );
+
+		$product_ids_transient = 'atum_all_products_' . self::get_transient_identifier( $args );
+		$products = self::get_transient( $product_ids_transient );
+
+		if ( ! $products ) {
+			$products = get_posts($args);
+			self::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
+		}
+
+		return $products;
+
+	}
 	
 	/**
 	 * Returns an array with the orders filtered by the atts array
@@ -804,7 +836,7 @@ final class Helpers {
 	 * @return bool
 	 */
 	public static function is_atum_controlling_stock($product_id) {
-		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ) === 'yes';
+		return self::get_atum_control_status($product_id) === 'yes';
 	}
 
 	/**
@@ -832,8 +864,41 @@ final class Helpers {
 	public static function is_child_type($type) {
 		return in_array( $type, Globals::get_child_product_types() );
 	}
-	
 
+	/**
+	 * Gets the ATUM control switch status for the specified product
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 *
+	 * @return string|bool  Yes if On of FALSE if Off
+	 */
+	public static function get_atum_control_status($product_id) {
+		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE );
+	}
+
+	/**
+	 * Enables the ATUM control switch for the specified product
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 */
+	public static function enable_atum_control($product_id) {
+		update_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+	}
+
+	/**
+	 * Disables the ATUM control switch for the specified product
+	 *
+	 * @since 1.4.1
+	 *
+	 * @param int $product_id
+	 */
+	public static function disable_atum_control($product_id) {
+		delete_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY );
+	}
 	
 	/**
 	 * Helper function to update a theme plugin value.
@@ -1208,8 +1273,6 @@ final class Helpers {
 		return new $model_class( $atum_order_id );
 
 	}
-
-
 	
 	/**
 	 * Update product meta from Stock Central List

@@ -123,10 +123,32 @@ class Hooks {
 		$post_type = get_post_type();
 
 		if ($post_type == 'product' && $hook == 'post.php') {
-			wp_enqueue_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
-			wp_enqueue_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array('switchery'), ATUM_VERSION );
 
-			wp_enqueue_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array('jquery'), ATUM_VERSION, TRUE );
+			// Enqueue styles
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array('switchery', 'sweetalert2'), ATUM_VERSION );
+			wp_enqueue_style( 'atum-product-data' );
+
+			// Enqueue scripts
+			$min = (! ATUM_DEBUG) ? '.min' : '';
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
+			Helpers::maybe_es6_promise();
+			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array('jquery'), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-product-data', ATUM_URL . "assets/js/atum.product.data{$min}.js", array('switchery', 'sweetalert2'), ATUM_VERSION, TRUE );
+
+			wp_localize_script( 'atum-product-data', 'atumProductData', array(
+				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'confirmNotice' => __( "This will change the ATUM control switch for all the variations within this product to %s", ATUM_TEXT_DOMAIN ),
+				'continue'      => __( "Yes, Continue", ATUM_TEXT_DOMAIN ),
+				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
+				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'nonce'         => wp_create_nonce('atum-product-data-nonce')
+			) );
+
+			wp_enqueue_script( 'atum-product-data' );
+
 		}
 
 	}
@@ -173,7 +195,7 @@ class Hooks {
 				woocommerce_wp_checkbox( array(
 					'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
 					'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-					'value'         => get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
+					'value'         => Helpers::get_atum_control_status($product_id),
 					'class'         => 'js-switch',
 					'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
 					'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
@@ -183,13 +205,13 @@ class Hooks {
 				?>
 
 				<p class="form-field show_if_variable">
-					<label for="change_stock_control"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
-					<select name="change_stock_control" id="change_stock_control">
+					<label for="stock_control_status"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
+					<select id="stock_control_status">
 						<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
 						<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
 					</select>
 					&nbsp;
-					<button type="button" class="button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
+					<button type="button" class="change-stock-control button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
 
 					<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
 				</p>
@@ -197,27 +219,8 @@ class Hooks {
 			</div>
 
 			<?php
-
 			// Allow other fields to be added to the ATUM panel
-			do_action('atum/after_product_data_panel');
-
-			?>
-			<script type="text/javascript">
-				jQuery(function($){
-					atumDoSwitchers();
-
-					$('#woocommerce-product-data').on('woocommerce_variations_loaded', function() {
-						atumDoSwitchers();
-					});
-				});
-
-				function atumDoSwitchers() {
-					jQuery('.js-switch').each(function () {
-						new Switchery(this, { size: 'small' });
-						jQuery(this).removeClass('js-switch');
-					});
-				}
-			</script>
+			do_action('atum/after_product_data_panel'); ?>
 		</div><?php
 
 	}
@@ -241,7 +244,7 @@ class Hooks {
 			woocommerce_wp_checkbox( array(
 				'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
 				'name'        => "variation_atum_tab[" . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
-				'value'       => get_post_meta( $variation->ID, Globals::ATUM_CONTROL_STOCK_KEY, TRUE ),
+				'value'       => Helpers::get_atum_control_status( $variation->ID ),
 				'class'       => 'js-switch',
 				'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
 				'description' => __( "Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.", ATUM_TEXT_DOMAIN ),
@@ -341,10 +344,10 @@ class Hooks {
 	public function save_product_variation_data_panel($variation_id, $i) {
 
 		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ) {
-			update_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+			Helpers::enable_atum_control($variation_id);
 		}
 		else {
-			delete_post_meta( $variation_id, Globals::ATUM_CONTROL_STOCK_KEY );
+			Helpers::disable_atum_control($variation_id);
 		}
 
 	}

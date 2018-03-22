@@ -112,6 +112,9 @@ final class Ajax {
 		// Import WC order items to an Inventory Log
 		add_action( 'wp_ajax_atum_order_import_items', array( $this, 'import_wc_order_items' ) );
 
+		// Set the ATUM control switch status to all variations at once
+		add_action( 'wp_ajax_atum_set_variations_control_status', array( $this, 'set_variations_control_status' ) );
+
 	}
 
 	/**
@@ -434,7 +437,7 @@ final class Ajax {
 			case 'uncontrol_stock':
 
 				foreach ($ids as $id) {
-					delete_post_meta($id, Globals::ATUM_CONTROL_STOCK_KEY);
+					Helpers::disable_atum_control($id);
 				}
 
 		        break;
@@ -442,12 +445,11 @@ final class Ajax {
 			case 'control_stock':
 
 				foreach ($ids as $id) {
-					update_post_meta($id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes');
+					Helpers::enable_atum_control($id);
 				}
 
 				break;
 		}
-
 
 		wp_send_json_success( __('Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN) );
 
@@ -1682,6 +1684,47 @@ final class Ajax {
 
 		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( "edit.php?post_type=$post_type" ) );
 		exit;
+
+	}
+
+	/**
+	 * Set the ATUM control switch status to all variations at once
+	 *
+	 * @since 1.4.1
+	 */
+	public function set_variations_control_status() {
+
+		check_ajax_referer( 'atum-product-data-nonce', 'security' );
+
+		if ( empty($_POST['parent_id']) ) {
+			wp_send_json_error( __('No parent ID specified', ATUM_TEXT_DOMAIN) );
+		}
+
+		if ( empty($_POST['status']) ) {
+			wp_send_json_error( __('No status specified', ATUM_TEXT_DOMAIN) );
+		}
+
+		$product = wc_get_product( absint( $_POST['parent_id'] ) );
+
+		if ( ! is_a($product, '\WC_Product') ) {
+			wp_send_json_error( __('Invalid parent product', ATUM_TEXT_DOMAIN) );
+		}
+
+		$status     = esc_attr( $_POST['status'] );
+		$variations = $product->get_children();
+
+		foreach ($variations as $variation_id) {
+
+			if ($status == 'uncontrolled') {
+				Helpers::disable_atum_control($variation_id);
+			}
+			else {
+				Helpers::enable_atum_control($variation_id);
+			}
+
+		}
+
+		wp_send_json_success( __('All the variations were updated successfully', ATUM_TEXT_DOMAIN) );
 
 	}
 

@@ -1,7 +1,7 @@
 /**
  * Atum Stock Settings
  *
- * @copyright Stock Management Labs (c)2017
+ * @copyright Stock Management Labs ©2018
  * @since 0.0.2
  */
 (function ($) {
