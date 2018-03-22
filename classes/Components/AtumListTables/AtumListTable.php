@@ -833,7 +833,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Stock not managed by WC
 		elseif( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 			$classes .= ' cell-blue';
-			$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __("This item's stock is not managed by WooCommerce", ATUM_TEXT_DOMAIN) . '"></span>';
+			$content = '<span class="dashicons dashicons-hidden" data-toggle="tooltip" title="' . __('Stock not managed by WC', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
 		// Out of stock
 		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
@@ -1495,12 +1495,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $products ) {
 
-			$post_types = ( ! empty($variations) || ! empty($sc_variations) ) ? array($this->post_type, 'product_variation') : $this->post_type;
+			$post_types = ( ! empty($variations) || ! empty($sc_variations) ) ? [$this->post_type, 'product_variation'] : [$this->post_type];
 
 			/*
 			 * Unmanaged products
 			 */
-
 			$products_unmanaged = Helpers::get_unmanaged_products($post_types);
 
 			$this->id_views['unmanaged']          = $products_unmanaged;
@@ -2104,9 +2103,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$children_args = array(
 				'post_type'       => $post_type,
-				'post_status'     => ['publish', 'private'],
+				'post_status'     => [ 'publish', 'private' ],
 				'posts_per_page'  => - 1,
-				'post_parent__in' => $parents->posts
+				'post_parent__in' => $parents->posts,
+				'orderby'         => 'title',
+				'order'           => 'ASC'
 			);
 
 			if ($this->show_controlled) {
