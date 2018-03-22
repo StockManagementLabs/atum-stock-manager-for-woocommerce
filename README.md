@@ -219,11 +219,52 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.1`
+
+*2018-03-22*
+
+**Features**
+
+* (NEW) ATUM Stock Control system.
+* Upgrade script for setting ATUM control switch to all managed products.
+* Upgrade script to set the _inheritable meta key to all inheritable products.
+* Added checkboxes to Stock Central.
+* Added Bulk Action to Stock Central for Control/Uncontrol products in bulk.
+* Check all the children rows' checkboxes when selecting the expandable row checkbox.
+* Added status icons to Purchase Orders and Inventory Logs.
+* Added Supplier's SKU to Purchase Orders' PDF export.
+* Allow all columns except "Stock" for not controlled products in Stock Central.
+* Added View Filter for products Unmanaged by WC.
+* Added WPML compatibility for Unmanaged products filter.
+* Added button to variable products for changing the ATUM Control switch to all their variations at once.
+* Added Unmanaged products counter to Stock Control widget.
+
+**Changes**
+
+* New look and feel for ATUM's custom fields.
+* Moved the WPML integration stuff to its class.
+* Improved loading animations.
+* Updated jscrollpane script to the latest version.
+* Improved row expand animation.
+* Do not allow clicking the currently applied view filter.
+* Changed Locations' menu name.
+* Use all published products for Dashboard calculations.
+* Changed some Dashboard Widgets' texts.
+
+**Fixes**
+
+* Reorganise the table column groups when the checkboxes column is shown.
+* Do not preserve filters' values when reloading the page in Firefox.
+* Minor bug fixes.
+* Re-factory.
+
+---
+
 `1.4.0.2`
 
 *2018-03-06*
 
-Fixes
+**Fixes**
 
 * Removed Purchase Order’s PDF export button from Inventory Logs.
 * Refactory.
@@ -234,7 +275,7 @@ Fixes
 
 *2018-03-05*
 
-Fixes
+**Fixes**
 
 * CSS fixes for the Product Levels' BOM Hierarchy column.
 * Fixed hidden columns when using the ListTable search.
@@ -248,7 +289,7 @@ Fixes
 
 *2018-02-28*
 
-Features
+**Features**
 
 * (NEW) ATUM Dashboard.
 * "Statistics" widget for ATUM Dashboard.
@@ -260,12 +301,12 @@ Features
 * "News" widget for ATUM Dashboard.
 * "Video Tutorials" widget for ATUM Dashboard.
 
-Changes
+**Changes**
 
 * Removed WP Dashboard Statistics widget.
 * Updated language file.
 
-Fixes
+**Fixes**
 
 * Refactory.
 * Fixed compatibility with WC 3.3.3.
@@ -276,7 +317,7 @@ Fixes
 
 *2018-02-23*
 
-Fixes
+**Fixes**
 
 * Fixed JS error in Purchase Orders page.
 * CSS fixes in settings page.
@@ -290,7 +331,7 @@ Fixes
 
 *2018-02-22*
 
-Fixes
+**Fixes**
 
 * Restored assets directory.
 
@@ -298,12 +339,12 @@ Fixes
 
 `1.3.9`
 
-Features
+**Features**
 
 * Added a new tab to Settings to allow users to fill their Store Details required for pdf generated Purchase Orders.
 * Added another action in Purchase Orders page to enable the user to generate a pdf of Purchase Orders.
 
-Fixes
+**Fixes**
 
 * Fixed issue that was showing all the products when adding items to a Purchase Order.
 
