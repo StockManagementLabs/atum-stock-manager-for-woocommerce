@@ -21,7 +21,7 @@
 	
 	> div {
 		width: 50%;
-		padding: $grid-gutter-width $grid-gutter-width/2;
+		padding: 10px $grid-gutter-width/2;
 		
 		@media all and (max-width: $screen-sm-min) {
 			padding: $grid-gutter-width/2;

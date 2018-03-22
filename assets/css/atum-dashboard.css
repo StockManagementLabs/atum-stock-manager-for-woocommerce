@@ -4204,7 +4204,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .stock-control-widget > div {
   width: 50%;
-  padding: 30px 15px;
+  padding: 10px 15px;
 }
 
 @media all and (max-width: 768px) {

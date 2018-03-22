@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
+use Atum\StockCentral\StockCentral;
 
 
 class StockControl extends AtumWidget {
@@ -54,9 +55,18 @@ class StockControl extends AtumWidget {
 	public function render() {
 
 		$stock_counters = WidgetHelpers::get_stock_levels();
+
+		$sc_url = add_query_arg( 'page', StockCentral::UI_SLUG, admin_url('admin.php') );
+		$sc_links = array(
+			'in_stock'  => add_query_arg( 'v_filter', 'in_stock', $sc_url ),
+			'out_stock' => add_query_arg( 'v_filter', 'out_stock', $sc_url ),
+			'low_stock' => add_query_arg( 'v_filter', 'low_stock', $sc_url ),
+			'unmanaged' => add_query_arg( 'v_filter', 'unmanaged', $sc_url )
+		);
+
 		$config = $this->get_config();
 
-		Helpers::load_view( 'widgets/stock-control', compact('stock_counters', 'config') );
+		Helpers::load_view( 'widgets/stock-control', compact('stock_counters', 'sc_links', 'config') );
 
 	}
 
