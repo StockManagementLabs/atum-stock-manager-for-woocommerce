@@ -20,6 +20,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
+use Atum\Suppliers\Suppliers;
 
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -1130,7 +1131,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
-		$posts               = array();
+		$products            = array();
 		$sortable            = $this->get_sortable_columns();
 		$hidden              = get_hidden_columns( $this->screen );
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
@@ -1241,15 +1242,15 @@ abstract class AtumListTable extends \WP_List_Table {
 				'type'  => 'numeric'
 			);
 
-			// TODO: FILTERING BY SUPPLIER DOES NOT BRING VARIATIONS
 			// This query does not get product variations and as each variation may have a distinct supplier,
 			// we have to get them separately and to add their variables to the results
-			/*$this->supplier_variation_products = Suppliers::get_supplier_products($supplier, 'ids', 'product_variation');
+			$this->supplier_variation_products = Suppliers::get_supplier_products($supplier, 'ids', 'product_variation');
 
 			if ( ! empty($this->supplier_variation_products) ) {
 				add_filter( 'atum/list_table/views_data_products', array($this, 'add_supplier_variables_to_query') );
+				add_filter( 'atum/list_table/items', array($this, 'add_supplier_variables_to_query') );
 				add_filter( 'atum/list_table/views_data_variations', array($this, 'add_supplier_variations_to_query'), 10, 2 );
-			}*/
+			}
 
 		}
 
@@ -1337,14 +1338,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			global $wp_query;
 			$wp_query = new \WP_Query( $args );
 			
-			$posts = $wp_query->posts;
-			$product_ids = wp_list_pluck($posts, 'ID');
+			$products = $wp_query->posts;
+			$product_ids = wp_list_pluck($products, 'ID');
 
 			// Check if there are some empty inheritable products within the resulting list and get rid of them
 			foreach ( array_map('wc_get_product', $product_ids) as $key => $wc_product ) {
 
 				if ( Helpers::is_inheritable_type( $wc_product->get_type() ) && ! $this->get_num_children( $wc_product->get_id() ) ) {
-					unset( $posts[$key], $product_ids[$key] );
+					unset( $products[$key], $product_ids[$key] );
 				}
 
 			}
@@ -1361,7 +1362,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * REQUIRED!!!
 		 * Save the sorted data to the items property, where can be used by the rest of the class
 		 */
-		$this->items = apply_filters( 'atum/list_table/items', $posts );
+		$this->items = apply_filters( 'atum/list_table/items', $products );
 		
 		$this->set_pagination_args( array(
 			'total_items' => $found_posts,
@@ -1376,45 +1377,53 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Add the supplier's variable products to the filtered query
 	 *
-	 * @since 1.4.0.2
+	 * @since 1.4.1.1
 	 *
 	 * @param array $products
 	 *
 	 * @return array
 	 */
-	/*public function add_supplier_variables_to_query($products) {
+	public function add_supplier_variables_to_query($products) {
 
-		foreach ($this->supplier_variation_products as $variation_id) {
+		foreach ($this->supplier_variation_products as $index => $variation_id) {
 			$variation_product = wc_get_product( $variation_id );
 
 			if ( ! is_a($variation_product, '\WC_Product_Variation') ) {
+				unset( $this->supplier_variation_products[$index] );
+				continue;
+			}
+
+			$is_controlled = Helpers::is_atum_controlling_stock( $variation_product->get_id() );
+
+			if ( ( $this->show_controlled && !$is_controlled ) || ( !$this->show_controlled && $is_controlled ) ) {
+				unset( $this->supplier_variation_products[$index] );
 				continue;
 			}
 
 			$variable_id = $variation_product->get_parent_id();
 
 			if ( ! is_array($products) || ! in_array($variable_id, $products) ) {
-				$products[] = $variable_id;
+				$products[] = $this->all_variable_products[] = $this->variable_products[] = $variable_id;
 			}
 		}
 
 		return $products;
-	}*/
+	}
 
 	/**
 	 * Add the supplier's variation products to the filtered query
 	 *
-	 * @since 1.4.0.2
+	 * @since 1.4.1.1
 	 *
 	 * @param array $variations
 	 * @param array $products
 	 *
 	 * @return array
 	 */
-	/*public function add_supplier_variations_to_query($variations, $products) {
+	public function add_supplier_variations_to_query($variations, $products) {
 
-		return array_intersect($variations, $this->supplier_variation_products);
-	}*/
+		return array_merge($variations, $this->supplier_variation_products);
+	}
 
 	/**
 	 * Set views for table filtering and calculate total value counters for pagination
@@ -1493,7 +1502,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				// WC Subscriptions compatibility
 				if ( class_exists('\WC_Subscriptions') && in_array('variable-subscription', (array) $taxonomy['terms']) ) {
 
-					$sc_variations = $this->get_children( 'variable-subscription', $post_in, 'product_variation' );
+					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
 
 					// Remove the empty variable subscriptions from the array and add the subscription variations
 					$products = array_unique( array_merge( array_diff( $products, $this->all_variable_sc_products ), $sc_variations ) );
@@ -2121,15 +2130,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			switch ( $parent_type ) {
 				case 'variable':
-					$this->all_variable_products = array_merge($this->all_variable_products, $parents->posts);
+					$this->all_variable_products = array_unique( array_merge($this->all_variable_products, $parents->posts) );
 			        break;
 
 				case 'grouped':
-					$this->all_grouped_products = array_merge($this->all_grouped_products, $parents->posts);
+					$this->all_grouped_products = array_unique( array_merge($this->all_grouped_products, $parents->posts) );
 					break;
 
 				case 'variable-subscription':
-					$this->all_variable_sc_products = array_merge($this->all_variable_sc_products, $parents->posts);
+					$this->all_variable_sc_products = array_unique( array_merge($this->all_variable_sc_products, $parents->posts) );
 					break;
 			}
 
@@ -2141,6 +2150,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				'orderby'         => 'title',
 				'order'           => 'ASC'
 			);
+
+			/*
+			 * NOTE: we should apply here all the query filters related to individual child products
+			 * like the ATUM control switch or the supplier
+			 */
 
 			if ($this->show_controlled) {
 
@@ -2163,23 +2177,35 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
+			if ( ! empty($this->supplier_variation_products) ) {
+
+				$children_args['meta_query'][] = array(
+					'key'   => '_supplier',
+					'value' => esc_attr( $_REQUEST['supplier'] ),
+					'type'  => 'NUMERIC'
+				);
+
+				$children_args['meta_query']['relation'] = 'AND';
+
+			}
+
 			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 
 			if ($children->found_posts) {
 
-				$parents_with_child = array_unique( wp_list_pluck($children->posts, 'post_parent') );
+				$parents_with_child = wp_list_pluck($children->posts, 'post_parent');
 
 				switch ( $parent_type ) {
 					case 'variable':
-						$this->variable_products = array_merge($this->variable_products, $parents_with_child);
+						$this->variable_products = array_unique( array_merge($this->variable_products, $parents_with_child) );
 				        break;
 
 					case 'grouped':
-						$this->grouped_products = array_merge($this->grouped_products, $parents_with_child);
+						$this->grouped_products = array_unique( array_merge($this->grouped_products, $parents_with_child) );
 						break;
 
 					case 'variable-subscription':
-						$this->variable_sc_products = array_merge($this->variable_sc_products, $parents_with_child);
+						$this->variable_sc_products = array_unique( array_merge($this->variable_sc_products, $parents_with_child) );
 						break;
 				}
 
