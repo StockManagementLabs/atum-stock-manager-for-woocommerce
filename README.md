@@ -219,6 +219,20 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.1.1`
+
+*2018-03-26*
+
+**Fixes**
+
+* Fixed issue with databases using non-standard prefixes in table names.
+* Fixed some tooltips not displaying properly in List Tables.
+* Fixed variations for variable subscription products not showing in Stock Central.
+* Fixed suppliers' filtering not returning variations.
+* Fixed last days' sales not being shown for variations.
+
+---
+
 `1.4.1`
 
 *2018-03-22*

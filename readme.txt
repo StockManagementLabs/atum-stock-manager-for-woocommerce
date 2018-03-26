@@ -275,9 +275,11 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 **Fixes**
 
-* Fixed issue with databases with non-standard prefixes in tables.
+* Fixed issue with databases using non-standard prefixes in table names.
 * Fixed some tooltips not displaying properly in List Tables.
 * Fixed variations for variable subscription products not showing in Stock Central.
+* Fixed suppliers' filtering not returning variations.
+* Fixed last days' sales not being shown for variations.
 
 ---
 
