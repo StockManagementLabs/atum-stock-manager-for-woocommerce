@@ -596,9 +596,11 @@ class ListTable extends AtumListTable {
 	public function prepare_items() {
 		
 		parent::prepare_items();
+		
+		$calc_products = array_merge( $this->current_products, $this->children_products);
 
 		// Calc products sold today (since midnight)
-		$rows = Helpers::get_sold_last_days( $this->current_products, 'today 00:00:00', $this->day );
+		$rows = Helpers::get_sold_last_days( $calc_products, 'today 00:00:00', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -607,7 +609,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold during the last week
-		$rows = Helpers::get_sold_last_days( $this->current_products, $this->day . ' -1 week', $this->day );
+		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -1 week', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -616,7 +618,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold during the last 2 weeks
-		$rows = Helpers::get_sold_last_days( $this->current_products, $this->day . ' -2 weeks', $this->day );
+		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -2 weeks', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -625,7 +627,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold the $last_days days
-		$rows = Helpers::get_sold_last_days( $this->current_products, "-$this->last_days days", $this->day );
+		$rows = Helpers::get_sold_last_days( $calc_products, "-$this->last_days days", $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {

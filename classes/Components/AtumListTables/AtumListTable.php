@@ -102,6 +102,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $all_grouped_products = array();
 	
 	/**
+	 * The array of IDs of children products
+	 *
+	 * @var array
+	 */
+	protected $children_products = array();
+	
+	/**
 	 * Elements per page (in order to obviate option default)
 	 * @var int
 	 */
@@ -2208,8 +2215,11 @@ abstract class AtumListTable extends \WP_List_Table {
 						$this->variable_sc_products = array_unique( array_merge($this->variable_sc_products, $parents_with_child) );
 						break;
 				}
+				
+				$children_ids = wp_list_pluck($children->posts, 'ID');
+				$this->children_products = array_merge( $this->children_products, $children_ids);
 
-				return wp_list_pluck($children->posts, 'ID');
+				return $children_ids;
 			}
 
 		}
