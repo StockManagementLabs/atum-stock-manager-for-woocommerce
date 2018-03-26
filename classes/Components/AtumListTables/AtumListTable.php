@@ -89,7 +89,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $all_variable_sc_products = array();
 
 	/**
-	 * The array of IDs of variable products with children
+	 * The array of IDs of grouped products with children
 	 * @var array
 	 */
 	protected $grouped_products = array();
@@ -360,7 +360,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the children products of each inheritable product type
 		if ( !$this->allow_calcs ) {
 
-			$product_type = in_array($type, ['variable', 'variable-subcription']) ? 'product_variation' : 'product';
+			$product_type   = in_array( $type, ['variable', 'variable-subscription'] ) ? 'product_variation' : 'product';
 			$child_products = $this->get_children($type, [  $this->product->get_id() ], $product_type );
 
 			if ( ! empty($child_products) ) {
@@ -1491,9 +1491,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 				// WC Subscriptions compatibility
-				if ( class_exists('\WC_Subscriptions') && in_array('variable_subscription', (array) $taxonomy['terms']) ) {
+				if ( class_exists('\WC_Subscriptions') && in_array('variable-subscription', (array) $taxonomy['terms']) ) {
 
-					$sc_variations = $this->get_children( 'variable_subscription', $post_in, 'product_variation' );
+					$sc_variations = $this->get_children( 'variable-subscription', $post_in, 'product_variation' );
 
 					// Remove the empty variable subscriptions from the array and add the subscription variations
 					$products = array_unique( array_merge( array_diff( $products, $this->all_variable_sc_products ), $sc_variations ) );
@@ -1600,8 +1600,6 @@ abstract class AtumListTable extends \WP_List_Table {
 						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
 						GROUP BY IDs) AS sales";
 
-					$low_stock_post_types = $variations ? "('product', 'product_variation')" : "('product')";
-
 					$str_states = "(SELECT `{$wpdb->posts}`.`ID`,
 						IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
 							CAST( IF( LENGTH(`{$wpdb->postmeta}`.`meta_value`) = 0 , 0, `{$wpdb->postmeta}`.`meta_value`) AS DECIMAL(10,2) ), TRUE, FALSE) AS state
@@ -1609,7 +1607,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						    LEFT JOIN `{$wpdb->postmeta}` ON (`{$wpdb->posts}`.`ID` = `{$wpdb->postmeta}`.`post_id`)
 						    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
 						WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
-				            AND `{$wpdb->posts}`.`post_type` IN " . $low_stock_post_types . "
+				            AND `{$wpdb->posts}`.`post_type` IN ('" . implode("', '", $post_types) . "')
 				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $products_in_stock ) . ")) )) AS states";
 
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
@@ -2121,11 +2119,18 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ($parents->found_posts) {
 
-			if ($parent_type == 'variable') {
-				$this->all_variable_products = array_merge($this->all_variable_products, $parents->posts);
-			}
-			else {
-				$this->all_grouped_products = array_merge($this->all_grouped_products, $parents->posts);
+			switch ( $parent_type ) {
+				case 'variable':
+					$this->all_variable_products = array_merge($this->all_variable_products, $parents->posts);
+			        break;
+
+				case 'grouped':
+					$this->all_grouped_products = array_merge($this->all_grouped_products, $parents->posts);
+					break;
+
+				case 'variable-subscription':
+					$this->all_variable_sc_products = array_merge($this->all_variable_sc_products, $parents->posts);
+					break;
 			}
 
 			$children_args = array(
@@ -2164,11 +2169,18 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$parents_with_child = array_unique( wp_list_pluck($children->posts, 'post_parent') );
 
-				if ($parent_type == 'variable') {
-					$this->variable_products = array_merge($this->variable_products, $parents_with_child);
-				}
-				else {
-					$this->grouped_products = array_merge($this->grouped_products, $parents_with_child);
+				switch ( $parent_type ) {
+					case 'variable':
+						$this->variable_products = array_merge($this->variable_products, $parents_with_child);
+				        break;
+
+					case 'grouped':
+						$this->grouped_products = array_merge($this->grouped_products, $parents_with_child);
+						break;
+
+					case 'variable-subscription':
+						$this->variable_sc_products = array_merge($this->variable_sc_products, $parents_with_child);
+						break;
 				}
 
 				return wp_list_pluck($children->posts, 'ID');
@@ -2194,18 +2206,18 @@ abstract class AtumListTable extends \WP_List_Table {
 		global $wpdb;
 
 		if ($this->show_controlled) {
-			$join = 'ID = post_id';
-			$where = "meta_key = '_atum_manage_stock' AND meta_value = 'yes'";
+			$join = "$wpdb->posts.ID = $wpdb->postmeta.post_id";
+			$where = "$wpdb->postmeta.meta_key = '_atum_manage_stock' AND $wpdb->postmeta.meta_value = 'yes'";
 		}
 		else {
-			$join = "(ID = post_id AND wp_postmeta.meta_key = '_atum_manage_stock')";
-			$where = 'post_id IS NULL';
+			$join = "($wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_atum_manage_stock')";
+			$where = "$wpdb->postmeta.post_id IS NULL";
 		}
 
 		$sql = $wpdb->prepare( "
 			SELECT COUNT(*) FROM $wpdb->posts 
-			LEFT JOIN wp_postmeta ON $join
-			WHERE post_type IN ('product', 'product_variation') AND post_parent = %d
+			LEFT JOIN $wpdb->postmeta ON $join
+			WHERE $wpdb->posts.post_type IN ('product', 'product_variation') AND $wpdb->posts.post_parent = %d
 			AND $where
 		", $product_id);
 
@@ -2232,7 +2244,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$product = wc_get_product($product_id);
 
 			// For Variations
-			if ( is_a($product, 'WC_Product_Variation') ) {
+			if ( is_a($product, '\WC_Product_Variation') ) {
 				$parents[] = $product->get_parent_id();
 			}
 			// For Group Items (these have the grouped ID as post_parent property)

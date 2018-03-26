@@ -439,7 +439,8 @@
 				tooltip: function () {
 					
 					$('[data-toggle="tooltip"]').tooltip({
-						html: true
+						html     : true,
+						container: 'body'
 					});
 					
 				},

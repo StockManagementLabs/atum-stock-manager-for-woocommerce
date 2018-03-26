@@ -91,7 +91,7 @@ final class Globals {
 	public static function get_product_types() {
 
 		// Add WC Subscriptions compatibility
-		if ( class_exists('WC_Subscriptions') && Helpers::get_option('show_subscriptions', 'yes') == 'yes' ) {
+		if ( class_exists('\WC_Subscriptions') && Helpers::get_option('show_subscriptions', 'yes') == 'yes' ) {
 			self::$product_types = array_merge( self::$product_types, ['subscription', 'variable-subscription'] );
 		}
 
@@ -109,7 +109,7 @@ final class Globals {
 
 		// Add WC Subscriptions compatibility
 		if (
-			class_exists('WC_Subscriptions') &&
+			class_exists('\WC_Subscriptions') &&
 			! in_array('variable-subscription', self::$inheritable_product_types) &&
 			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
 		) {
@@ -130,7 +130,7 @@ final class Globals {
 
 		// Add WC Subscriptions compatibility
 		if (
-			class_exists('WC_Subscriptions') &&
+			class_exists('\WC_Subscriptions') &&
 			! in_array('subscription_variation', self::$child_product_types) &&
 			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
 		) {
