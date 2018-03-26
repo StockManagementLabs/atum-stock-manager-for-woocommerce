@@ -7,13 +7,14 @@ Tested up to: 4.9.4
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.4
-Stable tag: 1.4.1
+Stable tag: 1.4.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical Sales, Inventory Levels, Promo Sales), Stock Central with Data Export, Inventory Logs (Reserved Stock, Lost In Post, Customer Returns, Inbound Stock, Warehouse Damages), One Page Updating, Quick Price Changes, Stock Levels Indicators.
 
 
+== Description ==
 
 **VERSION 1.4.1. IS HERE - BRAND NEW AND INNOVATIVE APPROACH**
 
@@ -53,10 +54,6 @@ https://www.youtube.com/watch?v=yQF4QgWOJnY
 
 https://www.youtube.com/watch?v=PqWBjsomKnU
 
-
-
-
-== Description ==
 
 ATUM is becoming the most advanced WooCommerce inventory management tool in the Wordpress depository. Free of charge and the absolute must for every serious shop owner. Stock Central, the heart of ATUM, gives you the full overview of your business with capabilities of a quick change of every aspect of your WooCommerce inventory and prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -269,6 +266,18 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.1.1`
+
+*2018-03-26*
+
+**Fixes**
+
+* Fixed issue with databases with non-standard prefixes in tables.
+* Fixed some tooltips not displaying properly in List Tables.
+* Fixed variations for variable subscription products not showing in Stock Central.
 
 ---
 
