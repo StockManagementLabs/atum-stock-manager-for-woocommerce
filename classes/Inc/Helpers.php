@@ -213,7 +213,7 @@ final class Helpers {
 
 		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge($defaults, $args) );
 
-		$product_ids_transient = 'atum_all_products_' . self::get_transient_identifier( $args );
+		$product_ids_transient = self::get_transient_identifier( $args, 'all_products' );
 		$products = self::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
@@ -664,16 +664,17 @@ final class Helpers {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param   string $transient  Transient simple name
-	 * @param   mixed  $value      Value to store
-	 * @param   int    $expiration Time until expiration in seconds
+	 * @param string $transient_id  Transient identifier
+	 * @param mixed  $value         Value to store
+	 * @param int    $expiration    Optional. Time until expiration in seconds. By default is set to 0 (does not expire)
+	 * @param bool   $force         Optional. If set to TRUE, will set the transient in debug mode too
 	 *
-	 * @return  bool  False if value was not set and true if value was set.
+	 * @return bool  FALSE if value was not set and TRUE if value was set
 	 *
 	 */
-	public static function set_transient( $transient, $value, $expiration = 0 ) {
+	public static function set_transient( $transient_id, $value, $expiration = 0, $force = FALSE ) {
 		
-		return (ATUM_DEBUG !== TRUE) ? set_transient( ATUM_PREFIX . $transient, $value, $expiration ) : FALSE;
+		return ($force || ATUM_DEBUG !== TRUE) ? set_transient( ATUM_PREFIX . $transient_id, $value, $expiration ) : FALSE;
 	}
 	
 	/**
@@ -681,13 +682,14 @@ final class Helpers {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param   string $transient Transient simple name
+	 * @param string $transient_id  Transient identifier
+	 * @param bool   $force         Optional. If set to TRUE, will get the transient in debug mode too
 	 *
-	 * @return  mixed|bool  The atum transient value or false if the transient does not exist or debug mode is on
+	 * @return mixed|bool  The ATUM transient value or FALSE if the transient does not exist or debug mode is on
 	 */
-	public static function get_transient( $transient ) {
+	public static function get_transient( $transient_id, $force = FALSE ) {
 		
-		return (ATUM_DEBUG !== TRUE) ? get_transient( ATUM_PREFIX . $transient ) : FALSE;
+		return ($force || ATUM_DEBUG !== TRUE) ? get_transient( ATUM_PREFIX . $transient_id ) : FALSE;
 	}
 	
 	/**
@@ -695,13 +697,24 @@ final class Helpers {
 	 *
 	 * @since 0.0.3
 	 *
-	 * @param   array $args The args to hash
+	 * @param string $prefix    Optional. The transient name prefix
+	 * @param mixed $args       Optional. The args to hash
 	 *
-	 * @return  string
+	 * @return string
 	 */
-	public static function get_transient_identifier( $args = array() ) {
-		
-		return md5( serialize( $args ) );
+	public static function get_transient_identifier( $args = array(), $prefix = '' ) {
+
+		$transient_id = ( empty($prefix) || strpos($prefix, ATUM_PREFIX) !== 0 ) ? ATUM_PREFIX . $prefix : $prefix;
+
+		if ( substr($transient_id, -1, 1) != '_' ) {
+			$transient_id .= '_';
+		}
+
+		if ( ! empty($args) ) {
+			$transient_id .= md5( serialize( $args ) );
+		}
+
+		return $transient_id;
 	}
 	
 	/**
@@ -709,12 +722,15 @@ final class Helpers {
 	 *
 	 * @since 0.1.5
 	 *
+	 * @param string $type  Optional. If specified will remove specific type of ATUM transients
+	 *
 	 * @return int|bool The number of transients deleted on success or false on error
 	 */
-	public static function delete_transients() {
+	public static function delete_transients($type = '') {
 
 		global $wpdb;
-		return $wpdb->query( "DELETE FROM {$wpdb->options} WHERE `option_name` LIKE '_transient_" . ATUM_PREFIX . "%'" );
+		$transient_id = $type ?: ATUM_PREFIX;
+		return $wpdb->query( "DELETE FROM {$wpdb->options} WHERE `option_name` LIKE '_transient_{$transient_id}%'" );
 	}
 	
 	/**
@@ -1391,6 +1407,5 @@ final class Helpers {
 		}
 		
 	}
-
 
 }

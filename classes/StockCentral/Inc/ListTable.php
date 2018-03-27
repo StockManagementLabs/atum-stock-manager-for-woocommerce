@@ -707,7 +707,7 @@ class ListTable extends AtumListTable {
 		$extra_filter = esc_attr( $_REQUEST['extra_filter'] );
 		$sorted       = FALSE;
 
-		$extra_filter_transient = 'atum_list_table_extra_filter_' . Helpers::get_transient_identifier( $extra_filter );
+		$extra_filter_transient = Helpers::get_transient_identifier( $extra_filter, 'list_table_extra_filter' );
 		$filtered_products      = Helpers::get_transient( $extra_filter_transient );
 
 		if ( empty($filtered_products) ) {

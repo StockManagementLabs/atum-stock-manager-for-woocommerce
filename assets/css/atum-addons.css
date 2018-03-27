@@ -154,6 +154,7 @@
   padding: 0 3px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
+  opacity: 0;
 }
 
 .atum-addons .theme .show-key, .atum-addons .theme .show-key i {
@@ -169,6 +170,7 @@
 }
 
 .atum-addons .theme .show-key:hover {
+  opacity: 1;
   background-color: #0fd9ff;
 }
 

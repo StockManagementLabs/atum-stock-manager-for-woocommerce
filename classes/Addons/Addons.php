@@ -137,7 +137,7 @@ class Addons {
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array('sweetalert2'), ATUM_VERSION );
 
-		$min = (! ATUM_DEBUG) ? '.min' : '';
+		$min = !ATUM_DEBUG ? '.min' : '';
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
 		Helpers::maybe_es6_promise();
 		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array('jquery', 'sweetalert2'), ATUM_VERSION );
@@ -199,12 +199,11 @@ class Addons {
 						$addon_file = key($addon_info);
 
 						new Updater( $addon_file, array(
-								'version'   => $addon_info[$addon_file]['Version'],
-								'license'   => $license_key['key'],
-								'item_name' => $addon_name,
-								'beta'      => FALSE
-							)
-						);
+							'version'   => $addon_info[ $addon_file ]['Version'],
+							'license'   => $license_key['key'],
+							'item_name' => $addon_name,
+							'beta'      => FALSE
+						) );
 					}
 				}
 
@@ -289,7 +288,8 @@ class Addons {
 	 *
 	 * @param array   $args
 	 * @param string  $url
-	 * @return object $array
+	 *
+	 * @return array
 	 */
 	public function http_request_args( $args, $url ) {
 		// If it is an https request and we are performing a package download, disable ssl verification
@@ -311,7 +311,7 @@ class Addons {
 	 */
 	public static function get_keys ($addon_name = '') {
 
-		$keys = get_option(self::ADDONS_KEY_OPTION);
+		$keys = get_option( self::ADDONS_KEY_OPTION );
 
 		if ($addon_name) {
 
@@ -363,12 +363,12 @@ class Addons {
 	 * @since 1.2.0
 	 *
 	 * @param string $addon_name    The addon name
-	 * @param string $key           The license key
+	 * @param array  $key           The license key
 	 */
-	public static function update_key ($addon_name, $key) {
-		$keys = get_option(self::ADDONS_KEY_OPTION);
+	public static function update_key($addon_name, $key) {
+		$keys = get_option( self::ADDONS_KEY_OPTION );
 		$keys[ $addon_name ] = $key;
-		update_option(self::ADDONS_KEY_OPTION, $keys);
+		update_option( self::ADDONS_KEY_OPTION, $keys );
 	}
 
 	/**
@@ -383,62 +383,89 @@ class Addons {
 	 */
 	public static function get_addon_status($addon_name, $addon_slug) {
 
-		// Status defaults
-		$addon_status = array(
-			'installed' => Helpers::is_plugin_installed($addon_slug),
-			'status'    => 'invalid',
-			'key'       => ''
-		);
+		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
+		$addon_status   = Helpers::get_transient( $transient_name, TRUE );
 
-		// TODO: USE TRANSIENTS TO IMPROVE THE PAGE LOAD
+		if ( empty($addon_status) ) {
 
-		$saved_license = self::get_keys($addon_name);
+			// Status defaults
+			$addon_status = array(
+				'installed' => Helpers::is_plugin_installed( $addon_slug ),
+				'status'    => 'invalid',
+				'key'       => ''
+			);
 
-		if ( ! empty( $saved_license ) ) {
-			$addon_status['key'] = $saved_license['key'];
+			$saved_license = self::get_keys( $addon_name );
 
-			// Check the license
-			$status = self::check_license($addon_name, $addon_status['key']);
+			if ( ! empty( $saved_license ) ) {
+				$addon_status['key'] = $saved_license['key'];
 
-			if ( ! is_wp_error( $status ) ) {
-				$license_data = json_decode( wp_remote_retrieve_body( $status ) );
+				// Check the license
+				$status = self::check_license( $addon_name, $addon_status['key'] );
 
-				if ($license_data) {
-					$addon_status['status'] = $license_data->license;
+				if ( ! is_wp_error( $status ) ) {
+					$license_data = json_decode( wp_remote_retrieve_body( $status ) );
+
+					if ( $license_data ) {
+						$addon_status['status'] = $license_data->license;
+
+						if ($license_data->license != $saved_license['status']) {
+							$saved_license['status'] = $license_data->license;
+							self::update_key($addon_name, $saved_license);
+						}
+					}
 				}
+
+			}
+			else {
+				self::update_key($addon_name, ['key' => '', 'status' => 'invalid']);
 			}
 
-		}
+			switch ( $addon_status['status'] ) {
 
-		switch ( $addon_status['status'] ) {
+				case 'invalid':
+				case 'disabled':
+				case 'expired':
+				case 'item_name_mismatch':
+					$addon_status['status']        = 'invalid';
+					$addon_status['button_text']   = __( 'Validate', ATUM_TEXT_DOMAIN );
+					$addon_status['button_class']  = 'validate-key';
+					$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
+					break;
 
-			case 'invalid':
-			case 'disabled':
-			case 'expired':
-			case 'item_name_mismatch':
-				$addon_status['status'] = 'invalid';
-				$addon_status['button_text'] = __('Validate', ATUM_TEXT_DOMAIN);
-				$addon_status['button_class'] = 'validate-key';
-				$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
-				break;
+				case 'inactive':
+				case 'site_inactive':
+					$addon_status['status']        = 'inactive';
+					$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
+					$addon_status['button_class']  = 'activate-key';
+					$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
+					break;
 
-			case 'inactive':
-			case 'site_inactive':
-				$addon_status['status'] = 'inactive';
-				$addon_status['button_text'] = __('Activate', ATUM_TEXT_DOMAIN);
-				$addon_status['button_class'] = 'activate-key';
-				$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
-				break;
+				case 'valid':
+					$addon_status['button_text']   = __( 'Deactivate', ATUM_TEXT_DOMAIN );
+					$addon_status['button_class']  = 'deactivate-key';
+					$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
+					break;
+			}
 
-			case 'valid':
-				$addon_status['button_text'] = __('Deactivate', ATUM_TEXT_DOMAIN);
-				$addon_status['button_class'] = 'deactivate-key';
-				$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
-				break;
+			Helpers::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
+
 		}
 
 		return $addon_status;
 
+	}
+
+	/**
+	 * Delete an addon status transient
+	 *
+	 * @since 1.4.1.2
+	 *
+	 * @param string $addon_name
+	 */
+	public static function delete_status_transient($addon_name) {
+		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
+		Helpers::delete_transients($transient_name);
 	}
 
 	/**
@@ -641,10 +668,34 @@ class Addons {
 	 * Getter for the installed addons arrray
 	 *
 	 * @since 1.2.0
+	 *
 	 * @return array
 	 */
 	public static function get_installed_addons() {
 		return self::$addons;
+	}
+
+	/**
+	 * Checks if there is a valid key installed in the current site
+	 *
+	 * @since 1.4.1.2
+	 *
+	 * @return bool
+	 */
+	public static function has_valid_key() {
+
+		$keys = self::get_keys();
+
+		if ( ! empty($keys) ) {
+			foreach ( $keys as $key ) {
+				if ( ! empty( $key['key'] ) && ! empty( $key['status'] ) && $key['status'] == 'valid' ) {
+					return TRUE;
+				}
+			}
+		}
+
+		return FALSE;
+
 	}
 
 
