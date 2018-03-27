@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Addons\Addons;
 use Atum\Components\AtumWidget;
 use Atum\Inc\Helpers;
 
@@ -169,7 +170,22 @@ class Dashboard {
 		$this->load_widgets();
 		$user_widgets_layout = self::get_user_widgets_layout();
 
-		Helpers::load_view( 'dashboard', array('widgets' => $this->widgets, 'layout' => $user_widgets_layout, 'dashboard' => $this) );
+		if ( Addons::has_valid_key() ) {
+			$support_link = 'https://stockmanagementlabs.ticksy.com/';
+			$support_button_text = __('Get Premium Support', ATUM_TEXT_DOMAIN);
+		}
+		else {
+			$support_link = 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions';
+			$support_button_text = __('Get Support', ATUM_TEXT_DOMAIN);
+		}
+
+		Helpers::load_view( 'dashboard', array(
+			'widgets'             => $this->widgets,
+			'layout'              => $user_widgets_layout,
+			'dashboard'           => $this,
+			'support_link'        => $support_link,
+			'support_button_text' => $support_button_text
+		) );
 
 	}
 

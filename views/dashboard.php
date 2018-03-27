@@ -6,6 +6,7 @@
  */
 
 defined( 'ABSPATH' ) or die;
+
 ?>
 <div class="atum-dashboard">
 
@@ -13,7 +14,7 @@ defined( 'ABSPATH' ) or die;
 
 		<div class="dash-header-buttons">
 			<!--<a href="#" target="_blank" type="button" class="btn btn-success pill"><?php _e('Upgrade Now', ATUM_TEXT_DOMAIN) ?></a>-->
-			<a href="https://stockmanagementlabs.ticksy.com/" target="_blank" class="btn btn-primary pill"><?php _e('Get Support', ATUM_TEXT_DOMAIN) ?></a>
+			<a href="<?php echo $support_link ?>" target="_blank" class="btn btn-primary pill"><?php echo $support_button_text ?></a>
 
 			<button type="button" class="restore-defaults btn btn-warning" title="<?php _e('Restore widgets and layout to defaults', ATUM_TEXT_DOMAIN) ?>" data-toggle="tooltip" data-placement="bottom"><i class="lnr lnr-redo"></i></button>
 		</div>
@@ -40,7 +41,7 @@ defined( 'ABSPATH' ) or die;
 
 				<p><?php _e("Our team is working daily to document ATUM's fast-growing content. Browse our detailed tutorials, ask questions or share feature requests with our team.", ATUM_TEXT_DOMAIN) ?></p>
 
-				<a href="https://www.stockmanagementlabs.com/tutorials/" class="btn btn-primary pill" target="_blank"><?php _e('View Tutorials', ATUM_TEXT_DOMAIN) ?></a>
+				<a href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-primary pill" target="_blank"><?php _e('View Tutorials', ATUM_TEXT_DOMAIN) ?></a>
 			</div>
 
 			<div class="card-img">

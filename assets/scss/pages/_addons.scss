@@ -116,6 +116,7 @@
 			padding: 0 3px;
 			border-left: 1px solid rgba(#000, 0.05);
 			cursor: pointer;
+			opacity: 0;
 			
 			&, i {
 				@include transition(all 0.2s ease-in-out);
@@ -128,6 +129,7 @@
 			}
 			
 			&:hover {
+				opacity: 1;
 				background-color: lighten($brand-primary, 10%);
 				
 				i {

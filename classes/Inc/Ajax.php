@@ -494,6 +494,9 @@ final class Ajax {
 					'status' => 'valid'
 				) );
 
+				// Delete status transient
+				Addons::delete_status_transient($addon_name);
+
 				wp_send_json_success( __('Your add-on license was saved.', ATUM_TEXT_DOMAIN) );
 		        break;
 
@@ -504,6 +507,9 @@ final class Ajax {
 					'key'    => $key,
 					'status' => 'inactive'
 				) );
+
+				// Delete status transient
+				Addons::delete_status_transient($addon_name);
 
 				if ($license_data->activations_left < 1) {
 					wp_send_json_error( __("You've reached your license activation limit for this add-on.<br>Please contact the Stock Management Labs support team.", ATUM_TEXT_DOMAIN) );
@@ -545,6 +551,9 @@ final class Ajax {
 			'key'    => $key,
 			'status' => 'invalid'
 		) );
+
+		// Delete status transient
+		Addons::delete_status_transient($addon_name);
 
 		wp_send_json_error($error_message);
 
@@ -593,7 +602,7 @@ final class Ajax {
 		// Make sure the response came back okay
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 
-			$message = ( is_wp_error( $response ) ) ? $response->get_error_message() : $default_error;
+			$message = is_wp_error( $response ) ? $response->get_error_message() : $default_error;
 
 		}
 		else {
@@ -658,6 +667,9 @@ final class Ajax {
 			'status' => $license_data->license
 		) );
 
+		// Delete status transient
+		Addons::delete_status_transient($addon_name);
+
 		if ($license_data->license == 'valid') {
 			wp_send_json_success( __('Your license has been activated.', ATUM_TEXT_DOMAIN) );
 		}
@@ -704,6 +716,9 @@ final class Ajax {
 				'key'    => $key,
 				'status' => 'inactive'
 			) );
+
+			// Delete status transient
+			Addons::delete_status_transient($addon_name);
 
 			wp_send_json_success( __('Your license has been deactivated.', ATUM_TEXT_DOMAIN) );
 

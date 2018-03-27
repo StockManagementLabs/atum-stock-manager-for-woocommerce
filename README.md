@@ -219,6 +219,19 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.1.2`
+
+*2018-03-28*
+
+**Changes**
+
+* Updated links in help tab's sidebar.
+* Updated support link in Dashboard.
+* Updated docs link in Dashboard.
+* Added transients for addon's status.
+
+---
+
 `1.4.1.1`
 
 *2018-03-26*

@@ -7,8 +7,15 @@
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Addons\Addons;
+
 ?>
 <br/>
 <p><a href="https://www.stockmanagementlabs.com" target="_blank"><?php _e( 'Visit our Website for More', ATUM_TEXT_DOMAIN ) ?></a></p>
-<p><a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce" target="_blank"><?php _e( 'Visit WP Support Forum', ATUM_TEXT_DOMAIN ) ?></a></p>
-<p><a href="https://stockmanagementlabs.ticksy.com/" target="_blank"><?php _e( 'Open Support Ticket', ATUM_TEXT_DOMAIN ) ?></a></p>
+<p><a href="https://forum.stockmanagementlabs.com/t/atum-documentation" target="_blank"><?php _e( 'Read the Docs', ATUM_TEXT_DOMAIN ) ?></a></p>
+<p><a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" target="_blank"><?php _e( 'Watch our Videos', ATUM_TEXT_DOMAIN ) ?></a></p>
+<p><a href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" target="_blank"><?php _e( 'Get Support', ATUM_TEXT_DOMAIN ) ?></a></p>
+
+<?php if ( Addons::has_valid_key() ): ?>
+<p><a href="https://stockmanagementlabs.ticksy.com/" target="_blank"><?php _e( 'Open Premium Support Ticket', ATUM_TEXT_DOMAIN ) ?></a></p>
+<?php endif;
