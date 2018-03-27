@@ -117,6 +117,9 @@ class Wpml {
 
 			// Remove the translations from the unmanaged products query
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
+			
+			// add upgrade ATUM tasks
+			add_action('atum/after_upgrade', array($this, 'upgrade'));
 		}
 
 	}
@@ -638,11 +641,55 @@ class Wpml {
 
 		$unmng_where .= " 
 			AND ID NOT IN (
-				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND element_id != trid
+				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND NULLIF(source_language_code, '') IS NULL
 			)
 		";
 
 		return $unmng_where;
 	}
-
+	
+	/**
+	 * Do upgrade tasks after ATUM's updated
+	 *
+	 * @since 1.4.1.2
+	 *
+	 * @param string $old_version Version before the upgrade tasks
+	 */
+	public function upgrade( $old_version ) {
+		
+		global $wpdb, $sitepress;
+		
+		if ( version_compare( $old_version, '1.4.1.2', '<' ) ) {
+			
+			// Delete previous existent metas in translations to prevent duplicates
+			$IDs_to_delete = $wpdb->get_results( "SELECT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
+ 									ON pm.post_id = tr.element_id WHERE pm.meta_key = '_atum_manage_stock' AND
+ 									NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');", ARRAY_N );
+			
+			if ( $IDs_to_delete ) {
+				
+				$IDs_to_delete  = implode( ',', wp_list_pluck( $IDs_to_delete, 0 ) );
+				$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_atum_manage_stock', '_inheritable', '_out_of_stock_date')
+ 										AND post_id IN({$IDs_to_delete});" );
+				
+			}
+			
+			$IDs_to_refresh = $wpdb->get_results("SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
+												WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN
+												('post_product', 'post_product_variation');", ARRAY_N );
+			
+			if ($IDs_to_refresh) {
+				
+				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
+				foreach ( $IDs_to_refresh as $id) {
+					
+					$original_id = $this->get_original_product_id($id);
+					$sitepress->sync_custom_field( $original_id, $id, '_inheritable');
+					$sitepress->sync_custom_field( $original_id, $id, '_atum_manage_stock');
+					$sitepress->sync_custom_field( $original_id, $id, '_out_of_stock_date');
+				}
+			}
+			
+		}
+	}
 }

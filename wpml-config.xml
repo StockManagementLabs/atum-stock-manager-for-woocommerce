@@ -1,4 +1,11 @@
 <wpml-config>
+	<custom-fields>
+		<custom-field action="ignore">_supplier</custom-field>
+		<custom-field action="ignore">_supplier_sku</custom-field>
+		<custom-field action="copy">_inheritable</custom-field>
+		<custom-field action="copy">_atum_manage_stock</custom-field>
+		<custom-field action="copy">_out_of_stock_date</custom-field>
+	</custom-fields>
 	<custom-types>
 		<custom-type translate="0">atum_inventory_log</custom-type>
 		<custom-type translate="0">atum_purchase_order</custom-type>

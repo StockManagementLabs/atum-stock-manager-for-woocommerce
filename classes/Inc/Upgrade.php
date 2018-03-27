@@ -61,7 +61,7 @@ class Upgrade {
 		// Update the db version to the current ATUM version
 		update_option( ATUM_PREFIX . 'version', ATUM_VERSION );
 
-		do_action('atum/after_upgrade');
+		do_action('atum/after_upgrade', $db_version);
 
 	}
 
