@@ -229,6 +229,13 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Updated support link in Dashboard.
 * Updated docs link in Dashboard.
 * Added transients for addon's status.
+* Changed Vendor label by Supplier in PO's PDF export.
+
+**Fixes**
+
+* Fixed WPML controlled products not shown in secondary languages.
+* Fixed undefined index 'product-type' issue when adding new products.
+* Fixed ATUM control switch not saved for inheritable products.
 
 ---
 

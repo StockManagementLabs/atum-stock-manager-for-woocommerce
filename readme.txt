@@ -7,7 +7,7 @@ Tested up to: 4.9.4
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.4
-Stable tag: 1.4.1.1
+Stable tag: 1.4.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,13 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Updated support link in Dashboard.
 * Updated docs link in Dashboard.
 * Added transients for addon's status.
+* Changed Vendor label by Supplier in PO's PDF export.
+
+**Fixes**
+
+* Fixed WPML controlled products not shown in secondary languages.
+* Fixed undefined index 'product-type' issue when adding new products.
+* Fixed ATUM control switch not saved for inheritable products.
 
 ---
 
