@@ -53,6 +53,12 @@ class Upgrade {
 			$this->set_individual_manage_stock();
 			$this->add_inheritable_meta();
 		}
+		
+		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta
+		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
+			
+			$this->add_inheritable_sock_meta();
+		}
 
 		/**********************
 		 * UPGRADE ACTIONS END
@@ -224,6 +230,24 @@ class Upgrade {
 
 		}
 
+	}
+	
+	/**
+	 * Ensure that all inheritable products have set ATUM_CONTROL_STOCK_KEY
+	 *
+	 * @since 1.4.1.2
+	 */
+	private function add_inheritable_sock_meta() {
+		
+		global $wpdb;
+		
+		$inheritable_ids = $wpdb->get_col( "SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" );
+		
+		if ( $inheritable_ids ) {
+			foreach ( $inheritable_ids as $id ) {
+				update_post_meta( $id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+			}
+		}
 	}
 
 }
