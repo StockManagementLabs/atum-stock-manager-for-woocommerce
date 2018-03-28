@@ -936,10 +936,12 @@
 				var $dropdownField = $('.dropdown_supplier').parent();
 				
 				if ( $(this).is(':checked') ) {
+					$('body').addClass('allow-multiple-suppliers');
 					$dropdownField.slideUp();
 					atum_order_items.$itemsBlocker.addClass('unblocked');
 				}
 				else {
+					$('body').removeClass('allow-multiple-suppliers');
 					$dropdownField.slideDown();
 					
 					if ($('#supplier').val()) {

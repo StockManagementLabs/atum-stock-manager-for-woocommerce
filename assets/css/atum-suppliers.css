@@ -797,7 +797,7 @@
 }
 
 .atum-meta-box .form-field .switchery {
-  margin-left: 10px;
+  margin-left: 7px;
 }
 
 .atum-meta-box .form-field.atum-editor {
@@ -854,6 +854,10 @@
   display: block;
   font-size: 12px;
   margin-bottom: 5px;
+}
+
+body.allow-multiple-suppliers .wc-backbone-modal .alert {
+  display: none;
 }
 
 .wc-backbone-modal-backdrop {
