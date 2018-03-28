@@ -799,13 +799,13 @@ final class Ajax {
 		global $wpdb;
 
 		$like_term     = '%%' . $wpdb->esc_like( $term ) . '%%';
-		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', array( 'product', 'product_variation' ) );
-		$post_statuses = current_user_can( 'edit_private_products' ) ? array( 'private', 'publish' ) : array( 'publish' );
+		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', ['product', 'product_variation'] );
+		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
 		$type_join     = $type_where = $meta_join = $meta_where = array();
 		$join_counter  = 1;
 
 		// Search by meta keys
-		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', array( '_sku', ) ) );
+		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', ['_sku'] ) );
 
 		/* DISABLED DUE TO BAD PERFORMANCE IN SITES WITH MANY PRODUCTS
 		if ( AtumCapabilities::current_user_can('read_supplier') ) {
@@ -819,7 +819,7 @@ final class Ajax {
 		}
 
 		// Allow searching for other product types if needed
-		$searched_types = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_product_types', array() ) );
+		$searched_types = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_product_types', [] ) );
 		if ( ! empty($searched_types) ) {
 
 			foreach ($searched_types as $searched_type) {

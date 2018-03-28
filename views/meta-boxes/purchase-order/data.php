@@ -35,29 +35,37 @@ $po_status = $atum_order->get_status();
 			<div class="atum_order_data_column">
 
 				<p class="form-field form-field-wide">
-					<label for="customer_user"><?php _e( 'Supplier:', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="multiple_suppliers">
+						<?php _e( 'Multiple Suppliers', ATUM_TEXT_DOMAIN ) ?>
+						<input type="checkbox" class="js-switch" name="multiple_suppliers" id="multiple_suppliers" value="yes"<?php checked($has_multiple_suppliers, TRUE) ?> style="display: none">
+						<input type="hidden" class="item-blocker-old-value" value="<?php echo $has_multiple_suppliers ? 'yes' : 'no' ?>">
+					</label>
+				</p>
+
+				<p class="form-field form-field-wide"<?php if ($has_multiple_suppliers) echo ' style="display:none"' ?>>
+					<label for="customer_user"><?php _e( 'Supplier', ATUM_TEXT_DOMAIN ) ?></label>
 
 					<?php
-					$supplier_id = ($supplier) ? $supplier->ID : '';
+					$supplier_id = $supplier ? $supplier->ID : '';
 					echo Helpers::suppliers_dropdown($supplier_id, TRUE);
 					?>
 					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty($supplier) ) echo $supplier->ID ?>">
 				</p>
 
 				<p class="form-field">
-					<label for="date"><?php _e( 'PO date:', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="date"><?php _e( 'PO date', ATUM_TEXT_DOMAIN ) ?></label>
 					<input type="text" class="date-picker" name="date" id="date" maxlength="10" value="<?php echo date_i18n( 'Y-m-d', strtotime( $atum_order_post->post_date ) ); ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="date_hour" id="date_hour" min="0" max="23" step="1" value="<?php echo date_i18n( 'H', strtotime( $atum_order_post->post_date ) ); ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})" />:
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="date_minute" id="date_minute" min="0" max="59" step="1" value="<?php echo date_i18n( 'i', strtotime( $atum_order_post->post_date ) ); ?>" pattern="[0-5]{1}[0-9]{1}" />
 				</p>
 
 				<p class="form-field form-field-wide">
-					<label for="status"><?php _e( 'PO status:', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="status"><?php _e( 'PO status', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php Helpers::atum_order_status_dropdown('status', $po_status) ?>
 				</p>
 
 				<p class="form-field expected-at-location-date">
-					<label for="reservation_date"><?php _e( 'Expected at location date:', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="reservation_date"><?php _e( 'Expected at location date', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php $expected_at_location_date = $atum_order->get_expected_at_location_date() ?>
 					<input type="text" class="date-picker" name="expected_at_location_date" id="expected_at_location_date" maxlength="10" value="<?php echo ($expected_at_location_date) ? date_i18n( 'Y-m-d', strtotime($expected_at_location_date) ) : '' ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="expected_at_location_date_hour" id="expected_at_location_date_hour" min="0" max="23" step="1" value="<?php echo ($expected_at_location_date) ? date_i18n( 'H', strtotime($expected_at_location_date) ) : '' ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})" />:
@@ -65,7 +73,7 @@ $po_status = $atum_order->get_status();
 				</p>
 
 				<div class="form-field form-field-wide atum-editor">
-					<label for="description"><?php _e( 'PO description:', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="description"><?php _e( 'PO description', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php
 					$editor_settings = array(
 						'media_buttons' => FALSE,

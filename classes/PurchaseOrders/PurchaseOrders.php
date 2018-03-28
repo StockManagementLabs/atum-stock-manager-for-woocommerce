@@ -136,14 +136,15 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$atum_order_post = $atum_order->get_post();
-		$supplier        = $atum_order->get_supplier();
-		$labels          = $this->labels;
+		$atum_order_post        = $atum_order->get_post();
+		$supplier               = $atum_order->get_supplier();
+		$has_multiple_suppliers = $atum_order->has_multiple_suppliers();
+		$labels                 = $this->labels;
 
 
 		wp_nonce_field( 'atum_save_meta_data', 'atum_meta_nonce' );
 
-		Helpers::load_view( 'meta-boxes/purchase-order/data', compact( 'atum_order', 'supplier', 'atum_order_post', 'labels' ) );
+		Helpers::load_view( 'meta-boxes/purchase-order/data', compact( 'atum_order', 'supplier', 'has_multiple_suppliers', 'atum_order_post', 'labels' ) );
 
 	}
 
@@ -172,10 +173,13 @@ class PurchaseOrders extends AtumOrderPostType {
 		$expected_at_location_date = ( empty( $_POST['expected_at_location_date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' );
 		$expected_at_location_date = date_i18n( 'Y-m-d H:i:s', $expected_at_location_date);
 
+		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && $_POST['multiple_suppliers'] == 'yes' ) ? 'yes' : 'no';
+
 		$log->save_meta( array(
 			'_status'                    => esc_attr( $_POST['status'] ),
 			'_date_created'              => $po_date,
-			'_supplier'                  => absint( $_POST['supplier'] ),
+			'_supplier'                  => $multiple_suppliers == 'no' ? absint( $_POST['supplier'] ) : '',
+			'_multiple_suppliers'        => $multiple_suppliers,
 			'_expected_at_location_date' => $expected_at_location_date,
 		) );
 

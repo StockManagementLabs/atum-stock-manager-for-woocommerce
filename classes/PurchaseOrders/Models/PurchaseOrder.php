@@ -77,11 +77,15 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function maybe_add_items_blocker($po) {
 
-		$unblocked_class = '';
-		$message         = __( 'Set the Supplier in the first field and hit the Create/Update button on the top right to add items.', ATUM_TEXT_DOMAIN );
-		$supplier        = $po->get_supplier();
+		$unblocked_class        = '';
+		$message                = __( 'Set the Supplier field above and click the Create/Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
+		$supplier               = $po->get_supplier();
+		$has_multiple_suppliers = $po->has_multiple_suppliers();
 
-		if ($supplier) {
+		if ($has_multiple_suppliers) {
+			$unblocked_class = ' unblocked';
+		}
+		elseif ($supplier) {
 			$products = Suppliers::get_supplier_products( $supplier->ID, 'ids' );
 
 			if ( empty($products) ) {
@@ -167,6 +171,19 @@ class PurchaseOrder extends AtumOrderModel {
 	}
 
 	/**
+	 * Check whether this PO allows products from multiple suppliers
+	 *
+	 * @since 1.4.2
+	 *
+	 * @return bool
+	 */
+	public function has_multiple_suppliers() {
+
+		return $this->get_meta('_multiple_suppliers') == 'yes';
+
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function get_atum_order_item( $item = NULL ) {
@@ -199,7 +216,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$id        = FALSE;
 		}
 
-		if ( $id && $item_type ) {
+		if ( $id && isset($item_type) && $item_type ) {
 
 			$classname = FALSE;
 			$items_namespace = '\\Atum\\PurchaseOrders\\Items\\';

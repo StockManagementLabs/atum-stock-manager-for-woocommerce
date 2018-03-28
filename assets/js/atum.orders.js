@@ -19,6 +19,7 @@
 			init: function() {
 				
 				this.$container = $('#atum_order_items');
+				this.$itemsBlocker = this.$container.find('.items-blocker');
 				this.stupidtable.init();
 				this.isEditable = $('#atum_order_is_editable').val();
 				this.askRemoval = true;
@@ -64,12 +65,15 @@
 					.on( 'click', 'button.remove-atum-order-item-meta', this.item_meta.remove )
 					.on( 'click', 'button.set-purchase-price', this.item_meta.set_purchase_price );
 				
-				$( document.body )
+				$(document.body)
 					.on( 'wc_backbone_modal_loaded', this.backbone.init )
 					.on( 'wc_backbone_modal_response', this.backbone.response );
 				
 				// Trigger ATUM order type dependent fields
 				$('#atum_order_type').change(this.toggleExtraFields).change();
+				
+				// Trigger multiple suppliers' dependent fields
+				$('#multiple_suppliers').change(this.toggleSupplierField);
 				
 				// Items' blockers
 				$('.atum_order_data_column_container').on( 'change', '.block-items', this.maybe_remove_items );
@@ -602,7 +606,7 @@
 					}).then(function () {
 					
 						if (!newValue) {
-							$('.items-blocker').removeClass('unblocked');
+							atum_order_items.$itemsBlocker.removeClass('unblocked');
 						}
 					
 					}, function (dismiss) {
@@ -616,7 +620,7 @@
 					
 				}
 				else if (newValue !== oldValue) {
-					$('.items-blocker').removeClass('unblocked');
+					atum_order_items.$itemsBlocker.removeClass('unblocked');
 				}
 			
 			},
@@ -927,6 +931,27 @@
 			
 			},
 			
+			toggleSupplierField: function() {
+				
+				var $dropdownField = $('.dropdown_supplier').parent();
+				
+				if ( $(this).is(':checked') ) {
+					$dropdownField.slideUp();
+					atum_order_items.$itemsBlocker.addClass('unblocked');
+				}
+				else {
+					$dropdownField.slideDown();
+					
+					if ($('#supplier').val()) {
+						atum_order_items.$itemsBlocker.addClass('unblocked');
+					}
+					else {
+						atum_order_items.$itemsBlocker.removeClass('unblocked');
+					}
+				}
+				
+			},
+			
 			importOrderItems: function() {
 				
 				var $wcOrder = $('#wc_order'),
@@ -1081,6 +1106,11 @@
 			dateFormat: 'yy-mm-dd',
 			numberOfMonths: 1,
 			showButtonPanel: true
+		});
+		
+		// Init switchers
+		$('.js-switch').each(function () {
+			new Switchery(this, { size: 'small' });
 		});
 	
 	});

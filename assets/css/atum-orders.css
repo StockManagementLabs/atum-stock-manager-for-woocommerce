@@ -1026,10 +1026,8 @@
   width: 50%;
 }
 
-.atum-meta-box .form-field small {
-  display: block;
-  margin: 5px 0 0;
-  color: #999;
+.atum-meta-box .form-field .switchery {
+  margin-left: 10px;
 }
 
 .atum-meta-box .form-field.atum-editor {

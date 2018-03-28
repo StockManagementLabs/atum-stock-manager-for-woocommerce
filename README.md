@@ -237,6 +237,10 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Fixed undefined index 'product-type' issue when adding new products.
 * Fixed ATUM control switch not saved for inheritable products.
 
+**Fixes**
+
+* Fixed WPML compatibility with the new stock management system.
+
 ---
 
 `1.4.1.1`

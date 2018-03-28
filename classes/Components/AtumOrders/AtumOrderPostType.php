@@ -830,16 +830,23 @@ abstract class AtumOrderPostType {
 
 			if ( in_array( $hook, ['post-new.php', 'post.php'] ) ) {
 
+				// Sweet Alert
 				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
 				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
 				Helpers::maybe_es6_promise();
 
-				wp_enqueue_style( 'sweetalert2' );
-				wp_enqueue_style( 'atum-orders' );
-
 				if ( wp_script_is('es6-promise', 'registered') ) {
 					wp_enqueue_script( 'es6-promise' );
 				}
+
+				// Switchery
+				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
+				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
+
+				// Enqueue styles
+				wp_enqueue_style( 'sweetalert2' );
+				wp_enqueue_style( 'switchery' );
+				wp_enqueue_style( 'atum-orders' );
 
 				// Enqueue the script with the required WooCommerce dependencies
 				$wc_dependencies = (array) apply_filters('atum/order_post_type/scripts/woocommerce_dependencies', array(
@@ -849,7 +856,8 @@ abstract class AtumOrderPostType {
 					'jquery-ui-datepicker',
 					'stupidtable',
 					'accounting',
-					'sweetalert2'
+					'sweetalert2',
+					'switchery'
 				));
 
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/atum.orders.js', $wc_dependencies, ATUM_VERSION, TRUE );

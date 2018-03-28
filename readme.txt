@@ -287,6 +287,11 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed undefined index 'product-type' issue when adding new products.
 * Fixed ATUM control switch not saved for inheritable products.
 
+**Fixes**
+
+* Fixed WPML compatibility with the new stock management system.
+
+
 ---
 
 `1.4.1.1`
