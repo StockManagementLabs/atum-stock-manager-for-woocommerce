@@ -26,7 +26,7 @@
 </div>
 <div class="po-wrapper content-address">
 	<div class="float-left">
-		<h4><?php _e( 'Vendor', ATUM_TEXT_DOMAIN ) ?></h4>
+		<h4><?php _e( 'Supplier', ATUM_TEXT_DOMAIN ) ?></h4>
 		<p class="address">
 			<?php echo $po->get_supplier_address() ?>
 		</p>
