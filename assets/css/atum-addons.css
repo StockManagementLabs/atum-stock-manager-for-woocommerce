@@ -105,6 +105,10 @@
   background-color: #82C342;
 }
 
+.atum-addons .theme .theme-actions.valid + .show-key {
+  opacity: 0;
+}
+
 .atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
   color: #82C342;
 }
@@ -154,7 +158,6 @@
   padding: 0 3px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  opacity: 0;
 }
 
 .atum-addons .theme .show-key, .atum-addons .theme .show-key i {
@@ -170,7 +173,7 @@
 }
 
 .atum-addons .theme .show-key:hover {
-  opacity: 1;
+  opacity: 1 !important;
   background-color: #0fd9ff;
 }
 
