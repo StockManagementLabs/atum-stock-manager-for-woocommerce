@@ -216,6 +216,13 @@
 					//-------------------------------------------
 					.on('click', '.product-type.has-child', function() {
 						
+						// Avoid multiple clicks before expanding
+						if (typeof self.isRowExpanding !== 'undefined' && self.isRowExpanding === true) {
+							return false;
+						}
+						
+						self.isRowExpanding = true;
+						
 						var $expandableRow = $(this).closest('tr'),
 						    $nextRow       = $expandableRow.next('.expandable');
 						
@@ -237,6 +244,11 @@
 							$nextRow = $nextRow.next('.expandable');
 							
 						}
+						
+						// Re-enable the expanding again after
+						setTimeout(function() {
+							self.isRowExpanding = false;
+						}, 305);
 						
 					})
 					
