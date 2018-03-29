@@ -122,7 +122,7 @@ class Hooks {
 
 		$post_type = get_post_type();
 
-		if ($post_type == 'product' && $hook == 'post.php') {
+		if ($post_type == 'product' && in_array($hook, ['post.php', 'post-new.php']) ) {
 
 			// Enqueue styles
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
@@ -191,11 +191,13 @@ class Hooks {
 		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
 			<div class="options_group"><?php
 
-				$product_id = get_the_ID();
+				$product_id     = get_the_ID();
+				$product_status = get_post_status( $product_id );
+
 				woocommerce_wp_checkbox( array(
 					'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
 					'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-					'value'         => Helpers::get_atum_control_status($product_id),
+					'value'         => $product_status == 'auto-draft' ? 'yes' : Helpers::get_atum_control_status($product_id),
 					'class'         => 'js-switch',
 					'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
 					'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
@@ -268,70 +270,69 @@ class Hooks {
 	 * @param bool     $update
 	 */
 	public function save_product_data_panel( $product_id, $post, $update ) {
-		
-		if ( $update && ( ! defined( 'DOING_AUTOSAVE' ) || ! DOING_AUTOSAVE ) ) {
-			
-			$product_tab_fields     = Globals::get_product_tab_fields();
-			$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
-			
-			// Update the "_inehritable" meta key
-			if ( $is_inheritable_product ) {
-				update_post_meta( $product_id, Globals::IS_INHERITABLE_KEY, 'yes' );
-				// The ATUM's stock control must be always 'yes' for inheritable products
-				update_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+
+		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
+			return;
+		}
+
+		$product_tab_values     = isset( $_POST['atum_product_tab'] ) ? $_POST['atum_product_tab'] : array();
+		$product_tab_fields     = Globals::get_product_tab_fields();
+		$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
+
+		// Update the "_inehritable" meta key
+		if ( $is_inheritable_product ) {
+			update_post_meta( $product_id, Globals::IS_INHERITABLE_KEY, 'yes' );
+		}
+		else {
+			delete_post_meta( $product_id, Globals::IS_INHERITABLE_KEY );
+		}
+
+		foreach ( $product_tab_fields as $field_name => $field_type ) {
+
+			// The ATUM's stock control must be always 'yes' for inheritable products
+			if ( $field_name == Globals::ATUM_CONTROL_STOCK_KEY && $is_inheritable_product ) {
+				Helpers::enable_atum_control($product_id);
+				continue;
+			}
+
+			// Sanitize the fields
+			$field_value = '';
+			switch ( $field_type ) {
+				case 'checkbox':
+
+					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : '';
+					break;
+
+				case 'number_int':
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = absint( $product_tab_values[ $field_name ] );
+					}
+					break;
+
+				case 'number_float':
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = floatval( $product_tab_values[ $field_name ] );
+					}
+					break;
+
+				case 'text':
+				default:
+
+					if ( isset( $product_tab_values[ $field_name ] ) ) {
+						$field_value = wc_clean( $product_tab_values[ $field_name ] );
+					}
+					break;
+			}
+
+			if ( $field_value ) {
+				update_post_meta( $product_id, $field_name, $field_value );
 			}
 			else {
-				delete_post_meta( $product_id, Globals::IS_INHERITABLE_KEY );
-				delete_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY );
+				delete_post_meta( $product_id, $field_name );
 			}
-			
-			if ( isset( $_POST['atum_product_tab'] ) ) {
-				
-				$product_tab_values = $_POST['atum_product_tab'];
-				
-				foreach ( $product_tab_fields as $field_name => $field_type ) {
-					
-					// Sanitize the fields
-					$field_value = '';
-					switch ( $field_type ) {
-						case 'checkbox':
-							
-							$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : '';
-							break;
-						
-						case 'number_int':
-							
-							if ( isset( $product_tab_values[ $field_name ] ) ) {
-								$field_value = absint( $product_tab_values[ $field_name ] );
-							}
-							break;
-						
-						case 'number_float':
-							
-							if ( isset( $product_tab_values[ $field_name ] ) ) {
-								$field_value = floatval( $product_tab_values[ $field_name ] );
-							}
-							break;
-						
-						case 'text':
-						default:
-							
-							if ( isset( $product_tab_values[ $field_name ] ) ) {
-								$field_value = wc_clean( $product_tab_values[ $field_name ] );
-							}
-							break;
-					}
-					
-					if ( $field_value ) {
-						update_post_meta( $product_id, $field_name, $field_value );
-					}
-					else {
-						delete_post_meta( $product_id, $field_name );
-					}
-					
-				}
-			}
-			
+
 		}
 		
 	}
