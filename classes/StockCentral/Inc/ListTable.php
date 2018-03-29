@@ -162,6 +162,22 @@ class ListTable extends AtumListTable {
 				)
 			)
 		) );
+
+		// Initialize totalizers
+		$this->totalizers = apply_filters( 'atum/list_table/totalizers', array(
+			'_stock'            => 0,
+			'calc_inbound'      => 0,
+			'calc_hold'         => 0,
+			'calc_reserved'     => 0,
+			'calc_back_orders'  => 0,
+			'calc_sold_today'   => 0,
+			'calc_returns'      => 0,
+			'calc_damages'      => 0,
+			'calc_lost_in_post' => 0,
+			'calc_sales14'      => 0,
+			'calc_sales7'       => 0,
+			'calc_lost_sales'   => 0,
+		));
 		
 		parent::__construct( $args );
 
@@ -271,7 +287,7 @@ class ListTable extends AtumListTable {
 		
 		if ( $this->allow_calcs ) {
 			
-			$sale_price_value      = $this->product->get_sale_price();
+			$sale_price_value = $this->product->get_sale_price();
 			$sale_price_value = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency' => $this->default_currency ] ) : $sale_price;
 			
 			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
@@ -348,6 +364,8 @@ class ListTable extends AtumListTable {
 			);
 
 			$stock_on_hold = wc_stock_amount( $wpdb->get_var($sql) );
+			$this->increase_total('calc_hold', $stock_on_hold);
+
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
@@ -364,7 +382,9 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_reserved( $item ) {
 
-		$reserved_stock = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
+		$reserved_stock = !$this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
+		$this->increase_total('calc_reserved', $reserved_stock);
+
 		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product );
 	}
 	
@@ -394,6 +414,8 @@ class ListTable extends AtumListTable {
 
 			}
 
+			$this->increase_total('calc_back_orders', $back_orders);
+
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_back_orders', $back_orders, $item, $this->product );
@@ -415,8 +437,10 @@ class ListTable extends AtumListTable {
 			$sold_today = self::EMPTY_COL;
 		}
 		else {
-			$sold_today = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
+			$sold_today = empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
 		}
+
+		$this->increase_total('calc_sold_today', $sold_today);
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_today', $sold_today, $item, $this->product );
 		
@@ -433,7 +457,9 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_returns( $item ) {
 
-		$consumer_returns = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
+		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
+		$this->increase_total('calc_returns', $consumer_returns);
+
 		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product );
 	}
 
@@ -448,7 +474,9 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_damages( $item ) {
 
-		$warehouse_damages = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
+		$warehouse_damages = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
+		$this->increase_total('calc_damages', $warehouse_damages);
+
 		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product );
 	}
 
@@ -463,7 +491,9 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_lost_in_post( $item ) {
 
-		$lost_in_post = (! $this->allow_calcs) ? self::EMPTY_COL : $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
+		$lost_in_post = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
+		$this->increase_total('calc_lost_in_post', $lost_in_post);
+
 		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
 	}
 	
@@ -482,7 +512,8 @@ class ListTable extends AtumListTable {
 			$sales7 = self::EMPTY_COL;
 		}
 		else {
-			$sales7 = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
+			$sales7 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
+			$this->increase_total('calc_sales7', $sales7);
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $sales7, $item, $this->product );
@@ -504,7 +535,8 @@ class ListTable extends AtumListTable {
 			$sales14 = self::EMPTY_COL;
 		}
 		else {
-			$sales14 = ( empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
+			$sales14 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
+			$this->increase_total('calc_sales14', $sales14);
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $sales14, $item, $this->product );
@@ -559,7 +591,7 @@ class ListTable extends AtumListTable {
 			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product->get_id() );
 		}
 
-		$out_of_stock_days = ( is_numeric($out_of_stock_days) ) ? $out_of_stock_days : self::EMPTY_COL;
+		$out_of_stock_days = is_numeric($out_of_stock_days) ? $out_of_stock_days : self::EMPTY_COL;
 		
 		return apply_filters( 'atum/stock_central_list/column_stock_out_days', $out_of_stock_days, $item, $this->product );
 		
@@ -582,7 +614,8 @@ class ListTable extends AtumListTable {
 			$lost_sales = Helpers::get_product_lost_sales( $this->product->get_id() );
 		}
 
-		$lost_sales = ( is_numeric($lost_sales) ) ? Helpers::format_price( $lost_sales, ['trim_zeros' => TRUE] ) : self::EMPTY_COL;
+		$lost_sales = is_numeric($lost_sales) ? Helpers::format_price( $lost_sales, ['trim_zeros' => TRUE] ) : self::EMPTY_COL;
+		$this->increase_total('calc_lost_sales', $lost_sales);
 
 		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product );
 

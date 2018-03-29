@@ -813,6 +813,32 @@ h1.wp-heading-inline #atum-update-list:active {
   padding: 10px 24px;
 }
 
+.atum-list-table tr.totals {
+  background-color: #e7e7e7;
+}
+
+.atum-list-table tr.totals td, .atum-list-table tr.totals th {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  color: #333333;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.atum-list-table tr.totals td span, .atum-list-table tr.totals th span {
+  display: inline-block;
+  background-color: #555;
+  color: #FFF;
+  border-radius: 2px;
+  padding: 2px 4px;
+  min-width: 20px;
+}
+
+.atum-list-table tr.totals td span.danger, .atum-list-table tr.totals th span.danger {
+  background-color: #FF4848;
+}
+
 .atum-list-table .cell-green {
   color: #82C342;
 }

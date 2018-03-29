@@ -197,6 +197,19 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var bool
 	 */
 	protected $show_controlled = TRUE;
+
+	/**
+	 * Columns that allow totalizers with their totals
+	 * @var array
+	 */
+	protected $totalizers = array();
+
+	/**
+	 * Whether to show the totals row
+	 * @var bool
+	 */
+	protected $show_totals = TRUE;
+
 	
 	/**
 	 * User meta key to control the current user dismissed notices
@@ -238,6 +251,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->show_cb         = $args['show_cb'];
 		$this->show_controlled = $args['show_controlled'];
+
+		if ($this->show_totals &&  Helpers::get_option('show_totals', 'yes') == 'no' ) {
+			$this->show_totals = FALSE;
+		}
 
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
@@ -717,8 +734,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		if ( $this->allow_calcs ) {
 			
-				$purchase_price_value = get_post_meta( $product_id, '_purchase_price', TRUE );
-			$purchase_price_value = ( is_numeric( $purchase_price_value ) ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->default_currency ] ) : $purchase_price;
+			$purchase_price_value = get_post_meta( $product_id, '_purchase_price', TRUE );
+			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->default_currency ] ) : $purchase_price;
 			
 			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
 				'post_id'   => $product_id,
@@ -760,6 +777,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
+			$this->increase_total('_stock', $stock);
 
 			if ($editable) {
 
@@ -811,8 +829,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->product->get_id()
 			);
 
-			$inbound_stock = $wpdb->get_col($sql);
-			$inbound_stock = ( ! empty($inbound_stock) ) ? reset($inbound_stock) : 0;
+			$inbound_stock = $wpdb->get_var($sql);
+			$inbound_stock = $inbound_stock ?: 0;
+			$this->increase_total('calc_inbound', $inbound_stock);
 
 		}
 
@@ -1682,9 +1701,17 @@ abstract class AtumListTable extends \WP_List_Table {
 				</tbody>
 				
 				<tfoot>
-					<tr>
+
+					<?php if ( $this->show_totals ): ?>
+					<tr class="totals">
+						<?php $this->print_column_totals(); ?>
+					</tr>
+					<?php endif ?>
+
+					<tr class="item-heads">
 						<?php $this->print_column_headers( FALSE ); ?>
 					</tr>
+
 				</tfoot>
 			
 			</table>
@@ -1745,6 +1772,56 @@ abstract class AtumListTable extends \WP_List_Table {
 			echo '</tr>';
 			
 		}
+	}
+
+	/**
+	 * Prints the totals row on table footer
+	 *
+	 * @since 1.4.2
+	 */
+	public function print_column_totals() {
+
+		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
+
+		$column_keys  = array_keys( $columns );
+		$first_column = reset( $column_keys );
+
+		foreach ( $columns as $column_key => $column_display ) {
+
+			$class = array( 'manage-column', "column-$column_key" );
+
+			if ( in_array( $column_key, $hidden ) ) {
+				$class[] = 'hidden';
+			}
+
+			if ( $first_column == $column_key ) {
+				$class[] = 'totals-heading';
+				$column_display = '<span>' . __('Totals', ATUM_TEXT_DOMAIN) . '</span>';
+			}
+			elseif( in_array( $column_key, array_keys($this->totalizers) ) ) {
+				$total = $this->totalizers[ $column_key ];
+				$total_class = $total < 0 ? ' class="danger"' : '';
+				$column_display = "<span{$total_class}>" . $total . '</span>';
+			}
+			else {
+				$column_display = self::EMPTY_COL;
+			}
+
+			if ( $column_key == $primary ) {
+				$class[] = 'column-primary';
+			}
+
+			$tag   = 'cb' == $column_key ? 'td' : 'th';
+			$scope = 'th' == $tag ? 'scope="col"' : '';
+
+			if ( ! empty( $class ) ) {
+				$class = "class='" . join( ' ', $class ) . "'";
+			}
+
+			echo "<$tag $scope $class>$column_display</th>";
+
+		}
+
 	}
 	
 	/**
@@ -1980,15 +2057,25 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->display_tablenav( 'bottom' );
 		$extra_tablenav_bottom = ob_get_clean();
 		
-		$response                         = array( 'rows' => $rows );
-		$response['extra_t_n']['top']     = $extra_tablenav_top;
-		$response['extra_t_n']['bottom']  = $extra_tablenav_bottom;
-		$response['column_headers']       = $headers;
-		
 		ob_start();
 		$this->views();
-		$response['views'] = ob_get_clean();
-		
+		$views = ob_get_clean();
+
+		$response = array(
+			'rows'           => $rows,
+			'extra_t_n'      => array(
+				'top'    => $extra_tablenav_top,
+				'bottom' => $extra_tablenav_bottom
+			),
+			'column_headers' => $headers,
+			'views'          => $views
+		);
+
+		if ($this->show_totals) {
+			ob_start();
+			$this->print_column_totals();
+			$response['totals'] = ob_get_clean();
+		}
 		
 		if ( isset( $total_items ) ) {
 			$response['total_items_i18n'] = sprintf( _n( '%s item', '%s items', $total_items ), number_format_i18n( $total_items ) );
@@ -2295,6 +2382,20 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return array_merge( $product_ids, array_unique($parents) );
 
+	}
+
+	/**
+	 * Increase the total of the specified column by the specified amount
+	 *
+	 * @since 1.4.2
+	 *
+	 * @param string    $column_name
+	 * @param int|float $amount
+	 */
+	protected function increase_total($column_name, $amount) {
+		if ( $this->show_totals && isset($this->totalizers[ $column_name ]) && is_numeric($amount) ) {
+			$this->totalizers[ $column_name ] += floatval($amount);
+		}
 	}
 
 }

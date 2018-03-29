@@ -47,6 +47,11 @@ class ListTable extends AtumListTable {
 			'calc_purchase_order'  => __( 'PO', ATUM_TEXT_DOMAIN)
 		);
 
+		// Initialize totalizers
+		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array(
+			'calc_inbound' => 0
+		));
+
 		parent::__construct( $args );
 		
 	}
@@ -185,6 +190,8 @@ class ListTable extends AtumListTable {
 
 		// Get the quantity for the ATUM Order Item
 		$qty = AtumOrderItemModel::get_item_meta($item->po_item_id, '_qty');
+		$this->increase_total('calc_inbound', $qty);
+
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
 
 	}

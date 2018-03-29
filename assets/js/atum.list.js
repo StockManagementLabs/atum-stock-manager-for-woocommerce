@@ -855,16 +855,17 @@
 							
 							// Update column headers for sorting
 							if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-								$listWrapper.find('thead tr.item-heads, tfoot tr').html(response.column_headers);
+								$listWrapper.find('tr.item-heads').html(response.column_headers);
 							}
 							
+							// Update the views filters
 							if (typeof response.views !== 'undefined' && response.views.length) {
 								$listWrapper.find('.subsubsub').replaceWith(response.views);
 							}
 							
+							// Update table navs
 							if (typeof response.extra_t_n !== 'undefined') {
 								
-								// Update extra table nav for navigation
 								if (response.extra_t_n.top.length) {
 									$listWrapper.find('.tablenav.top').replaceWith(response.extra_t_n.top);
 								}
@@ -873,6 +874,11 @@
 									$listWrapper.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
 								}
 								
+							}
+							
+							// Update the totals row
+							if (typeof response.totals !== 'undefined') {
+								$listWrapper.find('tfoot tr.totals').html(response.totals);
 							}
 							
 							// Re-add the scrollbar

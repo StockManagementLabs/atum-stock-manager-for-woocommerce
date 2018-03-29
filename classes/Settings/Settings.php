@@ -119,6 +119,13 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
+			'show_totals'    => array(
+				'section' => 'general',
+				'name'    => __( 'Show Totals Row', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, ATUM will display new row at the bottom of Stock Central. You will be able to preview page column totals of essential stock counters.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes'
+			),
 			'enable_admin_bar_menu' => array(
 				'section' => 'general',
 				'name'    => __( 'Enable Admin Bar Menu', ATUM_TEXT_DOMAIN ),
@@ -145,7 +152,7 @@ class Settings {
 			),
 			'delete_data' => array(
 				'section' => 'general',
-				'name'    => __( 'Delete data when uninstalling', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Delete Data When Uninstalling', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'

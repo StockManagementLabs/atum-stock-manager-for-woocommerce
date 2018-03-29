@@ -289,6 +289,32 @@ h1.wp-heading-inline {
 			}
 		}
 		
+		&.totals {
+			background-color: darken($gray-light, 7%);
+			
+			td, th {
+				font-size: 12px;
+				font-style: italic;
+				font-weight: 400;
+				color: $gray-dark;
+				padding-top: 0;
+				padding-bottom: 0;
+				
+				span {
+					display: inline-block;
+					background-color: #555;
+					color: #FFF;
+					border-radius: 2px;
+					padding: 2px 4px;
+					min-width: 20px;
+					
+					&.danger {
+						background-color: $brand-danger;
+					}
+				}
+			}
+		}
+		
 	}
 	
 	.cell {

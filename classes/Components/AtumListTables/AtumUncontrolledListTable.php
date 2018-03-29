@@ -16,6 +16,8 @@ defined( 'ABSPATH' ) or die;
 
 class AtumUncontrolledListTable extends AtumListTable {
 
+	protected $show_totals = FALSE;
+
 	/**
 	 * @inheritdoc
 	 */
