@@ -652,6 +652,10 @@ h1.wp-heading-inline #atum-update-list:active {
   padding-right: 10px;
 }
 
+.atum-list-wrapper .actions .dropdown_extra_filter {
+  max-width: 160px;
+}
+
 .select2-dropdown .select2-results__option:focus {
   outline: none;
 }
@@ -728,9 +732,20 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .dashicons {
-  font-size: 15px;
-  width: 1em;
+  display: block;
+  text-indent: -9999px;
+  position: relative;
   height: 1em;
+  width: 1em;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .dashicons:before {
+  text-indent: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .atum-list-table .group th {
@@ -819,7 +834,6 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-table tr.totals td, .atum-list-table tr.totals th {
   font-size: 12px;
-  font-style: italic;
   font-weight: 400;
   color: #333333;
   padding-top: 0;
@@ -923,22 +937,6 @@ h1.wp-heading-inline #atum-update-list:active {
   padding-top: 6px;
 }
 
-.atum-list-table .column-calc_hierarchy .dashicons {
-  display: block;
-  text-indent: -9999px;
-  position: relative;
-  height: 1em;
-  width: 1em;
-  margin: 0 auto;
-}
-
-.atum-list-table .column-calc_hierarchy .dashicons:before {
-  text-indent: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
 .atum-list-table .set-meta {
   cursor: pointer;
   color: #0073AA;
@@ -964,7 +962,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .column-calc_stock_indicator .dashicons {
-  font-size: 1.5em;
+  font-size: 1.4em !important;
 }
 
 .atum-list-table .atum-title-small {

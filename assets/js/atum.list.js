@@ -70,7 +70,7 @@
 					//
 					// Init Tooltips
 					//---------------
-					this.tooltip();
+					this.addTooltips();
 					
 					//
 					// Init Popovers
@@ -229,7 +229,7 @@
 						// Reload the scrollbar once the slide animation is completed
 						if ($nextRow.length) {
 							$expandableRow.toggleClass('expanded');
-							self.reloadScrollbar(305);
+							self.destroyTooltips();
 						}
 						
 						while ($nextRow.length) {
@@ -248,6 +248,8 @@
 						// Re-enable the expanding again after
 						setTimeout(function() {
 							self.isRowExpanding = false;
+							self.addTooltips();
+							self.reloadScrollbar();
 						}, 305);
 						
 					})
@@ -374,25 +376,10 @@
 				
 				/**
 				 * Reload the scrollbar
-				 *
-				 * @param int creationDelay The time in miliseconds that will delay until adding the scroll bar again
 				 */
-				reloadScrollbar: function(creationDelay) {
-					
-					var self = this;
+				reloadScrollbar: function() {
 					jScrollApi.destroy();
-					
-					if (typeof creationDelay !== 'undefined' && creationDelay > 0) {
-					
-						setTimeout(function() {
-							self.addScrollBar();
-						}, creationDelay);
-						
-					}
-					else {
-						this.addScrollBar();
-					}
-					
+					this.addScrollBar();
 				},
 				
 				/**
@@ -448,13 +435,20 @@
 				/**
 				 * Enable tooltips
 				 */
-				tooltip: function () {
+				addTooltips: function () {
 					
 					$('[data-toggle="tooltip"]').tooltip({
 						html     : true,
 						container: 'body'
 					});
 					
+				},
+				
+				/**
+				 * Destroy all the tooltips
+				 */
+				destroyTooltips: function() {
+					$('[data-toggle="tooltip"]').tooltip('destroy');
 				},
 				
 				/**
@@ -897,7 +891,7 @@
 							self.reloadScrollbar();
 							
 							// Re-add tooltips
-							self.tooltip();
+							self.addTooltips();
 							
 							// Restore enhanced selects
 							self.maybeRestoreEnhancedSelect();
