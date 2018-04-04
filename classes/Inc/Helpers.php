@@ -206,7 +206,7 @@ final class Helpers {
 
 		$defaults = array(
 			'post_type'      => 'product',
-			'post_status'    => [ 'publish', 'private' ],
+			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids'
 		);
@@ -626,8 +626,10 @@ final class Helpers {
 			LEFT JOIN $wpdb->postmeta AS mt3 ON ID = mt3.post_id		
 		" );
 
+		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
+
 		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', "
-			WHERE post_type IN ('" . implode( "', '", $post_types ) . "') AND post_status IN ('publish', 'private')
+			WHERE post_type IN ('" . implode( "', '", $post_types ) . "') AND post_status IN ('" . implode( "','", $post_statuses ) . "')
 			AND (mt1.post_id IS NULL OR (mt2.meta_key = '_manage_stock' AND mt2.meta_value = 'no'))
 			AND mt3.meta_key = '_atum_manage_stock' AND mt3.meta_value = 'yes'
 		" );
@@ -888,7 +890,7 @@ final class Helpers {
 	 *
 	 * @param int $product_id
 	 *
-	 * @return string|bool  Yes if On of FALSE if Off
+	 * @return string|bool  yes if On of FALSE if Off
 	 */
 	public static function get_atum_control_status($product_id) {
 		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE );
