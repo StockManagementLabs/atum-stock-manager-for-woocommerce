@@ -674,7 +674,7 @@ final class Helpers {
 	 */
 	public static function set_transient( $transient_id, $value, $expiration = 0, $force = FALSE ) {
 		
-		return ($force || ATUM_DEBUG !== TRUE) ? set_transient( ATUM_PREFIX . $transient_id, $value, $expiration ) : FALSE;
+		return ( $force || ATUM_DEBUG !== TRUE ) ? set_transient( $transient_id, $value, $expiration ) : FALSE;
 	}
 	
 	/**
@@ -689,7 +689,7 @@ final class Helpers {
 	 */
 	public static function get_transient( $transient_id, $force = FALSE ) {
 		
-		return ($force || ATUM_DEBUG !== TRUE) ? get_transient( ATUM_PREFIX . $transient_id ) : FALSE;
+		return ( $force || ATUM_DEBUG !== TRUE ) ? get_transient( $transient_id ) : FALSE;
 	}
 	
 	/**

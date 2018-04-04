@@ -220,12 +220,13 @@ class Addons {
 	 *
 	 * @return array|bool
 	 */
-	private function get_addons_list () {
-
-		$addons = Helpers::get_transient( 'addons_list' );
-
-		if (!$addons) {
-
+	private function get_addons_list() {
+		
+		$transient_name = Helpers::get_transient_identifier( 'addons_list', '' );
+		$addons         = Helpers::get_transient( $transient_name );
+		
+		if ( ! $addons ) {
+			
 			$args = array(
 				'method'      => 'POST',
 				'timeout'     => 15,
@@ -237,36 +238,38 @@ class Addons {
 				'body'        => array(),
 				'cookies'     => array()
 			);
-
+			
 			$response = wp_remote_post( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
-
+			
 			// Admin notification about the error
 			if ( is_wp_error( $response ) ) {
-
+				
 				$error_message = $response->get_error_message();
-
+				
 				if ( ATUM_DEBUG == TRUE ) {
 					error_log( __METHOD__ . ": $error_message" );
 				}
-
+				
 				$this->display_addons_page_notice( 'error', sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ) );
+				
 				return FALSE;
-
+				
 			}
-
+			
 			$addons = @json_decode( wp_remote_retrieve_body( $response ), TRUE );
-
-			if ( !$addons) {
+			
+			if ( ! $addons ) {
 				$this->display_addons_page_notice( 'error', __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ) );
+				
 				return FALSE;
 			}
-
-			Helpers::set_transient('addons_list', $addons, DAY_IN_SECONDS);
-
+			
+			Helpers::set_transient( $transient_name, $addons, DAY_IN_SECONDS );
+			
 		}
-
+		
 		return $addons;
-
+		
 	}
 
 	/**
