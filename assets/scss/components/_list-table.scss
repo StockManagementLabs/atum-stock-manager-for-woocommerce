@@ -282,6 +282,14 @@ h1.wp-heading-inline {
 			}
 		}
 		
+		&.expandable {
+			.check-column {
+				input[type=checkbox] {
+					margin-left: 20px;
+				}
+			}
+		}
+		
 		&.variation {
 			background-color: lighten($brand-primary, 50%);
 			

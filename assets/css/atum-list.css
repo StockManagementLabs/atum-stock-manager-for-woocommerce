@@ -329,6 +329,215 @@
   color: #9ccf69;
 }
 
+.swal2-container .atum-loading {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.atum-tree {
+  position: relative;
+  min-height: 100px;
+}
+
+.ui-helper-hidden {
+  display: none;
+}
+
+ul.easytree-container {
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 1.3;
+  white-space: nowrap;
+  padding: 3px;
+  margin: 0;
+  border: 1px solid #E3E8F5;
+  border-radius: 6px;
+  overflow: auto;
+  height: 100%;
+  text-align: left;
+  padding: 10px 5px;
+}
+
+ul.easytree-container:focus {
+  outline: none;
+}
+
+ul.easytree-container ul {
+  padding: 0 0 0 16px;
+  margin: 0;
+}
+
+ul.easytree-container ul:focus {
+  outline: none;
+}
+
+ul.easytree-container ul li {
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+}
+
+ul.easytree-container ul li, ul.easytree-container ul li a {
+  color: #333333;
+}
+
+ul.easytree-container ul li.easytree-lastsib {
+  background-image: none;
+}
+
+.ui-easytree-disabled ul.easytree-container {
+  opacity: 0.5;
+  background-color: #C1C1C1;
+}
+
+ul.easytree-container img {
+  width: 16px;
+  height: 16px;
+  margin-left: 3px;
+  vertical-align: top;
+  border-style: none;
+}
+
+ul.easytree-no-connector > li {
+  background-image: none;
+}
+
+span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 17px;
+  display: inline-block;
+  vertical-align: top;
+  font-family: Dashicons;
+  cursor: pointer;
+  color: #333333;
+}
+
+span.easytree-custom-icon {
+  display: inline-block;
+}
+
+span.easytree-expander {
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  margin-right: 3px;
+}
+
+span.easytree-expander:before {
+  content: "\f132";
+}
+
+span.easytree-expander:hover {
+  color: #00B8DB !important;
+}
+
+.easytree-exp-e span.easytree-expander:before, .easytree-exp-ed span.easytree-expander:before, .easytree-exp-el span.easytree-expander:before, .easytree-exp-edl span.easytree-expander:before {
+  content: "\f460";
+}
+
+.easytree-exp-n span.easytree-expander, .easytree-exp-nl span.easytree-expander {
+  cursor: default;
+}
+
+.easytree-exp-n span.easytree-expander:before, .easytree-exp-nl span.easytree-expander:before {
+  content: '';
+  cursor: default;
+}
+
+.easytree-ico-c span.easytree-icon {
+  margin-left: 3px;
+}
+
+.easytree-ico-c span.easytree-icon:before {
+  font-family: WooCommerce;
+  content: '\e006';
+}
+
+.easytree-ico-ef span.easytree-icon:before {
+  content: '\f480';
+  font-size: 18px;
+}
+
+.easytree-title {
+  display: inline-block;
+  padding-left: 3px;
+  padding-right: 3px;
+  vertical-align: top;
+  margin-left: 3px;
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.easytree-title a {
+  color: #333333 !important;
+}
+
+.easytree-title a:hover {
+  color: #00B8DB !important;
+}
+
+.easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-active .easytree-title {
+  background-color: #00B8DB;
+}
+
+.easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-selected .easytree-title a, .easytree-focused span.easytree-active .easytree-title, .easytree-focused span.easytree-active .easytree-title a {
+  color: white !important;
+}
+
 .blockUI.blockOverlay:before {
   display: none;
 }
@@ -806,6 +1015,10 @@ h1.wp-heading-inline #atum-update-list:active {
 .atum-list-table tr.expanded .column-calc_type .has-child:before {
   content: "\e004";
   color: #FFF;
+}
+
+.atum-list-table tr.expandable .check-column input[type=checkbox] {
+  margin-left: 20px;
 }
 
 .atum-list-table tr.variation {

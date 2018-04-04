@@ -1781,10 +1781,15 @@ final class Ajax {
 		$locations_tree = wp_list_categories( array(
 			'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
 			'include'  => wp_list_pluck( $locations, 'term_id' ),
+			'title_li' => '',
 			'echo'     => FALSE
 		) );
 
-		wp_send_json( $locations_tree );
+		// Fix the list URLs to show the list of products within a location
+		$locations_tree = str_replace( home_url('/?'), admin_url('/edit.php?post_type=product&'), $locations_tree );
+		$locations_tree = str_replace( '<a href', '<a target="_blank" href', $locations_tree);
+
+		wp_send_json_success( "<ul>$locations_tree</ul>" );
 
 	}
 
