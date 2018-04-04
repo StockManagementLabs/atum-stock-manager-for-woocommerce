@@ -36,8 +36,9 @@ final class Ajax {
 	 */
 	private static $instance;
 
+
 	/**
-	 * Ajax constructor
+	 * Ajax singleton constructor
 	 */
 	private function __construct() {
 
@@ -115,6 +116,9 @@ final class Ajax {
 
 		// Set the ATUM control switch status to all variations at once
 		add_action( 'wp_ajax_atum_set_variations_control_status', array( $this, 'set_variations_control_status' ) );
+
+		// Get the product locations tree
+		add_action( 'wp_ajax_atum_get_locations_tree', array( $this, 'get_locations_tree' ) );
 
 	}
 
@@ -802,7 +806,8 @@ final class Ajax {
 		$like_term     = '%%' . $wpdb->esc_like( $term ) . '%%';
 		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', ['product', 'product_variation'] );
 		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
-		$type_join     = $type_where = $meta_join = $meta_where = array();
+		$meta_join     = $meta_where = array();
+		$type_where    = '';
 		$join_counter  = 1;
 
 		// Search by meta keys
@@ -819,22 +824,32 @@ final class Ajax {
 			$join_counter++;
 		}
 
-		// Allow searching for other product types if needed
-		$searched_types = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_product_types', [] ) );
-		if ( ! empty($searched_types) ) {
+		// Exclude variable products from results
+		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', ['variable', 'variable-subscription'] );
 
-			foreach ($searched_types as $searched_type) {
-				$type_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
-				$type_where[] = "AND ( pm{$join_counter}.meta_key = '{$searched_type}' AND pm{$join_counter}.meta_value = 'yes' )";
-				$join_counter++;
+		if ( ! empty($excluded_types) ) {
+
+			$excluded_type_terms = array();
+
+			foreach ($excluded_types as $excluded_type) {
+				$excluded_type_terms[] = get_term_by('slug', $excluded_type, 'product_type');
 			}
+
+			$excluded_type_terms = wp_list_pluck( array_filter($excluded_type_terms), 'term_taxonomy_id');
+
+			$type_where = "AND posts.ID NOT IN (
+				SELECT p.ID FROM $wpdb->posts p
+				LEFT JOIN $wpdb->term_relationships tr ON p.ID = tr.object_id
+				WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
+				AND p.post_status IN ('" . implode( "','", $post_statuses ) . "')
+				AND tr.term_taxonomy_id IN (" . implode(',', $excluded_type_terms) . ")
+			)";
 
 		}
 
 		$query = $wpdb->prepare( "
 			SELECT DISTINCT posts.ID FROM {$wpdb->posts} posts
 			" . implode("\n", $meta_join) . "
-			" . implode("\n", $type_join) . "
 			WHERE (
 				posts.post_title LIKE %s
 				OR posts.post_content LIKE %s
@@ -842,7 +857,7 @@ final class Ajax {
 			)
 			AND posts.post_type IN ('" . implode( "','", $post_types ) . "')
 			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-			" . implode("\n", $type_where) . "
+			" . $type_where . "
 			ORDER BY posts.post_parent ASC, posts.post_title ASC
 			",
 			$like_term,
@@ -1744,6 +1759,32 @@ final class Ajax {
 		}
 
 		wp_send_json_success( __('All the variations were updated successfully', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * Get the the Locations tree for a specific product
+	 *
+	 * @since 1.4.2
+	 */
+	public function get_locations_tree() {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		if ( empty($_POST['product_id']) ) {
+			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
+		}
+
+		$product_id = absint( $_POST['product_id'] );
+		$locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY);
+
+		$locations_tree = wp_list_categories( array(
+			'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+			'include'  => wp_list_pluck( $locations, 'term_id' ),
+			'echo'     => FALSE
+		) );
+
+		wp_send_json( $locations_tree );
 
 	}
 
