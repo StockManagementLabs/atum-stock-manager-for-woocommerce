@@ -219,6 +219,33 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.2`
+
+*2018-04-05*
+
+**Features**
+
+* Added Multiple Suppliers switch to POs.
+* Added Totals row to ATUM List Tables.
+* Add new setting to disable the Totals row globally.
+* Added ATUM Locations tree column to List Tables.
+
+**Changes**
+
+* Allow adding products from distinct suppliers to POs.
+
+**Fixes**
+
+* Fixed issue with product switched to uncontrolled when updating the stock from WC Orders or Purchase Orders or Inventory Logs.
+* Fixed issue when expanding rows with double-click.
+* Fixed Firefox issues in List Tables’ UI.
+* Security improvements.
+* Removed duplicated ATUM prefix in transients.
+* Fixed views filters' counters.
+* Fixed child rows' checkboxes not changing when checking the header's checkbox.
+
+---
+
 `1.4.1.2`
 
 *2018-03-28*
@@ -236,9 +263,6 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 * Fixed WPML controlled products not shown in secondary languages.
 * Fixed undefined index 'product-type' issue when adding new products.
 * Fixed ATUM control switch not saved for inheritable products.
-
-**Fixes**
-
 * Fixed WPML compatibility with the new stock management system.
 
 ---
