@@ -106,6 +106,10 @@ h1.wp-heading-inline {
 			padding-right: 10px;
 		}
 		
+		.dropdown_extra_filter {
+			max-width: 160px;
+		}
+		
 	}
 	
 }
@@ -192,14 +196,25 @@ h1.wp-heading-inline {
 			height: 42px;
 			
 			.dashicons {
-				font-size: 15px;
-				width: 1em;
+				display: block;
+				text-indent: -9999px;
+				position: relative;
 				height: 1em;
+				width: 1em;
+				margin: 0 auto;
+				font-size: 14px;
+				
+				&:before {
+					text-indent: 0;
+					position: absolute;
+					left: 0;
+					top: 0;
+				}
 			}
 		}
 	}
 	
-	.group {
+	.column-groups {
 		th {
 			font-weight: bold;
 			
@@ -267,6 +282,14 @@ h1.wp-heading-inline {
 			}
 		}
 		
+		&.expandable {
+			.check-column {
+				input[type=checkbox] {
+					margin-left: 20px;
+				}
+			}
+		}
+		
 		&.variation {
 			background-color: lighten($brand-primary, 50%);
 			
@@ -294,7 +317,6 @@ h1.wp-heading-inline {
 			
 			td, th {
 				font-size: 12px;
-				font-style: italic;
 				font-weight: 400;
 				color: $gray-dark;
 				padding-top: 0;
@@ -411,24 +433,6 @@ h1.wp-heading-inline {
 		}
 	}
 	
-	.column-calc_hierarchy {
-		.dashicons {
-			display: block;
-			text-indent: -9999px;
-			position: relative;
-			height: 1em;
-			width: 1em;
-			margin: 0 auto;
-			
-			&:before {
-				text-indent: 0;
-				position: absolute;
-				left: 0;
-				top: 0;
-			}
-		}
-	}
-	
 	.set-meta {
 		cursor: pointer;
 		color: $link;
@@ -455,7 +459,7 @@ h1.wp-heading-inline {
 	
 	.column-calc_stock_indicator {
 		.dashicons {
-			font-size: 1.5em;
+			font-size: 1.4em !important;
 		}
 	}
 	
@@ -464,7 +468,7 @@ h1.wp-heading-inline {
 	}
 	
 	@media screen and (max-width: 782px) {
-		.group {
+		.column-groups {
 			display: none;
 		}
 		

@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: inventory management, suppliers, purchase orders, inbound stock, statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.9.4
+Tested up to: 4.9.5
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.4
-Stable tag: 1.4.1.2
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -269,6 +269,33 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.2`
+
+*2018-04-05*
+
+**Features**
+
+* Added Multiple Suppliers switch to POs.
+* Added Totals row to ATUM List Tables.
+* Add new setting to disable the Totals row globally.
+* Added ATUM Locations tree column to List Tables.
+
+**Changes**
+
+* Allow adding products from distinct suppliers to POs.
+
+**Fixes**
+
+* Fixed issue with product switched to uncontrolled when updating the stock from WC Orders or Purchase Orders or Inventory Logs.
+* Fixed issue when expanding rows with double-click.
+* Fixed Firefox issues in List Tables’ UI.
+* Security improvements.
+* Removed duplicated ATUM prefix in transients.
+* Fixed views filters' counters.
+* Fixed child rows' checkboxes not changing when checking the header's checkbox.
+
+---
+
 `1.4.1.2`
 
 *2018-03-28*
@@ -286,11 +313,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed WPML controlled products not shown in secondary languages.
 * Fixed undefined index 'product-type' issue when adding new products.
 * Fixed ATUM control switch not saved for inheritable products.
-
-**Fixes**
-
 * Fixed WPML compatibility with the new stock management system.
-
 
 ---
 

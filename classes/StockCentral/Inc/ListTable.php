@@ -76,6 +76,7 @@ class ListTable extends AtumListTable {
 			'_supplier_sku'          => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                     => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'              => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_location'          => '<span class="dashicons dashicons-store tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
@@ -93,7 +94,7 @@ class ListTable extends AtumListTable {
 			'calc_will_last'         => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'    => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'        => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'   => __( 'Stock Indicator', ATUM_TEXT_DOMAIN )
+			'calc_stock_indicator'   => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
 		// Hide the purchase price column if the current user has not the capability
@@ -126,6 +127,7 @@ class ListTable extends AtumListTable {
 					'_supplier_sku',
 					'ID',
 					'calc_type',
+					'calc_location',
 					'_regular_price',
 					'_sale_price',
 					'_purchase_price'

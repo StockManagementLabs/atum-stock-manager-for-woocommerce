@@ -502,7 +502,7 @@ final class WidgetHelpers {
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
-				'post_status'    => ['publish', 'private'],
+				'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'fields'         => 'ids',
 				'post__in'       => $products,
 				'meta_query'     => array(
@@ -593,7 +593,7 @@ final class WidgetHelpers {
 		// Get the published Variables first
 		$parent_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/parent_args', array(
 			'post_type'      => 'product',
-			'post_status'    => ['publish', 'private'],
+			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 			'tax_query'      => array(
@@ -619,7 +619,7 @@ final class WidgetHelpers {
 
 			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
 				'post_type'       => $post_type,
-				'post_status'     => ['publish', 'private'],
+				'post_status'     => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
 				'post_parent__in' => $parents->posts

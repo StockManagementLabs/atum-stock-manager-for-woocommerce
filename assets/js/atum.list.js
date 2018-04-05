@@ -1,1082 +1,1176 @@
 /**
  * Atum List Tables
  *
- * @copyright Stock Management Labs ©2017
- * @since 0.0.1
+ * @copyright Stock Management Labs ©2018
  *
- * TODO: CREATE A JQUERY PLUGIN
+ * @since 0.0.1
  */
 
-(function ($) {
-	'use strict';
+;( function( $, window, document, undefined ) {
+	"use strict";
 	
-	$(function () {
+	// Create the defaults once
+	var pluginName = 'atumListTable',
+	    defaults   = {
+		    ajaxFilter: 'yes',
+		    order     : 'desc',
+		    orderby   : 'date'
+	    };
+	
+	// The actual plugin constructor
+	function Plugin ( element, options ) {
 		
-		//-------------------
-		// Stock Central List
-		//-------------------
-		var postTypeTableAjax = '';
+		// Initialize selectors
+		this.$atumList    = $(element);
+		this.$atumTable   = this.$atumList.find('.atum-list-table');
+		this.$editInput   = this.$atumList.find('#atum-column-edits');
+		this.$searchInput = this.$atumList.find('.atum-post-search');
+		this.$bulkButton  = $('.apply-bulk-action');
 		
-		$('.atum-list-wrapper').each(function () {
+		// We don't want to alter the default options for future instances of the plugin
+		// Load the localized vars to the plugin settings too
+		this.settings = $.extend( {}, defaults, atumListVars || {}, options );
+		
+		this._defaults = defaults;
+		this._name = pluginName;
+		this.init();
+	}
+	
+	// Avoid Plugin.prototype conflicts
+	$.extend( Plugin.prototype, {
+		
+		doingAjax     : null,
+		jScrollApi    : null,
+		$scrollPane   : null,
+		timer         : null,
+		isRowExpanding: {},
+		
+		/**
+		 * Register our events and initialize the UI
+		 */
+		init: function () {
 			
-			var $listWrapper      = $(this),
-			    $atumTable        = $listWrapper.find('.atum-list-table'),
-			    $editInput        = $listWrapper.find('#atum-column-edits'),
-			    $inputPerPage     = $listWrapper.parent().siblings('#screen-meta').find('.screen-per-page'),
-			    $search           = $listWrapper.find('.atum-post-search'),
-				$bulkButton       = $('.apply-bulk-action'),
-			    ajaxSearchEnabled = atumListTable.ajaxfilter || 'yes',
-			    jScrollApi,
-			    $scrollPane,
-			    timer;
+			var self = this;
 			
-			var stockCentralTable = {
+			//
+			// Init. Table Scrollbar
+			//----------------------
+			this.addScrollBar();
+			
+			$(window).resize(function() {
 				
-				/**
-				 * Register our events and initialize the UI
-				 */
-				init: function () {
+				if (self.$scrollPane && self.$scrollPane.length) {
 					
-					var self = this;
+					var vwWidth        = $(this).width(),
+					    isJsPaneActive = typeof self.$scrollPane.data('jsp') !== 'undefined';
 					
-					//
-					// Init. Table Scrollbar
-					//----------------------
-					this.addScrollBar();
-					
-					$(window).resize(function() {
-						
-						if ($scrollPane && $scrollPane.length) {
-							
-							var vwWidth        = $(this).width(),
-							    isJsPaneActive = typeof $scrollPane.data('jsp') !== 'undefined';
-							
-							// On mobile version, we don't need scrollbars
-							if (vwWidth < 782 && isJsPaneActive) {
-								jScrollApi.destroy();
-							}
-							// Instantiate the JScrollPane again if was removed while resizing the window
-							else if (vwWidth >= 782 && !isJsPaneActive) {
-								self.addScrollBar();
-							}
-							// Reinitialize to adapt to the screen width
-							else if (isJsPaneActive) {
-								jScrollApi.reinitialise();
-							}
-						}
-						
-					}).resize();
-					
-					//
-					// Init Tooltips
-					//---------------
-					this.tooltip();
-					
-					//
-					// Init Popovers
-					//---------------
-					this.setFieldPopover();
-					
-					// Hide any other opened popover before opening a new one
-					$listWrapper.click( function(e) {
-						
-						var $target   = $(e.target),
-						    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all
-						    $metaCell = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
-						
-						// Get only the cells with an opened popover
-						$metaCell = $metaCell.filter(function() {
-							return $(this).data('bs.popover') !== 'undefined' && ($(this).data('bs.popover').inState || false) && $(this).data('bs.popover').inState.click === true;
-						});
-						
-						self.destroyPopover($metaCell);
-						
-					});
-					
-					// Popover's "Set" button
-					$('body').on('click', '.popover button.set', function() {
-						
-						var $button   = $(this),
-						    $popover  = $button.closest('.popover'),
-						    popoverId = $popover.attr('id'),
-						    $setMeta  = $('[data-popover="' + popoverId + '"]');
-						
-						if ($setMeta.length) {
-							self.maybeAddSaveButton();
-							self.updateEditedColsInput($setMeta, $popover);
-						}
-						
-					});
-					
-					//
-					// Hide/Show/Colspan column groups
-					//--------------------------------
-					$('#adv-settings .metabox-prefs input').change(function () {
-						$listWrapper.find('thead .group th').each(function () {
-							
-							var $this = $(this),
-							    //these th only have one class
-							    cols  = $listWrapper.find('thead .col-' + $this.attr('class') + ':visible').length;
-							
-							if (cols) {
-								$this.show().attr('colspan', cols)
-							}
-							else {
-								$this.hide();
-							}
-						});
-					});
-					
-					//
-					// Pagination links, Sortable link
-					//--------------------------------
-					$listWrapper.on('click', '.tablenav-pages a, .manage-column.sortable a, .manage-column.sorted a, .subsubsub a', function (e) {
-						
-						e.preventDefault();
-						
-						// Simple way: use the URL to extract our needed variables
-						var query = this.search.substring(1),
-						    $this = $(this);
-						
-						self.$animationElem = $this.closest('.subsubsub');
-						
-						if (!self.$animationElem.length) {
-							self.$animationElem = $this.closest('.tablenav-pages');
-							
-							// For sorting tables with group headers
-							if (!self.$animationElem.length && $this.find('span[class*=col-]').length) {
-								var $group = '.' + $this.find('span[class*=col-]').attr('class').replace('col-', '');
-								self.$animationElem = $this.closest('.wp-list-table').find($group);
-							}
-						}
-						
-						var data = {
-							paged   : self.__query(query, 'paged') || '1',
-							order   : self.__query(query, 'order') || 'desc',
-							orderby : self.__query(query, 'orderby') || 'date',
-							v_filter: self.__query(query, 'v_filter') || '',
-							s       : $search.val() || ''
-						};
-						
-						self.update(data);
-						
-					});
-					
-					//
-					// Ajax filters
-					//-------------
-					if (ajaxSearchEnabled === 'yes') {
-						
-						// The search event is triggered when cliking on the clear field button within the seach input
-						$listWrapper.on('keyup paste search', '.atum-post-search', function (e) {
-							self.$animationElem = $(this).closest('.search-box');
-							self.keyUp(e);
-						})
-						.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-							self.$animationElem = $(this).closest('.actions');
-							self.keyUp(e, true);
-						});
-						
+					// On mobile version, we don't need scrollbars
+					if (vwWidth < 782 && isJsPaneActive) {
+						self.jScrollApi.destroy();
 					}
-					//
-					// Non-ajax filters
-					//-----------------
-					else {
-						
-						$listWrapper.on('click', '.search-category, .search-submit', function () {
-							
-							var page      = $listWrapper.find('.current-page').val() || 1,
-							    data      = {
-								    paged   : parseInt(page),
-								    order   : atumListTable.order || 'desc',
-								    orderby : atumListTable.orderby || 'date',
-								    v_filter: $listWrapper.find('.subsubsub a.current').attr('id') || '',
-								    s       : $search.val() || ''
-							    },
-							    $this     = $(this),
-							    elemClass = ($this.is('.search-category')) ? '.actions' : '.search-box';
-							
-							self.$animationElem = $this.closest(elemClass);
-							self.update(data);
-							
-						});
-						
+					// Instantiate the JScrollPane again if was removed while resizing the window
+					else if (vwWidth >= 782 && !isJsPaneActive) {
+						self.addScrollBar();
 					}
-					
-					//
-					// Pagination text box
-					//--------------------
-					$listWrapper.on('keyup paste', '.current-page', function (e) {
-						self.$animationElem = $(this).closest('.tablenav-pages');
-						self.keyUp(e);
-					})
-					
-					//
-					// Expanding/Collapsing inheritable products
-					//-------------------------------------------
-					.on('click', '.product-type.has-child', function() {
-						
-						var $expandableRow = $(this).closest('tr'),
-						    $nextRow       = $expandableRow.next('.expandable');
-						
-						// Reload the scrollbar once the slide animation is completed
-						if ($nextRow.length) {
-							$expandableRow.toggleClass('expanded');
-							self.reloadScrollbar(305);
-						}
-						
-						while ($nextRow.length) {
-							
-							if (!$nextRow.is(':visible')) {
-								$nextRow.show(300);
-							}
-							else {
-								$nextRow.hide(300);
-							}
-							
-							$nextRow = $nextRow.next('.expandable');
-							
-						}
-						
-					})
-					
-					//
-					// Bulk actions dropdown
-					//----------------------
-					.on('change', '.bulkactions select', function() {
-						
-						self.updateBulkButton();
-						
-						if ($(this).val() !== '-1') {
-							$bulkButton.show();
-						}
-						else {
-							$bulkButton.hide();
-						}
-					})
-					
-					//
-					// Change the Bulk Button text when selecting boxes
-					//-------------------------------------------------
-					.on('change', '.check-column input:checkbox', function() {
-						self.updateBulkButton();
-					})
-					
-					//
-					// Expandable rows' checkboxes
-					//----------------------------
-					.on('click', 'tr.variable .check-column input:checkbox, tr.group .check-column input:checkbox', function() {
-						
-						var $checkbox     = $(this),
-						    $containerRow = $checkbox.closest('tr'),
-							$nextRow      = $containerRow.next('.expandable');
-						
-						// If is not expanded, expand it
-						if (!$containerRow.hasClass('expanded')) {
-							$containerRow.find('.product-type.has-child').click();
-						}
-						
-						// Check/Uncheck all the children rows
-						while ($nextRow.length) {
-							$nextRow.find('.check-column input:checkbox').prop('checked', $checkbox.is(':checked'));
-							$nextRow = $nextRow.next('.expandable');
-						}
-					
-					});
-					
-					//
-					// Global save for edited cells
-					//-----------------------------
-					$('body').on('click', '#atum-update-list', function() {
-						self.saveData($(this));
-					});
-					
-					//
-					// Apply Bulk Actions
-					//-------------------
-					$bulkButton.click(function() {
-					
-						if (!$listWrapper.find('.check-column input:checked').length) {
-							
-							swal({
-								title            : atumListTable.noItemsSelected,
-								text             : atumListTable.selectItems,
-								type             : 'info',
-								confirmButtonText: atumListTable.ok
-							});
-							
-						}
-						else {
-							self.applyBulk();
-						}
-						
-					});
-					
-					//
-					// Warn the user about unsaved changes before navigatig away
-					//----------------------------------------------------------
-					$(window).bind('beforeunload', function() {
-						
-						if (!$editInput.val()) {
-							return;
-						}
-						
-						// Prevent multiple prompts - seen on Chrome and IE
-						if (navigator.userAgent.toLowerCase().match(/msie|chrome/)) {
-							
-							if (window.aysHasPrompted) {
-								return;
-							}
-							
-							window.aysHasPrompted = true;
-							window.setTimeout(function() {
-								window.aysHasPrompted = false;
-							}, 900);
-							
-						}
-						
-						return false;
-						
-					});
-					
-				},
+					// Reinitialize to adapt to the screen width
+					else if (isJsPaneActive) {
+						self.jScrollApi.reinitialise();
+					}
+				}
 				
-				/**
-				 * Add the horizontal scroll bar to the table
-				 */
-				addScrollBar: function() {
-					
-					// Wait until the thumbs are loaded and enable JScrollpane
-					var $tableWrapper = $('.atum-table-wrapper'),
-					    scrollOpts  = {
-						    horizontalGutter: 0,
-						    verticalGutter  : 0
-					    };
-					
-					$tableWrapper.imagesLoaded().then(function () {
-						$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
-						jScrollApi  = $scrollPane.data('jsp');
-					});
-					
-				},
+			}).resize();
+			
+			//
+			// Init Tooltips
+			//---------------
+			this.addTooltips();
+			
+			//
+			// Init Popovers
+			//---------------
+			this.setFieldPopover();
+			
+			// Hide any other opened popover before opening a new one
+			this.$atumList.click( function(e) {
 				
-				/**
-				 * Reload the scrollbar
-				 *
-				 * @param int creationDelay The time in miliseconds that will delay until adding the scroll bar again
-				 */
-				reloadScrollbar: function(creationDelay) {
+				var $target   = $(e.target),
+				    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all
+				    $metaCell = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
+				
+				// Get only the cells with an opened popover
+				$metaCell = $metaCell.filter(function() {
+					return $(this).data('bs.popover') !== 'undefined' && ($(this).data('bs.popover').inState || false) && $(this).data('bs.popover').inState.click === true;
+				});
+				
+				self.destroyPopover($metaCell);
+				
+			});
+			
+			// Popover's "Set" button
+			$('body').on('click', '.popover button.set', function() {
+				
+				var $button   = $(this),
+				    $popover  = $button.closest('.popover'),
+				    popoverId = $popover.attr('id'),
+				    $setMeta  = $('[data-popover="' + popoverId + '"]');
+				
+				if ($setMeta.length) {
+					self.maybeAddSaveButton();
+					self.updateEditedColsInput($setMeta, $popover);
+				}
+				
+			});
+			
+			//
+			// Hide/Show/Colspan column groups
+			//--------------------------------
+			$('#adv-settings .metabox-prefs input').change(function () {
+				self.$atumList.find('thead .column-groups th').each(function () {
 					
-					var self = this;
-					jScrollApi.destroy();
+					var $this = $(this),
+					    //these th only have one class
+					    cols  = self.$atumList.find('thead .col-' + $this.attr('class') + ':visible').length;
 					
-					if (typeof creationDelay !== 'undefined' && creationDelay > 0) {
-					
-						setTimeout(function() {
-							self.addScrollBar();
-						}, creationDelay);
-						
+					if (cols) {
+						$this.show().attr('colspan', cols)
 					}
 					else {
-						this.addScrollBar();
+						$this.hide();
 					}
-					
-				},
+				});
+			});
+			
+			//
+			// Pagination links, Sortable link
+			//--------------------------------
+			this.$atumList.on('click', '.tablenav-pages a, .manage-column.sortable a, .manage-column.sorted a, .subsubsub a', function (e) {
 				
-				/**
-				 * Search box keyUp event callback
-				 *
-				 * @param object e       The event data object
-				 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
-				 */
-				keyUp: function (e, noTimer) {
-					
-					var self    = this,
-					    delay   = 500,
-					    noTimer = noTimer || false;
-					
-					/*
-					 * If user hit enter, we don't want to submit the form
-					 * We don't preventDefault() for all keys because it would
-					 * also prevent to get the page number!
-					 */
-					if (13 === e.which) {
-						e.preventDefault();
-					}
-					
-					// This time we fetch the variables in inputs
-					var data = {
-						paged   : parseInt($listWrapper.find('.current-page').val()) || '1',
-						order   : atumListTable.order || 'desc',
-						orderby : atumListTable.orderby || 'date',
-						v_filter: $listWrapper.find('.subsubsub a.current').attr('id') || '',
-						s       : $search.val() || ''
-					};
-					
-					if (noTimer) {
-						self.update(data);
-					}
-					else {
-						/*
-						 * Now the timer comes to use: we wait half a second after
-						 * the user stopped typing to actually send the call. If
-						 * we don't, the keyup event will trigger instantly and
-						 * thus may cause duplicate calls before sending the intended value
-						 */
-						window.clearTimeout(timer);
-						
-						timer = window.setTimeout(function () {
-							self.update(data);
-						}, delay);
-						
-					}
-					
-				},
+				e.preventDefault();
 				
-				/**
-				 * Enable tooltips
-				 */
-				tooltip: function () {
-					
-					$('[data-toggle="tooltip"]').tooltip({
-						html     : true,
-						container: 'body'
-					});
-					
-				},
+				// Simple way: use the URL to extract our needed variables
+				var query = this.search.substring(1),
+				    $this = $(this);
 				
-				/**
-				 * Enable "Set Field" popovers
-				 */
-				setFieldPopover: function ($metaCells) {
+				self.$animationElem = $this.closest('.subsubsub');
+				
+				if (!self.$animationElem.length) {
+					self.$animationElem = $this.closest('.tablenav-pages');
 					
-					var self = this;
-					
-					if (typeof $metaCells === 'undefined') {
-						$metaCells = $('.set-meta');
+					// For sorting tables with group headers
+					if (!self.$animationElem.length && $this.find('span[class*=col-]').length) {
+						var $group = '.' + $this.find('span[class*=col-]').attr('class').replace('col-', '');
+						self.$animationElem = $this.closest('.wp-list-table').find($group);
 					}
-					
-					// Set meta value for listed products
-					$metaCells.each(function() {
-						self.bindPopover($(this));
-					});
-					
-					// Focus on the input field and set a reference to the popover to the editable column
-					$metaCells.on('shown.bs.popover', function () {
-						var $activePopover = $('.popover.in');
-						$activePopover.find('.meta-value').focus();
-						self.setDatePickers();
-						$(this).attr('data-popover', $activePopover.attr('id'));
-					});
-										
-				},
+				}
 				
-				/**
-				 * Bind the editable column's popovers
-				 * 
-				 * @param object $metaCell The cell where the popover will be attached
-				 */
-				bindPopover: function($metaCell) {
-					
-					var symbol            = $metaCell.data('symbol') || '',
-					    currentColumnText = $atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text(),
-					    inputType         = $metaCell.data('input-type') || 'number',
-					    inputAtts         = {
-						    type : $metaCell.data('input-type') || 'number',
-						    value: $metaCell.text().replace(symbol, '').replace('—', ''),
-						    class: 'meta-value'
-					    };
-					
-					if (inputType === 'number') {
-						inputAtts.min = '0';
-						// Allow decimals only for the pricing fields for now
-						inputAtts.step = (symbol) ? '0.1' : '1';
-					}
-					
-					
-					var $input       = $('<input />', inputAtts),
-					    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: atumListTable.setButton}),
-					    extraMeta    = $metaCell.data('extra-meta'),
-					    $extraFields = '',
-					    popoverClass = '';
-					
-					// Check whether to add extra fields to the popover
-					if (typeof extraMeta !== 'undefined') {
-						
-						popoverClass = ' with-meta';
-						$extraFields = $('<hr>');
-						
-						$.each(extraMeta, function(index, metaAtts) {
-							$extraFields = $extraFields.add($('<input />', metaAtts));
-						});
-						
-					}
-					
-					var $content = ($extraFields.length) ? $input.add($extraFields).add($setButton) : $input.add($setButton);
-					
-					// Create the meta edit popover
-					$metaCell.popover({
-						title    : atumListTable.setValue.replace('%%', currentColumnText),
-						content  : $content,
-						html     : true,
-						template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
-								   '<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-						placement: 'bottom',
-						trigger  : 'click',
-						container: 'body'
-					});
-					
-				},
+				var data = {
+					paged   : self.__query(query, 'paged') || '1',
+					order   : self.__query(query, 'order') || 'desc',
+					orderby : self.__query(query, 'orderby') || 'date',
+					v_filter: self.__query(query, 'v_filter') || '',
+					s       : self.$searchInput.val() || ''
+				};
 				
-				/**
-				 * Destroy a popover attached to a specified table cell
-				 *
-				 * @param object $metaCell The table cell where is attached the visible popover
-				 */
-				destroyPopover: function($metaCell) {
-					
-					if ($metaCell.length) {
-						var self = this;
-						$metaCell.popover('destroy');
-						$metaCell.removeAttr('data-popover');
-						
-						// Give a small lapse to complete the 'fadeOut' animation before re-binding
-						setTimeout(function() {
-							self.setFieldPopover($metaCell);
-						}, 300);
-						
-					}
+				self.update(data);
 				
-				},
+			});
+			
+			//
+			// Ajax filters
+			//-------------
+			if (this.settings.ajaxfilter === 'yes') {
 				
-				/**
-				 * Add the jQuery UI datepicker to input fields
-				 */
-				setDatePickers: function() {
+				// The search event is triggered when cliking on the clear field button within the seach input
+				this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
+					self.$animationElem = $(this).closest('.search-box');
+					self.keyUp(e);
+				})
+				.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
+					self.$animationElem = $(this).closest('.actions');
+					self.keyUp(e, true);
+				});
 				
-					if (typeof $.fn.datepicker !== 'undefined') {
-						var $datepickers = $('.datepicker').datepicker({
-							defaultDate    : '',
-							dateFormat     : 'yy-mm-dd',
-							numberOfMonths : 1,
-							showButtonPanel: true,
-							onSelect       : function (selectedDate) {
-								
-								var $this = $(this);
-								if ($this.hasClass('from') || $this.hasClass('to')) {
-									var option   = $this.hasClass('from') ? 'minDate' : 'maxDate',
-									    instance = $this.data('datepicker'),
-									    date     = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-									
-									$datepickers.not(this).datepicker('option', option, date);
-								}
-								
-							}
-						});
-					}
-					
-				},
+			}
+			//
+			// Non-ajax filters
+			//-----------------
+			else {
 				
-				/**
-				 * Every time a cell is edited, update the input value
-				 *
-				 * @param object $metaCell  The table cell that is being edited
-				 * @param object $popover   The popover attached to the above cell
-				 */
-				updateEditedColsInput: function($metaCell, $popover) {
+				this.$atumList.on('click', '.search-category, .search-submit', function () {
 					
-					var editedCols = $editInput.val(),
-					    itemId     = $metaCell.data('item'),
-					    meta       = $metaCell.data('meta'),
-					    symbol     = $metaCell.data('symbol') || '',
-					    custom     = $metaCell.data('custom') || 'no',
-					    currency   = $metaCell.data('currency') || '',
-					    value      = (symbol) ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
-					    newValue   = $popover.find('.meta-value').val();
+					var page      = self.$atumList.find('.current-page').val() || 1,
+					    data      = {
+						    paged   : parseInt(page),
+						    order   : self.settings.order,
+						    orderby : self.settings.orderby,
+						    v_filter: self.$atumList.find('.subsubsub a.current').attr('id') || '',
+						    s       : self.$searchInput.val() || ''
+					    },
+					    $this     = $(this),
+					    elemClass = ($this.is('.search-category')) ? '.actions' : '.search-box';
 					
-					// Update the cell value
-					this.setCellValue($metaCell, newValue);
+					self.$animationElem = $this.closest(elemClass);
+					self.update(data);
 					
-					// Initialize the JSON object
-					if (editedCols) {
-						editedCols = $.parseJSON(editedCols);
-					}
-					
-					editedCols = editedCols || {};
-					
-					if (!editedCols.hasOwnProperty(itemId)) {
-						editedCols[itemId] = {};
-					}
-					
-					if (!editedCols[itemId].hasOwnProperty(meta)) {
-						editedCols[itemId][meta] = {};
-					}
-					
-					// Add the meta value to the object
-					editedCols[itemId][meta] = newValue;
-					editedCols[itemId][meta + '_custom'] = custom;
-					editedCols[itemId][meta + '_currency'] = currency;
-					
-					// Add the extra meta data (if any)
-					if ($popover.hasClass('with-meta')) {
-						
-						var extraMeta = $metaCell.data('extra-meta');
-						
-						$popover.find('input').not('.meta-value').each(function(index, input) {
-							
-							var value = $(input).val();
-							editedCols[itemId][input.name] = value;
-							
-							// Save the meta values in the cell data for future uses
-							if (typeof extraMeta === 'object') {
-								$.each(extraMeta, function (index, elem) {
-									if (elem.name === input.name) {
-										extraMeta[index]['value'] = value;
-										return false;
-									}
-								});
-							}
-							
-						});
-						
-					}
-					
-					$editInput.val( JSON.stringify(editedCols) );
-					this.destroyPopover($metaCell);
-					
-				},
+				});
 				
-				/**
-				 * Check if we need to add the Update button
-				 */
-				maybeAddSaveButton: function() {
+			}
+			
+			//
+			// Pagination text box
+			//--------------------
+			this.$atumList.on('keyup paste', '.current-page', function (e) {
+				self.$animationElem = $(this).closest('.tablenav-pages');
+				self.keyUp(e);
+			})
+			
+			//
+			// Expanding/Collapsing inheritable products
+			//-------------------------------------------
+			.on('click', '.product-type.has-child', function() {
+				self.expandRow( $(this).closest('tr') );
+			})
+			
+			//
+			// Bulk actions dropdown
+			//----------------------
+			.on('change', '.bulkactions select', function() {
 				
-					var $tableTitle = $listWrapper.siblings('.wp-heading-inline');
-					if (!$tableTitle.find('#atum-update-list').length) {
-						$tableTitle.append( $('<button/>', {id: 'atum-update-list', class: 'page-title-action button-primary', text: atumListTable.saveButton}) );
-						
-						// Check whether to show the first edit popup
-						if (typeof swal === 'function' && typeof atumListTable.firstEditKey !== 'undefined') {
-							
-							swal({
-								title            : atumListTable.important,
-								text             : atumListTable.preventLossNotice,
-								type             : 'warning',
-								confirmButtonText: atumListTable.ok
-							});
-							
-						}
-					}
+				self.updateBulkButton();
 				
-				},
+				if ($(this).val() !== '-1') {
+					self.$bulkButton.show();
+				}
+				else {
+					self.$bulkButton.hide();
+				}
+			})
+			
+			//
+			// Change the Bulk Button text when selecting boxes
+			//-------------------------------------------------
+			.on('change', '.check-column input:checkbox', function() {
+				self.updateBulkButton();
+			})
+			
+			//
+			// Expandable rows' checkboxes
+			//----------------------------
+			.on('change', '.check-column input:checkbox', function() {
+				self.checkDescendats($(this));
+			})
+			
+			//
+			// Locations tree
+			//---------------
+			.on('click', '.show-locations', function(e) {
 				
-				/**
-				 * Save the edited columns
-				 *
-				 * @param object $button The "Save Data" button
-				 */
-				saveData: function($button) {
-					
-					if (typeof $.atumDoingAjax === 'undefined') {
+				e.preventDefault();
+				
+				var $button = $(this);
+				
+				swal({
+					title            : self.settings.productLocations,
+					html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
+					showCancelButton : false,
+					showConfirmButton: false,
+					showCloseButton  : true,
+					onOpen           : function () {
 						
-						var self = this,
-						    data = {
-							    token : atumListTable.nonce,
-							    action: 'atum_update_data',
-							    data  : $editInput.val()
-						    };
+						var $locationsTreeContainer = $('#atum-locations-tree');
 						
-						if (typeof atumListTable.firstEditKey !== 'undefined') {
-							data.first_edit_key = atumListTable.firstEditKey;
-						}
-						
-						$.atumDoingAjax = $.ajax({
+						$.ajax({
 							url       : ajaxurl,
-							method    : 'POST',
 							dataType  : 'json',
-							data      : data,
+							method    : 'post',
+							data      : {
+								action    : 'atum_get_locations_tree',
+								token     : self.settings.nonce,
+								product_id: $button.closest('tr').data('id')
+							},
 							beforeSend: function () {
-								$button.prop('disabled', true);
-								self.$animationElem = $button.parent();
-								self.addOverlay();
+								$locationsTreeContainer.append('<div class="atum-loading" />');
 							},
 							success   : function (response) {
 								
-								if (typeof response === 'object') {
-									var noticeType = (response.success) ? 'updated' : 'error';
-									self.addNotice(noticeType, response.data);
+								if (response.success === true) {
+									$locationsTreeContainer.html(response.data);
+									$locationsTreeContainer.easytree();
 								}
 								
-								if (response.success) {
-									$button.remove();
-									$editInput.val('');
-									self.update();
-								}
-								else {
-									$button.prop('disabled', false);
-								}
 								
-								$.atumDoingAjax = undefined;
-								
-								if (typeof atumListTable.firstEditKey !== 'undefined') {
-									delete atumListTable.firstEditKey;
-								}
-								
-							},
-							error: function() {
-								$.atumDoingAjax = undefined;
-								$button.prop('disabled', false);
-								self.removeOverlay();
-								
-								if (typeof atumListTable.firstEditKey !== 'undefined') {
-									delete atumListTable.firstEditKey;
-								}
 							}
 						});
 						
+					},
+					onClose          : function () {
+						$button.blur().tooltip('hide');
 					}
+				}).catch(swal.noop);
 				
-				},
+			});
+			
+			//
+			// Global save for edited cells
+			//-----------------------------
+			$('body').on('click', '#atum-update-list', function() {
+				self.saveData($(this));
+			});
+			
+			//
+			// Apply Bulk Actions
+			//-------------------
+			this.$bulkButton.click(function() {
 				
-				/**
-				 * Apply a bulk action for the selected rows
-				 */
-				applyBulk: function() {
+				if (!self.$atumList.find('.check-column input:checked').length) {
 					
-					var self          = this,
-					    $bulkButton   = $('.apply-bulk-action'),
-					    bulkAction    = $listWrapper.find('.bulkactions select').filter(function () {
-						    return $(this).val() !== '-1'
-					    }).val(),
-					    selectedItems = [];
-					
-					$listWrapper.find('tbody .check-column input:checkbox').filter(':checked').each(function() {
-						selectedItems.push($(this).val());
+					swal({
+						title            : self.settings.noItemsSelected,
+						text             : self.settings.selectItems,
+						type             : 'info',
+						confirmButtonText: self.settings.ok
 					});
 					
-					$.ajax({
-						url       : ajaxurl,
-						method    : 'POST',
-						dataType  : 'json',
-						data: {
-							token      : atumListTable.nonce,
-							action     : 'atum_apply_bulk_action',
-							bulk_action: bulkAction,
-							ids        : selectedItems
-						},
-						beforeSend: function () {
-							$bulkButton.prop('disabled', true);
-							self.$animationElem = $bulkButton.parent();
-							self.addOverlay();
-						},
-						success   : function (response) {
-							
-							if (typeof response === 'object') {
-								var noticeType = (response.success) ? 'updated' : 'error';
-								self.addNotice(noticeType, response.data);
-							}
-							
-							if (response.success) {
-								$bulkButton.hide();
-								self.update();
-							}
-							else {
-								$bulkButton.prop('disabled', false);
-							}
-							
-						},
-						error: function() {
-							$bulkButton.prop('disabled', false);
-							self.removeOverlay();
-						}
-					});
-				
-				},
-				
-				/**
-				 * AJAX call
-				 * Send the call and replace table parts with updated version!
-				 *
-				 * @param object data     The data to pass through AJAX
-				 */
-				update: function (data) {
-					
-					var self = this,
-						perPage;
-					
-					if (postTypeTableAjax && postTypeTableAjax.readyState !== 4) {
-						postTypeTableAjax.abort();
-					}
-					
-					if (!$.isNumeric($inputPerPage.val())) {
-						perPage = atumListTable.perpage || 20;
-					}
-					else {
-						perPage = parseInt($inputPerPage.val());
-					}
-					
-					data = $.extend({
-						token          : atumListTable.nonce,
-						action         : $listWrapper.data('action'),
-						screen         : $listWrapper.data('screen'),
-						per_page       : perPage,
-						show_cb        : atumListTable.showCb,
-						show_controlled: (self.__query(location.search.substring(1), 'uncontrolled') !== '1') ? 1 : 0,
-						product_cat    : $listWrapper.find('.dropdown_product_cat').val() || '',
-						m              : $listWrapper.find('#filter-by-date').val() || '',
-						product_type   : $listWrapper.find('.dropdown_product_type').val() || '',
-						supplier       : $listWrapper.find('.dropdown_supplier').val() || '',
-						extra_filter   : $listWrapper.find('.dropdown_extra_filter').val() || ''
-					}, data || {});
-					
-					postTypeTableAjax = $.ajax({
-						
-						url       : ajaxurl,
-						dataType  : 'json',
-						data      : data,
-						beforeSend: function () {
-							self.addOverlay();
-						},
-						// Handle the successful result
-						success   : function (response) {
-							
-							postTypeTableAjax = '';
-							
-							if (typeof response === 'undefined' || !response) {
-								return false;
-							}
-							
-							// Update table with the coming rows
-							if (typeof response.rows !== 'undefined' && response.rows.length) {
-								$listWrapper.find('#the-list').html(response.rows);
-								self.restoreMeta();
-								self.setFieldPopover();
-							}
-							
-							// Update column headers for sorting
-							if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-								$listWrapper.find('tr.item-heads').html(response.column_headers);
-							}
-							
-							// Update the views filters
-							if (typeof response.views !== 'undefined' && response.views.length) {
-								$listWrapper.find('.subsubsub').replaceWith(response.views);
-							}
-							
-							// Update table navs
-							if (typeof response.extra_t_n !== 'undefined') {
-								
-								if (response.extra_t_n.top.length) {
-									$listWrapper.find('.tablenav.top').replaceWith(response.extra_t_n.top);
-								}
-								
-								if (response.extra_t_n.bottom.length) {
-									$listWrapper.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
-								}
-								
-							}
-							
-							// Update the totals row
-							if (typeof response.totals !== 'undefined') {
-								$listWrapper.find('tfoot tr.totals').html(response.totals);
-							}
-							
-							// Re-add the scrollbar
-							self.reloadScrollbar();
-							
-							// Re-add tooltips
-							self.tooltip();
-							
-							// Restore enhanced selects
-							self.maybeRestoreEnhancedSelect();
-							
-							self.removeOverlay();
-							
-						},
-						error     : function () {
-							self.removeOverlay();
-						}
-					});
-					
-				},
-				
-				/**
-				 * Filter the URL Query to extract variables
-				 *
-				 * @see http://css-tricks.com/snippets/javascript/get-url-variables/
-				 *
-				 * @param    string    query The URL query part containing the variables
-				 * @param    string    variable Name of the variable we want to get
-				 *
-				 * @return   string|boolean The variable value if available, false else.
-				 */
-				__query: function (query, variable) {
-					
-					var vars = query.split("&");
-					for (var i = 0; i < vars.length; i++) {
-						var pair = vars[i].split("=");
-						if (pair[0] === variable) {
-							return pair[1];
-						}
-					}
-					return false;
-				},
-				
-				/**
-				 * Add the overlay effect while loading data
-				 */
-				addOverlay: function() {
-					$('.atum-table-wrapper').block({
-						message   : null,
-						overlayCSS: {
-							background: '#000',
-							opacity   : 0.5
-						}
-					});
-				},
-				
-				/**
-				 * Remove the overlay effect once the data is fully loaded
-				 */
-				removeOverlay: function() {;
-					$('.atum-table-wrapper').unblock();
-				},
-				
-				/**
-				 * Set the table cell value with right format
-				 *
-				 * @param object        $metaCell  The cell where will go the value
-				 * @param string|number value      The value to set in the cell
-				 */
-				setCellValue: function($metaCell, value) {
-					
-					var symbol      = $metaCell.data('symbol') || '',
-					    currencyPos = $atumTable.data('currency-pos');
-					
-					if (symbol) {
-						value = (currencyPos === 'left') ? symbol + value : value + symbol;
-					}
-					
-					$metaCell.addClass('unsaved').text(value);
-					
-				},
-				
-				/**
-				 * Restore the edited meta after loading new table rows
-				 */
-				restoreMeta: function() {
-					
-					var self       = this,
-						editedCols = $editInput.val();
-					
-					if (editedCols) {
-						
-						editedCols = $.parseJSON(editedCols);
-						$.each( editedCols, function(itemId, meta) {
-							
-							// Filter the meta cell that was previously edited
-							var $metaCell = $('.set-meta[data-item="' + itemId + '"]');
-							if ($metaCell.length) {
-								$.each(meta, function(key, value) {
-									
-									$metaCell = $metaCell.filter('[data-meta="' + key + '"]');
-									if ($metaCell.length) {
-										self.setCellValue($metaCell, value);
-										
-										// Add the extra meta too
-										var extraMeta = $metaCell.data('extra-meta');
-										if (typeof extraMeta === 'object') {
-											$.each(extraMeta, function(index, extraMetaObj) {
-												
-												// Restore the extra meta from the edit input
-												if (editedCols[itemId].hasOwnProperty(extraMetaObj.name)) {
-													extraMeta[index]['value'] = editedCols[itemId][extraMetaObj.name];
-												}
-												
-											});
-											
-											$metaCell.data('extra-meta', extraMeta);
-										}
-									}
-								});
-							}
-							
-						});
-					}
-				
-				},
-				
-				/**
-				 * Add a notice after saving data
-				 *
-				 * @param string type The notice type. Can be "updated" or "error"
-				 * @param string msg  The message
-				 */
-				addNotice: function(type, msg) {
-					
-					var $notice   = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
-					    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
-					
-					$listWrapper.siblings('.notice').remove();
-					$listWrapper.before($notice.append($dismissButton));
-					$notice.slideDown(100);
-					
-					$dismissButton.on('click.wp-dismiss-notice', function (e) {
-						e.preventDefault();
-						$notice.fadeTo(100, 0, function () {
-							$notice.slideUp(100, function () {
-								$notice.remove();
-							});
-						});
-					});
-					
-				},
-				
-				/**
-				 * Restore the enhanced select filters (if any)
-				 */
-				maybeRestoreEnhancedSelect: function() {
-					
-					$('.select2-container--open').remove();
-					$('body').trigger('wc-enhanced-select-init');
-					
-				},
-				
-				/**
-				 * Update the Bulk Button text depending on the number of checkboxes selected
-				 */
-				updateBulkButton: function() {
-					var numChecked = $listWrapper.find('.check-column input:checkbox:checked').length,
-					    buttonText = numChecked > 1 ? atumListTable.applyBulkAction : atumListTable.applyAction;
-					
-					$bulkButton.text(buttonText);
 				}
+				else {
+					self.applyBulk();
+				}
+				
+			});
+			
+			//
+			// Warn the user about unsaved changes before navigatig away
+			//----------------------------------------------------------
+			$(window).bind('beforeunload', function() {
+				
+				if (!self.$editInput.val()) {
+					return;
+				}
+				
+				// Prevent multiple prompts - seen on Chrome and IE
+				if (navigator.userAgent.toLowerCase().match(/msie|chrome/)) {
+					
+					if (window.aysHasPrompted) {
+						return;
+					}
+					
+					window.aysHasPrompted = true;
+					window.setTimeout(function() {
+						window.aysHasPrompted = false;
+					}, 900);
+					
+				}
+				
+				return false;
+				
+			});
+			
+		},
+		
+		/**
+		 * Add the horizontal scroll bar to the table
+		 */
+		addScrollBar: function() {
+			
+			// Wait until the thumbs are loaded and enable JScrollpane
+			var self          = this,
+			    $tableWrapper = $('.atum-table-wrapper'),
+			    scrollOpts    = {
+				    horizontalGutter: 0,
+				    verticalGutter  : 0
+			    };
+			
+			$tableWrapper.imagesLoaded().then(function () {
+				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
+				self.jScrollApi  = self.$scrollPane.data('jsp');
+			});
+			
+		},
+		
+		/**
+		 * Reload the scrollbar
+		 */
+		reloadScrollbar: function() {
+			this.jScrollApi.destroy();
+			this.addScrollBar();
+		},
+		
+		/**
+		 * Search box keyUp event callback
+		 *
+		 * @param object e       The event data object
+		 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
+		 */
+		keyUp: function (e, noTimer) {
+			
+			var self    = this,
+			    delay   = 500,
+			    noTimer = noTimer || false;
+			
+			/*
+			 * If user hit enter, we don't want to submit the form
+			 * We don't preventDefault() for all keys because it would
+			 * also prevent to get the page number!
+			 */
+			if (13 === e.which) {
+				e.preventDefault();
+			}
+			
+			// This time we fetch the variables in inputs
+			var data = {
+				paged   : parseInt( self.$atumList.find('.current-page').val() ) || '1',
+				order   : self.settings.order,
+				orderby : self.settings.orderby,
+				v_filter: self.$atumList.find('.subsubsub a.current').attr('id') || '',
+				s       : self.$searchInput.val() || ''
 			};
 			
-			// Show time!!!
-			stockCentralTable.init();
+			if (noTimer) {
+				self.update(data);
+			}
+			else {
+				/*
+				 * Now the timer comes to use: we wait half a second after
+				 * the user stopped typing to actually send the call. If
+				 * we don't, the keyup event will trigger instantly and
+				 * thus may cause duplicate calls before sending the intended value
+				 */
+				clearTimeout(self.timer);
+				
+				self.timer = setTimeout(function () {
+					self.update(data);
+				}, delay);
+				
+			}
 			
-		});
+		},
 		
-		//----------------
-		// Welcome notice
-		//----------------
-		$('.atum-notice.welcome-notice').click('.notice-dismiss', function() {
+		/**
+		 * Enable tooltips
+		 */
+		addTooltips: function () {
 			
-			var $welcomeNotice = $(this);
+			$('[data-toggle="tooltip"]').tooltip({
+				html     : true,
+				container: 'body'
+			});
+			
+		},
+		
+		/**
+		 * Destroy all the tooltips
+		 */
+		destroyTooltips: function() {
+			$('[data-toggle="tooltip"]').tooltip('destroy');
+		},
+		
+		/**
+		 * Enable "Set Field" popovers
+		 */
+		setFieldPopover: function ($metaCells) {
+			
+			var self = this;
+			
+			if (typeof $metaCells === 'undefined') {
+				$metaCells = $('.set-meta');
+			}
+			
+			// Set meta value for listed products
+			$metaCells.each(function() {
+				self.bindPopover($(this));
+			});
+			
+			// Focus on the input field and set a reference to the popover to the editable column
+			$metaCells.on('shown.bs.popover', function () {
+				var $activePopover = $('.popover.in');
+				$activePopover.find('.meta-value').focus();
+				self.setDatePickers();
+				$(this).attr('data-popover', $activePopover.attr('id'));
+			});
+			
+		},
+		
+		/**
+		 * Bind the editable column's popovers
+		 *
+		 * @param object $metaCell The cell where the popover will be attached
+		 */
+		bindPopover: function($metaCell) {
+			
+			var self              = this,
+				symbol            = $metaCell.data('symbol') || '',
+			    currentColumnText = this.$atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text(),
+			    inputType         = $metaCell.data('input-type') || 'number',
+			    inputAtts         = {
+				    type : $metaCell.data('input-type') || 'number',
+				    value: $metaCell.text().replace(symbol, '').replace('—', ''),
+				    class: 'meta-value'
+			    };
+			
+			if (inputType === 'number') {
+				inputAtts.min = '0';
+				// Allow decimals only for the pricing fields for now
+				inputAtts.step = (symbol) ? '0.1' : '1';
+			}
+			
+			
+			var $input       = $('<input />', inputAtts),
+			    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: self.settings.setButton}),
+			    extraMeta    = $metaCell.data('extra-meta'),
+			    $extraFields = '',
+			    popoverClass = '';
+			
+			// Check whether to add extra fields to the popover
+			if (typeof extraMeta !== 'undefined') {
+				
+				popoverClass = ' with-meta';
+				$extraFields = $('<hr>');
+				
+				$.each(extraMeta, function(index, metaAtts) {
+					$extraFields = $extraFields.add($('<input />', metaAtts));
+				});
+				
+			}
+			
+			var $content = ($extraFields.length) ? $input.add($extraFields).add($setButton) : $input.add($setButton);
+			
+			// Create the meta edit popover
+			$metaCell.popover({
+				title    : self.settings.setValue.replace('%%', currentColumnText),
+				content  : $content,
+				html     : true,
+				template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
+				'<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+				placement: 'bottom',
+				trigger  : 'click',
+				container: 'body'
+			});
+			
+		},
+		
+		/**
+		 * Destroy a popover attached to a specified table cell
+		 *
+		 * @param object $metaCell The table cell where is attached the visible popover
+		 */
+		destroyPopover: function($metaCell) {
+			
+			if ($metaCell.length) {
+				var self = this;
+				$metaCell.popover('destroy');
+				$metaCell.removeAttr('data-popover');
+				
+				// Give a small lapse to complete the 'fadeOut' animation before re-binding
+				setTimeout(function() {
+					self.setFieldPopover($metaCell);
+				}, 300);
+				
+			}
+			
+		},
+		
+		/**
+		 * Add the jQuery UI datepicker to input fields
+		 */
+		setDatePickers: function() {
+			
+			if (typeof $.fn.datepicker !== 'undefined') {
+				var $datepickers = $('.datepicker').datepicker({
+					defaultDate    : '',
+					dateFormat     : 'yy-mm-dd',
+					numberOfMonths : 1,
+					showButtonPanel: true,
+					onSelect       : function (selectedDate) {
+						
+						var $this = $(this);
+						if ($this.hasClass('from') || $this.hasClass('to')) {
+							var option   = $this.hasClass('from') ? 'minDate' : 'maxDate',
+							    instance = $this.data('datepicker'),
+							    date     = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+							
+							$datepickers.not(this).datepicker('option', option, date);
+						}
+						
+					}
+				});
+			}
+			
+		},
+		
+		/**
+		 * Every time a cell is edited, update the input value
+		 *
+		 * @param object $metaCell  The table cell that is being edited
+		 * @param object $popover   The popover attached to the above cell
+		 */
+		updateEditedColsInput: function($metaCell, $popover) {
+			
+			var editedCols = this.$editInput.val(),
+			    itemId     = $metaCell.data('item'),
+			    meta       = $metaCell.data('meta'),
+			    symbol     = $metaCell.data('symbol') || '',
+			    custom     = $metaCell.data('custom') || 'no',
+			    currency   = $metaCell.data('currency') || '',
+			    value      = (symbol) ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
+			    newValue   = $popover.find('.meta-value').val();
+			
+			// Update the cell value
+			this.setCellValue($metaCell, newValue);
+			
+			// Initialize the JSON object
+			if (editedCols) {
+				editedCols = $.parseJSON(editedCols);
+			}
+			
+			editedCols = editedCols || {};
+			
+			if (!editedCols.hasOwnProperty(itemId)) {
+				editedCols[itemId] = {};
+			}
+			
+			if (!editedCols[itemId].hasOwnProperty(meta)) {
+				editedCols[itemId][meta] = {};
+			}
+			
+			// Add the meta value to the object
+			editedCols[itemId][meta] = newValue;
+			editedCols[itemId][meta + '_custom'] = custom;
+			editedCols[itemId][meta + '_currency'] = currency;
+			
+			// Add the extra meta data (if any)
+			if ($popover.hasClass('with-meta')) {
+				
+				var extraMeta = $metaCell.data('extra-meta');
+				
+				$popover.find('input').not('.meta-value').each(function(index, input) {
+					
+					var value = $(input).val();
+					editedCols[itemId][input.name] = value;
+					
+					// Save the meta values in the cell data for future uses
+					if (typeof extraMeta === 'object') {
+						$.each(extraMeta, function (index, elem) {
+							if (elem.name === input.name) {
+								extraMeta[index]['value'] = value;
+								return false;
+							}
+						});
+					}
+					
+				});
+				
+			}
+			
+			this.$editInput.val( JSON.stringify(editedCols) );
+			this.destroyPopover($metaCell);
+			
+		},
+		
+		/**
+		 * Check if we need to add the Update button
+		 */
+		maybeAddSaveButton: function() {
+			
+			var self        = this,
+				$tableTitle = this.$atumList.siblings('.wp-heading-inline');
+			
+			if (!$tableTitle.find('#atum-update-list').length) {
+				$tableTitle.append( $('<button/>', {
+					id: 'atum-update-list',
+					class: 'page-title-action button-primary',
+					text: self.settings.saveButton
+				}) );
+				
+				// Check whether to show the first edit popup
+				if (typeof swal === 'function' && typeof this.settings.firstEditKey !== 'undefined') {
+					
+					swal({
+						title            : self.settings.important,
+						text             : self.settings.preventLossNotice,
+						type             : 'warning',
+						confirmButtonText: self.settings.ok
+					});
+					
+				}
+			}
+			
+		},
+		
+		/**
+		 * Save the edited columns
+		 *
+		 * @param object $button The "Save Data" button
+		 */
+		saveData: function($button) {
+			
+			if (typeof $.atumDoingAjax === 'undefined') {
+				
+				var self = this,
+				    data = {
+					    token : self.settings.nonce,
+					    action: 'atum_update_data',
+					    data  : self.$editInput.val()
+				    };
+				
+				if (typeof this.settings.firstEditKey !== 'undefined') {
+					data.first_edit_key = this.settings.firstEditKey;
+				}
+				
+				$.atumDoingAjax = $.ajax({
+					url       : ajaxurl,
+					method    : 'POST',
+					dataType  : 'json',
+					data      : data,
+					beforeSend: function () {
+						$button.prop('disabled', true);
+						self.$animationElem = $button.parent();
+						self.addOverlay();
+					},
+					success   : function (response) {
+						
+						if (typeof response === 'object') {
+							var noticeType = (response.success) ? 'updated' : 'error';
+							self.addNotice(noticeType, response.data);
+						}
+						
+						if (response.success) {
+							$button.remove();
+							self.$editInput.val('');
+							self.update();
+						}
+						else {
+							$button.prop('disabled', false);
+						}
+						
+						$.atumDoingAjax = undefined;
+						
+						if (typeof self.settings.firstEditKey !== 'undefined') {
+							delete self.settings.firstEditKey;
+						}
+						
+					},
+					error: function() {
+						$.atumDoingAjax = undefined;
+						$button.prop('disabled', false);
+						self.removeOverlay();
+						
+						if (typeof self.settings.firstEditKey !== 'undefined') {
+							delete self.settings.firstEditKey;
+						}
+					}
+				});
+				
+			}
+			
+		},
+		
+		/**
+		 * Apply a bulk action for the selected rows
+		 */
+		applyBulk: function() {
+			
+			var self          = this,
+			    bulkAction    = this.$atumList.find('.bulkactions select').filter(function () {
+				    return $(this).val() !== '-1'
+			    }).val(),
+			    selectedItems = [];
+			
+			this.$atumList.find('tbody .check-column input:checkbox').filter(':checked').each(function() {
+				selectedItems.push($(this).val());
+			});
 			
 			$.ajax({
-				url     : ajaxurl,
-				method  : 'POST',
-				data    : {
-					token : $welcomeNotice.data('nonce'),
-					action: 'atum_welcome_notice',
+				url       : ajaxurl,
+				method    : 'POST',
+				dataType  : 'json',
+				data: {
+					token      : self.settings.nonce,
+					action     : 'atum_apply_bulk_action',
+					bulk_action: bulkAction,
+					ids        : selectedItems
+				},
+				beforeSend: function () {
+					self.$bulkButton.prop('disabled', true);
+					self.$animationElem = self.$bulkButton.parent();
+					self.addOverlay();
+				},
+				success   : function (response) {
+					
+					if (typeof response === 'object') {
+						var noticeType = (response.success) ? 'updated' : 'error';
+						self.addNotice(noticeType, response.data);
+					}
+					
+					if (response.success) {
+						self.$bulkButton.hide();
+						self.update();
+					}
+					else {
+						self.$bulkButton.prop('disabled', false);
+					}
+					
+				},
+				error: function() {
+					self.$bulkButton.prop('disabled', false);
+					self.removeOverlay();
 				}
 			});
 			
-		});
+		},
 		
-	});
+		/**
+		 * AJAX call
+		 * Send the call and replace table parts with updated version!
+		 *
+		 * @param object data     The data to pass through AJAX
+		 */
+		update: function (data) {
+			
+			var self         = this,
+			    inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
+			    perPage;
+			
+			if (this.doingAjax && this.doingAjax.readyState !== 4) {
+				this.doingAjax.abort();
+			}
+			
+			if (!$.isNumeric(inputPerPage)) {
+				perPage = this.settings.perpage || 20;
+			}
+			else {
+				perPage = parseInt(inputPerPage);
+			}
+			
+			data = $.extend({
+				token          : self.settings.nonce,
+				action         : self.$atumList.data('action'),
+				screen         : self.$atumList.data('screen'),
+				per_page       : perPage,
+				show_cb        : self.settings.showCb,
+				show_controlled: (self.__query(location.search.substring(1), 'uncontrolled') !== '1') ? 1 : 0,
+				product_cat    : self.$atumList.find('.dropdown_product_cat').val() || '',
+				m              : self.$atumList.find('#filter-by-date').val() || '',
+				product_type   : self.$atumList.find('.dropdown_product_type').val() || '',
+				supplier       : self.$atumList.find('.dropdown_supplier').val() || '',
+				extra_filter   : self.$atumList.find('.dropdown_extra_filter').val() || ''
+			}, data || {});
+			
+			this.doingAjax = $.ajax({
+				
+				url       : ajaxurl,
+				dataType  : 'json',
+				data      : data,
+				beforeSend: function () {
+					self.addOverlay();
+				},
+				// Handle the successful result
+				success   : function (response) {
+					
+					self.doingAjax = null;
+					
+					if (typeof response === 'undefined' || !response) {
+						return false;
+					}
+					
+					// Update table with the coming rows
+					if (typeof response.rows !== 'undefined' && response.rows.length) {
+						self.$atumList.find('#the-list').html(response.rows);
+						self.restoreMeta();
+						self.setFieldPopover();
+					}
+					
+					// Update column headers for sorting
+					if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
+						self.$atumList.find('tr.item-heads').html(response.column_headers);
+					}
+					
+					// Update the views filters
+					if (typeof response.views !== 'undefined' && response.views.length) {
+						self.$atumList.find('.subsubsub').replaceWith(response.views);
+					}
+					
+					// Update table navs
+					if (typeof response.extra_t_n !== 'undefined') {
+						
+						if (response.extra_t_n.top.length) {
+							self.$atumList.find('.tablenav.top').replaceWith(response.extra_t_n.top);
+						}
+						
+						if (response.extra_t_n.bottom.length) {
+							self.$atumList.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
+						}
+						
+					}
+					
+					// Update the totals row
+					if (typeof response.totals !== 'undefined') {
+						self.$atumList.find('tfoot tr.totals').html(response.totals);
+					}
+					
+					// Re-add the scrollbar
+					self.reloadScrollbar();
+					
+					// Re-add tooltips
+					self.addTooltips();
+					
+					// Restore enhanced selects
+					self.maybeRestoreEnhancedSelect();
+					
+					self.removeOverlay();
+					
+				},
+				error     : function () {
+					self.removeOverlay();
+				}
+			});
+			
+		},
+		
+		/**
+		 * Filter the URL Query to extract variables
+		 *
+		 * @see http://css-tricks.com/snippets/javascript/get-url-variables/
+		 *
+		 * @param    string    query The URL query part containing the variables
+		 * @param    string    variable Name of the variable we want to get
+		 *
+		 * @return   string|boolean The variable value if available, false else.
+		 */
+		__query: function (query, variable) {
+			
+			var vars = query.split("&");
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] === variable) {
+					return pair[1];
+				}
+			}
+			return false;
+		},
+		
+		/**
+		 * Add the overlay effect while loading data
+		 */
+		addOverlay: function() {
+			$('.atum-table-wrapper').block({
+				message   : null,
+				overlayCSS: {
+					background: '#000',
+					opacity   : 0.5
+				}
+			});
+		},
+		
+		/**
+		 * Remove the overlay effect once the data is fully loaded
+		 */
+		removeOverlay: function() {;
+			$('.atum-table-wrapper').unblock();
+		},
+		
+		/**
+		 * Set the table cell value with right format
+		 *
+		 * @param object        $metaCell  The cell where will go the value
+		 * @param string|number value      The value to set in the cell
+		 */
+		setCellValue: function($metaCell, value) {
+			
+			var symbol      = $metaCell.data('symbol') || '',
+			    currencyPos = this.$atumTable.data('currency-pos');
+			
+			if (symbol) {
+				value = (currencyPos === 'left') ? symbol + value : value + symbol;
+			}
+			
+			$metaCell.addClass('unsaved').text(value);
+			
+		},
+		
+		/**
+		 * Restore the edited meta after loading new table rows
+		 */
+		restoreMeta: function() {
+			
+			var self       = this,
+			    editedCols = this.$editInput.val();
+			
+			if (editedCols) {
+				
+				editedCols = $.parseJSON(editedCols);
+				$.each( editedCols, function(itemId, meta) {
+					
+					// Filter the meta cell that was previously edited
+					var $metaCell = $('.set-meta[data-item="' + itemId + '"]');
+					if ($metaCell.length) {
+						$.each(meta, function(key, value) {
+							
+							$metaCell = $metaCell.filter('[data-meta="' + key + '"]');
+							if ($metaCell.length) {
+								self.setCellValue($metaCell, value);
+								
+								// Add the extra meta too
+								var extraMeta = $metaCell.data('extra-meta');
+								if (typeof extraMeta === 'object') {
+									$.each(extraMeta, function(index, extraMetaObj) {
+										
+										// Restore the extra meta from the edit input
+										if (editedCols[itemId].hasOwnProperty(extraMetaObj.name)) {
+											extraMeta[index]['value'] = editedCols[itemId][extraMetaObj.name];
+										}
+										
+									});
+									
+									$metaCell.data('extra-meta', extraMeta);
+								}
+							}
+						});
+					}
+					
+				});
+			}
+			
+		},
+		
+		/**
+		 * Add a notice after saving data
+		 *
+		 * @param string type The notice type. Can be "updated" or "error"
+		 * @param string msg  The message
+		 */
+		addNotice: function(type, msg) {
+			
+			var $notice        = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
+			    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
+			
+			this.$atumList.siblings('.notice').remove();
+			this.$atumList.before($notice.append($dismissButton));
+			$notice.slideDown(100);
+			
+			$dismissButton.on('click.wp-dismiss-notice', function (e) {
+				e.preventDefault();
+				$notice.fadeTo(100, 0, function () {
+					$notice.slideUp(100, function () {
+						$notice.remove();
+					});
+				});
+			});
+			
+		},
+		
+		/**
+		 * Restore the enhanced select filters (if any)
+		 */
+		maybeRestoreEnhancedSelect: function() {
+			
+			$('.select2-container--open').remove();
+			$('body').trigger('wc-enhanced-select-init');
+			
+		},
+		
+		expandRow: function($row) {
+			
+			var rowId = $row.data('id');
+			
+			// Avoid multiple clicks before expanding
+			if (typeof this.isRowExpanding[rowId] !== 'undefined' && this.isRowExpanding[rowId] === true) {
+				return false;
+			}
+			
+			this.isRowExpanding[rowId] = true;
+			
+			var self     = this,
+			    $nextRow = $row.next('.expandable');
+			
+			// Reload the scrollbar once the slide animation is completed
+			if ($nextRow.length) {
+				$row.toggleClass('expanded');
+				this.destroyTooltips();
+			}
+			
+			while ($nextRow.length) {
+				
+				if (!$nextRow.is(':visible')) {
+					$nextRow.show(300);
+				}
+				else {
+					$nextRow.hide(300);
+				}
+				
+				$nextRow = $nextRow.next('.expandable');
+				
+			}
+			
+			// Re-enable the expanding again once the animation has completed
+			setTimeout(function() {
+				delete self.isRowExpanding[rowId];
+				
+				// Do this only when all the rows has been already expanded
+				if (!Object.keys(self.isRowExpanding).length) {
+					self.addTooltips();
+					self.reloadScrollbar();
+				}
+			}, 320);
+			
+		},
+		
+		/**
+		 * Update the Bulk Button text depending on the number of checkboxes selected
+		 */
+		updateBulkButton: function() {
+			var numChecked = this.$atumList.find('.check-column input:checkbox:checked').length,
+			    buttonText = numChecked > 1 ? this.settings.applyBulkAction : this.settings.applyAction;
+			
+			this.$bulkButton.text(buttonText);
+		},
+		
+		/**
+		 * Checks/Unchecks the descendants rows when checking/unchecking their container
+		 *
+		 * @param object $parentCheckbox
+		 */
+		checkDescendats: function($parentCheckbox) {
+			
+			var $containerRow = $parentCheckbox.closest('tr');
+			
+			// Handle clicks on the header checkbox
+			if ($parentCheckbox.closest('td').hasClass('manage-column')) {
+				// Call this method recursively for all the checkboxes in the current page
+				this.$atumTable.find('tr.variable, tr.group').find('input:checkbox').change();
+			}
+			
+			if (!$containerRow.hasClass('variable') && !$containerRow.hasClass('group')) {
+				return;
+			}
+			
+			var $nextRow = $containerRow.next('.expandable');
+			
+			// If is not expanded, expand it
+			if (!$containerRow.hasClass('expanded') && $parentCheckbox.is(':checked')) {
+				$containerRow.find('.product-type.has-child').click();
+			}
+			
+			// Check/Uncheck all the children rows
+			while ($nextRow.length) {
+				$nextRow.find('.check-column input:checkbox').prop('checked', $parentCheckbox.is(':checked'));
+				$nextRow = $nextRow.next('.expandable');
+			}
+			
+		}
+		
+	} );
+	
+	
+	// A really lightweight plugin wrapper around the constructor, preventing against multiple instantiations
+	$.fn[ pluginName ] = function( options ) {
+		return this.each( function() {
+			if ( !$.data( this, "plugin_" + pluginName ) ) {
+				$.data( this, "plugin_" +
+					pluginName, new Plugin( this, options ) );
+			}
+		} );
+	};
+	
 	
 	// Allow an event to fire after all images are loaded
 	$.fn.imagesLoaded = function () {
@@ -1111,9 +1205,34 @@
 		
 	};
 	
-})(jQuery);
-
-jQuery.noConflict();
+	
+	// Init the plugin on document ready
+	$(function () {
+		
+		// Init ATUM List Table
+		$('.atum-list-wrapper').atumListTable();
+		
+		//----------------
+		// Welcome notice
+		//----------------
+		$('.atum-notice.welcome-notice').click('.notice-dismiss', function() {
+			
+			var $welcomeNotice = $(this);
+			
+			$.ajax({
+				url     : ajaxurl,
+				method  : 'POST',
+				data    : {
+					token : $welcomeNotice.data('nonce'),
+					action: 'atum_welcome_notice',
+				}
+			});
+			
+		});
+		
+	});
+	
+} )( jQuery, window, document );
 
 /**!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
