@@ -39,10 +39,11 @@
 	// Avoid Plugin.prototype conflicts
 	$.extend( Plugin.prototype, {
 		
-		doingAjax  : null,
-		jScrollApi : null,
-		$scrollPane: null,
-		timer      : null,
+		doingAjax     : null,
+		jScrollApi    : null,
+		$scrollPane   : null,
+		timer         : null,
+		isRowExpanding: {},
 		
 		/**
 		 * Register our events and initialize the UI
@@ -124,7 +125,7 @@
 			// Hide/Show/Colspan column groups
 			//--------------------------------
 			$('#adv-settings .metabox-prefs input').change(function () {
-				self.$atumList.find('thead .group th').each(function () {
+				self.$atumList.find('thead .column-groups th').each(function () {
 					
 					var $this = $(this),
 					    //these th only have one class
@@ -227,43 +228,7 @@
 			// Expanding/Collapsing inheritable products
 			//-------------------------------------------
 			.on('click', '.product-type.has-child', function() {
-				
-				// Avoid multiple clicks before expanding
-				if (typeof self.isRowExpanding !== 'undefined' && self.isRowExpanding === true) {
-					return false;
-				}
-				
-				self.isRowExpanding = true;
-				
-				var $expandableRow = $(this).closest('tr'),
-				    $nextRow       = $expandableRow.next('.expandable');
-				
-				// Reload the scrollbar once the slide animation is completed
-				if ($nextRow.length) {
-					$expandableRow.toggleClass('expanded');
-					self.destroyTooltips();
-				}
-				
-				while ($nextRow.length) {
-					
-					if (!$nextRow.is(':visible')) {
-						$nextRow.show(300);
-					}
-					else {
-						$nextRow.hide(300);
-					}
-					
-					$nextRow = $nextRow.next('.expandable');
-					
-				}
-				
-				// Re-enable the expanding again after
-				setTimeout(function() {
-					self.isRowExpanding = false;
-					self.addTooltips();
-					self.reloadScrollbar();
-				}, 320);
-				
+				self.expandRow( $(this).closest('tr') );
 			})
 			
 			//
@@ -291,23 +256,8 @@
 			//
 			// Expandable rows' checkboxes
 			//----------------------------
-			.on('click', 'tr.variable .check-column input:checkbox, tr.group .check-column input:checkbox', function() {
-				
-				var $checkbox     = $(this),
-				    $containerRow = $checkbox.closest('tr'),
-				    $nextRow      = $containerRow.next('.expandable');
-				
-				// If is not expanded, expand it
-				if (!$containerRow.hasClass('expanded')) {
-					$containerRow.find('.product-type.has-child').click();
-				}
-				
-				// Check/Uncheck all the children rows
-				while ($nextRow.length) {
-					$nextRow.find('.check-column input:checkbox').prop('checked', $checkbox.is(':checked'));
-					$nextRow = $nextRow.next('.expandable');
-				}
-				
+			.on('change', '.check-column input:checkbox', function() {
+				self.checkDescendats($(this));
 			})
 			
 			//
@@ -1118,6 +1068,52 @@
 			
 		},
 		
+		expandRow: function($row) {
+			
+			var rowId = $row.data('id');
+			
+			// Avoid multiple clicks before expanding
+			if (typeof this.isRowExpanding[rowId] !== 'undefined' && this.isRowExpanding[rowId] === true) {
+				return false;
+			}
+			
+			this.isRowExpanding[rowId] = true;
+			
+			var self     = this,
+			    $nextRow = $row.next('.expandable');
+			
+			// Reload the scrollbar once the slide animation is completed
+			if ($nextRow.length) {
+				$row.toggleClass('expanded');
+				this.destroyTooltips();
+			}
+			
+			while ($nextRow.length) {
+				
+				if (!$nextRow.is(':visible')) {
+					$nextRow.show(300);
+				}
+				else {
+					$nextRow.hide(300);
+				}
+				
+				$nextRow = $nextRow.next('.expandable');
+				
+			}
+			
+			// Re-enable the expanding again once the animation has completed
+			setTimeout(function() {
+				delete self.isRowExpanding[rowId];
+				
+				// Do this only when all the rows has been already expanded
+				if (!Object.keys(self.isRowExpanding).length) {
+					self.addTooltips();
+					self.reloadScrollbar();
+				}
+			}, 320);
+			
+		},
+		
 		/**
 		 * Update the Bulk Button text depending on the number of checkboxes selected
 		 */
@@ -1126,6 +1122,40 @@
 			    buttonText = numChecked > 1 ? this.settings.applyBulkAction : this.settings.applyAction;
 			
 			this.$bulkButton.text(buttonText);
+		},
+		
+		/**
+		 * Checks/Unchecks the descendants rows when checking/unchecking their container
+		 *
+		 * @param object $parentCheckbox
+		 */
+		checkDescendats: function($parentCheckbox) {
+			
+			var $containerRow = $parentCheckbox.closest('tr');
+			
+			// Handle clicks on the header checkbox
+			if ($parentCheckbox.closest('td').hasClass('manage-column')) {
+				// Call this method recursively for all the checkboxes in the current page
+				this.$atumTable.find('tr.variable, tr.group').find('input:checkbox').change();
+			}
+			
+			if (!$containerRow.hasClass('variable') && !$containerRow.hasClass('group')) {
+				return;
+			}
+			
+			var $nextRow = $containerRow.next('.expandable');
+			
+			// If is not expanded, expand it
+			if (!$containerRow.hasClass('expanded') && $parentCheckbox.is(':checked')) {
+				$containerRow.find('.product-type.has-child').click();
+			}
+			
+			// Check/Uncheck all the children rows
+			while ($nextRow.length) {
+				$nextRow.find('.check-column input:checkbox').prop('checked', $parentCheckbox.is(':checked'));
+				$nextRow = $nextRow.next('.expandable');
+			}
+			
 		}
 		
 	} );

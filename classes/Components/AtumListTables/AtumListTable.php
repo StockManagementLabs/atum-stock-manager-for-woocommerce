@@ -1120,7 +1120,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$bulk_actions = array();
 
-		if ( isset($_GET['uncontrolled']) && $_GET['uncontrolled'] == 1 ) {
+		if ( (isset($_GET['uncontrolled']) && $_GET['uncontrolled'] == 1) || (isset($_REQUEST['show_controlled']) && $_REQUEST['show_controlled'] == 0) ) {
 			$bulk_actions['control_stock'] = __( 'Control Stock', ATUM_TEXT_DOMAIN );
 		}
 		else {
@@ -1799,7 +1799,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		if ( ! empty( $this->group_columns ) ) {
 			
-			echo '<tr class="group">';
+			echo '<tr class="column-groups">';
 			
 			foreach ( $this->group_columns as $group_column ) {
 				echo '<th class="' . $group_column['name'] . '" colspan="' . $group_column['colspan'] . '"><span>' . $group_column['title'] . '</span></th>';

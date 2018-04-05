@@ -957,11 +957,11 @@ h1.wp-heading-inline #atum-update-list:active {
   top: 0;
 }
 
-.atum-list-table .group th {
+.atum-list-table .column-groups th {
   font-weight: bold;
 }
 
-.atum-list-table .group th:nth-child(even) {
+.atum-list-table .column-groups th:nth-child(even) {
   background-color: #F9F9F9;
 }
 
@@ -1183,7 +1183,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 @media screen and (max-width: 782px) {
-  .atum-list-table .group {
+  .atum-list-table .column-groups {
     display: none;
   }
   .atum-list-table .column-thumb {

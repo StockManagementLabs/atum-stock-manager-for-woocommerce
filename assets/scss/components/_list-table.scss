@@ -214,7 +214,7 @@ h1.wp-heading-inline {
 		}
 	}
 	
-	.group {
+	.column-groups {
 		th {
 			font-weight: bold;
 			
@@ -468,7 +468,7 @@ h1.wp-heading-inline {
 	}
 	
 	@media screen and (max-width: 782px) {
-		.group {
+		.column-groups {
 			display: none;
 		}
 		
