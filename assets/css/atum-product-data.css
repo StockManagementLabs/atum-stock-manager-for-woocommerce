@@ -102,6 +102,11 @@
   border-top-right-radius: 0;
 }
 
+.input-group.invalid input[type=text], .input-group.invalid input[type=number], .input-group.invalid textarea, .input-group.invalid select, .input-group.invalid .select2-container {
+  border-color: #FF4848;
+  background-color: rgba(255, 72, 72, 0.15);
+}
+
 .input-group-prepend,
 .input-group-append {
   display: -webkit-box;
@@ -110,6 +115,11 @@
   display: flex;
   z-index: 1;
   border: 1px solid #DDD;
+}
+
+.input-group.invalid .input-group-prepend, .input-group.invalid
+.input-group-append {
+  border-color: #FF4848;
 }
 
 .input-group-prepend .btn,
@@ -142,7 +152,7 @@
   align-items: center;
   padding: 0.375rem 0.75rem;
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
   color: #C1C1C1;
@@ -155,6 +165,10 @@
 .input-group-text input[type="radio"],
 .input-group-text input[type="checkbox"] {
   margin-top: 0;
+}
+
+.input-group.invalid .input-group-text {
+  background-color: rgba(255, 72, 72, 0.65);
 }
 
 .input-group > .input-group-prepend > .btn,
@@ -200,13 +214,14 @@
   padding: 2px 7px;
 }
 
-.product_data .atum-field input[type=text] {
+.product_data .atum-field input[type=text], .product_data .atum-field input[type=number] {
   width: calc(80% - 31px) !important;
   padding-top: 4px;
   padding-bottom: 4px;
+  max-height: 27px;
 }
 
-.product_data .atum-field input[type=text]:focus {
+.product_data .atum-field input[type=text]:focus, .product_data .atum-field input[type=number]:focus {
   box-shadow: none;
   border-color: #5B9DD9;
 }
@@ -224,7 +239,7 @@
 .product_data .atum-field .select2-container .select2-selection--single {
   height: auto;
   margin: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .product_data .atum-field .select2-container .select2-selection--single .select2-selection__rendered {

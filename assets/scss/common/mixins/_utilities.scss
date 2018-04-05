@@ -119,6 +119,7 @@
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
 }
 
+// Labels
 @mixin label-variant($color) {
 	background-color: $color;
 	
@@ -127,6 +128,34 @@
 			background-color: darken($color, 10%);
 		}
 	}
+}
+
+// Alerts
+@mixin alert-variant($background, $border, $color) {
+	color: $color;
+	background-color: $background;
+	border-color: $border;
+	
+	hr {
+		border-top-color: darken($border, 5%);
+	}
+	
+	.alert-link {
+		color: darken($color, 10%);
+	}
+}
+
+@function theme-color($key: "primary") {
+	@return map-get($theme-colors, $key);
+}
+
+// Request a theme color level
+@function theme-color-level($color-name: "primary", $level: 0) {
+	$color: theme-color($color-name);
+	$color-base: if($level > 0, $black, $white);
+	$level: abs($level);
+	
+	@return mix($color-base, $color, $level * $theme-color-interval);
 }
 
 // Dashicons

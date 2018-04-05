@@ -72,6 +72,14 @@
 			border-top-right-radius: $input-border-radius;
 		}
 	}
+	
+	&.invalid {
+		input[type=text], input[type=number], textarea, select, .select2-container {
+			border-color: $brand-danger;
+			background-color: transparentize($brand-danger, 0.85);
+		}
+	}
+	
 }
 
 
@@ -86,6 +94,10 @@
 	@include flexbox;
 	z-index: 1;
 	border: $input-border-width solid $input-border-color;
+	
+	.input-group.invalid & {
+		border-color: $brand-danger;
+	}
 	
 	// Ensure buttons are always above inputs for more visually pleasing borders.
 	// This isn't needed for `.input-group-text` since it shares the same border-color
@@ -130,6 +142,10 @@
 	input[type="radio"],
 	input[type="checkbox"] {
 		margin-top: 0;
+	}
+	
+	.input-group.invalid & {
+		background-color: transparentize($brand-danger, 0.35);
 	}
 }
 

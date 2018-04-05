@@ -7,7 +7,7 @@ $font-path:                             "../fonts/" !default;
 $img-path:                              "../images/" !default;
 
 // Fonts
-$font-size-base:                        14px !default;
+$font-size-base:                        0.875rem !default;
 $line-height-base:                      1.5 !default;
 
 // Grid settings
@@ -40,6 +40,8 @@ $brand-warning:                         #EFAF00 !default;
 $brand-danger:                          #FF4848 !default;
 $brand-success:                         #82C342 !default;
 
+$white:                                 #FFF !default;
+$black:                                 #000 !default;
 $gray:                                  #C1C1C1 !default;
 $gray-light:                            #F9F9F9 !default;
 $gray-dark:                             #333333 !default;
@@ -47,6 +49,20 @@ $blue-light:                            #D5F2F8 !default;
 
 $link:                                  #0073AA !default;
 $link-hover:                            #00A0D2 !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge((
+		"primary":    $brand-primary,
+		"success":    $brand-success,
+		"info":       $brand-info,
+		"warning":    $brand-warning,
+		"danger":     $brand-danger,
+		"light":      $gray-light,
+		"dark":       $gray-dark
+), $theme-colors);
+
+// Set a specific jump point for requesting color jumps
+$theme-color-interval:                  8% !default;
 
 // Media queries breakpoints
 $screen-xs:                             480px !default;
@@ -104,6 +120,18 @@ $popover-arrow-outer-color:             fade_in($popover-border-color, 0.05) !de
 $popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%) !default;
 
 $zindex-popover:                        99999999 !default;
+
+// Alerts
+$alert-padding-y:                       .75rem !default;
+$alert-padding-x:                       1.25rem !default;
+$alert-margin-bottom:                   1rem !default;
+$alert-border-radius:                   .25rem !default;
+$alert-link-font-weight:                700 !default;
+$alert-border-width:                    1px !default;
+
+$alert-bg-level:                        -10 !default;
+$alert-border-level:                    -9 !default;
+$alert-color-level:                     6 !default;
 
 // Inputs
 $input-border-width:                    1px !default;
