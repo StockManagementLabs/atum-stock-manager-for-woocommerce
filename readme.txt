@@ -283,16 +283,19 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 **Changes**
 
 * Allow adding products from distinct suppliers to POs.
+* Added the new columns to the Stock Central's help tab.
+* Minor CSS adjustments.
 
 **Fixes**
 
 * Fixed issue with product switched to uncontrolled when updating the stock from WC Orders or Purchase Orders or Inventory Logs.
 * Fixed issue when expanding rows with double-click.
-* Fixed Firefox issues in List Tables’ UI.
+* Fixed Firefox issues in List Tables' UI.
 * Security improvements.
 * Removed duplicated ATUM prefix in transients.
 * Fixed views filters' counters.
 * Fixed child rows' checkboxes not changing when checking the header's checkbox.
+* Fixed issue when trying to use the bulk button multiple times.
 
 ---
 
