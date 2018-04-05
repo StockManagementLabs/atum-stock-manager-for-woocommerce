@@ -315,7 +315,7 @@
 			//-----------------------------
 			$('body').on('click', '#atum-update-list', function() {
 				self.saveData($(this));
-			});
+			})
 			
 			//
 			// Apply Bulk Actions
@@ -801,12 +801,11 @@
 						self.addNotice(noticeType, response.data);
 					}
 					
+					self.$bulkButton.prop('disabled', false);
+					
 					if (response.success) {
 						self.$bulkButton.hide();
 						self.update();
-					}
-					else {
-						self.$bulkButton.prop('disabled', false);
 					}
 					
 				},
