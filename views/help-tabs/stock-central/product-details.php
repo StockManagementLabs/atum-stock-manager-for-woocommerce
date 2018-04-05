@@ -56,5 +56,11 @@ defined( 'ABSPATH' ) or die;
 			<td><strong><?php _e( 'Purchase Price', ATUM_TEXT_DOMAIN ) ?></strong></td>
 			<td><?php _e( "You can configure the purchase price of the product. After you click the 'Set' button, the product price will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
+		<tr>
+			<td><span class="dashicons dashicons-store" title="<?php _e( 'Location', ATUM_TEXT_DOMAIN ) ?>"></span></td>
+			<td><?php _e( "Shows the product's Location hierarchy. Click ones to open the hierarchy in a popup.", ATUM_TEXT_DOMAIN ) ?></td>
+		</tr>
+
+		<?php do_action('atum/help_tabs/stock_central/after_product_details') ?>
 	</tbody>
 </table>
