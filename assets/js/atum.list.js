@@ -13,8 +13,10 @@
 	var pluginName = 'atumListTable',
 	    defaults   = {
 		    ajaxFilter: 'yes',
+		    view      : 'all_stock',
 		    order     : 'desc',
-		    orderby   : 'date'
+		    orderby   : 'date',
+		    paged     : 1
 	    };
 	
 	// The actual plugin constructor
@@ -29,7 +31,7 @@
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
-		this.settings = $.extend( {}, defaults, atumListVars || {}, options );
+		this.settings = $.extend( {}, defaults, atumListVars || {}, options || {} );
 		
 		this._defaults = defaults;
 		this._name = pluginName;
@@ -39,21 +41,52 @@
 	// Avoid Plugin.prototype conflicts
 	$.extend( Plugin.prototype, {
 		
-		doingAjax     : null,
-		jScrollApi    : null,
-		$scrollPane   : null,
-		timer         : null,
-		isRowExpanding: {},
+		doingAjax      : null,
+		jScrollApi     : null,
+		$scrollPane    : null,
+		timer          : null,
+		isRowExpanding : {},
+		filterData     : {},
+		navigationReady: false,
+		numHashParameters: 0,
 		
 		/**
 		 * Register our events and initialize the UI
 		 */
 		init: function () {
 			
-			var self = this;
+			var self         = this,
+			    inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
+			    perPage;
 			
 			//
-			// Init. Table Scrollbar
+			// Initialize the filters' data
+			//-----------------------------
+			if (!$.isNumeric(inputPerPage)) {
+				perPage = this.settings.perPage || 20;
+			}
+			else {
+				perPage = parseInt(inputPerPage);
+			}
+			
+			this.filterData = {
+				token          : this.settings.nonce,
+				action         : this.$atumList.data('action'),
+				screen         : this.$atumList.data('screen'),
+				per_page       : perPage,
+				show_cb        : this.settings.showCb,
+				show_controlled: (this.__query(location.search.substring(1), 'uncontrolled') !== '1' && $.address.parameter('uncontrolled') !== '1') ? 1 : 0,
+				order          : this.settings.order,
+				orderby        : this.settings.orderby,
+			};
+			
+			//
+			// Setup the URL navaigation
+			//--------------------------
+			this.setupNavigation();
+			
+			//
+			// Init Table Scrollbar
 			//----------------------
 			this.addScrollBar();
 			
@@ -144,49 +177,20 @@
 			// Pagination links, Sortable link
 			//--------------------------------
 			this.$atumList.on('click', '.tablenav-pages a, .manage-column.sortable a, .manage-column.sorted a, .subsubsub a', function (e) {
-				
 				e.preventDefault();
-				
-				// Simple way: use the URL to extract our needed variables
-				var query = this.search.substring(1),
-				    $this = $(this);
-				
-				self.$animationElem = $this.closest('.subsubsub');
-				
-				if (!self.$animationElem.length) {
-					self.$animationElem = $this.closest('.tablenav-pages');
-					
-					// For sorting tables with group headers
-					if (!self.$animationElem.length && $this.find('span[class*=col-]').length) {
-						var $group = '.' + $this.find('span[class*=col-]').attr('class').replace('col-', '');
-						self.$animationElem = $this.closest('.wp-list-table').find($group);
-					}
-				}
-				
-				var data = {
-					paged   : self.__query(query, 'paged') || '1',
-					order   : self.__query(query, 'order') || 'desc',
-					orderby : self.__query(query, 'orderby') || 'date',
-					v_filter: self.__query(query, 'v_filter') || '',
-					s       : self.$searchInput.val() || ''
-				};
-				
-				self.update(data);
-				
+				self.updateHash();
 			});
 			
 			//
 			// Ajax filters
 			//-------------
-			if (this.settings.ajaxfilter === 'yes') {
+			if (this.settings.ajaxFilter === 'yes') {
 				
 				// The search event is triggered when cliking on the clear field button within the seach input
 				this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
-					self.$animationElem = $(this).closest('.search-box');
 					self.keyUp(e);
 				})
-				.on('change', '#filter-by-date, .dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-					self.$animationElem = $(this).closest('.actions');
+				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
 					self.keyUp(e, true);
 				});
 				
@@ -197,21 +201,7 @@
 			else {
 				
 				this.$atumList.on('click', '.search-category, .search-submit', function () {
-					
-					var page      = self.$atumList.find('.current-page').val() || 1,
-					    data      = {
-						    paged   : parseInt(page),
-						    order   : self.settings.order,
-						    orderby : self.settings.orderby,
-						    v_filter: self.$atumList.find('.subsubsub a.current').attr('id') || '',
-						    s       : self.$searchInput.val() || ''
-					    },
-					    $this     = $(this),
-					    elemClass = ($this.is('.search-category')) ? '.actions' : '.search-box';
-					
-					self.$animationElem = $this.closest(elemClass);
-					self.update(data);
-					
+					self.updateHash();
 				});
 				
 			}
@@ -220,7 +210,6 @@
 			// Pagination text box
 			//--------------------
 			this.$atumList.on('keyup paste', '.current-page', function (e) {
-				self.$animationElem = $(this).closest('.tablenav-pages');
 				self.keyUp(e);
 			})
 			
@@ -308,6 +297,15 @@
 					}
 				}).catch(swal.noop);
 				
+			})
+			
+			//
+			// Reset Filters button
+			//---------------------
+			.on('click', '.reset-filters', function() {
+				self.destroyTooltips();
+				$.address.queryString('');
+				self.update();
 			});
 			
 			//
@@ -368,6 +366,56 @@
 		},
 		
 		/**
+		 * Setup the URL state navigation
+		 */
+		setupNavigation: function() {
+			
+			if (typeof $.address === 'undefined') {
+				return;
+			}
+			
+			var self = this;
+			
+			this.bindListLinks();
+			
+			// Hash history navigation
+			$.address.externalChange(function(event) {
+				
+				var numCurrentParams = $.address.parameterNames().length;
+				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
+					self.update();
+				}
+				
+				self.navigationReady = true;
+				
+			})
+			.init(function() {
+				
+				// When accessing externally or reloading the page, update the fields and the list
+				if($.address.parameterNames().length) {
+					
+					// Init fields from hash parameters
+					var s = $.address.parameter('s');
+					if (s) {
+						self.$atumList.find('.atum-post-search').val(s);
+					}
+					
+					self.update();
+					
+				}
+				
+			});
+		
+		},
+		
+		/**
+		 * Bind the List Table links that will trigger URL hash changes
+		 */
+		bindListLinks: function () {
+			this.$atumList.find('.subsubsub a, .tablenav-pages a').address();
+		},
+		
+		/**
 		 * Add the horizontal scroll bar to the table
 		 */
 		addScrollBar: function() {
@@ -416,17 +464,8 @@
 				e.preventDefault();
 			}
 			
-			// This time we fetch the variables in inputs
-			var data = {
-				paged   : parseInt( self.$atumList.find('.current-page').val() ) || '1',
-				order   : self.settings.order,
-				orderby : self.settings.orderby,
-				v_filter: self.$atumList.find('.subsubsub a.current').attr('id') || '',
-				s       : self.$searchInput.val() || ''
-			};
-			
 			if (noTimer) {
-				self.update(data);
+				self.updateHash();
 			}
 			else {
 				/*
@@ -438,7 +477,7 @@
 				clearTimeout(self.timer);
 				
 				self.timer = setTimeout(function () {
-					self.update(data);
+					self.updateHash();
 				}, delay);
 				
 			}
@@ -510,7 +549,7 @@
 			if (inputType === 'number') {
 				inputAtts.min = '0';
 				// Allow decimals only for the pricing fields for now
-				inputAtts.step = (symbol) ? '0.1' : '1';
+				inputAtts.step = symbol ? '0.1' : '1';
 			}
 			
 			
@@ -723,7 +762,6 @@
 					data      : data,
 					beforeSend: function () {
 						$button.prop('disabled', true);
-						self.$animationElem = $button.parent();
 						self.addOverlay();
 					},
 					success   : function (response) {
@@ -791,7 +829,6 @@
 				},
 				beforeSend: function () {
 					self.$bulkButton.prop('disabled', true);
-					self.$animationElem = self.$bulkButton.parent();
 					self.addOverlay();
 				},
 				success   : function (response) {
@@ -818,47 +855,83 @@
 		},
 		
 		/**
-		 * AJAX call
-		 * Send the call and replace table parts with updated version!
-		 *
-		 * @param object data     The data to pass through AJAX
+		 * Update the URL hash with the current filters
 		 */
-		update: function (data) {
+		updateHash: function () {
 			
-			var self         = this,
-			    inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
-			    perPage;
+			var self = this;
+			
+			this.filterData = $.extend(this.filterData, {
+				view        : $.address.parameter('view') || self.$atumList.find('.subsubsub a.current').attr('id') || '',
+				product_cat : self.$atumList.find('.dropdown_product_cat').val() || '',
+				product_type: self.$atumList.find('.dropdown_product_type').val() || '',
+				supplier    : self.$atumList.find('.dropdown_supplier').val() || '',
+				extra_filter: self.$atumList.find('.dropdown_extra_filter').val() || '',
+				paged       : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
+				s           : self.$searchInput.val() || ''
+			});
+			
+			// Update the URL hash parameters
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'extra_filter'], function(index, elem) {
+				
+				// Disable auto-update on each iteration until all the parameters have been set
+				self.navigationReady = false;
+				
+				// If it's not saved on the filter data, continue
+				if ( typeof self.filterData[elem] === 'undefined' ) {
+					return true;
+				}
+				
+				// If it's the default value, is not needed
+				if (self.settings.hasOwnProperty(elem) && self.settings[elem] === self.filterData[elem]) {
+					$.address.parameter(elem, '');
+					return true;
+				}
+				
+				$.address.parameter(elem, self.filterData[elem]);
+				
+			});
+			
+			// Restore navigation and update if needed
+			var numCurrentParams = $.address.parameterNames().length;
+			if (numCurrentParams || this.numHashParameters !== numCurrentParams) {
+				this.update();
+			}
+			
+			this.navigationReady   = true;
+			this.numHashParameters = numCurrentParams
+			
+		},
+		
+		/**
+		 * Send the ajax call and replace table parts with updated version
+		 */
+		update: function () {
+			
+			var self = this;
 			
 			if (this.doingAjax && this.doingAjax.readyState !== 4) {
 				this.doingAjax.abort();
 			}
 			
-			if (!$.isNumeric(inputPerPage)) {
-				perPage = this.settings.perpage || 20;
-			}
-			else {
-				perPage = parseInt(inputPerPage);
-			}
-			
-			data = $.extend({
-				token          : self.settings.nonce,
-				action         : self.$atumList.data('action'),
-				screen         : self.$atumList.data('screen'),
-				per_page       : perPage,
-				show_cb        : self.settings.showCb,
-				show_controlled: (self.__query(location.search.substring(1), 'uncontrolled') !== '1') ? 1 : 0,
-				product_cat    : self.$atumList.find('.dropdown_product_cat').val() || '',
-				m              : self.$atumList.find('#filter-by-date').val() || '',
-				product_type   : self.$atumList.find('.dropdown_product_type').val() || '',
-				supplier       : self.$atumList.find('.dropdown_supplier').val() || '',
-				extra_filter   : self.$atumList.find('.dropdown_extra_filter').val() || ''
-			}, data || {});
+			// Overwrite the filterData with the URL hash parameters
+			this.filterData = $.extend(this.filterData, {
+				view        : $.address.parameter('view') || '',
+				product_cat : $.address.parameter('product_cat') || '',
+				product_type: $.address.parameter('product_type') || '',
+				supplier    : $.address.parameter('supplier') || '',
+				extra_filter: $.address.parameter('extra_filter') || '',
+				paged       : $.address.parameter('paged') || '',
+				order       : $.address.parameter('order') || '',
+				orderby     : $.address.parameter('orderby') || '',
+				s           : $.address.parameter('s') || '',
+			});
 			
 			this.doingAjax = $.ajax({
-				
 				url       : ajaxurl,
 				dataType  : 'json',
-				data      : data,
+				method    : 'GET',
+				data      : self.filterData,
 				beforeSend: function () {
 					self.addOverlay();
 				},
@@ -904,6 +977,14 @@
 					// Update the totals row
 					if (typeof response.totals !== 'undefined') {
 						self.$atumList.find('tfoot tr.totals').html(response.totals);
+					}
+					
+					// Re-bind the jQuery address links
+					self.bindListLinks();
+					
+					// If there are active filters, show the reset button
+					if ($.address.parameterNames().length) {
+						self.$atumList.find('.reset-filters').removeClass('hidden');
 					}
 					
 					// Re-add the scrollbar

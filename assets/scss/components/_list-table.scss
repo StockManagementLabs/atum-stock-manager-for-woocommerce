@@ -54,6 +54,32 @@ h1.wp-heading-inline {
 				pointer-events: none;
 			}
 		}
+		
+		.reset-filters {
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;
+			text-align: center;
+			border: none;
+			background-color: $brand-primary;
+			color: #FFF;
+			padding: 2px 0 0;
+			cursor: pointer;
+			position: relative;
+			@include transition(0.2s ease-in-out);
+			
+			&:focus {
+				outline: none;
+			}
+			
+			&:hover {
+				background-color: darken($brand-primary, 5%);
+			}
+			
+			i {
+				font-size: 18px;
+			}
+		}
 	}
 	
 	.actions {
@@ -291,10 +317,10 @@ h1.wp-heading-inline {
 		}
 		
 		&.variation {
-			background-color: lighten($brand-primary, 50%);
+			background-color: lighten($brand-primary, 46%);
 			
 			&:nth-child(even) {
-				background-color: lighten($brand-primary, 58%);
+				background-color: lighten($brand-primary, 50%);
 			}
 		}
 		

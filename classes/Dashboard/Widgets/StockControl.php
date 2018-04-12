@@ -58,10 +58,10 @@ class StockControl extends AtumWidget {
 
 		$sc_url = add_query_arg( 'page', StockCentral::UI_SLUG, admin_url('admin.php') );
 		$sc_links = array(
-			'in_stock'  => add_query_arg( 'v_filter', 'in_stock', $sc_url ),
-			'out_stock' => add_query_arg( 'v_filter', 'out_stock', $sc_url ),
-			'low_stock' => add_query_arg( 'v_filter', 'low_stock', $sc_url ),
-			'unmanaged' => add_query_arg( 'v_filter', 'unmanaged', $sc_url )
+			'in_stock'  => add_query_arg( 'view', 'in_stock', $sc_url ),
+			'out_stock' => add_query_arg( 'view', 'out_stock', $sc_url ),
+			'low_stock' => add_query_arg( 'view', 'low_stock', $sc_url ),
+			'unmanaged' => add_query_arg( 'view', 'unmanaged', $sc_url )
 		);
 
 		$config = $this->get_config();

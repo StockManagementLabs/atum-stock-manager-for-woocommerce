@@ -2,8 +2,8 @@
 /**
  * @package         Atum\InboundStock
  * @subpackage      Inc
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.3.0
  */
@@ -58,9 +58,15 @@ class ListTable extends AtumListTable {
 
 	/**
 	 * @inheritdoc
+	 *
+	 * @since 1.4.2
 	 */
-	public function views() {
-		// Disable views filters
+	protected function get_views() {
+
+		$views = parent::get_views();
+		unset($views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged']);
+
+		return $views;
 	}
 
 	/**
@@ -85,11 +91,23 @@ class ListTable extends AtumListTable {
 
 	/**
 	 * @inheritdoc
+	 *
+	 * @since 1.4.2
 	 */
-	protected function set_views_data( $args ) {
-		// No need to calculate views
+	protected function set_views_data( $args = array() ) {
+
+		$this->count_views = array(
+			'count_in_stock'  => 0,
+			'count_out_stock' => 0,
+			'count_low_stock' => 0,
+			'count_unmanaged' => 0
+		);
+
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	protected function get_sortable_columns() {
 
 		$sortable_columns = parent::get_sortable_columns();
@@ -323,10 +341,13 @@ class ListTable extends AtumListTable {
 
 			}
 
+			$this->set_views_data();
+			$this->count_views['count_all'] = $found_posts;
+
 			$this->set_pagination_args( array(
 				'total_items' => $found_posts,
 				'per_page'    => $this->per_page,
-				'total_pages' => ( $this->per_page == - 1 ) ? 0 : ceil( $found_posts / $this->per_page )
+				'total_pages' => $this->per_page == - 1 ? 0 : ceil( $found_posts / $this->per_page )
 			) );
 
 		}

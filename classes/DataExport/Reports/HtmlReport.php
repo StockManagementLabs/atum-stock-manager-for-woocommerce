@@ -131,10 +131,10 @@ class HtmlReport extends ListTable {
 				foreach ($child_products as $child_id) {
 
 					// Exclude some children if there is a "Views Filter" active
-					if ( ! empty($_REQUEST['v_filter']) ) {
+					if ( ! empty($_REQUEST['view']) ) {
 
-						$v_filter = esc_attr( $_REQUEST['v_filter'] );
-						if ( ! in_array($child_id, $this->id_views[ $v_filter ]) ) {
+						$view = esc_attr( $_REQUEST['view'] );
+						if ( ! in_array($child_id, $this->id_views[ $view ]) ) {
 							continue;
 						}
 

@@ -22,7 +22,6 @@ use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 
-
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
@@ -52,6 +51,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $selected = array();
+
+	/**
+	 * Array of product IDs that are excluded from the list
+	 * @var array
+	 */
+	protected $excluded = array();
 	
 	/**
 	 * Group title columns
@@ -66,40 +71,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $group_members = array();
 
 	/**
-	 * The array of IDs of variable products with children
+	 * The array of container products
 	 * @var array
 	 */
-	protected $variable_products = array();
-
-	/**
-	 * The array of IDs of available variable products
-	 * @var array
-	 */
-	protected $all_variable_products = array();
-
-	/**
-	 * The array of IDs of variable subscription products with children
-	 * @var array
-	 */
-	protected $variable_sc_products = array();
-
-	/**
-	 * The array of IDs of available variable subscription products
-	 * @var array
-	 */
-	protected $all_variable_sc_products = array();
-
-	/**
-	 * The array of IDs of grouped products with children
-	 * @var array
-	 */
-	protected $grouped_products = array();
-
-	/**
-	 * The array of IDs of available grouped products
-	 * @var array
-	 */
-	protected $all_grouped_products = array();
+	protected $container_products = array(
+		'variable'                  => [],
+		'all_variable'              => [],
+		'grouped'                   => [],
+		'all_grouped'               => [],
+		'variable_subscription'     => [],
+		'all_variable_subscription' => []
+	);
 	
 	/**
 	 * The array of IDs of children products
@@ -137,12 +119,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $extra_meta = array();
-	
-	/**
-	 * Data for send to client side
-	 * @var array
-	 */
-	protected $data = array();
 	
 	/**
 	 * IDs for views
@@ -215,7 +191,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var bool
 	 */
 	protected $is_filtering = FALSE;
-
 	
 	/**
 	 * User meta key to control the current user dismissed notices
@@ -227,22 +202,24 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	const EMPTY_COL = '&mdash;';
 
+
 	/**
 	 * AtumListTable Constructor
 	 *
-	 * The child class should call this constructor from its own constructor to override the default $args.
+	 * The child class should call this constructor from its own constructor to override the default $args
 	 *
 	 * @since 0.0.1
 	 *
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns The table columns for the list table
-	 *      @type array  $group_members The column grouping members
-	 *      @type bool   $show_cb       Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled  Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page      Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected      Optional. The posts selected on the list table
+	 *      @type array  $table_columns     The table columns for the list table
+	 *      @type array  $group_members     The column grouping members
+	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
+	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
+	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
+	 *      @type array  $selected          Optional. The posts selected on the list table
+	 *      @type array  $excluded          Optional. The posts excluded from the list table
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -266,6 +243,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
+		}
+
+		if ( ! empty( $args['excluded'] ) ) {
+			$this->excluded = is_array( $args['excluded'] ) ? $args['excluded'] : explode( ',', $args['excluded'] );
 		}
 
 		if ( ! empty($args['group_members']) ) {
@@ -339,7 +320,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Category filtering
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
-			'selected'   => ( ! empty( $_REQUEST['product_cat'] ) ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
+			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
 		) );
 
 		// Product type filtering
@@ -368,12 +349,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		/*if ( $type == 'simple' && $this->product->visibility == 'hidden' && ! empty($this->product->post->post_parent) ) {
 			return;
 		}*/
-		
+
 		$this->allow_calcs = TRUE;
-		$row_class = '';
+		$row_class         = '';
 		
 		// Inheritable products do not allow calcs
 		if ( Helpers::is_inheritable_type($type) ) {
+
 			$this->allow_calcs = FALSE;
 			$class_type = $type == 'grouped' ? 'group' : 'variable';
 			
@@ -382,7 +364,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( Helpers::get_option( 'expandable_rows', 'no' ) == 'yes' ) {
 				$row_classes[] = 'expanded';
 			}
+
 			$row_class = ' class="' . implode(' ', $row_classes) . '"';
+
 		}
 
 		// Output the row
@@ -394,7 +378,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( !$this->allow_calcs ) {
 
 			$product_type   = in_array( $type, ['variable', 'variable-subscription'] ) ? 'product_variation' : 'product';
-			$child_products = $this->get_children($type, [  $this->product->get_id() ], $product_type );
+			$child_products = $this->get_children($type, [ $this->product->get_id() ], $product_type );
 
 			if ( ! empty($child_products) ) {
 
@@ -410,17 +394,17 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					// Exclude some children if there is a "Views Filter" active
-					if ( ! empty($_REQUEST['v_filter']) ) {
+					if ( ! empty($_REQUEST['view']) ) {
 
-						$v_filter = esc_attr( $_REQUEST['v_filter'] );
-						if ( ! in_array($child_id, $this->id_views[ $v_filter ]) ) {
+						$view = esc_attr( $_REQUEST['view'] );
+						if ( ! in_array($child_id, $this->id_views[ $view ]) ) {
 							continue;
 						}
 
 					}
 
 					$this->is_child = TRUE;
-					$this->product = wc_get_product($child_id);
+					$this->product  = wc_get_product( $child_id );
 					$this->single_expandable_row($this->product, ($type == 'grouped' ? $type : 'variation'));
 				}
 			}
@@ -449,6 +433,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo '<tr class="expandable ' . $type . '"' . $row_style . ' data-id="' . $this->get_current_product_id() . '">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
+
 	}
 
 	/**
@@ -584,7 +569,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$supplier         = $supplier_post->post_title;
 				$supplier_length  = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
-				$supplier_abb     = ( strlen( $supplier ) > $supplier_length ) ? trim( substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
+				$supplier_abb     = strlen( $supplier ) > $supplier_length ? trim( substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
 				$supplier_tooltip = sprintf( __( '%s (ID: %d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
 
 				$supplier = '<span class="tips" data-toggle="tooltip" title="' . $supplier_tooltip . '">' . $supplier_abb . '</span>' .
@@ -595,6 +580,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return apply_filters( 'atum/list_table/column_supplier', $supplier, $item, $this->product );
+
 	}
 
 	/**
@@ -655,7 +641,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_calc_type( $item ) {
 
-		$type = $this->product->get_type();
+		$type          = $this->product->get_type();
+		$product_tip   = '';
 		$product_types = wc_get_product_types();
 
 		if ( isset($product_types[$type]) || $this->is_child ) {
@@ -668,16 +655,16 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'simple':
 
 					if ($this->is_child) {
-						$type = 'grouped-item';
-						$product_tip = __('Grouped item', ATUM_TEXT_DOMAIN);
+						$type        = 'grouped-item';
+						$product_tip = __( 'Grouped item', ATUM_TEXT_DOMAIN );
 					}
 					elseif ( $this->product->is_downloadable() ) {
-						$type = 'downloadable';
-						$product_tip = __('Downloadable product', ATUM_TEXT_DOMAIN);
+						$type        = 'downloadable';
+						$product_tip = __( 'Downloadable product', ATUM_TEXT_DOMAIN );
 					}
 					elseif ( $this->product->is_virtual() ) {
-						$type = 'virtual';
-						$product_tip = __('Virtual product', ATUM_TEXT_DOMAIN);
+						$type        = 'virtual';
+						$product_tip = __( 'Virtual product', ATUM_TEXT_DOMAIN );
 					}
 
 					break;
@@ -687,8 +674,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'variable-subscription': // WC Subscriptions compatibility
 
 					if ($this->is_child) {
-						$type = 'grouped-item';
-						$product_tip = __('Grouped item', ATUM_TEXT_DOMAIN);
+						$type        = 'grouped-item';
+						$product_tip = __( 'Grouped item', ATUM_TEXT_DOMAIN );
 					}
 					elseif ( $this->product->has_child() ) {
 
@@ -766,14 +753,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			
 			$purchase_price_value = get_post_meta( $product_id, '_purchase_price', TRUE );
 			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->default_currency ] ) : $purchase_price;
-			
+
 			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
-				'post_id'   => $product_id,
-				'meta_key'  => 'purchase_price',
-				'value'     => $purchase_price_value,
-				'symbol' => get_woocommerce_currency_symbol(),
+				'post_id'  => $product_id,
+				'meta_key' => 'purchase_price',
+				'value'    => $purchase_price_value,
+				'symbol'   => get_woocommerce_currency_symbol(),
 				'currency' => $this->default_currency,
-				'tooltip'   => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
+				'tooltip'  => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN )
 			) );
 			
 			$purchase_price = $this->get_editable_column( $args );
@@ -881,7 +868,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 
 		$product_id = $this->product->get_id();
-		$content = '';
+		$content    = '';
 
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
 		if ( !$this->allow_calcs ) {
@@ -944,11 +931,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 	
 	/**
-	 * REQUIRED! This method dictates the table's columns and titles.
+	 * REQUIRED! This method dictates the table's columns and titles
 	 * This should return an array where the key is the column slug (and class) and the value
 	 * is the column's title text.
 	 *
-	 * @see   WP_List_Table::single_row_columns()
+	 * @see WP_List_Table::single_row_columns()
 	 *
 	 * @since 0.0.1
 	 *
@@ -971,10 +958,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 0.0.8
 	 *
-	 * @return string   Name of the default primary column.
+	 * @return string   Name of the default primary column
 	 */
 	protected function get_default_primary_column_name() {
-		
 		return 'title';
 	}
 
@@ -1024,8 +1010,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'currency'         => $this->default_currency
 		) ) );
 
-		$extra_meta_data = ( ! empty($extra_meta) ) ? ' data-extra-meta="' . htmlspecialchars( json_encode($extra_meta), ENT_QUOTES, 'UTF-8') . '"' : '';
-		$symbol_data = ( ! empty($symbol) ) ? ' data-symbol="' . esc_attr($symbol) . '"' : '';
+		$extra_meta_data = ! empty( $extra_meta ) ? ' data-extra-meta="' . htmlspecialchars( json_encode( $extra_meta ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
+		$symbol_data     = ! empty( $symbol ) ? ' data-symbol="' . esc_attr( $symbol ) . '"' : '';
 
 		$editable_col = '<span class="set-meta tips" data-toggle="tooltip" title="' . $tooltip . '" data-placement="' . $tooltip_position .
 		       '" data-item="' . $post_id . '" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
@@ -1052,8 +1038,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array An associative array containing all the columns that should be sortable: 'slugs' => array('data_values', bool)
 	 */
 	protected function get_sortable_columns() {
-		
-		$not_sortable = array( 'thumb', 'cb' );
+
+		$not_sortable     = array( 'thumb', 'cb' );
 		$sortable_columns = array();
 		
 		foreach ( $this->table_columns as $key => $column ) {
@@ -1074,8 +1060,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_views() {
 
-		$views    = array();
-		$v_filter = ( ! empty( $_REQUEST['v_filter'] ) ) ? esc_attr( $_REQUEST['v_filter'] ) : 'all_stock';
+		$views = array();
+		$view  = ! empty( $_REQUEST['view'] ) ? esc_attr( $_REQUEST['view'] ) : 'all_stock';
 
 		$views_name = array(
 			'all_stock' => __( 'All', ATUM_TEXT_DOMAIN ),
@@ -1086,26 +1072,68 @@ abstract class AtumListTable extends \WP_List_Table {
 		);
 
 		global $plugin_page;
+
+		if ( !$plugin_page && ! empty( $this->_args['screen'] ) ) {
+			$plugin_page = str_replace( Globals::ATUM_UI_HOOK . '_page_', '', $this->_args['screen'] );
+		}
+
 		$url = esc_url( add_query_arg( 'page', $plugin_page, admin_url()) );
 
 		foreach ( $views_name as $key => $text ) {
 
 			$id = '';
+
 			if ( $key != 'all_stock' ) {
-				$view_url = esc_url( add_query_arg( array( 'v_filter' => $key ), $url ) );
-				$id = ' id="' . $key . '"';
+				$view_url = esc_url( add_query_arg( array( 'view' => $key ), $url ) );
+				$id       = ' id="' . $key . '"';
 			}
 			else {
 				$view_url = $url;
 			}
 
-			$class = ( $key == $v_filter || ( ! $v_filter && $key == 'all_stock' ) ) ? ' class="current"' : '';
-			$count = $this->count_views[ 'count_' . ( ( $key == 'all_stock' ) ? 'all' : $key ) ];
+			$class = ( $key == $view || ( ! $view && $key == 'all_stock' ) ) ? ' class="current"' : '';
+			$count = $this->count_views[ 'count_' . ( $key == 'all_stock' ? 'all' : $key ) ];
 
-			$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '"><span>' . $text . ' (' . $count . ')</span></a>';
+			$filters = $this->get_filters_query_string( 'array' );
+			$filters['view'] = $key;
+
+			$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . http_build_query($filters) . '"><span>' . $text . ' (' . $count . ')</span></a>';
+
 		}
 
 		return apply_filters( 'atum/list_table/view_filters', $views );
+
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.4.2
+	 */
+	public function views() {
+
+		$views = $this->get_views();
+		$views = apply_filters( "views_{$this->screen->id}", $views );
+
+		if ( empty( $views ) )
+			return;
+
+		$this->screen->render_screen_reader_content( 'heading_views' );
+
+		?>
+		<ul class="subsubsub">
+			<?php
+			foreach ( $views as $class => $view ) {
+				$views[ $class ] = "\t<li class='$class'>$view";
+			}
+			echo implode( " |</li>\n", $views ) . "</li>\n";
+			?>
+
+			<li>
+				<button type="button" class="reset-filters hidden" data-toggle="tooltip" title="<?php _e('Reset Filters', ATUM_TEXT_DOMAIN) ?>"><i class="dashicons dashicons-update"></i></button>
+			</li>
+		</ul>
+		<?php
 
 	}
 	
@@ -1361,27 +1389,27 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Build "Views Filters" and calculate totals
 		$this->set_views_data( $args );
 		
-		$this->data['v_filter'] = '';
+		$view = '';
 		$allow_query = TRUE;
 		
 		/*
-	     * REQUIRED. Register our pagination options & calculations.
+	     * REQUIRED. Register our pagination options & calculations
 		 */
 		$found_posts  = isset( $this->count_views['count_all'] ) ? $this->count_views['count_all'] : 0;
 
-		if ( ! empty( $_REQUEST['v_filter'] ) ) {
+		if ( ! empty( $_REQUEST['view'] ) ) {
 			
-			$this->data['v_filter'] = esc_attr( $_REQUEST['v_filter'] );
+			$view = esc_attr( $_REQUEST['view'] );
 			$allow_query = FALSE;
 			
 			foreach ( $this->id_views as $key => $post_ids ) {
 				
-				if ( $this->data['v_filter'] == $key && ! empty($post_ids) ) {
+				if ( $view == $key && ! empty($post_ids) ) {
 
 					// Add the parent products again to the query
-					$args['post__in'] = ( ! empty($this->variable_products) || ! empty($this->grouped_products) ) ? $this->get_parents($post_ids) : $post_ids;
-					$allow_query = TRUE;
-					$found_posts = $this->count_views["count_$key"];
+					$args['post__in'] = ( ! empty( $this->container_products['variable'] ) || ! empty( $this->container_products['grouped'] ) ) ? $this->get_parents( $post_ids ) : $post_ids;
+					$allow_query      = TRUE;
+					$found_posts      = $this->count_views["count_$key"];
 
 				}
 				
@@ -1390,25 +1418,26 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		if ( $allow_query ) {
 
-			// Setup the WP query
-			global $wp_query;
-			$wp_query = new \WP_Query( $args );
-			
-			$products = $wp_query->posts;
-			$product_ids = wp_list_pluck($products, 'ID');
+			if ( ! empty($this->excluded) ) {
 
-			// Check if there are some empty inheritable products within the resulting list and get rid of them
-			foreach ( array_map('wc_get_product', $product_ids) as $key => $wc_product ) {
-
-				$product_type = $wc_product->get_type();
-				if ( Helpers::is_inheritable_type( $product_type ) && ! $this->get_num_children( $wc_product, $product_type ) ) {
-					unset( $products[$key], $product_ids[$key] );
+				if ( isset($args['post__not_in']) ) {
+					$args['post__not_in'] = array_merge($args['post__not_in'], $this->excluded);
+				}
+				else {
+					$args['post__not_in'] = $this->excluded;
 				}
 
 			}
 
+			// Setup the WP query
+			global $wp_query;
+			$wp_query = new \WP_Query( $args );
+
+			$products    = $wp_query->posts;
+			$product_ids = wp_list_pluck( $products, 'ID' );
+
 			$this->current_products = $product_ids;
-			$total_pages = $this->per_page == -1 ? 0 : ceil( $found_posts / $this->per_page );
+			$total_pages = $this->per_page == -1 ? 0 : ceil( ( $found_posts - count($this->excluded) ) / $this->per_page );
 			
 		}
 		else {
@@ -1460,7 +1489,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$variable_id = $variation_product->get_parent_id();
 
 			if ( ! is_array($products) || ! in_array($variable_id, $products) ) {
-				$products[] = $this->all_variable_products[] = $this->variable_products[] = $variable_id;
+				$products[] = $this->container_products['all_variable'][] = $this->container_products['variable'][] = $variable_id;
 			}
 		}
 
@@ -1546,8 +1575,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
 
-					// Remove the empty variables from the array and add the variations
-					$products = array_unique( array_merge( array_diff( $products, $this->all_variable_products ), $variations ) );
+					// Remove the variable containers from the array and add the variations
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable'] ), $variations ) );
 
 				}
 
@@ -1555,8 +1584,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
 
-					// Remove the empty grouped from the array and add the group items
-					$products = array_unique( array_merge( array_diff( $products, $this->all_grouped_products ), $group_items ) );
+					// Remove the grouped containers from the array and add the group items
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_grouped'] ), $group_items ) );
 
 				}
 
@@ -1565,8 +1594,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
 
-					// Remove the empty variable subscriptions from the array and add the subscription variations
-					$products = array_unique( array_merge( array_diff( $products, $this->all_variable_sc_products ), $sc_variations ) );
+					// Remove the variable subscription containers from the array and add the subscription variations
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
 
 				}
 
@@ -1756,16 +1785,17 @@ abstract class AtumListTable extends \WP_List_Table {
 		<?php
 		
 		$this->display_tablenav( 'bottom' );
+		global $plugin_page;
 
 		// Prepare JS vars
 		$vars = array(
-			'page'             => isset( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : 1,
-			'perpage'          => $this->per_page,
+			'listUrl'          => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
+			'perPage'          => $this->per_page,
 			'showCb'           => $this->show_cb,
 			'order'            => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
 			'orderby'          => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
 			'nonce'            => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxfilter'       => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'ajaxFilter'       => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 			'setValue'         => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
 			'setButton'        => __( 'Set', ATUM_TEXT_DOMAIN ),
 			'saveButton'       => __( 'Save Data', ATUM_TEXT_DOMAIN ),
@@ -1783,7 +1813,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$vars['preventLossNotice'] = __( "To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN );
 		}
 
-		$vars = apply_filters( 'atum/list_table/js_vars',  array_merge($vars, $this->data) );
+		$vars = apply_filters( 'atum/list_table/js_vars', $vars );
 		wp_localize_script( 'atum-list', 'atumListVars', $vars );
 		
 		do_action( 'atum/list_table/after_display', $this );
@@ -1896,6 +1926,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			<br class="clear"/>
 		</div>
 		<?php
+
 	}
 	
 	/**
@@ -1912,6 +1943,147 @@ abstract class AtumListTable extends \WP_List_Table {
 			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), esc_attr( $_REQUEST['s'] ) );
 		}
 		
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @since 1.4.2
+	 */
+	protected function pagination( $which ) {
+
+		if ( empty( $this->_pagination_args ) ) {
+			return;
+		}
+
+		$total_items = $this->_pagination_args['total_items'];
+		$total_pages = $this->_pagination_args['total_pages'];
+
+		if ( 'top' === $which && $total_pages > 1 ) {
+			$this->screen->render_screen_reader_content( 'heading_pagination' );
+		}
+
+		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, ATUM_TEXT_DOMAIN ), number_format_i18n( $total_items ) ) . '</span>';
+
+		$current = $this->get_pagenum();
+		$removable_query_args = wp_removable_query_args();
+
+		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		$current_url = remove_query_arg( $removable_query_args, $current_url );
+
+		// Extract the filters from the URL
+		$filters = $this->get_filters_query_string('array');
+
+		$page_links = array();
+
+		$total_pages_before = '<span class="paging-input">';
+		$total_pages_after  = '</span></span>';
+
+		$disable_first = $disable_last = $disable_prev = $disable_next = FALSE;
+
+		if ( $current == 1 ) {
+			$disable_first = TRUE;
+			$disable_prev  = TRUE;
+		}
+
+		if ( $current == 2 ) {
+			$disable_first = TRUE;
+		}
+
+		if ( $current == $total_pages ) {
+			$disable_last = TRUE;
+			$disable_next = TRUE;
+		}
+
+		if ( $current == $total_pages - 1 ) {
+			$disable_last = TRUE;
+		}
+
+		if ( $disable_first ) {
+			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
+		}
+		else {
+
+			$page_links[] = sprintf( "<a class='first-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				esc_url( remove_query_arg( 'paged', $current_url ) ),
+				http_build_query($filters),
+				__( 'First page', ATUM_TEXT_DOMAIN ),
+				'&laquo;'
+			);
+
+		}
+
+		if ( $disable_prev ) {
+			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>';
+		}
+		else {
+
+			$prev_page    = max( 1, $current - 1 );
+			$page_links[] = sprintf( "<a class='prev-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				esc_url( add_query_arg( 'paged', $prev_page, $current_url ) ),
+				http_build_query( array_merge($filters, ['paged' => $prev_page]) ),
+				__( 'Previous page', ATUM_TEXT_DOMAIN ),
+				'&lsaquo;'
+			);
+
+		}
+
+		if ( 'bottom' === $which ) {
+			$html_current_page  = $current;
+			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">';
+		}
+		else {
+			$html_current_page = sprintf( "%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
+				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</label>',
+				$current,
+				strlen( $total_pages )
+			);
+		}
+
+		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
+		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', ATUM_TEXT_DOMAIN ), $html_current_page, $html_total_pages ) . $total_pages_after;
+
+		if ( $disable_next ) {
+			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
+		}
+		else {
+
+			$next_page    = min( $total_pages, $current + 1 );
+			$page_links[] = sprintf( "<a class='next-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				esc_url( add_query_arg( 'paged', $next_page, $current_url ) ),
+				http_build_query( array_merge($filters, ['paged' => $next_page]) ),
+				__( 'Next page', ATUM_TEXT_DOMAIN ),
+				'&rsaquo;'
+			);
+		}
+
+		if ( $disable_last ) {
+			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
+		}
+		else {
+			$page_links[] = sprintf( "<a class='last-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
+				http_build_query( array_merge($filters, ['paged' => $total_pages]) ),
+				__( 'Last page', ATUM_TEXT_DOMAIN ),
+				'&raquo;'
+			);
+		}
+
+		$pagination_links_class = 'pagination-links';
+
+		$output .= "\n<span class='$pagination_links_class'>" . join( "\n", $page_links ) . '</span>';
+
+		if ( $total_pages ) {
+			$page_class = $total_pages < 2 ? ' one-page' : '';
+		}
+		else {
+			$page_class = ' no-pages';
+		}
+
+		$this->_pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
+
+		echo $this->_pagination;
+
 	}
 	
 	/**
@@ -2025,13 +2197,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		if (
 			! in_array( $pagenow, array('edit.php', 'admin-ajax.php') ) ||
-		    ! isset( $_GET['s'], $_GET['action'] ) || strpos( $_GET['action'], ATUM_PREFIX ) === FALSE
+		    ! isset( $_REQUEST['s'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === FALSE
 		) {
 			return $where;
 		}
 
 		$search_ids = array();
-		$terms      = explode( ',', $_GET['s'] );
+		$terms      = explode( ',', $_REQUEST['s'] );
 
 		foreach ( $terms as $term ) {
 
@@ -2135,12 +2307,16 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * Enqueue the required scripts
 	 *
 	 * @since 0.0.1
+	 *
 	 * @param string $hook
 	 */
 	public function enqueue_scripts( $hook ) {
 
+		// jQuery.address
+		wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+
 		// jScrollPane
-		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION, TRUE );
 
 		// Sweet Alert 2
@@ -2170,7 +2346,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array('woocommerce_admin_styles', 'sweetalert2'), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
@@ -2267,15 +2443,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			switch ( $parent_type ) {
 				case 'variable':
-					$this->all_variable_products = array_unique( array_merge($this->all_variable_products, $parents->posts) );
+					$this->container_products['all_variable'] = array_unique( array_merge($this->container_products['all_variable'], $parents->posts) );
 			        break;
 
 				case 'grouped':
-					$this->all_grouped_products = array_unique( array_merge($this->all_grouped_products, $parents->posts) );
+					$this->container_products['all_grouped'] = array_unique( array_merge($this->container_products['all_grouped'], $parents->posts) );
 					break;
 
 				case 'variable-subscription':
-					$this->all_variable_sc_products = array_unique( array_merge($this->all_variable_sc_products, $parents->posts) );
+					$this->container_products['all_variable_subscription'] = array_unique( array_merge($this->container_products['all_variable_subscription'], $parents->posts) );
 					break;
 			}
 
@@ -2334,15 +2510,27 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				switch ( $parent_type ) {
 					case 'variable':
-						$this->variable_products = array_unique( array_merge($this->variable_products, $parents_with_child) );
+
+						$this->container_products['variable'] = array_unique( array_merge($this->container_products['variable'], $parents_with_child) );
+
+						// Exclude all those variations with no children from the list
+						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable'], $this->container_products['variable'] ) ) );
 				        break;
 
 					case 'grouped':
-						$this->grouped_products = array_unique( array_merge($this->grouped_products, $parents_with_child) );
+
+						$this->container_products['grouped'] = array_unique( array_merge($this->container_products['grouped'], $parents_with_child) );
+
+						// Exclude all those grouped with no children from the list
+						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_grouped'], $this->container_products['grouped'] ) ) );
 						break;
 
 					case 'variable-subscription':
-						$this->variable_sc_products = array_unique( array_merge($this->variable_sc_products, $parents_with_child) );
+
+						$this->container_products['variable_subscription'] = array_unique( array_merge($this->container_products['variable_subscription'], $parents_with_child) );
+
+						// Exclude all those subscription variations with no children from the list
+						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable_subscription'], $this->container_products['variable_subscription'] ) ) );
 						break;
 				}
 				
@@ -2350,6 +2538,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->children_products = array_merge( $this->children_products, $children_ids);
 
 				return $children_ids;
+			}
+			else {
+				$this->excluded = array_unique( array_merge( $this->excluded, $parents->posts ) );
 			}
 
 		}
@@ -2464,6 +2655,43 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $this->show_totals && isset($this->totalizers[ $column_name ]) && is_numeric($amount) ) {
 			$this->totalizers[ $column_name ] += floatval($amount);
 		}
+	}
+
+	/**
+	 * Buils a query string with the active filters
+	 *
+	 * @since 1.4.2
+	 *
+	 * @param string $format    Optional. The return format (array or string)
+	 *
+	 * @return string|array
+	 */
+	protected function get_filters_query_string($format = 'string') {
+
+		$default_filters = array(
+			'paged'        => 1,
+			'order'        => 'desc',
+			'orderby'      => 'date',
+			'view'         => 'all_stock',
+			'product_cat'  => '',
+			'product_type' => '',
+			'supplier'     => '',
+			'extra_filter' => '',
+			's'            => ''
+		);
+
+		parse_str($_SERVER['QUERY_STRING'], $query_string);
+		$params = array_filter( array_intersect_key($query_string, $default_filters) );
+
+		// The filters with default values should be excluded
+		foreach ($params as $param => $value) {
+			if ($value == $default_filters[$param]) {
+				unset($params[$param]);
+			}
+		}
+
+		return $format == 'string' ? http_build_query($params) : $params;
+
 	}
 
 }

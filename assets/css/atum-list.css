@@ -820,6 +820,34 @@ h1.wp-heading-inline #atum-update-list:active {
   pointer-events: none;
 }
 
+.atum-list-wrapper .subsubsub .reset-filters {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  border: none;
+  background-color: #00B8DB;
+  color: #FFF;
+  padding: 2px 0 0;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.atum-list-wrapper .subsubsub .reset-filters:focus {
+  outline: none;
+}
+
+.atum-list-wrapper .subsubsub .reset-filters:hover {
+  background-color: #00a3c2;
+}
+
+.atum-list-wrapper .subsubsub .reset-filters i {
+  font-size: 18px;
+}
+
 .atum-list-wrapper .actions.bulkactions {
   padding-right: 0;
 }
@@ -1022,11 +1050,11 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.variation {
-  background-color: #dbf9ff;
+  background-color: #c7f6ff;
 }
 
 .atum-list-table tr.variation:nth-child(even) {
-  background-color: white;
+  background-color: #dbf9ff;
 }
 
 .atum-list-table tr.grouped {
