@@ -269,6 +269,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.3`
+
+*2018-04-12*
+
+**Features**
+
+* Added URL hash navigation for filters in List Tables.
+* Added "Reset Filters" button to List Tables.
+* Alow navigating through filters history with browser's back/forward buttons.
+* Allow reloading the page without losing filters.
+* Allow going to specific page with some filters preset just editing the URL parameters.
+
+**Fixes**
+
+* Fixed pagination in List Tables.
+
+---
+
 `1.4.2`
 
 *2018-04-05*

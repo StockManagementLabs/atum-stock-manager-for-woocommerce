@@ -1108,7 +1108,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * @inheritdoc
 	 *
-	 * @since 1.4.2
+	 * @since 1.4.3
 	 */
 	public function views() {
 
@@ -1948,7 +1948,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * @inheritdoc
 	 *
-	 * @since 1.4.2
+	 * @since 1.4.3
 	 */
 	protected function pagination( $which ) {
 
@@ -2660,7 +2660,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Buils a query string with the active filters
 	 *
-	 * @since 1.4.2
+	 * @since 1.4.3
 	 *
 	 * @param string $format    Optional. The return format (array or string)
 	 *
