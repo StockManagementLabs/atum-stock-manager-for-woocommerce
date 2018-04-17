@@ -10,7 +10,7 @@
  * Plugin Name:          ATUM Stock Manager for WooCommerce
  * Plugin URI:           https://www.stockmanagementlabs.com/
  * Description:          The ultimate stock management plugin for serious WooCommerce sellers
- * Version:              1.4.3.1
+ * Version:              1.4.3.2
  * Author:               Stock Management Labs™
  * Author URI:           https://www.stockmanagementlabs.com/
  * Contributors:         Be Rebel Studio - https://berebel.io
@@ -25,11 +25,10 @@
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-// If this file is called directly, abort.
 defined( 'ABSPATH' ) or die;
 
 if ( ! defined('ATUM_VERSION') ) {
-	define( 'ATUM_VERSION', '1.4.3.1' );
+	define( 'ATUM_VERSION', '1.4.3.2' );
 }
 
 if ( ! defined('ATUM_PATH') ) {
