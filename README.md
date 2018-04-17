@@ -219,6 +219,23 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.3.2`
+
+*2018-04-17*
+
+**Changes**
+
+* Added filter hooks for ATUM tab's fields visibility.
+
+**Fixes**
+
+* Fixed pagination in List Tables.
+* Fixed pagination's go-to-first-page button.
+* Fixed issue when cutting strings with non standard characters.
+* Minor fixes.
+
+---
+
 `1.4.3`
 
 *2018-04-12*

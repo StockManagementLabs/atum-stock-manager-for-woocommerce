@@ -7,7 +7,7 @@ Tested up to: 4.9.5
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.5
-Stable tag: 1.4.3.1
+Stable tag: 1.4.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,23 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.3.2`
+
+*2018-04-17*
+
+**Changes**
+
+* Added filter hooks for ATUM tab's fields visibility.
+
+**Fixes**
+
+* Fixed pagination in List Tables.
+* Fixed pagination's go-to-first-page button.
+* Fixed issue when cutting strings with non standard characters.
+* Minor fixes.
 
 ---
 
