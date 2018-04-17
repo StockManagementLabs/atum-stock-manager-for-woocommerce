@@ -300,6 +300,12 @@
   margin-left: 5px;
 }
 
+.product_data .woocommerce_variations .alert {
+  display: block;
+  margin-bottom: 15px;
+  padding: 0.35rem 0.75rem;
+}
+
 .product_data #atum_product_data .switchery {
   float: left;
 }

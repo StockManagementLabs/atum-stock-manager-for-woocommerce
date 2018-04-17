@@ -13,7 +13,7 @@
 		atumDoSwitchers();
 		
 		// Add switches to variations once are loaded by WC
-		$('#woocommerce-product-data').on('woocommerce_variations_loaded', function() {
+		$('#woocommerce-product-data').on('woocommerce_variations_added woocommerce_variations_loaded', function() {
 			atumDoSwitchers();
 		});
 		
