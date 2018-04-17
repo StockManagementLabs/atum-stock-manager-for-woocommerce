@@ -57,7 +57,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 		);
 
 		// Hide the purchase price column if the current user has not the capability
-		if ( ! AtumCapabilities::current_user_can('view_purchase_price') ) {
+		if ( ! AtumCapabilities::current_user_can('view_purchase_price') || ! ModuleManager::is_module_active('purchase_orders') ) {
 			unset( $args['table_columns']['_purchase_price'] );
 		}
 
@@ -65,10 +65,6 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
 			unset( $args['table_columns']['_supplier'] );
 			unset( $args['table_columns']['_supplier_sku'] );
-		}
-
-		if ( ! ModuleManager::is_module_active('purchase_orders') ) {
-			unset( $args['table_columns']['_purchase_price'] );
 		}
 
 		$args['table_columns'] = (array) apply_filters( 'atum/uncontrolled_stock_central_list/table_columns', $args['table_columns'] );
