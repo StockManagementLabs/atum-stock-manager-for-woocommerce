@@ -2006,7 +2006,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$page_links[] = sprintf( "<a class='first-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( remove_query_arg( 'paged', $current_url ) ),
-				http_build_query($filters),
+				http_build_query( array_merge($filters, ['paged' => 1]) ),
 				__( 'First page', ATUM_TEXT_DOMAIN ),
 				'&laquo;'
 			);
@@ -2061,12 +2061,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
 		}
 		else {
+
 			$page_links[] = sprintf( "<a class='last-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
 				http_build_query( array_merge($filters, ['paged' => $total_pages]) ),
 				__( 'Last page', ATUM_TEXT_DOMAIN ),
 				'&raquo;'
 			);
+
 		}
 
 		$pagination_links_class = 'pagination-links';
