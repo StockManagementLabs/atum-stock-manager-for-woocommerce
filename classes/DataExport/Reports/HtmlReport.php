@@ -173,7 +173,7 @@ class HtmlReport extends ListTable {
 			$title = $this->product->get_title();
 
 			// Limit the title length to 20 characters
-			if ( $this->title_max_length && strlen($title) > $this->title_max_length ) {
+			if ( $this->title_max_length && mb_strlen($title) > $this->title_max_length ) {
 				$title = trim( mb_substr( $title, 0, $this->title_max_length ) ) . '...';
 			}
 		}
