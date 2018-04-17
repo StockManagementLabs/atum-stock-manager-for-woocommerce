@@ -399,8 +399,9 @@ class Suppliers {
 
 			$suplier_field_name      = empty( $variation ) ? '_supplier' : "variation_supplier[$loop]";
 			$supplier_sku_field_name = empty( $variation ) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
+			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', ['show_if_simple'] );
 
-			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('suplier_field_name', 'variation', 'supplier', 'supplier_sku', 'supplier_sku_field_name'));
+			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('suplier_field_name', 'variation', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_fields_classes'));
 
 		endif;
 

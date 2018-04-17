@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) or die;
 
 if ( empty($variation) ): ?>
-<div class="options_group show_if_simple show_if_product-part show_if_raw-material">
+<div class="options_group <?php echo implode(' ', $supplier_fields_classes) ?>">
 <?php endif; ?>
 
 	<p class="form-field _supplier_field<?php if ( ! empty($variation) ) echo ' form-row form-row-first' ?>">

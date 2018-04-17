@@ -165,14 +165,14 @@ class Hooks {
 	public function add_product_data_tab($data_tabs) {
 
 		// Add the ATUM tab to Simple and BOM products
-		$bom_tab = array(
+		$bom_tab = (array) apply_filters( 'atum/product_data/tab', array(
 			'atum' => array(
 				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
-				'class'    => array( 'show_if_simple', 'show_if_variable', 'show_if_product-part', 'show_if_raw-material' ),
+				'class'    => array( 'show_if_simple', 'show_if_variable' ),
 				'priority' => 21
 			)
-		);
+		) );
 
 		// Insert the ATUM tab under Inventory tab
 		$data_tabs = array_merge( array_slice($data_tabs, 0, 2), $bom_tab, array_slice($data_tabs, 2) );
@@ -193,20 +193,23 @@ class Hooks {
 
 				$product_id     = get_the_ID();
 				$product_status = get_post_status( $product_id );
+				$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', ['show_if_simple']);
 
 				woocommerce_wp_checkbox( array(
 					'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
 					'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
 					'value'         => $product_status == 'auto-draft' ? 'yes' : Helpers::get_atum_control_status($product_id),
 					'class'         => 'js-switch',
-					'wrapper_class' => 'show_if_simple show_if_raw-material show_if_product-part',
+					'wrapper_class' => implode(' ', $checkbox_wrapper_classes),
 					'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
 					'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
 					'desc_tip'      => TRUE
 				) );
+
+				$control_button_classes = (array) apply_filters( 'atum/product_data/control_button/classes', ['show_if_variable']);
 				?>
 
-				<p class="form-field show_if_variable">
+				<p class="form-field <?php echo implode(' ', $control_button_classes) ?>">
 					<label for="stock_control_status"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
 					<select id="stock_control_status">
 						<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
