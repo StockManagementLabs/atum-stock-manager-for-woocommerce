@@ -814,6 +814,7 @@ h1.wp-heading-inline #atum-update-list:active {
 .atum-list-wrapper .subsubsub {
   position: relative;
   margin-left: 3px;
+  margin-top: 0;
 }
 
 .atum-list-wrapper .subsubsub a.current {
