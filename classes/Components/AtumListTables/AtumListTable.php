@@ -1437,7 +1437,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$product_ids = wp_list_pluck( $products, 'ID' );
 
 			$this->current_products = $product_ids;
-			$total_pages = $this->per_page == -1 ? 0 : ceil( ( $found_posts - count($this->excluded) ) / $this->per_page );
+			$total_pages = ( $this->per_page == -1 || ! $wp_query->have_posts() ) ? 0 : ceil( $wp_query->found_posts / $this->per_page );
 			
 		}
 		else {
