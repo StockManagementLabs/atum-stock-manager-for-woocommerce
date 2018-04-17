@@ -691,5 +691,37 @@ class Wpml {
 			}
 			
 		}
+		
+		if ( version_compare( $old_version, '1.4.3.3', '<' ) ) {
+			
+			// Delete previous existent metas in translations to prevent duplicates
+			$IDs_to_delete = $wpdb->get_results( "SELECT DISTINCT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
+ 									ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('_supplier', '_supplier_sku') AND
+ 									NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');", ARRAY_N );
+			
+			if ( $IDs_to_delete ) {
+				
+				$IDs_to_delete  = implode( ',', wp_list_pluck( $IDs_to_delete, 0 ) );
+				$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_supplier', '_supplier_sku')
+ 										AND post_id IN({$IDs_to_delete});" );
+				
+			}
+			
+			$IDs_to_refresh = $wpdb->get_results("SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
+												WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN
+												('post_product', 'post_product_variation');", ARRAY_N );
+			
+			if ($IDs_to_refresh) {
+				
+				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
+				foreach ( $IDs_to_refresh as $id) {
+					
+					$original_id = $this->get_original_product_id($id);
+					$sitepress->sync_custom_field( $original_id, $id, '_supplier');
+					$sitepress->sync_custom_field( $original_id, $id, '_supplier_sku');
+				}
+			}
+			
+		}
 	}
 }
