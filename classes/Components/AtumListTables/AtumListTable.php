@@ -533,7 +533,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title_length = absint( apply_filters( 'atum/list_table/column_title_length', 20 ) );
 
 		if ( strlen( $title ) > $title_length ) {
-			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( substr( $title, 0, $title_length ) ) .
+			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
@@ -569,7 +569,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$supplier         = $supplier_post->post_title;
 				$supplier_length  = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
-				$supplier_abb     = strlen( $supplier ) > $supplier_length ? trim( substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
+				$supplier_abb     = strlen( $supplier ) > $supplier_length ? trim( mb_substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
 				$supplier_tooltip = sprintf( __( '%s (ID: %d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
 
 				$supplier = '<span class="tips" data-toggle="tooltip" title="' . $supplier_tooltip . '">' . $supplier_abb . '</span>' .

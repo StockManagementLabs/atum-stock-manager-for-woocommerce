@@ -150,7 +150,7 @@ class ListTable extends AtumListTable {
 		$title_length = absint( apply_filters( 'atum/inbound_stock_list/column_title_length', 20 ) );
 
 		if ( strlen( $title ) > $title_length ) {
-			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( substr( $title, 0, $title_length ) ) .
+			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
