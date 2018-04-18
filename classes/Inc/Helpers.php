@@ -617,48 +617,37 @@ final class Helpers {
 	 * @return array
 	 */
 	public static function get_unmanaged_products($post_types) {
-
+		
 		global $wpdb;
-
+		
 		$unmng_join = apply_filters( 'atum/get_unmanaged_products/join_query', "
 			LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
-			LEFT JOIN $wpdb->postmeta AS mt2 ON posts.ID = mt2.post_id
-			LEFT JOIN $wpdb->postmeta AS mt3 ON posts.ID = mt3.post_id		
+			LEFT JOIN wp_term_relationships tere ON posts.ID = tere.object_id
 		" );
-
+		
 		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
-
+		
 		// Exclude the inheritable products from query (as are just containers in ATUM List Tables)
 		$excluded_types = Globals::get_inheritable_product_types();
 		$excluded_type_terms = array();
-
+		
 		foreach ($excluded_types as $excluded_type) {
 			$excluded_type_terms[] = get_term_by('slug', $excluded_type, 'product_type');
 		}
-
+		
 		$excluded_type_terms = wp_list_pluck( array_filter($excluded_type_terms), 'term_taxonomy_id');
-
+		
 		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', "
-			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "') 
+			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
 			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-			AND (mt1.post_id IS NULL OR (mt2.meta_key = '_manage_stock' AND mt2.meta_value = 'no'))
-			AND mt3.meta_key = '_atum_manage_stock' AND mt3.meta_value = 'yes'
-			AND posts.ID NOT IN (
-				SELECT DISTINCT p.ID FROM $wpdb->posts p 
-				LEFT JOIN $wpdb->postmeta pm1 ON (p.ID = pm1.post_id AND pm1.meta_key = '_manage_stock')
-				LEFT JOIN $wpdb->postmeta pm2 ON p.ID = pm2.post_id	
-				LEFT JOIN $wpdb->term_relationships tr ON p.ID = tr.object_id
-				WHERE p.post_type IN ('" . implode( "','", $post_types ) . "') 
-				AND p.post_status IN ('" . implode( "','", $post_statuses ) . "')
-				AND (pm1.post_id IS NULL OR (pm2.meta_key = '_manage_stock' AND pm2.meta_value = 'no'))
-				AND tr.term_taxonomy_id IN (" . implode(',', $excluded_type_terms) . ")
-			)
+			AND tere.term_taxonomy_id NOT IN (" . implode(',', $excluded_type_terms) . ")
+			AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
 		" );
-
+		
 		$sql = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts $unmng_join $unmng_where";
-
+		
 		return $wpdb->get_col($sql);
-
+		
 	}
 
 	/**

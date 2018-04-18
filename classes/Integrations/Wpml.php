@@ -59,6 +59,12 @@ class Wpml {
 	protected $original_product_id;
 
 	/**
+	 * Current language
+	 * @var string
+	 */
+	protected $current_language;
+
+	/**
 	 * Current currency symbol
 	 * @var string
 	 */
@@ -75,6 +81,8 @@ class Wpml {
 		$this->sitepress = $sitepress;
 
 		$this->wpml = \woocommerce_wpml::instance();
+
+		$this->current_language = $this->sitepress->get_current_language();
 
 		if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
 			$this->multicurrency_active = TRUE;
@@ -224,7 +232,7 @@ class Wpml {
 
 		$currency = get_woocommerce_currency();
 
-		$lang = $lang ? $lang : $this->sitepress->get_current_language();
+		$lang = $lang ? $lang : $this->current_language;
 
 		if ( ! empty( $this->wpml->settings['default_currencies'][ $lang ] ) ) {
 			$currency = $this->wpml->settings['default_currencies'][ $lang ];
@@ -625,7 +633,7 @@ class Wpml {
 		return $product->get_id();
 
 	}
-
+	
 	/**
 	 * Filter for the Unmanaged products query (where part) to only exclude WPML translations
 	 *
@@ -636,15 +644,15 @@ class Wpml {
 	 * @return string
 	 */
 	public function unmanaged_products_where($unmng_where) {
-
+		
 		global $wpdb;
-
-		$unmng_where .= " 
-			AND ID NOT IN (
-				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND NULLIF(source_language_code, '') IS NULL
+		
+		$unmng_where .= "
+			AND posts.ID IN (
+				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND language_code = '{$this->current_language}'
 			)
 		";
-
+		
 		return $unmng_where;
 	}
 	
