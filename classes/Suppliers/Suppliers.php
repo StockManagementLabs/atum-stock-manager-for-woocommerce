@@ -15,6 +15,7 @@ namespace Atum\Suppliers;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 
@@ -366,7 +367,7 @@ class Suppliers {
 			$product = wc_get_product( $post->ID );
 
 			// Do not add the field to variable products (every variation will have its own)
-			if ( in_array( $product->get_type(), ['variable', 'variable-subscription'] ) ) {
+			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) ) ) {
 				return;
 			}
 
@@ -418,7 +419,7 @@ class Suppliers {
 
 		$product  = wc_get_product( $post_id );
 
-		if ( is_a($product, '\WC_Product') && in_array( $product->get_type(), ['variable', 'variable-subscription'] ) ) {
+		if ( is_a($product, '\WC_Product') && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) ) ) {
 			return;
 		}
 

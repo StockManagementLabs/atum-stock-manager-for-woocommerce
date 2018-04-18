@@ -102,7 +102,7 @@ class Hooks {
 			$row_meta = array(
 				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
 				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
-				'support'         => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Visit premium customer support', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
+				'support'         => '<a href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" aria-label="' . esc_attr__( 'Visit ATUM support forums', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );
@@ -454,7 +454,7 @@ class Hooks {
 	}
 
 	/**
-	 * Sets the stock status in WooCommerce products' list when ATUM is managing the stock
+	 * Sets the stock status in WooCommerce products' list
 	 *
 	 * @since 1.2.6
 	 *
@@ -467,21 +467,13 @@ class Hooks {
 
 		if (
 			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
-			in_array( $the_product->get_type(), ['variable', 'variable-subscription'] )
+			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) )
 		) {
 
-			// WC Subscriptions compatibility
-			if ( class_exists('\WC_Subscriptions') && $the_product->get_type() == 'variable-subscription') {
-				$variable_product = new \WC_Product_Variable_Subscription( $the_product->get_id() );
-			}
-			else {
-				$variable_product = new \WC_Product_Variable( $the_product->get_id() );
-			}
-
 			// Get the variations within the variable
-			$variations = $variable_product->get_children();
-			$stock_status = __('Out of stock', ATUM_TEXT_DOMAIN);
-			$stocks_list = array();
+			$variations   = $the_product->get_children();
+			$stock_status = __( 'Out of stock', ATUM_TEXT_DOMAIN );
+			$stocks_list  = array();
 
 			if ( ! empty($variations) ) {
 

@@ -216,7 +216,7 @@
 			//
 			// Expanding/Collapsing inheritable products
 			//-------------------------------------------
-			.on('click', '.product-type.has-child', function() {
+			.on('click', '.calc_type .has-child', function() {
 				self.expandRow( $(this).closest('tr') );
 			})
 			
@@ -1227,7 +1227,7 @@
 			
 			// If is not expanded, expand it
 			if (!$containerRow.hasClass('expanded') && $parentCheckbox.is(':checked')) {
-				$containerRow.find('.product-type.has-child').click();
+				$containerRow.find('.calc_type .has-child').click();
 			}
 			
 			// Check/Uncheck all the children rows

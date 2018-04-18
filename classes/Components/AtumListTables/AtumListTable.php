@@ -377,7 +377,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the children products of each inheritable product type
 		if ( !$this->allow_calcs ) {
 
-			$product_type   = in_array( $type, ['variable', 'variable-subscription'] ) ? 'product_variation' : 'product';
+			$product_type   = $type == 'grouped' ? 'product' : 'product_variation';
 			$child_products = $this->get_children($type, [ $this->product->get_id() ], $product_type );
 
 			if ( ! empty($child_products) ) {

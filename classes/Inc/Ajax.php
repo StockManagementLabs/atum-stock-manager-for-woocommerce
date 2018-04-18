@@ -825,7 +825,7 @@ final class Ajax {
 		}
 
 		// Exclude variable products from results
-		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', ['variable', 'variable-subscription'] );
+		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) );
 
 		if ( ! empty($excluded_types) ) {
 
