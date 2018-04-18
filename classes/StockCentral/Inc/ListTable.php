@@ -906,6 +906,9 @@ class ListTable extends AtumListTable {
 
 			}
 
+			// Allow extra filters to be added externally
+			$filtered_products = apply_filters( 'atum/stock_central_list/extra_filter_products', $filtered_products, $extra_filter);
+
 			if ( ! empty($filtered_products) ) {
 
 				// Order desc by quantity and get the ordered IDs
