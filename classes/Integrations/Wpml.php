@@ -59,6 +59,12 @@ class Wpml {
 	protected $original_product_id;
 
 	/**
+	 * Current language
+	 * @var string
+	 */
+	protected $current_language;
+
+	/**
 	 * Current currency symbol
 	 * @var string
 	 */
@@ -75,6 +81,8 @@ class Wpml {
 		$this->sitepress = $sitepress;
 
 		$this->wpml = \woocommerce_wpml::instance();
+
+		$this->current_language = $this->sitepress->get_current_language();
 
 		if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
 			$this->multicurrency_active = TRUE;
@@ -224,7 +232,7 @@ class Wpml {
 
 		$currency = get_woocommerce_currency();
 
-		$lang = $lang ? $lang : $this->sitepress->get_current_language();
+		$lang = $lang ? $lang : $this->current_language;
 
 		if ( ! empty( $this->wpml->settings['default_currencies'][ $lang ] ) ) {
 			$currency = $this->wpml->settings['default_currencies'][ $lang ];
@@ -625,7 +633,7 @@ class Wpml {
 		return $product->get_id();
 
 	}
-
+	
 	/**
 	 * Filter for the Unmanaged products query (where part) to only exclude WPML translations
 	 *
@@ -636,15 +644,15 @@ class Wpml {
 	 * @return string
 	 */
 	public function unmanaged_products_where($unmng_where) {
-
+		
 		global $wpdb;
-
-		$unmng_where .= " 
-			AND ID NOT IN (
-				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND NULLIF(source_language_code, '') IS NULL
+		
+		$unmng_where .= "
+			AND posts.ID IN (
+				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND language_code = '{$this->current_language}'
 			)
 		";
-
+		
 		return $unmng_where;
 	}
 	
@@ -687,6 +695,38 @@ class Wpml {
 					$sitepress->sync_custom_field( $original_id, $id, '_inheritable');
 					$sitepress->sync_custom_field( $original_id, $id, '_atum_manage_stock');
 					$sitepress->sync_custom_field( $original_id, $id, '_out_of_stock_date');
+				}
+			}
+			
+		}
+		
+		if ( version_compare( $old_version, '1.4.3.3', '<' ) ) {
+			
+			// Delete previous existent metas in translations to prevent duplicates
+			$IDs_to_delete = $wpdb->get_results( "SELECT DISTINCT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
+ 									ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('_supplier', '_supplier_sku') AND
+ 									NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');", ARRAY_N );
+			
+			if ( $IDs_to_delete ) {
+				
+				$IDs_to_delete  = implode( ',', wp_list_pluck( $IDs_to_delete, 0 ) );
+				$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_supplier', '_supplier_sku')
+ 										AND post_id IN({$IDs_to_delete});" );
+				
+			}
+			
+			$IDs_to_refresh = $wpdb->get_results("SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
+												WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN
+												('post_product', 'post_product_variation');", ARRAY_N );
+			
+			if ($IDs_to_refresh) {
+				
+				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
+				foreach ( $IDs_to_refresh as $id) {
+					
+					$original_id = $this->get_original_product_id($id);
+					$sitepress->sync_custom_field( $original_id, $id, '_supplier');
+					$sitepress->sync_custom_field( $original_id, $id, '_supplier_sku');
 				}
 			}
 			
