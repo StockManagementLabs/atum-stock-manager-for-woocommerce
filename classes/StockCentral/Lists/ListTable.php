@@ -1,14 +1,14 @@
 <?php
 /**
  * @package         Atum\StockCentral
- * @subpackage      Inc
+ * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  */
 
-namespace Atum\StockCentral\Inc;
+namespace Atum\StockCentral\Lists;
 
 defined( 'ABSPATH' ) or die;
 

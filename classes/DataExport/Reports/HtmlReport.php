@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\StockCentral\Inc\ListTable;
+use Atum\StockCentral\Lists\ListTable;
 use Atum\StockCentral\StockCentral;
 
 

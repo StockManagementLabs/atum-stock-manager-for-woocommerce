@@ -21,7 +21,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
-use Atum\InboundStock\Inc\ListTable as InboundStockListTable;
+use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
@@ -326,7 +326,8 @@ final class Ajax {
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
 
-		$list_class = $args['show_controlled'] ? '\Atum\StockCentral\Inc\ListTable' : '\Atum\StockCentral\Inc\UncontrolledListTable';
+		$namespace  = '\Atum\StockCentral\Lists';
+		$list_class = $args['show_controlled'] ? "$namespace\ListTable" : "$namespace\UncontrolledListTable";
 		$list       = new $list_class( $args );
 
 		$list->ajax_response();

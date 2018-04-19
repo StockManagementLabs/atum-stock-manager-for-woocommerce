@@ -167,7 +167,8 @@ class StockCentral extends AtumListPage {
 			$this->is_uncontrolled_list = TRUE;
 		}
 
-		$list_class = $this->is_uncontrolled_list ? __NAMESPACE__ . '\Inc\UncontrolledListTable' : __NAMESPACE__ . '\Inc\ListTable';
+		$namespace  = __NAMESPACE__ . '\Lists';
+		$list_class = $this->is_uncontrolled_list ? "$namespace\UncontrolledListTable" : "$namespace\ListTable";
 		$this->list = new $list_class( ['per_page' => $this->per_page, 'show_cb' => TRUE, 'show_controlled' => !$this->is_uncontrolled_list] );
 		
 	}
