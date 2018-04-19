@@ -191,6 +191,14 @@
   border-top-left-radius: 0;
 }
 
+.product_data input[type=text].tips, .product_data input[type=number].tips, .product_data textarea.tips {
+  cursor: text;
+}
+
+.product_data input[type=text]:disabled, .product_data input[type=text]:read-only, .product_data input[type=number]:disabled, .product_data input[type=number]:read-only, .product_data textarea:disabled, .product_data textarea:read-only {
+  cursor: default;
+}
+
 .product_data_tabs .atum_tab a:before {
   content: '' !important;
   background-image: url("../images/atum-icon-mono.png");

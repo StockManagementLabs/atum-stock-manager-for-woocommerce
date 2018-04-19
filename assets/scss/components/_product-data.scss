@@ -4,6 +4,16 @@
 
 .product_data {
 	
+	input[type=text], input[type=number], textarea {
+		&.tips {
+			cursor: text;
+		}
+		
+		&:disabled, &:read-only {
+			cursor: default;
+		}
+	}
+	
 	&_tabs {
 		.atum_tab {
 			

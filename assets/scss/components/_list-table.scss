@@ -300,7 +300,7 @@ h1.wp-heading-inline {
 			}
 			
 			.column-calc_type {
-				.has-child {
+				.product-type.has-child {
 					&:before {
 						content: "\e004";
 						color: #FFF;
@@ -427,25 +427,30 @@ h1.wp-heading-inline {
 		.has-child {
 			cursor: pointer;
 			
-			&.variable, &.variable-subscription {
-				color: $brand-primary;
-			}
-			
-			&.variable-subscription {
-				&:before {
-					content: "\e003";
+			&.product-type {
+				
+				&.variable, &.variable-subscription {
+					color: $brand-primary;
 				}
-			}
-			
-			&.grouped {
-				color: $brand-warning;
-			}
-			
-			&:hover {
-				&:before {
-					content: "\e005";
+				
+				&.variable-subscription {
+					&:before {
+						content: "\e003";
+					}
 				}
+				
+				&.grouped {
+					color: $brand-warning;
+				}
+				
+				&:hover {
+					&:before {
+						content: "\e005";
+					}
+				}
+				
 			}
+			
 		}
 		
 		.variation, .grouped-item {
