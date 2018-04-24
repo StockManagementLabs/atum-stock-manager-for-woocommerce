@@ -394,20 +394,22 @@ class Hooks {
 		$field_title = __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')';
 
 		if ( empty($variation) ) {
-			$post_id       = get_the_ID();
+			$product_id       = get_the_ID();
 			$wrapper_class = '_purchase_price_field';
 			$field_id      = $field_name = '_purchase_price';
 		}
 		else {
-			$post_id       = $variation->ID;
+			$product_id       = $variation->ID;
 			$field_name    = "variation_purchase_price[$loop]";
-			$field_id      = "variation_purchase_price_{$loop}";
+			$field_id      = "variation_purchase_price{$loop}";
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
-		$field_value = wc_format_localized_price( get_post_meta( $post_id, '_purchase_price', TRUE ) );
+		$field_value = wc_format_localized_price( get_post_meta( $product_id, '_purchase_price', TRUE ) );
+		$product     = wc_get_product( $product_id );
+		$price       = $product->get_price();
 
-		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value' ) );
+		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price' ) );
 
 	}
 
@@ -420,20 +422,21 @@ class Hooks {
 	 */
 	public function save_purchase_price($post_id) {
 
-		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+		$old_purchase_price = get_post_meta( $post_id, '_purchase_price', TRUE );
 
 		// Variables, grouped and variations
 		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
-			if ( isset($_POST['_purchase_price']) ) {
+			if ( isset( $_POST['_purchase_price'] ) ) {
 				update_post_meta( $post_id, '_purchase_price', '' );
 			}
-			elseif ( isset($_POST['variation_purchase_price']) ) {
+			elseif ( isset( $_POST['variation_purchase_price'] ) ) {
 
 				$product_key    = array_search( $post_id, $_POST['variable_post_id'] );
 				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
-				$purchase_price = ( '' === $purchase_price ) ? '' : wc_format_decimal( $purchase_price );
+				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 				update_post_meta( $post_id, '_purchase_price', $purchase_price );
 
 			}
@@ -443,14 +446,15 @@ class Hooks {
 		elseif ( isset($_POST['_purchase_price']) ) {
 
 			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
-			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
+			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 			update_post_meta( $post_id, '_purchase_price', $purchase_price);
 
 		}
 		
-		if (isset($purchase_price)) {
-			do_action( 'atum/hooks/after_save_purchase_price', $post_id, $purchase_price );
-			}
+		if ( isset( $purchase_price ) ) {
+			do_action( 'atum/hooks/after_save_purchase_price', $post_id, $purchase_price, $old_purchase_price );
+		}
+
 	}
 
 	/**

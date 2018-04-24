@@ -2,8 +2,8 @@
 /**
  * @package     Atum
  * @subpackage  Settings
- * @author      Salva Machí and Jose Piera - https://sispixels.com
- * @copyright   ©2017 Stock Management Labs™
+ * @author      Be Rebel - https://berebel.io
+ * @copyright   ©2018 Stock Management Labs™
  *
  * @since       0.0.2
  *
@@ -333,7 +333,7 @@ class Settings {
 		}
 		
 		foreach ( $defaults as $field => $default ) {
-			$options[ $field ] = ( array_key_exists( $field, $settings ) ) ? $settings[ $field ] : $default['default'];
+			$options[ $field ] = array_key_exists( $field, $settings ) ? $settings[ $field ] : $default['default'];
 		}
 		
 		return apply_filters( 'atum/settings/get_settings', $options );
@@ -492,7 +492,9 @@ class Settings {
 	public function display_text( $args ) {
 		
 		$output = sprintf(
-			'<input class="atum-settings-input regular-text" type="text" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+			'<input class="atum-settings-input regular-text" type="text" id="%s" name="%s" value="%s">',
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}]",
 			$this->options[ $args['id'] ]
 		) . $this->get_label( $args );
 		
@@ -513,16 +515,25 @@ class Settings {
 		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
 
 		$output = sprintf(
-			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME . '[' . $args['id'] . ']" value="%s">',
+			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="%s" name="%s" value="%s">',
 			$min,
 			$step,
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}]",
 			$this->options[ $args['id'] ]
 		) . $this->get_label( $args );
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
 
 	}
-	
+
+	/**
+	 * Get a dropdow of countries registered in WC
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param array $args
+	 */
 	public function display_wc_country($args) {
 	
 		$country_setting = (string) $this->options[ $args['id']] ;
@@ -531,14 +542,17 @@ class Settings {
 			$country_setting = explode( ':', $country_setting );
 			$country         = current( $country_setting );
 			$state           = end( $country_setting );
-		} else {
+		}
+		else {
 			$country = $country_setting;
 			$state   = '*';
 		}
+
 		ob_start();
+
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo  self::OPTION_NAME .'[' . $args['id'] . ']' ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ); ?>" class="wc-enhanced-select">
-					<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select">
+			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
 		
@@ -557,10 +571,13 @@ class Settings {
 	 * @param array $args   Label for the field
 	 */
 	public function display_switcher( $args ) {
-		
-		$output = '<input type="checkbox" id="' . ATUM_PREFIX . $args['id'] . '" name="' . self::OPTION_NAME
-		          . '[' . $args['id'] . ']" value="yes" ' . checked( 'yes', $this->options[ $args['id'] ], FALSE )
-		          . 'class="js-switch atum-settings-input" style="display: none">' . $this->get_label( $args );
+
+		$output = sprintf(
+			'<input type="checkbox" id="%s" name="%s" value="yes" %s class="js-switch atum-settings-input" style="display: none">',
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}]",
+			checked( 'yes', $this->options[ $args['id'] ], FALSE )
+		) . $this->get_label( $args );
 		
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args );
 	}

@@ -1041,9 +1041,13 @@ h1.wp-heading-inline #atum-update-list:active {
   color: #FFF;
 }
 
-.atum-list-table tr.expanded .column-calc_type .product-type.has-child:before {
+.atum-list-table tr.expanded .column-calc_type .has-child.product-type:before {
   content: "\e004";
   color: #FFF;
+}
+
+.atum-list-table tr.expanded .column-calc_type .has-child.product-type-icon svg .st1 {
+  fill: #FFF;
 }
 
 .atum-list-table tr.expandable .check-column input[type=checkbox] {

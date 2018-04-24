@@ -300,11 +300,23 @@ h1.wp-heading-inline {
 			}
 			
 			.column-calc_type {
-				.product-type.has-child {
-					&:before {
-						content: "\e004";
-						color: #FFF;
+				.has-child {
+					
+					&.product-type {
+						&:before {
+							content: "\e004";
+							color: #FFF;
+						}
 					}
+					
+					&.product-type-icon {
+						svg {
+							.st1 {
+								fill: #FFF;
+							}
+						}
+					}
+					
 				}
 			}
 		}
