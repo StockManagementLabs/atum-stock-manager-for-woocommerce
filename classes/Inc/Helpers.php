@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -1418,6 +1419,28 @@ final class Helpers {
 		if ( !$skip_action) {
 			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
 		}
+		
+	}
+	
+	/**
+	 * Return header support buttons info
+	 *
+	 * @since 1.4.3.3
+	 *
+	 * @return array
+	 */
+	public static function get_support_button() {
+		
+		if ( Addons::has_valid_key() ) {
+			$support['support_link']        = 'https://stockmanagementlabs.ticksy.com/';
+			$support['support_button_text'] = __( 'Get Premium Support', ATUM_TEXT_DOMAIN );
+		}
+		else {
+			$support['support_link']        = 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions';
+			$support['support_button_text'] = __( 'Get Support', ATUM_TEXT_DOMAIN );
+		}
+		
+		return $support;
 		
 	}
 
