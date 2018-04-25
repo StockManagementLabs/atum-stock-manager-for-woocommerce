@@ -72,7 +72,7 @@
 				}
 				
 			})
-			.find('#atum_same_ship_address').change();
+			.find('#atum_same_ship_address').change().removeClass('dirty');
 			
 			// Before unload alert
 			$(window).bind('beforeunload', function() {
@@ -106,6 +106,9 @@
 				new Switchery(this, { size: 'small' });
 			});
 			
+		},
+		doNiceSelects: function() {
+		
 		},
 		restoreEnhancedSelects: function() {
 			
@@ -188,7 +191,7 @@
 				
 				self.doSwitchers();
 				self.restoreEnhancedSelects();
-				self.$form.find('#atum_same_ship_address').change();
+				self.$form.find('#atum_same_ship_address').change().removeClass('dirty');
 				
 				var $inputButton = self.$form.find('input:submit');
 				

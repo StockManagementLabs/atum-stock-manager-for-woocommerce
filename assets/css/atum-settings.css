@@ -7,6 +7,84 @@
  * License : ©2018 Stock Management Labs 
  */ 
 
+.btn {
+  padding: 7px 12px;
+  border: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.btn:hover:not(:disabled), .btn:focus:not(:disabled) {
+  color: #FFF;
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn.pill {
+  border-radius: 16px;
+}
+
+.btn-success {
+  color: #FFF;
+  background-color: #82C342;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: rgba(130, 195, 66, 0.75);
+}
+
+.btn-primary {
+  color: #FFF;
+  background-color: #00B8DB;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: rgba(0, 184, 219, 0.75);
+}
+
+.btn-warning {
+  color: #FFF;
+  background-color: #EFAF00;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background-color: rgba(239, 175, 0, 0.75);
+}
+
+.btn-danger {
+  color: #FFF;
+  background-color: #FF4848;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: rgba(255, 72, 72, 0.75);
+}
+
+.btn-info {
+  color: #333333;
+  background-color: #E3E8F5;
+}
+
+.btn-info:hover:not(:disabled) {
+  background-color: rgba(227, 232, 245, 0.75);
+}
+
+.btn-sm {
+  padding: 5px 14px;
+  font-size: 9px;
+}
+
 .swal2-container {
   z-index: 100000000;
 }
@@ -167,13 +245,13 @@
   -ms-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
-  -khtml-user-select: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
   overflow: hidden;
   text-align: center;
   color: #95adbf;
   -webkit-transition: color 0.3s;
+  -o-transition: color 0.3s;
   transition: color 0.3s;
 }
 
@@ -440,6 +518,21 @@
   width: 60px;
 }
 
+#atum-settings .section-fields .script-runner {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#atum-settings .section-fields .script-runner .select2-container:focus, #atum-settings .section-fields .script-runner .select2-container .selection:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection--single:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection__rendered:focus {
+  outline: none;
+}
+
+#atum-settings .section-fields .script-runner button {
+  border-radius: 4px;
+}
+
 #atum-settings .submit {
   padding-top: 0;
 }
@@ -487,6 +580,10 @@
 }
 
 .swal2-container button:focus {
+  outline: none;
+}
+
+.select2-results .select2-results__option:focus {
   outline: none;
 }
 
