@@ -123,11 +123,16 @@ class Wpml {
 			add_filter( 'atum/product_meta', array( $this, 'update_multicurrency_translations_meta' ), 10, 2 );
 			add_action( 'atum/product_meta_updated', array( $this, 'update_translations_meta' ), 10, 2 );
 
-			// Remove the translations from the unmanaged products query
+			// Filter current language translations from the unmanaged products query
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
+			
+			// Add WPML filters to get_posts in Helpers::get_all_products
+			add_filter('atum/get_all_products/args', array( $this, 'filter_get_all_products'));
 			
 			// add upgrade ATUM tasks
 			add_action('atum/after_upgrade', array($this, 'upgrade'));
+			
+			
 		}
 
 	}
@@ -654,6 +659,22 @@ class Wpml {
 		";
 		
 		return $unmng_where;
+	}
+	
+	/**
+	 * Set suppress_filters to 0 to add WPML filters to get_posts functions
+	 *
+	 * @ince 1.4.3.3
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	public function filter_get_all_products($args) {
+		
+		$args['suppress_filters'] = 0;
+		
+		return $args;
 	}
 	
 	/**

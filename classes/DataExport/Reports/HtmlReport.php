@@ -275,47 +275,61 @@ class HtmlReport extends ListTable {
 	 * @since 1.2.5
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
-			
-		$stock = intval( $this->product->get_stock_quantity() );
+		
+		$product_id = $this->product->get_id();
+		$content    = '';
+		
 		$dashicons_style = ' style="font-family: dashicons; font-size: 20px;"';
 		
+		
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales
-		if (! $this->allow_calcs) {
-
-			if (
-				! Helpers::is_inheritable_type( $this->product->get_type() ) &&
-				( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() )
-			) {
-				$classes .= ' cell-blue';
-				$content = '<span class="dashicons dashicons-hidden"' . $dashicons_style . '>&#xf530;</span>';
-			}
-			else {
-				$content = '&mdash;';
-			}
-
+		if ( ! $this->allow_calcs ) {
+			$content = self::EMPTY_COL;
 		}
-		elseif ( $stock <= 0 ) {
-			// no stock
-			$classes .= ' cell-red';
-			$content = '<span class="dashicons dashicons-dismiss"' . $dashicons_style . '>&#xf153;</span>';
-		}
-		elseif ( isset( $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) ) {
+		// Stock not managed by WC
+		elseif ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 			
-			// stock ok
-			if ( $stock >= $this->calc_columns[ $this->product->get_id() ]['sold_last_days'] ) {
-				$classes .= ' cell-green';
-				$content = '<span class="dashicons dashicons-yes"' . $dashicons_style . '>&#xf147;</span>';
-			}
-			// stock low
-			else {
-				$classes .= ' cell-yellow';
-				$content = '<span class="dashicons dashicons-warning"' . $dashicons_style . '>&#xf534;</span>';
+			$wc_stock_status = $this->product->get_stock_status();
+			$content         = '<span class="dashicons"' . $dashicons_style . '>&#xf530;</span>';
+			
+			switch ( $wc_stock_status ) {
+				case 'instock':
+					
+					$classes .= ' cell-green';
+					break;
+				
+				case 'outofstock':
+					
+					$classes .= ' cell-red';
+					break;
+				
+				case 'onbackorder':
+					$classes .= ' cell-blue';
+					break;
 			}
 			
 		}
-		else {
+		// Out of stock
+		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
+			
+			if ( $this->product->backorders_allowed() ) {
+				$content = '<span class="dashicons"' . $dashicons_style . '>&#xf177;</span>';
+			}
+			else {
+				$classes .= ' cell-red';
+				$content = '<span class="dashicons"' . $dashicons_style . '>&#xf153;</span>';
+			}
+			
+		}
+		// Low Stock
+		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
+			$classes .= ' cell-yellow';
+			$content = '<span class="dashicons"' . $dashicons_style . '>&#xf534;</span>';
+		}
+		// In Stock
+		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
 			$classes .= ' cell-green';
-			$content = '<span class="dashicons dashicons-yes"' . $dashicons_style . '>&#xf147;</span>';
+			$content = '<span class="dashicons"' . $dashicons_style . '>&#xf147;</span>';
 		}
 		
 		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';

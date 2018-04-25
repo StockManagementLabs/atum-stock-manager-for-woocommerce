@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -622,7 +623,6 @@ final class Helpers {
 		
 		$unmng_join = apply_filters( 'atum/get_unmanaged_products/join_query', "
 			LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
-			LEFT JOIN wp_term_relationships tere ON posts.ID = tere.object_id
 		" );
 		
 		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
@@ -640,8 +640,9 @@ final class Helpers {
 		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', "
 			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
 			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-			AND tere.term_taxonomy_id NOT IN (" . implode(',', $excluded_type_terms) . ")
 			AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
+			AND posts.ID NOT IN ( SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
+				WHERE term_taxonomy_id IN  (" . implode(',', $excluded_type_terms) . ") )
 		" );
 		
 		$sql = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts $unmng_join $unmng_where";
@@ -649,7 +650,8 @@ final class Helpers {
 		return $wpdb->get_col($sql);
 		
 	}
-
+	
+	
 	/**
 	 * Get the price formatted with no HTML tags
 	 *
@@ -1489,6 +1491,28 @@ final class Helpers {
 		if ( !$skip_action) {
 			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
 		}
+		
+	}
+	
+	/**
+	 * Return header support buttons info
+	 *
+	 * @since 1.4.3.3
+	 *
+	 * @return array
+	 */
+	public static function get_support_button() {
+		
+		if ( Addons::has_valid_key() ) {
+			$support['support_link']        = 'https://stockmanagementlabs.ticksy.com/';
+			$support['support_button_text'] = __( 'Get Premium Support', ATUM_TEXT_DOMAIN );
+		}
+		else {
+			$support['support_link']        = 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions';
+			$support['support_button_text'] = __( 'Get Support', ATUM_TEXT_DOMAIN );
+		}
+		
+		return $support;
 		
 	}
 
