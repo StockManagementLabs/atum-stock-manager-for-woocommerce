@@ -219,6 +219,31 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.4`
+
+*2018-04-26*
+
+**Changes**
+
+* Added "supplier" and "supplier_sku" to WPML's translation automatic copied metas.
+* Added compatibility with Product Level's BOM variations.
+* Added compatibility with Product Level's Purchase Price synchronization.
+* Allow more extra filters to be added externally to Stock Central.
+* Added WPML suppport to the ATUM dashboard.
+* Added filter to pages excluded in admin footer text.
+* Added admin notice to inform users that should activate their add-ons.
+
+**Fixes**
+
+* Fixed product type icons for subscription variations.
+* Fixed Unmanaged products counter.
+* Fixed month sales filter in ATUM Dashboard's Orders widget.
+* Fixed stock indicators in Export Data reports.
+* Minor CSS fixes.
+* Refactory.
+
+---
+
 `1.4.3.2`
 
 *2018-04-17*
