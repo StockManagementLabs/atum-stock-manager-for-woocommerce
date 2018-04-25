@@ -102,7 +102,7 @@ class Hooks {
 			$row_meta = array(
 				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
 				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
-				'support'         => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Visit premium customer support', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
+				'support'         => '<a href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" aria-label="' . esc_attr__( 'Visit ATUM support forums', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );
@@ -394,20 +394,22 @@ class Hooks {
 		$field_title = __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')';
 
 		if ( empty($variation) ) {
-			$post_id       = get_the_ID();
+			$product_id       = get_the_ID();
 			$wrapper_class = '_purchase_price_field';
 			$field_id      = $field_name = '_purchase_price';
 		}
 		else {
-			$post_id       = $variation->ID;
+			$product_id       = $variation->ID;
 			$field_name    = "variation_purchase_price[$loop]";
-			$field_id      = "variation_purchase_price_{$loop}";
+			$field_id      = "variation_purchase_price{$loop}";
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
-		$field_value = wc_format_localized_price( get_post_meta( $post_id, '_purchase_price', TRUE ) );
+		$field_value = wc_format_localized_price( get_post_meta( $product_id, '_purchase_price', TRUE ) );
+		$product     = wc_get_product( $product_id );
+		$price       = $product->get_price();
 
-		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value' ) );
+		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price' ) );
 
 	}
 
@@ -420,20 +422,21 @@ class Hooks {
 	 */
 	public function save_purchase_price($post_id) {
 
-		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+		$old_purchase_price = get_post_meta( $post_id, '_purchase_price', TRUE );
 
 		// Variables, grouped and variations
 		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
-			if ( isset($_POST['_purchase_price']) ) {
+			if ( isset( $_POST['_purchase_price'] ) ) {
 				update_post_meta( $post_id, '_purchase_price', '' );
 			}
-			elseif ( isset($_POST['variation_purchase_price']) ) {
+			elseif ( isset( $_POST['variation_purchase_price'] ) ) {
 
 				$product_key    = array_search( $post_id, $_POST['variable_post_id'] );
 				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
-				$purchase_price = ( '' === $purchase_price ) ? '' : wc_format_decimal( $purchase_price );
+				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 				update_post_meta( $post_id, '_purchase_price', $purchase_price );
 
 			}
@@ -443,18 +446,19 @@ class Hooks {
 		elseif ( isset($_POST['_purchase_price']) ) {
 
 			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
-			$purchase_price = ('' === $purchase_price) ? '' : wc_format_decimal( $purchase_price );
+			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 			update_post_meta( $post_id, '_purchase_price', $purchase_price);
 
 		}
 		
-		if (isset($purchase_price)) {
-			do_action( 'atum/hooks/after_save_purchase_price', $post_id, $purchase_price );
-			}
+		if ( isset( $purchase_price ) ) {
+			do_action( 'atum/hooks/after_save_purchase_price', $post_id, $purchase_price, $old_purchase_price );
+		}
+
 	}
 
 	/**
-	 * Sets the stock status in WooCommerce products' list when ATUM is managing the stock
+	 * Sets the stock status in WooCommerce products' list
 	 *
 	 * @since 1.2.6
 	 *
@@ -467,21 +471,13 @@ class Hooks {
 
 		if (
 			Helpers::get_option('show_variations_stock', 'yes') == 'yes' &&
-			in_array( $the_product->get_type(), ['variable', 'variable-subscription'] )
+			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) )
 		) {
 
-			// WC Subscriptions compatibility
-			if ( class_exists('\WC_Subscriptions') && $the_product->get_type() == 'variable-subscription') {
-				$variable_product = new \WC_Product_Variable_Subscription( $the_product->get_id() );
-			}
-			else {
-				$variable_product = new \WC_Product_Variable( $the_product->get_id() );
-			}
-
 			// Get the variations within the variable
-			$variations = $variable_product->get_children();
-			$stock_status = __('Out of stock', ATUM_TEXT_DOMAIN);
-			$stocks_list = array();
+			$variations   = $the_product->get_children();
+			$stock_status = __( 'Out of stock', ATUM_TEXT_DOMAIN );
+			$stocks_list  = array();
 
 			if ( ! empty($variations) ) {
 

@@ -191,11 +191,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var bool
 	 */
 	protected $is_filtering = FALSE;
-	
-	/**
-	 * User meta key to control the current user dismissed notices
-	 */
-	const DISMISSED_NOTICES = 'atum_dismissed_notices';
 
 	/**
 	 * Value for empty columns
@@ -377,7 +372,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the children products of each inheritable product type
 		if ( !$this->allow_calcs ) {
 
-			$product_type   = in_array( $type, ['variable', 'variable-subscription'] ) ? 'product_variation' : 'product';
+			$product_type   = $type == 'grouped' ? 'product' : 'product_variation';
 			$child_products = $this->get_children($type, [ $this->product->get_id() ], $product_type );
 
 			if ( ! empty($child_products) ) {
@@ -682,7 +677,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$product_tip .= '<br>' . sprintf(
 							__('(click to show/hide the %s)', ATUM_TEXT_DOMAIN),
-							( ($type == 'grouped') ? __('Grouped items', ATUM_TEXT_DOMAIN) : __('Variations', ATUM_TEXT_DOMAIN) )
+							( $type == 'grouped' ? __('Grouped items', ATUM_TEXT_DOMAIN) : __('Variations', ATUM_TEXT_DOMAIN) )
 						);
 						$type .= ' has-child';
 
@@ -698,6 +693,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				// WC Subscriptions compatibility
 				case 'subscription_variation':
 
+					$type        = 'variation';
 					$product_tip = __('Subscription Variation', ATUM_TEXT_DOMAIN);
 					break;
 			}
@@ -707,6 +703,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return '';
+
 	}
 
 	/**
@@ -1407,8 +1404,16 @@ abstract class AtumListTable extends \WP_List_Table {
 				
 				if ( $view == $key && ! empty($post_ids) ) {
 
+					$get_parents = FALSE;
+					foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
+						if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
+							$get_parents = TRUE;
+							break;
+						}
+					}
+
 					// Add the parent products again to the query
-					$args['post__in'] = ( ! empty( $this->container_products['variable'] ) || ! empty( $this->container_products['grouped'] ) ) ? $this->get_parents( $post_ids ) : $post_ids;
+					$args['post__in'] = $get_parents ? $this->get_parents( $post_ids ) : $post_ids;
 					$allow_query      = TRUE;
 					$found_posts      = $this->count_views["count_$key"];
 
@@ -1660,7 +1665,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			);
 
 			$in_stock_transient = Helpers::get_transient_identifier( $args, 'list_table_in_stock' );
-			$products_in_stock = Helpers::get_transient( $in_stock_transient );
+			$products_in_stock  = Helpers::get_transient( $in_stock_transient );
 
 			if ( empty($products_in_stock) ) {
 				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $args ) );
@@ -1683,9 +1688,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( $this->count_views['count_in_stock'] ) {
 
 				$low_stock_transient = Helpers::get_transient_identifier( $args, 'list_table_low_stock' );
-				$products_low_stock = Helpers::get_transient( $low_stock_transient );
+				$products_low_stock  = Helpers::get_transient( $low_stock_transient );
 
-				if ( ! $products_low_stock ) {
+				if ( empty($products_low_stock) ) {
 
 					// Compare last seven days average sales per day * re-order days with current stock
 					$str_sales = "(SELECT			   

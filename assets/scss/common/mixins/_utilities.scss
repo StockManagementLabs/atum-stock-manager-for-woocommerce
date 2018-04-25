@@ -206,3 +206,53 @@
 	height: 1em;
 	width: 1em;
 }
+
+//Brand colors mixins
+@mixin brand_colors() {
+	.color- {
+		&primary {
+			color: $brand-primary;
+		}
+		
+		&info {
+			color: $brand-info;
+		}
+		
+		&success {
+			color: $brand-success;
+		}
+		
+		&warning {
+			color: $brand-warning;
+		}
+		
+		&danger {
+			color: $brand-danger;
+		}
+	}
+}
+
+@mixin brand_bg_colors() {
+	.bg- {
+		&primary {
+			background-color: $brand-primary;
+		}
+		
+		&info {
+			background-color: $brand-info;
+		}
+		
+		&success {
+			background-color: $brand-success;
+		}
+		
+		&warning {
+			background-color: $brand-warning;
+		}
+		
+		&danger {
+			background-color: $brand-danger;
+		}
+	}
+	
+}

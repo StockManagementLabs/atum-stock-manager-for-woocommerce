@@ -4,6 +4,16 @@
 
 .product_data {
 	
+	input[type=text], input[type=number], textarea {
+		&.tips {
+			cursor: text;
+		}
+		
+		&:disabled, &:read-only {
+			cursor: default;
+		}
+	}
+	
 	&_tabs {
 		.atum_tab {
 			
@@ -27,7 +37,7 @@
 	
 	.atum-field {
 		.input-group-text {
-			padding: 2px 7px;
+			padding: 2px 7px 3px;
 		}
 		
 		input[type=text], input[type=number] {
@@ -101,6 +111,17 @@
 		.atum-data-panel {
 			border-top: 1px solid #DDD;
 			padding-top: $grid-gutter-width/2;
+			
+			label {
+				float: left;
+				margin-right: 10px;
+			}
+			
+			.form-field {
+				&:first-of-type {
+					margin: 25px 0;
+				}
+			}
 		}
 		
 		h3.atum-section-title {
@@ -110,14 +131,14 @@
 			text-transform: uppercase;
 			cursor: default !important;
 			margin-bottom: $grid-gutter-width/2 !important;
-		}
-		
-		._atum_manage_stock_field {
-			margin: 25px 0;
+			padding: 1em !important;
 		}
 		
 		h4.atum-section-title {
-			margin-top: 20px;
+			margin-top: $grid-gutter-width;
+			padding-bottom: 10px;
+			border-bottom: 1px dashed $gray;
+			font-size: 1.1em;
 		}
 		
 		.switchery {
@@ -125,18 +146,14 @@
 		}
 		
 		.alert {
-			display: block;
-			margin-bottom: $grid-gutter-width/2;
+			margin: 10px auto;
 			padding: 0.35rem 0.75rem;
 		}
 		
 	}
 	
-	#atum_product_data {
-		.switchery {
-			float: left;
-		}
+	.switchery, .btn-group {
+		float: left;
 	}
-	
 	
 }

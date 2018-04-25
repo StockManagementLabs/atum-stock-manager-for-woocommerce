@@ -1041,9 +1041,13 @@ h1.wp-heading-inline #atum-update-list:active {
   color: #FFF;
 }
 
-.atum-list-table tr.expanded .column-calc_type .has-child:before {
+.atum-list-table tr.expanded .column-calc_type .has-child.product-type:before {
   content: "\e004";
   color: #FFF;
+}
+
+.atum-list-table tr.expanded .column-calc_type .has-child.product-type-icon svg .st1 {
+  fill: #FFF;
 }
 
 .atum-list-table tr.expandable .check-column input[type=checkbox] {
@@ -1154,19 +1158,19 @@ h1.wp-heading-inline #atum-update-list:active {
   cursor: pointer;
 }
 
-.atum-list-table .column-calc_type .has-child.variable, .atum-list-table .column-calc_type .has-child.variable-subscription {
+.atum-list-table .column-calc_type .has-child.product-type.variable, .atum-list-table .column-calc_type .has-child.product-type.variable-subscription {
   color: #00B8DB;
 }
 
-.atum-list-table .column-calc_type .has-child.variable-subscription:before {
+.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before {
   content: "\e003";
 }
 
-.atum-list-table .column-calc_type .has-child.grouped {
+.atum-list-table .column-calc_type .has-child.product-type.grouped {
   color: #EFAF00;
 }
 
-.atum-list-table .column-calc_type .has-child:hover:before {
+.atum-list-table .column-calc_type .has-child.product-type:hover:before {
   content: "\e005";
 }
 

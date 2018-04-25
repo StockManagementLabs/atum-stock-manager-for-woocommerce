@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -987,7 +988,60 @@ final class Helpers {
 		return FALSE;
 
 	}
-	
+
+	/**
+	 * Display a notice an ATUM's admin notice
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $type              The notice type: error, success, warning or info
+	 * @param string $message           The message within the notice
+	 * @param bool   $is_dismissible    Optional. Whether to make the notice dismissible
+	 * @param string $key               Optional. Only needed for dismissible notices. Is the key used to save the dismissal on db
+	 */
+	public static function display_notice( $type, $message, $is_dismissible = FALSE, $key = '' ) {
+
+		$notice_classes = array("notice-$type");
+
+		if ($is_dismissible) {
+
+			// Check if the notice was already dismissed
+			if ( $key && self::is_notice_dismissed($key) ) {
+				return;
+			}
+
+			$notice_classes[] = 'is-dismissible';
+		}
+
+		?>
+		<div class="notice <?php echo implode(' ', $notice_classes) ?> atum-notice" data-key="<?php echo $key ?>">
+			<p><?php echo $message ?></p>
+
+			<?php if ($is_dismissible): ?>
+			<script type="text/javascript">
+
+				jQuery('.atum-notice').click('.notice-dismiss', function() {
+
+					var $notice = jQuery(this).closest('.atum-notice');
+
+					jQuery.ajax({
+						url   : ajaxurl,
+						method: 'POST',
+						data  : {
+							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ) ?>',
+							action: 'atum_dismiss_notice',
+							key   : $notice.data('key')
+						}
+					});
+				});
+
+			</script>
+			<?php endif; ?>
+		</div>
+		<?php
+
+	}
+
 	/**
 	 * Add a notice to the list of dismissed notices for the current user
 	 *
@@ -997,15 +1051,15 @@ final class Helpers {
 	 *
 	 * @return int|bool
 	 */
-	public static function dismiss_notice ($notice) {
-		
-		$current_user_id = get_current_user_id();
-		$user_dismissed_notices = self::get_dismissed_notices($current_user_id);
-		$user_dismissed_notices[$notice] = 'yes';
-		
-		return update_user_meta($current_user_id, AtumListTable::DISMISSED_NOTICES, $user_dismissed_notices);
+	public static function dismiss_notice($notice) {
+
+		$current_user_id                   = get_current_user_id();
+		$user_dismissed_notices            = self::get_dismissed_notices( $current_user_id );
+		$user_dismissed_notices[ $notice ] = 'yes';
+
+		return update_user_meta( $current_user_id, Globals::DISMISSED_NOTICES, $user_dismissed_notices );
 	}
-	
+
 	/**
 	 * Get the list of ATUM's dismissed notices for the current user
 	 *
@@ -1015,9 +1069,28 @@ final class Helpers {
 	 *
 	 * @return array|bool
 	 */
-	public static function get_dismissed_notices ($user_id = NULL) {
-		$user_id = ($user_id) ? absint($user_id) : get_current_user_id();
-		return apply_filters( 'atum/dismissed_notices', get_user_meta($user_id, AtumListTable::DISMISSED_NOTICES, TRUE) );
+	public static function get_dismissed_notices($user_id = NULL) {
+
+		$user_id = $user_id ? absint($user_id) : get_current_user_id();
+
+		return apply_filters( 'atum/dismissed_notices', get_user_meta($user_id, Globals::DISMISSED_NOTICES, TRUE) );
+	}
+
+	/**
+	 * Check whether the specified notice was previously dismissed
+	 *
+	 * @since 1.4.4
+	 *
+	 * @param string $key
+	 *
+	 * @return bool
+	 */
+	public static function is_notice_dismissed($key) {
+
+		$current_user_id        = get_current_user_id();
+		$user_dismissed_notices = self::get_dismissed_notices( $current_user_id );
+
+		return isset( $user_dismissed_notices[ $key ] ) && $user_dismissed_notices[ $key ] == 'yes';
 	}
 
 	/**
@@ -1026,7 +1099,7 @@ final class Helpers {
 	 *
 	 * @since 1.2.0
 	 */
-	public static function maybe_es6_promise () {
+	public static function maybe_es6_promise() {
 
 		global $is_IE;
 		// ES6 Polyfill (only for IE<12). Required by SweetAlert2
@@ -1418,6 +1491,28 @@ final class Helpers {
 		if ( !$skip_action) {
 			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
 		}
+		
+	}
+	
+	/**
+	 * Return header support buttons info
+	 *
+	 * @since 1.4.3.3
+	 *
+	 * @return array
+	 */
+	public static function get_support_button() {
+		
+		if ( Addons::has_valid_key() ) {
+			$support['support_link']        = 'https://stockmanagementlabs.ticksy.com/';
+			$support['support_button_text'] = __( 'Get Premium Support', ATUM_TEXT_DOMAIN );
+		}
+		else {
+			$support['support_link']        = 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions';
+			$support['support_button_text'] = __( 'Get Support', ATUM_TEXT_DOMAIN );
+		}
+		
+		return $support;
 		
 	}
 

@@ -3133,7 +3133,7 @@
 }
 
 body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel_page_atum-dashboard #wpbody-content > .notice-info, body.toplevel_page_atum-dashboard #wpbody-content > .notice-success, body.toplevel_page_atum-dashboard #wpbody-content > .notice-warning, body.toplevel_page_atum-dashboard #wpbody-content > .error, body.toplevel_page_atum-dashboard #wpbody-content > .updated, body.toplevel_page_atum-dashboard #wpbody-content > .notice {
-  margin: 0 0 0 -20px;
+  margin: 15px 15px 15px 0;
 }
 
 .atum-dashboard {

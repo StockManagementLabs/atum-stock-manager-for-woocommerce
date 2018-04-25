@@ -18,7 +18,7 @@ $widget-controls-hover:     $brand-primary;
 body.toplevel_page_atum-dashboard {
 	#wpbody-content {
 		> .notice-error, > .notice-info, > .notice-success, > .notice-warning, > .error, > .updated, > .notice{
-			margin: 0 0 0 -20px;
+			margin: ($grid-gutter-width/2) ($grid-gutter-width/2) ($grid-gutter-width/2) 0;
 		}
 	}
 }

@@ -13,12 +13,10 @@ namespace Atum\InboundStock;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumListTables\AtumListPage;
-use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
-use Atum\InboundStock\Inc\ListTable;
+use Atum\InboundStock\Lists\ListTable;
 
 
 class InboundStock extends AtumListPage {

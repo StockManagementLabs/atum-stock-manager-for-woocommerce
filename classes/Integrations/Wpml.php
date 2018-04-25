@@ -721,7 +721,7 @@ class Wpml {
 			
 		}
 		
-		if ( version_compare( $old_version, '1.4.3.3', '<' ) ) {
+		if ( version_compare( $old_version, '1.4.4', '<' ) ) {
 			
 			// Delete previous existent metas in translations to prevent duplicates
 			$IDs_to_delete = $wpdb->get_results( "SELECT DISTINCT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr

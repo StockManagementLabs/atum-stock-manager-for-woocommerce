@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Atum\StockCentral
- * @subpackage      Inc
+ * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
@@ -10,7 +10,7 @@
  * List Table for the products not controlled by ATUM
  */
 
-namespace Atum\StockCentral\Inc;
+namespace Atum\StockCentral\Lists;
 
 defined( 'ABSPATH' ) or die;
 

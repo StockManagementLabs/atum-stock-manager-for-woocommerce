@@ -38,6 +38,8 @@
 		.theme-actions {
 			height: 39px;
 			right: 27px;
+			@include transform(translate3d(0, -50%, 0));
+			@include transition(0.2s ease-in-out);
 			
 			&.valid, &.invalid, &.inactive, &.coming-soon {
 				opacity: 1;
@@ -88,11 +90,34 @@
 			
 		}
 		
-		&:hover {
+		.show-key {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			height: 49px;
+			padding: 0 3px;
+			border-left: 1px solid rgba(#000, 0.05);
+			cursor: pointer;
+			@include transform(translateX(100%));
+			
+			&, i {
+				@include transition(all 0.2s ease-in-out);
+			}
+			
+			i {
+				font-size: 15px;
+				padding-top: 17px;
+				color: $brand-primary;
+			}
+			
+		}
+		
+		&:hover, &.inactive, &.invalid {
 			
 			.theme-actions {
-				&.no-key:not(.coming-soon) {
-					display: none;
+				&:not(.coming-soon):not(.inactive) {
+					opacity: 0;
+					@include transform(translate3d(100%, -50%, 0));
 				}
 			}
 			
@@ -112,30 +137,10 @@
 				}
 			}
 			
-		}
-		
-		.show-key {
-			position: absolute;
-			right: 0;
-			bottom: 0;
-			height: 49px;
-			padding: 0 3px;
-			border-left: 1px solid rgba(#000, 0.05);
-			cursor: pointer;
-			
-			&, i {
-				@include transition(all 0.2s ease-in-out);
-			}
-			
-			i {
-				font-size: 15px;
-				padding-top: 17px;
-				color: $brand-primary;
-			}
-			
-			&:hover {
+			.show-key {
 				opacity: 1 !important;
 				background-color: lighten($brand-primary, 10%);
+				@include transform(translateX(0));
 				
 				i {
 					color: #FFF !important;

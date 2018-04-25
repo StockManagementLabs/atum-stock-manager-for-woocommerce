@@ -476,9 +476,13 @@ class Main {
 
 		if ( isset( $current_screen->id ) && $current_screen->parent_base == self::$main_menu_item['slug'] ) {
 
-			// Load the footer text in all pages except the ATUM Dashboard
-			if ( strpos($current_screen->id, Dashboard::UI_SLUG) !== FALSE ) {
-				return '';
+			// Load the footer text in all pages except the ATUM Dashboard && allow add-ons pages to be included
+			$excluded = (array) apply_filters('atum/admin/footer/pages_excluded', array( Dashboard::UI_SLUG));
+			
+			foreach ( $excluded as $item) {
+				if ( strpos($current_screen->id, $item) !== FALSE ) {
+					return '';
+				}
 			}
 
 			// Change the footer text

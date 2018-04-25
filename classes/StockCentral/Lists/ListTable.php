@@ -1,14 +1,14 @@
 <?php
 /**
  * @package         Atum\StockCentral
- * @subpackage      Inc
+ * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
  */
 
-namespace Atum\StockCentral\Inc;
+namespace Atum\StockCentral\Lists;
 
 defined( 'ABSPATH' ) or die;
 
@@ -905,6 +905,9 @@ class ListTable extends AtumListTable {
 					break;
 
 			}
+
+			// Allow extra filters to be added externally
+			$filtered_products = apply_filters( 'atum/stock_central_list/extra_filter_products', $filtered_products, $extra_filter);
 
 			if ( ! empty($filtered_products) ) {
 

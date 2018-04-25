@@ -191,6 +191,14 @@
   border-top-left-radius: 0;
 }
 
+.product_data input[type=text].tips, .product_data input[type=number].tips, .product_data textarea.tips {
+  cursor: text;
+}
+
+.product_data input[type=text]:disabled, .product_data input[type=text]:read-only, .product_data input[type=number]:disabled, .product_data input[type=number]:read-only, .product_data textarea:disabled, .product_data textarea:read-only {
+  cursor: default;
+}
+
 .product_data_tabs .atum_tab a:before {
   content: '' !important;
   background-image: url("../images/atum-icon-mono.png");
@@ -211,7 +219,7 @@
 }
 
 .product_data .atum-field .input-group-text {
-  padding: 2px 7px;
+  padding: 2px 7px 3px;
 }
 
 .product_data .atum-field input[type=text], .product_data .atum-field input[type=number] {
@@ -279,6 +287,15 @@
   padding-top: 15px;
 }
 
+.product_data .woocommerce_variations .atum-data-panel label {
+  float: left;
+  margin-right: 10px;
+}
+
+.product_data .woocommerce_variations .atum-data-panel .form-field:first-of-type {
+  margin: 25px 0;
+}
+
 .product_data .woocommerce_variations h3.atum-section-title {
   border: 1px solid #E3E8F5;
   background-color: rgba(213, 242, 248, 0.15);
@@ -286,14 +303,14 @@
   text-transform: uppercase;
   cursor: default !important;
   margin-bottom: 15px !important;
-}
-
-.product_data .woocommerce_variations ._atum_manage_stock_field {
-  margin: 25px 0;
+  padding: 1em !important;
 }
 
 .product_data .woocommerce_variations h4.atum-section-title {
-  margin-top: 20px;
+  margin-top: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #C1C1C1;
+  font-size: 1.1em;
 }
 
 .product_data .woocommerce_variations .switchery {
@@ -301,12 +318,11 @@
 }
 
 .product_data .woocommerce_variations .alert {
-  display: block;
-  margin-bottom: 15px;
+  margin: 10px auto;
   padding: 0.35rem 0.75rem;
 }
 
-.product_data #atum_product_data .switchery {
+.product_data .switchery, .product_data .btn-group {
   float: left;
 }
 
