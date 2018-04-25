@@ -65,6 +65,7 @@ return array(
     'Atum\\PurchaseOrders\\Models\\PurchaseOrder' => $baseDir . '/classes/PurchaseOrders/Models/PurchaseOrder.php',
     'Atum\\PurchaseOrders\\PurchaseOrders' => $baseDir . '/classes/PurchaseOrders/PurchaseOrders.php',
     'Atum\\Settings\\Settings' => $baseDir . '/classes/Settings/Settings.php',
+    'Atum\\Settings\\Tools' => $baseDir . '/classes/Settings/Tools.php',
     'Atum\\StockCentral\\Lists\\ListTable' => $baseDir . '/classes/StockCentral/Lists/ListTable.php',
     'Atum\\StockCentral\\Lists\\UncontrolledListTable' => $baseDir . '/classes/StockCentral/Lists/UncontrolledListTable.php',
     'Atum\\StockCentral\\StockCentral' => $baseDir . '/classes/StockCentral/StockCentral.php',
