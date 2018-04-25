@@ -25,12 +25,12 @@ use Atum\Settings\Settings;
 			<ul class="atum-nav-list">
 				<?php foreach ( $tabs as $tab => $atts ):
 
-					if ($tab == $active) {
+					if ($tab == $active):
 						$active_sections = $atts['sections'];
-					}
-					?>
-					<li class="atum-nav-item">
-						<a href="?page=atum-settings&tab=<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
+					endif; ?>
+
+					<li class="atum-nav-item<?php if ( isset( $atts['no_submit'] ) && $atts['no_submit'] ) echo ' no-submit' ?>">
+						<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
 							<span class="menu-helper"><?php echo $atts['tab_name'] ?></span>
 						</a>
 					</li>
@@ -44,7 +44,8 @@ use Atum\Settings\Settings;
 				<?php
 				global $wp_settings_sections, $wp_settings_fields;
 
-				foreach (array_keys($active_sections) as $active_section):
+				foreach ( array_keys($active_sections) as $active_section ):
+
 					// This prints out all hidden setting fields
 					settings_fields( ATUM_PREFIX . "setting_$active_section" );
 
@@ -68,7 +69,7 @@ use Atum\Settings\Settings;
 								call_user_func( $section['callback'], $section );
 							endif;
 
-							if ( ! isset( $wp_settings_fields ) || !isset( $wp_settings_fields[$page] ) || !isset( $wp_settings_fields[$page][$section['id']] ) ):
+							if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[$page] ) || ! isset( $wp_settings_fields[$page][$section['id']] ) ):
 								continue;
 							endif; ?>
 
