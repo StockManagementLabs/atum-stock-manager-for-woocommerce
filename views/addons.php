@@ -14,7 +14,7 @@ use Atum\Addons\Addons;
 
 	<h1>
 		<?php _e('ATUM Add-ons', ATUM_TEXT_DOMAIN) ?>
-		<span class="title-count theme-count"><?php echo ( ! empty($addons) ) ? count($addons) : 0 ?></span>
+		<span class="title-count theme-count"><?php echo ( ! empty($addons) ? count($addons) : 0 ) ?></span>
 		<a href="<?php echo Addons::ADDONS_STORE_URL ?>addons/" class="page-title-action" target="_blank"><?php _e('Visit Add-ons Store', ATUM_TEXT_DOMAIN) ?></a>
 	</h1>
 
@@ -24,12 +24,12 @@ use Atum\Addons\Addons;
 			<div class="themes wp-clearfix">
 				<?php foreach ($addons as $addon):
 
-					$addon_status = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] );
-					$more_details_link = '<a class="more-details" href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
+					$addon_status         = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] );
+					$more_details_link    = '<a class="more-details" href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
 					$is_coming_soon_addon = $addon['info']['coming_soon'];
 					?>
 
-					<div class="theme <?php if ($addon_status['installed'] && $addon_status['status'] == 'valid') echo 'active' ?>" data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
+					<div class="theme <?php echo $addon_status['status'] ?><?php if ($addon_status['installed'] && $addon_status['status'] == 'valid') echo ' active' ?>" data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
 
 						<?php if ( ! empty($addon['info']['thumbnail']) ) : ?>
 						<div class="theme-screenshot" style="background-image: url(<?php echo $addon['info']['thumbnail'] ?>)">
@@ -60,7 +60,7 @@ use Atum\Addons\Addons;
 								$addon_classes[] = 'coming-soon';
 							}
 							else {
-								$addon_classes[] = ($addon_status['key']) ? $addon_status['status'] : 'no-key';
+								$addon_classes[] = $addon_status['key'] ? $addon_status['status'] : 'no-key';
 							}
 
 							if ( $addon_status['status'] == 'valid' && !$addon_status['installed'] ) {
@@ -88,7 +88,7 @@ use Atum\Addons\Addons;
 							</div>
 
 							<?php if (!$is_coming_soon_addon): ?>
-							<div class="show-key" title="<?php _e('Show/Hide the license key', ATUM_TEXT_DOMAIN) ?>">
+							<div class="show-key" title="<?php esc_attr_e('Show/Hide the license key', ATUM_TEXT_DOMAIN) ?>">
 								<i class="dashicons dashicons-admin-network"></i>
 							</div>
 							<?php endif ?>
@@ -98,7 +98,7 @@ use Atum\Addons\Addons;
 						<?php if (!$is_coming_soon_addon): ?>
 						<div class="addon-key">
 							<div class="wrapper">
-								<input type="text" autocomplete="false" spellcheck="false" class="<?php if ($addon_status['key']) echo $addon_status['status'] ?>" value="<?php echo $addon_status['key'] ?>" placeholder="<?php _e('Enter the addon license key...', ATUM_TEXT_DOMAIN) ?>">
+								<input type="text" autocomplete="false" spellcheck="false" class="<?php if ($addon_status['key']) echo $addon_status['status'] ?>" value="<?php echo $addon_status['key'] ?>" placeholder="<?php esc_attr_e('Enter the addon license key...', ATUM_TEXT_DOMAIN) ?>">
 								<button type="button" class="button <?php echo $addon_status['button_class'] ?>" data-action="<?php echo $addon_status['button_action'] ?>"><?php echo $addon_status['button_text'] ?></button>
 							</div>
 						</div>

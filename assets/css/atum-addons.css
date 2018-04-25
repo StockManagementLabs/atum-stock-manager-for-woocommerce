@@ -144,6 +144,14 @@
 .atum-addons .theme .theme-actions {
   height: 39px;
   right: 27px;
+  -webkit-transform: translate3d(0, -50%, 0);
+  -moz-transform: translate3d(0, -50%, 0);
+  -o-transform: translate3d(0, -50%, 0);
+  -ms-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0);
+  -webkit-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 
 .atum-addons .theme .theme-actions.valid, .atum-addons .theme .theme-actions.invalid, .atum-addons .theme .theme-actions.inactive, .atum-addons .theme .theme-actions.coming-soon {
@@ -187,26 +195,6 @@
   right: 0;
 }
 
-.atum-addons .theme:hover .theme-actions.no-key:not(.coming-soon) {
-  display: none;
-}
-
-.atum-addons .theme:hover .more-details {
-  opacity: 0 !important;
-}
-
-.atum-addons .theme:hover .theme-screenshot:hover .addon-details {
-  -webkit-transform: translateY(0);
-  -moz-transform: translateY(0);
-  -o-transform: translateY(0);
-  -ms-transform: translateY(0);
-  transform: translateY(0);
-}
-
-.atum-addons .theme:hover .theme-screenshot:hover .more-details {
-  opacity: 1 !important;
-}
-
 .atum-addons .theme .show-key {
   position: absolute;
   right: 0;
@@ -215,6 +203,11 @@
   padding: 0 3px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
 }
 
 .atum-addons .theme .show-key, .atum-addons .theme .show-key i {
@@ -229,12 +222,42 @@
   color: #00B8DB;
 }
 
-.atum-addons .theme .show-key:hover {
-  opacity: 1 !important;
-  background-color: #0fd9ff;
+.atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive), .atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive), .atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive) {
+  opacity: 0;
+  -webkit-transform: translate3d(100%, -50%, 0);
+  -moz-transform: translate3d(100%, -50%, 0);
+  -o-transform: translate3d(100%, -50%, 0);
+  -ms-transform: translate3d(100%, -50%, 0);
+  transform: translate3d(100%, -50%, 0);
 }
 
-.atum-addons .theme .show-key:hover i {
+.atum-addons .theme:hover .more-details, .atum-addons .theme.inactive .more-details, .atum-addons .theme.invalid .more-details {
+  opacity: 0 !important;
+}
+
+.atum-addons .theme:hover .theme-screenshot:hover .addon-details, .atum-addons .theme.inactive .theme-screenshot:hover .addon-details, .atum-addons .theme.invalid .theme-screenshot:hover .addon-details {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -o-transform: translateY(0);
+  -ms-transform: translateY(0);
+  transform: translateY(0);
+}
+
+.atum-addons .theme:hover .theme-screenshot:hover .more-details, .atum-addons .theme.inactive .theme-screenshot:hover .more-details, .atum-addons .theme.invalid .theme-screenshot:hover .more-details {
+  opacity: 1 !important;
+}
+
+.atum-addons .theme:hover .show-key, .atum-addons .theme.inactive .show-key, .atum-addons .theme.invalid .show-key {
+  opacity: 1 !important;
+  background-color: #0fd9ff;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -o-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.atum-addons .theme:hover .show-key i, .atum-addons .theme.inactive .show-key i, .atum-addons .theme.invalid .show-key i {
   color: #FFF !important;
 }
 
