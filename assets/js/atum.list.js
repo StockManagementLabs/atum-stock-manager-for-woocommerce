@@ -1292,24 +1292,6 @@
 		// Init ATUM List Table
 		$('.atum-list-wrapper').atumListTable();
 		
-		//----------------
-		// Welcome notice
-		//----------------
-		$('.atum-notice.welcome-notice').click('.notice-dismiss', function() {
-			
-			var $welcomeNotice = $(this);
-			
-			$.ajax({
-				url     : ajaxurl,
-				method  : 'POST',
-				data    : {
-					token : $welcomeNotice.data('nonce'),
-					action: 'atum_welcome_notice',
-				}
-			});
-			
-		});
-		
 	});
 	
 } )( jQuery, window, document );

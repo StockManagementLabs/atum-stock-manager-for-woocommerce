@@ -62,9 +62,6 @@ final class Ajax {
 
 		// Ajax callback for Inbound Stock ListTable
 		add_action( 'wp_ajax_atum_fetch_inbound_stock_list', array( $this, 'fetch_inbound_stock_list' ) );
-		
-		// Welcome notice dismissal
-		add_action( 'wp_ajax_atum_welcome_notice', array( $this, 'welcome_notice' ) );
 
 		// Save the rate link click on the ATUM pages footer
 		add_action( 'wp_ajax_atum_rated', array($this, 'rated') );
@@ -80,6 +77,9 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_activate_license', array($this, 'activate_license') );
 		add_action( 'wp_ajax_atum_deactivate_license', array($this, 'deactivate_license') );
 		add_action( 'wp_ajax_atum_install_addon', array($this, 'install_addon') );
+
+		// ATUM notice dismissals
+		add_action( 'wp_ajax_atum_dismiss_notice', array( $this, 'dismiss_notice' ) );
 
 		// Search for products from enhanced selects
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -355,19 +355,6 @@ final class Ajax {
 		$list = new InboundStockListTable( $args );
 		$list->ajax_response();
 
-	}
-	
-	/**
-	 * Handle the ajax requests sent by the Atum's "Welcome" notice
-	 *
-	 * @package ATUM List Tables
-	 *
-	 * @since 1.1.1
-	 */
-	public function welcome_notice() {
-		check_ajax_referer( 'dismiss-welcome-notice', 'token' );
-		Helpers::dismiss_notice('welcome');
-		wp_die();
 	}
 
 	/**
@@ -781,6 +768,23 @@ final class Ajax {
 
 		wp_send_json_error($default_error);
 
+	}
+
+	/**
+	 * Dismiss the ATUM notices
+	 *
+	 * @package Helpers
+	 *
+	 * @since 1.4.4
+	 */
+	public function dismiss_notice() {
+		check_ajax_referer( 'dismiss-atum-notice', 'token' );
+
+		if ( ! empty( $_POST['key'] ) ) {
+			Helpers::dismiss_notice( esc_attr( $_POST['key'] ) );
+		}
+
+		wp_die();
 	}
 
 	/**
@@ -1725,6 +1729,8 @@ final class Ajax {
 	/**
 	 * Set the ATUM control switch status to all variations at once
 	 *
+	 * @package Product Data
+	 *
 	 * @since 1.4.1
 	 */
 	public function set_variations_control_status() {
@@ -1765,6 +1771,8 @@ final class Ajax {
 
 	/**
 	 * Get the the Locations tree for a specific product
+	 *
+	 * @package ATUM List Tables
 	 *
 	 * @since 1.4.2
 	 */

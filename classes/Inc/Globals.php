@@ -61,6 +61,11 @@ final class Globals {
 	const TEMPLATE_DIR = 'atum';
 
 	/**
+	 * User meta key to control the current user dismissed notices
+	 */
+	const DISMISSED_NOTICES = 'atum_dismissed_notices';
+
+	/**
 	 * The products' location taxonomy name
 	 */
 	const PRODUCT_LOCATION_TAXONOMY =  ATUM_PREFIX . 'location';

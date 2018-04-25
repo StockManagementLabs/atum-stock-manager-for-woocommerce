@@ -191,11 +191,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var bool
 	 */
 	protected $is_filtering = FALSE;
-	
-	/**
-	 * User meta key to control the current user dismissed notices
-	 */
-	const DISMISSED_NOTICES = 'atum_dismissed_notices';
 
 	/**
 	 * Value for empty columns

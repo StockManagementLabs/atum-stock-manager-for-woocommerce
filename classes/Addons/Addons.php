@@ -27,10 +27,16 @@ class Addons {
 	private static $instance;
 
 	/**
-	 * The list of registered ATUM's addons
+	 * The list of registered ATUM's add-ons
 	 * @var array
 	 */
 	private static $addons = array();
+
+	/**
+	 * The list of add-ons installed but not activated for updates
+	 * @var array
+	 */
+	private $not_activated_addons = array();
 
 	/**
 	 * The ATUM's addons store URL
@@ -53,7 +59,7 @@ class Addons {
 	const MENU_ORDER = 81;
 
 	/**
-	 * Singleton constructor
+	 * Addons singleton constructor
 	 *
 	 * @since 1.2.0
 	 */
@@ -81,6 +87,25 @@ class Addons {
 				add_filter( 'http_request_host_is_external', '__return_true' );
 			}
 
+			// Check if there are ATUM add-ons installed that are not activated
+			$installed_addons = self::get_installed_addons();
+
+			if ( ! empty($installed_addons) ) {
+
+				foreach ($installed_addons as $installed_addon) {
+					$addon_key = self::get_keys( $installed_addon['name'] );
+
+					if ( empty($addon_key) || ! $addon_key['key'] || in_array($addon_key['status'], ['invalid', 'expired']) ) {
+						$this->not_activated_addons[] = $installed_addon['name'];
+					}
+				}
+
+				if ( ! empty($this->not_activated_addons) ) {
+					add_action( 'admin_notices', array( $this, 'show_addons_activation_notice' ) );
+				}
+
+			}
+
 		}
 
 	}
@@ -94,7 +119,7 @@ class Addons {
 	 *
 	 * @return array
 	 */
-	public function add_menu ($menus) {
+	public function add_menu($menus) {
 
 		$menus['addons'] = array(
 			'title'      => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
@@ -112,7 +137,7 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 */
-	public function init_addons () {
+	public function init_addons() {
 
 		if ( ! empty(self::$addons) ) {
 			foreach (self::$addons as $addon) {
@@ -181,7 +206,7 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 */
-	public function check_addons_updates () {
+	public function check_addons_updates() {
 
 		$license_keys = self::get_keys();
 
@@ -250,7 +275,7 @@ class Addons {
 					error_log( __METHOD__ . ": $error_message" );
 				}
 				
-				$this->display_addons_page_notice( 'error', sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ) );
+				Helpers::display_notice( 'error', sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ) );
 				
 				return FALSE;
 				
@@ -259,7 +284,7 @@ class Addons {
 			$addons = @json_decode( wp_remote_retrieve_body( $response ), TRUE );
 			
 			if ( ! $addons ) {
-				$this->display_addons_page_notice( 'error', __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ) );
+				Helpers::display_notice( 'error', __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ) );
 				
 				return FALSE;
 			}
@@ -273,15 +298,19 @@ class Addons {
 	}
 
 	/**
-	 * Display a notice on the Addons page
+	 * Display an admin notice if there are ATUM add-ons installed but not activated for updates
 	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $type      The notice type: error, success, warning or info
-	 * @param string $message   The message within the notice
+	 * @since 1.4.4
 	 */
-	public function display_addons_page_notice ($type, $message) {
-		echo '<div class="notice notice-' . $type . ' atum-notice"><p>' . $message . '</p></div>';
+	public function show_addons_activation_notice() {
+
+		$message = sprintf(
+			__( 'Please, activate %syour purchased ATUM premium add-ons%s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url('admin.php') ) . '">',
+			'</a>'
+		);
+		Helpers::display_notice( 'info', $message, TRUE, 'activate-addons' );
+
 	}
 
 	/**
@@ -312,7 +341,7 @@ class Addons {
 	 *
 	 * @return string|array|bool
 	 */
-	public static function get_keys ($addon_name = '') {
+	public static function get_keys($addon_name = '') {
 
 		$keys = get_option( self::ADDONS_KEY_OPTION );
 
@@ -340,7 +369,7 @@ class Addons {
 	 *
 	 * @return array|\WP_Error
 	 */
-	private static function api_request ( $addon_name, $key, $endpoint, $extra_params = array() ) {
+	private static function api_request( $addon_name, $key, $endpoint, $extra_params = array() ) {
 
 		$params = array_merge($extra_params, array(
 			'edd_action' => $endpoint,
@@ -482,7 +511,7 @@ class Addons {
 	 *
 	 * @return array    An array with the result and the message
 	 */
-	public static function install_addon ($addon_name, $addon_slug, $download_link) {
+	public static function install_addon($addon_name, $addon_slug, $download_link) {
 
 		// Ensure that the download link URL is pointing to the right place
 		if (
@@ -619,7 +648,7 @@ class Addons {
 	 *
 	 * @return array|\WP_Error
 	 */
-	public static function check_license ($addon_name, $key) {
+	public static function check_license($addon_name, $key) {
 		return self::api_request($addon_name, $key, 'check_license');
 	}
 
