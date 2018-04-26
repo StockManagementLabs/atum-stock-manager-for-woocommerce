@@ -13,7 +13,7 @@
 		width: 48%;
 		padding: 0;
 		margin: 9px 0 0;
-		color: #777;
+		color: $wp-heading;
 		
 		label {
 			display: block;
@@ -77,7 +77,7 @@
 	
 	.wc-backbone-modal-content {
 		position: fixed;
-		background: #fff;
+		background: $white;
 		z-index: 100000;
 		left: 50%;
 		top: 50%;
@@ -121,7 +121,7 @@
 	right: 0;
 	bottom: 0;
 	min-height: 360px;
-	background: #000;
+	background: $blue-dark;
 	opacity: 0.7;
 	z-index: 99900;
 }
@@ -137,9 +137,9 @@
 	
 	.wc-backbone-modal-header {
 		height: auto;
-		background: #fcfcfc;
+		background: $white;
 		padding: 1em 1.5em;
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid $wp-input-border;
 		
 		h1 {
 			margin: 0;
@@ -150,7 +150,7 @@
 		
 		.modal-close-link {
 			cursor: pointer;
-			color: #777;
+			color: $wp-heading;
 			height: 54px;
 			width: 54px;
 			padding: 0;
@@ -159,23 +159,23 @@
 			right: 0;
 			text-align: center;
 			border: 0;
-			border-left: 1px solid #ddd;
+			border-left: 1px solid $wp-input-border;
 			background-color: transparent;
 			-webkit-transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 			transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 			
 			&::before {
 				font: normal 22px/50px 'dashicons' !important;
-				color: #666;
+				color: $gray;
 				display: block;
 				content: '\f335';
 				font-weight: 300;
 			}
 			
 			&:hover, &:focus {
-				background: #ddd;
-				border-color: #ccc;
-				color: #000;
+				background: $wp-input-border;
+				border-color: $wp-add;
+				color: $blue-dark;
 			}
 			
 			&:focus {
@@ -212,8 +212,8 @@
 		bottom: 0;
 		z-index: 100;
 		padding: 1em 1.5em;
-		background: #fcfcfc;
-		border-top: 1px solid #dfdfdf;
+		background: $white;
+		border-top: 1px solid $wp-section-border;
 		box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
 		
 		.inner {
@@ -245,7 +245,7 @@
 }
 
 .select2-dropdown {
-	border-color: #DDD;
+	border-color: $wp-input-border;
 }
 
 .select2-dropdown--below {
@@ -263,7 +263,7 @@
 	}
 	
 	.select2-selection {
-		border-color: #DDD;
+		border-color: $wp-input-border;
 	}
 	
 	.select2-search__field {
@@ -300,7 +300,7 @@
 	}
 	
 	.select2-selection__clear {
-		color: #999;
+		color: $wp-heading;
 		margin-top: -1px;
 	}
 	
@@ -328,7 +328,7 @@
 //---------
 
 .atum-help-tip {
-	color: #666;
+	color: $gray;
 	display: inline-block;
 	font-size: 1.1em;
 	font-style: normal;

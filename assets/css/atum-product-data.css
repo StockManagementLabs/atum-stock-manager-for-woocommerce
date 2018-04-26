@@ -103,7 +103,7 @@
 }
 
 .input-group.invalid input[type=text], .input-group.invalid input[type=number], .input-group.invalid textarea, .input-group.invalid select, .input-group.invalid .select2-container {
-  border-color: #FF4848;
+  border-color: #ff4848;
   background-color: rgba(255, 72, 72, 0.15);
 }
 
@@ -114,12 +114,12 @@
   display: -ms-flexbox;
   display: flex;
   z-index: 1;
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
 }
 
 .input-group.invalid .input-group-prepend, .input-group.invalid
 .input-group-append {
-  border-color: #FF4848;
+  border-color: #ff4848;
 }
 
 .input-group-prepend .btn,
@@ -155,10 +155,10 @@
   font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
-  color: #C1C1C1;
+  color: #afafaf;
   text-align: center;
   white-space: nowrap;
-  background-color: #D5F2F8;
+  background-color: #0fd9ff;
   border-radius: 0;
 }
 
@@ -231,7 +231,7 @@
 
 .product_data .atum-field input[type=text]:focus, .product_data .atum-field input[type=number]:focus {
   box-shadow: none;
-  border-color: #5B9DD9;
+  border-color: #5b9dd9;
 }
 
 .product_data .atum-field .select2-container:focus, .product_data .atum-field .select2-selection--single:focus, .product_data .atum-field .select2-selection__rendered:focus {
@@ -259,7 +259,7 @@
 }
 
 .product_data .atum-field .select2-container .select2-selection--single:focus {
-  border-color: #5B9DD9;
+  border-color: #5b9dd9;
 }
 
 .product_data .woocommerce_variations .form-row-first .atum-field, .product_data .woocommerce_variations .form-row-last .atum-field {
@@ -283,7 +283,7 @@
 }
 
 .product_data .woocommerce_variations .atum-data-panel {
-  border-top: 1px solid #DDD;
+  border-top: 1px solid #ddd;
   padding-top: 15px;
 }
 
@@ -297,8 +297,8 @@
 }
 
 .product_data .woocommerce_variations h3.atum-section-title {
-  border: 1px solid #E3E8F5;
-  background-color: rgba(213, 242, 248, 0.15);
+  border: 1px solid #e5e5e5;
+  background-color: rgba(15, 217, 255, 0.15);
   color: #555;
   text-transform: uppercase;
   cursor: default !important;
@@ -309,7 +309,7 @@
 .product_data .woocommerce_variations h4.atum-section-title {
   margin-top: 30px;
   padding-bottom: 10px;
-  border-bottom: 1px dashed #C1C1C1;
+  border-bottom: 1px dashed #afafaf;
   font-size: 1.1em;
 }
 

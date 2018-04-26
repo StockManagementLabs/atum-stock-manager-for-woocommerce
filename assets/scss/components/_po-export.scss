@@ -56,7 +56,7 @@ body {
 	h4 {
 		font-size: 18px;
 		background-color: $brand-primary;
-		color: #FFF;
+		color: $white;
 		padding: 5px 10px;
 		margin: 0;
 		text-transform: uppercase;
@@ -74,7 +74,7 @@ body {
 	.po-li-head {
 		background-color: $brand-primary;
 		th {
-			color: #FFF;
+			color: $white;
 			text-transform: uppercase;
 		}
 	}
@@ -118,7 +118,7 @@ body {
 }
 
 .po-content {
-	border: 1px solid #DDDDDD;
+	border: 1px solid $wp-input-border;
 	padding: 10px;
 	margin-top: 10px;
 }

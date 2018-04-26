@@ -48,7 +48,7 @@
 					display: inline-block;
 					margin-top: 11px;
 					font-size: 12px;
-					color: #FFF;
+					color: $white;
 					font-weight: normal;
 				}
 			}
@@ -143,7 +143,7 @@
 				@include transform(translateX(0));
 				
 				i {
-					color: #FFF !important;
+					color: $white !important;
 				}
 			}
 			
@@ -161,7 +161,7 @@
 			bottom: 0;
 			background-color: rgba(#000, 0.7);
 			position: absolute;
-			color: #FFF;
+			color: $white;
 			padding: 10px;
 			@include flexbox;
 			@include flex-wrap(wrap);
@@ -193,7 +193,7 @@
 				@include flex-wrap(nowrap);
 				@include flex-align-items(center);
 				padding: 5px;
-				border-top: 1px solid #DDD;
+				border-top: 1px solid $wp-input-border;
 				position: relative;
 			}
 			
@@ -230,14 +230,14 @@
 			text-shadow: none;
 			font-weight: normal;
 			background-color: $brand-primary;
-			color: #FFF;
+			color: $white;
 			border-radius: 0;
 			@include transition(all 0.2s ease-in-out);
 			
 			&:disabled {
 				background-color: $brand-primary !important;
 				text-shadow: none !important;
-				color: #FFF !important;
+				color: $white !important;
 				opacity: 0.6;
 			}
 			
@@ -248,8 +248,8 @@
 		
 		&.active {
 			.addon-key {
-				background-color: #23282d;
-				border-top-color: lighten(#23282d, 25%);
+				background-color: $blue-dark;
+				border-top-color: lighten($blue-dark, 25%);
 			}
 		}
 		

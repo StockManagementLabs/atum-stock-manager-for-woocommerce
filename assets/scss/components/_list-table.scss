@@ -12,9 +12,9 @@ h1.wp-heading-inline {
 		vertical-align: middle;
 		
 		&:active {
-			color: #FFF;
+			color: $white;
 			padding: 0 10px 1px;
-			box-shadow: 0 1px 0 #006799;
+			box-shadow: 0 1px 0 $wp-link;
 		}
 	}
 }
@@ -63,7 +63,7 @@ h1.wp-heading-inline {
 			text-align: center;
 			border: none;
 			background-color: $brand-primary;
-			color: #FFF;
+			color: $white;
 			padding: 2px 0 0;
 			cursor: pointer;
 			position: relative;
@@ -113,8 +113,8 @@ h1.wp-heading-inline {
 			
 			&:focus {
 				.select2-selection {
-					box-shadow: 0 0 2px rgba($input-focus, .8);
-					border-color: $input-focus;
+					box-shadow: 0 0 2px rgba($wp-input-focus, .8);
+					border-color: $wp-input-focus;
 				}
 			}
 			
@@ -300,7 +300,7 @@ h1.wp-heading-inline {
 			}
 			
 			td, a {
-				color: #FFF;
+				color: $white;
 			}
 			
 			.column-calc_type {
@@ -309,14 +309,14 @@ h1.wp-heading-inline {
 					&.product-type {
 						&:before {
 							content: "\e004";
-							color: #FFF;
+							color: $white;
 						}
 					}
 					
 					&.product-type-icon {
 						svg {
 							.st1 {
-								fill: #FFF;
+								fill: $white;
 							}
 						}
 					}
@@ -367,8 +367,8 @@ h1.wp-heading-inline {
 				
 				span {
 					display: inline-block;
-					background-color: #555;
-					color: #FFF;
+					background-color: $wp-heading;
+					color: $white;
 					border-radius: 2px;
 					padding: 2px 4px;
 					min-width: 20px;
@@ -483,10 +483,10 @@ h1.wp-heading-inline {
 	
 	.set-meta {
 		cursor: pointer;
-		color: $link;
+		color: $wp-link;
 		
 		&:hover {
-			color: $link-hover;
+			color: $wp-link-hover;
 		}
 		
 		&.unsaved {
@@ -496,7 +496,7 @@ h1.wp-heading-inline {
 	
 	.highlight-danger {
 		background-color: $brand-danger;
-		color: #FFF;
+		color: $white;
 		padding: 2px 3px;
 		border-radius: 2px;
 	}

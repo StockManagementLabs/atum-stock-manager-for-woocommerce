@@ -33,22 +33,43 @@ $container-max-widths: (
 
 $max-width-limit:                       1280px !default;
 
-// Colors
-$brand-primary:                         #00B8DB !default;
-$brand-info:                            #E3E8F5 !default;
-$brand-warning:                         #EFAF00 !default;
-$brand-danger:                          #FF4848 !default;
-$brand-success:                         #82C342 !default;
+// Inherited Colors
+$wp-link:                               #0073aa !default;
+$wp-link-hover:                         #00a0d2 !default;
+$wp-input-focus:                        #5b9dd9 !default;
+$wp-tr-border:                          #e6cce1 !default;
+$wp-tr-selected:                        #f5ebf3 !default;
+$wp-input-color:                        #32373c !default;
+$wp-heading:                            #555 !default;
+$wp-add:                                #b4b9be !default;
+$wp-input-border:                       #ddd !default;
+$wp-section-border:                     #e5e5e5 !default;
+$wp-bg-light:                           #f9f9f9 !default;
 
-$white:                                 #FFF !default;
-$black:                                 #000 !default;
-$gray:                                  #C1C1C1 !default;
-$gray-light:                            #F9F9F9 !default;
-$gray-dark:                             #333333 !default;
-$blue-light:                            #D5F2F8 !default;
 
-$link:                                  #0073AA !default;
-$link-hover:                            #00A0D2 !default;
+//Colors:
+$blue:                                  #00b8db !default;
+$blue-dark:                             #27282a !default;
+$blue-light:                            lighten($blue, 10%) !default;
+$green:                                 #69c61d !default;
+$green-light:                           lighten($green, 10%) !default;
+$orange:                                #efaf00 !default;
+$orange-light:                          lighten($orange, 10%) !default;
+$red:                                   #ff4848 !default;
+$red-light:                             lighten($red, 10%) !default;
+$white:                                 #fff !default;
+$gray:                                  #afafaf !default;
+$gray-light:                            $wp-section-border !default;
+$gray-dark:                             $wp-heading !default;
+
+
+$brand-primary:                         $blue !default;
+$brand-info:                            $gray-light !default;
+$brand-warning:                         $orange !default;
+$brand-danger:                          $red !default;
+$brand-success:                         $green !default;
+
+
 
 $theme-colors: () !default;
 $theme-colors: map-merge((
@@ -96,18 +117,19 @@ $btn-info:                              $brand-info !default;
 $zindex-tooltip:                        1070 !default;
 $tooltip-max-width:                     200px !default;
 $tooltip-font-size:                     12px !default;
-$tooltip-color:                         #FFF !default;
-$tooltip-bg:                            #000 !default;
+$tooltip-color:                         $white !default;
+$tooltip-bg:                            $blue-dark !default;
 $tooltip-opacity:                       .9 !default;
 
 $tooltip-arrow-width:                   5px !default;
 $tooltip-arrow-color:                   $tooltip-bg !default;
 
 // Popovers
-$popover-bg:                            #FFF !default;
+$popover-bg:                            $white !default;
 $popover-max-width:                     276px !default;
 $popover-border-color:                  rgba(0,0,0,.2) !default;
-$popover-fallback-border-color:         #CCC !default;
+$popover-fallback-border-color:         $wp-add !default;
+
 $popover-border-radius:                 6px !default;
 
 $popover-title-bg:                      darken($popover-bg, 3%) !default;
@@ -138,14 +160,12 @@ $input-border-width:                    1px !default;
 $input-padding-y:                       .375rem !default;
 $input-padding-x:                       .75rem !default;
 $input-border-radius:                   0;
-$input-focus:                           #5B9DD9 !default;
 $input-group-addon-color:               $gray;
 $input-group-addon-bg:                  $blue-light;
-$input-border-color:                    #DDD;
 
 // Widgets
-$widget-text:                           #AFAFAF !default;
-$widget-success:                        #69C61D !default;
+$widget-text:                           $gray !default;
+$widget-success:                        $green !default;
 $widget-primary:                        $brand-primary !default;
 $widget-warning:                        $brand-warning !default;
 $widget-danger:                         $brand-danger !default;

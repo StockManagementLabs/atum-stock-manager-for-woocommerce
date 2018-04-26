@@ -93,7 +93,7 @@
 .input-group-append {
 	@include flexbox;
 	z-index: 1;
-	border: $input-border-width solid $input-border-color;
+	border: $input-border-width solid $wp-input-border;
 	
 	.input-group.invalid & {
 		border-color: $brand-danger;

@@ -46,7 +46,7 @@ body {
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 25px;
-  color: #00B8DB;
+  color: #00b8db;
   text-transform: uppercase;
 }
 
@@ -60,8 +60,8 @@ body {
 
 .content-address h4 {
   font-size: 18px;
-  background-color: #00B8DB;
-  color: #FFF;
+  background-color: #00b8db;
+  color: #fff;
   padding: 5px 10px;
   margin: 0;
   text-transform: uppercase;
@@ -77,11 +77,11 @@ body {
 }
 
 .content-lines .po-li-head {
-  background-color: #00B8DB;
+  background-color: #00b8db;
 }
 
 .content-lines .po-li-head th {
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 }
 
@@ -107,12 +107,12 @@ body {
 }
 
 .content-totals .subtotal td {
-  border-top: 2px solid #00B8DB;
+  border-top: 2px solid #00b8db;
   padding-top: 20px;
 }
 
 .po-total .label, .po-total .total {
-  border-top: 2px solid #00B8DB;
+  border-top: 2px solid #00b8db;
   font-weight: bold;
 }
 
@@ -121,7 +121,7 @@ body {
 }
 
 .po-content {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #ddd;
   padding: 10px;
   margin-top: 10px;
 }

@@ -31,7 +31,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -7px;
 			margin-left: -6px;
-			border-top-color: #333;
+			border-top-color: $gray-dark;
 		}
 	}
 	
@@ -41,7 +41,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -5px;
 			margin-left: -6px;
-			border-bottom-color: #333;
+			border-bottom-color: $gray-dark;
 		}
 	}
 	
@@ -51,7 +51,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -5px;
-			border-right-color: #333;
+			border-right-color: $gray-dark;
 		}
 	}
 	
@@ -61,16 +61,16 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -7px;
-			border-left-color: #333;
+			border-left-color: $gray-dark;
 		}
 	}
 }
 
 #tiptip_content {
-	color: #fff;
+	color: $white;
 	font-size: 0.8em;
 	max-width: 150px;
-	background: #333;
+	background: $gray-dark;
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
@@ -78,7 +78,7 @@ img.tips {
 	
 	code {
 		padding: 1px;
-		background: #888;
+		background: $gray;
 	}
 }
 
@@ -112,7 +112,7 @@ table.wp-list-table {
 		
 		time {
 			display: block;
-			color: #999;
+			color: $wp-heading;
 			margin: 3px 0;
 		}
 	}
@@ -175,7 +175,7 @@ table.wp-list-table {
 		.note-on {
 			@include ir();
 			margin: 0 auto;
-			color: #999;
+			color: $wp-heading;
 			
 			&::after {
 				@include icon_woocommerce( '\e027' );
@@ -225,7 +225,7 @@ table.wp-list-table {
 	}
 	
 	.row-actions, span.na {
-		color: #999;
+		color: $wp-heading;
 	}
 	
 	.notes_head, .notes_head, .status_head {

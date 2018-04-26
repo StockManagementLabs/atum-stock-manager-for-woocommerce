@@ -11,7 +11,7 @@
 	
 	&:hover, &:focus {
 		&:not(:disabled) {
-			color: #FFF;
+			color: $white;
 		}
 	}
 	
@@ -32,7 +32,7 @@
 }
 
 .btn-success {
-	color: #FFF;
+	color: $white;
 	background-color: $btn-success;
 	
 	&:hover:not(:disabled) {
@@ -41,7 +41,7 @@
 }
 
 .btn-primary {
-	color: #FFF;
+	color: $white;
 	background-color: $btn-primary;
 	
 	&:hover:not(:disabled) {
@@ -50,7 +50,7 @@
 }
 
 .btn-warning {
-	color: #FFF;
+	color: $white;
 	background-color: $btn-warning;
 	
 	&:hover:not(:disabled) {
@@ -59,7 +59,7 @@
 }
 
 .btn-danger {
-	color: #FFF;
+	color: $white;
 	background-color: $btn-danger;
 	
 	&:hover:not(:disabled) {

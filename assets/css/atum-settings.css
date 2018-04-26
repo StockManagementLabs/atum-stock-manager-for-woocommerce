@@ -116,18 +116,18 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82C342;
+  color: #69c61d;
 }
 
 .swal2-container a:hover {
-  color: #9ccf69;
+  color: #82e135;
 }
 
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00B8DB;
+  border-top-color: #00b8db;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -257,7 +257,7 @@
 
 .atum-settings-wrapper .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-link:focus {
   outline: none;
-  color: #FFF;
+  color: #fff;
   box-shadow: none;
 }
 
@@ -275,7 +275,7 @@
   width: 100%;
   height: 2px;
   opacity: 0;
-  background: #FFF;
+  background: #fff;
   -webkit-transform: translate3d(0, -3em, 0);
   -moz-transform: translate3d(0, -3em, 0);
   -o-transform: translate3d(0, -3em, 0);
@@ -295,7 +295,7 @@
 }
 
 .atum-settings-wrapper .atum-nav-link.active {
-  color: #FFF;
+  color: #fff;
 }
 
 .atum-settings-wrapper .atum-nav-link.active .menu-helper {
@@ -407,8 +407,8 @@
   margin: auto;
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(227, 232, 245, 0.25);
-  border-top-color: #E3E8F5;
+  border: 3px solid rgba(229, 229, 229, 0.25);
+  border-top-color: #e5e5e5;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -455,7 +455,7 @@
 }
 
 #atum-settings .settings-section {
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 6px;
   margin-bottom: 20px;
 }
@@ -466,11 +466,11 @@
 
 #atum-settings .section-title {
   padding: 20px 30px;
-  border-bottom: 2px solid #ececec;
+  border-bottom: 2px solid #d8d8d8;
 }
 
 #atum-settings .section-title h2 {
-  color: #5b5b5b;
+  color: #494949;
   margin: 0;
   text-transform: uppercase;
   font-size: 14px;
@@ -481,7 +481,7 @@
 }
 
 #atum-settings .section-fields tr:not(:last-child) {
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid #d8d8d8;
 }
 
 #atum-settings .section-fields th, #atum-settings .section-fields td {
@@ -490,12 +490,12 @@
 
 #atum-settings .section-fields th {
   width: 25%;
-  color: #5b5b5b;
+  color: #494949;
   font-weight: 400;
 }
 
 #atum-settings .section-fields .atum-setting-info {
-  color: #999;
+  color: #555;
   font-style: italic;
   font-size: 13px;
   font-weight: 100;
@@ -542,7 +542,7 @@
   padding: 11px 20px 9px;
   line-height: 1;
   height: auto;
-  background: #00B8DB;
+  background: #00b8db;
   text-shadow: none;
   box-shadow: none;
   border: none;

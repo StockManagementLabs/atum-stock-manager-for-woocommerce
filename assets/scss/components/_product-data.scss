@@ -48,7 +48,7 @@
 			
 			&:focus {
 				box-shadow: none;
-				border-color: $input-focus;
+				border-color: $wp-input-focus;
 			}
 		}
 		
@@ -77,7 +77,7 @@
 				}
 				
 				&:focus {
-					border-color: $input-focus;
+					border-color: $wp-input-focus;
 				}
 			}
 		}
@@ -109,7 +109,7 @@
 		}
 		
 		.atum-data-panel {
-			border-top: 1px solid #DDD;
+			border-top: 1px solid $wp-input-border;
 			padding-top: $grid-gutter-width/2;
 			
 			label {
@@ -127,7 +127,7 @@
 		h3.atum-section-title {
 			border: 1px solid $brand-info;
 			background-color: transparentize($blue-light, .85);
-			color: #555;
+			color: $wp-heading;
 			text-transform: uppercase;
 			cursor: default !important;
 			margin-bottom: $grid-gutter-width/2 !important;

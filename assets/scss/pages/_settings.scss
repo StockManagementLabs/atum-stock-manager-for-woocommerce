@@ -4,7 +4,7 @@
 
 $settings-menu-bg:          darken($brand-primary, 30%);
 $settings-menu-color:       #95adbf;
-$settings-menu-active:      #FFF;
+$settings-menu-active:      $white;
 
 
 // Settings Menu
@@ -169,7 +169,7 @@ $settings-menu-active:      #FFF;
 	}
 	
 	.settings-section {
-		background-color: #FFF;
+		background-color: $white;
 		border-radius: 6px;
 		margin-bottom: $grid-gutter-width/1.5;
 		
@@ -210,7 +210,7 @@ $settings-menu-active:      #FFF;
 		}
 		
 		.atum-setting-info {
-			color: #999;
+			color: $wp-heading;
 			font-style: italic;
 			font-size: 13px;
 			font-weight: 100;
