@@ -71,14 +71,6 @@
 					location.reload();
 				});
 				
-			}, function (result) {
-				
-				swal({
-					type : 'error',
-					title: atumProductData.error,
-					text : result
-				});
-				
 			}).catch(swal.noop);
 		
 		});
