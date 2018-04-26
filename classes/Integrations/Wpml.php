@@ -76,11 +76,11 @@ class Wpml {
 	 */
 	public function __construct() {
 
-		global $sitepress;
+		global $sitepress, $woocommerce_wpml;
 
 		$this->sitepress = $sitepress;
 
-		$this->wpml = \woocommerce_wpml::instance();
+		$this->wpml = $woocommerce_wpml;
 
 		$this->current_language = $this->sitepress->get_current_language();
 
