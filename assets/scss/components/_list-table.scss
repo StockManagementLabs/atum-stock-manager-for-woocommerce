@@ -87,6 +87,10 @@ h1.wp-heading-inline {
 		
 		&.bulkactions {
 			padding-right: 0;
+			
+			select {
+				max-width: 150px;
+			}
 		}
 		
 		input, select, .select2-container {
