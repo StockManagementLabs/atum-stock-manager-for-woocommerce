@@ -53,11 +53,17 @@
 			
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
-				$(this).addClass('dirty');
+				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
+					$(this).addClass('dirty');
+				}
 			})
 			// Remove the dirty mark if the user tries to save
 			.on('click', 'input[type=submit]', function() {
 				self.$form.find('.dirty').removeClass('dirty');
+			})
+			// Script Runner fields
+			.on('click', '.script-runner button', function() {
+				self.runScript($(this));
 			})
 			// Manage Shipping address switch
 			.on('change','#atum_same_ship_address', function() {
@@ -145,6 +151,9 @@
 				if(pathNames.length) {
 					self.clickTab(pathNames[0]);
 				}
+				else {
+					self.$form.show();
+				}
 				
 			});
 			
@@ -191,7 +200,7 @@
 				
 				self.doSwitchers();
 				self.restoreEnhancedSelects();
-				self.$form.find('#atum_same_ship_address').change().removeClass('dirty');
+				self.$form.show().find('#atum_same_ship_address').change().removeClass('dirty');
 				
 				var $inputButton = self.$form.find('input:submit');
 				
@@ -204,6 +213,72 @@
 				
 			});
 			
+		},
+		runScript: function($button) {
+			
+			var self          = this,
+			    $scriptRunner = $button.closest('.script-runner');
+			
+			swal({
+				title              : this.settings.areYouSure,
+				text               : $scriptRunner.data('confirm'),
+				type               : 'warning',
+				showCancelButton   : true,
+				confirmButtonText  : this.settings.run,
+				cancelButtonText   : this.settings.cancel,
+				reverseButtons     : true,
+				allowOutsideClick  : false,
+				showLoaderOnConfirm: true,
+				preConfirm: function() {
+					
+					return new Promise(function (resolve, reject) {
+						
+						var $select = $button.siblings('select'),
+						    data    = {
+							    action: $scriptRunner.data('action'),
+							    token : self.settings.runnerNonce
+						    };
+						
+						if ($select.length) {
+							data.option = $select.val();
+						}
+						
+						$.ajax({
+							url       : ajaxurl,
+							method    : 'POST',
+							dataType  : 'json',
+							data      : data,
+							beforeSend: function () {
+								$button.prop('disabled', true);
+							},
+							success   : function (response) {
+								
+								$button.prop('disabled', false);
+								
+								if (response.success === true) {
+									resolve(response.data);
+								}
+								else {
+									reject(response.data);
+								}
+								
+							}
+						});
+						
+					});
+				
+				}
+			}).then(function (message) {
+				
+				swal({
+					title            : self.settings.done,
+					type             : 'success',
+					text             : message,
+					confirmButtonText: self.settings.ok
+				});
+			
+			}).catch(swal.noop);
+		
 		}
 		
 	} );

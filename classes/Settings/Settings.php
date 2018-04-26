@@ -333,7 +333,14 @@ class Settings {
 		}
 		
 		foreach ( $defaults as $field => $default ) {
-			$options[ $field ] = array_key_exists( $field, $settings ) ? $settings[ $field ] : $default['default'];
+
+			if ( array_key_exists( $field, $settings ) ) {
+				$options[ $field ] = $settings[ $field ];
+			}
+			elseif ( isset($default['default']) ) {
+				$options[ $field ] =  $default['default'];
+			}
+
 		}
 		
 		return apply_filters( 'atum/settings/get_settings', $options );
@@ -362,12 +369,17 @@ class Settings {
 
 			$min = ! ATUM_DEBUG ? '.min' : '';
 			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
-			
+
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
-				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'unsavedData'   => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
-				'continue'      => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
-				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN )
+				'areYouSure'     => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'unsavedData'    => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'continue'       => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
+				'cancel'         => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'run'            => __( 'Run', ATUM_TEXT_DOMAIN ),
+				'ok'             => __( 'OK', ATUM_TEXT_DOMAIN ),
+				'done'           => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'error'          => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'runnerNonce'    => wp_create_nonce('atum-script-runner-nonce')
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
@@ -594,7 +606,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="script-runner" data-action="<?php echo $args['options']['script_action'] ?>">
+		<div class="script-runner" data-action="<?php echo $args['options']['script_action'] ?>" data-confirm="<?php echo $args['options']['confirm_msg'] ?>">
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
 			<select class="wc-enhanced-select" style="width: 12em">
@@ -605,7 +617,7 @@ class Settings {
 			&nbsp;
 			<?php endif; ?>
 
-			<button type="button" class="change-stock-control btn btn-primary">
+			<button type="button" class="btn btn-primary">
 				<?php echo $args['options']['button_text'] ?>
 			</button>
 

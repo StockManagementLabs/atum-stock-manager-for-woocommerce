@@ -70,18 +70,34 @@ class Tools {
 
 		$defaults['update_manage_stock'] = array(
 			'section' => 'tools',
-			'name'    => __( 'Update Manage Stock', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( 'Update the WooCommerce manage stock at product level for all the products at once.', ATUM_TEXT_DOMAIN ),
+			'name'    => __( "Update WC's Manage Stock", ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "Update the WooCommerce's manage stock at product level for all the products at once.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
 				'select'        => array(
 					'manage'   => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
 					'unmanage' => __( 'Unmanage Stock', ATUM_TEXT_DOMAIN )
 				),
-				'button_text'   => __( 'Change Now!', ATUM_TEXT_DOMAIN ),
-				'script_action' => 'atum_tool_manage_stock'
-			),
-			'default' => Settings::DEFAULT_POSTS_PER_PAGE
+				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
+				'script_action' => 'atum_tool_manage_stock',
+				'confirm_msg'   => esc_attr( __("This will change the WooCommerce's manage stock option for all your products", ATUM_TEXT_DOMAIN) )
+			)
+		);
+
+		$defaults['update_control_stock'] = array(
+			'section' => 'tools',
+			'name'    => __( "Update ATUM's stock control", ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "Update the ATUM's stock control option for all the products at once.", ATUM_TEXT_DOMAIN ),
+			'type'    => 'script_runner',
+			'options' => array(
+				'select'        => array(
+					'control'   => __( 'Control Stock', ATUM_TEXT_DOMAIN ),
+					'uncontrol' => __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN )
+				),
+				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
+				'script_action' => 'atum_tool_control_stock',
+				'confirm_msg'   => esc_attr( __("This will change the ATUM's stock control option for all your products", ATUM_TEXT_DOMAIN) )
+			)
 		);
 
 		return $defaults;

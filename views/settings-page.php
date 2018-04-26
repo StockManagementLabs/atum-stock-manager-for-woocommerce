@@ -38,7 +38,7 @@ use Atum\Settings\Settings;
 			</ul>
 		</nav>
 	
-		<form id="atum-settings" method="post" action="options.php">
+		<form id="atum-settings" method="post" action="options.php" style="display: none">
 			<div class="form-settings-wrapper">
 
 				<?php
