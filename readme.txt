@@ -269,6 +269,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.5`
+
+*2018-05-02*
+
+**Features**
+
+* Added URL hash navigation to Settings.
+* New “script runner” field type for Settings.
+* Added new Tools tab to Settings.
+* Added tools for Managing/Unmanaging and Controlling/Uncontrolling the stock for all the products at once.
+* Added new bulk actions for Managing/Unmanaging the stock to List Tables.
+
+**Changes**
+
+* Changed WooCommerce WPML's instance call.
+
+**Fixes**
+
+* Fixed issue in Uncontrolled List Tables when the meta key for any product had set the value to "no".
+
+---
+
 `1.4.4`
 
 *2018-04-26*
