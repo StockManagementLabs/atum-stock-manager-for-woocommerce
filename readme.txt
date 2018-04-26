@@ -16,7 +16,7 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 == Description ==
 
-**VERSION 1.4.1. IS HERE - BRAND NEW AND INNOVATIVE APPROACH**
+**VERSION 1.4.1 - BRAND NEW AND INNOVATIVE APPROACH**
 
 * (NEW) ATUM Stock Control system.
 * Brand new controlling and monitoring features.

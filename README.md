@@ -4,6 +4,45 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 ##Description
 
+**VERSION 1.4.1 - BRAND NEW AND INNOVATIVE APPROACH**
+
+* (NEW) ATUM Stock Control system.
+* Brand new controlling and monitoring features.
+* Faultless approach to all product types.
+* No more variable products issues or problems.
+* Quicker and better Stock Central environment.
+* Added checkboxes to Stock Central.
+* Added Bulk Action to Stock Central to Control/Uncontrol products in bulk.
+* Added Supplier's SKU to Purchase Orders' PDF export.
+* Added View Filter for products Unmanaged by WC.
+* Added WPML compatibility for Unmanaged products filter.
+* Added button to variable products for changing the ATUM Control switch to all their variations at once.
+* Added Unmanaged products counter to Stock Control widget.
+* New settings and improvements.
+* Clear, effective and branded ATUM fields.
+
+
+= TUTORIALS AND HOW TO START FOR NEW USERS =
+
+
+https://www.youtube.com/watch?v=VH_Th3pdH9M
+
+https://www.youtube.com/watch?v=syeNJlGoy4s
+
+
+
+= EXISTING USERS UPGRADING FROM OLDER VERSIONS, WATCH BELOW =
+
+
+https://www.youtube.com/watch?v=yQF4QgWOJnY
+
+
+= EXISTING USERS - FAULTLESS VARIABLE PRODUCTS  =
+
+
+https://www.youtube.com/watch?v=PqWBjsomKnU
+
+
 ATUM is becoming the most advanced WooCommerce inventory management tool in the Wordpress depository. Free of charge and the absolute must for every serious shop owner. Stock Central, the heart of ATUM, gives you the full overview of your business with capabilities of a quick change of every aspect of your WooCommerce inventory and prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
 Stock Management Labs™, creators that have combined over 25 years of experience in inventory management, working very closely with a bunch of professional Wordpress developers since October 2016. The aim is to create the complete product that will take care of all business needs.
