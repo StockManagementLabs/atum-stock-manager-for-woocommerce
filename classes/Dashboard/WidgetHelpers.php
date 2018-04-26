@@ -2,7 +2,7 @@
 /**
  * @package        Atum
  * @subpackage     Dashboard
- * @author         Salva Machí and Jose Piera - https://sispixels.com
+ * @author         Be Rebel - https://berebel.io
  * @copyright      ©2018 Stock Management Labs™
  *
  * @since          1.4.0

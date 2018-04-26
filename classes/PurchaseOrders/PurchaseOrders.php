@@ -2,8 +2,8 @@
 /**
  * @package         Atum
  * @subpackage      PurchaseOrders
- * @author          Salva Machí and Jose Piera - https://sispixels.com
- * @copyright       ©2017 Stock Management Labs™
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.9
  *
