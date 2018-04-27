@@ -853,6 +853,10 @@ h1.wp-heading-inline #atum-update-list:active {
   padding-right: 0;
 }
 
+.atum-list-wrapper .actions.bulkactions select {
+  max-width: 150px;
+}
+
 .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
   height: 32px;
   margin-bottom: 4px;

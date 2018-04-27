@@ -120,6 +120,10 @@ final class Ajax {
 		// Get the product locations tree
 		add_action( 'wp_ajax_atum_get_locations_tree', array( $this, 'get_locations_tree' ) );
 
+		// Run scripts from Tools section
+		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
+		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
+
 	}
 
 	/**
@@ -439,6 +443,22 @@ final class Ajax {
 
 				foreach ($ids as $id) {
 					Helpers::enable_atum_control($id);
+				}
+
+				break;
+
+			case 'unmanage_stock':
+
+				foreach ($ids as $id) {
+					Helpers::disable_wc_manage_stock($id);
+				}
+
+		        break;
+
+			case 'manage_stock':
+
+				foreach ($ids as $id) {
+					Helpers::enable_wc_manage_stock($id);
 				}
 
 				break;
@@ -1799,6 +1819,104 @@ final class Ajax {
 		$locations_tree = str_replace( '<a href', '<a target="_blank" href', $locations_tree);
 
 		wp_send_json_success( "<ul>$locations_tree</ul>" );
+
+	}
+
+	/**
+	 * Change the WC's manage stock status for all products from Tools section
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 *
+	 * @since 1.4.5
+	 */
+	public function change_manage_stock() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+
+		if ( empty($_POST['option']) ) {
+			wp_send_json_error( __('Please select an option from the dropdown', ATUM_TEXT_DOMAIN) );
+		}
+
+		$option = esc_attr( $_POST['option'] );
+
+		if ( in_array($option, ['manage', 'unmanage'] ) ) {
+			$manage_status = $option == 'manage' ? 'yes' : 'no';
+			$this->change_status_meta('_manage_stock', $manage_status);
+		}
+
+		wp_send_json_error( __('Something failed changing the Manage Stock option', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * Change the ATUM's control stock status for all products from Tools section
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 *
+	 * @since 1.4.5
+	 */
+	public function change_control_stock() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+
+		if ( empty($_POST['option']) ) {
+			wp_send_json_error( __('Please select an option from the dropdown', ATUM_TEXT_DOMAIN) );
+		}
+
+		$option = esc_attr( $_POST['option'] );
+
+		if ( in_array($option, ['control', 'uncontrol'] ) ) {
+			$control_status = $option == 'control' ? 'yes' : 'no';
+			$this->change_status_meta(Globals::ATUM_CONTROL_STOCK_KEY, $control_status);
+		}
+
+		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * Change the value of a meta key for all products at once
+	 *
+	 * @since 1.4.5
+	 *
+	 * @param string $meta_key
+	 * @param string $status
+	 */
+	private function change_status_meta($meta_key, $status) {
+
+		global $wpdb;
+		$wpdb->hide_errors();
+
+		// If there are products without the manage_stock meta key, insert it for them
+		$insert_success = $wpdb->query( $wpdb->prepare("
+			INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
+			SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts as posts
+            LEFT JOIN $wpdb->postmeta as pm ON posts.ID = pm.post_id
+            WHERE posts.post_type IN ('product', 'product_variation')
+            AND posts.ID NOT IN (
+                SELECT DISTINCT post_id FROM $wpdb->postmeta
+                WHERE meta_key = %s
+            )",
+			$meta_key,
+			$status,
+			$meta_key
+		) );
+
+		// For the rest, just update those that don't have the right status
+		$update_success = $wpdb->query( $wpdb->prepare("
+			UPDATE $wpdb->postmeta SET meta_value = %s		        		
+            WHERE meta_key = %s 
+            AND meta_value != %s",
+			$status,
+			$meta_key,
+			$status
+		) );
+
+		if ($insert_success !== FALSE && $update_success !== FALSE) {
+			wp_send_json_success( __('All your products were updated successfully', ATUM_TEXT_DOMAIN) );
+		}
 
 	}
 

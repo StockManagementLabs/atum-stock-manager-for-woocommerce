@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
@@ -160,6 +159,7 @@ final class Helpers {
 	public static function get_data_att( $att, $value = '', $quote_symbol = '"' ) {
 		
 		$data_att = '';
+
 		if ( is_array( $att ) ) {
 			foreach ( $att as $name => $value ) {
 				// Recursive calls
@@ -215,7 +215,7 @@ final class Helpers {
 		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge($defaults, $args) );
 
 		$product_ids_transient = self::get_transient_identifier( $args, 'all_products' );
-		$products = self::get_transient( $product_ids_transient );
+		$products              = self::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
 			$products = get_posts($args);
@@ -319,7 +319,7 @@ final class Helpers {
 			}
 		}
 		
-		$args['post_status'] = ( ! empty( $valid_order_statuses ) ) ? $valid_order_statuses : $wc_order_statuses;
+		$args['post_status'] = ! empty( $valid_order_statuses ) ? $valid_order_statuses : $wc_order_statuses;
 		
 		// Selected posts
 		if ( $orders_in ) {
@@ -341,6 +341,7 @@ final class Helpers {
 			);
 			
 			$meta_type = strtoupper( esc_attr( $meta_type ) );
+
 			if ( in_array( $meta_type, [ 'NUMERIC', 'DECIMAL' ] ) ) {
 				$meta_query['value'] = floatval( $meta_value );
 				$meta_query['type']  = $meta_type;
@@ -362,7 +363,7 @@ final class Helpers {
 		}
 		
 		if ( ! empty( $order ) ) {
-			$args['order'] = ( in_array( $order, [ 'ASC', 'DESC' ] ) ) ? $order : 'DESC';
+			$args['order'] = in_array( $order, [ 'ASC', 'DESC' ] ) ? $order : 'DESC';
 		}
 		
 		if ( ! empty( $orderby ) ) {
@@ -481,7 +482,7 @@ final class Helpers {
 	 */
 	public static function get_product_lost_sales ($product_id, $days = 7) {
 
-		$lost_sales = FALSE;
+		$lost_sales        = FALSE;
 		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
 		if ($out_of_stock_date && $days > 0) {
@@ -491,22 +492,24 @@ final class Helpers {
 			if ( is_numeric( $days_out_of_stock ) ) {
 
 				// Get the average sales for the past days when in stock
-				$days = absint($days);
+				$days           = absint( $days );
 				$sold_last_days = self::get_sold_last_days( [ $product_id ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
-				$lost_sales = 0;
+				$lost_sales     = 0;
 
 				if ( ! empty($sold_last_days) ) {
+
 					$sold_last_days = reset($sold_last_days);
 
 					if ( ! empty($sold_last_days['QTY']) && $sold_last_days['QTY'] > 0 ) {
 
 						$average_sales = $sold_last_days['QTY'] / $days;
-						$product = wc_get_product($product_id);
-						$price = $product->get_regular_price();
+						$product       = wc_get_product( $product_id );
+						$price         = $product->get_regular_price();
 
 						$lost_sales = $days_out_of_stock * $average_sales * $price;
 
 					}
+
 				}
 			}
 
@@ -541,7 +544,7 @@ final class Helpers {
 
 				$out_of_stock_days = $interval->days;
 
-			} catch(\Exception $e) {
+			} catch( \Exception $e ) {
 				error_log( __METHOD__ . ' || Product: ' . $product_id . ' || ' . $e->getMessage() );
 				return $out_of_stock_days;
 			}
@@ -571,8 +574,8 @@ final class Helpers {
 		global $global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
-		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
-		$option         = ( isset( $global_options[ $name ] ) ) ? $global_options[ $name ] : $default;
+		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+		$option         = isset( $global_options[ $name ] ) ? $global_options[ $name ] : $default;
 
 		if ( $echo ) {
 			echo apply_filters( "atum/print_option/$name", $option );
@@ -598,7 +601,7 @@ final class Helpers {
 		global $global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
-		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
 
 		if ( ! $global_options ) {
 			$global_options = array();
@@ -628,7 +631,7 @@ final class Helpers {
 		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
 		
 		// Exclude the inheritable products from query (as are just containers in ATUM List Tables)
-		$excluded_types = Globals::get_inheritable_product_types();
+		$excluded_types      = Globals::get_inheritable_product_types();
 		$excluded_type_terms = array();
 		
 		foreach ($excluded_types as $excluded_type) {
@@ -920,6 +923,17 @@ final class Helpers {
 	}
 
 	/**
+	 * Enables the WC's manage stock for the specified product
+	 *
+	 * @since 1.4.5
+	 *
+	 * @param int $product_id
+	 */
+	public static function enable_wc_manage_stock($product_id) {
+		update_post_meta( $product_id, '_manage_stock', 'yes' );
+	}
+
+	/**
 	 * Disables the ATUM control switch for the specified product
 	 *
 	 * @since 1.4.1
@@ -928,6 +942,17 @@ final class Helpers {
 	 */
 	public static function disable_atum_control($product_id) {
 		delete_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY );
+	}
+
+	/**
+	 * Disables the WC's manage stock for the specified product
+	 *
+	 * @since 1.4.5
+	 *
+	 * @param int $product_id
+	 */
+	public static function disable_wc_manage_stock($product_id) {
+		update_post_meta( $product_id, '_manage_stock', 'no' );
 	}
 	
 	/**
@@ -945,17 +970,15 @@ final class Helpers {
 		global $global_options;
 		
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
-		$global_options = ( empty( $global_options ) ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
 		
-		$old_value = ( isset( $global_options[ $name ] ) ) ? $global_options[ $name ] : FALSE;
+		$old_value = isset( $global_options[ $name ] ) ? $global_options[ $name ] : FALSE;
 		
 		$global_options[ $name ] = apply_filters( "atum/update_option/$name", $value, $old_value );
 		
 		update_option( Settings::OPTION_NAME, $global_options );
 		
 	}
-	
-
 
 	/**
 	 * Check whether a specific plugin is installed
@@ -973,12 +996,7 @@ final class Helpers {
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 
 			// Get the plugin slug from its path
-			if ($by == 'slug') {
-				$installed_plugin_key = explode( DIRECTORY_SEPARATOR, $plugin_file )[0];
-			}
-			else {
-				$installed_plugin_key = $plugin_data['Title'];
-			}
+			$installed_plugin_key = $by == 'slug' ? explode( DIRECTORY_SEPARATOR, $plugin_file )[0] : $plugin_data['Title'];
 
 			if ($installed_plugin_key == $plugin) {
 				return ($return_bool) ? TRUE : array($plugin_file => $plugin_data);

@@ -59,14 +59,12 @@ $settings-menu-active:      #FFF;
 		cursor: pointer;
 		@include user-select(none);
 		-webkit-touch-callout: none;
-		-khtml-user-select: none;
 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 		position: relative;
 		overflow: hidden;
 		text-align: center;
 		color: $settings-menu-color;
-		-webkit-transition: color 0.3s;
-		transition: color 0.3s;
+		@include transition(color 0.3s);
 		
 		&:hover, &:focus {
 			outline: none;
@@ -146,6 +144,7 @@ $settings-menu-active:      #FFF;
 		position: relative;
 		
 		&.overlay {
+			
 			&:before {
 				content: '';
 				position: absolute;
@@ -234,6 +233,22 @@ $settings-menu-active:      #FFF;
 			width: 60px;
 		}
 		
+		.script-runner {
+			@include flexbox;
+			
+			.select2-container {
+				&, .selection, .select2-selection--single, .select2-selection__rendered {
+					&:focus {
+						outline: none;
+					}
+				}
+			}
+			
+			button {
+				border-radius: 4px;
+			}
+		}
+		
 	}
 	
 	.submit {
@@ -280,6 +295,14 @@ $settings-menu-active:      #FFF;
 	}
 	
 	button {
+		&:focus {
+			outline: none;
+		}
+	}
+}
+
+.select2-results {
+	.select2-results__option {
 		&:focus {
 			outline: none;
 		}

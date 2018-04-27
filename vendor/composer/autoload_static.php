@@ -98,6 +98,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\PurchaseOrders\\Models\\PurchaseOrder' => __DIR__ . '/../..' . '/classes/PurchaseOrders/Models/PurchaseOrder.php',
         'Atum\\PurchaseOrders\\PurchaseOrders' => __DIR__ . '/../..' . '/classes/PurchaseOrders/PurchaseOrders.php',
         'Atum\\Settings\\Settings' => __DIR__ . '/../..' . '/classes/Settings/Settings.php',
+        'Atum\\Settings\\Tools' => __DIR__ . '/../..' . '/classes/Settings/Tools.php',
         'Atum\\StockCentral\\Lists\\ListTable' => __DIR__ . '/../..' . '/classes/StockCentral/Lists/ListTable.php',
         'Atum\\StockCentral\\Lists\\UncontrolledListTable' => __DIR__ . '/../..' . '/classes/StockCentral/Lists/UncontrolledListTable.php',
         'Atum\\StockCentral\\StockCentral' => __DIR__ . '/../..' . '/classes/StockCentral/StockCentral.php',

@@ -1144,13 +1144,19 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_bulk_actions() {
 
-		$bulk_actions = array();
+		$bulk_actions = array(
+			'manage_stock'   => __( "Enable WC's Manage Stock", ATUM_TEXT_DOMAIN ),
+			'unmanage_stock' => __( "Disable WC's Manage Stock", ATUM_TEXT_DOMAIN )
+		);
 
-		if ( (isset($_GET['uncontrolled']) && $_GET['uncontrolled'] == 1) || (isset($_REQUEST['show_controlled']) && $_REQUEST['show_controlled'] == 0) ) {
-			$bulk_actions['control_stock'] = __( 'Control Stock', ATUM_TEXT_DOMAIN );
+		if (
+			( isset( $_GET['uncontrolled'] ) && $_GET['uncontrolled'] == 1 ) ||
+			( isset( $_REQUEST['show_controlled'] ) && $_REQUEST['show_controlled'] == 0 )
+		) {
+			$bulk_actions['control_stock'] = __( "Enable ATUM's Stock Control", ATUM_TEXT_DOMAIN );
 		}
 		else {
-			$bulk_actions['uncontrol_stock'] = __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN );
+			$bulk_actions['uncontrol_stock'] = __( "Disable ATUM's Stock Control", ATUM_TEXT_DOMAIN );
 		}
 
 		return apply_filters( 'atum/list_table/bulk_actions', $bulk_actions, $this );
@@ -1251,6 +1257,10 @@ abstract class AtumListTable extends \WP_List_Table {
 					array(
 						'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
 						'compare' => 'NOT EXISTS'
+					),
+					array(
+						'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
+						'value' => 'no'
 					),
 					array(
 						'key'   => Globals::IS_INHERITABLE_KEY,
@@ -1386,8 +1396,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		// Build "Views Filters" and calculate totals
 		$this->set_views_data( $args );
-		
-		$view = '';
+
 		$allow_query = TRUE;
 		
 		/*
@@ -2491,8 +2500,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$children_args['meta_query'] = array(
 					array(
-						'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
-						'compare' => 'NOT EXISTS'
+						'relation' => 'OR',
+						array(
+							'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
+							'compare' => 'NOT EXISTS'
+						),
+						array(
+							'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
+							'value' => 'no'
+						)
 					)
 				);
 

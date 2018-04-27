@@ -95,7 +95,7 @@ class Settings {
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN )
 				)
 			),
-			'store' => array(
+			'store_details' => array(
 				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
@@ -333,7 +333,14 @@ class Settings {
 		}
 		
 		foreach ( $defaults as $field => $default ) {
-			$options[ $field ] = array_key_exists( $field, $settings ) ? $settings[ $field ] : $default['default'];
+
+			if ( array_key_exists( $field, $settings ) ) {
+				$options[ $field ] = $settings[ $field ];
+			}
+			elseif ( isset($default['default']) ) {
+				$options[ $field ] =  $default['default'];
+			}
+
 		}
 		
 		return apply_filters( 'atum/settings/get_settings', $options );
@@ -350,28 +357,32 @@ class Settings {
 	public function enqueue_scripts( $hook ) {
 		
 		if ( in_array( $hook, [Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG] ) ) {
-			
-			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', FALSE, ATUM_VERSION );
 
-			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
+			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array('switchery', 'sweetalert2'), ATUM_VERSION );
+
+			wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
-			$min = (! ATUM_DEBUG) ? '.min' : '';
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
-			
-			wp_localize_script( self::UI_SLUG, 'atumSettings', array(
-				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'unsavedData'   => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
-				'continue'      => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
-				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN )
+			$min = ! ATUM_DEBUG ? '.min' : '';
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
+
+			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
+				'areYouSure'     => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'unsavedData'    => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'continue'       => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
+				'cancel'         => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'run'            => __( 'Run', ATUM_TEXT_DOMAIN ),
+				'ok'             => __( 'OK', ATUM_TEXT_DOMAIN ),
+				'done'           => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'error'          => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'runnerNonce'    => wp_create_nonce('atum-script-runner-nonce')
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
-			wp_enqueue_style( 'switchery' );
-			wp_enqueue_style( 'sweetalert2' );
 			wp_enqueue_style( self::UI_SLUG );
 
 			if ( wp_script_is('es6-promise', 'registered') ) {
@@ -390,6 +401,9 @@ class Settings {
 	 * @since 0.0.2
 	 */
 	public function register_settings() {
+
+		// Load the tools tab
+		Tools::get_instance();
 		
 		// Add the tabs
 		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs);
@@ -496,7 +510,7 @@ class Settings {
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
 			$this->options[ $args['id'] ]
-		) . $this->get_label( $args );
+		) . $this->get_description( $args );
 		
 		echo apply_filters( 'atum/settings/display_text', $output, $args );
 		
@@ -521,7 +535,7 @@ class Settings {
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
 			$this->options[ $args['id'] ]
-		) . $this->get_label( $args );
+		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
 
@@ -532,11 +546,11 @@ class Settings {
 	 *
 	 * @since 1.3.1
 	 *
-	 * @param array $args
+	 * @param array $args Field arguments
 	 */
 	public function display_wc_country($args) {
 	
-		$country_setting = (string) $this->options[ $args['id']] ;
+		$country_setting = (string) $this->options[ $args['id'] ] ;
 		
 		if ( strstr( $country_setting, ':' ) ) {
 			$country_setting = explode( ':', $country_setting );
@@ -551,24 +565,23 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select">
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em">
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
 		
-		$result = ob_get_clean();
+		$output = ob_get_clean() . $this->get_description($args);
 		
-		echo apply_filters('atum/settings/display_wc_country', $result , $args);
+		echo apply_filters('atum/settings/display_wc_country', $output , $args);
 		
 	}
-	
 	
 	/**
 	 * Get the settings option array and prints a switcher
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param array $args   Label for the field
+	 * @param array $args Field arguments
 	 */
 	public function display_switcher( $args ) {
 
@@ -577,13 +590,47 @@ class Settings {
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
 			checked( 'yes', $this->options[ $args['id'] ], FALSE )
-		) . $this->get_label( $args );
+		) . $this->get_description( $args );
 		
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args );
 	}
+
+	/**
+	 * Get the settings option array and prints an script runner field
+	 *
+	 * @since 1.4.5
+	 *
+	 * @param array $args  Field arguments
+	 */
+	public function display_script_runner( $args ) {
+
+		ob_start();
+		?>
+		<div class="script-runner" data-action="<?php echo $args['options']['script_action'] ?>" data-confirm="<?php echo $args['options']['confirm_msg'] ?>">
+
+			<?php if ( isset( $args['options']['select'] ) ): ?>
+			<select class="wc-enhanced-select" style="width: 12em">
+				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
+				<option value="<?php echo $key ?>"><?php echo $label ?></option>
+				<?php endforeach ?>
+			</select>
+			&nbsp;
+			<?php endif; ?>
+
+			<button type="button" class="btn btn-primary">
+				<?php echo $args['options']['button_text'] ?>
+			</button>
+
+		</div>
+		<?php
+
+		$output = ob_get_clean() . $this->get_description($args);
+		echo apply_filters( 'atum/settings/display_script_runner', $output, $args );
+
+	}
 	
 	/**
-	 * Print label if it exists
+	 * Print field descirption if it exists
 	 *
 	 * @since 0.0.2
 	 *
@@ -591,7 +638,7 @@ class Settings {
 	 *
 	 * @return string
 	 */
-	public function get_label( $args ) {
+	public function get_description( $args ) {
 		
 		$label = '';
 		
