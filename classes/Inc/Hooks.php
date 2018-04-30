@@ -188,45 +188,12 @@ class Hooks {
 	 */
 	public function add_product_data_tab_panel() {
 
-		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
-			<div class="options_group"><?php
+		$product_id               = get_the_ID();
+		$product_status           = get_post_status( $product_id );
+		$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple' ] );
+		$control_button_classes   = (array) apply_filters( 'atum/product_data/control_button/classes', [ 'show_if_variable' ] );
 
-				$product_id               = get_the_ID();
-				$product_status           = get_post_status( $product_id );
-				$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple' ] );
-
-				woocommerce_wp_checkbox( array(
-					'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
-					'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-					'value'         => $product_status == 'auto-draft' ? 'yes' : Helpers::get_atum_control_status($product_id),
-					'class'         => 'js-switch',
-					'wrapper_class' => implode(' ', $checkbox_wrapper_classes),
-					'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-					'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
-					'desc_tip'      => TRUE
-				) );
-
-				$control_button_classes = (array) apply_filters( 'atum/product_data/control_button/classes', ['show_if_variable']);
-				?>
-
-				<p class="form-field <?php echo implode(' ', $control_button_classes) ?>">
-					<label for="stock_control_status"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
-					<select id="stock_control_status">
-						<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
-						<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
-					</select>
-					&nbsp;
-					<button type="button" class="change-stock-control button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
-
-					<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
-				</p>
-
-			</div>
-
-			<?php
-			// Allow other fields to be added to the ATUM panel
-			do_action('atum/after_product_data_panel'); ?>
-		</div><?php
+		Helpers::load_view('meta-boxes/product-data/atum-tab-panel', compact('product_id', 'product_status', 'checkbox_wrapper_classes', 'control_button_classes'));
 
 	}
 
@@ -241,25 +208,7 @@ class Hooks {
 	 */
 	public function add_product_variation_data_panel($loop, $variation_data, $variation) {
 
-		?>
-		<div class="atum-data-panel">
-			<h3 class="atum-section-title"><?php _e('ATUM Inventory', ATUM_TEXT_DOMAIN) ?></h3>
-
-			<?php
-			woocommerce_wp_checkbox( array(
-				'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
-				'name'        => "variation_atum_tab[" . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
-				'value'       => Helpers::get_atum_control_status( $variation->ID ),
-				'class'       => 'js-switch',
-				'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-				'description' => __( "Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.", ATUM_TEXT_DOMAIN ),
-				'desc_tip'    => TRUE
-			) );
-
-			// Allow other fields to be added to the ATUM panel
-			do_action('atum/after_variation_product_data_panel', $loop, $variation_data, $variation); ?>
-		</div>
-		<?php
+		Helpers::load_view('meta-boxes/product-data/atum-variation-panel', compact('loop', 'variation_data', 'variation'));
 
 	}
 	
