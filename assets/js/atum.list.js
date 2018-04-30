@@ -174,9 +174,9 @@
 			});
 			
 			//
-			// Pagination links, Sortable link
-			//--------------------------------
-			this.$atumList.on('click', '.tablenav-pages a, .manage-column.sortable a, .manage-column.sorted a, .subsubsub a', function (e) {
+			// Views, Pagination and Sortable links
+			//-------------------------------------
+			this.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', function (e) {
 				e.preventDefault();
 				self.updateHash();
 			});
@@ -412,7 +412,7 @@
 		 * Bind the List Table links that will trigger URL hash changes
 		 */
 		bindListLinks: function () {
-			this.$atumList.find('.subsubsub a, .tablenav-pages a').address();
+			this.$atumList.find('.subsubsub a, .tablenav-pages a, .item-heads a').address();
 		},
 		
 		/**
@@ -868,7 +868,9 @@
 				supplier    : self.$atumList.find('.dropdown_supplier').val() || '',
 				extra_filter: self.$atumList.find('.dropdown_extra_filter').val() || '',
 				paged       : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
-				s           : self.$searchInput.val() || ''
+				s           : self.$searchInput.val() || '',
+				orderby     : $.address.parameter('orderby') || self.settings.orderby,
+				order       : $.address.parameter('order') || self.settings.order
 			});
 			
 			// Update the URL hash parameters

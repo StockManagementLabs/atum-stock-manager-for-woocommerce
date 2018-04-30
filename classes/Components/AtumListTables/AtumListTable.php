@@ -193,6 +193,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $is_filtering = FALSE;
 
 	/**
+	 * Filters being applied to the current query
+	 * @var array
+	 */
+	protected $query_filters = array();
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&mdash;';
@@ -221,7 +227,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
-		$this->is_filtering = ! empty($_REQUEST['s']) || ! empty($_REQUEST['product_cat']) || ! empty($_REQUEST['product_type']) || ! empty($_REQUEST['supplier']);
+		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+		$this->query_filters = $this->get_filters_query_string();
 
 		$args = wp_parse_args( $args, array(
 			'show_cb'  => FALSE,
@@ -253,7 +260,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Add the checkbox column to the table if enabled
-		$this->table_columns = ( $this->show_cb == TRUE ) ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
+		$this->table_columns = $this->show_cb == TRUE ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
 		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 
 		$post_type_obj = get_post_type_object( $this->post_type );
@@ -1092,10 +1099,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			$class = ( $key == $view || ( ! $view && $key == 'all_stock' ) ) ? ' class="current"' : '';
 			$count = $this->count_views[ 'count_' . ( $key == 'all_stock' ? 'all' : $key ) ];
 
-			$filters = $this->get_filters_query_string( 'array' );
-			$filters['view'] = $key;
+			$hash_params = http_build_query( array_merge( $this->query_filters, array('view' => $key) ) );
 
-			$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . http_build_query($filters) . '"><span>' . $text . ' (' . $count . ')</span></a>';
+			$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span>' . $text . ' (' . $count . ')</span></a>';
 
 		}
 
@@ -1354,11 +1360,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		
 		/*
-		 * Ordering
+		 * Sorting
 		 */
-		if ( ! empty( $_REQUEST['orderby'] ) && ! empty( $_REQUEST['order'] ) ) {
-			
-			$args['order'] = $_REQUEST['order'];
+		if ( ! empty( $_REQUEST['orderby'] ) ) {
+
+			$args['order'] = ( isset( $_REQUEST['order'] ) && $_REQUEST['order'] == 'asc' ) ? 'ASC' : 'DESC';
 			
 			// Columns starting by underscore are based in meta keys, so can be sorted
 			if ( substr( $_REQUEST['orderby'], 0, 1 ) == '_' ) {
@@ -1382,6 +1388,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			else {
 				$args['orderby'] = $_REQUEST['orderby'];
 			}
+
 		}
 		
 		/*
@@ -1748,6 +1755,85 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 	}
+
+	/**
+	 * Print column headers, accounting for hidden and sortable columns
+	 *
+	 * @since 1.4.5
+	 *
+	 * @param bool $with_id Whether to set the id attribute or not
+	 */
+	public function print_column_headers( $with_id = TRUE ) {
+
+		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
+
+		$current_url     = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		$current_url     = remove_query_arg( 'paged', $current_url );
+		$current_orderby = isset( $_GET['orderby'] ) ? $_GET['orderby'] : '';
+		$current_order   = ( isset( $_GET['order'] ) && 'desc' === $_GET['order'] ) ? 'desc' : 'asc';
+
+		if ( ! empty( $columns['cb'] ) ) {
+			static $cb_counter = 1;
+			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All' ) . '</label>'
+			                 . '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
+			$cb_counter++;
+		}
+
+		foreach ( $columns as $column_key => $column_display_name ) {
+
+			$class = array( 'manage-column', "column-$column_key" );
+
+			if ( in_array( $column_key, $hidden ) ) {
+				$class[] = 'hidden';
+			}
+
+			if ( 'cb' === $column_key ) {
+				$class[] = 'check-column';
+			}
+			elseif ( in_array( $column_key, array( 'posts', 'comments', 'links' ) ) ) {
+				$class[] = 'num';
+			}
+
+			if ( $column_key === $primary ) {
+				$class[] = 'column-primary';
+			}
+
+			if ( isset( $sortable[$column_key] ) ) {
+
+				list( $orderby, $desc_first ) = $sortable[$column_key];
+
+				if ( $current_orderby === $orderby ) {
+					$order   = 'asc' === $current_order ? 'desc' : 'asc';
+					$class[] = 'sorted';
+					$class[] = $current_order;
+				}
+				else {
+					$order   = $desc_first ? 'desc' : 'asc';
+					$class[] = 'sortable';
+					$class[] = $desc_first ? 'asc' : 'desc';
+				}
+
+				$sorting_params = compact( 'orderby', 'order' );
+				$sorting_url    = esc_url( add_query_arg( $sorting_params, $current_url ) );
+				$hash_params    = http_build_query( array_merge( $this->query_filters, $sorting_params ) );
+
+				$column_display_name = '<a href="' . $sorting_url . '" rel="address:/?' . $hash_params . '"><span>' . $column_display_name . '</span><span class="sorting-indicator"></span></a>';
+
+			}
+
+			$tag   = 'cb' === $column_key ? 'td' : 'th';
+			$scope = 'th' === $tag ? 'scope="col"' : '';
+			$id    = $with_id ? "id='$column_key'" : '';
+
+			if ( ! empty( $class ) ) {
+				$class = "class='" . join( ' ', $class ) . "'";
+			}
+
+			echo "<$tag $scope $id $class>$column_display_name</$tag>";
+
+		}
+
+	}
 	
 	/**
 	 * Adds the data needed for ajax filtering, sorting and pagination and displays the table
@@ -1983,14 +2069,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$current = $this->get_pagenum();
 		$removable_query_args = wp_removable_query_args();
 
-		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-		$current_url = remove_query_arg( $removable_query_args, $current_url );
-
-		// Extract the filters from the URL
-		$filters = $this->get_filters_query_string('array');
-
-		$page_links = array();
-
+		$current_url        = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		$current_url        = remove_query_arg( $removable_query_args, $current_url );
+		$page_links         = array();
 		$total_pages_before = '<span class="paging-input">';
 		$total_pages_after  = '</span></span>';
 
@@ -2021,7 +2102,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$page_links[] = sprintf( "<a class='first-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( remove_query_arg( 'paged', $current_url ) ),
-				http_build_query( array_merge($filters, ['paged' => 1]) ),
+				http_build_query( array_merge($this->query_filters, ['paged' => 1]) ),
 				__( 'First page', ATUM_TEXT_DOMAIN ),
 				'&laquo;'
 			);
@@ -2036,7 +2117,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$prev_page    = max( 1, $current - 1 );
 			$page_links[] = sprintf( "<a class='prev-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', $prev_page, $current_url ) ),
-				http_build_query( array_merge($filters, ['paged' => $prev_page]) ),
+				http_build_query( array_merge($this->query_filters, ['paged' => $prev_page]) ),
 				__( 'Previous page', ATUM_TEXT_DOMAIN ),
 				'&lsaquo;'
 			);
@@ -2066,7 +2147,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$next_page    = min( $total_pages, $current + 1 );
 			$page_links[] = sprintf( "<a class='next-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', $next_page, $current_url ) ),
-				http_build_query( array_merge($filters, ['paged' => $next_page]) ),
+				http_build_query( array_merge($this->query_filters, ['paged' => $next_page]) ),
 				__( 'Next page', ATUM_TEXT_DOMAIN ),
 				'&rsaquo;'
 			);
@@ -2079,7 +2160,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$page_links[] = sprintf( "<a class='last-page' href='%s' rel='address:/?%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
-				http_build_query( array_merge($filters, ['paged' => $total_pages]) ),
+				http_build_query( array_merge($this->query_filters, ['paged' => $total_pages]) ),
 				__( 'Last page', ATUM_TEXT_DOMAIN ),
 				'&raquo;'
 			);
@@ -2690,7 +2771,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return string|array
 	 */
-	protected function get_filters_query_string($format = 'string') {
+	protected function get_filters_query_string($format = 'array') {
 
 		$default_filters = array(
 			'paged'        => 1,
