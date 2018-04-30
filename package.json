@@ -12,14 +12,12 @@
 		"gulp": "latest",
 		"gulp-filter": "latest",
 		"gulp-if": "latest",
-		"gulp-imagemin": "latest",
 		"gulp-livereload": "latest",
 		"gulp-notify": "latest",
 		"gulp-plumber": "latest",
 		"gulp-sass": "latest",
 		"gulp-sourcemaps": "latest",
 		"gulp-watch": "latest",
-		"imagemin-pngcrush": "latest",
 		"gulp-composer": "latest",
 		"gulp-wrap": "latest"
 	}
