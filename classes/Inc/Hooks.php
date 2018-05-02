@@ -482,11 +482,7 @@ class Hooks {
 			if ( ! empty($variations) ) {
 
 				foreach ($variations as $variation_id) {
-
-					if ( ! Helpers::is_atum_controlling_stock($variation_id) ) {
-						continue;
-					}
-
+					
 					$variation_product = wc_get_product( $variation_id );
 					$variation_stock = $variation_product->get_stock_quantity();
 					$stocks_list[] = $variation_stock;
