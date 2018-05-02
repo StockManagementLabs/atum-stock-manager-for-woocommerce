@@ -646,7 +646,8 @@ final class Helpers {
 			AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
 			AND posts.ID NOT IN ( SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
 				WHERE term_taxonomy_id IN  (" . implode(',', $excluded_type_terms) . ") )
-			AND posts.post_parent IN (SELECT ID FROM wp_posts WHERE post_type = 'product' AND post_status IN ('private','publish') )
+			AND (posts.post_parent IN (SELECT ID FROM wp_posts WHERE post_type = 'product' AND post_status IN ('private','publish') )
+				OR posts.post_parent = 0)
 		" );
 		
 		$sql = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts $unmng_join $unmng_where";
