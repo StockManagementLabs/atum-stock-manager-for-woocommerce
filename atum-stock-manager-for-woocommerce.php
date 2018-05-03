@@ -1,16 +1,16 @@
 <?php
 /**
- * ATUM Stock Manager for WooCommerce
+ * ATUM Inventory Management for WooCommerce
  *
  * @link                 https://www.stockmanagementlabs.com/
  * @since                0.0.1
  * @package              Atum
  *
  * @wordpress-plugin
- * Plugin Name:          ATUM Stock Manager for WooCommerce
+ * Plugin Name:          ATUM Inventory Management for WooCommerce
  * Plugin URI:           https://www.stockmanagementlabs.com/
  * Description:          The ultimate stock management plugin for serious WooCommerce sellers
- * Version:              1.4.4
+ * Version:              1.4.5
  * Author:               Stock Management Labs™
  * Author URI:           https://www.stockmanagementlabs.com/
  * Contributors:         Be Rebel Studio - https://berebel.io
@@ -28,7 +28,7 @@
 defined( 'ABSPATH' ) or die;
 
 if ( ! defined('ATUM_VERSION') ) {
-	define( 'ATUM_VERSION', '1.4.4' );
+	define( 'ATUM_VERSION', '1.4.5' );
 }
 
 if ( ! defined('ATUM_PATH') ) {
