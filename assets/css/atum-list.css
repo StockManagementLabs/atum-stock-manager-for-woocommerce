@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -42,7 +42,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #FFF;
+  color: #fff;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -128,7 +128,7 @@
   display: none;
   max-width: 276px;
   padding: 1px;
-  background-color: #FFF;
+  background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #CCC;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -278,7 +278,7 @@
 }
 
 .popover .popover-content > .button:disabled {
-  color: #F9F9F9 !important;
+  color: #f8f9fa !important;
   opacity: 0.6;
 }
 
@@ -430,7 +430,7 @@ ul.easytree-container ul li {
 }
 
 ul.easytree-container ul li, ul.easytree-container ul li a {
-  color: #333333;
+  color: #343a40;
 }
 
 ul.easytree-container ul li.easytree-lastsib {
@@ -439,7 +439,7 @@ ul.easytree-container ul li.easytree-lastsib {
 
 .ui-easytree-disabled ul.easytree-container {
   opacity: 0.5;
-  background-color: #C1C1C1;
+  background-color: #6c757d;
 }
 
 ul.easytree-container img {
@@ -462,7 +462,7 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   vertical-align: top;
   font-family: Dashicons;
   cursor: pointer;
-  color: #333333;
+  color: #343a40;
 }
 
 span.easytree-custom-icon {
@@ -523,7 +523,7 @@ span.easytree-expander:hover {
 }
 
 .easytree-title a {
-  color: #333333 !important;
+  color: #343a40 !important;
 }
 
 .easytree-title a:hover {
@@ -535,7 +535,7 @@ span.easytree-expander:hover {
 }
 
 .easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-selected .easytree-title a, .easytree-focused span.easytree-active .easytree-title, .easytree-focused span.easytree-active .easytree-title a {
-  color: white !important;
+  color: #fff !important;
 }
 
 .blockUI.blockOverlay:before {
@@ -705,16 +705,16 @@ span.easytree-expander:hover {
 
 .atum-report .report-header .report-data, .atum-report .report-header .report-details {
   padding: 15px;
-  border-top: 2px solid #C1C1C1;
-  border-bottom: 2px solid #C1C1C1;
+  border-top: 2px solid #6c757d;
+  border-bottom: 2px solid #6c757d;
 }
 
 .atum-report .report-header .report-data {
-  border-left: 2px solid #C1C1C1;
+  border-left: 2px solid #6c757d;
 }
 
 .atum-report .report-header .report-details {
-  border-right: 2px solid #C1C1C1;
+  border-right: 2px solid #6c757d;
 }
 
 .atum-report .report-header .space {
@@ -733,7 +733,7 @@ span.easytree-expander:hover {
 }
 
 .atum-report .report-header p {
-  color: #333333;
+  color: #343a40;
 }
 
 .atum-report .report-header .warning-color {
@@ -749,7 +749,7 @@ span.easytree-expander:hover {
 }
 
 .atum-report .atum-list-table thead th {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .atum-report .atum-list-table tbody td {
@@ -767,7 +767,7 @@ span.easytree-expander:hover {
 .atum-report h3 {
   font-size: 24px;
   font-weight: normal;
-  color: #C1C1C1;
+  color: #6c757d;
   margin-top: 5px;
 }
 
@@ -783,7 +783,7 @@ h1.wp-heading-inline #atum-update-list {
 }
 
 h1.wp-heading-inline #atum-update-list:active {
-  color: #FFF;
+  color: #fff;
   padding: 0 10px 1px;
   box-shadow: 0 1px 0 #006799;
 }
@@ -828,7 +828,7 @@ h1.wp-heading-inline #atum-update-list:active {
   text-align: center;
   border: none;
   background-color: #00B8DB;
-  color: #FFF;
+  color: #fff;
   padding: 2px 0 0;
   cursor: pointer;
   position: relative;
@@ -880,11 +880,11 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-wrapper .actions .select2-container .select2-selection__placeholder {
-  color: #333333 !important;
+  color: #343a40 !important;
 }
 
 .atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
-  border-top-color: #333333;
+  border-top-color: #343a40;
 }
 
 .atum-list-wrapper .actions .filter-text {
@@ -943,12 +943,12 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-table-wrapper .jspTrack {
-  background: rgba(193, 193, 193, 0.2);
+  background: rgba(108, 117, 125, 0.2);
   position: relative;
 }
 
 .atum-table-wrapper .jspDrag {
-  background: #C1C1C1;
+  background: #6c757d;
   position: relative;
   top: 0;
   left: 0;
@@ -956,7 +956,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-table-wrapper .jspCorner {
-  background: #F9F9F9;
+  background: #f8f9fa;
   float: left;
   height: 100%;
 }
@@ -991,11 +991,12 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .column-groups th {
-  font-weight: bold;
+  padding-left: 10px;
+  font-weight: 500;
 }
 
 .atum-list-table .column-groups th:nth-child(even) {
-  background-color: #F9F9F9;
+  background-color: #f8f9fa;
 }
 
 .atum-list-table th.sortable a, .atum-list-table th.sorted a {
@@ -1027,6 +1028,10 @@ h1.wp-heading-inline #atum-update-list:active {
   margin-top: 7px;
 }
 
+.atum-list-table tr.even {
+  background-color: #f8f9fa;
+}
+
 .atum-list-table tr.expanded {
   -webkit-transition: all 0.1s ease-in-out;
   -o-transition: all 0.1s ease-in-out;
@@ -1042,16 +1047,16 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.expanded td, .atum-list-table tr.expanded a {
-  color: #FFF;
+  color: #fff;
 }
 
 .atum-list-table tr.expanded .column-calc_type .has-child.product-type:before {
   content: "\e004";
-  color: #FFF;
+  color: #fff;
 }
 
 .atum-list-table tr.expanded .column-calc_type .has-child.product-type-icon svg .st1 {
-  fill: #FFF;
+  fill: #fff;
 }
 
 .atum-list-table tr.expandable .check-column input[type=checkbox] {
@@ -1079,13 +1084,13 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.totals {
-  background-color: #e7e7e7;
+  background-color: #e3e7eb;
 }
 
 .atum-list-table tr.totals td, .atum-list-table tr.totals th {
   font-size: 12px;
   font-weight: 400;
-  color: #333333;
+  color: #343a40;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -1093,7 +1098,7 @@ h1.wp-heading-inline #atum-update-list:active {
 .atum-list-table tr.totals td span, .atum-list-table tr.totals th span {
   display: inline-block;
   background-color: #555;
-  color: #FFF;
+  color: #fff;
   border-radius: 2px;
   padding: 2px 4px;
   min-width: 20px;
@@ -1126,7 +1131,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table td.pro-version, .atum-list-table th.pro-version {
-  background-color: #C1C1C1;
+  background-color: #6c757d;
 }
 
 .atum-list-table td.column-title, .atum-list-table th.column-title {
@@ -1202,7 +1207,7 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-table .highlight-danger {
   background-color: #FF4848;
-  color: #FFF;
+  color: #fff;
   padding: 2px 3px;
   border-radius: 2px;
 }

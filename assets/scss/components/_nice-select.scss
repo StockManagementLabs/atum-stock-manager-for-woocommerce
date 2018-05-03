@@ -22,8 +22,8 @@ $arrow-color:                   $gray;
 
 // Style the dropdown
 .nice-select {
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-	background-color: #fff;
+	-webkit-tap-highlight-color: rgba($black, 0);
+	background-color: $white;
 	border-radius: $dropdown-border-radius;
 	border: solid 1px $gray-light;
 	box-sizing: border-box;
@@ -129,9 +129,9 @@ $arrow-color:                   $gray;
 	
 	// List and options
 	.list {
-		background-color: #fff;
+		background-color: $white;
 		border-radius: $list-border-radius;
-		box-shadow: 0 0 0 1px rgba($gray-dark, .11);
+		box-shadow: 0 0 0 1px rgba($dark, .11);
 		box-sizing: border-box;
 		margin-top: 4px;
 		opacity: 0;
@@ -169,7 +169,7 @@ $arrow-color:                   $gray;
 		
 		&.selected {
 			font-weight: bold;
-			color: $gray-dark;
+			color: $dark;
 		}
 		
 		&.disabled {

@@ -18,8 +18,8 @@
 	</div>
 
 	<div class="config-controls">
-		<input type="submit" value="<?php esc_attr_e('Save', ATUM_TEXT_DOMAIN ) ?>" class="btn btn-primary pill">
-		<button type="button" class="cancel-config btn btn-danger pill"><?php _e('Cancel', ATUM_TEXT_DOMAIN) ?></button>
+		<input type="submit" value="<?php esc_attr_e('Save', ATUM_TEXT_DOMAIN ) ?>" class="btn btn-primary btn-pill">
+		<button type="button" class="cancel-config btn btn-danger btn-pill"><?php _e('Cancel', ATUM_TEXT_DOMAIN) ?></button>
 	</div>
 
 </form>

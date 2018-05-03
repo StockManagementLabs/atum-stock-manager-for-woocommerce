@@ -14,11 +14,11 @@
 		left: 0;
 		right: 0;
 		margin: auto;
-		@include loader(30px, $brand-info, 3px);
+		@include loader(30px, $info, 3px);
 		
 		.note & {
 			top: 38%;
-			@include loader(25px, $brand-info);
+			@include loader(25px, $info);
 		}
 	}
 	

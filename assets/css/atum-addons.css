@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -162,7 +162,7 @@
   display: inline-block;
   margin-top: 11px;
   font-size: 12px;
-  color: #FFF;
+  color: #fff;
   font-weight: normal;
 }
 
@@ -258,7 +258,7 @@
 }
 
 .atum-addons .theme:hover .show-key i, .atum-addons .theme.inactive .show-key i, .atum-addons .theme.invalid .show-key i {
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .atum-addons .theme .more-details {
@@ -279,7 +279,7 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
-  color: #FFF;
+  color: #fff;
   padding: 10px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -382,7 +382,7 @@
   text-shadow: none;
   font-weight: normal;
   background-color: #00B8DB;
-  color: #FFF;
+  color: #fff;
   border-radius: 0;
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
@@ -392,7 +392,7 @@
 .atum-addons .theme .button:disabled {
   background-color: #00B8DB !important;
   text-shadow: none !important;
-  color: #FFF !important;
+  color: #fff !important;
   opacity: 0.6;
 }
 

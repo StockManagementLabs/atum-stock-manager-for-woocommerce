@@ -2,13 +2,11 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-
 .po-wrapper {
 	width: calc(100% - 40px);
 	padding: 30px 20px 20px 20px;
 	font-size: 14px;
 }
-
 
 .float-left {
 	float: left;
@@ -40,13 +38,13 @@ body {
 	margin-top: 0;
 	margin-bottom: 10px;
 	font-size: 25px;
-	color: $brand-primary;
+	color: $primary;
 	text-transform: uppercase;
 	
 }
 
-
 .content-address {
+	
 	.float-left {
 		width: 40%;
 	}
@@ -55,26 +53,27 @@ body {
 	}
 	h4 {
 		font-size: 18px;
-		background-color: $brand-primary;
-		color: #FFF;
+		background-color: $primary;
+		color: $white;
 		padding: 5px 10px;
 		margin: 0;
 		text-transform: uppercase;
 	}
+	
 }
 
 .content-lines {
 	padding: 0 20px;
+	
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		//border: 2px solid $brand-primary;
 	}
 	
 	.po-li-head {
-		background-color: $brand-primary;
+		background-color: $primary;
 		th {
-			color: #FFF;
+			color: $white;
 			text-transform: uppercase;
 		}
 	}
@@ -94,19 +93,19 @@ body {
 		text-align: center;
 	}
 	td.total, .po-lines tr:nth-child(even) td {
-		background-color: transparentize($brand-primary, .9);
+		background-color: transparentize($primary, .9);
 	}
 }
 
 .content-totals {
 	.subtotal td{
-		border-top: 2px solid $brand-primary;
+		border-top: 2px solid $primary;
 		padding-top: 20px;
 	}
 }
 .po-total {
 	.label, .total {
-		border-top: 2px solid $brand-primary;
+		border-top: 2px solid $primary;
 		font-weight: bold;
 	}
 	
@@ -118,7 +117,7 @@ body {
 }
 
 .po-content {
-	border: 1px solid #DDDDDD;
+	border: 1px solid #DDD;
 	padding: 10px;
 	margin-top: 10px;
 }

@@ -77,7 +77,7 @@
 	
 	.wc-backbone-modal-content {
 		position: fixed;
-		background: #fff;
+		background: $white;
 		z-index: 100000;
 		left: 50%;
 		top: 50%;
@@ -101,7 +101,7 @@
 	}
 	
 	.alert {
-		background-color: lighten($brand-primary, 35%);
+		background-color: lighten($primary, 35%);
 		padding: 4px 6px;
 		display: block;
 		font-size: 12px;
@@ -121,7 +121,7 @@
 	right: 0;
 	bottom: 0;
 	min-height: 360px;
-	background: #000;
+	background: $black;
 	opacity: 0.7;
 	z-index: 99900;
 }
@@ -175,7 +175,7 @@
 			&:hover, &:focus {
 				background: #ddd;
 				border-color: #ccc;
-				color: #000;
+				color: $black;
 			}
 			
 			&:focus {

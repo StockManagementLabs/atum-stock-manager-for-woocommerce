@@ -199,6 +199,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $query_filters = array();
 
 	/**
+	 * Counter for the table rows
+	 * @var int
+	 */
+	protected $row_count = 0;
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&mdash;';
@@ -353,7 +359,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}*/
 
 		$this->allow_calcs = TRUE;
-		$row_class         = '';
+		$row_classes       = array( (++$this->row_count % 2 ? 'even' : 'odd') );
 		
 		// Inheritable products do not allow calcs
 		if ( Helpers::is_inheritable_type($type) ) {
@@ -361,15 +367,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->allow_calcs = FALSE;
 			$class_type = $type == 'grouped' ? 'group' : 'variable';
 			
-			$row_classes = array($class_type);
+			$row_classes[] = $class_type;
 			
 			if ( Helpers::get_option( 'expandable_rows', 'no' ) == 'yes' ) {
 				$row_classes[] = 'expanded';
 			}
 
-			$row_class = ' class="' . implode(' ', $row_classes) . '"';
-
 		}
+
+		$row_class = ' class="' . implode( ' ', $row_classes ) . '"';
 
 		// Output the row
 		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>';
@@ -2193,7 +2199,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_table_classes() {
 		
-		return array( 'widefat', 'striped', $this->_args['plural'] );
+		return array( 'widefat', $this->_args['plural'] );
 	}
 
 	/**

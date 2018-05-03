@@ -31,7 +31,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -7px;
 			margin-left: -6px;
-			border-top-color: #333;
+			border-top-color: $dark;
 		}
 	}
 	
@@ -41,7 +41,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -5px;
 			margin-left: -6px;
-			border-bottom-color: #333;
+			border-bottom-color: $dark;
 		}
 	}
 	
@@ -51,7 +51,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -5px;
-			border-right-color: #333;
+			border-right-color: $dark;
 		}
 	}
 	
@@ -61,20 +61,20 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -7px;
-			border-left-color: #333;
+			border-left-color: $dark;
 		}
 	}
 }
 
 #tiptip_content {
-	color: #fff;
+	color: $white;
 	font-size: 0.8em;
 	max-width: 150px;
-	background: #333;
+	background: $dark;
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 3px rgba($black, 0.2);
 	
 	code {
 		padding: 1px;
@@ -158,12 +158,12 @@ table.wp-list-table {
 		
 		mark.pending::after {
 			content: '\e012';
-			color: $brand-warning;
+			color: $warning;
 		}
 		
 		mark.completed::after {
 			content: '\e015';
-			color: $brand-success;
+			color: $success;
 		}
 	}
 	
@@ -209,7 +209,7 @@ table.wp-list-table {
 		}
 		
 		.pdf::after {
-			content: url(#{$img-path}pdf.svg);
+			content: url('#{$img-path}pdf.svg');
 			position: absolute;
 			top: 2px;
 			left: 2px;

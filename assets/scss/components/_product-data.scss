@@ -36,6 +36,7 @@
 	}
 	
 	.atum-field {
+		
 		.input-group-text {
 			padding: 2px 7px 3px;
 		}
@@ -81,6 +82,7 @@
 				}
 			}
 		}
+		
 	}
 	
 	.woocommerce_variations {
@@ -125,8 +127,8 @@
 		}
 		
 		h3.atum-section-title {
-			border: 1px solid $brand-info;
-			background-color: transparentize($blue-light, .85);
+			border: 1px solid $info;
+			background-color: transparentize($cyan, .85);
 			color: #555;
 			text-transform: uppercase;
 			cursor: default !important;
@@ -137,7 +139,7 @@
 		h4.atum-section-title {
 			margin-top: $grid-gutter-width;
 			padding-bottom: 10px;
-			border-bottom: 1px dashed $gray;
+			border-bottom: 1px dashed $secondary;
 			font-size: 1.1em;
 		}
 		

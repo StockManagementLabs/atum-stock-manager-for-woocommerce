@@ -119,14 +119,14 @@
 		a {
 			display: inline-block;
 			margin-right: 5px;
-			background-color: transparentize($gray-light, 0.8);
+			background-color: transparentize($light, 0.8);
 			padding: 3px 7px;
 			border-radius: 4px;
 			border: 0.5px solid #e8e8e8;
 			
 			&.active, &:hover {
 				svg {
-					fill: $brand-warning;
+					fill: $warning;
 				}
 			}
 		}
@@ -141,7 +141,7 @@
 			padding: 10px 40px;
 			border: 0.5px solid #e8e8e8;
 			border-radius: 4px;
-			background-color: transparentize($gray-light, 0.8);
+			background-color: transparentize($light, 0.8);
 			position: relative;
 			margin-left: 5px;
 			@include flexbox;
@@ -154,7 +154,7 @@
 			}
 			
 			&.legend-placeholder {
-				background-color: transparentize($gray-light, 0.85);
+				background-color: transparentize($light, 0.85);
 				border-style: dashed;
 				
 				&:before {

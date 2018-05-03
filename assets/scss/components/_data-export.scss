@@ -9,8 +9,8 @@
 	margin: 0 0 0 6px;
 	border: 1px solid #ddd;
 	border-top: none;
-	background: #fff;
-	box-shadow: 0 1px 1px -1px rgba(#000, .1);
+	background: $white;
+	box-shadow: 0 1px 1px -1px rgba($black, .1);
 }
 
 #atum-export-wrap {
@@ -62,17 +62,17 @@
 		
 		.report-data, .report-details {
 			padding: $grid-gutter-width/2;
-			border-top: 2px solid $gray;
-			border-bottom: 2px solid $gray;
+			border-top: 2px solid $secondary;
+			border-bottom: 2px solid $secondary;
 		}
 		
 		.report-data {
-			border-left: 2px solid $gray;
+			border-left: 2px solid $secondary;
 			
 		}
 		
 		.report-details {
-			border-right: 2px solid $gray;
+			border-right: 2px solid $secondary;
 		}
 		
 		.space {
@@ -81,7 +81,7 @@
 		
 		.inventory-resume {
 			padding: $grid-gutter-width/2;
-			border: 2px solid $brand-warning;
+			border: 2px solid $warning;
 		}
 		
 		h5 {
@@ -91,19 +91,19 @@
 		}
 		
 		p {
-			color: $gray-dark;
+			color: $dark;
 		}
 		
 		.warning-color {
-			color: $brand-warning;
+			color: $warning;
 		}
 		
 		.success-color {
-			color: $brand-success;
+			color: $success;
 		}
 		
 		.danger-color {
-			color: $brand-danger;
+			color: $danger;
 		}
 		
 	}
@@ -111,7 +111,7 @@
 	.atum-list-table {
 		thead {
 			th {
-				background-color: #FFF;
+				background-color: $white;
 			}
 		}
 		
@@ -123,7 +123,7 @@
 	}
 
 	h1 {
-		color: $brand-primary;
+		color: $primary;
 		text-transform: uppercase;
 		font-size: 38px;
 		font-weight: bold;
@@ -133,7 +133,7 @@
 	h3 {
 		font-size: 24px;
 		font-weight: normal;
-		color: $gray;
+		color: $secondary;
 		margin-top: 5px;
 	}
 	

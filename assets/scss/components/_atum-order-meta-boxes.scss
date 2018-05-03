@@ -25,7 +25,7 @@
 			font-size: 21px;
 			font-weight: 300;
 			line-height: 1.2;
-			text-shadow: 1px 1px 1px #FFF;
+			text-shadow: 1px 1px 1px $white;
 			padding: 0;
 		}
 		
@@ -34,7 +34,7 @@
 		}
 		
 		h3, h4 {
-			color: #333;
+			color: $dark;
 			margin: 1.33em 0 0
 		}
 		
@@ -198,7 +198,7 @@ ul.atum_order_notes {
 		}
 		
 		a.delete_note {
-			color: $brand-danger;
+			color: $danger;
 		}
 		
 		.note_content::after {
@@ -307,7 +307,7 @@ ul.atum_order_notes {
 		}
 		
 		.refunded-total {
-			color: $brand-danger;
+			color: $danger;
 		}
 	}
 	
@@ -383,11 +383,7 @@ ul.atum_order_notes {
 					color: #999;
 					background: #f8f8f8;
 					-webkit-touch-callout: none;
-					-webkit-user-select: none;
-					-khtml-user-select: none;
-					-moz-user-select: none;
-					-ms-user-select: none;
-					user-select: none;
+					@include user-select(none);
 					
 					&.sortable {
 						cursor: pointer;
@@ -798,7 +794,7 @@ ul.atum_order_notes {
 					
 					&:hover {
 						&:before {
-							color: $brand-danger;
+							color: $danger;
 						}
 					}
 				}
@@ -813,7 +809,7 @@ ul.atum_order_notes {
 			
 			small.refunded {
 				display: block;
-				color: $brand-danger;
+				color: $danger;
 				white-space: nowrap;
 				margin-top: 0.5em;
 				
@@ -895,7 +891,7 @@ ul.atum_order_notes {
 			
 			&:hover {
 				&:before {
-					color: $brand-danger;
+					color: $danger;
 				}
 			}
 			
@@ -930,7 +926,7 @@ ul.atum_order_notes {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	background: rgba(#000, .5);
+	background: rgba($black, .5);
 	z-index: 1;
 	
 	&, h3 {
@@ -939,7 +935,7 @@ ul.atum_order_notes {
 	}
 	
 	h3 {
-		color: #FFF;
+		color: $white;
 		font-size: 30px;
 		line-height: 1.3;
 		margin: 0;

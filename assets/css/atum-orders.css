@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -679,7 +679,7 @@
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #FFF;
+  color: #fff;
   text-align: center;
   background-color: #000;
   border-radius: 4px;
@@ -1395,7 +1395,7 @@ h2 .atum-help-tip {
   font-size: 21px;
   font-weight: 300;
   line-height: 1.2;
-  text-shadow: 1px 1px 1px #FFF;
+  text-shadow: 1px 1px 1px #fff;
   padding: 0;
 }
 
@@ -1404,7 +1404,7 @@ h2 .atum-help-tip {
 }
 
 #atum_order_data .panel h3, #atum_order_data .panel h4 {
-  color: #333;
+  color: #343a40;
   margin: 1.33em 0 0;
 }
 
@@ -1724,7 +1724,6 @@ ul.atum_order_notes li .note_content::after {
   background: #f8f8f8;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -2341,7 +2340,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .items-blocker h3 {
-  color: #FFF;
+  color: #fff;
   font-size: 30px;
   line-height: 1.3;
   margin: 0;
@@ -2389,7 +2388,7 @@ img.tips {
 #tiptip_holder.tip_top #tiptip_arrow_inner {
   margin-top: -7px;
   margin-left: -6px;
-  border-top-color: #333;
+  border-top-color: #343a40;
 }
 
 #tiptip_holder.tip_bottom {
@@ -2399,7 +2398,7 @@ img.tips {
 #tiptip_holder.tip_bottom #tiptip_arrow_inner {
   margin-top: -5px;
   margin-left: -6px;
-  border-bottom-color: #333;
+  border-bottom-color: #343a40;
 }
 
 #tiptip_holder.tip_right {
@@ -2409,7 +2408,7 @@ img.tips {
 #tiptip_holder.tip_right #tiptip_arrow_inner {
   margin-top: -6px;
   margin-left: -5px;
-  border-right-color: #333;
+  border-right-color: #343a40;
 }
 
 #tiptip_holder.tip_left {
@@ -2419,14 +2418,14 @@ img.tips {
 #tiptip_holder.tip_left #tiptip_arrow_inner {
   margin-top: -6px;
   margin-left: -7px;
-  border-left-color: #333;
+  border-left-color: #343a40;
 }
 
 #tiptip_content {
   color: #fff;
   font-size: 0.8em;
   max-width: 150px;
-  background: #333;
+  background: #343a40;
   text-align: center;
   border-radius: 3px;
   padding: 0.618em 1em;
@@ -2640,7 +2639,7 @@ table.wp-list-table .column-actions .view::after {
 }
 
 table.wp-list-table .column-actions .pdf::after {
-  content: url(../images/pdf.svg);
+  content: url("../images/pdf.svg");
   position: absolute;
   top: 2px;
   left: 2px;

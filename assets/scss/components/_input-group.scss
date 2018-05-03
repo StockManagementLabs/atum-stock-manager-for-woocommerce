@@ -75,8 +75,8 @@
 	
 	&.invalid {
 		input[type=text], input[type=number], textarea, select, .select2-container {
-			border-color: $brand-danger;
-			background-color: transparentize($brand-danger, 0.85);
+			border-color: $danger;
+			background-color: transparentize($danger, 0.85);
 		}
 	}
 	
@@ -96,7 +96,7 @@
 	border: $input-border-width solid $input-border-color;
 	
 	.input-group.invalid & {
-		border-color: $brand-danger;
+		border-color: $danger;
 	}
 	
 	// Ensure buttons are always above inputs for more visually pleasing borders.
@@ -145,7 +145,7 @@
 	}
 	
 	.input-group.invalid & {
-		background-color: transparentize($brand-danger, 0.35);
+		background-color: transparentize($danger, 0.35);
 	}
 }
 

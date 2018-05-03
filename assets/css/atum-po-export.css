@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -61,7 +61,7 @@ body {
 .content-address h4 {
   font-size: 18px;
   background-color: #00B8DB;
-  color: #FFF;
+  color: #fff;
   padding: 5px 10px;
   margin: 0;
   text-transform: uppercase;
@@ -81,7 +81,7 @@ body {
 }
 
 .content-lines .po-li-head th {
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 }
 
@@ -121,7 +121,7 @@ body {
 }
 
 .po-content {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #DDD;
   padding: 10px;
   margin-top: 10px;
 }

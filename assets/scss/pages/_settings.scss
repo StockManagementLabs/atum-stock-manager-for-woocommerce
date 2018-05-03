@@ -2,9 +2,9 @@
 // Atum Settings
 //---------------
 
-$settings-menu-bg:          darken($brand-primary, 30%);
+$settings-menu-bg:          darken($primary, 30%);
 $settings-menu-color:       #95adbf;
-$settings-menu-active:      #FFF;
+$settings-menu-active:      $white;
 
 
 // Settings Menu
@@ -59,7 +59,7 @@ $settings-menu-active:      #FFF;
 		cursor: pointer;
 		@include user-select(none);
 		-webkit-touch-callout: none;
-		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		-webkit-tap-highlight-color: rgba($black, 0);
 		position: relative;
 		overflow: hidden;
 		text-align: center;
@@ -154,7 +154,7 @@ $settings-menu-active:      #FFF;
 				bottom: 0;
 				border-radius: 6px;
 				z-index: 10;
-				background-color: transparentize(#000, 0.45);
+				background-color: transparentize($black, 0.45);
 			}
 			
 			&:after {
@@ -163,13 +163,13 @@ $settings-menu-active:      #FFF;
 				left: 0;
 				right: 0;
 				margin: auto;
-				@include loader(50px, $brand-info, 3px);
+				@include loader(50px, $info, 3px);
 			}
 		}
 	}
 	
 	.settings-section {
-		background-color: #FFF;
+		background-color: $white;
 		border-radius: 6px;
 		margin-bottom: $grid-gutter-width/1.5;
 		
@@ -180,10 +180,10 @@ $settings-menu-active:      #FFF;
 	
 	.section-title {
 		padding: $grid-gutter-width/1.5 $grid-gutter-width;
-		border-bottom: 2px solid darken($gray-light, 5%);
+		border-bottom: 2px solid darken($light, 5%);
 		
 		h2 {
-			color: darken($gray, 40%);
+			color: $dark;
 			margin: 0;
 			text-transform: uppercase;
 			font-size: 14px;
@@ -195,7 +195,7 @@ $settings-menu-active:      #FFF;
 		
 		tr {
 			&:not(:last-child) {
-				border-bottom: 1px solid darken($gray-light, 5%);
+				border-bottom: 1px solid darken($light, 5%);
 			}
 		}
 		
@@ -205,7 +205,7 @@ $settings-menu-active:      #FFF;
 		
 		th {
 			width: 25%;
-			color: darken($gray, 40%);
+			color: $dark;
 			font-weight: 400;
 		}
 		
@@ -260,15 +260,15 @@ $settings-menu-active:      #FFF;
 		padding: 11px 20px 9px;
 		line-height: 1;
 		height: auto;
-		background: $brand-primary;
+		background: $primary;
 		text-shadow: none;
 		box-shadow: none;
 		border: none;
 		@include transition(all 0.2s ease-in-out);
 		
 		&:hover, &:active {
-			background-color: lighten($brand-primary, 10%);
-			border-color: lighten($brand-primary, 10%);
+			background-color: lighten($primary, 10%);
+			border-color: lighten($primary, 10%);
 			@include transform(none);
 		}
 		
