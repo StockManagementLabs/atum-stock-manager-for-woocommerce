@@ -1009,6 +1009,10 @@ input[type="button"].btn-block {
   border-color: #5B9DD9;
 }
 
+.product_data .atum-data-panel .woocommerce-help-tip ~ .switchery {
+  margin-left: 10px;
+}
+
 .product_data .woocommerce_variations .form-row-first .atum-field, .product_data .woocommerce_variations .form-row-last .atum-field {
   position: relative;
   margin-top: 2px;
@@ -1037,6 +1041,7 @@ input[type="button"].btn-block {
 .product_data .woocommerce_variations .atum-data-panel label:not(.btn) {
   float: left;
   margin-right: 10px;
+  min-width: 130px;
 }
 
 .product_data .woocommerce_variations .atum-data-panel .form-field:first-of-type {
@@ -1060,17 +1065,9 @@ input[type="button"].btn-block {
   font-size: 1.1em;
 }
 
-.product_data .woocommerce_variations .switchery {
-  margin-left: 5px;
-}
-
 .product_data .woocommerce_variations .alert {
   margin: 10px auto;
   padding: 0.35rem 0.75rem;
-}
-
-.product_data .switchery, .product_data .btn-group {
-  float: left;
 }
 
 /*# sourceMappingURL=atum-product-data.css.map */

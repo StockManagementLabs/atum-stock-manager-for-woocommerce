@@ -85,6 +85,14 @@
 		
 	}
 	
+	.atum-data-panel {
+		.woocommerce-help-tip {
+			~ .switchery {
+				margin-left: 10px;
+			}
+		}
+	}
+	
 	.woocommerce_variations {
 		
 		.form-row-first, .form-row-last {
@@ -118,6 +126,7 @@
 				&:not(.btn) {
 					float: left;
 					margin-right: 10px;
+					min-width: 130px;
 				}
 			}
 			
@@ -145,19 +154,11 @@
 			font-size: 1.1em;
 		}
 		
-		.switchery {
-			margin-left: 5px;
-		}
-		
 		.alert {
 			margin: 10px auto;
 			padding: 0.35rem 0.75rem;
 		}
 		
-	}
-	
-	.switchery, .btn-group {
-		float: left;
 	}
 	
 }
