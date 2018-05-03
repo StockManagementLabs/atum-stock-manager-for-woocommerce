@@ -1034,7 +1034,7 @@ input[type="button"].btn-block {
   padding-top: 15px;
 }
 
-.product_data .woocommerce_variations .atum-data-panel label {
+.product_data .woocommerce_variations .atum-data-panel label:not(.btn) {
   float: left;
   margin-right: 10px;
 }

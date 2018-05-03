@@ -115,8 +115,10 @@
 			padding-top: $grid-gutter-width/2;
 			
 			label {
-				float: left;
-				margin-right: 10px;
+				&:not(.btn) {
+					float: left;
+					margin-right: 10px;
+				}
 			}
 			
 			.form-field {
