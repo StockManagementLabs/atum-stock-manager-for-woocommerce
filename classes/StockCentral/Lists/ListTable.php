@@ -504,18 +504,21 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since  0.1.2
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item         The WooCommerce product post to use in calculations
+	 * @param bool     $add_to_total Whether to add or not result to total counters
 	 *
 	 * @return int
 	 */
-	protected function column_calc_sales7( $item ) {
+	protected function column_calc_sales7( $item, $add_to_total = TRUE ) {
 
 		if (! $this->allow_calcs) {
 			$sales7 = self::EMPTY_COL;
 		}
 		else {
 			$sales7 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
-			$this->increase_total('calc_sales7', $sales7);
+			if ( $add_to_total ) {
+				$this->increase_total('calc_sales7', $sales7);
+			}
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $sales7, $item, $this->product );
@@ -561,7 +564,7 @@ class ListTable extends AtumListTable {
 		$will_last = self::EMPTY_COL;
 
 		if ($this->allow_calcs) {
-			$sales = $this->column_calc_sales7( $item );
+			$sales = $this->column_calc_sales7( $item, FALSE );
 			$stock = $this->product->get_stock_quantity();
 
 			if ( $stock > 0 && $sales > 0 ) {

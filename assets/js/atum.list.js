@@ -935,6 +935,7 @@
 				method    : 'GET',
 				data      : self.filterData,
 				beforeSend: function () {
+					self.destroyTooltips();
 					self.addOverlay();
 				},
 				// Handle the successful result

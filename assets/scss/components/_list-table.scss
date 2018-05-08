@@ -51,8 +51,10 @@ h1.wp-heading-inline {
 		margin-top: 0;
 		
 		a {
-			&.current {
+			&.current, &.empty {
 				pointer-events: none;
+				color: $black;
+				
 			}
 		}
 		
