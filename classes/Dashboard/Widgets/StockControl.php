@@ -1,11 +1,11 @@
 <?php
 /**
- * @package     Atum
- * @subpackage  Dashboard\Widgets
- * @author      Salva Machí and Jose Piera - https://sispixels.com
- * @copyright   ©2018 Stock Management Labs™
+ * @package         Atum
+ * @subpackage      Dashboard\Widgets
+ * @author          Be Rebel - https://berebel.io
+ * @copyright       ©2018 Stock Management Labs™
  *
- * @since       1.4.0
+ * @since           1.4.0
  *
  * Stock Control Widget for ATUM Dashboard
  */

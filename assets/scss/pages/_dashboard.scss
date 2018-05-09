@@ -2,7 +2,7 @@
 // Atum Dashboard
 //----------------
 
-$header-bg:                 $blue-light;
+$header-bg:                 $cyan;
 $header-height:             300px;
 $card-border:               $gray-light;
 $card-bg:                   $white;
@@ -11,7 +11,7 @@ $add-widget-color:          $wp-add;
 $widget-bg:                 $card-bg;
 $widget-icon:               $gray-light;
 $widget-controls:           $card-text;
-$widget-controls-hover:     $brand-primary;
+$widget-controls-hover:     $primary;
 
 
 // Style the WP notices
@@ -41,6 +41,10 @@ body.toplevel_page_atum-dashboard {
 		&:focus {
 			box-shadow: none;
 		}
+	}
+	
+	.btn {
+		text-transform: uppercase;
 	}
 	
 	// Dashboard Header
@@ -74,7 +78,7 @@ body.toplevel_page_atum-dashboard {
 				font-size: 18px;
 				
 				i {
-					margin-left: -1px;
+					margin-left: -2px;
 				}
 			}
 		}
@@ -119,7 +123,7 @@ body.toplevel_page_atum-dashboard {
 			font-size: 11px;
 			
 			span {
-				color: $brand-primary;
+				color: $primary;
 			}
 			
 			@media all and (max-width: $screen-sm-min) {
@@ -442,7 +446,7 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			.config-controls {
-				border-top: 1px solid $gray-light;
+				border-top: 1px solid $light;
 				padding-top: $grid-gutter-width/2;
 			}
 		}
@@ -536,20 +540,20 @@ body.toplevel_page_atum-dashboard {
 		position: relative;
 		font-size: 17px;
 		text-align: left;
-		color: $gray-dark;
-		border-bottom: 1px solid $gray-light;
+		color: $dark;
+		border-bottom: 1px solid $light;
 		padding: 20px;
 		margin: -$grid-gutter-width/2 0 0;
 	}
 	
 	.swal2-close {
-		color: $gray-light;
+		color: $light;
 		font-weight: 200;
 		font-size: 32px;
 		line-height: 1.7;
 		
 		&:hover {
-			color: $gray;
+			color: $secondary;
 		}
 	}
 	
@@ -566,7 +570,7 @@ body.toplevel_page_atum-dashboard {
 			margin: auto;
 			@include flexbox;
 			@include flex-align-items(center);
-			border-bottom: 0.5px solid transparentize($gray-light, 0.5);
+			border-bottom: 0.5px solid transparentize($light, 0.5);
 			
 			&:first-child {
 				padding-top: 3px;

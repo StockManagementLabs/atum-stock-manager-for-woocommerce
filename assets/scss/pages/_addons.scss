@@ -54,7 +54,7 @@
 			}
 			
 			&.valid {
-				background-color: $brand-success;
+				background-color: $success;
 				
 				+ .show-key {
 					opacity: 0;
@@ -63,7 +63,7 @@
 				&:not(.not-installed) {
 					+ .show-key {
 						i {
-							color: $brand-success;
+							color: $success;
 						}
 					}
 				}
@@ -71,12 +71,12 @@
 			
 			&.invalid {
 				span {
-					color: $brand-danger;
+					color: $danger;
 				}
 			}
 			
 			&.inactive {
-				background-color: $brand-warning;
+				background-color: $warning;
 			}
 			
 			&.not-installed {
@@ -84,7 +84,7 @@
 			}
 			
 			&.coming-soon {
-				background-color: lighten($brand-primary, 10%);
+				background-color: lighten($primary, 10%);
 				right: 0;
 			}
 			
@@ -96,7 +96,7 @@
 			bottom: 0;
 			height: 49px;
 			padding: 0 3px;
-			border-left: 1px solid rgba(#000, 0.05);
+			border-left: 1px solid rgba($black, 0.05);
 			cursor: pointer;
 			@include transform(translateX(100%));
 			
@@ -107,7 +107,7 @@
 			i {
 				font-size: 15px;
 				padding-top: 17px;
-				color: $brand-primary;
+				color: $primary;
 			}
 			
 		}
@@ -139,7 +139,7 @@
 			
 			.show-key {
 				opacity: 1 !important;
-				background-color: lighten($brand-primary, 10%);
+				background-color: lighten($primary, 10%);
 				@include transform(translateX(0));
 				
 				i {
@@ -159,7 +159,7 @@
 		.addon-details {
 			top: 0;
 			bottom: 0;
-			background-color: rgba(#000, 0.7);
+			background-color: rgba($black, 0.7);
 			position: absolute;
 			color: $white;
 			padding: 10px;
@@ -193,7 +193,7 @@
 				@include flex-wrap(nowrap);
 				@include flex-align-items(center);
 				padding: 5px;
-				border-top: 1px solid $wp-input-border;
+				border-top: 1px solid #DDD;
 				position: relative;
 			}
 			
@@ -210,15 +210,15 @@
 				}
 				
 				&.valid {
-					border-color: $brand-success;
+					border-color: $success;
 				}
 				
 				&.inactive {
-					border-color: $brand-warning;
+					border-color: $warning;
 				}
 				
 				&.invalid {
-					border-color: $brand-danger;
+					border-color: $danger;
 				}
 			}
 			
@@ -229,34 +229,34 @@
 			box-shadow: none;
 			text-shadow: none;
 			font-weight: normal;
-			background-color: $brand-primary;
+			background-color: $primary;
 			color: $white;
 			border-radius: 0;
 			@include transition(all 0.2s ease-in-out);
 			
 			&:disabled {
-				background-color: $brand-primary !important;
+				background-color: $primary !important;
 				text-shadow: none !important;
 				color: $white !important;
 				opacity: 0.6;
 			}
 			
 			&:hover {
-				background-color: lighten($brand-primary, 10%);
+				background-color: lighten($primary, 10%);
 			}
 		}
 		
 		&.active {
 			.addon-key {
-				background-color: $blue-dark;
-				border-top-color: lighten($blue-dark, 25%);
+				background-color: #23282d;
+				border-top-color: lighten(#23282d, 25%);
 			}
 		}
 		
 		.atum-loading {
 			right: 28px;
 			top: 11px;
-			@include loader(18px, $brand-primary, 3px, 1s);
+			@include loader(18px, $primary, 3px, 1s);
 		}
 		
 		@media only screen and (max-width: 780px) {
@@ -284,8 +284,6 @@
 			}
 			
 		}
-		
-		
 		
 	}
 	

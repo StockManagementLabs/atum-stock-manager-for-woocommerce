@@ -18,7 +18,7 @@ ul.easytree-container {
 	white-space: nowrap;
 	padding: 3px;
 	margin: 0;
-	border: 1px solid $brand-info;
+	border: 1px solid $info;
 	border-radius: 6px;
 	overflow: auto;
 	height: 100%;
@@ -43,7 +43,7 @@ ul.easytree-container {
 			padding: 2px 0;
 			
 			&, a {
-				color: $gray-dark;
+				color: $dark;
 			}
 			
 			&.easytree-lastsib {
@@ -55,7 +55,7 @@ ul.easytree-container {
 	// Style, when control is disabled
 	.ui-easytree-disabled & {
 		opacity: 0.5;
-		background-color: $gray;
+		background-color: $secondary;
 	}
 	
 	// Custom icons
@@ -92,7 +92,7 @@ span {
 		vertical-align: top;
 		font-family: Dashicons;
 		cursor: pointer;
-		color: $gray-dark;
+		color: $dark;
 	}
 	
 	&.easytree-custom-icon {
@@ -119,7 +119,7 @@ span.easytree-expander {
 	}
 	
 	&:hover {
-		color: $brand-primary !important;
+		color: $primary !important;
 	}
 }
 
@@ -190,10 +190,10 @@ span.easytree-expander {
 	cursor: pointer;
 	
 	a {
-		color: $gray-dark !important;
+		color: $dark !important;
 		
 		&:hover {
-			color: $brand-primary !important;
+			color: $primary !important;
 		}
 	}
 }
@@ -203,10 +203,10 @@ span.easytree-expander {
 	span {
 		&.easytree-selected, &.easytree-active {
 			.easytree-title {
-				background-color: $brand-primary;
+				background-color: $primary;
 				
 				&, a {
-					color: white !important;
+					color: $white !important;
 				}
 				
 			}

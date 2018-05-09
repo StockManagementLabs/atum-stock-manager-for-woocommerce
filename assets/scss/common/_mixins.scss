@@ -3,12 +3,22 @@
 //--------
 
 // Utilities
-@import "mixins/vendor-prefixes";
+
+@import "mixins/border-radius";
+@import "mixins/box-shadow";
 @import "mixins/breakpoints";
 @import "mixins/fonts";
+@import "mixins/gradients";
+@import "mixins/hover";
 @import "mixins/utilities";
+@import "mixins/vendor-prefixes";
 
 // Layout
+
 @import "mixins/grid-framework";
 @import "mixins/grid";
 @import "mixins/flex";
+
+// Components
+
+@import "mixins/buttons";

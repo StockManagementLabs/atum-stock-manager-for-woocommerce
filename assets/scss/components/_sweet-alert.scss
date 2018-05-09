@@ -30,15 +30,15 @@
 	
 	a {
 		text-decoration: none;
-		color: $brand-success;
+		color: $success;
 		
 		&:hover {
-			color: lighten($brand-success, 10%);
+			color: lighten($success, 10%);
 		}
 	}
 	
 	.atum-loading {
-		@include loader(18px, $brand-primary, 3px, 1s);
+		@include loader(18px, $primary, 3px, 1s);
 		top: $grid-gutter-width;
 		left: 0;
 		right: 0;

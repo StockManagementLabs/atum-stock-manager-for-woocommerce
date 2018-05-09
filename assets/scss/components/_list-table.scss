@@ -14,7 +14,7 @@ h1.wp-heading-inline {
 		&:active {
 			color: $white;
 			padding: 0 10px 1px;
-			box-shadow: 0 1px 0 $wp-link;
+			box-shadow: 0 1px 0 #006799;
 		}
 	}
 }
@@ -62,7 +62,7 @@ h1.wp-heading-inline {
 			height: 25px;
 			text-align: center;
 			border: none;
-			background-color: $brand-primary;
+			background-color: $primary;
 			color: $white;
 			padding: 2px 0 0;
 			cursor: pointer;
@@ -74,7 +74,7 @@ h1.wp-heading-inline {
 			}
 			
 			&:hover {
-				background-color: darken($brand-primary, 5%);
+				background-color: darken($primary, 5%);
 			}
 			
 			i {
@@ -113,18 +113,18 @@ h1.wp-heading-inline {
 			
 			&:focus {
 				.select2-selection {
-					box-shadow: 0 0 2px rgba($wp-input-focus, .8);
-					border-color: $wp-input-focus;
+					box-shadow: 0 0 2px rgba($input-focus, .8);
+					border-color: $input-focus;
 				}
 			}
 			
 			.select2-selection__placeholder {
-				color: $gray-dark !important;
+				color: $dark !important;
 			}
 			
 			.select2-selection__arrow {
 				b {
-					border-top-color: $gray-dark;
+					border-top-color: $dark;
 				}
 			}
 		}
@@ -195,12 +195,12 @@ h1.wp-heading-inline {
 	}
 	
 	.jspTrack {
-		background: rgba($gray, 0.2);
+		background: rgba($secondary, 0.2);
 		position: relative;
 	}
 	
 	.jspDrag {
-		background: $gray;
+		background: $secondary;
 		position: relative;
 		top: 0;
 		left: 0;
@@ -208,7 +208,7 @@ h1.wp-heading-inline {
 	}
 	
 	.jspCorner {
-		background: $gray-light;
+		background: $light;
 		float: left;
 		height: 100%;
 	}
@@ -247,10 +247,11 @@ h1.wp-heading-inline {
 	
 	.column-groups {
 		th {
-			font-weight: bold;
+			padding-left: 10px;
+			font-weight: 500;
 			
 			&:nth-child(even) {
-				background-color: $gray-light;
+				background-color: $light;
 			}
 		}
 	}
@@ -288,15 +289,19 @@ h1.wp-heading-inline {
 	
 	tr {
 		
+		&.even {
+			background-color: $light;
+		}
+		
 		&.expanded {
 			@include transition(all 0.1s ease-in-out);
 			
 			&.variable, &.variable-subscription {
-				background-color: $brand-primary;
+				background-color: $primary;
 			}
 			
 			&.group {
-				background-color: $brand-warning;
+				background-color: $warning;
 			}
 			
 			td, a {
@@ -334,18 +339,18 @@ h1.wp-heading-inline {
 		}
 		
 		&.variation {
-			background-color: lighten($brand-primary, 46%);
+			background-color: lighten($primary, 46%);
 			
 			&:nth-child(even) {
-				background-color: lighten($brand-primary, 50%);
+				background-color: lighten($primary, 50%);
 			}
 		}
 		
 		&.grouped {
-			background-color: lighten($brand-warning, 32%);
+			background-color: lighten($warning, 32%);
 			
 			&:nth-child(even) {
-				background-color: lighten($brand-warning, 40%);
+				background-color: lighten($warning, 40%);
 			}
 		}
 		
@@ -356,25 +361,25 @@ h1.wp-heading-inline {
 		}
 		
 		&.totals {
-			background-color: darken($gray-light, 7%);
+			background-color: darken($light, 7%);
 			
 			td, th {
 				font-size: 12px;
 				font-weight: 400;
-				color: $gray-dark;
+				color: $dark;
 				padding-top: 0;
 				padding-bottom: 0;
 				
 				span {
 					display: inline-block;
-					background-color: $wp-heading;
+					background-color: #555;
 					color: $white;
 					border-radius: 2px;
 					padding: 2px 4px;
 					min-width: 20px;
 					
 					&.danger {
-						background-color: $brand-danger;
+						background-color: $danger;
 					}
 				}
 			}
@@ -384,19 +389,19 @@ h1.wp-heading-inline {
 	
 	.cell {
 		&-green {
-			color: $brand-success;
+			color: $success;
 		}
 		
 		&-yellow {
-			color: $brand-warning;
+			color: $warning;
 		}
 		
 		&-red {
-			color: $brand-danger;
+			color: $danger;
 		}
 		
 		&-blue {
-			color: $brand-primary;
+			color: $primary;
 		}
 	}
 	
@@ -406,7 +411,7 @@ h1.wp-heading-inline {
 		padding: 6px 5px;
 		
 		&.pro-version {
-			background-color: $gray;
+			background-color: $secondary;
 		}
 		
 		&.column-title {
@@ -446,7 +451,7 @@ h1.wp-heading-inline {
 			&.product-type {
 				
 				&.variable, &.variable-subscription {
-					color: $brand-primary;
+					color: $primary;
 				}
 				
 				&.variable-subscription {
@@ -456,7 +461,7 @@ h1.wp-heading-inline {
 				}
 				
 				&.grouped {
-					color: $brand-warning;
+					color: $warning;
 				}
 				
 				&:hover {
@@ -483,19 +488,19 @@ h1.wp-heading-inline {
 	
 	.set-meta {
 		cursor: pointer;
-		color: $wp-link;
+		color: $link-color;
 		
 		&:hover {
-			color: $wp-link-hover;
+			color: $link-hover-color;
 		}
 		
 		&.unsaved {
-			color: $brand-danger;
+			color: $danger;
 		}
 	}
 	
 	.highlight-danger {
-		background-color: $brand-danger;
+		background-color: $danger;
 		color: $white;
 		padding: 2px 3px;
 		border-radius: 2px;

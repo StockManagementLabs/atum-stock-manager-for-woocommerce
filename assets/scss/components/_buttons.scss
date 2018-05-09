@@ -2,81 +2,149 @@
 // Buttons
 //---------
 
+//
+// Base styles
+//
+
 .btn {
-	padding: 7px 12px;
-	border: none;
-	text-transform: uppercase;
-	cursor: pointer;
-	@include transition(.2s ease-in-out);
+	display: inline-block;
+	font-weight: $btn-font-weight;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	user-select: none;
+	border: $btn-border-width solid transparent;
+	@include button-size($btn-padding-y, $btn-padding-x, $font-size-base, $btn-line-height, $btn-border-radius);
+	@include transition($btn-transition);
 	
-	&:hover, &:focus {
-		&:not(:disabled) {
-			color: $white;
-		}
+	// Share hover and focus styles
+	@include hover-focus {
+		text-decoration: none;
 	}
 	
+	&:focus,
+	&.focus {
+		outline: 0;
+		box-shadow: $btn-focus-box-shadow;
+	}
+	
+	// Disabled comes first so active can properly restyle
+	&.disabled,
 	&:disabled {
-		cursor: default;
-		opacity: 0.7;
-	}
-	
-	&:focus {
-		outline: none;
+		opacity: $btn-disabled-opacity;
 		box-shadow: none;
 	}
 	
-	&.pill {
-		border-radius: 16px;
+	// Opinionated: add "hand" cursor to non-disabled .btn elements
+	&:not(:disabled):not(.disabled) {
+		cursor: pointer;
 	}
 	
-}
-
-.btn-success {
-	color: $white;
-	background-color: $btn-success;
+	&:not(:disabled):not(.disabled):active,
+	&:not(:disabled):not(.disabled).active {
+		background-image: none;
+		@include box-shadow($btn-active-box-shadow);
 	
-	&:hover:not(:disabled) {
-		background-color: transparentize($btn-success, 0.25);
+	&:focus {
+			@include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
 	}
-}
-
-.btn-primary {
-	color: $white;
-	background-color: $btn-primary;
-	
-	&:hover:not(:disabled) {
-		background-color: transparentize($btn-primary, 0.25);
 	}
 }
 
-.btn-warning {
-	color: $white;
-	background-color: $btn-warning;
-	
-	&:hover:not(:disabled) {
-		background-color: transparentize($btn-warning, 0.25);
+// Future-proof disabling of clicks on `<a>` elements
+a.btn.disabled,
+fieldset:disabled a.btn {
+	pointer-events: none;
+}
+
+
+//
+// Alternate buttons
+//
+
+@each $color, $value in $theme-colors {
+	.btn-#{$color} {
+		@include button-variant($value, $value);
 	}
 }
 
-.btn-danger {
-	color: $white;
-	background-color: $btn-danger;
-	
-	&:hover:not(:disabled) {
-		background-color: transparentize($btn-danger, 0.25);
+@each $color, $value in $theme-colors {
+	.btn-outline-#{$color} {
+		@include button-outline-variant($value);
 	}
 }
 
-.btn-info {
-	color: $gray-dark;
-	background-color: $btn-info;
+.btn-pill {
+	@include border-radius(16px);
+}
+
+
+//
+// Link buttons
+//
+
+// Make a button look and behave like a link
+.btn-link {
+	font-weight: $font-weight-normal;
+	color: $link-color;
+	background-color: transparent;
 	
-	&:hover:not(:disabled) {
-		background-color: transparentize($btn-info, 0.25);
+	@include hover {
+		color: $link-hover-color;
+		text-decoration: $link-hover-decoration;
+		background-color: transparent;
+		border-color: transparent;
 	}
+	
+	&:focus,
+	&.focus {
+		text-decoration: $link-hover-decoration;
+		border-color: transparent;
+		box-shadow: none;
+	}
+	
+	&:disabled,
+	&.disabled {
+		color: $btn-link-disabled-color;
+		pointer-events: none;
+	}
+	
+	// No need for an active state here
+}
+
+
+//
+// Button Sizes
+//
+
+.btn-lg {
+	@include button-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
 }
 
 .btn-sm {
-	padding: 5px 14px;
-	font-size: 9px;
+	@include button-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+}
+
+
+//
+// Block button
+//
+
+.btn-block {
+	display: block;
+	width: 100%;
+	
+	// Vertically space out multiple block buttons
+	+ .btn-block {
+		margin-top: $btn-block-spacing-y;
+	}
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	&.btn-block {
+		width: 100%;
+	}
 }

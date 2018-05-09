@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -381,7 +381,11 @@
   box-shadow: none;
   text-shadow: none;
   font-weight: normal;
+<<<<<<< HEAD
   background-color: #00b8db;
+=======
+  background-color: #00B8DB;
+>>>>>>> master
   color: #fff;
   border-radius: 0;
   -webkit-transition: all 0.2s ease-in-out;

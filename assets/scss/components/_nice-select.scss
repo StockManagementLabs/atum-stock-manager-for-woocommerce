@@ -13,16 +13,16 @@ $dropdown-height:               42px;
 $dropdown-height-small:         36px;
 $dropdown-padding:              18px;
 
-//$gray:                          #afafaf;
-//$gray-light:                    #e1e1e1;
-$gray-lighter:                  $wp-bg-light;
+$gray:                          #afafaf;
+$gray-light:                    #e1e1e1;
+$gray-lighter:                  #f6f6f6;
 $primary-light:                 $gray;
 $arrow-color:                   $gray;
 
 
 // Style the dropdown
 .nice-select {
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-tap-highlight-color: rgba($black, 0);
 	background-color: $white;
 	border-radius: $dropdown-border-radius;
 	border: solid 1px $gray-light;
@@ -131,7 +131,7 @@ $arrow-color:                   $gray;
 	.list {
 		background-color: $white;
 		border-radius: $list-border-radius;
-		box-shadow: 0 0 0 1px rgba($gray-dark, .11);
+		box-shadow: 0 0 0 1px rgba($dark, .11);
 		box-sizing: border-box;
 		margin-top: 4px;
 		opacity: 0;
@@ -169,7 +169,7 @@ $arrow-color:                   $gray;
 		
 		&.selected {
 			font-weight: bold;
-			color: $gray-dark;
+			color: $dark;
 		}
 		
 		&.disabled {

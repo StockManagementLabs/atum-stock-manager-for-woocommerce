@@ -36,6 +36,7 @@
 	}
 	
 	.atum-field {
+		
 		.input-group-text {
 			padding: 2px 7px 3px;
 		}
@@ -48,7 +49,7 @@
 			
 			&:focus {
 				box-shadow: none;
-				border-color: $wp-input-focus;
+				border-color: $input-focus;
 			}
 		}
 		
@@ -77,8 +78,17 @@
 				}
 				
 				&:focus {
-					border-color: $wp-input-focus;
+					border-color: $input-focus;
 				}
+			}
+		}
+		
+	}
+	
+	.atum-data-panel {
+		.woocommerce-help-tip {
+			~ .switchery {
+				margin-left: 10px;
 			}
 		}
 	}
@@ -109,12 +119,15 @@
 		}
 		
 		.atum-data-panel {
-			border-top: 1px solid $wp-input-border;
+			border-top: 1px solid #DDD;
 			padding-top: $grid-gutter-width/2;
 			
 			label {
+				&:not(.btn) {
 				float: left;
 				margin-right: 10px;
+					min-width: 130px;
+				}
 			}
 			
 			.form-field {
@@ -125,9 +138,9 @@
 		}
 		
 		h3.atum-section-title {
-			border: 1px solid $brand-info;
-			background-color: transparentize($blue-light, .85);
-			color: $wp-heading;
+			border: 1px solid $info;
+			background-color: transparentize($cyan, .85);
+			color: #555;
 			text-transform: uppercase;
 			cursor: default !important;
 			margin-bottom: $grid-gutter-width/2 !important;
@@ -137,12 +150,8 @@
 		h4.atum-section-title {
 			margin-top: $grid-gutter-width;
 			padding-bottom: 10px;
-			border-bottom: 1px dashed $gray;
+			border-bottom: 1px dashed $secondary;
 			font-size: 1.1em;
-		}
-		
-		.switchery {
-			margin-left: 5px;
 		}
 		
 		.alert {
@@ -150,10 +159,6 @@
 			padding: 0.35rem 0.75rem;
 		}
 		
-	}
-	
-	.switchery, .btn-group {
-		float: left;
 	}
 	
 }

@@ -169,7 +169,7 @@
 			margin-left: 3px;
 			
 			&:disabled {
-				color: $gray-light !important;
+				color: $light !important;
 				opacity: 0.6;
 			}
 		}
@@ -186,7 +186,7 @@
 			}
 			
 			hr {
-				border-color: $brand-info;
+				border-color: $info;
 			}
 		}
 		

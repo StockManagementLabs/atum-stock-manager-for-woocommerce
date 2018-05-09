@@ -131,7 +131,7 @@ class Hooks {
 			wp_enqueue_style( 'atum-product-data' );
 
 			// Enqueue scripts
-			$min = (! ATUM_DEBUG) ? '.min' : '';
+			$min = ! ATUM_DEBUG ? '.min' : '';
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
 			Helpers::maybe_es6_promise();
 			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array('jquery'), ATUM_VERSION, TRUE );
@@ -188,45 +188,12 @@ class Hooks {
 	 */
 	public function add_product_data_tab_panel() {
 
-		?><div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
-			<div class="options_group"><?php
+		$product_id               = get_the_ID();
+		$product_status           = get_post_status( $product_id );
+		$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple' ] );
+		$control_button_classes   = (array) apply_filters( 'atum/product_data/control_button/classes', [ 'show_if_variable' ] );
 
-				$product_id     = get_the_ID();
-				$product_status = get_post_status( $product_id );
-				$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', ['show_if_simple']);
-
-				woocommerce_wp_checkbox( array(
-					'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
-					'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-					'value'         => $product_status == 'auto-draft' ? 'yes' : Helpers::get_atum_control_status($product_id),
-					'class'         => 'js-switch',
-					'wrapper_class' => implode(' ', $checkbox_wrapper_classes),
-					'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-					'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
-					'desc_tip'      => TRUE
-				) );
-
-				$control_button_classes = (array) apply_filters( 'atum/product_data/control_button/classes', ['show_if_variable']);
-				?>
-
-				<p class="form-field <?php echo implode(' ', $control_button_classes) ?>">
-					<label for="stock_control_status"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
-					<select id="stock_control_status">
-						<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
-						<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
-					</select>
-					&nbsp;
-					<button type="button" class="change-stock-control button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
-
-					<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
-				</p>
-
-			</div>
-
-			<?php
-			// Allow other fields to be added to the ATUM panel
-			do_action('atum/after_product_data_panel'); ?>
-		</div><?php
+		Helpers::load_view('meta-boxes/product-data/atum-tab-panel', compact('product_id', 'product_status', 'checkbox_wrapper_classes', 'control_button_classes'));
 
 	}
 
@@ -239,29 +206,11 @@ class Hooks {
 	 * @param array    $variation_data   The current variation data
 	 * @param \WP_Post $variation        The variation post
 	 */
-	public function add_product_variation_data_panel ($loop, $variation_data, $variation) {
+	public function add_product_variation_data_panel($loop, $variation_data, $variation) {
 
-		?>
-		<div class="atum-data-panel">
-			<h3 class="atum-section-title"><?php _e('ATUM Inventory', ATUM_TEXT_DOMAIN) ?></h3>
+		Helpers::load_view('meta-boxes/product-data/atum-variation-panel', compact('loop', 'variation_data', 'variation'));
 
-			<?php
-			woocommerce_wp_checkbox( array(
-				'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
-				'name'        => "variation_atum_tab[" . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
-				'value'       => Helpers::get_atum_control_status( $variation->ID ),
-				'class'       => 'js-switch',
-				'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-				'description' => __( "Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.", ATUM_TEXT_DOMAIN ),
-				'desc_tip'    => TRUE
-			) );
-
-			// Allow other fields to be added to the ATUM panel
-			do_action('atum/after_variation_product_data_panel', $loop, $variation_data, $variation); ?>
-		</div>
-		<?php
-
-		}
+	}
 	
 	/**
 	 * Save all the fields within the Product Data's ATUM Inventory tab
@@ -394,12 +343,12 @@ class Hooks {
 		$field_title = __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')';
 
 		if ( empty($variation) ) {
-			$product_id       = get_the_ID();
+			$product_id    = get_the_ID();
 			$wrapper_class = '_purchase_price_field';
 			$field_id      = $field_name = '_purchase_price';
 		}
 		else {
-			$product_id       = $variation->ID;
+			$product_id    = $variation->ID;
 			$field_name    = "variation_purchase_price[$loop]";
 			$field_id      = "variation_purchase_price{$loop}";
 			$wrapper_class = "$field_name form-row form-row-first";
@@ -437,6 +386,7 @@ class Hooks {
 				$product_key    = array_search( $post_id, $_POST['variable_post_id'] );
 				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
 				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
+
 				update_post_meta( $post_id, '_purchase_price', $purchase_price );
 
 			}
@@ -482,11 +432,7 @@ class Hooks {
 			if ( ! empty($variations) ) {
 
 				foreach ($variations as $variation_id) {
-
-					if ( ! Helpers::is_atum_controlling_stock($variation_id) ) {
-						continue;
-					}
-
+					
 					$variation_product = wc_get_product( $variation_id );
 					$variation_stock = $variation_product->get_stock_quantity();
 					$stocks_list[] = $variation_stock;
@@ -534,10 +480,12 @@ class Hooks {
 	 */
 	public function wc_order_add_location_column_value($product, $item, $item_id) {
 
+		$locations_list = '';
+
 		if ($product) {
-			$product_id = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
-			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
-			$locations_list = ( ! empty( $locations ) ) ? implode( ', ', $locations ) : '&ndash;';
+			$product_id     = $product->get_type() == 'variation' ? $product->get_parent_id() : $product->get_id();
+			$locations      = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
+			$locations_list = ! empty( $locations ) ? implode( ', ', $locations ) : '&ndash;';
 		}
 
 		?>
@@ -563,9 +511,9 @@ class Hooks {
 
 		if ( in_array($product->get_type(), Globals::get_product_types()) ) {
 
-			$current_stock = $product->get_stock_quantity();
+			$current_stock         = $product->get_stock_quantity();
 			$out_of_stock_date_key = Globals::OUT_OF_STOCK_DATE_KEY;
-			$product_id = $product->get_id();
+			$product_id            = $product->get_id();
 
 			if (!$current_stock) {
 				update_post_meta( $product_id, $out_of_stock_date_key, Helpers::date_format( current_time('timestamp'), TRUE ) );

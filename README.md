@@ -258,6 +258,34 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.5`
+
+*2018-05-03*
+
+**Features**
+
+* Added URL hash navigation to Settings.
+* New “script runner” field type for Settings.
+* Added new Tools tab to Settings.
+* Added tools for Managing/Unmanaging and Controlling/Uncontrolling the stock for all the products at once.
+* Added new bulk actions for Managing/Unmanaging the stock to List Tables.
+* Added new Button Group HTML component.
+
+**Changes**
+
+* Changed WooCommerce WPML's instance call.
+* Moved ATUM panel HTML to external views.
+* Changed Stock Status Override functionality on products page.
+
+**Fixes**
+
+* Fixed issue in Uncontrolled List Tables when the meta key for any product had set the value to "no".
+* Fixed sorting in List Tables.
+* Excluded non private/publised product parents (for variations) from dashboard's unmanaged queries.
+* Refactory.
+
+---
+
 `1.4.4`
 
 *2018-04-26*

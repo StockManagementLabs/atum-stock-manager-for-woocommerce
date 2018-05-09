@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -1404,7 +1404,11 @@ h2 .atum-help-tip {
 }
 
 #atum_order_data .panel h3, #atum_order_data .panel h4 {
+<<<<<<< HEAD
   color: #555;
+=======
+  color: #343a40;
+>>>>>>> master
   margin: 1.33em 0 0;
 }
 
@@ -1724,7 +1728,6 @@ ul.atum_order_notes li .note_content::after {
   background: #f9f9f9;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -2384,7 +2387,11 @@ img.tips {
 #tiptip_holder.tip_top #tiptip_arrow_inner {
   margin-top: -7px;
   margin-left: -6px;
+<<<<<<< HEAD
   border-top-color: #555;
+=======
+  border-top-color: #343a40;
+>>>>>>> master
 }
 
 #tiptip_holder.tip_bottom {
@@ -2394,7 +2401,11 @@ img.tips {
 #tiptip_holder.tip_bottom #tiptip_arrow_inner {
   margin-top: -5px;
   margin-left: -6px;
+<<<<<<< HEAD
   border-bottom-color: #555;
+=======
+  border-bottom-color: #343a40;
+>>>>>>> master
 }
 
 #tiptip_holder.tip_right {
@@ -2404,7 +2415,11 @@ img.tips {
 #tiptip_holder.tip_right #tiptip_arrow_inner {
   margin-top: -6px;
   margin-left: -5px;
+<<<<<<< HEAD
   border-right-color: #555;
+=======
+  border-right-color: #343a40;
+>>>>>>> master
 }
 
 #tiptip_holder.tip_left {
@@ -2414,14 +2429,22 @@ img.tips {
 #tiptip_holder.tip_left #tiptip_arrow_inner {
   margin-top: -6px;
   margin-left: -7px;
+<<<<<<< HEAD
   border-left-color: #555;
+=======
+  border-left-color: #343a40;
+>>>>>>> master
 }
 
 #tiptip_content {
   color: #fff;
   font-size: 0.8em;
   max-width: 150px;
+<<<<<<< HEAD
   background: #555;
+=======
+  background: #343a40;
+>>>>>>> master
   text-align: center;
   border-radius: 3px;
   padding: 0.618em 1em;
@@ -2635,7 +2658,7 @@ table.wp-list-table .column-actions .view::after {
 }
 
 table.wp-list-table .column-actions .pdf::after {
-  content: url(../images/pdf.svg);
+  content: url("../images/pdf.svg");
   position: absolute;
   top: 2px;
   left: 2px;

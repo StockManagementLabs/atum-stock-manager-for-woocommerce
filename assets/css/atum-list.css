@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.0 
+ * @version 1.4.5 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -278,7 +278,11 @@
 }
 
 .popover .popover-content > .button:disabled {
+<<<<<<< HEAD
   color: #e5e5e5 !important;
+=======
+  color: #f8f9fa !important;
+>>>>>>> master
   opacity: 0.6;
 }
 
@@ -430,7 +434,11 @@ ul.easytree-container ul li {
 }
 
 ul.easytree-container ul li, ul.easytree-container ul li a {
+<<<<<<< HEAD
   color: #555;
+=======
+  color: #343a40;
+>>>>>>> master
 }
 
 ul.easytree-container ul li.easytree-lastsib {
@@ -439,7 +447,11 @@ ul.easytree-container ul li.easytree-lastsib {
 
 .ui-easytree-disabled ul.easytree-container {
   opacity: 0.5;
+<<<<<<< HEAD
   background-color: #afafaf;
+=======
+  background-color: #6c757d;
+>>>>>>> master
 }
 
 ul.easytree-container img {
@@ -462,7 +474,11 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   vertical-align: top;
   font-family: Dashicons;
   cursor: pointer;
+<<<<<<< HEAD
   color: #555;
+=======
+  color: #343a40;
+>>>>>>> master
 }
 
 span.easytree-custom-icon {
@@ -523,7 +539,11 @@ span.easytree-expander:hover {
 }
 
 .easytree-title a {
+<<<<<<< HEAD
   color: #555 !important;
+=======
+  color: #343a40 !important;
+>>>>>>> master
 }
 
 .easytree-title a:hover {
@@ -535,7 +555,7 @@ span.easytree-expander:hover {
 }
 
 .easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-selected .easytree-title a, .easytree-focused span.easytree-active .easytree-title, .easytree-focused span.easytree-active .easytree-title a {
-  color: white !important;
+  color: #fff !important;
 }
 
 .blockUI.blockOverlay:before {
@@ -705,6 +725,7 @@ span.easytree-expander:hover {
 
 .atum-report .report-header .report-data, .atum-report .report-header .report-details {
   padding: 15px;
+<<<<<<< HEAD
   border-top: 2px solid #afafaf;
   border-bottom: 2px solid #afafaf;
 }
@@ -715,6 +736,18 @@ span.easytree-expander:hover {
 
 .atum-report .report-header .report-details {
   border-right: 2px solid #afafaf;
+=======
+  border-top: 2px solid #6c757d;
+  border-bottom: 2px solid #6c757d;
+}
+
+.atum-report .report-header .report-data {
+  border-left: 2px solid #6c757d;
+}
+
+.atum-report .report-header .report-details {
+  border-right: 2px solid #6c757d;
+>>>>>>> master
 }
 
 .atum-report .report-header .space {
@@ -733,7 +766,11 @@ span.easytree-expander:hover {
 }
 
 .atum-report .report-header p {
+<<<<<<< HEAD
   color: #555;
+=======
+  color: #343a40;
+>>>>>>> master
 }
 
 .atum-report .report-header .warning-color {
@@ -767,7 +804,11 @@ span.easytree-expander:hover {
 .atum-report h3 {
   font-size: 24px;
   font-weight: normal;
+<<<<<<< HEAD
   color: #afafaf;
+=======
+  color: #6c757d;
+>>>>>>> master
   margin-top: 5px;
 }
 
@@ -827,7 +868,11 @@ h1.wp-heading-inline #atum-update-list:active {
   height: 25px;
   text-align: center;
   border: none;
+<<<<<<< HEAD
   background-color: #00b8db;
+=======
+  background-color: #00B8DB;
+>>>>>>> master
   color: #fff;
   padding: 2px 0 0;
   cursor: pointer;
@@ -880,11 +925,19 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-wrapper .actions .select2-container .select2-selection__placeholder {
+<<<<<<< HEAD
   color: #555 !important;
 }
 
 .atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
   border-top-color: #555;
+=======
+  color: #343a40 !important;
+}
+
+.atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
+  border-top-color: #343a40;
+>>>>>>> master
 }
 
 .atum-list-wrapper .actions .filter-text {
@@ -943,12 +996,20 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-table-wrapper .jspTrack {
+<<<<<<< HEAD
   background: rgba(175, 175, 175, 0.2);
+=======
+  background: rgba(108, 117, 125, 0.2);
+>>>>>>> master
   position: relative;
 }
 
 .atum-table-wrapper .jspDrag {
+<<<<<<< HEAD
   background: #afafaf;
+=======
+  background: #6c757d;
+>>>>>>> master
   position: relative;
   top: 0;
   left: 0;
@@ -956,7 +1017,11 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-table-wrapper .jspCorner {
+<<<<<<< HEAD
   background: #e5e5e5;
+=======
+  background: #f8f9fa;
+>>>>>>> master
   float: left;
   height: 100%;
 }
@@ -991,11 +1056,16 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .column-groups th {
-  font-weight: bold;
+  padding-left: 10px;
+  font-weight: 500;
 }
 
 .atum-list-table .column-groups th:nth-child(even) {
+<<<<<<< HEAD
   background-color: #e5e5e5;
+=======
+  background-color: #f8f9fa;
+>>>>>>> master
 }
 
 .atum-list-table th.sortable a, .atum-list-table th.sorted a {
@@ -1025,6 +1095,10 @@ h1.wp-heading-inline #atum-update-list:active {
 .atum-list-table th.check-column input[type=checkbox] {
   vertical-align: middle;
   margin-top: 7px;
+}
+
+.atum-list-table tr.even {
+  background-color: #f8f9fa;
 }
 
 .atum-list-table tr.expanded {
@@ -1079,13 +1153,21 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.totals {
+<<<<<<< HEAD
   background-color: lightgray;
+=======
+  background-color: #e3e7eb;
+>>>>>>> master
 }
 
 .atum-list-table tr.totals td, .atum-list-table tr.totals th {
   font-size: 12px;
   font-weight: 400;
+<<<<<<< HEAD
   color: #555;
+=======
+  color: #343a40;
+>>>>>>> master
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -1126,7 +1208,11 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table td.pro-version, .atum-list-table th.pro-version {
+<<<<<<< HEAD
   background-color: #afafaf;
+=======
+  background-color: #6c757d;
+>>>>>>> master
 }
 
 .atum-list-table td.column-title, .atum-list-table th.column-title {
@@ -1201,7 +1287,11 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .highlight-danger {
+<<<<<<< HEAD
   background-color: #ff4848;
+=======
+  background-color: #FF4848;
+>>>>>>> master
   color: #fff;
   padding: 2px 3px;
   border-radius: 2px;

@@ -110,7 +110,7 @@
 					</a>
 				</span>
 
-				<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" class="btn btn-primary pill channel-subscribe" target="_blank"><?php _e('Subscribe Now', ATUM_TEXT_DOMAIN) ?></a>
+				<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" class="btn btn-primary btn-pill channel-subscribe" target="_blank"><?php _e('Subscribe Now', ATUM_TEXT_DOMAIN) ?></a>
 			</div>
 
 			<div class="video-player">
