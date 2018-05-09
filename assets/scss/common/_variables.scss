@@ -47,7 +47,7 @@ $wp-section-border:                     #e5e5e5 !default;
 $wp-bg-light:                           #f9f9f9 !default;
 
 
-//Colors:
+// Colors:
 $blue:                                  #00b8db !default;
 $blue-dark:                             #27282a !default;
 $blue-light:                            lighten($blue, 10%) !default;
@@ -62,14 +62,12 @@ $gray:                                  #afafaf !default;
 $gray-light:                            $wp-section-border !default;
 $gray-dark:                             $wp-heading !default;
 
-
+// Brand Colors
 $brand-primary:                         $blue !default;
 $brand-info:                            $gray-light !default;
 $brand-warning:                         $orange !default;
 $brand-danger:                          $red !default;
 $brand-success:                         $green !default;
-
-
 
 $theme-colors: () !default;
 $theme-colors: map-merge((

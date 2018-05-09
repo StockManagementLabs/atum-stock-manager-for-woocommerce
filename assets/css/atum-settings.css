@@ -18,7 +18,7 @@
 }
 
 .btn:hover:not(:disabled), .btn:focus:not(:disabled) {
-  color: #FFF;
+  color: #fff;
 }
 
 .btn:disabled {
@@ -36,17 +36,17 @@
 }
 
 .btn-success {
-  color: #FFF;
-  background-color: #82C342;
+  color: #fff;
+  background-color: #69c61d;
 }
 
 .btn-success:hover:not(:disabled) {
-  background-color: rgba(130, 195, 66, 0.75);
+  background-color: rgba(105, 198, 29, 0.75);
 }
 
 .btn-primary {
-  color: #FFF;
-  background-color: #00B8DB;
+  color: #fff;
+  background-color: #00b8db;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -54,8 +54,8 @@
 }
 
 .btn-warning {
-  color: #FFF;
-  background-color: #EFAF00;
+  color: #fff;
+  background-color: #efaf00;
 }
 
 .btn-warning:hover:not(:disabled) {
@@ -63,8 +63,8 @@
 }
 
 .btn-danger {
-  color: #FFF;
-  background-color: #FF4848;
+  color: #fff;
+  background-color: #ff4848;
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -72,12 +72,12 @@
 }
 
 .btn-info {
-  color: #333333;
-  background-color: #E3E8F5;
+  color: #555;
+  background-color: #e5e5e5;
 }
 
 .btn-info:hover:not(:disabled) {
-  background-color: rgba(227, 232, 245, 0.75);
+  background-color: rgba(229, 229, 229, 0.75);
 }
 
 .btn-sm {
