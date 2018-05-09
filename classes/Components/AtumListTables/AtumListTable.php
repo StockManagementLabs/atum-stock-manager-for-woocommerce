@@ -296,8 +296,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		
 		$this->default_currency = get_woocommerce_currency();
 		
-		$this->show_unmanaged_counters = ( Helpers::get_option( 'unmanaged_counters' ) == 'yes' );
-		
 	}
 
 	/**

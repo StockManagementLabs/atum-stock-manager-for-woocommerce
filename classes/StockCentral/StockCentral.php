@@ -233,14 +233,6 @@ class StockCentral extends AtumListPage {
 			'type'    => 'number',
 			'default' => Settings::DEFAULT_SALE_DAYS
 		);
-		
-		$defaults['unmanaged_counters'] = array(
-			'section' => 'stock_central',
-			'name'    => __( 'Unmanaged Product Counters', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( "Add 'In Stock', 'Out of Stock' and 'Back Ordered' counters and views for Unmanaged by WooCommerce Products. This option will also add these products to the Dashboard Stock Control Widget. Please note that enabling this option can affect the performance in stores with a large number of products.", ATUM_TEXT_DOMAIN ),
-			'type'    => 'switcher',
-			'default' => 'no'
-		);
 
 		$defaults['expandable_rows'] = array(
 			'section' => 'stock_central',

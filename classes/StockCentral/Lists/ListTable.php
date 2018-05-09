@@ -56,6 +56,9 @@ class ListTable extends AtumListTable {
 		
 		$this->no_stock = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		
+		// Activate managed/unmanaged counters separation
+		$this->show_unmanaged_counters = ( Helpers::get_option( 'unmanaged_counters' ) == 'yes' );
+		
 		// TODO: Allow to specify the day of query in constructor atts
 		$this->day = Helpers::date_format( current_time('timestamp'), TRUE );
 		
