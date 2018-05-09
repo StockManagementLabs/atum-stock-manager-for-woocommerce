@@ -617,10 +617,11 @@ final class Helpers {
 	 * @since 1.4.1
 	 *
 	 * @param array $post_types
+	 * @param bool  $get_stock_status   Whether to get also the WC stock_status of the unmanaged products
 	 *
 	 * @return array
 	 */
-	public static function get_unmanaged_products($post_types) {
+	public static function get_unmanaged_products($post_types, $get_stock_status = FALSE) {
 		
 		global $wpdb;
 		
@@ -629,6 +630,9 @@ final class Helpers {
 		" );
 		
 		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
+		
+		// TODO: Change the query to remove the subquery and get the values with joins
+		$stock_sql = $get_stock_status ? ", (SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = posts.ID AND meta_key = '_stock_status' )" : '';
 		
 		// Exclude the inheritable products from query (as are just containers in ATUM List Tables)
 		$excluded_types      = Globals::get_inheritable_product_types();
@@ -650,9 +654,9 @@ final class Helpers {
 				OR posts.post_parent = 0)
 		" );
 		
-		$sql = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts $unmng_join $unmng_where";
+		$sql = "SELECT DISTINCT posts.ID{$stock_sql} FROM $wpdb->posts posts $unmng_join $unmng_where";
 		
-		return $wpdb->get_col($sql);
+		return $wpdb->get_results( $sql, ARRAY_N );
 		
 	}
 	

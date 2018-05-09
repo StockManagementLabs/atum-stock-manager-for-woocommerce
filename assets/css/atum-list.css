@@ -817,8 +817,9 @@ h1.wp-heading-inline #atum-update-list:active {
   margin-top: 0;
 }
 
-.atum-list-wrapper .subsubsub a.current {
+.atum-list-wrapper .subsubsub a.current, .atum-list-wrapper .subsubsub a.empty {
   pointer-events: none;
+  color: #000;
 }
 
 .atum-list-wrapper .subsubsub .reset-filters {
