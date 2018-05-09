@@ -46,6 +46,21 @@ $container-max-widths: (
 
 $max-width-limit:                       1280px !default;
 
+// WP Colors
+
+$wp-link:                               #0073AA !default;
+$wp-link-hover:                         #00A0D2 !default;
+$wp-input-focus:                        #5B9DD9 !default;
+$wp-tr-border:                          #E6CCE1 !default;
+$wp-tr-selected:                        #F5EBF3 !default;
+$wp-input-color:                        #32373C !default;
+$wp-heading:                            #555 !default;
+$wp-add:                                #B4B9BE !default;
+$wp-input-border:                       #DDD    !default;
+$wp-section-border:                     #E5E5E5 !default;
+$wp-bg-light:                           #f9f9f9 !default;
+
+
 // Colors
 
 $white:                                 #fff !default;
@@ -74,11 +89,15 @@ $grays: map-merge((
 ), $grays);
 
 $blue:                                  #00B8DB !default;
+$blue-dark:                             #27283B !default;
+$blue-light:                            lighten($blue, 50%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
 $orange:                                #EFAF00 !default;
+$orange-light:                          lighten($orange, 40%) !default;
 $red:                                   #FF4848 !default;
-$green:                                 #82C342 !default;
-$cyan:                                  #D5F2F8 !default;
+$red-light:                             lighten($red, 30%) !default;
+$green:                                 #69C61D !default;
+$green-light:                           lighten($green, 40%) !default;
 
 $colors: () !default;
 $colors: map-merge((
@@ -87,7 +106,7 @@ $colors: map-merge((
 		"orange":          $orange,
 		"red":             $red,
 		"green":           $green,
-		"cyan":            $cyan,
+		"blue-light":      $blue-light,
 		"white":           $white,
 		"gray":            $gray-600,
 		"gray-light":      $gray-100,
@@ -117,9 +136,9 @@ $theme-colors: map-merge((
 
 // Links
 
-$link-color:                            #0073AA !default;
+$link-color:                            $wp-link !default;
 $link-decoration:                       none !default;
-$link-hover-color:                      #00A0D2 !default;
+$link-hover-color:                      $wp-link-hover !default;
 $link-hover-decoration:                 underline !default;
 
 $border-color:                          $gray-300 !default;
@@ -280,15 +299,15 @@ $input-border-width:                    1px !default;
 $input-padding-y:                       .375rem !default;
 $input-padding-x:                       .75rem !default;
 $input-border-radius:                   0;
-$input-focus:                           #5B9DD9 !default;
+$input-focus:                           $wp-input-focus !default;
 $input-group-addon-color:               $gray-600;
-$input-group-addon-bg:                  $cyan;
-$input-border-color:                    #DDD;
+$input-group-addon-bg:                  $blue-light;
+$input-border-color:                    $wp-input-border;
 
 // Widgets
 
-$widget-text:                           #AFAFAF !default;
-$widget-success:                        #69C61D !default;
+$widget-text:                           $gray-500 !default;
+$widget-success:                        $green !default;
 $widget-primary:                        $primary !default;
 $widget-warning:                        $warning !default;
 $widget-danger:                         $danger !default;

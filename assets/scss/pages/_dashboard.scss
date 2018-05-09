@@ -2,14 +2,14 @@
 // Atum Dashboard
 //----------------
 
-$header-bg:                 $cyan;
+$header-bg:                 $blue-light;
 $header-height:             300px;
-$card-border:                #e5e5e5;;
+$card-border:               $wp-section-border;
 $card-bg:                   $white;
 $card-text:                 $gray;
 $add-widget-color:          #CCC;
 $widget-bg:                 $card-bg;
-$widget-icon:               #e1e1e1;
+$widget-icon:               $wp-section-border;
 $widget-controls:           $card-text;
 $widget-controls-hover:     $primary;
 
@@ -105,7 +105,7 @@ body.toplevel_page_atum-dashboard {
 		
 		.atum-version {
 			color: $white;
-			background-color: transparentize(#000, 0.9);
+			background-color: transparentize($black, 0.9);
 			border-radius: 30px;
 			padding: 1px 15px;
 			font-weight: 100;

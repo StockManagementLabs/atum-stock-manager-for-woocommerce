@@ -157,7 +157,7 @@
   width: auto;
   opacity: 0;
   z-index: 99;
-  background-color: #FFF;
+  background-color: #fff;
   filter: alpha(opacity=0);
 }
 
@@ -173,7 +173,7 @@
 }
 
 .select2-container--default .select2-selection--single {
-  background-color: #FFF;
+  background-color: #fff;
   border: 1px solid #AAA;
   border-radius: 4px;
 }
@@ -414,7 +414,7 @@
   background-image: -o-linear-gradient(top, white 50%, #EEEEEE 100%);
   background-image: linear-gradient(to bottom, white 50%, #EEEEEE 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$whiteFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--single:focus {
@@ -504,7 +504,7 @@
   background-image: -o-linear-gradient(top, white 0%, #EEEEEE 50%);
   background-image: linear-gradient(to bottom, white 0%, #EEEEEE 50%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$whiteFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
 }
 
 .select2-container--classic.select2-container--open.select2-container--below .select2-selection--single {
@@ -515,7 +515,7 @@
   background-image: -o-linear-gradient(top, #EEEEEE 50%, white 100%);
   background-image: linear-gradient(to bottom, #EEEEEE 50%, white 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='#FFFFFFFF', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='$whiteFFFFF', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--multiple {
@@ -788,11 +788,11 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82C342;
+  color: #69C61D;
 }
 
 .swal2-container a:hover {
-  color: #9ccf69;
+  color: #82e135;
 }
 
 .swal2-container .atum-loading {
@@ -971,7 +971,7 @@
 }
 
 .color-success {
-  color: #82C342;
+  color: #69C61D;
 }
 
 .color-warning {
@@ -991,7 +991,7 @@
 }
 
 .bg-success {
-  background-color: #82C342;
+  background-color: #69C61D;
 }
 
 .bg-warning {
@@ -1173,7 +1173,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   height: auto;
   background: #fcfcfc;
   padding: 1em 1.5em;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #DDD;
 }
 
 .wc-backbone-modal-main .wc-backbone-modal-header h1 {
@@ -1194,7 +1194,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   right: 0;
   text-align: center;
   border: 0;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #DDD;
   background-color: transparent;
   -webkit-transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
   transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
@@ -1202,14 +1202,14 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link::before {
   font: normal 22px/50px 'dashicons' !important;
-  color: #666;
+  color: #6c757d;
   display: block;
   content: '\f335';
   font-weight: 300;
 }
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:hover, .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:focus {
-  background: #ddd;
+  background: #DDD;
   border-color: #ccc;
   color: #000;
 }
@@ -1342,7 +1342,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .atum-help-tip {
-  color: #666;
+  color: #6c757d;
   display: inline-block;
   font-size: 1.1em;
   font-style: normal;
@@ -2530,7 +2530,7 @@ table.wp-list-table .column-status mark.pending::after {
 
 table.wp-list-table .column-status mark.completed::after {
   content: '\e015';
-  color: #82C342;
+  color: #69C61D;
 }
 
 table.wp-list-table td.column-status {
