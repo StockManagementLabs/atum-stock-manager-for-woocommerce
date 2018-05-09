@@ -13,7 +13,7 @@
 		width: 48%;
 		padding: 0;
 		margin: 9px 0 0;
-		color: $wp-heading;
+		color: #777;
 		
 		label {
 			display: block;
@@ -101,7 +101,7 @@
 	}
 	
 	.alert {
-		background-color: lighten($brand-primary, 35%);
+		background-color: lighten($primary, 35%);
 		padding: 4px 6px;
 		display: block;
 		font-size: 12px;

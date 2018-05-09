@@ -78,7 +78,7 @@
 
 .select2-dropdown {
   background-color: white;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #AAA;
   border-radius: 4px;
   box-sizing: border-box;
   display: block;
@@ -157,7 +157,7 @@
   width: auto;
   opacity: 0;
   z-index: 99;
-  background-color: #fff;
+  background-color: #FFF;
   filter: alpha(opacity=0);
 }
 
@@ -173,13 +173,13 @@
 }
 
 .select2-container--default .select2-selection--single {
-  background-color: #fff;
-  border: 1px solid #e5e5e5;
+  background-color: #FFF;
+  border: 1px solid #AAA;
   border-radius: 4px;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-  color: #32373c;
+  color: #444;
   font-size: 14px;
   line-height: 28px;
 }
@@ -191,7 +191,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
-  color: #afafaf;
+  color: #999;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -203,7 +203,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
-  border-color: #afafaf transparent transparent transparent;
+  border-color: #888 transparent transparent transparent;
   border-style: solid;
   border-width: 5px 4px 0 4px;
   height: 0;
@@ -225,7 +225,7 @@
 }
 
 .select2-container--default.select2-container--disabled .select2-selection--single {
-  background-color: #e5e5e5;
+  background-color: #EEE;
   cursor: default;
 }
 
@@ -234,13 +234,13 @@
 }
 
 .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-  border-color: transparent transparent #afafaf transparent;
+  border-color: transparent transparent #888 transparent;
   border-width: 0 4px 5px 4px;
 }
 
 .select2-container--default .select2-selection--multiple {
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid #AAA;
   border-radius: 4px;
   cursor: text;
 }
@@ -258,7 +258,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
-  color: #afafaf;
+  color: #999;
   margin-top: 5px;
   float: left;
 }
@@ -272,8 +272,8 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #e5e5e5;
-  border: 1px solid #ddd;
+  background-color: #E4E4E4;
+  border: 1px solid #AAA;
   border-radius: 4px;
   cursor: default;
   float: left;
@@ -283,7 +283,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-  color: #afafaf;
+  color: #999;
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
@@ -291,7 +291,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-  color: #555;
+  color: #333;
 }
 
 .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__choice, .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__placeholder, .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-search--inline {
@@ -314,7 +314,7 @@
 }
 
 .select2-container--default.select2-container--disabled .select2-selection--multiple {
-  background-color: #e5e5e5;
+  background-color: #EEE;
   cursor: default;
 }
 
@@ -333,7 +333,7 @@
 }
 
 .select2-container--default .select2-search--dropdown .select2-search__field {
-  border: 1px solid #ddd;
+  border: 1px solid #AAA;
 }
 
 .select2-container--default .select2-search--inline .select2-search__field {
@@ -354,11 +354,11 @@
 }
 
 .select2-container--default .select2-results__option[aria-disabled=true] {
-  color: #afafaf;
+  color: #999;
 }
 
 .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: #ddd;
+  background-color: #DDD;
 }
 
 .select2-container--default .select2-results__option .select2-results__option {
@@ -395,7 +395,7 @@
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #0073aa;
+  background-color: #0073AA;
   color: white;
 }
 
@@ -406,8 +406,8 @@
 }
 
 .select2-container--classic .select2-selection--single {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #F7F7F7;
+  border: 1px solid #AAA;
   border-radius: 4px;
   outline: 0;
   background-image: -webkit-linear-gradient(top, white 50%, #EEEEEE 100%);
@@ -418,11 +418,11 @@
 }
 
 .select2-container--classic .select2-selection--single:focus {
-  border: 1px solid #0073aa;
+  border: 1px solid #0073AA;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__rendered {
-  color: #32373c;
+  color: #444;
   line-height: 28px;
 }
 
@@ -434,13 +434,13 @@
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__placeholder {
-  color: #afafaf;
+  color: #999;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow {
-  background-color: #ddd;
+  background-color: #DDD;
   border: none;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #AAA;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   height: 26px;
@@ -456,7 +456,7 @@
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow b {
-  border-color: #afafaf transparent transparent transparent;
+  border-color: #888 transparent transparent transparent;
   border-style: solid;
   border-width: 5px 4px 0 4px;
   height: 0;
@@ -474,7 +474,7 @@
 
 .select2-container--classic[dir="rtl"] .select2-selection--single .select2-selection__arrow {
   border: none;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #AAA;
   border-radius: 0;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -483,7 +483,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single {
-  border: 1px solid #0073aa;
+  border: 1px solid #0073AA;
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow {
@@ -492,7 +492,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow b {
-  border-color: transparent transparent #afafaf transparent;
+  border-color: transparent transparent #888 transparent;
   border-width: 0 4px 5px 4px;
 }
 
@@ -520,14 +520,14 @@
 
 .select2-container--classic .select2-selection--multiple {
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid #AAA;
   border-radius: 4px;
   cursor: text;
   outline: 0;
 }
 
 .select2-container--classic .select2-selection--multiple:focus {
-  border: 1px solid #0073aa;
+  border: 1px solid #0073AA;
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__rendered {
@@ -541,8 +541,8 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice {
-  background-color: #e5e5e5;
-  border: 1px solid #ddd;
+  background-color: #E4E4E4;
+  border: 1px solid #AAA;
   border-radius: 4px;
   cursor: default;
   float: left;
@@ -552,7 +552,7 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove {
-  color: #afafaf;
+  color: #888;
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
@@ -578,7 +578,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--multiple {
-  border: 1px solid #0073aa;
+  border: 1px solid #0073AA;
 }
 
 .select2-container--classic.select2-container--open.select2-container--above .select2-selection--multiple {
@@ -594,7 +594,7 @@
 }
 
 .select2-container--classic .select2-search--dropdown .select2-search__field {
-  border: 1px solid #ddd;
+  border: 1px solid #AAA;
   outline: 0;
 }
 
@@ -630,7 +630,7 @@
 }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
-  background-color: #0073aa;
+  background-color: #3875D7;
   color: white;
 }
 
@@ -641,7 +641,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-dropdown {
-  border-color: #0073aa;
+  border-color: #0073AA;
 }
 
 .tooltip {
@@ -681,7 +681,7 @@
   padding: 3px 8px;
   color: #fff;
   text-align: center;
-  background-color: #27282a;
+  background-color: #000;
   border-radius: 4px;
 }
 
@@ -698,7 +698,7 @@
   left: 50%;
   margin-left: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #27282a;
+  border-top-color: #000;
 }
 
 .tooltip.top-left .tooltip-arrow {
@@ -706,7 +706,7 @@
   right: 5px;
   margin-bottom: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #27282a;
+  border-top-color: #000;
 }
 
 .tooltip.top-right .tooltip-arrow {
@@ -714,7 +714,7 @@
   left: 5px;
   margin-bottom: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #27282a;
+  border-top-color: #000;
 }
 
 .tooltip.right .tooltip-arrow {
@@ -722,7 +722,7 @@
   left: 0;
   margin-top: -5px;
   border-width: 5px 5px 5px 0;
-  border-right-color: #27282a;
+  border-right-color: #000;
 }
 
 .tooltip.left .tooltip-arrow {
@@ -730,7 +730,7 @@
   right: 0;
   margin-top: -5px;
   border-width: 5px 0 5px 5px;
-  border-left-color: #27282a;
+  border-left-color: #000;
 }
 
 .tooltip.bottom .tooltip-arrow {
@@ -738,7 +738,7 @@
   left: 50%;
   margin-left: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #27282a;
+  border-bottom-color: #000;
 }
 
 .tooltip.bottom-left .tooltip-arrow {
@@ -746,7 +746,7 @@
   right: 5px;
   margin-top: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #27282a;
+  border-bottom-color: #000;
 }
 
 .tooltip.bottom-right .tooltip-arrow {
@@ -754,7 +754,7 @@
   left: 5px;
   margin-top: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #27282a;
+  border-bottom-color: #000;
 }
 
 .swal2-container {
@@ -788,18 +788,18 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #69c61d;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
-  color: #82e135;
+  color: #9ccf69;
 }
 
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00b8db;
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -864,8 +864,8 @@
   margin: auto;
   width: 30px;
   height: 30px;
-  border: 3px solid rgba(229, 229, 229, 0.25);
-  border-top-color: #e5e5e5;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -915,8 +915,8 @@
   top: 38%;
   width: 25px;
   height: 25px;
-  border: 2px solid rgba(229, 229, 229, 0.25);
-  border-top-color: #e5e5e5;
+  border: 2px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -963,43 +963,43 @@
 }
 
 .color-primary {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .color-info {
-  color: #e5e5e5;
+  color: #E3E8F5;
 }
 
 .color-success {
-  color: #69c61d;
+  color: #82C342;
 }
 
 .color-warning {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .color-danger {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .bg-primary {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .bg-info {
-  background-color: #e5e5e5;
+  background-color: #E3E8F5;
 }
 
 .bg-success {
-  background-color: #69c61d;
+  background-color: #82C342;
 }
 
 .bg-warning {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .bg-danger {
-  background-color: #ff4848;
+  background-color: #FF4848;
 }
 
 .embed-responsive {
@@ -1057,7 +1057,7 @@
   width: 48%;
   padding: 0;
   margin: 9px 0 0;
-  color: #555;
+  color: #777;
 }
 
 .atum-meta-box .form-field label {
@@ -1154,7 +1154,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   right: 0;
   bottom: 0;
   min-height: 360px;
-  background: #27282a;
+  background: #000;
   opacity: 0.7;
   z-index: 99900;
 }
@@ -1171,7 +1171,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header {
   height: auto;
-  background: #fff;
+  background: #fcfcfc;
   padding: 1em 1.5em;
   border-bottom: 1px solid #ddd;
 }
@@ -1185,7 +1185,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link {
   cursor: pointer;
-  color: #555;
+  color: #777;
   height: 54px;
   width: 54px;
   padding: 0;
@@ -1202,7 +1202,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link::before {
   font: normal 22px/50px 'dashicons' !important;
-  color: #afafaf;
+  color: #666;
   display: block;
   content: '\f335';
   font-weight: 300;
@@ -1210,8 +1210,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:hover, .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:focus {
   background: #ddd;
-  border-color: #b4b9be;
-  color: #27282a;
+  border-color: #ccc;
+  color: #000;
 }
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:focus {
@@ -1246,8 +1246,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   bottom: 0;
   z-index: 100;
   padding: 1em 1.5em;
-  background: #fff;
-  border-top: 1px solid #e5e5e5;
+  background: #fcfcfc;
+  border-top: 1px solid #dfdfdf;
   box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
 }
 
@@ -1274,7 +1274,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .select2-dropdown {
-  border-color: #ddd;
+  border-color: #DDD;
 }
 
 .select2-dropdown--below {
@@ -1290,7 +1290,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .select2-container .select2-selection {
-  border-color: #ddd;
+  border-color: #DDD;
 }
 
 .select2-container .select2-search__field {
@@ -1326,7 +1326,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .select2-container .select2-selection__clear {
-  color: #555;
+  color: #999;
   margin-top: -1px;
 }
 
@@ -1342,7 +1342,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .atum-help-tip {
-  color: #afafaf;
+  color: #666;
   display: inline-block;
   font-size: 1.1em;
   font-style: normal;
@@ -1404,11 +1404,7 @@ h2 .atum-help-tip {
 }
 
 #atum_order_data .panel h3, #atum_order_data .panel h4 {
-<<<<<<< HEAD
-  color: #555;
-=======
   color: #343a40;
->>>>>>> master
   margin: 1.33em 0 0;
 }
 
@@ -1442,7 +1438,7 @@ h2 .atum-help-tip {
 }
 
 #atum_order_data .panel .atum_order_data_column p.none_set {
-  color: #555;
+  color: #999;
 }
 
 #atum_order_data .panel .atum_order_data_column .address strong {
@@ -1529,7 +1525,7 @@ ul.atum_order_notes li {
 
 ul.atum_order_notes li .note_content {
   padding: 10px;
-  background: #e5e5e5;
+  background: #EFEFEF;
   position: relative;
 }
 
@@ -1541,17 +1537,17 @@ ul.atum_order_notes li .note_content p {
 
 ul.atum_order_notes li p.meta {
   padding: 10px;
-  color: #afafaf;
+  color: #999;
   margin: 0;
   font-size: 11px;
 }
 
 ul.atum_order_notes li p.meta .exact-date {
-  border-bottom: 1px dotted #afafaf;
+  border-bottom: 1px dotted #999;
 }
 
 ul.atum_order_notes li a.delete_note {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 ul.atum_order_notes li .note_content::after {
@@ -1564,11 +1560,11 @@ ul.atum_order_notes li .note_content::after {
   height: 0;
   border-width: 10px 10px 0 0;
   border-style: solid;
-  border-color: #e5e5e5 transparent;
+  border-color: #EFEFEF transparent;
 }
 
 .add_note {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #DDD;
   padding: 10px 10px 0;
 }
 
@@ -1588,7 +1584,7 @@ ul.atum_order_notes li .note_content::after {
   display: block !important;
   margin: 0;
   padding: 0;
-  background: #fff;
+  background: #fefefe;
 }
 
 #atum_order_items .atum-meta-box {
@@ -1596,9 +1592,9 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-data-row {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #dfdfdf;
   padding: 1.5em 2em;
-  background: #f9f9f9;
+  background: #f8f8f8;
   line-height: 2em;
   text-align: right;
 }
@@ -1656,13 +1652,13 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-totals .refunded-total {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .refund-actions {
   margin-top: 5px;
   padding-top: 12px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #dfdfdf;
 }
 
 #atum_order_items .refund-actions .button {
@@ -1685,7 +1681,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items h3 small {
-  color: #555;
+  color: #999;
 }
 
 #atum_order_items .amount {
@@ -1724,8 +1720,8 @@ ul.atum_order_notes li .note_content::after {
   text-align: left;
   padding: 1em;
   font-weight: normal;
-  color: #555;
-  background: #f9f9f9;
+  color: #999;
+  background: #f8f8f8;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1756,7 +1752,7 @@ ul.atum_order_notes li .note_content::after {
   text-align: left;
   line-height: 1.5em;
   vertical-align: top;
-  border-bottom: 1px solid #f9f9f9;
+  border-bottom: 1px solid #f8f8f8;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tbody th textarea, #atum_order_items .atum_order_items_wrapper table.atum_order_items td textarea {
@@ -1795,11 +1791,11 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tbody tr:last-child td {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #dfdfdf;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tbody tr:first-child td {
-  border-top: 8px solid #f9f9f9;
+  border-top: 8px solid #f8f8f8;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tbody#order_line_items tr:first-child td {
@@ -1815,9 +1811,9 @@ ul.atum_order_notes li .note_content::after {
 #atum_order_items .atum_order_items_wrapper table.atum_order_items td.thumb .atum-order-item-thumbnail {
   width: 38px;
   height: 38px;
-  border: 2px solid #ddd;
-  background: #f9f9f9;
-  color: #b4b9be;
+  border: 2px solid #e8e8e8;
+  background: #f8f8f8;
+  color: #ccc;
   position: relative;
   font-size: 21px;
   display: block;
@@ -1858,7 +1854,7 @@ ul.atum_order_notes li .note_content::after {
   display: block;
   margin-top: 0.5em;
   font-size: 0.92em !important;
-  color: #afafaf;
+  color: #888;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .item {
@@ -1875,7 +1871,7 @@ ul.atum_order_notes li .note_content::after {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost label {
   white-space: nowrap;
-  color: #555;
+  color: #999;
   font-size: 0.833em;
 }
 
@@ -1950,7 +1946,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .split-input div.input:first-child input, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .split-input div.input:first-child input, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .split-input div.input:first-child input, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .split-input div.input:first-child input, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .split-input div.input:first-child input, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .split-input div.input:first-child input, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .split-input div.input:first-child label, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .split-input div.input:first-child input {
-  color: #b4b9be;
+  color: #ccc;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .view, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .view, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .view, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .view, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .view, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .view, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .view {
@@ -1963,7 +1959,7 @@ ul.atum_order_notes li .note_content::after {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost small.times, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost del, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .atum-order-item-discount, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .atum-order-item-refund-fields {
   font-size: 0.92em !important;
-  color: #afafaf;
+  color: #888;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .cost .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .quantity .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .line_tax .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .tax_class .atum-order-item-refund-fields, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .atum-order-item-taxes, #atum_order_items .atum_order_items_wrapper table.atum_order_items .item_cost .atum-order-item-refund-fields {
@@ -2000,6 +1996,11 @@ ul.atum_order_notes li .note_content::after {
   text-align: left;
 }
 
+#atum_order_items .atum_order_items_wrapper table.atum_order_items .calculated {
+  border-color: #ae8ca2;
+  border-style: dotted;
+}
+
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta {
   width: 100%;
 }
@@ -2013,7 +2014,7 @@ ul.atum_order_notes li .note_content::after {
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta, #atum_order_items .atum_order_items_wrapper table.atum_order_items table.display_meta {
   margin: 0.5em 0 0;
   font-size: 0.92em !important;
-  color: #afafaf;
+  color: #888;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta tr th, #atum_order_items .atum_order_items_wrapper table.atum_order_items table.display_meta tr th {
@@ -2046,7 +2047,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta tr td input:focus + textarea, #atum_order_items .atum_order_items_wrapper table.atum_order_items table.display_meta tr td input:focus + textarea {
-  border-top-color: #555;
+  border-top-color: #999;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items table.meta tr td p, #atum_order_items .atum_order_items_wrapper table.atum_order_items table.display_meta tr td p {
@@ -2059,7 +2060,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items .refund_by {
-  border-bottom: 1px dotted #555;
+  border-bottom: 1px dotted #999;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.refund .thumb div, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div {
@@ -2075,7 +2076,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.refund .thumb div:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
-  color: #b4b9be;
+  color: #ccc;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before {
@@ -2173,11 +2174,11 @@ ul.atum_order_notes li .note_content::after {
   height: 100%;
   text-align: center;
   content: "";
-  color: #555;
+  color: #999;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax .delete-atum-order-tax:hover:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax .delete-atum-order-tax:hover:before {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax:hover .delete-atum-order-tax, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax:hover .delete-atum-order-tax {
@@ -2186,7 +2187,7 @@ ul.atum_order_notes li .note_content::after {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items small.refunded {
   display: block;
-  color: #ff4848;
+  color: #FF4848;
   white-space: nowrap;
   margin-top: 0.5em;
 }
@@ -2228,7 +2229,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions a {
-  color: #b4b9be;
+  color: #ccc;
   display: inline-block;
   cursor: pointer;
   padding: 0 0 0.5em;
@@ -2249,7 +2250,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions a:hover:before {
-  color: #555;
+  color: #999;
 }
 
 #atum_order_items .atum-order-edit-line-item-actions a:first-child {
@@ -2301,7 +2302,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:hover:before, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:hover:before {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:focus, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:focus {
@@ -2387,11 +2388,7 @@ img.tips {
 #tiptip_holder.tip_top #tiptip_arrow_inner {
   margin-top: -7px;
   margin-left: -6px;
-<<<<<<< HEAD
-  border-top-color: #555;
-=======
   border-top-color: #343a40;
->>>>>>> master
 }
 
 #tiptip_holder.tip_bottom {
@@ -2401,11 +2398,7 @@ img.tips {
 #tiptip_holder.tip_bottom #tiptip_arrow_inner {
   margin-top: -5px;
   margin-left: -6px;
-<<<<<<< HEAD
-  border-bottom-color: #555;
-=======
   border-bottom-color: #343a40;
->>>>>>> master
 }
 
 #tiptip_holder.tip_right {
@@ -2415,11 +2408,7 @@ img.tips {
 #tiptip_holder.tip_right #tiptip_arrow_inner {
   margin-top: -6px;
   margin-left: -5px;
-<<<<<<< HEAD
-  border-right-color: #555;
-=======
   border-right-color: #343a40;
->>>>>>> master
 }
 
 #tiptip_holder.tip_left {
@@ -2429,22 +2418,14 @@ img.tips {
 #tiptip_holder.tip_left #tiptip_arrow_inner {
   margin-top: -6px;
   margin-left: -7px;
-<<<<<<< HEAD
-  border-left-color: #555;
-=======
   border-left-color: #343a40;
->>>>>>> master
 }
 
 #tiptip_content {
   color: #fff;
   font-size: 0.8em;
   max-width: 150px;
-<<<<<<< HEAD
-  background: #555;
-=======
   background: #343a40;
->>>>>>> master
   text-align: center;
   border-radius: 3px;
   padding: 0.618em 1em;
@@ -2453,7 +2434,7 @@ img.tips {
 
 #tiptip_content code {
   padding: 1px;
-  background: #afafaf;
+  background: #888;
 }
 
 #tiptip_arrow, #tiptip_arrow_inner {
@@ -2481,7 +2462,7 @@ table.wp-list-table .column-title {
 
 table.wp-list-table .column-title time {
   display: block;
-  color: #555;
+  color: #999;
   margin: 3px 0;
 }
 
@@ -2544,12 +2525,12 @@ table.wp-list-table .column-status mark.pending::after, table.wp-list-table .col
 
 table.wp-list-table .column-status mark.pending::after {
   content: '\e012';
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 table.wp-list-table .column-status mark.completed::after {
   content: '\e015';
-  color: #69c61d;
+  color: #82C342;
 }
 
 table.wp-list-table td.column-status {
@@ -2563,7 +2544,7 @@ table.wp-list-table .column-notes .note-on {
   height: 1em;
   width: 1em;
   margin: 0 auto;
-  color: #555;
+  color: #999;
 }
 
 table.wp-list-table .column-notes .note-on::after {
@@ -2672,7 +2653,7 @@ table.wp-list-table img {
 }
 
 table.wp-list-table .row-actions, table.wp-list-table span.na {
-  color: #555;
+  color: #999;
 }
 
 table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-table .status_head {

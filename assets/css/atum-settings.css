@@ -24,13 +24,8 @@
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-<<<<<<< HEAD
-.btn:hover:not(:disabled), .btn:focus:not(:disabled) {
-  color: #fff;
-=======
 .btn:hover, .btn:focus {
   text-decoration: none;
->>>>>>> master
 }
 
 .btn:focus, .btn.focus {
@@ -47,15 +42,6 @@
   cursor: pointer;
 }
 
-<<<<<<< HEAD
-.btn-success {
-  color: #fff;
-  background-color: #69c61d;
-}
-
-.btn-success:hover:not(:disabled) {
-  background-color: rgba(105, 198, 29, 0.75);
-=======
 .btn:not(:disabled):not(.disabled):active, .btn:not(:disabled):not(.disabled).active {
   background-image: none;
 }
@@ -63,14 +49,10 @@
 a.btn.disabled,
 fieldset:disabled a.btn {
   pointer-events: none;
->>>>>>> master
 }
 
 .btn-primary {
   color: #fff;
-<<<<<<< HEAD
-  background-color: #00b8db;
-=======
   background-color: #00B8DB;
   border-color: #00B8DB;
 }
@@ -185,7 +167,6 @@ fieldset:disabled a.btn {
 
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
->>>>>>> master
 }
 
 .btn-info.disabled, .btn-info:disabled {
@@ -208,9 +189,6 @@ fieldset:disabled a.btn {
 
 .btn-warning {
   color: #fff;
-<<<<<<< HEAD
-  background-color: #efaf00;
-=======
   background-color: #EFAF00;
   border-color: #EFAF00;
 }
@@ -219,7 +197,6 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #c99300;
   border-color: #bc8a00;
->>>>>>> master
 }
 
 .btn-warning:focus, .btn-warning.focus {
@@ -246,12 +223,8 @@ fieldset:disabled a.btn {
 
 .btn-danger {
   color: #fff;
-<<<<<<< HEAD
-  background-color: #ff4848;
-=======
   background-color: #FF4848;
   border-color: #FF4848;
->>>>>>> master
 }
 
 .btn-danger:hover {
@@ -260,15 +233,6 @@ fieldset:disabled a.btn {
   border-color: #ff1515;
 }
 
-<<<<<<< HEAD
-.btn-info {
-  color: #555;
-  background-color: #e5e5e5;
-}
-
-.btn-info:hover:not(:disabled) {
-  background-color: rgba(229, 229, 229, 0.75);
-=======
 .btn-danger:focus, .btn-danger.focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
 }
@@ -664,7 +628,6 @@ fieldset:disabled a.btn {
   font-size: 1.09375rem;
   line-height: 1.5;
   border-radius: 0.3rem;
->>>>>>> master
 }
 
 .btn-sm {
@@ -720,18 +683,18 @@ input[type="button"].btn-block {
 
 .swal2-container a {
   text-decoration: none;
-  color: #69c61d;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
-  color: #82e135;
+  color: #9ccf69;
 }
 
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00b8db;
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -1011,8 +974,8 @@ input[type="button"].btn-block {
   margin: auto;
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(229, 229, 229, 0.25);
-  border-top-color: #e5e5e5;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -1070,19 +1033,11 @@ input[type="button"].btn-block {
 
 #atum-settings .section-title {
   padding: 20px 30px;
-<<<<<<< HEAD
-  border-bottom: 2px solid #d8d8d8;
-}
-
-#atum-settings .section-title h2 {
-  color: #494949;
-=======
   border-bottom: 2px solid #e9ecef;
 }
 
 #atum-settings .section-title h2 {
   color: #343a40;
->>>>>>> master
   margin: 0;
   text-transform: uppercase;
   font-size: 14px;
@@ -1093,11 +1048,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields tr:not(:last-child) {
-<<<<<<< HEAD
-  border-bottom: 1px solid #d8d8d8;
-=======
   border-bottom: 1px solid #e9ecef;
->>>>>>> master
 }
 
 #atum-settings .section-fields th, #atum-settings .section-fields td {
@@ -1106,16 +1057,12 @@ input[type="button"].btn-block {
 
 #atum-settings .section-fields th {
   width: 25%;
-<<<<<<< HEAD
-  color: #494949;
-=======
   color: #343a40;
->>>>>>> master
   font-weight: 400;
 }
 
 #atum-settings .section-fields .atum-setting-info {
-  color: #555;
+  color: #999;
   font-style: italic;
   font-size: 13px;
   font-weight: 100;
@@ -1162,7 +1109,7 @@ input[type="button"].btn-block {
   padding: 11px 20px 9px;
   line-height: 1;
   height: auto;
-  background: #00b8db;
+  background: #00B8DB;
   text-shadow: none;
   box-shadow: none;
   border: none;

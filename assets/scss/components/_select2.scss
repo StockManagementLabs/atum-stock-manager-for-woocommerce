@@ -72,7 +72,7 @@
 
 .select2-dropdown {
 	background-color: white;
-	border: 1px solid $wp-section-border;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 	box-sizing: border-box;
 	display: block;
@@ -151,7 +151,7 @@
 	width: auto;
 	opacity: 0;
 	z-index: 99;
-	background-color: $white;
+	background-color: #FFF;
 	filter: alpha(opacity=0);
 }
 
@@ -167,13 +167,13 @@
 }
 
 .select2-container--default .select2-selection--single {
-	background-color: $white;
-	border: 1px solid $wp-section-border;
+	background-color: #FFF;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-	color: $wp-input-color;
+	color: #444;
 	font-size: 14px;
 	line-height: 28px;
 }
@@ -185,7 +185,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
-	color: $gray;
+	color: #999;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -197,7 +197,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
-	border-color: $gray transparent transparent transparent;
+	border-color: #888 transparent transparent transparent;
 	border-style: solid;
 	border-width: 5px 4px 0 4px;
 	height: 0;
@@ -219,7 +219,7 @@
 }
 
 .select2-container--default.select2-container--disabled .select2-selection--single {
-	background-color: $wp-section-border;
+	background-color: #EEE;
 	cursor: default;
 }
 
@@ -228,13 +228,13 @@
 }
 
 .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-	border-color: transparent transparent $gray transparent;
+	border-color: transparent transparent #888 transparent;
 	border-width: 0 4px 5px 4px;
 }
 
 .select2-container--default .select2-selection--multiple {
 	background-color: white;
-	border: 1px solid $wp-input-border;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 	cursor: text;
 }
@@ -252,7 +252,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
-	color: $gray;
+	color: #999;
 	margin-top: 5px;
 	float: left;
 }
@@ -266,8 +266,8 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-	background-color: $wp-section-border;
-	border: 1px solid $wp-input-border;
+	background-color: #E4E4E4;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 	cursor: default;
 	float: left;
@@ -277,7 +277,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-	color: $gray;
+	color: #999;
 	cursor: pointer;
 	display: inline-block;
 	font-weight: bold;
@@ -285,7 +285,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-	color: $gray-dark;
+	color: #333;
 }
 
 .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__choice, .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__placeholder, .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-search--inline {
@@ -308,7 +308,7 @@
 }
 
 .select2-container--default.select2-container--disabled .select2-selection--multiple {
-	background-color: $wp-section-border;
+	background-color: #EEE;
 	cursor: default;
 }
 
@@ -327,7 +327,7 @@
 }
 
 .select2-container--default .select2-search--dropdown .select2-search__field {
-	border: 1px solid $wp-input-border;
+	border: 1px solid #AAA;
 }
 
 .select2-container--default .select2-search--inline .select2-search__field {
@@ -348,11 +348,11 @@
 }
 
 .select2-container--default .select2-results__option[aria-disabled=true] {
-	color: $gray;
+	color: #999;
 }
 
 .select2-container--default .select2-results__option[aria-selected=true] {
-	background-color: $wp-input-border;
+	background-color: #DDD;
 }
 
 .select2-container--default .select2-results__option .select2-results__option {
@@ -389,7 +389,7 @@
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-	background-color: $wp-link;
+	background-color: #0073AA;
 	color: white;
 }
 
@@ -400,8 +400,8 @@
 }
 
 .select2-container--classic .select2-selection--single {
-	background-color: $wp-bg-light;
-	border: 1px solid $wp-input-border;
+	background-color: #F7F7F7;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 	outline: 0;
 	background-image: -webkit-linear-gradient(top, white 50%, #EEEEEE 100%);
@@ -412,11 +412,11 @@
 }
 
 .select2-container--classic .select2-selection--single:focus {
-	border: 1px solid $wp-link;
+	border: 1px solid #0073AA;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__rendered {
-	color: $wp-input-color;
+	color: #444;
 	line-height: 28px;
 }
 
@@ -428,13 +428,13 @@
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__placeholder {
-	color: $gray;
+	color: #999;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow {
-	background-color: $wp-input-border;
+	background-color: #DDD;
 	border: none;
-	border-left: 1px solid $wp-input-border;
+	border-left: 1px solid #AAA;
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 	height: 26px;
@@ -450,7 +450,7 @@
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow b {
-	border-color: $gray transparent transparent transparent;
+	border-color: #888 transparent transparent transparent;
 	border-style: solid;
 	border-width: 5px 4px 0 4px;
 	height: 0;
@@ -468,7 +468,7 @@
 
 .select2-container--classic[dir="rtl"] .select2-selection--single .select2-selection__arrow {
 	border: none;
-	border-right: 1px solid $wp-input-border;
+	border-right: 1px solid #AAA;
 	border-radius: 0;
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
@@ -477,7 +477,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single {
-	border: 1px solid $wp-link;
+	border: 1px solid #0073AA;
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow {
@@ -486,7 +486,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow b {
-	border-color: transparent transparent $gray transparent;
+	border-color: transparent transparent #888 transparent;
 	border-width: 0 4px 5px 4px;
 }
 
@@ -514,14 +514,14 @@
 
 .select2-container--classic .select2-selection--multiple {
 	background-color: white;
-	border: 1px solid $wp-input-border;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 	cursor: text;
 	outline: 0;
 }
 
 .select2-container--classic .select2-selection--multiple:focus {
-	border: 1px solid $wp-link;
+	border: 1px solid #0073AA;
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__rendered {
@@ -535,8 +535,8 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice {
-	background-color: $wp-section-border;
-	border: 1px solid $wp-input-border;
+	background-color: #E4E4E4;
+	border: 1px solid #AAA;
 	border-radius: 4px;
 	cursor: default;
 	float: left;
@@ -546,7 +546,7 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove {
-	color: $gray;
+	color: #888;
 	cursor: pointer;
 	display: inline-block;
 	font-weight: bold;
@@ -554,7 +554,7 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove:hover {
-	color: $wp-heading;
+	color: #555;
 }
 
 .select2-container--classic[dir="rtl"] .select2-selection--multiple .select2-selection__choice {
@@ -572,7 +572,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--multiple {
-	border: 1px solid $wp-link;
+	border: 1px solid #0073AA;
 }
 
 .select2-container--classic.select2-container--open.select2-container--above .select2-selection--multiple {
@@ -588,7 +588,7 @@
 }
 
 .select2-container--classic .select2-search--dropdown .select2-search__field {
-	border: 1px solid $wp-input-border;
+	border: 1px solid #AAA;
 	outline: 0;
 }
 
@@ -624,7 +624,7 @@
 }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
-	background-color: $wp-link;
+	background-color: #3875D7;
 	color: white;
 }
 
@@ -635,6 +635,6 @@
 }
 
 .select2-container--classic.select2-container--open .select2-dropdown {
-	border-color: $wp-link;
+	border-color: #0073AA;
 }
 

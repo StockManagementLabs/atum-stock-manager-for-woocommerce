@@ -850,7 +850,7 @@ input[type="button"].btn-block {
 }
 
 .input-group.invalid input[type=text], .input-group.invalid input[type=number], .input-group.invalid textarea, .input-group.invalid select, .input-group.invalid .select2-container {
-  border-color: #ff4848;
+  border-color: #FF4848;
   background-color: rgba(255, 72, 72, 0.15);
 }
 
@@ -861,12 +861,12 @@ input[type="button"].btn-block {
   display: -ms-flexbox;
   display: flex;
   z-index: 1;
-  border: 1px solid #ddd;
+  border: 1px solid #DDD;
 }
 
 .input-group.invalid .input-group-prepend, .input-group.invalid
 .input-group-append {
-  border-color: #ff4848;
+  border-color: #FF4848;
 }
 
 .input-group-prepend .btn,
@@ -902,14 +902,10 @@ input[type="button"].btn-block {
   font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
-<<<<<<< HEAD
-  color: #afafaf;
-=======
   color: #6c757d;
->>>>>>> master
   text-align: center;
   white-space: nowrap;
-  background-color: #0fd9ff;
+  background-color: #D5F2F8;
   border-radius: 0;
 }
 
@@ -982,7 +978,7 @@ input[type="button"].btn-block {
 
 .product_data .atum-field input[type=text]:focus, .product_data .atum-field input[type=number]:focus {
   box-shadow: none;
-  border-color: #5b9dd9;
+  border-color: #5B9DD9;
 }
 
 .product_data .atum-field .select2-container:focus, .product_data .atum-field .select2-selection--single:focus, .product_data .atum-field .select2-selection__rendered:focus {
@@ -1010,7 +1006,7 @@ input[type="button"].btn-block {
 }
 
 .product_data .atum-field .select2-container .select2-selection--single:focus {
-  border-color: #5b9dd9;
+  border-color: #5B9DD9;
 }
 
 .product_data .atum-data-panel .woocommerce-help-tip ~ .switchery {
@@ -1038,7 +1034,7 @@ input[type="button"].btn-block {
 }
 
 .product_data .woocommerce_variations .atum-data-panel {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #DDD;
   padding-top: 15px;
 }
 
@@ -1053,8 +1049,8 @@ input[type="button"].btn-block {
 }
 
 .product_data .woocommerce_variations h3.atum-section-title {
-  border: 1px solid #e5e5e5;
-  background-color: rgba(15, 217, 255, 0.15);
+  border: 1px solid #E3E8F5;
+  background-color: rgba(213, 242, 248, 0.15);
   color: #555;
   text-transform: uppercase;
   cursor: default !important;
@@ -1065,11 +1061,7 @@ input[type="button"].btn-block {
 .product_data .woocommerce_variations h4.atum-section-title {
   margin-top: 30px;
   padding-bottom: 10px;
-<<<<<<< HEAD
-  border-bottom: 1px dashed #afafaf;
-=======
   border-bottom: 1px dashed #6c757d;
->>>>>>> master
   font-size: 1.1em;
 }
 

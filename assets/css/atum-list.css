@@ -44,7 +44,7 @@
   padding: 3px 8px;
   color: #fff;
   text-align: center;
-  background-color: #27282a;
+  background-color: #000;
   border-radius: 4px;
 }
 
@@ -61,7 +61,7 @@
   left: 50%;
   margin-left: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #27282a;
+  border-top-color: #000;
 }
 
 .tooltip.top-left .tooltip-arrow {
@@ -69,7 +69,7 @@
   right: 5px;
   margin-bottom: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #27282a;
+  border-top-color: #000;
 }
 
 .tooltip.top-right .tooltip-arrow {
@@ -77,7 +77,7 @@
   left: 5px;
   margin-bottom: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #27282a;
+  border-top-color: #000;
 }
 
 .tooltip.right .tooltip-arrow {
@@ -85,7 +85,7 @@
   left: 0;
   margin-top: -5px;
   border-width: 5px 5px 5px 0;
-  border-right-color: #27282a;
+  border-right-color: #000;
 }
 
 .tooltip.left .tooltip-arrow {
@@ -93,7 +93,7 @@
   right: 0;
   margin-top: -5px;
   border-width: 5px 0 5px 5px;
-  border-left-color: #27282a;
+  border-left-color: #000;
 }
 
 .tooltip.bottom .tooltip-arrow {
@@ -101,7 +101,7 @@
   left: 50%;
   margin-left: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #27282a;
+  border-bottom-color: #000;
 }
 
 .tooltip.bottom-left .tooltip-arrow {
@@ -109,7 +109,7 @@
   right: 5px;
   margin-top: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #27282a;
+  border-bottom-color: #000;
 }
 
 .tooltip.bottom-right .tooltip-arrow {
@@ -117,7 +117,7 @@
   left: 5px;
   margin-top: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #27282a;
+  border-bottom-color: #000;
 }
 
 .popover {
@@ -130,7 +130,7 @@
   padding: 1px;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #b4b9be;
+  border: 1px solid #CCC;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -192,7 +192,7 @@
   left: 50%;
   margin-left: -11px;
   border-bottom-width: 0;
-  border-top-color: #7d868f;
+  border-top-color: #999999;
   border-top-color: rgba(0, 0, 0, 0.25);
   bottom: -11px;
 }
@@ -210,7 +210,7 @@
   left: -11px;
   margin-top: -11px;
   border-left-width: 0;
-  border-right-color: #7d868f;
+  border-right-color: #999999;
   border-right-color: rgba(0, 0, 0, 0.25);
 }
 
@@ -226,7 +226,7 @@
   left: 50%;
   margin-left: -11px;
   border-top-width: 0;
-  border-bottom-color: #7d868f;
+  border-bottom-color: #999999;
   border-bottom-color: rgba(0, 0, 0, 0.25);
   top: -11px;
 }
@@ -244,7 +244,7 @@
   right: -11px;
   margin-top: -11px;
   border-right-width: 0;
-  border-left-color: #7d868f;
+  border-left-color: #999999;
   border-left-color: rgba(0, 0, 0, 0.25);
 }
 
@@ -278,11 +278,7 @@
 }
 
 .popover .popover-content > .button:disabled {
-<<<<<<< HEAD
-  color: #e5e5e5 !important;
-=======
   color: #f8f9fa !important;
->>>>>>> master
   opacity: 0.6;
 }
 
@@ -292,7 +288,7 @@
 }
 
 .popover.with-meta .popover-content hr {
-  border-color: #e5e5e5;
+  border-color: #E3E8F5;
 }
 
 .swal2-container {
@@ -326,18 +322,18 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #69c61d;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
-  color: #82e135;
+  color: #9ccf69;
 }
 
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00b8db;
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -406,7 +402,7 @@ ul.easytree-container {
   white-space: nowrap;
   padding: 3px;
   margin: 0;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #E3E8F5;
   border-radius: 6px;
   overflow: auto;
   height: 100%;
@@ -434,11 +430,7 @@ ul.easytree-container ul li {
 }
 
 ul.easytree-container ul li, ul.easytree-container ul li a {
-<<<<<<< HEAD
-  color: #555;
-=======
   color: #343a40;
->>>>>>> master
 }
 
 ul.easytree-container ul li.easytree-lastsib {
@@ -447,11 +439,7 @@ ul.easytree-container ul li.easytree-lastsib {
 
 .ui-easytree-disabled ul.easytree-container {
   opacity: 0.5;
-<<<<<<< HEAD
-  background-color: #afafaf;
-=======
   background-color: #6c757d;
->>>>>>> master
 }
 
 ul.easytree-container img {
@@ -474,11 +462,7 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   vertical-align: top;
   font-family: Dashicons;
   cursor: pointer;
-<<<<<<< HEAD
-  color: #555;
-=======
   color: #343a40;
->>>>>>> master
 }
 
 span.easytree-custom-icon {
@@ -497,7 +481,7 @@ span.easytree-expander:before {
 }
 
 span.easytree-expander:hover {
-  color: #00b8db !important;
+  color: #00B8DB !important;
 }
 
 .easytree-exp-e span.easytree-expander:before, .easytree-exp-ed span.easytree-expander:before, .easytree-exp-el span.easytree-expander:before, .easytree-exp-edl span.easytree-expander:before {
@@ -539,19 +523,15 @@ span.easytree-expander:hover {
 }
 
 .easytree-title a {
-<<<<<<< HEAD
-  color: #555 !important;
-=======
   color: #343a40 !important;
->>>>>>> master
 }
 
 .easytree-title a:hover {
-  color: #00b8db !important;
+  color: #00B8DB !important;
 }
 
 .easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-active .easytree-title {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-selected .easytree-title a, .easytree-focused span.easytree-active .easytree-title, .easytree-focused span.easytree-active .easytree-title a {
@@ -570,8 +550,8 @@ span.easytree-expander:hover {
   margin: auto;
   width: 30px;
   height: 30px;
-  border: 3px solid rgba(229, 229, 229, 0.25);
-  border-top-color: #e5e5e5;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -621,8 +601,8 @@ span.easytree-expander:hover {
   top: 38%;
   width: 25px;
   height: 25px;
-  border: 2px solid rgba(229, 229, 229, 0.25);
-  border-top-color: #e5e5e5;
+  border: 2px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -725,18 +705,6 @@ span.easytree-expander:hover {
 
 .atum-report .report-header .report-data, .atum-report .report-header .report-details {
   padding: 15px;
-<<<<<<< HEAD
-  border-top: 2px solid #afafaf;
-  border-bottom: 2px solid #afafaf;
-}
-
-.atum-report .report-header .report-data {
-  border-left: 2px solid #afafaf;
-}
-
-.atum-report .report-header .report-details {
-  border-right: 2px solid #afafaf;
-=======
   border-top: 2px solid #6c757d;
   border-bottom: 2px solid #6c757d;
 }
@@ -747,7 +715,6 @@ span.easytree-expander:hover {
 
 .atum-report .report-header .report-details {
   border-right: 2px solid #6c757d;
->>>>>>> master
 }
 
 .atum-report .report-header .space {
@@ -756,7 +723,7 @@ span.easytree-expander:hover {
 
 .atum-report .report-header .inventory-resume {
   padding: 15px;
-  border: 2px solid #efaf00;
+  border: 2px solid #EFAF00;
 }
 
 .atum-report .report-header h5 {
@@ -766,23 +733,19 @@ span.easytree-expander:hover {
 }
 
 .atum-report .report-header p {
-<<<<<<< HEAD
-  color: #555;
-=======
   color: #343a40;
->>>>>>> master
 }
 
 .atum-report .report-header .warning-color {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-report .report-header .success-color {
-  color: #69c61d;
+  color: #82C342;
 }
 
 .atum-report .report-header .danger-color {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-report .atum-list-table thead th {
@@ -794,7 +757,7 @@ span.easytree-expander:hover {
 }
 
 .atum-report h1 {
-  color: #00b8db;
+  color: #00B8DB;
   text-transform: uppercase;
   font-size: 38px;
   font-weight: bold;
@@ -804,11 +767,7 @@ span.easytree-expander:hover {
 .atum-report h3 {
   font-size: 24px;
   font-weight: normal;
-<<<<<<< HEAD
-  color: #afafaf;
-=======
   color: #6c757d;
->>>>>>> master
   margin-top: 5px;
 }
 
@@ -826,7 +785,7 @@ h1.wp-heading-inline #atum-update-list {
 h1.wp-heading-inline #atum-update-list:active {
   color: #fff;
   padding: 0 10px 1px;
-  box-shadow: 0 1px 0 #0073aa;
+  box-shadow: 0 1px 0 #006799;
 }
 
 .atum-list-wrapper {
@@ -868,11 +827,7 @@ h1.wp-heading-inline #atum-update-list:active {
   height: 25px;
   text-align: center;
   border: none;
-<<<<<<< HEAD
-  background-color: #00b8db;
-=======
   background-color: #00B8DB;
->>>>>>> master
   color: #fff;
   padding: 2px 0 0;
   cursor: pointer;
@@ -921,23 +876,15 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-wrapper .actions .select2-container:focus .select2-selection {
   box-shadow: 0 0 2px rgba(91, 157, 217, 0.8);
-  border-color: #5b9dd9;
+  border-color: #5B9DD9;
 }
 
 .atum-list-wrapper .actions .select2-container .select2-selection__placeholder {
-<<<<<<< HEAD
-  color: #555 !important;
-}
-
-.atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
-  border-top-color: #555;
-=======
   color: #343a40 !important;
 }
 
 .atum-list-wrapper .actions .select2-container .select2-selection__arrow b {
   border-top-color: #343a40;
->>>>>>> master
 }
 
 .atum-list-wrapper .actions .filter-text {
@@ -996,20 +943,12 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-table-wrapper .jspTrack {
-<<<<<<< HEAD
-  background: rgba(175, 175, 175, 0.2);
-=======
   background: rgba(108, 117, 125, 0.2);
->>>>>>> master
   position: relative;
 }
 
 .atum-table-wrapper .jspDrag {
-<<<<<<< HEAD
-  background: #afafaf;
-=======
   background: #6c757d;
->>>>>>> master
   position: relative;
   top: 0;
   left: 0;
@@ -1017,11 +956,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-table-wrapper .jspCorner {
-<<<<<<< HEAD
-  background: #e5e5e5;
-=======
   background: #f8f9fa;
->>>>>>> master
   float: left;
   height: 100%;
 }
@@ -1061,11 +996,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .column-groups th:nth-child(even) {
-<<<<<<< HEAD
-  background-color: #e5e5e5;
-=======
   background-color: #f8f9fa;
->>>>>>> master
 }
 
 .atum-list-table th.sortable a, .atum-list-table th.sorted a {
@@ -1108,11 +1039,11 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription {
-  background-color: #00b8db;
+  background-color: #00B8DB;
 }
 
 .atum-list-table tr.expanded.group {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .atum-list-table tr.expanded td, .atum-list-table tr.expanded a {
@@ -1153,21 +1084,13 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.totals {
-<<<<<<< HEAD
-  background-color: lightgray;
-=======
   background-color: #e3e7eb;
->>>>>>> master
 }
 
 .atum-list-table tr.totals td, .atum-list-table tr.totals th {
   font-size: 12px;
   font-weight: 400;
-<<<<<<< HEAD
-  color: #555;
-=======
   color: #343a40;
->>>>>>> master
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -1182,23 +1105,23 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table tr.totals td span.danger, .atum-list-table tr.totals th span.danger {
-  background-color: #ff4848;
+  background-color: #FF4848;
 }
 
 .atum-list-table .cell-green {
-  color: #69c61d;
+  color: #82C342;
 }
 
 .atum-list-table .cell-yellow {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-list-table .cell-red {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-list-table .cell-blue {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-list-table td, .atum-list-table th {
@@ -1208,11 +1131,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table td.pro-version, .atum-list-table th.pro-version {
-<<<<<<< HEAD
-  background-color: #afafaf;
-=======
   background-color: #6c757d;
->>>>>>> master
 }
 
 .atum-list-table td.column-title, .atum-list-table th.column-title {
@@ -1249,7 +1168,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .column-calc_type .has-child.product-type.variable, .atum-list-table .column-calc_type .has-child.product-type.variable-subscription {
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before {
@@ -1257,7 +1176,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .column-calc_type .has-child.product-type.grouped {
-  color: #efaf00;
+  color: #EFAF00;
 }
 
 .atum-list-table .column-calc_type .has-child.product-type:hover:before {
@@ -1275,23 +1194,19 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-table .set-meta {
   cursor: pointer;
-  color: #0073aa;
+  color: #0073AA;
 }
 
 .atum-list-table .set-meta:hover {
-  color: #00a0d2;
+  color: #00A0D2;
 }
 
 .atum-list-table .set-meta.unsaved {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-list-table .highlight-danger {
-<<<<<<< HEAD
-  background-color: #ff4848;
-=======
   background-color: #FF4848;
->>>>>>> master
   color: #fff;
   padding: 2px 3px;
   border-radius: 2px;

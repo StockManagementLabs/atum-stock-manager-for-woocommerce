@@ -38,18 +38,18 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #69c61d;
+  color: #82C342;
 }
 
 .swal2-container a:hover {
-  color: #82e135;
+  color: #9ccf69;
 }
 
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00b8db;
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -167,7 +167,7 @@
 }
 
 .atum-addons .theme .theme-actions.valid {
-  background-color: #69c61d;
+  background-color: #82C342;
 }
 
 .atum-addons .theme .theme-actions.valid + .show-key {
@@ -175,15 +175,15 @@
 }
 
 .atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
-  color: #69c61d;
+  color: #82C342;
 }
 
 .atum-addons .theme .theme-actions.invalid span {
-  color: #ff4848;
+  color: #FF4848;
 }
 
 .atum-addons .theme .theme-actions.inactive {
-  background-color: #efaf00;
+  background-color: #EFAF00;
 }
 
 .atum-addons .theme .theme-actions.not-installed {
@@ -219,7 +219,7 @@
 .atum-addons .theme .show-key i {
   font-size: 15px;
   padding-top: 17px;
-  color: #00b8db;
+  color: #00B8DB;
 }
 
 .atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive), .atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive), .atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive) {
@@ -347,7 +347,7 @@
   -moz-align-items: center;
   align-items: center;
   padding: 5px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #DDD;
   position: relative;
 }
 
@@ -365,15 +365,15 @@
 }
 
 .atum-addons .theme .addon-key input[type=text].valid {
-  border-color: #69c61d;
+  border-color: #82C342;
 }
 
 .atum-addons .theme .addon-key input[type=text].inactive {
-  border-color: #efaf00;
+  border-color: #EFAF00;
 }
 
 .atum-addons .theme .addon-key input[type=text].invalid {
-  border-color: #ff4848;
+  border-color: #FF4848;
 }
 
 .atum-addons .theme .button {
@@ -381,11 +381,7 @@
   box-shadow: none;
   text-shadow: none;
   font-weight: normal;
-<<<<<<< HEAD
-  background-color: #00b8db;
-=======
   background-color: #00B8DB;
->>>>>>> master
   color: #fff;
   border-radius: 0;
   -webkit-transition: all 0.2s ease-in-out;
@@ -394,7 +390,7 @@
 }
 
 .atum-addons .theme .button:disabled {
-  background-color: #00b8db !important;
+  background-color: #00B8DB !important;
   text-shadow: none !important;
   color: #fff !important;
   opacity: 0.6;
@@ -405,8 +401,8 @@
 }
 
 .atum-addons .theme.active .addon-key {
-  background-color: #27282a;
-  border-top-color: #64676c;
+  background-color: #23282d;
+  border-top-color: #5b6875;
 }
 
 .atum-addons .theme .atum-loading {
@@ -415,7 +411,7 @@
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00b8db;
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
