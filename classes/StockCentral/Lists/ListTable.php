@@ -83,6 +83,7 @@ class ListTable extends AtumListTable {
 			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+            '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
@@ -133,7 +134,8 @@ class ListTable extends AtumListTable {
 					'calc_location',
 					'_regular_price',
 					'_sale_price',
-					'_purchase_price'
+					'_purchase_price',
+                    '_weight'
 				)
 			),
 			'stock-counters'        => array(
@@ -637,7 +639,6 @@ class ListTable extends AtumListTable {
 	public function prepare_items() {
 		
 		parent::prepare_items();
-		
 		$calc_products = array_merge( $this->current_products, $this->children_products);
 
 		// Calc products sold today (since midnight)

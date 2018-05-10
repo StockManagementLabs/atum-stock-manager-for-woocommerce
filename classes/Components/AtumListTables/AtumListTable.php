@@ -787,7 +787,23 @@ abstract class AtumListTable extends \WP_List_Table {
 		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
 		
 	}
-	
+
+    /**
+     * Post Weight column
+     *
+     * @since  v1.4.6
+     *
+     * @param \WP_Post $item The WooCommerce product post
+     *
+     * @return double
+     */
+    protected function column_calc_weight( $item ) {
+        $weights = self::EMPTY_COL;
+        $weight_meta = get_post_meta($this->product->get_id(), '_weight', $single = true);
+
+        return apply_filters( 'atum/list_table/column_weight', $weight_meta, $item, $this->product );
+    }
+
 	/**
 	 * Column for stock amount
 	 *
@@ -1358,14 +1374,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @since  0.0.1
 	 */
 	public function prepare_items() {
-		
-		/*
+	    //Check if user has a hidden collumns configuration, if not, _weight must be hidde
+        $user_hidden = get_hidden_columns( $this->screen );
+        /*
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
 		$products            = array();
 		$sortable            = $this->get_sortable_columns();
-		$hidden              = get_hidden_columns( $this->screen );
+        $hidden              = (!empty( $user_hidden )) ? $user_hidden : array('_weight');
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
 		
 		/*
