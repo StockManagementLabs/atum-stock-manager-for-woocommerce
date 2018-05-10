@@ -1376,13 +1376,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function prepare_items() {
 	    //Check if user has a hidden collumns configuration, if not, _weight must be hidde
         $user_hidden = get_hidden_columns( $this->screen );
-		/*
+        /*
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
 		$products            = array();
 		$sortable            = $this->get_sortable_columns();
-        $hidden              = (is_array( $user_hidden )) ? $user_hidden : '_weight';
+        $hidden              = (!empty( $user_hidden )) ? $user_hidden : array('_weight');
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
 		
 		/*
