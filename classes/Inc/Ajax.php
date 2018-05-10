@@ -782,6 +782,8 @@ final class Ajax {
 		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
 		if ($license_data->download_link) {
+			
+			Addons::delete_status_transient($addon_name);
 			$result = Addons::install_addon($addon_name, $addon_slug, $license_data->download_link);
 			wp_send_json($result);
 		}
