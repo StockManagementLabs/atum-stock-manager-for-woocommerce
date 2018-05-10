@@ -1129,6 +1129,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		foreach ( $views_name as $key => $text ) {
 
 			$class = $id = '';
+			$classes= array();
+			
 			$current_all = ! empty( $views[ $key ]['all'] ) ? $views[ $key ]['all'] : $key;
 			
 			if ( $current_all == 'all_stock' ) {
@@ -1151,17 +1153,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			$query_filters = $this->query_filters;
 			
 			if ( $current_all == $view || ( ! $view && $current_all == 'all_stock' ) ) {
-				$class[] = 'current';
+				$classes[] = 'current';
 			}
 			else {
 				$query_filters['paged'] = 1;
 			}
 			if (!$count) {
-				$class[] = 'empty';
+				$classes[] = 'empty';
  			}
  			
- 			if ( $class ) {
-				$class = ' class="' . implode( ' ', $class) . '"';
+ 			if ( $classes ) {
+				$class = ' class="' . implode( ' ', $classes) . '"';
 		    }
 		    else {
 				$class = '';
