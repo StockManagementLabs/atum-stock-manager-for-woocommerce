@@ -60,6 +60,16 @@
 					opacity: 0;
 				}
 				
+				&.not-installed {
+					
+					background-color: $success;
+					right: 0;
+					width: 105px;
+					height: 50px;
+					padding: 0;
+					border: none;
+				}
+				
 				&:not(.not-installed) {
 					+ .show-key {
 						i {
@@ -115,7 +125,7 @@
 		&:hover, &.inactive, &.invalid {
 			
 			.theme-actions {
-				&:not(.coming-soon):not(.inactive) {
+				&:not(.coming-soon):not(.inactive):not(.not-installed) {
 					opacity: 0;
 					@include transform(translate3d(100%, -50%, 0));
 				}
@@ -193,7 +203,7 @@
 				@include flex-wrap(nowrap);
 				@include flex-align-items(center);
 				padding: 5px;
-				border-top: 1px solid $wp-input-border;
+				border-top: 1px solid #DDD;
 				position: relative;
 			}
 			
@@ -225,6 +235,7 @@
 		}
 		
 		.button {
+			
 			border: none;
 			box-shadow: none;
 			text-shadow: none;
@@ -233,6 +244,16 @@
 			color: $white;
 			border-radius: 0;
 			@include transition(all 0.2s ease-in-out);
+			
+			&.install-addon {
+				background-color: $success;
+				height: 100%;
+				width: 100%;
+				margin-left: 0;
+				&:hover {
+					background-color: lighten($success, 10%);
+				}
+			}
 			
 			&:disabled {
 				background-color: $primary !important;
@@ -248,8 +269,8 @@
 		
 		&.active {
 			.addon-key {
-				background-color: $blue-dark;
-				border-top-color: lighten($blue-dark, 25%);
+				background-color: #23282d;
+				border-top-color: lighten(#23282d, 25%);
 			}
 		}
 		
