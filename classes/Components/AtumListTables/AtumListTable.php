@@ -1370,11 +1370,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	
 	/**
 	 * Prepare the table data
-	 *
-	 * @since  0.0.1
+	 * @param array  $default_hidden_collumns An array of columns hidden by default.
+     * @since  0.0.1
 	 */
 	public function prepare_items() {
-	    //Check if user has a hidden collumns configuration, if not, _weight must be hidde
         $user_hidden = get_hidden_columns( $this->screen );
         /*
 		 * Define our column headers
@@ -1382,9 +1381,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$columns             = $this->get_columns();
 		$products            = array();
 		$sortable            = $this->get_sortable_columns();
-        $hidden              = (!empty( $user_hidden )) ? $user_hidden : array('_weight');
+        $hidden              = $user_hidden;
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
-		
+
 		/*
 		 * REQUIRED. Build an array to be used by the class for column headers
 		 */
