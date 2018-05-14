@@ -1070,4 +1070,14 @@ input[type="button"].btn-block {
   padding: 0.35rem 0.75rem;
 }
 
+#tiptip_holder ul {
+  text-align: left;
+  padding-left: 10px;
+}
+
+#tiptip_holder ul li {
+  list-style: circle;
+  line-height: 1.3;
+}
+
 /*# sourceMappingURL=atum-product-data.css.map */
