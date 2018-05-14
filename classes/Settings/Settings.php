@@ -140,6 +140,13 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
+			'unmanaged_counters' => array(
+				'section' => 'general',
+				'name'    => __( 'Unmanaged Product Counters', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Add 'In Stock', 'Out of Stock' and 'Back Ordered' counters and views for Unmanaged by WooCommerce Products in all ATUM list tables. This option will also add these products to the Dashboard Stock Control Widget. Please note that enabling this option can affect the performance in stores with a large number of products.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no'
+			),
 			'stock_quantity_decimals' => array(
 				'section' => 'general',
 				'name'    => __( 'Decimals in Stock Quantity', ATUM_TEXT_DOMAIN ),

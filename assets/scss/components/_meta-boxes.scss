@@ -139,7 +139,7 @@
 		height: auto;
 		background: #fcfcfc;
 		padding: 1em 1.5em;
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid $wp-input-border;
 		
 		h1 {
 			margin: 0;
@@ -159,21 +159,21 @@
 			right: 0;
 			text-align: center;
 			border: 0;
-			border-left: 1px solid #ddd;
+			border-left: 1px solid $wp-input-border;
 			background-color: transparent;
 			-webkit-transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 			transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 			
 			&::before {
 				font: normal 22px/50px 'dashicons' !important;
-				color: #666;
+				color: color('gray');
 				display: block;
 				content: '\f335';
 				font-weight: 300;
 			}
 			
 			&:hover, &:focus {
-				background: #ddd;
+				background: $wp-input-border;
 				border-color: #ccc;
 				color: $black;
 			}
@@ -245,7 +245,7 @@
 }
 
 .select2-dropdown {
-	border-color: #DDD;
+	border-color: $wp-input-border;
 }
 
 .select2-dropdown--below {
@@ -263,7 +263,7 @@
 	}
 	
 	.select2-selection {
-		border-color: #DDD;
+		border-color: $wp-input-border;
 	}
 	
 	.select2-search__field {
@@ -328,7 +328,7 @@
 //---------
 
 .atum-help-tip {
-	color: #666;
+	color: color('gray');
 	display: inline-block;
 	font-size: 1.1em;
 	font-style: normal;

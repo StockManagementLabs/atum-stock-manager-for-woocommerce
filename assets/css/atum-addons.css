@@ -38,11 +38,11 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82C342;
+  color: #69C61D;
 }
 
 .swal2-container a:hover {
-  color: #9ccf69;
+  color: #82e135;
 }
 
 .swal2-container .atum-loading {
@@ -167,7 +167,7 @@
 }
 
 .atum-addons .theme .theme-actions.valid {
-  background-color: #82C342;
+  background-color: #69C61D;
 }
 
 .atum-addons .theme .theme-actions.valid + .show-key {
@@ -175,7 +175,7 @@
 }
 
 .atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
-  color: #82C342;
+  color: #69C61D;
 }
 
 .atum-addons .theme .theme-actions.invalid span {
@@ -365,7 +365,7 @@
 }
 
 .atum-addons .theme .addon-key input[type=text].valid {
-  border-color: #82C342;
+  border-color: #69C61D;
 }
 
 .atum-addons .theme .addon-key input[type=text].inactive {
@@ -401,8 +401,8 @@
 }
 
 .atum-addons .theme.active .addon-key {
-  background-color: #23282d;
-  border-top-color: #5b6875;
+  background-color: #27283B;
+  border-top-color: #5a5c88;
 }
 
 .atum-addons .theme .atum-loading {

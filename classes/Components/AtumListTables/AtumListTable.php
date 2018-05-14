@@ -203,6 +203,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var int
 	 */
 	protected $row_count = 0;
+	
+	/**
+	 * Whether to show or not the unmanaged counters
+	 *
+	 * @var bool
+	 */
+	protected $show_unmanaged_counters;
 
 	/**
 	 * Value for empty columns
@@ -780,7 +787,23 @@ abstract class AtumListTable extends \WP_List_Table {
 		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
 		
 	}
-	
+
+    /**
+     * Post Weight column
+     *
+     * @since  v1.4.6
+     *
+     * @param \WP_Post $item The WooCommerce product post
+     *
+     * @return double
+     */
+    protected function column_calc_weight( $item ) {
+        $weights = self::EMPTY_COL;
+        $weight_meta = get_post_meta($this->product->get_id(), '_weight', $single = true);
+
+        return apply_filters( 'atum/list_table/column_weight', $weight_meta, $item, $this->product );
+    }
+
 	/**
 	 * Column for stock amount
 	 *
@@ -911,16 +934,16 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 		// Out of stock
-		elseif ( in_array($product_id, $this->id_views['out_stock']) ) {
-
-			if ($this->product->backorders_allowed()) {
-				$content = '<span class="dashicons dashicons-visibility" data-toggle="tooltip" title="' . __('Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN) . '"></span>';
-			}
-			else {
-				$classes .= ' cell-red';
-				$content = '<span class="dashicons dashicons-dismiss" data-toggle="tooltip" title="' . __('Out of Stock', ATUM_TEXT_DOMAIN) . '"></span>';
-			}
-
+		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
+			
+			$classes .= ' cell-red';
+			$content = '<span class="dashicons dashicons-dismiss" data-toggle="tooltip" title="' . __( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"></span>';
+			
+		}
+		// Back Orders
+		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
+			
+			$content = '<span class="dashicons dashicons-visibility" data-toggle="tooltip" title="' . __( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"></span>';
 		}
 		// Low Stock
 		elseif ( in_array($product_id, $this->id_views['low_stock']) ) {
@@ -1073,14 +1096,43 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$views = array();
 		$view  = ! empty( $_REQUEST['view'] ) ? esc_attr( $_REQUEST['view'] ) : 'all_stock';
-
+		
 		$views_name = array(
-			'all_stock' => __( 'All', ATUM_TEXT_DOMAIN ),
-			'in_stock'  => __( 'In Stock', ATUM_TEXT_DOMAIN ),
-			'out_stock' => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
-			'low_stock' => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
-			'unmanaged' => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN )
+			'all_stock'  => __( 'All', ATUM_TEXT_DOMAIN ),
+			'in_stock'   => __( 'In Stock', ATUM_TEXT_DOMAIN ),
+			'out_stock'  => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
+			'back_order' => __( 'on Back Order', ATUM_TEXT_DOMAIN ),
+			'low_stock'  => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
+			'unmanaged'  => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
 		);
+		
+		if ( $this->show_unmanaged_counters ) {
+			unset( $views_name['unmanaged'] );
+			
+			$views = array(
+				'all_stock'  => array(
+					'all'       => 'all_stock',
+					'managed'   => 'managed',
+					'unmanaged' => 'unmanaged'
+				),
+				'in_stock'   => array(
+					'all'       => 'all_in_stock',
+					'managed'   => 'in_stock',
+					'unmanaged' => 'unm_in_stock'
+				),
+				'out_stock'  => array(
+					'all'       => 'all_out_stock',
+					'managed'   => 'out_stock',
+					'unmanaged' => 'unm_out_stock'
+				),
+				'back_order' => array(
+					'all'       => 'all_back_order',
+					'managed'   => 'back_order',
+					'unmanaged' => 'unm_back_order'
+				),
+			);
+			
+		}
 
 		global $plugin_page;
 
@@ -1092,22 +1144,118 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		foreach ( $views_name as $key => $text ) {
 
-			$id = '';
-
-			if ( $key != 'all_stock' ) {
-				$view_url = esc_url( add_query_arg( array( 'view' => $key ), $url ) );
-				$id       = ' id="' . $key . '"';
-			}
-			else {
+			$class = $id = '';
+			$classes= array();
+			
+			$current_all = ! empty( $views[ $key ]['all'] ) ? $views[ $key ]['all'] : $key;
+			
+			if ( $current_all == 'all_stock' ) {
+				$count = $this->count_views['count_all'];
 				$view_url = $url;
 			}
-
-			$class = ( $key == $view || ( ! $view && $key == 'all_stock' ) ) ? ' class="current"' : '';
-			$count = $this->count_views[ 'count_' . ( $key == 'all_stock' ? 'all' : $key ) ];
-
-			$hash_params = http_build_query( array_merge( $this->query_filters, array('view' => $key) ) );
-
-			$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span>' . $text . ' (' . $count . ')</span></a>';
+			else{
+				
+				if ( ! empty( $views[ $key ] ) ) {
+					$count = $this->count_views[ 'count_' . $views[ $key ]['all'] ];
+				}
+				else {
+					$count = $this->count_views[ 'count_' . $key ];
+				}
+				
+				$view_url = esc_url( add_query_arg( array( 'view' => $current_all), $url ) );
+				$id       = ' id="' . $current_all . '"';
+			}
+			
+			$query_filters = $this->query_filters;
+			
+			if ( $current_all == $view || ( ! $view && $current_all == 'all_stock' ) ) {
+				$classes[] = 'current';
+			}
+			else {
+				$query_filters['paged'] = 1;
+			}
+			if (!$count) {
+				$classes[] = 'empty';
+ 			}
+ 			
+ 			if ( $classes ) {
+				$class = ' class="' . implode( ' ', $classes) . '"';
+		    }
+		    else {
+				$class = '';
+		    }
+			
+			$hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $current_all ) ) );
+			
+			if ( ! empty( $views[ $key ] ) && $this->show_controlled ) {
+				
+				$extra_links = '';
+				
+				if ( ! empty( $views[ $key ]['managed'] ) ) {
+					
+					$man_class = array();
+					
+					$man_url   = esc_url( add_query_arg( array( 'view' => $views[ $key ]['managed'] ), $url ) );
+					$man_id    = ' id="' . $views[ $key ]['managed'] . '"';
+					$man_count = $this->count_views[ 'count_' . $views[ $key ]['managed'] ];
+					
+					$query_filters = $this->query_filters;
+					
+					if ( ( $views[ $key ]['managed'] == $view ) ) {
+						$man_class[] = 'current';
+					}
+					else {
+						$query_filters['paged'] = 1;
+					}
+					if ( ! $man_count ) {
+						$man_class[] = 'empty';
+					}
+					if ( $man_class ) {
+						$man_class = ' class="' . implode( ' ', $man_class ) . '"';
+					}
+					else {
+						$man_class = '';
+					}
+					$man_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['managed'] ) ) );
+					
+					$extra_links .= '<a' . $man_id . $man_class . ' href="' . $man_url . '" rel="address:/?' . $man_hash_params . '" data-toggle="tooltip" title="' . __('Managed by WC', ATUM_LEVELS_TEXT_DOMAIN) . '">' . $man_count . '</a>';
+				}
+				
+				if ( ! empty( $views[ $key ]['unmanaged'] ) ) {
+					
+					$unm_class = array();
+					
+					$unm_url         = esc_url( add_query_arg( array( 'view' => $views[ $key ]['unmanaged'] ), $url ) );
+					$unm_id          = ' id="' . $views[ $key ]['unmanaged'] . '"';
+					$unm_count       = $this->count_views[ 'count_' . $views[ $key ]['unmanaged'] ];
+					
+					$query_filters = $this->query_filters;
+					
+					if ( ( $views[ $key ]['unmanaged'] == $view ) ) {
+						$unm_class[] = 'current';
+					}
+					else {
+						$query_filters['paged'] = 1;
+					}
+					if ( ! $unm_count ) {
+						$unm_class[] = 'empty';
+					}
+					if ( $unm_class ) {
+						$unm_class = ' class="' . implode( ' ', $unm_class ) . '"';
+					}
+					else {
+						$unm_class = '';
+					}
+					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
+					
+					$extra_links .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '" data-toggle="tooltip" title="' . __('UnManaged by WC', ATUM_LEVELS_TEXT_DOMAIN) . '">'  . $unm_count . '</a>';
+				}
+				
+				$views[ $key ] = '<span>' . $text . ' ' . '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">' . $count . '</a> (' . $extra_links . ')</span>';
+			}
+			else {
+				$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span>' . $text . ' (' . $count . ')</span></a>';
+			}
 
 		}
 
@@ -1222,20 +1370,20 @@ abstract class AtumListTable extends \WP_List_Table {
 	
 	/**
 	 * Prepare the table data
-	 *
-	 * @since  0.0.1
+	 * @param array  $default_hidden_collumns An array of columns hidden by default.
+     * @since  0.0.1
 	 */
 	public function prepare_items() {
-		
-		/*
+        $user_hidden = get_hidden_columns( $this->screen );
+        /*
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
 		$products            = array();
 		$sortable            = $this->get_sortable_columns();
-		$hidden              = get_hidden_columns( $this->screen );
+        $hidden              = $user_hidden;
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
-		
+
 		/*
 		 * REQUIRED. Build an array to be used by the class for column headers
 		 */
@@ -1549,20 +1697,46 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function set_views_data( $args ) {
 
 		global $wpdb;
-
+		
 		$this->id_views = array(
-			'in_stock'  => [ ],
-			'out_stock' => [ ],
-			'low_stock' => [ ],
-			'unmanaged' => [ ]
+			'in_stock'   => [],
+			'out_stock'  => [],
+			'back_order' => [],
+			'low_stock'  => [],
+			'unmanaged'  => []
 		);
-
+		
 		$this->count_views = array(
-			'count_in_stock'  => 0,
-			'count_out_stock' => 0,
-			'count_low_stock' => 0,
-			'count_unmanaged' => 0
+			'count_in_stock'   => 0,
+			'count_out_stock'  => 0,
+			'count_back_order' => 0,
+			'count_low_stock'  => 0,
+			'count_unmanaged'  => 0
 		);
+		
+		if ( $this->show_unmanaged_counters ) {
+			
+			$this->id_views = array_merge( $this->id_views, array(
+				'managed'           => [],
+				'unm_in_stock'      => [],
+				'unm_out_stock'     => [],
+				'unm_back_order'    => [],
+				'all_in_stock'   => [],
+				'all_out_stock'  => [],
+				'all_back_order' => [],
+			) );
+			
+			$this->count_views = array_merge( $this->count_views, array(
+				'count_managed'           => 0,
+				'count_unm_in_stock'      => 0,
+				'count_unm_out_stock'     => 0,
+				'count_unm_back_order'    => 0,
+				'count_all_in_stock'   => 0,
+				'count_all_out_stock'  => 0,
+				'count_all_back_order' => 0,
+			) );
+			
+		}
 
 		// Get all the IDs in the two queries with no pagination
 		$args['fields']         = 'ids';
@@ -1654,18 +1828,62 @@ abstract class AtumListTable extends \WP_List_Table {
 			/*
 			 * Unmanaged products
 			 */
-			$products_unmanaged = Helpers::get_unmanaged_products($post_types);
-
+			
+			if ( $this->show_unmanaged_counters ) {
+				
+				$products_unmanaged = array();
+				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, TRUE );
+				
+				if ( ! empty( $products_unmanaged_status ) ) {
+					
+					// Filter the unmanaged (also removes uncontrolled)
+					$products_unmanaged_status = array_filter( $products_unmanaged_status, function ( $row ) use ( $products ) {
+						
+						return in_array( $row[0], $products );
+					} );
+					
+					$this->id_views['unm_in_stock']          = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
+						
+						return ( $row[1] == 'instock' );
+					} ), 0 );
+					$this->count_views['count_unm_in_stock'] = count( $this->id_views['unm_in_stock'] );
+					
+					$this->id_views['unm_out_stock']          = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
+						
+						return ( $row[1] == 'outofstock' );
+					} ), 0 );
+					$this->count_views['count_unm_out_stock'] = count( $this->id_views['unm_out_stock'] );
+					
+					$this->id_views['unm_back_order']          = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
+						
+						return ( $row[1] == 'onbackorder' );
+					} ), 0 );
+					$this->count_views['count_unm_back_order'] = count( $this->id_views['unm_back_order'] );
+					
+					$products_unmanaged = array_column( $products_unmanaged_status, 0 );
+					
+					$this->id_views['managed']          = array_diff( $products, $products_unmanaged );
+					$this->count_views['count_managed'] = count( $this->id_views['managed'] );
+				}
+				
+			}
+			else {
+				$products_unmanaged = array_column( Helpers::get_unmanaged_products( $post_types ), 0 );
+			}
+			
+			
 			// Remove the unmanaged from the products list
-			if ( ! empty($products_unmanaged) ) {
-				$products_unmanaged = array_intersect($products, $products_unmanaged);
-
+			if ( ! empty( $products_unmanaged ) ) {
+				// Filter the unmanaged (also removes uncontrolled)
+				$products_unmanaged = array_intersect( $products, $products_unmanaged );
+				
 				$this->id_views['unmanaged']          = $products_unmanaged;
 				$this->count_views['count_unmanaged'] = count( $products_unmanaged );
-
-				if ( ! empty($matching) ) {
-					$products = array_diff( $products, $products_unmanaged );
+				
+				if ( ! empty( $products_unmanaged ) ) {
+					$products = ! empty( $this->count_views['count_managed'] ) ? $this->id_views['managed'] : array_diff( $products, $products_unmanaged );
 				}
+				
 			}
 
 			/*
@@ -1698,10 +1916,54 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$this->id_views['in_stock']          = $products_in_stock;
 			$this->count_views['count_in_stock'] = count( $products_in_stock );
-
+			
+			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged);
+			
+			/**
+			 * Products on Back Order
+			 */
+			$args = array(
+				'post_type'      => $post_types,
+				'posts_per_page' => - 1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'     => '_stock',
+						'value'   => 0,
+						'type'    => 'numeric',
+						'compare' => '<=',
+					),
+					array(
+						'key'     => '_backorders',
+						'value'   => array( 'yes', 'notify' ),
+						'type'    => 'char',
+						'compare' => 'IN',
+					),
+				
+				),
+				'post__in'       => $products_not_stock
+			);
+			
+			$back_order_transient = Helpers::get_transient_identifier( $args, 'list_table_back_order' );
+			$products_back_order  = Helpers::get_transient( $back_order_transient );
+			
+			if ( empty($products_back_order) ) {
+				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $args ) );
+				Helpers::set_transient( $back_order_transient, $products_back_order );
+			}
+			
+			$products_back_order = $products_back_order->posts;
+			
+			$this->id_views['back_order']          = $products_back_order;
+			$this->count_views['count_back_order'] = count( $products_back_order );
+			
+			
 			// As the Group items might be displayed multiple times, we should count them multiple times too
 			if ( ! empty($group_items) && ( empty($_REQUEST['product_type']) || $_REQUEST['product_type'] != 'grouped' )) {
 				$this->count_views['count_in_stock'] += count( array_intersect($group_items, $products_in_stock) );
+				$this->count_views['count_back_order'] += count( array_intersect($group_items, $products_back_order) );
+				
 			}
 
 			/*
@@ -1753,10 +2015,25 @@ abstract class AtumListTable extends \WP_List_Table {
 			/*
 			 * Products out of stock
 			 */
-			$products_out_stock = array_diff( $products, $products_in_stock );
+			$products_out_stock = array_diff( $products_not_stock, $products_back_order );
 
 			$this->id_views['out_stock']          = $products_out_stock;
-			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_unmanaged'];
+			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];
+			
+			if ( $this->show_unmanaged_counters) {
+				/*
+				 * Calculate totals
+				 */
+				$this->id_views['all_in_stock']          = array_merge( $this->id_views['in_stock'], $this->id_views['unm_in_stock'] );
+				$this->count_views['count_all_in_stock'] = $this->count_views['count_in_stock'] + $this->count_views['count_unm_in_stock'];
+				
+				$this->id_views['all_out_stock']          = array_merge( $this->id_views['out_stock'], $this->id_views['unm_out_stock'] );
+				$this->count_views['count_all_out_stock'] = $this->count_views['count_out_stock'] + $this->count_views['count_unm_out_stock'];
+				
+				$this->id_views['all_back_order']          = array_merge( $this->id_views['back_order'], $this->id_views['unm_back_order'] );
+				$this->count_views['count_all_back_order'] = $this->count_views['count_back_order'] + $this->count_views['count_unm_back_order'];
+				
+			}
 
 		}
 
@@ -2769,7 +3046,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Buils a query string with the active filters
+	 * Builds a query string with the active filters
 	 *
 	 * @since 1.4.3
 	 *

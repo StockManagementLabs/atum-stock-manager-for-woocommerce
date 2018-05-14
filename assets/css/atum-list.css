@@ -322,11 +322,11 @@
 
 .swal2-container a {
   text-decoration: none;
-  color: #82C342;
+  color: #69C61D;
 }
 
 .swal2-container a:hover {
-  color: #9ccf69;
+  color: #82e135;
 }
 
 .swal2-container .atum-loading {
@@ -652,7 +652,7 @@ span.easytree-expander:hover {
   float: right;
   height: 28px;
   margin: 0 0 0 6px;
-  border: 1px solid #ddd;
+  border: 1px solid #DDD;
   border-top: none;
   background: #fff;
   box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.1);
@@ -741,7 +741,7 @@ span.easytree-expander:hover {
 }
 
 .atum-report .report-header .success-color {
-  color: #82C342;
+  color: #69C61D;
 }
 
 .atum-report .report-header .danger-color {
@@ -817,8 +817,9 @@ h1.wp-heading-inline #atum-update-list:active {
   margin-top: 0;
 }
 
-.atum-list-wrapper .subsubsub a.current {
+.atum-list-wrapper .subsubsub a.current, .atum-list-wrapper .subsubsub a.empty {
   pointer-events: none;
+  color: #000;
 }
 
 .atum-list-wrapper .subsubsub .reset-filters {
@@ -1097,7 +1098,7 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-table tr.totals td span, .atum-list-table tr.totals th span {
   display: inline-block;
-  background-color: #555;
+  background-color: #27283B;
   color: #fff;
   border-radius: 2px;
   padding: 2px 4px;
@@ -1109,7 +1110,7 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table .cell-green {
-  color: #82C342;
+  color: #69C61D;
 }
 
 .atum-list-table .cell-yellow {

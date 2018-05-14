@@ -86,7 +86,7 @@
 				
 				&:after {
 					content: '';
-					@include loader($size: 30px, $color: #FFF, $border-size: 2.4px, $zindex: 101);
+					@include loader($size: 30px, $color: $white, $border-size: 2.4px, $zindex: 101);
 					top: 50%;
 					left: 0;
 					right: 0;
@@ -144,8 +144,8 @@
 				position: absolute;
 				bottom: 6px;
 				right: 2px;
-				color: #FFF;
-				background-color: #000;
+				color: $white;
+				background-color: $black;
 				border-radius: 2px;
 				font-size: 9px;
 				line-height: 1;

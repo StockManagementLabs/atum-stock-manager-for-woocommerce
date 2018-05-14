@@ -440,7 +440,8 @@ final class WidgetHelpers {
 			'count_all'       => 0,
 			'count_unmanaged' => 0
 		);
-
+		
+		$show_unmanaged_counter = ( Helpers::get_option( 'unmanaged_counters' ) == 'yes' );
 		$products = Helpers::get_all_products();
 		$stock_counters['count_all'] = count( $products );
 
@@ -484,7 +485,24 @@ final class WidgetHelpers {
 			/*
 			 * Unmanaged products
 			 */
-			$products_unmanaged = Helpers::get_unmanaged_products($post_types);
+			if ( $show_unmanaged_counter ) {
+				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, TRUE );
+				
+				$stock_counters['count_in_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
+					
+					return ( $row[1] == 'instock' );
+				} ) );
+				
+				$stock_counters['count_out_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
+					
+					return ( $row[1] == 'outofstock' );
+				} ) );
+			}
+			else {
+				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, FALSE );
+			}
+			
+			$products_unmanaged = array_column($products_unmanaged_status, 0);
 			$stock_counters['count_unmanaged'] = count( $products_unmanaged );
 
 			// Remove the unmanaged from the products list
@@ -522,12 +540,53 @@ final class WidgetHelpers {
 
 			$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
 			$products_in_stock = $products_in_stock->posts;
-			$stock_counters['count_in_stock'] = count( $products_in_stock );
-
-			// As the Group items might be displayed multiple times, we should count them multiple times too
-			if ($group_items && ( empty($_REQUEST['type']) || $_REQUEST['type'] != 'grouped' )) {
-				$stock_counters['count_in_stock'] += count( array_intersect($group_items, $products_in_stock) );
-			}
+			$stock_counters['count_in_stock'] += count( $products_in_stock );
+			
+			/*
+			 * Products Out of Stock
+			 */
+			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged);
+			$args = array(
+				'post_type'      => $post_types,
+				'posts_per_page' => - 1,
+				'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'relation' => 'OR',
+						array(
+							'key'     => '_stock',
+							'value'   => 0,
+							'type'    => 'numeric',
+							'compare' => '<=',
+						),
+						array(
+							'key'     => '_stock',
+							'compare' => 'NOT EXISTS',
+						),
+					),
+					array(
+						'relation' => 'OR',
+						array(
+							'key'     => '_backorders',
+							'value'   => 'no',
+							'type'    => 'char',
+						),
+						array(
+							'key'     => '_backorders',
+							'compare' => 'NOT EXISTS',
+						),
+					),
+					
+				),
+				'post__in'       => $products_not_stock
+			);
+			
+			$products_out_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
+			$products_out_stock = $products_out_stock->posts;
+			$stock_counters['count_out_stock'] += count( $products_out_stock );
+			
 
 			/*
 			 * Products with low stock
@@ -566,12 +625,7 @@ final class WidgetHelpers {
 				$stock_counters['count_low_stock'] = count( $products_low_stock );
 
 			}
-
-			/*
-			 * Products out of stock
-			 */
-			$stock_counters['count_out_stock'] = $stock_counters['count_all'] - $stock_counters['count_in_stock'];
-
+			
 		}
 
 		return $stock_counters;

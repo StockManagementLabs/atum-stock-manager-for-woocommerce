@@ -151,7 +151,7 @@
 	width: auto;
 	opacity: 0;
 	z-index: 99;
-	background-color: #FFF;
+	background-color: $white;
 	filter: alpha(opacity=0);
 }
 
@@ -167,7 +167,7 @@
 }
 
 .select2-container--default .select2-selection--single {
-	background-color: #FFF;
+	background-color: $white;
 	border: 1px solid #AAA;
 	border-radius: 4px;
 }
@@ -408,7 +408,7 @@
 	background-image: -o-linear-gradient(top, white 50%, #EEEEEE 100%);
 	background-image: linear-gradient(to bottom, white 50%, #EEEEEE 100%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$whiteFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--single:focus {
@@ -498,7 +498,7 @@
 	background-image: -o-linear-gradient(top, white 0%, #EEEEEE 50%);
 	background-image: linear-gradient(to bottom, white 0%, #EEEEEE 50%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$whiteFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
 }
 
 .select2-container--classic.select2-container--open.select2-container--below .select2-selection--single {
@@ -509,7 +509,7 @@
 	background-image: -o-linear-gradient(top, #EEEEEE 50%, white 100%);
 	background-image: linear-gradient(to bottom, #EEEEEE 50%, white 100%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='#FFFFFFFF', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='$whiteFFFFF', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--multiple {

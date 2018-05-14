@@ -56,6 +56,9 @@ class ListTable extends AtumListTable {
 		
 		$this->no_stock = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		
+		// Activate managed/unmanaged counters separation
+		$this->show_unmanaged_counters = ( Helpers::get_option( 'unmanaged_counters' ) == 'yes' );
+		
 		// TODO: Allow to specify the day of query in constructor atts
 		$this->day = Helpers::date_format( current_time('timestamp'), TRUE );
 		
@@ -80,6 +83,7 @@ class ListTable extends AtumListTable {
 			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+            '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
@@ -130,7 +134,8 @@ class ListTable extends AtumListTable {
 					'calc_location',
 					'_regular_price',
 					'_sale_price',
-					'_purchase_price'
+					'_purchase_price',
+                    '_weight'
 				)
 			),
 			'stock-counters'        => array(
@@ -504,18 +509,21 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since  0.1.2
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item         The WooCommerce product post to use in calculations
+	 * @param bool     $add_to_total Whether to add or not result to total counters
 	 *
 	 * @return int
 	 */
-	protected function column_calc_sales7( $item ) {
+	protected function column_calc_sales7( $item, $add_to_total = TRUE ) {
 
 		if (! $this->allow_calcs) {
 			$sales7 = self::EMPTY_COL;
 		}
 		else {
 			$sales7 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
-			$this->increase_total('calc_sales7', $sales7);
+			if ( $add_to_total ) {
+				$this->increase_total('calc_sales7', $sales7);
+			}
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $sales7, $item, $this->product );
@@ -561,7 +569,7 @@ class ListTable extends AtumListTable {
 		$will_last = self::EMPTY_COL;
 
 		if ($this->allow_calcs) {
-			$sales = $this->column_calc_sales7( $item );
+			$sales = $this->column_calc_sales7( $item, FALSE );
 			$stock = $this->product->get_stock_quantity();
 
 			if ( $stock > 0 && $sales > 0 ) {
@@ -625,13 +633,39 @@ class ListTable extends AtumListTable {
 	
 	/**
 	 * Prepare the table data
-	 *
+     * (the product weight column doesnt has to be shown as default.
+	 * @param array  $default_hidden_collumns An array of columns hidden by default.
 	 * @since  0.0.2
 	 */
 	public function prepare_items() {
-		
+
+	    // has this user any value set in this tabble for columnshidden ?
+        global $wpdb;
+        $query = $wpdb->prepare(
+            "SELECT umeta_id FROM {$wpdb->prefix}usermeta
+                WHERE meta_key = %s
+                AND user_id = %d
+				LIMIT 1",
+            //'manage' . $this->$screen->id . 'columnshidden',
+            "manageatum-inventory_page_atum-stock-centralcolumnshidden",
+            get_current_user_id()
+        );
+
+        $qty = $wpdb->get_var($query);
+
+        // get the user columnshidden value for this tabble
+        //It can be empty
+        $user_hidden = get_hidden_columns( $this->screen );
+
+        if ( $qty == 0) {
+            //If $qty = 0, means that this user has never set any configuration before. We hidde the weight collumn
+            $user_hidden_flag = 1;
+            $current_user_id = get_current_user_id();
+            //update_user_option( $current_user_id, 'manage' . $this->$screen->id . 'columnshidden' , $newvalue = array('_weight'), $global = true );
+            update_user_option( $current_user_id, 'manageatum-inventory_page_atum-stock-centralcolumnshidden' , $newvalue = array('_weight'), $global = false );
+        }
+
 		parent::prepare_items();
-		
 		$calc_products = array_merge( $this->current_products, $this->children_products);
 
 		// Calc products sold today (since midnight)
