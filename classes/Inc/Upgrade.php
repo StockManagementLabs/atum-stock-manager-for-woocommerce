@@ -108,7 +108,7 @@ class Upgrade {
 			  	meta_value longtext NULL,
 			  	PRIMARY KEY  (meta_id),
 			  	KEY log_item_id (log_item_id),
-			  	KEY meta_key (meta_key(32))
+			  	KEY meta_key (meta_key(191))
 			) $collate;
 			";
 
