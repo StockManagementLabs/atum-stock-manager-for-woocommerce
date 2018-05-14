@@ -48,6 +48,12 @@ class ListTable extends AtumListTable {
 	 */
 	protected $load_datepicker = TRUE;
 
+	/**
+	 * The columns hidden by default
+	 * @var array
+	 */
+	protected $default_hidden_columns = array('_weight');
+
 
 	/**
 	 * @inheritdoc
@@ -633,37 +639,10 @@ class ListTable extends AtumListTable {
 	
 	/**
 	 * Prepare the table data
-     * (the product weight column doesnt has to be shown as default.
-	 * @param array  $default_hidden_collumns An array of columns hidden by default.
+	 *
 	 * @since  0.0.2
 	 */
 	public function prepare_items() {
-
-	    // has this user any value set in this tabble for columnshidden ?
-        global $wpdb;
-        $query = $wpdb->prepare(
-            "SELECT umeta_id FROM {$wpdb->prefix}usermeta
-                WHERE meta_key = %s
-                AND user_id = %d
-				LIMIT 1",
-            //'manage' . $this->$screen->id . 'columnshidden',
-            "manageatum-inventory_page_atum-stock-centralcolumnshidden",
-            get_current_user_id()
-        );
-
-        $qty = $wpdb->get_var($query);
-
-        // get the user columnshidden value for this tabble
-        //It can be empty
-        $user_hidden = get_hidden_columns( $this->screen );
-
-        if ( $qty == 0) {
-            //If $qty = 0, means that this user has never set any configuration before. We hidde the weight collumn
-            $user_hidden_flag = 1;
-            $current_user_id = get_current_user_id();
-            //update_user_option( $current_user_id, 'manage' . $this->$screen->id . 'columnshidden' , $newvalue = array('_weight'), $global = true );
-            update_user_option( $current_user_id, 'manageatum-inventory_page_atum-stock-centralcolumnshidden' , $newvalue = array('_weight'), $global = false );
-        }
 
 		parent::prepare_items();
 		$calc_products = array_merge( $this->current_products, $this->children_products);

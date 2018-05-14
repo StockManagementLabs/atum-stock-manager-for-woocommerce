@@ -47,6 +47,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $table_columns;
 
 	/**
+	 * The columns that are hidden by default
+	 * @var array
+	 */
+	protected $default_hidden_columns = array();
+
+	/**
 	 * The previously selected items
 	 * @var array
 	 */
@@ -293,6 +299,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		// Hidden columns
+		if (! empty($this->default_hidden_columns) ) {
+			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
+		}
 		
 		$this->default_currency = get_woocommerce_currency();
 		
@@ -1370,18 +1381,18 @@ abstract class AtumListTable extends \WP_List_Table {
 	
 	/**
 	 * Prepare the table data
-	 * @param array  $default_hidden_collumns An array of columns hidden by default.
+	 *
      * @since  0.0.1
 	 */
 	public function prepare_items() {
-        $user_hidden = get_hidden_columns( $this->screen );
+
         /*
 		 * Define our column headers
 		 */
 		$columns             = $this->get_columns();
 		$products            = array();
 		$sortable            = $this->get_sortable_columns();
-        $hidden              = $user_hidden;
+        $hidden              = get_hidden_columns( $this->screen );
 		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
 
 		/*
@@ -3080,6 +3091,21 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return $format == 'string' ? http_build_query($params) : $params;
 
+	}
+
+	/**
+	 * Default hidden columns
+	 *
+	 * @since 1.4.6
+	 *
+	 * @param array      $hidden
+	 * @param \WP_Screen $screen
+	 *
+	 * @return array
+	 */
+	public function hidden_columns($hidden, $screen) {
+
+		return apply_filters('atum/list_table/default_hidden_columns', $this->default_hidden_columns);
 	}
 
 }
