@@ -358,7 +358,7 @@ class Suppliers {
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
-	public function add_product_supplier_fields ($loop = NULL, $variation_data = array(), $variation = NULL) {
+	public function add_product_supplier_fields($loop = NULL, $variation_data = array(), $variation = NULL) {
 
 		global $post;
 
@@ -381,28 +381,24 @@ class Suppliers {
 			$supplier = get_post($supplier_id);
 		}
 
+		$supplier_field_name     = empty( $variation ) ? '_supplier' : "variation_supplier[$loop]";
+		$supplier_field_id       = empty( $variation ) ? "_supplier" : "_supplier{$loop}";
+		$supplier_sku_field_name = empty( $variation ) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
+		$supplier_sku_field_id   = empty( $variation ) ? '_supplier_sku' : "_supplier_sku{$loop}";
+
 		// If the user is not allowed to edit Suppliers, add a hidden input
 		if ( ! AtumCapabilities::current_user_can('edit_supplier') ):
 
-			// Supplier ID
-			woocommerce_wp_hidden_input( array(
-				'id'    => '_supplier',
-				'value' => ( ! empty($supplier) ) ? esc_attr( $supplier->ID ) : ''
-			) );
-
-			// Supplier SKU
-			woocommerce_wp_hidden_input( array(
-				'id'    => '_supplier_sku',
-				'value' => $supplier_sku ?: ''
-			) );
+			?>
+			<input type="hidden" name="<?php echo $supplier_field_name ?>" id="<?php echo $supplier_field_id ?>" value="<?php echo ( ! empty($supplier) ? esc_attr( $supplier->ID ) : '' ) ?>">
+			<input type="hidden" name="<?php echo $supplier_sku_field_name ?>" id="<?php echo $supplier_sku_field_id ?>" value="<?php echo ( $supplier_sku ?: '' ) ?>">
+			<?php
 
 		else:
 
-			$suplier_field_name      = empty( $variation ) ? '_supplier' : "variation_supplier[$loop]";
-			$supplier_sku_field_name = empty( $variation ) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
 			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', ['show_if_simple'] );
 
-			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('suplier_field_name', 'variation', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_fields_classes'));
+			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('supplier_field_name', 'supplier_field_id', 'variation', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes'));
 
 		endif;
 
@@ -415,7 +411,7 @@ class Suppliers {
 	 *
 	 * @param int $post_id    The post ID
 	 */
-	public function save_product_supplier_fields ($post_id) {
+	public function save_product_supplier_fields($post_id) {
 
 		$product  = wc_get_product( $post_id );
 
