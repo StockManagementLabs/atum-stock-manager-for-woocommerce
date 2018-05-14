@@ -57,32 +57,6 @@ fieldset:disabled a.btn {
 	pointer-events: none;
 }
 
-
-//
-// Alternate buttons
-//
-
-@each $color, $value in $theme-colors {
-	.btn-#{$color} {
-		@include button-variant($value, $value);
-	}
-}
-
-@each $color, $value in $theme-colors {
-	.btn-outline-#{$color} {
-		@include button-outline-variant($value);
-	}
-}
-
-.btn-pill {
-	@include border-radius(16px);
-}
-
-
-//
-// Link buttons
-//
-
 // Make a button look and behave like a link
 .btn-link {
 	font-weight: $font-weight-normal;
@@ -124,6 +98,31 @@ fieldset:disabled a.btn {
 .btn-sm {
 	@include button-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
 }
+
+//
+// Alternate buttons
+//
+
+@each $color, $value in $theme-colors {
+	.btn-#{$color} {
+		@include button-variant($value, $value);
+	}
+}
+
+@each $color, $value in $theme-colors {
+	.btn-outline-#{$color} {
+		@include button-outline-variant($value);
+	}
+}
+
+.btn-pill {
+	@include border-radius(16px);
+}
+
+
+//
+// Link buttons
+//
 
 
 //

@@ -1202,7 +1202,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link::before {
   font: normal 22px/50px 'dashicons' !important;
-  color: #6c757d;
+  color: #adb5bd;
   display: block;
   content: '\f335';
   font-weight: 300;
@@ -1342,7 +1342,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .atum-help-tip {
-  color: #6c757d;
+  color: #adb5bd;
   display: inline-block;
   font-size: 1.1em;
   font-style: normal;
