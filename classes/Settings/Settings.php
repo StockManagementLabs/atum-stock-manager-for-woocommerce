@@ -474,15 +474,15 @@ class Settings {
 					switch ( $this->defaults[ $key ]['type'] ) {
 						
 						case 'switcher':
-							$this->options[ $key ] = ( isset( $input[ $key ] ) ) ? 'yes' : 'no';
+							$this->options[ $key ] = isset( $input[ $key ] ) ? 'yes' : 'no';
 							break;
 						
 						case 'number':
-							$this->options[ $key ] = ( isset( $input[ $key ] ) ) ? intval( $input[ $key ] ) : $atts['default'];
+							$this->options[ $key ] = isset( $input[ $key ] ) ? intval( $input[ $key ] ) : $atts['default'];
 							break;
 
 						default:
-							$this->options[ $key ] = ( isset( $input[ $key ] ) ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
+							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
 							break;
 					}
 					
@@ -596,6 +596,37 @@ class Settings {
 	}
 
 	/**
+	 * Get the settings option array and prints a button group
+	 *
+	 * @since 1.4.6
+	 *
+	 * @param array $args Field arguments
+	 */
+	public function display_button_group( $args ) {
+
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->options[ $args['id'] ];
+		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
+		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
+
+		ob_start();
+		?>
+		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
+			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
+			<label class="btn btn-<?php echo $style ?><?php if ($value == $option_value) echo ' active'?>">
+				<input type="radio" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"> <?php echo $option_label ?>
+		    </label>
+			<?php endforeach; ?>
+		</div>
+		<?php
+
+		echo $this->get_description( $args );
+
+		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args );
+
+	}
+
+	/**
 	 * Get the settings option array and prints an script runner field
 	 *
 	 * @since 1.4.5
@@ -643,7 +674,7 @@ class Settings {
 		$label = '';
 		
 		if ( array_key_exists( 'desc', $args ) ) {
-			$label = '<p class="atum-setting-info">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</p>';
+			$label = '<div class="atum-setting-info">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</div>';
 		}
 		
 		return $label;
