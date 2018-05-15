@@ -1,13 +1,13 @@
 === ATUM Inventory Management for WooCommerce ===
 
-Contributors: stockmanagementlabs, salvamb, japiera
+Contributors: stockmanagementlabs, salvamb, japiera, miquelnez
 Tags: inventory management, suppliers, purchase orders, inbound stock, statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
 Tested up to: 4.9.5
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.3.5
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.6`
+
+*2018-05-15*
+
+**Features**
+
+* Add counters for Unmanaged Products.
+* Added option to Settings to enable/disable unmanaged products' counters.
+* Added "weight" column to Stock Central.
+* Added "default hidden columns" feature to hide some columns in List Tables by default.
+
+**Changes**
+
+* CSS changes and refactory.
+* CSS colors normalized.
+* Added Button Group field type to Settings.
+
+**Fixes**
+
+* Refactory.
+* Minor fixes.
 
 ---
 
