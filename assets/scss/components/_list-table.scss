@@ -283,8 +283,7 @@ h1.wp-heading-inline {
 		
 		&.check-column {
 			input[type=checkbox] {
-				vertical-align: middle;
-				margin-top: 7px;
+				@include vertical-align-absolute;
 			}
 		}
 	}

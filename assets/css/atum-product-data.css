@@ -1009,7 +1009,7 @@ input[type="button"].btn-block {
   border-color: #5B9DD9;
 }
 
-.product_data .atum-data-panel .woocommerce-help-tip ~ .switchery {
+.product_data .woocommerce-help-tip ~ .switchery {
   margin-left: 10px;
 }
 

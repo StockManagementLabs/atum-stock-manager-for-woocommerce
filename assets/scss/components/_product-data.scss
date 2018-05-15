@@ -85,11 +85,9 @@
 		
 	}
 	
-	.atum-data-panel {
-		.woocommerce-help-tip {
-			~ .switchery {
-				margin-left: 10px;
-			}
+	.woocommerce-help-tip {
+		~ .switchery {
+			margin-left: 10px;
 		}
 	}
 	
