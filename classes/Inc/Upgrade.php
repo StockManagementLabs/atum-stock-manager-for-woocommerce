@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\StockCentral\StockCentral;
 
 
 class Upgrade {
@@ -58,6 +59,12 @@ class Upgrade {
 		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
 			
 			$this->add_inheritable_sock_meta();
+		}
+
+		// ** version 1.4.6 New hidden column: weight
+		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
+
+			$this->add_weight_to_hidden_columns();
 		}
 
 		/**********************
@@ -246,6 +253,55 @@ class Upgrade {
 		if ( $inheritable_ids ) {
 			foreach ( $inheritable_ids as $id ) {
 				update_post_meta( $id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+			}
+		}
+	}
+
+
+	/**
+	 * Add weight to hidden columns on SC (in all users with hidden columns set)
+	 *
+	 * @since 1.4.6
+	 */
+	private function  add_weight_to_hidden_columns(){
+		// 'manage'
+		// Globals::ATUM_UI_HOOK = 'atum-inventory';
+		// '_page'
+		// StockCentral::UI_SLUG = 'atum-stock-central' | ManufacturingCentral::UI_SLUG = 'atum-manufacturing-central'
+		// 'columnshidden'
+		/*  SELECT * FROM `wp_usermeta` WHERE `meta_key` = 'manageatum-inventory_page_atum-stock-centralcolumnshidden' LIMIT 0,1000; */
+
+		// manageatum-inventory_page_atum-stock-centralcolumnshidden
+		// manageatum-inventory_page_atum-manufacturing-centralcolumnshidden
+
+
+		$meta_key_SC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG . 'columnshidden';
+
+		global $wpdb;
+
+		$users_ids = $wpdb->get_col("SELECT user_id FROM wp_usermeta WHERE meta_key = '" .$meta_key_SC. "' AND meta_value NOT LIKE '%_weight%'" );
+
+		foreach ($users_ids as $user_id) {
+			$meta = get_user_meta($user_id, $meta_key_SC, true);
+			if ( ! array($meta) ) {
+				$meta = array();
+			}
+			$meta[] = '_weight';
+			update_user_meta($user_id, $meta_key_SC, $meta);
+		}
+
+		// ManufacturingCentral can be installed... or not:
+		if (class_exists('AtumLevels\ManufacturingCentral\ManufacturingCentral')) {
+			$meta_key_MC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . \AtumLevels\ManufacturingCentral\ManufacturingCentral::UI_SLUG . 'columnshidden';
+			$users_ids = $wpdb->get_col("SELECT user_id FROM wp_usermeta WHERE meta_key = '" .$meta_key_MC. "' AND meta_value NOT LIKE '%_weight%'" );
+
+			foreach ($users_ids as $user_id) {
+				$meta = get_user_meta($user_id, $meta_key_MC, true);
+				if ( ! array($meta) ) {
+					$meta = array();
+				}
+				$meta[] = '_weight';
+				update_user_meta($user_id, $meta_key_MC, $meta);
 			}
 		}
 	}

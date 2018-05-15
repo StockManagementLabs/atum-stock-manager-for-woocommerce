@@ -50,6 +50,7 @@ class ListTable extends AtumListTable {
 
 	/**
 	 * The columns hidden by default
+     * @since 1.4.6
 	 * @var array
 	 */
 	protected $default_hidden_columns = array('_weight');
