@@ -912,7 +912,7 @@ final class Ajax {
 			$ids = array_diff( $ids, (array) $_GET['exclude'] );
 		}
 
-		$included = ( ! empty( $_GET['include'] ) ) ? array_map( 'absint', (array) $_GET['include'] ) : array();
+		$included = ! empty( $_GET['include'] ) ? array_map( 'absint', (array) $_GET['include'] ) : array();
 		$url      = parse_url( wp_get_referer() );
 		parse_str( $url['query'], $url_query );
 
