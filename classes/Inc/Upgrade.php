@@ -18,6 +18,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\StockCentral\StockCentral;
+use Atum\StockCentral\Lists\ListTable;
 
 
 class Upgrade {
@@ -54,17 +55,17 @@ class Upgrade {
 			$this->set_individual_manage_stock();
 			$this->add_inheritable_meta();
 		}
-		
+
 		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta
 		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
-			
+
 			$this->add_inheritable_sock_meta();
 		}
 
 		// ** version 1.4.6 New hidden column: weight
 		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
 
-			$this->add_weight_to_hidden_columns();
+			$this->add_default_hidden_columns_to_hidden_columns();
 		}
 
 		/**********************
@@ -238,18 +239,18 @@ class Upgrade {
 		}
 
 	}
-	
+
 	/**
 	 * Ensure that all inheritable products have set ATUM_CONTROL_STOCK_KEY
 	 *
 	 * @since 1.4.1.2
 	 */
 	private function add_inheritable_sock_meta() {
-		
+
 		global $wpdb;
-		
+
 		$inheritable_ids = $wpdb->get_col( "SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" );
-		
+
 		if ( $inheritable_ids ) {
 			foreach ( $inheritable_ids as $id ) {
 				update_post_meta( $id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
@@ -259,49 +260,31 @@ class Upgrade {
 
 
 	/**
-	 * Add weight to hidden columns on SC (in all users with hidden columns set)
+	 * Add default_hidden_columns to hidden columns on SC (in all users with hidden columns set)
 	 *
 	 * @since 1.4.6
 	 */
-	private function  add_weight_to_hidden_columns(){
-		// 'manage'
-		// Globals::ATUM_UI_HOOK = 'atum-inventory';
-		// '_page'
-		// StockCentral::UI_SLUG = 'atum-stock-central' | ManufacturingCentral::UI_SLUG = 'atum-manufacturing-central'
-		// 'columnshidden'
-		/*  SELECT * FROM `wp_usermeta` WHERE `meta_key` = 'manageatum-inventory_page_atum-stock-centralcolumnshidden' LIMIT 0,1000; */
+	private function  add_default_hidden_columns_to_hidden_columns(){
 
-		// manageatum-inventory_page_atum-stock-centralcolumnshidden
-		// manageatum-inventory_page_atum-manufacturing-centralcolumnshidden
+		$hidden_columns = ListTable::hidden_columns();
 
-
-		$meta_key_SC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG . 'columnshidden';
+		if(empty($hidden_columns)){
+			return;
+		}
 
 		global $wpdb;
 
-		$users_ids = $wpdb->get_col("SELECT user_id FROM wp_usermeta WHERE meta_key = '" .$meta_key_SC. "' AND meta_value NOT LIKE '%_weight%'" );
+		$meta_key_SC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG . 'columnshidden';
 
-		foreach ($users_ids as $user_id) {
-			$meta = get_user_meta($user_id, $meta_key_SC, true);
-			if ( ! array($meta) ) {
-				$meta = array();
-			}
-			$meta[] = '_weight';
-			update_user_meta($user_id, $meta_key_SC, $meta);
-		}
-
-		// ManufacturingCentral can be installed... or not:
-		if (class_exists('AtumLevels\ManufacturingCentral\ManufacturingCentral')) {
-			$meta_key_MC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . \AtumLevels\ManufacturingCentral\ManufacturingCentral::UI_SLUG . 'columnshidden';
-			$users_ids = $wpdb->get_col("SELECT user_id FROM wp_usermeta WHERE meta_key = '" .$meta_key_MC. "' AND meta_value NOT LIKE '%_weight%'" );
-
+		foreach ($hidden_columns AS $hide_column){
+			$users_ids = $wpdb->get_col("SELECT user_id FROM wp_usermeta WHERE meta_key = '" .$meta_key_SC. "' AND meta_value NOT LIKE '%". $hide_column ."%'" );
 			foreach ($users_ids as $user_id) {
-				$meta = get_user_meta($user_id, $meta_key_MC, true);
+				$meta = get_user_meta($user_id, $meta_key_SC, true);
 				if ( ! array($meta) ) {
 					$meta = array();
 				}
-				$meta[] = '_weight';
-				update_user_meta($user_id, $meta_key_MC, $meta);
+				$meta[] = $hide_column;
+				update_user_meta($user_id, $meta_key_SC, $meta);
 			}
 		}
 	}

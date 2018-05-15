@@ -53,7 +53,7 @@ class ListTable extends AtumListTable {
      * @since 1.4.6
 	 * @var array
 	 */
-	protected $default_hidden_columns = array('_weight');
+	protected static $default_hidden_columns = array('_weight');
 
 
 	/**
@@ -950,6 +950,18 @@ class ListTable extends AtumListTable {
 			$query->set( 'post__in', array(-1) );
 		}
 
+	}
+
+	/**
+	 * Default hidden columns
+	 *
+	 * @since 1.4.6
+	 *
+	 *
+	 * @return array
+	 */
+	public static function hidden_columns() {
+		return apply_filters('atum/list_table/default_hidden_columns', static::$default_hidden_columns);
 	}
 
 	/**
