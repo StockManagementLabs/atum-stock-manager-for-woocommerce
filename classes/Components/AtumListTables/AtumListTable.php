@@ -302,7 +302,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Hidden columns
 		if (! empty($this->default_hidden_columns) ) {
-			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
+			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 ); // Where $priority is 10, $accepted_args is 2.
 		}
 		
 		$this->default_currency = get_woocommerce_currency();
