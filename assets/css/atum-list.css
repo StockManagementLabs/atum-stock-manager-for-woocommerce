@@ -1025,8 +1025,13 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 .atum-list-table th.check-column input[type=checkbox] {
-  vertical-align: middle;
-  margin-top: 7px;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .atum-list-table tr.even {

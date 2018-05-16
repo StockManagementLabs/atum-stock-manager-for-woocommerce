@@ -48,6 +48,13 @@ class ListTable extends AtumListTable {
 	 */
 	protected $load_datepicker = TRUE;
 
+	/**
+	 * The columns hidden by default
+     * @since 1.4.6
+	 * @var array
+	 */
+	protected static $default_hidden_columns = array('_weight');
+
 
 	/**
 	 * @inheritdoc
@@ -637,7 +644,7 @@ class ListTable extends AtumListTable {
 	 * @since  0.0.2
 	 */
 	public function prepare_items() {
-		
+
 		parent::prepare_items();
 		$calc_products = array_merge( $this->current_products, $this->children_products);
 
@@ -943,6 +950,18 @@ class ListTable extends AtumListTable {
 			$query->set( 'post__in', array(-1) );
 		}
 
+	}
+
+	/**
+	 * Default hidden columns
+	 *
+	 * @since 1.4.6
+	 *
+	 *
+	 * @return array
+	 */
+	public static function hidden_columns() {
+		return apply_filters('atum/list_table/default_hidden_columns', static::$default_hidden_columns);
 	}
 
 	/**

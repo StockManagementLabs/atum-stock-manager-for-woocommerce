@@ -1009,7 +1009,7 @@ input[type="button"].btn-block {
   border-color: #5B9DD9;
 }
 
-.product_data .atum-data-panel .woocommerce-help-tip ~ .switchery {
+.product_data .woocommerce-help-tip ~ .switchery {
   margin-left: 10px;
 }
 
@@ -1068,6 +1068,16 @@ input[type="button"].btn-block {
 .product_data .woocommerce_variations .alert {
   margin: 10px auto;
   padding: 0.35rem 0.75rem;
+}
+
+#tiptip_holder ul {
+  text-align: left;
+  padding-left: 10px;
+}
+
+#tiptip_holder ul li {
+  list-style: circle;
+  line-height: 1.3;
 }
 
 /*# sourceMappingURL=atum-product-data.css.map */
