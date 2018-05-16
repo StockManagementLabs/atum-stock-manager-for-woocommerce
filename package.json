@@ -20,5 +20,8 @@
 		"gulp-watch": "latest",
 		"gulp-composer": "latest",
 		"gulp-wrap": "latest"
+	},
+	"dependencies": {
+		"fsevents": "^1.2.4"
 	}
 }
