@@ -69,8 +69,11 @@ abstract class AtumOrderPostType {
 
 		// Add the ATUM Orders' meta table to wpdb
 		global $wpdb;
-		$wpdb->atum_order_itemmeta = $wpdb->prefix . self::ORDER_ITEM_META_TABLE;
-		$wpdb->tables[] = self::ORDER_ITEM_META_TABLE;
+
+		if ( ! in_array(self::ORDER_ITEM_META_TABLE, $wpdb->tables) ) {
+			$wpdb->atum_order_itemmeta = $wpdb->prefix . self::ORDER_ITEM_META_TABLE;
+			$wpdb->tables[]            = self::ORDER_ITEM_META_TABLE;
+		}
 
 		// Register the post type
 		add_action( 'init', array($this, 'register_post_type') );

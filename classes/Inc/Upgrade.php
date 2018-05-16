@@ -17,6 +17,8 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\StockCentral\StockCentral;
+use Atum\StockCentral\Lists\ListTable;
 
 
 class Upgrade {
@@ -53,11 +55,17 @@ class Upgrade {
 			$this->set_individual_manage_stock();
 			$this->add_inheritable_meta();
 		}
-		
+
 		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta
 		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
-			
+
 			$this->add_inheritable_sock_meta();
+		}
+
+		// ** version 1.4.6 New hidden column: weight
+		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
+
+			$this->add_default_hidden_columns_to_hidden_columns();
 		}
 
 		/**********************
@@ -108,7 +116,7 @@ class Upgrade {
 			  	meta_value longtext NULL,
 			  	PRIMARY KEY  (meta_id),
 			  	KEY log_item_id (log_item_id),
-			  	KEY meta_key (meta_key(32))
+			  	KEY meta_key (meta_key(191))
 			) $collate;
 			";
 
@@ -231,21 +239,52 @@ class Upgrade {
 		}
 
 	}
-	
+
 	/**
 	 * Ensure that all inheritable products have set ATUM_CONTROL_STOCK_KEY
 	 *
 	 * @since 1.4.1.2
 	 */
 	private function add_inheritable_sock_meta() {
-		
+
 		global $wpdb;
-		
+
 		$inheritable_ids = $wpdb->get_col( "SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" );
-		
+
 		if ( $inheritable_ids ) {
 			foreach ( $inheritable_ids as $id ) {
 				update_post_meta( $id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+			}
+		}
+	}
+
+
+	/**
+	 * Add default_hidden_columns to hidden columns on SC (in all users with hidden columns set)
+	 *
+	 * @since 1.4.6
+	 */
+	private function  add_default_hidden_columns_to_hidden_columns(){
+
+		$hidden_columns = ListTable::hidden_columns();
+
+		if(empty($hidden_columns)){
+			return;
+		}
+
+		global $wpdb;
+
+		$meta_key_SC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG . 'columnshidden';
+
+		foreach ($hidden_columns AS $hide_column){
+			$users_ids = $wpdb->get_col("SELECT user_id FROM wp_usermeta WHERE meta_key = '" .$meta_key_SC. "' AND meta_value NOT LIKE '%". $hide_column ."%'" );
+			foreach ($users_ids as $user_id) {
+				$meta = get_user_meta($user_id, $meta_key_SC, true);
+				if ( ! array($meta) ) {
+					$meta = array();
+				}
+				$meta[] = $hide_column;
+				update_user_meta($user_id, $meta_key_SC, $meta);
 			}
 		}
 	}

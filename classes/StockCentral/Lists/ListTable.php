@@ -48,6 +48,13 @@ class ListTable extends AtumListTable {
 	 */
 	protected $load_datepicker = TRUE;
 
+	/**
+	 * The columns hidden by default
+     * @since 1.4.6
+	 * @var array
+	 */
+	protected static $default_hidden_columns = array('_weight');
+
 
 	/**
 	 * @inheritdoc
@@ -83,6 +90,7 @@ class ListTable extends AtumListTable {
 			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+            '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
@@ -133,7 +141,8 @@ class ListTable extends AtumListTable {
 					'calc_location',
 					'_regular_price',
 					'_sale_price',
-					'_purchase_price'
+					'_purchase_price',
+                    '_weight'
 				)
 			),
 			'stock-counters'        => array(
@@ -635,9 +644,8 @@ class ListTable extends AtumListTable {
 	 * @since  0.0.2
 	 */
 	public function prepare_items() {
-		
+
 		parent::prepare_items();
-		
 		$calc_products = array_merge( $this->current_products, $this->children_products);
 
 		// Calc products sold today (since midnight)
@@ -942,6 +950,18 @@ class ListTable extends AtumListTable {
 			$query->set( 'post__in', array(-1) );
 		}
 
+	}
+
+	/**
+	 * Default hidden columns
+	 *
+	 * @since 1.4.6
+	 *
+	 *
+	 * @return array
+	 */
+	public static function hidden_columns() {
+		return apply_filters('atum/list_table/default_hidden_columns', static::$default_hidden_columns);
 	}
 
 	/**

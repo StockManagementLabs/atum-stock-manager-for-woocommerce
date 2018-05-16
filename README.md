@@ -258,6 +258,30 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.6`
+
+*2018-05-15*
+
+**Features**
+
+* Add counters for Unmanaged Products.
+* Added option to Settings to enable/disable unmanaged products' counters.
+* Added "weight" column to Stock Central.
+* Added "default hidden columns" feature to hide some columns in List Tables by default.
+
+**Changes**
+
+* CSS changes and refactory.
+* CSS colors normalized.
+* Added Button Group field type to Settings.
+
+**Fixes**
+
+* Refactory.
+* Minor fixes.
+
+---
+
 `1.4.5`
 
 *2018-05-03*
