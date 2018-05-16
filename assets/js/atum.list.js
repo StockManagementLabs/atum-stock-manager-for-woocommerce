@@ -153,6 +153,9 @@
 				}
 				
 			});
+
+			// Init stickyTableHeaders
+            $(this.$atumTable).stickyTableHeaders({cacheHeaderHeight: true});
 			
 			//
 			// Hide/Show/Colspan column groups
