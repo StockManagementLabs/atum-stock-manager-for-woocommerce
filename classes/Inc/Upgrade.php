@@ -65,7 +65,7 @@ class Upgrade {
 		// ** version 1.4.6 New hidden column: weight
 		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
 
-			$this->add_default_hidden_columns_to_hidden_columns();
+			$this->add_default_hidden_columns();
 		}
 
 		/**********************
@@ -264,7 +264,7 @@ class Upgrade {
 	 *
 	 * @since 1.4.6
 	 */
-	private function add_default_hidden_columns_to_hidden_columns() {
+	private function add_default_hidden_columns() {
 
 		$hidden_columns = ListTable::hidden_columns();
 
@@ -276,19 +276,24 @@ class Upgrade {
 
 		$meta_key_SC = 'manage' . Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG . 'columnshidden';
 
-		foreach ( $hidden_columns AS $hide_column ) {
+		foreach ( $hidden_columns AS $hidden_column ) {
 
-			$users_ids = $wpdb->get_col( "SELECT user_id FROM wp_usermeta WHERE meta_key = '" . $meta_key_SC . "' AND meta_value NOT LIKE '%" . $hide_column . "%' AND meta_value<>''" );
-			foreach ( $users_ids as $user_id ) {
+			$user_ids = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key_SC' AND meta_value NOT LIKE '%{$hidden_column}%' AND meta_value <> ''" );
 
-				$meta = get_user_meta( $user_id, $meta_key_SC, true );
+			foreach ( $user_ids as $user_id ) {
+
+				$meta = get_user_meta( $user_id, $meta_key_SC, TRUE );
+
 				if ( ! array( $meta ) ) {
 					$meta = array();
 				}
-				$meta[] = $hide_column;
+
+				$meta[] = $hidden_column;
 				update_user_meta( $user_id, $meta_key_SC, $meta );
+
 			}
 		}
+
 	}
 
 }
