@@ -961,7 +961,7 @@ class ListTable extends AtumListTable {
 	 * @return array
 	 */
 	public static function hidden_columns() {
-		return apply_filters('atum/list_table/default_hidden_columns', static::$default_hidden_columns);
+		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_hidden_columns );
 	}
 
 	/**

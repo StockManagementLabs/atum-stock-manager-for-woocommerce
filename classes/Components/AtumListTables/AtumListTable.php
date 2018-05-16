@@ -301,8 +301,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Hidden columns
-		if (! empty(static::$default_hidden_columns) ) {
-			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 ); // Where $priority is 10, $accepted_args is 2.
+		if ( ! empty( static::$default_hidden_columns ) ) {
+			add_filter( 'default_hidden_columns', array(
+				$this,
+				'hidden_columns'
+			), 10, 2 ); // Where $priority is 10, $accepted_args is 2.
 		}
 
 		$this->default_currency = get_woocommerce_currency();
@@ -3102,7 +3105,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	public static function hidden_columns() {
-		return apply_filters('atum/list_table/default_hidden_columns', static::$default_hidden_columns);
+		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_hidden_columns );
 	}
 
 }
