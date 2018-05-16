@@ -277,6 +277,7 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 **Fixes**
 
+* Fixed SQL Syntax error when accessing feeds.
 * Refactory.
 * Minor fixes.
 

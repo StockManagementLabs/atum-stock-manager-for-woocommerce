@@ -288,6 +288,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 **Fixes**
 
+* Fixed SQL Syntax error when accessing feeds.
 * Refactory.
 * Minor fixes.
 
