@@ -77,7 +77,8 @@ class AtumComments {
 	 */
 	public function exclude_atum_order_notes_from_feed_where( $where ) {
 		// *** The 'log_note' is deprecated and could be deleted in future versions ***
-		return ( ! empty($where) ? ' AND ' : '' ) . " comment_type NOT IN ('" . self::NOTES_KEY . "', 'log_note') ";
+		// This filter always has value and comes with the where statement
+		return  "{$where} AND comment_type NOT IN ('" . self::NOTES_KEY . "', 'log_note') ";
 	}
 
 	/**
