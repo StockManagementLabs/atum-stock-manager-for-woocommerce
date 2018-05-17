@@ -214,14 +214,13 @@ class ListTable extends AtumListTable {
 	 *
 	 * @param string $hook
 	 */
-
 	public function enqueue_scripts( $hook ) {
 
 		parent::enqueue_scripts( $hook );
 
 		// Extra js
 		// init jquery.floatThead on SC
-		wp_register_script( 'atum.sc.stickyheaders', ATUM_URL . 'assets/js/atum.sc.stickyheaders.js', array( 'jquery' ), ATUM_VERSION, true );
+		wp_register_script( 'atum.sc.stickyheaders', ATUM_URL . 'assets/js/atum.sc.stickyheaders.js', array( 'jquery' ), ATUM_LEVELS_VERSION, true );
 		wp_enqueue_script( 'atum.sc.stickyheaders' );
 	}
 
