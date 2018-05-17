@@ -203,28 +203,7 @@ class ListTable extends AtumListTable {
 		// Add the "Apply Bulk Action" button to the title section
 		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
 	}
-
-	/**
-	 * Enqueue the required scripts
-	 *
-	 * @since 1.4.6
-	 *
-	 * @param string $hook
-	 */
-	public function enqueue_scripts( $hook ) {
-
-		parent::enqueue_scripts( $hook );
-
-		// Extra js
-		// init jquery.floatThead on SC
-		wp_register_script( 'atum.sc.stickyheaders', ATUM_URL . 'assets/js/atum.sc.stickyheaders.js', array( 'jquery' ), ATUM_LEVELS_VERSION, true );
-		wp_enqueue_script( 'atum.sc.stickyheaders' );
-	}
-
-
 
 	/**
 	 * @inheritdoc
