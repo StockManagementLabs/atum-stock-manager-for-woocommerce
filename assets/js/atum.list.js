@@ -154,19 +154,6 @@
 				
 			});
 
-            //
-			// Init stickyHeaders: floatThead
-            //--------------------------------
-
-			$(this.$atumTable).floatThead({
-                responsiveContainer: function($table){
-                    return $table.closest('.jspContainer');
-                },
-                position: 'absolute'
-            });
-
-
-
 			//
 			// Hide/Show/Colspan column groups
 			//--------------------------------
