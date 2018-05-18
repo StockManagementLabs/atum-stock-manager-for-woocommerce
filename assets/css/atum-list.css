@@ -803,6 +803,11 @@ h1.wp-heading-inline #atum-update-list:active {
   width: 187px;
 }
 
+.atum-list-wrapper .search-box select {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
 .atum-list-wrapper .search-submit {
   margin-left: 4px;
 }

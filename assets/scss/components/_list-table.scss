@@ -35,6 +35,11 @@ h1.wp-heading-inline {
 			margin-right: 0;
 			width: 187px;
 		}
+
+		select {
+			border-top-left-radius: 0px;
+			border-bottom-left-radius: 0px;
+		}
 	}
 	
 	.search-submit {

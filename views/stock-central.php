@@ -25,8 +25,28 @@ defined( 'ABSPATH' ) or die;
 		
 		<?php $list->views(); ?>
 
+        <?php /*
 		<p class="search-box">
+            <select autocomplete="off" name="search_column" id="search_column" class="dropdown_search_column">
+                <option value="" selected="selected"><?php _e('Select a Column', ATUM_TEXT_DOMAIN) ?></option>
+            </select>
 			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
+
+        */
+            ?>
+
+
+        <p class="search-box">
+            <div class="input-group">
+                <!--<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">-->
+                <input type="search" name="s" class="form-control atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
+
+                <div class="input-group-append">
+                    <select autocomplete="off" name="search_column" id="search_column" class="dropdown_search_column custom-select">
+                        <option value="" selected="selected"><?php _e('Select a Column', ATUM_TEXT_DOMAIN) ?></option>
+                    </select>
+                </div>
+            </div>
 			
 			<?php if ( $ajax == 'no' ):?>
 				<input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">

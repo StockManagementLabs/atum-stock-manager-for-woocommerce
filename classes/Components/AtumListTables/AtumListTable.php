@@ -246,7 +246,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
-		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
 		$this->query_filters = $this->get_filters_query_string();
 
 		$args = wp_parse_args( $args, array(
@@ -305,7 +305,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			add_filter( 'default_hidden_columns', array(
 				$this,
 				'hidden_columns'
-			), 10, 2 ); // Where $priority is 10, $accepted_args is 2.
+			), 10, 2 );
 		}
 
 		$this->default_currency = get_woocommerce_currency();
@@ -1562,6 +1562,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		/*
 		 * Searching
 		 */
+		if ( ! empty( $_REQUEST['search_column'] ) ) {
+			$args['search_column'] = esc_attr( $_REQUEST['search_column'] );
+		}
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$args['s'] = esc_attr( $_REQUEST['s'] );
 		}
@@ -2202,7 +2205,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'selectItems'      => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
 			'applyBulkAction'  => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
 			'applyAction'      => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
-			'productLocations' => __( 'Product Locations', ATUM_TEXT_DOMAIN )
+			'productLocations' => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
+            'searchInColumn' => __( 'Search In Column', ATUM_TEXT_DOMAIN )
 		);
 
 		if ($this->first_edit_key) {
@@ -2582,53 +2586,88 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
+
 	public function product_search( $where ) {
 
 		global $pagenow, $wpdb;
 
-		/**
-		 * Changed the WooCommerce's "product_search" filter to allow Ajax requests
-		 * @see \\WC_Admin_Post_Types\product_search
-		 */
+		 // Changed the WooCommerce's "product_search" filter to allow Ajax requests
+		 // @see \\WC_Admin_Post_Types\product_search
+
 		if (
 			! in_array( $pagenow, array('edit.php', 'admin-ajax.php') ) ||
-		    ! isset( $_REQUEST['s'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === FALSE
+		    ! isset( $_REQUEST['s'], $_REQUEST['search_column'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === FALSE
 		) {
 			return $where;
 		}
 
-		$search_ids = array();
-		$terms      = explode( ',', $_REQUEST['s'] );
+		if(empty($_REQUEST['search_column'])){
 
-		foreach ( $terms as $term ) {
+            $search_ids = array();
+            $terms      = explode( ',', $_REQUEST['s'] );
+
+            foreach ( $terms as $term ) {
+
+                if ( is_numeric( $term ) ) {
+                    $search_ids[] = $term;
+                }
+
+                // Attempt to get an SKU or Supplier's SKU
+                foreach (['sku', 'supplier_sku'] as $meta_key) {
+
+                    $sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_{$meta_key}' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
+                    $sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
+
+                    if ( sizeof( $sku_to_id ) > 0 ) {
+                        $search_ids = array_merge( $search_ids, $sku_to_id );
+                    }
+
+                }
+
+            }
+
+            $search_ids = array_filter( array_unique( array_map( 'absint', $search_ids ) ) );
+
+            if ( sizeof( $search_ids ) > 0 ) {
+                $where = str_replace( 'AND (((', "AND ( ({$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")) OR ((", $where );
+            }
+            return $where;
+		}else{
+		    die("TODO");
+
+			$terms      = explode( ',', $_REQUEST['s'] );
 
 			if ( is_numeric( $term ) ) {
 				$search_ids[] = $term;
 			}
+			$where = "AND {$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")";
 
-			// Attempt to get an SKU or Supplier's SKU
-			foreach (['sku', 'supplier_sku'] as $meta_key) {
-
-				$sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_{$meta_key}' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
-				$sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
-
-				if ( sizeof( $sku_to_id ) > 0 ) {
-					$search_ids = array_merge( $search_ids, $sku_to_id );
-				}
-
-			}
-
-		}
-
-		$search_ids = array_filter( array_unique( array_map( 'absint', $search_ids ) ) );
-
-		if ( sizeof( $search_ids ) > 0 ) {
-			$where = str_replace( 'AND (((', "AND ( ({$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")) OR ((", $where );
-		}
-
-		return $where;
+			return $where;
+        }
 
 	}
+	/*
+	function product_search( $search, $wp_query ) {
+		if ( ! empty( $search ) && ! empty( $wp_query->query_vars['search_terms'] ) ) {
+			global $wpdb;
+
+			$q = $wp_query->query_vars;
+			$n = ! empty( $q['exact'] ) ? '' : '%';
+
+			$search = array();
+
+			foreach ( ( array ) $q['search_terms'] as $term )
+				$search[] = $wpdb->prepare( "$wpdb->posts.post_title LIKE %s", $n . $wpdb->esc_like( $term ) . $n );
+
+			if ( ! is_user_logged_in() )
+				$search[] = "$wpdb->posts.post_password = ''";
+
+			$search = ' AND ' . implode( ' AND ', $search );
+		}
+
+		return $search;
+	}
+    */
 
 	/**
 	 * Handle an incoming ajax request
@@ -2758,6 +2797,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		$min = !ATUM_DEBUG ? '.min' : '';
 		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
+
+
+// Enqueued script with localized data.
+		wp_enqueue_script( 'some_handle' );
 
 	}
 

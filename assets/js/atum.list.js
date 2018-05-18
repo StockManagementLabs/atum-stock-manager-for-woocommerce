@@ -80,6 +80,16 @@
 				orderby        : this.settings.orderby,
 			};
 
+			//
+			//Init search by column, disable search input, and listen screen option checkboxes
+            //--------------------------------
+            $(".search-box input[type=search]").prop('disabled', true);
+            this.setupSearchColumnDropdown();
+
+            $('#adv-settings input[type=checkbox]').change(function () {
+            	setTimeout(self.setupSearchColumnDropdown, 500); //performance
+            });
+
             //
             // Init stickyHeaders: floatThead
             //--------------------------------
@@ -397,6 +407,25 @@
 			});
 			
 		},
+
+		/**
+		 * Fill the search by column dropdown with the active screen options checkboxes
+		 */
+        setupSearchColumnDropdown: function() {
+
+            var $search_column_dropdown = $("#search_column");
+            $search_column_dropdown.empty();
+            $search_column_dropdown.append( $("<option />" ).val( '' ).text( atumListVars.searchInColumn ));
+			var optionVal = "";
+
+            $('#adv-settings input:checked').each(function () {
+                optionVal = $(this).val() ;
+                if( optionVal.search("calc_") < 0 ){ // calc values are not searchable
+                    $search_column_dropdown.append( $("<option />" ).val( optionVal ).text( $(this).parent().text() ) );
+				}
+            });
+
+        },
 		
 		/**
 		 * Setup the URL state navigation
@@ -949,7 +978,7 @@
 				this.doingAjax.abort();
 			}
 			
-			// Overwrite the filterData with the URL hash parameters
+			// Overwrite the filterData with the URL hash parameters AND the search_column value (if exits)
 			this.filterData = $.extend(this.filterData, {
 				view        : $.address.parameter('view') || '',
 				product_cat : $.address.parameter('product_cat') || '',
@@ -959,6 +988,7 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
+                search_column : $('#search_column').val() || '',
 				s           : $.address.parameter('s') || '',
 			});
 			
