@@ -3235,7 +3235,7 @@ input[type="button"].btn-block {
 }
 
 .nice-select {
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background-color: #fff;
   border-radius: 30px;
   border: solid 1px #e1e1e1;

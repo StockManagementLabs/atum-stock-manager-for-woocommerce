@@ -202,7 +202,7 @@ class ListTable extends AtumListTable {
 
 		// Add the "Apply Bulk Action" button to the title section
 		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
-		
+
 	}
 
 	/**
