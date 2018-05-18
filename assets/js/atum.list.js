@@ -84,28 +84,29 @@
             // Init stickyHeaders: floatThead
             //--------------------------------
 
-            let beforeHeaderHeight = $("#wpadminbar").height();
-            let actualHeaderHeight = beforeHeaderHeight;
+            var beforeHeaderHeight = $("#wpadminbar").height(),
+                actualHeaderHeight = beforeHeaderHeight;
 
             //fired when the sticky header has to be floated, or not.
-            $(this.$atumTable).on("floatThead", function(e, isFloated, $floatContainer){
+            this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
                 if(isFloated){
                     actualHeaderHeight = $("#wpadminbar").height();
                     //console.log(beforeHeaderHeight + " -> "+ actualHeaderHeight);
                     if ($("#wpadminbar").css("position") == "absolute" ){
                         //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
-                        $($floatContainer).css('display', 'none');
-                    }else{
-                        // console.log("wpadminbar not absolute, so, its on the normal admin bar");
-                        $($floatContainer).css('display', 'block');
+                        $floatContainer.css('display', 'none');
                     }
-					console.log("floated");
+                    else{
+                        // console.log("wpadminbar not absolute, so, its on the normal admin bar");
+                        $floatContainer.css('display', 'block');
+                    }
+					//console.log("floated");
                 } else {
                     // console.log("unfloated");
                 }
             });
 
-            $(this.$atumTable).floatThead({
+            this.$atumTable.floatThead({
                 responsiveContainer: function ($table) {
                     return $table.closest('.jspContainer');
                 },
