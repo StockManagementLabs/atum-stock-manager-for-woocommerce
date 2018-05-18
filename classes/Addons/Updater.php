@@ -319,8 +319,8 @@ class Updater {
 		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
 			$new_sections = array();
-			foreach ( $_data->sections as $key => $key ) {
-				$new_sections[ $key ] = $key;
+			foreach ( $_data->sections as $key => $value ) {
+				$new_sections[ $key ] = $value;
 			}
 
 			$_data->sections = $new_sections;
@@ -329,11 +329,21 @@ class Updater {
 		// Convert banners into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
 			$new_banners = array();
-			foreach ( $_data->banners as $key => $key ) {
-				$new_banners[ $key ] = $key;
+			foreach ( $_data->banners as $key => $value ) {
+				$new_banners[ $key ] = $value;
 			}
 
 			$_data->banners = $new_banners;
+		}
+		
+		// Transform contributos array to reach WP required format.
+		if ( isset( $_data->contributors ) ) {
+			$new_contributors = array();
+			foreach ( $_data->contributors as $value ) {
+				$new_contributors[ $value ] = 0;
+			}
+			
+			$_data->contributors = $new_contributors;
 		}
 
 		return $_data;

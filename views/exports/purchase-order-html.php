@@ -79,8 +79,18 @@
 									<?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
 								</span>
 							<?php endif;
+							
+							$sku = get_post_meta( $product->get_id(), '_sku', TRUE );
+							
+							if ( $sku ): ?>
+								<br>
+								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
+									<?php _e( 'SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $sku ) ?>
+								</span>
+							<?php endif;
 						endif;
 						?>
+						
 						
 					</td>
 					<td class="qty"><?php echo $item->get_quantity() ?></td>
