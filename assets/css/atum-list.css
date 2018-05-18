@@ -966,6 +966,10 @@ h1.wp-heading-inline #atum-update-list:active {
   margin-bottom: 15px;
 }
 
+.atum-list-table thead .item-heads, .atum-list-table tfoot {
+  background-color: #fff;
+}
+
 .atum-list-table thead .item-heads th, .atum-list-table tfoot th {
   padding: 3px 5px;
   line-height: 1.1;
