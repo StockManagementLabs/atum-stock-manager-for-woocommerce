@@ -320,7 +320,7 @@ class Updater {
 		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
 			$new_sections = array();
 			foreach ( $_data->sections as $key => $value ) {
-				$new_sections[ $key ] = $key;
+				$new_sections[ $key ] = $value;
 			}
 
 			$_data->sections = $new_sections;
@@ -330,7 +330,7 @@ class Updater {
 		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
 			$new_banners = array();
 			foreach ( $_data->banners as $key => $value ) {
-				$new_banners[ $key ] = $key;
+				$new_banners[ $key ] = $value;
 			}
 
 			$_data->banners = $new_banners;
