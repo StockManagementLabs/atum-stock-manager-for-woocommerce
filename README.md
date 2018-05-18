@@ -258,6 +258,22 @@ https://www.youtube.com/watch?v=Wdnnm6dETMY
 
 ---
 
+`1.4.7`
+
+*2018-05-18*
+
+**Features**
+
+* Added sticky header for ATUM List Tables that shows up when scrolling down.
+* Added new CSS components.
+
+
+**Fixes**
+
+* Fixed ATUM add-ons info in automatic updates.
+
+---
+
 `1.4.6`
 
 *2018-05-15*
