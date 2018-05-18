@@ -335,6 +335,16 @@ class Updater {
 
 			$_data->banners = $new_banners;
 		}
+		
+		// Transform contributos array to reach WP required format.
+		if ( isset( $_data->contributors ) ) {
+			$new_contributors = array();
+			foreach ( $_data->contributors as $value ) {
+				$new_contributors[ $value ] = 0;
+			}
+			
+			$_data->contributors = $new_contributors;
+		}
 
 		return $_data;
 
