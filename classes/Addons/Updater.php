@@ -319,7 +319,7 @@ class Updater {
 		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
 			$new_sections = array();
-			foreach ( $_data->sections as $key => $key ) {
+			foreach ( $_data->sections as $key => $value ) {
 				$new_sections[ $key ] = $key;
 			}
 
@@ -329,7 +329,7 @@ class Updater {
 		// Convert banners into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
 			$new_banners = array();
-			foreach ( $_data->banners as $key => $key ) {
+			foreach ( $_data->banners as $key => $value ) {
 				$new_banners[ $key ] = $key;
 			}
 
