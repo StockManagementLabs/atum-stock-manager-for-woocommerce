@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) or die;
             ?>
 
 
-        <p class="search-box">
+        <div class="search-box">
             <div class="input-group">
                 <!--<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">-->
                 <input type="search" name="s" class="form-control atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) or die;
 			<?php if ( $ajax == 'no' ):?>
 				<input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">
 			<?php endif;?>
-		</p>
+		</div>
 		
 		<?php $list->display(); ?>
 		

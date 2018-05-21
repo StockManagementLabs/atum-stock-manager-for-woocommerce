@@ -83,7 +83,6 @@
 			//
 			//Init search by column, disable search input, and listen screen option checkboxes
             //--------------------------------
-            $(".search-box input[type=search]").prop('disabled', true);
             this.setupSearchColumnDropdown();
 
             $('#adv-settings input[type=checkbox]').change(function () {
@@ -233,8 +232,15 @@
 				this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
 					self.keyUp(e);
 				})
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-					self.keyUp(e, true);
+				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter, .dropdown_search_column', function (e) {
+					console.log('drops');
+
+					if( $('.atum-post-search').val().length > 0 ){
+                        console.log('col search drop');
+                        self.keyUp(e, true);
+					}else{
+                        self.keyUp(e, true);
+					}
 				});
 				
 			}
@@ -413,18 +419,39 @@
 		 */
         setupSearchColumnDropdown: function() {
 
+        	/* TODO
+        	<div class="dropdown">
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				Dropdown
+				<span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li><a href="#" data-value="action">Action</a></li>
+				<li><a href="#" data-value="another action">Another action</a></li>
+				<li><a href="#" data-value="something else here">Something else here</a></li>
+				<li><a href="#" data-value="separated link">Separated link</a></li>
+			  </ul>
+			</div>
+
+        	$(".dropdown-menu li a").click(function(){
+			  $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+			  $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+			});
+        	 */
+
             var $search_column_dropdown = $("#search_column");
             $search_column_dropdown.empty();
             $search_column_dropdown.append( $("<option />" ).val( '' ).text( atumListVars.searchInColumn ));
+            $search_column_dropdown.append( $("<option />" ).val( 'title' ).text( atumListVars.productName ));
 			var optionVal = "";
 
             $('#adv-settings input:checked').each(function () {
                 optionVal = $(this).val() ;
-                if( optionVal.search("calc_") < 0 ){ // calc values are not searchable
-                    $search_column_dropdown.append( $("<option />" ).val( optionVal ).text( $(this).parent().text() ) );
+                if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
+                	if(optionVal != 'thumb')
+                    	$search_column_dropdown.append( $("<option />" ).val( optionVal ).text( $(this).parent().text() ) );
 				}
             });
-
         },
 		
 		/**

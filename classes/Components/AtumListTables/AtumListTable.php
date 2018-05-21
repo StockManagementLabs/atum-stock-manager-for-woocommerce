@@ -2206,7 +2206,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'applyBulkAction'  => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
 			'applyAction'      => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'productLocations' => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
-            'searchInColumn' => __( 'Search In Column', ATUM_TEXT_DOMAIN )
+            'searchInColumn'   => __( 'Search In Column', ATUM_TEXT_DOMAIN ),
+            'productName'      => __( 'Product Name', ATUM_TEXT_DOMAIN )
 		);
 
 		if ($this->first_edit_key) {
@@ -2578,15 +2579,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Search products by SKU, Supplier's SKU or ID
+	 * Search products by: A (post_title, post_excerpt, post_content), B (posts.ID), C (posts.title), D (other meta fields wich can be numeric or not)
 	 *
 	 * @since 1.2.5
 	 *
-	 * @param string $where
+	 * @param string $where "AND (((wp_posts.post_title LIKE '%s%') OR (wp_posts.post_excerpt LIKE '%s%') OR (wp_posts.post_content LIKE '%s%')))"
 	 *
 	 * @return string
+     *
 	 */
-
 	public function product_search( $where ) {
 
 		global $pagenow, $wpdb;
@@ -2601,73 +2602,109 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $where;
 		}
 
+		// # case A #
 		if(empty($_REQUEST['search_column'])){
 
-            $search_ids = array();
-            $terms      = explode( ',', $_REQUEST['s'] );
+            return $where;
 
-            foreach ( $terms as $term ) {
+		}
+		else{
 
-                if ( is_numeric( $term ) ) {
-                    $search_ids[] = $term;
+			if ( array_key_exists( $_REQUEST['search_column'], $this->get_table_columns() ) ) {
+
+	            $terms      = explode( ',', $_REQUEST['s'] );
+	            $terms      = array_unique($terms);
+
+	            // If we don't get any result looking for a field, we must force an empty result before
+                // WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
+	            $where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
+
+	            // # case B # search in IDs
+                if( $_REQUEST['search_column'] == "ID" ) {
+
+	                $terms = array_filter( array_unique( array_map( 'absint', $terms ) ) );
+	                if(count($terms) == 0) return $where_without_results; // not numeric terms
+
+	                $where = "AND ( {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ") )";
+
+	                return $where;
+
                 }
+                //  # case C and Ds #
+                else {
 
-                // Attempt to get an SKU or Supplier's SKU
-                foreach (['sku', 'supplier_sku'] as $meta_key) {
+                    $preLike = "";
+	                $search_terms = "";
+	                $is_title_value = false;
 
-                    $sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_{$meta_key}' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
-                    $sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
+	                // title field is not in meta
+	                if ($_REQUEST['search_column'] == "title"){
+		                $is_title_value = true;
+	                }
 
-                    if ( sizeof( $sku_to_id ) > 0 ) {
-                        $search_ids = array_merge( $search_ids, $sku_to_id );
+	                //numeric fields
+	                if ( substr( $_REQUEST['search_column'], 0, 1 ) == '_' &&
+                         ( in_array( $_REQUEST['search_column'], [ '_weight', '_stock' ] ) || substr_count( $_REQUEST['search_column'], '_price' ) > 0 ) ) {
+
+	                    $terms = array_filter( array_unique( $terms ), 'is_numeric' );
+
+	                    if(count($terms) == 0) return $where_without_results; // not numeric terms
+
+                    //string fields
+                    }else{
+	                    $preLike="%";
                     }
 
+	                $i =0;
+	                foreach ( $terms AS $term ) {
+
+		                if($is_title_value) {
+			                $search_terms .= ($i == 0) ? " WHERE " : " OR ";
+			                $search_terms.= "{$wpdb->posts}.post_title LIKE '$preLike".$wpdb->esc_like( $term )."%' ";
+
+		                }else {
+			                $search_terms .= ($i == 0) ? " AND ( " : " OR ";
+			                $search_terms.= "{$wpdb->postmeta}.meta_value LIKE '$preLike".$wpdb->esc_like( $term )."%' ";
+
+                        }
+		                $i++;
+	                }
+
+	                $search_terms .= ($is_title_value) ? "" : ") ";
+
+	                if($is_title_value){
+		                $query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} "
+		                         .$search_terms;
+	                }else{
+		                $query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} "
+		                         ."LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
+		                         ."WHERE {$wpdb->postmeta}.meta_key = '". $_REQUEST['search_column'] . "' "
+		                         .$search_terms;
+                    }
+
+	                $search_terms_ids = $wpdb->get_results( $wpdb->prepare( $query ) ) ;
+	                if(count($search_terms_ids) == 0) return $where_without_results;
+
+	                $search_terms_ids_str="";
+
+	                foreach ( $search_terms_ids as $term_id ) {
+		                $search_terms_ids_str .= "'".$term_id->ID."',";
+	                }
+	                // removes last ,
+	                $search_terms_ids_str = rtrim($search_terms_ids_str, ",");
+
+	                $where = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str ." ) )";
+
+	                return $where;
+
                 }
 
+            }else{
+	            return $where;
             }
-
-            $search_ids = array_filter( array_unique( array_map( 'absint', $search_ids ) ) );
-
-            if ( sizeof( $search_ids ) > 0 ) {
-                $where = str_replace( 'AND (((', "AND ( ({$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")) OR ((", $where );
-            }
-            return $where;
-		}else{
-		    die("TODO");
-
-			$terms      = explode( ',', $_REQUEST['s'] );
-
-			if ( is_numeric( $term ) ) {
-				$search_ids[] = $term;
-			}
-			$where = "AND {$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")";
-
-			return $where;
         }
 
 	}
-	/*
-	function product_search( $search, $wp_query ) {
-		if ( ! empty( $search ) && ! empty( $wp_query->query_vars['search_terms'] ) ) {
-			global $wpdb;
-
-			$q = $wp_query->query_vars;
-			$n = ! empty( $q['exact'] ) ? '' : '%';
-
-			$search = array();
-
-			foreach ( ( array ) $q['search_terms'] as $term )
-				$search[] = $wpdb->prepare( "$wpdb->posts.post_title LIKE %s", $n . $wpdb->esc_like( $term ) . $n );
-
-			if ( ! is_user_logged_in() )
-				$search[] = "$wpdb->posts.post_password = ''";
-
-			$search = ' AND ' . implode( ' AND ', $search );
-		}
-
-		return $search;
-	}
-    */
 
 	/**
 	 * Handle an incoming ajax request

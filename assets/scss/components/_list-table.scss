@@ -31,15 +31,25 @@ h1.wp-heading-inline {
 	}
 	
 	.search-box {
-		input[type=search] {
-			margin-right: 0;
-			width: 187px;
+		display: flex;
+
+		.input-group{
+			width: 75%;
+
+			input[type=search] {
+				margin-right: 0;
+				width: 187px;
+			}
+			.input-group-append {
+				.dropdown_search_column {
+					margin: 0px !important;
+					border: 0px !important;
+					border-top-left-radius: 0px;
+					border-bottom-left-radius: 0px;
+				}
+			}
 		}
 
-		select {
-			border-top-left-radius: 0px;
-			border-bottom-left-radius: 0px;
-		}
 	}
 	
 	.search-submit {
