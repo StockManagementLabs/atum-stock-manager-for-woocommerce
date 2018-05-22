@@ -80,6 +80,15 @@
 				orderby        : this.settings.orderby,
 			};
 
+			//
+			//Init search by column, disable search input, and listen screen option checkboxes
+            //--------------------------------
+            this.setupSearchColumnDropdown();
+
+            $('#adv-settings input[type=checkbox]').change(function () {
+            	setTimeout(self.setupSearchColumnDropdown, 500); //performance
+            });
+
             //
             // Init stickyHeaders: floatThead
             //--------------------------------
@@ -223,8 +232,15 @@
 				this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
 					self.keyUp(e);
 				})
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-					self.keyUp(e, true);
+				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter, .dropdown_search_column', function (e) {
+					console.log('drops');
+
+					if( $('.atum-post-search').val().length > 0 ){
+                        console.log('col search drop');
+                        self.keyUp(e, true);
+					}else{
+                        self.keyUp(e, true);
+					}
 				});
 				
 			}
@@ -397,6 +413,46 @@
 			});
 			
 		},
+
+		/**
+		 * Fill the search by column dropdown with the active screen options checkboxes
+		 */
+        setupSearchColumnDropdown: function() {
+
+        	/* TODO
+        	<div class="dropdown">
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				Dropdown
+				<span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li><a href="#" data-value="action">Action</a></li>
+				<li><a href="#" data-value="another action">Another action</a></li>
+				<li><a href="#" data-value="something else here">Something else here</a></li>
+				<li><a href="#" data-value="separated link">Separated link</a></li>
+			  </ul>
+			</div>
+
+        	$(".dropdown-menu li a").click(function(){
+			  $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+			  $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+			});
+        	 */
+
+            var $search_column_dropdown = $("#search_column");
+            $search_column_dropdown.empty();
+            $search_column_dropdown.append( $("<option />" ).val( '' ).text( atumListVars.searchInColumn ));
+            $search_column_dropdown.append( $("<option />" ).val( 'title' ).text( atumListVars.productName ));
+			var optionVal = "";
+
+            $('#adv-settings input:checked').each(function () {
+                optionVal = $(this).val() ;
+                if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
+                	if(optionVal != 'thumb')
+                    	$search_column_dropdown.append( $("<option />" ).val( optionVal ).text( $(this).parent().text() ) );
+				}
+            });
+        },
 		
 		/**
 		 * Setup the URL state navigation
@@ -949,7 +1005,7 @@
 				this.doingAjax.abort();
 			}
 			
-			// Overwrite the filterData with the URL hash parameters
+			// Overwrite the filterData with the URL hash parameters AND the search_column value (if exits)
 			this.filterData = $.extend(this.filterData, {
 				view        : $.address.parameter('view') || '',
 				product_cat : $.address.parameter('product_cat') || '',
@@ -959,6 +1015,7 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
+                search_column : $('#search_column').val() || '',
 				s           : $.address.parameter('s') || '',
 			});
 			
