@@ -134,6 +134,12 @@ $theme-colors: map-merge((
 		"dark":       $dark
 ), $theme-colors);
 
+
+// Body
+
+$body-bg:                               $white !default;
+$body-color:                            $gray-900 !default;
+
 // Links
 
 $link-color:                            $wp-link !default;
@@ -145,6 +151,12 @@ $border-color:                          $gray-300 !default;
 
 $component-active-color:                $white !default;
 $component-active-bg:                   theme-color("primary") !default;
+
+$caret-width:                           .3em !default;
+
+$transition-base:                       all .2s ease-in-out !default;
+$transition-fade:                       opacity .15s linear !default;
+$transition-collapse:                   height .35s ease !default;
 
 $border-radius:                         .25rem !default;
 $border-radius-lg:                      .3rem !default;
@@ -159,6 +171,36 @@ $yiq-contrasted-threshold:              175 !default;
 // Customize the light and dark text colors for use in our YIQ color contrast function.
 $yiq-text-dark:                         $gray-900 !default;
 $yiq-text-light:                        $white !default;
+
+
+// Spacing
+//
+// Control the default styling of most elements by modifying these variables. Mostly focused on spacing.
+// You can add more entries to the $spacers map, should you need more variation.
+
+// stylelint-disable
+$spacer: 1rem !default;
+$spacers: () !default;
+$spacers: map-merge((
+		0: 0,
+		1: ($spacer * .25),
+		2: ($spacer * .5),
+		3: $spacer,
+		4: ($spacer * 1.5),
+		5: ($spacer * 3)
+), $spacers);
+
+// This variable affects the `.h-*` and `.w-*` classes.
+$sizes: () !default;
+$sizes: map-merge((
+		25: 25%,
+		50: 50%,
+		75: 75%,
+		100: 100%,
+		auto: auto
+), $sizes);
+// stylelint-enable
+
 
 // Options
 
@@ -192,6 +234,7 @@ $screen-xs-max:                         ($screen-sm-min - 1) !default;
 $screen-sm-max:                         ($screen-md-min - 1) !default;
 $screen-md-max:                         ($screen-lg-min - 1) !default;
 
+
 // Buttons + Forms
 //
 // Shared variables that are reassigned to `$input-` and `$btn-` specific variables
@@ -213,6 +256,7 @@ $input-btn-padding-x-lg:                1rem !default;
 $input-btn-line-height-lg:              $line-height-lg !default;
 
 $input-btn-border-width:                $border-width !default;
+
 
 // Buttons
 
@@ -249,9 +293,54 @@ $btn-border-radius-sm:                  $border-radius-sm !default;
 $btn-transition:                        color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
 
 
+// Dropdowns
+
+$dropdown-min-width:                    10rem !default;
+$dropdown-padding-y:                    .5rem !default;
+$dropdown-spacer:                       .125rem !default;
+$dropdown-bg:                           $white !default;
+$dropdown-border-color:                 rgba($black, .15) !default;
+$dropdown-border-radius:                $border-radius !default;
+$dropdown-border-width:                 $border-width !default;
+$dropdown-divider-bg:                   $gray-200 !default;
+$dropdown-box-shadow:                   0 .5rem 1rem rgba($black, .175) !default;
+
+$dropdown-link-color:                   $gray-900 !default;
+$dropdown-link-hover-color:             darken($gray-900, 5%) !default;
+$dropdown-link-hover-bg:                $gray-100 !default;
+
+$dropdown-link-active-color:            $component-active-color !default;
+$dropdown-link-active-bg:               $component-active-bg !default;
+
+$dropdown-link-disabled-color:          $gray-600 !default;
+
+$dropdown-item-padding-y:               .25rem !default;
+$dropdown-item-padding-x:               1.5rem !default;
+
+$dropdown-header-color:                 $gray-600 !default;
+
+
+// Z-index master list
+//
+// Warning: Avoid customizing these values. They're used for a bird's eye view
+// of components dependent on the z-axis and are designed to all work together
+
+$zindex-dropdown:                       1000 !default;
+$zindex-sticky:                         1020 !default;
+$zindex-fixed:                          1030 !default;
+$zindex-modal-backdrop:                 1040 !default;
+$zindex-modal:                          1050 !default;
+$zindex-tooltip:                        1070 !default;
+
+
+// Navs
+
+$nav-divider-color:                     $gray-200 !default;
+$nav-divider-margin-y:                  ($spacer / 2) !default;
+
+
 // Tooltips
 
-$zindex-tooltip:                        1070 !default;
 $tooltip-max-width:                     200px !default;
 $tooltip-font-size:                     12px !default;
 $tooltip-color:                         $white !default;

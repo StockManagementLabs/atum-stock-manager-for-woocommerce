@@ -2623,6 +2623,7 @@ abstract class AtumListTable extends \WP_List_Table {
                 if( $_REQUEST['search_column'] == "ID" ) {
 
 	                $terms = array_filter( array_unique( array_map( 'absint', $terms ) ) );
+
 	                if(count($terms) == 0) return $where_without_results; // not numeric terms
 
 	                $where = "AND ( {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ") )";
