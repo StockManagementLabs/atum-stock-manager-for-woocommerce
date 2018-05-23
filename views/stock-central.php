@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) or die;
 
             <div class="input-group">
                 <input type="text"
-                       class="form-control atum-post-search" data-value=""
+                       class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
                        aria-label="Text input with dropdown button"
                        placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off"
                 >

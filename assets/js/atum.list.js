@@ -82,35 +82,43 @@
 			};
 
 			//
-			//Init search by column, disable search input, and listen screen option checkboxes
+			//Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
             //--------------------------------
 			//Fix height TODO: look for SASS variable to get the button exact height
-            $('.atum-post-search').height($('#search_column_btn').height()-4);
+            var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
+            if ( $atumPostSearchWithDropdown.length) {
+                $('.atum-post-search-with-dropdown').height($('#search_column_btn').height() - 4);
+                this.setupSearchColumnDropdown();
+                $('#adv-settings input[type=checkbox]').change(function () {
+                    setTimeout(self.setupSearchColumnDropdown, 500); //performance
+                });
+            }
 
-			this.setupSearchColumnDropdown();
 
-            $('#adv-settings input[type=checkbox]').change(function () {
-            	setTimeout(self.setupSearchColumnDropdown, 500); //performance
-            });
 
             //
             // Init stickyHeaders: floatThead
             //--------------------------------
 
-            let beforeHeaderHeight = $("#wpadminbar").height();
-            let actualHeaderHeight = beforeHeaderHeight;
+            var beforeHeaderHeight = $("#wpadminbar").height(),
+                actualHeaderHeight = beforeHeaderHeight;
 
             //fired when the sticky header has to be floated, or not.
             this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
                 if(isFloated){
                     actualHeaderHeight = $("#wpadminbar").height();
+                    //console.log(beforeHeaderHeight + " -> "+ actualHeaderHeight);
                     if ($("#wpadminbar").css("position") == "absolute" ){
+                        //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
                         $floatContainer.css('display', 'none');
-                    }else{
+                    }
+                    else{
+                        // console.log("wpadminbar not absolute, so, its on the normal admin bar");
                         $floatContainer.css('display', 'block');
                     }
+                    //console.log("floated");
                 } else {
-                	//unfloated
+                    // console.log("unfloated");
                 }
             });
 
@@ -119,7 +127,7 @@
                     return $table.closest('.jspContainer');
                 },
                 position: 'absolute',
-				top: actualHeaderHeight
+                top: actualHeaderHeight
             });
 			
 			//
