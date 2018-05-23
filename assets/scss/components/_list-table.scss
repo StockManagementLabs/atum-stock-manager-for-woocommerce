@@ -283,7 +283,7 @@ h1.wp-heading-inline {
 			}
 			
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku {
+			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight {
 				a {
 					@include flex-justify-content(center);
 					
@@ -445,7 +445,7 @@ h1.wp-heading-inline {
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku {
+		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight {
 			text-align: center;
 		}
 		
