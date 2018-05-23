@@ -27,6 +27,7 @@
 		this.$atumTable   = this.$atumList.find('.atum-list-table');
 		this.$editInput   = this.$atumList.find('#atum-column-edits');
 		this.$searchInput = this.$atumList.find('.atum-post-search');
+                this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
 		this.$bulkButton  = $('.apply-bulk-action');
 		
 		// We don't want to alter the default options for future instances of the plugin
@@ -79,6 +80,21 @@
 				order          : this.settings.order,
 				orderby        : this.settings.orderby,
 			};
+
+            //
+			//Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
+            //--------------------------------
+			//Fix height TODO: look for SASS variable to get the button exact height
+            var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
+            if ( $atumPostSearchWithDropdown.length) {
+                $('.atum-post-search-with-dropdown').height($('#search_column_btn').height() - 4);
+                this.setupSearchColumnDropdown();
+                $('#adv-settings input[type=checkbox]').change(function () {
+                    setTimeout(self.setupSearchColumnDropdown, 500); //performance
+                });
+            }
+
+
 
             //
             // Init stickyHeaders: floatThead
@@ -225,7 +241,22 @@
 					self.keyUp(e);
 				})
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-					self.keyUp(e, true);
+                    self.keyUp(e);
+				});
+                //= this.$atumList.find('#search_column_btn');
+                this.$searchColumnBtn .on('search_column_data_changed', function(e) {
+                    self.keyUp(e);
+
+                    //TODO Improve performance: check before launch if there's any data on the two fields. For some reason it doesn't update the url params on the first shot, and it fires twice. Always.
+                    //console.log('search_column_data_changed');
+                    //var data = $('#search_column_btn').data('value');
+                    //self.filterData.search_column = data;
+                    //self.filterData.s = self.$searchInput.val();
+                    //console.log("val::" + self.$searchInput.val() + " data: " + data + "("+data.lenght +")");
+                    //if(self.$searchInput.val().lenght > 0 && data.lenght > 0){
+                    //	console.log('keyUp');
+                    //    self.keyUp(e);
+					//}
 				});
 				
 			}
@@ -237,6 +268,9 @@
 				this.$atumList.on('click', '.search-category, .search-submit', function () {
 					self.updateHash();
 				});
+                $('#search_column_btn').on('search_column_data_changed', function(e) {
+                    self.updateHash();
+                });
 				
 			}
 			
@@ -398,6 +432,49 @@
 			});
 			
 		},
+
+		/**
+		 * Fill the search by column dropdown with the active screen options checkboxes
+		 */
+        setupSearchColumnDropdown: function() {
+        	//don't loose context
+            var self = this;
+
+			var $search_column_btn = $("#search_column_btn");
+			var $search_column_dropdown = $("#search_column_dropdown");
+
+			$search_column_dropdown.empty();
+			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( atumListVars.productName ));
+
+			var optionVal = "";
+			$('#adv-settings input:checked').each(function () {
+				optionVal = $(this).val() ;
+				if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
+					if(optionVal != 'thumb') {
+						$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', optionVal ).text( $(this).parent().text() ));
+					}
+				}
+			});
+
+            $('.dropdown-toggle').click( function (e) {
+                    $(this).parent().find('.dropdown-menu').toggle();
+                	e.stopPropagation();
+                }
+            );
+
+            $(".dropdown-menu a").click(function(e){
+                $(this).parents().find('.button').html($(this).text() + ' <span class="caret"></span>');
+                $(this).parents().find('.button').data( 'value' , $(this).data('value') );
+                $(this).parents().find('.dropdown-menu').hide();
+                $search_column_btn.trigger('search_column_data_changed');
+                e.stopPropagation();
+
+            });
+
+            $(document).click(function(){
+            	$('.dropdown-menu').hide();
+            });
+        },
 		
 		/**
 		 * Setup the URL state navigation
@@ -960,6 +1037,7 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
+                search_column : $('#search_column_btn').data('value') || '',
 				s           : $.address.parameter('s') || '',
 			});
 			

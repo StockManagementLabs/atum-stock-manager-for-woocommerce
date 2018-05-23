@@ -31,10 +31,26 @@ h1.wp-heading-inline {
 	}
 	
 	.search-box {
-		input[type=search] {
+		display: flex;
+		display: inline-block;
+		float: right;
+
+		.atum-post-search {
 			margin-right: 0;
-			width: 187px;
+			// width: 187px;
+			//height: 18px;
 		}
+
+		.dropdown-menu{
+			margin-top: 0px;
+			right: 0px;
+		}
+
+
+		.dropdown-item{
+			width: auto; // For `<button>`s
+		}
+
 	}
 	
 	.search-submit {
