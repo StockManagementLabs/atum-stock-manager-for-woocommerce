@@ -49,6 +49,12 @@ defined( 'ABSPATH' ) or die;
             </div>
 
 		</div>
+
+        <input type="text"
+               class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
+               aria-label="Text input with dropdown button"
+               placeholder="tessst" autocomplete="off"
+        >
 		
 		<?php $list->display(); ?>
 		

@@ -3165,7 +3165,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'product_type' => '',
 			'supplier'     => '',
 			'extra_filter' => '',
-			's'            => ''
+			's'            => '',
+			'search_column'=> ''
 		);
 
 		parse_str($_SERVER['QUERY_STRING'], $query_string);

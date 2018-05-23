@@ -23,12 +23,12 @@
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
-		this.$atumList    = $(element);
-		this.$atumTable   = this.$atumList.find('.atum-list-table');
-		this.$editInput   = this.$atumList.find('#atum-column-edits');
-		this.$searchInput = this.$atumList.find('.atum-post-search');
-                this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
-		this.$bulkButton  = $('.apply-bulk-action');
+		this.$atumList        = $(element);
+		this.$atumTable       = this.$atumList.find('.atum-list-table');
+		this.$editInput       = this.$atumList.find('#atum-column-edits');
+		this.$searchInput     = this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
+		this.$bulkButton      = $('.apply-bulk-action');
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -86,14 +86,16 @@
             //--------------------------------
 			//Fix height TODO: look for SASS variable to get the button exact height
             var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
+
             if ( $atumPostSearchWithDropdown.length) {
-                $('.atum-post-search-with-dropdown').height($('#search_column_btn').height() - 4);
+
+                $('.atum-post-search-with-dropdown').height($('#search_column_btn').height() - 4); //fix height
                 this.setupSearchColumnDropdown();
+
                 $('#adv-settings input[type=checkbox]').change(function () {
                     setTimeout(self.setupSearchColumnDropdown, 500); //performance
                 });
             }
-
 
 
             //
@@ -245,20 +247,11 @@
 				});
                 //= this.$atumList.find('#search_column_btn');
                 this.$searchColumnBtn .on('search_column_data_changed', function(e) {
-                    self.keyUp(e);
-
-                    //TODO Improve performance: check before launch if there's any data on the two fields. For some reason it doesn't update the url params on the first shot, and it fires twice. Always.
-                    //console.log('search_column_data_changed');
-                    //var data = $('#search_column_btn').data('value');
-                    //self.filterData.search_column = data;
-                    //self.filterData.s = self.$searchInput.val();
-                    //console.log("val::" + self.$searchInput.val() + " data: " + data + "("+data.lenght +")");
-                    //if(self.$searchInput.val().lenght > 0 && data.lenght > 0){
-                    //	console.log('keyUp');
-                    //    self.keyUp(e);
+                    //Improve performance: check before launch if there's any data on the two fields.
+                    //if(self.$searchInput.val().lenght > 0 && self.$searchColumnBtn.data('value').lenght > 0){
+                        self.keyUp(e);
 					//}
 				});
-				
 			}
 			//
 			// Non-ajax filters
@@ -437,6 +430,7 @@
 		 * Fill the search by column dropdown with the active screen options checkboxes
 		 */
         setupSearchColumnDropdown: function() {
+        	//TODO optimize this
         	//don't loose context
             var self = this;
 
@@ -463,8 +457,8 @@
             );
 
             $(".dropdown-menu a").click(function(e){
-                $(this).parents().find('.button').html($(this).text() + ' <span class="caret"></span>');
-                $(this).parents().find('.button').data( 'value' , $(this).data('value') );
+                $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
+                $search_column_btn.data( 'value' , $(this).data('value') );
                 $(this).parents().find('.dropdown-menu').hide();
                 $search_column_btn.trigger('search_column_data_changed');
                 e.stopPropagation();
@@ -503,15 +497,32 @@
 			.init(function() {
 				
 				// When accessing externally or reloading the page, update the fields and the list
-				if($.address.parameterNames().length) {
-					
-					// Init fields from hash parameters
-					var s = $.address.parameter('s');
-					if (s) {
-						self.$atumList.find('.atum-post-search').val(s);
-					}
-					
-					self.update();
+                if ($.address.parameterNames().length) {
+
+                    // Init fields from hash parameters
+                    var s = $.address.parameter('s');
+                    if (s) {
+                        self.$atumList.find('.atum-post-search').val(s);
+                    }
+
+                    var search_column = $.address.parameter('search_column');
+                    if (search_column) {
+                        var optionVal = "";
+
+                        $('#adv-settings :checkbox').each(function () {
+                            optionVal = $(this).val();
+                            if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
+
+                                if (optionVal != 'thumb' && optionVal == search_column) {
+                                    self.$searchColumnBtn.html($(this).parent().text() + ' <span class="caret"></span>');
+                                    self.$searchColumnBtn.data('value', optionVal);
+                                    return false;
+                                }
+                            }
+                        });
+                    }
+
+                    self.update();
 					
 				}
 				
@@ -969,23 +980,24 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
-			
+
 			var self = this;
 			
-			this.filterData = $.extend(this.filterData, {
-				view        : $.address.parameter('view') || self.$atumList.find('.subsubsub a.current').attr('id') || '',
-				product_cat : self.$atumList.find('.dropdown_product_cat').val() || '',
-				product_type: self.$atumList.find('.dropdown_product_type').val() || '',
-				supplier    : self.$atumList.find('.dropdown_supplier').val() || '',
-				extra_filter: self.$atumList.find('.dropdown_extra_filter').val() || '',
-				paged       : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
-				s           : self.$searchInput.val() || '',
-				orderby     : $.address.parameter('orderby') || self.settings.orderby,
-				order       : $.address.parameter('order') || self.settings.order
+			this.filterData   = $.extend(this.filterData, {
+				view          : $.address.parameter('view') || self.$atumList.find('.subsubsub a.current').attr('id') || '',
+				product_cat   : self.$atumList.find('.dropdown_product_cat').val() || '',
+				product_type  : self.$atumList.find('.dropdown_product_type').val() || '',
+				supplier      : self.$atumList.find('.dropdown_supplier').val() || '',
+				extra_filter  : self.$atumList.find('.dropdown_extra_filter').val() || '',
+				paged         : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
+				s             : self.$searchInput.val() || '',
+                search_column : self.$searchColumnBtn.data('value') || '',
+				orderby       : $.address.parameter('orderby') || self.settings.orderby,
+				order         : $.address.parameter('order') || self.settings.order
 			});
 			
 			// Update the URL hash parameters
-			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'extra_filter'], function(index, elem) {
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter'], function(index, elem) {
 				
 				// Disable auto-update on each iteration until all the parameters have been set
 				self.navigationReady = false;
@@ -1037,7 +1049,8 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
-                search_column : $('#search_column_btn').data('value') || '',
+                //search_column : $('#search_column_btn').data('value') || '',
+                search_column : $.address.parameter('search_column') || '',
 				s           : $.address.parameter('s') || '',
 			});
 			
