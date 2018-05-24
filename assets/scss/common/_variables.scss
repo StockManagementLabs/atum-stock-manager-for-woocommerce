@@ -46,21 +46,6 @@ $container-max-widths: (
 
 $max-width-limit:                       1280px !default;
 
-// WP Colors
-
-$wp-link:                               #0073AA !default;
-$wp-link-hover:                         #00A0D2 !default;
-$wp-input-focus:                        #5B9DD9 !default;
-$wp-tr-border:                          #E6CCE1 !default;
-$wp-tr-selected:                        #F5EBF3 !default;
-$wp-input-color:                        #32373C !default;
-$wp-heading:                            #555 !default;
-$wp-add:                                #B4B9BE !default;
-$wp-input-border:                       #DDD    !default;
-$wp-section-border:                     #E5E5E5 !default;
-$wp-bg-light:                           #f9f9f9 !default;
-
-
 // Colors
 
 $white:                                 #fff !default;
@@ -133,6 +118,32 @@ $theme-colors: map-merge((
 		"light":      $light,
 		"dark":       $dark
 ), $theme-colors);
+
+
+// WP Colors
+
+$wp-link:                               #0073AA !default;
+$wp-link-hover:                         #00A0D2 !default;
+$wp-input-focus:                        #5B9DD9 !default;
+$wp-tr-border:                          #E6CCE1 !default;
+$wp-tr-selected:                        #F5EBF3 !default;
+$wp-input-color:                        #32373C !default;
+$wp-heading:                            #555 !default;
+$wp-add:                                #B4B9BE !default;
+$wp-input-border:                       #DDD    !default;
+$wp-section-border:                     #E5E5E5 !default;
+$wp-bg-light:                           #f9f9f9 !default;
+
+// WC Colors
+
+$wc-blue-gray:                          #2e4453 !default;
+$wc-blue-gray-light:                    #C8D7E1 !default;
+$wc-green:                              #5B841B !default;
+$wc-green-light:                        #C6E1C6 !default;
+$wc-orange:                             #94660c !default;
+$wc-orange-light:                       #f8dda7 !default;
+$wc-red:                                #761919 !default;
+$wc-red-light:                          #eba3a3 !default;
 
 
 // Body

@@ -9,6 +9,13 @@
 	display: flex;
 }
 
+@mixin flex-inline {
+	display: -webkit-inline-box;
+	display: -webkit-inline-flex;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+}
+
 @mixin flex-grow($int: 0) {
 	-webkit-box-flex: $int;
 	-webkit-flex-grow: $int;

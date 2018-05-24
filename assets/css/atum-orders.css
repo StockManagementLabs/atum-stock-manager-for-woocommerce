@@ -2489,48 +2489,49 @@ table.wp-list-table .column-total, table.wp-list-table .column-date {
 }
 
 table.wp-list-table .column-status {
-  width: 45px;
   text-align: center;
 }
 
-table.wp-list-table .column-status mark {
-  display: block;
-  text-indent: -9999px;
-  position: relative;
-  height: 1em;
-  width: 1em;
-  background: none;
-  font-size: 1.4em;
-  margin: 0 auto;
+table.wp-list-table .column-status .order-status {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  line-height: 2.5em;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin: -.25em 0;
+  cursor: inherit !important;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
-table.wp-list-table .column-status mark.pending::after, table.wp-list-table .column-status mark.completed::after {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+table.wp-list-table .column-status .order-status.status-completed {
+  background: #C8D7E1;
+  color: #2e4453;
 }
 
-table.wp-list-table .column-status mark.pending::after {
-  content: '\e012';
-  color: #EFAF00;
+table.wp-list-table .column-status .order-status.status-on-hold {
+  background: #f8dda7;
+  color: #94660c;
 }
 
-table.wp-list-table .column-status mark.completed::after {
-  content: '\e015';
-  color: #69C61D;
+table.wp-list-table .column-status .order-status.status-failed, table.wp-list-table .column-status .order-status.status-trash {
+  background: #eba3a3;
+  color: #761919;
+}
+
+table.wp-list-table .column-status .order-status.status-pending {
+  background: #C6E1C6;
+  color: #5B841B;
+}
+
+table.wp-list-table .column-status .order-status > span {
+  margin: 0 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 table.wp-list-table td.column-status {
