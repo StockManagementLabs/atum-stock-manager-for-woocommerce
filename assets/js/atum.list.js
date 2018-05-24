@@ -88,8 +88,7 @@
             var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
 
             if ( $atumPostSearchWithDropdown.length) {
-
-                $('.atum-post-search-with-dropdown').height($('#search_column_btn').height() - 4); //fix height
+            	
                 this.setupSearchColumnDropdown();
 
                 $('#adv-settings input[type=checkbox]').change(function () {
@@ -430,17 +429,19 @@
 		 * Fill the search by column dropdown with the active screen options checkboxes
 		 */
         setupSearchColumnDropdown: function() {
+        	
         	//TODO optimize this
         	//don't loose context
             var self = this;
 
-			var $search_column_btn = $("#search_column_btn");
-			var $search_column_dropdown = $("#search_column_dropdown");
+			var $search_column_btn = $('#search_column_btn');
+			var $search_column_dropdown = $('#search_column_dropdown');
 
 			$search_column_dropdown.empty();
-			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( atumListVars.productName ));
+			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( this.settings.productName ));
 
-			var optionVal = "";
+			var optionVal = '';
+			
 			$('#adv-settings input:checked').each(function () {
 				optionVal = $(this).val() ;
 				if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
@@ -453,21 +454,20 @@
             $('.dropdown-toggle').click( function (e) {
                     $(this).parent().find('.dropdown-menu').toggle();
                 	e.stopPropagation();
-                }
-            );
+            });
 
-            $(".dropdown-menu a").click(function(e){
+            $('.dropdown-menu a').click(function(e){
                 $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
                 $search_column_btn.data( 'value' , $(this).data('value') );
                 $(this).parents().find('.dropdown-menu').hide();
                 $search_column_btn.trigger('search_column_data_changed');
                 e.stopPropagation();
-
             });
 
             $(document).click(function(){
             	$('.dropdown-menu').hide();
             });
+            
         },
 		
 		/**

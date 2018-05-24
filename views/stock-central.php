@@ -27,19 +27,18 @@ defined( 'ABSPATH' ) or die;
         
         <div class="search-box">
 
-            <div class="input-group">
-                <input type="text"
-                       class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
+            <div class="input-group input-group-sm">
+
+                <input type="text" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
                        aria-label="Text input with dropdown button"
-                       placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off"
-                >
+                       placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
+
                 <div class="input-group-append">
-                    <button class="button btn-outline-secondary dropdown-toggle" id="search_column_btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?php _e('Select a Column', ATUM_TEXT_DOMAIN) ?>
+                    <button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php _e('Search in Column', ATUM_TEXT_DOMAIN) ?>
                     </button>
-                    <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown">
-                        <a class="dropdown-item" data-value="aaaa" href="#">Action</a>
-                    </div>
+
+                    <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"></div>
                 </div>
 
 	            <?php if ( $ajax == 'no' ):?>

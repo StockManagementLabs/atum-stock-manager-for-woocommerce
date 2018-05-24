@@ -14,12 +14,13 @@ h1.wp-heading-inline {
 		&:active {
 			color: $white;
 			padding: 0 10px 1px;
-			box-shadow: 0 1px 0 #006799;
+			box-shadow: 0 1px 0 $wp-link;
 		}
 	}
 }
 
 .atum-list-wrapper {
+	padding-top: 2px;
 	padding-bottom: 20px;
 	width: 100%;
 	overflow: hidden;
@@ -31,24 +32,34 @@ h1.wp-heading-inline {
 	}
 	
 	.search-box {
-		display: flex;
+		@include flexbox;
 		display: inline-block;
 		float: right;
+		margin-right: 3px;
+		margin-bottom: 3px;
 
 		.atum-post-search {
 			margin-right: 0;
-			// width: 187px;
-			//height: 18px;
+		}
+		
+		.input-group-append {
+			border: none;
+		}
+		
+		.dropdown-toggle {
+			&:after {
+				vertical-align: middle;
+			}
 		}
 
 		.dropdown-menu{
 			margin-top: 0px;
 			right: 0px;
+			
 		}
 
-
 		.dropdown-item{
-			width: auto; // For `<button>`s
+			width: auto;
 		}
 
 	}
