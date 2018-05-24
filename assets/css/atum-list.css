@@ -798,9 +798,23 @@ h1.wp-heading-inline #atum-update-list:active {
   box-shadow: none;
 }
 
-.atum-list-wrapper .search-box input[type=search] {
+.atum-list-wrapper .search-box {
+  display: flex;
+  display: inline-block;
+  float: right;
+}
+
+.atum-list-wrapper .search-box .atum-post-search {
   margin-right: 0;
-  width: 187px;
+}
+
+.atum-list-wrapper .search-box .dropdown-menu {
+  margin-top: 0px;
+  right: 0px;
+}
+
+.atum-list-wrapper .search-box .dropdown-item {
+  width: auto;
 }
 
 .atum-list-wrapper .search-submit {
@@ -1012,7 +1026,7 @@ h1.wp-heading-inline #atum-update-list:active {
   display: flex;
 }
 
-.atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sortable.column-_stock a, .atum-list-table th.sortable.column-_regular_price a, .atum-list-table th.sortable.column-_sale_price a, .atum-list-table th.sortable.column-_purchase_price a, .atum-list-table th.sortable.column-ID a, .atum-list-table th.sortable.column-_supplier_sku a, .atum-list-table th.sorted[class*="column-calc_"] a, .atum-list-table th.sorted.column-_stock a, .atum-list-table th.sorted.column-_regular_price a, .atum-list-table th.sorted.column-_sale_price a, .atum-list-table th.sorted.column-_purchase_price a, .atum-list-table th.sorted.column-ID a, .atum-list-table th.sorted.column-_supplier_sku a {
+.atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sortable.column-_stock a, .atum-list-table th.sortable.column-_regular_price a, .atum-list-table th.sortable.column-_sale_price a, .atum-list-table th.sortable.column-_purchase_price a, .atum-list-table th.sortable.column-ID a, .atum-list-table th.sortable.column-_supplier_sku a, .atum-list-table th.sortable.column-_weight a, .atum-list-table th.sorted[class*="column-calc_"] a, .atum-list-table th.sorted.column-_stock a, .atum-list-table th.sorted.column-_regular_price a, .atum-list-table th.sorted.column-_sale_price a, .atum-list-table th.sorted.column-_purchase_price a, .atum-list-table th.sorted.column-ID a, .atum-list-table th.sorted.column-_supplier_sku a, .atum-list-table th.sorted.column-_weight a {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
@@ -1020,11 +1034,11 @@ h1.wp-heading-inline #atum-update-list:active {
   justify-content: center;
 }
 
-.atum-list-table th.sortable[class*="column-calc_"] a > span, .atum-list-table th.sortable.column-_stock a > span, .atum-list-table th.sortable.column-_regular_price a > span, .atum-list-table th.sortable.column-_sale_price a > span, .atum-list-table th.sortable.column-_purchase_price a > span, .atum-list-table th.sortable.column-ID a > span, .atum-list-table th.sortable.column-_supplier_sku a > span, .atum-list-table th.sorted[class*="column-calc_"] a > span, .atum-list-table th.sorted.column-_stock a > span, .atum-list-table th.sorted.column-_regular_price a > span, .atum-list-table th.sorted.column-_sale_price a > span, .atum-list-table th.sorted.column-_purchase_price a > span, .atum-list-table th.sorted.column-ID a > span, .atum-list-table th.sorted.column-_supplier_sku a > span {
+.atum-list-table th.sortable[class*="column-calc_"] a > span, .atum-list-table th.sortable.column-_stock a > span, .atum-list-table th.sortable.column-_regular_price a > span, .atum-list-table th.sortable.column-_sale_price a > span, .atum-list-table th.sortable.column-_purchase_price a > span, .atum-list-table th.sortable.column-ID a > span, .atum-list-table th.sortable.column-_supplier_sku a > span, .atum-list-table th.sortable.column-_weight a > span, .atum-list-table th.sorted[class*="column-calc_"] a > span, .atum-list-table th.sorted.column-_stock a > span, .atum-list-table th.sorted.column-_regular_price a > span, .atum-list-table th.sorted.column-_sale_price a > span, .atum-list-table th.sorted.column-_purchase_price a > span, .atum-list-table th.sorted.column-ID a > span, .atum-list-table th.sorted.column-_supplier_sku a > span, .atum-list-table th.sorted.column-_weight a > span {
   float: none;
 }
 
-.atum-list-table th.sortable[class*="column-calc_"] a > span:first-child, .atum-list-table th.sortable.column-_stock a > span:first-child, .atum-list-table th.sortable.column-_regular_price a > span:first-child, .atum-list-table th.sortable.column-_sale_price a > span:first-child, .atum-list-table th.sortable.column-_purchase_price a > span:first-child, .atum-list-table th.sortable.column-ID a > span:first-child, .atum-list-table th.sortable.column-_supplier_sku a > span:first-child, .atum-list-table th.sorted[class*="column-calc_"] a > span:first-child, .atum-list-table th.sorted.column-_stock a > span:first-child, .atum-list-table th.sorted.column-_regular_price a > span:first-child, .atum-list-table th.sorted.column-_sale_price a > span:first-child, .atum-list-table th.sorted.column-_purchase_price a > span:first-child, .atum-list-table th.sorted.column-ID a > span:first-child, .atum-list-table th.sorted.column-_supplier_sku a > span:first-child {
+.atum-list-table th.sortable[class*="column-calc_"] a > span:first-child, .atum-list-table th.sortable.column-_stock a > span:first-child, .atum-list-table th.sortable.column-_regular_price a > span:first-child, .atum-list-table th.sortable.column-_sale_price a > span:first-child, .atum-list-table th.sortable.column-_purchase_price a > span:first-child, .atum-list-table th.sortable.column-ID a > span:first-child, .atum-list-table th.sortable.column-_supplier_sku a > span:first-child, .atum-list-table th.sortable.column-_weight a > span:first-child, .atum-list-table th.sorted[class*="column-calc_"] a > span:first-child, .atum-list-table th.sorted.column-_stock a > span:first-child, .atum-list-table th.sorted.column-_regular_price a > span:first-child, .atum-list-table th.sorted.column-_sale_price a > span:first-child, .atum-list-table th.sorted.column-_purchase_price a > span:first-child, .atum-list-table th.sorted.column-ID a > span:first-child, .atum-list-table th.sorted.column-_supplier_sku a > span:first-child, .atum-list-table th.sorted.column-_weight a > span:first-child {
   padding-left: 10px;
 }
 
@@ -1156,7 +1170,7 @@ h1.wp-heading-inline #atum-update-list:active {
   min-width: 70px;
 }
 
-.atum-list-table td[class*="column-calc_"], .atum-list-table td.column-_stock, .atum-list-table td.column-_regular_price, .atum-list-table td.column-_sale_price, .atum-list-table td.column-_purchase_price, .atum-list-table td.column-ID, .atum-list-table td.column-_supplier_sku, .atum-list-table th[class*="column-calc_"], .atum-list-table th.column-_stock, .atum-list-table th.column-_regular_price, .atum-list-table th.column-_sale_price, .atum-list-table th.column-_purchase_price, .atum-list-table th.column-ID, .atum-list-table th.column-_supplier_sku {
+.atum-list-table td[class*="column-calc_"], .atum-list-table td.column-_stock, .atum-list-table td.column-_regular_price, .atum-list-table td.column-_sale_price, .atum-list-table td.column-_purchase_price, .atum-list-table td.column-ID, .atum-list-table td.column-_supplier_sku, .atum-list-table td.column-_weight, .atum-list-table th[class*="column-calc_"], .atum-list-table th.column-_stock, .atum-list-table th.column-_regular_price, .atum-list-table th.column-_sale_price, .atum-list-table th.column-_purchase_price, .atum-list-table th.column-ID, .atum-list-table th.column-_supplier_sku, .atum-list-table th.column-_weight {
   text-align: center;
 }
 
@@ -1314,6 +1328,394 @@ h1.wp-heading-inline #atum-update-list:active {
   text-transform: none;
   -webkit-font-smoothing: antialiased;
   left: 0;
+}
+
+.input-group {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+
+.input-group > .form-control,
+.input-group > .custom-select,
+.input-group > .custom-file {
+  position: relative;
+  -webkit-box-flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  width: 1%;
+  margin-bottom: 0;
+}
+
+.input-group > .form-control:focus,
+.input-group > .custom-select:focus,
+.input-group > .custom-file:focus {
+  z-index: 3;
+}
+
+.input-group > .form-control + .form-control,
+.input-group > .form-control + .custom-select,
+.input-group > .form-control + .custom-file,
+.input-group > .custom-select + .form-control,
+.input-group > .custom-select + .custom-select,
+.input-group > .custom-select + .custom-file,
+.input-group > .custom-file + .form-control,
+.input-group > .custom-file + .custom-select,
+.input-group > .custom-file + .custom-file {
+  margin-left: -1px;
+}
+
+.input-group > .form-control:not(:last-child),
+.input-group > .custom-select:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group > .form-control:not(:first-child),
+.input-group > .custom-select:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.input-group > .custom-file {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.input-group > .custom-file:not(:last-child) .custom-file-label,
+.input-group > .custom-file:not(:last-child) .custom-file-label::after {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group > .custom-file:not(:first-child) .custom-file-label,
+.input-group > .custom-file:not(:first-child) .custom-file-label::after {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.input-group > .select2-container {
+  z-index: 0;
+}
+
+.input-group > .select2-container .select2-selection--single {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group.invalid input[type=text], .input-group.invalid input[type=number], .input-group.invalid textarea, .input-group.invalid select, .input-group.invalid .select2-container {
+  border-color: #FF4848;
+  background-color: rgba(255, 72, 72, 0.15);
+}
+
+.input-group-prepend,
+.input-group-append {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  z-index: 1;
+  border: 1px solid #DDD;
+}
+
+.input-group.invalid .input-group-prepend, .input-group.invalid
+.input-group-append {
+  border-color: #FF4848;
+}
+
+.input-group-prepend .btn,
+.input-group-append .btn {
+  position: relative;
+  z-index: 2;
+}
+
+.input-group-prepend .btn + .btn,
+.input-group-prepend .btn + .input-group-text,
+.input-group-prepend .input-group-text + .input-group-text,
+.input-group-prepend .input-group-text + .btn,
+.input-group-append .btn + .btn,
+.input-group-append .btn + .input-group-text,
+.input-group-append .input-group-text + .input-group-text,
+.input-group-append .input-group-text + .btn {
+  margin-left: -1px;
+}
+
+.input-group-prepend {
+  border-right: none;
+}
+
+.input-group-append {
+  border-left: none;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  font-weight: normal;
+  line-height: 1.5;
+  color: #6c757d;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #dbf9ff;
+  border-radius: 0;
+}
+
+.input-group-text input[type="radio"],
+.input-group-text input[type="checkbox"] {
+  margin-top: 0;
+}
+
+.input-group.invalid .input-group-text {
+  background-color: rgba(255, 72, 72, 0.65);
+}
+
+.input-group > .input-group-prepend > .btn,
+.input-group > .input-group-prepend > .input-group-text,
+.input-group > .input-group-append:not(:last-child) > .btn,
+.input-group > .input-group-append:not(:last-child) > .input-group-text,
+.input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+.input-group > .input-group-append:last-child > .input-group-text:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group > .input-group-append > .btn,
+.input-group > .input-group-append > .input-group-text,
+.input-group > .input-group-prepend:not(:first-child) > .btn,
+.input-group > .input-group-prepend:not(:first-child) > .input-group-text,
+.input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+.input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.dropup,
+.dropright,
+.dropdown,
+.dropleft {
+  position: relative;
+}
+
+.dropdown-toggle::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+
+.dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 0.875rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+.dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+.dropup .dropdown-menu {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.125rem;
+}
+
+.dropup .dropdown-toggle::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0.3em solid;
+  border-left: 0.3em solid transparent;
+}
+
+.dropup .dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+.dropright .dropdown-menu {
+  top: 0;
+  right: auto;
+  left: 100%;
+  margin-top: 0;
+  margin-left: 0.125rem;
+}
+
+.dropright .dropdown-toggle::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid transparent;
+  border-right: 0;
+  border-bottom: 0.3em solid transparent;
+  border-left: 0.3em solid;
+}
+
+.dropright .dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+.dropright .dropdown-toggle::after {
+  vertical-align: 0;
+}
+
+.dropleft .dropdown-menu {
+  top: 0;
+  right: 100%;
+  left: auto;
+  margin-top: 0;
+  margin-right: 0.125rem;
+}
+
+.dropleft .dropdown-toggle::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+}
+
+.dropleft .dropdown-toggle::after {
+  display: none;
+}
+
+.dropleft .dropdown-toggle::before {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-right: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid transparent;
+  border-right: 0.3em solid;
+  border-bottom: 0.3em solid transparent;
+}
+
+.dropleft .dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+.dropleft .dropdown-toggle::before {
+  vertical-align: 0;
+}
+
+.dropdown-menu[x-placement^="top"], .dropdown-menu[x-placement^="right"], .dropdown-menu[x-placement^="bottom"], .dropdown-menu[x-placement^="left"] {
+  right: auto;
+  bottom: auto;
+}
+
+.dropdown-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #00B8DB;
+}
+
+.dropdown-item.disabled, .dropdown-item:disabled {
+  color: #6c757d;
+  background-color: transparent;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-header {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 0;
+  font-size: 0.76562rem;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.dropdown-item-text {
+  display: block;
+  padding: 0.25rem 1.5rem;
+  color: #212529;
 }
 
 /*# sourceMappingURL=atum-list.css.map */

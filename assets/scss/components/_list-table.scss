@@ -31,10 +31,26 @@ h1.wp-heading-inline {
 	}
 	
 	.search-box {
-		input[type=search] {
+		display: flex;
+		display: inline-block;
+		float: right;
+
+		.atum-post-search {
 			margin-right: 0;
-			width: 187px;
+			// width: 187px;
+			//height: 18px;
 		}
+
+		.dropdown-menu{
+			margin-top: 0px;
+			right: 0px;
+		}
+
+
+		.dropdown-item{
+			width: auto; // For `<button>`s
+		}
+
 	}
 	
 	.search-submit {
@@ -267,7 +283,7 @@ h1.wp-heading-inline {
 			}
 			
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku {
+			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight {
 				a {
 					@include flex-justify-content(center);
 					
@@ -429,7 +445,7 @@ h1.wp-heading-inline {
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku {
+		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight {
 			text-align: center;
 		}
 		

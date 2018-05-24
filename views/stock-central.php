@@ -24,15 +24,32 @@ defined( 'ABSPATH' ) or die;
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo $list->screen->id ?>">
 		
 		<?php $list->views(); ?>
+        
+        <div class="search-box">
 
-		<p class="search-box">
-			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
-			
-			<?php if ( $ajax == 'no' ):?>
-				<input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">
-			<?php endif;?>
-		</p>
-		
+            <div class="input-group">
+                <input type="text"
+                       class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
+                       aria-label="Text input with dropdown button"
+                       placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off"
+                >
+                <div class="input-group-append">
+                    <button class="button btn-outline-secondary dropdown-toggle" id="search_column_btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php _e('Select a Column', ATUM_TEXT_DOMAIN) ?>
+                    </button>
+                    <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown">
+                        <a class="dropdown-item" data-value="aaaa" href="#">Action</a>
+                    </div>
+                </div>
+
+	            <?php if ( $ajax == 'no' ):?>
+                    <input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">
+	            <?php endif;?>
+
+            </div>
+
+		</div>
+        
 		<?php $list->display(); ?>
 		
 	</div>
