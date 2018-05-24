@@ -2836,10 +2836,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
 
-
-// Enqueued script with localized data.
-		wp_enqueue_script( 'some_handle' );
-
 	}
 
 	/**

@@ -82,9 +82,8 @@
 			};
 
             //
-			//Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
+			// Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
             //--------------------------------
-			//Fix height TODO: look for SASS variable to get the button exact height
             var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
 
             if ( $atumPostSearchWithDropdown.length) {
@@ -92,7 +91,7 @@
                 this.setupSearchColumnDropdown();
 
                 $('#adv-settings input[type=checkbox]').change(function () {
-                    setTimeout(self.setupSearchColumnDropdown, 500); //performance
+                    setTimeout(self.setupSearchColumnDropdown, 500); // performance
                 });
             }
 
