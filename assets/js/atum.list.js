@@ -12,17 +12,19 @@
 	// Create the defaults once
 	var pluginName = 'atumListTable',
 	    defaults   = {
-		    ajaxFilter: 'yes',
-		    view      : 'all_stock',
-		    order     : 'desc',
-		    orderby   : 'date',
-		    paged     : 1
+		    ajaxFilter     : 'yes',
+		    view           : 'all_stock',
+		    order          : 'desc',
+		    orderby        : 'date',
+		    paged          : 1,
+			searchDropdown : 'no'
 	    };
 	
 	// The actual plugin constructor
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
+		// Todo searchColumnBtn here
 		this.$atumList        = $(element);
 		this.$atumTable       = this.$atumList.find('.atum-list-table');
 		this.$editInput       = this.$atumList.find('#atum-column-edits');
@@ -87,6 +89,8 @@
             var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
 
             if ( $atumPostSearchWithDropdown.length) {
+
+                this.settings.searchDropdown = "yes";
             	
                 this.setupSearchColumnDropdown();
 
@@ -234,6 +238,8 @@
 			//
 			// Ajax filters
 			//-------------
+
+            //TODO Improve performance: ajaxFilter yes or not
 			if (this.settings.ajaxFilter === 'yes') {
 				
 				// The search event is triggered when cliking on the clear field button within the seach input
@@ -243,13 +249,19 @@
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
                     self.keyUp(e);
 				});
-                //= this.$atumList.find('#search_column_btn');
-                this.$searchColumnBtn .on('search_column_data_changed', function(e) {
-                    //Improve performance: check before launch if there's any data on the two fields.
-                    //if(self.$searchInput.val().lenght > 0 && self.$searchColumnBtn.data('value').lenght > 0){
-                        self.keyUp(e);
-					//}
-				});
+
+				if(this.settings.searchDropdown === 'yes'){
+                    this.$searchColumnBtn .on('search_column_data_changed', function(e) {
+
+                        var searchInputVal= self.$searchInput.val();
+
+                        if( searchInputVal.length > 0 ){
+                            self.keyUp(e);
+                        }
+                    });
+				}
+
+
 			}
 			//
 			// Non-ajax filters
@@ -257,11 +269,13 @@
 			else {
 				
 				this.$atumList.on('click', '.search-category, .search-submit', function () {
-					self.updateHash();
+
+                    var searchInputVal= self.$searchInput.val();
+
+					if( searchInputVal.length > 0 ){
+						self.updateHash();
+					}
 				});
-                $('#search_column_btn').on('search_column_data_changed', function(e) {
-                    self.updateHash();
-                });
 				
 			}
 			
@@ -429,7 +443,7 @@
 		 */
         setupSearchColumnDropdown: function() {
         	
-        	//TODO optimize this
+        	//TODO optimize setupSearchColumnDropdown
         	//don't loose context
             var self = this;
 
@@ -437,6 +451,7 @@
 			var $search_column_dropdown = $('#search_column_dropdown');
 
 			$search_column_dropdown.empty();
+            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( self.settings.searchInColumn ).hide()); // search_column_dropdown.first
 			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( this.settings.productName ));
 
 			var optionVal = '';
@@ -455,10 +470,19 @@
                 	e.stopPropagation();
             });
 
+            //TODO click on drop element
             $('.dropdown-menu a').click(function(e){
+            	console.log("clicked value:" + $(this).data('value'));
                 $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
                 $search_column_btn.data( 'value' , $(this).data('value') );
                 $(this).parents().find('.dropdown-menu').hide();
+
+                //click on "clean filter option"
+                if( $(this).data('value') === ""){
+                	$(this).hide();
+				}else{
+                    $('#search_column_dropdown a').first().show();
+				}
                 $search_column_btn.trigger('search_column_data_changed');
                 e.stopPropagation();
             });
