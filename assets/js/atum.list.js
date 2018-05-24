@@ -110,8 +110,14 @@
             //fired when the sticky header has to be floated, or not.
             this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
                 if(isFloated){
+                	//hide searchDropdown on sticky
+                    if(self.settings.searchDropdown === 'yes'){
+                    	console.log("hide on sticky");
+                        $('#search_column_dropdown').hide();
+                    }
+
                     actualHeaderHeight = $("#wpadminbar").height();
-                    //console.log(beforeHeaderHeight + " -> "+ actualHeaderHeight);
+					//Hide on mobile view
                     if ($("#wpadminbar").css("position") == "absolute" ){
                         //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
                         $floatContainer.css('display', 'none');
