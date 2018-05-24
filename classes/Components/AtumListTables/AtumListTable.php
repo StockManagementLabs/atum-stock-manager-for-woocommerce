@@ -2651,7 +2651,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	                    if(count($terms) == 0) return $where_without_results; // not numeric terms
 
-                    //string fields
+                    //string fields (_supplier, _sku, _supplier_sku ...)
                     }else{
 	                    $preLike="%";
                     }
@@ -2661,11 +2661,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		                if($is_title_value) {
 			                $search_terms .= ($i == 0) ? " WHERE " : " OR ";
-			                $search_terms.= "{$wpdb->posts}.post_title LIKE '$preLike".$wpdb->esc_like( $term )."%' ";
+			                $search_terms.= "lower({$wpdb->posts}.post_title) LIKE '$preLike".$wpdb->esc_like( strtolower($term) )."%' ";
 
 		                }else {
 			                $search_terms .= ($i == 0) ? " AND ( " : " OR ";
-			                $search_terms.= "{$wpdb->postmeta}.meta_value LIKE '$preLike".$wpdb->esc_like( $term )."%' ";
+			                $search_terms.= "lower({$wpdb->postmeta}.meta_value) LIKE '$preLike".$wpdb->esc_like( strtolower($term) )."%' ";
 
                         }
 		                $i++;

@@ -279,6 +279,7 @@
                     var searchInputVal= self.$searchInput.val();
 
 					if( searchInputVal.length > 0 ){
+                        console.log("non ajax update hash");
 						self.updateHash();
 					}
 				});
@@ -489,7 +490,9 @@
 				}else{
                     $('#search_column_dropdown a').first().show();
 				}
-                $search_column_btn.trigger('search_column_data_changed');
+                if (self.settings.ajaxFilter === 'yes') {
+                    $search_column_btn.trigger('search_column_data_changed');
+                }
                 e.stopPropagation();
             });
 
@@ -601,36 +604,48 @@
 		 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
 		 */
 		keyUp: function (e, noTimer) {
+
+			console.log("keyup method");
 			
 			var self    = this,
 			    delay   = 500,
 			    noTimer = noTimer || false;
-			
+
+            var searchInputVal= this.$searchInput.val();
+
 			/*
 			 * If user hit enter, we don't want to submit the form
 			 * We don't preventDefault() for all keys because it would
 			 * also prevent to get the page number!
+			 *
+			 * Also, if the S param is empty, we don't want to search anything
 			 */
-			if (13 === e.which) {
-				e.preventDefault();
-			}
-			
-			if (noTimer) {
-				self.updateHash();
-			}
-			else {
-				/*
-				 * Now the timer comes to use: we wait half a second after
-				 * the user stopped typing to actually send the call. If
-				 * we don't, the keyup event will trigger instantly and
-				 * thus may cause duplicate calls before sending the intended value
-				 */
-				clearTimeout(self.timer);
-				
-				self.timer = setTimeout(function () {
+        	if( searchInputVal.length > 0 ){
+				if (13 === e.which) {
+					e.preventDefault();
+				}
+
+
+
+				if (noTimer) {
 					self.updateHash();
-				}, delay);
-				
+				}
+				else {
+					/*
+					 * Now the timer comes to use: we wait half a second after
+					 * the user stopped typing to actually send the call. If
+					 * we don't, the keyup event will trigger instantly and
+					 * thus may cause duplicate calls before sending the intended value
+					 */
+					clearTimeout(self.timer);
+
+					self.timer = setTimeout(function () {
+						self.updateHash();
+					}, delay);
+
+				}
+            }else{
+                e.preventDefault();
 			}
 			
 		},
@@ -1009,6 +1024,7 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
+			console.log ("updateHash method");
 
 			var self = this;
 			
@@ -1061,6 +1077,8 @@
 		 * Send the ajax call and replace table parts with updated version
 		 */
 		update: function () {
+
+			console.log("update method");
 			
 			var self = this;
 			
@@ -1078,7 +1096,6 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
-                //search_column : $('#search_column_btn').data('value') || '',
                 search_column : $.address.parameter('search_column') || '',
 				s           : $.address.parameter('s') || '',
 			});
@@ -1157,6 +1174,7 @@
 					
 				},
 				error     : function () {
+					console.error(error);
 					self.removeOverlay();
 				}
 			});
