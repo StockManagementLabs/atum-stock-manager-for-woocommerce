@@ -12,17 +12,19 @@
 	// Create the defaults once
 	var pluginName = 'atumListTable',
 	    defaults   = {
-		    ajaxFilter: 'yes',
-		    view      : 'all_stock',
-		    order     : 'desc',
-		    orderby   : 'date',
-		    paged     : 1
+		    ajaxFilter     : 'yes',
+		    view           : 'all_stock',
+		    order          : 'desc',
+		    orderby        : 'date',
+		    paged          : 1,
+			searchDropdown : 'no'
 	    };
 	
 	// The actual plugin constructor
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
+		// Todo searchColumnBtn here
 		this.$atumList        = $(element);
 		this.$atumTable       = this.$atumList.find('.atum-list-table');
 		this.$editInput       = this.$atumList.find('#atum-column-edits');
@@ -87,6 +89,8 @@
             var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
 
             if ( $atumPostSearchWithDropdown.length) {
+
+                this.settings.searchDropdown = "yes";
             	
                 this.setupSearchColumnDropdown();
 
@@ -106,8 +110,14 @@
             //fired when the sticky header has to be floated, or not.
             this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
                 if(isFloated){
+                	//hide searchDropdown on sticky
+                    if(self.settings.searchDropdown === 'yes'){
+                    	console.log("hide on sticky");
+                        $('#search_column_dropdown').hide();
+                    }
+
                     actualHeaderHeight = $("#wpadminbar").height();
-                    //console.log(beforeHeaderHeight + " -> "+ actualHeaderHeight);
+					//Hide on mobile view
                     if ($("#wpadminbar").css("position") == "absolute" ){
                         //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
                         $floatContainer.css('display', 'none');
@@ -234,6 +244,8 @@
 			//
 			// Ajax filters
 			//-------------
+
+            //TODO Improve performance: ajaxFilter yes or not
 			if (this.settings.ajaxFilter === 'yes') {
 				
 				// The search event is triggered when cliking on the clear field button within the seach input
@@ -243,13 +255,19 @@
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
                     self.keyUp(e);
 				});
-                //= this.$atumList.find('#search_column_btn');
-                this.$searchColumnBtn .on('search_column_data_changed', function(e) {
-                    //Improve performance: check before launch if there's any data on the two fields.
-                    //if(self.$searchInput.val().lenght > 0 && self.$searchColumnBtn.data('value').lenght > 0){
-                        self.keyUp(e);
-					//}
-				});
+
+				if(this.settings.searchDropdown === 'yes'){
+                    this.$searchColumnBtn .on('search_column_data_changed', function(e) {
+
+                        var searchInputVal= self.$searchInput.val();
+
+                        if( searchInputVal.length > 0 ){
+                            self.keyUp(e);
+                        }
+                    });
+				}
+
+
 			}
 			//
 			// Non-ajax filters
@@ -257,11 +275,14 @@
 			else {
 				
 				this.$atumList.on('click', '.search-category, .search-submit', function () {
-					self.updateHash();
+
+                    var searchInputVal= self.$searchInput.val();
+
+					if( searchInputVal.length > 0 ){
+                        console.log("non ajax update hash");
+						self.updateHash();
+					}
 				});
-                $('#search_column_btn').on('search_column_data_changed', function(e) {
-                    self.updateHash();
-                });
 				
 			}
 			
@@ -429,7 +450,7 @@
 		 */
         setupSearchColumnDropdown: function() {
         	
-        	//TODO optimize this
+        	//TODO optimize setupSearchColumnDropdown
         	//don't loose context
             var self = this;
 
@@ -437,6 +458,7 @@
 			var $search_column_dropdown = $('#search_column_dropdown');
 
 			$search_column_dropdown.empty();
+            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( self.settings.searchInColumn ).hide()); // search_column_dropdown.first
 			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( this.settings.productName ));
 
 			var optionVal = '';
@@ -455,11 +477,22 @@
                 	e.stopPropagation();
             });
 
+            //TODO click on drop element
             $('.dropdown-menu a').click(function(e){
+            	console.log("clicked value:" + $(this).data('value'));
                 $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
                 $search_column_btn.data( 'value' , $(this).data('value') );
                 $(this).parents().find('.dropdown-menu').hide();
-                $search_column_btn.trigger('search_column_data_changed');
+
+                //click on "clean filter option"
+                if( $(this).data('value') === ""){
+                	$(this).hide();
+				}else{
+                    $('#search_column_dropdown a').first().show();
+				}
+                if (self.settings.ajaxFilter === 'yes') {
+                    $search_column_btn.trigger('search_column_data_changed');
+                }
                 e.stopPropagation();
             });
 
@@ -571,36 +604,48 @@
 		 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
 		 */
 		keyUp: function (e, noTimer) {
+
+			console.log("keyup method");
 			
 			var self    = this,
 			    delay   = 500,
 			    noTimer = noTimer || false;
-			
+
+            var searchInputVal= this.$searchInput.val();
+
 			/*
 			 * If user hit enter, we don't want to submit the form
 			 * We don't preventDefault() for all keys because it would
 			 * also prevent to get the page number!
+			 *
+			 * Also, if the S param is empty, we don't want to search anything
 			 */
-			if (13 === e.which) {
-				e.preventDefault();
-			}
-			
-			if (noTimer) {
-				self.updateHash();
-			}
-			else {
-				/*
-				 * Now the timer comes to use: we wait half a second after
-				 * the user stopped typing to actually send the call. If
-				 * we don't, the keyup event will trigger instantly and
-				 * thus may cause duplicate calls before sending the intended value
-				 */
-				clearTimeout(self.timer);
-				
-				self.timer = setTimeout(function () {
+        	if( searchInputVal.length > 0 ){
+				if (13 === e.which) {
+					e.preventDefault();
+				}
+
+
+
+				if (noTimer) {
 					self.updateHash();
-				}, delay);
-				
+				}
+				else {
+					/*
+					 * Now the timer comes to use: we wait half a second after
+					 * the user stopped typing to actually send the call. If
+					 * we don't, the keyup event will trigger instantly and
+					 * thus may cause duplicate calls before sending the intended value
+					 */
+					clearTimeout(self.timer);
+
+					self.timer = setTimeout(function () {
+						self.updateHash();
+					}, delay);
+
+				}
+            }else{
+                e.preventDefault();
 			}
 			
 		},
@@ -979,6 +1024,7 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
+			console.log ("updateHash method");
 
 			var self = this;
 			
@@ -1031,6 +1077,8 @@
 		 * Send the ajax call and replace table parts with updated version
 		 */
 		update: function () {
+
+			console.log("update method");
 			
 			var self = this;
 			
@@ -1048,7 +1096,6 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
-                //search_column : $('#search_column_btn').data('value') || '',
                 search_column : $.address.parameter('search_column') || '',
 				s           : $.address.parameter('s') || '',
 			});
@@ -1127,6 +1174,7 @@
 					
 				},
 				error     : function () {
+					console.error(error);
 					self.removeOverlay();
 				}
 			});
