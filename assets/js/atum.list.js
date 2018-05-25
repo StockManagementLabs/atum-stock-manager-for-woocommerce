@@ -454,11 +454,13 @@
         	//don't loose context
             var self = this;
 
+            // console.log( this.settings.searchableColumns);
+
 			var $search_column_btn = $('#search_column_btn');
 			var $search_column_dropdown = $('#search_column_dropdown');
 
 			$search_column_dropdown.empty();
-            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( self.settings.searchInColumn ).hide()); // search_column_dropdown.first
+            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( this.settings.searchInColumn ).hide()); // search_column_dropdown.first
 			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( this.settings.productName ));
 
 			var optionVal = '';
@@ -487,8 +489,17 @@
                 //click on "clean filter option"
                 if( $(this).data('value') === ""){
                 	$(this).hide();
+                    self.$searchInput.val(''); // clean the search
 				}else{
                     $('#search_column_dropdown a').first().show();
+
+                    if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
+                        $('.atum-post-search').attr('type', 'number') ;
+					}else{
+                        $('.atum-post-search').attr('type', 'text');
+                        //$('#password').replaceWith($('#password').clone().attr('type', 'text'));
+					}
+
 				}
                 if (self.settings.ajaxFilter === 'yes') {
                     $search_column_btn.trigger('search_column_data_changed');
