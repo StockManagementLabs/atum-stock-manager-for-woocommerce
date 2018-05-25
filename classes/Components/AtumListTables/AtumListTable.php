@@ -2640,15 +2640,34 @@ abstract class AtumListTable extends \WP_List_Table {
 	            // # case B # search in IDs
                 if( $_REQUEST['search_column'] == "ID" ) {
 
-                    // we can search multiple idss
+                    // we can search multiple idss, So, explode them to an array, and check if we have any absint.
 	                $terms      = explode( ',', $_REQUEST['s'] );
 	                $terms      = array_unique($terms);
-
 	                $terms = array_filter( array_unique( array_map( 'absint', $terms ) ) );
-
 	                if(count($terms) == 0) return $where_without_results; // not numeric terms
 
-	                $where = "AND ( {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ") )";
+                    // get all (parent and variations, and build where)
+	                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
+	                         ."WHERE {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ")";
+
+
+	                $search_terms_ids = $wpdb->get_results( $wpdb->prepare( $query ) ) ;
+	                if(count($search_terms_ids) == 0) return $where_without_results;
+
+	                //var_dump($search_terms_ids);
+
+	                $search_terms_ids_str="";
+	                foreach ( $search_terms_ids as $term_id ) {
+		                if( $term_id->post_type == "product" ) {
+			                $search_terms_ids_str .= "'" . $term_id->ID . "',";
+		                }else{
+		                    //add parent and current
+			                $search_terms_ids_str .= "'" . $term_id->ID . "',";
+			                $search_terms_ids_str .= "'" . $term_id->post_parent . "',";
+		                }
+	                }
+	                $search_terms_ids_str = rtrim($search_terms_ids_str, ",");
+	                $where = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str ." ) )";
 
 	                return $where;
 
@@ -2661,7 +2680,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	                // title field is not in meta
 	                if ($_REQUEST['search_column'] == "title"){
-		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type FROM {$wpdb->posts} "
+		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 		                         ."WHERE lower({$wpdb->posts}.post_title) LIKE '%".$term."%'";
 		                //die($query);
 
@@ -2669,14 +2688,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
                         if ( ! is_numeric($_REQUEST['s']) ) return $where_without_results; // not numeric terms
 
-		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type FROM {$wpdb->posts} "
+		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 		                         ."LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
 		                         ."WHERE {$wpdb->postmeta}.meta_key = '". $_REQUEST['search_column'] . "' "
 		                         ." AND ( lower({$wpdb->postmeta}.meta_value) LIKE '".$term."%' )";
 
                     //string fields (_supplier, _sku, _supplier_sku ...)
                     }else{
-		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type FROM {$wpdb->posts} "
+		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 		                         ."LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
 		                         ."WHERE {$wpdb->postmeta}.meta_key = '". $_REQUEST['search_column'] . "' "
 		                         ."AND ( lower({$wpdb->postmeta}.meta_value) LIKE '%".$term."%' )";
@@ -2692,8 +2711,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	                foreach ( $search_terms_ids as $term_id ) {
 	                    if( $term_id->post_type == "product" ) {
 		                    $search_terms_ids_str .= "'" . $term_id->ID . "',";
-	                    }if( $term_id->post_type == "product" ) {
-
+	                    }else{
+		                    //add parent and current
+		                    $search_terms_ids_str .= "'" . $term_id->ID . "',";
+		                    $search_terms_ids_str .= "'" . $term_id->post_parent . "',";
 		                }
 	                }
 	                // removes last ,
