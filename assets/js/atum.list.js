@@ -489,8 +489,17 @@
                 //click on "clean filter option"
                 if( $(this).data('value') === ""){
                 	$(this).hide();
+                    self.$searchInput.val(''); // clean the search
 				}else{
                     $('#search_column_dropdown a').first().show();
+
+                    if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
+                        $('.atum-post-search').attr('type', 'number') ;
+					}else{
+                        $('.atum-post-search').attr('type', 'text');
+                        //$('#password').replaceWith($('#password').clone().attr('type', 'text'));
+					}
+
 				}
                 if (self.settings.ajaxFilter === 'yes') {
                     $search_column_btn.trigger('search_column_data_changed');

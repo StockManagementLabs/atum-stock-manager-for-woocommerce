@@ -304,6 +304,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		parent::__construct( $args );
 
+
+
 		add_filter( 'posts_search', array( $this, 'product_search' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -2629,10 +2631,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		else{
 
-			if ( array_key_exists( $_REQUEST['search_column'], $this->get_table_columns() ) ) {
-
-	            // $terms      = explode( ',', $_REQUEST['s'] );
-	            // $terms      = array_unique($terms);
+			if ( Helpers::in_multi_array( $_REQUEST['search_column'], static::$default_searchable_columns ) ) {
 
 	            // If we don't get any result looking for a field, we must force an empty result before
                 // WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
@@ -2664,11 +2663,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	                if ($_REQUEST['search_column'] == "title"){
 		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type FROM {$wpdb->posts} "
 		                         ."WHERE lower({$wpdb->posts}.post_title) LIKE '%".$term."%'";
-	                }
+		                //die($query);
 
-	                //numeric fields
-	                if ( substr( $_REQUEST['search_column'], 0, 1 ) == '_' &&
-                         ( in_array( $_REQUEST['search_column'], [ '_weight', '_stock' ] ) || substr_count( $_REQUEST['search_column'], '_price' ) > 0 ) ) {
+	                }elseif (in_array ($_REQUEST['search_column'], static::$default_searchable_columns['numeric'])) {
 
                         if ( ! is_numeric($_REQUEST['s']) ) return $where_without_results; // not numeric terms
 
@@ -2676,7 +2673,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		                         ."LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
 		                         ."WHERE {$wpdb->postmeta}.meta_key = '". $_REQUEST['search_column'] . "' "
 		                         ." AND ( lower({$wpdb->postmeta}.meta_value) LIKE '".$term."%' )";
-
 
                     //string fields (_supplier, _sku, _supplier_sku ...)
                     }else{
@@ -2903,6 +2899,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array|bool
 	 */
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
+
+		//die('get_children');
 
 		// Get the published Variables first
 		$parent_args = array(
