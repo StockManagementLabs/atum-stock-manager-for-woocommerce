@@ -454,11 +454,13 @@
         	//don't loose context
             var self = this;
 
+            // console.log( this.settings.searchableColumns);
+
 			var $search_column_btn = $('#search_column_btn');
 			var $search_column_dropdown = $('#search_column_dropdown');
 
 			$search_column_dropdown.empty();
-            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( self.settings.searchInColumn ).hide()); // search_column_dropdown.first
+            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( this.settings.searchInColumn ).hide()); // search_column_dropdown.first
 			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( this.settings.productName ));
 
 			var optionVal = '';
