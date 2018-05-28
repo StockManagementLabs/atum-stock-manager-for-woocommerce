@@ -2610,126 +2610,138 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		global $pagenow, $wpdb;
 
-		 // Changed the WooCommerce's "product_search" filter to allow Ajax requests
-		 // @see \\WC_Admin_Post_Types\product_search
+		// Changed the WooCommerce's "product_search" filter to allow Ajax requests
+		// @see \\WC_Admin_Post_Types\product_search
 
 		if (
-			! in_array( $pagenow, array('edit.php', 'admin-ajax.php') ) ||
-		    ! isset( $_REQUEST['s'], $_REQUEST['search_column'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === FALSE
+			! in_array( $pagenow, array( 'edit.php', 'admin-ajax.php' ) ) ||
+			! isset( $_REQUEST['s'], $_REQUEST['search_column'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === false
 		) {
 			return $where;
 		}
 
 		// prevent keyUp problems (scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url))
 		if ( empty( $_REQUEST['s'] ) ) {
+
 			return "AND ( 1 = 1 )";
 		}
 
 		// # case A #
-		if(empty($_REQUEST['search_column'])){
-            return $where;
-		}
-		else{
+		if ( empty( $_REQUEST['search_column'] ) ) {
+
+			return $where;
+		} else {
+
+		    // sanitize inputs
+			$_REQUEST['s'] = sanitize_text_field($_REQUEST['s']);
+			$_REQUEST['search_column'] = sanitize_text_field($_REQUEST['search_column']);
 
 			if ( Helpers::in_multi_array( $_REQUEST['search_column'], static::$default_searchable_columns ) ) {
 
-	            // If we don't get any result looking for a field, we must force an empty result before
-                // WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
-	            $where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
+				// If we don't get any result looking for a field, we must force an empty result before
+				// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
+				$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
 
-	            // # case B # search in IDs
-                if( $_REQUEST['search_column'] == "ID" ) {
+				// # case B # search in IDs
+				if ( $_REQUEST['search_column'] == "ID" ) {
 
-                    // we can search multiple idss, So, explode them to an array, and check if we have any absint.
-	                $terms      = explode( ',', $_REQUEST['s'] );
-	                $terms      = array_unique($terms);
-	                $terms = array_filter( array_unique( array_map( 'absint', $terms ) ) );
-	                if(count($terms) == 0) return $where_without_results; // not numeric terms
+					// we can search multiple idss, So, explode them to an array, and check if we have any absint.
+					$terms = explode( ',', $_REQUEST['s'] );
+					$terms = array_unique( $terms );
+					$terms = array_filter( array_unique( array_map( 'absint', $terms ) ) );
+					if ( count( $terms ) == 0 ) {
+						return $where_without_results;
+					} // not numeric terms
 
-                    // get all (parent and variations, and build where)
-	                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
-	                         ."WHERE {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ")";
-
-
-	                $search_terms_ids = $wpdb->get_results( $wpdb->prepare( $query ) ) ;
-	                if(count($search_terms_ids) == 0) return $where_without_results;
-
-	                //var_dump($search_terms_ids);
-
-	                $search_terms_ids_str="";
-	                foreach ( $search_terms_ids as $term_id ) {
-		                if( $term_id->post_type == "product" ) {
-			                $search_terms_ids_str .= "'" . $term_id->ID . "',";
-		                }else{
-		                    //add parent and current
-			                $search_terms_ids_str .= "'" . $term_id->ID . "',";
-			                $search_terms_ids_str .= "'" . $term_id->post_parent . "',";
-		                }
-	                }
-	                $search_terms_ids_str = rtrim($search_terms_ids_str, ",");
-	                $where = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str ." ) )";
-
-	                return $where;
-
-                }
-                //  # case C and Ds #
-                else {
-
-	                $term = $wpdb->esc_like( strtolower($_REQUEST['s']) );
+					// get all (parent and variations, and build where)
+					$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
+					         . "WHERE {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ")";
 
 
-	                // title field is not in meta
-	                if ($_REQUEST['search_column'] == "title"){
-		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
-		                         ."WHERE lower({$wpdb->posts}.post_title) LIKE '%".$term."%'";
-		                //die($query);
+					$search_terms_ids = $wpdb->get_results( $query );
+					if ( count( $search_terms_ids ) == 0 ) {
+						return $where_without_results;
+					}
 
-	                }elseif (in_array ($_REQUEST['search_column'], static::$default_searchable_columns['numeric'])) {
+					//var_dump($search_terms_ids);
 
-                        if ( ! is_numeric($_REQUEST['s']) ) return $where_without_results; // not numeric terms
+					$search_terms_ids_str = "";
+					foreach ( $search_terms_ids as $term_id ) {
+						if ( $term_id->post_type == "product" ) {
+							$search_terms_ids_str .= "'" . $term_id->ID . "',";
+						} else {
+							//add parent and current
+							$search_terms_ids_str .= "'" . $term_id->ID . "',";
+							$search_terms_ids_str .= "'" . $term_id->post_parent . "',";
+						}
+					}
+					$search_terms_ids_str = rtrim( $search_terms_ids_str, "," );
+					$where                = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str . " ) )";
 
-		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
-		                         ."LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
-		                         ."WHERE {$wpdb->postmeta}.meta_key = '". $_REQUEST['search_column'] . "' "
-		                         ." AND ( lower({$wpdb->postmeta}.meta_value) LIKE '".$term."%' )";
+					return $where;
 
-                    //string fields (_supplier, _sku, _supplier_sku ...)
-                    }else{
-		                $query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
-		                         ."LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
-		                         ."WHERE {$wpdb->postmeta}.meta_key = '". $_REQUEST['search_column'] . "' "
-		                         ."AND ( lower({$wpdb->postmeta}.meta_value) LIKE '%".$term."%' )";
-                    }
+				} //  # case C and Ds #
+				else {
 
-                    //die($query);
+					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
-	                $search_terms_ids = $wpdb->get_results( $wpdb->prepare( $query ) ) ;
-	                if(count($search_terms_ids) == 0) return $where_without_results;
 
-	                $search_terms_ids_str="";
+					// title field is not in meta
+					if ( $_REQUEST['search_column'] == "title" ) {
+						$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
+						         . "WHERE lower({$wpdb->posts}.post_title) LIKE '%" . $term . "%'";
+						//die($query);
 
-	                foreach ( $search_terms_ids as $term_id ) {
-	                    if( $term_id->post_type == "product" ) {
-		                    $search_terms_ids_str .= "'" . $term_id->ID . "',";
-	                    }else{
-		                    //add parent and current
-		                    $search_terms_ids_str .= "'" . $term_id->ID . "',";
-		                    $search_terms_ids_str .= "'" . $term_id->post_parent . "',";
-		                }
-	                }
-	                // removes last ,
-	                $search_terms_ids_str = rtrim($search_terms_ids_str, ",");
+					} elseif ( in_array( $_REQUEST['search_column'], static::$default_searchable_columns['numeric'] ) ) {
 
-	                $where = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str ." ) )";
+						if ( ! is_numeric( $_REQUEST['s'] ) ) {
+							return $where_without_results;
+						} // not numeric terms
 
-	                return $where;
+						$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
+						         . "LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
+						         . "WHERE {$wpdb->postmeta}.meta_key = '" . $_REQUEST['search_column'] . "' "
+						         . " AND ( lower({$wpdb->postmeta}.meta_value) LIKE '" . $term . "%' )";
 
-                }
+						//string fields (_supplier, _sku, _supplier_sku ...)
+					} else {
+						$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
+						         . "LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
+						         . "WHERE {$wpdb->postmeta}.meta_key = '" . $_REQUEST['search_column'] . "' "
+						         . "AND ( lower({$wpdb->postmeta}.meta_value) LIKE '%" . $term . "%' )";
+					}
 
-            }else{
-	            return $where;
-            }
-        }
+					//die($query);
+
+					$search_terms_ids = $wpdb->get_results( $query );
+					if ( count( $search_terms_ids ) == 0 ) {
+						return $where_without_results;
+					}
+
+					$search_terms_ids_str = "";
+
+					foreach ( $search_terms_ids as $term_id ) {
+						if ( $term_id->post_type == "product" ) {
+							$search_terms_ids_str .= "'" . $term_id->ID . "',";
+						} else {
+							//add parent and current
+							$search_terms_ids_str .= "'" . $term_id->ID . "',";
+							$search_terms_ids_str .= "'" . $term_id->post_parent . "',";
+						}
+					}
+					// removes last ,
+					$search_terms_ids_str = rtrim( $search_terms_ids_str, "," );
+
+					$where = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str . " ) )";
+
+					return $where;
+
+				}
+
+			} else {
+				return $where;
+			}
+		}
 
 	}
 
