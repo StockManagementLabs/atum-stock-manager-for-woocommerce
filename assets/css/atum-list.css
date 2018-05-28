@@ -1904,6 +1904,7 @@ h1.wp-heading-inline #atum-update-list:active {
   float: right;
   margin-right: 3px;
   margin-bottom: 3px;
+  min-width: 400px;
 }
 
 .atum-list-wrapper .search-box .atum-post-search {
