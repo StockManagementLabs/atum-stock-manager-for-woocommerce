@@ -302,11 +302,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			'ajax'     => TRUE
 		), $args );
 
+
 		parent::__construct( $args );
 
 
+		// searchable columns
+		if ( ! empty( static::$default_searchable_columns ) ) {
+			add_filter( 'default_searchable_columns', array(
+				$this,
+				'searchable_columns'
+			), 1, 2 );
+		}
 
-		add_filter( 'posts_search', array( $this, 'product_search' ) );
+		add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Hidden columns
@@ -314,14 +322,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			add_filter( 'default_hidden_columns', array(
 				$this,
 				'hidden_columns'
-			), 10, 2 );
-		}
-
-		// searchable columns
-		if ( ! empty( static::$default_searchable_columns ) ) {
-			add_filter( 'default_searchable_columns', array(
-				$this,
-				'searchable_columns'
 			), 10, 2 );
 		}
 
@@ -2597,7 +2597,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Search products by: A (post_title, post_excerpt, post_content), B (posts.ID), C (posts.title), D (other meta fields wich can be numeric or not)
+	 * Search products by: A (post_title, post_excerpt, post_content, skus, etc: searcher 1.4.4 ), B (posts.ID), C (posts.title), D (other meta fields wich can be numeric or not)
 	 *
 	 * @since 1.2.5
 	 *
@@ -2607,6 +2607,10 @@ abstract class AtumListTable extends \WP_List_Table {
      *
 	 */
 	public function product_search( $where ) {
+
+		//var_dump(static::$default_hidden_columns);
+	    //die(var_dump(static::$default_searchable_columns));
+
 
 		global $pagenow, $wpdb;
 
@@ -2629,23 +2633,55 @@ abstract class AtumListTable extends \WP_List_Table {
 		// # case A #
 		if ( empty( $_REQUEST['search_column'] ) ) {
 
+			/* Original (1.4.4) search system */
+			$search_ids = array();
+			$terms      = explode( ',', $_REQUEST['s'] );
+
+			foreach ( $terms as $term ) {
+
+				if ( is_numeric( $term ) ) {
+					$search_ids[] = $term;
+				}
+
+				// Attempt to get an SKU or Supplier's SKU
+				foreach ( [ 'sku', 'supplier_sku' ] as $meta_key ) {
+
+					$sku_to_id = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent FROM {$wpdb->posts} LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id WHERE meta_key='_{$meta_key}' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( wc_clean( $term ) ) . '%' ) );
+					$sku_to_id = array_merge( wp_list_pluck( $sku_to_id, 'ID' ), wp_list_pluck( $sku_to_id, 'post_parent' ) );
+
+					if ( sizeof( $sku_to_id ) > 0 ) {
+						$search_ids = array_merge( $search_ids, $sku_to_id );
+					}
+
+				}
+
+			}
+
+			$search_ids = array_filter( array_unique( array_map( 'absint', $search_ids ) ) );
+
+			if ( sizeof( $search_ids ) > 0 ) {
+				$where = str_replace( 'AND (((', "AND ( ({$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . ")) OR ((", $where );
+			}
+
 			return $where;
 		} else {
 
-		    // sanitize inputs
-			$_REQUEST['s'] = sanitize_text_field($_REQUEST['s']);
-			$_REQUEST['search_column'] = sanitize_text_field($_REQUEST['search_column']);
+			// sanitize inputs
+			$_REQUEST['s']             = sanitize_text_field( $_REQUEST['s'] );
+			$_REQUEST['search_column'] = sanitize_text_field( $_REQUEST['search_column'] );
 
-			if ( Helpers::in_multi_array( $_REQUEST['search_column'], static::$default_searchable_columns ) ) {
+			//var_dump(Helpers::in_multi_array( $_REQUEST['search_column'], static::$default_searchable_columns ) );
+
+			if ( Helpers::in_multi_array( $_REQUEST['search_column'], GLOBALS::SC_SEARCHABLES ) ) {
 
 				// If we don't get any result looking for a field, we must force an empty result before
 				// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
 				$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
 
 				// # case B # search in IDs
-				if ( $_REQUEST['search_column'] == "ID" ) {
+				// DEBUG MODE: search in IDs! (what happen when we try to search for specific ids? No matter their types or parents or stuff)
+				if ( ATUM_DEBUG && $_REQUEST['search_column'] == "IDs" ) {
 
-					// we can search multiple idss, So, explode them to an array, and check if we have any absint.
 					$terms = explode( ',', $_REQUEST['s'] );
 					$terms = array_unique( $terms );
 					$terms = array_filter( array_unique( array_map( 'absint', $terms ) ) );
@@ -2657,26 +2693,69 @@ abstract class AtumListTable extends \WP_List_Table {
 					$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 					         . "WHERE {$wpdb->posts}.ID IN (" . implode( ',', $terms ) . ")";
 
-
 					$search_terms_ids = $wpdb->get_results( $query );
 					if ( count( $search_terms_ids ) == 0 ) {
 						return $where_without_results;
 					}
 
-					//var_dump($search_terms_ids);
 
 					$search_terms_ids_str = "";
 					foreach ( $search_terms_ids as $term_id ) {
 						if ( $term_id->post_type == "product" ) {
-							$search_terms_ids_str .= "'" . $term_id->ID . "',";
+							$search_terms_ids_str .= "" . $term_id->ID . ",";
 						} else {
 							//add parent and current
-							$search_terms_ids_str .= "'" . $term_id->ID . "',";
-							$search_terms_ids_str .= "'" . $term_id->post_parent . "',";
+							$search_terms_ids_str .= "" . $term_id->ID . ",";
+							$search_terms_ids_str .= "" . $term_id->post_parent . ",";
 						}
 					}
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, "," );
 					$where                = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str . " ) )";
+
+					//$where = "AND ( (wp_posts.ID IN (10)) OR ((wp_posts.post_title LIKE '%10%') OR (wp_posts.post_excerpt LIKE '%10%') OR (wp_posts.post_content LIKE '%10%')))";
+
+					return $where;
+
+				}
+				if ( $_REQUEST['search_column'] == "ID" ) {
+
+					$term = absint( $_REQUEST['s'] );
+
+					if ( empty( $term ) ) {
+						return $where_without_results;
+					} // not numeric terms
+
+					// get all (parent and variations, and build where)
+					$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
+					         . "WHERE {$wpdb->posts}.ID = " . $term;
+
+					$search_term_id = $wpdb->get_row( $query );
+					if ( empty( $search_term_id ) ) {
+						return $where_without_results;
+					}
+
+					$search_terms_ids_str = "";
+                    if ( $search_term_id->post_type == "product" ) {
+
+	                    $search_terms_ids_str .= "" . $search_term_id->ID . ",";
+
+	                    //Has children? add them
+	                    $product = wc_get_product($search_term_id->ID);
+	                    $children = $product->get_children(); // return array of the children IDs if applicable.
+	                    if(!empty($children)){
+		                    foreach ( $children as $child ) {
+			                    $search_terms_ids_str .= "" . $child . ",";
+		                    }
+                        }
+                    } else {
+	                    //add parent and current
+	                    $search_terms_ids_str .= "" . $search_term_id->post_parent . ",";
+	                    $search_terms_ids_str .= "" . $search_term_id->ID . ",";
+                    }
+					$search_terms_ids_str = rtrim( $search_terms_ids_str, "," );
+					$where                = "AND ( {$wpdb->posts}.ID IN (" . $search_terms_ids_str . " ) )";
+
+					//$where = "AND ( (wp_posts.ID IN (10)) OR ((wp_posts.post_title LIKE '%10%') OR (wp_posts.post_excerpt LIKE '%10%') OR (wp_posts.post_content LIKE '%10%')))";
 
 					return $where;
 
@@ -2690,14 +2769,14 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( $_REQUEST['search_column'] == "title" ) {
 						$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 						         . "WHERE lower({$wpdb->posts}.post_title) LIKE '%" . $term . "%'";
-						//die($query);
 
-					} elseif ( in_array( $_REQUEST['search_column'], static::$default_searchable_columns['numeric'] ) ) {
+					} elseif ( in_array( $_REQUEST['search_column'], GLOBALS::SC_SEARCHABLES['numeric'] ) ) {
 
 						if ( ! is_numeric( $_REQUEST['s'] ) ) {
 							return $where_without_results;
 						} // not numeric terms
 
+						// WHERE meta_key = $_REQUEST['search_column'] and lower(meta_value) like term%
 						$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 						         . "LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
 						         . "WHERE {$wpdb->postmeta}.meta_key = '" . $_REQUEST['search_column'] . "' "
@@ -2705,6 +2784,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						//string fields (_supplier, _sku, _supplier_sku ...)
 					} else {
+
+						// WHERE meta_key = $_REQUEST['search_column'] and lower(meta_value) like %term%
 						$query = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts} "
 						         . "LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id) "
 						         . "WHERE {$wpdb->postmeta}.meta_key = '" . $_REQUEST['search_column'] . "' "
@@ -2932,8 +3013,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array|bool
 	 */
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
-
-		//die('get_children');
 
 		// Get the published Variables first
 		$parent_args = array(

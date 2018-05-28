@@ -246,45 +246,64 @@
 			//-------------
 
             //TODO Improve performance: ajaxFilter yes or not
-			if (this.settings.ajaxFilter === 'yes') {
-				
-				// The search event is triggered when cliking on the clear field button within the seach input
-				this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
-					self.keyUp(e);
-				})
+            if (this.settings.ajaxFilter === 'yes') {
+
+
+
+                // The search event is triggered when cliking on the clear field button within the seach input
+                this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
+
+                    var value = $(this).val();
+                    var timerid;
+                    if ($(this).data("lastval") != value) {
+                        $(this).data("lastval", value);
+                        clearTimeout(timerid);
+                        timerid = setTimeout(function () {
+                            //change action
+                            if (value) {
+                                // console.log("keyup  paste search', '.atum-post-search'");
+                                self.keyUp(e);
+                            } else {
+                            	//not
+                            }
+                        }, 500)
+
+                    }
+                })
+
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-                    self.keyUp(e);
+                    console.log("keyup 'change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter'");
+					self.keyUp(e);
 				});
 
-				if(this.settings.searchDropdown === 'yes'){
-                    this.$searchColumnBtn .on('search_column_data_changed', function(e) {
+                if (this.settings.searchDropdown === 'yes') {
+                    this.$searchColumnBtn.on('search_column_data_changed', function (e) {
 
-                        var searchInputVal= self.$searchInput.val();
+                        var searchInputVal = self.$searchInput.val();
 
-                        if( searchInputVal.length > 0 ){
+                        if (searchInputVal.length > 0) {
+                        	console.log("keyup search_column_data_changed");
                             self.keyUp(e);
                         }
                     });
-				}
+                }
+            }
+            //
+            // Non-ajax filters
+            //-----------------
+            else {
 
+                this.$atumList.on('click', '.search-category, .search-submit', function () {
 
-			}
-			//
-			// Non-ajax filters
-			//-----------------
-			else {
-				
-				this.$atumList.on('click', '.search-category, .search-submit', function () {
+                    var searchInputVal = self.$searchInput.val();
 
-                    var searchInputVal= self.$searchInput.val();
+                    if (searchInputVal.length > 0) {
+                        //console.log("non ajax update hash");
+                        self.updateHash();
+                    }
+                });
 
-					if( searchInputVal.length > 0 ){
-                        console.log("non ajax update hash");
-						self.updateHash();
-					}
-				});
-				
-			}
+            }
 			
 			//
 			// Pagination text box
@@ -481,7 +500,8 @@
 
             //TODO click on drop element
             $('.dropdown-menu a').click(function(e){
-            	console.log("clicked value:" + $(this).data('value'));
+            	// console.log(self.settings.searchableColumns.numeric);
+            	//console.log("clicked value:" + $(this).data('value'));
                 $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
                 $search_column_btn.data( 'value' , $(this).data('value') );
                 $(this).parents().find('.dropdown-menu').hide();
@@ -616,7 +636,7 @@
 		 */
 		keyUp: function (e, noTimer) {
 
-			console.log("keyup method");
+			//console.log("keyup method");
 			
 			var self    = this,
 			    delay   = 500,
@@ -635,8 +655,6 @@
 				if (13 === e.which) {
 					e.preventDefault();
 				}
-
-
 
 				if (noTimer) {
 					self.updateHash();
@@ -1035,7 +1053,7 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
-			console.log ("updateHash method");
+			//console.log ("updateHash method");
 
 			var self = this;
 			
@@ -1089,11 +1107,12 @@
 		 */
 		update: function () {
 
-			console.log("update method");
+			//console.log("update method");
 			
 			var self = this;
 			
 			if (this.doingAjax && this.doingAjax.readyState !== 4) {
+				console.log( "doingAjax.abort" );
 				this.doingAjax.abort();
 			}
 			
@@ -1124,7 +1143,7 @@
 				success   : function (response) {
 					
 					self.doingAjax = null;
-					
+
 					if (typeof response === 'undefined' || !response) {
 						return false;
 					}
@@ -1184,8 +1203,10 @@
 					self.removeOverlay();
 					
 				},
-				error     : function () {
-					console.error(error);
+				error     : function (error) {
+					//console.error(error);
+					// console.log(self.filterData);
+
 					self.removeOverlay();
 				}
 			});
