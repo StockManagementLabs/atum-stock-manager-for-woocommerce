@@ -112,7 +112,7 @@
                 if(isFloated){
                 	//hide searchDropdown on sticky
                     if(self.settings.searchDropdown === 'yes'){
-                    	console.log("hide on sticky");
+                    	// console.log("hide on sticky");
                         $('#search_column_dropdown').hide();
                     }
 
@@ -270,7 +270,7 @@
                 })
 
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-                    console.log("keyup 'change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter'");
+                    // console.log("keyup 'change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter'");
 					self.keyUp(e);
 				});
 
@@ -280,7 +280,7 @@
                         var searchInputVal = self.$searchInput.val();
 
                         if (searchInputVal.length > 0) {
-                        	console.log("keyup search_column_data_changed");
+                        	// console.log("keyup search_column_data_changed");
                             self.keyUp(e);
                         }
                     });
@@ -1110,7 +1110,7 @@
 			var self = this;
 			
 			if (this.doingAjax && this.doingAjax.readyState !== 4) {
-				console.log( "doingAjax.abort" );
+				// console.log( "doingAjax.abort" );
 				this.doingAjax.abort();
 			}
 			

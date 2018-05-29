@@ -1,0 +1,116 @@
+#performance-tool *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Times;
+}
+
+#performance-tool{
+    display: block;
+    position: fixed;
+    border: solid #ccc 1px;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999999;
+    height: 300px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.30);
+    background-color: #FFF;
+    border-radius: 4px;
+    border-top: solid 8px #e09a0f;
+}
+
+@media (max-width: 540px) {
+    body{
+        margin-bottom: 350px;
+    }
+    #performance-tool {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        max-width: none;
+        box-shadow: none;
+    }
+}
+
+#performance-tool .overflow{
+    overflow: auto;
+    height: 77%;
+    border-top: solid #bababa 1px;
+}
+
+#performance-tool .table-title{
+    width: 100%;
+    background-color: #fff;
+}
+#performance-tool .table-title td{
+    text-align: center;
+    padding: 8px;
+    font-size: 28px;
+}
+#performance-tool .table-point .t-l{
+    text-align: left;
+}
+#performance-tool .table-point .new-line-message{
+    color: #333;
+    text-align: left;
+    padding-left: 14px;
+}
+
+#performance-tool .table-title td span{
+    font-size: 12px;
+}
+
+#performance-tool .table-point {
+    width: 100%;
+}
+
+#performance-tool .table-point th{
+    background-color: #e2e2e2;
+
+}
+
+#performance-tool .table-point tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+#performance-tool .table-point tr:hover{
+    background-color: #e2e2e2;
+
+}
+
+#performance-tool .table-point td{
+    padding: 4px;
+    text-align: right;
+}
+
+#performance-tool .table-more-info{
+    border-top: solid #ccc 2px;
+    color: #555;
+    padding: 14px 10px;
+    text-align: center;
+}
+
+#performance-tool code {
+    background-color: #2b542c;
+    margin: 20px;
+    padding: 20px;
+    display: block;
+    background:#F8F8FF;
+    border:black dashed 1px;
+}
+
+#performance-btn-close{
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0px;
+    padding: 10px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 100%;
+}
+
+#performance-btn-close:hover{
+    color: #e09a0f;
+}

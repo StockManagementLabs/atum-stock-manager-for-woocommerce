@@ -10,7 +10,8 @@
  * Extends the Purchase Order Class and exports it as PDF
  */
 
-namespace Atum\DataExport\Models;
+//namespace Atum\DataExport\Models;
+namespace Atum\PurchaseOrders\Exports;
 
 defined( 'ABSPATH' ) or die;
 
