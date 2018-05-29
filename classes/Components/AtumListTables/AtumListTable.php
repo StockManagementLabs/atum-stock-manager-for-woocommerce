@@ -2617,7 +2617,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if (
 			! in_array( $pagenow, array( 'edit.php', 'admin-ajax.php' ) ) ||
-			! isset( $_REQUEST['s'], $_REQUEST['search_column'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === false
+			! isset( $_REQUEST['s'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === false
 		) {
 			return $where;
 		}
@@ -2674,10 +2674,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// sanitize inputs
 			$_REQUEST['s']             = $wpdb->esc_like( strtolower( sanitize_text_field($_REQUEST['s']) ) );
-			$_REQUEST['search_column'] = $wpdb->esc_like(sanitize_text_field( $_REQUEST['search_column'] ));
+			$_REQUEST['search_column'] = sanitize_text_field( $_REQUEST['search_column'] );
 
 			//TODO static searchables stills empty at this point, so, we use a global var with all the stuff that can be searched in all addons
 			if ( Helpers::in_multi_array( $_REQUEST['search_column'], GLOBALS::SC_SEARCHABLES ) ) {
+
 
 				// If we don't get any result looking for a field, we must force an empty result before
 				// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
