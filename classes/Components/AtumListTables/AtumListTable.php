@@ -137,13 +137,26 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * IDs for views
 	 * @var array
 	 */
-	protected $id_views = array();
+	protected $id_views = array(
+		'in_stock'   => [],
+		'out_stock'  => [],
+		'back_order' => [],
+		'low_stock'  => [],
+		'unmanaged'  => []
+	);
 
 	/**
 	 * Counters for views
 	 * @var array
 	 */
-	protected $count_views = array();
+	protected $count_views = array(
+		'count_in_stock'   => 0,
+		'count_out_stock'  => 0,
+		'count_back_order' => 0,
+		'count_low_stock'  => 0,
+		'count_unmanaged'  => 0,
+		'count_all'        => 0
+	);
 
 	/**
 	 * Sale days from settings
@@ -1732,39 +1745,23 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		global $wpdb;
 
-		$this->id_views = array(
-			'in_stock'   => [],
-			'out_stock'  => [],
-			'back_order' => [],
-			'low_stock'  => [],
-			'unmanaged'  => []
-		);
-
-		$this->count_views = array(
-			'count_in_stock'   => 0,
-			'count_out_stock'  => 0,
-			'count_back_order' => 0,
-			'count_low_stock'  => 0,
-			'count_unmanaged'  => 0
-		);
-
 		if ( $this->show_unmanaged_counters ) {
 
 			$this->id_views = array_merge( $this->id_views, array(
-				'managed'           => [],
-				'unm_in_stock'      => [],
-				'unm_out_stock'     => [],
-				'unm_back_order'    => [],
+				'managed'        => [],
+				'unm_in_stock'   => [],
+				'unm_out_stock'  => [],
+				'unm_back_order' => [],
 				'all_in_stock'   => [],
 				'all_out_stock'  => [],
 				'all_back_order' => [],
 			) );
 
 			$this->count_views = array_merge( $this->count_views, array(
-				'count_managed'           => 0,
-				'count_unm_in_stock'      => 0,
-				'count_unm_out_stock'     => 0,
-				'count_unm_back_order'    => 0,
+				'count_managed'        => 0,
+				'count_unm_in_stock'   => 0,
+				'count_unm_out_stock'  => 0,
+				'count_unm_back_order' => 0,
 				'count_all_in_stock'   => 0,
 				'count_all_out_stock'  => 0,
 				'count_all_back_order' => 0,
