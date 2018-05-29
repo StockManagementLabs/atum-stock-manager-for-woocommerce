@@ -12,7 +12,6 @@
 		"jimmiw/php-time-ago": "^2.0"
 	},
 	"require-dev": {
-		"bvanhoekelen/performance": "^2.3"
 	},
 	"autoload": {
 		"psr-4": {
