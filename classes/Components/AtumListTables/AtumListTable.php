@@ -2223,8 +2223,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			'applyBulkAction'  => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
 			'applyAction'      => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'productLocations' => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
-            'searchInColumn'   => __( 'Search In Column', ATUM_TEXT_DOMAIN ),
-            'productName'      => __( 'Product Name', ATUM_TEXT_DOMAIN ),
             'searchableColumns'=> self::searchable_columns()
 		);
 

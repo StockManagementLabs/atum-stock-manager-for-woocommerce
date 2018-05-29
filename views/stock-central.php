@@ -31,6 +31,7 @@ defined( 'ABSPATH' ) or die;
 
                 <input type="text" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
                        aria-label="Text input with dropdown button"
+                       data-no-option="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>"
                        placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
 
                 <div class="input-group-append">
@@ -38,7 +39,10 @@ defined( 'ABSPATH' ) or die;
                         <?php _e('Search in Column', ATUM_TEXT_DOMAIN) ?>
                     </button>
 
-                    <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"></div>
+                    <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
+                         data-product-title="<?php _e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
+                         data-no-option="<?php _e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>"
+                    ></div>
                 </div>
 
 	            <?php if ( $ajax == 'no' ):?>

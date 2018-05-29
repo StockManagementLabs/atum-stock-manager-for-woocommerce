@@ -248,8 +248,6 @@
             //TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
 
-
-
                 // The search event is triggered when cliking on the clear field button within the seach input
                 this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
 
@@ -473,14 +471,14 @@
         	//don't loose context
             var self = this;
 
-            // console.log( this.settings.searchableColumns);
-
 			var $search_column_btn = $('#search_column_btn');
 			var $search_column_dropdown = $('#search_column_dropdown');
 
+			// No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
 			$search_column_dropdown.empty();
-            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( this.settings.searchInColumn ).hide()); // search_column_dropdown.first
-			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( this.settings.productName ));
+            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( $search_column_dropdown.data('no-option') )); // 'Search in Column'
+			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( $search_column_dropdown.data('product-title') )); // 'Product Name'
+            $('#search_column_dropdown a').first().hide();
 
 			var optionVal = '';
 			
