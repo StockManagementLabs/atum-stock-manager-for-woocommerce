@@ -16,11 +16,13 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\DataExport\Models\POExport;
+//use Atum\DataExport\Models\POExport;
+use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
+use Mpdf\Mpdf;
 
 
 class PurchaseOrders extends AtumOrderPostType {
@@ -429,9 +431,10 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		if ( AtumCapabilities::current_user_can( 'export_data' ) && check_admin_referer( 'atum-order-pdf' ) && $atum_order_id ) {
 
-			$po_export = new POExport( $atum_order_id);
+			//$po_export = new Atum\DataExport\Models\POExport( $atum_order_id);
+			$po_export = new POExport($atum_order_id);
 
-			$mpdf = new \mPDF( 'utf-8', 'A4' );
+			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ]);
 			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
 
 			$mpdf->default_available_fonts = $mpdf->available_unifonts;
