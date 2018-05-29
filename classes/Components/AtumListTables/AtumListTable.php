@@ -642,8 +642,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__sku( $item, $editable = TRUE ) {
 
-		$id = $this->get_current_product_id();
-		$sku = get_post_meta( $id, '_sku', TRUE );
+		$id  = $this->get_current_product_id();
+		$sku = get_post_meta( $id, '_sku', true );
 		$sku = $sku ?: self::EMPTY_COL;
 
 		if ($editable) {
@@ -656,7 +656,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => __( 'Click to edit the SKU', ATUM_TEXT_DOMAIN )
 			);
 
-			$sku = $this->get_editable_column($args);
+			$sku = $this->get_editable_column( $args );
 
 		}
 
@@ -828,11 +828,27 @@ abstract class AtumListTable extends \WP_List_Table {
      *
      * @return double
      */
-    protected function column_calc_weight( $item ) {
-        $weights = self::EMPTY_COL;
-        $weight_meta = get_post_meta($this->product->get_id(), '_weight', $single = true);
+    protected function column__weight( $item,  $editable = TRUE ) {
 
-        return apply_filters( 'atum/list_table/column_weight', $weight_meta, $item, $this->product );
+	    $product_id = $this->get_current_product_id();
+	    $weight = get_post_meta( $this->product->get_id(), '_weight', $single = true );
+	    $weight = $weight ?: self::EMPTY_COL;
+
+	    if ($editable) {
+
+		    $args = array(
+			    'post_id'  => $product_id,
+			    'meta_key' => 'weight',
+			    'value'    => $weight,
+			    'input_type' => 'number',
+			    'tooltip'  => __( 'Click to edit the weight', ATUM_TEXT_DOMAIN )
+		    );
+
+		    $weight = $this->get_editable_column( $args );
+
+	    }
+
+        return apply_filters( 'atum/list_table/column_weight', $weight, $item, $this->product );
     }
 
 	/**
