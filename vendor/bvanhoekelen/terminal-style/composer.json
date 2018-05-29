@@ -1,0 +1,22 @@
+{
+  "name": "bvanhoekelen/terminal-style",
+  "description": "Return your terminal message in style! Change the text style, text color and text background color form the terminal interface with ANSI color codes. The terminal style tool support Laravel and Composer.",
+  "keywords": ["php", "terminal", "terminal colors", "php terminal colors", "php terminal style", "command line", "command line colors", "command line style", "colors", "8-bits background color", "bash", "ANSI", "ANSI color codes"],
+  "license": "Apache-2.0",
+  "authors" : [
+    {
+      "name": "B. van Hoekelen",
+      "homepage": "https://github.com/bvanhoekelen/terminal-style"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "files": ["src/terminal-style.php"]
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7",
+    "larapack/dd": "1.*"
+  }
+}

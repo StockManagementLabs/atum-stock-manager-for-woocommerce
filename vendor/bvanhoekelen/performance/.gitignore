@@ -1,0 +1,7 @@
+composer.phar
+examples/export.txt
+tests/Unit/export.txt
+/vendor/
+/.idea
+.DS_Store
+composer.lock
