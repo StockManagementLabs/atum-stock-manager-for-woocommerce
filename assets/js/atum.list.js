@@ -256,7 +256,7 @@
             var pseudoKeyUpAjax = (function(){
                 return function(callback, searchColumnBtnVal, searchInputVal,e){
 
-                	console.log("searchColumnBtnVal("+searchColumnBtnVal+") searchInputVal("+searchInputVal+")");
+                	// console.log("searchColumnBtnVal("+searchColumnBtnVal+") searchInputVal("+searchInputVal+")");
 
                     if(searchInputVal.length == 0) {
 
@@ -267,7 +267,7 @@
                         }
                     }else{
                         if(searchColumnBtnVal.length > 0) {
-                        	console.log("searchColumnBtnVal.length:"+searchColumnBtnVal.length);
+                        	// console.log("searchColumnBtnVal.length:"+searchColumnBtnVal.length);
                             $.address.parameter('s', searchInputVal);
                             $.address.parameter('search_column', searchColumnBtnVal);
                             self.updateHash();
@@ -335,7 +335,6 @@
                 $(function () {
                     var searchInputVal = self.$searchInput.val();
                     if (searchInputVal.length >0) {
-                    	console.log("no disable search submit");
                         $('.search-submit').prop("disabled", false);
                     } else {
                         $('.search-submit').prop("disabled", true);
@@ -404,7 +403,6 @@
 					}
 
                     if (searchInputVal.length > 0) {
-                        console.log("non ajax update hash");
                         $.address.parameter('s', self.$searchInput.val());
                         $.address.parameter('search_column', self.$searchColumnBtn.data('value'));
 
@@ -413,9 +411,6 @@
                     }else{
 
                         //force clean s when required
-						console.log("force clean s");
-                        console.log("force clean search_column");
-
                         $.address.parameter('s', '');
                         $.address.parameter('search_column', '');
                         self.updateHash();
@@ -588,8 +583,6 @@
 		 */
         setupSearchColumnDropdown: function() {
 
-        	console.log('setupSearchColumnDropdown');
-
         	//TODO optimize setupSearchColumnDropdown
         	//don't loose context
             var self = this;
@@ -642,7 +635,6 @@
 				}
 
                 if (self.settings.ajaxFilter === 'yes') {
-					console.log("trigger search_column_data_changed");
                     $search_column_btn.trigger('search_column_data_changed');
                 }
                 // e.stopPropagation();
@@ -682,7 +674,7 @@
 
 				var numCurrentParams = $.address.parameterNames().length;
 				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
-                    console.log("$.address.externalChange numCurrentParams("+ numCurrentParams +") || self.numHashParameters("+ self.numHashParameters +") !== numCurrentParams("+ numCurrentParams +")");
+                    // console.log("$.address.externalChange numCurrentParams("+ numCurrentParams +") || self.numHashParameters("+ self.numHashParameters +") !== numCurrentParams("+ numCurrentParams +")");
 					self.update();
 				}
 				
@@ -1185,7 +1177,7 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
-			console.log ("updateHash method");
+			// console.log ("updateHash method");
 
 			var self = this;
 			
