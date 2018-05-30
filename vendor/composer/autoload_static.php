@@ -7,7 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
 {
     public static $files = array (
-        '6a2d6610a335476b559f7c966bce1ca3' => __DIR__ . '/..' . '/bvanhoekelen/terminal-style/src/terminal-style.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
     );
@@ -16,7 +15,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'P' => 
         array (
             'Psr\\Log\\' => 8,
-            'Performance\\' => 12,
         ),
         'M' => 
         array (
@@ -37,10 +35,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-        ),
-        'Performance\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bvanhoekelen/performance/src',
         ),
         'Mpdf\\' => 
         array (
