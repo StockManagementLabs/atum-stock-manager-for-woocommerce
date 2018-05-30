@@ -643,16 +643,23 @@ final class Helpers {
 		}
 		
 		$excluded_type_terms = wp_list_pluck( array_filter($excluded_type_terms), 'term_taxonomy_id');
-		
-		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', "
+
+		$unmng_where = "
 			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
-			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-			AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
-			AND posts.ID NOT IN ( SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
+            AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
+		    AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
+			AND posts.ID NOT IN ( 
+				SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
 				WHERE term_taxonomy_id IN  (" . implode(',', $excluded_type_terms) . ") )
-			AND (posts.post_parent IN (SELECT ID FROM wp_posts WHERE post_type = 'product' AND post_status IN ('private','publish') )
-				OR posts.post_parent = 0)
-		" );
+				AND (posts.post_parent IN (
+					SELECT ID FROM $wpdb->posts 
+					WHERE post_type = 'product' AND post_status IN ('private','publish') 
+				)
+				OR posts.post_parent = 0
+			)
+		";
+		
+		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
 		
 		$sql = "SELECT DISTINCT posts.ID{$stock_sql} FROM $wpdb->posts posts $unmng_join $unmng_where";
 		
