@@ -2624,6 +2624,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// @see \\WC_Admin_Post_Types\product_search
 
 		if (
+			! is_admin() ||
 			! in_array( $pagenow, array( 'edit.php', 'admin-ajax.php' ) ) ||
 			! isset( $_REQUEST['s'], $_REQUEST['action'] ) || strpos( $_REQUEST['action'], ATUM_PREFIX ) === FALSE
 		) {
@@ -2639,8 +2640,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error
 		$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
 
+		$search_column = esc_attr( $_REQUEST['search_column'] );
+
 		// # case A # search in post_title, post_excerpt and post_content like a pro
-		if ( empty( $_REQUEST['search_column'] ) ) {
+		if ( empty( $search_column ) ) {
 
 			// Sanitize inputs
 			$term = $wpdb->esc_like( strtolower( sanitize_text_field( $_REQUEST['s'] ) ) );
@@ -2684,16 +2687,15 @@ abstract class AtumListTable extends \WP_List_Table {
 		else {
 
 			// Sanitize inputs
-			$_REQUEST['s']             = $wpdb->esc_like( strtolower( sanitize_text_field( $_REQUEST['s'] ) ) );
-			$_REQUEST['search_column'] = sanitize_text_field( $_REQUEST['search_column'] );
+			$term = $wpdb->esc_like( strtolower( sanitize_text_field( $_REQUEST['s'] ) ) );
 
 			// TODO static searchables stills empty at this point, so, we use a global var with all the stuff that can be searched in all addons
-			if ( Helpers::in_multi_array( $_REQUEST['search_column'], Globals::SEARCHABLE_COLUMNS ) ) {
+			if ( Helpers::in_multi_array( $search_column, Globals::SEARCHABLE_COLUMNS ) ) {
 
 				// Case B # search in IDs
-				if ( $_REQUEST['search_column'] == 'ID' ) {
+				if ( $search_column == 'ID' ) {
 
-					$term = absint( $_REQUEST['s'] );
+					$term = absint( $term );
 
 					// Not numeric terms
 					if ( empty( $term ) ) {
@@ -2746,41 +2748,40 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
-
 					// title field is not in meta
-					if ( $_REQUEST['search_column'] == "title" ) {
+					if ( $search_column == "title" ) {
 						$query = "
 							SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts}
 					        WHERE lower({$wpdb->posts}.post_title) LIKE '%" . $term . "%'
 				         ";
 
 					}
-					elseif ( in_array( $_REQUEST['search_column'], Globals::SEARCHABLE_COLUMNS['numeric'] ) ) {
+					elseif ( in_array( $search_column, Globals::SEARCHABLE_COLUMNS['numeric'] ) ) {
 
 						// Not numeric terms
-						if ( ! is_numeric( $_REQUEST['s'] ) ) {
+						if ( ! is_numeric( $term ) ) {
 							return $where_without_results;
 						}
 
-						// WHERE meta_key = $_REQUEST['search_column'] and lower(meta_value) like term%
+						// WHERE meta_key = $search_column and lower(meta_value) like term%
 						$query = $wpdb->prepare("
 							SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts}
 						    LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id)
 						    WHERE {$wpdb->postmeta}.meta_key = %s
 						    AND ( lower({$wpdb->postmeta}.meta_value) LIKE '" . $term . "%' )
-					    ", esc_attr( $_REQUEST['search_column'] ) );
+					    ", $search_column );
 
 					}
 					// String fields (_supplier, _sku, _supplier_sku ...)
 					else {
 
-						// WHERE meta_key = $_REQUEST['search_column'] and lower(meta_value) like %term%
+						// WHERE meta_key = $search_column and lower(meta_value) like %term%
 						$query = $wpdb->prepare("
 							SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts}
 						    LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.post_id)
 						    WHERE {$wpdb->postmeta}.meta_key = %s
 						    AND ( lower({$wpdb->postmeta}.meta_value) LIKE '%" . $term . "%' )
-				         ", esc_attr( $_REQUEST['search_column'] ) );
+				         ", $search_column );
 					}
 
 					$search_terms_ids = $wpdb->get_results( $query );
