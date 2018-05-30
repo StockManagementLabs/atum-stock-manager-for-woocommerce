@@ -123,6 +123,33 @@ fieldset:disabled a.btn {
 //
 // Link buttons
 //
+.btn-link {
+	font-weight: $font-weight-normal;
+	color: $link-color;
+	background-color: transparent;
+	
+	@include hover {
+		color: $link-hover-color;
+		text-decoration: $link-hover-decoration;
+		background-color: transparent;
+		border-color: transparent;
+	}
+	
+	&:focus,
+	&.focus {
+		text-decoration: $link-hover-decoration;
+		border-color: transparent;
+		box-shadow: none;
+	}
+	
+	&:disabled,
+	&.disabled {
+		color: $btn-link-disabled-color;
+		pointer-events: none;
+	}
+	
+	// No need for an active state here
+}
 
 
 //

@@ -16,11 +16,13 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\DataExport\Models\POExport;
+//use Atum\DataExport\Models\POExport;
+use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
+use Mpdf\Mpdf;
 
 
 class PurchaseOrders extends AtumOrderPostType {
@@ -197,11 +199,10 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		$columns = array(
 			'cb'               => $existing_columns['cb'],
-			'status'           => '<span class="status_head tips" data-tip="' . esc_attr__( 'PO Status', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', ATUM_TEXT_DOMAIN ) . '</span>',
 			'atum_order_title' => __( 'PO', ATUM_TEXT_DOMAIN ),
-			'supplier'         => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'notes'            => '<span class="notes_head tips" data-tip="' . esc_attr__( 'PO Notes', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Notes', ATUM_TEXT_DOMAIN ) . '</span>',
 			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
+			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
+			'supplier'         => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'expected_date'    => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
 			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN )
@@ -430,9 +431,10 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		if ( AtumCapabilities::current_user_can( 'export_data' ) && check_admin_referer( 'atum-order-pdf' ) && $atum_order_id ) {
 
-			$po_export = new POExport( $atum_order_id);
+			//$po_export = new Atum\DataExport\Models\POExport( $atum_order_id);
+			$po_export = new POExport($atum_order_id);
 
-			$mpdf = new \mPDF( 'utf-8', 'A4' );
+			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ]);
 			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
 
 			$mpdf->default_available_fonts = $mpdf->available_unifonts;

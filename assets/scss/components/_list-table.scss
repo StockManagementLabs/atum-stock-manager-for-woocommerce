@@ -14,12 +14,13 @@ h1.wp-heading-inline {
 		&:active {
 			color: $white;
 			padding: 0 10px 1px;
-			box-shadow: 0 1px 0 #006799;
+			box-shadow: 0 1px 0 $wp-link;
 		}
 	}
 }
 
 .atum-list-wrapper {
+	padding-top: 2px;
 	padding-bottom: 20px;
 	width: 100%;
 	overflow: hidden;
@@ -31,23 +32,34 @@ h1.wp-heading-inline {
 	}
 	
 	.search-box {
-		display: flex;
+		@include flexbox;
+		display: inline-block;
+		float: right;
+		margin-right: 3px;
+		margin-bottom: 3px;
 
-		.input-group{
-			width: 75%;
+		.atum-post-search {
+			margin-right: 0;
+		}
+		
+		.input-group-append {
+			border: none;
+		}
+		
+		.dropdown-toggle {
+			&:after {
+				vertical-align: middle;
+			}
+		}
 
-			input[type=search] {
-				margin-right: 0;
-				width: 187px;
-			}
-			.input-group-append {
-				.dropdown_search_column {
-					margin: 0px !important;
-					border: 0px !important;
-					border-top-left-radius: 0px;
-					border-bottom-left-radius: 0px;
-				}
-			}
+		.dropdown-menu{
+			margin-top: 0px;
+			right: 0px;
+			
+		}
+
+		.dropdown-item{
+			width: auto;
 		}
 
 	}
@@ -282,7 +294,7 @@ h1.wp-heading-inline {
 			}
 			
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku {
+			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight {
 				a {
 					@include flex-justify-content(center);
 					
@@ -326,6 +338,7 @@ h1.wp-heading-inline {
 			}
 			
 			.column-calc_type {
+				
 				.has-child {
 					
 					&.product-type {
@@ -444,7 +457,7 @@ h1.wp-heading-inline {
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku {
+		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight {
 			text-align: center;
 		}
 		
@@ -461,6 +474,56 @@ h1.wp-heading-inline {
 	.column-calc_type {
 		max-width: 50px;
 		text-align: center;
+		
+		.product-type {
+			display: block;
+			text-indent: -9999px;
+			position: relative;
+			height: 1em;
+			width: 1em;
+			font-size: 1.6em;
+			margin: 0 auto;
+			-moz-osx-font-smoothing: grayscale;
+			
+			&:before {
+				font-family: WooCommerce;
+				speak: none;
+				font-weight: 400;
+				text-transform: none;
+				line-height: 1;
+				text-indent: 0px;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				text-align: center;
+				content: "\e006";
+				font-variant: normal;
+				margin: 0;
+			}
+			
+			&.grouped:before {
+				content: "\e002";
+			}
+			
+			&.external::before {
+				content: "\e034";
+			}
+			
+			&.variable::before {
+				content: "\e003";
+			}
+			
+			&.downloadable::before {
+				content: "\e001";
+			}
+			
+			&.virtual::before {
+				content: "\e000";
+			}
+			
+		}
 		
 		.has-child {
 			cursor: pointer;

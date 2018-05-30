@@ -12,22 +12,25 @@
 	// Create the defaults once
 	var pluginName = 'atumListTable',
 	    defaults   = {
-		    ajaxFilter: 'yes',
-		    view      : 'all_stock',
-		    order     : 'desc',
-		    orderby   : 'date',
-		    paged     : 1
+		    ajaxFilter     : 'yes',
+		    view           : 'all_stock',
+		    order          : 'desc',
+		    orderby        : 'date',
+		    paged          : 1,
+			searchDropdown : 'no'
 	    };
 	
 	// The actual plugin constructor
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
-		this.$atumList    = $(element);
-		this.$atumTable   = this.$atumList.find('.atum-list-table');
-		this.$editInput   = this.$atumList.find('#atum-column-edits');
-		this.$searchInput = this.$atumList.find('.atum-post-search');
-		this.$bulkButton  = $('.apply-bulk-action');
+		// Todo searchColumnBtn here
+		this.$atumList        = $(element);
+		this.$atumTable       = this.$atumList.find('.atum-list-table');
+		this.$editInput       = this.$atumList.find('#atum-column-edits');
+		this.$searchInput     = this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
+		this.$bulkButton      = $('.apply-bulk-action');
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -80,14 +83,22 @@
 				orderby        : this.settings.orderby,
 			};
 
-			//
-			//Init search by column, disable search input, and listen screen option checkboxes
+            //
+			// Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
             //--------------------------------
-            this.setupSearchColumnDropdown();
+            var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
 
-            $('#adv-settings input[type=checkbox]').change(function () {
-            	setTimeout(self.setupSearchColumnDropdown, 500); //performance
-            });
+            if ( $atumPostSearchWithDropdown.length) {
+
+                this.settings.searchDropdown = "yes";
+            	
+                this.setupSearchColumnDropdown();
+
+                $('#adv-settings input[type=checkbox]').change(function () {
+                    setTimeout(self.setupSearchColumnDropdown, 500); // performance
+                });
+            }
+
 
             //
             // Init stickyHeaders: floatThead
@@ -99,8 +110,14 @@
             //fired when the sticky header has to be floated, or not.
             this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
                 if(isFloated){
+                	//hide searchDropdown on sticky
+                    if(self.settings.searchDropdown === 'yes'){
+                    	// console.log("hide on sticky");
+                        $('#search_column_dropdown').hide();
+                    }
+
                     actualHeaderHeight = $("#wpadminbar").height();
-                    //console.log(beforeHeaderHeight + " -> "+ actualHeaderHeight);
+					//Hide on mobile view
                     if ($("#wpadminbar").css("position") == "absolute" ){
                         //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
                         $floatContainer.css('display', 'none');
@@ -227,34 +244,64 @@
 			//
 			// Ajax filters
 			//-------------
-			if (this.settings.ajaxFilter === 'yes') {
-				
-				// The search event is triggered when cliking on the clear field button within the seach input
-				this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
-					self.keyUp(e);
-				})
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter, .dropdown_search_column', function (e) {
-					console.log('drops');
 
-					if( $('.atum-post-search').val().length > 0 ){
-                        console.log('col search drop');
-                        self.keyUp(e, true);
-					}else{
-                        self.keyUp(e, true);
-					}
+            //TODO Improve performance: ajaxFilter yes or not
+            if (this.settings.ajaxFilter === 'yes') {
+
+                // The search event is triggered when cliking on the clear field button within the seach input
+                this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
+
+                    var value = $(this).val();
+                    var timerid;
+                    if ($(this).data("lastval") != value) {
+                        $(this).data("lastval", value);
+                        clearTimeout(timerid);
+                        timerid = setTimeout(function () {
+                            //change action
+                            if (value) {
+                                // console.log("keyup  paste search', '.atum-post-search'");
+                                self.keyUp(e);
+                            } else {
+                            	//not
+                            }
+                        }, 500)
+
+                    }
+                })
+
+				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
+                    // console.log("keyup 'change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter'");
+					self.keyUp(e);
 				});
-				
-			}
-			//
-			// Non-ajax filters
-			//-----------------
-			else {
-				
-				this.$atumList.on('click', '.search-category, .search-submit', function () {
-					self.updateHash();
-				});
-				
-			}
+
+                if (this.settings.searchDropdown === 'yes') {
+                    this.$searchColumnBtn.on('search_column_data_changed', function (e) {
+
+                        var searchInputVal = self.$searchInput.val();
+
+                        if (searchInputVal.length > 0) {
+                        	// console.log("keyup search_column_data_changed");
+                            self.keyUp(e);
+                        }
+                    });
+                }
+            }
+            //
+            // Non-ajax filters
+            //-----------------
+            else {
+
+                this.$atumList.on('click', '.search-category, .search-submit', function () {
+
+                    var searchInputVal = self.$searchInput.val();
+
+                    if (searchInputVal.length > 0) {
+                        //console.log("non ajax update hash");
+                        self.updateHash();
+                    }
+                });
+
+            }
 			
 			//
 			// Pagination text box
@@ -419,40 +466,69 @@
 		 * Fill the search by column dropdown with the active screen options checkboxes
 		 */
         setupSearchColumnDropdown: function() {
+        	
+        	//TODO optimize setupSearchColumnDropdown
+        	//don't loose context
+            var self = this;
 
-        	/* TODO
-        	<div class="dropdown">
-			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-				Dropdown
-				<span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-				<li><a href="#" data-value="action">Action</a></li>
-				<li><a href="#" data-value="another action">Another action</a></li>
-				<li><a href="#" data-value="something else here">Something else here</a></li>
-				<li><a href="#" data-value="separated link">Separated link</a></li>
-			  </ul>
-			</div>
+			var $search_column_btn = $('#search_column_btn');
+			var $search_column_dropdown = $('#search_column_dropdown');
 
-        	$(".dropdown-menu li a").click(function(){
-			  $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-			  $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-			});
-        	 */
+			// No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
+			$search_column_dropdown.empty();
+            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( $search_column_dropdown.data('no-option') )); // 'Search in Column'
+			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( $search_column_dropdown.data('product-title') )); // 'Product Name'
+            $('#search_column_dropdown a').first().hide();
 
-            var $search_column_dropdown = $("#search_column");
-            $search_column_dropdown.empty();
-            $search_column_dropdown.append( $("<option />" ).val( '' ).text( atumListVars.searchInColumn ));
-            $search_column_dropdown.append( $("<option />" ).val( 'title' ).text( atumListVars.productName ));
-			var optionVal = "";
-
-            $('#adv-settings input:checked').each(function () {
-                optionVal = $(this).val() ;
-                if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
-                	if(optionVal != 'thumb')
-                    	$search_column_dropdown.append( $("<option />" ).val( optionVal ).text( $(this).parent().text() ) );
+			var optionVal = '';
+			
+			$('#adv-settings input:checked').each(function () {
+				optionVal = $(this).val() ;
+				if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
+					if(optionVal != 'thumb') {
+						$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', optionVal ).text( $(this).parent().text() ));
+					}
 				}
+			});
+
+            $('.dropdown-toggle').click( function (e) {
+                    $(this).parent().find('.dropdown-menu').toggle();
+                	e.stopPropagation();
             });
+
+            //TODO click on drop element
+            $('.dropdown-menu a').click(function(e){
+            	// console.log(self.settings.searchableColumns.numeric);
+            	//console.log("clicked value:" + $(this).data('value'));
+                $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
+                $search_column_btn.data( 'value' , $(this).data('value') );
+                $(this).parents().find('.dropdown-menu').hide();
+
+                //click on "clean filter option"
+                if( $(this).data('value') === ""){
+                	$(this).hide();
+                    self.$searchInput.val(''); // clean the search
+				}else{
+                    $('#search_column_dropdown a').first().show();
+
+                    if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
+                        $('.atum-post-search').attr('type', 'number') ;
+					}else{
+                        $('.atum-post-search').attr('type', 'text');
+                        //$('#password').replaceWith($('#password').clone().attr('type', 'text'));
+					}
+
+				}
+                if (self.settings.ajaxFilter === 'yes') {
+                    $search_column_btn.trigger('search_column_data_changed');
+                }
+                e.stopPropagation();
+            });
+
+            $(document).click(function(){
+            	$('.dropdown-menu').hide();
+            });
+            
         },
 		
 		/**
@@ -482,15 +558,32 @@
 			.init(function() {
 				
 				// When accessing externally or reloading the page, update the fields and the list
-				if($.address.parameterNames().length) {
-					
-					// Init fields from hash parameters
-					var s = $.address.parameter('s');
-					if (s) {
-						self.$atumList.find('.atum-post-search').val(s);
-					}
-					
-					self.update();
+                if ($.address.parameterNames().length) {
+
+                    // Init fields from hash parameters
+                    var s = $.address.parameter('s');
+                    if (s) {
+                        self.$atumList.find('.atum-post-search').val(s);
+                    }
+
+                    var search_column = $.address.parameter('search_column');
+                    if (search_column) {
+                        var optionVal = "";
+
+                        $('#adv-settings :checkbox').each(function () {
+                            optionVal = $(this).val();
+                            if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
+
+                                if (optionVal != 'thumb' && optionVal == search_column) {
+                                    self.$searchColumnBtn.html($(this).parent().text() + ' <span class="caret"></span>');
+                                    self.$searchColumnBtn.data('value', optionVal);
+                                    return false;
+                                }
+                            }
+                        });
+                    }
+
+                    self.update();
 					
 				}
 				
@@ -540,36 +633,46 @@
 		 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
 		 */
 		keyUp: function (e, noTimer) {
+
+			//console.log("keyup method");
 			
 			var self    = this,
 			    delay   = 500,
 			    noTimer = noTimer || false;
-			
+
+            var searchInputVal= this.$searchInput.val();
+
 			/*
 			 * If user hit enter, we don't want to submit the form
 			 * We don't preventDefault() for all keys because it would
 			 * also prevent to get the page number!
+			 *
+			 * Also, if the S param is empty, we don't want to search anything
 			 */
-			if (13 === e.which) {
-				e.preventDefault();
-			}
-			
-			if (noTimer) {
-				self.updateHash();
-			}
-			else {
-				/*
-				 * Now the timer comes to use: we wait half a second after
-				 * the user stopped typing to actually send the call. If
-				 * we don't, the keyup event will trigger instantly and
-				 * thus may cause duplicate calls before sending the intended value
-				 */
-				clearTimeout(self.timer);
-				
-				self.timer = setTimeout(function () {
+        	if( searchInputVal.length > 0 ){
+				if (13 === e.which) {
+					e.preventDefault();
+				}
+
+				if (noTimer) {
 					self.updateHash();
-				}, delay);
-				
+				}
+				else {
+					/*
+					 * Now the timer comes to use: we wait half a second after
+					 * the user stopped typing to actually send the call. If
+					 * we don't, the keyup event will trigger instantly and
+					 * thus may cause duplicate calls before sending the intended value
+					 */
+					clearTimeout(self.timer);
+
+					self.timer = setTimeout(function () {
+						self.updateHash();
+					}, delay);
+
+				}
+            }else{
+                e.preventDefault();
 			}
 			
 		},
@@ -948,23 +1051,25 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
-			
+			//console.log ("updateHash method");
+
 			var self = this;
 			
-			this.filterData = $.extend(this.filterData, {
-				view        : $.address.parameter('view') || self.$atumList.find('.subsubsub a.current').attr('id') || '',
-				product_cat : self.$atumList.find('.dropdown_product_cat').val() || '',
-				product_type: self.$atumList.find('.dropdown_product_type').val() || '',
-				supplier    : self.$atumList.find('.dropdown_supplier').val() || '',
-				extra_filter: self.$atumList.find('.dropdown_extra_filter').val() || '',
-				paged       : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
-				s           : self.$searchInput.val() || '',
-				orderby     : $.address.parameter('orderby') || self.settings.orderby,
-				order       : $.address.parameter('order') || self.settings.order
+			this.filterData   = $.extend(this.filterData, {
+				view          : $.address.parameter('view') || self.$atumList.find('.subsubsub a.current').attr('id') || '',
+				product_cat   : self.$atumList.find('.dropdown_product_cat').val() || '',
+				product_type  : self.$atumList.find('.dropdown_product_type').val() || '',
+				supplier      : self.$atumList.find('.dropdown_supplier').val() || '',
+				extra_filter  : self.$atumList.find('.dropdown_extra_filter').val() || '',
+				paged         : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
+				s             : self.$searchInput.val() || '',
+                search_column : self.$searchColumnBtn.data('value') || '',
+				orderby       : $.address.parameter('orderby') || self.settings.orderby,
+				order         : $.address.parameter('order') || self.settings.order
 			});
 			
 			// Update the URL hash parameters
-			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'extra_filter'], function(index, elem) {
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter'], function(index, elem) {
 				
 				// Disable auto-update on each iteration until all the parameters have been set
 				self.navigationReady = false;
@@ -999,14 +1104,17 @@
 		 * Send the ajax call and replace table parts with updated version
 		 */
 		update: function () {
+
+			//console.log("update method");
 			
 			var self = this;
 			
 			if (this.doingAjax && this.doingAjax.readyState !== 4) {
+				// console.log( "doingAjax.abort" );
 				this.doingAjax.abort();
 			}
 			
-			// Overwrite the filterData with the URL hash parameters AND the search_column value (if exits)
+			// Overwrite the filterData with the URL hash parameters
 			this.filterData = $.extend(this.filterData, {
 				view        : $.address.parameter('view') || '',
 				product_cat : $.address.parameter('product_cat') || '',
@@ -1016,7 +1124,7 @@
 				paged       : $.address.parameter('paged') || '',
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
-                search_column : $('#search_column').val() || '',
+                search_column : $.address.parameter('search_column') || '',
 				s           : $.address.parameter('s') || '',
 			});
 			
@@ -1033,7 +1141,7 @@
 				success   : function (response) {
 					
 					self.doingAjax = null;
-					
+
 					if (typeof response === 'undefined' || !response) {
 						return false;
 					}
@@ -1093,7 +1201,10 @@
 					self.removeOverlay();
 					
 				},
-				error     : function () {
+				error     : function (error) {
+					//console.error(error);
+					// console.log(self.filterData);
+
 					self.removeOverlay();
 				}
 			});

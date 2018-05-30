@@ -140,30 +140,46 @@ table.wp-list-table {
 	}
 	
 	.column-status {
-		width: 45px;
 		text-align: center;
 		
-		mark {
-			@include ir();
-			background: none;
-			font-size: 1.4em;
-			margin: 0 auto;
-		}
-		
-		mark.pending, mark.completed {
-			&::after {
-				@include icon_woocommerce;
+		.order-status {
+			@include flex-inline;
+			line-height: 2.5em;
+			color: $secondary;
+			background: $light;
+			border-radius: 4px;
+			border-bottom: 1px solid rgba($black, .05);
+			margin: -.25em 0;
+			cursor: inherit !important;
+			white-space: nowrap;
+			max-width: 100%;
+			
+			&.status-completed {
+				background: $wc-blue-gray-light;
+				color: $wc-blue-gray;
 			}
-		}
-		
-		mark.pending::after {
-			content: '\e012';
-			color: $warning;
-		}
-		
-		mark.completed::after {
-			content: '\e015';
-			color: $success;
+			
+			&.status-on-hold {
+				background: $wc-orange-light;
+				color: $wc-orange;
+			}
+			
+			&.status-failed, &.status-trash {
+				background: $wc-red-light;
+				color: $wc-red;
+			}
+			
+			&.status-pending {
+				background: $wc-green-light;
+				color: $wc-green;
+			}
+			
+			> span {
+				margin: 0 1em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			
 		}
 	}
 	

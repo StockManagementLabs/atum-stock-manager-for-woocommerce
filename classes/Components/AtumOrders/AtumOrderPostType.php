@@ -334,7 +334,7 @@ abstract class AtumOrderPostType {
 					$status      = $atum_order->get_status();
 					$status_name = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
 
-					printf( '<mark class="%s tips" data-tip="%s">%s</mark>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					printf( '<mark class="order-status status-%s tips" data-tip="%s"><span>%s</span></mark>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 
@@ -349,9 +349,7 @@ abstract class AtumOrderPostType {
 					$user = get_user_by( 'id', $author );
 
 					if ( is_a($user, '\WP_User') ) {
-						$username = '<a href="user-edit.php?user_id=' . absint( $author ) . '">';
-						$username .= esc_html( ucwords( $user->display_name ) );
-						$username .= '</a>';
+						$username = ucwords( $user->display_name );
 					}
 					else {
 						$username = __('User not found', ATUM_TEXT_DOMAIN);
@@ -362,13 +360,7 @@ abstract class AtumOrderPostType {
 					$username = 'ATUM';
 				}
 
-				printf(
-					__( '%1$s by %2$s', ATUM_TEXT_DOMAIN ),
-					'<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . '</strong></a>',
-					$username
-				);
-
-				echo '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details', ATUM_TEXT_DOMAIN ) . '</span></button>';
+				echo '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username  . '</strong></a>';
 				$rendered = TRUE;
 
 				break;

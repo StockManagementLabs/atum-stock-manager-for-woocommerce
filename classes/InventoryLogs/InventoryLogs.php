@@ -238,12 +238,11 @@ class InventoryLogs extends AtumOrderPostType {
 
 		$columns = array(
 			'cb'               => $existing_columns['cb'],
-			'status'           => '<span class="status_head tips" data-tip="' . esc_attr__( 'Log Status', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', ATUM_TEXT_DOMAIN ) . '</span>',
 			'atum_order_title' => __( 'Log', ATUM_TEXT_DOMAIN ),
+			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'type'             => __( 'Type', ATUM_TEXT_DOMAIN ),
-			'wc_order'         => __( 'Order', ATUM_TEXT_DOMAIN ),
-			'notes'            => '<span class="notes_head tips" data-tip="' . esc_attr__( 'Log Notes', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Notes', ATUM_TEXT_DOMAIN ) . '</span>',
 			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
+			'wc_order'         => __( 'Order', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
 			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN )
 		);
