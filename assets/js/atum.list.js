@@ -245,29 +245,29 @@
 			// Ajax filters
 			//-------------
 
-            var delay = (function(){
+            var delay = (function () {
                 var timer = 0;
-                return function(callback, ms){
-                    clearTimeout (timer);
+                return function (callback, ms) {
+                    clearTimeout(timer);
                     timer = setTimeout(callback, ms);
                 };
             })();
 
-            var pseudoKeyUpAjax = (function(){
-                return function(callback, searchColumnBtnVal, searchInputVal,e){
+            var pseudoKeyUpAjax = (function () {
+                return function (callback, searchColumnBtnVal, searchInputVal, e) {
 
-                	// console.log("searchColumnBtnVal("+searchColumnBtnVal+") searchInputVal("+searchInputVal+")");
+                    // console.log("searchColumnBtnVal("+searchColumnBtnVal+") searchInputVal("+searchInputVal+")");
 
-                    if(searchInputVal.length == 0) {
+                    if (searchInputVal.length == 0) {
 
-                        if ( searchInputVal != $.address.parameter('s')  ) {
+                        if (searchInputVal != $.address.parameter('s')) {
                             $.address.parameter('s', '');
                             $.address.parameter('search_column', '');
                             self.updateHash(); // force clean search
                         }
-                    }else{
-                        if(searchColumnBtnVal.length > 0) {
-                        	// console.log("searchColumnBtnVal.length:"+searchColumnBtnVal.length);
+                    } else {
+                        if (searchColumnBtnVal.length > 0) {
+                            // console.log("searchColumnBtnVal.length:"+searchColumnBtnVal.length);
                             $.address.parameter('s', searchInputVal);
                             $.address.parameter('search_column', searchColumnBtnVal);
                             self.updateHash();
@@ -276,50 +276,49 @@
                 };
             })();
 
+            self.$searchColumnBtn.bind('setHtmlAndDataValue',function(event, value, html) {
+                $(this).html( html );
+                $(this).data( 'value' , value );
+            });
+            self.$searchColumnBtn.bind('setDataValue',function(event, value) {
+                $(this).data( 'value' , value );
+            });
+
             //TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
 
-                this.$searchInput.bind('input', function(e){
+                this.$searchInput.bind('input', function (e) {
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
-                    var searchInputVal =$(this).val();
-                    delay(function(){
-                        pseudoKeyUpAjax(function(){
-                        }, searchColumnBtnVal, searchInputVal, e );
+                    var searchInputVal = $(this).val();
+                    delay(function () {
+                        pseudoKeyUpAjax(function () {
+                        }, searchColumnBtnVal, searchInputVal, e);
 
-                    }, 500 );
+                    }, 500);
                 });
 
                 this.$atumList
 				.on('keyup paste search', '.atum-post-search', function (e) {
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
-                    var searchInputVal =$(this).val();
-                    delay(function(){
-                        pseudoKeyUpAjax(function(){
-                        }, searchColumnBtnVal, searchInputVal, e );
+                    var searchInputVal = $(this).val();
+                    delay(function () {
+                        pseudoKeyUpAjax(function () {
+                        }, searchColumnBtnVal, searchInputVal, e);
 
-                    }, 500 );
+                    }, 500);
                 })
-            	.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-                    self.keyUp(e);
-                });
+                .on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
+                        self.keyUp(e);
+                    });
 
                 if (this.settings.searchDropdown === 'yes') {
                     this.$searchColumnBtn.on('search_column_data_changed', function (e) {
 
-                    	var searchColumnBtnVal = $(this).data('value');
-                        var searchInputVal     = self.$searchInput.val();
+                        var searchColumnBtnVal = $(this).data('value');
+                        var searchInputVal = self.$searchInput.val();
 
-                        /*
-                        if(searchInputVal.length > 0) {
-                            $.address.parameter('search_column', searchColumnBtnVal);
-                            self.updateHash();
-                        }*/
-
-                        //delay(function(){
-                            pseudoKeyUpAjax(function(){
-                            }, searchColumnBtnVal, searchInputVal, e );
-
-                        //}, 500 );
+                        pseudoKeyUpAjax(function () {
+                        }, searchColumnBtnVal, searchInputVal, e);
 
                     });
                 }
@@ -344,25 +343,25 @@
 
             	// if s is empty, search-submit must be disabled and ?s removed
 				// if s and searchColumnBtnVal have values, then we can push over search
-                this.$searchInput.bind('input', function(){
+                this.$searchInput.bind('input', function () {
 
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
 
                     //console.log("this.$searchInput.bind('input' $searchInput " +$(this).val()+ "  searchColumnBtnVal:" + searchColumnBtnVal);
 
-                    if($(this).val().length == 0) {
-                        $('.search-submit').prop("disabled",true);
+                    if ($(this).val().length == 0) {
+                        $('.search-submit').prop("disabled", true);
 
-                        if ( $(this).val() != $.address.parameter('s')  ) {
+                        if ($(this).val() != $.address.parameter('s')) {
                             $.address.parameter('s', '');
                             $.address.parameter('search_column', '');
                             self.updateHash(); // force clean search
                         }
-					}else{
-                        if(searchColumnBtnVal.length > 0) {
+                    } else {
+                        if (searchColumnBtnVal.length > 0) {
                             $('.search-submit').prop("disabled", false);
                         }
-					}
+                    }
                 });
 
                 // TODO on init address, check s i search_column values, and disable or not
@@ -371,7 +370,7 @@
                 if (this.settings.searchDropdown === 'yes') {
                     this.$searchColumnBtn.on('search_column_data_changed', function (e) {
 
-                    	// console.log("on('search_column_data_changed'");
+                        // console.log("on('search_column_data_changed'");
 
                         var searchInputVal = self.$searchInput.val();
                         var searchColumnBtnVal = self.$searchColumnBtn.data('value');
@@ -381,7 +380,7 @@
                             $.address.parameter('s', searchInputVal);
                             $.address.parameter('search_column', searchColumnBtnVal);
                             self.keyUp(e);
-                        }else{
+                        } else {
                             //force clean s when required
                             $.address.parameter('s', '');
                             $.address.parameter('search_column', '');
@@ -391,16 +390,16 @@
 
 
                 this.$atumList.on('click', '.search-category, .search-submit', function () {
-                	// console.log('click .search-category, .search-submit');
+                    // console.log('click .search-category, .search-submit');
 
                     var searchInputVal = self.$searchInput.val();
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
 
-                    if (searchColumnBtnVal.length ==  0){
-                        $('.search-submit').prop("disabled",true);
-					}else{
-                        $('.search-submit').prop("disabled",false);
-					}
+                    if (searchColumnBtnVal.length == 0) {
+                        $('.search-submit').prop("disabled", true);
+                    } else {
+                        $('.search-submit').prop("disabled", false);
+                    }
 
                     if (searchInputVal.length > 0) {
                         $.address.parameter('s', self.$searchInput.val());
@@ -408,13 +407,13 @@
 
                         self.updateHash();
 
-                    }else{
+                    } else {
 
                         //force clean s when required
                         $.address.parameter('s', '');
                         $.address.parameter('search_column', '');
                         self.updateHash();
-					}
+                    }
                 });
 
             }
@@ -516,8 +515,15 @@
 			// Reset Filters button
 			//---------------------
 			.on('click', '.reset-filters', function() {
-				self.destroyTooltips();
-				$.address.queryString('');
+                self.destroyTooltips();
+                //TODO reset s and column search
+                $.address.queryString('');
+                self.$searchInput.val('');
+                if (self.settings.searchDropdown === 'yes') {
+					if (self.$searchColumnBtn.data('value') != 'title') {
+						self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
+					}
+            	}
 				self.update();
 			});
 			
@@ -587,52 +593,48 @@
         	//don't loose context
             var self = this;
 
-			var $search_column_btn = $('#search_column_btn');
-			var $search_column_dropdown = $('#search_column_dropdown');
+            var $search_column_btn = $('#search_column_btn');
+            var $search_column_dropdown = $('#search_column_dropdown');
 
-			// No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
-			$search_column_dropdown.empty();
-            //$search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( $search_column_dropdown.data('no-option') )); // 'Search in Column'
-			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( $search_column_dropdown.data('product-title') )); // 'Product Name'
-            //$('#search_column_dropdown a').first().hide();
+            // No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
+            $search_column_dropdown.empty();
+            $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($search_column_dropdown.data('product-title'))); // 'Product Name'
 
-			var optionVal = '';
-			
-			$('#adv-settings input:checked').each(function () {
-				optionVal = $(this).val() ;
-				if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
-					if(optionVal != 'thumb') {
-						$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', optionVal ).text( $(this).parent().text() ));
+            var optionVal = '';
+
+            $('#adv-settings input:checked').each(function () {
+                optionVal = $(this).val();
+                if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
+                    if (optionVal != 'thumb') {
+                        $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
 
                         //most probably, we are on init and ?search_column has a value.
-						if( $.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
-                            $search_column_btn.data('value', optionVal);
-                            $search_column_btn.html($(this).parent().text() + ' <span class="caret"></span>');
-						}
-					}
-				}
-			});
+                        if ($.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
 
-            $('.dropdown-toggle').click( function (e) {
-                    $(this).parent().find('.dropdown-menu').toggle();
-                	e.stopPropagation();
+                            self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
+                        }
+                    }
+                }
+            });
+
+            $('.dropdown-toggle').click(function (e) {
+                $(this).parent().find('.dropdown-menu').toggle();
+                e.stopPropagation();
             });
 
             //TODO click on drop element
-            $('.dropdown-menu a').click(function(){
-            	//console.log("clicked value:" + $(this).data('value'));
+            $('.dropdown-menu a').click(function (event) {
+
                 event.preventDefault();
-                $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
-                $search_column_btn.data( 'value' , $(this).data('value') );
+
+                self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
+
                 $(this).parents().find('.dropdown-menu').hide();
-
-				//$('#search_column_dropdown a').first().show();
-
-				if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
-					$('.atum-post-search').attr('type', 'number') ;
-				}else{
-					$('.atum-post-search').attr('type', 'text');
-				}
+                if ($.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1) {
+                    $('.atum-post-search').attr('type', 'number');
+                } else {
+                    $('.atum-post-search').attr('type', 'text');
+                }
 
                 if (self.settings.ajaxFilter === 'yes') {
                     $search_column_btn.trigger('search_column_data_changed');
@@ -640,13 +642,13 @@
                 // e.stopPropagation();
             });
 
-            $(document).click(function(){
-            	$('.dropdown-menu').hide();
+            $(document).click(function () {
+                $('.dropdown-menu').hide();
             });
-            
+
         },
-		
-		/**
+
+        /**
 		 * Setup the URL state navigation
 		 */
 		setupNavigation: function() {
@@ -789,30 +791,30 @@
 					 * we don't, the keyup event will trigger instantly and
 					 * thus may cause duplicate calls before sending the intended value
 					 */
-					clearTimeout(self.timer);
+                    clearTimeout(self.timer);
 
-					self.timer = setTimeout(function () {
+                    self.timer = setTimeout(function () {
                         //TODO force ?vars on updateHash when ajax
-						self.updateHash();
-					}, delay);
+                        self.updateHash();
+                    }, delay);
 
-				}
-            }else{
+                }
+            } else {
                 e.preventDefault();
-			}
-			
-		},
-		
-		/**
+            }
+
+        },
+
+        /**
 		 * Enable tooltips
 		 */
 		addTooltips: function () {
-			
+
 			$('[data-toggle="tooltip"]').tooltip({
 				html     : true,
 				container: 'body'
 			});
-			
+
 		},
 		
 		/**
