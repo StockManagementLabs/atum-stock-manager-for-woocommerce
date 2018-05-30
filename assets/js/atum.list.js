@@ -248,6 +248,8 @@
             //TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
 
+            	/*
+
                 // The search event is triggered when cliking on the clear field button within the seach input
                 this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
 
@@ -260,6 +262,14 @@
                             //change action
                             if (value) {
                                 // console.log("keyup  paste search', '.atum-post-search'");
+
+                                //force clean s when required
+                                var searchInputVal = self.$searchInput.val();
+                                if(searchInputVal.length == 0 ) {
+                                    $.address.parameter('s', '');
+                                    $.address.parameter('search_column', '');
+                                }else{
+								}
                                 self.keyUp(e);
                             } else {
                             	//not
@@ -271,6 +281,12 @@
 
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
                     // console.log("keyup 'change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter'");
+                    //force clean s when required
+                    var searchInputVal = self.$searchInput.val();
+                    if(searchInputVal.length == 0 ) {
+                        $.address.parameter('s', '');
+                        $.address.parameter('search_column', '');
+                    }
 					self.keyUp(e);
 				});
 
@@ -282,23 +298,102 @@
                         if (searchInputVal.length > 0) {
                         	// console.log("keyup search_column_data_changed");
                             self.keyUp(e);
-                        }
+                        }else{
+                            //force clean s when required
+                            $.address.parameter('s', '');
+                            $.address.parameter('search_column', '');
+						}
                     });
                 }
+                */
             }
+
+
             //
             // Non-ajax filters
             //-----------------
             else {
 
+            	// if s is empty, search-submit must be disabled and ?s removed
+				// if s and searchColumnBtnVal have values, then we can push over search
+                this.$searchInput.bind('input', function(){
+
+                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+
+                    console.log("this.$searchInput.bind('input' $searchInput " +$(this).val()+ "  searchColumnBtnVal:" + searchColumnBtnVal);
+
+                    if($(this).val().length == 0) {
+                        $('.search-submit').prop("disabled",true);
+
+                        if ( $(this).val() != $.address.parameter('s')  ) {
+                            $.address.parameter('s', '');
+                            $.address.parameter('search_column', '');
+                            self.updateHash(); // force clean search
+                        }
+					}else{
+                        if(searchColumnBtnVal.length > 0) {
+                            $('.search-submit').prop("disabled", false);
+                        }
+					}
+                });
+
+                // TODO on init address, check s i search_column values, and disable or not
+
+                // when a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters
+                if (this.settings.searchDropdown === 'yes') {
+                    this.$searchColumnBtn.on('search_column_data_changed', function (e) {
+
+                    	console.log("on('search_column_data_changed'");
+
+                        var searchInputVal = self.$searchInput.val();
+                        var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+
+                        if (searchInputVal.length > 0) {
+                            // console.log("keyup search_column_data_changed");
+                            $.address.parameter('s', searchInputVal);
+                            $.address.parameter('search_column', searchColumnBtnVal);
+                            self.keyUp(e);
+                        }else{
+                            //force clean s when required
+                            $.address.parameter('s', '');
+                            $.address.parameter('search_column', '');
+                        }
+                    });
+                }
+
+
+
                 this.$atumList.on('click', '.search-category, .search-submit', function () {
+                	console.log('click .search-category, .search-submit');
 
                     var searchInputVal = self.$searchInput.val();
+                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+
+                    if (searchColumnBtnVal.length ==  0){
+                        $('.search-submit').prop("disabled",true);
+					}else{
+                        $('.search-submit').prop("disabled",false);
+					}
+
+
 
                     if (searchInputVal.length > 0) {
-                        //console.log("non ajax update hash");
+                        console.log("non ajax update hash");
+                        $.address.parameter('s', self.$searchInput.val());
+                        $.address.parameter('search_column', self.$searchColumnBtn.data('value'));
+
                         self.updateHash();
-                    }
+
+                    }else{
+
+                        //force clean s when required
+						console.log("force clean s");
+                        console.log("force clean search_column");
+
+                        $.address.parameter('s', '');
+                        $.address.parameter('search_column', '');
+                        self.updateHash();
+					}
                 });
 
             }
@@ -476,9 +571,9 @@
 
 			// No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
 			$search_column_dropdown.empty();
-            $search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( $search_column_dropdown.data('no-option') )); // 'Search in Column'
+            //$search_column_dropdown.prepend( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', "" ).text( $search_column_dropdown.data('no-option') )); // 'Search in Column'
 			$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', 'title' ).text( $search_column_dropdown.data('product-title') )); // 'Product Name'
-            $('#search_column_dropdown a').first().hide();
+            //$('#search_column_dropdown a').first().hide();
 
 			var optionVal = '';
 			
@@ -509,13 +604,12 @@
                 	$(this).hide();
                     self.$searchInput.val(''); // clean the search
 				}else{
-                    $('#search_column_dropdown a').first().show();
+                    //$('#search_column_dropdown a').first().show();
 
                     if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
                         $('.atum-post-search').attr('type', 'number') ;
 					}else{
                         $('.atum-post-search').attr('type', 'text');
-                        //$('#password').replaceWith($('#password').clone().attr('type', 'text'));
 					}
 
 				}
@@ -546,6 +640,8 @@
 			
 			// Hash history navigation
 			$.address.externalChange(function(event) {
+
+				console.log('$.address.externalChange');
 				
 				var numCurrentParams = $.address.parameterNames().length;
 				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
@@ -1062,8 +1158,10 @@
 				supplier      : self.$atumList.find('.dropdown_supplier').val() || '',
 				extra_filter  : self.$atumList.find('.dropdown_extra_filter').val() || '',
 				paged         : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
-				s             : self.$searchInput.val() || '',
-                search_column : self.$searchColumnBtn.data('value') || '',
+				//s             : self.$searchInput.val() || '',
+                //search_column : self.$searchColumnBtn.data('value') || '',
+                s             : $.address.parameter('s') || '',
+                search_column : $.address.parameter('search_column') || '',
 				orderby       : $.address.parameter('orderby') || self.settings.orderby,
 				order         : $.address.parameter('order') || self.settings.order
 			});
