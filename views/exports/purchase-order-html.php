@@ -17,7 +17,7 @@
 				<span class="field"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $po->get_date() ) ) ?></span>
 			</div>
 			<div class="row">
-				<span class="label"><?php _e('P.O. #:', ATUM) ?>&nbsp;&nbsp;</span>
+				<span class="label"><?php _e('P.O. #:', ATUM_TEXT_DOMAIN) ?>&nbsp;&nbsp;</span>
 				<span class="field"><?php echo $po->get_id() ?></span>
 			</div>
 		</div>
