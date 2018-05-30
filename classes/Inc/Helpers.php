@@ -1547,33 +1547,35 @@ final class Helpers {
 		
 	}
 
-
 	/**
 	 * Return true if value exists in a multiarray
      * http://codepad.org/GU0qG5su
 	 *
 	 * @since 1.4.8
 	 *
-	 * @return boolean
+	 * @param string $key
+	 * @param array  $arr
+	 *
+	 * @return bool
 	 */
-	public static function in_multi_array($key, array $arr ) {
+	public static function in_multi_array( $key, array $arr ) {
 
 		// is in base array?
-		if (in_array($key, $arr)) {
-			return true;
+		if ( in_array( $key, $arr ) ) {
+			return TRUE;
 		}
 
 		// check arrays contained in this array
-		foreach ($arr as $element) {
-			if (is_array($element)) {
-				if (self::in_multi_array($key, $element )) {
-					return true;
+		foreach ( $arr as $element ) {
+			if ( is_array( $element ) ) {
+				if ( self::in_multi_array( $key, $element ) ) {
+					return TRUE;
 				}
 			}
 
 		}
 
-		return false;
+		return FALSE;
 	}
 
 }
