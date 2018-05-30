@@ -35,8 +35,8 @@ defined( 'ABSPATH' ) or die;
                        placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
 
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?php _e('Search in Column', ATUM_TEXT_DOMAIN) ?>
+                    <button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php _e('Product Name', ATUM_TEXT_DOMAIN) ?>
                     </button>
 
                     <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"

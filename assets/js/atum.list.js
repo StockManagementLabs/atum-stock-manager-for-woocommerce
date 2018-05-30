@@ -245,67 +245,85 @@
 			// Ajax filters
 			//-------------
 
+            var delay = (function(){
+                var timer = 0;
+                return function(callback, ms){
+                    clearTimeout (timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+
+            var pseudoKeyUpAjax = (function(){
+                return function(callback, searchColumnBtnVal, searchInputVal,e){
+
+                	console.log("searchColumnBtnVal("+searchColumnBtnVal+") searchInputVal("+searchInputVal+")");
+
+                    if(searchInputVal.length == 0) {
+
+                        if ( searchInputVal != $.address.parameter('s')  ) {
+                            $.address.parameter('s', '');
+                            $.address.parameter('search_column', '');
+                            self.updateHash(); // force clean search
+                        }
+                    }else{
+                        if(searchColumnBtnVal.length > 0) {
+                        	console.log("searchColumnBtnVal.length:"+searchColumnBtnVal.length);
+                            $.address.parameter('s', searchInputVal);
+                            $.address.parameter('search_column', searchColumnBtnVal);
+                            self.updateHash();
+                        }
+                    }
+                };
+            })();
+
             //TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
 
-            	/*
+                this.$searchInput.bind('input', function(e){
+                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+                    var searchInputVal =$(this).val();
+                    delay(function(){
+                        pseudoKeyUpAjax(function(){
+                        }, searchColumnBtnVal, searchInputVal, e );
 
-                // The search event is triggered when cliking on the clear field button within the seach input
-                this.$atumList.on('keyup paste search', '.atum-post-search', function (e) {
+                    }, 500 );
+                });
 
-                    var value = $(this).val();
-                    var timerid;
-                    if ($(this).data("lastval") != value) {
-                        $(this).data("lastval", value);
-                        clearTimeout(timerid);
-                        timerid = setTimeout(function () {
-                            //change action
-                            if (value) {
-                                // console.log("keyup  paste search', '.atum-post-search'");
+                this.$atumList
+				.on('keyup paste search', '.atum-post-search', function (e) {
+                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+                    var searchInputVal =$(this).val();
+                    delay(function(){
+                        pseudoKeyUpAjax(function(){
+                        }, searchColumnBtnVal, searchInputVal, e );
 
-                                //force clean s when required
-                                var searchInputVal = self.$searchInput.val();
-                                if(searchInputVal.length == 0 ) {
-                                    $.address.parameter('s', '');
-                                    $.address.parameter('search_column', '');
-                                }else{
-								}
-                                self.keyUp(e);
-                            } else {
-                            	//not
-                            }
-                        }, 500)
-
-                    }
+                    }, 500 );
                 })
-
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-                    // console.log("keyup 'change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter'");
-                    //force clean s when required
-                    var searchInputVal = self.$searchInput.val();
-                    if(searchInputVal.length == 0 ) {
-                        $.address.parameter('s', '');
-                        $.address.parameter('search_column', '');
-                    }
-					self.keyUp(e);
-				});
+            	.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
+                    self.keyUp(e);
+                });
 
                 if (this.settings.searchDropdown === 'yes') {
                     this.$searchColumnBtn.on('search_column_data_changed', function (e) {
 
-                        var searchInputVal = self.$searchInput.val();
+                    	var searchColumnBtnVal = $(this).data('value');
+                        var searchInputVal     = self.$searchInput.val();
 
-                        if (searchInputVal.length > 0) {
-                        	// console.log("keyup search_column_data_changed");
-                            self.keyUp(e);
-                        }else{
-                            //force clean s when required
-                            $.address.parameter('s', '');
-                            $.address.parameter('search_column', '');
-						}
+                        /*
+                        if(searchInputVal.length > 0) {
+                            $.address.parameter('search_column', searchColumnBtnVal);
+                            self.updateHash();
+                        }*/
+
+                        //delay(function(){
+                            pseudoKeyUpAjax(function(){
+                            }, searchColumnBtnVal, searchInputVal, e );
+
+                        //}, 500 );
+
                     });
                 }
-                */
+
             }
 
 
@@ -314,13 +332,24 @@
             //-----------------
             else {
 
+                $(function () {
+                    var searchInputVal = self.$searchInput.val();
+                    if (searchInputVal.length >0) {
+                    	console.log("no disable search submit");
+                        $('.search-submit').prop("disabled", false);
+                    } else {
+                        $('.search-submit').prop("disabled", true);
+                    }
+                });
+
+
             	// if s is empty, search-submit must be disabled and ?s removed
 				// if s and searchColumnBtnVal have values, then we can push over search
                 this.$searchInput.bind('input', function(){
 
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
 
-                    console.log("this.$searchInput.bind('input' $searchInput " +$(this).val()+ "  searchColumnBtnVal:" + searchColumnBtnVal);
+                    //console.log("this.$searchInput.bind('input' $searchInput " +$(this).val()+ "  searchColumnBtnVal:" + searchColumnBtnVal);
 
                     if($(this).val().length == 0) {
                         $('.search-submit').prop("disabled",true);
@@ -343,7 +372,7 @@
                 if (this.settings.searchDropdown === 'yes') {
                     this.$searchColumnBtn.on('search_column_data_changed', function (e) {
 
-                    	console.log("on('search_column_data_changed'");
+                    	// console.log("on('search_column_data_changed'");
 
                         var searchInputVal = self.$searchInput.val();
                         var searchColumnBtnVal = self.$searchColumnBtn.data('value');
@@ -362,9 +391,8 @@
                 }
 
 
-
                 this.$atumList.on('click', '.search-category, .search-submit', function () {
-                	console.log('click .search-category, .search-submit');
+                	// console.log('click .search-category, .search-submit');
 
                     var searchInputVal = self.$searchInput.val();
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
@@ -374,8 +402,6 @@
 					}else{
                         $('.search-submit').prop("disabled",false);
 					}
-
-
 
                     if (searchInputVal.length > 0) {
                         console.log("non ajax update hash");
@@ -561,7 +587,9 @@
 		 * Fill the search by column dropdown with the active screen options checkboxes
 		 */
         setupSearchColumnDropdown: function() {
-        	
+
+        	console.log('setupSearchColumnDropdown');
+
         	//TODO optimize setupSearchColumnDropdown
         	//don't loose context
             var self = this;
@@ -582,6 +610,12 @@
 				if( optionVal.search("calc_") < 0 ){ // calc values are not searchable, also we can't search on thumb
 					if(optionVal != 'thumb') {
 						$search_column_dropdown.append( $('<a class="dropdown-item" href="#">-</a>' ).data( 'value', optionVal ).text( $(this).parent().text() ));
+
+                        //most probably, we are on init and ?search_column has a value.
+						if( $.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
+                            $search_column_btn.data('value', optionVal);
+                            $search_column_btn.html($(this).parent().text() + ' <span class="caret"></span>');
+						}
 					}
 				}
 			});
@@ -592,31 +626,26 @@
             });
 
             //TODO click on drop element
-            $('.dropdown-menu a').click(function(e){
-            	// console.log(self.settings.searchableColumns.numeric);
+            $('.dropdown-menu a').click(function(){
             	//console.log("clicked value:" + $(this).data('value'));
+                event.preventDefault();
                 $search_column_btn.html($(this).text() + ' <span class="caret"></span>');
                 $search_column_btn.data( 'value' , $(this).data('value') );
                 $(this).parents().find('.dropdown-menu').hide();
 
-                //click on "clean filter option"
-                if( $(this).data('value') === ""){
-                	$(this).hide();
-                    self.$searchInput.val(''); // clean the search
+				//$('#search_column_dropdown a').first().show();
+
+				if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
+					$('.atum-post-search').attr('type', 'number') ;
 				}else{
-                    //$('#search_column_dropdown a').first().show();
-
-                    if ( $.inArray( $(this).data('value') , self.settings.searchableColumns.numeric) > -1 ) {
-                        $('.atum-post-search').attr('type', 'number') ;
-					}else{
-                        $('.atum-post-search').attr('type', 'text');
-					}
-
+					$('.atum-post-search').attr('type', 'text');
 				}
+
                 if (self.settings.ajaxFilter === 'yes') {
+					console.log("trigger search_column_data_changed");
                     $search_column_btn.trigger('search_column_data_changed');
                 }
-                e.stopPropagation();
+                // e.stopPropagation();
             });
 
             $(document).click(function(){
@@ -641,10 +670,19 @@
 			// Hash history navigation
 			$.address.externalChange(function(event) {
 
-				console.log('$.address.externalChange');
-				
+                if (self.settings.ajaxFilter != 'yes') {
+                	//Force enabled or disabled search button.
+                    var searchInputVal = self.$searchInput.val();
+                    if (searchInputVal.length > 0) {
+                        $('.search-submit').prop("disabled", false);
+                    } else {
+                        $('.search-submit').prop("disabled", true);
+                    }
+                }
+
 				var numCurrentParams = $.address.parameterNames().length;
 				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
+                    console.log("$.address.externalChange numCurrentParams("+ numCurrentParams +") || self.numHashParameters("+ self.numHashParameters +") !== numCurrentParams("+ numCurrentParams +")");
 					self.update();
 				}
 				
@@ -730,8 +768,6 @@
 		 */
 		keyUp: function (e, noTimer) {
 
-			//console.log("keyup method");
-			
 			var self    = this,
 			    delay   = 500,
 			    noTimer = noTimer || false;
@@ -745,7 +781,8 @@
 			 *
 			 * Also, if the S param is empty, we don't want to search anything
 			 */
-        	if( searchInputVal.length > 0 ){
+
+        	if( e.type != "keyup" || searchInputVal.length > 0 ){
 				if (13 === e.which) {
 					e.preventDefault();
 				}
@@ -763,6 +800,7 @@
 					clearTimeout(self.timer);
 
 					self.timer = setTimeout(function () {
+                        //TODO force ?vars on updateHash when ajax
 						self.updateHash();
 					}, delay);
 
@@ -1147,7 +1185,7 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
-			//console.log ("updateHash method");
+			console.log ("updateHash method");
 
 			var self = this;
 			
