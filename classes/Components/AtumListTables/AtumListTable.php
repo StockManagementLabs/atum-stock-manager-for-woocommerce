@@ -2802,7 +2802,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$query = "
 							SELECT ID, post_type, post_parent FROM $wpdb->posts
-					        WHERE lower(post_title) LIKE '%" . $term . "%'
+					        WHERE lower(post_title) LIKE '%{$term}%'
 				         ";
 
 					}
@@ -2865,6 +2865,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						}
 
 					}
+
 					// removes last ,
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
 
