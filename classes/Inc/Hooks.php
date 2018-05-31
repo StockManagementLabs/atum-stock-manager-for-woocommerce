@@ -12,6 +12,8 @@
 
 namespace Atum\Inc;
 
+use Atum\Components\AtumCapabilities;
+
 defined( 'ABSPATH' ) or die;
 
 
@@ -83,6 +85,12 @@ class Hooks {
 		// Delete the views' transients after changing the stock of any product
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
+
+		//TODO 1.4.8 add here out_of_stock_fields
+		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+		add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+		add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
+		add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 
 	}
 
@@ -322,7 +330,96 @@ class Hooks {
 		// Save the product purchase price meta
 		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
 		add_action( 'woocommerce_update_product_variation', array( $this, 'save_purchase_price' ) );
+
+		//add_action( 'woocommerce_product_options_pricing', array( $this, 'add_out_stock_threshold_field' ) );
 		
+	}
+
+	//TODO 1.4.8 add_out_stock_threshold_field
+	/**
+	 * Add the individual out stock threshold field to WC's WC's product data meta box
+	 *
+	 * @since 1.4.8
+	 *
+	 * @param int $loop Only for variations. The loop item number
+	 * @param array $variation_data Only for variations. The variation item data
+	 * @param \WP_Post $variation Only for variations. The variation product
+	 */
+	public function add_out_stock_threshold_field( $loop = null, $variation_data = array(), $variation = null ) {
+
+		global $post;
+
+		if ( empty( $variation ) ) {
+
+			$product = wc_get_product( $post->ID );
+
+			// Do not add the field to variable products (every variation will have its own)
+			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+				return;
+			}
+
+		}
+
+		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
+		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', true );
+
+		$out_stock_threshold_field_name = empty( $variation ) ? '_out_stock_threshold' : "variation_out_stock_threshold[$loop]";
+		$out_stock_threshold_field_id   = empty( $variation ) ? '_out_stock_threshold' : "_out_stock_threshold{$loop}";
+
+		// If the user is not allowed to edit Suppliers, add a hidden input
+		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ):
+			?>
+            <input type="hidden" value="<?php echo( $out_stock_threshold ?: '' ) ?>"
+                   name="<?php echo $out_stock_threshold_field_name ?>"
+                   id="<?php echo $out_stock_threshold_field_id ?>">
+            <p style="color:red;">hidden(AtumCapabilities::current_user_can( 'edit_out_stock_threshold')</p>
+		<?php
+
+		else:
+
+			//$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
+
+			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id' ) );
+
+		endif;
+
+	}
+
+	//TODO 1.4.8 save_out_stock_threshold_field
+	/**
+	 * Save the out of stock threshold field
+	 *
+	 * @since 1.4.8
+	 *
+	 * @param int $post_id    The post ID
+	 */
+	public function save_out_stock_threshold_field($post_id) {
+
+		$product  = wc_get_product( $post_id );
+
+		if ( is_a($product, '\WC_Product') && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['variation_supplier_sku'] ) ) {
+
+			//$product_key = array_search( $post_id, $_POST['variable_post_id'] );
+			//$supplier    = $_POST['variation_supplier'][ $product_key ];
+			//$supplier    = $supplier ? absint( $supplier ) : '';
+
+			$out_stock_threshold = reset( $_POST['variation_out_stock_threshold'] );
+
+		} elseif ( isset( $_POST['_out_stock_threshold'] ) ) {
+			$out_stock_threshold = esc_attr( $_POST['_out_stock_threshold'] );
+
+		} else {
+			// If we are not saving the product from its edit page, do not continue
+			return;
+		}
+
+		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
+		update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+
 	}
 
 	/**

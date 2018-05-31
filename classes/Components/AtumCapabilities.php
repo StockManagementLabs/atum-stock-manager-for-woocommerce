@@ -56,6 +56,9 @@ class AtumCapabilities {
 		// Inbound Stock caps
 		'read_inbound_stock',
 
+		// Out Stock Threshold
+		'edit_out_stock_threshold',
+
 		// Suppliers caps
 		'edit_supplier',
 		'read_supplier',
