@@ -1906,6 +1906,11 @@ h1.wp-heading-inline #atum-update-list:active {
   margin-bottom: 3px;
 }
 
+.atum-list-wrapper .search-box #search_column_btn {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
 .atum-list-wrapper .search-box .atum-post-search {
   margin-right: 0;
 }
