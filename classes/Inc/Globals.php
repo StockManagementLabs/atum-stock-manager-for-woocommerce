@@ -89,8 +89,8 @@ final class Globals {
 	 * Searchable columns and their types
 	 */
 	const SEARCHABLE_COLUMNS = array(
-		'string' => array( 'title', '_supplier', '_sku', '_supplier_sku', 'IDs' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
-		'numeric'  => array('ID','_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
+		'string'  => array( 'title', '_supplier', '_sku', '_supplier_sku', 'IDs' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
+		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
 	);
 
 	
