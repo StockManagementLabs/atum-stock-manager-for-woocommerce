@@ -2703,7 +2703,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					// Get all (parent and variations, and build where)
-					$query = $wpdb->prepare("
+					$query = $wpdb->prepare( "
 						SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_type, {$wpdb->posts}.post_parent FROM {$wpdb->posts}
 					    WHERE {$wpdb->posts}.ID = %d
 				    ", $term );
@@ -2721,7 +2721,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$search_terms_ids_str .= $search_term_id->ID . ',';
 
 						// Has children? add them
-						$product  = wc_get_product( $search_term_id->ID );
+						$product = wc_get_product( $search_term_id->ID );
 
 						// return array of the children IDs if applicable
 						$children = $product->get_children();
@@ -2732,8 +2732,7 @@ abstract class AtumListTable extends \WP_List_Table {
 							}
 						}
 
-					}
-					// Add parent and current
+					} // Add parent and current
 					else {
 						$search_terms_ids_str .= $search_term_id->post_parent . ',';
 						$search_terms_ids_str .= $search_term_id->ID . ',';
@@ -2742,7 +2741,49 @@ abstract class AtumListTable extends \WP_List_Table {
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
 					$where                = "AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
 
+					// meta relational values.
 				}
+				elseif ( $search_column == '_supplier' ) {
+
+					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
+
+					$query = "SELECT {$wpdb->postmeta}.post_id FROM {$wpdb->posts}
+						    LEFT JOIN {$wpdb->postmeta} ON ({$wpdb->posts}.ID = {$wpdb->postmeta}.meta_value)
+						    WHERE {$wpdb->postmeta}.meta_key = '_supplier'
+						    AND ( lower({$wpdb->posts}.post_title) LIKE '%" . $term . "%' )";
+
+					$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
+
+
+					if ( count( $search_terms_ids ) == 0 ) {
+						return $where_without_results;
+					}
+
+					$search_terms_ids_str = '';
+
+					foreach ( $search_terms_ids AS $search_terms_id ) // Has children? add them
+					{
+						$search_terms_ids_str .= $search_terms_id['post_id'] . ",";
+						$product              = wc_get_product( $search_terms_id['post_id'] );
+
+						if ( $product ) {
+							// return array of the children IDs if applicable
+							$children = $product->get_children();
+
+							if ( ! empty( $children ) ) {
+								foreach ( $children as $child ) {
+									$search_terms_ids_str .= $child . ',';
+								}
+							}
+						}
+
+					}
+					// removes last ,
+					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
+
+					$where = "AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
+
+                }
 				//  # case C and Ds #
 				else {
 
@@ -2772,7 +2813,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					    ", $search_column );
 
 					}
-					// String fields (_supplier, _sku, _supplier_sku ...)
+					// String fields (_supplier, _sku ...)
 					else {
 
 						// WHERE meta_key = $search_column and lower(meta_value) like %term%
@@ -2795,7 +2836,14 @@ abstract class AtumListTable extends \WP_List_Table {
 					foreach ( $search_terms_ids as $term_id ) {
 
 						if ( $term_id->post_type == 'product' ) {
-							$search_terms_ids_str .= "'$term_id->ID',";
+							$search_terms_ids_str .= "$term_id->ID,";
+							$product = wc_get_product( $term_id->ID );
+							$children = $product->get_children();
+							if ( ! empty( $children ) ) {
+								foreach ( $children as $child ) {
+									$search_terms_ids_str .= $child . ',';
+								}
+							}
 						}
 						// Add parent and current
 						else {
