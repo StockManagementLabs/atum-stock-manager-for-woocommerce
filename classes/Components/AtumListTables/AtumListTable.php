@@ -2966,6 +2966,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'jquery.floatThead' );
 
+		// jquery.filterbydata
+		wp_register_script( 'jquery.filterbydata', ATUM_URL . 'assets/js/vendor/jquery.filterbydata.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+		wp_enqueue_script( 'jquery.filterbydata' );
+
 		// jScrollPane
 		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION, TRUE );
