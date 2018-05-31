@@ -57,28 +57,49 @@
 					$(this).addClass('dirty');
 				}
 			})
+			
 			// Remove the dirty mark if the user tries to save
 			.on('click', 'input[type=submit]', function() {
 				self.$form.find('.dirty').removeClass('dirty');
 			})
+			
 			// Script Runner fields
 			.on('click', '.script-runner button', function() {
 				self.runScript($(this));
 			})
-			// Manage Shipping address switch
-			.on('change','#atum_same_ship_address', function() {
+			
+			// Field dependencies
+			.on('change','[data-dependency]', function() {
 				
-				var $shippingSection = $('#atum_setting_shipping');
+				var $field     = $(this),
+					dependency = $field.data('dependency'),
+					visibility,
+				    $dependant;
 				
-				if ( this.checked ) {
-					$shippingSection.slideUp();
+				if ($field.is(':checkbox')) {
+					visibility = $field.val() === (dependency.value && $field.is(':checked')) || ($field.val() !== dependency.value && !$field.is(':checked'));
 				}
 				else {
-					$shippingSection.slideDown();
+					visibility = $field.val() === dependency.value;
+				}
+				
+				if (dependency.hasOwnProperty('section')) {
+					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
+				}
+				
+				if ($dependant.length) {
+					
+					if (visibility === true) {
+						$dependant.slideDown();
+					}
+					else {
+						$dependant.slideUp();
+					}
+					
 				}
 				
 			})
-			.find('#atum_same_ship_address').change().removeClass('dirty');
+			.find('[data-dependency]').change().removeClass('dirty');
 			
 			// Before unload alert
 			$(window).bind('beforeunload', function() {

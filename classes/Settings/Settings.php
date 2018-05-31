@@ -218,7 +218,11 @@ class Settings {
 				'name'    => __( "Use as Shipping Address", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
-				'default' => 'yes'
+				'default' => 'yes',
+				'dependency' => array(
+					'section' => 'shipping',
+					'value'   => 'no'
+				)
 			),
 			'ship_to' => array(
 				'section' => 'shipping',
@@ -513,10 +517,11 @@ class Settings {
 	public function display_text( $args ) {
 		
 		$output = sprintf(
-			'<input class="atum-settings-input regular-text" type="text" id="%s" name="%s" value="%s">',
+			'<input class="atum-settings-input regular-text" type="text" id="%s" name="%s" value="%s" %s>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-			$this->options[ $args['id'] ]
+			$this->options[ $args['id'] ],
+			$this->get_dependency($args)
 		) . $this->get_description( $args );
 		
 		echo apply_filters( 'atum/settings/display_text', $output, $args );
@@ -536,12 +541,13 @@ class Settings {
 		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
 
 		$output = sprintf(
-			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="%s" name="%s" value="%s">',
+			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="%s" name="%s" value="%s" %s>',
 			$min,
 			$step,
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-			$this->options[ $args['id'] ]
+			$this->options[ $args['id'] ],
+			$this->get_dependency($args)
 		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args );
@@ -572,7 +578,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em">
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -593,10 +599,11 @@ class Settings {
 	public function display_switcher( $args ) {
 
 		$output = sprintf(
-			'<input type="checkbox" id="%s" name="%s" value="yes" %s class="js-switch atum-settings-input" style="display: none">',
+			'<input type="checkbox" id="%s" name="%s" value="yes" %s class="js-switch atum-settings-input" style="display: none" %s>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-			checked( 'yes', $this->options[ $args['id'] ], FALSE )
+			checked( 'yes', $this->options[ $args['id'] ], FALSE ),
+			$this->get_dependency($args)
 		) . $this->get_description( $args );
 		
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args );
@@ -621,7 +628,7 @@ class Settings {
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
 			<label class="btn btn-<?php echo $style ?><?php if ($value == $option_value) echo ' active'?>">
-				<input type="radio" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"> <?php echo $option_label ?>
+				<input type="radio" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
 		    </label>
 			<?php endforeach; ?>
 		</div>
@@ -668,11 +675,11 @@ class Settings {
 	}
 	
 	/**
-	 * Print field descirption if it exists
+	 * Print field description if it exists
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param array $args   Label for the field
+	 * @param array $args
 	 *
 	 * @return string
 	 */
@@ -685,6 +692,25 @@ class Settings {
 		}
 		
 		return $label;
+	}
+
+	/**
+	 * Get the dependency data (if any)
+	 *
+	 * @since 1.4.8
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	public function get_dependency($args) {
+
+		if ( isset($args['dependency']) ) {
+			return " data-dependency='" . json_encode( $args['dependency'] ) . "'";
+		}
+
+		return '';
+
 	}
 
 	
