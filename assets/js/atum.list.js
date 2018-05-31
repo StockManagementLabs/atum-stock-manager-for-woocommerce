@@ -103,42 +103,45 @@
             //
             // Init stickyHeaders: floatThead
             //--------------------------------
-
-            var beforeHeaderHeight = $("#wpadminbar").height(),
-                actualHeaderHeight = beforeHeaderHeight;
+			
+			var $adminBar    = $('#wpadminbar'),
+			    headerHeight = $adminBar.height();
 
             //fired when the sticky header has to be floated, or not.
-            this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
-                if(isFloated){
-                	//hide searchDropdown on sticky
-                    if(self.settings.searchDropdown === 'yes'){
-                    	// console.log("hide on sticky");
-                        $('#search_column_dropdown').hide();
-                    }
-
-                    actualHeaderHeight = $("#wpadminbar").height();
-					//Hide on mobile view
-                    if ($("#wpadminbar").css("position") == "absolute" ){
-                        //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
-                        $floatContainer.css('display', 'none');
-                    }
-                    else{
-                        // console.log("wpadminbar not absolute, so, its on the normal admin bar");
-                        $floatContainer.css('display', 'block');
-                    }
-					//console.log("floated");
-                } else {
-                    // console.log("unfloated");
-                }
+            this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
+	
+	            if (isFloated) {
+	            	
+		            $floatContainer.css('height', 'auto');
+	            	
+		            // Hide searchDropdown on sticky
+		            if (self.settings.searchDropdown === 'yes') {
+			            $('#search_column_dropdown').hide();
+		            }
+		
+		            headerHeight = $adminBar.height();
+		
+		            // Hide on mobile view
+		            if ($adminBar.css('position') == 'absolute') {
+			            $floatContainer.hide();
+		            }
+		            else {
+			            $floatContainer.show();
+		            }
+		
+	            }
+	            else {
+		            $floatContainer.css('height', 0);
+	            }
             });
-
-            this.$atumTable.floatThead({
-                responsiveContainer: function ($table) {
-                    return $table.closest('.jspContainer');
-                },
-                position: 'absolute',
-				top: actualHeaderHeight
-            });
+			
+			this.$atumTable.floatThead({
+				responsiveContainer: function ($table) {
+					return $table.closest('.jspContainer');
+				},
+				position           : 'absolute',
+				top                : headerHeight
+			});
 			
 			//
 			// Setup the URL navaigation

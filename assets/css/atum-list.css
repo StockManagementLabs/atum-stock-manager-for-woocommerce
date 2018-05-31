@@ -2023,6 +2023,10 @@ h1.wp-heading-inline #atum-update-list:active {
   max-width: 160px;
 }
 
+.atum-list-wrapper .floatThead-container {
+  height: 0;
+}
+
 .select2-dropdown .select2-results__option:focus {
   outline: none;
 }
