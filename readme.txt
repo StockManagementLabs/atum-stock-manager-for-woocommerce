@@ -6,8 +6,8 @@ Requires at least: 4.6
 Tested up to: 4.9.6
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.3.5
-Stable tag: 1.4.7
+WC tested up to: 3.4.1
+Stable tag: 1.4.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,33 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.8`
+
+*2018-05-30*
+
+**Features**
+
+* Added search by column to List Tables.
+* Now the List Table searches are able to find variations.
+* Improved search performance.
+
+**Changes**
+
+* Match Inventory Logs and Purchase Orders lists' style to WC lists' style.
+* Restored product type icons that were removed in WC 3.4.
+* Upgraded mPDF library to 7.1.
+
+**Fixes**
+
+* Fixed WooCommerce 3.4.0 compatibility.
+* Fixed notice errors in List Tables with no items.
+* Fixed PHP notice when exporting Purchase Orders.
+* Fixed bug in databases with non standard prefixes.
+* CSS fixes.
+* Refactory.
 
 ---
 

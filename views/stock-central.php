@@ -35,8 +35,8 @@ defined( 'ABSPATH' ) or die;
                        placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
 
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?php _e('Search in Column', ATUM_TEXT_DOMAIN) ?>
+                    <button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php _e('Product Name', ATUM_TEXT_DOMAIN) ?>
                     </button>
 
                     <div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) or die;
                 </div>
 
 	            <?php if ( $ajax == 'no' ):?>
-                    <input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">
+                    <input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>" disabled>
 	            <?php endif;?>
 
             </div>
