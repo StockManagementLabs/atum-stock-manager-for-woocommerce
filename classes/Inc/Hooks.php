@@ -152,7 +152,10 @@ class Hooks {
 				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
 				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'nonce'         => wp_create_nonce('atum-product-data-nonce')
+				'nonce'         => wp_create_nonce('atum-product-data-nonce'),
+				//TODO 1.4.8 Pass vars to js
+				'isOutStockThresholdEnabled' => Helpers::get_option( 'out_stock_threshold', 'no' ),
+                'outStockThresholdProductTypes' => Globals::OUT_STOCK_THRESHOLD_PRODUCT_TYPES
 			) );
 
 			wp_enqueue_script( 'atum-product-data' );
@@ -352,12 +355,12 @@ class Hooks {
 		if ( empty( $variation ) ) {
 
 			$product = wc_get_product( $post->ID );
+			$product_type = $product->get_type();
 
 			// Do not add the field to variable products (every variation will have its own)
-			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-				return;
-			}
-
+			//if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+			//	return;
+			//}
 		}
 
 		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
@@ -377,9 +380,11 @@ class Hooks {
 
 		else:
 
-			//$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
+            //[ 'show_if_simple', 'show_if_variable', 'show_if_grouped', 'show_if_product-part', ...
+			$show_if_out_stock_threshold_product_types = array_map(function($val) { return "show_if_".$val; }, Globals::OUT_STOCK_THRESHOLD_PRODUCT_TYPES) ;
+		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $show_if_out_stock_threshold_product_types );
 
-			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id' ) );
+			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation','product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes' ) );
 
 		endif;
 
