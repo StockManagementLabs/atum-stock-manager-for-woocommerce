@@ -2,19 +2,37 @@
 // Atum List Tables
 //------------------
 
-h1.wp-heading-inline {
-	line-height: 1.5;
-	position: relative;
-	
-	#atum-update-list {
-		margin-left: 5px;
-		border-radius: 0;
-		vertical-align: middle;
+.wrap {
+	h1.wp-heading-inline {
+		line-height: 1.5;
+		position: relative;
 		
-		&:active {
-			color: $white;
-			padding: 0 10px 1px;
-			box-shadow: 0 1px 0 $wp-link;
+		#atum-update-list {
+			margin-left: 5px;
+			border-radius: 0;
+			vertical-align: middle;
+			
+			&:active {
+				color: $white;
+				padding: 0 10px 1px;
+				box-shadow: 0 1px 0 $wp-link;
+			}
+		}
+		
+		// At 782px, WordPress changes the list table views to mobile version
+		@media all and (max-width: 782px) {
+			@include flexbox;
+			@include flex-wrap(wrap);
+			@include flex-justify-content(center);
+			
+			a, button {
+				width: 100%;
+				text-align: center;
+				padding: 7px 15px;
+				margin-top: 5px;
+				height: auto;
+				line-height: 1.3;
+			}
 		}
 	}
 }
@@ -177,6 +195,46 @@ h1.wp-heading-inline {
 		height: 0;
 	}
 	
+	@media screen and (max-width: 782px) {
+		
+		ul.subsubsub {
+			font-size: 14px;
+			float: none;
+		}
+		
+		.search-box {
+			@include flexbox;
+			float: none;
+			margin: auto;
+			width: 90%;
+			
+			input[type="text"], input[type="number"], button {
+				height: 36px;
+			}
+		}
+		
+		.actions.bulkactions {
+			display: block;
+			text-align: center;
+			float: none;
+			
+			select {
+				width: 90%;
+				max-width: 90%;
+				float: none;
+				display: block;
+				margin: auto;
+			}
+		}
+		
+		.tablenav.top {
+			.bulkactions {
+				margin-bottom: $grid-gutter-width/2;
+			}
+		}
+		
+	}
+	
 }
 
 // Enhanced Select fix
@@ -254,6 +312,7 @@ h1.wp-heading-inline {
 	
 	thead .item-heads, tfoot {
 		background-color: $white;
+		
 		th {
 			padding: 3px 5px;
 			line-height: 1.1;
@@ -606,34 +665,41 @@ h1.wp-heading-inline {
 	}
 	
 	@media screen and (max-width: 782px) {
-		.column-groups {
-			display: none;
-		}
 		
-		.column-thumb {
-			display: none;
+		th, td {
+			display: table-cell !important;
+			padding: 6px 5px !important;
 			
-			&:before {
-				content: none;
+			&.check-column {
+				input[type="checkbox"] {
+					width: 18px;
+					height: 18px;
+					
+					&:before {
+						margin: -5px -8px;
+					}
+				}
 			}
 		}
 		
-		tr:not(.inline-edit-row):not(.no-items) td.column-thumb:not(.column-primary)::before {
+		th {
+			&.column-primary {
+				width: auto !important;
+			}
+		}
+		
+		tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
 			content: none;
 		}
 		
-		.tips {
-			display: none;
+		.column-primary {
+			.toggle-row {
+				display: none;
+			}
 		}
 		
-		.atum-title-small {
-			display: block;
-		}
-		
-		td.thumb.column-thumb {
-			text-align: left;
-		}
 	}
+	
 }
 
 // Manage Stock notice
@@ -689,3 +755,65 @@ h1.wp-heading-inline {
 	}
 }
 
+// Popovers' customisations
+.popover {
+	
+	// Inner content for "Set Field" popovers
+	.popover-content {
+		
+		.atum-list-table & {
+			text-align: center;
+		}
+		
+		> input[type=number], > input[type=text], > .button {
+			display: inline-block;
+			vertical-align: middle;
+			height: 30px;
+			font-size: 14px;
+		}
+		
+		> input[type=number], > input[type=text] {
+			width: 75%;
+			text-align: center;
+			border-radius: 3px;
+		}
+		
+		> .button {
+			margin-left: 3px;
+			
+			&:disabled {
+				color: $light !important;
+				opacity: 0.6;
+			}
+		}
+		
+		@media all and (max-width: $screen-sm) {
+			> input[type=number], > input[type=text], > .button {
+				width: 100%;
+			}
+			
+			> .button {
+				margin-left: 0;
+				margin-top: 5px;
+			}
+		}
+		
+	}
+	
+	// Popover with extra meta fields
+	&.with-meta {
+		
+		.popover-content {
+			input, button {
+				width: 100%;
+				margin: 3px 0;
+			}
+			
+			hr {
+				border-color: $info;
+			}
+		}
+		
+	}
+	
+}
