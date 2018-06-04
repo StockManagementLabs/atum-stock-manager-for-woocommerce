@@ -24,7 +24,6 @@
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
-		// Todo searchColumnBtn here
 		this.$atumList        = $(element);
 		this.$atumTable       = this.$atumList.find('.atum-list-table');
 		this.$editInput       = this.$atumList.find('#atum-column-edits');
@@ -262,13 +261,25 @@
                 };
             })();
 
-            self.$searchColumnBtn.bind('setHtmlAndDataValue',function(event, value, html) {
-                $(this).html( html );
-                $(this).data( 'value' , value );
+            //
+			// functions to set $searchColumnBtn data-value and html content
+			// TODO: searchColumnBtn as an independent component?
+            self.$searchColumnBtn.bind('setHtmlAndDataValue', function (event, value, html) {
+                $(this).html(html);
+                $(this).data('value', value);
+
+                $('#search_column_dropdown>a.active').removeClass('active');
+                $('#search_column_dropdown>a').filterByData('value', value).addClass('active');
+
             });
-            self.$searchColumnBtn.bind('setDataValue',function(event, value) {
-                $(this).data( 'value' , value );
+
+            self.$searchColumnBtn.bind('setDataValue', function (event, value) {
+                $(this).data('value', value);
+
+                $('#search_column_dropdown>a.active').removeClass('active');
+                $('#search_column_dropdown>a').filterByData('value', value).addClass('active');
             });
+
 
             //TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
@@ -585,9 +596,8 @@
                     if (optionVal != 'thumb') {
                         $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
 
-                        //most probably, we are on init and ?search_column has a value.
+                        //most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
                         if ($.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
-
                             self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
                         }
                     }
@@ -607,6 +617,9 @@
                 self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
 
                 $(this).parents().find('.dropdown-menu').hide();
+                $('#search_column_dropdown>a.active').removeClass('active');
+                $(this).addClass('active');
+
                 if ($.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1) {
                     $('.atum-post-search').attr('type', 'number');
                 } else {
@@ -675,13 +688,13 @@
                             if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
 
                                 if (optionVal != 'thumb' && optionVal == search_column) {
-                                    self.$searchColumnBtn.html($(this).parent().text() + ' <span class="caret"></span>');
-                                    self.$searchColumnBtn.data('value', optionVal);
+                                    self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
                                     return false;
                                 }
                             }
                         });
                     }
+
 
                     self.update();
 					

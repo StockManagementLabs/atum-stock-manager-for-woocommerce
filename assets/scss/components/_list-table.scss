@@ -56,6 +56,15 @@
 		margin-right: 3px;
 		margin-bottom: 3px;
 
+		#search_column_btn{
+			@if $enable-rounded {
+				border-top-right-radius : $border-radius;
+				border-bottom-right-radius: $border-radius;
+			} @else {
+				border-radius: 0;
+			}
+		}
+
 		.atum-post-search {
 			margin-right: 0;
 		}
