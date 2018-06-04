@@ -622,7 +622,8 @@
 
                 if ($.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1) {
                     $('.atum-post-search').attr('type', 'number');
-                } else {
+                }
+                else {
                     $('.atum-post-search').attr('type', 'text');
                 }
 
