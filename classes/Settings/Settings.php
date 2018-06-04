@@ -641,6 +641,34 @@ class Settings {
 	}
 
 	/**
+	 * Get the settings option array and prints select dropdown
+	 *
+	 * @since 1.4.9
+	 *
+	 * @param array $args Field arguments
+	 */
+	public function display_select( $args ) {
+
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->options[ $args['id'] ];
+		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
+
+		ob_start();
+		?>
+		<select class="atum-select2" name="<?php echo $name ?>" id="<?php echo ATUM_PREFIX . $args['id'] ?>"<?php echo $this->get_dependency($args) . $style ?>>
+			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
+			<option value="<?php echo $option_value ?>>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+		echo $this->get_description( $args );
+
+		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args );
+
+	}
+
+	/**
 	 * Get the settings option array and prints an script runner field
 	 *
 	 * @since 1.4.5

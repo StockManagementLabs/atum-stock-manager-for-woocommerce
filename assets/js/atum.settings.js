@@ -48,6 +48,9 @@
 			// Enable switchers
 			this.doSwitchers();
 			
+			// Enable Select2
+			this.doSelect2();
+			
 			// Restore enhanced selects
 			this.restoreEnhancedSelects();
 			
@@ -72,15 +75,16 @@
 			.on('change','[data-dependency]', function() {
 				
 				var $field     = $(this),
+				    value      = $field.val(),
 					dependency = $field.data('dependency'),
 					visibility,
 				    $dependant;
 				
 				if ($field.is(':checkbox')) {
-					visibility = $field.val() === (dependency.value && $field.is(':checked')) || ($field.val() !== dependency.value && !$field.is(':checked'));
+					visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
 				}
 				else {
-					visibility = $field.val() === dependency.value;
+					visibility = value === dependency.value;
 				}
 				
 				if (dependency.hasOwnProperty('section')) {
@@ -90,15 +94,16 @@
 				if ($dependant.length) {
 					
 					if (visibility === true) {
-						$dependant.slideDown();
+						$dependant.slideDown('fast');
 					}
 					else {
-						$dependant.slideUp();
+						$dependant.slideUp('fast');
 					}
 					
 				}
 				
 			})
+			
 			.find('[data-dependency]').change().removeClass('dirty');
 			
 			// Before unload alert
@@ -134,7 +139,13 @@
 			});
 			
 		},
-		doNiceSelects: function() {
+		doSelect2: function() {
+		
+			if (typeof $.fn.select2 === 'function') {
+				$('.atum-select2').select2({
+					minimumResultsForSearch: 20
+				});
+			}
 		
 		},
 		restoreEnhancedSelects: function() {
@@ -220,8 +231,10 @@
 			this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				
 				self.doSwitchers();
+				self.doSelect2();
 				self.restoreEnhancedSelects();
-				self.$form.show().find('#atum_same_ship_address').change().removeClass('dirty');
+				self.$form.find('[data-dependency]').change().removeClass('dirty');
+				self.$form.show();
 				
 				var $inputButton = self.$form.find('input:submit');
 				
