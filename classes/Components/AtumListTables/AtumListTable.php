@@ -2632,7 +2632,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Prevent keyUp problems (scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url))
-		if ( empty( $_REQUEST['s'] ) ) {
+		if ( strlen( $_REQUEST['s'] ) == 0 ) {
 			return "AND ( 1 = 1 )";
 		}
 
