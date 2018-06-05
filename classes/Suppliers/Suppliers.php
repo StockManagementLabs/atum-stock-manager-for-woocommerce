@@ -497,8 +497,8 @@ class Suppliers {
 					'relation' => 'AND',
 					array(
 						'taxonomy' => 'product_type',
-						'field'    => 'slug',
-						'terms'    => $product_taxonomies
+						'field'    => 'id',
+						'terms'    => $product_taxonomies_ids
 					)
 				)
 			);
@@ -513,26 +513,23 @@ class Suppliers {
 
 			//TODO do anotther search to get children and force fathers for a given supplier on SC-MC
 
-			//get rebel parents:
+			//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
 			$query_parents = $wpdb->prepare( "
 				SELECT DISTINCT POSTS.ID FROM $wpdb->posts POSTS
                 LEFT JOIN $wpdb->term_relationships ON (POSTS.ID = $wpdb->term_relationships.object_id)
                 INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
-                WHERE 1=1
+                WHERE POSTS.post_type = 'product'
                   AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
-                  AND POSTS.post_type = 'product'
                   AND (POSTS.post_status = 'publish' OR POSTS.post_status = 'private')
                 
-                AND POSTS.ID IN (
+                  AND POSTS.ID IN (
                 
-                SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
-                INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
-                WHERE 1=1
-                  AND (
-                       (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
-                       )
-                  AND SUBPOSTS.post_type = 'product_variation'
-                  AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private')))", $supplier_id );
+                    SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
+                    INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                    WHERE SUBPOSTS.post_type = 'product_variation'
+                      AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
+                      AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private'))
+                  )", $supplier_id );
 
 			$search_parents_ids = $wpdb->get_results( $query_parents, ARRAY_A );
 
@@ -543,16 +540,14 @@ class Suppliers {
 			} );
 
 			//get rebel childs:
-			$query_childs      = $wpdb->prepare( "
+			$query_childs = $wpdb->prepare( "
                 SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
                 INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
-                WHERE 1=1
-                  AND (
-                       (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
-                       )
-                  AND SUBPOSTS.post_type = 'product_variation'
+                WHERE SUBPOSTS.post_type = 'product_variation'
+                  AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
                   AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
                   AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private'))", $supplier_id );
+
 			$search_childs_ids = $wpdb->get_results( $query_childs, ARRAY_A );
 
 			$childs_ids = array();
