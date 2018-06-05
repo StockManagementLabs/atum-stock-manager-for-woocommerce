@@ -40,10 +40,10 @@ final class Helpers {
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT wp_terms.term_id FROM wp_terms 
-                INNER JOIN wp_term_taxonomy ON wp_term_taxonomy.term_id = wp_terms.term_id
-                WHERE wp_term_taxonomy.taxonomy = %s
-                AND wp_terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
+		$query = $wpdb->prepare( "SELECT $wpdb->terms.term_id FROM $wpdb->terms 
+                INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
+                WHERE $wpdb->term_taxonomy.taxonomy = %s
+                AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
 
 		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
 		$result           = array();
