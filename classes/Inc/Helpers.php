@@ -28,6 +28,55 @@ use Atum\Suppliers\Suppliers;
 
 final class Helpers {
 
+
+	/**
+	 * Get the term ids of a given array of slug terms
+	 *
+	 * @since 1.4.8
+	 *
+	 * @param array $slug_terms
+     * @param string taxonomy default 'product_type'
+	 * @return array term_ids
+	 */
+	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
+		global $wpdb;
+		$query = $wpdb->prepare( "SELECT wp_terms.term_id FROM wp_terms 
+                INNER JOIN wp_term_taxonomy ON wp_term_taxonomy.term_id = wp_terms.term_id
+                WHERE wp_term_taxonomy.taxonomy = %s
+                AND wp_terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
+
+		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
+		$result           = array();
+		//flat array:
+		array_walk_recursive( $search_terms_ids, function ( $v, $k ) use ( &$result ) {
+			$result[] = absint( $v );
+		} );
+
+		return $result;
+	}
+
+
+	/**
+	 * Flat a multidimensional array. 
+	 *
+	 * @since 1.4.8
+	 *
+	 * @param array $slug_terms
+	 * @param string taxonomy default 'product_type'
+	 *
+	 * @return array term_ids
+	 */
+	public static function flat_multidimensional_array( array $original ) {
+		$result = array();
+		array_walk_recursive( $original, function ( $v, $k ) use ( &$result ) {
+			$result[] = $v;
+		} );
+
+		return $result;
+	}
+
+
+
 	/**
 	 * Set the help tab for admin pages
 	 *
