@@ -515,18 +515,18 @@ class Suppliers {
 
 			//get rebel parents:
 			$query_parents = $wpdb->prepare( "
-				SELECT DISTINCT POSTS.ID FROM wp_posts POSTS
-                LEFT JOIN wp_term_relationships ON (POSTS.ID = wp_term_relationships.object_id)
-                INNER JOIN wp_postmeta ON (POSTS.ID = wp_postmeta.post_id)
+				SELECT DISTINCT POSTS.ID FROM $wpdb->posts POSTS
+                LEFT JOIN $wpdb->term_relationships ON (POSTS.ID = $wpdb->term_relationships.object_id)
+                INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
                 WHERE 1=1
-                  AND wp_term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
+                  AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
                   AND POSTS.post_type = 'product'
                   AND (POSTS.post_status = 'publish' OR POSTS.post_status = 'private')
                 
                 AND POSTS.ID IN (
                 
-                SELECT DISTINCT SUBPOSTS.post_parent FROM wp_posts SUBPOSTS
-                INNER JOIN wp_postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
+                INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
                 WHERE 1=1
                   AND (
                        (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
@@ -544,8 +544,8 @@ class Suppliers {
 
 			//get rebel childs:
 			$query_childs      = $wpdb->prepare( "
-                SELECT DISTINCT SUBPOSTS.ID FROM wp_posts SUBPOSTS
-                INNER JOIN wp_postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
+                INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
                 WHERE 1=1
                   AND (
                        (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
