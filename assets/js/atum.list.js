@@ -24,7 +24,6 @@
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
-		// Todo searchColumnBtn here
 		this.$atumList        = $(element);
 		this.$atumTable       = this.$atumList.find('.atum-list-table');
 		this.$editInput       = this.$atumList.find('#atum-column-edits');
@@ -103,42 +102,46 @@
             //
             // Init stickyHeaders: floatThead
             //--------------------------------
-
-            var beforeHeaderHeight = $("#wpadminbar").height(),
-                actualHeaderHeight = beforeHeaderHeight;
+			
+			var $adminBar    = $('#wpadminbar'),
+			    headerHeight = $adminBar.height();
 
             //fired when the sticky header has to be floated, or not.
-            this.$atumTable.on("floatThead", function(e, isFloated, $floatContainer){
-                if(isFloated){
-                	//hide searchDropdown on sticky
-                    if(self.settings.searchDropdown === 'yes'){
-                    	// console.log("hide on sticky");
-                        $('#search_column_dropdown').hide();
-                    }
-
-                    actualHeaderHeight = $("#wpadminbar").height();
-					//Hide on mobile view
-                    if ($("#wpadminbar").css("position") == "absolute" ){
-                        //console.log("wpadminbar is absolute, so, it has to be the mobile size (<600 width)");
-                        $floatContainer.css('display', 'none');
-                    }
-                    else{
-                        // console.log("wpadminbar not absolute, so, its on the normal admin bar");
-                        $floatContainer.css('display', 'block');
-                    }
-					//console.log("floated");
-                } else {
-                    // console.log("unfloated");
-                }
+            this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
+	
+	            if (isFloated) {
+	            	
+		            $floatContainer.css('height', 'auto');
+	            	
+		            // Hide searchDropdown on sticky
+		            if (self.settings.searchDropdown === 'yes') {
+			            $('#search_column_dropdown').hide();
+		            }
+		
+		            headerHeight = $adminBar.height();
+		
+		            // Hide on mobile view
+		            if ($adminBar.css('position') == 'absolute') {
+			            $floatContainer.hide();
+		            }
+		            else {
+			            $floatContainer.show();
+		            }
+		
+	            }
+	            else {
+		            $floatContainer.css('height', 0);
+	            }
             });
-
-            this.$atumTable.floatThead({
-                responsiveContainer: function ($table) {
-                    return $table.closest('.jspContainer');
-                },
-                position: 'absolute',
-				top: actualHeaderHeight
-            });
+			
+			this.$atumTable.floatThead({
+				responsiveContainer: function ($table) {
+					return $table.closest('.jspContainer');
+				},
+				position           : 'absolute',
+				top                : headerHeight,
+				autoReflow         : true
+			});
 			
 			//
 			// Setup the URL navaigation
@@ -152,23 +155,8 @@
 			
 			$(window).resize(function() {
 				
-				if (self.$scrollPane && self.$scrollPane.length) {
-					
-					var vwWidth        = $(this).width(),
-					    isJsPaneActive = typeof self.$scrollPane.data('jsp') !== 'undefined';
-					
-					// On mobile version, we don't need scrollbars
-					if (vwWidth < 782 && isJsPaneActive) {
-						self.jScrollApi.destroy();
-					}
-					// Instantiate the JScrollPane again if was removed while resizing the window
-					else if (vwWidth >= 782 && !isJsPaneActive) {
-						self.addScrollBar();
-					}
-					// Reinitialize to adapt to the screen width
-					else if (isJsPaneActive) {
-						self.jScrollApi.reinitialise();
-					}
+				if (self.$scrollPane && self.$scrollPane.length && typeof self.$scrollPane.data('jsp') !== 'undefined') {
+					self.jScrollApi.reinitialise();
 				}
 				
 			}).resize();
@@ -256,8 +244,6 @@
             var pseudoKeyUpAjax = (function () {
                 return function (callback, searchColumnBtnVal, searchInputVal, e) {
 
-                    // console.log("searchColumnBtnVal("+searchColumnBtnVal+") searchInputVal("+searchInputVal+")");
-
                     if (searchInputVal.length == 0) {
 
                         if (searchInputVal != $.address.parameter('s')) {
@@ -265,24 +251,35 @@
                             $.address.parameter('search_column', '');
                             self.updateHash(); // force clean search
                         }
-                    } else {
-                        if (searchColumnBtnVal.length > 0) {
-                            // console.log("searchColumnBtnVal.length:"+searchColumnBtnVal.length);
-                            $.address.parameter('s', searchInputVal);
-                            $.address.parameter('search_column', searchColumnBtnVal);
-                            self.updateHash();
-                        }
                     }
+                    else if (searchColumnBtnVal.length > 0) {
+                        $.address.parameter('s', searchInputVal);
+                        $.address.parameter('search_column', searchColumnBtnVal);
+                        self.updateHash();
+                    }
+                    
                 };
             })();
 
-            self.$searchColumnBtn.bind('setHtmlAndDataValue',function(event, value, html) {
-                $(this).html( html );
-                $(this).data( 'value' , value );
+            //
+			// functions to set $searchColumnBtn data-value and html content
+			// TODO: searchColumnBtn as an independent component?
+            self.$searchColumnBtn.bind('setHtmlAndDataValue', function (event, value, html) {
+                $(this).html(html);
+                $(this).data('value', value);
+
+                $('#search_column_dropdown>a.active').removeClass('active');
+                $('#search_column_dropdown>a').filterByData('value', value).addClass('active');
+
             });
-            self.$searchColumnBtn.bind('setDataValue',function(event, value) {
-                $(this).data( 'value' , value );
+
+            self.$searchColumnBtn.bind('setDataValue', function (event, value) {
+                $(this).data('value', value);
+
+                $('#search_column_dropdown>a.active').removeClass('active');
+                $('#search_column_dropdown>a').filterByData('value', value).addClass('active');
             });
+
 
             //TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
@@ -347,8 +344,6 @@
 
                     var searchColumnBtnVal = self.$searchColumnBtn.data('value');
 
-                    //console.log("this.$searchInput.bind('input' $searchInput " +$(this).val()+ "  searchColumnBtnVal:" + searchColumnBtnVal);
-
                     if ($(this).val().length == 0) {
                         $('.search-submit').prop("disabled", true);
 
@@ -357,7 +352,9 @@
                             $.address.parameter('search_column', '');
                             self.updateHash(); // force clean search
                         }
-                    } else {
+                    }
+                    //TODO Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
+                    else {
                         if (searchColumnBtnVal.length > 0) {
                             $('.search-submit').prop("disabled", false);
                         }
@@ -370,18 +367,16 @@
                 if (this.settings.searchDropdown === 'yes') {
                     this.$searchColumnBtn.on('search_column_data_changed', function (e) {
 
-                        // console.log("on('search_column_data_changed'");
-
                         var searchInputVal = self.$searchInput.val();
                         var searchColumnBtnVal = self.$searchColumnBtn.data('value');
 
                         if (searchInputVal.length > 0) {
-                            // console.log("keyup search_column_data_changed");
                             $.address.parameter('s', searchInputVal);
                             $.address.parameter('search_column', searchColumnBtnVal);
                             self.keyUp(e);
-                        } else {
-                            //force clean s when required
+                        }
+                        // Force clean s when required
+                        else {
                             $.address.parameter('s', '');
                             $.address.parameter('search_column', '');
                         }
@@ -390,16 +385,11 @@
 
 
                 this.$atumList.on('click', '.search-category, .search-submit', function () {
-                    // console.log('click .search-category, .search-submit');
 
-                    var searchInputVal = self.$searchInput.val();
-                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
-
-                    if (searchColumnBtnVal.length == 0) {
-                        $('.search-submit').prop("disabled", true);
-                    } else {
-                        $('.search-submit').prop("disabled", false);
-                    }
+                    var searchInputVal = self.$searchInput.val(),
+                        searchColumnBtnVal = self.$searchColumnBtn.data('value');
+	
+	                $('.search-submit').prop('disabled', searchColumnBtnVal.length === 0 ? true : false);
 
                     if (searchInputVal.length > 0) {
                         $.address.parameter('s', self.$searchInput.val());
@@ -407,9 +397,9 @@
 
                         self.updateHash();
 
-                    } else {
-
-                        //force clean s when required
+                    }
+                    // Force clean s when required
+                    else {
                         $.address.parameter('s', '');
                         $.address.parameter('search_column', '');
                         self.updateHash();
@@ -608,9 +598,8 @@
                     if (optionVal != 'thumb') {
                         $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
 
-                        //most probably, we are on init and ?search_column has a value.
+                        //most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
                         if ($.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
-
                             self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
                         }
                     }
@@ -630,9 +619,13 @@
                 self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
 
                 $(this).parents().find('.dropdown-menu').hide();
+                $('#search_column_dropdown>a.active').removeClass('active');
+                $(this).addClass('active');
+
                 if ($.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1) {
                     $('.atum-post-search').attr('type', 'number');
-                } else {
+                }
+                else {
                     $('.atum-post-search').attr('type', 'text');
                 }
 
@@ -665,18 +658,13 @@
 			$.address.externalChange(function(event) {
 
                 if (self.settings.ajaxFilter != 'yes') {
-                	//Force enabled or disabled search button.
+                	// Force enabled or disabled search button
                     var searchInputVal = self.$searchInput.val();
-                    if (searchInputVal.length > 0) {
-                        $('.search-submit').prop("disabled", false);
-                    } else {
-                        $('.search-submit').prop("disabled", true);
-                    }
+	                $('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true);
                 }
 
 				var numCurrentParams = $.address.parameterNames().length;
 				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
-                    // console.log("$.address.externalChange numCurrentParams("+ numCurrentParams +") || self.numHashParameters("+ self.numHashParameters +") !== numCurrentParams("+ numCurrentParams +")");
 					self.update();
 				}
 				
@@ -703,13 +691,13 @@
                             if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
 
                                 if (optionVal != 'thumb' && optionVal == search_column) {
-                                    self.$searchColumnBtn.html($(this).parent().text() + ' <span class="caret"></span>');
-                                    self.$searchColumnBtn.data('value', optionVal);
+                                    self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
                                     return false;
                                 }
                             }
                         });
                     }
+
 
                     self.update();
 					
@@ -1179,7 +1167,6 @@
 		 * Update the URL hash with the current filters
 		 */
 		updateHash: function () {
-			// console.log ("updateHash method");
 
 			var self = this;
 			
@@ -1234,13 +1221,10 @@
 		 * Send the ajax call and replace table parts with updated version
 		 */
 		update: function () {
-
-			//console.log("update method");
 			
 			var self = this;
 			
 			if (this.doingAjax && this.doingAjax.readyState !== 4) {
-				// console.log( "doingAjax.abort" );
 				this.doingAjax.abort();
 			}
 			
@@ -1332,9 +1316,6 @@
 					
 				},
 				error     : function (error) {
-					//console.error(error);
-					// console.log(self.filterData);
-
 					self.removeOverlay();
 				}
 			});

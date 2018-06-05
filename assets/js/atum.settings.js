@@ -48,6 +48,9 @@
 			// Enable switchers
 			this.doSwitchers();
 			
+			// Enable Select2
+			this.doSelect2();
+			
 			// Restore enhanced selects
 			this.restoreEnhancedSelects();
 			
@@ -57,28 +60,51 @@
 					$(this).addClass('dirty');
 				}
 			})
+			
 			// Remove the dirty mark if the user tries to save
 			.on('click', 'input[type=submit]', function() {
 				self.$form.find('.dirty').removeClass('dirty');
 			})
+			
 			// Script Runner fields
 			.on('click', '.script-runner button', function() {
 				self.runScript($(this));
 			})
-			// Manage Shipping address switch
-			.on('change','#atum_same_ship_address', function() {
+			
+			// Field dependencies
+			.on('change','[data-dependency]', function() {
 				
-				var $shippingSection = $('#atum_setting_shipping');
+				var $field     = $(this),
+				    value      = $field.val(),
+					dependency = $field.data('dependency'),
+					visibility,
+				    $dependant;
 				
-				if ( this.checked ) {
-					$shippingSection.slideUp();
+				if ($field.is(':checkbox')) {
+					visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
 				}
 				else {
-					$shippingSection.slideDown();
+					visibility = value === dependency.value;
+				}
+				
+				if (dependency.hasOwnProperty('section')) {
+					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
+				}
+				
+				if ($dependant.length) {
+					
+					if (visibility === true) {
+						$dependant.slideDown('fast');
+					}
+					else {
+						$dependant.slideUp('fast');
+					}
+					
 				}
 				
 			})
-			.find('#atum_same_ship_address').change().removeClass('dirty');
+			
+			.find('[data-dependency]').change().removeClass('dirty');
 			
 			// Before unload alert
 			$(window).bind('beforeunload', function() {
@@ -113,7 +139,13 @@
 			});
 			
 		},
-		doNiceSelects: function() {
+		doSelect2: function() {
+		
+			if (typeof $.fn.select2 === 'function') {
+				$('.atum-select2').select2({
+					minimumResultsForSearch: 20
+				});
+			}
 		
 		},
 		restoreEnhancedSelects: function() {
@@ -199,8 +231,10 @@
 			this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				
 				self.doSwitchers();
+				self.doSelect2();
 				self.restoreEnhancedSelects();
-				self.$form.show().find('#atum_same_ship_address').change().removeClass('dirty');
+				self.$form.find('[data-dependency]').change().removeClass('dirty');
+				self.$form.show();
 				
 				var $inputButton = self.$form.find('input:submit');
 				

@@ -2632,7 +2632,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Prevent keyUp problems (scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url))
-		if ( empty( $_REQUEST['s'] ) ) {
+		if ( strlen( $_REQUEST['s'] ) == 0 ) {
 			return "AND ( 1 = 1 )";
 		}
 
@@ -2751,6 +2751,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
+					//get products with that supplier
 					$query = "
 						SELECT pm.post_id FROM $wpdb->posts p
 						LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.meta_value)
@@ -2768,6 +2769,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					$search_terms_ids_str = '';
 
 					// Has children? add them
+                    /*
 					foreach ( $search_terms_ids AS $search_terms_id ) {
 
 						$search_terms_ids_str .= $search_terms_id['post_id'] . ",";
@@ -2784,7 +2786,28 @@ abstract class AtumListTable extends \WP_List_Table {
 							}
 						}
 
+					} */
+
+					$search_terms_ids_arr = array();
+
+					foreach ( $search_terms_ids as $product ) {
+
+						if ( $product['post_type'] == 'product' ) {
+							array_push( $search_terms_ids_arr, $product['ID'] );
+						}
+						// Add parent and current
+						else {
+							array_push( $search_terms_ids_arr, $product['ID'] );
+							array_push( $search_terms_ids_arr, $product['post_parent'] );
+						}
 					}
+
+					$search_terms_ids_arr = array_unique( $search_terms_ids_arr );
+					$search_terms_ids_str = implode( ',', $search_terms_ids_arr );
+
+					$where = "AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
+
+
 
 					// removes last ,
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
@@ -2965,6 +2988,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		// jquery.floatThead
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'jquery.floatThead' );
+
+		// jquery.filterbydata
+		wp_register_script( 'jquery.filterbydata', ATUM_URL . 'assets/js/vendor/jquery.filterbydata.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+		wp_enqueue_script( 'jquery.filterbydata' );
 
 		// jScrollPane
 		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );

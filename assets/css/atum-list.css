@@ -256,41 +256,6 @@
   bottom: -10px;
 }
 
-.atum-list-table .popover .popover-content {
-  text-align: center;
-}
-
-.popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
-  display: inline-block;
-  vertical-align: middle;
-  height: 30px;
-  font-size: 14px;
-}
-
-.popover .popover-content > input[type=number], .popover .popover-content > input[type=text] {
-  width: 75%;
-  text-align: center;
-  border-radius: 3px;
-}
-
-.popover .popover-content > .button {
-  margin-left: 3px;
-}
-
-.popover .popover-content > .button:disabled {
-  color: #f8f9fa !important;
-  opacity: 0.6;
-}
-
-.popover.with-meta .popover-content input, .popover.with-meta .popover-content button {
-  width: 100%;
-  margin: 3px 0;
-}
-
-.popover.with-meta .popover-content hr {
-  border-color: #E3E8F5;
-}
-
 .swal2-container {
   z-index: 100000000;
 }
@@ -1867,21 +1832,47 @@ input[type="button"].btn-block {
   color: #212529;
 }
 
-h1.wp-heading-inline {
+.wrap h1.wp-heading-inline {
   line-height: 1.5;
   position: relative;
 }
 
-h1.wp-heading-inline #atum-update-list {
+.wrap h1.wp-heading-inline #atum-update-list {
   margin-left: 5px;
   border-radius: 0;
   vertical-align: middle;
 }
 
-h1.wp-heading-inline #atum-update-list:active {
+.wrap h1.wp-heading-inline #atum-update-list:active {
   color: #fff;
   padding: 0 10px 1px;
   box-shadow: 0 1px 0 #0073AA;
+}
+
+@media all and (max-width: 782px) {
+  .wrap h1.wp-heading-inline {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+  }
+  .wrap h1.wp-heading-inline a, .wrap h1.wp-heading-inline button {
+    width: 100%;
+    text-align: center;
+    padding: 7px 15px;
+    margin-top: 5px;
+    height: auto;
+    line-height: 1.3;
+  }
 }
 
 .atum-list-wrapper {
@@ -1904,6 +1895,11 @@ h1.wp-heading-inline #atum-update-list:active {
   float: right;
   margin-right: 3px;
   margin-bottom: 3px;
+}
+
+.atum-list-wrapper .search-box #search_column_btn {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
 }
 
 .atum-list-wrapper .search-box .atum-post-search {
@@ -2021,6 +2017,44 @@ h1.wp-heading-inline #atum-update-list:active {
 
 .atum-list-wrapper .actions .dropdown_extra_filter {
   max-width: 160px;
+}
+
+.atum-list-wrapper .floatThead-container {
+  height: 0;
+}
+
+@media screen and (max-width: 782px) {
+  .atum-list-wrapper ul.subsubsub {
+    font-size: 14px;
+    float: none;
+  }
+  .atum-list-wrapper .search-box {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    float: none;
+    margin: auto;
+    width: 90%;
+  }
+  .atum-list-wrapper .search-box input[type="text"], .atum-list-wrapper .search-box input[type="number"], .atum-list-wrapper .search-box button {
+    height: 36px;
+  }
+  .atum-list-wrapper .actions.bulkactions {
+    display: block;
+    text-align: center;
+    float: none;
+  }
+  .atum-list-wrapper .actions.bulkactions select {
+    width: 90%;
+    max-width: 90%;
+    float: none;
+    display: block;
+    margin: auto;
+  }
+  .atum-list-wrapper .tablenav.top .bulkactions {
+    margin-bottom: 15px;
+  }
 }
 
 .select2-dropdown .select2-results__option:focus {
@@ -2408,26 +2442,25 @@ h1.wp-heading-inline #atum-update-list:active {
 }
 
 @media screen and (max-width: 782px) {
-  .atum-list-table .column-groups {
-    display: none;
+  .atum-list-table th, .atum-list-table td {
+    display: table-cell !important;
+    padding: 6px 5px !important;
   }
-  .atum-list-table .column-thumb {
-    display: none;
+  .atum-list-table th.check-column input[type="checkbox"], .atum-list-table td.check-column input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
   }
-  .atum-list-table .column-thumb:before {
+  .atum-list-table th.check-column input[type="checkbox"]:before, .atum-list-table td.check-column input[type="checkbox"]:before {
+    margin: -5px -8px;
+  }
+  .atum-list-table th.column-primary {
+    width: auto !important;
+  }
+  .atum-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
     content: none;
   }
-  .atum-list-table tr:not(.inline-edit-row):not(.no-items) td.column-thumb:not(.column-primary)::before {
-    content: none;
-  }
-  .atum-list-table .tips {
+  .atum-list-table .column-primary .toggle-row {
     display: none;
-  }
-  .atum-list-table .atum-title-small {
-    display: block;
-  }
-  .atum-list-table td.thumb.column-thumb {
-    text-align: left;
   }
 }
 
@@ -2487,6 +2520,51 @@ h1.wp-heading-inline #atum-update-list:active {
   text-transform: none;
   -webkit-font-smoothing: antialiased;
   left: 0;
+}
+
+.atum-list-table .popover .popover-content {
+  text-align: center;
+}
+
+.popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
+  display: inline-block;
+  vertical-align: middle;
+  height: 30px;
+  font-size: 14px;
+}
+
+.popover .popover-content > input[type=number], .popover .popover-content > input[type=text] {
+  width: 75%;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.popover .popover-content > .button {
+  margin-left: 3px;
+}
+
+.popover .popover-content > .button:disabled {
+  color: #f8f9fa !important;
+  opacity: 0.6;
+}
+
+@media all and (max-width: 768px) {
+  .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
+    width: 100%;
+  }
+  .popover .popover-content > .button {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}
+
+.popover.with-meta .popover-content input, .popover.with-meta .popover-content button {
+  width: 100%;
+  margin: 3px 0;
+}
+
+.popover.with-meta .popover-content hr {
+  border-color: #E3E8F5;
 }
 
 /*# sourceMappingURL=atum-list.css.map */
