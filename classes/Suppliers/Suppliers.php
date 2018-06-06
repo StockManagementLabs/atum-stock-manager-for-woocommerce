@@ -473,11 +473,17 @@ class Suppliers {
 	 */
 	public static function get_supplier_products( $supplier_id, $fields = '', $post_type = ['product', 'product_variation'] ) {
 
-		$supplier = get_post($supplier_id);
+		global $wpdb;
+
+		$supplier = get_post( $supplier_id );
 
 		if ($supplier->post_type == self::POST_TYPE) {
 
-			$args = array(
+			// SC fathers default taxonomies and ready to override to MC (or others) requirements
+			$product_taxonomies     = apply_filters( 'atum/suppliers/suppliers_products_taxonomies', Globals::get_product_types() );
+			$product_taxonomies_ids = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
+
+			$default_args = array(
 				'post_type'      => $post_type,
 				'posts_per_page' => - 1,
 				'fields'         => $fields,
@@ -486,10 +492,65 @@ class Suppliers {
 						'key'   => '_supplier',
 						'value' => $supplier_id
 					)
+				),
+				'tax_query'      => array(
+					'relation' => 'AND',
+					array(
+						'taxonomy' => 'product_type',
+						'field'    => 'id',
+						'terms'    => $product_taxonomies_ids
+					)
 				)
 			);
 
-			return apply_filters( 'atum/suppliers/products', get_posts($args), $supplier );
+			//Let others play
+			$extra_args = apply_filters('atum/suppliers/suppliers_products_extra_args', array());
+			$args = $default_args + $extra_args;
+
+			// FATHERS IDS!
+			$return_value = apply_filters( 'atum/suppliers/products', get_posts( $args ), $supplier );
+			//$parents_ids  = array();
+			$childs_ids   = array();
+
+
+			//TODO $wpdb->term_relationships.term_taxonomy in childs to do this faster
+
+			//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
+			$query_parents = $wpdb->prepare( "
+				SELECT DISTINCT POSTS.ID FROM $wpdb->posts POSTS
+                LEFT JOIN $wpdb->term_relationships ON (POSTS.ID = $wpdb->term_relationships.object_id)
+                INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
+                WHERE POSTS.post_type = 'product'
+                  AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
+                  AND POSTS.post_status IN ('publish', 'private')
+                
+                  AND POSTS.ID IN (
+                
+                    SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
+                    INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                    WHERE SUBPOSTS.post_type = 'product_variation'
+                      AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
+                      AND SUBPOSTS.post_status IN ('publish', 'private')
+                  )", $supplier_id );
+
+			$parents_ids = $wpdb->get_col( $query_parents );
+
+			if(!empty($parents_ids)){
+				//get rebel childs:
+				$query_childs = $wpdb->prepare( "
+                SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
+                INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                WHERE SUBPOSTS.post_type = 'product_variation'
+                  AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
+                  AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
+                  AND SUBPOSTS.post_status IN ('publish', 'private')", $supplier_id );
+
+				$childs_ids = $wpdb->get_col( $query_childs );
+            }
+
+
+
+			return array_merge( $return_value, $parents_ids, $childs_ids );
 
 		}
 

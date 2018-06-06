@@ -352,7 +352,9 @@
                             $.address.parameter('search_column', '');
                             self.updateHash(); // force clean search
                         }
-                    } else {
+                    }
+                    //TODO Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
+                    else {
                         if (searchColumnBtnVal.length > 0) {
                             $('.search-submit').prop("disabled", false);
                         }

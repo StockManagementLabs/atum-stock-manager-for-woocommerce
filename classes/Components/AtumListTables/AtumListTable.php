@@ -1603,7 +1603,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['orderby'] = $_REQUEST['orderby'];
 			}
 
-		}
+		}else{
+		    //TODO 1598179 order by
+			$args['orderby'] = 'menu_order';
+			$args['order']   = 'ASC';
+        }
 
 		/*
 		 * Searching
@@ -1689,6 +1693,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		$this->items = apply_filters( 'atum/list_table/items', $products );
 
+		//TODO 1598179 here is where we order all the fathers
 		$this->set_pagination_args( array(
 			'total_items' => $found_posts,
 			'per_page'    => $this->per_page,
@@ -2632,7 +2637,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Prevent keyUp problems (scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url))
-		if ( empty( $_REQUEST['s'] ) ) {
+		if ( strlen( $_REQUEST['s'] ) == 0 ) {
 			return "AND ( 1 = 1 )";
 		}
 
@@ -2692,7 +2697,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Sanitize inputs
 			$term = $wpdb->esc_like( strtolower( sanitize_text_field( $_REQUEST['s'] ) ) );
 
-			// TODO static searchables stills empty at this point, so, we use a global var with all the stuff that can be searched in all addons
 			if ( Helpers::in_multi_array( $search_column, Globals::SEARCHABLE_COLUMNS ) ) {
 
 				// Case B # search in IDs
@@ -2708,7 +2712,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					// Get all (parent and variations, and build where)
 					$query = $wpdb->prepare( "
 						SELECT ID, post_type, post_parent FROM $wpdb->posts
-					    WHERE ID = %d
+					    WHERE ID = %d ORDER by menu_order ASC
 				    ", $term );
 
 					$search_term_id = $wpdb->get_row( $query );
@@ -2751,45 +2755,86 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
-					$query = "
-						SELECT pm.post_id FROM $wpdb->posts p
-						LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.meta_value)
-						WHERE pm.meta_key = '_supplier'  
-						AND p.post_type = '" . Suppliers::POST_TYPE . "'
-						AND ( lower(p.post_title) LIKE '%{$term}%' )
-				    ";
+					//get suppliers
+					$query ="
+						SELECT p.ID FROM $wpdb->posts p
+					    WHERE p.post_type = '" . Suppliers::POST_TYPE . "' AND p.post_title LIKE '%%{$term}%%'";
 
-					$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
+					$search_suppliers_ids = $wpdb->get_col( $query );
 
-					if ( count( $search_terms_ids ) == 0 ) {
+					if ( empty( $search_suppliers_ids ) ) {
 						return $where_without_results;
 					}
 
-					$search_terms_ids_str = '';
+					$product_taxonomies     = apply_filters( 'atum/list_table/product_search_taxonomies', Globals::get_product_types() );
+					$product_taxonomies_ids = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
 
-					// Has children? add them
-					foreach ( $search_terms_ids AS $search_terms_id ) {
+					$args = array(
+						'post_type'      => ['product', 'product_variation'],
+						'posts_per_page' => - 1,
+						'fields'         => 'ids',
+						'meta_query'     => array(
+							array(
+								'key'   => '_supplier',
+								'value' => $search_suppliers_ids,
+								'compare' => 'IN'
+							)
+						),
+						'tax_query'      => array(
+							'relation' => 'AND',
+							array(
+								'taxonomy' => 'product_type',
+								'field'    => 'id',
+								'terms'    => $product_taxonomies_ids
+							)
+						)
+					);
 
-						$search_terms_ids_str .= $search_terms_id['post_id'] . ",";
-						$product              = wc_get_product( $search_terms_id['post_id'] );
+					$fathers = get_posts( $args );
+					$fathers = Helpers::flat_multidimensional_array_absint( $fathers );
+					//$parents_ids  = array();
+					$childs_ids   = array();
 
-						if ( $product ) {
-							// return array of the children IDs if applicable
-							$children = $product->get_children();
+					//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
+					$query_parents = "
+                        SELECT DISTINCT POSTS.ID FROM $wpdb->posts POSTS
+                        LEFT JOIN $wpdb->term_relationships ON (POSTS.ID = $wpdb->term_relationships.object_id)
+                        INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
+                        WHERE POSTS.post_type = 'product'
+                          AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
+                          AND POSTS.post_status IN ('publish', 'private')
+                        
+                          AND POSTS.ID IN (
+                        
+                            SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
+                            INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                            WHERE SUBPOSTS.post_type = 'product_variation'
+                              AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
+                              AND SUBPOSTS.post_status IN ('publish', 'private')
+                          )";
 
-							if ( ! empty( $children ) ) {
-								foreach ( $children as $child ) {
-									$search_terms_ids_str .= $child . ',';
-								}
-							}
-						}
+					$parents_ids = $wpdb->get_col( $query_parents );
 
+					if(!empty($parents_ids)) {
+
+						//get rebel childs:
+						$query_childs = "
+                        SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
+                        INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                        WHERE SUBPOSTS.post_type = 'product_variation'
+                          AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
+                          AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
+                          AND SUBPOSTS.post_status IN ('publish', 'private')";
+
+						$childs_ids = $wpdb->get_col( $query_childs );
 					}
 
-					// removes last ,
-					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
 
-					$where = "AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
+					$products_to_show = array_merge( $fathers, $parents_ids, $childs_ids );
+
+					//die(var_dump($products_to_show));
+
+                    $where = "AND ( $wpdb->posts.ID IN ( " . implode( ',', $products_to_show ) . " ))";
 
                 }
 				//  # case C and Ds # (post title and other meta fields)
@@ -3074,11 +3119,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
 		// Get the published Variables first
+        //TODO 1598179 order by menu_order ?
 		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
+			'orderby'       => 'menu_order',
+			'order'       => 'ASC',
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'product_type',
@@ -3110,13 +3158,16 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 			}
 
+			//TODO 1598179 order by menu_order ?
 			$children_args = array(
 				'post_type'       => $post_type,
 				'post_status'     => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'posts_per_page'  => - 1,
 				'post_parent__in' => $parents->posts,
-				'orderby'         => 'title',
-				'order'           => 'ASC'
+				//'orderby'         => 'title',
+				//'order'           => 'ASC'
+                'orderby'       => 'menu_order',
+			    'order'       => 'ASC',
 			);
 
 			/*
