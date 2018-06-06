@@ -149,7 +149,7 @@ class DataExport {
 
 		// Landscape or Portrait format
 		$max_columns = (int) apply_filters('atum/data_export/max_portrait_cols', 12);
-		$format = $this->number_columns > $max_columns ? 'L' : 'A4';
+		$format = $this->number_columns > $max_columns ? 'A4-L' : 'A4';
 		$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => $format ]);
 
 
