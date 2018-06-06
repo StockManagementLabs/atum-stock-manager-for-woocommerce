@@ -90,8 +90,34 @@
 				if (dependency.hasOwnProperty('section')) {
 					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
 				}
+				else if (dependency.hasOwnProperty('field')) {
+					
+					var selector = '';
+					
+					if ($.isArray(dependency.field)) {
+						
+						$.each(dependency.field, function(index, value) {
+							selector += '#' + value;
+							
+							if (dependency.field.length - 1 < index) {
+								selector += ','
+							}
+						});
+						
+					}
+					else {
+						selector = '#' + dependency.field;
+					}
+					
+					$dependant = $(selector);
+					
+					if ($dependant.length) {
+						$dependant = $dependant.closest('tr').find('th, td');
+					}
+					
+				}
 				
-				if ($dependant.length) {
+				if (typeof $dependant !== 'undefined' && $dependant.length) {
 					
 					if (visibility === true) {
 						$dependant.slideDown('fast');
