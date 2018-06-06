@@ -2712,7 +2712,8 @@ abstract class AtumListTable extends \WP_List_Table {
 					// Get all (parent and variations, and build where)
 					$query = $wpdb->prepare( "
 						SELECT ID, post_type, post_parent FROM $wpdb->posts
-					    WHERE ID = %d ORDER by menu_order ASC
+					    WHERE ID = %d
+					    AND post_type IN ('product', 'product_variation')
 				    ", $term );
 
 					$search_term_id = $wpdb->get_row( $query );
@@ -2851,7 +2852,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$query = "
 							SELECT ID, post_type, post_parent FROM $wpdb->posts
-					        WHERE lower(post_title) LIKE '%{$term}%'
+					        WHERE lower(post_title) LIKE '%{$term}%' 
+					        AND post_type IN ('product', 'product_variation')	
 				         ";
 
 					}
@@ -2919,7 +2921,6 @@ abstract class AtumListTable extends \WP_List_Table {
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
 
 					$where = "AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
-
 				}
 
 			}
