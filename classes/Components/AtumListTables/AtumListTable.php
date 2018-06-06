@@ -2756,9 +2756,11 @@ abstract class AtumListTable extends \WP_List_Table {
 						SELECT p.ID FROM $wpdb->posts p
 					    WHERE p.post_type = '" . Suppliers::POST_TYPE . "' AND p.post_title LIKE '%%{$term}%%'";
 
-					$search_suppliers_ids = $wpdb->get_results( $query, ARRAY_A );
-					$search_suppliers_ids = Helpers::flat_multidimensional_array_absint($search_suppliers_ids);
+					$search_suppliers_ids = $wpdb->get_col( $query );
 
+					if ( empty( $search_suppliers_ids ) ) {
+						return $where_without_results;
+					}
 
 					$product_taxonomies     = apply_filters( 'atum/list_table/product_search_taxonomies', Globals::get_product_types() );
 					$product_taxonomies_ids = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
@@ -2786,6 +2788,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$fathers = get_posts( $args );
 					$fathers = Helpers::flat_multidimensional_array_absint( $fathers );
+					//$parents_ids  = array();
+					$childs_ids   = array();
 
 					//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
 					$query_parents = "
@@ -2794,7 +2798,7 @@ abstract class AtumListTable extends \WP_List_Table {
                         INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
                         WHERE POSTS.post_type = 'product'
                           AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
-                          AND (POSTS.post_status = 'publish' OR POSTS.post_status = 'private')
+                          AND POSTS.post_status IN ('publish', 'private')
                         
                           AND POSTS.ID IN (
                         
@@ -2802,23 +2806,24 @@ abstract class AtumListTable extends \WP_List_Table {
                             INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
                             WHERE SUBPOSTS.post_type = 'product_variation'
                               AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
-                              AND (SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private')
+                              AND SUBPOSTS.post_status IN ('publish', 'private')
                           )";
 
-					$search_parents_ids = $wpdb->get_results( $query_parents, ARRAY_A );
-					$parents_ids = Helpers::flat_multidimensional_array_absint( $search_parents_ids );
+					$parents_ids = $wpdb->get_col( $query_parents );
 
-					//get rebel childs:
-					$query_childs ="
+					if(!empty($parents_ids)) {
+
+						//get rebel childs:
+						$query_childs = "
                         SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
                         INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
                         WHERE SUBPOSTS.post_type = 'product_variation'
                           AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
                           AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
-                          AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private'))";
+                          AND SUBPOSTS.post_status IN ('publish', 'private')";
 
-					$search_childs_ids = $wpdb->get_results( $query_childs, ARRAY_A );
-					$childs_ids = Helpers::flat_multidimensional_array_absint( $search_childs_ids );
+						$childs_ids = $wpdb->get_col( $query_childs );
+					}
 
 
 					$products_to_show = array_merge( $fathers, $parents_ids, $childs_ids );

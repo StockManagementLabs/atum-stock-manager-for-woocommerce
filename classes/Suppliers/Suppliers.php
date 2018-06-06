@@ -509,9 +509,11 @@ class Suppliers {
 
 			// FATHERS IDS!
 			$return_value = apply_filters( 'atum/suppliers/products', get_posts( $args ), $supplier );
+			//$parents_ids  = array();
+			$childs_ids   = array();
 
 
-			//TODO do anotther search to get children and force fathers for a given supplier on SC-MC
+			//TODO $wpdb->term_relationships.term_taxonomy in childs to do this faster
 
 			//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
 			$query_parents = $wpdb->prepare( "
@@ -520,7 +522,7 @@ class Suppliers {
                 INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
                 WHERE POSTS.post_type = 'product'
                   AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
-                  AND (POSTS.post_status = 'publish' OR POSTS.post_status = 'private')
+                  AND POSTS.post_status IN ('publish', 'private')
                 
                   AND POSTS.ID IN (
                 
@@ -528,32 +530,25 @@ class Suppliers {
                     INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
                     WHERE SUBPOSTS.post_type = 'product_variation'
                       AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
-                      AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private'))
+                      AND SUBPOSTS.post_status IN ('publish', 'private')
                   )", $supplier_id );
 
-			$search_parents_ids = $wpdb->get_results( $query_parents, ARRAY_A );
+			$parents_ids = $wpdb->get_col( $query_parents );
 
-			$parents_ids = array();
-			//flat array:
-			array_walk_recursive( $search_parents_ids, function ( $v, $k ) use ( &$parents_ids ) {
-				$parents_ids[] = absint( $v );
-			} );
-
-			//get rebel childs:
-			$query_childs = $wpdb->prepare( "
+			if(!empty($parents_ids)){
+				//get rebel childs:
+				$query_childs = $wpdb->prepare( "
                 SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
                 INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
                 WHERE SUBPOSTS.post_type = 'product_variation'
                   AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
                   AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
-                  AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private'))", $supplier_id );
+                  AND SUBPOSTS.post_status IN ('publish', 'private')", $supplier_id );
 
-			$search_childs_ids = $wpdb->get_results( $query_childs, ARRAY_A );
+				$childs_ids = $wpdb->get_col( $query_childs );
+            }
 
-			$childs_ids = array();
-			array_walk_recursive( $search_childs_ids, function ( $v, $k ) use ( &$childs_ids ) {
-				$childs_ids[] = absint( $v );
-			} );
+
 
 			return array_merge( $return_value, $parents_ids, $childs_ids );
 
