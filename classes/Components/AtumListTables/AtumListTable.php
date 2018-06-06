@@ -2870,7 +2870,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
 						    WHERE pm.meta_key = %s
 						    AND p.post_type IN ('product', 'product_variation')
-						    AND ( lower(pm.meta_value) LIKE '{$term}%%' )
+						    AND pm.meta_value = $term
 					    ", $search_column );
 
 					}
