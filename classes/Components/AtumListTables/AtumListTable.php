@@ -2829,8 +2829,12 @@ abstract class AtumListTable extends \WP_List_Table {
 						$childs_ids = $wpdb->get_col( $query_childs );
 					}
 
-
 					$products_to_show = array_merge( $fathers, $parents_ids, $childs_ids );
+
+					//empty 
+					if ( empty( $products_to_show ) ) {
+						return $where_without_results;
+					}
 
 					//die(var_dump($products_to_show));
 
