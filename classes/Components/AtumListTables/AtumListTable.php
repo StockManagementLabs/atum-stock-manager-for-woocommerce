@@ -1603,7 +1603,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['orderby'] = $_REQUEST['orderby'];
 			}
 
-		}
+		}else{
+		    //TODO 1598179 order by
+			$args['orderby'] = 'menu_order';
+			$args['order']   = 'ASC';
+        }
 
 		/*
 		 * Searching
@@ -1689,6 +1693,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		$this->items = apply_filters( 'atum/list_table/items', $products );
 
+		//TODO 1598179 here is where we order all the fathers
 		$this->set_pagination_args( array(
 			'total_items' => $found_posts,
 			'per_page'    => $this->per_page,
@@ -2692,7 +2697,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Sanitize inputs
 			$term = $wpdb->esc_like( strtolower( sanitize_text_field( $_REQUEST['s'] ) ) );
 
-			// TODO static searchables stills empty at this point, so, we use a global var with all the stuff that can be searched in all addons
 			if ( Helpers::in_multi_array( $search_column, Globals::SEARCHABLE_COLUMNS ) ) {
 
 				// Case B # search in IDs
@@ -2708,7 +2712,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					// Get all (parent and variations, and build where)
 					$query = $wpdb->prepare( "
 						SELECT ID, post_type, post_parent FROM $wpdb->posts
-					    WHERE ID = %d
+					    WHERE ID = %d ORDER by menu_order ASC
 				    ", $term );
 
 					$search_term_id = $wpdb->get_row( $query );
@@ -3115,11 +3119,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
 		// Get the published Variables first
+        //TODO 1598179 order by menu_order ?
 		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
+			'orderby'       => 'menu_order',
+			'order'       => 'ASC',
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'product_type',
@@ -3151,13 +3158,16 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 			}
 
+			//TODO 1598179 order by menu_order ?
 			$children_args = array(
 				'post_type'       => $post_type,
 				'post_status'     => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'posts_per_page'  => - 1,
 				'post_parent__in' => $parents->posts,
-				'orderby'         => 'title',
-				'order'           => 'ASC'
+				//'orderby'         => 'title',
+				//'order'           => 'ASC'
+                'orderby'       => 'menu_order',
+			    'order'       => 'ASC',
 			);
 
 			/*
