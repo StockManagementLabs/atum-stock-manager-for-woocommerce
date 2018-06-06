@@ -2751,68 +2751,81 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
-					//get products with that supplier
-					$query = "
-						SELECT pm.post_id FROM $wpdb->posts p
-						LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.meta_value)
-						WHERE pm.meta_key = '_supplier'  
-						AND p.post_type = '" . Suppliers::POST_TYPE . "'
-						AND ( lower(p.post_title) LIKE '%{$term}%' )
-				    ";
+					//get suppliers
+					$query ="
+						SELECT p.ID FROM $wpdb->posts p
+					    WHERE p.post_type = '" . Suppliers::POST_TYPE . "' AND p.post_title LIKE '%%{$term}%%'";
 
-					$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
-
-					if ( count( $search_terms_ids ) == 0 ) {
-						return $where_without_results;
-					}
-
-					$search_terms_ids_str = '';
-
-					// Has children? add them
-                    /*
-					foreach ( $search_terms_ids AS $search_terms_id ) {
-
-						$search_terms_ids_str .= $search_terms_id['post_id'] . ",";
-						$product              = wc_get_product( $search_terms_id['post_id'] );
-
-						if ( $product ) {
-							// return array of the children IDs if applicable
-							$children = $product->get_children();
-
-							if ( ! empty( $children ) ) {
-								foreach ( $children as $child ) {
-									$search_terms_ids_str .= $child . ',';
-								}
-							}
-						}
-
-					} */
-
-					$search_terms_ids_arr = array();
-
-					foreach ( $search_terms_ids as $product ) {
-
-						if ( $product['post_type'] == 'product' ) {
-							array_push( $search_terms_ids_arr, $product['ID'] );
-						}
-						// Add parent and current
-						else {
-							array_push( $search_terms_ids_arr, $product['ID'] );
-							array_push( $search_terms_ids_arr, $product['post_parent'] );
-						}
-					}
-
-					$search_terms_ids_arr = array_unique( $search_terms_ids_arr );
-					$search_terms_ids_str = implode( ',', $search_terms_ids_arr );
-
-					$where = "AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
+					$search_suppliers_ids = $wpdb->get_results( $query, ARRAY_A );
+					$search_suppliers_ids = Helpers::flat_multidimensional_array_absint($search_suppliers_ids);
 
 
+					$product_taxonomies     = apply_filters( 'atum/list_table/product_search_taxonomies', Globals::get_product_types() );
+					$product_taxonomies_ids = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
 
-					// removes last ,
-					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
+					$args = array(
+						'post_type'      => ['product', 'product_variation'],
+						'posts_per_page' => - 1,
+						'fields'         => 'ids',
+						'meta_query'     => array(
+							array(
+								'key'   => '_supplier',
+								'value' => $search_suppliers_ids,
+								'compare' => 'IN'
+							)
+						),
+						'tax_query'      => array(
+							'relation' => 'AND',
+							array(
+								'taxonomy' => 'product_type',
+								'field'    => 'id',
+								'terms'    => $product_taxonomies_ids
+							)
+						)
+					);
 
-					$where = "AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
+					$fathers = get_posts( $args );
+					$fathers = Helpers::flat_multidimensional_array_absint( $fathers );
+
+					//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
+					$query_parents = "
+                        SELECT DISTINCT POSTS.ID FROM $wpdb->posts POSTS
+                        LEFT JOIN $wpdb->term_relationships ON (POSTS.ID = $wpdb->term_relationships.object_id)
+                        INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
+                        WHERE POSTS.post_type = 'product'
+                          AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
+                          AND (POSTS.post_status = 'publish' OR POSTS.post_status = 'private')
+                        
+                          AND POSTS.ID IN (
+                        
+                            SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
+                            INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                            WHERE SUBPOSTS.post_type = 'product_variation'
+                              AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
+                              AND (SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private')
+                          )";
+
+					$search_parents_ids = $wpdb->get_results( $query_parents, ARRAY_A );
+					$parents_ids = Helpers::flat_multidimensional_array_absint( $search_parents_ids );
+
+					//get rebel childs:
+					$query_childs ="
+                        SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
+                        INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
+                        WHERE SUBPOSTS.post_type = 'product_variation'
+                          AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
+                          AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
+                          AND ((SUBPOSTS.post_status = 'publish' OR SUBPOSTS.post_status = 'private'))";
+
+					$search_childs_ids = $wpdb->get_results( $query_childs, ARRAY_A );
+					$childs_ids = Helpers::flat_multidimensional_array_absint( $search_childs_ids );
+
+
+					$products_to_show = array_merge( $fathers, $parents_ids, $childs_ids );
+
+					//die(var_dump($products_to_show));
+
+                    $where = "AND ( $wpdb->posts.ID IN ( " . implode( ',', $products_to_show ) . " ))";
 
                 }
 				//  # case C and Ds # (post title and other meta fields)

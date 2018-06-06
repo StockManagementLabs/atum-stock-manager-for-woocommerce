@@ -57,7 +57,9 @@ final class Helpers {
 
 
 	/**
-	 * Flat a multidimensional array. 
+	 * Flat a multidimensional array of ids.
+     * ex:
+     * $search_suppliers_ids = $wpdb->get_results( $query_who_gets_only_ids, ARRAY_A );
 	 *
 	 * @since 1.4.8
 	 *
@@ -66,10 +68,10 @@ final class Helpers {
 	 *
 	 * @return array term_ids
 	 */
-	public static function flat_multidimensional_array( array $original ) {
+	public static function flat_multidimensional_array_absint( array $original ) {
 		$result = array();
 		array_walk_recursive( $original, function ( $v, $k ) use ( &$result ) {
-			$result[] = $v;
+			$result[] = absint($v);
 		} );
 
 		return $result;
