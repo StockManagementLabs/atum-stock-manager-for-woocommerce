@@ -14421,6 +14421,10 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 				$evenhtml .= 'text-align: left; ">' . $Harray . '</div>';
 			}
 		} elseif (is_array($Harray) && !empty($Harray)) {
+
+			// ATUM: Fixed notice of non declared variables
+			$even = $odd = array();
+
 			if ($side == 'O') {
 				$odd = $Harray;
 			} elseif ($side == 'E') {
