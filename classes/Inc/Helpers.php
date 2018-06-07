@@ -1137,9 +1137,11 @@ final class Helpers {
 
 		$current_user_id                   = get_current_user_id();
 		$user_dismissed_notices            = self::get_dismissed_notices( $current_user_id );
+		$user_dismissed_notices            = ! is_array( $user_dismissed_notices ) ? array() : $user_dismissed_notices;
 		$user_dismissed_notices[ $notice ] = 'yes';
 
 		return update_user_meta( $current_user_id, Globals::DISMISSED_NOTICES, $user_dismissed_notices );
+
 	}
 
 	/**
