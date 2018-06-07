@@ -100,7 +100,7 @@ final class Globals {
 	 * 'MC' :  'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material'  // MC/classes/inc/hooks/ -> product_type_selector($wc_product_types)
 	 * @since 1.4.8
 	 */
-	const OUT_STOCK_THRESHOLD_PRODUCT_TYPES = array('simple', 'variable', 'grouped', 'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material');
+	const OUT_STOCK_THRESHOLD_PRODUCT_TYPES = array('simple', 'variable', 'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material');
 
 
 	

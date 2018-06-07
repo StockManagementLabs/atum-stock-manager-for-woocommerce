@@ -400,30 +400,30 @@ class Hooks {
 	 */
 	public function save_out_stock_threshold_field($post_id) {
 
+
 		$product  = wc_get_product( $post_id );
 
-		if ( is_a($product, '\WC_Product') && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) ) ) {
+        // TODO all excepting grouped. Check if we can get a full list of types (OUT_STOCK_THRESHOLD_PRODUCT_TYPES ???)
+		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), [ 'grouped' ] ) ) {
 			return;
 		}
 
-		if ( isset( $_POST['variation_supplier_sku'] ) ) {
-
-			//$product_key = array_search( $post_id, $_POST['variable_post_id'] );
-			//$supplier    = $_POST['variation_supplier'][ $product_key ];
-			//$supplier    = $supplier ? absint( $supplier ) : '';
-
-			$out_stock_threshold = reset( $_POST['variation_out_stock_threshold'] );
-
-		} elseif ( isset( $_POST['_out_stock_threshold'] ) ) {
-			$out_stock_threshold = esc_attr( $_POST['_out_stock_threshold'] );
-
-		} else {
-			// If we are not saving the product from its edit page, do not continue
+		if ( ! isset( $_POST['_out_stock_threshold'] ) && ! isset( $_POST['variation_out_stock_threshold'] ) ) {
 			return;
 		}
 
 		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
-		update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+
+		if ( isset( $_POST['_out_stock_threshold'] ) ) {
+			$out_stock_threshold = esc_attr( $_POST['_out_stock_threshold'] );
+			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+		}
+
+		if ( isset( $_POST['variation_out_stock_threshold'] ) ) {
+
+			$out_stock_threshold = reset( $_POST['variation_out_stock_threshold'] );
+			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+		}
 
 	}
 

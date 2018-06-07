@@ -12,41 +12,41 @@
 		// Enable switchers
 		atumDoSwitchers();
 
-
+        //----------------------------
+        // _out_stock_threshold_field_ front
+		// This binds and unbinds atumEnableOutStockThresholdField on required types (atumProductData.outStockThresholdProductTypes) when we are on the inventory tab
+		//
+		// For variations, we use .show_if_variation_manage_stock css class
+		// check woocomere/js*/meta-boxes-product-variations.js -> $( 'input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock', wrapper ).change();
+        //----------------------------
+        var $productType = $('#product-type');
 
         console.log(atumProductData.outStockThresholdProductTypes);
-        console.log(">:"+$('#product-type').val());
-        //$("#_out_stock_threshold_field_div").hide();
-
         // check product-type on load, or on every change to fire
-        if ($.inArray( $('#product-type').val(), atumProductData.outStockThresholdProductTypes) >= 0 ) {
-			console.log("enabled product type on load:"+$('#product-type').val());
+        if ($.inArray( $productType.val(), atumProductData.outStockThresholdProductTypes) >= 0 ) {
+
+			console.log("enabled product type on load:"+$productType.val());
+
+			//bind to inventory_tab
             $( 'li.inventory_tab>a' ).bind( "click", atumEnableOutStockThresholdField );
 
-
-            if( $('#_out_stock_threshold').data('onload-product-type').indexOf('variable') >= 0 ){
-                $( 'li.variations_tab>a' ).bind( "click", atumEnableOutStockThresholdFieldOnVariations );
-			}
-
 		}else{
+        	//force unbind and hide
             $( 'li.inventory_tab>a' ).unbind( "click", atumEnableOutStockThresholdField );
-            $("#_out_stock_threshold_field_div").hide();
+            $('#_out_stock_threshold_field_div').hide();
 		}
 
-        $('#product-type').change(function () {
+        $productType.change(function () {
             if ( $.inArray( $(this).val(), atumProductData.outStockThresholdProductTypes ) >= 0 ) {
                 console.log("enabled product type on change:"+$(this).val());
-                atumEnableOutStockThresholdField();
+
+                //bind to inventory_tab
                 $( 'li.inventory_tab>a' ).bind( "click", atumEnableOutStockThresholdField );
 
-                if( $('_out_stock_threshold').data('onload-product-type').indexOf('variable') >= 0 ){
-                    atumEnableOutStockThresholdFieldOnVariations();
-                }
-
             }else{
-            	console.log("hide _out_stock_threshold_field_div");
+                //force unbind and hide
                 $( 'li.inventory_tab>a' ).unbind( "click", atumEnableOutStockThresholdField );
-                $("#_out_stock_threshold_field_div").hide();
+                $('#_out_stock_threshold_field_div').hide();
 			}
         });
         
@@ -62,94 +62,19 @@
 				$("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
 
 				$('#_manage_stock').change(function () {
+					console.log("_manage_stock fired");
 					$("#_out_stock_threshold_field_div").css("display", this.checked ? "block" : "none");
 				});
-			}
-			// Some kind of products (Grouped products) have a _stock field without checbox.
-			if( $('#_stock').filter(":visible").length === 1 ){
-				console.log('Some kind of products (Grouped products) have a _stock field without checbox.');
-				$("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
-			}
-        }
-
-        $( document ).on( "woocommerce_variations_loaded", function ( event, variation ) {
-        	alert(event);
-        });
-
-
-
-            function atumEnableOutStockThresholdFieldOnVariations() {
-        	console.log('atumEnableOutStockThresholdFieldOnVariations');
-			// selector: all checkboxes which starts with variable_manage_stock like variable_manage_stock[n]
-
-
-            /*
-            Delay until this div is load
-            <div class="woocommerce_variations wc-metaboxes" data-attributes="{&quot;pa_color&quot;:{&quot;id&quot;:1,&quot;name&quot;:&quot;pa_color&quot;,&quot;options&quot;:[22,23,24],&quot;position&quot;:0,&quot;visible&quot;:true,&quot;variation&quot;:true,&quot;is_visible&quot;:1,&quot;is_variation&quot;:1,&quot;is_taxonomy&quot;:1,&quot;value&quot;:&quot;&quot;},&quot;logo&quot;:{&quot;id&quot;:0,&quot;name&quot;:&quot;Logo&quot;,&quot;options&quot;:[&quot;Yes&quot;,&quot;No&quot;],&quot;position&quot;:1,&quot;visible&quot;:true,&quot;variation&quot;:true,&quot;is_visible&quot;:1,&quot;is_variation&quot;:1,&quot;is_taxonomy&quot;:0,&quot;value&quot;:&quot;Yes | No&quot;}}" data-total="4" data-total_pages="1" data-page="1" data-edited="false">
-			</div>
-             */
-
-            //do {
-            //    $('.variable_manage_stock').addClass('atum_waiting').delay(500).removeClass('atum_waiting');
-            //    console.log('atum_waiting');
-            //}
-            //while ($('.variable_manage_stock').length == 0);
-            waitForElement('input[type="checkbox"][name^="variable_manage_stock"]',function(){
-                $('input[type="checkbox"][name^="variable_manage_stock"]').each(function () {
-                    console.log($(this).prop('checked'));
-                });
-            	console.log("done");
-			});
-
-            //$('input[type="checkbox"][name^="variable_manage_stock"]').each(function () {
-            //    console.log($(this).prop('checked'));
-            //});
-
-            //$('input[type="checkbox"][name^="variable_manage_stock"]') woocommerce_variations
-
-            //variable_product_options_inner
-            //console.log("end");
-
-            //jQuery('input[type="checkbox"][name^="variable_manage_stock"]').each(function () { console.log(jQuery(this).prop('checked'));})
-
-			/*
-            if( $('.variable_manage_stock').filter(":visible").length === 1 ){
-                console.log('_manage_stock is visible and checkd?'+ $('#_manage_stock').prop('checked'));
-
-                // make _out_stock_threshold_field_div visible if needed, and listen to _manage_stock for changes.
-                $("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
-
-                $('#_manage_stock').change(function () {
-                    $("#_out_stock_threshold_field_div").css("display", this.checked ? "block" : "none");
-                });
-            }
-            // Some kind of products (Grouped products) have a _stock field without checbox.
-            if( $('#_stock').filter(":visible").length === 1 ){
-                console.log('Some kind of products (Grouped products) have a _stock field without checbox.');
-                $("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
-            }
-            */
-
-
-        }
-
-
-        // https://stackoverflow.com/a/31913947
-		//
-        // waitForElement("yourId",function(){
-        //    console.log("done");
-        // });
-        function waitForElement(elementPath, callBack){
-            window.setTimeout(function(){
-                if($(elementPath).length){
-                    callBack(elementPath, $(elementPath));
-                }else{
-                    waitForElement(elementPath, callBack);
+			}else{
+                // Some kind of products (Grouped products) have a _stock field without checbox.
+                if( $('#_stock').filter(":visible").length === 1 ){
+                    console.log('Some kind of products (Grouped products) have a _stock field without checbox.');
+                    $("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
                 }
-            },500)
+			}
         }
 
-		
+
 		// Add switches to variations once are loaded by WC
 		$('#woocommerce-product-data').on('woocommerce_variations_added woocommerce_variations_loaded', function() {
 			atumDoSwitchers();
