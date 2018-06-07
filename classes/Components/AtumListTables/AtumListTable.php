@@ -54,10 +54,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	/**
 	 * What columns are numeric and searchable? and strings? append to this two keys.
-     * @since 1.4.8
 	 * @var array string keys
 	 */
-	protected static $default_searchable_columns = array();
+	protected $default_searchable_columns = array();
 
 	/**
 	 * The previously selected items
@@ -270,9 +269,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->query_filters = $this->get_filters_query_string();
 
 		$args = wp_parse_args( $args, array(
-			'show_cb'  => FALSE,
+			'show_cb'         => FALSE,
 			'show_controlled' => TRUE,
-			'per_page' => Settings::DEFAULT_POSTS_PER_PAGE,
+			'per_page'        => Settings::DEFAULT_POSTS_PER_PAGE,
 		) );
 
 		$this->show_cb         = $args['show_cb'];
@@ -315,27 +314,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			'ajax'     => TRUE
 		), $args );
 
-
 		parent::__construct( $args );
-
-
-		// searchable columns
-		if ( ! empty( static::$default_searchable_columns ) ) {
-			add_filter( 'default_searchable_columns', array(
-				$this,
-				'searchable_columns'
-			), 1, 2 );
-		}
 
 		add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Hidden columns
+		// Hook the default_hidden_columns filter used within get_hidden_columns() function
 		if ( ! empty( static::$default_hidden_columns ) ) {
-			add_filter( 'default_hidden_columns', array(
-				$this,
-				'hidden_columns'
-			), 10, 2 );
+			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
 		}
 
 		$this->default_currency = get_woocommerce_currency();
@@ -2225,23 +2211,23 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prepare JS vars
 		$vars = array(
-			'listUrl'          => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
-			'perPage'          => $this->per_page,
-			'showCb'           => $this->show_cb,
-			'order'            => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'          => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'            => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxFilter'       => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'         => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'        => __( 'Set', ATUM_TEXT_DOMAIN ),
-			'saveButton'       => __( 'Save Data', ATUM_TEXT_DOMAIN ),
-			'ok'               => __( 'OK', ATUM_TEXT_DOMAIN ),
-			'noItemsSelected'  => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
-			'selectItems'      => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
-			'applyBulkAction'  => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
-			'applyAction'      => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
-			'productLocations' => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
-            'searchableColumns'=> self::searchable_columns()
+			'listUrl'           => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
+			'perPage'           => $this->per_page,
+			'showCb'            => $this->show_cb,
+			'order'             => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'           => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'             => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxFilter'        => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'          => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'         => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'saveButton'        => __( 'Save Data', ATUM_TEXT_DOMAIN ),
+			'ok'                => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'noItemsSelected'   => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
+			'selectItems'       => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
+			'applyBulkAction'   => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
+			'applyAction'       => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
+			'productLocations'  => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
+			'searchableColumns' => $this->default_searchable_columns
 		);
 
 		if ($this->first_edit_key) {
@@ -2870,7 +2856,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
 						    WHERE pm.meta_key = %s
 						    AND p.post_type IN ('product', 'product_variation')
-						    AND ( lower(pm.meta_value) LIKE '{$term}%%' )
+						    AND pm.meta_value = $term
 					    ", $search_column );
 
 					}
@@ -3414,27 +3400,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Default hidden columns
+	 * Get columns hidden by default
 	 *
-	 * @since 1.4.6
-	 *
+	 * @since 1.2.1
 	 *
 	 * @return array
 	 */
 	public static function hidden_columns() {
 		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_hidden_columns );
-	}
-
-	/**
-	 * Default hidden columns
-	 *
-	 * @since 1.4.6
-	 *
-	 *
-	 * @return array
-	 */
-	public static function searchable_columns() {
-		return apply_filters( 'atum/list_table/default_searchable_columns', static::$default_searchable_columns );
 	}
 
 }

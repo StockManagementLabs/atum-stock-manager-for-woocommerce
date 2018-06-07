@@ -50,7 +50,6 @@ class ListTable extends AtumListTable {
 
 	/**
 	 * The columns hidden by default
-     * @since 1.4.6
 	 * @var array
 	 */
 	protected static $default_hidden_columns = array('_weight');
@@ -58,13 +57,13 @@ class ListTable extends AtumListTable {
 	/**
 	 * TODO $searchable_columns ?
      * What columns are numeric and searchable? and strings? append to this two keys.
-	 * @since 1.4.8
 	 * @var array string keys ()
 	 */
-	protected static $default_searchable_columns = array(
-		'string' => array( 'title', '_supplier', '_sku', '_supplier_sku'), // ID as string to allow the use of commas ex: s = '12, 13, 89'
-		'numeric'  => array('ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
+	protected $default_searchable_columns = array(
+		'string'  => array( 'title', '_supplier', '_sku', '_supplier_sku' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
+		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
 	);
+
 
 	/**
 	 * @inheritdoc
@@ -960,29 +959,6 @@ class ListTable extends AtumListTable {
 			$query->set( 'post__in', array(-1) );
 		}
 
-	}
-
-	/**
-	 * Default hidden columns
-	 *
-	 * @since 1.4.6
-	 *
-	 *
-	 * @return array
-	 */
-	public static function hidden_columns() {
-		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_hidden_columns );
-	}
-
-	/**
-	 * searchable_columns
-	 *
-	 * @since 1.4.8
-	 *
-	 * @return array key strings
-	 */
-	public static function searchable_columns() {
-		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_searchable_columns );
 	}
 
 	/**

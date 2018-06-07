@@ -159,6 +159,36 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.9`
+
+*2018-06-07*
+
+**Features**
+
+* Added section dependencies to Settings.
+* Added support for select fields to Settings.
+* Added field dependency handler to Settings.
+
+**Changes**
+
+* When an item is selected on the "Search in Column" the dropdown, now it is active on the list.
+* Use the same UI for all screen sizes in List Tables.
+* Order variations in Stock Central by menu_order as WooCommerce does.
+* Now we do exact searches in all numeric values.
+
+**Fixes**
+
+* Fixed floating table header height when not displayed.
+* Fixed issue that was displaying all the products when searching for "0".
+* Fixed issue that was showing BOM products in Stock Central when filtering by supplier.
+* Fixed mPDF orientation format issue.
+* Fixed mPDF bug.
+* Fixed issue that was not dismissing ATUM notices when the value stored in db was not an array.
+* Refactory.
+* Other minor fixes.
+
+---
+
 `1.4.8`
 
 *2018-05-30*
