@@ -962,29 +962,6 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Default hidden columns
-	 *
-	 * @since 1.4.6
-	 *
-	 *
-	 * @return array
-	 */
-	public static function hidden_columns() {
-		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_hidden_columns );
-	}
-
-	/**
-	 * searchable_columns
-	 *
-	 * @since 1.4.8
-	 *
-	 * @return array key strings
-	 */
-	public static function searchable_columns() {
-		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_searchable_columns );
-	}
-
-	/**
 	 * Get all the products with total quantity within a specific type of Log
 	 *
 	 * @since 1.2.8

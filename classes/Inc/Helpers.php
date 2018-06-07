@@ -63,8 +63,7 @@ final class Helpers {
 	 *
 	 * @since 1.4.8
 	 *
-	 * @param array $slug_terms
-	 * @param string taxonomy default 'product_type'
+	 * @param array $original
 	 *
 	 * @return array term_ids
 	 */

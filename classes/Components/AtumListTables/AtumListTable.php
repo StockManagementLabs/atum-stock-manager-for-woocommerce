@@ -319,6 +319,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// Hook the default_hidden_columns filter used within get_hidden_columns() function
+		if ( ! empty( static::$default_hidden_columns ) ) {
+			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
+		}
+
 		$this->default_currency = get_woocommerce_currency();
 
 	}
