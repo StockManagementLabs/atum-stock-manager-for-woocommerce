@@ -543,7 +543,6 @@ class Hooks {
 						$stock_status = __('In stock', ATUM_TEXT_DOMAIN);
 					}
 				}
-
 			}
 
 			if ( empty($stocks_list) ) {

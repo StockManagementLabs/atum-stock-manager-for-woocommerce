@@ -81,6 +81,11 @@ final class Globals {
 	const OUT_OF_STOCK_DATE_KEY = '_out_of_stock_date';
 
 	/**
+	 * The meta key where is stored the out of stock threshold
+	 */
+	const OUT_STOCK_THRESHOLD_KEY = '_out_stock_threshold';
+
+	/**
 	 * The meta key name used for inheritable products (Grouped, Variables...)
 	 */
 	const IS_INHERITABLE_KEY = '_inheritable';
@@ -101,8 +106,6 @@ final class Globals {
 	 * @since 1.4.8
 	 */
 	const OUT_STOCK_THRESHOLD_PRODUCT_TYPES = array('simple', 'variable', 'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material');
-
-
 	
 	/**
 	 * Getter for the product_types property
