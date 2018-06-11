@@ -34,8 +34,11 @@ class AtumRender {
 		// override the stock  / $availability if required.
 		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 
+
 		if($is_out_stock_threshold_managed  === "yes"){
 			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
+
+			//add_action( 'woocommerce_before_variations_form',  array($this, 'wpdocs_who_is_hook'), 10, 2 );
 
 			// old way, and debug method to print and override values on single-product/stock.php
 			//add_filter( 'woocommerce_get_stock_html', array($this, 'get_stock_html_when_out_stock_threshold'), 10, 2 );
@@ -46,18 +49,115 @@ class AtumRender {
 		}
 	}
 
+	public function wpdocs_who_is_hook( $a ) {
+	    ?>
+        <script type="text/html" id="tmpl-variation-data">
+            <div id="woocommerce-variation-data">{{{ data.variation }}}</div>
+        </script>
+        <?php
+        echo "(.)";
+	}
+
 	/**
 	 * Override the get_stock_status to all products that have stock managed at product level,
 	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set.
 	 * @return bool
 	 */
 	public function get_product_is_in_stock_when_out_stock_threshold( ) {
-		global $product;
+		global $product, $wpdb;
+
+		/*
+		// test if product is variable
+		if ($product->is_type( 'variable' ))
+		{
+			$available_variations = $product->get_available_variations();
+			foreach ($available_variations as $key => $value)
+			{
+				echo "[". $key."]".$value."<br>";
+			}
+		}
+		*/
+
+        //If variable type, get visible childs and process.
+		if (preg_match('/\bvariable\b/',$product->get_type())){
+
+		    $visible_children_ids = $product->get_visible_children();
+
+		    //Refactored : get all child metas together, work in array values
+			/**  $child_metas example for 3 childs (104. 105. 106). (Before we had 4 get_post_meta for every child)
+             *
+			[104] => Array(
+				[_manage_stock] => Array( [0] => Array( [post_id] => 104, [meta_key] => _manage_stock, [meta_value] => yes ) )
+                [_stock] => Array( [0] => Array(  [post_id] => 104 [meta_key] => _stock [meta_value] => 5 ))
+            ...
+             *  */
+
+
+			$query = "SELECT post_id, meta_key, meta_value 
+                      FROM wp_postmeta where post_id IN ( " . implode( ',', $visible_children_ids ) . " ) 
+                      AND meta_key IN ( '_out_stock_threshold', '_manage_stock','_stock','_stock_status')";
+
+			$child_metas = array_group_by( $wpdb->get_results( $query, ARRAY_A ), "post_id", "meta_key" );
+
+			foreach ($child_metas as $child_id=>$child_meta){
+				echo "<br>";
+
+				if ( count( $child_meta ) < 4 ) {
+					echo "not good(".$child_id.")|";
+					continue;
+				}elseif($child_meta['_manage_stock'][0]['meta_value'] === "no" || empty($child_meta['_out_stock_threshold'][0]['meta_value']))  {
+					// return 'outofstock' !== $child->get_stock_status();
+
+					// TODO recalculate if diferent ?
+					/*if ( ($value = 'outofstock' !== $child_meta['_manage_stock'][0]['_stock_status'] ) === $child_meta['_manage_stock'][0]['_stock_status']){
+						//security check.
+						echo "not my problem_and ok|";
+						continue;
+					}else{
+						echo "not my problem_and updated|";
+						continue;
+					}*/
+					echo "not my problem(".$child_id.")|";
+					continue;
+				}else{
+					echo "probably(".$child_id."#".$child_meta['_stock'][0]['meta_value']."#".$child_meta['_out_stock_threshold'][0]['meta_value'].")|";
+					if ($child_meta['_stock'][0]['meta_value'] > $child_meta['_out_stock_threshold'][0]['meta_value']) {
+						//avaiable
+						if($child_meta['_stock_status'][0]['meta_value'] !== "instock" ){
+							//force meta to instock
+							update_post_meta( $child_id, '_stock_status', "instock" );
+						}
+					}else{
+						if($child_meta['_stock_status'][0]['meta_value'] !== "outofstock" ){
+							//force meta to outofstock
+							update_post_meta( $child_id, '_stock_status', "outofstock" );
+						}
+					}
+				}
+			}
+
+
+
+
+        }
+
+        //process fathers and simples
+
+		$element_id = $product->get_id();
 
 		// if not, it's not our problem: @see wc-apidocs/source-class-WC_Product.html#1931
-		$out_stock_threshold = get_post_meta( $product->get_id(), '_out_stock_threshold', $single = true );
+		$out_stock_threshold = get_post_meta( $element_id, '_out_stock_threshold', $single = true );
 
-		if ( ! $product->get_manage_stock() || empty($out_stock_threshold) ) {
+		$product_manage_stock = $product->get_manage_stock();
+		$is_out_stock_threshold_set = !empty($out_stock_threshold);
+
+		$product_stock_status = $product->get_stock_status();
+
+		$value = 'outofstock' !== $product_stock_status;
+
+		if ( ! $product_manage_stock || !$is_out_stock_threshold_set ) {
+		//if ( ! $product->get_manage_stock() || empty($out_stock_threshold) ) {
+			//echo "stop";
 			return 'outofstock' !== $product->get_stock_status();
 		}
 
@@ -68,7 +168,18 @@ class AtumRender {
 		}else{
 			return false;
 		}
-		return false; // 'in-stock': true 'out-of-stock': false
+	}
+
+
+	//$variations = get_variation_data_from_variation_id( $item_id );
+	// https://stackoverflow.com/a/22817556
+	private function get_variation_data_from_variation_id( $item_id ) {
+		$_product = new WC_Product_Variation( $item_id );
+		$variation_data = $_product->get_variation_attributes();
+		$variation_detail = woocommerce_get_formatted_variation( $variation_data, true );  // this will give all variation detail in one line
+		// $variation_detail = woocommerce_get_formatted_variation( $variation_data, false);  // this will give all variation detail one by one
+		return $variation_detail; // $variation_detail will return string containing variation detail which can be used to print on website
+		// return $variation_data; // $variation_data will return only the data which can be used to store variation data
 	}
 
 
