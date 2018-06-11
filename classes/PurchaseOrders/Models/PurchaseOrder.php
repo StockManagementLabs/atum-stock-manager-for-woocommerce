@@ -86,7 +86,8 @@ class PurchaseOrder extends AtumOrderModel {
 			$unblocked_class = ' unblocked';
 		}
 		elseif ($supplier) {
-			$products = Suppliers::get_supplier_products( $supplier->ID, 'ids' );
+
+			$products = Suppliers::get_supplier_products( $supplier->ID, ['product', 'product_variation'], FALSE );
 
 			if ( empty($products) ) {
 				$message = __( 'This Supplier has no products assigned yet.', ATUM_TEXT_DOMAIN );
@@ -94,6 +95,7 @@ class PurchaseOrder extends AtumOrderModel {
 			else {
 				$unblocked_class = ' unblocked';
 			}
+
 		}
 
 		echo '<div class="items-blocker' . $unblocked_class . '"><h3>' . $message . '</h3></div>';

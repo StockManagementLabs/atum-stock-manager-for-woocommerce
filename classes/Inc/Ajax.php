@@ -875,7 +875,7 @@ final class Ajax {
 		}
 
 		$query = $wpdb->prepare( "
-			SELECT DISTINCT posts.ID FROM {$wpdb->posts} posts
+			SELECT DISTINCT posts.ID FROM $wpdb->posts posts
 			" . implode("\n", $meta_join) . "
 			WHERE (
 				posts.post_title LIKE %s
@@ -890,6 +890,7 @@ final class Ajax {
 			$like_term,
 			$like_term
 		);
+
 		$product_ids = $wpdb->get_col($query);
 
 		if ( is_numeric( $term ) ) {
@@ -928,7 +929,7 @@ final class Ajax {
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier)
 			if ( is_a($po, '\Atum\PurchaseOrders\Models\PurchaseOrder') && ! $po->has_multiple_suppliers() ) {
 
-				$supplier_products = apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier('id'), 'ids' ) );
+				$supplier_products = apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier('id'), ['product', 'product_variation'], FALSE ) );
 
 				// If the PO supplier has no linked products, it must return an empty array
 				if ( empty($supplier_products) ) {

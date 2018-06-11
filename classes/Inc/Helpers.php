@@ -55,29 +55,6 @@ final class Helpers {
 		return $result;
 	}
 
-
-	/**
-	 * Flat a multidimensional array of ids.
-     * ex:
-     * $search_suppliers_ids = $wpdb->get_results( $query_who_gets_only_ids, ARRAY_A );
-	 *
-	 * @since 1.4.8
-	 *
-	 * @param array $original
-	 *
-	 * @return array term_ids
-	 */
-	public static function flat_multidimensional_array_absint( array $original ) {
-		$result = array();
-		array_walk_recursive( $original, function ( $v, $k ) use ( &$result ) {
-			$result[] = absint($v);
-		} );
-
-		return $result;
-	}
-
-
-
 	/**
 	 * Set the help tab for admin pages
 	 *
