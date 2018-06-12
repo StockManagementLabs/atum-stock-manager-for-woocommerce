@@ -103,7 +103,7 @@ final class Globals {
 	 * _out_stock_threshold_field is allowed on the product types
 	 * 'SC' : 'simple', 'variable', 'grouped', // this -> private static $product_types = ['simple', 'variable', 'grouped'];
 	 * 'MC' :  'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material'  // MC/classes/inc/hooks/ -> product_type_selector($wc_product_types)
-	 * @since 1.4.8
+	 * @since 1.4.10
 	 */
 	const OUT_STOCK_THRESHOLD_PRODUCT_TYPES = array('simple', 'variable', 'subscription', 'variable-subscription', 'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material');
 	

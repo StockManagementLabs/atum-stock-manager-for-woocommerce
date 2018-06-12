@@ -5,9 +5,9 @@
  * @author         Be Rebel - https://berebel.io
  * @copyright      ©2018 Stock Management Labs™
  *
- * @since          1.3.1
+ * @since          1.4.10
  *
- * Add capabilities to WP user roles
+ * Overrides woocommerce_product_is_in_stock in front shop if out_stock_threshold is enabled
  */
 
 namespace Atum\Components;
@@ -27,7 +27,7 @@ class AtumRender {
 	/**
 	 * Singleton constructor
 	 *
-	 * @since 1.3.1
+	 * @since 1.4.10
 	 */
 	private function __construct() {
 
@@ -46,7 +46,11 @@ class AtumRender {
 	/**
 	 * Override the get_stock_status to all products that have stock managed at product level,
 	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set.
-	 * @return bool
+	 * @param $is_in_stock before hook value
+	 * @param $item actual product or variation who fires
+	 * @return bool procesed $is_in_stock (if required)
+	 *
+	 * @since 1.4.10
 	 */
 	public function get_product_is_in_stock_when_out_stock_threshold( $is_in_stock, $item) {
 
@@ -54,40 +58,45 @@ class AtumRender {
 
 	    $item_id = $item->get_ID();
 
-		$query = $wpdb->prepare("SELECT meta_key, meta_value 
+		$query = $wpdb->prepare( "SELECT meta_key, meta_value 
                   FROM wp_postmeta where post_id = %d
-                  AND meta_key IN ( '_out_stock_threshold', '_manage_stock','_stock','_stock_status')",$item_id);
+                  AND meta_key IN ( '_out_stock_threshold', '_manage_stock','_stock','_stock_status', '_backorders')", $item_id );
 
-		/**
-		 * $item_metas['_out_stock_threshold'][0]['meta_value']
-		 * $item_metas['_manage_stock'][0]['meta_value']
-		 * $item_metas['_stock'][0]['meta_value']
-		 * $item_metas['_stock_status'][0]['meta_value']
-		 */
-		$item_metas = array_group_by( $wpdb->get_results( $query, ARRAY_A ), "meta_key" )  ;
+		// Array( [_manage_stock] => no , [_stock] => , [_stock_status] => instock)
+		$item_metas = array_column( $wpdb->get_results( $query, ARRAY_A ), 'meta_value', 'meta_key' );
 
-		if ( count( $item_metas ) < 4 ) {
-		    //not my problem
-            return 'outofstock' !== $item->get_stock_status();
-		}
-		elseif($item_metas['_manage_stock'][0]['meta_value'] === "no" || empty($item_metas['_out_stock_threshold'][0]['meta_value']))  {
+		//if this item doesn't have this 4 keys, it means that it never has had _out_stock_threshold set
+		if( ! Helpers::array_keys_exist( array('_out_stock_threshold', '_manage_stock','_stock','_stock_status'), $item_metas ) ){
+
 			//not my problem
 			return 'outofstock' !== $item->get_stock_status();
 
-        }else{
-            if ($item_metas['_stock'][0]['meta_value'] > $item_metas['_out_stock_threshold'][0]['meta_value']) {
-	            //avaiable
-                return true;
-            }else{
-	            //_out_stock_threshold!
-                return false;
-            }
-        }
+		} elseif ( $item_metas['_manage_stock'] === "no" || empty( $item_metas['_out_stock_threshold'] ) ) {
+
+			//not my problem
+			return 'outofstock' !== $item->get_stock_status();
+
+		} else {
+
+			if ( $item_metas['_backorders'] !== "no" ) {
+				//not my problem
+				return true;
+			}
+
+			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
+				//avaiable
+				return true;
+
+			} else {
+				//_out_stock_threshold!
+				return false;
+			}
+		}
 	}
 
 	/**
 	 *  set max on woocomerce before add to cart if required.
-	 * TODO this... is usseful?
+	 * TODO this... is useful? Clean and finish or delete.
 	do_action( 'woocommerce_before_add_to_cart_quantity' );
 	woocommerce_quantity_input( array(
 	'min_value'   => apply_filters( 'woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product ),
