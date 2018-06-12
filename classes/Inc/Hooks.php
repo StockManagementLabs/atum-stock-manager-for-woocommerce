@@ -334,7 +334,7 @@ class Hooks {
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
 	 */
-	public function add_purchase_price_meta ($loop = NULL, $variation_data = array(), $variation = NULL) {
+	public function add_purchase_price_meta($loop = NULL, $variation_data = array(), $variation = NULL) {
 
 		if ( ! current_user_can( ATUM_PREFIX . 'edit_purchase_price') ) {
 			return;
@@ -367,27 +367,27 @@ class Hooks {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int $post_id
+	 * @param int $product_id
 	 */
-	public function save_purchase_price($post_id) {
+	public function save_purchase_price($product_id) {
 
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-		$old_purchase_price = get_post_meta( $post_id, '_purchase_price', TRUE );
+		$old_purchase_price = get_post_meta( $product_id, '_purchase_price', TRUE );
 
 		// Variables, grouped and variations
 		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
 			if ( isset( $_POST['_purchase_price'] ) ) {
-				update_post_meta( $post_id, '_purchase_price', '' );
+				update_post_meta( $product_id, '_purchase_price', '' );
 			}
 			elseif ( isset( $_POST['variation_purchase_price'] ) ) {
 
-				$product_key    = array_search( $post_id, $_POST['variable_post_id'] );
+				$product_key    = array_search( $product_id, $_POST['variable_post_id'] );
 				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
 				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 
-				update_post_meta( $post_id, '_purchase_price', $purchase_price );
+				update_post_meta( $product_id, '_purchase_price', $purchase_price );
 
 			}
 
@@ -397,12 +397,12 @@ class Hooks {
 
 			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
 			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
-			update_post_meta( $post_id, '_purchase_price', $purchase_price);
+			update_post_meta( $product_id, '_purchase_price', $purchase_price);
 
 		}
 		
 		if ( isset( $purchase_price ) ) {
-			do_action( 'atum/hooks/after_save_purchase_price', $post_id, $purchase_price, $old_purchase_price );
+			do_action( 'atum/hooks/after_save_purchase_price', $product_id, $purchase_price, $old_purchase_price );
 		}
 
 	}

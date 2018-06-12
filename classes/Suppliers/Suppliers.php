@@ -409,11 +409,11 @@ class Suppliers {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int $post_id    The post ID
+	 * @param int  $product_id The saved product's ID
 	 */
-	public function save_product_supplier_fields($post_id) {
+	public function save_product_supplier_fields($product_id) {
 
-		$product  = wc_get_product( $post_id );
+		$product  = wc_get_product( $product_id );
 
 		if ( is_a($product, '\WC_Product') && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), ['grouped'] ) ) ) {
 			return;
@@ -421,15 +421,14 @@ class Suppliers {
 
 		if ( isset($_POST['variation_supplier'], $_POST['variation_supplier_sku']) ) {
 
-			$product_key = array_search( $post_id, $_POST['variable_post_id'] );
-			$supplier    = $_POST['variation_supplier'][ $product_key ];
-			$supplier    = $supplier ? absint( $supplier ) : '';
+			$product_key  = array_search( $product_id, $_POST['variable_post_id'] );
+			$supplier     = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : '';
+			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : '';
 
-			$supplier_sku = reset($_POST['variation_supplier_sku']);
 		}
 		elseif ( isset($_POST['_supplier'], $_POST['_supplier_sku']) ) {
-			$supplier     = $_POST['_supplier'] ? absint( $_POST['_supplier'] ) : '';
-			$supplier_sku = esc_attr( $_POST['_supplier_sku'] );
+			$supplier     = isset( $_POST['_supplier'] ) ? absint( $_POST['_supplier'] ) : '';
+			$supplier_sku = isset( $_POST['_supplier_sku'] ) ? esc_attr( $_POST['_supplier_sku'] ) : '';
 		}
 		else {
 			// If we are not saving the product from its edit page, do not continue
@@ -437,8 +436,8 @@ class Suppliers {
 		}
 
 		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
-		update_post_meta( $post_id, '_supplier', $supplier );
-		update_post_meta( $post_id, '_supplier_sku', $supplier_sku );
+		update_post_meta( $product_id, '_supplier', $supplier );
+		update_post_meta( $product_id, '_supplier_sku', $supplier_sku );
 
 	}
 
