@@ -21,10 +21,8 @@
         //----------------------------
         var $productType = $('#product-type');
 
-        console.log(atumProductData.outStockThresholdProductTypes);
         // check product-type on load, or on every change to fire
         if ($.inArray( $productType.val(), atumProductData.outStockThresholdProductTypes) >= 0 ) {
-
 			//console.log("enabled product type on load:"+$productType.val());
 
 			//bind to inventory_tab
@@ -49,7 +47,6 @@
                 $('#_out_stock_threshold_field_div').hide();
 			}
         });
-        
 
         function atumEnableOutStockThresholdField() {
         	//console.log(">atumEnableOutStockThresholdField ");
@@ -65,12 +62,6 @@
 					//console.log("_manage_stock fired");
 					$("#_out_stock_threshold_field_div").css("display", this.checked ? "block" : "none");
 				});
-			}else{
-                // Some kind of products (Grouped products) have a _stock field without checbox.
-                if( $('#_stock').filter(":visible").length === 1 ){
-                    //console.log('Some kind of products (Grouped products) have a _stock field without checbox.');
-                    $("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
-                }
 			}
         }
 

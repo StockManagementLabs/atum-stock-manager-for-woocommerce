@@ -26,10 +26,15 @@ class Hooks {
 	 */
 	private static $instance;
 
+	// flag to load out_stock_threshold hooks
+	private $is_out_stock_threshold_managed = "no";
+
 	/**
 	 * Hooks singleton constructor
 	 */
 	private function __construct() {
+
+		$this->is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 
 		if ( is_admin() ) {
 			$this->register_admin_hooks();
@@ -68,6 +73,12 @@ class Hooks {
 		// Firefox fix to not preserve the dropdown
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
+		if($this->is_out_stock_threshold_managed  === "yes"){
+			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
+			add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
+			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+		}
 	}
 
 	/**
@@ -87,15 +98,7 @@ class Hooks {
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
-
-		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
-		add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
-		add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
-		add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
-
-		//TODO 1.4.10 add here out_of_stock_fields
-		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
-		if($is_out_stock_threshold_managed  === "yes"){
+		if($this->is_out_stock_threshold_managed  === "yes"){
 			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
 		}
 
@@ -391,16 +394,12 @@ class Hooks {
 		// Save the product purchase price meta
 		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
 		add_action( 'woocommerce_update_product_variation', array( $this, 'save_purchase_price' ) );
-
-		//add_action( 'woocommerce_product_options_pricing', array( $this, 'add_out_stock_threshold_field' ) );
-		
 	}
 
-	//TODO 1.4.8 add_out_stock_threshold_field
 	/**
 	 * Add the individual out stock threshold field to WC's WC's product data meta box
 	 *
-	 * @since 1.4.8
+	 * @since 1.4.10
 	 *
 	 * @param int $loop Only for variations. The loop item number
 	 * @param array $variation_data Only for variations. The variation item data
@@ -448,11 +447,10 @@ class Hooks {
 
 	}
 
-	//TODO 1.4.8 save_out_stock_threshold_field
 	/**
 	 * Save the out of stock threshold field
 	 *
-	 * @since 1.4.8
+	 * @since 1.4.10
 	 *
 	 * @param int $post_id    The post ID
 	 */

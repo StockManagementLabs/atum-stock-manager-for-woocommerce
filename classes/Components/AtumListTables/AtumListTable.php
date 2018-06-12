@@ -1047,6 +1047,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$classes .= ' cell-yellow';
 			$content = '<span class="dashicons dashicons-warning" data-toggle="tooltip" title="' . __('Low Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
+		//TODO out_stock_trheshold
 		// In Stock
 		elseif ( in_array($product_id, $this->id_views['in_stock']) ) {
 			$classes .= ' cell-green';
@@ -1814,6 +1815,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'all_in_stock'   => [],
 				'all_out_stock'  => [],
 				'all_back_order' => [],
+				//'all_out_stock_threshold' => [],
 			) );
 
 			$this->count_views = array_merge( $this->count_views, array(
