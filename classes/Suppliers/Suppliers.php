@@ -557,7 +557,7 @@ class Suppliers {
 
 			}
 
-			return apply_filters( 'atum/suppliers/products', $products, $supplier );;
+			return apply_filters( 'atum/suppliers/products', $products, $supplier );
 
 		}
 

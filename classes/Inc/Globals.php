@@ -85,7 +85,7 @@ final class Globals {
 	 */
 	const IS_INHERITABLE_KEY = '_inheritable';
 
-	/*
+	/**
 	 * Searchable columns and their types
 	 */
 	const SEARCHABLE_COLUMNS = array(

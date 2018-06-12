@@ -2791,25 +2791,26 @@ abstract class AtumListTable extends \WP_List_Table {
 						}
 
 						// WHERE meta_key = $search_column and lower(meta_value) like term%
-						$query = $wpdb->prepare("
-							SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						$meta_where = apply_filters('atum/list_table/product_search/numeric_meta_where', sprintf("pm.meta_key = '%s' AND pm.meta_value = '%s'", $search_column, $term ), $search_column, $term);
+						
+						$query = "SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-						    WHERE pm.meta_key = %s
-						    AND p.post_type IN ('product', 'product_variation')
-						    AND pm.meta_value = $term
-					    ", $search_column );
+						    WHERE p.post_type IN ('product', 'product_variation')
+						    AND $meta_where
+					    ";
 
 					}
 					// String fields (_sku ...)
 					else {
+						
+						// WHERE meta_key = $search_column and lower(meta_value) like term%
+						$meta_where = apply_filters('atum/list_table/product_search/string_meta_where', sprintf("pm.meta_key = '%s' AND pm.meta_value LIKE '%%%s%%'", $search_column, $term ), $search_column, $term);
 
-						$query = $wpdb->prepare("
-							SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						$query = "SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-						    WHERE pm.meta_key = %s	
-						    AND p.post_type IN ('product', 'product_variation')	
-						    AND ( lower(pm.meta_value) LIKE '%%{$term}%%' )				
-				         ", $search_column );
+						    WHERE p.post_type IN ('product', 'product_variation')
+						    AND  {$meta_where}
+				         ";
 					}
 
 					$search_terms_ids = $wpdb->get_results( $query );
