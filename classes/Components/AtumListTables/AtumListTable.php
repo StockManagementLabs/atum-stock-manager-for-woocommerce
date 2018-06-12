@@ -294,8 +294,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( isset ($this->group_members['product-details']) && $this->show_cb == TRUE ) {
 				array_unshift($this->group_members['product-details']['members'], 'cb');
+		    }
 		}
-		}
+
+		//remove _out_stock_threshold columns if not set, or add filters to get availability etc.
+		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
+		if($is_out_stock_threshold_managed === "no"){
+			unset($args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
+			unset($args['group_members']['stock-counters'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
+        }
 
 		// Add the checkbox column to the table if enabled
 		$this->table_columns = $this->show_cb == TRUE ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
@@ -818,12 +825,56 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	}
 
+
+	/**
+	 * Column out_stock_threshold column
+	 *
+	 * @since  v1.4.6
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return double
+	 */
+	protected function column__out_stock_threshold( $item,  $editable = TRUE ) {
+
+		$product_id          = $this->get_current_product_id();
+		$out_stock_threshold = get_post_meta( $this->product->get_id(), '_out_stock_threshold', $single = true );
+		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
+
+		// Check type and managed stock at product level
+		$product_type = $this->product->get_type();
+		if ( ! in_array( $product_type, GLOBALS::OUT_STOCK_THRESHOLD_PRODUCT_TYPES ) ) {
+			$editable = false;
+		}
+
+		$manage_stock = get_post_meta( $this->product->get_id(), '_manage_stock', $single = true );
+		if ($manage_stock === "no"){
+			$editable = false;
+        }
+
+		if ($editable) {
+
+			$args = array(
+				'post_id'  => $product_id,
+				'meta_key' => 'out_stock_threshold',
+				'value'    => $out_stock_threshold,
+				'input_type' => 'number',
+				'tooltip'  => __( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN )
+			);
+
+			$out_stock_threshold = $this->get_editable_column( $args );
+
+		}
+
+		return apply_filters( 'atum/list_table/column__out_stock_threshold', $out_stock_threshold, $item, $this->product );
+	}
+
     /**
-     * Post Weight column
+     * Column Weight column
      *
      * @since  v1.4.6
      *
-     * @param \WP_Post $item The WooCommerce product post
+     * @param \WP_Post $item The WooCommerce product weight
      *
      * @return double
      */

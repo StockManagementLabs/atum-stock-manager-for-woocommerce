@@ -81,18 +81,31 @@ final class Globals {
 	const OUT_OF_STOCK_DATE_KEY = '_out_of_stock_date';
 
 	/**
+	 * The meta key where is stored the out of stock threshold
+	 */
+	const OUT_STOCK_THRESHOLD_KEY = '_out_stock_threshold';
+
+	/**
 	 * The meta key name used for inheritable products (Grouped, Variables...)
 	 */
 	const IS_INHERITABLE_KEY = '_inheritable';
 
 	/**
 	 * Searchable columns and their types
+	 * @since 1.4.7
 	 */
 	const SEARCHABLE_COLUMNS = array(
 		'string'  => array( 'title', '_supplier', '_sku', '_supplier_sku', 'IDs' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
 		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
 	);
 
+	/*
+	 * _out_stock_threshold_field is allowed on the product types
+	 * 'SC' : 'simple', 'variable', 'grouped', // this -> private static $product_types = ['simple', 'variable', 'grouped'];
+	 * 'MC' :  'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material'  // MC/classes/inc/hooks/ -> product_type_selector($wc_product_types)
+	 * @since 1.4.8
+	 */
+	const OUT_STOCK_THRESHOLD_PRODUCT_TYPES = array('simple', 'variable', 'subscription', 'variable-subscription', 'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material');
 	
 	/**
 	 * Getter for the product_types property
