@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\Components\AtumRender;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 use Atum\InventoryLogs\InventoryLogs;
@@ -78,9 +77,6 @@ class Bootstrap {
 			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
 			// in queries when any dependency is not met
 			AtumComments::get_instance();
-
-			//AtumRender must work on front shop
-			AtumRender::get_instance();
 			
 			// Check that the plugin dependencies are met
 			$this->check_dependencies();

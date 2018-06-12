@@ -13,6 +13,7 @@
 namespace Atum\Inc;
 
 use Atum\Components\AtumCapabilities;
+use Atum\Inc\Helpers;
 
 defined( 'ABSPATH' ) or die;
 
@@ -86,12 +87,69 @@ class Hooks {
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
-		//TODO 1.4.8 add here out_of_stock_fields
+
 		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
 		add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
 		add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
 		add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 
+		//TODO 1.4.10 add here out_of_stock_fields
+		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
+		if($is_out_stock_threshold_managed  === "yes"){
+			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
+		}
+
+	}
+
+	/**
+	 * Override the get_stock_status to all products that have stock managed at product level,
+	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set.
+	 * @param $is_in_stock before hook value
+	 * @param $item actual product or variation who fires
+	 * @return bool procesed $is_in_stock (if required)
+	 *
+	 * @since 1.4.10
+	 */
+	public function get_product_is_in_stock_when_out_stock_threshold( $is_in_stock, $item) {
+
+		global $wpdb;
+
+		$item_id = $item->get_ID();
+
+		$query = $wpdb->prepare( "SELECT meta_key, meta_value 
+                  FROM wp_postmeta where post_id = %d
+                  AND meta_key IN ( '_out_stock_threshold', '_manage_stock','_stock','_stock_status', '_backorders')", $item_id );
+
+		// Array( [_manage_stock] => no , [_stock] => , [_stock_status] => instock)
+		$item_metas = array_column( $wpdb->get_results( $query, ARRAY_A ), 'meta_value', 'meta_key' );
+
+		//if this item doesn't have this 4 keys, it means that it never has had _out_stock_threshold set
+		if( ! Helpers::array_keys_exist( array('_out_stock_threshold', '_manage_stock','_stock','_stock_status'), $item_metas ) ){
+
+			//not my problem
+			return 'outofstock' !== $item->get_stock_status();
+
+		} elseif ( $item_metas['_manage_stock'] === "no" || empty( $item_metas['_out_stock_threshold'] ) ) {
+
+			//not my problem
+			return 'outofstock' !== $item->get_stock_status();
+
+		} else {
+
+			if ( $item_metas['_backorders'] !== "no" ) {
+				//not my problem
+				return true;
+			}
+
+			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
+				//avaiable
+				return true;
+
+			} else {
+				//_out_stock_threshold!
+				return false;
+			}
+		}
 	}
 
 	/**
@@ -153,7 +211,7 @@ class Hooks {
 				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
 				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'nonce'         => wp_create_nonce('atum-product-data-nonce'),
-				//TODO 1.4.8 Pass vars to js
+				//TODO 1.4.10 Pass vars to js
 				'isOutStockThresholdEnabled' => Helpers::get_option( 'out_stock_threshold', 'no' ),
                 'outStockThresholdProductTypes' => Globals::OUT_STOCK_THRESHOLD_PRODUCT_TYPES
 			) );
