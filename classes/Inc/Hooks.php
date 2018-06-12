@@ -130,12 +130,12 @@ class Hooks {
 		if( ! Helpers::array_keys_exist( array('_out_stock_threshold', '_manage_stock','_stock','_stock_status'), $item_metas ) ){
 
 			//not my problem
-			return 'outofstock' !== $item->get_stock_status();
+			return 'outofstock' !== $item_metas['_stock_status']; // $item->get_stock_status();
 
 		} elseif ( $item_metas['_manage_stock'] === "no" || empty( $item_metas['_out_stock_threshold'] ) ) {
 
 			//not my problem
-			return 'outofstock' !== $item->get_stock_status();
+			return 'outofstock' !== $item_metas['_stock_status'];
 
 		} else {
 

@@ -850,6 +850,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$manage_stock = get_post_meta( $this->product->get_id(), '_manage_stock', $single = true );
 		if ($manage_stock === "no"){
 			$editable = false;
+			//TODO CHECK THAT
+			$out_stock_threshold = self::EMPTY_COL;
         }
 
 		if ($editable) {
@@ -1047,12 +1049,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			$classes .= ' cell-yellow';
 			$content = '<span class="dashicons dashicons-warning" data-toggle="tooltip" title="' . __('Low Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
-		//TODO out_stock_trheshold
 		// In Stock
 		elseif ( in_array($product_id, $this->id_views['in_stock']) ) {
 			$classes .= ' cell-green';
 			$content = '<span class="dashicons dashicons-yes" data-toggle="tooltip" title="' . __('In Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
+
+		//TODO out_stock_trheshold
+		if ( in_array($product_id, $this->id_views['all_below_out_stock_threshold']) ) {
+			$content .= '<span class="dashicons dashicons-dismiss cell-yellow" data-toggle="tooltip" title="' . __('Below Out Of Stock Trheshold', ATUM_TEXT_DOMAIN) . '"></span>';
+		}
+
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
@@ -1808,14 +1815,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $this->show_unmanaged_counters ) {
 
 			$this->id_views = array_merge( $this->id_views, array(
-				'managed'        => [],
-				'unm_in_stock'   => [],
-				'unm_out_stock'  => [],
-				'unm_back_order' => [],
-				'all_in_stock'   => [],
-				'all_out_stock'  => [],
-				'all_back_order' => [],
-				//'all_out_stock_threshold' => [],
+				'managed'                 => [],
+				'unm_in_stock'            => [],
+				'unm_out_stock'           => [],
+				'unm_back_order'          => [],
+				'all_in_stock'            => [],
+				'all_out_stock'           => [],
+				'all_back_order'          => [],
+				'all_below_out_stock_threshold' => [],
 			) );
 
 			$this->count_views = array_merge( $this->count_views, array(
@@ -2103,6 +2110,22 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->count_views['count_low_stock'] = count( $products_low_stock );
 
 			}
+
+			/**
+			 * Products that are below _out_stock_threshold
+			 */
+			//TODO LIST ALL THRESHOLDS
+			$query = "SELECT DISTINCT pm.post_id FROM {$wpdb->postmeta} pm
+    
+                INNER JOIN {$wpdb->postmeta} pm_manage_stock 			ON ( pm_manage_stock.meta_key = '_manage_stock'  				AND pm_manage_stock.post_id = pm.post_id)
+                INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold 	ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.post_id = pm.post_id )
+                INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.post_id = pm.post_id)
+                
+                WHERE pm_manage_stock.meta_value = 'yes' AND pm_out_stock_threshold.meta_value > pm_stock.meta_value AND pm_out_stock_threshold.meta_value<>'' AND pm_stock.meta_value<>''";
+			$products_below_out_stock_threshold = $wpdb->get_col( $query );
+
+            $this->id_views['all_below_out_stock_threshold']      = $products_below_out_stock_threshold;
+            $this->count_views['count_below_out_stock_threshold'] = count($products_below_out_stock_threshold);
 
 			/*
 			 * Products out of stock
