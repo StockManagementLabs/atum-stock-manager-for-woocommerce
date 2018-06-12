@@ -25,7 +25,7 @@
         // check product-type on load, or on every change to fire
         if ($.inArray( $productType.val(), atumProductData.outStockThresholdProductTypes) >= 0 ) {
 
-			console.log("enabled product type on load:"+$productType.val());
+			//console.log("enabled product type on load:"+$productType.val());
 
 			//bind to inventory_tab
             $( 'li.inventory_tab>a' ).bind( "click", atumEnableOutStockThresholdField );
@@ -38,7 +38,7 @@
 
         $productType.change(function () {
             if ( $.inArray( $(this).val(), atumProductData.outStockThresholdProductTypes ) >= 0 ) {
-                console.log("enabled product type on change:"+$(this).val());
+                //console.log("enabled product type on change:"+$(this).val());
 
                 //bind to inventory_tab
                 $( 'li.inventory_tab>a' ).bind( "click", atumEnableOutStockThresholdField );
@@ -52,23 +52,23 @@
         
 
         function atumEnableOutStockThresholdField() {
-        	console.log(">atumEnableOutStockThresholdField ");
-			console.log("inventory_tab  click");
+        	//console.log(">atumEnableOutStockThresholdField ");
+			//console.log("inventory_tab  click");
 			// and the checkbox _manage_stock is visible
 			if( $('#_manage_stock').filter(":visible").length === 1 ){
-				console.log('_manage_stock is visible and checkd?'+ $('#_manage_stock').prop('checked'));
+				//console.log('_manage_stock is visible and checkd?'+ $('#_manage_stock').prop('checked'));
 
 				// make _out_stock_threshold_field_div visible if needed, and listen to _manage_stock for changes.
 				$("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
 
 				$('#_manage_stock').change(function () {
-					console.log("_manage_stock fired");
+					//console.log("_manage_stock fired");
 					$("#_out_stock_threshold_field_div").css("display", this.checked ? "block" : "none");
 				});
 			}else{
                 // Some kind of products (Grouped products) have a _stock field without checbox.
                 if( $('#_stock').filter(":visible").length === 1 ){
-                    console.log('Some kind of products (Grouped products) have a _stock field without checbox.');
+                    //console.log('Some kind of products (Grouped products) have a _stock field without checbox.');
                     $("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
                 }
 			}
