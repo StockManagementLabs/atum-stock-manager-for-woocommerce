@@ -19,7 +19,12 @@ use Atum\PurchaseOrders\PurchaseOrders;
 
 
 class Wpml {
-
+	
+	/**
+	 * Searchable MultiCurrency columns and their types
+	 */
+	const MULTICURRENCY_COLUMNS = array( '_regular_price', '_sale_price', '_purchase_price' );
+	
 	/**
 	 * Store ATUM Order Post Types
 	 * @var array
@@ -118,6 +123,11 @@ class Wpml {
 			// Hook into Stock Central ListTable columns
 			add_filter( 'atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
 			add_filter( 'atum/stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ) );
+			
+			// Hook into AtumListTable Product Search
+			if ( $this->multicurrency_active ) {
+				add_filter( 'atum/list_table/product_search/numeric_meta_where', array( $this, 'change_multi_currency_meta_where' ), 10, 3 );
+			}
 
 			// Update product meta translations
 			add_filter( 'atum/product_meta', array( $this, 'update_multicurrency_translations_meta' ), 10, 2 );
@@ -133,13 +143,12 @@ class Wpml {
 			// add upgrade ATUM tasks
 			add_action('atum/after_upgrade', array($this, 'upgrade'));
 			
-			
 		}
 
 	}
 
 	/**
-	 * Add specific hooks to the Order post type
+	 * Add specific hooks if the Order Post Type is active and more specific if PO are active.
 	 *
 	 * @since 1.4.1
 	 *
@@ -280,7 +289,7 @@ class Wpml {
 	 * @return array
 	 */
 	public function add_custom_purchase_price( $args ) {
-
+		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
 			$purchase_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_purchase_price'];
 			$args['value'] = ( is_numeric( $purchase_price_value ) ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->current_currency ] ) : $args['value'];
@@ -358,6 +367,45 @@ class Wpml {
 		}
 
 		return $args;
+	}
+	
+	/**
+	 * Change meta where for values with custom multicurrency set
+	 *
+	 * @since 1.4.10
+	 *
+	 * @param string        $where
+	 * @param string        $search_column
+	 * @param integer|float $value
+	 *
+	 * @return mixed
+	 */
+	public function change_multi_currency_meta_where( $where, $search_column, $value) {
+		
+		if ( in_array( $search_column , self::MULTICURRENCY_COLUMNS ) ) {
+			
+			$translated_meta = "{$search_column}_{$this->current_currency}";
+			
+			// Basically: if the original translation has set _wcml_custom_prices_status to 1,
+			//              then took specific currency meta from original translation,
+			//              else took current post meta value
+			$where = "IF( (SELECT pmtrans.meta_value FROM wp_icl_translations AS trans1
+								INNER JOIN wp_icl_translations AS trans2 ON trans2.trid = trans1.trid
+								INNER JOIN wp_postmeta pmtrans ON trans2.element_id = pmtrans.post_ID
+								WHERE trans1.element_type IN ('post_product', 'post_product_variation')
+								AND trans1.element_id = p.ID AND trans2.source_language_code IS NULL
+								AND pmtrans.meta_key = '_wcml_custom_prices_status') = 1,
+					      (SELECT pmtrans.meta_value FROM wp_icl_translations AS trans1
+								INNER JOIN wp_icl_translations AS trans2 ON trans2.trid = trans1.trid
+								INNER JOIN wp_postmeta pmtrans ON trans2.element_id = pmtrans.post_ID
+								WHERE trans1.element_type IN ('post_product', 'post_product_variation')
+								AND trans1.element_id = p.ID AND trans2.source_language_code IS NULL
+								AND pmtrans.meta_key = '$translated_meta'),
+					      (SELECT meta_value FROM wp_postmeta WHERE post_id = p.ID AND meta_key = '$search_column')) = '{$value}';";
+			
+		}
+		
+		return $where;
 	}
 
 	/**
