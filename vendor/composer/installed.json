@@ -100,6 +100,47 @@
         ]
     },
     {
+        "name": "mcaskill/php-array-group-by",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://gist.github.com/mcaskill/baaee44487653e1afc0d",
+            "reference": "20aa76bbc63c0a83448db7d7b93af8006a5bb56f"
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "time": "2017-11-24T13:45:55+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "files": [
+                "Function.Array-Group-By.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Chauncey McAskill",
+                "email": "chauncey@mcaskill.ca",
+                "homepage": "https://github.com/mcaskill"
+            }
+        ],
+        "description": "Groups an array by a given key.",
+        "keywords": [
+            "function"
+        ]
+    },
+    {
         "name": "mpdf/mpdf",
         "version": "v7.1.0",
         "version_normalized": "7.1.0.0",

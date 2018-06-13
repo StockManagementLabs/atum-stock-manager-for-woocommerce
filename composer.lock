@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9acb401606d0f9016c1d9067b5e1702",
+    "content-hash": "d8b5a081618e50d743a8d26df969b9f6",
     "packages": [
         {
             "name": "jimmiw/php-time-ago",
@@ -101,6 +101,45 @@
                 "youtube"
             ],
             "time": "2017-04-13T09:47:50+00:00"
+        },
+        {
+            "name": "mcaskill/php-array-group-by",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://gist.github.com/mcaskill/baaee44487653e1afc0d",
+                "reference": "20aa76bbc63c0a83448db7d7b93af8006a5bb56f"
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "Function.Array-Group-By.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chauncey McAskill",
+                    "email": "chauncey@mcaskill.ca",
+                    "homepage": "https://github.com/mcaskill"
+                }
+            ],
+            "description": "Groups an array by a given key.",
+            "keywords": [
+                "function"
+            ],
+            "time": "2017-11-24T13:45:55+00:00"
         },
         {
             "name": "mpdf/mpdf",

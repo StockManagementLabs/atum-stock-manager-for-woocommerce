@@ -61,9 +61,8 @@ class ListTable extends AtumListTable {
 	 */
 	protected $default_searchable_columns = array(
 		'string'  => array( 'title', '_supplier', '_sku', '_supplier_sku' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
-		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
+		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock', '_out_stock_threshold' )
 	);
-
 
 	/**
 	 * @inheritdoc
@@ -101,6 +100,7 @@ class ListTable extends AtumListTable {
 			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
             '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_out_stock_threshold'   => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'calc_reserved'          => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
@@ -158,6 +158,7 @@ class ListTable extends AtumListTable {
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
 				'members' => array(
 					'_stock',
+					'_out_stock_threshold',
 					'calc_inbound',
 					'calc_hold',
 					'calc_reserved',
@@ -188,18 +189,19 @@ class ListTable extends AtumListTable {
 
 		// Initialize totalizers
 		$this->totalizers = apply_filters( 'atum/list_table/totalizers', array(
-			'_stock'            => 0,
-			'calc_inbound'      => 0,
-			'calc_hold'         => 0,
-			'calc_reserved'     => 0,
-			'calc_back_orders'  => 0,
-			'calc_sold_today'   => 0,
-			'calc_returns'      => 0,
-			'calc_damages'      => 0,
-			'calc_lost_in_post' => 0,
-			'calc_sales14'      => 0,
-			'calc_sales7'       => 0,
-			'calc_lost_sales'   => 0,
+			'_stock'               => 0,
+			'_out_stock_threshold' => 0,
+			'calc_inbound'         => 0,
+			'calc_hold'            => 0,
+			'calc_reserved'        => 0,
+			'calc_back_orders'     => 0,
+			'calc_sold_today'      => 0,
+			'calc_returns'         => 0,
+			'calc_damages'         => 0,
+			'calc_lost_in_post'    => 0,
+			'calc_sales14'         => 0,
+			'calc_sales7'          => 0,
+			'calc_lost_sales'      => 0,
 		));
 		
 		parent::__construct( $args );

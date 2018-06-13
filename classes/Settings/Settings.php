@@ -140,6 +140,14 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
+			// @since 1.4.8
+			'out_stock_threshold' => array(
+				'section' => 'general',
+				'name'    => __( "Enable 'Out of stock Threshold' for individual products", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabled on one product with Atum managing their stock, this limit will override the general WooComerce 'Out of stock' value.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no'
+			),
 			'unmanaged_counters' => array(
 				'section' => 'general',
 				'name'    => __( 'Unmanaged Product Counters', ATUM_TEXT_DOMAIN ),

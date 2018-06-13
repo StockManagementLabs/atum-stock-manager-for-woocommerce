@@ -1607,4 +1607,27 @@ final class Helpers {
 		return FALSE;
 	}
 
+	/**
+     * like array_key_exists, but with multiple keys
+     *
+     * @since 1.4.10
+     *
+	 * @param array $required array with the required keys
+	 * @param array $data array to check.
+	 *
+	 * @return bool
+	 */
+	public static function array_keys_exist(array $required, array $data){
+
+		if (count(array_intersect_key(array_flip($required), $data)) === count($required)) {
+			// All required keys exist!
+			return true;
+		}else{
+			return false;
+		}
+
+    }
+
+
+
 }

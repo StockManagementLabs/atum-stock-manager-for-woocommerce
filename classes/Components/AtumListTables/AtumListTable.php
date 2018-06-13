@@ -294,8 +294,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( isset ($this->group_members['product-details']) && $this->show_cb == TRUE ) {
 				array_unshift($this->group_members['product-details']['members'], 'cb');
+		    }
 		}
-		}
+
+		//remove _out_stock_threshold columns if not set, or add filters to get availability etc.
+		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
+		if($is_out_stock_threshold_managed === "no"){
+			unset($args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
+			unset($args['group_members']['stock-counters'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
+        }
 
 		// Add the checkbox column to the table if enabled
 		$this->table_columns = $this->show_cb == TRUE ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
@@ -818,12 +825,58 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	}
 
+
+	/**
+	 * Column out_stock_threshold column
+	 *
+	 * @since  v1.4.6
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return double
+	 */
+	protected function column__out_stock_threshold( $item,  $editable = TRUE ) {
+
+		$product_id          = $this->get_current_product_id();
+		$out_stock_threshold = get_post_meta( $this->product->get_id(), '_out_stock_threshold', $single = true );
+		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
+
+		// Check type and managed stock at product level
+		$product_type = $this->product->get_type();
+		if ( ! in_array( $product_type, GLOBALS::OUT_STOCK_THRESHOLD_PRODUCT_TYPES ) ) {
+			$editable = false;
+		}
+
+		$manage_stock = get_post_meta( $this->product->get_id(), '_manage_stock', $single = true );
+		if ($manage_stock === "no"){
+			$editable = false;
+			//TODO CHECK THAT
+			$out_stock_threshold = self::EMPTY_COL;
+        }
+
+		if ($editable) {
+
+			$args = array(
+				'post_id'  => $product_id,
+				'meta_key' => 'out_stock_threshold',
+				'value'    => $out_stock_threshold,
+				'input_type' => 'number',
+				'tooltip'  => __( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN )
+			);
+
+			$out_stock_threshold = $this->get_editable_column( $args );
+
+		}
+
+		return apply_filters( 'atum/list_table/column__out_stock_threshold', $out_stock_threshold, $item, $this->product );
+	}
+
     /**
-     * Post Weight column
+     * Column Weight column
      *
      * @since  v1.4.6
      *
-     * @param \WP_Post $item The WooCommerce product post
+     * @param \WP_Post $item The WooCommerce product weight
      *
      * @return double
      */
@@ -1001,6 +1054,12 @@ abstract class AtumListTable extends \WP_List_Table {
 			$classes .= ' cell-green';
 			$content = '<span class="dashicons dashicons-yes" data-toggle="tooltip" title="' . __('In Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
+
+		//TODO out_stock_trheshold
+		if ( in_array($product_id, $this->id_views['all_below_out_stock_threshold']) ) {
+			$content .= '<span class="dashicons dashicons-dismiss cell-yellow" data-toggle="tooltip" title="' . __('Below Out Of Stock Trheshold', ATUM_TEXT_DOMAIN) . '"></span>';
+		}
+
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
@@ -1756,13 +1815,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $this->show_unmanaged_counters ) {
 
 			$this->id_views = array_merge( $this->id_views, array(
-				'managed'        => [],
-				'unm_in_stock'   => [],
-				'unm_out_stock'  => [],
-				'unm_back_order' => [],
-				'all_in_stock'   => [],
-				'all_out_stock'  => [],
-				'all_back_order' => [],
+				'managed'                 => [],
+				'unm_in_stock'            => [],
+				'unm_out_stock'           => [],
+				'unm_back_order'          => [],
+				'all_in_stock'            => [],
+				'all_out_stock'           => [],
+				'all_back_order'          => [],
+				'all_below_out_stock_threshold' => [],
 			) );
 
 			$this->count_views = array_merge( $this->count_views, array(
@@ -2050,6 +2110,22 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->count_views['count_low_stock'] = count( $products_low_stock );
 
 			}
+
+			/**
+			 * Products that are below _out_stock_threshold
+			 */
+			//TODO LIST ALL THRESHOLDS
+			$query = "SELECT DISTINCT pm.post_id FROM {$wpdb->postmeta} pm
+    
+                INNER JOIN {$wpdb->postmeta} pm_manage_stock 			ON ( pm_manage_stock.meta_key = '_manage_stock'  				AND pm_manage_stock.post_id = pm.post_id)
+                INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold 	ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.post_id = pm.post_id )
+                INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.post_id = pm.post_id)
+                
+                WHERE pm_manage_stock.meta_value = 'yes' AND pm_out_stock_threshold.meta_value > pm_stock.meta_value AND pm_out_stock_threshold.meta_value<>'' AND pm_stock.meta_value<>''";
+			$products_below_out_stock_threshold = $wpdb->get_col( $query );
+
+            $this->id_views['all_below_out_stock_threshold']      = $products_below_out_stock_threshold;
+            $this->count_views['count_below_out_stock_threshold'] = count($products_below_out_stock_threshold);
 
 			/*
 			 * Products out of stock
@@ -2791,25 +2867,26 @@ abstract class AtumListTable extends \WP_List_Table {
 						}
 
 						// WHERE meta_key = $search_column and lower(meta_value) like term%
-						$query = $wpdb->prepare("
-							SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						$meta_where = apply_filters('atum/list_table/product_search/numeric_meta_where', sprintf("pm.meta_key = '%s' AND pm.meta_value = '%s'", $search_column, $term ), $search_column, $term);
+						
+						$query = "SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-						    WHERE pm.meta_key = %s
-						    AND p.post_type IN ('product', 'product_variation')
-						    AND pm.meta_value = $term
-					    ", $search_column );
+						    WHERE p.post_type IN ('product', 'product_variation')
+						    AND $meta_where
+					    ";
 
 					}
 					// String fields (_sku ...)
 					else {
+						
+						// WHERE meta_key = $search_column and lower(meta_value) like term%
+						$meta_where = apply_filters('atum/list_table/product_search/string_meta_where', sprintf("pm.meta_key = '%s' AND pm.meta_value LIKE '%%%s%%'", $search_column, $term ), $search_column, $term);
 
-						$query = $wpdb->prepare("
-							SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						$query = "SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-						    WHERE pm.meta_key = %s	
-						    AND p.post_type IN ('product', 'product_variation')	
-						    AND ( lower(pm.meta_value) LIKE '%%{$term}%%' )				
-				         ", $search_column );
+						    WHERE p.post_type IN ('product', 'product_variation')
+						    AND  {$meta_where}
+				         ";
 					}
 
 					$search_terms_ids = $wpdb->get_results( $query );
