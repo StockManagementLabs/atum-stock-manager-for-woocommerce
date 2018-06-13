@@ -1019,5 +1019,39 @@ class ListTable extends AtumListTable {
 		return $products;
 
 	}
+
+	/**
+	 * Message to be displayed when there are no items
+	 *
+	 * @since 1.4.10
+	 */
+	public function no_items() {
+
+		parent::no_items();
+
+		// Do not add the message when filtering
+		if ( defined('DOING_AJAX') && DOING_AJAX ) {
+			return;
+		}
+
+		// Display an alert to ask the user to control all the product at once
+		?>
+		<div class="alert alert-primary">
+			<h3>
+				<i class="dashicons dashicons-megaphone"></i>
+				<?php _e("Your products need to be set as 'Controlled by ATUM' to appear here", ATUM_TEXT_DOMAIN) ?>
+			</h3>
+
+			<p><?php _e('You can do it in 3 ways:', ATUM_TEXT_DOMAIN) ?></p>
+
+			<ol>
+				<li><?php _e("Using the <strong>ATUM Control Switch</strong> that you'll find in every product <strong>edit</strong> page within the <strong>Product Data</strong> section. It may take a lot of time as this is per product edit.", ATUM_TEXT_DOMAIN) ?></li>
+				<li><?php _e("Going to the <strong>Uncontrolled</strong> list using the above button (<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like to take control of, open the bulk action drop-down and press <strong>Enable ATUM's Stock Control</strong> option.", ATUM_TEXT_DOMAIN) ?></li>
+				<li><?php printf( __("We can add all your products at once! Just click the button below. If you change your mind later, you can revert the action by using the <code>ATUM Settings menu > Tools</code>.<br>%sControl all my products%s", ATUM_TEXT_DOMAIN), '<button class="btn btn-sm btn-secondary" id="control-all-products" data-nonce="' . wp_create_nonce('atum-control-all-products-nonce') . '">', '</button>' ) ?></li>
+			</ol>
+		</div>
+		<?php
+
+	}
 	
 }

@@ -72,6 +72,9 @@ final class Ajax {
 		// Apply bulk actions on ListTable components
 		add_action( 'wp_ajax_atum_apply_bulk_action', array( $this, 'apply_bulk_action' ) );
 
+		// Control all products' button
+		add_action( 'wp_ajax_atum_control_all_products', array( $this, 'control_all_products' ) );
+
 		// Manage addon licenses
 		add_action( 'wp_ajax_atum_validate_license', array($this, 'validate_license') );
 		add_action( 'wp_ajax_atum_activate_license', array($this, 'activate_license') );
@@ -465,6 +468,20 @@ final class Ajax {
 		}
 
 		wp_send_json_success( __('Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * Control all the shop products at once from the List Tables' button
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.4.10
+	 */
+	public function control_all_products() {
+
+		check_ajax_referer( 'atum-control-all-products-nonce', 'token' );
+		$this->change_status_meta(Globals::ATUM_CONTROL_STOCK_KEY, 'yes');
 
 	}
 

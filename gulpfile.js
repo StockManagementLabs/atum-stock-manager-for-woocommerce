@@ -12,7 +12,7 @@ var gulp         = require('gulp'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.4.5';
+var version = '1.4.10';
 
 // Global config
 var config = {
@@ -20,7 +20,7 @@ var config = {
 	assetsDir : './assets',
 
 	devUrl    : 'http://atum.loc',
-	production: false, // NOTE: the production tag was causing problems with CSS compression
+	production: true, // NOTE: the production tag was causing problems with CSS compression
 
 	// decorate
 	decorate: {
@@ -45,7 +45,7 @@ var enabled = {
 	// Enable static asset revisioning when `--production`
 	rev: config.production,
 	// Disable source maps when `--production`
-	maps: !config.production,
+	maps: true,
 	// Fail styles task on error when `--production`
 	failStyleTask: config.production
 };
