@@ -1036,6 +1036,14 @@ class ListTable extends AtumListTable {
 			return;
 		}
 
+		// Makes no sense to show the message if there are no products in the shop
+		global $wpdb;
+		$product_count_sql = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = 'product' AND post_status != 'trash'";
+
+		if ( absint( $wpdb->get_var($product_count_sql) ) == 0 ) {
+			return;
+		}
+
 		// Display an alert to ask the user to control all the product at once
 		?>
 		<div class="alert alert-primary">
