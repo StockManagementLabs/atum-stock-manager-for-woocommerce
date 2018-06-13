@@ -2281,11 +2281,19 @@ input[type="button"].btn-block {
 }
 
 .atum-list-table .cell-yellow {
-  color: #EFAF00;
+  color: #EFAF00 !important;
+}
+
+.atum-list-table .cell-yellow .set-meta {
+  color: #EFAF00 !important;
 }
 
 .atum-list-table .cell-red {
-  color: #FF4848;
+  color: #FF4848 !important;
+}
+
+.atum-list-table .cell-red .set-meta {
+  color: #FF4848 !important;
 }
 
 .atum-list-table .cell-blue {

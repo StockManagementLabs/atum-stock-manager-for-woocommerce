@@ -145,11 +145,18 @@ class Hooks {
 			}
 
 			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
+
 				//avaiable
+				if ($item_metas['_stock_status'] !== "instock"){
+					update_post_meta( $item_id, '_stock_status', "instock" );
+                }
 				return true;
 
 			} else {
 				//_out_stock_threshold!
+				if ($item_metas['_stock_status'] !== "outofstock"){
+					update_post_meta( $item_id, '_stock_status', "outofstock" );
+				}
 				return false;
 			}
 		}

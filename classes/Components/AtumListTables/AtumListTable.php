@@ -835,22 +835,23 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return double
 	 */
-	protected function column__out_stock_threshold( $item,  $editable = TRUE ) {
+	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
 
 		$product_id          = $this->get_current_product_id();
-		$out_stock_threshold = get_post_meta( $this->product->get_id(), '_out_stock_threshold', $single = true );
+		$classes = '';
+		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 
-		// Check type and managed stock at product level
+		// Check type and managed stock at product level (override $out_stock_threshold value if set and not allowed)
 		$product_type = $this->product->get_type();
 		if ( ! in_array( $product_type, GLOBALS::OUT_STOCK_THRESHOLD_PRODUCT_TYPES ) ) {
 			$editable = false;
+			$out_stock_threshold = self::EMPTY_COL;
 		}
 
-		$manage_stock = get_post_meta( $this->product->get_id(), '_manage_stock', $single = true );
+		$manage_stock = get_post_meta( $product_id, '_manage_stock', $single = true );
 		if ($manage_stock === "no"){
 			$editable = false;
-			//TODO CHECK THAT
 			$out_stock_threshold = self::EMPTY_COL;
         }
 
@@ -863,12 +864,16 @@ abstract class AtumListTable extends \WP_List_Table {
 				'input_type' => 'number',
 				'tooltip'  => __( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN )
 			);
-
 			$out_stock_threshold = $this->get_editable_column( $args );
-
 		}
 
-		return apply_filters( 'atum/list_table/column__out_stock_threshold', $out_stock_threshold, $item, $this->product );
+		if ( $this->allow_calcs ) {
+			if ( in_array( $product_id, $this->id_views['all_below_out_stock_threshold'] ) ) {
+				$classes = " class='cell-yellow'";
+			}
+		}
+
+		return apply_filters( 'atum/list_table/column__out_stock_threshold', "<span".$classes.">".$out_stock_threshold."</span>", $item, $this->product );
 	}
 
     /**
@@ -1054,12 +1059,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			$classes .= ' cell-green';
 			$content = '<span class="dashicons dashicons-yes" data-toggle="tooltip" title="' . __('In Stock', ATUM_TEXT_DOMAIN) . '"></span>';
 		}
-
-		//TODO out_stock_trheshold
-		if ( in_array($product_id, $this->id_views['all_below_out_stock_threshold']) ) {
-			$content .= '<span class="dashicons dashicons-dismiss cell-yellow" data-toggle="tooltip" title="' . __('Below Out Of Stock Trheshold', ATUM_TEXT_DOMAIN) . '"></span>';
-		}
-
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
@@ -1650,7 +1649,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 		else{
-		    //TODO 1598179 order by
 			$args['orderby'] = 'menu_order';
 			$args['order']   = 'ASC';
         }
@@ -1739,7 +1737,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		$this->items = apply_filters( 'atum/list_table/items', $products );
 
-		//TODO 1598179 here is where we order all the fathers
 		$this->set_pagination_args( array(
 			'total_items' => $found_posts,
 			'per_page'    => $this->per_page,
@@ -2112,20 +2109,21 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			/**
-			 * Products that are below _out_stock_threshold
+			 * Products that are below _out_stock_threshold and cannot be purchased
 			 */
-			//TODO LIST ALL THRESHOLDS
+			//TODO LIST ALL THRESHOLDS VIEW ? it's used to set the warning class if required.
 			$query = "SELECT DISTINCT pm.post_id FROM {$wpdb->postmeta} pm
     
                 INNER JOIN {$wpdb->postmeta} pm_manage_stock 			ON ( pm_manage_stock.meta_key = '_manage_stock'  				AND pm_manage_stock.post_id = pm.post_id)
                 INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold 	ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.post_id = pm.post_id )
-                INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.post_id = pm.post_id)
+                INNER JOIN {$wpdb->postmeta} pm_stock 				    ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.post_id = pm.post_id)
+                INNER JOIN {$wpdb->postmeta} pm_backorders 				ON ( pm_backorders.meta_key = '_backorders'  					AND pm_backorders.post_id = pm.post_id)
                 
-                WHERE pm_manage_stock.meta_value = 'yes' AND pm_out_stock_threshold.meta_value > pm_stock.meta_value AND pm_out_stock_threshold.meta_value<>'' AND pm_stock.meta_value<>''";
+                WHERE pm_manage_stock.meta_value = 'yes' AND pm_out_stock_threshold.meta_value > pm_stock.meta_value AND pm_out_stock_threshold.meta_value<>'' AND pm_stock.meta_value<>'' AND pm_backorders.meta_value = 'no'";
 			$products_below_out_stock_threshold = $wpdb->get_col( $query );
 
             $this->id_views['all_below_out_stock_threshold']      = $products_below_out_stock_threshold;
-            $this->count_views['count_below_out_stock_threshold'] = count($products_below_out_stock_threshold);
+            //$this->count_views['count_below_out_stock_threshold'] = count($products_below_out_stock_threshold);
 
 			/*
 			 * Products out of stock
@@ -3127,7 +3125,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
 		// Get the published Variables first
-        //TODO 1598179 order by menu_order ?
 		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
@@ -3166,7 +3163,6 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 			}
 
-			//TODO 1598179 order by menu_order ?
 			$children_args = array(
 				'post_type'       => $post_type,
 				'post_status'     => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
