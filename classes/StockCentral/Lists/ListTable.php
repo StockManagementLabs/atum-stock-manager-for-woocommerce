@@ -52,7 +52,22 @@ class ListTable extends AtumListTable {
 	 * The columns hidden by default
 	 * @var array
 	 */
-	protected static $default_hidden_columns = array('_weight');
+	protected static $default_hidden_columns = array(
+		'_weight',
+		'calc_inbound',
+		'calc_hold',
+		'calc_reserved',
+		'calc_back_orders',
+		'calc_sold_today',
+		'calc_returns',
+		'calc_damages',
+		'calc_lost_in_post',
+		'calc_sales14',
+		'calc_sales7',
+		'calc_will_last',
+		'calc_stock_out_days',
+		'calc_lost_sales'
+	);
 
 	/**
 	 * TODO $searchable_columns ?
@@ -60,9 +75,23 @@ class ListTable extends AtumListTable {
 	 * @var array string keys ()
 	 */
 	protected $default_searchable_columns = array(
-		'string'  => array( 'title', '_supplier', '_sku', '_supplier_sku' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
-		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock', '_out_stock_threshold' )
+		'string'  => array(
+			'title',
+			'_supplier',
+			'_sku',
+			'_supplier_sku'
+		),
+		'numeric' => array(
+			'ID',
+			'_regular_price',
+			'_sale_price',
+			'_purchase_price',
+			'_weight',
+			'_stock',
+			'_out_stock_threshold'
+		)
 	);
+
 
 	/**
 	 * @inheritdoc
@@ -117,25 +146,9 @@ class ListTable extends AtumListTable {
 			'calc_stock_indicator'   => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
-		// Hide the purchase price column if the current user has not the capability
-		if ( ! AtumCapabilities::current_user_can('view_purchase_price') ) {
-			unset( $args['table_columns']['_purchase_price'] );
-		}
-
-		// Hide the supplier's columns if the current user has not the capability
-		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
-			unset( $args['table_columns']['_supplier'] );
-			unset( $args['table_columns']['_supplier_sku'] );
-		}
-
-		if ( ! ModuleManager::is_module_active('purchase_orders') ) {
-			unset( $args['table_columns']['_purchase_price'] );
-			unset( $args['table_columns']['calc_inbound'] );
-		}
-
 		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
 
-		// TODO: Add group table functionality if some columns are invisible
+		// TODO: Add group table functionality if some columns are hidden
 		$args['group_members'] = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
@@ -186,6 +199,26 @@ class ListTable extends AtumListTable {
 				)
 			)
 		) );
+
+		// Hide the purchase price column if the current user has not the capability
+		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
+			unset( $args['table_columns']['_purchase_price'] );
+			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
+		}
+
+		// Hide the supplier's columns if the current user has not the capability
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			unset( $args['table_columns']['_supplier'] );
+			unset( $args['table_columns']['_supplier_sku'] );
+			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_sku', '_supplier_sku' ] );
+		}
+
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
+			unset( $args['table_columns']['_purchase_price'] );
+			unset( $args['table_columns']['calc_inbound'] );
+			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
+			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ 'calc_inbound' ] );
+		}
 
 		// Initialize totalizers
 		$this->totalizers = apply_filters( 'atum/list_table/totalizers', array(
