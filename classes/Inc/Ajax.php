@@ -1924,54 +1924,25 @@ final class Ajax {
     private function clean_out_stock_threshold_meta(){
 	    global $wpdb;
 	    $wpdb->hide_errors();
+	    //$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
 
-	    $woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
+        //TODO _out_stock_threshold rebuild stock_status
+	    $ids_2_rebuild_stock_status =$wpdb->get_col(
+	    "SELECT DISTINCT p.ID FROM wp_posts p
+            INNER JOIN wp_postmeta pm_out_stock_threshold 	ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.meta_value<>''		AND pm_out_stock_threshold.post_id = p.ID )
+            INNER JOIN wp_postmeta pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.meta_value<>''						AND pm_stock.post_id = p.ID)
+            WHERE p.post_type IN ('product', 'product_variation')");
 
-	    $clean_success = $wpdb->query("DELETE FROM {$wpdb->postmeta}  WHERE meta_key = '".Globals::OUT_STOCK_THRESHOLD_KEY."'");
-	    //TODO _out_stock_threshold rebuild stock_status
-
-        $ids_2_rebuild_stock_status_instock =$wpdb->get_col( $wpdb->prepare(
-            "SELECT DISTINCT p.ID  FROM {$wpdb->posts} p
-
-            INNER JOIN {$wpdb->postmeta} pm_manage_stock 	ON ( pm_manage_stock.meta_key = '_manage_stock'  	AND pm_manage_stock.meta_value = 'yes'	AND pm_manage_stock.post_id = p.ID)
-            INNER JOIN {$wpdb->postmeta} pm_stock 			ON ( pm_stock.meta_key = '_stock'  					AND pm_stock.meta_value<>''				AND pm_stock.post_id = p.ID)
-            INNER JOIN {$wpdb->postmeta} pm_backorders 		ON ( pm_backorders.meta_key = '_backorders'  		AND pm_backorders.meta_value='no'		AND pm_backorders.post_id = p.ID)
-            INNER JOIN {$wpdb->postmeta} pm_stock_status 	ON ( pm_stock_status.meta_key = '_stock_status' 	AND pm_stock_status.meta_value<>''		AND pm_stock_status.post_id = p.ID )
-            
-            WHERE p.post_type IN ('product', 'product_variation')
-               AND CAST( %d AS DECIMAL(10,2) ) < CAST( pm_stock.meta_value AS DECIMAL(10,2))
-               AND pm_stock_status.meta_value<>'instock' ;", $woocommerce_notify_no_stock_amount ) );
-
-	    $ids_2_rebuild_stock_status_outofstock =$wpdb->get_col( $wpdb->prepare(
-		    "SELECT DISTINCT p.ID  FROM {$wpdb->posts} p
-
-            INNER JOIN {$wpdb->postmeta} pm_manage_stock 		ON ( pm_manage_stock.meta_key = '_manage_stock' AND pm_manage_stock.meta_value = 'yes'	AND pm_manage_stock.post_id = p.ID)
-            INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  				AND pm_stock.meta_value<>''				AND pm_stock.post_id = p.ID)
-            INNER JOIN {$wpdb->postmeta} pm_backorders 			ON ( pm_backorders.meta_key = '_backorders'  	AND pm_backorders.meta_value='no'		AND pm_backorders.post_id = p.ID)
-            INNER JOIN {$wpdb->postmeta} pm_stock_status 		ON ( pm_stock_status.meta_key = '_stock_status' AND pm_stock_status.meta_value<>''		AND pm_stock_status.post_id = p.ID )
-            
-            WHERE p.post_type IN ('product', 'product_variation')
-               AND CAST( %d AS DECIMAL(10,2) ) >= CAST( pm_stock.meta_value AS DECIMAL(10,2))
-               AND pm_stock_status.meta_value<>'outofstock' ;", $woocommerce_notify_no_stock_amount ) );
-
-	    if (count($ids_2_rebuild_stock_status_instock)>0 ) {
-		    $rebuild_stock_status_instock = $wpdb->query( "UPDATE {$wpdb->postmeta}
-                SET meta_value = 'instock'
-                WHERE  meta_key = '_stock_status' AND post_id IN (" . implode( ', ', $ids_2_rebuild_stock_status_instock ) . ")" );
-
-	    }else{
-		    $rebuild_stock_status_instock = TRUE;
+	    foreach ($ids_2_rebuild_stock_status AS $id_2_rebuild){
+		    $product  = wc_get_product( $id_2_rebuild );
+		    $product->save();
+		    // set _out_stock_threshold to empty (avoid partial works to be done again)
+		    delete_post_meta( $id_2_rebuild, '_out_stock_threshold' );
         }
 
-	    if (count($ids_2_rebuild_stock_status_outofstock)>0 ) {
-		    $rebuild_stock_status_outofstock = $wpdb->query(  "UPDATE {$wpdb->postmeta}
-                  SET meta_value = 'outofstock'
-                  WHERE  meta_key = '_stock_status' AND post_id IN (" . implode( ', ', $ids_2_rebuild_stock_status_outofstock ) . ")" );
-	    }else{
-		    $rebuild_stock_status_outofstock = TRUE;
-        }
+	    $clean_success = $wpdb->query("DELETE FROM {$wpdb->postmeta}  WHERE meta_key = '".Globals::OUT_STOCK_THRESHOLD_KEY."' AND meta_value =''");
 
-	    if ($clean_success !== FALSE && $rebuild_stock_status_instock !== FALSE && $rebuild_stock_status_outofstock !== FALSE) {
+	    if ($clean_success !== FALSE ) {
 		    wp_send_json_success( __('All your Out Of Stock Threshold values in products were clean successfully', ATUM_TEXT_DOMAIN) );
 	    }
     }
