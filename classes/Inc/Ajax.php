@@ -126,6 +126,7 @@ final class Ajax {
 		// Run scripts from Tools section
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
+		add_action( 'wp_ajax_atum_tool_clean_out_stock_threshold', array( $this, 'clean_out_stock_threshold' ) );
 
 	}
 
@@ -1895,6 +1896,38 @@ final class Ajax {
 		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
 
 	}
+
+
+	/**
+	 * Clean all Out Stock Threshold values that have been set
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 * TODO clean_out_stock_threshold
+	 * @since 1.4.10
+	 */
+	public function clean_out_stock_threshold() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+
+		$this->clean_out_stock_threshold_meta();
+
+		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
+
+	}
+
+
+    private function clean_out_stock_threshold_meta(){
+	    global $wpdb;
+	    $wpdb->hide_errors();
+
+	    $clean_success = $wpdb->query("DELETE FROM {$wpdb->postmeta}  WHERE meta_key = '".Globals::OUT_STOCK_THRESHOLD_KEY."'");
+	    //TODO _out_stock_threshold rebuild stock_status
+
+	    if ($clean_success !== FALSE) {
+		    wp_send_json_success( __('All your Out Of Stock Threshold values in products were clean successfully', ATUM_TEXT_DOMAIN) );
+	    }
+    }
 
 	/**
 	 * Change the value of a meta key for all products at once
