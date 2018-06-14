@@ -140,11 +140,12 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
-			// @since 1.4.8
 			'out_stock_threshold' => array(
 				'section' => 'general',
-				'name'    => __( "Enable 'Out of stock Threshold' for individual products", ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "When enabled on one product with Atum managing their stock, this limit will override the general WooComerce 'Out of stock' value.", ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'ATUM per product Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Activate the switch to disable WooCommerce global threshold settings and enable ATUM per product threshold. All products will inherit the WooCommerce global value that you can now amend.<br><br>
+								  Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br> 
+								  We have a tool to reset or change all per product values in the Tool tab above.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
