@@ -464,6 +464,7 @@ class ListTable extends AtumListTable {
 			$back_orders = '--';
 			if ( $this->product->backorders_allowed() ) {
 
+			    //TODO threshold recalc if needed
 				$stock_quantity = $this->product->get_stock_quantity();
 				$back_orders = 0;
 				if ( $stock_quantity < $this->no_stock ) {

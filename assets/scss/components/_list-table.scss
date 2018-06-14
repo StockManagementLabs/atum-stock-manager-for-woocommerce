@@ -545,11 +545,17 @@
 		}
 		
 		&-yellow {
-			color: $warning;
+			color: $warning !important;
+			.set-meta {
+				color: $warning !important;
+			}
 		}
-		
+
 		&-red {
-			color: $danger;
+			color: $danger !important;
+			.set-meta {
+				color: $danger !important;
+			}
 		}
 		
 		&-blue {

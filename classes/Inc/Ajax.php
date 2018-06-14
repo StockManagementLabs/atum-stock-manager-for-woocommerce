@@ -126,6 +126,7 @@ final class Ajax {
 		// Run scripts from Tools section
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
+		add_action( 'wp_ajax_atum_tool_clean_out_stock_threshold', array( $this, 'clean_out_stock_threshold' ) );
 
 	}
 
@@ -1895,6 +1896,56 @@ final class Ajax {
 		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
 
 	}
+
+
+	/**
+	 * Clean all Out Stock Threshold values that have been set
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 * TODO clean_out_stock_threshold
+	 * @since 1.4.10
+	 */
+	public function clean_out_stock_threshold() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+
+		$this->clean_out_stock_threshold_meta();
+
+		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * clean all the postmeta with OUT_STOCK_THRESHOLD_KEY, and rebuild all the _stock_status if
+     * required to comeback to the $woocommerce_notify_no_stock_amount
+     * @since 1.4.10
+	 */
+    private function clean_out_stock_threshold_meta(){
+	    global $wpdb;
+	    $wpdb->hide_errors();
+	    //$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
+
+        //TODO _out_stock_threshold rebuild stock_status
+	    $ids_2_rebuild_stock_status =$wpdb->get_col(
+	    "SELECT DISTINCT p.ID FROM wp_posts p
+            INNER JOIN wp_postmeta pm_out_stock_threshold 	ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.meta_value<>''		AND pm_out_stock_threshold.post_id = p.ID )
+            INNER JOIN wp_postmeta pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.meta_value<>''						AND pm_stock.post_id = p.ID)
+            WHERE p.post_type IN ('product', 'product_variation')");
+
+	    foreach ($ids_2_rebuild_stock_status AS $id_2_rebuild){
+		    $product  = wc_get_product( $id_2_rebuild );
+		    $product->save();
+		    // set _out_stock_threshold to empty (avoid partial works to be done again)
+		    delete_post_meta( $id_2_rebuild, '_out_stock_threshold' );
+        }
+
+	    $clean_success = $wpdb->query("DELETE FROM {$wpdb->postmeta}  WHERE meta_key = '".Globals::OUT_STOCK_THRESHOLD_KEY."' AND meta_value =''");
+
+	    if ($clean_success !== FALSE ) {
+		    wp_send_json_success( __('All your Out Of Stock Threshold values in products were clean successfully', ATUM_TEXT_DOMAIN) );
+	    }
+    }
 
 	/**
 	 * Change the value of a meta key for all products at once
