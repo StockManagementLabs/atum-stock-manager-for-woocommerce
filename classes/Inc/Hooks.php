@@ -101,7 +101,7 @@ class Hooks {
 		// since 1.4.10
 		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 		if($is_out_stock_threshold_managed  === "yes"){
-			//add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
+			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
 		}
 
 	}
@@ -424,6 +424,8 @@ class Hooks {
 			//}
 		}
 
+		$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
+
 		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
 		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', true );
 
@@ -445,7 +447,7 @@ class Hooks {
 			$show_if_out_stock_threshold_product_types = array_map(function($val) { return "show_if_".$val; }, Globals::OUT_STOCK_THRESHOLD_PRODUCT_TYPES) ;
 		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $show_if_out_stock_threshold_product_types );
 
-			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation','product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes' ) );
+			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation','product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes','woocommerce_notify_no_stock_amount' ) );
 
 		endif;
 

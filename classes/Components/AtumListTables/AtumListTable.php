@@ -851,7 +851,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
 
-		$product_id          = $this->get_current_product_id();
+		//$product_id          = $this->get_current_product_id();
+		$product_id = $this->get_current_product_id();
 		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 

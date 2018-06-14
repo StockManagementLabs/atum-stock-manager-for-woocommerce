@@ -31,7 +31,7 @@ if ( Helpers::get_option( 'out_stock_threshold', 'no' ) == 'yes' ):?>
                 <input type="number" class="short" style="" step="1"
                        name="<?php echo $out_stock_threshold_field_name ?>"
                        id="<?php echo $out_stock_threshold_field_id ?>"
-                       value="<?php echo $out_stock_threshold ?>" placeholder=""
+                       value="<?php echo $out_stock_threshold ?>" placeholder="<?php echo $woocommerce_notify_no_stock_amount ?>"
                        data-onload-product-type="<?php echo $product_type ?>">
                 <?php echo wc_help_tip( __( "When enabled on one product with Atum managing their stock, this limit will override the general WooComerce 'Out of stock' value.", ATUM_TEXT_DOMAIN ) ); ?>
                 </span>
