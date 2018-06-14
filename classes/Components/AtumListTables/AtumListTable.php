@@ -990,6 +990,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		//TODO order?
 		return apply_filters( 'atum/stock_central_list/column_stock',"<span".$classes_title.">".$stock."</span>"  , $item, $this->product );
+		//return apply_filters( 'atum/stock_central_list/column_stock',$stock, $item, $this->product );
 	}
 
 	/**
@@ -1689,7 +1690,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 		else{
-			$args['orderby'] = 'menu_order';
+			$args['orderby'] = 'title';
 			$args['order']   = 'ASC';
         }
 
@@ -3176,7 +3177,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
-			'orderby'       => 'menu_order',
+			'orderby'       => 'title',
+			//'orderby'       => 'menu_order',
 			'order'       => 'ASC',
 			'tax_query'      => array(
 				array(
