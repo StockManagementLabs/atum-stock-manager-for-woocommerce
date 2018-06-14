@@ -349,12 +349,17 @@
 	}
 	
 	.column-groups {
+		background-color: darken($light, 7%);
+		
 		th {
-			padding-left: 10px;
+			padding: 4px 10px;
 			font-weight: 500;
+			font-size: 12px;
+			line-height: 1.3;
+			min-width: 80px;
 			
-			&:nth-child(even) {
-				background-color: $light;
+			&:not(:last-child) {
+				border-right: 1px solid $gray-400;
 			}
 		}
 	}
@@ -592,6 +597,29 @@
 		max-width: 50px;
 		text-align: center;
 		
+		.wc-type {
+			display: block;
+			text-indent: -9999px;
+			position: relative;
+			height: 1em;
+			width: 1em;
+			margin: 0 auto;
+			
+			&:before {
+				font-family: WooCommerce;
+				content: "\e006";
+				position: absolute;
+				text-indent: 0;
+				font-size: 14px;
+				top: 0;
+				speak: none;
+				font-variant: normal;
+				text-transform: none;
+				-webkit-font-smoothing: antialiased;
+				left: 0;
+			}
+		}
+		
 		.product-type {
 			display: block;
 			text-indent: -9999px;
@@ -806,6 +834,7 @@
 			left: 0;
 		}
 	}
+	
 }
 
 // Popovers' customisations
