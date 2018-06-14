@@ -1576,6 +1576,17 @@ final class Helpers {
 		
 	}
 
+
+
+	public static function is_any_out_stock_threshold_set(){
+	    global $wpdb;
+
+		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->postmeta} where meta_key ='_out_stock_threshold';");
+
+		return $rowcount>0;
+
+    }
+
 	/**
 	 * Return true if value exists in a multiarray
      * http://codepad.org/GU0qG5su
