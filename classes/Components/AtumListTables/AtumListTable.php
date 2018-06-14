@@ -950,30 +950,44 @@ abstract class AtumListTable extends \WP_List_Table {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 			$this->increase_total('_stock', $stock);
 
-			if($this->is_out_stock_threshold_managed){ //setings value
+			if($this->is_out_stock_threshold_managed) { //setings value is on
 
 				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
+
 				if ( strlen( $out_stock_threshold ) > 0 ) {
-					$is_below_out_stock_threshold = ( wc_stock_amount( $out_stock_threshold ) >= $stock );
+					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
+						//$is_below_out_stock_threshold = ( wc_stock_amount( $out_stock_threshold ) >= $stock );
+						if ( ! $editable ) {
+							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below Out Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+						} else {
+							$classes_title   = " class='cell-yellow'";
+							$tooltip_warning = __( 'Click to edit the stock quantity (it is below Out Stock Threshold)', ATUM_TEXT_DOMAIN );
+						}
+					}
+
+				} else {
+					if ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
+						if ( ! $editable ) {
+							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+						} else {
+							$classes_title   = " class='cell-yellow'";
+							$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
+						}
+					}
+				}
+			} else {
+				if ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
+					if ( ! $editable ) {
+						$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+					} else {
+						$classes_title   = " class='cell-yellow'";
+						$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
+					}
 				}
 
-				if ( $is_below_out_stock_threshold && ! $editable ) {
-					$classes_title = " class='cell-yellow' title='" . __( 'Stock is below Out Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
-
-				} else if ( $is_below_out_stock_threshold && $editable ) {
-					$classes_title   = " class='cell-yellow'";
-					$tooltip_warning = __( 'Click to edit the stock quantity (it is below Out Stock Threshold)', ATUM_TEXT_DOMAIN );
-				}
-			}
-
-            if(!$is_below_out_stock_threshold && wc_stock_amount($woocommerce_notify_no_stock_amount) && strlen($classes_title) == 0 ){
-	            if ( ! $editable ) {
-		            $classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
-
-	            } else {
-		            $classes_title   = " class='cell-yellow'";
-		            $tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
-	            }
             }
 
 			if ($editable) {
