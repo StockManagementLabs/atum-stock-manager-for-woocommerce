@@ -241,6 +241,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	const EMPTY_COL = '&mdash;';
 
+	/*
+	 * it's out of stock threshold enabled on setings?
+	 * @since 1.4.10
+	 */
+	protected $is_out_stock_threshold_managed =  "no";
+
+	protected $woocommerce_notify_no_stock_amount;
+
 
 	/**
 	 * AtumListTable Constructor
@@ -281,6 +289,12 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->show_totals = FALSE;
 		}
 
+		if (Helpers::get_option( 'out_stock_threshold', "no" ) == 'no' ) {
+			$this->is_out_stock_threshold_managed = FALSE;
+		}else{
+			$this->is_out_stock_threshold_managed = TRUE;
+        }
+
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
@@ -301,7 +315,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 		if($is_out_stock_threshold_managed === "no"){
 			unset($args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
-			unset($args['group_members']['stock-counters'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
+			$args['group_members']['stock-counters']['members'] = array_diff($args['group_members']['stock-counters']['members'], array(Globals::OUT_STOCK_THRESHOLD_KEY));
         }
 
 		// Add the checkbox column to the table if enabled
@@ -838,7 +852,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
 
 		$product_id          = $this->get_current_product_id();
-		$classes = '';
 		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 
@@ -867,13 +880,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$out_stock_threshold = $this->get_editable_column( $args );
 		}
 
-		if ( $this->allow_calcs ) {
-			if ( in_array( $product_id, $this->id_views['all_below_out_stock_threshold'] ) ) {
-				$classes = " class='cell-yellow'";
-			}
-		}
-
-		return apply_filters( 'atum/list_table/column__out_stock_threshold', "<span".$classes.">".$out_stock_threshold."</span>", $item, $this->product );
+		return apply_filters( 'atum/list_table/column__out_stock_threshold', $out_stock_threshold, $item, $this->product );
 	}
 
     /**
@@ -923,6 +930,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		$stock = self::EMPTY_COL;
 
 		$product_id = $this->get_current_product_id();
+		$classes_title = '';
+		$tooltip_warning = '';
+		$is_below_out_stock_threshold = FALSE;
+
+
+		$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
 
 		if ($this->allow_calcs) {
 
@@ -934,13 +947,39 @@ abstract class AtumListTable extends \WP_List_Table {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 			$this->increase_total('_stock', $stock);
 
+			if($this->is_out_stock_threshold_managed){ //setings value
+
+				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
+				if ( strlen( $out_stock_threshold ) > 0 ) {
+					$is_below_out_stock_threshold = ( wc_stock_amount( $out_stock_threshold ) >= $stock );
+				}
+
+				if ( $is_below_out_stock_threshold && ! $editable ) {
+					$classes_title = " class='cell-yellow' title='" . __( 'Stock is below Out Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+				} else if ( $is_below_out_stock_threshold && $editable ) {
+					$classes_title   = " class='cell-yellow'";
+					$tooltip_warning = __( 'Click to edit the stock quantity (it is below Out Stock Threshold)', ATUM_TEXT_DOMAIN );
+				}
+			}
+
+            if(!$is_below_out_stock_threshold && wc_stock_amount($woocommerce_notify_no_stock_amount) >= $stock){
+	            if ( ! $editable ) {
+		            $classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+	            } else {
+		            $classes_title   = " class='cell-yellow'";
+		            $tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
+	            }
+            }
+
 			if ($editable) {
 
 				$args = array(
 					'post_id'  => $product_id,
 					'meta_key' => 'stock',
 					'value'    => $stock,
-					'tooltip'  => __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
+					'tooltip'  => ($tooltip_warning)?:__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
 				);
 
 				$stock = $this->get_editable_column( $args );
@@ -948,9 +987,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 		}
-
-		return apply_filters( 'atum/stock_central_list/column_stock', $stock, $item, $this->product );
-
+		//TODO order?
+		return apply_filters( 'atum/stock_central_list/column_stock',"<span".$classes_title.">".$stock."</span>"  , $item, $this->product );
 	}
 
 	/**
@@ -987,6 +1025,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$inbound_stock = $wpdb->get_var($sql);
 			$inbound_stock = $inbound_stock ?: 0;
 			$this->increase_total('calc_inbound', $inbound_stock);
+
 
 		}
 
@@ -1819,7 +1858,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'all_in_stock'            => [],
 				'all_out_stock'           => [],
 				'all_back_order'          => [],
-				'all_below_out_stock_threshold' => [],
+				//'all_below_out_stock_threshold' => [],
 			) );
 
 			$this->count_views = array_merge( $this->count_views, array(
@@ -2112,17 +2151,23 @@ abstract class AtumListTable extends \WP_List_Table {
 			 * Products that are below _out_stock_threshold and cannot be purchased
 			 */
 			//TODO LIST ALL THRESHOLDS VIEW ? it's used to set the warning class if required.
-			$query = "SELECT DISTINCT pm.post_id FROM {$wpdb->postmeta} pm
-    
-                INNER JOIN {$wpdb->postmeta} pm_manage_stock 			ON ( pm_manage_stock.meta_key = '_manage_stock'  				AND pm_manage_stock.post_id = pm.post_id)
-                INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold 	ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.post_id = pm.post_id )
-                INNER JOIN {$wpdb->postmeta} pm_stock 				    ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.post_id = pm.post_id)
-                INNER JOIN {$wpdb->postmeta} pm_backorders 				ON ( pm_backorders.meta_key = '_backorders'  					AND pm_backorders.post_id = pm.post_id)
+            /*
+			if($this->is_out_stock_threshold_managed) {
+				$query = "SELECT DISTINCT p.ID FROM {$wpdb->posts} p
+            
+                INNER JOIN {$wpdb->postmeta} pm_manage_stock 		ON ( pm_manage_stock.meta_key = '_manage_stock'  				AND pm_manage_stock.meta_value = 'yes'			AND pm_manage_stock.post_id = p.ID)
+                INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.meta_value<>''		AND pm_out_stock_threshold.post_id = p.ID )
+                INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.meta_value<>''						AND pm_stock.post_id = p.ID)
+                INNER JOIN {$wpdb->postmeta} pm_backorders 			ON ( pm_backorders.meta_key = '_backorders'  					AND pm_backorders.meta_value='no'				AND pm_backorders.post_id = p.ID)
                 
-                WHERE pm_manage_stock.meta_value = 'yes' AND pm_out_stock_threshold.meta_value > pm_stock.meta_value AND pm_out_stock_threshold.meta_value<>'' AND pm_stock.meta_value<>'' AND pm_backorders.meta_value = 'no'";
-			$products_below_out_stock_threshold = $wpdb->get_col( $query );
+                WHERE p.post_type IN ('" . implode( "', '", $post_types ) . "')
+                   AND CAST( pm_out_stock_threshold.meta_value AS DECIMAL(10,2) ) > CAST( pm_stock.meta_value AS DECIMAL(10,2) )";
 
-            $this->id_views['all_below_out_stock_threshold']      = $products_below_out_stock_threshold;
+				$products_below_out_stock_threshold = $wpdb->get_col( $query );
+
+				$this->id_views['all_below_out_stock_threshold'] = $products_below_out_stock_threshold;
+			}
+			*/
             //$this->count_views['count_below_out_stock_threshold'] = count($products_below_out_stock_threshold);
 
 			/*
