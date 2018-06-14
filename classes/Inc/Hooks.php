@@ -101,7 +101,7 @@ class Hooks {
 		// since 1.4.10
 		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 		if($is_out_stock_threshold_managed  === "yes"){
-			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
+			//add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
 		}
 
 	}
