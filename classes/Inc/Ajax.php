@@ -1916,7 +1916,11 @@ final class Ajax {
 
 	}
 
-
+	/**
+	 * clean all the postmeta with OUT_STOCK_THRESHOLD_KEY, and rebuild all the _stock_status if
+     * required to comeback to the $woocommerce_notify_no_stock_amount
+     * @since 1.4.10
+	 */
     private function clean_out_stock_threshold_meta(){
 	    global $wpdb;
 	    $wpdb->hide_errors();
