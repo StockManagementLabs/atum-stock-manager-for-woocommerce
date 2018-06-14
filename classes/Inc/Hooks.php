@@ -26,15 +26,10 @@ class Hooks {
 	 */
 	private static $instance;
 
-	// flag to load out_stock_threshold hooks
-	private $is_out_stock_threshold_managed = "no";
-
 	/**
 	 * Hooks singleton constructor
 	 */
 	private function __construct() {
-
-		$this->is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 
 		if ( is_admin() ) {
 			$this->register_admin_hooks();
@@ -73,7 +68,11 @@ class Hooks {
 		// Firefox fix to not preserve the dropdown
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
-		if($this->is_out_stock_threshold_managed  === "yes"){
+		//add out_stock_threshold actions if required
+        // since 1.4.10
+		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
+		if($is_out_stock_threshold_managed  === "yes"){
+
 			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
@@ -98,7 +97,10 @@ class Hooks {
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
-		if($this->is_out_stock_threshold_managed  === "yes"){
+		//add out_stock_threshold actions if required
+		// since 1.4.10
+		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
+		if($is_out_stock_threshold_managed  === "yes"){
 			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
 		}
 
@@ -106,10 +108,11 @@ class Hooks {
 
 	/**
 	 * Override the get_stock_status to all products that have stock managed at product level,
-	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set.
-	 * @param $is_in_stock before hook value
-	 * @param $item actual product or variation who fires
-	 * @return bool procesed $is_in_stock (if required)
+	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
+     *
+	 * @param $is_in_stock double before hook value
+	 * @param $item product actual product or variation who fires
+	 * @return bool true/false procesed $is_in_stock (if required)
 	 *
 	 * @since 1.4.10
 	 */
@@ -144,13 +147,14 @@ class Hooks {
 				return true;
 			}
 
-			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
+			if ( $item_metas['_stock'] >= $item_metas['_out_stock_threshold'] ) {
 				//avaiable
 				return true;
 
 			} else {
 				//_out_stock_threshold!
 				return false;
+
 			}
 		}
 	}
@@ -817,7 +821,6 @@ class Hooks {
 		return $dropdown;
 
 	}
-
 
 	/****************************
 	 * Instance methods

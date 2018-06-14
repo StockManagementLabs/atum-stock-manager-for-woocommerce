@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) or die;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
-
 class Settings {
 	
 	/**
@@ -140,7 +139,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
-			// @since 1.4.8
+			// @since 1.4.10
 			'out_stock_threshold' => array(
 				'section' => 'general',
 				'name'    => __( "Enable 'Out of stock Threshold' for individual products", ATUM_TEXT_DOMAIN ),
@@ -365,7 +364,6 @@ class Settings {
 		return apply_filters( 'atum/settings/get_settings', $options );
 	}
 	
-	
 	/**
 	 * Enqueues scripts and styles needed for the Settings Page
 	 *
@@ -513,7 +511,6 @@ class Settings {
 		return apply_filters( 'atum/settings/sanitize', $this->options );
 		
 	}
-	
 	
 	/**
 	 * Get the settings option array and print a text field
