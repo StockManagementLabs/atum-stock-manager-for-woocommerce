@@ -65,8 +65,7 @@
 
 			//TODO out_stock_threshold prompts
 			.on('change','#atum_out_stock_threshold',function() {
-                console.log('binded:'+self.settings.isAnyOutStockThresholdSet);
-                if($(this).is(":checked")) {
+                if( $(this).is(":checked") && self.settings.isAnyOutStockThresholdSet ) {
                     swal({
                         title              : self.settings.areYouSure,
                         text               : self.settings.OutStockThresholdSetCleanText,
@@ -85,7 +84,7 @@
                                     token : self.settings.runnerNonce
                                 };
                                 $.ajax({
-                                    url       : ajax,
+                                    url       : ajaxurl,
                                     method    : 'POST',
                                     dataType  : 'json',
                                     data      : data,
@@ -115,6 +114,16 @@
 
                     }).catch(swal.noop);
 
+                }
+                if(!this.checked) {
+					console.log("uncheck");
+
+                    swal({
+                            title: self.settings.areYouSure,
+                            text: self.settings.OutStockThresholdDisable,
+                            type: 'info'
+                        }
+                    )
                 }
             })
 			

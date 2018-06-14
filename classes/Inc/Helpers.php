@@ -1584,7 +1584,6 @@ final class Helpers {
 		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->postmeta} where meta_key ='_out_stock_threshold';");
 
 		return $rowcount>0;
-
     }
 
 	/**

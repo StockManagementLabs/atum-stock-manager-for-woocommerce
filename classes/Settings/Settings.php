@@ -402,9 +402,10 @@ class Settings {
 				'error'                     => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'               => wp_create_nonce( 'atum-script-runner-nonce' ),
 				'isAnyOutStockThresholdSet' => Helpers::is_any_out_stock_threshold_set(),
-				'OutStockThresholdSetCleanButton'   => __( 'Clean Now!', ATUM_TEXT_DOMAIN ),
+				'OutStockThresholdSetCleanButton'   => __( 'Star Fresh', ATUM_TEXT_DOMAIN ),
 				'OutStockThresholdSetCleanScript' => 'atum_tool_clean_out_stock_threshold',
-				'OutStockThresholdSetCleanText'   => __( 'You have older saved settings for this option. Do you want to clean all references to Out of Stock Threshold before activate it?', ATUM_TEXT_DOMAIN ),
+				'OutStockThresholdSetCleanText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
+				'OutStockThresholdDisable'   => __( 'We will save all your values for future use, in case you decide to reactive the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
