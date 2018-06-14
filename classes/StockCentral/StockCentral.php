@@ -261,34 +261,34 @@ class StockCentral extends AtumListPage {
 
 		$pointers = array(
 			array(
-				'id'       => self::UI_SLUG . '-help-tab',                  // Unique id for this pointer
-				'next'     => '#screen-options-link-wrap',                  // The help tip that will be displayed next
-				'screen'   => $screen_id,                                   // This is the page hook we want our pointer to show on
-				'target'   => '#contextual-help-link-wrap',                 // The css selector for the pointer to be tied to, best to use ID's
+				'id'       => self::UI_SLUG . '-screen-tab',        // Unique id for this pointer
+				'screen'   => $screen_id,                           // This is the page hook we want our pointer to show on
+				'target'   => '#screen-options-link-wrap',          // The css selector for the pointer to be tied to, best to use ID's
+				'next'     => '#contextual-help-link-wrap',         // The help tip that will be displayed next
+				'title'    => __('ATUM Stock Central Screen Options', ATUM_TEXT_DOMAIN),
+				'content'  => __("Click the 'Screen Options' tab to add/hide/show columns within the Stock Central view.", ATUM_TEXT_DOMAIN),
+				'position' => array(
+					'edge'  => 'top',                               // Top, bottom, left, right
+					'align' => 'left'                               // Top, bottom, left, right, middle
+				),
+				'arrow_position' => array(
+					'right' => '32px'
+				)
+			),
+			array(
+				'id'       => self::UI_SLUG . '-help-tab',
+				'screen'   => $screen_id,
+				'target'   => '#contextual-help-link-wrap',
 				'title'    => __('ATUM Quick Help', ATUM_TEXT_DOMAIN),
 				'content'  => __("Click the 'Help' tab to learn more about the ATUM's Stock Central.", ATUM_TEXT_DOMAIN),
 				'position' => array(
-					'edge'  => 'top',                                       // Top, bottom, left, right
-					'align' => 'right'                                      // Top, bottom, left, right, middle
+					'edge'  => 'top',
+					'align' => 'right'
 				),
 				'arrow_position' => array(
 					'left' => '45%'
 				)
 			),
-			array(
-				'id'       => self::UI_SLUG . '-screen-tab',
-				'screen'   => $screen_id,
-				'target'   => '#screen-options-link-wrap',
-				'title'    => __('ATUM Stock Central Screen Options', ATUM_TEXT_DOMAIN),
-				'content'  => __("Click the 'Screen Options' tab to add/hide/show columns within the Stock Central view.", ATUM_TEXT_DOMAIN),
-				'position' => array(
-					'edge'  => 'top',
-					'align' => 'left'
-				),
-				'arrow_position' => array(
-					'right' => '32px'
-				)
-			)
 		);
 
 		// Instantiate the class and pass our pointers array to the constructor
