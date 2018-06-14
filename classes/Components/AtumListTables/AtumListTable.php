@@ -966,7 +966,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 			}
 
-            if(!$is_below_out_stock_threshold && wc_stock_amount($woocommerce_notify_no_stock_amount) && strlen($tooltip_warning) == 0 ){
+            if(!$is_below_out_stock_threshold && wc_stock_amount($woocommerce_notify_no_stock_amount) && strlen($classes_title) == 0 ){
 	            if ( ! $editable ) {
 		            $classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
 
