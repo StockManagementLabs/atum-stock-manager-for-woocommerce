@@ -315,7 +315,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
 		if($is_out_stock_threshold_managed === "no"){
 			unset($args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
-			$args['group_members']['stock-counters']['members'] = array_diff($args['group_members']['stock-counters']['members'], array(Globals::OUT_STOCK_THRESHOLD_KEY));
+			if(isset($args['group_members']['stock-counters']['members'])){
+				$args['group_members']['stock-counters']['members'] = array_diff($args['group_members']['stock-counters']['members'], array(Globals::OUT_STOCK_THRESHOLD_KEY));
+            }
         }
 
 		// Add the checkbox column to the table if enabled
