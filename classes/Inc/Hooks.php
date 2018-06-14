@@ -147,7 +147,7 @@ class Hooks {
 				return true;
 			}
 
-			if ( $item_metas['_stock'] >= $item_metas['_out_stock_threshold'] ) {
+			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
 				//avaiable
 				return true;
 
