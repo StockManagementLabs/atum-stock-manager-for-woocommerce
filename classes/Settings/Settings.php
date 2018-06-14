@@ -405,7 +405,7 @@ class Settings {
 				'OutStockThresholdSetCleanButton'   => __( 'Star Fresh', ATUM_TEXT_DOMAIN ),
 				'OutStockThresholdSetCleanScript' => 'atum_tool_clean_out_stock_threshold',
 				'OutStockThresholdSetCleanText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
-				'OutStockThresholdDisable'   => __( 'We will save all your values for future use, in case you decide to reactive the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
+				'OutStockThresholdDisable'   => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
