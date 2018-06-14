@@ -126,6 +126,7 @@ final class Ajax {
 		// Run scripts from Tools section
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
+		add_action( 'wp_ajax_atum_tool_clean_out_stock_threshold', array( $this, 'clean_out_stock_threshold' ) );
 
 	}
 
@@ -1895,6 +1896,85 @@ final class Ajax {
 		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
 
 	}
+
+
+	/**
+	 * Clean all Out Stock Threshold values that have been set
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 * TODO clean_out_stock_threshold
+	 * @since 1.4.10
+	 */
+	public function clean_out_stock_threshold() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+
+		$this->clean_out_stock_threshold_meta();
+
+		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
+
+	}
+
+	/**
+	 * clean all the postmeta with OUT_STOCK_THRESHOLD_KEY, and rebuild all the _stock_status if
+     * required to comeback to the $woocommerce_notify_no_stock_amount
+     * @since 1.4.10
+	 */
+    private function clean_out_stock_threshold_meta(){
+	    global $wpdb;
+	    $wpdb->hide_errors();
+
+	    $woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
+
+	    $clean_success = $wpdb->query("DELETE FROM {$wpdb->postmeta}  WHERE meta_key = '".Globals::OUT_STOCK_THRESHOLD_KEY."'");
+	    //TODO _out_stock_threshold rebuild stock_status
+
+        $ids_2_rebuild_stock_status_instock =$wpdb->get_col( $wpdb->prepare(
+            "SELECT DISTINCT p.ID  FROM {$wpdb->posts} p
+
+            INNER JOIN {$wpdb->postmeta} pm_manage_stock 	ON ( pm_manage_stock.meta_key = '_manage_stock'  	AND pm_manage_stock.meta_value = 'yes'	AND pm_manage_stock.post_id = p.ID)
+            INNER JOIN {$wpdb->postmeta} pm_stock 			ON ( pm_stock.meta_key = '_stock'  					AND pm_stock.meta_value<>''				AND pm_stock.post_id = p.ID)
+            INNER JOIN {$wpdb->postmeta} pm_backorders 		ON ( pm_backorders.meta_key = '_backorders'  		AND pm_backorders.meta_value='no'		AND pm_backorders.post_id = p.ID)
+            INNER JOIN {$wpdb->postmeta} pm_stock_status 	ON ( pm_stock_status.meta_key = '_stock_status' 	AND pm_stock_status.meta_value<>''		AND pm_stock_status.post_id = p.ID )
+            
+            WHERE p.post_type IN ('product', 'product_variation')
+               AND CAST( %d AS DECIMAL(10,2) ) < CAST( pm_stock.meta_value AS DECIMAL(10,2))
+               AND pm_stock_status.meta_value<>'instock' ;", $woocommerce_notify_no_stock_amount ) );
+
+	    $ids_2_rebuild_stock_status_outofstock =$wpdb->get_col( $wpdb->prepare(
+		    "SELECT DISTINCT p.ID  FROM {$wpdb->posts} p
+
+            INNER JOIN {$wpdb->postmeta} pm_manage_stock 		ON ( pm_manage_stock.meta_key = '_manage_stock' AND pm_manage_stock.meta_value = 'yes'	AND pm_manage_stock.post_id = p.ID)
+            INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  				AND pm_stock.meta_value<>''				AND pm_stock.post_id = p.ID)
+            INNER JOIN {$wpdb->postmeta} pm_backorders 			ON ( pm_backorders.meta_key = '_backorders'  	AND pm_backorders.meta_value='no'		AND pm_backorders.post_id = p.ID)
+            INNER JOIN {$wpdb->postmeta} pm_stock_status 		ON ( pm_stock_status.meta_key = '_stock_status' AND pm_stock_status.meta_value<>''		AND pm_stock_status.post_id = p.ID )
+            
+            WHERE p.post_type IN ('product', 'product_variation')
+               AND CAST( %d AS DECIMAL(10,2) ) >= CAST( pm_stock.meta_value AS DECIMAL(10,2))
+               AND pm_stock_status.meta_value<>'outofstock' ;", $woocommerce_notify_no_stock_amount ) );
+
+	    if (count($ids_2_rebuild_stock_status_instock)>0 ) {
+		    $rebuild_stock_status_instock = $wpdb->query( "UPDATE {$wpdb->postmeta}
+                SET meta_value = 'instock'
+                WHERE  meta_key = '_stock_status' AND post_id IN (" . implode( ', ', $ids_2_rebuild_stock_status_instock ) . ")" );
+
+	    }else{
+		    $rebuild_stock_status_instock = TRUE;
+        }
+
+	    if (count($ids_2_rebuild_stock_status_outofstock)>0 ) {
+		    $rebuild_stock_status_outofstock = $wpdb->query(  "UPDATE {$wpdb->postmeta}
+                  SET meta_value = 'outofstock'
+                  WHERE  meta_key = '_stock_status' AND post_id IN (" . implode( ', ', $ids_2_rebuild_stock_status_outofstock ) . ")" );
+	    }else{
+		    $rebuild_stock_status_outofstock = TRUE;
+        }
+
+	    if ($clean_success !== FALSE && $rebuild_stock_status_instock !== FALSE && $rebuild_stock_status_outofstock !== FALSE) {
+		    wp_send_json_success( __('All your Out Of Stock Threshold values in products were clean successfully', ATUM_TEXT_DOMAIN) );
+	    }
+    }
 
 	/**
 	 * Change the value of a meta key for all products at once
