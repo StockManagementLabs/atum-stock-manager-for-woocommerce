@@ -55,29 +55,6 @@ final class Helpers {
 		return $result;
 	}
 
-
-	/**
-	 * Flat a multidimensional array of ids.
-     * ex:
-     * $search_suppliers_ids = $wpdb->get_results( $query_who_gets_only_ids, ARRAY_A );
-	 *
-	 * @since 1.4.8
-	 *
-	 * @param array $original
-	 *
-	 * @return array term_ids
-	 */
-	public static function flat_multidimensional_array_absint( array $original ) {
-		$result = array();
-		array_walk_recursive( $original, function ( $v, $k ) use ( &$result ) {
-			$result[] = absint($v);
-		} );
-
-		return $result;
-	}
-
-
-
 	/**
 	 * Set the help tab for admin pages
 	 *
@@ -1599,6 +1576,16 @@ final class Helpers {
 		
 	}
 
+
+
+	public static function is_any_out_stock_threshold_set(){
+	    global $wpdb;
+
+		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->postmeta} where meta_key ='_out_stock_threshold';");
+
+		return $rowcount>0;
+    }
+
 	/**
 	 * Return true if value exists in a multiarray
      * http://codepad.org/GU0qG5su
@@ -1629,5 +1616,28 @@ final class Helpers {
 
 		return FALSE;
 	}
+
+	/**
+     * like array_key_exists, but with multiple keys
+     *
+     * @since 1.4.10
+     *
+	 * @param array $required array with the required keys
+	 * @param array $data array to check.
+	 *
+	 * @return bool
+	 */
+	public static function array_keys_exist(array $required, array $data){
+
+		if (count(array_intersect_key(array_flip($required), $data)) === count($required)) {
+			// All required keys exist!
+			return true;
+		}else{
+			return false;
+		}
+
+    }
+
+
 
 }

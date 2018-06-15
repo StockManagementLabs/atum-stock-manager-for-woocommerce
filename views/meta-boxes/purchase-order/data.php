@@ -26,7 +26,7 @@ $po_status = $atum_order->get_status();
 	<input name="post_title" type="hidden" value="<?php echo empty( $atum_order->get_title() ) ? __( 'Purchase Order', ATUM_TEXT_DOMAIN ) : esc_attr( $atum_order->get_title() ); ?>" />
 	<input name="post_status" type="hidden" value="<?php echo ($po_status) ? ATUM_PREFIX . $po_status : 'atum_pending' ?>" />
 	<input type="hidden" id="atum_order_is_editable" value="<?php echo ( $atum_order->is_editable() ) ? 'true' : 'false' ?>">
-
+	<input type="hidden" id="atum_order_has_multiple_suppliers" value="<?php echo ( $has_multiple_suppliers ) ? 'true' : 'false' ?>">
 	<div class="atum-meta-box panel">
 
 		<h2><?php printf( esc_html__( '%1$s #%2$s details', ATUM_TEXT_DOMAIN ), $labels['singular_name'], $atum_order_post->ID ); ?></h2>

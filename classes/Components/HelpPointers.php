@@ -76,8 +76,9 @@ class HelpPointers {
 
 		$this->register_pointers($pntrs);
 
-		add_action( 'admin_enqueue_scripts', array( &$this, 'add_pointers' ), 1000 );
-		add_action( 'admin_head', array( &$this, 'add_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_pointers' ), 1000 );
+		add_action( 'admin_head', array( $this, 'add_scripts' ) );
+
 	}
 	
 	/**
@@ -91,17 +92,23 @@ class HelpPointers {
 
 		$pointers = NULL;
 
-		foreach( $pntrs as $ptr ) {
-			if( $ptr['screen'] == $this->screen_id ) {
-				$pointers[$ptr['id']] = array(
-					'screen' => $ptr['screen'],
-					'target' => $ptr['target'],
+		foreach ( $pntrs as $ptr ) {
+
+			if ( $ptr['screen'] == $this->screen_id ) {
+
+				$pointers[ $ptr['id'] ] = array(
+					'screen'  => $ptr['screen'],
+					'target'  => $ptr['target'],
+					'next'    => isset( $ptr['next'] ) ? $ptr['next'] : '',
 					'options' => array(
-						'content' => sprintf( '<h3>%s</h3> <p>%s</p>',$ptr['title'],$ptr['content'] ),
-						'position' => $ptr['position']
+						'content'       => sprintf( '<h3>%s</h3> <p>%s</p>', $ptr['title'], $ptr['content'] ),
+						'position'      => $ptr['position'],
+						'arrowPosition' => isset( $ptr['arrow_position'] ) ? $ptr['arrow_position'] : [],
 					)
 				);
+
 			}
+
 		}
 
 		if ( ! empty($pointers) ) {
@@ -174,35 +181,84 @@ class HelpPointers {
 		<script type="text/javascript">
 			jQuery(function ($) {
 
-				var ATUMHelpPointer = <?php echo json_encode( $pointers ) ?>;
-	
-				$.each(ATUMHelpPointer.pointers, function(i) {
-					atum_help_pointer_open(i);
-				});
-	
-				function atum_help_pointer_open(i) {
+				var ATUMHelpPointers = <?php echo json_encode( $pointers ) ?>;
 
-					var pointer = ATUMHelpPointer.pointers[i];
-					options = $.extend( pointer.options, {
-						close: function() {
-							$.post( ajaxurl, {
-								pointer: pointer.pointer_id,
-								action: 'dismiss-wp-pointer'
-							});
-						},
-						buttons: function( event, t ) {
-							var close  = '<?php _e('Close', ATUM_TEXT_DOMAIN) ?>',
-								button = $('<a class="close" href="#">' + close + '</a>');
+				if (Object.keys(ATUMHelpPointers).length && typeof ATUMHelpPointers.pointers !== 'undefined' && ATUMHelpPointers.pointers.length) {
 	
-							return button.bind( 'click.pointer', function(e) {
-								e.preventDefault();
-								t.element.pointer('close');
-							});
-						}
+					$.each(ATUMHelpPointers.pointers, function(i) {
+						doAtumHelpPointer(i);
 					});
-					
-					$(pointer.target).pointer( options ).pointer('open');
+
+					function doAtumHelpPointer(i) {
+
+						var pointer = ATUMHelpPointers.pointers[i],
+							options = $.extend( pointer.options, {
+								close: function() {
+
+									$.ajax({
+										url: ajaxurl,
+										type: 'POST',
+										data: {
+											pointer: pointer.pointer_id,
+											action: 'dismiss-wp-pointer'
+										},
+										beforeSend: function() {
+											// Show next pointer
+											if (pointer.next) {
+												$(pointer.next).pointer('open');
+											}
+										}
+									});
+
+								},
+								buttons: function( event, t ) {
+									var $button = $('<a class="close" href="#"><?php _e('Close', ATUM_TEXT_DOMAIN) ?></a>');
+
+									return $button.on( 'click.pointer', function(e) {
+										e.preventDefault();
+										t.element.pointer('close');
+									});
+								}
+							});
+
+						$.widget('wp.pointer', $.wp.pointer, {
+							_create: function() {
+
+								var positioning,
+								    family;
+
+								this.content = $('<div class="wp-pointer-content"></div>');
+								this.arrow   = $('<div class="wp-pointer-arrow"><div class="wp-pointer-arrow-inner"></div></div>');
+
+								if (typeof this.options.arrowPosition !== 'undefined') {
+									this.arrow.css(this.options.arrowPosition);
+								}
+
+								family = this.element.parents().add( this.element );
+								positioning = 'absolute';
+
+								if ( family.filter(function(){ return 'fixed' === $(this).css('position'); }).length )
+									positioning = 'fixed';
+
+								this.pointer = $('<div />')
+									.append( this.content )
+									.append( this.arrow )
+									.attr('id', 'wp-pointer-' + i)
+									.addClass( this.options.pointerClass )
+									.css({'position': positioning, 'width': this.options.pointerWidth+'px', 'display': 'none'})
+									.appendTo( this.options.document.body );
+							}
+						});
+
+						$(pointer.target).pointer( options );
+
+					}
+
+					// Open the first one
+					$(ATUMHelpPointers.pointers.shift().target).pointer('open');
+
 				}
+
 			});
 		</script>
 		<?php

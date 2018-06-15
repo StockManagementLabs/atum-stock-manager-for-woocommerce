@@ -167,10 +167,6 @@ class Main {
 			new Upgrade( $db_version ?: '0.0.1' );
 		}
 
-		// TODO: CREATE A FIRST-ACCESS TUTORIAL WITH HELP POINTERS (LIKE WC)
-		// Register the help pointers
-		//add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
-
 		// Add the footer text to ATUM pages
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 		
@@ -414,52 +410,6 @@ class Main {
 
 		}
 
-	}
-	
-	/**
-	 * Setup help pointers for some Atum screens
-	 *
-	 * @since 0.1.6
-	 */
-	public function setup_help_pointers() {
-		
-		$pointers = array(
-			array(
-				'id'       => self::$main_menu_item['slug'] . '-help-tab',      // Unique id for this pointer
-				'next'     => 'screen-tab',
-				'screen'   => 'toplevel_page_' . self::$main_menu_item['slug'], // This is the page hook we want our pointer to show on
-				'target'   => '#contextual-help-link-wrap',                     // The css selector for the pointer to be tied to, best to use ID's
-				'title'    => __('ATUM Quick Help', ATUM_TEXT_DOMAIN),
-				'content'  => __("Click the 'Help' tab to learn more about the ATUM's Stock Central.", ATUM_TEXT_DOMAIN),
-				'position' => array(
-					'edge'  => 'top',                                           // Top, bottom, left, right
-					'align' => 'right'                                           // Top, bottom, left, right, middle
-				),
-				'arrow_position' => array(
-					'left' => 'auto',
-					'right' => '32px'
-				)
-			),
-			array(
-				'id'       => self::$main_menu_item['slug'] . '-screen-tab',
-				'screen'   => 'toplevel_page_' . self::$main_menu_item['slug'],
-				'target'   => '#screen-options-link-wrap',
-				'title'    => __('ATUM Screen Setup', ATUM_TEXT_DOMAIN),
-				'content'  => __("Click the 'Screen Options' tab to setup your table view preferences.", ATUM_TEXT_DOMAIN),
-				'position' => array(
-					'edge'  => 'top',
-					'align' => 'left'
-				),
-				'arrow_position' => array(
-					'left' => 'auto',
-					'right' => '166px'
-				)
-			)
-		);
-		
-		// Instantiate the class and pass our pointers array to the constructor
-		new HelpPointers( $pointers );
-		
 	}
 
 	/**

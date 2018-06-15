@@ -52,7 +52,22 @@ class ListTable extends AtumListTable {
 	 * The columns hidden by default
 	 * @var array
 	 */
-	protected static $default_hidden_columns = array('_weight');
+	protected static $default_hidden_columns = array(
+		'_weight',
+		'calc_inbound',
+		'calc_hold',
+		'calc_reserved',
+		'calc_back_orders',
+		'calc_sold_today',
+		'calc_returns',
+		'calc_damages',
+		'calc_lost_in_post',
+		'calc_sales14',
+		'calc_sales7',
+		'calc_will_last',
+		'calc_stock_out_days',
+		'calc_lost_sales'
+	);
 
 	/**
 	 * TODO $searchable_columns ?
@@ -60,8 +75,21 @@ class ListTable extends AtumListTable {
 	 * @var array string keys ()
 	 */
 	protected $default_searchable_columns = array(
-		'string'  => array( 'title', '_supplier', '_sku', '_supplier_sku' ), // ID as string to allow the use of commas ex: s = '12, 13, 89'
-		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
+		'string'  => array(
+			'title',
+			'_supplier',
+			'_sku',
+			'_supplier_sku'
+		),
+		'numeric' => array(
+			'ID',
+			'_regular_price',
+			'_sale_price',
+			'_purchase_price',
+			'_weight',
+			'_stock',
+			'_out_stock_threshold'
+		)
 	);
 
 
@@ -101,6 +129,7 @@ class ListTable extends AtumListTable {
 			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
             '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_out_stock_threshold'   => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'calc_reserved'          => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
@@ -117,25 +146,9 @@ class ListTable extends AtumListTable {
 			'calc_stock_indicator'   => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
-		// Hide the purchase price column if the current user has not the capability
-		if ( ! AtumCapabilities::current_user_can('view_purchase_price') ) {
-			unset( $args['table_columns']['_purchase_price'] );
-		}
-
-		// Hide the supplier's columns if the current user has not the capability
-		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
-			unset( $args['table_columns']['_supplier'] );
-			unset( $args['table_columns']['_supplier_sku'] );
-		}
-
-		if ( ! ModuleManager::is_module_active('purchase_orders') ) {
-			unset( $args['table_columns']['_purchase_price'] );
-			unset( $args['table_columns']['calc_inbound'] );
-		}
-
 		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
 
-		// TODO: Add group table functionality if some columns are invisible
+		// TODO: Add group table functionality if some columns are hidden
 		$args['group_members'] = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
@@ -158,6 +171,7 @@ class ListTable extends AtumListTable {
 				'title'   => __( 'Stock Counters', ATUM_TEXT_DOMAIN ),
 				'members' => array(
 					'_stock',
+					'_out_stock_threshold',
 					'calc_inbound',
 					'calc_hold',
 					'calc_reserved',
@@ -186,20 +200,41 @@ class ListTable extends AtumListTable {
 			)
 		) );
 
+		// Hide the purchase price column if the current user has not the capability
+		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
+			unset( $args['table_columns']['_purchase_price'] );
+			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
+		}
+
+		// Hide the supplier's columns if the current user has not the capability
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			unset( $args['table_columns']['_supplier'] );
+			unset( $args['table_columns']['_supplier_sku'] );
+			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_sku', '_supplier_sku' ] );
+		}
+
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
+			unset( $args['table_columns']['_purchase_price'] );
+			unset( $args['table_columns']['calc_inbound'] );
+			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
+			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ 'calc_inbound' ] );
+		}
+
 		// Initialize totalizers
 		$this->totalizers = apply_filters( 'atum/list_table/totalizers', array(
-			'_stock'            => 0,
-			'calc_inbound'      => 0,
-			'calc_hold'         => 0,
-			'calc_reserved'     => 0,
-			'calc_back_orders'  => 0,
-			'calc_sold_today'   => 0,
-			'calc_returns'      => 0,
-			'calc_damages'      => 0,
-			'calc_lost_in_post' => 0,
-			'calc_sales14'      => 0,
-			'calc_sales7'       => 0,
-			'calc_lost_sales'   => 0,
+			'_stock'               => 0,
+			'_out_stock_threshold' => 0,
+			'calc_inbound'         => 0,
+			'calc_hold'            => 0,
+			'calc_reserved'        => 0,
+			'calc_back_orders'     => 0,
+			'calc_sold_today'      => 0,
+			'calc_returns'         => 0,
+			'calc_damages'         => 0,
+			'calc_lost_in_post'    => 0,
+			'calc_sales14'         => 0,
+			'calc_sales7'          => 0,
+			'calc_lost_sales'      => 0,
 		));
 		
 		parent::__construct( $args );
@@ -429,6 +464,7 @@ class ListTable extends AtumListTable {
 			$back_orders = '--';
 			if ( $this->product->backorders_allowed() ) {
 
+			    //TODO threshold recalc if needed
 				$stock_quantity = $this->product->get_stock_quantity();
 				$back_orders = 0;
 				if ( $stock_quantity < $this->no_stock ) {
@@ -1017,6 +1053,48 @@ class ListTable extends AtumListTable {
 		}
 
 		return $products;
+
+	}
+
+	/**
+	 * Message to be displayed when there are no items
+	 *
+	 * @since 1.4.10
+	 */
+	public function no_items() {
+
+		parent::no_items();
+
+		// Do not add the message when filtering
+		if ( defined('DOING_AJAX') && DOING_AJAX ) {
+			return;
+		}
+
+		// Makes no sense to show the message if there are no products in the shop
+		global $wpdb;
+		$product_count_sql = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = 'product' AND post_status != 'trash'";
+
+		if ( absint( $wpdb->get_var($product_count_sql) ) == 0 ) {
+			return;
+		}
+
+		// Display an alert to ask the user to control all the product at once
+		?>
+		<div class="alert alert-primary">
+			<h3>
+				<i class="dashicons dashicons-megaphone"></i>
+				<?php _e("Your products need to be set as 'Controlled by ATUM' to appear here", ATUM_TEXT_DOMAIN) ?>
+			</h3>
+
+			<p><?php _e('You can do it in 3 ways:', ATUM_TEXT_DOMAIN) ?></p>
+
+			<ol>
+				<li><?php _e("Using the <strong>ATUM Control Switch</strong> that you'll find in every product <strong>edit</strong> page within the <strong>Product Data</strong> section. It may take a lot of time as this is per product edit.", ATUM_TEXT_DOMAIN) ?></li>
+				<li><?php _e("Going to the <strong>Uncontrolled</strong> list using the above button (<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like to take control of, open the bulk action drop-down and press <strong>Enable ATUM's Stock Control</strong> option.", ATUM_TEXT_DOMAIN) ?></li>
+				<li><?php printf( __("We can add all your products at once! Just click the button below. If you change your mind later, you can revert the action by using the <code>ATUM Settings menu > Tools</code>.<br>%sControl all my products%s", ATUM_TEXT_DOMAIN), '<button class="btn btn-sm btn-secondary" id="control-all-products" data-nonce="' . wp_create_nonce('atum-control-all-products-nonce') . '">', '</button>' ) ?></li>
+			</ol>
+		</div>
+		<?php
 
 	}
 	

@@ -53,13 +53,79 @@
 			
 			// Restore enhanced selects
 			this.restoreEnhancedSelects();
-			
+
+
+
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
 				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
 					$(this).addClass('dirty');
 				}
 			})
+
+			//TODO out_stock_threshold prompts
+			.on('change','#atum_out_stock_threshold',function() {
+                if( $(this).is(":checked") && self.settings.isAnyOutStockThresholdSet ) {
+                    swal({
+                        title              : self.settings.areYouSure,
+                        text               : self.settings.OutStockThresholdSetCleanText,
+                        type               : 'question',
+                        showCancelButton   : true,
+                        confirmButtonText  : self.settings.OutStockThresholdSetCleanButton,
+                        cancelButtonText   : self.settings.cancel,
+                        reverseButtons     : true,
+                        allowOutsideClick  : false,
+                        showLoaderOnConfirm: true,
+                        preConfirm: function() {
+
+                            return new Promise(function (resolve, reject) {
+                            	var data    = {
+                                    action: self.settings.OutStockThresholdSetCleanScript,
+                                    token : self.settings.runnerNonce
+                                };
+                                $.ajax({
+                                    url       : ajaxurl,
+                                    method    : 'POST',
+                                    dataType  : 'json',
+                                    data      : data,
+                                    success   : function (response) {
+
+                                        if (response.success === true) {
+                                            resolve(response.data);
+                                        }
+                                        else {
+                                            reject(response.data);
+                                        }
+
+                                    }
+                                });
+
+                            });
+
+                        }
+                    }).then(function (message) {
+
+                        swal({
+                            title            : self.settings.done,
+                            type             : 'success',
+                            text             : message,
+                            confirmButtonText: self.settings.ok
+                        });
+
+                    }).catch(swal.noop);
+
+                }
+                if(!this.checked) {
+					console.log("uncheck");
+
+                    swal({
+                            title: self.settings.areYouSure,
+                            text: self.settings.OutStockThresholdDisable,
+                            type: 'info'
+                        }
+                    )
+                }
+            })
 			
 			// Remove the dirty mark if the user tries to save
 			.on('click', 'input[type=submit]', function() {

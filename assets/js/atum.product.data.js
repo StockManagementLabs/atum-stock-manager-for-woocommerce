@@ -11,7 +11,61 @@
 		
 		// Enable switchers
 		atumDoSwitchers();
-		
+
+        //----------------------------
+        // _out_stock_threshold_field_ front
+		// This binds and unbinds atumEnableOutStockThresholdField on required types (atumProductData.outStockThresholdProductTypes) when we are on the inventory tab
+		//
+		// For variations, we use .show_if_variation_manage_stock css class
+		// check woocomere/js*/meta-boxes-product-variations.js -> $( 'input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock', wrapper ).change();
+        //----------------------------
+        var $productType = $('#product-type');
+
+        // check product-type on load, or on every change to fire
+        if ($.inArray( $productType.val(), atumProductData.outStockThresholdProductTypes) >= 0 ) {
+			//console.log("enabled product type on load:"+$productType.val());
+
+			//bind to inventory_tab
+            $( 'li.inventory_tab>a' ).bind( "click", atumEnableOutStockThresholdField );
+
+		}else{
+        	//force unbind and hide
+            $( 'li.inventory_tab>a' ).unbind( "click", atumEnableOutStockThresholdField );
+            $('#_out_stock_threshold_field_div').hide();
+		}
+
+        $productType.change(function () {
+            if ( $.inArray( $(this).val(), atumProductData.outStockThresholdProductTypes ) >= 0 ) {
+                //console.log("enabled product type on change:"+$(this).val());
+
+                //bind to inventory_tab
+                $( 'li.inventory_tab>a' ).bind( "click", atumEnableOutStockThresholdField );
+
+            }else{
+                //force unbind and hide
+                $( 'li.inventory_tab>a' ).unbind( "click", atumEnableOutStockThresholdField );
+                $('#_out_stock_threshold_field_div').hide();
+			}
+        });
+
+        function atumEnableOutStockThresholdField() {
+        	//console.log(">atumEnableOutStockThresholdField ");
+			//console.log("inventory_tab  click");
+			// and the checkbox _manage_stock is visible
+			if( $('#_manage_stock').filter(":visible").length === 1 ){
+				//console.log('_manage_stock is visible and checkd?'+ $('#_manage_stock').prop('checked'));
+
+				// make _out_stock_threshold_field_div visible if needed, and listen to _manage_stock for changes.
+				$("#_out_stock_threshold_field_div").css("display", $('#_manage_stock').prop('checked') ? "block" : "none");
+
+				$('#_manage_stock').change(function () {
+					//console.log("_manage_stock fired");
+					$("#_out_stock_threshold_field_div").css("display", this.checked ? "block" : "none");
+				});
+			}
+        }
+
+
 		// Add switches to variations once are loaded by WC
 		$('#woocommerce-product-data').on('woocommerce_variations_added woocommerce_variations_loaded', function() {
 			atumDoSwitchers();

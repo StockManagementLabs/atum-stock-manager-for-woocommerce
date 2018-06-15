@@ -241,6 +241,14 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	const EMPTY_COL = '&mdash;';
 
+	/*
+	 * it's out of stock threshold enabled on setings?
+	 * @since 1.4.10
+	 */
+	protected $is_out_stock_threshold_managed =  "no";
+
+	protected $woocommerce_notify_no_stock_amount;
+
 
 	/**
 	 * AtumListTable Constructor
@@ -281,6 +289,12 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->show_totals = FALSE;
 		}
 
+		if (Helpers::get_option( 'out_stock_threshold', "no" ) == 'no' ) {
+			$this->is_out_stock_threshold_managed = FALSE;
+		}else{
+			$this->is_out_stock_threshold_managed = TRUE;
+        }
+
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
@@ -294,8 +308,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( isset ($this->group_members['product-details']) && $this->show_cb == TRUE ) {
 				array_unshift($this->group_members['product-details']['members'], 'cb');
+		    }
 		}
-		}
+
+		//remove _out_stock_threshold columns if not set, or add filters to get availability etc.
+		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
+		if($is_out_stock_threshold_managed === "no"){
+			unset($args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
+			if(isset($args['group_members']['stock-counters']['members'])){
+				$args['group_members']['stock-counters']['members'] = array_diff($args['group_members']['stock-counters']['members'], array(Globals::OUT_STOCK_THRESHOLD_KEY));
+            }
+        }
 
 		// Add the checkbox column to the table if enabled
 		$this->table_columns = $this->show_cb == TRUE ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
@@ -818,12 +841,57 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	}
 
+
+	/**
+	 * Column out_stock_threshold column
+	 *
+	 * @since  v1.4.6
+	 *
+	 * @param \WP_Post $item The WooCommerce product post
+	 *
+	 * @return double
+	 */
+	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
+
+		//$product_id          = $this->get_current_product_id();
+		$product_id = $this->get_current_product_id();
+		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
+		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
+
+		// Check type and managed stock at product level (override $out_stock_threshold value if set and not allowed)
+		$product_type = $this->product->get_type();
+		if ( ! in_array( $product_type, GLOBALS::OUT_STOCK_THRESHOLD_PRODUCT_TYPES ) ) {
+			$editable = false;
+			$out_stock_threshold = self::EMPTY_COL;
+		}
+
+		$manage_stock = get_post_meta( $product_id, '_manage_stock', $single = true );
+		if ($manage_stock === "no"){
+			$editable = false;
+			$out_stock_threshold = self::EMPTY_COL;
+        }
+
+		if ($editable) {
+
+			$args = array(
+				'post_id'  => $product_id,
+				'meta_key' => 'out_stock_threshold',
+				'value'    => $out_stock_threshold,
+				'input_type' => 'number',
+				'tooltip'  => __( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN )
+			);
+			$out_stock_threshold = $this->get_editable_column( $args );
+		}
+
+		return apply_filters( 'atum/list_table/column__out_stock_threshold', $out_stock_threshold, $item, $this->product );
+	}
+
     /**
-     * Post Weight column
+     * Column Weight column
      *
      * @since  v1.4.6
      *
-     * @param \WP_Post $item The WooCommerce product post
+     * @param \WP_Post $item The WooCommerce product weight
      *
      * @return double
      */
@@ -865,6 +933,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		$stock = self::EMPTY_COL;
 
 		$product_id = $this->get_current_product_id();
+		$classes_title = '';
+		$tooltip_warning = '';
+		$is_below_out_stock_threshold = FALSE;
+
+
+		$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
 
 		if ($this->allow_calcs) {
 
@@ -876,13 +950,53 @@ abstract class AtumListTable extends \WP_List_Table {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 			$this->increase_total('_stock', $stock);
 
+			if($this->is_out_stock_threshold_managed) { //setings value is on
+
+				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
+
+				if ( strlen( $out_stock_threshold ) > 0 ) {
+					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
+						//$is_below_out_stock_threshold = ( wc_stock_amount( $out_stock_threshold ) >= $stock );
+						if ( ! $editable ) {
+							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below Out Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+						} else {
+							$classes_title   = " class='cell-yellow'";
+							$tooltip_warning = __( 'Click to edit the stock quantity (it is below Out Stock Threshold)', ATUM_TEXT_DOMAIN );
+						}
+					}
+
+				} else {
+					if ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
+						if ( ! $editable ) {
+							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+						} else {
+							$classes_title   = " class='cell-yellow'";
+							$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
+						}
+					}
+				}
+			} else {
+				if ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
+					if ( ! $editable ) {
+						$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+
+					} else {
+						$classes_title   = " class='cell-yellow'";
+						$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
+					}
+				}
+
+            }
+
 			if ($editable) {
 
 				$args = array(
 					'post_id'  => $product_id,
 					'meta_key' => 'stock',
 					'value'    => $stock,
-					'tooltip'  => __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
+					'tooltip'  => ($tooltip_warning)?:__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
 				);
 
 				$stock = $this->get_editable_column( $args );
@@ -890,9 +1004,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 		}
-
-		return apply_filters( 'atum/stock_central_list/column_stock', $stock, $item, $this->product );
-
+		//TODO order?
+		return apply_filters( 'atum/stock_central_list/column_stock',"<span".$classes_title.">".$stock."</span>"  , $item, $this->product );
+		//return apply_filters( 'atum/stock_central_list/column_stock',$stock, $item, $this->product );
 	}
 
 	/**
@@ -929,6 +1043,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$inbound_stock = $wpdb->get_var($sql);
 			$inbound_stock = $inbound_stock ?: 0;
 			$this->increase_total('calc_inbound', $inbound_stock);
+
 
 		}
 
@@ -1542,7 +1657,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// This query does not get product variations and as each variation may have a distinct supplier,
 			// we have to get them separately and to add their variables to the results
-			$this->supplier_variation_products = Suppliers::get_supplier_products($supplier, 'ids', 'product_variation');
+			$this->supplier_variation_products = Suppliers::get_supplier_products($supplier, 'product_variation');
 
 			if ( ! empty($this->supplier_variation_products) ) {
 				add_filter( 'atum/list_table/views_data_products', array($this, 'add_supplier_variables_to_query') );
@@ -1589,9 +1704,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['orderby'] = $_REQUEST['orderby'];
 			}
 
-		}else{
-		    //TODO 1598179 order by
-			$args['orderby'] = 'menu_order';
+		}
+		else{
+			$args['orderby'] = 'title';
 			$args['order']   = 'ASC';
         }
 
@@ -1679,7 +1794,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		$this->items = apply_filters( 'atum/list_table/items', $products );
 
-		//TODO 1598179 here is where we order all the fathers
 		$this->set_pagination_args( array(
 			'total_items' => $found_posts,
 			'per_page'    => $this->per_page,
@@ -1755,13 +1869,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $this->show_unmanaged_counters ) {
 
 			$this->id_views = array_merge( $this->id_views, array(
-				'managed'        => [],
-				'unm_in_stock'   => [],
-				'unm_out_stock'  => [],
-				'unm_back_order' => [],
-				'all_in_stock'   => [],
-				'all_out_stock'  => [],
-				'all_back_order' => [],
+				'managed'                 => [],
+				'unm_in_stock'            => [],
+				'unm_out_stock'           => [],
+				'unm_back_order'          => [],
+				'all_in_stock'            => [],
+				'all_out_stock'           => [],
+				'all_back_order'          => [],
+				//'all_below_out_stock_threshold' => [],
 			) );
 
 			$this->count_views = array_merge( $this->count_views, array(
@@ -2049,6 +2164,29 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->count_views['count_low_stock'] = count( $products_low_stock );
 
 			}
+
+			/**
+			 * Products that are below _out_stock_threshold and cannot be purchased
+			 */
+			//TODO LIST ALL THRESHOLDS VIEW ? it's used to set the warning class if required.
+            /*
+			if($this->is_out_stock_threshold_managed) {
+				$query = "SELECT DISTINCT p.ID FROM {$wpdb->posts} p
+            
+                INNER JOIN {$wpdb->postmeta} pm_manage_stock 		ON ( pm_manage_stock.meta_key = '_manage_stock'  				AND pm_manage_stock.meta_value = 'yes'			AND pm_manage_stock.post_id = p.ID)
+                INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' 	AND pm_out_stock_threshold.meta_value<>''		AND pm_out_stock_threshold.post_id = p.ID )
+                INNER JOIN {$wpdb->postmeta} pm_stock 				ON ( pm_stock.meta_key = '_stock'  								AND pm_stock.meta_value<>''						AND pm_stock.post_id = p.ID)
+                INNER JOIN {$wpdb->postmeta} pm_backorders 			ON ( pm_backorders.meta_key = '_backorders'  					AND pm_backorders.meta_value='no'				AND pm_backorders.post_id = p.ID)
+                
+                WHERE p.post_type IN ('" . implode( "', '", $post_types ) . "')
+                   AND CAST( pm_out_stock_threshold.meta_value AS DECIMAL(10,2) ) > CAST( pm_stock.meta_value AS DECIMAL(10,2) )";
+
+				$products_below_out_stock_threshold = $wpdb->get_col( $query );
+
+				$this->id_views['all_below_out_stock_threshold'] = $products_below_out_stock_threshold;
+			}
+			*/
+            //$this->count_views['count_below_out_stock_threshold'] = count($products_below_out_stock_threshold);
 
 			/*
 			 * Products out of stock
@@ -2742,90 +2880,29 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
-					//get suppliers
-					$query ="
+					// Get suppliers
+					$query = $wpdb->prepare("
 						SELECT p.ID FROM $wpdb->posts p
-					    WHERE p.post_type = '" . Suppliers::POST_TYPE . "' AND p.post_title LIKE '%%{$term}%%'";
+					    WHERE p.post_type = %s AND p.post_title LIKE '%%{$term}%%'
+				    ", Suppliers::POST_TYPE );
 
-					$search_suppliers_ids = $wpdb->get_col( $query );
+					$search_supplier_ids = $wpdb->get_col( $query );
 
-					if ( empty( $search_suppliers_ids ) ) {
+					if ( empty( $search_supplier_ids ) ) {
 						return $where_without_results;
 					}
 
-					$product_taxonomies     = apply_filters( 'atum/list_table/product_search_taxonomies', Globals::get_product_types() );
-					$product_taxonomies_ids = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
+					$supplier_products = array();
 
-					$args = array(
-						'post_type'      => ['product', 'product_variation'],
-						'posts_per_page' => - 1,
-						'fields'         => 'ids',
-						'meta_query'     => array(
-							array(
-								'key'   => '_supplier',
-								'value' => $search_suppliers_ids,
-								'compare' => 'IN'
-							)
-						),
-						'tax_query'      => array(
-							'relation' => 'AND',
-							array(
-								'taxonomy' => 'product_type',
-								'field'    => 'id',
-								'terms'    => $product_taxonomies_ids
-							)
-						)
-					);
-
-					$fathers = get_posts( $args );
-					$fathers = Helpers::flat_multidimensional_array_absint( $fathers );
-					//$parents_ids  = array();
-					$childs_ids   = array();
-
-					//get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id):
-					$query_parents = "
-                        SELECT DISTINCT POSTS.ID FROM $wpdb->posts POSTS
-                        LEFT JOIN $wpdb->term_relationships ON (POSTS.ID = $wpdb->term_relationships.object_id)
-                        INNER JOIN $wpdb->postmeta ON (POSTS.ID = $wpdb->postmeta.post_id)
-                        WHERE POSTS.post_type = 'product'
-                          AND $wpdb->term_relationships.term_taxonomy_id IN  ( " . implode( ',', $product_taxonomies_ids ) . " )
-                          AND POSTS.post_status IN ('publish', 'private')
-                        
-                          AND POSTS.ID IN (
-                        
-                            SELECT DISTINCT SUBPOSTS.post_parent FROM $wpdb->posts SUBPOSTS
-                            INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
-                            WHERE SUBPOSTS.post_type = 'product_variation'
-                              AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
-                              AND SUBPOSTS.post_status IN ('publish', 'private')
-                          )";
-
-					$parents_ids = $wpdb->get_col( $query_parents );
-
-					if(!empty($parents_ids)) {
-
-						//get rebel childs:
-						$query_childs = "
-                        SELECT DISTINCT SUBPOSTS.ID FROM $wpdb->posts SUBPOSTS
-                        INNER JOIN $wpdb->postmeta AS mt1 ON (SUBPOSTS.ID = mt1.post_id)
-                        WHERE SUBPOSTS.post_type = 'product_variation'
-                          AND (mt1.meta_key = '_supplier' AND mt1.meta_value IN ( " . implode( ',', $search_suppliers_ids ) . " ))
-                          AND SUBPOSTS.post_parent IN ( " . implode( ',', $parents_ids ) . " )
-                          AND SUBPOSTS.post_status IN ('publish', 'private')";
-
-						$childs_ids = $wpdb->get_col( $query_childs );
+					foreach ($search_supplier_ids as $supplier_id) {
+						$supplier_products = array_unique( array_merge( $supplier_products, Suppliers::get_supplier_products($supplier_id) ) );
 					}
 
-					$products_to_show = array_merge( $fathers, $parents_ids, $childs_ids );
-
-					//empty 
-					if ( empty( $products_to_show ) ) {
+					if ( empty( $supplier_products ) ) {
 						return $where_without_results;
 					}
 
-					//die(var_dump($products_to_show));
-
-                    $where = "AND ( $wpdb->posts.ID IN ( " . implode( ',', $products_to_show ) . " ))";
+                    $where = "AND ( $wpdb->posts.ID IN ( " . implode( ',', $supplier_products ) . " ))";
 
                 }
 				//  # case C and Ds # (post title and other meta fields)
@@ -2851,25 +2928,26 @@ abstract class AtumListTable extends \WP_List_Table {
 						}
 
 						// WHERE meta_key = $search_column and lower(meta_value) like term%
-						$query = $wpdb->prepare("
-							SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						$meta_where = apply_filters('atum/list_table/product_search/numeric_meta_where', sprintf("pm.meta_key = '%s' AND pm.meta_value = '%s'", $search_column, $term ), $search_column, $term);
+						
+						$query = "SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-						    WHERE pm.meta_key = %s
-						    AND p.post_type IN ('product', 'product_variation')
-						    AND pm.meta_value = $term
-					    ", $search_column );
+						    WHERE p.post_type IN ('product', 'product_variation')
+						    AND $meta_where
+					    ";
 
 					}
 					// String fields (_sku ...)
 					else {
+						
+						// WHERE meta_key = $search_column and lower(meta_value) like term%
+						$meta_where = apply_filters('atum/list_table/product_search/string_meta_where', sprintf("pm.meta_key = '%s' AND pm.meta_value LIKE '%%%s%%'", $search_column, $term ), $search_column, $term);
 
-						$query = $wpdb->prepare("
-							SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						$query = "SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
 						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-						    WHERE pm.meta_key = %s	
-						    AND p.post_type IN ('product', 'product_variation')	
-						    AND ( lower(pm.meta_value) LIKE '%%{$term}%%' )				
-				         ", $search_column );
+						    WHERE p.post_type IN ('product', 'product_variation')
+						    AND  {$meta_where}
+				         ";
 					}
 
 					$search_terms_ids = $wpdb->get_results( $query );
@@ -3110,13 +3188,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
 		// Get the published Variables first
-        //TODO 1598179 order by menu_order ?
 		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
-			'orderby'       => 'menu_order',
+			'orderby'       => 'title',
+			//'orderby'       => 'menu_order',
 			'order'       => 'ASC',
 			'tax_query'      => array(
 				array(
@@ -3149,7 +3227,6 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 			}
 
-			//TODO 1598179 order by menu_order ?
 			$children_args = array(
 				'post_type'       => $post_type,
 				'post_status'     => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],

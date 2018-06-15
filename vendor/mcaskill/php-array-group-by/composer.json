@@ -1,0 +1,26 @@
+{
+  "name": "mcaskill/php-array-group-by",
+  "description": "Groups an array by a given key.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Chauncey McAskill",
+      "email": "chauncey@mcaskill.ca",
+      "homepage": "https://github.com/mcaskill"
+    }
+  ],
+  "keywords": [
+    "function"
+  ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.x-dev"
+    }
+  },
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "files": ["Function.Array-Group-By.php"]
+  }
+}

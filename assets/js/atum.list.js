@@ -24,12 +24,13 @@
 	function Plugin ( element, options ) {
 		
 		// Initialize selectors
-		this.$atumList        = $(element);
-		this.$atumTable       = this.$atumList.find('.atum-list-table');
-		this.$editInput       = this.$atumList.find('#atum-column-edits');
-		this.$searchInput     = this.$atumList.find('.atum-post-search');
-		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
-		this.$bulkButton      = $('.apply-bulk-action');
+		this.$atumList             = $(element);
+		this.$atumTable            = this.$atumList.find('.atum-list-table');
+		this.$editInput            = this.$atumList.find('#atum-column-edits');
+		this.$searchInput          = this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn      = this.$atumList.find('#search_column_btn');
+		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
+		this.$bulkButton           = $('.apply-bulk-action');
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -43,14 +44,15 @@
 	// Avoid Plugin.prototype conflicts
 	$.extend( Plugin.prototype, {
 		
-		doingAjax      : null,
-		jScrollApi     : null,
-		$scrollPane    : null,
-		timer          : null,
-		isRowExpanding : {},
-		filterData     : {},
-		navigationReady: false,
+		doingAjax        : null,
+		jScrollApi       : null,
+		$scrollPane      : null,
+		timer            : null,
+		isRowExpanding   : {},
+		filterData       : {},
+		navigationReady  : false,
 		numHashParameters: 0,
+		delayTimer       : 0,
 		
 		/**
 		 * Register our events and initialize the UI
@@ -90,7 +92,6 @@
             if ( $atumPostSearchWithDropdown.length) {
 
                 this.settings.searchDropdown = "yes";
-            	
                 this.setupSearchColumnDropdown();
 
                 $('#adv-settings input[type=checkbox]').change(function () {
@@ -228,96 +229,63 @@
 				e.preventDefault();
 				self.updateHash();
 			});
-			
-			//
-			// Ajax filters
-			//-------------
-
-            var delay = (function () {
-                var timer = 0;
-                return function (callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })();
-
-            var pseudoKeyUpAjax = (function () {
-                return function (callback, searchColumnBtnVal, searchInputVal, e) {
-
-                    if (searchInputVal.length == 0) {
-
-                        if (searchInputVal != $.address.parameter('s')) {
-                            $.address.parameter('s', '');
-                            $.address.parameter('search_column', '');
-                            self.updateHash(); // force clean search
-                        }
-                    }
-                    else if (searchColumnBtnVal.length > 0) {
-                        $.address.parameter('s', searchInputVal);
-                        $.address.parameter('search_column', searchColumnBtnVal);
-                        self.updateHash();
-                    }
-                    
-                };
-            })();
 
             //
-			// functions to set $searchColumnBtn data-value and html content
+			// Functions to set $searchColumnBtn data-value and html content
 			// TODO: searchColumnBtn as an independent component?
-            self.$searchColumnBtn.bind('setHtmlAndDataValue', function (event, value, html) {
-                $(this).html(html);
+            this.$searchColumnBtn.on('setHtmlAndDataValue', function (event, value, html) {
+            	
+            	var $searchColBtn = $(this);
+	
+	            $searchColBtn.html(html);
+	            $searchColBtn.data('value', value);
+
+                self.$searchColumnDropdown.children('a.active').removeClass('active');
+                self.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active');
+
+            })
+            .on('setDataValue', function (event, value) {
                 $(this).data('value', value);
-
-                $('#search_column_dropdown>a.active').removeClass('active');
-                $('#search_column_dropdown>a').filterByData('value', value).addClass('active');
-
+	
+	            self.$searchColumnDropdown.children('a.active').removeClass('active');
+	            self.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active');
             });
 
-            self.$searchColumnBtn.bind('setDataValue', function (event, value) {
-                $(this).data('value', value);
 
-                $('#search_column_dropdown>a.active').removeClass('active');
-                $('#search_column_dropdown>a').filterByData('value', value).addClass('active');
-            });
-
-
-            //TODO Improve performance: ajaxFilter yes or not
+            // TODO Improve performance: ajaxFilter yes or not
             if (this.settings.ajaxFilter === 'yes') {
 
-                this.$searchInput.bind('input', function (e) {
-                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
-                    var searchInputVal = $(this).val();
-                    delay(function () {
-                        pseudoKeyUpAjax(function () {
-                        }, searchColumnBtnVal, searchInputVal, e);
-
+                this.$searchInput.on('input', function() {
+                	
+                    var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
+                        searchInputVal = $(this).val();
+                    
+                    self.delay(function () {
+                        self.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal);
                     }, 500);
+                    
                 });
 
-                this.$atumList
-				.on('keyup paste search', '.atum-post-search', function (e) {
-                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
-                    var searchInputVal = $(this).val();
-                    delay(function () {
-                        pseudoKeyUpAjax(function () {
-                        }, searchColumnBtnVal, searchInputVal, e);
-
+                this.$atumList.on('keyup paste search', '.atum-post-search', function() {
+	
+	                var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
+	                    $searchInputVal    = $(this).val();
+                    
+                    self.delay(function () {
+                        self.pseudoKeyUpAjax(searchColumnBtnVal, $searchInputVal);
                     }, 500);
+                    
                 })
                 .on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-                        self.keyUp(e);
-                    });
+                    self.keyUp(e);
+                });
 
                 if (this.settings.searchDropdown === 'yes') {
-                    this.$searchColumnBtn.on('search_column_data_changed', function (e) {
-
-                        var searchColumnBtnVal = $(this).data('value');
-                        var searchInputVal = self.$searchInput.val();
-
-                        pseudoKeyUpAjax(function () {
-                        }, searchColumnBtnVal, searchInputVal, e);
-
+                	
+                    this.$searchColumnBtn.on('search_column_data_changed', function() {
+                        self.pseudoKeyUpAjax($(this).data('value'), self.$searchInput.val());
                     });
+                    
                 }
 
             }
@@ -327,38 +295,34 @@
             // Non-ajax filters
             //-----------------
             else {
-
-                $(function () {
-                    var searchInputVal = self.$searchInput.val();
-                    if (searchInputVal.length >0) {
-                        $('.search-submit').prop("disabled", false);
-                    } else {
-                        $('.search-submit').prop("disabled", true);
-                    }
-                });
-
+            	
+            	var $searchSubmitBtn = this.$searchInput.siblings('.search-submit');
+	
+                if (!self.$searchInput.val()) {
+	                $searchSubmitBtn.prop('disabled', true);
+                }
 
             	// if s is empty, search-submit must be disabled and ?s removed
 				// if s and searchColumnBtnVal have values, then we can push over search
                 this.$searchInput.bind('input', function () {
+	
+	                var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
+	                    inputVal           = $(this).val();
 
-                    var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+                    if (!inputVal) {
+	                    $searchSubmitBtn.prop('disabled', true);
 
-                    if ($(this).val().length == 0) {
-                        $('.search-submit').prop("disabled", true);
-
-                        if ($(this).val() != $.address.parameter('s')) {
+                        if (inputVal != $.address.parameter('s')) {
                             $.address.parameter('s', '');
                             $.address.parameter('search_column', '');
                             self.updateHash(); // force clean search
                         }
                     }
-                    //TODO Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
-                    else {
-                        if (searchColumnBtnVal.length > 0) {
-                            $('.search-submit').prop("disabled", false);
-                        }
+                    // TODO Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
+                    else if (searchColumnBtnVal.length > 0) {
+	                    $searchSubmitBtn.prop('disabled', false);
                     }
+                    
                 });
 
                 // TODO on init address, check s i search_column values, and disable or not
@@ -366,9 +330,9 @@
                 // when a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters
                 if (this.settings.searchDropdown === 'yes') {
                     this.$searchColumnBtn.on('search_column_data_changed', function (e) {
-
-                        var searchInputVal = self.$searchInput.val();
-                        var searchColumnBtnVal = self.$searchColumnBtn.data('value');
+	
+	                    var searchInputVal     = self.$searchInput.val(),
+	                        searchColumnBtnVal = self.$searchColumnBtn.data('value');
 
                         if (searchInputVal.length > 0) {
                             $.address.parameter('s', searchInputVal);
@@ -380,16 +344,17 @@
                             $.address.parameter('s', '');
                             $.address.parameter('search_column', '');
                         }
+                        
                     });
                 }
 
 
                 this.$atumList.on('click', '.search-category, .search-submit', function () {
-
-                    var searchInputVal = self.$searchInput.val(),
-                        searchColumnBtnVal = self.$searchColumnBtn.data('value');
 	
-	                $('.search-submit').prop('disabled', searchColumnBtnVal.length === 0 ? true : false);
+	                var searchInputVal     = self.$searchInput.val(),
+	                    searchColumnBtnVal = self.$searchColumnBtn.data('value');
+	
+	                $searchSubmitBtn.prop('disabled', searchColumnBtnVal.length === 0 ? true : false);
 
                     if (searchInputVal.length > 0) {
                         $.address.parameter('s', self.$searchInput.val());
@@ -404,6 +369,7 @@
                         $.address.parameter('search_column', '');
                         self.updateHash();
                     }
+                    
                 });
 
             }
@@ -506,15 +472,41 @@
 			//---------------------
 			.on('click', '.reset-filters', function() {
                 self.destroyTooltips();
+                
                 //TODO reset s and column search
                 $.address.queryString('');
                 self.$searchInput.val('');
-                if (self.settings.searchDropdown === 'yes') {
-					if (self.$searchColumnBtn.data('value') != 'title') {
-						self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
-					}
+                
+                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') != 'title') {
+					self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
             	}
+            	
 				self.update();
+    
+			})
+			
+			//
+			// "Control all products" button
+			.on('click', '#control-all-products', function() {
+				
+				var $button = $(this);
+				
+				$.ajax({
+					url     : ajaxurl,
+					method  : 'POST',
+					dataType: 'json',
+					beforeSend: function() {
+						$button.prop('disabled', true).after('<span class="atum-spinner"><span></span></span>');
+					},
+					data    : {
+						token : $(this).data('nonce'),
+						action: 'atum_control_all_products'
+					},
+					success: function() {
+						location.reload();
+					}
+				});
+				
 			});
 			
 			//
@@ -546,7 +538,7 @@
 			});
 			
 			//
-			// Warn the user about unsaved changes before navigatig away
+			// Warn the user about unsaved changes before navigating away
 			//----------------------------------------------------------
 			$(window).bind('beforeunload', function() {
 				
@@ -579,64 +571,59 @@
 		 */
         setupSearchColumnDropdown: function() {
 
-        	//TODO optimize setupSearchColumnDropdown
-        	//don't loose context
-            var self = this;
-
-            var $search_column_btn = $('#search_column_btn');
-            var $search_column_dropdown = $('#search_column_dropdown');
+        	// TODO optimize setupSearchColumnDropdown
+			var self                    = this,
+			    $search_column_btn      = $('#search_column_btn'),
+			    $search_column_dropdown = $('#search_column_dropdown');
 
             // No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
             $search_column_dropdown.empty();
             $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($search_column_dropdown.data('product-title'))); // 'Product Name'
 
-            var optionVal = '';
-
             $('#adv-settings input:checked').each(function () {
-                optionVal = $(this).val();
-                if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
-                    if (optionVal != 'thumb') {
-                        $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
+            	
+                var optionVal = $(this).val();
+                
+                if (optionVal.search("calc_") < 0 && optionVal != 'thumb') { // calc values are not searchable, also we can't search on thumb
+                    
+                    $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
 
-                        //most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
-                        if ($.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
-                            self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
-                        }
+                    // Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
+                    if ($.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
+                        self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
                     }
+                    
                 }
+                
             });
-
-            $('.dropdown-toggle').click(function (e) {
+			
+			$search_column_btn.click(function (e) {
                 $(this).parent().find('.dropdown-menu').toggle();
                 e.stopPropagation();
             });
 
-            //TODO click on drop element
-            $('.dropdown-menu a').click(function (event) {
+            // TODO click on drop element
+			$search_column_dropdown.find('a').click(function (e) {
 
-                event.preventDefault();
+                e.preventDefault();
 
                 self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
 
                 $(this).parents().find('.dropdown-menu').hide();
-                $('#search_column_dropdown>a.active').removeClass('active');
+                $search_column_dropdown.children('a.active').removeClass('active');
                 $(this).addClass('active');
 
-                if ($.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1) {
-                    $('.atum-post-search').attr('type', 'number');
-                }
-                else {
-                    $('.atum-post-search').attr('type', 'text');
-                }
+                var fieldTye = $.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1 ? 'number' : 'text';
+				self.$searchInput.attr('type', fieldTye);
 
                 if (self.settings.ajaxFilter === 'yes') {
                     $search_column_btn.trigger('search_column_data_changed');
                 }
-                // e.stopPropagation();
+               
             });
 
             $(document).click(function () {
-                $('.dropdown-menu').hide();
+	            $search_column_dropdown.hide();
             });
 
         },
@@ -679,7 +666,7 @@
                     // Init fields from hash parameters
                     var s = $.address.parameter('s');
                     if (s) {
-                        self.$atumList.find('.atum-post-search').val(s);
+                        self.$searchInput.val(s);
                     }
 
                     var search_column = $.address.parameter('search_column');
@@ -1552,6 +1539,37 @@
 				$nextRow = $nextRow.next('.expandable');
 			}
 			
+		},
+		
+		/**
+		 * Apply a delay
+		 * @return {Function}
+		 */
+		delay: function(callback, ms) {
+			
+			clearTimeout(this.delayTimer);
+			this.delayTimer = setTimeout(callback, ms);
+			
+		},
+		
+		pseudoKeyUpAjax: function(searchColumnBtnVal, searchInputVal) {
+			
+			var self = this;
+			
+			if (searchInputVal.length == 0) {
+				
+				if (searchInputVal != $.address.parameter('s')) {
+					$.address.parameter('s', '');
+					$.address.parameter('search_column', '');
+					self.updateHash(); // force clean search
+				}
+			}
+			else if (searchColumnBtnVal.length > 0) {
+				$.address.parameter('s', searchInputVal);
+				$.address.parameter('search_column', searchColumnBtnVal);
+				self.updateHash();
+			}
+		
 		}
 		
 	} );
