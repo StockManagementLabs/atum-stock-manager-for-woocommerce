@@ -1923,27 +1923,8 @@ final class Ajax {
      * @since 1.4.10
 	 */
     private function clear_out_stock_threshold_meta(){
-
-	    global $wpdb;
-	    $wpdb->hide_errors();
-	    //$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
-
-	    // TODO _out_stock_threshold rebuild stock_status
-	    $ids_2_rebuild_stock_status = $wpdb->get_col( "
-			SELECT DISTINCT p.ID FROM $wpdb->posts p
-            INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
-            WHERE p.post_type IN ('product', 'product_variation')
-        " );
-
-	    foreach ( $ids_2_rebuild_stock_status as $id_2_rebuild ) {
-
-		    // delete _out_stock_threshold (avoid partial works to be done again)
-		    delete_post_meta( $id_2_rebuild, Globals::OUT_STOCK_THRESHOLD_KEY );
-
-		    $product = wc_get_product( $id_2_rebuild );
-		    $product->save();
-
-	    }
+        
+	    Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta = TRUE, $all = TRUE );
 
 	    if (  Helpers::is_any_out_stock_threshold_set() == FALSE ) {
 		    wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
