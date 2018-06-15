@@ -149,7 +149,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 				'is_any_out_stock_threshold_set' => Helpers::is_any_out_stock_threshold_set(),
-				'confirm_msg'   => esc_attr( __("This will clean all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
+				'confirm_msg'   => esc_attr( __("This will clear all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
 			),
 			'unmanaged_counters' => array(
 				'section' => 'general',
@@ -392,20 +392,20 @@ class Settings {
 			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
-				'areYouSure'                => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'unsavedData'               => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
-				'continue'                  => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
-				'cancel'                    => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'run'                       => __( 'Run', ATUM_TEXT_DOMAIN ),
-				'ok'                        => __( 'OK', ATUM_TEXT_DOMAIN ),
-				'done'                      => __( 'Done!', ATUM_TEXT_DOMAIN ),
-				'error'                     => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'runnerNonce'               => wp_create_nonce( 'atum-script-runner-nonce' ),
-				'isAnyOutStockThresholdSet' => Helpers::is_any_out_stock_threshold_set(),
-				'OutStockThresholdSetCleanButton'   => __( 'Star Fresh', ATUM_TEXT_DOMAIN ),
-				'OutStockThresholdSetCleanScript' => 'atum_tool_clean_out_stock_threshold',
-				'OutStockThresholdSetCleanText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
-				'OutStockThresholdDisable'   => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
+				'areYouSure'                      => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'unsavedData'                     => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'continue'                        => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
+				'cancel'                          => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'run'                             => __( 'Run', ATUM_TEXT_DOMAIN ),
+				'ok'                              => __( 'OK', ATUM_TEXT_DOMAIN ),
+				'done'                            => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
+				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
+				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
+				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
+				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
+				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );

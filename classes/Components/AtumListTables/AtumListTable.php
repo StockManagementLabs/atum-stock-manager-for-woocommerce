@@ -289,11 +289,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->show_totals = FALSE;
 		}
 
-		if (Helpers::get_option( 'out_stock_threshold', "no" ) == 'no' ) {
-			$this->is_out_stock_threshold_managed = FALSE;
-		}else{
-			$this->is_out_stock_threshold_managed = TRUE;
-        }
+		$this->is_out_stock_threshold_managed = Helpers::get_option( 'out_stock_threshold', 'no' ) == 'no' ? FALSE : TRUE;
 
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
@@ -311,14 +307,15 @@ abstract class AtumListTable extends \WP_List_Table {
 		    }
 		}
 
-		//remove _out_stock_threshold columns if not set, or add filters to get availability etc.
-		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
-		if($is_out_stock_threshold_managed === "no"){
-			unset($args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ]);
-			if(isset($args['group_members']['stock-counters']['members'])){
-				$args['group_members']['stock-counters']['members'] = array_diff($args['group_members']['stock-counters']['members'], array(Globals::OUT_STOCK_THRESHOLD_KEY));
-            }
-        }
+		// Remove _out_stock_threshold columns if not set, or add filters to get availability etc
+		if ( $this->is_out_stock_threshold_managed === 'no' ) {
+			unset( $args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ] );
+
+			if ( isset( $args['group_members']['stock-counters']['members'] ) ) {
+				$this->group_members['stock-counters']['members'] = array_diff( $this->group_members['stock-counters']['members'], array( Globals::OUT_STOCK_THRESHOLD_KEY ) );
+				$args['group_members']['stock-counters']['members'] = array_diff( $args['group_members']['stock-counters']['members'], array( Globals::OUT_STOCK_THRESHOLD_KEY ) );
+			}
+		}
 
 		// Add the checkbox column to the table if enabled
 		$this->table_columns = $this->show_cb == TRUE ? array_merge( array( 'cb' => 'cb' ), $args['table_columns'] ) : $args['table_columns'];
@@ -935,9 +932,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		$product_id = $this->get_current_product_id();
 		$classes_title = '';
 		$tooltip_warning = '';
-		$is_below_out_stock_threshold = FALSE;
-
-
 		$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
 
 		if ($this->allow_calcs) {
@@ -950,45 +944,54 @@ abstract class AtumListTable extends \WP_List_Table {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 			$this->increase_total('_stock', $stock);
 
-			if($this->is_out_stock_threshold_managed) { //setings value is on
+			// Setings value is on
+			if ( $this->is_out_stock_threshold_managed ) {
 
-				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
+				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = TRUE );
 
 				if ( strlen( $out_stock_threshold ) > 0 ) {
-					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
-						//$is_below_out_stock_threshold = ( wc_stock_amount( $out_stock_threshold ) >= $stock );
-						if ( ! $editable ) {
-							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below Out Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
 
-						} else {
+					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
+
+						// $is_below_out_stock_threshold = ( wc_stock_amount( $out_stock_threshold ) >= $stock );
+						if ( ! $editable ) {
+							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below Out Stock Threshold', ATUM_TEXT_DOMAIN ) . "'";
+
+						}
+						else {
 							$classes_title   = " class='cell-yellow'";
 							$tooltip_warning = __( 'Click to edit the stock quantity (it is below Out Stock Threshold)', ATUM_TEXT_DOMAIN );
 						}
+
 					}
 
-				} else {
-					if ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
-						if ( ! $editable ) {
-							$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
-
-						} else {
-							$classes_title   = " class='cell-yellow'";
-							$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
-						}
-					}
 				}
-			} else {
-				if ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
-					if ( ! $editable ) {
-						$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN ) . "'";
+				elseif ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
 
-					} else {
+					if ( ! $editable ) {
+						$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold', ATUM_TEXT_DOMAIN ) . "'";
+
+					}
+					else {
 						$classes_title   = " class='cell-yellow'";
 						$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
 					}
+
 				}
 
-            }
+			}
+			elseif ( wc_stock_amount( $woocommerce_notify_no_stock_amount ) >= $stock ) {
+
+				if ( ! $editable ) {
+					$classes_title = " class='cell-yellow' title='" . __( 'Stock is below WooCommerce No Stock Threshold', ATUM_TEXT_DOMAIN ) . "'";
+
+				}
+				else {
+					$classes_title   = " class='cell-yellow'";
+					$tooltip_warning = __( 'Click to edit the stock quantity (it is below WooCommerce No Stock Threshold)', ATUM_TEXT_DOMAIN );
+				}
+
+			}
 
 			if ($editable) {
 
@@ -996,7 +999,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					'post_id'  => $product_id,
 					'meta_key' => 'stock',
 					'value'    => $stock,
-					'tooltip'  => ($tooltip_warning)?:__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
+					'tooltip'  => ($tooltip_warning) ?: __( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN )
 				);
 
 				$stock = $this->get_editable_column( $args );
@@ -1004,9 +1007,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 		}
-		//TODO order?
-		return apply_filters( 'atum/stock_central_list/column_stock',"<span".$classes_title.">".$stock."</span>"  , $item, $this->product );
-		//return apply_filters( 'atum/stock_central_list/column_stock',$stock, $item, $this->product );
+
+		// TODO order?
+		return apply_filters( 'atum/stock_central_list/column_stock', "<span".$classes_title.">".$stock."</span>", $item, $this->product );
+
 	}
 
 	/**

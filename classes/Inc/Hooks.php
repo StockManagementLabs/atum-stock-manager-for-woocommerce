@@ -97,10 +97,8 @@ class Hooks {
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
-		//add out_stock_threshold actions if required
-		// since 1.4.10
-		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
-		if($is_out_stock_threshold_managed  === "yes"){
+		// Add out_stock_threshold hooks if required
+		if( Helpers::get_option( 'out_stock_threshold', 'no' ) == 'yes' ){
 			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
 		}
 
@@ -108,13 +106,14 @@ class Hooks {
 
 	/**
 	 * Override the get_stock_status to all products that have stock managed at product level,
-	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
-     *
-	 * @param $is_in_stock double before hook value
-	 * @param $item product actual product or variation who fires
-	 * @return bool true/false procesed $is_in_stock (if required)
+	 * and ATUM's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
 	 *
 	 * @since 1.4.10
+     *
+	 * @param mixed       $is_in_stock double before hook value
+	 * @param \WC_Product $item product actual product or variation who fires
+	 *
+	 * @return bool true/false procesed $is_in_stock (if required)
 	 */
 	public function get_product_is_in_stock_when_out_stock_threshold( $is_in_stock, $item) {
 
@@ -122,41 +121,52 @@ class Hooks {
 
 		$item_id = $item->get_ID();
 
-		$query = $wpdb->prepare( "SELECT meta_key, meta_value 
-                  FROM wp_postmeta where post_id = %d
-                  AND meta_key IN ( '_out_stock_threshold', '_manage_stock','_stock','_stock_status', '_backorders')", $item_id );
+		$query = $wpdb->prepare( "
+			SELECT meta_key, meta_value 
+      		FROM wp_postmeta where post_id = %d
+          	AND meta_key IN ( '" . Globals::OUT_STOCK_THRESHOLD_KEY . "', '_manage_stock','_stock','_stock_status', '_backorders')
+        ", $item_id );
 
 		// Array( [_manage_stock] => no , [_stock] => , [_stock_status] => instock)
 		$item_metas = array_column( $wpdb->get_results( $query, ARRAY_A ), 'meta_value', 'meta_key' );
 
 		//if this item doesn't have this 4 keys, it means that it never has had _out_stock_threshold set
-		if( ! Helpers::array_keys_exist( array('_out_stock_threshold', '_manage_stock','_stock','_stock_status'), $item_metas ) ){
+		if ( ! Helpers::array_keys_exist( array( Globals::OUT_STOCK_THRESHOLD_KEY, '_manage_stock', '_stock', '_stock_status' ), $item_metas ) ) {
 
-			//not my problem
-			return 'outofstock' !== $item_metas['_stock_status']; // $item->get_stock_status();
-
-		} elseif ( $item_metas['_manage_stock'] === "no" || empty( $item_metas['_out_stock_threshold'] ) ) {
-
-			//not my problem
-			return 'outofstock' !== $item_metas['_stock_status'];
-
-		} else {
-
-			if ( $item_metas['_backorders'] !== "no" ) {
-				//not my problem
-				return true;
+			if ( isset( $item_metas['_stock_status'] ) ){
+				return 'outofstock' !== $item_metas['_stock_status'];
+			}
+			else {
+				return $is_in_stock;
 			}
 
-			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
-				//avaiable
-				return true;
+		}
+		elseif ( $item_metas['_manage_stock'] == 'no' || empty( $item_metas[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
 
-			} else {
+			return 'outofstock' !== $item_metas['_stock_status'];
+
+		}
+		else {
+
+			if ( $item_metas['_backorders'] !== 'no' ) {
+				return TRUE;
+			}
+
+			if ( $item_metas['_stock'] > $item_metas[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) {
+				//avaiable
+				return TRUE;
+
+			}
+			else {
 				//_out_stock_threshold!
-				return false;
+				return FALSE;
 
 			}
 		}
+
+		return $is_in_stock;
+
+
 	}
 
 	/**

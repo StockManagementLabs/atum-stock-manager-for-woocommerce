@@ -1576,14 +1576,19 @@ final class Helpers {
 		
 	}
 
-
-
+	/**
+	 * Checks whether the Out of Stock Threshold at product level is set for any product
+	 *
+	 * @since 1.4.10
+	 *
+	 * @return bool
+	 */
 	public static function is_any_out_stock_threshold_set(){
 	    global $wpdb;
 
-		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->postmeta} where meta_key ='_out_stock_threshold';");
+		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->postmeta where meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "';");
 
-		return $rowcount>0;
+		return $rowcount > 0;
     }
 
 	/**
@@ -1629,15 +1634,14 @@ final class Helpers {
 	 */
 	public static function array_keys_exist(array $required, array $data){
 
-		if (count(array_intersect_key(array_flip($required), $data)) === count($required)) {
+		if ( count( array_intersect_key( array_flip( $required ), $data ) ) === count( $required ) ) {
 			// All required keys exist!
-			return true;
-		}else{
-			return false;
+			return TRUE;
+		}
+		else {
+			return FALSE;
 		}
 
     }
-
-
 
 }
