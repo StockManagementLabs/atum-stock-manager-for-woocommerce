@@ -100,15 +100,15 @@ class Tools {
 			)
 		);
 
-		$defaults['clean_out_stock_threshold'] = array(
+		$defaults['clear_out_stock_threshold'] = array(
 			'section' => 'tools',
-			'name'    => __( "Clean Out Stock Threshold", ATUM_TEXT_DOMAIN ),
-			'desc'    => __( "Clean all Out Stock Threshold values that have been set", ATUM_TEXT_DOMAIN ),
+			'name'    => __( "Clear Out Stock Threshold", ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "Clear all previously saved Out of Stock Threshold values.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
-				'button_text'   => __( 'Clean Now!', ATUM_TEXT_DOMAIN ),
-				'script_action' => 'atum_tool_clean_out_stock_threshold',
-				'confirm_msg'   => esc_attr( __("This will clean all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
+				'button_text'   => __( 'Clear Now!', ATUM_TEXT_DOMAIN ),
+				'script_action' => 'atum_tool_clear_out_stock_threshold',
+				'confirm_msg'   => esc_attr( __("This will clear all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
 			)
 		);
 

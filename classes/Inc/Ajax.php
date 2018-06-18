@@ -126,7 +126,7 @@ final class Ajax {
 		// Run scripts from Tools section
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
-		add_action( 'wp_ajax_atum_tool_clean_out_stock_threshold', array( $this, 'clean_out_stock_threshold' ) );
+		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
 	}
 
@@ -141,7 +141,7 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
 
-		$layout = ( ! empty($_POST['layout']) ) ? $_POST['layout'] : array();
+		$layout = ! empty($_POST['layout']) ? $_POST['layout'] : array();
 		$user_id = get_current_user_id();
 		Dashboard::save_user_widgets_layout($user_id, $layout);
 
@@ -1899,51 +1899,37 @@ final class Ajax {
 
 
 	/**
-	 * Clean all Out Stock Threshold values that have been set
+	 * Clear all Out Stock Threshold values that have been set
 	 *
 	 * @package    Settings
 	 * @subpackage Tools
-	 * TODO clean_out_stock_threshold
+	 *
 	 * @since 1.4.10
 	 */
-	public function clean_out_stock_threshold() {
+	public function clear_out_stock_threshold() {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
 
-		$this->clean_out_stock_threshold_meta();
+		$this->clear_out_stock_threshold_meta();
 
-		wp_send_json_error( __('Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN) );
+		wp_send_json_error( __('Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN) );
 
 	}
 
 	/**
-	 * clean all the postmeta with OUT_STOCK_THRESHOLD_KEY, and rebuild all the _stock_status if
+	 * Clear all the postmeta with OUT_STOCK_THRESHOLD_KEY, and rebuild all the _stock_status if
      * required to comeback to the $woocommerce_notify_no_stock_amount
+	 *
      * @since 1.4.10
 	 */
-    private function clean_out_stock_threshold_meta(){
-	    global $wpdb;
-	    $wpdb->hide_errors();
-	    //$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
+    private function clear_out_stock_threshold_meta(){
+        
+	    Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta = TRUE, $all = TRUE );
 
-        //TODO _out_stock_threshold rebuild stock_status
-	    $ids_2_rebuild_stock_status =$wpdb->get_col(
-	    "SELECT DISTINCT p.ID FROM {$wpdb->posts} p
-            INNER JOIN {$wpdb->postmeta} pm_out_stock_threshold ON ( pm_out_stock_threshold.meta_key = '_out_stock_threshold' AND pm_out_stock_threshold.post_id = p.ID )
-            WHERE p.post_type IN ('product', 'product_variation')");
-
-	    foreach ($ids_2_rebuild_stock_status AS $id_2_rebuild){
-		    $product  = wc_get_product( $id_2_rebuild );
-		    $product->save();
-		    // delete _out_stock_threshold (avoid partial works to be done again)
-		    delete_post_meta( $id_2_rebuild, '_out_stock_threshold' );
-        }
-
-	    $clean_success = Helpers::is_any_out_stock_threshold_set();
-
-	    if ($clean_success == FALSE ) {
-		    wp_send_json_success( __('All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN) );
+	    if (  Helpers::is_any_out_stock_threshold_set() == FALSE ) {
+		    wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
 	    }
+
     }
 
 	/**

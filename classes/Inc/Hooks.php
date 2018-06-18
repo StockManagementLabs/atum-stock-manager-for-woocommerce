@@ -68,10 +68,12 @@ class Hooks {
 		// Firefox fix to not preserve the dropdown
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
-		//add out_stock_threshold actions if required
+		//rebuild stock status in all products with _out_stock_threshold when we disable this setting
         // since 1.4.10
-		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
-		if($is_out_stock_threshold_managed  === "yes"){
+		add_action('updated_option', array( $this,'hook_rebuild_wo_stock_status_on_disable'), 10, 3);
+
+		// Add out_stock_threshold actions if required
+		if( Helpers::get_option( 'out_stock_threshold', 'no' )  == 'yes' ){
 
 			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
@@ -97,66 +99,78 @@ class Hooks {
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
-		//add out_stock_threshold actions if required
-		// since 1.4.10
-		$is_out_stock_threshold_managed =  Helpers::get_option( 'out_stock_threshold', "no" ) ;
-		if($is_out_stock_threshold_managed  === "yes"){
-			add_filter( 'woocommerce_product_is_in_stock', array($this, 'get_product_is_in_stock_when_out_stock_threshold'), 10, 2 );
+		// Add out_stock_threshold hooks if required
+		if( Helpers::get_option( 'out_stock_threshold', 'no' ) === 'yes' ){
+			add_filter( 'woocommerce_product_is_in_stock', array($this, 'check_product_out_of_stock_threshold' ), 10, 2 );
 		}
 
 	}
 
 	/**
 	 * Override the get_stock_status to all products that have stock managed at product level,
-	 * and atum's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
-     *
-	 * @param $is_in_stock double before hook value
-	 * @param $item product actual product or variation who fires
-	 * @return bool true/false procesed $is_in_stock (if required)
+	 * and ATUM's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
 	 *
 	 * @since 1.4.10
+     *
+	 * @param mixed       $is_in_stock  Before hook value
+	 * @param \WC_Product $item         Actual product or variation who fires
+	 *
+	 * @return bool true/false procesed $is_in_stock (if required)
 	 */
-	public function get_product_is_in_stock_when_out_stock_threshold( $is_in_stock, $item) {
+	public function check_product_out_of_stock_threshold( $is_in_stock, $item) {
 
 		global $wpdb;
 
-		$item_id = $item->get_ID();
+		$item_id                = $item->get_ID();
+		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
-		$query = $wpdb->prepare( "SELECT meta_key, meta_value 
-                  FROM wp_postmeta where post_id = %d
-                  AND meta_key IN ( '_out_stock_threshold', '_manage_stock','_stock','_stock_status', '_backorders')", $item_id );
+		// If the product has no "Out of Stock Threshold" set we don't need to continue
+		if ( $out_of_stock_threshold === FALSE || $out_of_stock_threshold === '' ) {
+			return $is_in_stock;
+		}
+
+		// Allow disabling the threshold checking externally for some products
+		if ( apply_filters('atum/out_of_stock_threshold_for_product', FALSE, $item, $is_in_stock) ) {
+			return $is_in_stock;
+		}
+
+		$query = $wpdb->prepare( "
+			SELECT meta_key, meta_value 
+      		FROM wp_postmeta where post_id = %d
+          	AND meta_key IN ( '_manage_stock','_stock','_stock_status', '_backorders')
+        ", $item_id );
 
 		// Array( [_manage_stock] => no , [_stock] => , [_stock_status] => instock)
 		$item_metas = array_column( $wpdb->get_results( $query, ARRAY_A ), 'meta_value', 'meta_key' );
 
-		//if this item doesn't have this 4 keys, it means that it never has had _out_stock_threshold set
-		if( ! Helpers::array_keys_exist( array('_out_stock_threshold', '_manage_stock','_stock','_stock_status'), $item_metas ) ){
+		// If this item doesn't have these 4 keys, it means that it never has had "_out_stock_threshold" set
+		if ( ! Helpers::array_keys_exist( array( '_manage_stock', '_stock', '_stock_status' ), $item_metas ) ) {
 
-			//not my problem
-			return 'outofstock' !== $item_metas['_stock_status']; // $item->get_stock_status();
-
-		} elseif ( $item_metas['_manage_stock'] === "no" || empty( $item_metas['_out_stock_threshold'] ) ) {
-
-			//not my problem
-			return 'outofstock' !== $item_metas['_stock_status'];
-
-		} else {
-
-			if ( $item_metas['_backorders'] !== "no" ) {
-				//not my problem
-				return true;
+			if ( isset( $item_metas['_stock_status'] ) ){
+				return 'outofstock' !== $item_metas['_stock_status'];
 			}
 
-			if ( $item_metas['_stock'] > $item_metas['_out_stock_threshold'] ) {
-				//avaiable
-				return true;
+		}
+		elseif ( $item_metas['_manage_stock'] == 'yes' ) {
 
-			} else {
+			if ( $item_metas['_backorders'] !== 'no' ) {
+				return TRUE;
+			}
+
+			if ( $item_metas['_stock'] > $out_of_stock_threshold ) {
+				// Available
+				return TRUE;
+
+			}
+			else {
 				//_out_stock_threshold!
-				return false;
+				return FALSE;
 
 			}
 		}
+
+		return $is_in_stock;
+
 	}
 
 	/**
@@ -455,13 +469,14 @@ class Hooks {
 
 	/**
 	 * Save the out of stock threshold field
+     * Rebuild: force_rebuild_stock_status if _out_stock_threshold is empty, and check that this change is not comming from options.php to avoid nestings problems
 	 *
 	 * @since 1.4.10
 	 *
 	 * @param int $post_id    The post ID
 	 */
 	public function save_out_stock_threshold_field($post_id) {
-
+        global $pagenow;
 
 		$product  = wc_get_product( $post_id );
 
@@ -470,7 +485,10 @@ class Hooks {
 			return;
 		}
 
-		if ( ! isset( $_POST['_out_stock_threshold'] ) && ! isset( $_POST['variation_out_stock_threshold'] ) ) {
+		if ( ! isset( $_POST['_out_stock_threshold'] ) && ! isset( $_POST['variation_out_stock_threshold']) && ! in_array( $pagenow, array( 'options.php' )))  {
+			//Force product validate and save to rebuild stock_status
+			Helpers::force_rebuild_stock_status($product);
+
 			return;
 		}
 
@@ -478,12 +496,20 @@ class Hooks {
 
 		if ( isset( $_POST['_out_stock_threshold'] ) ) {
 			$out_stock_threshold = esc_attr( $_POST['_out_stock_threshold'] );
+			if ( empty( $out_stock_threshold ) && ! in_array( $pagenow, array( 'options.php' ) ) ) {
+				//Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product)
+				Helpers::force_rebuild_stock_status($product);
+            }
 			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
 		}
 
 		if ( isset( $_POST['variation_out_stock_threshold'] ) ) {
 
 			$out_stock_threshold = reset( $_POST['variation_out_stock_threshold'] );
+			if ( empty( $out_stock_threshold ) && ! in_array( $pagenow, array( 'options.php' ) ) ) {
+				//Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product)
+				Helpers::force_rebuild_stock_status($product);
+			}
 			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
 		}
 
@@ -802,6 +828,43 @@ class Hooks {
 
 		return $message;
 
+	}
+
+	/**
+	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
+	 * Then, if we have any out_stock_threshold meta, rebuild that product to update the stock_status if required
+	 *
+	 * @param $option_name string we want atum_settings
+	 * @param $old_value array
+	 * @param $option_value array
+	 *
+	 * @return mixed
+	 * @throws \Atum\Components\AtumException if we set a product with all true.
+	 */
+	public function hook_rebuild_wo_stock_status_on_disable( $option_name, $old_value, $option_value ) {
+
+		if ( $option_name === "atum_settings" ) {
+			if ( isset( $option_value['out_stock_threshold'] ) ) {
+				if ( $option_value['out_stock_threshold'] === "no" && Helpers::is_any_out_stock_threshold_set() ) {
+
+					Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta=FALSE, $all = TRUE);
+					/*
+					$ids_2_rebuild_stock_status = $wpdb->get_col(
+						"SELECT DISTINCT p.ID FROM $wpdb->posts p
+                          INNER JOIN $wpdb->postmeta pm_out_stock_threshold ON ( pm_out_stock_threshold.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm_out_stock_threshold.post_id = p.ID )
+                          WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish','future','private');" );
+
+					foreach ( $ids_2_rebuild_stock_status AS $id_2_rebuild ) {
+						$product = wc_get_product( $id_2_rebuild );
+						Helpers::force_rebuild_stock_status($product);
+					}
+					*/
+				}
+			}
+		}
+
+		//do nothing with the values
+		return $option_value;
 	}
 
 	/**

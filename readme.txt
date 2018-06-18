@@ -7,7 +7,7 @@ Tested up to: 4.9.6
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.4.2
-Stable tag: 1.4.9
+Stable tag: 1.4.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,37 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.10`
+
+*2018-06-14*
+
+**Features**
+
+* Added "Out of Stock Threshold" at product level.
+* Added AtumCapabilities: "edit_out_stock_threshold".
+* Added option to ATUM Settings to enable/disable the "Out of Stock Threshold" at product level globally.
+* Added new column to List Tables to display the "Out of Stock Threshold" set for each product.
+* Show the out of stock threshold value in yellow if the current product's stock has reached the minimum.
+* Added placeholder to "Out of Stock Threshold" empty fields with the global value set in WC settings that will be used by default.
+* Added notice in Stock Central to alert the users that the products must be controlled by ATUM to appear.
+* Added a button to Stock Central notice to control all the shop products at once.
+* Added help pointers to Stock Central.
+
+
+**Changes**
+
+* Added WPML multicurrency compatibility to new "search by column".
+
+**Fixes**
+
+* Fixed issue when adding BOM products linked to specific Supplier to Purchase Orders.
+* Fixed issue with Purchase Oorders' Product Search & WPML: All translations returned.
+* Fixed issue with "Add Items" blocking.
+* Fixed issue that was not saving Supplier fields for variations correctly.
+* Fixed issue with List Table's group members when the user has no permissions to see some columns.
 
 ---
 
