@@ -241,12 +241,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	const EMPTY_COL = '&mdash;';
 
-	/*
-	 * it's out of stock threshold enabled on setings?
-	 * @since 1.4.10
-	 */
-	protected $is_out_stock_threshold_managed =  "no";
-
 	protected $woocommerce_notify_no_stock_amount;
 
 
@@ -289,8 +283,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->show_totals = FALSE;
 		}
 
-		$this->is_out_stock_threshold_managed = Helpers::get_option( 'out_stock_threshold', 'no' ) == 'no' ? FALSE : TRUE;
-
 		if ( ! empty( $args['selected'] ) ) {
 			$this->selected = is_array( $args['selected'] ) ? $args['selected'] : explode( ',', $args['selected'] );
 		}
@@ -308,7 +300,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Remove _out_stock_threshold columns if not set, or add filters to get availability etc
-		if ( $this->is_out_stock_threshold_managed === 'no' ) {
+		$is_out_stock_threshold_managed = Helpers::get_option( 'out_stock_threshold', 'no' ) == 'no' ? FALSE : TRUE;
+		if(!$is_out_stock_threshold_managed ){
 			unset( $args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
 			if ( isset( $args['group_members']['stock-counters']['members'] ) ) {
@@ -945,7 +938,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->increase_total('_stock', $stock);
 
 			// Setings value is on
-			if ( $this->is_out_stock_threshold_managed ) {
+			$is_out_stock_threshold_managed = Helpers::get_option( 'out_stock_threshold', 'no' ) == 'no' ? false : true;
+			if($is_out_stock_threshold_managed ){
 
 				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = TRUE );
 

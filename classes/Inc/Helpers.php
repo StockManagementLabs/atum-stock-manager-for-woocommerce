@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
@@ -1575,6 +1576,65 @@ final class Helpers {
 		return $support;
 		
 	}
+
+	/**
+	 * Force save with changes to validate_props and rebuild stock_status if required.
+	 * We can use it with 1 product/variation or
+	 * set all to true to aply to all products OUT_STOCK_THRESHOLD_KEY set and clean or not the OUT_STOCK_THRESHOLD_KEY meta keys
+	 *(@see clean OUT_STOCK_THRESHOLD_KEY tool)
+	 *
+	 * @since 1.4.10
+	 *
+	 * @param $product any subclass of WC_Abstract_Legacy_Product
+	 * @param $all bool
+	 * @param $clean_meta bool
+	 *
+	 * @throws AtumException if we set a product with all = true
+	 */
+	public static function force_rebuild_stock_status($product = NULL, $clean_meta=FALSE, $all = FALSE){
+
+	    global $wpdb;
+		$wpdb->hide_errors();
+
+	    if ( is_subclass_of($product, 'WC_Abstract_Legacy_Product') && !is_null($product) ){
+
+	        if ($all){
+                throw new AtumException($error = "you cannot set a product, and at same time ask to work in all products");
+            }
+
+		    $product->set_stock_quantity($product->get_stock_quantity()+1);
+		    $product->set_stock_quantity($product->get_stock_quantity()-1);
+		    $product->save();
+
+		    if($clean_meta) {
+			    delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
+		    }
+		    return;
+        }
+
+        if ($all){
+	        $ids_2_rebuild_stock_status = $wpdb->get_col( "
+                SELECT DISTINCT p.ID FROM $wpdb->posts p
+                INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
+                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish','future','private');
+            " );
+	        foreach ( $ids_2_rebuild_stock_status as $id_2_rebuild ) {
+
+		        // delete _out_stock_threshold (avoid partial works to be done again)
+                if($clean_meta){
+	                delete_post_meta( $id_2_rebuild, Globals::OUT_STOCK_THRESHOLD_KEY );
+                }
+
+		        $product = wc_get_product( $id_2_rebuild );
+		        //Helpers::force_rebuild_stock_status($product);  Maximum function nesting level
+		        $product->set_stock_quantity($product->get_stock_quantity()+1);
+		        $product->set_stock_quantity($product->get_stock_quantity()-1);
+		        $product->save();
+
+	        }
+        }
+
+    }
 
 	/**
 	 * Checks whether the Out of Stock Threshold at product level is set for any product
