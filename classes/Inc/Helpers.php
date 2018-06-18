@@ -615,6 +615,14 @@ final class Helpers {
 
 	}
 
+	public static function get_sold_last_days_option(){
+		if (isset( $_REQUEST['sold_last_days'] ) ) {
+		    return absint(esc_attr( $_REQUEST['sold_last_days'] ));
+		}else{
+			return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+		}
+    }
+
 	/**
 	 * Helper function to return the entire plugin option value.
 	 * If no option has been saved, it returns empty array.

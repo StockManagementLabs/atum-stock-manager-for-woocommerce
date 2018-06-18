@@ -187,7 +187,27 @@
 				self.destroyPopover($metaCell);
 				
 			});
-			
+
+			//TODO sold_last_days jquery
+            // Find set-header editable content.
+            //$('#sales_last_ndays_val[contenteditable=true]')
+            $('#sales_last_ndays_val')
+            // When you click on item, record into data("initialText") content of this item.
+                .focus(function () {
+                    console.log("sales_last_ndays_val focus");
+                    $(this).data("initialText", $(this).html());
+                })
+                // When you leave an item...
+                .blur(function () {
+                    console.log("sales_last_ndays_val blur" + $(this).data("initialText") + "#" + $(this).html());
+                    // ...if content is different...
+                    if ($(this).data("initialText") !== $(this).html()) {
+                        // ... do something.
+                        console.log('New data when content change to :' + $(this).html());
+                        $.address.parameter('sold_last_days', parseInt($(this).text()));
+                    }
+                });
+
 			// Popover's "Set" button
 			$('body').on('click', '.popover button.set', function() {
 				
@@ -1173,7 +1193,7 @@
 			});
 			
 			// Update the URL hash parameters
-			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter'], function(index, elem) {
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], function(index, elem) {
 				
 				// Disable auto-update on each iteration until all the parameters have been set
 				self.navigationReady = false;
@@ -1226,6 +1246,7 @@
 				order       : $.address.parameter('order') || '',
 				orderby     : $.address.parameter('orderby') || '',
                 search_column : $.address.parameter('search_column') || '',
+                sold_last_days : $.address.parameter('sold_last_days') || '',
 				s           : $.address.parameter('s') || '',
 			});
 			

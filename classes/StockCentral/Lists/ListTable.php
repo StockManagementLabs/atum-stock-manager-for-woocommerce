@@ -71,7 +71,6 @@ class ListTable extends AtumListTable {
 	);
 
 	/**
-	 * TODO $searchable_columns ?
      * What columns are numeric and searchable? and strings? append to this two keys.
 	 * @var array string keys ()
 	 */
@@ -114,7 +113,8 @@ class ListTable extends AtumListTable {
 		);
 
 		// Get the ndays set to last sales column
-		$ndays_settings = intval(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+		//TODO sold_last_days get value for column header
+		$sold_last_days = Helpers::get_sold_last_days_option();
 
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
@@ -144,7 +144,7 @@ class ListTable extends AtumListTable {
 			'calc_lost_in_post'              => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'calc_sales14'                   => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
 			'calc_sales7'                    => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
-			'calc_sales_last_ndays_settings' => sprintf(_n( 'Sales last %s day', 'Sales last %s days', $ndays_settings, ATUM_TEXT_DOMAIN ), $ndays_settings ),
+			'calc_sales_last_ndays_settings' => sprintf(_n( 'Sales last <span class="set-header" id="sales_last_ndays_val" contenteditable="true">%s</span> day', 'Sales last <span class="set-header" id="sales_last_ndays_val" contenteditable="true">%s</span> days', $sold_last_days, ATUM_TEXT_DOMAIN ), $sold_last_days ),
 			'calc_will_last'                 => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'            => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'                => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
@@ -749,8 +749,8 @@ class ListTable extends AtumListTable {
 
 		// Calc products sold during the last ndays_settings
         // TODO sold ndays_settings calc
-		$ndays_settings = intval(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
-		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -'.$ndays_settings.' days', $this->day );
+		$sold_last_days = Helpers::get_sold_last_days_option();
+		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -'.$sold_last_days.' days', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
@@ -759,14 +759,16 @@ class ListTable extends AtumListTable {
 		}
 
 		// Calc products sold the $last_days days
-		// TODO sold sold_last_days jquery value calc
-		$rows = Helpers::get_sold_last_days( $calc_products, "-$this->last_days days", $this->day );
+		// TODO sold sold_last_days jquery value calc ?
+		/*
+        $rows = Helpers::get_sold_last_days( $calc_products, "-$this->last_days days", $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_days'] = $row['QTY'];
 			}
 		}
+		*/
 		
 	}
 
