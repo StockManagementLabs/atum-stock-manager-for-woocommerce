@@ -13,7 +13,6 @@
 namespace Atum\Inc;
 
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumException;
 use Atum\Inc\Helpers;
 
 defined( 'ABSPATH' ) or die;
@@ -123,7 +122,7 @@ class Hooks {
 
 		global $wpdb;
 
-		$item_id                = $item->get_ID();
+		$item_id = $item->get_ID();
 		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
 		// If the product has no "Out of Stock Threshold" set we don't need to continue
@@ -227,14 +226,14 @@ class Hooks {
 			wp_register_script( 'atum-product-data', ATUM_URL . "assets/js/atum.product.data{$min}.js", array('switchery', 'sweetalert2'), ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', array(
-				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'confirmNotice'                 => __( 'This will change the ATUM control switch for all the variations within this product to %s', ATUM_TEXT_DOMAIN ),
 				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
-				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
+				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
-				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
+				'isOutStockThresholdEnabled' => Helpers::get_option( 'out_stock_threshold', 'no' ),
 				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock()
 			) );
 
@@ -432,7 +431,7 @@ class Hooks {
 
 		if ( empty( $variation ) ) {
 
-			$product      = wc_get_product( $post->ID );
+			$product = wc_get_product( $post->ID );
 			$product_type = $product->get_type();
 
 			// Do not add the field to variable products (every variation will have its own)
@@ -481,7 +480,7 @@ class Hooks {
 
         global $pagenow;
 
-		$product = wc_get_product( $post_id );
+		$product  = wc_get_product( $post_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 			return;

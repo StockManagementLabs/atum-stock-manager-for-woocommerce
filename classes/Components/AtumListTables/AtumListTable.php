@@ -1002,7 +1002,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		// TODO order?
 		return apply_filters( 'atum/stock_central_list/column_stock', "<span".$classes_title.">".$stock."</span>", $item, $this->product );
 
 	}

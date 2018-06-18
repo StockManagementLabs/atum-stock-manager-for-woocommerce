@@ -165,7 +165,19 @@ class Settings {
 				'type'    => 'number',
 				'default' => 0,
 				'options'    => array(
-					'min' => 0
+					'min' => 0,
+					'max' => 4
+				)
+			),
+			'sales_last_ndays' => array(
+				'section' => 'general',
+				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enter the number of days to calculate the number of sales in that period in one Stock Central column.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => self::DEFAULT_SALE_DAYS,
+				'options'    => array(
+					'min' => 1,
+                    'max' => 31
 				)
 			),
 			'delete_data' => array(
@@ -553,10 +565,12 @@ class Settings {
 
 		$step = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
 		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
+		$max  = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
 
 		$output = sprintf(
-			'<input class="atum-settings-input" type="number" min="%s" step="%s" id="%s" name="%s" value="%s" %s>',
+			'<input class="atum-settings-input" type="number" min="%s" max="%s" step="%s" id="%s" name="%s" value="%s" %s>',
 			$min,
+            $max,
 			$step,
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",

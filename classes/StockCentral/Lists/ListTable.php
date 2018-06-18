@@ -20,6 +20,7 @@ use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Settings\Settings;
 
 
 class ListTable extends AtumListTable {
@@ -112,37 +113,41 @@ class ListTable extends AtumListTable {
 			'terms'    => Globals::get_product_types()
 		);
 
+		// Get the ndays set to last sales column
+		$ndays_settings = intval(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
-			'thumb'                  => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'                  => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'_supplier'              => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_sku'                   => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'          => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'ID'                     => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'              => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'calc_location'          => '<span class="dashicons dashicons-store tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
-			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
-			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-            '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
-			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
-			'_out_stock_threshold'   => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
-			'calc_reserved'          => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'       => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
-			'calc_sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
-			'calc_returns'           => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
-			'calc_damages'           => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'calc_sales14'           => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
-			'calc_sales7'            => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
-			'calc_will_last'         => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_stock_out_days'    => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_lost_sales'        => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'thumb'                          => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'title'                          => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'_supplier'                      => __( 'Supplier', ATUM_TEXT_DOMAIN ),
+			'_sku'                           => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'                  => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'ID'                             => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'calc_type'                      => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_location'                  => '<span class="dashicons dashicons-store tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_regular_price'                 => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'_sale_price'                    => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'_purchase_price'                => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'_weight'                        => __( 'Weight', ATUM_TEXT_DOMAIN ),
+			'_stock'                         => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_out_stock_threshold'           => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+			'calc_inbound'                   => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'calc_hold'                      => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+			'calc_reserved'                  => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+			'calc_back_orders'               => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'calc_sold_today'                => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+			'calc_returns'                   => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+			'calc_damages'                   => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+			'calc_lost_in_post'              => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'calc_sales14'                   => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
+			'calc_sales7'                    => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
+			'calc_sales_last_ndays_settings' => sprintf(_n( 'Sales last %s day', 'Sales last %s days', $ndays_settings, ATUM_TEXT_DOMAIN ), $ndays_settings ),
+			'calc_will_last'                 => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_stock_out_days'            => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_lost_sales'                => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
 			'calc_stock_indicator'   => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
@@ -604,6 +609,31 @@ class ListTable extends AtumListTable {
 		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $sales14, $item, $this->product );
 		
 	}
+
+	/**
+	 * Column for items sold during the last N days (set on atum's general settings) sales_last_ndays
+	 *
+	 * @since  0.1.2
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return int
+	 */
+	protected function column_calc_sales_last_ndays_settings( $item, $add_to_total = TRUE ) {
+
+		if (! $this->allow_calcs) {
+			$sales_last_ndays_settings = self::EMPTY_COL;
+		}
+		else {
+			$sales_last_ndays_settings = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays_settings'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays_settings'];
+			if ( $add_to_total ) {
+				$this->increase_total('calc_sales_last_ndays_settings', $sales_last_ndays_settings);
+			}
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays_settings', $sales_last_ndays_settings, $item, $this->product );
+
+	}
 	
 	/**
 	 * Column for number of days the stock will be sufficient to fulfill orders
@@ -695,7 +725,6 @@ class ListTable extends AtumListTable {
 
 		// Calc products sold today (since midnight)
 		$rows = Helpers::get_sold_last_days( $calc_products, 'today 00:00:00', $this->day );
-		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_today'] = $row['QTY'];
@@ -704,7 +733,6 @@ class ListTable extends AtumListTable {
 
 		// Calc products sold during the last week
 		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -1 week', $this->day );
-		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_7'] = $row['QTY'];
@@ -713,14 +741,25 @@ class ListTable extends AtumListTable {
 
 		// Calc products sold during the last 2 weeks
 		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -2 weeks', $this->day );
-		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_14'] = $row['QTY'];
 			}
 		}
 
+		// Calc products sold during the last ndays_settings
+        // TODO sold ndays_settings calc
+		$ndays_settings = intval(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -'.$ndays_settings.' days', $this->day );
+		
+		if ( $rows ) {
+			foreach ( $rows as $row ) {
+				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays_settings'] = $row['QTY'];
+			}
+		}
+
 		// Calc products sold the $last_days days
+		// TODO sold sold_last_days jquery value calc
 		$rows = Helpers::get_sold_last_days( $calc_products, "-$this->last_days days", $this->day );
 		
 		if ( $rows ) {
