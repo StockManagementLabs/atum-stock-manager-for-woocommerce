@@ -615,9 +615,24 @@ final class Helpers {
 
 	}
 
+	/**
+     * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
+     * @since   1.4.11
+     *
+	 * @return int days between 1 and 31
+	 */
 	public static function get_sold_last_days_option(){
-		if (isset( $_REQUEST['sold_last_days'] ) ) {
-		    return absint(esc_attr( $_REQUEST['sold_last_days'] ));
+
+	    if (isset( $_REQUEST['sold_last_days'] ) ) {
+
+		    //sanitize
+		    $value = absint( esc_attr( $_REQUEST['sold_last_days'] ) );
+
+			if ( $value > 0 && $value < 31 ) {
+		        return $value;
+		    }else {
+				return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+			}
 		}else{
 			return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
 		}

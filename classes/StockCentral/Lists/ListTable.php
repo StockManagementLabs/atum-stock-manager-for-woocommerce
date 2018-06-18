@@ -144,7 +144,7 @@ class ListTable extends AtumListTable {
 			'calc_lost_in_post'              => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'calc_sales14'                   => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
 			'calc_sales7'                    => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
-			'calc_sales_last_ndays_settings' => sprintf(_n( 'Sales last <span class="set-header" id="sales_last_ndays_val" contenteditable="true">%s</span> day', 'Sales last <span class="set-header" id="sales_last_ndays_val" contenteditable="true">%s</span> days', $sold_last_days, ATUM_TEXT_DOMAIN ), $sold_last_days ),
+			'calc_sales_last_ndays_settings' => sprintf(_n( 'Sales last <span class="set-header" id="sales_last_ndays_val">%s</span> day', 'Sales last <span class="set-header" id="sales_last_ndays_val">%s</span> days', $sold_last_days, ATUM_TEXT_DOMAIN ), $sold_last_days ),
 			'calc_will_last'                 => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'            => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'                => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),

@@ -188,10 +188,15 @@
 				
 			});
 
-			//TODO sold_last_days jquery
+            //TODO sold_last_days jquery
+            this.setupSalesLastNDaysVal();
+
+
             // Find set-header editable content.
             //$('#sales_last_ndays_val[contenteditable=true]')
-            $('#sales_last_ndays_val')
+			// since 1.4.11
+            /*
+			$('#sales_last_ndays_val')
             // When you click on item, record into data("initialText") content of this item.
                 .focus(function () {
                     console.log("sales_last_ndays_val focus");
@@ -207,6 +212,7 @@
                         $.address.parameter('sold_last_days', parseInt($(this).text()));
                     }
                 });
+            */
 
 			// Popover's "Set" button
 			$('body').on('click', '.popover button.set', function() {
@@ -585,6 +591,50 @@
 			});
 			
 		},
+
+		//TODO sales_last_ndays_val
+        setupSalesLastNDaysVal: function() {
+            var self = this;
+
+            var selectDaysText = $( '#sales_last_ndays_val' ).text();
+            var days= Array.apply(null, {length: 31}).map(Number.call, Number); //var o = [0, 1, 2, 3 ... 30];
+            days.shift();
+
+
+            var $selectableDays = $('<select/>');
+            for (var i in days) {
+                $selectableDays.append($('<option/>').html(days[i]));
+            }
+
+            $( '#sales_last_ndays_val' ).html("<span class='textvalue'>"+selectDaysText+"</span>");
+            $( '#sales_last_ndays_val' ).append($selectableDays);
+            $('#sales_last_ndays_val select').hide();
+            $("#sales_last_ndays_val select").val(selectDaysText);
+
+            $selectableDays.change(function() {
+                debugger;
+                $('#sales_last_ndays_val .textvalue').text($( this ).val());
+                $( this ).hide();
+                $('#sales_last_ndays_val .textvalue').show();
+                $.address.parameter('sold_last_days', parseInt($(this).val()));
+                self.updateHash();
+				//self.keyUp(e);
+                //alert(parseInt($(this).val()));
+
+                //var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
+                //    searchInputVal    = self.$searchInput.val();
+
+                //self.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal);
+            });
+
+
+            $('#sales_last_ndays_val .textvalue').click(function() {
+                console.log("clicked");
+                $('#sales_last_ndays_val .textvalue').hide();
+                $('#sales_last_ndays_val select').show();
+            });
+
+        },
 
 		/**
 		 * Fill the search by column dropdown with the active screen options checkboxes
@@ -1188,6 +1238,7 @@
                 //search_column : self.$searchColumnBtn.data('value') || '',
                 s             : $.address.parameter('s') || '',
                 search_column : $.address.parameter('search_column') || '',
+                sold_last_days: $.address.parameter('sold_last_days') || '',
 				orderby       : $.address.parameter('orderby') || self.settings.orderby,
 				order         : $.address.parameter('order') || self.settings.order
 			});
@@ -1237,17 +1288,17 @@
 			
 			// Overwrite the filterData with the URL hash parameters
 			this.filterData = $.extend(this.filterData, {
-				view        : $.address.parameter('view') || '',
-				product_cat : $.address.parameter('product_cat') || '',
-				product_type: $.address.parameter('product_type') || '',
-				supplier    : $.address.parameter('supplier') || '',
-				extra_filter: $.address.parameter('extra_filter') || '',
-				paged       : $.address.parameter('paged') || '',
-				order       : $.address.parameter('order') || '',
-				orderby     : $.address.parameter('orderby') || '',
-                search_column : $.address.parameter('search_column') || '',
-                sold_last_days : $.address.parameter('sold_last_days') || '',
-				s           : $.address.parameter('s') || '',
+				view        	: $.address.parameter('view') || '',
+				product_cat 	: $.address.parameter('product_cat') || '',
+				product_type	: $.address.parameter('product_type') || '',
+				supplier    	: $.address.parameter('supplier') || '',
+				extra_filter	: $.address.parameter('extra_filter') || '',
+				paged       	: $.address.parameter('paged') || '',
+				order       	: $.address.parameter('order') || '',
+				orderby     	: $.address.parameter('orderby') || '',
+                search_column 	: $.address.parameter('search_column') || '',
+                sold_last_days 	: $.address.parameter('sold_last_days') || '',
+				s           	: $.address.parameter('s') || '',
 			});
 			
 			this.doingAjax = $.ajax({
@@ -1321,6 +1372,9 @@
 					self.maybeRestoreEnhancedSelect();
 					
 					self.removeOverlay();
+
+                    self.setupSalesLastNDaysVal();
+
 					
 				},
 				error     : function (error) {
