@@ -14,8 +14,8 @@
 		
 		// Toggle the "Out of Stock Threshold" field visibility
 		$('#_manage_stock').change(function () {
-			$('#out_stock_threshold_field').css('display', this.checked ? 'block' : 'none');
-		});
+			$('.out_stock_threshold_field_wrapper').css('display', this.checked ? 'block' : 'none');
+		}).change();
 
 		// Add switches to variations once are loaded by WC
 		$('#woocommerce-product-data').on('woocommerce_variations_added woocommerce_variations_loaded', function() {

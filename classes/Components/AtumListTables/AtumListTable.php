@@ -618,7 +618,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $supplier;
 		}
 
-		$supplier_id = get_post_meta( $this->get_current_product_id(), '_supplier', TRUE );
+		$supplier_id = get_post_meta( $this->get_current_product_id(), Suppliers::SUPPLIER_META_KEY, TRUE );
 
 		if ($supplier_id) {
 
@@ -1648,7 +1648,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$args['meta_query'][] = array(
-				'key'   => '_supplier',
+				'key'   => Suppliers::SUPPLIER_META_KEY,
 				'value' => $supplier,
 				'type'  => 'numeric'
 			);
@@ -2874,7 +2874,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 				// Meta relational values
-				elseif ( $search_column == '_supplier' ) {
+				elseif ( $search_column == Suppliers::SUPPLIER_META_KEY ) {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
 
@@ -3272,7 +3272,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( ! empty($this->supplier_variation_products) ) {
 
 				$children_args['meta_query'][] = array(
-					'key'   => '_supplier',
+					'key'   => Suppliers::SUPPLIER_META_KEY,
 					'value' => esc_attr( $_REQUEST['supplier'] ),
 					'type'  => 'NUMERIC'
 				);

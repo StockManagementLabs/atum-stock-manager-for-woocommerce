@@ -12,7 +12,7 @@ use Atum\Inc\Helpers;
 if ( Helpers::get_option( 'out_stock_threshold', 'no' ) == 'yes' ): ?>
 
 	<?php if ( empty($variation) ): ?>
-    <div id="out_stock_threshold_field" class="options_group <?php echo implode(' ', $out_stock_threshold_classes) ?>">
+    <div class="options_group out_stock_threshold_field_wrapper <?php echo implode(' ', $out_stock_threshold_classes) ?>">
     <?php endif; ?>
 
         <p class="form-field _out_stock_threshold_field <?php if ( ! empty($variation) ) echo ' show_if_variation_manage_stock form-row form-row-last' ?>">
@@ -23,7 +23,7 @@ if ( Helpers::get_option( 'out_stock_threshold', 'no' ) == 'yes' ): ?>
             <span class="atum-field input-group">
                     <?php Helpers::atum_field_input_addon() ?>
 
-                <input type="number" class="short" style="" step="1" name="<?php echo $out_stock_threshold_field_name ?>"
+                <input type="number" class="short" step="1" name="<?php echo $out_stock_threshold_field_name ?>"
                        id="<?php echo $out_stock_threshold_field_id ?>" value="<?php echo $out_stock_threshold ?>"
 		               placeholder="<?php echo $woocommerce_notify_no_stock_amount ?>" data-onload-product-type="<?php echo $product_type ?>">
 

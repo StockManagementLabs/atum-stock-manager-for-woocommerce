@@ -154,7 +154,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function get_supplier($return = 'post') {
 
-		$supplier_id = $this->get_meta('_supplier');
+		$supplier_id = $this->get_meta( Suppliers::SUPPLIER_META_KEY );
 
 		if ($supplier_id) {
 

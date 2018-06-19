@@ -19,6 +19,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\StockCentral\StockCentral;
+use Atum\Suppliers\Suppliers;
 
 
 class HtmlReport extends ListTable {
@@ -194,7 +195,7 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
-		$supplier_id = get_post_meta( $this->get_current_product_id(), '_supplier', TRUE );
+		$supplier_id = get_post_meta( $this->get_current_product_id(), Suppliers::SUPPLIER_META_KEY, TRUE );
 
 		if ($supplier_id) {
 

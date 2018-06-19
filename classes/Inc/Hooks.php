@@ -15,6 +15,8 @@ namespace Atum\Inc;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Inc\Helpers;
+use Atum\Settings\Settings;
+
 
 defined( 'ABSPATH' ) or die;
 
@@ -444,10 +446,10 @@ class Hooks {
 		$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
 
 		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
-		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', true );
+		$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
-		$out_stock_threshold_field_name = empty( $variation ) ? '_out_stock_threshold' : "variation_out_stock_threshold[$loop]";
-		$out_stock_threshold_field_id   = empty( $variation ) ? '_out_stock_threshold' : "_out_stock_threshold{$loop}";
+		$out_stock_threshold_field_name = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : "variation_out_stock_threshold[$loop]";
+		$out_stock_threshold_field_id   = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : "_out_stock_threshold{$loop}";
 
 		// If the user is not allowed to edit "Out of stock threshold", add a hidden input
 		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ): ?>
@@ -457,8 +459,8 @@ class Hooks {
 
 		<?php else:
 
-            //[ 'show_if_simple', 'show_if_variable', 'show_if_grouped', 'show_if_product-part', ...
-			$show_if_out_stock_threshold_product_types = array_map( function($val) { return "show_if_".$val; }, Globals::get_product_types_with_stock() ) ;
+            // [ 'show_if_simple', 'show_if_variable', 'show_if_grouped', 'show_if_product-part', ...
+			$show_if_out_stock_threshold_product_types = array_map( function($val) { return "show_if_{$val}"; }, Globals::get_product_types_with_stock() ) ;
 		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $show_if_out_stock_threshold_product_types );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation','product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes','woocommerce_notify_no_stock_amount' ) );
@@ -853,7 +855,7 @@ class Hooks {
 	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
 
 		if (
-			$option_name === 'atum_settings' && isset( $option_value['out_stock_threshold'] ) &&
+			$option_name == Settings::OPTION_NAME && isset( $option_value['out_stock_threshold'] ) &&
 			$option_value['out_stock_threshold'] === 'no' && Helpers::is_any_out_stock_threshold_set()
 		) {
 
