@@ -599,16 +599,16 @@ class ListTable extends AtumListTable {
 	protected function column_calc_sales_last_ndays( $item, $add_to_total = TRUE ) {
 
 		if (! $this->allow_calcs) {
-			$sales_last_ndays_settings = self::EMPTY_COL;
+			$sales_last_ndays = self::EMPTY_COL;
 		}
 		else {
-			$sales_last_ndays_settings = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'];
+			$sales_last_ndays = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'];
 			if ( $add_to_total ) {
-				$this->increase_total('calc_sales_last_ndays', $sales_last_ndays_settings);
+				$this->increase_total('calc_sales_last_ndays', $sales_last_ndays);
 			}
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays', $sales_last_ndays_settings, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays', $sales_last_ndays, $item, $this->product );
 
 	}
 	
