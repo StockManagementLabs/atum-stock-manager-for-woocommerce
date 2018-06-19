@@ -845,18 +845,18 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		//$product_id          = $this->get_current_product_id();
 		$product_id = $this->get_current_product_id();
-		$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = true );
+		$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 
 		// Check type and managed stock at product level (override $out_stock_threshold value if set and not allowed)
 		$product_type = $this->product->get_type();
-		if ( ! in_array( $product_type, GLOBALS::OUT_STOCK_THRESHOLD_PRODUCT_TYPES ) ) {
+		if ( ! in_array( $product_type, Globals::get_product_types_with_stock() ) ) {
 			$editable = false;
 			$out_stock_threshold = self::EMPTY_COL;
 		}
 
 		$manage_stock = get_post_meta( $product_id, '_manage_stock', $single = true );
-		if ($manage_stock === "no"){
+		if ($manage_stock == 'no'){
 			$editable = false;
 			$out_stock_threshold = self::EMPTY_COL;
         }

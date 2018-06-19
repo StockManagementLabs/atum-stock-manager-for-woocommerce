@@ -1596,10 +1596,10 @@ final class Helpers {
 	    global $wpdb;
 		$wpdb->hide_errors();
 
-	    if ( is_subclass_of($product, 'WC_Abstract_Legacy_Product') && !is_null($product) ){
+	    if ( is_subclass_of($product, 'WC_Abstract_Legacy_Product') && ! is_null($product) ){
 
 	        if ($all){
-                throw new AtumException($error = "you cannot set a product, and at same time ask to work in all products");
+                throw new AtumException( __('You cannot set a product, and at same time to ask to work in all products', ATUM_TEXT_DOMAIN) );
             }
 
 		    $product->set_stock_quantity($product->get_stock_quantity()+1);
@@ -1609,15 +1609,19 @@ final class Helpers {
 		    if($clean_meta) {
 			    delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
 		    }
+
 		    return;
+
         }
 
         if ($all){
+
 	        $ids_2_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT p.ID FROM $wpdb->posts p
                 INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
-                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish','future','private');
+                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private');
             " );
+
 	        foreach ( $ids_2_rebuild_stock_status as $id_2_rebuild ) {
 
 		        // delete _out_stock_threshold (avoid partial works to be done again)
@@ -1626,7 +1630,8 @@ final class Helpers {
                 }
 
 		        $product = wc_get_product( $id_2_rebuild );
-		        //Helpers::force_rebuild_stock_status($product);  Maximum function nesting level
+
+                // Force change and save
 		        $product->set_stock_quantity($product->get_stock_quantity()+1);
 		        $product->set_stock_quantity($product->get_stock_quantity()-1);
 		        $product->save();

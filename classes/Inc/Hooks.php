@@ -13,6 +13,7 @@
 namespace Atum\Inc;
 
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumException;
 use Atum\Inc\Helpers;
 
 defined( 'ABSPATH' ) or die;
@@ -68,9 +69,8 @@ class Hooks {
 		// Firefox fix to not preserve the dropdown
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
-		//rebuild stock status in all products with _out_stock_threshold when we disable this setting
-        // since 1.4.10
-		add_action('updated_option', array( $this,'hook_rebuild_wo_stock_status_on_disable'), 10, 3);
+		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting
+		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3);
 
 		// Add out_stock_threshold actions if required
 		if( Helpers::get_option( 'out_stock_threshold', 'no' )  == 'yes' ){
@@ -78,8 +78,10 @@ class Hooks {
 			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
-			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
+
 		}
+
 	}
 
 	/**
@@ -225,16 +227,15 @@ class Hooks {
 			wp_register_script( 'atum-product-data', ATUM_URL . "assets/js/atum.product.data{$min}.js", array('switchery', 'sweetalert2'), ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', array(
-				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'confirmNotice' => __( "This will change the ATUM control switch for all the variations within this product to %s", ATUM_TEXT_DOMAIN ),
-				'continue'      => __( "Yes, Continue", ATUM_TEXT_DOMAIN ),
-				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
-				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'nonce'         => wp_create_nonce('atum-product-data-nonce'),
-				//TODO 1.4.10 Pass vars to js
-				'isOutStockThresholdEnabled' => Helpers::get_option( 'out_stock_threshold', 'no' ),
-                'outStockThresholdProductTypes' => Globals::OUT_STOCK_THRESHOLD_PRODUCT_TYPES
+				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'confirmNotice'                 => __( 'This will change the ATUM control switch for all the variations within this product to %s', ATUM_TEXT_DOMAIN ),
+				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
+				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
+				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
+				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
+				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock()
 			) );
 
 			wp_enqueue_script( 'atum-product-data' );
@@ -423,13 +424,15 @@ class Hooks {
 	 * @param array $variation_data Only for variations. The variation item data
 	 * @param \WP_Post $variation Only for variations. The variation product
 	 */
-	public function add_out_stock_threshold_field( $loop = null, $variation_data = array(), $variation = null ) {
+	public function add_out_stock_threshold_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
 
 		global $post;
 
+		$product_type = '';
+
 		if ( empty( $variation ) ) {
 
-			$product = wc_get_product( $post->ID );
+			$product      = wc_get_product( $post->ID );
 			$product_type = $product->get_type();
 
 			// Do not add the field to variable products (every variation will have its own)
@@ -446,19 +449,16 @@ class Hooks {
 		$out_stock_threshold_field_name = empty( $variation ) ? '_out_stock_threshold' : "variation_out_stock_threshold[$loop]";
 		$out_stock_threshold_field_id   = empty( $variation ) ? '_out_stock_threshold' : "_out_stock_threshold{$loop}";
 
-		// If the user is not allowed to edit Suppliers, add a hidden input
-		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ):
-			?>
-            <input type="hidden" value="<?php echo( $out_stock_threshold ?: '' ) ?>"
-                   name="<?php echo $out_stock_threshold_field_name ?>"
-                   id="<?php echo $out_stock_threshold_field_id ?>">
-            <p style="color:red;">hidden(AtumCapabilities::current_user_can( 'edit_out_stock_threshold')</p>
-		<?php
+		// If the user is not allowed to edit "Out of stock threshold", add a hidden input
+		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ): ?>
 
-		else:
+            <input type="hidden" value="<?php echo( $out_stock_threshold ?: '' ) ?>" name="<?php echo $out_stock_threshold_field_name ?>" id="<?php echo $out_stock_threshold_field_id ?>">
+
+
+		<?php else:
 
             //[ 'show_if_simple', 'show_if_variable', 'show_if_grouped', 'show_if_product-part', ...
-			$show_if_out_stock_threshold_product_types = array_map(function($val) { return "show_if_".$val; }, Globals::OUT_STOCK_THRESHOLD_PRODUCT_TYPES) ;
+			$show_if_out_stock_threshold_product_types = array_map( function($val) { return "show_if_".$val; }, Globals::get_product_types_with_stock() ) ;
 		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $show_if_out_stock_threshold_product_types );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation','product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes','woocommerce_notify_no_stock_amount' ) );
@@ -474,18 +474,20 @@ class Hooks {
 	 * @since 1.4.10
 	 *
 	 * @param int $post_id    The post ID
+	 *
+	 * @throws AtumException
 	 */
 	public function save_out_stock_threshold_field($post_id) {
+
         global $pagenow;
 
-		$product  = wc_get_product( $post_id );
+		$product = wc_get_product( $post_id );
 
-        // TODO all excepting grouped. Check if we can get a full list of types (OUT_STOCK_THRESHOLD_PRODUCT_TYPES ???)
-		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), [ 'grouped' ] ) ) {
+		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 			return;
 		}
 
-		if ( ! isset( $_POST['_out_stock_threshold'] ) && ! isset( $_POST['variation_out_stock_threshold']) && ! in_array( $pagenow, array( 'options.php' )))  {
+		if ( ! isset( $_POST['_out_stock_threshold'] ) && ! isset( $_POST['variation_out_stock_threshold'] ) && ! in_array( $pagenow, array( 'options.php' )) )  {
 			//Force product validate and save to rebuild stock_status
 			Helpers::force_rebuild_stock_status($product);
 
@@ -493,24 +495,30 @@ class Hooks {
 		}
 
 		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
-
 		if ( isset( $_POST['_out_stock_threshold'] ) ) {
+
 			$out_stock_threshold = esc_attr( $_POST['_out_stock_threshold'] );
+
 			if ( empty( $out_stock_threshold ) && ! in_array( $pagenow, array( 'options.php' ) ) ) {
 				//Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product)
 				Helpers::force_rebuild_stock_status($product);
             }
+
 			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+
 		}
 
 		if ( isset( $_POST['variation_out_stock_threshold'] ) ) {
 
 			$out_stock_threshold = reset( $_POST['variation_out_stock_threshold'] );
+
 			if ( empty( $out_stock_threshold ) && ! in_array( $pagenow, array( 'options.php' ) ) ) {
 				//Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product)
 				Helpers::force_rebuild_stock_status($product);
 			}
+
 			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+
 		}
 
 	}
@@ -834,37 +842,24 @@ class Hooks {
 	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
 	 * Then, if we have any out_stock_threshold meta, rebuild that product to update the stock_status if required
 	 *
+	 * @since 1.4.10
+	 *
 	 * @param $option_name string we want atum_settings
 	 * @param $old_value array
 	 * @param $option_value array
 	 *
-	 * @return mixed
 	 * @throws \Atum\Components\AtumException if we set a product with all true.
 	 */
-	public function hook_rebuild_wo_stock_status_on_disable( $option_name, $old_value, $option_value ) {
+	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
 
-		if ( $option_name === "atum_settings" ) {
-			if ( isset( $option_value['out_stock_threshold'] ) ) {
-				if ( $option_value['out_stock_threshold'] === "no" && Helpers::is_any_out_stock_threshold_set() ) {
+		if (
+			$option_name === 'atum_settings' && isset( $option_value['out_stock_threshold'] ) &&
+			$option_value['out_stock_threshold'] === 'no' && Helpers::is_any_out_stock_threshold_set()
+		) {
 
-					Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta=FALSE, $all = TRUE);
-					/*
-					$ids_2_rebuild_stock_status = $wpdb->get_col(
-						"SELECT DISTINCT p.ID FROM $wpdb->posts p
-                          INNER JOIN $wpdb->postmeta pm_out_stock_threshold ON ( pm_out_stock_threshold.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm_out_stock_threshold.post_id = p.ID )
-                          WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish','future','private');" );
-
-					foreach ( $ids_2_rebuild_stock_status AS $id_2_rebuild ) {
-						$product = wc_get_product( $id_2_rebuild );
-						Helpers::force_rebuild_stock_status($product);
-					}
-					*/
-				}
-			}
+			Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE);
 		}
 
-		//do nothing with the values
-		return $option_value;
 	}
 
 	/**

@@ -99,13 +99,6 @@ final class Globals {
 		'numeric' => array( 'ID', '_regular_price', '_sale_price', '_purchase_price', '_weight', '_stock' )
 	);
 
-	/*
-	 * _out_stock_threshold_field is allowed on the product types
-	 * 'SC' : 'simple', 'variable', 'grouped', // this -> private static $product_types = ['simple', 'variable', 'grouped'];
-	 * 'MC' :  'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material'  // MC/classes/inc/hooks/ -> product_type_selector($wc_product_types)
-	 * @since 1.4.10
-	 */
-	const OUT_STOCK_THRESHOLD_PRODUCT_TYPES = array('simple', 'variable', 'variation', 'subscription', 'variable-subscription', 'product-part', 'variable-product-part', 'raw-material', 'variable-raw-material');
 	
 	/**
 	 * Getter for the product_types property
@@ -168,6 +161,20 @@ final class Globals {
 		}
 
 		return (array) apply_filters('atum/allowed_child_product_types', self::$child_product_types);
+	}
+
+	/**
+	 * Get all the product types that allow stock management
+	 *
+	 * @since 1.4.11
+	 */
+	public static function get_product_types_with_stock() {
+
+		// Get all the product types used for List Tables except grouped
+		$product_types = array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() );
+
+		return (array) apply_filters( 'atum', array_diff( array_unique($product_types), ['grouped'] ) );
+
 	}
 
 	/**
