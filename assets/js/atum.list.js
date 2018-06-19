@@ -344,7 +344,7 @@
                             self.updateHash(); // force clean search
                         }
                     }
-                    // TODO Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
+                    // Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
                     else if (searchColumnBtnVal.length > 0) {
 	                    $searchSubmitBtn.prop('disabled', false);
                     }
@@ -612,7 +612,6 @@
             $("#sales_last_ndays_val select").val(selectDaysText);
 
             $selectableDays.change(function() {
-                debugger;
                 $('#sales_last_ndays_val .textvalue').text($( this ).val());
                 $( this ).hide();
                 $('#sales_last_ndays_val .textvalue').show();
@@ -1312,7 +1311,7 @@
 				},
 				// Handle the successful result
 				success   : function (response) {
-					
+
 					self.doingAjax = null;
 
 					if (typeof response === 'undefined' || !response) {

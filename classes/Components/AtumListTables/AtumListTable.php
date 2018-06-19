@@ -3447,16 +3447,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_filters_query_string($format = 'array') {
 
 		$default_filters = array(
-			'paged'        => 1,
-			'order'        => 'desc',
-			'orderby'      => 'date',
-			'view'         => 'all_stock',
-			'product_cat'  => '',
-			'product_type' => '',
-			'supplier'     => '',
-			'extra_filter' => '',
-			's'            => '',
-			'search_column'=> ''
+			'paged'          => 1,
+			'order'          => 'desc',
+			'orderby'        => 'date',
+			'view'           => 'all_stock',
+			'product_cat'    => '',
+			'product_type'   => '',
+			'supplier'       => '',
+			'extra_filter'   => '',
+			's'              => '',
+			'search_column'  => '',
+			'sold_last_days' => ''
 		);
 
 		parse_str($_SERVER['QUERY_STRING'], $query_string);

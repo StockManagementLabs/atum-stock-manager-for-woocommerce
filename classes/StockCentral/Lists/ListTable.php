@@ -560,7 +560,7 @@ class ListTable extends AtumListTable {
 
 		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
 	}
-	
+
 	/**
 	 * Column for items sold during the last week
 	 *
@@ -582,11 +582,11 @@ class ListTable extends AtumListTable {
 				$this->increase_total('calc_sales7', $sales7);
 			}
 		}
-		
+
 		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $sales7, $item, $this->product );
-		
+
 	}
-	
+
 	/**
 	 * Column for items sold during the last 2 weeks
 	 *
@@ -605,9 +605,9 @@ class ListTable extends AtumListTable {
 			$sales14 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
 			$this->increase_total('calc_sales14', $sales14);
 		}
-		
+
 		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $sales14, $item, $this->product );
-		
+
 	}
 
 	/**
@@ -762,7 +762,7 @@ class ListTable extends AtumListTable {
 		// TODO sold sold_last_days jquery value calc ?
 		/*
         $rows = Helpers::get_sold_last_days( $calc_products, "-$this->last_days days", $this->day );
-		
+
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_days'] = $row['QTY'];
