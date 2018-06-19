@@ -729,6 +729,15 @@
 			color: $danger;
 		}
 	}
+
+	.set-header {
+		cursor: pointer;
+		color: $link-color;
+
+		&:hover {
+			color: $link-hover-color;
+		}
+	}
 	
 	.highlight-danger {
 		background-color: $danger;
