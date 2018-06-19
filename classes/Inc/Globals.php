@@ -173,7 +173,7 @@ final class Globals {
 		// Get all the product types used for List Tables except grouped
 		$product_types = array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() );
 
-		return (array) apply_filters( 'atum', array_diff( array_unique($product_types), ['grouped'] ) );
+		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( array_unique($product_types), ['grouped'] ) );
 
 	}
 
