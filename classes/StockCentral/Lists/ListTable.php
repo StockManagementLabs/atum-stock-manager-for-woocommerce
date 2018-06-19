@@ -113,7 +113,6 @@ class ListTable extends AtumListTable {
 		);
 
 		// Get the ndays set to last sales column
-		//TODO sold_last_days get value for column header
 		$sold_last_days = Helpers::get_sold_last_days_option();
 
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
@@ -589,27 +588,27 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Column for items sold during the last N days (set on atum's general settings) sales_last_ndays
+	 * Column for items sold during the last N days (set on atum's general settings) sales_last_ndays or via jquery ?sold_last_days=N
 	 *
-	 * @since  0.1.2
+	 * @since  1.4.11
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations
 	 *
 	 * @return int
 	 */
-	protected function column_calc_sales_last_ndays_settings( $item, $add_to_total = TRUE ) {
+	protected function column_calc_sales_last_ndays( $item, $add_to_total = TRUE ) {
 
 		if (! $this->allow_calcs) {
 			$sales_last_ndays_settings = self::EMPTY_COL;
 		}
 		else {
-			$sales_last_ndays_settings = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays_settings'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays_settings'];
+			$sales_last_ndays_settings = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'];
 			if ( $add_to_total ) {
-				$this->increase_total('calc_sales_last_ndays_settings', $sales_last_ndays_settings);
+				$this->increase_total('calc_sales_last_ndays', $sales_last_ndays_settings);
 			}
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays_settings', $sales_last_ndays_settings, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays', $sales_last_ndays_settings, $item, $this->product );
 
 	}
 	
@@ -732,7 +731,7 @@ class ListTable extends AtumListTable {
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays_settings'] = $row['QTY'];
+				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays'] = $row['QTY'];
 			}
 		}
 
