@@ -716,6 +716,11 @@
 			padding-top: 6px;
 		}
 	}
+
+	.show-locations{
+		cursor: pointer;
+		color: $link-color;
+	}
 	
 	.set-meta {
 		cursor: pointer;
