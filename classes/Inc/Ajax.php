@@ -122,6 +122,7 @@ final class Ajax {
 
 		// Get the product locations tree
 		add_action( 'wp_ajax_atum_get_locations_tree', array( $this, 'get_locations_tree' ) );
+		add_action( 'wp_ajax_atum_set_locations_tree', array( $this, 'set_locations_tree' ) );
 
 		// Run scripts from Tools section
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
@@ -1820,26 +1821,74 @@ final class Ajax {
 	public function get_locations_tree() {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		$flag_empty = FALSE;
 
 		if ( empty($_POST['product_id']) ) {
 			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
 		}
 
-		$product_id = absint( $_POST['product_id'] );
-		$locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY);
+		if ($_POST['product_id'] >0){
 
-		$locations_tree = wp_list_categories( array(
-			'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-			'include'  => wp_list_pluck( $locations, 'term_id' ),
-			'title_li' => '',
-			'echo'     => FALSE
-		) );
 
-		// Fix the list URLs to show the list of products within a location
-		$locations_tree = str_replace( home_url('/?'), admin_url('/edit.php?post_type=product&'), $locations_tree );
-		$locations_tree = str_replace( '<a href', '<a target="_blank" href', $locations_tree);
+            $product_id = absint( $_POST['product_id'] );
+            $locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY);
 
-		wp_send_json_success( "<ul>$locations_tree</ul>" );
+            if (empty($locations)){
+	            wp_send_json_success( '<span class="no-locations-set">'. __('No Locations set on this product', ATUM_LEVELS_TEXT_DOMAIN) .'</span>');
+            }else{
+	            $locations_tree = wp_list_categories( array(
+		            'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+		            'include'  => wp_list_pluck( $locations, 'term_id' ),
+		            'title_li' => '',
+		            'echo'     => FALSE
+	            ) );
+	            // Fix the list URLs to show the list of products within a location
+	            $locations_tree = str_replace( home_url('/?'), admin_url('/edit.php?post_type=product&'), $locations_tree );
+	            $locations_tree = str_replace( '<a href', '<a target="_blank" href', $locations_tree);
+            }
+
+		}elseif ( $_POST['product_id'] == -1 ){
+			//Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
+			$locations_tree = wp_list_categories( array(
+				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+				'title_li' => '',
+				'echo'     => FALSE
+			) );
+		}
+
+		//if($flag_empty){
+		//	wp_send_json_success( "<ul>$locations_tree</ul>" );
+        //}else{
+			wp_send_json_success( "<ul>$locations_tree</ul>" );
+        //}
+
+
+	}
+
+	/**
+	 * Set the the Locations from tree for a specific product
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.4.11
+	 */
+	public function set_locations_tree() {
+
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+
+		if ( empty($_POST['product_id']) ) {
+			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
+		}
+
+        $product_id = absint( $_POST['product_id'] );
+
+        //sanitize $_POST['terms']
+		$sanitized_terms = array_map( 'intval', $_POST['terms'] );
+
+        //$terms = 38; //france on dev
+		wp_set_post_terms( $product_id, $sanitized_terms, $taxonomy = Globals::PRODUCT_LOCATION_TAXONOMY, $append = FALSE );
+
+		wp_send_json_success( "ok" );
 
 	}
 

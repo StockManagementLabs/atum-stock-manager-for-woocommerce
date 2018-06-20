@@ -780,7 +780,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_calc_location( $item ) {
 
-		$locations = self::EMPTY_COL;
+		$locations = '<span class="show-locations">'.self::EMPTY_COL.'</span>';
+
 		$location_terms = wp_get_post_terms($this->product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY);
 
 		if ( ! empty($location_terms) ) {
@@ -2388,22 +2389,25 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prepare JS vars
 		$vars = array(
-			'listUrl'           => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
-			'perPage'           => $this->per_page,
-			'showCb'            => $this->show_cb,
-			'order'             => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'           => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
-			'nonce'             => wp_create_nonce( 'atum-list-table-nonce' ),
-			'ajaxFilter'        => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
-			'setValue'          => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
-			'setButton'         => __( 'Set', ATUM_TEXT_DOMAIN ),
-			'saveButton'        => __( 'Save Data', ATUM_TEXT_DOMAIN ),
-			'ok'                => __( 'OK', ATUM_TEXT_DOMAIN ),
-			'noItemsSelected'   => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
-			'selectItems'       => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
-			'applyBulkAction'   => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
-			'applyAction'       => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
-			'productLocations'  => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
+			'listUrl'              => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
+			'perPage'              => $this->per_page,
+			'showCb'               => $this->show_cb,
+			'order'                => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
+			'orderby'              => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'nonce'                => wp_create_nonce( 'atum-list-table-nonce' ),
+			'ajaxFilter'           => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
+			'setValue'             => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'setButton'            => __( 'Set', ATUM_TEXT_DOMAIN ),
+			'saveButton'           => __( 'Save Data', ATUM_TEXT_DOMAIN ),
+			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'noItemsSelected'      => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
+			'selectItems'          => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
+			'applyBulkAction'      => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
+			'applyAction'          => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
+			'productLocations'     => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
+			'editProductLocations' => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),
+			'locationsSaved'       => __( 'Values Saved', ATUM_TEXT_DOMAIN ),
+			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns' => $this->default_searchable_columns
 		);
 
