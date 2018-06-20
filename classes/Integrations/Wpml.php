@@ -216,7 +216,7 @@ class Wpml {
 	 */
 	public function load_wpml_product( $item, $post_type = '' ) {
 
-		$this->original_product_id = $this->get_original_product_id( $this->get_product_id( $item ), $post_type );
+		$this->original_product_id = self::get_original_product_id( $item->get_id(), $post_type );
 		$this->custom_prices = FALSE;
 
 		if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
@@ -424,7 +424,7 @@ class Wpml {
 
 		if ( $this->multicurrency_active ) {
 
-			$original_product_id = $this->get_original_product_id( $product_id );
+			$original_product_id = self::get_original_product_id( $product_id );
 
 			foreach ( $product_meta as $meta_key => $meta_value ) {
 
@@ -746,7 +746,7 @@ class Wpml {
 				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
 				foreach ( $IDs_to_refresh as $id) {
 					
-					$original_id = $this->get_original_product_id($id);
+					$original_id = self::get_original_product_id($id);
 					$sitepress->sync_custom_field( $original_id, $id, '_inheritable');
 					$sitepress->sync_custom_field( $original_id, $id, '_atum_manage_stock');
 					$sitepress->sync_custom_field( $original_id, $id, '_out_of_stock_date');
@@ -784,7 +784,7 @@ class Wpml {
 				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
 				foreach ( $IDs_to_refresh as $id) {
 					
-					$original_id = $this->get_original_product_id($id);
+					$original_id = self::get_original_product_id($id);
 					$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_META_KEY);
 					$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_META_KEY);
 				}
