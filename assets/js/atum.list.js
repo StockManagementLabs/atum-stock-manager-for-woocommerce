@@ -456,8 +456,19 @@
 					title            : self.settings.productLocations,
 					html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
 					showCancelButton : false,
-					showConfirmButton: false,
+					showConfirmButton: true,
+                    confirmButtonText  : 'Edit ' + self.settings.productLocations,
 					showCloseButton  : true,
+                    /*
+					preConfirm: function() {
+                        swal({
+                            title            : "eii",
+                            type             : 'question',
+                            text             : "text to show?",
+                            confirmButtonText: "ok?"
+                        });
+                    },
+					*/
 					onOpen           : function () {
 						
 						var $locationsTreeContainer = $('#atum-locations-tree');
@@ -489,7 +500,42 @@
 					onClose          : function () {
 						$button.blur().tooltip('hide');
 					}
-				}).catch(swal.noop);
+				}).then((value) => {
+                    swal({
+                        title            : "eii",
+                        html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
+                        text             : "text to show?",
+                        confirmButtonText: "Save",
+                        showCloseButton  : true,
+                        onOpen           : function () {
+                            var $locationsTreeContainer = $('#atum-locations-tree');
+
+                            $.ajax({
+                                url       : ajaxurl,
+                                dataType  : 'json',
+                                method    : 'post',
+                                data      : {
+                                    action    : 'atum_get_locations_tree',
+                                    token     : self.settings.nonce,
+                                    product_id: $button.closest('tr').data('id')
+                                },
+                                beforeSend: function () {
+                                    $locationsTreeContainer.append('<div class="atum-loading" />');
+                                },
+                                success   : function (response) {
+
+                                    if (response.success === true) {
+                                        $locationsTreeContainer.html(response.data);
+                                        $locationsTreeContainer.easytree();
+                                    }
+
+
+                                }
+                            });
+
+                        }
+                    });
+                }).catch(swal.noop);
 				
 			})
 			

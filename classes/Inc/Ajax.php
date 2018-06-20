@@ -1844,6 +1844,29 @@ final class Ajax {
 	}
 
 	/**
+	 * Get the the Locations tree  editable for a specific product
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.4.2
+	 */
+	public function get_locations_tree_editable() {
+		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		if ( empty($_POST['product_id']) ) {
+			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
+		}
+
+		$product_id = absint( $_POST['product_id'] );
+		$product_locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY);
+
+		$terms = get_terms( array(
+			'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+			'hide_empty' => false,
+		) );
+
+	}
+
+	/**
 	 * Change the WC's manage stock status for all products from Tools section
 	 *
 	 * @package    Settings

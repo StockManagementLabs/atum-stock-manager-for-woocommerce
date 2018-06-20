@@ -831,6 +831,48 @@ abstract class AtumListTable extends \WP_List_Table {
 
 	}
 
+	/**
+	 * Column for supplier sku
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 *
+	 * @return float
+	 */
+	protected function column__supplier_sku( $item, $editable = TRUE ) {
+
+		$supplier_sku = self::EMPTY_COL;
+
+		if ( ! AtumCapabilities::current_user_can('read_supplier') ) {
+			return $supplier_sku;
+		}
+
+		$product_id = $this->get_current_product_id();
+
+		if ($editable) {
+
+			$supplier_sku = get_post_meta( $product_id, '_supplier_sku', TRUE );
+
+			if (strlen($supplier_sku) === 0){
+				$supplier_sku = self::EMPTY_COL;
+            }
+
+			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
+				'post_id'  => $product_id,
+				'meta_key' => 'supplier_sku',
+				'value'    => $supplier_sku,
+				'input_type' => 'text',
+				'tooltip'  => __( 'Click to edit the Supplier Sku', ATUM_TEXT_DOMAIN )
+			) );
+
+			$supplier_sku = $this->get_editable_column( $args );
+		}
+
+		return apply_filters( 'atum/stock_central_list/column_supplier_sku', $supplier_sku, $item, $this->product );
+
+	}
+
 
 	/**
 	 * Column out_stock_threshold column
