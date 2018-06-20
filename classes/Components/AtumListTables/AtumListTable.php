@@ -941,7 +941,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$is_out_stock_threshold_managed = Helpers::get_option( 'out_stock_threshold', 'no' ) == 'no' ? false : true;
 			if($is_out_stock_threshold_managed ){
 
-				$out_stock_threshold = get_post_meta( $product_id, '_out_stock_threshold', $single = TRUE );
+				$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
 				if ( strlen( $out_stock_threshold ) > 0 ) {
 
@@ -3365,10 +3365,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $this->show_controlled ) {
 				$join  = "$wpdb->posts.ID = $wpdb->postmeta.post_id";
-				$where = "$wpdb->postmeta.meta_key = '_atum_manage_stock' AND $wpdb->postmeta.meta_value = 'yes'";
+				$where = "$wpdb->postmeta.meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "' AND $wpdb->postmeta.meta_value = 'yes'";
 			}
 			else {
-				$join  = "($wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_atum_manage_stock')";
+				$join  = "($wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "')";
 				$where = "$wpdb->postmeta.post_id IS NULL";
 			}
 

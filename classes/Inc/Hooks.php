@@ -447,8 +447,8 @@ class Hooks {
 		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
 		$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
-		$out_stock_threshold_field_name = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : "variation_out_stock_threshold[$loop]";
-		$out_stock_threshold_field_id   = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : "_out_stock_threshold{$loop}";
+		$out_stock_threshold_field_name = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY . "[$loop]";
+		$out_stock_threshold_field_id   = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : Globals::OUT_STOCK_THRESHOLD_KEY . $loop;
 
 		// If the user is not allowed to edit "Out of stock threshold", add a hidden input
 		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ): ?>
@@ -476,7 +476,7 @@ class Hooks {
 	 *
 	 * @param int $post_id    The post ID
 	 *
-	 * @throws AtumException
+	 * @throws \Exception
 	 */
 	public function save_out_stock_threshold_field($post_id) {
 
@@ -488,7 +488,7 @@ class Hooks {
 			return;
 		}
 
-		if ( ! isset( $_POST['_out_stock_threshold'] ) && ! isset( $_POST['variation_out_stock_threshold'] ) && ! in_array( $pagenow, array( 'options.php' )) )  {
+		if ( ! isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) && ! isset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) && ! in_array( $pagenow, array( 'options.php' )) )  {
 			//Force product validate and save to rebuild stock_status
 			Helpers::force_rebuild_stock_status($product);
 
@@ -496,29 +496,29 @@ class Hooks {
 		}
 
 		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
-		if ( isset( $_POST['_out_stock_threshold'] ) ) {
+		if ( isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
 
-			$out_stock_threshold = esc_attr( $_POST['_out_stock_threshold'] );
+			$out_stock_threshold = esc_attr( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
 			if ( empty( $out_stock_threshold ) && ! in_array( $pagenow, array( 'options.php' ) ) ) {
 				//Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product)
 				Helpers::force_rebuild_stock_status($product);
             }
 
-			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
 
 		}
 
-		if ( isset( $_POST['variation_out_stock_threshold'] ) ) {
+		if ( isset( $_POST['variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
 
-			$out_stock_threshold = reset( $_POST['variation_out_stock_threshold'] );
+			$out_stock_threshold = reset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
 			if ( empty( $out_stock_threshold ) && ! in_array( $pagenow, array( 'options.php' ) ) ) {
 				//Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product)
 				Helpers::force_rebuild_stock_status($product);
 			}
 
-			update_post_meta( $post_id, '_out_stock_threshold', $out_stock_threshold );
+			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
 
 		}
 

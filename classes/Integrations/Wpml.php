@@ -14,6 +14,7 @@ namespace Atum\Integrations;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
@@ -194,14 +195,14 @@ class Wpml {
 	 */
 	public function remove_language_switcher() {
 
-		global $sitepress, $pagenow;
+		global $pagenow;
 
 		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], $this->atum_order_types ) ) ? TRUE : FALSE;
 		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE;
 		$is_order_edit      = $get_post && $pagenow == 'post.php' && in_array( get_post_type( $get_post ), $this->atum_order_types );
 
 		if ( $is_order_post_type || $is_order_edit ) {
-			remove_action( 'wp_before_admin_bar_render', array( $sitepress, 'admin_language_switcher' ) );
+			remove_action( 'wp_before_admin_bar_render', array( self::$sitepress, 'admin_language_switcher' ) );
 		}
 
 	}
@@ -715,14 +716,14 @@ class Wpml {
 	 */
 	public function upgrade( $old_version ) {
 		
-		global $wpdb, $sitepress;
+		global $wpdb;
 		
 		if ( version_compare( $old_version, '1.4.1.2', '<' ) ) {
 			
 			// Delete previous existent metas in translations to prevent duplicates
 			$IDs_to_delete = $wpdb->get_results( "
 				SELECT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
- 				ON pm.post_id = tr.element_id WHERE pm.meta_key = '_atum_manage_stock' AND
+ 				ON pm.post_id = tr.element_id WHERE pm.meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "' AND
  				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
             ", ARRAY_N );
 			
@@ -730,7 +731,7 @@ class Wpml {
 				
 				$IDs_to_delete  = implode( ',', wp_list_pluck( $IDs_to_delete, 0 ) );
 				$wpdb->query( "
-					DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_atum_manage_stock', '_inheritable', '_out_of_stock_date')
+					DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('" . Globals::ATUM_CONTROL_STOCK_KEY . "', '" . Globals::IS_INHERITABLE_KEY . "', '" . Globals::OUT_OF_STOCK_DATE_KEY . "')
  					AND post_id IN({$IDs_to_delete});
                 " );
 				
@@ -747,9 +748,9 @@ class Wpml {
 				foreach ( $IDs_to_refresh as $id) {
 					
 					$original_id = self::get_original_product_id($id);
-					$sitepress->sync_custom_field( $original_id, $id, '_inheritable');
-					$sitepress->sync_custom_field( $original_id, $id, '_atum_manage_stock');
-					$sitepress->sync_custom_field( $original_id, $id, '_out_of_stock_date');
+					self::$sitepress->sync_custom_field( $original_id, $id, Globals::IS_INHERITABLE_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Globals::ATUM_CONTROL_STOCK_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Globals::OUT_OF_STOCK_DATE_KEY);
 				}
 			}
 			
@@ -785,8 +786,8 @@ class Wpml {
 				foreach ( $IDs_to_refresh as $id) {
 					
 					$original_id = self::get_original_product_id($id);
-					$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_META_KEY);
-					$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_META_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_META_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_META_KEY);
 				}
 			}
 			
