@@ -1247,7 +1247,11 @@ final class Helpers {
 	 */
 	public static function product_types_dropdown($selected = '', $class = 'dropdown_product_type') {
 
-		$terms = get_terms( 'product_type' );
+		$terms = get_terms( array(
+			'taxonomy'   => 'product_type',
+			'hide_empty' => FALSE
+		) );
+
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
 		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
