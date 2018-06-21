@@ -7,32 +7,13 @@
  *
  * @since          0.1.6
  *
+ * @based on WP Help Pointers:
+ *
  * @how_to_use
- * Pointers are defined in an associative array and passed to the class upon instantiation.
+ * Pointers are defined in an associative array and passed to the class upon instantiation
  * First we hook into the 'admin_enqueue_scripts' hook with our function:
  *
- *   add_action('admin_enqueue_scripts', 'my_help_pointers');
- *
- *   function my_help_pointers() {
- *      // First we define our pointers
- *      $pointers = array(
- *                       array(
- *                           'id' => 'xyz123',                          // Unique id for this pointer
- *                           'screen' => 'page',                        // This is the page hook we want our pointer to show on
- *                           'target' => '#element-selector',           // The css selector for the pointer to be tied to, best to use ID's
- *                           'title' => 'My ToolTip',
- *                           'content' => 'My tooltips Description',
- *                           'position' => array(
- *                               'edge' => 'top',                       // Top, bottom, left, right
- *                               'align' => 'middle'                    // Top, bottom, left, right, middle
- *                            )
- *                        ),
- *                        // More as needed
- *                        );
- *
- *      // Now we instantiate the class and pass our pointers array to the constructor
- *      $my_pointers = new \Atum\Components\HelpPointers($pointers);
- *    }
+ * add_action('admin_enqueue_scripts', 'my_help_pointers');
  *
  * @author Tim Debo <tim@rawcreativestudios.com>
  * @copyright Copyright (c) 2012, Raw Creative Studios
@@ -43,7 +24,7 @@
 namespace Atum\Components;
 
 
-class HelpPointers {
+class AtumHelpPointers {
 	
 	/**
 	 * The current screen ID
@@ -101,9 +82,10 @@ class HelpPointers {
 					'target'  => $ptr['target'],
 					'next'    => isset( $ptr['next'] ) ? $ptr['next'] : '',
 					'options' => array(
+						'target'        => $ptr['target'],
 						'content'       => sprintf( '<h3>%s</h3> <p>%s</p>', $ptr['title'], $ptr['content'] ),
 						'position'      => $ptr['position'],
-						'arrowPosition' => isset( $ptr['arrow_position'] ) ? $ptr['arrow_position'] : [],
+						'arrowPosition' => isset( $ptr['arrow_position'] ) ? $ptr['arrow_position'] : []
 					)
 				);
 
@@ -191,35 +173,35 @@ class HelpPointers {
 
 					function doAtumHelpPointer(i) {
 
-						var pointer = ATUMHelpPointers.pointers[i],
-							options = $.extend( pointer.options, {
-								close: function() {
+						var atumPointer = ATUMHelpPointers.pointers[i],
+						    options     = $.extend(atumPointer.options, {
+							    close  : function () {
 
-									$.ajax({
-										url: ajaxurl,
-										type: 'POST',
-										data: {
-											pointer: pointer.pointer_id,
-											action: 'dismiss-wp-pointer'
-										},
-										beforeSend: function() {
-											// Show next pointer
-											if (pointer.next) {
-												$(pointer.next).pointer('open');
-											}
-										}
-									});
+								    $.ajax({
+									    url       : ajaxurl,
+									    type      : 'POST',
+									    data      : {
+										    pointer: atumPointer.pointer_id,
+										    action : 'dismiss-wp-pointer'
+									    },
+									    beforeSend: function () {
+										    // Show next pointer
+										    if (atumPointer.next) {
+											    $(atumPointer.next).pointer('open');
+										    }
+									    }
+								    });
 
-								},
-								buttons: function( event, t ) {
-									var $button = $('<a class="close" href="#"><?php _e('Close', ATUM_TEXT_DOMAIN) ?></a>');
+							    },
+							    buttons: function (event, t) {
+								    var $button = $('<a class="close" href="#"><?php _e( 'Close', ATUM_TEXT_DOMAIN ) ?></a>');
 
-									return $button.on( 'click.pointer', function(e) {
-										e.preventDefault();
-										t.element.pointer('close');
-									});
-								}
-							});
+								    return $button.on('click.pointer', function (e) {
+									    e.preventDefault();
+									    t.element.pointer('close');
+								    });
+							    }
+						    });
 
 						$.widget('wp.pointer', $.wp.pointer, {
 							_create: function() {
@@ -237,8 +219,9 @@ class HelpPointers {
 								family = this.element.parents().add( this.element );
 								positioning = 'absolute';
 
-								if ( family.filter(function(){ return 'fixed' === $(this).css('position'); }).length )
+								if ( family.filter( function(){ return 'fixed' === $(this).css('position'); }).length ) {
 									positioning = 'fixed';
+								}
 
 								this.pointer = $('<div />')
 									.append( this.content )
@@ -246,16 +229,33 @@ class HelpPointers {
 									.attr('id', 'wp-pointer-' + i)
 									.addClass( this.options.pointerClass )
 									.css({'position': positioning, 'width': this.options.pointerWidth+'px', 'display': 'none'})
+									.data('target', this.options.target)
 									.appendTo( this.options.document.body );
-							}
+
+							},
+							open: function( event ) {
+								var self = this,
+								    o    = this.options;
+
+								if ( this.active || o.disabled || this.element.is(':hidden') )
+									return;
+
+								this.update().done( function() {
+									self._open( event );
+
+									setTimeout(function() {
+										self.reposition();
+									}, 0)
+								});
+							},
 						});
 
-						$(pointer.target).pointer( options );
-
+						$(atumPointer.target).pointer( options );
 					}
 
 					// Open the first one
-					$(ATUMHelpPointers.pointers.shift().target).pointer('open');
+					var $firstTarget = $(ATUMHelpPointers.pointers.shift().target);
+					$firstTarget.pointer('open');
 
 				}
 

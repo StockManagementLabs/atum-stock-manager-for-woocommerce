@@ -14,7 +14,7 @@ namespace Atum\StockCentral;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumListTables\AtumListPage;
-use Atum\Components\HelpPointers;
+use Atum\Components\AtumHelpPointers;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
@@ -294,13 +294,13 @@ class StockCentral extends AtumListPage {
 					'align' => 'right'
 				),
 				'arrow_position' => array(
-					'left' => '45%'
+					'left' => '84%'
 				)
 			),
 		);
 
 		// Instantiate the class and pass our pointers array to the constructor
-		new HelpPointers( $pointers );
+		new AtumHelpPointers( $pointers );
 
 	}
 

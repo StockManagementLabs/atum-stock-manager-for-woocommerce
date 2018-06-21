@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\HelpPointers;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
