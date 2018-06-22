@@ -404,6 +404,7 @@ class Settings {
 			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
+			    'atumPrefix'                      => ATUM_PREFIX, //'atum'
 				'areYouSure'                      => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'unsavedData'                     => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
 				'continue'                        => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
@@ -541,17 +542,46 @@ class Settings {
 	 * @param array $args  Field arguments
 	 */
 	public function display_text( $args ) {
+
+	    $placeholder = isset($args['options']['placeholder']) ? $args['options']['placeholder']: "";
 		
 		$output = sprintf(
-			'<input class="atum-settings-input regular-text" type="text" id="%s" name="%s" value="%s" %s>',
+			'<input class="atum-settings-input regular-text" type="text" id="%s" name="%s" placeholder="%s" value="%s" %s>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
+            $placeholder,
 			$this->options[ $args['id'] ],
 			$this->get_dependency($args)
 		) . $this->get_description( $args );
 		
 		echo apply_filters( 'atum/settings/display_text', $output, $args );
 		
+	}
+
+
+	/**
+	 * Get the settings option array and print a textarea
+	 *
+	 * @since 1.4.11
+	 *
+	 * @param array $args  Field arguments
+	 */
+	public function display_textarea( $args ) {
+
+		// <textarea name="textarea" rows="10" cols="50">Write something here</textarea>
+
+		$output = sprintf(
+			          '<textarea class="atum-settings-input regular-text" type="text" id="%s" rows="%d" cols="%d" name="%s" %s>%s</textarea>',
+			          ATUM_PREFIX . $args['id'],
+			            absint($args['rows']),
+			            absint($args['cols']),
+			          self::OPTION_NAME . "[{$args['id']}]",
+			          $this->get_dependency($args),
+			          $this->options[ $args['id'] ]
+		          ) . $this->get_description( $args );
+
+		echo apply_filters( 'atum/settings/display_textarea', $output, $args );
+
 	}
 
 	/**
@@ -650,13 +680,14 @@ class Settings {
 		$value = $this->options[ $args['id'] ];
 		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
+		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
 
 		ob_start();
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
 			<label class="btn btn-<?php echo $style ?><?php if ($value == $option_value) echo ' active'?>">
-				<input type="radio" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
+				<input type="<?php echo $input_type ?>" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
 		    </label>
 			<?php endforeach; ?>
 		</div>

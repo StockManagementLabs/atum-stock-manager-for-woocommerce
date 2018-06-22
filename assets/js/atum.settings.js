@@ -141,7 +141,7 @@
 			
 			// Field dependencies
 			.on('change','[data-dependency]', function() {
-				
+
 				var $field     = $(this),
 				    value      = $field.val(),
 					dependency = $field.data('dependency'),
@@ -159,22 +159,25 @@
 					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
 				}
 				else if (dependency.hasOwnProperty('field')) {
+					//debugger;
 					
 					var selector = '';
 					
 					if ($.isArray(dependency.field)) {
+
+						//TODO SOLVE FIELDS DEPENDENCY
 						
 						$.each(dependency.field, function(index, value) {
-							selector += '#' + value;
+							selector += '#' + self.settings.atumPrefix + value;
 							
-							if (dependency.field.length - 1 < index) {
-								selector += ','
+							if ( index+1 < dependency.field.length) {
+								selector += ', ';
 							}
 						});
 						
 					}
 					else {
-						selector = '#' + dependency.field;
+						selector = '#' + self.settings.atumPrefix + dependency.field;
 					}
 					
 					$dependant = $(selector);
