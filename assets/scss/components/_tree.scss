@@ -175,6 +175,15 @@ span.easytree-expander {
 	}
 }
 
+// check and uncheck icons for the 1.4.11 update : editable locations on SC
+.checked{
+	span.easytree-icon {
+		&:before {
+			color: $blue;
+		}
+	}
+}
+
 //
 // Node titles
 //-------------
