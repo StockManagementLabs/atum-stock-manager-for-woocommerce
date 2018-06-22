@@ -6,8 +6,8 @@ Requires at least: 4.6
 Tested up to: 4.9.6
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.4.2
-Stable tag: 1.4.10
+WC tested up to: 3.4.3
+Stable tag: 1.4.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.11`
+
+*2018-06-21*
+
+**Features**
+
+* Added editable column to set any number of days from 0-30 by default.
+* Added field to ATUM Settings to set the default value for the "Sold Last Days" column.
+* Allow editing Product Locations from Stock Central.
+
+**Changes**
+
+* Removed Sold last 7 and 14 days columns from Stock Central.
+* Show empty product types in Stock Central's filter to allow private products' filtering.
+
+**Fixes**
+
+* Fixed floating header with new column groups style.
+* Fixed help tips positioning on some screen sizes.
+* Refactory.
 
 ---
 
