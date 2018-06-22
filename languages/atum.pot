@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2018-06-21 13:55+0200\n"
+"POT-Creation-Date: 2018-06-22 08:19+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -817,7 +817,7 @@ msgid "Yes, restore it!"
 msgstr ""
 
 #: classes/Dashboard/Widgets/LostSales.php:35 classes/Inc/Ajax.php:277
-#: classes/StockCentral/Lists/ListTable.php:146
+#: classes/StockCentral/Lists/ListTable.php:145
 #: views/help-tabs/stock-central/stock-selling-manager.php:36
 #: views/widgets/statistics.php:30
 msgid "Lost Sales"
@@ -934,7 +934,7 @@ msgid "Output Format"
 msgstr ""
 
 #: classes/DataExport/DataExport.php:77 classes/InboundStock/Lists/ListTable.php:46
-#: classes/StockCentral/Lists/ListTable.php:127
+#: classes/StockCentral/Lists/ListTable.php:126
 #: classes/StockCentral/Lists/UncontrolledListTable.php:53
 #: views/help-tabs/inbound-stock/columns.php:36
 #: views/help-tabs/stock-central/product-details.php:44
@@ -996,8 +996,8 @@ msgstr ""
 
 #: classes/InboundStock/InboundStock.php:76
 #: classes/InboundStock/Lists/ListTable.php:47
-#: classes/StockCentral/Lists/ListTable.php:135
-#: classes/StockCentral/Lists/ListTable.php:260
+#: classes/StockCentral/Lists/ListTable.php:134
+#: classes/StockCentral/Lists/ListTable.php:259
 #: views/help-tabs/inbound-stock/columns.php:40
 #: views/help-tabs/stock-central/stock-counters.php:24 views/inbound-stock.php:12
 msgid "Inbound Stock"
@@ -1015,19 +1015,19 @@ msgid "Columns"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:42
-#: classes/StockCentral/Lists/ListTable.php:121
+#: classes/StockCentral/Lists/ListTable.php:120
 #: classes/StockCentral/Lists/UncontrolledListTable.php:47
 msgid "Image"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:42
-#: classes/StockCentral/Lists/ListTable.php:121
+#: classes/StockCentral/Lists/ListTable.php:120
 #: classes/StockCentral/Lists/UncontrolledListTable.php:47
 msgid "Thumb"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:43
-#: classes/StockCentral/Lists/ListTable.php:122
+#: classes/StockCentral/Lists/ListTable.php:121
 #: classes/StockCentral/Lists/UncontrolledListTable.php:48
 #: views/help-tabs/inbound-stock/columns.php:24
 #: views/help-tabs/stock-central/product-details.php:24 views/stock-central.php:39
@@ -1036,7 +1036,7 @@ msgid "Product Name"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:44
-#: classes/StockCentral/Lists/ListTable.php:124
+#: classes/StockCentral/Lists/ListTable.php:123
 #: classes/StockCentral/Lists/UncontrolledListTable.php:50
 #: views/help-tabs/inbound-stock/columns.php:28
 #: views/help-tabs/stock-central/product-details.php:32
@@ -1044,7 +1044,7 @@ msgid "SKU"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:45
-#: classes/StockCentral/Lists/ListTable.php:126
+#: classes/StockCentral/Lists/ListTable.php:125
 #: classes/StockCentral/Lists/UncontrolledListTable.php:52
 #: views/help-tabs/inbound-stock/columns.php:32
 #: views/help-tabs/stock-central/product-details.php:40
@@ -1382,7 +1382,7 @@ msgstr ""
 msgid "In stock"
 msgstr ""
 
-#: classes/Inc/Hooks.php:667 classes/StockCentral/Lists/ListTable.php:128
+#: classes/Inc/Hooks.php:667 classes/StockCentral/Lists/ListTable.php:127
 #: classes/Suppliers/Suppliers.php:198
 #: views/help-tabs/stock-central/product-details.php:60
 #: views/meta-boxes/atum-order/items.php:46
@@ -1472,7 +1472,7 @@ msgstr ""
 msgid "Thank you for trusting in <strong>ATUM</strong> for managing your stock."
 msgstr ""
 
-#: classes/Integrations/Wpml.php:547 classes/StockCentral/Lists/ListTable.php:131
+#: classes/Integrations/Wpml.php:547 classes/StockCentral/Lists/ListTable.php:130
 #: classes/StockCentral/Lists/UncontrolledListTable.php:56
 #: views/help-tabs/stock-central/product-details.php:56
 msgid "Purchase Price"
@@ -1697,15 +1697,15 @@ msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
 
 #: classes/InventoryLogs/Models/Log.php:103
-#: classes/StockCentral/Lists/ListTable.php:137
-#: classes/StockCentral/Lists/ListTable.php:262
+#: classes/StockCentral/Lists/ListTable.php:136
+#: classes/StockCentral/Lists/ListTable.php:261
 #: views/help-tabs/stock-central/stock-counters.php:32
 msgid "Reserved Stock"
 msgstr ""
 
 #: classes/InventoryLogs/Models/Log.php:104
-#: classes/StockCentral/Lists/ListTable.php:140
-#: classes/StockCentral/Lists/ListTable.php:265
+#: classes/StockCentral/Lists/ListTable.php:139
+#: classes/StockCentral/Lists/ListTable.php:264
 #: views/help-tabs/stock-central/stock-negatives.php:20
 msgid "Customer Returns"
 msgstr ""
@@ -1715,8 +1715,8 @@ msgid "Warehouse Damage"
 msgstr ""
 
 #: classes/InventoryLogs/Models/Log.php:106
-#: classes/StockCentral/Lists/ListTable.php:142
-#: classes/StockCentral/Lists/ListTable.php:267
+#: classes/StockCentral/Lists/ListTable.php:141
+#: classes/StockCentral/Lists/ListTable.php:266
 #: views/help-tabs/stock-central/stock-negatives.php:28
 msgid "Lost in Post"
 msgstr ""
@@ -1878,7 +1878,7 @@ msgid "PO Actions"
 msgstr ""
 
 #: classes/PurchaseOrders/PurchaseOrders.php:206
-#: classes/StockCentral/Lists/ListTable.php:123
+#: classes/StockCentral/Lists/ListTable.php:122
 #: classes/StockCentral/Lists/UncontrolledListTable.php:49
 #: views/exports/purchase-order-html.php:32
 #: views/help-tabs/purchase-orders/columns.php:32
@@ -2303,147 +2303,149 @@ msgstr ""
 msgid "Clear Now!"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:125
+#: classes/StockCentral/Lists/ListTable.php:124
 #: classes/StockCentral/Lists/UncontrolledListTable.php:51
 #: views/help-tabs/stock-central/product-details.php:36
 msgid "Supplier SKU"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:129
+#: classes/StockCentral/Lists/ListTable.php:128
 #: classes/StockCentral/Lists/UncontrolledListTable.php:54
 #: views/help-tabs/stock-central/product-details.php:48
 msgid "Regular Price"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:130
+#: classes/StockCentral/Lists/ListTable.php:129
 #: classes/StockCentral/Lists/UncontrolledListTable.php:55
 #: views/help-tabs/stock-central/product-details.php:52
 msgid "Sale Price"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:132
+#: classes/StockCentral/Lists/ListTable.php:131
 msgid "Weight"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:133
+#: classes/StockCentral/Lists/ListTable.php:132
 #: views/help-tabs/stock-central/stock-counters.php:20
 msgid "Current Stock"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:134
+#: classes/StockCentral/Lists/ListTable.php:133
 msgid "Out of Stock Threshold"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:136
-#: classes/StockCentral/Lists/ListTable.php:261
+#: classes/StockCentral/Lists/ListTable.php:135
+#: classes/StockCentral/Lists/ListTable.php:260
 #: views/help-tabs/stock-central/stock-counters.php:28
 msgid "Stock on Hold"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:138
-#: classes/StockCentral/Lists/ListTable.php:263
+#: classes/StockCentral/Lists/ListTable.php:137
+#: classes/StockCentral/Lists/ListTable.php:262
 #: views/help-tabs/stock-central/stock-counters.php:36
 msgid "Back Orders"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:139
-#: classes/StockCentral/Lists/ListTable.php:264
+#: classes/StockCentral/Lists/ListTable.php:138
+#: classes/StockCentral/Lists/ListTable.php:263
 msgid "Sold Today"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:141
-#: classes/StockCentral/Lists/ListTable.php:266
+#: classes/StockCentral/Lists/ListTable.php:140
+#: classes/StockCentral/Lists/ListTable.php:265
 #: views/help-tabs/stock-central/stock-negatives.php:24
 msgid "Warehouse Damages"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:143
+#: classes/StockCentral/Lists/ListTable.php:142
 #, php-format
-msgid ""
-"Sales last <span class=\"set-header\" id=\"sales_last_ndays_val\">%s</span> day"
-msgid_plural ""
-"Sales last <span class=\"set-header\" id=\"sales_last_ndays_val\">%s</span> days"
+msgid "Sales last %s day"
+msgid_plural "Sales last %s days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/StockCentral/Lists/ListTable.php:144
+#: classes/StockCentral/Lists/ListTable.php:142
+msgid "Click to change days"
+msgstr ""
+
+#: classes/StockCentral/Lists/ListTable.php:143
 #: views/help-tabs/stock-central/stock-selling-manager.php:28
 msgid "Stock will Last (Days)"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:145
+#: classes/StockCentral/Lists/ListTable.php:144
 #: views/help-tabs/stock-central/stock-selling-manager.php:32
 msgid "Out of Stock for (Days)"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:147
+#: classes/StockCentral/Lists/ListTable.php:146
 #: views/help-tabs/stock-central/stock-selling-manager.php:40
 msgid "Stock Indicator"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:155
+#: classes/StockCentral/Lists/ListTable.php:154
 #: classes/StockCentral/Lists/UncontrolledListTable.php:74
 #: classes/StockCentral/StockCentral.php:141
 msgid "Product Details"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:172
+#: classes/StockCentral/Lists/ListTable.php:171
 #: classes/StockCentral/StockCentral.php:145
 msgid "Stock Counters"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:184
+#: classes/StockCentral/Lists/ListTable.php:183
 #: classes/StockCentral/StockCentral.php:149
 msgid "Stock Negatives"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:192
+#: classes/StockCentral/Lists/ListTable.php:191
 #: classes/StockCentral/StockCentral.php:153
 msgid "Stock Selling Manager"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:272
+#: classes/StockCentral/Lists/ListTable.php:271
 msgid "Show all"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:320
+#: classes/StockCentral/Lists/ListTable.php:319
 #: classes/StockCentral/Lists/UncontrolledListTable.php:155
 msgid "Click to edit the regular price"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:360
+#: classes/StockCentral/Lists/ListTable.php:359
 #: classes/StockCentral/Lists/UncontrolledListTable.php:225
 msgid "Click to edit the sale price"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:365
+#: classes/StockCentral/Lists/ListTable.php:364
 #: classes/StockCentral/Lists/UncontrolledListTable.php:230
 msgctxt "placeholder"
 msgid "Sale date from..."
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:374
+#: classes/StockCentral/Lists/ListTable.php:373
 #: classes/StockCentral/Lists/UncontrolledListTable.php:239
 msgctxt "placeholder"
 msgid "Sale date to..."
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:1050
+#: classes/StockCentral/Lists/ListTable.php:1049
 msgid "Your products need to be set as 'Controlled by ATUM' to appear here"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:1053
+#: classes/StockCentral/Lists/ListTable.php:1052
 msgid "You can do it in 3 ways:"
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:1056
+#: classes/StockCentral/Lists/ListTable.php:1055
 msgid ""
 "Using the <strong>ATUM Control Switch</strong> that you'll find in every product "
 "<strong>edit</strong> page within the <strong>Product Data</strong> section. It "
 "may take a lot of time as this is per product edit."
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:1057
+#: classes/StockCentral/Lists/ListTable.php:1056
 msgid ""
 "Going to the <strong>Uncontrolled</strong> list using the above button "
 "(<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like "
@@ -2451,7 +2453,7 @@ msgid ""
 "ATUM's Stock Control</strong> option."
 msgstr ""
 
-#: classes/StockCentral/Lists/ListTable.php:1058
+#: classes/StockCentral/Lists/ListTable.php:1057
 #, php-format
 msgid ""
 "We can add all your products at once! Just click the button below. If you change "
