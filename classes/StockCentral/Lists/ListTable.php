@@ -20,7 +20,6 @@ use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
-use Atum\Settings\Settings;
 
 
 class ListTable extends AtumListTable {
@@ -140,7 +139,7 @@ class ListTable extends AtumListTable {
 			'calc_returns'          => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'calc_damages'          => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
 			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'calc_sales_last_ndays' => sprintf( _n( 'Sales last <span class="set-header" id="sales_last_ndays_val">%s</span> day', 'Sales last <span class="set-header" id="sales_last_ndays_val">%s</span> days', $sold_last_days, ATUM_TEXT_DOMAIN ), $sold_last_days ),
+			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __('Click to change days', ATUM_TEXT_DOMAIN) . '">' . $sold_last_days . '</span>' ),
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
