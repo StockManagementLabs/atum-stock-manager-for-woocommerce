@@ -587,14 +587,14 @@ class Settings {
 		// <textarea name="textarea" rows="10" cols="50">Write something here</textarea>
 
 		$output = sprintf(
-			          '<textarea class="atum-settings-input regular-text" type="text" id="%s" rows="%d" cols="%d" name="%s" %s>%s</textarea>',
-			          ATUM_PREFIX . $args['id'],
-			            absint($args['rows']),
-			            absint($args['cols']),
-			          self::OPTION_NAME . "[{$args['id']}]",
-			          $this->get_dependency($args),
-			          $this->options[ $args['id'] ]
-		          ) . $this->get_description( $args );
+            '<textarea class="atum-settings-input regular-text" type="text" id="%s" rows="%d" cols="%d" name="%s" %s>%s</textarea>',
+            ATUM_PREFIX . $args['id'],
+	        absint($args['rows']),
+	        absint($args['cols']),
+	        self::OPTION_NAME . "[{$args['id']}]",
+	        $this->get_dependency($args),
+	        $this->options[ $args['id'] ]
+        ) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args );
 
@@ -692,11 +692,11 @@ class Settings {
 	 */
 	public function display_button_group( $args ) {
 
-		$name  = self::OPTION_NAME . "[{$args['id']}]";
-		$value = $this->options[ $args['id'] ];
-		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
-		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
-		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
+		$name       = self::OPTION_NAME . "[{$args['id']}]";
+		$value      = $this->options[ $args['id'] ];
+		$style      = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
+		$size       = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
+		$input_type = isset( $args['options']['type'] ) ? $args['options']['type'] : 'radio';
 
 		ob_start();
 		?>

@@ -144,59 +144,17 @@
 
 				var $field     = $(this),
 				    value      = $field.val(),
-					dependency = $field.data('dependency'),
-					visibility,
-				    $dependant;
+					dependency = $field.data('dependency');
 				
-				if ($field.is(':checkbox')) {
-					visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
+				if ($.isArray(dependency)) {
+				
+					$.each(dependency, function (index, dependencyElem) {
+						self.checkDependency($field, dependencyElem, value);
+					});
+				
 				}
 				else {
-					visibility = value === dependency.value;
-				}
-				
-				if (dependency.hasOwnProperty('section')) {
-					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
-				}
-				else if (dependency.hasOwnProperty('field')) {
-					//debugger;
-					
-					var selector = '';
-					
-					if ($.isArray(dependency.field)) {
-
-						//TODO SOLVE FIELDS DEPENDENCY
-						
-						$.each(dependency.field, function(index, value) {
-							selector += '#' + self.settings.atumPrefix + value;
-							
-							if ( index+1 < dependency.field.length) {
-								selector += ', ';
-							}
-						});
-						
-					}
-					else {
-						selector = '#' + self.settings.atumPrefix + dependency.field;
-					}
-					
-					$dependant = $(selector);
-					
-					if ($dependant.length) {
-						$dependant = $dependant.closest('tr').find('th, td');
-					}
-					
-				}
-				
-				if (typeof $dependant !== 'undefined' && $dependant.length) {
-					
-					if (visibility === true) {
-						$dependant.slideDown('fast');
-					}
-					else {
-						$dependant.slideUp('fast');
-					}
-					
+					self.checkDependency($field, dependency, value);
 				}
 				
 			})
@@ -410,6 +368,53 @@
 			
 			}).catch(swal.noop);
 		
+		},
+		checkDependency: function($field, dependency, value) {
+			
+			var $dependant,
+				visibility;
+			
+			if ($field.is(':checkbox')) {
+				visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
+			}
+			else {
+				visibility = value === dependency.value;
+			}
+			
+			if (dependency.hasOwnProperty('section')) {
+				$dependant = this.$form.find('[data-section="' + dependency.section + '"]');
+			}
+			else if (dependency.hasOwnProperty('field')) {
+				
+				$dependant = $( '#' + this.settings.atumPrefix + dependency.field );
+				
+				if ($dependant.length) {
+					$dependant = $dependant.closest('tr').find('th, td');
+				}
+				
+			}
+			
+			if (typeof $dependant !== 'undefined' && $dependant.length) {
+				
+				if (visibility === true) {
+					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
+						$dependant.slideDown('fast');
+					}
+					else {
+						$dependant.show();
+					}
+				}
+				else {
+					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
+						$dependant.slideUp('fast');
+					}
+					else {
+						$dependant.hide();
+					}
+				}
+				
+			}
+			
 		}
 		
 	} );
