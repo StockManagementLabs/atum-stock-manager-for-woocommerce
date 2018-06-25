@@ -754,7 +754,12 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="script-runner" data-action="<?php echo $args['options']['script_action'] ?>" data-confirm="<?php echo $args['options']['confirm_msg'] ?>">
+		<div class="script-runner"
+			data-action="<?php echo $args['options']['script_action'] ?>"
+			<?php if ( isset( $args['options']['confirm_msg'] ) ): ?>data-confirm="<?php echo $args['options']['confirm_msg'] ?>"<?php endif; ?>
+			>
+
+			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
 			<select class="wc-enhanced-select" style="width: 12em">
@@ -765,9 +770,11 @@ class Settings {
 			&nbsp;
 			<?php endif; ?>
 
-			<button type="button" class="btn btn-primary">
+			<button type="button" class="btn btn-primary tool-runner">
 				<?php echo $args['options']['button_text'] ?>
 			</button>
+
+			<?php do_action('atum/settings/after_script_runner_field', $args) ?>
 
 		</div>
 		<?php
