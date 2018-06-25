@@ -149,7 +149,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 				'is_any_out_stock_threshold_set' => Helpers::is_any_out_stock_threshold_set(),
-				'confirm_msg'   => esc_attr( __("This will clear all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
+				'confirm_msg' => esc_attr( __('This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN) )
 			),
 			'unmanaged_counters' => array(
 				'section' => 'general',
@@ -183,7 +183,7 @@ class Settings {
 			'delete_data' => array(
 				'section' => 'general',
 				'name'    => __( 'Delete Data When Uninstalling', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
@@ -211,28 +211,28 @@ class Settings {
 			'address_2' => array(
 				'section' => 'company',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Optional additional info for the Address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Optional additional info for the Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'city' => array(
 				'section' => 'company',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The city where your business is located", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The city where your business is located', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'country' => array(
 				'section' => 'company',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The country and state or province if any", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The country and state or province if any', ATUM_TEXT_DOMAIN ),
 				'type'    => 'wc_country',
 				'default' => $default_country
 			),
 			'zip' => array(
 				'section' => 'company',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The postal code of your business", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The postal code of your business', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
@@ -250,42 +250,42 @@ class Settings {
 			'ship_to' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Ship to Name', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The ship to name that will appear in the Shipping address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The ship to name that will appear in the Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_address_1' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The shipping street address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The shipping street address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_address_2' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Optional additional info for the Shipping Address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Optional additional info for the Shipping Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_city' => array(
 				'section' => 'shipping',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The city where is your Shipping address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The city where is your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_country' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The country and state or province if any", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The country and state/province (if any)', ATUM_TEXT_DOMAIN ),
 				'type'    => 'wc_country',
 				'default' => $default_country
 			),
 			'ship_zip' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The postal code of your Shipping address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
@@ -348,7 +348,7 @@ class Settings {
 	}
 	
 	/**
-	 * Get the option settings ans merge them with defaults. With parameters in case we need this function in Helpers
+	 * Get the option settings and merge them with defaults. With parameters in case we need this function in Helpers
 	 *
 	 * @since   0.0.2
 	 *
@@ -378,6 +378,7 @@ class Settings {
 		}
 		
 		return apply_filters( 'atum/settings/get_settings', $options );
+
 	}
 	
 	/**
@@ -497,13 +498,22 @@ class Settings {
 	public function sanitize( $input ) {
 		
 		$this->options = Helpers::get_options();
+
+		// Remove deprecated/removed/unneeded keys
+		$valid_keys = array_keys($this->defaults);
+
+		foreach ($this->options as $option_key => $option_value) {
+			if ( ! in_array($option_key, $valid_keys) ) {
+				unset( $this->options[ $option_key] );
+			}
+		}
 		
 		if ( isset( $input['settings_section'] ) ) {
 			
 			// Only accept settings defined
 			foreach ( $this->defaults as $key => $atts ) {
 				
-				// Only current section
+				// Save only current section
 				if (
 					! empty( $this->tabs[ $input['settings_section'] ] ) &&
 					in_array( $atts['section'], array_keys( $this->tabs[ $input['settings_section'] ]['sections'] ) )
@@ -516,12 +526,18 @@ class Settings {
 							break;
 						
 						case 'number':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? intval( $input[ $key ] ) : $atts['default'];
+							$this->options[ $key ] = isset( $input[ $key ] ) ? floatval( $input[ $key ] ) : $atts['default'];
 							break;
 
+						case 'select':
+							$this->options[ $key ] = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
+							break;
+
+						case 'text':
 						default:
 							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
 							break;
+							
 					}
 					
 				}
@@ -685,7 +701,7 @@ class Settings {
 		?>
 		<select class="atum-select2" name="<?php echo $name ?>" id="<?php echo ATUM_PREFIX . $args['id'] ?>"<?php echo $this->get_dependency($args) . $style ?>>
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-			<option value="<?php echo $option_value ?>>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
+			<option value="<?php echo $option_value ?>"<?php selected($option_value, $value) ?>><?php echo $option_label ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
