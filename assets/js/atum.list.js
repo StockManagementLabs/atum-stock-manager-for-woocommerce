@@ -187,7 +187,10 @@
 				self.destroyPopover($metaCell);
 				
 			});
-			
+
+            //TODO sold_last_days jquery
+            this.setupSalesLastNDaysVal();
+
 			// Popover's "Set" button
 			$('body').on('click', '.popover button.set', function() {
 				
@@ -318,7 +321,7 @@
                             self.updateHash(); // force clean search
                         }
                     }
-                    // TODO Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
+                    // Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
                     else if (searchColumnBtnVal.length > 0) {
 	                    $searchSubmitBtn.prop('disabled', false);
                     }
@@ -423,14 +426,49 @@
 			.on('click', '.show-locations', function(e) {
 				
 				e.preventDefault();
-				
+
+				//component vars
 				var $button = $(this);
-				
+				var setedLocations = [];
+				var toSetLocations = [];
+
+                //'Component' methods
+				// on click in a tree a or icon, get the node cat-item-xx class
+                function getClosestsCatItem(thisObj){
+                    //debugger;
+					var returnValue = '';
+                    var classList = thisObj.closest('.easytree-node').attr('class').split(/\s+/);
+                    $.each(classList, function(index, item) {
+                        if (item.lastIndexOf('cat-item-', 0) === 0 ) { // item.startsWith('cat-item-') es5 'equivalent'
+                            returnValue = item;
+                        }
+                    });
+                    return returnValue;
+				}
+
+				// toggle check class on node, and add or remove from array toSetLocations
+                function toggleValueToSetLocations(thisObj){
+                	//debugger;
+                    var catItem = getClosestsCatItem(thisObj);
+
+                    $('.'+catItem).toggleClass( 'checked' );
+
+                    if($('.'+catItem).hasClass( 'checked' )) {
+                        toSetLocations.push(catItem);
+                    }else{
+                        var pos = toSetLocations.indexOf(catItem);
+                        if(pos != -1) {
+                            toSetLocations.splice(pos, 1);
+                        }
+					}
+				}
+				//Open on view
 				swal({
 					title            : self.settings.productLocations,
 					html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
 					showCancelButton : false,
-					showConfirmButton: false,
+					showConfirmButton: true,
+                    confirmButtonText  : self.settings.editProductLocations,
 					showCloseButton  : true,
 					onOpen           : function () {
 						
@@ -449,13 +487,27 @@
 								$locationsTreeContainer.append('<div class="atum-loading" />');
 							},
 							success   : function (response) {
-								
-								if (response.success === true) {
-									$locationsTreeContainer.html(response.data);
-									$locationsTreeContainer.easytree();
+
+                                if (response.success === true) {
+                                    $locationsTreeContainer.html(response.data);
+
+                                    //if answer is like <span class="no-locations-set">...  don't put easytree on work.
+                                    // It will remove the span message
+                                    if (!(response.data.indexOf("no-locations-set") !== -1)) {
+
+                                        $locationsTreeContainer.easytree();
+
+                                        //Fill setedLocations
+                                        $("#atum-locations-tree span[class^='cat-item-'], #atum-locations-tree span[class*='cat-item-']").each(function () {
+                                            var classList = $(this).attr('class').split(/\s+/);
+                                            $.each(classList, function (index, item) {
+                                                if (item.startsWith('cat-item-')) {
+                                                    setedLocations.push(item);
+                                                }
+                                            });
+                                        })
+                                    }
 								}
-								
-								
 							}
 						});
 						
@@ -463,7 +515,110 @@
 					onClose          : function () {
 						$button.blur().tooltip('hide');
 					}
-				}).catch(swal.noop);
+				// Click on edit!
+				}).then(function () {
+
+                    swal({
+                        title            : "Edit",
+                        html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
+                        text             : "text to show?",
+                        confirmButtonText: self.settings.saveButton,
+                        showCloseButton  : true,
+                        showCancelButton : true,
+                        onOpen           : function () {
+                            var $locationsTreeContainer = $('#atum-locations-tree');
+
+                            $.ajax({
+                                url       : ajaxurl,
+                                dataType  : 'json',
+                                method    : 'post',
+                                data      : {
+                                    action    : 'atum_get_locations_tree',
+                                    token     : self.settings.nonce,
+                                    product_id: -1 //$button.closest('tr').data('id') <- send -1 to get all the taxonomies
+                                },
+                                beforeSend: function () {
+                                    $locationsTreeContainer.append('<div class="atum-loading" />');
+                                },
+                                success   : function (response) {
+
+                                    if (response.success === true) {
+                                        $locationsTreeContainer.html(response.data);
+                                        $locationsTreeContainer.easytree();
+
+                                        toSetLocations = setedLocations;
+                                        //if click on link or icon, set node as checked
+                                        $('#atum-locations-tree a').click(function(event) {
+                                            event.preventDefault();
+                                            toggleValueToSetLocations($(this));
+                                        });
+                                        $('#atum-locations-tree .easytree-icon').click(function() {
+                                            toggleValueToSetLocations($(this));
+                                        });
+
+                                        //set class checked the actual values on load
+                                        $("#atum-locations-tree span[class^='cat-item-'], #atum-locations-tree span[class*='cat-item-']").each( function( ) {
+                                            var classList = $(this).attr('class').split(/\s+/);
+                                            $.each(classList, function(index, item) {
+                                                if (item.startsWith('cat-item-')) {
+                                                    if(jQuery.inArray(item, setedLocations) !== -1){
+                                                        $('.'+item).addClass('checked');
+													}
+                                                }
+                                            });
+                                        })
+
+                                    }
+                                }
+                            })
+                        },
+						onClose          : function () {
+                            $button.blur().tooltip('hide');
+                        }
+                        //Save button clicked
+						}).then(function(){
+							// ["cat-item-40", "cat-item-39"] -> [40, 39]
+							var toSetTerms = toSetLocations.map(function(x) {
+								return parseInt(x.substring(9));
+							});
+
+                        	var $locationsTreeContainer = $('#atum-locations-tree');
+
+							$.ajax({
+								url       : ajaxurl,
+								dataType  : 'json',
+								method    : 'post',
+								data      : {
+									action    : 'atum_set_locations_tree',
+									token     : self.settings.nonce,
+									product_id: $button.closest('tr').data('id'),
+									terms: toSetTerms
+								},
+								beforeSend: function () {
+									$locationsTreeContainer.append('<div class="atum-loading" />');
+								},
+								success   : function (response) {
+
+									if (response.success === true) {
+                                        swal({
+                                            title            : self.settings.done,
+                                            type             : 'success',
+                                            text             : self.settings.locationsSaved,
+                                            confirmButtonText: self.settings.ok,
+                                            onClose           : function () {
+                                                //update atum-table to show the new location icon
+                                                self.update();
+                                            }
+                                        }).then(function(){
+                                        	//update atum-table to show the new location icon
+                                            self.update();
+                                        }).catch(swal.noop);
+									}
+								}
+							});
+
+						}).catch(swal.noop);
+                }).catch(swal.noop);
 				
 			})
 			
@@ -565,6 +720,42 @@
 			});
 			
 		},
+
+		//TODO sales_last_ndays_val
+        setupSalesLastNDaysVal: function() {
+            var self = this;
+
+            var selectDaysText = $( '#sales_last_ndays_val' ).text();
+            var days= Array.apply(null, {length: 31}).map(Number.call, Number); //var o = [0, 1, 2, 3 ... 30];
+            days.shift();
+
+
+            var $selectableDays = $('<select/>');
+            for (var i in days) {
+                $selectableDays.append($('<option/>').html(days[i]));
+            }
+
+            $( '#sales_last_ndays_val' ).html("<span class='textvalue'>"+selectDaysText+"</span>");
+            $( '#sales_last_ndays_val' ).append($selectableDays);
+            $('#sales_last_ndays_val select').hide();
+            $("#sales_last_ndays_val select").val(selectDaysText);
+
+            $selectableDays.change(function() {
+                $('#sales_last_ndays_val .textvalue').text($( this ).val());
+                $( this ).hide();
+                $('#sales_last_ndays_val .textvalue').show();
+                $.address.parameter('sold_last_days', parseInt($(this).val()));
+                self.updateHash();
+            });
+
+
+            $('#sales_last_ndays_val .textvalue').click(function() {
+                //console.log("clicked");
+                $('#sales_last_ndays_val .textvalue').hide();
+                $('#sales_last_ndays_val select').show();
+            });
+
+        },
 
 		/**
 		 * Fill the search by column dropdown with the active screen options checkboxes
@@ -1168,12 +1359,13 @@
                 //search_column : self.$searchColumnBtn.data('value') || '',
                 s             : $.address.parameter('s') || '',
                 search_column : $.address.parameter('search_column') || '',
+                sold_last_days: $.address.parameter('sold_last_days') || '',
 				orderby       : $.address.parameter('orderby') || self.settings.orderby,
 				order         : $.address.parameter('order') || self.settings.order
 			});
 			
 			// Update the URL hash parameters
-			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter'], function(index, elem) {
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], function(index, elem) {
 				
 				// Disable auto-update on each iteration until all the parameters have been set
 				self.navigationReady = false;
@@ -1217,16 +1409,17 @@
 			
 			// Overwrite the filterData with the URL hash parameters
 			this.filterData = $.extend(this.filterData, {
-				view        : $.address.parameter('view') || '',
-				product_cat : $.address.parameter('product_cat') || '',
-				product_type: $.address.parameter('product_type') || '',
-				supplier    : $.address.parameter('supplier') || '',
-				extra_filter: $.address.parameter('extra_filter') || '',
-				paged       : $.address.parameter('paged') || '',
-				order       : $.address.parameter('order') || '',
-				orderby     : $.address.parameter('orderby') || '',
-                search_column : $.address.parameter('search_column') || '',
-				s           : $.address.parameter('s') || '',
+				view        	: $.address.parameter('view') || '',
+				product_cat 	: $.address.parameter('product_cat') || '',
+				product_type	: $.address.parameter('product_type') || '',
+				supplier    	: $.address.parameter('supplier') || '',
+				extra_filter	: $.address.parameter('extra_filter') || '',
+				paged       	: $.address.parameter('paged') || '',
+				order       	: $.address.parameter('order') || '',
+				orderby     	: $.address.parameter('orderby') || '',
+                search_column 	: $.address.parameter('search_column') || '',
+                sold_last_days 	: $.address.parameter('sold_last_days') || '',
+				s           	: $.address.parameter('s') || '',
 			});
 			
 			this.doingAjax = $.ajax({
@@ -1240,7 +1433,7 @@
 				},
 				// Handle the successful result
 				success   : function (response) {
-					
+
 					self.doingAjax = null;
 
 					if (typeof response === 'undefined' || !response) {
@@ -1300,6 +1493,9 @@
 					self.maybeRestoreEnhancedSelect();
 					
 					self.removeOverlay();
+
+                    self.setupSalesLastNDaysVal();
+
 					
 				},
 				error     : function (error) {

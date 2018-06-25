@@ -14,8 +14,10 @@ namespace Atum\Integrations;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Suppliers\Suppliers;
 
 
 class Wpml {
@@ -36,7 +38,6 @@ class Wpml {
 
 	/**
 	 * Whether the WC multicurrency option is active or not
-	 * @var bool
 	 */
 	public $multicurrency_active = FALSE;
 
@@ -49,7 +50,7 @@ class Wpml {
 	/**
 	 * @var \SitePress
 	 */
-	protected $sitepress;
+	protected static $sitepress;
 
 	/**
 	 * Current product and currency custom prices (WPML Multi-currency custom product prices)
@@ -83,11 +84,10 @@ class Wpml {
 
 		global $sitepress, $woocommerce_wpml;
 
-		$this->sitepress = $sitepress;
+		self::$sitepress = $sitepress;
+		$this->wpml      = $woocommerce_wpml;
 
-		$this->wpml = $woocommerce_wpml;
-
-		$this->current_language = $this->sitepress->get_current_language();
+		$this->current_language = self::$sitepress->get_current_language();
 
 		if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
 			$this->multicurrency_active = TRUE;
@@ -109,6 +109,7 @@ class Wpml {
 	public function register_hooks() {
 
 		if ( is_admin() ) {
+
 			// Make Atum orders not translatable
 			add_action( 'atum/order_post_type/init', array( $this, 'register_atum_order_hooks' ) );
 
@@ -160,6 +161,7 @@ class Wpml {
 		add_action( 'init', array( $this, 'remove_language_switcher' ), 12 );
 
 		if ( $post_type == PurchaseOrders::POST_TYPE) {
+
 			// Add purchase price to WPML custom prices
 			add_filter( 'wcml_custom_prices_fields', array($this, 'wpml_add_purchase_price_to_custom_prices'), 10, 2 );
 			add_filter( 'wcml_custom_prices_fields_labels', array($this, 'wpml_add_purchase_price_to_custom_price_labels'), 10, 2 );
@@ -193,14 +195,14 @@ class Wpml {
 	 */
 	public function remove_language_switcher() {
 
-		global $sitepress, $pagenow;
+		global $pagenow;
 
 		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], $this->atum_order_types ) ) ? TRUE : FALSE;
 		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE;
 		$is_order_edit      = $get_post && $pagenow == 'post.php' && in_array( get_post_type( $get_post ), $this->atum_order_types );
 
 		if ( $is_order_post_type || $is_order_edit ) {
-			remove_action( 'wp_before_admin_bar_render', array( $sitepress, 'admin_language_switcher' ) );
+			remove_action( 'wp_before_admin_bar_render', array( self::$sitepress, 'admin_language_switcher' ) );
 		}
 
 	}
@@ -215,10 +217,11 @@ class Wpml {
 	 */
 	public function load_wpml_product( $item, $post_type = '' ) {
 
-		$this->original_product_id = $this->get_original_product_id( $this->get_product_id( $item ), $post_type );
+		$this->original_product_id = self::get_original_product_id( $item->get_id(), $post_type );
 		$this->custom_prices = FALSE;
 
 		if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
+
 			$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id );
 
 			if ( $custom_price_ui ) {
@@ -231,6 +234,7 @@ class Wpml {
 
 				$thepostid = $keep_id;
 			}
+
 		}
 	}
 
@@ -247,7 +251,7 @@ class Wpml {
 
 		$currency = get_woocommerce_currency();
 
-		$lang = $lang ? $lang : $this->current_language;
+		$lang = $lang ?: $this->current_language;
 
 		if ( ! empty( $this->wpml->settings['default_currencies'][ $lang ] ) ) {
 			$currency = $this->wpml->settings['default_currencies'][ $lang ];
@@ -270,7 +274,6 @@ class Wpml {
 	public function add_custom_prices_arg($editable_col, $args) {
 
 		// string $is_custom  For prices, whether value is a WPML custom price value or not
-
 		if ( ! empty($args['is_custom'])) {
 			$editable_col = str_replace(' data-currency=', 'data-custom="' . $args['is_custom'] . '" data-currency=', $editable_col);
 		}
@@ -292,7 +295,7 @@ class Wpml {
 		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
 			$purchase_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_purchase_price'];
-			$args['value'] = ( is_numeric( $purchase_price_value ) ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->current_currency ] ) : $args['value'];
+			$args['value'] = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency' => $this->current_currency ] ) : $args['value'];
 
 			$args['currency'] = $this->current_currency;
 			$args['symbol'] = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
@@ -316,7 +319,7 @@ class Wpml {
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
 
 			$regular_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_regular_price'];
-			$args['value']       = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->current_currency ] ) : $args['value'];
+			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency' => $this->current_currency ] ) : $args['value'];
 
 			$args['currency']  = $this->current_currency;
 			$args['symbol']    = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
@@ -325,7 +328,7 @@ class Wpml {
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
 			$product             = wc_get_product( $this->original_product_id );
 			$regular_price_value = $product->get_regular_price();
-			$args['value']       = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $args['currency'] ] ) : $args['value'];
+			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [ 'trim_zeros' => TRUE, 'currency' => $args['currency'] ] ) : $args['value'];
 
 		}
 
@@ -347,7 +350,7 @@ class Wpml {
 
 			$args['currency'] = $this->current_currency;
 			$sale_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_sale_price'];
-			$args['value']    = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->current_currency ] ) : $args['value'];
+			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $this->current_currency ] ) : $args['value'];
 			$args['symbol']   = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
 
 			// Dates come already formatted
@@ -360,9 +363,9 @@ class Wpml {
 
 			$product                        = wc_get_product( $this->original_product_id );
 			$sale_price_value               = $product->get_sale_price();
-			$args['value']                  = ( is_numeric( $sale_price_value ) ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $args['currency'] ] ) : $args['value'];
-			$args['extra_meta'][0]['value'] = ( $date = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
-			$args['extra_meta'][1]['value'] = ( $date = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+			$args['value']                  = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $args['currency'] ] ) : $args['value'];
+			$args['extra_meta'][0]['value'] = $date = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE ) ? date_i18n( 'Y-m-d', $date ) : '';
+			$args['extra_meta'][1]['value'] = $date = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE ) ? date_i18n( 'Y-m-d', $date ) : '';
 
 		}
 
@@ -422,7 +425,7 @@ class Wpml {
 
 		if ( $this->multicurrency_active ) {
 
-			$original_product_id = $this->get_original_product_id( $product_id );
+			$original_product_id = self::get_original_product_id( $product_id );
 
 			foreach ( $product_meta as $meta_key => $meta_value ) {
 
@@ -432,6 +435,7 @@ class Wpml {
 
 					// stock id updated
 					case 'regular_price':
+
 						if ( isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
 
 							$custom_prices                   = $this->wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['regular_price_currency'] );
@@ -502,7 +506,8 @@ class Wpml {
 
 		$post_type = get_post_type( $product_id );
 
-		$product_translations = $this->sitepress->get_element_translations( $this->sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+
 		foreach ( $product_translations as $translation ) {
 			if ( $translation->element_id !== $product_id ) {
 				Helpers::update_product_meta( $translation->element_id, $product_meta, TRUE );
@@ -557,10 +562,10 @@ class Wpml {
 	public function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
 
 		if ($variation_id) {
-			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_variation_purchase_price'][$code][$variation_id]) ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][$code][$variation_id] ) : '';
+			$prices['_purchase_price'] = ! empty( $_POST['_custom_variation_purchase_price'][$code][$variation_id]) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][$code][$variation_id] ) : '';
 		}
 		else {
-			$prices['_purchase_price'] = ( ! empty( $_POST['_custom_purchase_price'][$code]) )? wc_format_decimal( $_POST['_custom_purchase_price'][$code] ) : '';
+			$prices['_purchase_price'] = ! empty( $_POST['_custom_purchase_price'][$code]) ? wc_format_decimal( $_POST['_custom_purchase_price'][$code] ) : '';
 		}
 
 		return $prices;
@@ -595,7 +600,7 @@ class Wpml {
 
 		$post_type = get_post_type( $post_id );
 
-		$product_translations = $this->sitepress->get_element_translations( $this->sitepress->get_element_trid($post_id, "post_{$post_type}"), "post_{$post_type}" );
+		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid($post_id, "post_{$post_type}"), "post_{$post_type}" );
 		foreach($product_translations as $translation){
 
 			if( $translation->element_id !==  $post_id){
@@ -615,13 +620,13 @@ class Wpml {
 	 *
 	 * @return int
 	 */
-	public function get_original_product_id( $product_id = 0, $post_type = '' ) {
+	public static function get_original_product_id( $product_id = 0, $post_type = '' ) {
 
 		if ( $product_id ) {
 
 			$post_type = $post_type ? $post_type : get_post_type( $product_id );
 
-			$product_translations = $this->sitepress->get_element_translations( $this->sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
 			foreach ( $product_translations as $translation ) {
 				if ( $translation->original ) {
 					$product_id = $translation->element_id;
@@ -645,7 +650,7 @@ class Wpml {
 	 *
 	 * @return array
 	 */
-	public function get_product_translations_ids( $product_id = 0, $post_type = '' ) {
+	public static function get_product_translations_ids( $product_id = 0, $post_type = '' ) {
 
 		$translations = [];
 
@@ -653,7 +658,7 @@ class Wpml {
 
 			$post_type = $post_type ? $post_type : get_post_type( $product_id );
 
-			$product_translations = $this->sitepress->get_element_translations( $this->sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
 			foreach ( $product_translations as $translation ) {
 				$translations[$translation->language_code] = $translation->element_id;
 			}
@@ -661,30 +666,6 @@ class Wpml {
 		}
 
 		return $translations;
-
-	}
-
-	/**
-	 * A wrapper to get the right product ID (or variation ID)
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param \WC_Product $product
-	 *
-	 * @return int
-	 */
-	protected function get_product_id( $product ) {
-
-		if ( $product->get_type() == 'variation' ) {
-			/**
-			 * @deprecated
-			 * The get_variation_id() method was deprecated in WC 3.0.0
-			 * In newer versions the get_id() method always be the variation_id if it's a variation
-			 */
-			return ( version_compare( WC()->version, '3.0.0', '<' ) == - 1 ) ? $product->get_variation_id() : $product->get_id();
-		}
-
-		return $product->get_id();
 
 	}
 	
@@ -735,36 +716,41 @@ class Wpml {
 	 */
 	public function upgrade( $old_version ) {
 		
-		global $wpdb, $sitepress;
+		global $wpdb;
 		
 		if ( version_compare( $old_version, '1.4.1.2', '<' ) ) {
 			
 			// Delete previous existent metas in translations to prevent duplicates
-			$IDs_to_delete = $wpdb->get_results( "SELECT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
- 									ON pm.post_id = tr.element_id WHERE pm.meta_key = '_atum_manage_stock' AND
- 									NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');", ARRAY_N );
+			$IDs_to_delete = $wpdb->get_results( "
+				SELECT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
+ 				ON pm.post_id = tr.element_id WHERE pm.meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "' AND
+ 				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
+            ", ARRAY_N );
 			
 			if ( $IDs_to_delete ) {
 				
 				$IDs_to_delete  = implode( ',', wp_list_pluck( $IDs_to_delete, 0 ) );
-				$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_atum_manage_stock', '_inheritable', '_out_of_stock_date')
- 										AND post_id IN({$IDs_to_delete});" );
+				$wpdb->query( "
+					DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('" . Globals::ATUM_CONTROL_STOCK_KEY . "', '" . Globals::IS_INHERITABLE_KEY . "', '" . Globals::OUT_OF_STOCK_DATE_KEY . "')
+ 					AND post_id IN({$IDs_to_delete});
+                " );
 				
 			}
 			
-			$IDs_to_refresh = $wpdb->get_results("SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
-												WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN
-												('post_product', 'post_product_variation');", ARRAY_N );
+			$IDs_to_refresh = $wpdb->get_results("
+				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
+				WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN ('post_product', 'post_product_variation');
+			", ARRAY_N );
 			
 			if ($IDs_to_refresh) {
 				
 				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
 				foreach ( $IDs_to_refresh as $id) {
 					
-					$original_id = $this->get_original_product_id($id);
-					$sitepress->sync_custom_field( $original_id, $id, '_inheritable');
-					$sitepress->sync_custom_field( $original_id, $id, '_atum_manage_stock');
-					$sitepress->sync_custom_field( $original_id, $id, '_out_of_stock_date');
+					$original_id = self::get_original_product_id($id);
+					self::$sitepress->sync_custom_field( $original_id, $id, Globals::IS_INHERITABLE_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Globals::ATUM_CONTROL_STOCK_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Globals::OUT_OF_STOCK_DATE_KEY);
 				}
 			}
 			
@@ -773,30 +759,35 @@ class Wpml {
 		if ( version_compare( $old_version, '1.4.4', '<' ) ) {
 			
 			// Delete previous existent metas in translations to prevent duplicates
-			$IDs_to_delete = $wpdb->get_results( "SELECT DISTINCT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
- 									ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('_supplier', '_supplier_sku') AND
- 									NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');", ARRAY_N );
+			$IDs_to_delete = $wpdb->get_results( "
+				SELECT DISTINCT tr.element_id FROM $wpdb->postmeta pm LEFT JOIN {$wpdb->prefix}icl_translations tr
+ 				ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('" . Suppliers::SUPPLIER_META_KEY . "', '" . Suppliers::SUPPLIER_SKU_META_KEY . "') AND
+ 				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
+            ", ARRAY_N );
 			
 			if ( $IDs_to_delete ) {
 				
 				$IDs_to_delete  = implode( ',', wp_list_pluck( $IDs_to_delete, 0 ) );
-				$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_supplier', '_supplier_sku')
- 										AND post_id IN({$IDs_to_delete});" );
+				$wpdb->query( "
+					DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . Suppliers::SUPPLIER_META_KEY . "', '" . Suppliers::SUPPLIER_SKU_META_KEY . "')
+ 					AND post_id IN($IDs_to_delete);
+                " );
 				
 			}
 			
-			$IDs_to_refresh = $wpdb->get_results("SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
-												WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN
-												('post_product', 'post_product_variation');", ARRAY_N );
+			$IDs_to_refresh = $wpdb->get_results("
+				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
+				WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN ('post_product', 'post_product_variation');
+			", ARRAY_N );
 			
 			if ($IDs_to_refresh) {
 				
 				$IDs_to_refresh = wp_list_pluck( $IDs_to_refresh, 0 );
 				foreach ( $IDs_to_refresh as $id) {
 					
-					$original_id = $this->get_original_product_id($id);
-					$sitepress->sync_custom_field( $original_id, $id, '_supplier');
-					$sitepress->sync_custom_field( $original_id, $id, '_supplier_sku');
+					$original_id = self::get_original_product_id($id);
+					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_META_KEY);
+					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_META_KEY);
 				}
 			}
 			

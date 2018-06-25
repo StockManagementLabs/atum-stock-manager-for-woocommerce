@@ -22,6 +22,7 @@ use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
+use Atum\Suppliers\Suppliers;
 use Mpdf\Mpdf;
 
 
@@ -180,7 +181,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		$log->save_meta( array(
 			'_status'                    => esc_attr( $_POST['status'] ),
 			'_date_created'              => $po_date,
-			'_supplier'                  => $multiple_suppliers == 'no' ? absint( $_POST['supplier'] ) : '',
+			Suppliers::SUPPLIER_META_KEY => $multiple_suppliers == 'no' ? absint( $_POST['supplier'] ) : '',
 			'_multiple_suppliers'        => $multiple_suppliers,
 			'_expected_at_location_date' => $expected_at_location_date,
 		) );

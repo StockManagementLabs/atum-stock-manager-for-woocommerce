@@ -716,6 +716,11 @@
 			padding-top: 6px;
 		}
 	}
+
+	.show-locations{
+		cursor: pointer;
+		color: $link-color;
+	}
 	
 	.set-meta {
 		cursor: pointer;
@@ -727,6 +732,15 @@
 		
 		&.unsaved {
 			color: $danger;
+		}
+	}
+
+	.set-header {
+		cursor: pointer;
+		color: $link-color;
+
+		&:hover {
+			color: $link-hover-color;
 		}
 	}
 	

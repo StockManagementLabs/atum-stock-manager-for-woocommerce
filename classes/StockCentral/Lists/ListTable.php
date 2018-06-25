@@ -62,15 +62,13 @@ class ListTable extends AtumListTable {
 		'calc_returns',
 		'calc_damages',
 		'calc_lost_in_post',
-		'calc_sales14',
-		'calc_sales7',
+		'calc_sales_last_ndays',
 		'calc_will_last',
 		'calc_stock_out_days',
 		'calc_lost_sales'
 	);
 
 	/**
-	 * TODO $searchable_columns ?
      * What columns are numeric and searchable? and strings? append to this two keys.
 	 * @var array string keys ()
 	 */
@@ -112,39 +110,41 @@ class ListTable extends AtumListTable {
 			'terms'    => Globals::get_product_types()
 		);
 
+		// Get the ndays set to last sales column
+		$sold_last_days = Helpers::get_sold_last_days_option();
+
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
-			'thumb'                  => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'                  => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'_supplier'              => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_sku'                   => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'          => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'ID'                     => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'              => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'calc_location'          => '<span class="dashicons dashicons-store tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
-			'_sale_price'            => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
-			'_purchase_price'        => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-            '_weight'                => __( 'Weight', ATUM_TEXT_DOMAIN ),
-			'_stock'                 => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
-			'_out_stock_threshold'   => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'           => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_hold'              => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
-			'calc_reserved'          => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'       => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
-			'calc_sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
-			'calc_returns'           => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
-			'calc_damages'           => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'calc_sales14'           => __( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ),
-			'calc_sales7'            => __( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ),
-			'calc_will_last'         => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_stock_out_days'    => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_lost_sales'        => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'   => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
-		);
+			'thumb'                 => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'title'                 => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
+			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'calc_type'             => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_location'         => '<span class="dashicons dashicons-store tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'_weight'               => __( 'Weight', ATUM_TEXT_DOMAIN ),
+			'_stock'                => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_out_stock_threshold'  => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+			'calc_inbound'          => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'calc_hold'             => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+			'calc_reserved'         => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+			'calc_back_orders'      => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'calc_sold_today'       => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+			'calc_returns'          => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+			'calc_damages'          => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __('Click to change days', ATUM_TEXT_DOMAIN) . '">' . $sold_last_days . '</span>' ),
+			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>'
+        );
 
 		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
 
@@ -190,8 +190,7 @@ class ListTable extends AtumListTable {
 			'stock-selling-manager' => array(
 				'title'   => __( 'Stock Selling Manager', ATUM_TEXT_DOMAIN ),
 				'members' => array(
-					'calc_sales14',
-					'calc_sales7',
+					'calc_sales_last_ndays',
 					'calc_will_last',
 					'calc_stock_out_days',
 					'calc_lost_sales',
@@ -222,19 +221,18 @@ class ListTable extends AtumListTable {
 
 		// Initialize totalizers
 		$this->totalizers = apply_filters( 'atum/list_table/totalizers', array(
-			'_stock'               => 0,
-			'_out_stock_threshold' => 0,
-			'calc_inbound'         => 0,
-			'calc_hold'            => 0,
-			'calc_reserved'        => 0,
-			'calc_back_orders'     => 0,
-			'calc_sold_today'      => 0,
-			'calc_returns'         => 0,
-			'calc_damages'         => 0,
-			'calc_lost_in_post'    => 0,
-			'calc_sales14'         => 0,
-			'calc_sales7'          => 0,
-			'calc_lost_sales'      => 0,
+			'_stock'                => 0,
+			'_out_stock_threshold'  => 0,
+			'calc_inbound'          => 0,
+			'calc_hold'             => 0,
+			'calc_reserved'         => 0,
+			'calc_back_orders'      => 0,
+			'calc_sold_today'       => 0,
+			'calc_returns'          => 0,
+			'calc_damages'          => 0,
+			'calc_lost_in_post'     => 0,
+			'calc_sales_last_ndays' => 0,
+			'calc_lost_sales'       => 0,
 		));
 		
 		parent::__construct( $args );
@@ -555,59 +553,35 @@ class ListTable extends AtumListTable {
 
 		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
 	}
-	
-	/**
-	 * Column for items sold during the last week
-	 *
-	 * @since  0.1.2
-	 *
-	 * @param \WP_Post $item         The WooCommerce product post to use in calculations
-	 * @param bool     $add_to_total Whether to add or not result to total counters
-	 *
-	 * @return int
-	 */
-	protected function column_calc_sales7( $item, $add_to_total = TRUE ) {
 
-		if (! $this->allow_calcs) {
-			$sales7 = self::EMPTY_COL;
-		}
-		else {
-			$sales7 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_7'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_7'];
-			if ( $add_to_total ) {
-				$this->increase_total('calc_sales7', $sales7);
-			}
-		}
-		
-		return apply_filters( 'atum/stock_central_list/column_sold_last_7_days', $sales7, $item, $this->product );
-		
-	}
-	
 	/**
-	 * Column for items sold during the last 2 weeks
+	 * Column for items sold during the last N days (set on atum's general settings) sales_last_ndays or via jquery ?sold_last_days=N
 	 *
-	 * @since  0.1.2
+	 * @since  1.4.11
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations
 	 *
 	 * @return int
 	 */
-	protected function column_calc_sales14( $item ) {
+	protected function column_calc_sales_last_ndays( $item, $add_to_total = TRUE ) {
 
 		if (! $this->allow_calcs) {
-			$sales14 = self::EMPTY_COL;
+			$sales_last_ndays = self::EMPTY_COL;
 		}
 		else {
-			$sales14 = empty( $this->calc_columns[ $this->product->get_id() ]['sold_14'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_14'];
-			$this->increase_total('calc_sales14', $sales14);
+			$sales_last_ndays = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'];
+			if ( $add_to_total ) {
+				$this->increase_total('calc_sales_last_ndays', $sales_last_ndays);
+			}
 		}
-		
-		return apply_filters( 'atum/stock_central_list/column_sold_last_14_days', $sales14, $item, $this->product );
-		
+
+		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays', $sales_last_ndays, $item, $this->product );
+
 	}
 	
 	/**
 	 * Column for number of days the stock will be sufficient to fulfill orders
-	 * Formula: Current Stock Value / (Sales Last 7 Days / 7)
+	 * Formula: Current Stock Value / (Sales Last N Days / N)
 	 *
 	 * @since  0.1.3
 	 *
@@ -616,16 +590,17 @@ class ListTable extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_will_last( $item ) {
+
+		$sold_last_days = Helpers::get_sold_last_days_option();
 			
-		// NOTE: FOR NOW IS FIXED TO 7 DAYS AVERAGE
 		$will_last = self::EMPTY_COL;
 
 		if ($this->allow_calcs) {
-			$sales = $this->column_calc_sales7( $item, FALSE );
+			$sales = $this->column_calc_sales_last_ndays( $item, FALSE );
 			$stock = $this->product->get_stock_quantity();
 
 			if ( $stock > 0 && $sales > 0 ) {
-				$will_last = ceil( $stock / ( $sales / 7 ) );
+				$will_last = ceil( $stock / ( $sales / $sold_last_days ) );
 			}
 			elseif ( $stock > 0 ) {
 				$will_last = '>30';
@@ -695,39 +670,27 @@ class ListTable extends AtumListTable {
 
 		// Calc products sold today (since midnight)
 		$rows = Helpers::get_sold_last_days( $calc_products, 'today 00:00:00', $this->day );
-		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_today'] = $row['QTY'];
 			}
 		}
 
-		// Calc products sold during the last week
-		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -1 week', $this->day );
+		// Calc products sold during the last ndays_settings
+		$sold_last_days = Helpers::get_sold_last_days_option();
+		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -'.$sold_last_days.' days', $this->day );
 		
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_7'] = $row['QTY'];
+				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays'] = $row['QTY'];
 			}
 		}
+
+		// Calc products sold during the last week
+		// $rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -1 week', $this->day );
 
 		// Calc products sold during the last 2 weeks
-		$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -2 weeks', $this->day );
-		
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_14'] = $row['QTY'];
-			}
-		}
-
-		// Calc products sold the $last_days days
-		$rows = Helpers::get_sold_last_days( $calc_products, "-$this->last_days days", $this->day );
-		
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_days'] = $row['QTY'];
-			}
-		}
+		//$rows = Helpers::get_sold_last_days( $calc_products, $this->day . ' -2 weeks', $this->day );
 		
 	}
 

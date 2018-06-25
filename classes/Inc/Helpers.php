@@ -616,6 +616,29 @@ final class Helpers {
 	}
 
 	/**
+     * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
+     * @since   1.4.11
+     *
+	 * @return int days between 1 and 31
+	 */
+	public static function get_sold_last_days_option(){
+
+	    if (isset( $_REQUEST['sold_last_days'] ) ) {
+
+		    //sanitize
+		    $value = absint( esc_attr( $_REQUEST['sold_last_days'] ) );
+
+			if ( $value > 0 && $value < 31 ) {
+		        return $value;
+		    }else {
+				return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+			}
+		}else{
+			return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+		}
+    }
+
+	/**
 	 * Helper function to return the entire plugin option value.
 	 * If no option has been saved, it returns empty array.
 	 *
@@ -1224,7 +1247,11 @@ final class Helpers {
 	 */
 	public static function product_types_dropdown($selected = '', $class = 'dropdown_product_type') {
 
-		$terms = get_terms( 'product_type' );
+		$terms = get_terms( array(
+			'taxonomy'   => 'product_type',
+			'hide_empty' => FALSE
+		) );
+
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
 		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
@@ -1596,10 +1623,10 @@ final class Helpers {
 	    global $wpdb;
 		$wpdb->hide_errors();
 
-	    if ( is_subclass_of($product, 'WC_Abstract_Legacy_Product') && !is_null($product) ){
+	    if ( is_subclass_of($product, 'WC_Abstract_Legacy_Product') && ! is_null($product) ){
 
 	        if ($all){
-                throw new AtumException($error = "you cannot set a product, and at same time ask to work in all products");
+                throw new AtumException( __('You cannot set a product, and at same time to ask to work in all products', ATUM_TEXT_DOMAIN) );
             }
 
 		    $product->set_stock_quantity($product->get_stock_quantity()+1);
@@ -1609,15 +1636,19 @@ final class Helpers {
 		    if($clean_meta) {
 			    delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
 		    }
+
 		    return;
+
         }
 
         if ($all){
+
 	        $ids_2_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT p.ID FROM $wpdb->posts p
                 INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
-                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish','future','private');
+                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private');
             " );
+
 	        foreach ( $ids_2_rebuild_stock_status as $id_2_rebuild ) {
 
 		        // delete _out_stock_threshold (avoid partial works to be done again)
@@ -1626,7 +1657,8 @@ final class Helpers {
                 }
 
 		        $product = wc_get_product( $id_2_rebuild );
-		        //Helpers::force_rebuild_stock_status($product);  Maximum function nesting level
+
+                // Force change and save
 		        $product->set_stock_quantity($product->get_stock_quantity()+1);
 		        $product->set_stock_quantity($product->get_stock_quantity()-1);
 		        $product->save();

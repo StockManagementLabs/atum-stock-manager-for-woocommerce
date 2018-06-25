@@ -43,6 +43,16 @@ class Suppliers {
 	 * The menu order
 	 */
 	const MENU_ORDER = 4;
+
+	/**
+	 * The Supplier meta key
+	 */
+	const SUPPLIER_META_KEY = '_supplier';
+
+	/**
+	 * The Supplier SKU meta key
+	 */
+	const SUPPLIER_SKU_META_KEY = '_supplier_sku';
 	
 	
 	/**
@@ -374,27 +384,25 @@ class Suppliers {
 		}
 
 		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
-		$supplier_id  = get_post_meta( $product_id, '_supplier', TRUE );
-		$supplier_sku = get_post_meta( $product_id, '_supplier_sku', TRUE );
+		$supplier_id  = get_post_meta( $product_id, self::SUPPLIER_META_KEY, TRUE );
+		$supplier_sku = get_post_meta( $product_id, self::SUPPLIER_SKU_META_KEY, TRUE );
 
 		if ($supplier_id) {
 			$supplier = get_post($supplier_id);
 		}
 
-		$supplier_field_name     = empty( $variation ) ? '_supplier' : "variation_supplier[$loop]";
-		$supplier_field_id       = empty( $variation ) ? "_supplier" : "_supplier{$loop}";
-		$supplier_sku_field_name = empty( $variation ) ? '_supplier_sku' : "variation_supplier_sku[$loop]";
-		$supplier_sku_field_id   = empty( $variation ) ? '_supplier_sku' : "_supplier_sku{$loop}";
+		$supplier_field_name     = empty( $variation ) ? self::SUPPLIER_META_KEY : 'variation' . self::SUPPLIER_META_KEY . "[$loop]";
+		$supplier_field_id       = empty( $variation ) ? self::SUPPLIER_META_KEY : self::SUPPLIER_META_KEY . $loop;
+		$supplier_sku_field_name = empty( $variation ) ? self::SUPPLIER_SKU_META_KEY : 'variation' . self::SUPPLIER_SKU_META_KEY . "[$loop]";
+		$supplier_sku_field_id   = empty( $variation ) ? self::SUPPLIER_SKU_META_KEY : self::SUPPLIER_SKU_META_KEY . $loop;
 
 		// If the user is not allowed to edit Suppliers, add a hidden input
-		if ( ! AtumCapabilities::current_user_can('edit_supplier') ):
+		if ( ! AtumCapabilities::current_user_can('edit_supplier') ): ?>
 
-			?>
 			<input type="hidden" name="<?php echo $supplier_field_name ?>" id="<?php echo $supplier_field_id ?>" value="<?php echo ( ! empty($supplier) ? esc_attr( $supplier->ID ) : '' ) ?>">
 			<input type="hidden" name="<?php echo $supplier_sku_field_name ?>" id="<?php echo $supplier_sku_field_id ?>" value="<?php echo ( $supplier_sku ?: '' ) ?>">
-			<?php
 
-		else:
+		<?php else:
 
 			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', ['show_if_simple'] );
 
@@ -426,9 +434,9 @@ class Suppliers {
 			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : '';
 
 		}
-		elseif ( isset($_POST['_supplier'], $_POST['_supplier_sku']) ) {
-			$supplier     = isset( $_POST['_supplier'] ) ? absint( $_POST['_supplier'] ) : '';
-			$supplier_sku = isset( $_POST['_supplier_sku'] ) ? esc_attr( $_POST['_supplier_sku'] ) : '';
+		elseif ( isset($_POST[ self::SUPPLIER_META_KEY ], $_POST[ self::SUPPLIER_SKU_META_KEY ]) ) {
+			$supplier     = isset( $_POST[ self::SUPPLIER_META_KEY ] ) ? absint( $_POST[ self::SUPPLIER_META_KEY ] ) : '';
+			$supplier_sku = isset( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) : '';
 		}
 		else {
 			// If we are not saving the product from its edit page, do not continue
@@ -436,8 +444,8 @@ class Suppliers {
 		}
 
 		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables
-		update_post_meta( $product_id, '_supplier', $supplier );
-		update_post_meta( $product_id, '_supplier_sku', $supplier_sku );
+		update_post_meta( $product_id, self::SUPPLIER_META_KEY, $supplier );
+		update_post_meta( $product_id, self::SUPPLIER_SKU_META_KEY, $supplier_sku );
 
 	}
 
@@ -484,7 +492,7 @@ class Suppliers {
 				'fields'         => 'ids',
 				'meta_query'     => array(
 					array(
-						'key'   => '_supplier',
+						'key'   => self::SUPPLIER_META_KEY,
 						'value' => $supplier_id
 					)
 				)
@@ -532,7 +540,7 @@ class Suppliers {
 	                    SELECT DISTINCT sp.post_parent FROM $wpdb->posts sp
 	                    INNER JOIN $wpdb->postmeta AS mt1 ON (sp.ID = mt1.post_id)
 	                    WHERE sp.post_type = 'product_variation'
-	                    AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
+	                    AND (mt1.meta_key = '" . self::SUPPLIER_META_KEY . "' AND CAST(mt1.meta_value AS SIGNED) = %d)
 	                    AND sp.post_status IN ('publish', 'private')
 	                      
 	                )", $supplier_id );
@@ -545,7 +553,7 @@ class Suppliers {
 		                SELECT DISTINCT p.ID FROM $wpdb->posts p
 		                INNER JOIN $wpdb->postmeta AS mt1 ON (p.ID = mt1.post_id)
 		                WHERE p.post_type = 'product_variation'
-		                AND (mt1.meta_key = '_supplier' AND CAST(mt1.meta_value AS SIGNED) = %d)
+		                AND (mt1.meta_key = '" . self::SUPPLIER_META_KEY . "' AND CAST(mt1.meta_value AS SIGNED) = %d)
 		                AND p.post_parent IN ( " . implode( ',', $parent_ids ) . " )
 		                AND p.post_status IN ('publish', 'private')
 	                ", $supplier_id );

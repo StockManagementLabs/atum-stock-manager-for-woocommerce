@@ -14,7 +14,7 @@ namespace Atum\StockCentral;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumListTables\AtumListPage;
-use Atum\Components\HelpPointers;
+use Atum\Components\AtumHelpPointers;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
@@ -227,7 +227,11 @@ class StockCentral extends AtumListPage {
 			'name'    => __( 'Products per Page', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( "Controls the number of products displayed per page within the Stock Central screen. Please note, you can set this value within the 'Screen Options' tab as well. Enter '-1' to remove the pagination and display all available products on one page (not recommended if your store contains a large number of products as it may affect the performance).", ATUM_TEXT_DOMAIN ),
 			'type'    => 'number',
-			'default' => Settings::DEFAULT_POSTS_PER_PAGE
+			'default' => Settings::DEFAULT_POSTS_PER_PAGE,
+			'options'    => array(
+				'min' => 1,
+				'max' => 500
+			)
 		);
 
 		$defaults['sale_days'] = array(
@@ -235,7 +239,11 @@ class StockCentral extends AtumListPage {
 			'name'    => __( 'Days to Re-Order', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Low Stock' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'number',
-			'default' => Settings::DEFAULT_SALE_DAYS
+			'default' => Settings::DEFAULT_SALE_DAYS,
+			'options'    => array(
+				'min' => 1,
+				'max' => 365
+			)
 		);
 
 		$defaults['expandable_rows'] = array(
@@ -286,13 +294,13 @@ class StockCentral extends AtumListPage {
 					'align' => 'right'
 				),
 				'arrow_position' => array(
-					'left' => '45%'
+					'left' => '84%'
 				)
 			),
 		);
 
 		// Instantiate the class and pass our pointers array to the constructor
-		new HelpPointers( $pointers );
+		new AtumHelpPointers( $pointers );
 
 	}
 

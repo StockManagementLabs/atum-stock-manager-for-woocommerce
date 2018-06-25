@@ -98,7 +98,7 @@
 				position: relative;
 				margin-top: 2px;
 				
-				input[type=text] {
+				input[type=text], input[type=number] {
 					margin-top: 0;
 					width: calc(100% - 33px) !important;
 				}
@@ -122,8 +122,8 @@
 			
 			label {
 				&:not(.btn) {
-				float: left;
-				margin-right: 10px;
+					float: left;
+					margin-right: 10px;
 					min-width: 130px;
 				}
 			}

@@ -4,6 +4,9 @@
  *
  * @since 1.4.0
  */
+
+use Atum\Components\AtumCapabilities;
+use Atum\Suppliers\Suppliers;
 ?>
 <div class="po-wrapper content-header">
 	<div class="float-left">
@@ -70,8 +73,8 @@
 					<td class="description"><?php echo $item->get_name() ?>
 						<?php
 						$product = $item->get_product();
-						if ( $product && \Atum\Components\AtumCapabilities::current_user_can( 'read_supplier' ) ):
-							$supplier_sku = get_post_meta( $product->get_id(), '_supplier_sku', TRUE );
+						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ):
+							$supplier_sku = get_post_meta( $product->get_id(), Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
 							
 							if ( $supplier_sku ): ?>
 								<br>

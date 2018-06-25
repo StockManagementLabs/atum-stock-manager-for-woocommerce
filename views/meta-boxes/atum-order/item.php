@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Globals;
 use Atum\Components\AtumCapabilities;
+use Atum\Suppliers\Suppliers;
 
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
@@ -21,7 +22,7 @@ $product = $item->get_product();
 
 if ( empty($product) ) return;
 
-$product_id   = ( $product->get_type() == 'variation' ) ? $product->get_parent_id() : $product->get_id();
+$product_id   = $product->get_type() == 'variation' ? $product->get_parent_id() : $product->get_id();
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
 ?>
@@ -40,7 +41,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			<?php endif;
 
 			if ( $product && AtumCapabilities::current_user_can('read_supplier') ):
-				$supplier_sku = get_post_meta($product_id, '_supplier_sku', TRUE);
+				$supplier_sku = get_post_meta($product_id, Suppliers::SUPPLIER_SKU_META_KEY, TRUE);
 
 				if ($supplier_sku): ?>
 					<div class="atum-order-item-sku"><strong><?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $supplier_sku ) ?></div>
