@@ -520,6 +520,14 @@ class Settings {
 							$this->options[ $key ] = isset( $input[ $key ] ) ? intval( $input[ $key ] ) : $atts['default'];
 							break;
 
+							//TODO sanatize button_group ir array or if field (first save the lost array values)
+                        case 'button_group':
+                            $this->options[ $key ] = isset( $input[ $key ] ) ?  maybe_serialize( $input[ $key ]) : $atts['default'];
+	                        break;
+                        case 'textarea':
+	                        $this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
+	                        break;
+
 						default:
 							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
 							break;
@@ -677,18 +685,29 @@ class Settings {
 	public function display_button_group( $args ) {
 
 		$name  = self::OPTION_NAME . "[{$args['id']}]";
-		$value = $this->options[ $args['id'] ];
+		//$value = $this->options[ $args['id'] ];
+		$multiple = isset( $args['options']['multiple'] )  ? $args['options']['multiple'] : ''; //allow to send array
+		$value = (strlen($multiple)>0) ? maybe_unserialize($this->options[ $args['id']]) : $this->options[ $args['id'] ];
+		//$value="state";
 		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
 		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
+
 
 		ob_start();
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-			<label class="btn btn-<?php echo $style ?><?php if ($value == $option_value) echo ' active'?>">
-				<input type="<?php echo $input_type ?>" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
-		    </label>
+                <?php
+				if ( strlen( $multiple ) > 0 ) {
+	                $is_active = in_array($option_value, $value);
+                }else{
+	                $is_active = ($value == $option_value);
+                } ?>
+                <label class="btn btn-<?php echo $style ?><?php if ($is_active) echo ' active'?>">
+                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php //echo $multiple ?>" autocomplete="off"<?php checked($option_value, $is_active) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
+                </label>
+
 			<?php endforeach; ?>
 		</div>
 		<?php

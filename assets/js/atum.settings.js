@@ -288,6 +288,8 @@
 			
 		},
 		clickTab: function(tab) {
+
+			console.log("clickTab");
 			
 			var self     = this,
 			    $navLink = this.$nav.find('.atum-nav-link[data-tab="' + tab + '"]');
@@ -305,19 +307,26 @@
 					reverseButtons     : true,
 					allowOutsideClick  : false
 				}).then(function () {
-					self.moveToTab($navLink);
+
+					$( window ).trigger( 'atum.settings.clicktab.'+tab);
+
+					self.moveToTab($navLink, tab);
 				}, function (dismiss) {
 					$navLink.blur();
 				});
 				
 			}
 			else {
-				self.moveToTab($navLink);
+                $( window ).trigger( 'atum.settings.clicktab.'+tab);
+				self.moveToTab($navLink, tab);
 			}
 		
 		},
-		moveToTab: function($navLink) {
-			
+		moveToTab: function($navLink, tab) {
+
+			console.log("movetotab");
+			console.log(tab);
+
 			var self                 = this,
 			    $formSettingsWrapper = this.$form.find('.form-settings-wrapper');
 			
@@ -341,7 +350,10 @@
 				else {
 					$inputButton.show();
 				}
-				
+
+                //Fire event to tell we are prepared for other plugins.
+                $( window ).trigger( 'atum.settings.movetotab.'+tab);
+
 			});
 			
 		},
@@ -410,7 +422,18 @@
 			
 			}).catch(swal.noop);
 		
-		}
+		},
+        /**
+         * Add a Switchery change value via code.
+         * ex: this.changeSwitcheryState($('#atum_use_geoprompt'),false);
+         * @param el element selector
+         * @param value boolean true or false
+         */
+        changeSwitcheryState: function(el,value){
+            if($(el).is(':checked')!=value){
+                $(el).trigger("click");
+            }
+        }
 		
 	} );
 	
