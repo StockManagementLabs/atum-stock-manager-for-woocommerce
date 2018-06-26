@@ -31,7 +31,7 @@ $animation_speed:               .3s !default;
     }
 
     .grid-stack-placeholder > .placeholder-content {
-        border: 1px dashed lightgray;
+        border: 1px dashed $gray-300;
         margin: 0;
         position: absolute;
         top: 0;
@@ -84,7 +84,7 @@ $animation_speed:               .3s !default;
 
             > .grid-stack-item-content,
             > .grid-stack-item-content {
-                box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.2);
+                box-shadow: 1px 4px 6px rgba($black, 0.2);
                 opacity: 0.8;
             }
         }

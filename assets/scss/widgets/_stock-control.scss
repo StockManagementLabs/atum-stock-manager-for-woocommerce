@@ -33,7 +33,7 @@
 		.stock-chart-tooltip {
 			opacity: 1;
 			position: absolute;
-			background: rgba(0, 0, 0, .7);
+			background: rgba($black, .7);
 			color: $white;
 			border-radius: 3px;
 			@include transition(all .1s ease);
@@ -93,7 +93,7 @@
 	}
 	
 	hr {
-		border-top: 1px solid transparentize(#000, 0.9);
+		border-top: 1px solid transparentize($black, 0.9);
 		border-bottom: none;
 		margin: $grid-gutter-width/2 0;
 		
@@ -101,7 +101,7 @@
 			clear: both;
 			padding: $grid-gutter-width/3 0;
 			border-top: none;
-			border-bottom: 1px solid transparentize(#000, 0.9);
+			border-bottom: 1px solid transparentize($black, 0.9);
 		}
 		
 		@media all and (max-width: $screen-xs-min) {

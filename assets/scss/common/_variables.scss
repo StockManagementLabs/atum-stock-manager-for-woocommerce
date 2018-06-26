@@ -125,14 +125,16 @@ $theme-colors: map-merge((
 $wp-link:                               #0073AA !default;
 $wp-link-hover:                         #00A0D2 !default;
 $wp-input-focus:                        #5B9DD9 !default;
-$wp-tr-border:                          #E6CCE1 !default;
-$wp-tr-selected:                        #F5EBF3 !default;
-$wp-input-color:                        #32373C !default;
-$wp-heading:                            #555 !default;
-$wp-add:                                #B4B9BE !default;
-$wp-input-border:                       #DDD    !default;
-$wp-section-border:                     #E5E5E5 !default;
-$wp-bg-light:                           #f9f9f9 !default;
+$wp-pink:                               #E6CCE1 !default;
+$wp-pink-light:                         #F5EBF3 !default;
+$wp-gray-dark:                          #32373C !default;
+$wp-gray-1:                             #999 !default;
+$wp-gray-2:                             #555 !default;
+$wp-gray-3:                             #B4B9BE !default;
+$wp-gray-4:                             #DDD    !default;
+$wp-gray-5:                             #E5E5E5 !default;
+$wp-gray-6:                             #f9f9f9 !default;
+$wp-gray-7:                             #888 !default;
 
 // WC Colors
 
@@ -434,7 +436,7 @@ $input-border-radius:                   0;
 $input-focus:                           $wp-input-focus !default;
 $input-group-addon-color:               $gray-600;
 $input-group-addon-bg:                  $blue-light;
-$input-border-color:                    $wp-input-border;
+$input-border-color: $wp-gray-4;
 
 // Widgets
 
