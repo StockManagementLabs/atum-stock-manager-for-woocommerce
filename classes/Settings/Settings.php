@@ -398,11 +398,12 @@ class Settings {
 
 			wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
 			$min = ! ATUM_DEBUG ? '.min' : '';
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2' ), ATUM_VERSION );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 			    'atumPrefix'                      => ATUM_PREFIX, //'atum'
@@ -652,7 +653,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="atum-select2" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -762,7 +763,7 @@ class Settings {
 			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
-			<select class="wc-enhanced-select" style="width: 12em">
+			<select class="atum-select2" style="width: 12em">
 				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
 				<option value="<?php echo $key ?>"><?php echo $label ?></option>
 				<?php endforeach ?>

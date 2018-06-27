@@ -50,9 +50,6 @@
 			
 			// Enable Select2
 			this.doSelect2();
-			
-			// Restore enhanced selects
-			this.restoreEnhancedSelects();
 
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
@@ -194,16 +191,46 @@
 		doSelect2: function() {
 		
 			if (typeof $.fn.select2 === 'function') {
-				$('.atum-select2').select2({
-					minimumResultsForSearch: 20
+				
+				$('.atum-select2').each(function() {
+					
+					var $select = $(this);
+					
+					if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
+						$select.prop('multiple', true);
+					}
+					
+					$select.select2({
+						minimumResultsForSearch: 20
+					})
+					// Avoid selecting empty values in select multiples
+					.on('select2:selecting', function() {
+						
+						var $this = $(this),
+						    value = $this.val();
+						
+						// Avoid selecting the "None" option
+						if ($.isArray(value) && $.inArray('', value) > -1) {
+							$.each(value, function (index, elem) {
+								if (elem === '') {
+									value.splice(index, 1);
+								}
+							});
+							
+							$this.val(value);
+						}
+						
+					});
+					
 				});
+				
 			}
 		
 		},
-		restoreEnhancedSelects: function() {
+		restoreSelect2: function() {
 			
 			$('.select2-container--open').remove();
-			$('body').trigger( 'wc-enhanced-select-init' );
+			this.doSelect2();
 			
 		},
 		setupNavigation: function() {
@@ -283,8 +310,7 @@
 			this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				
 				self.doSwitchers();
-				self.doSelect2();
-				self.restoreEnhancedSelects();
+				self.restoreSelect2();
 				self.$form.find('[data-dependency]').change().removeClass('dirty');
 				self.$form.show();
 				
