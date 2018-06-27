@@ -8,5 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     '5255c38a0faeba867671b61dfda6d864' => $vendorDir . '/paragonie/random_compat/lib/random.php',
-    '45aa9999d4f6d0867d163901abfff6b6' => $vendorDir . '/mcaskill/php-array-group-by/Function.Array-Group-By.php',
 );
