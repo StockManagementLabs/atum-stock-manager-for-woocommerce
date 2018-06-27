@@ -262,9 +262,11 @@ $settings-menu-active:      $white;
 				.select2-selection--multiple {
 					border-radius: 4px;
 					line-height: 1;
+					margin-top: 2px;
 					
 					.select2-search.select2-search--inline {
 						margin: 0;
+						height: 28px;
 						
 						.select2-search__field {
 							height: auto;
@@ -284,15 +286,27 @@ $settings-menu-active:      $white;
 			.tool-fields-wrapper {
 				width: 100%;
 				margin-bottom: $grid-gutter-width/2;
-				max-height: 32px;
-				@include flexbox;
-				@include flex-align-items(center);
 				background-color: $light;
 				padding: $grid-gutter-width/2;
 				
-				> div {
-					margin-right: 10px;
+				.repeateable-row {
+					@include flexbox;
+					@include flex-align-items(center);
+					
+					> div {
+						margin-right: 10px;
+					}
+					
+					i {
+						cursor: pointer;
+						@include transition(0.2s ease-in-out);
+						
+						&:hover {
+							color: $wp-link-hover;
+						}
+					}
 				}
+				
 			}
 			
 			button {

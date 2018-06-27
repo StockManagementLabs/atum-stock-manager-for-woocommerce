@@ -754,9 +754,9 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="script-runner"
+		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo " {$args['options']['wrapper_class']}" ?>"
 			data-action="<?php echo $args['options']['script_action'] ?>"
-			<?php if ( isset( $args['options']['confirm_msg'] ) ): ?>data-confirm="<?php echo $args['options']['confirm_msg'] ?>"<?php endif; ?>
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ): ?>data-confirm="<?php echo $args['options']['confirm_msg'] ?>"<?php endif; ?>
 			>
 
 			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
@@ -770,7 +770,7 @@ class Settings {
 			&nbsp;
 			<?php endif; ?>
 
-			<button type="button" class="btn btn-primary tool-runner">
+			<button type="button" class="btn btn-primary tool-runner"<?php if ( isset( $args['options']['button_status'] ) && $args['options']['button_status'] == 'disabled' ) echo ' disabled="disabled"' ?>>
 				<?php echo $args['options']['button_text'] ?>
 			</button>
 

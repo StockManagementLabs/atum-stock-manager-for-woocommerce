@@ -54,8 +54,6 @@
 			// Restore enhanced selects
 			this.restoreEnhancedSelects();
 
-
-
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
 				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
@@ -120,11 +118,10 @@
 				else if (!this.checked) {
 					
 					swal({
-							title: self.settings.areYouSure,
-							text : self.settings.outStockThresholdDisable,
-							type : 'info'
-						}
-					);
+						title: self.settings.areYouSure,
+						text : self.settings.outStockThresholdDisable,
+						type : 'info'
+					});
 				}
 				
 			})
@@ -299,6 +296,8 @@
 				else {
 					$inputButton.show();
 				}
+				
+				self.$settingsWrapper.trigger('atum-settings-page-loaded', [$navLink.data('tab')]);
 				
 			});
 			
