@@ -152,6 +152,10 @@ class DataExport {
 		$format = $this->number_columns > $max_columns ? 'A4-L' : 'A4';
 		$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => $format ]);
 
+		// Add support for non-Latin languages
+		$mpdf->useAdobeCJK      = TRUE;
+		$mpdf->autoScriptToLang = TRUE;
+		$mpdf->autoLangToFont   = TRUE;
 
 		$mpdf->SetTitle( $report_title );
 

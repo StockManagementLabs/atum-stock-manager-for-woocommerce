@@ -54,8 +54,6 @@
 			// Restore enhanced selects
 			this.restoreEnhancedSelects();
 
-
-
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
 				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
@@ -288,8 +286,6 @@
 			
 		},
 		clickTab: function(tab) {
-
-			console.log("clickTab");
 			
 			var self     = this,
 			    $navLink = this.$nav.find('.atum-nav-link[data-tab="' + tab + '"]');

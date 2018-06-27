@@ -436,6 +436,12 @@ class PurchaseOrders extends AtumOrderPostType {
 			$po_export = new POExport($atum_order_id);
 
 			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ]);
+
+			// Add support for non-Latin languages
+			$mpdf->useAdobeCJK      = TRUE;
+			$mpdf->autoScriptToLang = TRUE;
+			$mpdf->autoLangToFont   = TRUE;
+
 			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
 
 			$mpdf->default_available_fonts = $mpdf->available_unifonts;

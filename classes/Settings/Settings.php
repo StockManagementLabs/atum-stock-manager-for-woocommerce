@@ -149,7 +149,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 				'is_any_out_stock_threshold_set' => Helpers::is_any_out_stock_threshold_set(),
-				'confirm_msg'   => esc_attr( __("This will clear all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
+				'confirm_msg' => esc_attr( __('This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN) )
 			),
 			'unmanaged_counters' => array(
 				'section' => 'general',
@@ -693,7 +693,6 @@ class Settings {
 		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
 		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
 
-
 		ob_start();
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
@@ -707,7 +706,6 @@ class Settings {
                 <label class="btn btn-<?php echo $style ?><?php if ($is_active) echo ' active'?>">
                     <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php //echo $multiple ?>" autocomplete="off"<?php checked($option_value, $is_active) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
                 </label>
-
 			<?php endforeach; ?>
 		</div>
 		<?php

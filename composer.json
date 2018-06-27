@@ -9,8 +9,7 @@
 		"php": ">=5.4.0",
 		"mpdf/mpdf": "^7.1",
 		"madcoda/php-youtube-api": "^1.2",
-		"jimmiw/php-time-ago": "^2.0",
-		"mcaskill/php-array-group-by": "^1.0"
+		"jimmiw/php-time-ago": "^2.0"
 	},
 	"require-dev": {
 	},

@@ -4,12 +4,12 @@
 
 $header-bg:                 $blue-light;
 $header-height:             300px;
-$card-border:               $wp-section-border;
+$card-border:               $wp-gray-5;
 $card-bg:                   $white;
-$card-text:                 $gray;
-$add-widget-color:          #CCC;
+$card-text:                 $gray-500;
+$add-widget-color:          $gray-500;
 $widget-bg:                 $card-bg;
-$widget-icon:               $wp-section-border;
+$widget-icon:               $wp-gray-5;
 $widget-controls:           $card-text;
 $widget-controls-hover:     $primary;
 
@@ -357,7 +357,7 @@ body.toplevel_page_atum-dashboard {
 		.widget-wrapper {
 			background-color: $widget-bg;
 			border-radius: 5px;
-			box-shadow: 0 3px 2px $gray-light;
+			box-shadow: 0 3px 2px $gray-200;
 		}
 		
 		.widget-header, .widget-body {

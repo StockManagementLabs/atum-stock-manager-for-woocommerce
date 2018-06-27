@@ -71,8 +71,8 @@
 }
 
 .select2-dropdown {
-	background-color: white;
-	border: 1px solid #AAA;
+	background-color: $white;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 	box-sizing: border-box;
 	display: block;
@@ -168,12 +168,12 @@
 
 .select2-container--default .select2-selection--single {
 	background-color: $white;
-	border: 1px solid #AAA;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-	color: #444;
+	color: $wp-gray-2;
 	font-size: 14px;
 	line-height: 28px;
 }
@@ -185,7 +185,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
-	color: #999;
+	color: $wp-gray-1;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -197,7 +197,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
-	border-color: #888 transparent transparent transparent;
+	border-color: $wp-gray-7 transparent transparent transparent;
 	border-style: solid;
 	border-width: 5px 4px 0 4px;
 	height: 0;
@@ -219,7 +219,7 @@
 }
 
 .select2-container--default.select2-container--disabled .select2-selection--single {
-	background-color: #EEE;
+	background-color: $wp-gray-5;
 	cursor: default;
 }
 
@@ -228,13 +228,13 @@
 }
 
 .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-	border-color: transparent transparent #888 transparent;
+	border-color: transparent transparent $wp-gray-7 transparent;
 	border-width: 0 4px 5px 4px;
 }
 
 .select2-container--default .select2-selection--multiple {
-	background-color: white;
-	border: 1px solid #AAA;
+	background-color: $white;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 	cursor: text;
 }
@@ -252,7 +252,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
-	color: #999;
+	color: $wp-gray-1;
 	margin-top: 5px;
 	float: left;
 }
@@ -266,8 +266,8 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-	background-color: #E4E4E4;
-	border: 1px solid #AAA;
+	background-color: $gray-200;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 	cursor: default;
 	float: left;
@@ -277,7 +277,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-	color: #999;
+	color: $wp-gray-1;
 	cursor: pointer;
 	display: inline-block;
 	font-weight: bold;
@@ -285,7 +285,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-	color: #333;
+	color: $gray-800;
 }
 
 .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__choice, .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__placeholder, .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-search--inline {
@@ -303,12 +303,12 @@
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-	border: solid black 1px;
+	border: solid $black 1px;
 	outline: 0;
 }
 
 .select2-container--default.select2-container--disabled .select2-selection--multiple {
-	background-color: #EEE;
+	background-color: $wp-gray-5;
 	cursor: default;
 }
 
@@ -327,7 +327,7 @@
 }
 
 .select2-container--default .select2-search--dropdown .select2-search__field {
-	border: 1px solid #AAA;
+	border: 1px solid $gray-500;
 }
 
 .select2-container--default .select2-search--inline .select2-search__field {
@@ -348,11 +348,11 @@
 }
 
 .select2-container--default .select2-results__option[aria-disabled=true] {
-	color: #999;
+	color: $wp-gray-1;
 }
 
 .select2-container--default .select2-results__option[aria-selected=true] {
-	background-color: #DDD;
+	background-color: $wp-gray-4;
 }
 
 .select2-container--default .select2-results__option .select2-results__option {
@@ -389,8 +389,8 @@
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-	background-color: #0073AA;
-	color: white;
+	background-color: $wp-link;
+	color: $white;
 }
 
 .select2-container--default .select2-results__group {
@@ -400,19 +400,19 @@
 }
 
 .select2-container--classic .select2-selection--single {
-	background-color: #F7F7F7;
-	border: 1px solid #AAA;
+	background-color: $gray-100;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 	outline: 0;
-	background-image: -webkit-linear-gradient(top, white 50%, #EEEEEE 100%);
-	background-image: -o-linear-gradient(top, white 50%, #EEEEEE 100%);
-	background-image: linear-gradient(to bottom, white 50%, #EEEEEE 100%);
+	background-image: -webkit-linear-gradient(top, $white 50%, $wp-gray-5 100%);
+	background-image: -o-linear-gradient(top, $white 50%, $wp-gray-5 100%);
+	background-image: linear-gradient(to bottom, $white 50%, $wp-gray-5 100%);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$whiteFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--single:focus {
-	border: 1px solid #0073AA;
+	border: 1px solid $wp-link;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__rendered {
@@ -428,13 +428,13 @@
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__placeholder {
-	color: #999;
+	color: $wp-gray-1;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow {
-	background-color: #DDD;
+	background-color: $wp-gray-4;
 	border: none;
-	border-left: 1px solid #AAA;
+	border-left: 1px solid $gray-500;
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 	height: 26px;
@@ -442,15 +442,15 @@
 	top: 1px;
 	right: 1px;
 	width: 20px;
-	background-image: -webkit-linear-gradient(top, #EEEEEE 50%, #CCCCCC 100%);
-	background-image: -o-linear-gradient(top, #EEEEEE 50%, #CCCCCC 100%);
-	background-image: linear-gradient(to bottom, #EEEEEE 50%, #CCCCCC 100%);
+	background-image: -webkit-linear-gradient(top, $wp-gray-5 50%, $gray-500 100%);
+	background-image: -o-linear-gradient(top, $wp-gray-5 50%, $gray-500 100%);
+	background-image: linear-gradient(to bottom, $wp-gray-5 50%, $gray-500 100%);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='#FFCCCCCC', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow b {
-	border-color: #888 transparent transparent transparent;
+	border-color: $wp-gray-7 transparent transparent transparent;
 	border-style: solid;
 	border-width: 5px 4px 0 4px;
 	height: 0;
@@ -468,7 +468,7 @@
 
 .select2-container--classic[dir="rtl"] .select2-selection--single .select2-selection__arrow {
 	border: none;
-	border-right: 1px solid #AAA;
+	border-right: 1px solid $gray-500;
 	border-radius: 0;
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
@@ -477,7 +477,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single {
-	border: 1px solid #0073AA;
+	border: 1px solid $wp-link;
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow {
@@ -486,7 +486,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow b {
-	border-color: transparent transparent #888 transparent;
+	border-color: transparent transparent $wp-gray-7 transparent;
 	border-width: 0 4px 5px 4px;
 }
 
@@ -494,9 +494,9 @@
 	border-top: none;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
-	background-image: -webkit-linear-gradient(top, white 0%, #EEEEEE 50%);
-	background-image: -o-linear-gradient(top, white 0%, #EEEEEE 50%);
-	background-image: linear-gradient(to bottom, white 0%, #EEEEEE 50%);
+	background-image: -webkit-linear-gradient(top, $white 0%, $wp-gray-5 50%);
+	background-image: -o-linear-gradient(top, $white 0%, $wp-gray-5 50%);
+	background-image: linear-gradient(to bottom, $white 0%, $wp-gray-5 50%);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$whiteFFFFF', endColorstr='#FFEEEEEE', GradientType=0);
 }
@@ -505,23 +505,23 @@
 	border-bottom: none;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
-	background-image: -webkit-linear-gradient(top, #EEEEEE 50%, white 100%);
-	background-image: -o-linear-gradient(top, #EEEEEE 50%, white 100%);
-	background-image: linear-gradient(to bottom, #EEEEEE 50%, white 100%);
+	background-image: -webkit-linear-gradient(top, $wp-gray-5 50%, $white 100%);
+	background-image: -o-linear-gradient(top, $wp-gray-5 50%, $white 100%);
+	background-image: linear-gradient(to bottom, $wp-gray-5 50%, $white 100%);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='$whiteFFFFF', GradientType=0);
 }
 
 .select2-container--classic .select2-selection--multiple {
-	background-color: white;
-	border: 1px solid #AAA;
+	background-color: $white;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 	cursor: text;
 	outline: 0;
 }
 
 .select2-container--classic .select2-selection--multiple:focus {
-	border: 1px solid #0073AA;
+	border: 1px solid $wp-link;
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__rendered {
@@ -535,8 +535,8 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice {
-	background-color: #E4E4E4;
-	border: 1px solid #AAA;
+	background-color: $wp-gray-5;
+	border: 1px solid $gray-500;
 	border-radius: 4px;
 	cursor: default;
 	float: left;
@@ -546,7 +546,7 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove {
-	color: #888;
+	color: $wp-gray-7;
 	cursor: pointer;
 	display: inline-block;
 	font-weight: bold;
@@ -554,7 +554,7 @@
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove:hover {
-	color: #555;
+	color: $wp-gray-2;
 }
 
 .select2-container--classic[dir="rtl"] .select2-selection--multiple .select2-selection__choice {
@@ -572,7 +572,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--multiple {
-	border: 1px solid #0073AA;
+	border: 1px solid $wp-link;
 }
 
 .select2-container--classic.select2-container--open.select2-container--above .select2-selection--multiple {
@@ -588,7 +588,7 @@
 }
 
 .select2-container--classic .select2-search--dropdown .select2-search__field {
-	border: 1px solid #AAA;
+	border: 1px solid $gray-500;
 	outline: 0;
 }
 
@@ -598,7 +598,7 @@
 }
 
 .select2-container--classic .select2-dropdown {
-	background-color: white;
+	background-color: $white;
 	border: 1px solid transparent;
 }
 
@@ -620,12 +620,12 @@
 }
 
 .select2-container--classic .select2-results__option[aria-disabled=true] {
-	color: grey;
+	color: $wp-gray-1;
 }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
-	background-color: #3875D7;
-	color: white;
+	background-color: $primary;
+	color: $white;
 }
 
 .select2-container--classic .select2-results__group {
@@ -635,6 +635,6 @@
 }
 
 .select2-container--classic.select2-container--open .select2-dropdown {
-	border-color: #0073AA;
+	border-color: $wp-link;
 }
 
