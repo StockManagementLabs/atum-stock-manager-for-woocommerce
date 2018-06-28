@@ -71,9 +71,14 @@ final class Globals {
 	const PRODUCT_LOCATION_TAXONOMY =  ATUM_PREFIX . 'location';
 
 	/**
-	 * The meta key where is stored the atum stock management status
+	 * The meta key where is stored the ATUM stock management status
 	 */
 	const ATUM_CONTROL_STOCK_KEY = '_atum_manage_stock';
+
+	/**
+	 * The meta key where is stored the purchase price
+	 */
+	const PURCHASE_PRICE_KEY = '_purchase_price';
 
 	/**
 	 * The meta key where is stored the out of stock date

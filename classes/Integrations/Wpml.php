@@ -25,7 +25,7 @@ class Wpml {
 	/**
 	 * Searchable MultiCurrency columns and their types
 	 */
-	const MULTICURRENCY_COLUMNS = array( '_regular_price', '_sale_price', '_purchase_price' );
+	const MULTICURRENCY_COLUMNS = array( '_regular_price', '_sale_price', Globals::PURCHASE_PRICE_KEY );
 	
 	/**
 	 * Store ATUM Order Post Types
@@ -294,7 +294,7 @@ class Wpml {
 	public function add_custom_purchase_price( $args ) {
 		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-			$purchase_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_purchase_price'];
+			$purchase_price_value = $this->custom_prices[ $this->current_currency ]['custom_price'][ Globals::PURCHASE_PRICE_KEY ];
 			$args['value'] = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [ 'trim_zeros' => TRUE, 'currency' => $this->current_currency ] ) : $args['value'];
 
 			$args['currency'] = $this->current_currency;
@@ -528,7 +528,7 @@ class Wpml {
 	 */
 	public function wpml_add_purchase_price_to_custom_prices( $prices, $product_id ) {
 
-		$prices[] = '_purchase_price';
+		$prices[] = Globals::PURCHASE_PRICE_KEY;
 		return $prices;
 	}
 
@@ -583,8 +583,8 @@ class Wpml {
 	 */
 	public function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
 
-		if ( isset( $custom_prices[ '_purchase_price'] ) ) {
-			update_post_meta( $post_id, "_purchase_price_{$code}", $custom_prices['_purchase_price'] );
+		if ( isset( $custom_prices[ Globals::PURCHASE_PRICE_KEY ] ) ) {
+			update_post_meta( $post_id, "_purchase_price_{$code}", $custom_prices[ Globals::PURCHASE_PRICE_KEY ] );
 		}
 	}
 
@@ -604,7 +604,7 @@ class Wpml {
 		foreach($product_translations as $translation){
 
 			if( $translation->element_id !==  $post_id){
-				update_post_meta( $translation->element_id, '_purchase_price', $purchase_price);
+				update_post_meta( $translation->element_id, Globals::PURCHASE_PRICE_KEY, $purchase_price);
 			}
 
 		}

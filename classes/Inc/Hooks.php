@@ -544,7 +544,7 @@ class Hooks {
 		if ( empty($variation) ) {
 			$product_id    = get_the_ID();
 			$wrapper_class = '_purchase_price_field';
-			$field_id      = $field_name = '_purchase_price';
+			$field_id      = $field_name = Globals::PURCHASE_PRICE_KEY;
 		}
 		else {
 			$product_id    = $variation->ID;
@@ -553,7 +553,7 @@ class Hooks {
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
-		$field_value = wc_format_localized_price( get_post_meta( $product_id, '_purchase_price', TRUE ) );
+		$field_value = wc_format_localized_price( get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE ) );
 		$product     = wc_get_product( $product_id );
 		$price       = $product->get_price();
 
@@ -571,14 +571,14 @@ class Hooks {
 	public function save_purchase_price($product_id) {
 
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-		$old_purchase_price = get_post_meta( $product_id, '_purchase_price', TRUE );
+		$old_purchase_price = get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
 
 		// Variables, grouped and variations
 		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
-			if ( isset( $_POST['_purchase_price'] ) ) {
-				update_post_meta( $product_id, '_purchase_price', '' );
+			if ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
+				update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, '' );
 			}
 			elseif ( isset( $_POST['variation_purchase_price'] ) ) {
 
@@ -586,17 +586,17 @@ class Hooks {
 				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
 				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 
-				update_post_meta( $product_id, '_purchase_price', $purchase_price );
+				update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, $purchase_price );
 
 			}
 
 		}
 		// Rest of product types (Bypass if "_puchase_price" meta is not coming)
-		elseif ( isset($_POST['_purchase_price']) ) {
+		elseif ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
 
-			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+			$purchase_price = (string) isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ? wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) : '';
 			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
-			update_post_meta( $product_id, '_purchase_price', $purchase_price);
+			update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, $purchase_price);
 
 		}
 		
