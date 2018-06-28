@@ -228,14 +228,13 @@ class Hooks {
 			wp_register_script( 'atum-product-data', ATUM_URL . "assets/js/atum.product.data{$min}.js", array('switchery', 'sweetalert2'), ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', array(
-				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'confirmNotice'                 => __( 'This will change the ATUM control switch for all the variations within this product to %s', ATUM_TEXT_DOMAIN ),
+				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
-				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
+				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
-				'isOutStockThresholdEnabled' => Helpers::get_option( 'out_stock_threshold', 'no' ),
+				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
 				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock()
 			) );
 
