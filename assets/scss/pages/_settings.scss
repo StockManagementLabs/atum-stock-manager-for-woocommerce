@@ -269,7 +269,7 @@ $settings-menu-active:      $white;
 						height: 28px;
 						
 						.select2-search__field {
-							height: auto;
+							min-height: 28px;
 							@include placeholder($wp-gray-1);
 						}
 					}
@@ -289,9 +289,10 @@ $settings-menu-active:      $white;
 				background-color: $light;
 				padding: $grid-gutter-width/2;
 				
-				.repeateable-row {
+				.repeatable-row {
 					@include flexbox;
 					@include flex-align-items(center);
+					margin: 10px 0;
 					
 					> div {
 						margin-right: 10px;
@@ -302,7 +303,13 @@ $settings-menu-active:      $white;
 						@include transition(0.2s ease-in-out);
 						
 						&:hover {
-							color: $wp-link-hover;
+							color: $primary;
+						}
+						
+						&.remove-row {
+							&:hover {
+								color: $danger;
+							}
 						}
 					}
 				}
