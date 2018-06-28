@@ -77,7 +77,7 @@ class Hooks {
 		if( Helpers::get_option( 'out_stock_threshold', 'no' )  == 'yes' ){
 
 			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
-			add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
+			add_action( 'woocommerce_save_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
 			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
 
