@@ -115,10 +115,11 @@
 				else if (!this.checked) {
 					
 					swal({
-						title: self.settings.areYouSure,
-						text : self.settings.outStockThresholdDisable,
-						type : 'info'
-					});
+							title: self.settings.areYouSure,
+							text : self.settings.outStockThresholdDisable,
+							type : 'info'
+						}
+					);
 				}
 				
 			})
@@ -138,17 +139,59 @@
 
 				var $field     = $(this),
 				    value      = $field.val(),
-					dependency = $field.data('dependency');
+					dependency = $field.data('dependency'),
+					visibility,
+				    $dependant;
 				
-				if ($.isArray(dependency)) {
-				
-					$.each(dependency, function (index, dependencyElem) {
-						self.checkDependency($field, dependencyElem, value);
-					});
-				
+				if ($field.is(':checkbox')) {
+					visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
 				}
 				else {
-					self.checkDependency($field, dependency, value);
+					visibility = value === dependency.value;
+				}
+				
+				if (dependency.hasOwnProperty('section')) {
+					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
+				}
+				else if (dependency.hasOwnProperty('field')) {
+					//debugger;
+					
+					var selector = '';
+					
+					if ($.isArray(dependency.field)) {
+
+						//TODO SOLVE FIELDS DEPENDENCY
+						
+						$.each(dependency.field, function(index, value) {
+							selector += '#' + self.settings.atumPrefix + value;
+							
+							if ( index+1 < dependency.field.length) {
+								selector += ', ';
+							}
+						});
+						
+					}
+					else {
+						selector = '#' + self.settings.atumPrefix + dependency.field;
+					}
+					
+					$dependant = $(selector);
+					
+					if ($dependant.length) {
+						$dependant = $dependant.closest('tr').find('th, td');
+					}
+					
+				}
+				
+				if (typeof $dependant !== 'undefined' && $dependant.length) {
+					
+					if (visibility === true) {
+						$dependant.slideDown('fast');
+					}
+					else {
+						$dependant.slideUp('fast');
+					}
+					
 				}
 				
 			})
@@ -287,19 +330,26 @@
 					reverseButtons     : true,
 					allowOutsideClick  : false
 				}).then(function () {
-					self.moveToTab($navLink);
+
+					$( window ).trigger( 'atum.settings.clicktab.'+tab);
+
+					self.moveToTab($navLink, tab);
 				}, function (dismiss) {
 					$navLink.blur();
 				});
 				
 			}
 			else {
-				self.moveToTab($navLink);
+                $( window ).trigger( 'atum.settings.clicktab.'+tab);
+				self.moveToTab($navLink, tab);
 			}
 		
 		},
-		moveToTab: function($navLink) {
-			
+		moveToTab: function($navLink, tab) {
+
+			console.log("movetotab");
+			console.log(tab);
+
 			var self                 = this,
 			    $formSettingsWrapper = this.$form.find('.form-settings-wrapper');
 			
@@ -322,9 +372,10 @@
 				else {
 					$inputButton.show();
 				}
-				
-				self.$settingsWrapper.trigger('atum-settings-page-loaded', [$navLink.data('tab')]);
-				
+
+                //Fire event to tell we are prepared for other plugins.
+                $( window ).trigger( 'atum.settings.movetotab.'+tab);
+
 			});
 			
 		},
@@ -394,53 +445,17 @@
 			}).catch(swal.noop);
 		
 		},
-		checkDependency: function($field, dependency, value) {
-			
-			var $dependant,
-				visibility;
-			
-			if ($field.is(':checkbox')) {
-				visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
-			}
-			else {
-				visibility = value === dependency.value;
-			}
-			
-			if (dependency.hasOwnProperty('section')) {
-				$dependant = this.$form.find('[data-section="' + dependency.section + '"]');
-			}
-			else if (dependency.hasOwnProperty('field')) {
-				
-				$dependant = $( '#' + this.settings.atumPrefix + dependency.field );
-				
-				if ($dependant.length) {
-					$dependant = $dependant.closest('tr').find('th, td');
-				}
-				
-			}
-			
-			if (typeof $dependant !== 'undefined' && $dependant.length) {
-				
-				if (visibility === true) {
-					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
-						$dependant.slideDown('fast');
-					}
-					else {
-						$dependant.show();
-					}
-				}
-				else {
-					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
-						$dependant.slideUp('fast');
-					}
-					else {
-						$dependant.hide();
-					}
-				}
-				
-			}
-			
-		}
+        /**
+         * Add a Switchery change value via code.
+         * ex: this.changeSwitcheryState($('#atum_use_geoprompt'),false);
+         * @param el element selector
+         * @param value boolean true or false
+         */
+        changeSwitcheryState: function(el,value){
+            if($(el).is(':checked')!=value){
+                $(el).trigger("click");
+            }
+        }
 		
 	} );
 	
