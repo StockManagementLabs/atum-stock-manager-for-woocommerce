@@ -89,7 +89,7 @@ class Suppliers {
 
 				// Save the product supplier meta box
 				add_action( 'save_post_product', array( $this, 'save_product_supplier_fields' ) );
-				add_action( 'woocommerce_update_product_variation', array( $this, 'save_product_supplier_fields' ) );
+				add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_supplier_fields' ) );
 
 			}
 

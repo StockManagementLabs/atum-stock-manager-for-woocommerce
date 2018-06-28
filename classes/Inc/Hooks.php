@@ -413,7 +413,7 @@ class Hooks {
 
 		// Save the product purchase price meta
 		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
-		add_action( 'woocommerce_update_product_variation', array( $this, 'save_purchase_price' ) );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
 	}
 
 	/**
@@ -482,7 +482,7 @@ class Hooks {
 
         global $pagenow;
 
-		$product  = wc_get_product( $post_id );
+		$product = wc_get_product( $post_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 			return;
