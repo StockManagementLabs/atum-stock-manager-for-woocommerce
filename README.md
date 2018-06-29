@@ -159,6 +159,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.12`
+
+*2018-06-29*
+
+**Changes**
+
+* Added new field types to Settings.
+* Improved Settings dependency rules.
+* Enhancement for ATUM Tools.
+* Use official Select2 instead of WC’s enhanced selects in Settings.
+* Added purchase_field meta key name to Globals.
+* Align the supplier SKU column left.
+
+**Fixes**
+
+* Added non-Latin fonts to mPDF.
+* Added support for non-Latin languages to mPDF.
+* Refactory.
+* Fixed infinite loop when saving variation products.
+* Fixed popover titles in List Tables.
+* Fixed PHPCS code smells.
+
+---
+
 `1.4.11`
 
 *2018-06-21*
