@@ -3152,9 +3152,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		// jQuery UI datePicker
 		if ( isset($this->load_datepicker) && $this->load_datepicker === TRUE ) {
 			global $wp_scripts;
-			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
+			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
 			wp_deregister_style('jquery-ui-style');
-			wp_register_style( 'jquery-ui-style', '//code.jquery.com/ui/' . $jquery_version . '/themes/excite-bike/jquery-ui.min.css', array(), $jquery_version );
+			wp_register_style( 'jquery-ui-style', 'https://code.jquery.com/ui/' . $jquery_version . '/themes/excite-bike/jquery-ui.min.css', array(), $jquery_version );
 
 			wp_enqueue_style('jquery-ui-style');
 			wp_enqueue_script('jquery-ui-datepicker');

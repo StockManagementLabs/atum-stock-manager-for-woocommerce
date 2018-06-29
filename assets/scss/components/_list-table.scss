@@ -372,9 +372,10 @@
 			}
 			
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-			&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight, &.column-_out_stock_threshold {
+			&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
 				a {
 					@include flex-justify-content(center);
+					@include flex-align-items(center);
 					
 					> span {
 						float: none;
@@ -384,7 +385,18 @@
 						}
 					}
 				}
+				
 			}
+			
+			.sorting-indicator {
+				display: inline-block;
+				width: auto;
+			}
+		}
+		
+		&.column-_supplier_sku {
+			white-space: nowrap;
+			max-width: 71px;
 		}
 		
 		&.check-column {
@@ -585,7 +597,7 @@
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-		&.column-_purchase_price, &.column-ID, &.column-_supplier_sku, &.column-_weight, &.column-_out_stock_threshold {
+		&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
 			text-align: center;
 		}
 		

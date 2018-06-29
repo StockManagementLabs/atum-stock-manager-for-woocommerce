@@ -121,7 +121,7 @@ class ListTable extends AtumListTable {
 			'title'                 => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'             => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_location'         => '<span class="dashicons dashicons-store tips" data-placement="bottom" data-tip="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
