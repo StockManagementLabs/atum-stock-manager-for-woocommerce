@@ -506,8 +506,8 @@ class Addons {
 	 * @since 1.2.0
 	 *
 	 * @param string $addon_name    The addon name
-	 * @param $addon_slug           The addon slug
-	 * @param $download_link        The link to download the addon zip file
+	 * @param string $addon_slug    The addon slug
+	 * @param string $download_link The link to download the addon zip file
 	 *
 	 * @return array    An array with the result and the message
 	 */
@@ -536,7 +536,7 @@ class Addons {
 
 		$skin       = new \Automatic_Upgrader_Skin;
 		$upgrader   = new \WP_Upgrader( $skin );
-		$plugin     = $addon_slug . '/' . $addon_slug . '.php';
+		$plugin     = "$addon_slug/$addon_slug.php";
 		$installed  = Helpers::is_plugin_installed($addon_slug);
 		$activate   = ($installed) ? ! is_plugin_active( $plugin ) : FALSE;
 

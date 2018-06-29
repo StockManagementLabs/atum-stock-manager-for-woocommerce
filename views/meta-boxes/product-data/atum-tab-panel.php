@@ -9,6 +9,12 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+
+/**
+ * @var string  $product_status
+ * @var array   $checkbox_wrapper_classes
+ * @var array   $control_button_classes
+ */
 ?>
 <div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
 	<div class="options_group">

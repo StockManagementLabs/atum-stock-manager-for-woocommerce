@@ -135,8 +135,9 @@ class ListTable extends AtumListTable {
 
 		if ( $this->product->get_type() == 'variation' ) {
 
+			/** @noinspection PhpUndefinedMethodInspection */
 			$parent_data = $this->product->get_parent_data();
-			$title = $parent_data['title'];
+			$title       = $parent_data['title'];
 
 			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {

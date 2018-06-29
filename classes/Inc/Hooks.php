@@ -13,7 +13,6 @@
 namespace Atum\Inc;
 
 use Atum\Components\AtumCapabilities;
-use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
 
@@ -311,6 +310,8 @@ class Hooks {
 	 * @param int      $product_id The saved product's ID
 	 * @param \WP_Post $post       The saved post
 	 * @param bool     $update
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function save_product_data_panel( $product_id, $post, $update ) {
 
@@ -420,9 +421,11 @@ class Hooks {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param int $loop Only for variations. The loop item number
-	 * @param array $variation_data Only for variations. The variation item data
-	 * @param \WP_Post $variation Only for variations. The variation product
+	 * @param int      $loop            Only for variations. The loop item number
+	 * @param array    $variation_data  Only for variations. The variation item data
+	 * @param \WP_Post $variation       Only for variations. The variation product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_out_stock_threshold_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
 
@@ -531,6 +534,8 @@ class Hooks {
 	 * @param int      $loop             Only for variations. The loop item number
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_purchase_price_meta($loop = NULL, $variation_data = array(), $variation = NULL) {
 
@@ -661,6 +666,8 @@ class Hooks {
 	 * @since 1.3.3
 	 *
 	 * @param \WC_Order $wc_order
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wc_order_add_location_column_header($wc_order) {
 		?><th class="item_location sortable" data-sort="string-ins"><?php _e( 'Location', ATUM_TEXT_DOMAIN ); ?></th><?php
@@ -674,6 +681,8 @@ class Hooks {
 	 * @param \WC_Product    $product
 	 * @param \WC_Order_Item $item
 	 * @param int            $item_id
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wc_order_add_location_column_value($product, $item, $item_id) {
 
@@ -732,6 +741,8 @@ class Hooks {
 	 * @since 0.1.5
 	 *
 	 * @param \WC_Product $product   The product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function delete_transients($product) {
 		Helpers::delete_transients();
@@ -776,6 +787,8 @@ class Hooks {
 	 * @param int         $value
 	 * @param \WC_Product $product
 	 *
+	 * @noinspection PhpUnusedParameterInspection
+	 *
 	 * @return float|int
 	 */
 	public function stock_quantity_input_atts($value, $product) {
@@ -809,6 +822,8 @@ class Hooks {
 	 *
 	 * @param string $message
 	 * @param int|array $products
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return string
 	 */
@@ -848,7 +863,7 @@ class Hooks {
 	 * @param $old_value array
 	 * @param $option_value array
 	 *
-	 * @throws \Atum\Components\AtumException if we set a product with all true.
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
 

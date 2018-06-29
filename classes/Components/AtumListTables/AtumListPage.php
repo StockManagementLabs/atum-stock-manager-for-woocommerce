@@ -52,7 +52,7 @@ abstract class AtumListPage {
 	protected function display() {
 		$this->list->prepare_items();
 	}
-	
+
 	/**
 	 * Save products per page option
 	 *
@@ -60,7 +60,9 @@ abstract class AtumListPage {
 	 *
 	 * @param bool|int $status Screen option value. Default false to skip.
 	 * @param string   $option The option name.
-	 * @param int      $value  The number of rows to use.
+	 * @param int      $value  The number of rows to use
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return mixed
 	 */

@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL */
+
 /**
  * @package         Atum\Components
  * @subpackage      AtumListTables
@@ -837,7 +838,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since  1.2.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item      The WooCommerce product post to use in calculations
+	 * @param bool     $editable  Optional. Whether the current column is editable
 	 *
 	 * @return float
 	 */
@@ -880,7 +882,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since  v1.4.6
 	 *
-	 * @param \WP_Post $item The WooCommerce product post
+	 * @param \WP_Post $item      The WooCommerce product post
+	 * @param bool     $editable  Optional. Whether the current column is editable
 	 *
 	 * @return double
 	 */
@@ -919,15 +922,16 @@ abstract class AtumListTable extends \WP_List_Table {
 		return apply_filters( 'atum/list_table/column__out_stock_threshold', $out_stock_threshold, $item, $this->product );
 	}
 
-    /**
-     * Column Weight column
-     *
-     * @since  v1.4.6
-     *
-     * @param \WP_Post $item The WooCommerce product weight
-     *
-     * @return double
-     */
+	/**
+	 * Column Weight column
+	 *
+	 * @since  v1.4.6
+	 *
+	 * @param \WP_Post $item      The WooCommerce product weight
+	 * @param bool     $editable  Optional. Whether the current column is editable
+	 *
+	 * @return double
+	 */
     protected function column__weight( $item,  $editable = TRUE ) {
 
 	    $product_id = $this->get_current_product_id();
@@ -1381,9 +1385,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
  			if ( $classes ) {
 				$class = ' class="' . implode( ' ', $classes) . '"';
-		    }
-		    else {
-				$class = '';
 		    }
 
 			$hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $current_all ) ) );
@@ -1893,6 +1894,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @param array $variations
 	 * @param array $products
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return array
 	 */
@@ -2462,6 +2465,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			return;
 		}
 
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
 		$column_keys  = array_keys( $columns );
@@ -2720,7 +2724,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			 * The get_variation_id() method was deprecated in WC 3.0.0
 			 * In newer versions the get_id() method always be the variation_id if it's a variation
 			 */
-			return ( version_compare( WC()->version, '3.0.0', '<' ) == -1 ) ? $this->product->get_variation_id() : $this->product->get_id();
+			return ( version_compare( WC()->version, '3.0.0', '<' ) == -1 ) ? $this->product->get_variation_id() : $this->product->get_id(); // phpcs:ignore
 		}
 
 		return $this->product->get_id();

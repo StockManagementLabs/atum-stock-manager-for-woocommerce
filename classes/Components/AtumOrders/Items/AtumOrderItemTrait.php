@@ -100,10 +100,8 @@ trait AtumOrderItemTrait {
 	 * Uses it's own caches because get_metadata does not provide meta_ids
 	 *
 	 * @since 1.2.9
-	 *
-	 * @param bool $force_read True to force a new DB read (and update cache)
 	 */
-	public function read_meta_data( $force_read = false ) {
+	public function read_meta_data() {
 		$this->meta_data = $this->atum_order_item_model->get_all_meta();
 	}
 
@@ -136,8 +134,7 @@ trait AtumOrderItemTrait {
 			}
 			// Add
 			elseif ( empty( $meta->id ) ) {
-				$new_meta_id = $this->atum_order_item_model->save_meta( array($meta->key => $meta->value) );
-				$this->meta_data[ $key ]->id = $new_meta_id;
+				$this->atum_order_item_model->save_meta( array($meta->key => $meta->value) );
 			}
 			// Update
 			else {
@@ -157,12 +154,8 @@ trait AtumOrderItemTrait {
 	 * Override the WC_Data method to delete the item through AtumOrderItemModel instead
 	 *
 	 * @since 1.2.9
-	 *
-	 * @param bool $force_delete    Optional. Just for overriding compatibility with WC_Data method
-	 *
-	 * @return int
 	 */
-	public function delete( $force_delete = FALSE ) {
+	public function delete() {
 		$this->atum_order_item_model->delete();
 	}
 

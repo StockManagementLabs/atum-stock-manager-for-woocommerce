@@ -15,6 +15,7 @@ namespace Atum\DataExport;
 
 defined( 'ABSPATH' ) or die;
 
+use Atum\DataExport\Reports\HtmlReport;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\StockCentral;
@@ -97,6 +98,8 @@ class DataExport {
 	 *
 	 * @param string $filename  The output file name
 	 * @param string $type       The file type
+	 *
+	 * @noinspection PhpUnusedPrivateMethodInspection
 	 */
 	private function set_file_headers($filename, $type){
 
@@ -138,7 +141,8 @@ class DataExport {
 	/**
 	 * Export the ATUM data to file
 	 *
-	 * @since 1.2.5
+	 * @since        1.2.5
+	 * @noinspection PhpUndefinedConstantInspection
 	 */
 	public function export_data() {
 
@@ -150,6 +154,7 @@ class DataExport {
 		// Landscape or Portrait format
 		$max_columns = (int) apply_filters('atum/data_export/max_portrait_cols', 12);
 		$format = $this->number_columns > $max_columns ? 'A4-L' : 'A4';
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => $format ]);
 
 		// Add support for non-Latin languages
@@ -284,6 +289,9 @@ class DataExport {
 			wp_die( __('Report class not found', ATUM_TEXT_DOMAIN) );
 		}
 
+		/**
+		 * @var HtmlReport $html_list_table
+		 */
 		$html_list_table = new $html_report_class( $report_settings );
 		$table_columns   = $html_list_table->get_table_columns();
 		$group_members   = $html_list_table->get_group_members();
@@ -326,7 +334,7 @@ class DataExport {
 		}
 
 		$this->number_columns = count($table_columns);
-		$html_list_table->set_table_columns($table_columns);
+		$html_list_table-set_table_columns($table_columns);
 		$html_list_table->set_group_members($group_members);
 		$html_list_table->prepare_items();
 		$html_list_table->display();

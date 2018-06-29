@@ -32,7 +32,7 @@ class ListTable extends AtumListTable {
 	
 	/**
 	 * Time of query
-	 * @var date
+	 * @var string
 	 */
 	protected $day;
 	
@@ -559,7 +559,8 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since  1.4.11
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item         The WooCommerce product post to use in calculations
+	 * @param bool     $add_to_total
 	 *
 	 * @return int
 	 */

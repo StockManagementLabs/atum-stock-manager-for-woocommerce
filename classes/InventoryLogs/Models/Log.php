@@ -179,11 +179,17 @@ class Log extends AtumOrderModel {
 	 */
 	public function get_atum_order_item( $item = NULL ) {
 
+		$item_type = $id = FALSE;
+
 		if ( is_a( $item, '\WC_Order_Item' ) ) {
+			/**
+			 * @var \WC_Order_Item $item
+			 */
 			$item_type = $item->get_type();
 			$id        = $item->get_id();
 		}
 		elseif ( is_object( $item ) && ! empty( $item->order_item_type ) ) {
+			/** @noinspection PhpUndefinedFieldInspection */
 			$id        = $item->order_item_id;
 			$item_type = $item->order_item_type;
 		}
@@ -201,10 +207,6 @@ class Log extends AtumOrderModel {
 
 			}
 
-		}
-		else {
-			$item_type = FALSE;
-			$id        = FALSE;
 		}
 
 		if ( $id && $item_type ) {
@@ -241,7 +243,7 @@ class Log extends AtumOrderModel {
 
 				try {
 					return new $classname( $id );
-				} catch ( AtumException $e ) {
+				} catch ( \Exception $e ) {
 					return FALSE;
 				}
 

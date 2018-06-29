@@ -451,6 +451,7 @@ class Settings {
 
 			foreach ($tab_data['sections'] as $section_key => $section_name) {
 
+				/** @noinspection PhpParamsInspection */
 				add_settings_section(
 					ATUM_PREFIX . "setting_$section_key",    // ID
 					$section_name,                           // Title
@@ -752,7 +753,7 @@ class Settings {
 		?>
 		<select class="atum-select2" name="<?php echo $name ?>" id="<?php echo ATUM_PREFIX . $args['id'] ?>"<?php echo $this->get_dependency($args) . $style ?>>
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-			<option value="<?php echo $option_value ?>>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
+			<option value="<?php echo $option_value ?>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php

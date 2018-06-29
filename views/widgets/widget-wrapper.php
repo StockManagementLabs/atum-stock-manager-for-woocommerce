@@ -6,6 +6,11 @@
  */
 
 defined( 'ABSPATH' ) or die;
+
+/**
+ * @var \Atum\Components\AtumWidget $widget
+ * @var string $widget_data
+ */
 ?>
 
 <div class="atum-widget <?php echo $widget->get_id() ?> grid-stack-item"<?php echo $widget_data ?>>

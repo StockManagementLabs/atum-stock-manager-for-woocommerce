@@ -9,6 +9,15 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Helpers;
 
+/**
+ * @var array  $out_stock_threshold_classes
+ * @var string $out_stock_threshold_field_id
+ * @var string $out_stock_threshold_field_name
+ * @var int    $out_stock_threshold
+ * @var int    $woocommerce_notify_no_stock_amount
+ * @var string $product_type
+ */
+
 if ( Helpers::get_option( 'out_stock_threshold', 'no' ) == 'yes' ): ?>
 
 	<?php if ( empty($variation) ): ?>

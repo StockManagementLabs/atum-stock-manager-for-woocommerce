@@ -14,7 +14,6 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Addons\Addons;
 use Atum\Components\AtumWidget;
 use Atum\Inc\Helpers;
 
@@ -221,6 +220,7 @@ class Dashboard {
 						// Load the widget (the class and file naming convention must follow PSR4 standards)
 						if ( class_exists( $widget_name ) ) {
 							$widget = new $widget_name();
+							/** @noinspection PhpUndefinedMethodInspection */
 							$this->widgets[ $widget->get_id() ] = $widget;
 						}
 					}

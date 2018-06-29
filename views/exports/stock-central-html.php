@@ -5,10 +5,16 @@
  * @since 1.2.5
  */
 
+/**
+ * @var int    $max_columns
+ * @var array  $count_views
+ * @var string $report
+ */
+
 // mPDF does not support styling content within a <TD> through classes, so we need to add it inline
 $report_header_title_stl = 'font-weight: bold;text-transform: uppercase;font-size: 13px;';
-$warning_color = 'color: #FEC007;';
-$title_color = 'color: #333;';
+$warning_color           = 'color: #FEC007;';
+$title_color             = 'color: #333;';
 ?>
 <div class="atum-report">
 	<h1><?php echo apply_filters( 'atum/data_export/report_title', __('Atum Stock Central Report', ATUM_TEXT_DOMAIN) ) ?></h1>

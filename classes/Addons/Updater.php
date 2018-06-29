@@ -7,6 +7,8 @@
  *
  * @since           1.2.0
  *
+ * @noinspection    PhpUndefinedFieldInspection
+ *
  * ATUM add-ons' updater and installer
  */
 
@@ -58,6 +60,12 @@ class Updater {
 	 * @var string
 	 */
 	private $cache_key = '';
+
+	/**
+	 * If we want to download a beta version
+	 * @var string
+	 */
+	private $beta = '';
 
 
 	/**
@@ -113,7 +121,8 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array  $_transient_data Update array build by WordPress
+	 * @param array $_transient_data Update array build by WordPress
+	 *
 	 * @return array Modified update array with custom plugin data
 	 */
 	public function check_update( $_transient_data ) {
@@ -121,7 +130,7 @@ class Updater {
 		global $pagenow;
 
 		if ( ! is_object( $_transient_data ) ) {
-			$_transient_data = new stdClass;
+			$_transient_data = new \stdClass;
 		}
 
 		if ( 'plugins.php' == $pagenow && is_multisite() ) {
@@ -187,7 +196,7 @@ class Updater {
 
 		$update_cache = get_site_transient( 'update_plugins' );
 
-		$update_cache = is_object( $update_cache ) ? $update_cache : new stdClass();
+		$update_cache = is_object( $update_cache ) ? $update_cache : new \stdClass();
 
 		if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->name ] ) ) {
 
@@ -222,9 +231,10 @@ class Updater {
 
 		if ( ! empty( $update_cache->response[ $this->name ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
-			// build a plugin list row, with update notification
-			$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-			# <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
+			// Build a plugin list row, with update notification
+			// $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
+
 			echo '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
 			echo '<div class="update-message notice inline notice-warning notice-alt">';
@@ -364,7 +374,7 @@ class Updater {
 		$data = array_merge( $this->api_data, $data );
 
 		if ( $data['slug'] != $this->slug ) {
-			return;
+			return FALSE;
 		}
 
 		// Don't allow a plugin to ping itself
@@ -387,7 +397,7 @@ class Updater {
 			$request->sections = maybe_unserialize( $request->sections );
 		}
 		else {
-			$request = false;
+			$request = FALSE;
 		}
 
 		if ( $request && isset( $request->banners ) ) {

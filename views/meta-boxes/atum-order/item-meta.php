@@ -7,6 +7,11 @@
 
 defined( 'ABSPATH' ) or die;
 
+/**
+ * @var \WC_Order_Item $item
+ * @var int            $item_id
+ */
+
 $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 	'_qty',
 	'_tax_class',

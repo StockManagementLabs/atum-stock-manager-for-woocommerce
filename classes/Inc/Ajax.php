@@ -25,6 +25,7 @@ use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
+use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
 
 
@@ -180,7 +181,7 @@ final class Ajax {
 		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
 
 		if ( empty($_POST['widget']) ) {
-			wp_json_error( __('Invalid widget', ATUM_TEXT_DOMAIN) );
+			wp_send_json_error( __('Invalid widget', ATUM_TEXT_DOMAIN) );
 		}
 
 		$widget_id = esc_attr( $_POST['widget'] );
@@ -337,8 +338,11 @@ final class Ajax {
 
 		$namespace  = '\Atum\StockCentral\Lists';
 		$list_class = $args['show_controlled'] ? "$namespace\ListTable" : "$namespace\UncontrolledListTable";
-		$list       = new $list_class( $args );
 
+		/**
+		 * @var ListTable $list
+		 */
+		$list = new $list_class( $args );
 		$list->ajax_response();
 		
 	}
@@ -621,8 +625,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name = esc_attr( $_POST['addon'] );
-		$key = esc_attr( $_POST['key'] );
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if (!$addon_name || !$key) {
@@ -694,16 +698,20 @@ final class Ajax {
 		}
 
 		// Update the key in database
-		Addons::update_key( $addon_name, array(
-			'key'    => $key,
-			'status' => $license_data->license
-		) );
+		if ( ! empty($license_data) ) {
 
-		// Delete status transient
-		Addons::delete_status_transient($addon_name);
+			Addons::update_key( $addon_name, array(
+				'key'    => $key,
+				'status' => $license_data->license
+			) );
 
-		if ($license_data->license == 'valid') {
-			wp_send_json_success( __('Your license has been activated.', ATUM_TEXT_DOMAIN) );
+			// Delete status transient
+			Addons::delete_status_transient($addon_name);
+
+			if ($license_data->license == 'valid') {
+				wp_send_json_success( __('Your license has been activated.', ATUM_TEXT_DOMAIN) );
+			}
+
 		}
 
 		wp_send_json_error($default_error);
@@ -780,10 +788,10 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name = esc_attr( $_POST['addon'] );
-		$addon_slug = esc_attr( $_POST['slug'] );
-		$key = esc_attr( $_POST['key'] );
-		$default_error =  __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$addon_slug    = esc_attr( $_POST['slug'] );
+		$key           = esc_attr( $_POST['key'] );
+		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if (!$addon_name || !$addon_slug || !$key) {
 			wp_send_json_error($default_error);
@@ -974,6 +982,9 @@ final class Ajax {
 		$products        = array();
 
 		foreach ( $product_objects as $product_object ) {
+			/**
+			 * @var \WC_Product $product_object
+			 */
 			$products[ $product_object->get_id() ] = rawurldecode( $product_object->get_formatted_name() );
 		}
 
@@ -1040,17 +1051,19 @@ final class Ajax {
 
 		global $wpdb;
 		ob_start();
+		$where = '';
 
 		if ( is_numeric( $_GET['term'] ) ) {
 
 			$supplier_id = absint( $_GET['term'] );
-			$where = "ID LIKE $supplier_id";
+			$where = "AND ID LIKE $supplier_id";
 
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
 
 			$supplier_name = $wpdb->esc_like( $_GET['term'] );
-			$where = "post_title LIKE '%%{$supplier_name}%%'";
+			$where = "AND post_title LIKE '%%{$supplier_name}%%'";
+
 		}
 		else {
 			wp_die();
@@ -1062,7 +1075,7 @@ final class Ajax {
 
 		$query = $wpdb->prepare(
 			"SELECT DISTINCT ID, post_title from $wpdb->posts 
-			 WHERE post_type = %s AND $where
+			 WHERE post_type = %s $where
 			 AND post_status IN ('" . implode( "','", $post_statuses ) . "')
 			 LIMIT %d",
 			Suppliers::POST_TYPE,
@@ -1209,7 +1222,7 @@ final class Ajax {
 			}
 
 			if ( ! $atum_order ) {
-				$message = ($post_type == ATUM_PREFIX . 'inventory_log') ? __( 'Invalid log', ATUM_TEXT_DOMAIN ) : __( 'Invalid purchase order', ATUM_TEXT_DOMAIN );
+				$message = $post_type == ATUM_PREFIX . 'inventory_log' ? __( 'Invalid log', ATUM_TEXT_DOMAIN ) : __( 'Invalid purchase order', ATUM_TEXT_DOMAIN );
 				throw new AtumException( 'invalid_atum_order', $message );
 			}
 
@@ -1547,7 +1560,9 @@ final class Ajax {
 	 *
 	 * @package ATUM Orders
 	 *
-	 * @since 1.3.0
+	 * @since   1.3.0
+	 *
+	 * @param string $action
 	 */
 	private function bulk_change_atum_order_items_stock ($action) {
 
@@ -1642,11 +1657,12 @@ final class Ajax {
 			wp_send_json_error( __('Invalid data provided', ATUM_TEXT_DOMAIN) );
 		}
 
-		$atum_order = Helpers::get_atum_order_model( absint($_POST['atum_order_id']) );
-		$atum_order_item = $atum_order->get_item( absint($_POST['atum_order_item_id']) );
+		$atum_order      = Helpers::get_atum_order_model( absint( $_POST['atum_order_id'] ) );
+		$atum_order_item = $atum_order->get_item( absint( $_POST['atum_order_item_id'] ) );
 
-		$product_id = ( $atum_order_item->get_variation_id() ) ? $atum_order_item->get_variation_id() : $atum_order_item->get_product_id();
-		$product = wc_get_product($product_id);
+		/** @noinspection PhpUndefinedMethodInspection */
+		$product_id = $atum_order_item->get_variation_id() ?: $atum_order_item->get_product_id();
+		$product    = wc_get_product($product_id);
 
 		if ( ! is_a($product, '\WC_Product') ) {
 			wp_send_json_error( __('Product not found', ATUM_TEXT_DOMAIN) );
@@ -1697,21 +1713,35 @@ final class Ajax {
 						foreach ($items as $item) {
 
 							if ( is_a($item, '\WC_Order_Item_Product') ) {
+								/**
+								 * @var \WC_Order_Item_Product $item
+								 */
 								$log_item = $atum_order->add_product( $item->get_product(), $item->get_quantity() );
 							}
 							elseif ( is_a($item, '\WC_Order_Item_Fee') ) {
+								/**
+								 * @var \WC_Order_Item_Fee $item
+								 */
 								$log_item = $atum_order->add_fee($item);
 							}
 							elseif ( is_a($item, '\WC_Order_Item_Shipping') ) {
+								/**
+								 * @var \WC_Order_Item_Shipping $item
+								 */
 								$log_item = $atum_order->add_shipping_cost($item);
 							}
 							elseif ( empty($current_tax) && is_a($item, '\WC_Order_Item_Tax') ) {
+								/**
+								 * @var \WC_Order_Item_Tax $item
+								 */
 								$log_item = $atum_order->add_tax( array( 'rate_id' => $item->get_rate_id() ), $item );
 							}
 
 							// Add the order ID as item's custom meta
-							$log_item->add_meta_data('_order_id', $wc_order_id, TRUE);
-							$log_item->save_meta_data();
+							if ( ! empty($log_item) ) {
+								$log_item->add_meta_data( '_order_id', $wc_order_id, TRUE );
+								$log_item->save_meta_data();
+							}
 
 						}
 
@@ -1720,7 +1750,7 @@ final class Ajax {
 
 						wp_send_json_success( array( 'html' => $html ) );
 
-					} catch ( Exception $e ) {
+					} catch ( \Exception $e ) {
 						wp_send_json_error( array( 'error' => $e->getMessage() ) );
 					}
 
@@ -1821,7 +1851,8 @@ final class Ajax {
 	public function get_locations_tree() {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
-		$flag_empty = FALSE;
+
+		$locations_tree = '';
 
 		if ( empty($_POST['product_id']) ) {
 			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
@@ -1856,12 +1887,7 @@ final class Ajax {
 			) );
 		}
 
-		//if($flag_empty){
-		//	wp_send_json_success( "<ul>$locations_tree</ul>" );
-        //}else{
-			wp_send_json_success( "<ul>$locations_tree</ul>" );
-        //}
-
+		wp_send_json_success( "<ul>$locations_tree</ul>" );
 
 	}
 
@@ -1889,29 +1915,6 @@ final class Ajax {
 		wp_set_post_terms( $product_id, $sanitized_terms, $taxonomy = Globals::PRODUCT_LOCATION_TAXONOMY, $append = FALSE );
 
 		wp_send_json_success( "ok" );
-
-	}
-
-	/**
-	 * Get the the Locations tree  editable for a specific product
-	 *
-	 * @package ATUM List Tables
-	 *
-	 * @since 1.4.2
-	 */
-	public function get_locations_tree_editable() {
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
-		if ( empty($_POST['product_id']) ) {
-			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
-		}
-
-		$product_id = absint( $_POST['product_id'] );
-		$product_locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY);
-
-		$terms = get_terms( array(
-			'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-			'hide_empty' => false,
-		) );
 
 	}
 

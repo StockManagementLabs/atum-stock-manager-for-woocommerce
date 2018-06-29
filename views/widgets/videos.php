@@ -4,6 +4,12 @@
  *
  * @since 1.4.0
  */
+
+/**
+ * @var array  $video_tags
+ * @var object $channel
+ * @var object $first_video
+ */
 ?>
 
 <div class="videos-widget" data-widget="videos">
@@ -61,6 +67,7 @@
 								<time>
 									<?php
 									$start = new \DateTime('@0'); // Unix epoch
+									/** @noinspection PhpUndefinedConstantInspection */
 									$start->add( new \DateInterval($video->contentDetails->duration) );
 									echo $start->format('i:s');
 									?>

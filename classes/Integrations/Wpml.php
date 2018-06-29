@@ -7,6 +7,10 @@
  *
  * @since           1.4.1
  *
+ * @noinspection    PhpUndefinedClassInspection
+ * @noinspection    PhpUndefinedMethodInspection
+ * @noinspection    PhpUndefinedConstantInspection
+ *
  * WPML multilingual integration class
  */
 
@@ -364,8 +368,12 @@ class Wpml {
 			$product                        = wc_get_product( $this->original_product_id );
 			$sale_price_value               = $product->get_sale_price();
 			$args['value']                  = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [ 'trim_zeros' => TRUE, 'currency'   => $args['currency'] ] ) : $args['value'];
-			$args['extra_meta'][0]['value'] = $date = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE ) ? date_i18n( 'Y-m-d', $date ) : '';
-			$args['extra_meta'][1]['value'] = $date = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE ) ? date_i18n( 'Y-m-d', $date ) : '';
+
+			$date_from = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE );
+			$date_to   = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE );
+
+			$args['extra_meta'][0]['value'] = $date_from ? date_i18n( 'Y-m-d', $date_from ) : '';
+			$args['extra_meta'][1]['value'] = $date_to ? date_i18n( 'Y-m-d', $date_to ) : '';
 
 		}
 
@@ -433,7 +441,7 @@ class Wpml {
 
 				switch ( $meta_key ) {
 
-					// stock id updated
+					// stock is updated
 					case 'regular_price':
 
 						if ( isset( $product_meta['regular_price_custom'] ) && $product_meta['regular_price_custom'] == 'yes' ) {
@@ -446,8 +454,9 @@ class Wpml {
 							// Unset the meta values to prevent next translations updates in update_translations_meta
 							unset( $product_meta['regular_price'], $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
 
-							break;
 						}
+
+						break;
 
 					case 'sale_price':
 
@@ -472,7 +481,6 @@ class Wpml {
 
 							unset( $product_meta['sale_price'], $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
 						}
-
 
 						break;
 
@@ -524,6 +532,8 @@ class Wpml {
 	 * @param array   $prices      Custom prices fields
 	 * @param integer $product_id  The product ID
 	 *
+	 * @noinspection PhpUnusedParameterInspection
+	 *
 	 * @return array
 	 */
 	public function wpml_add_purchase_price_to_custom_prices( $prices, $product_id ) {
@@ -539,6 +549,8 @@ class Wpml {
 	 *
 	 * @param array   $labels       Custom prices fields labels
 	 * @param integer $product_id   The product ID
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return array
 	 */
@@ -580,6 +592,8 @@ class Wpml {
 	 * @param float  $product_price
 	 * @param array  $custom_prices
 	 * @param string $code
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
 

@@ -9,6 +9,15 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Helpers;
 
+/**
+ * @var array  $supplier_fields_classes
+ * @var string $supplier_field_id
+ * @var string $supplier_field_name
+ * @var string $supplier_sku_field_id
+ * @var string $supplier_sku_field_name
+ * @var string $supplier_sku
+ */
+
 if ( empty($variation) ): ?>
 <div class="options_group <?php echo implode(' ', $supplier_fields_classes) ?>">
 <?php endif; ?>

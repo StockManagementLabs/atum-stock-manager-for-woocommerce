@@ -56,5 +56,6 @@ if ( ! defined('ATUM_DEBUG') ) {
 }
 
 // Use Composer's autoloader and PSR4 for naming convention
+/** @noinspection PhpIncludeInspection */
 require ATUM_PATH . 'vendor/autoload.php';
 \Atum\Bootstrap::get_instance();
