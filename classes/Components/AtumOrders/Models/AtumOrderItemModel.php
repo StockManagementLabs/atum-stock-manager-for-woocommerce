@@ -18,6 +18,10 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
+use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
+use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
+use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Inc\Helpers;
 
 
@@ -43,7 +47,7 @@ abstract class AtumOrderItemModel {
 
 	/**
 	 * The ATUM Order item object
-	 * @var \WC_Order_Item
+	 * @var AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax
 	 */
 	protected $atum_order_item;
 
@@ -97,6 +101,7 @@ abstract class AtumOrderItemModel {
 			}
 
 			$this->atum_order_item->set_atum_order_id( $data->order_id );
+			/** @noinspection PhpUnhandledExceptionInspection */
 			$this->atum_order_item->set_name( $data->order_item_name );
 
 			$this->read_meta();
@@ -186,8 +191,8 @@ abstract class AtumOrderItemModel {
 			return new \WP_Error( 'empty_props', __('Please provide a valid ATUM Order ID', ATUM_TEXT_DOMAIN) );
 		}
 
-		$post_type = get_post_type($atum_order_id);
-		$post_type_obj = get_post_type_object($post_type);
+		$post_type        = get_post_type( $atum_order_id );
+		$post_type_obj    = get_post_type_object( $post_type );
 		$atum_order_label = $post_type_obj->labels->singular_name;
 
 		if ( ! $this->atum_order_item->get_name() ) {
@@ -418,6 +423,7 @@ abstract class AtumOrderItemModel {
 		add_filter( 'sanitize_key', array(__CLASS__, 'fix_order_item_id_column'), 10, 2 );
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Fix the order_item_id column name from atum_order_itemmeta table when getting meta
 	 *
@@ -425,8 +431,6 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @param string $key
 	 * @param string $raw_key
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return string
 	 */

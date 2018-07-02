@@ -301,7 +301,8 @@ class Hooks {
 		Helpers::load_view('meta-boxes/product-data/atum-variation-panel', compact('loop', 'variation_data', 'variation'));
 
 	}
-	
+
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Save all the fields within the Product Data's ATUM Inventory tab
 	 *
@@ -310,8 +311,6 @@ class Hooks {
 	 * @param int      $product_id The saved product's ID
 	 * @param \WP_Post $post       The saved post
 	 * @param bool     $update
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function save_product_data_panel( $product_id, $post, $update ) {
 
@@ -416,6 +415,7 @@ class Hooks {
 		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add the individual out stock threshold field to WC's WC's product data meta box
 	 *
@@ -424,8 +424,6 @@ class Hooks {
 	 * @param int      $loop            Only for variations. The loop item number
 	 * @param array    $variation_data  Only for variations. The variation item data
 	 * @param \WP_Post $variation       Only for variations. The variation product
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_out_stock_threshold_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
 
@@ -526,6 +524,7 @@ class Hooks {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add the purchase price field to WC's product data meta box
 	 *
@@ -534,8 +533,6 @@ class Hooks {
 	 * @param int      $loop             Only for variations. The loop item number
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_purchase_price_meta($loop = NULL, $variation_data = array(), $variation = NULL) {
 
@@ -659,20 +656,20 @@ class Hooks {
 		return $stock_html;
 
 	}
-	
+
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add the location to the items table in WC orders
 	 *
 	 * @since 1.3.3
 	 *
 	 * @param \WC_Order $wc_order
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wc_order_add_location_column_header($wc_order) {
 		?><th class="item_location sortable" data-sort="string-ins"><?php _e( 'Location', ATUM_TEXT_DOMAIN ); ?></th><?php
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add the location to the items table in WC orders
 	 *
@@ -681,8 +678,6 @@ class Hooks {
 	 * @param \WC_Product    $product
 	 * @param \WC_Order_Item $item
 	 * @param int            $item_id
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wc_order_add_location_column_value($product, $item, $item_id) {
 
@@ -735,14 +730,13 @@ class Hooks {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Delete the ATUM transients after the product stock changes
 	 *
 	 * @since 0.1.5
 	 *
 	 * @param \WC_Product $product   The product
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function delete_transients($product) {
 		Helpers::delete_transients();
@@ -779,6 +773,7 @@ class Hooks {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Set min and step value for the stock quantity input number field (WC default = 1)
 	 *
@@ -786,8 +781,6 @@ class Hooks {
 	 *
 	 * @param int         $value
 	 * @param \WC_Product $product
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return float|int
 	 */
@@ -815,6 +808,7 @@ class Hooks {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Customise the "Add to cart" messages to allow decimal places
 	 *
@@ -822,8 +816,6 @@ class Hooks {
 	 *
 	 * @param string $message
 	 * @param int|array $products
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return string
 	 */
@@ -853,6 +845,7 @@ class Hooks {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
 	 * Then, if we have any out_stock_threshold meta, rebuild that product to update the stock_status if required
@@ -862,8 +855,6 @@ class Hooks {
 	 * @param $option_name string we want atum_settings
 	 * @param $old_value array
 	 * @param $option_value array
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
 

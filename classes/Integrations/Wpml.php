@@ -1,4 +1,7 @@
 <?php
+/** @noinspection PhpUndefinedMethodInspection */
+/** @noinspection PhpUndefinedClassInspection */
+/** @noinspection PhpUndefinedConstantInspection */
 /**
  * @package         Atum
  * @subpackage      Integrations
@@ -6,10 +9,6 @@
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.4.1
- *
- * @noinspection    PhpUndefinedClassInspection
- * @noinspection    PhpUndefinedMethodInspection
- * @noinspection    PhpUndefinedConstantInspection
  *
  * WPML multilingual integration class
  */
@@ -93,9 +92,9 @@ class Wpml {
 
 		$this->current_language = self::$sitepress->get_current_language();
 
-		if ( $this->wpml->settings['enable_multi_currency'] == WCML_MULTI_CURRENCIES_INDEPENDENT ) {
+		if ( $this->wpml->settings['enable_multi_currency'] === WCML_MULTI_CURRENCIES_INDEPENDENT ) {
 			$this->multicurrency_active = TRUE;
-			$this->current_currency = $this->get_lang_currency();
+			$this->current_currency     = $this->get_lang_currency();
 		}
 		else {
 			$this->current_currency = get_woocommerce_currency();
@@ -524,6 +523,7 @@ class Wpml {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add purchase price to WPML's custom price fields. Moved from Hooks class.
 	 *
@@ -531,8 +531,6 @@ class Wpml {
 	 *
 	 * @param array   $prices      Custom prices fields
 	 * @param integer $product_id  The product ID
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return array
 	 */
@@ -542,6 +540,7 @@ class Wpml {
 		return $prices;
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add purchase price to WPML's custom price fields labels. Moved from Hooks class.
 	 *
@@ -549,8 +548,6 @@ class Wpml {
 	 *
 	 * @param array   $labels       Custom prices fields labels
 	 * @param integer $product_id   The product ID
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return array
 	 */
@@ -583,6 +580,7 @@ class Wpml {
 		return $prices;
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Save WPML's purchase price when custom prices are enabled. Moved from Hooks class.
 	 *
@@ -592,8 +590,6 @@ class Wpml {
 	 * @param float  $product_price
 	 * @param array  $custom_prices
 	 * @param string $code
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wpml_save_purchase_price_in_custom_prices( $post_id, $product_price, $custom_prices, $code ) {
 

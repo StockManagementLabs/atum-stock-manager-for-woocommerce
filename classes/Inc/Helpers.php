@@ -36,8 +36,6 @@ final class Helpers {
 	 * @param array $slug_terms
      * @param string taxonomy default 'product_type'
 	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 *
 	 * @return array term_ids
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
@@ -53,6 +51,7 @@ final class Helpers {
 		$result           = array();
 
 		// Flat array
+		/** @noinspection PhpUnusedParameterInspection */
 		array_walk_recursive( $search_terms_ids, function ( $v, $k ) use ( &$result ) {
 			$result[] = absint( $v );
 		} );
@@ -826,8 +825,6 @@ final class Helpers {
 	 * @param array  $args                  Optional. Variables that will be passed to the view
 	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
 	 *
-	 * @noinspection PhpIncludeInspection
-	 *
 	 * @return void
 	 */
 	public static function load_view( $view, $args = [ ], $allow_theme_override = TRUE ) {
@@ -863,9 +860,11 @@ final class Helpers {
 		}
 
 		if ( ATUM_DEBUG ) {
+			/** @noinspection PhpIncludeInspection */
 			include $file_path;
 		}
 		else {
+			/** @noinspection PhpIncludeInspection */
 			@include $file_path;
 		}
 		

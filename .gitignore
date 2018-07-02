@@ -6,6 +6,7 @@ node_modules
 bower_components
 *.map
 .idea
+phpcs.xml
 
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*

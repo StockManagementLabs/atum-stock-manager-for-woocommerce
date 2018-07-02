@@ -130,6 +130,7 @@ class InboundStock extends AtumListPage {
 		
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Display the help tabs' content
 	 *
@@ -137,8 +138,6 @@ class InboundStock extends AtumListPage {
 	 *
 	 * @param \WP_Screen $screen    The current screen
 	 * @param array      $tab       The current help tab
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 

@@ -888,10 +888,14 @@ class ListTable extends AtumListTable {
 						'status'     => [ 'wc-processing', 'wc-completed' ],
 						'date_start' => 'today 00:00:00'
 					);
+
 					$today_orders = Helpers::get_orders( $atts );
 
 					foreach ( $today_orders as $today_order ) {
 
+						/**
+						 * @var \WC_Order $today_order
+						 */
 						$products = $today_order->get_items();
 
 						foreach ( $products as $product ) {

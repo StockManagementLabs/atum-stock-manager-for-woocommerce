@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpParamsInspection */
+
 /**
  * @package         Atum\InventoryLogs
  * @subpackage      Items
@@ -6,8 +7,6 @@
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.4
- *
- * @noinspection    PhpParamsInspection
  *
  * Shared methods for the Log Item objects
  */

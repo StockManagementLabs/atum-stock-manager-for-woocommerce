@@ -6,6 +6,11 @@
  */
 
 defined( 'ABSPATH' ) or die;
+
+/**
+ * @var int   $supplier_id
+ * @var array $countries
+ */
 ?>
 
 <div class="atum-meta-box supplier">
@@ -19,9 +24,9 @@ defined( 'ABSPATH' ) or die;
 			<option value=""><?php esc_html_e( 'Choose a currency&hellip;', ATUM_TEXT_DOMAIN ); ?></option>
 			<?php
 			$currency = get_post_meta($supplier_id, '_billing_information_currency', TRUE);
-			foreach ( get_woocommerce_currencies() as $code => $name ) {
-				echo '<option value="' . esc_attr( $code ) . '" ' . selected( $currency, $code, false ) . '>' . sprintf( esc_html__( '%1$s (%2$s)', ATUM_TEXT_DOMAIN ), $name, get_woocommerce_currency_symbol( $code ) ) . '</option>';
-			}
+			foreach ( get_woocommerce_currencies() as $code => $name ):
+				echo '<option value="' . esc_attr( $code ) . '" ' . selected( $currency, $code, FALSE ) . '>' . sprintf( esc_html__( '%1$s (%2$s)', ATUM_TEXT_DOMAIN ), $name, get_woocommerce_currency_symbol( $code ) ) . '</option>';
+			endforeach;
 			?>
 		</select>
 

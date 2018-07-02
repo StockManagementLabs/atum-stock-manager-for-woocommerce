@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+
 /**
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
@@ -6,8 +8,6 @@
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.4
- *
- * @noinspection    PhpUndefinedMethodInspection
  *
  * The abstract class for the ATUM Order model
  */
@@ -19,7 +19,10 @@ defined( 'ABSPATH' ) or die;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
+use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
+use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Inc\Helpers;
 
 
@@ -216,7 +219,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param \WC_Order_Item $item  Order item object (product, shipping, fee, coupon, tax)
+	 * @param AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item  Order item object (product, shipping, fee, coupon, tax)
 	 *
 	 * @return void
 	 */
@@ -307,6 +310,10 @@ abstract class AtumOrderModel {
 		$args = wp_parse_args( $args, $default_args );
 
 		$item_class = $this->get_items_class('line_items');
+
+		/**
+		 * @var AtumOrderItemProduct $item
+		 */
 		$item = new $item_class();
 		$item->set_props( $args );
 		$item->set_backorder_meta();
@@ -330,6 +337,10 @@ abstract class AtumOrderModel {
 	public function add_fee ( \WC_Order_Item_Fee $fee = NULL ) {
 
 		$item_class = $this->get_items_class('fee_lines');
+
+		/**
+		 * @var AtumOrderItemFee $item
+		 */
 		$item = new $item_class();
 		$item->set_atum_order_id( $this->id );
 
@@ -347,6 +358,7 @@ abstract class AtumOrderModel {
 
 	}
 
+	/** @noinspection PhpDocMissingThrowsInspection */
 	/**
 	 * Add a shipping cost item to the ATUM Order
 	 *
@@ -359,6 +371,10 @@ abstract class AtumOrderModel {
 	public function add_shipping_cost ( \WC_Order_Item_Shipping $shipping = NULL ) {
 
 		$item_class = $this->get_items_class('shipping_lines');
+
+		/**
+		 * @var AtumOrderItemShipping $item
+		 */
 		$item = new $item_class();
 		$item->set_shipping_rate( new \WC_Shipping_Rate() );
 		$item->set_atum_order_id( $this->id );
@@ -377,6 +393,7 @@ abstract class AtumOrderModel {
 
 	}
 
+	/** @noinspection PhpDocSignatureInspection */
 	/**
 	 * Add a tax item to the ATUM Order
 	 *
@@ -402,6 +419,10 @@ abstract class AtumOrderModel {
 		}
 
 		$item_class = $this->get_items_class('tax_lines');
+
+		/**
+		 * @var AtumOrderItemTax $item
+		 */
 		$item = new $item_class();
 		$item->set_rate( $values['rate_id'] );
 		$item->set_atum_order_id( $this->id );
@@ -461,6 +482,9 @@ abstract class AtumOrderModel {
 
 			foreach ( $items['atum_order_item_id'] as $item_id ) {
 
+				/**
+				 * @var AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item
+				 */
 				if ( ! $item = $this->get_atum_order_item( absint( $item_id ) ) ) {
 					continue;
 				}
@@ -698,6 +722,9 @@ abstract class AtumOrderModel {
 
 				foreach ( array_filter( $items ) as $item_key => $item ) {
 
+					/**
+					 * @var AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item
+					 */
 					$item->set_atum_order_id( $this->id );
 					$item_id = $item->save();
 
@@ -732,24 +759,34 @@ abstract class AtumOrderModel {
 	 */
 	public function create() {
 
-		$this->set_currency( $this->get_currency() ? $this->get_currency() : get_woocommerce_currency() );
-		$status = $this->get_status();
+		try {
 
-		$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-			'post_date'     => date_i18n( 'Y-m-d H:i:s' ),
-			'post_date_gmt' => gmdate( 'Y-m-d H:i:s' ),
-			'post_type'     => $this->post->post_type,
-			'post_status'   => ( in_array($status, array_keys( AtumOrderPostType::get_statuses() )) ) ? ATUM_PREFIX . $status : 'publish',
-			'ping_status'   => 'closed',
-			'post_author'   => get_current_user_id(),
-			'post_title'    => $this->get_title(),
-			'post_content'  => $this->get_description(),
-			'post_password' => uniqid( ATUM_PREFIX . 'order_' )
-		) ), TRUE );
+			$this->set_currency( $this->get_currency() ?: get_woocommerce_currency() );
+			$status = $this->get_status();
 
-		if ( $id && ! is_wp_error($id) ) {
-			$this->set_id( $id );
-			$this->clear_caches();
+			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
+				'post_date'     => date_i18n( 'Y-m-d H:i:s' ),
+				'post_date_gmt' => gmdate( 'Y-m-d H:i:s' ),
+				'post_type'     => $this->post->post_type,
+				'post_status'   => in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ? ATUM_PREFIX . $status : 'publish',
+				'ping_status'   => 'closed',
+				'post_author'   => get_current_user_id(),
+				'post_title'    => $this->get_title(),
+				'post_content'  => $this->get_description(),
+				'post_password' => uniqid( ATUM_PREFIX . 'order_' )
+			) ), TRUE );
+
+			if ( $id && ! is_wp_error( $id ) ) {
+				$this->id = $id;
+				$this->clear_caches();
+			}
+
+		} catch (AtumException $e) {
+
+			if (ATUM_DEBUG) {
+				error_log( __METHOD__ . '::' . $e->getErrorCode() . '::' . $e->getMessage() );
+			}
+
 		}
 
 	}
@@ -1678,6 +1715,9 @@ abstract class AtumOrderModel {
 
 		foreach ( $this->get_items() as $item ) {
 			if ( $product = $item->get_product() ) {
+				/**
+				 * @var \WC_Product $product
+				 */
 				$found_tax_classes[] = $product->get_tax_class();
 			}
 		}

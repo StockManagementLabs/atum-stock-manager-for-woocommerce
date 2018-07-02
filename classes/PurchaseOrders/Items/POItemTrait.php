@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpParamsInspection */
+
 /**
  * @package         Atum\PurchaseOrders
  * @subpackage      Items
@@ -6,8 +7,6 @@
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.9
- *
- * @noinspection    PhpParamsInspection
  *
  * Shared methods for the PO Item objects
  */

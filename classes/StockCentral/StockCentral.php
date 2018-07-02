@@ -176,7 +176,8 @@ class StockCentral extends AtumListPage {
 		$this->list = new $list_class( ['per_page' => $this->per_page, 'show_cb' => TRUE, 'show_controlled' => !$this->is_uncontrolled_list] );
 		
 	}
-	
+
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Display the help tabs' content
 	 *
@@ -184,8 +185,6 @@ class StockCentral extends AtumListPage {
 	 *
 	 * @param \WP_Screen $screen    The current screen
 	 * @param array      $tab       The current help tab
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 		

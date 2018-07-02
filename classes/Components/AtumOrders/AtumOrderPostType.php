@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUndefinedClassConstantInspection */
+
 /**
  * @package         Atum\Components
  * @subpackage      AtumOrders
@@ -6,8 +8,6 @@
  * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.2.9
- *
- * @noinspection    PhpUndefinedClassConstantInspection
  *
  * The abstract class for the ATUM Order post types
  */

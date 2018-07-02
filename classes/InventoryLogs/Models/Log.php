@@ -14,7 +14,6 @@ namespace Atum\InventoryLogs\Models;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 
 

@@ -20,6 +20,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\StockCentral;
 use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 
 
 class DataExport {
@@ -51,7 +52,8 @@ class DataExport {
 
 		// Load the script on the "Stock Central" page by default
 		$allowed_pages = (array) apply_filters( 'atum/data_export/allowed_pages', ['toplevel_page_' . StockCentral::UI_SLUG, Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG] );
-		if ( in_array($hook, $allowed_pages) ) {
+
+		if ( in_array($hook, $allowed_pages, TRUE) ) {
 
 			$min = (! ATUM_DEBUG) ? '.min' : '';
 			wp_register_script( 'atum-data-export', ATUM_URL . "assets/js/atum.data.export$min.js", array('jquery'), ATUM_VERSION, TRUE );
@@ -62,7 +64,7 @@ class DataExport {
 				'option_select_text' => __( 'Show all categories', ATUM_TEXT_DOMAIN )
 			) );
 			$product_categories = ob_get_clean();
-			$screen = get_current_screen();
+			$screen             = get_current_screen();
 
 			wp_localize_script( 'atum-data-export', 'atumExport', apply_filters( 'atum/data_export/js_settings', array(
 				'screen'            => $screen->id,
@@ -70,20 +72,20 @@ class DataExport {
 				'submitTitle'       => __( 'Export', ATUM_TEXT_DOMAIN ),
 				'outputFormatTitle' => __( 'Output Format', ATUM_TEXT_DOMAIN ),
 				'outputFormats'     => array(
-					'pdf'  => 'PDF',
+					'pdf' => 'PDF',
 					// TODO: ADD MORE OUTPUT FORMATS
-					/*'csv'  => 'CSV',
+					/*'csv' => 'CSV',
 					'xlsx' => 'XLSX'*/
 				),
 				'productTypesTitle' => __( 'Product Type', ATUM_TEXT_DOMAIN ),
 				'productTypes'      => Helpers::product_types_dropdown(),
-				'categoriesTitle'   => __('Product Category', ATUM_TEXT_DOMAIN),
+				'categoriesTitle'   => __( 'Product Category', ATUM_TEXT_DOMAIN ),
 				'categories'        => $product_categories,
-				'titleLength'       => __('Product Name (number of characters)', ATUM_TEXT_DOMAIN),
+				'titleLength'       => __( 'Product Name (number of characters)', ATUM_TEXT_DOMAIN ),
 				'maxLength'         => 20,
-				'disableMaxLength'  => __('Disable', ATUM_TEXT_DOMAIN),
+				'disableMaxLength'  => __( 'Disable', ATUM_TEXT_DOMAIN ),
 				'exportNonce'       => wp_create_nonce( 'atum-data-export-nonce' )
-			), $hook ));
+			), $hook ) );
 
 			wp_enqueue_script( 'atum-data-export' );
 
@@ -91,6 +93,7 @@ class DataExport {
 
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * Set the reponse header to make the returning file downloadable
 	 *
@@ -98,8 +101,6 @@ class DataExport {
 	 *
 	 * @param string $filename  The output file name
 	 * @param string $type       The file type
-	 *
-	 * @noinspection PhpUnusedPrivateMethodInspection
 	 */
 	private function set_file_headers($filename, $type){
 
@@ -138,11 +139,11 @@ class DataExport {
 
 	}
 
+	/** @noinspection PhpUndefinedConstantInspection */
 	/**
 	 * Export the ATUM data to file
 	 *
 	 * @since        1.2.5
-	 * @noinspection PhpUndefinedConstantInspection
 	 */
 	public function export_data() {
 
@@ -154,107 +155,118 @@ class DataExport {
 		// Landscape or Portrait format
 		$max_columns = (int) apply_filters('atum/data_export/max_portrait_cols', 12);
 		$format = $this->number_columns > $max_columns ? 'A4-L' : 'A4';
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => $format ]);
 
-		// Add support for non-Latin languages
-		$mpdf->useAdobeCJK      = TRUE;
-		$mpdf->autoScriptToLang = TRUE;
-		$mpdf->autoLangToFont   = TRUE;
+		try {
 
-		$mpdf->SetTitle( $report_title );
+			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => $format ] );
 
-		// Add the icon fonts to mPDF
-		$fontdata = array(
-			"dashicons" => array(
-				'R' => "../../../../assets/fonts/dashicons.ttf"
-			),
-			"woocommerce" => array(
-				'R' => "../../../../assets/fonts/WooCommerce.ttf"
-			)
-		);
+			// Add support for non-Latin languages
+			$mpdf->useAdobeCJK      = TRUE;
+			$mpdf->autoScriptToLang = TRUE;
+			$mpdf->autoLangToFont   = TRUE;
 
-		foreach ($fontdata as $f => $fs) {
-			$mpdf->fontdata[$f] = $fs;
+			$mpdf->SetTitle( $report_title );
 
-			foreach (['R', 'B', 'I', 'BI'] as $style) {
-				if (isset($fs[$style]) && $fs[$style]) {
-					$mpdf->available_unifonts[] = $f . trim($style, 'R');
+			// Add the icon fonts to mPDF
+			$fontdata = array(
+				"dashicons"   => array(
+					'R' => "../../../../assets/fonts/dashicons.ttf"
+				),
+				"woocommerce" => array(
+					'R' => "../../../../assets/fonts/WooCommerce.ttf"
+				)
+			);
+
+			foreach ( $fontdata as $f => $fs ) {
+				$mpdf->fontdata[ $f ] = $fs;
+
+				foreach ( [ 'R', 'B', 'I', 'BI' ] as $style ) {
+					if ( isset( $fs[ $style ] ) && $fs[ $style ] ) {
+						$mpdf->available_unifonts[] = $f . trim( $style, 'R' );
+					}
 				}
 			}
+
+			$mpdf->default_available_fonts = $mpdf->available_unifonts;
+
+			// Set the document header sections
+			$header = (array) apply_filters( 'atum/data_export/report_page_header', array(
+				'L'    => array(
+					'content'     => $report_title,
+					'font-size'   => 8,
+					'font-style'  => 'I',
+					'font-family' => 'serif',
+					'color'       => '#666666'
+				),
+				'C'    => array(
+					'content'     => '',
+					'font-size'   => 8,
+					'font-style'  => 'I',
+					'font-family' => 'serif',
+					'color'       => '#666666'
+				),
+				'R'    => array(
+					'content'     => '{DATE ' . get_option( 'date_format' ) . '}',
+					'font-size'   => 8,
+					'font-style'  => 'I',
+					'font-family' => 'serif',
+					'color'       => '#666666'
+				),
+				'line' => 0
+			) );
+
+			$mpdf->SetHeader( $header, 'O' );
+
+			// Set the document footer sections
+			$footer = (array) apply_filters( 'atum/data_export/report_page_footer', array(
+				'L'    => array(
+					'content'     => __( 'Report generated by DATA EXPORT, a free ATUM add-on.', ATUM_TEXT_DOMAIN ),
+					'font-size'   => 8,
+					'font-style'  => 'I',
+					'font-family' => 'serif',
+					'color'       => '#666666'
+				),
+				'C'    => array(
+					'content'     => '',
+					'font-size'   => 8,
+					'font-style'  => 'I',
+					'font-family' => 'serif',
+					'color'       => '#666666'
+				),
+				'R'    => array(
+					'content'     => sprintf( __( 'Page %s of %s', ATUM_TEXT_DOMAIN ), '{PAGENO}', '{nb}' ),
+					'font-size'   => 8,
+					'font-style'  => 'I',
+					'font-family' => 'serif',
+					'color'       => '#666666'
+				),
+				'line' => 0
+			) );
+
+			$mpdf->SetFooter( $footer, 'O' );
+
+			$common_stylesheet = file_get_contents( ABSPATH . 'wp-admin/css/common.css' );
+			$mpdf->WriteHTML( $common_stylesheet, 1 );
+
+			/** @noinspection PhpUndefinedConstantInspection */
+			$wc_admin_stylesheet = file_get_contents( WC_ABSPATH . 'assets/css/admin.css' );
+			$mpdf->WriteHTML( $wc_admin_stylesheet, 1 );
+
+			$atum_stylesheet = file_get_contents( ATUM_PATH . 'assets/css/atum-list.css' );
+			$mpdf->WriteHTML( $atum_stylesheet, 1 );
+
+			$mpdf->WriteHTML( $html_report );
+
+			$date_now = date_i18n( 'Y-m-d' );
+			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", 'I' );
+
+		} catch (MpdfException $e) {
+
+			if (ATUM_DEBUG) {
+				error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
+			}
+
 		}
-
-		$mpdf->default_available_fonts = $mpdf->available_unifonts;
-
-		// Set the document header sections
-		$header = (array) apply_filters( 'atum/data_export/report_page_header', array(
-			'L'    => array(
-				'content'     => $report_title,
-				'font-size'   => 8,
-				'font-style'  => 'I',
-				'font-family' => 'serif',
-				'color'       => '#666666'
-			),
-			'C'    => array(
-				'content'     => '',
-				'font-size'   => 8,
-				'font-style'  => 'I',
-				'font-family' => 'serif',
-				'color'       => '#666666'
-			),
-			'R'    => array(
-				'content'     => '{DATE ' . get_option( 'date_format' ) . '}',
-				'font-size'   => 8,
-				'font-style'  => 'I',
-				'font-family' => 'serif',
-				'color'       => '#666666'
-			),
-			'line' => 0
-		) );
-
-		$mpdf->SetHeader($header, 'O');
-
-		// Set the document footer sections
-		$footer = (array) apply_filters( 'atum/data_export/report_page_footer', array(
-			'L'    => array(
-				'content'     => __( 'Report generated by DATA EXPORT, a free ATUM add-on.', ATUM_TEXT_DOMAIN ),
-				'font-size'   => 8,
-				'font-style'  => 'I',
-				'font-family' => 'serif',
-				'color'       => '#666666'
-			),
-			'C'    => array(
-				'content'     => '',
-				'font-size'   => 8,
-				'font-style'  => 'I',
-				'font-family' => 'serif',
-				'color'       => '#666666'
-			),
-			'R'    => array(
-				'content'     => sprintf( __( 'Page %s of %s', ATUM_TEXT_DOMAIN ), '{PAGENO}', '{nb}' ),
-				'font-size'   => 8,
-				'font-style'  => 'I',
-				'font-family' => 'serif',
-				'color'       => '#666666'
-			),
-			'line' => 0
-		) );
-
-		$mpdf->SetFooter($footer, 'O');
-
-		$common_stylesheet = file_get_contents( ABSPATH . 'wp-admin/css/common.css');
-		$mpdf->WriteHTML($common_stylesheet, 1);
-
-		$wc_admin_stylesheet = file_get_contents( WC_ABSPATH . 'assets/css/admin.css');
-		$mpdf->WriteHTML($wc_admin_stylesheet, 1);
-
-		$atum_stylesheet = file_get_contents( ATUM_PATH . 'assets/css/atum-list.css');
-		$mpdf->WriteHTML($atum_stylesheet, 1);
-
-		$mpdf->WriteHTML( $html_report );
-
-		$date_now = date_i18n('Y-m-d');
-		echo $mpdf->Output("atum-inventory-report-$date_now.pdf", 'I');
 
 	}
 
@@ -334,7 +346,7 @@ class DataExport {
 		}
 
 		$this->number_columns = count($table_columns);
-		$html_list_table-set_table_columns($table_columns);
+		$html_list_table->set_table_columns($table_columns);
 		$html_list_table->set_group_members($group_members);
 		$html_list_table->prepare_items();
 		$html_list_table->display();

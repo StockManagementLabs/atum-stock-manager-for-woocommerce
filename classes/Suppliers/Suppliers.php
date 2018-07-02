@@ -363,6 +363,7 @@ class Suppliers {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Adds the Supplier fields in WC's product data meta box
 	 *
@@ -371,8 +372,6 @@ class Suppliers {
 	 * @param int      $loop             Only for variations. The loop item number
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_product_supplier_fields($loop = NULL, $variation_data = array(), $variation = NULL) {
 
