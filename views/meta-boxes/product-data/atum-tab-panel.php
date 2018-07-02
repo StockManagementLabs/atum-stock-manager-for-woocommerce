@@ -9,6 +9,12 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+
+/**
+ * @var string  $product_status
+ * @var array   $checkbox_wrapper_classes
+ * @var array   $control_button_classes
+ */
 ?>
 <div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
 	<div class="options_group">
@@ -26,14 +32,16 @@ use Atum\Inc\Helpers;
 		) );
 		?>
 
-		<p class="form-field <?php echo implode(' ', $control_button_classes) ?>">
+		<p class="form-field product-tab-runner <?php echo implode(' ', $control_button_classes) ?>">
 			<label for="stock_control_status"><?php _e("Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>
 			<select id="stock_control_status">
 				<option value="controlled"><?php _e('Controlled', ATUM_TEXT_DOMAIN) ?></option>
 				<option value="uncontrolled"><?php _e('Uncontrolled', ATUM_TEXT_DOMAIN) ?></option>
 			</select>
 			&nbsp;
-			<button type="button" class="change-stock-control button button-primary"><?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?></button>
+			<button type="button" class="run-script button button-primary" data-action="atum_set_variations_control_status" data-confirm="<?php esc_attr_e( 'This will change the ATUM Control Switch for all the variations within this product to %s', ATUM_TEXT_DOMAIN ) ?>">
+				<?php _e('Change Now!', ATUM_TEXT_DOMAIN) ?>
+			</button>
 
 			<?php echo wc_help_tip( __('Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN) ); ?>
 		</p>

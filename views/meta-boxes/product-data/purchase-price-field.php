@@ -8,9 +8,19 @@
 defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Helpers;
+use Atum\Inc\Globals;
+
+/**
+ * @var string $wrapper_class
+ * @var string $field_title
+ * @var float  $field_value
+ * @var float  $price
+ * @var string $field_name
+ * @var string $field_id
+ */
 ?>
 <p class="form-field <?php echo $wrapper_class ?>">
-	<label for="_purchase_price"><?php echo $field_title ?></label>
+	<label for="<?php echo Globals::PURCHASE_PRICE_KEY ?>"><?php echo $field_title ?></label>
 
 	<span class="atum-field input-group<?php if ($field_value > $price) echo ' invalid' ?>">
 		<?php Helpers::atum_field_input_addon() ?>

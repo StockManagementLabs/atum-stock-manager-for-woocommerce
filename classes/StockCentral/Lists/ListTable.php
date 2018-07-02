@@ -32,7 +32,7 @@ class ListTable extends AtumListTable {
 	
 	/**
 	 * Time of query
-	 * @var date
+	 * @var string
 	 */
 	protected $day;
 	
@@ -117,14 +117,14 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
-			'thumb'                 => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'                 => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                 => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'             => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'calc_location'         => '<span class="dashicons dashicons-store tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'             => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_location'         => '<span class="dashicons dashicons-store tips" data-placement="bottom" data-tip="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
@@ -143,7 +143,7 @@ class ListTable extends AtumListTable {
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>'
+			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>'
         );
 
 		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
@@ -559,7 +559,8 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since  1.4.11
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item         The WooCommerce product post to use in calculations
+	 * @param bool     $add_to_total
 	 *
 	 * @return int
 	 */

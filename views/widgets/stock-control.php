@@ -4,6 +4,11 @@
  *
  * @since 1.4.0
  */
+
+/**
+ * @var array $sc_links
+ * @var array $stock_counters
+ */
 ?>
 
 <div class="stock-control-widget">

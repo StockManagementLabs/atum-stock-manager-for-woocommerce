@@ -48,7 +48,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 			'title'                  => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_supplier'              => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_sku'                   => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'          => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'          => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                     => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'calc_type'              => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'         => __( 'Regular Price', ATUM_TEXT_DOMAIN ),

@@ -2,11 +2,18 @@
 /**
  * View for the Dashboard page
  *
- * @since 1.4.0
+ * @since        1.4.0
+ * @noinspection PhpUndefinedMethodInspection
  */
 
 defined( 'ABSPATH' ) or die;
 
+/**
+ * @var string                    $support_link
+ * @var string                    $support_button_text
+ * @var array                     $widgets
+ * @var \Atum\Dashboard\Dashboard $dashboard
+ */
 ?>
 <div class="atum-dashboard">
 

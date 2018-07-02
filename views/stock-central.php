@@ -6,6 +6,13 @@
  */
 
 defined( 'ABSPATH' ) or die;
+
+/**
+ * @var bool   $is_uncontrolled_list
+ * @var string $sc_url
+ * @var \Atum\StockCentral\Lists\ListTable $sc_url
+ * @var string $ajax
+ */
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline">

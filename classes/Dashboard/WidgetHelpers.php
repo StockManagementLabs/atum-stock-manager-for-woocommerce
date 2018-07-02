@@ -147,6 +147,7 @@ final class WidgetHelpers {
 			$order_discount = $order->get_discount_total();
 
 			if ($order_discount) {
+				/** @noinspection PhpWrongStringConcatenationInspection */
 				$stats['value'] += $order_discount;
 
 				$order_items = $order->get_items();
@@ -235,6 +236,9 @@ final class WidgetHelpers {
 
 		foreach ($period as $dt) {
 
+			/**
+			 * @var \DateTime $dt
+			 */
 			$interval = date_diff($dt, $date_now);
 
 			// Bypass all the future dates
@@ -294,6 +298,9 @@ final class WidgetHelpers {
 
 		foreach ($period as $dt) {
 
+			/**
+			 * @var \DateTime $dt
+			 */
 			$interval = date_diff($dt, $date_now);
 
 			// Bypass all the future dates
@@ -343,6 +350,9 @@ final class WidgetHelpers {
 
 		foreach ($period as $dt) {
 
+			/**
+			 * @var \DateTime $dt
+			 */
 			$interval = date_diff($dt, $date_now);
 
 			// Bypass all the future dates
@@ -374,7 +384,7 @@ final class WidgetHelpers {
 	 *
 	 * @param string $time_window   The time window that will specify the x axis in the chart
 	 *
-	 * @return void|\DatePeriod
+	 * @return \DatePeriod|null
 	 */
 	private static function get_chart_data_period($time_window) {
 

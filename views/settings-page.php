@@ -9,6 +9,10 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Settings\Settings;
 
+/**
+ * @var string $active
+ * @var array  $active_sections
+ */
 ?>
 <div class="wrap">
 	<div class="atum-settings-wrapper">

@@ -9,6 +9,12 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+
+/**
+ * @var int                  $loop
+ * @var WC_Product_Variation $variation
+ * @var array                $variation_data
+ */
 ?>
 <div class="atum-data-panel">
 	<h3 class="atum-section-title"><?php _e('ATUM Inventory', ATUM_TEXT_DOMAIN) ?></h3>

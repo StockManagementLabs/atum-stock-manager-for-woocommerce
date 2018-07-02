@@ -203,7 +203,7 @@
 				@include flex-wrap(nowrap);
 				@include flex-align-items(center);
 				padding: 5px;
-				border-top: 1px solid #DDD;
+				border-top: 1px solid $wp-gray-4;
 				position: relative;
 			}
 			
@@ -269,8 +269,8 @@
 		
 		&.active {
 			.addon-key {
-				background-color: #23282d;
-				border-top-color: lighten(#23282d, 25%);
+				background-color: $blue-dark;
+				border-top-color: lighten($blue-dark, 25%);
 			}
 		}
 		

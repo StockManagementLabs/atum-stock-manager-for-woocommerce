@@ -7,6 +7,8 @@
  *
  * @since           1.2.9
  *
+ * @noinspection    PhpUndefinedClassConstantInspection
+ *
  * The abstract class for the ATUM Order post types
  */
 
@@ -213,8 +215,8 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array  $terms
-	 * @param string $taxonomy
+	 * @param array        $terms
+	 * @param \WP_Taxonomy $taxonomy
 	 */
 	public function order_term_recount( $terms, $taxonomy ) {
 
@@ -734,7 +736,7 @@ abstract class AtumOrderPostType {
 
 		foreach ( $ids as $id ) {
 			$atum_order = Helpers::get_atum_order_model( $id );
-			$atum_order->update_status( $new_status, sprintf( __( '%s status changed by bulk edit:', ATUM_TEXT_DOMAIN ), $this->labels['singular_name']), TRUE );
+			$atum_order->update_status( $new_status );
 			do_action( 'atum/' . static::POST_TYPE . '/edit_status', $id, $new_status );
 			$changed++;
 		}

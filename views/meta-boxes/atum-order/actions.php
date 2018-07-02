@@ -2,10 +2,11 @@
 /**
  * View for the ATUM Order actions meta box
  *
- * @since 1.2.4
+ * @since   1.2.4
+ * @package AtumOrders
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 ?>
 

@@ -7,6 +7,8 @@
  *
  * @since           1.2.9
  *
+ * @noinspection    PhpParamsInspection
+ *
  * Shared methods for the PO Item objects
  */
 

@@ -7,6 +7,8 @@
  *
  * @since           1.2.4
  *
+ * @noinspection    PhpUndefinedMethodInspection
+ *
  * The abstract class for the ATUM Order model
  */
 
@@ -15,6 +17,7 @@ namespace Atum\Components\AtumOrders\Models;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Inc\Helpers;
@@ -101,7 +104,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @param  string $type Optional. Filter by item type
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public function read_items( $type = ''  ) {
 
@@ -113,7 +116,7 @@ abstract class AtumOrderModel {
 			$items = Helpers::get_order_items($this->id);
 
 			if (! $items) {
-				return array();
+				return;
 			}
 
 			foreach ( $items as $item ) {
@@ -215,12 +218,12 @@ abstract class AtumOrderModel {
 	 *
 	 * @param \WC_Order_Item $item  Order item object (product, shipping, fee, coupon, tax)
 	 *
-	 * @return void|bool
+	 * @return void
 	 */
 	public function add_item( $item ) {
 
 		if ( !$item || ! $items_key = $this->type_to_group( $item->get_type() ) ) {
-			return FALSE;
+			return;
 		}
 
 		// Make sure existing items are loaded so we can append this new one
@@ -248,14 +251,14 @@ abstract class AtumOrderModel {
 	 *
 	 * @param int $item_id
 	 *
-	 * @return void|bool
+	 * @return void
 	 */
 	public function remove_item( $item_id ) {
 
 		$item = $this->get_atum_order_item( $item_id );
 
 		if ( ! $item || ! ( $items_key = $this->get_items_key( $item ) ) ) {
-			return FALSE;
+			return;
 		}
 
 		// Unset and remove later
@@ -309,7 +312,7 @@ abstract class AtumOrderModel {
 		$item->set_backorder_meta();
 		$item->set_atum_order_id( $this->id );
 		$item->save();
-		$this->add_item( $item, 'line_item' );
+		$this->add_item( $item );
 
 		return $item;
 
@@ -338,7 +341,7 @@ abstract class AtumOrderModel {
 		}
 
 		$item->save();
-		$this->add_item( $item, 'fee' );
+		$this->add_item( $item );
 
 		return $item;
 
@@ -368,7 +371,7 @@ abstract class AtumOrderModel {
 		}
 
 		$item->save();
-		$this->add_item( $item, 'shipping' );
+		$this->add_item( $item );
 
 		return $item;
 
@@ -425,7 +428,7 @@ abstract class AtumOrderModel {
 		}
 
 		$item->save();
-		$this->add_item( $item, 'tax' );
+		$this->add_item( $item );
 
 		return $item;
 
@@ -804,7 +807,7 @@ abstract class AtumOrderModel {
 	public function update_status( $new_status ) {
 
 		$old_status = $this->get_status();
-		$new_status = ( strpos($new_status, ATUM_PREFIX) !== FALSE )  ? str_replace(ATUM_PREFIX, '', $new_status) : $new_status;
+		$new_status = strpos($new_status, ATUM_PREFIX) !== FALSE  ? str_replace(ATUM_PREFIX, '', $new_status) : $new_status;
 		$statuses   = AtumOrderPostType::get_statuses();
 
 		// Only allow valid new status
@@ -1014,6 +1017,7 @@ abstract class AtumOrderModel {
 			$fee_total += $item->get_total();
 		}
 
+		/** @noinspection PhpWrongStringConcatenationInspection */
 		$grand_total = round( $cart_total + $fee_total + $this->get_shipping_total() + $this->get_cart_tax() + $this->get_shipping_tax(), wc_get_price_decimals() );
 
 		$this->set_discount_total( $cart_subtotal - $cart_total );
@@ -1049,6 +1053,7 @@ abstract class AtumOrderModel {
 		if ( is_callable( array( $item, 'get_subtotal' ) ) ) {
 
 			if ( $inc_tax ) {
+				/** @noinspection PhpWrongStringConcatenationInspection */
 				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / max( 1, $item->get_quantity() );
 			}
 			else {
@@ -1081,6 +1086,7 @@ abstract class AtumOrderModel {
 		if ( is_callable( array( $item, 'get_total' ) ) ) {
 
 			if ( $inc_tax ) {
+				/** @noinspection PhpWrongStringConcatenationInspection */
 				$total = ( $item->get_total() + $item->get_total_tax() ) / max( 1, $item->get_quantity() );
 			}
 			else {
@@ -1109,9 +1115,11 @@ abstract class AtumOrderModel {
 		$total_discount = $this->get_discount_total();
 
 		if ( !$ex_tax ) {
+			/** @noinspection PhpWrongStringConcatenationInspection */
 			$total_discount += $this->get_discount_tax();
 		}
 
+		/** @noinspection PhpUndefinedConstantInspection */
 		return apply_filters( 'atum/orders/get_total_discount', round( $total_discount, WC_ROUNDING_PRECISION ), $this );
 
 	}
@@ -1511,8 +1519,6 @@ abstract class AtumOrderModel {
 	 * @param object $item
 	 *
 	 * @return \WC_Order_Item|false if not found
-	 *
-	 * @throws AtumException
 	 */
 	abstract public function get_atum_order_item( $item = NULL );
 
@@ -1631,7 +1637,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @return array
+	 * @return array|\WC_Order_Item_Product
 	 */
 	public function get_fees() {
 		return $this->get_items( 'fee' );
@@ -1642,7 +1648,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @return array
+	 * @return array|\WC_Order_Item_Product
 	 */
 	public function get_taxes() {
 		return $this->get_items( 'tax' );
@@ -1653,7 +1659,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @return array
+	 * @return array|\WC_Order_Item_Product
 	 */
 	public function get_shipping_methods() {
 		return $this->get_items( 'shipping' );

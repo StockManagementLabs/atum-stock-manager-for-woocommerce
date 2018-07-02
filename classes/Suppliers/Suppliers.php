@@ -89,7 +89,7 @@ class Suppliers {
 
 				// Save the product supplier meta box
 				add_action( 'save_post_product', array( $this, 'save_product_supplier_fields' ) );
-				add_action( 'woocommerce_update_product_variation', array( $this, 'save_product_supplier_fields' ) );
+				add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_supplier_fields' ) );
 
 			}
 
@@ -314,7 +314,11 @@ class Suppliers {
 	 * @param \WP_Post $post
 	 */
 	public function show_billing_information_meta_box( $post ) {
-		Helpers::load_view('meta-boxes/suppliers/billing-information', array('supplier_id' => $post->ID));
+
+		$country_obj = new \WC_Countries();
+		$countries   = $country_obj->get_countries();
+
+		Helpers::load_view('meta-boxes/suppliers/billing-information', array('supplier_id' => $post->ID, 'countries' => $countries));
 	}
 
 	/**
@@ -367,6 +371,8 @@ class Suppliers {
 	 * @param int      $loop             Only for variations. The loop item number
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_product_supplier_fields($loop = NULL, $variation_data = array(), $variation = NULL) {
 

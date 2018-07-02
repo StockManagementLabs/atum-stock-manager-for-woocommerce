@@ -249,13 +249,71 @@ $settings-menu-active:      $white;
 		
 		.script-runner {
 			@include flexbox;
+			@include flex-wrap(wrap);
 			
 			.select2-container {
+				
 				&, .selection, .select2-selection--single, .select2-selection__rendered {
 					&:focus {
 						outline: none;
 					}
 				}
+				
+				.select2-selection--multiple {
+					border-radius: 4px;
+					line-height: 1;
+					margin-top: 2px;
+					
+					.select2-search.select2-search--inline {
+						margin: 0;
+						height: 28px;
+						
+						.select2-search__field {
+							min-height: 28px;
+							@include placeholder($wp-gray-1);
+						}
+					}
+				}
+				
+				&.select2-container--focus {
+					.select2-selection--multiple {
+						border-color: $wp-gray-4;
+					}
+				}
+				
+			}
+			
+			.tool-fields-wrapper {
+				width: 100%;
+				margin-bottom: $grid-gutter-width/2;
+				background-color: $light;
+				padding: $grid-gutter-width/2;
+				
+				.repeatable-row {
+					@include flexbox;
+					@include flex-align-items(center);
+					margin: 10px 0;
+					
+					> div {
+						margin-right: 10px;
+					}
+					
+					i {
+						cursor: pointer;
+						@include transition(0.2s ease-in-out);
+						
+						&:hover {
+							color: $primary;
+						}
+						
+						&.remove-row {
+							&:hover {
+								color: $danger;
+							}
+						}
+					}
+				}
+				
 			}
 			
 			button {

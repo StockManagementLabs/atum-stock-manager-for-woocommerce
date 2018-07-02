@@ -82,6 +82,9 @@ $currency = $atum_order->get_currency();
 
 		foreach ( $atum_order->get_taxes() as $tax_item ):
 
+			/**
+			 * @var WC_Order_Item_Tax $tax_item
+			 */
 			$tax_item_id    = $tax_item->get_rate_id();
 			$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : '';
 			?>

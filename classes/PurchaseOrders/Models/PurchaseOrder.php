@@ -14,8 +14,8 @@ namespace Atum\PurchaseOrders\Models;
 
 defined( 'ABSPATH' ) or die;
 
-use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Globals;
 use Atum\Suppliers\Suppliers;
 
 
@@ -60,10 +60,12 @@ class PurchaseOrder extends AtumOrderModel {
 	 * Add the button for setting the purchase price to products within POs
 	 *
 	 * @since 1.3.0
+	 *
+	 * @param \WC_Product $item
 	 */
 	public function set_purchase_price_button ($item) {
 
-		if ($item->get_type() == 'line_item'):
+		if ($item->get_type() === 'line_item'):
 			?><button type="button" class="button set-purchase-price"><?php _e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button><?php
 		endif;
 	}
@@ -191,10 +193,14 @@ class PurchaseOrder extends AtumOrderModel {
 	public function get_atum_order_item( $item = NULL ) {
 
 		if ( is_a( $item, '\WC_Order_Item' ) ) {
+			/**
+			 * @var \WC_Order_Item $item
+			 */
 			$item_type = $item->get_type();
 			$id        = $item->get_id();
 		}
 		elseif ( is_object( $item ) && ! empty( $item->order_item_type ) ) {
+			/** @noinspection PhpUndefinedFieldInspection */
 			$id        = $item->order_item_id;
 			$item_type = $item->order_item_type;
 		}
@@ -252,7 +258,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 				try {
 					return new $classname( $id );
-				} catch ( AtumException $e ) {
+				} catch ( \Exception $e ) {
 					return FALSE;
 				}
 
@@ -335,16 +341,18 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param $price
-	 * @param $qty
-	 * @param $product
+	 * @param float       $price
+	 * @param float       $qty
+	 * @param \WC_Product $product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return float|mixed|string
 	 */
 	public function use_purchase_price($price, $qty, $product) {
 		
 		// Get the purchase price (if set)
-		$price = get_post_meta($product->get_id(), '_purchase_price', TRUE);
+		$price = get_post_meta( $product->get_id(), Globals::ATUM_PURCHASE_PRICE_KEY, TRUE );
 		
 		if ( !$price ) {
 			return '';

@@ -21,7 +21,6 @@ img.tips {
 	z-index: 8675309;
 	position: absolute;
 	top: 0;
-	/*rtl:ignore*/
 	left: 0;
 	
 	
@@ -74,11 +73,11 @@ img.tips {
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 3px rgba($black, 0.2);
 	
 	code {
 		padding: 1px;
-		background: #888;
+		background: $wp-gray-7;
 	}
 }
 
@@ -112,7 +111,7 @@ table.wp-list-table {
 		
 		time {
 			display: block;
-			color: #999;
+			color: $wp-gray-1;
 			margin: 3px 0;
 		}
 	}
@@ -191,7 +190,7 @@ table.wp-list-table {
 		.note-on {
 			@include ir();
 			margin: 0 auto;
-			color: #999;
+			color: $wp-gray-1;
 			
 			&::after {
 				@include icon_woocommerce( '\e027' );
@@ -241,7 +240,7 @@ table.wp-list-table {
 	}
 	
 	.row-actions, span.na {
-		color: #999;
+		color: $wp-gray-1;
 	}
 	
 	.notes_head, .notes_head, .status_head {

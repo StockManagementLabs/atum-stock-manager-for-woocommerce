@@ -7,6 +7,13 @@
 
 use Atum\Components\AtumCapabilities;
 use Atum\Suppliers\Suppliers;
+
+/**
+ * @var \Atum\PurchaseOrders\Exports\POExport $po
+ * @var int   $desc_percent
+ * @var float $discount
+ * @var int   $total_text_colspan
+ */
 ?>
 <div class="po-wrapper content-header">
 	<div class="float-left">
@@ -68,11 +75,16 @@ use Atum\Suppliers\Suppliers;
 			</tr>
 		</thead>
 		<tbody class="po-lines">
-			<?php foreach ( $po->get_items() as $item ):?>
+			<?php foreach ( $po->get_items() as $item ):
+				/**
+				 * @var \WC_Order_Item_Product $item
+				 */
+				?>
 				<tr class="po-line">
 					<td class="description"><?php echo $item->get_name() ?>
 						<?php
 						$product = $item->get_product();
+
 						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ):
 							$supplier_sku = get_post_meta( $product->get_id(), Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
 							

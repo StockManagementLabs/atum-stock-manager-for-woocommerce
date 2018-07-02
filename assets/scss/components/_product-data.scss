@@ -117,7 +117,7 @@
 		}
 		
 		.atum-data-panel {
-			border-top: 1px solid $wp-input-border;
+			border-top: 1px solid $wp-gray-4;
 			padding-top: $grid-gutter-width/2;
 			
 			label {
@@ -138,7 +138,7 @@
 		h3.atum-section-title {
 			border: 1px solid $info;
 			background-color: transparentize($blue-light, .85);
-			color: #555;
+			color: $wp-gray-2;
 			text-transform: uppercase;
 			cursor: default !important;
 			margin-bottom: $grid-gutter-width/2 !important;

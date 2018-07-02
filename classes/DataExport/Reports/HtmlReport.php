@@ -15,10 +15,8 @@ namespace Atum\DataExport\Reports;
 defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Lists\ListTable;
-use Atum\StockCentral\StockCentral;
 use Atum\Suppliers\Suppliers;
 
 
@@ -121,8 +119,10 @@ class HtmlReport extends ListTable {
 		// Add the children products of each Variable and Grouped product
 		if (!$this->allow_calcs) {
 
-			$product_class = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
+			$product_class  = '\WC_Product_' . ucwords( str_replace('-', '_', $type), '_' );
 			$parent_product = new $product_class( $this->product->get_id() );
+
+			/** @noinspection PhpUndefinedMethodInspection */
 			$child_products = $parent_product->get_children();
 
 			if ( ! empty($child_products) ) {

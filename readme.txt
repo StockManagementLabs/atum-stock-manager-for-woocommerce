@@ -7,7 +7,7 @@ Tested up to: 4.9.6
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.4.3
-Stable tag: 1.4.11
+Stable tag: 1.4.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.12`
+
+*2018-06-29*
+
+**Changes**
+
+* Added new field types to Settings.
+* Improved Settings dependency rules.
+* Enhancement for ATUM Tools.
+* Use official Select2 instead of WC’s enhanced selects in Settings.
+* Added purchase_field meta key name to Globals.
+* Align the supplier SKU column left.
+
+**Fixes**
+
+* Added non-Latin fonts to mPDF.
+* Added support for non-Latin languages to mPDF.
+* Refactory.
+* Fixed infinite loop when saving variation products.
+* Fixed popover titles in List Tables.
+* Fixed PHPCS code smells.
 
 ---
 

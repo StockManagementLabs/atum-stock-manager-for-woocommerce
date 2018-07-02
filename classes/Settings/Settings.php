@@ -149,7 +149,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 				'is_any_out_stock_threshold_set' => Helpers::is_any_out_stock_threshold_set(),
-				'confirm_msg'   => esc_attr( __("This will clear all the Out Stock Threshold values that have been set in all products", ATUM_TEXT_DOMAIN) )
+				'confirm_msg' => esc_attr( __('This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN) )
 			),
 			'unmanaged_counters' => array(
 				'section' => 'general',
@@ -397,11 +397,12 @@ class Settings {
 
 			wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
 			$min = ! ATUM_DEBUG ? '.min' : '';
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'wc-enhanced-select' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2' ), ATUM_VERSION );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 			    'atumPrefix'                      => ATUM_PREFIX, //'atum'
@@ -450,6 +451,7 @@ class Settings {
 
 			foreach ($tab_data['sections'] as $section_key => $section_name) {
 
+				/** @noinspection PhpParamsInspection */
 				add_settings_section(
 					ATUM_PREFIX . "setting_$section_key",    // ID
 					$section_name,                           // Title
@@ -519,6 +521,14 @@ class Settings {
 						case 'number':
 							$this->options[ $key ] = isset( $input[ $key ] ) ? intval( $input[ $key ] ) : $atts['default'];
 							break;
+                        case 'button_group':
+	                        //TODO sanatize button_group as FILTER_SANITIZE_STRING (there's no formmating filter for this case?)
+	                        filter_var_array($input[ $key ],FILTER_SANITIZE_STRING);
+	                        $this->options[ $key ] = isset( $input[ $key ] ) ?  maybe_serialize( $input[ $key ]) : $atts['default'];
+	                        break;
+                        case 'textarea':
+	                        $this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
+	                        break;
 
 						default:
 							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
@@ -636,7 +646,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="atum-select2" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -669,15 +679,34 @@ class Settings {
 
 	/**
 	 * Get the settings option array and prints a button group
+     * To use it with checkbox set options['type'] to checkbox & options['multiple'] to '[]'
+     * example:
+     * 'mi_geoprompt_required_fields' => array(
+	 *   'section' => 'geoprompt',
+	 *   'name'    => __( 'Required Fields', ATUM_MULTINV_TEXT_DOMAIN ),
+	 *   'desc'    => __( "What information do you need to know to work with region restriction mode?", ATUM_MULTINV_TEXT_DOMAIN ),
+	 *   'type'    => 'button_group',
+	 *   'default' => 'country',
+	 *   'options' => array(
+	 *     'type'     => 'checkbox',
+	 *     'multiple' => '[]',
+	 *     'values'   => array(
+	 *       'country'  => __( 'Country', ATUM_MULTINV_TEXT_DOMAIN ),
+	 *       'state'    => __( 'State', ATUM_MULTINV_TEXT_DOMAIN ),
+	 *       'postcode' => __( 'Postcode', ATUM_MULTINV_TEXT_DOMAIN ),
+	 *       )
+	 *     )
+	 *   ),
 	 *
-	 * @since 1.4.6
+	 * @since 1.4.11
 	 *
 	 * @param array $args Field arguments
 	 */
 	public function display_button_group( $args ) {
 
 		$name  = self::OPTION_NAME . "[{$args['id']}]";
-		$value = $this->options[ $args['id'] ];
+		$multiple = isset( $args['options']['multiple'] )  ? $args['options']['multiple'] : ''; //allow to send array
+		$value = (strlen($multiple)>0) ? maybe_unserialize($this->options[ $args['id']]) : $this->options[ $args['id'] ];
 		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
 		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
@@ -686,9 +715,17 @@ class Settings {
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-			<label class="btn btn-<?php echo $style ?><?php if ($value == $option_value) echo ' active'?>">
-				<input type="<?php echo $input_type ?>" name="<?php echo $name ?>" autocomplete="off"<?php checked($option_value, $value) ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
-		    </label>
+                <?php
+				if ( strlen( $multiple ) > 0 && is_array($value) && $input_type === "checkbox") {
+	                $is_active = in_array($option_value, $value);
+	                $value_to_check = true;
+                }else{
+	                $is_active = ($value == $option_value);
+					$value_to_check = $option_value;
+                } ?>
+                <label class="btn btn-<?php echo $style ?><?php if ($is_active) echo ' active'?>">
+                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php echo $multiple ?>" autocomplete="off"<?php checked($value_to_check, $is_active); ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
+                </label>
 			<?php endforeach; ?>
 		</div>
 		<?php
@@ -716,7 +753,7 @@ class Settings {
 		?>
 		<select class="atum-select2" name="<?php echo $name ?>" id="<?php echo ATUM_PREFIX . $args['id'] ?>"<?php echo $this->get_dependency($args) . $style ?>>
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-			<option value="<?php echo $option_value ?>>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
+			<option value="<?php echo $option_value ?>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
@@ -741,7 +778,7 @@ class Settings {
 		<div class="script-runner" data-action="<?php echo $args['options']['script_action'] ?>" data-confirm="<?php echo $args['options']['confirm_msg'] ?>">
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
-			<select class="wc-enhanced-select" style="width: 12em">
+			<select class="atum-select2" style="width: 12em">
 				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
 				<option value="<?php echo $key ?>"><?php echo $label ?></option>
 				<?php endforeach ?>

@@ -7,6 +7,8 @@
  *
  * @since           1.2.4
  *
+ * @noinspection    PhpUndefinedMethodInspection
+ *
  * The abstract class for the ATUM Order Item model
  */
 
@@ -78,83 +80,91 @@ abstract class AtumOrderItemModel {
 
 		global $wpdb;
 
-		// Get from cache if available
-		$data = wp_cache_get( 'item-' . $this->id, $this->cache_key );
+		try {
 
-		if ( FALSE === $data ) {
-			$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_item_id = %d LIMIT 1;", $this->id );
-			$data = $wpdb->get_row( $query );
-			wp_cache_set( 'item-' . $this->id, $data, $this->cache_key );
+			// Get from cache if available
+			$data = wp_cache_get( 'item-' . $this->id, $this->cache_key );
+
+			if ( FALSE === $data ) {
+				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_item_id = %d LIMIT 1;", $this->id );
+				$data  = $wpdb->get_row( $query );
+
+				wp_cache_set( 'item-' . $this->id, $data, $this->cache_key );
+			}
+
+			if ( ! $data ) {
+				throw new AtumException( 'invalid_item', __( 'Invalid item', ATUM_TEXT_DOMAIN ) );
+			}
+
+			$this->atum_order_item->set_atum_order_id( $data->order_id );
+			$this->atum_order_item->set_name( $data->order_item_name );
+
+			$this->read_meta();
+
+			// Read the ATUM Order item props from db
+			switch ( $this->atum_order_item->get_type() ) {
+
+				case 'line_item':
+
+					$this->atum_order_item->set_props( array(
+						'product_id'   => $this->get_meta( '_product_id' ),
+						'variation_id' => $this->get_meta( '_variation_id' ),
+						'quantity'     => $this->get_meta( '_qty' ),
+						'tax_class'    => $this->get_meta( '_tax_class' ),
+						'subtotal'     => $this->get_meta( '_line_subtotal' ),
+						'total'        => $this->get_meta( '_line_total' ),
+						'taxes'        => $this->get_meta( '_line_tax_data' )
+					) );
+
+					break;
+
+				case 'fee':
+
+					$this->atum_order_item->set_props( array(
+						'tax_class'  => $this->get_meta( '_tax_class' ),
+						'tax_status' => $this->get_meta( '_tax_status' ),
+						'total'      => $this->get_meta( '_line_total' ),
+						'total_tax'  => $this->get_meta( '_line_tax' ),
+						'taxes'      => $this->get_meta( '_line_tax_data' )
+					) );
+
+					break;
+
+				case 'shipping':
+
+					$this->atum_order_item->set_props( array(
+						'method_id' => $this->get_meta( '_method_id' ),
+						'total'     => $this->get_meta( '_cost' ),
+						'total_tax' => $this->get_meta( '_total_tax' ),
+						'taxes'     => $this->get_meta( '_taxes' )
+					) );
+
+					break;
+
+				case 'tax':
+
+					$this->atum_order_item->set_props( array(
+						'rate_id'            => $this->get_meta( '_rate_id' ),
+						'label'              => $this->get_meta( '_label' ),
+						'compound'           => $this->get_meta( '_compound' ),
+						'tax_total'          => $this->get_meta( '_tax_amount' ),
+						'shipping_tax_total' => $this->get_meta( '_shipping_tax_amount' )
+					) );
+
+					break;
+
+			}
+
+			$this->atum_order_item->set_object_read( TRUE );
+
+		} catch (AtumException $e) {
+
+			if (ATUM_DEBUG) {
+				// phpcs:ignore
+				error_log( __CLASS__ . '::' . __METHOD__ . '::' . $e->getMessage() );
+			}
+
 		}
-
-		if ( ! $data ) {
-			throw new AtumException( 'invalid_item', __( 'Invalid item', ATUM_TEXT_DOMAIN ) );
-		}
-
-		$this->atum_order_item->set_atum_order_id($data->order_id);
-		$this->atum_order_item->set_name($data->order_item_name);
-
-		$this->read_meta();
-
-		/*if ( ! empty($this->meta) ) {
-			$this->atum_order_item->set_meta_data( $this->meta );
-		}*/
-
-		// Read the ATUM Order item props from db
-		switch ( $this->atum_order_item->get_type() ) {
-
-			case 'line_item':
-
-				$this->atum_order_item->set_props( array(
-					'product_id'   => $this->get_meta( '_product_id' ),
-					'variation_id' => $this->get_meta( '_variation_id' ),
-					'quantity'     => $this->get_meta( '_qty' ),
-					'tax_class'    => $this->get_meta( '_tax_class' ),
-					'subtotal'     => $this->get_meta( '_line_subtotal' ),
-					'total'        => $this->get_meta( '_line_total' ),
-					'taxes'        => $this->get_meta( '_line_tax_data' )
-				) );
-
-				break;
-
-			case 'fee':
-
-				$this->atum_order_item->set_props( array(
-					'tax_class'  => $this->get_meta( '_tax_class' ),
-					'tax_status' => $this->get_meta( '_tax_status' ),
-					'total'      => $this->get_meta( '_line_total' ),
-					'total_tax'  => $this->get_meta( '_line_tax' ),
-					'taxes'      => $this->get_meta( '_line_tax_data' )
-				) );
-
-				break;
-
-			case 'shipping':
-
-				$this->atum_order_item->set_props( array(
-					'method_id'  => $this->get_meta( '_method_id' ),
-					'total'      => $this->get_meta( '_cost' ),
-					'total_tax'  => $this->get_meta( '_total_tax' ),
-					'taxes'      => $this->get_meta( '_taxes' )
-				) );
-
-				break;
-
-			case 'tax':
-
-				$this->atum_order_item->set_props( array(
-					'rate_id'            => $this->get_meta( '_rate_id' ),
-					'label'              => $this->get_meta( '_label' ),
-					'compound'           => $this->get_meta( '_compound' ),
-					'tax_total'          => $this->get_meta( '_tax_amount' ),
-					'shipping_tax_total' => $this->get_meta( '_shipping_tax_amount' )
-				) );
-
-				break;
-
-		}
-
-		$this->atum_order_item->set_object_read( TRUE );
 
 	}
 
@@ -163,7 +173,7 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @since  1.2.9
 	 *
-	 * @return int
+	 * @return int|\WP_Error
 	 */
 	public function save() {
 
@@ -415,6 +425,8 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @param string $key
 	 * @param string $raw_key
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return string
 	 */

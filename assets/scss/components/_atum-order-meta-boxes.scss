@@ -70,7 +70,7 @@
 				padding: 0 !important;
 				
 				&.none_set {
-					color: #999
+					color: $wp-gray-1;
 				}
 			}
 			
@@ -176,7 +176,7 @@ ul.atum_order_notes {
 		
 		.note_content {
 			padding: 10px;
-			background: #EFEFEF;
+			background: $gray-200;
 			position: relative;
 			
 			p {
@@ -188,12 +188,12 @@ ul.atum_order_notes {
 		
 		p.meta {
 			padding: 10px;
-			color: #999;
+			color: $wp-gray-1;
 			margin: 0;
 			font-size: 11px;
 			
 			.exact-date {
-				border-bottom: 1px dotted #999;
+				border-bottom: 1px dotted $wp-gray-1;
 			}
 		}
 		
@@ -211,14 +211,14 @@ ul.atum_order_notes {
 			height: 0;
 			border-width: 10px 10px 0 0;
 			border-style: solid;
-			border-color: #EFEFEF transparent;
+			border-color: $gray-200 transparent;
 		}
 	}
 	
 }
 
 .add_note {
-	border-top: 1px solid #DDD;
+	border-top: 1px solid $wp-gray-4;
 	padding: 10px 10px 0;
 	
 	h4 {
@@ -244,7 +244,7 @@ ul.atum_order_notes {
 		display: block !important;
 		margin: 0;
 		padding: 0;
-		background: #fefefe;
+		background: $gray-100;
 	}
 	
 	.atum-meta-box {
@@ -252,9 +252,9 @@ ul.atum_order_notes {
 	}
 	
 	.atum-order-data-row {
-		border-bottom: 1px solid #dfdfdf;
+		border-bottom: 1px solid $gray-300;
 		padding: 1.5em 2em;
-		background: #f8f8f8;
+		background: $gray-100;
 		@include clearfix;
 		line-height: 2em;
 		text-align: right;
@@ -314,7 +314,7 @@ ul.atum_order_notes {
 	.refund-actions {
 		margin-top: 5px;
 		padding-top: 12px;
-		border-top: 1px solid #dfdfdf;
+		border-top: 1px solid $gray-300;
 		
 		.button {
 			float: right;
@@ -339,7 +339,7 @@ ul.atum_order_notes {
 	}
 	
 	h3 small {
-		color: #999;
+		color: $wp-gray-1;
 	}
 	
 	.amount {
@@ -372,7 +372,7 @@ ul.atum_order_notes {
 		
 		table.atum_order_items {
 			width: 100%;
-			background: #fff;
+			background: $white;
 			
 			thead {
 				
@@ -380,8 +380,8 @@ ul.atum_order_notes {
 					text-align: left;
 					padding: 1em;
 					font-weight: normal;
-					color: #999;
-					background: #f8f8f8;
+					color: $wp-gray-1;
+					background: $wp-gray-6;
 					-webkit-touch-callout: none;
 					@include user-select(none);
 					
@@ -411,7 +411,7 @@ ul.atum_order_notes {
 				text-align: left;
 				line-height: 1.5em;
 				vertical-align: top;
-				border-bottom: 1px solid #f8f8f8;
+				border-bottom: 1px solid $wp-gray-6;
 				
 				textarea {
 					width: 100%;
@@ -424,7 +424,7 @@ ul.atum_order_notes {
 				input, textarea {
 					font-size: 14px;
 					padding: 4px;
-					color: #555;
+					color: $wp-gray-2;
 				}
 				
 				&:last-child {
@@ -444,10 +444,10 @@ ul.atum_order_notes {
 				}
 				
 				&.selected {
-					background: #f5ebf3;
+					background: $wp-pink-light;
 					
 					td {
-						border-color: #e6cce1;
+						border-color: $wp-pink;
 						opacity: 0.8;
 					}
 				}
@@ -455,11 +455,11 @@ ul.atum_order_notes {
 			}
 			
 			tbody tr:last-child td {
-				border-bottom: 1px solid #dfdfdf;
+				border-bottom: 1px solid $gray-300;
 			}
 			
 			tbody tr:first-child td {
-				border-top: 8px solid #f8f8f8;
+				border-top: 8px solid $wp-gray-6;
 			}
 			
 			tbody#order_line_items tr:first-child td {
@@ -474,8 +474,8 @@ ul.atum_order_notes {
 				.atum-order-item-thumbnail {
 					width: 38px;
 					height: 38px;
-					border: 2px solid #e8e8e8;
-					background: #f8f8f8;
+					border: 2px solid $gray-200;
+					background: $wp-gray-6;
 					color: #ccc;
 					position: relative;
 					font-size: 21px;
@@ -506,7 +506,7 @@ ul.atum_order_notes {
 					display: block;
 					margin-top: 0.5em;
 					font-size: 0.92em !important;
-					color: #888;
+					color: $wp-gray-7;
 				}
 			}
 			
@@ -523,7 +523,7 @@ ul.atum_order_notes {
 				
 				label {
 					white-space: nowrap;
-					color: #999;
+					color: $wp-gray-1;
 					font-size: 0.833em;
 					
 					input {
@@ -546,9 +546,9 @@ ul.atum_order_notes {
 				
 				.split-input {
 					display: inline-block;
-					background: #fff;
-					border: 1px solid #ddd;
-					box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+					background: $white;
+					border: 1px solid $wp-gray-4;
+					box-shadow: inset 0 1px 2px rgba($black, 0.07);
 					margin: 1px 0;
 					min-width: 80px;
 					overflow: hidden;
@@ -562,7 +562,7 @@ ul.atum_order_notes {
 						label {
 							font-size: 0.75em;
 							padding: 4px 6px 0;
-							color: #555;
+							color: $wp-gray-2;
 							display: block;
 						}
 						
@@ -573,17 +573,17 @@ ul.atum_order_notes {
 							box-shadow: none;
 							margin: 0;
 							padding: 0 6px 4px;
-							color: #555;
+							color: $wp-gray-2;
 							background: transparent;
 							
-							@include placeholder(#ddd);
+							@include placeholder($wp-gray-4);
 						}
 						
 					}
 					
 					div.input:first-child {
-						border-bottom: 1px dashed #ddd;
-						background: #fff;
+						border-bottom: 1px dashed $wp-gray-4;
+						background: $white;
 						
 						label, input {
 							color: #ccc;
@@ -603,7 +603,7 @@ ul.atum_order_notes {
 				
 				small.times, del, .atum-order-item-taxes, .atum-order-item-discount, .atum-order-item-refund-fields {
 					font-size: 0.92em !important;
-					color: #888;
+					color: $wp-gray-7;
 				}
 				
 				.atum-order-item-taxes, .atum-order-item-refund-fields {
@@ -645,7 +645,7 @@ ul.atum_order_notes {
 			}
 			
 			.calculated {
-				border-color: #ae8ca2;
+				border-color: $wc-red-light;
 				border-style: dotted;
 			}
 			
@@ -662,7 +662,7 @@ ul.atum_order_notes {
 			table.meta, table.display_meta {
 				margin: 0.5em 0 0;
 				font-size: 0.92em !important;
-				color: #888;
+				color: $wp-gray-7;
 				
 				tr {
 					
@@ -695,7 +695,7 @@ ul.atum_order_notes {
 						}
 						
 						input:focus + textarea {
-							border-top-color: #999;
+							border-top-color: $wp-gray-1;
 						}
 						
 						p {
@@ -714,7 +714,7 @@ ul.atum_order_notes {
 			}
 			
 			.refund_by {
-				border-bottom: 1px dotted #999;
+				border-bottom: 1px dotted $wp-gray-1;
 			}
 			
 			tr {
@@ -733,7 +733,7 @@ ul.atum_order_notes {
 							margin: 0;
 							
 							&:before {
-								color: #ccc;
+								color: $gray-500;
 							}
 						}
 					}
@@ -789,7 +789,7 @@ ul.atum_order_notes {
 					
 					&:before {
 						@include icon_dashicons( '\f153' );
-						color: #999;
+						color: $wp-gray-1;
 					}
 					
 					&:hover {
@@ -840,7 +840,7 @@ ul.atum_order_notes {
 		vertical-align: middle;
 		
 		a {
-			color: #ccc;
+			color: $gray-500;
 			display: inline-block;
 			cursor: pointer;
 			padding: 0 0 0.5em;
@@ -861,7 +861,7 @@ ul.atum_order_notes {
 			
 			&:hover {
 				&:before {
-					color: #999;
+					color: $wp-gray-1;
 				}
 			}
 			

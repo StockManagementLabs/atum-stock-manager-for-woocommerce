@@ -23,14 +23,14 @@
 		});
 		
 		// Change stock control for all variations at once
-		$('.change-stock-control').click(function() {
+		$('.product-tab-runner').find('.run-script').click(function() {
 			
 			var $button = $(this),
 			    status  = $button.siblings('select').val();
 			
 			swal({
 				title              : atumProductData.areYouSure,
-				text               : atumProductData.confirmNotice.replace('%s', '"' + status + '"'),
+				text               : $button.data('confirm').replace('%s', '"' + status + '"'),
 				type               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : atumProductData.continue,
@@ -43,7 +43,7 @@
 						$.ajax({
 							url     : ajaxurl,
 							data    : {
-								action   : 'atum_set_variations_control_status',
+								action   : $button.data('action'),
 								security : atumProductData.nonce,
 								parent_id: $('#post_ID').val(),
 								status   : status

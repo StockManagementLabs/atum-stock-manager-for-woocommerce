@@ -975,11 +975,16 @@
 		 * Enable tooltips
 		 */
 		addTooltips: function () {
-
-			$('[data-toggle="tooltip"]').tooltip({
-				html     : true,
-				container: 'body'
-			});
+	
+	        $('.tips').each(function() {
+	        	var $tipEl = $(this);
+		
+		        $tipEl.tooltip({
+			        html     : true,
+			        title    : $tipEl.data('tip'),
+			        container: 'body'
+	            });
+	        });
 
 		},
 		
@@ -987,7 +992,7 @@
 		 * Destroy all the tooltips
 		 */
 		destroyTooltips: function() {
-			$('[data-toggle="tooltip"]').tooltip('destroy');
+			$('.tips').tooltip('destroy');
 		},
 		
 		/**
@@ -1025,13 +1030,15 @@
 			
 			var self              = this,
 				symbol            = $metaCell.data('symbol') || '',
-			    currentColumnText = this.$atumTable.find('tfoot th').eq($metaCell.closest('td').index()).text(),
+			    currentColumnText = this.$atumTable.find('tfoot tr.item-heads th').eq($metaCell.closest('td').index()).text(),
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
 				    value: $metaCell.text().replace(symbol, '').replace('—', ''),
 				    class: 'meta-value'
 			    };
+			
+			//debugger;
 			
 			if (inputType === 'number') {
 				inputAtts.min = '0';

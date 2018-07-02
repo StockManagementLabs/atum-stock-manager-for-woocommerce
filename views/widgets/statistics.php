@@ -4,6 +4,12 @@
  *
  * @since 1.4.0
  */
+
+/**
+ * @var array  $legends
+ * @var array  $dataset
+ * @var string $period
+ */
 ?>
 
 <div class="statistics-widget">

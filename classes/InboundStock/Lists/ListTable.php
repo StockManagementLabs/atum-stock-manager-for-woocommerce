@@ -39,11 +39,11 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***
 		$args['table_columns'] = array(
-			'thumb'                => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'                => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'            => '<span class="wc-type tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'            => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'    => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
 			'calc_date_expected'   => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
@@ -135,8 +135,9 @@ class ListTable extends AtumListTable {
 
 		if ( $this->product->get_type() == 'variation' ) {
 
+			/** @noinspection PhpUndefinedMethodInspection */
 			$parent_data = $this->product->get_parent_data();
-			$title = $parent_data['title'];
+			$title       = $parent_data['title'];
 
 			$attributes = wc_get_product_variation_attributes($product_id);
 			if ( ! empty($attributes) ) {
@@ -154,7 +155,7 @@ class ListTable extends AtumListTable {
 		$title_length = absint( apply_filters( 'atum/inbound_stock_list/column_title_length', 20 ) );
 
 		if ( mb_strlen( $title ) > $title_length ) {
-			$title = '<span class="tips" data-toggle="tooltip" title="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
+			$title = '<span class="tips" data-tip="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
@@ -195,7 +196,7 @@ class ListTable extends AtumListTable {
 				return parent::column_calc_type($item);
 		}
 
-		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '" data-toggle="tooltip" title="' . $product_tip . '"></span>', $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>', $item, $this->product );
 
 	}
 

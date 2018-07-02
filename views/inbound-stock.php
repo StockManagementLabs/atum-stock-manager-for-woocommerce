@@ -6,6 +6,11 @@
  */
 
 defined( 'ABSPATH' ) or die;
+
+/**
+ * @var \Atum\InboundStock\Lists\ListTable $list
+ * @var string                             $ajax
+ */
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline">
@@ -20,12 +25,12 @@ defined( 'ABSPATH' ) or die;
 		<p class="search-box">
 			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e('Search products...', ATUM_TEXT_DOMAIN) ?>" autocomplete="off">
 			
-			<?php if ( $ajax == 'no' ):?>
+			<?php if ( $ajax === 'no' ): ?>
 				<input type="submit" class="button search-submit" value="<?php _e('Search', ATUM_TEXT_DOMAIN) ?>">
-			<?php endif;?>
+			<?php endif; ?>
 		</p>
 		
 		<?php $list->display(); ?>
-		
+
 	</div>
 </div>

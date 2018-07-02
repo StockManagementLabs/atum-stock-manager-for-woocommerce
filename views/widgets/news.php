@@ -2,7 +2,12 @@
 /**
  * View for the ATUM Dashboard News widget
  *
- * @since 1.4.0
+ * @since        1.4.0
+ * @noinspection PhpUndefinedMethodInspection
+ */
+
+/**
+ * @var array $rss_items
  */
 ?>
 <div class="news-widget" data-widget="news">

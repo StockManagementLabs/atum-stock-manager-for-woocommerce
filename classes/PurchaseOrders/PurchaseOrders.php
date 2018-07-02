@@ -391,6 +391,8 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @param \WP_Screen $screen    The current screen
 	 * @param array      $tab       The current help tab
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 
@@ -424,7 +426,8 @@ class PurchaseOrders extends AtumOrderPostType {
 	/**
 	 * Generate an Atum order pdf
 	 *
-	 * @since 1.3.9
+	 * @since        1.3.9
+	 * @noinspection PhpUndefinedConstantInspection
 	 */
 	public function generate_order_pdf() {
 
@@ -435,7 +438,13 @@ class PurchaseOrders extends AtumOrderPostType {
 			//$po_export = new Atum\DataExport\Models\POExport( $atum_order_id);
 			$po_export = new POExport($atum_order_id);
 
-			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ]);
+			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ]); // phpcs:ignore
+
+			// Add support for non-Latin languages
+			$mpdf->useAdobeCJK      = TRUE;
+			$mpdf->autoScriptToLang = TRUE;
+			$mpdf->autoLangToFont   = TRUE;
+
 			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
 
 			$mpdf->default_available_fonts = $mpdf->available_unifonts;
@@ -444,13 +453,13 @@ class PurchaseOrders extends AtumOrderPostType {
 
 			foreach ($css as $file) {
 				$stylesheet = file_get_contents( $file);
-				$mpdf->WriteHTML($stylesheet, 1);
+				$mpdf->WriteHTML($stylesheet, 1); // phpcs:ignore
 			}
 
-			$mpdf->WriteHTML(  $po_export->get_content() );
+			$mpdf->WriteHTML(  $po_export->get_content() ); // phpcs:ignore
 
 			// Output a PDF file directly to the browser
-			$mpdf->Output("po-{$po_export->get_id()}.pdf", 'I');
+			$mpdf->Output("po-{$po_export->get_id()}.pdf", 'I'); // phpcs:ignore
 
 		}
 

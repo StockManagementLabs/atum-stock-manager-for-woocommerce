@@ -13,7 +13,6 @@
 namespace Atum\Inc;
 
 use Atum\Components\AtumCapabilities;
-use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
 
@@ -77,7 +76,7 @@ class Hooks {
 		if( Helpers::get_option( 'out_stock_threshold', 'no' )  == 'yes' ){
 
 			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
-			add_action( 'woocommerce_update_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
+			add_action( 'woocommerce_save_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
 			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
 
@@ -228,14 +227,13 @@ class Hooks {
 			wp_register_script( 'atum-product-data', ATUM_URL . "assets/js/atum.product.data{$min}.js", array('switchery', 'sweetalert2'), ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', array(
-				'areYouSure'    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'confirmNotice'                 => __( 'This will change the ATUM control switch for all the variations within this product to %s', ATUM_TEXT_DOMAIN ),
+				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'success'       => __( 'Success!', ATUM_TEXT_DOMAIN ),
-				'error'         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
+				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
-				'isOutStockThresholdEnabled' => Helpers::get_option( 'out_stock_threshold', 'no' ),
+				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
 				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock()
 			) );
 
@@ -312,6 +310,8 @@ class Hooks {
 	 * @param int      $product_id The saved product's ID
 	 * @param \WP_Post $post       The saved post
 	 * @param bool     $update
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function save_product_data_panel( $product_id, $post, $update ) {
 
@@ -413,7 +413,7 @@ class Hooks {
 
 		// Save the product purchase price meta
 		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
-		add_action( 'woocommerce_update_product_variation', array( $this, 'save_purchase_price' ) );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
 	}
 
 	/**
@@ -421,9 +421,11 @@ class Hooks {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param int $loop Only for variations. The loop item number
-	 * @param array $variation_data Only for variations. The variation item data
-	 * @param \WP_Post $variation Only for variations. The variation product
+	 * @param int      $loop            Only for variations. The loop item number
+	 * @param array    $variation_data  Only for variations. The variation item data
+	 * @param \WP_Post $variation       Only for variations. The variation product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_out_stock_threshold_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
 
@@ -482,7 +484,7 @@ class Hooks {
 
         global $pagenow;
 
-		$product  = wc_get_product( $post_id );
+		$product = wc_get_product( $post_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 			return;
@@ -532,6 +534,8 @@ class Hooks {
 	 * @param int      $loop             Only for variations. The loop item number
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_purchase_price_meta($loop = NULL, $variation_data = array(), $variation = NULL) {
 
@@ -544,7 +548,7 @@ class Hooks {
 		if ( empty($variation) ) {
 			$product_id    = get_the_ID();
 			$wrapper_class = '_purchase_price_field';
-			$field_id      = $field_name = '_purchase_price';
+			$field_id      = $field_name = Globals::PURCHASE_PRICE_KEY;
 		}
 		else {
 			$product_id    = $variation->ID;
@@ -553,7 +557,7 @@ class Hooks {
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
-		$field_value = wc_format_localized_price( get_post_meta( $product_id, '_purchase_price', TRUE ) );
+		$field_value = wc_format_localized_price( get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE ) );
 		$product     = wc_get_product( $product_id );
 		$price       = $product->get_price();
 
@@ -571,14 +575,14 @@ class Hooks {
 	public function save_purchase_price($product_id) {
 
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-		$old_purchase_price = get_post_meta( $product_id, '_purchase_price', TRUE );
+		$old_purchase_price = get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
 
 		// Variables, grouped and variations
 		if ( Helpers::is_inheritable_type($product_type) ) {
 
 			// Inheritable products have no prices
-			if ( isset( $_POST['_purchase_price'] ) ) {
-				update_post_meta( $product_id, '_purchase_price', '' );
+			if ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
+				update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, '' );
 			}
 			elseif ( isset( $_POST['variation_purchase_price'] ) ) {
 
@@ -586,17 +590,17 @@ class Hooks {
 				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
 				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
 
-				update_post_meta( $product_id, '_purchase_price', $purchase_price );
+				update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, $purchase_price );
 
 			}
 
 		}
 		// Rest of product types (Bypass if "_puchase_price" meta is not coming)
-		elseif ( isset($_POST['_purchase_price']) ) {
+		elseif ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
 
-			$purchase_price = (string) isset( $_POST['_purchase_price'] ) ? wc_clean( $_POST['_purchase_price'] ) : '';
+			$purchase_price = (string) isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ? wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) : '';
 			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
-			update_post_meta( $product_id, '_purchase_price', $purchase_price);
+			update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, $purchase_price);
 
 		}
 		
@@ -662,6 +666,8 @@ class Hooks {
 	 * @since 1.3.3
 	 *
 	 * @param \WC_Order $wc_order
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wc_order_add_location_column_header($wc_order) {
 		?><th class="item_location sortable" data-sort="string-ins"><?php _e( 'Location', ATUM_TEXT_DOMAIN ); ?></th><?php
@@ -675,6 +681,8 @@ class Hooks {
 	 * @param \WC_Product    $product
 	 * @param \WC_Order_Item $item
 	 * @param int            $item_id
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function wc_order_add_location_column_value($product, $item, $item_id) {
 
@@ -733,6 +741,8 @@ class Hooks {
 	 * @since 0.1.5
 	 *
 	 * @param \WC_Product $product   The product
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function delete_transients($product) {
 		Helpers::delete_transients();
@@ -777,6 +787,8 @@ class Hooks {
 	 * @param int         $value
 	 * @param \WC_Product $product
 	 *
+	 * @noinspection PhpUnusedParameterInspection
+	 *
 	 * @return float|int
 	 */
 	public function stock_quantity_input_atts($value, $product) {
@@ -810,6 +822,8 @@ class Hooks {
 	 *
 	 * @param string $message
 	 * @param int|array $products
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 *
 	 * @return string
 	 */
@@ -849,7 +863,7 @@ class Hooks {
 	 * @param $old_value array
 	 * @param $option_value array
 	 *
-	 * @throws \Atum\Components\AtumException if we set a product with all true.
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
 

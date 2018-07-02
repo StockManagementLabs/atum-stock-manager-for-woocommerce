@@ -370,6 +370,9 @@ class Main {
 			return;
 		}
 
+		/**
+		 * @var \WP_Admin_Bar $wp_admin_bar
+		 */
 		global $wp_admin_bar;
 
 		// Add the main menu item

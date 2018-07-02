@@ -7,6 +7,8 @@
  *
  * @since           1.2.4
  *
+ * @noinspection    PhpParamsInspection
+ *
  * Shared methods for the Log Item objects
  */
 

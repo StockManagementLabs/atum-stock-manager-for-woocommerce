@@ -40,14 +40,12 @@ defined( 'ABSPATH' ) or die;
 	<div class="form-field form-field-wide">
 		<label for="country"><?php _e('Country', ATUM_TEXT_DOMAIN) ?></label>
 
-		<?php
-		$countries = apply_filters( 'atum/supplier/billing_information_countries', include( WC()->plugin_path() . '/i18n/countries.php' ) );
-		$country = get_post_meta($supplier_id, '_billing_information_country', TRUE);
-		?>
+		<?php $country = get_post_meta($supplier_id, '_billing_information_country', TRUE); ?>
 		<select id="country" name="billing_information[country]" style="width:100%;" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', ATUM_TEXT_DOMAIN ); ?>" class="wc-enhanced-select">
 			<option value=""><?php esc_html_e( 'Choose a country&hellip;', ATUM_TEXT_DOMAIN ); ?></option>
+
 			<?php foreach ($countries as $key => $value): ?>
-			<option value="<?php echo $key ?>"<?php selected($key, $country) ?>><?php echo $value ?></option>
+				<option value="<?php echo $key ?>"<?php selected($key, $country) ?>><?php echo $value ?></option>
 			<?php endforeach; ?>
 		</select>
 

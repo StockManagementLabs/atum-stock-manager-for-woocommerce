@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) or die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
@@ -29,7 +28,6 @@ use Atum\Suppliers\Suppliers;
 
 final class Helpers {
 
-
 	/**
 	 * Get the term ids of a given array of slug terms
 	 *
@@ -37,18 +35,24 @@ final class Helpers {
 	 *
 	 * @param array $slug_terms
      * @param string taxonomy default 'product_type'
+	 *
+	 * @noinspection PhpUnusedParameterInspection
+	 *
 	 * @return array term_ids
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT $wpdb->terms.term_id FROM $wpdb->terms 
-                INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-                WHERE $wpdb->term_taxonomy.taxonomy = %s
-                AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
+		$query = $wpdb->prepare( "
+			SELECT $wpdb->terms.term_id FROM $wpdb->terms 
+            INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
+            WHERE $wpdb->term_taxonomy.taxonomy = %s
+            AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')
+        ", $taxonomy );
 
 		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
 		$result           = array();
-		//flat array:
+
+		// Flat array
 		array_walk_recursive( $search_terms_ids, function ( $v, $k ) use ( &$result ) {
 			$result[] = absint( $v );
 		} );
@@ -102,8 +106,6 @@ final class Helpers {
 	 * @since 1.4.1
 	 *
 	 * @param string $side
-	 *
-	 * @return string
 	 */
 	public static function atum_field_input_addon($side = 'prepend') {
 
@@ -277,7 +279,7 @@ final class Helpers {
 	 *      @type string        $fields            If empty will return all the order posts. For returning only IDs the value must be 'ids'
 	 * }
 	 *
-	 * @return array
+	 * @return \WC_Order|array
 	 */
 	public static function get_orders( $atts = array() ) {
 
@@ -302,7 +304,7 @@ final class Helpers {
 		 *
 		 * @var array|string  $type
 		 * @var array|string  $status
-		 * @var array         $orders_in
+		 * @var array|string  $orders_in
 		 * @var int           $number
 		 * @var string        $meta_key
 		 * @var mixed         $meta_value
@@ -594,7 +596,7 @@ final class Helpers {
 	 * @param mixed   $default The default value returned if the option was not found
 	 * @param boolean $echo    If the option has to be returned or printed
 	 *
-	 * @return mixed
+	 * @return mixed|void
 	 */
 	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
 
@@ -611,6 +613,7 @@ final class Helpers {
 			return;
 		}
 
+		/** @noinspection PhpInconsistentReturnPointsInspection */
 		return apply_filters( "atum/get_option/$name", $option );
 
 	}
@@ -823,7 +826,9 @@ final class Helpers {
 	 * @param array  $args                  Optional. Variables that will be passed to the view
 	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
 	 *
-	 * @return void|bool
+	 * @noinspection PhpIncludeInspection
+	 *
+	 * @return void
 	 */
 	public static function load_view( $view, $args = [ ], $allow_theme_override = TRUE ) {
 		
@@ -848,7 +853,7 @@ final class Helpers {
 			$file_path = ATUM_PATH . "views/$file";
 
 			if ( ! is_file( $file_path ) ) {
-				return FALSE;
+				return;
 			}
 
 		}
@@ -856,7 +861,7 @@ final class Helpers {
 		if ( ! empty( $args ) && is_array( $args ) ) {
 			extract( $args );
 		}
-		
+
 		if ( ATUM_DEBUG ) {
 			include $file_path;
 		}
@@ -875,7 +880,7 @@ final class Helpers {
 	 * @param array  $args                  Optional. Variables that will be passed to the view
 	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
 	 *
-	 * @return View template string
+	 * @return string View template
 	 */
 	public static function load_view_to_string( $view, $args = [ ], $allow_theme_override = TRUE ) {
 		
@@ -1571,9 +1576,6 @@ final class Helpers {
 			
 		}
 		
-		// Hack to prevent overwriting the purchase_price on variations
-		remove_action( 'woocommerce_update_product_variation', array( Hooks::get_instance(), 'save_purchase_price' ) );
-		
 		$product->save();
 		
 		if ( !$skip_action) {
@@ -1612,22 +1614,16 @@ final class Helpers {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param $product any subclass of WC_Abstract_Legacy_Product
-	 * @param $all bool
-	 * @param $clean_meta bool
-	 *
-	 * @throws AtumException if we set a product with all = true
+	 * @param \WC_Product $product    Any subclass of WC_Abstract_Legacy_Product
+	 * @param bool        $all
+	 * @param bool        $clean_meta
 	 */
-	public static function force_rebuild_stock_status($product = NULL, $clean_meta=FALSE, $all = FALSE){
+	public static function force_rebuild_stock_status($product = NULL, $clean_meta = FALSE, $all = FALSE){
 
 	    global $wpdb;
 		$wpdb->hide_errors();
 
-	    if ( is_subclass_of($product, 'WC_Abstract_Legacy_Product') && ! is_null($product) ){
-
-	        if ($all){
-                throw new AtumException( __('You cannot set a product, and at same time to ask to work in all products', ATUM_TEXT_DOMAIN) );
-            }
+	    if ( is_subclass_of($product, '\WC_Abstract_Legacy_Product') && ! is_null($product) ){
 
 		    $product->set_stock_quantity($product->get_stock_quantity()+1);
 		    $product->set_stock_quantity($product->get_stock_quantity()-1);
@@ -1735,5 +1731,72 @@ final class Helpers {
 		}
 
     }
+
+	/**
+	 * Groups an array into arrays by a given key, or set of keys, shared between all array members
+	 *
+	 * Based on mcaskill's {@link https://gist.github.com/mcaskill/baaee44487653e1afc0d array_group_by()} function.
+	 *
+	 * @param array $array   The array to have grouping performed on.
+	 * @param mixed $key,... The key to group or split by. Can be a _string_,
+	 *                       an _integer_, a _float_, or a _callable_.
+	 *
+	 *                       If the key is a callback, it must return
+	 *                       a valid key from the array.
+	 *
+	 *                       If the key is _NULL_, the iterated element is skipped.
+	 *
+	 *                       ```
+	 *                       string|int callback ( mixed $item )
+	 *                       ```
+	 *
+	 * @return array|null Returns a multidimensional array or `null` if `$key` is invalid.
+	 */
+	public static function array_group_by(array $array, $key) {
+
+		if ( ! is_string( $key ) && ! is_int( $key ) && ! is_float( $key ) && ! is_callable( $key ) ) {
+			// The key should be a string, an integer, or a callback
+			return NULL;
+		}
+
+		$func = ( ! is_string( $key ) && is_callable( $key ) ? $key : NULL );
+		$_key = $key;
+
+		// Load the new array, splitting by the target key
+		$grouped = [];
+		foreach ( $array as $value ) {
+			$key = NULL;
+
+			if ( is_callable( $func ) ) {
+				$key = call_user_func( $func, $value );
+			}
+			elseif ( is_object( $value ) && isset( $value->{$_key} ) ) {
+				$key = $value->{$_key};
+			}
+			elseif ( isset( $value[ $_key ] ) ) {
+				$key = $value[ $_key ];
+			}
+
+			if ( $key === NULL ) {
+				continue;
+			}
+
+			$grouped[ $key ][] = $value;
+		}
+
+		// Recursively build a nested grouping if more parameters are supplied
+		// Each grouped array value is grouped according to the next sequential key
+		if ( func_num_args() > 2 ) {
+			$args = func_get_args();
+
+			foreach ( $grouped as $key => $value ) {
+				$params          = array_merge( [ $value ], array_slice( $args, 2, func_num_args() ) );
+				$grouped[ $key ] = call_user_func_array( 'array_group_by', $params );
+			}
+		}
+
+		return $grouped;
+
+	}
 
 }
