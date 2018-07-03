@@ -9,7 +9,7 @@
 	},
 	"license": "Copyrighted",
 	"devDependencies": {
-		"gulp": "^4.0.0",
+		"gulp": "latest",
 		"gulp-composer": "latest",
 		"gulp-filter": "latest",
 		"gulp-if": "latest",
