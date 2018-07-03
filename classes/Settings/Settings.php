@@ -710,6 +710,7 @@ class Settings {
 		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
 		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
+		$required_value = isset( $args['options']['required_value'] )  ? $args['options']['required_value'] : '';
 
 		ob_start();
 		?>
@@ -722,9 +723,24 @@ class Settings {
                 }else{
 	                $is_active = ($value == $option_value);
 					$value_to_check = $option_value;
-                } ?>
+                }
+
+				$disabled_str = '';
+				$checked_str ='';
+
+				//Force checked disabled and active on required value
+                //TODO required_value to required_values array
+				if ( $option_value === $required_value ) {
+					$checked_str  = checked( true, true, false );
+					$disabled_str = ' disabled';
+					$is_active = true;
+				} else {
+					$checked_str = checked( $value_to_check, $is_active, false );
+				}
+
+                ?>
                 <label class="btn btn-<?php echo $style ?><?php if ($is_active) echo ' active'?>">
-                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php echo $multiple ?>" autocomplete="off"<?php checked($value_to_check, $is_active); ?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label ?>
+                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php echo $multiple ?>" autocomplete="off"<?php echo $checked_str; echo $disabled_str;?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label; ?>
                 </label>
 			<?php endforeach; ?>
 		</div>

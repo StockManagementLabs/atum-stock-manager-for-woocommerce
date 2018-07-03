@@ -10,3 +10,4 @@ phpcs.xml
 
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*
+/vendor/mcaskill/php-array-group-by
