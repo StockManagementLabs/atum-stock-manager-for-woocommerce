@@ -35,17 +35,14 @@ final class Helpers {
 	 *
 	 * @param array $slug_terms
      * @param string taxonomy default 'product_type'
-	 *
 	 * @return array term_ids
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
 		global $wpdb;
-		$query = $wpdb->prepare( "
-			SELECT $wpdb->terms.term_id FROM $wpdb->terms 
-            INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-            WHERE $wpdb->term_taxonomy.taxonomy = %s
-            AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')
-        ", $taxonomy );
+		$query = $wpdb->prepare( "SELECT $wpdb->terms.term_id FROM $wpdb->terms 
+                INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
+                WHERE $wpdb->term_taxonomy.taxonomy = %s
+                AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
 
 		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
 		$result           = array();

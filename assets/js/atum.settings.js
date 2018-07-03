@@ -310,7 +310,7 @@
 			this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				
 				self.doSwitchers();
-				self.restoreSelect2();
+				self.restoreSelects();
 				self.$form.find('[data-dependency]').change().removeClass('dirty');
 				self.$form.show();
 				
