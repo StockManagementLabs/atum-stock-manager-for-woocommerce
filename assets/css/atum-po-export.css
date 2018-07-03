@@ -1,12 +1,128 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.10 
+ * @version 1.4.13 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2018 Stock Management Labs 
- */ 
+ * License : Copyright 2018 Stock Management Labs 
+ */
 
-body{font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif}.po-wrapper{width:calc(100% - 40px);padding:30px 20px 20px 20px;font-size:14px}.float-left{float:left}.float-right{float:right}.label{font-weight:bold}.content-header .float-right{text-align:right;width:250px}.content-header .float-left{width:60%}.content-header strong{font-size:20px}.po-title{margin-top:0;margin-bottom:10px;font-size:25px;color:#00B8DB;text-transform:uppercase}.content-address .float-left{width:40%}.content-address .float-right{width:40%}.content-address h4{font-size:18px;background-color:#00B8DB;color:#fff;padding:5px 10px;margin:0;text-transform:uppercase}.content-lines{padding:0 20px}.content-lines table{width:100%;border-collapse:collapse}.content-lines .po-li-head{background-color:#00B8DB}.content-lines .po-li-head th{color:#fff;text-transform:uppercase}.content-lines th,.content-lines td{font-size:14px;text-align:right;width:10%;white-space:nowrap;vertical-align:top;padding:5px 10px}.content-lines .description{text-align:left}.content-lines .qty{text-align:center}.content-lines td.total,.content-lines .po-lines tr:nth-child(even) td{background-color:rgba(0,184,219,0.1)}.content-totals .subtotal td{border-top:2px solid #00B8DB;padding-top:20px}.po-total .label,.po-total .total{border-top:2px solid #00B8DB;font-weight:bold}.content-description .label{text-transform:uppercase}.po-content{border:1px solid #DDD;padding:10px;margin-top:10px}
+ body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
 
+.po-wrapper {
+  width: calc(100% - 40px);
+  padding: 30px 20px 20px 20px;
+  font-size: 14px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.content-header .float-right {
+  text-align: right;
+  width: 250px;
+}
+
+.content-header .float-left {
+  width: 60%;
+}
+
+.content-header strong {
+  font-size: 20px;
+}
+
+.po-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 25px;
+  color: #00B8DB;
+  text-transform: uppercase;
+}
+
+.content-address .float-left {
+  width: 40%;
+}
+
+.content-address .float-right {
+  width: 40%;
+}
+
+.content-address h4 {
+  font-size: 18px;
+  background-color: #00B8DB;
+  color: #fff;
+  padding: 5px 10px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.content-lines {
+  padding: 0 20px;
+}
+
+.content-lines table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.content-lines .po-li-head {
+  background-color: #00B8DB;
+}
+
+.content-lines .po-li-head th {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.content-lines th, .content-lines td {
+  font-size: 14px;
+  text-align: right;
+  width: 10%;
+  white-space: nowrap;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+
+.content-lines .description {
+  text-align: left;
+}
+
+.content-lines .qty {
+  text-align: center;
+}
+
+.content-lines td.total, .content-lines .po-lines tr:nth-child(even) td {
+  background-color: rgba(0, 184, 219, 0.1);
+}
+
+.content-totals .subtotal td {
+  border-top: 2px solid #00B8DB;
+  padding-top: 20px;
+}
+
+.po-total .label, .po-total .total {
+  border-top: 2px solid #00B8DB;
+  font-weight: bold;
+}
+
+.content-description .label {
+  text-transform: uppercase;
+}
+
+.po-content {
+  border: 1px solid #DDD;
+  padding: 10px;
+  margin-top: 10px;
+}
 /*# sourceMappingURL=atum-po-export.css.map */

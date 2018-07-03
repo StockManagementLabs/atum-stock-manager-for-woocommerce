@@ -1,12 +1,497 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.10 
+ * @version 1.4.13 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2018 Stock Management Labs 
- */ 
+ * License : Copyright 2018 Stock Management Labs 
+ */
 
-.swal2-container{z-index:100000000}.swal2-container .swal2-content,.swal2-container .swal2-title{margin-bottom:30px}.swal2-container .swal2-title{line-height:1.3;font-size:23px}.swal2-container p{font-size:15px;text-align:center}.swal2-container button,.swal2-container a{-webkit-transition:all 0.2s ease-in-out;-o-transition:all 0.2s ease-in-out;transition:all 0.2s ease-in-out}.swal2-container button:focus,.swal2-container a:focus{outline:none;box-shadow:none}.swal2-container a{text-decoration:none;color:#69C61D}.swal2-container a:hover{color:#82e135}.swal2-container .atum-loading{width:18px;height:18px;border:3px solid rgba(0,184,219,0.25);border-top-color:#00B8DB;border-radius:50%;position:absolute;z-index:50;-webkit-animation:loader-rotate 1s linear infinite;-moz-animation:loader-rotate 1s linear infinite;-o-animation:loader-rotate 1s linear infinite;animation:loader-rotate 1s linear infinite;top:30px;left:0;right:0;margin:auto;width:40px;height:40px;border-width:3px}@-webkit-keyframes loader-rotate{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}@-moz-keyframes loader-rotate{from{-moz-transform:rotate(0deg)}to{-moz-transform:rotate(360deg)}}@-o-keyframes loader-rotate{from{-o-transform:rotate(0deg)}to{-o-transform:rotate(360deg)}}@keyframes loader-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.atum-addons h1{margin-bottom:15px}.atum-addons a{text-decoration:none}@media all and (min-width: 481px){.atum-addons .themes{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-moz-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-align:start;-ms-flex-align:start;-webkit-align-items:flex-start;-moz-align-items:flex-start;align-items:flex-start}}.atum-addons .theme .theme-screenshot{position:relative;cursor:default;background-size:cover !important;background-position:center !important;background-repeat:no-repeat !important}.atum-addons .theme .theme-name{position:relative;cursor:default}.atum-addons .theme .theme-actions{height:39px;right:27px;-webkit-transform:translate3d(0, -50%, 0);-moz-transform:translate3d(0, -50%, 0);-o-transform:translate3d(0, -50%, 0);-ms-transform:translate3d(0, -50%, 0);transform:translate3d(0, -50%, 0);-webkit-transition:0.2s ease-in-out;-o-transition:0.2s ease-in-out;transition:0.2s ease-in-out}.atum-addons .theme .theme-actions.valid,.atum-addons .theme .theme-actions.invalid,.atum-addons .theme .theme-actions.inactive,.atum-addons .theme .theme-actions.coming-soon{opacity:1}.atum-addons .theme .theme-actions.valid span,.atum-addons .theme .theme-actions.invalid span,.atum-addons .theme .theme-actions.inactive span,.atum-addons .theme .theme-actions.coming-soon span{display:inline-block;margin-top:11px;font-size:12px;color:#fff;font-weight:normal}.atum-addons .theme .theme-actions.valid{background-color:#69C61D}.atum-addons .theme .theme-actions.valid+.show-key{opacity:0}.atum-addons .theme .theme-actions.valid.not-installed{background-color:#69C61D;right:0;width:105px;height:50px;padding:0;border:none}.atum-addons .theme .theme-actions.valid:not(.not-installed)+.show-key i{color:#69C61D}.atum-addons .theme .theme-actions.invalid span{color:#FF4848}.atum-addons .theme .theme-actions.inactive{background-color:#EFAF00}.atum-addons .theme .theme-actions.not-installed{background-color:transparent}.atum-addons .theme .theme-actions.coming-soon{background-color:#0fd9ff;right:0}.atum-addons .theme .show-key{position:absolute;right:0;bottom:0;height:49px;padding:0 3px;border-left:1px solid rgba(0,0,0,0.05);cursor:pointer;-webkit-transform:translateX(100%);-moz-transform:translateX(100%);-o-transform:translateX(100%);-ms-transform:translateX(100%);transform:translateX(100%)}.atum-addons .theme .show-key,.atum-addons .theme .show-key i{-webkit-transition:all 0.2s ease-in-out;-o-transition:all 0.2s ease-in-out;transition:all 0.2s ease-in-out}.atum-addons .theme .show-key i{font-size:15px;padding-top:17px;color:#00B8DB}.atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed),.atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed),.atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed){opacity:0;-webkit-transform:translate3d(100%, -50%, 0);-moz-transform:translate3d(100%, -50%, 0);-o-transform:translate3d(100%, -50%, 0);-ms-transform:translate3d(100%, -50%, 0);transform:translate3d(100%, -50%, 0)}.atum-addons .theme:hover .more-details,.atum-addons .theme.inactive .more-details,.atum-addons .theme.invalid .more-details{opacity:0 !important}.atum-addons .theme:hover .theme-screenshot:hover .addon-details,.atum-addons .theme.inactive .theme-screenshot:hover .addon-details,.atum-addons .theme.invalid .theme-screenshot:hover .addon-details{-webkit-transform:translateY(0);-moz-transform:translateY(0);-o-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)}.atum-addons .theme:hover .theme-screenshot:hover .more-details,.atum-addons .theme.inactive .theme-screenshot:hover .more-details,.atum-addons .theme.invalid .theme-screenshot:hover .more-details{opacity:1 !important}.atum-addons .theme:hover .show-key,.atum-addons .theme.inactive .show-key,.atum-addons .theme.invalid .show-key{opacity:1 !important;background-color:#0fd9ff;-webkit-transform:translateX(0);-moz-transform:translateX(0);-o-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}.atum-addons .theme:hover .show-key i,.atum-addons .theme.inactive .show-key i,.atum-addons .theme.invalid .show-key i{color:#fff !important}.atum-addons .theme .more-details{border-radius:0;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-o-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);-webkit-transition:opacity 0.3s ease-in-out;-o-transition:opacity 0.3s ease-in-out;transition:opacity 0.3s ease-in-out}.atum-addons .theme .addon-details{top:0;bottom:0;background-color:rgba(0,0,0,0.7);position:absolute;color:#fff;padding:10px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-moz-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;-webkit-align-items:center;-moz-align-items:center;align-items:center;-webkit-transform:translateY(-101%);-moz-transform:translateY(-101%);-o-transform:translateY(-101%);-ms-transform:translateY(-101%);transform:translateY(-101%);-webkit-transition:transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);-o-transition:transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);transition:transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955)}.atum-addons .theme .addon-details>p{height:65%;overflow:hidden}.atum-addons .theme .addon-details .more-details{position:static;-webkit-transform:none;-moz-transform:none;-o-transform:none;-ms-transform:none;transform:none;-webkit-transition-delay:.2s;transition-delay:.2s;display:block;font-size:12px;padding:10px 14px}.atum-addons .theme .addon-key{display:none}.atum-addons .theme .addon-key .wrapper{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-wrap:nowrap;-moz-flex-wrap:nowrap;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-webkit-box-align:center;-ms-flex-align:center;-webkit-align-items:center;-moz-align-items:center;align-items:center;padding:5px;border-top:1px solid #DDD;position:relative}.atum-addons .theme .addon-key input[type=text]{width:80%;margin-right:4px;height:28px;border-radius:3px;font-size:12px;border-radius:0}.atum-addons .theme .addon-key input[type=text]:focus{box-shadow:none}.atum-addons .theme .addon-key input[type=text].valid{border-color:#69C61D}.atum-addons .theme .addon-key input[type=text].inactive{border-color:#EFAF00}.atum-addons .theme .addon-key input[type=text].invalid{border-color:#FF4848}.atum-addons .theme .button{border:none;box-shadow:none;text-shadow:none;font-weight:normal;background-color:#00B8DB;color:#fff;border-radius:0;-webkit-transition:all 0.2s ease-in-out;-o-transition:all 0.2s ease-in-out;transition:all 0.2s ease-in-out}.atum-addons .theme .button.install-addon{background-color:#69C61D;height:100%;width:100%;margin-left:0}.atum-addons .theme .button.install-addon:hover{background-color:#82e135}.atum-addons .theme .button:disabled{background-color:#00B8DB !important;text-shadow:none !important;color:#fff !important;opacity:0.6}.atum-addons .theme .button:hover{background-color:#0fd9ff}.atum-addons .theme.active .addon-key{background-color:#27283B;border-top-color:#5a5c88}.atum-addons .theme .atum-loading{right:28px;top:11px;width:18px;height:18px;border:3px solid rgba(0,184,219,0.25);border-top-color:#00B8DB;border-radius:50%;position:absolute;z-index:50;-webkit-animation:loader-rotate 1s linear infinite;-moz-animation:loader-rotate 1s linear infinite;-o-animation:loader-rotate 1s linear infinite;animation:loader-rotate 1s linear infinite}@-webkit-keyframes loader-rotate{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}@-moz-keyframes loader-rotate{from{-moz-transform:rotate(0deg)}to{-moz-transform:rotate(360deg)}}@-o-keyframes loader-rotate{from{-o-transform:rotate(0deg)}to{-o-transform:rotate(360deg)}}@keyframes loader-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@media only screen and (max-width: 780px){.atum-addons .theme .button{margin-bottom:0}.atum-addons .theme input[type=text]{height:29px}.atum-addons .theme .theme-actions{display:block}.atum-addons .theme .theme-actions.valid span,.atum-addons .theme .theme-actions.invalid span,.atum-addons .theme .theme-actions.inactive span{margin-top:10px}.atum-addons .theme .theme-actions .button{margin:5px 0 0}}
+ .swal2-container {
+  z-index: 100000000;
+}
 
+.swal2-container .swal2-content, .swal2-container .swal2-title {
+  margin-bottom: 30px;
+}
+
+.swal2-container .swal2-title {
+  line-height: 1.3;
+  font-size: 23px;
+}
+
+.swal2-container p {
+  font-size: 15px;
+  text-align: center;
+}
+
+.swal2-container button, .swal2-container a {
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.swal2-container button:focus, .swal2-container a:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.swal2-container a {
+  text-decoration: none;
+  color: #69C61D;
+}
+
+.swal2-container a:hover {
+  color: #82e135;
+}
+
+.swal2-container .atum-loading {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.atum-addons h1 {
+  margin-bottom: 15px;
+}
+
+.atum-addons a {
+  text-decoration: none;
+}
+
+@media all and (min-width: 481px) {
+  .atum-addons .themes {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.atum-addons .theme .theme-screenshot {
+  position: relative;
+  cursor: default;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.atum-addons .theme .theme-name {
+  position: relative;
+  cursor: default;
+}
+
+.atum-addons .theme .theme-actions {
+  height: 39px;
+  right: 27px;
+  -webkit-transform: translate3d(0, -50%, 0);
+  -moz-transform: translate3d(0, -50%, 0);
+  -o-transform: translate3d(0, -50%, 0);
+  -ms-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0);
+  -webkit-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.atum-addons .theme .theme-actions.valid, .atum-addons .theme .theme-actions.invalid, .atum-addons .theme .theme-actions.inactive, .atum-addons .theme .theme-actions.coming-soon {
+  opacity: 1;
+}
+
+.atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span, .atum-addons .theme .theme-actions.coming-soon span {
+  display: inline-block;
+  margin-top: 11px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: normal;
+}
+
+.atum-addons .theme .theme-actions.valid {
+  background-color: #69C61D;
+}
+
+.atum-addons .theme .theme-actions.valid + .show-key {
+  opacity: 0;
+}
+
+.atum-addons .theme .theme-actions.valid.not-installed {
+  background-color: #69C61D;
+  right: 0;
+  width: 105px;
+  height: 50px;
+  padding: 0;
+  border: none;
+}
+
+.atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
+  color: #69C61D;
+}
+
+.atum-addons .theme .theme-actions.invalid span {
+  color: #FF4848;
+}
+
+.atum-addons .theme .theme-actions.inactive {
+  background-color: #EFAF00;
+}
+
+.atum-addons .theme .theme-actions.not-installed {
+  background-color: transparent;
+}
+
+.atum-addons .theme .theme-actions.coming-soon {
+  background-color: #0fd9ff;
+  right: 0;
+}
+
+.atum-addons .theme .show-key {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 49px;
+  padding: 0 3px;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+.atum-addons .theme .show-key, .atum-addons .theme .show-key i {
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.atum-addons .theme .show-key i {
+  font-size: 15px;
+  padding-top: 17px;
+  color: #00B8DB;
+}
+
+.atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed), .atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed), .atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed) {
+  opacity: 0;
+  -webkit-transform: translate3d(100%, -50%, 0);
+  -moz-transform: translate3d(100%, -50%, 0);
+  -o-transform: translate3d(100%, -50%, 0);
+  -ms-transform: translate3d(100%, -50%, 0);
+  transform: translate3d(100%, -50%, 0);
+}
+
+.atum-addons .theme:hover .more-details, .atum-addons .theme.inactive .more-details, .atum-addons .theme.invalid .more-details {
+  opacity: 0 !important;
+}
+
+.atum-addons .theme:hover .theme-screenshot:hover .addon-details, .atum-addons .theme.inactive .theme-screenshot:hover .addon-details, .atum-addons .theme.invalid .theme-screenshot:hover .addon-details {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -o-transform: translateY(0);
+  -ms-transform: translateY(0);
+  transform: translateY(0);
+}
+
+.atum-addons .theme:hover .theme-screenshot:hover .more-details, .atum-addons .theme.inactive .theme-screenshot:hover .more-details, .atum-addons .theme.invalid .theme-screenshot:hover .more-details {
+  opacity: 1 !important;
+}
+
+.atum-addons .theme:hover .show-key, .atum-addons .theme.inactive .show-key, .atum-addons .theme.invalid .show-key {
+  opacity: 1 !important;
+  background-color: #0fd9ff;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -o-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.atum-addons .theme:hover .show-key i, .atum-addons .theme.inactive .show-key i, .atum-addons .theme.invalid .show-key i {
+  color: #fff !important;
+}
+
+.atum-addons .theme .more-details {
+  border-radius: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.atum-addons .theme .addon-details {
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  color: #fff;
+  padding: 10px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-transform: translateY(-101%);
+  -moz-transform: translateY(-101%);
+  -o-transform: translateY(-101%);
+  -ms-transform: translateY(-101%);
+  transform: translateY(-101%);
+  -webkit-transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  -o-transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.atum-addons .theme .addon-details > p {
+  height: 65%;
+  overflow: hidden;
+}
+
+.atum-addons .theme .addon-details .more-details {
+  position: static;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition-delay: 0.2s;
+  transition-delay: 0.2s;
+  display: block;
+  font-size: 12px;
+  padding: 10px 14px;
+}
+
+.atum-addons .theme .addon-key {
+  display: none;
+}
+
+.atum-addons .theme .addon-key .wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  padding: 5px;
+  border-top: 1px solid #DDD;
+  position: relative;
+}
+
+.atum-addons .theme .addon-key input[type=text] {
+  width: 80%;
+  margin-right: 4px;
+  height: 28px;
+  border-radius: 3px;
+  font-size: 12px;
+  border-radius: 0;
+}
+
+.atum-addons .theme .addon-key input[type=text]:focus {
+  box-shadow: none;
+}
+
+.atum-addons .theme .addon-key input[type=text].valid {
+  border-color: #69C61D;
+}
+
+.atum-addons .theme .addon-key input[type=text].inactive {
+  border-color: #EFAF00;
+}
+
+.atum-addons .theme .addon-key input[type=text].invalid {
+  border-color: #FF4848;
+}
+
+.atum-addons .theme .button {
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: normal;
+  background-color: #00B8DB;
+  color: #fff;
+  border-radius: 0;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.atum-addons .theme .button.install-addon {
+  background-color: #69C61D;
+  height: 100%;
+  width: 100%;
+  margin-left: 0;
+}
+
+.atum-addons .theme .button.install-addon:hover {
+  background-color: #82e135;
+}
+
+.atum-addons .theme .button:disabled {
+  background-color: #00B8DB !important;
+  text-shadow: none !important;
+  color: #fff !important;
+  opacity: 0.6;
+}
+
+.atum-addons .theme .button:hover {
+  background-color: #0fd9ff;
+}
+
+.atum-addons .theme.active .addon-key {
+  background-color: #27283B;
+  border-top-color: #5a5c88;
+}
+
+.atum-addons .theme .atum-loading {
+  right: 28px;
+  top: 11px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 780px) {
+  .atum-addons .theme .button {
+    margin-bottom: 0;
+  }
+  .atum-addons .theme input[type=text] {
+    height: 29px;
+  }
+  .atum-addons .theme .theme-actions {
+    display: block;
+  }
+  .atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span {
+    margin-top: 10px;
+  }
+  .atum-addons .theme .theme-actions .button {
+    margin: 5px 0 0;
+  }
+}
 /*# sourceMappingURL=atum-addons.css.map */
