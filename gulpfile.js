@@ -12,7 +12,7 @@ var gulp         = require('gulp'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.4.10';
+var version = '1.4.13';
 
 // Global config
 var config = {
@@ -20,7 +20,7 @@ var config = {
 	assetsDir : './assets',
 
 	devUrl    : 'http://atum.loc',
-	production: true, // NOTE: the production tag was causing problems with CSS compression
+	production: false, // NOTE: the production tag was causing problems with CSS compression when adding the @charset "UTF-8"
 
 	// decorate
 	decorate: {
@@ -32,9 +32,9 @@ var config = {
 			' * @author Be Rebel  \n',
 			' *\n',
 			' * Author URI: https://berebel.io \n',
-			' * License : ©2018 Stock Management Labs \n',
-			' */ \n',
-			'\n<%= contents %>\n'
+			' * License : Copyright 2018 Stock Management Labs \n',
+			' */\n',
+			'\n <%= contents %>'
 		].join('')
 
 	}
@@ -45,7 +45,7 @@ var enabled = {
 	// Enable static asset revisioning when `--production`
 	rev: config.production,
 	// Disable source maps when `--production`
-	maps: true,
+	maps: !config.production,
 	// Fail styles task on error when `--production`
 	failStyleTask: config.production
 };
