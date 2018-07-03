@@ -47,8 +47,8 @@ class Tools {
 	public function add_settings_tab($tabs) {
 
 		$tabs['tools'] = array(
-			'tab_name' => __( 'Tools', ATUM_TEXT_DOMAIN ),
-			'sections' => array(
+			'tab_name'  => __( 'Tools', ATUM_TEXT_DOMAIN ),
+			'sections'  => array(
 				'tools' => __( 'ATUM Tools', ATUM_TEXT_DOMAIN )
 			),
 			'no_submit' => TRUE

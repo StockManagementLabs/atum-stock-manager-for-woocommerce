@@ -347,9 +347,6 @@
 		},
 		moveToTab: function($navLink, tab) {
 
-			console.log("movetotab");
-			console.log(tab);
-
 			var self                 = this,
 			    $formSettingsWrapper = this.$form.find('.form-settings-wrapper');
 			
