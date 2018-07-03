@@ -183,7 +183,7 @@ class Settings {
 			'delete_data' => array(
 				'section' => 'general',
 				'name'    => __( 'Delete Data When Uninstalling', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
@@ -211,28 +211,28 @@ class Settings {
 			'address_2' => array(
 				'section' => 'company',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Optional additional info for the Address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Optional additional info for the Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'city' => array(
 				'section' => 'company',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The city where your business is located", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The city where your business is located', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'country' => array(
 				'section' => 'company',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The country and state or province if any", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The country and state or province if any', ATUM_TEXT_DOMAIN ),
 				'type'    => 'wc_country',
 				'default' => $default_country
 			),
 			'zip' => array(
 				'section' => 'company',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The postal code of your business", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The postal code of your business', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
@@ -250,42 +250,42 @@ class Settings {
 			'ship_to' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Ship to Name', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The ship to name that will appear in the Shipping address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The ship to name that will appear in the Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_address_1' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The shipping street address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The shipping street address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_address_2' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Optional additional info for the Shipping Address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Optional additional info for the Shipping Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_city' => array(
 				'section' => 'shipping',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The city where is your Shipping address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The city where is your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
 			'ship_country' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The country and state or province if any", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The country and state/province (if any)', ATUM_TEXT_DOMAIN ),
 				'type'    => 'wc_country',
 				'default' => $default_country
 			),
 			'ship_zip' => array(
 				'section' => 'shipping',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "The postal code of your Shipping address", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
@@ -348,7 +348,7 @@ class Settings {
 	}
 	
 	/**
-	 * Get the option settings ans merge them with defaults. With parameters in case we need this function in Helpers
+	 * Get the option settings and merge them with defaults. With parameters in case we need this function in Helpers
 	 *
 	 * @since   0.0.2
 	 *
@@ -378,6 +378,7 @@ class Settings {
 		}
 		
 		return apply_filters( 'atum/settings/get_settings', $options );
+
 	}
 	
 	/**
@@ -500,13 +501,22 @@ class Settings {
 	public function sanitize( $input ) {
 		
 		$this->options = Helpers::get_options();
-		
+
+		// Remove deprecated/removed/unneeded keys
+		$valid_keys = array_keys($this->defaults);
+
+		foreach ($this->options as $option_key => $option_value) {
+			if ( ! in_array($option_key, $valid_keys) ) {
+				unset( $this->options[ $option_key] );
+			}
+		}
+
 		if ( isset( $input['settings_section'] ) ) {
 			
 			// Only accept settings defined
 			foreach ( $this->defaults as $key => $atts ) {
 				
-				// Only current section
+				// Save only current section
 				if (
 					! empty( $this->tabs[ $input['settings_section'] ] ) &&
 					in_array( $atts['section'], array_keys( $this->tabs[ $input['settings_section'] ]['sections'] ) )
@@ -519,20 +529,28 @@ class Settings {
 							break;
 						
 						case 'number':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? intval( $input[ $key ] ) : $atts['default'];
+							$this->options[ $key ] = isset( $input[ $key ] ) ? floatval( $input[ $key ] ) : $atts['default'];
 							break;
+
+						case 'select':
+							$this->options[ $key ] = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
+							break;
+
                         case 'button_group':
 	                        //TODO sanatize button_group as FILTER_SANITIZE_STRING (there's no formmating filter for this case?)
 	                        filter_var_array($input[ $key ],FILTER_SANITIZE_STRING);
 	                        $this->options[ $key ] = isset( $input[ $key ] ) ?  maybe_serialize( $input[ $key ]) : $atts['default'];
 	                        break;
+
                         case 'textarea':
 	                        $this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
 	                        break;
 
+						case 'text':
 						default:
 							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
 							break;
+
 					}
 					
 				}
@@ -581,14 +599,14 @@ class Settings {
 		// <textarea name="textarea" rows="10" cols="50">Write something here</textarea>
 
 		$output = sprintf(
-			          '<textarea class="atum-settings-input regular-text" type="text" id="%s" rows="%d" cols="%d" name="%s" %s>%s</textarea>',
-			          ATUM_PREFIX . $args['id'],
-			            absint($args['rows']),
-			            absint($args['cols']),
-			          self::OPTION_NAME . "[{$args['id']}]",
-			          $this->get_dependency($args),
-			          $this->options[ $args['id'] ]
-		          ) . $this->get_description( $args );
+            '<textarea class="atum-settings-input regular-text" type="text" id="%s" rows="%d" cols="%d" name="%s" %s>%s</textarea>',
+            ATUM_PREFIX . $args['id'],
+	        absint($args['rows']),
+	        absint($args['cols']),
+	        self::OPTION_NAME . "[{$args['id']}]",
+	        $this->get_dependency($args),
+	        $this->options[ $args['id'] ]
+        ) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args );
 
@@ -646,7 +664,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="atum-select2" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -704,38 +722,40 @@ class Settings {
 	 */
 	public function display_button_group( $args ) {
 
-		$name  = self::OPTION_NAME . "[{$args['id']}]";
-		$multiple = isset( $args['options']['multiple'] )  ? $args['options']['multiple'] : ''; //allow to send array
-		$value = (strlen($multiple)>0) ? maybe_unserialize($this->options[ $args['id']]) : $this->options[ $args['id'] ];
-		$style = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
-		$size  = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
-		$input_type = isset( $args['options']['type'] )  ? $args['options']['type'] : 'radio';
-		$required_value = isset( $args['options']['required_value'] )  ? $args['options']['required_value'] : '';
+		$name           = self::OPTION_NAME . "[{$args['id']}]";
+		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; //allow to send array
+		$value          = strlen( $multiple ) > 0 ? maybe_unserialize( $this->options[ $args['id'] ] ) : $this->options[ $args['id'] ];
+		$style          = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
+		$size           = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
+		$input_type     = isset( $args['options']['type'] ) ? $args['options']['type'] : 'radio';
+		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
 
 		ob_start();
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
                 <?php
-				if ( strlen( $multiple ) > 0 && is_array($value) && $input_type === "checkbox") {
-	                $is_active = in_array($option_value, $value);
-	                $value_to_check = true;
-                }else{
-	                $is_active = ($value == $option_value);
+				if ( strlen( $multiple ) > 0 && is_array( $value ) && $input_type === "checkbox" ) {
+					$is_active      = in_array( $option_value, $value );
+					$value_to_check = TRUE;
+				}
+				else {
+					$is_active      = ( $value == $option_value );
 					$value_to_check = $option_value;
-                }
+				}
 
 				$disabled_str = '';
-				$checked_str ='';
+				$checked_str  = '';
 
-				//Force checked disabled and active on required value
-                //TODO required_value to required_values array
+				// Force checked disabled and active on required value
+                // TODO required_value to required_values array
 				if ( $option_value === $required_value ) {
-					$checked_str  = checked( true, true, false );
+					$checked_str  = checked( TRUE, TRUE, FALSE );
 					$disabled_str = ' disabled';
-					$is_active = true;
-				} else {
-					$checked_str = checked( $value_to_check, $is_active, false );
+					$is_active    = TRUE;
+				}
+				else {
+					$checked_str = checked( $value_to_check, $is_active, FALSE );
 				}
 
                 ?>
@@ -769,7 +789,7 @@ class Settings {
 		?>
 		<select class="atum-select2" name="<?php echo $name ?>" id="<?php echo ATUM_PREFIX . $args['id'] ?>"<?php echo $this->get_dependency($args) . $style ?>>
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-			<option value="<?php echo $option_value ?>"<?php selected($option_value, $value) ?>"><?php echo $option_label ?></option>
+			<option value="<?php echo $option_value ?>"<?php selected($option_value, $value) ?>><?php echo $option_label ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
@@ -791,10 +811,15 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="script-runner" data-action="<?php echo $args['options']['script_action'] ?>" data-confirm="<?php echo $args['options']['confirm_msg'] ?>">
+		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo " {$args['options']['wrapper_class']}" ?>"
+			data-action="<?php echo $args['options']['script_action'] ?>"
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ): ?>data-confirm="<?php echo $args['options']['confirm_msg'] ?>"<?php endif; ?>
+			>
+
+			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
-			<select class="atum-select2" style="width: 12em">
+			<select class="wc-enhanced-select" style="width: 12em">
 				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
 				<option value="<?php echo $key ?>"><?php echo $label ?></option>
 				<?php endforeach ?>
@@ -802,9 +827,11 @@ class Settings {
 			&nbsp;
 			<?php endif; ?>
 
-			<button type="button" class="btn btn-primary">
+			<button type="button" class="btn btn-primary tool-runner"<?php if ( isset( $args['options']['button_status'] ) && $args['options']['button_status'] == 'disabled' ) echo ' disabled="disabled"' ?>>
 				<?php echo $args['options']['button_text'] ?>
 			</button>
+
+			<?php do_action('atum/settings/after_script_runner_field', $args) ?>
 
 		</div>
 		<?php
