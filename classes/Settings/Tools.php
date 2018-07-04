@@ -80,7 +80,7 @@ class Tools {
 				),
 				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_manage_stock',
-				'confirm_msg'   => esc_attr( __("This will change the WooCommerce's manage stock option for all your products", ATUM_TEXT_DOMAIN) )
+				'confirm_msg'   => esc_attr( __( "This will change the WooCommerce's manage stock option for all your products", ATUM_TEXT_DOMAIN ) )
 			)
 		);
 

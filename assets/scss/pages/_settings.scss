@@ -314,6 +314,14 @@ $settings-menu-active:      $white;
 					}
 				}
 				
+				.error-message {
+					display: block;
+					color: $danger;
+					margin-top: $grid-gutter-width/2;
+					font-weight: normal;
+					font-size: 12px;
+				}
+				
 			}
 			
 			button {
