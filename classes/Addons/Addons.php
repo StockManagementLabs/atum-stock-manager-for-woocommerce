@@ -7,6 +7,8 @@
  *
  * @since           1.2.0
  *
+ * @noinspection    PhpIncludeInspection
+ *
  * ATUM add-ons loader
  */
 

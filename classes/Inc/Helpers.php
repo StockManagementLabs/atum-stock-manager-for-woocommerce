@@ -35,24 +35,20 @@ final class Helpers {
 	 *
 	 * @param array $slug_terms
      * @param string taxonomy default 'product_type'
-	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 *
 	 * @return array term_ids
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
 		global $wpdb;
-		$query = $wpdb->prepare( "
-			SELECT $wpdb->terms.term_id FROM $wpdb->terms 
-            INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-            WHERE $wpdb->term_taxonomy.taxonomy = %s
-            AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')
-        ", $taxonomy );
+		$query = $wpdb->prepare( "SELECT $wpdb->terms.term_id FROM $wpdb->terms 
+                INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
+                WHERE $wpdb->term_taxonomy.taxonomy = %s
+                AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
 
 		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
 		$result           = array();
 
 		// Flat array
+		/** @noinspection PhpUnusedParameterInspection */
 		array_walk_recursive( $search_terms_ids, function ( $v, $k ) use ( &$result ) {
 			$result[] = absint( $v );
 		} );
@@ -826,8 +822,6 @@ final class Helpers {
 	 * @param array  $args                  Optional. Variables that will be passed to the view
 	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
 	 *
-	 * @noinspection PhpIncludeInspection
-	 *
 	 * @return void
 	 */
 	public static function load_view( $view, $args = [ ], $allow_theme_override = TRUE ) {
@@ -863,9 +857,11 @@ final class Helpers {
 		}
 
 		if ( ATUM_DEBUG ) {
+			/** @noinspection PhpIncludeInspection */
 			include $file_path;
 		}
 		else {
+			/** @noinspection PhpIncludeInspection */
 			@include $file_path;
 		}
 		
@@ -1677,6 +1673,30 @@ final class Helpers {
 		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->postmeta where meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "';");
 
 		return $rowcount > 0;
+    }
+
+	/**
+     * Get string between two tags (can be different)
+     * https://stackoverflow.com/a/9826656
+     *
+     * ex:
+     * $fullstring = 'this is my [tag]dog[/tag]';
+	 * $parsed = get_string_between($fullstring, '[tag]', '[/tag]');
+	 * echo $parsed; // (result = dog)
+     *
+	 * @param $string string to parse
+	 * @param $start string tag start
+	 * @param $end string tag end
+	 *
+	 * @return bool|string
+	 */
+    public static function get_string_between($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
 
 	/**

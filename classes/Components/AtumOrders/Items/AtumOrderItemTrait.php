@@ -95,13 +95,16 @@ trait AtumOrderItemTrait {
 		}
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Read Meta Data from the database. Ignore any internal properties
 	 * Uses it's own caches because get_metadata does not provide meta_ids
 	 *
 	 * @since 1.2.9
+	 *
+	 * @param bool $force_read
 	 */
-	public function read_meta_data() {
+	public function read_meta_data( $force_read = FALSE ) {
 		$this->meta_data = $this->atum_order_item_model->get_all_meta();
 	}
 
@@ -150,12 +153,15 @@ trait AtumOrderItemTrait {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Override the WC_Data method to delete the item through AtumOrderItemModel instead
 	 *
 	 * @since 1.2.9
+	 *
+	 * @param bool $force_delete
 	 */
-	public function delete() {
+	public function delete($force_delete = FALSE) {
 		$this->atum_order_item_model->delete();
 	}
 

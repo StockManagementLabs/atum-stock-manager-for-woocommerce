@@ -335,7 +335,8 @@ class PurchaseOrder extends AtumOrderModel {
 	public function get_expected_at_location_date() {
 		return $this->get_meta('_expected_at_location_date');
 	}
-	
+
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Use the purchase price for the products added to POs
 	 *
@@ -345,14 +346,12 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @param float       $qty
 	 * @param \WC_Product $product
 	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 *
 	 * @return float|mixed|string
 	 */
 	public function use_purchase_price($price, $qty, $product) {
 		
 		// Get the purchase price (if set)
-		$price = get_post_meta( $product->get_id(), Globals::ATUM_PURCHASE_PRICE_KEY, TRUE );
+		$price = get_post_meta( $product->get_id(), Globals::PURCHASE_PRICE_KEY, TRUE );
 		
 		if ( !$price ) {
 			return '';

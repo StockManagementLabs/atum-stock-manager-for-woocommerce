@@ -68,7 +68,15 @@
 									<?php
 									$start = new \DateTime('@0'); // Unix epoch
 									/** @noinspection PhpUndefinedConstantInspection */
-									$start->add( new \DateInterval($video->contentDetails->duration) );
+									try {
+										$start->add( new \DateInterval( $video->contentDetails->duration ) );
+									} catch ( \Exception $e ) {
+
+										if (ATUM_DEBUG) {
+											error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
+										}
+
+									}
 									echo $start->format('i:s');
 									?>
 								</time>

@@ -7,7 +7,7 @@ Tested up to: 4.9.6
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.4.3
-Stable tag: 1.4.12
+Stable tag: 1.4.12.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,19 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.12.1`
+
+*2018-07-03*
+
+**Fixes**
+
+* Fixed compiled CSS issue.
+* Fixed strict standards error on Purchase Orders.
+* Updated npm dependencies.
+* Refactory.
 
 ---
 

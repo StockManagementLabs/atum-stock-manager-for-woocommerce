@@ -115,11 +115,10 @@
 				else if (!this.checked) {
 					
 					swal({
-							title: self.settings.areYouSure,
-							text : self.settings.outStockThresholdDisable,
-							type : 'info'
-						}
-					);
+						title: self.settings.areYouSure,
+						text : self.settings.outStockThresholdDisable,
+						type : 'info'
+					});
 				}
 				
 			})
@@ -139,59 +138,17 @@
 
 				var $field     = $(this),
 				    value      = $field.val(),
-					dependency = $field.data('dependency'),
-					visibility,
-				    $dependant;
+					dependency = $field.data('dependency');
 				
-				if ($field.is(':checkbox')) {
-					visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
+				if ($.isArray(dependency)) {
+				
+					$.each(dependency, function (index, dependencyElem) {
+						self.checkDependency($field, dependencyElem, value);
+					});
+				
 				}
 				else {
-					visibility = value === dependency.value;
-				}
-				
-				if (dependency.hasOwnProperty('section')) {
-					$dependant = self.$form.find('[data-section="' + dependency.section + '"]');
-				}
-				else if (dependency.hasOwnProperty('field')) {
-					//debugger;
-					
-					var selector = '';
-					
-					if ($.isArray(dependency.field)) {
-
-						//TODO SOLVE FIELDS DEPENDENCY
-						
-						$.each(dependency.field, function(index, value) {
-							selector += '#' + self.settings.atumPrefix + value;
-							
-							if ( index+1 < dependency.field.length) {
-								selector += ', ';
-							}
-						});
-						
-					}
-					else {
-						selector = '#' + self.settings.atumPrefix + dependency.field;
-					}
-					
-					$dependant = $(selector);
-					
-					if ($dependant.length) {
-						$dependant = $dependant.closest('tr').find('th, td');
-					}
-					
-				}
-				
-				if (typeof $dependant !== 'undefined' && $dependant.length) {
-					
-					if (visibility === true) {
-						$dependant.slideDown('fast');
-					}
-					else {
-						$dependant.slideUp('fast');
-					}
-					
+					self.checkDependency($field, dependency, value);
 				}
 				
 			})
@@ -270,7 +227,7 @@
 			}
 		
 		},
-		restoreSelect2: function() {
+		restoreSelects: function() {
 			
 			$('.select2-container--open').remove();
 			this.doSelect2();
@@ -330,26 +287,19 @@
 					reverseButtons     : true,
 					allowOutsideClick  : false
 				}).then(function () {
-
-					$( window ).trigger( 'atum.settings.clicktab.'+tab);
-
-					self.moveToTab($navLink, tab);
+					self.moveToTab($navLink);
 				}, function (dismiss) {
 					$navLink.blur();
 				});
 				
 			}
 			else {
-                $( window ).trigger( 'atum.settings.clicktab.'+tab);
-				self.moveToTab($navLink, tab);
+				self.moveToTab($navLink);
 			}
 		
 		},
-		moveToTab: function($navLink, tab) {
-
-			console.log("movetotab");
-			console.log(tab);
-
+		moveToTab: function($navLink) {
+			
 			var self                 = this,
 			    $formSettingsWrapper = this.$form.find('.form-settings-wrapper');
 			
@@ -360,7 +310,7 @@
 			this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				
 				self.doSwitchers();
-				self.restoreSelect2();
+				self.restoreSelects();
 				self.$form.find('[data-dependency]').change().removeClass('dirty');
 				self.$form.show();
 				
@@ -372,10 +322,9 @@
 				else {
 					$inputButton.show();
 				}
-
-                //Fire event to tell we are prepared for other plugins.
-                $( window ).trigger( 'atum.settings.movetotab.'+tab);
-
+				
+				self.$settingsWrapper.trigger('atum-settings-page-loaded', [$navLink.data('tab')]);
+				
 			});
 			
 		},
@@ -445,17 +394,53 @@
 			}).catch(swal.noop);
 		
 		},
-        /**
-         * Add a Switchery change value via code.
-         * ex: this.changeSwitcheryState($('#atum_use_geoprompt'),false);
-         * @param el element selector
-         * @param value boolean true or false
-         */
-        changeSwitcheryState: function(el,value){
-            if($(el).is(':checked')!=value){
-                $(el).trigger("click");
-            }
-        }
+		checkDependency: function($field, dependency, value) {
+			
+			var $dependant,
+				visibility;
+			
+			if ($field.is(':checkbox')) {
+				visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
+			}
+			else {
+				visibility = value === dependency.value;
+			}
+			
+			if (dependency.hasOwnProperty('section')) {
+				$dependant = this.$form.find('[data-section="' + dependency.section + '"]');
+			}
+			else if (dependency.hasOwnProperty('field')) {
+				
+				$dependant = $( '#' + this.settings.atumPrefix + dependency.field );
+				
+				if ($dependant.length) {
+					$dependant = $dependant.closest('tr').find('th, td');
+				}
+				
+			}
+			
+			if (typeof $dependant !== 'undefined' && $dependant.length) {
+				
+				if (visibility === true) {
+					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
+						$dependant.slideDown('fast');
+					}
+					else {
+						$dependant.show();
+					}
+				}
+				else {
+					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
+						$dependant.slideUp('fast');
+					}
+					else {
+						$dependant.hide();
+					}
+				}
+				
+			}
+			
+		}
 		
 	} );
 	

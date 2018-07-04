@@ -363,6 +363,7 @@ class Suppliers {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Adds the Supplier fields in WC's product data meta box
 	 *
@@ -371,8 +372,6 @@ class Suppliers {
 	 * @param int      $loop             Only for variations. The loop item number
 	 * @param array    $variation_data   Only for variations. The variation item data
 	 * @param \WP_Post $variation        Only for variations. The variation product
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_product_supplier_fields($loop = NULL, $variation_data = array(), $variation = NULL) {
 
@@ -389,18 +388,22 @@ class Suppliers {
 
 		}
 
+		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly)
+		$supplier_meta     = self::SUPPLIER_META_KEY;
+		$supplier_sku_meta = self::SUPPLIER_SKU_META_KEY;
+
 		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
-		$supplier_id  = get_post_meta( $product_id, self::SUPPLIER_META_KEY, TRUE );
-		$supplier_sku = get_post_meta( $product_id, self::SUPPLIER_SKU_META_KEY, TRUE );
+		$supplier_id  = get_post_meta( $product_id, $supplier_meta, TRUE );
+		$supplier_sku = get_post_meta( $product_id, $supplier_sku_meta, TRUE );
 
 		if ($supplier_id) {
 			$supplier = get_post($supplier_id);
 		}
 
-		$supplier_field_name     = empty( $variation ) ? self::SUPPLIER_META_KEY : 'variation' . self::SUPPLIER_META_KEY . "[$loop]";
-		$supplier_field_id       = empty( $variation ) ? self::SUPPLIER_META_KEY : self::SUPPLIER_META_KEY . $loop;
-		$supplier_sku_field_name = empty( $variation ) ? self::SUPPLIER_SKU_META_KEY : 'variation' . self::SUPPLIER_SKU_META_KEY . "[$loop]";
-		$supplier_sku_field_id   = empty( $variation ) ? self::SUPPLIER_SKU_META_KEY : self::SUPPLIER_SKU_META_KEY . $loop;
+		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
+		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
+		$supplier_sku_field_name = empty( $variation ) ? $supplier_sku_meta : "variation{$supplier_sku_meta}[$loop]";
+		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
 
 		// If the user is not allowed to edit Suppliers, add a hidden input
 		if ( ! AtumCapabilities::current_user_can('edit_supplier') ): ?>

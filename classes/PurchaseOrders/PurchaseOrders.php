@@ -24,6 +24,7 @@ use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
 use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 
 
 class PurchaseOrders extends AtumOrderPostType {
@@ -55,14 +56,14 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @var array
 	 */
 	protected $capabilities = array(
-		'edit_post'              => 'edit_purchase_order',
-		'read_post'              => 'read_purchase_order',
-		'delete_post'            => 'delete_purchase_order',
-		'edit_posts'             => 'edit_purchase_orders',
-		'edit_others_posts'      => 'edit_others_purchase_orders',
-		'create_posts'           => 'create_purchase_orders',
-		'delete_posts'           => 'delete_purchase_orders',
-		'delete_other_posts'     => 'delete_other_purchase_orders'
+		'edit_post'          => 'edit_purchase_order',
+		'read_post'          => 'read_purchase_order',
+		'delete_post'        => 'delete_purchase_order',
+		'edit_posts'         => 'edit_purchase_orders',
+		'edit_others_posts'  => 'edit_others_purchase_orders',
+		'create_posts'       => 'create_purchase_orders',
+		'delete_posts'       => 'delete_purchase_orders',
+		'delete_other_posts' => 'delete_other_purchase_orders'
 	);
 
 
@@ -384,6 +385,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Display the help tabs' content
 	 *
@@ -391,8 +393,6 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @param \WP_Screen $screen    The current screen
 	 * @param array      $tab       The current help tab
-	 *
-	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 
@@ -438,28 +438,38 @@ class PurchaseOrders extends AtumOrderPostType {
 			//$po_export = new Atum\DataExport\Models\POExport( $atum_order_id);
 			$po_export = new POExport($atum_order_id);
 
-			$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ]); // phpcs:ignore
+			try {
 
-			// Add support for non-Latin languages
-			$mpdf->useAdobeCJK      = TRUE;
-			$mpdf->autoScriptToLang = TRUE;
-			$mpdf->autoLangToFont   = TRUE;
+				$mpdf = new Mpdf( [ 'mode' => 'utf-8', 'format' => 'A4' ] ); // phpcs:ignore
 
-			$mpdf->SetTitle( __('Purchase Order', ATUM_TEXT_DOMAIN) );
+				// Add support for non-Latin languages
+				$mpdf->useAdobeCJK      = TRUE;
+				$mpdf->autoScriptToLang = TRUE;
+				$mpdf->autoLangToFont   = TRUE;
 
-			$mpdf->default_available_fonts = $mpdf->available_unifonts;
+				$mpdf->SetTitle( __( 'Purchase Order', ATUM_TEXT_DOMAIN ) );
 
-			$css = $po_export->get_stylesheets();
+				$mpdf->default_available_fonts = $mpdf->available_unifonts;
 
-			foreach ($css as $file) {
-				$stylesheet = file_get_contents( $file);
-				$mpdf->WriteHTML($stylesheet, 1); // phpcs:ignore
+				$css = $po_export->get_stylesheets();
+
+				foreach ( $css as $file ) {
+					$stylesheet = file_get_contents( $file );
+					$mpdf->WriteHTML( $stylesheet, 1 ); // phpcs:ignore
+				}
+
+				$mpdf->WriteHTML( $po_export->get_content() ); // phpcs:ignore
+
+				// Output a PDF file directly to the browser
+				$mpdf->Output( "po-{$po_export->get_id()}.pdf", 'I' ); // phpcs:ignore
+
+			} catch (MpdfException $e) {
+
+				if (ATUM_DEBUG) {
+					error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
+				}
+
 			}
-
-			$mpdf->WriteHTML(  $po_export->get_content() ); // phpcs:ignore
-
-			// Output a PDF file directly to the browser
-			$mpdf->Output("po-{$po_export->get_id()}.pdf", 'I'); // phpcs:ignore
 
 		}
 

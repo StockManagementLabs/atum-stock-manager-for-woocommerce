@@ -159,6 +159,19 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.12.1`
+
+*2018-07-03*
+
+**Fixes**
+
+* Fixed compiled CSS issue.
+* Fixed strict standards error on Purchase Orders.
+* Updated npm dependencies.
+* Refactory.
+
+---
+
 `1.4.12`
 
 *2018-06-29*

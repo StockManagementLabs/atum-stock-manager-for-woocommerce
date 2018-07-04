@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUndefinedClassConstantInspection */
+
 /**
  * @package         Atum\Components
  * @subpackage      AtumOrders
@@ -6,8 +8,6 @@
  * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.2.9
- *
- * @noinspection    PhpUndefinedClassConstantInspection
  *
  * The abstract class for the ATUM Order post types
  */
@@ -821,8 +821,8 @@ abstract class AtumOrderPostType {
 
 			global $wp_scripts, $post;
 
-			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
-			wp_register_style( 'jquery-ui-style', "//code.jquery.com/ui/$jquery_version/themes/smoothness/jquery-ui.min.css", array(), $jquery_version );
+			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
+			wp_register_style( 'jquery-ui-style', "https://code.jquery.com/ui/$jquery_version/themes/smoothness/jquery-ui.min.css", array(), $jquery_version );
 			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array('jquery-ui-style'), ATUM_VERSION );
 
 			if ( in_array( $hook, ['post-new.php', 'post.php'] ) ) {
