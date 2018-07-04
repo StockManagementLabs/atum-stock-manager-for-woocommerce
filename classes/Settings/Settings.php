@@ -454,15 +454,15 @@ class Settings {
 
 				/** @noinspection PhpParamsInspection */
 				add_settings_section(
-					ATUM_PREFIX . "setting_$section_key",    // ID
+					ATUM_PREFIX . "setting_{$section_key}",  // ID
 					$section_name,                           // Title
 					FALSE,                                   // Callback
-					ATUM_PREFIX . "setting_$section_key"     // Page
+					ATUM_PREFIX . "setting_{$section_key}"   // Page
 				);
 
 				// Register the settings
 				register_setting(
-					ATUM_PREFIX . "setting_$section_key",    // Option group
+					ATUM_PREFIX . "setting_{$section_key}",  // Option group
 					self::OPTION_NAME,                       // Option name
 					array( $this, 'sanitize' )               // Sanitization callback
 				);
@@ -537,9 +537,16 @@ class Settings {
 							break;
 
                         case 'button_group':
-	                        //TODO sanatize button_group as FILTER_SANITIZE_STRING (there's no formmating filter for this case?)
-	                        filter_var_array($input[ $key ],FILTER_SANITIZE_STRING);
-	                        $this->options[ $key ] = isset( $input[ $key ] ) ?  maybe_serialize( $input[ $key ]) : $atts['default'];
+
+                        	// The button groups could allow multiple values
+                        	if ( is_array( $input[ $key ] ) ) {
+		                        $input[ $key ] = maybe_serialize( array_map( 'esc_attr', $input[ $key ] ) );
+	                        }
+	                        else {
+		                        $input[ $key ] = esc_attr( $input[ $key ] );
+	                        }
+
+	                        $this->options[ $key ] = ! empty( $input[ $key ] ) ?  $input[ $key ] : $atts['default'];
 	                        break;
 
                         case 'textarea':
