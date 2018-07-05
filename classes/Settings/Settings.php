@@ -538,15 +538,32 @@ class Settings {
 
                         case 'button_group':
 
-                        	// The button groups could allow multiple values
-                        	if ( is_array( $input[ $key ] ) ) {
-		                        $input[ $key ] = maybe_serialize( array_map( 'esc_attr', $input[ $key ] ) );
+	                        // The button groups could allow multiple values (checkboxes)
+                        	if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
+
+                        		$values = array();
+
+                        		foreach ( array_keys( $atts['options']['values'] ) as $default_value) {
+
+                        			// Save always the required value as checked
+			                        if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] == $default_value ) {
+				                        $values[$default_value] = 'yes';
+			                        }
+			                        else {
+				                        $values[$default_value] = in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
+			                        }
+
+		                        }
+
+		                        $this->options[ $key ] = maybe_serialize($values);
+
 	                        }
 	                        else {
-		                        $input[ $key ] = esc_attr( $input[ $key ] );
+
+		                        $this->options[ $key ] = ! empty( $input[ $key ] ) ?  esc_attr( $input[ $key ]) : $atts['default'];
+
 	                        }
 
-	                        $this->options[ $key ] = ! empty( $input[ $key ] ) ?  $input[ $key ] : $atts['default'];
 	                        break;
 
                         case 'textarea':
@@ -713,20 +730,21 @@ class Settings {
 	public function display_button_group( $args ) {
 
 		$name           = self::OPTION_NAME . "[{$args['id']}]";
-		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; //allow to send array
-		$value          = strlen( $multiple ) > 0 ? maybe_unserialize( $this->options[ $args['id'] ] ) : $this->options[ $args['id'] ];
+		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; // allow to send array
+		$value          = $multiple ? maybe_unserialize( $this->options[ $args['id'] ] ) : $this->options[ $args['id'] ];
 		$style          = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size           = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
-		$input_type     = isset( $args['options']['type'] ) ? $args['options']['type'] : 'radio';
+		$input_type     = isset( $args['options']['input_type'] ) ? $args['options']['input_type'] : 'radio';
 		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
 
 		ob_start();
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-                <?php
-				if ( strlen( $multiple ) > 0 && is_array( $value ) && $input_type === "checkbox" ) {
-					$is_active      = in_array( $option_value, $value );
+
+				<?php
+				if ( $multiple && is_array( $value ) ) {
+					$is_active      = in_array( $option_value, array_keys($value) ) && $value[$option_value] == 'yes';
 					$value_to_check = TRUE;
 				}
 				else {
@@ -734,8 +752,7 @@ class Settings {
 					$value_to_check = $option_value;
 				}
 
-				$disabled_str = '';
-				$checked_str  = '';
+				$disabled_str = $checked_str = '';
 
 				// Force checked disabled and active on required value
                 // TODO required_value to required_values array
@@ -750,8 +767,11 @@ class Settings {
 
                 ?>
                 <label class="btn btn-<?php echo $style ?><?php if ($is_active) echo ' active'?>">
-                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php echo $multiple ?>" autocomplete="off"<?php echo $checked_str; echo $disabled_str;?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label; ?>
+                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php if ($multiple) echo '[]' ?>"
+	                    autocomplete="off"<?php echo $checked_str . $disabled_str ?> value="<?php echo $option_value ?>"
+	                    <?php echo $this->get_dependency($args) ?>> <?php echo $option_label; ?>
                 </label>
+
 			<?php endforeach; ?>
 		</div>
 		<?php
@@ -786,7 +806,7 @@ class Settings {
 
 		echo $this->get_description( $args );
 
-		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args );
+		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args );
 
 	}
 

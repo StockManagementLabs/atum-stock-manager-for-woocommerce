@@ -1854,31 +1854,32 @@ final class Ajax {
 
 		$locations_tree = '';
 
-		if ( empty($_POST['product_id']) ) {
-			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
+		if ( empty( $_POST['product_id'] ) ) {
+			wp_send_json_error( __( 'No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN ) );
 		}
 
-		if ($_POST['product_id'] >0){
+		if ( $_POST['product_id'] > 0 ) {
 
+			$product_id = absint( $_POST['product_id'] );
+			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
 
-            $product_id = absint( $_POST['product_id'] );
-            $locations = wc_get_product_terms($product_id, Globals::PRODUCT_LOCATION_TAXONOMY);
+			if ( empty( $locations ) ) {
+				wp_send_json_success( '<span class="no-locations-set">' . __( 'No Locations set on this product', ATUM_LEVELS_TEXT_DOMAIN ) . '</span>' );
+			}
+			else {
+				$locations_tree = wp_list_categories( array(
+					'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+					'include'  => wp_list_pluck( $locations, 'term_id' ),
+					'title_li' => '',
+					'echo'     => FALSE
+				) );
+				// Fix the list URLs to show the list of products within a location
+				$locations_tree = str_replace( home_url( '/?' ), admin_url( '/edit.php?post_type=product&' ), $locations_tree );
+				$locations_tree = str_replace( '<a href', '<a target="_blank" href', $locations_tree );
+			}
 
-            if (empty($locations)){
-	            wp_send_json_success( '<span class="no-locations-set">'. __('No Locations set on this product', ATUM_LEVELS_TEXT_DOMAIN) .'</span>');
-            }else{
-	            $locations_tree = wp_list_categories( array(
-		            'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-		            'include'  => wp_list_pluck( $locations, 'term_id' ),
-		            'title_li' => '',
-		            'echo'     => FALSE
-	            ) );
-	            // Fix the list URLs to show the list of products within a location
-	            $locations_tree = str_replace( home_url('/?'), admin_url('/edit.php?post_type=product&'), $locations_tree );
-	            $locations_tree = str_replace( '<a href', '<a target="_blank" href', $locations_tree);
-            }
-
-		}elseif ( $_POST['product_id'] == -1 ){
+		}
+		elseif ( $_POST['product_id'] == - 1 ) {
 			//Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
 			$locations_tree = wp_list_categories( array(
 				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
