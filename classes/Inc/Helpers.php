@@ -1177,25 +1177,22 @@ final class Helpers {
 
 		return isset( $user_dismissed_notices[ $key ] ) && $user_dismissed_notices[ $key ] == 'yes';
 	}
-
+	
 	/**
 	 * Check whether or not register the ES6 promise polyfill
 	 * This is only required for SweetAlert2 on IE<12
 	 *
 	 * @since 1.2.0
 	 */
-    public static function maybe_es6_promise()
-    {
-
-        global $is_IE;
-        // ES6 Polyfill (only for IE<12). Required by SweetAlert2
-        if ($is_IE) {
-            $version = array();
-
-            wp_register_script('es6-promise', 'https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js', [], ATUM_VERSION, TRUE);
-        }
-
-    }
+	public static function maybe_es6_promise() {
+		
+		global $is_IE;
+		// ES6 Polyfill (only for IE<12). Required by SweetAlert2
+		if ( $is_IE ) {
+			
+			wp_register_script( 'es6-promise', 'https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js', [], ATUM_VERSION, TRUE );
+		}
+	}
 
 	/**
 	 * Trim inputs and arrays
