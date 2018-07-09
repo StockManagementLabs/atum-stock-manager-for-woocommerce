@@ -1327,6 +1327,14 @@ input[type="button"].btn-block {
   color: #FF4848;
 }
 
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .error-message {
+  display: block;
+  color: #FF4848;
+  margin-top: 15px;
+  font-weight: normal;
+  font-size: 12px;
+}
+
 #atum-settings .section-fields .script-runner button {
   border-radius: 4px;
 }

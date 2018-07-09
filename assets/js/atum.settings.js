@@ -347,14 +347,14 @@
 					
 					return new Promise(function (resolve, reject) {
 						
-						var $select = $button.siblings('select'),
+						var $input  = $scriptRunner.find('#' + $scriptRunner.data('input')),
 						    data    = {
 							    action: $scriptRunner.data('action'),
 							    token : self.settings.runnerNonce
 						    };
 						
-						if ($select.length) {
-							data.option = $select.val();
+						if ($input.length) {
+							data.option = $input.val();
 						}
 						
 						$.ajax({
@@ -389,6 +389,8 @@
 					type             : 'success',
 					text             : message,
 					confirmButtonText: self.settings.ok
+				}).then(function() {
+					self.$settingsWrapper.trigger('atum-settings-script-runner-done', [$scriptRunner]);
 				});
 			
 			}).catch(swal.noop);

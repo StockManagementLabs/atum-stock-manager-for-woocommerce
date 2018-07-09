@@ -105,184 +105,184 @@ class Settings {
 		);
 
 		$this->defaults = array(
-			'enable_ajax_filter'    => array(
+			'enable_ajax_filter'        => array(
 				'section' => 'general',
 				'name'    => __( 'Enable Filter Autosearch', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the manual search button disappears. Disable this function if you don't use or find the automatic search feature helpful.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
-			'enhanced_suppliers_filter'    => array(
+			'enhanced_suppliers_filter' => array(
 				'section' => 'general',
 				'name'    => __( "Enhanced Suppliers' Filter", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the List Tables Suppliers’ filter will be replaced by an advanced search box. Recommended for sites with many suppliers.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
-			'show_totals'    => array(
+			'show_totals'               => array(
 				'section' => 'general',
 				'name'    => __( 'Show Totals Row', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, ATUM will display new row at the bottom of Stock Central. You will be able to preview page column totals of essential stock counters.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
-			'enable_admin_bar_menu' => array(
+			'enable_admin_bar_menu'     => array(
 				'section' => 'general',
 				'name'    => __( 'Enable Admin Bar Menu', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, the ATUM menu will be accessible through the WP admin bar.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
-			'show_variations_stock' => array(
+			'show_variations_stock'     => array(
 				'section' => 'general',
 				'name'    => __( "Override 'Out of stock' Status", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the variations' stock status will be displayed in WooCommerce products' list for variable products. This overrides the 'Out of stock' status displayed by WooCommerce, when stock is managed at product level for variable products.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes'
 			),
-			'out_stock_threshold' => array(
-				'section' => 'general',
-				'name'    => __( 'ATUM per product Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Activate the switch to disable WooCommerce global threshold settings and enable ATUM per product threshold. All products will inherit the WooCommerce global value that you can now amend.<br><br>
-								  Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br> 
-								  We have a tool to reset or change all per product values in the Tool tab above.', ATUM_TEXT_DOMAIN ),
-				'type'    => 'switcher',
-				'default' => 'no',
+			'out_stock_threshold'       => array(
+				'section'                        => 'general',
+				'name'                           => __( 'ATUM per product Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+				'desc'                           => __( 'Activate the switch to disable WooCommerce global threshold settings and enable ATUM per product threshold. All products will inherit the WooCommerce global value that you can now amend.<br><br>
+								                        Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br> 
+								                        We have a tool to reset or change all per product values in the Tool tab above.', ATUM_TEXT_DOMAIN ),
+				'type'                           => 'switcher',
+				'default'                        => 'no',
 				'is_any_out_stock_threshold_set' => Helpers::is_any_out_stock_threshold_set(),
-				'confirm_msg' => esc_attr( __('This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN) )
+				'confirm_msg'                    => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) )
 			),
-			'unmanaged_counters' => array(
+			'unmanaged_counters'        => array(
 				'section' => 'general',
 				'name'    => __( 'Unmanaged Product Counters', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Add 'In Stock', 'Out of Stock' and 'Back Ordered' counters and views for Unmanaged by WooCommerce Products in all ATUM list tables. This option will also add these products to the Dashboard Stock Control Widget. Please note that enabling this option can affect the performance in stores with a large number of products.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
-			'stock_quantity_decimals' => array(
+			'stock_quantity_decimals'   => array(
 				'section' => 'general',
 				'name'    => __( 'Decimals in Stock Quantity', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enter the number of decimal places your shop needs in stock quantity fields.  Set 0 to keep or 1 and higher to override the default WooCommerce NO decimal setting.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
-				'options'    => array(
+				'options' => array(
 					'min' => 0,
 					'max' => 4
 				)
 			),
-			'sales_last_ndays' => array(
+			'sales_last_ndays'          => array(
 				'section' => 'general',
 				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enter the number of days to calculate the number of sales in that period in one Stock Central column.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => self::DEFAULT_SALE_DAYS,
-				'options'    => array(
+				'options' => array(
 					'min' => 1,
-                    'max' => 31
+					'max' => 31
 				)
 			),
-			'delete_data' => array(
+			'delete_data'               => array(
 				'section' => 'general',
 				'name'    => __( 'Delete Data When Uninstalling', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no'
 			),
-			'company_name' => array(
+			'company_name'              => array(
 				'section' => 'company',
 				'name'    => __( 'Company Name', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Fill your company's name", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'tax_number' => array(
+			'tax_number'                => array(
 				'section' => 'company',
 				'name'    => __( 'Tax/VAT Number', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Fill your company's Tax/VAT Number", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'address_1' => array(
+			'address_1'                 => array(
 				'section' => 'company',
 				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "The company's street address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'address_2' => array(
+			'address_2'                 => array(
 				'section' => 'company',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Optional additional info for the Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'city' => array(
+			'city'                      => array(
 				'section' => 'company',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The city where your business is located', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'country' => array(
+			'country'                   => array(
 				'section' => 'company',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The country and state or province if any', ATUM_TEXT_DOMAIN ),
 				'type'    => 'wc_country',
 				'default' => $default_country
 			),
-			'zip' => array(
+			'zip'                       => array(
 				'section' => 'company',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your business', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'same_ship_address' => array(
-				'section' => 'company',
-				'name'    => __( "Use as Shipping Address", ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
-				'type'    => 'switcher',
-				'default' => 'yes',
+			'same_ship_address'         => array(
+				'section'    => 'company',
+				'name'       => __( "Use as Shipping Address", ATUM_TEXT_DOMAIN ),
+				'desc'       => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
+				'type'       => 'switcher',
+				'default'    => 'yes',
 				'dependency' => array(
 					'section' => 'shipping',
 					'value'   => 'no'
 				)
 			),
-			'ship_to' => array(
+			'ship_to'                   => array(
 				'section' => 'shipping',
 				'name'    => __( 'Ship to Name', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The ship to name that will appear in the Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'ship_address_1' => array(
+			'ship_address_1'            => array(
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The shipping street address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'ship_address_2' => array(
+			'ship_address_2'            => array(
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Optional additional info for the Shipping Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'ship_city' => array(
+			'ship_city'                 => array(
 				'section' => 'shipping',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The city where is your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => ''
 			),
-			'ship_country' => array(
+			'ship_country'              => array(
 				'section' => 'shipping',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The country and state/province (if any)', ATUM_TEXT_DOMAIN ),
 				'type'    => 'wc_country',
 				'default' => $default_country
 			),
-			'ship_zip' => array(
+			'ship_zip'                  => array(
 				'section' => 'shipping',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),
@@ -454,15 +454,15 @@ class Settings {
 
 				/** @noinspection PhpParamsInspection */
 				add_settings_section(
-					ATUM_PREFIX . "setting_$section_key",    // ID
+					ATUM_PREFIX . "setting_{$section_key}",  // ID
 					$section_name,                           // Title
 					FALSE,                                   // Callback
-					ATUM_PREFIX . "setting_$section_key"     // Page
+					ATUM_PREFIX . "setting_{$section_key}"   // Page
 				);
 
 				// Register the settings
 				register_setting(
-					ATUM_PREFIX . "setting_$section_key",    // Option group
+					ATUM_PREFIX . "setting_{$section_key}",  // Option group
 					self::OPTION_NAME,                       // Option name
 					array( $this, 'sanitize' )               // Sanitization callback
 				);
@@ -537,9 +537,33 @@ class Settings {
 							break;
 
                         case 'button_group':
-	                        //TODO sanatize button_group as FILTER_SANITIZE_STRING (there's no formmating filter for this case?)
-	                        filter_var_array($input[ $key ],FILTER_SANITIZE_STRING);
-	                        $this->options[ $key ] = isset( $input[ $key ] ) ?  maybe_serialize( $input[ $key ]) : $atts['default'];
+
+	                        // The button groups could allow multiple values (checkboxes)
+                        	if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
+
+                        		$values = array();
+
+                        		foreach ( array_keys( $atts['options']['values'] ) as $default_value) {
+
+                        			// Save always the required value as checked
+			                        if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] == $default_value ) {
+				                        $values[$default_value] = 'yes';
+			                        }
+			                        else {
+				                        $values[$default_value] = in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
+			                        }
+
+		                        }
+
+		                        $this->options[ $key ] = maybe_serialize($values);
+
+	                        }
+	                        else {
+
+		                        $this->options[ $key ] = ! empty( $input[ $key ] ) ?  esc_attr( $input[ $key ]) : $atts['default'];
+
+	                        }
+
 	                        break;
 
                         case 'textarea':
@@ -697,24 +721,7 @@ class Settings {
 
 	/**
 	 * Get the settings option array and prints a button group
-     * To use it with checkbox set options['type'] to checkbox & options['multiple'] to '[]'
-     * example:
-     * 'mi_geoprompt_required_fields' => array(
-	 *   'section' => 'geoprompt',
-	 *   'name'    => __( 'Required Fields', ATUM_MULTINV_TEXT_DOMAIN ),
-	 *   'desc'    => __( "What information do you need to know to work with region restriction mode?", ATUM_MULTINV_TEXT_DOMAIN ),
-	 *   'type'    => 'button_group',
-	 *   'default' => 'country',
-	 *   'options' => array(
-	 *     'type'     => 'checkbox',
-	 *     'multiple' => '[]',
-	 *     'values'   => array(
-	 *       'country'  => __( 'Country', ATUM_MULTINV_TEXT_DOMAIN ),
-	 *       'state'    => __( 'State', ATUM_MULTINV_TEXT_DOMAIN ),
-	 *       'postcode' => __( 'Postcode', ATUM_MULTINV_TEXT_DOMAIN ),
-	 *       )
-	 *     )
-	 *   ),
+     * To use it with checkbox set options['type'] to checkbox & options['multiple'] to []
 	 *
 	 * @since 1.4.11
 	 *
@@ -723,20 +730,21 @@ class Settings {
 	public function display_button_group( $args ) {
 
 		$name           = self::OPTION_NAME . "[{$args['id']}]";
-		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; //allow to send array
-		$value          = strlen( $multiple ) > 0 ? maybe_unserialize( $this->options[ $args['id'] ] ) : $this->options[ $args['id'] ];
+		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; // allow to send array
+		$value          = $multiple ? maybe_unserialize( $this->options[ $args['id'] ] ) : $this->options[ $args['id'] ];
 		$style          = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size           = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
-		$input_type     = isset( $args['options']['type'] ) ? $args['options']['type'] : 'radio';
+		$input_type     = isset( $args['options']['input_type'] ) ? $args['options']['input_type'] : 'radio';
 		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
 
 		ob_start();
 		?>
 		<div class="multi_inventory_buttons btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ($args['options']['values'] as $option_value => $option_label): ?>
-                <?php
-				if ( strlen( $multiple ) > 0 && is_array( $value ) && $input_type === "checkbox" ) {
-					$is_active      = in_array( $option_value, $value );
+
+				<?php
+				if ( $multiple && is_array( $value ) ) {
+					$is_active      = in_array( $option_value, array_keys($value) ) && $value[$option_value] == 'yes';
 					$value_to_check = TRUE;
 				}
 				else {
@@ -744,8 +752,7 @@ class Settings {
 					$value_to_check = $option_value;
 				}
 
-				$disabled_str = '';
-				$checked_str  = '';
+				$disabled_str = $checked_str = '';
 
 				// Force checked disabled and active on required value
                 // TODO required_value to required_values array
@@ -760,8 +767,11 @@ class Settings {
 
                 ?>
                 <label class="btn btn-<?php echo $style ?><?php if ($is_active) echo ' active'?>">
-                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php echo $multiple ?>" autocomplete="off"<?php echo $checked_str; echo $disabled_str;?> value="<?php echo $option_value ?>"<?php echo $this->get_dependency($args) ?>> <?php echo $option_label; ?>
+                    <input type="<?php echo $input_type ?>" name="<?php echo $name ?><?php if ($multiple) echo '[]' ?>"
+	                    autocomplete="off"<?php echo $checked_str . $disabled_str ?> value="<?php echo $option_value ?>"
+	                    <?php echo $this->get_dependency($args) ?>> <?php echo $option_label; ?>
                 </label>
+
 			<?php endforeach; ?>
 		</div>
 		<?php
@@ -796,7 +806,7 @@ class Settings {
 
 		echo $this->get_description( $args );
 
-		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args );
+		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args );
 
 	}
 
@@ -812,14 +822,14 @@ class Settings {
 		ob_start();
 		?>
 		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo " {$args['options']['wrapper_class']}" ?>"
-			data-action="<?php echo $args['options']['script_action'] ?>"
+			data-action="<?php echo $args['options']['script_action'] ?>" data-input="<?php echo $args['id'] ?>"
 			<?php if ( ! empty( $args['options']['confirm_msg'] ) ): ?>data-confirm="<?php echo $args['options']['confirm_msg'] ?>"<?php endif; ?>
 			>
 
 			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
-			<select class="wc-enhanced-select" style="width: 12em">
+			<select class="wc-enhanced-select" style="width: 12em" id="<?php echo $args['id'] ?>">
 				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
 				<option value="<?php echo $key ?>"><?php echo $label ?></option>
 				<?php endforeach ?>
