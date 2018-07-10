@@ -91,73 +91,73 @@
 		}
 	}
 	
-	.woocommerce_variations {
-		
-		.form-row-first, .form-row-last {
-			.atum-field {
-				position: relative;
-				margin-top: 2px;
-				
-				input[type=text], input[type=number] {
-					margin-top: 0;
-					width: calc(100% - 33px) !important;
-				}
-				
-				.select2-container {
-					max-width: calc(100% - 33px) !important;
-				}
-				
-				.woocommerce-help-tip {
-					position: absolute;
-					top: -25px;
-					right: 0;
-				}
-				
-			}
-		}
-		
-		.atum-data-panel {
-			border-top: 1px solid $wp-gray-4;
-			padding-top: $grid-gutter-width/2;
+}
+
+.woocommerce_variations {
+	
+	.form-row-first, .form-row-last {
+		.atum-field {
+			position: relative;
+			margin-top: 2px;
 			
-			label {
-				&:not(.btn) {
-					float: left;
-					margin-right: 10px;
-					min-width: 130px;
-				}
+			input[type=text], input[type=number] {
+				margin-top: 0;
+				width: calc(100% - 33px) !important;
 			}
 			
-			.form-field {
-				&:first-of-type {
-					margin: 25px 0;
-				}
+			.select2-container {
+				max-width: calc(100% - 33px) !important;
+			}
+			
+			.woocommerce-help-tip {
+				position: absolute;
+				top: -25px;
+				right: 0;
+			}
+			
+		}
+	}
+	
+	.atum-data-panel {
+		border-top: 1px solid $wp-gray-4;
+		padding-top: $grid-gutter-width/2;
+		
+		label {
+			&:not(.btn) {
+				float: left;
+				margin-right: 10px;
+				min-width: 130px;
 			}
 		}
 		
-		h3.atum-section-title {
-			border: 1px solid $info;
-			background-color: transparentize($blue-light, .85);
-			color: $wp-gray-2;
-			text-transform: uppercase;
-			cursor: default !important;
-			margin-bottom: $grid-gutter-width/2 !important;
-			padding: 1em !important;
+		.form-field {
+			&:first-of-type {
+				margin: 25px 0;
+			}
 		}
-		
-		h4.atum-section-title {
-			margin-top: $grid-gutter-width;
-			padding-bottom: 10px;
-			border-bottom: 1px dashed $secondary;
-			font-size: 1.1em;
-		}
-		
-		.alert {
-			margin: 10px auto;
-			padding: 0.35rem 0.75rem;
-			width: 100%;
-		}
-		
+	}
+	
+	h3.atum-section-title {
+		border: 1px solid $info;
+		background-color: transparentize($blue-light, .85);
+		color: $wp-gray-2;
+		text-transform: uppercase;
+		cursor: default !important;
+		margin-bottom: $grid-gutter-width/2 !important;
+		padding: 1em !important;
+	}
+	
+	h4.atum-section-title {
+		margin-top: $grid-gutter-width;
+		padding-bottom: 10px;
+		border-bottom: 1px dashed $secondary;
+		font-size: 1.1em;
+	}
+	
+	.alert {
+		margin: 10px auto;
+		padding: 0.35rem 0.75rem;
+		width: 100%;
 	}
 	
 }

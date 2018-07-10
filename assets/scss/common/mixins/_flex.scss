@@ -49,6 +49,14 @@
 	flex: $ratio;
 }
 
+@mixin flex-order($order) {
+	-webkit-box-ordinal-group: $order;
+	-moz-box-ordinal-group: $order;
+	-ms-flex-order: $order;
+	-webkit-order: $order;
+	order: $order;
+}
+
 @mixin flex-align-items($value: stretch) {
 	@if $value == flex-start {
 		-webkit-box-align: start;
