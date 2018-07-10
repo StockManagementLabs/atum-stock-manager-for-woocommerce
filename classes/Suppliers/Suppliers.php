@@ -494,9 +494,10 @@ class Suppliers {
 		$supplier = get_post( $supplier_id );
 
 		if ($supplier->post_type == self::POST_TYPE) {
-
+			
 			$args = array(
 				'post_type'      => $post_type,
+				'post_status'    => array( 'publish', 'private' ),
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
 				'meta_query'     => array(
