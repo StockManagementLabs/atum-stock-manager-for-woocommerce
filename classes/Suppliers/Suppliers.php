@@ -401,9 +401,13 @@ class Suppliers {
 		}
 
 		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
+		$supplier_field_name     = apply_filters( 'atum/product_data/supplier_field_name', $supplier_field_name, $supplier_meta, $loop );
 		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
+		$supplier_field_id       = apply_filters( 'atum/product_data/supplier_field_id', $supplier_field_id, $supplier_meta, $loop );
 		$supplier_sku_field_name = empty( $variation ) ? $supplier_sku_meta : "variation{$supplier_sku_meta}[$loop]";
+		$supplier_sku_field_name = apply_filters( 'atum/product_data/supplier_sku_field_name', $supplier_sku_field_name, $supplier_sku_meta, $loop );
 		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
+		$supplier_sku_field_id   = apply_filters( 'atum/product_data/supplier_sku_field_id', $supplier_sku_field_id, $supplier_sku_meta, $loop );
 
 		// If the user is not allowed to edit Suppliers, add a hidden input
 		if ( ! AtumCapabilities::current_user_can('edit_supplier') ): ?>

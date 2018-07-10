@@ -415,7 +415,6 @@ class Hooks {
 		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add the individual out stock threshold field to WC's WC's product data meta box
 	 *
@@ -430,37 +429,32 @@ class Hooks {
 		global $post;
 
 		$product_type = '';
+		$meta_key     = Globals::OUT_STOCK_THRESHOLD_KEY;
 
 		if ( empty( $variation ) ) {
-
-			$product = wc_get_product( $post->ID );
+			$product      = wc_get_product( $post->ID );
 			$product_type = $product->get_type();
-
-			// Do not add the field to variable products (every variation will have its own)
-			//if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-			//	return;
-			//}
 		}
 
-		$woocommerce_notify_no_stock_amount =  get_option( 'woocommerce_notify_no_stock_amount') ;
+		$woocommerce_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount') ;
 
-		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
-		$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+		$product_id          = empty( $variation ) ? $post->ID : $variation->ID;
+		$out_stock_threshold = get_post_meta( $product_id, $meta_key, TRUE );
 
-		$out_stock_threshold_field_name = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY . "[$loop]";
-		$out_stock_threshold_field_id   = empty( $variation ) ? Globals::OUT_STOCK_THRESHOLD_KEY : Globals::OUT_STOCK_THRESHOLD_KEY . $loop;
+		$out_stock_threshold_field_name = empty( $variation ) ? $meta_key : "variation{$meta_key}[$loop]";
+		$out_stock_threshold_field_name = apply_filters( 'atum/product_data/out_stock_threshold/field_name', $out_stock_threshold_field_name, $meta_key, $loop );
+		$out_stock_threshold_field_id   = empty( $variation ) ? $meta_key : $meta_key . $loop;
+		$out_stock_threshold_field_id   = apply_filters( 'atum/product_data/out_stock_threshold/field_id', $out_stock_threshold_field_id, $meta_key, $loop );
 
 		// If the user is not allowed to edit "Out of stock threshold", add a hidden input
 		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ): ?>
 
-            <input type="hidden" value="<?php echo( $out_stock_threshold ?: '' ) ?>" name="<?php echo $out_stock_threshold_field_name ?>" id="<?php echo $out_stock_threshold_field_id ?>">
-
+            <input type="hidden" value="<?php echo ( $out_stock_threshold ?: '' ) ?>" name="<?php echo $out_stock_threshold_field_name ?>" id="<?php echo $out_stock_threshold_field_id ?>">
 
 		<?php else:
 
-            // [ 'show_if_simple', 'show_if_variable', 'show_if_grouped', 'show_if_product-part', ...
-			$show_if_out_stock_threshold_product_types = array_map( function($val) { return "show_if_{$val}"; }, Globals::get_product_types_with_stock() ) ;
-		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $show_if_out_stock_threshold_product_types );
+			$visibility_classes          = array_map( function($val) { return "show_if_{$val}"; }, Globals::get_product_types_with_stock() ) ;
+		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation','product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes','woocommerce_notify_no_stock_amount' ) );
 
