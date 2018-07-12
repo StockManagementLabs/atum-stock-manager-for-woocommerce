@@ -1,20 +1,18 @@
 <?php
 /**
+ * ATUM add-ons loader
+ *
  * @package         Atum
  * @subpackage      Addons
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.0
- *
- * @noinspection    PhpIncludeInspection
- *
- * ATUM add-ons loader
  */
 
 namespace Atum\Addons;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumException;
 use Atum\Inc\Helpers;
@@ -24,18 +22,21 @@ class Addons {
 
 	/**
 	 * The singleton instance holder
+	 *
 	 * @var Addons
 	 */
 	private static $instance;
 
 	/**
 	 * The list of registered ATUM's add-ons
+	 *
 	 * @var array
 	 */
 	private static $addons = array();
 
 	/**
 	 * The list of add-ons installed but not activated for updates
+	 *
 	 * @var array
 	 */
 	private $not_activated_addons = array();
@@ -67,42 +68,42 @@ class Addons {
 	 */
 	private function __construct() {
 
-		// Get all the installed addons
-		self::$addons = apply_filters('atum/addons/setup', self::$addons);
+		// Get all the installed addons.
+		self::$addons = apply_filters( 'atum/addons/setup', self::$addons );
 
-		// Add the module menu
-		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
+		// Add the module menu.
+		add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
 
-		// Initialize the addons
-		add_action( 'after_setup_theme', array($this, 'init_addons'), 99 );
+		// Initialize the addons.
+		add_action( 'after_setup_theme', array( $this, 'init_addons' ), 99 );
 
 		if ( is_admin() ) {
 
-			// Automatic updates for addons
+			// Automatic updates for addons.
 			add_action( 'admin_init', array( $this, 'check_addons_updates' ), 0 );
 
-			// Disable SSL verification in order to prevent addon download failures
+			// Disable SSL verification in order to prevent addon download failures.
 			add_filter( 'http_request_args', array( $this, 'http_request_args' ), 10, 2 );
 
-			// Allow downloading files from local servers while developing
+			// Allow downloading files from local servers while developing.
 			if ( ATUM_DEBUG ) {
 				add_filter( 'http_request_host_is_external', '__return_true' );
 			}
 
-			// Check if there are ATUM add-ons installed that are not activated
+			// Check if there are ATUM add-ons installed that are not activated.
 			$installed_addons = self::get_installed_addons();
 
-			if ( ! empty($installed_addons) ) {
+			if ( ! empty( $installed_addons ) ) {
 
-				foreach ($installed_addons as $installed_addon) {
+				foreach ( $installed_addons as $installed_addon ) {
 					$addon_key = self::get_keys( $installed_addon['name'] );
 
-					if ( empty($addon_key) || ! $addon_key['key'] || in_array($addon_key['status'], ['invalid', 'expired']) ) {
+					if ( empty( $addon_key ) || ! $addon_key['key'] || in_array( $addon_key['status'], [ 'invalid', 'expired' ], TRUE ) ) {
 						$this->not_activated_addons[] = $installed_addon['name'];
 					}
 				}
 
-				if ( ! empty($this->not_activated_addons) ) {
+				if ( ! empty( $this->not_activated_addons ) ) {
 					add_action( 'admin_notices', array( $this, 'show_addons_activation_notice' ) );
 				}
 
@@ -121,13 +122,13 @@ class Addons {
 	 *
 	 * @return array
 	 */
-	public function add_menu($menus) {
+	public function add_menu( $menus ) {
 
 		$menus['addons'] = array(
 			'title'      => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
 			'callback'   => array( $this, 'load_addons_page' ),
 			'slug'       => ATUM_TEXT_DOMAIN . '-addons',
-			'menu_order' => self::MENU_ORDER
+			'menu_order' => self::MENU_ORDER,
 		);
 
 		return $menus;
@@ -141,10 +142,10 @@ class Addons {
 	 */
 	public function init_addons() {
 
-		if ( ! empty(self::$addons) ) {
-			foreach (self::$addons as $addon) {
+		if ( ! empty( self::$addons ) ) {
+			foreach ( self::$addons as $addon ) {
 
-				// Load the addon. Each addon should have a callback method for bootstraping
+				// Load the addon. Each addon should have a callback method for bootstraping.
 				if ( ! empty( $addon['bootstrap'] ) && is_callable( $addon['bootstrap'] ) ) {
 					call_user_func( $addon['bootstrap'] );
 				}
@@ -162,12 +163,12 @@ class Addons {
 	public function load_addons_page() {
 
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array('sweetalert2'), ATUM_VERSION );
+		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2' ), ATUM_VERSION );
 
-		$min = !ATUM_DEBUG ? '.min' : '';
+		$min = ! ATUM_DEBUG ? '.min' : '';
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
 		Helpers::maybe_es6_promise();
-		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array('jquery', 'sweetalert2'), ATUM_VERSION );
+		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
@@ -181,22 +182,22 @@ class Addons {
 			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
-			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN )
+			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN ),
 		) );
 
-		wp_enqueue_style('sweetalert2');
-		wp_enqueue_style('atum-addons');
+		wp_enqueue_style( 'sweetalert2' );
+		wp_enqueue_style( 'atum-addons' );
 
-		if ( wp_script_is('es6-promise', 'registered') ) {
+		if ( wp_script_is( 'es6-promise', 'registered' ) ) {
 			wp_enqueue_script( 'es6-promise' );
 		}
 
-		wp_enqueue_script('sweetalert2');
-		wp_enqueue_script('atum-addons');
+		wp_enqueue_script( 'sweetalert2' );
+		wp_enqueue_script( 'atum-addons' );
 
 		$args = array(
 			'addons'      => $this->get_addons_list(),
-			'addons_keys' => self::get_keys()
+			'addons_keys' => self::get_keys(),
 		);
 
 		Helpers::load_view( 'addons', $args );
@@ -212,24 +213,24 @@ class Addons {
 
 		$license_keys = self::get_keys();
 
-		if ( ! empty($license_keys) ) {
+		if ( ! empty( $license_keys ) ) {
 			foreach ( $license_keys as $addon_name => $license_key ) {
 
-				if ( $license_key && $license_key['status'] == 'valid' ) {
+				if ( $license_key && 'valid' === $license_key['status'] ) {
 
-					// All the ATUM addons' names should start with 'ATUM'
-					$addon_info = Helpers::is_plugin_installed( 'ATUM ' . $addon_name, 'name', FALSE);
+					// All the ATUM addons' names should start with 'ATUM'.
+					$addon_info = Helpers::is_plugin_installed( 'ATUM ' . $addon_name, 'name', FALSE );
 
-					if ($addon_info) {
+					if ( $addon_info ) {
 
-						// Setup the updater
-						$addon_file = key($addon_info);
+						// Setup the updater.
+						$addon_file = key( $addon_info );
 
 						new Updater( $addon_file, array(
 							'version'   => $addon_info[ $addon_file ]['Version'],
 							'license'   => $license_key['key'],
 							'item_name' => $addon_name,
-							'beta'      => FALSE
+							'beta'      => FALSE,
 						) );
 					}
 				}
@@ -263,29 +264,31 @@ class Addons {
 				'blocking'    => TRUE,
 				'headers'     => array(),
 				'body'        => array(),
-				'cookies'     => array()
+				'cookies'     => array(),
 			);
 			
 			$response = wp_remote_post( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
 			
-			// Admin notification about the error
+			// Admin notification about the error.
 			if ( is_wp_error( $response ) ) {
 				
 				$error_message = $response->get_error_message();
 				
-				if ( ATUM_DEBUG == TRUE ) {
+				if ( TRUE === ATUM_DEBUG ) {
 					error_log( __METHOD__ . ": $error_message" );
 				}
-				
+
+				/* translators: error message displayed */
 				Helpers::display_notice( 'error', sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ) );
 				
 				return FALSE;
 				
 			}
+
+			$response_body = wp_remote_retrieve_body( $response );
+			$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
 			
-			$addons = @json_decode( wp_remote_retrieve_body( $response ), TRUE );
-			
-			if ( ! $addons ) {
+			if ( empty( $addons ) ) {
 				Helpers::display_notice( 'error', __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ) );
 				
 				return FALSE;
@@ -307,10 +310,12 @@ class Addons {
 	public function show_addons_activation_notice() {
 
 		$message = sprintf(
-			__( 'Please, activate %syour purchased ATUM premium add-ons%s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
-			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url('admin.php') ) . '">',
+			/* translators: opening and closing HTML link to the add-ons page  */
+			__( 'Please, activate %1$ssyour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
 			'</a>'
 		);
+
 		Helpers::display_notice( 'info', $message, TRUE, 'activate-addons' );
 
 	}
@@ -320,13 +325,13 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array   $args
-	 * @param string  $url
+	 * @param array  $args
+	 * @param string $url
 	 *
 	 * @return array
 	 */
 	public function http_request_args( $args, $url ) {
-		// If it is an https request and we are performing a package download, disable ssl verification
+		// If it is an https request and we are performing a package download, disable ssl verification.
 		if ( strpos( $url, 'https://' ) !== FALSE && strpos( $url, 'package_download' ) !== FALSE && strpos( $url, self::ADDONS_STORE_URL ) !== FALSE ) {
 			$args['sslverify'] = FALSE;
 		}
@@ -339,18 +344,18 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    Optional. The addon name from which get the key
+	 * @param string $addon_name    Optional. The addon name from which get the key.
 	 *
 	 * @return string|array|bool
 	 */
-	public static function get_keys($addon_name = '') {
+	public static function get_keys( $addon_name = '' ) {
 
 		$keys = get_option( self::ADDONS_KEY_OPTION );
 
-		if ($addon_name) {
+		if ( $addon_name ) {
 
-			if (! empty($keys) && is_array($keys) && isset( $keys[$addon_name] ) ) {
-				return $keys[$addon_name];
+			if ( ! empty( $keys ) && is_array( $keys ) && isset( $keys[ $addon_name ] ) ) {
+				return $keys[ $addon_name ];
 			}
 
 			return '';
@@ -364,29 +369,29 @@ class Addons {
 	/**
 	 * Generate a license API request
 	 *
-	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name)
-	 * @param string $key           The license key
-	 * @param string $endpoint      The API endpoint
-	 * @param array  $extra_params  Optional. Any other param that will be sent to the API
+	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name).
+	 * @param string $key           The license key.
+	 * @param string $endpoint      The API endpoint.
+	 * @param array  $extra_params  Optional. Any other param that will be sent to the API.
 	 *
 	 * @return array|\WP_Error
 	 */
 	private static function api_request( $addon_name, $key, $endpoint, $extra_params = array() ) {
 
-		$params = array_merge($extra_params, array(
+		$params = array_merge( $extra_params, array(
 			'edd_action' => $endpoint,
 			'license'    => $key,
-			'item_name'  => urlencode( $addon_name ),
-			'url'        => home_url()
-		));
+			'item_name'  => rawurlencode( $addon_name ),
+			'url'        => home_url(),
+		) );
 
 		$request_params = array(
 			'timeout'   => 15,
 			'sslverify' => FALSE,
-			'body'      => $params
+			'body'      => $params,
 		);
 
-		// Call the license manager API
+		// Call the license manager API.
 		return wp_remote_post( self::ADDONS_STORE_URL, $request_params );
 
 	}
@@ -396,11 +401,12 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    The addon name
-	 * @param array  $key           The license key
+	 * @param string $addon_name    The addon name.
+	 * @param array  $key           The license key.
 	 */
-	public static function update_key($addon_name, $key) {
-		$keys = get_option( self::ADDONS_KEY_OPTION );
+	public static function update_key( $addon_name, $key ) {
+
+		$keys                = get_option( self::ADDONS_KEY_OPTION );
 		$keys[ $addon_name ] = $key;
 		update_option( self::ADDONS_KEY_OPTION, $keys );
 	}
@@ -410,23 +416,23 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name  The addon name (must match with the ATUM store's name)
-	 * @param string $addon_slug  The addon slug (must match with the plugin directory name)
+	 * @param string $addon_name  The addon name (must match with the ATUM store's name).
+	 * @param string $addon_slug  The addon slug (must match with the plugin directory name).
 	 *
-	 * @return array  The addon status info
+	 * @return array  The addon status info.
 	 */
-	public static function get_addon_status($addon_name, $addon_slug) {
+	public static function get_addon_status( $addon_name, $addon_slug ) {
 
 		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
 		$addon_status   = Helpers::get_transient( $transient_name, TRUE );
 
-		if ( empty($addon_status) ) {
+		if ( empty( $addon_status ) ) {
 
-			// Status defaults
+			// Status defaults.
 			$addon_status = array(
 				'installed' => Helpers::is_plugin_installed( $addon_slug ),
 				'status'    => 'invalid',
-				'key'       => ''
+				'key'       => '',
 			);
 
 			$saved_license = self::get_keys( $addon_name );
@@ -434,7 +440,7 @@ class Addons {
 			if ( ! empty( $saved_license ) ) {
 				$addon_status['key'] = $saved_license['key'];
 
-				// Check the license
+				// Check the license.
 				$status = self::check_license( $addon_name, $addon_status['key'] );
 
 				if ( ! is_wp_error( $status ) ) {
@@ -443,16 +449,21 @@ class Addons {
 					if ( $license_data ) {
 						$addon_status['status'] = $license_data->license;
 
-						if ($license_data->license != $saved_license['status']) {
+						if ( $license_data->license !== $saved_license['status'] ) {
 							$saved_license['status'] = $license_data->license;
-							self::update_key($addon_name, $saved_license);
+							self::update_key( $addon_name, $saved_license );
 						}
 					}
 				}
 
 			}
 			else {
-				self::update_key($addon_name, ['key' => '', 'status' => 'invalid']);
+
+				self::update_key( $addon_name, [
+					'key'    => '',
+					'status' => 'invalid',
+				] );
+
 			}
 
 			switch ( $addon_status['status'] ) {
@@ -497,9 +508,9 @@ class Addons {
 	 *
 	 * @param string $addon_name
 	 */
-	public static function delete_status_transient($addon_name) {
+	public static function delete_status_transient( $addon_name ) {
 		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
-		Helpers::delete_transients($transient_name);
+		Helpers::delete_transients( $transient_name );
 	}
 
 	/**
@@ -507,45 +518,47 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    The addon name
-	 * @param string $addon_slug    The addon slug
-	 * @param string $download_link The link to download the addon zip file
+	 * @param string $addon_name    The addon name.
+	 * @param string $addon_slug    The addon slug.
+	 * @param string $download_link The link to download the addon zip file.
 	 *
-	 * @return array    An array with the result and the message
+	 * @return array    An array with the result and the message.
+	 *
+	 * @throws AtumException If the download fails could throw an exception.
 	 */
-	public static function install_addon($addon_name, $addon_slug, $download_link) {
+	public static function install_addon( $addon_name, $addon_slug, $download_link ) {
 
-		// Ensure that the download link URL is pointing to the right place
+		// Ensure that the download link URL is pointing to the right place.
 		if (
-			! filter_var($download_link, FILTER_VALIDATE_URL) ||
-		    trailingslashit( parse_url($download_link, PHP_URL_SCHEME) . '://' .parse_url($download_link, PHP_URL_HOST) ) != self::ADDONS_STORE_URL
+			! filter_var( $download_link, FILTER_VALIDATE_URL ) ||
+			trailingslashit( wp_parse_url( $download_link, PHP_URL_SCHEME ) . '://' . wp_parse_url( $download_link, PHP_URL_HOST ) ) !== self::ADDONS_STORE_URL
 		) {
 
 			return array(
 				'success' => FALSE,
-				'data'    => __( 'The download link is not valid', ATUM_TEXT_DOMAIN )
+				'data'    => __( 'The download link is not valid', ATUM_TEXT_DOMAIN ),
 			);
 
 		}
 
-		// Start the addon download and installation
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		// Start the addon download and installation.
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		WP_Filesystem();
 
-		$skin       = new \Automatic_Upgrader_Skin;
-		$upgrader   = new \WP_Upgrader( $skin );
-		$plugin     = "$addon_slug/$addon_slug.php";
-		$installed  = Helpers::is_plugin_installed($addon_slug);
-		$activate   = ($installed) ? ! is_plugin_active( $plugin ) : FALSE;
+		$skin      = new \Automatic_Upgrader_Skin();
+		$upgrader  = new \WP_Upgrader( $skin );
+		$plugin    = "$addon_slug/$addon_slug.php";
+		$installed = Helpers::is_plugin_installed( $addon_slug );
+		$activate  = ( $installed ) ? ! is_plugin_active( $plugin ) : FALSE;
 
-		// Install this new addon
+		// Install this new addon.
 		if ( ! $installed ) {
 
-			// Suppress feedback
+			// Suppress feedback.
 			ob_start();
 
 			try {
@@ -585,22 +598,23 @@ class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-						__( 'ATUM %s could not be installed (%s). Please download it from your account and install it manually.', ATUM_TEXT_DOMAIN ),
+						/* translators: first one is the add-on nam and the second the error message */
+						__( 'ATUM %1$s could not be installed (%2$s). Please download it from your account and install it manually.', ATUM_TEXT_DOMAIN ),
 						$addon_name,
 						$e->getMessage()
-					)
+					),
 				);
 
 			}
 
-			// Discard feedback
+			// Discard feedback.
 			ob_end_clean();
 
 		}
 
 		wp_clean_plugins_cache();
 
-		// Activate this thing
+		// Activate this thing.
 		if ( $activate ) {
 
 			try {
@@ -615,27 +629,30 @@ class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-						__( 'ATUM %s was installed but could not be activated. %sPlease activate it manually by clicking here.%s', ATUM_TEXT_DOMAIN ),
+						/* translators: first one is the add-on nam, and the others are the opening and closing HTML link tags to the plugins page */
+						__( 'ATUM %1$s was installed but could not be activated. %2$sPlease activate it manually by clicking here.%3$s', ATUM_TEXT_DOMAIN ),
 						$addon_name,
 						'<a href="' . admin_url( 'plugins.php' ) . '">',
 						'</a>'
-					)
+					),
 				);
 
 			}
 
-			// Installed and activated
+			// Installed and activated.
 			return array(
 				'success' => TRUE,
-				'data'    => sprintf( __( 'The ATUM %s addon was installed and activated successfully.', ATUM_TEXT_DOMAIN ), $addon_name )
+				/* translators: the add-on name */
+				'data'    => sprintf( __( 'The ATUM %s addon was installed and activated successfully.', ATUM_TEXT_DOMAIN ), $addon_name ),
 			);
 
 		}
 
-		// Installed
+		// Installed.
 		return array(
 			'success' => TRUE,
-			'data'    => sprintf( __( 'The ATUM %s addon was installed successfully.', ATUM_TEXT_DOMAIN ), $addon_name )
+			/* translators: the add-on name */
+			'data'    => sprintf( __( 'The ATUM %s addon was installed successfully.', ATUM_TEXT_DOMAIN ), $addon_name ),
 		);
 
 	}
@@ -645,13 +662,13 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name)
-	 * @param string $key           The license key
+	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name).
+	 * @param string $key           The license key.
 	 *
 	 * @return array|\WP_Error
 	 */
-	public static function check_license($addon_name, $key) {
-		return self::api_request($addon_name, $key, 'check_license');
+	public static function check_license( $addon_name, $key ) {
+		return self::api_request( $addon_name, $key, 'check_license' );
 	}
 
 	/**
@@ -659,13 +676,13 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name)
-	 * @param string $key           The license key
+	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name).
+	 * @param string $key           The license key.
 	 *
 	 * @return array|\WP_Error
 	 */
-	public static function activate_license($addon_name, $key) {
-		return self::api_request($addon_name, $key, 'activate_license');
+	public static function activate_license( $addon_name, $key ) {
+		return self::api_request( $addon_name, $key, 'activate_license' );
 	}
 
 	/**
@@ -673,13 +690,13 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name)
-	 * @param string $key           The license key
+	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name).
+	 * @param string $key           The license key.
 	 *
 	 * @return array|\WP_Error
 	 */
-	public static function deactivate_license($addon_name, $key) {
-		return self::api_request($addon_name, $key, 'deactivate_license');
+	public static function deactivate_license( $addon_name, $key ) {
+		return self::api_request( $addon_name, $key, 'deactivate_license' );
 	}
 
 	/**
@@ -687,15 +704,19 @@ class Addons {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name)
-	 * @param string $key           The license key
-	 * @param string $version       The current addon version
-	 * @param bool   $beta          Whether to look for beta versions
+	 * @param string $addon_name    The addon name (must match to the ATUM store's addon name).
+	 * @param string $key           The license key.
+	 * @param string $version       The current addon version.
+	 * @param bool   $beta          Whether to look for beta versions.
 	 *
 	 * @return array|\WP_Error
 	 */
-	public static function get_version($addon_name, $key, $version, $beta = FALSE) {
-		return self::api_request($addon_name, $key, 'get_version', array('version' => $version, 'beta' => $beta));
+	public static function get_version( $addon_name, $key, $version, $beta = FALSE ) {
+
+		return self::api_request( $addon_name, $key, 'get_version', array(
+			'version' => $version,
+			'beta'    => $beta,
+		) );
 	}
 
 	/**
@@ -720,9 +741,9 @@ class Addons {
 
 		$keys = self::get_keys();
 
-		if ( ! empty($keys) ) {
+		if ( ! empty( $key ) ) {
 			foreach ( $keys as $key ) {
-				if ( ! empty( $key['key'] ) && ! empty( $key['status'] ) && $key['status'] == 'valid' ) {
+				if ( ! empty( $key['key'] ) && ! empty( $key['status'] ) && 'valid' === $key['status'] ) {
 					return TRUE;
 				}
 			}
@@ -736,22 +757,27 @@ class Addons {
 	/****************************
 	 * Instance methods
 	 ****************************/
+
+	/**
+	 * Cannot be cloned
+	 */
 	public function __clone() {
 
-		// cannot be cloned
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
+	/**
+	 * Cannot be serialized
+	 */
 	public function __sleep() {
 
-		// cannot be serialized
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Get Singleton instance
 	 *
-	 * @return Addons instance
+	 * @return Addons
 	 */
 	public static function get_instance() {
 
@@ -760,6 +786,7 @@ class Addons {
 		}
 
 		return self::$instance;
+
 	}
 
 }

@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.9.6
+Tested up to: 4.9.7
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.4.3
-Stable tag: 1.4.12.1
+Stable tag: 1.4.12.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,25 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.12.2`
+
+*2018-07-12*
+
+**Changes**
+
+* Improved tools.
+
+**Fixes**
+
+* Sanitization fixes.
+* Fixed Settings' button groups with multiple values allowed.
+* Fixed: Supplier's product search couldn't find private products.
+* Fixed: IE was not detected properly.
+* Css fixes.
+* Refactory.
 
 ---
 
