@@ -14,7 +14,7 @@
 		
 		// Toggle the "Out of Stock Threshold" field visibility
 		$('#_manage_stock').change(function () {
-			$('.out_stock_threshold_field_wrapper').css('display', this.checked ? 'block' : 'none');
+			$('#_out_stock_threshold').closest('.options_group').css('display', this.checked ? 'block' : 'none');
 		}).change();
 
 		// Add switches to variations once are loaded by WC

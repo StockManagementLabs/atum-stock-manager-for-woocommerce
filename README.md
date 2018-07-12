@@ -159,6 +159,25 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.12.2`
+
+*2018-07-12*
+
+**Changes**
+
+* Improved tools.
+
+**Fixes**
+
+* Sanitization fixes.
+* Fixed Settings' button groups with multiple values allowed.
+* Fixed: Supplier's product search couldn't find private products.
+* Fixed: IE was not detected properly.
+* Css fixes.
+* Refactory.
+
+---
+
 `1.4.12.1`
 
 *2018-07-03*

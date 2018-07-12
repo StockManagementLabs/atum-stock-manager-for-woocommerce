@@ -415,7 +415,7 @@ class Suppliers {
 
 			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', ['show_if_simple'] );
 
-			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('supplier_field_name', 'supplier_field_id', 'variation', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes'));
+			Helpers::load_view('meta-boxes/product-data/supplier-fields', compact('supplier_field_name', 'supplier_field_id', 'variation', 'loop', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes'));
 
 		endif;
 
