@@ -18,10 +18,10 @@ use Atum\Inc\Helpers;
  * @var string $product_type
  */
 
-if ( Helpers::get_option( 'out_stock_threshold', 'no' ) == 'yes' ): ?>
+if ( Helpers::get_option( 'out_stock_threshold', 'no' ) === 'yes' ): ?>
 
 	<?php if ( empty($variation) ): ?>
-    <div class="options_group out_stock_threshold_field_wrapper <?php echo implode(' ', $out_stock_threshold_classes) ?>">
+    <div class="options_group <?php echo implode(' ', $out_stock_threshold_classes) ?>">
     <?php endif; ?>
 
         <p class="form-field _out_stock_threshold_field <?php if ( ! empty($variation) ) echo ' show_if_variation_manage_stock form-row form-row-last' ?>">
