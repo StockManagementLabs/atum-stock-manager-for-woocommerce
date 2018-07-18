@@ -1815,4 +1815,43 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Load all PSR4-compliant classes within the specified path
+	 *
+	 * @since 1.4.12.3
+	 *
+	 * @param string $path          The path where are located the classes to load
+	 * @param string $namespace     The Namespace for the classes
+	 * @param bool   $is_singleton  Optional. Whether the classes follows the Singleton pattern
+	 */
+	public static function load_psr4_classes( $path, $namespace, $is_singleton = TRUE ) {
+
+		$files = @scandir( $path, 1 );
+
+		if ( ! empty( $files ) ) {
+
+			foreach ( $files as $file ) {
+
+				if ( is_file( $path . $file ) ) {
+
+					$class = $namespace . str_replace( '.php', '', $file );
+
+					if ( class_exists( $class ) ) {
+
+						if ( $is_singleton ) {
+							$class::get_instance();
+						}
+						else {
+							new $class();
+						}
+
+					}
+				}
+
+			}
+
+		}
+
+	}
+
 }
