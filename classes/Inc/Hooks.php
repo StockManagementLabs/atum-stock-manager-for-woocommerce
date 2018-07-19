@@ -114,6 +114,7 @@ class Hooks {
 	 * and ATUM's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
 	 *
 	 * @since 1.4.10
+	 * @version 1.5.0
 	 *
 	 * @param mixed       $is_in_stock Before hook value.
 	 * @param \WC_Product $product     Actual product or variation who fires.
@@ -123,10 +124,10 @@ class Hooks {
 	public function check_product_out_of_stock_threshold( $is_in_stock, $product ) {
 
 		global $wpdb;
-
-		$item_id = $product->get_ID();
+		
+		$item_id                = $product->get_ID();
 		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
-
+		
 		// If the product has no "Out of Stock Threshold" set we don't need to continue.
 		if ( FALSE === $out_of_stock_threshold || '' === $out_of_stock_threshold ) {
 			return $is_in_stock;
@@ -136,39 +137,20 @@ class Hooks {
 		if ( apply_filters( 'atum/out_of_stock_threshold_for_product', FALSE, $product, $is_in_stock ) ) {
 			return $is_in_stock;
 		}
-
-		$query = $wpdb->prepare( "
-			SELECT meta_key, meta_value 
-      		FROM wp_postmeta where post_id = %d
-          	AND meta_key IN ( '_manage_stock','_stock','_stock_status', '_backorders')
-        ", $item_id );
-
-		// Array( [_manage_stock] => no , [_stock] => , [_stock_status] => instock).
-		$item_metas = array_column( $wpdb->get_results( $query, ARRAY_A ), 'meta_value', 'meta_key' );
-
-		// If this item doesn't have these 4 keys, it means that it never has had "_out_stock_threshold" set.
-		if ( ! Helpers::array_keys_exist( array( '_manage_stock', '_stock', '_stock_status' ), $item_metas ) ) {
-
-			if ( isset( $item_metas['_stock_status'] ) ) {
-				return 'outofstock' !== $item_metas['_stock_status'];
-			}
-
+		
+		if ( ! $product->get_manage_stock() ) {
+			
+			$is_in_stock = 'outofstock' !== $product->get_stock_status();
 		}
-		elseif ( 'yes' === $item_metas['_manage_stock'] ) {
-
-			if ( 'no' !== $item_metas['_backorders'] ) {
-				return TRUE;
+		else {
+			if ( $product->backorders_allowed() ) {
+				
+				$is_in_stock = TRUE;
 			}
-
-			if ( $item_metas['_stock'] > $out_of_stock_threshold ) {
-				// Available.
-				return TRUE;
-
+			else {
+				
+				$is_in_stock = $product->get_stock_quantity() > $out_of_stock_threshold;
 			}
-
-			// _out_stock_threshold!
-			return FALSE;
-
 		}
 
 		return $is_in_stock;
