@@ -1,6 +1,7 @@
 <?php
 /**
- * Atum Legacy Class
+ * Atum Legacy Class.
+ * Integrates all Legacy functionality for WC versions less than 1.5Beta.
  *
  * @package         Atum
  * @subpackage      Legacy
@@ -8,14 +9,9 @@
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.5.0
- *
- * Integrates all Legacy functionality for WC versions less than 1.5Beta
  */
 
 namespace Atum\Legacy;
-
-use Atum\Modules\ModuleManager;
-
 
 defined( 'ABSPATH' ) || die;
 
