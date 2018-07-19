@@ -20,6 +20,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Integrations\Wpml;
+use Atum\Legacy\AtumLegacy;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
@@ -195,7 +196,7 @@ class Main {
 		if ( class_exists( '\woocommerce_wpml' ) ) {
 			new Wpml();
 		}
-
+		
 		//
 		// Load extra modules
 		//--------------------
@@ -232,6 +233,12 @@ class Main {
 				}
 			}
 
+		}
+		
+		// TODO: Change the version compare if needed as new versions released.
+		if ( ( version_compare( WC()->version, '3.5.dev', '<' ) && defined( 'WC_PRODUCT_TABLES_FILE' ) ) || version_compare( WC()->version, '3.5.dev', '>' ) ) {
+			
+			new AtumLegacy();
 		}
 
 	}
