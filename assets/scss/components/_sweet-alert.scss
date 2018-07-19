@@ -20,7 +20,7 @@
 	}
 	
 	button, a {
-		@include transition(all 0.2s ease-in-out);
+		@include transition(background-color 0.2s ease-in-out);
 		
 		&:focus {
 			outline: none;

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Inbound Stock List
+ *
  * @package         Atum\InboundStock
  * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
@@ -10,7 +12,7 @@
 
 namespace Atum\InboundStock\Lists;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -22,22 +24,23 @@ use Atum\PurchaseOrders\PurchaseOrders;
 class ListTable extends AtumListTable {
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	public function __construct( $args = array() ) {
 		
-		// Prevent unmanaged counters
+		// Prevent unmanaged counters.
 		$this->show_unmanaged_counters = FALSE;
 
 		$this->taxonomies[] = array(
 			'taxonomy' => 'product_type',
 			'field'    => 'slug',
-			'terms'    => Globals::get_product_types()
+			'terms'    => Globals::get_product_types(),
 		);
 
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
-		// *** Following this convention is necessary for column sorting functionality ***
+		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
 			'thumb'                => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
@@ -47,19 +50,18 @@ class ListTable extends AtumListTable {
 			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'    => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
 			'calc_date_expected'   => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
-			'calc_purchase_order'  => __( 'PO', ATUM_TEXT_DOMAIN)
+			'calc_purchase_order'  => __( 'PO', ATUM_TEXT_DOMAIN ),
 		);
 
-		// Initialize totalizers
-		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array(
-			'calc_inbound' => 0
-		));
+		// Initialize totalizers.
+		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( 'calc_inbound' => 0 ) );
 
 		parent::__construct( $args );
 		
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 *
 	 * @since 1.4.2
@@ -73,13 +75,23 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
-	protected function table_nav_filters() {
-		// Disable filters
+	protected function extra_tablenav( $which ) {
+		// Disable table nav.
 	}
 
 	/**
+	 *
+	 * @inheritdoc
+	 */
+	protected function table_nav_filters() {
+		// Disable filters.
+	}
+
+	/**
+	 *
 	 * @inheritdoc
 	 *
 	 * @since  1.1.3.1
@@ -93,6 +105,7 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 *
 	 * @since 1.4.2
@@ -104,29 +117,31 @@ class ListTable extends AtumListTable {
 			'count_out_stock'  => 0,
 			'count_back_order' => 0,
 			'count_low_stock'  => 0,
-			'count_unmanaged'  => 0
+			'count_unmanaged'  => 0,
 		);
 		
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	protected function get_sortable_columns() {
 
 		$sortable_columns = parent::get_sortable_columns();
 
-		// Disable SKU sortable
+		// Disable SKU sortable.
 		if ( isset( $sortable_columns['_sku'] ) ) {
 			unset( $sortable_columns['_sku'] );
 		}
 
-		$sortable_columns['calc_purchase_order'] = array('PO', FALSE);
+		$sortable_columns['calc_purchase_order'] = array( 'PO', FALSE );
 		return apply_filters( 'atum/inbound_stock_list/sortable_columns', $sortable_columns );
 
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	protected function column_title( $item ) {
@@ -135,16 +150,16 @@ class ListTable extends AtumListTable {
 
 		if ( $this->product->get_type() == 'variation' ) {
 
-			/** @noinspection PhpUndefinedMethodInspection */
+			/* @noinspection PhpUndefinedMethodInspection */
 			$parent_data = $this->product->get_parent_data();
 			$title       = $parent_data['title'];
 
-			$attributes = wc_get_product_variation_attributes($product_id);
-			if ( ! empty($attributes) ) {
-				$title .= ' - ' . ucfirst( implode(' - ', $attributes) );
+			$attributes = wc_get_product_variation_attributes( $product_id );
+			if ( ! empty( $attributes ) ) {
+				$title .= ' - ' . ucfirst( implode( ' - ', $attributes ) );
 			}
 
-			// Get the variable product ID to get the right link
+			// Get the variable product ID to get the right link.
 			$product_id = $this->product->get_parent_id();
 
 		}
@@ -159,12 +174,13 @@ class ListTable extends AtumListTable {
 			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
-		$title = '<a href="' . get_edit_post_link($product_id) . '" target="_blank">' . $title . '</a>';
+		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $title . '</a>';
 
 		return apply_filters( 'atum/inbound_stock_list/column_title', $title, $item, $this->product );
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	protected function column__sku( $item, $editable = FALSE ) {
@@ -172,6 +188,7 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	protected function column_calc_type( $item ) {
@@ -181,19 +198,17 @@ class ListTable extends AtumListTable {
 
 		switch ( $type ) {
 			case 'variation':
-
 				$type = 'variable';
 				$product_tip = __( 'Variation Product', ATUM_TEXT_DOMAIN );
 				break;
 
 			case 'variable':
 			case 'grouped':
-
-				$product_tip = $product_types[$type];
+				$product_tip = $product_types[ $type ];
 				break;
 
 			default:
-				return parent::column_calc_type($item);
+				return parent::column_calc_type( $item );
 		}
 
 		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>', $item, $this->product );
@@ -205,15 +220,15 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
 	 * @return string
 	 */
 	protected function column_calc_inbound( $item ) {
 
-		// Get the quantity for the ATUM Order Item
-		$qty = AtumOrderItemModel::get_item_meta($item->po_item_id, '_qty');
-		$this->increase_total('calc_inbound', $qty);
+		// Get the quantity for the ATUM Order Item.
+		$qty = AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' );
+		$this->increase_total( 'calc_inbound', $qty );
 
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
 
@@ -224,13 +239,13 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since  1.3.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
 	 * @return string
 	 */
 	protected function column_calc_date_ordered( $item ) {
 
-		$date_ordered = get_post_meta($item->po_id, '_date_created', TRUE);
+		$date_ordered = get_post_meta( $item->po_id, '_date_created', TRUE );
 		return apply_filters( 'atum/inbound_stock_list/column_date_ordered', $date_ordered, $item, $this->product );
 	}
 
@@ -239,13 +254,13 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since  1.3.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
 	 * @return string
 	 */
 	protected function column_calc_date_expected( $item ) {
 
-		$date_expected = get_post_meta($item->po_id, '_expected_at_location_date', TRUE);
+		$date_expected = get_post_meta( $item->po_id, '_expected_at_location_date', TRUE );
 		return apply_filters( 'atum/inbound_stock_list/column_date_expected', $date_expected, $item, $this->product );
 	}
 
@@ -254,7 +269,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
 	 * @return string
 	 */
@@ -266,6 +281,7 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	public function prepare_items() {
@@ -277,7 +293,7 @@ class ListTable extends AtumListTable {
 
 			$search = esc_attr( $_REQUEST['s'] );
 
-			if ( is_numeric($search) ) {
+			if ( is_numeric( $search ) ) {
 				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
@@ -287,29 +303,26 @@ class ListTable extends AtumListTable {
 		}
 
 		$order_by = 'ORDER BY `order_id`';
-		if ( ! empty(  $_REQUEST['orderby'] ) ) {
+		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
 			switch ( $_REQUEST['orderby'] ) {
 				case 'title':
-
 					$order_by = 'ORDER BY `order_item_name`';
-			        break;
-
-				case 'ID':
-
-					$order_by = 'ORDER BY oi.`order_item_id`';
 					break;
 
+				case 'ID':
+					$order_by = 'ORDER BY oi.`order_item_id`';
+					break;
 
 			}
 
 		}
 
-		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], ['asc', 'desc']) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
+		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
 
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
-			FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
@@ -318,24 +331,25 @@ class ListTable extends AtumListTable {
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",
 			PurchaseOrders::POST_TYPE
-		);
+		); // WPCS: unprepared SQL ok.
 
-		$po_products = $wpdb->get_results($sql);
+		$po_products = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 
-		if ( ! empty($po_products) ) {
+		if ( ! empty( $po_products ) ) {
 
-			$found_posts = count($po_products);
+			$found_posts = count( $po_products );
 
-			// Paginate the results (if needed)
-			if ($this->per_page != -1 && $found_posts > $this->per_page) {
+			// Paginate the results (if needed).
+			if ( -1 != $this->per_page && $found_posts > $this->per_page ) {
 				$page   = $this->get_pagenum();
 				$offset = ( $page - 1 ) * $this->per_page;
 
-				$po_products = array_slice($po_products, $offset, $this->per_page);
+				$po_products = array_slice( $po_products, $offset, $this->per_page );
 			}
 
-			foreach ($po_products as $po_product) {
-				$post = get_post($po_product->product_id);
+			foreach ( $po_products as $po_product ) {
+
+				$post = get_post( $po_product->product_id );
 
 				if ( $post ) {
 					$post->po_id = $po_product->order_id;
@@ -352,7 +366,7 @@ class ListTable extends AtumListTable {
 			$this->set_pagination_args( array(
 				'total_items' => $found_posts,
 				'per_page'    => $this->per_page,
-				'total_pages' => $this->per_page == - 1 ? 0 : ceil( $found_posts / $this->per_page )
+				'total_pages' => - 1 == $this->per_page ? 0 : ceil( $found_posts / $this->per_page ),
 			) );
 
 		}
@@ -360,6 +374,7 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	public function single_row( $item ) {
@@ -371,17 +386,18 @@ class ListTable extends AtumListTable {
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
-		// Reset the child value
+		// Reset the child value.
 		$this->is_child = FALSE;
 
 	}
 
 	/**
+	 *
 	 * @inheritdoc
 	 */
 	protected function get_bulk_actions() {
 
-		// No bulk actions needed for Inbound Stock
+		// No bulk actions needed for Inbound Stock.
 		return apply_filters( 'atum/inbound_stock_list/bulk_actions', array() );
 	}
 	

@@ -1423,7 +1423,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$man_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['managed'] ) ) );
 
-					$extra_links .= '<a' . $man_id . $man_class . ' href="' . $man_url . '" rel="address:/?' . $man_hash_params . '" data-tip="' . __('Managed by WC', ATUM_LEVELS_TEXT_DOMAIN) . '">' . $man_count . '</a>';
+					$extra_links .= '<a' . $man_id . $man_class . ' href="' . $man_url . '" rel="address:/?' . $man_hash_params . '" data-tip="' . __( 'Managed by WC', ATUM_TEXT_DOMAIN ) . '">' . $man_count . '</a>';
 				}
 
 				if ( ! empty( $views[ $key ]['unmanaged'] ) ) {
@@ -1456,7 +1456,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
 
-					$extra_links .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '" data-tip="' . __('UnManaged by WC', ATUM_LEVELS_TEXT_DOMAIN) . '">'  . $unm_count . '</a>';
+					$extra_links .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '" data-tip="' . __( 'UnManaged by WC', ATUM_TEXT_DOMAIN ) . '">'  . $unm_count . '</a>';
 				}
 
 				$views[ $key ] = '<span>' . $text . ' ' . '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">' . $count . '</a> (' . $extra_links . ')</span>';
