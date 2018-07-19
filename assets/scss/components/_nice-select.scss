@@ -4,43 +4,45 @@
 //--------------------------------------------------------
 
 // Scoped variables
-$font-size:                     14px;
-$font-size-small:               12px;
+$ns-font-size:                     14px !default;
+$ns-font-size-small:               12px !default;
 
-$dropdown-border-radius:        30px;
-$list-border-radius:            10px;
-$dropdown-height:               42px;
-$dropdown-height-small:         36px;
-$dropdown-padding:              18px;
+$ns-dropdown-border-radius:        30px !default;
+$ns-list-border-radius:            10px !default;
+$ns-dropdown-height:               42px !default;
+$ns-dropdown-height-small:         36px !default;
+$ns-dropdown-padding:              18px !default;
+$ns-dropdown-text-color:           $gray-500 !default;
 
-$arrow-color:                   $gray-500;
+$ns-arrow-color:                   $gray-500 !default;
+$ns-arrow-size:                    5px !default;;
 
 
 // Style the dropdown
 .nice-select {
 	-webkit-tap-highlight-color: rgba($black, 0);
 	background-color: $white;
-	border-radius: $dropdown-border-radius;
+	border-radius: $ns-dropdown-border-radius;
 	border: solid 1px $gray-200;
 	box-sizing: border-box;
 	clear: both;
 	cursor: pointer;
 	display: block;
 	font-family: inherit;
-	font-size: $font-size;
+	font-size: $ns-font-size;
 	font-weight: 100;
-	height: $dropdown-height;
-	line-height: $dropdown-height - 2;
+	height: $ns-dropdown-height;
+	line-height: $ns-dropdown-height - 2;
 	outline: none;
-	padding-left: $dropdown-padding;
-	padding-right: $dropdown-padding + 12;
+	padding-left: $ns-dropdown-padding;
+	padding-right: $ns-dropdown-padding + 12;
 	position: relative;
 	text-align: left !important;
 	@include transition(all 0.2s ease-in-out);
 	@include user-select(none);
 	white-space: nowrap;
 	width: auto;
-	color: $gray-500;
+	color: $ns-dropdown-text-color;
 	
 	&:hover, &:active, &:focus {
 		border-color: darken($gray-200, 10%);
@@ -48,12 +50,12 @@ $arrow-color:                   $gray-500;
 	
 	// Arrow
 	&:after {
-		border-bottom: 1px solid $arrow-color;
-		border-right: 1px solid $arrow-color;
+		border-bottom: 1px solid $ns-arrow-color;
+		border-right: 1px solid $ns-arrow-color;
 		content: '';
 		display: block;
-		height: 5px;
-		margin-top: -4px;
+		height: $ns-arrow-size;
+		margin-top: -($ns-arrow-size - 1);
 		pointer-events: none;
 		position: absolute;
 		right: 12px;
@@ -61,7 +63,7 @@ $arrow-color:                   $gray-500;
 		@include transform-origin(66% 66%);
 		@include transform(rotate(45deg));
 		@include transition(all 0.15s ease-in-out);
-		width: 5px;
+		width: $ns-arrow-size;
 	}
 	
 	&.open {
@@ -84,7 +86,7 @@ $arrow-color:                   $gray-500;
 		pointer-events: none;
 		
 		&:after {
-			border-color: lighten($arrow-color, 20%);
+			border-color: lighten($ns-arrow-color, 20%);
 		}
 	}
 	
@@ -107,10 +109,19 @@ $arrow-color:                   $gray-500;
 		}
 	}
 	
+	&.left {
+		float: left;
+		
+		.list {
+			left: 0;
+			right: auto;
+		}
+	}
+	
 	&.small {
-		font-size: $font-size-small;
-		height: $dropdown-height-small;
-		line-height: $dropdown-height-small - 2;
+		font-size: $ns-font-size-small;
+		height: $ns-dropdown-height-small;
+		line-height: $ns-dropdown-height-small - 2;
 		
 		&:after {
 			height: 4px;
@@ -118,15 +129,15 @@ $arrow-color:                   $gray-500;
 		}
 		
 		.option {
-			line-height: $dropdown-height-small - 2;
-			min-height: $dropdown-height-small - 2;
+			line-height: $ns-dropdown-height-small - 2;
+			min-height: $ns-dropdown-height-small - 2;
 		}
 	}
 	
 	// List and options
 	.list {
 		background-color: $white;
-		border-radius: $list-border-radius;
+		border-radius: $ns-list-border-radius;
 		box-shadow: 0 0 0 1px rgba($dark, .11);
 		box-sizing: border-box;
 		margin-top: 4px;
@@ -137,7 +148,7 @@ $arrow-color:                   $gray-500;
 		position: absolute;
 		top: 100%; left: 0;
 		@include transform-origin(50% 0);
-		@include transform(scale(.75) translateY(- $dropdown-height / 2));
+		@include transform(scale(.75) translateY(- $ns-dropdown-height / 2));
 		@include transition(all .2s cubic-bezier(0.5, 0, 0, 1.25), opacity .15s ease-out);
 		z-index: 9;
 		
@@ -149,12 +160,12 @@ $arrow-color:                   $gray-500;
 	.option {
 		cursor: pointer;
 		font-weight: 400;
-		line-height: $dropdown-height - 2;
+		line-height: $ns-dropdown-height - 2;
 		list-style: none;
-		min-height: $dropdown-height - 2;
+		min-height: $ns-dropdown-height - 2;
 		outline: none;
-		padding-left: $dropdown-padding;
-		padding-right: $dropdown-padding + 11;
+		padding-left: $ns-dropdown-padding;
+		padding-right: $ns-dropdown-padding + 11;
 		margin: 0;
 		text-align: left;
 		@include transition(all 0.2s);
