@@ -1855,7 +1855,7 @@ final class Ajax {
 		$locations_tree = '';
 
 		if ( empty( $_POST['product_id'] ) ) {
-			wp_send_json_error( __( 'No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN ) );
+			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
 		if ( $_POST['product_id'] > 0 ) {
@@ -1864,7 +1864,7 @@ final class Ajax {
 			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
 
 			if ( empty( $locations ) ) {
-				wp_send_json_success( '<span class="no-locations-set">' . __( 'No Locations set on this product', ATUM_LEVELS_TEXT_DOMAIN ) . '</span>' );
+				wp_send_json_success( '<span class="no-locations-set">' . __( 'No Locations set on this product', ATUM_TEXT_DOMAIN ) . '</span>' );
 			}
 			else {
 				$locations_tree = wp_list_categories( array(
@@ -1904,7 +1904,7 @@ final class Ajax {
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
 		if ( empty($_POST['product_id']) ) {
-			wp_send_json_error( __('No valid product ID provided', ATUM_LEVELS_TEXT_DOMAIN) );
+			wp_send_json_error( __('No valid product ID provided', ATUM_TEXT_DOMAIN) );
 		}
 
         $product_id = absint( $_POST['product_id'] );

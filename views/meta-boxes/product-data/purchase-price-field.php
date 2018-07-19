@@ -11,6 +11,8 @@ use Atum\Inc\Helpers;
 use Atum\Inc\Globals;
 
 /**
+ * Used variables
+ *
  * @var string $wrapper_class
  * @var string $field_title
  * @var float  $field_value
@@ -26,7 +28,7 @@ use Atum\Inc\Globals;
 		<?php Helpers::atum_field_input_addon() ?>
 		<input type="text" class="short wc_input_price<?php if ($field_value > $price) echo ' tips' ?>" name="<?php echo $field_name ?>"
 			id="<?php echo $field_id ?>" value="<?php echo $field_value ?>" placeholder=""
-			<?php if ($field_value > $price) echo ' data-tip="' . __("The Purchase Price set is greater than the product's active price", ATUM_LEVELS_TEXT_DOMAIN) . '"' ?>>
+			<?php if ($field_value > $price) echo ' data-tip="' . __( "The Purchase Price set is greater than the product's active price", ATUM_TEXT_DOMAIN ) . '"' ?>>
 	</span>
 </p>
 
