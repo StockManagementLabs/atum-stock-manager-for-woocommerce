@@ -52,108 +52,115 @@
 			this.doSelect2();
 
 			// Set the dirty fields
-			this.$form.on('change', 'input, select, textarea', function () {
-				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
-					$(this).addClass('dirty');
-				}
-			})
-			
-			.on('change', '#atum_out_stock_threshold', function () {
+			this.$form
 				
-				if ($(this).is(':checked') && self.settings.isAnyOutStockThresholdSet) {
+				.on('change', 'input, select, textarea', function () {
+					if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
+						$(this).addClass('dirty');
+					}
+				})
+			
+				.on('change', '#atum_out_stock_threshold', function () {
 					
-					swal({
-						title              : self.settings.areYouSure,
-						text               : self.settings.outStockThresholdSetClearText,
-						type               : 'question',
-						showCancelButton   : true,
-						confirmButtonText  : self.settings.startFresh,
-						cancelButtonText   : self.settings.cancel,
-						reverseButtons     : true,
-						allowOutsideClick  : false,
-						showLoaderOnConfirm: true,
-						preConfirm         : function () {
-							
-							return new Promise(function (resolve, reject) {
-								var data = {
-									action: self.settings.outStockThresholdSetClearScript,
-									token : self.settings.runnerNonce
-								};
-								
-								$.ajax({
-									url     : ajaxurl,
-									method  : 'POST',
-									dataType: 'json',
-									data    : data,
-									success : function (response) {
-										
-										if (response.success === true) {
-											resolve(response.data);
-										}
-										else {
-											reject(response.data);
-										}
-										
-									}
-								});
-								
-							});
-							
-						}
-					}).then(function (message) {
+					if ($(this).is(':checked') && self.settings.isAnyOutStockThresholdSet) {
 						
 						swal({
-							title            : self.settings.done,
-							type             : 'success',
-							text             : message,
-							confirmButtonText: self.settings.ok
-						});
+							title              : self.settings.areYouSure,
+							text               : self.settings.outStockThresholdSetClearText,
+							type               : 'question',
+							showCancelButton   : true,
+							confirmButtonText  : self.settings.startFresh,
+							cancelButtonText   : self.settings.cancel,
+							reverseButtons     : true,
+							allowOutsideClick  : false,
+							showLoaderOnConfirm: true,
+							preConfirm         : function () {
+								
+								return new Promise(function (resolve, reject) {
+									var data = {
+										action: self.settings.outStockThresholdSetClearScript,
+										token : self.settings.runnerNonce
+									};
+									
+									$.ajax({
+										url     : ajaxurl,
+										method  : 'POST',
+										dataType: 'json',
+										data    : data,
+										success : function (response) {
+											
+											if (response.success === true) {
+												resolve(response.data);
+											}
+											else {
+												reject(response.data);
+											}
+											
+										}
+									});
+									
+								});
+								
+							}
+						}).then(function (message) {
+							
+							swal({
+								title            : self.settings.done,
+								type             : 'success',
+								text             : message,
+								confirmButtonText: self.settings.ok
+							});
+							
+						}).catch(swal.noop);
 						
-					}).catch(swal.noop);
+					}
+					else if (!this.checked) {
+						
+						swal({
+							title: self.settings.areYouSure,
+							text : self.settings.outStockThresholdDisable,
+							type : 'info'
+						});
+					}
 					
-				}
-				else if (!this.checked) {
+				})
+				
+				// Remove the dirty mark if the user tries to save
+				.on('click', 'input[type=submit]', function() {
+					self.$form.find('.dirty').removeClass('dirty');
+				})
+				
+				// Script Runner fields
+				.on('click', '.script-runner button', function() {
+					self.runScript($(this));
+				})
+				
+				// Field dependencies
+				.on('change','[data-dependency]', function() {
+	
+					var $field     = $(this),
+					    value      = $field.val(),
+						dependency = $field.data('dependency');
 					
-					swal({
-						title: self.settings.areYouSure,
-						text : self.settings.outStockThresholdDisable,
-						type : 'info'
-					});
-				}
+					if ($.isArray(dependency)) {
+					
+						$.each(dependency, function (index, dependencyElem) {
+							self.checkDependency($field, dependencyElem, value);
+						});
+					
+					}
+					else {
+						self.checkDependency($field, dependency, value);
+					}
+					
+				})
 				
-			})
+				.find('[data-dependency]').each(function() {
 			
-			// Remove the dirty mark if the user tries to save
-			.on('click', 'input[type=submit]', function() {
-				self.$form.find('.dirty').removeClass('dirty');
-			})
+					$(this).change().removeClass('dirty');
+					
+				});
 			
-			// Script Runner fields
-			.on('click', '.script-runner button', function() {
-				self.runScript($(this));
-			})
-			
-			// Field dependencies
-			.on('change','[data-dependency]', function() {
-
-				var $field     = $(this),
-				    value      = $field.val(),
-					dependency = $field.data('dependency');
-				
-				if ($.isArray(dependency)) {
-				
-					$.each(dependency, function (index, dependencyElem) {
-						self.checkDependency($field, dependencyElem, value);
-					});
-				
-				}
-				else {
-					self.checkDependency($field, dependency, value);
-				}
-				
-			})
-			
-			.find('[data-dependency]').change().removeClass('dirty');
 			
 			// Before unload alert
 			$(window).bind('beforeunload', function() {
@@ -398,10 +405,16 @@
 		},
 		checkDependency: function($field, dependency, value) {
 			
-			var $dependant,
+			var $dependantInput,
+			    $dependantWraper,
 				visibility;
 			
-			if ($field.is(':checkbox')) {
+			// Do no apply to not checked radio buttons
+			if ($field.is(':radio') && !$field.is(':checked')) {
+				return;
+			}
+			
+			if ($field.is(':checkbox') || $field.is(':radio')) {
 				visibility = (value === dependency.value && $field.is(':checked')) || (value !== dependency.value && !$field.is(':checked'));
 			}
 			else {
@@ -409,35 +422,55 @@
 			}
 			
 			if (dependency.hasOwnProperty('section')) {
-				$dependant = this.$form.find('[data-section="' + dependency.section + '"]');
+				$dependantWraper = this.$form.find('[data-section="' + dependency.section + '"]');
 			}
 			else if (dependency.hasOwnProperty('field')) {
 				
-				$dependant = $( '#' + this.settings.atumPrefix + dependency.field );
+				$dependantInput = $( '#' + this.settings.atumPrefix + dependency.field );
 				
-				if ($dependant.length) {
-					$dependant = $dependant.closest('tr').find('th, td');
+				if ($dependantInput.length) {
+					$dependantWraper = $dependantInput.closest('tr').find('th, td');
 				}
 				
 			}
 			
-			if (typeof $dependant !== 'undefined' && $dependant.length) {
+			if (typeof $dependantWraper !== 'undefined' && $dependantWraper.length) {
 				
+				// Show/Hide the field
 				if (visibility === true) {
 					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
-						$dependant.slideDown('fast');
+						$dependantWraper.slideDown('fast');
 					}
 					else {
-						$dependant.show();
+						$dependantWraper.show();
 					}
 				}
 				else {
+					
 					if (! dependency.hasOwnProperty('animated') || dependency.animated === true) {
-						$dependant.slideUp('fast');
+						$dependantWraper.slideUp('fast');
 					}
 					else {
-						$dependant.hide();
+						$dependantWraper.hide();
 					}
+					
+					// Check if we have to reset the dependant input to default when hiding the field
+					if (dependency.hasOwnProperty('resetDefault') && dependency.resetDefault === true) {
+						
+						var defaultValue = $dependantInput.data('default'),
+						    curValue     = $dependantInput.val();
+							
+						if ($dependantInput.is(':radio') || $dependantInput.is(':checkbox')) {
+							$dependantInput.prop('checked', defaultValue === curValue);
+						}
+						else {
+							$dependantInput.val(defaultValue);
+						}
+						
+						$dependantInput.change();
+						
+					}
+					
 				}
 				
 			}
