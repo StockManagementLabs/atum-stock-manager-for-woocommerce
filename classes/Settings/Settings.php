@@ -553,7 +553,7 @@ class Settings {
 										$values[ $default_value ] = 'yes';
 									}
 									else {
-										$values[ $default_value ] = in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
+										$values[ $default_value ] = isset($input[ $key ]) && in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
 									}
 
 								}
