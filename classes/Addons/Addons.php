@@ -311,7 +311,7 @@ class Addons {
 
 		$message = sprintf(
 			/* translators: opening and closing HTML link to the add-ons page  */
-			__( 'Please, activate %1$ssyour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+			__( 'Please, activate %1$syour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
 			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
 			'</a>'
 		);
