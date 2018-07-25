@@ -122,7 +122,7 @@ class Hooks {
 
 		global $wpdb;
 
-		$item_id                = $product->get_ID();
+		$item_id = $product->get_ID();
 		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
 		// If the product has no "Out of Stock Threshold" set we don't need to continue.
@@ -447,7 +447,7 @@ class Hooks {
 			// phpcs:disable Generic.Formatting.DisallowMultipleStatements.SameLine
 			// phpcs:disable Generic.Functions.OpeningFunctionBraceKernighanRitchie.ContentAfterBrace
 			$visibility_classes          = array_map( function( $val ) { return "show_if_{$val}"; }, Globals::get_product_types_with_stock() );
-			$out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
+		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes', 'woocommerce_notify_no_stock_amount' ) );
 
@@ -467,7 +467,7 @@ class Hooks {
 	 */
 	public function save_out_stock_threshold_field( $post_id ) {
 
-		global $pagenow;
+        global $pagenow;
 
 		$product = wc_get_product( $post_id );
 
@@ -490,7 +490,7 @@ class Hooks {
 			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
 				Helpers::force_rebuild_stock_status( $product );
-			}
+            }
 
 			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
 
@@ -607,7 +607,7 @@ class Hooks {
 
 		if (
 			'yes' === Helpers::get_option( 'show_variations_stock', 'yes' ) &&
-			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ], TRUE ) )
+			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ), TRUE )
 		) {
 
 			// Get the variations within the variable.
@@ -620,8 +620,8 @@ class Hooks {
 				foreach ( $variations as $variation_id ) {
 
 					$variation_product = wc_get_product( $variation_id );
-					$variation_stock   = $variation_product->get_stock_quantity();
-					$stocks_list[]     = $variation_stock;
+					$variation_stock = $variation_product->get_stock_quantity();
+					$stocks_list[] = $variation_stock;
 
 					if ( $variation_stock > 0 ) {
 						$stock_status = __( 'In stock', ATUM_TEXT_DOMAIN );
@@ -797,7 +797,7 @@ class Hooks {
 	 *
 	 * @since 1.3.4.1
 	 *
-	 * @param string    $message
+	 * @param string $message
 	 * @param int|array $products
 	 *
 	 * @return string
@@ -814,7 +814,7 @@ class Hooks {
 			$count   += $qty;
 		}
 
-		$titles = array_filter( $titles );
+		$titles     = array_filter( $titles );
 		/* translators: the titles of products added to the cart */
 		$added_text = sprintf( _n( '%s has been added to your cart.', '%s have been added to your cart.', $count, ATUM_TEXT_DOMAIN ), wc_format_list_of_items( $titles ) );
 
