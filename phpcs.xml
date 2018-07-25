@@ -54,6 +54,7 @@
 		<exclude name="WordPress.Functions.DontExtract" />
 		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_error_log" />
 		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound" />
+		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd" />
 		<exclude name="WordPress.WP.I18n.NonSingularStringLiteralDomain" />
 		<exclude name="WordPress.XSS.EscapeOutput.OutputNotEscaped" />
