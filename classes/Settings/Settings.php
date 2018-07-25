@@ -407,7 +407,7 @@ class Settings {
 			Helpers::maybe_es6_promise();
 
 			$min = ! ATUM_DEBUG ? '.min' : '';
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'atumPrefix'                      => ATUM_PREFIX,
@@ -428,6 +428,7 @@ class Settings {
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
+			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( self::UI_SLUG );
 
 			if ( wp_script_is( 'es6-promise', 'registered' ) ) {
@@ -553,7 +554,7 @@ class Settings {
 										$values[ $default_value ] = 'yes';
 									}
 									else {
-										$values[ $default_value ] = isset($input[ $key ]) && in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
+										$values[ $default_value ] = isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
 									}
 
 								}
@@ -862,6 +863,33 @@ class Settings {
 	}
 	
 	/**
+	 * Get the settings option array and prints color picker
+	 *
+	 * @since 1.4.13
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_color( $args ) {
+		
+		$name    = self::OPTION_NAME . "[{$args['id']}]";
+		$value   = $this->options[ $args['id'] ];
+		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
+		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		
+		ob_start();
+		?>
+		<input class="atum-settings-input atum-color" data-alpha="true" name="<?php echo $name ?>"  id="<?php echo ATUM_PREFIX . $args['id'] ?>"
+		type="text" value="<?php echo $value ?>" <?php echo $default . $style ?>>
+		
+		<?php
+		
+		echo $this->get_description( $args );
+		
+		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args );
+		
+	}
+	
+	/**
 	 * Print field description if it exists
 	 *
 	 * @since 0.0.2
@@ -891,15 +919,15 @@ class Settings {
 	 * @return string
 	 */
 	public function get_dependency( $args ) {
-
+		
 		if ( isset( $args['dependency'] ) ) {
-			return " data-dependency='" . json_encode( $args['dependency'] ) . "'";
+			return " data-dependency='" . wp_json_encode( $args['dependency'] ) . "'";
 		}
-
+		
 		return '';
-
+		
 	}
-
+	
 	
 	/****************************
 	 * Instance methods

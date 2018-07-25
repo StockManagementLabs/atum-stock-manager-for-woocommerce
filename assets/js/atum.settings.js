@@ -48,6 +48,9 @@
 			// Enable switchers
 			this.doSwitchers();
 			
+			// Draw ColoPickers
+			this.doColorPickers();
+			
 			// Enable Select2
 			this.doSelect2();
 
@@ -195,6 +198,12 @@
 			});
 			
 		},
+		doColorPickers: function() {
+			
+			$('.atum-color').each(function () {
+				$(this).wpColorPicker();
+			});
+		},
 		doSelect2: function() {
 		
 			if (typeof $.fn.select2 === 'function') {
@@ -317,6 +326,7 @@
 			this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', function() {
 				
 				self.doSwitchers();
+				self.doColorPickers();
 				self.restoreSelects();
 				self.$form.find('[data-dependency]').change().removeClass('dirty');
 				self.$form.show();
