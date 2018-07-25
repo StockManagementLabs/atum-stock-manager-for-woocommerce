@@ -571,6 +571,10 @@ class Settings {
 						case 'textarea':
 							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
 							break;
+							
+						case 'color':
+							$this->options[ $key ] = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
+							break;
 
 						case 'text':
 						default:
