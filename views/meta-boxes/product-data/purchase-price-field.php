@@ -5,7 +5,7 @@
  * @since 1.4.1
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
 use Atum\Inc\Globals;
