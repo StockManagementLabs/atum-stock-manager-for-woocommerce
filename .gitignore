@@ -6,7 +6,6 @@ node_modules
 bower_components
 *.map
 .idea
-phpcs.xml
 package-lock.json
 
 # mPDF temp dir
