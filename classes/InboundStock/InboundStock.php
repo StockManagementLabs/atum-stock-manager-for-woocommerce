@@ -1,5 +1,7 @@
 <?php
 /**
+ * Inbound Stock page
+ *
  * @package         Atum
  * @subpackage      InboundStock
  * @author          Be Rebel - https://berebel.io
@@ -10,7 +12,7 @@
 
 namespace Atum\InboundStock;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Inc\Globals;
@@ -23,6 +25,7 @@ class InboundStock extends AtumListPage {
 	
 	/**
 	 * The singleton instance holder
+	 *
 	 * @var InboundStock
 	 */
 	private static $instance;
@@ -44,15 +47,15 @@ class InboundStock extends AtumListPage {
 	 */
 	private function __construct() {
 
-		// Add the module menu
-		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
+		// Add the module menu.
+		add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
 
 		if ( is_admin() ) {
 
 			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'inbound_stock_products_per_page', TRUE );
 			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 
-			// Initialize on admin page load
+			// Initialize on admin page load.
 			add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
 			parent::init_hooks();
@@ -70,14 +73,14 @@ class InboundStock extends AtumListPage {
 	 *
 	 * @return array
 	 */
-	public function add_menu ($menus) {
+	public function add_menu( $menus ) {
 
 		$menus['inbound-stock'] = array(
 			'title'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'callback'     => array( $this, 'display' ),
 			'slug'         => self::UI_SLUG,
 			'menu_order'   => self::MENU_ORDER,
-			'capability'   => ATUM_PREFIX . 'read_inbound_stock'
+			'capability'   => ATUM_PREFIX . 'read_inbound_stock',
 		);
 
 		return $menus;
@@ -107,37 +110,37 @@ class InboundStock extends AtumListPage {
 	 */
 	public function screen_options() {
 
-		// Add "Products per page" screen option
+		// Add "Products per page" screen option.
 		$args   = array(
-			'label'   => __('Products per page', ATUM_TEXT_DOMAIN),
+			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
-			'option'  => ATUM_PREFIX . 'inbound_stock_products_per_page'
+			'option'  => ATUM_PREFIX . 'inbound_stock_products_per_page',
 		);
 		
 		add_screen_option( 'per_page', $args );
 
-		// Add the help tab
+		// Add the help tab.
 		$help_tabs = array(
 			array(
 				'name'  => 'columns',
 				'title' => __( 'Columns', ATUM_TEXT_DOMAIN ),
-			)
+			),
 		);
 
-		Helpers::add_help_tab($help_tabs, $this);
+		Helpers::add_help_tab( $help_tabs, $this );
 		
-		$this->list = new ListTable( ['per_page' => $this->per_page] );
+		$this->list = new ListTable( [ 'per_page' => $this->per_page ] );
 		
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
+	/* @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Display the help tabs' content
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param \WP_Screen $screen    The current screen
-	 * @param array      $tab       The current help tab
+	 * @param \WP_Screen $screen    The current screen.
+	 * @param array      $tab       The current help tab.
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 
@@ -148,15 +151,20 @@ class InboundStock extends AtumListPage {
 	/****************************
 	 * Instance methods
 	 ****************************/
+
+	/**
+	 * Cannot be cloned
+	 */
 	public function __clone() {
-		
-		// cannot be cloned
+
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
-	
+
+	/**
+	 * Cannot be serialized
+	 */
 	public function __sleep() {
-		
-		// cannot be serialized
+
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
