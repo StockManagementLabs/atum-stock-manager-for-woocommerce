@@ -18,44 +18,43 @@
  * Tested up to:         4.9.7
  * Requires PHP:         5.6
  * WC requires at least: 3.0.0
- * WC tested up to:      3.4.3
+ * WC tested up to:      3.4.4
  * Text Domain:          atum
  * Domain Path:          /languages
  * License:              GPLv2 or later
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
-if ( ! defined('ATUM_VERSION') ) {
+if ( ! defined( 'ATUM_VERSION' ) ) {
 	define( 'ATUM_VERSION', '1.4.13' );
 }
 
-if ( ! defined('ATUM_PATH') ) {
+if ( ! defined( 'ATUM_PATH' ) ) {
 	define( 'ATUM_PATH', plugin_dir_path( __FILE__ ) );
 }
 
-if ( ! defined('ATUM_URL') ) {
+if ( ! defined( 'ATUM_URL' ) ) {
 	define( 'ATUM_URL', plugin_dir_url( __FILE__ ) );
 }
 
-if ( ! defined('ATUM_BASENAME') ) {
+if ( ! defined( 'ATUM_BASENAME' ) ) {
 	define( 'ATUM_BASENAME', plugin_basename( __FILE__ ) );
 }
 
-if ( ! defined('ATUM_TEXT_DOMAIN') ) {
+if ( ! defined( 'ATUM_TEXT_DOMAIN' ) ) {
 	define( 'ATUM_TEXT_DOMAIN', 'atum' );
 }
 
-if ( ! defined('ATUM_PREFIX') ) {
+if ( ! defined( 'ATUM_PREFIX' ) ) {
 	define( 'ATUM_PREFIX', 'atum_' );
 }
 
-if ( ! defined('ATUM_DEBUG') ) {
+if ( ! defined( 'ATUM_DEBUG' ) ) {
 	define( 'ATUM_DEBUG', FALSE );
 }
 
-// Use Composer's autoloader and PSR4 for naming convention
-/** @noinspection PhpIncludeInspection */
+// Use Composer's autoloader and PSR4 for naming convention.
 require ATUM_PATH . 'vendor/autoload.php';
 \Atum\Bootstrap::get_instance();

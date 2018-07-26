@@ -159,6 +159,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.13`
+
+*2018-07-26*
+
+**Features**
+
+* Allow resetting a dependant field to its default value when checking Settings' dependencies.
+* Allow button groups without required values.
+* Added PHPCS rules.
+* Added color picker field type to settings.
+
+**Fixes**
+
+* Fixed filter button showing in Inbound Stock table when Ajax filter was disabled.
+* Fixed activate text typo error.
+* Fixed popover titles in Stock Central.
+* Refactory.
+* CSS fixes.
+
+---
+
 `1.4.12.2`
 
 *2018-07-12*
