@@ -1030,7 +1030,7 @@
 			
 			var self              = this,
 				symbol            = $metaCell.data('symbol') || '',
-			    currentColumnText = this.$atumTable.find('tfoot tr.item-heads th').eq($metaCell.closest('td').index()).text(),
+			    currentColumnText = this.$atumTable.find('tfoot tr.item-heads').children().eq($metaCell.closest('td').index()).text(),
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
