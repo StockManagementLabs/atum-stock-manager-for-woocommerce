@@ -447,7 +447,7 @@ class Hooks {
 			// phpcs:disable Generic.Formatting.DisallowMultipleStatements.SameLine
 			// phpcs:disable Generic.Functions.OpeningFunctionBraceKernighanRitchie.ContentAfterBrace
 			$visibility_classes          = array_map( function( $val ) { return "show_if_{$val}"; }, Globals::get_product_types_with_stock() );
-		    $out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
+			$out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes', 'woocommerce_notify_no_stock_amount' ) );
 
@@ -467,7 +467,7 @@ class Hooks {
 	 */
 	public function save_out_stock_threshold_field( $post_id ) {
 
-        global $pagenow;
+		global $pagenow;
 
 		$product = wc_get_product( $post_id );
 

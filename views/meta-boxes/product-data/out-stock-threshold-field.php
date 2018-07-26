@@ -12,12 +12,14 @@ use Atum\Inc\Helpers;
 /**
  * Used variabled
  *
- * @var array  $out_stock_threshold_classes
- * @var string $out_stock_threshold_field_id
- * @var string $out_stock_threshold_field_name
- * @var int    $out_stock_threshold
- * @var int    $woocommerce_notify_no_stock_amount
- * @var string $product_type
+ * @var array    $out_stock_threshold_classes
+ * @var string   $out_stock_threshold_field_id
+ * @var string   $out_stock_threshold_field_name
+ * @var int      $out_stock_threshold
+ * @var int      $woocommerce_notify_no_stock_amount
+ * @var string   $product_type
+ * @var \WP_Post $variation
+ * @var int      $loop
  */
 
 if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) : ?>
@@ -37,7 +39,7 @@ if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) : ?>
 				<input type="number" class="short" step="1" name="<?php echo $out_stock_threshold_field_name ?>"
 					id="<?php echo $out_stock_threshold_field_id ?>" value="<?php echo $out_stock_threshold ?>"
 					placeholder="<?php echo $woocommerce_notify_no_stock_amount ?>" data-onload-product-type="<?php echo $product_type ?>"
-					<?php echo apply_filters( 'atum/views/meta_boxes/out_stock_threshold_field', '' ) ?>>
+					<?php echo apply_filters( 'atum/views/meta_boxes/out_stock_threshold_field', '', $variation, $loop ) ?>>
 
 				<?php echo wc_help_tip( __( "This value will override the global WooComerce's 'Out of stock threshold' for this individual product.", ATUM_TEXT_DOMAIN ) ); ?>
 			</span>

@@ -12,12 +12,14 @@ use Atum\Inc\Helpers;
 /**
  * Used variables
  *
- * @var array  $supplier_fields_classes
- * @var string $supplier_field_id
- * @var string $supplier_field_name
- * @var string $supplier_sku_field_id
- * @var string $supplier_sku_field_name
- * @var string $supplier_sku
+ * @var array    $supplier_fields_classes
+ * @var string   $supplier_field_id
+ * @var string   $supplier_field_name
+ * @var string   $supplier_sku_field_id
+ * @var string   $supplier_sku_field_name
+ * @var string   $supplier_sku
+ * @var \WP_Post $variation
+ * @var int      $loop
  */
 
 if ( empty( $variation ) ) : ?>
@@ -32,7 +34,7 @@ if ( empty( $variation ) ) : ?>
 
 			<select class="wc-product-search" id="<?php echo $supplier_field_id ?>" name="<?php echo $supplier_field_name ?>" style="width: <?php echo ( empty( $variation ) ) ? 80 : 100 ?>%"
 				data-allow_clear="true" data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-				data-multiple="false" data-selected="" data-minimum_input_length="1"<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier', '' ) ?>>
+				data-multiple="false" data-selected="" data-minimum_input_length="1"<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier', '', $variation, $loop ) ?>>
 
 				<?php if ( ! empty( $supplier ) ) : ?>
 				<option value=""></option>
@@ -53,7 +55,7 @@ if ( empty( $variation ) ) : ?>
 		<span class="atum-field input-group">
 			<?php Helpers::atum_field_input_addon() ?>
 
-			<input type="text" class="short" style="" name="<?php echo $supplier_sku_field_name ?>" id="<?php echo $supplier_sku_field_id ?>" value="<?php echo $supplier_sku ?>"<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_sku', '' ) ?>>
+			<input type="text" class="short" style="" name="<?php echo $supplier_sku_field_name ?>" id="<?php echo $supplier_sku_field_id ?>" value="<?php echo $supplier_sku ?>"<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_sku', '', $variation, $loop ) ?>>
 			<?php echo wc_help_tip( __( "Supplier's SKU refers to a Stock-keeping unit coming from the product's supplier, a unique identifier for each distinct product and service that can be purchased.", ATUM_TEXT_DOMAIN ) ); ?>
 		</span>
 	</p>
