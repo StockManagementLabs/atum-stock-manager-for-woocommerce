@@ -490,7 +490,7 @@ class Hooks {
 			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
 				Helpers::force_rebuild_stock_status( $product );
-            }
+			}
 
 			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
 
@@ -618,11 +618,11 @@ class Hooks {
 			if ( ! empty( $variations ) ) {
 
 				foreach ( $variations as $variation_id ) {
-
+					
 					$variation_product = wc_get_product( $variation_id );
-					$variation_stock = $variation_product->get_stock_quantity();
-					$stocks_list[] = $variation_stock;
-
+					$variation_stock   = $variation_product->get_stock_quantity();
+					$stocks_list[]     = $variation_stock;
+					
 					if ( $variation_stock > 0 ) {
 						$stock_status = __( 'In stock', ATUM_TEXT_DOMAIN );
 					}
