@@ -1,18 +1,18 @@
 <?php
 /**
+ * Global options for Atum
+ *
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.1.4
- *
- * Global options for Atum
  */
 
 namespace Atum\Inc;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 
 final class Globals {
@@ -20,36 +20,41 @@ final class Globals {
 	/**
 	 * The product types allowed
 	 * For now the "external" products are excluded as WC doesn't add stock control fields to them
+	 *
 	 * @var array
 	 */
-	private static $product_types = ['simple', 'variable', 'grouped'];
-
+	private static $product_types = [ 'simple', 'variable', 'grouped' ];
+	
 	/**
 	 * The product types that allow children
+	 *
 	 * @var array
 	 */
-	private static $inheritable_product_types = ['variable', 'grouped'];
-
+	private static $inheritable_product_types = [ 'variable', 'grouped' ];
+	
 	/**
 	 * The child product types
+	 *
 	 * @var array
 	 */
-	private static $child_product_types = ['variation'];
-
+	private static $child_product_types = [ 'variation' ];
+	
 	/**
 	 * The number of decimals specified in settings to round the stock quantities
+	 *
 	 * @var int
 	 */
 	private static $stock_decimals;
-
+	
 	/**
 	 * The ATUM fields within the WC's Product Data meta box (ATUM Inventory tab)
+	 *
 	 * @var array
 	 */
 	private static $product_tab_fields = array(
-		self::ATUM_CONTROL_STOCK_KEY => 'checkbox'
+		self::ATUM_CONTROL_STOCK_KEY => 'checkbox',
 	);
-
+	
 	/**
 	 * The ATUM pages hook name
 	 */
@@ -68,7 +73,7 @@ final class Globals {
 	/**
 	 * The products' location taxonomy name
 	 */
-	const PRODUCT_LOCATION_TAXONOMY =  ATUM_PREFIX . 'location';
+	const PRODUCT_LOCATION_TAXONOMY = ATUM_PREFIX . 'location';
 
 	/**
 	 * The meta key where is stored the ATUM stock management status
@@ -104,7 +109,7 @@ final class Globals {
 			'_supplier',
 			'_sku',
 			'_supplier_sku',
-			'IDs' // ID as string to allow the use of commas ex: s = '12, 13, 89'
+			'IDs', // ID as string to allow the use of commas ex: s = '12, 13, 89'.
 		),
 		'numeric' => array(
 			'ID',
@@ -112,8 +117,8 @@ final class Globals {
 			'_sale_price',
 			'_purchase_price',
 			'_weight',
-			'_stock'
-		)
+			'_stock',
+		),
 	);
 
 	
@@ -126,16 +131,16 @@ final class Globals {
 	 */
 	public static function get_product_types() {
 
-		// Add WC Subscriptions compatibility
+		// Add WC Subscriptions compatibility.
 		if (
-			class_exists('\WC_Subscriptions') &&
-			! in_array('subscription', self::$product_types) &&
-			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
+			class_exists( '\WC_Subscriptions' ) &&
+			! in_array( 'subscription', self::$product_types ) &&
+			Helpers::get_option( 'show_subscriptions', 'yes' ) === 'yes'
 		) {
-			self::$product_types = array_merge( self::$product_types, ['subscription', 'variable-subscription'] );
+			self::$product_types = array_merge( self::$product_types, [ 'subscription', 'variable-subscription' ] );
 		}
-
-		return (array) apply_filters('atum/allowed_product_types', self::$product_types);
+		
+		return (array) apply_filters( 'atum/allowed_product_types', self::$product_types );
 	}
 
 	/**
@@ -146,17 +151,17 @@ final class Globals {
 	 * @return array
 	 */
 	public static function get_inheritable_product_types() {
-
-		// Add WC Subscriptions compatibility
+		
+		// Add WC Subscriptions compatibility.
 		if (
-			class_exists('\WC_Subscriptions') &&
-			! in_array('variable-subscription', self::$inheritable_product_types) &&
-			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
+			class_exists( '\WC_Subscriptions' ) &&
+			! in_array( 'variable-subscription', self::$inheritable_product_types ) &&
+			Helpers::get_option( 'show_subscriptions', 'yes' ) === 'yes'
 		) {
 			self::$inheritable_product_types[] = 'variable-subscription';
 		}
-
-		return (array) apply_filters('atum/allowed_inheritable_product_types', self::$inheritable_product_types);
+		
+		return (array) apply_filters( 'atum/allowed_inheritable_product_types', self::$inheritable_product_types );
 	}
 
 	/**
@@ -167,17 +172,17 @@ final class Globals {
 	 * @return array
 	 */
 	public static function get_child_product_types() {
-
-		// Add WC Subscriptions compatibility
+		
+		// Add WC Subscriptions compatibility.
 		if (
-			class_exists('\WC_Subscriptions') &&
-			! in_array('subscription_variation', self::$child_product_types) &&
-			Helpers::get_option('show_subscriptions', 'yes') == 'yes'
+			class_exists( '\WC_Subscriptions' ) &&
+			! in_array( 'subscription_variation', self::$child_product_types ) &&
+			Helpers::get_option( 'show_subscriptions', 'yes' ) === 'yes'
 		) {
 			self::$child_product_types[] = 'subscription_variation';
 		}
-
-		return (array) apply_filters('atum/allowed_child_product_types', self::$child_product_types);
+		
+		return (array) apply_filters( 'atum/allowed_child_product_types', self::$child_product_types );
 	}
 
 	/**
@@ -187,10 +192,10 @@ final class Globals {
 	 */
 	public static function get_product_types_with_stock() {
 
-		// Get all the product types used for List Tables except grouped
+		// Get all the product types used for List Tables except grouped.
 		$product_types = array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() );
-
-		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( array_unique($product_types), ['grouped'] ) );
+		
+		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( array_unique( $product_types ), [ 'grouped' ] ) );
 
 	}
 
@@ -202,7 +207,7 @@ final class Globals {
 	 * @return int
 	 */
 	public static function get_stock_decimals() {
-		return (int) apply_filters( 'atum/stock_decimals', self::$stock_decimals);
+		return (int) apply_filters( 'atum/stock_decimals', self::$stock_decimals );
 	}
 
 	/**
@@ -212,8 +217,8 @@ final class Globals {
 	 *
 	 * @param int $stock_decimals
 	 */
-	public static function set_stock_decimals($stock_decimals) {
-		self::$stock_decimals = absint($stock_decimals);
+	public static function set_stock_decimals( $stock_decimals ) {
+		self::$stock_decimals = absint( $stock_decimals );
 	}
 
 	/**

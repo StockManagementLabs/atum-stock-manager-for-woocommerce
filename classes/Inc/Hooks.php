@@ -121,10 +121,10 @@ class Hooks {
 	public function check_product_out_of_stock_threshold( $is_in_stock, $product ) {
 
 		global $wpdb;
-
-		$item_id = $product->get_ID();
+		
+		$item_id                = $product->get_ID();
 		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
-
+		
 		// If the product has no "Out of Stock Threshold" set we don't need to continue.
 		if ( FALSE === $out_of_stock_threshold || '' === $out_of_stock_threshold ) {
 			return $is_in_stock;
@@ -137,7 +137,7 @@ class Hooks {
 
 		$query = $wpdb->prepare( "
 			SELECT meta_key, meta_value 
-      		FROM wp_postmeta where post_id = %d
+      		FROM {$wpdb->prefix}postmeta where post_id = %d
           	AND meta_key IN ( '_manage_stock','_stock','_stock_status', '_backorders')
         ", $item_id );
 
