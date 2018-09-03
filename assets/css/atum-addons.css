@@ -136,6 +136,18 @@
   background-repeat: no-repeat !important;
 }
 
+.atum-addons .theme .theme-screenshot .label {
+  background-color: #EFAF00;
+  float: right;
+  margin: 10px;
+  border-radius: 15px;
+  padding: 2px 9px;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .atum-addons .theme .theme-name {
   position: relative;
   cursor: default;
