@@ -40,7 +40,9 @@ use Atum\Addons\Addons;
 						<?php endif ?>
 
 							<?php if ( $is_beta ) : ?>
-							<span class="label"><?php _e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
+								<span class="label label-warning"><?php _e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
+							<?php elseif ( ! $is_coming_soon_addon && ! empty( $addon['licensing']['version'] ) ) : ?>
+								<span class="label"><?php echo 'v' . $addon['licensing']['version'] ?></span>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $addon['info']['excerpt'] ) ) : ?>

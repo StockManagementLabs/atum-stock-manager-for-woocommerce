@@ -137,15 +137,19 @@
 }
 
 .atum-addons .theme .theme-screenshot .label {
-  background-color: #EFAF00;
+  background-color: #6c757d;
   float: right;
   margin: 10px;
   border-radius: 15px;
   padding: 2px 9px;
   color: #fff;
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   text-transform: uppercase;
+}
+
+.atum-addons .theme .theme-screenshot .label.label-warning {
+  background-color: #EFAF00;
 }
 
 .atum-addons .theme .theme-name {
