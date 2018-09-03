@@ -250,7 +250,7 @@ class Addons {
 	 */
 	private function get_addons_list() {
 		
-		$transient_name = Helpers::get_transient_identifier( 'addons_list', '' );
+		$transient_name = Helpers::get_transient_identifier( [], 'addons_list' );
 		$addons         = Helpers::get_transient( $transient_name );
 		
 		if ( ! $addons ) {
@@ -423,7 +423,7 @@ class Addons {
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug ) {
 
-		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
+		$transient_name = Helpers::get_transient_identifier( [ $addon_name ], 'addon_status' );
 		$addon_status   = Helpers::get_transient( $transient_name, TRUE );
 
 		if ( empty( $addon_status ) ) {
@@ -509,7 +509,7 @@ class Addons {
 	 * @param string $addon_name
 	 */
 	public static function delete_status_transient( $addon_name ) {
-		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
+		$transient_name = Helpers::get_transient_identifier( [ $addon_name ], 'addon_status' );
 		Helpers::delete_transients( $transient_name );
 	}
 
