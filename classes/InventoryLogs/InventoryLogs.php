@@ -1,18 +1,18 @@
 <?php
 /**
+ * Inventory Logs main class
+ *
  * @package         Atum
  * @subpackage      InventoryLogs
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.4
- *
- * Inventory Logs main class
  */
 
 namespace Atum\InventoryLogs;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Helpers;
@@ -23,6 +23,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 	/**
 	 * The query var name used in list searches
+	 *
 	 * @var string
 	 */
 	protected $search_label = ATUM_PREFIX . 'log_search';
@@ -44,23 +45,25 @@ class InventoryLogs extends AtumOrderPostType {
 
 	/**
 	 * Will hold the current log object
+	 *
 	 * @var Log
 	 */
 	private $log;
 
 	/**
 	 * The capabilities used when registering the post type
+	 *
 	 * @var array
 	 */
 	protected $capabilities = array(
-		'edit_post'              => 'edit_inventory_log',
-		'read_post'              => 'read_inventory_log',
-		'delete_post'            => 'delete_inventory_log',
-		'edit_posts'             => 'edit_inventory_logs',
-		'edit_others_posts'      => 'edit_others_inventory_logs',
-		'create_posts'           => 'create_inventory_logs',
-		'delete_posts'           => 'delete_inventory_logs',
-		'delete_other_posts'     => 'delete_other_inventory_logs'
+		'edit_post'          => 'edit_inventory_log',
+		'read_post'          => 'read_inventory_log',
+		'delete_post'        => 'delete_inventory_log',
+		'edit_posts'         => 'edit_inventory_logs',
+		'edit_others_posts'  => 'edit_others_inventory_logs',
+		'create_posts'       => 'create_inventory_logs',
+		'delete_posts'       => 'delete_inventory_logs',
+		'delete_other_posts' => 'delete_other_inventory_logs',
 	);
 
 
@@ -71,9 +74,10 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	public function __construct() {
 
-		// Set post type labels
+		// Set post type labels.
 		$this->labels = array(
 			'name'                  => __( 'Inventory Logs', ATUM_TEXT_DOMAIN ),
+			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralContext
 			'singular_name'         => _x( 'Inventory Log', self::POST_TYPE . ' post type singular name', ATUM_TEXT_DOMAIN ),
 			'add_new'               => __( 'Add New Log', ATUM_TEXT_DOMAIN ),
 			'add_new_item'          => __( 'Add New Log', ATUM_TEXT_DOMAIN ),
@@ -92,26 +96,26 @@ class InventoryLogs extends AtumOrderPostType {
 			'items_list'            => __( 'Inventory logs list', ATUM_TEXT_DOMAIN ),
 		);
 
-		// Set meta box labels
+		// Set meta box labels.
 		$this->metabox_labels = array(
 			'data'    => __( 'Log Data', ATUM_TEXT_DOMAIN ),
 			'notes'   => __( 'Log Notes', ATUM_TEXT_DOMAIN ),
-			'actions' => __( 'Log Actions', ATUM_TEXT_DOMAIN )
+			'actions' => __( 'Log Actions', ATUM_TEXT_DOMAIN ),
 		);
 
-		// Initialize
+		// Initialize.
 		parent::__construct();
 
-		// Add item order
+		// Add item order.
 		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
 
-		// Add the "Inventory Logs" link to the ATUM's admin bar menu
+		// Add the "Inventory Logs" link to the ATUM's admin bar menu.
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
 
-		// Add the filters to the post type list table
-		add_action( 'restrict_manage_posts', array($this, 'add_log_filters') );
+		// Add the filters to the post type list table.
+		add_action( 'restrict_manage_posts', array( $this, 'add_log_filters' ) );
 
-		// Add the help tab to Inventory Logs' list page
+		// Add the help tab to Inventory Logs' list page.
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 		
 	}
@@ -125,7 +129,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	public function show_data_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order($post->ID);
+		$atum_order = $this->get_current_atum_order( $post->ID );
 
 		if ( ! is_a( $atum_order, 'Atum\InventoryLogs\Models\Log' ) ) {
 			return;
@@ -148,7 +152,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @param int $log_id
 	 */
-	public function save_meta_boxes($log_id) {
+	public function save_meta_boxes( $log_id ) {
 
 		if ( ! isset( $_POST['atum_order_type'], $_POST['status'], $_POST['atum_meta_nonce'] ) ) {
 			return;
@@ -158,9 +162,9 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order($log_id);
+		$log = $this->get_current_atum_order( $log_id );
 
-		if ( empty($log) ) {
+		if ( empty( $log ) ) {
 			return;
 		}
 
@@ -174,10 +178,10 @@ class InventoryLogs extends AtumOrderPostType {
 		 * @var string $damage_date
 		 */
 		$log_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$log_date = date_i18n( 'Y-m-d H:i:s', $log_date);
+		$log_date = date_i18n( 'Y-m-d H:i:s', $log_date );
 
-		foreach ( ['reservation_date', 'return_date', 'damage_date'] as $date_field ) {
-			${$date_field} = ( empty( $_POST[$date_field] ) ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[$date_field] . ' ' . (int) $_POST["{$date_field}_hour"] . ':' . (int) $_POST["{$date_field}_minute"] . ':00' ) );
+		foreach ( [ 'reservation_date', 'return_date', 'damage_date' ] as $date_field ) {
+			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
 		}
 
 		$log->save_meta( array(
@@ -189,15 +193,15 @@ class InventoryLogs extends AtumOrderPostType {
 			'_return_date'      => $return_date,
 			'_damage_date'      => $damage_date,
 			'_shipping_company' => esc_attr( $_POST['shipping_company'] ),
-			'_custom_name'      => esc_attr( $_POST['custom_name'] )
+			'_custom_name'      => esc_attr( $_POST['custom_name'] ),
 		) );
 
-		// Add the Log post to the appropriate Log Type taxonomy
+		// Add the Log post to the appropriate Log Type taxonomy.
 		if ( in_array( $log_type, array_keys( Log::get_types() ) ) ) {
-			wp_set_object_terms($log_id, $log_type, self::TAXONOMY);
+			wp_set_object_terms( $log_id, $log_type, self::TAXONOMY );
 		}
 
-		// Set the Log description as post content
+		// Set the Log description as post content.
 		$log->set_description( $_POST['description'] );
 
 		$log->save();
@@ -213,18 +217,18 @@ class InventoryLogs extends AtumOrderPostType {
 
 		global $typenow;
 
-		if ($typenow == self::POST_TYPE) {
+		if ( self::POST_TYPE === $typenow ) {
 
 			wp_dropdown_categories( array(
-				'show_option_all' => __( "Show All Log Types", ATUM_TEXT_DOMAIN ),
+				'show_option_all' => __( 'Show All Log Types', ATUM_TEXT_DOMAIN ),
 				'taxonomy'        => self::TAXONOMY,
 				'name'            => self::TAXONOMY,
 				'orderby'         => 'name',
-				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? $_GET[ self::TAXONOMY ] : '',
+				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? $_GET[ self::TAXONOMY ] : '', // WPCS: CSRF ok.
 				'hierarchical'    => FALSE,
 				'show_count'      => TRUE,
 				'hide_empty'      => FALSE,
-				'value_field'     => 'slug'
+				'value_field'     => 'slug',
 			) );
 
 		}
@@ -232,9 +236,15 @@ class InventoryLogs extends AtumOrderPostType {
 	}
 
 	/**
-	 * @inheritdoc
+	 * Customize the columns used in the ATUM Order's list table
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param array $existing_columns
+	 *
+	 * @return array
 	 */
-	public function add_columns($existing_columns) {
+	public function add_columns( $existing_columns ) {
 
 		$columns = array(
 			'cb'               => $existing_columns['cb'],
@@ -244,7 +254,7 @@ class InventoryLogs extends AtumOrderPostType {
 			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
 			'wc_order'         => __( 'Order', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
-			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN )
+			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN ),
 		);
 
 		return $columns;
@@ -252,38 +262,42 @@ class InventoryLogs extends AtumOrderPostType {
 	}
 
 	/**
-	 * @inheritdoc
+	 * Output custom columns for ATUM Order's list table
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param string $column
+	 *
+	 * @return void
 	 */
 	public function render_columns( $column ) {
 
 		global $post;
 
-		$rendered = parent::render_columns($column);
+		$rendered = parent::render_columns( $column );
 
-		if ($rendered) {
+		if ( $rendered ) {
 			return;
 		}
 
-		$log = $this->get_current_atum_order($post->ID);
+		$log = $this->get_current_atum_order( $post->ID );
 
 		switch ( $column ) {
 
 			case 'type':
-
-				$types = Log::get_types();
+				$types    = Log::get_types();
 				$log_type = $log->get_type();
 
-				if ( in_array( $log_type, array_keys($types) ) ) {
-					echo $types[$log_type];
+				if ( in_array( $log_type, array_keys( $types ) ) ) {
+					echo $types[ $log_type ];
 				}
 
 				break;
 
 			case 'wc_order':
-
 				$log_order = $log->get_order();
 
-				echo ($log_order) ? '<a href="' . admin_url( 'post.php?post=' . absint( $log_order->get_id() ) . '&action=edit' ) . '" target="_blank">' . __('Order #', ATUM_TEXT_DOMAIN) . $log_order->get_id() . '</a>' : '&ndash;';
+				echo $log_order ? '<a href="' . admin_url( 'post.php?post=' . absint( $log_order->get_id() ) . '&action=edit' ) . '" target="_blank">' . __( 'Order #', ATUM_TEXT_DOMAIN ) . $log_order->get_id() . '</a>' : '&ndash;';
 				break;
 
 		}
@@ -291,16 +305,28 @@ class InventoryLogs extends AtumOrderPostType {
 	}
 
 	/**
-	 * @inheritdoc
+	 * Specify custom bulk actions messages for the ATUM Order post type
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param  array $bulk_messages
+	 * @param  array $bulk_counts
+	 *
+	 * @return array
 	 */
 	public function bulk_post_updated_messages( $bulk_messages, $bulk_counts ) {
 
 		$bulk_messages[ self::POST_TYPE ] = array(
+			/* translators: the number of logs updated */
 			'updated'   => _n( '%s log updated.', '%s logs updated.', $bulk_counts['updated'], ATUM_TEXT_DOMAIN ),
+			/* translators: the number of logs locked */
 			'locked'    => _n( '%s log not updated, somebody is editing it.', '%s logs not updated, somebody is editing them.', $bulk_counts['locked'], ATUM_TEXT_DOMAIN ),
+			/* translators: the number of logs deleted */
 			'deleted'   => _n( '%s log permanently deleted.', '%s logs permanently deleted.', $bulk_counts['deleted'], ATUM_TEXT_DOMAIN ),
+			/* translators: the number of logs moved to the trash */
 			'trashed'   => _n( '%s log moved to the Trash.', '%s logs moved to the Trash.', $bulk_counts['trashed'], ATUM_TEXT_DOMAIN ),
-			'untrashed' => _n( '%s log restored from the Trash.', '%s logs restored from the Trash.', $bulk_counts['untrashed'], ATUM_TEXT_DOMAIN )
+			/* translators: the number of restored from the trash */
+			'untrashed' => _n( '%s log restored from the Trash.', '%s logs restored from the Trash.', $bulk_counts['untrashed'], ATUM_TEXT_DOMAIN ),
 		);
 
 		return $bulk_messages;
@@ -320,18 +346,20 @@ class InventoryLogs extends AtumOrderPostType {
 		global $post;
 
 		$messages[ self::POST_TYPE ] = array(
-			0  => '', // Unused. Messages start at index 1
+			0  => '', // Unused. Messages start at index 1.
 			1  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
 			2  => __( 'Custom field updated.', ATUM_TEXT_DOMAIN ),
 			3  => __( 'Custom field deleted.', ATUM_TEXT_DOMAIN ),
 			4  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Log restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE,
+			/* translators: the revision name */
+			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Log restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE, // WPCS: CSRF ok.
 			6  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
 			7  => __( 'Log saved.', ATUM_TEXT_DOMAIN ),
 			8  => __( 'Log submitted.', ATUM_TEXT_DOMAIN ),
+			/* translators: the log's schedule date */
 			9  => sprintf( __( 'Log scheduled for: <strong>%1$s</strong>.', ATUM_TEXT_DOMAIN ), date_i18n( __( 'M j, Y @ G:i', ATUM_TEXT_DOMAIN ), strtotime( $post->post_date ) ) ),
 			10 => __( 'Log draft updated.', ATUM_TEXT_DOMAIN ),
-			11 => __( 'Log updated and email sent.', ATUM_TEXT_DOMAIN )
+			11 => __( 'Log updated and email sent.', ATUM_TEXT_DOMAIN ),
 		);
 
 		return $messages;
@@ -352,7 +380,7 @@ class InventoryLogs extends AtumOrderPostType {
 			'slug'       => ATUM_TEXT_DOMAIN . '-inventory-logs',
 			'title'      => $this->labels['menu_name'],
 			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
-			'menu_order' => self::MENU_ORDER
+			'menu_order' => self::MENU_ORDER,
 		);
 
 		return $atum_menus;
@@ -369,7 +397,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 		$items_order[] = array(
 			'slug'       => 'edit.php?post_type=' . self::POST_TYPE,
-			'menu_order' => self::MENU_ORDER
+			'menu_order' => self::MENU_ORDER,
 		);
 		
 		return $items_order;
@@ -385,9 +413,9 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @return Log
 	 */
-	protected function get_current_atum_order($post_id) {
+	protected function get_current_atum_order( $post_id ) {
 
-		if ( ! $this->log || $this->log->get_id() != $post_id ) {
+		if ( ! $this->log || $this->log->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$this->log = new Log( $post_id );
 		}
 
@@ -404,29 +432,28 @@ class InventoryLogs extends AtumOrderPostType {
 
 		$screen = get_current_screen();
 
-		if ($screen && strpos($screen->id, self::POST_TYPE) !== FALSE) {
+		if ( $screen && FALSE !== strpos( $screen->id, self::POST_TYPE ) ) {
 
 			$help_tabs = array(
 				array(
 					'name'  => 'columns',
 					'title' => __( 'Columns', ATUM_TEXT_DOMAIN ),
-				)
+				),
 			);
 
-			Helpers::add_help_tab($help_tabs, $this);
+			Helpers::add_help_tab( $help_tabs, $this );
 
 		}
 
 	}
 
-	/**@noinspection PhpUnusedParameterInspection
 	/**
 	 * Display the help tabs' content
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \WP_Screen $screen    The current screen
-	 * @param array      $tab       The current help tab
+	 * @param \WP_Screen $screen    The current screen.
+	 * @param array      $tab       The current help tab.
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 

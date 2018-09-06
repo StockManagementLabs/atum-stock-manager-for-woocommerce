@@ -1,20 +1,18 @@
 <?php
 /**
+ * The abstract class for the ATUM Order Item model
+ *
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.4
- *
- * @noinspection    PhpUndefinedMethodInspection
- *
- * The abstract class for the ATUM Order Item model
  */
 
 namespace Atum\Components\AtumOrders\Models;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -29,30 +27,35 @@ abstract class AtumOrderItemModel {
 
 	/**
 	 * The object ID
+	 *
 	 * @var int
 	 */
 	protected $id;
 
 	/**
 	 * An array containing all the meta keys attached to this item
+	 *
 	 * @var array
 	 */
 	protected $meta = [];
 
 	/**
 	 * The ATUM Order ID
+	 *
 	 * @var int
 	 */
 	protected $atum_order_id;
 
 	/**
 	 * The ATUM Order item object
+	 *
 	 * @var AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax
 	 */
 	protected $atum_order_item;
 
 	/**
 	 * The WP cache key name
+	 *
 	 * @var string
 	 */
 	protected $cache_key = 'atum-order-items';
@@ -60,25 +63,30 @@ abstract class AtumOrderItemModel {
 	/**
 	 * AtumOrderItemModel constructor
 	 *
-	 * @param int $id   Optional. The object ID to initialize
+	 * @param int $id   Optional. The object ID to initialize.
+	 *
+	 * @throws AtumException
 	 */
 	protected function __construct( $id = 0 ) {
 
-		if ($id) {
-			$this->id = absint($id);
+		if ( $id ) {
+			$this->id = absint( $id );
 
-			// Load the data from db
-			if ($this->id) {
+			// Load the data from db.
+			if ( $this->id ) {
 				$this->read();
 			}
 		}
 
 	}
 
+	/* @noinspection PhpDocMissingThrowsInspection */
 	/**
 	 * Read a log item from the database
 	 *
 	 * @since 1.2.9
+	 *
+	 * @throws AtumException
 	 */
 	protected function read() {
 
@@ -86,12 +94,12 @@ abstract class AtumOrderItemModel {
 
 		try {
 
-			// Get from cache if available
+			// Get from cache if available.
 			$data = wp_cache_get( 'item-' . $this->id, $this->cache_key );
 
 			if ( FALSE === $data ) {
-				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_item_id = %d LIMIT 1;", $this->id );
-				$data  = $wpdb->get_row( $query );
+				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d LIMIT 1;', $this->id ); // WPCS: unprepared SQL ok.
+				$data  = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 
 				wp_cache_set( 'item-' . $this->id, $data, $this->cache_key );
 			}
@@ -101,16 +109,14 @@ abstract class AtumOrderItemModel {
 			}
 
 			$this->atum_order_item->set_atum_order_id( $data->order_id );
-			/** @noinspection PhpUnhandledExceptionInspection */
 			$this->atum_order_item->set_name( $data->order_item_name );
 
 			$this->read_meta();
 
-			// Read the ATUM Order item props from db
+			// Read the ATUM Order item props from db.
 			switch ( $this->atum_order_item->get_type() ) {
 
 				case 'line_item':
-
 					$this->atum_order_item->set_props( array(
 						'product_id'   => $this->get_meta( '_product_id' ),
 						'variation_id' => $this->get_meta( '_variation_id' ),
@@ -118,42 +124,39 @@ abstract class AtumOrderItemModel {
 						'tax_class'    => $this->get_meta( '_tax_class' ),
 						'subtotal'     => $this->get_meta( '_line_subtotal' ),
 						'total'        => $this->get_meta( '_line_total' ),
-						'taxes'        => $this->get_meta( '_line_tax_data' )
+						'taxes'        => $this->get_meta( '_line_tax_data' ),
 					) );
 
 					break;
 
 				case 'fee':
-
 					$this->atum_order_item->set_props( array(
 						'tax_class'  => $this->get_meta( '_tax_class' ),
 						'tax_status' => $this->get_meta( '_tax_status' ),
 						'total'      => $this->get_meta( '_line_total' ),
 						'total_tax'  => $this->get_meta( '_line_tax' ),
-						'taxes'      => $this->get_meta( '_line_tax_data' )
+						'taxes'      => $this->get_meta( '_line_tax_data' ),
 					) );
 
 					break;
 
 				case 'shipping':
-
 					$this->atum_order_item->set_props( array(
 						'method_id' => $this->get_meta( '_method_id' ),
 						'total'     => $this->get_meta( '_cost' ),
 						'total_tax' => $this->get_meta( '_total_tax' ),
-						'taxes'     => $this->get_meta( '_taxes' )
+						'taxes'     => $this->get_meta( '_taxes' ),
 					) );
 
 					break;
 
 				case 'tax':
-
 					$this->atum_order_item->set_props( array(
 						'rate_id'            => $this->get_meta( '_rate_id' ),
 						'label'              => $this->get_meta( '_label' ),
 						'compound'           => $this->get_meta( '_compound' ),
 						'tax_total'          => $this->get_meta( '_tax_amount' ),
-						'shipping_tax_total' => $this->get_meta( '_shipping_tax_amount' )
+						'shipping_tax_total' => $this->get_meta( '_shipping_tax_amount' ),
 					) );
 
 					break;
@@ -162,10 +165,9 @@ abstract class AtumOrderItemModel {
 
 			$this->atum_order_item->set_object_read( TRUE );
 
-		} catch (AtumException $e) {
+		} catch ( AtumException $e ) {
 
-			if (ATUM_DEBUG) {
-				// phpcs:ignore
+			if ( ATUM_DEBUG ) {
 				error_log( __CLASS__ . '::' . __METHOD__ . '::' . $e->getMessage() );
 			}
 
@@ -182,13 +184,13 @@ abstract class AtumOrderItemModel {
 	 */
 	public function save() {
 
-		// Trigger action before saving to the DB. Allows to adjust object props before save
+		// Trigger action before saving to the DB. Allows to adjust object props before save.
 		do_action( 'atum/orders/before_item_save', $this );
 
 		$atum_order_id = $this->atum_order_item->get_atum_order_id();
 
-		if ( !$atum_order_id ) {
-			return new \WP_Error( 'empty_props', __('Please provide a valid ATUM Order ID', ATUM_TEXT_DOMAIN) );
+		if ( ! $atum_order_id ) {
+			return new \WP_Error( 'empty_props', __( 'Please provide a valid ATUM Order ID', ATUM_TEXT_DOMAIN ) );
 		}
 
 		$post_type        = get_post_type( $atum_order_id );
@@ -196,11 +198,13 @@ abstract class AtumOrderItemModel {
 		$atum_order_label = $post_type_obj->labels->singular_name;
 
 		if ( ! $this->atum_order_item->get_name() ) {
-			return new \WP_Error( 'empty_props', sprintf( __('Please provide a valid name for the %s item', ATUM_TEXT_DOMAIN), $atum_order_label) );
+			/* translators: the item name */
+			return new \WP_Error( 'empty_props', sprintf( __( 'Please provide a valid name for the %s item', ATUM_TEXT_DOMAIN ), $atum_order_label ) );
 		}
 
 		if ( ! $this->atum_order_item->get_type() ) {
-			return new \WP_Error( 'empty_props', sprintf( __('Please provide a valid type for the %s item', ATUM_TEXT_DOMAIN), $atum_order_label) );
+			/* translators: the item name */
+			return new \WP_Error( 'empty_props', sprintf( __( 'Please provide a valid type for the %s item', ATUM_TEXT_DOMAIN ), $atum_order_label ) );
 		}
 
 		if ( $this->id ) {
@@ -232,9 +236,9 @@ abstract class AtumOrderItemModel {
 			)
 		);
 
-		if ($inserted) {
+		if ( $inserted ) {
 			$this->id = $wpdb->insert_id;
-			$this->atum_order_item->set_id($this->id);
+			$this->atum_order_item->set_id( $this->id );
 		}
 
 		$this->clear_cache();
@@ -301,9 +305,9 @@ abstract class AtumOrderItemModel {
 			ORDER BY meta_id
 		", $this->id );
 
-		$raw_meta_data = $wpdb->get_results( $query );
+		$raw_meta_data = $wpdb->get_results( $query ); // WPCS: unprepared SQL ok.
 
-		if ($raw_meta_data) {
+		if ( $raw_meta_data ) {
 			$this->meta = $raw_meta_data;
 		}
 
@@ -334,22 +338,23 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $meta_key Optional. A string indicating which meta key to retrieve, or NULL to return all keys
-	 * @param bool   $single   Optional. TRUE to return the first value, FALSE to return an array of values
+	 * @param string $meta_key Optional. A string indicating which meta key to retrieve, or NULL to return all keys.
+	 * @param bool   $single   Optional. TRUE to return the first value, FALSE to return an array of values.
 	 *
 	 * @return string|array
 	 */
 	public function get_meta( $meta_key = NULL, $single = TRUE ) {
 
-		if ( $meta_key && isset( $this->meta[$meta_key] ) ) {
-			return ($single) ? reset( $this->meta[$meta_key] ) : $this->meta[$meta_key];
+		if ( $meta_key && isset( $this->meta[ $meta_key ] ) ) {
+			return ( $single ) ? reset( $this->meta[ $meta_key ] ) : $this->meta[ $meta_key ];
 		}
-		elseif ( !$meta_key && ! empty($this->meta) ) {
+		elseif ( ! $meta_key && ! empty( $this->meta ) ) {
 			return $this->meta;
 		}
 
 		self::sanitize_order_item_name();
-		return get_metadata( 'atum_order_item', $this->id, $meta_key, $single);
+
+		return get_metadata( 'atum_order_item', $this->id, $meta_key, $single );
 
 	}
 
@@ -358,7 +363,7 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array $meta An associative array of meta keys and their values to save
+	 * @param array $meta An associative array of meta keys and their values to save.
 	 * @param bool  $trim
 	 *
 	 * @return void
@@ -367,8 +372,8 @@ abstract class AtumOrderItemModel {
 
 		foreach ( $meta as $key => $value ) {
 
-			if ($trim) {
-				$value = Helpers::trim_input($value);
+			if ( $trim ) {
+				$value = Helpers::trim_input( $value );
 			}
 
 			self::sanitize_order_item_name();
@@ -409,9 +414,9 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @return mixed
 	 */
-	public static function get_item_meta($item_id, $meta_key) {
+	public static function get_item_meta( $item_id, $meta_key ) {
 		self::sanitize_order_item_name();
-		return get_metadata( 'atum_order_item', $item_id, $meta_key, TRUE);
+		return get_metadata( 'atum_order_item', $item_id, $meta_key, TRUE );
 	}
 
 	/**
@@ -420,10 +425,9 @@ abstract class AtumOrderItemModel {
 	 * @since 1.3.0
 	 */
 	public static function sanitize_order_item_name() {
-		add_filter( 'sanitize_key', array(__CLASS__, 'fix_order_item_id_column'), 10, 2 );
+		add_filter( 'sanitize_key', array( __CLASS__, 'fix_order_item_id_column' ), 10, 2 );
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Fix the order_item_id column name from atum_order_itemmeta table when getting meta
 	 *
@@ -434,9 +438,9 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @return string
 	 */
-	public static function fix_order_item_id_column($key, $raw_key) {
+	public static function fix_order_item_id_column( $key, $raw_key ) {
 
-		if ($key == 'atum_order_item_id') {
+		if ( 'atum_order_item_id' === $key ) {
 			$key = 'order_item_id';
 		}
 

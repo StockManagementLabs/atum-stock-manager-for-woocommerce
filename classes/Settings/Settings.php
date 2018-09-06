@@ -342,8 +342,8 @@ class Settings {
 		
 		$this->options = $this->get_settings( Helpers::get_options(), $this->defaults );
 		
-		if ( isset( $_GET['tab'] ) ) {
-			$this->active_tab = $_GET['tab'];
+		if ( isset( $_GET['tab'] ) ) { // WPCS: CSRF ok.
+			$this->active_tab = $_GET['tab']; // WPCS: CSRF ok.
 		}
 
 		Helpers::load_view( 'settings-page', array(
@@ -549,11 +549,11 @@ class Settings {
 								foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
 
 									// Save always the required value as checked.
-									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] == $default_value ) {
+									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
 										$values[ $default_value ] = 'yes';
 									}
 									else {
-										$values[ $default_value ] = isset($input[ $key ]) && in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
+										$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
 									}
 
 								}
@@ -752,12 +752,10 @@ class Settings {
 
 				<?php
 				if ( $multiple && is_array( $value ) ) {
-					$is_active      = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
-					$value_to_check = TRUE;
+					$is_active = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
 				}
 				else {
-					$is_active      = ( $value == $option_value );
-					$value_to_check = $option_value;
+					$is_active = $value === $option_value;
 				}
 
 				$disabled_str = $checked_str = '';
@@ -893,7 +891,7 @@ class Settings {
 	public function get_dependency( $args ) {
 
 		if ( isset( $args['dependency'] ) ) {
-			return " data-dependency='" . json_encode( $args['dependency'] ) . "'";
+			return " data-dependency='" . wp_json_encode( $args['dependency'] ) . "'";
 		}
 
 		return '';

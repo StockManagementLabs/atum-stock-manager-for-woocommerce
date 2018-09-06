@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 ?>
 <table class="widefat fixed striped">
@@ -18,15 +18,15 @@ defined( 'ABSPATH' ) or die;
 	<tbody>
 		<tr>
 			<td><strong><?php _e( 'Current Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "The current stock represents the number of products available to order (values update on the Stock Central refresh).", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( 'The current stock represents the number of products available to order (values update on the Stock Central refresh).', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "Inbound stock counter represents the volume of products that have been ordered in, using the Purchase Order feature and are pending delivery.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( 'Inbound stock counter represents the volume of products that have been ordered in, using the Purchase Order feature and are pending delivery.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock on Hold', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "The 'Stock on Hold' value is an important indicator for stores that allow customers to add items to their baskets and leave them there unattended for a while. Products left in baskets are still physically in the warehouse, but not included in the 'Current Stock' indicator. You can set the time of the product being held by a customer under 'WooCommerce' - 'Settings' - 'Products' and the 'Inventory' tab." ) ?></td>
+			<td><?php _e( "The 'Stock on Hold' value is an important indicator for stores that allow customers to add items to their baskets and leave them there unattended for a while. Products left in baskets are still physically in the warehouse, but not included in the 'Current Stock' indicator. You can set the time of the product being held by a customer under 'WooCommerce' - 'Settings' - 'Products' and the 'Inventory' tab.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Reserved Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>

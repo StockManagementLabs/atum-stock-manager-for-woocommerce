@@ -32,11 +32,14 @@
 		The below two examples just show how you can exclude rules.
 		They are not intended as advice about which sniffs to exclude.
 		-->
+		<exclude name="Generic.CodeAnalysis.UselessOverridingMethod.Found" />
 		<exclude name="Generic.ControlStructures.InlineControlStructure" />
 		<exclude name="Generic.Files.InlineHTML" />
 		<exclude name="Generic.Files.LineLength" />
 		<exclude name="Generic.PHP.LowerCaseConstant" />
 		<exclude name="Generic.WhiteSpace.DisallowTabIndent" />
+		
+		<exclude name="PSR2.Methods.MethodDeclaration.Underscore" />
 		
 		<exclude name="Squiz.Commenting.ClassComment.Missing" />
 		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
@@ -49,6 +52,7 @@
 		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
 		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine" />
 		
+		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.Found" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Functions.DontExtract" />
