@@ -24,23 +24,8 @@ use Atum\PurchaseOrders\PurchaseOrders;
 class ListTable extends AtumListTable {
 
 	/**
-	 * ListTable Constructor
 	 *
-	 * The child class should call this constructor from its own constructor to override the default $args
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array|string $args          {
-	 *      Array or string of arguments.
-	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
-	 * }
+	 * @inheritdoc
 	 */
 	public function __construct( $args = array() ) {
 		
@@ -57,15 +42,15 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
-			'thumb'               => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'ID'                  => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'calc_type'           => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
-			'calc_date_expected'  => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
-			'calc_purchase_order' => __( 'PO', ATUM_TEXT_DOMAIN ),
+			'thumb'                => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'calc_type'            => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_inbound'         => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'calc_date_ordered'    => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
+			'calc_date_expected'   => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
+			'calc_purchase_order'  => __( 'PO', ATUM_TEXT_DOMAIN ),
 		);
 
 		// Initialize totalizers.
@@ -76,64 +61,57 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Get an associative array ( id => link ) with the list of available views on this table.
+	 *
+	 * @inheritdoc
 	 *
 	 * @since 1.4.2
-	 *
-	 * @return array
 	 */
 	protected function get_views() {
 
 		$views = parent::get_views();
-		unset( $views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged'], $views['back_order'] );
+		unset($views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged'], $views['back_order']);
 
 		return $views;
 	}
 
 	/**
-	 * Extra controls to be displayed in table nav sections
 	 *
-	 * @since  1.4.2
-	 *
-	 * @param string $which 'top' or 'bottom' table nav.
+	 * @inheritdoc
 	 */
 	protected function extra_tablenav( $which ) {
 		// Disable table nav.
 	}
 
 	/**
-	 * Add the filters to the table nav
 	 *
-	 * @since 1.4.2
+	 * @inheritdoc
 	 */
 	protected function table_nav_filters() {
 		// Disable filters.
 	}
 
 	/**
-	 * Get a list of CSS classes for the WP_List_Table table tag. Deleted 'fixed' from standard function
+	 *
+	 * @inheritdoc
 	 *
 	 * @since  1.1.3.1
-	 *
-	 * @return array List of CSS classes for the table tag
 	 */
 	protected function get_table_classes() {
 
-		$table_classes   = parent::get_table_classes();
+		$table_classes = parent::get_table_classes();
 		$table_classes[] = 'inbound-stock-list';
 
 		return $table_classes;
 	}
 
 	/**
-	 * Set views for table filtering and calculate total value counters for pagination
+	 *
+	 * @inheritdoc
 	 *
 	 * @since 1.4.2
-	 *
-	 * @param array $args WP_Query arguments.
 	 */
 	protected function set_views_data( $args = array() ) {
-
+		
 		$this->count_views = array(
 			'count_in_stock'   => 0,
 			'count_out_stock'  => 0,
@@ -145,22 +123,8 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * All columns are sortable by default except cb and thumbnail
 	 *
-	 * Optional. If you want one or more columns to be sortable (ASC/DESC toggle),
-	 * you will need to register it here. This should return an array where the
-	 * key is the column that needs to be sortable, and the value is db column to
-	 * sort by. Often, the key and value will be the same, but this is not always
-	 * the case (as the value is a column name from the database, not the list table).
-	 *
-	 * This method merely defines which columns should be sortable and makes them
-	 * clickable - it does not handle the actual sorting. You still need to detect
-	 * the ORDERBY and ORDER querystring variables within prepare_items() and sort
-	 * your data accordingly (usually by modifying your query).
-	 *
-	 * @since 1.4.2
-	 *
-	 * @return array An associative array containing all the columns that should be sortable: 'slugs' => array('data_values', bool)
+	 * @inheritdoc
 	 */
 	protected function get_sortable_columns() {
 
@@ -177,19 +141,14 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Post title column
 	 *
-	 * @since  1.4.2
-	 *
-	 * @param \WP_Post $item The WooCommerce product post.
-	 *
-	 * @return string
+	 * @inheritdoc
 	 */
 	protected function column_title( $item ) {
 
 		$product_id = $this->get_current_product_id();
 
-		if ( 'variation' === $this->product->get_type() ) {
+		if ( $this->product->get_type() == 'variation' ) {
 
 			/* @noinspection PhpUndefinedMethodInspection */
 			$parent_data = $this->product->get_parent_data();
@@ -212,7 +171,7 @@ class ListTable extends AtumListTable {
 
 		if ( mb_strlen( $title ) > $title_length ) {
 			$title = '<span class="tips" data-tip="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
-					'...</span><span class="atum-title-small">' . $title . '</span>';
+			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
 		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $title . '</a>';
@@ -221,36 +180,25 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Product SKU column
 	 *
-	 * @since  1.4.2
-	 *
-	 * @param \WP_Post $item     The WooCommerce product post.
-	 * @param bool     $editable Whether the SKU will be editable.
-	 *
-	 * @return string
+	 * @inheritdoc
 	 */
 	protected function column__sku( $item, $editable = FALSE ) {
 		return parent::column__sku( $item, $editable );
 	}
 
 	/**
-	 * Column for product type
 	 *
-	 * @since 1.4.2
-	 *
-	 * @param \WP_Post $item The WooCommerce product post.
-	 *
-	 * @return string
+	 * @inheritdoc
 	 */
 	protected function column_calc_type( $item ) {
 
-		$type          = $this->product->get_type();
+		$type = $this->product->get_type();
 		$product_types = wc_get_product_types();
 
 		switch ( $type ) {
 			case 'variation':
-				$type        = 'variable';
+				$type = 'variable';
 				$product_tip = __( 'Variation Product', ATUM_TEXT_DOMAIN );
 				break;
 
@@ -333,32 +281,31 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Prepare the table data
 	 *
-	 * @since 1.4.2
+	 * @inheritdoc
 	 */
 	public function prepare_items() {
 
 		global $wpdb;
 
 		$search_query = '';
-		if ( ! empty( $_REQUEST['s'] ) ) { // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['s'] ) ) {
 
-			$search = esc_attr( $_REQUEST['s'] ); // WPCS: CSRF ok.
+			$search = esc_attr( $_REQUEST['s'] );
 
 			if ( is_numeric( $search ) ) {
-				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] ); // WPCS: CSRF ok.
+				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'"; // WPCS: CSRF ok.
+				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'";
 			}
 
 		}
 
 		$order_by = 'ORDER BY `order_id`';
-		if ( ! empty( $_REQUEST['orderby'] ) ) { // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
-			switch ( $_REQUEST['orderby'] ) { // WPCS: CSRF ok.
+			switch ( $_REQUEST['orderby'] ) {
 				case 'title':
 					$order_by = 'ORDER BY `order_item_name`';
 					break;
@@ -371,7 +318,7 @@ class ListTable extends AtumListTable {
 
 		}
 
-		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC'; // WPCS: CSRF ok.
+		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
 
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
@@ -393,7 +340,7 @@ class ListTable extends AtumListTable {
 			$found_posts = count( $po_products );
 
 			// Paginate the results (if needed).
-			if ( -1 !== $this->per_page && $found_posts > $this->per_page ) {
+			if ( -1 != $this->per_page && $found_posts > $this->per_page ) {
 				$page   = $this->get_pagenum();
 				$offset = ( $page - 1 ) * $this->per_page;
 
@@ -405,7 +352,7 @@ class ListTable extends AtumListTable {
 				$post = get_post( $po_product->product_id );
 
 				if ( $post ) {
-					$post->po_id      = $po_product->order_id;
+					$post->po_id = $po_product->order_id;
 					$post->po_item_id = $po_product->order_item_id;
 				}
 
@@ -419,7 +366,7 @@ class ListTable extends AtumListTable {
 			$this->set_pagination_args( array(
 				'total_items' => $found_posts,
 				'per_page'    => $this->per_page,
-				'total_pages' => -1 === $this->per_page ? 0 : ceil( $found_posts / $this->per_page ),
+				'total_pages' => - 1 == $this->per_page ? 0 : ceil( $found_posts / $this->per_page ),
 			) );
 
 		}
@@ -427,15 +374,12 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Loads the current product
 	 *
-	 * @since 1.4.2
-	 *
-	 * @param \WP_Post $item The WooCommerce product post.
+	 * @inheritdoc
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product = wc_get_product( $item );
 		$this->allow_calcs = TRUE;
 
 		echo '<tr>';
@@ -448,13 +392,11 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Bulk actions are an associative array in the format 'slug' => 'Visible Title'
 	 *
-	 * @since 1.4.2
-	 *
-	 * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'.
+	 * @inheritdoc
 	 */
 	protected function get_bulk_actions() {
+
 		// No bulk actions needed for Inbound Stock.
 		return apply_filters( 'atum/inbound_stock_list/bulk_actions', array() );
 	}

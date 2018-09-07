@@ -3,15 +3,16 @@
  * View for the ATUM Dashboard News widget
  *
  * @since        1.4.0
- *
- * @var array $rss_items
+ * @noinspection PhpUndefinedMethodInspection
  */
 
-defined( 'ABSPATH' ) || die;
+/**
+ * @var array $rss_items
+ */
 ?>
 <div class="news-widget" data-widget="news">
 
-	<?php if ( $max_items > 0 ) : ?>
+	<?php if ($max_items > 0) : ?>
 
 		<div class="scroll-box">
 			<?php foreach ( $rss_items as $item ) : ?>
@@ -21,7 +22,7 @@ defined( 'ABSPATH' ) || die;
 						<?php
 						$attachment = $item->get_enclosure();
 
-						if ( ! empty( $attachment ) && ! empty( $attachment->link ) ) : ?>
+						if ( ! empty($attachment) && ! empty($attachment->link) ): ?>
 							<div class="thumb">
 								<div style="background-image: url('<?php echo $attachment->link ?>')"></div>
 							</div>
@@ -36,8 +37,8 @@ defined( 'ABSPATH' ) || die;
 							<?php
 							echo $item->get_author()->name;
 
-							$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
-							echo ' · ' . $timeAgo->inWords( $item->get_date() ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
+							$timeAgo = new \Westsworld\TimeAgo();
+							echo ' · ' . $timeAgo->inWords( $item->get_date() );
 							?>
 						</div>
 
@@ -51,8 +52,8 @@ defined( 'ABSPATH' ) || die;
 			<?php endforeach; ?>
 		</div>
 
-	<?php else : ?>
-		<p class="error"><?php _e( 'The Stock Management Labs news could not be loaded. Please try again later.', ATUM_TEXT_DOMAIN ) ?></p>
+	<?php else: ?>
+		<p class="error"><?php _e('The Stock Management Labs news could not be loaded. Please try again later.', ATUM_TEXT_DOMAIN) ?></p>
 	<?php endif ?>
 
 </div>

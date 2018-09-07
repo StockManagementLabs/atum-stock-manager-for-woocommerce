@@ -159,29 +159,6 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
-`1.4.14`
-
-*2018-09-07*
-
-**Features**
-
-* Added beta label to add-ons in beta stage.
-* Added version label to available add-ons.
-* Added WC Bookings compatibility.
-
-**Changes**
-
-* Moved the "Add tax" button the same place as in WC orders.
-
-**Fixes**
-
-* Fixed output "out of stock threshold" failing with non-standard wpdb prefixes.
-* Fixed add-ons list's transient name.
-* CSS fixes.
-* Full refactory (code style following PHPCS and WPCS standards).
-
----
-
 `1.4.13`
 
 *2018-07-26*

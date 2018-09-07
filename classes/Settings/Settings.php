@@ -147,7 +147,7 @@ class Settings {
 			),
 			'out_stock_threshold'       => array(
 				'section'                        => 'general',
-				'name'                           => __( 'Out of Stock Threshold per product', ATUM_TEXT_DOMAIN ),
+				'name'                           => __( 'ATUM per product Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 				'desc'                           => __( 'Activate the switch to disable WooCommerce global threshold settings and enable ATUM per product threshold. All products will inherit the WooCommerce global value that you can now amend.<br><br>
 								                        Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br> 
 								                        We have a tool to reset or change all per product values in the Tool tab above.', ATUM_TEXT_DOMAIN ),
@@ -550,11 +550,11 @@ class Settings {
 								foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
 
 									// Save always the required value as checked.
-									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
+									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] == $default_value ) {
 										$values[ $default_value ] = 'yes';
 									}
 									else {
-										$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
+										$values[ $default_value ] = isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ? 'yes' : 'no';
 									}
 
 								}
@@ -758,9 +758,11 @@ class Settings {
 				<?php
 				if ( $multiple && is_array( $value ) ) {
 					$is_active      = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
+					$value_to_check = TRUE;
 				}
 				else {
-					$is_active = $value === $option_value;
+					$is_active      = ( $value == $option_value );
+					$value_to_check = $option_value;
 				}
 
 				$disabled_str = $checked_str = '';
@@ -921,15 +923,15 @@ class Settings {
 	 * @return string
 	 */
 	public function get_dependency( $args ) {
-
+		
 		if ( isset( $args['dependency'] ) ) {
 			return " data-dependency='" . wp_json_encode( $args['dependency'] ) . "'";
 		}
-
+		
 		return '';
-
+		
 	}
-
+	
 	
 	/****************************
 	 * Instance methods

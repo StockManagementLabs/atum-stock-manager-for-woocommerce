@@ -1,7 +1,5 @@
 <?php
 /**
- * Help pointers class
- *
  * @package        Atum
  * @subpackage     Components
  * @author         Be Rebel - https://berebel.io
@@ -17,56 +15,47 @@
  *
  * add_action('admin_enqueue_scripts', 'my_help_pointers');
  *
- * @original_author Tim Debo <tim@rawcreativestudios.com>
- * @original_copyright Copyright (c) 2012, Raw Creative Studios
+ * @author Tim Debo <tim@rawcreativestudios.com>
+ * @copyright Copyright (c) 2012, Raw Creative Studios
  * @link https://github.com/rawcreative/wp-help-pointers
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Atum\Components;
 
-defined( 'ABSPATH' ) || die;
-
 
 class AtumHelpPointers {
 	
 	/**
 	 * The current screen ID
-	 *
 	 * @var string
 	 */
 	public $screen_id;
 	
 	/**
 	 * An array of valid help pointers for the screen
-	 *
 	 * @var array
 	 */
 	public $valid;
 	
 	/**
 	 * The help pointers configuration array
-	 *
 	 * @var array
 	 */
 	public $pointers;
+	
 
-	/**
-	 * AtumHelpPointers constructor.
-	 *
-	 * @param array $pntrs
-	 */
 	public function __construct( $pntrs = array() ) {
 
-		// Doesn't run on WP < 3.3.
-		if ( version_compare( get_bloginfo( 'version' ), '3.3', '<' ) ) {
+		// Don't run on WP < 3.3
+		if ( version_compare( get_bloginfo( 'version' ), '3.3', '<') ) {
 			return;
 		}
 
-		$screen          = get_current_screen();
+		$screen = get_current_screen();
 		$this->screen_id = $screen->id;
 
-		$this->register_pointers( $pntrs );
+		$this->register_pointers($pntrs);
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_pointers' ), 1000 );
 		add_action( 'admin_head', array( $this, 'add_scripts' ) );
@@ -78,7 +67,7 @@ class AtumHelpPointers {
 	 *
 	 * @since 0.1.6
 	 *
-	 * @param array $pntrs  The help pointers configuration array.
+	 * @param array $pntrs  The help pointers configuration array
 	 */
 	public function register_pointers( $pntrs ) {
 
@@ -86,7 +75,7 @@ class AtumHelpPointers {
 
 		foreach ( $pntrs as $ptr ) {
 
-			if ( $ptr['screen'] === $this->screen_id ) {
+			if ( $ptr['screen'] == $this->screen_id ) {
 
 				$pointers[ $ptr['id'] ] = array(
 					'screen'  => $ptr['screen'],
@@ -96,15 +85,15 @@ class AtumHelpPointers {
 						'target'        => $ptr['target'],
 						'content'       => sprintf( '<h3>%s</h3> <p>%s</p>', $ptr['title'], $ptr['content'] ),
 						'position'      => $ptr['position'],
-						'arrowPosition' => isset( $ptr['arrow_position'] ) ? $ptr['arrow_position'] : [],
-					),
+						'arrowPosition' => isset( $ptr['arrow_position'] ) ? $ptr['arrow_position'] : []
+					)
 				);
 
 			}
 
 		}
 
-		if ( ! empty( $pointers ) ) {
+		if ( ! empty($pointers) ) {
 			$this->pointers = $pointers;
 		}
 		
@@ -119,20 +108,20 @@ class AtumHelpPointers {
 
 		$pointers = $this->pointers;
 
-		if ( empty( $pointers ) || ! is_array( $pointers ) ) {
+		if ( empty($pointers) || ! is_array( $pointers ) ) {
 			return;
 		}
 
-		// Get dismissed pointers.
-		$dismissed      = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', TRUE ) );
+		// Get dismissed pointers
+		$dismissed = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
 		$valid_pointers = array();
 
 		// Check pointers and remove dismissed ones.
 		foreach ( $pointers as $pointer_id => $pointer ) {
 
-			// Make sure we have pointers & check if they have been dismissed.
+			// Make sure we have pointers & check if they have been dismissed
 			if (
-				in_array( $pointer_id, $dismissed ) || empty( $pointer ) ||
+				in_array( $pointer_id, $dismissed ) || empty( $pointer )  ||
 				empty( $pointer_id ) || empty( $pointer['target'] ) || empty( $pointer['options'] )
 			) {
 				continue;
@@ -140,8 +129,8 @@ class AtumHelpPointers {
 
 			$pointer['pointer_id'] = $pointer_id;
 
-			// Add the pointer to $valid_pointers array.
-			$valid_pointers['pointers'][] = $pointer;
+			// Add the pointer to $valid_pointers array
+			$valid_pointers['pointers'][] =  $pointer;
 			
 		}
 
@@ -163,23 +152,22 @@ class AtumHelpPointers {
 		
 		$pointers = $this->valid;
 
-		if ( empty( $pointers ) ) {
+		if( empty( $pointers ) ) {
 			return;
 		}
 		
 		wp_enqueue_style( 'wp-pointer' );
 		wp_enqueue_script( 'wp-pointer' );
 
-		// TODO: MOVE TO A FILE?
 		?>
 		<script type="text/javascript">
 			jQuery(function ($) {
 
-				var ATUMHelpPointers = <?php echo wp_json_encode( $pointers ) ?>;
+				var ATUMHelpPointers = <?php echo json_encode( $pointers ) ?>;
 
 				if (Object.keys(ATUMHelpPointers).length && typeof ATUMHelpPointers.pointers !== 'undefined' && ATUMHelpPointers.pointers.length) {
-
-					$.each(ATUMHelpPointers.pointers, function (i) {
+	
+					$.each(ATUMHelpPointers.pointers, function(i) {
 						doAtumHelpPointer(i);
 					});
 
@@ -216,60 +204,53 @@ class AtumHelpPointers {
 						    });
 
 						$.widget('wp.pointer', $.wp.pointer, {
-							_create: function () {
+							_create: function() {
 
 								var positioning,
 								    family;
 
 								this.content = $('<div class="wp-pointer-content"></div>');
-								this.arrow = $('<div class="wp-pointer-arrow"><div class="wp-pointer-arrow-inner"></div></div>');
+								this.arrow   = $('<div class="wp-pointer-arrow"><div class="wp-pointer-arrow-inner"></div></div>');
 
 								if (typeof this.options.arrowPosition !== 'undefined') {
 									this.arrow.css(this.options.arrowPosition);
 								}
 
-								family = this.element.parents().add(this.element);
+								family = this.element.parents().add( this.element );
 								positioning = 'absolute';
 
-								if (family.filter(function () {
-									return 'fixed' === $(this).css('position');
-								}).length) {
+								if ( family.filter( function(){ return 'fixed' === $(this).css('position'); }).length ) {
 									positioning = 'fixed';
 								}
 
 								this.pointer = $('<div />')
-									.append(this.content)
-									.append(this.arrow)
+									.append( this.content )
+									.append( this.arrow )
 									.attr('id', 'wp-pointer-' + i)
-									.addClass(this.options.pointerClass)
-									.css({
-										'position': positioning,
-										'width'   : this.options.pointerWidth + 'px',
-										'display' : 'none'
-									})
+									.addClass( this.options.pointerClass )
+									.css({'position': positioning, 'width': this.options.pointerWidth+'px', 'display': 'none'})
 									.data('target', this.options.target)
-									.appendTo(this.options.document.body);
+									.appendTo( this.options.document.body );
 
 							},
-							open   : function (event) {
+							open: function( event ) {
 								var self = this,
 								    o    = this.options;
 
-								if (this.active || o.disabled || this.element.is(':hidden')) {
+								if ( this.active || o.disabled || this.element.is(':hidden') )
 									return;
-								}
 
-								this.update().done(function () {
-									self._open(event);
+								this.update().done( function() {
+									self._open( event );
 
-									setTimeout(function () {
+									setTimeout(function() {
 										self.reposition();
 									}, 0)
 								});
 							},
 						});
 
-						$(atumPointer.target).pointer(options);
+						$(atumPointer.target).pointer( options );
 					}
 
 					// Open the first one

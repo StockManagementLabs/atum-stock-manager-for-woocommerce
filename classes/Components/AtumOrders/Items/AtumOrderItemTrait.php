@@ -1,18 +1,18 @@
 <?php
 /**
- * Shared trait for Atum Order item objects
- *
  * @package         Atum\Components\AtumOrders
  * @subpackage      Items
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.9
+ *
+ * Shared trait for Atum Order item objects
  */
 
 namespace Atum\Components\AtumOrders\Items;
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 
@@ -21,14 +21,12 @@ trait AtumOrderItemTrait {
 
 	/**
 	 * The AtumOrderItem model object handler
-	 *
 	 * @var AtumOrderItemModel
 	 */
 	protected $atum_order_item_model;
 
 	/**
 	 * The parent Atum Order ID
-	 *
 	 * @var int
 	 */
 	protected $atum_order_id;
@@ -38,7 +36,7 @@ trait AtumOrderItemTrait {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int|object|array $item ID to load from the DB, or the Atum Order item object.
+	 * @param int|object|array $item ID to load from the DB, or the Atum Order item object
 	 */
 	public function __construct( $item = 0 ) {
 
@@ -74,10 +72,10 @@ trait AtumOrderItemTrait {
 	 */
 	public function save() {
 
-		// Save the Log Item and its meta data.
+		// Save the Log Item and its meta data
 		$atum_order_item_id = $this->atum_order_item_model->save();
 
-		if ( $atum_order_item_id ) {
+		if ($atum_order_item_id) {
 			$this->set_id( $this->id );
 			$this->save_item_data();
 			$this->save_meta_data();
@@ -97,6 +95,7 @@ trait AtumOrderItemTrait {
 		}
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Read Meta Data from the database. Ignore any internal properties
 	 * Uses it's own caches because get_metadata does not provide meta_ids
@@ -122,12 +121,12 @@ trait AtumOrderItemTrait {
 
 		foreach ( $this->meta_data as $key => $meta ) {
 
-			// Bypass any internal meta key.
-			if ( $this->is_internal_meta( $meta->key ) ) {
+			// Bypass any internal meta key
+			if ( $this->is_internal_meta($meta->key) ) {
 				continue;
 			}
 
-			// Delete.
+			// Delete
 			if ( empty( $meta->value ) ) {
 
 				if ( ! empty( $meta->id ) ) {
@@ -136,13 +135,13 @@ trait AtumOrderItemTrait {
 				}
 
 			}
-			// Add.
+			// Add
 			elseif ( empty( $meta->id ) ) {
-				$this->atum_order_item_model->save_meta( array( $meta->key => $meta->value ) );
+				$this->atum_order_item_model->save_meta( array($meta->key => $meta->value) );
 			}
-			// Update.
+			// Update
 			else {
-				$this->atum_order_item_model->save_meta( array( $meta->key => $meta->value ) );
+				$this->atum_order_item_model->save_meta(  array($meta->key => $meta->value) );
 			}
 
 		}
@@ -154,6 +153,7 @@ trait AtumOrderItemTrait {
 
 	}
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Override the WC_Data method to delete the item through AtumOrderItemModel instead
 	 *
@@ -161,7 +161,7 @@ trait AtumOrderItemTrait {
 	 *
 	 * @param bool $force_delete
 	 */
-	public function delete( $force_delete = FALSE ) {
+	public function delete($force_delete = FALSE) {
 		$this->atum_order_item_model->delete();
 	}
 
@@ -183,7 +183,7 @@ trait AtumOrderItemTrait {
 	 *
 	 * @param int $value
 	 */
-	public function set_atum_order_id( $value ) {
+	public function set_atum_order_id($value) {
 		$this->atum_order_id = absint( $value );
 	}
 
@@ -196,9 +196,8 @@ trait AtumOrderItemTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_internal_meta( $meta_key ) {
-
-		return in_array( $meta_key, $this->internal_meta_keys );
+	public function is_internal_meta ($meta_key) {
+		return in_array($meta_key, $this->internal_meta_keys);
 	}
 
 }

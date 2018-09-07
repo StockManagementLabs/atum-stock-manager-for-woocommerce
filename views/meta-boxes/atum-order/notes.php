@@ -5,7 +5,7 @@
  * @since 1.2.9
  */
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumOrders\AtumComments;
 
@@ -19,7 +19,7 @@ $args = array(
 	'type'    => AtumComments::NOTES_KEY,
 );
 
-// Bypass the AtumComments filter to get rid of ATUM Order notes comments from queries.
+// Bypass the AtumComments filter to get rid of ATUM Order notes comments from queries
 $atum_comments = AtumComments::get_instance();
 
 remove_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes' ) );
@@ -31,9 +31,9 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 	<ul class="atum_order_notes">
 
-		<?php if ( $notes ) :
+		<?php if ( $notes ):
 
-			foreach ( $notes as $note ) :
+			foreach ( $notes as $note ):
 
 				$note_classes   = array( 'note' );
 				$note_classes[] = ( 'ATUM' === $note->comment_author ) ? 'system-note' : '';
@@ -46,15 +46,9 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 					</div>
 
 					<p class="meta">
-						<abbr class="exact-date" title="<?php echo $note->comment_date; ?>">
-							<?php
-							/* translators: first one is the date added and second is the time */
-							printf( __( 'added on %1$s at %2$s', ATUM_TEXT_DOMAIN ), date_i18n( wc_date_format(), strtotime( $note->comment_date ) ), date_i18n( wc_time_format(), strtotime( $note->comment_date ) ) );
-							?>
-						</abbr>
+						<abbr class="exact-date" title="<?php echo $note->comment_date; ?>"><?php printf( __( 'added on %1$s at %2$s', ATUM_TEXT_DOMAIN ), date_i18n( wc_date_format(), strtotime( $note->comment_date ) ), date_i18n( wc_time_format(), strtotime( $note->comment_date ) ) ); ?></abbr>
 
 						<?php if ( 'ATUM' !== $note->comment_author ) :
-							/* translators: the note author */
 							printf( ' ' . __( 'by %s', ATUM_TEXT_DOMAIN ), $note->comment_author );
 						endif; ?>
 
@@ -64,7 +58,7 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 			<?php endforeach;
 
-		else : ?>
+		else: ?>
 
 			<li><?php _e( 'There are no notes yet.', ATUM_TEXT_DOMAIN ) ?></li>
 

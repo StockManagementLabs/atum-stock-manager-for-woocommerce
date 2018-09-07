@@ -9,7 +9,7 @@
  * @var int                                                $item_id
  */
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 do_action( 'atum/atum_order/before_item_fee_html', $item, $atum_order );
 $currency = $atum_order->get_currency();
@@ -47,13 +47,11 @@ $currency = $atum_order->get_currency();
 	</td>
 
 	<?php
-	if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ) :
+	if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ):
 
-		foreach ( $atum_order->get_taxes() as $tax_item ) :
+		foreach ( $atum_order->get_taxes() as $tax_item ):
 
 			/**
-			 * Variable definition
-			 *
 			 * @var WC_Order_Item_Tax $tax_item
 			 */
 			$tax_item_id    = $tax_item->get_rate_id();

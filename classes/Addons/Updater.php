@@ -1,74 +1,68 @@
 <?php
 /**
- * ATUM add-ons' updater and installer
- *
  * @package         Atum
  * @subpackage      Addons
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.0
+ *
+ * @noinspection    PhpUndefinedFieldInspection
+ *
+ * ATUM add-ons' updater and installer
  */
 
 namespace Atum\Addons;
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 
 class Updater {
 
 	/**
 	 * The ATUM's API URL
-	 *
 	 * @var string
 	 */
 	private $api_url = '';
 
 	/**
 	 * The data passed in the API request
-	 *
 	 * @var array
 	 */
 	private $api_data = array();
 
 	/**
 	 * The addon's directory name
-	 *
 	 * @var string
 	 */
 	private $name = '';
 
 	/**
 	 * The addon's slug
-	 *
 	 * @var string
 	 */
 	private $slug = '';
 
 	/**
 	 * The current version of the installed addon
-	 *
 	 * @var string
 	 */
 	private $version = '';
 
 	/**
 	 * Whether to force an API request instead of getting the cached info
-	 *
 	 * @var bool
 	 */
 	private $wp_override = FALSE;
 
 	/**
 	 * The key used for caching the data retrieved by the API
-	 *
 	 * @var string
 	 */
 	private $cache_key = '';
 
 	/**
 	 * If we want to download a beta version
-	 *
 	 * @var string
 	 */
 	private $beta = '';
@@ -79,8 +73,8 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_file    Path to the plugin file.
-	 * @param array  $api_data      Optional. Data to send with API calls.
+	 * @param string $addon_file    Path to the plugin file
+	 * @param array  $api_data      Optional. Data to send with API calls
 	 */
 	public function __construct( $addon_file, $api_data = array() ) {
 
@@ -93,11 +87,11 @@ class Updater {
 		$this->version     = $api_data['version'];
 		$this->wp_override = isset( $api_data['wp_override'] ) ? (bool) $api_data['wp_override'] : FALSE;
 		$this->beta        = ! empty( $this->api_data['beta'] ) ? TRUE : FALSE;
-		$this->cache_key   = md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$this->cache_key   = md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
-		// Set up hooks.
+		// Set up hooks
 		$this->init();
 
 	}
@@ -127,19 +121,19 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $_transient_data Update array build by WordPress.
+	 * @param array $_transient_data Update array build by WordPress
 	 *
-	 * @return array Modified update array with custom plugin data.
+	 * @return array Modified update array with custom plugin data
 	 */
 	public function check_update( $_transient_data ) {
 
 		global $pagenow;
 
 		if ( ! is_object( $_transient_data ) ) {
-			$_transient_data = new \stdClass();
+			$_transient_data = new \stdClass;
 		}
 
-		if ( 'plugins.php' === $pagenow && is_multisite() ) {
+		if ( 'plugins.php' == $pagenow && is_multisite() ) {
 			return $_transient_data;
 		}
 
@@ -150,10 +144,7 @@ class Updater {
 		$version_info = $this->get_cached_version_info();
 
 		if ( FALSE === $version_info ) {
-			$version_info = $this->api_request( array(
-				'slug' => $this->slug,
-				'beta' => $this->beta,
-			) );
+			$version_info = $this->api_request( array( 'slug' => $this->slug, 'beta' => $this->beta ) );
 
 			$this->set_version_info_cache( $version_info );
 
@@ -179,8 +170,8 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $file
-	 * @param array  $plugin
+	 * @param string  $file
+	 * @param array   $plugin
 	 */
 	public function show_update_notification( $file, $plugin ) {
 
@@ -188,19 +179,19 @@ class Updater {
 			return;
 		}
 
-		if ( ! current_user_can( 'update_plugins' ) ) {
+		if( ! current_user_can( 'update_plugins' ) ) {
 			return;
 		}
 
-		if ( ! is_multisite() ) {
+		if( ! is_multisite() ) {
 			return;
 		}
 
-		if ( $this->name !== $file ) {
+		if ( $this->name != $file ) {
 			return;
 		}
 
-		// Remove our filter on the site transient.
+		// Remove our filter on the site transient
 		remove_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ), 10 );
 
 		$update_cache = get_site_transient( 'update_plugins' );
@@ -212,10 +203,7 @@ class Updater {
 			$version_info = $this->get_cached_version_info();
 
 			if ( FALSE === $version_info ) {
-				$version_info = $this->api_request( array(
-					'slug' => $this->slug,
-					'beta' => $this->beta,
-				) );
+				$version_info = $this->api_request( array( 'slug' => $this->slug, 'beta' => $this->beta ) );
 
 				$this->set_version_info_cache( $version_info );
 			}
@@ -228,7 +216,7 @@ class Updater {
 				$update_cache->response[ $this->name ] = $version_info;
 			}
 
-			$update_cache->last_checked           = current_time( 'timestamp' );
+			$update_cache->last_checked = current_time( 'timestamp' );
 			$update_cache->checked[ $this->name ] = $this->version;
 
 			set_site_transient( 'update_plugins', $update_cache );
@@ -238,14 +226,14 @@ class Updater {
 			$version_info = $update_cache->response[ $this->name ];
 		}
 
-		// Restore our filter.
+		// Restore our filter
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
 
 		if ( ! empty( $update_cache->response[ $this->name ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
 			// Build a plugin list row, with update notification
 			// $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-			/* <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">*/
+			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
 
 			echo '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
@@ -256,7 +244,6 @@ class Updater {
 			if ( empty( $version_info->download_link ) ) {
 
 				printf(
-					/* translators: first is the add-on name, second is the change log link, third is the version and forth is the closing tag for the link  */
 					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', ATUM_TEXT_DOMAIN ),
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
@@ -268,19 +255,18 @@ class Updater {
 			else {
 
 				printf(
-					/* translators: first is the add-on name, second is the change log link, third is the version, forth is the closing tag for the link, fifth is the plugin update link and sixth is the closing tag for the second link  */
 					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', ATUM_TEXT_DOMAIN ),
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
 					'</a>',
-					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) . '">',
+					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) .'">',
 					'</a>'
 				);
 
 			}
 
-			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info ); // WPCS: prefix ok.
+			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info );
 
 			echo '</div></td></tr>';
 
@@ -293,19 +279,19 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param mixed  $_data
-	 * @param string $_action
-	 * @param object $_args
+	 * @param mixed   $_data
+	 * @param string  $_action
+	 * @param object  $_args
 	 *
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
-		if ( 'plugin_information' !== $_action ) {
+		if ( $_action != 'plugin_information' ) {
 			return $_data;
 		}
 
-		if ( ! isset( $_args->slug ) || ( $_args->slug !== $this->slug ) ) {
+		if ( ! isset( $_args->slug ) || ( $_args->slug != $this->slug ) ) {
 			return $_data;
 		}
 
@@ -314,21 +300,21 @@ class Updater {
 			'is_ssl' => is_ssl(),
 			'fields' => array(
 				'banners' => array(),
-				'reviews' => FALSE,
-			),
+				'reviews' => FALSE
+			)
 		);
 
-		$cache_key = ATUM_PREFIX . 'api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$cache_key = ATUM_PREFIX . 'api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
 
-		// Get the transient where we store the api request for this plugin for 24 hours.
+		// Get the transient where we store the api request for this plugin for 24 hours
 		$api_request_transient = $this->get_cached_version_info( $cache_key );
 
 		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
 		if ( empty( $api_request_transient ) ) {
 
-			$api_response = $this->api_request( $to_send );
+			$api_response = $this->api_request($to_send);
 
-			// Expires in 3 hours.
+			// Expires in 3 hours
 			$this->set_version_info_cache( $api_response, $cache_key );
 
 			if ( FALSE !== $api_response ) {
@@ -379,7 +365,7 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $data   Parameters for the API action.
+	 * @param array   $data   Parameters for the API action.
 	 *
 	 * @return bool|object
 	 */
@@ -387,12 +373,12 @@ class Updater {
 
 		$data = array_merge( $this->api_data, $data );
 
-		if ( $data['slug'] !== $this->slug ) {
+		if ( $data['slug'] != $this->slug ) {
 			return FALSE;
 		}
 
-		// Don't allow a plugin to ping itself.
-		if ( trailingslashit( home_url() ) === $this->api_url ) {
+		// Don't allow a plugin to ping itself
+		if( $this->api_url == trailingslashit( home_url() ) ) {
 			return FALSE;
 		}
 
@@ -418,8 +404,8 @@ class Updater {
 			$request->banners = maybe_unserialize( $request->banners );
 		}
 
-		if ( ! empty( $request->sections ) ) {
-			foreach ( $request->sections as $key => $section ) {
+		if( ! empty( $request->sections ) ) {
+			foreach( $request->sections as $key => $section ) {
 				$request->$key = (array) $section;
 			}
 		}
@@ -437,24 +423,24 @@ class Updater {
 
 		global $edd_plugin_data;
 
-		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) { // WPCS: CSRF ok.
+		if( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' != $_REQUEST['edd_sl_action'] ) {
 			return;
 		}
 
-		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) { // WPCS: CSRF ok.
+		if( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) {
 			return;
 		}
 
-		if ( ! current_user_can( 'update_plugins' ) ) {
+		if( ! current_user_can( 'update_plugins' ) ) {
 			wp_die( __( 'You do not have permission to install plugin updates', ATUM_TEXT_DOMAIN ), __( 'Error', ATUM_TEXT_DOMAIN ), array( 'response' => 403 ) );
 		}
 
-		$data         = $edd_plugin_data[ $_REQUEST['slug'] ]; // WPCS: CSRF ok.
+		$data         = $edd_plugin_data[ $_REQUEST['slug'] ];
 		$beta         = ! empty( $data['beta'] ) ? TRUE : FALSE;
-		$cache_key    = md5( ATUM_PREFIX . 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' ); // WPCS: CSRF ok.
+		$cache_key    = md5( ATUM_PREFIX . 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
 		$version_info = $this->get_cached_version_info( $cache_key );
 
-		if ( FALSE === $version_info ) {
+		if( FALSE === $version_info ) {
 
 			$version = isset( $data['version'] ) ? $data['version'] : FALSE;
 			$request = Addons::get_version( $data['item_name'], $data['license'], $version, ! empty( $data['beta'] ) );
@@ -470,8 +456,8 @@ class Updater {
 				$version_info = false;
 			}
 
-			if ( ! empty( $version_info ) ) {
-				foreach ( $version_info->sections as $key => $section ) {
+			if( ! empty( $version_info ) ) {
+				foreach( $version_info->sections as $key => $section ) {
 					$version_info->$key = (array) $section;
 				}
 			}
@@ -480,7 +466,7 @@ class Updater {
 
 		}
 
-		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
+		if( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
 			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>';
 		}
 
@@ -499,14 +485,14 @@ class Updater {
 	 */
 	public function get_cached_version_info( $cache_key = '' ) {
 
-		if ( empty( $cache_key ) ) {
+		if( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;
 		}
 
 		$cache = get_option( $cache_key );
 
-		if ( empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
-			return FALSE; // Cache has expired.
+		if( empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
+			return FALSE; // Cache has expired
 		}
 
 		return json_decode( $cache['value'] );
@@ -523,13 +509,13 @@ class Updater {
 	 */
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
 
-		if ( empty( $cache_key ) ) {
+		if( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;
 		}
 
 		$data = array(
 			'timeout' => strtotime( '+3 hours', current_time( 'timestamp' ) ),
-			'value'   => wp_json_encode( $value ),
+			'value'   => json_encode( $value )
 		);
 
 		update_option( $cache_key, $data );

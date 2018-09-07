@@ -1,18 +1,18 @@
 <?php
 /**
- * Lost Sales Widget for ATUM Dashboard
- *
  * @package         Atum
  * @subpackage      Dashboard\Widgets
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.3.9
+ *
+ * Lost Sales Widget for ATUM Dashboard
  */
 
 namespace Atum\Dashboard\Widgets;
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
@@ -23,7 +23,6 @@ class LostSales extends AtumWidget {
 
 	/**
 	 * The id of this widget
-	 *
 	 * @var string
 	 */
 	protected $id = ATUM_PREFIX . 'lost_sales_widget';
@@ -41,9 +40,7 @@ class LostSales extends AtumWidget {
 	}
 
 	/**
-	 * Widget initialization
-	 *
-	 * @since 1.4.0
+	 * @inheritDoc
 	 */
 	public function init() {
 
@@ -51,51 +48,44 @@ class LostSales extends AtumWidget {
 	}
 
 	/**
-	 * Load the widget view
-	 *
-	 * @since 1.4.0
+	 * @inheritDoc
 	 */
 	public function render() {
 
-		// Get all the products IDs (including variations).
+		// Get all the products IDs (including variations)
 		$products = Helpers::get_all_products( array(
-			'post_type' => [ 'product', 'product_variation' ],
+			'post_type' => ['product', 'product_variation']
 		) );
 
-		if ( empty( $products ) ) {
+		if ( empty($products) ) {
 			return;
 		}
 
 		$stats_this_month = WidgetHelpers::get_sales_stats( array(
 			'types'      => array( 'lost_sales' ),
 			'products'   => $products,
-			'date_start' => 'first day of this month 00:00:00',
+			'date_start' => 'first day of this month 00:00:00'
 		) );
 
 		$stats_today = WidgetHelpers::get_sales_stats( array(
 			'types'      => array( 'lost_sales' ),
 			'products'   => $products,
 			'date_start' => 'today 00:00:00',
-			'days'       => 1,
+			'days'       => 1
 		) );
 
 		$config = $this->get_config();
 
-		Helpers::load_view( 'widgets/lost-sales', compact( 'stats_this_month', 'stats_today', 'config' ) );
+		Helpers::load_view( 'widgets/lost-sales', compact('stats_this_month', 'stats_today', 'config') );
 
 	}
 
 	/**
-	 * Load widget config view
-	 * This is what will display when an admin clicks "Configure" at widget header
-	 *
-	 * @since 1.4.0
-	 *
-	 * @return string
+	 * @inheritDoc
 	 */
 	protected function get_config() {
-		// TODO: IMPLEMENT WIDGET SETTINGS.
-		return ''; // Helpers::load_view_to_string( 'widgets/lost-sales-config' );.
+		// TODO: IMPLEMENT WIDGET SETTINGS
+		return '';//Helpers::load_view_to_string( 'widgets/lost-sales-config' );
 	}
 
 }

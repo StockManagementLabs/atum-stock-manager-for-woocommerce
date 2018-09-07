@@ -5395,7 +5395,6 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .videos-widget .video-filter .nice-select {
   display: inline-block;
   margin-right: 10px;
-  float: none;
 }
 
 @media all and (max-width: 768px) {

@@ -1,75 +1,48 @@
 <?php
 /**
- * List Table for the products not controlled by ATUM
- *
  * @package         Atum\Components
  * @subpackage      AtumListTables
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.4.1
+ *
+ * List Table for the products not controlled by ATUM
  */
 
 namespace Atum\Components\AtumListTables;
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 class AtumUncontrolledListTable extends AtumListTable {
 
-	/**
-	 * Whether to show the totals row
-	 *
-	 * @var bool
-	 */
 	protected $show_totals = FALSE;
 
 	/**
-	 * AtumUncontrolledListTable Constructor
-	 *
-	 * The child class should call this constructor from its own constructor to override the default $args
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param array|string $args          {
-	 *      Array or string of arguments.
-	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
-	 * }
+	 * @inheritdoc
 	 */
 	public function __construct( $args = array() ) {
 		
 		parent::__construct( $args );
 
-		// Add the "Apply Bulk Action" button to the title section.
+		// Add the "Apply Bulk Action" button to the title section
 		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
 		
 	}
 
 	/**
-	 * Get an associative array ( id => link ) with the list of available views on this table.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @return array
+	 * @inheritdoc
 	 */
 	protected function get_views() {
 
 		$views = parent::get_views();
-		unset( $views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged'], $views['back_order'] );
+		unset($views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged'], $views['back_order']);
 
 		return $views;
 	}
 
 	/**
-	 * Add the filters to the table nav
-	 *
-	 * @since 1.3.0
+	 * @inheritdoc
 	 */
 	protected function table_nav_filters() {
 		parent::table_nav_filters();
@@ -81,7 +54,9 @@ class AtumUncontrolledListTable extends AtumListTable {
 	 * @since  1.4.1
 	 */
 	public function prepare_items() {
+		
 		parent::prepare_items();
+		
 	}
 	
 }

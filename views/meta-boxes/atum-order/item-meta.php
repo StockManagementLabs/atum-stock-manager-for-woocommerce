@@ -3,12 +3,14 @@
  * View for the ATUM Order items' meta
  *
  * @since 1.2.4
- *
+ */
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * @var \WC_Order_Item $item
  * @var int            $item_id
  */
-
-defined( 'ABSPATH' ) || die;
 
 $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 	'_qty',
@@ -24,7 +26,7 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 	'_cost',
 	'_total_tax',
 	'_taxes',
-	'_stock_changed',
+	'_stock_changed'
 ) );
 ?>
 <div class="view">
@@ -37,8 +39,8 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 					continue;
 				endif;
 
-				if ( '_order_id' === $meta->display_key ) :
-					$meta->display_key = '<strong>' . __( 'Order ID', ATUM_TEXT_DOMAIN ) . '</strong>';
+				if ($meta->display_key == '_order_id') :
+					$meta->display_key = '<strong>' . __('Order ID', ATUM_TEXT_DOMAIN) . '</strong>';
 				endif;
 				?>
 				<tr>

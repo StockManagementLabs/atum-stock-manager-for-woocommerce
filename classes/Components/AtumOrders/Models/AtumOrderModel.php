@@ -1,18 +1,20 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+
 /**
- * The abstract class for the ATUM Order model
- *
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.4
+ *
+ * The abstract class for the ATUM Order model
  */
 
 namespace Atum\Components\AtumOrders\Models;
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
@@ -28,35 +30,30 @@ abstract class AtumOrderModel {
 
 	/**
 	 * The object ID
-	 *
 	 * @var int
 	 */
 	protected $id;
 
 	/**
 	 * The WP post linked to this object
-	 *
 	 * @var \WP_Post
 	 */
 	protected $post;
 
 	/**
 	 * The array of items belonging to this Order
-	 *
 	 * @var array
 	 */
 	protected $items = [];
 
 	/**
 	 * Order items that need deleting are stored here
-	 *
 	 * @var array
 	 */
 	protected $items_to_delete = array();
 
 	/**
 	 * The available ATUM Order item types
-	 *
 	 * @var array
 	 */
 	protected $item_types = [ 'line_item', 'tax', 'shipping', 'fee' ];
@@ -65,17 +62,17 @@ abstract class AtumOrderModel {
 	/**
 	 * AtumOrderModel constructor
 	 *
-	 * @param int  $id         Optional. The ATUM Order ID to initialize.
-	 * @param bool $read_items Optional. Whether to read the inner items.
+	 * @param int $id           Optional. The ATUM Order ID to initialize
+	 * @param bool $read_items  Optional. Whether to read the inner items
 	 */
 	protected function __construct( $id = 0, $read_items = TRUE ) {
 
-		if ( $id ) {
+		if ($id) {
 
-			$this->id = absint( $id );
+			$this->id = absint($id);
 			$this->load_post();
 
-			if ( $read_items ) {
+			if ($read_items) {
 				$this->read_items();
 			}
 
@@ -108,20 +105,20 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  string $type Optional. Filter by item type.
+	 * @param  string $type Optional. Filter by item type
 	 *
 	 * @return void
 	 */
-	public function read_items( $type = '' ) {
+	public function read_items( $type = ''  ) {
 
-		// Get from cache if available.
+		// Get from cache if available
 		$items = wp_cache_get( "atum-order-items-{$this->id}", $this->post->post_type );
 
 		if ( FALSE === $items ) {
 
-			$items = Helpers::get_order_items( $this->id );
+			$items = Helpers::get_order_items($this->id);
 
-			if ( ! $items ) {
+			if (! $items) {
 				return;
 			}
 
@@ -133,13 +130,13 @@ abstract class AtumOrderModel {
 
 		}
 
-		if ( $type ) {
+		if ($type) {
 			$items = wp_list_filter( $items, array( 'order_item_type' => $type ) );
 		}
 
-		$atum_order_items = array_map( array( $this, 'get_atum_order_item' ), array_combine( wp_list_pluck( $items, 'order_item_id' ), $items ) );
+		$atum_order_items =  array_map( array( $this, 'get_atum_order_item' ), array_combine( wp_list_pluck( $items, 'order_item_id' ), $items ) );
 
-		if ( ! empty( $atum_order_items ) ) {
+		if ( ! empty($atum_order_items) ) {
 
 			foreach ( $atum_order_items as $atum_order_item ) {
 				$this->add_item( $atum_order_item );
@@ -161,12 +158,12 @@ abstract class AtumOrderModel {
 		global $wpdb;
 
 		if ( ! empty( $type ) ) {
-			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d AND items.order_item_type = %s', $this->id, $type ) ); // WPCS: unprepared SQL ok.
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d AND order_item_type = %s', $this->id, $type ) ); // WPCS: unprepared SQL ok.
+			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d AND items.order_item_type = %s", $this->id, $type ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_id = %d AND order_item_type = %s", $this->id, $type ) );
 		}
 		else {
-			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d', $this->id ) ); // WPCS: unprepared SQL ok.
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d', $this->id ) ); // WPCS: unprepared SQL ok.
+			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d", $this->id ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_id = %d", $this->id ) );
 		}
 
 		$this->clear_caches();
@@ -188,7 +185,7 @@ abstract class AtumOrderModel {
 			'line_item' => 'line_items',
 			'tax'       => 'tax_lines',
 			'shipping'  => 'shipping_lines',
-			'fee'       => 'fee_lines',
+			'fee'       => 'fee_lines'
 		) );
 
 		return isset( $type_to_group[ $type ] ) ? $type_to_group[ $type ] : '';
@@ -210,7 +207,7 @@ abstract class AtumOrderModel {
 			'line_items'     => 'line_item',
 			'tax_lines'      => 'tax',
 			'shipping_lines' => 'shipping',
-			'fee_lines'      => 'fee',
+			'fee_lines'      => 'fee'
 		) );
 
 		return isset( $group_to_type[ $group ] ) ? $group_to_type[ $group ] : '';
@@ -222,30 +219,30 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item  Order item object (product, shipping, fee, coupon, tax).
+	 * @param AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item  Order item object (product, shipping, fee, coupon, tax)
 	 *
 	 * @return void
 	 */
 	public function add_item( $item ) {
 
-		if ( ! $item || ! $items_key = $this->type_to_group( $item->get_type() ) ) {
+		if ( !$item || ! $items_key = $this->type_to_group( $item->get_type() ) ) {
 			return;
 		}
 
-		// Make sure existing items are loaded so we can append this new one.
+		// Make sure existing items are loaded so we can append this new one
 		if ( ! isset( $this->items[ $items_key ] ) ) {
 			$this->items[ $items_key ] = $this->get_items( $item->get_type() );
 		}
 
-		// Set parent ATUM Order ID.
+		// Set parent ATUM Order ID
 		$item->set_atum_order_id( $this->id );
 
-		// Append new item with generated temporary ID.
+		// Append new item with generated temporary ID
 		if ( $item_id = $item->get_id() ) {
 			$this->items[ $items_key ][ $item_id ] = $item;
 		}
 		else {
-			$this->items[ $items_key ][ 'new:' . $items_key . count( $this->items[ $items_key ] ) ] = $item;
+			$this->items[ $items_key ][ 'new:' . $items_key . sizeof( $this->items[ $items_key ] ) ] = $item;
 		}
 
 	}
@@ -267,7 +264,7 @@ abstract class AtumOrderModel {
 			return;
 		}
 
-		// Unset and remove later.
+		// Unset and remove later
 		$this->items_to_delete[] = $item;
 		unset( $this->items[ $items_key ][ $item->get_id() ] );
 
@@ -278,15 +275,15 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param  \WC_Product $product
-	 * @param  int         $qty
-	 * @param  array       $args
+	 * @param  \WC_Product  $product
+	 * @param  int          $qty
+	 * @param  array        $args
 	 *
 	 * @return \WC_Order_Item_Product The product item added to ATUM Order
 	 */
 	public function add_product( $product, $qty = 1, $args = array() ) {
 
-		if ( is_a( $product, '\WC_Product' ) ) {
+		if ( is_a( $product, '\WC_Product' )  ) {
 
 			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product );
 
@@ -298,24 +295,23 @@ abstract class AtumOrderModel {
 				'variation'    => $product->is_type( 'variation' ) ? $product->get_attributes() : array(),
 				'subtotal'     => $product_price,
 				'total'        => $product_price,
-				'quantity'     => $qty,
+				'quantity'     => $qty
 			);
 
 		}
 		else {
 
 			$default_args = array(
-				'quantity' => $qty,
+				'quantity' => $qty
 			);
 
 		}
 
-		$args       = wp_parse_args( $args, $default_args );
-		$item_class = $this->get_items_class( 'line_items' );
+		$args = wp_parse_args( $args, $default_args );
+
+		$item_class = $this->get_items_class('line_items');
 
 		/**
-		 * Variable definition
-		 *
 		 * @var AtumOrderItemProduct $item
 		 */
 		$item = new $item_class();
@@ -334,23 +330,21 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param \WC_Order_Item_Fee $fee   Optional. Fee item to import.
+	 * @param \WC_Order_Item_Fee $fee   Optional. Fee item to import
 	 *
-	 * @return \WC_Order_Item_Fee  The fee item added to the ATUM Order.
+	 * @return \WC_Order_Item_Fee  The fee item added to the ATUM Order
 	 */
-	public function add_fee( \WC_Order_Item_Fee $fee = NULL ) {
+	public function add_fee ( \WC_Order_Item_Fee $fee = NULL ) {
 
-		$item_class = $this->get_items_class( 'fee_lines' );
+		$item_class = $this->get_items_class('fee_lines');
 
 		/**
-		 * Variable definition
-		 *
 		 * @var AtumOrderItemFee $item
 		 */
 		$item = new $item_class();
 		$item->set_atum_order_id( $this->id );
 
-		if ( $fee ) {
+		if ($fee) {
 			$item->set_tax_status( $fee->get_tax_status() );
 			$item->set_taxes( $fee->get_taxes() );
 			$item->set_tax_class( $fee->get_tax_class() );
@@ -364,37 +358,31 @@ abstract class AtumOrderModel {
 
 	}
 
-	/* @noinspection PhpDocMissingThrowsInspection */
+	/** @noinspection PhpDocMissingThrowsInspection */
 	/**
 	 * Add a shipping cost item to the ATUM Order
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param \WC_Order_Item_Shipping $shipping  Optional. Shipping cost item to import.
+	 * @param \WC_Order_Item_Shipping $shipping  Optional. Shipping cost item to import
 	 *
-	 * @return \WC_Order_Item_Shipping  The shipping cost item added to the ATUM Order.
+	 * @return \WC_Order_Item_Shipping  The shipping cost item added to the ATUM Order
 	 */
-	public function add_shipping_cost( \WC_Order_Item_Shipping $shipping = NULL ) {
+	public function add_shipping_cost ( \WC_Order_Item_Shipping $shipping = NULL ) {
 
-		$item_class = $this->get_items_class( 'shipping_lines' );
+		$item_class = $this->get_items_class('shipping_lines');
 
 		/**
-		 * Variable definition
-		 *
 		 * @var AtumOrderItemShipping $item
 		 */
 		$item = new $item_class();
 		$item->set_shipping_rate( new \WC_Shipping_Rate() );
 		$item->set_atum_order_id( $this->id );
 
-		if ( $shipping ) {
-			/* @noinspection PhpUnhandledExceptionInspection */
+		if ($shipping) {
 			$item->set_method_id( $shipping->get_method_id() );
-			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_total( $shipping->get_total() );
-			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_taxes( $shipping->get_taxes() );
-			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_method_title( $shipping->get_method_title() );
 		}
 
@@ -405,13 +393,14 @@ abstract class AtumOrderModel {
 
 	}
 
+	/** @noinspection PhpDocSignatureInspection */
 	/**
 	 * Add a tax item to the ATUM Order
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array              $values {
-	 *      The array of tax values to add to the created tax item.
+	 * @param array $values {
+	 *      The array of tax values to add to the created tax item
 	 *
 	 *      @type int    $rate_id            The tax rate ID
 	 *      @type string $name               The tax item name
@@ -419,43 +408,41 @@ abstract class AtumOrderModel {
 	 *      @type float  $shipping_tax_total The shipping tax total
 	 *
 	 * }
-	 * @param \WC_Order_Item_Tax $tax Optional. Tax item to import.
+	 * @param \WC_Order_Item_Tax $tax Optional. Tax item to import
 	 *
 	 * @return \WC_Order_Item_Tax|bool  The tax item added to the ATUM Order or false if the required rate_id value is not passed
 	 */
-	public function add_tax( array $values, \WC_Order_Item_Tax $tax = NULL ) {
+	public function add_tax ( array $values, \WC_Order_Item_Tax $tax = NULL ) {
 
 		if ( empty( $values['rate_id'] ) ) {
 			return FALSE;
 		}
 
-		$item_class = $this->get_items_class( 'tax_lines' );
+		$item_class = $this->get_items_class('tax_lines');
 
 		/**
-		 * Variable definition
-		 *
 		 * @var AtumOrderItemTax $item
 		 */
 		$item = new $item_class();
 		$item->set_rate( $values['rate_id'] );
 		$item->set_atum_order_id( $this->id );
 
-		if ( $tax ) {
+		if ($tax) {
 			$item->set_name( $tax->get_name() );
 			$item->set_tax_total( $tax->get_tax_total() );
 			$item->set_shipping_tax_total( $tax->get_shipping_tax_total() );
 		}
 		else {
 
-			if ( isset( $values['name'] ) ) {
+			if ( isset($values['name']) ) {
 				$item->set_name( $values['name'] );
 			}
 
-			if ( isset( $values['tax_total'] ) ) {
+			if ( isset($values['tax_total']) ) {
 				$item->set_tax_total( $values['tax_total'] );
 			}
 
-			if ( isset( $values['shipping_tax_total'] ) ) {
+			if ( isset($values['shipping_tax_total']) ) {
 				$item->set_shipping_tax_total( $values['shipping_tax_total'] );
 			}
 
@@ -473,14 +460,14 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array $items Order items to save.
+	 * @param array $items Order items to save
 	 */
 	public function save_order_items( $items ) {
 
-		// Allow other plugins to check changes in ATUM Order items before they are saved.
+		// Allow other plugins to check changes in ATUM Order items before they are saved
 		do_action( 'atum/orders/before_save_items', $this, $items );
 
-		// Line items and fees.
+		// Line items and fees
 		if ( isset( $items['atum_order_item_id'] ) ) {
 
 			$data_keys = array(
@@ -490,14 +477,12 @@ abstract class AtumOrderModel {
 				'atum_order_item_qty'       => NULL,
 				'atum_order_item_tax_class' => NULL,
 				'line_total'                => NULL,
-				'line_subtotal'             => NULL,
+				'line_subtotal'             => NULL
 			);
 
 			foreach ( $items['atum_order_item_id'] as $item_id ) {
 
 				/**
-				 * Variable definition
-				 *
 				 * @var AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item
 				 */
 				if ( ! $item = $this->get_atum_order_item( absint( $item_id ) ) ) {
@@ -516,15 +501,15 @@ abstract class AtumOrderModel {
 				}
 
 				$item->set_props( array(
-					'name'      => $item_data['atum_order_item_name'],
-					'quantity'  => $item_data['atum_order_item_qty'],
-					'tax_class' => $item_data['atum_order_item_tax_class'],
-					'total'     => $item_data['line_total'],
-					'subtotal'  => $item_data['line_subtotal'],
-					'taxes'     => array(
+					'name'         => $item_data['atum_order_item_name'],
+					'quantity'     => $item_data['atum_order_item_qty'],
+					'tax_class'    => $item_data['atum_order_item_tax_class'],
+					'total'        => $item_data['line_total'],
+					'subtotal'     => $item_data['line_subtotal'],
+					'taxes'        => array(
 						'total'    => $item_data['line_tax'],
-						'subtotal' => $item_data['line_subtotal_tax'],
-					),
+						'subtotal' => $item_data['line_subtotal_tax']
+					)
 				) );
 
 				if ( isset( $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] ) ) {
@@ -549,21 +534,21 @@ abstract class AtumOrderModel {
 
 				}
 
-				$this->add_item( $item );
+				$this->add_item($item);
 				$item->save();
 
 			}
 
 		}
 
-		// Shipping Rows.
+		// Shipping Rows
 		if ( isset( $items['shipping_method_id'] ) ) {
 
 			$data_keys = array(
 				'shipping_method'       => NULL,
 				'shipping_method_title' => NULL,
 				'shipping_cost'         => 0,
-				'shipping_taxes'        => array(),
+				'shipping_taxes'        => array()
 			);
 
 			foreach ( $items['shipping_method_id'] as $item_id ) {
@@ -583,8 +568,8 @@ abstract class AtumOrderModel {
 					'method_title' => $item_data['shipping_method_title'],
 					'total'        => $item_data['shipping_cost'],
 					'taxes'        => array(
-						'total' => $item_data['shipping_taxes'],
-					),
+						'total'    => $item_data['shipping_taxes']
+					)
 				) );
 
 				if ( isset( $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] ) ) {
@@ -609,20 +594,20 @@ abstract class AtumOrderModel {
 
 				}
 
-				$this->add_item( $item );
+				$this->add_item($item);
 				$item->save();
 
 			}
 
 		}
 
-		// Updates tax totals.
+		// Updates tax totals
 		$this->update_taxes();
 
-		// Calc totals - this also triggers save.
+		// Calc totals - this also triggers save
 		$this->calculate_totals( FALSE );
 
-		// Inform other plugins that the items have been saved.
+		// Inform other plugins that the items have been saved
 		do_action( 'atum/orders/after_save_items', $this, $items );
 
 	}
@@ -639,7 +624,7 @@ abstract class AtumOrderModel {
 		$existing_taxes = $this->get_taxes();
 		$saved_rate_ids = array();
 
-		foreach ( $this->get_items( [ 'line_item', 'fee' ] ) as $item_id => $item ) {
+		foreach ( $this->get_items( ['line_item', 'fee'] ) as $item_id => $item ) {
 
 			$taxes = $item->get_taxes();
 
@@ -660,7 +645,7 @@ abstract class AtumOrderModel {
 
 		foreach ( $existing_taxes as $tax ) {
 
-			// Remove taxes which no longer exist for cart/shipping.
+			// Remove taxes which no longer exist for cart/shipping
 			if ( ( ! array_key_exists( $tax->get_rate_id(), $cart_taxes ) && ! array_key_exists( $tax->get_rate_id(), $shipping_taxes ) ) || in_array( $tax->get_rate_id(), $saved_rate_ids ) ) {
 				$this->remove_item( $tax->get_id() );
 				continue;
@@ -675,18 +660,18 @@ abstract class AtumOrderModel {
 
 		$new_rate_ids = wp_parse_id_list( array_diff( array_keys( $cart_taxes + $shipping_taxes ), $saved_rate_ids ) );
 
-		// New taxes.
+		// New taxes
 		foreach ( $new_rate_ids as $tax_rate_id ) {
 
 			$this->add_tax( array(
 				'rate_id'            => $tax_rate_id,
 				'tax_total'          => isset( $cart_taxes[ $tax_rate_id ] ) ? $cart_taxes[ $tax_rate_id ] : 0,
-				'shipping_tax_total' => ! empty( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] : 0,
+				'shipping_tax_total' => ! empty( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] : 0
 			) );
 
 		}
 
-		// Save tax totals.
+		// Save tax totals
 		$this->set_shipping_tax( \WC_Tax::round( array_sum( $shipping_taxes ) ) );
 		$this->set_cart_tax( \WC_Tax::round( array_sum( $cart_taxes ) ) );
 		$this->save();
@@ -702,7 +687,7 @@ abstract class AtumOrderModel {
 	 */
 	public function save() {
 
-		// Trigger action before saving to the DB. Allows you to adjust object props before save.
+		// Trigger action before saving to the DB. Allows you to adjust object props before save
 		do_action( 'atum/order/before_object_save', $this );
 
 		if ( $this->id ) {
@@ -730,7 +715,7 @@ abstract class AtumOrderModel {
 		}
 		$this->items_to_delete = array();
 
-		// Add/save items.
+		// Add/save items
 		foreach ( $this->items as $item_group => $items ) {
 
 			if ( is_array( $items ) ) {
@@ -738,20 +723,18 @@ abstract class AtumOrderModel {
 				foreach ( array_filter( $items ) as $item_key => $item ) {
 
 					/**
-					 * Variable definition
-					 *
 					 * @var AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item
 					 */
 					$item->set_atum_order_id( $this->id );
 					$item_id = $item->save();
 
-					// TODO: HANDLE ERRORS.
-					if ( is_wp_error( $item_id ) ) {
+					// TODO: HANDLE ERRORS
+					if ( is_wp_error($item_id) ) {
 						continue;
 					}
 
 					// If ID changed (new item saved to DB)...
-					if ( $item_id != $item_key ) { // WPCS: loose comparison ok.
+					if ( $item_id != $item_key ) {
 						$this->items[ $item_group ][ $item_id ] = $item;
 					}
 
@@ -763,9 +746,11 @@ abstract class AtumOrderModel {
 
 	}
 
-	/***************
-	 * CRUD METHODS
-	 ***************/
+	//-------------
+	//
+	// CRUD METHODS
+	//
+	//-------------
 
 	/**
 	 * Create a new ATUM Order in database
@@ -788,7 +773,7 @@ abstract class AtumOrderModel {
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
 				'post_content'  => $this->get_description(),
-				'post_password' => uniqid( ATUM_PREFIX . 'order_' ),
+				'post_password' => uniqid( ATUM_PREFIX . 'order_' )
 			) ), TRUE );
 
 			if ( $id && ! is_wp_error( $id ) ) {
@@ -796,9 +781,9 @@ abstract class AtumOrderModel {
 				$this->clear_caches();
 			}
 
-		} catch ( AtumException $e ) {
+		} catch (AtumException $e) {
 
-			if ( ATUM_DEBUG ) {
+			if (ATUM_DEBUG) {
 				error_log( __METHOD__ . '::' . $e->getErrorCode() . '::' . $e->getMessage() );
 			}
 
@@ -814,21 +799,21 @@ abstract class AtumOrderModel {
 	public function update() {
 
 		$status = $this->get_status();
-		$date   = $this->get_date();
+		$date = $this->get_date();
 
-		if ( $this->post->post_date !== $date ) {
-			// Empty the post title to be updated by the get_title() method.
+		if ($this->post->post_date != $date) {
+			// Empty the post title to be updated by the get_title() method
 			$this->post->post_title = '';
 		}
 
 		$post_data = array(
 			'post_date'         => $date,
 			'post_date_gmt'     => $date,
-			'post_status'       => ( in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ) ? ATUM_PREFIX . $status : 'publish',
+			'post_status'       => ( in_array($status, array_keys( AtumOrderPostType::get_statuses() )) ) ? ATUM_PREFIX . $status : 'publish',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
-			'post_content'      => $this->get_description(),
+			'post_content'      => $this->get_description()
 		);
 
 		/**
@@ -854,47 +839,58 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $new_status    Status to set to the ATUM Order. No "atum_" prefix is required.
+	 * @param string $new_status    Status to set to the ATUM Order. No "atum_" prefix is required
 	 */
 	public function update_status( $new_status ) {
 
 		$old_status = $this->get_status();
-		$new_status = FALSE !== strpos( $new_status, ATUM_PREFIX ) ? str_replace( ATUM_PREFIX, '', $new_status ) : $new_status;
+		$new_status = strpos($new_status, ATUM_PREFIX) !== FALSE  ? str_replace(ATUM_PREFIX, '', $new_status) : $new_status;
 		$statuses   = AtumOrderPostType::get_statuses();
 
-		// Only allow valid new status.
-		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
+		// Only allow valid new status
+		if ( ! in_array( $new_status, array_keys($statuses) ) && 'trash' != $new_status ) {
 			$new_status = 'pending';
 		}
 
-		// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-		if ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) {
+		// If the old status is set but unknown (e.g. draft) assume its pending for action usage
+		if ( $old_status && ! in_array( $old_status, array_keys($statuses) ) && 'trash' != $old_status ) {
 			$old_status = 'pending';
 		}
 
-		if ( $new_status !== $old_status ) {
+		if ($new_status != $old_status) {
 			$this->set_status( $new_status );
 			$this->save();
 		}
 
 	}
 
-	/***************
-	 * CALCULATIONS
-	 ***************/
+	//--------------
+	//
+	// CALCULATIONS
+	//
+	//--------------
 
 	/**
 	 * Calculate taxes for all line items and shipping, and store the totals and tax rows
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param array $args Optional. To pass things like location.
+	 * @param $args array Optional. To pass things like location
 	 */
 	public function calculate_taxes( $args = array() ) {
 
+		// For now we'll avoid calculating location based taxes
+		/*$tax_based_on = get_option( 'woocommerce_tax_based_on' );
+		$args         = wp_parse_args( $args, array(
+			'country'  => 'billing' === $tax_based_on ? $this->get_billing_country()  : $this->get_shipping_country(),
+			'state'    => 'billing' === $tax_based_on ? $this->get_billing_state()    : $this->get_shipping_state(),
+			'postcode' => 'billing' === $tax_based_on ? $this->get_billing_postcode() : $this->get_shipping_postcode(),
+			'city'     => 'billing' === $tax_based_on ? $this->get_billing_city()     : $this->get_shipping_city(),
+		) );*/
+
 		$tax_based_on = 'base';
 
-		// Default to base.
+		// Default to base
 		if ( 'base' === $tax_based_on || empty( $args['country'] ) ) {
 			$default          = wc_get_base_location();
 			$args['country']  = $default['country'];
@@ -903,32 +899,29 @@ abstract class AtumOrderModel {
 			$args['city']     = '';
 		}
 
-		// Calc taxes for line items.
-		foreach ( $this->get_items( [ 'line_item', 'fee' ] ) as $item_id => $item ) {
+		// Calc taxes for line items
+		foreach ( $this->get_items( ['line_item', 'fee'] ) as $item_id => $item ) {
 
 			$tax_class  = $item->get_tax_class();
 			$tax_status = $item->get_tax_status();
 
-			if ( '0' !== $tax_class && 'taxable' === $tax_status && wc_tax_enabled() ) {
+			if ( '0' !== $tax_class && 'taxable' == $tax_status && wc_tax_enabled() ) {
 
 				$tax_rates = \WC_Tax::find_rates( array(
 					'country'   => $args['country'],
 					'state'     => $args['state'],
 					'postcode'  => $args['postcode'],
 					'city'      => $args['city'],
-					'tax_class' => $tax_class,
+					'tax_class' => $tax_class
 				) );
 
 				$total = $item->get_total();
 				$taxes = \WC_Tax::calc_tax( $total, $tax_rates, FALSE );
 
 				if ( $item->is_type( 'line_item' ) ) {
-					$subtotal       = $item->get_subtotal();
+					$subtotal = $item->get_subtotal();
 					$subtotal_taxes = \WC_Tax::calc_tax( $subtotal, $tax_rates, FALSE );
-					$item->set_taxes( array(
-						'total'    => $taxes,
-						'subtotal' => $subtotal_taxes,
-					) );
+					$item->set_taxes( array( 'total' => $taxes, 'subtotal' => $subtotal_taxes ) );
 				}
 				else {
 					$item->set_taxes( array( 'total' => $taxes ) );
@@ -943,14 +936,14 @@ abstract class AtumOrderModel {
 
 		}
 
-		// Calc taxes for shipping.
+		// Calc taxes for shipping
 		foreach ( $this->get_shipping_methods() as $item_id => $item ) {
 
 			if ( wc_tax_enabled() ) {
 
 				$shipping_tax_class = get_option( 'woocommerce_shipping_tax_class' );
 
-				// Inherit tax class from items.
+				// Inherit tax class from items
 				if ( 'inherit' === $shipping_tax_class ) {
 
 					$tax_rates         = array();
@@ -1008,6 +1001,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
+	 * @since 2.2
 	 * @return float
 	 */
 	public function calculate_shipping() {
@@ -1030,7 +1024,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param bool $and_taxes Optional. Calc taxes if true.
+	 * @param bool $and_taxes Optional. Calc taxes if true
 	 *
 	 * @return float Calculated grand total
 	 */
@@ -1046,7 +1040,7 @@ abstract class AtumOrderModel {
 			$this->calculate_taxes();
 		}
 
-		// Line items.
+		// line items
 		foreach ( $this->get_items() as $item ) {
 			$cart_subtotal     += $item->get_subtotal();
 			$cart_total        += $item->get_total();
@@ -1060,6 +1054,7 @@ abstract class AtumOrderModel {
 			$fee_total += $item->get_total();
 		}
 
+		/** @noinspection PhpWrongStringConcatenationInspection */
 		$grand_total = round( $cart_total + $fee_total + $this->get_shipping_total() + $this->get_cart_tax() + $this->get_shipping_tax(), wc_get_price_decimals() );
 
 		$this->set_discount_total( $cart_subtotal - $cart_total );
@@ -1071,9 +1066,11 @@ abstract class AtumOrderModel {
 
 	}
 
-	/*************
-	 * TOTALIZERS
-	 *************/
+	//------------
+	//
+	// TOTALIZERS
+	//
+	//------------
 
 	/**
 	 * Get item subtotal - this is the cost before discount
@@ -1093,6 +1090,7 @@ abstract class AtumOrderModel {
 		if ( is_callable( array( $item, 'get_subtotal' ) ) ) {
 
 			if ( $inc_tax ) {
+				/** @noinspection PhpWrongStringConcatenationInspection */
 				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / max( 1, $item->get_quantity() );
 			}
 			else {
@@ -1125,6 +1123,7 @@ abstract class AtumOrderModel {
 		if ( is_callable( array( $item, 'get_total' ) ) ) {
 
 			if ( $inc_tax ) {
+				/** @noinspection PhpWrongStringConcatenationInspection */
 				$total = ( $item->get_total() + $item->get_total_tax() ) / max( 1, $item->get_quantity() );
 			}
 			else {
@@ -1144,7 +1143,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  bool $ex_tax  Optional. Show discount excl any tax.
+	 * @param  bool $ex_tax  Optional. Show discount excl any tax
 	 *
 	 * @return float
 	 */
@@ -1152,11 +1151,12 @@ abstract class AtumOrderModel {
 
 		$total_discount = $this->get_discount_total();
 
-		if ( ! $ex_tax ) {
+		if ( !$ex_tax ) {
+			/** @noinspection PhpWrongStringConcatenationInspection */
 			$total_discount += $this->get_discount_tax();
 		}
 
-		/* @noinspection PhpUndefinedConstantInspection */
+		/** @noinspection PhpUndefinedConstantInspection */
 		return apply_filters( 'atum/orders/get_total_discount', round( $total_discount, WC_ROUNDING_PRECISION ), $this );
 
 	}
@@ -1196,16 +1196,16 @@ abstract class AtumOrderModel {
 			$code = $tax->get_rate_code();
 
 			if ( ! isset( $tax_totals[ $code ] ) ) {
-				$tax_totals[ $code ]         = new \stdClass();
+				$tax_totals[ $code ] = new \stdClass();
 				$tax_totals[ $code ]->amount = 0;
 			}
 
-			$tax_totals[ $code ]->id               = $key;
-			$tax_totals[ $code ]->rate_id          = $tax->get_rate_id();
-			$tax_totals[ $code ]->is_compound      = $tax->is_compound();
-			$tax_totals[ $code ]->label            = $tax->get_label();
-			$tax_totals[ $code ]->amount          += (float) $tax->get_tax_total() + (float) $tax->get_shipping_tax_total();
-			$tax_totals[ $code ]->formatted_amount = wc_price( wc_round_tax_total( $tax_totals[ $code ]->amount ), array( 'currency' => $this->get_currency() ) );
+			$tax_totals[ $code ]->id                = $key;
+			$tax_totals[ $code ]->rate_id           = $tax->get_rate_id();
+			$tax_totals[ $code ]->is_compound       = $tax->is_compound();
+			$tax_totals[ $code ]->label             = $tax->get_label();
+			$tax_totals[ $code ]->amount           += (float) $tax->get_tax_total() + (float) $tax->get_shipping_tax_total();
+			$tax_totals[ $code ]->formatted_amount  = wc_price( wc_round_tax_total( $tax_totals[ $code ]->amount ), array( 'currency' => $this->get_currency() ) );
 
 		}
 
@@ -1223,23 +1223,23 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param  string $tax_display  Optional. Type of tax display.
-	 * @param  bool   $subtotal     Optional. If should return the tax free Subtotal instead.
+	 * @param  string $tax_display  Optional. Type of tax display
+	 * @param  bool   $subtotal     Optional. If should return the tax free Subtotal instead
 	 *
 	 * @return string
 	 */
 	public function get_formatted_total( $tax_display = '', $subtotal = FALSE ) {
 
-		$amount          = $subtotal ? $this->get_subtotal() : $this->get_total();
+		$amount = ($subtotal) ? $this->get_subtotal() : $this->get_total();
 		$formatted_total = wc_price( $amount, array( 'currency' => $this->get_currency() ) );
-		$tax_string      = '';
+		$tax_string     = '';
 
-		// Tax for inclusive prices.
-		if ( wc_tax_enabled() && 'incl' === $tax_display && ! $subtotal ) {
+		// Tax for inclusive prices
+		if ( wc_tax_enabled() && 'incl' == $tax_display && ! $subtotal ) {
 
 			$tax_string_array = array();
 
-			if ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) ) {
+			if ( 'itemized' == get_option( 'woocommerce_tax_total_display' ) ) {
 
 				foreach ( $this->get_tax_totals() as $code => $tax ) {
 					$tax_amount         = $tax->formatted_amount;
@@ -1253,7 +1253,6 @@ abstract class AtumOrderModel {
 			}
 
 			if ( ! empty( $tax_string_array ) ) {
-				/* translators: a list of comma-separated taxes */
 				$tax_string = ' <small class="includes_tax">' . sprintf( __( '(includes %s)', ATUM_TEXT_DOMAIN ), implode( ', ', $tax_string_array ) ) . '</small>';
 			}
 
@@ -1274,7 +1273,7 @@ abstract class AtumOrderModel {
 	 */
 	public function is_editable() {
 		$status = $this->get_status();
-		return apply_filters( 'atum/orders/is_editable', ! $status || 'pending' === $status, $this );
+		return apply_filters( 'atum/orders/is_editable', !$status || $status == 'pending', $this );
 	}
 
 	/**
@@ -1282,7 +1281,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $note Note to add.
+	 * @param string $note Note to add
 	 *
 	 * @return int   Comment ID
 	 */
@@ -1310,7 +1309,7 @@ abstract class AtumOrderModel {
 
 		$comment_id = wp_insert_comment( $commentdata );
 
-		do_action( 'atum/orders/after_note_added', $comment_id, $this->id );
+		do_action('atum/orders/after_note_added', $comment_id, $this->id);
 
 		return $comment_id;
 
@@ -1321,15 +1320,14 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $meta_key Optional. A string indicating which meta key to retrieve, or NULL to return all keys.
-	 * @param bool   $single   Optional. TRUE to return the first value, FALSE to return an array of values.
+	 * @param string $meta_key Optional. A string indicating which meta key to retrieve, or NULL to return all keys
+	 * @param bool   $single   Optional. TRUE to return the first value, FALSE to return an array of values
 	 *
 	 * @return string|array
 	 */
 	public function get_meta( $meta_key = NULL, $single = TRUE ) {
 
-		if ( NULL !== $meta_key ) {
-			// Get a single field.
+		if ( $meta_key !== NULL ) { // get a single field
 			return get_post_meta( $this->id, $meta_key, $single );
 		}
 		else {
@@ -1343,7 +1341,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array $meta An associative array of meta keys and their values to save.
+	 * @param array $meta An associative array of meta keys and their values to save
 	 * @param bool  $trim
 	 *
 	 * @return void
@@ -1418,10 +1416,10 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $code             Error code.
-	 * @param string $message          Error message.
-	 * @param int    $http_status_code HTTP status code.
-	 * @param array  $data             Extra error data.
+	 * @param string $code             Error code
+	 * @param string $message          Error message
+	 * @param int    $http_status_code HTTP status code
+	 * @param array  $data             Extra error data
 	 *
 	 * @throws AtumException
 	 */
@@ -1429,9 +1427,11 @@ abstract class AtumOrderModel {
 		throw new AtumException( $code, $message, $http_status_code, $data );
 	}
 
-	/**********
-	 * GETTERS
-	 **********/
+	//---------
+	//
+	// GETTERS
+	//
+	//---------
 
 	/**
 	 * Getter for the post property
@@ -1453,15 +1453,14 @@ abstract class AtumOrderModel {
 	 */
 	public function get_title() {
 
-		if ( ! empty( $this->post->post_title ) && __( 'Auto Draft' ) !== $this->post->post_title ) { // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+		if ( ! empty($this->post->post_title) && $this->post->post_title != __('Auto Draft') ) {
 			$post_title = $this->post->post_title;
 		}
 		else {
-			/* translators: the order date */
-			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'ATUM Order date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->get_date() ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'ATUM Order date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->get_date() ) ) );
 		}
 
-		return apply_filters( 'atum/orders/title', $post_title );
+		return apply_filters('atum/orders/title', $post_title);
 	}
 
 	/**
@@ -1473,8 +1472,8 @@ abstract class AtumOrderModel {
 	 */
 	public function get_description() {
 
-		$description = ! empty( $this->post->post_content ) ? $this->post->post_content : '';
-		return apply_filters( 'atum/orders/description', $description );
+		$description = ( ! empty($this->post->post_content) ) ? $this->post->post_content : '';
+		return apply_filters('atum/orders/description', $description);
 	}
 
 	/**
@@ -1485,7 +1484,7 @@ abstract class AtumOrderModel {
 	 * @return string
 	 */
 	public function get_status() {
-		return $this->get_meta( '_status' );
+		return $this->get_meta('_status');
 	}
 
 	/**
@@ -1496,7 +1495,7 @@ abstract class AtumOrderModel {
 	 * @return string
 	 */
 	public function get_date() {
-		return $this->get_meta( '_date_created' );
+		return $this->get_meta('_date_created');
 	}
 
 	/**
@@ -1526,7 +1525,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string|array $types Optional. Types of line items to get (array or string).
+	 * @param string|array $types Optional. Types of line items to get (array or string)
 	 *
 	 * @return \WC_Order_Item_Product array
 	 */
@@ -1539,7 +1538,7 @@ abstract class AtumOrderModel {
 
 			if ( $group = $this->type_to_group( $type ) ) {
 
-				// Don't use array_merge here because keys are numeric.
+				// Don't use array_merge here because keys are numeric
 				$items = ( isset( $this->items[ $group ] ) ) ? array_filter( $items + $this->items[ $group ] ) : $items;
 			}
 
@@ -1565,7 +1564,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since  1.2.9
 	 *
-	 * @param  \WC_Order_Item $item  ATUM Order item object (product, shipping, fee, tax).
+	 * @param  \WC_Order_Item $item  ATUM Order item object (product, shipping, fee, tax)
 	 *
 	 * @return string
 	 */
@@ -1577,7 +1576,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $items_key The items key.
+	 * @param string $items_key The items key
 	 *
 	 * @return string
 	 */
@@ -1588,16 +1587,16 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int    $item_id
+	 * @param int $item_id
 	 * @param string $type
 	 *
 	 * @return \WC_Order_Item|bool
 	 */
-	public function get_item( $item_id, $type = 'line_item' ) {
+	public function get_item ($item_id, $type = 'line_item') {
 
-		$type_group = $this->type_to_group( $type );
-		if ( ! empty( $this->items ) && isset( $this->items[ $type_group ], $this->items[ $type_group ][ $item_id ] ) ) {
-			return $this->items[ $type_group ][ $item_id ];
+		$type_group = $this->type_to_group($type);
+		if ( ! empty( $this->items ) && isset( $this->items[$type_group], $this->items[$type_group][$item_id] ) ) {
+			return $this->items[$type_group][$item_id];
 		}
 
 		return FALSE;
@@ -1655,7 +1654,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @return float
 	 */
-	public function get_cart_tax() {
+	public function get_cart_tax( ) {
 		return $this->get_meta( '_cart_tax' );
 	}
 
@@ -1717,8 +1716,6 @@ abstract class AtumOrderModel {
 		foreach ( $this->get_items() as $item ) {
 			if ( $product = $item->get_product() ) {
 				/**
-				 * Variable definition
-				 *
 				 * @var \WC_Product $product
 				 */
 				$found_tax_classes[] = $product->get_tax_class();
@@ -1730,9 +1727,11 @@ abstract class AtumOrderModel {
 	}
 
 
-	/**********
-	 * SETTERS
-	 **********/
+	//---------
+	//
+	// SETTERS
+	//
+	//---------
 
 	/**
 	 * Set ATUM Order currency
@@ -1857,20 +1856,20 @@ abstract class AtumOrderModel {
 			'a'      => array(
 				'href'  => [],
 				'title' => [],
-				'style' => [],
+				'style' => []
 			),
 			'span'   => array(
-				'style' => [],
+				'style' => []
 			),
 			'p'      => array(
-				'style' => [],
+				'style' => []
 			),
 			'br'     => [],
 			'em'     => [],
 			'strong' => [],
 			'ul'     => [],
 			'ol'     => [],
-			'li'     => [],
+			'li'     => []
 		) );
 
 		$this->post->post_content = wp_kses( $value, $allowed_html );

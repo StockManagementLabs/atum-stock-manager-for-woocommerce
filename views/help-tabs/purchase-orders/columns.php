@@ -5,13 +5,13 @@
  * @since 1.3.0
  */
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 ?>
 <table class="widefat fixed striped">
 	<thead>
 		<tr>
-			<td><strong><?php _e( 'COLUMN', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><strong><?php _e( 'COLUMN', ATUM_TEXT_DOMAIN) ?></strong></td>
 			<td><strong><?php _e( 'DEFINITION', ATUM_TEXT_DOMAIN ) ?></strong></td>
 		</tr>
 	</thead>

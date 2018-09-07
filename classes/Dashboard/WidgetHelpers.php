@@ -1,18 +1,18 @@
 <?php
 /**
- * Helper functions for Widgets
- *
  * @package        Atum
  * @subpackage     Dashboard
  * @author         Be Rebel - https://berebel.io
  * @copyright      ©2018 Stock Management Labs™
  *
  * @since          1.4.0
+ *
+ * Helper functions for Widgets
  */
 
 namespace Atum\Dashboard;
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
@@ -22,14 +22,12 @@ final class WidgetHelpers {
 
 	/**
 	 * The array of published Variable products' IDs
-	 *
 	 * @var array
 	 */
 	private static $variable_products = array();
 
 	/**
 	 * The array of published Grouped products' IDs
-	 *
 	 * @var array
 	 */
 	private static $grouped_products = array();
@@ -39,8 +37,8 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param array $atts {
-	 *      Array of stats filter params.
+	 *  @param array $atts {
+	 *      Array of stats filter params
 	 *
 	 *      @type array  $types              An array of stats to get. Possible values: "sales" and/or "lost_sales"
 	 *      @type array  $products           The array of products to include in calculations
@@ -52,11 +50,9 @@ final class WidgetHelpers {
 	 *
 	 * @return array
 	 */
-	public static function get_sales_stats( $atts ) {
+	public static function get_sales_stats($atts) {
 
 		/**
-		 * Variables definition
-		 *
 		 * @var array  $types
 		 * @var array  $products
 		 * @var string $date_start
@@ -64,45 +60,45 @@ final class WidgetHelpers {
 		 * @var int    $days
 		 * @var bool   $formatted_value
 		 */
-		extract( $atts );
+		extract($atts);
 		$stats = array();
 
-		// Initialize values.
-		if ( in_array( 'sales', $types ) ) {
-			$stats['value']    = 0;
+		// Initialize values
+		if ( in_array('sales', $types) ) {
+			$stats['value'] = 0;
 			$stats['products'] = 0;
 		}
 
-		if ( in_array( 'lost_sales', $types ) ) {
-			$stats['lost_value']    = 0;
+		if ( in_array('lost_sales', $types) ) {
+			$stats['lost_value'] = 0;
 			$stats['lost_products'] = 0;
 		}
 
-		$products_sold  = Helpers::get_sold_last_days( $products, $date_start, ( isset( $date_end ) ? $date_end : NULL ) );
+		$products_sold = Helpers::get_sold_last_days( $products, $date_start, ( isset($date_end) ? $date_end : NULL ) );
 		$lost_processed = array();
 
 		if ( $products_sold ) {
 
 			foreach ( $products_sold as $row ) {
 
-				if ( in_array( 'sales', $types ) ) {
+				if ( in_array('sales', $types) ) {
 					$stats['products'] += floatval( $row['QTY'] );
-					$stats['value']    += floatval( $row['TOTAL'] );
+					$stats['value'] += floatval( $row['TOTAL'] );
 				}
 
-				if ( in_array( 'lost_sales', $types ) && ! in_array( $row['PROD_ID'], $lost_processed ) ) {
+				if ( in_array('lost_sales', $types) && ! in_array($row['PROD_ID'], $lost_processed) ) {
 
-					if ( ! isset( $days ) || $days <= 0 ) {
+					if ( ! isset($days) || $days <= 0 ) {
 						$date_days_start = new \DateTime( $date_start );
-						$date_days_end   = new \DateTime( ( isset( $date_end ) ? $date_end : 'now' ) );
-						$days            = $date_days_end->diff( $date_days_start )->days;
+						$date_days_end = new \DateTime( ( isset($date_end) ? $date_end : 'now' ) );
+						$days = $date_days_end->diff($date_days_start)->days;
 					}
 
 					$lost_sales = Helpers::get_product_lost_sales( $row['PROD_ID'], $days );
 
-					if ( is_numeric( $lost_sales ) ) {
+					if ( is_numeric($lost_sales) ) {
 						$stats['lost_value'] += $lost_sales;
-						$lost_processed[]     = $row['PROD_ID'];
+						$lost_processed[] = $row['PROD_ID'];
 					}
 				}
 
@@ -110,12 +106,12 @@ final class WidgetHelpers {
 
 		}
 
-		if ( in_array( 'sales', $types ) ) {
-			$stats['value'] = ( ! isset( $formatted_value ) || $formatted_value ) ? Helpers::format_price( $stats['value'] ) : round( $stats['value'], 2 );
+		if ( in_array('sales', $types) ) {
+			$stats['value'] = ( ! isset($formatted_value) || $formatted_value ) ? Helpers::format_price( $stats['value'] ) : round($stats['value'], 2);
 		}
 
-		if ( in_array( 'lost_sales', $types ) ) {
-			$stats['lost_value'] = ( ! isset( $formatted_value ) || $formatted_value ) ? Helpers::format_price( $stats['lost_value'] ) : round( $stats['lost_value'], 2 );
+		if ( in_array('lost_sales', $types) ) {
+			$stats['lost_value'] = ( ! isset($formatted_value) || $formatted_value ) ? Helpers::format_price( $stats['lost_value'] ) : round($stats['lost_value'], 2);
 		}
 
 		return $stats;
@@ -127,41 +123,37 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param array $order_args  See: Helpers::get_orders() param description.
+	 * @param array $order_args  See: Helpers::get_orders() param description
 	 *
 	 * @return array
 	 */
-	public static function get_promo_sales_stats( $order_args ) {
+	public static function get_promo_sales_stats ($order_args) {
 
-		// Initialize counters.
+		// Initialize counters
 		$stats = array(
 			'value'    => 0,
-			'products' => 0,
+			'products' => 0
 		);
 
-		$orders = Helpers::get_orders( $order_args );
+		$orders = Helpers::get_orders($order_args);
 
-		foreach ( $orders as $order ) {
+		foreach ($orders as $order) {
 
 			/**
-			 * Variable definition
-			 *
 			 * @var \WC_Order $order
 			 */
 
-			// Check if this order had discounts.
+			// Check if this order had discounts
 			$order_discount = $order->get_discount_total();
 
-			if ( $order_discount ) {
-
+			if ($order_discount) {
+				/** @noinspection PhpWrongStringConcatenationInspection */
 				$stats['value'] += $order_discount;
 
 				$order_items = $order->get_items();
 
-				foreach ( $order_items as $order_item ) {
+				foreach ($order_items as $order_item) {
 					/**
-					 * Variable definition
-					 *
 					 * @var \WC_Order_Item $order_item
 					 */
 					$stats['products'] += $order_item->get_quantity();
@@ -169,7 +161,7 @@ final class WidgetHelpers {
 			}
 		}
 
-		$stats['value'] = ( ! isset( $order_args['formatted_value'] ) || $order_args['formatted_value'] ) ? Helpers::format_price( $stats['value'] ) : round( $stats['value'], 2 );
+		$stats['value'] = ( ! isset($order_args['formatted_value']) || $order_args['formatted_value'] ) ? Helpers::format_price( $stats['value'] ) : round($stats['value'], 2);
 
 		return $stats;
 
@@ -184,29 +176,27 @@ final class WidgetHelpers {
 	 *
 	 * @return array
 	 */
-	public static function get_orders_stats( $order_args ) {
+	public static function get_orders_stats ($order_args) {
 
-		// Initialize.
+		// Initialize
 		$stats = array(
-			'value'  => 0,
-			'orders' => 0,
+			'value' => 0,
+			'orders'  => 0
 		);
 
-		$orders          = Helpers::get_orders( $order_args );
-		$stats['orders'] = count( $orders );
+		$orders = Helpers::get_orders($order_args);
+		$stats['orders'] = count($orders);
 
-		foreach ( $orders as $order ) {
+		foreach ($orders as $order) {
 
 			/**
-			 * Variable definition
-			 *
 			 * @var \WC_Order $order
 			 */
 			$stats['value'] += floatval( $order->get_total() );
 
 		}
 
-		$stats['value'] = ( ! isset( $order_args['formatted_value'] ) || $order_args['formatted_value'] ) ? Helpers::format_price( $stats['value'] ) : round( $stats['value'], 2 );
+		$stats['value'] = ( ! isset($order_args['formatted_value']) || $order_args['formatted_value'] ) ? Helpers::format_price( $stats['value'] ) : round($stats['value'], 2);
 
 		return $stats;
 
@@ -217,65 +207,63 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $time_window The time window that will specify the x axis in the chart.
-	 *                            Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week".
-	 * @param array  $types       Optional. An array of stats to get. Possible values: "sales" and/or "lost_sales".
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
+	 * @type array  $types          Optional. An array of stats to get. Possible values: "sales" and/or "lost_sales"
 	 *
 	 * @return array
 	 */
-	public static function get_sales_chart_data( $time_window, $types = [ 'sales' ] ) {
+	public static function get_sales_chart_data( $time_window, $types = ['sales'] ) {
 
 		$products = Helpers::get_all_products( array(
-			'post_type' => [ 'product', 'product_variation' ],
+			'post_type' => ['product', 'product_variation']
 		) );
 
 		$data = $dataset = array();
 
-		if ( empty( $products ) ) {
+		if ( empty($products) ) {
 			return $dataset;
 		}
 
 		$period = self::get_chart_data_period( $time_window );
 
-		if ( ! $period ) {
+		if ( !$period ) {
 			return $dataset;
 		}
 
 		$date_now    = new \DateTime();
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 
-		foreach ( $period as $dt ) {
+		foreach ($period as $dt) {
 
 			/**
-			 * Variable definition
-			 *
 			 * @var \DateTime $dt
 			 */
-			$interval = date_diff( $dt, $date_now );
+			$interval = date_diff($dt, $date_now);
 
-			// Bypass all the future dates.
-			if ( $interval->invert ) {
+			// Bypass all the future dates
+			if ($interval->invert) {
 				break;
 			}
 
 			$data[] = self::get_sales_stats( array(
-				'types'           => $types,
-				'products'        => $products,
-				'date_start'      => $dt->format( 'Y-m-d H:i:s' ),
-				'date_end'        => 'year' === $period_time ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
-				'formatted_value' => FALSE,
+				'types'              => $types,
+				'products'           => $products,
+				'date_start'         => $dt->format( 'Y-m-d H:i:s' ),
+				'date_end'           => ($period_time == 'year') ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
+				'formatted_value'    => FALSE
 			) );
 		}
 
-		if ( ! empty( $data ) ) {
+		if ( ! empty($data) ) {
 
-			// The chart must use sales or lost_sales types (not both).
-			if ( in_array( 'sales', $types ) ) {
-				$dataset['value']    = wp_list_pluck( $data, 'value' );
+			// The chart must use sales or lost_sales types (not both)
+			if ( in_array('sales', $types) ) {
+				$dataset['value'] = wp_list_pluck( $data, 'value' );
 				$dataset['products'] = wp_list_pluck( $data, 'products' );
 			}
-			elseif ( in_array( 'lost_sales', $types ) ) {
-				$dataset['value']    = wp_list_pluck( $data, 'lost_value' );
+			elseif ( in_array('lost_sales', $types) ) {
+				$dataset['value'] = wp_list_pluck( $data, 'lost_value' );
 				$dataset['products'] = wp_list_pluck( $data, 'lost_products' );
 			}
 
@@ -290,8 +278,8 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $time_window   The time window that will specify the x axis in the chart.
-	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week".
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
 	 *
 	 * @return array
 	 */
@@ -300,38 +288,36 @@ final class WidgetHelpers {
 		$data   = $dataset = array();
 		$period = self::get_chart_data_period( $time_window );
 
-		if ( ! $period ) {
+		if ( !$period ) {
 			return $dataset;
 		}
 
 		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$date_now     = new \DateTime();
-		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', [ 'wc-processing', 'wc-completed' ] );
+		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', ['wc-processing', 'wc-completed'] );
 
-		foreach ( $period as $dt ) {
+		foreach ($period as $dt) {
 
 			/**
-			 * Variable definition
-			 *
 			 * @var \DateTime $dt
 			 */
-			$interval = date_diff( $dt, $date_now );
+			$interval = date_diff($dt, $date_now);
 
-			// Bypass all the future dates.
-			if ( $interval->invert ) {
+			// Bypass all the future dates
+			if ($interval->invert) {
 				break;
 			}
 
 			$data[] = self::get_promo_sales_stats( array(
-				'status'          => $order_status,
-				'date_start'      => $dt->format( 'Y-m-d H:i:s' ),
-				'date_end'        => 'year' === $period_time ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
-				'formatted_value' => FALSE,
+				'status'             => $order_status,
+				'date_start'         => $dt->format( 'Y-m-d H:i:s' ),
+				'date_end'           => ( $period_time == 'year' ) ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
+				'formatted_value'    => FALSE
 			) );
 		}
 
-		if ( ! empty( $data ) ) {
-			$dataset['value']    = wp_list_pluck( $data, 'value' );
+		if ( ! empty($data) ) {
+			$dataset['value'] = wp_list_pluck( $data, 'value' );
 			$dataset['products'] = wp_list_pluck( $data, 'products' );
 		}
 
@@ -344,8 +330,8 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $time_window   The time window that will specify the x axis in the chart.
-	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week".
+	 * @param string $time_window   The time window that will specify the x axis in the chart
+	 *                              Possible values: "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week"
 	 *
 	 * @return array
 	 */
@@ -354,38 +340,36 @@ final class WidgetHelpers {
 		$data   = $dataset = array();
 		$period = self::get_chart_data_period( $time_window );
 
-		if ( ! $period ) {
+		if ( !$period ) {
 			return $dataset;
 		}
 
 		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$date_now     = new \DateTime();
-		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', [ 'wc-processing', 'wc-completed' ] );
+		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', ['wc-processing', 'wc-completed'] );
 
-		foreach ( $period as $dt ) {
+		foreach ($period as $dt) {
 
 			/**
-			 * Variable definition
-			 *
 			 * @var \DateTime $dt
 			 */
-			$interval = date_diff( $dt, $date_now );
+			$interval = date_diff($dt, $date_now);
 
-			// Bypass all the future dates.
-			if ( $interval->invert ) {
+			// Bypass all the future dates
+			if ($interval->invert) {
 				break;
 			}
 
 			$data[] = self::get_orders_stats( array(
-				'status'          => $order_status,
-				'date_start'      => $dt->format( 'Y-m-d H:i:s' ),
-				'date_end'        => 'year' === $period_time ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
-				'formatted_value' => FALSE,
+				'status'             => $order_status,
+				'date_start'         => $dt->format( 'Y-m-d H:i:s' ),
+				'date_end'           => ( $period_time == 'year' ) ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
+				'formatted_value' => FALSE
 			) );
 		}
 
-		if ( ! empty( $data ) ) {
-			$dataset['value']    = wp_list_pluck( $data, 'value' );
+		if ( ! empty($data) ) {
+			$dataset['value'] = wp_list_pluck( $data, 'value' );
 			$dataset['products'] = wp_list_pluck( $data, 'orders' );
 		}
 
@@ -398,19 +382,19 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $time_window   The time window that will specify the x axis in the chart.
+	 * @param string $time_window   The time window that will specify the x axis in the chart
 	 *
 	 * @return \DatePeriod|null
 	 */
-	private static function get_chart_data_period( $time_window ) {
+	private static function get_chart_data_period($time_window) {
 
-		$which       = FALSE !== strpos( $time_window, 'previous' ) ? 'last' : 'this';
+		$which       = ( strpos( $time_window, 'previous' ) !== FALSE ) ? 'last' : 'this';
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$period      = NULL;
 
 		switch ( $period_time ) {
 			case 'year':
-				$period = self::get_date_period( "first day of January $which year 00:00:00", "last day of December $which year 23:59:59", '1 month' );
+				$period = self::get_date_period("first day of January $which year 00:00:00", "last day of December $which year 23:59:59", '1 month');
 				break;
 
 			case 'month':
@@ -418,7 +402,7 @@ final class WidgetHelpers {
 				break;
 
 			case 'week':
-				$period = self::get_date_period( "$which week 00:00:00", "$which week +6 days 23:59:59" );
+				$period = self::get_date_period("$which week 00:00:00", "$which week +6 days 23:59:59");
 				break;
 
 		}
@@ -432,18 +416,18 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $date_start    The period's start date. Must be an string compatible with strtotime.
-	 * @param string $date_end      The period's end date. Must be an string compatible with strtotime.
-	 * @param string $interval      Optional. The period' interval. Must be an string compatible with strtotime.
+	 * @param string $date_start    The period's start date. Must be an string compatible with strtotime
+	 * @param string $date_end      The period's end date. Must be an string compatible with strtotime
+	 * @param string $interval      Optional. The period' interval. Must be an string compatible with strtotime
 	 *
 	 * @return \DatePeriod
 	 */
-	public static function get_date_period( $date_start, $date_end, $interval = '1 day' ) {
+	public static function get_date_period($date_start, $date_end, $interval = '1 day') {
 
-		$start       = new \DateTime( $date_start );
-		$interval    = \DateInterval::createFromDateString( $interval );
-		$end         = new \DateTime( $date_end );
-		$date_period = new \DatePeriod( $start, $interval, $end );
+		$start    = new \DateTime( $date_start );
+		$interval = \DateInterval::createFromDateString( $interval );
+		$end      = new \DateTime( $date_end );
+		$date_period   = new \DatePeriod( $start, $interval, $end );
 
 		return $date_period;
 	}
@@ -464,49 +448,49 @@ final class WidgetHelpers {
 			'count_out_stock' => 0,
 			'count_low_stock' => 0,
 			'count_all'       => 0,
-			'count_unmanaged' => 0,
+			'count_unmanaged' => 0
 		);
-
-		$show_unmanaged_counter      = 'yes' === Helpers::get_option( 'unmanaged_counters' );
-		$products                    = Helpers::get_all_products();
+		
+		$show_unmanaged_counter = ( Helpers::get_option( 'unmanaged_counters' ) == 'yes' );
+		$products = Helpers::get_all_products();
 		$stock_counters['count_all'] = count( $products );
 
 		$variations = self::get_children( 'variable', 'product_variation' );
 
-		// Add the Variations to the posts list.
+		// Add the Variations to the posts list
 		if ( $variations ) {
-			// The Variable products are just containers and don't count for the list views.
+			// The Variable products are just containers and don't count for the list views
 			$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
-			$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $variations ) );
+			$products = array_unique( array_merge( array_diff( $products, self::$variable_products ), $variations ) );
 		}
 
 		$group_items = self::get_children( 'grouped' );
 
-		// Add the Group Items to the posts list.
+		// Add the Group Items to the posts list
 		if ( $group_items ) {
-			// The Grouped products are just containers and don't count for the list views.
+			// The Grouped products are just containers and don't count for the list views
 			$stock_counters['count_all'] += ( count( $group_items ) - count( self::$grouped_products ) );
-			$products                     = array_unique( array_merge( array_diff( $products, self::$grouped_products ), $group_items ) );
+			$products = array_unique( array_merge( array_diff( $products, self::$grouped_products ), $group_items ) );
 
 		}
 
-		// WC Subscriptions compatibility.
-		if ( class_exists( '\WC_Subscriptions' ) ) {
+		// WC Subscriptions compatibility
+		if ( class_exists('\WC_Subscriptions') ) {
 
 			$subscription_variations = self::get_children( 'variable-subscription', 'product_variation' );
 
-			// Add the Variations to the posts list.
+			// Add the Variations to the posts list
 			if ( $subscription_variations ) {
-				// The Variable products are just containers and don't count for the list views.
+				// The Variable products are just containers and don't count for the list views
 				$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
-				$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $variations ) );
+				$products = array_unique( array_merge( array_diff( $products, self::$variable_products ), $variations ) );
 			}
 
 		}
 
 		if ( $products ) {
 
-			$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+			$post_types = $variations ? ['product', 'product_variation'] : ['product'];
 
 			/*
 			 * Unmanaged products
@@ -516,26 +500,26 @@ final class WidgetHelpers {
 				
 				$stock_counters['count_in_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
 					
-					return ( 'instock' === $row[1] );
+					return ( $row[1] == 'instock' );
 				} ) );
 				
 				$stock_counters['count_out_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
 					
-					return ( 'outofstock' === $row[1] );
+					return ( $row[1] == 'outofstock' );
 				} ) );
 			}
 			else {
 				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, FALSE );
 			}
-
-			$products_unmanaged                = array_column( $products_unmanaged_status, 0 );
+			
+			$products_unmanaged = array_column($products_unmanaged_status, 0);
 			$stock_counters['count_unmanaged'] = count( $products_unmanaged );
 
-			// Remove the unmanaged from the products list.
-			if ( ! empty( $products_unmanaged ) && ! empty( $products ) ) {
-				$matching = array_intersect( $products, $products_unmanaged );
+			// Remove the unmanaged from the products list
+			if ( ! empty($products_unmanaged) && ! empty($products) ) {
+				$matching = array_intersect($products, $products_unmanaged);
 
-				if ( ! empty( $matching ) ) {
+				if ( ! empty($matching) ) {
 					$products = array_diff( $products, $matching );
 				}
 			}
@@ -546,36 +530,36 @@ final class WidgetHelpers {
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
-				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'fields'         => 'ids',
 				'post__in'       => $products,
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
 						'key'   => '_manage_stock',
-						'value' => 'yes',
+						'value' => 'yes'
 					),
 					array(
 						'key'     => '_stock',
 						'value'   => 0,
 						'type'    => 'numeric',
-						'compare' => '>',
-					),
-				),
+						'compare' => '>'
+					)
+				)
 			);
 
-			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
-			$products_in_stock                 = $products_in_stock->posts;
+			$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			$products_in_stock = $products_in_stock->posts;
 			$stock_counters['count_in_stock'] += count( $products_in_stock );
 			
 			/*
 			 * Products Out of Stock
 			 */
-			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
-			$args               = array(
+			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged);
+			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
-				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'fields'         => 'ids',
 				'meta_query'     => array(
 					'relation' => 'AND',
@@ -595,23 +579,24 @@ final class WidgetHelpers {
 					array(
 						'relation' => 'OR',
 						array(
-							'key'   => '_backorders',
-							'value' => 'no',
-							'type'  => 'char',
+							'key'     => '_backorders',
+							'value'   => 'no',
+							'type'    => 'char',
 						),
 						array(
 							'key'     => '_backorders',
 							'compare' => 'NOT EXISTS',
 						),
 					),
-
+					
 				),
-				'post__in'       => $products_not_stock,
+				'post__in'       => $products_not_stock
 			);
-
-			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
-			$products_out_stock                 = $products_out_stock->posts;
+			
+			$products_out_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
+			$products_out_stock = $products_out_stock->posts;
 			$stock_counters['count_out_stock'] += count( $products_out_stock );
+			
 
 			/*
 			 * Products with low stock
@@ -620,7 +605,7 @@ final class WidgetHelpers {
 
 				$days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
-				// Compare last seven days average sales per day * re-order days with current stock.
+				// Compare last seven days average sales per day * re-order days with current stock
 				$str_sales = "(SELECT			   
 				    (SELECT MAX(CAST( meta_value AS SIGNED )) AS q FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key IN ('_product_id', '_variation_id') AND order_item_id = `item`.`order_item_id`) AS IDs,
 				    CEIL(SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`))/7*$days_to_reorder) AS qty
@@ -640,13 +625,13 @@ final class WidgetHelpers {
 					    LEFT JOIN `{$wpdb->postmeta}` ON (`{$wpdb->posts}`.`ID` = `{$wpdb->postmeta}`.`post_id`)
 					    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
 					WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
-			            AND `{$wpdb->posts}`.`post_type` IN ('" . implode( "','", $post_types ) . "')
-			            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $products_in_stock ) . ')) )) AS states';
+			            AND `{$wpdb->posts}`.`post_type` IN ('" . implode("','", $post_types) . "')
+			            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $products_in_stock ) . ")) )) AS states";
 
 				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
 
-				$products_low_stock                = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
-				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
+				$products_low_stock = $wpdb->get_results( $str_sql );
+				$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
 				$stock_counters['count_low_stock'] = count( $products_low_stock );
 
 			}
@@ -662,51 +647,51 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $parent_type   The parent product type.
-	 * @param string $post_type     Optional. The children post type.
+	 * @param string $parent_type   The parent product type
+	 * @param string $post_type     Optional. The children post type
 	 *
 	 * @return array|bool
 	 */
-	private static function get_children( $parent_type, $post_type = 'product' ) {
+	private static function get_children ($parent_type, $post_type = 'product') {
 
-		// Get the published Variables first.
+		// Get the published Variables first
 		$parent_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/parent_args', array(
 			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'product_type',
 					'field'    => 'slug',
-					'terms'    => $parent_type,
-				),
-			),
+					'terms'    => $parent_type
+				)
+			)
 		) );
 
 		$parents = new \WP_Query( $parent_args );
 
-		if ( $parents->found_posts ) {
+		if ($parents->found_posts) {
 
-			// Save them to be used when preparing the list query.
-			if ( 'variable' === $parent_type ) {
-				self::$variable_products = array_merge( self::$variable_products, $parents->posts );
+			// Save them to be used when preparing the list query
+			if ($parent_type == 'variable') {
+				self::$variable_products = array_merge(self::$variable_products, $parents->posts);
 			}
 			else {
-				self::$grouped_products = array_merge( self::$grouped_products, $parents->posts );
+				self::$grouped_products = array_merge(self::$grouped_products, $parents->posts);
 			}
 
 			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
 				'post_type'       => $post_type,
-				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'post_status'     => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
-				'post_parent__in' => $parents->posts,
+				'post_parent__in' => $parents->posts
 			) );
 
 			$children = new \WP_Query( $children_args );
 
-			if ( $children->found_posts ) {
+			if ($children->found_posts) {
 				return $children->posts;
 			}
 

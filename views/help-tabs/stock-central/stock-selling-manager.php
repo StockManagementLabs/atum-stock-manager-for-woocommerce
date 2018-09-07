@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 
-defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) or die;
 
 ?>
 <table class="widefat fixed striped">
@@ -34,18 +34,18 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Lost Sales', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( 'Our users will want to see this figure as close to zero as possible. The formula calculates the volume of products that store owner would sell if the item stayed in stock. By default, we take the average sales for the last seven days the item was in stock. We time the result by the number of days the item is out of stock.', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "Our users will want to see this figure as close to zero as possible. The formula calculates the volume of products that store owner would sell if the item stayed in stock. By default, we take the average sales for the last seven days the item was in stock. We time the result by the number of days the item is out of stock.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php _e( 'Stock Indicator', ATUM_TEXT_DOMAIN ) ?></strong></td>
 			<td>
-				<p><i class="dashicons dashicons-yes" style="color: #82C342"></i> <?php _e( 'Product In Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="dashicons dashicons-dismiss" style="color: #FF4848"></i> <?php _e( 'Product Out of Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="dashicons dashicons-warning" style="color: #EFAF00"></i> <?php _e( 'Product is Low Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="dashicons dashicons-visibility"></i> <?php _e( 'Product is Out of Stock, but Managed by WC and Set to Back Orders.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="dashicons dashicons-hidden" style="color: #82C342"></i> <?php _e( 'Product In Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="dashicons dashicons-hidden" style="color: #FF4848"></i> <?php _e( 'Product Out of Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="dashicons dashicons-hidden" style="color: #00B8DB"></i> <?php _e( 'Product set to Back Orders Only and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="dashicons dashicons-yes" style="color: #82C342"></i> <?php _e('Product In Stock and Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-dismiss" style="color: #FF4848"></i> <?php _e('Product Out of Stock and Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-warning" style="color: #EFAF00"></i> <?php _e('Product is Low Stock and Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-visibility"></i> <?php _e('Product is Out of Stock, but Managed by WC and Set to Back Orders.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-hidden" style="color: #82C342"></i> <?php _e('Product In Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-hidden" style="color: #FF4848"></i> <?php _e('Product Out of Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
+				<p><i class="dashicons dashicons-hidden" style="color: #00B8DB"></i> <?php _e('Product set to Back Orders Only and Not Managed by WC.', ATUM_TEXT_DOMAIN) ?></p>
 			</td>
 		</tr>
 	</tbody>

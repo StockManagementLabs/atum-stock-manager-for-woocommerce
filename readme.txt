@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.9.8
+Tested up to: 4.9.7
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.4.5
-Stable tag: 1.4.14
+WC tested up to: 3.4.4
+Stable tag: 1.4.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -200,29 +200,6 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
-`1.4.14`
-
-*2018-09-07*
-
-**Features**
-
-* Added beta label to add-ons in beta stage.
-* Added version label to available add-ons.
-* Added WC Bookings compatibility.
-
-**Changes**
-
-* Moved the "Add tax" button the same place as in WC orders.
-
-**Fixes**
-
-* Fixed output "out of stock threshold" failing with non-standard wpdb prefixes.
-* Fixed add-ons list's transient name.
-* CSS fixes.
-* Full refactory (code style following PHPCS and WPCS standards).
-
----
-
 `1.4.13`
 
 *2018-07-26*
@@ -241,6 +218,8 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed popover titles in Stock Central.
 * Refactory.
 * CSS fixes.
+
+---
 
 ---
 

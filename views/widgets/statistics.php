@@ -3,13 +3,13 @@
  * View for the ATUM Dashboard Statistics widget
  *
  * @since 1.4.0
- *
+ */
+
+/**
  * @var array  $legends
  * @var array  $dataset
  * @var string $period
  */
-
-defined( 'ABSPATH' ) || die;
 ?>
 
 <div class="statistics-widget">
@@ -17,13 +17,13 @@ defined( 'ABSPATH' ) || die;
 	<nav class="mobile-filter-nav">
 		<ul>
 			<li data-show-filter=".filter-controls">
-				<i class="lnr lnr-funnel"></i> <span><?php _e( 'Filters', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="lnr lnr-funnel"></i> <span><?php _e('Filters', ATUM_TEXT_DOMAIN) ?></span> <span class="status">+</span>
 			</li>
 			<li data-show-filter=".chart-type">
-				<i class="lnr lnr-chart-bars"></i> <span><?php _e( 'Chart Type', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="lnr lnr-chart-bars"></i> <span><?php _e('Chart Type', ATUM_TEXT_DOMAIN) ?></span> <span class="status">+</span>
 			</li>
 			<li data-show-filter=".chart-legend">
-				<i class="lnr lnr-layers"></i> <span><?php _e( 'Layers', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="lnr lnr-layers"></i> <span><?php _e('Layers', ATUM_TEXT_DOMAIN) ?></span> <span class="status">+</span>
 			</li>
 		</ul>
 	</nav>
@@ -32,25 +32,25 @@ defined( 'ABSPATH' ) || die;
 
 		<div class="filter-controls">
 			<select class="chart-data left">
-				<option value="sales"><?php _e( 'Sales', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="lost-sales"><?php _e( 'Lost Sales', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="promo-sales"><?php _e( 'Promo Sales', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="orders"><?php _e( 'Orders', ATUM_TEXT_DOMAIN ) ?></option>
+				<option value="sales"><?php _e('Sales', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="lost-sales"><?php _e('Lost Sales', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="promo-sales"><?php _e('Promo Sales', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="orders"><?php _e('Orders', ATUM_TEXT_DOMAIN) ?></option>
 			</select>
 
 			<select class="chart-period left">
-				<option value="this_year"><?php _e( 'This Year', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="previous_year"><?php _e( 'Previous Year', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="this_month"><?php _e( 'This Month', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="previous_month"><?php _e( 'Previous Month', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="this_week"><?php _e( 'This Week', ATUM_TEXT_DOMAIN ) ?></option>
-				<option value="previous_week"><?php _e( 'Previous Week', ATUM_TEXT_DOMAIN ) ?></option>
+				<option value="this_year"><?php _e('This Year', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="previous_year"><?php _e('Previous Year', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="this_month"><?php _e('This Month', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="previous_month"><?php _e('Previous Month', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="this_week"><?php _e('This Week', ATUM_TEXT_DOMAIN) ?></option>
+				<option value="previous_week"><?php _e('Previous Week', ATUM_TEXT_DOMAIN) ?></option>
 			</select>
 		</div>
 
 		<div class="chart-type">
 
-			<a class="active" href="#" title="<?php _e( 'Line Chart', ATUM_TEXT_DOMAIN ) ?>" data-view="line">
+			<a class="active" href="#" title="<?php _e('Line Chart', ATUM_TEXT_DOMAIN) ?>" data-view="line">
 				<svg version="1.1" id="line-chart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100.8px" height="100.8px" viewBox="0 0 100.8 100.8" xml:space="preserve">
 					<path d="M99.3,94.9H3V4.4c0-0.8-0.7-1.5-1.5-1.5S0,3.6,0,4.4v92c0,0.8,0.7,1.5,1.5,1.5h97.8c0.8,0,1.5-0.7,1.5-1.5 S100.1,94.9,99.3,94.9z" />
 					<g>
@@ -59,14 +59,14 @@ defined( 'ABSPATH' ) || die;
 				</svg>
 			</a>
 
-			<a href="#" title="<?php _e( 'Area Chart', ATUM_TEXT_DOMAIN ) ?>" data-view="area">
+			<a href="#" title="<?php _e('Area Chart', ATUM_TEXT_DOMAIN) ?>" data-view="area">
 				<svg version="1.1" id="area-chart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100.8px" height="100.8px" viewBox="0 0 100.8 100.8" xml:space="preserve">
 					<path d="M99.3,94.9H3V4.4c0-0.8-0.7-1.5-1.5-1.5S0,3.6,0,4.4v92c0,0.8,0.7,1.5,1.5,1.5h97.8c0.8,0,1.5-0.7,1.5-1.5 S100.1,94.9,99.3,94.9z"/>
 					<path d="M70.1,50.9c-13.3,22.7-19.9,0.5-22-6c-3.6-11-20.4-41.8-40.7-9.7v54.7h93C100.4,89.9,93.3,17,70.1,50.9z"/>
 				</svg>
 			</a>
 
-			<a href="#" title="<?php _e( 'Bar Chart', ATUM_TEXT_DOMAIN ) ?>" data-view="bar">
+			<a href="#" title="<?php _e('Bar Chart', ATUM_TEXT_DOMAIN) ?>" data-view="bar">
 				<svg version="1.1" id="bar-chart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100.8px" height="100.8px" viewBox="0 0 100.8 100.8" style="enable-background:new 0 0 100.8 100.8;" xml:space="preserve">
 					<path d="M99.3,94.9H3V4.4c0-0.8-0.7-1.5-1.5-1.5S0,3.6,0,4.4v92c0,0.8,0.7,1.5,1.5,1.5h97.8c0.8,0,1.5-0.7,1.5-1.5 S100.1,94.9,99.3,94.9z"/>
 					<path d="M18.8,49.5H8.4c-0.6,0-1,0.5-1,1v38.4c0,0.6,0.5,1,1,1h10.4c0.6,0,1-0.5,1-1V50.5C19.8,49.9,19.4,49.5,18.8,49.5z"/>
@@ -97,7 +97,7 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="canvas-wrapper">
-		<canvas class="statistics-canvas" data-chartdata='<?php echo wp_json_encode( $dataset ) ?>' data-period="<?php echo $period ?>" data-legends='<?php echo wp_json_encode( $legends ) ?>'></canvas>
+		<canvas class="statistics-canvas" data-chartdata='<?php echo json_encode($dataset) ?>' data-period="<?php echo $period ?>" data-legends='<?php echo json_encode($legends) ?>'></canvas>
 		<div class="stats-chart-tooltip" id="stats-chart-tooltip-0"></div>
 		<div class="stats-chart-tooltip" id="stats-chart-tooltip-1"></div>
 	</div>
