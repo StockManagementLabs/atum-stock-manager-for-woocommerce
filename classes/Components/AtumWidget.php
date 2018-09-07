@@ -1,54 +1,60 @@
 <?php
 /**
+ * The abstact class that acts as a skeleton for all the ATUM Widgets
+ *
  * @package         Atum
  * @subpackage      Components
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.4.0
- *
- * The abstact class that acts as a skeleton for all the ATUM Widgets
  */
 
 namespace Atum\Components;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 
 abstract class AtumWidget {
 
 	/**
 	 * The id of this widget
+	 *
 	 * @var string
 	 */
 	protected $id;
 
 	/**
 	 * The widget title
+	 *
 	 * @var string
 	 */
 	protected $title = '';
 
 	/**
 	 * The widget description
+	 *
 	 * @var string
 	 */
 	protected $description = '';
 
 	/**
 	 * The widget thumbnail URL (for the "Add Widget" popup)
+	 *
 	 * @var string
 	 */
 	protected $thumbnail = '';
 
 	/**
 	 * Whether the current widget has the config settings enabled
+	 *
 	 * @var bool
 	 */
 	protected $has_config = TRUE;
 
 	/**
 	 * The key used to store the ATUM Widget options in db
+	 *
 	 * @var string
 	 */
 	protected $options_key = ATUM_PREFIX . 'dashboard_widget_options';
@@ -59,7 +65,7 @@ abstract class AtumWidget {
 	 */
 	public function __construct() {
 
-		// The widgets are used in the admin-side only
+		// The widgets are used in the admin-side only.
 		if ( is_admin() ) {
 			add_action( 'atum/dashboard/setup', array( $this, 'init' ) );
 		}
@@ -99,16 +105,15 @@ abstract class AtumWidget {
 	 */
 	protected function get_dashboard_widget_options() {
 
-		// Fetch all the dashboard widget options from db
+		// Fetch all the dashboard widget options from db.
 		$opts = get_option( $this->options_key );
 
-
-		// If we request a widget and it exists, return it
+		// If we request a widget and it exists, return it.
 		if ( isset( $opts[ $this->id ] ) ) {
 			return $opts[ $this->id ];
 		}
 
-		// Something went wrong
+		// Something went wrong.
 		return FALSE;
 
 	}
@@ -127,13 +132,13 @@ abstract class AtumWidget {
 
 		$opts = $this->get_dashboard_widget_options();
 
-		// If widget opts dont exist, return false
+		// If widget opts dont exist, return false.
 		if ( ! $opts ) {
 			return FALSE;
 		}
 
-		// Otherwise fetch the option or use default
-		if ( ! empty($opts[$option]) ) {
+		// Otherwise fetch the option or use default.
+		if ( ! empty( $opts[ $option ] ) ) {
 			return $opts[ $option ];
 		}
 
@@ -147,19 +152,19 @@ abstract class AtumWidget {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param array  $args      An associative array of options being saved
-	 * @param bool   $add_only  If true, options will not be added if widget options already exist
+	 * @param array $args      An associative array of options being saved.
+	 * @param bool  $add_only  If true, options will not be added if widget options already exist.
 	 */
 	protected function update_dashboard_widget_options( $args = array(), $add_only = FALSE ) {
 
 		// Fetch ALL dashboard widget options from the db...
 		$opts = get_option( $this->options_key );
 
-		// Get just our widget's options, or set empty array
-		$w_opts = ( isset( $opts[ $this->id ] ) ) ? $opts[ $this->id ] : array();
-		$opts[ $this->id ] = ( $add_only ) ? array_merge($args, $w_opts) : array_merge($w_opts, $args);
+		// Get just our widget's options, or set empty array.
+		$w_opts            = isset( $opts[ $this->id ] ) ? $opts[ $this->id ] : array();
+		$opts[ $this->id ] = $add_only ? array_merge( $args, $w_opts ) : array_merge( $w_opts, $args );
 
-		// Save the entire widgets array back to the db
+		// Save the entire widgets array back to the db.
 		update_option( $this->options_key, $opts );
 
 	}

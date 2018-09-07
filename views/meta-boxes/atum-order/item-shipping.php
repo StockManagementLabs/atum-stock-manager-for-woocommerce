@@ -10,7 +10,7 @@
  * @var array                                                   $shipping_methods
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 do_action( 'atum/atum_order/before_item_shipping_html', $item, $atum_order );
 $currency = $atum_order->get_currency();
@@ -33,19 +33,19 @@ $currency = $atum_order->get_currency();
 					<?php
 					$found_method = false;
 
-					foreach ( $shipping_methods as $method ):
+					foreach ( $shipping_methods as $method ) :
 						$current_method = ( 0 === strpos( $item->get_method_id(), $method->id ) ) ? $item->get_method_id() : $method->id;
 
 						echo '<option value="' . esc_attr( $current_method ) . '" ' . selected( $item->get_method_id() === $current_method, true, false ) . '>' . esc_html( $method->get_method_title() ) . '</option>';
 
-						if ( $item->get_method_id() === $current_method ):
+						if ( $item->get_method_id() === $current_method ) :
 							$found_method = true;
 						endif;
 					endforeach;
 
-					if ( ! $found_method && $item->get_method_id() ):
+					if ( ! $found_method && $item->get_method_id() ) :
 						echo '<option value="' . esc_attr( $item->get_method_id() ) . '" selected="selected">' . __( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
-					else:
+					else :
 						echo '<option value="other">' . __( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
 					endif;
 					?>
@@ -54,7 +54,7 @@ $currency = $atum_order->get_currency();
 		</div>
 
 		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, null ) ?>
-		<?php include( 'item-meta.php' ); ?>
+		<?php require 'item-meta.php'; ?>
 		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, null ) ?>
 	</td>
 
@@ -78,11 +78,13 @@ $currency = $atum_order->get_currency();
 		</div>
 	</td>
 
-	<?php if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ):
+	<?php if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ) :
 
-		foreach ( $atum_order->get_taxes() as $tax_item ):
+		foreach ( $atum_order->get_taxes() as $tax_item ) :
 
 			/**
+			 * Variable definition
+			 *
 			 * @var WC_Order_Item_Tax $tax_item
 			 */
 			$tax_item_id    = $tax_item->get_rate_id();

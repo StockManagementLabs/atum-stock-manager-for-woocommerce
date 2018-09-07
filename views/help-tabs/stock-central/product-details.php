@@ -5,19 +5,19 @@
  * @since 0.0.5
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 ?>
 <table class="widefat fixed striped">
 	<thead>
 		<tr>
-			<td><strong><?php _e( 'COLUMN', ATUM_TEXT_DOMAIN) ?></strong></td>
+			<td><strong><?php _e( 'COLUMN', ATUM_TEXT_DOMAIN ) ?></strong></td>
 			<td><strong><?php _e( 'DEFINITION', ATUM_TEXT_DOMAIN ) ?></strong></td>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td><span class="dashicons dashicons-format-image" title="<?php _e('Thumbnail', ATUM_TEXT_DOMAIN) ?>"></span></td>
+			<td><span class="dashicons dashicons-format-image" title="<?php _e( 'Thumbnail', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php _e( 'Product small image preview.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
@@ -61,6 +61,6 @@ defined( 'ABSPATH' ) or die;
 			<td><?php _e( "Shows the product's Location hierarchy. Click ones to open the hierarchy in a popup.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 
-		<?php do_action('atum/help_tabs/stock_central/after_product_details') ?>
+		<?php do_action( 'atum/help_tabs/stock_central/after_product_details' ) ?>
 	</tbody>
 </table>

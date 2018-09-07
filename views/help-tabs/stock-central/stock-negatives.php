@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 ?>
 <table class="widefat fixed striped">

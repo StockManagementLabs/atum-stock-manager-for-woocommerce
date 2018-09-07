@@ -3,17 +3,17 @@
  * View for the Purchase Order reports
  *
  * @since 1.4.0
- */
-
-use Atum\Components\AtumCapabilities;
-use Atum\Suppliers\Suppliers;
-
-/**
+ *
  * @var \Atum\PurchaseOrders\Exports\POExport $po
  * @var int   $desc_percent
  * @var float $discount
  * @var int   $total_text_colspan
  */
+
+defined( 'ABSPATH' ) || die;
+
+use Atum\Components\AtumCapabilities;
+use Atum\Suppliers\Suppliers;
 ?>
 <div class="po-wrapper content-header">
 	<div class="float-left">
@@ -23,11 +23,11 @@ use Atum\Suppliers\Suppliers;
 		<h3 class="po-title"><?php _e( 'Purchase Order', ATUM_TEXT_DOMAIN ) ?></h3>
 		<div class="content-header-po-data">
 			<div class="row">
-				<span class="label"><?php _e('Date:', ATUM_TEXT_DOMAIN) ?>&nbsp;&nbsp;</span>
+				<span class="label"><?php _e( 'Date:', ATUM_TEXT_DOMAIN ) ?>&nbsp;&nbsp;</span>
 				<span class="field"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $po->get_date() ) ) ?></span>
 			</div>
 			<div class="row">
-				<span class="label"><?php _e('P.O. #:', ATUM_TEXT_DOMAIN) ?>&nbsp;&nbsp;</span>
+				<span class="label"><?php _e( 'P.O. #:', ATUM_TEXT_DOMAIN ) ?>&nbsp;&nbsp;</span>
 				<span class="field"><?php echo $po->get_id() ?></span>
 			</div>
 		</div>
@@ -57,7 +57,7 @@ use Atum\Suppliers\Suppliers;
 				<th class="qty"><?php _e( 'Qty', ATUM_TEXT_DOMAIN ) ?></th>
 				<th class="price"><?php _e( 'Unit Price', ATUM_TEXT_DOMAIN ) ?></th>
 
-				<?php if ( $discount ): ?>
+				<?php if ( $discount ) : ?>
 					<th class="discount"><?php _e( 'Discount', ATUM_TEXT_DOMAIN ) ?></th>
 				<?php endif; ?>
 
@@ -75,8 +75,10 @@ use Atum\Suppliers\Suppliers;
 			</tr>
 		</thead>
 		<tbody class="po-lines">
-			<?php foreach ( $po->get_items() as $item ):
+			<?php foreach ( $po->get_items() as $item ) :
 				/**
+				 * Variable definition
+				 *
 				 * @var \WC_Order_Item_Product $item
 				 */
 				?>
@@ -85,10 +87,10 @@ use Atum\Suppliers\Suppliers;
 						<?php
 						$product = $item->get_product();
 
-						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ):
+						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
 							$supplier_sku = get_post_meta( $product->get_id(), Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
 							
-							if ( $supplier_sku ): ?>
+							if ( $supplier_sku ) : ?>
 								<br>
 								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
 									<?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
@@ -97,22 +99,19 @@ use Atum\Suppliers\Suppliers;
 							
 							$sku = get_post_meta( $product->get_id(), '_sku', TRUE );
 							
-							if ( $sku ): ?>
+							if ( $sku ) : ?>
 								<br>
 								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
 									<?php _e( 'SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $sku ) ?>
 								</span>
 							<?php endif;
-						endif;
-						?>
-						
-						
+						endif; ?>
 					</td>
 					<td class="qty"><?php echo $item->get_quantity() ?></td>
 					<td class="price"><?php echo wc_price( $po->get_item_subtotal( $item, FALSE, FALSE ), array( 'currency' => $currency ) ); ?></td>
-					<?php if ( $discount ): ?>
+					<?php if ( $discount ) : ?>
 						<td class="discount">
-							<?php if ( $item->get_subtotal() != $item->get_total() ): ?>
+							<?php if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
 								-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ) ?>
 							<?php endif; ?>
 						</td>
@@ -122,12 +121,12 @@ use Atum\Suppliers\Suppliers;
 					if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ) :
 
 						foreach ( $po->get_taxes() as $tax_item ) :
-							$tax_item_id = $tax_item->get_rate_id();
+							$tax_item_id    = $tax_item->get_rate_id();
 							$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : ''; ?>
 							<td class="tax">
-								<?php if ( '' != $tax_item_total ):
+								<?php if ( '' !== $tax_item_total ) :
 									echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) );
-								else:
+								else :
 									echo '&ndash;';
 								endif; ?>
 							</td>
@@ -138,26 +137,26 @@ use Atum\Suppliers\Suppliers;
 				</tr>
 			<?php endforeach; ?>
 
-			<?php if ( $line_items_shipping ): ?>
-				<?php foreach ( $line_items_shipping as $item_id => $item ): ?>
+			<?php if ( $line_items_shipping ) : ?>
+				<?php foreach ( $line_items_shipping as $item_id => $item ) : ?>
 					<tr class="po-line content-shipping">
 						<td class="description"><?php echo esc_html( $item->get_name() ?: __( 'Shipping', ATUM_TEXT_DOMAIN ) ); ?></td>
 						<td class="qty">&nbsp;</td>
 						<td class="price">&nbsp;</td>
 
-						<?php if ( $discount ): ?>
+						<?php if ( $discount ) : ?>
 							<td class="discount">&nbsp;</td>
 						<?php endif; ?>
 
 						<?php if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ) :
 
 							foreach ( $po->get_taxes() as $tax_item ) :
-								$tax_item_id = $tax_item->get_rate_id();
+								$tax_item_id    = $tax_item->get_rate_id();
 								$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : ''; ?>
 								<td class="tax">
-									<?php if ( '' != $tax_item_total ):
+									<?php if ( '' !== $tax_item_total ) :
 										echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) );
-									else:
+									else :
 										echo '&ndash;';
 									endif; ?>
 								</td>
@@ -169,26 +168,26 @@ use Atum\Suppliers\Suppliers;
 				<?php endforeach; ?>
 			<?php endif; ?>
 
-			<?php if ( $line_items_fee ): ?>
-				<?php foreach ( $line_items_fee as $item_id => $item ): ?>
+			<?php if ( $line_items_fee ) : ?>
+				<?php foreach ( $line_items_fee as $item_id => $item ) : ?>
 					<tr class="po-line content-fees">
 						<td class="description kk"><?php echo esc_html( $item->get_name() ?: __( 'Fee', ATUM_TEXT_DOMAIN ) ); ?></td>
 						<td class="qty">&nbsp;</td>
 						<td class="price">&nbsp;</td>
 
-						<?php if ( $discount ): ?>
+						<?php if ( $discount ) : ?>
 							<td class="discount">&nbsp;</td>
 						<?php endif; ?>
 
-						<?php if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ):
+						<?php if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ) :
 
 							foreach ( $po->get_taxes() as $tax_item ) :
-								$tax_item_id = $tax_item->get_rate_id();
+								$tax_item_id    = $tax_item->get_rate_id();
 								$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : ''; ?>
 								<td class="tax">
-									<?php if ( '' != $tax_item_total ):
+									<?php if ( '' !== $tax_item_total ) :
 										echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) );
-									else:
+									else :
 										echo '&ndash;';
 									endif; ?>
 								</td>
@@ -212,7 +211,7 @@ use Atum\Suppliers\Suppliers;
 			</td>
 		</tr>
 
-		<?php if ( $discount ): ?>
+		<?php if ( $discount ) : ?>
 			<tr>
 				<td class="label" colspan="<?php echo $total_text_colspan ?>">
 					<?php _e( 'Discount', ATUM_TEXT_DOMAIN ) ?>:
@@ -223,7 +222,7 @@ use Atum\Suppliers\Suppliers;
 			</tr>
 		<?php endif; ?>
 
-		<?php if ( $line_items_shipping ): ?>
+		<?php if ( $line_items_shipping ) : ?>
 			<tr>
 				<td class="label" colspan="<?php echo $total_text_colspan ?>">
 					<?php _e( 'Shipping', ATUM_TEXT_DOMAIN ) ?>:
@@ -238,7 +237,7 @@ use Atum\Suppliers\Suppliers;
 
 			$tax_totals = $po->get_tax_totals();
 
-			if ( ! empty( $tax_totals ) ):
+			if ( ! empty( $tax_totals ) ) :
 
 				foreach ( $tax_totals as $code => $tax ) : ?>
 					<tr>
@@ -258,7 +257,9 @@ use Atum\Suppliers\Suppliers;
 		<tr class="po-total">
 			<td colspan="<?php echo $total_text_colspan - 2 ?>"></td>
 			<td class="label" colspan="2">
-				<?php printf( __( '%s Total', ATUM_TEXT_DOMAIN ), $post_type->labels->singular_name ); ?>:
+				<?php
+				/* translators: the purchase order's post type name */
+				printf( __( '%s Total', ATUM_TEXT_DOMAIN ), $post_type->labels->singular_name ); ?>:
 			</td>
 			<td class="total">
 				<?php echo $po->get_formatted_total(); ?>
@@ -274,6 +275,6 @@ use Atum\Suppliers\Suppliers;
 		<?php _e( 'Description', ATUM_TEXT_DOMAIN ) ?>
 	</div>
 	<div class="po-content">
-		<?php echo apply_filters( 'the_content', $po->get_description() ) ?>
+		<?php echo apply_filters( 'the_content', $po->get_description() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?>
 	</div>
 </div>

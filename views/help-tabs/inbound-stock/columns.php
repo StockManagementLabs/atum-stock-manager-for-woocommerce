@@ -5,19 +5,19 @@
  * @since 1.3.0
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 ?>
 <table class="widefat fixed striped">
 	<thead>
 		<tr>
-			<td><strong><?php _e( 'COLUMN', ATUM_TEXT_DOMAIN) ?></strong></td>
+			<td><strong><?php _e( 'COLUMN', ATUM_TEXT_DOMAIN ) ?></strong></td>
 			<td><strong><?php _e( 'DEFINITION', ATUM_TEXT_DOMAIN ) ?></strong></td>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td><span class="dashicons dashicons-format-image" title="<?php _e('Thumbnail', ATUM_TEXT_DOMAIN) ?>"></span></td>
+			<td><span class="dashicons dashicons-format-image" title="<?php _e( 'Thumbnail', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php _e( 'Product small image preview.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
