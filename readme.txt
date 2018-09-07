@@ -7,7 +7,7 @@ Tested up to: 4.9.8
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.4.5
-Stable tag: 1.4.14.1
+Stable tag: 1.4.14.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -200,7 +200,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
-`1.4.14.1`
+`1.4.14.2`
 
 *2018-09-07*
 
