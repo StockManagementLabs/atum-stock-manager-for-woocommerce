@@ -224,7 +224,7 @@ class Dashboard {
 
 						// Load the widget (the class and file naming convention must follow PSR4 standards).
 						if ( class_exists( $widget_name ) ) {
-							$widget                             = new $widget_name();
+							$widget = new $widget_name();
 							/* @noinspection PhpUndefinedMethodInspection */
 							$this->widgets[ $widget->get_id() ] = $widget;
 						}
@@ -273,7 +273,7 @@ class Dashboard {
 			/*
 			 * SweetAlert 2
 			 */
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
 			/*
@@ -340,7 +340,7 @@ class Dashboard {
 			if ( in_array( ATUM_PREFIX . 'statistics_widget', $widget_keys ) ) {
 				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
 				wp_enqueue_style( 'switchery' );
-				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
+				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION, TRUE );
 				$deps[] = 'switchery';
 				$deps[] = 'jquery-ui-sortable';
 			}
@@ -459,14 +459,14 @@ class Dashboard {
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

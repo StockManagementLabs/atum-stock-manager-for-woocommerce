@@ -148,16 +148,16 @@ class InboundStock extends AtumListPage {
 	}
 
 	
-	/****************************
+	/********************
 	 * Instance methods
-	 ****************************/
+	 ********************/
 
 	/**
 	 * Cannot be cloned
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
@@ -165,7 +165,7 @@ class InboundStock extends AtumListPage {
 	 */
 	public function __sleep() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
 	/**

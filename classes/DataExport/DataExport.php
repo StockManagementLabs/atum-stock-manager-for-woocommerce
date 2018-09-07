@@ -265,7 +265,7 @@ class DataExport {
 			$mpdf->WriteHTML( $html_report );
 
 			$date_now = date_i18n( 'Y-m-d' );
-			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", 'I' );
+			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", 'I' ); // WPCS: XSS ok.
 
 		} catch ( MpdfException $e ) {
 
@@ -305,7 +305,7 @@ class DataExport {
 		$html_report_class = apply_filters( 'atum/data_export/html_report_class', '\Atum\DataExport\Reports\HtmlReport' );
 
 		if ( ! class_exists( $html_report_class ) ) {
-			wp_die( __( 'Report class not found', ATUM_TEXT_DOMAIN ) );
+			wp_die( esc_attr__( 'Report class not found', ATUM_TEXT_DOMAIN ) );
 		}
 
 		/**

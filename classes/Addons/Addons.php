@@ -166,9 +166,9 @@ class Addons {
 		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2' ), ATUM_VERSION );
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
-		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
+		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 		Helpers::maybe_es6_promise();
-		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION );
+		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
@@ -513,6 +513,7 @@ class Addons {
 		Helpers::delete_transients( $transient_name );
 	}
 
+	/* @noinspection PhpDocRedundantThrowsInspection */
 	/**
 	 * Download an ATUM addon and install it
 	 *
@@ -763,7 +764,7 @@ class Addons {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
@@ -771,7 +772,7 @@ class Addons {
 	 */
 	public function __sleep() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

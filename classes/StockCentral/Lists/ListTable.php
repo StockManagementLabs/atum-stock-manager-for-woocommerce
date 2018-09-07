@@ -295,10 +295,10 @@ class ListTable extends AtumListTable {
 
 		?>
 		<select name="extra_filter" class="dropdown_extra_filter" autocomplete="off">
-			<option value=""><?php _e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
+			<option value=""><?php esc_attr_e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
-				<option value="<?php echo $extra_filter ?>"<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] === $extra_filter, TRUE ); // WPCS: CSRF ok. ?>><?php echo $label ?></option>
+				<option value="<?php echo esc_attr( $extra_filter ) ?>"<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] === $extra_filter, TRUE ); ?>><?php echo esc_attr( $label ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
@@ -1075,18 +1075,18 @@ class ListTable extends AtumListTable {
 		<div class="alert alert-primary">
 			<h3>
 				<i class="dashicons dashicons-megaphone"></i>
-				<?php _e( "Your products need to be set as 'Controlled by ATUM' to appear here", ATUM_TEXT_DOMAIN ) ?>
+				<?php esc_attr_e( "Your products need to be set as 'Controlled by ATUM' to appear here", ATUM_TEXT_DOMAIN ) ?>
 			</h3>
 
-			<p><?php _e( 'You can do it in 3 ways:', ATUM_TEXT_DOMAIN ) ?></p>
+			<p><?php esc_attr_e( 'You can do it in 3 ways:', ATUM_TEXT_DOMAIN ) ?></p>
 
 			<ol>
-				<li><?php _e( "Using the <strong>ATUM Control Switch</strong> that you'll find in every product <strong>edit</strong> page within the <strong>Product Data</strong> section. It may take a lot of time as this is per product edit.", ATUM_TEXT_DOMAIN ) ?></li>
-				<li><?php _e( "Going to the <strong>Uncontrolled</strong> list using the above button (<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like to take control of, open the bulk action drop-down and press <strong>Enable ATUM's Stock Control</strong> option.", ATUM_TEXT_DOMAIN ) ?></li>
+				<li><?php _e( "Using the <strong>ATUM Control Switch</strong> that you'll find in every product <strong>edit</strong> page within the <strong>Product Data</strong> section. It may take a lot of time as this is per product edit.", ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></li>
+				<li><?php _e( "Going to the <strong>Uncontrolled</strong> list using the above button (<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like to take control of, open the bulk action drop-down and press <strong>Enable ATUM's Stock Control</strong> option.", ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></li>
 				<li>
 					<?php
 					/* translators: first one is the button html tag and second is the closing tag */
-					printf( __( 'We can add all your products at once! Just click the button below. If you change your mind later, you can revert the action by using the <code>ATUM Settings menu > Tools</code>.<br>%1$sControl all my products%2$s', ATUM_TEXT_DOMAIN ), '<button class="btn btn-sm btn-secondary" id="control-all-products" data-nonce="' . wp_create_nonce( 'atum-control-all-products-nonce' ) . '">', '</button>' );
+					printf( __( 'We can add all your products at once! Just click the button below. If you change your mind later, you can revert the action by using the <code>ATUM Settings menu > Tools</code>.<br>%1$sControl all my products%2$s', ATUM_TEXT_DOMAIN ), '<button class="btn btn-sm btn-secondary" id="control-all-products" data-nonce="' . wp_create_nonce( 'atum-control-all-products-nonce' ) . '">', '</button>' ); // WPCS: XSS ok.
 					?>
 				</li>
 			</ol>

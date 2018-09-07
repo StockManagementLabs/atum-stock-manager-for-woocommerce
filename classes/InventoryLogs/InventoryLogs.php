@@ -224,7 +224,7 @@ class InventoryLogs extends AtumOrderPostType {
 				'taxonomy'        => self::TAXONOMY,
 				'name'            => self::TAXONOMY,
 				'orderby'         => 'name',
-				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? $_GET[ self::TAXONOMY ] : '', // WPCS: CSRF ok.
+				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? esc_attr( $_GET[ self::TAXONOMY ] ) : '',
 				'hierarchical'    => FALSE,
 				'show_count'      => TRUE,
 				'hide_empty'      => FALSE,
@@ -289,7 +289,7 @@ class InventoryLogs extends AtumOrderPostType {
 				$log_type = $log->get_type();
 
 				if ( in_array( $log_type, array_keys( $types ) ) ) {
-					echo $types[ $log_type ];
+					echo $types[ $log_type ]; // WPCS: XSS ok.
 				}
 
 				break;
@@ -297,7 +297,7 @@ class InventoryLogs extends AtumOrderPostType {
 			case 'wc_order':
 				$log_order = $log->get_order();
 
-				echo $log_order ? '<a href="' . admin_url( 'post.php?post=' . absint( $log_order->get_id() ) . '&action=edit' ) . '" target="_blank">' . __( 'Order #', ATUM_TEXT_DOMAIN ) . $log_order->get_id() . '</a>' : '&ndash;';
+				echo $log_order ? '<a href="' . admin_url( 'post.php?post=' . absint( $log_order->get_id() ) . '&action=edit' ) . '" target="_blank">' . esc_attr__( 'Order #', ATUM_TEXT_DOMAIN ) . $log_order->get_id() . '</a>' : '&ndash;'; // WPCS: XSS ok.
 				break;
 
 		}

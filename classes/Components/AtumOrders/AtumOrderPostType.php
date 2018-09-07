@@ -60,7 +60,6 @@ abstract class AtumOrderPostType {
 	 */
 	const ORDER_ITEM_META_TABLE = ATUM_PREFIX . 'order_itemmeta';
 
-
 	/**
 	 * AtumOrderPostType constructor
 	 *
@@ -81,24 +80,26 @@ abstract class AtumOrderPostType {
 
 		// Register the post type.
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		/* @noinspection PhpUndefinedClassConstantInspection */
+		$post_type = static::POST_TYPE;
 
 		if ( is_admin() ) {
 
 			// Add the custom columns to the post type list table.
-			add_filter( 'manage_' . static::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
-			add_action( 'manage_' . static::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
+			add_filter( "manage_{$post_type}_posts_columns", array( $this, 'add_columns' ) );
+			add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'render_columns' ), 2 );
 			add_filter( 'post_row_actions', array( $this, 'row_actions' ), 2, 100 );
-			add_filter( 'manage_edit-' . static::POST_TYPE . '_sortable_columns', array( $this, 'sortable_columns' ) );
+			add_filter( "manage_edit-{$post_type}_sortable_columns", array( $this, 'sortable_columns' ) );
 			add_filter( 'list_table_primary_column', array( $this, 'list_table_primary_column' ), 10, 2 );
 
 			// Filters and sorts the ATUM Orders' list tables.
 			add_filter( 'request', array( $this, 'request_query' ) );
 
 			// Add meta boxes to ATUM Order UI.
-			add_action( 'add_meta_boxes_' . static::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
+			add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes' ), 30 );
 
 			// Save the meta boxes.
-			add_action( 'save_post_' . static::POST_TYPE, array( $this, 'save_meta_boxes' ) );
+			add_action( "save_post_{$post_type}", array( $this, 'save_meta_boxes' ) );
 
 			// Disable post type view mode options.
 			add_filter( 'view_mode_post_types', array( $this, 'disable_view_mode_options' ) );
@@ -110,8 +111,8 @@ abstract class AtumOrderPostType {
 			add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
 
 			// Bulk actions.
-			add_filter( 'bulk_actions-edit-' . static::POST_TYPE, array( $this, 'add_bulk_actions' ) );
-			add_filter( 'handle_bulk_actions-edit-' . static::POST_TYPE, array( $this, 'handle_bulk_actions' ), 10, 3 );
+			add_filter( "bulk_actions-edit-{$post_type}", array( $this, 'add_bulk_actions' ) );
+			add_filter( "handle_bulk_actions-edit-{$post_type}", array( $this, 'handle_bulk_actions' ), 10, 3 );
 			add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ), 10, 2 );
 
@@ -126,7 +127,7 @@ abstract class AtumOrderPostType {
 			
 		}
 		
-		do_action( 'atum/order_post_type/init', static::POST_TYPE );
+		do_action( 'atum/order_post_type/init', $post_type );
 
 	}
 
@@ -143,6 +144,9 @@ abstract class AtumOrderPostType {
 		$read_capability = isset( $this->capabilities['read_post'] ) ? $this->capabilities['read_post'] : 'manage_woocommerce';
 		$is_user_allowed = current_user_can( $read_capability );
 		$main_menu_item  = Main::get_main_menu_item();
+
+		/* @noinspection PhpUndefinedClassConstantInspection */
+		$post_type = static::POST_TYPE;
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
@@ -162,7 +166,7 @@ abstract class AtumOrderPostType {
 		), $args ));
 
 		// Register the ATUM Order post type.
-		register_post_type( static::POST_TYPE, $args );
+		register_post_type( $post_type, $args );
 
 		// Register the post statuses.
 		$atum_statuses = (array) apply_filters( 'atum/order_post_type/register_post_statuses',
@@ -193,6 +197,7 @@ abstract class AtumOrderPostType {
 		}
 
 		// Register the taxomony only if needed by the custom post type.
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( defined( 'static::TAXONOMY' ) && ! empty( static::TAXONOMY ) ) {
 
 			$args = apply_filters( 'atum/order_post_type/taxonomy_args', wp_parse_args( array(
@@ -206,7 +211,8 @@ abstract class AtumOrderPostType {
 			), $args ));
 
 			// Register the hidden order type taxonomy (if used).
-			register_taxonomy( static::TAXONOMY, array( static::POST_TYPE ), $args );
+			/* @noinspection PhpUndefinedClassConstantInspection */
+			register_taxonomy( static::TAXONOMY, array( $post_type ), $args );
 
 		}
 
@@ -269,6 +275,7 @@ abstract class AtumOrderPostType {
 
 		global $typenow, $wp_post_statuses;
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $typenow ) {
 
 			// Sorting.
@@ -328,6 +335,9 @@ abstract class AtumOrderPostType {
 		global $post;
 		$rendered = FALSE;
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
+		$post_type = static::POST_TYPE;
+
 		switch ( $column ) {
 
 			case 'status':
@@ -364,13 +374,13 @@ abstract class AtumOrderPostType {
 					$username = 'ATUM';
 				}
 
-				echo '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
+				echo '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>'; // WPCS: XSS ok.
 				$rendered = TRUE;
 
 				break;
 
 			case 'date':
-				printf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) );
+				printf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) ); // WPCS: XSS ok.
 				$rendered = TRUE;
 
 				break;
@@ -390,15 +400,15 @@ abstract class AtumOrderPostType {
 					$latest_note = current( $latest_notes );
 
 					if ( isset( $latest_note->comment_content ) && 1 == $post->comment_count ) { // WPCS: loose comparison ok.
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . __( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
+						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // WPCS: XSS ok.
 					}
 					elseif ( isset( $latest_note->comment_content ) ) {
 						/* translators: the notes' count */
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content . '<br/><small style="display:block">' . sprintf( _n( 'plus %d other note', 'plus %d other notes', ( $post->comment_count - 1 ), ATUM_TEXT_DOMAIN ), $post->comment_count - 1 ) . '</small>' ) . '">' . __( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
+						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content . '<br/><small style="display:block">' . sprintf( _n( 'plus %d other note', 'plus %d other notes', ( $post->comment_count - 1 ), ATUM_TEXT_DOMAIN ), $post->comment_count - 1 ) . '</small>' ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // WPCS: XSS ok.
 					}
 					else {
 						/* translators: the notes' count */
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . __( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
+						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // WPCS: XSS ok.
 					}
 
 				}
@@ -414,7 +424,7 @@ abstract class AtumOrderPostType {
 				$atum_order = Helpers::get_atum_order_model( $post->ID );
 
 				if ( ! is_wp_error( $atum_order ) ) {
-					echo $atum_order->get_formatted_total();
+					echo $atum_order->get_formatted_total(); // WPCS: XSS ok.
 				}
 
 				break;
@@ -429,7 +439,7 @@ abstract class AtumOrderPostType {
 				?><p>
 				<?php
 
-				do_action( 'atum/' . static::POST_TYPE . '/admin_actions_start', $atum_order );
+				do_action( "atum/$post_type/admin_actions_start", $atum_order );
 
 				$actions = array();
 				$status  = $atum_order->get_status();
@@ -462,13 +472,13 @@ abstract class AtumOrderPostType {
 					'target' => '_self',
 				);
 
-				$actions = apply_filters( 'atum/' . static::POST_TYPE . '/admin_order_actions', $actions, $atum_order );
+				$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
 				
 				foreach ( $actions as $action ) {
 					printf( '<a class="button %s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
 				}
 				
-				do_action( 'atum/' . static::POST_TYPE . '/admin_actions_end', $atum_order ); ?>
+				do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>
 				</p>
 				<?php
 				
@@ -492,6 +502,7 @@ abstract class AtumOrderPostType {
 	 */
 	public function row_actions( $actions, $post ) {
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post->post_type && isset( $actions['inline hide-if-no-js'] ) ) {
 			unset( $actions['inline hide-if-no-js'] );
 		}
@@ -511,6 +522,7 @@ abstract class AtumOrderPostType {
 	 */
 	public function list_table_primary_column( $default, $screen_id ) {
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( 'edit-' . static::POST_TYPE === $screen_id ) {
 			return 'atum_order_title';
 		}
@@ -549,12 +561,15 @@ abstract class AtumOrderPostType {
 	 */
 	public function add_meta_boxes() {
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
+		$post_type = static::POST_TYPE;
+
 		// Data meta box.
 		add_meta_box(
 			'atum_order_data',
 			! empty( $this->metabox_labels['data'] ) ? $this->metabox_labels['data'] : __( 'Data', ATUM_TEXT_DOMAIN ),
 			array( $this, 'show_data_meta_box' ),
-			static::POST_TYPE,
+			$post_type,
 			'normal',
 			'high'
 		);
@@ -564,7 +579,7 @@ abstract class AtumOrderPostType {
 			'atum_order_items',
 			! empty( $this->metabox_labels['items'] ) ? $this->metabox_labels['items'] : __( 'Items', ATUM_TEXT_DOMAIN ),
 			array( $this, 'show_items_meta_box' ),
-			static::POST_TYPE,
+			$post_type,
 			'normal',
 			'high'
 		);
@@ -576,7 +591,7 @@ abstract class AtumOrderPostType {
 				'atum_order_notes',
 				! empty( $this->metabox_labels['notes'] ) ? $this->metabox_labels['notes'] : __( 'Notes', ATUM_TEXT_DOMAIN ),
 				array( $this, 'show_notes_meta_box' ),
-				static::POST_TYPE,
+				$post_type,
 				'side',
 				'default'
 			);
@@ -588,16 +603,16 @@ abstract class AtumOrderPostType {
 			'atum_order_actions',
 			! empty( $this->metabox_labels['actions'] ) ? $this->metabox_labels['actions'] : __( 'Actions', ATUM_TEXT_DOMAIN ),
 			array( $this, 'show_actions_meta_box' ),
-			static::POST_TYPE,
+			$post_type,
 			'side',
 			'high'
 		);
 
 		// Remove unneeded WP meta boxes.
-		remove_meta_box( 'commentsdiv', static::POST_TYPE, 'normal' );
-		remove_meta_box( 'commentstatusdiv', static::POST_TYPE, 'normal' );
-		remove_meta_box( 'slugdiv', static::POST_TYPE, 'normal' );
-		remove_meta_box( 'submitdiv', static::POST_TYPE, 'side' );
+		remove_meta_box( 'commentsdiv', $post_type, 'normal' );
+		remove_meta_box( 'commentstatusdiv', $post_type, 'normal' );
+		remove_meta_box( 'slugdiv', $post_type, 'normal' );
+		remove_meta_box( 'submitdiv', $post_type, 'side' );
 
 	}
 
@@ -667,6 +682,8 @@ abstract class AtumOrderPostType {
 	 * @return array
 	 */
 	public function disable_view_mode_options( $post_types ) {
+
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		unset( $post_types[ static::POST_TYPE ] );
 		return $post_types;
 	}
@@ -679,6 +696,7 @@ abstract class AtumOrderPostType {
 	public function disable_autosave() {
 		global $post;
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( $post && get_post_type( $post->ID ) === static::POST_TYPE ) {
 			wp_dequeue_script( 'autosave' );
 		}
@@ -736,15 +754,18 @@ abstract class AtumOrderPostType {
 		$changed = 0;
 		$ids     = array_map( 'absint', $ids );
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
+		$post_type = static::POST_TYPE;
+
 		foreach ( $ids as $id ) {
 			$atum_order = Helpers::get_atum_order_model( $id );
 			$atum_order->update_status( $new_status );
-			do_action( 'atum/' . static::POST_TYPE . '/edit_status', $id, $new_status );
+			do_action( "atum/$post_type/edit_status", $id, $new_status );
 			$changed++;
 		}
 
 		$redirect_to = add_query_arg( array(
-			'post_type'    => static::POST_TYPE,
+			'post_type'    => $post_type,
 			$report_action => TRUE,
 			'changed'      => $changed,
 			'ids'          => join( ',', $ids ),
@@ -764,6 +785,7 @@ abstract class AtumOrderPostType {
 		global $post_type, $pagenow;
 
 		// Bail out if not on ATUM Order's list page.
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( 'edit.php' !== $pagenow || static::POST_TYPE !== $post_type ) {
 			return;
 		}
@@ -778,7 +800,7 @@ abstract class AtumOrderPostType {
 				$number = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0; // WPCS: CSRF ok.
 				/* translators: the number of changed statuses */
 				$message = sprintf( _n( 'Status changed.', '%s statuses changed.', $number, ATUM_TEXT_DOMAIN ), number_format_i18n( $number ) ); // phpcs:ignore
-				echo '<div class="updated"><p>' . $message . '</p></div>';
+				echo '<div class="updated"><p>' . $message . '</p></div>'; // WPCS: XSS ok.
 
 				break;
 			}
@@ -820,6 +842,7 @@ abstract class AtumOrderPostType {
 
 		global $post_type;
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post_type ) {
 
 			global $wp_scripts, $post;
@@ -832,7 +855,7 @@ abstract class AtumOrderPostType {
 
 				// Sweet Alert.
 				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION );
+				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
 				Helpers::maybe_es6_promise();
 
 				if ( wp_script_is( 'es6-promise', 'registered' ) ) {
@@ -841,7 +864,7 @@ abstract class AtumOrderPostType {
 
 				// Switchery.
 				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
-				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION );
+				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION, TRUE );
 
 				// Enqueue styles.
 				wp_enqueue_style( 'sweetalert2' );
@@ -917,6 +940,7 @@ abstract class AtumOrderPostType {
 
 		global $post_type, $pagenow;
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post_type && 'edit.php' === $pagenow ) {
 
 			?>
@@ -955,6 +979,7 @@ abstract class AtumOrderPostType {
 			return $query;
 		}
 
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE !== $typenow ) {
 			return $query;
 		}
@@ -993,7 +1018,10 @@ abstract class AtumOrderPostType {
 
 		global $pagenow, $wpdb;
 
-		if ( 'edit.php' !== $pagenow || empty( $query->query_vars['s'] ) || static::POST_TYPE !== $query->query_vars['post_type'] ) {
+		/* @noinspection PhpUndefinedClassConstantInspection */
+		$post_type = static::POST_TYPE;
+
+		if ( 'edit.php' !== $pagenow || empty( $query->query_vars['s'] ) || $post_type !== $query->query_vars['post_type'] ) {
 			return;
 		}
 
@@ -1016,7 +1044,7 @@ abstract class AtumOrderPostType {
 		);
 
 		// Searches on meta data can be slow - this let you choose what fields to search.
-		$search_fields  = array_map( 'wc_clean', apply_filters( 'atum/' . static::POST_TYPE . '/search_fields', array( '_order' ) ) );
+		$search_fields  = array_map( 'wc_clean', apply_filters( "atum/$post_type/search_fields", array( '_order' ) ) );
 		$atum_order_ids = array();
 
 		if ( is_numeric( $term ) ) {
@@ -1040,7 +1068,7 @@ abstract class AtumOrderPostType {
 
 		}
 
-		$atum_order_ids = apply_filters( 'atum/' . static::POST_TYPE . '/search_results', $atum_order_ids, $term, $search_fields );
+		$atum_order_ids = apply_filters( "atum/$post_type/search_results", $atum_order_ids, $term, $search_fields );
 
 		if ( ! empty( $atum_order_ids ) ) {
 			// Remove "s" - we don't want to search ATUM Order names.
@@ -1074,6 +1102,8 @@ abstract class AtumOrderPostType {
 	 * @return string
 	 */
 	public static function get_post_type() {
+
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		return static::POST_TYPE;
 	}
 
@@ -1085,6 +1115,8 @@ abstract class AtumOrderPostType {
 	 * @return string|bool
 	 */
 	public static function get_type_taxonomy() {
+
+		/* @noinspection PhpUndefinedClassConstantInspection */
 		return ! empty( static::TAXONOMY ) ? static::TAXONOMY : FALSE;
 	}
 

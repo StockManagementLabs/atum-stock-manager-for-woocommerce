@@ -388,9 +388,13 @@ abstract class AtumOrderModel {
 		$item->set_atum_order_id( $this->id );
 
 		if ( $shipping ) {
+			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_method_id( $shipping->get_method_id() );
+			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_total( $shipping->get_total() );
+			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_taxes( $shipping->get_taxes() );
+			/* @noinspection PhpUnhandledExceptionInspection */
 			$item->set_method_title( $shipping->get_method_title() );
 		}
 
@@ -406,8 +410,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array              $values
-	 * {
+	 * @param array              $values {
 	 *      The array of tax values to add to the created tax item.
 	 *
 	 *      @type int    $rate_id            The tax rate ID
@@ -1153,6 +1156,7 @@ abstract class AtumOrderModel {
 			$total_discount += $this->get_discount_tax();
 		}
 
+		/* @noinspection PhpUndefinedConstantInspection */
 		return apply_filters( 'atum/orders/get_total_discount', round( $total_discount, WC_ROUNDING_PRECISION ), $this );
 
 	}

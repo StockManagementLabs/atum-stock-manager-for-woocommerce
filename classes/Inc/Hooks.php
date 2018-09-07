@@ -217,7 +217,7 @@ class Hooks {
 
 			// Enqueue scripts.
 			$min = ! ATUM_DEBUG ? '.min' : '';
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 			wp_register_script( 'atum-product-data', ATUM_URL . "assets/js/atum.product.data{$min}.js", array( 'switchery', 'sweetalert2' ), ATUM_VERSION, TRUE );
@@ -439,7 +439,7 @@ class Hooks {
 		// If the user is not allowed to edit "Out of stock threshold", add a hidden input.
 		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ) : ?>
 
-			<input type="hidden" value="<?php echo ( $out_stock_threshold ?: '' ) ?>" name="<?php echo $out_stock_threshold_field_name ?>" id="<?php echo $out_stock_threshold_field_id ?>">
+			<input type="hidden" value="<?php echo esc_attr( $out_stock_threshold ?: '' ) ?>" name="<?php echo esc_attr( $out_stock_threshold_field_name ) ?>" id="<?php echo esc_attr( $out_stock_threshold_field_id ) ?>">
 
 		<?php else :
 
@@ -651,7 +651,7 @@ class Hooks {
 	 */
 	public function wc_order_add_location_column_header( $wc_order ) {
 		?>
-		<th class="item_location sortable" data-sort="string-ins"><?php _e( 'Location', ATUM_TEXT_DOMAIN ); ?></th>
+		<th class="item_location sortable" data-sort="string-ins"><?php esc_attr_e( 'Location', ATUM_TEXT_DOMAIN ); ?></th>
 		<?php
 	}
 
@@ -675,9 +675,9 @@ class Hooks {
 		}
 
 		?>
-		<td class="item_location"<?php if ($product) echo ' data-sort-value="' . $locations_list . '"' ?>>
+		<td class="item_location"<?php if ($product) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
 			<?php if ( $product ) : ?>
-				<div class="view"><?php echo $locations_list ?></div>
+				<div class="view"><?php echo esc_attr( $locations_list ) ?></div>
 			<?php else : ?>
 				&nbsp;
 			<?php endif; ?>
@@ -809,7 +809,7 @@ class Hooks {
 		foreach ( $products as $product_id => $qty ) {
 			// phpcs:disable WordPress.PHP.StrictComparisons.LooseComparison
 			/* translators: the product title */
-			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), strip_tags( get_the_title( $product_id ) ) );
+			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), wp_strip_all_tags( get_the_title( $product_id ) ) );
 			$count   += $qty;
 		}
 
@@ -871,22 +871,22 @@ class Hooks {
 
 	}
 
-	/****************************
+	/********************
 	 * Instance methods
-	 ****************************/
+	 ********************/
 
 	/**
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL */
+
 /**
  * Main loader
  *
@@ -71,6 +72,7 @@ class Bootstrap {
 
 	}
 
+	/* @noinspection PhpDocRedundantThrowsInspection */
 	/**
 	 * Initial checking and plugin bootstrap
 	 *
@@ -189,7 +191,7 @@ class Bootstrap {
 		if ( ! empty( $this->admin_message ) ) : ?>
 			<div class="error fade">
 				<p>
-					<strong><?php echo $this->admin_message ?></strong>
+					<strong><?php echo $this->admin_message; // WPCS: XSS ok. ?></strong>
 				</p>
 			</div>
 		<?php endif;
@@ -260,14 +262,14 @@ class Bootstrap {
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
 	/**

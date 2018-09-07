@@ -112,9 +112,9 @@ final class Helpers {
 	public static function atum_field_input_addon( $side = 'prepend' ) {
 
 		?>
-		<span class="input-group-<?php echo $side ?>" title="<?php _e( 'ATUM field', ATUM_TEXT_DOMAIN ) ?>">
+		<span class="input-group-<?php echo esc_attr( $side ) ?>" title="<?php esc_attr_e( 'ATUM field', ATUM_TEXT_DOMAIN ) ?>">
 			<span class="input-group-text">
-				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" alt="">
+				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" alt="">
 			</span>
 		</span>
 		<?php
@@ -132,7 +132,7 @@ final class Helpers {
 	public static function atum_order_status_dropdown( $id, $value ) {
 
 		?>
-		<select id="<?php echo $id ?>" name="<?php echo $id ?>" class="wc-enhanced-select">
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select">
 			<?php
 			$statuses = AtumOrderPostType::get_statuses();
 			foreach ( $statuses as $status => $status_name ) : ?>
@@ -610,7 +610,7 @@ final class Helpers {
 		$option         = isset( $global_options[ $name ] ) ? $global_options[ $name ] : $default;
 
 		if ( $echo ) {
-			echo apply_filters( "atum/print_option/$name", $option );
+			echo apply_filters( "atum/print_option/$name", $option ); // WPCS: XSS ok.
 
 			return FALSE;
 		}
@@ -741,7 +741,7 @@ final class Helpers {
 			add_filter( 'woocommerce_price_trim_zeros', '__return_true' );
 		}
 
-		return apply_filters( 'atum/format_price', strip_tags( wc_price( round( $price, 2 ), $args ) ) );
+		return apply_filters( 'atum/format_price', wp_strip_all_tags( wc_price( round( $price, 2 ), $args ) ) );
 
 	}
 	
@@ -1107,8 +1107,8 @@ final class Helpers {
 		}
 
 		?>
-		<div class="notice <?php echo implode( ' ', $notice_classes ) ?> atum-notice" data-key="<?php echo $key ?>">
-			<p><?php echo $message ?></p>
+		<div class="notice <?php echo esc_attr( implode( ' ', $notice_classes ) ) ?> atum-notice" data-key="<?php echo esc_attr( $key ) ?>">
+			<p><?php echo $message; // WPCS: XSS ok. ?></p>
 
 			<?php if ( $is_dismissible ) : ?>
 			<script type="text/javascript">
@@ -1121,7 +1121,7 @@ final class Helpers {
 						url   : ajaxurl,
 						method: 'POST',
 						data  : {
-							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ) ?>',
+							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // WPCS: XSS ok. ?>',
 							action: 'atum_dismiss_notice',
 							key   : $notice.data('key')
 						}
@@ -1339,22 +1339,22 @@ final class Helpers {
 			endif;
 			?>
 
-			<select name="supplier" class="<?php echo $class ?>" autocomplete="off" style="width: 165px">
-				<option value=""<?php selected( $selected, '' ) ?>><?php _e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
+			<select name="supplier" class="<?php echo esc_attr( $class ) ?>" autocomplete="off" style="width: 165px">
+				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>
-					<option value="<?php echo $supplier->ID ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo $supplier->post_title ?></option>
+					<option value="<?php echo esc_attr( $supplier->ID ) ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo esc_attr( $supplier->post_title ) ?></option>
 				<?php endforeach; ?>
 			</select>
 
 		<?php else : ?>
 
-			<select class="wc-product-search <?php echo $class ?>" id="supplier" name="supplier" data-allow_clear="true"
+			<select class="wc-product-search <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
 					data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 					data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>
-					<option value="<?php echo $selected ?>" selected="selected"><?php echo $supplier->post_title ?></option>
+					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ) ?></option>
 				<?php endif; ?>
 			</select>
 
@@ -1366,8 +1366,6 @@ final class Helpers {
 		return ob_get_clean();
 
 	}
-
-
 
 	/**
 	 * Get the inventory log's IDs

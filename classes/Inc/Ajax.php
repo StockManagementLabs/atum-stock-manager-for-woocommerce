@@ -207,7 +207,7 @@ final class Ajax {
 		$widget = $available_widgets[ $widget_id ];
 
 		if ( ! is_a( $widget, '\Atum\Components\AtumWidget' ) ) {
-			wp_die( __( 'Invalid widget', ATUM_TEXT_DOMAIN ) );
+			wp_die( esc_attr__( 'Invalid widget', ATUM_TEXT_DOMAIN ) );
 		}
 
 		ob_start();
@@ -242,7 +242,7 @@ final class Ajax {
 		}
 
 		ob_start();
-		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( $_POST['sortby'] ) );
+		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( esc_attr( $_POST['sortby'] ) ) );
 
 		wp_die( ob_get_clean() );
 
@@ -1122,11 +1122,11 @@ final class Ajax {
 				?>
 				<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
 					<div class="note_content">
-						<?php echo wpautop( wptexturize( $note ) ) ?>
+						<?php echo wpautop( wptexturize( $note ) ); // WPCS: XSS ok. ?>
 					</div>
 
 					<p class="meta">
-						<a href="#" class="delete_note"><?php _e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
+						<a href="#" class="delete_note"><?php esc_attr_e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
 					</p>
 				</li>
 				<?php
@@ -2069,22 +2069,22 @@ final class Ajax {
 	}
 
 	
-	/****************************
+	/*******************
 	 * Instance methods
-	 ****************************/
+	 *******************/
 
 	/**
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
 	/**

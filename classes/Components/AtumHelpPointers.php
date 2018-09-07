@@ -169,6 +169,8 @@ class AtumHelpPointers {
 		
 		wp_enqueue_style( 'wp-pointer' );
 		wp_enqueue_script( 'wp-pointer' );
+
+		// TODO: MOVE TO A FILE?
 		?>
 		<script type="text/javascript">
 			jQuery(function ($) {

@@ -154,7 +154,7 @@ class HtmlReport extends ListTable {
 			$row_style .= ' style="background-color:' . $row_color . '" class="expanded"';
 		}
 
-		echo '<tr' . $row_style . '>';
+		echo '<tr' . $row_style . '>'; // WPCS: XSS ok.
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
@@ -390,11 +390,11 @@ class HtmlReport extends ListTable {
 			$content  = '<span class="dashicons"' . $dashicons_style . '>&#xf147;</span>';
 		}
 		
-		$classes = ( $classes ) ? ' class="' . $classes . '"' : '';
+		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . $data . $classes . '>' .
-			apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) .
-			$this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>';
+		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' .
+			apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . // WPCS: XSS ok.
+			$this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>'; // WPCS: XSS ok.
 		
 	}
 

@@ -80,7 +80,7 @@ abstract class AtumOrderItemModel {
 
 	}
 
-	/* @noinspection PhpDocMissingThrowsInspection */
+	/* @noinspection PhpDocMissingThrowsInspection PhpDocRedundantThrowsInspection */
 	/**
 	 * Read a log item from the database
 	 *
@@ -109,6 +109,7 @@ abstract class AtumOrderItemModel {
 			}
 
 			$this->atum_order_item->set_atum_order_id( $data->order_id );
+			/* @noinspection PhpUnhandledExceptionInspection */
 			$this->atum_order_item->set_name( $data->order_item_name );
 
 			$this->read_meta();
