@@ -6,6 +6,8 @@
  */
 
 /**
+ * Variable difinitions
+ *
  * @var array  $video_tags
  * @var object $channel
  * @var object $first_video
@@ -14,34 +16,34 @@
 
 <div class="videos-widget" data-widget="videos">
 
-	<?php if( ! empty($videos) ): ?>
+	<?php if ( ! empty( $videos ) ) : ?>
 		<div class="video-list" data-view="list">
 			<div class="video-filter">
 
 				<div class="filter-controls">
 					<select class="video-filter-by left">
-						<option value="" data-display="<?php _e('Filter by', ATUM_TEXT_DOMAIN) ?>"><?php _e('Show All', ATUM_TEXT_DOMAIN) ?></option>
-						<?php foreach ($video_tags as $video_tag => $tag_label): ?>
+						<option value="" data-display="<?php _e( 'Filter by', ATUM_TEXT_DOMAIN ) ?>"><?php _e( 'Show All', ATUM_TEXT_DOMAIN ) ?></option>
+						<?php foreach ( $video_tags as $video_tag => $tag_label ) : ?>
 							<option value="<?php echo $video_tag ?>"><?php echo $tag_label ?></option>
 						<?php endforeach; ?>
 					</select>
 
 					<select class="video-sort-by left">
-						<option value="date" data-display="<?php _e('Sort by date added', ATUM_TEXT_DOMAIN) ?>"><?php _e('Date added (newest)', ATUM_TEXT_DOMAIN) ?></option>
-						<option value="rating" data-display="<?php _e('Sort by rating', ATUM_TEXT_DOMAIN) ?>"><?php _e('Rating', ATUM_TEXT_DOMAIN) ?></option>
-						<option value="relevance" data-display="<?php _e('Sort by relevance', ATUM_TEXT_DOMAIN) ?>"><?php _e('Relevance', ATUM_TEXT_DOMAIN) ?></option>
-						<option value="title" data-display="<?php _e('Sort by title', ATUM_TEXT_DOMAIN) ?>"><?php _e('Title', ATUM_TEXT_DOMAIN) ?></option>
-						<option value="viewCount" data-display="<?php _e('Sort by view count', ATUM_TEXT_DOMAIN) ?>"><?php _e('View Count', ATUM_TEXT_DOMAIN) ?></option>
+						<option value="date" data-display="<?php _e( 'Sort by date added', ATUM_TEXT_DOMAIN ) ?>"><?php _e( 'Date added (newest)', ATUM_TEXT_DOMAIN ) ?></option>
+						<option value="rating" data-display="<?php _e( 'Sort by rating', ATUM_TEXT_DOMAIN ) ?>"><?php _e( 'Rating', ATUM_TEXT_DOMAIN ) ?></option>
+						<option value="relevance" data-display="<?php _e( 'Sort by relevance', ATUM_TEXT_DOMAIN ) ?>"><?php _e( 'Relevance', ATUM_TEXT_DOMAIN ) ?></option>
+						<option value="title" data-display="<?php _e( 'Sort by title', ATUM_TEXT_DOMAIN ) ?>"><?php _e( 'Title', ATUM_TEXT_DOMAIN ) ?></option>
+						<option value="viewCount" data-display="<?php _e( 'Sort by view count', ATUM_TEXT_DOMAIN ) ?>"><?php _e( 'View Count', ATUM_TEXT_DOMAIN ) ?></option>
 					</select>
 				</div>
 
 				<div class="video-list-layout">
 
-					<a class="active" href="#" title="<?php _e('List View', ATUM_TEXT_DOMAIN) ?>" data-view="list">
+					<a class="active" href="#" title="<?php _e( 'List View', ATUM_TEXT_DOMAIN ) ?>" data-view="list">
 						<img src="<?php echo ATUM_URL ?>assets/images/dashboard/icon-view-list.svg">
 					</a>
 
-					<a href="#" title="<?php _e('Grid View', ATUM_TEXT_DOMAIN) ?>" data-view="grid">
+					<a href="#" title="<?php _e( 'Grid View', ATUM_TEXT_DOMAIN ) ?>" data-view="grid">
 						<img src="<?php echo ATUM_URL ?>assets/images/dashboard/icon-view-grid.svg">
 					</a>
 
@@ -53,12 +55,13 @@
 				<div class="carousel-nav-prev disabled"><i class="lnr lnr-chevron-left"></i></div>
 
 				<div class="scroll-box">
-					<?php foreach ($videos as $index => $video):
+					<?php foreach ( $videos as $index => $video ) :
 
 						$video_snippet = $video->snippet;
-						$tags = array_map('sanitize_title', $video_snippet->tags); ?>
+						$tags          = array_map( 'sanitize_title', $video_snippet->tags );
+						?>
 
-						<article class="<?php echo implode(' ', $tags) ?><?php if ( (! defined('DOING_AJAX') || !DOING_AJAX) && $index == 0 ) echo ' active' ?>" data-video="<?php echo $video->id ?>">
+						<article class="<?php echo implode( ' ', $tags ) ?><?php if ( ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) && 0 === $index ) echo ' active' ?>" data-video="<?php echo $video->id ?>">
 
 							<a href="#" class="video-thumb">
 
@@ -66,18 +69,17 @@
 
 								<time>
 									<?php
-									$start = new \DateTime('@0'); // Unix epoch
-									/** @noinspection PhpUndefinedConstantInspection */
+									$start = new \DateTime( '@0' ); // Unix epoch.
 									try {
-										$start->add( new \DateInterval( $video->contentDetails->duration ) );
+										$start->add( new \DateInterval( $video->contentDetails->duration ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
 									} catch ( \Exception $e ) {
 
-										if (ATUM_DEBUG) {
+										if ( ATUM_DEBUG ) {
 											error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
 										}
 
 									}
-									echo $start->format('i:s');
+									echo $start->format( 'i:s' );
 									?>
 								</time>
 
@@ -89,10 +91,11 @@
 
 								<div class="video-meta">
 									<?php
-									printf( __('%d Views', ATUM_TEXT_DOMAIN), $video->statistics->viewCount );
+									/* translators: the number of video views */
+									printf( __( '%d Views', ATUM_TEXT_DOMAIN ), $video->statistics->viewCount );
 
-									$timeAgo = new \Westsworld\TimeAgo();
-									echo ' · ' . $timeAgo->inWords( $video_snippet->publishedAt );
+									$time_ago = new \Westsworld\TimeAgo();
+									echo ' · ' . $time_ago->inWords( $video_snippet->publishedAt ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
 									?>
 								</div>
 
@@ -125,7 +128,7 @@
 					</a>
 				</span>
 
-				<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" class="btn btn-primary btn-pill channel-subscribe" target="_blank"><?php _e('Subscribe Now', ATUM_TEXT_DOMAIN) ?></a>
+				<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" class="btn btn-primary btn-pill channel-subscribe" target="_blank"><?php _e( 'Subscribe Now', ATUM_TEXT_DOMAIN ) ?></a>
 			</div>
 
 			<div class="video-player">
@@ -138,10 +141,11 @@
 
 				<div class="video-meta">
 					<?php
-					printf( __('%d Views', ATUM_TEXT_DOMAIN), $first_video->statistics->viewCount );
+					/* translators: the number of video views */
+					printf( __( '%d Views', ATUM_TEXT_DOMAIN ), $first_video->statistics->viewCount );
 
-					$timeAgo = new \Westsworld\TimeAgo();
-					echo ' · ' . $timeAgo->inWords( $first_video->snippet->publishedAt );
+					$time_ago = new \Westsworld\TimeAgo();
+					echo ' · ' . $time_ago->inWords( $first_video->snippet->publishedAt );
 					?>
 				</div>
 
@@ -151,8 +155,8 @@
 			</div>
 
 		</div>
-	<?php else: ?>
-		<p class="error"><?php _e("The ATUM's Youtube videos could not be loaded. Please try again later.", ATUM_TEXT_DOMAIN) ?></p>
+	<?php else : ?>
+		<p class="error"><?php _e( "The ATUM's Youtube videos could not be loaded. Please try again later.", ATUM_TEXT_DOMAIN ) ?></p>
 	<?php endif; ?>
 
 </div>

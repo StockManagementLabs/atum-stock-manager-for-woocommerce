@@ -41,6 +41,7 @@ use Atum\Inc\Helpers;
 				<option value="uncontrolled"><?php _e( 'Uncontrolled', ATUM_TEXT_DOMAIN ) ?></option>
 			</select>
 			&nbsp;
+			<?php /* translators: the status of the ATUM control switch */ ?>
 			<button type="button" class="run-script button button-primary" data-action="atum_set_variations_control_status" data-confirm="<?php esc_attr_e( 'This will change the ATUM Control Switch for all the variations within this product to %s', ATUM_TEXT_DOMAIN ) ?>">
 				<?php _e( 'Change Now!', ATUM_TEXT_DOMAIN ) ?>
 			</button>

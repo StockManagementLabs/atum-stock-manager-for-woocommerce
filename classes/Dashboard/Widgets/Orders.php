@@ -1,18 +1,18 @@
 <?php
 /**
+ * Orders Widget for ATUM Dashboard
+ *
  * @package         Atum
  * @subpackage      Dashboard\Widgets
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since       1.4.0
- *
- * Orders Widget for ATUM Dashboard
  */
 
 namespace Atum\Dashboard\Widgets;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
@@ -23,6 +23,7 @@ class Orders extends AtumWidget {
 
 	/**
 	 * The id of this widget
+	 *
 	 * @var string
 	 */
 	protected $id = ATUM_PREFIX . 'orders_widget';
@@ -40,7 +41,9 @@ class Orders extends AtumWidget {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Widget initialization
+	 *
+	 * @since 1.4.0
 	 */
 	public function init() {
 
@@ -48,18 +51,20 @@ class Orders extends AtumWidget {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Load the widget view
+	 *
+	 * @since 1.4.0
 	 */
 	public function render() {
 
-		$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', ['wc-processing', 'wc-completed'] );
+		$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', [ 'wc-processing', 'wc-completed' ] );
 
 		/**
 		 * This month
 		 */
 		$stats_this_month = WidgetHelpers::get_orders_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'first day of this month 00:00:00'
+			'date_start' => 'first day of this month 00:00:00',
 		) );
 
 		/**
@@ -68,7 +73,7 @@ class Orders extends AtumWidget {
 		$stats_previous_month = WidgetHelpers::get_orders_stats( array(
 			'status'     => $order_status,
 			'date_start' => 'first day of last month 00:00:00',
-			'date_end'   => 'last day of last month 23:59:59'
+			'date_end'   => 'last day of last month 23:59:59',
 		) );
 
 		/**
@@ -76,7 +81,7 @@ class Orders extends AtumWidget {
 		 */
 		$stats_this_week = WidgetHelpers::get_orders_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'this week 00:00:00'
+			'date_start' => 'this week 00:00:00',
 		) );
 
 		/**
@@ -84,21 +89,26 @@ class Orders extends AtumWidget {
 		 */
 		$stats_today = WidgetHelpers::get_orders_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'today 00:00:00'
+			'date_start' => 'today 00:00:00',
 		) );
 
 		$config = $this->get_config();
 
-		Helpers::load_view( 'widgets/orders', compact('stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today', 'config') );
+		Helpers::load_view( 'widgets/orders', compact( 'stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today', 'config' ) );
 
 	}
 
 	/**
-	 * @inheritDoc
+	 * Load widget config view
+	 * This is what will display when an admin clicks "Configure" at widget header
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return string
 	 */
 	public function get_config() {
-		// TODO: IMPLEMENT WIDGET SETTINGS
-		return '';//Helpers::load_view_to_string( 'widgets/orders-config' );
+		// TODO: IMPLEMENT WIDGET SETTINGS.
+		return ''; // Helpers::load_view_to_string( 'widgets/orders-config' );.
 	}
 
 }

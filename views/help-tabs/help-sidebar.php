@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 
@@ -16,6 +16,6 @@ use Atum\Addons\Addons;
 <p><a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" target="_blank"><?php _e( 'Watch our Videos', ATUM_TEXT_DOMAIN ) ?></a></p>
 <p><a href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" target="_blank"><?php _e( 'Get Support', ATUM_TEXT_DOMAIN ) ?></a></p>
 
-<?php if ( Addons::has_valid_key() ): ?>
+<?php if ( Addons::has_valid_key() ) : ?>
 <p><a href="https://stockmanagementlabs.ticksy.com/" target="_blank"><?php _e( 'Open Premium Support Ticket', ATUM_TEXT_DOMAIN ) ?></a></p>
 <?php endif;

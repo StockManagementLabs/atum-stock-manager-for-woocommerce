@@ -26,16 +26,24 @@ use Atum\Addons\Addons;
 
 					$addon_status         = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] );
 					$more_details_link    = '<a class="more-details" href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
-					$is_coming_soon_addon = $addon['info']['coming_soon'];
+					$is_coming_soon_addon = isset( $addon['info']['coming_soon'] ) && $addon['info']['coming_soon'];
+					$is_beta              = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
 					?>
 
-					<div class="theme <?php echo $addon_status['status'] ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>" data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
+					<div class="theme <?php echo $addon_status['status'] ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>"
+						data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
 
 						<?php if ( ! empty( $addon['info']['thumbnail'] ) ) : ?>
 						<div class="theme-screenshot" style="background-image: url(<?php echo $addon['info']['thumbnail'] ?>)">
 						<?php else : ?>
 						<div class="theme-screenshot blank">
 						<?php endif ?>
+
+							<?php if ( $is_beta ) : ?>
+								<span class="label label-warning"><?php _e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
+							<?php elseif ( ! $is_coming_soon_addon && ! empty( $addon['licensing']['version'] ) ) : ?>
+								<span class="label"><?php echo 'v' . $addon['licensing']['version'] ?></span>
+							<?php endif; ?>
 
 							<?php if ( ! empty( $addon['info']['excerpt'] ) ) : ?>
 							<div class="addon-details">

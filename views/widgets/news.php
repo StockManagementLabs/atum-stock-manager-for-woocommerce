@@ -3,16 +3,15 @@
  * View for the ATUM Dashboard News widget
  *
  * @since        1.4.0
- * @noinspection PhpUndefinedMethodInspection
- */
-
-/**
+ *
  * @var array $rss_items
  */
+
+defined( 'ABSPATH' ) || die;
 ?>
 <div class="news-widget" data-widget="news">
 
-	<?php if ($max_items > 0) : ?>
+	<?php if ( $max_items > 0 ) : ?>
 
 		<div class="scroll-box">
 			<?php foreach ( $rss_items as $item ) : ?>
@@ -22,7 +21,7 @@
 						<?php
 						$attachment = $item->get_enclosure();
 
-						if ( ! empty($attachment) && ! empty($attachment->link) ): ?>
+						if ( ! empty( $attachment ) && ! empty( $attachment->link ) ) : ?>
 							<div class="thumb">
 								<div style="background-image: url('<?php echo $attachment->link ?>')"></div>
 							</div>
@@ -37,8 +36,8 @@
 							<?php
 							echo $item->get_author()->name;
 
-							$timeAgo = new \Westsworld\TimeAgo();
-							echo ' · ' . $timeAgo->inWords( $item->get_date() );
+							$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
+							echo ' · ' . $timeAgo->inWords( $item->get_date() ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 							?>
 						</div>
 
@@ -52,8 +51,8 @@
 			<?php endforeach; ?>
 		</div>
 
-	<?php else: ?>
-		<p class="error"><?php _e('The Stock Management Labs news could not be loaded. Please try again later.', ATUM_TEXT_DOMAIN) ?></p>
+	<?php else : ?>
+		<p class="error"><?php _e( 'The Stock Management Labs news could not be loaded. Please try again later.', ATUM_TEXT_DOMAIN ) ?></p>
 	<?php endif ?>
 
 </div>

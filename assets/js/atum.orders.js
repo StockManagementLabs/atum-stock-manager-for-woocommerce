@@ -75,9 +75,6 @@
 				// Trigger multiple suppliers' dependent fields
 				$('#multiple_suppliers').change(this.toggleSupplierField);
 				
-				// Items' blockers
-				$('.atum_order_data_column_container').on( 'change', '.block-items', this.maybe_remove_items );
-				
 				// Ask for importing the order items after linking an order
 				$('#wc_order').change(this.importOrderItems);
 				
@@ -572,57 +569,6 @@
 			
 			select_row_child: function( e ) {
 				e.stopPropagation();
-			},
-			
-			maybe_remove_items: function() {
-				
-				var $blocker      = $(this),
-				    newValue      = $blocker.val(),
-				    oldValue      = $blocker.siblings('.item-blocker-old-value').val(),
-				    $currentItems = $('table.atum_order_items').find('tr.item');
-				
-				if ($currentItems.length && ( !newValue || (oldValue && newValue !== oldValue) )) {
-					
-					swal({
-						title              : atumOrder.are_you_sure,
-						text               : atumOrder.remove_all_items_notice,
-						type               : 'warning',
-						showCancelButton   : true,
-						confirmButtonText  : atumOrder.continue,
-						cancelButtonText   : atumOrder.cancel,
-						reverseButtons     : true,
-						allowOutsideClick  : false,
-						showLoaderOnConfirm: true,
-						preConfirm         : function () {
-							return new Promise(function (resolve, reject) {
-								
-								// Select all the item rows and delete them in bulk
-								$currentItems.addClass('selected');
-								atum_order_items.askRemoval = false;
-								atum_order_items.do_bulk_delete();
-								
-							});
-						}
-					}).then(function () {
-					
-						if (!newValue) {
-							atum_order_items.$itemsBlocker.removeClass('unblocked');
-						}
-					
-					}, function (dismiss) {
-						
-						// Unbind, restore the value and rebind again
-						$blocker.unbind('change', atum_order_items.maybe_remove_items)
-								.val(oldValue).change()
-								.change( atum_order_items.maybe_remove_items );
-					
-					});
-					
-				}
-				else if (newValue !== oldValue) {
-					atum_order_items.$itemsBlocker.removeClass('unblocked');
-				}
-			
 			},
 			
 			do_bulk_delete: function( e ) {

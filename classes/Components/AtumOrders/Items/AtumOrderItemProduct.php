@@ -1,24 +1,25 @@
 <?php
 /**
+ * The model class for the ATUM Order Item Product objects
+ *
  * @package         Atum\Components\AtumOrders
  * @subpackage      Items
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.9
- *
- * The model class for the ATUM Order Item Product objects
  */
 
 namespace Atum\Components\AtumOrders\Items;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 
 abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 
 	/**
 	 * The Product item data array
+	 *
 	 * @var array
 	 */
 	protected $extra_data = array(
@@ -38,11 +39,12 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 
 	/**
 	 * Meta keys reserved for internal use
+	 *
 	 * @var array
 	 */
 	protected $internal_meta_keys = array( '_product_id', '_variation_id', '_qty', '_tax_class', '_line_subtotal', '_line_subtotal_tax', '_line_total', '_line_tax', '_line_tax_data' );
 
-	// Load the shared methods
+	// Load the shared methods.
 	use AtumOrderItemTrait;
 
 
@@ -63,7 +65,7 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 			'_line_subtotal_tax' => $this->get_subtotal_tax( 'edit' ),
 			'_line_total'        => $this->get_total( 'edit' ),
 			'_line_tax'          => $this->get_total_tax( 'edit' ),
-			'_line_tax_data'     => $this->get_taxes( 'edit' )
+			'_line_tax_data'     => $this->get_taxes( 'edit' ),
 		) );
 
 		$this->atum_order_item_model->save_meta( $save_values );

@@ -76,11 +76,11 @@ class InboundStock extends AtumListPage {
 	public function add_menu( $menus ) {
 
 		$menus['inbound-stock'] = array(
-			'title'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'callback'     => array( $this, 'display' ),
-			'slug'         => self::UI_SLUG,
-			'menu_order'   => self::MENU_ORDER,
-			'capability'   => ATUM_PREFIX . 'read_inbound_stock',
+			'title'      => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'callback'   => array( $this, 'display' ),
+			'slug'       => self::UI_SLUG,
+			'menu_order' => self::MENU_ORDER,
+			'capability' => ATUM_PREFIX . 'read_inbound_stock',
 		);
 
 		return $menus;
@@ -111,7 +111,7 @@ class InboundStock extends AtumListPage {
 	public function screen_options() {
 
 		// Add "Products per page" screen option.
-		$args   = array(
+		$args = array(
 			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
 			'option'  => ATUM_PREFIX . 'inbound_stock_products_per_page',
@@ -148,16 +148,16 @@ class InboundStock extends AtumListPage {
 	}
 
 	
-	/****************************
+	/********************
 	 * Instance methods
-	 ****************************/
+	 ********************/
 
 	/**
 	 * Cannot be cloned
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
@@ -165,7 +165,7 @@ class InboundStock extends AtumListPage {
 	 */
 	public function __sleep() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
 	/**

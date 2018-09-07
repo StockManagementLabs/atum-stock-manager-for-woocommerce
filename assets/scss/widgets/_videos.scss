@@ -282,6 +282,7 @@
 		.nice-select {
 			display: inline-block;
 			margin-right: 10px;
+			float: none;
 			
 			@media all and (max-width: $screen-sm-min) {
 				font-size: 12px;
