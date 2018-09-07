@@ -140,7 +140,17 @@ final class Globals {
 			self::$product_types = array_merge( self::$product_types, [ 'subscription', 'variable-subscription' ] );
 		}
 
+		// Add WC Bookings compatibility.
+		if (
+			class_exists( '\WC_Bookings' ) &&
+			! in_array( 'booking', self::$product_types ) &&
+			'yes' === Helpers::get_option( 'show_bookable_products', 'yes' )
+		) {
+			array_push( self::$product_types, 'booking' );
+		}
+
 		return (array) apply_filters( 'atum/allowed_product_types', self::$product_types );
+
 	}
 
 	/**

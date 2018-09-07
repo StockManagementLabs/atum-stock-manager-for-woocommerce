@@ -261,6 +261,32 @@ class StockCentral extends AtumListPage {
 			'default' => 'no',
 		);
 
+		// WC Subscriptions compatibility.
+		if ( class_exists( '\WC_Subscriptions' ) ) {
+
+			$defaults['show_subscriptions'] = array(
+				'section' => 'stock_central',
+				'name'    => __( 'Show WC Subscriptions', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, ATUM will show the WC Subscriptions in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes',
+			);
+
+		}
+
+		// WC Bookings compatibility.
+		if ( class_exists( '\WC_Bookings' ) ) {
+
+			$defaults['show_bookable_products'] = array(
+				'section' => 'stock_central',
+				'name'    => __( 'Show Bookable Productss', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, ATUM will show the Bookable products from WC Bookings add-on in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes',
+			);
+
+		}
+
 		return $defaults;
 
 	}
