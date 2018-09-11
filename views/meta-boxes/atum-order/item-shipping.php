@@ -16,7 +16,7 @@ do_action( 'atum/atum_order/before_item_shipping_html', $item, $atum_order );
 $currency = $atum_order->get_currency();
 
 ?>
-<tr class="shipping <?php echo ( ! empty( $class ) ) ? $class : ''; ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
+<tr class="shipping <?php echo esc_attr( ! empty( $class ) ? $class : '' ); ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
 	<td class="thumb"><div></div></td>
 
 	<td class="name">
@@ -29,7 +29,7 @@ $currency = $atum_order->get_currency();
 			<input type="text" class="shipping_method_name" placeholder="<?php esc_attr_e( 'Shipping name', ATUM_TEXT_DOMAIN ); ?>" name="shipping_method_title[<?php echo absint( $item_id ); ?>]" value="<?php echo esc_attr( $item->get_name() ); ?>" />
 			<select class="shipping_method" name="shipping_method[<?php echo absint( $item_id ); ?>]">
 				<optgroup label="<?php esc_attr_e( 'Shipping method', ATUM_TEXT_DOMAIN ); ?>">
-					<option value=""><?php _e( 'N/A', ATUM_TEXT_DOMAIN ); ?></option>
+					<option value=""><?php esc_html_e( 'N/A', ATUM_TEXT_DOMAIN ); ?></option>
 					<?php
 					$found_method = false;
 
@@ -44,9 +44,9 @@ $currency = $atum_order->get_currency();
 					endforeach;
 
 					if ( ! $found_method && $item->get_method_id() ) :
-						echo '<option value="' . esc_attr( $item->get_method_id() ) . '" selected="selected">' . __( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
+						echo '<option value="' . esc_attr( $item->get_method_id() ) . '" selected="selected">' . esc_html__( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
 					else :
-						echo '<option value="other">' . __( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
+						echo '<option value="other">' . esc_html__( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
 					endif;
 					?>
 				</optgroup>
@@ -66,15 +66,15 @@ $currency = $atum_order->get_currency();
 
 	<td class="line_cost" width="1%">
 		<div class="view">
-			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); ?>
+			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
 		</div>
 
 		<div class="edit" style="display: none;">
-			<input type="text" name="shipping_cost[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" />
+			<input type="text" name="shipping_cost[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" />
 		</div>
 
 		<div class="refund" style="display: none;">
-			<input type="text" name="refund_line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_total wc_input_price" />
+			<input type="text" name="refund_line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" class="refund_line_total wc_input_price" />
 		</div>
 	</td>
 
@@ -92,15 +92,15 @@ $currency = $atum_order->get_currency();
 			?>
 			<td class="line_tax" width="1%">
 				<div class="view">
-					<?php echo ( '' !== $tax_item_total ) ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;'; ?>
+					<?php echo ( '' !== $tax_item_total ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;' ); // WPCS: XSS ok. ?>
 				</div>
 
 				<div class="edit" style="display: none;">
-					<input type="text" name="shipping_taxes[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo ( isset( $tax_item_total ) ) ? esc_attr( wc_format_localized_price( $tax_item_total ) ) : ''; ?>" class="line_tax wc_input_price" />
+					<input type="text" name="shipping_taxes[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo ( isset( $tax_item_total ) ) ? esc_attr( wc_format_localized_price( $tax_item_total ) ) : ''; ?>" class="line_tax wc_input_price" />
 				</div>
 
 				<div class="refund" style="display: none;">
-					<input type="text" name="refund_line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_tax wc_input_price" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
+					<input type="text" name="refund_line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" class="refund_line_tax wc_input_price" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
 				</div>
 			</td>
 			<?php

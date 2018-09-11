@@ -42,23 +42,23 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 				<li rel="<?php echo absint( $note->comment_ID ); ?>" class="<?php echo esc_attr( implode( ' ', $note_classes ) ); ?>">
 					<div class="note_content">
-						<?php echo wpautop( wptexturize( wp_kses_post( $note->comment_content ) ) ); ?>
+						<?php echo wp_kses_post( wpautop( wptexturize( $note->comment_content ) ) ) ?>
 					</div>
 
 					<p class="meta">
-						<abbr class="exact-date" title="<?php echo $note->comment_date; ?>">
+						<abbr class="exact-date" title="<?php echo esc_attr( $note->comment_date ) ?>">
 							<?php
 							/* translators: first one is the date added and second is the time */
-							printf( __( 'added on %1$s at %2$s', ATUM_TEXT_DOMAIN ), date_i18n( wc_date_format(), strtotime( $note->comment_date ) ), date_i18n( wc_time_format(), strtotime( $note->comment_date ) ) );
+							printf( esc_html__( 'added on %1$s at %2$s', ATUM_TEXT_DOMAIN ), esc_html( date_i18n( wc_date_format(), strtotime( $note->comment_date ) ) ), esc_html( date_i18n( wc_time_format() ), esc_html( strtotime( $note->comment_date ) ) ) );
 							?>
 						</abbr>
 
 						<?php if ( 'ATUM' !== $note->comment_author ) :
 							/* translators: the note author */
-							printf( ' ' . __( 'by %s', ATUM_TEXT_DOMAIN ), $note->comment_author );
+							printf( ' ' . esc_html__( 'by %s', ATUM_TEXT_DOMAIN ), esc_html( $note->comment_author ) );
 						endif; ?>
 
-						<a href="#" class="delete_note" role="button"><?php _e( 'Delete note', ATUM_TEXT_DOMAIN ); ?></a>
+						<a href="#" class="delete_note" role="button"><?php esc_html_e( 'Delete note', ATUM_TEXT_DOMAIN ); ?></a>
 					</p>
 				</li>
 
@@ -66,7 +66,7 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 		else : ?>
 
-			<li><?php _e( 'There are no notes yet.', ATUM_TEXT_DOMAIN ) ?></li>
+			<li><?php esc_html_e( 'There are no notes yet.', ATUM_TEXT_DOMAIN ) ?></li>
 
 		<?php endif; ?>
 
@@ -74,12 +74,12 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 	<div class="add_note">
 		<p>
-			<label for="add_atum_order_note"><?php _e( 'Add Note', ATUM_TEXT_DOMAIN ); ?> <span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( 'Add a note for your reference', ATUM_TEXT_DOMAIN ) ?>"></span></label>
+			<label for="add_atum_order_note"><?php esc_html_e( 'Add Note', ATUM_TEXT_DOMAIN ); ?> <span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( 'Add a note for your reference', ATUM_TEXT_DOMAIN ) ?>"></span></label>
 			<textarea type="text" name="atum_order_note" id="add_atum_order_note" class="input-text" cols="20" rows="5"></textarea>
 		</p>
 
 		<p>
-			<button type="button" class="add_note button"><?php _e( 'Add', ATUM_TEXT_DOMAIN ); ?></button>
+			<button type="button" class="add_note button"><?php esc_html_e( 'Add', ATUM_TEXT_DOMAIN ); ?></button>
 		</p>
 	</div>
 

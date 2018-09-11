@@ -3,6 +3,10 @@
  * View for the ATUM tab panel within the WC Product Data meta box in variations
  *
  * @since 1.4.5
+ *
+ * @var int                  $loop
+ * @var WC_Product_Variation $variation
+ * @var array                $variation_data
  */
 
 defined( 'ABSPATH' ) || die;
@@ -10,16 +14,9 @@ defined( 'ABSPATH' ) || die;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
-/**
- * Variable definitions
- *
- * @var int                  $loop
- * @var WC_Product_Variation $variation
- * @var array                $variation_data
- */
 ?>
 <div class="atum-data-panel">
-	<h3 class="atum-section-title"><?php _e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?></h3>
+	<h3 class="atum-section-title"><?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?></h3>
 
 	<div class="options_group">
 		<?php

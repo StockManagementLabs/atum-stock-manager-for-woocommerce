@@ -12,10 +12,10 @@ defined( 'ABSPATH' ) || die;
 
 <div class="atum-meta-box supplier">
 
-	<p class="description"><?php _e( 'Set defaults that ATUM will use when creating Purchase Orders for this supplier.', ATUM_TEXT_DOMAIN ) ?></p>
+	<p class="description"><?php esc_html_e( 'Set defaults that ATUM will use when creating Purchase Orders for this supplier.', ATUM_TEXT_DOMAIN ) ?></p>
 
 	<div class="form-field form-field-wide">
-		<label for="assigned_to"><?php _e( 'Assigned To', ATUM_TEXT_DOMAIN ) ?></label>
+		<label for="assigned_to"><?php esc_html_e( 'Assigned To', ATUM_TEXT_DOMAIN ) ?></label>
 
 		<?php
 		$args = array(
@@ -30,8 +30,8 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="form-field form-field-wide">
-		<label for="location"><?php _e( 'Location', ATUM_TEXT_DOMAIN ) ?></label>
-		<input type="text" id="location" name="default_settings[location]" value="<?php echo get_post_meta( $supplier_id, '_default_settings_location', TRUE ) ?>">
+		<label for="location"><?php esc_html_e( 'Location', ATUM_TEXT_DOMAIN ) ?></label>
+		<input type="text" id="location" name="default_settings[location]" value="<?php echo esc_attr( get_post_meta( $supplier_id, '_default_settings_location', TRUE ) ) ?>">
 	</div>
 
 </div>

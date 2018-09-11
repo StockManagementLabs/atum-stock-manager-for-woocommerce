@@ -30,6 +30,8 @@ class Hooks {
 
 	/**
 	 * Hooks singleton constructor
+	 *
+	 * @since 1.3.8.2
 	 */
 	private function __construct() {
 
@@ -122,7 +124,7 @@ class Hooks {
 
 		global $wpdb;
 
-		$item_id = $product->get_ID();
+		$item_id                = $product->get_id();
 		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
 		// If the product has no "Out of Stock Threshold" set we don't need to continue.
@@ -310,7 +312,7 @@ class Hooks {
 	 */
 	public function save_product_data_panel( $product_id, $post, $update ) {
 
-		// phpcs:disable WordPress.CSRF.NonceVerification.NoNonceVerification -- Nonce verification already handled by WP
+		// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification -- Nonce verification already handled by WP
 		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
 			return;
 		}
@@ -444,9 +446,10 @@ class Hooks {
 
 		<?php else :
 
-			// phpcs:disable Generic.Formatting.DisallowMultipleStatements.SameLine
-			// phpcs:disable Generic.Functions.OpeningFunctionBraceKernighanRitchie.ContentAfterBrace
-			$visibility_classes          = array_map( function( $val ) { return "show_if_{$val}"; }, Globals::get_product_types_with_stock() );
+			$visibility_classes = array_map( function ( $val ) {
+				return "show_if_{$val}";
+			}, Globals::get_product_types_with_stock() );
+
 			$out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes', 'woocommerce_notify_no_stock_amount' ) );
@@ -490,7 +493,7 @@ class Hooks {
 			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
 				Helpers::force_rebuild_stock_status( $product );
-            }
+			}
 
 			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
 
@@ -620,8 +623,8 @@ class Hooks {
 				foreach ( $variations as $variation_id ) {
 
 					$variation_product = wc_get_product( $variation_id );
-					$variation_stock = $variation_product->get_stock_quantity();
-					$stocks_list[] = $variation_stock;
+					$variation_stock   = $variation_product->get_stock_quantity();
+					$stocks_list[]     = $variation_stock;
 
 					if ( $variation_stock > 0 ) {
 						$stock_status = __( 'In stock', ATUM_TEXT_DOMAIN );
@@ -797,7 +800,7 @@ class Hooks {
 	 *
 	 * @since 1.3.4.1
 	 *
-	 * @param string $message
+	 * @param string    $message
 	 * @param int|array $products
 	 *
 	 * @return string
@@ -808,13 +811,12 @@ class Hooks {
 		$count  = 0;
 
 		foreach ( $products as $product_id => $qty ) {
-			// phpcs:disable WordPress.PHP.StrictComparisons.LooseComparison
 			/* translators: the product title */
-			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), wp_strip_all_tags( get_the_title( $product_id ) ) );
+			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), wp_strip_all_tags( get_the_title( $product_id ) ) ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$count   += $qty;
 		}
 
-		$titles     = array_filter( $titles );
+		$titles = array_filter( $titles );
 		/* translators: the titles of products added to the cart */
 		$added_text = sprintf( _n( '%s has been added to your cart.', '%s have been added to your cart.', $count, ATUM_TEXT_DOMAIN ), wc_format_list_of_items( $titles ) );
 
