@@ -1674,36 +1674,6 @@ final class Helpers {
 	}
 
 	/**
-	 * Get string between two tags (can be different)
-	 * https://stackoverflow.com/a/9826656
-	 *
-	 * Example:
-	 * $fullstring = 'this is my [tag]dog[/tag]';
-	 * $parsed = get_string_between($fullstring, '[tag]', '[/tag]');
-	 * echo $parsed; // (result = dog)
-	 *
-	 * @param string $string To parse.
-	 * @param string $start  Tag start.
-	 * @param string $end    Tag end.
-	 *
-	 * @return bool|string
-	 */
-	public static function get_string_between( $string, $start, $end ) {
-
-		$string = ' ' . $string;
-		$ini    = strpos( $string, $start );
-
-		if ( 0 === $ini ) {
-			return '';
-		}
-
-		$ini += strlen( $start );
-		$len  = strpos( $string, $end, $ini ) - $ini;
-
-		return substr( $string, $ini, $len );
-	}
-
-	/**
 	 * Return true if value exists in a multiarray
 	 * http://codepad.org/GU0qG5su.
 	 *
