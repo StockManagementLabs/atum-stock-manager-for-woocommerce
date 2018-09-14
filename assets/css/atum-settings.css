@@ -1367,6 +1367,27 @@ input[type="button"].btn-block {
   transform: none;
 }
 
+#atum-settings .wp-picker-container button.wp-color-result {
+  height: 31px;
+  box-shadow: none;
+}
+
+#atum-settings .wp-picker-container button.wp-color-result .wp-color-result-text {
+  line-height: 29px;
+}
+
+#atum-settings .wp-picker-container .wp-picker-clear {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  height: 31px;
+  line-height: 31px;
+}
+
+#atum-settings .wp-picker-container .wp-picker-clear:hover {
+  background-color: rgba(108, 117, 125, 0.8);
+}
+
 .swal2-container {
   z-index: 100000;
 }
