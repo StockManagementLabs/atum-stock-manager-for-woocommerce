@@ -58,7 +58,7 @@ abstract class AtumOrderItemModel {
 	 *
 	 * @var string
 	 */
-	protected $cache_key = 'atum-order-items';
+	protected $cache_key = 'atum-order-item';
 
 	/**
 	 * AtumOrderItemModel constructor
@@ -82,7 +82,7 @@ abstract class AtumOrderItemModel {
 
 	/* @noinspection PhpDocMissingThrowsInspection PhpDocRedundantThrowsInspection */
 	/**
-	 * Read a log item from the database
+	 * Read an ATUM Order item from the database
 	 *
 	 * @since 1.2.9
 	 *
@@ -95,13 +95,15 @@ abstract class AtumOrderItemModel {
 		try {
 
 			// Get from cache if available.
-			$data = wp_cache_get( 'item-' . $this->id, $this->cache_key );
+			$cache_key   = "{$this->cache_key}-{$this->id}";
+			$cache_group = ATUM_TEXT_DOMAIN;
+			$data        = wp_cache_get( $cache_key, $cache_group );
 
 			if ( FALSE === $data ) {
 				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d LIMIT 1;', $this->id ); // WPCS: unprepared SQL ok.
 				$data  = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 
-				wp_cache_set( 'item-' . $this->id, $data, $this->cache_key );
+				wp_cache_set( $cache_key, $data, $cache_group, 20 );
 			}
 
 			if ( ! $data ) {
@@ -331,7 +333,9 @@ abstract class AtumOrderItemModel {
 	 * @since 1.2.9
 	 */
 	public function clear_cache() {
-		wp_cache_delete( 'item-' . $this->id, $this->cache_key );
+		$cache_key   = "{$this->cache_key}-{$this->id}";
+		$cache_group = ATUM_TEXT_DOMAIN;
+		wp_cache_delete( $cache_key, $cache_group );
 	}
 
 	/**
@@ -448,5 +452,6 @@ abstract class AtumOrderItemModel {
 		return $key;
 
 	}
+
 
 }
