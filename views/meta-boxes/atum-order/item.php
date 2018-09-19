@@ -28,7 +28,7 @@ $product_id   = 'variation' === $product->get_type() ? $product->get_parent_id()
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
 ?>
-<tr class="item <?php echo apply_filters( 'atum/atum_order/item_class', ( ! empty( $class ) ? $class : '' ), $item, $atum_order ); ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
+<tr class="item <?php echo esc_attr( apply_filters( 'atum/atum_order/item_class', ! empty( $class ) ? $class : '', $item, $atum_order ) ) ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
 
 	<td class="thumb">
 		<?php echo '<div class="atum-order-item-thumbnail">' . wp_kses_post( $thumbnail ) . '</div>'; ?>
@@ -39,25 +39,25 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</a>' : '<div class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</div>';
 
 		if ( $product && $product->get_sku() ) : ?>
-			<div class="atum-order-item-sku"><strong><?php _e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
+			<div class="atum-order-item-sku"><strong><?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
 		<?php endif;
 
 		if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
 			$supplier_sku = get_post_meta( $product_id, Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
 
 			if ( $supplier_sku ) : ?>
-				<div class="atum-order-item-sku"><strong><?php _e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $supplier_sku ) ?></div>
+				<div class="atum-order-item-sku"><strong><?php esc_html_e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $supplier_sku ) ?></div>
 			<?php endif;
 		endif;
 
 		if ( $item->get_variation_id() ) : ?>
-			<div class="atum-order-item-variation"><strong><?php _e( 'Variation ID:', ATUM_TEXT_DOMAIN ) ?></strong>
+			<div class="atum-order-item-variation"><strong><?php esc_html_e( 'Variation ID:', ATUM_TEXT_DOMAIN ) ?></strong>
 
 				<?php if ( 'product_variation' === get_post_type( $item->get_variation_id() ) ) :
 					echo esc_html( $item->get_variation_id() );
 				else :
 					/* translators: the variation ID */
-					printf( esc_html__( '%s (No longer exists)', ATUM_TEXT_DOMAIN ), $item->get_variation_id() );
+					printf( esc_html__( '%s (No longer exists)', ATUM_TEXT_DOMAIN ), esc_attr( $item->get_variation_id() ) );
 				endif; ?>
 
 			</div>
@@ -72,11 +72,11 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 
 		<div class="item_status">
 			<?php if ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) : ?>
-				<i class="dashicons dashicons-hidden color-primary" data-toggle="tooltip" title="<?php _e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="dashicons dashicons-hidden color-primary" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 
 			<?php if ( $item->get_meta( '_stock_changed' ) ) : ?>
-				<i class="dashicons dashicons-admin-settings color-warning" data-toggle="tooltip" title="<?php _e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="dashicons dashicons-admin-settings color-warning" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 		</div>
 	</td>
@@ -87,18 +87,18 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 	$locations      = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
 	$locations_list = ( ! empty( $locations ) ) ? implode( ', ', $locations ) : '&ndash;';
 	?>
-	<td class="item_location"<?php if ($product) echo ' data-sort-value="' . $locations_list . '"' ?>>
-		<?php echo $locations_list ?>
+	<td class="item_location"<?php if ($product) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
+		<?php echo esc_html( $locations_list ) ?>
 	</td>
 
 	<td class="item_cost" width="1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>">
 		<div class="view">
 			<?php
 			$currency = $atum_order->get_currency();
-			echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) );
+			echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
 
 			if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ) ?></span>
+				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></span>
 			<?php endif; ?>
 		</div>
 	</td>
@@ -110,17 +110,17 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		</div>
 
 		<div class="edit" style="display: none;">
-			<input type="number" step="<?php echo apply_filters( 'atum/atum_order/quantity_input_step', '1', $product ); ?>" min="0" autocomplete="off" name="atum_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" value="<?php echo esc_attr( $item->get_quantity() ); ?>" data-qty="<?php echo esc_attr( $item->get_quantity() ); ?>" size="4" class="quantity" />
+			<input type="number" step="<?php echo esc_attr( apply_filters( 'atum/atum_order/quantity_input_step', '1', $product ) ) ?>" min="0" autocomplete="off" name="atum_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" value="<?php echo esc_attr( $item->get_quantity() ); ?>" data-qty="<?php echo esc_attr( $item->get_quantity() ); ?>" size="4" class="quantity" />
 		</div>
 
 	</td>
 	<td class="line_cost" width="1%" data-sort-value="<?php echo esc_attr( $item->get_total() ); ?>">
 		<div class="view">
 			<?php
-			echo wc_price( $item->get_total(), array( 'currency' => $currency ) );
+			echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok.
 
 			if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ) ?></span>
+				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></span>
 			<?php endif; ?>
 		</div>
 
@@ -128,12 +128,12 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			<div class="split-input">
 				<div class="input">
 					<label><?php esc_attr_e( 'Pre-discount:', ATUM_TEXT_DOMAIN ); ?></label>
-					<input type="text" name="line_subtotal[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_subtotal() ) ); ?>" class="line_subtotal wc_input_price" data-subtotal="<?php echo esc_attr( wc_format_localized_price( $item->get_subtotal() ) ); ?>" />
+					<input type="text" name="line_subtotal[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_subtotal() ) ); ?>" class="line_subtotal wc_input_price" data-subtotal="<?php echo esc_attr( wc_format_localized_price( $item->get_subtotal() ) ); ?>" />
 				</div>
 
 				<div class="input">
 					<label><?php esc_attr_e( 'Total:', ATUM_TEXT_DOMAIN ); ?></label>
-					<input type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" data-tip="<?php esc_attr_e( 'After pre-tax discounts.', ATUM_TEXT_DOMAIN ); ?>" data-total="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" />
+					<input type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" data-tip="<?php esc_attr_e( 'After pre-tax discounts.', ATUM_TEXT_DOMAIN ); ?>" data-total="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" />
 				</div>
 			</div>
 		</div>
@@ -158,7 +158,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 				<div class="view">
 					<?php
 					if ( '' !== $tax_item_total ) :
-						echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) );
+						echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
 					else :
 						echo '&ndash;';
 					endif;
@@ -167,7 +167,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 						if ( '' === $tax_item_total ) : ?>
 							<span class="atum-order-item-discount">&ndash;</span>
 						<?php else : ?>
-							<span class="atum-order-item-discount">-<?php echo wc_price( wc_round_tax_total( $tax_item_subtotal - $tax_item_total ), array( 'currency' => $currency ) ) ?></span>
+							<span class="atum-order-item-discount">-<?php echo wc_price( wc_round_tax_total( $tax_item_subtotal - $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></span>
 						<?php endif;
 					endif;
 					?>
@@ -177,12 +177,12 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 					<div class="split-input">
 						<div class="input">
 							<label><?php esc_attr_e( 'Pre-discount:', ATUM_TEXT_DOMAIN ); ?></label>
-							<input type="text" name="line_subtotal_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $tax_item_subtotal ) ); ?>" class="line_subtotal_tax wc_input_price" data-subtotal_tax="<?php echo esc_attr( wc_format_localized_price( $tax_item_subtotal ) ); ?>" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
+							<input type="text" name="line_subtotal_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $tax_item_subtotal ) ); ?>" class="line_subtotal_tax wc_input_price" data-subtotal_tax="<?php echo esc_attr( wc_format_localized_price( $tax_item_subtotal ) ); ?>" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
 						</div>
 
 						<div class="input">
 							<label><?php esc_attr_e( 'Total:', ATUM_TEXT_DOMAIN ); ?></label>
-							<input type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $tax_item_total ) ); ?>" class="line_tax wc_input_price" data-total_tax="<?php echo esc_attr( wc_format_localized_price( $tax_item_total ) ); ?>" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
+							<input type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $tax_item_total ) ); ?>" class="line_tax wc_input_price" data-total_tax="<?php echo esc_attr( wc_format_localized_price( $tax_item_total ) ); ?>" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
 						</div>
 					</div>
 				</div>

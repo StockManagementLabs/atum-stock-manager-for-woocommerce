@@ -61,6 +61,13 @@ abstract class AtumOrderModel {
 	 */
 	protected $item_types = [ 'line_item', 'tax', 'shipping', 'fee' ];
 
+	/**
+	 * The WP cache key name
+	 *
+	 * @var string
+	 */
+	protected $cache_key = 'atum-order-items';
+
 
 	/**
 	 * AtumOrderModel constructor
@@ -115,7 +122,9 @@ abstract class AtumOrderModel {
 	public function read_items( $type = '' ) {
 
 		// Get from cache if available.
-		$items = wp_cache_get( "atum-order-items-{$this->id}", $this->post->post_type );
+		$cache_key   = "{$this->cache_key}-{$this->id}";
+		$cache_group = $this->post->post_type;
+		$items       = wp_cache_get( $cache_key, $cache_group );
 
 		if ( FALSE === $items ) {
 
@@ -125,11 +134,7 @@ abstract class AtumOrderModel {
 				return;
 			}
 
-			foreach ( $items as $item ) {
-				wp_cache_set( "item-{$item->order_item_id}", $item, "{$this->post->post_type}_items" );
-			}
-
-			wp_cache_set( "atum-order-items-{$this->id}", $items, $this->post->post_type );
+			wp_cache_set( $cache_key, $items, $cache_group, 20 );
 
 		}
 
@@ -1395,8 +1400,11 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 */
 	protected function clear_caches() {
+
 		clean_post_cache( $this->id );
-		wp_cache_delete( "atum-order-items-{$this->id}", $this->post->post_type );
+		$cache_key   = "{$this->cache_key}-{$this->id}";
+		$cache_group = $this->post->post_type;
+		wp_cache_delete( $cache_key, $cache_group );
 	}
 
 	/**

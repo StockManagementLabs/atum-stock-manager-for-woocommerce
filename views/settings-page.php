@@ -14,14 +14,14 @@ use Atum\Settings\Settings;
 ?>
 <div class="wrap">
 	<div class="atum-settings-wrapper">
-		<h1 class="wp-heading-inline"><?php _e( 'ATUM Settings', ATUM_TEXT_DOMAIN ) ?></h1>
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'ATUM Settings', ATUM_TEXT_DOMAIN ) ?></h1>
 		<hr class="wp-header-end">
 		
 		<?php settings_errors(); ?>
 		
 		<nav class="atum-nav">
 			<a class="atum-brand" href="https://www.stockmanagementlabs.com" target="_blank">
-				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr_e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
 			</a>
 
 			<ul class="atum-nav-list">
@@ -32,8 +32,8 @@ use Atum\Settings\Settings;
 					endif; ?>
 
 					<li class="atum-nav-item<?php if ( isset( $atts['no_submit'] ) && $atts['no_submit'] ) echo ' no-submit' ?>">
-						<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab === $active) echo ' active' ?>">
-							<span class="menu-helper"><?php echo $atts['tab_name'] ?></span>
+						<a href="?page=atum-settings&tab=<?php echo esc_attr( $tab ) ?>" rel="address:/<?php echo esc_attr( $tab ) ?>" data-tab="<?php echo esc_attr( $tab ) ?>" class="atum-nav-link<?php if ($tab === $active) echo ' active' ?>">
+							<span class="menu-helper"><?php echo esc_html( $atts['tab_name'] ) ?></span>
 						</a>
 					</li>
 				<?php endforeach; ?>
@@ -59,11 +59,11 @@ use Atum\Settings\Settings;
 
 					foreach ( (array) $wp_settings_sections[ $page ] as $section ) : ?>
 
-						<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace( [ ATUM_PREFIX, 'setting_' ], '', $section['id'] ) ?>">
+						<div id="<?php echo esc_attr( $section['id'] ) ?>" class="settings-section" data-section="<?php echo esc_attr( str_replace( [ ATUM_PREFIX, 'setting_' ], '', $section['id'] ) ) ?>">
 
 							<?php if ( $section['title'] ) : ?>
 								<div class="section-title">
-									<h2><?php echo $section['title'] ?></h2>
+									<h2><?php echo esc_html( $section['title'] ) ?></h2>
 								</div>
 							<?php endif; ?>
 
@@ -88,12 +88,12 @@ use Atum\Settings\Settings;
 				endforeach;
 				?>
 
-				<input type="hidden" id="atum_settings_section" name="<?php echo Settings::OPTION_NAME ?>[settings_section]" value="<?php echo $active ?>">
+				<input type="hidden" id="atum_settings_section" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[settings_section]" value="<?php echo esc_attr( $active ) ?>">
 
 				<?php
 				// Add a hidden field to restore WooCommerce manage_stock individual settings.
 				if ( 'stock_central' === $active ) : ?>
-					<input type="hidden" id="atum_restore_option_stock" name="<?php echo Settings::OPTION_NAME ?>[restore_option_stock]" value="no">
+					<input type="hidden" id="atum_restore_option_stock" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[restore_option_stock]" value="no">
 				<?php endif;
 
 				submit_button( __( 'Update Settings', ATUM_TEXT_DOMAIN ) );

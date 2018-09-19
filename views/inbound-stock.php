@@ -13,19 +13,19 @@ defined( 'ABSPATH' ) || die;
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline">
-		<?php echo apply_filters( 'atum/inbound_stock/title', __( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ) ?>
+		<?php echo esc_html( apply_filters( 'atum/inbound_stock/title', __( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ) ) ?>
 	</h1>
 	<hr class="wp-header-end">
 
-	<div class="atum-list-wrapper" data-action="atum_fetch_inbound_stock_list" data-screen="<?php echo $list->screen->id ?>">
+	<div class="atum-list-wrapper" data-action="atum_fetch_inbound_stock_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
 		
 		<?php $list->views(); ?>
 
 		<p class="search-box">
-			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php _e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
+			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php esc_attr_e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
 			
 			<?php if ( 'no' === $ajax ) : ?>
-				<input type="submit" class="button search-submit" value="<?php _e( 'Search', ATUM_TEXT_DOMAIN ) ?>">
+				<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>">
 			<?php endif; ?>
 		</p>
 		

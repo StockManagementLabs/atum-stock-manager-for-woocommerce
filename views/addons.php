@@ -10,17 +10,17 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 
 ?>
-<div class="wrap atum-addons" data-nonce="<?php echo wp_create_nonce( ATUM_PREFIX . 'manage_license' ) ?>">
+<div class="wrap atum-addons" data-nonce="<?php echo esc_attr( wp_create_nonce( ATUM_PREFIX . 'manage_license' ) ) ?>">
 
 	<h1>
-		<?php _e( 'ATUM Add-ons', ATUM_TEXT_DOMAIN ) ?>
-		<span class="title-count theme-count"><?php echo( ! empty( $addons ) ? count( $addons ) : 0 ) ?></span>
-		<a href="<?php echo Addons::ADDONS_STORE_URL ?>addons/" class="page-title-action" target="_blank"><?php _e( 'Visit Add-ons Store', ATUM_TEXT_DOMAIN ) ?></a>
+		<?php esc_html_e( 'ATUM Add-ons', ATUM_TEXT_DOMAIN ) ?>
+		<span class="title-count theme-count"><?php echo esc_attr( ! empty( $addons ) ? count( $addons ) : 0 ) ?></span>
+		<a href="<?php echo esc_url( Addons::ADDONS_STORE_URL ) ?>addons/" class="page-title-action" target="_blank"><?php esc_html_e( 'Visit Add-ons Store', ATUM_TEXT_DOMAIN ) ?></a>
 	</h1>
 
 	<?php if ( ! empty( $addons ) ) : ?>
 
-		<div class="theme-browser rendered" data-nonce="<?php echo wp_create_nonce( 'atum-addon-action' ) ?>">
+		<div class="theme-browser rendered" data-nonce="<?php echo esc_attr( wp_create_nonce( 'atum-addon-action' ) ) ?>">
 			<div class="themes wp-clearfix">
 				<?php foreach ( $addons as $addon ) :
 
@@ -30,29 +30,29 @@ use Atum\Addons\Addons;
 					$is_beta              = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
 					?>
 
-					<div class="theme <?php echo $addon_status['status'] ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>"
-						data-addon="<?php echo $addon['info']['title'] ?>" data-addon-slug="<?php echo $addon['info']['slug'] ?>">
+					<div class="theme <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>"
+						data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>" data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>">
 
 						<?php if ( ! empty( $addon['info']['thumbnail'] ) ) : ?>
-						<div class="theme-screenshot" style="background-image: url(<?php echo $addon['info']['thumbnail'] ?>)">
+						<div class="theme-screenshot" style="background-image: url(<?php echo esc_url( $addon['info']['thumbnail'] ) ?>)">
 						<?php else : ?>
 						<div class="theme-screenshot blank">
 						<?php endif ?>
 
 							<?php if ( $is_beta ) : ?>
-								<span class="label label-warning"><?php _e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
+								<span class="label label-warning"><?php esc_html_e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
 							<?php elseif ( ! $is_coming_soon_addon && ! empty( $addon['licensing']['version'] ) ) : ?>
-								<span class="label"><?php echo 'v' . $addon['licensing']['version'] ?></span>
+								<span class="label"><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?></span>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $addon['info']['excerpt'] ) ) : ?>
 							<div class="addon-details">
-								<p><?php echo $addon['info']['excerpt'] ?></p>
+								<p><?php echo wp_kses_post( $addon['info']['excerpt'] ) ?></p>
 
-								<?php echo $more_details_link ?>
+								<?php echo $more_details_link; // WPCS: XSS ok. ?>
 							</div>
 							<?php else :
-								echo $more_details_link;
+								echo $more_details_link; // WPCS: XSS ok.
 							endif ?>
 
 						</div>
@@ -60,7 +60,7 @@ use Atum\Addons\Addons;
 						<h2 class="theme-name">
 
 							<?php
-							echo $addon['info']['title'];
+							echo esc_html( $addon['info']['title'] );
 
 							$addon_classes = array();
 
@@ -75,22 +75,22 @@ use Atum\Addons\Addons;
 							endif;
 							?>
 
-							<div class="theme-actions <?php echo implode( ' ', $addon_classes ) ?>">
+							<div class="theme-actions <?php echo esc_attr( implode( ' ', $addon_classes ) ) ?>">
 
 								<?php if ( $is_coming_soon_addon ) : ?>
-									<span><?php _e( 'coming soon', ATUM_TEXT_DOMAIN ) ?></span>
+									<span><?php esc_html_e( 'coming soon', ATUM_TEXT_DOMAIN ) ?></span>
 								<?php elseif ( 'valid' === $addon_status['status'] ) : ?>
 
 									<?php if ( ! $addon_status['installed'] ) : ?>
-										<button type="button" title="<?php esc_attr_e( 'Click to install', ATUM_TEXT_DOMAIN ) ?>" class="button install-addon"><?php _e( 'Install', ATUM_TEXT_DOMAIN ) ?></button>
+										<button type="button" title="<?php esc_attr_e( 'Click to install', ATUM_TEXT_DOMAIN ) ?>" class="button install-addon"><?php esc_html_e( 'Install', ATUM_TEXT_DOMAIN ) ?></button>
 									<?php else : ?>
-										<span><?php _e( 'installed', ATUM_TEXT_DOMAIN ) ?></span>
+										<span><?php esc_html_e( 'installed', ATUM_TEXT_DOMAIN ) ?></span>
 									<?php endif ?>
 
 								<?php elseif ( 'inactive' === $addon_status['status'] ) : ?>
-									<span><?php _e( 'inactive key', ATUM_TEXT_DOMAIN ) ?></span>
+									<span><?php esc_html_e( 'inactive key', ATUM_TEXT_DOMAIN ) ?></span>
 								<?php elseif ( 'invalid' === $addon_status['status'] && $addon_status['key'] ) : ?>
-									<span><?php _e( 'invalid key', ATUM_TEXT_DOMAIN ) ?></span>
+									<span><?php esc_html_e( 'invalid key', ATUM_TEXT_DOMAIN ) ?></span>
 								<?php endif ?>
 							</div>
 
@@ -105,8 +105,10 @@ use Atum\Addons\Addons;
 						<?php if ( ! $is_coming_soon_addon ) : ?>
 							<div class="addon-key">
 								<div class="wrapper">
-									<input type="text" autocomplete="false" spellcheck="false" class="<?php if ( $addon_status['key'] ) echo $addon_status['status'] ?>" value="<?php echo $addon_status['key'] ?>" placeholder="<?php esc_attr_e( 'Enter the addon license key...', ATUM_TEXT_DOMAIN ) ?>">
-									<button type="button" class="button <?php echo $addon_status['button_class'] ?>" data-action="<?php echo $addon_status['button_action'] ?>"><?php echo $addon_status['button_text'] ?></button>
+									<input type="text" autocomplete="false" spellcheck="false" class="<?php if ( $addon_status['key'] ) echo esc_attr( $addon_status['status'] ) ?>"
+										value="<?php echo esc_attr( $addon_status['key'] ) ?>" placeholder="<?php esc_attr_e( 'Enter the addon license key...', ATUM_TEXT_DOMAIN ) ?>">
+									<button type="button" class="button <?php echo esc_attr( $addon_status['button_class'] ) ?>"
+										data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"><?php echo esc_html( $addon_status['button_text'] ) ?></button>
 								</div>
 							</div>
 						<?php endif ?>

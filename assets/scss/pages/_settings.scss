@@ -354,6 +354,31 @@ $settings-menu-active:      $white;
 		
 	}
 	
+	// Color Pickers
+	.wp-picker-container {
+		
+		button.wp-color-result {
+			height: 31px;
+			box-shadow: none;
+			
+			.wp-color-result-text {
+				line-height: 29px;
+			}
+		}
+		
+		.wp-picker-clear {
+			background-color: $secondary;
+			color: $white;
+			border: none;
+			height: 31px;
+			line-height: 31px;
+			
+			&:hover {
+				background-color: rgba($secondary, .8);
+			}
+		}
+	}
+	
 }
 
 // Sweet alert customizations
