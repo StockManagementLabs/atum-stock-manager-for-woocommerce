@@ -137,7 +137,7 @@ class Hooks {
 
 		$query = $wpdb->prepare( "
 			SELECT meta_key, meta_value 
-      		FROM wp_postmeta where post_id = %d
+      		FROM {$wpdb->postmeta} where post_id = %d
           	AND meta_key IN ( '_manage_stock','_stock','_stock_status', '_backorders')
         ", $item_id );
 
@@ -604,6 +604,8 @@ class Hooks {
 	 * @return string
 	 */
 	public function set_wc_products_list_stock_status( $stock_html, $the_product ) {
+		
+		$ggg = 2;
 
 		if (
 			'yes' === Helpers::get_option( 'show_variations_stock', 'yes' ) &&
@@ -791,13 +793,13 @@ class Hooks {
 		}
 
 	}
-
+	
 	/**
 	 * Customise the "Add to cart" messages to allow decimal places
 	 *
 	 * @since 1.3.4.1
 	 *
-	 * @param string $message
+	 * @param string    $message
 	 * @param int|array $products
 	 *
 	 * @return string
