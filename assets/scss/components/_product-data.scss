@@ -85,6 +85,13 @@
 		
 	}
 	
+	.atum-data-panel {
+		.atum-section-title {
+			font-size: 1.15em;
+			padding-left: 10px;
+		}
+	}
+	
 	.woocommerce-help-tip {
 		~ .switchery {
 			margin-left: 10px;
@@ -131,27 +138,32 @@
 		}
 		
 		.form-field {
+			@include flexbox;
+			@include flex-align-items(center);
+			
 			&:first-of-type {
 				margin: 25px 0;
 			}
 		}
+		
 	}
 	
-	h3.atum-section-title {
+	h2.atum-section-title {
 		border: 1px solid $info;
-		background-color: transparentize($blue-light, .85);
+		background-color: $blue-light;
 		color: $wp-gray-2;
 		text-transform: uppercase;
 		cursor: default !important;
-		margin-bottom: $grid-gutter-width/2 !important;
-		padding: 1em !important;
+		margin: ($grid-gutter-width/2) (-$grid-gutter-width)  !important;
+		padding: 1.1em !important;
+		text-align: center;
 	}
 	
 	h4.atum-section-title {
 		margin-top: $grid-gutter-width;
 		padding-bottom: 10px;
+		padding-left: 0 !important;
 		border-bottom: 1px dashed $secondary;
-		font-size: 1.1em;
 	}
 	
 	.alert {

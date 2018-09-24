@@ -16,7 +16,7 @@ use Atum\Inc\Helpers;
 
 ?>
 <div class="atum-data-panel">
-	<h3 class="atum-section-title"><?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?></h3>
+	<h2 class="atum-section-title"><?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?></h2>
 
 	<div class="options_group">
 		<?php
