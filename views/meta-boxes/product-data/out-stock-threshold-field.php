@@ -35,7 +35,7 @@ if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) : ?>
 				<input type="number" class="short" step="1" name="<?php echo esc_attr( $out_stock_threshold_field_name ) ?>"
 					id="<?php echo esc_attr( $out_stock_threshold_field_id ) ?>" value="<?php echo esc_attr( $out_stock_threshold ) ?>"
 					placeholder="<?php echo esc_attr( $woocommerce_notify_no_stock_amount ) ?>" data-onload-product-type="<?php echo esc_attr( $product_type ) ?>"
-					<?php echo apply_filters( 'atum/views/meta_boxes/out_stock_threshold_field', '', $variation, $loop ); // WPCS: XSS ok. ?>
+					<?php echo apply_filters( 'atum/views/meta_boxes/out_stock_threshold_field_extra_atts', '', $variation, $loop ); // WPCS: XSS ok. ?>
 					>
 
 				<?php echo wc_help_tip( esc_attr__( "This value will override the global WooComerce's 'Out of stock threshold' for this individual product.", ATUM_TEXT_DOMAIN ) ); // WPCS: XSS ok. ?>

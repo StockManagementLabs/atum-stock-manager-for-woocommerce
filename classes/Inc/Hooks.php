@@ -547,7 +547,7 @@ class Hooks {
 		$product     = wc_get_product( $product_id );
 		$price       = $product->get_price();
 
-		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price' ) );
+		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price', 'variation', 'loop' ) );
 
 	}
 
