@@ -90,6 +90,16 @@ class AtumCapabilities {
 		'export_data',
 		'view_statistics',
 	);
+	
+	/**
+	 * Capabilities used in WP_Query when searching for more than one post type not included by default in WordPress.
+	 *
+	 * @var array
+	 */
+	private $wp_capabilities = array(
+		'edit_others_multiple_post_types',
+		'read_private_multiple_post_types',
+	);
 
 	/**
 	 * Singleton constructor
@@ -99,7 +109,7 @@ class AtumCapabilities {
 	private function __construct() {
 
 		// Add the ATUM prefix to all the capabilities.
-		$this->capabilities = preg_filter( '/^/', ATUM_PREFIX, $this->capabilities );
+		$this->capabilities = array_merge( preg_filter( '/^/', ATUM_PREFIX, $this->capabilities ), $this->wp_capabilities );
 
 		$admin_roles = (array) apply_filters( 'atum/capabilities/admin_roles', [ get_role( 'administrator' ) ] );
 
