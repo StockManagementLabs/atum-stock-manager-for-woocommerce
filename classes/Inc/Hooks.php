@@ -402,8 +402,8 @@ class Hooks {
 	public function purchase_price_hooks() {
 
 		// Add the purchase price to WC products.
-		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_meta' ) );
-		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_meta' ), 10, 3 );
+		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_field' ) );
+		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_field' ), 10, 3 );
 
 		// Save the product purchase price meta.
 		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
@@ -523,7 +523,7 @@ class Hooks {
 	 * @param array    $variation_data   Only for variations. The variation item data.
 	 * @param \WP_Post $variation        Only for variations. The variation product.
 	 */
-	public function add_purchase_price_meta( $loop = NULL, $variation_data = array(), $variation = NULL ) {
+	public function add_purchase_price_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
 
 		if ( ! current_user_can( ATUM_PREFIX . 'edit_purchase_price' ) ) {
 			return;
