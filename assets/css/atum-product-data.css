@@ -1136,6 +1136,12 @@ input[type="button"].btn-block {
   margin: 15px -30px !important;
   padding: 1.1em !important;
   text-align: center;
+  font-weight: 600;
+}
+
+.woocommerce_variations h2.atum-section-title img {
+  vertical-align: -4px;
+  margin-right: 5px;
 }
 
 .woocommerce_variations h4.atum-section-title {

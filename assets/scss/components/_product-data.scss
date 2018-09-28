@@ -157,6 +157,12 @@
 		margin: ($grid-gutter-width/2) (-$grid-gutter-width)  !important;
 		padding: 1.1em !important;
 		text-align: center;
+		font-weight: 600;
+		
+		img {
+			vertical-align: -4px;
+			margin-right: 5px;
+		}
 	}
 	
 	h4.atum-section-title {
