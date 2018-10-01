@@ -62,7 +62,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
 			'thumb'           => '<span class="wc-image tips" data-toggle="tooltip" data-placement="bottom" title="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'           => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'title'           => __( 'Name', ATUM_TEXT_DOMAIN ),
 			'_supplier'       => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_sku'            => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'_supplier_sku'   => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
