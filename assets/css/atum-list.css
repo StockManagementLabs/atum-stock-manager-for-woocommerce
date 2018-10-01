@@ -269,28 +269,44 @@
   font-size: 23px;
 }
 
-.swal2-container p {
+.swal2-container .swal2-close {
+  font-weight: 100;
+  font-family: inherit;
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.swal2-container .swal2-modal p {
   font-size: 15px;
   text-align: center;
 }
 
-.swal2-container button, .swal2-container a {
+.swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
   -webkit-transition: background-color 0.2s ease-in-out;
   -o-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
 }
 
-.swal2-container button:focus, .swal2-container a:focus {
+.swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
   outline: none;
   box-shadow: none;
 }
 
-.swal2-container a {
+.swal2-container .swal2-modal button {
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 300;
+  padding: 9px 19px;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.swal2-container .swal2-modal a {
   text-decoration: none;
   color: #69C61D;
 }
 
-.swal2-container a:hover {
+.swal2-container .swal2-modal a:hover {
   color: #82e135;
 }
 
@@ -2411,19 +2427,27 @@ input[type="button"].btn-block {
 }
 
 .atum-list-table tr.variation, .floatThead-container tr.variation {
-  background-color: #c7f6ff;
-}
-
-.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even) {
   background-color: #dbf9ff;
 }
 
+.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even) {
+  background-color: #f5fdff;
+}
+
+.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow {
+  color: #00B8DB;
+}
+
 .atum-list-table tr.grouped, .floatThead-container tr.grouped {
-  background-color: #ffe293;
+  background-color: #ffedbc;
 }
 
 .atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even) {
-  background-color: #ffedbc;
+  background-color: #fff4d6;
+}
+
+.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow {
+  color: #EFAF00;
 }
 
 .atum-list-table tr.no-items td, .floatThead-container tr.no-items td {
@@ -2583,10 +2607,24 @@ input[type="button"].btn-block {
 
 .atum-list-table td.column-title, .atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title {
   min-width: 150px;
+  font-weight: 500;
 }
 
 .atum-list-table td.column-title > span, .atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span {
   white-space: nowrap;
+}
+
+.atum-list-table td.column-title .child-arrow, .atum-list-table th.column-title .child-arrow, .floatThead-container td.column-title .child-arrow, .floatThead-container th.column-title .child-arrow {
+  display: inline-block;
+  margin-right: 2px;
+  margin-left: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .atum-list-table td.column-sku, .atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku {

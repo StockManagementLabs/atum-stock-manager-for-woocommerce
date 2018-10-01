@@ -459,18 +459,30 @@
 		}
 		
 		&.variation {
-			background-color: lighten($primary, 46%);
+			background-color: $blue-light;
 			
 			&:nth-child(even) {
-				background-color: lighten($primary, 50%);
+				background-color: $blue-light-2;
+			}
+			
+			td.title {
+				.child-arrow {
+					color: $blue;
+				}
 			}
 		}
 		
 		&.grouped {
-			background-color: lighten($warning, 32%);
+			background-color: $orange-light;
 			
 			&:nth-child(even) {
-				background-color: lighten($warning, 40%);
+				background-color: $orange-light-2;
+			}
+			
+			td.title {
+				.child-arrow {
+					color: $orange;
+				}
 			}
 		}
 		
@@ -586,9 +598,19 @@
 		
 		&.column-title {
 			min-width: 150px;
+			font-weight: 500;
 			
 			> span {
 				white-space: nowrap;
+			}
+			
+			.child-arrow {
+				display: inline-block;
+				margin-right: 2px;
+				margin-left: 5px;
+				font-weight: bold;
+				font-size: 14px;
+				@include transform(rotate(90deg));
 			}
 		}
 		

@@ -603,8 +603,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_title( $item ) {
 
-		$title      = '';
-		$product_id = $this->get_current_product_id();
+		$title       = '';
+		$product_id  = $this->get_current_product_id();
+		$child_arrow = $this->is_child ? '<span class="child-arrow">&#8629;</span>' : '';
 
 		if ( Helpers::is_child_type( $this->product->get_type() ) ) {
 
@@ -627,7 +628,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$title = '<span class="tips" data-tip="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) . '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
-		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $title . '</a>';
+		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $child_arrow . $title . '</a>';
 
 		return apply_filters( 'atum/list_table/column_title', $title, $item, $this->product );
 

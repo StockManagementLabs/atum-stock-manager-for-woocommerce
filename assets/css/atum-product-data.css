@@ -1071,6 +1071,11 @@ input[type="button"].btn-block {
   border-color: #5B9DD9;
 }
 
+.product_data .atum-data-panel .atum-section-title {
+  font-size: 1.15em;
+  padding-left: 10px;
+}
+
 .product_data .woocommerce-help-tip ~ .switchery {
   margin-left: 10px;
 }
@@ -1106,25 +1111,44 @@ input[type="button"].btn-block {
   min-width: 130px;
 }
 
+.woocommerce_variations .atum-data-panel .form-field {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
 .woocommerce_variations .atum-data-panel .form-field:first-of-type {
   margin: 25px 0;
 }
 
-.woocommerce_variations h3.atum-section-title {
+.woocommerce_variations h2.atum-section-title {
   border: 1px solid #E3E8F5;
-  background-color: rgba(219, 249, 255, 0.15);
+  background-color: #dbf9ff;
   color: #555;
   text-transform: uppercase;
   cursor: default !important;
-  margin-bottom: 15px !important;
-  padding: 1em !important;
+  margin: 15px -30px !important;
+  padding: 1.1em !important;
+  text-align: center;
+  font-weight: 600;
+}
+
+.woocommerce_variations h2.atum-section-title img {
+  vertical-align: -4px;
+  margin-right: 5px;
 }
 
 .woocommerce_variations h4.atum-section-title {
   margin-top: 30px;
   padding-bottom: 10px;
+  padding-left: 0 !important;
   border-bottom: 1px dashed #6c757d;
-  font-size: 1.1em;
 }
 
 .woocommerce_variations .alert {

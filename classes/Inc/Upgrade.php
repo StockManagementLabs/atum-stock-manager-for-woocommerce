@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumLogs\AtumLogs;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
@@ -39,7 +40,7 @@ class Upgrade {
 		 * UPGRADE ACTIONS START
 		 **********************!*/
 
-		// ** version 1.2.4 ** The Inventory Logs was introduced
+		// ** version 1.2.4 ** The Inventory Logs was introduced.
 		if ( version_compare( $db_version, '1.2.4', '<' ) ) {
 			$this->create_inventory_log_tables();
 			add_action( 'admin_init', array( $this, 'create_inventory_log_types' ) );
@@ -58,15 +59,18 @@ class Upgrade {
 
 		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta.
 		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
-
 			$this->add_inheritable_sock_meta();
 		}
 
-		// ** version 1.4.6 New hidden column: weight
+		// ** version 1.4.6 ** New hidden column: weight.
 		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
-
 			$this->add_default_hidden_columns();
 		}
+
+		// ** version 1.4.15 ** New table for ATUM Logs component.
+		/*if ( version_compare( $db_version, '1.4.15', '<' ) ) {
+			$this->create_atum_log_table();
+		}*/
 
 		/**********************
 		 * UPGRADE ACTIONS END
@@ -295,5 +299,47 @@ class Upgrade {
 		}
 
 	}
+
+	/**
+	 * Create the table for the ATUM Logs
+	 *
+	 * @since 1.4.15
+	 */
+	/*private function create_atum_log_table() {
+
+		global $wpdb;
+
+		$log_table = $wpdb->prefix . AtumLogs::get_log_table();
+
+		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$log_table';" ) ) { // WPCS: unprepared SQL ok.
+
+			$collate = '';
+
+			if ( $wpdb->has_cap( 'collation' ) ) {
+				$collate = $wpdb->get_charset_collate();
+			}
+
+			$sql = "
+			CREATE TABLE $log_table (
+				id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+		  		ref VARCHAR(256) NOT NULL,			
+			  	user_id BIGINT DEFAULT NULL,			  
+				type VARCHAR(64) DEFAULT NULL,
+				source VARCHAR(256) DEFAULT NULL,
+				time BIGINT DEFAULT NULL,			  
+				entry LONGTEXT,
+				status INT(11) DEFAULT '0',
+				data LONGTEXT,			
+			  	PRIMARY KEY (id),
+			  	UNIQUE KEY id (id)
+			) $collate;
+			";
+
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
+
+		}
+
+	}*/
 
 }

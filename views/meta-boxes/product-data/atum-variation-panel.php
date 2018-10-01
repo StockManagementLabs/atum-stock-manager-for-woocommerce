@@ -16,7 +16,10 @@ use Atum\Inc\Helpers;
 
 ?>
 <div class="atum-data-panel">
-	<h3 class="atum-section-title"><?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?></h3>
+	<h2 class="atum-section-title">
+		<img src="<?php echo ATUM_URL . 'assets/images/atum-icon.svg'; // WPCS: XSS ok. ?>">
+		<?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?>
+	</h2>
 
 	<div class="options_group">
 		<?php

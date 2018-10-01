@@ -1525,12 +1525,11 @@ final class Helpers {
 						$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
 
-						$product->set_date_on_sale_from( $date_from ? strtotime( $date_from ) : '' );
-						$product->set_date_on_sale_to( $date_to ? strtotime( $date_to ) : '' );
+						$date_from = $date_from ? strtotime( $date_from ) : '';
+						$date_to   = $date_to ? strtotime( $date_to ) : '';
 
 						if ( $date_to && ! $date_from ) {
-							$date_from = date( 'Y-m-d' );
-							$product->set_date_on_sale_from( strtotime( $date_from ) );
+							$date_from = current_time( 'timestamp', TRUE );
 						}
 
 						// Update price if on sale.
@@ -1541,12 +1540,14 @@ final class Helpers {
 
 							$product->set_price( $regular_price );
 
-							if ( $date_to && strtotime( $date_to ) < current_time( 'timestamp' ) ) {
-								$product->set_date_on_sale_from( '' );
-								$product->set_date_on_sale_to( '' );
+							if ( $date_to && $date_to < current_time( 'timestamp', TRUE ) ) {
+								$date_from = $date_to = '';
 							}
 
 						}
+
+						$product->set_date_on_sale_from( $date_from );
+						$product->set_date_on_sale_to( $date_to );
 
 					}
 						
@@ -1852,6 +1853,37 @@ final class Helpers {
 		
 		return FALSE;
 		
+	}
+
+	/**
+	 * Like "array_unique" function but for multi-dimensional arrays where the specified key must be unique
+	 *
+	 * @since 1.4.14
+	 *
+	 * @param array  $array
+	 * @param string $key
+	 *
+	 * @return array
+	 */
+	public static function unique_multidim_array( $array, $key ) {
+
+		$temp_array = array();
+		$i          = 0;
+		$key_array  = array();
+
+		foreach ( $array as $val ) {
+
+			if ( ! in_array( $val[ $key ], $key_array ) ) {
+				$key_array[ $i ]  = $val[ $key ];
+				$temp_array[ $i ] = $val;
+			}
+
+			$i++;
+
+		}
+
+		return $temp_array;
+
 	}
 
 }
