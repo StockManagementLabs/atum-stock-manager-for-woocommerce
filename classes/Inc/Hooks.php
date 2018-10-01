@@ -543,9 +543,9 @@ class Hooks {
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
-		$field_value = wc_format_localized_price( get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE ) );
+		$field_value = (float) get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
 		$product     = wc_get_product( $product_id );
-		$price       = $product->get_price();
+		$price       = (float) $product->get_price();
 
 		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price' ) );
 
