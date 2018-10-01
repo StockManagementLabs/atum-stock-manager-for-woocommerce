@@ -74,6 +74,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Components\\AtumListTables\\AtumListPage' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumListPage.php',
         'Atum\\Components\\AtumListTables\\AtumListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumListTable.php',
         'Atum\\Components\\AtumListTables\\AtumUncontrolledListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumUncontrolledListTable.php',
+        'Atum\\Components\\AtumLogs\\AtumLogs' => __DIR__ . '/../..' . '/classes/Components/AtumLogs/AtumLogs.php',
         'Atum\\Components\\AtumOrders\\AtumComments' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/AtumComments.php',
         'Atum\\Components\\AtumOrders\\AtumOrderPostType' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/AtumOrderPostType.php',
         'Atum\\Components\\AtumOrders\\Items\\AtumOrderItemFee' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Items/AtumOrderItemFee.php',
