@@ -137,9 +137,11 @@ class Wpml {
 			add_filter( 'atum/list_table/editable_column', array( $this, 'add_custom_prices_arg' ), 10, 2 );
 			add_filter( 'atum/stock_central_list/args_purchase_price', array( $this, 'add_custom_purchase_price' ) );
 
-			// Hook into Stock Central ListTable columns.
+			// Hook into Controlled and UnControlled Stock Central ListTables columns.
 			add_filter( 'atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
+			add_filter( 'atum/uncontrolled_stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
 			add_filter( 'atum/stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ) );
+			add_filter( 'atum/uncontrolled_stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ) );
 			
 			// Hook into AtumListTable Product Search.
 			if ( $this->multicurrency_active ) {
