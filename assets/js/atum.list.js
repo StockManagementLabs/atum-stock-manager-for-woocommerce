@@ -932,7 +932,7 @@
 			    delay   = 500,
 			    noTimer = noTimer || false;
 
-            var searchInputVal= this.$searchInput.val();
+            var searchInputVal = this.$searchInput.val();
 
 			/*
 			 * If user hit enter, we don't want to submit the form
@@ -942,7 +942,8 @@
 			 * Also, if the S param is empty, we don't want to search anything
 			 */
 
-        	if( e.type != "keyup" || searchInputVal.length > 0 ){
+        	if( e.type != 'keyup' || searchInputVal.length > 0 ) {
+        	
 				if (13 === e.which) {
 					e.preventDefault();
 				}
@@ -965,7 +966,9 @@
                     }, delay);
 
                 }
-            } else {
+                
+            }
+            else {
                 e.preventDefault();
             }
 
@@ -1037,8 +1040,6 @@
 				    value: $metaCell.text().replace(symbol, '').replace('—', ''),
 				    class: 'meta-value'
 			    };
-			
-			//debugger;
 			
 			if (inputType === 'number') {
 				inputAtts.min = '0';

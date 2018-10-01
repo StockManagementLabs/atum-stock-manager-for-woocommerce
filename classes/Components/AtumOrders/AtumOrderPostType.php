@@ -5,7 +5,7 @@
  * @package         Atum\Components
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2017 Stock Management Labs™
+ * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.9
  */
