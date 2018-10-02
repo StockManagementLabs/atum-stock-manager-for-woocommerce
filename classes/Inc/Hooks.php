@@ -544,7 +544,6 @@ class Hooks {
 			$stock_status = 'outofstock';
 			$stock_text   = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
 			$stock_html   = ''; // '<mark class="outofstock">' . __( 'Out of stock', ATUM_TEXT_DOMAIN ) . '</mark>';
-			$stocks_list  = array();
 			
 			if ( ! empty( $variations ) ) {
 				
