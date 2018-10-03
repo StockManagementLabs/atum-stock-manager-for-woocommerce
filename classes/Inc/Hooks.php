@@ -15,11 +15,19 @@ namespace Atum\Inc;
 use Atum\Components\AtumCapabilities;
 use Atum\Settings\Settings;
 
-
 defined( 'ABSPATH' ) || die;
 
 
 class Hooks {
+	
+	/**
+	 * Store current stock threshold
+	 *
+	 * @since 1.4.15
+	 *
+	 * @var int
+	 */
+	private $stock_threshold;
 
 	/**
 	 * The singleton instance holder
@@ -104,99 +112,17 @@ class Hooks {
 
 		// Add out_stock_threshold hooks if required.
 		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			add_filter( 'woocommerce_product_is_in_stock', array( $this, 'check_product_out_of_stock_threshold' ), 10, 2 );
-		}
-
-	}
-
-	/**
-	 * Override the get_stock_status to all products that have stock managed at product level,
-	 * and ATUM's out_stock_threshold enabled and the _out_stock_threshold set and greater or equal to stock
-	 *
-	 * @since 1.4.10
-	 *
-	 * @param mixed       $is_in_stock Before hook value.
-	 * @param \WC_Product $product     Actual product or variation who fires.
-	 *
-	 * @return bool true/false procesed $is_in_stock (if required)
-	 */
-	public function check_product_out_of_stock_threshold( $is_in_stock, $product ) {
-
-		global $wpdb;
-
-		$item_id                = $product->get_id();
-		$out_of_stock_threshold = get_post_meta( $item_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
-
-		// If the product has no "Out of Stock Threshold" set we don't need to continue.
-		if ( FALSE === $out_of_stock_threshold || '' === $out_of_stock_threshold ) {
-			return $is_in_stock;
-		}
-
-		// Allow disabling the threshold checking externally for some products.
-		if ( apply_filters( 'atum/out_of_stock_threshold_for_product', FALSE, $product, $is_in_stock ) ) {
-			return $is_in_stock;
-		}
-
-		$query = $wpdb->prepare( "
-			SELECT meta_key, meta_value 
-      		FROM {$wpdb->postmeta} where post_id = %d
-          	AND meta_key IN ( '_manage_stock','_stock','_stock_status', '_backorders')
-        ", $item_id );
-
-		$item_metas = array_column( $wpdb->get_results( $query, ARRAY_A ), 'meta_value', 'meta_key' ); // WPCS: Unprepared SQL ok.
-
-		// If this item doesn't have these 4 keys, it means that it never has had "_out_stock_threshold" set.
-		if ( ! Helpers::array_keys_exist( array( '_manage_stock', '_stock', '_stock_status' ), $item_metas ) ) {
-
-			if ( isset( $item_metas['_stock_status'] ) ) {
-				return 'outofstock' !== $item_metas['_stock_status'];
-			}
-
-		}
-		elseif ( 'yes' === $item_metas['_manage_stock'] ) {
-
-			if ( 'no' !== $item_metas['_backorders'] ) {
-				return TRUE;
-			}
-
-			if ( $item_metas['_stock'] > $out_of_stock_threshold ) {
-				// Available.
-				return TRUE;
-
-			}
-
-			// _out_stock_threshold!
-			return FALSE;
+			
+			add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
+			add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
+			
+			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
+			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_stock_status' ), 10, 2 );
+			
+			add_action( 'woocommerce_before_product_object_save', array( $this, 'remove_order_stock_status_filter' ), 10, 2 );
 
 		}
 
-		return $is_in_stock;
-
-	}
-
-	/**
-	 * Show row meta on the plugin screen
-	 *
-	 * @since 1.4.0
-	 *
-	 * @param array  $links   Plugin row meta.
-	 * @param string $file    Plugin base file.
-	 *
-	 * @return array
-	 */
-	public function plugin_row_meta( $links, $file ) {
-
-		if ( ATUM_BASENAME === $file ) {
-			$row_meta = array(
-				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
-				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
-				'support'         => '<a href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" aria-label="' . esc_attr__( 'Visit ATUM support forums', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
-			);
-
-			return array_merge( $links, $row_meta );
-		}
-
-		return $links;
 	}
 
 	/**
@@ -597,7 +523,7 @@ class Hooks {
 	}
 
 	/**
-	 * Sets the stock status in WooCommerce products' list
+	 * Sets the stock status in WooCommerce products' list for inheritable products
 	 *
 	 * @since 1.2.6
 	 *
@@ -607,8 +533,6 @@ class Hooks {
 	 * @return string
 	 */
 	public function set_wc_products_list_stock_status( $stock_html, $the_product ) {
-		
-		$ggg = 2;
 
 		if (
 			'yes' === Helpers::get_option( 'show_variations_stock', 'yes' ) &&
@@ -617,30 +541,43 @@ class Hooks {
 
 			// Get the variations within the variable.
 			$variations   = $the_product->get_children();
-			$stock_status = __( 'Out of stock', ATUM_TEXT_DOMAIN );
-			$stocks_list  = array();
-
+			$stock_status = 'outofstock';
+			$stock_text   = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
+			$stock_html   = '';
+			
 			if ( ! empty( $variations ) ) {
-
+				
+				$stock_html = ' (';
 				foreach ( $variations as $variation_id ) {
-
+					
 					$variation_product = wc_get_product( $variation_id );
-					$variation_stock   = $variation_product->get_stock_quantity();
-					$stocks_list[]     = $variation_stock;
-
-					if ( $variation_stock > 0 ) {
-						$stock_status = __( 'In stock', ATUM_TEXT_DOMAIN );
+					$variation_stock   = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
+					$variation_status  = $variation_product->get_stock_status();
+					$style             = 'color:#a44';
+					
+					switch ( $variation_status ) {
+						case 'instock':
+							$stock_status = 'instock';
+							$stock_text   = esc_attr__( 'In stock', ATUM_TEXT_DOMAIN );
+							$style        = 'color:#7ad03a';
+							break;
+						case 'onbackorder':
+							if ( 'instock' !== $stock_status ) {
+								$stock_status = 'onbackorder';
+								$stock_text   = esc_attr__( 'On backorder', ATUM_TEXT_DOMAIN );
+							}
+							$style = 'color:#eaa600';
+							break;
 					}
+					
+					$stock_html .= sprintf( '<span style="%s">%s</span>, ', $style, $variation_stock );
+					
 				}
+				
+				$stock_html = substr( $stock_html, 0, -2 ) . ')';
 			}
-
-			if ( empty( $stocks_list ) ) {
-				$stock_html = '<mark class="outofstock">' . $stock_status . '</mark> (0)';
-			}
-			else {
-				$class      = __( 'Out of stock', ATUM_TEXT_DOMAIN ) === $stock_status ? 'outofstock' : 'instock';
-				$stock_html = '<mark class="' . $class . '">' . $stock_status . '</mark> (' . implode( ', ', array_map( 'intval', $stocks_list ) ) . ')';
-			}
+			
+			$stock_html = "<mark class='$stock_status'>$stock_text</mark>" . $stock_html;
 
 		}
 
@@ -730,6 +667,7 @@ class Hooks {
 	 */
 	public function delete_transients( $product ) {
 		Helpers::delete_transients();
+		
 	}
 
 	/**
@@ -777,25 +715,7 @@ class Hooks {
 		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
 	}
 
-	/**
-	 * Round the stock quantity according to the number of decimals specified in settings
-	 *
-	 * @since 1.3.4
-	 *
-	 * @param float|int $qty
-	 *
-	 * @return float|int
-	 */
-	public function round_stock_quantity( $qty ) {
-
-		if ( ! Globals::get_stock_decimals() ) {
-			return intval( $qty );
-		}
-		else {
-			return round( floatval( $qty ), Globals::get_stock_decimals() );
-		}
-
-	}
+	
 	
 	/**
 	 * Customise the "Add to cart" messages to allow decimal places
@@ -875,7 +795,174 @@ class Hooks {
 		return $dropdown;
 
 	}
-
+	
+	/**
+	 * Round the stock quantity according to the number of decimals specified in settings
+	 *
+	 * @since 1.4.13
+	 *
+	 * @param float|int $qty
+	 *
+	 * @return float|int
+	 */
+	public function round_stock_quantity( $qty ) {
+		
+		if ( ! Globals::get_stock_decimals() ) {
+			return intval( $qty );
+		}
+		else {
+			return round( floatval( $qty ), Globals::get_stock_decimals() );
+		}
+		
+	}
+	
+	/**
+	 * Change stock status threshold value when reducing if new threshold value is set for the item's product
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param int                    $qty
+	 * @param \WC_Order              $order
+	 * @param \WC_Order_Item_Product $item
+	 *
+	 * @return int
+	 */
+	public function maybe_change_stock_status_in_orders( $qty, $order, $item ) {
+		
+		/** UNUSED */
+		$product = $item->get_product();
+		
+		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
+			
+			$out_of_stock_threshold = get_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+			
+			if ( $out_of_stock_threshold ) {
+				
+				$this->stock_threshold = (int) $out_of_stock_threshold;
+				if ( ! has_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ) ) ) {
+					add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ) );
+				};
+				
+			}
+			else {
+				
+				unset( $this->stock_threshold );
+			}
+			
+		}
+		
+		return $qty;
+	}
+	
+	/**
+	 * Change the stock threshold if this->stock_threshold has value
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param bool|mixed $pre
+	 * @param string     $option
+	 * @param mixed      $default
+	 *
+	 * @return mixed
+	 */
+	public function get_custom_stock_threshold( $pre, $option, $default ) {
+		
+		return is_null( $this->stock_threshold ) ? $pre : $this->stock_threshold;
+		
+	}
+	
+	/**
+	 * Change the stock threshold if current product has one set.
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param \WC_Product $product   The product.
+	 */
+	public function maybe_change_stock_threshold( $product ) {
+		
+		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
+			
+			unset( $this->stock_threshold );
+			
+			$out_of_stock_threshold = get_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+			
+			if ( $out_of_stock_threshold || '0' === $out_of_stock_threshold ) {
+				
+				$this->stock_threshold = (int) $out_of_stock_threshold;
+				
+				add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+				
+			}
+			
+		}
+	}
+	
+	/**
+	 * Change the stock status if current variation has one set.
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param int $variation_id
+	 * @param int $i
+	 */
+	public function maybe_change_stock_status( $variation_id, $i ) {
+		
+		$out_of_stock_threshold = get_post_meta( $variation_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+		unset( $this->stock_threshold );
+		
+		if ( $out_of_stock_threshold || '0' === $out_of_stock_threshold ) {
+			
+			$this->stock_threshold = (int) $out_of_stock_threshold;
+			
+			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+			
+			$product = wc_get_product( $variation_id );
+			$product->save();
+			
+			remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+			
+		}
+		
+	}
+	
+	/**
+	 * Remove pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param \WC_Product       $product
+	 * @param \WC_Data_Store_WP $data_store
+	 */
+	public function remove_order_stock_status_filter( $product, $data_store ) {
+		
+		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+	}
+	
+	/**
+	 * Show row meta on the plugin screen
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array  $links   Plugin row meta.
+	 * @param string $file    Plugin base file.
+	 *
+	 * @return array
+	 */
+	public function plugin_row_meta( $links, $file ) {
+		
+		if ( ATUM_BASENAME === $file ) {
+			$row_meta = array(
+				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
+				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
+				'support'         => '<a href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" aria-label="' . esc_attr__( 'Visit ATUM support forums', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
+			);
+			
+			return array_merge( $links, $row_meta );
+		}
+		
+		return $links;
+	}
+	
 	/********************
 	 * Instance methods
 	 ********************/
