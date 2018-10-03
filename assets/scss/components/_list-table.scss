@@ -199,9 +199,14 @@
 		
 	}
 	
-	// Float Head
+	// Float Thead
 	.floatThead-container {
 		height: 0;
+		
+		// Avoid issues when toggling columns while the header is floating
+		.group-toggler {
+			display: none;
+		}
 	}
 	
 	@media screen and (max-width: 782px) {
@@ -246,7 +251,7 @@
 	
 }
 
-// Enhanced Select fix
+// WC's Enhanced Select fix
 .select2-dropdown {
 	.select2-results__option {
 		&:focus {
@@ -316,7 +321,7 @@
 	
 }
 
-.atum-list-table, .floatThead-container{
+.atum-list-table, .floatThead-container {
 	margin-bottom: 15px;
 	
 	thead .item-heads, tfoot {
@@ -345,6 +350,7 @@
 					top: 0;
 				}
 			}
+			
 		}
 	}
 	
@@ -361,6 +367,32 @@
 			&:not(:last-child) {
 				border-right: 1px solid $gray-400;
 			}
+			
+			.group-toggler {
+				float: right;
+				font-size: 16px;
+				cursor: pointer;
+				font-family: 'Linearicons';
+				
+				&:before {
+					content: "\e889";
+				}
+				
+				&:hover {
+					color: $wp-link-hover;
+				}
+				
+			}
+			
+			&.collapsed {
+				min-width: 0;
+				width: 37px;
+				
+				.group-toggler {
+					@include transform(rotate(180deg));
+				}
+			}
+			
 		}
 	}
 	
@@ -598,7 +630,6 @@
 		
 		&.column-title {
 			min-width: 150px;
-			font-weight: 500;
 			
 			> span {
 				white-space: nowrap;
@@ -627,6 +658,21 @@
 			cursor: pointer;
 		}
 		
+		&.ghost-column {
+			width: 37px;
+			padding: 0 !important;
+			min-width: 0 !important;
+			height: auto !important;
+			border-left: 1px solid $gray-200;
+			border-right: 1px solid $gray-200;
+		}
+		
+	}
+	
+	td {
+		&.column-title {
+			font-weight: 500;
+		}
 	}
 	
 	.column-thumb {

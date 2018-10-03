@@ -22,7 +22,7 @@ use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 
-if ( ! class_exists( 'WP_List_Table' ) ) {
+if ( ! class_exists( '\WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
@@ -555,6 +555,83 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Generates the columns for a single row of the table
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param object $item The current item.
+	 */
+	protected function single_row_columns( $item ) {
+
+		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
+
+		$group_members = wp_list_pluck( $this->group_members, 'members' );
+
+		foreach ( $columns as $column_name => $column_display_name ) {
+
+			$classes = "$column_name column-$column_name";
+			if ( $primary === $column_name ) {
+				$classes .= ' has-row-actions column-primary';
+			}
+
+			if ( in_array( $column_name, $hidden ) ) {
+				$classes .= ' hidden';
+			}
+
+			// Add the group key as class.
+			foreach ( $group_members as $group_key => $members ) {
+				if ( in_array( $column_name, $members ) ) {
+					$classes .= " $group_key";
+					break;
+				}
+			}
+
+			// Comments column uses HTML in the display name with screen reader text.
+			// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
+			$data = 'data-colname="' . wp_strip_all_tags( $column_display_name ) . '"';
+
+			$attributes = "class='$classes' $data";
+
+			if ( 'cb' === $column_name ) {
+
+				echo '<th scope="row" class="check-column">';
+				echo $this->column_cb( $item ); // WPCS: XSS ok.
+				echo '</th>';
+
+			}
+			elseif ( method_exists( $this, '_column_' . $column_name ) ) {
+
+				echo call_user_func(
+					array( $this, '_column_' . $column_name ),
+					$item,
+					$classes,
+					$data,
+					$primary
+				); // WPCS: XSS ok.
+
+			}
+			elseif ( method_exists( $this, 'column_' . $column_name ) ) {
+
+				echo "<td $attributes>"; // WPCS: XSS ok.
+				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // WPCS: XSS ok.
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo '</td>';
+
+			}
+			else {
+
+				echo "<td $attributes>"; // WPCS: XSS ok.
+				echo $this->column_default( $item, $column_name ); // WPCS: XSS ok.
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo '</td>';
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Column selector checkbox
 	 *
 	 * @since  0.0.1
@@ -772,7 +849,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$product_tip .= '<br>' . sprintf(
 							/* translators: product type names */
 							__( '(click to show/hide the %s)', ATUM_TEXT_DOMAIN ),
-							( 'grouped' === $type ? __( 'Grouped items', ATUM_TEXT_DOMAIN ) : __( 'Variations', ATUM_TEXT_DOMAIN )
+							( 'grouped' === $type ? __( 'grouped items', ATUM_TEXT_DOMAIN ) : __( 'variations', ATUM_TEXT_DOMAIN )
 						) );
 						$type .= ' has-child';
 
@@ -2286,6 +2363,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
+		$group_members = wp_list_pluck( $this->group_members, 'members' );
+
 		$current_url     = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url     = remove_query_arg( 'paged', $current_url );
 		$current_orderby = isset( $_GET['orderby'] ) ? $_GET['orderby'] : '';
@@ -2316,6 +2395,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $column_key === $primary ) {
 				$class[] = 'column-primary';
+			}
+
+			// Add the group key as class.
+			foreach ( $group_members as $group_key => $members ) {
+				if ( in_array( $column_key, $members ) ) {
+					$class[] = $group_key;
+					break;
+				}
 			}
 
 			if ( isset( $sortable[ $column_key ] ) ) {
@@ -2350,6 +2437,103 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // WPCS: XSS ok.
+
+		}
+
+	}
+
+	/**
+	 * Prints the columns that groups the distinct header columns
+	 *
+	 * @since 0.0.1
+	 */
+	public function print_group_columns() {
+
+		if ( ! empty( $this->group_columns ) ) {
+
+			echo '<tr class="column-groups">';
+
+			foreach ( $this->group_columns as $group_column ) {
+
+				$data = $group_column['collapsed'] ? ' data-collapsed="1"' : '';
+
+				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"' . $data . '>' .
+					 '<span>' . $group_column['title'] . '</span>'; // WPCS: XSS ok.
+
+				if ( $group_column['toggler'] ) {
+					/* translators: the column group title */
+					echo '<span class="group-toggler tips" data-tip="' . esc_attr( sprintf( __( "Show/Hide the '%s' columns", ATUM_TEXT_DOMAIN ), $group_column['title'] ) ) . '"></span>';
+				}
+
+				echo '</th>';
+
+			}
+
+			echo '</tr>';
+
+		}
+	}
+
+	/**
+	 * Prints the totals row on table footer
+	 *
+	 * @since 1.4.2
+	 */
+	public function print_column_totals() {
+
+		// Does not show the totals row if there are no results.
+		if ( empty( $this->items ) ) {
+			return;
+		}
+
+		/* @noinspection PhpUnusedLocalVariableInspection */
+		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
+
+		$group_members = wp_list_pluck( $this->group_members, 'members' );
+		$column_keys   = array_keys( $columns );
+		$first_column  = reset( $column_keys );
+
+		foreach ( $columns as $column_key => $column_display ) {
+
+			$class = array( 'manage-column', "column-$column_key" );
+
+			if ( in_array( $column_key, $hidden ) ) {
+				$class[] = 'hidden';
+			}
+
+			if ( $first_column === $column_key ) {
+				$class[]        = 'totals-heading';
+				$column_display = '<span>' . __( 'Totals', ATUM_TEXT_DOMAIN ) . '</span>';
+			}
+			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
+				$total          = $this->totalizers[ $column_key ];
+				$total_class    = $total < 0 ? ' class="danger"' : '';
+				$column_display = "<span{$total_class}>" . $total . '</span>';
+			}
+			else {
+				$column_display = self::EMPTY_COL;
+			}
+
+			if ( $column_key === $primary ) {
+				$class[] = 'column-primary';
+			}
+
+			// Add the group key as class.
+			foreach ( $group_members as $group_key => $members ) {
+				if ( in_array( $column_key, $members ) ) {
+					$class[] = $group_key;
+					break;
+				}
+			}
+
+			$tag   = 'cb' === $column_key ? 'td' : 'th';
+			$scope = 'th' === $tag ? 'scope="col"' : '';
+
+			if ( ! empty( $class ) ) {
+				$class = "class='" . join( ' ', $class ) . "'";
+			}
+
+			echo "<$tag $scope $class>$column_display</th>"; // WPCS: XSS ok.
 
 		}
 
@@ -2427,6 +2611,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'applyAction'          => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'productLocations'     => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
 			'editProductLocations' => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),
+			'edit'                 => __( 'Edit', ATUM_TEXT_DOMAIN ),
+			'textToShow'           => __( 'Text to show?', ATUM_TEXT_DOMAIN ),
 			'locationsSaved'       => __( 'Values Saved', ATUM_TEXT_DOMAIN ),
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'    => $this->default_searchable_columns,
@@ -2442,82 +2628,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_localize_script( 'atum-list', 'atumListVars', $vars );
 
 		do_action( 'atum/list_table/after_display', $this );
-
-	}
-
-	/**
-	 * Prints the columns that groups the distinct header columns
-	 *
-	 * @since 0.0.1
-	 */
-	public function print_group_columns() {
-
-		if ( ! empty( $this->group_columns ) ) {
-
-			echo '<tr class="column-groups">';
-
-			foreach ( $this->group_columns as $group_column ) {
-				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"><span>' . $group_column['title'] . '</span></th>'; // WPCS: XSS ok.
-			}
-
-			echo '</tr>';
-
-		}
-	}
-
-	/**
-	 * Prints the totals row on table footer
-	 *
-	 * @since 1.4.2
-	 */
-	public function print_column_totals() {
-
-		// Does not show the totals row if there are no results.
-		if ( empty( $this->items ) ) {
-			return;
-		}
-
-		/* @noinspection PhpUnusedLocalVariableInspection */
-		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
-
-		$column_keys  = array_keys( $columns );
-		$first_column = reset( $column_keys );
-
-		foreach ( $columns as $column_key => $column_display ) {
-
-			$class = array( 'manage-column', "column-$column_key" );
-
-			if ( in_array( $column_key, $hidden ) ) {
-				$class[] = 'hidden';
-			}
-
-			if ( $first_column === $column_key ) {
-				$class[]        = 'totals-heading';
-				$column_display = '<span>' . __( 'Totals', ATUM_TEXT_DOMAIN ) . '</span>';
-			}
-			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
-				$total          = $this->totalizers[ $column_key ];
-				$total_class    = $total < 0 ? ' class="danger"' : '';
-				$column_display = "<span{$total_class}>" . $total . '</span>';
-			}
-			else {
-				$column_display = self::EMPTY_COL;
-			}
-
-			if ( $column_key === $primary ) {
-				$class[] = 'column-primary';
-			}
-
-			$tag   = 'cb' === $column_key ? 'td' : 'th';
-			$scope = 'th' === $tag ? 'scope="col"' : '';
-
-			if ( ! empty( $class ) ) {
-				$class = "class='" . join( ' ', $class ) . "'";
-			}
-
-			echo "<$tag $scope $class>$column_display</th>"; // WPCS: XSS ok.
-
-		}
 
 	}
 
@@ -2784,9 +2894,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( $counter ) {
 
 				$response[] = array(
-					'name'    => $name,
-					'title'   => $group['title'],
-					'colspan' => $counter,
+					'name'      => $name,
+					'title'     => $group['title'],
+					'colspan'   => $counter,
+					'toggler'   => ! empty( $group['toggler'] ) && $group['toggler'],
+					'collapsed' => ! empty( $group['collapsed'] ) && $group['collapsed'],
 				);
 
 			}

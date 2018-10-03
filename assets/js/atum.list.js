@@ -99,17 +99,13 @@
                 });
             }
 
-
             //
             // Init stickyHeaders: floatThead
             //--------------------------------
-			
-			var $adminBar    = $('#wpadminbar'),
-			    headerHeight = $adminBar.height();
 
-            //fired when the sticky header has to be floated, or not.
+            // Fired when the sticky header has to be floated, or not.
             this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
-	
+            	
 	            if (isFloated) {
 	            	
 		            $floatContainer.css('height', 'auto');
@@ -119,10 +115,8 @@
 			            $('#search_column_dropdown').hide();
 		            }
 		
-		            headerHeight = $adminBar.height();
-		
 		            // Hide on mobile view
-		            if ($adminBar.css('position') == 'absolute') {
+		            if ($('#wpadminbar').css('position') === 'absolute') {
 			            $floatContainer.hide();
 		            }
 		            else {
@@ -133,16 +127,10 @@
 	            else {
 		            $floatContainer.css('height', 0);
 	            }
+	            
             });
 			
-			this.$atumTable.floatThead({
-				responsiveContainer: function ($table) {
-					return $table.closest('.jspContainer');
-				},
-				position           : 'absolute',
-				top                : headerHeight,
-				autoReflow         : true
-			});
+			this.addFloatThead();
 			
 			//
 			// Setup the URL navaigation
@@ -177,7 +165,7 @@
 				
 				var $target   = $(e.target),
 				    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all
-				    $metaCell = ($target.hasClass('set-meta')) ? $('.set-meta').not($target) : $('.set-meta');
+				    $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
 				
 				// Get only the cells with an opened popover
 				$metaCell = $metaCell.filter(function() {
@@ -188,7 +176,7 @@
 				
 			});
 
-            //TODO sold_last_days jquery
+            // TODO sold_last_days jquery
             this.setupSalesLastNDaysVal();
 
 			// Popover's "Set" button
@@ -213,7 +201,7 @@
 				self.$atumList.find('thead .column-groups th').each(function () {
 					
 					var $this = $(this),
-					    //these th only have one class
+					    // these th only have one class
 					    cols  = self.$atumList.find('thead .col-' + $this.attr('class') + ':visible').length;
 					
 					if (cols) {
@@ -224,6 +212,13 @@
 					}
 				});
 			});
+			
+			//
+			// Hide/Show entire group of columns
+			//----------------------------------
+			this.$atumList.on('click', '.group-toggler', function () {
+				self.toggleGroupColumns($(this));
+			}).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
 			
 			//
 			// Views, Pagination and Sortable links
@@ -427,48 +422,55 @@
 				
 				e.preventDefault();
 
-				//component vars
-				var $button = $(this);
-				var setedLocations = [];
-				var toSetLocations = [];
+				// Component vars
+				var $button        = $(this),
+				    setedLocations = [],
+				    toSetLocations = [];
 
-                //'Component' methods
+                // Component methods
 				// on click in a tree a or icon, get the node cat-item-xx class
                 function getClosestsCatItem(thisObj){
-                    //debugger;
-					var returnValue = '';
-                    var classList = thisObj.closest('.easytree-node').attr('class').split(/\s+/);
+                
+					var returnValue = '',
+                        classList = thisObj.closest('.easytree-node').attr('class').split(/\s+/);
+					
                     $.each(classList, function(index, item) {
                         if (item.lastIndexOf('cat-item-', 0) === 0 ) { // item.startsWith('cat-item-') es5 'equivalent'
                             returnValue = item;
                         }
                     });
+                    
                     return returnValue;
+                    
 				}
 
-				// toggle check class on node, and add or remove from array toSetLocations
+				// Toggle check class on node, and add or remove from array toSetLocations
                 function toggleValueToSetLocations(thisObj){
-                	//debugger;
+                	
                     var catItem = getClosestsCatItem(thisObj);
 
-                    $('.'+catItem).toggleClass( 'checked' );
+                    $('.' + catItem).toggleClass( 'checked' );
 
-                    if($('.'+catItem).hasClass( 'checked' )) {
+                    if($('.' + catItem).hasClass( 'checked' )) {
                         toSetLocations.push(catItem);
-                    }else{
+                    }
+                    else {
                         var pos = toSetLocations.indexOf(catItem);
-                        if(pos != -1) {
+                        
+                        if (pos != -1) {
                             toSetLocations.splice(pos, 1);
                         }
 					}
+					
 				}
-				//Open on view
+				
+				// Open on view
 				swal({
 					title            : self.settings.productLocations,
 					html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
 					showCancelButton : false,
 					showConfirmButton: true,
-                    confirmButtonText  : self.settings.editProductLocations,
+                    confirmButtonText: self.settings.editProductLocations,
 					showCloseButton  : true,
 					onOpen           : function () {
 						
@@ -491,15 +493,16 @@
                                 if (response.success === true) {
                                     $locationsTreeContainer.html(response.data);
 
-                                    //if answer is like <span class="no-locations-set">...  don't put easytree on work.
+                                    // if answer is like <span class="no-locations-set">...  don't put easytree on work.
                                     // It will remove the span message
-                                    if (!(response.data.indexOf("no-locations-set") !== -1)) {
+                                    if (!(response.data.indexOf('no-locations-set') !== -1)) {
 
                                         $locationsTreeContainer.easytree();
 
                                         //Fill setedLocations
                                         $("#atum-locations-tree span[class^='cat-item-'], #atum-locations-tree span[class*='cat-item-']").each(function () {
                                             var classList = $(this).attr('class').split(/\s+/);
+                                            
                                             $.each(classList, function (index, item) {
                                                 if (item.startsWith('cat-item-')) {
                                                     setedLocations.push(item);
@@ -519,105 +522,120 @@
 				}).then(function () {
 
                     swal({
-                        title            : "Edit",
+                        title            : self.settings.edit,
                         html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
-                        text             : "text to show?",
+                        text             : self.settings.textToShow,
                         confirmButtonText: self.settings.saveButton,
                         showCloseButton  : true,
                         showCancelButton : true,
                         onOpen           : function () {
+                        	
                             var $locationsTreeContainer = $('#atum-locations-tree');
-
-                            $.ajax({
-                                url       : ajaxurl,
-                                dataType  : 'json',
-                                method    : 'post',
-                                data      : {
-                                    action    : 'atum_get_locations_tree',
-                                    token     : self.settings.nonce,
-                                    product_id: -1 //$button.closest('tr').data('id') <- send -1 to get all the taxonomies
-                                },
-                                beforeSend: function () {
-                                    $locationsTreeContainer.append('<div class="atum-loading" />');
-                                },
-                                success   : function (response) {
-
-                                    if (response.success === true) {
-                                        $locationsTreeContainer.html(response.data);
-                                        $locationsTreeContainer.easytree();
-
-                                        toSetLocations = setedLocations;
-                                        //if click on link or icon, set node as checked
-                                        $('#atum-locations-tree a').click(function(event) {
-                                            event.preventDefault();
-                                            toggleValueToSetLocations($(this));
-                                        });
-                                        $('#atum-locations-tree .easytree-icon').click(function() {
-                                            toggleValueToSetLocations($(this));
-                                        });
-
-                                        //set class checked the actual values on load
-                                        $("#atum-locations-tree span[class^='cat-item-'], #atum-locations-tree span[class*='cat-item-']").each( function( ) {
-                                            var classList = $(this).attr('class').split(/\s+/);
-                                            $.each(classList, function(index, item) {
-                                                if (item.startsWith('cat-item-')) {
-                                                    if(jQuery.inArray(item, setedLocations) !== -1){
-                                                        $('.'+item).addClass('checked');
-													}
-                                                }
-                                            });
-                                        })
-
-                                    }
-                                }
-                            })
+	
+	                        $.ajax({
+		                        url       : ajaxurl,
+		                        dataType  : 'json',
+		                        method    : 'post',
+		                        data      : {
+			                        action    : 'atum_get_locations_tree',
+			                        token     : self.settings.nonce,
+			                        product_id: -1 // $button.closest('tr').data('id') <- send -1 to get all the taxonomies
+		                        },
+		                        beforeSend: function () {
+			                        $locationsTreeContainer.append('<div class="atum-loading" />');
+		                        },
+		                        success   : function (response) {
+			
+			                        if (response.success === true) {
+			                        	
+			                        	var $atumLocationsTree = $('#atum-locations-tree');
+				
+				                        $locationsTreeContainer.html(response.data);
+				                        $locationsTreeContainer.easytree();
+				
+				                        toSetLocations = setedLocations;
+				
+				                        // If click on link or icon, set node as checked
+				                        $atumLocationsTree.find('a').click(function (e) {
+					                        e.preventDefault();
+					                        toggleValueToSetLocations($(this));
+				                        });
+				
+				                        $atumLocationsTree.find('.easytree-icon').click(function () {
+					                        toggleValueToSetLocations($(this));
+				                        });
+				
+				                        //set class checked the actual values on load
+				                        $atumLocationsTree.find('span[class^="cat-item-"], span[class*="cat-item-"]').each(function () {
+					
+					                        var classList = $(this).attr('class').split(/\s+/);
+					
+					                        $.each(classList, function (index, item) {
+						
+						                        if (item.startsWith('cat-item-')) {
+							                        if ($.inArray(item, setedLocations) !== -1) {
+								                        $('.' + item).addClass('checked');
+							                        }
+						                        }
+						
+					                        });
+					                        
+				                        });
+				
+			                        }
+		                        }
+	                        });
+                            
                         },
 						onClose          : function () {
                             $button.blur().tooltip('hide');
                         }
-                        //Save button clicked
-						}).then(function(){
-							// ["cat-item-40", "cat-item-39"] -> [40, 39]
-							var toSetTerms = toSetLocations.map(function(x) {
-								return parseInt(x.substring(9));
-							});
+                    // Save button clicked
+					}).then(function(){
+						
+						// ["cat-item-40", "cat-item-39"] -> [40, 39]
+						var toSetTerms = toSetLocations.map(function(x) {
+							return parseInt(x.substring(9));
+						});
 
-                        	var $locationsTreeContainer = $('#atum-locations-tree');
+                        var $locationsTreeContainer = $('#atum-locations-tree');
 
-							$.ajax({
-								url       : ajaxurl,
-								dataType  : 'json',
-								method    : 'post',
-								data      : {
-									action    : 'atum_set_locations_tree',
-									token     : self.settings.nonce,
-									product_id: $button.closest('tr').data('id'),
-									terms: toSetTerms
-								},
-								beforeSend: function () {
-									$locationsTreeContainer.append('<div class="atum-loading" />');
-								},
-								success   : function (response) {
+						$.ajax({
+							url       : ajaxurl,
+							dataType  : 'json',
+							method    : 'post',
+							data      : {
+								action    : 'atum_set_locations_tree',
+								token     : self.settings.nonce,
+								product_id: $button.closest('tr').data('id'),
+								terms     : toSetTerms
+							},
+							beforeSend: function () {
+								$locationsTreeContainer.append('<div class="atum-loading" />');
+							},
+							success   : function (response) {
 
-									if (response.success === true) {
-                                        swal({
-                                            title            : self.settings.done,
-                                            type             : 'success',
-                                            text             : self.settings.locationsSaved,
-                                            confirmButtonText: self.settings.ok,
-                                            onClose           : function () {
-                                                //update atum-table to show the new location icon
-                                                self.update();
-                                            }
-                                        }).then(function(){
-                                        	//update atum-table to show the new location icon
+								if (response.success === true) {
+									
+                                    swal({
+                                        title            : self.settings.done,
+                                        type             : 'success',
+                                        text             : self.settings.locationsSaved,
+                                        confirmButtonText: self.settings.ok,
+                                        onClose           : function () {
+                                            // Update atum-table to show the new location icon
                                             self.update();
-                                        }).catch(swal.noop);
-									}
+                                        }
+                                    }).then(function(){
+                                        self.update();
+                                    }).catch(swal.noop);
+                                    
 								}
-							});
+							}
+						});
 
-						}).catch(swal.noop);
+					}).catch(swal.noop);
+                
                 }).catch(swal.noop);
 				
 			})
@@ -626,6 +644,7 @@
 			// Reset Filters button
 			//---------------------
 			.on('click', '.reset-filters', function() {
+				
                 self.destroyTooltips();
                 
                 //TODO reset s and column search
@@ -721,39 +740,42 @@
 			
 		},
 
-		//TODO sales_last_ndays_val
+		// TODO sales_last_ndays_val
         setupSalesLastNDaysVal: function() {
-            var self = this;
-
-            var selectDaysText = $( '#sales_last_ndays_val' ).text();
-            var days= Array.apply(null, {length: 31}).map(Number.call, Number); //var o = [0, 1, 2, 3 ... 30];
-            days.shift();
-
-
-            var $selectableDays = $('<select/>');
-            for (var i in days) {
-                $selectableDays.append($('<option/>').html(days[i]));
-            }
-
-            $( '#sales_last_ndays_val' ).html("<span class='textvalue'>"+selectDaysText+"</span>");
-            $( '#sales_last_ndays_val' ).append($selectableDays);
-            $('#sales_last_ndays_val select').hide();
-            $("#sales_last_ndays_val select").val(selectDaysText);
-
-            $selectableDays.change(function() {
-                $('#sales_last_ndays_val .textvalue').text($( this ).val());
-                $( this ).hide();
-                $('#sales_last_ndays_val .textvalue').show();
-                $.address.parameter('sold_last_days', parseInt($(this).val()));
-                self.updateHash();
-            });
-
-
-            $('#sales_last_ndays_val .textvalue').click(function() {
-                //console.log("clicked");
-                $('#sales_last_ndays_val .textvalue').hide();
-                $('#sales_last_ndays_val select').show();
-            });
+	
+	        var self            = this,
+	            $selectDays     = $('#sales_last_ndays_val'),
+	            selectDaysText  = $selectDays.text(),
+	            days            = Array.apply(null, {length: 31}).map(Number.call, Number), //var o = [0, 1, 2, 3 ... 30];
+	            $selectableDays = $('<select/>');
+	        
+	        days.shift();
+	        
+	        for (var i in days) {
+		        $selectableDays.append($('<option/>').html(days[i]));
+	        }
+	
+	        $selectDays.html('<span class="textvalue">' + selectDaysText + '</span>');
+	        $selectDays.append($selectableDays);
+	        $selectDays.find('select').hide().val(selectDaysText);
+	
+	        $selectableDays.change(function () {
+	        	
+	        	var $select = $(this);
+	        	
+		        $selectDays.find('.textvalue').text($select.val());
+		        $select.hide();
+		        $selectDays.find('.textvalue').show();
+		        
+		        $.address.parameter('sold_last_days', parseInt($select.val()));
+		        self.updateHash();
+		        
+	        });
+	
+	        $selectDays.find('.textvalue').click(function () {
+		        $(this).hide();
+		        $selectDays.find('select').show();
+	        });
 
         },
 
@@ -763,24 +785,24 @@
         setupSearchColumnDropdown: function() {
 
         	// TODO optimize setupSearchColumnDropdown
-			var self                    = this,
-			    $search_column_btn      = $('#search_column_btn'),
-			    $search_column_dropdown = $('#search_column_dropdown');
+			var self                  = this,
+			    $searchColumnBtn      = $('#search_column_btn'),
+			    $searchColumnDropdown = $('#search_column_dropdown');
 
             // No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
-            $search_column_dropdown.empty();
-            $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($search_column_dropdown.data('product-title'))); // 'Product Name'
+            $searchColumnDropdown.empty();
+            $searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($searchColumnDropdown.data('product-title'))); // 'Product Name'
 
             $('#adv-settings input:checked').each(function () {
             	
                 var optionVal = $(this).val();
                 
-                if (optionVal.search("calc_") < 0 && optionVal != 'thumb') { // calc values are not searchable, also we can't search on thumb
+                if (optionVal.search('calc_') < 0 && optionVal != 'thumb') { // calc values are not searchable, also we can't search on thumb
                     
-                    $search_column_dropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
+                    $searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
 
                     // Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
-                    if ($.address.parameter('search_column') != $search_column_btn.data('value') && $search_column_btn.data('value') == optionVal) {
+                    if ($.address.parameter('search_column') != $searchColumnBtn.data('value') && $searchColumnBtn.data('value') == optionVal) {
                         self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
                     }
                     
@@ -788,33 +810,33 @@
                 
             });
 			
-			$search_column_btn.click(function (e) {
+			$searchColumnBtn.click(function (e) {
                 $(this).parent().find('.dropdown-menu').toggle();
                 e.stopPropagation();
             });
 
             // TODO click on drop element
-			$search_column_dropdown.find('a').click(function (e) {
+			$searchColumnDropdown.find('a').click(function (e) {
 
                 e.preventDefault();
 
                 self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
 
                 $(this).parents().find('.dropdown-menu').hide();
-                $search_column_dropdown.children('a.active').removeClass('active');
+                $searchColumnDropdown.children('a.active').removeClass('active');
                 $(this).addClass('active');
 
                 var fieldTye = $.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1 ? 'number' : 'text';
 				self.$searchInput.attr('type', fieldTye);
 
                 if (self.settings.ajaxFilter === 'yes') {
-                    $search_column_btn.trigger('search_column_data_changed');
+                    $searchColumnBtn.trigger('search_column_data_changed');
                 }
                
             });
 
             $(document).click(function () {
-	            $search_column_dropdown.hide();
+	            $searchColumnDropdown.hide();
             });
 
         },
@@ -833,7 +855,7 @@
 			this.bindListLinks();
 			
 			// Hash history navigation
-			$.address.externalChange(function(event) {
+			$.address.externalChange(function(e) {
 
                 if (self.settings.ajaxFilter != 'yes') {
                 	// Force enabled or disabled search button
@@ -876,7 +898,6 @@
                         });
                     }
 
-
                     self.update();
 					
 				}
@@ -916,8 +937,83 @@
 		 * Reload the scrollbar
 		 */
 		reloadScrollbar: function() {
-			this.jScrollApi.destroy();
+			
+			if (this.jScrollApi !== null) {
+				this.jScrollApi.destroy();
+			}
+			
 			this.addScrollBar();
+		},
+		
+		/**
+		 * Add the floating header to the table
+		 */
+		addFloatThead: function() {
+			
+			this.$atumTable.floatThead({
+				responsiveContainer: function ($table) {
+					return $table.closest('.jspContainer');
+				},
+				position           : 'absolute',
+				top                : $('#wpadminbar').height(),
+				autoReflow         : true
+			});
+			
+		},
+		
+		/**
+		 * Reload the floating table header
+		 */
+		reloadFloatThead: function() {
+			this.$atumTable.floatThead('destroy');
+			this.addFloatThead();
+		},
+		
+		/**
+		 * Show/Hide the group of columns with the group-toggler button
+		 */
+		toggleGroupColumns: function($toggler) {
+			
+			var $curGroupCell = $toggler.closest('th'),
+			    groupClass    = $curGroupCell.attr('class').replace('collapsed', ''),
+			    $groupCells   = this.$atumTable.find('.item-heads, tbody, .totals').find('th, td').filter('.' + groupClass);
+			
+			// Show/hide the column group text
+			$toggler.siblings().toggle();
+			
+			if ($curGroupCell.hasClass('collapsed')) {
+				
+				// Remove the ghost column
+				this.$atumTable.find('.ghost-column.' + groupClass).remove();
+				$curGroupCell.attr('colspan', $curGroupCell.data('colspan')).removeData('colspan');
+				$groupCells.removeAttr('style');
+				
+			}
+			else {
+				
+				$groupCells.hide();
+				$curGroupCell.data('colspan', $curGroupCell.attr('colspan')).removeAttr('colspan');
+				
+				// Add a ghost column
+				var ghostColOpts = {
+					class: 'ghost-column ' + groupClass
+				};
+				
+				// The header could be floating (so in another table)
+				$('<th />', ghostColOpts).insertBefore( this.$atumTable.find('thead .item-heads th.' + groupClass).first() );
+				$('<th />', ghostColOpts).insertBefore( this.$atumTable.find('tfoot .item-heads th.' + groupClass).first() );
+				$('<th />', ghostColOpts).insertBefore( this.$atumTable.find('tfoot .totals th.' + groupClass).first() );
+				
+				this.$atumTable.find('tbody tr').each(function () {
+					$('<td />', ghostColOpts).insertBefore( $(this).find('td.' + groupClass).first() );
+				});
+				
+			}
+			
+			$curGroupCell.toggleClass('collapsed');
+			this.reloadScrollbar();
+			this.reloadFloatThead();
+			
 		},
 		
 		/**
@@ -961,7 +1057,7 @@
                     clearTimeout(self.timer);
 
                     self.timer = setTimeout(function () {
-                        //TODO force ?vars on updateHash when ajax
+                        // TODO force ?vars on updateHash when ajax
                         self.updateHash();
                     }, delay);
 
