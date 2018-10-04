@@ -575,7 +575,9 @@ class Settings {
 						case 'color':
 							$this->options[ $key ] = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
 							break;
-
+						case 'html':
+							$this->options[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( $input[ $key ] ) : '';
+							break;
 						case 'text':
 						default:
 							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
@@ -613,7 +615,7 @@ class Settings {
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 		
-		echo apply_filters( 'atum/settings/display_text', $output, $args );
+		echo apply_filters( 'atum/settings/display_text', $output, $args ); // WPCS: XSS ok.
 		
 	}
 
@@ -639,7 +641,7 @@ class Settings {
 			$this->options[ $args['id'] ]
 		) . $this->get_description( $args );
 
-		echo apply_filters( 'atum/settings/display_textarea', $output, $args );
+		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // WPCS: XSS ok.
 
 	}
 
@@ -668,7 +670,7 @@ class Settings {
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 
-		echo apply_filters( 'atum/settings/display_number', $output, $args );
+		echo apply_filters( 'atum/settings/display_number', $output, $args ); // WPCS: XSS ok.
 
 	}
 
@@ -697,14 +699,14 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME . "[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em"<?php echo $this->get_dependency( $args ) . $default ?>>
+		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="wc-enhanced-select" style="width: 25em"<?php echo esc_attr( $this->get_dependency( $args ) . $default ) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
 
-		$output = ob_get_clean() . $this->get_description( $args );
+		$output = ob_get_clean() . wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_wc_country', $output, $args );
+		echo apply_filters( 'atum/settings/display_wc_country', $output, $args ); // WPCS: XSS ok.
 		
 	}
 	
@@ -727,7 +729,7 @@ class Settings {
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 		
-		echo apply_filters( 'atum/settings/display_switcher', $output, $args );
+		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // WPCS: XSS ok.
 
 	}
 
@@ -752,17 +754,17 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="btn-group btn-group-<?php echo $size ?> btn-group-toggle" data-toggle="buttons">
+		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" data-toggle="buttons">
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
 
 				<?php
 				if ( $multiple && is_array( $value ) ) {
-					$is_active      = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
+					$is_active = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
 				}
 				else {
 					$is_active = $value === $option_value;
 				}
-
+				
 				$disabled_str = $checked_str = '';
 
 				// Force checked disabled and active on required value.
@@ -777,19 +779,19 @@ class Settings {
 				}
 
 				?>
-				<label class="btn btn-<?php echo $style ?><?php if ( $is_active ) echo ' active' ?>">
-					<input class="multi-<?php echo $input_type ?>" type="<?php echo $input_type ?>" name="<?php echo $name ?><?php if ($multiple) echo '[]' ?>"
-						autocomplete="off"<?php echo $checked_str . $disabled_str ?> value="<?php echo $option_value ?>"
-						<?php echo $this->get_dependency( $args ) . $default ?>> <?php echo $option_label ?>
+				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
+					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
+						autocomplete="off"<?php echo esc_attr( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
+						<?php echo esc_attr( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
 				</label>
 
 			<?php endforeach; ?>
 		</div>
 		<?php
 
-		echo $this->get_description( $args );
+		echo wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args );
+		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args ); // WPCS: XSS ok.
 
 	}
 
@@ -809,18 +811,18 @@ class Settings {
 
 		ob_start();
 		?>
-		<select class="atum-select2" name="<?php echo $name ?>" id="<?php echo ATUM_PREFIX . $args['id'] ?>"
-			<?php echo $this->get_dependency( $args ) . $default . $style ?>>
+		<select class="atum-select2" name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+			<?php echo esc_attr( $this->get_dependency( $args ) . $default . $style ) ?>>
 
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
-			<option value="<?php echo $option_value ?>"<?php selected( $option_value, $value ) ?>><?php echo $option_label ?></option>
+			<option value="<?php echo esc_attr( $option_value ) ?>"<?php selected( $option_value, $value ) ?>><?php echo esc_attr( $option_label ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
 
-		echo $this->get_description( $args );
+		echo wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args );
+		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args ); // WPCS: XSS ok.
 
 	}
 
@@ -835,23 +837,23 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo " {$args['options']['wrapper_class']}" ?>"
-			data-action="<?php echo $args['options']['script_action'] ?>" data-input="<?php echo $args['id'] ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo 'data-confirm="' . $args['options']['confirm_msg'] . '"' ?>>
+		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?>"
+			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo esc_attr( 'data-confirm="' . $args['options']['confirm_msg'] ) . '"' ?>>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ) : ?>
-			<select class="wc-enhanced-select" style="width: 12em" id="<?php echo $args['id'] ?>">
+			<select class="wc-enhanced-select" style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
 				<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
-				<option value="<?php echo $key ?>"><?php echo $label ?></option>
+				<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
 				<?php endforeach ?>
 			</select>
 			&nbsp;
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-primary tool-runner"<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] ) echo ' disabled="disabled"' ?>>
-				<?php echo $args['options']['button_text'] ?>
+				<?php echo esc_attr( $args['options']['button_text'] ) ?>
 			</button>
 
 			<?php do_action( 'atum/settings/after_script_runner_field', $args ) ?>
@@ -859,8 +861,8 @@ class Settings {
 		</div>
 		<?php
 
-		$output = ob_get_clean() . $this->get_description( $args );
-		echo apply_filters( 'atum/settings/display_script_runner', $output, $args );
+		$output = ob_get_clean() . wp_kses_post( $this->get_description( $args ) );
+		echo apply_filters( 'atum/settings/display_script_runner', $output, $args ); // WPCS: XSS ok.
 
 	}
 	
@@ -880,16 +882,42 @@ class Settings {
 		
 		ob_start();
 		?>
-		<input class="atum-settings-input atum-color" data-alpha="true" name="<?php echo $name ?>"  id="<?php echo ATUM_PREFIX . $args['id'] ?>"
-		type="text" value="<?php echo $value ?>" <?php echo $default . $style ?>>
+		<input class="atum-settings-input atum-color" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+		type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo esc_attr( $default . $style ) ?>>
 		
 		<?php
 		
-		echo $this->get_description( $args );
+		echo wp_kses_post( $this->get_description( $args ) );
 		
-		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args );
+		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // WPCS: XSS ok.
 		
 	}
+	
+	/**
+	 * Get the settings HTML field
+	 *
+	 * @since 1.4.15
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_html( $args ) {
+		
+		$id    = ATUM_PREFIX . "[{$args['id']}]";
+		$value = $this->options[ $args['id'] ];
+		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
+		
+		ob_start();
+		?>
+		<div id="<?php echo esc_attr( $id ) ?>" class="atum-settings-html"<?php echo esc_attr( $style ) ?>>
+			<?php echo $value // WPCS: XSS ok. ?>
+		</div>
+		<?php
+		
+		echo apply_filters( 'atum/settings/display_html', ob_get_clean(), $args ); // WPCS: XSS ok.
+		
+	}
+
+
 	
 	/**
 	 * Print field description if it exists
@@ -940,7 +968,7 @@ class Settings {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
@@ -948,7 +976,7 @@ class Settings {
 	 */
 	public function __sleep() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
 	/**
