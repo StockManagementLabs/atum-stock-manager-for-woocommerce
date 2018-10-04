@@ -688,7 +688,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="wc-enhanced-select" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
+		<select id="<?php echo ATUM_PREFIX . $args['id'] ?>" name="<?php echo self::OPTION_NAME ."[{$args['id']}]" ?>" class="atum-select2" style="width: 25em"<?php echo $this->get_dependency($args) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -829,7 +829,7 @@ class Settings {
 			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
-			<select class="wc-enhanced-select" style="width: 12em" id="<?php echo $args['id'] ?>">
+			<select class="atum-select2" style="width: 12em" id="<?php echo $args['id'] ?>">
 				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
 				<option value="<?php echo $key ?>"><?php echo $label ?></option>
 				<?php endforeach ?>

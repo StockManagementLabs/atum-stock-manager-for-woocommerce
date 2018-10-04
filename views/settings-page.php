@@ -60,6 +60,12 @@ use Atum\Settings\Settings;
 										case 'stock_central':
 											$icon_class            = 'lnr lnr-layers';
 											break;
+										case 'multi_inventory':
+											$icon_class            = 'lnr lnr-construction';
+											break;
+										case 'product_levels':
+											$icon_class            = 'lnr lnr-construction';
+											break;
 										case 'tools':
 											$icon_class            = 'lnr lnr-rocket';
 											break;
@@ -108,7 +114,7 @@ use Atum\Settings\Settings;
 						foreach ( (array) $wp_settings_sections[$page] as $section ): ?>
 
 							<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace([ATUM_PREFIX, 'setting_'], '', $section['id']) ?>">
-								<?php if ( 'atum_setting_shipping' !== $section['id'] ) : ?>
+								<?php if ( 'atum_setting_shipping' !== $section['id'] && 'atum_setting_manufacturing_central' !== $section['id']) : ?>
 									<div class="section-general-title">
 										<?php
 
@@ -125,6 +131,12 @@ use Atum\Settings\Settings;
 												break;
 											case 'atum_setting_stock_central':
 												$header_settings_title = __( 'Stock Central', ATUM_TEXT_DOMAIN );
+												break;
+											case 'atum_setting_multi_inventory':
+												$header_settings_title = __( 'MULTI-INVENTORY', ATUM_TEXT_DOMAIN );
+												break;
+											case 'atum_setting_product_levels':
+												$header_settings_title = __( 'PRODUCT LEVELS', ATUM_TEXT_DOMAIN );
 												break;
 											case 'atum_setting_tools':
 												$header_settings_title = __( 'Tools', ATUM_TEXT_DOMAIN );
