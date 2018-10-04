@@ -20,88 +20,174 @@ use Atum\Settings\Settings;
 		<hr class="wp-header-end">
 		
 		<?php settings_errors(); ?>
-		
-		<nav class="atum-nav">
-			<a class="atum-brand" href="https://www.stockmanagementlabs.com" target="_blank">
-				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
-			</a>
 
-			<ul class="atum-nav-list">
-				<?php foreach ( $tabs as $tab => $atts ):
+		<div class="atum-settings-container">
+			<nav class="atum-nav">
 
-					if ($tab == $active):
-						$active_sections = $atts['sections'];
-					endif; ?>
+				<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
+					<div class="atum-brand">
+						<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
+						<span>
+							<?php echo esc_attr(__('ATUM', ATUM_TEXT_DOMAIN) ) ?>
+						</span>
+					</div>
+				</a>
 
-					<li class="atum-nav-item<?php if ( isset( $atts['no_submit'] ) && $atts['no_submit'] ) echo ' no-submit' ?>">
-						<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
-							<span class="menu-helper"><?php echo $atts['tab_name'] ?></span>
-						</a>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		</nav>
+				<ul class="atum-nav-list">
+
+					<?php foreach ( $tabs as $tab => $atts ):
+
+						if ($tab == $active):
+							$active_sections = $atts['sections'];
+						endif; ?>
+
+						<li class="atum-nav-item<?php if ( isset( $atts['no_submit'] ) && $atts['no_submit'] ) echo ' no-submit' ?>">
+							<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
+								<span class="menu-helper">
+									<?php
+
+									$icon_class = null;
+									switch ( $tab ) {
+										case 'general':
+											$icon_class            = 'lnr lnr-cog';
+											break;
+										case 'store_details':
+											$icon_class            = 'lnr lnr-store';
+											break;
+										case 'module_manager':
+											$icon_class            = 'lnr lnr-database';
+											break;
+										case 'stock_central':
+											$icon_class            = 'lnr lnr-layers';
+											break;
+										case 'tools':
+											$icon_class            = 'lnr lnr-rocket';
+											break;
+									}
+
+									?>
+									<i class="<?php echo esc_attr( $icon_class ); ?>"></i>
+									<?php echo $atts['tab_name'] ?>
+								</span>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+
+				<div class="nav-footer">
+					<div class="nav-footer-logo">
+						<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
+						<span>
+						<?php echo esc_attr(__('ATUM', ATUM_TEXT_DOMAIN) ) ?>
+						</span>
+					</div>
+					<p>
+						<?php echo esc_attr(__('Current version: ' . ATUM_VERSION, ATUM_TEXT_DOMAIN) ) ?>
+						<a href="#"><?php echo esc_attr(__('Check updates', ATUM_TEXT_DOMAIN) ) ?></a>
+					</p>
+				</div>
+			</nav>
+
+			<form id="atum-settings" method="post" action="options.php" style="display: none">
+				<div class="form-settings-wrapper">
+
+					<?php
+					global $wp_settings_sections, $wp_settings_fields;
+
+					foreach ( array_keys($active_sections) as $active_section ):
+
+						// This prints out all hidden setting fields
+						settings_fields( ATUM_PREFIX . "setting_$active_section" );
+
+						$page = ATUM_PREFIX . "setting_$active_section";
+
+						if ( ! isset( $wp_settings_sections[$page] ) ):
+							continue;
+						endif;
+
+						foreach ( (array) $wp_settings_sections[$page] as $section ): ?>
+
+							<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace([ATUM_PREFIX, 'setting_'], '', $section['id']) ?>">
+								<?php if ( 'atum_setting_shipping' !== $section['id'] ) : ?>
+									<div class="section-general-title">
+										<?php
+
+										$header_settings_title = null;
+										switch ( $section['id'] ) {
+											case 'atum_setting_general':
+												$header_settings_title = __( 'General', ATUM_TEXT_DOMAIN );
+												break;
+											case 'atum_setting_company':
+												$header_settings_title = __( 'Store Details', ATUM_TEXT_DOMAIN );
+												break;
+											case 'atum_setting_module_manager':
+												$header_settings_title = __( 'Modules', ATUM_TEXT_DOMAIN );
+												break;
+											case 'atum_setting_stock_central':
+												$header_settings_title = __( 'Stock Central', ATUM_TEXT_DOMAIN );
+												break;
+											case 'atum_setting_tools':
+												$header_settings_title = __( 'Tools', ATUM_TEXT_DOMAIN );
+												break;
+										}
+
+										?>
+										<h2><?php echo esc_attr( $header_settings_title ) ?></h2>
+										<?php
 	
-		<form id="atum-settings" method="post" action="options.php" style="display: none">
-			<div class="form-settings-wrapper">
+										submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
 
-				<?php
-				global $wp_settings_sections, $wp_settings_fields;
+										?>
+									</div>
+								<?php endif; ?>
+								<?php if ( $section['title'] ): ?>
+									<div class="section-title">
+										<h2><?php echo $section['title'] ?></h2>
+									</div>
+								<?php endif;
 
-				foreach ( array_keys($active_sections) as $active_section ):
+								if ( $section['callback'] ):
+									call_user_func( $section['callback'], $section );
+								endif;
 
-					// This prints out all hidden setting fields
-					settings_fields( ATUM_PREFIX . "setting_$active_section" );
+								if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[$page] ) || ! isset( $wp_settings_fields[$page][$section['id']] ) ):
+									continue;
+								endif; ?>
 
-					$page = ATUM_PREFIX . "setting_$active_section";
+								<div class="section-fields">
+									<table class="form-table">
+										<?php do_settings_fields( $page, $section['id'] ); ?>
+									</table>
 
-					if ( ! isset( $wp_settings_sections[$page] ) ):
-						continue;
-					endif;
+									<?php
 
-					foreach ( (array) $wp_settings_sections[$page] as $section ): ?>
+									submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
 
-						<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace([ATUM_PREFIX, 'setting_'], '', $section['id']) ?>">
+									?>
 
-							<?php if ( $section['title'] ): ?>
-								<div class="section-title">
-									<h2><?php echo $section['title'] ?></h2>
 								</div>
-							<?php endif;
 
-							if ( $section['callback'] ):
-								call_user_func( $section['callback'], $section );
-							endif;
-
-							if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[$page] ) || ! isset( $wp_settings_fields[$page][$section['id']] ) ):
-								continue;
-							endif; ?>
-
-							<div class="section-fields">
-								<table class="form-table">
-									<?php do_settings_fields( $page, $section['id'] ); ?>
-								</table>
 							</div>
 
-						</div>
+						<?php endforeach;
 
-					<?php endforeach;
+					endforeach;
 
-				endforeach;
-				?>
+					?>
 
-				<input type="hidden" id="atum_settings_section" name="<?php echo Settings::OPTION_NAME ?>[settings_section]" value="<?php echo $active ?>">
+					<input type="hidden" id="atum_settings_section" name="<?php echo Settings::OPTION_NAME ?>[settings_section]" value="<?php echo $active ?>">
 
-				<?php
-				// Add a hidden field to restore WooCommerce manage_stock individual settings
-				if ( $active == 'stock_central' ) : ?>
-					<input type="hidden" id="atum_restore_option_stock" name="<?php echo Settings::OPTION_NAME ?>[restore_option_stock]" value="no">
-				<?php endif;
+					<?php
+					// Add a hidden field to restore WooCommerce manage_stock individual settings
+					if ( $active == 'stock_central' ) : ?>
+						<input type="hidden" id="atum_restore_option_stock" name="<?php echo Settings::OPTION_NAME ?>[restore_option_stock]" value="no">
+					<?php endif;
 
-				submit_button( __('Update Settings', ATUM_TEXT_DOMAIN) );
-				?>
+					?>
 
-			</div>
-		</form>
+				</div>
+			</form>
+		</div>
+
 	</div>
 </div>

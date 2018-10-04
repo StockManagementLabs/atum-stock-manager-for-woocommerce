@@ -2,8 +2,8 @@
 // Atum Settings
 //---------------
 
-$settings-menu-bg:          $dark;
-$settings-menu-color:       $gray-500;
+$settings-menu-bg:          $blue-dark-lighten;
+$settings-menu-color:       $white;
 $settings-menu-active:      $white;
 
 
@@ -16,49 +16,108 @@ $settings-menu-active:      $white;
 		font-weight: 500;
 	}
 	
+	.atum-settings-container {
+		
+		@include flexbox;
+		@include flex-align-items(stretch);
+		
+	}
+	
 	.atum-nav {
 		border: none;
 		background-color: $settings-menu-bg;
 		border-radius: 6px;
-		padding: 4px $grid-gutter-width/2;
-		@include flexbox;
-		@include flex-align-items(center);
+		position: relative;
+		width: 230px;
 	}
 	
-	.atum-brand {
-		margin: 0 1em 0 0.25em;
+	.atum-brand-link {
+		text-decoration: none;
 		
-		&:focus {
-			box-shadow: none;
+		.atum-brand {
+			@include flexbox;
+			@include flex-align-items(center);
+			text-decoration: none;
+			color: $white;
+			height: 51px;
+			background-color: $blue-dark;
+			border-top-right-radius: 6px;
+			border-top-left-radius: 6px;
+			font-size: 18px;
+			font-weight: bold;
+			padding-left: 15px;
+			
+			span {
+				margin-left: 5px;
+			}
+			
+			&:focus {
+				box-shadow: none;
+			}
+			
+			img {
+				position: relative;
+				top: 3px;
+				min-width: 25px;
+			}
+		}
+	}
+	
+	.nav-footer {
+		position: absolute;
+		margin: 0;
+		bottom: 0;
+		
+		.nav-footer-logo {
+			@include flexbox;
+			@include flex-align-items(center);
+			padding: 5px 22px;
+			img {
+				width: 34px;
+			}
+			span {
+				color: $white;
+				font-size: 20px;
+				margin-left: 10px;
+				font-weight: bold;
+			}
 		}
 		
-		img {
-			position: relative;
-			top: 3px;
-			min-width: 25px;
+		p {
+			color: $white;
+			margin: 0;
+			font-size: 12px;
+			font-weight: normal;
+			display: block;
+			padding: 0 10px 5px 10px;
+			
+			a {
+				text-decoration: none;
+				color: $blue;
+				&:hover {
+					color: $blue;
+				}
+			}
 		}
 	}
 	
 	.atum-nav-list {
 		position: relative;
-		@include flexbox;
-		@include flex-wrap(wrap);
 		margin: 0;
-		padding: 0;
 		list-style: none;
 	}
 	
 	.atum-nav-item {
 		display: block;
-		margin: 1em 0;
+		margin: 0;
+		box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 -1px 0 0 rgba(255, 255, 255, 0.1);
 	}
 	
 	.atum-nav-link {
 		text-transform: uppercase;
-		font-size: 13px;
-		font-weight: 300;
+		font-size: 15px;
+		font-weight: bold;
 		text-decoration: none;
-		display: block;
 		padding: 0 1em;
 		cursor: pointer;
 		@include user-select(none);
@@ -66,20 +125,26 @@ $settings-menu-active:      $white;
 		-webkit-tap-highlight-color: rgba($black, 0);
 		position: relative;
 		overflow: hidden;
-		text-align: center;
 		color: $settings-menu-color;
 		@include transition(color 0.3s);
+		height: 51px;
+		display: flex;
+		align-items: center;
+		justify-content: left;
 		
 		&:hover, &:focus {
 			outline: none;
 			color: $settings-menu-active;
 			box-shadow: none;
+			background-color: $white;
+			font-size: 15px;
+			font-weight: bold;
+			color: $blue;
 		}
 		
 		.menu-helper {
 			padding-top: 0.45em;
 			padding-bottom: 0.5em;
-			display: block;
 			pointer-events: none;
 			
 			&:before, &:after {
@@ -102,11 +167,19 @@ $settings-menu-active:      $white;
 				bottom: 0;
 			}
 			
+			i {
+				margin-right: 5px;
+			}
+			
 		}
 		
 		&.active {
-			color: $settings-menu-active;
 			cursor: default;
+			background-color: $white;
+			font-size: 15px;
+			font-weight: bold;
+			color: $blue;
+			border-right: 3px solid $blue;
 			
 			.menu-helper {
 				@include animation(anim-atum-menu 0.3s forwards);
@@ -143,7 +216,8 @@ $settings-menu-active:      $white;
 
 // Settings form
 #atum-settings {
-	margin-top: $grid-gutter-width/1.5;
+	width: 75%;
+	margin-left: 20px;
 	
 	.form-settings-wrapper {
 		position: relative;
@@ -157,9 +231,7 @@ $settings-menu-active:      $white;
 				right: 0;
 				top: 0;
 				bottom: 0;
-				border-radius: 6px;
 				z-index: 10;
-				background-color: transparentize($black, 0.45);
 			}
 			
 			&:after {
@@ -173,10 +245,31 @@ $settings-menu-active:      $white;
 		}
 	}
 	
-	.settings-section {
-		background-color: $white;
+	.section-general-title {
+		padding: 0 $grid-gutter-width;
+		background-color: $blue-dark-lighten;
 		border-radius: 6px;
-		margin-bottom: $grid-gutter-width/1.5;
+		height: 51px;
+		@include flexbox;
+		@include flex-align-items(center);
+		justify-content: space-between;
+		
+		.submit {
+			margin: 0;
+			padding: 0;
+		}
+		
+		h2 {
+			color: $white;
+			margin: 0;
+			text-transform: uppercase;
+			font-size: 18px;
+			font-weight: bold;
+		}
+	}
+	
+	.settings-section {
+		border-radius: 6px;
 		
 		&#atum_setting_shipping {
 			display: none;
@@ -184,23 +277,41 @@ $settings-menu-active:      $white;
 	}
 	
 	.section-title {
-		padding: $grid-gutter-width/1.5 $grid-gutter-width;
+		margin-top: 11px;
 		border-bottom: 2px solid darken($light, 5%);
+		background-color: $white;
+		border-top-right-radius: 6px;
+		border-top-left-radius: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: left;
+		height: 50px;
+		padding-left: 20px;
+		font-size: 18px;
+		font-weight: bold;
+		color: $blue-dark;
 		
 		h2 {
-			color: $dark;
+			color: $blue-dark;
 			margin: 0;
-			text-transform: uppercase;
-			font-size: 14px;
+			text-transform: capitalize;
+			font-size: 18px;
 		}
 	}
 	
 	.section-fields {
-		padding: 0 $grid-gutter-width;
+		padding: 4px $grid-gutter-width;
+		background-color: $white;
+		border-bottom-right-radius: 6px;
+		border-bottom-left-radius: 6px;
+		background-image: url("../images/settings/bg-settings.png");
+		background-position: bottom;
+		background-repeat: no-repeat;
+		background-size: contain;
 		
 		tr {
 			&:not(:last-child) {
-				border-bottom: 1px solid darken($light, 5%);
+				border-bottom: 0.5px solid darken($light, 5%);
 			}
 		}
 		
@@ -210,17 +321,20 @@ $settings-menu-active:      $white;
 		
 		th {
 			width: 25%;
-			color: $dark;
-			font-weight: 400;
+			color: $gray-600;
+			font-weight: bold;
+			font-size: 16px;
 		}
 		
 		.atum-setting-info {
 			color: $gray-500;
-			font-style: italic;
-			font-size: 13px;
-			font-weight: 100;
 			margin-bottom: $grid-gutter-width/2;
 			padding-top: 10px;
+			font-size: 15px;
+			font-weight: normal;
+			font-style: normal;
+			font-stretch: normal;
+			line-height: 1.47;
 			
 			ul {
 				padding-left: $grid-gutter-width/2;
@@ -236,7 +350,9 @@ $settings-menu-active:      $white;
 			padding: 6px;
 			margin: 0;
 			border-radius: 4px;
-			height: auto;
+			height: 30px;
+			color: $gray-600;
+			border: 1px solid $gray-200;
 		}
 		
 		input[type=text], input[type=number] {
@@ -333,6 +449,7 @@ $settings-menu-active:      $white;
 	
 	.submit {
 		padding-top: 0;
+		text-align: right;
 	}
 	
 	input[type=submit] {
@@ -341,8 +458,10 @@ $settings-menu-active:      $white;
 		line-height: 1;
 		height: auto;
 		background: $primary;
+		border-radius: 5px;
 		text-shadow: none;
 		box-shadow: none;
+		font-size: 12px;
 		border: none;
 		@include transition(all 0.2s ease-in-out);
 		

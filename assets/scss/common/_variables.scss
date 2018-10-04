@@ -75,6 +75,7 @@ $grays: map-merge((
 
 $blue:                                  #00B8DB !default;
 $blue-dark:                             #27283B !default;
+$blue-dark-lighten:                     #3b3d5a;
 $blue-light:                            lighten($blue, 50%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
 $orange:                                #EFAF00 !default;
