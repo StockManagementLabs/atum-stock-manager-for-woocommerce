@@ -24,6 +24,13 @@ use Atum\PurchaseOrders\PurchaseOrders;
 class ListTable extends AtumListTable {
 
 	/**
+	 * The columns hidden by default
+	 *
+	 * @var array
+	 */
+	protected static $default_hidden_columns = array( 'ID' );
+
+	/**
 	 * ListTable Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args
@@ -58,10 +65,10 @@ class ListTable extends AtumListTable {
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
 			'thumb'               => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                  => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'calc_type'           => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
 			'calc_date_expected'  => __( 'Date Expected', ATUM_TEXT_DOMAIN ),

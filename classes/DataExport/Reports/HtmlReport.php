@@ -140,11 +140,8 @@ class HtmlReport extends ListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product = wc_get_product( $item );
-		$type          = $this->product->get_type();
-		
-		do_action( 'atum/list_table/before_single_row', $this->product, $this->post_type );
-
+		$this->product     = wc_get_product( $item );
+		$type              = $this->product->get_type();
 		$this->allow_calcs = Helpers::is_inheritable_type( $type ) ? FALSE : TRUE;
 		$row_style         = '';
 
@@ -152,11 +149,16 @@ class HtmlReport extends ListTable {
 		if ( ! $this->allow_calcs ) {
 			$row_color  = 'grouped' === $type ? '#FEC007' : '#0073AA';
 			$row_style .= ' style="background-color:' . $row_color . '" class="expanded"';
+
 		}
+
+		do_action( 'atum/list_table/before_single_row', $item, $this );
 
 		echo '<tr' . $row_style . '>'; // WPCS: XSS ok.
 		$this->single_row_columns( $item );
 		echo '</tr>';
+
+		do_action( 'atum/list_table/after_single_row', $item, $this );
 
 		// Add the children products of each Variable and Grouped product.
 		if ( ! $this->allow_calcs ) {

@@ -436,13 +436,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 
-		$this->product = wc_get_product( $item );
-		$type          = $this->product->get_type();
-
-		do_action( 'atum/list_table/before_single_row', $this->product, $this->post_type );
-
+		$this->product     = wc_get_product( $item );
+		$type              = $this->product->get_type();
 		$this->allow_calcs = TRUE;
-		$row_classes       = array( ( ++$this->row_count % 2 ? 'even' : 'odd' ) );
+		$row_classes       = array( ( ++ $this->row_count % 2 ? 'even' : 'odd' ) );
 
 		// Inheritable products do not allow calcs.
 		if ( Helpers::is_inheritable_type( $type ) ) {
@@ -460,10 +457,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$row_class = ' class="' . implode( ' ', $row_classes ) . '"';
 
+		do_action( 'atum/list_table/before_single_row', $item, $this );
+
 		// Output the row.
 		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>'; // WPCS: XSS ok.
 		$this->single_row_columns( $item );
 		echo '</tr>';
+
+		do_action( 'atum/list_table/after_single_row', $item, $this );
 
 		// Add the children products of each inheritable product type.
 		if ( ! $this->allow_calcs ) {
@@ -516,13 +517,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function single_expandable_row( $item, $type ) {
 
-		do_action( 'atum/list_table/before_single_expandable_row', $item, $this->post_type );
-
 		$row_style = 'yes' !== Helpers::get_option( 'expandable_rows', 'no' ) ? ' style="display: none"' : '';
+
+		do_action( 'atum/list_table/before_single_expandable_row', $item, $this );
 
 		echo '<tr class="expandable ' . $type . '"' . $row_style . ' data-id="' . $this->get_current_product_id() . '">'; // WPCS: XSS ok.
 		$this->single_row_columns( $item );
 		echo '</tr>';
+
+		do_action( 'atum/list_table/after_single_expandable_row', $item, $this );
 
 	}
 
@@ -666,6 +669,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$product_id = $this->get_current_product_id();
 		$thumb      = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $this->product->get_image( [ 40, 40 ] ) . '</a>';
+
 		return apply_filters( 'atum/list_table/column_thumb', $thumb, $item, $this->product );
 	}
 
@@ -1038,7 +1042,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since  v1.4.6
 	 *
-	 * @param \WP_Post $item      The WooCommerce product weight.
+	 * @param \WP_Post $item      The WooCommerce product post.
 	 * @param bool     $editable  Optional. Whether the current column is editable.
 	 *
 	 * @return double
@@ -3371,7 +3375,18 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Get all the available children products of the published parent products (Variable and Grouped)
+	 * Getter for the current product prop
+	 *
+	 * @since 1.4.15
+	 *
+	 * @return \WC_Product
+	 */
+	public function get_current_product() {
+		return $this->product;
+	}
+
+	/**
+	 * Get all the available children products in the system
 	 *
 	 * @since 1.1.1
 	 *
@@ -3509,6 +3524,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->children_products = array_merge( $this->children_products, $children_ids );
 
 				return $children_ids;
+
 			}
 			else {
 				$this->excluded = array_unique( array_merge( $this->excluded, $parents->posts ) );

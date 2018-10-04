@@ -14,6 +14,7 @@ namespace Atum\Integrations;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -230,12 +231,13 @@ class Wpml {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param \WC_Product $item
-	 * @param string      $post_type
+	 * @param \WP_Post      $item
+	 * @param AtumListTable $list_table
 	 */
-	public function load_wpml_product( $item, $post_type = '' ) {
+	public function load_wpml_product( $item, $list_table = NULL ) {
 
-		$this->original_product_id = self::get_original_product_id( $item->get_id(), $post_type );
+		$product                   = $list_table->get_current_product();
+		$this->original_product_id = self::get_original_product_id( $product->get_id(), $product->get_type() );
 		$this->custom_prices       = FALSE;
 
 		if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {

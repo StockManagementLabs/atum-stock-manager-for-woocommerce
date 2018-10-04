@@ -60,6 +60,7 @@ class ListTable extends AtumListTable {
 	 * @var array
 	 */
 	protected static $default_hidden_columns = array(
+		'ID',
 		'_weight',
 		'calc_inbound',
 		'calc_hold',
@@ -142,12 +143,12 @@ class ListTable extends AtumListTable {
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
 			'thumb'                 => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'title'                 => __( 'Name', ATUM_TEXT_DOMAIN ),
-			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
 			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'title'                 => __( 'Name', ATUM_TEXT_DOMAIN ),
 			'calc_type'             => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
 			'calc_location'         => '<span class="dashicons dashicons-store tips" data-placement="bottom" data-tip="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
