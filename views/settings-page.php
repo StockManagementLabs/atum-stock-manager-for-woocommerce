@@ -16,6 +16,9 @@ use Atum\Settings\Settings;
 ?>
 <div class="wrap">
 	<div class="atum-settings-wrapper">
+		<div class="switch-interface-style">
+			Menu Dark <input type="checkbox" class="js-switch-menu" name="interface_style"> Menu Light
+		</div>
 		<h1 class="wp-heading-inline"><?php _e('ATUM Settings', ATUM_TEXT_DOMAIN) ?></h1>
 		<hr class="wp-header-end">
 		

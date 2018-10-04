@@ -31,6 +31,54 @@ $settings-menu-active:      $white;
 		width: 230px;
 	}
 	
+	.atum-nav-light {
+		background-color: $white;
+		.atum-brand-link {
+			.atum-brand {
+				background-color: $blue;
+			}
+		}
+		.atum-nav-link {
+			color: $blue;
+			&:hover, &:focus {
+				background-color: $blue-light;
+				color: $blue;
+			}
+			
+			.menu-helper {
+				&:before, &:after {
+					background: $blue;
+				}
+			}
+			
+			&.active {
+				cursor: default;
+				background-color: $blue-light;
+				.menu-helper {
+					animation: inherit;
+				}
+			}
+		}
+		.nav-footer {
+			.nav-footer-logo {
+				span {
+					color: $blue;
+				}
+			}
+			
+			p {
+				color: $gray-500;
+				
+				a {
+					color: $blue;
+					&:hover {
+						color: $blue;
+					}
+				}
+			}
+		}
+	}
+	
 	.atum-brand-link {
 		text-decoration: none;
 		
@@ -335,6 +383,14 @@ $settings-menu-active:      $white;
 		}
 	}
 	
+	.section-general-title-light {
+		background-color: $blue;
+		
+		h2 {
+			color: $white;
+		}
+	}
+	
 	.settings-section {
 		border-radius: 6px;
 		
@@ -363,6 +419,12 @@ $settings-menu-active:      $white;
 			margin: 0;
 			text-transform: capitalize;
 			font-size: 18px;
+		}
+	}
+	
+	.section-title-light {
+		h2 {
+			color: $blue;
 		}
 	}
 	

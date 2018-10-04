@@ -1623,6 +1623,52 @@ input[type="button"].btn-block {
   width: 230px;
 }
 
+.atum-settings-wrapper .atum-nav-light {
+  background-color: #fff;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand {
+  background-color: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-nav-link {
+  color: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-light .atum-nav-link:focus {
+  background-color: #dbf9ff;
+  color: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:before, .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:after {
+  background: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-nav-link.active {
+  cursor: default;
+  background-color: #dbf9ff;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-nav-link.active .menu-helper {
+  animation: inherit;
+}
+
+.atum-settings-wrapper .atum-nav-light .nav-footer .nav-footer-logo span {
+  color: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .nav-footer p {
+  color: #adb5bd;
+}
+
+.atum-settings-wrapper .atum-nav-light .nav-footer p a {
+  color: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .nav-footer p a:hover {
+  color: #00B8DB;
+}
+
 .atum-settings-wrapper .atum-brand-link {
   text-decoration: none;
 }
@@ -2056,6 +2102,14 @@ input[type="button"].btn-block {
   font-weight: bold;
 }
 
+#atum-settings .section-general-title-light {
+  background-color: #00B8DB;
+}
+
+#atum-settings .section-general-title-light h2 {
+  color: #fff;
+}
+
 #atum-settings .settings-section {
   border-radius: 6px;
 }
@@ -2085,6 +2139,10 @@ input[type="button"].btn-block {
   margin: 0;
   text-transform: capitalize;
   font-size: 18px;
+}
+
+#atum-settings .section-title-light h2 {
+  color: #00B8DB;
 }
 
 #atum-settings .section-fields {

@@ -50,6 +50,13 @@
 			
 			// Enable Select2
 			this.doSelect2();
+			
+			//Change menu color syle
+			$('.switch-interface-style input[type=checkbox]').on('change', function () {
+				$('.atum-nav').toggleClass('atum-nav-light');
+				$('.section-general-title').toggleClass('section-general-title-light');
+				$('.section-title').toggleClass('section-title-light');
+			});
 
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
@@ -191,6 +198,18 @@
 					jackColor          : '#69c61d',
 					jackSecondaryColor : '#adb5bd'
 				});
+			});
+			
+			$('.js-switch-menu').each(function () {
+				if ( $('.switch-interface-style .switchery').length === 0 ) {
+					new Switchery(this, {
+						size               : 'small',
+						color              : '#d5f5ba',
+						secondaryColor     : '#e9ecef',
+						jackColor          : '#69c61d',
+						jackSecondaryColor : '#adb5bd'
+					});
+				}
 			});
 			
 		},
