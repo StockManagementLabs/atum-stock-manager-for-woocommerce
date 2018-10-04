@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || die;
 		<div class="dash-header-logo">
 			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/header-logo.svg" alt="ATUM">
 			<h3><?php esc_html_e( 'Inventory Management for WooCommerce', ATUM_TEXT_DOMAIN ) ?></h3>
-			<a href="https://www.stockmanagementlabs.com/the-change-log/" target="_blank" class="atum-version">v<?php echo esc_html( ATUM_VERSION ) ?></a>
+			<a href="https://www.stockmanagementlabs.com/the-changelog/" target="_blank" class="atum-version">v<?php echo esc_html( ATUM_VERSION ) ?></a>
 		</div>
 
 		<div class="dash-header-notice">
