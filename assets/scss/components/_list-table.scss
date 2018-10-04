@@ -3,6 +3,7 @@
 //------------------
 
 .wrap {
+	
 	h1.wp-heading-inline {
 		line-height: 1.5;
 		position: relative;
@@ -35,6 +36,7 @@
 			}
 		}
 	}
+	
 }
 
 .atum-list-wrapper {
@@ -349,6 +351,10 @@
 					left: 0;
 					top: 0;
 				}
+			}
+			
+			svg {
+				max-height: 14px;
 			}
 			
 		}

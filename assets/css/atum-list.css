@@ -3027,6 +3027,10 @@ input[type="button"].btn-block {
   top: 0;
 }
 
+.atum-list-table thead .item-heads th svg, .atum-list-table tfoot th svg, .floatThead-container thead .item-heads th svg, .floatThead-container tfoot th svg {
+  max-height: 14px;
+}
+
 .atum-list-table .column-groups, .floatThead-container .column-groups {
   background-color: #e3e7eb;
 }
