@@ -702,7 +702,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="wc-enhanced-select" style="width: 25em"<?php echo esc_attr( $this->get_dependency( $args ) . $default ) ?>>
+		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="wc-enhanced-select" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -784,8 +784,8 @@ class Settings {
 				?>
 				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
 					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
-						autocomplete="off"<?php echo esc_attr( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
-						<?php echo esc_attr( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
+						autocomplete="off"<?php echo wp_kses_post( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
+						<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
 				</label>
 
 			<?php endforeach; ?>
@@ -815,7 +815,7 @@ class Settings {
 		ob_start();
 		?>
 		<select class="atum-select2" name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
-			<?php echo esc_attr( $this->get_dependency( $args ) . $default . $style ) ?>>
+			<?php echo wp_kses_post( $this->get_dependency( $args ) . $default . $style ) ?>>
 
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
 			<option value="<?php echo esc_attr( $option_value ) ?>"<?php selected( $option_value, $value ) ?>><?php echo esc_attr( $option_label ) ?></option>
