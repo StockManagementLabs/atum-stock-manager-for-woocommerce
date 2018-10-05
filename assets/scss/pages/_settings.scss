@@ -68,7 +68,7 @@ $settings-menu-active:      $white;
 		.nav-footer {
 			.nav-footer-logo {
 				span {
-					color: $blue;
+					color: $blue-dark;
 				}
 			}
 			
@@ -80,6 +80,37 @@ $settings-menu-active:      $white;
 					&:hover {
 						color: $blue;
 					}
+				}
+			}
+		}
+	}
+	
+	@media all and (max-width: $screen-sm-min) {
+		.atum-nav, .atum-nav-light {
+			width: 50px;
+			.atum-brand {
+				justify-content: center;
+				height: 51px;
+				text-align: center;
+				padding-left: 0 !important;
+				span {
+					display: none;
+				}
+			}
+			.menu-helper {
+				span {
+					display: none;
+				}
+			}
+			.nav-footer {
+				display: none;
+			}
+		}
+		#atum-settings {
+			.form-table {
+				th {
+					display: table-cell;
+					vertical-align: top;
 				}
 			}
 		}
@@ -337,7 +368,7 @@ $settings-menu-active:      $white;
 
 // Settings form
 #atum-settings {
-	width: 75%;
+	width: 100%;
 	margin-left: 20px;
 	
 	.form-settings-wrapper {
@@ -364,6 +395,23 @@ $settings-menu-active:      $white;
 				@include loader(50px, $info, 3px);
 			}
 		}
+	}
+	
+	.btn {
+		line-height: 1;
+	}
+	
+	.btn-secondary {
+		background-color: $gray-500;
+		border: none;
+		&:hover, &:active {
+			background-color: $green;
+			box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+		}
+	}
+	.active {
+		background-color: $green;
+		box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
 	}
 	
 	.section-general-title {
@@ -541,13 +589,10 @@ $settings-menu-active:      $white;
 			.tool-fields-wrapper {
 				width: 100%;
 				margin-bottom: $grid-gutter-width/2;
-				background-color: $light;
-				padding: $grid-gutter-width/2;
 				
 				.repeatable-row {
 					@include flexbox;
 					@include flex-align-items(center);
-					margin: 10px 0;
 					
 					> div {
 						margin-right: 10px;
@@ -566,6 +611,9 @@ $settings-menu-active:      $white;
 								color: $danger;
 							}
 						}
+					}
+					.add-row {
+						width: 62px;
 					}
 				}
 				

@@ -1660,7 +1660,7 @@ input[type="button"].btn-block {
 }
 
 .atum-settings-wrapper .atum-nav-light .nav-footer .nav-footer-logo span {
-  color: #00B8DB;
+  color: #27283B;
 }
 
 .atum-settings-wrapper .atum-nav-light .nav-footer p {
@@ -1673,6 +1673,31 @@ input[type="button"].btn-block {
 
 .atum-settings-wrapper .atum-nav-light .nav-footer p a:hover {
   color: #00B8DB;
+}
+
+@media all and (max-width: 768px) {
+  .atum-settings-wrapper .atum-nav, .atum-settings-wrapper .atum-nav-light {
+    width: 50px;
+  }
+  .atum-settings-wrapper .atum-nav .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand {
+    justify-content: center;
+    height: 51px;
+    text-align: center;
+    padding-left: 0 !important;
+  }
+  .atum-settings-wrapper .atum-nav .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand span {
+    display: none;
+  }
+  .atum-settings-wrapper .atum-nav .menu-helper span, .atum-settings-wrapper .atum-nav-light .menu-helper span {
+    display: none;
+  }
+  .atum-settings-wrapper .atum-nav .nav-footer, .atum-settings-wrapper .atum-nav-light .nav-footer {
+    display: none;
+  }
+  .atum-settings-wrapper #atum-settings .form-table th {
+    display: table-cell;
+    vertical-align: top;
+  }
 }
 
 .atum-settings-wrapper .atum-brand-link {
@@ -2005,7 +2030,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings {
-  width: 75%;
+  width: 100%;
   margin-left: 20px;
 }
 
@@ -2076,6 +2101,25 @@ input[type="button"].btn-block {
   to {
     transform: rotate(360deg);
   }
+}
+
+#atum-settings .btn {
+  line-height: 1;
+}
+
+#atum-settings .btn-secondary {
+  background-color: #adb5bd;
+  border: none;
+}
+
+#atum-settings .btn-secondary:hover, #atum-settings .btn-secondary:active {
+  background-color: #69C61D;
+  box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+#atum-settings .active {
+  background-color: #69C61D;
+  box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 #atum-settings .section-general-title {
@@ -2269,8 +2313,6 @@ input[type="button"].btn-block {
 #atum-settings .section-fields .script-runner .tool-fields-wrapper {
   width: 100%;
   margin-bottom: 15px;
-  background-color: #f8f9fa;
-  padding: 15px;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row {
@@ -2283,7 +2325,6 @@ input[type="button"].btn-block {
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
-  margin: 10px 0;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row > div {
@@ -2303,6 +2344,10 @@ input[type="button"].btn-block {
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row i.remove-row:hover {
   color: #FF4848;
+}
+
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .add-row {
+  width: 62px;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .error-message {

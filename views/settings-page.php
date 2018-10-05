@@ -21,7 +21,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 			<?php wp_nonce_field( 'add_atum_nonce_field', 'menu-theme-nonce' ); ?>
 			Menu Dark <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'checked' : '' ?>> Menu Light
 		</div>
-		<h1 class="wp-heading-inline"><?php _e('ATUM Settings', ATUM_TEXT_DOMAIN) ?></h1>
+		<h1 class="wp-heading-inline"><?php _e('Settings', ATUM_TEXT_DOMAIN) ?></h1>
 		<hr class="wp-header-end">
 		
 		<?php settings_errors(); ?>
@@ -50,7 +50,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 							<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
 								<span class="menu-helper">
 									<i class="<?php echo $atts['icon']; ?>"></i>
-									<?php echo $atts['tab_name'] ?>
+									<span>
+										<?php echo $atts['tab_name'] ?>
+									</span>
 								</span>
 							</a>
 						</li>
