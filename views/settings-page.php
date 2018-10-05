@@ -13,11 +13,13 @@ use Atum\Settings\Settings;
  * @var string $active
  * @var array  $active_sections
  */
+$menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE );
 ?>
 <div class="wrap">
 	<div class="atum-settings-wrapper">
 		<div class="switch-interface-style">
-			Menu Dark <input type="checkbox" class="js-switch-menu" name="interface_style"> Menu Light
+			<?php wp_nonce_field( 'add_atum_nonce_field', 'menu-theme-nonce' ); ?>
+			Menu Dark <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'checked' : '' ?>> Menu Light
 		</div>
 		<h1 class="wp-heading-inline"><?php _e('ATUM Settings', ATUM_TEXT_DOMAIN) ?></h1>
 		<hr class="wp-header-end">
@@ -25,7 +27,7 @@ use Atum\Settings\Settings;
 		<?php settings_errors(); ?>
 
 		<div class="atum-settings-container">
-			<nav class="atum-nav">
+			<nav class="atum-nav <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'atum-nav-light' : '' ?>">
 
 				<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
 					<div class="atum-brand">
@@ -47,35 +49,7 @@ use Atum\Settings\Settings;
 						<li class="atum-nav-item<?php if ( isset( $atts['no_submit'] ) && $atts['no_submit'] ) echo ' no-submit' ?>">
 							<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
 								<span class="menu-helper">
-									<?php
-
-									$icon_class = null;
-									switch ( $tab ) {
-										case 'general':
-											$icon_class            = 'lnr lnr-cog';
-											break;
-										case 'store_details':
-											$icon_class            = 'lnr lnr-store';
-											break;
-										case 'module_manager':
-											$icon_class            = 'lnr lnr-database';
-											break;
-										case 'stock_central':
-											$icon_class            = 'lnr lnr-layers';
-											break;
-										case 'multi_inventory':
-											$icon_class            = 'lnr lnr-construction';
-											break;
-										case 'product_levels':
-											$icon_class            = 'lnr lnr-construction';
-											break;
-										case 'tools':
-											$icon_class            = 'lnr lnr-rocket';
-											break;
-									}
-
-									?>
-									<i class="<?php echo esc_attr( $icon_class ); ?>"></i>
+									<i class="<?php echo $atts['icon']; ?>"></i>
 									<?php echo $atts['tab_name'] ?>
 								</span>
 							</a>
@@ -118,7 +92,8 @@ use Atum\Settings\Settings;
 
 							<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace([ATUM_PREFIX, 'setting_'], '', $section['id']) ?>">
 								<?php if ( 'atum_setting_shipping' !== $section['id'] && 'atum_setting_manufacturing_central' !== $section['id']) : ?>
-									<div class="section-general-title">
+									<?php $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE ); ?>
+									<div class="section-general-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-general-title-light' : '' ?>">
 										<?php
 
 										$header_settings_title = null;

@@ -51,12 +51,10 @@
 			// Enable Select2
 			this.doSelect2();
 			
-			//Change menu color syle
-			$('.switch-interface-style input[type=checkbox]').on('change', function () {
-				$('.atum-nav').toggleClass('atum-nav-light');
-				$('.section-general-title').toggleClass('section-general-title-light');
-				$('.section-title').toggleClass('section-title-light');
-			});
+			// Change menu theme
+			$('.js-switch-menu').on('change', function () {
+				self.changeMenuTheme();
+			})
 
 			// Set the dirty fields
 			this.$form.on('change', 'input, select, textarea', function () {
@@ -204,10 +202,10 @@
 				if ( $('.switch-interface-style .switchery').length === 0 ) {
 					new Switchery(this, {
 						size               : 'small',
-						color              : '#d5f5ba',
-						secondaryColor     : '#e9ecef',
-						jackColor          : '#69c61d',
-						jackSecondaryColor : '#adb5bd'
+						color              : '#00b8db',
+						secondaryColor     : '#3b3d5a',
+						jackColor          : '#00b8db',
+						jackSecondaryColor : '#3b3d5a'
 					});
 				}
 			});
@@ -251,6 +249,26 @@
 				
 			}
 		
+		},
+		changeMenuTheme: function() {
+			//Change menu color syle
+			$('.atum-nav').toggleClass('atum-nav-light');
+			$('.section-general-title').toggleClass('section-general-title-light');
+			$('.section-title').toggleClass('section-title-light');
+			
+			var data = {
+				menu_theme    : $('.js-switch-menu').is(':checked') ? 1 : 0
+			}
+			
+			$.ajax({
+				url       : ajaxurl,
+				method    : 'POST',
+				data      : {
+					token : this.settings.menuThemeNonce,
+					action: this.settings.changeSettingsMenuStyle,
+					data  : data
+				}
+			});
 		},
 		restoreSelects: function() {
 			

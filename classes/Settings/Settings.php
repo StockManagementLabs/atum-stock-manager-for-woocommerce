@@ -91,12 +91,14 @@ class Settings {
 		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'lnr lnr-cog',
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN )
 				)
 			),
 			'store_details' => array(
 				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'lnr lnr-store',
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
 					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN )
@@ -416,9 +418,11 @@ class Settings {
 				'done'                            => __( 'Done!', ATUM_TEXT_DOMAIN ),
 				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
+		        'menuThemeNonce'                  => wp_create_nonce( 'atum-menu-theme-nonce' ),
 				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
+			    'changeSettingsMenuStyle'         => 'atum_menu_style',
 				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
 			) );

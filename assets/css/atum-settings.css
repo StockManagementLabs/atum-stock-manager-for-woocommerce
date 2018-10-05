@@ -1600,7 +1600,9 @@ input[type="button"].btn-block {
 .atum-settings-wrapper h1 {
   text-transform: uppercase;
   margin-bottom: 15px;
-  font-weight: 500;
+  font-weight: bold;
+  color: #27283B;
+  font-size: 36px;
 }
 
 .atum-settings-wrapper .atum-settings-container {
@@ -1613,6 +1615,10 @@ input[type="button"].btn-block {
   -webkit-align-items: stretch;
   -moz-align-items: stretch;
   align-items: stretch;
+}
+
+.atum-settings-wrapper .switch-interface-style {
+  float: right;
 }
 
 .atum-settings-wrapper .atum-nav {
@@ -2108,6 +2114,11 @@ input[type="button"].btn-block {
 
 #atum-settings .section-general-title-light h2 {
   color: #fff;
+}
+
+#atum-settings .section-general-title-light input[type=submit], #atum-settings .section-general-title-light input[type=submit]:hover {
+  background-color: #fff;
+  color: #00B8DB;
 }
 
 #atum-settings .settings-section {

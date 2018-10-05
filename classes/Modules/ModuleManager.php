@@ -62,6 +62,7 @@ class ModuleManager {
 
 		$tabs['module_manager'] = array(
 			'tab_name' => __( 'Modules', ATUM_TEXT_DOMAIN ),
+			'icon'     => 'lnr lnr-database',
 			'sections' => array(
 				'module_manager' => __( 'Module Manager', ATUM_TEXT_DOMAIN )
 			)

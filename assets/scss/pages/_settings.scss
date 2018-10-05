@@ -13,7 +13,9 @@ $settings-menu-active:      $white;
 	h1 {
 		text-transform: uppercase;
 		margin-bottom: $grid-gutter-width/2;
-		font-weight: 500;
+		font-weight: bold;
+		color: $blue-dark;
+		font-size: 36px;
 	}
 	
 	.atum-settings-container {
@@ -21,6 +23,10 @@ $settings-menu-active:      $white;
 		@include flexbox;
 		@include flex-align-items(stretch);
 		
+	}
+	
+	.switch-interface-style {
+		float: right;
 	}
 	
 	.atum-nav {
@@ -388,6 +394,10 @@ $settings-menu-active:      $white;
 		
 		h2 {
 			color: $white;
+		}
+		input[type=submit], input[type=submit]:hover {
+			background-color: $white;
+			color: $blue;
 		}
 	}
 	

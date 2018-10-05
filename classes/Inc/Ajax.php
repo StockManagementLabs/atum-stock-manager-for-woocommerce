@@ -130,6 +130,9 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
+		// Change ATUM setttings menu style
+		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
+
 	}
 
 	/**
@@ -2050,6 +2053,27 @@ final class Ajax {
 			wp_send_json_success( __('All your products were updated successfully', ATUM_TEXT_DOMAIN) );
 		}
 
+	}
+
+	/**
+	 * Change the value of a meta key for show dark o light menu theme for atum setting
+	 *
+	 * @since 1.4.5
+	 *
+	 */
+	public function change_settings_menu_style( ) {
+		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
+		$menu_theme = $_POST['data']['menu_theme'];
+		$user_id    = get_current_user_id();
+
+		if ( $menu_theme ) {
+			update_user_meta( $user_id, 'menu_settings_theme', 'light' );
+		}
+		else {
+			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
+		}
+
+		wp_send_json_success( __('Menu theme were updated successfully', ATUM_TEXT_DOMAIN) );
 	}
 
 	
