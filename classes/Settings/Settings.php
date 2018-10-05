@@ -577,7 +577,7 @@ class Settings {
 							break;
 						case 'html':
 							// Don't save.
-							if ( isset( $this->options[ $key ] ) ) {
+							if ( array_key_exists( $key, $this->options ) ) {
 								unset( $this->options[ $key ] );
 							}
 							break;
