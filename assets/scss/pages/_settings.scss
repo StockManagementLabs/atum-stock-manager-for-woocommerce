@@ -19,7 +19,10 @@ $settings-menu-active:      $white;
 	}
 	
 	.atum-settings-container {
-		
+		// Mobile style
+		@media all and (max-width: $screen-xs-min) {
+			flex-wrap: wrap;
+		}
 		@include flexbox;
 		@include flex-align-items(stretch);
 		
@@ -84,69 +87,49 @@ $settings-menu-active:      $white;
 			}
 		}
 	}
-	
-	@media all and (max-width: $screen-sm-min) {
-		.atum-nav, .atum-nav-light {
-			width: 50px;
-			.atum-brand {
-				justify-content: center;
-				height: 51px;
-				text-align: center;
-				padding-left: 0 !important;
-				span {
-					display: none;
-				}
-			}
-			.menu-helper {
-				span {
-					display: none;
-				}
-			}
-			.nav-footer {
-				display: none;
-			}
-		}
-		#atum-settings {
-			.form-table {
-				th {
-					display: table-cell;
-					vertical-align: top;
-				}
-			}
-		}
-	}
-	
-	.atum-brand-link {
-		text-decoration: none;
-		
-		.atum-brand {
-			@include flexbox;
-			@include flex-align-items(center);
-			text-decoration: none;
+	.atum-nav-header {
+		background-color: $blue-dark;
+		@include flexbox;
+		@include flex-align-items(center);
+		justify-content: space-between;
+		border-top-right-radius: 6px;
+		border-top-left-radius: 6px;
+		padding-left: 10px;
+		padding-right: 10px;
+		.toogle-menu {
+			font-size: 20px;
 			color: $white;
-			height: 51px;
-			background-color: $blue-dark;
-			border-top-right-radius: 6px;
-			border-top-left-radius: 6px;
-			font-size: 18px;
-			font-weight: bold;
-			padding-left: 15px;
-			
-			span {
-				margin-left: 5px;
-			}
-			
-			&:focus {
-				box-shadow: none;
-			}
-			
-			img {
-				position: relative;
-				top: 3px;
-				min-width: 25px;
+			display: none;
+		}
+		.atum-brand-link {
+			text-decoration: none;
+			.atum-brand {
+				@include flexbox;
+				@include flex-align-items(center);
+				text-decoration: none;
+				color: $white;
+				height: 51px;
+				font-size: 18px;
+				font-weight: bold;
+				padding-left: 15px;
+				
+				span {
+					margin-left: 5px;
+				}
+				
+				&:focus {
+					box-shadow: none;
+				}
+				
+				img {
+					position: relative;
+					top: 3px;
+					min-width: 25px;
+				}
 			}
 		}
 	}
+	
 	
 	.nav-footer {
 		position: absolute;
@@ -190,6 +173,10 @@ $settings-menu-active:      $white;
 		position: relative;
 		margin: 0;
 		list-style: none;
+	}
+	
+	.expand-menu {
+		display: block !important;
 	}
 	
 	.atum-nav-item {
@@ -279,7 +266,69 @@ $settings-menu-active:      $white;
 		}
 		
 	}
-
+	// Tablet style
+	@media all and (max-width: $screen-sm-min) {
+		.atum-nav, .atum-nav-light {
+			width: 50px;
+			.atum-brand {
+				justify-content: center;
+				height: 51px;
+				text-align: center;
+				padding-left: 0 !important;
+				span {
+					display: none;
+				}
+			}
+			.menu-helper {
+				span {
+					display: none;
+				}
+			}
+			.nav-footer {
+				display: none;
+			}
+		}
+	}
+	
+	// Mobile style
+	@media all and (max-width: $screen-xs-min) {
+		.atum-nav, .atum-nav-light {
+			width: 100%;
+			margin-bottom: 11px;
+			.atum-brand {
+				span {
+					display: block;
+				}
+			}
+			.atum-nav-header {
+				border-bottom-right-radius: 6px;
+				border-bottom-left-radius: 6px;
+				.toogle-menu {
+					display: block;
+				}
+			}
+			.atum-nav-list {
+				display: none;
+				.menu-helper {
+					width: 100%;
+					@include flexbox;
+					@include flex-align-items(center);
+					justify-content: left;
+					span {
+						display: block;
+					}
+				}
+			}
+			.menu-helper {
+				span {
+				
+				}
+			}
+			.nav-footer {
+			
+			}
+		}
+	}
 }
 
 .select2-container {
@@ -659,6 +708,43 @@ $settings-menu-active:      $white;
 		
 	}
 	
+	// Tablet style
+	@media all and (max-width: $screen-sm-min) {
+		.form-table {
+			th {
+				display: table-cell;
+				vertical-align: top;
+			}
+		}
+	}
+	
+	// Mobile style
+	@media all and (max-width: $screen-xs-min) {
+		.section-general-title {
+			p {
+				display: none;
+			}
+		}
+		.form-table {
+			th {
+				width: 100%;
+				display: block;
+				vertical-align: middle;
+			}
+			.tool-fields-wrapper {
+				.repeatable-row {
+					flex-wrap: wrap;
+				}
+			}
+		}
+	}
+}
+
+// Mobile style
+@media all and (max-width: $screen-xs-min) {
+	#atum-settings {
+		margin-left: 0;
+	}
 }
 
 // Sweet alert customizations

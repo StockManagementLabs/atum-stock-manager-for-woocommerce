@@ -51,6 +51,9 @@
 			// Enable Select2
 			this.doSelect2();
 			
+			// Toggle Menu
+			this.toggleMenu();
+			
 			// Change menu theme
 			$('.js-switch-menu').on('change', function () {
 				self.changeMenuTheme();
@@ -268,6 +271,11 @@
 					action: this.settings.changeSettingsMenuStyle,
 					data  : data
 				}
+			});
+		},
+		toggleMenu    : function() {
+			$('.toogle-menu').click(function () {
+				$('.atum-nav-list').toggleClass('expand-menu');
 			});
 		},
 		restoreSelects: function() {

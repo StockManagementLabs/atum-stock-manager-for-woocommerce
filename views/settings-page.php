@@ -29,14 +29,20 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 		<div class="atum-settings-container">
 			<nav class="atum-nav <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'atum-nav-light' : '' ?>">
 
-				<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
-					<div class="atum-brand">
-						<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
-						<span>
+				<div class="atum-nav-header">
+					<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
+						<div class="atum-brand">
+							<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
+							<span>
 							<?php echo esc_attr(__('ATUM', ATUM_TEXT_DOMAIN) ) ?>
 						</span>
-					</div>
-				</a>
+						</div>
+					</a>
+
+					<button class="toogle-menu">
+						<span class="lnr lnr-menu"></span>
+					</button>
+				</div>
 
 				<ul class="atum-nav-list">
 
