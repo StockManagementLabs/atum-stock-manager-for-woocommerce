@@ -576,7 +576,10 @@ class Settings {
 							$this->options[ $key ] = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
 							break;
 						case 'html':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( $input[ $key ] ) : '';
+							// Don't save.
+							if ( isset( $this->options[ $key ] ) ) {
+								unset( $this->options[ $key ] );
+							}
 							break;
 						case 'text':
 						default:
