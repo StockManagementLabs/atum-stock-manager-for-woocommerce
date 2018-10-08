@@ -1632,7 +1632,7 @@ input[type="button"].btn-block {
   background-color: #3b3d5a;
   border-radius: 6px;
   position: relative;
-  width: 230px;
+  min-width: 230px;
 }
 
 .atum-settings-wrapper .atum-nav-light {
@@ -1913,6 +1913,7 @@ input[type="button"].btn-block {
 @media all and (max-width: 768px) {
   .atum-settings-wrapper .atum-nav, .atum-settings-wrapper .atum-nav-light {
     width: 50px;
+    min-width: inherit;
   }
   .atum-settings-wrapper .atum-nav .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand {
     justify-content: center;
@@ -2489,6 +2490,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings input[type=submit] {
+  width: 144px;
   text-transform: uppercase;
   padding: 11px 20px 9px;
   line-height: 1;

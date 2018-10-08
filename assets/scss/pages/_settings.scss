@@ -37,7 +37,7 @@ $settings-menu-active:      $white;
 		background-color: $settings-menu-bg;
 		border-radius: 6px;
 		position: relative;
-		width: 230px;
+		min-width: 230px;
 	}
 	
 	.atum-nav-light {
@@ -273,6 +273,7 @@ $settings-menu-active:      $white;
 	@media all and (max-width: $screen-sm-min) {
 		.atum-nav, .atum-nav-light {
 			width: 50px;
+			min-width: inherit;
 			.atum-brand {
 				justify-content: center;
 				height: 51px;
