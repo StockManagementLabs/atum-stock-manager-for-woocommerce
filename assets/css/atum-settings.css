@@ -1639,7 +1639,11 @@ input[type="button"].btn-block {
   background-color: #fff;
 }
 
-.atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand {
+.atum-settings-wrapper .atum-nav-light .atum-nav-header {
+  background-color: #00B8DB;
+}
+
+.atum-settings-wrapper .atum-nav-light .atum-nav-header .atum-brand-link .atum-brand {
   background-color: #00B8DB;
 }
 
@@ -1941,6 +1945,11 @@ input[type="button"].btn-block {
   }
   .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
     display: block;
+    background-color: transparent;
+    border: none;
+  }
+  .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu:active, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:active {
+    outline: 0;
   }
   .atum-settings-wrapper .atum-nav .atum-nav-list, .atum-settings-wrapper .atum-nav-light .atum-nav-list {
     display: none;
@@ -1960,6 +1969,26 @@ input[type="button"].btn-block {
   }
   .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper span, .atum-settings-wrapper .atum-nav-light .atum-nav-list .menu-helper span {
     display: block;
+  }
+  .atum-settings-wrapper .atum-nav-light .atum-nav-header {
+    background-color: #00B8DB;
+  }
+  .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
+    background-color: transparent;
+    border: none;
+  }
+  .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:active {
+    outline: 0;
+  }
+}
+
+.select2-container {
+  width: 80% !important;
+}
+
+@media all and (max-width: 480px) {
+  .select2-container {
+    width: 100% !important;
   }
 }
 
@@ -2095,6 +2124,16 @@ input[type="button"].btn-block {
 #atum-settings {
   width: 100%;
   margin-left: 20px;
+}
+
+#atum-settings .btn-group {
+  height: 30px;
+}
+
+#atum-settings .btn-group label {
+  margin-left: 1px;
+  margin-right: 1px;
+  line-height: 2;
 }
 
 #atum-settings .form-settings-wrapper {
@@ -2282,6 +2321,10 @@ input[type="button"].btn-block {
   padding-top: 30px;
 }
 
+#atum-settings .section-fields th input[type=text], #atum-settings .section-fields td input[type=text] {
+  width: 80%;
+}
+
 #atum-settings .section-fields th {
   width: 25%;
   color: #6c757d;
@@ -2326,15 +2369,26 @@ input[type="button"].btn-block {
   width: 60px;
 }
 
+#atum-settings .section-fields .region-switcher {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap !important;
+  -moz-flex-wrap: wrap !important;
+  -ms-flex-wrap: wrap !important;
+  flex-wrap: wrap !important;
+}
+
 #atum-settings .section-fields .script-runner {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-  -moz-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
+  -webkit-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
 }
 
 #atum-settings .section-fields .script-runner .select2-container:focus, #atum-settings .section-fields .script-runner .select2-container .selection:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection--single:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection__rendered:focus {
@@ -2409,6 +2463,10 @@ input[type="button"].btn-block {
   color: #FF4848;
 }
 
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container {
+  width: 100% !important;
+}
+
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .add-row {
   width: 62px;
 }
@@ -2457,6 +2515,9 @@ input[type="button"].btn-block {
 }
 
 @media all and (max-width: 768px) {
+  #atum-settings .section-fields .script-runner {
+    flex-wrap: nowrap;
+  }
   #atum-settings .form-table th {
     display: table-cell;
     vertical-align: top;
@@ -2467,13 +2528,54 @@ input[type="button"].btn-block {
   #atum-settings .section-general-title p {
     display: none;
   }
+  #atum-settings .section-fields {
+    padding: 4px 10px;
+  }
+  #atum-settings .submit {
+    text-align: center;
+  }
+  #atum-settings .submit input[type=submit] {
+    width: 100%;
+  }
+  #atum-settings .form-table {
+    margin: 0;
+    font-size: 12px;
+    width: 100%;
+  }
   #atum-settings .form-table th {
     width: 100%;
     display: block;
     vertical-align: middle;
   }
+  #atum-settings .form-table th input[type=text], #atum-settings .form-table td input[type=text] {
+    width: 100%;
+  }
+  #atum-settings .form-table th .script-runner, #atum-settings .form-table td .script-runner {
+    flex-wrap: wrap;
+  }
+  #atum-settings .form-table th .script-runner button, #atum-settings .form-table td .script-runner button {
+    width: 100%;
+  }
+  #atum-settings .form-table th .script-runner .add-row, #atum-settings .form-table td .script-runner .add-row {
+    width: 100% !important;
+  }
   #atum-settings .form-table .tool-fields-wrapper .repeatable-row {
     flex-wrap: wrap;
+  }
+  #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-search__field::placeholder {
+    font-style: italic !important;
+    color: #adb5bd;
+  }
+  #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__rendered {
+    line-height: 1;
+  }
+  #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__rendered .select2-selection__choice {
+    height: 15px;
+  }
+  #atum-settings .form-table .tool-fields-wrapper .repeatable-row div {
+    width: 100%;
+    margin-right: 0 !important;
+    margin-top: 11px;
   }
 }
 

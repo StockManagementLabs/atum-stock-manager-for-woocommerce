@@ -42,9 +42,12 @@ $settings-menu-active:      $white;
 	
 	.atum-nav-light {
 		background-color: $white;
-		.atum-brand-link {
-			.atum-brand {
-				background-color: $blue;
+		.atum-nav-header {
+			background-color: $blue;
+			.atum-brand-link {
+				.atum-brand {
+					background-color: $blue;
+				}
 			}
 		}
 		.atum-nav-link {
@@ -305,6 +308,11 @@ $settings-menu-active:      $white;
 				border-bottom-left-radius: 6px;
 				.toogle-menu {
 					display: block;
+					background-color: transparent;
+					border: none;
+					&:focus, &:active {
+						outline: 0;
+					}
 				}
 			}
 			.atum-nav-list {
@@ -328,10 +336,27 @@ $settings-menu-active:      $white;
 			
 			}
 		}
+		.atum-nav-light {
+			.atum-nav-header {
+				background-color: $blue;
+				.toogle-menu {
+					background-color: transparent;
+					border: none;
+					&:focus, &:active {
+						outline: 0;
+					}
+				}
+			}
+		}
 	}
 }
 
 .select2-container {
+	width: 80% !important;
+	// Mobile style
+	@media all and (max-width: $screen-xs-min) {
+		width: 100% !important;
+	}
 	&, .selection, .select2-selection--single, .select2-selection__rendered {
 		&:focus {
 			outline: none;
@@ -419,6 +444,15 @@ $settings-menu-active:      $white;
 #atum-settings {
 	width: 100%;
 	margin-left: 20px;
+	
+	.btn-group {
+		height: 30px;
+		label {
+			margin-left: 1px;
+			margin-right: 1px;
+			line-height: 2;
+		}
+	}
 	
 	.form-settings-wrapper {
 		position: relative;
@@ -553,6 +587,9 @@ $settings-menu-active:      $white;
 		
 		th, td {
 			padding-top: $grid-gutter-width;
+			input[type=text] {
+				width: 80%;
+			}
 		}
 		
 		th {
@@ -599,9 +636,14 @@ $settings-menu-active:      $white;
 			width: 60px;
 		}
 		
+		.region-switcher {
+			@include flexbox;
+			@include flex-wrap(wrap !important);
+		}
+		
 		.script-runner {
 			@include flexbox;
-			@include flex-wrap(wrap);
+			@include flex-wrap(nowrap);
 			
 			.select2-container {
 				
@@ -635,6 +677,10 @@ $settings-menu-active:      $white;
 				
 			}
 			
+			.btn-primary {
+				//height: 30px;
+			}
+			
 			.tool-fields-wrapper {
 				width: 100%;
 				margin-bottom: $grid-gutter-width/2;
@@ -659,6 +705,11 @@ $settings-menu-active:      $white;
 							&:hover {
 								color: $danger;
 							}
+						}
+					}
+					.tool-fields-from {
+						.select2-container {
+							width: 100% !important;
 						}
 					}
 					.add-row {
@@ -710,6 +761,11 @@ $settings-menu-active:      $white;
 	
 	// Tablet style
 	@media all and (max-width: $screen-sm-min) {
+		.section-fields {
+			.script-runner {
+				flex-wrap: nowrap;
+			}
+		}
 		.form-table {
 			th {
 				display: table-cell;
@@ -725,15 +781,59 @@ $settings-menu-active:      $white;
 				display: none;
 			}
 		}
+		.section-fields {
+			padding: 4px 10px;
+		}
+		.submit {
+			text-align: center;
+			input[type=submit] {
+				width: 100%;
+			}
+		}
+		
 		.form-table {
+			margin: 0;
+			font-size: 12px;
+			width: 100%;
 			th {
 				width: 100%;
 				display: block;
 				vertical-align: middle;
 			}
+			th, td {
+				input[type=text] {
+					width: 100%;
+				}
+				.script-runner {
+					flex-wrap: wrap;
+					button {
+						width: 100%;
+					}
+					.add-row {
+						width: 100% !important;
+					}
+				}
+			}
 			.tool-fields-wrapper {
 				.repeatable-row {
 					flex-wrap: wrap;
+					.tool-fields-to {
+						.select2-search__field::placeholder {
+							font-style: italic !important;
+							color: $gray-500;
+						}
+						.select2-selection__rendered {
+							line-height: 1;
+							.select2-selection__choice {
+								height: 15px;
+							}
+						}
+					}
+					div {
+						width: 100%;
+						margin-right: 0 !important;
+						margin-top: 11px;
+					}
 				}
 			}
 		}

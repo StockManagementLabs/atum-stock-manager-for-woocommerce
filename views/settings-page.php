@@ -85,7 +85,10 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 					<?php
 					global $wp_settings_sections, $wp_settings_fields;
 
-					foreach ( array_keys($active_sections) as $active_section ):
+					foreach ( array_keys($active_sections) as $active_section_key =>$active_section ):
+
+						// Check if is last section
+						$last_section = count( $active_sections ) - 1 === $active_section_key ? true : false;
 
 						// This prints out all hidden setting fields
 						settings_fields( ATUM_PREFIX . "setting_$active_section" );
@@ -99,7 +102,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 						foreach ( (array) $wp_settings_sections[$page] as $section ): ?>
 
 							<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace([ATUM_PREFIX, 'setting_'], '', $section['id']) ?>">
-								<?php if ( 'atum_setting_shipping' !== $section['id'] && 'atum_setting_manufacturing_central' !== $section['id']) : ?>
+								<?php if ( ! $last_section ) : ?>
 									<?php $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE ); ?>
 									<div class="section-general-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-general-title-light' : '' ?>">
 										<?php
@@ -132,7 +135,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										?>
 										<h2><?php echo esc_attr( $header_settings_title ) ?></h2>
 										<?php
-	
+
 										submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
 
 										?>
@@ -158,9 +161,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									</table>
 
 									<?php
-
-									submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
-
+									if ( $last_section ) :
+										submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
+									endif;
 									?>
 
 								</div>
