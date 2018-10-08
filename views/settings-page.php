@@ -88,7 +88,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 					foreach ( array_keys($active_sections) as $active_section_key =>$active_section ):
 
 						// Check if is last section
-						$last_section = count( $active_sections ) - 1 === $active_section_key ? true : false;
+						$last_section = count( $active_sections ) - 1 === $active_section_key && 1 !== count( $active_sections ) ? true : false;
 
 						// This prints out all hidden setting fields
 						settings_fields( ATUM_PREFIX . "setting_$active_section" );
