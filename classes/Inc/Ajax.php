@@ -1659,7 +1659,7 @@ final class Ajax {
 			wp_send_json_error( __( 'You are not allowed to do this', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( empty( $_POST['atum_order_id'] ) || empty( $_POST['atum_order_item_id'] ) || empty( $_POST['purchase_price'] ) ) {
+		if ( empty( $_POST['atum_order_id'] ) || empty( $_POST['atum_order_item_id'] ) || empty( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
 			wp_send_json_error( __( 'Invalid data provided', ATUM_TEXT_DOMAIN ) );
 		}
 
