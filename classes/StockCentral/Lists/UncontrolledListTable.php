@@ -142,7 +142,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 			$regular_price_value = $this->product->get_regular_price();
 			$regular_price_value = ( is_numeric( $regular_price_value ) ) ? Helpers::format_price( $regular_price_value, [
 				'trim_zeros' => TRUE,
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 			] ) : $regular_price;
 			
 			$args = apply_filters( 'atum/uncontrolled_stock_central_list/args_regular_price', array(
@@ -150,11 +150,11 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				'meta_key' => 'regular_price',
 				'value'    => $regular_price_value,
 				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => $this->default_currency,
+				'currency' => self::$default_currency,
 				'tooltip'  => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
 			) );
 			
-			$regular_price = $this->get_editable_column( $args );
+			$regular_price = self::get_editable_column( $args );
 			
 		}
 
@@ -181,7 +181,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 			$sale_price_value = $this->product->get_sale_price();
 			$sale_price_value = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
 				'trim_zeros' => TRUE,
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 			] ) : $sale_price;
 			
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
@@ -194,7 +194,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				'meta_key'   => 'sale_price',
 				'value'      => $sale_price_value,
 				'symbol'     => get_woocommerce_currency_symbol(),
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 				'tooltip'    => __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
 				'extra_meta' => array(
 					array(
@@ -218,7 +218,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				),
 			) );
 			
-			$sale_price = $this->get_editable_column( $args );
+			$sale_price = self::get_editable_column( $args );
 			
 		}
 

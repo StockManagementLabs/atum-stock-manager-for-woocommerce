@@ -57,8 +57,8 @@ class HtmlReport extends ListTable {
 		parent::__construct( $args );
 
 		// Add the font icons inline for thumb and product type columns.
-		$this->table_columns['thumb']     = '<span class="wc-image" style="font-family: dashicons">&#xf128;</span>';
-		$this->table_columns['calc_type'] = '<span class="wc-type" style="font-family: woocommerce">&#xe006;</span>';
+		self::$table_columns['thumb']     = '<span class="wc-image" style="font-family: dashicons">&#xf128;</span>';
+		self::$table_columns['calc_type'] = '<span class="wc-type" style="font-family: woocommerce">&#xe006;</span>';
 	}
 
 	/**
@@ -93,19 +93,6 @@ class HtmlReport extends ListTable {
 	 * @param bool  $always_visible Whether the actions should be always visible.
 	 */
 	protected function row_actions( $actions, $always_visible = false ) {
-		// Row actions not needed in reports.
-	}
-
-	/**
-	 * Generates and display row actions links for the list table.
-	 *
-	 * @since 1.2.5
-	 *
-	 * @param object $item        The item being acted upon.
-	 * @param string $column_name Current column name.
-	 * @param string $primary     Primary column name.
-	 */
-	protected function handle_row_actions( $item, $column_name, $primary ) {
 		// Row actions not needed in reports.
 	}
 
@@ -394,9 +381,7 @@ class HtmlReport extends ListTable {
 		
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' .
-			apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . // WPCS: XSS ok.
-			$this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>'; // WPCS: XSS ok.
+		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // WPCS: XSS ok.
 		
 	}
 
@@ -424,7 +409,7 @@ class HtmlReport extends ListTable {
 		parent::display();
 
 		// The title column cannot be disabled, so we must add 1 to the count.
-		$columns     = count( $this->table_columns ) + 1;
+		$columns     = count( self::$table_columns ) + 1;
 		$max_columns = count( $this->_args['table_columns'] );
 		$count_views = $this->count_views;
 

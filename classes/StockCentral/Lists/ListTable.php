@@ -135,44 +135,8 @@ class ListTable extends AtumListTable {
 			'terms'    => Globals::get_product_types(),
 		);
 
-		// Get the ndays set to last sales column.
-		$sold_last_days = Helpers::get_sold_last_days_option();
-
-		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
-		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
-		// *** Following this convention is necessary for column sorting functionality ***!
-		$args['table_columns'] = array(
-			'thumb'                 => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'title'                 => __( 'Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'             => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
-			'calc_location'         => '<span class="dashicons dashicons-store tips" data-placement="bottom" data-tip="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
-			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
-			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-			'_weight'               => __( 'Weight', ATUM_TEXT_DOMAIN ),
-			'_stock'                => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
-			'_out_stock_threshold'  => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'          => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_hold'             => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
-			'calc_reserved'         => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'      => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
-			'calc_sold_today'       => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
-			'calc_returns'          => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
-			'calc_damages'          => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			/* translators: the number of sales during last days */
-			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . $sold_last_days . '</span>' ),
-			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
-		);
-
-		$args['table_columns'] = (array) apply_filters( 'atum/stock_central_list/table_columns', $args['table_columns'] );
+		// Prepare the table columns.
+		$args['table_columns'] = self::get_table_columns();
 
 		// TODO: Add group table functionality if some columns are hidden.
 		$args['group_members'] = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
@@ -260,7 +224,8 @@ class ListTable extends AtumListTable {
 			'calc_sales_last_ndays' => 0,
 			'calc_lost_sales'       => 0,
 		));
-		
+
+		// Call the parent class once all the $args are set.
 		parent::__construct( $args );
 
 		// Filtering with extra filters.
@@ -270,6 +235,72 @@ class ListTable extends AtumListTable {
 
 		// Add the "Apply Bulk Action" button to the title section.
 		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
+
+	}
+
+	/**
+	 * Prepare the table columns for Stock Central
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return array
+	 */
+	public static function get_table_columns() {
+
+		// Get the ndays set to last sales column.
+		$sold_last_days = Helpers::get_sold_last_days_option();
+
+		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
+		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
+		// *** Following this convention is necessary for column sorting functionality ***!
+		$table_columns = array(
+			'thumb'                 => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'title'                 => __( 'Name', ATUM_TEXT_DOMAIN ),
+			'calc_type'             => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
+			'calc_location'         => '<span class="dashicons dashicons-store tips" data-placement="bottom" data-tip="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'_weight'               => __( 'Weight', ATUM_TEXT_DOMAIN ),
+			'_stock'                => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_out_stock_threshold'  => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+			'calc_inbound'          => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'calc_hold'             => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+			'calc_reserved'         => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+			'calc_back_orders'      => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'calc_sold_today'       => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+			'calc_returns'          => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+			'calc_damages'          => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			/* translators: the number of sales during last days */
+			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . $sold_last_days . '</span>' ),
+			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
+			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
+		);
+
+		// Hide the purchase price column if the current user has not the capability.
+		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
+			unset( $table_columns['_purchase_price'] );
+		}
+
+		// Hide the supplier's columns if the current user has not the capability.
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			unset( $table_columns['_supplier'] );
+			unset( $table_columns['_supplier_sku'] );
+		}
+
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
+			unset( $table_columns['_purchase_price'] );
+			unset( $table_columns['calc_inbound'] );
+		}
+
+		return (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
 
 	}
 
@@ -324,7 +355,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for regular price
 	 *
-	 * @since  1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -340,7 +371,7 @@ class ListTable extends AtumListTable {
 			$regular_price_value = $this->product->get_regular_price();
 			$regular_price_value = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'trim_zeros' => TRUE,
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 			] ) : $regular_price;
 
 			$args = apply_filters( 'atum/stock_central_list/args_regular_price', array(
@@ -348,11 +379,11 @@ class ListTable extends AtumListTable {
 				'meta_key' => 'regular_price',
 				'value'    => $regular_price_value,
 				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => $this->default_currency,
+				'currency' => self::$default_currency,
 				'tooltip'  => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
 			) );
 			
-			$regular_price = $this->get_editable_column( $args );
+			$regular_price = self::get_editable_column( $args );
 			
 		}
 		
@@ -363,7 +394,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for sale price
 	 *
-	 * @since  1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -379,7 +410,7 @@ class ListTable extends AtumListTable {
 			$sale_price_value = $this->product->get_sale_price();
 			$sale_price_value = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
 				'trim_zeros' => TRUE,
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 			] ) : $sale_price;
 			
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
@@ -392,7 +423,7 @@ class ListTable extends AtumListTable {
 				'meta_key'   => 'sale_price',
 				'value'      => $sale_price_value,
 				'symbol'     => get_woocommerce_currency_symbol(),
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 				'tooltip'    => __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
 				'extra_meta' => array(
 					array(
@@ -416,7 +447,7 @@ class ListTable extends AtumListTable {
 				),
 			) );
 			
-			$sale_price = $this->get_editable_column( $args );
+			$sale_price = self::get_editable_column( $args );
 			
 		}
 
@@ -427,7 +458,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for stock on hold: show amount of items with pending payment.
 	 *
-	 * @since  0.0.1
+	 * @since 0.0.1
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -467,7 +498,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for reserved stock: sums the items within "Reserved Stock" logs
 	 *
-	 * @since  1.2.4
+	 * @since 1.2.4
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -484,7 +515,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for back orders amount: show amount if items pending to serve and without existences
 	 *
-	 * @since  0.0.1
+	 * @since 0.0.1
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -519,7 +550,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for items sold today
 	 *
-	 * @since  0.0.1
+	 * @since 0.0.1
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -543,7 +574,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for customer returns: sums the items within "Reserved Stock" logs
 	 *
-	 * @since  1.2.4
+	 * @since 1.2.4
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -560,7 +591,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for warehouse damages: sums the items within "Warehouse Damage" logs
 	 *
-	 * @since  1.2.4
+	 * @since 1.2.4
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -577,7 +608,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for lost in post: sums the items within "Lost in Post" logs
 	 *
-	 * @since  1.2.4
+	 * @since 1.2.4
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -594,7 +625,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for items sold during the last N days (set on atum's general settings) sales_last_ndays or via jquery ?sold_last_days=N
 	 *
-	 * @since  1.4.11
+	 * @since 1.4.11
 	 *
 	 * @param \WP_Post $item         The WooCommerce product post to use in calculations.
 	 * @param bool     $add_to_total
@@ -623,7 +654,7 @@ class ListTable extends AtumListTable {
 	 * Column for number of days the stock will be sufficient to fulfill orders
 	 * Formula: Current Stock Value / (Sales Last N Days / N)
 	 *
-	 * @since  0.1.3
+	 * @since 0.1.3
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -654,7 +685,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for number of days the product is out of stock
 	 *
-	 * @since  0.1.4
+	 * @since 0.1.4
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -677,7 +708,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Column for lost sales
 	 *
-	 * @since  1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -701,7 +732,7 @@ class ListTable extends AtumListTable {
 	/**
 	 * Prepare the table data
 	 *
-	 * @since  0.0.2
+	 * @since 0.0.2
 	 */
 	public function prepare_items() {
 
@@ -725,6 +756,8 @@ class ListTable extends AtumListTable {
 				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays'] = $row['QTY'];
 			}
 		}
+
+		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products, $this->day );
 		
 	}
 

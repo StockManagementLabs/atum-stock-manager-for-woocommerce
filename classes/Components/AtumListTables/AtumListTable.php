@@ -47,7 +47,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $table_columns;
+	protected static $table_columns;
 
 	/**
 	 * The columns that are hidden by default
@@ -200,7 +200,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var string
 	 */
-	protected $default_currency;
+	protected static $default_currency;
 
 	/**
 	 * The user meta key used for first edit popup
@@ -349,7 +349,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Add the checkbox column to the table if enabled.
-		$this->table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], $args['table_columns'] ) : $args['table_columns'];
+		self::$table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], $args['table_columns'] ) : $args['table_columns'];
 		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 
 		$post_type_obj = get_post_type_object( $this->post_type );
@@ -375,7 +375,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
 		}
 
-		$this->default_currency = get_woocommerce_currency();
+		self::$default_currency = get_woocommerce_currency();
 
 	}
 
@@ -564,7 +564,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @param object $item The current item.
 	 */
-	protected function single_row_columns( $item ) {
+	public function single_row_columns( $item ) {
 
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
@@ -602,10 +602,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				echo '</th>';
 
 			}
-			elseif ( method_exists( $this, '_column_' . $column_name ) ) {
+			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), '_column_' . $column_name ) ) {
 
 				echo call_user_func(
-					array( $this, '_column_' . $column_name ),
+					array( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), '_column_' . $column_name ),
 					$item,
 					$classes,
 					$data,
@@ -613,11 +613,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				); // WPCS: XSS ok.
 
 			}
-			elseif ( method_exists( $this, 'column_' . $column_name ) ) {
+			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), 'column_' . $column_name ) ) {
 
 				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo call_user_func( array( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), 'column_' . $column_name ), $item ); // WPCS: XSS ok.
 				echo '</td>';
 
 			}
@@ -625,7 +624,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				echo "<td $attributes>"; // WPCS: XSS ok.
 				echo $this->column_default( $item, $column_name ); // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
 				echo '</td>';
 
 			}
@@ -674,6 +672,19 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Post ID column
+	 *
+	 * @since  0.0.1
+	 *
+	 * @param \WP_Post $item The WooCommerce product post.
+	 *
+	 * @return int
+	 */
+	protected function column_id( $item ) {
+		return apply_filters( 'atum/list_table/column_id', $this->get_current_product_id(), $item, $this->product );
+	}
+
+	/**
 	 * Post title column
 	 *
 	 * @since  0.0.1
@@ -712,6 +723,40 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $child_arrow . $title . '</a>';
 
 		return apply_filters( 'atum/list_table/column_title', $title, $item, $this->product );
+
+	}
+
+	/**
+	 * Product SKU column
+	 *
+	 * @since  1.1.2
+	 *
+	 * @param \WP_Post $item     The WooCommerce product post.
+	 * @param bool     $editable Whether the SKU will be editable.
+	 *
+	 * @return string
+	 */
+	protected function column__sku( $item, $editable = TRUE ) {
+
+		$id  = $this->get_current_product_id();
+		$sku = get_post_meta( $id, '_sku', true );
+		$sku = $sku ?: self::EMPTY_COL;
+
+		if ( $editable ) {
+
+			$args = array(
+				'post_id'    => $id,
+				'meta_key'   => 'sku',
+				'value'      => $sku,
+				'input_type' => 'text',
+				'tooltip'    => __( 'Click to edit the SKU', ATUM_TEXT_DOMAIN ),
+			);
+
+			$sku = self::get_editable_column( $args );
+
+		}
+
+		return apply_filters( 'atum/list_table/column_sku', $sku, $item, $this->product );
 
 	}
 
@@ -757,50 +802,46 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Product SKU column
+	 * Column for supplier sku
 	 *
-	 * @since  1.1.2
+	 * @since  1.2.0
 	 *
-	 * @param \WP_Post $item     The WooCommerce product post.
-	 * @param bool     $editable Whether the SKU will be editable.
+	 * @param \WP_Post $item      The WooCommerce product post to use in calculations.
+	 * @param bool     $editable  Optional. Whether the current column is editable.
 	 *
-	 * @return string
+	 * @return float
 	 */
-	protected function column__sku( $item, $editable = TRUE ) {
+	protected function column__supplier_sku( $item, $editable = TRUE ) {
 
-		$id  = $this->get_current_product_id();
-		$sku = get_post_meta( $id, '_sku', true );
-		$sku = $sku ?: self::EMPTY_COL;
+		$supplier_sku = self::EMPTY_COL;
+
+		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			return $supplier_sku;
+		}
+
+		$product_id = $this->get_current_product_id();
 
 		if ( $editable ) {
 
-			$args = array(
-				'post_id'    => $id,
-				'meta_key'   => 'sku',
-				'value'      => $sku,
+			$supplier_sku = get_post_meta( $product_id, '_supplier_sku', TRUE );
+
+			if ( 0 === strlen( $supplier_sku ) ) {
+				$supplier_sku = self::EMPTY_COL;
+			}
+
+			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
+				'post_id'    => $product_id,
+				'meta_key'   => 'supplier_sku',
+				'value'      => $supplier_sku,
 				'input_type' => 'text',
-				'tooltip'    => __( 'Click to edit the SKU', ATUM_TEXT_DOMAIN ),
-			);
+				'tooltip'    => __( 'Click to edit the Supplier Sku', ATUM_TEXT_DOMAIN ),
+			) );
 
-			$sku = $this->get_editable_column( $args );
-
+			$supplier_sku = self::get_editable_column( $args );
 		}
 
-		return apply_filters( 'atum/list_table/column_sku', $sku, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_supplier_sku', $supplier_sku, $item, $this->product );
 
-	}
-
-	/**
-	 * Post ID column
-	 *
-	 * @since  0.0.1
-	 *
-	 * @param \WP_Post $item The WooCommerce product post.
-	 *
-	 * @return int
-	 */
-	protected function column_ID( $item ) {
-		return apply_filters( 'atum/list_table/column_id', $this->get_current_product_id(), $item, $this->product );
 	}
 
 	/**
@@ -905,7 +946,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Column for purchase price
 	 *
-	 * @since  1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -926,7 +967,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$purchase_price_value = get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
 			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
 				'trim_zeros' => TRUE,
-				'currency'   => $this->default_currency,
+				'currency'   => self::$default_currency,
 			] ) : $purchase_price;
 
 			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
@@ -934,11 +975,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				'meta_key' => 'purchase_price',
 				'value'    => $purchase_price_value,
 				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => $this->default_currency,
+				'currency' => self::$default_currency,
 				'tooltip'  => __( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
 			) );
 
-			$purchase_price = $this->get_editable_column( $args );
+			$purchase_price = self::get_editable_column( $args );
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
@@ -946,53 +987,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Column for supplier sku
-	 *
-	 * @since  1.2.0
-	 *
-	 * @param \WP_Post $item      The WooCommerce product post to use in calculations.
-	 * @param bool     $editable  Optional. Whether the current column is editable.
-	 *
-	 * @return float
-	 */
-	protected function column__supplier_sku( $item, $editable = TRUE ) {
-
-		$supplier_sku = self::EMPTY_COL;
-
-		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			return $supplier_sku;
-		}
-
-		$product_id = $this->get_current_product_id();
-
-		if ( $editable ) {
-
-			$supplier_sku = get_post_meta( $product_id, '_supplier_sku', TRUE );
-
-			if ( 0 === strlen( $supplier_sku ) ) {
-				$supplier_sku = self::EMPTY_COL;
-			}
-
-			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
-				'post_id'    => $product_id,
-				'meta_key'   => 'supplier_sku',
-				'value'      => $supplier_sku,
-				'input_type' => 'text',
-				'tooltip'    => __( 'Click to edit the Supplier Sku', ATUM_TEXT_DOMAIN ),
-			) );
-
-			$supplier_sku = $this->get_editable_column( $args );
-		}
-
-		return apply_filters( 'atum/stock_central_list/column_supplier_sku', $supplier_sku, $item, $this->product );
-
-	}
-
-
-	/**
 	 * Column out_stock_threshold column
 	 *
-	 * @since  v1.4.6
+	 * @since 1.4.6
 	 *
 	 * @param \WP_Post $item      The WooCommerce product post.
 	 * @param bool     $editable  Optional. Whether the current column is editable.
@@ -1029,7 +1026,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => __( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN ),
 			);
 
-			$out_stock_threshold = $this->get_editable_column( $args );
+			$out_stock_threshold = self::get_editable_column( $args );
 
 		}
 
@@ -1040,7 +1037,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Column Weight column
 	 *
-	 * @since  v1.4.6
+	 * @since 1.4.6
 	 *
 	 * @param \WP_Post $item      The WooCommerce product post.
 	 * @param bool     $editable  Optional. Whether the current column is editable.
@@ -1063,7 +1060,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => __( 'Click to edit the weight', ATUM_TEXT_DOMAIN ),
 			);
 
-			$weight = $this->get_editable_column( $args );
+			$weight = self::get_editable_column( $args );
 
 		}
 
@@ -1074,7 +1071,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Column for stock amount
 	 *
-	 * @since  0.0.1
+	 * @since 0.0.1
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 * @param bool     $editable Whether the stock will be editable.
@@ -1157,7 +1154,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
 				);
 
-				$stock = $this->get_editable_column( $args );
+				$stock = self::get_editable_column( $args );
 
 			}
 
@@ -1170,7 +1167,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Column for inbound stock: shows sum of inbound stock within Purchase Orders
 	 *
-	 * @since  1.3.0
+	 * @since 1.3.0
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
@@ -1210,7 +1207,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Column for stock indicators
 	 *
-	 * @since  0.0.1
+	 * @since 0.0.1
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 * @param string   $classes
@@ -1274,9 +1271,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . $data . $classes . '>' .
-			apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product ) .
-			$this->handle_row_actions( $item, 'calc_stock_indicator', $primary ) . '</td>'; // WPCS: XSS ok.
+		echo '<td ' . $data . $classes . '>' . apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // WPCS: XSS ok.
 
 	}
 
@@ -1295,7 +1290,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$result = array();
 
-		foreach ( $this->table_columns as $table => $slug ) {
+		foreach ( self::$table_columns as $table => $slug ) {
 			$group            = $this->search_group_columns( $table );
 			$result[ $table ] = $group ? "<span class='col-$group'>$slug</span>" : $slug;
 		}
@@ -1331,11 +1326,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *      @type array  $extra_meta        Any extra fields will be appended to the popover (as JSON array).
 	 *      @type string $tooltip_position  Where to place the tooltip.
 	 *      @type string $currency          Product prices currency.
+	 *      @type array  $extra_data        Any other array of data that should be added to the element.
 	 * }
 	 *
 	 * @return string
 	 */
-	protected function get_editable_column( $args ) {
+	public static function get_editable_column( $args ) {
 
 		/**
 		 * Variable definitions
@@ -1349,6 +1345,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var array  $extra_meta
 		 * @var string $tooltip_position
 		 * @var string $currency
+		 * @var array  $extra_data
 		 */
 		extract( wp_parse_args( $args, array(
 			'post_id'          => NULL,
@@ -1359,15 +1356,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			'input_type'       => 'number',
 			'extra_meta'       => array(),
 			'tooltip_position' => 'top',
-			'currency'         => $this->default_currency,
+			'currency'         => self::$default_currency,
+			'extra_data'       => array(),
 		) ) );
 
 		$extra_meta_data = ! empty( $extra_meta ) ? ' data-extra-meta="' . htmlspecialchars( wp_json_encode( $extra_meta ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
 		$symbol_data     = ! empty( $symbol ) ? ' data-symbol="' . esc_attr( $symbol ) . '"' : '';
+		$extra_data      = ! empty( $extra_data ) ? Helpers::array_to_data( $extra_data ) : '';
 
 		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
 			'" data-item="' . $post_id . '" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
-			$input_type . '" data-currency="' . $currency . '">' . $value . '</span>';
+			$input_type . '" data-currency="' . $currency . '"' . $extra_data . '>' . $value . '</span>';
 
 		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );
 
@@ -1394,7 +1393,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$not_sortable     = array( 'thumb', 'cb' );
 		$sortable_columns = array();
 
-		foreach ( $this->table_columns as $key => $column ) {
+		foreach ( self::$table_columns as $key => $column ) {
 			if ( ! in_array( $key, $not_sortable ) && 0 !== strpos( $key, 'calc_' ) ) {
 				$sortable_columns[ $key ] = array( $key, FALSE );
 			}
@@ -3337,8 +3336,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return array
 	 */
-	public function get_table_columns() {
-		return $this->table_columns;
+	public static function get_table_columns() {
+		return self::$table_columns;
 	}
 
 	/**
@@ -3348,8 +3347,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @param array $table_columns
 	 */
-	public function set_table_columns( $table_columns ) {
-		$this->table_columns = $table_columns;
+	public static function set_table_columns( $table_columns ) {
+		self::$table_columns = $table_columns;
 	}
 
 	/**
@@ -3383,6 +3382,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function get_current_product() {
 		return $this->product;
+	}
+
+	/**
+	 * Getter for the default_currency prop
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return \WC_Product
+	 */
+	public static function get_default_currency() {
+		return self::$default_currency;
 	}
 
 	/**
