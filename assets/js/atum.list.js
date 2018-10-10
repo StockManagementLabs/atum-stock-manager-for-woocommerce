@@ -91,7 +91,7 @@
 
             if ( $atumPostSearchWithDropdown.length) {
 
-                this.settings.searchDropdown = "yes";
+                this.settings.searchDropdown = 'yes';
                 this.setupSearchColumnDropdown();
 
                 $('#adv-settings input[type=checkbox]').change(function () {
@@ -1751,9 +1751,13 @@
 			
 		},
 		
-		expandRow: function($row) {
+		expandRow: function($row, expandableRowClass) {
 			
 			var rowId = $row.data('id');
+			
+			if (typeof expandableRowClass === 'undefined') {
+				expandableRowClass = 'expandable';
+			}
 			
 			// Avoid multiple clicks before expanding
 			if (typeof this.isRowExpanding[rowId] !== 'undefined' && this.isRowExpanding[rowId] === true) {
@@ -1763,7 +1767,7 @@
 			this.isRowExpanding[rowId] = true;
 			
 			var self     = this,
-			    $nextRow = $row.next('.expandable');
+			    $nextRow = $row.next('.' + expandableRowClass);
 			
 			// Reload the scrollbar once the slide animation is completed
 			if ($nextRow.length) {
@@ -1780,7 +1784,7 @@
 					$nextRow.hide(300);
 				}
 				
-				$nextRow = $nextRow.next('.expandable');
+				$nextRow = $nextRow.next('.' + expandableRowClass);
 				
 			}
 			
