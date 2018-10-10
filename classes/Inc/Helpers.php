@@ -1555,8 +1555,8 @@ final class Helpers {
 					
 					break;
 				
-				case 'purchase_price':
-					update_post_meta( $product_id, '_' . $meta_key, wc_format_decimal( $meta_value ) );
+				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
+					update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $meta_value ) );
 					
 					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
 					break;

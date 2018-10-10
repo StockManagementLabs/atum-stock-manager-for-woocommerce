@@ -472,7 +472,14 @@
 					
 					var $item         = $(e.target).closest('.item'),
 					    qty           = parseFloat($item.find('input.quantity').val() || 1),
-					    purchasePrice = parseFloat($item.find('input.line_total').val() || 0) / qty;
+					    purchasePrice = parseFloat($item.find('input.line_total').val() || 0) / qty,
+					    data          = {
+						    atum_order_id     : atumOrder.post_id,
+						    atum_order_item_id: $item.data('atum_order_item_id'),
+						    action            : 'atum_order_change_purchase_price',
+						    security          : atumOrder.atum_order_item_nonce
+					    };
+					data[atumOrder.purchase_price_field] = purchasePrice;
 					
 					swal({
 						html               : atumOrder.confirm_purchase_price.replace('{{number}}', '<strong>' + purchasePrice + '</strong>'),
@@ -488,13 +495,7 @@
 								
 								$.ajax({
 									url    : ajaxurl,
-									data   : {
-										atum_order_id      : atumOrder.post_id,
-										atum_order_item_id : $item.data('atum_order_item_id'),
-										purchase_price     : purchasePrice,
-										action             : 'atum_order_change_purchase_price',
-										security           : atumOrder.atum_order_item_nonce
-									},
+									data   : data,
 									type   : 'POST',
 									dataType: 'json',
 									success: function (response) {

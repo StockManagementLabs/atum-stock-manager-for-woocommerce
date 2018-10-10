@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 
@@ -911,6 +912,7 @@ abstract class AtumOrderPostType {
 					'stock_decreased'          => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN ),
 					'confirm_purchase_price'   => __( 'Do you want to set the purchase price of this product to {{number}}?', ATUM_TEXT_DOMAIN ),
 					'purchase_price_changed'   => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
+					'purchase_price_field'     => Globals::PURCHASE_PRICE_KEY,
 					'remove_all_items_notice'  => __( 'This will remove all the items previously added to this order', ATUM_TEXT_DOMAIN ),
 					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
 					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
