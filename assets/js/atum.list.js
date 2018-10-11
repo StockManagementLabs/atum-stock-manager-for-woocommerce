@@ -1953,6 +1953,23 @@
 		
 	};
 	
+	// Filter by data
+	$.fn.filterByData = function(prop, val) {
+		var $self = this;
+		if (typeof val === 'undefined') {
+			return $self.filter(
+				
+				function() {
+					return typeof $(this).data(prop) !== 'undefined';
+				});
+		}
+		return $self.filter(
+			
+			function() {
+				return $(this).data(prop) == val;
+			});
+	};
+	
 	
 	// Init the plugin on document ready
 	$(function () {

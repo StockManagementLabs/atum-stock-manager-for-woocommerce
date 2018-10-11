@@ -3277,11 +3277,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// jquery.floatThead.
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-		wp_enqueue_script( 'jquery.floatThead' );
-
-		// jquery.filterbydata.
-		wp_register_script( 'jquery.filterbydata', ATUM_URL . 'assets/js/vendor/jquery.filterbydata.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-		wp_enqueue_script( 'jquery.filterbydata' );
 
 		// jScrollPane.
 		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
@@ -3314,7 +3309,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
