@@ -544,7 +544,6 @@ class Suppliers {
 				$query_parents = $wpdb->prepare( "
 					SELECT DISTINCT p.ID FROM $wpdb->posts p
 	                $term_join
-	                INNER JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
 	                WHERE p.post_type = 'product'
 	                $term_where
 	                AND p.post_status IN ('publish', 'private')              
@@ -578,7 +577,7 @@ class Suppliers {
 
 			}
 
-			return apply_filters( 'atum/suppliers/products', $products, $supplier );
+			return apply_filters( 'atum/suppliers/products', $products, $supplier, $post_type, $type_filter );
 
 		}
 
