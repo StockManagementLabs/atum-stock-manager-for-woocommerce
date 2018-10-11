@@ -53,6 +53,7 @@
 		navigationReady  : false,
 		numHashParameters: 0,
 		delayTimer       : 0,
+		$collapsedGroups : null,
 		
 		/**
 		 * Register our events and initialize the UI
@@ -624,10 +625,10 @@
                                         confirmButtonText: self.settings.ok,
                                         onClose           : function () {
                                             // Update atum-table to show the new location icon
-                                            self.update();
+                                            self.updateTable();
                                         }
                                     }).then(function(){
-                                        self.update();
+                                        self.updateTable();
                                     }).catch(swal.noop);
                                     
 								}
@@ -655,7 +656,7 @@
 					self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
             	}
             	
-				self.update();
+				self.updateTable();
     
 			})
 			
@@ -865,7 +866,7 @@
 
 				var numCurrentParams = $.address.parameterNames().length;
 				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
-					self.update();
+					self.updateTable();
 				}
 				
 				self.navigationReady = true;
@@ -898,7 +899,7 @@
                         });
                     }
 
-                    self.update();
+                    self.updateTable();
 					
 				}
 				
@@ -971,6 +972,8 @@
 		
 		/**
 		 * Show/Hide the group of columns with the group-toggler button
+		 *
+		 * TODO: STORE THE TOGGLED COLUMNS GROUPS TO BE ABLE TO RESTORE THEM TO THE SAME STAGE AFTER FILTERING
 		 */
 		toggleGroupColumns: function($toggler) {
 			
@@ -981,6 +984,7 @@
 			// Show/hide the column group text
 			$toggler.siblings().toggle();
 			
+			// Expand group columns
 			if ($curGroupCell.hasClass('collapsed')) {
 				
 				// Remove the ghost column
@@ -989,6 +993,7 @@
 				$groupCells.removeAttr('style');
 				
 			}
+			// Collapse group columns
 			else {
 				
 				$groupCells.hide();
@@ -1011,6 +1016,10 @@
 			}
 			
 			$curGroupCell.toggleClass('collapsed');
+			
+			// Set the collapsed group columns array
+			this.$collapsedGroups = this.$atumTable.find('.column-groups').children('.collapsed');
+			
 			this.reloadScrollbar();
 			this.reloadFloatThead();
 			
@@ -1365,7 +1374,7 @@
 						if (response.success) {
 							$button.remove();
 							self.$editInput.val('');
-							self.update();
+							self.updateTable();
 						}
 						else {
 							$button.prop('disabled', false);
@@ -1433,7 +1442,7 @@
 					
 					if (response.success) {
 						self.$bulkButton.hide();
-						self.update();
+						self.updateTable();
 					}
 					
 				},
@@ -1492,7 +1501,7 @@
 			// Restore navigation and update if needed
 			var numCurrentParams = $.address.parameterNames().length;
 			if (numCurrentParams || this.numHashParameters !== numCurrentParams) {
-				this.update();
+				this.updateTable();
 			}
 			
 			this.navigationReady   = true;
@@ -1503,7 +1512,7 @@
 		/**
 		 * Send the ajax call and replace table parts with updated version
 		 */
-		update: function () {
+		updateTable: function () {
 			
 			var self = this;
 			
@@ -1587,19 +1596,31 @@
 						self.$atumList.find('.reset-filters').removeClass('hidden');
 					}
 					
-					// Re-add the scrollbar
-					self.reloadScrollbar();
-					
-					// Re-add tooltips
+					// Regenerate the UI
 					self.addTooltips();
-					
-					// Restore enhanced selects
 					self.maybeRestoreEnhancedSelect();
 					
+					// Restore toggled column groups
+					if (self.$collapsedGroups.length) {
+						
+						self.$collapsedGroups.each(function () {
+							var $groupCell = $(this);
+							$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));
+							$groupCell.children('span').not('.group-toggler').show();
+							
+							self.toggleGroupColumns($groupCell.find('.group-toggler'));
+						});
+						
+					}
+					else {
+						self.reloadScrollbar();
+					}
+					
 					self.removeOverlay();
-
                     self.setupSalesLastNDaysVal();
-
+                    
+                    // Custom trigger after updating
+                    self.$atumList.trigger('atum-table-updated');
 					
 				},
 				error     : function (error) {

@@ -461,30 +461,34 @@
 				background-color: $warning;
 			}
 			
-			td, a {
-				color: $white;
-			}
-			
-			.column-calc_type {
+			&.variable, &.variable-subscription, &.group {
 				
-				.has-child {
+				td, a {
+					color: $white;
+				}
+				
+				.column-calc_type {
 					
-					&.product-type {
-						&:before {
-							content: "\e004";
-							color: $white;
-						}
-					}
-					
-					&.product-type-icon {
-						svg {
-							.st1 {
-								fill: $white;
+					.has-child {
+						
+						&.product-type {
+							&:before {
+								content: "\e004";
+								color: $white;
 							}
 						}
+						
+						&.product-type-icon {
+							svg {
+								.st1 {
+									fill: $white;
+								}
+							}
+						}
+						
 					}
-					
 				}
+				
 			}
 		}
 		

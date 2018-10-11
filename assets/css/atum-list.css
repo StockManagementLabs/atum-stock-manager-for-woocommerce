@@ -3142,16 +3142,16 @@ input[type="button"].btn-block {
   background-color: #EFAF00;
 }
 
-.atum-list-table tr.expanded td, .atum-list-table tr.expanded a, .floatThead-container tr.expanded td, .floatThead-container tr.expanded a {
+.atum-list-table tr.expanded.variable td, .atum-list-table tr.expanded.variable a, .atum-list-table tr.expanded.variable-subscription td, .atum-list-table tr.expanded.variable-subscription a, .atum-list-table tr.expanded.group td, .atum-list-table tr.expanded.group a, .floatThead-container tr.expanded.variable td, .floatThead-container tr.expanded.variable a, .floatThead-container tr.expanded.variable-subscription td, .floatThead-container tr.expanded.variable-subscription a, .floatThead-container tr.expanded.group td, .floatThead-container tr.expanded.group a {
   color: #fff;
 }
 
-.atum-list-table tr.expanded .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded .column-calc_type .has-child.product-type:before {
+.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type:before {
   content: "\e004";
   color: #fff;
 }
 
-.atum-list-table tr.expanded .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded .column-calc_type .has-child.product-type-icon svg .st1 {
+.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1 {
   fill: #fff;
 }
 
