@@ -1772,12 +1772,16 @@
 			
 		},
 		
-		expandRow: function($row, expandableRowClass) {
+		expandRow: function($row, expandableRowClass, stopRowSelector) {
 			
 			var rowId = $row.data('id');
 			
 			if (typeof expandableRowClass === 'undefined') {
 				expandableRowClass = 'expandable';
+			}
+			
+			if (typeof stopRowSelector === 'undefined') {
+				stopRowSelector = '.main-row';
 			}
 			
 			// Avoid multiple clicks before expanding
@@ -1788,15 +1792,20 @@
 			this.isRowExpanding[rowId] = true;
 			
 			var self     = this,
-			    $nextRow = $row.next('.' + expandableRowClass);
+			    $nextRow = $row.next();
 			
-			// Reload the scrollbar once the slide animation is completed
 			if ($nextRow.length) {
 				$row.toggleClass('expanded');
 				this.destroyTooltips();
 			}
 			
-			while ($nextRow.length) {
+			// Loop until reaching the next main row
+			while (!$nextRow.filter(stopRowSelector).length) {
+				
+				if (!$nextRow.hasClass(expandableRowClass)) {
+					$nextRow = $nextRow.next();
+					continue;
+				}
 				
 				if (!$nextRow.is(':visible')) {
 					$nextRow.show(300);
@@ -1805,7 +1814,7 @@
 					$nextRow.hide(300);
 				}
 				
-				$nextRow = $nextRow.next('.' + expandableRowClass);
+				$nextRow = $nextRow.next();
 				
 			}
 			
