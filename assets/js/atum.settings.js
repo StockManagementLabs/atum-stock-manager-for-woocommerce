@@ -293,6 +293,9 @@
 			$('.toogle-menu').click(function () {
 				$('.atum-nav-list').toggleClass('expand-menu');
 			});
+			$('.atum-nav-link').click(function () {
+				$('.atum-nav-list').toggleClass('expand-menu');
+			});
 		},
 		restoreSelects: function() {
 			

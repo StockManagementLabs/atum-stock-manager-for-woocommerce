@@ -39,6 +39,7 @@ $settings-menu-active:      $white;
 		border-radius: 6px;
 		position: relative;
 		min-width: 230px;
+		box-shadow: 0 4px 0 0 $gray-200;
 	}
 	
 	.atum-nav-light {
@@ -100,7 +101,7 @@ $settings-menu-active:      $white;
 		border-top-left-radius: 6px;
 		.toogle-menu {
 			font-size: 20px;
-			color: $white;
+			color: $gray-500;
 			display: none;
 		}
 		.atum-brand-link {
@@ -288,7 +289,7 @@ $settings-menu-active:      $white;
 			}
 			
 			.atum-nav-link {
-				padding: 0 15px 0 15px;
+				padding: 0 15px 0 17px;
 				.menu-helper {
 					span {
 						display: none;
@@ -540,6 +541,9 @@ $settings-menu-active:      $white;
 		th, td {
 			padding-top: 20px;
 			input[type=text] {
+				box-shadow: none;
+				padding-left: 10px;
+				font-size: 14px;
 				width: 350px;
 				// Tablet style
 				@media all and (max-width: $screen-sm-min) {
@@ -553,7 +557,7 @@ $settings-menu-active:      $white;
 		}
 		
 		th {
-			width: 25%;
+			width: 37%;
 			color: $gray-600;
 			font-weight: bold;
 			font-size: 15px;
@@ -578,6 +582,9 @@ $settings-menu-active:      $white;
 					line-height: 1.1;
 					&:before {
 						content: "- ";
+					}
+					strong {
+						font-weight: normal;
 					}
 				}
 			}
@@ -622,7 +629,7 @@ $settings-menu-active:      $white;
 			@include flex-wrap(nowrap);
 			
 			.tool-runner {
-				//margin-left: 10px;
+				//margin-left: 5px;
 				text-transform: uppercase;
 				font-size: 12px;
 				width: 110px;
@@ -632,8 +639,10 @@ $settings-menu-active:      $white;
 			.atum-select2-container {
 				height: 30px;
 				padding-bottom: 8px;
+				margin-right: 5px;
 				@media all and (max-width: $screen-sm-min) {
 					width: 80%;
+					margin-right: 10px;
 					.select2-container {
 						width: 100% !important;
 					}
@@ -740,7 +749,10 @@ $settings-menu-active:      $white;
 						font-size: 12px;
 					}
 					.tool-fields-to {
-						margin-right: 14px;
+						margin-right: 10px;
+						.select2-selection__rendered {
+							padding-left: 4px;
+						}
 					}
 				}
 				
@@ -779,6 +791,10 @@ $settings-menu-active:      $white;
 				.select2-selection__rendered {
 					line-height: 30px;
 					color: $gray-600;
+					padding-left: 16px;
+					.select2-selection__placeholder {
+						color: $gray-600;
+					}
 				}
 				.select2-selection__arrow {
 					b {
@@ -800,6 +816,7 @@ $settings-menu-active:      $white;
 	.submit {
 		padding-top: 0;
 		text-align: right;
+		margin-top: 35px;
 	}
 	
 	input[type=submit] {
@@ -856,21 +873,36 @@ $settings-menu-active:      $white;
 		.section-fields {
 			.script-runner {
 				flex-wrap: nowrap;
+				.tool-fields-wrapper {
+					.repeatable-row {
+						.tool-fields-to {
+							margin-right: 14px;
+						}
+					}
+				}
 			}
 			.tool-runner {
-				margin-left: 10px;
+				//margin-left: 10px;
 			}
 		}
 		.form-table {
 			th {
 				display: table-cell;
 				vertical-align: top;
+				width: 30%;
+				padding-right: 60px;
 			}
 		}
 	}
 	
 	// Mobile style
 	@media all and (max-width: $screen-xs-min) {
+		.btn-group {
+			label {
+				line-height: 1.8;
+				font-size: 12px;
+			}
+		}
 		.section-general-title {
 			p {
 				display: none;

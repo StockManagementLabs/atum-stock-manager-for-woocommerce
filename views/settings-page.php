@@ -136,7 +136,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										<h2><?php echo esc_attr( $header_settings_title ) ?></h2>
 										<?php
 
-										submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
+										submit_button( __('Save Changes', ATUM_TEXT_DOMAIN) );
 
 										?>
 									</div>
@@ -163,7 +163,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 									<?php
 									if ( $last_section ) :
-										submit_button( __('Save Settings', ATUM_TEXT_DOMAIN) );
+										submit_button( __('Save Changes', ATUM_TEXT_DOMAIN) );
 									endif;
 									?>
 
