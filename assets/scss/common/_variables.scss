@@ -77,13 +77,17 @@ $blue:                                  #00B8DB !default;
 $blue-dark:                             #27283B !default;
 $blue-dark-lighten:                     #3b3d5a;
 $blue-light:                            lighten($blue, 50%) !default;
+$blue-light-2:                          lighten($blue, 55%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
 $orange:                                #EFAF00 !default;
 $orange-light:                          lighten($orange, 40%) !default;
+$orange-light-2:                        lighten($orange, 45%) !default;
 $red:                                   #FF4848 !default;
 $red-light:                             lighten($red, 30%) !default;
 $green:                                 #69C61D !default;
 $green-light:                           lighten($green, 40%) !default;
+$purple:                                #BA7DF7 !default;
+$purple-light:                          lighten($purple, 20%) !default;
 
 $colors: () !default;
 $colors: map-merge((

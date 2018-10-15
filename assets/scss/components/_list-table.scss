@@ -3,6 +3,7 @@
 //------------------
 
 .wrap {
+	
 	h1.wp-heading-inline {
 		line-height: 1.5;
 		position: relative;
@@ -35,6 +36,7 @@
 			}
 		}
 	}
+	
 }
 
 .atum-list-wrapper {
@@ -199,9 +201,14 @@
 		
 	}
 	
-	// Float Head
+	// Float Thead
 	.floatThead-container {
 		height: 0;
+		
+		// Avoid issues when toggling columns while the header is floating
+		.group-toggler {
+			display: none;
+		}
 	}
 	
 	@media screen and (max-width: 782px) {
@@ -246,7 +253,7 @@
 	
 }
 
-// Enhanced Select fix
+// WC's Enhanced Select fix
 .select2-dropdown {
 	.select2-results__option {
 		&:focus {
@@ -316,7 +323,7 @@
 	
 }
 
-.atum-list-table, .floatThead-container{
+.atum-list-table, .floatThead-container {
 	margin-bottom: 15px;
 	
 	thead .item-heads, tfoot {
@@ -345,6 +352,11 @@
 					top: 0;
 				}
 			}
+			
+			svg {
+				max-height: 14px;
+			}
+			
 		}
 	}
 	
@@ -361,6 +373,32 @@
 			&:not(:last-child) {
 				border-right: 1px solid $gray-400;
 			}
+			
+			.group-toggler {
+				float: right;
+				font-size: 16px;
+				cursor: pointer;
+				font-family: 'Linearicons';
+				
+				&:before {
+					content: "\e889";
+				}
+				
+				&:hover {
+					color: $wp-link-hover;
+				}
+				
+			}
+			
+			&.collapsed {
+				min-width: 0;
+				width: 37px;
+				
+				.group-toggler {
+					@include transform(rotate(180deg));
+				}
+			}
+			
 		}
 	}
 	
@@ -423,30 +461,34 @@
 				background-color: $warning;
 			}
 			
-			td, a {
-				color: $white;
-			}
-			
-			.column-calc_type {
+			&.variable, &.variable-subscription, &.group {
 				
-				.has-child {
+				td, a {
+					color: $white;
+				}
+				
+				.column-calc_type {
 					
-					&.product-type {
-						&:before {
-							content: "\e004";
-							color: $white;
-						}
-					}
-					
-					&.product-type-icon {
-						svg {
-							.st1 {
-								fill: $white;
+					.has-child {
+						
+						&.product-type {
+							&:before {
+								content: "\e004";
+								color: $white;
 							}
 						}
+						
+						&.product-type-icon {
+							svg {
+								.st1 {
+									fill: $white;
+								}
+							}
+						}
+						
 					}
-					
 				}
+				
 			}
 		}
 		
@@ -459,18 +501,30 @@
 		}
 		
 		&.variation {
-			background-color: lighten($primary, 46%);
+			background-color: $blue-light;
 			
 			&:nth-child(even) {
-				background-color: lighten($primary, 50%);
+				background-color: $blue-light-2;
+			}
+			
+			td.title {
+				.child-arrow {
+					color: $blue;
+				}
 			}
 		}
 		
 		&.grouped {
-			background-color: lighten($warning, 32%);
+			background-color: $orange-light;
 			
 			&:nth-child(even) {
-				background-color: lighten($warning, 40%);
+				background-color: $orange-light-2;
+			}
+			
+			td.title {
+				.child-arrow {
+					color: $orange;
+				}
 			}
 		}
 		
@@ -590,6 +644,15 @@
 			> span {
 				white-space: nowrap;
 			}
+			
+			.child-arrow {
+				display: inline-block;
+				margin-right: 2px;
+				margin-left: 5px;
+				font-weight: bold;
+				font-size: 14px;
+				@include transform(rotate(90deg));
+			}
 		}
 		
 		&.column-sku {
@@ -605,6 +668,21 @@
 			cursor: pointer;
 		}
 		
+		&.ghost-column {
+			width: 37px;
+			padding: 0 !important;
+			min-width: 0 !important;
+			height: auto !important;
+			border-left: 1px solid $gray-200;
+			border-right: 1px solid $gray-200;
+		}
+		
+	}
+	
+	td {
+		&.column-title {
+			font-weight: 500;
+		}
 	}
 	
 	.column-thumb {

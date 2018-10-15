@@ -1,17 +1,18 @@
 <?php
 /**
+ * Stock Central page
+ *
  * @package         Atum
  * @subpackage      StockCentral
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           0.0.1
- *
  */
 
 namespace Atum\StockCentral;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Components\AtumHelpPointers;
@@ -24,6 +25,7 @@ class StockCentral extends AtumListPage {
 	
 	/**
 	 * The singleton instance holder
+	 *
 	 * @var StockCentral
 	 */
 	private static $instance;
@@ -45,23 +47,23 @@ class StockCentral extends AtumListPage {
 	 */
 	private function __construct() {
 
-		// Add the module menu
-		add_filter( 'atum/admin/menu_items', array($this, 'add_menu'), self::MENU_ORDER );
+		// Add the module menu.
+		add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
 
 		if ( is_admin() ) {
 
 			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'stock_central_products_per_page', TRUE );
 			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 
-			// Initialize on admin page load
+			// Initialize on admin page load.
 			add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 			add_action( 'load-toplevel_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
-			// Add the Stock Central settings
+			// Add the Stock Central settings.
 			add_filter( 'atum/settings/tabs', array( $this, 'add_settings_tab' ) );
 			add_filter( 'atum/settings/defaults', array( $this, 'add_settings_defaults' ) );
 
-			// Register the help pointers
+			// Register the help pointers.
 			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
 
 			parent::init_hooks();
@@ -79,13 +81,13 @@ class StockCentral extends AtumListPage {
 	 *
 	 * @return array
 	 */
-	public function add_menu ($menus) {
+	public function add_menu( $menus ) {
 
 		$menus['stock-central'] = array(
 			'title'      => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
 			'callback'   => array( $this, 'display' ),
 			'slug'       => self::UI_SLUG,
-			'menu_order' => self::MENU_ORDER
+			'menu_order' => self::MENU_ORDER,
 		);
 
 		return $menus;
@@ -101,9 +103,9 @@ class StockCentral extends AtumListPage {
 		
 		parent::display();
 
-		$sc_url = add_query_arg( 'page', self::UI_SLUG, admin_url('admin.php') );
+		$sc_url = add_query_arg( 'page', self::UI_SLUG, admin_url( 'admin.php' ) );
 
-		if (!$this->is_uncontrolled_list) {
+		if ( ! $this->is_uncontrolled_list ) {
 			$sc_url = add_query_arg( 'uncontrolled', 1, $sc_url );
 		}
 
@@ -111,7 +113,7 @@ class StockCentral extends AtumListPage {
 			'list'                 => $this->list,
 			'ajax'                 => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 			'is_uncontrolled_list' => $this->is_uncontrolled_list,
-			'sc_url'               => $sc_url
+			'sc_url'               => $sc_url,
 		) );
 		
 	}
@@ -124,11 +126,11 @@ class StockCentral extends AtumListPage {
 	 */
 	public function screen_options() {
 
-		// Add "Products per page" to screen options tab
+		// Add "Products per page" to screen options tab.
 		add_screen_option( 'per_page', array(
 			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
-			'option'  => ATUM_PREFIX . 'stock_central_products_per_page'
+			'option'  => ATUM_PREFIX . 'stock_central_products_per_page',
 		) );
 		
 		$help_tabs = array(
@@ -167,24 +169,28 @@ class StockCentral extends AtumListPage {
 		
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/help-sidebar' ) );
 
-		if ( isset($_GET['uncontrolled']) && $_GET['uncontrolled'] == 1 ) {
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		if ( isset( $_GET['uncontrolled'] ) && 1 == $_GET['uncontrolled'] ) { // WPCS: CSRF ok.
 			$this->is_uncontrolled_list = TRUE;
 		}
 
 		$namespace  = __NAMESPACE__ . '\Lists';
 		$list_class = $this->is_uncontrolled_list ? "$namespace\UncontrolledListTable" : "$namespace\ListTable";
-		$this->list = new $list_class( ['per_page' => $this->per_page, 'show_cb' => TRUE, 'show_controlled' => !$this->is_uncontrolled_list] );
+		$this->list = new $list_class( [
+			'per_page'        => $this->per_page,
+			'show_cb'         => TRUE,
+			'show_controlled' => ! $this->is_uncontrolled_list,
+		] );
 		
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Display the help tabs' content
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param \WP_Screen $screen    The current screen
-	 * @param array      $tab       The current help tab
+	 * @param \WP_Screen $screen    The current screen.
+	 * @param array      $tab       The current help tab.
 	 */
 	public function help_tabs_content( $screen, $tab ) {
 		
@@ -200,14 +206,14 @@ class StockCentral extends AtumListPage {
 	 *
 	 * @return array
 	 */
-	public function add_settings_tab ($tabs) {
+	public function add_settings_tab( $tabs ) {
 
 		$tabs['stock_central'] = array(
 			'tab_name' => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
 			'icon'     => 'lnr lnr-layers',
 			'sections' => array(
-				'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN )
-			)
+				'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN ),
+			),
 		);
 
 		return $tabs;
@@ -222,7 +228,7 @@ class StockCentral extends AtumListPage {
 	 *
 	 * @return array
 	 */
-	public function add_settings_defaults ($defaults) {
+	public function add_settings_defaults( $defaults ) {
 
 		$defaults['posts_per_page'] = array(
 			'section' => 'stock_central',
@@ -230,10 +236,10 @@ class StockCentral extends AtumListPage {
 			'desc'    => __( "Controls the number of products displayed per page within the Stock Central screen. Please note, you can set this value within the 'Screen Options' tab as well. Enter '-1' to remove the pagination and display all available products on one page (not recommended if your store contains a large number of products as it may affect the performance).", ATUM_TEXT_DOMAIN ),
 			'type'    => 'number',
 			'default' => Settings::DEFAULT_POSTS_PER_PAGE,
-			'options'    => array(
+			'options' => array(
 				'min' => 1,
-				'max' => 500
-			)
+				'max' => 500,
+			),
 		);
 
 		$defaults['sale_days'] = array(
@@ -242,10 +248,10 @@ class StockCentral extends AtumListPage {
 			'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Low Stock' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'number',
 			'default' => Settings::DEFAULT_SALE_DAYS,
-			'options'    => array(
+			'options' => array(
 				'min' => 1,
-				'max' => 365
-			)
+				'max' => 365,
+			),
 		);
 
 		$defaults['expandable_rows'] = array(
@@ -253,8 +259,34 @@ class StockCentral extends AtumListPage {
 			'name'    => __( 'Expandable Rows', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Show variable and grouped products expanded (ON) or collapsed (OFF) by default.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
-			'default' => 'no'
+			'default' => 'no',
 		);
+
+		// WC Subscriptions compatibility.
+		if ( class_exists( '\WC_Subscriptions' ) ) {
+
+			$defaults['show_subscriptions'] = array(
+				'section' => 'stock_central',
+				'name'    => __( 'Show WC Subscriptions', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, ATUM will show the WC Subscriptions in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes',
+			);
+
+		}
+
+		// WC Bookings compatibility.
+		if ( class_exists( '\WC_Bookings' ) ) {
+
+			$defaults['show_bookable_products'] = array(
+				'section' => 'stock_central',
+				'name'    => __( 'Show Bookable Productss', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, ATUM will show the Bookable products from WC Bookings add-on in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes',
+			);
+
+		}
 
 		return $defaults;
 
@@ -271,54 +303,57 @@ class StockCentral extends AtumListPage {
 
 		$pointers = array(
 			array(
-				'id'       => self::UI_SLUG . '-screen-tab',        // Unique id for this pointer
-				'screen'   => $screen_id,                           // This is the page hook we want our pointer to show on
-				'target'   => '#screen-options-link-wrap',          // The css selector for the pointer to be tied to, best to use ID's
-				'next'     => '#contextual-help-link-wrap',         // The help tip that will be displayed next
-				'title'    => __('ATUM Stock Central Screen Options', ATUM_TEXT_DOMAIN),
-				'content'  => __("Click the 'Screen Options' tab to add/hide/show columns within the Stock Central view.", ATUM_TEXT_DOMAIN),
-				'position' => array(
-					'edge'  => 'top',                               // Top, bottom, left, right
-					'align' => 'left'                               // Top, bottom, left, right, middle
+				'id'             => self::UI_SLUG . '-screen-tab',  // Unique id for this pointer.
+				'screen'         => $screen_id,                     // This is the page hook we want our pointer to show on.
+				'target'         => '#screen-options-link-wrap',    // The css selector for the pointer to be tied to, best to use ID's.
+				'next'           => '#contextual-help-link-wrap',   // The help tip that will be displayed next.
+				'title'          => __( 'ATUM Stock Central Screen Options', ATUM_TEXT_DOMAIN ),
+				'content'        => __( "Click the 'Screen Options' tab to add/hide/show columns within the Stock Central view.", ATUM_TEXT_DOMAIN ),
+				'position'       => array(
+					'edge'  => 'top',                               // Top, bottom, left, right.
+					'align' => 'left',                              // Top, bottom, left, right, middle.
 				),
 				'arrow_position' => array(
-					'right' => '32px'
-				)
+					'right' => '32px',
+				),
 			),
 			array(
-				'id'       => self::UI_SLUG . '-help-tab',
-				'screen'   => $screen_id,
-				'target'   => '#contextual-help-link-wrap',
-				'title'    => __('ATUM Quick Help', ATUM_TEXT_DOMAIN),
-				'content'  => __("Click the 'Help' tab to learn more about the ATUM's Stock Central.", ATUM_TEXT_DOMAIN),
-				'position' => array(
+				'id'             => self::UI_SLUG . '-help-tab',
+				'screen'         => $screen_id,
+				'target'         => '#contextual-help-link-wrap',
+				'title'          => __( 'ATUM Quick Help', ATUM_TEXT_DOMAIN ),
+				'content'        => __( "Click the 'Help' tab to learn more about the ATUM's Stock Central.", ATUM_TEXT_DOMAIN ),
+				'position'       => array(
 					'edge'  => 'top',
-					'align' => 'right'
+					'align' => 'right',
 				),
 				'arrow_position' => array(
-					'left' => '84%'
-				)
+					'left' => '84%',
+				),
 			),
 		);
 
-		// Instantiate the class and pass our pointers array to the constructor
+		// Instantiate the class and pass our pointers array to the constructor.
 		new AtumHelpPointers( $pointers );
 
 	}
 
 	
-	/****************************
+	/********************
 	 * Instance methods
-	 ****************************/
+	 ********************/
+
+	/**
+	 * Cannot be cloned
+	 */
 	public function __clone() {
-		
-		// cannot be cloned
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
-	
+
+	/**
+	 * Cannot be serialized
+	 */
 	public function __sleep() {
-		
-		// cannot be serialized
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	

@@ -15,6 +15,7 @@ return array(
     'Atum\\Components\\AtumListTables\\AtumListPage' => $baseDir . '/classes/Components/AtumListTables/AtumListPage.php',
     'Atum\\Components\\AtumListTables\\AtumListTable' => $baseDir . '/classes/Components/AtumListTables/AtumListTable.php',
     'Atum\\Components\\AtumListTables\\AtumUncontrolledListTable' => $baseDir . '/classes/Components/AtumListTables/AtumUncontrolledListTable.php',
+    'Atum\\Components\\AtumLogs\\AtumLogs' => $baseDir . '/classes/Components/AtumLogs/AtumLogs.php',
     'Atum\\Components\\AtumOrders\\AtumComments' => $baseDir . '/classes/Components/AtumOrders/AtumComments.php',
     'Atum\\Components\\AtumOrders\\AtumOrderPostType' => $baseDir . '/classes/Components/AtumOrders/AtumOrderPostType.php',
     'Atum\\Components\\AtumOrders\\Items\\AtumOrderItemFee' => $baseDir . '/classes/Components/AtumOrders/Items/AtumOrderItemFee.php',

@@ -166,9 +166,9 @@ class Addons {
 		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2' ), ATUM_VERSION );
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
-		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION );
+		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 		Helpers::maybe_es6_promise();
-		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION );
+		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
@@ -250,7 +250,7 @@ class Addons {
 	 */
 	private function get_addons_list() {
 		
-		$transient_name = Helpers::get_transient_identifier( 'addons_list', '' );
+		$transient_name = Helpers::get_transient_identifier( [], 'addons_list' );
 		$addons         = Helpers::get_transient( $transient_name );
 		
 		if ( ! $addons ) {
@@ -311,7 +311,7 @@ class Addons {
 
 		$message = sprintf(
 			/* translators: opening and closing HTML link to the add-ons page  */
-			__( 'Please, activate %1$ssyour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+			__( 'Please, activate %1$syour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
 			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
 			'</a>'
 		);
@@ -423,7 +423,7 @@ class Addons {
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug ) {
 
-		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
+		$transient_name = Helpers::get_transient_identifier( [ $addon_name ], 'addon_status' );
 		$addon_status   = Helpers::get_transient( $transient_name, TRUE );
 
 		if ( empty( $addon_status ) ) {
@@ -509,10 +509,11 @@ class Addons {
 	 * @param string $addon_name
 	 */
 	public static function delete_status_transient( $addon_name ) {
-		$transient_name = Helpers::get_transient_identifier( $addon_name, 'addon_status' );
+		$transient_name = Helpers::get_transient_identifier( [ $addon_name ], 'addon_status' );
 		Helpers::delete_transients( $transient_name );
 	}
 
+	/* @noinspection PhpDocRedundantThrowsInspection */
 	/**
 	 * Download an ATUM addon and install it
 	 *
@@ -763,7 +764,7 @@ class Addons {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
@@ -771,7 +772,7 @@ class Addons {
 	 */
 	public function __sleep() {
 
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

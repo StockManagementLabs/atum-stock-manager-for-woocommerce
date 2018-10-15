@@ -9,13 +9,13 @@
  * @var int                                                $item_id
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 do_action( 'atum/atum_order/before_item_fee_html', $item, $atum_order );
 $currency = $atum_order->get_currency();
 
 ?>
-<tr class="fee <?php echo ( ! empty( $class ) ) ? $class : ''; ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
+<tr class="fee <?php echo esc_attr( ! empty( $class ) ? $class : '' ); ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
 	<td class="thumb"><div></div></td>
 
 	<td class="name">
@@ -38,20 +38,22 @@ $currency = $atum_order->get_currency();
 
 	<td class="line_cost" width="1%">
 		<div class="view">
-			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); ?>
+			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
 		</div>
 
 		<div class="edit" style="display: none;">
-			<input type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" />
+			<input type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_total() ) ); ?>" class="line_total wc_input_price" />
 		</div>
 	</td>
 
 	<?php
-	if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ):
+	if ( ( $tax_data = $item->get_taxes() ) && wc_tax_enabled() ) :
 
-		foreach ( $atum_order->get_taxes() as $tax_item ):
+		foreach ( $atum_order->get_taxes() as $tax_item ) :
 
 			/**
+			 * Variable definition
+			 *
 			 * @var WC_Order_Item_Tax $tax_item
 			 */
 			$tax_item_id    = $tax_item->get_rate_id();
@@ -59,11 +61,11 @@ $currency = $atum_order->get_currency();
 			?>
 			<td class="line_tax" width="1%">
 				<div class="view">
-					<?php echo ( '' !== $tax_item_total ) ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;'; ?>
+					<?php echo ( '' !== $tax_item_total ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;' ); // WPCS: XSS ok. ?>
 				</div>
 
 				<div class="edit" style="display: none;">
-					<input type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo ( isset( $tax_item_total ) ) ? esc_attr( wc_format_localized_price( $tax_item_total ) ) : ''; ?>" class="line_tax wc_input_price" />
+					<input type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo ( isset( $tax_item_total ) ) ? esc_attr( wc_format_localized_price( $tax_item_total ) ) : ''; ?>" class="line_tax wc_input_price" />
 				</div>
 			</td>
 

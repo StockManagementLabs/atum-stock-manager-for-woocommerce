@@ -1,18 +1,18 @@
 <?php
 /**
+ * Helper functions
+ *
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
  * @copyright      ©2018 Stock Management Labs™
  *
  * @since          0.0.1
- *
- * Helper functions
  */
 
 namespace Atum\Inc;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
@@ -33,22 +33,26 @@ final class Helpers {
 	 *
 	 * @since 1.4.8
 	 *
-	 * @param array $slug_terms
-     * @param string taxonomy default 'product_type'
+	 * @param array  $slug_terms
+	 * @param string $taxonomy
+	 *
 	 * @return array term_ids
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
-		global $wpdb;
-		$query = $wpdb->prepare( "SELECT $wpdb->terms.term_id FROM $wpdb->terms 
-                INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-                WHERE $wpdb->term_taxonomy.taxonomy = %s
-                AND $wpdb->terms.slug IN ('" . implode( "','", $slug_terms ) . "')", $taxonomy );
 
-		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A );
+		global $wpdb;
+
+		$query = $wpdb->prepare( "
+			SELECT $wpdb->terms.term_id FROM $wpdb->terms 
+            INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
+            WHERE $wpdb->term_taxonomy.taxonomy = %s
+            AND $wpdb->terms.slug IN ('" . implode( "','", array_map( 'esc_attr', $slug_terms ) ) . "')
+        ", $taxonomy ); // WPCS: unprepared SQL ok.
+
+		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
 		$result           = array();
 
-		// Flat array
-		/** @noinspection PhpUnusedParameterInspection */
+		// Flat array.
 		array_walk_recursive( $search_terms_ids, function ( $v, $k ) use ( &$result ) {
 			$result[] = absint( $v );
 		} );
@@ -64,13 +68,13 @@ final class Helpers {
 	 * @param array  $help_tabs
 	 * @param Object $obj
 	 */
-	public static function add_help_tab($help_tabs, $obj) {
+	public static function add_help_tab( $help_tabs, $obj ) {
 
 		$screen = get_current_screen();
 
 		foreach ( $help_tabs as $help_tab ) {
 			$screen->add_help_tab( array_merge( array(
-				'id'       => ATUM_PREFIX . get_class($obj) . '_help_tabs_' . $help_tab['name'],
+				'id'       => ATUM_PREFIX . get_class( $obj ) . '_help_tabs_' . $help_tab['name'],
 				'callback' => array( $obj, 'help_tabs_content' ),
 			), $help_tab ) );
 		}
@@ -84,16 +88,18 @@ final class Helpers {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param array  $array   The array to convert
-	 * @param string $prefix  Optional. Prefix for the data key names
+	 * @param array  $array   The array to convert.
+	 * @param string $prefix  Optional. Prefix for the data key names.
 	 *
 	 * @return string
 	 */
-	public static function array_to_data($array, $prefix = '') {
+	public static function array_to_data( $array, $prefix = '' ) {
 
-		$data_array = array_map( function($key, $value) use ($prefix){ return "data-{$prefix}{$key}='$value'"; }, array_keys($array), $array );
+		$data_array = array_map( function( $key, $value ) use ( $prefix ) {
+			return "data-{$prefix}{$key}='$value'";
+		}, array_keys( $array ), $array );
 
-		return implode(' ', $data_array);
+		return implode( ' ', $data_array );
 	}
 
 	/**
@@ -103,12 +109,12 @@ final class Helpers {
 	 *
 	 * @param string $side
 	 */
-	public static function atum_field_input_addon($side = 'prepend') {
+	public static function atum_field_input_addon( $side = 'prepend' ) {
 
 		?>
-		<span class="input-group-<?php echo $side ?>" title="<?php _e('ATUM field', ATUM_TEXT_DOMAIN) ?>">
+		<span class="input-group-<?php echo esc_attr( $side ) ?>" title="<?php esc_attr_e( 'ATUM field', ATUM_TEXT_DOMAIN ) ?>">
 			<span class="input-group-text">
-				<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" alt="">
+				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" alt="">
 			</span>
 		</span>
 		<?php
@@ -120,16 +126,16 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $id        The select ID
-	 * @param string $value     The selected option
+	 * @param string $id        The select ID.
+	 * @param string $value     The selected option.
 	 */
-	public static function atum_order_status_dropdown($id, $value) {
+	public static function atum_order_status_dropdown( $id, $value ) {
 
 		?>
-		<select id="<?php echo $id ?>" name="<?php echo $id ?>" class="wc-enhanced-select">
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select">
 			<?php
 			$statuses = AtumOrderPostType::get_statuses();
-			foreach ( $statuses as $status => $status_name ): ?>
+			foreach ( $statuses as $status => $status_name ) : ?>
 				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -142,8 +148,8 @@ final class Helpers {
 	 *
 	 * @since 0.1.3
 	 *
-	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true)
-	 * @param bool       $is_timestamp Whether the first param is a Unix timesptamp
+	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true).
+	 * @param bool       $is_timestamp Whether the first param is a Unix timesptamp.
 	 *
 	 * @return string                   The formatted date
 	 */
@@ -161,8 +167,8 @@ final class Helpers {
 	 *
 	 * @since 0.0.3
 	 *
-	 * @param string $string   The string to decode
-	 * @param bool   $as_array If return an associative array or an object
+	 * @param string $string   The string to decode.
+	 * @param bool   $as_array If return an associative array or an object.
 	 *
 	 * @return array|object|bool
 	 */
@@ -176,9 +182,9 @@ final class Helpers {
 	 *
 	 * @since  0.0.1
 	 *
-	 * @param mixed  $att          The data attribute name (for as single data att) or an associative array for multiple atts
-	 * @param string $value        The data attribute value. Optional for multiple atts (will be get from the $att array)
-	 * @param string $quote_symbol Sometimes the quote symbol must be a single quote to allow json encoded values
+	 * @param mixed  $att          The data attribute name (for as single data att) or an associative array for multiple atts.
+	 * @param string $value        The data attribute value. Optional for multiple atts (will be get from the $att array).
+	 * @param string $quote_symbol Sometimes the quote symbol must be a single quote to allow json encoded values.
 	 *
 	 * @return string
 	 */
@@ -188,7 +194,7 @@ final class Helpers {
 
 		if ( is_array( $att ) ) {
 			foreach ( $att as $name => $value ) {
-				// Recursive calls
+				// Recursive calls.
 				$data_att .= self::get_data_att( $name, $value, $quote_symbol );
 			}
 		}
@@ -205,9 +211,9 @@ final class Helpers {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param string     $att   The attribute name
-	 * @param string|int $value The attribute value
-	 * @param bool       $force Force the attribute output without checking if it's empty
+	 * @param string     $att   The attribute name.
+	 * @param string|int $value The attribute value.
+	 * @param bool       $force Force the attribute output without checking if it's empty.
 	 *
 	 * @return string
 	 */
@@ -233,18 +239,18 @@ final class Helpers {
 
 		$defaults = array(
 			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'],
+			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'posts_per_page' => - 1,
-			'fields'         => 'ids'
+			'fields'         => 'ids',
 		);
 
-		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge($defaults, $args) );
+		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
 
 		$product_ids_transient = self::get_transient_identifier( $args, 'all_products' );
 		$products              = self::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
-			$products = get_posts($args);
+			$products = get_posts( $args );
 			self::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
 		}
 
@@ -260,19 +266,19 @@ final class Helpers {
 	 * @param array|string $atts {
 	 *      Optional. Filters for the orders' query.
 	 *
-	 *      @type array|string  $type              Order post type(s)
-	 *      @type array|string  $status            Order status(es)
-	 *      @type array         $orders_in         Array of order's IDs we want to get
-	 *      @type int           $number            Max number of orders (-1 gets all)
-	 *      @type string        $meta_key          Key of the meta field to filter/order (depending of orderby value)
-	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending of orderby value)
-	 *      @type string        $meta_type         Meta key type. Default value is 'CHAR'
-	 *      @type string        $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query )
-	 *      @type string        $order             ASC/DESC, default to DESC
-	 *      @type string        $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date)
-	 *      @type int           $date_start        If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime)
-	 *      @type int           $date_end          Requires $date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now
-	 *      @type string        $fields            If empty will return all the order posts. For returning only IDs the value must be 'ids'
+	 *      @type array|string  $type              Order post type(s).
+	 *      @type array|string  $status            Order status(es).
+	 *      @type array         $orders_in         Array of order's IDs we want to get.
+	 *      @type int           $number            Max number of orders (-1 gets all).
+	 *      @type string        $meta_key          Key of the meta field to filter/order (depending of orderby value).
+	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending of orderby value).
+	 *      @type string        $meta_type         Meta key type. Default value is 'CHAR'.
+	 *      @type string        $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query ).
+	 *      @type string        $order             ASC/DESC, default to DESC.
+	 *      @type string        $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date).
+	 *      @type int           $date_start        If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime).
+	 *      @type int           $date_end          Requires $date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now.
+	 *      @type string        $fields            If empty will return all the order posts. For returning only IDs the value must be 'ids'.
 	 * }
 	 *
 	 * @return \WC_Order|array
@@ -292,7 +298,7 @@ final class Helpers {
 			'orderby'      => '',
 			'date_start'   => '',
 			'date_end'     => '',
-			'fields'       => ''
+			'fields'       => '',
 		) ) );
 
 		/**
@@ -312,19 +318,19 @@ final class Helpers {
 		 * @var string        $date_end
 		 * @var string        $fields
 		 */
-		extract($atts);
+		extract( $atts );
 		
-		// WP_Query arguments
+		// WP_Query arguments.
 		$args = array(
-			'offset' => 0
+			'offset' => 0,
 		);
 		
-		// Post Type
+		// Post Type.
 		$wc_order_types    = wc_get_order_types();
 		$order_types       = (array) $type;
 		$valid_order_types = array();
 		
-		// Validate order types
+		// Validate order types.
 		foreach ( $order_types as $ot ) {
 			if ( in_array( $ot, $wc_order_types ) ) {
 				$valid_order_types[] = $ot;
@@ -333,12 +339,12 @@ final class Helpers {
 		
 		$args['post_type'] = $valid_order_types;
 		
-		// Order Status
+		// Order Status.
 		$valid_order_statuses = array();
 		$wc_order_statuses    = array_keys( wc_get_order_statuses() );
 		$order_statuses       = (array) $status;
 		
-		// Validate post statuses
+		// Validate post statuses.
 		foreach ( $order_statuses as $os ) {
 			if ( in_array( $os, $wc_order_statuses ) ) {
 				$valid_order_statuses[] = $os;
@@ -347,7 +353,7 @@ final class Helpers {
 		
 		$args['post_status'] = ! empty( $valid_order_statuses ) ? $valid_order_statuses : $wc_order_statuses;
 		
-		// Selected posts
+		// Selected posts.
 		if ( $orders_in ) {
 			
 			if ( ! is_array( $orders_in ) ) {
@@ -357,13 +363,13 @@ final class Helpers {
 			$args['post__in'] = array_map( 'absint', $orders_in );
 		}
 		
-		$args['posts_per_page'] = intval($number);
+		$args['posts_per_page'] = intval( $number );
 		
-		// Filter/Order by meta key
+		// Filter/Order by meta key.
 		if ( $meta_key ) {
 			
 			$meta_query = array(
-				'key' => esc_attr( $meta_key )
+				'key' => esc_attr( $meta_key ),
 			);
 			
 			$meta_type = strtoupper( esc_attr( $meta_type ) );
@@ -396,18 +402,18 @@ final class Helpers {
 			$args['orderby'] = esc_attr( $orderby );
 		}
 
-		// Filter by date
+		// Filter by date.
 		if ( $date_start ) {
 
 			$args['date_query'][] = array(
 				'after'     => $date_start,
 				'before'    => $date_end ?: 'now',
-				'inclusive' => TRUE
+				'inclusive' => TRUE,
 			);
 			
 		}
 		
-		// Return only ID's
+		// Return only ID's.
 		if ( $fields ) {
 			$args['fields'] = $fields;
 		}
@@ -422,7 +428,7 @@ final class Helpers {
 			}
 			else {
 				foreach ( $query->posts as $post ) {
-					// We need the WooCommerce order, not the post
+					// We need the WooCommerce order, not the post.
 					$result[] = new \WC_Order( $post->ID );
 				}
 			}
@@ -438,9 +444,9 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param array  $items      Array of Product IDs we want to calculate sales from
-	 * @param int    $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime)
-	 * @param int    $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime)
+	 * @param array $items      Array of Product IDs we want to calculate sales from.
+	 * @param int   $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime).
+	 * @param int   $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime).
 	 *
 	 * @return array
 	 */
@@ -448,17 +454,17 @@ final class Helpers {
 
 		$items_sold = array();
 
-		if ( ! empty($items) ) {
+		if ( ! empty( $items ) ) {
 
 			global $wpdb;
 
-			// Prepare the SQL query to get the orders in the specified time window
-			$date_start = date_i18n( 'Y-m-d H:i:s', strtotime($date_start) );
-			$date_where = $wpdb->prepare("WHERE post_date >= %s", $date_start);
+			// Prepare the SQL query to get the orders in the specified time window.
+			$date_start = date_i18n( 'Y-m-d H:i:s', strtotime( $date_start ) );
+			$date_where = $wpdb->prepare( 'WHERE post_date >= %s', $date_start );
 
-			if ($date_end) {
-				$date_end   = date_i18n( 'Y-m-d H:i:s', strtotime( $date_end ) );
-				$date_where .= $wpdb->prepare( " AND post_date <= %s", $date_end );
+			if ( $date_end ) {
+				$date_end    = date_i18n( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_where .= $wpdb->prepare( ' AND post_date <= %s', $date_end );
 			}
 
 			$orders_query = "
@@ -488,7 +494,7 @@ final class Helpers {
 				HAVING (`QTY` IS NOT NULL);
 			";
 
-			$items_sold = $wpdb->get_results( $query, ARRAY_A );
+			$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
 
 		}
 
@@ -501,32 +507,32 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int $product_id   The product ID to calculate the lost sales
-	 * @param int $days         Optional. By default the calculation is made for 7 days average
+	 * @param int $product_id   The product ID to calculate the lost sales.
+	 * @param int $days         Optional. By default the calculation is made for 7 days average.
 	 *
 	 * @return bool|float       Returns the lost sales or FALSE if never had lost sales
 	 */
-	public static function get_product_lost_sales ($product_id, $days = 7) {
+	public static function get_product_lost_sales( $product_id, $days = 7 ) {
 
 		$lost_sales        = FALSE;
 		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
-		if ($out_of_stock_date && $days > 0) {
+		if ( $out_of_stock_date && $days > 0 ) {
 
-			$days_out_of_stock = self::get_product_out_of_stock_days($product_id);
+			$days_out_of_stock = self::get_product_out_of_stock_days( $product_id );
 
 			if ( is_numeric( $days_out_of_stock ) ) {
 
-				// Get the average sales for the past days when in stock
+				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
 				$sold_last_days = self::get_sold_last_days( [ $product_id ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
 				$lost_sales     = 0;
 
-				if ( ! empty($sold_last_days) ) {
+				if ( ! empty( $sold_last_days ) ) {
 
-					$sold_last_days = reset($sold_last_days);
+					$sold_last_days = reset( $sold_last_days );
 
-					if ( ! empty($sold_last_days['QTY']) && $sold_last_days['QTY'] > 0 ) {
+					if ( ! empty( $sold_last_days['QTY'] ) && $sold_last_days['QTY'] > 0 ) {
 
 						$average_sales = $sold_last_days['QTY'] / $days;
 						$product       = wc_get_product( $product_id );
@@ -550,16 +556,16 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int $product_id   The product ID
+	 * @param int $product_id   The product ID.
 	 *
-	 * @return bool|int         Returns the number of days or FALSE if is not "Out of Stock"
+	 * @return bool|int         Returns the number of days or FALSE if is not "Out of Stock".
 	 */
-	public static function get_product_out_of_stock_days ($product_id) {
+	public static function get_product_out_of_stock_days( $product_id ) {
 
 		$out_of_stock_days = FALSE;
 
-		// Check if the current product has the "Out of stock" date recorded
-		$out_of_stock_date = get_post_meta($product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
+		// Check if the current product has the "Out of stock" date recorded.
+		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
 
 		if ( $out_of_stock_date ) {
 			
@@ -570,7 +576,7 @@ final class Helpers {
 
 				$out_of_stock_days = $interval->days;
 
-			} catch( \Exception $e ) {
+			} catch ( \Exception $e ) {
 				error_log( __METHOD__ . ' || Product: ' . $product_id . ' || ' . $e->getMessage() );
 				return $out_of_stock_days;
 			}
@@ -588,54 +594,54 @@ final class Helpers {
 	 *
 	 * @since   0.0.2
 	 *
-	 * @param string  $name    The option key to retrieve
-	 * @param mixed   $default The default value returned if the option was not found
-	 * @param boolean $echo    If the option has to be returned or printed
+	 * @param string  $name    The option key to retrieve.
+	 * @param mixed   $default The default value returned if the option was not found.
+	 * @param boolean $echo    If the option has to be returned or printed.
 	 *
-	 * @return mixed|void
+	 * @return mixed
 	 */
 	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
 
-		// Save it as a global variable to not get the value each time
+		// Save it as a global variable to not get the value each time.
 		global $global_options;
 
-		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
+		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
 		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
 		$option         = isset( $global_options[ $name ] ) ? $global_options[ $name ] : $default;
 
 		if ( $echo ) {
-			echo apply_filters( "atum/print_option/$name", $option );
+			echo apply_filters( "atum/print_option/$name", $option ); // WPCS: XSS ok.
 
-			return;
+			return FALSE;
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		return apply_filters( "atum/get_option/$name", $option );
 
 	}
 
 	/**
-     * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
-     * @since   1.4.11
-     *
+	 * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
+	 *
+	 * @since 1.4.11
+	 *
 	 * @return int days between 1 and 31
 	 */
-	public static function get_sold_last_days_option(){
+	public static function get_sold_last_days_option() {
 
-	    if (isset( $_REQUEST['sold_last_days'] ) ) {
+		if ( isset( $_REQUEST['sold_last_days'] ) ) { // WPCS: CSRF ok.
 
-		    //sanitize
-		    $value = absint( esc_attr( $_REQUEST['sold_last_days'] ) );
+			// Sanitize.
+			$value = absint( esc_attr( $_REQUEST['sold_last_days'] ) ); // WPCS: CSRF ok.
 
 			if ( $value > 0 && $value < 31 ) {
-		        return $value;
-		    }else {
-				return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+				return $value;
 			}
-		}else{
-			return absint(Helpers::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS)) ;
+
 		}
-    }
+
+		return absint( self::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS ) );
+
+	}
 
 	/**
 	 * Helper function to return the entire plugin option value.
@@ -647,10 +653,10 @@ final class Helpers {
 	 */
 	public static function get_options() {
 
-		// Save it as a global variable to not get the value each time
+		// Save it as a global variable to not get the value each time.
 		global $global_options;
 
-		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
+		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
 		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
 
 		if ( ! $global_options ) {
@@ -667,11 +673,11 @@ final class Helpers {
 	 * @since 1.4.1
 	 *
 	 * @param array $post_types
-	 * @param bool  $get_stock_status   Whether to get also the WC stock_status of the unmanaged products
+	 * @param bool  $get_stock_status   Whether to get also the WC stock_status of the unmanaged products.
 	 *
 	 * @return array
 	 */
-	public static function get_unmanaged_products($post_types, $get_stock_status = FALSE) {
+	public static function get_unmanaged_products( $post_types, $get_stock_status = FALSE ) {
 		
 		global $wpdb;
 		
@@ -679,20 +685,20 @@ final class Helpers {
 			LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
 		" );
 		
-		$post_statuses = current_user_can( 'edit_private_products' ) ? ['private', 'publish'] : ['publish'];
+		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 		
-		// TODO: Change the query to remove the subquery and get the values with joins
-		$stock_sql = $get_stock_status ? ", (SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = posts.ID AND meta_key = '_stock_status' )" : '';
+		// TODO: Change the query to remove the subquery and get the values with joins.
+		$stock_sql = $get_stock_status ? ", (SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' )" : '';
 		
-		// Exclude the inheritable products from query (as are just containers in ATUM List Tables)
+		// Exclude the inheritable products from query (as are just containers in ATUM List Tables).
 		$excluded_types      = Globals::get_inheritable_product_types();
 		$excluded_type_terms = array();
 		
-		foreach ($excluded_types as $excluded_type) {
-			$excluded_type_terms[] = get_term_by('slug', $excluded_type, 'product_type');
+		foreach ( $excluded_types as $excluded_type ) {
+			$excluded_type_terms[] = get_term_by( 'slug', $excluded_type, 'product_type' );
 		}
 		
-		$excluded_type_terms = wp_list_pluck( array_filter($excluded_type_terms), 'term_taxonomy_id');
+		$excluded_type_terms = wp_list_pluck( array_filter( $excluded_type_terms ), 'term_taxonomy_id' );
 
 		$unmng_where = "
 			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
@@ -700,7 +706,7 @@ final class Helpers {
 		    AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
 			AND posts.ID NOT IN ( 
 				SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
-				WHERE term_taxonomy_id IN  (" . implode(',', $excluded_type_terms) . ") )
+				WHERE term_taxonomy_id IN  (" . implode( ',', $excluded_type_terms ) . ") )
 				AND (posts.post_parent IN (
 					SELECT ID FROM $wpdb->posts 
 					WHERE post_type = 'product' AND post_status IN ('private','publish') 
@@ -713,7 +719,7 @@ final class Helpers {
 		
 		$sql = "SELECT DISTINCT posts.ID{$stock_sql} FROM $wpdb->posts posts $unmng_join $unmng_where";
 		
-		return $wpdb->get_results( $sql, ARRAY_N );
+		return $wpdb->get_results( $sql, ARRAY_N ); // WPCS: unprepared SQL ok.
 		
 	}
 	
@@ -723,19 +729,19 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param float $price  The price number to format
-	 * @param array $args   The format configuration array
+	 * @param float $price  The price number to format.
+	 * @param array $args   The format configuration array.
 	 *
 	 * @return string
 	 */
-	public static function format_price ($price, $args = array()) {
+	public static function format_price( $price, $args = array() ) {
 
-		// Do not add zeros as decimals
-		if ( ! empty( $args['trim_zeros'] ) && $args['trim_zeros'] == TRUE ) {
+		// Do not add zeros as decimals.
+		if ( ! empty( $args['trim_zeros'] ) && TRUE === $args['trim_zeros'] ) {
 			add_filter( 'woocommerce_price_trim_zeros', '__return_true' );
 		}
 
-		return apply_filters('atum/format_price', strip_tags( wc_price( round($price, 2), $args ) ) );
+		return apply_filters( 'atum/format_price', wp_strip_all_tags( wc_price( round( $price, 2 ), $args ) ) );
 
 	}
 	
@@ -744,73 +750,77 @@ final class Helpers {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param string $transient_id  Transient identifier
-	 * @param mixed  $value         Value to store
-	 * @param int    $expiration    Optional. Time until expiration in seconds. By default is set to 0 (does not expire)
-	 * @param bool   $force         Optional. If set to TRUE, will set the transient in debug mode too
+	 * @param string $transient_id  Transient identifier.
+	 * @param mixed  $value         Value to store.
+	 * @param int    $expiration    Optional. Time until expiration in seconds. By default is set to 0 (does not expire).
+	 * @param bool   $force         Optional. If set to TRUE, will set the transient in debug mode too.
 	 *
 	 * @return bool  FALSE if value was not set and TRUE if value was set
-	 *
 	 */
 	public static function set_transient( $transient_id, $value, $expiration = 0, $force = FALSE ) {
 		
-		return ( $force || ATUM_DEBUG !== TRUE ) ? set_transient( $transient_id, $value, $expiration ) : FALSE;
+		return ( $force || TRUE !== ATUM_DEBUG ) ? set_transient( $transient_id, $value, $expiration ) : FALSE;
 	}
-	
+
 	/**
 	 * Get a transient adding ATUM stuff to unequivocal identify it
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param string $transient_id  Transient identifier
-	 * @param bool   $force         Optional. If set to TRUE, will get the transient in debug mode too
+	 * @param string $transient_id  Transient identifier.
+	 * @param bool   $force         Optional. If set to TRUE, will get the transient in debug mode too.
 	 *
 	 * @return mixed|bool  The ATUM transient value or FALSE if the transient does not exist or debug mode is on
 	 */
 	public static function get_transient( $transient_id, $force = FALSE ) {
-		
-		return ( $force || ATUM_DEBUG !== TRUE ) ? get_transient( $transient_id ) : FALSE;
+
+		return ( $force || TRUE !== ATUM_DEBUG ) ? get_transient( $transient_id ) : FALSE;
 	}
-	
+
 	/**
 	 * Get md5 hash of a array of args to create unique transient identifier
 	 *
 	 * @since 0.0.3
 	 *
-	 * @param string $prefix    Optional. The transient name prefix
-	 * @param mixed $args       Optional. The args to hash
+	 * @param array  $args      Optional. The args to hash.
+	 * @param string $prefix    Optional. The transient name prefix.
 	 *
 	 * @return string
 	 */
 	public static function get_transient_identifier( $args = array(), $prefix = '' ) {
 
-		$transient_id = ( empty($prefix) || strpos($prefix, ATUM_PREFIX) !== 0 ) ? ATUM_PREFIX . $prefix : $prefix;
+		$transient_id = ( empty( $prefix ) || 0 !== strpos( $prefix, ATUM_PREFIX ) ) ? ATUM_PREFIX . $prefix : $prefix;
 
-		if ( substr($transient_id, -1, 1) != '_' ) {
-			$transient_id .= '_';
-		}
+		if ( ! empty( $args ) ) {
 
-		if ( ! empty($args) ) {
-			$transient_id .= md5( serialize( $args ) );
+			if ( '_' !== substr( $transient_id, -1, 1 ) ) {
+				$transient_id .= '_';
+			}
+
+			$transient_id .= md5( maybe_serialize( $args ) );
+
 		}
 
 		return $transient_id;
 	}
-	
+
 	/**
 	 * Delete all the ATUM transients
 	 *
 	 * @since 0.1.5
 	 *
-	 * @param string $type  Optional. If specified will remove specific type of ATUM transients
+	 * @param string $type  Optional. If specified will remove specific type of ATUM transients.
 	 *
 	 * @return int|bool The number of transients deleted on success or false on error
 	 */
-	public static function delete_transients($type = '') {
+	public static function delete_transients( $type = '' ) {
 
 		global $wpdb;
+
+		$type         = esc_attr( $type );
 		$transient_id = $type ?: ATUM_PREFIX;
-		return $wpdb->query( "DELETE FROM {$wpdb->options} WHERE `option_name` LIKE '_transient_{$transient_id}%'" );
+
+		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '_transient_{$transient_id}%'" ); // WPCS: unprepared SQL ok.
 	}
 	
 	/**
@@ -818,19 +828,19 @@ final class Helpers {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param string $view                  View file that should be loaded
-	 * @param array  $args                  Optional. Variables that will be passed to the view
-	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
+	 * @param string $view                  View file that should be loaded.
+	 * @param array  $args                  Optional. Variables that will be passed to the view.
+	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme.
 	 *
 	 * @return void
 	 */
-	public static function load_view( $view, $args = [ ], $allow_theme_override = TRUE ) {
+	public static function load_view( $view, $args = [], $allow_theme_override = TRUE ) {
 		
 		$file = apply_filters( "atum/load_view/$view", $view );
 		$args = apply_filters( "atum/load_view_args/$view", $args );
 		
-		// whether or not .php was added
-		if ( substr( $file, - 4 ) != '.php' ) {
+		// Whether or not .php was added.
+		if ( '.php' !== substr( $file, - 4 ) ) {
 			$file .= '.php';
 		}
 
@@ -838,8 +848,8 @@ final class Helpers {
 			$file = self::locate_template( array( $view ), $file );
 		}
 
-		// Allow using full paths as view name
-		if ( is_file($file) ) {
+		// Allow using full paths as view name.
+		if ( is_file( $file ) ) {
 			$file_path = $file;
 		}
 		else {
@@ -857,12 +867,12 @@ final class Helpers {
 		}
 
 		if ( ATUM_DEBUG ) {
-			/** @noinspection PhpIncludeInspection */
+			/* @noinspection PhpIncludeInspection */
 			include $file_path;
 		}
 		else {
-			/** @noinspection PhpIncludeInspection */
-			@include $file_path;
+			/* @noinspection PhpIncludeInspection */
+			@include $file_path; // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 		}
 		
 	}
@@ -872,13 +882,13 @@ final class Helpers {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param string $view                  View file that should be loaded
-	 * @param array  $args                  Optional. Variables that will be passed to the view
-	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme
+	 * @param string $view                  View file that should be loaded.
+	 * @param array  $args                  Optional. Variables that will be passed to the view.
+	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme.
 	 *
 	 * @return string View template
 	 */
-	public static function load_view_to_string( $view, $args = [ ], $allow_theme_override = TRUE ) {
+	public static function load_view_to_string( $view, $args = [], $allow_theme_override = TRUE ) {
 		
 		ob_start();
 		self::load_view( $view, $args, $allow_theme_override );
@@ -891,8 +901,8 @@ final class Helpers {
 	 *
 	 * @since 1.3.3
 	 *
-	 * @param array   $possibilities
-	 * @param string  $default
+	 * @param array  $possibilities
+	 * @param string $default
 	 *
 	 * @return string
 	 */
@@ -900,18 +910,19 @@ final class Helpers {
 
 		$possibilities = apply_filters( 'atum/locate_template/possibilities', $possibilities );
 
-		// Check if the theme has an override for the template
+		// Check if the theme has an override for the template.
 		$theme_overrides = array();
 
 		foreach ( $possibilities as $p ) {
 			$theme_overrides[] = Globals::TEMPLATE_DIR . "/$p";
 		}
 
-		if ( $found = locate_template( $theme_overrides, FALSE ) ) {
+		$found = locate_template( $theme_overrides, FALSE );
+		if ( $found ) {
 			return $found;
 		}
 
-		// Check for it in the public directory
+		// Check for it in the public directory.
 		foreach ( $possibilities as $p ) {
 
 			if ( file_exists( ATUM_PATH . "views/$p" ) ) {
@@ -920,7 +931,7 @@ final class Helpers {
 
 		}
 
-		// Not template found
+		// Not template found.
 		return $default;
 	}
 
@@ -933,8 +944,8 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_atum_controlling_stock($product_id) {
-		return self::get_atum_control_status($product_id) === 'yes';
+	public static function is_atum_controlling_stock( $product_id ) {
+		return 'yes' === self::get_atum_control_status( $product_id );
 	}
 
 	/**
@@ -946,7 +957,7 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_inheritable_type($type) {
+	public static function is_inheritable_type( $type ) {
 		return in_array( $type, Globals::get_inheritable_product_types() );
 	}
 
@@ -959,7 +970,7 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_child_type($type) {
+	public static function is_child_type( $type ) {
 		return in_array( $type, Globals::get_child_product_types() );
 	}
 
@@ -972,7 +983,7 @@ final class Helpers {
 	 *
 	 * @return string|bool  yes if On of FALSE if Off
 	 */
-	public static function get_atum_control_status($product_id) {
+	public static function get_atum_control_status( $product_id ) {
 		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE );
 	}
 
@@ -983,7 +994,7 @@ final class Helpers {
 	 *
 	 * @param int $product_id
 	 */
-	public static function enable_atum_control($product_id) {
+	public static function enable_atum_control( $product_id ) {
 		update_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
 	}
 
@@ -994,7 +1005,7 @@ final class Helpers {
 	 *
 	 * @param int $product_id
 	 */
-	public static function enable_wc_manage_stock($product_id) {
+	public static function enable_wc_manage_stock( $product_id ) {
 		update_post_meta( $product_id, '_manage_stock', 'yes' );
 	}
 
@@ -1005,7 +1016,7 @@ final class Helpers {
 	 *
 	 * @param int $product_id
 	 */
-	public static function disable_atum_control($product_id) {
+	public static function disable_atum_control( $product_id ) {
 		delete_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY );
 	}
 
@@ -1016,7 +1027,7 @@ final class Helpers {
 	 *
 	 * @param int $product_id
 	 */
-	public static function disable_wc_manage_stock($product_id) {
+	public static function disable_wc_manage_stock( $product_id ) {
 		update_post_meta( $product_id, '_manage_stock', 'no' );
 	}
 	
@@ -1025,16 +1036,15 @@ final class Helpers {
 	 *
 	 * @since   0.0.2
 	 *
-	 * @param string $name  The option key tu update
-	 * @param mixed  $value The option value
-	 *
+	 * @param string $name  The option key tu update.
+	 * @param mixed  $value The option value.
 	 */
 	public static function update_option( $name, $value ) {
 		
-		// Save it as a global variable to not get the value each time
+		// Save it as a global variable to not get the value each time.
 		global $global_options;
 		
-		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites
+		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
 		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
 		
 		$old_value = isset( $global_options[ $name ] ) ? $global_options[ $name ] : FALSE;
@@ -1050,21 +1060,21 @@ final class Helpers {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $plugin        The plugin name/slug
-	 * @param string $by            Optional. It can be cheched by 'slug' or by 'name'
-	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data
+	 * @param string $plugin        The plugin name/slug.
+	 * @param string $by            Optional. It can be cheched by 'slug' or by 'name'.
+	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data.
 	 *
 	 * @return bool|array
 	 */
-	public static function is_plugin_installed ($plugin, $by = 'slug', $return_bool = TRUE) {
+	public static function is_plugin_installed( $plugin, $by = 'slug', $return_bool = TRUE ) {
 
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 
-			// Get the plugin slug from its path
-			$installed_plugin_key = $by == 'slug' ? explode( DIRECTORY_SEPARATOR, $plugin_file )[0] : $plugin_data['Title'];
+			// Get the plugin slug from its path.
+			$installed_plugin_key = 'slug' === $by ? explode( DIRECTORY_SEPARATOR, $plugin_file )[0] : $plugin_data['Title'];
 
-			if ($installed_plugin_key == $plugin) {
-				return ($return_bool) ? TRUE : array($plugin_file => $plugin_data);
+			if ( $installed_plugin_key === $plugin ) {
+				return $return_bool ? TRUE : array( $plugin_file => $plugin_data );
 			}
 		}
 
@@ -1077,19 +1087,19 @@ final class Helpers {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $type              The notice type: error, success, warning or info
-	 * @param string $message           The message within the notice
-	 * @param bool   $is_dismissible    Optional. Whether to make the notice dismissible
-	 * @param string $key               Optional. Only needed for dismissible notices. Is the key used to save the dismissal on db
+	 * @param string $type              The notice type: error, success, warning or info.
+	 * @param string $message           The message within the notice.
+	 * @param bool   $is_dismissible    Optional. Whether to make the notice dismissible.
+	 * @param string $key               Optional. Only needed for dismissible notices. Is the key used to save the dismissal on db.
 	 */
 	public static function display_notice( $type, $message, $is_dismissible = FALSE, $key = '' ) {
 
-		$notice_classes = array("notice-$type");
+		$notice_classes = array( "notice-$type" );
 
-		if ($is_dismissible) {
+		if ( $is_dismissible ) {
 
-			// Check if the notice was already dismissed
-			if ( $key && self::is_notice_dismissed($key) ) {
+			// Check if the notice was already dismissed.
+			if ( $key && self::is_notice_dismissed( $key ) ) {
 				return;
 			}
 
@@ -1097,10 +1107,10 @@ final class Helpers {
 		}
 
 		?>
-		<div class="notice <?php echo implode(' ', $notice_classes) ?> atum-notice" data-key="<?php echo $key ?>">
-			<p><?php echo $message ?></p>
+		<div class="notice <?php echo esc_attr( implode( ' ', $notice_classes ) ) ?> atum-notice" data-key="<?php echo esc_attr( $key ) ?>">
+			<p><?php echo $message; // WPCS: XSS ok. ?></p>
 
-			<?php if ($is_dismissible): ?>
+			<?php if ( $is_dismissible ) : ?>
 			<script type="text/javascript">
 
 				jQuery('.atum-notice').click('.notice-dismiss', function() {
@@ -1111,7 +1121,7 @@ final class Helpers {
 						url   : ajaxurl,
 						method: 'POST',
 						data  : {
-							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ) ?>',
+							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // WPCS: XSS ok. ?>',
 							action: 'atum_dismiss_notice',
 							key   : $notice.data('key')
 						}
@@ -1130,11 +1140,11 @@ final class Helpers {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param string $notice    The notice key
+	 * @param string $notice    The notice key.
 	 *
 	 * @return int|bool
 	 */
-	public static function dismiss_notice($notice) {
+	public static function dismiss_notice( $notice ) {
 
 		$current_user_id                   = get_current_user_id();
 		$user_dismissed_notices            = self::get_dismissed_notices( $current_user_id );
@@ -1150,15 +1160,15 @@ final class Helpers {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param int $user_id  The ID of the user to retrieve the dismissed notices from
+	 * @param int $user_id  The ID of the user to retrieve the dismissed notices from.
 	 *
 	 * @return array|bool
 	 */
-	public static function get_dismissed_notices($user_id = NULL) {
+	public static function get_dismissed_notices( $user_id = NULL ) {
 
-		$user_id = $user_id ? absint($user_id) : get_current_user_id();
+		$user_id = $user_id ? absint( $user_id ) : get_current_user_id();
 
-		return apply_filters( 'atum/dismissed_notices', get_user_meta($user_id, Globals::DISMISSED_NOTICES, TRUE) );
+		return apply_filters( 'atum/dismissed_notices', get_user_meta( $user_id, Globals::DISMISSED_NOTICES, TRUE ) );
 	}
 
 	/**
@@ -1170,12 +1180,12 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_notice_dismissed($key) {
+	public static function is_notice_dismissed( $key ) {
 
 		$current_user_id        = get_current_user_id();
 		$user_dismissed_notices = self::get_dismissed_notices( $current_user_id );
 
-		return isset( $user_dismissed_notices[ $key ] ) && $user_dismissed_notices[ $key ] == 'yes';
+		return isset( $user_dismissed_notices[ $key ] ) && 'yes' === $user_dismissed_notices[ $key ];
 	}
 	
 	/**
@@ -1187,9 +1197,8 @@ final class Helpers {
 	public static function maybe_es6_promise() {
 		
 		global $is_IE;
-		// ES6 Polyfill (only for IE<12). Required by SweetAlert2
+		// ES6 Polyfill (only for IE<12). Required by SweetAlert2.
 		if ( $is_IE ) {
-			
 			wp_register_script( 'es6-promise', 'https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js', [], ATUM_VERSION, TRUE );
 		}
 	}
@@ -1199,7 +1208,7 @@ final class Helpers {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param string|array $value value(s) to trim
+	 * @param string|array $value value(s) to trim.
 	 *
 	 * @return mixed
 	 */
@@ -1216,11 +1225,11 @@ final class Helpers {
 			foreach ( $value as $k => $v ) {
 
 				if ( is_object( $v ) ) {
-					$return[$k] = $v;
+					$return[ $k ] = $v;
 					continue;
 				}
 
-				$return[$k] = is_array( $v ) ? self::trim_input( $v ) : trim( $v );
+				$return[ $k ] = is_array( $v ) ? self::trim_input( $v ) : trim( $v );
 
 			}
 
@@ -1237,59 +1246,55 @@ final class Helpers {
 	 *
 	 * @since 1.2.5
 	 *
-	 * @param string $selected  The pre-selected option
-	 * @param string $class     The dropdown class name
+	 * @param string $selected  The pre-selected option.
+	 * @param string $class     The dropdown class name.
 	 *
 	 * @return string
 	 */
-	public static function product_types_dropdown($selected = '', $class = 'dropdown_product_type') {
+	public static function product_types_dropdown( $selected = '', $class = 'dropdown_product_type' ) {
 
 		$terms = get_terms( array(
 			'taxonomy'   => 'product_type',
-			'hide_empty' => FALSE
+			'hide_empty' => FALSE,
 		) );
 
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
 		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
-		$output .= '<option value=""' . selected($selected, '', FALSE) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
+		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {
 
-			if ( ! in_array($term->slug, $allowed_types) ) {
+			if ( ! in_array( $term->slug, $allowed_types ) ) {
 				continue;
 			}
 
 			$output .= '<option value="' . sanitize_title( $term->name ) . '"' . selected( $term->slug, $selected, FALSE ) . '>';
 
 			switch ( $term->name ) {
-				case 'grouped' :
+				case 'grouped':
 					$output .= __( 'Grouped product', ATUM_TEXT_DOMAIN );
 					break;
 
-				case 'variable' :
+				case 'variable':
 					$output .= __( 'Variable product', ATUM_TEXT_DOMAIN );
 					break;
 
-				case 'simple' :
+				case 'simple':
 					$output .= __( 'Simple product', ATUM_TEXT_DOMAIN );
 					break;
 
-				// Assuming that we'll have other types in future
-				default :
+				// Assuming that we'll have other types in future.
+				default:
 					$output .= ucfirst( $term->name );
 					break;
 			}
 
 			$output .= '</option>';
 
-			if ( 'simple' == $term->name ) {
-
-				$output .= '<option value="downloadable"' . selected( 'downloadable', $selected, FALSE ) . '> &rarr; '
-				           . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
-
-				$output .= '<option value="virtual"' . selected( 'virtual', $selected, FALSE ) . '> &rarr; '
-				           . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
+			if ( 'simple' === $term->name ) {
+				$output .= '<option value="downloadable"' . selected( 'downloadable', $selected, FALSE ) . '> &rarr; ' . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
+				$output .= '<option value="virtual"' . selected( 'virtual', $selected, FALSE ) . '> &rarr; ' . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
 			}
 		}
 
@@ -1304,56 +1309,57 @@ final class Helpers {
 	 *
 	 * @since 1.3.1
 	 *
-	 * @param string $selected  Optional. The pre-selected option
-	 * @param bool   $enhanced  Optional. Whether to show an enhanced select
-	 * @param string $class     Optional. The dropdown class name
+	 * @param string $selected  Optional. The pre-selected option.
+	 * @param bool   $enhanced  Optional. Whether to show an enhanced select.
+	 * @param string $class     Optional. The dropdown class name.
 	 *
 	 * @return string
 	 */
-	public static function suppliers_dropdown($selected = '', $enhanced = FALSE, $class = 'dropdown_supplier') {
+	public static function suppliers_dropdown( $selected = '', $enhanced = FALSE, $class = 'dropdown_supplier' ) {
 
-		if ( ! ModuleManager::is_module_active('purchase_orders') || ! AtumCapabilities::current_user_can('read_supplier') ) {
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return '';
 		}
 
 		ob_start();
 
-		if (!$enhanced):
+		if ( ! $enhanced ) :
 
 			$args = array(
-				'post_type' => Suppliers::POST_TYPE,
-				'posts_per_page' => -1
+				'post_type'      => Suppliers::POST_TYPE,
+				'posts_per_page' => - 1,
 
 			);
 
 			$suppliers = get_posts( $args );
 
-			if ( empty($suppliers) ) {
+			if ( empty( $suppliers ) ) :
 				ob_end_flush();
 				return '';
-			}
+			endif;
 			?>
 
-			<select name="supplier" class="<?php echo $class ?>" autocomplete="off" style="width: 165px">
-				<option value=""<?php selected( $selected, '' ) ?>><?php _e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
+			<select name="supplier" class="<?php echo esc_attr( $class ) ?>" autocomplete="off" style="width: 165px">
+				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
-				<?php foreach ( $suppliers as $supplier ): ?>
-					<option value="<?php echo $supplier->ID ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo $supplier->post_title ?></option>
+				<?php foreach ( $suppliers as $supplier ) : ?>
+					<option value="<?php echo esc_attr( $supplier->ID ) ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo esc_attr( $supplier->post_title ) ?></option>
 				<?php endforeach; ?>
 			</select>
 
 		<?php else : ?>
 
-			<select class="wc-product-search <?php echo $class ?>" id="supplier" name="supplier" data-allow_clear="true"
+			<select class="wc-product-search <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
 					data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 					data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
-				<?php if ( $selected ): $supplier = get_post($selected)?>
-					<option value="<?php echo $selected ?>" selected="selected"><?php echo $supplier->post_title ?></option>
+				<?php if ( $selected ) :
+					$supplier = get_post( $selected ); ?>
+					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ) ?></option>
 				<?php endif; ?>
 			</select>
 
 			<?php
-			wp_enqueue_script('wc-enhanced-select');
+			wp_enqueue_script( 'wc-enhanced-select' );
 
 		endif;
 
@@ -1361,24 +1367,22 @@ final class Helpers {
 
 	}
 
-
-
 	/**
 	 * Get the inventory log's IDs
 	 *
 	 * @since 1.2.8
 	 *
-	 * @param string $type      The log type to query. Values: 'reserved-stock', 'customer-returns', 'warehouse-damage', 'lost-in-post', 'other'
-	 * @param string $status    Optional. The log status. Values: 'pending', 'completed'
+	 * @param string $type      The log type to query. Values: 'reserved-stock', 'customer-returns', 'warehouse-damage', 'lost-in-post', 'other'.
+	 * @param string $status    Optional. The log status. Values: 'pending', 'completed'.
 	 *
 	 * @return array|bool
 	 */
-	public static function get_logs($type, $status = '') {
+	public static function get_logs( $type, $status = '' ) {
 
-		// Filter by log type meta key
+		// Filter by log type meta key.
 		$log_types = Log::get_types();
 
-		if ( ! in_array( $type, array_keys($log_types) ) ) {
+		if ( ! in_array( $type, array_keys( $log_types ) ) ) {
 			return FALSE;
 		}
 
@@ -1386,27 +1390,29 @@ final class Helpers {
 			'post_type'      => InventoryLogs::POST_TYPE,
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
-			'meta_query' =>  array(
+			'meta_query'     => array(
 				array(
 					'key'   => '_type',
-					'value' => $type
-				)
-			)
+					'value' => $type,
+				),
+			),
 		);
 
-		// Filter by log status
-		if ($status) {
-			if ( strpos( $status, ATUM_PREFIX ) === FALSE ) {
+		// Filter by log status.
+		if ( $status ) {
+
+			if ( FALSE === strpos( $status, ATUM_PREFIX ) ) {
 				$status = ATUM_PREFIX . $status;
 			}
 
 			$args['post_status'] = $status;
+
 		}
 		else {
 			$args['post_status'] = 'any';
 		}
 
-		return get_posts( apply_filters('atum/get_logs_args', $args) );
+		return get_posts( apply_filters( 'atum/get_logs_args', $args ) );
 
 	}
 
@@ -1415,16 +1421,16 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $order_id   The ATUM Order ID
+	 * @param int $order_id   The ATUM Order ID.
 	 *
 	 * @return object|null
 	 */
-	public static function get_order_items($order_id) {
+	public static function get_order_items( $order_id ) {
 
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " WHERE order_id = %d ORDER BY order_item_id", $order_id );
+		$query = $wpdb->prepare( "SELECT * FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d ORDER BY order_item_id', $order_id ); // WPCS: unprepared SQL ok.
 
-		return $wpdb->get_results( $query );
+		return $wpdb->get_results( $query ); // WPCS: unprepared SQL ok.
 
 	}
 
@@ -1437,23 +1443,21 @@ final class Helpers {
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 */
-	public static function get_atum_order_model($atum_order_id) {
+	public static function get_atum_order_model( $atum_order_id ) {
 
-		$post_type = get_post_type($atum_order_id);
+		$post_type = get_post_type( $atum_order_id );
 
 		switch ( $post_type ) {
 			case InventoryLogs::POST_TYPE:
-
 				$model_class = '\Atum\InventoryLogs\Models\Log';
 				break;
 
 			case PurchaseOrders::POST_TYPE:
-
 				$model_class = '\Atum\PurchaseOrders\Models\PurchaseOrder';
 				break;
 		}
 
-		if ( ! isset($model_class) || ! class_exists($model_class) ) {
+		if ( ! isset( $model_class ) || ! class_exists( $model_class ) ) {
 			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
@@ -1468,7 +1472,7 @@ final class Helpers {
 	 *
 	 * @param int   $product_id
 	 * @param array $product_meta
-	 * @param bool $skip_action
+	 * @param bool  $skip_action
 	 */
 	public static function update_product_meta( $product_id, $product_meta, $skip_action = FALSE ) {
 		
@@ -1487,80 +1491,78 @@ final class Helpers {
 			switch ( $meta_key ) {
 				
 				case 'stock':
-					
 					unset( $product_meta['stock_custom'], $product_meta['stock_currency'] );
 					$product->set_stock_quantity( $meta_value );
 					
-					// Needed to clear transients and other stuff
-					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product );
+					// Needed to clear transients and other stuff.
+					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // WPCS: prefix ok.
 					
 					break;
 				
 				case 'regular_price':
-					
-						$product->set_regular_price( $meta_value );
-						
-						if ( $meta_key == 'regular_price' && ! $product->is_on_sale( 'edit' ) ) {
-							$product->set_price( $meta_value );
-						}
+					$product->set_regular_price( $meta_value );
+
+					if ( 'regular_price' === $meta_key && ! $product->is_on_sale( 'edit' ) ) {
+						$product->set_price( $meta_value );
+					}
 						
 					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
 					
 					break;
 				
 				case 'sale_price':
-					
-						$sale_price    = wc_format_decimal( $meta_value );
-						$regular_price = $product->get_regular_price();
-						
-						// The sale price cannot be higher than the regular price
-						if ( $regular_price >= $sale_price ) {
-							$product->set_sale_price( $sale_price );
+					$sale_price    = wc_format_decimal( $meta_value );
+					$regular_price = $product->get_regular_price();
+
+					// The sale price cannot be higher than the regular price.
+					if ( $regular_price >= $sale_price ) {
+						$product->set_sale_price( $sale_price );
+					}
+
+					// Check for sale dates.
+					if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+
+						$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
+						$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+
+						$date_from = $date_from ? strtotime( $date_from ) : '';
+						$date_to   = $date_to ? strtotime( $date_to ) : '';
+
+						if ( $date_to && ! $date_from ) {
+							$date_from = current_time( 'timestamp', TRUE );
 						}
-						
-						// Check for sale dates
-						if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
-							
-							$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
-							$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
-							
-							$product->set_date_on_sale_from( $date_from ? strtotime( $date_from ) : '' );
-							$product->set_date_on_sale_to( $date_to ? strtotime( $date_to ) : '' );
-							
-							if ( $date_to && ! $date_from ) {
-								$date_from = date( 'Y-m-d' );
-								$product->set_date_on_sale_from( strtotime( $date_from ) );
-							}
-							
-							// Update price if on sale
-							if ( $product->is_on_sale( 'edit' ) ) {
-								$product->set_price( $sale_price );
-							}
-							else {
-								$product->set_price( $regular_price );
-								
-								if ( $date_to && strtotime( $date_to ) < current_time( 'timestamp' ) ) {
-									$product->set_date_on_sale_from( '' );
-									$product->set_date_on_sale_to( '' );
-								}
-							}
-							
+
+						// Update price if on sale.
+						if ( $product->is_on_sale( 'edit' ) ) {
+							$product->set_price( $sale_price );
 						}
+						else {
+
+							$product->set_price( $regular_price );
+
+							if ( $date_to && $date_to < current_time( 'timestamp', TRUE ) ) {
+								$date_from = $date_to = '';
+							}
+
+						}
+
+						$product->set_date_on_sale_from( $date_from );
+						$product->set_date_on_sale_to( $date_to );
+
+					}
 						
 					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
 					
 					break;
 				
-				case 'purchase_price':
-					
-						update_post_meta( $product_id, '_' . $meta_key, wc_format_decimal( $meta_value ) );
+				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
+					update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $meta_value ) );
 					
 					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
 					break;
 				
-				// Any other text meta
+				// Any other text meta.
 				default:
-					
 					update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
 					unset( $product_meta[ '_' . $meta_key . '_custom' ], $product_meta[ '_' . $meta_key . 'currency' ] );
 					break;
@@ -1570,7 +1572,7 @@ final class Helpers {
 		
 		$product->save();
 		
-		if ( !$skip_action) {
+		if ( ! $skip_action ) {
 			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
 		}
 		
@@ -1600,61 +1602,61 @@ final class Helpers {
 
 	/**
 	 * Force save with changes to validate_props and rebuild stock_status if required.
-	 * We can use it with 1 product/variation or
-	 * set all to true to aply to all products OUT_STOCK_THRESHOLD_KEY set and clean or not the OUT_STOCK_THRESHOLD_KEY meta keys
-	 *(@see clean OUT_STOCK_THRESHOLD_KEY tool)
+	 * We can use it with 1 product/variation or set all to true to aply to all products OUT_STOCK_THRESHOLD_KEY
+	 * set and clean or not the OUT_STOCK_THRESHOLD_KEY meta keys
+	 * (@see clean OUT_STOCK_THRESHOLD_KEY tool).
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param \WC_Product $product    Any subclass of WC_Abstract_Legacy_Product
-	 * @param bool        $all
+	 * @param \WC_Product $product    Any subclass of WC_Abstract_Legacy_Product.
 	 * @param bool        $clean_meta
+	 * @param bool        $all
 	 */
-	public static function force_rebuild_stock_status($product = NULL, $clean_meta = FALSE, $all = FALSE){
+	public static function force_rebuild_stock_status( $product = NULL, $clean_meta = FALSE, $all = FALSE ) {
 
-	    global $wpdb;
+		global $wpdb;
 		$wpdb->hide_errors();
 
-	    if ( is_subclass_of($product, '\WC_Abstract_Legacy_Product') && ! is_null($product) ){
+		if ( is_subclass_of( $product, '\WC_Abstract_Legacy_Product' ) && ! is_null( $product ) ) {
 
-		    $product->set_stock_quantity($product->get_stock_quantity()+1);
-		    $product->set_stock_quantity($product->get_stock_quantity()-1);
-		    $product->save();
+			$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
+			$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
+			$product->save();
 
-		    if($clean_meta) {
-			    delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
-		    }
+			if ( $clean_meta ) {
+				delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
+			}
 
-		    return;
+			return;
 
-        }
+		}
 
-        if ($all){
+		if ( $all ) {
 
-	        $ids_2_rebuild_stock_status = $wpdb->get_col( "
+			$ids_to_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT p.ID FROM $wpdb->posts p
                 INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
                 WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private');
-            " );
+            " ); // WPCS: unprepared SQL ok.
 
-	        foreach ( $ids_2_rebuild_stock_status as $id_2_rebuild ) {
+			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
-		        // delete _out_stock_threshold (avoid partial works to be done again)
-                if($clean_meta){
-	                delete_post_meta( $id_2_rebuild, Globals::OUT_STOCK_THRESHOLD_KEY );
-                }
+				// Delete _out_stock_threshold (avoid partial works to be done again).
+				if ( $clean_meta ) {
+					delete_post_meta( $id_to_rebuild, Globals::OUT_STOCK_THRESHOLD_KEY );
+				}
 
-		        $product = wc_get_product( $id_2_rebuild );
+				$product = wc_get_product( $id_to_rebuild );
 
-                // Force change and save
-		        $product->set_stock_quantity($product->get_stock_quantity()+1);
-		        $product->set_stock_quantity($product->get_stock_quantity()-1);
-		        $product->save();
+				// Force change and save.
+				$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
+				$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
+				$product->save();
 
-	        }
-        }
+			}
+		}
 
-    }
+	}
 
 	/**
 	 * Checks whether the Out of Stock Threshold at product level is set for any product
@@ -1663,41 +1665,18 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_any_out_stock_threshold_set(){
-	    global $wpdb;
+	public static function is_any_out_stock_threshold_set() {
 
-		$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->postmeta where meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "';");
+		global $wpdb;
+
+		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta where meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "';" ); // WPCS: unprepared SQL ok.
 
 		return $rowcount > 0;
-    }
-
-	/**
-     * Get string between two tags (can be different)
-     * https://stackoverflow.com/a/9826656
-     *
-     * ex:
-     * $fullstring = 'this is my [tag]dog[/tag]';
-	 * $parsed = get_string_between($fullstring, '[tag]', '[/tag]');
-	 * echo $parsed; // (result = dog)
-     *
-	 * @param $string string to parse
-	 * @param $start string tag start
-	 * @param $end string tag end
-	 *
-	 * @return bool|string
-	 */
-    public static function get_string_between($string, $start, $end){
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        return substr($string, $ini, $len);
-    }
+	}
 
 	/**
 	 * Return true if value exists in a multiarray
-     * http://codepad.org/GU0qG5su
+	 * http://codepad.org/GU0qG5su.
 	 *
 	 * @since 1.4.8
 	 *
@@ -1708,17 +1687,15 @@ final class Helpers {
 	 */
 	public static function in_multi_array( $key, array $arr ) {
 
-		// is in base array?
+		// Is in base array?
 		if ( in_array( $key, $arr ) ) {
 			return TRUE;
 		}
 
-		// check arrays contained in this array
+		// Check arrays contained in this array.
 		foreach ( $arr as $element ) {
-			if ( is_array( $element ) ) {
-				if ( self::in_multi_array( $key, $element ) ) {
-					return TRUE;
-				}
+			if ( is_array( $element ) && self::in_multi_array( $key, $element ) ) {
+				return TRUE;
 			}
 
 		}
@@ -1727,16 +1704,16 @@ final class Helpers {
 	}
 
 	/**
-     * like array_key_exists, but with multiple keys
-     *
-     * @since 1.4.10
-     *
-	 * @param array $required array with the required keys
-	 * @param array $data array to check.
+	 * Like array_key_exists, but with multiple keys
+	 *
+	 * @since 1.4.10
+	 *
+	 * @param array $required array with the required keys.
+	 * @param array $data     array to check.
 	 *
 	 * @return bool
 	 */
-	public static function array_keys_exist(array $required, array $data){
+	public static function array_keys_exist( array $required, array $data ) {
 
 		if ( count( array_intersect_key( array_flip( $required ), $data ) ) === count( $required ) ) {
 			// All required keys exist!
@@ -1746,7 +1723,7 @@ final class Helpers {
 			return FALSE;
 		}
 
-    }
+	}
 
 	/**
 	 * Groups an array into arrays by a given key, or set of keys, shared between all array members
@@ -1754,31 +1731,23 @@ final class Helpers {
 	 * Based on mcaskill's {@link https://gist.github.com/mcaskill/baaee44487653e1afc0d array_group_by()} function.
 	 *
 	 * @param array $array   The array to have grouping performed on.
-	 * @param mixed $key,... The key to group or split by. Can be a _string_,
-	 *                       an _integer_, a _float_, or a _callable_.
-	 *
-	 *                       If the key is a callback, it must return
-	 *                       a valid key from the array.
-	 *
+	 * @param mixed $key     The key to group or split by. Can be a _string_, an _integer_, a _float_, or a _callable_.
+	 *                       If the key is a callback, it must return a valid key from the array.
 	 *                       If the key is _NULL_, the iterated element is skipped.
-	 *
-	 *                       ```
-	 *                       string|int callback ( mixed $item )
-	 *                       ```
 	 *
 	 * @return array|null Returns a multidimensional array or `null` if `$key` is invalid.
 	 */
-	public static function array_group_by(array $array, $key) {
+	public static function array_group_by( array $array, $key ) {
 
 		if ( ! is_string( $key ) && ! is_int( $key ) && ! is_float( $key ) && ! is_callable( $key ) ) {
-			// The key should be a string, an integer, or a callback
+			// The key should be a string, an integer, or a callback.
 			return NULL;
 		}
 
 		$func = ( ! is_string( $key ) && is_callable( $key ) ? $key : NULL );
 		$_key = $key;
 
-		// Load the new array, splitting by the target key
+		// Load the new array, splitting by the target key.
 		$grouped = [];
 		foreach ( $array as $value ) {
 			$key = NULL;
@@ -1793,15 +1762,15 @@ final class Helpers {
 				$key = $value[ $_key ];
 			}
 
-			if ( $key === NULL ) {
+			if ( NULL === $key ) {
 				continue;
 			}
 
 			$grouped[ $key ][] = $value;
 		}
 
-		// Recursively build a nested grouping if more parameters are supplied
-		// Each grouped array value is grouped according to the next sequential key
+		// Recursively build a nested grouping if more parameters are supplied.
+		// Each grouped array value is grouped according to the next sequential key.
 		if ( func_num_args() > 2 ) {
 			$args = func_get_args();
 
@@ -1820,13 +1789,13 @@ final class Helpers {
 	 *
 	 * @since 1.4.12.3
 	 *
-	 * @param string $path          The path where are located the classes to load
-	 * @param string $namespace     The Namespace for the classes
-	 * @param bool   $is_singleton  Optional. Whether the classes follows the Singleton pattern
+	 * @param string $path          The path where are located the classes to load.
+	 * @param string $namespace     The Namespace for the classes.
+	 * @param bool   $is_singleton  Optional. Whether the classes follows the Singleton pattern.
 	 */
 	public static function load_psr4_classes( $path, $namespace, $is_singleton = TRUE ) {
 
-		$files = @scandir( $path, 1 );
+		$files = @scandir( $path, 1 ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 
 		if ( ! empty( $files ) ) {
 
@@ -1839,6 +1808,7 @@ final class Helpers {
 					if ( class_exists( $class ) ) {
 
 						if ( $is_singleton ) {
+							/* @noinspection PhpUndefinedMethodInspection */
 							$class::get_instance();
 						}
 						else {
@@ -1851,6 +1821,68 @@ final class Helpers {
 			}
 
 		}
+
+	}
+	
+	/**
+	 * Validate a given string as CSS color. This validation supports alpha channel.
+	 *
+	 * @since 1.4.13
+	 *
+	 * @param string $color The color can be transparent, in hexidecimal, RGB or RGBA notation.
+	 *
+	 * @return bool
+	 */
+	public static function validate_color( $color ) {
+		
+		$color = trim( $color );
+		
+		// Regex match.
+		if ( strpos( $color, '#' ) !== FALSE ) {
+			return (bool) preg_match( '/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/i', $color );
+		}
+		elseif ( strpos( $color, 'rgba' ) !== FALSE ) {
+			return (bool) preg_match( '/rgba\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?),\s*(\d*\.?\d*)\s*\)/', $color );
+		}
+		elseif ( strpos( $color, 'rgb' ) !== FALSE ) {
+			return (bool) preg_match( '/rgb\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?)\s*\)/', $color );
+		}
+		elseif ( ! $color || 'transparent' === $color ) {
+			return TRUE;
+		}
+		
+		return FALSE;
+		
+	}
+
+	/**
+	 * Like "array_unique" function but for multi-dimensional arrays where the specified key must be unique
+	 *
+	 * @since 1.4.14
+	 *
+	 * @param array  $array
+	 * @param string $key
+	 *
+	 * @return array
+	 */
+	public static function unique_multidim_array( $array, $key ) {
+
+		$temp_array = array();
+		$i          = 0;
+		$key_array  = array();
+
+		foreach ( $array as $val ) {
+
+			if ( ! in_array( $val[ $key ], $key_array ) ) {
+				$key_array[ $i ]  = $val[ $key ];
+				$temp_array[ $i ] = $val;
+			}
+
+			$i++;
+
+		}
+
+		return $temp_array;
 
 	}
 

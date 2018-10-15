@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || die;
 				<?php if ( current_user_can( 'delete_post', $post->ID ) ) :
 
 					$delete_text = ! EMPTY_TRASH_DAYS ? __( 'Delete permanently', ATUM_TEXT_DOMAIN ) : __( 'Move to trash', ATUM_TEXT_DOMAIN ); ?>
-					<a class="submitdelete deletion" href="<?php echo esc_url( get_delete_post_link( $post->ID ) ); ?>"><?php echo $delete_text; ?></a>
+					<a class="submitdelete deletion" href="<?php echo esc_url( get_delete_post_link( $post->ID ) ); ?>"><?php echo esc_html( $delete_text ) ?></a>
 				<?php endif; ?>
 			</div>
 

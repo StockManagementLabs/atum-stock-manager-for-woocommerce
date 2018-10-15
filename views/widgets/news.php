@@ -3,16 +3,15 @@
  * View for the ATUM Dashboard News widget
  *
  * @since        1.4.0
- * @noinspection PhpUndefinedMethodInspection
- */
-
-/**
+ *
  * @var array $rss_items
  */
+
+defined( 'ABSPATH' ) || die;
 ?>
 <div class="news-widget" data-widget="news">
 
-	<?php if ($max_items > 0) : ?>
+	<?php if ( $max_items > 0 ) : ?>
 
 		<div class="scroll-box">
 			<?php foreach ( $rss_items as $item ) : ?>
@@ -22,28 +21,28 @@
 						<?php
 						$attachment = $item->get_enclosure();
 
-						if ( ! empty($attachment) && ! empty($attachment->link) ): ?>
+						if ( ! empty( $attachment ) && ! empty( $attachment->link ) ) : ?>
 							<div class="thumb">
-								<div style="background-image: url('<?php echo $attachment->link ?>')"></div>
+								<div style="background-image: url('<?php echo esc_url( $attachment->link ) ?>')"></div>
 							</div>
 						<?php endif ?>
 					</a>
 
 					<div class="post-details">
 
-						<a href="<?php echo esc_url( $item->get_permalink() ) ?>" class="post-title" title="<?php echo esc_attr( $item->get_title() ) ?>" target="_blank"><?php echo $item->get_title() ?></a>
+						<a href="<?php echo esc_url( $item->get_permalink() ) ?>" class="post-title" title="<?php echo esc_attr( $item->get_title() ) ?>" target="_blank"><?php echo esc_html( $item->get_title() ) ?></a>
 
 						<div class="post-meta">
 							<?php
-							echo $item->get_author()->name;
+							echo esc_html( $item->get_author()->name );
 
-							$timeAgo = new \Westsworld\TimeAgo();
-							echo ' · ' . $timeAgo->inWords( $item->get_date() );
+							$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
+							echo ' · ' . esc_html( $timeAgo->inWords( $item->get_date() ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 							?>
 						</div>
 
 						<div class="post-excerpt">
-							<?php echo $item->get_content() ?>
+							<?php echo wp_kses_post( $item->get_content() ) ?>
 						</div>
 
 					</div>
@@ -52,8 +51,8 @@
 			<?php endforeach; ?>
 		</div>
 
-	<?php else: ?>
-		<p class="error"><?php _e('The Stock Management Labs news could not be loaded. Please try again later.', ATUM_TEXT_DOMAIN) ?></p>
+	<?php else : ?>
+		<p class="error"><?php esc_html_e( 'The Stock Management Labs news could not be loaded. Please try again later.', ATUM_TEXT_DOMAIN ) ?></p>
 	<?php endif ?>
 
 </div>

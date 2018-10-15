@@ -14,27 +14,47 @@
 		font-size: 23px;
 	}
 	
-	p {
-		font-size: 15px;
-		text-align: center;
+	.swal2-close {
+		font-weight: 100;
+		font-family: inherit;
+		font-size: 30px;
+		line-height: 30px;
 	}
 	
-	button, a {
-		@include transition(background-color 0.2s ease-in-out);
+	.swal2-modal {
 		
-		&:focus {
-			outline: none;
-			box-shadow: none;
+		p {
+			font-size: 15px;
+			text-align: center;
 		}
-	}
-	
-	a {
-		text-decoration: none;
-		color: $success;
 		
-		&:hover {
-			color: lighten($success, 10%);
+		button, a {
+			@include transition(background-color 0.2s ease-in-out);
+			
+			&:focus {
+				outline: none;
+				box-shadow: none;
+			}
 		}
+		
+		button {
+			border-radius: 5px;
+			text-transform: uppercase;
+			font-weight: 300;
+			padding: 9px 19px;
+			font-size: 13px;
+			letter-spacing: 1px;
+		}
+		
+		a {
+			text-decoration: none;
+			color: $success;
+			
+			&:hover {
+				color: lighten($success, 10%);
+			}
+		}
+		
 	}
 	
 	.atum-loading {

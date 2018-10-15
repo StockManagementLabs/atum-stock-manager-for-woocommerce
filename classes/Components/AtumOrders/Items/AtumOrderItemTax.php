@@ -1,24 +1,25 @@
 <?php
 /**
+ * The model class for the ATUM Order Item Tax objects
+ *
  * @package         Atum\Components\AtumOrders
  * @subpackage      Items
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.2.9
- *
- * The model class for the ATUM Order Item Tax objects
  */
 
 namespace Atum\Components\AtumOrders\Items;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 
 abstract class AtumOrderItemTax extends \WC_Order_Item_Tax {
 
 	/**
 	 * The Tax item data array
+	 *
 	 * @var array
 	 */
 	protected $extra_data = array(
@@ -30,9 +31,20 @@ abstract class AtumOrderItemTax extends \WC_Order_Item_Tax {
 		'shipping_tax_total' => 0,
 	);
 
-	protected $internal_meta_keys = array( '_rate_id', '_label', '_compound', '_tax_amount', '_shipping_tax_amount' );
+	/**
+	 * The internal meta keys
+	 *
+	 * @var array
+	 */
+	protected $internal_meta_keys = array(
+		'_rate_id',
+		'_label',
+		'_compound',
+		'_tax_amount',
+		'_shipping_tax_amount',
+	);
 
-	// Load the shared methods
+	// Load the shared methods.
 	use AtumOrderItemTrait;
 
 	/**
@@ -48,7 +60,7 @@ abstract class AtumOrderItemTax extends \WC_Order_Item_Tax {
 			'_label'               => $this->get_label( 'edit' ),
 			'_compound'            => $this->get_compound( 'edit' ),
 			'_tax_amount'          => $this->get_tax_total( 'edit' ),
-			'_shipping_tax_amount' => $this->get_shipping_tax_total( 'edit' )
+			'_shipping_tax_amount' => $this->get_shipping_tax_total( 'edit' ),
 		) );
 
 		$this->atum_order_item_model->save_meta( $save_values );

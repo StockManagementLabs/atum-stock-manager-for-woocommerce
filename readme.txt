@@ -1,13 +1,13 @@
 === ATUM Inventory Management for WooCommerce ===
 
-Contributors: stockmanagementlabs, salvamb, japiera
+Contributors: stockmanagementlabs, salvamb, japiera, julianberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.6
-Tested up to: 4.9.7
+Tested up to: 4.9.8
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.4.3
-Stable tag: 1.4.12.2
+WC tested up to: 3.4.5
+Stable tag: 1.4.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**NEW UPDATE ALMOST EVERY WEEK!**
+**[WPML FULLY COMPATIBLE](https://wpml.org/plugin/atum-inventory-management-for-woocommerce/ "Visit the WPML compatibility page")**
 
 ATUM is now the most advanced FREE WooCommerce inventory management tool in the Wordpress depository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -25,7 +25,7 @@ Stock Management Labs™, creators that have combined over 25 years of experienc
 
 In the preparation process for the development stage, we have tested and tried the most popular WooCommerce inventory management and cloud inventory management plugins in the world. With full confidence, we believe that ATUM will become unrivalled in every category.
 
-**[FOR ALL THE LATEST UPDATES OR TUTORIALS VISIT OUR YOUTUBE CHANNEL HERE](https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA "Visit the Youtube channel")**
+**[FOR ANY QUESTIONS OR TUTORIALS VISIT OUR FORUM](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
 
 
 = AVAILABLE FEATURES =
@@ -197,6 +197,83 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.15`
+
+*2018-10-04*
+
+**Features**
+
+* Added 'Not found' text to ATUM Locations.
+* Added compatibility for Multi-Inventory add-on.
+* Added wrapper for the future ATUM Logs component.
+* Added children arrows to ATUM List tables.
+* Column group toggler for ATUM List tables.
+
+**Changes**
+
+* Added color picker styles to ATUM UI.
+* Updated PHPCS rules.
+* CSS improvements.
+* Added ATUM logo to ATUM panel within variations.
+* Change stock threshold behavior.
+* Added new hooks to ATUM List Tables.
+
+**Fixes**
+
+* Security Enhancements.
+* Fixed wrong status in other users's private products under Stock Central.
+* Fixed Uncontrolled List WPML behavior.
+* Fixed purchase price and price wrong comparison.
+* Removed unused helpers.
+* Cache handling refactory.
+* Refactory: code style.
+
+---
+
+`1.4.14.3`
+
+*2018-09-07*
+
+**Features**
+
+* Added beta label to add-ons in beta stage.
+* Added version label to available add-ons.
+* Added WC Bookings compatibility.
+
+**Changes**
+
+* Moved the "Add tax" button the same place as in WC orders.
+
+**Fixes**
+
+* Fixed output "out of stock threshold" failing with non-standard wpdb prefixes.
+* Fixed add-ons list's transient name.
+* CSS fixes.
+* Full refactory (code style following PHPCS and WPCS standards).
+
+---
+
+`1.4.13`
+
+*2018-07-26*
+
+**Features**
+
+* Allow resetting a dependant field to its default value when checking Settings' dependencies.
+* Allow button groups without required values.
+* Added PHPCS rules.
+* Added color picker field type to settings.
+
+**Fixes**
+
+* Fixed filter button showing in Inbound Stock table when Ajax filter was disabled.
+* Fixed activate text typo error.
+* Fixed popover titles in Stock Central.
+* Refactory.
+* CSS fixes.
 
 ---
 

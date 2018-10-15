@@ -3,16 +3,15 @@
  * View for the Settings admin page
  *
  * @since 0.0.1
- */
-
-defined( 'ABSPATH' ) or die;
-
-use Atum\Settings\Settings;
-
-/**
+ *
  * @var string $active
  * @var array  $active_sections
  */
+
+defined( 'ABSPATH' ) || die;
+
+use Atum\Settings\Settings;
+
 $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE );
 ?>
 <div class="wrap">
@@ -21,7 +20,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 			<?php wp_nonce_field( 'add_atum_nonce_field', 'menu-theme-nonce' ); ?>
 			Menu Dark <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'checked' : '' ?>> Menu Light
 		</div>
-		<h1 class="wp-heading-inline"><?php _e('Settings', ATUM_TEXT_DOMAIN) ?></h1>
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', ATUM_TEXT_DOMAIN ) ?></h1>
 		<hr class="wp-header-end">
 		
 		<?php settings_errors(); ?>
@@ -46,9 +45,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 				<ul class="atum-nav-list">
 
-					<?php foreach ( $tabs as $tab => $atts ):
+				<?php foreach ( $tabs as $tab => $atts ) :
 
-						if ($tab == $active):
+					if ( $tab === $active ) :
 							$active_sections = $atts['sections'];
 						endif; ?>
 
@@ -95,14 +94,15 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 						$page = ATUM_PREFIX . "setting_$active_section";
 
-						if ( ! isset( $wp_settings_sections[$page] ) ):
+					if ( ! isset( $wp_settings_sections[ $page ] ) ) :
 							continue;
 						endif;
 
-						foreach ( (array) $wp_settings_sections[$page] as $section ): ?>
+					foreach ( (array) $wp_settings_sections[ $page ] as $section ) : ?>
 
-							<div id="<?php echo $section['id'] ?>" class="settings-section" data-section="<?php echo str_replace([ATUM_PREFIX, 'setting_'], '', $section['id']) ?>">
-								<?php if ( ! $last_section || 1 === count( $active_sections ) ) : ?>
+						<div id="<?php echo esc_attr( $section['id'] ) ?>" class="settings-section" data-section="<?php echo esc_attr( str_replace( [ ATUM_PREFIX, 'setting_' ], '', $section['id'] ) ) ?>">
+
+<?php if ( ! $last_section || 1 === count( $active_sections ) ) : ?>
 									<?php $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE ); ?>
 									<div class="section-general-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-general-title-light' : '' ?>">
 										<?php
@@ -141,17 +141,18 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										?>
 									</div>
 								<?php endif; ?>
-								<?php if ( $section['title'] ): ?>
+
+							<?php if ( $section['title'] ) : ?>
 									<div class="section-title">
-										<h2><?php echo $section['title'] ?></h2>
+									<h2><?php echo esc_html( $section['title'] ) ?></h2>
 									</div>
-								<?php endif;
+							<?php endif; ?>
 
-								if ( $section['callback'] ):
+							<?php if ( $section['callback'] ) :
 									call_user_func( $section['callback'], $section );
-								endif;
+							endif; ?>
 
-								if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[$page] ) || ! isset( $wp_settings_fields[$page][$section['id']] ) ):
+							<?php if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[ $page ] ) || ! isset( $wp_settings_fields[ $page ][ $section['id'] ] ) ) :
 									continue;
 								endif; ?>
 
@@ -176,12 +177,12 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 					?>
 
-					<input type="hidden" id="atum_settings_section" name="<?php echo Settings::OPTION_NAME ?>[settings_section]" value="<?php echo $active ?>">
+				<input type="hidden" id="atum_settings_section" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[settings_section]" value="<?php echo esc_attr( $active ) ?>">
 
 					<?php
-					// Add a hidden field to restore WooCommerce manage_stock individual settings
-					if ( $active == 'stock_central' ) : ?>
-						<input type="hidden" id="atum_restore_option_stock" name="<?php echo Settings::OPTION_NAME ?>[restore_option_stock]" value="no">
+				// Add a hidden field to restore WooCommerce manage_stock individual settings.
+				if ( 'stock_central' === $active ) : ?>
+					<input type="hidden" id="atum_restore_option_stock" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[restore_option_stock]" value="no">
 					<?php endif;
 
 					?>

@@ -1,18 +1,18 @@
 <?php
 /**
+ * Stock Control Widget for ATUM Dashboard
+ *
  * @package         Atum
  * @subpackage      Dashboard\Widgets
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.4.0
- *
- * Stock Control Widget for ATUM Dashboard
  */
 
 namespace Atum\Dashboard\Widgets;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
@@ -24,6 +24,7 @@ class StockControl extends AtumWidget {
 
 	/**
 	 * The id of this widget
+	 *
 	 * @var string
 	 */
 	protected $id = ATUM_PREFIX . 'stock_control_widget';
@@ -42,7 +43,9 @@ class StockControl extends AtumWidget {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Widget initialization
+	 *
+	 * @since 1.4.0
 	 */
 	public function init() {
 
@@ -50,32 +53,39 @@ class StockControl extends AtumWidget {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Load the widget view
+	 *
+	 * @since 1.4.0
 	 */
 	public function render() {
 
 		$stock_counters = WidgetHelpers::get_stock_levels();
 
-		$sc_url = add_query_arg( 'page', StockCentral::UI_SLUG, admin_url('admin.php') );
+		$sc_url   = add_query_arg( 'page', StockCentral::UI_SLUG, admin_url( 'admin.php' ) );
 		$sc_links = array(
 			'in_stock'  => add_query_arg( 'view', 'in_stock', $sc_url ),
 			'out_stock' => add_query_arg( 'view', 'out_stock', $sc_url ),
 			'low_stock' => add_query_arg( 'view', 'low_stock', $sc_url ),
-			'unmanaged' => add_query_arg( 'view', 'unmanaged', $sc_url )
+			'unmanaged' => add_query_arg( 'view', 'unmanaged', $sc_url ),
 		);
 
 		$config = $this->get_config();
 
-		Helpers::load_view( 'widgets/stock-control', compact('stock_counters', 'sc_links', 'config') );
+		Helpers::load_view( 'widgets/stock-control', compact( 'stock_counters', 'sc_links', 'config' ) );
 
 	}
 
 	/**
-	 * @inheritDoc
+	 * Load widget config view
+	 * This is what will display when an admin clicks "Configure" at widget header
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return string
 	 */
 	public function get_config() {
-		// TODO: IMPLEMENT WIDGET SETTINGS
-		return '';//Helpers::load_view_to_string( 'widgets/stock-control-config' );
+		// TODO: IMPLEMENT WIDGET SETTINGS.
+		return ''; // Helpers::load_view_to_string( 'widgets/stock-control-config' );.
 	}
 
 }

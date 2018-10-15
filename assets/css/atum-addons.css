@@ -20,28 +20,44 @@
   font-size: 23px;
 }
 
-.swal2-container p {
+.swal2-container .swal2-close {
+  font-weight: 100;
+  font-family: inherit;
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.swal2-container .swal2-modal p {
   font-size: 15px;
   text-align: center;
 }
 
-.swal2-container button, .swal2-container a {
+.swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
   -webkit-transition: background-color 0.2s ease-in-out;
   -o-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
 }
 
-.swal2-container button:focus, .swal2-container a:focus {
+.swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
   outline: none;
   box-shadow: none;
 }
 
-.swal2-container a {
+.swal2-container .swal2-modal button {
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 300;
+  padding: 9px 19px;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.swal2-container .swal2-modal a {
   text-decoration: none;
   color: #69C61D;
 }
 
-.swal2-container a:hover {
+.swal2-container .swal2-modal a:hover {
   color: #82e135;
 }
 
@@ -134,6 +150,22 @@
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
+}
+
+.atum-addons .theme .theme-screenshot .label {
+  background-color: #6c757d;
+  float: right;
+  margin: 10px;
+  border-radius: 15px;
+  padding: 2px 9px;
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.atum-addons .theme .theme-screenshot .label.label-warning {
+  background-color: #EFAF00;
 }
 
 .atum-addons .theme .theme-name {

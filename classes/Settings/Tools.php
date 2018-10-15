@@ -1,24 +1,25 @@
 <?php
 /**
+ * ATUM tools and scripts for multiple purposes
+ *
  * @package     Atum
  * @subpackage  Settings
  * @author      Be Rebel - https://berebel.io
  * @copyright   ©2018 Stock Management Labs™
  *
  * @since       1.4.5
- *
- * ATUM tools and scripts for multiple purposes
  */
 
 namespace Atum\Settings;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 
 class Tools {
 
 	/**
 	 * The singleton instance holder
+	 *
 	 * @var Tools
 	 */
 	private static $instance;
@@ -44,15 +45,15 @@ class Tools {
 	 *
 	 * @return array
 	 */
-	public function add_settings_tab($tabs) {
+	public function add_settings_tab( $tabs ) {
 
 		$tabs['tools'] = array(
 			'tab_name'  => __( 'Tools', ATUM_TEXT_DOMAIN ),
 			'icon'      => 'lnr lnr-rocket',
 			'sections'  => array(
-				'tools' => __( 'ATUM Tools', ATUM_TEXT_DOMAIN )
+				'tools' => __( 'ATUM Tools', ATUM_TEXT_DOMAIN ),
 			),
-			'no_submit' => TRUE
+			'no_submit' => TRUE,
 		);
 
 		return $tabs;
@@ -67,7 +68,7 @@ class Tools {
 	 *
 	 * @return array
 	 */
-	public function add_settings_defaults($defaults) {
+	public function add_settings_defaults( $defaults ) {
 
 		$defaults['update_manage_stock'] = array(
 			'section' => 'tools',
@@ -77,12 +78,12 @@ class Tools {
 			'options' => array(
 				'select'        => array(
 					'manage'   => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
-					'unmanage' => __( 'Unmanage Stock', ATUM_TEXT_DOMAIN )
+					'unmanage' => __( 'Unmanage Stock', ATUM_TEXT_DOMAIN ),
 				),
 				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_manage_stock',
-				'confirm_msg'   => esc_attr( __( "This will change the WooCommerce's manage stock option for all your products", ATUM_TEXT_DOMAIN ) )
-			)
+				'confirm_msg'   => esc_attr( __( "This will change the WooCommerce's manage stock option for all your products", ATUM_TEXT_DOMAIN ) ),
+			),
 		);
 
 		$defaults['update_control_stock'] = array(
@@ -93,12 +94,12 @@ class Tools {
 			'options' => array(
 				'select'        => array(
 					'control'   => __( 'Control Stock', ATUM_TEXT_DOMAIN ),
-					'uncontrol' => __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN )
+					'uncontrol' => __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN ),
 				),
 				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_control_stock',
-				'confirm_msg'   => esc_attr( __("This will change the ATUM's stock control option for all your products", ATUM_TEXT_DOMAIN) )
-			)
+				'confirm_msg'   => esc_attr( __( "This will change the ATUM's stock control option for all your products", ATUM_TEXT_DOMAIN ) ),
+			),
 		);
 
 		$defaults['clear_out_stock_threshold'] = array(
@@ -109,8 +110,8 @@ class Tools {
 			'options' => array(
 				'button_text'   => __( 'Clear Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_clear_out_stock_threshold',
-				'confirm_msg'   => esc_attr( __('This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN) )
-			)
+				'confirm_msg'   => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) ),
+			),
 		);
 
 		return $defaults;
@@ -121,16 +122,21 @@ class Tools {
 	/****************************
 	 * Instance methods
 	 ****************************/
+
+	/**
+	 * Cannot be cloned
+	 */
 	public function __clone() {
 
-		// cannot be cloned
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
+	/**
+	 * Cannot be serialized
+	 */
 	public function __sleep() {
 
-		// cannot be serialized
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

@@ -26,8 +26,24 @@
 			position: relative;
 			cursor: default;
 			background-size: cover !important;
-			background-position: center !important;;
+			background-position: center !important;
 			background-repeat: no-repeat !important;
+			
+			.label {
+				background-color: $secondary;
+				float: right;
+				margin: $grid-gutter-width/3;
+				border-radius: 15px;
+				padding: 2px 9px;
+				color: $white;
+				font-size: 11px;
+				text-align: center;
+				text-transform: uppercase;
+				
+				&.label-warning {
+					background-color: $warning;
+				}
+			}
 		}
 		
 		.theme-name {

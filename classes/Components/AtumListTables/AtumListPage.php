@@ -1,36 +1,39 @@
 <?php
 /**
+ * The abstract class for the ATUM admin list pages
+ *
  * @package         Atum\Components
  * @subpackage      AtumListTables
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2017 Stock Management Labs™
  *
  * @since           1.1.2
- *
- * The abstract class for the ATUM admin list pages
  */
 
 namespace Atum\Components\AtumListTables;
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || die;
 
 
 abstract class AtumListPage {
 	
 	/**
 	 * Table rows per page
+	 *
 	 * @var int
 	 */
 	protected $per_page;
 	
 	/**
 	 * The list
+	 *
 	 * @var AtumListTable
 	 */
 	protected $list;
 
 	/**
 	 * Whether the currently displayed List Table is showing Controlled or Uncontrolled products
+	 *
 	 * @var bool
 	 */
 	protected $is_uncontrolled_list = FALSE;
@@ -53,7 +56,6 @@ abstract class AtumListPage {
 		$this->list->prepare_items();
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Save products per page option
 	 *
@@ -61,7 +63,7 @@ abstract class AtumListPage {
 	 *
 	 * @param bool|int $status Screen option value. Default false to skip.
 	 * @param string   $option The option name.
-	 * @param int      $value  The number of rows to use
+	 * @param int      $value  The number of rows to use.
 	 *
 	 * @return mixed
 	 */
@@ -84,9 +86,9 @@ abstract class AtumListPage {
 	 *
 	 * @param AtumListTable $list
 	 */
-	public function set_list_table (AtumListTable $list) {
+	public function set_list_table( AtumListTable $list ) {
 
-		if ( is_a($list, '\Atum\Components\AtumListTables\AtumListTable') ) {
+		if ( is_a( $list, '\Atum\Components\AtumListTables\AtumListTable' ) ) {
 			$this->list = $list;
 		}
 
