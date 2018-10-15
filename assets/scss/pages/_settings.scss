@@ -642,7 +642,7 @@ $settings-menu-active:      $white;
 				@media all and (max-width: $screen-xs-min) {
 					width: 100%;
 					.select2-container {
-						width: 100% !important;
+						//width: 100% !important;
 					}
 				}
 			}
@@ -667,6 +667,9 @@ $settings-menu-active:      $white;
 						.select2-search__field {
 							min-height: 28px;
 							@include placeholder($wp-gray-1);
+							@media all and (max-width: $screen-xs-min) {
+								width: 100% !important;
+							}
 						}
 					}
 				}
@@ -709,7 +712,8 @@ $settings-menu-active:      $white;
 							}
 						}
 					}
-					.tool-fields-from, .tool-fields-to {
+					.tool-fields-from, .tool-fields-to, .tool-controls {
+						width: 100%;
 						.select2-container {
 							width: 200px !important;
 							// Mobile
@@ -763,7 +767,7 @@ $settings-menu-active:      $white;
 			}
 			// Mobile
 			@media all and (max-width: $screen-xs-min) {
-				width: 100% !important;
+				//width: 100% !important;
 			}
 			&, .selection, .select2-selection--single, .select2-selection__rendered {
 				&:focus {
@@ -880,7 +884,7 @@ $settings-menu-active:      $white;
 				}
 				.tool-fields-from {
 					.select2-container {
-						width: 100% !important;
+						//width: 100% !important;
 					}
 				}
 				flex-wrap: wrap;
@@ -931,7 +935,7 @@ $settings-menu-active:      $white;
 						}
 					}
 					div {
-						width: 100%;
+						//width: 100%;
 						margin-right: 0 !important;
 						margin-top: 11px;
 					}

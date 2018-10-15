@@ -2407,9 +2407,6 @@ input[type="button"].btn-block {
   #atum-settings .section-fields .script-runner .atum-select2-container {
     width: 100%;
   }
-  #atum-settings .section-fields .script-runner .atum-select2-container .select2-container {
-    width: 100% !important;
-  }
 }
 
 #atum-settings .section-fields .script-runner .select2-container:focus, #atum-settings .section-fields .script-runner .select2-container .selection:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection--single:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection__rendered:focus {
@@ -2442,6 +2439,12 @@ input[type="button"].btn-block {
 
 #atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-webkit-input-placeholder {
   color: #999;
+}
+
+@media all and (max-width: 480px) {
+  #atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field {
+    width: 100% !important;
+  }
 }
 
 #atum-settings .section-fields .script-runner .select2-container.select2-container--focus .select2-selection--multiple {
@@ -2484,17 +2487,21 @@ input[type="button"].btn-block {
   color: #FF4848;
 }
 
-#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container {
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls {
+  width: 100%;
+}
+
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-container {
   width: 200px !important;
 }
 
 @media all and (max-width: 480px) {
-  #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container {
+  #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-container {
     width: 100% !important;
   }
 }
 
-#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice {
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-selection__choice {
   height: 15px;
   line-height: 15px;
   overflow: hidden;
@@ -2503,7 +2510,7 @@ input[type="button"].btn-block {
   color: #fff;
 }
 
-#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice .select2-selection__choice__remove {
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-selection__choice .select2-selection__choice__remove {
   color: #fff;
 }
 
@@ -2537,12 +2544,6 @@ input[type="button"].btn-block {
 @media all and (max-width: 768px) {
   #atum-settings .section-fields .select2-container {
     width: 80% !important;
-  }
-}
-
-@media all and (max-width: 480px) {
-  #atum-settings .section-fields .select2-container {
-    width: 100% !important;
   }
 }
 
@@ -2655,9 +2656,6 @@ input[type="button"].btn-block {
   #atum-settings .section-fields .script-runner .tool-fields-wrapper {
     margin-bottom: 5px;
   }
-  #atum-settings .section-fields .script-runner .tool-fields-from .select2-container {
-    width: 100% !important;
-  }
   #atum-settings .section-fields .script-runner .tool-runner {
     width: 100%;
     margin-left: 0;
@@ -2695,7 +2693,6 @@ input[type="button"].btn-block {
     height: 15px;
   }
   #atum-settings .form-table .tool-fields-wrapper .repeatable-row div {
-    width: 100%;
     margin-right: 0 !important;
     margin-top: 11px;
   }
