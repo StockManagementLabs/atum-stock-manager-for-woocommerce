@@ -274,6 +274,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $woocommerce_notify_no_stock_amount;
 
 	/**
+	 * The columns that will be sticky
+	 *
+	 * @var array
+	 */
+	protected $sticky_columns = array();
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&mdash;';
@@ -597,7 +604,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( 'cb' === $column_name ) {
 
-				echo '<th scope="row" class="check-column">';
+				echo '<th scope="row" class="check-column column-cb">';
 				echo $this->column_cb( $item ); // WPCS: XSS ok.
 				echo '</th>';
 
@@ -2619,6 +2626,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'locationsSaved'       => __( 'Values Saved', ATUM_TEXT_DOMAIN ),
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'    => $this->default_searchable_columns,
+			'stickyColumns'        => $this->sticky_columns,
 		);
 
 		if ( $this->first_edit_key ) {
