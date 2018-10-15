@@ -205,10 +205,10 @@
 				if ( $('.switch-interface-style .switchery').length === 0 ) {
 					new Switchery(this, {
 						size               : 'small',
-						color              : '#00b8db',
+						color              : '#dbf9ff',
 						secondaryColor     : '#3b3d5a',
 						jackColor          : '#00b8db',
-						jackSecondaryColor : '#3b3d5a'
+						jackSecondaryColor : '#27283B'
 					});
 				}
 			});

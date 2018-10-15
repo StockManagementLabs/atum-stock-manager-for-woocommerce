@@ -155,7 +155,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									continue;
 								endif; ?>
 
-								<div class="section-fields">
+								<div class="section-fields" <?php echo ! $last_section ? 'style="background-image: none;"' : ''; ?>>
 									<table class="form-table">
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>

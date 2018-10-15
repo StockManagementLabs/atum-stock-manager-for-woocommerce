@@ -11,11 +11,12 @@ $settings-menu-active:      $white;
 .atum-settings-wrapper {
 	
 	h1 {
-		text-transform: uppercase;
+		text-transform: capitalize;
 		margin-bottom: $grid-gutter-width/2;
 		font-weight: bold;
 		color: $blue-dark;
 		font-size: 36px;
+		margin-bottom: 20px;
 	}
 	
 	.atum-settings-container {
@@ -97,8 +98,6 @@ $settings-menu-active:      $white;
 		justify-content: space-between;
 		border-top-right-radius: 6px;
 		border-top-left-radius: 6px;
-		padding-left: 10px;
-		padding-right: 10px;
 		.toogle-menu {
 			font-size: 20px;
 			color: $white;
@@ -112,7 +111,7 @@ $settings-menu-active:      $white;
 				text-decoration: none;
 				color: $white;
 				height: 51px;
-				font-size: 18px;
+				font-size: 21px;
 				font-weight: bold;
 				padding-left: 15px;
 				
@@ -142,13 +141,13 @@ $settings-menu-active:      $white;
 		.nav-footer-logo {
 			@include flexbox;
 			@include flex-align-items(center);
-			padding: 5px 22px;
+			padding: 5px 24px;
 			img {
 				width: 34px;
 			}
 			span {
 				color: $white;
-				font-size: 20px;
+				font-size: 27px;
 				margin-left: 10px;
 				font-weight: bold;
 			}
@@ -160,7 +159,7 @@ $settings-menu-active:      $white;
 			font-size: 12px;
 			font-weight: normal;
 			display: block;
-			padding: 0 10px 5px 10px;
+			padding: 0 12px 9px 12px;
 			
 			a {
 				text-decoration: none;
@@ -193,7 +192,7 @@ $settings-menu-active:      $white;
 		font-size: 15px;
 		font-weight: bold;
 		text-decoration: none;
-		padding: 0 1em;
+		padding: 0 20px 0 20px;
 		cursor: pointer;
 		@include user-select(none);
 		-webkit-touch-callout: none;
@@ -243,7 +242,8 @@ $settings-menu-active:      $white;
 			}
 			
 			i {
-				margin-right: 5px;
+				margin-right: 7px;
+				font-size: 16px;
 			}
 			
 		}
@@ -274,20 +274,28 @@ $settings-menu-active:      $white;
 		.atum-nav, .atum-nav-light {
 			width: 50px;
 			min-width: inherit;
-			.atum-brand {
-				justify-content: center;
-				height: 51px;
-				text-align: center;
-				padding-left: 0 !important;
-				span {
-					display: none;
+			.atum-brand-link {
+				width: 100%;
+				.atum-brand {
+					justify-content: center;
+					height: 51px;
+					text-align: center;
+					padding-left: 0;
+					span {
+						display: none;
+					}
 				}
 			}
-			.menu-helper {
-				span {
-					display: none;
+			
+			.atum-nav-link {
+				padding: 0 15px 0 15px;
+				.menu-helper {
+					span {
+						display: none;
+					}
 				}
 			}
+			
 			.nav-footer {
 				display: none;
 			}
@@ -299,9 +307,13 @@ $settings-menu-active:      $white;
 		.atum-nav, .atum-nav-light {
 			width: 100%;
 			margin-bottom: 11px;
-			.atum-brand {
-				span {
-					display: block;
+			.atum-brand-link {
+				width: inherit;
+				.atum-brand {
+					padding-left: 10px;
+					span {
+						display: block;
+					}
 				}
 			}
 			.atum-nav-header {
@@ -352,78 +364,6 @@ $settings-menu-active:      $white;
 	}
 }
 
-.select2-container {
-	width: 80% !important;
-	// Mobile style
-	@media all and (max-width: $screen-xs-min) {
-		width: 100% !important;
-	}
-	&, .selection, .select2-selection--single, .select2-selection__rendered {
-		&:focus {
-			outline: none;
-		}
-	}
-	.select2-selection {
-		height: 30px;
-		.select2-selection__rendered {
-			line-height: 30px;
-			color: $gray-600;
-		}
-		.select2-selection__arrow {
-			b {
-				display: none;
-			}
-			&:after {
-				line-height: 30px;
-				font-family: Linearicons;
-				content: "\e874";
-				font-size: 10px;
-				color: $gray-500;
-			}
-		}
-		border: 1px solid $gray-200;
-	}
-	.select2-dropdown {
-		box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
-		.select2-search {
-			display: none;
-		}
-		.select2-results {
-			box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
-			.select2-results__option--highlighted {
-				background-color: $gray-100;
-			}
-			.select2-results__option[aria-selected=true] {
-				background-color: $blue-light;
-				color: $blue;
-			}
-			.select2-results__options {
-				&::-webkit-scrollbar {
-					background-color: transparent;
-					border: none;
-					width: 10px;
-				}
-				
-				&::-webkit-scrollbar-track {
-					background-color: transparent;
-					border: none;
-				}
-				
-				&::-webkit-scrollbar-thumb {
-					-webkit-border-radius: 10px;
-					border-radius: 5px;
-					background-color: $gray-600;
-				}
-				
-				.select2-results__option {
-					color: $gray-600;
-					font-size: 12px;
-				}
-			}
-		}
-	}
-}
-
 @include keyframes('anim-atum-menu') {
 	50% {
 		opacity: 0;
@@ -451,7 +391,8 @@ $settings-menu-active:      $white;
 		label {
 			margin-left: 1px;
 			margin-right: 1px;
-			line-height: 2;
+			line-height: 1.5;
+			font-size: 14px;
 		}
 	}
 	
@@ -459,7 +400,6 @@ $settings-menu-active:      $white;
 		position: relative;
 		
 		&.overlay {
-			
 			&:before {
 				content: '';
 				position: absolute;
@@ -468,6 +408,8 @@ $settings-menu-active:      $white;
 				top: 0;
 				bottom: 0;
 				z-index: 10;
+				background-color: $gray-100;
+				opacity: 0.5;
 			}
 			
 			&:after {
@@ -477,6 +419,7 @@ $settings-menu-active:      $white;
 				right: 0;
 				margin: auto;
 				@include loader(50px, $info, 3px);
+				border-top-color: $gray-600;
 			}
 		}
 	}
@@ -499,7 +442,7 @@ $settings-menu-active:      $white;
 	}
 	
 	.section-general-title {
-		padding: 0 $grid-gutter-width;
+		padding: 0 20px;
 		background-color: $blue-dark-lighten;
 		border-radius: 6px;
 		height: 51px;
@@ -517,6 +460,8 @@ $settings-menu-active:      $white;
 			margin: 0;
 			text-transform: uppercase;
 			font-size: 18px;
+			font-weight: bold;
+			padding-left: 5px;
 			font-weight: bold;
 		}
 	}
@@ -561,6 +506,7 @@ $settings-menu-active:      $white;
 			margin: 0;
 			text-transform: capitalize;
 			font-size: 18px;
+			font-weight: bold;
 		}
 	}
 	
@@ -571,7 +517,7 @@ $settings-menu-active:      $white;
 	}
 	
 	.section-fields {
-		padding: 4px $grid-gutter-width;
+		padding: 0px 20px 0px 25px;
 		background-color: $white;
 		border-bottom-right-radius: 6px;
 		border-bottom-left-radius: 6px;
@@ -579,6 +525,11 @@ $settings-menu-active:      $white;
 		background-position: bottom;
 		background-repeat: no-repeat;
 		background-size: contain;
+		box-shadow: 0 4px 0 0 $gray-200;
+		
+		.form-table {
+			margin-top: 0;
+		}
 		
 		tr {
 			&:not(:last-child) {
@@ -587,9 +538,17 @@ $settings-menu-active:      $white;
 		}
 		
 		th, td {
-			padding-top: $grid-gutter-width;
+			padding-top: 20px;
 			input[type=text] {
-				width: 80%;
+				width: 350px;
+				// Tablet style
+				@media all and (max-width: $screen-sm-min) {
+					width: 80% !important;
+				}
+				// Mobile
+				@media all and (max-width: $screen-xs-min) {
+					width: 100% !important;
+				}
 			}
 		}
 		
@@ -597,13 +556,14 @@ $settings-menu-active:      $white;
 			width: 25%;
 			color: $gray-600;
 			font-weight: bold;
-			font-size: 16px;
+			font-size: 15px;
+			padding-top: 25px;
 		}
 		
 		.atum-setting-info {
 			color: $gray-500;
 			margin-bottom: $grid-gutter-width/2;
-			padding-top: 10px;
+			padding-top: 12px;
 			font-size: 15px;
 			font-weight: normal;
 			font-style: normal;
@@ -614,8 +574,11 @@ $settings-menu-active:      $white;
 				padding-left: $grid-gutter-width/2;
 				
 				li {
-					list-style: circle;
+					list-style: none;
 					line-height: 1.1;
+					&:before {
+						content: "- ";
+					}
 				}
 			}
 		}
@@ -630,11 +593,17 @@ $settings-menu-active:      $white;
 		}
 		
 		input[type=text], input[type=number] {
-			height: 32px;
+			height: 30px;
 		}
 		
 		input[type=number] {
-			width: 60px;
+			width: 62px;
+			text-align: right;
+			margin-right: 2px;
+			&::-webkit-inner-spin-button,
+			&::-webkit-outer-spin-button {
+				opacity: 1;
+			}
 		}
 		
 		.region-switcher {
@@ -642,9 +611,41 @@ $settings-menu-active:      $white;
 			@include flex-wrap(wrap !important);
 		}
 		
+		.region-switcher {
+			.tool-runner {
+				margin-left: 0 !important;
+			}
+		}
+		
 		.script-runner {
 			@include flexbox;
 			@include flex-wrap(nowrap);
+			
+			.tool-runner {
+				//margin-left: 10px;
+				text-transform: uppercase;
+				font-size: 12px;
+				width: 110px;
+				height: 30px;
+			}
+			
+			.atum-select2-container {
+				height: 30px;
+				padding-bottom: 8px;
+				@media all and (max-width: $screen-sm-min) {
+					width: 80%;
+					.select2-container {
+						width: 100% !important;
+					}
+				}
+				// Mobile
+				@media all and (max-width: $screen-xs-min) {
+					width: 100%;
+					.select2-container {
+						width: 100% !important;
+					}
+				}
+			}
 			
 			.select2-container {
 				
@@ -684,7 +685,7 @@ $settings-menu-active:      $white;
 			
 			.tool-fields-wrapper {
 				width: 100%;
-				margin-bottom: $grid-gutter-width/2;
+				margin-bottom: 20px;
 				
 				.repeatable-row {
 					@include flexbox;
@@ -708,13 +709,34 @@ $settings-menu-active:      $white;
 							}
 						}
 					}
-					.tool-fields-from {
+					.tool-fields-from, .tool-fields-to {
 						.select2-container {
-							width: 100% !important;
+							width: 200px !important;
+							// Mobile
+							@media all and (max-width: $screen-xs-min) {
+								width: 100% !important;
+							}
+						}
+						.select2-selection__choice {
+							height: 15px;
+							line-height: 15px;
+							overflow: hidden;
+							background-color: $gray-500;
+							margin: 4px 5px 0 0;
+							color: $white;
+							.select2-selection__choice__remove {
+								color: $white;
+							}
 						}
 					}
 					.add-row {
 						width: 62px;
+						text-transform: uppercase;
+						height: 30px;
+						font-size: 12px;
+					}
+					.tool-fields-to {
+						margin-right: 14px;
 					}
 				}
 				
@@ -732,6 +754,43 @@ $settings-menu-active:      $white;
 				border-radius: 4px;
 			}
 		}
+		
+		.select2-container {
+			width: 350px !important;
+			// Tablet style
+			@media all and (max-width: $screen-sm-min) {
+				width: 80% !important;
+			}
+			// Mobile
+			@media all and (max-width: $screen-xs-min) {
+				width: 100% !important;
+			}
+			&, .selection, .select2-selection--single, .select2-selection__rendered {
+				&:focus {
+					outline: none;
+				}
+			}
+			.select2-selection {
+				height: 30px;
+				.select2-selection__rendered {
+					line-height: 30px;
+					color: $gray-600;
+				}
+				.select2-selection__arrow {
+					b {
+						display: none;
+					}
+					&:after {
+						line-height: 30px;
+						font-family: Linearicons;
+						content: "\e874";
+						font-size: 10px;
+						color: $gray-500;
+					}
+				}
+				border: 1px solid $gray-200;
+			}
+		}
 	}
 	
 	.submit {
@@ -741,6 +800,7 @@ $settings-menu-active:      $white;
 	
 	input[type=submit] {
 		width: 144px;
+		height: 30px;
 		text-transform: uppercase;
 		padding: 11px 20px 9px;
 		line-height: 1;
@@ -763,9 +823,13 @@ $settings-menu-active:      $white;
 	
 	// Tablet style
 	@media all and (max-width: $screen-sm-min) {
+		margin-left: 10px;
 		.section-fields {
 			.script-runner {
 				flex-wrap: nowrap;
+			}
+			.tool-runner {
+				margin-left: 10px;
 			}
 		}
 		.form-table {
@@ -785,6 +849,24 @@ $settings-menu-active:      $white;
 		}
 		.section-fields {
 			padding: 4px 10px;
+			.script-runner {
+				.tool-fields-wrapper {
+					margin-bottom: 5px;
+				}
+				.tool-fields-from {
+					.select2-container {
+						width: 100% !important;
+					}
+				}
+				flex-wrap: wrap;
+				.tool-runner {
+					width: 100%;
+					margin-left: 0;
+				}
+				.add-row {
+					width: 100% !important;
+				}
+			}
 		}
 		.submit {
 			text-align: center;
@@ -806,26 +888,18 @@ $settings-menu-active:      $white;
 				input[type=text] {
 					width: 100%;
 				}
-				.script-runner {
-					flex-wrap: wrap;
-					button {
-						width: 100%;
-					}
-					.add-row {
-						width: 100% !important;
-					}
-				}
 			}
+			
+			td {
+				padding-right: 0;
+				padding-top: 27px;
+			}
+			
 			.tool-fields-wrapper {
 				.repeatable-row {
 					flex-wrap: wrap;
 					.tool-fields-to {
-						.select2-search__field::placeholder {
-							font-style: italic !important;
-							color: $gray-500;
-						}
 						.select2-selection__rendered {
-							line-height: 1;
 							.select2-selection__choice {
 								height: 15px;
 							}
@@ -839,6 +913,69 @@ $settings-menu-active:      $white;
 				}
 			}
 		}
+	}
+}
+
+.select2-dropdown {
+	box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
+	margin-top: 4px;
+	.select2-search {
+		display: none;
+	}
+	.select2-results {
+		box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
+		.select2-results__option--highlighted {
+			background-color: $gray-100;
+		}
+		.select2-results__option[aria-selected=true] {
+			background-color: $blue-light;
+			color: $blue;
+		}
+		.select2-results__options {
+			&::-webkit-scrollbar {
+				background-color: transparent;
+				border: none;
+				width: 10px;
+			}
+			
+			&::-webkit-scrollbar-track {
+				background-color: transparent;
+				border: none;
+			}
+			
+			&::-webkit-scrollbar-thumb {
+				-webkit-border-radius: 10px;
+				border-radius: 5px;
+				background-color: $gray-600;
+			}
+			
+			.select2-results__option {
+				color: $gray-600;
+				font-size: 12px;
+			}
+		}
+	}
+}
+
+.select2-search {
+	line-height: 1;
+	&::after {
+		font-family: 'Linearicons';
+		content: "\e86f";
+		padding-right: 15px;
+		font-size: 12px;
+		bottom: 8px;
+		right: 0;
+		position: absolute;
+	}
+}
+
+input[type=search] {
+	&::placeholder {
+		font-style: italic !important;
+		color: $gray-500 !important;
+		font-size: 12px;
+		padding-left: 7px;
 	}
 }
 

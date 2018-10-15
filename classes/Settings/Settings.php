@@ -833,12 +833,14 @@ class Settings {
 			<?php do_action('atum/settings/before_script_runner_field', $args) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ): ?>
-			<select class="atum-select2" style="width: 12em" id="<?php echo $args['id'] ?>">
-				<?php foreach ( $args['options']['select'] as $key => $label ): ?>
-				<option value="<?php echo $key ?>"><?php echo $label ?></option>
-				<?php endforeach ?>
-			</select>
-			&nbsp;
+			<div class="atum-select2-container">
+				<select class="atum-select2" style="width: 12em" id="<?php echo $args['id'] ?>">
+					<?php foreach ( $args['options']['select'] as $key => $label ): ?>
+						<option value="<?php echo $key ?>"><?php echo $label ?></option>
+					<?php endforeach ?>
+				</select>
+				&nbsp;
+			</div>
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-primary tool-runner"<?php if ( isset( $args['options']['button_status'] ) && $args['options']['button_status'] == 'disabled' ) echo ' disabled="disabled"' ?>>

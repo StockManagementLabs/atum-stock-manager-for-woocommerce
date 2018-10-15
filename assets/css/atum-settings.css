@@ -890,7 +890,9 @@ input[type="button"].btn-block {
 }
 
 .switchery-small {
-  width: 42px;
+  width: 48px;
+  border-radius: 100px;
+  box-shadow: inset -1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
 .switchery-small small {
@@ -1598,11 +1600,12 @@ input[type="button"].btn-block {
 }
 
 .atum-settings-wrapper h1 {
-  text-transform: uppercase;
+  text-transform: capitalize;
   margin-bottom: 15px;
   font-weight: bold;
   color: #27283B;
   font-size: 36px;
+  margin-bottom: 20px;
 }
 
 .atum-settings-wrapper .atum-settings-container {
@@ -1699,8 +1702,6 @@ input[type="button"].btn-block {
   justify-content: space-between;
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .atum-settings-wrapper .atum-nav-header .toogle-menu {
@@ -1726,7 +1727,7 @@ input[type="button"].btn-block {
   text-decoration: none;
   color: #fff;
   height: 51px;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: bold;
   padding-left: 15px;
 }
@@ -1761,7 +1762,7 @@ input[type="button"].btn-block {
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
-  padding: 5px 22px;
+  padding: 5px 24px;
 }
 
 .atum-settings-wrapper .nav-footer .nav-footer-logo img {
@@ -1770,7 +1771,7 @@ input[type="button"].btn-block {
 
 .atum-settings-wrapper .nav-footer .nav-footer-logo span {
   color: #fff;
-  font-size: 20px;
+  font-size: 27px;
   margin-left: 10px;
   font-weight: bold;
 }
@@ -1781,7 +1782,7 @@ input[type="button"].btn-block {
   font-size: 12px;
   font-weight: normal;
   display: block;
-  padding: 0 10px 5px 10px;
+  padding: 0 12px 9px 12px;
 }
 
 .atum-settings-wrapper .nav-footer p a {
@@ -1814,7 +1815,7 @@ input[type="button"].btn-block {
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
-  padding: 0 1em;
+  padding: 0 20px 0 20px;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1877,7 +1878,8 @@ input[type="button"].btn-block {
 }
 
 .atum-settings-wrapper .atum-nav-link .menu-helper i {
-  margin-right: 5px;
+  margin-right: 7px;
+  font-size: 16px;
 }
 
 .atum-settings-wrapper .atum-nav-link.active {
@@ -1915,16 +1917,22 @@ input[type="button"].btn-block {
     width: 50px;
     min-width: inherit;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand {
+  .atum-settings-wrapper .atum-nav .atum-brand-link, .atum-settings-wrapper .atum-nav-light .atum-brand-link {
+    width: 100%;
+  }
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand {
     justify-content: center;
     height: 51px;
     text-align: center;
-    padding-left: 0 !important;
+    padding-left: 0;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand span {
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand span {
     display: none;
   }
-  .atum-settings-wrapper .atum-nav .menu-helper span, .atum-settings-wrapper .atum-nav-light .menu-helper span {
+  .atum-settings-wrapper .atum-nav .atum-nav-link, .atum-settings-wrapper .atum-nav-light .atum-nav-link {
+    padding: 0 15px 0 15px;
+  }
+  .atum-settings-wrapper .atum-nav .atum-nav-link .menu-helper span, .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper span {
     display: none;
   }
   .atum-settings-wrapper .atum-nav .nav-footer, .atum-settings-wrapper .atum-nav-light .nav-footer {
@@ -1937,7 +1945,13 @@ input[type="button"].btn-block {
     width: 100%;
     margin-bottom: 11px;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand span {
+  .atum-settings-wrapper .atum-nav .atum-brand-link, .atum-settings-wrapper .atum-nav-light .atum-brand-link {
+    width: inherit;
+  }
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand {
+    padding-left: 10px;
+  }
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand span {
     display: block;
   }
   .atum-settings-wrapper .atum-nav .atum-nav-header, .atum-settings-wrapper .atum-nav-light .atum-nav-header {
@@ -1981,85 +1995,6 @@ input[type="button"].btn-block {
   .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:active {
     outline: 0;
   }
-}
-
-.select2-container {
-  width: 80% !important;
-}
-
-@media all and (max-width: 480px) {
-  .select2-container {
-    width: 100% !important;
-  }
-}
-
-.select2-container:focus, .select2-container .selection:focus, .select2-container .select2-selection--single:focus, .select2-container .select2-selection__rendered:focus {
-  outline: none;
-}
-
-.select2-container .select2-selection {
-  height: 30px;
-  border: 1px solid #e9ecef;
-}
-
-.select2-container .select2-selection .select2-selection__rendered {
-  line-height: 30px;
-  color: #6c757d;
-}
-
-.select2-container .select2-selection .select2-selection__arrow b {
-  display: none;
-}
-
-.select2-container .select2-selection .select2-selection__arrow:after {
-  line-height: 30px;
-  font-family: Linearicons;
-  content: "\e874";
-  font-size: 10px;
-  color: #adb5bd;
-}
-
-.select2-container .select2-dropdown {
-  box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
-}
-
-.select2-container .select2-dropdown .select2-search {
-  display: none;
-}
-
-.select2-container .select2-dropdown .select2-results {
-  box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
-}
-
-.select2-container .select2-dropdown .select2-results .select2-results__option--highlighted {
-  background-color: #f8f9fa;
-}
-
-.select2-container .select2-dropdown .select2-results .select2-results__option[aria-selected=true] {
-  background-color: #dbf9ff;
-  color: #00B8DB;
-}
-
-.select2-container .select2-dropdown .select2-results .select2-results__options::-webkit-scrollbar {
-  background-color: transparent;
-  border: none;
-  width: 10px;
-}
-
-.select2-container .select2-dropdown .select2-results .select2-results__options::-webkit-scrollbar-track {
-  background-color: transparent;
-  border: none;
-}
-
-.select2-container .select2-dropdown .select2-results .select2-results__options::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 5px;
-  background-color: #6c757d;
-}
-
-.select2-container .select2-dropdown .select2-results .select2-results__options .select2-results__option {
-  color: #6c757d;
-  font-size: 12px;
 }
 
 @-webkit-keyframes anim-atum-menu {
@@ -2134,7 +2069,8 @@ input[type="button"].btn-block {
 #atum-settings .btn-group label {
   margin-left: 1px;
   margin-right: 1px;
-  line-height: 2;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 #atum-settings .form-settings-wrapper {
@@ -2149,6 +2085,8 @@ input[type="button"].btn-block {
   top: 0;
   bottom: 0;
   z-index: 10;
+  background-color: #f8f9fa;
+  opacity: 0.5;
 }
 
 #atum-settings .form-settings-wrapper.overlay:after {
@@ -2168,6 +2106,7 @@ input[type="button"].btn-block {
   -moz-animation: loader-rotate 1s linear infinite;
   -o-animation: loader-rotate 1s linear infinite;
   animation: loader-rotate 1s linear infinite;
+  border-top-color: #6c757d;
 }
 
 @-webkit-keyframes loader-rotate {
@@ -2226,7 +2165,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-general-title {
-  padding: 0 30px;
+  padding: 0 20px;
   background-color: #3b3d5a;
   border-radius: 6px;
   height: 51px;
@@ -2252,6 +2191,8 @@ input[type="button"].btn-block {
   margin: 0;
   text-transform: uppercase;
   font-size: 18px;
+  font-weight: bold;
+  padding-left: 5px;
   font-weight: bold;
 }
 
@@ -2297,6 +2238,7 @@ input[type="button"].btn-block {
   margin: 0;
   text-transform: capitalize;
   font-size: 18px;
+  font-weight: bold;
 }
 
 #atum-settings .section-title-light h2 {
@@ -2304,7 +2246,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields {
-  padding: 4px 30px;
+  padding: 0px 20px 0px 25px;
   background-color: #fff;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -2312,6 +2254,11 @@ input[type="button"].btn-block {
   background-position: bottom;
   background-repeat: no-repeat;
   background-size: contain;
+  box-shadow: 0 4px 0 0 #e9ecef;
+}
+
+#atum-settings .section-fields .form-table {
+  margin-top: 0;
 }
 
 #atum-settings .section-fields tr:not(:last-child) {
@@ -2319,24 +2266,37 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields th, #atum-settings .section-fields td {
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
 #atum-settings .section-fields th input[type=text], #atum-settings .section-fields td input[type=text] {
-  width: 80%;
+  width: 350px;
+}
+
+@media all and (max-width: 768px) {
+  #atum-settings .section-fields th input[type=text], #atum-settings .section-fields td input[type=text] {
+    width: 80% !important;
+  }
+}
+
+@media all and (max-width: 480px) {
+  #atum-settings .section-fields th input[type=text], #atum-settings .section-fields td input[type=text] {
+    width: 100% !important;
+  }
 }
 
 #atum-settings .section-fields th {
   width: 25%;
   color: #6c757d;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 15px;
+  padding-top: 25px;
 }
 
 #atum-settings .section-fields .atum-setting-info {
   color: #adb5bd;
   margin-bottom: 15px;
-  padding-top: 10px;
+  padding-top: 12px;
   font-size: 15px;
   font-weight: normal;
   font-style: normal;
@@ -2349,8 +2309,12 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields .atum-setting-info ul li {
-  list-style: circle;
+  list-style: none;
   line-height: 1.1;
+}
+
+#atum-settings .section-fields .atum-setting-info ul li:before {
+  content: "- ";
 }
 
 #atum-settings .section-fields input[type=text], #atum-settings .section-fields input[type=number], #atum-settings .section-fields select, #atum-settings .section-fields textarea {
@@ -2363,11 +2327,17 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields input[type=text], #atum-settings .section-fields input[type=number] {
-  height: 32px;
+  height: 30px;
 }
 
 #atum-settings .section-fields input[type=number] {
-  width: 60px;
+  width: 62px;
+  text-align: right;
+  margin-right: 2px;
+}
+
+#atum-settings .section-fields input[type=number]::-webkit-inner-spin-button, #atum-settings .section-fields input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
 
 #atum-settings .section-fields .region-switcher {
@@ -2381,6 +2351,10 @@ input[type="button"].btn-block {
   flex-wrap: wrap !important;
 }
 
+#atum-settings .section-fields .region-switcher .tool-runner {
+  margin-left: 0 !important;
+}
+
 #atum-settings .section-fields .script-runner {
   display: -webkit-box;
   display: -webkit-flex;
@@ -2390,6 +2364,36 @@ input[type="button"].btn-block {
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
+}
+
+#atum-settings .section-fields .script-runner .tool-runner {
+  text-transform: uppercase;
+  font-size: 12px;
+  width: 110px;
+  height: 30px;
+}
+
+#atum-settings .section-fields .script-runner .atum-select2-container {
+  height: 30px;
+  padding-bottom: 8px;
+}
+
+@media all and (max-width: 768px) {
+  #atum-settings .section-fields .script-runner .atum-select2-container {
+    width: 80%;
+  }
+  #atum-settings .section-fields .script-runner .atum-select2-container .select2-container {
+    width: 100% !important;
+  }
+}
+
+@media all and (max-width: 480px) {
+  #atum-settings .section-fields .script-runner .atum-select2-container {
+    width: 100%;
+  }
+  #atum-settings .section-fields .script-runner .atum-select2-container .select2-container {
+    width: 100% !important;
+  }
 }
 
 #atum-settings .section-fields .script-runner .select2-container:focus, #atum-settings .section-fields .script-runner .select2-container .selection:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection--single:focus, #atum-settings .section-fields .script-runner .select2-container .select2-selection__rendered:focus {
@@ -2430,7 +2434,7 @@ input[type="button"].btn-block {
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper {
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row {
@@ -2464,12 +2468,38 @@ input[type="button"].btn-block {
   color: #FF4848;
 }
 
-#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container {
-  width: 100% !important;
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container {
+  width: 200px !important;
+}
+
+@media all and (max-width: 480px) {
+  #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container {
+    width: 100% !important;
+  }
+}
+
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice {
+  height: 15px;
+  line-height: 15px;
+  overflow: hidden;
+  background-color: #adb5bd;
+  margin: 4px 5px 0 0;
+  color: #fff;
+}
+
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice .select2-selection__choice__remove {
+  color: #fff;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .add-row {
   width: 62px;
+  text-transform: uppercase;
+  height: 30px;
+  font-size: 12px;
+}
+
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to {
+  margin-right: 14px;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .error-message {
@@ -2484,6 +2514,48 @@ input[type="button"].btn-block {
   border-radius: 4px;
 }
 
+#atum-settings .section-fields .select2-container {
+  width: 350px !important;
+}
+
+@media all and (max-width: 768px) {
+  #atum-settings .section-fields .select2-container {
+    width: 80% !important;
+  }
+}
+
+@media all and (max-width: 480px) {
+  #atum-settings .section-fields .select2-container {
+    width: 100% !important;
+  }
+}
+
+#atum-settings .section-fields .select2-container:focus, #atum-settings .section-fields .select2-container .selection:focus, #atum-settings .section-fields .select2-container .select2-selection--single:focus, #atum-settings .section-fields .select2-container .select2-selection__rendered:focus {
+  outline: none;
+}
+
+#atum-settings .section-fields .select2-container .select2-selection {
+  height: 30px;
+  border: 1px solid #e9ecef;
+}
+
+#atum-settings .section-fields .select2-container .select2-selection .select2-selection__rendered {
+  line-height: 30px;
+  color: #6c757d;
+}
+
+#atum-settings .section-fields .select2-container .select2-selection .select2-selection__arrow b {
+  display: none;
+}
+
+#atum-settings .section-fields .select2-container .select2-selection .select2-selection__arrow:after {
+  line-height: 30px;
+  font-family: Linearicons;
+  content: "\e874";
+  font-size: 10px;
+  color: #adb5bd;
+}
+
 #atum-settings .submit {
   padding-top: 0;
   text-align: right;
@@ -2491,6 +2563,7 @@ input[type="button"].btn-block {
 
 #atum-settings input[type=submit] {
   width: 144px;
+  height: 30px;
   text-transform: uppercase;
   padding: 11px 20px 9px;
   line-height: 1;
@@ -2517,8 +2590,14 @@ input[type="button"].btn-block {
 }
 
 @media all and (max-width: 768px) {
+  #atum-settings {
+    margin-left: 10px;
+  }
   #atum-settings .section-fields .script-runner {
     flex-wrap: nowrap;
+  }
+  #atum-settings .section-fields .tool-runner {
+    margin-left: 10px;
   }
   #atum-settings .form-table th {
     display: table-cell;
@@ -2532,6 +2611,22 @@ input[type="button"].btn-block {
   }
   #atum-settings .section-fields {
     padding: 4px 10px;
+  }
+  #atum-settings .section-fields .script-runner {
+    flex-wrap: wrap;
+  }
+  #atum-settings .section-fields .script-runner .tool-fields-wrapper {
+    margin-bottom: 5px;
+  }
+  #atum-settings .section-fields .script-runner .tool-fields-from .select2-container {
+    width: 100% !important;
+  }
+  #atum-settings .section-fields .script-runner .tool-runner {
+    width: 100%;
+    margin-left: 0;
+  }
+  #atum-settings .section-fields .script-runner .add-row {
+    width: 100% !important;
   }
   #atum-settings .submit {
     text-align: center;
@@ -2552,24 +2647,12 @@ input[type="button"].btn-block {
   #atum-settings .form-table th input[type=text], #atum-settings .form-table td input[type=text] {
     width: 100%;
   }
-  #atum-settings .form-table th .script-runner, #atum-settings .form-table td .script-runner {
-    flex-wrap: wrap;
-  }
-  #atum-settings .form-table th .script-runner button, #atum-settings .form-table td .script-runner button {
-    width: 100%;
-  }
-  #atum-settings .form-table th .script-runner .add-row, #atum-settings .form-table td .script-runner .add-row {
-    width: 100% !important;
+  #atum-settings .form-table td {
+    padding-right: 0;
+    padding-top: 27px;
   }
   #atum-settings .form-table .tool-fields-wrapper .repeatable-row {
     flex-wrap: wrap;
-  }
-  #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-search__field::placeholder {
-    font-style: italic !important;
-    color: #adb5bd;
-  }
-  #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__rendered {
-    line-height: 1;
   }
   #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__rendered .select2-selection__choice {
     height: 15px;
@@ -2579,6 +2662,71 @@ input[type="button"].btn-block {
     margin-right: 0 !important;
     margin-top: 11px;
   }
+}
+
+.select2-dropdown {
+  box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
+  margin-top: 4px;
+}
+
+.select2-dropdown .select2-search {
+  display: none;
+}
+
+.select2-dropdown .select2-results {
+  box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+.select2-dropdown .select2-results .select2-results__option--highlighted {
+  background-color: #f8f9fa;
+}
+
+.select2-dropdown .select2-results .select2-results__option[aria-selected=true] {
+  background-color: #dbf9ff;
+  color: #00B8DB;
+}
+
+.select2-dropdown .select2-results .select2-results__options::-webkit-scrollbar {
+  background-color: transparent;
+  border: none;
+  width: 10px;
+}
+
+.select2-dropdown .select2-results .select2-results__options::-webkit-scrollbar-track {
+  background-color: transparent;
+  border: none;
+}
+
+.select2-dropdown .select2-results .select2-results__options::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 5px;
+  background-color: #6c757d;
+}
+
+.select2-dropdown .select2-results .select2-results__options .select2-results__option {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.select2-search {
+  line-height: 1;
+}
+
+.select2-search::after {
+  font-family: 'Linearicons';
+  content: "\e86f";
+  padding-right: 15px;
+  font-size: 12px;
+  bottom: 8px;
+  right: 0;
+  position: absolute;
+}
+
+input[type=search]::placeholder {
+  font-style: italic !important;
+  color: #adb5bd !important;
+  font-size: 12px;
+  padding-left: 7px;
 }
 
 @media all and (max-width: 480px) {
