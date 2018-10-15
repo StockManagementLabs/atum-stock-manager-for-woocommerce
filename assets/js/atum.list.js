@@ -54,6 +54,7 @@
 		numHashParameters: 0,
 		delayTimer       : 0,
 		$collapsedGroups : null,
+		$stickyCols      : null,
 		
 		/**
 		 * Register our events and initialize the UI
@@ -132,6 +133,8 @@
             });
 			
 			this.addFloatThead();
+			
+			this.addStickyColumns();
 			
 			//
 			// Setup the URL navaigation
@@ -919,6 +922,11 @@
 		 */
 		addScrollBar: function() {
 			
+			if (this.jScrollApi !== null) {
+				this.reloadScrollbar();
+				return;
+			}
+			
 			// Wait until the thumbs are loaded and enable JScrollpane
 			var self          = this,
 			    $tableWrapper = $('.atum-table-wrapper'),
@@ -930,6 +938,28 @@
 			$tableWrapper.imagesLoaded().then(function () {
 				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 				self.jScrollApi  = self.$scrollPane.data('jsp');
+				
+				// Bind events
+				self.$scrollPane
+					.on('jsp-initialised', function (event, isScrollable) {
+						
+						// Add the stickyCols table
+						self.$atumTable.after(self.$stickyCols);
+						
+					})
+					.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
+						
+						// Hide the sticky cols when reaching the left side of the panel
+						if (scrollPositionX <= 0) {
+							self.$stickyCols.hide().css('left', 0);
+						}
+						// Reposition the sticky cols while scrolling the pane
+						else {
+							self.$stickyCols.show().css('left', scrollPositionX);
+						}
+						
+					});
+				
 			});
 			
 		},
@@ -951,6 +981,11 @@
 		 */
 		addFloatThead: function() {
 			
+			if (typeof this.$atumTable.data('floatTheadAttached') !== 'undefined' && this.$atumTable.data('floatTheadAttached') !== false) {
+				this.reloadFloatThead();
+				return;
+			}
+			
 			this.$atumTable.floatThead({
 				responsiveContainer: function ($table) {
 					return $table.closest('.jspContainer');
@@ -968,6 +1003,38 @@
 		reloadFloatThead: function() {
 			this.$atumTable.floatThead('destroy');
 			this.addFloatThead();
+		},
+		
+		/**
+		 * Make the first table columns sticky
+		 */
+		addStickyColumns: function() {
+			
+			if (this.$stickyCols !== null) {
+				return false;
+			}
+			
+			this.$stickyCols = this.$atumTable.clone(true);
+			
+			// Remove table header and footer
+			this.$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
+			
+			// Remove all the columns that won't be sticky
+			this.$stickyCols.find('tr').each(function () {
+				
+				var $row = $(this);
+				
+				if ($row.hasClass('column-groups')) {
+					var $colGroups = $row.children();
+					$colGroups.not(':first-child').remove();
+					$colGroups.first().attr('colspan', 6);
+				}
+				else {
+					$row.children().slice(6).remove();
+				}
+	
+			});
+		
 		},
 		
 		/**
