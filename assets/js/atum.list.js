@@ -960,6 +960,19 @@
 						
 					});
 				
+				// Touch scrolling on desktops
+				var hammertime = new Hammer(self.$scrollPane.get(0), {});
+				
+				hammertime.on('panright panleft', function (ev) {
+					
+					var paneStartX   = self.jScrollApi.getContentPositionX(),
+					    offset       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
+					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
+					
+					self.jScrollApi.scrollToX( displacement, false)
+					
+				});
+				
 			});
 			
 		},
