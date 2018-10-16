@@ -202,16 +202,18 @@
 	}
 	
 	// Float Thead
-	.floatThead-container {
-		height: 0;
-		
-		// Avoid issues when toggling columns while the header is floating
-		.group-toggler {
+	.floatThead-wrapper {
+		tr.size-row {
 			display: none;
 		}
 		
-		tr.size-row {
-			display: none;
+		.floatThead-container {
+			height: 0;
+			
+			// Avoid issues when toggling columns while the header is floating
+			.group-toggler {
+				display: none;
+			}
 		}
 	}
 	
@@ -339,6 +341,7 @@
 .atum-list-table, .floatThead-container {
 	margin-bottom: 15px;
 	border-collapse: collapse;
+	table-layout: auto !important; // FloatTHead fix
 	
 	thead .item-heads, tfoot {
 		background-color: $white;
