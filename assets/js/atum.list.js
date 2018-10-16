@@ -100,61 +100,15 @@
                     setTimeout(self.setupSearchColumnDropdown, 500); // performance
                 });
             }
-
-            //
-            // Init stickyHeaders: floatThead
-            //--------------------------------
-
-            // Fired when the sticky header has to be floated, or not.
-            this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
-            	
-	            if (isFloated) {
-	            	
-		            $floatContainer.css('height', 'auto');
-	            	
-		            // Hide searchDropdown on sticky
-		            if (self.settings.searchDropdown === 'yes') {
-			            $('#search_column_dropdown').hide();
-		            }
-		
-		            // Hide on mobile view
-		            if ($('#wpadminbar').css('position') === 'absolute') {
-			            $floatContainer.hide();
-		            }
-		            else {
-			            $floatContainer.show();
-		            }
-		            
-		            // Reposition the sticky cols to fit the floating header
-		            if (self.$stickyCols !== null){
-		            	self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
-		            }
-		
-	            }
-	            else {
-	            	
-		            $floatContainer.css('height', 0);
-		
-		            if (self.$stickyCols !== null){
-			            self.$stickyCols.css('top', 0);
-		            }
-		            
-	            }
-	            
-            });
-			
-			this.addFloatThead();
-			
-			this.addStickyColumns();
 			
 			//
-			// Setup the URL navaigation
+			// Setup the URL navigation
 			//--------------------------
 			this.setupNavigation();
 			
 			//
-			// Init Table Scrollbar
-			//----------------------
+			// Init the table scrollbar
+			//--------------------------
 			this.addScrollBar();
 			
 			$(window).resize(function() {
@@ -166,12 +120,67 @@
 			}).resize();
 			
 			//
-			// Init Tooltips
+			// Make the first columns sticky
+			//------------------------------
+			this.addStickyColumns();
+			
+			//
+			// Hide/Show the toggleable group of columns
+			//------------------------------------------
+			this.$atumList.on('click', '.group-toggler', function () {
+				self.toggleGroupColumns($(this));
+			}).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
+			
+			//
+			// Add the floating table header
+			//------------------------------
+			this.addFloatThead();
+			
+			// This event will trigger on the table when the header is floated and unfloated
+			this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
+				
+				if (isFloated) {
+					
+					$floatContainer.css('height', 'auto');
+					
+					// Hide search dropdown on sticky
+					if (self.settings.searchDropdown === 'yes') {
+						$('#search_column_dropdown').hide();
+					}
+					
+					// Hide on mobile view
+					if ($('#wpadminbar').css('position') === 'absolute') {
+						$floatContainer.hide();
+					}
+					else {
+						$floatContainer.show();
+					}
+					
+					// Reposition the sticky cols to fit the floating header
+					if (self.$stickyCols !== null){
+						self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
+					}
+					
+				}
+				else {
+					
+					$floatContainer.css('height', 0);
+					
+					if (self.$stickyCols !== null){
+						self.$stickyCols.css('top', 0);
+					}
+					
+				}
+				
+			});
+			
+			//
+			// Init tooltips
 			//---------------
 			this.addTooltips();
 			
 			//
-			// Init Popovers
+			// Init popovers
 			//---------------
 			this.setFieldPopover();
 			
@@ -191,7 +200,9 @@
 				
 			});
 
-            // TODO sold_last_days jquery
+            //
+			// Handle the sales N days siwtcher
+			//---------------------------------
             this.setupSalesLastNDaysVal();
 
 			// Popover's "Set" button
@@ -225,15 +236,9 @@
 					else {
 						$this.hide();
 					}
+					
 				});
 			});
-			
-			//
-			// Hide/Show entire group of columns
-			//----------------------------------
-			this.$atumList.on('click', '.group-toggler', function () {
-				self.toggleGroupColumns($(this));
-			}).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
 			
 			//
 			// Views, Pagination and Sortable links
@@ -245,24 +250,26 @@
 
             //
 			// Functions to set $searchColumnBtn data-value and html content
-			// TODO: searchColumnBtn as an independent component?
-            this.$searchColumnBtn.on('setHtmlAndDataValue', function (event, value, html) {
+			//--------------------------------------------------------------
+            this.$searchColumnBtn
+	            
+	            .on('setHtmlAndDataValue', function (event, value, html) {
             	
-            	var $searchColBtn = $(this);
+	                var $searchColBtn = $(this);
+		
+		            $searchColBtn.html(html);
+		            $searchColBtn.data('value', value);
 	
-	            $searchColBtn.html(html);
-	            $searchColBtn.data('value', value);
-
-                self.$searchColumnDropdown.children('a.active').removeClass('active');
-                self.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active');
-
-            })
-            .on('setDataValue', function (event, value) {
-                $(this).data('value', value);
+	                self.$searchColumnDropdown.children('a.active').removeClass('active');
+	                self.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active');
 	
-	            self.$searchColumnDropdown.children('a.active').removeClass('active');
-	            self.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active');
-            });
+	            })
+	            .on('setDataValue', function (event, value) {
+	                $(this).data('value', value);
+		
+		            self.$searchColumnDropdown.children('a.active').removeClass('active');
+		            self.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active');
+	            });
 
 
             // TODO Improve performance: ajaxFilter yes or not
@@ -279,19 +286,21 @@
                     
                 });
 
-                this.$atumList.on('keyup paste search', '.atum-post-search', function() {
+                this.$atumList
+	                
+	                .on('keyup paste search', '.atum-post-search', function() {
 	
-	                var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
-	                    $searchInputVal    = $(this).val();
-                    
-                    self.delay(function () {
-                        self.pseudoKeyUpAjax(searchColumnBtnVal, $searchInputVal);
-                    }, 500);
-                    
-                })
-                .on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
-                    self.keyUp(e);
-                });
+		                var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
+		                    $searchInputVal    = $(this).val();
+	                    
+	                    self.delay(function () {
+	                        self.pseudoKeyUpAjax(searchColumnBtnVal, $searchInputVal);
+	                    }, 500);
+	                    
+	                })
+	                .on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function (e) {
+	                    self.keyUp(e);
+	                });
 
                 if (this.settings.searchDropdown === 'yes') {
                 	
@@ -390,314 +399,317 @@
 			//
 			// Pagination text box
 			//--------------------
-			this.$atumList.on('keyup paste', '.current-page', function (e) {
-				self.keyUp(e);
-			})
-			
-			//
-			// Expanding/Collapsing inheritable products
-			//-------------------------------------------
-			.on('click', '.calc_type .has-child', function() {
-				self.expandRow( $(this).closest('tr') );
-			})
-			
-			//
-			// Bulk actions dropdown
-			//----------------------
-			.on('change', '.bulkactions select', function() {
+			this.$atumList
 				
-				self.updateBulkButton();
+				.on('keyup paste', '.current-page', function (e) {
+					self.keyUp(e);
+				})
+			
+				//
+				// Expanding/Collapsing inheritable products
+				//-------------------------------------------
+				.on('click', '.calc_type .has-child', function() {
+					self.expandRow( $(this).closest('tr') );
+				})
 				
-				if ($(this).val() !== '-1') {
-					self.$bulkButton.show();
-				}
-				else {
-					self.$bulkButton.hide();
-				}
-			})
-			
-			//
-			// Change the Bulk Button text when selecting boxes
-			//-------------------------------------------------
-			.on('change', '.check-column input:checkbox', function() {
-				self.updateBulkButton();
-			})
-			
-			//
-			// Expandable rows' checkboxes
-			//----------------------------
-			.on('change', '.check-column input:checkbox', function() {
-				self.checkDescendats($(this));
-			})
-			
-			//
-			// Locations tree
-			//---------------
-			.on('click', '.show-locations', function(e) {
-				
-				e.preventDefault();
-
-				// Component vars
-				var $button        = $(this),
-				    setedLocations = [],
-				    toSetLocations = [];
-
-                // Component methods
-				// on click in a tree a or icon, get the node cat-item-xx class
-                function getClosestsCatItem(thisObj){
-                
-					var returnValue = '',
-                        classList = thisObj.closest('.easytree-node').attr('class').split(/\s+/);
+				//
+				// Bulk actions dropdown
+				//----------------------
+				.on('change', '.bulkactions select', function() {
 					
-                    $.each(classList, function(index, item) {
-                        if (item.lastIndexOf('cat-item-', 0) === 0 ) { // item.startsWith('cat-item-') es5 'equivalent'
-                            returnValue = item;
-                        }
-                    });
-                    
-                    return returnValue;
-                    
-				}
-
-				// Toggle check class on node, and add or remove from array toSetLocations
-                function toggleValueToSetLocations(thisObj){
-                	
-                    var catItem = getClosestsCatItem(thisObj);
-
-                    $('.' + catItem).toggleClass( 'checked' );
-
-                    if($('.' + catItem).hasClass( 'checked' )) {
-                        toSetLocations.push(catItem);
-                    }
-                    else {
-                        var pos = toSetLocations.indexOf(catItem);
-                        
-                        if (pos != -1) {
-                            toSetLocations.splice(pos, 1);
-                        }
-					}
+					self.updateBulkButton();
 					
-				}
-				
-				// Open on view
-				swal({
-					title            : self.settings.productLocations,
-					html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
-					showCancelButton : false,
-					showConfirmButton: true,
-                    confirmButtonText: self.settings.editProductLocations,
-					showCloseButton  : true,
-					onOpen           : function () {
-						
-						var $locationsTreeContainer = $('#atum-locations-tree');
-						
-						$.ajax({
-							url       : ajaxurl,
-							dataType  : 'json',
-							method    : 'post',
-							data      : {
-								action    : 'atum_get_locations_tree',
-								token     : self.settings.nonce,
-								product_id: $button.closest('tr').data('id')
-							},
-							beforeSend: function () {
-								$locationsTreeContainer.append('<div class="atum-loading" />');
-							},
-							success   : function (response) {
-
-                                if (response.success === true) {
-                                    $locationsTreeContainer.html(response.data);
-
-                                    // if answer is like <span class="no-locations-set">...  don't put easytree on work.
-                                    // It will remove the span message
-                                    if (!(response.data.indexOf('no-locations-set') !== -1)) {
-
-                                        $locationsTreeContainer.easytree();
-
-                                        //Fill setedLocations
-                                        $("#atum-locations-tree span[class^='cat-item-'], #atum-locations-tree span[class*='cat-item-']").each(function () {
-                                            var classList = $(this).attr('class').split(/\s+/);
-                                            
-                                            $.each(classList, function (index, item) {
-                                                if (item.startsWith('cat-item-')) {
-                                                    setedLocations.push(item);
-                                                }
-                                            });
-                                        })
-                                    }
-								}
-							}
-						});
-						
-					},
-					onClose          : function () {
-						$button.blur().tooltip('hide');
+					if ($(this).val() !== '-1') {
+						self.$bulkButton.show();
 					}
-				// Click on edit!
-				}).then(function () {
-
-                    swal({
-                        title            : self.settings.edit,
-                        html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
-                        text             : self.settings.textToShow,
-                        confirmButtonText: self.settings.saveButton,
-                        showCloseButton  : true,
-                        showCancelButton : true,
-                        onOpen           : function () {
-                        	
-                            var $locationsTreeContainer = $('#atum-locations-tree');
+					else {
+						self.$bulkButton.hide();
+					}
+				})
+				
+				//
+				// Change the Bulk Button text when selecting boxes
+				//-------------------------------------------------
+				.on('change', '.check-column input:checkbox', function() {
+					self.updateBulkButton();
+				})
+				
+				//
+				// Expandable rows' checkboxes
+				//----------------------------
+				.on('change', '.check-column input:checkbox', function() {
+					self.checkDescendats($(this));
+				})
+				
+				//
+				// Locations tree
+				//---------------
+				.on('click', '.show-locations', function(e) {
+					
+					e.preventDefault();
 	
-	                        $.ajax({
-		                        url       : ajaxurl,
-		                        dataType  : 'json',
-		                        method    : 'post',
-		                        data      : {
-			                        action    : 'atum_get_locations_tree',
-			                        token     : self.settings.nonce,
-			                        product_id: -1 // $button.closest('tr').data('id') <- send -1 to get all the taxonomies
-		                        },
-		                        beforeSend: function () {
-			                        $locationsTreeContainer.append('<div class="atum-loading" />');
-		                        },
-		                        success   : function (response) {
-			
-			                        if (response.success === true) {
-			                        	
-			                        	var $atumLocationsTree = $('#atum-locations-tree');
-				
-				                        $locationsTreeContainer.html(response.data);
-				                        $locationsTreeContainer.easytree();
-				
-				                        toSetLocations = setedLocations;
-				
-				                        // If click on link or icon, set node as checked
-				                        $atumLocationsTree.find('a').click(function (e) {
-					                        e.preventDefault();
-					                        toggleValueToSetLocations($(this));
-				                        });
-				
-				                        $atumLocationsTree.find('.easytree-icon').click(function () {
-					                        toggleValueToSetLocations($(this));
-				                        });
-				
-				                        //set class checked the actual values on load
-				                        $atumLocationsTree.find('span[class^="cat-item-"], span[class*="cat-item-"]').each(function () {
-					
-					                        var classList = $(this).attr('class').split(/\s+/);
-					
-					                        $.each(classList, function (index, item) {
+					// Component vars
+					var $button        = $(this),
+					    setedLocations = [],
+					    toSetLocations = [];
+	
+	                // Component methods
+					// on click in a tree a or icon, get the node cat-item-xx class
+	                function getClosestsCatItem(thisObj){
+	                
+						var returnValue = '',
+	                        classList = thisObj.closest('.easytree-node').attr('class').split(/\s+/);
 						
-						                        if (item.startsWith('cat-item-')) {
-							                        if ($.inArray(item, setedLocations) !== -1) {
-								                        $('.' + item).addClass('checked');
-							                        }
-						                        }
-						
-					                        });
-					                        
-				                        });
-				
-			                        }
-		                        }
-	                        });
-                            
-                        },
-						onClose          : function () {
-                            $button.blur().tooltip('hide');
-                        }
-                    // Save button clicked
-					}).then(function(){
-						
-						// ["cat-item-40", "cat-item-39"] -> [40, 39]
-						var toSetTerms = toSetLocations.map(function(x) {
-							return parseInt(x.substring(9));
-						});
-
-                        var $locationsTreeContainer = $('#atum-locations-tree');
-
-						$.ajax({
-							url       : ajaxurl,
-							dataType  : 'json',
-							method    : 'post',
-							data      : {
-								action    : 'atum_set_locations_tree',
-								token     : self.settings.nonce,
-								product_id: $button.closest('tr').data('id'),
-								terms     : toSetTerms
-							},
-							beforeSend: function () {
-								$locationsTreeContainer.append('<div class="atum-loading" />');
-							},
-							success   : function (response) {
-
-								if (response.success === true) {
-									
-                                    swal({
-                                        title            : self.settings.done,
-                                        type             : 'success',
-                                        text             : self.settings.locationsSaved,
-                                        confirmButtonText: self.settings.ok,
-                                        onClose           : function () {
-                                            // Update atum-table to show the new location icon
-                                            self.updateTable();
-                                        }
-                                    }).then(function(){
-                                        self.updateTable();
-                                    }).catch(swal.noop);
-                                    
-								}
-							}
-						});
-
-					}).catch(swal.noop);
-                
-                }).catch(swal.noop);
-				
-			})
-			
-			//
-			// Reset Filters button
-			//---------------------
-			.on('click', '.reset-filters', function() {
-				
-                self.destroyTooltips();
-                
-                //TODO reset s and column search
-                $.address.queryString('');
-                self.$searchInput.val('');
-                
-                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') != 'title') {
-					self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
-            	}
-            	
-				self.updateTable();
-    
-			})
-			
-			//
-			// "Control all products" button
-			.on('click', '#control-all-products', function() {
-				
-				var $button = $(this);
-				
-				$.ajax({
-					url     : ajaxurl,
-					method  : 'POST',
-					dataType: 'json',
-					beforeSend: function() {
-						$button.prop('disabled', true).after('<span class="atum-spinner"><span></span></span>');
-					},
-					data    : {
-						token : $(this).data('nonce'),
-						action: 'atum_control_all_products'
-					},
-					success: function() {
-						location.reload();
+	                    $.each(classList, function(index, item) {
+	                        if (item.lastIndexOf('cat-item-', 0) === 0 ) { // item.startsWith('cat-item-') es5 'equivalent'
+	                            returnValue = item;
+	                        }
+	                    });
+	                    
+	                    return returnValue;
+	                    
 					}
+	
+					// Toggle check class on node, and add or remove from array toSetLocations
+	                function toggleValueToSetLocations(thisObj){
+	                    
+	                    var catItem = getClosestsCatItem(thisObj);
+	
+	                    $('.' + catItem).toggleClass( 'checked' );
+	
+	                    if($('.' + catItem).hasClass( 'checked' )) {
+	                        toSetLocations.push(catItem);
+	                    }
+	                    else {
+	                        var pos = toSetLocations.indexOf(catItem);
+	                        
+	                        if (pos != -1) {
+	                            toSetLocations.splice(pos, 1);
+	                        }
+						}
+						
+					}
+					
+					// Open on view
+					swal({
+						title            : self.settings.productLocations,
+						html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
+						showCancelButton : false,
+						showConfirmButton: true,
+	                    confirmButtonText: self.settings.editProductLocations,
+						showCloseButton  : true,
+						onOpen           : function () {
+							
+							var $locationsTreeContainer = $('#atum-locations-tree');
+							
+							$.ajax({
+								url       : ajaxurl,
+								dataType  : 'json',
+								method    : 'post',
+								data      : {
+									action    : 'atum_get_locations_tree',
+									token     : self.settings.nonce,
+									product_id: $button.closest('tr').data('id')
+								},
+								beforeSend: function () {
+									$locationsTreeContainer.append('<div class="atum-loading" />');
+								},
+								success   : function (response) {
+	
+	                                if (response.success === true) {
+	                                    $locationsTreeContainer.html(response.data);
+	
+	                                    // if answer is like <span class="no-locations-set">...  don't put easytree on work.
+	                                    // It will remove the span message
+	                                    if (!(response.data.indexOf('no-locations-set') !== -1)) {
+	
+	                                        $locationsTreeContainer.easytree();
+	
+	                                        //Fill setedLocations
+	                                        $("#atum-locations-tree span[class^='cat-item-'], #atum-locations-tree span[class*='cat-item-']").each(function () {
+	                                            var classList = $(this).attr('class').split(/\s+/);
+	                                            
+	                                            $.each(classList, function (index, item) {
+	                                                if (item.startsWith('cat-item-')) {
+	                                                    setedLocations.push(item);
+	                                                }
+	                                            });
+	                                        })
+	                                    }
+									}
+								}
+							});
+							
+						},
+						onClose          : function () {
+							$button.blur().tooltip('hide');
+						}
+					// Click on edit!
+					}).then(function () {
+	
+	                    swal({
+	                        title            : self.settings.edit,
+	                        html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
+	                        text             : self.settings.textToShow,
+	                        confirmButtonText: self.settings.saveButton,
+	                        showCloseButton  : true,
+	                        showCancelButton : true,
+	                        onOpen           : function () {
+	                            
+	                            var $locationsTreeContainer = $('#atum-locations-tree');
+		
+		                        $.ajax({
+			                        url       : ajaxurl,
+			                        dataType  : 'json',
+			                        method    : 'post',
+			                        data      : {
+				                        action    : 'atum_get_locations_tree',
+				                        token     : self.settings.nonce,
+				                        product_id: -1 // $button.closest('tr').data('id') <- send -1 to get all the taxonomies
+			                        },
+			                        beforeSend: function () {
+				                        $locationsTreeContainer.append('<div class="atum-loading" />');
+			                        },
+			                        success   : function (response) {
+				
+				                        if (response.success === true) {
+				                            
+				                            var $atumLocationsTree = $('#atum-locations-tree');
+					
+					                        $locationsTreeContainer.html(response.data);
+					                        $locationsTreeContainer.easytree();
+					
+					                        toSetLocations = setedLocations;
+					
+					                        // If click on link or icon, set node as checked
+					                        $atumLocationsTree.find('a').click(function (e) {
+						                        e.preventDefault();
+						                        toggleValueToSetLocations($(this));
+					                        });
+					
+					                        $atumLocationsTree.find('.easytree-icon').click(function () {
+						                        toggleValueToSetLocations($(this));
+					                        });
+					
+					                        //set class checked the actual values on load
+					                        $atumLocationsTree.find('span[class^="cat-item-"], span[class*="cat-item-"]').each(function () {
+						
+						                        var classList = $(this).attr('class').split(/\s+/);
+						
+						                        $.each(classList, function (index, item) {
+							
+							                        if (item.startsWith('cat-item-')) {
+								                        if ($.inArray(item, setedLocations) !== -1) {
+									                        $('.' + item).addClass('checked');
+								                        }
+							                        }
+							
+						                        });
+						                        
+					                        });
+					
+				                        }
+			                        }
+		                        });
+	                         
+	                        },
+							onClose          : function () {
+	                            $button.blur().tooltip('hide');
+	                        }
+	                    // Save button clicked
+						}).then(function(){
+							
+							// ["cat-item-40", "cat-item-39"] -> [40, 39]
+							var toSetTerms = toSetLocations.map(function(x) {
+								return parseInt(x.substring(9));
+							});
+	
+	                        var $locationsTreeContainer = $('#atum-locations-tree');
+	
+							$.ajax({
+								url       : ajaxurl,
+								dataType  : 'json',
+								method    : 'post',
+								data      : {
+									action    : 'atum_set_locations_tree',
+									token     : self.settings.nonce,
+									product_id: $button.closest('tr').data('id'),
+									terms     : toSetTerms
+								},
+								beforeSend: function () {
+									$locationsTreeContainer.append('<div class="atum-loading" />');
+								},
+								success   : function (response) {
+	
+									if (response.success === true) {
+										
+	                                    swal({
+	                                        title            : self.settings.done,
+	                                        type             : 'success',
+	                                        text             : self.settings.locationsSaved,
+	                                        confirmButtonText: self.settings.ok,
+	                                        onClose           : function () {
+	                                            // Update atum-table to show the new location icon
+	                                            self.updateTable();
+	                                        }
+	                                    }).then(function(){
+	                                        self.updateTable();
+	                                    }).catch(swal.noop);
+	                                    
+									}
+								}
+							});
+	
+						}).catch(swal.noop);
+	                
+	                }).catch(swal.noop);
+					
+				})
+				
+				//
+				// Reset Filters button
+				//---------------------
+				.on('click', '.reset-filters', function() {
+					
+	                self.destroyTooltips();
+	                
+	                //TODO reset s and column search
+	                $.address.queryString('');
+	                self.$searchInput.val('');
+	                
+	                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') != 'title') {
+						self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
+	                }
+	                
+					self.updateTable();
+	    
+				})
+				
+				//
+				// "Control all products" button
+				//------------------------------
+				.on('click', '#control-all-products', function() {
+					
+					var $button = $(this);
+					
+					$.ajax({
+						url     : ajaxurl,
+						method  : 'POST',
+						dataType: 'json',
+						beforeSend: function() {
+							$button.prop('disabled', true).after('<span class="atum-spinner"><span></span></span>');
+						},
+						data    : {
+							token : $(this).data('nonce'),
+							action: 'atum_control_all_products'
+						},
+						success: function() {
+							location.reload();
+						}
+					});
+					
 				});
 				
-			});
-			
 			//
 			// Global save for edited cells
 			//-----------------------------
@@ -945,14 +957,16 @@
 			    $tableWrapper = $('.atum-table-wrapper'),
 			    scrollOpts    = {
 				    horizontalGutter: 0,
-				    verticalGutter  : 0
+				    verticalGutter  : 0,
+				    resizeSensor    : true
 			    };
 			
+			// Reset the sticky cols position and visibility to avoid flickering
+			if (self.$stickyCols !== null) {
+				self.$stickyCols.hide().css('left', 0);
+			}
+			
 			$tableWrapper.imagesLoaded().then(function () {
-				
-				if (self.$stickyCols !== null) {
-					self.$stickyCols.hide().css('left', 0);
-				}
 				
 				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 				self.jScrollApi  = self.$scrollPane.data('jsp');
@@ -998,6 +1012,8 @@
 					
 				});
 				
+				self.$atumList.trigger('atum-scroll-bar-loaded');
+				
 			});
 			
 		},
@@ -1007,12 +1023,23 @@
 		 */
 		reloadScrollbar: function() {
 			
+			var self      = this,
+			    positionX = 0;
+			
 			if (this.jScrollApi !== null) {
+				positionX = this.jScrollApi.getContentPositionX();
 				this.jScrollApi.destroy();
 				this.jScrollApi = null;
 			}
 			
 			this.addScrollBar();
+			
+			if (positionX > 0) {
+				// Wait until the scroll bar is re-added to restore the position
+				this.$atumList.on('atum-scroll-bar-loaded', function () {
+					self.jScrollApi.scrollToX(positionX);
+				});
+			}
 		},
 		
 		/**
@@ -1055,7 +1082,7 @@
 			
 			var self = this;
 			
-			this.$stickyCols = this.$atumTable.clone(true);
+			this.$stickyCols = this.$atumTable.clone();
 			
 			// Remove table header and footer
 			this.$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();

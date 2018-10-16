@@ -2897,7 +2897,7 @@ input[type="button"].btn-block {
   height: 0;
 }
 
-.atum-list-wrapper .floatThead-wrapper .group-toggler {
+.atum-list-wrapper .floatThead-wrapper .floatThead-container .group-toggler {
   display: none;
 }
 
@@ -3009,6 +3009,7 @@ input[type="button"].btn-block {
 .atum-list-table, .floatThead-container {
   margin-bottom: 15px;
   border-collapse: collapse;
+  table-layout: auto !important;
 }
 
 .atum-list-table thead .item-heads, .atum-list-table tfoot, .floatThead-container thead .item-heads, .floatThead-container tfoot {
