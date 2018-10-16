@@ -274,6 +274,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $woocommerce_notify_no_stock_amount;
 
 	/**
+	 * The columns that will be sticky
+	 *
+	 * @var array
+	 */
+	protected $sticky_columns = array();
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&mdash;';
@@ -597,7 +604,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( 'cb' === $column_name ) {
 
-				echo '<th scope="row" class="check-column">';
+				echo '<th scope="row" class="check-column column-cb">';
 				echo $this->column_cb( $item ); // WPCS: XSS ok.
 				echo '</th>';
 
@@ -2619,6 +2626,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'locationsSaved'       => __( 'Values Saved', ATUM_TEXT_DOMAIN ),
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'    => $this->default_searchable_columns,
+			'stickyColumns'        => $this->sticky_columns,
 		);
 
 		if ( $this->first_edit_key ) {
@@ -3277,15 +3285,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// jquery.floatThead.
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-		wp_enqueue_script( 'jquery.floatThead' );
-
-		// jquery.filterbydata.
-		wp_register_script( 'jquery.filterbydata', ATUM_URL . 'assets/js/vendor/jquery.filterbydata.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-		wp_enqueue_script( 'jquery.filterbydata' );
 
 		// jScrollPane.
-		wp_register_script( 'mousewheel', ATUM_URL . 'assets/js/vendor/jquery.mousewheel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'mousewheel' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array(), ATUM_VERSION, TRUE );
+		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
 
 		// Sweet Alert 2.
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
@@ -3314,7 +3317,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";

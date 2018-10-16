@@ -47,7 +47,7 @@ class AtumUncontrolledListTable extends AtumListTable {
 		parent::__construct( $args );
 
 		// Add the "Apply Bulk Action" button to the title section.
-		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
+		add_action( 'atum/stock_central_list/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
 		
 	}
 
