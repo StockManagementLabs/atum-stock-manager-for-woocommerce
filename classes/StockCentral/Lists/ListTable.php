@@ -210,7 +210,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Initialize totalizers.
-		$this->totalizers = apply_filters( 'atum/list_table/totalizers', array(
+		$this->totalizers = apply_filters( 'atum/stock_central_list/totalizers', array(
 			'_stock'                => 0,
 			'_out_stock_threshold'  => 0,
 			'calc_inbound'          => 0,
@@ -225,6 +225,17 @@ class ListTable extends AtumListTable {
 			'calc_lost_sales'       => 0,
 		));
 
+		// Set the sticky columns.
+		if ( 'yes' === Helpers::get_option( 'sticky_columns', 'yes' ) ) {
+			$this->sticky_columns = (array) apply_filters( 'atum/stock_central_list/sticky_columns', array(
+				'cb',
+				'thumb',
+				'ID',
+				'title',
+				'calc_type',
+			) );
+		}
+
 		// Call the parent class once all the $args are set.
 		parent::__construct( $args );
 
@@ -234,7 +245,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Add the "Apply Bulk Action" button to the title section.
-		add_action( 'atum/list_table/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
+		add_action( 'atum/stock_central_list/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
 
 	}
 

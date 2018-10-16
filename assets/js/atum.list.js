@@ -54,6 +54,7 @@
 		numHashParameters: 0,
 		delayTimer       : 0,
 		$collapsedGroups : null,
+		$stickyCols      : null,
 		
 		/**
 		 * Register our events and initialize the UI
@@ -132,6 +133,8 @@
             });
 			
 			this.addFloatThead();
+			
+			this.addStickyColumns();
 			
 			//
 			// Setup the URL navaigation
@@ -740,8 +743,10 @@
 			});
 			
 		},
-
-		// TODO sales_last_ndays_val
+		
+		/**
+		 * Sales Last Days switcher
+		 */
         setupSalesLastNDaysVal: function() {
 	
 	        var self            = this,
@@ -919,6 +924,11 @@
 		 */
 		addScrollBar: function() {
 			
+			if (this.jScrollApi !== null) {
+				this.reloadScrollbar();
+				return;
+			}
+			
 			// Wait until the thumbs are loaded and enable JScrollpane
 			var self          = this,
 			    $tableWrapper = $('.atum-table-wrapper'),
@@ -928,8 +938,55 @@
 			    };
 			
 			$tableWrapper.imagesLoaded().then(function () {
+				
+				if (self.$stickyCols !== null) {
+					self.$stickyCols.hide().css('left', 0);
+				}
+				
 				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 				self.jScrollApi  = self.$scrollPane.data('jsp');
+				
+				// Bind events
+				self.$scrollPane
+					.on('jsp-initialised', function (event, isScrollable) {
+						
+						// Add the stickyCols table
+						if (self.$stickyCols !== null && !self.$atumList.find('.atum-list-table.cloned').length) {
+							self.$atumTable.after(self.$stickyCols);
+							self.$atumList.trigger('atum-added-sticky-columns');
+						}
+						
+					})
+					.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
+						
+						// Hide the sticky cols when reaching the left side of the panel
+						if (self.$stickyCols !== null) {
+							
+							if (scrollPositionX <= 0) {
+								self.$stickyCols.hide().css('left', 0);
+							}
+							// Reposition the sticky cols while scrolling the pane
+							else {
+								self.$stickyCols.show().css('left', scrollPositionX);
+							}
+							
+						}
+						
+					});
+				
+				// Touch scrolling on desktops
+				var hammertime = new Hammer(self.$scrollPane.get(0), {});
+				
+				hammertime.on('panright panleft', function (ev) {
+					
+					var paneStartX   = self.jScrollApi.getContentPositionX(),
+					    offset       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
+					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
+					
+					self.jScrollApi.scrollToX( displacement, false)
+					
+				});
+				
 			});
 			
 		},
@@ -941,6 +998,7 @@
 			
 			if (this.jScrollApi !== null) {
 				this.jScrollApi.destroy();
+				this.jScrollApi = null;
 			}
 			
 			this.addScrollBar();
@@ -950,6 +1008,11 @@
 		 * Add the floating header to the table
 		 */
 		addFloatThead: function() {
+			
+			if (typeof this.$atumTable.data('floatTheadAttached') !== 'undefined' && this.$atumTable.data('floatTheadAttached') !== false) {
+				this.reloadFloatThead();
+				return;
+			}
 			
 			this.$atumTable.floatThead({
 				responsiveContainer: function ($table) {
@@ -968,6 +1031,54 @@
 		reloadFloatThead: function() {
 			this.$atumTable.floatThead('destroy');
 			this.addFloatThead();
+		},
+		
+		/**
+		 * Make the first table columns sticky
+		 */
+		addStickyColumns: function() {
+			
+			if (this.$stickyCols !== null) {
+				return false;
+			}
+			
+			var self = this;
+			
+			this.$stickyCols = this.$atumTable.clone(true);
+			
+			// Remove table header and footer
+			this.$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
+			
+			// Remove all the columns that won't be sticky
+			this.$stickyCols.find('tr').each(function () {
+				
+				var $row = $(this);
+				
+				// Add a prefix to the row ID to avoid problems when expanding/collapsing rows
+				$row.data('id', 'c' + $row.data('id'));
+				
+				// Remove all the column groups except first one
+				if ($row.hasClass('column-groups')) {
+					var $colGroups = $row.children();
+					$colGroups.not(':first-child').remove();
+					$colGroups.first().attr('colspan', self.settings.stickyColumns.length);
+				}
+				// Remove all the non-sticky columns
+				else {
+					
+					var columnNames   = self.settings.stickyColumns,
+					    columnClasses = [];
+					
+					$.each(columnNames, function (index, elem) {
+						columnClasses.push('.column-' + elem);
+					});
+					
+					$row.children().not(columnClasses.join(',')).remove();
+					
+				}
+	
+			});
+		
 		},
 		
 		/**
@@ -1028,8 +1139,8 @@
 		/**
 		 * Search box keyUp event callback
 		 *
-		 * @param object e       The event data object
-		 * @param bool   noTimer Whether to delay before triggering the update (used for autosearch)
+		 * @param object  e       The event data object
+		 * @param boolean noTimer Whether to delay before triggering the update (used for autosearch)
 		 */
 		keyUp: function (e, noTimer) {
 
@@ -1132,7 +1243,7 @@
 		/**
 		 * Bind the editable column's popovers
 		 *
-		 * @param object $metaCell The cell where the popover will be attached
+		 * @param jQuery $metaCell The cell where the popover will be attached
 		 */
 		bindPopover: function($metaCell) {
 			
@@ -1190,7 +1301,7 @@
 		/**
 		 * Destroy a popover attached to a specified table cell
 		 *
-		 * @param object $metaCell The table cell where is attached the visible popover
+		 * @param jQuery $metaCell The table cell where is attached the visible popover
 		 */
 		destroyPopover: function($metaCell) {
 			
@@ -1239,8 +1350,8 @@
 		/**
 		 * Every time a cell is edited, update the input value
 		 *
-		 * @param object $metaCell  The table cell that is being edited
-		 * @param object $popover   The popover attached to the above cell
+		 * @param jQuery $metaCell  The table cell that is being edited
+		 * @param jQuery $popover   The popover attached to the above cell
 		 */
 		updateEditedColsInput: function($metaCell, $popover) {
 			
@@ -1338,7 +1449,7 @@
 		/**
 		 * Save the edited columns
 		 *
-		 * @param object $button The "Save Data" button
+		 * @param jQuery $button The "Save Data" button
 		 */
 		saveData: function($button) {
 			
@@ -1635,10 +1746,10 @@
 		 *
 		 * @see http://css-tricks.com/snippets/javascript/get-url-variables/
 		 *
-		 * @param    string    query The URL query part containing the variables
-		 * @param    string    variable Name of the variable we want to get
+		 * @param string query    The URL query part containing the variables
+		 * @param string variable Name of the variable we want to get
 		 *
-		 * @return   string|boolean The variable value if available, false else.
+		 * @return string|boolean The variable value if available, false else.
 		 */
 		__query: function (query, variable) {
 			
@@ -1675,7 +1786,7 @@
 		/**
 		 * Set the table cell value with right format
 		 *
-		 * @param object        $metaCell  The cell where will go the value
+		 * @param jQuery        $metaCell  The cell where will go the value
 		 * @param string|number value      The value to set in the cell
 		 */
 		setCellValue: function($metaCell, value) {
@@ -1772,7 +1883,17 @@
 			
 		},
 		
-		expandRow: function($row, expandableRowClass, stopRowSelector) {
+		/**
+		 * Expand/Collapse rows with childrens
+		 *
+		 * @param jQuery $row
+		 * @param string expandableRowClass
+		 * @param string stopRowSelector
+		 * @param boolean stopPropagation
+		 *
+		 * @return void|boolean
+		 */
+		expandRow: function($row, expandableRowClass, stopRowSelector, stopPropagation) {
 			
 			var rowId = $row.data('id');
 			
@@ -1784,6 +1905,16 @@
 				stopRowSelector = '.main-row';
 			}
 			
+			// Sync the sticky columns table
+			if (this.$stickyCols !== null && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
+				
+				var $siblingTable = $row.closest('.atum-list-table').siblings('.atum-list-table'),
+				    $syncRow      = $siblingTable.find('tr[data-id=' + rowId.toString().replace('c', '') + ']');
+				
+				this.expandRow($syncRow, expandableRowClass, stopRowSelector, true);
+				
+			}
+			
 			// Avoid multiple clicks before expanding
 			if (typeof this.isRowExpanding[rowId] !== 'undefined' && this.isRowExpanding[rowId] === true) {
 				return false;
@@ -1791,8 +1922,9 @@
 			
 			this.isRowExpanding[rowId] = true;
 			
-			var self     = this,
-			    $nextRow = $row.next();
+			var self      = this,
+			    $nextRow  = $row.next(),
+			    childRows = [];
 			
 			if ($nextRow.length) {
 				$row.toggleClass('expanded');
@@ -1802,32 +1934,46 @@
 			// Loop until reaching the next main row
 			while (!$nextRow.filter(stopRowSelector).length) {
 				
+				if (!$nextRow.length) {
+					break;
+				}
+				
 				if (!$nextRow.hasClass(expandableRowClass)) {
 					$nextRow = $nextRow.next();
 					continue;
 				}
 				
+				childRows.push($nextRow);
+				
 				if (!$nextRow.is(':visible')) {
-					$nextRow.show(300);
+					$nextRow.addClass('expanding').show(300);
 				}
 				else {
-					$nextRow.hide(300);
+					$nextRow.addClass('collapsing').hide(300);
 				}
 				
 				$nextRow = $nextRow.next();
 				
 			}
 			
-			// Re-enable the expanding again once the animation has completed
-			setTimeout(function() {
+			// Re-enable the expanding again once the animation is completed
+			setTimeout(function () {
+				
 				delete self.isRowExpanding[rowId];
 				
 				// Do this only when all the rows has been already expanded
-				if (!Object.keys(self.isRowExpanding).length) {
+				if (!Object.keys(self.isRowExpanding).length && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
 					self.addTooltips();
 					self.reloadScrollbar();
 				}
+				
+				$.each(childRows, function (index, $childRow) {
+					$childRow.removeClass('expanding collapsing');
+				});
+				
 			}, 320);
+			
+			self.$atumList.trigger('atum-after-expand-row', [$row, expandableRowClass, stopRowSelector]);
 			
 		},
 		
@@ -1844,7 +1990,7 @@
 		/**
 		 * Checks/Unchecks the descendants rows when checking/unchecking their container
 		 *
-		 * @param object $parentCheckbox
+		 * @param jQuery $parentCheckbox
 		 */
 		checkDescendats: function($parentCheckbox) {
 			
@@ -1877,7 +2023,8 @@
 		
 		/**
 		 * Apply a delay
-		 * @return {Function}
+		 *
+		 * @return Function
 		 */
 		delay: function(callback, ms) {
 			
@@ -1951,6 +2098,23 @@
 		// IE - when all the images are loaded
 		return $.when.apply($, dfds);
 		
+	};
+	
+	// Filter by data
+	$.fn.filterByData = function(prop, val) {
+		var $self = this;
+		if (typeof val === 'undefined') {
+			return $self.filter(
+				
+				function() {
+					return typeof $(this).data(prop) !== 'undefined';
+				});
+		}
+		return $self.filter(
+			
+			function() {
+				return $(this).data(prop) == val;
+			});
 	};
 	
 	
