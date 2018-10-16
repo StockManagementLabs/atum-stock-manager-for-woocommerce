@@ -338,10 +338,15 @@
 	
 }
 
+.atum-list-table {
+	&:not(.floatThead-table) {
+		table-layout: auto !important; // FloatTHead fix
+	}
+}
+
 .atum-list-table, .floatThead-container {
 	margin-bottom: 15px;
 	border-collapse: collapse;
-	table-layout: auto !important; // FloatTHead fix
 	
 	thead .item-heads, tfoot {
 		background-color: $white;
