@@ -2002,7 +2002,6 @@
 				// Do this only when all the rows has been already expanded
 				if (!Object.keys(self.isRowExpanding).length && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
 					self.addTooltips();
-					self.reloadScrollbar();
 				}
 				
 				$.each(childRows, function (index, $childRow) {
