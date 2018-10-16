@@ -1677,7 +1677,7 @@ input[type="button"].btn-block {
 }
 
 .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:before, .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:after {
-  background: #00B8DB;
+  background: transparent;
 }
 
 .atum-settings-wrapper .atum-nav-light .atum-nav-link.active {
@@ -1779,6 +1779,7 @@ input[type="button"].btn-block {
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
+  justify-content: center;
   padding: 5px 24px;
 }
 
@@ -1798,8 +1799,11 @@ input[type="button"].btn-block {
   margin: 0;
   font-size: 12px;
   font-weight: normal;
-  display: block;
+  display: flex;
   padding: 0 12px 9px 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .atum-settings-wrapper .nav-footer p a {
@@ -2350,6 +2354,10 @@ input[type="button"].btn-block {
   border: 1px solid #e9ecef;
 }
 
+#atum-settings .section-fields textarea {
+  height: 150px;
+}
+
 #atum-settings .section-fields input[type=text], #atum-settings .section-fields input[type=number] {
   height: 30px;
 }
@@ -2408,14 +2416,12 @@ input[type="button"].btn-block {
     width: 80%;
     margin-right: 10px;
   }
-  #atum-settings .section-fields .script-runner .atum-select2-container .select2-container {
-    width: 100% !important;
-  }
 }
 
 @media all and (max-width: 480px) {
   #atum-settings .section-fields .script-runner .atum-select2-container {
     width: 100%;
+    margin-right: 0;
   }
 }
 
@@ -2561,6 +2567,12 @@ input[type="button"].btn-block {
   }
 }
 
+@media all and (max-width: 480px) {
+  #atum-settings .section-fields .select2-container {
+    width: 100% !important;
+  }
+}
+
 #atum-settings .section-fields .select2-container:focus, #atum-settings .section-fields .select2-container .selection:focus, #atum-settings .section-fields .select2-container .select2-selection--single:focus, #atum-settings .section-fields .select2-container .select2-selection__rendered:focus {
   outline: none;
 }
@@ -2627,12 +2639,34 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .wp-picker-container button.wp-color-result {
-  height: 31px;
+  height: 30px;
   box-shadow: none;
+  border-radius: 15.5px;
+  width: 110px;
+  margin-right: 10px;
+  border: solid 0.5px #E5E5E5;
+  background-color: transparent !important;
+  position: relative;
+  padding: 0 0 0 20px;
 }
 
 #atum-settings .wp-picker-container button.wp-color-result .wp-color-result-text {
   line-height: 29px;
+  background-color: transparent;
+  color: #adb5bd;
+  border-left: none;
+  font-size: 12px;
+  line-height: 1.17px;
+}
+
+#atum-settings .wp-picker-container button.wp-color-result .color-picker-preview {
+  border-radius: 15.5px;
+  width: 23px;
+  height: 23px;
+  background-color: transparent;
+  position: absolute;
+  left: 4px;
+  top: 2px;
 }
 
 #atum-settings .wp-picker-container .wp-picker-clear {

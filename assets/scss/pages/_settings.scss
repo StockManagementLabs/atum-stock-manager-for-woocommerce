@@ -61,7 +61,7 @@ $settings-menu-active:      $white;
 			
 			.menu-helper {
 				&:before, &:after {
-					background: $blue;
+					background: transparent;
 				}
 			}
 			
@@ -142,6 +142,7 @@ $settings-menu-active:      $white;
 		.nav-footer-logo {
 			@include flexbox;
 			@include flex-align-items(center);
+			justify-content: center;
 			padding: 5px 24px;
 			img {
 				width: 34px;
@@ -159,8 +160,11 @@ $settings-menu-active:      $white;
 			margin: 0;
 			font-size: 12px;
 			font-weight: normal;
-			display: block;
+			display: flex;
 			padding: 0 12px 9px 12px;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
 			
 			a {
 				text-decoration: none;
@@ -599,6 +603,10 @@ $settings-menu-active:      $white;
 			border: 1px solid $gray-200;
 		}
 		
+		textarea {
+			height: 150px;
+		}
+		
 		input[type=text], input[type=number] {
 			height: 30px;
 		}
@@ -643,16 +651,11 @@ $settings-menu-active:      $white;
 				@media all and (max-width: $screen-sm-min) {
 					width: 80%;
 					margin-right: 10px;
-					.select2-container {
-						width: 100% !important;
-					}
 				}
 				// Mobile
 				@media all and (max-width: $screen-xs-min) {
 					width: 100%;
-					.select2-container {
-						//width: 100% !important;
-					}
+					margin-right: 0;
 				}
 			}
 			
@@ -779,7 +782,7 @@ $settings-menu-active:      $white;
 			}
 			// Mobile
 			@media all and (max-width: $screen-xs-min) {
-				//width: 100% !important;
+				width: 100% !important;
 			}
 			&, .selection, .select2-selection--single, .select2-selection__rendered {
 				&:focus {
@@ -846,11 +849,32 @@ $settings-menu-active:      $white;
 	.wp-picker-container {
 		
 		button.wp-color-result {
-			height: 31px;
+			height: 30px;
 			box-shadow: none;
+			border-radius: 15.5px;
+			width: 110px;
+			margin-right: 10px;
+			border: solid 0.5px $wp-gray-5;
+			background-color: transparent !important;
+			position: relative;
+			padding: 0 0 0 20px;
 			
 			.wp-color-result-text {
-				line-height: 29px;
+				 line-height: 29px;
+				 background-color: transparent;
+				 color: $gray-500;
+				 border-left: none;
+				font-size: 12px;
+				line-height: 1.17px;
+			 }
+			.color-picker-preview {
+				border-radius: 15.5px;
+				width: 23px;
+				height: 23px;
+				background-color: transparent;
+				position: absolute;
+				left: 4px;
+				top: 2px;
 			}
 		}
 		
@@ -913,11 +937,6 @@ $settings-menu-active:      $white;
 			.script-runner {
 				.tool-fields-wrapper {
 					margin-bottom: 5px;
-				}
-				.tool-fields-from {
-					.select2-container {
-						//width: 100% !important;
-					}
 				}
 				flex-wrap: wrap;
 				.tool-runner {

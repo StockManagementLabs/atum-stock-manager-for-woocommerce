@@ -226,8 +226,27 @@
 		},
 		doColorPickers: function() {
 			
-			$('.atum-color').each(function () {
-				$(this).wpColorPicker();
+			// Custom color picker.
+			var colorPickerButtonText = $('.wp-color-result-text');
+			
+			$('.atum-color').each(function (key) {
+				$(this).wpColorPicker(
+				{
+					change: function(event, ui){
+						var value = $(this).val();
+						$('.wp-picker-active .color-picker-preview').css('background-color', value);
+						$('.wp-picker-active .wp-color-result-text').html(value);
+					}
+				}
+				);
+			});
+			
+			$('.wp-color-result').prepend('<span class="color-picker-preview"></span>');
+			
+			$('.wp-picker-container').each(function () {
+				var value = $(this).find('.atum-color').val();
+				$(this).find('.color-picker-preview').css('background-color', value);
+				$(this).find('.wp-color-result-text').html(value);
 			});
 		},
 		doSelect2: function() {
@@ -293,8 +312,13 @@
 			$('.toogle-menu').click(function () {
 				$('.atum-nav-list').toggleClass('expand-menu');
 			});
+			
 			$('.atum-nav-link').click(function () {
 				$('.atum-nav-list').toggleClass('expand-menu');
+			});
+			
+			$(window).resize(function () {
+				$('.atum-nav-list').removeClass('expand-menu');
 			});
 		},
 		restoreSelects: function() {
