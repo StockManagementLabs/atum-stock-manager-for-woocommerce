@@ -44,17 +44,18 @@
 	// Avoid Plugin.prototype conflicts
 	$.extend( Plugin.prototype, {
 		
-		doingAjax        : null,
-		jScrollApi       : null,
-		$scrollPane      : null,
-		timer            : null,
-		isRowExpanding   : {},
-		filterData       : {},
-		navigationReady  : false,
-		numHashParameters: 0,
-		delayTimer       : 0,
-		$collapsedGroups : null,
-		$stickyCols      : null,
+		doingAjax            : null,
+		jScrollApi           : null,
+		$scrollPane          : null,
+		timer                : null,
+		isRowExpanding       : {},
+		filterData           : {},
+		navigationReady      : false,
+		numHashParameters    : 0,
+		delayTimer           : 0,
+		$collapsedGroups     : null,
+		$stickyCols          : null,
+		$floatTheadStickyCols: null,
 		
 		/**
 		 * Register our events and initialize the UI
@@ -122,7 +123,7 @@
 			//
 			// Make the first columns sticky
 			//------------------------------
-			this.addStickyColumns();
+			this.$stickyCols = this.createStickyColumns(this.$atumTable);
 			
 			//
 			// Hide/Show the toggleable group of columns
@@ -161,13 +162,28 @@
 						self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
 					}
 					
+					// Add the sticky columns to the floating header too
+					var $floatTheadTable = self.$atumList.find('.floatThead-table');
+					self.$floatTheadStickyCols = self.createStickyColumns($floatTheadTable);
+					
+					if (self.$floatTheadStickyCols !== null) {
+						$floatTheadTable.after(self.$floatTheadStickyCols);
+						self.$floatTheadStickyCols.css('width', self.$stickyCols.width() + 1);
+					}
+					
 				}
 				else {
 					
 					$floatContainer.css('height', 0);
 					
+					// Reset the sticky columns position
 					if (self.$stickyCols !== null){
 						self.$stickyCols.css('top', 0);
+					}
+					
+					// Remove the floating header's sticky columns
+					if (self.$floatTheadStickyCols !== null) {
+						self.$floatTheadStickyCols.remove();
 					}
 					
 				}
@@ -812,8 +828,7 @@
 		 * Fill the search by column dropdown with the active screen options checkboxes
 		 */
         setupSearchColumnDropdown: function() {
-
-        	// TODO optimize setupSearchColumnDropdown
+        
 			var self                  = this,
 			    $searchColumnBtn      = $('#search_column_btn'),
 			    $searchColumnDropdown = $('#search_column_dropdown');
@@ -984,15 +999,24 @@
 					})
 					.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
 						
-						// Hide the sticky cols when reaching the left side of the panel
+						// Handle the sticky cols position and visibility when scrolling
 						if (self.$stickyCols !== null) {
 							
+							// Hide the sticky cols when reaching the left side of the panel
 							if (scrollPositionX <= 0) {
 								self.$stickyCols.hide().css('left', 0);
+								
+								if (self.$floatTheadStickyCols !== null) {
+									self.$floatTheadStickyCols.hide().css('left', 0);
+								}
 							}
 							// Reposition the sticky cols while scrolling the pane
 							else {
 								self.$stickyCols.show().css('left', scrollPositionX);
+								
+								if (self.$floatTheadStickyCols !== null) {
+									self.$floatTheadStickyCols.show().css('left', scrollPositionX);
+								}
 							}
 							
 						}
@@ -1060,7 +1084,7 @@
 				top                : $('#wpadminbar').height(),
 				autoReflow         : true
 			});
-			
+				
 		},
 		
 		/**
@@ -1073,22 +1097,26 @@
 		
 		/**
 		 * Make the first table columns sticky
+		 *
+		 * @param jQuery The table that will be used as a base to generate the sticky columns
+		 *
+		 * @return jQuery|null The sticky cols (if enabled) or null
 		 */
-		addStickyColumns: function() {
+		createStickyColumns: function($table) {
 			
-			if (this.$stickyCols !== null) {
-				return false;
+			// If there are no sticky columns in this table, do not continue
+			if (!this.settings.stickyColumns.length) {
+				return null;
 			}
 			
-			var self = this;
-			
-			this.$stickyCols = this.$atumTable.clone();
+			var self        = this,
+			    $stickyCols = $table.clone();
 			
 			// Remove table header and footer
-			this.$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
+			$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
 			
 			// Remove all the columns that won't be sticky
-			this.$stickyCols.find('tr').each(function () {
+			$stickyCols.find('tr').each(function () {
 				
 				var $row = $(this);
 				
@@ -1116,6 +1144,8 @@
 				}
 	
 			});
+			
+			return $stickyCols;
 		
 		},
 		
