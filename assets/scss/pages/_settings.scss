@@ -29,8 +29,20 @@ $settings-menu-active:      $white;
 		
 	}
 	
+	// Switch for change settings theme.
 	.switch-interface-style {
 		float: right;
+		width: 165px;
+		height: 44px;
+		border-radius: 8px;
+		box-shadow: 0 4px 0 0 $gray-200;
+		background-color: $white;
+		color: $gray-600;
+		font-weight: bold;
+		font-size: 16px;
+		@include flexbox;
+		@include flex-align-items(center);
+		justify-content: space-evenly;
 	}
 	
 	.atum-nav {
@@ -46,10 +58,8 @@ $settings-menu-active:      $white;
 		background-color: $white;
 		.atum-nav-header {
 			background-color: $blue;
-			.atum-brand-link {
-				.atum-brand {
-					background-color: $blue;
-				}
+			.toogle-menu {
+				color: $white;
 			}
 		}
 		.atum-nav-link {
@@ -274,6 +284,20 @@ $settings-menu-active:      $white;
 		}
 		
 	}
+	
+	// Desktop style
+	@media all and (max-width: $screen-md-min) {
+		.atum-nav {
+			min-width: 200px;
+			.atum-nav-link {
+				font-size: 14px;
+				&:active {
+					font-size: 14px;
+				}
+			}
+		}
+	}
+	
 	// Tablet style
 	@media all and (max-width: $screen-sm-min) {
 		.atum-nav, .atum-nav-light {
@@ -517,7 +541,7 @@ $settings-menu-active:      $white;
 	
 	.section-title-light {
 		h2 {
-			color: $blue;
+			//color: $blue;
 		}
 	}
 	
@@ -847,11 +871,23 @@ $settings-menu-active:      $white;
 	
 	// Color Pickers
 	.wp-picker-container {
+		// Mobile style
+		@media all and (max-width: $screen-xs-min) {
+			.iris-picker {
+				width: 100% !important;
+				.iris-square {
+					width: 76%!important;
+				}
+				.iris-palette-container {
+					left: 10%;
+				}
+			}
+		}
 		
 		button.wp-color-result {
 			height: 30px;
 			box-shadow: none;
-			border-radius: 15.5px;
+			border-radius: 5px;
 			width: 110px;
 			margin-right: 10px;
 			border: solid 0.5px $wp-gray-5;
@@ -859,22 +895,38 @@ $settings-menu-active:      $white;
 			position: relative;
 			padding: 0 0 0 20px;
 			
+			&:hover {
+				border-color: $gray-600;
+			}
+			
+			&:focus {
+				border-color: $blue;
+				.wp-color-result-text {
+					visibility: hidden;
+					&::before {
+						color: $gray-600;
+						content: "|";
+						visibility: visible;
+					}
+				}
+			}
+			
 			.wp-color-result-text {
-				 line-height: 29px;
-				 background-color: transparent;
-				 color: $gray-500;
-				 border-left: none;
+				line-height: 29px;
+				background-color: transparent;
+				color: $gray-600;
+				border-left: none;
 				font-size: 12px;
 				line-height: 1.17px;
 			 }
 			.color-picker-preview {
-				border-radius: 15.5px;
+				border-radius: 5px;
 				width: 23px;
-				height: 23px;
+				height: 22px;
 				background-color: transparent;
 				position: absolute;
 				left: 4px;
-				top: 2px;
+				top: 3px;
 			}
 		}
 		
@@ -887,6 +939,16 @@ $settings-menu-active:      $white;
 			
 			&:hover {
 				background-color: rgba($secondary, .8);
+			}
+		}
+	}
+	
+	// Desktop style
+	@media all and (max-width: $screen-md-min) {
+		.btn-group {
+			label {
+				line-height: 1.8;
+				font-size: 12px;
 			}
 		}
 	}

@@ -1948,7 +1948,7 @@ final class Ajax {
 	 */
 	public function change_manage_stock() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer('atum-script-runner-nonce', 'token');
 
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please select an option from the dropdown', ATUM_TEXT_DOMAIN ) );
@@ -2035,7 +2035,7 @@ final class Ajax {
 	 * @param string $meta_key
 	 * @param string $status
 	 */
-	private function change_status_meta( $meta_key, $status ) {
+	private function change_status_meta($meta_key, $status) {
 
 		global $wpdb;
 		$wpdb->hide_errors();
@@ -2075,9 +2075,8 @@ final class Ajax {
 	 * Change the value of a meta key for show dark o light menu theme for atum setting
 	 *
 	 * @since 1.4.5
-	 *
 	 */
-	public function change_settings_menu_style( ) {
+	public function change_settings_menu_style() {
 		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
 		$menu_theme = $_POST['data']['menu_theme'];
 		$user_id    = get_current_user_id();
@@ -2089,7 +2088,7 @@ final class Ajax {
 			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
 		}
 
-		wp_send_json_success( __('Menu theme were updated successfully', ATUM_TEXT_DOMAIN) );
+		wp_send_json_success( __( 'Menu theme were updated successfully', ATUM_TEXT_DOMAIN ) );
 	}
 
 	

@@ -216,16 +216,16 @@
 					new Switchery(this, {
 						size               : 'small',
 						color              : '#dbf9ff',
-						secondaryColor     : '#3b3d5a',
+						secondaryColor     : '#e9ecef',
 						jackColor          : '#00b8db',
-						jackSecondaryColor : '#27283B'
+						jackSecondaryColor : '#adb5bd'
 					});
 				}
 			});
 			
 		},
 		doColorPickers: function() {
-			
+			var self          = this;
 			// Custom color picker.
 			var colorPickerButtonText = $('.wp-color-result-text');
 			
@@ -245,8 +245,15 @@
 			
 			$('.wp-picker-container').each(function () {
 				var value = $(this).find('.atum-color').val();
-				$(this).find('.color-picker-preview').css('background-color', value);
-				$(this).find('.wp-color-result-text').html(value);
+				if ( value ) {
+					$(this).find('.color-picker-preview').css('background-color', value);
+					$(this).find('.wp-color-result-text').html(value);
+				}
+				else {
+					$(this).find('.color-picker-preview').css('background-color', value);
+					$(this).find('.wp-color-result-text').html(self.settings.selectColor);
+				}
+				
 			});
 		},
 		doSelect2: function() {

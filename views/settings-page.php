@@ -13,12 +13,13 @@ defined( 'ABSPATH' ) || die;
 use Atum\Settings\Settings;
 
 $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE );
+
 ?>
 <div class="wrap">
 	<div class="atum-settings-wrapper">
 		<div class="switch-interface-style">
 			<?php wp_nonce_field( 'add_atum_nonce_field', 'menu-theme-nonce' ); ?>
-			Menu Dark <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'checked' : '' ?>> Menu Light
+			<?php echo esc_attr( __( 'Dark Skin', ATUM_TEXT_DOMAIN ) ); ?> <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'checked' : '' ?>>
 		</div>
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', ATUM_TEXT_DOMAIN ) ?></h1>
 		<hr class="wp-header-end">
@@ -31,9 +32,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 				<div class="atum-nav-header">
 					<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
 						<div class="atum-brand">
-							<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
+							<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php echo esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
 							<span>
-							<?php echo esc_attr(__('ATUM', ATUM_TEXT_DOMAIN) ) ?>
+							<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
 						</span>
 						</div>
 					</a>
@@ -52,11 +53,11 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 						endif; ?>
 
 						<li class="atum-nav-item<?php if ( isset( $atts['no_submit'] ) && $atts['no_submit'] ) echo ' no-submit' ?>">
-							<a href="?page=atum-settings&tab=<?php echo $tab ?>" rel="address:/<?php echo $tab ?>" data-tab="<?php echo $tab ?>" class="atum-nav-link<?php if ($tab == $active) echo ' active' ?>">
+							<a href="?page=atum-settings&tab=<?php echo esc_attr( $tab ) ?>" rel="address:/<?php echo esc_attr( $tab ) ?>" data-tab="<?php echo esc_attr( $tab ) ?>" class="atum-nav-link<?php if ($tab === $active) echo ' active' ?>">
 								<span class="menu-helper">
-									<i class="<?php echo $atts['icon']; ?>"></i>
+									<i class="<?php echo esc_attr( $atts['icon'] ); ?>"></i>
 									<span>
-										<?php echo $atts['tab_name'] ?>
+										<?php echo esc_attr( $atts['tab_name'] ); ?>
 									</span>
 								</span>
 							</a>
@@ -66,14 +67,14 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 				<div class="nav-footer">
 					<div class="nav-footer-logo">
-						<img src="<?php echo ATUM_URL ?>assets/images/atum-icon.svg" title="<?php _e('Visit ATUM Website', ATUM_TEXT_DOMAIN) ?>">
+						<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
 						<span>
-						<?php echo esc_attr(__('ATUM', ATUM_TEXT_DOMAIN) ) ?>
+						<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
 						</span>
 					</div>
 					<p>
-						<?php echo esc_attr(__('Current version: ' . ATUM_VERSION, ATUM_TEXT_DOMAIN) ) ?>
-						<a href="#"><?php echo esc_attr(__('Check updates', ATUM_TEXT_DOMAIN) ) ?></a>
+						<?php echo esc_attr( __( 'Current version: ' . ATUM_VERSION, ATUM_TEXT_DOMAIN ) ); // phpcs:ignore ?>
+						<a href="#"><?php echo esc_attr( __( 'Check updates', ATUM_TEXT_DOMAIN ) ) ?></a>
 					</p>
 				</div>
 			</nav>
@@ -84,25 +85,25 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 					<?php
 					global $wp_settings_sections, $wp_settings_fields;
 
-					foreach ( array_keys($active_sections) as $active_section_key =>$active_section ):
+					foreach ( array_keys( $active_sections ) as $active_section_key => $active_section ) :
 
-						// Check if is last section
+						// Check if is last section.
 						$last_section = count( $active_sections ) - 1 === $active_section_key ? true : false;
 
-						// This prints out all hidden setting fields
+						// This prints out all hidden setting fields.
 						settings_fields( ATUM_PREFIX . "setting_$active_section" );
 
 						$page = ATUM_PREFIX . "setting_$active_section";
 
-					if ( ! isset( $wp_settings_sections[ $page ] ) ) :
+						if ( ! isset( $wp_settings_sections[ $page ] ) ) :
 							continue;
 						endif;
 
-					foreach ( (array) $wp_settings_sections[ $page ] as $section ) : ?>
+						foreach ( (array) $wp_settings_sections[ $page ] as $section ) : ?>
 
 						<div id="<?php echo esc_attr( $section['id'] ) ?>" class="settings-section" data-section="<?php echo esc_attr( str_replace( [ ATUM_PREFIX, 'setting_' ], '', $section['id'] ) ) ?>">
 
-<?php if ( ! $last_section || 1 === count( $active_sections ) ) : ?>
+								<?php if ( ! $last_section || 1 === count( $active_sections ) ) : ?>
 									<?php $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE ); ?>
 									<div class="section-general-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-general-title-light' : '' ?>">
 										<?php
@@ -136,7 +137,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										<h2><?php echo esc_attr( $header_settings_title ) ?></h2>
 										<?php
 
-										submit_button( __('Save Changes', ATUM_TEXT_DOMAIN) );
+										submit_button( __( 'Save Changes', ATUM_TEXT_DOMAIN ) );
 
 										?>
 									</div>
@@ -163,7 +164,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 									<?php
 									if ( $last_section ) :
-										submit_button( __('Save Changes', ATUM_TEXT_DOMAIN) );
+										submit_button( __( 'Save Changes', ATUM_TEXT_DOMAIN ) );
 									endif;
 									?>
 
@@ -180,8 +181,8 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 				<input type="hidden" id="atum_settings_section" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[settings_section]" value="<?php echo esc_attr( $active ) ?>">
 
 					<?php
-				// Add a hidden field to restore WooCommerce manage_stock individual settings.
-				if ( 'stock_central' === $active ) : ?>
+					// Add a hidden field to restore WooCommerce manage_stock individual settings.
+					if ( 'stock_central' === $active ) : ?>
 					<input type="hidden" id="atum_restore_option_stock" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[restore_option_stock]" value="no">
 					<?php endif;
 
