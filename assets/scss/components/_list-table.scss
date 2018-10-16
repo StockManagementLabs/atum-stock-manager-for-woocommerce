@@ -202,16 +202,18 @@
 	}
 	
 	// Float Thead
-	.floatThead-container {
-		height: 0;
-		
-		// Avoid issues when toggling columns while the header is floating
-		.group-toggler {
+	.floatThead-wrapper {
+		tr.size-row {
 			display: none;
 		}
 		
-		tr.size-row {
-			display: none;
+		.floatThead-container {
+			height: 0;
+			
+			// Avoid issues when toggling columns while the header is floating
+			.group-toggler {
+				display: none;
+			}
 		}
 	}
 	
@@ -334,6 +336,12 @@
 		height: 100%;
 	}
 	
+}
+
+.atum-list-table {
+	&:not(.floatThead-table) {
+		table-layout: auto !important; // FloatTHead fix
+	}
 }
 
 .atum-list-table, .floatThead-container {

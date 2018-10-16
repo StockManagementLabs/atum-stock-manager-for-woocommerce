@@ -2889,15 +2889,15 @@ input[type="button"].btn-block {
   max-width: 160px;
 }
 
-.atum-list-wrapper .floatThead-container {
-  height: 0;
-}
-
-.atum-list-wrapper .floatThead-container .group-toggler {
+.atum-list-wrapper .floatThead-wrapper tr.size-row {
   display: none;
 }
 
-.atum-list-wrapper .floatThead-container tr.size-row {
+.atum-list-wrapper .floatThead-wrapper .floatThead-container {
+  height: 0;
+}
+
+.atum-list-wrapper .floatThead-wrapper .floatThead-container .group-toggler {
   display: none;
 }
 
@@ -3004,6 +3004,10 @@ input[type="button"].btn-block {
   background: #f8f9fa;
   float: left;
   height: 100%;
+}
+
+.atum-list-table:not(.floatThead-table) {
+  table-layout: auto !important;
 }
 
 .atum-list-table, .floatThead-container {
