@@ -29,16 +29,6 @@ class Wpml {
 	const MULTICURRENCY_COLUMNS = array( '_regular_price', '_sale_price', Globals::PURCHASE_PRICE_KEY );
 	
 	/**
-	 * Store ATUM Order Post Types
-	 *
-	 * @var array
-	 */
-	private $atum_order_types = array(
-		ATUM_PREFIX . 'purchase_order',
-		ATUM_PREFIX . 'inventory_log',
-	);
-
-	/**
 	 * Whether the WC multicurrency option is active or not
 	 *
 	 * @var bool
@@ -202,7 +192,7 @@ class Wpml {
 	 */
 	public function hide_multilingual_content_setup_box() {
 
-		if ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], $this->atum_order_types ) ) { // WPCS: CSRF ok.
+		if ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) { // WPCS: CSRF ok.
 			remove_meta_box( 'icl_div_config', convert_to_screen( $_GET['post_type'] ), 'normal' ); // WPCS: CSRF ok.
 		}
 	}
@@ -216,9 +206,9 @@ class Wpml {
 
 		global $pagenow;
 
-		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], $this->atum_order_types ) ) ? TRUE : FALSE; // WPCS: CSRF ok.
+		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) ? TRUE : FALSE; // WPCS: CSRF ok.
 		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE; // WPCS: CSRF ok.
-		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), $this->atum_order_types );
+		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), Globals::get_order_types() );
 
 		if ( $is_order_post_type || $is_order_edit ) {
 			remove_action( 'wp_before_admin_bar_render', array( self::$sitepress, 'admin_language_switcher' ) );

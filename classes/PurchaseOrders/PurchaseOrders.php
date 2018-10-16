@@ -67,8 +67,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		'delete_posts'       => 'delete_purchase_orders',
 		'delete_other_posts' => 'delete_other_purchase_orders',
 	);
-
-
+	
 	/**
 	 * PurchaseOrders constructor
 	 *
@@ -251,14 +250,14 @@ class PurchaseOrders extends AtumOrderPostType {
 
 			case 'supplier':
 				$supplier = $po->get_supplier();
-
+				
 				if ( $supplier ) {
-					echo $supplier->post_title;
+					echo esc_attr( $supplier->post_title );
 				}
 				break;
 
 			case 'expected_date':
-				echo $po->get_expected_at_location_date();
+				echo esc_attr( $po->get_expected_at_location_date() );
 				break;
 
 		}
