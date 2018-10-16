@@ -124,10 +124,21 @@
 		            else {
 			            $floatContainer.show();
 		            }
+		            
+		            // Reposition the sticky cols to fit the floating header
+		            if (self.$stickyCols !== null){
+		            	self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
+		            }
 		
 	            }
 	            else {
+	            	
 		            $floatContainer.css('height', 0);
+		
+		            if (self.$stickyCols !== null){
+			            self.$stickyCols.css('top', 0);
+		            }
+		            
 	            }
 	            
             });
