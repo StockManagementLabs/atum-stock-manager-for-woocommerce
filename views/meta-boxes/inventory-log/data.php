@@ -44,10 +44,10 @@ $log_status = $atum_order->get_status();
 
 					<select id="atum_order_type" name="atum_order_type" class="wc-enhanced-select">
 						<?php
-						$types           = $atum_order::get_types();
-						$atum_order_type = $atum_order->get_type();
-						foreach ( $types as $type => $type_name ) : ?>
-							<option value="<?php echo esc_attr( $type ) ?>"<?php selected( $type, $atum_order_type ) ?>><?php echo esc_html( $type_name ) ?></option>
+						$log_types           = $atum_order::get_log_types();
+						$atum_order_log_type = $atum_order->get_log_type();
+						foreach ( $log_types as $type => $type_name ) : ?>
+							<option value="<?php echo esc_attr( $type ) ?>"<?php selected( $type, $atum_order_log_type ) ?>><?php echo esc_html( $type_name ) ?></option>
 						<?php endforeach; ?>
 					</select>
 				</p>
@@ -59,7 +59,7 @@ $log_status = $atum_order->get_status();
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="date_minute" id="date_minute" min="0" max="59" step="1" value="<?php echo esc_attr( date_i18n( 'i', strtotime( $atum_order_post->post_date ) ) ) ?>" pattern="[0-5]{1}[0-9]{1}" />
 				</p>
 
-				<p class="form-field reservation-date<?php if ( 'reserved-stock' !== $atum_order_type ) echo ' hidden' ?>" data-dependency="atum_order_type:reserved-stock">
+				<p class="form-field reservation-date<?php if ( 'reserved-stock' !== $atum_order_log_type ) echo ' hidden' ?>" data-dependency="atum_order_type:reserved-stock">
 					<label for="reservation_date"><?php esc_html_e( 'Reservation date:', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php $reservation_date = $atum_order->get_reservation_date() ?>
 					<input type="text" class="date-picker" name="reservation_date" id="reservation_date" maxlength="10" value="<?php echo esc_attr( $reservation_date ? date_i18n( 'Y-m-d', strtotime( $reservation_date ) ) : '' ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/inventory_logs/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
@@ -67,7 +67,7 @@ $log_status = $atum_order->get_status();
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="reservation_date_minute" id="reservation_date_minute" min="0" max="59" step="1" value="<?php echo esc_attr( $reservation_date ? date_i18n( 'i', strtotime( $reservation_date ) ) : '' ) ?>" pattern="[0-5]{1}[0-9]{1}" />
 				</p>
 
-				<p class="form-field return-date<?php if ( 'customer-returns' !== $atum_order_type ) echo ' hidden' ?>" data-dependency="atum_order_type:customer-returns">
+				<p class="form-field return-date<?php if ( 'customer-returns' !== $atum_order_log_type ) echo ' hidden' ?>" data-dependency="atum_order_type:customer-returns">
 					<label for="return_date"><?php esc_html_e( 'Return date', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php $return_date = $atum_order->get_return_date() ?>
 					<input type="text" class="date-picker" name="return_date" id="return_date" maxlength="10" value="<?php echo esc_attr( $return_date ? date_i18n( 'Y-m-d', strtotime( $return_date ) ) : '' ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/inventory_logs/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
@@ -75,7 +75,7 @@ $log_status = $atum_order->get_status();
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="return_date_minute" id="return_date_minute" min="0" max="59" step="1" value="<?php echo esc_attr( $return_date ? date_i18n( 'i', strtotime( $return_date ) ) : '' ) ?>" pattern="[0-5]{1}[0-9]{1}" />
 				</p>
 
-				<p class="form-field damage-date<?php if ( 'warehouse-damage' !== $atum_order_type ) echo ' hidden' ?>" data-dependency="atum_order_type:warehouse-damage">
+				<p class="form-field damage-date<?php if ( 'warehouse-damage' !== $atum_order_log_type ) echo ' hidden' ?>" data-dependency="atum_order_type:warehouse-damage">
 					<label for="damage_date"><?php esc_html_e( 'Date of damage', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php $damage_date = $atum_order->get_damage_date() ?>
 					<input type="text" class="date-picker" name="damage_date" id="damage_date" maxlength="10" value="<?php echo esc_attr( $damage_date ? date_i18n( 'Y-m-d', strtotime( $damage_date ) ) : '' ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/inventory_logs/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
@@ -83,12 +83,12 @@ $log_status = $atum_order->get_status();
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="damage_date_minute" id="damage_date_minute" min="0" max="59" step="1" value="<?php echo esc_attr( $damage_date ? date_i18n( 'i', strtotime( $damage_date ) ) : '' ) ?>" pattern="[0-5]{1}[0-9]{1}" />
 				</p>
 
-				<p class="form-field shipping-company<?php if ( 'lost-in-post' !== $atum_order_type ) echo ' hidden' ?>" data-dependency="atum_order_type:lost-in-post">
+				<p class="form-field shipping-company<?php if ( 'lost-in-post' !== $atum_order_log_type ) echo ' hidden' ?>" data-dependency="atum_order_type:lost-in-post">
 					<label for="shipping_company"><?php esc_html_e( 'Shipping company', ATUM_TEXT_DOMAIN ) ?></label>
 					<input type="text" name="shipping_company" id="shipping_company" value="<?php echo esc_attr( $atum_order->get_shipping_company() ) ?>" />
 				</p>
 
-				<p class="form-field form-field-wide custom-name<?php if ( 'other' !== $atum_order_type ) echo ' hidden' ?>" data-dependency="atum_order_type:other">
+				<p class="form-field form-field-wide custom-name<?php if ( 'other' !== $atum_order_log_type ) echo ' hidden' ?>" data-dependency="atum_order_type:other">
 					<label for="custom_name"><?php esc_html_e( 'Custom log name', ATUM_TEXT_DOMAIN ) ?></label>
 					<input type="text" name="custom_name" id="custom_name" maxlength="50" value="<?php echo esc_attr( $atum_order->get_custom_name() ) ?>" />
 				</p>

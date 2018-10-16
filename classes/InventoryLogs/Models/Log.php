@@ -43,8 +43,8 @@ class Log extends AtumOrderModel {
 	 */
 	public function add_stock_buttons() {
 		?>
-		<button type="button" class="button bulk-increase-stock"><?php _e( 'Increase Stock', ATUM_TEXT_DOMAIN ); ?></button>
-		<button type="button" class="button bulk-decrease-stock"><?php _e( 'Reduce Stock', ATUM_TEXT_DOMAIN ); ?></button>
+		<button type="button" class="button bulk-increase-stock"><?php esc_attr_e( 'Increase Stock', ATUM_TEXT_DOMAIN ); ?></button>
+		<button type="button" class="button bulk-decrease-stock"><?php esc_attr_e( 'Reduce Stock', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php
 	}
 
@@ -100,7 +100,7 @@ class Log extends AtumOrderModel {
 	 *
 	 * @return array
 	 */
-	public static function get_types() {
+	public static function get_log_types() {
 
 		return (array) apply_filters( 'atum/inventory_logs/log/types', array(
 			'reserved-stock'   => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
@@ -118,8 +118,19 @@ class Log extends AtumOrderModel {
 	 *
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_log_type() {
 		return $this->get_meta( '_type' );
+	}
+	
+	/**
+	 * Get the Order's type
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		return ATUM_PREFIX . 'inventory_log';
 	}
 
 	/**

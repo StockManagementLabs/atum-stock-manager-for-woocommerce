@@ -38,6 +38,13 @@ final class Globals {
 	 * @var array
 	 */
 	private static $child_product_types = [ 'variation' ];
+	
+	/**
+	 * ATUM existent order types
+	 *
+	 * @var array
+	 */
+	private static $order_types = [ ATUM_PREFIX . 'purchase_order', ATUM_PREFIX . 'inventory_log' ];
 
 	/**
 	 * The number of decimals specified in settings to round the stock quantities
@@ -207,6 +214,18 @@ final class Globals {
 
 		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( array_unique( $product_types ), [ 'grouped' ] ) );
 
+	}
+	
+	/**
+	 * Get all ATUM order types
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return array
+	 */
+	public static function get_order_types() {
+		
+		return (array) apply_filters( 'atum/order_types', self::$order_types );
 	}
 
 	/**

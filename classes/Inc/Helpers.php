@@ -1380,7 +1380,7 @@ final class Helpers {
 	public static function get_logs( $type, $status = '' ) {
 
 		// Filter by log type meta key.
-		$log_types = Log::get_types();
+		$log_types = Log::get_log_types();
 
 		if ( ! in_array( $type, array_keys( $log_types ) ) ) {
 			return FALSE;
