@@ -2380,6 +2380,14 @@ input[type="button"].btn-block {
   border: 1px solid #e9ecef;
 }
 
+#atum-settings .section-fields input[type=text]:hover, #atum-settings .section-fields input[type=number]:hover, #atum-settings .section-fields select:hover, #atum-settings .section-fields textarea:hover {
+  border: solid 1px #6c757d;
+}
+
+#atum-settings .section-fields input[type=text]:focus, #atum-settings .section-fields input[type=number]:focus, #atum-settings .section-fields select:focus, #atum-settings .section-fields textarea:focus {
+  border: solid 1px #00B8DB;
+}
+
 #atum-settings .section-fields textarea {
   height: 150px;
 }
@@ -2662,6 +2670,16 @@ input[type="button"].btn-block {
   -o-transform: none;
   -ms-transform: none;
   transform: none;
+}
+
+#atum-settings .wp-picker-container #atum_mi_geoprompt_accent_color {
+  width: 110px;
+}
+
+@media all and (max-width: 768px) {
+  #atum-settings .wp-picker-container .wp-picker-clear {
+    line-height: 0 !important;
+  }
 }
 
 @media all and (max-width: 568px) {

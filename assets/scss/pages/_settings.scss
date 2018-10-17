@@ -5,6 +5,7 @@
 $settings-menu-bg:          $blue-dark-lighten;
 $settings-menu-color:       $white;
 $settings-menu-active:      $white;
+$settings-xs-min:          568px !default;
 
 
 // Settings Menu
@@ -21,7 +22,7 @@ $settings-menu-active:      $white;
 	
 	.atum-settings-container {
 		// Mobile style
-		@media all and (max-width: $screen-xs-min) {
+		@media all and (max-width: $settings-xs-min) {
 			flex-wrap: wrap;
 		}
 		@include flexbox;
@@ -332,7 +333,7 @@ $settings-menu-active:      $white;
 	}
 	
 	// Mobile style
-	@media all and (max-width: $screen-xs-min) {
+	@media all and (max-width: $settings-xs-min) {
 		.atum-nav, .atum-nav-light {
 			width: 100%;
 			margin-bottom: 11px;
@@ -578,7 +579,7 @@ $settings-menu-active:      $white;
 					width: 80% !important;
 				}
 				// Mobile
-				@media all and (max-width: $screen-xs-min) {
+				@media all and (max-width: $settings-xs-min) {
 					width: 100% !important;
 				}
 			}
@@ -625,6 +626,15 @@ $settings-menu-active:      $white;
 			height: 30px;
 			color: $gray-600;
 			border: 1px solid $gray-200;
+		}
+		
+		input[type=text], input[type=number], select, textarea {
+			&:hover {
+				border: solid 1px $gray-600;
+			}
+			&:focus {
+				border: solid 1px $blue;
+			}
 		}
 		
 		textarea {
@@ -677,7 +687,7 @@ $settings-menu-active:      $white;
 					margin-right: 10px;
 				}
 				// Mobile
-				@media all and (max-width: $screen-xs-min) {
+				@media all and (max-width: $settings-xs-min) {
 					width: 100%;
 					margin-right: 0;
 				}
@@ -703,7 +713,7 @@ $settings-menu-active:      $white;
 						.select2-search__field {
 							min-height: 28px;
 							@include placeholder($wp-gray-1);
-							@media all and (max-width: $screen-xs-min) {
+							@media all and (max-width: $settings-xs-min) {
 								width: 100% !important;
 							}
 						}
@@ -753,7 +763,7 @@ $settings-menu-active:      $white;
 						.select2-container {
 							width: 200px !important;
 							// Mobile
-							@media all and (max-width: $screen-xs-min) {
+							@media all and (max-width: $settings-xs-min) {
 								width: 100% !important;
 							}
 						}
@@ -805,7 +815,7 @@ $settings-menu-active:      $white;
 				width: 80% !important;
 			}
 			// Mobile
-			@media all and (max-width: $screen-xs-min) {
+			@media all and (max-width: $settings-xs-min) {
 				width: 100% !important;
 			}
 			&, .selection, .select2-selection--single, .select2-selection__rendered {
@@ -871,8 +881,17 @@ $settings-menu-active:      $white;
 	
 	// Color Pickers
 	.wp-picker-container {
+		#atum_mi_geoprompt_accent_color {
+			width: 110px;
+		}
+		// Tablet style
+		@media all and (max-width: $screen-sm-min) {
+			.wp-picker-clear {
+				line-height: 0 !important;
+			}
+		}
 		// Mobile style
-		@media all and (max-width: $screen-xs-min) {
+		@media all and (max-width: $settings-xs-min) {
 			.iris-picker {
 				width: 100% !important;
 				.iris-square {
@@ -982,7 +1001,7 @@ $settings-menu-active:      $white;
 	}
 	
 	// Mobile style
-	@media all and (max-width: $screen-xs-min) {
+	@media all and (max-width: $settings-xs-min) {
 		.btn-group {
 			label {
 				line-height: 1.8;
@@ -1121,8 +1140,9 @@ input[type=search] {
 	}
 }
 
+
 // Mobile style
-@media all and (max-width: $screen-xs-min) {
+@media all and (max-width: $settings-xs-min) {
 	#atum-settings {
 		margin-left: 0;
 	}
