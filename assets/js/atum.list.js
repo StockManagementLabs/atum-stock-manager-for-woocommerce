@@ -142,6 +142,8 @@
 				
 				if (isFloated) {
 					
+					console.log('floated');
+					
 					$floatContainer.css('height', 'auto');
 					
 					// Hide search dropdown on sticky
@@ -171,12 +173,31 @@
 						$floatTheadTable.after(self.$floatTheadStickyCols);
 						self.$floatTheadStickyCols.css('width', self.$stickyCols.width() + 1);
 						
-						// Restore the colgroup needed by floatThead to properly sizing the cols
-						var $colGroup     = $floatTheadTable.find('colgroup').clone(),
-						    numStickyCols = self.$floatTheadStickyCols.find('.item-heads').find('td, th').length;
+						// Add the colgroup tag with column widths
+						self.$floatTheadStickyCols.prepend('<colgroup />');
 						
-						$colGroup.find('col').slice(numStickyCols, $colGroup.find('col').length).remove();
+						var $colGroup = self.$floatTheadStickyCols.find('colgroup');
+						
+						$floatTheadTable.find('thead .item-heads').children().each(function() {
+							
+							var $cell       = $(this),
+								id = $cell.attr('id');
+							
+							if ($cell.hasClass('hidden')) {
+								return;
+							}
+							
+							if (self.$floatTheadStickyCols.find('thead .item-heads').children('#' + id).length ) {
+								$colGroup.append('<col style="width:' + $cell.width() + 'px;">');
+							}
+						});
+						
+						// Remove the manage-column class to not conflict with the WP's Screen Options functionality
+						self.$floatTheadStickyCols.find('.manage-column').removeClass('manage-column');
+						
 						$colGroup.prependTo(self.$floatTheadStickyCols);
+						
+						self.adjustStickyHeaders(self.$floatTheadStickyCols, $floatTheadTable);
 						
 					}
 					
@@ -1018,14 +1039,20 @@
 								if (self.$floatTheadStickyCols !== null) {
 									self.$floatTheadStickyCols.hide().css('left', 0);
 								}
+								
 							}
 							// Reposition the sticky cols while scrolling the pane
 							else {
+								
 								self.$stickyCols.show().css('left', scrollPositionX);
 								
 								if (self.$floatTheadStickyCols !== null) {
 									self.$floatTheadStickyCols.show().css('left', scrollPositionX);
 								}
+								
+								// Ensure sticky column heights are matching
+								self.adjustStickyHeaders(self.$stickyCols, self.$atumTable);
+								
 							}
 							
 						}
@@ -1154,8 +1181,30 @@
 	
 			});
 			
+			// Do not add sticky columns with a low columns number
+			if ($stickyCols.find('thead .item-heads').children().not('.hidden').length <= 2) {
+				return null;
+			}
+			
+			// Remove the manage-column class to not conflict with the WP's Screen Options functionality
+			$stickyCols.find('.manage-column').removeClass('manage-column');
+			
 			return $stickyCols;
 		
+		},
+		
+		/**
+		 * Adjust the header heights to match the List Table heights
+		 *
+		 * @param jQuery $stickyTable
+		 * @param jQuery $origTable
+		 */
+		adjustStickyHeaders: function($stickyTable, $origTable) {
+			
+			$.each( ['column-groups', 'item-heads'], function(index, className) {
+				$stickyTable.find('.' + className + ' > th').first().css('height', $origTable.find('.' + className + ' > th').first().height());
+			});
+			
 		},
 		
 		/**
