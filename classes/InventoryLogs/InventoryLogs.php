@@ -197,7 +197,7 @@ class InventoryLogs extends AtumOrderPostType {
 		) );
 
 		// Add the Log post to the appropriate Log Type taxonomy.
-		if ( in_array( $log_type, array_keys( Log::get_types() ) ) ) {
+		if ( in_array( $log_type, array_keys( Log::get_log_types() ) ) ) {
 			wp_set_object_terms( $log_id, $log_type, self::TAXONOMY );
 		}
 
@@ -285,8 +285,8 @@ class InventoryLogs extends AtumOrderPostType {
 		switch ( $column ) {
 
 			case 'type':
-				$types    = Log::get_types();
-				$log_type = $log->get_type();
+				$types    = Log::get_log_types();
+				$log_type = $log->get_log_type();
 
 				if ( in_array( $log_type, array_keys( $types ) ) ) {
 					echo $types[ $log_type ]; // WPCS: XSS ok.

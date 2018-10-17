@@ -20,7 +20,14 @@ use Atum\Suppliers\Suppliers;
 
 
 class PurchaseOrder extends AtumOrderModel {
-
+	
+	/**
+	 * Whether the item's quantity will be negative or positive or both
+	 *
+	 * @var string
+	 */
+	protected $qty_sign = 'positive';
+	
 	/**
 	 * PurchaseOrder constructor
 	 *
@@ -57,7 +64,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function add_stock_button() {
 		?>
-		<button type="button" class="button bulk-increase-stock"><?php _e( 'Add to Stock', ATUM_TEXT_DOMAIN ); ?></button>
+		<button type="button" class="button bulk-increase-stock"><?php esc_attr_e( 'Add to Stock', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php
 	}
 
@@ -71,7 +78,7 @@ class PurchaseOrder extends AtumOrderModel {
 	public function set_purchase_price_button( $item ) {
 
 		if ( 'line_item' === $item->get_type() ) : ?>
-			<button type="button" class="button set-purchase-price"><?php _e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button>
+			<button type="button" class="button set-purchase-price"><?php esc_attr_e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php endif;
 	}
 
@@ -105,7 +112,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		}
 
-		echo '<div class="items-blocker' . $unblocked_class . '"><h3>' . $message . '</h3></div>';
+		echo '<div class="items-blocker' . esc_attr( $unblocked_class ) . '"><h3>' . esc_attr( $message ) . '</h3></div>';
 
 	}
 
@@ -122,7 +129,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		if ( $supplier ) {
 			/* translators: the supplier title */
-			echo '<em class="alert"><i class="dashicons dashicons-info"></i> ' . sprintf( __( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), $supplier->post_title ) . '</em>';
+			echo '<em class="alert"><i class="dashicons dashicons-info"></i> ' . sprintf( esc_attr__( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), esc_attr( $supplier->post_title ) ) . '</em>';
 		}
 	}
 
@@ -191,6 +198,17 @@ class PurchaseOrder extends AtumOrderModel {
 	public function has_multiple_suppliers() {
 		return 'yes' === $this->get_meta( '_multiple_suppliers' );
 
+	}
+	
+	/**
+	 * Get the Order's type
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		return ATUM_PREFIX . 'purchase_order';
 	}
 
 	/**

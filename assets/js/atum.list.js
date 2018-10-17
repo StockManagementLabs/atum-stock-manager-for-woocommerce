@@ -167,8 +167,17 @@
 					self.$floatTheadStickyCols = self.createStickyColumns($floatTheadTable);
 					
 					if (self.$floatTheadStickyCols !== null) {
+						
 						$floatTheadTable.after(self.$floatTheadStickyCols);
 						self.$floatTheadStickyCols.css('width', self.$stickyCols.width() + 1);
+						
+						// Restore the colgroup needed by floatThead to properly sizing the cols
+						var $colGroup     = $floatTheadTable.find('colgroup').clone(),
+						    numStickyCols = self.$floatTheadStickyCols.find('.item-heads').find('td, th').length;
+						
+						$colGroup.find('col').slice(numStickyCols, $colGroup.find('col').length).remove();
+						$colGroup.prependTo(self.$floatTheadStickyCols);
+						
 					}
 					
 				}

@@ -1048,7 +1048,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function get_log_products( $log_type, $log_status = '' ) {
 
-		$log_types = array_keys( Log::get_types() );
+		$log_types = array_keys( Log::get_log_types() );
 
 		if ( ! in_array( $log_type, $log_types ) ) {
 			return FALSE;

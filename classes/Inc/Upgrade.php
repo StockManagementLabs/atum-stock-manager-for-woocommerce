@@ -140,7 +140,7 @@ class Upgrade {
 
 		// Create terms for the log types.
 		$log_type_taxonomy = InventoryLogs::get_type_taxonomy();
-		foreach ( Log::get_types() as $log_type_slug => $log_type_name ) {
+		foreach ( Log::get_log_types() as $log_type_slug => $log_type_name ) {
 
 			if ( ! get_term_by( 'slug', $log_type_slug, $log_type_taxonomy ) ) {
 				wp_insert_term( $log_type_name, $log_type_taxonomy, array( 'slug' => $log_type_slug ) );

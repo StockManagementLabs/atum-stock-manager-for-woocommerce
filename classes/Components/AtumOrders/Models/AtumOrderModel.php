@@ -67,8 +67,14 @@ abstract class AtumOrderModel {
 	 * @var string
 	 */
 	protected $cache_key = 'atum-order-items';
-
-
+	
+	/**
+	 * Whether the item's quantity will be negative or positive or both
+	 *
+	 * @var string
+	 */
+	protected $qty_sign = 'both';
+	
 	/**
 	 * AtumOrderModel constructor
 	 *
@@ -1556,6 +1562,15 @@ abstract class AtumOrderModel {
 		return apply_filters( 'atum/orders/get_items', $items, $this );
 
 	}
+	
+	/**
+	 * Get order's type
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return string
+	 */
+	abstract public function get_type();
 
 	/**
 	 * Get an ATUM Order item
@@ -1736,7 +1751,18 @@ abstract class AtumOrderModel {
 		return array_unique( $found_tax_classes );
 
 	}
-
+	
+	/**
+	 * Get current Order Type item quantities sign
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return string
+	 */
+	public function get_qty_sign() {
+		
+		return $this->qty_sign;
+	}
 
 	/**********
 	 * SETTERS
