@@ -65,6 +65,7 @@
 			} @else {
 				border-radius: 0;
 			}
+			border-color: $gray-400;
 		}
 
 		.atum-post-search {
@@ -201,31 +202,6 @@
 		
 	}
 	
-	// Float Thead
-	.floatThead-wrapper {
-		tr.size-row {
-			display: none;
-		}
-		
-		.floatThead-container {
-			height: 0;
-			
-			// Avoid issues when toggling columns while the header is floating
-			.group-toggler {
-				display: none;
-			}
-		}
-	}
-	
-	// Fixed columns
-	.atum-list-table.cloned {
-		width: auto;
-		position: absolute;
-		top: 0;
-		border-right: none;
-		box-shadow: rgba($black, 0.04) 5px 1px 10px;
-	}
-	
 	@media screen and (max-width: 782px) {
 		
 		ul.subsubsub {
@@ -338,7 +314,38 @@
 	
 }
 
+// Float Thead
+.floatThead-wrapper {
+	tr.size-row {
+		display: none;
+	}
+	
+	.floatThead-container {
+		height: 0;
+		overflow-y: hidden;
+		
+		// Avoid issues when toggling columns while the header is floating
+		.group-toggler {
+			display: none;
+		}
+	}
+}
+
 .atum-list-table {
+	
+	// Fixed columns
+	&.cloned {
+		width: auto;
+		position: absolute;
+		top: 0;
+		border-right: none;
+		box-shadow: rgba($black, 0.04) 5px 1px 10px;
+		
+		@media all and (max-width: 600px) {
+			display: none !important;
+		}
+	}
+	
 	&:not(.floatThead-table) {
 		table-layout: auto !important; // FloatTHead fix
 	}

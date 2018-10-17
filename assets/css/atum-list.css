@@ -2770,6 +2770,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .search-box #search_column_btn {
   border-top-right-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
+  border-color: #ced4da;
 }
 
 .atum-list-wrapper .search-box .atum-post-search {
@@ -2889,26 +2890,6 @@ input[type="button"].btn-block {
   max-width: 160px;
 }
 
-.atum-list-wrapper .floatThead-wrapper tr.size-row {
-  display: none;
-}
-
-.atum-list-wrapper .floatThead-wrapper .floatThead-container {
-  height: 0;
-}
-
-.atum-list-wrapper .floatThead-wrapper .floatThead-container .group-toggler {
-  display: none;
-}
-
-.atum-list-wrapper .atum-list-table.cloned {
-  width: auto;
-  position: absolute;
-  top: 0;
-  border-right: none;
-  box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
-}
-
 @media screen and (max-width: 782px) {
   .atum-list-wrapper ul.subsubsub {
     font-size: 14px;
@@ -3004,6 +2985,33 @@ input[type="button"].btn-block {
   background: #f8f9fa;
   float: left;
   height: 100%;
+}
+
+.floatThead-wrapper tr.size-row {
+  display: none;
+}
+
+.floatThead-wrapper .floatThead-container {
+  height: 0;
+  overflow-y: hidden;
+}
+
+.floatThead-wrapper .floatThead-container .group-toggler {
+  display: none;
+}
+
+.atum-list-table.cloned {
+  width: auto;
+  position: absolute;
+  top: 0;
+  border-right: none;
+  box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
+}
+
+@media all and (max-width: 600px) {
+  .atum-list-table.cloned {
+    display: none !important;
+  }
 }
 
 .atum-list-table:not(.floatThead-table) {
