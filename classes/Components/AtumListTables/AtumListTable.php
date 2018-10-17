@@ -1471,6 +1471,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$class   = $id = '';
 			$classes = array();
+			$active  = '';
+			$empty   = '';
 
 			$current_all = ! empty( $views[ $key ]['all'] ) ? $views[ $key ]['all'] : $key;
 
@@ -1495,6 +1497,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $current_all === $view || ( ! $view && 'all_stock' === $current_all ) ) {
 				$classes[] = 'current';
+				$active    = 'class="active"';
 			}
 			else {
 				$query_filters['paged'] = 1;
@@ -1502,6 +1505,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( ! $count ) {
 				$classes[] = 'empty';
+				$empty     = 'empty';
 			}
 
 			if ( $classes ) {
@@ -1575,13 +1579,13 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
 
-					$extra_links .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '" data-tip="' . __( 'UnManaged by WC', ATUM_TEXT_DOMAIN ) . '">' . $unm_count . '</a>';
+					$extra_links .= ',<a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '" data-tip="' . __( 'UnManaged by WC', ATUM_TEXT_DOMAIN ) . '">' . $unm_count . '</a>';
 				}
 
-				$views[ $key ] = '<span>' . $text . ' <a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">' . $count . '</a> (' . $extra_links . ')</span>';
+				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">' . $text . ' <span class="text-blue">' . $count . '</span></a> <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
 			}
 			else {
-				$views[ $key ] = '<a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span>' . $text . ' (' . $count . ')</span></a>';
+				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . '<span class="count ' . $empty . '">(' . $count . ')</span></span></a></span>';
 			}
 
 		}
@@ -1612,7 +1616,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$views[ $class ] = "\t<li class='$class'>$view";
 			endforeach;
 
-			echo implode( " |</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
+			echo implode( "</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
 			?>
 
 			<li>
