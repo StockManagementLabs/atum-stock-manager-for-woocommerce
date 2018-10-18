@@ -6,8 +6,8 @@ Requires at least: 4.6
 Tested up to: 4.9.8
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.4.5
-Stable tag: 1.4.15
+WC tested up to: 3.4.6
+Stable tag: 1.4.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,37 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.16`
+
+*2018-10-18*
+
+**Features**
+
+* Sticky columns for Stock Central.
+* Added option to Stock Central's settings to enable/disable sticky columns.
+* Allow to horizontally scrolling the ATUM List tables with drag and drop.
+* Collapsible groups for List Tables.
+
+**Changes**
+
+* Improved List Tables' expandRow method to allow external calls.
+* Added custom trigger after updating the List Tables.
+* Improved Suppliers' query.
+* Updated jScrollPane vendor library.
+* Multi-Inventory compatibility changes.
+* Added source labels to Settings' tools.
+
+**Fixes**
+
+* Fixed change log address.
+* Fixed POs not reloading purchase price.
+* Fixed WPML error when WC WPML is active when WPML isn't.
+* Fixed Floating Header + Sticky Columns compatibility issues.
+* Minor bug fixes.
+* Refactory.
 
 ---
 

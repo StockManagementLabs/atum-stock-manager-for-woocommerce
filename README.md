@@ -159,6 +159,70 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.16`
+
+*2018-10-18*
+
+**Features**
+
+* Sticky columns for Stock Central.
+* Added option to Stock Central's settings to enable/disable sticky columns.
+* Allow to horizontally scrolling the ATUM List tables with drag and drop.
+* Collapsible groups for List Tables.
+
+**Changes**
+
+* Improved List Tables' expandRow method to allow external calls.
+* Added custom trigger after updating the List Tables.
+* Improved Suppliers' query.
+* Updated jScrollPane vendor library.
+* Multi-Inventory compatibility changes.
+* Added source labels to Settings' tools.
+
+**Fixes**
+
+* Fixed change log address.
+* Fixed POs not reloading purchase price.
+* Fixed WPML error when WC WPML is active when WPML isn't.
+* Fixed Floating Header + Sticky Columns compatibility issues.
+* Minor bug fixes.
+* Refactory.
+
+---
+
+`1.4.15`
+
+*2018-10-04*
+
+**Features**
+
+* Added 'Not found' text to ATUM Locations.
+* Added compatibility for Multi-Inventory add-on.
+* Added wrapper for the future ATUM Logs component.
+* Added children arrows to ATUM List tables.
+* Column group toggler for ATUM List tables.
+
+**Changes**
+
+* Added color picker styles to ATUM UI.
+* Updated PHPCS rules.
+* CSS improvements.
+* Added ATUM logo to ATUM panel within variations.
+* Change stock threshold behavior.
+* Added new hooks to ATUM List Tables.
+
+**Fixes**
+
+* Security Enhancements.
+* Fixed wrong status in other users's private products under Stock Central.
+* Fixed Uncontrolled List WPML behavior.
+* Fixed purchase price and price wrong comparison.
+* Removed unused helpers.
+* Cache handling refactory.
+* Refactory: code style.
+
+---
+
 `1.4.14`
 
 *2018-09-07*
