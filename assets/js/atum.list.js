@@ -2067,6 +2067,7 @@
 			this.isRowExpanding[rowId] = true;
 			
 			var self      = this,
+			    $rowTable = $row.closest('table'),
 			    $nextRow  = $row.next(),
 			    childRows = [];
 			
@@ -2089,7 +2090,7 @@
 				
 				childRows.push($nextRow);
 				
-				if ($nextRow.css('display') === 'none') {
+				if ( ($rowTable.is(':visible') && !$nextRow.is(':visible')) || (!$rowTable.is(':visible') && $nextRow.css('display') === 'none')) {
 					$nextRow.addClass('expanding').show(300);
 				}
 				else {
