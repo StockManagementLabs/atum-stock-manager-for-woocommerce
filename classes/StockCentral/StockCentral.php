@@ -287,7 +287,7 @@ class StockCentral extends AtumListPage {
 
 			$defaults['show_bookable_products'] = array(
 				'section' => 'stock_central',
-				'name'    => __( 'Show Bookable Productss', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Show Bookable Products', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, ATUM will show the Bookable products from WC Bookings add-on in Stock Central.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes',

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2018-10-18 11:18+0200\n"
+"POT-Creation-Date: 2018-10-18 12:47+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Stock Management Labs <admin@stockmanagementlabs.com>\n"
@@ -156,7 +156,7 @@ msgstr ""
 #: classes/Inc/Main.php:488 classes/Inc/Main.php:495
 #: classes/Modules/ModuleManager.php:183 classes/Modules/ModuleManager.php:190
 #: classes/Settings/Settings.php:974 classes/Settings/Settings.php:982
-#: classes/Settings/Tools.php:130 classes/Settings/Tools.php:138
+#: classes/Settings/Tools.php:132 classes/Settings/Tools.php:140
 #: classes/StockCentral/StockCentral.php:357
 #: classes/StockCentral/StockCentral.php:364 classes/Suppliers/Suppliers.php:636
 #: classes/Suppliers/Suppliers.php:643
@@ -2134,7 +2134,7 @@ msgid ""
 "per product values in the Tool tab above."
 msgstr ""
 
-#: classes/Settings/Settings.php:157 classes/Settings/Tools.php:112
+#: classes/Settings/Settings.php:157 classes/Settings/Tools.php:114
 msgid ""
 "This will clear all the Out Stock Threshold values that have been set in all "
 "products"
@@ -2330,62 +2330,62 @@ msgstr ""
 msgid "ATUM Tools"
 msgstr ""
 
-#: classes/Settings/Tools.php:74
+#: classes/Settings/Tools.php:76
 msgid "Update WC's Manage Stock"
 msgstr ""
 
-#: classes/Settings/Tools.php:75
+#: classes/Settings/Tools.php:77
 msgid ""
 "Update the WooCommerce's manage stock at product level for all the products at "
 "once."
 msgstr ""
 
-#: classes/Settings/Tools.php:79
+#: classes/Settings/Tools.php:81
 msgid "Manage Stock"
 msgstr ""
 
-#: classes/Settings/Tools.php:80
+#: classes/Settings/Tools.php:82
 msgid "Unmanage Stock"
 msgstr ""
 
-#: classes/Settings/Tools.php:82 classes/Settings/Tools.php:98
+#: classes/Settings/Tools.php:84 classes/Settings/Tools.php:100
 msgid "Update Now!"
 msgstr ""
 
-#: classes/Settings/Tools.php:84
+#: classes/Settings/Tools.php:86
 msgid ""
 "This will change the WooCommerce's manage stock option for all your products"
 msgstr ""
 
-#: classes/Settings/Tools.php:90
+#: classes/Settings/Tools.php:92
 msgid "Update ATUM's stock control"
 msgstr ""
 
-#: classes/Settings/Tools.php:91
+#: classes/Settings/Tools.php:93
 msgid "Update the ATUM's stock control option for all the products at once."
 msgstr ""
 
-#: classes/Settings/Tools.php:95
+#: classes/Settings/Tools.php:97
 msgid "Control Stock"
 msgstr ""
 
-#: classes/Settings/Tools.php:96
+#: classes/Settings/Tools.php:98
 msgid "Uncontrol Stock"
 msgstr ""
 
-#: classes/Settings/Tools.php:100
+#: classes/Settings/Tools.php:102
 msgid "This will change the ATUM's stock control option for all your products"
 msgstr ""
 
-#: classes/Settings/Tools.php:106
+#: classes/Settings/Tools.php:108
 msgid "Clear Out Stock Threshold"
 msgstr ""
 
-#: classes/Settings/Tools.php:107
+#: classes/Settings/Tools.php:109
 msgid "Clear all previously saved Out of Stock Threshold values."
 msgstr ""
 
-#: classes/Settings/Tools.php:110
+#: classes/Settings/Tools.php:112
 msgid "Clear Now!"
 msgstr ""
 
@@ -2599,7 +2599,7 @@ msgid ""
 msgstr ""
 
 #: classes/StockCentral/StockCentral.php:290
-msgid "Show Bookable Productss"
+msgid "Show Bookable Products"
 msgstr ""
 
 #: classes/StockCentral/StockCentral.php:291
