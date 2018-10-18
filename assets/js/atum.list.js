@@ -90,9 +90,7 @@
             //
 			// Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
             //--------------------------------
-            var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
-
-            if ( $atumPostSearchWithDropdown.length) {
+            if ( $('.atum-post-search-with-dropdown').length) {
 
                 this.settings.searchDropdown = 'yes';
                 this.setupSearchColumnDropdown();
@@ -126,11 +124,23 @@
 			this.$stickyCols = this.createStickyColumns(this.$atumTable);
 			
 			//
-			// Hide/Show the toggleable group of columns
-			//------------------------------------------
+			// Hide/Show the toggleable group of columns with the toggler button
+			//------------------------------------------------------------------
 			this.$atumList.on('click', '.group-toggler', function () {
 				self.toggleGroupColumns($(this));
 			}).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
+			
+			//
+			// Show the toggleable group columns when opening the screen options
+			// to avoid the hidden columns to be disabled when switching column visibilities
+			//-------------------------------------------------------------------------------
+			$('#show-settings-link').click(function () {
+				
+				if (!$(this).hasClass('screen-meta-active')) {
+					self.$atumTable.find('.column-groups').find('th.collapsed').find('.group-toggler').click();
+				}
+				
+			});
 			
 			//
 			// Add the floating table header
@@ -141,8 +151,6 @@
 			this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
 				
 				if (isFloated) {
-					
-					console.log('floated');
 					
 					$floatContainer.css('height', 'auto');
 					
@@ -1210,7 +1218,7 @@
 		/**
 		 * Show/Hide the group of columns with the group-toggler button
 		 *
-		 * TODO: STORE THE TOGGLED COLUMNS GROUPS TO BE ABLE TO RESTORE THEM TO THE SAME STAGE AFTER FILTERING
+		 * @param jQuery $toggler
 		 */
 		toggleGroupColumns: function($toggler) {
 			
@@ -1259,6 +1267,23 @@
 			
 			this.reloadScrollbar();
 			this.reloadFloatThead();
+			
+		},
+		
+		/**
+		 * Restore all the collapsed groups to its collapsed stage
+		 */
+		restoreCollapsedGroups: function() {
+			
+			var self = this;
+			
+			this.$collapsedGroups.each(function () {
+				var $groupCell = $(this);
+				$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));
+				$groupCell.children('span').not('.group-toggler').show();
+				
+				self.toggleGroupColumns($groupCell.find('.group-toggler'));
+			});
 			
 		},
 		
@@ -1839,15 +1864,7 @@
 					
 					// Restore toggled column groups
 					if (self.$collapsedGroups.length) {
-						
-						self.$collapsedGroups.each(function () {
-							var $groupCell = $(this);
-							$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));
-							$groupCell.children('span').not('.group-toggler').show();
-							
-							self.toggleGroupColumns($groupCell.find('.group-toggler'));
-						});
-						
+						self.restoreCollapsedGroups();
 					}
 					else {
 						self.reloadScrollbar();
