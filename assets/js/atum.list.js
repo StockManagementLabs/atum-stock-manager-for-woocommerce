@@ -1031,6 +1031,7 @@
 						// Add the stickyCols table
 						if (self.$stickyCols !== null && !self.$atumList.find('.atum-list-table.cloned').length) {
 							self.$atumTable.after(self.$stickyCols);
+							self.addTooltips();
 							self.$atumList.trigger('atum-added-sticky-columns');
 						}
 						
@@ -1067,7 +1068,7 @@
 						
 					});
 				
-				// Touch scrolling on desktops
+				// Drag and drop scrolling on desktops
 				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
 				hammertime.on('panright panleft', function (ev) {
@@ -2088,7 +2089,7 @@
 				
 				childRows.push($nextRow);
 				
-				if (!$nextRow.is(':visible')) {
+				if ($nextRow.css('display') === 'none') {
 					$nextRow.addClass('expanding').show(300);
 				}
 				else {
