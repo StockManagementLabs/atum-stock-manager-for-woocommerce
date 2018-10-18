@@ -212,6 +212,18 @@ $settings-menu-active:      $white;
 			width: 25%;
 			color: $dark;
 			font-weight: 400;
+			
+			.label {
+				background-color: $dark;
+				color: $white;
+				font-size: 10px;
+				font-weight: 500;
+				display: inline-block;
+				border-radius: 4px;
+				padding: 3px 7px;
+				margin-top: 5px;
+				text-transform: uppercase;
+			}
 		}
 		
 		.atum-setting-info {
