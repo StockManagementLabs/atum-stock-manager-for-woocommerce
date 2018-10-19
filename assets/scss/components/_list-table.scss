@@ -75,9 +75,24 @@
 		}
 	}
 	
+	.sticky-columns-button-container {
+		@include flexbox;
+		@include flex-align-items(center);
+		button {
+			width: 30px;
+			height: 30px;
+			border-radius: 5px;
+			border: solid 1px $gray-200;
+			&:first-child {
+				margin-left: 9px;
+				margin-right: 5px;
+			}
+		}
+	}
+	
 	.search-box {
 		@include flexbox;
-		display: inline-block;
+		//display: inline-block;
 		float: right;
 		margin-right: 3px;
 		margin-bottom: 3px;
@@ -472,6 +487,7 @@
 }
 
 .atum-list-table {
+	border: none !important;
 	&:not(.floatThead-table) {
 		table-layout: auto !important; // FloatTHead fix
 	}
@@ -487,9 +503,26 @@
 		th {
 			padding: 3px 5px;
 			line-height: 1.1;
-			font-size: 13px;
+			font-size: 14px;
 			min-width: 50px;
-			height: 42px;
+			height: 60px;
+			white-space: normal;
+			
+			.sorting-indicator {
+				visibility: visible;
+				margin-left: 4px;
+				&:before {
+					color: $gray-500;
+					content: "\f140";
+				}
+			}
+			
+			.col-product-details {
+				.lnr {
+					font-size: 16px;
+					color: $gray-500;
+				}
+			}
 			
 			.dashicons {
 				display: block;
@@ -498,7 +531,8 @@
 				height: 1em;
 				width: 1em;
 				margin: 0 auto;
-				font-size: 14px;
+				font-size: 16px;
+				color: $gray-500;
 				
 				&:before {
 					text-indent: 0;
@@ -516,15 +550,18 @@
 	}
 	
 	.column-groups {
-		background-color: darken($light, 7%);
+		background-color: $gray-200;
 		
 		th {
-			padding: 6px 10px;
+			padding: 6px 20px;
 			font-weight: 500;
-			font-size: 12px;
-			line-height: 1.3;
+			font-size: 14px;
+			line-height: normal;
 			min-width: 80px;
 			height: 20px;
+			font-weight: bold;
+			letter-spacing: 0.3px;
+			color: $gray-600;
 			
 			&:not(:last-child) {
 				border-right: 1px solid $gray-400;
@@ -563,6 +600,10 @@
 			a {
 				padding: 0;
 				@include flexbox;
+				font-size: 14px;
+				font-weight: bold;
+				letter-spacing: 0.3px;
+				color: $gray-500;
 			}
 			
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
@@ -687,7 +728,6 @@
 		&.no-items {
 			td {
 				padding: 10px 24px;
-				
 				.alert {
 					margin-top: $grid-gutter-width/2;
 					@include flex-wrap(wrap);
@@ -785,11 +825,36 @@
 		}
 	}
 	
+	tbody {
+		td {
+			&.column-title {
+				a {
+					font-size: 14px;
+					font-weight: bold;
+					letter-spacing: 0.3px;
+					color: $blue;
+				}
+			}
+			&.column-_sku {
+				span {
+					font-size: 14px;
+					letter-spacing: 0.3px;
+					color: $blue;
+				}
+			}
+		}
+	}
+	
 	td, th {
 		position: relative;
 		vertical-align: middle;
 		padding: 6px 5px;
-		
+		height: 60px;
+		&.column-ID {
+			font-size: 14px;
+			letter-spacing: 0.3px;
+			color: $gray-600;
+		}
 		&.pro-version {
 			background-color: $secondary;
 		}
@@ -898,6 +963,7 @@
 				content: "\e006";
 				font-variant: normal;
 				margin: 0;
+				color: $gray-600;
 			}
 			
 			&.grouped:before {

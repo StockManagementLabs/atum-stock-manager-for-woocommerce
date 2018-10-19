@@ -2788,12 +2788,35 @@ input[type="button"].btn-block {
   box-shadow: none;
 }
 
+.atum-list-wrapper .sticky-columns-button-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  border: solid 1px #e9ecef;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button:first-child {
+  margin-left: 9px;
+  margin-right: 5px;
+}
+
 .atum-list-wrapper .search-box {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  display: inline-block;
   float: right;
   margin-right: 3px;
   margin-bottom: 3px;
@@ -3168,6 +3191,10 @@ input[type="button"].btn-block {
   height: 100%;
 }
 
+.atum-list-table {
+  border: none !important;
+}
+
 .atum-list-table:not(.floatThead-table) {
   table-layout: auto !important;
 }
@@ -3184,9 +3211,25 @@ input[type="button"].btn-block {
 .atum-list-table thead .item-heads th, .atum-list-table tfoot th, .floatThead-container thead .item-heads th, .floatThead-container tfoot th {
   padding: 3px 5px;
   line-height: 1.1;
-  font-size: 13px;
+  font-size: 14px;
   min-width: 50px;
-  height: 42px;
+  height: 60px;
+  white-space: normal;
+}
+
+.atum-list-table thead .item-heads th .sorting-indicator, .atum-list-table tfoot th .sorting-indicator, .floatThead-container thead .item-heads th .sorting-indicator, .floatThead-container tfoot th .sorting-indicator {
+  visibility: visible;
+  margin-left: 4px;
+}
+
+.atum-list-table thead .item-heads th .sorting-indicator:before, .atum-list-table tfoot th .sorting-indicator:before, .floatThead-container thead .item-heads th .sorting-indicator:before, .floatThead-container tfoot th .sorting-indicator:before {
+  color: #adb5bd;
+  content: "\f140";
+}
+
+.atum-list-table thead .item-heads th .col-product-details .lnr, .atum-list-table tfoot th .col-product-details .lnr, .floatThead-container thead .item-heads th .col-product-details .lnr, .floatThead-container tfoot th .col-product-details .lnr {
+  font-size: 16px;
+  color: #adb5bd;
 }
 
 .atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .dashicons, .floatThead-container thead .item-heads th .dashicons, .floatThead-container tfoot th .dashicons {
@@ -3196,7 +3239,8 @@ input[type="button"].btn-block {
   height: 1em;
   width: 1em;
   margin: 0 auto;
-  font-size: 14px;
+  font-size: 16px;
+  color: #adb5bd;
 }
 
 .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .dashicons:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container tfoot th .dashicons:before {
@@ -3211,16 +3255,19 @@ input[type="button"].btn-block {
 }
 
 .atum-list-table .column-groups, .floatThead-container .column-groups {
-  background-color: #e3e7eb;
+  background-color: #e9ecef;
 }
 
 .atum-list-table .column-groups th, .floatThead-container .column-groups th {
-  padding: 6px 10px;
+  padding: 6px 20px;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 1.3;
+  font-size: 14px;
+  line-height: normal;
   min-width: 80px;
   height: 20px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #6c757d;
 }
 
 .atum-list-table .column-groups th:not(:last-child), .floatThead-container .column-groups th:not(:last-child) {
@@ -3261,6 +3308,10 @@ input[type="button"].btn-block {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
 }
 
 .atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sortable.column-_stock a, .atum-list-table th.sortable.column-_regular_price a, .atum-list-table th.sortable.column-_sale_price a, .atum-list-table th.sortable.column-_purchase_price a, .atum-list-table th.sortable.column-ID a, .atum-list-table th.sortable.column-_weight a, .atum-list-table th.sortable.column-_out_stock_threshold a, .atum-list-table th.sorted[class*="column-calc_"] a, .atum-list-table th.sorted.column-_stock a, .atum-list-table th.sorted.column-_regular_price a, .atum-list-table th.sorted.column-_sale_price a, .atum-list-table th.sorted.column-_purchase_price a, .atum-list-table th.sorted.column-ID a, .atum-list-table th.sorted.column-_weight a, .atum-list-table th.sorted.column-_out_stock_threshold a, .floatThead-container th.sortable[class*="column-calc_"] a, .floatThead-container th.sortable.column-_stock a, .floatThead-container th.sortable.column-_regular_price a, .floatThead-container th.sortable.column-_sale_price a, .floatThead-container th.sortable.column-_purchase_price a, .floatThead-container th.sortable.column-ID a, .floatThead-container th.sortable.column-_weight a, .floatThead-container th.sortable.column-_out_stock_threshold a, .floatThead-container th.sorted[class*="column-calc_"] a, .floatThead-container th.sorted.column-_stock a, .floatThead-container th.sorted.column-_regular_price a, .floatThead-container th.sorted.column-_sale_price a, .floatThead-container th.sorted.column-_purchase_price a, .floatThead-container th.sorted.column-ID a, .floatThead-container th.sorted.column-_weight a, .floatThead-container th.sorted.column-_out_stock_threshold a {
@@ -3508,10 +3559,30 @@ input[type="button"].btn-block {
   color: #00B8DB;
 }
 
+.atum-list-table tbody td.column-title a, .floatThead-container tbody td.column-title a {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #00B8DB;
+}
+
+.atum-list-table tbody td.column-_sku span, .floatThead-container tbody td.column-_sku span {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: #00B8DB;
+}
+
 .atum-list-table td, .atum-list-table th, .floatThead-container td, .floatThead-container th {
   position: relative;
   vertical-align: middle;
   padding: 6px 5px;
+  height: 60px;
+}
+
+.atum-list-table td.column-ID, .atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: #6c757d;
 }
 
 .atum-list-table td.pro-version, .atum-list-table th.pro-version, .floatThead-container td.pro-version, .floatThead-container th.pro-version {
@@ -3623,6 +3694,7 @@ input[type="button"].btn-block {
   content: "\e006";
   font-variant: normal;
   margin: 0;
+  color: #6c757d;
 }
 
 .atum-list-table .column-calc_type .product-type.grouped:before, .floatThead-container .column-calc_type .product-type.grouped:before {

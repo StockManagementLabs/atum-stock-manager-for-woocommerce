@@ -84,6 +84,9 @@ $settings-xs-min:          568px !default;
 				}
 			}
 		}
+		.atum-nav-item {
+			box-shadow: 0 1px 0 0 $gray-200;
+		}
 		.nav-footer {
 			.nav-footer-logo {
 				span {
@@ -104,7 +107,8 @@ $settings-xs-min:          568px !default;
 		}
 	}
 	.atum-nav-header {
-		background-color: $blue-dark;
+		background-color: $blue-dark-lighten;
+		box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
 		@include flexbox;
 		@include flex-align-items(center);
 		justify-content: space-between;
@@ -136,8 +140,6 @@ $settings-xs-min:          568px !default;
 				}
 				
 				img {
-					position: relative;
-					top: 3px;
 					min-width: 25px;
 				}
 			}
@@ -200,7 +202,7 @@ $settings-xs-min:          568px !default;
 	.atum-nav-item {
 		display: block;
 		margin: 0;
-		box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 -1px 0 0 rgba(255, 255, 255, 0.1);
+		box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
 	}
 	
 	.atum-nav-link {
@@ -382,6 +384,7 @@ $settings-xs-min:          568px !default;
 		.atum-nav-light {
 			.atum-nav-header {
 				background-color: $blue;
+				box-shadow: 0 1px 0 0 $gray-200;
 				.toogle-menu {
 					background-color: transparent;
 					border: none;
@@ -547,7 +550,7 @@ $settings-xs-min:          568px !default;
 	}
 	
 	.section-fields {
-		padding: 0px 20px 0px 25px;
+		padding: 0px 20px 1px 25px;
 		background-color: $white;
 		border-bottom-right-radius: 6px;
 		border-bottom-left-radius: 6px;

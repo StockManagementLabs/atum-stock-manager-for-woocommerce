@@ -31,6 +31,7 @@
 		this.$searchColumnBtn      = this.$atumList.find('#search_column_btn');
 		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
 		this.$bulkButton           = $('.apply-bulk-action');
+		this.$stickyColsButton     = this.$atumList.find('.sticky-columns-button');
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -106,6 +107,11 @@
 			// Setup the URL navigation
 			//--------------------------
 			this.setupNavigation();
+            
+            //
+			// Change sticky columns setting function
+			//--------------------------
+			this.changeStickyColumnsSetting();
 			
 			//
 			// Init the table scrollbar
@@ -957,6 +963,45 @@
 				
 			});
 		
+		},
+		
+		/**
+		 * Active/Deactive sticky columns setting
+		 */
+		changeStickyColumnsSetting: function () {
+			var self = this;
+			this.$stickyColsButton.click(function () {
+				
+				var option = $(this).data('option'),
+					data   = {
+					option: option
+				};
+				
+				$.ajax({
+					url       : ajaxurl,
+					method    : 'POST',
+					data      : {
+						// token : this.settings.menuThemeNonce,
+						action: 'atum_change_sticky_columns_value',
+						data  : data
+					},
+					beforeSend: function () {
+						self.addOverlay();
+					},
+					success   : function (response) {
+						
+						self.removeOverlay();
+						if ( option == 'no' ) {
+							self.$atumList.find('.atum-list-table.cloned').remove();
+						}
+						else {
+							self.$stickyCols = self.createStickyColumns(self.$atumList.find('.atum-list-table'));
+							self.reloadFloatThead();
+							self.reloadScrollbar();
+						}
+					},
+				});
+			});
 		},
 		
 		/**

@@ -19,7 +19,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 	<div class="atum-settings-wrapper">
 		<div class="switch-interface-style">
 			<?php wp_nonce_field( 'add_atum_nonce_field', 'menu-theme-nonce' ); ?>
-			<?php echo esc_attr( __( 'Dark Mode', ATUM_TEXT_DOMAIN ) ); ?> <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'checked' : '' ?>>
+			<?php echo esc_attr( __( 'Dark Mode', ATUM_TEXT_DOMAIN ) ); ?> <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'dark' === $menu_theme ? 'checked' : '' ?>>
 		</div>
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', ATUM_TEXT_DOMAIN ) ?></h1>
 		<hr class="wp-header-end">

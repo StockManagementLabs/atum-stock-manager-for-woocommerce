@@ -20,7 +20,8 @@
 		"gulp-sourcemaps": "latest",
 		"gulp-watch": "latest",
 		"gulp-wrap": "latest",
-		"hoek": "^4.2.1"
+		"hoek": "^4.2.1",
+		"gulp-uglify": "^3.0.0"
 	},
 	"dependencies": {
 		"fsevents": "^1.2.4"

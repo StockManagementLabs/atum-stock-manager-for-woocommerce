@@ -11,6 +11,7 @@
  */
 
 defined( 'ABSPATH' ) || die;
+
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline">
@@ -52,6 +53,17 @@ defined( 'ABSPATH' ) || die;
 				<?php if ( 'no' === $ajax ) : ?>
 					<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>" disabled>
 				<?php endif; ?>
+			</div>
+
+			<div class="sticky-columns-button-container">
+
+				<button class="sticky-columns-button sticky-on" data-option="yes">
+					<i class="lnr lnr-menu"></i>
+				</button>
+
+				<button class="sticky-columns-button sticky-off" data-option="no">
+					<i class="lnr lnr-menu"></i>
+				</button>
 
 			</div>
 

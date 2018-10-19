@@ -133,8 +133,11 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
-		// Change ATUM setttings menu style
+		// Change ATUM setttings menu style.
 		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
+
+		// Change sticky columns settting.
+		add_action( 'wp_ajax_atum_change_sticky_columns_value', array( $this, 'change_sticky_columns_value' ) );
 
 	}
 
@@ -2082,13 +2085,26 @@ final class Ajax {
 		$user_id    = get_current_user_id();
 
 		if ( $menu_theme ) {
-			update_user_meta( $user_id, 'menu_settings_theme', 'light' );
+			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
 		}
 		else {
-			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
+			update_user_meta( $user_id, 'menu_settings_theme', 'light' );
 		}
 
 		wp_send_json_success( __( 'Menu theme were updated successfully', ATUM_TEXT_DOMAIN ) );
+	}
+
+	/**
+	 * Change the value of a sticky_columns from stock central
+	 *
+	 * @since 1.4.5
+	 */
+	public function change_sticky_columns_value() {
+		$option = $_POST['data']['option'];
+
+		Helpers::update_option( 'sticky_columns', $option );
+
+		wp_die();
 	}
 
 	
