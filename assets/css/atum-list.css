@@ -2776,8 +2776,6 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper {
-  padding-top: 2px;
-  padding-bottom: 20px;
   width: 100%;
   overflow: hidden;
   background-color: #fff;
@@ -2819,7 +2817,6 @@ input[type="button"].btn-block {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  display: inline-block;
   float: right;
   margin-right: 3px;
   margin-bottom: 3px;
@@ -3207,6 +3204,10 @@ input[type="button"].btn-block {
   display: none;
 }
 
+.atum-list-table {
+  border: none !important;
+}
+
 .atum-list-table.cloned {
   width: auto;
   position: absolute;
@@ -3219,10 +3220,6 @@ input[type="button"].btn-block {
   .atum-list-table.cloned {
     display: none !important;
   }
-}
-
-.atum-list-table {
-  border: none !important;
 }
 
 .atum-list-table:not(.floatThead-table) {
