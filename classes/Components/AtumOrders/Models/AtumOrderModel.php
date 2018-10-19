@@ -69,11 +69,11 @@ abstract class AtumOrderModel {
 	protected $cache_key = 'atum-order-items';
 	
 	/**
-	 * Whether the item's quantity will be negative or positive or both
+	 * Whether the item's quantity will affect positively or negatively (or both) the stock
 	 *
 	 * @var string
 	 */
-	protected $qty_sign = 'both';
+	protected $action = 'both';
 	
 	/**
 	 * AtumOrderModel constructor
@@ -1759,9 +1759,9 @@ abstract class AtumOrderModel {
 	 *
 	 * @return string
 	 */
-	public function get_qty_sign() {
+	public function get_action() {
 		
-		return $this->qty_sign;
+		return $this->action;
 	}
 
 	/**********
