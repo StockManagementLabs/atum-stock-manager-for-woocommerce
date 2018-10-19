@@ -265,7 +265,7 @@ class DataExport {
 			$mpdf->WriteHTML( $html_report );
 
 			$date_now = date_i18n( 'Y-m-d' );
-			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", 'I' ); // WPCS: XSS ok.
+			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", \Mpdf\Output\Destination::INLINE ); // WPCS: XSS ok.
 
 		} catch ( MpdfException $e ) {
 
