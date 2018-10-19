@@ -34,7 +34,7 @@ class HtmlReport extends ListTable {
 	 *
 	 * @var bool
 	 */
-	protected $is_report = TRUE;
+	protected static $is_report = TRUE;
 
 	/**
 	 * HtmlReport Constructor

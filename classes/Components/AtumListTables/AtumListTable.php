@@ -285,7 +285,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var bool
 	 */
-	protected $is_report = FALSE;
+	protected static $is_report = FALSE;
 
 	/**
 	 * Value for empty columns
@@ -731,7 +731,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$title_length = absint( apply_filters( 'atum/list_table/column_title_length', 20 ) );
 
 		if ( mb_strlen( $title ) > $title_length ) {
-			$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr( $title ) . '"' : '';
+			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr( $title ) . '"' : '';
 			$title    = '<span class="tips"' . $data_tip . '>' . trim( mb_substr( $title, 0, $title_length ) ) . '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
@@ -806,7 +806,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				/* translators: first one is the supplier name and second is the supplier's ID */
 				$supplier_tooltip = sprintf( esc_attr__( '%1$s (ID: %2$d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
 
-				$data_tip = ! $this->is_report ? ' data-tip="' . $supplier_tooltip . '"' : '';
+				$data_tip = ! self::$is_report ? ' data-tip="' . $supplier_tooltip . '"' : '';
 				$supplier = '<span class="tips"' . $data_tip . '>' . $supplier_abb . '</span><span class="atum-title-small">' . $supplier_tooltip . '</span>';
 
 			}
@@ -929,7 +929,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 			}
 
-			$data_tip = ! $this->is_report ? ' data-tip="' . $product_tip . '"' : '';
+			$data_tip = ! self::$is_report ? ' data-tip="' . $product_tip . '"' : '';
 
 			return apply_filters( 'atum/list_table/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->product );
 
@@ -954,7 +954,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$location_terms = wp_get_post_terms( $this->product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
 
 		if ( ! empty( $location_terms ) ) {
-			$data_tip  = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
+			$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips"' . $data_tip . ' data-locations=""></a>';
 		}
 
@@ -1250,19 +1250,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			switch ( $wc_stock_status ) {
 				case 'instock':
 					$classes .= ' cell-green';
-					$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
+					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$content  = '<span class="dashicons dashicons-hidden tips"' . $data_tip . '></span>';
 					break;
 
 				case 'outofstock':
 					$classes .= ' cell-red';
-					$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
+					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$content  = '<span class="dashicons dashicons-hidden tips"' . $data_tip . '></span>';
 					break;
 
 				case 'onbackorder':
 					$classes .= ' cell-blue';
-					$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
+					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$content  = '<span class="dashicons dashicons-hidden tips"' . $data_tip . '></span>';
 					break;
 			}
@@ -1272,25 +1272,25 @@ abstract class AtumListTable extends \WP_List_Table {
 		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
 
 			$classes .= ' cell-red';
-			$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$content  = '<span class="dashicons dashicons-dismiss tips"' . $data_tip . '></span>';
 
 		}
 		// Back Orders.
 		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
-			$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
+			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$content  = '<span class="dashicons dashicons-visibility tips"' . $data_tip . '></span>';
 		}
 		// Low Stock.
 		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
 			$classes .= ' cell-yellow';
-			$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$content  = '<span class="dashicons dashicons-warning tips"' . $data_tip . '></span>';
 		}
 		// In Stock.
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
 			$classes .= ' cell-green';
-			$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$content  = '<span class="dashicons dashicons-yes tips"' . $data_tip . '></span>';
 		}
 
@@ -1560,7 +1560,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$man_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['managed'] ) ) );
-					$data_tip        = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Managed by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
+					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Managed by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$extra_links    .= '<a' . $man_id . $man_class . ' href="' . $man_url . '" rel="address:/?' . $man_hash_params . '"' . $data_tip . '>' . $man_count . '</a>';
 
 				}
@@ -1593,7 +1593,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
-					$data_tip        = ! $this->is_report ? ' data-tip="' . esc_attr__( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
+					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$extra_links    .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '"' . $data_tip . '>' . $unm_count . '</a>';
 				}
 
@@ -2492,7 +2492,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				if ( $group_column['toggler'] ) {
 					/* translators: the column group title */
-					$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr( sprintf( __( "Show/Hide the '%s' columns", ATUM_TEXT_DOMAIN ), $group_column['title'] ) ) . '"' : '';
+					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr( sprintf( __( "Show/Hide the '%s' columns", ATUM_TEXT_DOMAIN ), $group_column['title'] ) ) . '"' : '';
 
 					echo '<span class="group-toggler tips"' . $data_tip . '></span>'; // WPCS: XSS ok.
 				}
@@ -3352,6 +3352,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
 
+		do_action( 'atum/list_table/after_enqueue_scripts', $this );
+
 	}
 
 	/**
@@ -3730,6 +3732,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public static function hidden_columns() {
 		return apply_filters( 'atum/list_table/default_hidden_columns', static::$default_hidden_columns );
+	}
+
+	/**
+	 * Getter fot the is_report prop
+	 *
+	 * @since 1.4.16
+	 *
+	 * @return bool
+	 */
+	public static function is_report() {
+		return self::$is_report;
 	}
 
 }
