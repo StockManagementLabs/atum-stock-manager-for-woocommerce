@@ -91,9 +91,7 @@
             //
 			// Init search by column if .atum-post-search-with-dropdown exists, and listen screen option checkboxes
             //--------------------------------
-            var $atumPostSearchWithDropdown = $('.atum-post-search-with-dropdown');
-
-            if ( $atumPostSearchWithDropdown.length) {
+            if ( $('.atum-post-search-with-dropdown').length) {
 
                 this.settings.searchDropdown = 'yes';
                 this.setupSearchColumnDropdown();
@@ -132,11 +130,23 @@
 			this.$stickyCols = this.createStickyColumns(this.$atumTable);
 			
 			//
-			// Hide/Show the toggleable group of columns
-			//------------------------------------------
+			// Hide/Show the toggleable group of columns with the toggler button
+			//------------------------------------------------------------------
 			this.$atumList.on('click', '.group-toggler', function () {
 				self.toggleGroupColumns($(this));
 			}).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
+			
+			//
+			// Show the toggleable group columns when opening the screen options
+			// to avoid the hidden columns to be disabled when switching column visibilities
+			//-------------------------------------------------------------------------------
+			$('#show-settings-link').click(function () {
+				
+				if (!$(this).hasClass('screen-meta-active')) {
+					self.$atumTable.find('.column-groups').find('th.collapsed').find('.group-toggler').click();
+				}
+				
+			});
 			
 			//
 			// Add the floating table header
@@ -177,12 +187,31 @@
 						$floatTheadTable.after(self.$floatTheadStickyCols);
 						self.$floatTheadStickyCols.css('width', self.$stickyCols.width() + 1);
 						
-						// Restore the colgroup needed by floatThead to properly sizing the cols
-						var $colGroup     = $floatTheadTable.find('colgroup').clone(),
-						    numStickyCols = self.$floatTheadStickyCols.find('.item-heads').find('td, th').length;
+						// Add the colgroup tag with column widths
+						self.$floatTheadStickyCols.prepend('<colgroup />');
 						
-						$colGroup.find('col').slice(numStickyCols, $colGroup.find('col').length).remove();
+						var $colGroup = self.$floatTheadStickyCols.find('colgroup');
+						
+						$floatTheadTable.find('thead .item-heads').children().each(function() {
+							
+							var $cell       = $(this),
+								id = $cell.attr('id');
+							
+							if ($cell.hasClass('hidden')) {
+								return;
+							}
+							
+							if (self.$floatTheadStickyCols.find('thead .item-heads').children('#' + id).length ) {
+								$colGroup.append('<col style="width:' + $cell.width() + 'px;">');
+							}
+						});
+						
+						// Remove the manage-column class to not conflict with the WP's Screen Options functionality
+						self.$floatTheadStickyCols.find('.manage-column').removeClass('manage-column');
+						
 						$colGroup.prependTo(self.$floatTheadStickyCols);
+						
+						self.adjustStickyHeaders(self.$floatTheadStickyCols, $floatTheadTable);
 						
 					}
 					
@@ -1047,6 +1076,7 @@
 						// Add the stickyCols table
 						if (self.$stickyCols !== null && !self.$atumList.find('.atum-list-table.cloned').length) {
 							self.$atumTable.after(self.$stickyCols);
+							self.addTooltips();
 							self.$atumList.trigger('atum-added-sticky-columns');
 						}
 						
@@ -1063,21 +1093,27 @@
 								if (self.$floatTheadStickyCols !== null) {
 									self.$floatTheadStickyCols.hide().css('left', 0);
 								}
+								
 							}
 							// Reposition the sticky cols while scrolling the pane
 							else {
+								
 								self.$stickyCols.show().css('left', scrollPositionX);
 								
 								if (self.$floatTheadStickyCols !== null) {
 									self.$floatTheadStickyCols.show().css('left', scrollPositionX);
 								}
+								
+								// Ensure sticky column heights are matching
+								self.adjustStickyHeaders(self.$stickyCols, self.$atumTable);
+								
 							}
 							
 						}
 						
 					});
 				
-				// Touch scrolling on desktops
+				// Drag and drop scrolling on desktops
 				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
 				hammertime.on('panright panleft', function (ev) {
@@ -1199,14 +1235,36 @@
 	
 			});
 			
+			// Do not add sticky columns with a low columns number
+			if ($stickyCols.find('thead .item-heads').children().not('.hidden').length <= 2) {
+				return null;
+			}
+			
+			// Remove the manage-column class to not conflict with the WP's Screen Options functionality
+			$stickyCols.find('.manage-column').removeClass('manage-column');
+			
 			return $stickyCols;
 		
 		},
 		
 		/**
+		 * Adjust the header heights to match the List Table heights
+		 *
+		 * @param jQuery $stickyTable
+		 * @param jQuery $origTable
+		 */
+		adjustStickyHeaders: function($stickyTable, $origTable) {
+			
+			$.each( ['column-groups', 'item-heads'], function(index, className) {
+				$stickyTable.find('.' + className + ' > th').first().css('height', $origTable.find('.' + className + ' > th').first().height());
+			});
+			
+		},
+		
+		/**
 		 * Show/Hide the group of columns with the group-toggler button
 		 *
-		 * TODO: STORE THE TOGGLED COLUMNS GROUPS TO BE ABLE TO RESTORE THEM TO THE SAME STAGE AFTER FILTERING
+		 * @param jQuery $toggler
 		 */
 		toggleGroupColumns: function($toggler) {
 			
@@ -1255,6 +1313,23 @@
 			
 			this.reloadScrollbar();
 			this.reloadFloatThead();
+			
+		},
+		
+		/**
+		 * Restore all the collapsed groups to its collapsed stage
+		 */
+		restoreCollapsedGroups: function() {
+			
+			var self = this;
+			
+			this.$collapsedGroups.each(function () {
+				var $groupCell = $(this);
+				$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));
+				$groupCell.children('span').not('.group-toggler').show();
+				
+				self.toggleGroupColumns($groupCell.find('.group-toggler'));
+			});
 			
 		},
 		
@@ -1835,15 +1910,7 @@
 					
 					// Restore toggled column groups
 					if (self.$collapsedGroups.length) {
-						
-						self.$collapsedGroups.each(function () {
-							var $groupCell = $(this);
-							$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));
-							$groupCell.children('span').not('.group-toggler').show();
-							
-							self.toggleGroupColumns($groupCell.find('.group-toggler'));
-						});
-						
+						self.restoreCollapsedGroups();
 					}
 					else {
 						self.reloadScrollbar();
@@ -2045,6 +2112,7 @@
 			this.isRowExpanding[rowId] = true;
 			
 			var self      = this,
+			    $rowTable = $row.closest('table'),
 			    $nextRow  = $row.next(),
 			    childRows = [];
 			
@@ -2067,7 +2135,7 @@
 				
 				childRows.push($nextRow);
 				
-				if (!$nextRow.is(':visible')) {
+				if ( ($rowTable.is(':visible') && !$nextRow.is(':visible')) || (!$rowTable.is(':visible') && $nextRow.css('display') === 'none')) {
 					$nextRow.addClass('expanding').show(300);
 				}
 				else {

@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.13 
+ * @version 1.4.16 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -2346,6 +2346,18 @@ input[type="button"].btn-block {
   font-weight: bold;
   font-size: 15px;
   padding-top: 25px;
+}
+
+#atum-settings .section-fields th .label {
+  background-color: #343a40;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  display: inline-block;
+  border-radius: 4px;
+  padding: 3px 7px;
+  margin-top: 5px;
+  text-transform: uppercase;
 }
 
 #atum-settings .section-fields .atum-setting-info {

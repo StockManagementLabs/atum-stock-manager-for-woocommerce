@@ -1,6 +1,6 @@
 {
 	"name": "ATUM",
-	"version": "1.4.13",
+	"version": "1.4.16",
 	"author": "Be Rebel - https://berebel.io",
 	"homepage": "https://www.stockmanagementlabs.com",
 	"private": true,
@@ -20,10 +20,6 @@
 		"gulp-sourcemaps": "latest",
 		"gulp-watch": "latest",
 		"gulp-wrap": "latest",
-		"hoek": "^4.2.1",
-		"gulp-uglify": "^3.0.0"
-	},
-	"dependencies": {
-		"fsevents": "^1.2.4"
+		"hoek": "^4.2.1"
 	}
 }

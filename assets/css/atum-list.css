@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.13 
+ * @version 1.4.16 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -2776,6 +2776,8 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper {
+  padding-top: 2px;
+  padding-bottom: 20px;
   width: 100%;
   overflow: hidden;
   background-color: #fff;
@@ -2817,6 +2819,7 @@ input[type="button"].btn-block {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  display: inline-block;
   float: right;
   margin-right: 3px;
   margin-bottom: 3px;
@@ -3189,6 +3192,33 @@ input[type="button"].btn-block {
   background: #f8f9fa;
   float: left;
   height: 100%;
+}
+
+.floatThead-wrapper tr.size-row {
+  display: none;
+}
+
+.floatThead-wrapper .floatThead-container {
+  height: 0;
+  overflow-y: hidden;
+}
+
+.floatThead-wrapper .floatThead-container .group-toggler {
+  display: none;
+}
+
+.atum-list-table.cloned {
+  width: auto;
+  position: absolute;
+  top: 0;
+  border-right: none;
+  box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
+}
+
+@media all and (max-width: 600px) {
+  .atum-list-table.cloned {
+    display: none !important;
+  }
 }
 
 .atum-list-table {

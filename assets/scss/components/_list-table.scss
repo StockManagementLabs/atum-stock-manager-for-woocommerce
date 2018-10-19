@@ -486,7 +486,38 @@
 	
 }
 
+// Float Thead
+.floatThead-wrapper {
+	tr.size-row {
+		display: none;
+	}
+	
+	.floatThead-container {
+		height: 0;
+		overflow-y: hidden;
+		
+		// Avoid issues when toggling columns while the header is floating
+		.group-toggler {
+			display: none;
+		}
+	}
+}
+
 .atum-list-table {
+	
+	// Fixed columns
+	&.cloned {
+		width: auto;
+		position: absolute;
+		top: 0;
+		border-right: none;
+		box-shadow: rgba($black, 0.04) 5px 1px 10px;
+		
+		@media all and (max-width: 600px) {
+			display: none !important;
+		}
+	}
+	
 	border: none !important;
 	&:not(.floatThead-table) {
 		table-layout: auto !important; // FloatTHead fix
