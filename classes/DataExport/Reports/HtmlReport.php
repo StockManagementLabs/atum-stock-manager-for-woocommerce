@@ -30,6 +30,13 @@ class HtmlReport extends ListTable {
 	protected $title_max_length;
 
 	/**
+	 * Report table flag
+	 *
+	 * @var bool
+	 */
+	protected $is_report = TRUE;
+
+	/**
 	 * HtmlReport Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args
@@ -134,7 +141,7 @@ class HtmlReport extends ListTable {
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline.
 		if ( ! $this->allow_calcs ) {
-			$row_color  = 'grouped' === $type ? '#FEC007' : '#0073AA';
+			$row_color  = 'grouped' === $type ? '#EFAF00' : '#00B8DB';
 			$row_style .= ' style="background-color:' . $row_color . '" class="expanded"';
 
 		}
@@ -302,6 +309,12 @@ class HtmlReport extends ListTable {
 						$icon_char = 'grouped' === $type ? 'e002' : 'e003';
 						$type     .= ' has-child';
 					}
+
+					break;
+
+				// WC Bookings compatibility.
+				case 'booking':
+					$icon_char = 'e00e';
 
 					break;
 
