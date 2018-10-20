@@ -839,6 +839,11 @@ input[type="button"].btn-block {
   letter-spacing: 1px;
 }
 
+.swal2-container .swal2-modal button .lnr {
+  position: relative;
+  font-size: 12.15em;
+}
+
 .swal2-container .swal2-modal a {
   text-decoration: none;
   color: #69C61D;
