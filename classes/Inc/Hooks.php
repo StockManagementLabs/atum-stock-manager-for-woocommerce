@@ -840,7 +840,7 @@ class Hooks {
 				
 				$this->stock_threshold = (int) $out_of_stock_threshold;
 				if ( ! has_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ) ) ) {
-					add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ) );
+					add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ), 10, 3 );
 				};
 				
 			}
@@ -890,7 +890,7 @@ class Hooks {
 				
 				$this->stock_threshold = (int) $out_of_stock_threshold;
 				
-				add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+				add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
 				
 			}
 			
@@ -914,7 +914,7 @@ class Hooks {
 			
 			$this->stock_threshold = (int) $out_of_stock_threshold;
 			
-			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
 			
 			$product = wc_get_product( $variation_id );
 			$product->save();
