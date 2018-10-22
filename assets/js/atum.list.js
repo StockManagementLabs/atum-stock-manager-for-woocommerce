@@ -1909,7 +1909,7 @@
 					self.maybeRestoreEnhancedSelect();
 					
 					// Restore toggled column groups
-					if (self.$collapsedGroups.length) {
+					if (self.$collapsedGroups !== null) {
 						self.restoreCollapsedGroups();
 					}
 					else {

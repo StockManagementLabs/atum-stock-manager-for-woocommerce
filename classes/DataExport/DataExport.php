@@ -259,13 +259,13 @@ class DataExport {
 			$wc_admin_stylesheet = file_get_contents( WC_ABSPATH . 'assets/css/admin.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 			$mpdf->WriteHTML( $wc_admin_stylesheet, 1 );
 
-			$atum_stylesheet = file_get_contents( ATUM_PATH . 'assets/css/atum-list.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+			$atum_stylesheet = apply_filters( 'atum/data_export/report_styles', file_get_contents( ATUM_PATH . 'assets/css/atum-list.css' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 			$mpdf->WriteHTML( $atum_stylesheet, 1 );
 
 			$mpdf->WriteHTML( $html_report );
 
 			$date_now = date_i18n( 'Y-m-d' );
-			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", 'I' ); // WPCS: XSS ok.
+			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", \Mpdf\Output\Destination::INLINE ); // WPCS: XSS ok.
 
 		} catch ( MpdfException $e ) {
 

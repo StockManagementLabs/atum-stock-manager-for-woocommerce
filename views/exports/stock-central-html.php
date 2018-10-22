@@ -16,6 +16,15 @@ $report_header_title_stl = 'font-weight: bold;text-transform: uppercase;font-siz
 $warning_color           = 'color: #FEC007;';
 $title_color             = 'color: #333;';
 ?>
+<style>
+	table tr {
+		display: table-row !important;
+	}
+
+	.child-arrow {
+		display: none;
+	}
+</style>
 <div class="atum-report">
 	<h1><?php echo esc_html( apply_filters( 'atum/data_export/report_title', __( 'Atum Stock Central Report', ATUM_TEXT_DOMAIN ) ) ) ?></h1>
 	<h3><?php bloginfo( 'title' ) ?></h3>

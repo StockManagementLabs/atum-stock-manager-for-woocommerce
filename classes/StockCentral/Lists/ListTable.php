@@ -265,14 +265,14 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$table_columns = array(
-			'thumb'                 => '<span class="lnr lnr-picture" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '"></span>',
+			'thumb'                 => '<span class="lnr lnr-picture" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'                 => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'             => '<span class="lnr lnr-tag" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '"></span>',
+			'calc_type'             => '<span class="lnr lnr-tag" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'calc_location'         => '<span class="lnr lnr-store" data-placement="bottom" data-tip="' . __( 'Location', ATUM_TEXT_DOMAIN ) . '"></span>',
+			'calc_location'         => '<span class="lnr lnr-store tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
@@ -292,7 +292,7 @@ class ListTable extends AtumListTable {
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
 		// Hide the purchase price column if the current user has not the capability.
@@ -391,7 +391,7 @@ class ListTable extends AtumListTable {
 				'value'    => $regular_price_value,
 				'symbol'   => get_woocommerce_currency_symbol(),
 				'currency' => self::$default_currency,
-				'tooltip'  => __( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'tooltip'  => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
 			) );
 			
 			$regular_price = self::get_editable_column( $args );
@@ -435,7 +435,7 @@ class ListTable extends AtumListTable {
 				'value'      => $sale_price_value,
 				'symbol'     => get_woocommerce_currency_symbol(),
 				'currency'   => self::$default_currency,
-				'tooltip'    => __( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+				'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
 				'extra_meta' => array(
 					array(
 						'name'        => '_sale_price_dates_from',

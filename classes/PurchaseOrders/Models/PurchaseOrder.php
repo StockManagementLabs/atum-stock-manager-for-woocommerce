@@ -22,11 +22,11 @@ use Atum\Suppliers\Suppliers;
 class PurchaseOrder extends AtumOrderModel {
 	
 	/**
-	 * Whether the item's quantity will be negative or positive or both
+	 * Whether the item's quantity will affect positively or negatively (or both) the stock
 	 *
 	 * @var string
 	 */
-	protected $qty_sign = 'positive';
+	protected $action = 'add';
 	
 	/**
 	 * PurchaseOrder constructor

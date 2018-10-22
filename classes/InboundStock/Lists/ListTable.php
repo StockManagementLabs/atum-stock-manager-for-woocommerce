@@ -64,10 +64,10 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
-			'thumb'               => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'               => '<span class="wc-image tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                  => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'           => '<span class="wc-type tips" data-placement="bottom" data-tip="' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'           => '<span class="wc-type tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
@@ -218,7 +218,7 @@ class ListTable extends AtumListTable {
 		$title_length = absint( apply_filters( 'atum/inbound_stock_list/column_title_length', 20 ) );
 
 		if ( mb_strlen( $title ) > $title_length ) {
-			$title = '<span class="tips" data-tip="' . $title . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
+			$title = '<span class="tips" data-tip="' . esc_attr( $title ) . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
 					'...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
@@ -270,7 +270,9 @@ class ListTable extends AtumListTable {
 				return parent::column_calc_type( $item );
 		}
 
-		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '" data-tip="' . $product_tip . '"></span>', $item, $this->product );
+		$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr( $product_tip ) . '"' : '';
+
+		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->product );
 
 	}
 
