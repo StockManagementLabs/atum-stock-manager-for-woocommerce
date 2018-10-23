@@ -1000,7 +1000,9 @@
 
 .swal2-container .swal2-modal button .lnr {
   position: relative;
-  font-size: 12.15em;
+  font-size: 1.15em;
+  top: .15em;
+  padding-right: 3px;
 }
 
 .swal2-container .swal2-modal a {
