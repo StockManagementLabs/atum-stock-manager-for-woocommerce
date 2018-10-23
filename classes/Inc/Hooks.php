@@ -119,8 +119,7 @@ class Hooks {
 			add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 			
 			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
-			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_stock_status' ), 10, 2 );
-			
+			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_variation_stock_status' ), 10, 2 );
 			add_action( 'woocommerce_before_product_object_save', array( $this, 'remove_order_stock_status_filter' ), 10, 2 );
 
 		}
@@ -825,44 +824,6 @@ class Hooks {
 	}
 	
 	/**
-	 * Change stock status threshold value when reducing if new threshold value is set for the item's product
-	 *
-	 * @since 1.4.15
-	 *
-	 * @param int                    $qty
-	 * @param \WC_Order              $order
-	 * @param \WC_Order_Item_Product $item
-	 *
-	 * @return int
-	 */
-	public function maybe_change_stock_status_in_orders( $qty, $order, $item ) {
-		
-		/** UNUSED */
-		$product = $item->get_product();
-		
-		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
-			
-			$out_of_stock_threshold = get_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
-			
-			if ( $out_of_stock_threshold ) {
-				
-				$this->stock_threshold = (int) $out_of_stock_threshold;
-				if ( ! has_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ) ) ) {
-					add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'maybe_change_stock_threshold' ), 10, 3 );
-				};
-				
-			}
-			else {
-				
-				unset( $this->stock_threshold );
-			}
-			
-		}
-		
-		return $qty;
-	}
-	
-	/**
 	 * Change the stock threshold if this->stock_threshold has value
 	 *
 	 * @since 1.4.15
@@ -891,10 +852,14 @@ class Hooks {
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 			
 			unset( $this->stock_threshold );
+
+			$product_id             = $product->get_id();
+			$out_of_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+
+			// Allow to be hooked externally.
+			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product_id );
 			
-			$out_of_stock_threshold = get_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
-			
-			if ( $out_of_stock_threshold || '0' === $out_of_stock_threshold ) {
+			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 				
 				$this->stock_threshold = (int) $out_of_stock_threshold;
 				
@@ -913,20 +878,23 @@ class Hooks {
 	 * @param int $variation_id
 	 * @param int $i
 	 */
-	public function maybe_change_stock_status( $variation_id, $i ) {
-		
-		$out_of_stock_threshold = get_post_meta( $variation_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+	public function maybe_change_variation_stock_status( $variation_id, $i ) {
+
 		unset( $this->stock_threshold );
-		
-		if ( $out_of_stock_threshold || '0' === $out_of_stock_threshold ) {
+		$out_of_stock_threshold = get_post_meta( $variation_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+
+		// Allow to be hooked externally.
+		$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $variation_id );
+
+		if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 			
 			$this->stock_threshold = (int) $out_of_stock_threshold;
 			
 			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
-			
+
 			$product = wc_get_product( $variation_id );
 			$product->save();
-			
+
 			remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
 			
 		}
