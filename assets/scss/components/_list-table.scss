@@ -337,7 +337,8 @@
 	&.cloned {
 		width: auto;
 		position: absolute;
-		top: 0;
+		bottom: 0;
+		margin-bottom: 0;
 		border-right: none;
 		box-shadow: rgba($black, 0.04) 5px 1px 10px;
 		

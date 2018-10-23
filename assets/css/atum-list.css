@@ -1000,7 +1000,9 @@
 
 .swal2-container .swal2-modal button .lnr {
   position: relative;
-  font-size: 12.15em;
+  font-size: 1.15em;
+  top: .15em;
+  padding-right: 3px;
 }
 
 .swal2-container .swal2-modal a {
@@ -3008,7 +3010,8 @@ input[type="button"].btn-block {
 .atum-list-table.cloned {
   width: auto;
   position: absolute;
-  top: 0;
+  bottom: 0;
+  margin-bottom: 0;
   border-right: none;
   box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
 }
