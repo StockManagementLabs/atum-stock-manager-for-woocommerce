@@ -844,11 +844,12 @@ class Hooks {
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 			
 			unset( $this->stock_threshold );
-			
-			$out_of_stock_threshold = get_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+
+			$product_id             = $product->get_id();
+			$out_of_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
 
 			// Allow to be hooked externally.
-			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product );
+			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product_id );
 			
 			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 				
@@ -873,17 +874,19 @@ class Hooks {
 
 		unset( $this->stock_threshold );
 		$out_of_stock_threshold = get_post_meta( $variation_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
-		$product                = wc_get_product( $variation_id );
 
 		// Allow to be hooked externally.
-		$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product );
+		$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $variation_id );
 
 		if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 			
 			$this->stock_threshold = (int) $out_of_stock_threshold;
 			
 			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+
+			$product = wc_get_product( $variation_id );
 			$product->save();
+
 			remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
 			
 		}
