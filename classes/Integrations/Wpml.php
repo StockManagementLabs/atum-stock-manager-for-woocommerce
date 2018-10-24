@@ -126,7 +126,7 @@ class Wpml {
 
 			// Hook into AtumListTable columns.
 			add_filter( 'atum/list_table/editable_column', array( $this, 'add_custom_prices_arg' ), 10, 2 );
-			add_filter( 'atum/stock_central_list/args_purchase_price', array( $this, 'add_custom_purchase_price' ) );
+			add_filter( 'atum/list_table/args_purchase_price', array( $this, 'add_custom_purchase_price' ) );
 
 			// Hook into Controlled and UnControlled Stock Central ListTables columns.
 			add_filter( 'atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
