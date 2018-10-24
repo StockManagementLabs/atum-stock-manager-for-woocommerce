@@ -567,7 +567,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$column_item = self::EMPTY_COL;
 		}
 
-		return apply_filters( "atum/list_table/column_default_$column_name", $column_item, $item, $this->product );
+		return apply_filters( "atum/list_table/column_default_$column_name", $column_item, $item, $this->product, $this );
 
 	}
 
@@ -682,7 +682,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$product_id = $this->get_current_product_id();
 		$thumb      = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $this->product->get_image( [ 40, 40 ] ) . '</a>';
 
-		return apply_filters( 'atum/list_table/column_thumb', $thumb, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_thumb', $thumb, $item, $this->product, $this );
 	}
 
 	/**
@@ -695,7 +695,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function column_id( $item ) {
-		return apply_filters( 'atum/list_table/column_id', $this->get_current_product_id(), $item, $this->product );
+		return apply_filters( 'atum/list_table/column_id', $this->get_current_product_id(), $item, $this->product, $this );
 	}
 
 	/**
@@ -737,7 +737,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $child_arrow . $title . '</a>';
 
-		return apply_filters( 'atum/list_table/column_title', $title, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_title', $title, $item, $this->product, $this );
 
 	}
 
@@ -771,7 +771,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/list_table/column_sku', $sku, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_sku', $sku, $item, $this->product, $this );
 
 	}
 
@@ -813,7 +813,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/list_table/column_supplier', $supplier, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_supplier', $supplier, $item, $this->product, $this );
 
 	}
 
@@ -845,7 +845,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$supplier_sku = self::EMPTY_COL;
 			}
 
-			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
+			$args = apply_filters( 'atum/list_table/args_supplier_sku', array(
 				'post_id'    => $product_id,
 				'meta_key'   => 'supplier_sku',
 				'value'      => $supplier_sku,
@@ -856,7 +856,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$supplier_sku = self::get_editable_column( $args );
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_supplier_sku', $supplier_sku, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_supplier_sku', $supplier_sku, $item, $this->product, $this );
 
 	}
 
@@ -931,7 +931,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$data_tip = ! self::$is_report ? ' data-tip="' . $product_tip . '"' : '';
 
-			return apply_filters( 'atum/list_table/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->product );
+			return apply_filters( 'atum/list_table/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->product, $this );
 
 		}
 
@@ -958,7 +958,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips"' . $data_tip . ' data-locations=""></a>';
 		}
 
-		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
 	}
 
@@ -989,7 +989,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'currency'   => self::$default_currency,
 			] ) : $purchase_price;
 
-			$args = apply_filters( 'atum/stock_central_list/args_purchase_price', array(
+			$args = apply_filters( 'atum/list_table/args_purchase_price', array(
 				'post_id'  => $product_id,
 				'meta_key' => 'purchase_price',
 				'value'    => $purchase_price_value,
@@ -1001,7 +1001,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$purchase_price = self::get_editable_column( $args );
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_purchase_price', $purchase_price, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_purchase_price', $purchase_price, $item, $this->product, $this );
 
 	}
 
@@ -1049,7 +1049,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/list_table/column_out_stock_threshold', $out_stock_threshold, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_out_stock_threshold', $out_stock_threshold, $item, $this->product, $this );
 
 	}
 
@@ -1083,7 +1083,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/list_table/column_weight', $weight, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_weight', $weight, $item, $this->product, $this );
 
 	}
 
@@ -1179,7 +1179,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_stock', "<span{$classes_title}>{$stock}</span>", $item, $this->product );
+		return apply_filters( 'atum/list_table/column_stock', "<span{$classes_title}>{$stock}</span>", $item, $this->product, $this );
 
 	}
 
@@ -1220,7 +1220,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_inbound_stock', $inbound_stock, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_inbound_stock', $inbound_stock, $item, $this->product );
 	}
 
 	/**
@@ -1296,7 +1296,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . $data . $classes . '>' . apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // WPCS: XSS ok.
+		echo '<td ' . $data . $classes . '>' . apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product, $this ) . '</td>'; // WPCS: XSS ok.
 
 	}
 
