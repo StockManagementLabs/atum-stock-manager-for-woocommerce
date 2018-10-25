@@ -264,9 +264,9 @@ class StockCentral extends AtumListPage {
 		$defaults['sticky_columns'] = array(
 			'section' => 'stock_central',
 			'name'    => __( 'Sticky Columns', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( 'Stick the first table columns to not lose context when scrolling horizontally.', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Stick the first table columns to not lose context when scrolling horizontally. **EXPERIMENTAL**.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
-			'default' => 'yes',
+			'default' => 'no',
 		);
 
 		// WC Subscriptions compatibility.
