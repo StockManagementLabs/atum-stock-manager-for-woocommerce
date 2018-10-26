@@ -129,15 +129,15 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 	<div class="atum-order-data-row atum-order-totals-items">
 
 		<table class="atum-order-totals">
-			<tr>
+			<!--<tr>
 				<td class="label"><span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
 				<td width="1%"></td>
 				<td class="total">
-					<?php echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+					<?php // echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
 				</td>
-			</tr>
+			</tr>-->
 
-			<?php do_action( 'atum/atum_order/totals_after_discount', $atum_order->get_id() ); ?>
+			<?php // do_action( 'atum/atum_order/totals_after_discount', $atum_order->get_id() );! ?>
 
 			<tr>
 				<td class="label">
