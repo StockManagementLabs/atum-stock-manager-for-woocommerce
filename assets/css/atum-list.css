@@ -2994,24 +2994,10 @@ input[type="button"].btn-block {
   height: 100%;
 }
 
-.floatThead-wrapper tr.size-row {
-  display: none;
-}
-
-.floatThead-wrapper .floatThead-container {
-  height: 0;
-  overflow-y: hidden;
-}
-
-.floatThead-wrapper .floatThead-container .group-toggler {
-  display: none;
-}
-
 .atum-list-table.cloned {
   width: auto;
   position: absolute;
   bottom: 0;
-  margin-bottom: 0;
   border-right: none;
   box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
 }
@@ -3595,6 +3581,20 @@ input[type="button"].btn-block {
   .atum-list-table .column-primary .toggle-row, .floatThead-container .column-primary .toggle-row {
     display: none;
   }
+}
+
+.floatThead-wrapper tr.size-row {
+  display: none;
+}
+
+.floatThead-wrapper .floatThead-container {
+  height: 0;
+  overflow-y: hidden;
+  margin-bottom: 0;
+}
+
+.floatThead-wrapper .floatThead-container .group-toggler {
+  display: none;
 }
 
 .atum-notice {

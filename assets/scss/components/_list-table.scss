@@ -314,23 +314,6 @@
 	
 }
 
-// Float Thead
-.floatThead-wrapper {
-	tr.size-row {
-		display: none;
-	}
-	
-	.floatThead-container {
-		height: 0;
-		overflow-y: hidden;
-		
-		// Avoid issues when toggling columns while the header is floating
-		.group-toggler {
-			display: none;
-		}
-	}
-}
-
 .atum-list-table {
 	
 	// Fixed columns
@@ -922,6 +905,24 @@
 		
 	}
 	
+}
+
+// Float Thead
+.floatThead-wrapper {
+	tr.size-row {
+		display: none;
+	}
+	
+	.floatThead-container {
+		height: 0;
+		overflow-y: hidden;
+		margin-bottom: 0;
+		
+		// Avoid issues when toggling columns while the header is floating
+		.group-toggler {
+			display: none;
+		}
+	}
 }
 
 // Manage Stock notice
