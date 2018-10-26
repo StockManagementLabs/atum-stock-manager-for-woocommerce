@@ -6,7 +6,7 @@ Requires at least: 4.6
 Tested up to: 4.9.8
 Requires PHP: 5.6
 WC requires at least: 3.0.0
-WC tested up to: 3.4.6
+WC tested up to: 3.5.0
 Stable tag: 1.4.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -202,7 +202,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.4.16`
 
-*2018-10-18*
+*2018-10-26*
 
 **Features**
 
@@ -219,6 +219,10 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Updated jScrollPane vendor library.
 * Multi-Inventory compatibility changes.
 * Added source labels to Settings' tools.
+* Updated composer dependencies.
+* Added global styles to HTML report.
+* Added hook to out_of_stock_threshold actions.
+* Hook name changes.
 
 **Fixes**
 
@@ -226,6 +230,10 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed POs not reloading purchase price.
 * Fixed WPML error when WC WPML is active when WPML isn't.
 * Fixed Floating Header + Sticky Columns compatibility issues.
+* Added missing ID attribute to button groups in Settings.
+* Fixed issue in products with "Out of stock threshold" enabled at product level.
+* Fixed tooltip bug in Firefox.
+* Fixed custom trigger after loading tab in Settings.
 * Minor bug fixes.
 * Refactory.
 
