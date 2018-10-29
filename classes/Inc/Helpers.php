@@ -620,30 +620,6 @@ final class Helpers {
 	}
 
 	/**
-	 * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
-	 *
-	 * @since 1.4.11
-	 *
-	 * @return int days between 1 and 31
-	 */
-	public static function get_sold_last_days_option() {
-
-		if ( isset( $_REQUEST['sold_last_days'] ) ) { // WPCS: CSRF ok.
-
-			// Sanitize.
-			$value = absint( esc_attr( $_REQUEST['sold_last_days'] ) ); // WPCS: CSRF ok.
-
-			if ( $value > 0 && $value < 31 ) {
-				return $value;
-			}
-
-		}
-
-		return absint( self::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS ) );
-
-	}
-
-	/**
 	 * Helper function to return the entire plugin option value.
 	 * If no option has been saved, it returns empty array.
 	 *
@@ -664,6 +640,30 @@ final class Helpers {
 		}
 
 		return apply_filters( 'atum/get_options', $global_options );
+
+	}
+
+	/**
+	 * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
+	 *
+	 * @since 1.4.11
+	 *
+	 * @return int days between 1 and 31
+	 */
+	public static function get_sold_last_days_option() {
+
+		if ( isset( $_REQUEST['sold_last_days'] ) ) { // WPCS: CSRF ok.
+
+			// Sanitize.
+			$value = absint( esc_attr( $_REQUEST['sold_last_days'] ) ); // WPCS: CSRF ok.
+
+			if ( $value > 0 && $value < 31 ) {
+				return $value;
+			}
+
+		}
+
+		return absint( self::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS ) );
 
 	}
 
@@ -1029,30 +1029,6 @@ final class Helpers {
 	 */
 	public static function disable_wc_manage_stock( $product_id ) {
 		update_post_meta( $product_id, '_manage_stock', 'no' );
-	}
-	
-	/**
-	 * Helper function to update a theme plugin value.
-	 *
-	 * @since   0.0.2
-	 *
-	 * @param string $name  The option key tu update.
-	 * @param mixed  $value The option value.
-	 */
-	public static function update_option( $name, $value ) {
-		
-		// Save it as a global variable to not get the value each time.
-		global $global_options;
-		
-		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
-		
-		$old_value = isset( $global_options[ $name ] ) ? $global_options[ $name ] : FALSE;
-		
-		$global_options[ $name ] = apply_filters( "atum/update_option/$name", $value, $old_value );
-		
-		update_option( Settings::OPTION_NAME, $global_options );
-		
 	}
 
 	/**
