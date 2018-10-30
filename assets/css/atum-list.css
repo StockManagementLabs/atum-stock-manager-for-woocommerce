@@ -3198,19 +3198,6 @@ input[type="button"].btn-block {
   height: 100%;
 }
 
-.floatThead-wrapper tr.size-row {
-  display: none;
-}
-
-.floatThead-wrapper .floatThead-container {
-  height: 0;
-  overflow-y: hidden;
-}
-
-.floatThead-wrapper .floatThead-container .group-toggler {
-  display: none;
-}
-
 .atum-list-table {
   border: none !important;
 }
@@ -3848,6 +3835,20 @@ input[type="button"].btn-block {
   .atum-list-table .column-primary .toggle-row, .floatThead-container .column-primary .toggle-row {
     display: none;
   }
+}
+
+.floatThead-wrapper tr.size-row {
+  display: none;
+}
+
+.floatThead-wrapper .floatThead-container {
+  height: 0;
+  overflow-y: hidden;
+  margin-bottom: 0;
+}
+
+.floatThead-wrapper .floatThead-container .group-toggler {
+  display: none;
 }
 
 .atum-notice {

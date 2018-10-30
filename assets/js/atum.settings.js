@@ -142,7 +142,7 @@
 				})
 				
 				// Script Runner fields
-				.on('click', '.script-runner button', function() {
+				.on('click', '.script-runner .tool-runner', function() {
 					self.runScript($(this));
 				})
 				

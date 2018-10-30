@@ -2625,7 +2625,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields .select2-container .select2-selection {
-  height: 30px;
+  min-height: 30px;
   border: 1px solid #e9ecef;
 }
 
@@ -2905,7 +2905,7 @@ input[type="button"].btn-block {
   content: "\e86f";
   padding-right: 15px;
   font-size: 12px;
-  bottom: 8px;
+  top: 13px;
   right: 0;
   position: absolute;
 }
