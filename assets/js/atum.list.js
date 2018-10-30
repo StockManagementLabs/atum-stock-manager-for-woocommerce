@@ -134,6 +134,7 @@
 			//------------------------------------------------------------------
 			this.$atumList.on('click', '.group-toggler', function () {
 				self.toggleGroupColumns($(this));
+				$(this).tooltip('hide');
 			}).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
 			
 			//

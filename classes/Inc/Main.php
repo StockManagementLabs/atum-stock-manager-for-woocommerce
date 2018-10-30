@@ -141,7 +141,7 @@ class Main {
 			'add_new_item'      => __( 'Add new location', ATUM_TEXT_DOMAIN ),
 			'new_item_name'     => __( 'New location name', ATUM_TEXT_DOMAIN ),
 			'menu_name'         => __( 'ATUM Locations', ATUM_TEXT_DOMAIN ),
-            'not_found'         => __( 'No locations found', ATUM_TEXT_DOMAIN ),
+			'not_found'         => __( 'No locations found', ATUM_TEXT_DOMAIN ),
 		);
 
 		$args = apply_filters( 'atum/location_taxonomy_args', array(
@@ -492,14 +492,14 @@ class Main {
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 	
 	/**

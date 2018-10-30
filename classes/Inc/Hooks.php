@@ -719,6 +719,11 @@ class Hooks {
 	 * @return float|int
 	 */
 	public function stock_quantity_input_atts( $value, $product ) {
+		
+		if ( doing_filter( 'woocommerce_quantity_input_min' ) && 0 === $value ) {
+			return $value;
+		}
+		
 		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
 	}
 

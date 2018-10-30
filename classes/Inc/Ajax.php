@@ -1419,6 +1419,7 @@ final class Ajax {
 
 			foreach ( $atum_order_item_ids as $id ) {
 				$atum_order->remove_item( absint( $id ) );
+				do_action( 'atum/atum_order/delete_order_item', absint( $id ) );
 			}
 
 			$atum_order->save_items();

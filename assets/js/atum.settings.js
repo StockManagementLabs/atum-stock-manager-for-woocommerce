@@ -367,6 +367,18 @@
 					self.$form.show();
 				}
 				
+				var searchQuery  = location.search.substr(1),
+				    searchParams = {};
+				
+				searchQuery.split('&').forEach(function(part) {
+					var item = part.split('=');
+					searchParams[item[0]] = decodeURIComponent(item[1]);
+				});
+				
+				if (searchParams.hasOwnProperty('tab')) {
+					self.$settingsWrapper.trigger('atum-settings-page-loaded', [searchParams.tab]);
+				}
+				
 			});
 			
 		},

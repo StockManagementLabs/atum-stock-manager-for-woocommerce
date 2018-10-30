@@ -226,7 +226,7 @@ class ListTable extends AtumListTable {
 		));
 
 		// Set the sticky columns.
-		if ( 'yes' === Helpers::get_option( 'sticky_columns', 'yes' ) ) {
+		if ( 'yes' === Helpers::get_option( 'sticky_columns', 'no' ) ) {
 			$this->sticky_columns = (array) apply_filters( 'atum/stock_central_list/sticky_columns', array(
 				'cb',
 				'thumb',

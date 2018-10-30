@@ -174,7 +174,7 @@ class Bootstrap {
 		}
 
 		// Minimum WooCommerce version required: 2.5.
-		if ( version_compare( WC()->version, '2.5', '<' ) ) {
+		if ( version_compare( WC()->version, '3.0', '<' ) ) {
 			/* translators: the first one is the WP updates page link and the second is the link closing tag */
 			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version 2.5 or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
 		}

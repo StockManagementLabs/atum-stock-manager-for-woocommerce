@@ -512,6 +512,17 @@ class Settings {
 		
 		$this->options = Helpers::get_options();
 
+		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
+		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
+
+			$this->options = wp_list_pluck( $this->defaults, 'default' );
+
+			// Avoid infinite loop calling this method.
+			remove_filter( 'sanitize_option_' . self::OPTION_NAME, array( $this, 'sanitize' ) );
+			update_option( self::OPTION_NAME, $this->options );
+
+		}
+
 		// Remove deprecated/removed/unneeded keys.
 		$valid_keys = array_keys( $this->defaults );
 
@@ -758,7 +769,12 @@ class Settings {
 		$size           = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
 		$input_type     = isset( $args['options']['input_type'] ) ? $args['options']['input_type'] : 'radio';
 		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
-		$default        = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+
+		$default = '';
+		if ( isset( $args['default'] ) ) {
+			$default = is_array( $args['default'] ) ? wp_json_encode( $args['default'] ) : $args['default'];
+			$default = ' data-default="' . $default . '"';
+		}
 
 		ob_start();
 		?>
