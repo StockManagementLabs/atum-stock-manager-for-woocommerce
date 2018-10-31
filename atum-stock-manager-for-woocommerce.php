@@ -31,6 +31,18 @@ if ( ! defined( 'ATUM_VERSION' ) ) {
 	define( 'ATUM_VERSION', '1.4.16' );
 }
 
+if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
+	define( 'ATUM_WC_MINIMUM_VERSION', '2.7' );
+}
+
+if ( ! defined( 'ATUM_WP_MINIMUM_VERSION' ) ) {
+	define( 'ATUM_WP_MINIMUM_VERSION', '4.0' );
+}
+
+if ( ! defined( 'ATUM_PHP_MINIMUM_VERSION' ) ) {
+	define( 'ATUM_PHP_MINIMUM_VERSION', '5.6' );
+}
+
 if ( ! defined( 'ATUM_PATH' ) ) {
 	define( 'ATUM_PATH', plugin_dir_path( __FILE__ ) );
 }
@@ -55,6 +67,24 @@ if ( ! defined( 'ATUM_DEBUG' ) ) {
 	define( 'ATUM_DEBUG', FALSE );
 }
 
-// Use Composer's autoloader and PSR4 for naming convention.
-require ATUM_PATH . 'vendor/autoload.php';
-\Atum\Bootstrap::get_instance();
+// Minimum PHP version required: 5.6.
+if ( version_compare( phpversion(), ATUM_PHP_MINIMUM_VERSION, '<' ) ) {
+	add_action( 'admin_notices', function() {
+		?>
+		<div class="error fade">
+			<p>
+				<strong>
+					<?php echo esc_attr( __( 'ATUM requires PHP version ' . ATUM_PHP_MINIMUM_VERSION . ' or greater. Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress ?>
+				</strong>
+			</p>
+		</div>
+		<?php
+	} );
+}
+else {
+	// Use Composer's autoloader and PSR4 for naming convention.
+	require ATUM_PATH . 'vendor/autoload.php';
+	\Atum\Bootstrap::get_instance();
+}
+
+
