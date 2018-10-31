@@ -27,7 +27,7 @@
 			margin-left: 14px;
 			
 			&:hover {
-				background-color: rgba(105, 198, 29, 0.6);
+				background-color: $green-opacity;
 			}
 		}
 		
@@ -68,7 +68,7 @@
 	background-color: $white;
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 $gray-200;
-	padding: 20px 11px;
+	padding: 20px 0;
 	a {
 		&:focus {
 			box-shadow: none;
@@ -182,15 +182,15 @@
 	
 	.subsubsub {
 		position: relative;
-		margin-left: 3px;
 		margin-top: 0;
 		font-size: 16px;
 		letter-spacing: 0.4px;
 		font-weight: bold;
 		text-transform: uppercase;
+		padding: 0 11px;
 		
 		li {
-			margin-right: 20px;
+			margin-right: 15px;
 			color: $gray-500;
 			span {
 				&.active {
@@ -293,6 +293,7 @@
 		
 		&.bulkactions {
 			padding-right: 0;
+			padding: 0 11px;
 			
 			select {
 				max-width: 150px;
@@ -409,6 +410,7 @@
 		.tablenav.top {
 			.bulkactions {
 				margin-bottom: $grid-gutter-width/2;
+				box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
 			}
 		}
 		
