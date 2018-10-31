@@ -644,36 +644,43 @@ class Wpml {
 		}
 
 	}
-
+	
 	/**
 	 * Get the original product id from a translation
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int    $product_id
-	 * @param string $post_type
+	 * @param int|array    $product_id integer or array with the maybe translated products ids.
+	 * @param string|array $post_type  post type of the arrays we're searching for. Default to product, product_variation. Allows to search by other pos types.
 	 *
-	 * @return int
+	 * @return int|array
 	 */
-	public static function get_original_product_id( $product_id = 0, $post_type = '' ) {
-
+	public static function get_original_product_id( $product_id = 0, $post_type = array( 'product', 'product_variation' ) ) {
+		
+		$return_array = is_array( $product_id );
+		$results      = array( 0 );
+		
 		if ( $product_id ) {
-
-			$post_type = $post_type ?: get_post_type( $product_id );
-
-			/* @noinspection PhpUndefinedMethodInspection */
-			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
-			foreach ( $product_translations as $translation ) {
-				if ( $translation->original ) {
-					$product_id = $translation->element_id;
-					break;
-				}
-			}
-
+			
+			global $wpdb;
+			
+			$product_id = (array) $product_id;
+			$post_type  = $post_type ? (array) $post_type : (array) get_post_type( $product_id[0] );
+			// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
+			$str_sql = "SELECT ori.element_id FROM wp_icl_translations tra
+							LEFT OUTER JOIN wp_icl_translations ori ON tra.trid = ori.trid
+  							WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
+  							AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
+  							 AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL";
+			
+			$results = $wpdb->get_col( $str_sql ); // WPCS: unprepared SQL ok.
+			
+			$results = $results ?: array( 0 );
+			
 		}
-
-		return $product_id;
-
+		
+		return $return_array ? $results : $results[0];
+		
 	}
 
 	/**

@@ -25,21 +25,21 @@ use Atum\Suppliers\Suppliers;
 
 
 class Bootstrap {
-	
+
 	/**
 	 * The singleton instance holder
 	 *
 	 * @var Bootstrap
 	 */
 	private static $instance;
-	
+
 	/**
 	 * Flag to indicate the plugin has been boostrapped
 	 *
 	 * @var bool
 	 */
 	private $bootstrapped = FALSE;
-	
+
 	/**
 	 * Error message holder
 	 *
@@ -63,7 +63,7 @@ class Bootstrap {
 	 * @since 0.0.2
 	 */
 	private function __construct() {
-		
+
 		// Check all the requirements before bootstraping.
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );
 
@@ -81,9 +81,9 @@ class Bootstrap {
 	 * @throws AtumException
 	 */
 	public function maybe_bootstrap() {
-		
+
 		try {
-			
+
 			if ( $this->bootstrapped ) {
 				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
 			}
@@ -91,25 +91,25 @@ class Bootstrap {
 			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
 			// in queries when any dependency is not met.
 			AtumComments::get_instance();
-			
+
 			// Check that the plugin dependencies are met.
 			$this->check_dependencies();
-			
+
 			// Bootstrap the plugin.
 			Main::get_instance();
 			$this->bootstrapped = TRUE;
-			
+
 		} catch ( AtumException $e ) {
-			
+
 			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
 				$this->admin_message = $e->getMessage();
 				add_action( 'admin_notices', array( $this, 'show_bootstrap_warning' ) );
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Check the plugin dependencies before bootstrapping
 	 *
@@ -118,16 +118,16 @@ class Bootstrap {
 	 * @throws AtumException
 	 */
 	private function check_dependencies() {
-		
+
 		// WooCommerce required.
 		if ( ! function_exists( 'WC' ) ) {
 			throw new AtumException( 'woocommerce_disabled', __( 'ATUM requires WooCommerce to be activated', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 		// WooCommerce "Manage Stock" global option must be enabled.
 		else {
-			
+
 			$woo_inventory_page = 'page=wc-settings&tab=products&section=inventory';
-			
+
 			// Special case for when the user is currently changing the stock option.
 			if ( isset( $_POST['_wp_http_referer'] ) && FALSE !== strpos( $_POST['_wp_http_referer'], $woo_inventory_page ) ) { // WPCS: CSRF ok.
 				// It's a checkbox, so it's not sent with the form if unchecked.
@@ -137,9 +137,9 @@ class Bootstrap {
 				$manage                      = get_option( 'woocommerce_manage_stock' );
 				$display_stock_option_notice = ! $manage || 'no' === $manage;
 			}
-			
+
 			if ( $display_stock_option_notice ) {
-				
+
 				$stock_option_msg = __( "You need to enable WooCommerce 'Manage Stock' option for ATUM plugin to work.", ATUM_TEXT_DOMAIN );
 
 				if (
@@ -149,38 +149,38 @@ class Bootstrap {
 				) {
 					$stock_option_msg .= ' ' . sprintf(
 						/* translators: the first one is the WC inventory settings page link and the second is the link closing tag */
-						__( 'Go to %1$sWooCommerce inventory settings%2$s to fix this.', ATUM_TEXT_DOMAIN ),
-						'<a href="' . self_admin_url( "admin.php?$woo_inventory_page" ) . '">',
-						'</a>'
-					);
+							__( 'Go to %1$sWooCommerce inventory settings%2$s to fix this.', ATUM_TEXT_DOMAIN ),
+							'<a href="' . self_admin_url( "admin.php?$woo_inventory_page" ) . '">',
+							'</a>'
+						);
 				}
-				
+
 				throw new AtumException( 'woocommerce_manage_stock_disabled', $stock_option_msg, self::DEPENDENCIES_UNSATISFIED );
-				
+
 			}
-			
+
 		}
 
 		// Minimum PHP version required: 5.6.
-		if ( version_compare( phpversion(), '5.6', '<' ) ) {
-			throw new AtumException( 'php_min_version_required', __( 'ATUM requires PHP version 5.6 or greater. Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
+		if ( version_compare( phpversion(), ATUM_PHP_MINIMUM_VERSION, '<' ) ) {
+			throw new AtumException( 'php_min_version_required', __( 'ATUM requires PHP version ' . ATUM_PHP_MINIMUM_VERSION . ' or greater. Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 
 		// Minimum WordPress version required: 4.0.
 		global $wp_version;
-		if ( version_compare( $wp_version, '4.0', '<' ) ) {
+		if ( version_compare( $wp_version, ATUM_WP_MINIMUM_VERSION, '<' ) ) {
 			/* translators: the first one is the WP updates page link and the second is the link closing tag */
-			throw new AtumException( 'wordpress_min_version_required', sprintf( __( 'ATUM requires WordPress version 4.0 or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'wordpress_min_version_required', sprintf( __( 'ATUM requires WordPress version ' . ATUM_WP_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
 		}
 
-		// Minimum WooCommerce version required: 2.5.
-		if ( version_compare( WC()->version, '2.5', '<' ) ) {
+		// Minimum WooCommerce version required: 3.0.
+		if ( version_compare( WC()->version, ATUM_WC_MINIMUM_VERSION, '<' ) ) {
 			/* translators: the first one is the WP updates page link and the second is the link closing tag */
-			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version 2.5 or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version ' . ATUM_WC_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
 		}
-		
+
 	}
-	
+
 	/**
 	 * Display an admin notice if was not possible to bootstrap the plugin
 	 *
@@ -195,7 +195,7 @@ class Bootstrap {
 				</p>
 			</div>
 		<?php endif;
-		
+
 	}
 
 	/**
@@ -253,7 +253,7 @@ class Bootstrap {
 
 	}
 
-	
+
 	/*******************
 	 * Instance methods
 	 *******************/
@@ -271,7 +271,7 @@ class Bootstrap {
 	public function __sleep() {
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
-	
+
 	/**
 	 * Get Singleton instance
 	 *
@@ -281,8 +281,8 @@ class Bootstrap {
 		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
 			self::$instance = new self();
 		}
-		
+
 		return self::$instance;
 	}
-	
+
 }
