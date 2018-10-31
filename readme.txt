@@ -2,12 +2,12 @@
 
 Contributors: stockmanagementlabs, salvamb, japiera, julianberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
-Requires at least: 4.6
+Requires at least: 4.4
 Tested up to: 4.9.8
 Requires PHP: 5.6
 WC requires at least: 3.0.0
 WC tested up to: 3.5.0
-Stable tag: 1.4.16
+Stable tag: 1.4.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
