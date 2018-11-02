@@ -21,6 +21,7 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
 
@@ -283,21 +284,25 @@ abstract class AtumOrderModel {
 		unset( $this->items[ $items_key ][ $item->get_id() ] );
 
 	}
-
+	
 	/**
 	 * Add a product line item to the ATUM Order
 	 *
 	 * @since 1.2.9
 	 *
 	 * @param  \WC_Product $product
-	 * @param  int         $qty
+	 * @param  int|float   $qty
 	 * @param  array       $args
 	 *
 	 * @return \WC_Order_Item_Product The product item added to ATUM Order
 	 */
-	public function add_product( $product, $qty = 1, $args = array() ) {
+	public function add_product( $product, $qty = NULL, $args = array() ) {
 
 		if ( is_a( $product, '\WC_Product' ) ) {
+			
+			if ( is_null( $qty ) ) {
+				$qty = 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+			}
 
 			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product );
 

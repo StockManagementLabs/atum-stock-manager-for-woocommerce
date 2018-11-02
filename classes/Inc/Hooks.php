@@ -166,6 +166,33 @@ class Hooks {
 		}
 
 	}
+	
+	/**
+	 * Add set min quantities script to WC orders
+	 *
+	 * @since 1.4.18
+	 *
+	 * @param \WC_Order $order
+	 */
+	public function wc_orders_min_qty( $order ) {
+		
+		$step = 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+		
+		?>
+		<script type="text/javascript">
+			jQuery(function ($) {
+				var $script = $('#tmpl-wc-modal-add-products');
+				
+				$script.html($script.html().replace('step="1"', 'step="<?php echo esc_attr( $step ) ?>"')
+					.replace('placeholder="1"', 'placeholder="<?php echo esc_attr( $step ) ?>" value="<?php echo esc_attr( $step ) ?>"')
+					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>')
+					.replace('<?php echo esc_attr( 'placeholder="1"' ) ?>', '<?php echo esc_attr( 'placeholder="' . $step . '" value="' . $step . '"' ) ?>'));
+				
+			});
+		</script>
+		
+		<?php
+	}
 
 	/**
 	 * Filters the Product data tabs settings to add ATUM settings
@@ -695,6 +722,9 @@ class Hooks {
 
 			// Customise the "Add to Cart" message to allow decimals in quantities.
 			add_filter( 'wc_add_to_cart_message_html', array( $this, 'add_to_cart_message' ), 10, 2 );
+			
+			// Add custom decimal quantities to order add products.
+			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
 
 		}
 
