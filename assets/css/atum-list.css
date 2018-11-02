@@ -3531,6 +3531,10 @@ input[type="button"].btn-block {
 
 .atum-list-table .show-locations, .floatThead-container .show-locations {
   cursor: pointer;
+  color: #555;
+}
+
+.atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty {
   color: #0073AA;
 }
 

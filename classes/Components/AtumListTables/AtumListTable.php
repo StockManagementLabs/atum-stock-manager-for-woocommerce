@@ -950,8 +950,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_calc_location( $item ) {
 
+		$location_terms       = wp_get_post_terms( $this->get_current_product_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
+		$location_terms_class = ! empty( $location_terms ) ? ' not-empty' : '';
+
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
-		$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips"' . $data_tip . ' data-locations=""></a>';
+		$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
 
 		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
