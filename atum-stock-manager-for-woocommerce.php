@@ -19,7 +19,7 @@
  * Requires PHP:         5.6
  * WC requires at least: 3.0.0
  * WC tested up to:      3.5.0
- * Text Domain:          atum
+ * Text Domain:          atum-stock-manager-for-woocommerce
  * Domain Path:          /languages
  * License:              GPLv2 or later
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,7 +56,7 @@ if ( ! defined( 'ATUM_BASENAME' ) ) {
 }
 
 if ( ! defined( 'ATUM_TEXT_DOMAIN' ) ) {
-	define( 'ATUM_TEXT_DOMAIN', 'atum' );
+	define( 'ATUM_TEXT_DOMAIN', 'atum-stock-manager-for-woocommerce' );
 }
 
 if ( ! defined( 'ATUM_PREFIX' ) ) {
