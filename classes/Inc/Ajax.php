@@ -1238,7 +1238,8 @@ final class Ajax {
 				$item    = $atum_order->add_product( wc_get_product( $item_to_add ) );
 				$item_id = $item->get_id();
 				$class   = 'new_row';
-
+				
+				do_action( 'atum/atum_order/add_order_item_meta', $item_id, $item, $atum_order );
 				// Load template.
 				$html .= Helpers::load_view_to_string( 'meta-boxes/atum-order/item', compact( 'atum_order', 'item', 'item_id', 'class' ) );
 
