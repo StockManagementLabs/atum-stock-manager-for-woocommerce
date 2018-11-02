@@ -950,13 +950,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_calc_location( $item ) {
 
-		$locations      = '<span class="show-locations">' . self::EMPTY_COL . '</span>';
-		$location_terms = wp_get_post_terms( $this->product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
-
-		if ( ! empty( $location_terms ) ) {
-			$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips"' . $data_tip . ' data-locations=""></a>';
-		}
+		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
+		$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips"' . $data_tip . ' data-locations=""></a>';
 
 		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
@@ -2643,7 +2638,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'applyAction'          => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'productLocations'     => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
 			'editProductLocations' => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),
-			'edit'                 => __( 'Edit', ATUM_TEXT_DOMAIN ),
+			'editLocationsInfo'    => __( 'Click on the location icons you want to set for this product. Locations marked with blue icons will be set and with grey icons will be unset.', ATUM_TEXT_DOMAIN ),
 			'textToShow'           => __( 'Text to show?', ATUM_TEXT_DOMAIN ),
 			'locationsSaved'       => __( 'Values Saved', ATUM_TEXT_DOMAIN ),
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
