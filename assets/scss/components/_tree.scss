@@ -5,6 +5,16 @@
 .atum-tree {
 	position: relative;
 	min-height: 100px;
+	
+	.alert {
+		margin-top: $grid-gutter-width/2;
+		font-size: 12px;
+		text-align: left;
+	}
+	
+	.no-locations-set {
+		@include flex-justify-content(center);
+	}
 }
 
 .ui-helper-hidden {

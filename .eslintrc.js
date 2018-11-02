@@ -50,7 +50,7 @@ module.exports = {
 		],
 		"comma-spacing"                  : ["error", {"before": false, "after": true}],
 		"comma-style"                    : ["error", "last"],
-		"consistent-this"                : ["error", "that"],
+		"consistent-this"                : ["error", "self"],
 		"eqeqeq"                         : ["error", "smart"],
 		"func-call-spacing"              : ["error", "never"],
 		"global-require"                 : "error",
@@ -97,7 +97,6 @@ module.exports = {
 		"one-var"                        : ["error", "always"],
 		"one-var-declaration-per-line"   : ["error", "initializations"],
 		"operator-assignment"            : ["error", "always"],
-		"padded-blocks"                  : ["error", "always"],
 		"padding-line-between-statements": [
 			"error",
 			{blankLine: "always", prev: "*", next: "return"},

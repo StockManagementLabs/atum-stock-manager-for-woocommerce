@@ -1874,13 +1874,14 @@ final class Ajax {
 			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( $_POST['product_id'] > 0 ) {
+		$product_id = intval( $_POST['product_id'] );
 
-			$product_id = absint( $_POST['product_id'] );
+		if ( $product_id > 0 ) {
+
 			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
 
 			if ( empty( $locations ) ) {
-				wp_send_json_success( '<span class="no-locations-set">' . __( 'No Locations set on this product', ATUM_TEXT_DOMAIN ) . '</span>' );
+				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No Locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
 			}
 			else {
 
@@ -1898,7 +1899,7 @@ final class Ajax {
 			}
 
 		}
-		elseif ( -1 === $_POST['product_id'] ) {
+		elseif ( -1 === $product_id ) {
 
 			// Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
 			$locations_tree = wp_list_categories( array(
