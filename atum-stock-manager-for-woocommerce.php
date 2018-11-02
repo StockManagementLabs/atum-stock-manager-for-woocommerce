@@ -59,6 +59,10 @@ if ( ! defined( 'ATUM_TEXT_DOMAIN' ) ) {
 	define( 'ATUM_TEXT_DOMAIN', 'atum-stock-manager-for-woocommerce' );
 }
 
+if ( ! defined( 'ATUM_SHORT_NAME' ) ) {
+	define( 'ATUM_SHORT_NAME', 'atum' );
+}
+
 if ( ! defined( 'ATUM_PREFIX' ) ) {
 	define( 'ATUM_PREFIX', 'atum_' );
 }

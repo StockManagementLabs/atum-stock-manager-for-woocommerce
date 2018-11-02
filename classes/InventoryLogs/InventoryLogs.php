@@ -377,7 +377,7 @@ class InventoryLogs extends AtumOrderPostType {
 	public function add_admin_bar_link( $atum_menus ) {
 
 		$atum_menus['inventory-logs'] = array(
-			'slug'       => ATUM_TEXT_DOMAIN . '-inventory-logs',
+			'slug'       => ATUM_SHORT_NAME . '-inventory-logs',
 			'title'      => $this->labels['menu_name'],
 			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER,

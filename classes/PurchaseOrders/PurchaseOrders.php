@@ -337,7 +337,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	public function add_admin_bar_link( $atum_menus ) {
 
 		$atum_menus['purchase-orders'] = array(
-			'slug'       => ATUM_TEXT_DOMAIN . '-purchase-orders',
+			'slug'       => ATUM_SHORT_NAME . '-purchase-orders',
 			'title'      => $this->labels['menu_name'],
 			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER,

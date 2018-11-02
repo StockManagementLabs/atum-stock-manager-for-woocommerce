@@ -96,7 +96,7 @@ abstract class AtumOrderItemModel {
 
 			// Get from cache if available.
 			$cache_key   = "{$this->cache_key}-{$this->id}";
-			$cache_group = ATUM_TEXT_DOMAIN;
+			$cache_group = ATUM_SHORT_NAME;
 			$data        = wp_cache_get( $cache_key, $cache_group );
 
 			if ( FALSE === $data ) {
@@ -334,7 +334,7 @@ abstract class AtumOrderItemModel {
 	 */
 	public function clear_cache() {
 		$cache_key   = "{$this->cache_key}-{$this->id}";
-		$cache_group = ATUM_TEXT_DOMAIN;
+		$cache_group = ATUM_SHORT_NAME;
 		wp_cache_delete( $cache_key, $cache_group );
 	}
 
