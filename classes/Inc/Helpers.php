@@ -644,6 +644,50 @@ final class Helpers {
 	}
 
 	/**
+	 * Get the a setting for the specified product
+	 * First checks if has a meta key, if the meta value is distinct than global, returns that value,
+	 * but if it's set to global, returns the global ATUM setting default for it.
+	 *
+	 * NOTE: The global setting must have the same name as the individual meta key but starting with the keyword "default".
+	 *
+	 * @since 1.4.18
+	 *
+	 * @param int    $product_id     The product ID.
+	 * @param string $meta_key       The meta key name.
+	 * @param mixed  $default        The default value for the global option.
+	 * @param string $prefix         Optional. The ATUM add-ons should use a prefix for their settings.
+	 * @param bool   $allow_global   Optional. If FALSE, only can return meta value or default. If TRUE, it could return 'global'.
+	 *
+	 * @return mixed
+	 */
+	public static function get_product_setting( $product_id, $meta_key, $default, $prefix = '', $allow_global = FALSE ) {
+
+		$meta_value = get_post_meta( $product_id, $meta_key, TRUE );
+
+		// If has no value saved, get the default.
+		if ( ! $meta_value || 'global' === $meta_value ) {
+
+			$option_name = "default{$meta_key}";
+
+			if ( ! empty( $prefix ) ) {
+
+				if ( '_' !== substr( $prefix, -1, 1 ) ) {
+					$prefix .= '_';
+				}
+
+				$option_name = $prefix . $option_name;
+
+			}
+
+			$meta_value  = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
+
+		}
+
+		return $meta_value;
+
+	}
+
+	/**
 	 * Get sold_last_days address var if set and valid, or the sales_last_ndays options/ Settings::DEFAULT_SALE_DAYS if set
 	 *
 	 * @since 1.4.11
