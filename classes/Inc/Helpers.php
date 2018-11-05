@@ -159,7 +159,7 @@ final class Helpers {
 			$date = strtotime( $date );
 		}
 
-		return date_i18n( 'Y-m-d H:i:s', $date );
+		return date( 'Y-m-d H:i:s', $date );
 	}
 
 	/**
@@ -459,11 +459,11 @@ final class Helpers {
 			global $wpdb;
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$date_start = date_i18n( 'Y-m-d H:i:s', strtotime( $date_start ) );
+			$date_start = date( 'Y-m-d H:i:s', strtotime( $date_start ) );
 			$date_where = $wpdb->prepare( 'WHERE post_date >= %s', $date_start );
 
 			if ( $date_end ) {
-				$date_end    = date_i18n( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_end    = date( 'Y-m-d H:i:s', strtotime( $date_end ) );
 				$date_where .= $wpdb->prepare( ' AND post_date <= %s', $date_end );
 			}
 

@@ -177,10 +177,10 @@ class PurchaseOrders extends AtumOrderPostType {
 		}
 
 		$po_date = empty( $_POST['date'] ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$po_date = date_i18n( 'Y-m-d H:i:s', $po_date );
+		$po_date = date( 'Y-m-d H:i:s', $po_date );
 
 		$expected_at_location_date = empty( $_POST['expected_at_location_date'] ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' );
-		$expected_at_location_date = date_i18n( 'Y-m-d H:i:s', $expected_at_location_date );
+		$expected_at_location_date = date( 'Y-m-d H:i:s', $expected_at_location_date );
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
