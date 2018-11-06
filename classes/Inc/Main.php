@@ -296,8 +296,8 @@ class Main {
 
 				$slug = $menu_item['slug'];
 
-				if ( FALSE === strpos( $slug, ATUM_TEXT_DOMAIN ) ) {
-					$slug = ATUM_TEXT_DOMAIN . "-$slug";
+				if ( FALSE === strpos( $slug, ATUM_SHORT_NAME ) ) {
+					$slug = ATUM_SHORT_NAME . "-$slug";
 				}
 
 				add_submenu_page(
@@ -406,8 +406,8 @@ class Main {
 
 				$slug = $menu_item['slug'];
 
-				if ( strpos( $slug, ATUM_TEXT_DOMAIN ) === FALSE ) {
-					$slug = ATUM_TEXT_DOMAIN . "-$slug";
+				if ( strpos( $slug, ATUM_SHORT_NAME ) === FALSE ) {
+					$slug = ATUM_SHORT_NAME . "-$slug";
 				}
 
 				$href = ( isset( $menu_item['href'] ) ) ? $menu_item['href'] : "admin.php?page=$slug";

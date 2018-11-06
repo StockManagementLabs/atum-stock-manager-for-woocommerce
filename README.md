@@ -159,6 +159,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.17`
+
+*2018-10-31*
+
+**Changes**
+
+* Added minimum WooCommerce version required and warnings.
+* Added minimum PHP version required and warnings.
+* Added ESLint config file.
+
+**Fixes**
+
+* Save all the Settings defaults the first time the user save them.
+* Fix incorrect min qty shown in grouped products when using decimals.
+* WPML compatibility issues.
+
+---
+
 `1.4.16`
 
 *2018-10-26*

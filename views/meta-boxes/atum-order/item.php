@@ -24,6 +24,7 @@ if ( empty( $product ) ) {
 	return;
 }
 
+$step = \Atum\Inc\Helpers::get_input_step();
 $product_id   = 'variation' === $product->get_type() ? $product->get_parent_id() : $product->get_id();
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
@@ -110,7 +111,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		</div>
 
 		<div class="edit" style="display: none;">
-			<input type="number" step="<?php echo esc_attr( apply_filters( 'atum/atum_order/quantity_input_step', '1', $product ) ) ?>" min="0" autocomplete="off" name="atum_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" value="<?php echo esc_attr( $item->get_quantity() ); ?>" data-qty="<?php echo esc_attr( $item->get_quantity() ); ?>" size="4" class="quantity" />
+			<input type="number" step="<?php echo esc_attr( apply_filters( 'atum/atum_order/quantity_input_step', $step, $product ) ) ?>" min="0" autocomplete="off" name="atum_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" value="<?php echo esc_attr( $item->get_quantity() ); ?>" data-qty="<?php echo esc_attr( $item->get_quantity() ); ?>" size="4" class="quantity" />
 		</div>
 
 	</td>

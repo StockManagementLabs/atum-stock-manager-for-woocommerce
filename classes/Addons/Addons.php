@@ -127,7 +127,7 @@ class Addons {
 		$menus['addons'] = array(
 			'title'      => __( 'Add-ons', ATUM_TEXT_DOMAIN ),
 			'callback'   => array( $this, 'load_addons_page' ),
-			'slug'       => ATUM_TEXT_DOMAIN . '-addons',
+			'slug'       => ATUM_SHORT_NAME . '-addons',
 			'menu_order' => self::MENU_ORDER,
 		);
 

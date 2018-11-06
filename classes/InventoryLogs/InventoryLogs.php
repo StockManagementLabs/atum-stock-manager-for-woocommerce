@@ -178,10 +178,10 @@ class InventoryLogs extends AtumOrderPostType {
 		 * @var string $damage_date
 		 */
 		$log_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$log_date = date_i18n( 'Y-m-d H:i:s', $log_date );
+		$log_date = date( 'Y-m-d H:i:s', $log_date );
 
 		foreach ( [ 'reservation_date', 'return_date', 'damage_date' ] as $date_field ) {
-			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
+			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
 		}
 
 		$log->save_meta( array(
@@ -377,7 +377,7 @@ class InventoryLogs extends AtumOrderPostType {
 	public function add_admin_bar_link( $atum_menus ) {
 
 		$atum_menus['inventory-logs'] = array(
-			'slug'       => ATUM_TEXT_DOMAIN . '-inventory-logs',
+			'slug'       => ATUM_SHORT_NAME . '-inventory-logs',
 			'title'      => $this->labels['menu_name'],
 			'href'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER,

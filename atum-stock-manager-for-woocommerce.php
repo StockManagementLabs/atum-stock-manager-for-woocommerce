@@ -10,7 +10,7 @@
  * Plugin Name:          ATUM Inventory Management for WooCommerce
  * Plugin URI:           https://www.stockmanagementlabs.com/
  * Description:          The ultimate stock management plugin for serious WooCommerce sellers
- * Version:              1.4.16
+ * Version:              1.4.18
  * Author:               Stock Management Labs™
  * Author URI:           https://www.stockmanagementlabs.com/
  * Contributors:         Be Rebel Studio - https://berebel.io
@@ -18,8 +18,8 @@
  * Tested up to:         4.9.8
  * Requires PHP:         5.6
  * WC requires at least: 3.0.0
- * WC tested up to:      3.5.0
- * Text Domain:          atum
+ * WC tested up to:      3.5.1
+ * Text Domain:          atum-stock-manager-for-woocommerce
  * Domain Path:          /languages
  * License:              GPLv2 or later
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,7 +28,19 @@
 defined( 'ABSPATH' ) || die;
 
 if ( ! defined( 'ATUM_VERSION' ) ) {
-	define( 'ATUM_VERSION', '1.4.16' );
+	define( 'ATUM_VERSION', '1.4.18' );
+}
+
+if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
+	define( 'ATUM_WC_MINIMUM_VERSION', '2.7' );
+}
+
+if ( ! defined( 'ATUM_WP_MINIMUM_VERSION' ) ) {
+	define( 'ATUM_WP_MINIMUM_VERSION', '4.0' );
+}
+
+if ( ! defined( 'ATUM_PHP_MINIMUM_VERSION' ) ) {
+	define( 'ATUM_PHP_MINIMUM_VERSION', '5.6' );
 }
 
 if ( ! defined( 'ATUM_PATH' ) ) {
@@ -44,7 +56,11 @@ if ( ! defined( 'ATUM_BASENAME' ) ) {
 }
 
 if ( ! defined( 'ATUM_TEXT_DOMAIN' ) ) {
-	define( 'ATUM_TEXT_DOMAIN', 'atum' );
+	define( 'ATUM_TEXT_DOMAIN', 'atum-stock-manager-for-woocommerce' );
+}
+
+if ( ! defined( 'ATUM_SHORT_NAME' ) ) {
+	define( 'ATUM_SHORT_NAME', 'atum' );
 }
 
 if ( ! defined( 'ATUM_PREFIX' ) ) {
@@ -55,7 +71,28 @@ if ( ! defined( 'ATUM_DEBUG' ) ) {
 	define( 'ATUM_DEBUG', FALSE );
 }
 
-// Use Composer's autoloader and PSR4 for naming convention
-/** @noinspection PhpIncludeInspection */
-require ATUM_PATH . 'vendor/autoload.php';
-\Atum\Bootstrap::get_instance();
+// Minimum PHP version required: 5.6.
+if ( version_compare( phpversion(), ATUM_PHP_MINIMUM_VERSION, '<' ) ) {
+
+	add_action( 'admin_notices', function() {
+		?>
+		<div class="error fade">
+			<p>
+				<strong>
+					<?php echo esc_attr( __( 'ATUM requires PHP version ' . ATUM_PHP_MINIMUM_VERSION . ' or greater. Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress ?>
+				</strong>
+			</p>
+		</div>
+		<?php
+	} );
+
+}
+else {
+
+	// Use Composer's autoloader and PSR4 for naming convention.
+	require ATUM_PATH . 'vendor/autoload.php';
+	\Atum\Bootstrap::get_instance();
+
+}
+
+

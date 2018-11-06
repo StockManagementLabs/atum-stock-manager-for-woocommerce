@@ -1048,7 +1048,11 @@
 
 	.show-locations{
 		cursor: pointer;
-		color: $link-color;
+		color: $wp-gray-2;
+		
+		&.not-empty {
+			color: $link-color;
+		}
 	}
 	
 	.set-meta {

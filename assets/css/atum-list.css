@@ -1076,6 +1076,20 @@
   min-height: 100px;
 }
 
+.atum-tree .alert {
+  margin-top: 15px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.atum-tree .no-locations-set {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+}
+
 .ui-helper-hidden {
   display: none;
 }
@@ -3772,6 +3786,10 @@ input[type="button"].btn-block {
 
 .atum-list-table .show-locations, .floatThead-container .show-locations {
   cursor: pointer;
+  color: #555;
+}
+
+.atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty {
   color: #0073AA;
 }
 

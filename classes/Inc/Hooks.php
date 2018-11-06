@@ -85,12 +85,10 @@ class Hooks {
 
 		// Add out_stock_threshold actions if required.
 		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-
 			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_save_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
 			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
 			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
-
 		}
 
 	}
@@ -167,6 +165,33 @@ class Hooks {
 
 		}
 
+	}
+	
+	/**
+	 * Add set min quantities script to WC orders
+	 *
+	 * @since 1.4.18
+	 *
+	 * @param \WC_Order $order
+	 */
+	public function wc_orders_min_qty( $order ) {
+		
+		$step = Helpers::get_input_step();
+		
+		?>
+		<script type="text/javascript">
+			jQuery(function ($) {
+				var $script = $('#tmpl-wc-modal-add-products');
+				
+				$script.html($script.html().replace('step="1"', 'step="<?php echo esc_attr( $step ) ?>"')
+					.replace('placeholder="1"', 'placeholder="<?php echo esc_attr( $step ) ?>" value="<?php echo esc_attr( $step ) ?>"')
+					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>')
+					.replace('<?php echo esc_attr( 'placeholder="1"' ) ?>', '<?php echo esc_attr( 'placeholder="' . $step . '" value="' . $step . '"' ) ?>'));
+				
+			});
+		</script>
+		
+		<?php
 	}
 
 	/**
@@ -702,6 +727,9 @@ class Hooks {
 
 			// Customise the "Add to Cart" message to allow decimals in quantities.
 			add_filter( 'wc_add_to_cart_message_html', array( $this, 'add_to_cart_message' ), 10, 2 );
+			
+			// Add custom decimal quantities to order add products.
+			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
 
 		}
 
@@ -724,7 +752,7 @@ class Hooks {
 			return $value;
 		}
 		
-		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+		return Helpers::get_input_step();
 	}
 
 	/** @noinspection PhpUnusedParameterInspection */
