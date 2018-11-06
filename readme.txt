@@ -7,7 +7,7 @@ Tested up to: 4.9.8
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.1
-Stable tag: 1.4.18
+Stable tag: 1.4.18.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.18.1`
+
+*2018-11-06*
+
+**Fixes**
+
+* Added missing arabic language font to mPDF.
 
 ---
 

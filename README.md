@@ -159,6 +159,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.18.1`
+
+*2018-11-06*
+
+**Fixes**
+
+* Added missing arabic language font to mPDF.
+
+---
+
 `1.4.18`
 
 *2018-11-06*
