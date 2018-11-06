@@ -67,6 +67,9 @@ class Upgrade {
 			$this->add_default_hidden_columns();
 		}
 
+		// Check if post meta vualues contains not latins characters.
+		$this->check_post_meta_values();
+
 		// ** version 1.4.15 ** New table for ATUM Logs component.
 		/*if ( version_compare( $db_version, '1.4.15', '<' ) ) {
 			$this->create_atum_log_table();
@@ -298,6 +301,33 @@ class Upgrade {
 			}
 		}
 
+	}
+
+	/**
+	 * Check if post meta vualues contains not latins characters.
+	 *
+	 * @since 1.4.18
+	 */
+	private function check_post_meta_values() {
+
+		global $wpdb;
+		$prefix = $wpdb->prefix;
+
+		$sql = 'SELECT postmeta.post_id, postmeta.meta_value 
+				FROM ' . $prefix . 'postmeta AS postmeta, ' . $prefix . 'posts AS post
+				WHERE postmeta.post_id = post.ID AND
+				postmeta.meta_key = "_out_of_stock_date" AND
+				post.post_type = "product";
+				  ';
+
+		$post_metas = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
+		foreach ( $post_metas as $post_meta ) {
+			$not_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
+
+			if ( $not_latin_character ) {
+				delete_post_meta( $post_meta->post_id, '_out_of_stock_date' );
+			}
+		}
 	}
 
 	/**

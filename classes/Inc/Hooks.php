@@ -176,7 +176,7 @@ class Hooks {
 	 */
 	public function wc_orders_min_qty( $order ) {
 		
-		$step = 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+		$step = Helpers::get_input_step();
 		
 		?>
 		<script type="text/javascript">
@@ -746,10 +746,8 @@ class Hooks {
 			return $value;
 		}
 		
-		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+		return Helpers::get_input_step();
 	}
-
-	
 	
 	/**
 	 * Customise the "Add to cart" messages to allow decimal places
