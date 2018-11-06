@@ -2,7 +2,7 @@ module.exports = {
 	"root"         : true,
 	"extends"      : "eslint:recommended",
 	"globals"      : {
-		"wp": true
+		"wp": true,
 	},
 	"env"          : {
 		"node"   : true,
@@ -55,14 +55,13 @@ module.exports = {
 		"func-call-spacing"              : ["error", "never"],
 		"global-require"                 : "error",
 		"id-length"                      : ["error", {"min": 3, "max": 25}],
-		"indent"                         : ["error", "tab"],
+		"indent"                         : ["error", "tab", { "SwitchCase": 1 , "VariableDeclarator": { "var": 2, "let": 2, "const": 3 }}],
 		"key-spacing"                    : ["error", {
 			"singleLine": {
 				"beforeColon": false,
 				"afterColon" : true
 			},
 			"multiLine" : {
-				"beforeColon": true,
 				"afterColon" : true,
 				"align"      : "colon"
 			}
@@ -110,6 +109,6 @@ module.exports = {
 		"space-infix-ops"                : "error",
 		"spaced-comment"                 : ["error", "always"],
 		"switch-colon-spacing"           : "error",
-		"vars-on-top"                    : "error",
+		"vars-on-top"                    : "error"
 	}
 }
