@@ -1849,7 +1849,7 @@ final class Helpers {
 	 *
 	 * @since 1.4.13
 	 *
-	 * @param string $color The color can be transparent, in hexidecimal, RGB or RGBA notation.
+	 * @param string $color The color can be transparent, in hexadecimal, RGB or RGBA notation.
 	 *
 	 * @return bool
 	 */
@@ -1904,6 +1904,18 @@ final class Helpers {
 
 		return $temp_array;
 
+	}
+	
+	/**
+	 * Return the step to input stock quantities attending ATUM custom decimals set.
+	 *
+	 * @since 1.4.18
+	 *
+	 * @return float|int
+	 */
+	public static function get_input_step() {
+		
+		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
 	}
 
 }

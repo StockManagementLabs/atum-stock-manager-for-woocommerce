@@ -301,7 +301,7 @@ abstract class AtumOrderModel {
 		if ( is_a( $product, '\WC_Product' ) ) {
 			
 			if ( is_null( $qty ) ) {
-				$qty = 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+				$qty = Helpers::get_input_step();
 			}
 
 			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product );
