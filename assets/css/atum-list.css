@@ -2922,14 +2922,23 @@ input[type="button"].btn-block {
   position: relative;
 }
 
+.atum-list-wrapper .tablenav.top {
+  box-shadow: 0 1px 0 0 #e9ecef, 0 -1px 0 0 #e9ecef;
+  align-items: center;
+  justify-content: left;
+  display: flex;
+  height: 50px;
+  margin: 0;
+}
+
 .atum-list-wrapper .subsubsub {
   position: relative;
   margin-top: 0;
   font-size: 16px;
   letter-spacing: 0.4px;
   font-weight: bold;
-  text-transform: uppercase;
-  padding: 0 11px;
+  text-transform: capitalize;
+  padding: 0 11px 20px;
 }
 
 .atum-list-wrapper .subsubsub li {
@@ -3597,6 +3606,23 @@ input[type="button"].btn-block {
   color: #00B8DB;
 }
 
+.atum-list-table input[type=checkbox], .floatThead-container input[type=checkbox] {
+  border-radius: 3px;
+}
+
+.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked {
+  background-color: #00B8DB;
+  border: 0;
+}
+
+.atum-list-table input[type=checkbox]:before, .floatThead-container input[type=checkbox]:before {
+  color: #fff;
+}
+
+.atum-list-table tbody .main-row.active-row, .floatThead-container tbody .main-row.active-row {
+  background-color: #dbf9ff;
+}
+
 .atum-list-table tbody td.column-title a, .floatThead-container tbody td.column-title a {
   font-size: 14px;
   font-weight: bold;
@@ -3614,7 +3640,7 @@ input[type="button"].btn-block {
   position: relative;
   vertical-align: middle;
   padding: 6px 5px;
-  height: 60px;
+  height: 47px;
 }
 
 .atum-list-table td.column-ID, .atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID {

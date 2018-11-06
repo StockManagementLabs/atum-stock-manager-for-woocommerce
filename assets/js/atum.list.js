@@ -111,6 +111,8 @@
 			//--------------------------
 			this.changeStickyColumnsSetting();
 			
+			this.addActiveClassRow();
+			
 			//
 			// Init the table scrollbar
 			//--------------------------
@@ -1546,6 +1548,16 @@
 				}
 			});
 			
+		},
+		/**
+		 * Add/remove row active class when checkbox is clicked
+		 */
+		addActiveClassRow: function() {
+			var self = this;
+			self.$atumList.find('tbody .check-column input:checkbox').click(function () {
+				self.$atumList.find("[data-id='" + $(this).val() + "']")
+					.toggleClass('active-row');
+			});
 		},
 		
 		/**
