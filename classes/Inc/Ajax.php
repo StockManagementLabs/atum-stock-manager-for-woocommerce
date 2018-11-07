@@ -1682,7 +1682,7 @@ final class Ajax {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
-		update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, floatval( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) );
+		update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) );
 
 		wp_send_json_success();
 

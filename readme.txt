@@ -5,9 +5,9 @@ Tags: woocommerce inventory management, suppliers, purchase orders, inbound stoc
 Requires at least: 4.4
 Tested up to: 4.9.8
 Requires PHP: 5.6
-WC requires at least: 3.0.0
-WC tested up to: 3.5.0
-Stable tag: 1.4.17
+WC requires at least: 2.7.0
+WC tested up to: 3.5.1
+Stable tag: 1.4.18.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,38 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.18.1`
+
+*2018-11-06*
+
+**Fixes**
+
+* Added missing arabic language font to mPDF.
+
+---
+
+`1.4.18`
+
+*2018-11-06*
+
+**Features**
+
+* Added the locations popup icon to all the Stock Central products to be able to add locations to those that had no locations previously.
+* Added custom decimals to quantity fields in WooCommerce and Atum Orders.
+
+**Changes**
+
+* Switch the locations popup icon color depending on number of locations set.
+* Changed language text domain to read translations.
+
+**Fixes**
+
+* Fixed ATUM Locations popup.
+* Fixed issue with "date_i18" function in sites using non-latin characters.
+* CSS fixes.
 
 ---
 

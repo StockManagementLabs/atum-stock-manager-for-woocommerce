@@ -472,7 +472,7 @@
 					
 					var $item         = $(e.target).closest('.item'),
 					    qty           = parseFloat($item.find('input.quantity').val() || 1),
-					    purchasePrice = qty !== 0 ? parseFloat($item.find('input.line_total').val() || 0) / qty : 0,
+					    purchasePrice = qty !== 0 ? accounting.unformat( $item.find('input.line_total').val() || 0, atumOrder.mon_decimal_point ) / qty : 0,
 					    data          = {
 						    atum_order_id     : atumOrder.post_id,
 						    atum_order_item_id: $item.data('atum_order_item_id'),
