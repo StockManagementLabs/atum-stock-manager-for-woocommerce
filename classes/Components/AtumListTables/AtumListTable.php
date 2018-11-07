@@ -760,7 +760,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $editable ) {
 
 			$args = array(
-				'post_id'    => $id,
 				'meta_key'   => 'sku',
 				'value'      => $sku,
 				'input_type' => 'text',
@@ -846,7 +845,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$args = apply_filters( 'atum/list_table/args_supplier_sku', array(
-				'post_id'    => $product_id,
 				'meta_key'   => 'supplier_sku',
 				'value'      => $supplier_sku,
 				'input_type' => 'text',
@@ -988,7 +986,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			] ) : $purchase_price;
 
 			$args = apply_filters( 'atum/list_table/args_purchase_price', array(
-				'post_id'  => $product_id,
 				'meta_key' => 'purchase_price',
 				'value'    => $purchase_price_value,
 				'symbol'   => get_woocommerce_currency_symbol(),
@@ -1036,7 +1033,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $editable ) {
 
 			$args = array(
-				'post_id'    => $product_id,
 				'meta_key'   => 'out_stock_threshold',
 				'value'      => $out_stock_threshold,
 				'input_type' => 'number',
@@ -1064,13 +1060,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__weight( $item, $editable = TRUE ) {
 
 		$product_id = $this->get_current_product_id();
-		$weight     = get_post_meta( $this->product->get_id(), '_weight', TRUE );
+		$weight     = get_post_meta( $product_id, '_weight', TRUE );
 		$weight     = $weight ?: self::EMPTY_COL;
 
 		if ( $editable ) {
 
 			$args = array(
-				'post_id'    => $product_id,
 				'meta_key'   => 'weight',
 				'value'      => $weight,
 				'input_type' => 'number',
@@ -1165,7 +1160,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( $editable ) {
 
 				$args = array(
-					'post_id'  => $product_id,
 					'meta_key' => 'stock',
 					'value'    => $stock,
 					'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
@@ -1359,7 +1353,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		/**
 		 * Variable definitions
 		 *
-		 * @var int    $post_id
 		 * @var string $meta_key
 		 * @var mixed  $value
 		 * @var string $symbol
@@ -1371,7 +1364,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var array  $extra_data
 		 */
 		extract( wp_parse_args( $args, array(
-			'post_id'          => NULL,
 			'meta_key'         => '',
 			'value'            => '',
 			'symbol'           => '',
@@ -1388,7 +1380,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$extra_data      = ! empty( $extra_data ) ? Helpers::array_to_data( $extra_data ) : '';
 
 		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
-			'" data-item="' . $post_id . '" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
+			'" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
 			$input_type . '" data-currency="' . $currency . '"' . $extra_data . '>' . $value . '</span>';
 
 		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );

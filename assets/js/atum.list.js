@@ -1294,7 +1294,7 @@
 		updateEditedColsInput: function($metaCell, $popover) {
 			
 			var editedCols = this.$editInput.val(),
-			    itemId     = $metaCell.data('item'),
+			    itemId     = $metaCell.closest('tr').data('id'),
 			    meta       = $metaCell.data('meta'),
 			    symbol     = $metaCell.data('symbol') || '',
 			    custom     = $metaCell.data('custom') || 'no',
@@ -1746,7 +1746,7 @@
 				$.each( editedCols, function(itemId, meta) {
 					
 					// Filter the meta cell that was previously edited
-					var $metaCell = $('.set-meta[data-item="' + itemId + '"]');
+					var $metaCell = $('tr[data-id="' + itemId + '"] .set-meta');
 					if ($metaCell.length) {
 						$.each(meta, function(key, value) {
 							
