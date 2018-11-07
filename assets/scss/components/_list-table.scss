@@ -526,6 +526,10 @@
 	thead .item-heads, tfoot {
 		background-color: $white;
 		
+		th, td {
+			border: none;
+		}
+		
 		th {
 			padding: 3px 5px;
 			line-height: 1.1;
@@ -801,22 +805,36 @@
 		}
 		
 		&.totals {
-			background-color: darken($light, 7%);
+			background-color: $gray-200;
 			
 			td, th {
 				font-size: 12px;
 				font-weight: 400;
-				color: $dark;
+				color: $gray-600;
 				padding-top: 0;
 				padding-bottom: 0;
 				
+				&.totals-heading {
+					span {
+						font-size: 14px;
+						font-weight: bold;
+						letter-spacing: 0.3px;
+						color: $gray-600;
+						text-transform: uppercase;
+						background-color: transparent;
+					}
+				}
+				
 				span {
 					display: inline-block;
-					background-color: $blue-dark;
+					font-size: 16px;
+					font-weight: bold;
+					letter-spacing: 0.4px;
+					text-align: center;
 					color: $white;
-					border-radius: 2px;
-					padding: 2px 4px;
-					min-width: 20px;
+					border-radius: 5px;
+					background-color: $gray-600;
+					padding: 2px;
 					
 					&.danger {
 						background-color: $danger;
@@ -825,6 +843,12 @@
 			}
 		}
 		
+	}
+	
+	.stock-selling-manager {
+		.lnr {
+			font-size: 20px;
+		}
 	}
 	
 	.cell {
@@ -892,6 +916,8 @@
 		vertical-align: middle;
 		padding: 6px 5px;
 		height: 47px;
+		font-size: 14px;
+		color: $gray-600;
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
@@ -942,9 +968,28 @@
 		
 	}
 	
+	th {
+		span {
+			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
+				color: $gray-500;
+				font-weight: bold;
+				font-size: 14px;
+				.set-header {
+					color: $gray-500;
+				}
+			}
+		}
+		&.stock-selling-manager {
+			font-size: 20px;
+		}
+	}
+	
 	td {
 		&.column-title {
 			font-weight: 500;
+		}
+		&.stock-counters {
+			color: $blue;
 		}
 	}
 	
@@ -1073,8 +1118,17 @@
 
 	.show-locations{
 		cursor: pointer;
-		color: $wp-gray-2;
-		
+		color: $blue;
+		font-size: 20px;
+		&.not-empty {
+			color: $link-color;
+		}
+	}
+	
+	.show-hierarchy {
+		cursor: pointer;
+		color: $blue;
+		font-size: 20px;
 		&.not-empty {
 			color: $link-color;
 		}
@@ -1082,7 +1136,7 @@
 	
 	.set-meta {
 		cursor: pointer;
-		color: $link-color;
+		color: $blue;
 		
 		&:hover {
 			color: $link-hover-color;
