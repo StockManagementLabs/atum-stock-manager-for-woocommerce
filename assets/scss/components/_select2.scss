@@ -9,6 +9,48 @@
 	vertical-align: middle;
 }
 
+.select2-container {
+	font-size: 14px;
+	
+	&, * {
+		&:focus {
+			outline: none;
+		}
+	}
+	
+	.select2-selection {
+		border-color: $gray-200;
+		height: 30px;
+		border-radius: 5px;
+		.select2-selection__rendered {
+			line-height: 30px;
+			color: $gray-600;
+			font-size: 15px;
+			padding-left: 16px;
+		}
+	}
+	
+	&:focus {
+		.select2-selection {
+			box-shadow: 0 0 2px rgba($input-focus, .8);
+			border-color: $input-focus;
+		}
+	}
+	
+	.select2-selection__arrow {
+		b {
+			display: none;
+		}
+		&:after {
+			line-height: 30px;
+			font-family: Linearicons;
+			content: "\e874";
+			font-size: 10px;
+			color: $gray-500;
+		}
+	}
+}
+
 .select2-container .select2-selection--single {
 	box-sizing: border-box;
 	cursor: pointer;
@@ -70,31 +112,49 @@
 }
 
 .select2-dropdown {
-	background-color: $white;
-	border: 1px solid $gray-500;
-	border-radius: 4px;
-	box-sizing: border-box;
-	display: block;
-	position: absolute;
-	left: -100000px;
-	width: 100%;
-	z-index: 1051;
+	box-shadow: $dropdown-box-shadow;
+	margin-top: 4px;
 }
 
 .select2-results {
 	display: block;
+	box-shadow: $dropdown-box-shadow;
+	.select2-results__option--highlighted {
+		background-color: $gray-100;
+	}
 }
 
 .select2-results__options {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		border: none;
+		width: 10px;
+	}
+	
+	&::-webkit-scrollbar-track {
+		background-color: transparent;
+		border: none;
+	}
+	
+	&::-webkit-scrollbar-thumb {
+		-webkit-border-radius: 10px;
+		border-radius: 5px;
+		background-color: $gray-600;
+	}
 }
 
 .select2-results__option {
 	padding: 6px;
 	user-select: none;
 	-webkit-user-select: none;
+	color: $gray-600;
+	font-size: 12px;
+	&:focus {
+		outline: none;
+	}
 }
 
 .select2-results__option[aria-selected] {
@@ -184,7 +244,7 @@
 }
 
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
-	color: $wp-gray-1;
+	color: $dark;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -351,7 +411,8 @@
 }
 
 .select2-container--default .select2-results__option[aria-selected=true] {
-	background-color: $wp-gray-4;
+	background-color: $blue-light;
+	color: $blue;
 }
 
 .select2-container--default .select2-results__option .select2-results__option {
@@ -388,8 +449,8 @@
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-	background-color: $wp-link;
-	color: $white;
+	background-color: $blue-light;
+	color: $blue;
 }
 
 .select2-container--default .select2-results__group {
@@ -427,7 +488,7 @@
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__placeholder {
-	color: $wp-gray-1;
+	color: $dark;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow {

@@ -478,17 +478,17 @@
 				//
 				// Bulk actions dropdown
 				//----------------------
-				.on('change', '.bulkactions select', function() {
-					
-					self.updateBulkButton();
-					
-					if ($(this).val() !== '-1') {
-						self.$bulkButton.show();
-					}
-					else {
-						self.$bulkButton.hide();
-					}
-				})
+				// .on('change', '.bulkactions select', function() {
+				//
+				// 	self.updateBulkButton();
+				//
+				// 	if ($(this).val() !== '-1') {
+				// 		self.$bulkButton.show();
+				// 	}
+				// 	else {
+				// 		self.$bulkButton.hide();
+				// 	}
+				// })
 				
 				//
 				// Change the Bulk Button text when selecting boxes

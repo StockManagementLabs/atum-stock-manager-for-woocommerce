@@ -1690,15 +1690,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php _e( 'Select bulk action', ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></label>
-		<select name="action<?php echo $two; // WPCS: XSS ok. ?>" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+		<select name="action<?php echo $two; // WPCS: XSS ok. ?>" class="wc-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
 			<option value="-1"><?php _e( 'Bulk Actions', ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>
 				<option value="<?php echo $name; // WPCS: XSS ok. ?>"<?php if ( 'edit' === $name ) echo ' class="hide-if-no-js"' ?>><?php echo $title; // WPCS: XSS ok. ?></option>
 			<?php endforeach; ?>
 		</select>
+		<button type="button" class="apply-bulk-action btn btn-warning">
+			<?php echo esc_attr( __( 'Apply', ATUM_TEXT_DOMAIN ) ); ?>
+		</button>
 		<?php
-
 	}
 
 	/**

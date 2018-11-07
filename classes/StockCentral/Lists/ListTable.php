@@ -244,9 +244,6 @@ class ListTable extends AtumListTable {
 			add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 		}
 
-		// Add the "Apply Bulk Action" button to the title section.
-		add_action( 'atum/stock_central_list/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
-
 	}
 
 	/**

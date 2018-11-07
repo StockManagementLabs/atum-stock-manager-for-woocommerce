@@ -307,44 +307,60 @@
 			select {
 				max-width: 150px;
 			}
+			
+			button {
+				height: 30px;
+				line-height: 0;
+				text-transform: uppercase;
+				font-size: 12px;
+			}
 		}
 		
 		input, select, .select2-container {
-			height: 32px;
-			margin-bottom: 4px;
-			margin-right: 2px;
+			height: 30px;
+			margin-right: 5px;
 			float: left;
 		}
 		
 		.select2-container {
-			margin-top: 1px;
-			margin-right: 2px;
-			font-size: 14px;
-			
-			&, * {
-				&:focus {
-					outline: none;
+			margin-right: 5px;
+
+			.select2-selection {
+				border-color: $gray-200;
+				height: 30px;
+				border-radius: 5px;
+				.select2-selection__rendered {
+					line-height: 30px;
+					color: $gray-600;
+					font-size: 15px;
+					padding-left: 16px;
 				}
 			}
-			
+
 			&:focus {
 				.select2-selection {
 					box-shadow: 0 0 2px rgba($input-focus, .8);
 					border-color: $input-focus;
 				}
 			}
-			
+
 			.select2-selection__placeholder {
 				color: $dark !important;
 			}
-			
+
 			.select2-selection__arrow {
 				b {
-					border-top-color: $dark;
+					display: none;
+				}
+				&:after {
+					line-height: 30px;
+					font-family: Linearicons;
+					content: "\e874";
+					font-size: 10px;
+					color: $gray-500;
 				}
 			}
 		}
-		
 		
 		.filter-text {
 			display: inline;
@@ -425,15 +441,6 @@
 		
 	}
 	
-}
-
-// WC's Enhanced Select fix
-.select2-dropdown {
-	.select2-results__option {
-		&:focus {
-			outline: none;
-		}
-	}
 }
 
 .atum-table-wrapper {
