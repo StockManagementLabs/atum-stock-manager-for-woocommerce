@@ -375,7 +375,6 @@ class ListTable extends AtumListTable {
 	protected function column__regular_price( $item ) {
 		
 		$regular_price = self::EMPTY_COL;
-		$product_id    = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
 			
@@ -386,7 +385,6 @@ class ListTable extends AtumListTable {
 			] ) : $regular_price;
 
 			$args = apply_filters( 'atum/stock_central_list/args_regular_price', array(
-				'post_id'  => $product_id,
 				'meta_key' => 'regular_price',
 				'value'    => $regular_price_value,
 				'symbol'   => get_woocommerce_currency_symbol(),
@@ -430,7 +428,6 @@ class ListTable extends AtumListTable {
 			$sale_price_dates_to = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
 
 			$args = apply_filters( 'atum/stock_central_list/args_sale_price', array(
-				'post_id'    => $product_id,
 				'meta_key'   => 'sale_price',
 				'value'      => $sale_price_value,
 				'symbol'     => get_woocommerce_currency_symbol(),
