@@ -2791,11 +2791,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( 'bottom' === $which ) {
+			$current_page_style = 'tablenav-current-page';
 			$html_current_page  = $current;
 			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">';
 		}
 		else {
-			$html_current_page = sprintf( "%1\$s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
+			$current_page_style = '';
+			$html_current_page  = sprintf( "%1\$s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
 				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</label>',
 				$current,
 				strlen( $total_pages )
@@ -2804,7 +2806,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 		/* translators: first one is the current page number and sesond is the total number of pages */
-		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', ATUM_TEXT_DOMAIN ), $html_current_page, $html_total_pages ) . $total_pages_after;
+		$page_links[] = $total_pages_before . sprintf( _x( '<span class="' . esc_attr( $current_page_style ) . '">%1$s</span> of %2$s', 'paging', ATUM_TEXT_DOMAIN ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
 		if ( $disable_next ) {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
