@@ -159,6 +159,23 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.4.18.2`
+
+*2018-11-08*
+
+**Changes**
+
+* Added hook to filter data sent from Stock Central before updating products.
+* Added JS trigger when an Atum order line item is removed.
+* Tested with WordPress 5.0 beta 3.
+
+**Fixes**
+
+* Added comma support when setting purchase price from Purchase Orders.
+* Fixed ATUM Order dates not being saved correctly.
+
+---
+
 `1.4.18.1`
 
 *2018-11-06*
