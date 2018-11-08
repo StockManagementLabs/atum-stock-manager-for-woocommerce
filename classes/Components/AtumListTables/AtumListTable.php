@@ -952,7 +952,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$location_terms_class = ! empty( $location_terms ) ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
-		$locations = '<a href="#" class="show-locations dashicons dashicons-editor-table tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
+		$locations = '<a href="#" class="show-locations lnr lnr-store tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
 
 		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
@@ -1265,7 +1265,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$classes .= ' cell-red';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="dashicons dashicons-dismiss tips"' . $data_tip . '></span>';
+			$content  = '<span class="lnr lnr-cross-circle tips"' . $data_tip . '></span>';
 
 		}
 		// Back Orders.
@@ -1283,7 +1283,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
 			$classes .= ' cell-green';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="dashicons dashicons-yes tips"' . $data_tip . '></span>';
+			$content  = '<span class="lnr lnr-checkmark-circle tips"' . $data_tip . '></span>';
 		}
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';
@@ -1690,15 +1690,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php _e( 'Select bulk action', ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></label>
-		<select name="action<?php echo $two; // WPCS: XSS ok. ?>" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+		<select name="action<?php echo $two; // WPCS: XSS ok. ?>" class="wc-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
 			<option value="-1"><?php _e( 'Bulk Actions', ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>
 				<option value="<?php echo $name; // WPCS: XSS ok. ?>"<?php if ( 'edit' === $name ) echo ' class="hide-if-no-js"' ?>><?php echo $title; // WPCS: XSS ok. ?></option>
 			<?php endforeach; ?>
 		</select>
+		<button type="button" class="apply-bulk-action btn btn-warning">
+			<?php echo esc_attr( __( 'Apply', ATUM_TEXT_DOMAIN ) ); ?>
+		</button>
 		<?php
-
 	}
 
 	/**
@@ -2727,9 +2729,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( 'top' === $which && $total_pages > 1 ) {
 			$this->screen->render_screen_reader_content( 'heading_pagination' );
 		}
-
-		/* translators: the number of items */
-		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, ATUM_TEXT_DOMAIN ), number_format_i18n( $total_items ) ) . '</span>';
 
 		$current              = $this->get_pagenum();
 		$removable_query_args = wp_removable_query_args();

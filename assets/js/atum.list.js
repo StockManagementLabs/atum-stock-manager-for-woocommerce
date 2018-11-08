@@ -478,17 +478,17 @@
 				//
 				// Bulk actions dropdown
 				//----------------------
-				.on('change', '.bulkactions select', function() {
-					
-					self.updateBulkButton();
-					
-					if ($(this).val() !== '-1') {
-						self.$bulkButton.show();
-					}
-					else {
-						self.$bulkButton.hide();
-					}
-				})
+				// .on('change', '.bulkactions select', function() {
+				//
+				// 	self.updateBulkButton();
+				//
+				// 	if ($(this).val() !== '-1') {
+				// 		self.$bulkButton.show();
+				// 	}
+				// 	else {
+				// 		self.$bulkButton.hide();
+				// 	}
+				// })
 				
 				//
 				// Change the Bulk Button text when selecting boxes
@@ -1238,7 +1238,7 @@
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
-				    value: $metaCell.text().replace(symbol, '').replace('—', ''),
+				    value: $metaCell.text().replace(symbol, '').replace('-', ''),
 				    class: 'meta-value'
 			    };
 			
@@ -1554,9 +1554,27 @@
 		 */
 		addActiveClassRow: function() {
 			var self = this;
-			self.$atumList.find('tbody .check-column input:checkbox').click(function () {
-				self.$atumList.find("[data-id='" + $(this).val() + "']")
-					.toggleClass('active-row');
+			self.$atumList.find('tbody .check-column input:checkbox').change(function () {
+				var $checkboxRow = self.$atumList.find("[data-id='" + $(this).val() + "']");
+				if ( $(this).is(':checked') ) {
+					$checkboxRow.addClass('active-row');
+				}else{
+					$checkboxRow.removeClass('active-row');
+				}
+				// self.$atumList.find("[data-id='" + $(this).val() + "']")
+				// 	.toggleClass('active-row');
+			});
+			
+			$('#cb-select-all-1').change(function () {
+				$('.main-row').each(function () {
+					var $checkbox = $(this).find('input[type=checkbox]');
+					if ( $checkbox.is(':checked') ) {
+						$(this).addClass('active-row');
+					}else {
+						$(this).removeClass('active-row');
+					}
+				});
+				// $('.main-row').toggleClass('active-row');
 			});
 		},
 		

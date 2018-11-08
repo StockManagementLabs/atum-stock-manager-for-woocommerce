@@ -244,9 +244,6 @@ class ListTable extends AtumListTable {
 			add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 		}
 
-		// Add the "Apply Bulk Action" button to the title section.
-		add_action( 'atum/stock_central_list/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
-
 	}
 
 	/**
@@ -292,7 +289,7 @@ class ListTable extends AtumListTable {
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_stock_indicator'  => '<span class="lnr lnr-layers stock-indicator-icon tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '"></span>',
 		);
 
 		// Hide the purchase price column if the current user has not the capability.

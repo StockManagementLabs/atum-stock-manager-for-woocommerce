@@ -1,7 +1,9 @@
 //
 // Atum List Tables
 //------------------
-
+#wpbody-content {
+	padding-bottom: 20px;
+}
 .wrap {
 	
 	h1.wp-heading-inline {
@@ -68,7 +70,7 @@
 	background-color: $white;
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 $gray-200;
-	padding: 20px 0;
+	padding: 20px 0 10px;
 	a {
 		&:focus {
 			box-shadow: none;
@@ -189,6 +191,10 @@
 		margin: 0;
 	}
 	
+	.tablenav.bottom {
+		margin: 21px 0 0;
+	}
+	
 	.subsubsub {
 		position: relative;
 		margin-top: 0;
@@ -307,44 +313,24 @@
 			select {
 				max-width: 150px;
 			}
+			
+			button {
+				height: 30px;
+				line-height: 0;
+				text-transform: uppercase;
+				font-size: 12px;
+			}
 		}
 		
 		input, select, .select2-container {
-			height: 32px;
-			margin-bottom: 4px;
-			margin-right: 2px;
+			height: 30px;
+			margin-right: 5px;
 			float: left;
 		}
 		
 		.select2-container {
-			margin-top: 1px;
-			margin-right: 2px;
-			font-size: 14px;
-			
-			&, * {
-				&:focus {
-					outline: none;
-				}
-			}
-			
-			&:focus {
-				.select2-selection {
-					box-shadow: 0 0 2px rgba($input-focus, .8);
-					border-color: $input-focus;
-				}
-			}
-			
-			.select2-selection__placeholder {
-				color: $dark !important;
-			}
-			
-			.select2-selection__arrow {
-				b {
-					border-top-color: $dark;
-				}
-			}
+			margin-right: 5px;
 		}
-		
 		
 		.filter-text {
 			display: inline;
@@ -416,6 +402,13 @@
 			}
 		}
 		
+		.filter-box {
+			@include flexbox;
+			float: none;
+			margin: auto;
+			width: 90%;
+		}
+		
 		.tablenav.top {
 			.bulkactions {
 				margin-bottom: $grid-gutter-width/2;
@@ -425,15 +418,6 @@
 		
 	}
 	
-}
-
-// WC's Enhanced Select fix
-.select2-dropdown {
-	.select2-results__option {
-		&:focus {
-			outline: none;
-		}
-	}
 }
 
 .atum-table-wrapper {
@@ -525,6 +509,10 @@
 	
 	thead .item-heads, tfoot {
 		background-color: $white;
+		
+		th, td {
+			border: none;
+		}
 		
 		th {
 			padding: 3px 5px;
@@ -801,22 +789,36 @@
 		}
 		
 		&.totals {
-			background-color: darken($light, 7%);
+			background-color: $gray-200;
 			
 			td, th {
 				font-size: 12px;
 				font-weight: 400;
-				color: $dark;
+				color: $gray-600;
 				padding-top: 0;
 				padding-bottom: 0;
 				
+				&.totals-heading {
+					span {
+						font-size: 14px;
+						font-weight: bold;
+						letter-spacing: 0.3px;
+						color: $gray-600;
+						text-transform: uppercase;
+						background-color: transparent;
+					}
+				}
+				
 				span {
 					display: inline-block;
-					background-color: $blue-dark;
+					font-size: 16px;
+					font-weight: bold;
+					letter-spacing: 0.4px;
+					text-align: center;
 					color: $white;
-					border-radius: 2px;
-					padding: 2px 4px;
-					min-width: 20px;
+					border-radius: 5px;
+					background-color: $gray-600;
+					padding: 2px;
 					
 					&.danger {
 						background-color: $danger;
@@ -825,6 +827,12 @@
 			}
 		}
 		
+	}
+	
+	.stock-selling-manager {
+		.lnr {
+			font-size: 20px;
+		}
 	}
 	
 	.cell {
@@ -892,6 +900,8 @@
 		vertical-align: middle;
 		padding: 6px 5px;
 		height: 47px;
+		font-size: 14px;
+		color: $gray-600;
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
@@ -942,9 +952,28 @@
 		
 	}
 	
+	th {
+		span {
+			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
+				color: $gray-500;
+				font-weight: bold;
+				font-size: 14px;
+				.set-header {
+					color: $gray-500;
+				}
+			}
+		}
+		&.stock-selling-manager {
+			font-size: 20px;
+		}
+	}
+	
 	td {
 		&.column-title {
 			font-weight: 500;
+		}
+		&.stock-counters {
+			color: $blue;
 		}
 	}
 	
@@ -1073,8 +1102,17 @@
 
 	.show-locations{
 		cursor: pointer;
-		color: $wp-gray-2;
-		
+		color: $blue;
+		font-size: 20px;
+		&.not-empty {
+			color: $link-color;
+		}
+	}
+	
+	.show-hierarchy {
+		cursor: pointer;
+		color: $blue;
+		font-size: 20px;
 		&.not-empty {
 			color: $link-color;
 		}
@@ -1082,7 +1120,7 @@
 	
 	.set-meta {
 		cursor: pointer;
-		color: $link-color;
+		color: $blue;
 		
 		&:hover {
 			color: $link-hover-color;

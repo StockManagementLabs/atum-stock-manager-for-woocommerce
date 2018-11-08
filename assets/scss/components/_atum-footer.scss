@@ -1,0 +1,55 @@
+#wpfooter {
+	position: inherit;
+	padding-top: 0;
+	.footer-box {
+		height: 90px;
+		background: $white url("../images/stock-central/bg-footer.png") no-repeat center 86%;
+		background-size: cover;
+		border-radius: 8px;
+		box-shadow: 0 4px 0 0 $gray-200;
+		padding: 0 23px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		.footer-atum-logo {
+			@include flexbox;
+			@include flex-align-items(center);
+			justify-content: left;
+			padding: 6.4px 0 5px;
+			img {
+				width: 34px;
+			}
+			span {
+				color: $blue-dark;
+				font-size: 27px;
+				margin-left: 10px;
+				font-weight: bold;
+			}
+		}
+		.footer-atum-text {
+			font-size: 12px;
+			span {
+				color: $wp-link;
+			}
+			.wc-rating-link {
+				text-decoration: none;
+			}
+		}
+		.footer-atum-buttons {
+			.footer-button {
+				width: 130px;
+				height: 30px;
+				padding: 0;
+				font-size: 12px;
+				line-height: 30px;
+				text-decoration: none;
+				&:first-child {
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+	#footer-upgrade {
+		display: none;
+	}
+}
