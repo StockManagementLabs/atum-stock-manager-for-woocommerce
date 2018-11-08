@@ -414,6 +414,8 @@ final class Ajax {
 			wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
 		}
 		
+		$data = apply_filters( 'atum/ajax/before_update_product_meta', $data );
+		
 		foreach ( $data as $product_id => &$product_meta ) {
 			
 			Helpers::update_product_meta( $product_id, $product_meta );

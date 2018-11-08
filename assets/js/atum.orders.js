@@ -306,7 +306,8 @@
 			delete_item: function() {
 				
 				var $item              = $(this).closest('tr.item, tr.fee, tr.shipping'),
-				    atum_order_item_id = $item.data('atum_order_item_id');
+				    atum_order_item_id = $item.data('atum_order_item_id'),
+					$container         = $item.closest('#atum_order_items');
 				
 				swal({
 					text               : atumOrder.remove_item_notice,
@@ -340,6 +341,7 @@
 					}
 				}).then(function () {
 					$item.remove();
+					$container.trigger('atum_item_line_removed', [atum_order_item_id]);
 					atum_order_items.unblock();
 				}).catch(swal.noop);
 				

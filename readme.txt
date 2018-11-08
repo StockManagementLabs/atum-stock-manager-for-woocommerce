@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, julianberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 4.9.8
+Tested up to: 5.0
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.1
-Stable tag: 1.4.18.1
+Stable tag: 1.4.18.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,23 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.4.18.2`
+
+*2018-11-08*
+
+**Changes**
+
+* Added hook to filter data sent from Stock Central before updating products.
+* Added JS trigger when an Atum order line item is removed.
+* Tested with WordPress 5.0 beta 3.
+
+**Fixes**
+
+* Added comma support when setting purchase price from Purchase Orders.
+* Fixed ATUM Order dates not being saved correctly.
 
 ---
 
