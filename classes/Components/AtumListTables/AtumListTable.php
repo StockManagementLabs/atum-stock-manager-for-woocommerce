@@ -2730,9 +2730,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->screen->render_screen_reader_content( 'heading_pagination' );
 		}
 
-		/* translators: the number of items */
-		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, ATUM_TEXT_DOMAIN ), number_format_i18n( $total_items ) ) . '</span>';
-
 		$current              = $this->get_pagenum();
 		$removable_query_args = wp_removable_query_args();
 

@@ -3300,6 +3300,14 @@ input[type="button"].btn-block {
   font-size: 12px;
 }
 
+#wpfooter .footer-box .footer-atum-text span {
+  color: #0073AA;
+}
+
+#wpfooter .footer-box .footer-atum-text .wc-rating-link {
+  text-decoration: none;
+}
+
 #wpfooter .footer-box .footer-atum-buttons .footer-button {
   width: 130px;
   height: 30px;
@@ -3311,6 +3319,10 @@ input[type="button"].btn-block {
 
 #wpfooter .footer-box .footer-atum-buttons .footer-button:first-child {
   margin-right: 10px;
+}
+
+#wpfooter #footer-upgrade {
+  display: none;
 }
 
 .alert {

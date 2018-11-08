@@ -28,6 +28,12 @@
 		}
 		.footer-atum-text {
 			font-size: 12px;
+			span {
+				color: $wp-link;
+			}
+			.wc-rating-link {
+				text-decoration: none;
+			}
 		}
 		.footer-atum-buttons {
 			.footer-button {
@@ -42,6 +48,8 @@
 				}
 			}
 		}
-		
+	}
+	#footer-upgrade {
+		display: none;
 	}
 }
