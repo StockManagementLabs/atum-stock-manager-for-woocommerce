@@ -3261,7 +3261,7 @@ input[type="button"].btn-block {
 
 #wpfooter .footer-box {
   height: 90px;
-  background: #fff url("../images/settings/bg-settings.png") no-repeat bottom;
+  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 86%;
   background-size: cover;
   border-radius: 8px;
   box-shadow: 0 4px 0 0 #e9ecef;
