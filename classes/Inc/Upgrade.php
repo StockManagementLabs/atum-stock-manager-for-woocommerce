@@ -66,9 +66,11 @@ class Upgrade {
 		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
 			$this->add_default_hidden_columns();
 		}
-
-		// Check if post meta vualues contains not latins characters.
-		$this->check_post_meta_values();
+		
+		// ** version 1.4.18.2. Removed date_i18n function.Check if post meta values contains not latins characters.
+		if ( version_compare( $db_version, '1.4.18.2', '<' ) ) {
+			$this->check_post_meta_values();
+		}
 
 		// ** version 1.4.15 ** New table for ATUM Logs component.
 		/*if ( version_compare( $db_version, '1.4.15', '<' ) ) {
