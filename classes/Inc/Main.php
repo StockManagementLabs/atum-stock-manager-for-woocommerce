@@ -467,6 +467,37 @@ class Main {
 
 		}
 
+		ob_start();
+
+		?>
+		<div class="footer-box">
+			<div class="footer-atum-content">
+				<div class="footer-atum-logo">
+					<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+					<span>
+						<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
+						</span>
+				</div>
+				<div class="footer-atum-text">
+					<?php echo $footer_text; // phpcs:ignore WordPress ?>
+				</div>
+			</div>
+
+			<div class="footer-atum-buttons">
+				<a target="_blank" href="<?php echo esc_url( 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions' ) ?>" class="btn btn-primary footer-button">
+					<?php echo esc_attr( __( 'GET SUPPORT', ATUM_TEXT_DOMAIN ) ); ?>
+				</a>
+				<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-success footer-button">
+					<?php echo esc_attr( __( 'WATCH TUTORIALS', ATUM_TEXT_DOMAIN ) ); ?>
+				</a>
+			</div>
+		</div>
+
+
+		<?php
+
+		return ob_get_clean();
+
 		return $footer_text;
 
 	}

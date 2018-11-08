@@ -1,7 +1,9 @@
 //
 // Atum List Tables
 //------------------
-
+#wpbody-content {
+	padding-bottom: 20px;
+}
 .wrap {
 	
 	h1.wp-heading-inline {
@@ -68,7 +70,7 @@
 	background-color: $white;
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 $gray-200;
-	padding: 20px 0;
+	padding: 20px 0 10px;
 	a {
 		&:focus {
 			box-shadow: none;
@@ -187,6 +189,10 @@
 		display: flex;
 		height: 50px;
 		margin: 0;
+	}
+	
+	.tablenav.bottom {
+		margin: 21px 0 0;
 	}
 	
 	.subsubsub {
@@ -324,42 +330,6 @@
 		
 		.select2-container {
 			margin-right: 5px;
-
-			.select2-selection {
-				border-color: $gray-200;
-				height: 30px;
-				border-radius: 5px;
-				.select2-selection__rendered {
-					line-height: 30px;
-					color: $gray-600;
-					font-size: 15px;
-					padding-left: 16px;
-				}
-			}
-
-			&:focus {
-				.select2-selection {
-					box-shadow: 0 0 2px rgba($input-focus, .8);
-					border-color: $input-focus;
-				}
-			}
-
-			.select2-selection__placeholder {
-				color: $dark !important;
-			}
-
-			.select2-selection__arrow {
-				b {
-					display: none;
-				}
-				&:after {
-					line-height: 30px;
-					font-family: Linearicons;
-					content: "\e874";
-					font-size: 10px;
-					color: $gray-500;
-				}
-			}
 		}
 		
 		.filter-text {
@@ -430,6 +400,13 @@
 				display: block;
 				margin: auto;
 			}
+		}
+		
+		.filter-box {
+			@include flexbox;
+			float: none;
+			margin: auto;
+			width: 90%;
 		}
 		
 		.tablenav.top {
