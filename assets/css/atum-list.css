@@ -4150,7 +4150,7 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .dashicons, .floatThead-container thead .item-heads th .dashicons, .floatThead-container tfoot th .dashicons {
+.atum-list-table thead .item-heads th .lnr, .atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .lnr, .atum-list-table tfoot th .dashicons, .floatThead-container thead .item-heads th .lnr, .floatThead-container thead .item-heads th .dashicons, .floatThead-container tfoot th .lnr, .floatThead-container tfoot th .dashicons {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -4161,7 +4161,7 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .dashicons:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container tfoot th .dashicons:before {
+.atum-list-table thead .item-heads th .lnr:before, .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .lnr:before, .atum-list-table tfoot th .dashicons:before, .floatThead-container thead .item-heads th .lnr:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container tfoot th .lnr:before, .floatThead-container tfoot th .dashicons:before {
   text-indent: 0;
   position: absolute;
   left: 0;
