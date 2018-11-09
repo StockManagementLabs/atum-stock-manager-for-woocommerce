@@ -153,6 +153,10 @@ class Wpml {
 			// Add upgrade ATUM tasks.
 			add_action( 'atum/after_upgrade', array( $this, 'upgrade' ) );
 			
+			// Filter original product parts shown in product json search.
+			add_filter( 'atum/product_levels/ajax/search_products/select', array( $this, 'select_add_icl_translations' ), 10, 3 );
+			add_filter( 'atum/product_levels/ajax/search_products/where', array( $this, 'where_add_icl_translations' ), 10, 3 );
+			
 		}
 
 	}
@@ -749,6 +753,49 @@ class Wpml {
 		$args['suppress_filters'] = 0;
 		
 		return $args;
+	}
+	
+	/**
+	 * Add ICL_TRANSLATIONS table to the Select clause
+	 *
+	 * @since 1.1.8
+	 *
+	 * @param string $query_select
+	 * @param string $product_type
+	 * @param array  $post_types
+	 *
+	 * @return string
+	 */
+	public function select_add_icl_translations( $query_select, $product_type = '', $post_types = [] ) {
+		
+		global $wpdb;
+		
+		$query_select .= " LEFT JOIN {$wpdb->prefix}icl_translations tr ON (posts.ID = tr.element_id AND
+						   CONCAT('post_', posts.post_type) = tr.element_type)";
+		
+		return $query_select;
+		
+	}
+	
+	/**
+	 * Add ICL_TRANSLATIONS where to sect default language (WC shows not translatable product data in the default language)
+	 *
+	 * @since 1.1.8
+	 *
+	 * @param string $where_clause
+	 * @param string $product_type
+	 * @param array  $post_types
+	 *
+	 * @return string
+	 */
+	public function where_add_icl_translations( $where_clause, $product_type = '', $post_types = [] ) {
+		
+		/* @noinspection PhpUndefinedMethodInspection */
+		$lang          = self::$sitepress->get_default_language();
+		$where_clause .= " AND tr.language_code = '{$lang}'";
+		
+		return $where_clause;
+		
 	}
 
 	/**
