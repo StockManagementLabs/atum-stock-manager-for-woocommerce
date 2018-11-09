@@ -300,6 +300,7 @@
 					font-size: 16px;
 					&.extra-links-container {
 						font-size: 14px;
+						font-weight: normal;
 					}
 					font-weight: bold;
 					color: $blue;
@@ -365,6 +366,11 @@
 		
 		.select2-container {
 			margin-right: 5px;
+		}
+		
+		input[type=submit] {
+			line-height: 0;
+			text-transform: uppercase;
 		}
 		
 		.filter-text {

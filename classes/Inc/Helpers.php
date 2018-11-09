@@ -1280,7 +1280,7 @@ final class Helpers {
 
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
-		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
+		$output  = '<select name="product_type" class="wc-enhanced-select ' . $class . '" autocomplete="off">';
 		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {

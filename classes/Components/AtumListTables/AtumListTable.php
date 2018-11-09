@@ -410,7 +410,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					<?php $this->table_nav_filters() ?>
 
 					<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
-						<input type="submit" name="filter_action" class="button search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
+						<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
 					<?php endif; ?>
 
 				</div>
@@ -431,6 +431,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
 			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
+			'class'      => 'wc-enhanced-select',
 		) );
 
 		// Product type filtering.

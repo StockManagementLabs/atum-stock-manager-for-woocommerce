@@ -3879,6 +3879,7 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .subsubsub li span .count.extra-links-container {
   font-size: 14px;
+  font-weight: normal;
 }
 
 .atum-list-wrapper .subsubsub li span .count.empty {
@@ -3937,6 +3938,11 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .actions .select2-container {
   margin-right: 5px;
+}
+
+.atum-list-wrapper .actions input[type=submit] {
+  line-height: 0;
+  text-transform: uppercase;
 }
 
 .atum-list-wrapper .actions .filter-text {

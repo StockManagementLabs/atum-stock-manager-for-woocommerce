@@ -334,7 +334,7 @@ class ListTable extends AtumListTable {
 		));
 
 		?>
-		<select name="extra_filter" class="dropdown_extra_filter" autocomplete="off">
+		<select name="extra_filter" class="wc-enhanced-select dropdown_extra_filter" autocomplete="off">
 			<option value=""><?php esc_attr_e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
