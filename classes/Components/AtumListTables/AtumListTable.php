@@ -1544,6 +1544,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( ! $man_count ) {
 						$man_class[] = 'empty';
+						$empty       = 'empty';
 					}
 
 					if ( $man_class ) {
@@ -1588,14 +1589,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
 					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$extra_links    .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '"' . $data_tip . '>' . $unm_count . '</a>';
+					$extra_links    .= ',<a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '"' . $data_tip . '>' . $unm_count . '</a>';
 				}
 
-				$views[ $key ] = '<span>' . $text . ' <a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">' . $count . '</a> (' . $extra_links . ')</span>';
+				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
 
 			}
 			else {
-				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . '<span class="count ' . $empty . '">(' . $count . ')</span></span></a></span>';
+				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . ' <span class="count extra-links-container ' . $empty . '">(' . $count . ')</span></span></a></span>';
 			}
 
 		}
@@ -2484,7 +2485,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$data = $group_column['collapsed'] ? ' data-collapsed="1"' : '';
 
 				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"' . $data . '>' .
-					 '<span>' . $group_column['title'] . '</span>'; // WPCS: XSS ok.
+						'<span>' . $group_column['title'] . '</span>'; // WPCS: XSS ok.
 
 				if ( $group_column['toggler'] ) {
 					/* translators: the column group title */

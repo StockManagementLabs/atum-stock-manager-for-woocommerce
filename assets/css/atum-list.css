@@ -3773,12 +3773,14 @@ input[type="button"].btn-block {
 .atum-list-wrapper .subsubsub li {
   margin-right: 15px;
   color: #adb5bd;
+  text-transform: uppercase;
 }
 
 .atum-list-wrapper .subsubsub li span.active {
   border-radius: 5px;
   background-color: #00B8DB;
   padding: 6px 10px;
+  color: #fff;
 }
 
 .atum-list-wrapper .subsubsub li span.active .text-blue {
@@ -3803,9 +3805,22 @@ input[type="button"].btn-block {
   color: #fff;
 }
 
+.atum-list-wrapper .subsubsub li span.active a {
+  color: #fff;
+  padding: 0;
+}
+
+.atum-list-wrapper .subsubsub li span.active a.empty, .atum-list-wrapper .subsubsub li span.active a.tips, .atum-list-wrapper .subsubsub li span.active a.empty {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active a .active {
+  padding: 0;
+}
+
 .atum-list-wrapper .subsubsub li span.active .count {
-  font-size: 14px;
-  font-weight: normal;
+  font-size: 16px;
+  font-weight: bold;
   color: #fff;
 }
 
@@ -3815,15 +3830,25 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .subsubsub li span a {
   color: #adb5bd;
+  padding: 0;
 }
 
 .atum-list-wrapper .subsubsub li span a.current {
   pointer-events: none;
   color: #fff;
+  font-weight: bold;
 }
 
 .atum-list-wrapper .subsubsub li span a .text-blue {
   color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span a.tips {
+  color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span a.empty {
+  color: #adb5bd;
 }
 
 .atum-list-wrapper .subsubsub li span .extra-links-container {
@@ -3847,9 +3872,13 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .subsubsub li span .count {
-  font-size: 14px;
-  font-weight: normal;
+  font-size: 16px;
+  font-weight: bold;
   color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span .count.extra-links-container {
+  font-size: 14px;
 }
 
 .atum-list-wrapper .subsubsub li span .count.empty {

@@ -219,11 +219,13 @@
 		li {
 			margin-right: 15px;
 			color: $gray-500;
+			text-transform: uppercase;
 			span {
 				&.active {
 					border-radius: 5px;
 					background-color: $blue;
 					padding: 6px 10px;
+					color: $white;
 					.text-blue {
 						color: $white;
 					}
@@ -241,9 +243,19 @@
 							}
 						}
 					}
+					a {
+						color: $white;
+						padding: 0;
+						&.empty, &.tips, &.empty {
+							color: $white;
+						}
+						.active {
+							padding: 0;
+						}
+					}
 					.count {
-						font-size: 14px;
-						font-weight: normal;
+						font-size: 16px;
+						font-weight: bold;
 						color: $white;
 						&.empty {
 							color: $white;
@@ -252,12 +264,20 @@
 				}
 				a {
 					color: $gray-500;
+					padding: 0;
 					&.current {
 						pointer-events: none;
 						color: $white;
+						font-weight: bold;
 					}
 					.text-blue {
 						color: $blue;
+					}
+					&.tips {
+						color: $blue;
+					}
+					&.empty {
+						color: $gray-500;
 					}
 				}
 				.extra-links-container {
@@ -277,8 +297,11 @@
 					}
 				}
 				.count {
-					font-size: 14px;
-					font-weight: normal;
+					font-size: 16px;
+					&.extra-links-container {
+						font-size: 14px;
+					}
+					font-weight: bold;
 					color: $blue;
 					&.empty {
 						color: $gray-500;
