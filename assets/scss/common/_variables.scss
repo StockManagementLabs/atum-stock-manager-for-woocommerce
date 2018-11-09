@@ -394,9 +394,10 @@ $nav-divider-margin-y:                  ($spacer / 2) !default;
 
 $tooltip-max-width:                     200px !default;
 $tooltip-font-size:                     12px !default;
-$tooltip-color:                         $white !default;
-$tooltip-bg:                            $black !default;
+$tooltip-color:                         $gray-500 !default;
+$tooltip-bg:                            $white !default;
 $tooltip-opacity:                       .9 !default;
+$tooltip-box-shadow:                    0 1px 5px 0 rgba($black, .15) !default;
 
 $tooltip-arrow-width:                   5px !default;
 $tooltip-arrow-color:                   $tooltip-bg !default;
@@ -409,7 +410,7 @@ $popover-border-color:                  rgba($black, .2) !default;
 $popover-fallback-border-color:         #CCC !default;
 $popover-border-radius:                 6px !default;
 
-$popover-title-bg:                      darken($popover-bg, 3%) !default;
+$popover-title-bg:                      $gray-100;
 
 $popover-arrow-width:                   10px !default;
 $popover-arrow-color:                   $popover-title-bg !default;
