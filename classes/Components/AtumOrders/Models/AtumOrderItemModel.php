@@ -351,7 +351,7 @@ abstract class AtumOrderItemModel {
 	public function get_meta( $meta_key = NULL, $single = TRUE ) {
 
 		if ( $meta_key && isset( $this->meta[ $meta_key ] ) ) {
-			return ( $single ) ? reset( $this->meta[ $meta_key ] ) : $this->meta[ $meta_key ];
+			return $single ? current( $this->meta[ $meta_key ] ) : $this->meta[ $meta_key ];
 		}
 		elseif ( ! $meta_key && ! empty( $this->meta ) ) {
 			return $this->meta;

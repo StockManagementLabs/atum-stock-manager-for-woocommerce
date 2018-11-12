@@ -314,6 +314,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
+		// Enable the ATUM product models for all the products shown in the List Tables.
+		Globals::enable_atum_product_models();
+
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] ); // WPCS: CSRF ok.
@@ -2521,7 +2524,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$group_members = wp_list_pluck( $this->group_members, 'members' );
 		$column_keys   = array_keys( $columns );
-		$first_column  = reset( $column_keys );
+		$first_column  = current( $column_keys );
 
 		foreach ( $columns as $column_key => $column_display ) {
 

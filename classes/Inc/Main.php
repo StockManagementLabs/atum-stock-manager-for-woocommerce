@@ -236,12 +236,6 @@ class Main {
 			}
 
 		}
-		
-		// TODO: Change the version compare if needed as new versions released.
-		if ( ( version_compare( WC()->version, '3.5.dev', '<' ) && defined( 'WC_PRODUCT_TABLES_FILE' ) ) || version_compare( WC()->version, '3.5.dev', '>' ) ) {
-			
-			new AtumLegacy();
-		}
 
 	}
 
@@ -257,13 +251,13 @@ class Main {
 		foreach ( $this->menu_items as $menu_item ) {
 			$this->menu_items_order[] = array(
 				'slug'       => $menu_item['slug'],
-				'menu_order' => ( ! isset( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
+				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
 			);
 		}
 
 		// The first submenu will be the main (parent) menu too.
 		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
-		self::$main_menu_item = reset( self::$main_menu_item );
+		self::$main_menu_item = current( self::$main_menu_item );
 
 	}
 	
