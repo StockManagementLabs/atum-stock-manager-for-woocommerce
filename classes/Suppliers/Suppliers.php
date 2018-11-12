@@ -411,8 +411,8 @@ class Suppliers {
 		// If the user is not allowed to edit Suppliers, add a hidden input.
 		if ( ! AtumCapabilities::current_user_can( 'edit_supplier' ) ) : ?>
 
-			<input type="hidden" name="<?php echo $supplier_field_name ?>" id="<?php echo $supplier_field_id ?>" value="<?php echo ( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
-			<input type="hidden" name="<?php echo $supplier_sku_field_name ?>" id="<?php echo $supplier_sku_field_id ?>" value="<?php echo ( $supplier_sku ?: '' ) ?>">
+			<input type="hidden" name="<?php echo esc_attr( $supplier_field_name ) ?>" id="<?php echo esc_attr( $supplier_field_id ) ?>" value="<?php echo esc_attr( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
+			<input type="hidden" name="<?php echo esc_attr( $supplier_sku_field_name ) ?>" id="<?php echo esc_attr( $supplier_sku_field_id ) ?>" value="<?php echo esc_attr( $supplier_sku ?: '' ) ?>">
 
 		<?php else :
 
@@ -624,6 +624,35 @@ class Suppliers {
 		
 	}
 
+	/**
+	 * Check if product supplier's SKU is found for any other product IDs.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int    $product_id   Product ID to exclude from the query.
+	 * @param string $supplier_sku Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+	 *
+	 * @return int
+	 */
+	public static function get_product_id_by_supplier_sku( $product_id, $supplier_sku ) {
+
+		global $wpdb;
+
+		return $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT $wpdb->posts.ID
+				FROM $wpdb->posts
+				LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id )
+				WHERE $wpdb->posts.post_type IN ( 'product', 'product_variation' )
+					AND $wpdb->posts.post_status != 'trash'
+					AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
+					AND $wpdb->postmeta.post_id <> %d
+				LIMIT 1",
+				wp_slash( $supplier_sku ), $product_id
+			)
+		);
+	}
+
 
 	/*******************
 	 * Instance methods
@@ -633,14 +662,14 @@ class Suppliers {
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

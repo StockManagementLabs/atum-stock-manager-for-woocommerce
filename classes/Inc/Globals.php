@@ -260,5 +260,81 @@ final class Globals {
 	public static function get_product_tab_fields() {
 		return (array) apply_filters( 'atum/product_tab_fields', self::$product_tab_fields );
 	}
+
+	/**
+	 * Add the hook to enable the ATUM Product models
+	 *
+	 * @since 1.5.0
+	 */
+	public static function enable_atum_product_models() {
+		add_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ), 10, 4 );
+		add_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), 100 );
+	}
+
+	/**
+	 * Add the hook to enable the ATUM Product models
+	 *
+	 * @since 1.5.0
+	 */
+	public static function disable_atum_product_models() {
+		remove_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ) );
+		add_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), 100 );
+	}
+
+	/**
+	 * Get the ATUM class name matching the passed product type
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $wc_product_class
+	 * @param string $product_type
+	 * @param string $post_type
+	 * @param int    $product_id
+	 *
+	 * @return string
+	 */
+	public static function get_atum_product_model_class( $wc_product_class, $product_type, $post_type, $product_id ) {
+
+		$atum_product_class = Helpers::get_atum_product_class( $product_type );
+
+		if ( $atum_product_class ) {
+			return $atum_product_class;
+		}
+
+		return $wc_product_class;
+
+	}
+
+	/**
+	 * Replace the WooCommerce data stores with our custome ones
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $data_stores
+	 *
+	 * @return array
+	 */
+	public static function replace_wc_data_stores( $data_stores ) {
+
+		$data_stores_namespace = '\Atum\Models\DataStores';
+
+		// Check if we have to use the new custom tables or the old ones.
+		// TODO: WHEN WC MOVE THE NEW TABLES FROM THE FEATURE PLUGIN TO THE CORE, WILL PERHAPS CHANGE THE CLASS NAMES.
+		if ( class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+			$data_stores['product']           = "{$data_stores_namespace}\WCProductDataStoreCustomTable";
+			$data_stores['product-grouped']   = "{$data_stores_namespace}\WCProductGroupedDataStoreCustomTable";
+			$data_stores['product-variable']  = "{$data_stores_namespace}\WCProductVariableDataStoreCustomTable";
+			$data_stores['product-variation'] = "{$data_stores_namespace}\WCProductVariationDataStoreCustomTable";
+		}
+		else {
+			$data_stores['product']           = "{$data_stores_namespace}\WCProductDataStoreCPT";
+			$data_stores['product-grouped']   = "{$data_stores_namespace}\WCProductGroupedDataStoreCPT";
+			$data_stores['product-variable']  = "{$data_stores_namespace}\WCProductVariableDataStoreCPT";
+			$data_stores['product-variation'] = "{$data_stores_namespace}\WCProductVariationDataStoreCPT";
+		}
+
+		return $data_stores;
+
+	}
 	
 }
