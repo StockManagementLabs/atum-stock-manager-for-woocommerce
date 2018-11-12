@@ -3171,8 +3171,21 @@ input[type="button"].btn-block {
   margin-right: 10px;
 }
 
+@media screen and (max-width: 782px) {
+  #wpfooter .footer-box .footer-atum-buttons {
+    display: none;
+  }
+}
+
 #wpfooter #footer-upgrade {
   display: none;
+}
+
+@media screen and (max-width: 782px) {
+  #wpfooter {
+    display: block;
+    margin-left: 0 !important;
+  }
 }
 
 .tips {

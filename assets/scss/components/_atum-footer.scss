@@ -47,9 +47,17 @@
 					margin-right: 10px;
 				}
 			}
+			@media screen and (max-width: 782px) {
+				display: none;
+			}
 		}
 	}
 	#footer-upgrade {
 		display: none;
+	}
+	
+	@media screen and (max-width: 782px) {
+		display: block;
+		margin-left: 0 !important;
 	}
 }

@@ -2377,6 +2377,10 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
+.atum-list-wrapper .displaying-num {
+  display: none;
+}
+
 .atum-list-wrapper .pagination-links {
   color: #6c757d;
 }
@@ -2390,6 +2394,13 @@ input[type="button"].btn-block {
   height: 30px;
   line-height: 30px;
   text-decoration: none;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .tablenav-current-page, .atum-list-wrapper .pagination-links #current-page-selector {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 .atum-list-wrapper .pagination-links #current-page-selector {
@@ -2413,11 +2424,17 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .pagination-links .tablenav-current-page {
   background-color: #e9ecef;
-  padding: 8px 12px 7px;
+  padding: 8px 15px 11px;
 }
 
 .atum-list-wrapper .pagination-links .paging-input, .atum-list-wrapper .pagination-links .table-paging {
-  margin: 0 10px 0 10px;
+  margin: 0 10px;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .pagination-links .paging-input, .atum-list-wrapper .pagination-links .table-paging {
+    margin: 0;
+  }
 }
 
 @media screen and (max-width: 782px) {
@@ -2441,6 +2458,13 @@ input[type="button"].btn-block {
 .atum-list-wrapper .tablenav-pages a:hover, .atum-list-wrapper .tablenav-pages a:focus {
   background-color: #e9ecef;
   color: #adb5bd;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .tablenav-pages a {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 .dropup,
@@ -3399,8 +3423,21 @@ input[type="button"].btn-block {
   margin-right: 10px;
 }
 
+@media screen and (max-width: 782px) {
+  #wpfooter .footer-box .footer-atum-buttons {
+    display: none;
+  }
+}
+
 #wpfooter #footer-upgrade {
   display: none;
+}
+
+@media screen and (max-width: 782px) {
+  #wpfooter {
+    display: block;
+    margin-left: 0 !important;
+  }
 }
 
 .alert {
