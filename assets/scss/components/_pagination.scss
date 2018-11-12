@@ -1,0 +1,53 @@
+.atum-list-wrapper {
+	.pagination-links {
+		color: $gray-600;
+		.tablenav-pages-navspan, .tablenav-current-page, #current-page-selector {
+			border-radius: 5px;
+			border: none;
+			color: $gray-500;
+			padding: 0;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			text-decoration: none;
+		}
+		
+		#current-page-selector {
+			border: 1px solid $gray-200;
+			&:focus {
+				outline: 0;
+				box-shadow: none;
+			}
+		}
+		
+		.tablenav-pages-navspan {
+			background-color: $gray-100;
+		}
+		
+		.tablenav-current-page {
+			background-color: $gray-200;
+			padding: 8px 12px 7px;
+		}
+		.paging-input, .table-paging {
+			margin: 0 10px 0 10px;
+		}
+	}
+	
+	.tablenav-pages {
+		a {
+			border-radius: 5px;
+			border: none;
+			color: $gray-500;
+			padding: 0;
+			line-height: 30px;
+			width: 30px;
+			height: 30px;
+			text-decoration: none;
+			background-color: $gray-200;
+			&:hover, &:focus {
+				background-color: $gray-200;
+				color: $gray-500;
+			}
+		}
+	}
+}

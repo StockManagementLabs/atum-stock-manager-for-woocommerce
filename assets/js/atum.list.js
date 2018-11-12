@@ -1250,7 +1250,7 @@
 			
 			
 			var $input       = $('<input />', inputAtts),
-			    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: self.settings.setButton}),
+			    $setButton   = $('<button />', {type: 'button', class: 'set btn btn-primary button-small', text: self.settings.setButton}),
 			    extraMeta    = $metaCell.data('extra-meta'),
 			    $extraFields = '',
 			    popoverClass = '';

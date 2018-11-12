@@ -413,7 +413,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					<?php $this->table_nav_filters() ?>
 
 					<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
-						<input type="submit" name="filter_action" class="button search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
+						<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
 					<?php endif; ?>
 
 				</div>
@@ -434,6 +434,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
 			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
+			'class'      => 'wc-enhanced-select dropdown_product_cat',
 		) );
 
 		// Product type filtering.
@@ -1547,6 +1548,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( ! $man_count ) {
 						$man_class[] = 'empty';
+						$empty       = 'empty';
 					}
 
 					if ( $man_class ) {
@@ -1591,14 +1593,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
 					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$extra_links    .= ', <a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '"' . $data_tip . '>' . $unm_count . '</a>';
+					$extra_links    .= ',<a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '"' . $data_tip . '>' . $unm_count . '</a>';
 				}
 
-				$views[ $key ] = '<span>' . $text . ' <a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">' . $count . '</a> (' . $extra_links . ')</span>';
+				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
 
 			}
 			else {
-				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . '<span class="count ' . $empty . '">(' . $count . ')</span></span></a></span>';
+				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . ' <span class="count extra-links-container ' . $empty . '">(' . $count . ')</span></span></a></span>';
 			}
 
 		}
@@ -2487,7 +2489,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$data = $group_column['collapsed'] ? ' data-collapsed="1"' : '';
 
 				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"' . $data . '>' .
-					 '<span>' . $group_column['title'] . '</span>'; // WPCS: XSS ok.
+						'<span>' . $group_column['title'] . '</span>'; // WPCS: XSS ok.
 
 				if ( $group_column['toggler'] ) {
 					/* translators: the column group title */
@@ -2794,11 +2796,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( 'bottom' === $which ) {
+			$current_page_style = 'tablenav-current-page';
 			$html_current_page  = $current;
 			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">';
 		}
 		else {
-			$html_current_page = sprintf( "%1\$s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
+			$current_page_style = '';
+			$html_current_page  = sprintf( "%1\$s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
 				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</label>',
 				$current,
 				strlen( $total_pages )
@@ -2807,7 +2811,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 		/* translators: first one is the current page number and sesond is the total number of pages */
-		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', ATUM_TEXT_DOMAIN ), $html_current_page, $html_total_pages ) . $total_pages_after;
+		$page_links[] = $total_pages_before . sprintf( _x( '<span class="' . esc_attr( $current_page_style ) . '">%1$s</span> of %2$s', 'paging', ATUM_TEXT_DOMAIN ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
 		if ( $disable_next ) {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
