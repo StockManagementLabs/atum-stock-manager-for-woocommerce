@@ -125,6 +125,22 @@ class Hooks {
 	}
 
 	/**
+	 * Add hooks to show and save the Purchase Price field on products
+	 *
+	 * @since 1.3.8.3
+	 */
+	public function purchase_price_hooks() {
+
+		// Add the purchase price to WC products.
+		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_field' ) );
+		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_field' ), 10, 3 );
+
+		// Save the product purchase price meta.
+		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
+	}
+
+	/**
 	 * Enqueue the ATUM admin scripts
 	 *
 	 * @since 1.4.1
@@ -253,7 +269,6 @@ class Hooks {
 
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Save all the fields within the Product Data's ATUM Inventory tab
 	 *
@@ -348,22 +363,6 @@ class Hooks {
 	}
 
 	/**
-	 * Add hooks to show and save the Purchase Price field on products
-	 *
-	 * @since 1.3.8.3
-	 */
-	public function purchase_price_hooks() {
-
-		// Add the purchase price to WC products.
-		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_field' ) );
-		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_field' ), 10, 3 );
-
-		// Save the product purchase price meta.
-		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
-	}
-
-	/**
 	 * Add the individual out stock threshold field to WC's WC's product data meta box
 	 *
 	 * @since 1.4.10
@@ -446,7 +445,7 @@ class Hooks {
 			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
 				Helpers::force_rebuild_stock_status( $product );
-            }
+			}
 
 			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
 
@@ -454,7 +453,7 @@ class Hooks {
 
 		if ( isset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
 
-			$out_stock_threshold = reset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] );
+			$out_stock_threshold = current( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
 			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
@@ -467,7 +466,7 @@ class Hooks {
 
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
+	/* @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Add the purchase price field to WC's product data meta box
 	 *

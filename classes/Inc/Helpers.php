@@ -257,6 +257,29 @@ final class Helpers {
 		return $products;
 
 	}
+
+	/**
+	 * Get the right ATUM Product class when instantiating a WC product
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $product_type
+	 *
+	 * @return string
+	 */
+	public static function get_atum_product_class( $product_type ) {
+
+		$namespace    = '\Atum\Models\Products';
+		$product_type = ucwords( $product_type, ' _-' );
+		$class_name   = "$namespace\WCProduct{$product_type}";
+
+		if ( class_exists( $class_name ) ) {
+			return $class_name;
+		}
+
+		return '';
+
+	}
 	
 	/**
 	 * Returns an array with the orders filtered by the atts array
@@ -530,7 +553,7 @@ final class Helpers {
 
 				if ( ! empty( $sold_last_days ) ) {
 
-					$sold_last_days = reset( $sold_last_days );
+					$sold_last_days = current( $sold_last_days );
 
 					if ( ! empty( $sold_last_days['QTY'] ) && $sold_last_days['QTY'] > 0 ) {
 
