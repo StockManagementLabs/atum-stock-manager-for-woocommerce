@@ -31,6 +31,12 @@
 			&:hover {
 				background-color: $green-opacity;
 			}
+			
+			@media all and (max-width: 782px) {
+				font-size: 14px;
+				height: 35px;
+				line-height: 35px;
+			}
 		}
 		
 		#atum-update-list {
@@ -49,19 +55,17 @@
 		@media all and (max-width: 782px) {
 			@include flexbox;
 			@include flex-wrap(wrap);
-			@include flex-justify-content(center);
+			@include flex-justify-content(left);
 			
-			a, button {
-				width: 100%;
-				text-align: center;
-				padding: 7px 15px;
-				margin-top: 5px;
-				height: auto;
-				line-height: 1.3;
-			}
+			margin: 0 10px;
+			padding-bottom: 15px;
 		}
 	}
 	
+	@media all and (max-width: 782px) {
+		margin-right: 20px;
+		margin-left: 10px;
+	}
 }
 
 .atum-list-wrapper {
@@ -71,6 +75,7 @@
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 $gray-200;
 	padding: 20px 0 10px;
+	
 	a {
 		&:focus {
 			box-shadow: none;
@@ -187,14 +192,16 @@
 		align-items: center;
 		justify-content: left;
 		display: flex;
-		height: 50px;
+		padding: 10px 0;
 		margin: 0;
+		flex-wrap: wrap;
 		.tablenav-pages {
 			margin-left: auto;
 		}
 	}
 	
 	.tablenav {
+		height: auto;
 		.btn {
 			margin-left: 5px;
 		}
@@ -358,17 +365,32 @@
 				line-height: 0;
 				text-transform: uppercase;
 				font-size: 12px;
+				@media screen and (max-width: 782px) {
+					font-size: 14px;
+					height: 35px;
+				}
 			}
 		}
 		
 		input, select, .select2-container {
 			height: 30px;
+			@media screen and (max-width: 782px) {
+				height: 35px;
+				.select2-selection, .select2-selection__rendered, .select2-selection__arrow {
+					height: 35px;
+					line-height: 35px;
+				}
+			}
 		}
 		
 		input[type=submit] {
 			line-height: 0;
 			text-transform: uppercase;
 			font-size: 12px;
+			@media screen and (max-width: 782px) {
+				font-size: 14px;
+				height: 35px;
+			}
 		}
 		
 		.filter-text {
@@ -412,8 +434,9 @@
 	@media screen and (max-width: 782px) {
 		
 		ul.subsubsub {
-			font-size: 14px;
+			font-size: 16px;
 			float: none;
+			text-align: left;
 		}
 		
 		.search-box {
@@ -429,12 +452,10 @@
 		
 		.actions.bulkactions {
 			display: block;
-			text-align: center;
-			float: none;
+			float: left;
 			
 			select {
-				width: 90%;
-				max-width: 90%;
+				width: auto;
 				float: none;
 				display: block;
 				margin: auto;
@@ -450,8 +471,13 @@
 		
 		.tablenav.top {
 			.bulkactions {
-				margin-bottom: $grid-gutter-width/2;
-				box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
+			}
+		}
+		
+		.tablenav {
+			.tablenav-pages {
+				width: auto;
+				margin: 0;
 			}
 		}
 		
@@ -1007,9 +1033,6 @@
 				}
 			}
 		}
-		&.stock-selling-manager {
-			font-size: 20px;
-		}
 	}
 	
 	td {
@@ -1203,6 +1226,12 @@
 	
 	.atum-title-small {
 		display: none;
+	}
+	
+	.column-groups {
+		th {
+			padding: 6px 20px !important;
+		}
 	}
 	
 	@media screen and (max-width: 782px) {
