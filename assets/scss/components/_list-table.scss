@@ -37,6 +37,11 @@
 				height: 35px;
 				line-height: 35px;
 			}
+			
+			@media all and (max-width: $screen-xs-min) {
+				margin: 0;
+			}
+			
 		}
 		
 		#atum-update-list {
@@ -59,6 +64,10 @@
 			
 			margin: 0 10px;
 			padding-bottom: 15px;
+		}
+		
+		@media all and (max-width: $screen-xs-min) {
+			@include flex-justify-content(center);
 		}
 	}
 	
@@ -210,11 +219,17 @@
 		}
 		#table-paging {
 			margin-left: 10px;
+			@media all and (max-width: 782px) {
+				margin-left: 0;
+			}
 		}
 	}
 	
 	.tablenav.bottom {
 		margin: 21px 0 0;
+		@media all and (max-width: 782px) {
+			margin: 10px 0 0;
+		}
 	}
 	
 	.subsubsub {
