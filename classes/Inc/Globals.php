@@ -83,6 +83,11 @@ final class Globals {
 	const PRODUCT_LOCATION_TAXONOMY = ATUM_PREFIX . 'location';
 
 	/**
+	 * The table name where is stored the ATUM data for products
+	 */
+	const ATUM_PRODUCT_DATA_TABLE = ATUM_PREFIX . 'product_data';
+
+	/**
 	 * The meta key where is stored the ATUM stock management status
 	 */
 	const ATUM_CONTROL_STOCK_KEY = '_atum_manage_stock';

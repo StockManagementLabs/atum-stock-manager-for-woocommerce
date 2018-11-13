@@ -327,21 +327,21 @@ class Upgrade {
 	private function check_post_meta_values() {
 
 		global $wpdb;
-		$prefix = $wpdb->prefix;
 
-		$sql = 'SELECT postmeta.post_id, postmeta.meta_value 
-				FROM ' . $prefix . 'postmeta AS postmeta, ' . $prefix . 'posts AS post
-				WHERE postmeta.post_id = post.ID AND
-				postmeta.meta_key = "_out_of_stock_date" AND
-				post.post_type = "product";
-				  ';
+		$sql = "
+			SELECT pm.post_id, pm.meta_value 
+			FROM $wpdb->posts AS p
+			INNER JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
+			WHERE pm.meta_key = '" . Globals::OUT_OF_STOCK_DATE_KEY . "' 
+			AND pm.meta_value <> ''AND p.post_type IN ('product', 'product_variation');
+		";
 
 		$post_metas = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 		foreach ( $post_metas as $post_meta ) {
-			$not_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
+			$non_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
 
-			if ( $not_latin_character ) {
-				delete_post_meta( $post_meta->post_id, '_out_of_stock_date' );
+			if ( $non_latin_character ) {
+				delete_post_meta( $post_meta->post_id, Globals::OUT_OF_STOCK_DATE_KEY );
 			}
 		}
 	}

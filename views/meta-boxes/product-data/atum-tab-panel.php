@@ -4,15 +4,15 @@
  *
  * @since 1.4.5
  *
- * @var string  $product_status
- * @var array   $checkbox_wrapper_classes
- * @var array   $control_button_classes
+ * @var WC_Product $product
+ * @var string     $product_status
+ * @var array      $checkbox_wrapper_classes
+ * @var array      $control_button_classes
  */
 
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
-use Atum\Inc\Helpers;
 
 ?>
 <div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
@@ -22,7 +22,7 @@ use Atum\Inc\Helpers;
 		woocommerce_wp_checkbox( array(
 			'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
 			'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-			'value'         => 'auto-draft' === $product_status ? 'yes' : Helpers::get_atum_control_status( $product_id ),
+			'value'         => 'auto-draft' === $product_status ? 'yes' : $product->get_atum_controlled(),
 			'class'         => 'js-switch',
 			'wrapper_class' => implode( ' ', $checkbox_wrapper_classes ),
 			'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),

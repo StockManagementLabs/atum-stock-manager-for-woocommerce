@@ -242,7 +242,7 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
-		$supplier_id = get_post_meta( $this->get_current_product_id(), Suppliers::SUPPLIER_META_KEY, TRUE );
+		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {
 

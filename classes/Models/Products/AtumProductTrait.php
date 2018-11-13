@@ -26,7 +26,7 @@ trait AtumProductTrait {
 	 */
 	protected $atum_data = array(
 		'purchase_price'      => '',
-		'supplier'            => 0,
+		'supplier_id'         => 0,
 		'supplier_sku'        => '',
 		'atum_controlled'     => FALSE,
 		'out_stock_date'      => NULL,
@@ -65,8 +65,8 @@ trait AtumProductTrait {
 	 *
 	 * @return string price
 	 */
-	public function get_supplier( $context = 'view' ) {
-		return $this->get_prop( 'supplier', $context );
+	public function get_supplier_id( $context = 'view' ) {
+		return $this->get_prop( 'supplier_id', $context );
 	}
 
 	/**
@@ -162,8 +162,8 @@ trait AtumProductTrait {
 	 *
 	 * @param int $supplier_id The supplier ID.
 	 */
-	public function set_supplier( $supplier_id ) {
-		$this->set_prop( 'supplier', absint( $supplier_id ) );
+	public function set_supplier_id( $supplier_id ) {
+		$this->set_prop( 'supplier_id', absint( $supplier_id ) );
 	}
 
 	/**
@@ -176,7 +176,7 @@ trait AtumProductTrait {
 	public function set_supplier_sku( $supplier_sku ) {
 
 		$supplier_sku       = (string) $supplier_sku;
-		$supplier_sku_found = Suppliers::is_existing_supplier_sku( $supplier_sku );
+		$supplier_sku_found = Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku );
 
 		if ( $this->get_object_read() && ! empty( $supplier_sku ) && ! $supplier_sku_found ) {
 			$this->error( 'product_invalid_supplier_sku', __( 'Invalid or duplicated Supplier SKU.', ATUM_TEXT_DOMAIN ), 400, array( 'resource_id' => $supplier_sku_found ) );

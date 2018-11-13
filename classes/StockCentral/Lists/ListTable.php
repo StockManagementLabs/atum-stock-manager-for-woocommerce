@@ -409,7 +409,6 @@ class ListTable extends AtumListTable {
 	protected function column__sale_price( $item ) {
 
 		$sale_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
 			
@@ -420,9 +419,9 @@ class ListTable extends AtumListTable {
 			] ) : $sale_price;
 			
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
+			$sale_price_dates_from = ( $date = $this->product->get_date_on_sale_from() ) ? date( 'Y-m-d', $date ) : '';
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_to = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
+			$sale_price_dates_to = ( $date = $this->product->get_date_on_sale_to() ) ? date( 'Y-m-d', $date ) : '';
 
 			$args = apply_filters( 'atum/stock_central_list/args_sale_price', array(
 				'meta_key'   => 'sale_price',
@@ -701,7 +700,7 @@ class ListTable extends AtumListTable {
 		$out_of_stock_days = '';
 
 		if ( $this->allow_calcs ) {
-			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product->get_id() );
+			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
 		}
 
 		$out_of_stock_days = is_numeric( $out_of_stock_days ) ? $out_of_stock_days : self::EMPTY_COL;
@@ -724,7 +723,7 @@ class ListTable extends AtumListTable {
 		$lost_sales = '';
 
 		if ( $this->allow_calcs ) {
-			$lost_sales = Helpers::get_product_lost_sales( $this->product->get_id() );
+			$lost_sales = Helpers::get_product_lost_sales( $this->product );
 		}
 
 		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales, [ 'trim_zeros' => TRUE ] ) : self::EMPTY_COL;

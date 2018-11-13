@@ -380,9 +380,10 @@ class Suppliers {
 
 		global $post;
 
-		if ( empty( $variation ) ) {
+		$product_id = empty( $variation ) ? $post->ID : $variation->ID;
+		$product    = wc_get_product( $product_id );
 
-			$product = wc_get_product( $post->ID );
+		if ( empty( $variation ) ) {
 
 			// Do not add the field to variable products (every variation will have its own).
 			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
@@ -394,10 +395,8 @@ class Suppliers {
 		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
 		$supplier_meta     = self::SUPPLIER_META_KEY;
 		$supplier_sku_meta = self::SUPPLIER_SKU_META_KEY;
-
-		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
-		$supplier_id  = get_post_meta( $product_id, $supplier_meta, TRUE );
-		$supplier_sku = get_post_meta( $product_id, $supplier_sku_meta, TRUE );
+		$supplier_id       = $product->get_supplier_id();
+		$supplier_sku      = $product->get_supplier_sku();
 
 		if ( $supplier_id ) {
 			$supplier = get_post( $supplier_id );
@@ -442,12 +441,12 @@ class Suppliers {
 		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) { // WPCS: CSRF ok.
 
 			$product_key  = array_search( $product_id, $_POST['variable_post_id'] ); // WPCS: CSRF ok.
-			$supplier     = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : ''; // WPCS: CSRF ok.
+			$supplier_id  = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : ''; // WPCS: CSRF ok.
 			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : ''; // WPCS: CSRF ok.
 
 		}
 		elseif ( isset( $_POST[ self::SUPPLIER_META_KEY ], $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ) { // WPCS: CSRF ok.
-			$supplier     = isset( $_POST[ self::SUPPLIER_META_KEY ] ) ? absint( $_POST[ self::SUPPLIER_META_KEY ] ) : ''; // WPCS: CSRF ok.
+			$supplier_id  = isset( $_POST[ self::SUPPLIER_META_KEY ] ) ? absint( $_POST[ self::SUPPLIER_META_KEY ] ) : ''; // WPCS: CSRF ok.
 			$supplier_sku = isset( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) : ''; // WPCS: CSRF ok.
 		}
 		else {
@@ -456,8 +455,9 @@ class Suppliers {
 		}
 
 		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables.
-		update_post_meta( $product_id, self::SUPPLIER_META_KEY, $supplier );
-		update_post_meta( $product_id, self::SUPPLIER_SKU_META_KEY, $supplier_sku );
+		$product->set_supplier_id( $supplier_id );
+		$product->set_supplier_sku( $supplier_sku );
+		$product->save();
 
 	}
 

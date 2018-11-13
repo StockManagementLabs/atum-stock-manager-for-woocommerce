@@ -88,7 +88,7 @@ use Atum\Suppliers\Suppliers;
 						$product = $item->get_product();
 
 						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
-							$supplier_sku = get_post_meta( $product->get_id(), Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
+							$supplier_sku = $product->get_supplier_sku();
 							
 							if ( $supplier_sku ) : ?>
 								<br>
@@ -97,7 +97,7 @@ use Atum\Suppliers\Suppliers;
 								</span>
 							<?php endif;
 							
-							$sku = get_post_meta( $product->get_id(), '_sku', TRUE );
+							$sku = $product->get_sku();
 							
 							if ( $sku ) : ?>
 								<br>

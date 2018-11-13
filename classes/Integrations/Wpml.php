@@ -400,8 +400,8 @@ class Wpml {
 				'currency'   => $args['currency'],
 			] ) : $args['value'];
 
-			$date_from = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE );
-			$date_to   = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE );
+			$date_from = $product->get_date_on_sale_from();
+			$date_to   = $product->get_date_on_sale_to();
 
 			$args['extra_meta'][0]['value'] = $date_from ? date( 'Y-m-d', $date_from ) : '';
 			$args['extra_meta'][1]['value'] = $date_to ? date( 'Y-m-d', $date_to ) : '';
@@ -642,7 +642,9 @@ class Wpml {
 		foreach ( $product_translations as $translation ) {
 
 			if ( $translation->element_id !== $post_id ) {
-				update_post_meta( $translation->element_id, Globals::PURCHASE_PRICE_KEY, $purchase_price );
+				$product = wc_get_product( $post_id );
+				$product->set_purchase_price( $purchase_price );
+				$product->save();
 			}
 
 		}

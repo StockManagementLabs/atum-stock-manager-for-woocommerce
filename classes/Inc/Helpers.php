@@ -530,25 +530,30 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int $product_id   The product ID to calculate the lost sales.
-	 * @param int $days         Optional. By default the calculation is made for 7 days average.
+	 * @param int|\WC_Product $product   The product ID or product object to calculate the lost sales.
+	 * @param int             $days      Optional. By default the calculation is made for 7 days average.
 	 *
 	 * @return bool|float       Returns the lost sales or FALSE if never had lost sales
 	 */
-	public static function get_product_lost_sales( $product_id, $days = 7 ) {
+	public static function get_product_lost_sales( $product, $days = 7 ) {
 
-		$lost_sales        = FALSE;
-		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
+		$lost_sales = FALSE;
+
+		if ( ! is_a( $product, '\WC_Product' ) ) {
+			$product = wc_get_product( $product );
+		}
+
+		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date && $days > 0 ) {
 
-			$days_out_of_stock = self::get_product_out_of_stock_days( $product_id );
+			$days_out_of_stock = self::get_product_out_of_stock_days( $product );
 
 			if ( is_numeric( $days_out_of_stock ) ) {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( [ $product_id ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
+				$sold_last_days = self::get_sold_last_days( [ $product->get_id() ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
 				$lost_sales     = 0;
 
 				if ( ! empty( $sold_last_days ) ) {
@@ -558,7 +563,6 @@ final class Helpers {
 					if ( ! empty( $sold_last_days['QTY'] ) && $sold_last_days['QTY'] > 0 ) {
 
 						$average_sales = $sold_last_days['QTY'] / $days;
-						$product       = wc_get_product( $product_id );
 						$price         = $product->get_regular_price();
 
 						$lost_sales = $days_out_of_stock * $average_sales * $price;
@@ -579,16 +583,20 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int $product_id   The product ID.
+	 * @param int|\WC_Product $product The product ID or product object.
 	 *
-	 * @return bool|int         Returns the number of days or FALSE if is not "Out of Stock".
+	 * @return bool|int  Returns the number of days or FALSE if is not "Out of Stock".
 	 */
-	public static function get_product_out_of_stock_days( $product_id ) {
+	public static function get_product_out_of_stock_days( $product ) {
 
 		$out_of_stock_days = FALSE;
 
+		if ( ! is_a( $product, '\WC_Product' ) ) {
+			$product = wc_get_product( $product );
+		}
+
 		// Check if the current product has the "Out of stock" date recorded.
-		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
+		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date ) {
 			
@@ -600,7 +608,7 @@ final class Helpers {
 				$out_of_stock_days = $interval->days;
 
 			} catch ( \Exception $e ) {
-				error_log( __METHOD__ . ' || Product: ' . $product_id . ' || ' . $e->getMessage() );
+				error_log( __METHOD__ . ' || Product: ' . $product->get_id() . ' || ' . $e->getMessage() );
 				return $out_of_stock_days;
 			}
 			
@@ -1007,12 +1015,12 @@ final class Helpers {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product
 	 *
 	 * @return bool
 	 */
-	public static function is_atum_controlling_stock( $product_id ) {
-		return 'yes' === self::get_atum_control_status( $product_id );
+	public static function is_atum_controlling_stock( $product ) {
+		return '1' === self::get_atum_control_status( $product );
 	}
 
 	/**
@@ -1046,56 +1054,54 @@ final class Helpers {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product
 	 *
 	 * @return string|bool  yes if On of FALSE if Off
 	 */
-	public static function get_atum_control_status( $product_id ) {
-		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE );
+	public static function get_atum_control_status( $product ) {
+
+		if ( ! is_a( $product, '\WC_product' ) ) {
+			$product = wc_get_product( $product );
+		}
+
+		return $product->get_atum_controlled();
 	}
 
 	/**
-	 * Enables the ATUM control switch for the specified product
+	 * Updates the ATUM control switch for the specified product
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product  The product ID or product object.
+	 * @param string          $status   Optional. Can be 'enable' or 'disable'.
 	 */
-	public static function enable_atum_control( $product_id ) {
-		update_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+	public static function update_atum_control( $product, $status = 'enable' ) {
+
+		if ( ! is_a( $product, '\WC_product' ) ) {
+			$product = wc_get_product( $product );
+		}
+
+		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
+		$product->save();
 	}
 
 	/**
-	 * Enables the WC's manage stock for the specified product
+	 * Updates the WC's manage stock for the specified product
 	 *
 	 * @since 1.4.5
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product  The product ID or product object.
+	 * @param string          $status   Optional. Can be 'enable' or 'disable'.
 	 */
-	public static function enable_wc_manage_stock( $product_id ) {
-		update_post_meta( $product_id, '_manage_stock', 'yes' );
-	}
+	public static function update_wc_manage_stock( $product, $status = 'enable' ) {
 
-	/**
-	 * Disables the ATUM control switch for the specified product
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param int $product_id
-	 */
-	public static function disable_atum_control( $product_id ) {
-		delete_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY );
-	}
+		if ( ! is_a( $product, '\WC_product' ) ) {
+			$product = wc_get_product( $product );
+		}
 
-	/**
-	 * Disables the WC's manage stock for the specified product
-	 *
-	 * @since 1.4.5
-	 *
-	 * @param int $product_id
-	 */
-	public static function disable_wc_manage_stock( $product_id ) {
-		update_post_meta( $product_id, '_manage_stock', 'no' );
+		$product->set_manage_stock( ( 'enable' === $status ? 'yes' : 'no' ) );
+		$product->save();
+
 	}
 
 	/**
@@ -1599,14 +1605,20 @@ final class Helpers {
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
-					update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $meta_value ) );
+					$product->set_purchase_price( $meta_value );
 					
 					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
 					break;
 				
 				// Any other text meta.
 				default:
-					update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
+					if ( is_callable( array( $product, "set_{$meta_key}" ) ) ) {
+						$product->{"set_{$meta_key}"}( $meta_value );
+					}
+					else {
+						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
+					}
+
 					unset( $product_meta[ '_' . $meta_key . '_custom' ], $product_meta[ '_' . $meta_key . 'currency' ] );
 					break;
 			}
@@ -1664,32 +1676,35 @@ final class Helpers {
 
 			$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
 			$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
-			$product->save();
 
 			if ( $clean_meta ) {
-				delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
+				$product->set_out_stock_threshold( NULL );
 			}
+
+			$product->save();
 
 			return;
 
 		}
 
+		// TODO: IS THIS NEEDED?
 		if ( $all ) {
 
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
-                SELECT DISTINCT p.ID FROM $wpdb->posts p
-                INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
-                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private');
+                SELECT DISTINCT ID FROM $wpdb->posts p
+                INNER JOIN $wpdb->prefix" . ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
+                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private')
+                AND ap.out_stock_threshold IS NOT NULL;
             " ); // WPCS: unprepared SQL ok.
 
 			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
+				$product = wc_get_product( $id_to_rebuild );
+
 				// Delete _out_stock_threshold (avoid partial works to be done again).
 				if ( $clean_meta ) {
-					delete_post_meta( $id_to_rebuild, Globals::OUT_STOCK_THRESHOLD_KEY );
+					$product->set_out_stock_threshold( NULL );
 				}
-
-				$product = wc_get_product( $id_to_rebuild );
 
 				// Force change and save.
 				$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
