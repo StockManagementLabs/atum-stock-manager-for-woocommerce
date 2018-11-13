@@ -1,4 +1,7 @@
 .atum-list-wrapper {
+	.displaying-num {
+		display: none;
+	}
 	.pagination-links {
 		color: $gray-600;
 		.tablenav-pages-navspan, .tablenav-current-page, #current-page-selector {
@@ -10,6 +13,10 @@
 			height: 30px;
 			line-height: 30px;
 			text-decoration: none;
+			@media all and (max-width: 782px) {
+				width: 35px;
+				height: 35px;
+			}
 		}
 		
 		#current-page-selector {
@@ -29,10 +36,13 @@
 		
 		.tablenav-current-page {
 			background-color: $gray-200;
-			padding: 8px 12px 7px;
+			padding: 8px 15px 11px;
 		}
 		.paging-input, .table-paging {
-			margin: 0 10px 0 10px;
+			margin: 0 10px;
+			@media all and (max-width: 782px) {
+				margin: 0;
+			}
 		}
 		
 		@media screen and (max-width: 782px) {
@@ -54,6 +64,10 @@
 			&:hover, &:focus {
 				background-color: $gray-200;
 				color: $gray-500;
+			}
+			@media all and (max-width: 782px) {
+				width: 35px;
+				height: 35px;
 			}
 		}
 	}
