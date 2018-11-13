@@ -2001,9 +2001,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Setup the WP query.
 			global $wp_query;
-			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ), 10, 2 );
+			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( $args );
-			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ), 10 );
+			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
 			$products    = $wp_query->posts;
 			$product_ids = wp_list_pluck( $products, 'ID' );
@@ -2038,12 +2038,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array     $pieces
-	 * @param \WP_Query $wp_query
+	 * @param array $pieces
 	 *
 	 * @return array
 	 */
-	public function atum_product_data_query_clauses( $pieces, $wp_query ) {
+	public function atum_product_data_query_clauses( $pieces ) {
 
 		if ( empty( $this->query_data ) ) {
 			return $pieces;
