@@ -114,6 +114,11 @@
 			this.addActiveClassRow();
 			
 			//
+			// Add horizontal scroll effect to menu views
+			//--------------------------
+			this.addHorizontalScrolleffect();
+			
+			//
 			// Init the table scrollbar
 			//--------------------------
 			this.addScrollBar();
@@ -1561,8 +1566,6 @@
 				}else{
 					$checkboxRow.removeClass('active-row');
 				}
-				// self.$atumList.find("[data-id='" + $(this).val() + "']")
-				// 	.toggleClass('active-row');
 			});
 			
 			$('#cb-select-all-1').change(function () {
@@ -1574,7 +1577,32 @@
 						$(this).removeClass('active-row');
 					}
 				});
-				// $('.main-row').toggleClass('active-row');
+			});
+		},
+		/**
+		 * Add horizontal scroll effect to menu views
+		 */
+		addHorizontalScrolleffect: function() {
+			$('.stock-central-nav').bind('scroll',function () {
+				var $nav = document.getElementById('stock_central_nav');
+				var $overflowOpacityEffectRight = $('.overflow-opacity-effect-right');
+				var $overflowOpacityEffectLeft  = $('.overflow-opacity-effect-left');
+				var $leftMax                    = $nav.scrollWidth;
+				var $left                       = $nav.scrollLeft;
+				var $diff                       = $leftMax - $left;
+				
+				if ($diff === $('.stock-central-nav').outerWidth())
+				{
+					$overflowOpacityEffectRight.hide();
+				}else {
+					$overflowOpacityEffectRight.show();
+				}
+				
+				if ( $left === 0 ) {
+					$overflowOpacityEffectLeft.hide();
+				}else {
+					$overflowOpacityEffectLeft.show();
+				}
 			});
 		},
 		

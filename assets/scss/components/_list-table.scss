@@ -83,7 +83,7 @@
 	background-color: $white;
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 $gray-200;
-	padding: 20px 0 10px;
+	padding: 0 0 10px;
 	
 	a {
 		&:focus {
@@ -109,9 +109,10 @@
 	.search-box {
 		@include flexbox;
 		//display: inline-block;
-		float: right;
+		//float: right;
 		margin-right: 3px;
 		margin-bottom: 3px;
+		flex-wrap: nowrap;
 
 		#search_column_btn{
 			@if $enable-rounded {
@@ -132,6 +133,8 @@
 			border-radius: 5px;
 			border: solid 1px $gray-200;
 			background-color: $white;
+			width: 270px;
+			flex-wrap: nowrap;
 		}
 		
 		.input-group-append {
@@ -231,7 +234,44 @@
 			margin: 10px 0 0;
 		}
 	}
-	
+	.stock-central-nav {
+		@include flexbox;
+		@include flex-align-items(center);
+		@include flex-justify-content(space-between);
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		overflow-y: hidden;
+		-ms-overflow-style: -ms-autohiding-scrollbar;
+		-webkit-overflow-scrolling: touch;
+		white-space: nowrap;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		height: 70px;
+		margin: 0 11px 0 20px;
+		
+		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+			width: 200px;
+			position: absolute;
+			z-index: 999;
+			height: 70px;
+		}
+		.overflow-opacity-effect-right {
+			right: 0;
+			background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
+			background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
+			background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
+			background: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+		}
+		.overflow-opacity-effect-left {
+			display: none;
+			left: 0;
+			background: -webkit-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
+			background: -o-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
+			background: -moz-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
+			background: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+		}
+	}
 	.subsubsub {
 		position: relative;
 		margin-top: 0;
@@ -239,7 +279,6 @@
 		letter-spacing: 0.4px;
 		font-weight: bold;
 		text-transform: capitalize;
-		padding: 0 11px 20px;
 		
 		li {
 			margin-right: 15px;
