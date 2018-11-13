@@ -390,7 +390,7 @@ class PurchaseOrder extends AtumOrderModel {
 	public function use_purchase_price( $price, $qty, $product ) {
 		
 		// Get the purchase price (if set).
-		$price = get_post_meta( $product->get_id(), Globals::PURCHASE_PRICE_KEY, TRUE );
+		$price = $product->get_purchase_price();
 		
 		if ( ! $price ) {
 			return '';

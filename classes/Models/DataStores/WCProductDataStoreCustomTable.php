@@ -12,6 +12,9 @@
 
 namespace Atum\Models\DataStores;
 
+use Atum\Inc\Globals;
+
+
 defined( 'ABSPATH' ) || die;
 
 class WCProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface, \WC_Product_Data_Store_Interface {
@@ -247,7 +250,7 @@ class WCProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table 
 			$data = parent::get_product_row_from_db( $product_id );
 
 			// Get the extra ATUM data for the product.
-			$atum_product_data_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
+			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: Unprepared SQL ok.
 
 			$data = array_merge( $data, $atum_data );

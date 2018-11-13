@@ -27,9 +27,10 @@ class WCProductSimple extends \WC_Product_Simple {
 	 * @param \WC_Product|int $product Product instance or ID.
 	 */
 	public function __construct( $product = 0 ) {
-		parent::__construct( $product );
 
 		$this->data = apply_filters( 'atum/model/product_simple/data', array_merge( $this->data, $this->atum_data ) );
+		parent::__construct( $product );
+
 	}
 
 

@@ -26,7 +26,7 @@ trait AtumProductTrait {
 	 */
 	protected $atum_data = array(
 		'purchase_price'      => '',
-		'supplier'            => 0,
+		'supplier_id'         => 0,
 		'supplier_sku'        => '',
 		'atum_controlled'     => FALSE,
 		'out_stock_date'      => NULL,
@@ -65,8 +65,8 @@ trait AtumProductTrait {
 	 *
 	 * @return string price
 	 */
-	public function get_supplier( $context = 'view' ) {
-		return $this->get_prop( 'supplier', $context );
+	public function get_supplier_id( $context = 'view' ) {
+		return $this->get_prop( 'supplier_id', $context );
 	}
 
 	/**
@@ -162,8 +162,8 @@ trait AtumProductTrait {
 	 *
 	 * @param int $supplier_id The supplier ID.
 	 */
-	public function set_supplier( $supplier_id ) {
-		$this->set_prop( 'supplier', absint( $supplier_id ) );
+	public function set_supplier_id( $supplier_id ) {
+		$this->set_prop( 'supplier_id', absint( $supplier_id ) );
 	}
 
 	/**

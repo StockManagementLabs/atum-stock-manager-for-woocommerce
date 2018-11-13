@@ -455,28 +455,28 @@ final class Ajax {
 		switch ( $_POST['bulk_action'] ) {
 			case 'uncontrol_stock':
 				foreach ( $ids as $id ) {
-					Helpers::disable_atum_control( $id );
+					Helpers::update_atum_control( $id, 'disable' );
 				}
 
 				break;
 
 			case 'control_stock':
 				foreach ( $ids as $id ) {
-					Helpers::enable_atum_control( $id );
+					Helpers::update_atum_control( $id );
 				}
 
 				break;
 
 			case 'unmanage_stock':
 				foreach ( $ids as $id ) {
-					Helpers::disable_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( $id, 'disable' );
 				}
 
 				break;
 
 			case 'manage_stock':
 				foreach ( $ids as $id ) {
-					Helpers::enable_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( $id );
 				}
 
 				break;
@@ -1690,7 +1690,8 @@ final class Ajax {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
-		update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) );
+		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
+		$product->save();
 
 		wp_send_json_success();
 
@@ -1857,14 +1858,7 @@ final class Ajax {
 		$variations = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
-
-			if ( 'uncontrolled' === $status ) {
-				Helpers::disable_atum_control( $variation_id );
-			}
-			else {
-				Helpers::enable_atum_control( $variation_id );
-			}
-
+			Helpers::update_atum_control( $variation_id, ( 'uncontrolled' === $status ? 'enable' : 'disable' ) );
 		}
 
 		wp_send_json_success( __( 'All the variations were updated successfully', ATUM_TEXT_DOMAIN ) );
@@ -2033,7 +2027,7 @@ final class Ajax {
 	 */
 	private function clear_out_stock_threshold_meta() {
 
-		Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta = TRUE, $all = TRUE );
+		Helpers::force_rebuild_stock_status( NULL, TRUE, TRUE );
 
 		if ( FALSE === Helpers::is_any_out_stock_threshold_set() ) {
 			wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
@@ -2049,7 +2043,7 @@ final class Ajax {
 	 * @param string $meta_key
 	 * @param string $status
 	 */
-	private function change_status_meta($meta_key, $status) {
+	private function change_status_meta( $meta_key, $status ) {
 
 		global $wpdb;
 		$wpdb->hide_errors();

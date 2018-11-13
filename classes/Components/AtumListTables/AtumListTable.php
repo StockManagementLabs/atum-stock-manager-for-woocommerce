@@ -564,7 +564,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Check if it's a hidden meta key (will start with underscore).
 		if ( '_' === substr( $column_name, 0, 1 ) ) {
-			$column_item = get_post_meta( $id, $column_name, TRUE );
+
+			// If the current product has a method to get the prop, use it.
+			if ( is_callable( array( $this->product, "get_{$column_name}" ) ) ) {
+				$column_item = $this->product->{"get_{$column_name}"};
+			}
+			else {
+				$column_item = get_post_meta( $id, $column_name, TRUE );
+			}
+
 		}
 
 		if ( '' === $column_item || FALSE === $column_item ) {
@@ -757,8 +765,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__sku( $item, $editable = TRUE ) {
 
-		$id  = $this->get_current_product_id();
-		$sku = get_post_meta( $id, '_sku', true );
+		$sku = $this->product->get_sku();
 		$sku = $sku ?: self::EMPTY_COL;
 
 		if ( $editable ) {
@@ -795,7 +802,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $supplier;
 		}
 
-		$supplier_id = get_post_meta( $this->get_current_product_id(), Suppliers::SUPPLIER_META_KEY, TRUE );
+		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {
 
@@ -838,11 +845,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $supplier_sku;
 		}
 
-		$product_id = $this->get_current_product_id();
-
 		if ( $editable ) {
 
-			$supplier_sku = get_post_meta( $product_id, '_supplier_sku', TRUE );
+			$supplier_sku = $this->product->get_supplier_sku();
 
 			if ( 0 === strlen( $supplier_sku ) ) {
 				$supplier_sku = self::EMPTY_COL;
@@ -979,11 +984,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $purchase_price;
 		}
 
-		$product_id = $this->get_current_product_id();
-
 		if ( $this->allow_calcs ) {
 
-			$purchase_price_value = get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
+			$purchase_price_value = $this->product->get_purchase_price();
 			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
 				'trim_zeros' => TRUE,
 				'currency'   => self::$default_currency,
@@ -1016,8 +1019,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
 
-		$product_id          = $this->get_current_product_id();
-		$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+		$out_stock_threshold = $this->product->get_out_stock_threshold();
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 
 		// Check type and managed stock at product level (override $out_stock_threshold value if set and not allowed).
@@ -1027,7 +1029,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$out_stock_threshold = self::EMPTY_COL;
 		}
 
-		$manage_stock = get_post_meta( $product_id, '_manage_stock', TRUE );
+		$manage_stock = $this->product->get_manage_stock();
 
 		if ( 'no' === $manage_stock ) {
 			$editable            = FALSE;
@@ -1063,9 +1065,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__weight( $item, $editable = TRUE ) {
 
-		$product_id = $this->get_current_product_id();
-		$weight     = get_post_meta( $product_id, '_weight', TRUE );
-		$weight     = $weight ?: self::EMPTY_COL;
+		$weight = $this->product->get_weight();
+		$weight = $weight ?: self::EMPTY_COL;
 
 		if ( $editable ) {
 
@@ -1098,7 +1099,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$stock = self::EMPTY_COL;
 
-		$product_id                = $this->get_current_product_id();
 		$classes_title             = '';
 		$tooltip_warning           = '';
 		$wc_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
@@ -1118,7 +1118,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $is_out_stock_threshold_managed ) {
 
-				$out_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+				$out_stock_threshold = $this->product->get_out_stock_threshold();
 
 				if ( strlen( $out_stock_threshold ) > 0 ) {
 
@@ -2016,7 +2016,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				continue;
 			}
 
-			$is_controlled = Helpers::is_atum_controlling_stock( $variation_product->get_id() );
+			$is_controlled = Helpers::is_atum_controlling_stock( $variation_product );
 
 			if ( ( $this->show_controlled && ! $is_controlled ) || ( ! $this->show_controlled && $is_controlled ) ) {
 				unset( $this->supplier_variation_products[ $index ] );
@@ -3594,7 +3594,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			foreach ( $children as $child ) {
 
-				$atum_control_status = Helpers::get_atum_control_status( $child );
+				$atum_control_status = $child->get_atum_controlled();
 				if (
 					( $this->show_controlled && 'yes' === $atum_control_status ) ||
 					( ! $this->show_controlled && 'yes' !== $atum_control_status )
