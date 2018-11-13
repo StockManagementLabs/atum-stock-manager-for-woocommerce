@@ -18,7 +18,9 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\Legacy\AtumListTableLegacyTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Queries\AtumProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 
@@ -146,6 +148,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $extra_meta = array();
+
+	/**
+	 * The ATUM product data used in WP_Query
+	 *
+	 * @var array
+	 */
+	protected $query_data = array();
 
 	/**
 	 * IDs for views
@@ -315,6 +324,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function __construct( $args = array() ) {
 
 		// Enable the ATUM product models for all the products shown in the List Tables.
+		// TODO: WOULD BE BETTER TO ENABLE THIS GLOBALLY?
 		Globals::enable_atum_product_models();
 
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
@@ -513,7 +523,8 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$this->is_child = TRUE;
-					$this->product  = wc_get_product( $child_id );
+					// Set the product prop to the child product.
+					$this->product = wc_get_product( $child_id );
 					$this->single_expandable_row( $this->product, ( 'grouped' === $type ? $type : 'variation' ) );
 				}
 			}
@@ -566,8 +577,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( '_' === substr( $column_name, 0, 1 ) ) {
 
 			// If the current product has a method to get the prop, use it.
-			if ( is_callable( array( $this->product, "get_{$column_name}" ) ) ) {
-				$column_item = $this->product->{"get_{$column_name}"};
+			if ( is_callable( array( $this->product, "get{$column_name}" ) ) ) {
+				$column_item = $this->product->{"get{$column_name}"};
 			}
 			else {
 				$column_item = get_post_meta( $id, $column_name, TRUE );
@@ -808,7 +819,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$supplier_post = get_post( $supplier_id );
 
-			if ( $supplier_post ) {
+			if ( $supplier_post && Suppliers::POST_TYPE === $supplier_post->post_type ) {
 
 				$supplier        = $supplier_post->post_title;
 				$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
@@ -1594,6 +1605,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					$unm_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['unmanaged'] ) ) );
 					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$extra_links    .= ',<a' . $unm_id . $unm_class . ' href="' . $unm_url . '" rel="address:/?' . $unm_hash_params . '"' . $data_tip . '>' . $unm_count . '</a>';
+
 				}
 
 				$views[ $key ] = '<span ' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span ' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
@@ -1657,8 +1669,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		);
 
 		if (
-			( isset( $_GET['uncontrolled'] ) && 1 == $_GET['uncontrolled'] ) || // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			( isset( $_REQUEST['show_controlled'] ) && 0 == $_REQUEST['show_controlled'] ) // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			( isset( $_GET['uncontrolled'] ) && 1 === absint( $_GET['uncontrolled'] ) ) ||
+			( isset( $_REQUEST['show_controlled'] ) && 0 === absint( $_REQUEST['show_controlled'] ) )
 		) {
 			$bulk_actions['control_stock'] = __( "Enable ATUM's Stock Control", ATUM_TEXT_DOMAIN );
 		}
@@ -1694,16 +1706,16 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		?>
-		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php _e( 'Select bulk action', ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></label>
-		<select name="action<?php echo $two; // WPCS: XSS ok. ?>" class="wc-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
-			<option value="-1"><?php _e( 'Bulk Actions', ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></option>
+		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
+		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+			<option value="-1"><?php esc_html_e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>
-				<option value="<?php echo $name; // WPCS: XSS ok. ?>"<?php if ( 'edit' === $name ) echo ' class="hide-if-no-js"' ?>><?php echo $title; // WPCS: XSS ok. ?></option>
+				<option value="<?php echo esc_attr( $name ) ?>"<?php if ( 'edit' === $name ) echo ' class="hide-if-no-js"' ?>><?php echo esc_html( $title ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<button type="button" class="apply-bulk-action btn btn-warning">
-			<?php echo esc_attr( __( 'Apply', ATUM_TEXT_DOMAIN ) ); ?>
+			<?php esc_html_e( 'Apply', ATUM_TEXT_DOMAIN ) ?>
 		</button>
 		<?php
 	}
@@ -1720,11 +1732,30 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy method
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use AtumListTableLegacyTrait;
+
+	/**
 	 * Prepare the table data
 	 *
 	 * @since 0.0.1
 	 */
 	public function prepare_items() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+			$this->prepare_items_legacy();
+			return;
+		}
 
 		/**
 		 * Define our column headers
@@ -1752,30 +1783,34 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		if ( $this->show_controlled ) {
 
-			$args['meta_query'] = array(
+			$this->query_data = array(
 				array(
-					'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
-					'value' => 'yes',
+					'key'   => 'atum_controlled',
+					'value' => 1,
+					'type'  => 'NUMERIC',
 				),
 			);
 
 		}
 		else {
 
-			$args['meta_query'] = array(
+			$this->query_data = array(
 				array(
 					'relation' => 'OR',
 					array(
-						'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
-						'compare' => 'NOT EXISTS',
+						'key'   => 'atum_controlled',
+						'value' => NULL,
+						'type'  => 'NUMERIC',
 					),
 					array(
-						'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
-						'value' => 'no',
+						'key'   => 'atum_controlled',
+						'value' => 0,
+						'type'  => 'NUMERIC',
 					),
 					array(
-						'key'   => Globals::IS_INHERITABLE_KEY,
-						'value' => 'yes',
+						'key'   => 'inheritable',
+						'value' => 1,
+						'type'  => 'NUMERIC',
 					),
 				),
 			);
@@ -1838,14 +1873,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$supplier = absint( $_REQUEST['supplier'] );
 
-			if ( ! empty( $args['meta_query'] ) ) {
-				$args['meta_query']['relation'] = 'AND';
+			if ( ! empty( $this->query_data ) ) {
+				$this->query_data['relation'] = 'AND';
 			}
 
-			$args['meta_query'][] = array(
-				'key'   => Suppliers::SUPPLIER_META_KEY,
+			$this->query_data[] = array(
+				'key'   => 'supplier_id',
 				'value' => $supplier,
-				'type'  => 'numeric',
+				'type'  => 'NUMERIC',
 			);
 
 			// This query does not get product variations and as each variation may have a distinct supplier,
@@ -1966,7 +2001,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Setup the WP query.
 			global $wp_query;
+			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ), 10, 2 );
 			$wp_query = new \WP_Query( $args );
+			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ), 10 );
 
 			$products    = $wp_query->posts;
 			$product_ids = wp_list_pluck( $products, 'ID' );
@@ -1994,6 +2031,145 @@ abstract class AtumListTable extends \WP_List_Table {
 			'order'       => ! empty( $_REQUEST['order'] ) ? $_REQUEST['order'] : 'desc',
 		) );
 
+	}
+
+	/**
+	 * Customize the WP_Query to handle ATUM product data
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array     $pieces
+	 * @param \WP_Query $wp_query
+	 *
+	 * @return array
+	 */
+	public function atum_product_data_query_clauses( $pieces, $wp_query ) {
+
+		if ( empty( $this->query_data ) ) {
+			return $pieces;
+		}
+
+		$atum_product_data_query = new AtumProductDataQuery( $this->query_data );
+		$sql                     = $atum_product_data_query->get_sql();
+
+		foreach ( [ 'join', 'where' ] as $key ) {
+
+			if ( ! empty( $sql[ $key ] ) ) {
+				$pieces[ $key ] .= ' ' . $sql[ $key ];
+			}
+
+		}
+
+		return $pieces;
+
+	}
+
+	/**
+	 * Generate SQL clauses for a single query array.
+	 *
+	 * If nested subqueries are found, this method recurses the tree to
+	 * produce the properly nested SQL.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param \WP_Query $wp_query
+	 * @param int       $depth    Optional. Number of tree levels deep we currently are. Used to calculate indentation. Default 0.
+	 *
+	 * @return array {
+	 *  Array containing JOIN and WHERE SQL clauses to append to a single query array.
+	 *
+	 *  @type string $join  SQL fragment to append to the main JOIN clause.
+	 *  @type string $where SQL fragment to append to the main WHERE clause.
+	 * }
+	 */
+	protected function get_sql_for_query( $wp_query, $depth = 0 ) {
+
+		$sql_chunks = array(
+			'join'  => array(),
+			'where' => array(),
+		);
+
+		$sql = array(
+			'join'  => '',
+			'where' => '',
+		);
+
+		$indent = '';
+		for ( $i = 0; $i < $depth; $i ++ ) {
+			$indent .= "  ";
+		}
+
+		foreach ( $this->query_data as $key => &$clause ) {
+
+			if ( 'relation' === $key ) {
+				$relation = $this->query_data['relation'];
+			}
+			elseif ( is_array( $clause ) ) {
+
+				// This is a first-order clause.
+				if ( $this->is_first_order_clause( $clause ) ) {
+
+					$clause_sql = $this->get_sql_for_clause( $clause, $this->query_data, $key );
+
+					$where_count = count( $clause_sql['where'] );
+
+					if ( ! $where_count ) {
+						$sql_chunks['where'][] = '';
+					}
+					elseif ( 1 === $where_count ) {
+						$sql_chunks['where'][] = $clause_sql['where'][0];
+					}
+					else {
+						$sql_chunks['where'][] = '( ' . implode( ' AND ', $clause_sql['where'] ) . ' )';
+					}
+
+					$sql_chunks['join'] = array_merge( $sql_chunks['join'], $clause_sql['join'] );
+				}
+				// This is a subquery, so we recurse.
+				else {
+					$clause_sql = $this->get_sql_for_query( $clause, $depth + 1 );
+
+					$sql_chunks['where'][] = $clause_sql['where'];
+					$sql_chunks['join'][]  = $clause_sql['join'];
+				}
+			}
+		}
+
+		// Filter to remove empties.
+		$sql_chunks['join']  = array_filter( $sql_chunks['join'] );
+		$sql_chunks['where'] = array_filter( $sql_chunks['where'] );
+
+		if ( empty( $relation ) ) {
+			$relation = 'AND';
+		}
+
+		// Filter duplicate JOIN clauses and combine into a single string.
+		if ( ! empty( $sql_chunks['join'] ) ) {
+			$sql['join'] = implode( ' ', array_unique( $sql_chunks['join'] ) );
+		}
+
+		// Generate a single WHERE clause with proper brackets and indentation.
+		if ( ! empty( $sql_chunks['where'] ) ) {
+			$sql['where'] = '( ' . "\n  " . $indent . implode( ' ' . "\n  " . $indent . $relation . ' ' . "\n  " . $indent, $sql_chunks['where'] ) . "\n" . $indent . ')';
+		}
+
+		return $sql;
+	}
+
+	/**
+	 * Determine whether a query clause is first-order.
+	 *
+	 * A first-order meta query clause is one that has either a 'key' or
+	 * a 'value' array key.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $query Meta query arguments.
+	 *
+	 * @return bool Whether the query clause is a first-order clause.
+	 */
+	protected function is_first_order_clause( $query ) {
+		return isset( $query['key'] ) || isset( $query['value'] );
 	}
 
 	/**
@@ -2095,6 +2271,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! $products ) {
 
 			global $wp_query;
+			// TODO: 1.5.
 			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_args', $args ) );
 			$products = $wp_query->posts;
 
