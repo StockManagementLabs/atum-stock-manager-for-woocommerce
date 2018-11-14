@@ -122,28 +122,6 @@ final class Helpers {
 	}
 
 	/**
-	 * Output a dropdown to choose the ATUM Order status
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param string $id        The select ID.
-	 * @param string $value     The selected option.
-	 */
-	public static function atum_order_status_dropdown( $id, $value ) {
-
-		?>
-		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select">
-			<?php
-			$statuses = AtumOrderPostType::get_statuses();
-			foreach ( $statuses as $status => $status_name ) : ?>
-				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
-			<?php endforeach; ?>
-		</select>
-		<?php
-
-	}
-
-	/**
 	 * Format a date to match the db format
 	 *
 	 * @since 0.1.3
@@ -1512,6 +1490,37 @@ final class Helpers {
 
 		return new $model_class( $atum_order_id );
 
+	}
+	
+		/**
+	 * Get the appropriate ATUM Order statuses depending on the post_type
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $post_type
+	 *
+	 * @return array
+	 */
+	public static function get_atum_order_post_type_statuses( $post_type ) {
+		
+		$statuses = [];
+		
+		switch ( $post_type ) {
+			case InventoryLogs::POST_TYPE:
+				$post_type_class = '\Atum\InventoryLogs\InventoryLogs';
+				break;
+			
+			case PurchaseOrders::POST_TYPE:
+				$post_type_class = '\Atum\PurchaseOrders\PurchaseOrders';
+				break;
+		}
+		
+		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
+			$statuses = call_user_func( array( $post_type_class, 'get_statuses' ) );
+		}
+		
+		return $statuses;
+		
 	}
 
 	/**

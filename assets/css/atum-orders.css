@@ -3341,7 +3341,7 @@ table.wp-list-table .column-status .order-status {
   max-width: 100%;
 }
 
-table.wp-list-table .column-status .order-status.status-completed {
+table.wp-list-table .column-status .order-status.status-completed, table.wp-list-table .column-status .order-status.status-received {
   background: #C8D7E1;
   color: #2e4453;
 }
@@ -3401,7 +3401,7 @@ table.wp-list-table .column-notes .note-on::after {
   line-height: 16px;
 }
 
-table.wp-list-table .column-actions .pending, table.wp-list-table .column-actions .complete, table.wp-list-table .column-actions .view, table.wp-list-table .column-actions .pdf {
+table.wp-list-table .column-actions .complete, table.wp-list-table .column-actions .view, table.wp-list-table .column-actions .pdf {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -3410,26 +3410,6 @@ table.wp-list-table .column-actions .pending, table.wp-list-table .column-action
   padding: 0 !important;
   height: 2em !important;
   width: 2em;
-}
-
-table.wp-list-table .column-actions .pending::after {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
-  line-height: 1.85;
 }
 
 table.wp-list-table .column-actions .complete::after {
