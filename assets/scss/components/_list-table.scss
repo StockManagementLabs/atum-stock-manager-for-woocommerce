@@ -11,6 +11,7 @@
 		position: relative;
 		font-size: 36px;
 		font-weight: bold;
+		width: 100%;
 		@include flexbox;
 		@include flex-align-items(center);
 		
@@ -38,7 +39,7 @@
 				line-height: 35px;
 			}
 			
-			@media all and (max-width: $screen-xs-min) {
+			@media all and (max-width: $screen-xs) {
 				margin: 0;
 			}
 			
@@ -66,8 +67,9 @@
 			padding-bottom: 15px;
 		}
 		
-		@media all and (max-width: $screen-xs-min) {
+		@media all and (max-width: $screen-xs) {
 			@include flex-justify-content(center);
+			margin: 0;
 		}
 	}
 	
@@ -104,6 +106,9 @@
 				margin-right: 5px;
 			}
 		}
+		@media all and (max-width: $screen-xs-min) {
+			display: none;
+		}
 	}
 	
 	.search-box {
@@ -116,6 +121,14 @@
 		z-index: 999;
 		float: right;
 		margin-left: auto;
+		
+		@media all and (max-width: $screen-xs-min) {
+			float: none;
+			width: 100%;
+			justify-content: center;
+			margin: 0;
+			flex-wrap: wrap;
+		}
 
 		#search_column_btn{
 			@if $enable-rounded {
@@ -131,6 +144,14 @@
 			border: none;
 			box-shadow: none;
 			width: 110px;
+			&::placeholder {
+				color: $gray-500;
+				font-size: 12px;
+				font-style: italic;
+				letter-spacing: normal;
+				margin-left: 10px;
+			}
+			
 		}
 		
 		.input-group {
@@ -139,6 +160,9 @@
 			background-color: $white;
 			width: 270px;
 			flex-wrap: nowrap;
+			@media all and (max-width: $screen-xs-min) {
+				width: 100%;
+			}
 		}
 		
 		.input-group-append {
@@ -197,6 +221,12 @@
 			color: $white;
 			box-shadow: none;
 		}
+		
+		@media all and (max-width: 782px) {
+			height: 31px;
+			padding: 0;
+			margin-bottom: 0;
+		}
 	}
 	
 	.tablenav-pages, .search-box {
@@ -213,6 +243,10 @@
 		flex-wrap: wrap;
 		.tablenav-pages {
 			margin-left: auto;
+			@media all and (max-width: $screen-xs) {
+				margin: 0;
+				width: 100%;
+			}
 		}
 	}
 	
@@ -245,6 +279,10 @@
 		margin: 0 11px 0 20px;
 		@media screen and (max-width: $screen-lg) {
 			flex-wrap: wrap;
+			margin-bottom: 15px;
+		}
+		@media all and (max-width: $screen-xs-min) {
+			margin: 0 11px 15px;
 		}
 	}
 	.stock-central-nav {
@@ -307,10 +345,17 @@
 			color: $gray-500;
 			text-transform: uppercase;
 			span {
+				@include flexbox;
+				@include flex-justify-content(center);
+				@include flex-align-items(center);
+				margin-left: 3px;
 				&.active {
 					border-radius: 5px;
 					background-color: $blue;
-					padding: 6px 10px;
+					font-size: 16px;
+					padding: 0 10px;
+					font-weight: bold;
+					letter-spacing: 0.4px;
 					color: $white;
 					.text-blue {
 						color: $white;
@@ -444,6 +489,15 @@
 					font-size: 14px;
 					height: 35px;
 				}
+				
+				@media screen and (max-width: $screen-xs) {
+					width: 100%;
+					margin: 10px 0;
+				}
+			}
+			@media screen and (max-width: $screen-xs) {
+				width: 100%;
+				float: none;
 			}
 		}
 		
@@ -455,6 +509,10 @@
 					height: 35px;
 					line-height: 35px;
 				}
+			}
+			
+			@media screen and (max-width: $screen-xs) {
+				width: 100% !important;
 			}
 		}
 		
@@ -516,12 +574,12 @@
 		
 		.search-box {
 			@include flexbox;
-			float: none;
-			margin: auto;
-			width: 90%;
+			//float: none;
+			//margin: auto;
+			//width: 90%;
 			
 			input[type="text"], input[type="number"], button {
-				height: 36px;
+				height: 30px;
 			}
 		}
 		
@@ -557,7 +615,14 @@
 		}
 		
 	}
-	
+	@media screen and (max-width: $screen-xs) {
+		.tablenav {
+			.tablenav-pages {
+				width: 100%;
+				margin: 0;
+			}
+		}
+	}
 }
 
 .atum-table-wrapper {
@@ -606,7 +671,7 @@
 	}
 	
 	.jspDrag {
-		background: $secondary;
+		background: $gray-500;
 		position: relative;
 		top: 0;
 		left: 0;
@@ -662,9 +727,16 @@
 			height: 60px;
 			white-space: normal;
 			
+			&.column-_supplier_sku {
+				.sorting-indicator {
+					margin-top: 15px;
+				}
+			}
+			
 			.sorting-indicator {
 				visibility: visible;
 				margin-left: 4px;
+				margin-top: 7px;
 				&:before {
 					color: $gray-500;
 					content: "\f140";
@@ -700,6 +772,14 @@
 				max-height: 14px;
 			}
 			
+		}
+	}
+	
+	.item-heads {
+		@media screen and (max-width: 782px) {
+			td, th {
+				box-shadow: 0 1px 0 0 $gray-200;
+			}
 		}
 	}
 	
@@ -784,7 +864,7 @@
 		}
 		
 		&.column-_supplier_sku {
-			white-space: nowrap;
+			white-space: pre-wrap;
 			max-width: 71px;
 		}
 		
@@ -1176,7 +1256,7 @@
 				content: "\e006";
 				font-variant: normal;
 				margin: 0;
-				color: $gray-600;
+				//color: $gray-600;
 			}
 			
 			&.grouped:before {
@@ -1331,6 +1411,7 @@
 			&.column-primary {
 				width: auto !important;
 			}
+			padding: 0 5px !important;
 		}
 		
 		tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
