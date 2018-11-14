@@ -28,9 +28,17 @@ defined( 'ABSPATH' ) || die;
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
+		<div class="stock-central-header">
+			<nav id="stock_central_nav" class="stock-central-nav dragscroll">
+				<?php $list->views(); ?>
+				<div class="overflow-opacity-effect-right" >
 
-		<nav id="stock_central_nav" class="stock-central-nav dragscroll">
-			<?php $list->views(); ?>
+				</div>
+				<div class="overflow-opacity-effect-left" >
+
+				</div>
+			</nav>
+
 			<div class="search-box">
 
 				<div class="input-group input-group-sm">
@@ -66,13 +74,8 @@ defined( 'ABSPATH' ) || die;
 
 				</div>
 			</div>
-			<div class="overflow-opacity-effect-right" >
+		</div>
 
-			</div>
-			<div class="overflow-opacity-effect-left" >
-
-			</div>
-		</nav>
 
 		<?php $list->display(); ?>
 		
