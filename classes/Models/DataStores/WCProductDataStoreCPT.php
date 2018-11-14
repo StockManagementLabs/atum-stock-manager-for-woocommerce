@@ -830,7 +830,7 @@ class WCProductDataStoreCPT extends \WC_Data_Store_WP implements \WC_Object_Data
 	 */
 	protected function clear_caches( &$product ) {
 		wc_delete_product_transients( $product->get_id() );
-		WC_Cache_Helper::incr_cache_prefix( 'product_' . $product->get_id() );
+		\WC_Cache_Helper::incr_cache_prefix( 'product_' . $product->get_id() );
 	}
 
 	/*

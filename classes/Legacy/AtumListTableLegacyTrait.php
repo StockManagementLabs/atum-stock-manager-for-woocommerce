@@ -15,6 +15,11 @@ namespace Atum\Legacy;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
+use Atum\Inc\Globals;
+use Atum\Suppliers\Suppliers;
+
+
 trait AtumListTableLegacyTrait {
 
 	/**

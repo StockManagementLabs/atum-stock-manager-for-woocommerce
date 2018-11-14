@@ -31,7 +31,8 @@ class WCProductSimple extends \WC_Product_Simple {
 		$this->data = apply_filters( 'atum/model/product_simple/data', array_merge( $this->data, $this->atum_data ) );
 		parent::__construct( $product );
 
-	}
+		do_action( 'atum/model/product_simple', $product );
 
+	}
 
 }

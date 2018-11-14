@@ -259,7 +259,7 @@ class WCProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table 
 
 		}
 
-		return (array) $data;
+		return (array) apply_filters( 'atum/model/product_data_store/product_data', $data, $product_id );
 
 	}
 

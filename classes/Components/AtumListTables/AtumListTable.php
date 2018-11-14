@@ -1799,11 +1799,6 @@ abstract class AtumListTable extends \WP_List_Table {
 					'relation' => 'OR',
 					array(
 						'key'   => 'atum_controlled',
-						'value' => NULL,
-						'type'  => 'NUMERIC',
-					),
-					array(
-						'key'   => 'atum_controlled',
 						'value' => 0,
 						'type'  => 'NUMERIC',
 					),

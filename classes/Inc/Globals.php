@@ -272,8 +272,8 @@ final class Globals {
 	 * @since 1.5.0
 	 */
 	public static function enable_atum_product_models() {
-		add_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ), 10, 4 );
-		add_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), 100 );
+		add_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ), PHP_INT_MAX, 4 );
+		add_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), PHP_INT_MAX );
 	}
 
 	/**
@@ -282,8 +282,8 @@ final class Globals {
 	 * @since 1.5.0
 	 */
 	public static function disable_atum_product_models() {
-		remove_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ) );
-		add_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), 100 );
+		remove_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ), PHP_INT_MAX );
+		remove_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), PHP_INT_MAX );
 	}
 
 	/**

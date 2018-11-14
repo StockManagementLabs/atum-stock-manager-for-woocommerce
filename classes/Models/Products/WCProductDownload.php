@@ -31,7 +31,8 @@ class WCProductDownload extends \WC_Product_Download {
 		$this->data = apply_filters( 'atum/model/product_download/data', array_merge( $this->data, $this->atum_data ) );
 		parent::__construct( $product );
 
-	}
+		do_action( 'atum/model/product_download', $product );
 
+	}
 
 }

@@ -14,7 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-class WCProductGroupedDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface {
+class WCProductGroupedDataStoreCustomTable extends WCProductDataStoreCustomTable implements \WC_Object_Data_Store_Interface {
 
 	/**
 	 * Handle updated meta props after updating meta data.

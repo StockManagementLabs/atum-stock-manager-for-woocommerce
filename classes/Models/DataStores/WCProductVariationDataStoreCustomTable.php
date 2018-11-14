@@ -14,7 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-class WCProductVariationDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface {
+class WCProductVariationDataStoreCustomTable extends WCProductDataStoreCustomTable implements \WC_Object_Data_Store_Interface {
 
 	/**
 	 * Relationships.

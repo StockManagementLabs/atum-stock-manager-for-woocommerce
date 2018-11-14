@@ -14,7 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-class WCProductVariableDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface {
+class WCProductVariableDataStoreCustomTable extends WCProductDataStoreCustomTable implements \WC_Object_Data_Store_Interface {
 
 	/**
 	 * Cached & hashed prices array for child variations.
@@ -110,7 +110,7 @@ class WCProductVariableDataStoreCustomTable extends \WC_Product_Data_Store_Custo
 	/**
 	 * Loads an array of attributes used for variations, as well as their possible values.
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param \WC_Product $product Product object.
 	 */
 	protected function read_variation_attributes( &$product ) {
 		global $wpdb;
@@ -118,7 +118,7 @@ class WCProductVariableDataStoreCustomTable extends \WC_Product_Data_Store_Custo
 		$variation_attributes = array();
 		$attributes           = $product->get_attributes();
 		$child_ids            = $product->get_children();
-		$cache_key            = WC_Cache_Helper::get_cache_prefix( 'products' ) . 'product_variation_attributes_' . $product->get_id();
+		$cache_key            = \WC_Cache_Helper::get_cache_prefix( 'products' ) . 'product_variation_attributes_' . $product->get_id();
 		$cache_group          = 'products';
 		$cached_data          = wp_cache_get( $cache_key, $cache_group );
 
@@ -197,9 +197,9 @@ class WCProductVariableDataStoreCustomTable extends \WC_Product_Data_Store_Custo
 			$transient_cached_prices_array = array_filter( (array) json_decode( strval( get_transient( $transient_name ) ), true ) );
 
 			// If the product version has changed since the transient was last saved, reset the transient cache.
-			if ( empty( $transient_cached_prices_array['version'] ) || WC_Cache_Helper::get_transient_version( 'product' ) !== $transient_cached_prices_array['version'] ) {
+			if ( empty( $transient_cached_prices_array['version'] ) || \WC_Cache_Helper::get_transient_version( 'product' ) !== $transient_cached_prices_array['version'] ) {
 				$transient_cached_prices_array = array(
-					'version' => WC_Cache_Helper::get_transient_version( 'product' ),
+					'version' => \WC_Cache_Helper::get_transient_version( 'product' ),
 				);
 			}
 
@@ -319,7 +319,7 @@ class WCProductVariableDataStoreCustomTable extends \WC_Product_Data_Store_Custo
 			}
 		}
 
-		$price_hash[] = WC_Cache_Helper::get_transient_version( 'product' );
+		$price_hash[] = \WC_Cache_Helper::get_transient_version( 'product' );
 		$price_hash   = md5( wp_json_encode( apply_filters( 'woocommerce_get_variation_prices_hash', $price_hash, $product, $include_taxes ) ) );
 
 		return $price_hash;

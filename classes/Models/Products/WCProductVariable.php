@@ -31,7 +31,8 @@ class WCProductVariable extends \WC_Product_Variable {
 		$this->data = apply_filters( 'atum/model/product_variable/data', array_merge( $this->data, $this->atum_data ) );
 		parent::__construct( $product );
 
-	}
+		do_action( 'atum/model/product_variable', $product );
 
+	}
 
 }
