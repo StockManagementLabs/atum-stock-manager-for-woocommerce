@@ -489,6 +489,8 @@ class Suppliers {
 	 * @param bool         $type_filter  Optional. Whether to filter the retrieved suppliers by product type or not.
 	 *
 	 * @return array|bool
+	 *
+	 * TODO: 1.5.
 	 */
 	public static function get_supplier_products( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE ) {
 
