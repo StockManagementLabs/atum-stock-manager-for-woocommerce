@@ -36,7 +36,10 @@
 		
 		.tablenav-current-page {
 			background-color: $gray-200;
-			padding: 8px 15px 11px;
+			padding: 8px 12px 6px;
+			@media all and (max-width: 782px) {
+				padding: 8px 15px 11px;
+			}
 		}
 		.paging-input, .table-paging {
 			margin: 0 10px;
@@ -47,6 +50,15 @@
 		
 		@media screen and (max-width: 782px) {
 			font-size: 13px;
+		}
+		
+		.tablenav-paging-text {
+			@media screen and (max-width: $screen-xs) {
+				width: auto;
+				float: none;
+				padding: 0;
+				margin-left: auto;
+			}
 		}
 	}
 	

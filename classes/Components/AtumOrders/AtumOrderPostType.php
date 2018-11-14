@@ -50,6 +50,13 @@ abstract class AtumOrderPostType {
 	 * @var string
 	 */
 	protected $search_label = 'atum_order';
+	
+	/**
+	 * Status that means an ATUM Order is finished
+	 *
+	 * @var string
+	 */
+	protected $finished = 'completed';
 
 	/**
 	 * The ATUM Order items table name
@@ -170,29 +177,32 @@ abstract class AtumOrderPostType {
 		register_post_type( $post_type, $args );
 
 		// Register the post statuses.
-		$atum_statuses = (array) apply_filters( 'atum/order_post_type/register_post_statuses',
-			array(
-				ATUM_PREFIX . 'pending'   => array(
-					'label'                     => _x( 'Pending', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
-					'public'                    => FALSE,
-					'exclude_from_search'       => FALSE,
-					'show_in_admin_all_list'    => TRUE,
-					'show_in_admin_status_list' => TRUE,
-					/* translators: the count of pendings */
-					'label_count'               => _n_noop( 'Pending <span class="count">(%s)</span>', 'Pending <span class="count">(%s)</span>', ATUM_TEXT_DOMAIN ),
+		$atum_statuses = [];
+		foreach ( static::get_statuses() as $status => $label ) {
+			
+			$count = "$label <span class='count'>(%s)</span>";
+			
+			$atum_statuses[ ATUM_PREFIX . $status ] = array(
+				'label'                     => $label,
+				'public'                    => FALSE,
+				'exclude_from_search'       => FALSE,
+				'show_in_admin_all_list'    => TRUE,
+				'show_in_admin_status_list' => TRUE,
+				/* translators: the count of orders in current status */
+				'label_count'               => array(
+					0          => $count,
+					1          => $count,
+					'singular' => $count,
+					'plural'   => $count,
+					'context'  => NULL,
+					'domain'   => ATUM_TEXT_DOMAIN,
 				),
-				ATUM_PREFIX . 'completed' => array(
-					'label'                     => _x( 'Completed', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
-					'public'                    => FALSE,
-					'exclude_from_search'       => FALSE,
-					'show_in_admin_all_list'    => TRUE,
-					'show_in_admin_status_list' => TRUE,
-					/* translators: the count of pendings */
-					'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', ATUM_TEXT_DOMAIN ),
-				),
-			)
-		);
-
+			);
+			
+		}
+		
+		$atum_statuses = (array) apply_filters( 'atum/order_post_type/register_post_statuses', $atum_statuses );
+		
 		foreach ( $atum_statuses as $atum_status => $values ) {
 			register_post_status( $atum_status, $values );
 		}
@@ -247,10 +257,10 @@ abstract class AtumOrderPostType {
 		foreach ( (array) $terms as $term ) {
 			$count = 0;
 
-			// Count all the orders with one of the ATUM Order's statuses (atum_pending or atum_completed).
+			// Count all the orders with one of the ATUM Order's statuses.
 			if ( $object_types ) {
 				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
-				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('atum_pending', 'atum_completed') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . $this->get_statuses_simple( TRUE ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
 			}
 
 			// This action is documented in wp-includes/taxonomy.php.
@@ -291,10 +301,10 @@ abstract class AtumOrderPostType {
 
 			// Status.
 			if ( ! isset( $vars['post_status'] ) ) {
-
+				
 				// All the ATUM Order posts must have the custom statuses created for them.
-				$statuses = array( ATUM_PREFIX . 'pending', ATUM_PREFIX . 'completed' );
-
+				$statuses = $this->get_statuses_simple( TRUE );
+				
 				foreach ( $statuses as $key => $status ) {
 					if ( isset( $wp_post_statuses[ $status ] ) && FALSE === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
 						unset( $statuses[ $key ] );
@@ -342,7 +352,7 @@ abstract class AtumOrderPostType {
 		switch ( $column ) {
 
 			case 'status':
-				$statuses   = self::get_statuses();
+				$statuses   = static::get_statuses();
 				$atum_order = Helpers::get_atum_order_model( $post->ID );
 
 				if ( ! is_wp_error( $atum_order ) ) {
@@ -391,13 +401,13 @@ abstract class AtumOrderPostType {
 
 					// Check the status of the post.
 					$status = ( 'trash' !== $post->post_status ) ? '' : 'post-trashed';
-
+					
 					$latest_notes = get_comments( array(
 						'post_id' => $post->ID,
 						'number'  => 1,
 						'status'  => $status,
 					) );
-
+					
 					$latest_note = current( $latest_notes );
 
 					if ( isset( $latest_note->comment_content ) && 1 == $post->comment_count ) { // WPCS: loose comparison ok.
@@ -445,21 +455,12 @@ abstract class AtumOrderPostType {
 				$actions = array();
 				$status  = $atum_order->get_status();
 
-				if ( 'completed' === $status ) {
-
-					$actions['pending'] = array(
-						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status=pending&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-						'name'   => __( 'Mark as Pending', ATUM_TEXT_DOMAIN ),
-						'action' => 'pending',
-						'target' => '_self',
-					);
-
-				}
-				elseif ( 'pending' === $status ) {
-
+				if ( $this->finished !== $status ) {
+					
 					$actions['complete'] = array(
-						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status=completed&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-						'name'   => __( 'Mark as Completed', ATUM_TEXT_DOMAIN ),
+						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status={$this->finished}&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+						/* translators: Change the order's status to finished */
+						'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ $this->finished ] ),
 						'action' => 'complete',
 						'target' => '_self',
 					);
@@ -717,10 +718,12 @@ abstract class AtumOrderPostType {
 		if ( isset( $actions['edit'] ) ) {
 			unset( $actions['edit'] );
 		}
-
-		$actions['mark_pending']   = __( 'Mark as Pending', ATUM_TEXT_DOMAIN );
-		$actions['mark_completed'] = __( 'Mark as Completed', ATUM_TEXT_DOMAIN );
-
+		
+		foreach ( static::get_statuses() as $status => $label ) {
+			/* translators: Change the order's status to $status */
+			$actions[ "atum_order_mark_$status" ] = sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $label );
+		}
+		
 		return $actions;
 
 	}
@@ -743,8 +746,8 @@ abstract class AtumOrderPostType {
 			return $redirect_to;
 		}
 
-		$statuses      = self::get_statuses();
-		$new_status    = substr( $action, 5 ); // Get the status name from action.
+		$statuses      = static::get_statuses();
+		$new_status    = substr( $action, 16 ); // Get the status name from action.
 		$report_action = 'marked_' . $new_status;
 
 		// Sanity check: bail out if this is actually not a status, or is not a registered status.
@@ -791,7 +794,7 @@ abstract class AtumOrderPostType {
 			return;
 		}
 
-		$statuses = self::get_statuses();
+		$statuses = static::get_statuses();
 
 		// Check if any status changes happened.
 		foreach ( $statuses as $slug => $name ) {
@@ -1121,7 +1124,7 @@ abstract class AtumOrderPostType {
 		/* @noinspection PhpUndefinedClassConstantInspection */
 		return ! empty( static::TAXONOMY ) ? static::TAXONOMY : FALSE;
 	}
-
+	
 	/**
 	 * Get the available ATUM Order statuses
 	 *
@@ -1130,12 +1133,56 @@ abstract class AtumOrderPostType {
 	 * @return array
 	 */
 	public static function get_statuses() {
-
-		return (array) apply_filters( 'atum/order_post_type/statuses', array(
-			'pending'   => __( 'Pending', ATUM_TEXT_DOMAIN ),
-			'completed' => __( 'Completed', ATUM_TEXT_DOMAIN ),
+		
+		return (array) apply_filters( 'atum/inventory_logs/statuses', array(
+			'pending'   => _x( 'Pending', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
+			'completed' => _x( 'Completed', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
 		) );
-
+	}
+	
+	/**
+	 * Get the available ATUM Order statuses (only the statuses without any additional info)
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param bool $add_prefix Whether to add or not the ATUM Prefix to each status, default FALSE.
+	 *
+	 * @return array
+	 */
+	public static function get_statuses_simple( $add_prefix = FALSE ) {
+		
+		$statuses = array_keys( static::get_statuses() );
+		
+		if ( $add_prefix ) {
+			array_walk( $statuses, function ( &$value, $key ) {
+				
+				$value = ATUM_PREFIX . $value;
+			} );
+		}
+		
+		return $statuses;
+	}
+	
+	/**
+	 * Output a dropdown to choose the ATUM Order status
+	 *
+	 * @since 1.2.9
+	 *
+	 * @param string $id        The select ID.
+	 * @param string $value     The selected option.
+	 */
+	public static function atum_order_status_dropdown( $id, $value ) {
+		
+		?>
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select">
+			<?php
+			$statuses = static::get_statuses();
+			foreach ( $statuses as $status => $status_name ) : ?>
+				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+		
 	}
 
 }

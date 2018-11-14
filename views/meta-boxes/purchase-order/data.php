@@ -15,6 +15,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Inc\Helpers;
 
 $po_status = $atum_order->get_status();
@@ -67,7 +68,7 @@ $po_status = $atum_order->get_status();
 
 				<p class="form-field form-field-wide">
 					<label for="status"><?php esc_html_e( 'PO status', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php Helpers::atum_order_status_dropdown( 'status', $po_status ) ?>
+					<?php PurchaseOrders::atum_order_status_dropdown( 'status', $po_status ) ?>
 				</p>
 
 				<p class="form-field expected-at-location-date">

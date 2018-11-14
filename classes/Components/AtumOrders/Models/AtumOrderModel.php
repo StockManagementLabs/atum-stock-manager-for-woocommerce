@@ -800,7 +800,7 @@ abstract class AtumOrderModel {
 				'post_date'     => gmdate( 'Y-m-d H:i:s', $current_date->getOffsetTimestamp() ),
 				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $current_date->getTimestamp() ),
 				'post_type'     => $this->post->post_type,
-				'post_status'   => in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ? ATUM_PREFIX . $status : 'publish',
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? ATUM_PREFIX . $status : 'publish',
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
@@ -842,7 +842,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
 			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
-			'post_status'       => ( in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ) ? ATUM_PREFIX . $status : 'publish',
+			'post_status'       => ( in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ) ? ATUM_PREFIX . $status : 'publish',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -878,7 +878,7 @@ abstract class AtumOrderModel {
 
 		$old_status = $this->get_status();
 		$new_status = FALSE !== strpos( $new_status, ATUM_PREFIX ) ? str_replace( ATUM_PREFIX, '', $new_status ) : $new_status;
-		$statuses   = AtumOrderPostType::get_statuses();
+		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {

@@ -55,8 +55,8 @@ defined( 'ABSPATH' ) || die;
 					</div>
 					<input type="text" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
 							aria-label="Text input with dropdown button"
-							data-no-option="<?php esc_attr_e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>"
-							placeholder="<?php esc_attr_e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
+							data-no-option="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>"
+							placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
 
 					<?php if ( 'no' === $ajax ) : ?>
 						<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>" disabled>
