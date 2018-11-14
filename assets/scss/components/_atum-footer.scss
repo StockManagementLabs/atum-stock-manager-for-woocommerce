@@ -51,6 +51,9 @@
 				display: none;
 			}
 		}
+		@media screen and (max-width: $screen-xs) {
+			padding: 14px 23px;
+		}
 	}
 	#footer-upgrade {
 		display: none;

@@ -3186,6 +3186,12 @@ input[type="button"].btn-block {
   }
 }
 
+@media screen and (max-width: 480px) {
+  #wpfooter .footer-box {
+    padding: 14px 23px;
+  }
+}
+
 #wpfooter #footer-upgrade {
   display: none;
 }

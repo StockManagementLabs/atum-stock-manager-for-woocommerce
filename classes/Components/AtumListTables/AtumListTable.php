@@ -1268,7 +1268,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 
 				case 'onbackorder':
-					$classes .= ' cell-blue';
+					$classes .= ' cell-yellow';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
 					break;
@@ -1285,7 +1285,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		// Back Orders.
 		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
-			$classes .= ' cell-orange';
+			$classes .= ' cell-yellow';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$content  = '<span class="lnr lnr-circle-minus tips"' . $data_tip . '></span>';
 		}
