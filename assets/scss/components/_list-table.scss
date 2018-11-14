@@ -109,10 +109,13 @@
 	.search-box {
 		@include flexbox;
 		//display: inline-block;
-		//float: right;
+		float: right;
 		margin-right: 3px;
 		margin-bottom: 3px;
 		flex-wrap: nowrap;
+		z-index: 999;
+		float: right;
+		margin-left: auto;
 
 		#search_column_btn{
 			@if $enable-rounded {
@@ -127,6 +130,7 @@
 			margin-right: 0;
 			border: none;
 			box-shadow: none;
+			width: 110px;
 		}
 		
 		.input-group {
@@ -204,7 +208,7 @@
 		align-items: center;
 		justify-content: left;
 		display: flex;
-		padding: 10px 0;
+		padding: 10px 11px;
 		margin: 0;
 		flex-wrap: wrap;
 		.tablenav-pages {
@@ -218,7 +222,7 @@
 			margin-left: 5px;
 		}
 		.tablenav-pages {
-			padding-right: 10px;
+			//padding-right: 10px;
 		}
 		#table-paging {
 			margin-left: 10px;
@@ -229,9 +233,18 @@
 	}
 	
 	.tablenav.bottom {
-		margin: 21px 0 0;
+		margin: 21px 11px 0;
 		@media all and (max-width: 782px) {
-			margin: 10px 0 0;
+			margin: 10px 11px 0;
+		}
+	}
+	.stock-central-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 0 11px 0 20px;
+		@media screen and (max-width: $screen-lg) {
+			flex-wrap: wrap;
 		}
 	}
 	.stock-central-nav {
@@ -244,24 +257,33 @@
 		-ms-overflow-style: -ms-autohiding-scrollbar;
 		-webkit-overflow-scrolling: touch;
 		white-space: nowrap;
+		width: 70%;
+		float: left;
+		margin: 0 11px 0 0;
 		&::-webkit-scrollbar {
 			display: none;
 		}
 		height: 70px;
-		margin: 0 11px 0 20px;
+		
+		@media screen and (max-width: $screen-lg) {
+			width: 100%;
+		}
 		
 		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 			width: 200px;
 			position: absolute;
 			z-index: 999;
-			height: 70px;
+			height: 65px;
 		}
 		.overflow-opacity-effect-right {
-			right: 0;
+			right: 30%;
 			background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+			@media screen and (max-width: $screen-lg) {
+				right: 0;
+			}
 		}
 		.overflow-opacity-effect-left {
 			display: none;
@@ -408,7 +430,6 @@
 		
 		&.bulkactions {
 			padding-right: 0;
-			padding: 0 11px;
 			
 			select {
 				max-width: 150px;

@@ -1258,19 +1258,19 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'instock':
 					$classes .= ' cell-green';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="dashicons dashicons-hidden tips"' . $data_tip . '></span>';
+					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
 					break;
 
 				case 'outofstock':
 					$classes .= ' cell-red';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="dashicons dashicons-hidden tips"' . $data_tip . '></span>';
+					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
 					break;
 
 				case 'onbackorder':
 					$classes .= ' cell-blue';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="dashicons dashicons-hidden tips"' . $data_tip . '></span>';
+					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
 					break;
 			}
 
@@ -1285,14 +1285,15 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		// Back Orders.
 		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
+			$classes .= ' cell-orange';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="dashicons dashicons-visibility tips"' . $data_tip . '></span>';
+			$content  = '<span class="lnr lnr-circle-minus tips"' . $data_tip . '></span>';
 		}
 		// Low Stock.
 		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
-			$classes .= ' cell-yellow';
+			$classes .= ' cell-blue';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="dashicons dashicons-warning tips"' . $data_tip . '></span>';
+			$content  = '<span class="lnr lnr-arrow-down-circle tips"' . $data_tip . '></span>';
 		}
 		// In Stock.
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {

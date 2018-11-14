@@ -3746,9 +3746,13 @@ input[type="button"].btn-block {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  float: right;
   margin-right: 3px;
   margin-bottom: 3px;
   flex-wrap: nowrap;
+  z-index: 999;
+  float: right;
+  margin-left: auto;
 }
 
 .atum-list-wrapper .search-box #search_column_btn {
@@ -3760,6 +3764,7 @@ input[type="button"].btn-block {
   margin-right: 0;
   border: none;
   box-shadow: none;
+  width: 110px;
 }
 
 .atum-list-wrapper .search-box .input-group {
@@ -3837,7 +3842,7 @@ input[type="button"].btn-block {
   align-items: center;
   justify-content: left;
   display: flex;
-  padding: 10px 0;
+  padding: 10px 11px;
   margin: 0;
   flex-wrap: wrap;
 }
@@ -3854,10 +3859,6 @@ input[type="button"].btn-block {
   margin-left: 5px;
 }
 
-.atum-list-wrapper .tablenav .tablenav-pages {
-  padding-right: 10px;
-}
-
 .atum-list-wrapper .tablenav #table-paging {
   margin-left: 10px;
 }
@@ -3869,12 +3870,25 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .tablenav.bottom {
-  margin: 21px 0 0;
+  margin: 21px 11px 0;
 }
 
 @media all and (max-width: 782px) {
   .atum-list-wrapper .tablenav.bottom {
-    margin: 10px 0 0;
+    margin: 10px 11px 0;
+  }
+}
+
+.atum-list-wrapper .stock-central-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 11px 0 20px;
+}
+
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .stock-central-header {
+    flex-wrap: wrap;
   }
 }
 
@@ -3899,27 +3913,41 @@ input[type="button"].btn-block {
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
+  width: 70%;
+  float: left;
+  margin: 0 11px 0 0;
   height: 70px;
-  margin: 0 11px 0 20px;
 }
 
 .atum-list-wrapper .stock-central-nav::-webkit-scrollbar {
   display: none;
 }
 
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .stock-central-nav {
+    width: 100%;
+  }
+}
+
 .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right, .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-left {
   width: 200px;
   position: absolute;
   z-index: 999;
-  height: 70px;
+  height: 65px;
 }
 
 .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right {
-  right: 0;
+  right: 30%;
   background: -webkit-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
   background: -o-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
   background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+}
+
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right {
+    right: 0;
+  }
 }
 
 .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-left {
@@ -4086,7 +4114,6 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .actions.bulkactions {
   padding-right: 0;
-  padding: 0 11px;
 }
 
 .atum-list-wrapper .actions.bulkactions select {
