@@ -418,7 +418,7 @@ final class Ajax {
 		
 		foreach ( $data as $product_id => &$product_meta ) {
 			
-			Helpers::update_product_meta( $product_id, $product_meta );
+			Helpers::update_product_data( $product_id, $product_meta );
 			
 		}
 		

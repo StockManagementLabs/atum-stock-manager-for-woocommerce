@@ -1515,15 +1515,15 @@ final class Helpers {
 	}
 	
 	/**
-	 * Update product meta from Stock Central List
+	 * Update product meta from ATUM List tables
 	 *
 	 * @since 1.3.0
 	 *
 	 * @param int   $product_id
-	 * @param array $product_meta
+	 * @param array $product_data
 	 * @param bool  $skip_action
 	 */
-	public static function update_product_meta( $product_id, $product_meta, $skip_action = FALSE ) {
+	public static function update_product_data( $product_id, $product_data, $skip_action = FALSE ) {
 		
 		$product = wc_get_product( $product_id );
 		
@@ -1531,16 +1531,16 @@ final class Helpers {
 			return;
 		}
 		
-		$product_meta = apply_filters( 'atum/product_meta', $product_meta, $product_id );
+		$product_data = apply_filters( 'atum/product_data', $product_data, $product_id );
 		
-		foreach ( $product_meta as $meta_key => &$meta_value ) {
+		foreach ( $product_data as $meta_key => &$meta_value ) {
 			
 			$meta_key = esc_attr( $meta_key );
 			
 			switch ( $meta_key ) {
 				
 				case 'stock':
-					unset( $product_meta['stock_custom'], $product_meta['stock_currency'] );
+					unset( $product_data['stock_custom'], $product_data['stock_currency'] );
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
@@ -1555,7 +1555,7 @@ final class Helpers {
 						$product->set_price( $meta_value );
 					}
 						
-					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
+					unset( $product_data['regular_price_custom'], $product_data['regular_price_currency'] );
 					
 					break;
 				
@@ -1569,10 +1569,11 @@ final class Helpers {
 					}
 
 					// Check for sale dates.
-					if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+					if ( isset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] ) ) {
 
-						$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
-						$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+						// TODO: USE WC_DATE.
+						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
+						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
 
 						$date_from = $date_from ? strtotime( $date_from ) : '';
 						$date_to   = $date_to ? strtotime( $date_to ) : '';
@@ -1600,14 +1601,14 @@ final class Helpers {
 
 					}
 						
-					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
+					unset( $product_data['sale_price_custom'], $product_data['sale_price_currency'] );
 					
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
 					$product->set_purchase_price( $meta_value );
 					
-					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
+					unset( $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
 					break;
 				
 				// Any other text meta.
@@ -1619,7 +1620,7 @@ final class Helpers {
 						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
 					}
 
-					unset( $product_meta[ '_' . $meta_key . '_custom' ], $product_meta[ '_' . $meta_key . 'currency' ] );
+					unset( $product_data[ '_' . $meta_key . '_custom' ], $product_data[ '_' . $meta_key . 'currency' ] );
 					break;
 			}
 			
@@ -1628,7 +1629,7 @@ final class Helpers {
 		$product->save();
 		
 		if ( ! $skip_action ) {
-			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
+			do_action( 'atum/product_data_updated', $product_id, $product_data );
 		}
 		
 	}
