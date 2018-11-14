@@ -4308,6 +4308,7 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
   height: 30px;
+  margin: 0 0 0 5px;
 }
 
 @media screen and (max-width: 782px) {

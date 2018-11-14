@@ -543,6 +543,7 @@
 		
 		input, select, .select2-container {
 			height: 30px;
+			margin: 0 0 0 5px;
 			@media screen and (max-width: 782px) {
 				height: 35px;
 				.select2-selection, .select2-selection__rendered, .select2-selection__arrow {
