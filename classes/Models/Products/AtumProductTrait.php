@@ -206,8 +206,8 @@ trait AtumProductTrait {
 	 *                                  If the DateTime string has no timezone or offset, WordPress site timezone will be assumed.
 	 *                                  Null if there is no date.
 	 */
-	public function set_out_of_stock_date( $date = NULL ) {
-		$this->set_date_prop( 'out_of_stock_date', $date );
+	public function set_out_stock_date( $date = NULL ) {
+		$this->set_date_prop( 'out_stock_date', $date );
 	}
 
 	/**
@@ -217,8 +217,8 @@ trait AtumProductTrait {
 	 *
 	 * @param int|string $amount Empty string if value not set.
 	 */
-	public function set_out_of_stock_threshold( $amount ) {
-		$this->set_prop( 'out_of_stock_threshold', '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_out_stock_threshold( $amount ) {
+		$this->set_prop( 'out_stock_threshold', '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
