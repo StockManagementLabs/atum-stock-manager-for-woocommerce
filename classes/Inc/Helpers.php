@@ -540,7 +540,7 @@ final class Helpers {
 		$lost_sales = FALSE;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		$out_of_stock_date = $product->get_out_stock_date();
@@ -592,7 +592,7 @@ final class Helpers {
 		$out_of_stock_days = FALSE;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		// Check if the current product has the "Out of stock" date recorded.
@@ -1061,7 +1061,7 @@ final class Helpers {
 	public static function get_atum_control_status( $product ) {
 
 		if ( ! is_a( $product, '\WC_product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		return $product->get_atum_controlled();
@@ -1078,7 +1078,7 @@ final class Helpers {
 	public static function update_atum_control( $product, $status = 'enable' ) {
 
 		if ( ! is_a( $product, '\WC_product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
@@ -1096,7 +1096,7 @@ final class Helpers {
 	public static function update_wc_manage_stock( $product, $status = 'enable' ) {
 
 		if ( ! is_a( $product, '\WC_product' ) ) {
-			$product = wc_get_product( $product );
+			$product = wc_get_product( $product ); // We don't need to use the ATUM models here.
 		}
 
 		$product->set_manage_stock( ( 'enable' === $status ? 'yes' : 'no' ) );
@@ -1513,34 +1513,53 @@ final class Helpers {
 		return new $model_class( $atum_order_id );
 
 	}
+
+	/**
+	 * Get a WooCommerce product using the ATUM's product data models
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param mixed $the_product Post object or post ID of the product.
+	 *
+	 * @return \WC_Product|null|false
+	 */
+	public static function get_atum_product( $the_product = FALSE ) {
+
+		Globals::enable_atum_product_data_models();
+		$product = wc_get_product( $the_product );
+		Globals::disable_atum_product_data_models();
+
+		return $product;
+
+	}
 	
 	/**
-	 * Update product meta from Stock Central List
+	 * Update product meta from ATUM List tables
 	 *
 	 * @since 1.3.0
 	 *
 	 * @param int   $product_id
-	 * @param array $product_meta
+	 * @param array $product_data
 	 * @param bool  $skip_action
 	 */
-	public static function update_product_meta( $product_id, $product_meta, $skip_action = FALSE ) {
+	public static function update_product_data( $product_id, $product_data, $skip_action = FALSE ) {
 		
-		$product = wc_get_product( $product_id );
+		$product = self::get_atum_product( $product_id );
 		
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
 		}
 		
-		$product_meta = apply_filters( 'atum/product_meta', $product_meta, $product_id );
+		$product_data = apply_filters( 'atum/product_data', $product_data, $product_id );
 		
-		foreach ( $product_meta as $meta_key => &$meta_value ) {
+		foreach ( $product_data as $meta_key => &$meta_value ) {
 			
 			$meta_key = esc_attr( $meta_key );
 			
 			switch ( $meta_key ) {
 				
 				case 'stock':
-					unset( $product_meta['stock_custom'], $product_meta['stock_currency'] );
+					unset( $product_data['stock_custom'], $product_data['stock_currency'] );
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
@@ -1555,7 +1574,7 @@ final class Helpers {
 						$product->set_price( $meta_value );
 					}
 						
-					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
+					unset( $product_data['regular_price_custom'], $product_data['regular_price_currency'] );
 					
 					break;
 				
@@ -1569,10 +1588,11 @@ final class Helpers {
 					}
 
 					// Check for sale dates.
-					if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+					if ( isset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] ) ) {
 
-						$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
-						$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+						// TODO: USE WC_DATE.
+						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
+						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
 
 						$date_from = $date_from ? strtotime( $date_from ) : '';
 						$date_to   = $date_to ? strtotime( $date_to ) : '';
@@ -1600,14 +1620,14 @@ final class Helpers {
 
 					}
 						
-					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
+					unset( $product_data['sale_price_custom'], $product_data['sale_price_currency'] );
 					
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
 					$product->set_purchase_price( $meta_value );
 					
-					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
+					unset( $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
 					break;
 				
 				// Any other text meta.
@@ -1619,7 +1639,7 @@ final class Helpers {
 						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
 					}
 
-					unset( $product_meta[ '_' . $meta_key . '_custom' ], $product_meta[ '_' . $meta_key . 'currency' ] );
+					unset( $product_data[ '_' . $meta_key . '_custom' ], $product_data[ '_' . $meta_key . 'currency' ] );
 					break;
 			}
 			
@@ -1628,7 +1648,7 @@ final class Helpers {
 		$product->save();
 		
 		if ( ! $skip_action ) {
-			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
+			do_action( 'atum/product_data_updated', $product_id, $product_data );
 		}
 		
 	}
@@ -1699,7 +1719,7 @@ final class Helpers {
 
 			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
-				$product = wc_get_product( $id_to_rebuild );
+				$product = self::get_atum_product( $id_to_rebuild );
 
 				// Delete _out_stock_threshold (avoid partial works to be done again).
 				if ( $clean_meta ) {

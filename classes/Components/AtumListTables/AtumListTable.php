@@ -323,10 +323,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		// Enable the ATUM product models for all the products shown in the List Tables.
-		// TODO: WOULD BE BETTER TO ENABLE THIS GLOBALLY?
-		Globals::enable_atum_product_models();
-
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] ); // WPCS: CSRF ok.
@@ -464,7 +460,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product     = Helpers::get_atum_product( $item );
 		$type              = $this->product->get_type();
 		$this->allow_calcs = TRUE;
 		$row_classes       = array( ( ++ $this->row_count % 2 ? 'even' : 'odd' ) );
@@ -524,7 +520,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$this->is_child = TRUE;
 					// Set the product prop to the child product.
-					$this->product = wc_get_product( $child_id );
+					$this->product = Helpers::get_atum_product( $child_id );
 					$this->single_expandable_row( $this->product, ( 'grouped' === $type ? $type : 'variation' ) );
 				}
 			}
@@ -2180,7 +2176,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		foreach ( $this->supplier_variation_products as $index => $variation_id ) {
 
-			$variation_product = wc_get_product( $variation_id );
+			$variation_product = Helpers::get_atum_product( $variation_id );
 
 			if ( ! is_a( $variation_product, '\WC_Product_Variation' ) ) {
 				unset( $this->supplier_variation_products[ $index ] );
@@ -3824,6 +3820,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Filter the parents of the current values.
 		$parents = array();
+		// TODO: PERHAPS WOULD BE MOST PERFORMANT TO DO A SINGLE SQL QUERY?
 		foreach ( $product_ids as $product_id ) {
 
 			$product = wc_get_product( $product_id );

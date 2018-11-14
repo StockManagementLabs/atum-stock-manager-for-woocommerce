@@ -140,8 +140,8 @@ class Wpml {
 			}
 
 			// Update product meta translations.
-			add_filter( 'atum/product_meta', array( $this, 'update_multicurrency_translations_meta' ), 10, 2 );
-			add_action( 'atum/product_meta_updated', array( $this, 'update_translations_meta' ), 10, 2 );
+			add_filter( 'atum/product_data', array( $this, 'update_multicurrency_translations_data' ), 10, 2 );
+			add_action( 'atum/product_data_updated', array( $this, 'update_translations_data' ), 10, 2 );
 
 			// Filter current language translations from the unmanaged products query.
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
@@ -352,7 +352,7 @@ class Wpml {
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
 
-			$product             = wc_get_product( $this->original_product_id );
+			$product             = wc_get_product( $this->original_product_id ); // We don't need the ATUM models here.
 			$regular_price_value = $product->get_regular_price();
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'trim_zeros' => TRUE,
@@ -393,7 +393,7 @@ class Wpml {
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
 
-			$product          = wc_get_product( $this->original_product_id );
+			$product          = wc_get_product( $this->original_product_id ); // We don't need to use the ATUM models here.
 			$sale_price_value = $product->get_sale_price();
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
 				'trim_zeros' => TRUE,
@@ -451,22 +451,22 @@ class Wpml {
 	}
 
 	/**
-	 * Update current product translations meta
+	 * Update current product translations data
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param array $product_meta
+	 * @param array $product_data
 	 * @param int   $product_id
 	 *
 	 * @return array
 	 */
-	public function update_multicurrency_translations_meta( $product_meta, $product_id ) {
+	public function update_multicurrency_translations_data( $product_data, $product_id ) {
 
 		if ( $this->multicurrency_active ) {
 
 			$original_product_id = self::get_original_product_id( $product_id );
 
-			foreach ( $product_meta as $meta_key => $meta_value ) {
+			foreach ( $product_data as $meta_key => $meta_value ) {
 
 				$meta_key = esc_attr( $meta_key );
 
@@ -474,49 +474,49 @@ class Wpml {
 
 					// Stock is updated.
 					case 'regular_price':
-						if ( isset( $product_meta['regular_price_custom'] ) && 'yes' === $product_meta['regular_price_custom'] ) {
+						if ( isset( $product_data['regular_price_custom'] ) && 'yes' === $product_data['regular_price_custom'] ) {
 
-							$custom_prices                   = $this->wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['regular_price_currency'] );
+							$custom_prices                   = $this->wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_data['regular_price_currency'] );
 							$custom_prices['_regular_price'] = $meta_value;
 
-							$this->wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['regular_price_currency'] );
+							$this->wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_data['regular_price_currency'] );
 
-							// Unset the meta values to prevent next translations updates in update_translations_meta.
-							unset( $product_meta['regular_price'], $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
+							// Unset the meta values to prevent next translations updates in update_translations_data.
+							unset( $product_data['regular_price'], $product_data['regular_price_custom'], $product_data['regular_price_currency'] );
 
 						}
 
 						break;
 
 					case 'sale_price':
-						if ( isset( $product_meta['sale_price_custom'] ) && 'yes' === $product_meta['sale_price_custom'] ) {
+						if ( isset( $product_data['sale_price_custom'] ) && 'yes' === $product_data['sale_price_custom'] ) {
 
-							$custom_prices                = $this->wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_meta['sale_price_currency'] );
+							$custom_prices                = $this->wpml->multi_currency->custom_prices->get_product_custom_prices( $product_id, $product_data['sale_price_currency'] );
 							$custom_prices['_sale_price'] = $meta_value;
 
-							if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+							if ( isset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] ) ) {
 
-								$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
-								$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+								$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
+								$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
 
 								$custom_prices['_sale_price_dates_from'] = $date_from ? strtotime( $date_from ) : '';
 								$custom_prices['_sale_price_dates_to']   = $date_to ? strtotime( $date_to ) : '';
 
 								// Ensure these meta keys are not handled on next iterations.
-								unset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] );
+								unset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] );
 							}
 
-							$this->wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_meta['sale_price_currency'] );
+							$this->wpml->multi_currency->custom_prices->update_custom_prices( $original_product_id, $custom_prices, $product_data['sale_price_currency'] );
 
-							unset( $product_meta['sale_price'], $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
+							unset( $product_data['sale_price'], $product_data['sale_price_custom'], $product_data['sale_price_currency'] );
 						}
 
 						break;
 
 					case 'purchase_price':
-						if ( isset( $product_meta['purchase_price_custom'] ) && 'yes' === $product_meta['purchase_price_custom'] ) {
-							update_post_meta( $original_product_id, '_' . $meta_key . '_' . $product_meta['purchase_price_currency'], wc_format_decimal( $meta_value ) );
-							unset( $product_meta['purchase_price'], $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
+						if ( isset( $product_data['purchase_price_custom'] ) && 'yes' === $product_data['purchase_price_custom'] ) {
+							update_post_meta( $original_product_id, '_' . $meta_key . '_' . $product_data['purchase_price_currency'], wc_format_decimal( $meta_value ) );
+							unset( $product_data['purchase_price'], $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
 						}
 
 						break;
@@ -526,19 +526,19 @@ class Wpml {
 
 		}
 
-		return $product_meta;
+		return $product_data;
 
 	}
 
 	/**
-	 * Update current product translations meta
+	 * Update current product translations data
 	 *
 	 * @since 1.4.1
 	 *
 	 * @param int   $product_id
-	 * @param array $product_meta
+	 * @param array $product_data
 	 */
-	public function update_translations_meta( $product_id, $product_meta ) {
+	public function update_translations_data( $product_id, $product_data ) {
 
 		$post_type = get_post_type( $product_id );
 
@@ -547,7 +547,7 @@ class Wpml {
 
 		foreach ( $product_translations as $translation ) {
 			if ( $translation->element_id !== $product_id ) {
-				Helpers::update_product_meta( $translation->element_id, $product_meta, TRUE );
+				Helpers::update_product_data( $translation->element_id, $product_data, TRUE );
 			}
 		}
 
@@ -581,7 +581,7 @@ class Wpml {
 	 */
 	public function wpml_add_purchase_price_to_custom_price_labels( $labels, $product_id ) {
 
-		$labels['_purchase_price'] = __( 'Purchase Price', ATUM_TEXT_DOMAIN );
+		$labels[ Globals::PURCHASE_PRICE_KEY ] = __( 'Purchase Price', ATUM_TEXT_DOMAIN );
 		return $labels;
 	}
 
@@ -599,10 +599,10 @@ class Wpml {
 	public function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
 
 		if ( $variation_id ) {
-			$prices['_purchase_price'] = ! empty( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) : ''; // WPCS: CSRF ok.
+			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) : ''; // WPCS: CSRF ok.
 		}
 		else {
-			$prices['_purchase_price'] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : ''; // WPCS: CSRF ok.
+			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : ''; // WPCS: CSRF ok.
 		}
 
 		return $prices;
@@ -642,7 +642,7 @@ class Wpml {
 		foreach ( $product_translations as $translation ) {
 
 			if ( $translation->element_id !== $post_id ) {
-				$product = wc_get_product( $post_id );
+				$product = Helpers::get_atum_product( $post_id );
 				$product->set_purchase_price( $purchase_price );
 				$product->save();
 			}

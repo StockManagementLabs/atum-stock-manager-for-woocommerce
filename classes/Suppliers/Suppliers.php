@@ -381,7 +381,7 @@ class Suppliers {
 		global $post;
 
 		$product_id = empty( $variation ) ? $post->ID : $variation->ID;
-		$product    = wc_get_product( $product_id );
+		$product    = Helpers::get_atum_product( $product_id );
 
 		if ( empty( $variation ) ) {
 
@@ -432,7 +432,7 @@ class Suppliers {
 	 */
 	public function save_product_supplier_fields( $product_id ) {
 
-		$product = wc_get_product( $product_id );
+		$product = Helpers::get_atum_product( $product_id );
 
 		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
 			return;

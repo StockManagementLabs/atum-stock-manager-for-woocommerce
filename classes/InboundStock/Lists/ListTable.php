@@ -444,7 +444,7 @@ class ListTable extends AtumListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product     = Helpers::get_atum_product( $item );
 		$this->allow_calcs = TRUE;
 
 		echo '<tr>';

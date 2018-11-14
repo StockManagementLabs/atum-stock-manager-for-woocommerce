@@ -267,27 +267,27 @@ final class Globals {
 	}
 
 	/**
-	 * Add the hook to enable the ATUM Product models
+	 * Add the hook to enable the ATUM Product data models
 	 *
 	 * @since 1.5.0
 	 */
-	public static function enable_atum_product_models() {
-		add_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ), PHP_INT_MAX, 4 );
+	public static function enable_atum_product_data_models() {
+		add_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_data_model_class' ), PHP_INT_MAX, 4 );
 		add_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), PHP_INT_MAX );
 	}
 
 	/**
-	 * Add the hook to enable the ATUM Product models
+	 * Add the hook to enable the ATUM Product data models
 	 *
 	 * @since 1.5.0
 	 */
-	public static function disable_atum_product_models() {
-		remove_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_model_class' ), PHP_INT_MAX );
+	public static function disable_atum_product_data_models() {
+		remove_filter( 'woocommerce_product_class', array( __CLASS__, 'get_atum_product_data_model_class' ), PHP_INT_MAX );
 		remove_filter( 'woocommerce_data_stores', array( __CLASS__, 'replace_wc_data_stores' ), PHP_INT_MAX );
 	}
 
 	/**
-	 * Get the ATUM class name matching the passed product type
+	 * Get the ATUM's product data model class name matching the passed product type
 	 *
 	 * @since 1.5.0
 	 *
@@ -298,7 +298,7 @@ final class Globals {
 	 *
 	 * @return string
 	 */
-	public static function get_atum_product_model_class( $wc_product_class, $product_type, $post_type, $product_id ) {
+	public static function get_atum_product_data_model_class( $wc_product_class, $product_type, $post_type, $product_id ) {
 
 		$atum_product_class = Helpers::get_atum_product_class( $product_type );
 

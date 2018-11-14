@@ -245,7 +245,8 @@ class Hooks {
 	 */
 	public function add_product_data_tab_panel() {
 
-		$product                  = wc_get_product( get_the_ID() );
+		$product_id               = get_the_ID();
+		$product                  = Helpers::get_atum_product( $product_id );
 		$product_status           = get_post_status( $product_id );
 		$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple' ] );
 		$control_button_classes   = (array) apply_filters( 'atum/product_data/control_button/classes', [ 'show_if_variable' ] );
@@ -264,6 +265,9 @@ class Hooks {
 	 * @param \WP_Post $variation        The variation post.
 	 */
 	public function add_product_variation_data_panel( $loop, $variation_data, $variation ) {
+
+		// Get the variation product.
+		$variation = Helpers::get_atum_product( $variation->ID );
 
 		Helpers::load_view( 'meta-boxes/product-data/atum-variation-panel', compact( 'loop', 'variation_data', 'variation' ) );
 
@@ -287,7 +291,7 @@ class Hooks {
 		$product_tab_values     = isset( $_POST['atum_product_tab'] ) ? $_POST['atum_product_tab'] : array();
 		$product_tab_fields     = Globals::get_product_tab_fields();
 		$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
-		$product                = wc_get_product( $product_id );
+		$product                = Helpers::get_atum_product( $product_id );
 
 		// Update the "_inehritable" meta key.
 		$product->set_inheritable( ( $is_inheritable_product ? 'yes' : 'no' ) );
@@ -384,7 +388,7 @@ class Hooks {
 		$woocommerce_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
 
 		$product_id          = empty( $variation ) ? $post->ID : $variation->ID;
-		$product             = wc_get_product( $product_id );
+		$product             = Helpers::get_atum_product( $product_id );
 		$out_stock_threshold = $product->get_out_stock_threshold();
 		$product_type        = empty( $variation ) ? $product->get_type() : '';
 
@@ -424,7 +428,7 @@ class Hooks {
 
 		global $pagenow;
 
-		$product = wc_get_product( $post_id );
+		$product = Helpers::get_atum_product( $post_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock(), TRUE ) ) {
 			return;
@@ -496,7 +500,7 @@ class Hooks {
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 
-		$product     = wc_get_product( $product_id );
+		$product     = Helpers::get_atum_product( $product_id );
 		$field_value = (float) $product->get_purchase_price();
 		$price       = (float) $product->get_price();
 
@@ -513,7 +517,7 @@ class Hooks {
 	 */
 	public function save_purchase_price( $product_id ) {
 
-		$product            = wc_get_product( $product_id );
+		$product            = Helpers::get_atum_product( $product_id );
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 		$old_purchase_price = $product->get_purchase_price();
 		$new_purchase_price = NULL;
@@ -575,7 +579,7 @@ class Hooks {
 				$stock_html = ' (';
 				foreach ( $variations as $variation_id ) {
 					
-					$variation_product = wc_get_product( $variation_id );
+					$variation_product = wc_get_product( $variation_id ); // We don't need to use ATUM models here.
 					$variation_stock   = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
 					$variation_status  = $variation_product->get_stock_status();
 					$style             = 'color:#a44';
@@ -590,14 +594,14 @@ class Hooks {
 							if ( 'instock' !== $stock_status ) {
 								$stock_status = 'onbackorder';
 								$stock_text   = esc_attr__( 'On backorder', ATUM_TEXT_DOMAIN );
-					}
+							}
 							$style = 'color:#eaa600';
 							break;
-				}
+					}
 					
 					$stock_html .= sprintf( '<span style="%s">%s</span>, ', $style, $variation_stock );
 					
-			}
+				}
 				
 				$stock_html = substr( $stock_html, 0, -2 ) . ')';
 			}
@@ -907,7 +911,7 @@ class Hooks {
 
 		unset( $this->stock_threshold );
 
-		$product                = wc_get_product( $variation_id );
+		$product                = Helpers::get_atum_product( $variation_id );
 		$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 		// Allow to be hooked externally.
