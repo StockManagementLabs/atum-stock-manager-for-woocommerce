@@ -37,10 +37,12 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @param bool $read_items Optional. Whether to read the inner items.
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
-
-		// Add the button for adding the inbound stock products to the WC stock.
-		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_button' ) );
-
+		
+		if ( version_compare( WC()->version, '3.5', '<' ) ) {
+			// Add the button for adding the inbound stock products to the WC stock.
+			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_button' ) );
+		}
+		
 		// Add the button for setting the purchase price to products within POs.
 		add_action( 'atum/atum_order/item_meta_controls', array( $this, 'set_purchase_price_button' ) );
 
