@@ -122,6 +122,42 @@
 		float: right;
 		margin-left: auto;
 		
+		&.inbound-stock-search {
+			border: 1px solid $gray-200;
+			width: 280px;
+			height: 30px;
+			border-radius: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin: 10px 20px;
+			.atum-post-search {
+				width: 190px;
+				border-radius: 5px;
+				@media all and (max-width: 782px) {
+					margin-bottom: 0;
+				}
+				@media all and (max-width: $screen-xs) {
+					width: 100%;
+				}
+			}
+			input[type=submit] {
+				width: 87px;
+				height: 30px;
+				@media all and (max-width: 782px) {
+					margin-bottom: 0;
+				}
+			}
+			@media all and (max-width: 782px) {
+				margin: 10px 10px;
+			}
+			@media all and (max-width: $screen-xs) {
+				margin: 10px 10px;
+				width: 95%;
+				flex-wrap: nowrap;
+			}
+		}
+		
 		@media all and (max-width: $screen-xs-min) {
 			float: none;
 			width: 100%;
@@ -160,7 +196,7 @@
 			background-color: $white;
 			width: 270px;
 			flex-wrap: nowrap;
-			@media all and (max-width: $screen-xs-min) {
+			@media all and (max-width: $screen-xs) {
 				width: 100%;
 			}
 		}
@@ -267,10 +303,7 @@
 	}
 	
 	.tablenav.bottom {
-		margin: 21px 11px 0;
-		@media all and (max-width: 782px) {
-			margin: 10px 11px 0;
-		}
+		margin: 10px 11px 0;
 	}
 	.stock-central-header {
 		display: flex;
@@ -307,6 +340,10 @@
 			width: 100%;
 		}
 		
+		.subsubsub {
+			margin: 0;
+		}
+		
 		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 			width: 200px;
 			position: absolute;
@@ -334,11 +371,14 @@
 	}
 	.subsubsub {
 		position: relative;
-		margin-top: 0;
 		font-size: 16px;
 		letter-spacing: 0.4px;
 		font-weight: bold;
 		text-transform: capitalize;
+		margin: 10px 20px;
+		@media all and (max-width: 782px) {
+			margin: 10px 10px;
+		}
 		
 		li {
 			margin-right: 15px;
@@ -708,7 +748,7 @@
 	}
 }
 
-.atum-list-table, .floatThead-container {
+.atum-list-table, .floatThead-container, .inbound-stock-list {
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
@@ -726,6 +766,9 @@
 			min-width: 50px;
 			height: 60px;
 			white-space: normal;
+			font-weight: bold;
+			letter-spacing: 0.3px;
+			color: $gray-500;
 			
 			&.column-_supplier_sku {
 				.sorting-indicator {
@@ -775,11 +818,25 @@
 		}
 	}
 	
-	.item-heads {
-		@media screen and (max-width: 782px) {
-			td, th {
-				box-shadow: 0 1px 0 0 $gray-200;
+	tfoot {
+		.item-heads {
+			th {
+				padding: 3px 5px;
+				line-height: 1.1;
+				font-size: 14px;
+				min-width: 50px;
+				height: 60px;
+				white-space: normal;
+				font-weight: bold;
+				letter-spacing: 0.3px;
+				color: $gray-500;
 			}
+		}
+	}
+	
+	.item-heads {
+		td, th {
+			box-shadow: 0 1px 0 0 $gray-200;
 		}
 	}
 	
@@ -867,6 +924,7 @@
 			white-space: pre-wrap;
 			max-width: 71px;
 		}
+		
 		
 		&.check-column {
 			input[type=checkbox] {
@@ -1115,6 +1173,12 @@
 					font-size: 14px;
 					letter-spacing: 0.3px;
 					color: $blue;
+				}
+			}
+			&.calc_purchase_order {
+				a {
+					color: $blue;
+					font-weight: bold;
 				}
 			}
 		}

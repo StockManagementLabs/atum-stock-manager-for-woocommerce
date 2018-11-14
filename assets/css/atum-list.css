@@ -3434,6 +3434,11 @@ input[type="button"].btn-block {
   text-decoration: none;
 }
 
+#wpfooter .footer-box .footer-atum-buttons {
+  display: flex;
+  align-items: center;
+}
+
 #wpfooter .footer-box .footer-atum-buttons .footer-button {
   width: 130px;
   height: 30px;
@@ -3784,6 +3789,59 @@ input[type="button"].btn-block {
   margin-left: auto;
 }
 
+.atum-list-wrapper .search-box.inbound-stock-search {
+  border: 1px solid #e9ecef;
+  width: 280px;
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 20px;
+}
+
+.atum-list-wrapper .search-box.inbound-stock-search .atum-post-search {
+  width: 190px;
+  border-radius: 5px;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .search-box.inbound-stock-search .atum-post-search {
+    margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .search-box.inbound-stock-search .atum-post-search {
+    width: 100%;
+  }
+}
+
+.atum-list-wrapper .search-box.inbound-stock-search input[type=submit] {
+  width: 87px;
+  height: 30px;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .search-box.inbound-stock-search input[type=submit] {
+    margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .search-box.inbound-stock-search {
+    margin: 10px 10px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .search-box.inbound-stock-search {
+    margin: 10px 10px;
+    width: 95%;
+    flex-wrap: nowrap;
+  }
+}
+
 @media all and (max-width: 480px) {
   .atum-list-wrapper .search-box {
     float: none;
@@ -3938,13 +3996,7 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .tablenav.bottom {
-  margin: 21px 11px 0;
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .tablenav.bottom {
-    margin: 10px 11px 0;
-  }
+  margin: 10px 11px 0;
 }
 
 .atum-list-wrapper .stock-central-header {
@@ -4004,6 +4056,10 @@ input[type="button"].btn-block {
   }
 }
 
+.atum-list-wrapper .stock-central-nav .subsubsub {
+  margin: 0;
+}
+
 .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right, .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-left {
   width: 200px;
   position: absolute;
@@ -4036,11 +4092,17 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .subsubsub {
   position: relative;
-  margin-top: 0;
   font-size: 16px;
   letter-spacing: 0.4px;
   font-weight: bold;
   text-transform: capitalize;
+  margin: 10px 20px;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .subsubsub {
+    margin: 10px 10px;
+  }
 }
 
 .atum-list-wrapper .subsubsub li {
@@ -4437,49 +4499,52 @@ input[type="button"].btn-block {
   table-layout: auto !important;
 }
 
-.atum-list-table, .floatThead-container {
+.atum-list-table, .floatThead-container, .inbound-stock-list {
   margin-bottom: 15px;
   border-collapse: collapse;
 }
 
-.atum-list-table thead .item-heads, .atum-list-table tfoot, .floatThead-container thead .item-heads, .floatThead-container tfoot {
+.atum-list-table thead .item-heads, .atum-list-table tfoot, .floatThead-container thead .item-heads, .floatThead-container tfoot, .inbound-stock-list thead .item-heads, .inbound-stock-list tfoot {
   background-color: #fff;
 }
 
-.atum-list-table thead .item-heads th, .atum-list-table thead .item-heads td, .atum-list-table tfoot th, .atum-list-table tfoot td, .floatThead-container thead .item-heads th, .floatThead-container thead .item-heads td, .floatThead-container tfoot th, .floatThead-container tfoot td {
+.atum-list-table thead .item-heads th, .atum-list-table thead .item-heads td, .atum-list-table tfoot th, .atum-list-table tfoot td, .floatThead-container thead .item-heads th, .floatThead-container thead .item-heads td, .floatThead-container tfoot th, .floatThead-container tfoot td, .inbound-stock-list thead .item-heads th, .inbound-stock-list thead .item-heads td, .inbound-stock-list tfoot th, .inbound-stock-list tfoot td {
   border: none;
 }
 
-.atum-list-table thead .item-heads th, .atum-list-table tfoot th, .floatThead-container thead .item-heads th, .floatThead-container tfoot th {
+.atum-list-table thead .item-heads th, .atum-list-table tfoot th, .floatThead-container thead .item-heads th, .floatThead-container tfoot th, .inbound-stock-list thead .item-heads th, .inbound-stock-list tfoot th {
   padding: 3px 5px;
   line-height: 1.1;
   font-size: 14px;
   min-width: 50px;
   height: 60px;
   white-space: normal;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th.column-_supplier_sku .sorting-indicator, .atum-list-table tfoot th.column-_supplier_sku .sorting-indicator, .floatThead-container thead .item-heads th.column-_supplier_sku .sorting-indicator, .floatThead-container tfoot th.column-_supplier_sku .sorting-indicator {
+.atum-list-table thead .item-heads th.column-_supplier_sku .sorting-indicator, .atum-list-table tfoot th.column-_supplier_sku .sorting-indicator, .floatThead-container thead .item-heads th.column-_supplier_sku .sorting-indicator, .floatThead-container tfoot th.column-_supplier_sku .sorting-indicator, .inbound-stock-list thead .item-heads th.column-_supplier_sku .sorting-indicator, .inbound-stock-list tfoot th.column-_supplier_sku .sorting-indicator {
   margin-top: 15px;
 }
 
-.atum-list-table thead .item-heads th .sorting-indicator, .atum-list-table tfoot th .sorting-indicator, .floatThead-container thead .item-heads th .sorting-indicator, .floatThead-container tfoot th .sorting-indicator {
+.atum-list-table thead .item-heads th .sorting-indicator, .atum-list-table tfoot th .sorting-indicator, .floatThead-container thead .item-heads th .sorting-indicator, .floatThead-container tfoot th .sorting-indicator, .inbound-stock-list thead .item-heads th .sorting-indicator, .inbound-stock-list tfoot th .sorting-indicator {
   visibility: visible;
   margin-left: 4px;
   margin-top: 7px;
 }
 
-.atum-list-table thead .item-heads th .sorting-indicator:before, .atum-list-table tfoot th .sorting-indicator:before, .floatThead-container thead .item-heads th .sorting-indicator:before, .floatThead-container tfoot th .sorting-indicator:before {
+.atum-list-table thead .item-heads th .sorting-indicator:before, .atum-list-table tfoot th .sorting-indicator:before, .floatThead-container thead .item-heads th .sorting-indicator:before, .floatThead-container tfoot th .sorting-indicator:before, .inbound-stock-list thead .item-heads th .sorting-indicator:before, .inbound-stock-list tfoot th .sorting-indicator:before {
   color: #adb5bd;
   content: "\f140";
 }
 
-.atum-list-table thead .item-heads th .col-product-details .lnr, .atum-list-table tfoot th .col-product-details .lnr, .floatThead-container thead .item-heads th .col-product-details .lnr, .floatThead-container tfoot th .col-product-details .lnr {
+.atum-list-table thead .item-heads th .col-product-details .lnr, .atum-list-table tfoot th .col-product-details .lnr, .floatThead-container thead .item-heads th .col-product-details .lnr, .floatThead-container tfoot th .col-product-details .lnr, .inbound-stock-list thead .item-heads th .col-product-details .lnr, .inbound-stock-list tfoot th .col-product-details .lnr {
   font-size: 16px;
   color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th .lnr, .atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .lnr, .atum-list-table tfoot th .dashicons, .floatThead-container thead .item-heads th .lnr, .floatThead-container thead .item-heads th .dashicons, .floatThead-container tfoot th .lnr, .floatThead-container tfoot th .dashicons {
+.atum-list-table thead .item-heads th .lnr, .atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .lnr, .atum-list-table tfoot th .dashicons, .floatThead-container thead .item-heads th .lnr, .floatThead-container thead .item-heads th .dashicons, .floatThead-container tfoot th .lnr, .floatThead-container tfoot th .dashicons, .inbound-stock-list thead .item-heads th .lnr, .inbound-stock-list thead .item-heads th .dashicons, .inbound-stock-list tfoot th .lnr, .inbound-stock-list tfoot th .dashicons {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -4490,28 +4555,38 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th .lnr:before, .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .lnr:before, .atum-list-table tfoot th .dashicons:before, .floatThead-container thead .item-heads th .lnr:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container tfoot th .lnr:before, .floatThead-container tfoot th .dashicons:before {
+.atum-list-table thead .item-heads th .lnr:before, .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .lnr:before, .atum-list-table tfoot th .dashicons:before, .floatThead-container thead .item-heads th .lnr:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container tfoot th .lnr:before, .floatThead-container tfoot th .dashicons:before, .inbound-stock-list thead .item-heads th .lnr:before, .inbound-stock-list thead .item-heads th .dashicons:before, .inbound-stock-list tfoot th .lnr:before, .inbound-stock-list tfoot th .dashicons:before {
   text-indent: 0;
   position: absolute;
   left: 0;
   top: 0;
 }
 
-.atum-list-table thead .item-heads th svg, .atum-list-table tfoot th svg, .floatThead-container thead .item-heads th svg, .floatThead-container tfoot th svg {
+.atum-list-table thead .item-heads th svg, .atum-list-table tfoot th svg, .floatThead-container thead .item-heads th svg, .floatThead-container tfoot th svg, .inbound-stock-list thead .item-heads th svg, .inbound-stock-list tfoot th svg {
   max-height: 14px;
 }
 
-@media screen and (max-width: 782px) {
-  .atum-list-table .item-heads td, .atum-list-table .item-heads th, .floatThead-container .item-heads td, .floatThead-container .item-heads th {
-    box-shadow: 0 1px 0 0 #e9ecef;
-  }
+.atum-list-table tfoot .item-heads th, .floatThead-container tfoot .item-heads th, .inbound-stock-list tfoot .item-heads th {
+  padding: 3px 5px;
+  line-height: 1.1;
+  font-size: 14px;
+  min-width: 50px;
+  height: 60px;
+  white-space: normal;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
 }
 
-.atum-list-table .column-groups, .floatThead-container .column-groups {
+.atum-list-table .item-heads td, .atum-list-table .item-heads th, .floatThead-container .item-heads td, .floatThead-container .item-heads th, .inbound-stock-list .item-heads td, .inbound-stock-list .item-heads th {
+  box-shadow: 0 1px 0 0 #e9ecef;
+}
+
+.atum-list-table .column-groups, .floatThead-container .column-groups, .inbound-stock-list .column-groups {
   background-color: #e9ecef;
 }
 
-.atum-list-table .column-groups th, .floatThead-container .column-groups th {
+.atum-list-table .column-groups th, .floatThead-container .column-groups th, .inbound-stock-list .column-groups th {
   padding: 6px 20px;
   font-weight: 500;
   font-size: 14px;
@@ -4523,31 +4598,31 @@ input[type="button"].btn-block {
   color: #6c757d;
 }
 
-.atum-list-table .column-groups th:not(:last-child), .floatThead-container .column-groups th:not(:last-child) {
+.atum-list-table .column-groups th:not(:last-child), .floatThead-container .column-groups th:not(:last-child), .inbound-stock-list .column-groups th:not(:last-child) {
   border-right: 1px solid #ced4da;
 }
 
-.atum-list-table .column-groups th .group-toggler, .floatThead-container .column-groups th .group-toggler {
+.atum-list-table .column-groups th .group-toggler, .floatThead-container .column-groups th .group-toggler, .inbound-stock-list .column-groups th .group-toggler {
   float: right;
   font-size: 16px;
   cursor: pointer;
   font-family: 'Linearicons';
 }
 
-.atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before {
+.atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before {
   content: "\e889";
 }
 
-.atum-list-table .column-groups th .group-toggler:hover, .floatThead-container .column-groups th .group-toggler:hover {
+.atum-list-table .column-groups th .group-toggler:hover, .floatThead-container .column-groups th .group-toggler:hover, .inbound-stock-list .column-groups th .group-toggler:hover {
   color: #00A0D2;
 }
 
-.atum-list-table .column-groups th.collapsed, .floatThead-container .column-groups th.collapsed {
+.atum-list-table .column-groups th.collapsed, .floatThead-container .column-groups th.collapsed, .inbound-stock-list .column-groups th.collapsed {
   min-width: 0;
   width: 37px;
 }
 
-.atum-list-table .column-groups th.collapsed .group-toggler, .floatThead-container .column-groups th.collapsed .group-toggler {
+.atum-list-table .column-groups th.collapsed .group-toggler, .floatThead-container .column-groups th.collapsed .group-toggler, .inbound-stock-list .column-groups th.collapsed .group-toggler {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -o-transform: rotate(180deg);
@@ -4555,7 +4630,7 @@ input[type="button"].btn-block {
   transform: rotate(180deg);
 }
 
-.atum-list-table th.sortable a, .atum-list-table th.sorted a, .floatThead-container th.sortable a, .floatThead-container th.sorted a {
+.atum-list-table th.sortable a, .atum-list-table th.sorted a, .floatThead-container th.sortable a, .floatThead-container th.sorted a, .inbound-stock-list th.sortable a, .inbound-stock-list th.sorted a {
   padding: 0;
   display: -webkit-box;
   display: -webkit-flex;
@@ -4567,7 +4642,7 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sortable.column-_stock a, .atum-list-table th.sortable.column-_regular_price a, .atum-list-table th.sortable.column-_sale_price a, .atum-list-table th.sortable.column-_purchase_price a, .atum-list-table th.sortable.column-ID a, .atum-list-table th.sortable.column-_weight a, .atum-list-table th.sortable.column-_out_stock_threshold a, .atum-list-table th.sorted[class*="column-calc_"] a, .atum-list-table th.sorted.column-_stock a, .atum-list-table th.sorted.column-_regular_price a, .atum-list-table th.sorted.column-_sale_price a, .atum-list-table th.sorted.column-_purchase_price a, .atum-list-table th.sorted.column-ID a, .atum-list-table th.sorted.column-_weight a, .atum-list-table th.sorted.column-_out_stock_threshold a, .floatThead-container th.sortable[class*="column-calc_"] a, .floatThead-container th.sortable.column-_stock a, .floatThead-container th.sortable.column-_regular_price a, .floatThead-container th.sortable.column-_sale_price a, .floatThead-container th.sortable.column-_purchase_price a, .floatThead-container th.sortable.column-ID a, .floatThead-container th.sortable.column-_weight a, .floatThead-container th.sortable.column-_out_stock_threshold a, .floatThead-container th.sorted[class*="column-calc_"] a, .floatThead-container th.sorted.column-_stock a, .floatThead-container th.sorted.column-_regular_price a, .floatThead-container th.sorted.column-_sale_price a, .floatThead-container th.sorted.column-_purchase_price a, .floatThead-container th.sorted.column-ID a, .floatThead-container th.sorted.column-_weight a, .floatThead-container th.sorted.column-_out_stock_threshold a {
+.atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sortable.column-_stock a, .atum-list-table th.sortable.column-_regular_price a, .atum-list-table th.sortable.column-_sale_price a, .atum-list-table th.sortable.column-_purchase_price a, .atum-list-table th.sortable.column-ID a, .atum-list-table th.sortable.column-_weight a, .atum-list-table th.sortable.column-_out_stock_threshold a, .atum-list-table th.sorted[class*="column-calc_"] a, .atum-list-table th.sorted.column-_stock a, .atum-list-table th.sorted.column-_regular_price a, .atum-list-table th.sorted.column-_sale_price a, .atum-list-table th.sorted.column-_purchase_price a, .atum-list-table th.sorted.column-ID a, .atum-list-table th.sorted.column-_weight a, .atum-list-table th.sorted.column-_out_stock_threshold a, .floatThead-container th.sortable[class*="column-calc_"] a, .floatThead-container th.sortable.column-_stock a, .floatThead-container th.sortable.column-_regular_price a, .floatThead-container th.sortable.column-_sale_price a, .floatThead-container th.sortable.column-_purchase_price a, .floatThead-container th.sortable.column-ID a, .floatThead-container th.sortable.column-_weight a, .floatThead-container th.sortable.column-_out_stock_threshold a, .floatThead-container th.sorted[class*="column-calc_"] a, .floatThead-container th.sorted.column-_stock a, .floatThead-container th.sorted.column-_regular_price a, .floatThead-container th.sorted.column-_sale_price a, .floatThead-container th.sorted.column-_purchase_price a, .floatThead-container th.sorted.column-ID a, .floatThead-container th.sorted.column-_weight a, .floatThead-container th.sorted.column-_out_stock_threshold a, .inbound-stock-list th.sortable[class*="column-calc_"] a, .inbound-stock-list th.sortable.column-_stock a, .inbound-stock-list th.sortable.column-_regular_price a, .inbound-stock-list th.sortable.column-_sale_price a, .inbound-stock-list th.sortable.column-_purchase_price a, .inbound-stock-list th.sortable.column-ID a, .inbound-stock-list th.sortable.column-_weight a, .inbound-stock-list th.sortable.column-_out_stock_threshold a, .inbound-stock-list th.sorted[class*="column-calc_"] a, .inbound-stock-list th.sorted.column-_stock a, .inbound-stock-list th.sorted.column-_regular_price a, .inbound-stock-list th.sorted.column-_sale_price a, .inbound-stock-list th.sorted.column-_purchase_price a, .inbound-stock-list th.sorted.column-ID a, .inbound-stock-list th.sorted.column-_weight a, .inbound-stock-list th.sorted.column-_out_stock_threshold a {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
@@ -4580,25 +4655,25 @@ input[type="button"].btn-block {
   align-items: center;
 }
 
-.atum-list-table th.sortable[class*="column-calc_"] a > span, .atum-list-table th.sortable.column-_stock a > span, .atum-list-table th.sortable.column-_regular_price a > span, .atum-list-table th.sortable.column-_sale_price a > span, .atum-list-table th.sortable.column-_purchase_price a > span, .atum-list-table th.sortable.column-ID a > span, .atum-list-table th.sortable.column-_weight a > span, .atum-list-table th.sortable.column-_out_stock_threshold a > span, .atum-list-table th.sorted[class*="column-calc_"] a > span, .atum-list-table th.sorted.column-_stock a > span, .atum-list-table th.sorted.column-_regular_price a > span, .atum-list-table th.sorted.column-_sale_price a > span, .atum-list-table th.sorted.column-_purchase_price a > span, .atum-list-table th.sorted.column-ID a > span, .atum-list-table th.sorted.column-_weight a > span, .atum-list-table th.sorted.column-_out_stock_threshold a > span, .floatThead-container th.sortable[class*="column-calc_"] a > span, .floatThead-container th.sortable.column-_stock a > span, .floatThead-container th.sortable.column-_regular_price a > span, .floatThead-container th.sortable.column-_sale_price a > span, .floatThead-container th.sortable.column-_purchase_price a > span, .floatThead-container th.sortable.column-ID a > span, .floatThead-container th.sortable.column-_weight a > span, .floatThead-container th.sortable.column-_out_stock_threshold a > span, .floatThead-container th.sorted[class*="column-calc_"] a > span, .floatThead-container th.sorted.column-_stock a > span, .floatThead-container th.sorted.column-_regular_price a > span, .floatThead-container th.sorted.column-_sale_price a > span, .floatThead-container th.sorted.column-_purchase_price a > span, .floatThead-container th.sorted.column-ID a > span, .floatThead-container th.sorted.column-_weight a > span, .floatThead-container th.sorted.column-_out_stock_threshold a > span {
+.atum-list-table th.sortable[class*="column-calc_"] a > span, .atum-list-table th.sortable.column-_stock a > span, .atum-list-table th.sortable.column-_regular_price a > span, .atum-list-table th.sortable.column-_sale_price a > span, .atum-list-table th.sortable.column-_purchase_price a > span, .atum-list-table th.sortable.column-ID a > span, .atum-list-table th.sortable.column-_weight a > span, .atum-list-table th.sortable.column-_out_stock_threshold a > span, .atum-list-table th.sorted[class*="column-calc_"] a > span, .atum-list-table th.sorted.column-_stock a > span, .atum-list-table th.sorted.column-_regular_price a > span, .atum-list-table th.sorted.column-_sale_price a > span, .atum-list-table th.sorted.column-_purchase_price a > span, .atum-list-table th.sorted.column-ID a > span, .atum-list-table th.sorted.column-_weight a > span, .atum-list-table th.sorted.column-_out_stock_threshold a > span, .floatThead-container th.sortable[class*="column-calc_"] a > span, .floatThead-container th.sortable.column-_stock a > span, .floatThead-container th.sortable.column-_regular_price a > span, .floatThead-container th.sortable.column-_sale_price a > span, .floatThead-container th.sortable.column-_purchase_price a > span, .floatThead-container th.sortable.column-ID a > span, .floatThead-container th.sortable.column-_weight a > span, .floatThead-container th.sortable.column-_out_stock_threshold a > span, .floatThead-container th.sorted[class*="column-calc_"] a > span, .floatThead-container th.sorted.column-_stock a > span, .floatThead-container th.sorted.column-_regular_price a > span, .floatThead-container th.sorted.column-_sale_price a > span, .floatThead-container th.sorted.column-_purchase_price a > span, .floatThead-container th.sorted.column-ID a > span, .floatThead-container th.sorted.column-_weight a > span, .floatThead-container th.sorted.column-_out_stock_threshold a > span, .inbound-stock-list th.sortable[class*="column-calc_"] a > span, .inbound-stock-list th.sortable.column-_stock a > span, .inbound-stock-list th.sortable.column-_regular_price a > span, .inbound-stock-list th.sortable.column-_sale_price a > span, .inbound-stock-list th.sortable.column-_purchase_price a > span, .inbound-stock-list th.sortable.column-ID a > span, .inbound-stock-list th.sortable.column-_weight a > span, .inbound-stock-list th.sortable.column-_out_stock_threshold a > span, .inbound-stock-list th.sorted[class*="column-calc_"] a > span, .inbound-stock-list th.sorted.column-_stock a > span, .inbound-stock-list th.sorted.column-_regular_price a > span, .inbound-stock-list th.sorted.column-_sale_price a > span, .inbound-stock-list th.sorted.column-_purchase_price a > span, .inbound-stock-list th.sorted.column-ID a > span, .inbound-stock-list th.sorted.column-_weight a > span, .inbound-stock-list th.sorted.column-_out_stock_threshold a > span {
   float: none;
 }
 
-.atum-list-table th.sortable[class*="column-calc_"] a > span:first-child, .atum-list-table th.sortable.column-_stock a > span:first-child, .atum-list-table th.sortable.column-_regular_price a > span:first-child, .atum-list-table th.sortable.column-_sale_price a > span:first-child, .atum-list-table th.sortable.column-_purchase_price a > span:first-child, .atum-list-table th.sortable.column-ID a > span:first-child, .atum-list-table th.sortable.column-_weight a > span:first-child, .atum-list-table th.sortable.column-_out_stock_threshold a > span:first-child, .atum-list-table th.sorted[class*="column-calc_"] a > span:first-child, .atum-list-table th.sorted.column-_stock a > span:first-child, .atum-list-table th.sorted.column-_regular_price a > span:first-child, .atum-list-table th.sorted.column-_sale_price a > span:first-child, .atum-list-table th.sorted.column-_purchase_price a > span:first-child, .atum-list-table th.sorted.column-ID a > span:first-child, .atum-list-table th.sorted.column-_weight a > span:first-child, .atum-list-table th.sorted.column-_out_stock_threshold a > span:first-child, .floatThead-container th.sortable[class*="column-calc_"] a > span:first-child, .floatThead-container th.sortable.column-_stock a > span:first-child, .floatThead-container th.sortable.column-_regular_price a > span:first-child, .floatThead-container th.sortable.column-_sale_price a > span:first-child, .floatThead-container th.sortable.column-_purchase_price a > span:first-child, .floatThead-container th.sortable.column-ID a > span:first-child, .floatThead-container th.sortable.column-_weight a > span:first-child, .floatThead-container th.sortable.column-_out_stock_threshold a > span:first-child, .floatThead-container th.sorted[class*="column-calc_"] a > span:first-child, .floatThead-container th.sorted.column-_stock a > span:first-child, .floatThead-container th.sorted.column-_regular_price a > span:first-child, .floatThead-container th.sorted.column-_sale_price a > span:first-child, .floatThead-container th.sorted.column-_purchase_price a > span:first-child, .floatThead-container th.sorted.column-ID a > span:first-child, .floatThead-container th.sorted.column-_weight a > span:first-child, .floatThead-container th.sorted.column-_out_stock_threshold a > span:first-child {
+.atum-list-table th.sortable[class*="column-calc_"] a > span:first-child, .atum-list-table th.sortable.column-_stock a > span:first-child, .atum-list-table th.sortable.column-_regular_price a > span:first-child, .atum-list-table th.sortable.column-_sale_price a > span:first-child, .atum-list-table th.sortable.column-_purchase_price a > span:first-child, .atum-list-table th.sortable.column-ID a > span:first-child, .atum-list-table th.sortable.column-_weight a > span:first-child, .atum-list-table th.sortable.column-_out_stock_threshold a > span:first-child, .atum-list-table th.sorted[class*="column-calc_"] a > span:first-child, .atum-list-table th.sorted.column-_stock a > span:first-child, .atum-list-table th.sorted.column-_regular_price a > span:first-child, .atum-list-table th.sorted.column-_sale_price a > span:first-child, .atum-list-table th.sorted.column-_purchase_price a > span:first-child, .atum-list-table th.sorted.column-ID a > span:first-child, .atum-list-table th.sorted.column-_weight a > span:first-child, .atum-list-table th.sorted.column-_out_stock_threshold a > span:first-child, .floatThead-container th.sortable[class*="column-calc_"] a > span:first-child, .floatThead-container th.sortable.column-_stock a > span:first-child, .floatThead-container th.sortable.column-_regular_price a > span:first-child, .floatThead-container th.sortable.column-_sale_price a > span:first-child, .floatThead-container th.sortable.column-_purchase_price a > span:first-child, .floatThead-container th.sortable.column-ID a > span:first-child, .floatThead-container th.sortable.column-_weight a > span:first-child, .floatThead-container th.sortable.column-_out_stock_threshold a > span:first-child, .floatThead-container th.sorted[class*="column-calc_"] a > span:first-child, .floatThead-container th.sorted.column-_stock a > span:first-child, .floatThead-container th.sorted.column-_regular_price a > span:first-child, .floatThead-container th.sorted.column-_sale_price a > span:first-child, .floatThead-container th.sorted.column-_purchase_price a > span:first-child, .floatThead-container th.sorted.column-ID a > span:first-child, .floatThead-container th.sorted.column-_weight a > span:first-child, .floatThead-container th.sorted.column-_out_stock_threshold a > span:first-child, .inbound-stock-list th.sortable[class*="column-calc_"] a > span:first-child, .inbound-stock-list th.sortable.column-_stock a > span:first-child, .inbound-stock-list th.sortable.column-_regular_price a > span:first-child, .inbound-stock-list th.sortable.column-_sale_price a > span:first-child, .inbound-stock-list th.sortable.column-_purchase_price a > span:first-child, .inbound-stock-list th.sortable.column-ID a > span:first-child, .inbound-stock-list th.sortable.column-_weight a > span:first-child, .inbound-stock-list th.sortable.column-_out_stock_threshold a > span:first-child, .inbound-stock-list th.sorted[class*="column-calc_"] a > span:first-child, .inbound-stock-list th.sorted.column-_stock a > span:first-child, .inbound-stock-list th.sorted.column-_regular_price a > span:first-child, .inbound-stock-list th.sorted.column-_sale_price a > span:first-child, .inbound-stock-list th.sorted.column-_purchase_price a > span:first-child, .inbound-stock-list th.sorted.column-ID a > span:first-child, .inbound-stock-list th.sorted.column-_weight a > span:first-child, .inbound-stock-list th.sorted.column-_out_stock_threshold a > span:first-child {
   padding-left: 10px;
 }
 
-.atum-list-table th.sortable .sorting-indicator, .atum-list-table th.sorted .sorting-indicator, .floatThead-container th.sortable .sorting-indicator, .floatThead-container th.sorted .sorting-indicator {
+.atum-list-table th.sortable .sorting-indicator, .atum-list-table th.sorted .sorting-indicator, .floatThead-container th.sortable .sorting-indicator, .floatThead-container th.sorted .sorting-indicator, .inbound-stock-list th.sortable .sorting-indicator, .inbound-stock-list th.sorted .sorting-indicator {
   display: inline-block;
   width: auto;
 }
 
-.atum-list-table th.column-_supplier_sku, .floatThead-container th.column-_supplier_sku {
+.atum-list-table th.column-_supplier_sku, .floatThead-container th.column-_supplier_sku, .inbound-stock-list th.column-_supplier_sku {
   white-space: pre-wrap;
   max-width: 71px;
 }
 
-.atum-list-table th.check-column input[type=checkbox], .floatThead-container th.check-column input[type=checkbox] {
+.atum-list-table th.check-column input[type=checkbox], .floatThead-container th.check-column input[type=checkbox], .inbound-stock-list th.check-column input[type=checkbox] {
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
@@ -4608,74 +4683,74 @@ input[type="button"].btn-block {
   transform: translateY(-50%);
 }
 
-.atum-list-table tr.main-row:hover, .atum-list-table tr.mi-row:hover, .atum-list-table tr.expandable:hover, .floatThead-container tr.main-row:hover, .floatThead-container tr.mi-row:hover, .floatThead-container tr.expandable:hover {
+.atum-list-table tr.main-row:hover, .atum-list-table tr.mi-row:hover, .atum-list-table tr.expandable:hover, .floatThead-container tr.main-row:hover, .floatThead-container tr.mi-row:hover, .floatThead-container tr.expandable:hover, .inbound-stock-list tr.main-row:hover, .inbound-stock-list tr.mi-row:hover, .inbound-stock-list tr.expandable:hover {
   box-shadow: -10px 1px 16px 2px rgba(0, 0, 0, 0.15) inset;
 }
 
-.atum-list-table tr.even, .floatThead-container tr.even {
+.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even {
   background-color: #f8f9fa;
 }
 
-.atum-list-table tr.expanded, .floatThead-container tr.expanded {
+.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-stock-list tr.expanded {
   -webkit-transition: all 0.1s ease-in-out;
   -o-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
 
-.atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription, .floatThead-container tr.expanded.variable, .floatThead-container tr.expanded.variable-subscription {
+.atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription, .floatThead-container tr.expanded.variable, .floatThead-container tr.expanded.variable-subscription, .inbound-stock-list tr.expanded.variable, .inbound-stock-list tr.expanded.variable-subscription {
   background-color: #00B8DB;
 }
 
-.atum-list-table tr.expanded.group, .floatThead-container tr.expanded.group {
+.atum-list-table tr.expanded.group, .floatThead-container tr.expanded.group, .inbound-stock-list tr.expanded.group {
   background-color: #EFAF00;
 }
 
-.atum-list-table tr.expanded.variable td, .atum-list-table tr.expanded.variable a, .atum-list-table tr.expanded.variable-subscription td, .atum-list-table tr.expanded.variable-subscription a, .atum-list-table tr.expanded.group td, .atum-list-table tr.expanded.group a, .floatThead-container tr.expanded.variable td, .floatThead-container tr.expanded.variable a, .floatThead-container tr.expanded.variable-subscription td, .floatThead-container tr.expanded.variable-subscription a, .floatThead-container tr.expanded.group td, .floatThead-container tr.expanded.group a {
+.atum-list-table tr.expanded.variable td, .atum-list-table tr.expanded.variable a, .atum-list-table tr.expanded.variable-subscription td, .atum-list-table tr.expanded.variable-subscription a, .atum-list-table tr.expanded.group td, .atum-list-table tr.expanded.group a, .floatThead-container tr.expanded.variable td, .floatThead-container tr.expanded.variable a, .floatThead-container tr.expanded.variable-subscription td, .floatThead-container tr.expanded.variable-subscription a, .floatThead-container tr.expanded.group td, .floatThead-container tr.expanded.group a, .inbound-stock-list tr.expanded.variable td, .inbound-stock-list tr.expanded.variable a, .inbound-stock-list tr.expanded.variable-subscription td, .inbound-stock-list tr.expanded.variable-subscription a, .inbound-stock-list tr.expanded.group td, .inbound-stock-list tr.expanded.group a {
   color: #fff;
 }
 
-.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type:before {
+.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type:before, .inbound-stock-list tr.expanded.variable .column-calc_type .has-child.product-type:before, .inbound-stock-list tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .inbound-stock-list tr.expanded.group .column-calc_type .has-child.product-type:before {
   content: "\e004";
   color: #fff;
 }
 
-.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1 {
+.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .inbound-stock-list tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .inbound-stock-list tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .inbound-stock-list tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1 {
   fill: #fff;
 }
 
-.atum-list-table tr.expandable .check-column input[type=checkbox], .floatThead-container tr.expandable .check-column input[type=checkbox] {
+.atum-list-table tr.expandable .check-column input[type=checkbox], .floatThead-container tr.expandable .check-column input[type=checkbox], .inbound-stock-list tr.expandable .check-column input[type=checkbox] {
   margin-left: 20px;
 }
 
-.atum-list-table tr.variation, .floatThead-container tr.variation {
+.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound-stock-list tr.variation {
   background-color: #dbf9ff;
 }
 
-.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even) {
+.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even) {
   background-color: #f5fdff;
 }
 
-.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow {
+.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow, .inbound-stock-list tr.variation td.title .child-arrow {
   color: #00B8DB;
 }
 
-.atum-list-table tr.grouped, .floatThead-container tr.grouped {
+.atum-list-table tr.grouped, .floatThead-container tr.grouped, .inbound-stock-list tr.grouped {
   background-color: #ffedbc;
 }
 
-.atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even) {
+.atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even), .inbound-stock-list tr.grouped:nth-child(even) {
   background-color: #fff4d6;
 }
 
-.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow {
+.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow, .inbound-stock-list tr.grouped td.title .child-arrow {
   color: #EFAF00;
 }
 
-.atum-list-table tr.no-items td, .floatThead-container tr.no-items td {
+.atum-list-table tr.no-items td, .floatThead-container tr.no-items td, .inbound-stock-list tr.no-items td {
   padding: 10px 24px;
 }
 
-.atum-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert {
+.atum-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert, .inbound-stock-list tr.no-items td .alert {
   margin-top: 15px;
   -webkit-flex-wrap: wrap;
   -moz-flex-wrap: wrap;
@@ -4683,15 +4758,15 @@ input[type="button"].btn-block {
   flex-wrap: wrap;
 }
 
-.atum-list-table tr.no-items td .alert h3, .atum-list-table tr.no-items td .alert p, .floatThead-container tr.no-items td .alert h3, .floatThead-container tr.no-items td .alert p {
+.atum-list-table tr.no-items td .alert h3, .atum-list-table tr.no-items td .alert p, .floatThead-container tr.no-items td .alert h3, .floatThead-container tr.no-items td .alert p, .inbound-stock-list tr.no-items td .alert h3, .inbound-stock-list tr.no-items td .alert p {
   width: 100%;
 }
 
-.atum-list-table tr.no-items td .alert h3, .floatThead-container tr.no-items td .alert h3 {
+.atum-list-table tr.no-items td .alert h3, .floatThead-container tr.no-items td .alert h3, .inbound-stock-list tr.no-items td .alert h3 {
   margin-bottom: 15px;
 }
 
-.atum-list-table tr.no-items td .alert i, .floatThead-container tr.no-items td .alert i {
+.atum-list-table tr.no-items td .alert i, .floatThead-container tr.no-items td .alert i, .inbound-stock-list tr.no-items td .alert i {
   margin-right: 0;
   font-size: 24px;
   width: 24px;
@@ -4699,25 +4774,25 @@ input[type="button"].btn-block {
   line-height: 0.8;
 }
 
-.atum-list-table tr.no-items td .alert p, .floatThead-container tr.no-items td .alert p {
+.atum-list-table tr.no-items td .alert p, .floatThead-container tr.no-items td .alert p, .inbound-stock-list tr.no-items td .alert p {
   font-weight: bold;
   padding-left: 10px;
   margin-bottom: 0;
 }
 
-.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-items td .alert button {
+.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-items td .alert button, .inbound-stock-list tr.no-items td .alert button {
   display: inline-block;
   vertical-align: middle;
   margin-top: 10px;
 }
 
-.atum-list-table tr.no-items td .alert .atum-spinner, .floatThead-container tr.no-items td .alert .atum-spinner {
+.atum-list-table tr.no-items td .alert .atum-spinner, .floatThead-container tr.no-items td .alert .atum-spinner, .inbound-stock-list tr.no-items td .alert .atum-spinner {
   display: inline-block;
   vertical-align: 8px;
   margin-left: 10px;
 }
 
-.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-container tr.no-items td .alert .atum-spinner span {
+.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-container tr.no-items td .alert .atum-spinner span, .inbound-stock-list tr.no-items td .alert .atum-spinner span {
   width: 15px;
   height: 15px;
   border: 2px solid rgba(108, 117, 125, 0.25);
@@ -4767,11 +4842,11 @@ input[type="button"].btn-block {
   }
 }
 
-.atum-list-table tr.totals, .floatThead-container tr.totals {
+.atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals {
   background-color: #e9ecef;
 }
 
-.atum-list-table tr.totals td, .atum-list-table tr.totals th, .floatThead-container tr.totals td, .floatThead-container tr.totals th {
+.atum-list-table tr.totals td, .atum-list-table tr.totals th, .floatThead-container tr.totals td, .floatThead-container tr.totals th, .inbound-stock-list tr.totals td, .inbound-stock-list tr.totals th {
   font-size: 12px;
   font-weight: 400;
   color: #6c757d;
@@ -4779,7 +4854,7 @@ input[type="button"].btn-block {
   padding-bottom: 0;
 }
 
-.atum-list-table tr.totals td.totals-heading span, .atum-list-table tr.totals th.totals-heading span, .floatThead-container tr.totals td.totals-heading span, .floatThead-container tr.totals th.totals-heading span {
+.atum-list-table tr.totals td.totals-heading span, .atum-list-table tr.totals th.totals-heading span, .floatThead-container tr.totals td.totals-heading span, .floatThead-container tr.totals th.totals-heading span, .inbound-stock-list tr.totals td.totals-heading span, .inbound-stock-list tr.totals th.totals-heading span {
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.3px;
@@ -4788,7 +4863,7 @@ input[type="button"].btn-block {
   background-color: transparent;
 }
 
-.atum-list-table tr.totals td span, .atum-list-table tr.totals th span, .floatThead-container tr.totals td span, .floatThead-container tr.totals th span {
+.atum-list-table tr.totals td span, .atum-list-table tr.totals th span, .floatThead-container tr.totals td span, .floatThead-container tr.totals th span, .inbound-stock-list tr.totals td span, .inbound-stock-list tr.totals th span {
   display: inline-block;
   font-size: 16px;
   font-weight: bold;
@@ -4800,69 +4875,74 @@ input[type="button"].btn-block {
   padding: 2px;
 }
 
-.atum-list-table tr.totals td span.danger, .atum-list-table tr.totals th span.danger, .floatThead-container tr.totals td span.danger, .floatThead-container tr.totals th span.danger {
+.atum-list-table tr.totals td span.danger, .atum-list-table tr.totals th span.danger, .floatThead-container tr.totals td span.danger, .floatThead-container tr.totals th span.danger, .inbound-stock-list tr.totals td span.danger, .inbound-stock-list tr.totals th span.danger {
   background-color: #FF4848;
 }
 
-.atum-list-table .stock-selling-manager .lnr, .floatThead-container .stock-selling-manager .lnr {
+.atum-list-table .stock-selling-manager .lnr, .floatThead-container .stock-selling-manager .lnr, .inbound-stock-list .stock-selling-manager .lnr {
   font-size: 20px;
 }
 
-.atum-list-table .cell-green, .floatThead-container .cell-green {
+.atum-list-table .cell-green, .floatThead-container .cell-green, .inbound-stock-list .cell-green {
   color: #69C61D;
 }
 
-.atum-list-table .cell-yellow, .floatThead-container .cell-yellow {
+.atum-list-table .cell-yellow, .floatThead-container .cell-yellow, .inbound-stock-list .cell-yellow {
   color: #EFAF00 !important;
 }
 
-.atum-list-table .cell-yellow .set-meta, .floatThead-container .cell-yellow .set-meta {
+.atum-list-table .cell-yellow .set-meta, .floatThead-container .cell-yellow .set-meta, .inbound-stock-list .cell-yellow .set-meta {
   color: #EFAF00 !important;
 }
 
-.atum-list-table .cell-red, .floatThead-container .cell-red {
+.atum-list-table .cell-red, .floatThead-container .cell-red, .inbound-stock-list .cell-red {
   color: #FF4848 !important;
 }
 
-.atum-list-table .cell-red .set-meta, .floatThead-container .cell-red .set-meta {
+.atum-list-table .cell-red .set-meta, .floatThead-container .cell-red .set-meta, .inbound-stock-list .cell-red .set-meta {
   color: #FF4848 !important;
 }
 
-.atum-list-table .cell-blue, .floatThead-container .cell-blue {
+.atum-list-table .cell-blue, .floatThead-container .cell-blue, .inbound-stock-list .cell-blue {
   color: #00B8DB;
 }
 
-.atum-list-table input[type=checkbox], .floatThead-container input[type=checkbox] {
+.atum-list-table input[type=checkbox], .floatThead-container input[type=checkbox], .inbound-stock-list input[type=checkbox] {
   border-radius: 3px;
 }
 
-.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked {
+.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked, .inbound-stock-list input[type=checkbox]:checked {
   background-color: #00B8DB;
   border: 0;
 }
 
-.atum-list-table input[type=checkbox]:before, .floatThead-container input[type=checkbox]:before {
+.atum-list-table input[type=checkbox]:before, .floatThead-container input[type=checkbox]:before, .inbound-stock-list input[type=checkbox]:before {
   color: #fff;
 }
 
-.atum-list-table tbody .main-row.active-row, .floatThead-container tbody .main-row.active-row {
+.atum-list-table tbody .main-row.active-row, .floatThead-container tbody .main-row.active-row, .inbound-stock-list tbody .main-row.active-row {
   background-color: #dbf9ff;
 }
 
-.atum-list-table tbody td.column-title a, .floatThead-container tbody td.column-title a {
+.atum-list-table tbody td.column-title a, .floatThead-container tbody td.column-title a, .inbound-stock-list tbody td.column-title a {
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.3px;
   color: #00B8DB;
 }
 
-.atum-list-table tbody td.column-_sku span, .floatThead-container tbody td.column-_sku span {
+.atum-list-table tbody td.column-_sku span, .floatThead-container tbody td.column-_sku span, .inbound-stock-list tbody td.column-_sku span {
   font-size: 14px;
   letter-spacing: 0.3px;
   color: #00B8DB;
 }
 
-.atum-list-table td, .atum-list-table th, .floatThead-container td, .floatThead-container th {
+.atum-list-table tbody td.calc_purchase_order a, .floatThead-container tbody td.calc_purchase_order a, .inbound-stock-list tbody td.calc_purchase_order a {
+  color: #00B8DB;
+  font-weight: bold;
+}
+
+.atum-list-table td, .atum-list-table th, .floatThead-container td, .floatThead-container th, .inbound-stock-list td, .inbound-stock-list th {
   position: relative;
   vertical-align: middle;
   padding: 6px 5px;
@@ -4871,25 +4951,25 @@ input[type="button"].btn-block {
   color: #6c757d;
 }
 
-.atum-list-table td.column-ID, .atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID {
+.atum-list-table td.column-ID, .atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID, .inbound-stock-list td.column-ID, .inbound-stock-list th.column-ID {
   font-size: 14px;
   letter-spacing: 0.3px;
   color: #6c757d;
 }
 
-.atum-list-table td.pro-version, .atum-list-table th.pro-version, .floatThead-container td.pro-version, .floatThead-container th.pro-version {
+.atum-list-table td.pro-version, .atum-list-table th.pro-version, .floatThead-container td.pro-version, .floatThead-container th.pro-version, .inbound-stock-list td.pro-version, .inbound-stock-list th.pro-version {
   background-color: #6c757d;
 }
 
-.atum-list-table td.column-title, .atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title {
+.atum-list-table td.column-title, .atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title, .inbound-stock-list td.column-title, .inbound-stock-list th.column-title {
   min-width: 150px;
 }
 
-.atum-list-table td.column-title > span, .atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span {
+.atum-list-table td.column-title > span, .atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span, .inbound-stock-list td.column-title > span, .inbound-stock-list th.column-title > span {
   white-space: nowrap;
 }
 
-.atum-list-table td.column-title .child-arrow, .atum-list-table th.column-title .child-arrow, .floatThead-container td.column-title .child-arrow, .floatThead-container th.column-title .child-arrow {
+.atum-list-table td.column-title .child-arrow, .atum-list-table th.column-title .child-arrow, .floatThead-container td.column-title .child-arrow, .floatThead-container th.column-title .child-arrow, .inbound-stock-list td.column-title .child-arrow, .inbound-stock-list th.column-title .child-arrow {
   display: inline-block;
   margin-right: 2px;
   margin-left: 5px;
@@ -4902,19 +4982,19 @@ input[type="button"].btn-block {
   transform: rotate(90deg);
 }
 
-.atum-list-table td.column-sku, .atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku {
+.atum-list-table td.column-sku, .atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku, .inbound-stock-list td.column-sku, .inbound-stock-list th.column-sku {
   min-width: 70px;
 }
 
-.atum-list-table td[class*="column-calc_"], .atum-list-table td.column-_stock, .atum-list-table td.column-_regular_price, .atum-list-table td.column-_sale_price, .atum-list-table td.column-_purchase_price, .atum-list-table td.column-ID, .atum-list-table td.column-_weight, .atum-list-table td.column-_out_stock_threshold, .atum-list-table th[class*="column-calc_"], .atum-list-table th.column-_stock, .atum-list-table th.column-_regular_price, .atum-list-table th.column-_sale_price, .atum-list-table th.column-_purchase_price, .atum-list-table th.column-ID, .atum-list-table th.column-_weight, .atum-list-table th.column-_out_stock_threshold, .floatThead-container td[class*="column-calc_"], .floatThead-container td.column-_stock, .floatThead-container td.column-_regular_price, .floatThead-container td.column-_sale_price, .floatThead-container td.column-_purchase_price, .floatThead-container td.column-ID, .floatThead-container td.column-_weight, .floatThead-container td.column-_out_stock_threshold, .floatThead-container th[class*="column-calc_"], .floatThead-container th.column-_stock, .floatThead-container th.column-_regular_price, .floatThead-container th.column-_sale_price, .floatThead-container th.column-_purchase_price, .floatThead-container th.column-ID, .floatThead-container th.column-_weight, .floatThead-container th.column-_out_stock_threshold {
+.atum-list-table td[class*="column-calc_"], .atum-list-table td.column-_stock, .atum-list-table td.column-_regular_price, .atum-list-table td.column-_sale_price, .atum-list-table td.column-_purchase_price, .atum-list-table td.column-ID, .atum-list-table td.column-_weight, .atum-list-table td.column-_out_stock_threshold, .atum-list-table th[class*="column-calc_"], .atum-list-table th.column-_stock, .atum-list-table th.column-_regular_price, .atum-list-table th.column-_sale_price, .atum-list-table th.column-_purchase_price, .atum-list-table th.column-ID, .atum-list-table th.column-_weight, .atum-list-table th.column-_out_stock_threshold, .floatThead-container td[class*="column-calc_"], .floatThead-container td.column-_stock, .floatThead-container td.column-_regular_price, .floatThead-container td.column-_sale_price, .floatThead-container td.column-_purchase_price, .floatThead-container td.column-ID, .floatThead-container td.column-_weight, .floatThead-container td.column-_out_stock_threshold, .floatThead-container th[class*="column-calc_"], .floatThead-container th.column-_stock, .floatThead-container th.column-_regular_price, .floatThead-container th.column-_sale_price, .floatThead-container th.column-_purchase_price, .floatThead-container th.column-ID, .floatThead-container th.column-_weight, .floatThead-container th.column-_out_stock_threshold, .inbound-stock-list td[class*="column-calc_"], .inbound-stock-list td.column-_stock, .inbound-stock-list td.column-_regular_price, .inbound-stock-list td.column-_sale_price, .inbound-stock-list td.column-_purchase_price, .inbound-stock-list td.column-ID, .inbound-stock-list td.column-_weight, .inbound-stock-list td.column-_out_stock_threshold, .inbound-stock-list th[class*="column-calc_"], .inbound-stock-list th.column-_stock, .inbound-stock-list th.column-_regular_price, .inbound-stock-list th.column-_sale_price, .inbound-stock-list th.column-_purchase_price, .inbound-stock-list th.column-ID, .inbound-stock-list th.column-_weight, .inbound-stock-list th.column-_out_stock_threshold {
   text-align: center;
 }
 
-.atum-list-table td a, .atum-list-table th a, .floatThead-container td a, .floatThead-container th a {
+.atum-list-table td a, .atum-list-table th a, .floatThead-container td a, .floatThead-container th a, .inbound-stock-list td a, .inbound-stock-list th a {
   cursor: pointer;
 }
 
-.atum-list-table td.ghost-column, .atum-list-table th.ghost-column, .floatThead-container td.ghost-column, .floatThead-container th.ghost-column {
+.atum-list-table td.ghost-column, .atum-list-table th.ghost-column, .floatThead-container td.ghost-column, .floatThead-container th.ghost-column, .inbound-stock-list td.ghost-column, .inbound-stock-list th.ghost-column {
   width: 37px;
   padding: 0 !important;
   min-width: 0 !important;
@@ -4923,34 +5003,34 @@ input[type="button"].btn-block {
   border-right: 1px solid #e9ecef;
 }
 
-.atum-list-table th span.col-stock-counters, .atum-list-table th span.col-stock-negatives, .atum-list-table th span.col-stock-selling-manager, .floatThead-container th span.col-stock-counters, .floatThead-container th span.col-stock-negatives, .floatThead-container th span.col-stock-selling-manager {
+.atum-list-table th span.col-stock-counters, .atum-list-table th span.col-stock-negatives, .atum-list-table th span.col-stock-selling-manager, .floatThead-container th span.col-stock-counters, .floatThead-container th span.col-stock-negatives, .floatThead-container th span.col-stock-selling-manager, .inbound-stock-list th span.col-stock-counters, .inbound-stock-list th span.col-stock-negatives, .inbound-stock-list th span.col-stock-selling-manager {
   color: #adb5bd;
   font-weight: bold;
   font-size: 14px;
 }
 
-.atum-list-table th span.col-stock-counters .set-header, .atum-list-table th span.col-stock-negatives .set-header, .atum-list-table th span.col-stock-selling-manager .set-header, .floatThead-container th span.col-stock-counters .set-header, .floatThead-container th span.col-stock-negatives .set-header, .floatThead-container th span.col-stock-selling-manager .set-header {
+.atum-list-table th span.col-stock-counters .set-header, .atum-list-table th span.col-stock-negatives .set-header, .atum-list-table th span.col-stock-selling-manager .set-header, .floatThead-container th span.col-stock-counters .set-header, .floatThead-container th span.col-stock-negatives .set-header, .floatThead-container th span.col-stock-selling-manager .set-header, .inbound-stock-list th span.col-stock-counters .set-header, .inbound-stock-list th span.col-stock-negatives .set-header, .inbound-stock-list th span.col-stock-selling-manager .set-header {
   color: #adb5bd;
 }
 
-.atum-list-table td.column-title, .floatThead-container td.column-title {
+.atum-list-table td.column-title, .floatThead-container td.column-title, .inbound-stock-list td.column-title {
   font-weight: 500;
 }
 
-.atum-list-table td.stock-counters, .floatThead-container td.stock-counters {
+.atum-list-table td.stock-counters, .floatThead-container td.stock-counters, .inbound-stock-list td.stock-counters {
   color: #00B8DB;
 }
 
-.atum-list-table .column-thumb, .floatThead-container .column-thumb {
+.atum-list-table .column-thumb, .floatThead-container .column-thumb, .inbound-stock-list .column-thumb {
   height: 40px;
 }
 
-.atum-list-table .column-calc_type, .floatThead-container .column-calc_type {
+.atum-list-table .column-calc_type, .floatThead-container .column-calc_type, .inbound-stock-list .column-calc_type {
   max-width: 50px;
   text-align: center;
 }
 
-.atum-list-table .column-calc_type .wc-type, .floatThead-container .column-calc_type .wc-type {
+.atum-list-table .column-calc_type .wc-type, .floatThead-container .column-calc_type .wc-type, .inbound-stock-list .column-calc_type .wc-type {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -4959,7 +5039,7 @@ input[type="button"].btn-block {
   margin: 0 auto;
 }
 
-.atum-list-table .column-calc_type .wc-type:before, .floatThead-container .column-calc_type .wc-type:before {
+.atum-list-table .column-calc_type .wc-type:before, .floatThead-container .column-calc_type .wc-type:before, .inbound-stock-list .column-calc_type .wc-type:before {
   font-family: WooCommerce;
   content: "\e006";
   position: absolute;
@@ -4973,7 +5053,7 @@ input[type="button"].btn-block {
   left: 0;
 }
 
-.atum-list-table .column-calc_type .product-type, .floatThead-container .column-calc_type .product-type {
+.atum-list-table .column-calc_type .product-type, .floatThead-container .column-calc_type .product-type, .inbound-stock-list .column-calc_type .product-type {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -4984,7 +5064,7 @@ input[type="button"].btn-block {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.atum-list-table .column-calc_type .product-type:before, .floatThead-container .column-calc_type .product-type:before {
+.atum-list-table .column-calc_type .product-type:before, .floatThead-container .column-calc_type .product-type:before, .inbound-stock-list .column-calc_type .product-type:before {
   font-family: WooCommerce;
   speak: none;
   font-weight: 400;
@@ -5002,142 +5082,142 @@ input[type="button"].btn-block {
   margin: 0;
 }
 
-.atum-list-table .column-calc_type .product-type.grouped:before, .floatThead-container .column-calc_type .product-type.grouped:before {
+.atum-list-table .column-calc_type .product-type.grouped:before, .floatThead-container .column-calc_type .product-type.grouped:before, .inbound-stock-list .column-calc_type .product-type.grouped:before {
   content: "\e002";
 }
 
-.atum-list-table .column-calc_type .product-type.external::before, .floatThead-container .column-calc_type .product-type.external::before {
+.atum-list-table .column-calc_type .product-type.external::before, .floatThead-container .column-calc_type .product-type.external::before, .inbound-stock-list .column-calc_type .product-type.external::before {
   content: "\e034";
 }
 
-.atum-list-table .column-calc_type .product-type.variable::before, .floatThead-container .column-calc_type .product-type.variable::before {
+.atum-list-table .column-calc_type .product-type.variable::before, .floatThead-container .column-calc_type .product-type.variable::before, .inbound-stock-list .column-calc_type .product-type.variable::before {
   content: "\e003";
 }
 
-.atum-list-table .column-calc_type .product-type.downloadable::before, .floatThead-container .column-calc_type .product-type.downloadable::before {
+.atum-list-table .column-calc_type .product-type.downloadable::before, .floatThead-container .column-calc_type .product-type.downloadable::before, .inbound-stock-list .column-calc_type .product-type.downloadable::before {
   content: "\e001";
 }
 
-.atum-list-table .column-calc_type .product-type.virtual::before, .floatThead-container .column-calc_type .product-type.virtual::before {
+.atum-list-table .column-calc_type .product-type.virtual::before, .floatThead-container .column-calc_type .product-type.virtual::before, .inbound-stock-list .column-calc_type .product-type.virtual::before {
   content: "\e000";
 }
 
-.atum-list-table .column-calc_type .has-child, .floatThead-container .column-calc_type .has-child {
+.atum-list-table .column-calc_type .has-child, .floatThead-container .column-calc_type .has-child, .inbound-stock-list .column-calc_type .has-child {
   cursor: pointer;
 }
 
-.atum-list-table .column-calc_type .has-child.product-type.variable, .atum-list-table .column-calc_type .has-child.product-type.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type.variable, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription {
+.atum-list-table .column-calc_type .has-child.product-type.variable, .atum-list-table .column-calc_type .has-child.product-type.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type.variable, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type.variable, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription {
   color: #00B8DB;
 }
 
-.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription:before {
+.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription:before {
   content: "\e003";
 }
 
-.atum-list-table .column-calc_type .has-child.product-type.grouped, .floatThead-container .column-calc_type .has-child.product-type.grouped {
+.atum-list-table .column-calc_type .has-child.product-type.grouped, .floatThead-container .column-calc_type .has-child.product-type.grouped, .inbound-stock-list .column-calc_type .has-child.product-type.grouped {
   color: #EFAF00;
 }
 
-.atum-list-table .column-calc_type .has-child.product-type:hover:before, .floatThead-container .column-calc_type .has-child.product-type:hover:before {
+.atum-list-table .column-calc_type .has-child.product-type:hover:before, .floatThead-container .column-calc_type .has-child.product-type:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type:hover:before {
   content: "\e005";
 }
 
-.atum-list-table .column-calc_type .variation:before, .atum-list-table .column-calc_type .grouped-item:before, .floatThead-container .column-calc_type .variation:before, .floatThead-container .column-calc_type .grouped-item:before {
+.atum-list-table .column-calc_type .variation:before, .atum-list-table .column-calc_type .grouped-item:before, .floatThead-container .column-calc_type .variation:before, .floatThead-container .column-calc_type .grouped-item:before, .inbound-stock-list .column-calc_type .variation:before, .inbound-stock-list .column-calc_type .grouped-item:before {
   content: "\e039";
 }
 
-.atum-list-table .column-calc_type .product-part, .atum-list-table .column-calc_type .raw-material, .floatThead-container .column-calc_type .product-part, .floatThead-container .column-calc_type .raw-material {
+.atum-list-table .column-calc_type .product-part, .atum-list-table .column-calc_type .raw-material, .floatThead-container .column-calc_type .product-part, .floatThead-container .column-calc_type .raw-material, .inbound-stock-list .column-calc_type .product-part, .inbound-stock-list .column-calc_type .raw-material {
   display: block;
   padding-top: 6px;
 }
 
-.atum-list-table .show-locations, .floatThead-container .show-locations {
+.atum-list-table .show-locations, .floatThead-container .show-locations, .inbound-stock-list .show-locations {
   cursor: pointer;
   color: #00B8DB;
   font-size: 20px;
 }
 
-.atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty {
+.atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty, .inbound-stock-list .show-locations.not-empty {
   color: #0073AA;
 }
 
-.atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy {
+.atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy, .inbound-stock-list .show-hierarchy {
   cursor: pointer;
   color: #00B8DB;
   font-size: 20px;
 }
 
-.atum-list-table .show-hierarchy.not-empty, .floatThead-container .show-hierarchy.not-empty {
+.atum-list-table .show-hierarchy.not-empty, .floatThead-container .show-hierarchy.not-empty, .inbound-stock-list .show-hierarchy.not-empty {
   color: #0073AA;
 }
 
-.atum-list-table .set-meta, .floatThead-container .set-meta {
+.atum-list-table .set-meta, .floatThead-container .set-meta, .inbound-stock-list .set-meta {
   cursor: pointer;
   color: #00B8DB;
 }
 
-.atum-list-table .set-meta:hover, .floatThead-container .set-meta:hover {
+.atum-list-table .set-meta:hover, .floatThead-container .set-meta:hover, .inbound-stock-list .set-meta:hover {
   color: #00A0D2;
 }
 
-.atum-list-table .set-meta.unsaved, .floatThead-container .set-meta.unsaved {
+.atum-list-table .set-meta.unsaved, .floatThead-container .set-meta.unsaved, .inbound-stock-list .set-meta.unsaved {
   color: #FF4848;
 }
 
-.atum-list-table .set-header, .floatThead-container .set-header {
+.atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header {
   cursor: pointer;
   color: #0073AA;
 }
 
-.atum-list-table .set-header:hover, .floatThead-container .set-header:hover {
+.atum-list-table .set-header:hover, .floatThead-container .set-header:hover, .inbound-stock-list .set-header:hover {
   color: #00A0D2;
 }
 
-.atum-list-table .highlight-danger, .floatThead-container .highlight-danger {
+.atum-list-table .highlight-danger, .floatThead-container .highlight-danger, .inbound-stock-list .highlight-danger {
   background-color: #FF4848;
   color: #fff;
   padding: 2px 3px;
   border-radius: 2px;
 }
 
-.atum-list-table #calc_stock_out_days, .floatThead-container #calc_stock_out_days {
+.atum-list-table #calc_stock_out_days, .floatThead-container #calc_stock_out_days, .inbound-stock-list #calc_stock_out_days {
   min-width: 56px;
 }
 
-.atum-list-table .column-calc_stock_indicator .dashicons, .floatThead-container .column-calc_stock_indicator .dashicons {
+.atum-list-table .column-calc_stock_indicator .dashicons, .floatThead-container .column-calc_stock_indicator .dashicons, .inbound-stock-list .column-calc_stock_indicator .dashicons {
   font-size: 1.4em !important;
 }
 
-.atum-list-table .atum-title-small, .floatThead-container .atum-title-small {
+.atum-list-table .atum-title-small, .floatThead-container .atum-title-small, .inbound-stock-list .atum-title-small {
   display: none;
 }
 
-.atum-list-table .column-groups th, .floatThead-container .column-groups th {
+.atum-list-table .column-groups th, .floatThead-container .column-groups th, .inbound-stock-list .column-groups th {
   padding: 6px 20px !important;
 }
 
 @media screen and (max-width: 782px) {
-  .atum-list-table th, .atum-list-table td, .floatThead-container th, .floatThead-container td {
+  .atum-list-table th, .atum-list-table td, .floatThead-container th, .floatThead-container td, .inbound-stock-list th, .inbound-stock-list td {
     display: table-cell !important;
     padding: 6px 5px !important;
   }
-  .atum-list-table th.check-column input[type="checkbox"], .atum-list-table td.check-column input[type="checkbox"], .floatThead-container th.check-column input[type="checkbox"], .floatThead-container td.check-column input[type="checkbox"] {
+  .atum-list-table th.check-column input[type="checkbox"], .atum-list-table td.check-column input[type="checkbox"], .floatThead-container th.check-column input[type="checkbox"], .floatThead-container td.check-column input[type="checkbox"], .inbound-stock-list th.check-column input[type="checkbox"], .inbound-stock-list td.check-column input[type="checkbox"] {
     width: 18px;
     height: 18px;
   }
-  .atum-list-table th.check-column input[type="checkbox"]:before, .atum-list-table td.check-column input[type="checkbox"]:before, .floatThead-container th.check-column input[type="checkbox"]:before, .floatThead-container td.check-column input[type="checkbox"]:before {
+  .atum-list-table th.check-column input[type="checkbox"]:before, .atum-list-table td.check-column input[type="checkbox"]:before, .floatThead-container th.check-column input[type="checkbox"]:before, .floatThead-container td.check-column input[type="checkbox"]:before, .inbound-stock-list th.check-column input[type="checkbox"]:before, .inbound-stock-list td.check-column input[type="checkbox"]:before {
     margin: -5px -8px;
   }
-  .atum-list-table th, .floatThead-container th {
+  .atum-list-table th, .floatThead-container th, .inbound-stock-list th {
     padding: 0 5px !important;
   }
-  .atum-list-table th.column-primary, .floatThead-container th.column-primary {
+  .atum-list-table th.column-primary, .floatThead-container th.column-primary, .inbound-stock-list th.column-primary {
     width: auto !important;
   }
-  .atum-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before, .floatThead-container tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
+  .atum-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before, .floatThead-container tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before, .inbound-stock-list tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
     content: none;
   }
-  .atum-list-table .column-primary .toggle-row, .floatThead-container .column-primary .toggle-row {
+  .atum-list-table .column-primary .toggle-row, .floatThead-container .column-primary .toggle-row, .inbound-stock-list .column-primary .toggle-row {
     display: none;
   }
 }
