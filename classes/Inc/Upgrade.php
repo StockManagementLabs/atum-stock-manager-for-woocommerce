@@ -18,6 +18,7 @@ use Atum\Components\AtumLogs\AtumLogs;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\StockCentral;
 use Atum\StockCentral\Lists\ListTable;
 
@@ -84,6 +85,7 @@ class Upgrade {
 		// ** version 1.5.0 ** New tables to store ATUM data for products.
 		if ( version_compare( $db_version, '1.5.0', '<' ) ) {
 			$this->create_product_data_table();
+			$this->update_po_status();
 		}
 
 		// ** version 1.6.0 ** New table for ATUM Logs component.
@@ -492,7 +494,32 @@ class Upgrade {
 		}
 
 	}
-
+	
+	/**
+	 * Update PO status completed to received.
+	 *
+	 * @since 1.5.0
+	 */
+	private function update_po_status() {
+		
+		global $wpdb;
+		
+		$wpdb->update( $wpdb->posts, [ 'post_status' => ATUM_PREFIX . 'received' ], [
+			'post_status' => ATUM_PREFIX . 'completed',
+			'post_type'   => PurchaseOrders::get_post_type(),
+		] );
+		
+		$sql = "UPDATE $wpdb->postmeta pm
+					INNER JOIN $wpdb->posts p ON pm.post_id = p.ID
+					SET pm.meta_value = 'received'
+					WHERE p.post_type='atum_purchase_order' AND
+					pm.meta_key = '_status' AND
+					pm.meta_value = 'completed'";
+		
+		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+		
+	}
+	
 	/**
 	 * Create the table for the ATUM Logs
 	 *

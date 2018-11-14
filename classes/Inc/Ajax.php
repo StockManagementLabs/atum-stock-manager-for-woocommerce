@@ -918,11 +918,8 @@ final class Ajax {
 		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
 		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
 		
-		$query = $wpdb->prepare( "
-			$query_select $where_clause
-			ORDER BY posts.post_parent ASC, posts.post_title ASC
-			"
-		); // WPCS: unprepared SQL ok.
+		$query = "$query_select $where_clause
+			ORDER BY posts.post_parent ASC, posts.post_title ASC";
 
 		$product_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
 
@@ -1813,7 +1810,7 @@ final class Ajax {
 				wp_die( - 1 );
 			}
 
-			if ( $atum_order && in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ) {
+			if ( $atum_order && in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $post_type ) ) ) ) {
 				$atum_order->update_status( $status );
 				do_action( 'atum/atum_orders/edit_status', $atum_order->get_id(), $status );
 			}

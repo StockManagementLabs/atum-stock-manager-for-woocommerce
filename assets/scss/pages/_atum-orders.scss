@@ -153,7 +153,7 @@ table.wp-list-table {
 			white-space: nowrap;
 			max-width: 100%;
 			
-			&.status-completed {
+			&.status-completed, &.status-received {
 				background: $wc-blue-gray-light;
 				color: $wc-blue-gray;
 			}
@@ -201,16 +201,11 @@ table.wp-list-table {
 	
 	.column-actions {
 		
-		.pending, .complete, .view, .pdf{
+		.complete, .view, .pdf{
 			@include ir();
 			padding: 0 !important;
 			height: 2em !important;
 			width: 2em;
-		}
-		
-		.pending::after {
-			@include icon_woocommerce( '\e00f' );
-			line-height: 1.85;
 		}
 		
 		.complete::after {
