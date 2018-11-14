@@ -352,7 +352,7 @@ class Wpml {
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
 
-			$product             = wc_get_product( $this->original_product_id );
+			$product             = wc_get_product( $this->original_product_id ); // We don't need the ATUM models here.
 			$regular_price_value = $product->get_regular_price();
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'trim_zeros' => TRUE,
@@ -393,7 +393,7 @@ class Wpml {
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
 
-			$product          = wc_get_product( $this->original_product_id );
+			$product          = wc_get_product( $this->original_product_id ); // We don't need to use the ATUM models here.
 			$sale_price_value = $product->get_sale_price();
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
 				'trim_zeros' => TRUE,
@@ -642,7 +642,7 @@ class Wpml {
 		foreach ( $product_translations as $translation ) {
 
 			if ( $translation->element_id !== $post_id ) {
-				$product = wc_get_product( $post_id );
+				$product = Helpers::get_atum_product( $post_id );
 				$product->set_purchase_price( $purchase_price );
 				$product->save();
 			}

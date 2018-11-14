@@ -50,7 +50,7 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return string
 	 */
 	public function get_purchase_price( $context = 'view' ) {
 		return $this->get_prop( 'purchase_price', $context );
@@ -63,7 +63,7 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return int
 	 */
 	public function get_supplier_id( $context = 'view' ) {
 		return $this->get_prop( 'supplier_id', $context );
@@ -76,23 +76,23 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return string
 	 */
 	public function get_supplier_sku( $context = 'view' ) {
 		return $this->get_prop( 'supplier_sku', $context );
 	}
 
 	/**
-	 * Returns the product's supplier ID.
+	 * Returns the ATUM's control status.
 	 *
 	 * @since 1.5.0
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return string 'yes' or 'no'
 	 */
 	public function get_atum_controlled( $context = 'view' ) {
-		return $this->get_prop( 'atum_controlled', $context );
+		return wc_bool_to_string( $this->get_prop( 'atum_controlled', $context ) );
 	}
 
 	/**
@@ -102,7 +102,7 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return \WC_DateTime|NULL object if the date is set or null if there is no date.
 	 */
 	public function get_out_stock_date( $context = 'view' ) {
 		return $this->get_prop( 'out_stock_date', $context );
@@ -115,7 +115,7 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return float|null
 	 */
 	public function get_out_stock_threshold( $context = 'view' ) {
 		return $this->get_prop( 'out_stock_threshold', $context );
@@ -128,10 +128,10 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string price
+	 * @return string 'yes' or 'no'
 	 */
 	public function get_inheritable( $context = 'view' ) {
-		return $this->get_prop( 'inheritable', $context );
+		return wc_bool_to_string( $this->get_prop( 'inheritable', $context ) );
 	}
 
 
@@ -160,7 +160,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int $supplier_id The supplier ID.
+	 * @param int $supplier_id
 	 */
 	public function set_supplier_id( $supplier_id ) {
 		$this->set_prop( 'supplier_id', absint( $supplier_id ) );
@@ -171,7 +171,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $supplier_sku Product SKU.
+	 * @param string $supplier_sku
 	 */
 	public function set_supplier_sku( $supplier_sku ) {
 
@@ -191,7 +191,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param bool $atum_controlled Whether or not the ATUM control switch is enabled.
+	 * @param string|bool $atum_controlled Whether or not the ATUM control switch is enabled.
 	 */
 	public function set_atum_controlled( $atum_controlled ) {
 		$this->set_prop( 'atum_controlled', wc_string_to_bool( $atum_controlled ) );
@@ -202,7 +202,9 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string|integer|null $date UTC timestamp, or ISO 8601 DateTime. If the DateTime string has no timezone or offset, WordPress site timezone will be assumed. Null if there is no date.
+	 * @param string|integer|null $date UTC timestamp, or ISO 8601 DateTime.
+	 *                                  If the DateTime string has no timezone or offset, WordPress site timezone will be assumed.
+	 *                                  Null if there is no date.
 	 */
 	public function set_out_of_stock_date( $date = NULL ) {
 		$this->set_date_prop( 'out_of_stock_date', $date );
@@ -224,7 +226,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param bool $inheritable Whether or not the product is inheritable by others.
+	 * @param string|bool $inheritable Whether or not the product is inheritable by others.
 	 */
 	public function set_inheritable( $inheritable ) {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );

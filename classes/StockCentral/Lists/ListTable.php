@@ -929,7 +929,7 @@ class ListTable extends AtumListTable {
 
 					foreach ( $products as $product ) {
 
-						$wc_product     = wc_get_product( $product->ID );
+						$wc_product     = wc_get_product( $product->ID ); // We don't need to use the ATUM models here.
 						$back_orders    = 0;
 						$stock_quantity = $wc_product->get_stock_quantity();
 

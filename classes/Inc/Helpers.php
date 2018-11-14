@@ -540,7 +540,7 @@ final class Helpers {
 		$lost_sales = FALSE;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		$out_of_stock_date = $product->get_out_stock_date();
@@ -592,7 +592,7 @@ final class Helpers {
 		$out_of_stock_days = FALSE;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		// Check if the current product has the "Out of stock" date recorded.
@@ -1061,7 +1061,7 @@ final class Helpers {
 	public static function get_atum_control_status( $product ) {
 
 		if ( ! is_a( $product, '\WC_product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		return $product->get_atum_controlled();
@@ -1078,7 +1078,7 @@ final class Helpers {
 	public static function update_atum_control( $product, $status = 'enable' ) {
 
 		if ( ! is_a( $product, '\WC_product' ) ) {
-			$product = wc_get_product( $product );
+			$product = self::get_atum_product( $product );
 		}
 
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
@@ -1096,7 +1096,7 @@ final class Helpers {
 	public static function update_wc_manage_stock( $product, $status = 'enable' ) {
 
 		if ( ! is_a( $product, '\WC_product' ) ) {
-			$product = wc_get_product( $product );
+			$product = wc_get_product( $product ); // We don't need to use the ATUM models here.
 		}
 
 		$product->set_manage_stock( ( 'enable' === $status ? 'yes' : 'no' ) );
@@ -1513,6 +1513,25 @@ final class Helpers {
 		return new $model_class( $atum_order_id );
 
 	}
+
+	/**
+	 * Get a WooCommerce product using the ATUM's product data models
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param mixed $the_product Post object or post ID of the product.
+	 *
+	 * @return \WC_Product|null|false
+	 */
+	public static function get_atum_product( $the_product = FALSE ) {
+
+		Globals::enable_atum_product_data_models();
+		$product = wc_get_product( $the_product );
+		Globals::disable_atum_product_data_models();
+
+		return $product;
+
+	}
 	
 	/**
 	 * Update product meta from ATUM List tables
@@ -1525,7 +1544,7 @@ final class Helpers {
 	 */
 	public static function update_product_data( $product_id, $product_data, $skip_action = FALSE ) {
 		
-		$product = wc_get_product( $product_id );
+		$product = self::get_atum_product( $product_id );
 		
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
@@ -1700,7 +1719,7 @@ final class Helpers {
 
 			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
-				$product = wc_get_product( $id_to_rebuild );
+				$product = self::get_atum_product( $id_to_rebuild );
 
 				// Delete _out_stock_threshold (avoid partial works to be done again).
 				if ( $clean_meta ) {

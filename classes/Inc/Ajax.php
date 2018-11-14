@@ -1064,16 +1064,12 @@ final class Ajax {
 		$where = '';
 
 		if ( is_numeric( $_GET['term'] ) ) {
-
 			$supplier_id = absint( $_GET['term'] );
 			$where       = "AND ID LIKE $supplier_id";
-
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
-
 			$supplier_name = $wpdb->esc_like( $_GET['term'] );
 			$where         = "AND post_title LIKE '%%{$supplier_name}%%'";
-
 		}
 		else {
 			wp_die();
@@ -1083,11 +1079,11 @@ final class Ajax {
 		$max_results   = absint( apply_filters( 'atum/ajax/search_suppliers/max_results', 10 ) );
 		$post_statuses = AtumCapabilities::current_user_can( 'edit_private_suppliers' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
-		$query = $wpdb->prepare(
-			"SELECT DISTINCT ID, post_title from $wpdb->posts 
-			 WHERE post_type = %s $where
-			 AND post_status IN ('" . implode( "','", $post_statuses ) . "')
-			 LIMIT %d",
+		$query = $wpdb->prepare( "
+			SELECT DISTINCT ID, post_title from $wpdb->posts 
+			WHERE post_type = %s $where
+			AND post_status IN ('" . implode( "','", $post_statuses ) . "')
+			LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results
 		); // WPCS: unprepared SQL ok.
@@ -1684,7 +1680,7 @@ final class Ajax {
 
 		/* @noinspection PhpUndefinedMethodInspection */
 		$product_id = $atum_order_item->get_variation_id() ?: $atum_order_item->get_product_id();
-		$product    = wc_get_product( $product_id );
+		$product    = Helpers::get_atum_product( $product_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
@@ -1848,7 +1844,7 @@ final class Ajax {
 			wp_send_json_error( __( 'No status specified', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$product = wc_get_product( absint( $_POST['parent_id'] ) );
+		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
