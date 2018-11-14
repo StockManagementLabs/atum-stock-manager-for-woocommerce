@@ -1492,7 +1492,7 @@ final class Helpers {
 
 	}
 	
-		/**
+	/**
 	 * Get the appropriate ATUM Order statuses depending on the post_type
 	 *
 	 * @since 1.5.0
