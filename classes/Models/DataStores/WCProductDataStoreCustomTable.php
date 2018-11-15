@@ -70,6 +70,12 @@ class WCProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table 
 			'out_stock_date',
 		);
 
+		// Switches and/or checkboxes.
+		$yes_no_columns = array(
+			'atum_controlled',
+			'inheritable',
+		);
+
 		// Values which can be null in the database.
 		$allow_null = array(
 			'purchase_price',
@@ -85,6 +91,9 @@ class WCProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table 
 
 				if ( in_array( $column, $date_columns, TRUE ) ) {
 					$data[ $column ] = empty( $value ) ? NULL : gmdate( 'Y-m-d H:i:s', $product->{"get_$column"}( 'edit' )->getOffsetTimestamp() );
+				}
+				elseif ( in_array( $column, $yes_no_columns, TRUE ) ) {
+					$data[ $column ] = 'yes' === $value ? 1 : 0; // These columns are saved as integers in db.
 				}
 				else {
 					$data[ $column ] = '' === $value && in_array( $column, $allow_null, TRUE ) ? NULL : $value;

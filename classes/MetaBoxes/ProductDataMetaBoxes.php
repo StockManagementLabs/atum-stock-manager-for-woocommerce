@@ -16,6 +16,8 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\Suppliers\Suppliers;
+
 
 class ProductDataMetaBoxes {
 
@@ -27,24 +29,49 @@ class ProductDataMetaBoxes {
 	private static $instance;
 
 	/**
+	 * Store all the product data submitted from the product's edit page
+	 *
+	 * @var array
+	 */
+	private $product_data = array();
+
+	/**
+	 * Whether the purchase price is allowed
+	 *
+	 * @var bool
+	 */
+	private $purchase_price_allowed = FALSE;
+
+	/**
 	 * ProductDataMetaBoxes constructor
 	 *
 	 * @since 1.5.0
 	 */
 	private function __construct() {
 
-		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
-		add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_tab_panel' ) );
-		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_product_variation_data_panel' ), 9, 3 );
-		add_action( 'save_post_product', array( $this, 'save_product_data_panel' ), 11, 3 );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_data_panel' ), 10, 2 );
+		if ( is_admin() ) {
 
-		// Add out_stock_threshold actions if required.
-		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
-			add_action( 'woocommerce_save_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
-			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
-			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
+			// Add the ATUM Inventory panel and fields.
+			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
+			add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_tab_panel' ) );
+			add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_product_variation_data_panel' ), 9, 3 );
+
+			// Add out_stock_threshold field if required.
+			if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
+			}
+
+			// Add the supplier's fields to products if allowed.
+			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
+				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
+			}
+
+			// Save the ATUM's product data meta boxes.
+			add_action( 'save_post_product', array( $this, 'save_atum_product_data' ), 11, 3 );
+			add_action( 'woocommerce_save_product_variation', array( $this, 'save_atum_product_data' ), 10, 2 );
+
 		}
 
 	}
@@ -56,13 +83,63 @@ class ProductDataMetaBoxes {
 	 */
 	public function purchase_price_hooks() {
 
+		$this->purchase_price_allowed = TRUE;
+
 		// Add the purchase price to WC products.
 		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_field' ) );
 		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_field' ), 10, 3 );
 
-		// Save the product purchase price meta.
-		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
+	}
+
+	/**
+	 * Save all the collected ATUM's product data at once
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int      $product_id The saved product's ID.
+	 * @param \WP_Post $post       The saved post.
+	 * @param bool     $update     Whether this is an existing post being updated or not.
+	 */
+	public function save_atum_product_data( $product_id, $post, $update ) {
+
+		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
+			return;
+		}
+
+		$product = Helpers::get_atum_product( $product_id );
+
+		$this->save_product_data_panel( $product );
+
+		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+			$this->save_out_stock_threshold_field( $product );
+		}
+
+		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			$this->save_product_supplier_fields( $product );
+		}
+
+		if ( $this->purchase_price_allowed ) {
+			$purchase_price = $this->save_purchase_price( $product );
+		}
+
+		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data );
+
+		if ( ! empty( $this->product_data ) ) {
+
+			$product->set_props( $this->product_data );
+			$product->save_atum_data();
+
+			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {
+				do_action( 'atum/hooks/after_save_purchase_price', $product->get_id(), $purchase_price['new_purchase_price'], $purchase_price['old_purchase_price'] );
+			}
+
+			do_action( 'atum/product_data/after_save_data', $this->product_data );
+
+		}
+
+		// Restore the WC data models.
+		Globals::disable_atum_product_data_models();
+
 	}
 
 	/**
@@ -115,9 +192,9 @@ class ProductDataMetaBoxes {
 	 *
 	 * @since 0.0.3
 	 *
-	 * @param int      $loop             The current item in the loop of variations.
-	 * @param array    $variation_data   The current variation data.
-	 * @param \WP_Post $variation        The variation post.
+	 * @param int      $loop           The current item in the loop of variations.
+	 * @param array    $variation_data The current variation data.
+	 * @param \WP_Post $variation      The variation post.
 	 */
 	public function add_product_variation_data_panel( $loop, $variation_data, $variation ) {
 
@@ -133,30 +210,21 @@ class ProductDataMetaBoxes {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int      $product_id The saved product's ID.
-	 * @param \WP_Post $post       The saved post.
-	 * @param bool     $update
+	 * @param \WC_Product $product The currently saved product.
 	 */
-	public function save_product_data_panel( $product_id, $post, $update ) {
-
-		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
-			return;
-		}
+	private function save_product_data_panel( $product ) {
 
 		$product_tab_values     = isset( $_POST['atum_product_tab'] ) ? $_POST['atum_product_tab'] : array();
 		$product_tab_fields     = Globals::get_product_tab_fields();
 		$is_inheritable_product = Helpers::is_inheritable_type( esc_attr( $_POST['product-type'] ) );
-		$product                = Helpers::get_atum_product( $product_id );
 
-		$props = array(
-			'inheritable' => $is_inheritable_product ? 'yes' : 'no',
-		);
+		$this->product_data['inheritable'] = $is_inheritable_product ? 'yes' : 'no';
 
 		foreach ( $product_tab_fields as $field_name => $field_type ) {
 
 			// The ATUM's stock control must be always 'yes' for inheritable products.
 			if ( Globals::ATUM_CONTROL_STOCK_KEY === $field_name && $is_inheritable_product ) {
-				$props['atum_controlled'] = 'yes';
+				$this->product_data['atum_controlled'] = 'yes';
 				continue;
 			}
 
@@ -164,7 +232,7 @@ class ProductDataMetaBoxes {
 			$field_value = '';
 			switch ( $field_type ) {
 				case 'checkbox':
-					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : '';
+					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : 'no';
 					break;
 
 				case 'number_int':
@@ -189,34 +257,12 @@ class ProductDataMetaBoxes {
 
 			// The ATUM control key doesn't match to the new table column.
 			if ( Globals::ATUM_CONTROL_STOCK_KEY === $field_name ) {
-				$field_name = '_atum_controlled';
+				$field_name = 'atum_controlled';
 			}
 
-			if ( $field_value ) {
-
-				if ( is_callable( $product, "set{$field_name}" ) ) {
-					$props[ $field_name ] = $field_value;
-				}
-				else {
-					update_post_meta( $product_id, $field_name, $field_value );
-				}
-
-			}
-			else {
-
-				if ( is_callable( $product, "set{$field_name}" ) ) {
-					$props[ $field_name ] = NULL;
-				}
-				else {
-					delete_post_meta( $product_id, $field_name );
-				}
-
-			}
+			$this->product_data[ $field_name ] = $field_value;
 
 		}
-
-		$product->set_props( $props );
-		$product->save_atum_data();
 
 	}
 
@@ -282,15 +328,11 @@ class ProductDataMetaBoxes {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param int $post_id    The post ID.
-	 *
-	 * @throws \Exception
+	 * @param \WC_Product $product The product being saved.
 	 */
-	public function save_out_stock_threshold_field( $post_id ) {
+	private function save_out_stock_threshold_field( $product ) {
 
 		global $pagenow;
-
-		$product             = Helpers::get_atum_product( $post_id );
 		$out_stock_threshold = NULL;
 
 		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock(), TRUE ) ) {
@@ -304,7 +346,6 @@ class ProductDataMetaBoxes {
 			return;
 		}
 
-		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables.
 		if ( isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
 
 			$out_stock_threshold = esc_attr( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] );
@@ -327,8 +368,7 @@ class ProductDataMetaBoxes {
 
 		}
 
-		$product->set_out_stock_threshold( $out_stock_threshold );
-		$product->save_atum_data();
+		$this->product_data['out_stock_threshold'] = $out_stock_threshold;
 
 	}
 
@@ -374,11 +414,12 @@ class ProductDataMetaBoxes {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int $product_id
+	 * @param \WC_Product $product The product being saved.
+	 *
+	 * @return array
 	 */
-	public function save_purchase_price( $product_id ) {
+	private function save_purchase_price( $product ) {
 
-		$product            = Helpers::get_atum_product( $product_id );
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 		$old_purchase_price = $product->get_purchase_price();
 		$new_purchase_price = $old_purchase_price;
@@ -387,7 +428,7 @@ class ProductDataMetaBoxes {
 		if ( Helpers::is_inheritable_type( $product_type ) ) {
 
 			if ( isset( $_POST['variation_purchase_price'] ) ) {
-				$product_key        = array_search( $product_id, $_POST['variable_post_id'] );
+				$product_key        = array_search( $product->get_id(), $_POST['variable_post_id'] );
 				$purchase_price     = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
 				$new_purchase_price = '' === $purchase_price ? NULL : wc_format_decimal( $purchase_price );
 			}
@@ -399,12 +440,100 @@ class ProductDataMetaBoxes {
 			$new_purchase_price = '' === $purchase_price ? NULL : wc_format_decimal( $purchase_price );
 		}
 
-		$product->set_purchase_price( $new_purchase_price );
-		$product->save_atum_data();
+		$this->product_data['purchase_price'] = $new_purchase_price;
 
-		if ( isset( $purchase_price ) ) {
-			do_action( 'atum/hooks/after_save_purchase_price', $product_id, $purchase_price, $old_purchase_price );
+		return array(
+			'new_purchase_price' => $new_purchase_price,
+			'old_purchase_price' => $old_purchase_price,
+		);
+
+	}
+
+	/**
+	 * Adds the Supplier fields in WC's product data meta box
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int      $loop             Only for variations. The loop item number.
+	 * @param array    $variation_data   Only for variations. The variation item data.
+	 * @param \WP_Post $variation        Only for variations. The variation product.
+	 */
+	public function add_product_supplier_fields( $loop = NULL, $variation_data = array(), $variation = NULL ) {
+
+		global $post;
+
+		$product_id = empty( $variation ) ? $post->ID : $variation->ID;
+		$product    = Helpers::get_atum_product( $product_id );
+
+		if ( empty( $variation ) ) {
+
+			// Do not add the field to variable products (every variation will have its own).
+			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+				return;
+			}
+
 		}
+
+		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
+		$supplier_meta     = Suppliers::SUPPLIER_META_KEY;
+		$supplier_sku_meta = Suppliers::SUPPLIER_SKU_META_KEY;
+		$supplier_id       = $product->get_supplier_id();
+		$supplier_sku      = $product->get_supplier_sku();
+
+		if ( $supplier_id ) {
+			$supplier = get_post( $supplier_id );
+		}
+
+		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
+		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
+		$supplier_sku_field_name = empty( $variation ) ? $supplier_sku_meta : "variation{$supplier_sku_meta}[$loop]";
+		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
+
+		// If the user is not allowed to edit Suppliers, add a hidden input.
+		if ( ! AtumCapabilities::current_user_can( 'edit_supplier' ) ) : ?>
+
+			<input type="hidden" name="<?php echo esc_attr( $supplier_field_name ) ?>" id="<?php echo esc_attr( $supplier_field_id ) ?>" value="<?php echo esc_attr( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
+			<input type="hidden" name="<?php echo esc_attr( $supplier_sku_field_name ) ?>" id="<?php echo esc_attr( $supplier_sku_field_id ) ?>" value="<?php echo esc_attr( $supplier_sku ?: '' ) ?>">
+
+		<?php else :
+
+			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
+
+			Helpers::load_view( 'meta-boxes/product-data/supplier-fields', compact( 'supplier_field_name', 'supplier_field_id', 'variation', 'loop', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes' ) );
+
+		endif;
+
+	}
+
+	/**
+	 * Save the product supplier fields
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param \WC_Product $product The product being saved.
+	 */
+	private function save_product_supplier_fields( $product ) {
+
+		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) {
+			$product_key  = array_search( $product->get_id(), $_POST['variable_post_id'] );
+			$supplier_id  = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : '';
+			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : '';
+		}
+		elseif ( isset( $_POST[ Suppliers::SUPPLIER_META_KEY ], $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ) {
+			$supplier_id  = isset( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) ? absint( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) : '';
+			$supplier_sku = isset( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) : '';
+		}
+		else {
+			// If we are not saving the product from its edit page, do not continue.
+			return;
+		}
+
+		$this->product_data['supplier_id']  = $supplier_id;
+		$this->product_data['supplier_sku'] = $supplier_sku;
 
 	}
 
