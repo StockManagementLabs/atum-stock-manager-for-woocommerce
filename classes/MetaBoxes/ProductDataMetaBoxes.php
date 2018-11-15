@@ -36,6 +36,27 @@ class ProductDataMetaBoxes {
 	private $product_data = array();
 
 	/**
+	 * The product object currently saved.
+	 *
+	 * @var \WC_Product
+	 */
+	private $product;
+
+	/**
+	 * Whether the above product is a variation
+	 *
+	 * @var bool
+	 */
+	private $is_variation = FALSE;
+
+	/**
+	 * When saving a variation product, this represent its index in the array of values
+	 *
+	 * @var int
+	 */
+	private $loop = NULL;
+
+	/**
 	 * Whether the purchase price is allowed
 	 *
 	 * @var bool
@@ -69,8 +90,8 @@ class ProductDataMetaBoxes {
 			}
 
 			// Save the ATUM's product data meta boxes.
-			add_action( 'save_post_product', array( $this, 'save_atum_product_data' ), 11, 3 );
-			add_action( 'woocommerce_save_product_variation', array( $this, 'save_atum_product_data' ), 10, 2 );
+			add_action( 'save_post_product', array( $this, 'save_product_meta_boxes' ), 11, 3 );
+			add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_meta_boxes' ), 11, 2 );
 
 		}
 
@@ -88,57 +109,6 @@ class ProductDataMetaBoxes {
 		// Add the purchase price to WC products.
 		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_field' ) );
 		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_field' ), 10, 3 );
-
-	}
-
-	/**
-	 * Save all the collected ATUM's product data at once
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int      $product_id The saved product's ID.
-	 * @param \WP_Post $post       The saved post.
-	 * @param bool     $update     Whether this is an existing post being updated or not.
-	 */
-	public function save_atum_product_data( $product_id, $post, $update ) {
-
-		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
-			return;
-		}
-
-		$product = Helpers::get_atum_product( $product_id );
-
-		$this->save_product_data_panel( $product );
-
-		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			$this->save_out_stock_threshold_field( $product );
-		}
-
-		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			$this->save_product_supplier_fields( $product );
-		}
-
-		if ( $this->purchase_price_allowed ) {
-			$purchase_price = $this->save_purchase_price( $product );
-		}
-
-		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data );
-
-		if ( ! empty( $this->product_data ) ) {
-
-			$product->set_props( $this->product_data );
-			$product->save_atum_data();
-
-			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {
-				do_action( 'atum/hooks/after_save_purchase_price', $product->get_id(), $purchase_price['new_purchase_price'], $purchase_price['old_purchase_price'] );
-			}
-
-			do_action( 'atum/product_data/after_save_data', $this->product_data );
-
-		}
-
-		// Restore the WC data models.
-		Globals::disable_atum_product_data_models();
 
 	}
 
@@ -209,10 +179,8 @@ class ProductDataMetaBoxes {
 	 * Save all the fields within the Product Data's ATUM Inventory tab
 	 *
 	 * @since 1.4.1
-	 *
-	 * @param \WC_Product $product The currently saved product.
 	 */
-	private function save_product_data_panel( $product ) {
+	private function save_product_data_panel() {
 
 		$product_tab_values     = isset( $_POST['atum_product_tab'] ) ? $_POST['atum_product_tab'] : array();
 		$product_tab_fields     = Globals::get_product_tab_fields();
@@ -267,18 +235,6 @@ class ProductDataMetaBoxes {
 	}
 
 	/**
-	 * Save all the fields within the Variation Product's ATUM Section
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param int $variation_id
-	 * @param int $i
-	 */
-	public function save_product_variation_data_panel( $variation_id, $i ) {
-		Helpers::update_atum_control( $variation_id, ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ? 'enable' : 'disable' ) );
-	}
-
-	/**
 	 * Add the individual out stock threshold field to WC's WC's product data meta box
 	 *
 	 * @since 1.4.10
@@ -324,25 +280,15 @@ class ProductDataMetaBoxes {
 
 	/**
 	 * Save the out of stock threshold field
-	 * Rebuild: force_rebuild_stock_status if _out_stock_threshold is empty, and check that this change is not comming from options.php to avoid nestings problems.
+	 * Rebuild: force_rebuild_stock_status if _out_stock_threshold is empty.
 	 *
 	 * @since 1.4.10
-	 *
-	 * @param \WC_Product $product The product being saved.
 	 */
-	private function save_out_stock_threshold_field( $product ) {
+	private function save_out_stock_threshold_field() {
 
-		global $pagenow;
 		$out_stock_threshold = NULL;
 
-		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock(), TRUE ) ) {
-			return;
-		}
-
-		if ( ! isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) && ! isset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) && 'options.php' !== $pagenow ) {
-			// Force product validate and save to rebuild stock_status.
-			Helpers::force_rebuild_stock_status( $product );
-
+		if ( ! in_array( $this->product->get_type(), Globals::get_product_types_with_stock(), TRUE ) ) {
 			return;
 		}
 
@@ -350,9 +296,9 @@ class ProductDataMetaBoxes {
 
 			$out_stock_threshold = esc_attr( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
-			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
+			if ( empty( $out_stock_threshold ) ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-				Helpers::force_rebuild_stock_status( $product );
+				Helpers::force_rebuild_stock_status( $this->product );
 			}
 
 		}
@@ -361,9 +307,9 @@ class ProductDataMetaBoxes {
 			// TODO: CHECK IF THIS IS SAVING THE RIGHT VALUE WHEN MULTIPLE VARIATIONS ARE PRESENT.
 			$out_stock_threshold = current( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
-			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
+			if ( empty( $out_stock_threshold ) ) {
 				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-				Helpers::force_rebuild_stock_status( $product );
+				Helpers::force_rebuild_stock_status( $this->product );
 			}
 
 		}
@@ -414,28 +360,26 @@ class ProductDataMetaBoxes {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param \WC_Product $product The product being saved.
-	 *
 	 * @return array
 	 */
-	private function save_purchase_price( $product ) {
+	private function save_purchase_price() {
 
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-		$old_purchase_price = $product->get_purchase_price();
-		$new_purchase_price = $old_purchase_price;
+		$old_purchase_price = $this->product->get_purchase_price();
+		$new_purchase_price = $old_purchase_price ?: NULL;
 
 		// Variables, grouped and variations.
 		if ( Helpers::is_inheritable_type( $product_type ) ) {
 
-			if ( isset( $_POST['variation_purchase_price'] ) ) {
-				$product_key        = array_search( $product->get_id(), $_POST['variable_post_id'] );
+			if ( $this->is_variation && isset( $_POST['variation_purchase_price'] ) ) {
+				$product_key        = array_search( $this->product->get_id(), $_POST['variable_post_id'] );
 				$purchase_price     = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
 				$new_purchase_price = '' === $purchase_price ? NULL : wc_format_decimal( $purchase_price );
 			}
 
 		}
 		// Rest of product types (Bypass if "_puchase_price" meta is not coming).
-		elseif ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
+		elseif ( ! $this->is_variation && isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
 			$purchase_price     = (string) isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ? wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) : '';
 			$new_purchase_price = '' === $purchase_price ? NULL : wc_format_decimal( $purchase_price );
 		}
@@ -509,21 +453,19 @@ class ProductDataMetaBoxes {
 	 * Save the product supplier fields
 	 *
 	 * @since 1.3.0
-	 *
-	 * @param \WC_Product $product The product being saved.
 	 */
-	private function save_product_supplier_fields( $product ) {
+	private function save_product_supplier_fields() {
 
-		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+		if ( in_array( $this->product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
 			return;
 		}
 
-		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) {
-			$product_key  = array_search( $product->get_id(), $_POST['variable_post_id'] );
+		if ( $this->is_variation && isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) {
+			$product_key  = array_search( $this->product->get_id(), $_POST['variable_post_id'] );
 			$supplier_id  = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : '';
 			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : '';
 		}
-		elseif ( isset( $_POST[ Suppliers::SUPPLIER_META_KEY ], $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ) {
+		elseif ( ! $this->is_variation && isset( $_POST[ Suppliers::SUPPLIER_META_KEY ], $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ) {
 			$supplier_id  = isset( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) ? absint( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) : '';
 			$supplier_sku = isset( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) : '';
 		}
@@ -534,6 +476,89 @@ class ProductDataMetaBoxes {
 
 		$this->product_data['supplier_id']  = $supplier_id;
 		$this->product_data['supplier_sku'] = $supplier_sku;
+
+	}
+
+	/**
+	 * Hook callback after saving a product
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int      $product_id The saved product's ID.
+	 * @param \WP_Post $post       The saved post.
+	 * @param bool     $update     Whether this is an existing post being updated or not.
+	 */
+	public function save_product_meta_boxes( $product_id, $post, $update ) {
+
+		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
+			return;
+		}
+
+		$this->product      = Helpers::get_atum_product( $product_id );
+		$this->is_variation = FALSE;
+		$this->loop         = NULL;
+
+		$this->save_atum_product_data();
+
+	}
+
+	/**
+	 * Hook callback after saving a variation product
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $variation_id
+	 * @param int $loop
+	 */
+	public function save_product_variation_meta_boxes( $variation_id, $loop ) {
+
+		$this->product      = Helpers::get_atum_product( $variation_id );
+		$this->is_variation = TRUE;
+		$this->loop         = $loop;
+
+		$this->save_atum_product_data();
+
+	}
+
+	/**
+	 * Save all the collected ATUM's product data at once
+	 *
+	 * @since 1.5.0
+	 */
+	public function save_atum_product_data() {
+
+		$this->save_product_data_panel();
+
+		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+			$this->save_out_stock_threshold_field();
+		}
+
+		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			$this->save_product_supplier_fields();
+		}
+
+		if ( $this->purchase_price_allowed ) {
+			$purchase_price = $this->save_purchase_price();
+		}
+
+		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data );
+
+		if ( ! empty( $this->product_data ) ) {
+
+			$this->product->set_props( $this->product_data );
+			$this->product->save_atum_data();
+
+			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {
+				do_action( 'atum/hooks/after_save_purchase_price', $this->product->get_id(), $purchase_price['new_purchase_price'], $purchase_price['old_purchase_price'] );
+			}
+
+			do_action( 'atum/product_data/after_save_data', $this->product_data );
+
+		}
+
+		// Restore the WC data models.
+		// TODO: THIS WAS IN ATUM_GET_PRODUCT. MAKES SENSE TO LEAVE IT HERE?
+		Globals::disable_atum_product_data_models();
 
 	}
 
