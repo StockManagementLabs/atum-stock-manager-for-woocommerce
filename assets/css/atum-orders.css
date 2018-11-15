@@ -3167,6 +3167,11 @@ input[type="button"].btn-block {
   text-decoration: none;
 }
 
+#wpfooter .footer-box .footer-atum-buttons {
+  display: flex;
+  align-items: center;
+}
+
 #wpfooter .footer-box .footer-atum-buttons .footer-button {
   width: 130px;
   height: 30px;
@@ -3348,8 +3353,8 @@ table.wp-list-table .column-status .order-status {
 }
 
 table.wp-list-table .column-status .order-status.status-completed, table.wp-list-table .column-status .order-status.status-received {
-  background: #C8D7E1;
-  color: #2e4453;
+  background: #d5f5ba;
+  color: #69C61D;
 }
 
 table.wp-list-table .column-status .order-status.status-on-hold {
@@ -3363,8 +3368,23 @@ table.wp-list-table .column-status .order-status.status-failed, table.wp-list-ta
 }
 
 table.wp-list-table .column-status .order-status.status-pending {
-  background: #C6E1C6;
-  color: #5B841B;
+  background: #ffe1e1;
+  color: #FF4848;
+}
+
+table.wp-list-table .column-status .order-status.status-ordered {
+  background: #ffedbc;
+  color: #EFAF00;
+}
+
+table.wp-list-table .column-status .order-status.status-onthewayin {
+  background: #dbf9ff;
+  color: #00B8DB;
+}
+
+table.wp-list-table .column-status .order-status.status-receiving {
+  background: #edddfd;
+  color: #BA7DF7;
 }
 
 table.wp-list-table .column-status .order-status > span {

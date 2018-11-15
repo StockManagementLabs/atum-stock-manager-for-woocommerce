@@ -154,8 +154,8 @@ table.wp-list-table {
 			max-width: 100%;
 			
 			&.status-completed, &.status-received {
-				background: $wc-blue-gray-light;
-				color: $wc-blue-gray;
+				background: $green-light;
+				color: $green;
 			}
 			
 			&.status-on-hold {
@@ -169,8 +169,24 @@ table.wp-list-table {
 			}
 			
 			&.status-pending {
-				background: $wc-green-light;
-				color: $wc-green;
+				background: $red-light;
+				color: $red;
+			}
+			
+			
+			&.status-ordered {
+				background: $orange-light;
+				color: $orange;
+			}
+			
+			&.status-onthewayin {
+				background: $blue-light;
+				color: $blue;
+			}
+			
+			&.status-receiving {
+				background: $purple-light;
+				color: $purple;
 			}
 			
 			> span {
