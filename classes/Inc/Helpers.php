@@ -1060,7 +1060,7 @@ final class Helpers {
 		}
 
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
-		$product->save();
+		$product->save_atum_data();
 	}
 
 	/**

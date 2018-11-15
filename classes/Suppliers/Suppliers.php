@@ -438,12 +438,10 @@ class Suppliers {
 			return;
 		}
 
-		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) { // WPCS: CSRF ok.
-
-			$product_key  = array_search( $product_id, $_POST['variable_post_id'] ); // WPCS: CSRF ok.
+		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) {
+			$product_key  = array_search( $product_id, $_POST['variable_post_id'] );
 			$supplier_id  = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : ''; // WPCS: CSRF ok.
 			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : ''; // WPCS: CSRF ok.
-
 		}
 		elseif ( isset( $_POST[ self::SUPPLIER_META_KEY ], $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ) { // WPCS: CSRF ok.
 			$supplier_id  = isset( $_POST[ self::SUPPLIER_META_KEY ] ) ? absint( $_POST[ self::SUPPLIER_META_KEY ] ) : ''; // WPCS: CSRF ok.
@@ -454,10 +452,11 @@ class Suppliers {
 			return;
 		}
 
-		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables.
-		$product->set_supplier_id( $supplier_id );
-		$product->set_supplier_sku( $supplier_sku );
-		$product->save();
+		$product->set_props( array(
+			'supplier_id'  => $supplier_id,
+			'supplier_sku' => $supplier_sku,
+		) );
+		$product->save_atum_data();
 
 	}
 
