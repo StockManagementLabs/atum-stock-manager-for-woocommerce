@@ -863,7 +863,7 @@ class Settings {
 		?>
 		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?>"
 			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo esc_attr( 'data-confirm="' . $args['options']['confirm_msg'] ) . '"' ?>>
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"' ?>>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 
