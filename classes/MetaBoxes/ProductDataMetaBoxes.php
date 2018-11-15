@@ -182,9 +182,10 @@ class ProductDataMetaBoxes {
 	 */
 	private function save_product_data_panel() {
 
-		$product_tab_values     = isset( $_POST['atum_product_tab'] ) ? $_POST['atum_product_tab'] : array();
+		$tab_data_key           = $this->is_variation ? 'variation_atum_tab' : 'atum_product_tab';
+		$atum_tab_values        = isset( $_POST[ $tab_data_key ] ) ? $_POST[ $tab_data_key ] : array();
 		$product_tab_fields     = Globals::get_product_tab_fields();
-		$is_inheritable_product = Helpers::is_inheritable_type( esc_attr( $_POST['product-type'] ) );
+		$is_inheritable_product = ! $this->is_variation && Helpers::is_inheritable_type( esc_attr( $_POST['product-type'] ) );
 
 		$this->product_data['inheritable'] = $is_inheritable_product ? 'yes' : 'no';
 
@@ -196,34 +197,34 @@ class ProductDataMetaBoxes {
 				continue;
 			}
 
+			if ( $this->is_variation ) {
+				$field_value = isset( $atum_tab_values[ $field_name ][ $this->loop ] ) ? $atum_tab_values[ $field_name ][ $this->loop ] : NULL;
+			}
+			else {
+				$field_value = isset( $atum_tab_values[ $field_name ] ) ? $atum_tab_values[ $field_name ] : NULL;
+			}
+
 			// Sanitize the fields.
-			$field_value = '';
 			switch ( $field_type ) {
 				case 'checkbox':
-					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : 'no';
+					$field_value = 'yes' === $field_value ? 'yes' : 'no';
 					break;
 
 				case 'number_int':
-					if ( isset( $product_tab_values[ $field_name ] ) ) {
-						$field_value = absint( $product_tab_values[ $field_name ] );
-					}
+						$field_value = absint( $field_value );
 					break;
 
 				case 'number_float':
-					if ( isset( $product_tab_values[ $field_name ] ) ) {
-						$field_value = floatval( $product_tab_values[ $field_name ] );
-					}
+					$field_value = floatval( $field_value );
 					break;
 
 				case 'text':
 				default:
-					if ( isset( $product_tab_values[ $field_name ] ) ) {
-						$field_value = wc_clean( $product_tab_values[ $field_name ] );
-					}
+					$field_value = wc_clean( $field_value );
 					break;
 			}
 
-			// The ATUM control key doesn't match to the new table column.
+			// The ATUM control key doesn't match to the new table column name.
 			if ( Globals::ATUM_CONTROL_STOCK_KEY === $field_name ) {
 				$field_name = 'atum_controlled';
 			}
@@ -292,26 +293,11 @@ class ProductDataMetaBoxes {
 			return;
 		}
 
-		if ( isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
+		$out_stock_threshold = $this->is_variation ? $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ][ $this->loop ] : $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ];
 
-			$out_stock_threshold = esc_attr( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] );
-
-			if ( empty( $out_stock_threshold ) ) {
-				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-				Helpers::force_rebuild_stock_status( $this->product );
-			}
-
-		}
-		elseif ( isset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
-
-			// TODO: CHECK IF THIS IS SAVING THE RIGHT VALUE WHEN MULTIPLE VARIATIONS ARE PRESENT.
-			$out_stock_threshold = current( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] );
-
-			if ( empty( $out_stock_threshold ) ) {
-				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-				Helpers::force_rebuild_stock_status( $this->product );
-			}
-
+		// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
+		if ( $out_stock_threshold ) {
+			Helpers::force_rebuild_stock_status( $this->product );
 		}
 
 		$this->product_data['out_stock_threshold'] = $out_stock_threshold;
@@ -371,17 +357,16 @@ class ProductDataMetaBoxes {
 		// Variables, grouped and variations.
 		if ( Helpers::is_inheritable_type( $product_type ) ) {
 
-			if ( $this->is_variation && isset( $_POST['variation_purchase_price'] ) ) {
-				$product_key        = array_search( $this->product->get_id(), $_POST['variable_post_id'] );
-				$purchase_price     = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
-				$new_purchase_price = '' === $purchase_price ? NULL : wc_format_decimal( $purchase_price );
+			if ( $this->is_variation && isset( $_POST[ 'variation' . Globals::PURCHASE_PRICE_KEY ][ $this->loop ] ) ) {
+				$purchase_price     = wc_clean( $_POST[ 'variation' . Globals::PURCHASE_PRICE_KEY ][ $this->loop ] );
+				$new_purchase_price = '' === $purchase_price ? NULL : $purchase_price;
 			}
 
 		}
 		// Rest of product types (Bypass if "_puchase_price" meta is not coming).
 		elseif ( ! $this->is_variation && isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
-			$purchase_price     = (string) isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ? wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) : '';
-			$new_purchase_price = '' === $purchase_price ? NULL : wc_format_decimal( $purchase_price );
+			$purchase_price     = wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
+			$new_purchase_price = '' === $purchase_price ? NULL : $purchase_price;
 		}
 
 		$this->product_data['purchase_price'] = $new_purchase_price;
@@ -460,14 +445,13 @@ class ProductDataMetaBoxes {
 			return;
 		}
 
-		if ( $this->is_variation && isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) {
-			$product_key  = array_search( $this->product->get_id(), $_POST['variable_post_id'] );
-			$supplier_id  = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : '';
-			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : '';
+		if ( $this->is_variation && isset( $_POST['variation_supplier'][ $this->loop ], $_POST['variation_supplier_sku'][ $this->loop ] ) ) {
+			$supplier_id  = $_POST[ 'variation' . Suppliers::SUPPLIER_META_KEY ][ $this->loop ];
+			$supplier_sku = $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_META_KEY ][ $this->loop ];
 		}
 		elseif ( ! $this->is_variation && isset( $_POST[ Suppliers::SUPPLIER_META_KEY ], $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ) {
-			$supplier_id  = isset( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) ? absint( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) : '';
-			$supplier_sku = isset( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) : '';
+			$supplier_id  = $_POST[ Suppliers::SUPPLIER_META_KEY ];
+			$supplier_sku = $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ];
 		}
 		else {
 			// If we are not saving the product from its edit page, do not continue.
@@ -498,7 +482,7 @@ class ProductDataMetaBoxes {
 		$this->is_variation = FALSE;
 		$this->loop         = NULL;
 
-		$this->save_atum_product_data();
+		$this->save_atum_meta_boxes();
 
 	}
 
@@ -516,16 +500,16 @@ class ProductDataMetaBoxes {
 		$this->is_variation = TRUE;
 		$this->loop         = $loop;
 
-		$this->save_atum_product_data();
+		$this->save_atum_meta_boxes();
 
 	}
 
 	/**
-	 * Save all the collected ATUM's product data at once
+	 * Save all the collected data for the ATUM meta boxes at once
 	 *
 	 * @since 1.5.0
 	 */
-	public function save_atum_product_data() {
+	public function save_atum_meta_boxes() {
 
 		$this->save_product_data_panel();
 
@@ -555,10 +539,6 @@ class ProductDataMetaBoxes {
 			do_action( 'atum/product_data/after_save_data', $this->product_data );
 
 		}
-
-		// Restore the WC data models.
-		// TODO: THIS WAS IN ATUM_GET_PRODUCT. MAKES SENSE TO LEAVE IT HERE?
-		Globals::disable_atum_product_data_models();
 
 	}
 
