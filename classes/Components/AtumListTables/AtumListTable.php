@@ -20,7 +20,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Legacy\AtumListTableLegacyTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
-use Atum\Queries\AtumProductDataQuery;
+use Atum\Queries\ProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 
@@ -2040,7 +2040,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $pieces;
 		}
 
-		$atum_product_data_query = new AtumProductDataQuery( $this->query_data );
+		$atum_product_data_query = new ProductDataQuery( $this->query_data );
 		$sql                     = $atum_product_data_query->get_sql();
 
 		foreach ( [ 'join', 'where' ] as $key ) {

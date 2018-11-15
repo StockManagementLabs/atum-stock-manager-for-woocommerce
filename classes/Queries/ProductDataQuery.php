@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
 
-class AtumProductDataQuery extends \WP_Meta_Query {
+class ProductDataQuery extends \WP_Meta_Query {
 
 	/**
 	 * Generates SQL clauses to be appended to a main query.
