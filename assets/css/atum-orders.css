@@ -3167,6 +3167,11 @@ input[type="button"].btn-block {
   text-decoration: none;
 }
 
+#wpfooter .footer-box .footer-atum-buttons {
+  display: flex;
+  align-items: center;
+}
+
 #wpfooter .footer-box .footer-atum-buttons .footer-button {
   width: 130px;
   height: 30px;

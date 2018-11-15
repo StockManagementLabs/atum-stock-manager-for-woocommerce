@@ -175,14 +175,22 @@ trait AtumProductTrait {
 	 */
 	public function set_supplier_sku( $supplier_sku ) {
 
-		$supplier_sku       = (string) $supplier_sku;
-		$supplier_sku_found = Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku );
+		$errors = new \WP_Error();
 
-		if ( $this->get_object_read() && ! empty( $supplier_sku ) && ! $supplier_sku_found ) {
-			$this->error( 'product_invalid_supplier_sku', __( 'Invalid or duplicated Supplier SKU.', ATUM_TEXT_DOMAIN ), 400, array( 'resource_id' => $supplier_sku_found ) );
+		try {
+
+			$supplier_sku       = (string) $supplier_sku;
+			$supplier_sku_found = Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku );
+
+			if ( $this->get_object_read() && ! empty( $supplier_sku ) && $supplier_sku_found ) {
+				$this->error( 'product_invalid_supplier_sku', __( 'Invalid or duplicated Supplier SKU.', ATUM_TEXT_DOMAIN ), 400, array( 'resource_id' => $supplier_sku_found ) );
+			}
+
+			$this->set_prop( 'supplier_sku', $supplier_sku );
+
+		} catch ( \WC_Data_Exception $e ) {
+			$errors->add( $e->getErrorCode(), $e->getMessage() );
 		}
-
-		$this->set_prop( 'supplier_sku', $supplier_sku );
 
 	}
 
@@ -230,6 +238,18 @@ trait AtumProductTrait {
 	 */
 	public function set_inheritable( $inheritable ) {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );
+	}
+
+	/**
+	 * Save the ATUM prodcut data
+	 *
+	 * @since 1.5.0
+	 */
+	public function save_atum_data() {
+
+		$data_store = $this->get_data_store();
+		$data_store->update_atum_product_data( $this );
+
 	}
 
 }

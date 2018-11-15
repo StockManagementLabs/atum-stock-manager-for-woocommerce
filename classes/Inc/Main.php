@@ -20,6 +20,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Integrations\Wpml;
+use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
@@ -191,6 +192,7 @@ class Main {
 		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();
+		ProductDataMetaBoxes::get_instance();
 		
 		//
 		// Enable WPML module if needed

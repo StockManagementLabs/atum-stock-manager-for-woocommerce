@@ -1684,7 +1684,7 @@ final class Ajax {
 		}
 
 		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
-		$product->save();
+		$product->save_atum_data();
 
 		wp_send_json_success();
 

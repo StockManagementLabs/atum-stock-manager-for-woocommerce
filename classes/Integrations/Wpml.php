@@ -183,7 +183,7 @@ class Wpml {
 			add_action( 'wcml_after_save_custom_prices', array( $this, 'wpml_save_purchase_price_in_custom_prices' ), 10, 4 );
 
 			// Save the product purchase price meta.
-			add_action( 'atum/hooks/after_save_purchase_price', array( $this, 'save_translations_purchase_price' ), 10, 2 );
+			add_action( 'atum/product_data/after_save_purchase_price', array( $this, 'save_translations_purchase_price' ), 10, 2 );
 
 		}
 
@@ -644,7 +644,7 @@ class Wpml {
 			if ( $translation->element_id !== $post_id ) {
 				$product = Helpers::get_atum_product( $post_id );
 				$product->set_purchase_price( $purchase_price );
-				$product->save();
+				$product->save_atum_data();
 			}
 
 		}

@@ -1060,7 +1060,7 @@ final class Helpers {
 		}
 
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
-		$product->save();
+		$product->save_atum_data();
 	}
 
 	/**
@@ -1536,7 +1536,6 @@ final class Helpers {
 
 		Globals::enable_atum_product_data_models();
 		$product = wc_get_product( $the_product );
-		Globals::disable_atum_product_data_models();
 
 		return $product;
 

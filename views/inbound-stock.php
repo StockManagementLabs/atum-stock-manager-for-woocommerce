@@ -21,8 +21,8 @@ defined( 'ABSPATH' ) || die;
 		
 		<?php $list->views(); ?>
 
-		<p class="search-box">
-			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php esc_attr_e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
+		<p class="search-box inbound-stock-search">
+			<input type="search" name="s" class="atum-post-search" value="" placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
 			
 			<?php if ( 'no' === $ajax ) : ?>
 				<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>">

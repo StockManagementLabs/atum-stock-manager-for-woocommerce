@@ -16,9 +16,9 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
-use Atum\Inc\Hooks;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
@@ -130,7 +130,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );
 
 		// Add the hooks for the Purchase Price field.
-		Hooks::get_instance()->purchase_price_hooks();
+		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
 
 	}
 
