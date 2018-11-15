@@ -891,8 +891,18 @@ abstract class AtumOrderModel {
 		}
 
 		if ( $new_status !== $old_status ) {
+			
 			$this->set_status( $new_status );
 			$this->save();
+			
+			do_action( "atum/orders/status_$new_status", $this->id, $this );
+			do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
+			do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
+			
+			/* translators: 1: old order status 2: new order status */
+			$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
+			$this->add_note( $transition_note );
+			
 		}
 
 	}
