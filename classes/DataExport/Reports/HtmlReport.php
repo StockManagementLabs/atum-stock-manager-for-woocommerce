@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Lists\ListTable;
-use Atum\Suppliers\Suppliers;
 
 
 class HtmlReport extends ListTable {
@@ -134,7 +133,7 @@ class HtmlReport extends ListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product     = Helpers::get_atum_product( $item );
 		$type              = $this->product->get_type();
 		$this->allow_calcs = Helpers::is_inheritable_type( $type ) ? FALSE : TRUE;
 		$row_style         = '';
@@ -180,7 +179,7 @@ class HtmlReport extends ListTable {
 					}
 
 					$this->is_child = TRUE;
-					$this->product  = wc_get_product( $child_id );
+					$this->product  = Helpers::get_atum_product( $child_id );
 					$this->single_expandable_row( $this->product, ( 'grouped' === $type ? $type : 'variation' ) );
 				}
 			}
@@ -242,7 +241,7 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
-		$supplier_id = get_post_meta( $this->get_current_product_id(), Suppliers::SUPPLIER_META_KEY, TRUE );
+		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {
 

@@ -18,6 +18,7 @@ use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -64,10 +65,10 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
-			'thumb'               => '<span class="wc-image tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'               => '<span class="lnr lnr-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                  => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'           => '<span class="wc-type tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'           => '<span class="lnr lnr-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
@@ -444,7 +445,7 @@ class ListTable extends AtumListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product     = Helpers::get_atum_product( $item );
 		$this->allow_calcs = TRUE;
 
 		echo '<tr>';

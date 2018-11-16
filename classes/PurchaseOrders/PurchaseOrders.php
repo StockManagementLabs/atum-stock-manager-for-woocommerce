@@ -16,9 +16,9 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
-use Atum\Inc\Hooks;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
@@ -34,6 +34,13 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @var string
 	 */
 	protected $search_label = ATUM_PREFIX . 'po_search';
+	
+	/**
+	 * Status that means an ATUM Order is finished
+	 *
+	 * @var string
+	 */
+	protected $finished = 'received';
 
 	/**
 	 * The Purchase Order post type name
@@ -123,7 +130,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );
 
 		// Add the hooks for the Purchase Price field.
-		Hooks::get_instance()->purchase_price_hooks();
+		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
 
 	}
 
@@ -381,6 +388,25 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		return $this->po;
 
+	}
+	
+	/**
+	 * Get the available ATUM Order statuses
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return array
+	 */
+	public static function get_statuses() {
+		
+		return (array) apply_filters( 'atum/purchase_orders/statuses', array(
+			'pending'    => _x( 'Pending', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'ordered'    => _x( 'Ordered', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'onthewayin' => _x( 'On the Way In', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'receiving'  => _x( 'Receiving', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'received'   => _x( 'Received', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+		) );
+		
 	}
 
 	/**

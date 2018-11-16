@@ -11,6 +11,7 @@
  */
 
 defined( 'ABSPATH' ) || die;
+
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline">
@@ -27,36 +28,54 @@ defined( 'ABSPATH' ) || die;
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
+		<div class="stock-central-header">
+			<nav id="stock_central_nav" class="stock-central-nav dragscroll">
+				<?php $list->views(); ?>
+				<div class="overflow-opacity-effect-right" >
 
-		<?php $list->views(); ?>
+				</div>
+				<div class="overflow-opacity-effect-left" >
 
-		<div class="search-box">
+				</div>
+			</nav>
 
-			<div class="input-group input-group-sm">
+			<div class="search-box">
 
-				<input type="text" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
-					aria-label="Text input with dropdown button"
-					data-no-option="<?php esc_attr_e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>"
-					placeholder="<?php esc_attr_e( 'Search products...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
+				<div class="input-group input-group-sm">
 
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<?php esc_html_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>
-					</button>
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>
+						</button>
 
-					<div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
-						data-product-title="<?php esc_attr_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
-						data-no-option="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>"
-					></div>
+						<div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
+								data-product-title="<?php esc_attr_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
+								data-no-option="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>"
+						></div>
+					</div>
+					<input type="text" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
+							aria-label="Text input with dropdown button"
+							data-no-option="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>"
+							placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
+
+					<?php if ( 'no' === $ajax ) : ?>
+						<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>" disabled>
+					<?php endif; ?>
 				</div>
 
-				<?php if ( 'no' === $ajax ) : ?>
-					<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>" disabled>
-				<?php endif; ?>
+				<div class="sticky-columns-button-container">
+					<button class="sticky-columns-button sticky-on" data-option="yes">
+						<i class="lnr lnr-menu"></i>
+					</button>
 
+					<button class="sticky-columns-button sticky-off" data-option="no">
+						<i class="lnr lnr-menu"></i>
+					</button>
+
+				</div>
 			</div>
-
 		</div>
+
 
 		<?php $list->display(); ?>
 		

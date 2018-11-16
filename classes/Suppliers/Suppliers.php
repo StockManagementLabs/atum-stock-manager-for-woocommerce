@@ -87,14 +87,6 @@ class Suppliers {
 				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
 				add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
 
-				// Add the supplier's fields to products.
-				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
-				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
-
-				// Save the product supplier meta box.
-				add_action( 'save_post_product', array( $this, 'save_product_supplier_fields' ) );
-				add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_supplier_fields' ) );
-
 			}
 
 			if ( AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
@@ -226,21 +218,21 @@ class Suppliers {
 		switch ( $column ) {
 
 			case 'company_code':
-				echo get_post_meta( $post->ID, '_supplier_details_code', TRUE );
+				echo esc_html( get_post_meta( $post->ID, '_supplier_details_code', TRUE ) );
 				break;
 
 			case 'company_phone':
-				echo get_post_meta( $post->ID, '_supplier_details_phone', TRUE );
+				echo esc_html( get_post_meta( $post->ID, '_supplier_details_phone', TRUE ) );
 				break;
 
 			case 'assigned_to':
-				$user_id = get_post_meta( $post->ID, '_default_settings_assigned_to', TRUE );
+				$user_id = esc_html( get_post_meta( $post->ID, '_default_settings_assigned_to', TRUE ) );
 
 				if ( $user_id > 0 ) {
 					$user = get_user_by( 'id', $user_id );
 
 					if ( $user ) {
-						echo '<a href="' . get_edit_user_link( $user_id ) . '" target="_blank">' . $user->display_name . '</a>';
+						echo '<a href="' . esc_url( get_edit_user_link( $user_id ) ) . '" target="_blank">' . esc_html( $user->display_name ) . '</a>';
 					}
 
 				}
@@ -248,7 +240,7 @@ class Suppliers {
 				break;
 
 			case 'location':
-				echo get_post_meta( $post->ID, '_default_settings_location', TRUE );
+				echo esc_html( get_post_meta( $post->ID, '_default_settings_location', TRUE ) );
 				break;
 
 		}
@@ -368,100 +360,6 @@ class Suppliers {
 	}
 
 	/**
-	 * Adds the Supplier fields in WC's product data meta box
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param int      $loop             Only for variations. The loop item number.
-	 * @param array    $variation_data   Only for variations. The variation item data.
-	 * @param \WP_Post $variation        Only for variations. The variation product.
-	 */
-	public function add_product_supplier_fields( $loop = NULL, $variation_data = array(), $variation = NULL ) {
-
-		global $post;
-
-		if ( empty( $variation ) ) {
-
-			$product = wc_get_product( $post->ID );
-
-			// Do not add the field to variable products (every variation will have its own).
-			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-				return;
-			}
-
-		}
-
-		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
-		$supplier_meta     = self::SUPPLIER_META_KEY;
-		$supplier_sku_meta = self::SUPPLIER_SKU_META_KEY;
-
-		$product_id   = empty( $variation ) ? $post->ID : $variation->ID;
-		$supplier_id  = get_post_meta( $product_id, $supplier_meta, TRUE );
-		$supplier_sku = get_post_meta( $product_id, $supplier_sku_meta, TRUE );
-
-		if ( $supplier_id ) {
-			$supplier = get_post( $supplier_id );
-		}
-
-		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
-		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
-		$supplier_sku_field_name = empty( $variation ) ? $supplier_sku_meta : "variation{$supplier_sku_meta}[$loop]";
-		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
-
-		// If the user is not allowed to edit Suppliers, add a hidden input.
-		if ( ! AtumCapabilities::current_user_can( 'edit_supplier' ) ) : ?>
-
-			<input type="hidden" name="<?php echo $supplier_field_name ?>" id="<?php echo $supplier_field_id ?>" value="<?php echo ( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
-			<input type="hidden" name="<?php echo $supplier_sku_field_name ?>" id="<?php echo $supplier_sku_field_id ?>" value="<?php echo ( $supplier_sku ?: '' ) ?>">
-
-		<?php else :
-
-			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
-
-			Helpers::load_view( 'meta-boxes/product-data/supplier-fields', compact( 'supplier_field_name', 'supplier_field_id', 'variation', 'loop', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes' ) );
-
-		endif;
-
-	}
-
-	/**
-	 * Save the product supplier fields
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param int $product_id The saved product's ID.
-	 */
-	public function save_product_supplier_fields( $product_id ) {
-
-		$product = wc_get_product( $product_id );
-
-		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-			return;
-		}
-
-		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) { // WPCS: CSRF ok.
-
-			$product_key  = array_search( $product_id, $_POST['variable_post_id'] ); // WPCS: CSRF ok.
-			$supplier     = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : ''; // WPCS: CSRF ok.
-			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : ''; // WPCS: CSRF ok.
-
-		}
-		elseif ( isset( $_POST[ self::SUPPLIER_META_KEY ], $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ) { // WPCS: CSRF ok.
-			$supplier     = isset( $_POST[ self::SUPPLIER_META_KEY ] ) ? absint( $_POST[ self::SUPPLIER_META_KEY ] ) : ''; // WPCS: CSRF ok.
-			$supplier_sku = isset( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) : ''; // WPCS: CSRF ok.
-		}
-		else {
-			// If we are not saving the product from its edit page, do not continue.
-			return;
-		}
-
-		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables.
-		update_post_meta( $product_id, self::SUPPLIER_META_KEY, $supplier );
-		update_post_meta( $product_id, self::SUPPLIER_SKU_META_KEY, $supplier_sku );
-
-	}
-
-	/**
 	 * Enqueue the scripts
 	 *
 	 * @since 1.2.9
@@ -489,6 +387,8 @@ class Suppliers {
 	 * @param bool         $type_filter  Optional. Whether to filter the retrieved suppliers by product type or not.
 	 *
 	 * @return array|bool
+	 *
+	 * TODO: 1.5.
 	 */
 	public static function get_supplier_products( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE ) {
 
@@ -624,6 +524,35 @@ class Suppliers {
 		
 	}
 
+	/**
+	 * Check if product supplier's SKU is found for any other product IDs.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int    $product_id   Product ID to exclude from the query.
+	 * @param string $supplier_sku Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+	 *
+	 * @return int
+	 */
+	public static function get_product_id_by_supplier_sku( $product_id, $supplier_sku ) {
+
+		global $wpdb;
+
+		return $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT $wpdb->posts.ID
+				FROM $wpdb->posts
+				LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id )
+				WHERE $wpdb->posts.post_type IN ( 'product', 'product_variation' )
+					AND $wpdb->posts.post_status != 'trash'
+					AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
+					AND $wpdb->postmeta.post_id <> %d
+				LIMIT 1",
+				wp_slash( $supplier_sku ), $product_id
+			)
+		);
+	}
+
 
 	/*******************
 	 * Instance methods
@@ -633,14 +562,14 @@ class Suppliers {
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
 	/**

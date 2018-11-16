@@ -44,7 +44,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php endif;
 
 		if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
-			$supplier_sku = get_post_meta( $product_id, Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
+			$supplier_sku = $product->get_supplier_sku();
 
 			if ( $supplier_sku ) : ?>
 				<div class="atum-order-item-sku"><strong><?php esc_html_e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $supplier_sku ) ?></div>

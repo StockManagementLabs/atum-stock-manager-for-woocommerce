@@ -31,6 +31,7 @@
 		this.$searchColumnBtn      = this.$atumList.find('#search_column_btn');
 		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
 		this.$bulkButton           = $('.apply-bulk-action');
+		this.$stickyColsButton     = this.$atumList.find('.sticky-columns-button');
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -104,6 +105,18 @@
 			// Setup the URL navigation
 			//--------------------------
 			this.setupNavigation();
+            
+            //
+			// Change sticky columns setting function
+			//--------------------------
+			this.changeStickyColumnsSetting();
+			
+			this.addActiveClassRow();
+			
+			//
+			// Add horizontal scroll effect to menu views
+			//--------------------------
+			this.addHorizontalScrolleffect();
 			
 			//
 			// Init the table scrollbar
@@ -470,17 +483,17 @@
 				//
 				// Bulk actions dropdown
 				//----------------------
-				.on('change', '.bulkactions select', function() {
-					
-					self.updateBulkButton();
-					
-					if ($(this).val() !== '-1') {
-						self.$bulkButton.show();
-					}
-					else {
-						self.$bulkButton.hide();
-					}
-				})
+				// .on('change', '.bulkactions select', function() {
+				//
+				// 	self.updateBulkButton();
+				//
+				// 	if ($(this).val() !== '-1') {
+				// 		self.$bulkButton.show();
+				// 	}
+				// 	else {
+				// 		self.$bulkButton.hide();
+				// 	}
+				// })
 				
 				//
 				// Change the Bulk Button text when selecting boxes
@@ -772,6 +785,45 @@
 				
 			});
 		
+		},
+		
+		/**
+		 * Active/Deactive sticky columns setting
+		 */
+		changeStickyColumnsSetting: function () {
+			var self = this;
+			this.$stickyColsButton.click(function () {
+				
+				var option = $(this).data('option'),
+					data   = {
+					option: option
+				};
+				
+				$.ajax({
+					url       : ajaxurl,
+					method    : 'POST',
+					data      : {
+						// token : this.settings.menuThemeNonce,
+						action: 'atum_change_sticky_columns_value',
+						data  : data
+					},
+					beforeSend: function () {
+						self.addOverlay();
+					},
+					success   : function (response) {
+						
+						self.removeOverlay();
+						if ( option == 'no' ) {
+							self.$atumList.find('.atum-list-table.cloned').remove();
+						}
+						else {
+							self.$stickyCols = self.createStickyColumns(self.$atumList.find('.atum-list-table'));
+							self.reloadFloatThead();
+							self.reloadScrollbar();
+						}
+					},
+				});
+			});
 		},
 		
 		/**
@@ -1191,7 +1243,7 @@
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
-				    value: $metaCell.text().replace(symbol, '').replace('—', ''),
+				    value: $metaCell.text().replace(symbol, '').replace('-', ''),
 				    class: 'meta-value'
 			    };
 			
@@ -1203,7 +1255,7 @@
 			
 			
 			var $input       = $('<input />', inputAtts),
-			    $setButton   = $('<button />', {type: 'button', class: 'set button button-primary button-small', text: self.settings.setButton}),
+			    $setButton   = $('<button />', {type: 'button', class: 'set btn btn-primary button-small', text: self.settings.setButton}),
 			    extraMeta    = $metaCell.data('extra-meta'),
 			    $extraFields = '',
 			    popoverClass = '';
@@ -1501,6 +1553,57 @@
 				}
 			});
 			
+		},
+		/**
+		 * Add/remove row active class when checkbox is clicked
+		 */
+		addActiveClassRow: function() {
+			var self = this;
+			self.$atumList.find('tbody .check-column input:checkbox').change(function () {
+				var $checkboxRow = self.$atumList.find("[data-id='" + $(this).val() + "']");
+				if ( $(this).is(':checked') ) {
+					$checkboxRow.addClass('active-row');
+				}else{
+					$checkboxRow.removeClass('active-row');
+				}
+			});
+			
+			$('#cb-select-all-1').change(function () {
+				$('.main-row').each(function () {
+					var $checkbox = $(this).find('input[type=checkbox]');
+					if ( $checkbox.is(':checked') ) {
+						$(this).addClass('active-row');
+					}else {
+						$(this).removeClass('active-row');
+					}
+				});
+			});
+		},
+		/**
+		 * Add horizontal scroll effect to menu views
+		 */
+		addHorizontalScrolleffect: function() {
+			$('.stock-central-nav').bind('scroll',function () {
+				var $nav = document.getElementById('stock_central_nav');
+				var $overflowOpacityEffectRight = $('.overflow-opacity-effect-right');
+				var $overflowOpacityEffectLeft  = $('.overflow-opacity-effect-left');
+				var $leftMax                    = $nav.scrollWidth;
+				var $left                       = $nav.scrollLeft;
+				var $diff                       = $leftMax - $left;
+				
+				if ($diff === $('.stock-central-nav').outerWidth())
+				{
+					$overflowOpacityEffectRight.hide();
+				}else {
+					$overflowOpacityEffectRight.show();
+				}
+				
+				if ( $left === 0 ) {
+					$overflowOpacityEffectLeft.hide();
+				}else {
+					$overflowOpacityEffectLeft.show();
+				}
+			});
 		},
 		
 		/**

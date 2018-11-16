@@ -133,6 +133,12 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
+		// Change ATUM setttings menu style.
+		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
+
+		// Change sticky columns settting.
+		add_action( 'wp_ajax_atum_change_sticky_columns_value', array( $this, 'change_sticky_columns_value' ) );
+
 	}
 
 	/**
@@ -412,7 +418,7 @@ final class Ajax {
 		
 		foreach ( $data as $product_id => &$product_meta ) {
 			
-			Helpers::update_product_meta( $product_id, $product_meta );
+			Helpers::update_product_data( $product_id, $product_meta );
 			
 		}
 		
@@ -449,28 +455,28 @@ final class Ajax {
 		switch ( $_POST['bulk_action'] ) {
 			case 'uncontrol_stock':
 				foreach ( $ids as $id ) {
-					Helpers::disable_atum_control( $id );
+					Helpers::update_atum_control( $id, 'disable' );
 				}
 
 				break;
 
 			case 'control_stock':
 				foreach ( $ids as $id ) {
-					Helpers::enable_atum_control( $id );
+					Helpers::update_atum_control( $id );
 				}
 
 				break;
 
 			case 'unmanage_stock':
 				foreach ( $ids as $id ) {
-					Helpers::disable_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( $id, 'disable' );
 				}
 
 				break;
 
 			case 'manage_stock':
 				foreach ( $ids as $id ) {
-					Helpers::enable_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( $id );
 				}
 
 				break;
@@ -912,11 +918,8 @@ final class Ajax {
 		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
 		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
 		
-		$query = $wpdb->prepare( "
-			$query_select $where_clause
-			ORDER BY posts.post_parent ASC, posts.post_title ASC
-			"
-		); // WPCS: unprepared SQL ok.
+		$query = "$query_select $where_clause
+			ORDER BY posts.post_parent ASC, posts.post_title ASC";
 
 		$product_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
 
@@ -1058,16 +1061,12 @@ final class Ajax {
 		$where = '';
 
 		if ( is_numeric( $_GET['term'] ) ) {
-
 			$supplier_id = absint( $_GET['term'] );
 			$where       = "AND ID LIKE $supplier_id";
-
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
-
 			$supplier_name = $wpdb->esc_like( $_GET['term'] );
 			$where         = "AND post_title LIKE '%%{$supplier_name}%%'";
-
 		}
 		else {
 			wp_die();
@@ -1077,11 +1076,11 @@ final class Ajax {
 		$max_results   = absint( apply_filters( 'atum/ajax/search_suppliers/max_results', 10 ) );
 		$post_statuses = AtumCapabilities::current_user_can( 'edit_private_suppliers' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
-		$query = $wpdb->prepare(
-			"SELECT DISTINCT ID, post_title from $wpdb->posts 
-			 WHERE post_type = %s $where
-			 AND post_status IN ('" . implode( "','", $post_statuses ) . "')
-			 LIMIT %d",
+		$query = $wpdb->prepare( "
+			SELECT DISTINCT ID, post_title from $wpdb->posts 
+			WHERE post_type = %s $where
+			AND post_status IN ('" . implode( "','", $post_statuses ) . "')
+			LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results
 		); // WPCS: unprepared SQL ok.
@@ -1678,13 +1677,14 @@ final class Ajax {
 
 		/* @noinspection PhpUndefinedMethodInspection */
 		$product_id = $atum_order_item->get_variation_id() ?: $atum_order_item->get_product_id();
-		$product    = wc_get_product( $product_id );
+		$product    = Helpers::get_atum_product( $product_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
-		update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) );
+		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
+		$product->save_atum_data();
 
 		wp_send_json_success();
 
@@ -1810,7 +1810,7 @@ final class Ajax {
 				wp_die( - 1 );
 			}
 
-			if ( $atum_order && in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ) {
+			if ( $atum_order && in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $post_type ) ) ) ) {
 				$atum_order->update_status( $status );
 				do_action( 'atum/atum_orders/edit_status', $atum_order->get_id(), $status );
 			}
@@ -1841,7 +1841,7 @@ final class Ajax {
 			wp_send_json_error( __( 'No status specified', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$product = wc_get_product( absint( $_POST['parent_id'] ) );
+		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
@@ -1851,14 +1851,7 @@ final class Ajax {
 		$variations = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
-
-			if ( 'uncontrolled' === $status ) {
-				Helpers::disable_atum_control( $variation_id );
-			}
-			else {
-				Helpers::enable_atum_control( $variation_id );
-			}
-
+			Helpers::update_atum_control( $variation_id, ( 'uncontrolled' === $status ? 'enable' : 'disable' ) );
 		}
 
 		wp_send_json_success( __( 'All the variations were updated successfully', ATUM_TEXT_DOMAIN ) );
@@ -1956,7 +1949,7 @@ final class Ajax {
 	 */
 	public function change_manage_stock() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer('atum-script-runner-nonce', 'token');
 
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please select an option from the dropdown', ATUM_TEXT_DOMAIN ) );
@@ -2027,7 +2020,7 @@ final class Ajax {
 	 */
 	private function clear_out_stock_threshold_meta() {
 
-		Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta = TRUE, $all = TRUE );
+		Helpers::force_rebuild_stock_status( NULL, TRUE, TRUE );
 
 		if ( FALSE === Helpers::is_any_out_stock_threshold_set() ) {
 			wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
@@ -2077,6 +2070,39 @@ final class Ajax {
 			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
 		}
 
+	}
+
+	/**
+	 * Change the value of a meta key for show dark o light menu theme for atum setting
+	 *
+	 * @since 1.4.5
+	 */
+	public function change_settings_menu_style() {
+		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
+		$menu_theme = $_POST['data']['menu_theme'];
+		$user_id    = get_current_user_id();
+
+		if ( $menu_theme ) {
+			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
+		}
+		else {
+			update_user_meta( $user_id, 'menu_settings_theme', 'light' );
+		}
+
+		wp_send_json_success( __( 'Menu theme were updated successfully', ATUM_TEXT_DOMAIN ) );
+	}
+
+	/**
+	 * Change the value of a sticky_columns from stock central
+	 *
+	 * @since 1.4.5
+	 */
+	public function change_sticky_columns_value() {
+		$option = $_POST['data']['option'];
+
+		Helpers::update_option( 'sticky_columns', $option );
+
+		wp_die();
 	}
 
 	

@@ -422,7 +422,7 @@ class InventoryLogs extends AtumOrderPostType {
 		return $this->log;
 
 	}
-
+	
 	/**
 	 * Add the help tab to the Inventory Logs' list page
 	 *

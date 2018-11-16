@@ -4,9 +4,9 @@
  *
  * @since 1.4.5
  *
- * @var int                  $loop
- * @var WC_Product_Variation $variation
- * @var array                $variation_data
+ * @var int                   $loop
+ * @var \WC_Product_Variation $variation
+ * @var array                 $variation_data
  */
 
 defined( 'ABSPATH' ) || die;
@@ -26,7 +26,7 @@ use Atum\Inc\Helpers;
 		woocommerce_wp_checkbox( array(
 			'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
 			'name'        => 'variation_atum_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
-			'value'       => Helpers::get_atum_control_status( $variation->ID ),
+			'value'       => $variation->get_atum_controlled(),
 			'class'       => 'js-switch',
 			'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
 			'description' => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),

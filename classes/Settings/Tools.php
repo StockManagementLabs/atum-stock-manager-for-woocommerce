@@ -49,6 +49,7 @@ class Tools {
 
 		$tabs['tools'] = array(
 			'tab_name'  => __( 'Tools', ATUM_TEXT_DOMAIN ),
+			'icon'      => 'lnr lnr-rocket',
 			'sections'  => array(
 				'tools' => __( 'ATUM Tools', ATUM_TEXT_DOMAIN ),
 			),

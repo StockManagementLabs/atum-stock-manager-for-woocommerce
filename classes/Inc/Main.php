@@ -20,6 +20,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Integrations\Wpml;
+use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
@@ -191,6 +192,7 @@ class Main {
 		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();
+		ProductDataMetaBoxes::get_instance();
 		
 		//
 		// Enable WPML module if needed
@@ -250,13 +252,13 @@ class Main {
 		foreach ( $this->menu_items as $menu_item ) {
 			$this->menu_items_order[] = array(
 				'slug'       => $menu_item['slug'],
-				'menu_order' => ( ! isset( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
+				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
 			);
 		}
 
 		// The first submenu will be the main (parent) menu too.
 		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
-		self::$main_menu_item = reset( self::$main_menu_item );
+		self::$main_menu_item = current( self::$main_menu_item );
 
 	}
 	
@@ -458,9 +460,39 @@ class Main {
 				$footer_text = __( 'Thank you for trusting in <strong>ATUM</strong> for managing your stock.', ATUM_TEXT_DOMAIN );
 			}
 
+			ob_start();
+
+			?>
+			<div class="footer-box">
+				<div class="footer-atum-content">
+					<div class="footer-atum-logo">
+						<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+						<span>
+						<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
+						</span>
+					</div>
+					<div class="footer-atum-text">
+						<span><?php esc_html_e( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) ?></span>
+						<?php echo $footer_text; // phpcs:ignore WordPress ?>
+					</div>
+				</div>
+
+				<div class="footer-atum-buttons">
+					<a target="_blank" href="<?php echo esc_url( 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions' ) ?>" class="btn btn-primary footer-button">
+						<?php echo esc_attr( __( 'GET SUPPORT', ATUM_TEXT_DOMAIN ) ); ?>
+					</a>
+					<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-success footer-button">
+						<?php echo esc_attr( __( 'WATCH TUTORIALS', ATUM_TEXT_DOMAIN ) ); ?>
+					</a>
+				</div>
+			</div>
+
+
+			<?php
+
 		}
 
-		return $footer_text;
+		return ob_get_clean();
 
 	}
 

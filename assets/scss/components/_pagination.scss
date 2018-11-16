@@ -1,0 +1,86 @@
+.atum-list-wrapper {
+	.displaying-num {
+		display: none;
+	}
+	.pagination-links {
+		color: $gray-600;
+		.tablenav-pages-navspan, .tablenav-current-page, #current-page-selector {
+			border-radius: 5px;
+			border: none;
+			color: $gray-500;
+			padding: 0;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			text-decoration: none;
+			@media all and (max-width: 782px) {
+				width: 35px;
+				height: 35px;
+			}
+		}
+		
+		#current-page-selector {
+			border: 1px solid $gray-200;
+			&:focus {
+				outline: 0;
+				box-shadow: none;
+			}
+			@media screen and (max-width: 782px) {
+				font-size: 13px;
+			}
+		}
+		
+		.tablenav-pages-navspan {
+			background-color: $gray-100;
+		}
+		
+		.tablenav-current-page {
+			background-color: $gray-200;
+			padding: 8px 12px 6px;
+			@media all and (max-width: 782px) {
+				padding: 8px 15px 11px;
+			}
+		}
+		.paging-input, .table-paging {
+			margin: 0 10px;
+			@media all and (max-width: 782px) {
+				margin: 0;
+			}
+		}
+		
+		@media screen and (max-width: 782px) {
+			font-size: 13px;
+		}
+		
+		.tablenav-paging-text {
+			@media screen and (max-width: $screen-xs) {
+				width: auto;
+				float: none;
+				padding: 0;
+				margin-left: auto;
+			}
+		}
+	}
+	
+	.tablenav-pages {
+		a {
+			border-radius: 5px;
+			border: none;
+			color: $gray-500;
+			padding: 0;
+			line-height: 30px;
+			width: 30px;
+			height: 30px;
+			text-decoration: none;
+			background-color: $gray-200;
+			&:hover, &:focus {
+				background-color: $gray-200;
+				color: $gray-500;
+			}
+			@media all and (max-width: 782px) {
+				width: 35px;
+				height: 35px;
+			}
+		}
+	}
+}

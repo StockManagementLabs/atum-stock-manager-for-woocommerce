@@ -75,6 +75,7 @@ $grays: map-merge((
 
 $blue:                                  #00B8DB !default;
 $blue-dark:                             #27283B !default;
+$blue-dark-lighten:                     #3b3d5a;
 $blue-light:                            lighten($blue, 50%) !default;
 $blue-light-2:                          lighten($blue, 55%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
@@ -85,6 +86,7 @@ $red:                                   #FF4848 !default;
 $red-light:                             lighten($red, 30%) !default;
 $green:                                 #69C61D !default;
 $green-light:                           lighten($green, 40%) !default;
+$green-opacity:                         rgba(105, 198, 29, 0.6) !default;
 $purple:                                #BA7DF7 !default;
 $purple-light:                          lighten($purple, 20%) !default;
 
@@ -392,9 +394,10 @@ $nav-divider-margin-y:                  ($spacer / 2) !default;
 
 $tooltip-max-width:                     200px !default;
 $tooltip-font-size:                     12px !default;
-$tooltip-color:                         $white !default;
-$tooltip-bg:                            $black !default;
+$tooltip-color:                         $gray-500 !default;
+$tooltip-bg:                            $white !default;
 $tooltip-opacity:                       .9 !default;
+$tooltip-box-shadow:                    0 1px 5px 0 rgba($black, .15) !default;
 
 $tooltip-arrow-width:                   5px !default;
 $tooltip-arrow-color:                   $tooltip-bg !default;
@@ -407,7 +410,7 @@ $popover-border-color:                  rgba($black, .2) !default;
 $popover-fallback-border-color:         #CCC !default;
 $popover-border-radius:                 6px !default;
 
-$popover-title-bg:                      darken($popover-bg, 3%) !default;
+$popover-title-bg:                      $gray-100;
 
 $popover-arrow-width:                   10px !default;
 $popover-arrow-color:                   $popover-title-bg !default;

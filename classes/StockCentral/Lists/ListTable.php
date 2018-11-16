@@ -244,9 +244,6 @@ class ListTable extends AtumListTable {
 			add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 		}
 
-		// Add the "Apply Bulk Action" button to the title section.
-		add_action( 'atum/stock_central_list/page_title_buttons', array( $this, 'add_apply_bulk_action_button' ) );
-
 	}
 
 	/**
@@ -265,14 +262,14 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$table_columns = array(
-			'thumb'                 => '<span class="wc-image tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'                 => '<span class="lnr lnr-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'title'                 => __( 'Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'             => '<span class="wc-type tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'title'                 => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'calc_type'             => '<span class="lnr lnr-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'         => __( 'Sup. SKU', ATUM_TEXT_DOMAIN ),
-			'calc_location'         => '<span class="dashicons dashicons-store tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . __( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'calc_location'         => '<span class="lnr lnr-store tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
@@ -292,7 +289,7 @@ class ListTable extends AtumListTable {
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'  => '<span class="dashicons dashicons-dashboard tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . __( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_stock_indicator'  => '<span class="lnr lnr-layers stock-indicator-icon tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
 		// Hide the purchase price column if the current user has not the capability.
@@ -337,7 +334,7 @@ class ListTable extends AtumListTable {
 		));
 
 		?>
-		<select name="extra_filter" class="dropdown_extra_filter" autocomplete="off">
+		<select name="extra_filter" class="wc-enhanced-select dropdown_extra_filter" autocomplete="off">
 			<option value=""><?php esc_attr_e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
@@ -412,7 +409,6 @@ class ListTable extends AtumListTable {
 	protected function column__sale_price( $item ) {
 
 		$sale_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
 			
@@ -423,9 +419,10 @@ class ListTable extends AtumListTable {
 			] ) : $sale_price;
 			
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
+			$sale_price_dates_from = $this->product->get_date_on_sale_from( 'edit' ) && ( $date = $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
+
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_to = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
+			$sale_price_dates_to = $this->product->get_date_on_sale_to( 'edit' ) && ( $date = $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
 
 			$args = apply_filters( 'atum/stock_central_list/args_sale_price', array(
 				'meta_key'   => 'sale_price',
@@ -704,7 +701,7 @@ class ListTable extends AtumListTable {
 		$out_of_stock_days = '';
 
 		if ( $this->allow_calcs ) {
-			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product->get_id() );
+			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
 		}
 
 		$out_of_stock_days = is_numeric( $out_of_stock_days ) ? $out_of_stock_days : self::EMPTY_COL;
@@ -727,7 +724,7 @@ class ListTable extends AtumListTable {
 		$lost_sales = '';
 
 		if ( $this->allow_calcs ) {
-			$lost_sales = Helpers::get_product_lost_sales( $this->product->get_id() );
+			$lost_sales = Helpers::get_product_lost_sales( $this->product );
 		}
 
 		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales, [ 'trim_zeros' => TRUE ] ) : self::EMPTY_COL;
@@ -932,7 +929,7 @@ class ListTable extends AtumListTable {
 
 					foreach ( $products as $product ) {
 
-						$wc_product     = wc_get_product( $product->ID );
+						$wc_product     = wc_get_product( $product->ID ); // We don't need to use the ATUM models here.
 						$back_orders    = 0;
 						$stock_quantity = $wc_product->get_stock_quantity();
 
