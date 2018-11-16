@@ -2100,7 +2100,9 @@ final class Ajax {
 	public function change_sticky_columns_value() {
 		$option = $_POST['data']['option'];
 
-		Helpers::update_option( 'sticky_columns', $option );
+        global $global_options;
+        $global_options['sticky_columns'] = $option;
+        update_option( Settings::OPTION_NAME, $global_options );
 
 		wp_die();
 	}

@@ -808,20 +808,14 @@
 						data  : data
 					},
 					beforeSend: function () {
-						self.addOverlay();
+						$('body').css('cursor', 'wait');
 					},
 					success   : function (response) {
-						
+                        $('body').css('cursor', 'auto');
 						self.removeOverlay();
-						if ( option == 'no' ) {
-							self.$atumList.find('.atum-list-table.cloned').remove();
-						}
-						else {
-							self.$stickyCols = self.createStickyColumns(self.$atumList.find('.atum-list-table'));
-							self.reloadFloatThead();
-							self.reloadScrollbar();
-						}
-					},
+                        window.location.reload(true);
+
+                    },
 				});
 			});
 		},
