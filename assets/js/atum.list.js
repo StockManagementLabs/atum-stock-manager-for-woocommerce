@@ -793,11 +793,19 @@
 		changeStickyColumnsSetting: function () {
 			var self = this;
 			this.$stickyColsButton.click(function () {
-				
+				var $buttonsContainer = $('.sticky-columns-button-container');
 				var option = $(this).data('option'),
 					data   = {
 					option: option
 				};
+
+				if ( option === 'yes' ) {
+                    $buttonsContainer.find('button').first().addClass('active');
+                    $buttonsContainer.find('button').last().removeClass('active');
+				}else {
+                    $buttonsContainer.find('button').first().removeClass('active');
+                    $buttonsContainer.find('button').last().addClass('active');
+				}
 				
 				$.ajax({
 					url       : ajaxurl,
