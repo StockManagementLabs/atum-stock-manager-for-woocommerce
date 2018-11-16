@@ -427,23 +427,24 @@ class Wpml {
 		if ( in_array( $search_column, self::MULTICURRENCY_COLUMNS ) ) {
 			
 			$translated_meta = "{$search_column}_{$this->current_currency}";
+			global $wpdb;
 			
 			// Basically: if the original translation has set _wcml_custom_prices_status to 1,
 			// then took specific currency meta from original translation,
 			// else took current post meta value.
-			$where = "IF( (SELECT pmtrans.meta_value FROM wp_icl_translations AS trans1
-						INNER JOIN wp_icl_translations AS trans2 ON trans2.trid = trans1.trid
-						INNER JOIN wp_postmeta pmtrans ON trans2.element_id = pmtrans.post_ID
+			$where = "IF( (SELECT pmtrans.meta_value FROM {$wpdb->prefix}icl_translations AS trans1
+						INNER JOIN {$wpdb->prefix}icl_translations AS trans2 ON trans2.trid = trans1.trid
+						INNER JOIN {$wpdb->postmeta} pmtrans ON trans2.element_id = pmtrans.post_ID
 						WHERE trans1.element_type IN ('post_product', 'post_product_variation')
 						AND trans1.element_id = p.ID AND trans2.source_language_code IS NULL
 						AND pmtrans.meta_key = '_wcml_custom_prices_status') = 1,
-				        (SELECT pmtrans.meta_value FROM wp_icl_translations AS trans1
-							INNER JOIN wp_icl_translations AS trans2 ON trans2.trid = trans1.trid
-							INNER JOIN wp_postmeta pmtrans ON trans2.element_id = pmtrans.post_ID
+				        (SELECT pmtrans.meta_value FROM {$wpdb->prefix}icl_translations AS trans1
+							INNER JOIN {$wpdb->prefix}icl_translations AS trans2 ON trans2.trid = trans1.trid
+							INNER JOIN {$wpdb->postmeta} pmtrans ON trans2.element_id = pmtrans.post_ID
 							WHERE trans1.element_type IN ('post_product', 'post_product_variation')
 							AND trans1.element_id = p.ID AND trans2.source_language_code IS NULL
 							AND pmtrans.meta_key = '$translated_meta'),
-				        (SELECT meta_value FROM wp_postmeta WHERE post_id = p.ID AND meta_key = '$search_column')) = '{$value}';";
+				        (SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = p.ID AND meta_key = '$search_column')) = '{$value}';";
 			
 		}
 		
@@ -671,8 +672,8 @@ class Wpml {
 			$product_id = (array) $product_id;
 			$post_type  = $post_type ? (array) $post_type : (array) get_post_type( $product_id[0] );
 			// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
-			$str_sql = "SELECT ori.element_id FROM wp_icl_translations tra
-							LEFT OUTER JOIN wp_icl_translations ori ON tra.trid = ori.trid
+			$str_sql = "SELECT ori.element_id FROM {$wpdb->prefix}icl_translations tra
+							LEFT OUTER JOIN {$wpdb->prefix}icl_translations ori ON tra.trid = ori.trid
   							WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
   							AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
   							 AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL";
