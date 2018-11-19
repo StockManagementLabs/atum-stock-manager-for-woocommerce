@@ -271,9 +271,9 @@ class ProductDataMetaBoxes {
 				return "show_if_{$val}";
 			}, Globals::get_product_types_with_stock() );
 
-			$out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
+			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
 
-			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes', 'woocommerce_notify_no_stock_amount' ) );
+			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'visibility_classes', 'woocommerce_notify_no_stock_amount' ) );
 
 		endif;
 
@@ -445,21 +445,14 @@ class ProductDataMetaBoxes {
 			return;
 		}
 
-		if ( $this->is_variation && isset( $_POST['variation_supplier'][ $this->loop ], $_POST['variation_supplier_sku'][ $this->loop ] ) ) {
-			$supplier_id  = $_POST[ 'variation' . Suppliers::SUPPLIER_META_KEY ][ $this->loop ];
-			$supplier_sku = $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_META_KEY ][ $this->loop ];
-		}
-		elseif ( ! $this->is_variation && isset( $_POST[ Suppliers::SUPPLIER_META_KEY ], $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ) {
-			$supplier_id  = $_POST[ Suppliers::SUPPLIER_META_KEY ];
-			$supplier_sku = $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ];
+		if ( $this->is_variation ) {
+			$this->product_data['supplier_id']  = isset( $_POST[ 'variation' . Suppliers::SUPPLIER_META_KEY ][ $this->loop ] ) ? $_POST[ 'variation' . Suppliers::SUPPLIER_META_KEY ][ $this->loop ] : NULL;
+			$this->product_data['supplier_sku'] = isset( $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_META_KEY ][ $this->loop ] ) ? $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_META_KEY ][ $this->loop ] : NULL;
 		}
 		else {
-			// If we are not saving the product from its edit page, do not continue.
-			return;
+			$this->product_data['supplier_id']  = isset( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) ? $_POST[ Suppliers::SUPPLIER_META_KEY ] : NULL;
+			$this->product_data['supplier_sku'] = isset( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ? $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] : NULL;
 		}
-
-		$this->product_data['supplier_id']  = $supplier_id;
-		$this->product_data['supplier_sku'] = $supplier_sku;
 
 	}
 
@@ -496,7 +489,9 @@ class ProductDataMetaBoxes {
 	 */
 	public function save_product_variation_meta_boxes( $variation_id, $loop ) {
 
-		$this->product      = Helpers::get_atum_product( $variation_id );
+		$this->product = Helpers::get_atum_product( $variation_id );
+		$this->product->set_object_read( TRUE );
+
 		$this->is_variation = TRUE;
 		$this->loop         = $loop;
 
@@ -529,7 +524,12 @@ class ProductDataMetaBoxes {
 
 		if ( ! empty( $this->product_data ) ) {
 
-			$this->product->set_props( $this->product_data );
+			$errors = $this->product->set_props( $this->product_data );
+
+			if ( is_wp_error( $errors ) ) {
+				\WC_Admin_Meta_Boxes::add_error( $errors->get_error_message() );
+			}
+
 			$this->product->save_atum_data();
 
 			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {
