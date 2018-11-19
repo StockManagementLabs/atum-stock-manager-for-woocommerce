@@ -1061,12 +1061,16 @@ final class Ajax {
 		$where = '';
 
 		if ( is_numeric( $_GET['term'] ) ) {
+
 			$supplier_id = absint( $_GET['term'] );
 			$where       = "AND ID LIKE $supplier_id";
+
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
+
 			$supplier_name = $wpdb->esc_like( $_GET['term'] );
 			$where         = "AND post_title LIKE '%%{$supplier_name}%%'";
+
 		}
 		else {
 			wp_die();
@@ -1076,8 +1080,8 @@ final class Ajax {
 		$max_results   = absint( apply_filters( 'atum/ajax/search_suppliers/max_results', 10 ) );
 		$post_statuses = AtumCapabilities::current_user_can( 'edit_private_suppliers' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
-		$query = $wpdb->prepare( "
-			SELECT DISTINCT ID, post_title from $wpdb->posts 
+		$query = $wpdb->prepare(
+			"SELECT DISTINCT ID, post_title from $wpdb->posts 
 			WHERE post_type = %s $where
 			AND post_status IN ('" . implode( "','", $post_statuses ) . "')
 			LIMIT %d",
