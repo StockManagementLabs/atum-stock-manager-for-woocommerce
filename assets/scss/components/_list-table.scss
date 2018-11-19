@@ -813,7 +813,7 @@
 				}
 			}
 			
-			.lnr, .dashicons {
+			.lnr, .dashicons, .atum-icon {
 				display: block;
 				text-indent: -9999px;
 				position: relative;
@@ -885,7 +885,8 @@
 				font-family: 'Linearicons';
 				
 				&:before {
-					content: "\e889";
+					font-family: '#{$icomoon-font-family}';
+					content: $atmi-chevron-left-circle;
 				}
 				
 				&:hover {
@@ -1133,7 +1134,7 @@
 	}
 	
 	.stock-selling-manager {
-		.lnr {
+		.atum-icon {
 			font-size: 20px;
 		}
 	}

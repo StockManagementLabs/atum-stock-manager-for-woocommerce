@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || die;
 			<h2><?php echo esc_html( $widget->get_title() ) ?></h2>
 
 			<span class="controls">
-				<i class="lnr lnr-cog widget-settings" title="<?php esc_attr_e( 'Widget Settings', ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="atmi-cog widget-settings" title="<?php esc_attr_e( 'Widget Settings', ATUM_TEXT_DOMAIN ) ?>"></i>
 				<i class="lnr lnr-cross widget-close" title="<?php esc_attr_e( 'Close', ATUM_TEXT_DOMAIN ) ?>"></i>
 			</span>
 		</div>

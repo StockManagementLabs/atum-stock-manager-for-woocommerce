@@ -65,13 +65,13 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
-                <?php
-                    $sticky_column = Helpers::get_option( 'sticky_columns' );
-                    $active        = FALSE;
-                    if ( 'yes' === $sticky_column ) {
-                        $active = TRUE;
-                    }
-                ?>
+				<?php
+				$sticky_column = Helpers::get_option( 'sticky_columns' );
+				$active        = FALSE;
+				if ( 'yes' === $sticky_column ) {
+					$active = TRUE;
+				}
+				?>
 
 				<div class="sticky-columns-button-container">
 					<button type="button" class="sticky-columns-button sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes">
@@ -81,7 +81,6 @@ defined( 'ABSPATH' ) || die;
 					<button type="button" class="sticky-columns-button sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no">
 						<i class="atmi-view-list"></i>
 					</button>
-
 				</div>
 			</div>
 		</div>

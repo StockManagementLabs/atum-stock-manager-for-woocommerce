@@ -968,7 +968,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$location_terms_class = ! empty( $location_terms ) ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
-		$locations = '<a href="#" class="show-locations lnr lnr-store tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
+		$locations = '<a href="#" class="show-locations atum-icon atmi-store tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
 
 		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
@@ -1276,14 +1276,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$classes .= ' cell-red';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="lnr lnr-cross-circle tips"' . $data_tip . '></span>';
+			$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
 
 		}
 		// Back Orders.
 		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
 			$classes .= ' cell-yellow';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="lnr lnr-circle-minus tips"' . $data_tip . '></span>';
+			$content  = '<span class="atum-icon atmi-circle-minus tips"' . $data_tip . '></span>';
 		}
 		// Low Stock.
 		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
@@ -1295,7 +1295,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
 			$classes .= ' cell-green';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="lnr lnr-checkmark-circle tips"' . $data_tip . '></span>';
+			$content  = '<span class="atum-icon atmi-checkmark-circle tips"' . $data_tip . '></span>';
 		}
 
 		$classes = $classes ? ' class="' . $classes . '"' : '';

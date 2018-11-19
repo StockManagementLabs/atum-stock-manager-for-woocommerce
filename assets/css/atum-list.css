@@ -2466,7 +2466,7 @@ span.easytree-expander:hover {
 .input-group-sm > .input-group-prepend > .btn,
 .input-group-sm > .input-group-append > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76563rem;
+  font-size: 0.76562rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -2568,7 +2568,7 @@ fieldset:disabled a.btn {
 
 .btn-sm {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76563rem;
+  font-size: 0.76562rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -3459,7 +3459,7 @@ input[type="button"].btn-block {
   display: block;
   padding: 0.5rem 1.5rem;
   margin-bottom: 0;
-  font-size: 0.76563rem;
+  font-size: 0.76562rem;
   color: #6c757d;
   white-space: nowrap;
 }
@@ -5349,7 +5349,7 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th .lnr, .atum-list-table thead .item-heads th .dashicons, .atum-list-table tfoot th .lnr, .atum-list-table tfoot th .dashicons, .floatThead-container thead .item-heads th .lnr, .floatThead-container thead .item-heads th .dashicons, .floatThead-container tfoot th .lnr, .floatThead-container tfoot th .dashicons, .inbound-stock-list thead .item-heads th .lnr, .inbound-stock-list thead .item-heads th .dashicons, .inbound-stock-list tfoot th .lnr, .inbound-stock-list tfoot th .dashicons {
+.atum-list-table thead .item-heads th .lnr, .atum-list-table thead .item-heads th .dashicons, .atum-list-table thead .item-heads th .atum-icon, .atum-list-table tfoot th .lnr, .atum-list-table tfoot th .dashicons, .atum-list-table tfoot th .atum-icon, .floatThead-container thead .item-heads th .lnr, .floatThead-container thead .item-heads th .dashicons, .floatThead-container thead .item-heads th .atum-icon, .floatThead-container tfoot th .lnr, .floatThead-container tfoot th .dashicons, .floatThead-container tfoot th .atum-icon, .inbound-stock-list thead .item-heads th .lnr, .inbound-stock-list thead .item-heads th .dashicons, .inbound-stock-list thead .item-heads th .atum-icon, .inbound-stock-list tfoot th .lnr, .inbound-stock-list tfoot th .dashicons, .inbound-stock-list tfoot th .atum-icon {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -5360,7 +5360,7 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-table thead .item-heads th .lnr:before, .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table tfoot th .lnr:before, .atum-list-table tfoot th .dashicons:before, .floatThead-container thead .item-heads th .lnr:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container tfoot th .lnr:before, .floatThead-container tfoot th .dashicons:before, .inbound-stock-list thead .item-heads th .lnr:before, .inbound-stock-list thead .item-heads th .dashicons:before, .inbound-stock-list tfoot th .lnr:before, .inbound-stock-list tfoot th .dashicons:before {
+.atum-list-table thead .item-heads th .lnr:before, .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table thead .item-heads th .atum-icon:before, .atum-list-table tfoot th .lnr:before, .atum-list-table tfoot th .dashicons:before, .atum-list-table tfoot th .atum-icon:before, .floatThead-container thead .item-heads th .lnr:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container thead .item-heads th .atum-icon:before, .floatThead-container tfoot th .lnr:before, .floatThead-container tfoot th .dashicons:before, .floatThead-container tfoot th .atum-icon:before, .inbound-stock-list thead .item-heads th .lnr:before, .inbound-stock-list thead .item-heads th .dashicons:before, .inbound-stock-list thead .item-heads th .atum-icon:before, .inbound-stock-list tfoot th .lnr:before, .inbound-stock-list tfoot th .dashicons:before, .inbound-stock-list tfoot th .atum-icon:before {
   text-indent: 0;
   position: absolute;
   left: 0;
@@ -5415,7 +5415,8 @@ input[type="button"].btn-block {
 }
 
 .atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before {
-  content: "\e889";
+  font-family: "atum-icon-font";
+  content: "";
 }
 
 .atum-list-table .column-groups th .group-toggler:hover, .floatThead-container .column-groups th .group-toggler:hover, .inbound-stock-list .column-groups th .group-toggler:hover {
@@ -5684,7 +5685,7 @@ input[type="button"].btn-block {
   background-color: #FF4848;
 }
 
-.atum-list-table .stock-selling-manager .lnr, .floatThead-container .stock-selling-manager .lnr, .inbound-stock-list .stock-selling-manager .lnr {
+.atum-list-table .stock-selling-manager .atum-icon, .floatThead-container .stock-selling-manager .atum-icon, .inbound-stock-list .stock-selling-manager .atum-icon {
   font-size: 20px;
 }
 
