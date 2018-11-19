@@ -1,252 +1,199 @@
 <?php
 /**
- * Shared trait for Atum Products
+ * Shared trait for Atum Data Stores (using custom tables)
  *
  * @package         Atum\Models
- * @subpackage      Products
+ * @subpackage      DataStores
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2018 Stock Management Labs™
  *
  * @since           1.5.0
  */
 
-namespace Atum\Models\Products;
+namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Suppliers\Suppliers;
+use Atum\Inc\Globals;
 
-
-trait AtumProductTrait {
-
-	/**
-	 * Add the ATUM data to the ATUM
-	 *
-	 * @var bool
-	 */
-	protected $atum_data = array(
-		'purchase_price'      => '',
-		'supplier_id'         => 0,
-		'supplier_sku'        => '',
-		'atum_controlled'     => FALSE,
-		'out_stock_date'      => NULL,
-		'out_stock_threshold' => '',
-		'inheritable'         => FALSE,
-	);
-
-
-	/*
-	|--------------------------------------------------------------------------
-	| Getters
-	|--------------------------------------------------------------------------
-	|
-	| Methods for getting data from the product object.
-	*/
+trait AtumDataStoreCustomTable {
 
 	/**
-	 * Returns the product's purchase price.
+	 * Store data into WC's and ATUM's custom product data tables
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return string
+	 * @param \WC_Product $product The product object.
 	 */
-	public function get_purchase_price( $context = 'view' ) {
-		return $this->get_prop( 'purchase_price', $context );
+	protected function update_product_data( &$product ) {
+
+		parent::update_product_data( $product );
+		$this->update_atum_product_data( $product );
+
 	}
 
 	/**
-	 * Returns the product's supplier ID.
+	 * Store data into ATUM's custom product data table
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return int
+	 * @param \WC_Product $product The product object.
 	 */
-	public function get_supplier_id( $context = 'view' ) {
-		return $this->get_prop( 'supplier_id', $context );
-	}
+	public function update_atum_product_data( &$product ) {
 
-	/**
-	 * Returns the product's supplier SKU.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return string
-	 */
-	public function get_supplier_sku( $context = 'view' ) {
-		return $this->get_prop( 'supplier_sku', $context );
-	}
+		global $wpdb;
 
-	/**
-	 * Returns the ATUM's control status.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return string 'yes' or 'no'
-	 */
-	public function get_atum_controlled( $context = 'view' ) {
-		return wc_bool_to_string( $this->get_prop( 'atum_controlled', $context ) );
-	}
+		$changes = $product->get_changes();
+		$data    = [];
+		$insert  = FALSE;
+		$row     = $this->get_product_row_from_db( $product->get_id() );
 
-	/**
-	 * Returns the product's out of stock date.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return \WC_DateTime|NULL object if the date is set or null if there is no date.
-	 */
-	public function get_out_stock_date( $context = 'view' ) {
-		return $this->get_prop( 'out_stock_date', $context );
-	}
+		if ( ! $row ) {
+			$insert = TRUE;
+		}
+		elseif ( empty( $changes ) ) {
+			return;
+		}
 
-	/**
-	 * Returns the product's out of stock threshold.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return float|null
-	 */
-	public function get_out_stock_threshold( $context = 'view' ) {
-		return $this->get_prop( 'out_stock_threshold', $context );
-	}
+		$columns = array(
+			'purchase_price',
+			'supplier_id',
+			'supplier_sku',
+			'atum_controlled',
+			'out_stock_date',
+			'out_stock_threshold',
+			'inheritable',
+		);
 
-	/**
-	 * Returns the product's inheritable prop.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return string 'yes' or 'no'
-	 */
-	public function get_inheritable( $context = 'view' ) {
-		return wc_bool_to_string( $this->get_prop( 'inheritable', $context ) );
-	}
+		// Columns data need to be converted to datetime.
+		$date_columns = array(
+			'out_stock_date',
+		);
 
+		// Switches and/or checkboxes.
+		$yes_no_columns = array(
+			'atum_controlled',
+			'inheritable',
+		);
 
-	/*
-	|--------------------------------------------------------------------------
-	| Setters
-	|--------------------------------------------------------------------------
-	|
-	| Functions for setting product data. These should not update anything in the
-	| database itself and should only change what is stored in the class object.
-	*/
+		// Values which can be null in the database.
+		$allow_null = array(
+			'purchase_price',
+			'out_stock_date',
+			'out_stock_threshold',
+		);
 
-	/**
-	 * Set the product's purchase price.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $purchase_price
-	 */
-	public function set_purchase_price( $purchase_price ) {
-		$this->set_prop( 'purchase_price', wc_format_decimal( $purchase_price ) );
-	}
+		foreach ( $columns as $column ) {
 
-	/**
-	 * Set the product's supplier ID.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int $supplier_id
-	 */
-	public function set_supplier_id( $supplier_id ) {
-		$this->set_prop( 'supplier_id', absint( $supplier_id ) );
-	}
+			if ( $insert || array_key_exists( $column, $changes ) ) {
 
-	/**
-	 * Set product supplier's SKU.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $supplier_sku
-	 */
-	public function set_supplier_sku( $supplier_sku ) {
+				$value = $product->{"get_$column"}( 'edit' );
 
-		$supplier_sku = (string) $supplier_sku;
+				if ( in_array( $column, $date_columns, TRUE ) ) {
+					$data[ $column ] = empty( $value ) ? NULL : gmdate( 'Y-m-d H:i:s', $product->{"get_$column"}( 'edit' )->getOffsetTimestamp() );
+				}
+				elseif ( in_array( $column, $yes_no_columns, TRUE ) ) {
+					$data[ $column ] = 'yes' === $value ? 1 : 0; // These columns are saved as integers in db.
+				}
+				else {
+					$data[ $column ] = '' === $value && in_array( $column, $allow_null, TRUE ) ? NULL : $value;
+				}
 
-		if ( $supplier_sku ) {
+				$this->updated_props[] = $column;
 
-			$supplier_sku_found = Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku );
-
-			if ( $this->get_object_read() && $supplier_sku_found ) {
-				$this->error( 'product_invalid_supplier_sku', __( 'Invalid or duplicated Supplier SKU.', ATUM_TEXT_DOMAIN ), 400, array( 'resource_id' => $supplier_sku_found ) );
 			}
 
 		}
 
-		$this->set_prop( 'supplier_sku', $supplier_sku );
+		if ( empty( $data ) ) {
+			return;
+		}
+
+		if ( $insert ) {
+			$data['product_id'] = $product->get_id();
+			$wpdb->insert( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, $data ); // WPCS: db call ok, cache ok.
+		}
+		elseif ( ! empty( $data ) ) {
+
+			$wpdb->update(
+				$wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE,
+				$data,
+				array(
+					'product_id' => $product->get_id(),
+				)
+			); // WPCS: db call ok, cache ok.
+
+		}
 
 	}
 
 	/**
-	 * Set if the product is controlled by ATUM.
+	 * Get product data row from the DB whilst utilising cache.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string|bool $atum_controlled Whether or not the ATUM control switch is enabled.
+	 * @param int $product_id Product ID to grab from the database.
+	 *
+	 * @return array
 	 */
-	public function set_atum_controlled( $atum_controlled ) {
-		$this->set_prop( 'atum_controlled', wc_string_to_bool( $atum_controlled ) );
+	protected function get_product_row_from_db( $product_id ) {
+
+		global $wpdb;
+
+		$data = wp_cache_get( ATUM_PREFIX . 'woocommerce_product_' . $product_id, 'product' );
+
+		if ( FALSE === $data ) {
+
+			// Get the default data from parent class.
+			$data = parent::get_product_row_from_db( $product_id );
+
+			// Get the extra ATUM data for the product.
+			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: Unprepared SQL ok.
+
+			$data = array_merge( $data, $atum_data );
+
+			wp_cache_set( ATUM_PREFIX . 'woocommerce_product_' . $product_id, $data, 'product' );
+
+		}
+
+		return (array) apply_filters( 'atum/model/product_data_store/product_data', $data, $product_id );
+
 	}
 
 	/**
-	 * Set out of stock date.
+	 * Method to delete a product from the database.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string|integer|null $date UTC timestamp, or ISO 8601 DateTime.
-	 *                                  If the DateTime string has no timezone or offset, WordPress site timezone will be assumed.
-	 *                                  Null if there is no date.
+	 * @param \WC_Product $product The product object.
+	 * @param array       $args    Array of args to pass to the delete method.
 	 */
-	public function set_out_stock_date( $date = NULL ) {
-		$this->set_date_prop( 'out_stock_date', $date );
+	public function delete( &$product, $args = array() ) {
+
+		global $wpdb;
+		$id = $product->get_id();
+
+		parent::delete( $product, $args );
+
+		// Delete the ATUM data for this product.
+		if ( $args['force_delete'] ) {
+			$wpdb->delete( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, array( 'product_id' => $id ), array( '%d' ) );
+		}
+
 	}
 
 	/**
-	 * Set out of stock threshold for the current product.
+	 * Clear any ATUM's data store caches.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param \WC_Product $product The product object.
 	 */
-	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', '' === $amount ? '' : wc_stock_amount( $amount ) );
-	}
+	protected function clear_caches( &$product ) {
 
-	/**
-	 * Set if the product is from an inheriable type.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string|bool $inheritable Whether or not the product is inheritable by others.
-	 */
-	public function set_inheritable( $inheritable ) {
-		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );
-	}
-
-	/**
-	 * Save the ATUM prodcut data
-	 *
-	 * @since 1.5.0
-	 */
-	public function save_atum_data() {
-
-		$data_store = $this->get_data_store();
-		$data_store->update_atum_product_data( $this );
-
+		parent::clear_caches( $product );
+		wp_cache_delete( ATUM_PREFIX . 'woocommerce_product_' . $product->get_id(), 'product' );
 	}
 
 }

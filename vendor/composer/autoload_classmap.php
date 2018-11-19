@@ -57,6 +57,7 @@ return array(
     'Atum\\InventoryLogs\\Models\\LogItem' => $baseDir . '/classes/InventoryLogs/Models/LogItem.php',
     'Atum\\Legacy\\AtumListTableLegacyTrait' => $baseDir . '/classes/Legacy/AtumListTableLegacyTrait.php',
     'Atum\\MetaBoxes\\ProductDataMetaBoxes' => $baseDir . '/classes/MetaBoxes/ProductDataMetaBoxes.php',
+    'Atum\\Models\\DataStores\\AtumDataStoreCustomTable' => $baseDir . '/classes/Models/DataStores/AtumDataStoreCustomTable.php',
     'Atum\\Models\\DataStores\\WCProductDataStoreCPT' => $baseDir . '/classes/Models/DataStores/WCProductDataStoreCPT.php',
     'Atum\\Models\\DataStores\\WCProductDataStoreCustomTable' => $baseDir . '/classes/Models/DataStores/WCProductDataStoreCustomTable.php',
     'Atum\\Models\\DataStores\\WCProductGroupedDataStoreCPT' => $baseDir . '/classes/Models/DataStores/WCProductGroupedDataStoreCPT.php',

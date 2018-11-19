@@ -172,8 +172,6 @@ trait AtumProductTrait {
 	 * @since 1.5.0
 	 *
 	 * @param string $supplier_sku
-	 *
-	 * @throws \WC_Data_Exception
 	 */
 	public function set_supplier_sku( $supplier_sku ) {
 
