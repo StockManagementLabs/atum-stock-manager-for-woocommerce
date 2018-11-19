@@ -538,19 +538,19 @@ class Suppliers {
 
 		global $wpdb;
 
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
 		return $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT $wpdb->posts.ID
-				FROM $wpdb->posts
-				LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id )
-				WHERE $wpdb->posts.post_type IN ( 'product', 'product_variation' )
-					AND $wpdb->posts.post_status != 'trash'
-					AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
-					AND $wpdb->postmeta.post_id <> %d
+				"SELECT p.ID
+				FROM $wpdb->posts p
+				LEFT JOIN $atum_data_table apd ON ( p.ID = apd.product_id )
+				WHERE p.post_status != 'trash'
+				AND apd.supplier_sku = %s AND p.ID <> %d
 				LIMIT 1",
 				wp_slash( $supplier_sku ), $product_id
 			)
-		);
+		); // WPCS: unprepared SQL ok.
 	}
 
 
