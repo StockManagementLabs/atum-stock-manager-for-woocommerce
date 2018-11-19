@@ -1684,7 +1684,7 @@ final class Ajax {
 		}
 
 		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
-		$product->save();
+		$product->save_atum_data();
 
 		wp_send_json_success();
 
@@ -2100,7 +2100,9 @@ final class Ajax {
 	public function change_sticky_columns_value() {
 		$option = $_POST['data']['option'];
 
-		Helpers::update_option( 'sticky_columns', $option );
+        global $global_options;
+        $global_options['sticky_columns'] = $option;
+        update_option( Settings::OPTION_NAME, $global_options );
 
 		wp_die();
 	}

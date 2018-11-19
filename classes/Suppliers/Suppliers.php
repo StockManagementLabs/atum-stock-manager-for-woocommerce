@@ -87,14 +87,6 @@ class Suppliers {
 				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
 				add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
 
-				// Add the supplier's fields to products.
-				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
-				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
-
-				// Save the product supplier meta box.
-				add_action( 'save_post_product', array( $this, 'save_product_supplier_fields' ) );
-				add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_supplier_fields' ) );
-
 			}
 
 			if ( AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
@@ -226,21 +218,21 @@ class Suppliers {
 		switch ( $column ) {
 
 			case 'company_code':
-				echo get_post_meta( $post->ID, '_supplier_details_code', TRUE );
+				echo esc_html( get_post_meta( $post->ID, '_supplier_details_code', TRUE ) );
 				break;
 
 			case 'company_phone':
-				echo get_post_meta( $post->ID, '_supplier_details_phone', TRUE );
+				echo esc_html( get_post_meta( $post->ID, '_supplier_details_phone', TRUE ) );
 				break;
 
 			case 'assigned_to':
-				$user_id = get_post_meta( $post->ID, '_default_settings_assigned_to', TRUE );
+				$user_id = esc_html( get_post_meta( $post->ID, '_default_settings_assigned_to', TRUE ) );
 
 				if ( $user_id > 0 ) {
 					$user = get_user_by( 'id', $user_id );
 
 					if ( $user ) {
-						echo '<a href="' . get_edit_user_link( $user_id ) . '" target="_blank">' . $user->display_name . '</a>';
+						echo '<a href="' . esc_url( get_edit_user_link( $user_id ) ) . '" target="_blank">' . esc_html( $user->display_name ) . '</a>';
 					}
 
 				}
@@ -248,7 +240,7 @@ class Suppliers {
 				break;
 
 			case 'location':
-				echo get_post_meta( $post->ID, '_default_settings_location', TRUE );
+				echo esc_html( get_post_meta( $post->ID, '_default_settings_location', TRUE ) );
 				break;
 
 		}
@@ -364,100 +356,6 @@ class Suppliers {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Adds the Supplier fields in WC's product data meta box
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param int      $loop             Only for variations. The loop item number.
-	 * @param array    $variation_data   Only for variations. The variation item data.
-	 * @param \WP_Post $variation        Only for variations. The variation product.
-	 */
-	public function add_product_supplier_fields( $loop = NULL, $variation_data = array(), $variation = NULL ) {
-
-		global $post;
-
-		$product_id = empty( $variation ) ? $post->ID : $variation->ID;
-		$product    = Helpers::get_atum_product( $product_id );
-
-		if ( empty( $variation ) ) {
-
-			// Do not add the field to variable products (every variation will have its own).
-			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-				return;
-			}
-
-		}
-
-		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
-		$supplier_meta     = self::SUPPLIER_META_KEY;
-		$supplier_sku_meta = self::SUPPLIER_SKU_META_KEY;
-		$supplier_id       = $product->get_supplier_id();
-		$supplier_sku      = $product->get_supplier_sku();
-
-		if ( $supplier_id ) {
-			$supplier = get_post( $supplier_id );
-		}
-
-		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
-		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
-		$supplier_sku_field_name = empty( $variation ) ? $supplier_sku_meta : "variation{$supplier_sku_meta}[$loop]";
-		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
-
-		// If the user is not allowed to edit Suppliers, add a hidden input.
-		if ( ! AtumCapabilities::current_user_can( 'edit_supplier' ) ) : ?>
-
-			<input type="hidden" name="<?php echo esc_attr( $supplier_field_name ) ?>" id="<?php echo esc_attr( $supplier_field_id ) ?>" value="<?php echo esc_attr( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
-			<input type="hidden" name="<?php echo esc_attr( $supplier_sku_field_name ) ?>" id="<?php echo esc_attr( $supplier_sku_field_id ) ?>" value="<?php echo esc_attr( $supplier_sku ?: '' ) ?>">
-
-		<?php else :
-
-			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
-
-			Helpers::load_view( 'meta-boxes/product-data/supplier-fields', compact( 'supplier_field_name', 'supplier_field_id', 'variation', 'loop', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes' ) );
-
-		endif;
-
-	}
-
-	/**
-	 * Save the product supplier fields
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param int $product_id The saved product's ID.
-	 */
-	public function save_product_supplier_fields( $product_id ) {
-
-		$product = Helpers::get_atum_product( $product_id );
-
-		if ( is_a( $product, '\WC_Product' ) && in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-			return;
-		}
-
-		if ( isset( $_POST['variation_supplier'], $_POST['variation_supplier_sku'] ) ) { // WPCS: CSRF ok.
-
-			$product_key  = array_search( $product_id, $_POST['variable_post_id'] ); // WPCS: CSRF ok.
-			$supplier_id  = isset( $_POST['variation_supplier'][ $product_key ] ) ? absint( $_POST['variation_supplier'][ $product_key ] ) : ''; // WPCS: CSRF ok.
-			$supplier_sku = isset( $_POST['variation_supplier_sku'][ $product_key ] ) ? esc_attr( $_POST['variation_supplier_sku'][ $product_key ] ) : ''; // WPCS: CSRF ok.
-
-		}
-		elseif ( isset( $_POST[ self::SUPPLIER_META_KEY ], $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ) { // WPCS: CSRF ok.
-			$supplier_id  = isset( $_POST[ self::SUPPLIER_META_KEY ] ) ? absint( $_POST[ self::SUPPLIER_META_KEY ] ) : ''; // WPCS: CSRF ok.
-			$supplier_sku = isset( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) ? esc_attr( $_POST[ self::SUPPLIER_SKU_META_KEY ] ) : ''; // WPCS: CSRF ok.
-		}
-		else {
-			// If we are not saving the product from its edit page, do not continue.
-			return;
-		}
-
-		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables.
-		$product->set_supplier_id( $supplier_id );
-		$product->set_supplier_sku( $supplier_sku );
-		$product->save();
 
 	}
 

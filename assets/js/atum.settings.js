@@ -60,7 +60,7 @@
 			// Change menu theme
 			$('.js-switch-menu').on('change', function () {
 				self.changeMenuTheme();
-			})
+			});
 
 			// Set the dirty fields
 			this.$form
