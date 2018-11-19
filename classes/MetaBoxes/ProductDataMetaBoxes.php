@@ -271,9 +271,9 @@ class ProductDataMetaBoxes {
 				return "show_if_{$val}";
 			}, Globals::get_product_types_with_stock() );
 
-			$out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
+			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
 
-			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes', 'woocommerce_notify_no_stock_amount' ) );
+			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'visibility_classes', 'woocommerce_notify_no_stock_amount' ) );
 
 		endif;
 
