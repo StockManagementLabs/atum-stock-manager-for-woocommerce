@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || die;
 				<i class="lnr lnr-chart-bars"></i> <span><?php esc_html_e( 'Chart Type', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
 			</li>
 			<li data-show-filter=".chart-legend">
-				<i class="lnr lnr-layers"></i> <span><?php esc_html_e( 'Layers', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="atmi-layers"></i> <span><?php esc_html_e( 'Layers', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
 			</li>
 		</ul>
 	</nav>

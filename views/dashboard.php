@@ -140,7 +140,7 @@ defined( 'ABSPATH' ) || die;
 
 							<div>
 								<button type="button" class="add-widget btn btn-primary btn-sm btn-pill"><?php esc_html_e( 'Add Widget', ATUM_TEXT_DOMAIN ) ?></button>
-								<button type="button" class="btn btn-info btn-sm btn-pill" disabled><i class="lnr lnr-checkmark-circle"></i> <?php esc_html_e( 'Added', ATUM_TEXT_DOMAIN ) ?></button>
+								<button type="button" class="btn btn-info btn-sm btn-pill" disabled><i class="atmi-checkmark-circle"></i> <?php esc_html_e( 'Added', ATUM_TEXT_DOMAIN ) ?></button>
 							</div>
 						</li>
 					<?php endforeach; ?>

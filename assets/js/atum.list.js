@@ -793,11 +793,19 @@
 		changeStickyColumnsSetting: function () {
 			var self = this;
 			this.$stickyColsButton.click(function () {
-				
+				var $buttonsContainer = $('.sticky-columns-button-container');
 				var option = $(this).data('option'),
 					data   = {
 					option: option
 				};
+
+				if ( option === 'yes' ) {
+                    $buttonsContainer.find('button').first().addClass('active');
+                    $buttonsContainer.find('button').last().removeClass('active');
+				}else {
+                    $buttonsContainer.find('button').first().removeClass('active');
+                    $buttonsContainer.find('button').last().addClass('active');
+				}
 				
 				$.ajax({
 					url       : ajaxurl,
@@ -808,20 +816,14 @@
 						data  : data
 					},
 					beforeSend: function () {
-						self.addOverlay();
+						$('body').css('cursor', 'wait');
 					},
 					success   : function (response) {
-						
+                        $('body').css('cursor', 'auto');
 						self.removeOverlay();
-						if ( option == 'no' ) {
-							self.$atumList.find('.atum-list-table.cloned').remove();
-						}
-						else {
-							self.$stickyCols = self.createStickyColumns(self.$atumList.find('.atum-list-table'));
-							self.reloadFloatThead();
-							self.reloadScrollbar();
-						}
-					},
+                        window.location.reload(true);
+
+                    },
 				});
 			});
 		},

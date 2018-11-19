@@ -210,7 +210,7 @@ class StockCentral extends AtumListPage {
 
 		$tabs['stock_central'] = array(
 			'tab_name' => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
-			'icon'     => 'lnr lnr-layers',
+			'icon'     => 'atmi-layers',
 			'sections' => array(
 				'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN ),
 			),

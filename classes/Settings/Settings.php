@@ -96,14 +96,14 @@ class Settings {
 		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
-				'icon'     => 'lnr lnr-cog',
+				'icon'     => 'atmi-cog',
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN ),
 				),
 			),
 			'store_details' => array(
 				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
-				'icon'     => 'lnr lnr-store',
+				'icon'     => 'atmi-store',
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
 					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN ),

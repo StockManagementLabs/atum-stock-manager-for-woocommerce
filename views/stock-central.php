@@ -10,6 +10,8 @@
  * @var string                             $ajax
  */
 
+use Atum\Inc\Helpers;
+
 defined( 'ABSPATH' ) || die;
 
 ?>
@@ -63,15 +65,22 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
+				<?php
+				$sticky_column = Helpers::get_option( 'sticky_columns' );
+				$active        = FALSE;
+				if ( 'yes' === $sticky_column ) {
+					$active = TRUE;
+				}
+				?>
+
 				<div class="sticky-columns-button-container">
-					<button class="sticky-columns-button sticky-on" data-option="yes">
-						<i class="lnr lnr-menu"></i>
+					<button type="button" class="sticky-columns-button sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes">
+						<i class="atmi-view-sidebar-right rotate"></i>
 					</button>
 
-					<button class="sticky-columns-button sticky-off" data-option="no">
-						<i class="lnr lnr-menu"></i>
+					<button type="button" class="sticky-columns-button sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no">
+						<i class="atmi-view-list"></i>
 					</button>
-
 				</div>
 			</div>
 		</div>

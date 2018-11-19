@@ -92,6 +92,14 @@
 			box-shadow: none;
 		}
 	}
+
+	.rotate {
+		-webkit-transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+		transform: rotate(45deg);
+	}
 	
 	.sticky-columns-button-container {
 		@include flexbox;
@@ -101,9 +109,19 @@
 			height: 30px;
 			border-radius: 5px;
 			border: solid 1px $gray-200;
+			background-color: $white;
+			color: $gray-600;
+			cursor: pointer;
 			&:first-child {
 				margin-left: 9px;
 				margin-right: 5px;
+			}
+			&:focus {
+				outline: 0;
+			}
+			&.active {
+				background-color: $blue;
+				color: white;
 			}
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -554,6 +572,7 @@
 			
 			@media screen and (max-width: $screen-xs) {
 				width: 100% !important;
+				margin: 0;
 			}
 		}
 		
@@ -794,7 +813,7 @@
 				}
 			}
 			
-			.lnr, .dashicons {
+			.lnr, .dashicons, .atum-icon {
 				display: block;
 				text-indent: -9999px;
 				position: relative;
@@ -866,7 +885,8 @@
 				font-family: 'Linearicons';
 				
 				&:before {
-					content: "\e889";
+					font-family: '#{$icomoon-font-family}';
+					content: $atmi-chevron-left-circle;
 				}
 				
 				&:hover {
@@ -1114,7 +1134,7 @@
 	}
 	
 	.stock-selling-manager {
-		.lnr {
+		.atum-icon {
 			font-size: 20px;
 		}
 	}
