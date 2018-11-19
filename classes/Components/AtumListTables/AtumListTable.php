@@ -299,7 +299,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Value for empty columns
 	 */
-	const EMPTY_COL = '&mdash;';
+	const EMPTY_COL = '&#45;';
 
 
 	/**
