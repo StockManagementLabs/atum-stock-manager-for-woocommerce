@@ -1211,7 +1211,7 @@
 		padding: 6px 5px;
 		height: 47px;
 		font-size: 14px;
-		color: $gray-600;
+		color: $blue;
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
@@ -1240,6 +1240,14 @@
 		
 		&.column-sku {
 			min-width: 70px;
+		}
+		
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.stock-selling-manager, &.multi-inventory, &.calc_mi_status {
+			color: $gray-600;
+		}
+		
+		&.column-_stock, &._out_stock_threshold {
+			color: $blue;
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
@@ -1278,9 +1286,6 @@
 	td {
 		&.column-title {
 			font-weight: 500;
-		}
-		&.stock-counters {
-			color: $blue;
 		}
 	}
 	
