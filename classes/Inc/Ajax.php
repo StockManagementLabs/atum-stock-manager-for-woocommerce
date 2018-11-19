@@ -912,11 +912,10 @@ final class Ajax {
 		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
 		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
 		
-		$query = $wpdb->prepare( "
+		$query = "
 			$query_select $where_clause
 			ORDER BY posts.post_parent ASC, posts.post_title ASC
-			"
-		); // WPCS: unprepared SQL ok.
+			";
 
 		$product_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
 
