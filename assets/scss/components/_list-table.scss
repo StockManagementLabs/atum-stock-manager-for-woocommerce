@@ -112,6 +112,10 @@
 			background-color: $white;
 			color: $gray-600;
 			cursor: pointer;
+			-webkit-transition: all 0.20s; /* Safari */
+			transition: all 0.20s;
+			line-height: 2;
+			
 			&:first-child {
 				margin-left: 9px;
 				margin-right: 5px;
@@ -119,9 +123,12 @@
 			&:focus {
 				outline: 0;
 			}
-			&.active {
+			&.active, &:hover {
 				background-color: $blue;
 				color: white;
+			}
+			&:hover {
+				opacity: 0.3;
 			}
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -1122,7 +1129,7 @@
 					color: $white;
 					border-radius: 5px;
 					background-color: $gray-600;
-					padding: 2px;
+					padding: 4px;
 					
 					&.danger {
 						background-color: $danger;
@@ -1242,7 +1249,7 @@
 			min-width: 70px;
 		}
 		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.stock-selling-manager, &.multi-inventory, &.calc_mi_status {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.stock-selling-manager, &.multi-inventory {
 			color: $gray-600;
 		}
 		

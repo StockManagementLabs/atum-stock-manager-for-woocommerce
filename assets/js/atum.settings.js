@@ -300,6 +300,7 @@
 			$('.atum-nav').toggleClass('atum-nav-light');
 			$('.section-general-title').toggleClass('section-general-title-light');
 			$('.section-title').toggleClass('section-title-light');
+			$('.section-fields').toggleClass('section-field-light');
 			
 			var data = {
 				menu_theme    : $('.js-switch-menu').is(':checked') ? 1 : 0

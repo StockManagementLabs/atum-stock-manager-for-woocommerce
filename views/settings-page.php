@@ -144,7 +144,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 								<?php endif; ?>
 
 							<?php if ( $section['title'] ) : ?>
-									<div class="section-title">
+									<div class="section-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-title-light' : '' ?>">
 									<h2><?php echo esc_html( $section['title'] ) ?></h2>
 									</div>
 							<?php endif; ?>
@@ -157,7 +157,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									continue;
 								endif; ?>
 
-								<div class="section-fields" <?php echo ! $last_section ? 'style="background-image: none;"' : ''; ?>>
+								<div class="section-fields <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-field-light' : '' ?>" <?php echo ! $last_section ? 'style="background-image: none;"' : ''; ?>>
 									<table class="form-table">
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>
