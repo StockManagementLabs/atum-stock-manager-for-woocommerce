@@ -3215,8 +3215,8 @@ input[type="button"].btn-block {
   height: 44px;
   border-radius: 8px;
   box-shadow: 0 4px 0 0 #e9ecef;
-  background-color: #fff;
-  color: #6c757d;
+  background-color: #3b3d5a;
+  color: #fff;
   font-weight: bold;
   font-size: 16px;
   display: -webkit-box;
@@ -3229,6 +3229,11 @@ input[type="button"].btn-block {
   -moz-align-items: center;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.atum-settings-wrapper .switch-interface-style.bg-light {
+  background-color: #fff;
+  color: #6c757d;
 }
 
 .atum-settings-wrapper .atum-nav {
@@ -3498,26 +3503,6 @@ input[type="button"].btn-block {
   font-weight: bold;
   color: #fff;
   border-right: 3px solid #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-link.active .menu-helper {
-  -webkit-animation: anim-atum-menu 0.3s forwards;
-  -moz-animation: anim-atum-menu 0.3s forwards;
-  -o-animation: anim-atum-menu 0.3s forwards;
-  animation: anim-atum-menu 0.3s forwards;
-}
-
-.atum-settings-wrapper .atum-nav-link.active .menu-helper:before, .atum-settings-wrapper .atum-nav-link.active .menu-helper:after {
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  -webkit-transition: transform 0.3s, opacity 0.1s;
-  -o-transition: transform 0.3s, opacity 0.1s;
-  transition: transform 0.3s, opacity 0.1s;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media all and (max-width: 992px) {

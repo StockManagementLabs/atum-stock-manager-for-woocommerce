@@ -37,13 +37,17 @@ $settings-xs-min:          568px !default;
 		height: 44px;
 		border-radius: 8px;
 		box-shadow: 0 4px 0 0 $gray-200;
-		background-color: $white;
-		color: $gray-600;
+		background-color: $blue-dark-lighten;
+		color: $white;
 		font-weight: bold;
 		font-size: 16px;
 		@include flexbox;
 		@include flex-align-items(center);
 		justify-content: space-evenly;
+		&.bg-light {
+			background-color: $white;
+			color: $gray-600;
+		}
 	}
 	
 	.atum-nav {
@@ -273,17 +277,6 @@ $settings-xs-min:          568px !default;
 			font-weight: bold;
 			color: $white;
 			border-right: 3px solid $blue;
-			
-			.menu-helper {
-				@include animation(anim-atum-menu 0.3s forwards);
-				
-				&:before, &:after {
-					//opacity: 1;
-					@include transform(translate3d(0, 0, 0));
-					@include transition(transform 0.3s, opacity 0.1s);
-					@include transition-timing(cubic-bezier(0.4, 0, 0.2, 1));
-				}
-			}
 		}
 		
 	}
