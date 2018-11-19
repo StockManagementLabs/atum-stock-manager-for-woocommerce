@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
 
-trait AtumDataStoreCustomTable {
+trait AtumDataStoreCustomTableTrait {
 
 	/**
 	 * Store data into WC's and ATUM's custom product data tables
