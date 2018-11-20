@@ -3604,9 +3604,9 @@ input[type="button"].btn-block {
 }
 
 .select2-container--default .select2-selection--single {
-  border-color: #e9ecef;
   height: 30px;
   border-radius: 5px;
+  border: 1px solid #e9ecef;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -3712,7 +3712,6 @@ input[type="button"].btn-block {
   margin: 4px 5px 0 0;
   padding: 0 5px;
   height: 24px;
-  line-height: 24px;
   overflow: hidden;
   margin: 4px 5px 0 0;
   color: #fff;
@@ -3734,6 +3733,7 @@ input[type="button"].btn-block {
   position: relative;
   left: -8px;
   font-size: 14px;
+  color: #fff;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
