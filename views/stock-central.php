@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) || die;
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
 		<div class="stock-central-header">
-			<nav id="stock_central_nav" class="stock-central-nav dragscroll">
+			<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
 				<?php $list->views(); ?>
 				<div class="overflow-opacity-effect-right" >
 

@@ -1585,15 +1585,15 @@
 		 * Add horizontal scroll effect to menu views
 		 */
 		addHorizontalScrolleffect: function() {
-			$('.stock-central-nav').bind('scroll',function () {
-				var $nav = document.getElementById('stock_central_nav');
-				var $overflowOpacityEffectRight = $('.overflow-opacity-effect-right');
-				var $overflowOpacityEffectLeft  = $('.overflow-opacity-effect-left');
+			$('.nav-with-scroll-effect').bind('scroll',function () {
+				var $nav = document.getElementById($(this).attr('id'));
+				var $overflowOpacityEffectRight = $('#' + $(this).attr('id') + ' .overflow-opacity-effect-right');
+				var $overflowOpacityEffectLeft  = $('#' + $(this).attr('id') + ' .overflow-opacity-effect-left');
 				var $leftMax                    = $nav.scrollWidth;
 				var $left                       = $nav.scrollLeft;
 				var $diff                       = $leftMax - $left;
 				
-				if ($diff === $('.stock-central-nav').outerWidth())
+				if ($diff === $('#' + $(this).attr('id')).outerWidth())
 				{
 					$overflowOpacityEffectRight.hide();
 				}else {

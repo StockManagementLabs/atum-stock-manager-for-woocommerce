@@ -299,14 +299,54 @@
 		align-items: center;
 		justify-content: left;
 		display: flex;
-		padding: 10px 11px;
+		padding: 0 11px;
 		margin: 0;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
+		@media all and (max-width: 782px) {
+			flex-wrap: wrap;
+		}
 		.tablenav-pages {
 			margin-left: auto;
+			text-align: right;
+			z-index: 999;
+			width: 300px;
 			@media all and (max-width: $screen-xs) {
 				margin: 0;
 				width: 100%;
+				text-align: center;
+			}
+			.displaying-num {
+				@media all and (max-width: $screen-lg) {
+					display: inline-block;;
+				}
+			}
+		}
+		.nav-with-scroll-effect {
+			width: 70%;
+			height: 52px;
+			justify-content: start;
+			.actions {
+				overflow: initial;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				display: contents;
+				white-space: normal;
+			}
+			@media all and (max-width: 782px) {
+				right: 63%;
+				width: inherit;
+			}
+			.overflow-opacity-effect-right {
+				@media screen and (max-width: $screen-lg) {
+					right: 30%;
+				}
+				@media all and (max-width: $screen-xs) {
+					display: none !important;
+				}
+			}
+			.overflow-opacity-effect-right, .overflow-opacity-effect-right {
+				height: 50px;
 			}
 		}
 	}
@@ -320,7 +360,7 @@
 			//padding-right: 10px;
 		}
 		#table-paging {
-			margin-left: 10px;
+			margin-left: 0;
 			@media all and (max-width: 782px) {
 				margin-left: 0;
 			}
@@ -329,6 +369,22 @@
 	
 	.tablenav.bottom {
 		margin: 10px 11px 0;
+		.tablenav-pages {
+			margin-left: auto;
+			text-align: right;
+			z-index: 999;
+			width: 300px;
+			@media all and (max-width: $screen-xs) {
+				margin: 0;
+				width: 100%;
+				text-align: center;
+			}
+			.displaying-num {
+				@media all and (max-width: $screen-lg) {
+					display: contents;
+				}
+			}
+		}
 	}
 	.stock-central-header {
 		display: flex;
@@ -343,7 +399,7 @@
 			margin: 0 11px 15px;
 		}
 	}
-	.stock-central-nav {
+	.nav-with-scroll-effect {
 		@include flexbox;
 		@include flex-align-items(center);
 		@include flex-justify-content(space-between);

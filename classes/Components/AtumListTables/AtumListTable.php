@@ -2900,14 +2900,23 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
-			<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
+			<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll">
+				<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 				<div class="alignleft actions bulkactions">
 					<?php $this->bulk_actions( $which ); ?>
 				</div>
-				<?php
+					<?php
 			endif;
 
-			$this->extra_tablenav( $which );
+			$this->extra_tablenav( $which ); ?>
+				<div class="overflow-opacity-effect-right" >
+
+				</div>
+				<div class="overflow-opacity-effect-left" >
+
+				</div>
+			</div>
+			<?php
 
 			// Firefox fix to not preserve the pagination input value when reloading the page.
 			ob_start();
