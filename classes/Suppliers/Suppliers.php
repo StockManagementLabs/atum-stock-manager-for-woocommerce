@@ -472,7 +472,7 @@ class Suppliers {
 	 * @return array
 	 */
 	public static function supplier_data_query_clauses( $pieces ) {
-		return Helpers::atum_product_data_query_clauses( self::$query_data, $pieces );
+		return Helpers::product_data_query_clauses( self::$query_data, $pieces );
 	}
 	
 	/**
