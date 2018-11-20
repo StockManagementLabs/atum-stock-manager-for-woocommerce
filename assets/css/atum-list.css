@@ -4402,6 +4402,14 @@ input[type="button"].btn-block {
   margin-left: 5px;
   border-radius: 0;
   vertical-align: middle;
+  background-color: #00B8DB;
+  border-radius: 5px;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.wrap h1.wp-heading-inline #atum-update-list:hover {
+  background-color: rgba(0, 184, 219, 0.6);
 }
 
 .wrap h1.wp-heading-inline #atum-update-list:active {
@@ -4905,7 +4913,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-right, .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-left {
   width: 200px;
   position: absolute;
-  z-index: 999;
+  z-index: 998;
   height: 65px;
 }
 

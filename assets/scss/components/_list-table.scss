@@ -49,6 +49,14 @@
 			margin-left: 5px;
 			border-radius: 0;
 			vertical-align: middle;
+			background-color: $blue;
+			border-radius: 5px;
+			text-shadow: none;
+			box-shadow: none;
+			
+			&:hover {
+				background-color: rgba($blue, 0.6);
+			}
 			
 			&:active {
 				color: $white;
@@ -442,7 +450,7 @@
 		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 			width: 200px;
 			position: absolute;
-			z-index: 999;
+			z-index: 998;
 			height: 65px;
 		}
 		.overflow-opacity-effect-right {
