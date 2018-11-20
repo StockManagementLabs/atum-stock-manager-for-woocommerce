@@ -112,6 +112,10 @@
 			background-color: $white;
 			color: $gray-600;
 			cursor: pointer;
+			-webkit-transition: all 0.20s; /* Safari */
+			transition: all 0.20s;
+			line-height: 2;
+			
 			&:first-child {
 				margin-left: 9px;
 				margin-right: 5px;
@@ -119,9 +123,12 @@
 			&:focus {
 				outline: 0;
 			}
-			&.active {
+			&.active, &:hover {
 				background-color: $blue;
 				color: white;
+			}
+			&:hover {
+				background-color: rgba($blue, 0.6);
 			}
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -212,7 +219,6 @@
 			border-radius: 5px;
 			border: solid 1px $gray-200;
 			background-color: $white;
-			width: 270px;
 			flex-wrap: nowrap;
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
@@ -228,9 +234,10 @@
 				vertical-align: middle;
 				font-family: Linearicons;
 				content: "\e874";
-				display: contents;
+				display: inline;
 				font-size: 10px;
 			}
+			
 			border: none;
 			background-color: $gray-100;
 			font-size: 15px;
@@ -292,14 +299,61 @@
 		align-items: center;
 		justify-content: left;
 		display: flex;
-		padding: 10px 11px;
+		padding: 0 11px;
 		margin: 0;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
+		@media all and (max-width: 782px) {
+			flex-wrap: wrap;
+		}
 		.tablenav-pages {
 			margin-left: auto;
+			text-align: right;
+			z-index: 999;
+			width: 300px;
+			&.one-page {
+				width: inherit;
+			}
 			@media all and (max-width: $screen-xs) {
-				margin: 0;
 				width: 100%;
+				text-align: center;
+				display: inline-block;
+				margin: 0 0 10px;
+			}
+			.displaying-num {
+				@media all and (max-width: $screen-lg) {
+					display: inline-block;;
+				}
+				@media all and (max-width: $screen-xs) {
+					width: 100%;
+				}
+			}
+		}
+		.nav-with-scroll-effect {
+			width: 70%;
+			height: 52px;
+			justify-content: start;
+			.actions {
+				overflow: initial;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				display: contents;
+				white-space: normal;
+			}
+			@media all and (max-width: 782px) {
+				right: 63%;
+				width: inherit;
+			}
+			.overflow-opacity-effect-right {
+				@media screen and (max-width: $screen-lg) {
+					right: 30%;
+				}
+				@media all and (max-width: $screen-xs) {
+					display: none !important;
+				}
+			}
+			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+				height: 50px;
 			}
 		}
 	}
@@ -313,7 +367,7 @@
 			//padding-right: 10px;
 		}
 		#table-paging {
-			margin-left: 10px;
+			margin-left: 0;
 			@media all and (max-width: 782px) {
 				margin-left: 0;
 			}
@@ -322,6 +376,29 @@
 	
 	.tablenav.bottom {
 		margin: 10px 11px 0;
+		.tablenav-pages {
+			margin-left: auto;
+			text-align: right;
+			z-index: 999;
+			@media all and (max-width: $screen-xs) {
+				margin: 0;
+				width: 100%;
+				text-align: center;
+				display: inline-block;
+				margin: 0 0 10px;
+			}
+			.displaying-num {
+				@media all and (max-width: $screen-lg) {
+					display: contents;
+				}
+				@media all and (max-width: $screen-xs) {
+					width: 100%;
+					display: inline-block;
+					position: inherit;
+					top: inherit;
+				}
+			}
+		}
 	}
 	.stock-central-header {
 		display: flex;
@@ -336,7 +413,7 @@
 			margin: 0 11px 15px;
 		}
 	}
-	.stock-central-nav {
+	.nav-with-scroll-effect {
 		@include flexbox;
 		@include flex-align-items(center);
 		@include flex-justify-content(space-between);
@@ -346,7 +423,7 @@
 		-ms-overflow-style: -ms-autohiding-scrollbar;
 		-webkit-overflow-scrolling: touch;
 		white-space: nowrap;
-		width: 70%;
+		width: 62%;
 		float: left;
 		margin: 0 11px 0 0;
 		&::-webkit-scrollbar {
@@ -369,7 +446,7 @@
 			height: 65px;
 		}
 		.overflow-opacity-effect-right {
-			right: 30%;
+			right: 37%;
 			background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
@@ -500,32 +577,38 @@
 			}
 		}
 		
+	}
+	
+	.reset-filters {
+		border-radius: 50%;
+		width: 25px;
+		height: 25px;
+		text-align: center;
+		border: none;
+		background-color: $primary;
+		color: $white;
+		padding: 2px 0 0;
+		cursor: pointer;
+		position: absolute;
+		top: 20px;
+		z-index: 999;
+		right: 36%;
+		@include transition(0.2s ease-in-out);
 		
+		@media screen and (max-width: $screen-lg) {
+			right: 15px;
+		}
 		
-		.reset-filters {
-			border-radius: 50%;
-			width: 25px;
-			height: 25px;
-			text-align: center;
-			border: none;
-			background-color: $primary;
-			color: $white;
-			padding: 2px 0 0;
-			cursor: pointer;
-			position: relative;
-			@include transition(0.2s ease-in-out);
-			
-			&:focus {
-				outline: none;
-			}
-			
-			&:hover {
-				background-color: darken($primary, 5%);
-			}
-			
-			i {
-				font-size: 18px;
-			}
+		&:focus {
+			outline: none;
+		}
+		
+		&:hover {
+			background-color: darken($primary, 5%);
+		}
+		
+		i {
+			font-size: 18px;
 		}
 	}
 	
@@ -573,6 +656,19 @@
 			@media screen and (max-width: $screen-xs) {
 				width: 100% !important;
 				margin: 0;
+			}
+		}
+		
+		#select2-supplier-container {
+			padding: 0 30px 0 16px;
+			.select2-selection__clear {
+				visibility: hidden;
+				&:after {
+					font-family: atum-icon-font;
+					content: $atmi-cross;
+					visibility: visible;
+					line-height: 2;
+				}
 			}
 		}
 		
@@ -1122,7 +1218,7 @@
 					color: $white;
 					border-radius: 5px;
 					background-color: $gray-600;
-					padding: 2px;
+					padding: 4px;
 					
 					&.danger {
 						background-color: $danger;
@@ -1242,7 +1338,7 @@
 			min-width: 70px;
 		}
 		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.stock-selling-manager, &.multi-inventory, &.calc_mi_status {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days, &.calc_lost_sales, &.multi-inventory {
 			color: $gray-600;
 		}
 		
