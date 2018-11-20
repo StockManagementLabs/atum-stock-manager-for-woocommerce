@@ -2079,8 +2079,24 @@ final class Ajax {
 			$meta_key,
 			$status
 		) );
-	
-		if ( FALSE !== $insert_success && FALSE !== $update_success ) {
+		
+		$stock_success = TRUE;
+		// Ensure there is no _stock set to 0 for managed products.
+		if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
+			
+			global $wpdb;
+			
+			$sql = "UPDATE $wpdb->postmeta SET meta_value = 0
+ 						WHERE meta_key = '_stock'
+ 							AND meta_value IS NULL
+ 							AND post_id IN ( SELECT DISTINCT post_id FROM (SELECT * FROM $wpdb->postmeta) AS pm
+ 							 WHERE meta_key = '_manage_stock')
+ 						";
+			
+			$stock_success = $wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+		}
+		
+		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
 			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
 		}
 
