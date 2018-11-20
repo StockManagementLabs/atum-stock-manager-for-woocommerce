@@ -1764,23 +1764,24 @@ final class Helpers {
 	}
 
 	/**
-	 * Customize the WP_Query to handle ATUM product data
+	 * Customize the WP_Query to handle ATUM product data and product data from the new WC tables
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $query_data
-	 * @param array $pieces
+	 * @param array  $query_data  The query data args.
+	 * @param array  $pieces      The pieces array that must be returned to the post_clauses filter.
+	 * @param string $table_name  Optional. If passed will use this table name instead of the ATUM product data table.
 	 *
 	 * @return array
 	 */
-	public static function atum_product_data_query_clauses( $query_data, $pieces ) {
+	public static function product_data_query_clauses( $query_data, $pieces, $table_name = '' ) {
 
 		if ( empty( $query_data ) ) {
 			return $pieces;
 		}
 
 		$atum_product_data_query = new ProductDataQuery( $query_data );
-		$sql                     = $atum_product_data_query->get_sql();
+		$sql                     = $atum_product_data_query->get_sql( $table_name );
 
 		foreach ( [ 'join', 'where' ] as $key ) {
 

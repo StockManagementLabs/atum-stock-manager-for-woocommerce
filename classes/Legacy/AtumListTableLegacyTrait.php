@@ -69,9 +69,9 @@ trait AtumListTableLegacyTrait {
 			global $wp_query;
 
 			// Pass through the ATUM query data filter.
-			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+			add_filter( 'posts_clauses', array( $this, 'product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_args', $args ) );
-			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+			remove_filter( 'posts_clauses', array( $this, 'product_data_query_clauses' ) );
 
 			$products = $wp_query->posts;
 

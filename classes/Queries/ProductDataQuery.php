@@ -37,16 +37,13 @@ class ProductDataQuery extends \WP_Meta_Query {
 	 */
 	public function get_sql( $type = '', $primary_table = '', $primary_id_column = '', $context = NULL ) {
 
-		if ( $type && ! $meta_table = _get_meta_table( $type ) ) {
-			return FALSE;
-		}
-
 		global $wpdb;
 
 		$this->table_aliases = array();
 
-		$this->meta_table        = isset( $meta_table ) ? $meta_table : $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-		$this->meta_id_column    = $type ? sanitize_key( $type . '_id' ) : 'product_id';
+		$type                    = $type ?: Globals::ATUM_PRODUCT_DATA_TABLE;
+		$this->meta_table        = $wpdb->prefix . $type;
+		$this->meta_id_column    = 'product_id';
 		$this->primary_table     = $primary_table ?: $wpdb->posts;
 		$this->primary_id_column = $primary_id_column ?: 'ID';
 
