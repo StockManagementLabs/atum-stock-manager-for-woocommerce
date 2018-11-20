@@ -18,6 +18,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
+use Atum\Legacy\AtumSuppliersLegacyTrait;
 
 
 class Suppliers {
@@ -35,6 +36,13 @@ class Suppliers {
 	 * @var array
 	 */
 	protected $labels = array();
+
+	/**
+	 * The ATUM product data used in WP_Query
+	 *
+	 * @var array
+	 */
+	protected static $query_data = array();
 	
 	/**
 	 * The Supplier post type name
@@ -378,6 +386,14 @@ class Suppliers {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy method
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use AtumSuppliersLegacyTrait;
+
+	/**
 	 * Get all the products linked to the specified supplier
 	 *
 	 * @since 1.3.0
@@ -387,94 +403,55 @@ class Suppliers {
 	 * @param bool         $type_filter  Optional. Whether to filter the retrieved suppliers by product type or not.
 	 *
 	 * @return array|bool
-	 *
-	 * TODO: 1.5.
 	 */
 	public static function get_supplier_products( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE ) {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+			return self::get_supplier_products_legacy( $supplier_id, $post_type, $type_filter );
+		}
 
 		global $wpdb;
 
 		$supplier = get_post( $supplier_id );
 
-		if ( self::POST_TYPE === $supplier->post_type ) {
+		if ( $supplier && self::POST_TYPE === $supplier->post_type ) {
 
-			$args = array(
-				'post_type'      => $post_type,
-				'post_status'    => array( 'publish', 'private' ),
-				'posts_per_page' => - 1,
-				'fields'         => 'ids',
-				'meta_query'     => array(
-					array(
-						'key'   => self::SUPPLIER_META_KEY,
-						'value' => $supplier_id,
-					),
-				),
-			);
+			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-			$term_join = $term_where = '';
+			$where = $wpdb->prepare( "
+				WHERE apd.supplier_id = %d AND p.post_type IN ('" . implode( "','", $post_type ) . "')
+			", $supplier_id ); // WPCS: unprepared SQL ok.
 
 			if ( $type_filter ) {
 
-				// SC fathers default taxonomies and ready to override to MC (or others) requirements.
-				$product_taxonomies = apply_filters( 'atum/suppliers/supplier_products_taxonomies', Globals::get_product_types() );
-				$term_ids           = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
+				$product_types = Globals::get_product_types();
 
-				$args['tax_query'] = array(
-					'relation' => 'AND',
-					array(
-						'taxonomy' => 'product_type',
-						'field'    => 'id',
-						'terms'    => $term_ids,
-					),
-				);
+				if ( in_array( 'product_variation', $post_type ) ) {
+					$product_types = array_merge( $product_types, Globals::get_child_product_types() );
+				}
 
-				$term_join  = "LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id)";
-				$term_where = 'AND tr.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ')';
+				$product_types = (array) apply_filters( 'atum/suppliers/supplier_products_taxonomies', $product_types );
+
+				$where .= " AND wcp.type IN ('" . implode( "','", $product_types ) . "')";
 
 			}
 
-			// Father IDs.
-			$products = get_posts( apply_filters( 'atum/suppliers/supplier_products_args', $args ) );
+			$products = $wpdb->get_results( "
+				SELECT p.ID, p.post_parent FROM $wpdb->posts p
+				LEFT JOIN {$wpdb->prefix}wc_products wcp ON p.ID = wcp.product_id
+				LEFT JOIN $atum_data_table apd ON p.ID = apd.product_id 
+				$where
+			", ARRAY_A ); // WPCS: unprepared SQL ok.
 
-			if ( $type_filter ) {
-
-				$child_ids = array();
-
-				// Get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id).
-				$query_parents = $wpdb->prepare( "
-					SELECT DISTINCT p.ID FROM $wpdb->posts p
-	                $term_join
-	                WHERE p.post_type = 'product'
-	                $term_where
-	                AND p.post_status IN ('publish', 'private')              
-	                AND p.ID IN (
-	                
-	                    SELECT DISTINCT sp.post_parent FROM $wpdb->posts sp
-	                    INNER JOIN $wpdb->postmeta AS mt1 ON (sp.ID = mt1.post_id)
-	                    WHERE sp.post_type = 'product_variation'
-	                    AND (mt1.meta_key = '" . self::SUPPLIER_META_KEY . "' AND CAST(mt1.meta_value AS SIGNED) = %d)
-	                    AND sp.post_status IN ('publish', 'private')
-	                      
-	                )", $supplier_id ); // WPCS: unprepared SQL ok.
-
-				$parent_ids = $wpdb->get_col( $query_parents ); // WPCS: unprepared SQL ok.
-
-				if ( ! empty( $parent_ids ) ) {
-					// Get rebel childs.
-					$query_childs = $wpdb->prepare( "
-		                SELECT DISTINCT p.ID FROM $wpdb->posts p
-		                INNER JOIN $wpdb->postmeta AS mt1 ON (p.ID = mt1.post_id)
-		                WHERE p.post_type = 'product_variation'
-		                AND (mt1.meta_key = '" . self::SUPPLIER_META_KEY . "' AND CAST(mt1.meta_value AS SIGNED) = %d)
-		                AND p.post_parent IN ( " . implode( ',', $parent_ids ) . " )
-		                AND p.post_status IN ('publish', 'private')
-	                ", $supplier_id ); // WPCS: unprepared SQL ok.
-
-					$child_ids = $wpdb->get_col( $query_childs ); // WPCS: unprepared SQL ok.
-				}
-
-				$products = array_unique( array_merge( $products, $parent_ids, $child_ids ) );
-
+			if ( $products ) {
+				// Merge the child and parent IDs.
+				$products = array_unique( array_filter( array_merge( wp_list_pluck( $products, 'ID' ), wp_list_pluck( $products, 'post_parent' ) ) ) );
 			}
 
 			return apply_filters( 'atum/suppliers/products', $products, $supplier, $post_type, $type_filter );
@@ -483,6 +460,19 @@ class Suppliers {
 
 		return FALSE;
 
+	}
+
+	/**
+	 * Customize the WP_Query to handle ATUM product data
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $pieces
+	 *
+	 * @return array
+	 */
+	public static function supplier_data_query_clauses( $pieces ) {
+		return Helpers::atum_product_data_query_clauses( self::$query_data, $pieces );
 	}
 	
 	/**

@@ -22,6 +22,7 @@ use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Queries\ProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 
@@ -255,7 +256,8 @@ final class Helpers {
 			return $class_name;
 		}
 
-		return '';
+		// As fallback, return the simple product class.
+		return "$namespace\WCProductSimple";
 
 	}
 	
@@ -998,7 +1000,7 @@ final class Helpers {
 	 * @return bool
 	 */
 	public static function is_atum_controlling_stock( $product ) {
-		return '1' === self::get_atum_control_status( $product );
+		return 'yes' === self::get_atum_control_status( $product );
 	}
 
 	/**
@@ -1756,9 +1758,40 @@ final class Helpers {
 
 		global $wpdb;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta where meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "';" ); // WPCS: unprepared SQL ok.
+		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . ' WHERE out_stock_threshold IS NOT NULL;' ); // WPCS: unprepared SQL ok.
 
 		return $rowcount > 0;
+	}
+
+	/**
+	 * Customize the WP_Query to handle ATUM product data
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $query_data
+	 * @param array $pieces
+	 *
+	 * @return array
+	 */
+	public static function atum_product_data_query_clauses( $query_data, $pieces ) {
+
+		if ( empty( $query_data ) ) {
+			return $pieces;
+		}
+
+		$atum_product_data_query = new ProductDataQuery( $query_data );
+		$sql                     = $atum_product_data_query->get_sql();
+
+		foreach ( [ 'join', 'where' ] as $key ) {
+
+			if ( ! empty( $sql[ $key ] ) ) {
+				$pieces[ $key ] .= ' ' . $sql[ $key ];
+			}
+
+		}
+
+		return $pieces;
+
 	}
 
 	/**
