@@ -314,13 +314,17 @@
 				width: inherit;
 			}
 			@media all and (max-width: $screen-xs) {
-				margin: 0;
 				width: 100%;
 				text-align: center;
+				display: inline-block;
+				margin: 0 0 10px;
 			}
 			.displaying-num {
 				@media all and (max-width: $screen-lg) {
 					display: inline-block;;
+				}
+				@media all and (max-width: $screen-xs) {
+					width: 100%;
 				}
 			}
 		}
@@ -348,7 +352,7 @@
 					display: none !important;
 				}
 			}
-			.overflow-opacity-effect-right, .overflow-opacity-effect-right {
+			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 				height: 50px;
 			}
 		}
@@ -380,10 +384,18 @@
 				margin: 0;
 				width: 100%;
 				text-align: center;
+				display: inline-block;
+				margin: 0 0 10px;
 			}
 			.displaying-num {
 				@media all and (max-width: $screen-lg) {
 					display: contents;
+				}
+				@media all and (max-width: $screen-xs) {
+					width: 100%;
+					display: inline-block;
+					position: inherit;
+					top: inherit;
 				}
 			}
 		}
@@ -411,7 +423,7 @@
 		-ms-overflow-style: -ms-autohiding-scrollbar;
 		-webkit-overflow-scrolling: touch;
 		white-space: nowrap;
-		width: 70%;
+		width: 62%;
 		float: left;
 		margin: 0 11px 0 0;
 		&::-webkit-scrollbar {
@@ -434,7 +446,7 @@
 			height: 65px;
 		}
 		.overflow-opacity-effect-right {
-			right: 30%;
+			right: 37%;
 			background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
 			background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
@@ -565,32 +577,38 @@
 			}
 		}
 		
+	}
+	
+	.reset-filters {
+		border-radius: 50%;
+		width: 25px;
+		height: 25px;
+		text-align: center;
+		border: none;
+		background-color: $primary;
+		color: $white;
+		padding: 2px 0 0;
+		cursor: pointer;
+		position: absolute;
+		top: 20px;
+		z-index: 999;
+		right: 36%;
+		@include transition(0.2s ease-in-out);
 		
+		@media screen and (max-width: $screen-lg) {
+			right: 15px;
+		}
 		
-		.reset-filters {
-			border-radius: 50%;
-			width: 25px;
-			height: 25px;
-			text-align: center;
-			border: none;
-			background-color: $primary;
-			color: $white;
-			padding: 2px 0 0;
-			cursor: pointer;
-			position: relative;
-			@include transition(0.2s ease-in-out);
-			
-			&:focus {
-				outline: none;
-			}
-			
-			&:hover {
-				background-color: darken($primary, 5%);
-			}
-			
-			i {
-				font-size: 18px;
-			}
+		&:focus {
+			outline: none;
+		}
+		
+		&:hover {
+			background-color: darken($primary, 5%);
+		}
+		
+		i {
+			font-size: 18px;
 		}
 	}
 	

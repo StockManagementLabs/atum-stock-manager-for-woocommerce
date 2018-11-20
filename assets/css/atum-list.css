@@ -3481,10 +3481,10 @@ input[type="button"].btn-block {
 
 .select2-dropdown {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  margin-top: 4px;
   background-color: #fff;
   border: 1px solid #adb5bd;
-  border-radius: 4px;
+  border-radius: 5px;
+  overflow: hidden;
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -3511,7 +3511,7 @@ input[type="button"].btn-block {
 .select2-results__options::-webkit-scrollbar {
   background-color: transparent;
   border: none;
-  width: 10px;
+  width: 7px;
 }
 
 .select2-results__options::-webkit-scrollbar-track {
@@ -3522,7 +3522,7 @@ input[type="button"].btn-block {
 .select2-results__options::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 5px;
-  background-color: #6c757d;
+  background-color: #adb5bd;
 }
 
 .select2-results__option {
@@ -3731,8 +3731,8 @@ input[type="button"].btn-block {
   font-family: atum-icon-font;
   content: "";
   visibility: visible;
-  position: absolute;
-  left: 7px;
+  position: relative;
+  left: -8px;
   font-size: 14px;
 }
 
@@ -4728,15 +4728,22 @@ input[type="button"].btn-block {
 
 @media all and (max-width: 480px) {
   .atum-list-wrapper .tablenav.top .tablenav-pages {
-    margin: 0;
     width: 100%;
     text-align: center;
+    display: inline-block;
+    margin: 0 0 10px;
   }
 }
 
 @media all and (max-width: 1200px) {
   .atum-list-wrapper .tablenav.top .tablenav-pages .displaying-num {
     display: inline-block;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .tablenav.top .tablenav-pages .displaying-num {
+    width: 100%;
   }
 }
 
@@ -4777,7 +4784,7 @@ input[type="button"].btn-block {
   }
 }
 
-.atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right, .atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right {
+.atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right, .atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-left {
   height: 50px;
 }
 
@@ -4814,12 +4821,23 @@ input[type="button"].btn-block {
     margin: 0;
     width: 100%;
     text-align: center;
+    display: inline-block;
+    margin: 0 0 10px;
   }
 }
 
 @media all and (max-width: 1200px) {
   .atum-list-wrapper .tablenav.bottom .tablenav-pages .displaying-num {
     display: contents;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .tablenav.bottom .tablenav-pages .displaying-num {
+    width: 100%;
+    display: inline-block;
+    position: inherit;
+    top: inherit;
   }
 }
 
@@ -4864,7 +4882,7 @@ input[type="button"].btn-block {
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
-  width: 70%;
+  width: 62%;
   float: left;
   margin: 0 11px 0 0;
   height: 70px;
@@ -4892,7 +4910,7 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-right {
-  right: 30%;
+  right: 37%;
   background: -webkit-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
   background: -o-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
   background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
@@ -5066,7 +5084,7 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
-.atum-list-wrapper .subsubsub .reset-filters {
+.atum-list-wrapper .reset-filters {
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -5076,21 +5094,30 @@ input[type="button"].btn-block {
   color: #fff;
   padding: 2px 0 0;
   cursor: pointer;
-  position: relative;
+  position: absolute;
+  top: 20px;
+  z-index: 999;
+  right: 36%;
   -webkit-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
 }
 
-.atum-list-wrapper .subsubsub .reset-filters:focus {
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .reset-filters {
+    right: 15px;
+  }
+}
+
+.atum-list-wrapper .reset-filters:focus {
   outline: none;
 }
 
-.atum-list-wrapper .subsubsub .reset-filters:hover {
+.atum-list-wrapper .reset-filters:hover {
   background-color: #00a3c2;
 }
 
-.atum-list-wrapper .subsubsub .reset-filters i {
+.atum-list-wrapper .reset-filters i {
   font-size: 18px;
 }
 

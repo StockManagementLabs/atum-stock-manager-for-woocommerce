@@ -39,8 +39,8 @@ defined( 'ABSPATH' ) || die;
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
+				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
 			</nav>
-
 			<div class="search-box">
 
 				<div class="input-group input-group-sm">

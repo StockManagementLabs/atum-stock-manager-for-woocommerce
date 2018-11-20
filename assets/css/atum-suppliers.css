@@ -103,10 +103,10 @@
 
 .select2-dropdown {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  margin-top: 4px;
   background-color: #fff;
   border: 1px solid #adb5bd;
-  border-radius: 4px;
+  border-radius: 5px;
+  overflow: hidden;
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -133,7 +133,7 @@
 .select2-results__options::-webkit-scrollbar {
   background-color: transparent;
   border: none;
-  width: 10px;
+  width: 7px;
 }
 
 .select2-results__options::-webkit-scrollbar-track {
@@ -144,7 +144,7 @@
 .select2-results__options::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 5px;
-  background-color: #6c757d;
+  background-color: #adb5bd;
 }
 
 .select2-results__option {
@@ -353,8 +353,8 @@
   font-family: atum-icon-font;
   content: "";
   visibility: visible;
-  position: absolute;
-  left: 7px;
+  position: relative;
+  left: -8px;
   font-size: 14px;
 }
 

@@ -1249,6 +1249,7 @@ $settings-xs-min:          568px !default;
 								height: 28px;
 								
 								.select2-search__field {
+									width: inherit!important;
 									@include placeholder($wp-gray-1);
 									@media all and (max-width: $settings-xs-min) {
 										width: 100% !important;
@@ -1896,11 +1897,12 @@ $settings-xs-min:          568px !default;
 					.tool-fields-from, .tool-fields-to, .tool-controls {
 						width: 100%;
 						.select2-container {
-							width: 200px !important;
-							// Mobile
-							@media all and (max-width: $settings-xs-min) {
-								width: 100% !important;
-							}
+							width: inherit !important;
+							//width: 200px !important;
+							//// Mobile
+							//@media all and (max-width: $settings-xs-min) {
+							//	width: 100% !important;
+							//}
 						}
 						.select2-selection__choice {
 							//height: 15px;
@@ -1944,7 +1946,7 @@ $settings-xs-min:          568px !default;
 		}
 		
 		.select2-container {
-			width: 350px !important;
+			//width: 350px !important;
 			// Tablet style
 			@media all and (max-width: $screen-sm-min) {
 				width: 80% !important;
@@ -2194,13 +2196,6 @@ $settings-xs-min:          568px !default;
 			.tool-fields-wrapper {
 				.repeatable-row {
 					flex-wrap: wrap;
-					.tool-fields-to {
-						.select2-selection__rendered {
-							.select2-selection__choice {
-								height: 15px;
-							}
-						}
-					}
 					div {
 						//width: 100%;
 						margin-right: 0 !important;
@@ -2213,6 +2208,7 @@ $settings-xs-min:          568px !default;
 }
 
 .select2-dropdown {
+	margin-top: 4px;
 	.select2-search {
 		display: none;
 	}

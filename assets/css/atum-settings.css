@@ -992,10 +992,10 @@ input[type="button"].btn-block {
 
 .select2-dropdown {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  margin-top: 4px;
   background-color: #fff;
   border: 1px solid #adb5bd;
-  border-radius: 4px;
+  border-radius: 5px;
+  overflow: hidden;
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -1022,7 +1022,7 @@ input[type="button"].btn-block {
 .select2-results__options::-webkit-scrollbar {
   background-color: transparent;
   border: none;
-  width: 10px;
+  width: 7px;
 }
 
 .select2-results__options::-webkit-scrollbar-track {
@@ -1033,7 +1033,7 @@ input[type="button"].btn-block {
 .select2-results__options::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 5px;
-  background-color: #6c757d;
+  background-color: #adb5bd;
 }
 
 .select2-results__option {
@@ -1242,8 +1242,8 @@ input[type="button"].btn-block {
   font-family: atum-icon-font;
   content: "";
   visibility: visible;
-  position: absolute;
-  left: 7px;
+  position: relative;
+  left: -8px;
   font-size: 14px;
 }
 
@@ -4733,6 +4733,10 @@ input[type="button"].btn-block {
   height: 28px;
 }
 
+#atum-settings .section-title #atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field {
+  width: inherit !important;
+}
+
 #atum-settings .section-title #atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-moz-placeholder {
   color: #999;
   opacity: 1;
@@ -5414,13 +5418,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-container {
-  width: 200px !important;
-}
-
-@media all and (max-width: 568px) {
-  #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-container, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-container {
-    width: 100% !important;
-  }
+  width: inherit !important;
 }
 
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-selection__choice .select2-selection__choice__remove {
@@ -5452,10 +5450,6 @@ input[type="button"].btn-block {
 
 #atum-settings .section-fields .script-runner button {
   border-radius: 4px;
-}
-
-#atum-settings .section-fields .select2-container {
-  width: 350px !important;
 }
 
 @media all and (max-width: 768px) {
@@ -5693,13 +5687,14 @@ input[type="button"].btn-block {
   #atum-settings .form-table .tool-fields-wrapper .repeatable-row {
     flex-wrap: wrap;
   }
-  #atum-settings .form-table .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__rendered .select2-selection__choice {
-    height: 15px;
-  }
   #atum-settings .form-table .tool-fields-wrapper .repeatable-row div {
     margin-right: 0 !important;
     margin-top: 11px;
   }
+}
+
+.select2-dropdown {
+  margin-top: 4px;
 }
 
 .select2-dropdown .select2-search {

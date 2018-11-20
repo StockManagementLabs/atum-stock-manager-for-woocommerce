@@ -1642,9 +1642,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			echo implode( "</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
 			?>
 
-			<li>
-				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
-			</li>
+<!--			<li>-->
+<!--				<button type="button" class="reset-filters hidden tips" data-tip="--><?php //esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?><!--"><i class="dashicons dashicons-update"></i></button>-->
+<!--			</li>-->
 		</ul>
 		<?php
 
