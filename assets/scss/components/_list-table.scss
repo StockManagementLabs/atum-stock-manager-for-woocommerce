@@ -128,7 +128,7 @@
 				color: white;
 			}
 			&:hover {
-				opacity: 0.3;
+				background-color: rgba($blue, 0.6);
 			}
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -310,6 +310,9 @@
 			text-align: right;
 			z-index: 999;
 			width: 300px;
+			&.one-page {
+				width: inherit;
+			}
 			@media all and (max-width: $screen-xs) {
 				margin: 0;
 				width: 100%;
@@ -373,7 +376,6 @@
 			margin-left: auto;
 			text-align: right;
 			z-index: 999;
-			width: 300px;
 			@media all and (max-width: $screen-xs) {
 				margin: 0;
 				width: 100%;
@@ -640,9 +642,8 @@
 		}
 		
 		#select2-supplier-container {
-			width: 60%;
+			padding: 0 30px 0 16px;
 			.select2-selection__clear {
-				content: "wwww";
 				visibility: hidden;
 				&:after {
 					font-family: atum-icon-font;

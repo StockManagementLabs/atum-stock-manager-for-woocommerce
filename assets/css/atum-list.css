@@ -4510,7 +4510,7 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .sticky-columns-button-container button:hover {
-  opacity: 0.3;
+  background-color: rgba(0, 184, 219, 0.6);
 }
 
 @media all and (max-width: 480px) {
@@ -4722,6 +4722,10 @@ input[type="button"].btn-block {
   width: 300px;
 }
 
+.atum-list-wrapper .tablenav.top .tablenav-pages.one-page {
+  width: inherit;
+}
+
 @media all and (max-width: 480px) {
   .atum-list-wrapper .tablenav.top .tablenav-pages {
     margin: 0;
@@ -4803,7 +4807,6 @@ input[type="button"].btn-block {
   margin-left: auto;
   text-align: right;
   z-index: 999;
-  width: 300px;
 }
 
 @media all and (max-width: 480px) {
@@ -5150,11 +5153,10 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .actions #select2-supplier-container {
-  width: 60%;
+  padding: 0 30px 0 16px;
 }
 
 .atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear {
-  content: "wwww";
   visibility: hidden;
 }
 

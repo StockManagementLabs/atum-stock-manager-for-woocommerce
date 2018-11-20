@@ -2854,7 +2854,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
-			<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll">
+			<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll"
+				style="<?php echo $this->_pagination_args['total_pages'] <= 1 ? 'width: 90%!important' : ''; ?>">
 				<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 				<div class="alignleft actions bulkactions">
 					<?php $this->bulk_actions( $which ); ?>
@@ -2863,7 +2864,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			endif;
 
 			$this->extra_tablenav( $which ); ?>
-				<div class="overflow-opacity-effect-right" >
+				<div class="overflow-opacity-effect-right" style="<?php echo $this->_pagination_args['total_pages'] <= 1 ? 'right: 10%!important' : ''; ?>">
 
 				</div>
 				<div class="overflow-opacity-effect-left" >
