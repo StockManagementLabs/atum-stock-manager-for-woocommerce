@@ -583,6 +583,20 @@
 			}
 		}
 		
+		#select2-supplier-container {
+			width: 60%;
+			.select2-selection__clear {
+				content: "wwww";
+				visibility: hidden;
+				&:after {
+					font-family: atum-icon-font;
+					content: $atmi-cross;
+					visibility: visible;
+					line-height: 2;
+				}
+			}
+		}
+		
 		input[type=submit] {
 			line-height: 0;
 			text-transform: uppercase;

@@ -321,14 +321,18 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-	background-color: $gray-200;
-	border: 1px solid $gray-500;
+	background-color: $gray-500;
+	border: none;
 	border-radius: 4px;
 	cursor: default;
 	float: left;
-	margin-right: 5px;
-	margin-top: 5px;
+	margin: 4px 5px 0 0;
 	padding: 0 5px;
+	height: 24px;
+	line-height: 24px;
+	overflow: hidden;
+	margin: 4px 5px 0 0;
+	color: $white;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
@@ -336,7 +340,16 @@
 	cursor: pointer;
 	display: inline-block;
 	font-weight: bold;
-	margin-right: 2px;
+	margin-right: 3px;
+	visibility: hidden;
+	&:after {
+		font-family: atum-icon-font;
+		content: $atmi-cross;
+		visibility: visible;
+		position: absolute;
+		left: 7px;
+		font-size: 14px;
+	}
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {

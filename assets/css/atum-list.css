@@ -3788,14 +3788,18 @@ input[type="button"].btn-block {
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #e9ecef;
-  border: 1px solid #adb5bd;
+  background-color: #adb5bd;
+  border: none;
   border-radius: 4px;
   cursor: default;
   float: left;
-  margin-right: 5px;
-  margin-top: 5px;
+  margin: 4px 5px 0 0;
   padding: 0 5px;
+  height: 24px;
+  line-height: 24px;
+  overflow: hidden;
+  margin: 4px 5px 0 0;
+  color: #fff;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
@@ -3803,7 +3807,17 @@ input[type="button"].btn-block {
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
-  margin-right: 2px;
+  margin-right: 3px;
+  visibility: hidden;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  position: absolute;
+  left: 7px;
+  font-size: 14px;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
@@ -5140,6 +5154,22 @@ input[type="button"].btn-block {
     width: 100% !important;
     margin: 0;
   }
+}
+
+.atum-list-wrapper .actions #select2-supplier-container {
+  width: 60%;
+}
+
+.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear {
+  content: "wwww";
+  visibility: hidden;
+}
+
+.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  line-height: 2;
 }
 
 .atum-list-wrapper .actions input[type=submit] {
