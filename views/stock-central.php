@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) || die;
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
 		<div class="stock-central-header">
-			<nav id="stock_central_nav" class="stock-central-nav dragscroll">
+			<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
 				<?php $list->views(); ?>
 				<div class="overflow-opacity-effect-right" >
 
@@ -39,8 +39,8 @@ defined( 'ABSPATH' ) || die;
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
+				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
 			</nav>
-
 			<div class="search-box">
 
 				<div class="input-group input-group-sm">

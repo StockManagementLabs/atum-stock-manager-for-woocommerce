@@ -1,6 +1,6 @@
 .atum-list-wrapper {
 	.displaying-num {
-		display: none;
+		color: $gray-600;
 	}
 	.pagination-links {
 		color: $gray-600;
@@ -42,7 +42,6 @@
 			}
 		}
 		.paging-input, .table-paging {
-			margin: 0 10px;
 			@media all and (max-width: 782px) {
 				margin: 0;
 			}
