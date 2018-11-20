@@ -1612,8 +1612,16 @@ final class Ajax {
 				$product = $atum_order_item->get_product();
 
 				if ( $product && $product->exists() && $product->managing_stock() && isset( $quantities[ $item_id ] ) && $quantities[ $item_id ] > 0 ) {
-
-					$old_stock    = $product->get_stock_quantity();
+					
+					$old_stock = $product->get_stock_quantity();
+					
+					// if stock is null but WC is managing stock.
+					if ( is_null( $old_stock ) ) {
+						$old_stock = 0;
+						wc_update_product_stock( $product, $old_stock );
+						
+					}
+					
 					$stock_change = apply_filters( 'atum/ajax/restore_atum_order_stock_quantity', $quantities[ $item_id ], $item_id );
 					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
 					$item_name    = $product->get_sku() ? $product->get_sku() : $product->get_id();
@@ -1962,7 +1970,7 @@ final class Ajax {
 		}
 
 		$option = esc_attr( $_POST['option'] );
-
+		
 		if ( in_array( $option, [ 'manage', 'unmanage' ] ) ) {
 			$manage_status = 'manage' === $option ? 'yes' : 'no';
 			$this->change_status_meta( '_manage_stock', $manage_status );
@@ -2071,7 +2079,7 @@ final class Ajax {
 			$meta_key,
 			$status
 		) );
-
+	
 		if ( FALSE !== $insert_success && FALSE !== $update_success ) {
 			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
 		}
