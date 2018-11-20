@@ -5358,6 +5358,10 @@ input[type="button"].btn-block {
   height: 28px;
 }
 
+#atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field {
+  width: inherit !important;
+}
+
 #atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-moz-placeholder {
   color: #999;
   opacity: 1;

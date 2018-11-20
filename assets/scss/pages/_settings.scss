@@ -1249,7 +1249,7 @@ $settings-xs-min:          568px !default;
 								height: 28px;
 								
 								.select2-search__field {
-									width: inherit!important;
+									width: inherit !important;
 									@include placeholder($wp-gray-1);
 									@media all and (max-width: $settings-xs-min) {
 										width: 100% !important;
@@ -1859,6 +1859,7 @@ $settings-xs-min:          568px !default;
 						height: 28px;
 						
 						.select2-search__field {
+							width: inherit !important;
 							@include placeholder($wp-gray-1);
 							@media all and (max-width: $settings-xs-min) {
 								width: 100% !important;
