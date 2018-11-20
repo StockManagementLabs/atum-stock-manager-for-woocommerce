@@ -3272,23 +3272,6 @@ input[type="button"].btn-block {
   position: relative;
 }
 
-.dropdown-toggle::after {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 0.3145em;
-  vertical-align: 0.3145em;
-  content: "";
-  border-top: 0.37em solid;
-  border-right: 0.37em solid transparent;
-  border-bottom: 0;
-  border-left: 0.37em solid transparent;
-}
-
-.dropdown-toggle:empty::after {
-  margin-left: 0;
-}
-
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -3321,46 +3304,12 @@ input[type="button"].btn-block {
   margin-bottom: 0.125rem;
 }
 
-.dropup .dropdown-toggle::after {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 0.3145em;
-  vertical-align: 0.3145em;
-  content: "";
-  border-top: 0;
-  border-right: 0.37em solid transparent;
-  border-bottom: 0.37em solid;
-  border-left: 0.37em solid transparent;
-}
-
-.dropup .dropdown-toggle:empty::after {
-  margin-left: 0;
-}
-
 .dropright .dropdown-menu {
   top: 0;
   right: auto;
   left: 100%;
   margin-top: 0;
   margin-left: 0.125rem;
-}
-
-.dropright .dropdown-toggle::after {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 0.3145em;
-  vertical-align: 0.3145em;
-  content: "";
-  border-top: 0.37em solid transparent;
-  border-right: 0;
-  border-bottom: 0.37em solid transparent;
-  border-left: 0.37em solid;
-}
-
-.dropright .dropdown-toggle:empty::after {
-  margin-left: 0;
 }
 
 .dropright .dropdown-toggle::after {
@@ -3373,35 +3322,6 @@ input[type="button"].btn-block {
   left: auto;
   margin-top: 0;
   margin-right: 0.125rem;
-}
-
-.dropleft .dropdown-toggle::after {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 0.3145em;
-  vertical-align: 0.3145em;
-  content: "";
-}
-
-.dropleft .dropdown-toggle::after {
-  display: none;
-}
-
-.dropleft .dropdown-toggle::before {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-right: 0.3145em;
-  vertical-align: 0.3145em;
-  content: "";
-  border-top: 0.37em solid transparent;
-  border-right: 0.37em solid;
-  border-bottom: 0.37em solid transparent;
-}
-
-.dropleft .dropdown-toggle:empty::after {
-  margin-left: 0;
 }
 
 .dropleft .dropdown-toggle::before {
@@ -3582,8 +3502,8 @@ input[type="button"].btn-block {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
 }
 
-.select2-results .select2-results__option--highlighted {
-  background-color: #f8f9fa;
+.select2-results .select2-results__option {
+  padding: 8px 20px;
 }
 
 .select2-results__options {
@@ -3636,9 +3556,7 @@ input[type="button"].btn-block {
 }
 
 .select2-container--open .select2-dropdown--below {
-  border-top: none;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border: none;
 }
 
 .select2-search--dropdown {
@@ -3790,14 +3708,18 @@ input[type="button"].btn-block {
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #e9ecef;
-  border: 1px solid #adb5bd;
+  background-color: #adb5bd;
+  border: none;
   border-radius: 4px;
   cursor: default;
   float: left;
-  margin-right: 5px;
-  margin-top: 5px;
+  margin: 4px 5px 0 0;
   padding: 0 5px;
+  height: 24px;
+  line-height: 24px;
+  overflow: hidden;
+  margin: 4px 5px 0 0;
+  color: #fff;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
@@ -3805,7 +3727,17 @@ input[type="button"].btn-block {
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
-  margin-right: 2px;
+  margin-right: 3px;
+  visibility: hidden;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  position: absolute;
+  left: 7px;
+  font-size: 14px;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
@@ -3862,11 +3794,6 @@ input[type="button"].btn-block {
   -webkit-appearance: textfield;
 }
 
-.select2-container--default .select2-results > .select2-results__options {
-  max-height: inherit;
-  overflow-y: auto;
-}
-
 .select2-container--default .select2-results__option[role=group] {
   padding: 0;
 }
@@ -3876,6 +3803,11 @@ input[type="button"].btn-block {
 }
 
 .select2-container--default .select2-results__option[aria-selected=true] {
+  background-color: #dbf9ff;
+  color: #00B8DB;
+}
+
+.select2-container--default .select2-results__option[data-selected=true] {
   background-color: #dbf9ff;
   color: #00B8DB;
 }
@@ -3913,9 +3845,9 @@ input[type="button"].btn-block {
   padding-left: 6em;
 }
 
-.select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #dbf9ff;
-  color: #00B8DB;
+.select2-container--default .select2-results__option--highlighted[aria-selected=true] {
+  background-color: #f8f9fa;
+  color: #6c757d;
 }
 
 .select2-container--default .select2-results__group {
@@ -4151,6 +4083,11 @@ input[type="button"].btn-block {
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
   background-color: #00B8DB;
   color: #fff;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #f8f9fa;
+  color: #6c757d;
 }
 
 .select2-container--classic .select2-results__group {
@@ -4556,6 +4493,10 @@ input[type="button"].btn-block {
   background-color: #fff;
   color: #6c757d;
   cursor: pointer;
+  -webkit-transition: all 0.20s;
+  /* Safari */
+  transition: all 0.20s;
+  line-height: 2;
 }
 
 .atum-list-wrapper .sticky-columns-button-container button:first-child {
@@ -4567,9 +4508,13 @@ input[type="button"].btn-block {
   outline: 0;
 }
 
-.atum-list-wrapper .sticky-columns-button-container button.active {
+.atum-list-wrapper .sticky-columns-button-container button.active, .atum-list-wrapper .sticky-columns-button-container button:hover {
   background-color: #00B8DB;
   color: white;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button:hover {
+  opacity: 0.3;
 }
 
 @media all and (max-width: 480px) {
@@ -4679,7 +4624,6 @@ input[type="button"].btn-block {
   border-radius: 5px;
   border: solid 1px #e9ecef;
   background-color: #fff;
-  width: 270px;
   flex-wrap: nowrap;
 }
 
@@ -4704,7 +4648,7 @@ input[type="button"].btn-block {
   vertical-align: middle;
   font-family: Linearicons;
   content: "\e874";
-  display: contents;
+  display: inline;
   font-size: 10px;
 }
 
@@ -5129,6 +5073,22 @@ input[type="button"].btn-block {
     width: 100% !important;
     margin: 0;
   }
+}
+
+.atum-list-wrapper .actions #select2-supplier-container {
+  width: 60%;
+}
+
+.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear {
+  content: "wwww";
+  visibility: hidden;
+}
+
+.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  line-height: 2;
 }
 
 .atum-list-wrapper .actions input[type=submit] {
@@ -5678,7 +5638,7 @@ input[type="button"].btn-block {
   color: #fff;
   border-radius: 5px;
   background-color: #6c757d;
-  padding: 2px;
+  padding: 4px;
 }
 
 .atum-list-table tr.totals td span.danger, .atum-list-table tr.totals th span.danger, .floatThead-container tr.totals td span.danger, .floatThead-container tr.totals th span.danger, .inbound-stock-list tr.totals td span.danger, .inbound-stock-list tr.totals th span.danger {
@@ -5792,7 +5752,7 @@ input[type="button"].btn-block {
   min-width: 70px;
 }
 
-.atum-list-table td._supplier, .atum-list-table td.column-_supplier_sku, .atum-list-table td.column-calc_type, .atum-list-table td.stock-counters, .atum-list-table td.stock-negatives, .atum-list-table td.stock-selling-manager, .atum-list-table td.multi-inventory, .atum-list-table td.calc_mi_status, .atum-list-table th._supplier, .atum-list-table th.column-_supplier_sku, .atum-list-table th.column-calc_type, .atum-list-table th.stock-counters, .atum-list-table th.stock-negatives, .atum-list-table th.stock-selling-manager, .atum-list-table th.multi-inventory, .atum-list-table th.calc_mi_status, .floatThead-container td._supplier, .floatThead-container td.column-_supplier_sku, .floatThead-container td.column-calc_type, .floatThead-container td.stock-counters, .floatThead-container td.stock-negatives, .floatThead-container td.stock-selling-manager, .floatThead-container td.multi-inventory, .floatThead-container td.calc_mi_status, .floatThead-container th._supplier, .floatThead-container th.column-_supplier_sku, .floatThead-container th.column-calc_type, .floatThead-container th.stock-counters, .floatThead-container th.stock-negatives, .floatThead-container th.stock-selling-manager, .floatThead-container th.multi-inventory, .floatThead-container th.calc_mi_status, .inbound-stock-list td._supplier, .inbound-stock-list td.column-_supplier_sku, .inbound-stock-list td.column-calc_type, .inbound-stock-list td.stock-counters, .inbound-stock-list td.stock-negatives, .inbound-stock-list td.stock-selling-manager, .inbound-stock-list td.multi-inventory, .inbound-stock-list td.calc_mi_status, .inbound-stock-list th._supplier, .inbound-stock-list th.column-_supplier_sku, .inbound-stock-list th.column-calc_type, .inbound-stock-list th.stock-counters, .inbound-stock-list th.stock-negatives, .inbound-stock-list th.stock-selling-manager, .inbound-stock-list th.multi-inventory, .inbound-stock-list th.calc_mi_status {
+.atum-list-table td._supplier, .atum-list-table td.column-_supplier_sku, .atum-list-table td.column-calc_type, .atum-list-table td.stock-counters, .atum-list-table td.stock-negatives, .atum-list-table td.calc_sales_last_ndays, .atum-list-table td.calc_will_last, .atum-list-table td.calc_stock_out_days, .atum-list-table td.calc_lost_sales, .atum-list-table td.multi-inventory, .atum-list-table th._supplier, .atum-list-table th.column-_supplier_sku, .atum-list-table th.column-calc_type, .atum-list-table th.stock-counters, .atum-list-table th.stock-negatives, .atum-list-table th.calc_sales_last_ndays, .atum-list-table th.calc_will_last, .atum-list-table th.calc_stock_out_days, .atum-list-table th.calc_lost_sales, .atum-list-table th.multi-inventory, .floatThead-container td._supplier, .floatThead-container td.column-_supplier_sku, .floatThead-container td.column-calc_type, .floatThead-container td.stock-counters, .floatThead-container td.stock-negatives, .floatThead-container td.calc_sales_last_ndays, .floatThead-container td.calc_will_last, .floatThead-container td.calc_stock_out_days, .floatThead-container td.calc_lost_sales, .floatThead-container td.multi-inventory, .floatThead-container th._supplier, .floatThead-container th.column-_supplier_sku, .floatThead-container th.column-calc_type, .floatThead-container th.stock-counters, .floatThead-container th.stock-negatives, .floatThead-container th.calc_sales_last_ndays, .floatThead-container th.calc_will_last, .floatThead-container th.calc_stock_out_days, .floatThead-container th.calc_lost_sales, .floatThead-container th.multi-inventory, .inbound-stock-list td._supplier, .inbound-stock-list td.column-_supplier_sku, .inbound-stock-list td.column-calc_type, .inbound-stock-list td.stock-counters, .inbound-stock-list td.stock-negatives, .inbound-stock-list td.calc_sales_last_ndays, .inbound-stock-list td.calc_will_last, .inbound-stock-list td.calc_stock_out_days, .inbound-stock-list td.calc_lost_sales, .inbound-stock-list td.multi-inventory, .inbound-stock-list th._supplier, .inbound-stock-list th.column-_supplier_sku, .inbound-stock-list th.column-calc_type, .inbound-stock-list th.stock-counters, .inbound-stock-list th.stock-negatives, .inbound-stock-list th.calc_sales_last_ndays, .inbound-stock-list th.calc_will_last, .inbound-stock-list th.calc_stock_out_days, .inbound-stock-list th.calc_lost_sales, .inbound-stock-list th.multi-inventory {
   color: #6c757d;
 }
 

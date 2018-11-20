@@ -112,6 +112,10 @@
 			background-color: $white;
 			color: $gray-600;
 			cursor: pointer;
+			-webkit-transition: all 0.20s; /* Safari */
+			transition: all 0.20s;
+			line-height: 2;
+			
 			&:first-child {
 				margin-left: 9px;
 				margin-right: 5px;
@@ -119,9 +123,12 @@
 			&:focus {
 				outline: 0;
 			}
-			&.active {
+			&.active, &:hover {
 				background-color: $blue;
 				color: white;
+			}
+			&:hover {
+				opacity: 0.3;
 			}
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -212,7 +219,6 @@
 			border-radius: 5px;
 			border: solid 1px $gray-200;
 			background-color: $white;
-			width: 270px;
 			flex-wrap: nowrap;
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
@@ -228,9 +234,10 @@
 				vertical-align: middle;
 				font-family: Linearicons;
 				content: "\e874";
-				display: contents;
+				display: inline;
 				font-size: 10px;
 			}
+			
 			border: none;
 			background-color: $gray-100;
 			font-size: 15px;
@@ -573,6 +580,20 @@
 			@media screen and (max-width: $screen-xs) {
 				width: 100% !important;
 				margin: 0;
+			}
+		}
+		
+		#select2-supplier-container {
+			width: 60%;
+			.select2-selection__clear {
+				content: "wwww";
+				visibility: hidden;
+				&:after {
+					font-family: atum-icon-font;
+					content: $atmi-cross;
+					visibility: visible;
+					line-height: 2;
+				}
 			}
 		}
 		
@@ -1122,7 +1143,7 @@
 					color: $white;
 					border-radius: 5px;
 					background-color: $gray-600;
-					padding: 2px;
+					padding: 4px;
 					
 					&.danger {
 						background-color: $danger;
@@ -1242,7 +1263,7 @@
 			min-width: 70px;
 		}
 		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.stock-selling-manager, &.multi-inventory, &.calc_mi_status {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days, &.calc_lost_sales, &.multi-inventory {
 			color: $gray-600;
 		}
 		
