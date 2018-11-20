@@ -219,7 +219,6 @@
 			border-radius: 5px;
 			border: solid 1px $gray-200;
 			background-color: $white;
-			width: 270px;
 			flex-wrap: nowrap;
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
@@ -235,9 +234,10 @@
 				vertical-align: middle;
 				font-family: Linearicons;
 				content: "\e874";
-				display: contents;
+				display: inline;
 				font-size: 10px;
 			}
+			
 			border: none;
 			background-color: $gray-100;
 			font-size: 15px;
@@ -1263,7 +1263,7 @@
 			min-width: 70px;
 		}
 		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.stock-selling-manager, &.multi-inventory {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days, &.calc_lost_sales, &.multi-inventory {
 			color: $gray-600;
 		}
 		
