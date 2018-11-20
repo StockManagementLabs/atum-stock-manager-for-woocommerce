@@ -3161,7 +3161,7 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .displaying-num {
-  display: none;
+  color: #6c757d;
 }
 
 .atum-list-wrapper .pagination-links {
@@ -3214,10 +3214,6 @@ input[type="button"].btn-block {
   .atum-list-wrapper .pagination-links .tablenav-current-page {
     padding: 8px 15px 11px;
   }
-}
-
-.atum-list-wrapper .pagination-links .paging-input, .atum-list-wrapper .pagination-links .table-paging {
-  margin: 0 10px;
 }
 
 @media all and (max-width: 782px) {
@@ -4708,20 +4704,77 @@ input[type="button"].btn-block {
   align-items: center;
   justify-content: left;
   display: flex;
-  padding: 10px 11px;
+  padding: 0 11px;
   margin: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .tablenav.top {
+    flex-wrap: wrap;
+  }
 }
 
 .atum-list-wrapper .tablenav.top .tablenav-pages {
   margin-left: auto;
+  text-align: right;
+  z-index: 999;
+  width: 300px;
 }
 
 @media all and (max-width: 480px) {
   .atum-list-wrapper .tablenav.top .tablenav-pages {
     margin: 0;
     width: 100%;
+    text-align: center;
   }
+}
+
+@media all and (max-width: 1200px) {
+  .atum-list-wrapper .tablenav.top .tablenav-pages .displaying-num {
+    display: inline-block;
+  }
+}
+
+.atum-list-wrapper .tablenav.top .nav-with-scroll-effect {
+  width: 70%;
+  height: 52px;
+  justify-content: start;
+}
+
+.atum-list-wrapper .tablenav.top .nav-with-scroll-effect .actions {
+  overflow: initial;
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .tablenav.top .nav-with-scroll-effect {
+    width: 100%;
+    display: contents;
+    white-space: normal;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .tablenav.top .nav-with-scroll-effect {
+    right: 63%;
+    width: inherit;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right {
+    right: 30%;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right {
+    display: none !important;
+  }
+}
+
+.atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right, .atum-list-wrapper .tablenav.top .nav-with-scroll-effect .overflow-opacity-effect-right {
+  height: 50px;
 }
 
 .atum-list-wrapper .tablenav {
@@ -4733,7 +4786,7 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .tablenav #table-paging {
-  margin-left: 10px;
+  margin-left: 0;
 }
 
 @media all and (max-width: 782px) {
@@ -4744,6 +4797,27 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .tablenav.bottom {
   margin: 10px 11px 0;
+}
+
+.atum-list-wrapper .tablenav.bottom .tablenav-pages {
+  margin-left: auto;
+  text-align: right;
+  z-index: 999;
+  width: 300px;
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .tablenav.bottom .tablenav-pages {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media all and (max-width: 1200px) {
+  .atum-list-wrapper .tablenav.bottom .tablenav-pages .displaying-num {
+    display: contents;
+  }
 }
 
 .atum-list-wrapper .stock-central-header {
@@ -4766,7 +4840,7 @@ input[type="button"].btn-block {
   }
 }
 
-.atum-list-wrapper .stock-central-nav {
+.atum-list-wrapper .nav-with-scroll-effect {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -4793,28 +4867,28 @@ input[type="button"].btn-block {
   height: 70px;
 }
 
-.atum-list-wrapper .stock-central-nav::-webkit-scrollbar {
+.atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
   display: none;
 }
 
 @media screen and (max-width: 1200px) {
-  .atum-list-wrapper .stock-central-nav {
+  .atum-list-wrapper .nav-with-scroll-effect {
     width: 100%;
   }
 }
 
-.atum-list-wrapper .stock-central-nav .subsubsub {
+.atum-list-wrapper .nav-with-scroll-effect .subsubsub {
   margin: 0;
 }
 
-.atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right, .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-left {
+.atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-right, .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-left {
   width: 200px;
   position: absolute;
   z-index: 999;
   height: 65px;
 }
 
-.atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right {
+.atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-right {
   right: 30%;
   background: -webkit-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
   background: -o-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
@@ -4823,12 +4897,12 @@ input[type="button"].btn-block {
 }
 
 @media screen and (max-width: 1200px) {
-  .atum-list-wrapper .stock-central-nav .overflow-opacity-effect-right {
+  .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-right {
     right: 0;
   }
 }
 
-.atum-list-wrapper .stock-central-nav .overflow-opacity-effect-left {
+.atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-left {
   display: none;
   left: 0;
   background: -webkit-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
