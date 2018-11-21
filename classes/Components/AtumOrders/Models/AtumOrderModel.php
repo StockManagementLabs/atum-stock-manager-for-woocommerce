@@ -924,6 +924,7 @@ abstract class AtumOrderModel {
 		}
 		
 		$this->set_status( $new_status );
+		$this->save();
 		
 	}
 
