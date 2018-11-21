@@ -334,6 +334,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] ); // WPCS: CSRF ok.
 		$this->query_filters = $this->get_filters_query_string();
 
+		// Filter the table data results to show specific produt types only.
+		$this->set_product_types_query_data();
+
 		$args = wp_parse_args( $args, array(
 			'show_cb'         => FALSE,
 			'show_controlled' => TRUE,
@@ -1262,19 +1265,19 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'instock':
 					$classes .= ' cell-green';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
+					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
 					break;
 
 				case 'outofstock':
 					$classes .= ' cell-red';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
+					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
 					break;
 
 				case 'onbackorder':
 					$classes .= ' cell-yellow';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
+					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
 					break;
 			}
 
@@ -1804,22 +1807,23 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$type = esc_attr( $_REQUEST['product_type'] );
 
-			foreach ( $this->taxonomies as $index => $taxonomy ) {
+			foreach ( $this->wc_query_data as $index => $query_arg ) {
 
-				if ( 'product_type' === $taxonomy['taxonomy'] ) {
+				if ( isset( $query_arg['key'] ) && 'type' === $query_arg['key'] ) {
 
 					if ( in_array( $type, [ 'downloadable', 'virtual' ] ) ) {
 
-						$this->taxonomies[ $index ]['terms'] = 'simple';
+						$this->wc_query_data[ $index ]['value'] = 'simple';
 
-						$this->extra_meta = array(
-							'key'   => "_$type",
-							'value' => 'yes',
+						$this->wc_query_data[] = array(
+							'key'   => $type,
+							'value' => 1,
+							'type'  => 'NUMERIC',
 						);
 
 					}
 					else {
-						$this->taxonomies[ $index ]['terms'] = $type;
+						$this->wc_query_data[ $index ]['value'] = $type;
 					}
 
 					break;
@@ -1880,6 +1884,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
 
 				// All the meta key based columns are numeric except the SKU.
+				// TODO: ORDERBY WITH NEW TABLES.
 				if ( '_sku' === $_REQUEST['orderby'] ) {
 					$args['orderby'] = 'meta_value';
 				}
@@ -1969,9 +1974,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Setup the WP query.
 			global $wp_query;
 
-			// Pass through the ATUM query data filter.
+			// Pass through the ATUM query data and WC query data filters.
+			add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( $args );
+			remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
 			$posts       = $wp_query->posts;
@@ -2036,6 +2043,39 @@ abstract class AtumListTable extends \WP_List_Table {
 						'type'  => 'NUMERIC',
 					),
 				),
+			);
+
+		}
+
+	}
+
+	/**
+	 * Filter the list table data to show compatible product types only
+	 *
+	 * @since 1.5.0
+	 */
+	protected function set_product_types_query_data() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy way
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+
+			$this->taxonomies[] = array(
+				'taxonomy' => 'product_type',
+				'field'    => 'slug',
+				'terms'    => Globals::get_product_types(),
+			);
+
+		}
+		else {
+
+			$this->wc_query_data[] = array(
+				'key'   => 'type',
+				'value' => Globals::get_product_types(),
 			);
 
 		}
@@ -2335,13 +2375,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				'post__in'       => $products,
 			);
 
-			$this->wc_query_data = array(
-				array(
-					'key'     => 'stock_quantity',
-					'value'   => 0,
-					'type'    => 'NUMERIC',
-					'compare' => '>',
-				),
+			$temp_wc_query_data = $this->wc_query_data;
+
+			$this->wc_query_data[] = array(
+				'key'     => 'stock_quantity',
+				'value'   => 0,
+				'type'    => 'NUMERIC',
+				'compare' => '>',
 			);
 
 			$in_stock_transient = Helpers::get_transient_identifier( $in_stock_args, 'list_table_in_stock' );
@@ -2358,7 +2398,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			$products_in_stock = $products_in_stock->posts;
+			$products_in_stock   = $products_in_stock->posts;
+			$this->wc_query_data = $temp_wc_query_data; // Restore the original value.
 
 			$this->id_views['in_stock']          = $products_in_stock;
 			$this->count_views['count_in_stock'] = count( $products_in_stock );
@@ -2385,13 +2426,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				'post__in'       => $products_not_stock,
 			);
 
-			$this->wc_query_data = array(
-				array(
-					'key'     => 'stock_quantity',
-					'value'   => 0,
-					'type'    => 'numeric',
-					'compare' => '<=',
-				),
+			$temp_wc_query_data = $this->wc_query_data;
+
+			$this->wc_query_data[] = array(
+				'key'     => 'stock_quantity',
+				'value'   => 0,
+				'type'    => 'numeric',
+				'compare' => '<=',
 			);
 
 			$back_order_transient = Helpers::get_transient_identifier( $back_order_args, 'list_table_back_order' );
@@ -2409,6 +2450,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$products_back_order = $products_back_order->posts;
+			$this->wc_query_data = $temp_wc_query_data;
 
 			$this->id_views['back_order']          = $products_back_order;
 			$this->count_views['count_back_order'] = count( $products_back_order );
@@ -2801,23 +2843,27 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
-			<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll"
-				style="<?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'width: 90%!important' : ''; ?>">
-				<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
-				<div class="alignleft actions bulkactions">
-					<?php $this->bulk_actions( $which ); ?>
-				</div>
-					<?php
-			endif;
+			<div id="scroll-filters_container" class="filters-containe-box <?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'not-pagination' : ''; ?> ">
+				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll">
+					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
+						<div class="alignleft actions bulkactions">
+							<?php $this->bulk_actions( $which ); ?>
+						</div>
+						<?php
+					endif;
 
-			$this->extra_tablenav( $which ); ?>
-				<div class="overflow-opacity-effect-right" style="<?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'right: 10%!important' : ''; ?>">
+					$this->extra_tablenav( $which ); ?>
+				</div>
+				<?php if ( 'top' === $which ) : ?>
+				<div class="overflow-opacity-effect-right">
 
 				</div>
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
+				<?php endif; ?>
 			</div>
+
 			<?php
 
 			// Firefox fix to not preserve the pagination input value when reloading the page.

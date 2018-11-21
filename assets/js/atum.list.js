@@ -578,10 +578,11 @@
 				if (!self.$atumList.find('.check-column input:checked').length) {
 					
 					swal({
-						title            : self.settings.noItemsSelected,
-						text             : self.settings.selectItems,
-						type             : 'info',
-						confirmButtonText: self.settings.ok
+						title             : self.settings.noItemsSelected,
+						text              : self.settings.selectItems,
+						type              : 'info',
+						confirmButtonText : self.settings.ok,
+						confirmButtonColor: '#00b8db',
 					});
 					
 				}
@@ -1430,7 +1431,8 @@
 						title            : self.settings.important,
 						text             : self.settings.preventLossNotice,
 						type             : 'warning',
-						confirmButtonText: self.settings.ok
+						confirmButtonText: self.settings.ok,
+						confirmButtonColor: '#00b8db'
 					});
 					
 				}
@@ -1587,8 +1589,8 @@
 		addHorizontalScrolleffect: function() {
 			$('.nav-with-scroll-effect').bind('scroll',function () {
 				var $nav = document.getElementById($(this).attr('id'));
-				var $overflowOpacityEffectRight = $('#' + $(this).attr('id') + ' .overflow-opacity-effect-right');
-				var $overflowOpacityEffectLeft  = $('#' + $(this).attr('id') + ' .overflow-opacity-effect-left');
+				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');
+				var $overflowOpacityEffectLeft  = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-left');
 				var $leftMax                    = $nav.scrollWidth;
 				var $left                       = $nav.scrollLeft;
 				var $diff                       = $leftMax - $left;
@@ -2103,13 +2105,14 @@
 			
 			// Open on view
 			swal({
-				title            : this.settings.productLocations,
-				html             : '<div id="atum-locations-tree" class="atum-tree"></div>',
-				showCancelButton : false,
-				showConfirmButton: true,
-				confirmButtonText: this.settings.editProductLocations,
-				showCloseButton  : true,
-				onOpen           : function() {
+				title             : this.settings.productLocations,
+				html              : '<div id="atum-locations-tree" class="atum-tree"></div>',
+				showCancelButton  : false,
+				showConfirmButton : true,
+				confirmButtonText : this.settings.editProductLocations,
+				confirmButtonColor: '#00b8db',
+				showCloseButton   : true,
+				onOpen            : function() {
 					
 					var $locationsTreeContainer = $('#atum-locations-tree');
 					
@@ -2165,6 +2168,7 @@
 					html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
 					text               : self.settings.textToShow,
 					confirmButtonText  : self.settings.saveButton,
+					confirmButtonColor : '#00b8db',
 					showCloseButton    : true,
 					showCancelButton   : true,
 					showLoaderOnConfirm: true,
@@ -2192,7 +2196,7 @@
 									$locationsTreeContainer.easytree();
 									
 									// Add instructions alert
-									$locationsTreeContainer.append('<div class="alert alert-primary"><i class="dashicons dashicons-info"></i> ' + self.settings.editLocationsInfo + '</div>');
+									$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + self.settings.editLocationsInfo + '</div>');
 									
 									toSetLocations = locationsSet;
 									
@@ -2285,13 +2289,14 @@
 				}).then(function() {
 					
 					swal({
-						title            : self.settings.done,
-						type             : 'success',
-						text             : self.settings.locationsSaved,
-						confirmButtonText: self.settings.ok,
+						title             : self.settings.done,
+						type              : 'success',
+						text              : self.settings.locationsSaved,
+						confirmButtonText : self.settings.ok,
+						confirmButtonColor: '#00b8db',
 					});
 					
-				});
+				}).catch(swal.noop);
 				
 			}).catch(swal.noop);
 			

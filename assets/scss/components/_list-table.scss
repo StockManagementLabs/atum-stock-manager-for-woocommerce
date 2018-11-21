@@ -154,6 +154,7 @@
 		z-index: 999;
 		float: right;
 		margin-left: auto;
+		align-items: center;
 		
 		&.inbound-stock-search {
 			border: 1px solid $gray-200;
@@ -316,7 +317,7 @@
 		.tablenav-pages {
 			margin-left: auto;
 			text-align: right;
-			z-index: 999;
+			z-index: 998;
 			width: 300px;
 			&.one-page {
 				width: inherit;
@@ -336,8 +337,39 @@
 				}
 			}
 		}
-		.nav-with-scroll-effect {
+		
+		.filters-containe-box {
 			width: 70%;
+			position: relative;
+			&.not-pagination {
+				width: 90%;
+			}
+			@media screen and (max-width: $screen-lg) {
+				width: 62%;
+			}
+			@media screen and (max-width: 782px) {
+				width: inherit;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100% !important;
+				margin-top: 10px;
+			}
+			.overflow-opacity-effect-right {
+				
+				@media screen and (max-width: 782px) {
+					display: none !important;
+				}
+				@media all and (max-width: $screen-xs) {
+					display: none !important;
+				}
+			}
+			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+				height: 50px;
+			}
+		}
+		
+		.nav-with-scroll-effect {
+			width: 100%;
 			height: 52px;
 			justify-content: start;
 			.actions {
@@ -352,17 +384,6 @@
 				right: 63%;
 				width: inherit;
 			}
-			.overflow-opacity-effect-right {
-				@media screen and (max-width: $screen-lg) {
-					right: 30%;
-				}
-				@media all and (max-width: $screen-xs) {
-					display: none !important;
-				}
-			}
-			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-				height: 50px;
-			}
 		}
 	}
 	
@@ -372,7 +393,7 @@
 			margin-left: 5px;
 		}
 		.tablenav-pages {
-			//padding-right: 10px;
+			margin-top: 0;
 		}
 		#table-paging {
 			margin-left: 0;
@@ -412,7 +433,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin: 0 11px 0 20px;
+		margin: 0 11px 0 11px;
 		@media screen and (max-width: $screen-lg) {
 			flex-wrap: wrap;
 			margin-bottom: 15px;
@@ -420,7 +441,38 @@
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
 		}
+		.sc-nav-containe-box {
+			width: 70%;
+			position: relative;
+			@media screen and (max-width: $screen-lg) {
+				width: 100%;
+			}
+		}
 	}
+	
+	.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+		width: 200px;
+		position: absolute;
+		z-index: 998;
+		height: 65px;
+		pointer-events: none;
+	}
+	.overflow-opacity-effect-right {
+		right: 0;
+		background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
+		background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
+		background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
+		background: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+	}
+	.overflow-opacity-effect-left {
+		display: none;
+		left: 0;
+		background: -webkit-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
+		background: -o-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
+		background: -moz-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
+		background: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+	}
+	
 	.nav-with-scroll-effect {
 		@include flexbox;
 		@include flex-align-items(center);
@@ -431,7 +483,7 @@
 		-ms-overflow-style: -ms-autohiding-scrollbar;
 		-webkit-overflow-scrolling: touch;
 		white-space: nowrap;
-		width: 62%;
+		width: 100%;
 		float: left;
 		margin: 0 11px 0 0;
 		&::-webkit-scrollbar {
@@ -439,38 +491,10 @@
 		}
 		height: 70px;
 		
-		@media screen and (max-width: $screen-lg) {
-			width: 100%;
-		}
-		
 		.subsubsub {
 			margin: 0;
 		}
 		
-		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-			width: 200px;
-			position: absolute;
-			z-index: 998;
-			height: 65px;
-		}
-		.overflow-opacity-effect-right {
-			right: 37%;
-			background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
-			background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
-			background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
-			background: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
-			@media screen and (max-width: $screen-lg) {
-				right: 0;
-			}
-		}
-		.overflow-opacity-effect-left {
-			display: none;
-			left: 0;
-			background: -webkit-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
-			background: -o-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
-			background: -moz-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
-			background: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
-		}
 	}
 	.subsubsub {
 		position: relative;
@@ -589,7 +613,7 @@
 	
 	.reset-filters {
 		border-radius: 50%;
-		width: 25px;
+		width: 35px;
 		height: 25px;
 		text-align: center;
 		border: none;
@@ -597,14 +621,17 @@
 		color: $white;
 		padding: 2px 0 0;
 		cursor: pointer;
-		position: absolute;
-		top: 20px;
 		z-index: 999;
-		right: 36%;
+		margin-right: 5px;
 		@include transition(0.2s ease-in-out);
 		
-		@media screen and (max-width: $screen-lg) {
-			right: 15px;
+		@media all and (max-width: 768px) {
+			width: 40px;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			width: 35px;
+			margin-bottom: 15px;
 		}
 		
 		&:focus {

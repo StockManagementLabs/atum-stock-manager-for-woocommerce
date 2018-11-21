@@ -31,20 +31,21 @@ defined( 'ABSPATH' ) || die;
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
 		<div class="stock-central-header">
-			<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
-				<?php $list->views(); ?>
+			<div id="scroll-stock_central_nav" class="sc-nav-containe-box">
 				<div class="overflow-opacity-effect-right" >
 
 				</div>
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
-				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
-			</nav>
+				<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
+					<?php $list->views(); ?>
+				</nav>
+			</div>
+
 			<div class="search-box">
-
+				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
 				<div class="input-group input-group-sm">
-
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>
@@ -75,11 +76,11 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="sticky-columns-button-container">
 					<button type="button" class="sticky-columns-button sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes">
-						<i class="atmi-view-sidebar-right rotate"></i>
+						<i class="atmi-view-col-fixed-outline"></i>
 					</button>
 
 					<button type="button" class="sticky-columns-button sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no">
-						<i class="atmi-view-list"></i>
+						<i class="atmi-view-list-outline"></i>
 					</button>
 				</div>
 			</div>
