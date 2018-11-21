@@ -631,6 +631,7 @@ trait AtumListTableLegacyTrait {
 	protected function get_children_legacy( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
 		// Get the published Variables first.
+		// Get the published Variables first.
 		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
@@ -646,25 +647,25 @@ trait AtumListTableLegacyTrait {
 				),
 			),
 		);
-
+		
 		if ( ! empty( $post_in ) ) {
 			$parent_args['post__in'] = $post_in;
 		}
-
+		
 		// As this query does not contain ATUM params, doesn't need the filters.
 		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
-
+		
 		if ( $parents->found_posts ) {
-
+			
 			switch ( $parent_type ) {
 				case 'variable':
 					$this->container_products['all_variable'] = array_unique( array_merge( $this->container_products['all_variable'], $parents->posts ) );
 					break;
-
+				
 				case 'grouped':
 					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents->posts ) );
 					break;
-
+				
 				case 'variable-subscription':
 					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents->posts ) );
 					break;
@@ -683,49 +684,24 @@ trait AtumListTableLegacyTrait {
 			 * NOTE: we should apply here all the query filters related to individual child products
 			 * like the ATUM control switch or the supplier
 			 */
-
-			if ( $this->show_controlled ) {
-
-				$children_args['meta_query'] = array(
-					array(
-						'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
-						'value' => 'yes',
-					),
-				);
-
-			}
-			else {
-
-				$children_args['meta_query'] = array(
-					array(
-						'relation' => 'OR',
-						array(
-							'key'     => Globals::ATUM_CONTROL_STOCK_KEY,
-							'compare' => 'NOT EXISTS',
-						),
-						array(
-							'key'   => Globals::ATUM_CONTROL_STOCK_KEY,
-							'value' => 'no',
-						),
-					),
-				);
-
-			}
+			$this->set_controlled_query_data();
 
 			if ( ! empty( $this->supplier_variation_products ) ) {
-
-				$children_args['meta_query'][] = array(
-					'key'   => Suppliers::SUPPLIER_META_KEY,
-					'value' => esc_attr( $_REQUEST['supplier'] ),
+				
+				$this->atum_query_data[] = array(
+					'key'   => 'supplier_id',
+					'value' => absint( $_REQUEST['supplier'] ),
 					'type'  => 'NUMERIC',
 				);
-
-				$children_args['meta_query']['relation'] = 'AND';
+				
+				$this->atum_query_data['relation'] = 'AND';
 
 			}
-
+			
+			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
-
+			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+			
 			if ( $children->found_posts ) {
 
 				$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
@@ -767,6 +743,46 @@ trait AtumListTableLegacyTrait {
 
 		return array();
 
+	}
+	
+	/**
+	 * Set the query data for filtering the Controlled/Uncontrolled products.
+	 *
+	 * @since 1.5.0
+	 */
+	protected function set_controlled_query_data() {
+		
+		if ( $this->show_controlled ) {
+			
+			$this->atum_query_data = array(
+				array(
+					'key'   => 'atum_controlled',
+					'value' => 1,
+					'type'  => 'NUMERIC',
+				),
+			);
+			
+		}
+		else {
+			
+			$this->atum_query_data = array(
+				array(
+					'relation' => 'OR',
+					array(
+						'key'   => 'atum_controlled',
+						'value' => 0,
+						'type'  => 'NUMERIC',
+					),
+					array(
+						'key'   => 'inheritable',
+						'value' => 1,
+						'type'  => 'NUMERIC',
+					),
+				),
+			);
+			
+		}
+		
 	}
 
 }

@@ -74,7 +74,7 @@ trait AtumDataStoreLegacyCustomTableTrait {
 	 * @param bool        $force Force update. Used during create.
 	 * @since 1.5.0
 	 */
-	protected function update_post_meta( &$product, $force = false ) {
+	public function update_post_meta( &$product, $force = false ) {
 		
 		parent::update_post_meta( $product, $force );
 		$this->update_atum_product_data( $product );
