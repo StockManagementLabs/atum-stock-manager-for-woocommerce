@@ -2291,7 +2291,7 @@
 						confirmButtonText: self.settings.ok,
 					});
 					
-				});
+				}).catch(swal.noop);
 				
 			}).catch(swal.noop);
 			
