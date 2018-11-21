@@ -506,6 +506,9 @@ class Hooks {
 	public function maybe_change_stock_threshold( $product ) {
 		
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
+
+			// Ensure that is the product uses the ATUM models.
+			$product = Helpers::get_atum_product( $product );
 			
 			unset( $this->stock_threshold );
 
