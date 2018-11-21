@@ -135,7 +135,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		if ( $supplier ) {
 			/* translators: the supplier title */
-			echo '<em class="alert"><i class="dashicons dashicons-info"></i> ' . sprintf( esc_attr__( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), esc_attr( $supplier->post_title ) ) . '</em>';
+			echo '<em class="alert"><i class="atmi-info"></i> ' . sprintf( esc_attr__( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), esc_attr( $supplier->post_title ) ) . '</em>';
 		}
 	}
 

@@ -10,6 +10,9 @@
 		margin-top: $grid-gutter-width/2;
 		font-size: 12px;
 		text-align: left;
+		i {
+			font-size: 17px;
+		}
 	}
 	
 	.no-locations-set {
@@ -125,7 +128,8 @@ span.easytree-expander {
 	margin-right: 3px;
 	
 	&:before {
-		content: "\f132"; // dashicons-plus
+		font-family: atum-icon-font;
+		content: $atmi-plus-circle; // dashicons-plus
 	}
 	
 	&:hover {
@@ -136,7 +140,8 @@ span.easytree-expander {
 .easytree-exp-e, .easytree-exp-ed, .easytree-exp-el, .easytree-exp-edl {
 	span.easytree-expander {
 		&:before {
-			content: "\f460"; // dashicons-minus
+			font-family: atum-icon-font;
+			content: $atmi-circle-minus; // dashicons-minus
 		}
 	}
 }
@@ -169,8 +174,8 @@ span.easytree-expander {
 		margin-left: 3px;
 		
 		&:before {
-			font-family: WooCommerce;
-			content: '\e006'; // wcicon-simple
+			font-family: atum-icon-font;
+			content: $atmi-map-marker;
 		}
 	}
 }
