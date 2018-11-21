@@ -20,6 +20,7 @@
 				
 				this.$container = $('#atum_order_items');
 				this.$itemsBlocker = this.$container.find('.items-blocker');
+				this.areItemsSelectable = atumOrder.enableSelectItems;
 				this.stupidtable.init();
 				this.isEditable = $('#atum_order_is_editable').val();
 				this.askRemoval = true;
@@ -37,8 +38,6 @@
 					.on( 'click', 'button.calculate-action', this.recalculate )
 					.on( 'click', 'a.edit-atum-order-item', this.edit_item )
 					.on( 'click', 'a.delete-atum-order-item', this.delete_item )
-					.on( 'click', 'tr.item, tr.fee, tr.shipping', this.select_row )
-					.on( 'click', 'tr.item :input, tr.fee :input, tr.shipping :input, tr.item a, tr.fee a, tr.shipping a', this.select_row_child )
 					
 					// Bulk actions
 					.on( 'click', 'button.bulk-delete-items', this.do_bulk_delete )
@@ -64,6 +63,12 @@
 					.on( 'click', 'button.add-atum-order-item-meta', this.item_meta.add )
 					.on( 'click', 'button.remove-atum-order-item-meta', this.item_meta.remove )
 					.on( 'click', 'button.set-purchase-price', this.item_meta.set_purchase_price );
+				
+				if (this.areItemsSelectable) {
+					this.$container
+						.on('click', 'tr.item, tr.fee, tr.shipping', this.select_row)
+						.on('click', 'tr.item :input, tr.fee :input, tr.shipping :input, tr.item a, tr.fee a, tr.shipping a', this.select_row_child);
+				}
 				
 				$(document.body)
 					.on( 'wc_backbone_modal_loaded', this.backbone.init )

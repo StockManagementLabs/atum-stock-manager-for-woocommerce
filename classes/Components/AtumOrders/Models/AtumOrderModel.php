@@ -40,6 +40,13 @@ abstract class AtumOrderModel {
 	 * @var \WP_Post
 	 */
 	protected $post;
+	
+	/**
+	 * Database stored current Order status
+	 *
+	 * @var string
+	 */
+	protected $db_status;
 
 	/**
 	 * The array of items belonging to this Order
@@ -114,7 +121,9 @@ abstract class AtumOrderModel {
 	 * @since 1.2.4
 	 */
 	protected function load_post() {
-		$this->post = get_post( $this->id );
+		
+		$this->post      = get_post( $this->id );
+		$this->db_status = $this->get_status();
 	}
 
 	/**
@@ -728,6 +737,7 @@ abstract class AtumOrderModel {
 			$this->create();
 		}
 
+		$this->process_status();
 		$this->save_items();
 
 		return $this->id;
@@ -777,6 +787,35 @@ abstract class AtumOrderModel {
 
 		}
 
+	}
+	
+	/**
+	 * Process status changes
+	 *
+	 * @since 1.5.0
+	 */
+	public function process_status() {
+		
+		$new_status = $this->get_status();
+		$old_status = $this->db_status;
+		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
+		
+		// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
+		if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
+			$old_status = 'pending';
+		}
+		
+		if ( $new_status !== $old_status ) {
+			
+			do_action( "atum/orders/status_$new_status", $this->id, $this );
+			do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
+			do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
+			
+			/* translators: 1: old order status 2: new order status */
+			$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
+			$this->add_note( $transition_note );
+			
+		}
 	}
 
 	/***************
@@ -875,8 +914,7 @@ abstract class AtumOrderModel {
 	 * @param string $new_status    Status to set to the ATUM Order. No "atum_" prefix is required.
 	 */
 	public function update_status( $new_status ) {
-
-		$old_status = $this->get_status();
+		
 		$new_status = FALSE !== strpos( $new_status, ATUM_PREFIX ) ? str_replace( ATUM_PREFIX, '', $new_status ) : $new_status;
 		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
 
@@ -884,27 +922,9 @@ abstract class AtumOrderModel {
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
 			$new_status = 'pending';
 		}
-
-		// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-		if ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) {
-			$old_status = 'pending';
-		}
-
-		if ( $new_status !== $old_status ) {
-			
-			$this->set_status( $new_status );
-			$this->save();
-			
-			do_action( "atum/orders/status_$new_status", $this->id, $this );
-			do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
-			do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
-			
-			/* translators: 1: old order status 2: new order status */
-			$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
-			$this->add_note( $transition_note );
-			
-		}
-
+		
+		$this->set_status( $new_status );
+		
 	}
 
 	/***************
@@ -1302,7 +1322,8 @@ abstract class AtumOrderModel {
 	 */
 	public function is_editable() {
 		$status = $this->get_status();
-		return apply_filters( 'atum/orders/is_editable', ! $status || 'pending' === $status, $this );
+		
+		return apply_filters( 'atum/orders/is_editable', ! $status || array_key_exists( $status, Helpers::get_atum_order_post_type_statuses( $this->post->post_type, TRUE ) ) );
 	}
 
 	/**

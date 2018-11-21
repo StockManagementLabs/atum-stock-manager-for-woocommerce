@@ -121,10 +121,13 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 		</table>
 	</div>
 
+	<?php if ( version_compare( WC()->version, '3.5.0', '<' ) ) :
+		// Only allow bulk edit before 3.5.0 VC Version. ?>
 	<div class="atum-order-data-row atum-order-item-bulk-edit" style="display:none;">
 		<button type="button" class="button bulk-delete-items"><?php esc_html_e( 'Delete selected row(s)', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php do_action( 'atum/atum_order/item_bulk_controls', $atum_order ); ?>
 	</div>
+	<?php endif; ?>
 
 	<div class="atum-order-data-row atum-order-totals-items">
 
