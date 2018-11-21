@@ -37,10 +37,8 @@ class PurchaseOrders extends AtumOrderPostType {
 	
 	/**
 	 * Status that means an ATUM Order is finished
-	 *
-	 * @var string
 	 */
-	protected $finished = 'received';
+	const FINISHED = 'received';
 
 	/**
 	 * The Purchase Order post type name
