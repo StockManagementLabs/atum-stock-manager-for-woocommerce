@@ -906,7 +906,8 @@
 	}
 }
 
-.atum-list-table, .floatThead-container, .inbound-stock-list {
+.atum-list-table, .floatThead-container, .inbound-stock-list, .wp-list-table  {
+	
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
@@ -1046,6 +1047,7 @@
 	}
 	
 	th {
+		
 		&.sortable, &.sorted {
 			a {
 				padding: 0;
@@ -1319,7 +1321,7 @@
 			}
 		}
 		td {
-			&.column-title {
+			&.column-title, &.atum_order_title {
 				a {
 					font-size: 14px;
 					font-weight: bold;
@@ -1380,7 +1382,10 @@
 			min-width: 70px;
 		}
 		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days, &.calc_lost_sales, &.multi-inventory {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
+		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
+		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
+		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total {
 			color: $gray-600;
 		}
 		

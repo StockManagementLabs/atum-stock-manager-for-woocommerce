@@ -1588,6 +1588,7 @@
 		 */
 		addHorizontalScrolleffect: function() {
 			$('.nav-with-scroll-effect').bind('scroll',function () {
+				$('.wc-enhanced-select').select2("close");
 				var $nav = document.getElementById($(this).attr('id'));
 				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');
 				var $overflowOpacityEffectLeft  = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-left');
