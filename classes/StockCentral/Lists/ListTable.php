@@ -846,7 +846,7 @@ class ListTable extends AtumListTable {
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 							WHERE `order_id` IN (
-								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` = 'atum_pending'
+								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "'
 							)
 							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
 							GROUP BY oi.order_item_id

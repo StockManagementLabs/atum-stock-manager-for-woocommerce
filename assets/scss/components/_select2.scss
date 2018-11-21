@@ -31,8 +31,8 @@
 		}
 		&:after {
 			line-height: 27px;
-			font-family: Linearicons;
-			content: "\e874";
+			font-family: atum-icon-font;
+			content: $atmi-chevron-down;
 			font-size: 10px;
 			color: $gray-500;
 		}
@@ -117,7 +117,7 @@
 	display: block;
 	box-shadow: $dropdown-box-shadow;
 	.select2-results__option {
-		padding: 8px 20px;
+		padding: 8px 10px;
 	}
 }
 
@@ -181,6 +181,7 @@
 	padding: 4px;
 	width: 100%;
 	box-sizing: border-box;
+	min-width: inherit;
 }
 
 .select2-search--dropdown .select2-search__field::-webkit-search-cancel-button {
