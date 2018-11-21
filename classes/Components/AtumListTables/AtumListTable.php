@@ -2843,16 +2843,16 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
+					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?> ">
 				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll">
-					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
+
 						<div class="alignleft actions bulkactions">
 							<?php $this->bulk_actions( $which ); ?>
 						</div>
-						<?php
-					endif;
 
-					$this->extra_tablenav( $which ); ?>
+						<?php $this->extra_tablenav( $which ); ?>
+
 				</div>
 
 				<?php if ( 'top' === $which ) : ?>
@@ -2860,8 +2860,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					<div class="overflow-opacity-effect-left"></div>
 				<?php endif; ?>
 			</div>
-
-			<?php
+			<?php endif;
 
 			// Firefox fix to not preserve the pagination input value when reloading the page.
 			ob_start();
@@ -2901,6 +2900,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function pagination( $which ) {
 
 		if ( empty( $this->_pagination_args ) ) {
+			$output = '<span class="displaying-num">' . esc_html__( '0 items', ATUM_TEXT_DOMAIN ) . '</span>';
+			echo "<div class='tablenav-pages'>$output</div>"; // WPCS: XSS ok.
 			return;
 		}
 

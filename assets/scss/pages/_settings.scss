@@ -178,11 +178,11 @@ $settings-xs-min:          568px !default;
 			margin: 0;
 			font-size: 12px;
 			font-weight: normal;
-			display: flex;
+			@include flexbox;
+			@include flex-justify-content(center);
+			@include flex-align-items(center);
+			@include flex-wrap(wrap);
 			padding: 0 12px 9px 12px;
-			align-items: center;
-			justify-content: center;
-			flex-wrap: wrap;
 			
 			a {
 				text-decoration: none;
@@ -225,9 +225,9 @@ $settings-xs-min:          568px !default;
 		color: $settings-menu-color;
 		@include transition(color 0.3s);
 		height: 51px;
-		display: flex;
-		align-items: center;
-		justify-content: left;
+		@include flexbox;
+		@include flex-align-items(center);
+		@include flex-justify-content(left);
 		
 		&:hover, &:focus {
 			outline: none;
@@ -518,9 +518,9 @@ $settings-xs-min:          568px !default;
 		background-color: $blue-dark-lighten;
 		border-top-right-radius: 6px;
 		border-top-left-radius: 6px;
-		display: flex;
-		align-items: center;
-		justify-content: left;
+		@include flexbox;
+		@include flex-align-items(center);
+		@include flex-justify-content(left);
 		height: 50px;
 		padding-left: 20px;
 		font-size: 18px;
@@ -684,7 +684,7 @@ $settings-xs-min:          568px !default;
 				.nav-footer-logo {
 					@include flexbox;
 					@include flex-align-items(center);
-					justify-content: center;
+					@include flex-justify-content(center);
 					padding: 5px 24px;
 					img {
 						width: 34px;
@@ -702,11 +702,11 @@ $settings-xs-min:          568px !default;
 					margin: 0;
 					font-size: 12px;
 					font-weight: normal;
-					display: flex;
+					@include flexbox;
+					@include flex-align-items(center);
+					@include flex-justify-content(center);
+					@include flex-wrap(wrap);
 					padding: 0 12px 9px 12px;
-					align-items: center;
-					justify-content: center;
-					flex-wrap: wrap;
 					
 					a {
 						text-decoration: none;
@@ -749,9 +749,9 @@ $settings-xs-min:          568px !default;
 				color: $settings-menu-color;
 				@include transition(color 0.3s);
 				height: 51px;
-				display: flex;
-				align-items: center;
-				justify-content: left;
+				@include flexbox;
+				@include flex-align-items(center);
+				@include flex-justify-content(left);
 				
 				&:hover, &:focus {
 					outline: none;
@@ -1054,9 +1054,9 @@ $settings-xs-min:          568px !default;
 				background-color: $blue-dark-lighten;
 				border-top-right-radius: 6px;
 				border-top-left-radius: 6px;
-				display: flex;
-				align-items: center;
-				justify-content: left;
+				@include flexbox;
+				@include flex-align-items(center);
+				@include flex-justify-content(left);
 				height: 50px;
 				padding-left: 20px;
 				font-size: 18px;

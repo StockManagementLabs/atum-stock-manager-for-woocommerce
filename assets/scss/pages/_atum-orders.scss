@@ -16,6 +16,302 @@ img.tips {
 	padding: 5px 0 0;
 }
 
+.wrap {
+	h1.wp-heading-inline {
+		display: inline;
+		margin-right: 15px;
+		line-height: 1.5;
+		position: relative;
+		font-size: 36px;
+		font-weight: bold;
+	}
+	.page-title-action {
+		width: 130px;
+		height: 35px;
+		border-radius: 5px;
+		
+		background-color: $green;
+		color: $white;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 30px;
+		text-transform: uppercase;
+		border: none;
+		padding: 9px 11px;
+		
+		&:hover {
+			background-color: $green-opacity;
+		}
+		
+		@media all and (max-width: 782px) {
+			font-size: 14px;
+			height: 35px;
+			line-height: 35px;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			margin: 0;
+		}
+		
+	}
+}
+
+.subsubsub {
+	background-color: $white;
+	width: 100%;
+	position: relative;
+	font-size: 16px;
+	letter-spacing: 0.4px;
+	font-weight: bold;
+	text-transform: capitalize;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	
+	li {
+		color: $white;
+		text-transform: uppercase;
+		padding: 20px 0 0 10px;
+		a {
+			color: $gray-500;
+			padding: 0;
+			&.current {
+				border-radius: 5px;
+				background-color: $blue;
+				font-size: 16px;
+				padding: 6px 10px;
+				font-weight: bold;
+				letter-spacing: 0.4px;
+				color: $white;
+				.count {
+					color: white;
+				}
+			}
+			.count {
+				font-size: 14px;
+				font-weight: normal;
+				color: $blue;
+			}
+			&:active, &:focus {
+				border: none;
+				outline: none;
+				box-shadow: none;
+			}
+		}
+		
+	}
+	
+}
+
+#posts-filter {
+	width: 100%;
+	overflow: hidden;
+	background-color: $white;
+	box-shadow: 0 4px 0 0 $gray-200;
+	padding: 0 0 10px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	.search-box {
+		@include flexbox;
+		//display: inline-block;
+		float: right;
+		margin-right: 10px;
+		margin-bottom: 10px;
+		padding: 1px;
+		flex-wrap: nowrap;
+		z-index: 999;
+		float: right;
+		margin-left: auto;
+		align-items: center;
+		border: 1px solid $gray-200;
+		border-radius: 5px;
+		#post-search-input {
+			border: none;
+			box-shadow: none;
+			margin: 0;
+			height: inherit;
+			padding: 0 12px;
+		}
+		input[type=submit] {
+			border-radius: 5px;
+			background-color: $orange;
+			font-size: 10px;
+			letter-spacing: normal;
+			text-align: center;
+			color: $white;
+			text-transform: uppercase;
+			box-shadow: none;
+			border: none;
+			&:hover, &.active {
+				background-color: rgba($orange, 0.6);
+			}
+		}
+	}
+}
+
+.tablenav.top {
+	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
+	@include flexbox;
+	@include flex-wrap(nowrap);
+	@include flex-justify-content(left);
+	@include flex-align-items(center);
+	padding: 10px 11px;
+	margin: 0;
+	@media all and (max-width: 782px) {
+		@include flex-wrap(wrap);
+	}
+	.tablenav-pages {
+		margin-left: auto;
+		text-align: right;
+		z-index: 998;
+		width: 300px;
+		&.one-page {
+			width: inherit;
+		}
+		@media all and (max-width: $screen-xs) {
+			width: 100%;
+			text-align: center;
+			display: inline-block;
+			margin: 0 0 10px;
+		}
+		.displaying-num {
+			@media all and (max-width: $screen-lg) {
+				display: inline-block;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+			}
+		}
+	}
+	
+	.filters-container-box {
+		width: 70%;
+		position: relative;
+		
+		&.not-pagination {
+			width: 90%;
+		}
+		
+		@media screen and (max-width: $screen-lg) {
+			width: 62%;
+		}
+		
+		@media screen and (max-width: 782px) {
+			width: inherit;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			width: 100% !important;
+			margin-top: 10px;
+		}
+		
+		.overflow-opacity-effect-right {
+			
+			@media screen and (max-width: 782px) {
+				display: none !important;
+			}
+			
+			@media all and (max-width: $screen-xs) {
+				display: none !important;
+			}
+		}
+		
+		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+			height: 50px;
+		}
+	}
+	
+	.nav-with-scroll-effect {
+		width: 100%;
+		height: 52px;
+		justify-content: start;
+		.actions {
+			overflow: initial;
+		}
+		@media all and (max-width: $screen-xs) {
+			width: 100%;
+			display: contents;
+			white-space: normal;
+		}
+		@media all and (max-width: 782px) {
+			right: 63%;
+			width: inherit;
+		}
+	}
+}
+
+.tablenav {
+	height: auto;
+	.btn {
+		margin-left: 5px;
+	}
+	.tablenav-pages {
+		margin-top: 0;
+		a {
+			display: inline-block;
+			border: none;
+			padding: 0;
+			background: $gray-200;
+			font-size: 16px;
+			font-weight: 400;
+			text-align: center;
+			line-height: 30px;
+			&:hover, &:active, &:focus {
+				background-color: $orange;
+				color: $white;
+			}
+		}
+	}
+	#table-paging {
+		margin-left: 0;
+		@media all and (max-width: 782px) {
+			margin-left: 0;
+		}
+	}
+	input[type=submit] {
+		border-radius: 5px;
+		background-color: $orange;
+		font-size: 12px;
+		line-height: 1.5;
+		letter-spacing: normal;
+		text-align: center;
+		color: $white;
+		text-transform: uppercase;
+		box-shadow: none;
+		border: none;
+		&:hover, &.active {
+			background-color: rgba($orange, 0.6);
+		}
+	}
+}
+
+.tablenav.bottom {
+	margin: 10px 11px 0;
+	.tablenav-pages {
+		margin-left: auto;
+		text-align: right;
+		z-index: 999;
+		@media all and (max-width: $screen-xs) {
+			margin: 0;
+			width: 100%;
+			text-align: center;
+			display: inline-block;
+			margin: 0 0 10px;
+		}
+		.displaying-num {
+			@media all and (max-width: $screen-lg) {
+				display: contents;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				display: inline-block;
+				position: inherit;
+				top: inherit;
+			}
+		}
+	}
+}
+
+
 #tiptip_holder {
 	display: none;
 	z-index: 8675309;
@@ -30,7 +326,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -7px;
 			margin-left: -6px;
-			border-top-color: $dark;
+			border-top-color: $white;
 		}
 	}
 	
@@ -40,7 +336,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -5px;
 			margin-left: -6px;
-			border-bottom-color: $dark;
+			border-bottom-color: $white;
 		}
 	}
 	
@@ -50,7 +346,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -5px;
-			border-right-color: $dark;
+			border-right-color: $white;
 		}
 	}
 	
@@ -60,16 +356,16 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -7px;
-			border-left-color: $dark;
+			border-left-color: $white;
 		}
 	}
 }
 
 #tiptip_content {
-	color: $white;
+	color: $gray-600;
 	font-size: 0.8em;
 	max-width: 150px;
-	background: $dark;
+	background: $white;
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
@@ -95,6 +391,25 @@ img.tips {
 //-------------
 
 table.wp-list-table {
+	
+	border: none;
+	border-top: 1px solid $gray-200;
+	
+	th {
+		&.column-status, &.column-type, &.column-wc_order, &.column-actions, &.column-supplier, &.column-expected_date {
+			padding: 0;
+			font-size: 14px;
+			font-weight: bold;
+			letter-spacing: 0.3px;
+			color: $gray-500;
+		}
+	}
+	
+	tbody {
+		tr:hover {
+			box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
+		}
+	}
 	
 	.column-notes {
 		width: 48px;
@@ -123,8 +438,14 @@ table.wp-list-table {
 			float: left;
 			margin: 0 4px 2px 0;
 			cursor: pointer;
+			height: inherit;
 			padding: 3px 4px;
-			height: auto;
+			
+			&.complete:after {
+				font-family: atum-icon-font;
+				content: $atmi-checkmark-circle;
+				color: $green;
+			}
 			
 			img {
 				display: block;
@@ -147,11 +468,12 @@ table.wp-list-table {
 			color: $secondary;
 			background: $light;
 			border-radius: 4px;
-			border-bottom: 1px solid rgba($black, .05);
 			margin: -.25em 0;
 			cursor: inherit !important;
 			white-space: nowrap;
 			max-width: 100%;
+			height: 26px;
+			line-height: 26px;
 			
 			&.status-completed, &.status-received {
 				background: $green-light;

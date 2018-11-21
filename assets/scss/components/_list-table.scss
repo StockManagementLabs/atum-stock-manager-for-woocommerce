@@ -161,12 +161,12 @@
 			width: 280px;
 			height: 30px;
 			border-radius: 5px;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
+			@include flexbox;
+			@include flex-align-items(center);
+			@include flex-justify-content(space-between);
 			margin: 10px 20px;
 			.atum-post-search {
-				width: 190px;
+				width: 100%;
 				border-radius: 5px;
 				@media all and (max-width: 782px) {
 					margin-bottom: 0;
@@ -305,14 +305,14 @@
 	
 	.tablenav.top {
 		box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
-		align-items: center;
-		justify-content: left;
-		display: flex;
+		@include flexbox;
+		@include flex-wrap(nowrap);
+		@include flex-justify-content(left);
+		@include flex-align-items(center);
 		padding: 0 11px;
 		margin: 0;
-		flex-wrap: nowrap;
 		@media all and (max-width: 782px) {
-			flex-wrap: wrap;
+			@include flex-wrap(wrap);
 		}
 		.tablenav-pages {
 			margin-left: auto;
@@ -330,7 +330,7 @@
 			}
 			.displaying-num {
 				@media all and (max-width: $screen-lg) {
-					display: inline-block;;
+					display: inline-block;
 				}
 				@media all and (max-width: $screen-xs) {
 					width: 100%;
@@ -437,12 +437,12 @@
 		}
 	}
 	.stock-central-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		@include flexbox;
+		@include flex-justify-content(space-between);
+		@include flex-align-items(center);
 		margin: 0 11px 0 11px;
 		@media screen and (max-width: $screen-lg) {
-			flex-wrap: wrap;
+			@include flex-wrap(wrap);
 			margin-bottom: 15px;
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -906,7 +906,8 @@
 	}
 }
 
-.atum-list-table, .floatThead-container, .inbound-stock-list {
+.atum-list-table, .floatThead-container, .inbound-stock-list, .wp-list-table  {
+	
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
@@ -1046,6 +1047,7 @@
 	}
 	
 	th {
+		
 		&.sortable, &.sorted {
 			a {
 				padding: 0;
@@ -1319,7 +1321,7 @@
 			}
 		}
 		td {
-			&.column-title {
+			&.column-title, &.atum_order_title {
 				a {
 					font-size: 14px;
 					font-weight: bold;
@@ -1380,7 +1382,10 @@
 			min-width: 70px;
 		}
 		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters, &.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days, &.calc_lost_sales, &.multi-inventory {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
+		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
+		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
+		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total {
 			color: $gray-600;
 		}
 		
