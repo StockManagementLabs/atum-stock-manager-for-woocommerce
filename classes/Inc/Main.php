@@ -450,7 +450,7 @@ class Main {
 				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
 				wc_enqueue_js( "
 					jQuery( 'a.wc-rating-link' ).click( function() {
-						jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );
+						jQuery.post( '" . wc()->ajax_url() . "', { action: 'atum_rated' } );
 						jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
 					});
 				" );
@@ -473,21 +473,19 @@ class Main {
 					</div>
 					<div class="footer-atum-text">
 						<span><?php esc_html_e( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) ?></span>
-						<?php echo $footer_text; // phpcs:ignore WordPress ?>
+						<?php echo wp_kses_post( $footer_text ) ?>
 					</div>
 				</div>
 
 				<div class="footer-atum-buttons">
-					<a target="_blank" href="<?php echo esc_url( 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions' ) ?>" class="btn btn-primary footer-button">
-						<?php echo esc_attr( __( 'GET SUPPORT', ATUM_TEXT_DOMAIN ) ); ?>
+					<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" class="btn btn-primary footer-button">
+						<?php esc_html_e( 'Get Support', ATUM_TEXT_DOMAIN ); ?>
 					</a>
 					<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-success footer-button">
-						<?php echo esc_attr( __( 'WATCH TUTORIALS', ATUM_TEXT_DOMAIN ) ); ?>
+						<?php esc_html_e( 'View Tutorials', ATUM_TEXT_DOMAIN ); ?>
 					</a>
 				</div>
 			</div>
-
-
 			<?php
 
 		}

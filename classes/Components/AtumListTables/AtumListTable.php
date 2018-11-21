@@ -2843,7 +2843,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
-			<div id="scroll-filters_container" class="filters-containe-box <?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'not-pagination' : ''; ?> ">
+			<div id="scroll-filters_container" class="filters-containe-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?> ">
 				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll">
 					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 						<div class="alignleft actions bulkactions">
