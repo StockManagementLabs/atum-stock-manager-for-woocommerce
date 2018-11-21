@@ -2196,7 +2196,7 @@
 									$locationsTreeContainer.easytree();
 									
 									// Add instructions alert
-									$locationsTreeContainer.append('<div class="alert alert-primary"><i class="dashicons dashicons-info"></i> ' + self.settings.editLocationsInfo + '</div>');
+									$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + self.settings.editLocationsInfo + '</div>');
 									
 									toSetLocations = locationsSet;
 									
