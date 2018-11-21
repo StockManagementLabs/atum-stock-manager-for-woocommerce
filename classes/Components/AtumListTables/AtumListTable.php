@@ -334,6 +334,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] ); // WPCS: CSRF ok.
 		$this->query_filters = $this->get_filters_query_string();
 
+		// Filter the table data results to show specific produt types only.
+		$this->filter_product_types();
+
 		$args = wp_parse_args( $args, array(
 			'show_cb'         => FALSE,
 			'show_controlled' => TRUE,
@@ -3080,6 +3083,39 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return $response;
+
+	}
+
+	/**
+	 * Filter the list table data to show compatible product types only
+	 *
+	 * @since 1.5.0
+	 */
+	protected function filter_product_types() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy way
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+
+			$this->taxonomies[] = array(
+				'taxonomy' => 'product_type',
+				'field'    => 'slug',
+				'terms'    => Globals::get_product_types(),
+			);
+
+		}
+		else {
+
+			$this->wc_query_data[] = array(
+				'key'   => 'type',
+				'value' => Globals::get_product_types(),
+			);
+
+		}
 
 	}
 
