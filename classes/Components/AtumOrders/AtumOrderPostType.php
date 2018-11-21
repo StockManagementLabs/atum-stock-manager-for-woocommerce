@@ -19,6 +19,7 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
+use Atum\PurchaseOrders\PurchaseOrders;
 
 
 abstract class AtumOrderPostType {
@@ -53,10 +54,8 @@ abstract class AtumOrderPostType {
 	
 	/**
 	 * Status that means an ATUM Order is finished
-	 *
-	 * @var string
 	 */
-	protected $finished = 'completed';
+	const FINISHED = 'completed';
 
 	/**
 	 * The ATUM Order items table name
@@ -455,12 +454,12 @@ abstract class AtumOrderPostType {
 				$actions = array();
 				$status  = $atum_order->get_status();
 
-				if ( $this->finished !== $status ) {
+				if ( static::FINISHED !== $status ) {
 					
 					$actions['complete'] = array(
-						'url'    => wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_mark_status&status={$this->finished}&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+						'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status={' . static::FINISHED . "}&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
 						/* translators: Change the order's status to finished */
-						'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ $this->finished ] ),
+						'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ static::FINISHED ] ),
 						'action' => 'complete',
 						'target' => '_self',
 					);
@@ -922,6 +921,8 @@ abstract class AtumOrderPostType {
 					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
 					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
+					// Disable order item selection for only PO when WC version >= 3.5.0.
+					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
 				) );
 
 				wp_enqueue_script( 'atum-orders' );

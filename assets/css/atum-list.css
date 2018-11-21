@@ -1917,6 +1917,10 @@
   text-align: left;
 }
 
+.atum-tree .alert i {
+  font-size: 17px;
+}
+
 .atum-tree .no-locations-set {
   -webkit-box-pack: center;
   -ms-flex-pack: center;

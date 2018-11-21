@@ -128,12 +128,6 @@ class ListTable extends AtumListTable {
 		
 		// TODO: Allow to specify the day of query in constructor atts.
 		$this->day = Helpers::date_format( current_time( 'timestamp' ), TRUE );
-		
-		$this->taxonomies[] = array(
-			'taxonomy' => 'product_type',
-			'field'    => 'slug',
-			'terms'    => Globals::get_product_types(),
-		);
 
 		// Prepare the table columns.
 		$args['table_columns'] = self::get_table_columns();

@@ -2296,7 +2296,7 @@
 						confirmButtonColor: '#00b8db',
 					});
 					
-				});
+				}).catch(swal.noop);
 				
 			}).catch(swal.noop);
 			

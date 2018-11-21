@@ -51,12 +51,6 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->taxonomies[] = array(
-			'taxonomy' => 'product_type',
-			'field'    => 'slug',
-			'terms'    => Globals::get_product_types(),
-		);
-
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!

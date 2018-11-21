@@ -1500,10 +1500,11 @@ final class Helpers {
 	 * @since 1.5.0
 	 *
 	 * @param string $post_type
+	 * @param bool   $remove_finished Whether to remove or not the finished status.
 	 *
 	 * @return array
 	 */
-	public static function get_atum_order_post_type_statuses( $post_type ) {
+	public static function get_atum_order_post_type_statuses( $post_type, $remove_finished = FALSE ) {
 		
 		$statuses = [];
 		
@@ -1519,6 +1520,13 @@ final class Helpers {
 		
 		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
 			$statuses = call_user_func( array( $post_type_class, 'get_statuses' ) );
+			
+			if ( $remove_finished ) {
+				
+				unset( $statuses[ constant( $post_type_class . '::FINISHED' ) ] );
+				
+			}
+			
 		}
 		
 		return $statuses;

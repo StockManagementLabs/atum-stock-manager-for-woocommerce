@@ -54,6 +54,10 @@ class PurchaseOrder extends AtumOrderModel {
 
 		// Use the purchase price when adding products to a PO.
 		add_filter( 'atum/order/add_product/price', array( $this, 'use_purchase_price' ), 10, 3 );
+		
+		// Maybe change product stock when order status change.
+		add_action( 'atum/orders/status_received', array( $this, 'maybe_increase_stock_levels' ), 10, 2 );
+		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
 
 		parent::__construct( $id, $read_items );
 
@@ -411,6 +415,91 @@ class PurchaseOrder extends AtumOrderModel {
 		}
 		
 		return $price;
+		
+	}
+	
+	/**
+	 * Maybe increase stock Levels
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int           $order_id
+	 * @param string        $old_status
+	 * @param string        $new_status
+	 * @param PurchaseOrder $order
+	 */
+	public function maybe_decrease_stock_levels( $order_id, $old_status, $new_status, $order ) {
+		
+		$gg = 44;
+		
+		if ( 'received' === $new_status ) {
+			return;
+		}
+		
+		// Any status !== finished is like pending, so reduce stock.
+		if ( $order && 'received' === $old_status && $old_status !== $new_status ) {
+			$this->change_stock_levels( $order, 'decrease' );
+		}
+		
+	}
+	
+	/**
+	 * Maybe decrease stock Levels
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int           $order_id
+	 * @param PurchaseOrder $order
+	 */
+	public function maybe_increase_stock_levels( $order_id, $order ) {
+		
+		$gg = 33;
+		
+		if ( $order ) {
+			$this->change_stock_levels( $order, 'increase' );
+		}
+		
+	}
+	
+	/**
+	 * Change product stock from items
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param PurchaseOrder $order
+	 * @param string        $action
+	 */
+	public function change_stock_levels( $order, $action ) {
+		
+		$atum_order_items = $order->get_items();
+		
+		if ( ! empty( $atum_order_items ) ) {
+			foreach ( $atum_order_items as $item_id => $atum_order_item ) {
+				
+				$product = $atum_order_item->get_product();
+				
+				if ( $product ) {
+					$old_stock    = $product->get_stock_quantity();
+					$stock_change = apply_filters( 'atum/purchase_orders/po/restore_atum_order_stock_quantity', $atum_order_item->get_quantity(), $item_id );
+					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
+					
+					$item_name = $product->get_sku() ? $product->get_sku() : $product->get_id();
+					$note      = sprintf(
+						/* translators: first is the item name, second is the action, third is the old stock and forth is the new stock */
+						__( 'Item %1$s stock %2$s from %3$s to %4$s.', ATUM_TEXT_DOMAIN ),
+						$item_name,
+						'increase' === $action ? __( 'increased', ATUM_TEXT_DOMAIN ) : __( 'decreased', ATUM_TEXT_DOMAIN ),
+						$old_stock,
+						$new_quantity
+					);
+					
+					$order->add_note( $note );
+					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
+					$atum_order_item->save();
+				}
+				
+			}
+		}
 		
 	}
 
