@@ -338,31 +338,38 @@
 			}
 		}
 		
-		.filters-containe-box {
+		.filters-container-box {
 			width: 70%;
 			position: relative;
+			
 			&.not-pagination {
 				width: 90%;
 			}
+			
 			@media screen and (max-width: $screen-lg) {
 				width: 62%;
 			}
+			
 			@media screen and (max-width: 782px) {
 				width: inherit;
 			}
+			
 			@media all and (max-width: $screen-xs) {
 				width: 100% !important;
 				margin-top: 10px;
 			}
+			
 			.overflow-opacity-effect-right {
 				
 				@media screen and (max-width: 782px) {
 					display: none !important;
 				}
+				
 				@media all and (max-width: $screen-xs) {
 					display: none !important;
 				}
 			}
+			
 			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 				height: 50px;
 			}
