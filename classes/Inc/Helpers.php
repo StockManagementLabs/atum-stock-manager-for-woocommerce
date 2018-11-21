@@ -1506,6 +1506,7 @@ final class Helpers {
 	 */
 	public static function get_atum_order_post_type_statuses( $post_type, $remove_finished = FALSE ) {
 		
+		// TODO: Modify to allow options to add simple "get_atum_order_post_type_statuses_simpl" functionality and prefix.
 		$statuses = [];
 		
 		switch ( $post_type ) {
@@ -1532,7 +1533,53 @@ final class Helpers {
 		return $statuses;
 		
 	}
-
+	
+	/**
+	 * Get the appropriate ATUM Order list of statuses depending on the post_type
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $post_type
+	 * @param bool   $remove_finished Whether to remove or not the finished status.
+	 * @param bool   $add_prefix      Whether to add or not the ATUM prefix to each status.
+	 *
+	 * @return array
+	 */
+	public static function get_atum_order_post_type_statuses_simple( $post_type, $remove_finished = FALSE, $add_prefix = FALSE ) {
+		
+		$statuses = [];
+		
+		switch ( $post_type ) {
+			case InventoryLogs::POST_TYPE:
+				$post_type_class = '\Atum\InventoryLogs\InventoryLogs';
+				break;
+			
+			case PurchaseOrders::POST_TYPE:
+				$post_type_class = '\Atum\PurchaseOrders\PurchaseOrders';
+				break;
+		}
+		
+		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
+			$statuses = call_user_func( array( $post_type_class, 'get_statuses_simple' ), $add_prefix );
+			
+			if ( $remove_finished ) {
+				
+				$constant_name  = $add_prefix ? ATUM_PREFIX : '';
+				$constant_name .= constant( $post_type_class . '::FINISHED' );
+				
+				if ( ( $key = array_search( $constant_name, $statuses ) ) !== FALSE ) {
+					unset( $statuses[ $key ] );
+				}
+				
+			}
+			
+		}
+		
+		return $statuses;
+		
+	}
+	
+	
 	/**
 	 * Get a WooCommerce product using the ATUM's product data models
 	 *

@@ -1219,7 +1219,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
 				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` = 'atum_pending' AND oim2.`meta_key` = '_qty'	
+				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' AND oim2.`meta_key` = '_qty'
 				GROUP BY oim.`meta_value`;",
 				PurchaseOrders::POST_TYPE,
 				$this->get_current_product_id()
