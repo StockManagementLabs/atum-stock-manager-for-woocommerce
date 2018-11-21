@@ -1260,19 +1260,19 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'instock':
 					$classes .= ' cell-green';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
+					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
 					break;
 
 				case 'outofstock':
 					$classes .= ' cell-red';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
+					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
 					break;
 
 				case 'onbackorder':
 					$classes .= ' cell-yellow';
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="lnr lnr-question-circle tips"' . $data_tip . '></span>';
+					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
 					break;
 			}
 
@@ -2792,23 +2792,27 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
-			<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll"
-				style="<?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'width: 90%!important' : ''; ?>">
-				<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
-				<div class="alignleft actions bulkactions">
-					<?php $this->bulk_actions( $which ); ?>
-				</div>
-					<?php
-			endif;
+			<div id="scroll-filters_container" class="filters-containe-box <?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'not-pagination' : ''; ?> ">
+				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?> dragscroll">
+					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
+						<div class="alignleft actions bulkactions">
+							<?php $this->bulk_actions( $which ); ?>
+						</div>
+						<?php
+					endif;
 
-			$this->extra_tablenav( $which ); ?>
-				<div class="overflow-opacity-effect-right" style="<?php echo 'top' === $which && $this->_pagination_args['total_pages'] <= 1 ? 'right: 10%!important' : ''; ?>">
+					$this->extra_tablenav( $which ); ?>
+				</div>
+				<?php if ( 'top' === $which ) : ?>
+				<div class="overflow-opacity-effect-right">
 
 				</div>
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
+				<?php endif; ?>
 			</div>
+
 			<?php
 
 			// Firefox fix to not preserve the pagination input value when reloading the page.
