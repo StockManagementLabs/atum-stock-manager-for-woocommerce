@@ -1115,9 +1115,9 @@ input[type="button"].btn-block {
 }
 
 .select2-container--default .select2-selection--single {
-  border-color: #e9ecef;
   height: 30px;
   border-radius: 5px;
+  border: 1px solid #e9ecef;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -1223,7 +1223,6 @@ input[type="button"].btn-block {
   margin: 4px 5px 0 0;
   padding: 0 5px;
   height: 24px;
-  line-height: 24px;
   overflow: hidden;
   margin: 4px 5px 0 0;
   color: #fff;
@@ -1245,6 +1244,7 @@ input[type="button"].btn-block {
   position: relative;
   left: -8px;
   font-size: 14px;
+  color: #fff;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
@@ -5358,6 +5358,10 @@ input[type="button"].btn-block {
   height: 28px;
 }
 
+#atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field {
+  width: inherit !important;
+}
+
 #atum-settings .section-fields .script-runner .select2-container .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-moz-placeholder {
   color: #999;
   opacity: 1;
@@ -5421,6 +5425,10 @@ input[type="button"].btn-block {
   width: inherit !important;
 }
 
+#atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-selection__choice {
+  line-height: 24px;
+}
+
 #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice .select2-selection__choice__remove, #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-selection__choice .select2-selection__choice__remove {
   color: #fff;
 }
@@ -5474,7 +5482,6 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields .select2-container .select2-selection .select2-selection__rendered {
-  line-height: 30px;
   color: #6c757d;
   padding-left: 16px;
 }

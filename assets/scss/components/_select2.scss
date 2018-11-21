@@ -221,9 +221,9 @@
 }
 
 .select2-container--default .select2-selection--single {
-	border-color: $gray-200;
 	height: 30px;
 	border-radius: 5px;
+	border: 1px solid $gray-200;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -329,7 +329,7 @@
 	margin: 4px 5px 0 0;
 	padding: 0 5px;
 	height: 24px;
-	line-height: 24px;
+	//line-height: 24px;
 	overflow: hidden;
 	margin: 4px 5px 0 0;
 	color: $white;
@@ -350,6 +350,7 @@
 		position: relative;
 		left: -8px;
 		font-size: 14px;
+		color: $white;
 	}
 }
 

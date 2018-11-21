@@ -3604,9 +3604,9 @@ input[type="button"].btn-block {
 }
 
 .select2-container--default .select2-selection--single {
-  border-color: #e9ecef;
   height: 30px;
   border-radius: 5px;
+  border: 1px solid #e9ecef;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -3712,7 +3712,6 @@ input[type="button"].btn-block {
   margin: 4px 5px 0 0;
   padding: 0 5px;
   height: 24px;
-  line-height: 24px;
   overflow: hidden;
   margin: 4px 5px 0 0;
   color: #fff;
@@ -3734,6 +3733,7 @@ input[type="button"].btn-block {
   position: relative;
   left: -8px;
   font-size: 14px;
+  color: #fff;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
@@ -4402,6 +4402,14 @@ input[type="button"].btn-block {
   margin-left: 5px;
   border-radius: 0;
   vertical-align: middle;
+  background-color: #00B8DB;
+  border-radius: 5px;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.wrap h1.wp-heading-inline #atum-update-list:hover {
+  background-color: rgba(0, 184, 219, 0.6);
 }
 
 .wrap h1.wp-heading-inline #atum-update-list:active {
@@ -4905,7 +4913,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-right, .atum-list-wrapper .nav-with-scroll-effect .overflow-opacity-effect-left {
   width: 200px;
   position: absolute;
-  z-index: 999;
+  z-index: 998;
   height: 65px;
 }
 
