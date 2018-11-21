@@ -924,8 +924,8 @@ input[type="button"].btn-block {
 
 .select2-container .select2-selection__arrow:after {
   line-height: 27px;
-  font-family: Linearicons;
-  content: "\e874";
+  font-family: atum-icon-font;
+  content: "";
   font-size: 10px;
   color: #adb5bd;
 }
@@ -1010,7 +1010,7 @@ input[type="button"].btn-block {
 }
 
 .select2-results .select2-results__option {
-  padding: 8px 20px;
+  padding: 8px 10px;
 }
 
 .select2-results__options {
@@ -1075,6 +1075,7 @@ input[type="button"].btn-block {
   padding: 4px;
   width: 100%;
   box-sizing: border-box;
+  min-width: inherit;
 }
 
 .select2-search--dropdown .select2-search__field::-webkit-search-cancel-button {
@@ -3431,11 +3432,25 @@ input[type="button"].btn-block {
   margin: 0;
   font-size: 12px;
   font-weight: normal;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  padding: 0 12px 9px 12px;
-  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  padding: 0 12px 9px 12px;
 }
 
 .atum-settings-wrapper .nav-footer p a {
@@ -3483,8 +3498,19 @@ input[type="button"].btn-block {
   -o-transition: color 0.3s;
   transition: color 0.3s;
   height: 51px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   align-items: center;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  -webkit-justify-content: left;
+  -moz-justify-content: left;
   justify-content: left;
 }
 
@@ -3867,8 +3893,19 @@ input[type="button"].btn-block {
   background-color: #3b3d5a;
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   align-items: center;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  -webkit-justify-content: left;
+  -moz-justify-content: left;
   justify-content: left;
   height: 50px;
   padding-left: 20px;
@@ -4063,6 +4100,10 @@ input[type="button"].btn-block {
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
   justify-content: center;
   padding: 5px 24px;
 }
@@ -4083,11 +4124,25 @@ input[type="button"].btn-block {
   margin: 0;
   font-size: 12px;
   font-weight: normal;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  padding: 0 12px 9px 12px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
   justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  padding: 0 12px 9px 12px;
 }
 
 #atum-settings .section-title .atum-settings-wrapper .nav-footer p a {
@@ -4135,8 +4190,19 @@ input[type="button"].btn-block {
   -o-transition: color 0.3s;
   transition: color 0.3s;
   height: 51px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   align-items: center;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  -webkit-justify-content: left;
+  -moz-justify-content: left;
   justify-content: left;
 }
 
@@ -4540,8 +4606,19 @@ input[type="button"].btn-block {
   background-color: #3b3d5a;
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   align-items: center;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  -webkit-justify-content: left;
+  -moz-justify-content: left;
   justify-content: left;
   height: 50px;
   padding-left: 20px;

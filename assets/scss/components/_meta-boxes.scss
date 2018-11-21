@@ -274,13 +274,14 @@
 		height: 32px;
 		
 		.select2-selection__rendered {
-			line-height: 32px;
+			line-height: 28px;
 			padding-right: 24px;
 		}
 		
 		.select2-selection__arrow {
 			right: 3px;
 			height: 30px;
+			top: 4px;
 		}
 		
 	}
