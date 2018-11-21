@@ -128,12 +128,30 @@ class ListTable extends AtumListTable {
 		
 		// TODO: Allow to specify the day of query in constructor atts.
 		$this->day = Helpers::date_format( current_time( 'timestamp' ), TRUE );
-		
-		$this->taxonomies[] = array(
-			'taxonomy' => 'product_type',
-			'field'    => 'slug',
-			'terms'    => Globals::get_product_types(),
-		);
+
+		/**
+		 * If the site is not using the new tables, use the legacy way
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+
+			$this->taxonomies[] = array(
+				'taxonomy' => 'product_type',
+				'field'    => 'slug',
+				'terms'    => Globals::get_product_types(),
+			);
+
+		}
+		else {
+
+			$this->wc_query_data[] = array(
+				'key'   => 'type',
+				'value' => Globals::get_product_types(),
+			);
+
+		}
 
 		// Prepare the table columns.
 		$args['table_columns'] = self::get_table_columns();
