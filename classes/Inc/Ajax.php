@@ -1821,10 +1821,9 @@ final class Ajax {
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
 			}
-
-			if ( $atum_order && in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $post_type ) ) ) ) {
+			
+			if ( $atum_order ) {
 				$atum_order->update_status( $status );
-				do_action( 'atum/atum_orders/edit_status', $atum_order->get_id(), $status );
 			}
 
 		}

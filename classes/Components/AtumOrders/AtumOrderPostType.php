@@ -457,7 +457,7 @@ abstract class AtumOrderPostType {
 				if ( static::FINISHED !== $status ) {
 					
 					$actions['complete'] = array(
-						'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status={' . static::FINISHED . "}&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+						'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
 						/* translators: Change the order's status to finished */
 						'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ static::FINISHED ] ),
 						'action' => 'complete',
@@ -465,13 +465,6 @@ abstract class AtumOrderPostType {
 					);
 
 				}
-
-				$actions['view'] = array(
-					'url'    => admin_url( "post.php?post={$post->ID}&action=edit" ),
-					'name'   => __( 'View', ATUM_TEXT_DOMAIN ),
-					'action' => 'view',
-					'target' => '_self',
-				);
 
 				$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
 				
@@ -763,7 +756,7 @@ abstract class AtumOrderPostType {
 		foreach ( $ids as $id ) {
 			$atum_order = Helpers::get_atum_order_model( $id );
 			$atum_order->update_status( $new_status );
-			do_action( "atum/$post_type/edit_status", $id, $new_status );
+			$atum_order->save();
 			$changed++;
 		}
 
