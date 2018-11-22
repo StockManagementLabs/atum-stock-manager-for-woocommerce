@@ -1890,7 +1890,7 @@ final class Ajax {
 
 		if ( $product_id > 0 ) {
 
-			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
+			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, [ 'hide_empty' => FALSE ] );
 
 			if ( empty( $locations ) ) {
 				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No Locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
@@ -2052,6 +2052,7 @@ final class Ajax {
 		global $wpdb;
 		$wpdb->hide_errors();
 
+		// TODO: 1.5.0.
 		// If there are products without the manage_stock meta key, insert it for them.
 		$insert_success = $wpdb->query( $wpdb->prepare("
 			INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
