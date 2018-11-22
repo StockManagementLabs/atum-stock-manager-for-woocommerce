@@ -75,11 +75,11 @@ defined( 'ABSPATH' ) || die;
 				?>
 
 				<div class="sticky-columns-button-container">
-					<button type="button" class="sticky-columns-button sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes">
+					<button type="button" class="sticky-columns-button tips sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes" data-tip="Enable Sticky Columns">
 						<i class="atmi-view-col-fixed-outline"></i>
 					</button>
 
-					<button type="button" class="sticky-columns-button sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no">
+					<button type="button" class="sticky-columns-button tips sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no" data-tip="Disable Sticky Columns">
 						<i class="atmi-view-list-outline"></i>
 					</button>
 				</div>
