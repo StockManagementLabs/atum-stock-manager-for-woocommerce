@@ -5560,6 +5560,10 @@ input[type="button"].btn-block {
   height: 100%;
 }
 
+.select2-container .select2-search__field {
+  min-width: inherit;
+}
+
 .atum-list-table {
   border: none !important;
 }
@@ -6456,10 +6460,6 @@ table.wp-list-table tbody tr:hover {
 
 img.tips {
   padding: 5px 0 0;
-}
-
-.select2-container .select2-search__field {
-  min-width: inherit;
 }
 
 #tiptip_holder {

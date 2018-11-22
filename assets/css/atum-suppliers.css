@@ -4148,6 +4148,10 @@ h2 .atum-help-tip {
   height: 100%;
 }
 
+.select2-container .select2-search__field {
+  min-width: inherit;
+}
+
 .atum-list-table {
   border: none !important;
 }

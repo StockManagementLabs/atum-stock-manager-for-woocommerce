@@ -5786,6 +5786,10 @@ input[type="button"].btn-block {
   height: 100%;
 }
 
+.select2-container .select2-search__field {
+  min-width: inherit;
+}
+
 .atum-list-table {
   border: none !important;
 }
