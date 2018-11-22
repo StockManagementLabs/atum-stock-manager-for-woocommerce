@@ -314,7 +314,7 @@ trait AtumListTableLegacyTrait {
 		$args['posts_per_page'] = - 1;
 		unset( $args['paged'] );
 
-		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERACALLY TO AVOID REPETITIVE WORK.
+		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERALLY TO AVOID REPETITIVE WORK.
 		$all_transient = Helpers::get_transient_identifier( $args, 'list_table_all' );
 		$products      = Helpers::get_transient( $all_transient );
 

@@ -377,9 +377,17 @@ class Suppliers {
 	public function enqueue_scripts( $hook ) {
 
 		global $post_type;
-		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) && self::POST_TYPE === $post_type ) {
+		if ( in_array( $hook, [ 'post.php', 'post-new.php', 'edit.php' ] ) && self::POST_TYPE === $post_type ) {
 			wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array(), ATUM_VERSION );
+			wp_register_script( 'atum-suppliers', ATUM_URL . 'assets/js/atum.listTables.js', FALSE, ATUM_VERSION, TRUE );
+			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
+
+			wp_localize_script( 'atum-suppliers', 'atumListTableVars', array(
+				'placeholderSearch' => __( 'Search Supplier...', ATUM_TEXT_DOMAIN ),
+			) );
 			wp_enqueue_style( 'atum-suppliers' );
+			wp_enqueue_script( 'atum-suppliers' );
+			wp_enqueue_script( 'select2' );
 			wp_enqueue_script( 'wc-enhanced-select' );
 		}
 

@@ -1591,6 +1591,41 @@
 		 * Add horizontal scroll effect to menu views
 		 */
 		addHorizontalScrolleffect: function() {
+			
+			var $nav = document.getElementById('stock_central_nav');
+			var stockCentralNav = new Hammer($nav);
+			
+			stockCentralNav.on('panright panleft', function (ev) {
+				var $nav = document.getElementById('stock_central_nav');
+				var paneStartX   = $nav.scrollLeft,
+				    offset       = 20,
+				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
+				if ( ev.type === 'panright' ) {
+					$nav.scrollLeft = displacement;
+				}else {
+					$nav.scrollLeft = displacement;
+				}
+				
+				
+			});
+			
+			var $nav = document.getElementById('filters_container');
+			var filtersContainerScroll = new Hammer($nav);
+			
+			filtersContainerScroll.on('panright panleft', function (ev) {
+				var $nav = document.getElementById('filters_container');
+				var paneStartX   = $nav.scrollLeft,
+				    offset       = 20,
+				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
+				if ( ev.type === 'panright' ) {
+					$nav.scrollLeft = displacement;
+				}else {
+					$nav.scrollLeft = displacement;
+				}
+				
+				
+			});
+			
 			$('.nav-with-scroll-effect').bind('scroll',function () {
 				$('.wc-enhanced-select').select2("close");
 				var $nav = document.getElementById($(this).attr('id'));
