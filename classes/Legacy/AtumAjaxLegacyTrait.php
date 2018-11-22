@@ -15,6 +15,9 @@ namespace Atum\Legacy;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Globals;
+use Atum\Suppliers\Suppliers;
+
 
 trait AtumAjaxLegacyTrait {
 
@@ -54,6 +57,11 @@ trait AtumAjaxLegacyTrait {
 			$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // WPCS: unprepared SQL ok.
 			$join_counter ++;
 		}
+
+		// Search by Supplier SKU.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$meta_join[]     = "LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id";
+		$meta_where[]    = $wpdb->prepare( 'OR apd.supplier_sku LIKE %s', $like_term );
 
 		// Exclude variable products from results.
 		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) );
@@ -175,6 +183,5 @@ trait AtumAjaxLegacyTrait {
 		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $products ) );
 
 	}
-
 
 }

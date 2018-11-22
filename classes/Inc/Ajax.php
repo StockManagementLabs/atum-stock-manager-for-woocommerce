@@ -22,6 +22,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
+use Atum\Legacy\AtumAjaxLegacyTrait;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
@@ -887,43 +888,32 @@ final class Ajax {
 		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 		$meta_join     = $meta_where = array();
 		$type_where    = '';
-		$join_counter  = 1;
 
-		// Search by meta keys.
-		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', [ 'sku', 'supplier_sku' ] ) );
+		// Search by SKU.
+		$meta_join[]  = "LEFT JOIN {$wpdb->prefix}wc_products wcd ON posts.ID = wcd.product_id";
+		$meta_where[] = $wpdb->prepare( 'OR wcd.sku LIKE %s', $like_term );
 
-		foreach ( $searched_metas as $searched_meta ) {
-			$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
-			$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // WPCS: unprepared SQL ok.
-			$join_counter ++;
-		}
+		// Search by Supplier SKU.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$meta_join[]     = "LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id";
+		$meta_where[]    = $wpdb->prepare( 'OR apd.supplier_sku LIKE %s', $like_term );
 
 		// Exclude variable products from results.
 		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) );
 
 		if ( ! empty( $excluded_types ) ) {
 
-			$excluded_type_terms = array();
-
-			foreach ( $excluded_types as $excluded_type ) {
-				$excluded_type_terms[] = get_term_by( 'slug', $excluded_type, 'product_type' );
-			}
-
-			$excluded_type_terms = wp_list_pluck( array_filter( $excluded_type_terms ), 'term_taxonomy_id' );
-
 			$type_where = "AND posts.ID NOT IN (
-				SELECT p.ID FROM $wpdb->posts p
-				LEFT JOIN $wpdb->term_relationships tr ON p.ID = tr.object_id
-				WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
-				AND p.post_status IN ('" . implode( "','", $post_statuses ) . "')
-				AND tr.term_taxonomy_id IN (" . implode( ',', $excluded_type_terms ) . ')
-			)';
+				SELECT wpd1.product_id FROM {$wpdb->prefix}wc_products wpd1		
+				WHERE wpd1.type IN ('" . implode( "','", $excluded_types ) . "')
+			)";
 
 		}
 		
-		$query_select = " SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
+		$query_select = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
 		
-		$where_clause = $wpdb->prepare( 'WHERE (
+		$where_clause = $wpdb->prepare( '
+			WHERE (
 				posts.post_title LIKE %s
 				OR posts.post_content LIKE %s
 				' . implode( "\n", $meta_where ) . "
