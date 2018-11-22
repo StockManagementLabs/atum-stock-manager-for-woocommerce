@@ -1166,8 +1166,8 @@ table.wp-list-table {
 	border: none;
 	border-top: 1px solid $gray-200;
 	
-	th {
-		&.column-status, &.column-type, &.column-wc_order, &.column-actions, &.column-supplier, &.column-expected_date {
+	thead, tfoot {
+		th {
 			padding: 0;
 			font-size: 14px;
 			font-weight: bold;
@@ -1175,6 +1175,7 @@ table.wp-list-table {
 			color: $gray-500;
 		}
 	}
+	
 	
 	tbody {
 		tr:hover {
@@ -1626,6 +1627,23 @@ table.wp-list-table {
 		}
 	}
 	
+	td {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
+		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
+		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
+		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total,
+		&.company_code, &.company_phone, &.calc_inbound, &.calc_date_ordered, &.calc_date_expected, &.column-calc_mi_status {
+			color: $gray-600;
+		}
+		
+		&.column-_stock, &._out_stock_threshold, &.assigned_to, &.wc_order {
+			color: $blue;
+			a {
+				color: $blue;
+			}
+		}
+	}
+	
 	td, th {
 		position: relative;
 		vertical-align: middle;
@@ -1661,21 +1679,6 @@ table.wp-list-table {
 		
 		&.column-sku {
 			min-width: 70px;
-		}
-		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
-		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
-		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
-		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total,
-		&.company_code, &.company_phone, &.calc_inbound, &.calc_date_ordered, &.calc_date_expected {
-			color: $gray-600;
-		}
-		
-		&.column-_stock, &._out_stock_threshold, &.assigned_to, &.wc_order {
-			color: $blue;
-			a {
-				color: $blue;
-			}
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
