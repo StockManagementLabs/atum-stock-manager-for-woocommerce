@@ -40,7 +40,7 @@
 			
 			var self = this;
 			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
-			
+			$('#posts-filter').prepend($('.subsubsub'));
 			$('.subsubsub').append($('.search-box'));
 			$('.search-box').show();
 			$('select').select2();
