@@ -5508,6 +5508,8 @@ input[type="button"].btn-block {
 
 .atum-list-table thead .item-heads, .atum-list-table tfoot, .floatThead-container thead .item-heads, .floatThead-container tfoot, .inbound-stock-list thead .item-heads, .inbound-stock-list tfoot, .wp-list-table thead .item-heads, .wp-list-table tfoot {
   background-color: #fff;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .atum-list-table thead .item-heads th, .atum-list-table thead .item-heads td, .atum-list-table tfoot th, .atum-list-table tfoot td, .floatThead-container thead .item-heads th, .floatThead-container thead .item-heads td, .floatThead-container tfoot th, .floatThead-container tfoot td, .inbound-stock-list thead .item-heads th, .inbound-stock-list thead .item-heads td, .inbound-stock-list tfoot th, .inbound-stock-list tfoot td, .wp-list-table thead .item-heads th, .wp-list-table thead .item-heads td, .wp-list-table tfoot th, .wp-list-table tfoot td {
@@ -5566,6 +5568,11 @@ input[type="button"].btn-block {
 
 .atum-list-table thead .item-heads th svg, .atum-list-table tfoot th svg, .floatThead-container thead .item-heads th svg, .floatThead-container tfoot th svg, .inbound-stock-list thead .item-heads th svg, .inbound-stock-list tfoot th svg, .wp-list-table thead .item-heads th svg, .wp-list-table tfoot th svg {
   max-height: 14px;
+}
+
+.atum-list-table tfoot .item-heads, .floatThead-container tfoot .item-heads, .inbound-stock-list tfoot .item-heads, .wp-list-table tfoot .item-heads {
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .atum-list-table tfoot .item-heads th, .floatThead-container tfoot .item-heads th, .inbound-stock-list tfoot .item-heads th, .wp-list-table tfoot .item-heads th {
@@ -6140,22 +6147,22 @@ input[type="button"].btn-block {
 
 .atum-list-table .show-locations, .floatThead-container .show-locations, .inbound-stock-list .show-locations, .wp-list-table .show-locations {
   cursor: pointer;
-  color: #00B8DB;
+  color: #adb5bd;
   font-size: 20px;
 }
 
 .atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty, .inbound-stock-list .show-locations.not-empty, .wp-list-table .show-locations.not-empty {
-  color: #0073AA;
+  color: #00B8DB;
 }
 
 .atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy, .inbound-stock-list .show-hierarchy, .wp-list-table .show-hierarchy {
   cursor: pointer;
-  color: #00B8DB;
+  color: #adb5bd;
   font-size: 20px;
 }
 
 .atum-list-table .show-hierarchy.not-empty, .floatThead-container .show-hierarchy.not-empty, .inbound-stock-list .show-hierarchy.not-empty, .wp-list-table .show-hierarchy.not-empty {
-  color: #0073AA;
+  color: #00B8DB;
 }
 
 .atum-list-table .set-meta, .floatThead-container .set-meta, .inbound-stock-list .set-meta, .wp-list-table .set-meta {

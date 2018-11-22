@@ -1718,10 +1718,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				<option value="<?php echo esc_attr( $name ) ?>"<?php if ( 'edit' === $name ) echo ' class="hide-if-no-js"' ?>><?php echo esc_html( $title ) ?></option>
 			<?php endforeach; ?>
 		</select>
-		<button type="button" class="apply-bulk-action btn btn-warning">
-			<?php esc_html_e( 'Apply', ATUM_TEXT_DOMAIN ) ?>
-		</button>
 		<?php
+		$this->add_apply_bulk_action_button();
 	}
 
 	/**
@@ -1731,7 +1729,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function add_apply_bulk_action_button() {
 		?>
-		<button type="button" class="apply-bulk-action page-title-action hidden"></button>
+		<button type="button" class="apply-bulk-action apply-bulk-action  btn btn-warning">
+			<?php esc_html_e( 'Apply', ATUM_TEXT_DOMAIN ) ?>
+		</button>
 		<?php
 	}
 

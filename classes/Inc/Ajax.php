@@ -250,7 +250,7 @@ final class Ajax {
 		ob_start();
 		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( esc_attr( $_POST['sortby'] ) ) );
 
-		wp_die( ob_get_clean() );
+		wp_die( ob_get_clean() ); // WPCS: XSS ok.
 
 	}
 
@@ -511,8 +511,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$key        = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name = esc_attr( $_POST['addon'] );
+		$key        = esc_attr( $_POST['key'] );
 
 		if ( ! $addon_name || ! $key ) {
 			wp_send_json_error( __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN ) );
@@ -633,8 +633,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$key           = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $key ) {
@@ -732,8 +732,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$key           = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $key ) {
@@ -792,9 +792,9 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$addon_slug    = esc_attr( $_POST['slug'] ); // WPCS: CSRF ok.
-		$key           = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$addon_slug    = esc_attr( $_POST['slug'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $addon_slug || ! $key ) {
@@ -832,6 +832,7 @@ final class Ajax {
 	 * @since 1.4.4
 	 */
 	public function dismiss_notice() {
+
 		check_ajax_referer( 'dismiss-atum-notice', 'token' );
 
 		if ( ! empty( $_POST['key'] ) ) {
@@ -842,6 +843,14 @@ final class Ajax {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy methods
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use AtumAjaxLegacyTrait;
+
+	/**
 	 * Seach for products from enhanced selects
 	 *
 	 * @package ATUM Orders
@@ -849,6 +858,17 @@ final class Ajax {
 	 * @since 1.3.7
 	 */
 	public function search_products() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			$this->search_products_legacy();
+			return;
+		}
 
 		check_ajax_referer( 'search-products', 'security' );
 
@@ -870,7 +890,7 @@ final class Ajax {
 		$join_counter  = 1;
 
 		// Search by meta keys.
-		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', [ '_sku' ] ) );
+		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', [ 'sku', 'supplier_sku' ] ) );
 
 		foreach ( $searched_metas as $searched_meta ) {
 			$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
@@ -1890,7 +1910,7 @@ final class Ajax {
 
 		if ( $product_id > 0 ) {
 
-			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
+			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, [ 'hide_empty' => FALSE ] );
 
 			if ( empty( $locations ) ) {
 				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No Locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
@@ -2052,6 +2072,7 @@ final class Ajax {
 		global $wpdb;
 		$wpdb->hide_errors();
 
+		// TODO: 1.5.0.
 		// If there are products without the manage_stock meta key, insert it for them.
 		$insert_success = $wpdb->query( $wpdb->prepare("
 			INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
