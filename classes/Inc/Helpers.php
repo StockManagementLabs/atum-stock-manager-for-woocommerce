@@ -1493,6 +1493,17 @@ final class Helpers {
 		return new $model_class( $atum_order_id );
 
 	}
+
+	/**
+	 * Check whether WooCommerce is using the new tables
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return bool
+	 */
+	public static function is_using_new_wc_tables() {
+		return class_exists( '\WC_Product_Data_Store_Custom_Table' );
+	}
 	
 	/**
 	 * Get the appropriate ATUM Order statuses depending on the post_type

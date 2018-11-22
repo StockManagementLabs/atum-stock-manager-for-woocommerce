@@ -521,20 +521,21 @@
 				
 				//
 				// Reset Filters button
-				//---------------------
+				// --------------------
 				.on('click', '.reset-filters', function() {
 					
 	                self.destroyTooltips();
 	                
-	                //TODO reset s and column search
+	                // TODO reset s and column search
 	                $.address.queryString('');
 	                self.$searchInput.val('');
 	                
-	                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') != 'title') {
+	                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') !== 'title') {
 						self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
 	                }
 	                
 					self.updateTable();
+	                $(this).addClass('hidden');
 	    
 				})
 				

@@ -12,6 +12,9 @@
 
 namespace Atum\Inc;
 
+use Atum\Suppliers\Suppliers;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -118,16 +121,15 @@ final class Globals {
 	const SEARCHABLE_COLUMNS = array(
 		'string'  => array(
 			'title',
-			'_supplier',
 			'_sku',
-			'_supplier_sku',
+			Suppliers::SUPPLIER_SKU_META_KEY,
 			'IDs', // ID as string to allow the use of commas ex: s = '12, 13, 89'.
 		),
 		'numeric' => array(
 			'ID',
 			'_regular_price',
 			'_sale_price',
-			'_purchase_price',
+			self::PURCHASE_PRICE_KEY,
 			'_weight',
 			'_stock',
 		),
