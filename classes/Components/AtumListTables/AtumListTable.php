@@ -743,7 +743,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( Helpers::is_child_type( $this->product->get_type() ) ) {
 
-			$attributes = wc_get_product_variation_attributes( $product_id );
+			$attributes = $this->product->get_attributes();
 
 			if ( ! empty( $attributes ) ) {
 				$title = ucfirst( implode( ' ', $attributes ) );
