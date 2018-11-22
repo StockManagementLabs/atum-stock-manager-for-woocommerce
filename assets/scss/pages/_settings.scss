@@ -89,9 +89,11 @@ $settings-xs-min:          568px !default;
 				}
 			}
 		}
+		
 		.atum-nav-item {
 			box-shadow: 0 1px 0 0 $gray-200;
 		}
+		
 		.nav-footer {
 			.nav-footer-logo {
 				span {
@@ -150,7 +152,6 @@ $settings-xs-min:          568px !default;
 			}
 		}
 	}
-	
 	
 	.nav-footer {
 		position: absolute;
@@ -370,9 +371,7 @@ $settings-xs-min:          568px !default;
 				
 				}
 			}
-			.nav-footer {
-			
-			}
+		
 		}
 		.atum-nav-light {
 			.atum-nav-header {
@@ -616,6 +615,7 @@ $settings-xs-min:          568px !default;
 				.atum-nav-item {
 					box-shadow: 0 1px 0 0 $gray-200;
 				}
+				
 				.nav-footer {
 					.nav-footer-logo {
 						span {
@@ -678,7 +678,8 @@ $settings-xs-min:          568px !default;
 			
 			.nav-footer {
 				position: absolute;
-				margin: 0;
+				left: 0;
+				right: 0;
 				bottom: 0;
 				
 				.nav-footer-logo {

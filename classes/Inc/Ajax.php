@@ -2105,7 +2105,9 @@ final class Ajax {
 	 * @since 1.4.5
 	 */
 	public function change_settings_menu_style() {
+
 		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
+
 		$menu_theme = $_POST['data']['menu_theme'];
 		$user_id    = get_current_user_id();
 
@@ -2125,13 +2127,22 @@ final class Ajax {
 	 * @since 1.4.5
 	 */
 	public function change_sticky_columns_value() {
+
+		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
+
 		$option = $_POST['data']['option'];
 
-        global $global_options;
-        $global_options['sticky_columns'] = $option;
-        update_option( Settings::OPTION_NAME, $global_options );
+		global $atum_global_options;
+
+		if ( empty( $atum_global_options ) ) {
+			$atum_global_options = Helpers::get_options();
+		}
+
+		$atum_global_options['sticky_columns'] = $option;
+		update_option( Settings::OPTION_NAME, $atum_global_options );
 
 		wp_die();
+
 	}
 
 	

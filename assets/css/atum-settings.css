@@ -4101,7 +4101,8 @@ input[type="button"].btn-block {
 
 #atum-settings .section-title .atum-settings-wrapper .nav-footer {
   position: absolute;
-  margin: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
 }
 
