@@ -7,42 +7,20 @@
 .wrap {
 	
 	h1.wp-heading-inline {
+		display: inline;
+		margin-right: 15px;
 		line-height: 1.5;
 		position: relative;
 		font-size: 36px;
 		font-weight: bold;
-		width: 100%;
-		@include flexbox;
-		@include flex-align-items(center);
-		
-		.page-title-action {
-			border-radius: 5px;
-			background-color: $green;
-			color: $white;
-			font-size: 12px;
-			font-weight: normal;
-			line-height: 30px;
-			text-transform: uppercase;
-			border: none;
-			padding: 0 12px;
-			top: 1px;
-			height: 30px;
-			margin-left: 14px;
-			
-			&:hover {
-				background-color: $green-opacity;
-			}
-			
-			@media all and (max-width: 782px) {
-				font-size: 14px;
-				height: 35px;
-				line-height: 35px;
-			}
-			
-			@media all and (max-width: $screen-xs) {
-				margin: 0;
-			}
-			
+		&.extend-list-table {
+			line-height: 1.5;
+			position: relative;
+			font-size: 36px;
+			font-weight: bold;
+			width: 100%;
+			@include flexbox;
+			@include flex-align-items(center);
 		}
 		
 		#atum-update-list {
@@ -81,9 +59,546 @@
 		}
 	}
 	
+	.page-title-action, .page-title-action:active {
+		border-radius: 5px;
+		background-color: $green;
+		color: $white;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 30px;
+		text-transform: uppercase;
+		border: none;
+		padding: 9px 11px;
+		
+		&.extend-list-table {
+			font-size: 12px;
+			padding: 0 12px;
+			top: 1px;
+			height: 30px;
+			margin-left: 14px;
+		}
+		
+		&:hover, &:focus {
+			background-color: $green-opacity;
+		}
+		
+		@media all and (max-width: 782px) {
+			font-size: 14px;
+			height: 35px;
+			line-height: 35px;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			margin: 0;
+		}
+		
+	}
+	
+	input[type=submit]:not(.save-atum-order) {
+		border-radius: 5px;
+		background-color: $orange;
+		font-size: 10px;
+		letter-spacing: normal;
+		text-align: center;
+		color: $white;
+		text-transform: uppercase;
+		box-shadow: none;
+		border: none;
+		height: 30px;
+		&:hover, &.active {
+			background-color: rgba($orange, 0.6);
+			color: $white;
+			border: none;
+		}
+	}
+	
 	@media all and (max-width: 782px) {
 		margin-right: 20px;
 		margin-left: 10px;
+	}
+}
+
+#posts-filter {
+	width: 100%;
+	overflow: hidden;
+	background-color: $white;
+	box-shadow: 0 4px 0 0 $gray-200;
+	padding: 0 0 10px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+
+.subsubsub {
+	&.extend-list-table {
+		width: inherit;
+		margin: 10px 20px;
+		border-radius: 0;
+		border-bottom: 0;
+		li {
+			padding: 0;
+			span {
+				@include flexbox;
+				@include flex-justify-content(center);
+				@include flex-align-items(center);
+				margin-left: 3px;
+				&.active {
+					border-radius: 5px;
+					background-color: $blue;
+					font-size: 16px;
+					padding: 0 10px;
+					font-weight: bold;
+					letter-spacing: 0.4px;
+					color: $white;
+					.text-blue {
+						color: $white;
+					}
+					.extra-links-container {
+						font-size: 14px;
+						font-weight: normal;
+						color: $white;
+						&.empty {
+							color: $white;
+						}
+						a {
+							color: $white;
+							&.empty {
+								color: $white;
+							}
+						}
+					}
+					a {
+						color: $white;
+						padding: 0;
+						&.empty, &.tips, &.empty {
+							color: $white;
+						}
+						.active {
+							padding: 0;
+						}
+					}
+					.count {
+						font-size: 16px;
+						font-weight: bold;
+						color: $white;
+						&.empty {
+							color: $white;
+						}
+					}
+				}
+				a {
+					color: $gray-500;
+					padding: 0;
+					&.current {
+						pointer-events: none;
+						color: $white;
+						font-weight: bold;
+					}
+					.text-blue {
+						color: $blue;
+					}
+					&.tips {
+						color: $blue;
+					}
+					&.empty {
+						color: $gray-500;
+					}
+				}
+				.extra-links-container {
+					font-size: 14px;
+					font-weight: normal;
+					color: $blue;
+					&.empty {
+						color: $gray-500;
+						a {
+							padding: 0;
+							color: $gray-500;
+						}
+					}
+					a {
+						padding: 0;
+						color: $blue;
+					}
+				}
+				.count {
+					font-size: 16px;
+					&.extra-links-container {
+						font-size: 14px;
+						font-weight: normal;
+					}
+					font-weight: bold;
+					color: $blue;
+					&.empty {
+						color: $gray-500;
+					}
+				}
+			}
+		}
+	}
+	
+	background-color: $white;
+	width: 100%;
+	position: relative;
+	font-size: 16px;
+	letter-spacing: 0.4px;
+	font-weight: bold;
+	text-transform: capitalize;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid $gray-200;
+	
+	@media all and (max-width: 782px) {
+		margin: 10px 10px;
+	}
+	
+	li {
+		color: $white;
+		padding: 20px 0 20px 10px;
+		text-transform: uppercase;
+		a {
+			color: $gray-500;
+			padding: 0;
+			&.current {
+				border-radius: 5px;
+				background-color: $blue;
+				font-size: 16px;
+				padding: 6px 10px;
+				font-weight: bold;
+				letter-spacing: 0.4px;
+				color: $white;
+				.count {
+					color: white;
+				}
+			}
+			.count {
+				font-size: 14px;
+				font-weight: normal;
+				color: $blue;
+			}
+			&:active, &:focus {
+				border: none;
+				outline: none;
+				box-shadow: none;
+			}
+		}
+	}
+	
+}
+
+.search-box {
+	@include flexbox;
+	//display: inline-block;
+	display: none;
+	float: right;
+	padding: 1px;
+	@include flex-wrap(nowrap);
+	z-index: 999;
+	float: right;
+	margin: 20px 10px 20px auto !important;
+	align-items: center;
+	border: 1px solid $gray-200;
+	border-radius: 5px;
+	
+	
+	z-index: 999;
+	float: right;
+	
+	&.extend-list-table {
+		@include flexbox;
+		border-radius: 0;
+		border: 0;
+		margin: 0 3px 3px auto;
+	}
+	
+	#post-search-input {
+		border: none;
+		box-shadow: none;
+		margin: 0;
+		height: 28px;
+		padding: 0 12px;
+		font-weight: normal;
+		&::placeholder {
+			font-size: 12px;
+			font-style: italic;
+			color: $gray-500;
+		}
+	}
+	input[type=submit] {
+		font-weight: normal;
+	}
+	
+	&.inbound-stock-search {
+		border: 1px solid $gray-200;
+		width: 280px;
+		height: 30px;
+		border-radius: 5px;
+		@include flexbox;
+		@include flex-align-items(center);
+		@include flex-justify-content(space-between);
+		margin: 10px 20px;
+		.atum-post-search {
+			width: 100%;
+			border-radius: 5px;
+			@media all and (max-width: 782px) {
+				margin-bottom: 0;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+			}
+		}
+		input[type=submit] {
+			width: 87px;
+			height: 30px;
+			@media all and (max-width: 782px) {
+				margin-bottom: 0;
+			}
+		}
+		@media all and (max-width: 782px) {
+			margin: 10px 10px;
+		}
+		@media all and (max-width: $screen-xs) {
+			margin: 10px 10px;
+			width: 95%;
+			flex-wrap: nowrap;
+		}
+	}
+	
+	@media all and (max-width: $screen-xs-min) {
+		float: none;
+		width: 100%;
+		justify-content: center;
+		margin: 0;
+		flex-wrap: wrap;
+	}
+	
+	#search_column_btn{
+		@if $enable-rounded {
+			border-top-left-radius : $border-radius;
+			border-bottom-left-radius: $border-radius;
+		} @else {
+			border-radius: 0;
+		}
+	}
+	
+	.atum-post-search {
+		margin-right: 0;
+		border: none;
+		box-shadow: none;
+		width: 110px;
+		&::placeholder {
+			color: $gray-500;
+			font-size: 12px;
+			font-style: italic;
+			letter-spacing: normal;
+			margin-left: 10px;
+		}
+		
+	}
+	
+	.input-group {
+		border-radius: 5px;
+		border: solid 1px $gray-200;
+		background-color: $white;
+		flex-wrap: nowrap;
+		@media all and (max-width: $screen-xs) {
+			width: 100%;
+		}
+	}
+	
+	.input-group-append {
+		border: none;
+	}
+	
+	.dropdown-toggle {
+		width: 130px;
+		text-align: left;
+		&:after {
+			vertical-align: middle;
+			font-family: Linearicons;
+			content: "\e874";
+			display: inline;
+			font-size: 10px;
+			position: absolute;
+			right: 10px;
+			top: 8px;
+		}
+		
+		border: none;
+		background-color: $gray-100;
+		font-size: 15px;
+		color: $gray-600;
+		&:focus, &:active, &:hover {
+			outline: 0;
+			box-shadow: none;
+			background-color: $gray-100;
+			color: $gray-600;
+		}
+	}
+	
+	.dropdown-menu{
+		margin-top: 0px;
+		right: 0px;
+		
+	}
+	
+	.dropdown-item{
+		width: auto;
+	}
+	
+}
+
+.tablenav.top {
+	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
+	@include flexbox;
+	@include flex-wrap(nowrap);
+	@include flex-justify-content(left);
+	@include flex-align-items(center);
+	padding: 10px 11px;
+	margin: 0;
+	@media all and (max-width: 782px) {
+		@include flex-wrap(wrap);
+	}
+	&.extend-list-table {
+		padding: 0 11px;
+	}
+	.tablenav-pages {
+		margin-left: auto;
+		text-align: right;
+		z-index: 998;
+		width: 300px;
+		&.one-page {
+			width: inherit;
+		}
+		@media all and (max-width: $screen-xs) {
+			width: 100%;
+			text-align: center;
+			display: inline-block;
+			margin: 0 0 10px;
+		}
+		.displaying-num {
+			@media all and (max-width: $screen-lg) {
+				display: inline-block;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+			}
+		}
+	}
+	
+	.filters-container-box {
+		width: 70%;
+		position: relative;
+		
+		&.not-pagination {
+			width: 90%;
+		}
+		
+		@media screen and (max-width: $screen-lg) {
+			width: 62%;
+		}
+		
+		@media screen and (max-width: 782px) {
+			width: inherit;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			width: 100% !important;
+			margin-top: 10px;
+		}
+		
+		.overflow-opacity-effect-right {
+			
+			@media screen and (max-width: 782px) {
+				display: none !important;
+			}
+			
+			@media all and (max-width: $screen-xs) {
+				display: none !important;
+			}
+		}
+		
+		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+			height: 50px;
+		}
+	}
+	
+	.nav-with-scroll-effect {
+		width: 100%;
+		height: 52px;
+		justify-content: start;
+		.actions {
+			overflow: initial;
+		}
+		@media all and (max-width: $screen-xs) {
+			width: 100%;
+			display: contents;
+			white-space: normal;
+		}
+		@media all and (max-width: 782px) {
+			right: 63%;
+			width: inherit;
+		}
+	}
+}
+
+.tablenav {
+	height: auto;
+	.btn {
+		margin-left: 5px;
+	}
+	.tablenav-pages {
+		margin-top: 0;
+		a:not(.extend-list-table) {
+			display: inline-block;
+			border: none;
+			padding: 0;
+			background: $gray-200;
+			font-size: 16px;
+			font-weight: 400;
+			text-align: center;
+			line-height: 30px;
+			&:hover, &:active, &:focus {
+				background-color: $orange;
+				color: $white;
+			}
+		}
+	}
+	#table-paging {
+		margin-left: 0;
+		@media all and (max-width: 782px) {
+			margin-left: 0;
+		}
+	}
+	input[type=submit] {
+		font-size: 12px;
+	}
+}
+
+.tablenav.bottom {
+	margin: 10px 11px 0;
+	.tablenav-pages {
+		margin-left: auto;
+		text-align: right;
+		z-index: 999;
+		@media all and (max-width: $screen-xs) {
+			margin: 0;
+			width: 100%;
+			text-align: center;
+			display: inline-block;
+			margin: 0 0 10px;
+		}
+		.displaying-num {
+			@media all and (max-width: $screen-lg) {
+				display: contents;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				display: inline-block;
+				position: inherit;
+				top: inherit;
+			}
+		}
 	}
 }
 
@@ -144,133 +659,6 @@
 		}
 	}
 	
-	.search-box {
-		@include flexbox;
-		//display: inline-block;
-		float: right;
-		margin-right: 3px;
-		margin-bottom: 3px;
-		flex-wrap: nowrap;
-		z-index: 999;
-		float: right;
-		margin-left: auto;
-		align-items: center;
-		
-		&.inbound-stock-search {
-			border: 1px solid $gray-200;
-			width: 280px;
-			height: 30px;
-			border-radius: 5px;
-			@include flexbox;
-			@include flex-align-items(center);
-			@include flex-justify-content(space-between);
-			margin: 10px 20px;
-			.atum-post-search {
-				width: 100%;
-				border-radius: 5px;
-				@media all and (max-width: 782px) {
-					margin-bottom: 0;
-				}
-				@media all and (max-width: $screen-xs) {
-					width: 100%;
-				}
-			}
-			input[type=submit] {
-				width: 87px;
-				height: 30px;
-				@media all and (max-width: 782px) {
-					margin-bottom: 0;
-				}
-			}
-			@media all and (max-width: 782px) {
-				margin: 10px 10px;
-			}
-			@media all and (max-width: $screen-xs) {
-				margin: 10px 10px;
-				width: 95%;
-				flex-wrap: nowrap;
-			}
-		}
-		
-		@media all and (max-width: $screen-xs-min) {
-			float: none;
-			width: 100%;
-			justify-content: center;
-			margin: 0;
-			flex-wrap: wrap;
-		}
-
-		#search_column_btn{
-			@if $enable-rounded {
-				border-top-left-radius : $border-radius;
-				border-bottom-left-radius: $border-radius;
-			} @else {
-				border-radius: 0;
-			}
-		}
-
-		.atum-post-search {
-			margin-right: 0;
-			border: none;
-			box-shadow: none;
-			width: 110px;
-			&::placeholder {
-				color: $gray-500;
-				font-size: 12px;
-				font-style: italic;
-				letter-spacing: normal;
-				margin-left: 10px;
-			}
-			
-		}
-		
-		.input-group {
-			border-radius: 5px;
-			border: solid 1px $gray-200;
-			background-color: $white;
-			flex-wrap: nowrap;
-			@media all and (max-width: $screen-xs) {
-				width: 100%;
-			}
-		}
-		
-		.input-group-append {
-			border: none;
-		}
-		
-		.dropdown-toggle {
-			&:after {
-				vertical-align: middle;
-				font-family: Linearicons;
-				content: "\e874";
-				display: inline;
-				font-size: 10px;
-			}
-			
-			border: none;
-			background-color: $gray-100;
-			font-size: 15px;
-			color: $gray-600;
-			&:focus, &:active, &:hover {
-				outline: 0;
-				box-shadow: none;
-				background-color: $gray-100;
-				color: $gray-600;
-			}
-		}
-
-		.dropdown-menu{
-			margin-top: 0px;
-			right: 0px;
-			
-		}
-
-		.dropdown-item{
-			width: auto;
-		}
-
-	}
-	
 	.search-submit {
 		margin-left: 4px;
 		background-color: $orange;
@@ -303,139 +691,7 @@
 		position: relative;
 	}
 	
-	.tablenav.top {
-		box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
-		@include flexbox;
-		@include flex-wrap(nowrap);
-		@include flex-justify-content(left);
-		@include flex-align-items(center);
-		padding: 0 11px;
-		margin: 0;
-		@media all and (max-width: 782px) {
-			@include flex-wrap(wrap);
-		}
-		.tablenav-pages {
-			margin-left: auto;
-			text-align: right;
-			z-index: 998;
-			width: 300px;
-			&.one-page {
-				width: inherit;
-			}
-			@media all and (max-width: $screen-xs) {
-				width: 100%;
-				text-align: center;
-				display: inline-block;
-				margin: 0 0 10px;
-			}
-			.displaying-num {
-				@media all and (max-width: $screen-lg) {
-					display: inline-block;
-				}
-				@media all and (max-width: $screen-xs) {
-					width: 100%;
-				}
-			}
-		}
-		
-		.filters-container-box {
-			width: 70%;
-			position: relative;
-			
-			&.not-pagination {
-				width: 90%;
-			}
-			
-			@media screen and (max-width: $screen-lg) {
-				width: 62%;
-			}
-			
-			@media screen and (max-width: 782px) {
-				width: inherit;
-			}
-			
-			@media all and (max-width: $screen-xs) {
-				width: 100% !important;
-				margin-top: 10px;
-			}
-			
-			.overflow-opacity-effect-right {
-				
-				@media screen and (max-width: 782px) {
-					display: none !important;
-				}
-				
-				@media all and (max-width: $screen-xs) {
-					display: none !important;
-				}
-			}
-			
-			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-				height: 50px;
-			}
-		}
-		
-		.nav-with-scroll-effect {
-			width: 100%;
-			height: 52px;
-			justify-content: start;
-			.actions {
-				overflow: initial;
-			}
-			@media all and (max-width: $screen-xs) {
-				width: 100%;
-				display: contents;
-				white-space: normal;
-			}
-			@media all and (max-width: 782px) {
-				right: 63%;
-				width: inherit;
-			}
-		}
-	}
 	
-	.tablenav {
-		height: auto;
-		.btn {
-			margin-left: 5px;
-		}
-		.tablenav-pages {
-			margin-top: 0;
-		}
-		#table-paging {
-			margin-left: 0;
-			@media all and (max-width: 782px) {
-				margin-left: 0;
-			}
-		}
-	}
-	
-	.tablenav.bottom {
-		margin: 10px 11px 0;
-		.tablenav-pages {
-			margin-left: auto;
-			text-align: right;
-			z-index: 999;
-			@media all and (max-width: $screen-xs) {
-				margin: 0;
-				width: 100%;
-				text-align: center;
-				display: inline-block;
-				margin: 0 0 10px;
-			}
-			.displaying-num {
-				@media all and (max-width: $screen-lg) {
-					display: contents;
-				}
-				@media all and (max-width: $screen-xs) {
-					width: 100%;
-					display: inline-block;
-					position: inherit;
-					top: inherit;
-				}
-			}
-		}
-	}
 	.stock-central-header {
 		@include flexbox;
 		@include flex-justify-content(space-between);
@@ -906,6 +1162,28 @@
 	}
 }
 
+table.wp-list-table {
+	border: none;
+	border-top: 1px solid $gray-200;
+	
+	thead, tfoot {
+		th {
+			padding: 0;
+			font-size: 14px;
+			font-weight: bold;
+			letter-spacing: 0.3px;
+			color: $gray-500;
+		}
+	}
+	
+	
+	tbody {
+		tr:hover {
+			box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
+		}
+	}
+}
+
 .atum-list-table, .floatThead-container, .inbound-stock-list, .wp-list-table  {
 	
 	margin-bottom: 15px;
@@ -1318,7 +1596,7 @@
 		}
 	}
 	
-	tbody {
+	tbody, #the-list {
 		.main-row {
 			&.active-row {
 				background-color: $blue-light;
@@ -1326,7 +1604,7 @@
 		}
 		td {
 			&.column-title, &.atum_order_title {
-				a {
+				a, .row-title {
 					font-size: 14px;
 					font-weight: bold;
 					letter-spacing: 0.3px;
@@ -1345,6 +1623,23 @@
 					color: $blue;
 					font-weight: bold;
 				}
+			}
+		}
+	}
+	
+	td {
+		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
+		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
+		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
+		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total,
+		&.company_code, &.company_phone, &.calc_inbound, &.calc_date_ordered, &.calc_date_expected, &.column-calc_mi_status {
+			color: $gray-600;
+		}
+		
+		&.column-_stock, &._out_stock_threshold, &.assigned_to, &.wc_order {
+			color: $blue;
+			a {
+				color: $blue;
 			}
 		}
 	}
@@ -1384,17 +1679,6 @@
 		
 		&.column-sku {
 			min-width: 70px;
-		}
-		
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
-		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
-		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
-		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total {
-			color: $gray-600;
-		}
-		
-		&.column-_stock, &._out_stock_threshold {
-			color: $blue;
 		}
 		
 		&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,

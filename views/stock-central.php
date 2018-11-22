@@ -16,14 +16,14 @@ defined( 'ABSPATH' ) || die;
 
 ?>
 <div class="wrap">
-	<h1 class="wp-heading-inline">
+	<h1 class="wp-heading-inline extend-list-table">
 		<?php echo esc_html( apply_filters( 'atum/stock_central/title', __( 'Stock Central', ATUM_TEXT_DOMAIN ) ) ) ?>
 
 		<?php if ( $is_uncontrolled_list ) : ?>
 			<?php esc_html_e( '(Uncontrolled)', ATUM_TEXT_DOMAIN ) ?>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
+		<a href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action extend-list-table"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
 		<?php do_action( 'atum/stock_central_list/page_title_buttons' ) ?>
 	</h1>
 
@@ -43,7 +43,7 @@ defined( 'ABSPATH' ) || die;
 				</nav>
 			</div>
 
-			<div class="search-box">
+			<div class="search-box extend-list-table">
 				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
@@ -75,11 +75,11 @@ defined( 'ABSPATH' ) || die;
 				?>
 
 				<div class="sticky-columns-button-container">
-					<button type="button" class="sticky-columns-button sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes">
+					<button type="button" class="sticky-columns-button tips sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes" data-tip="Enable Sticky Columns">
 						<i class="atmi-view-col-fixed-outline"></i>
 					</button>
 
-					<button type="button" class="sticky-columns-button sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no">
+					<button type="button" class="sticky-columns-button tips sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no" data-tip="Disable Sticky Columns">
 						<i class="atmi-view-list-outline"></i>
 					</button>
 				</div>

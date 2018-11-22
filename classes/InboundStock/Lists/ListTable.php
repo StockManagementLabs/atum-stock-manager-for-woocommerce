@@ -123,6 +123,7 @@ class ListTable extends AtumListTable {
 
 		$table_classes   = parent::get_table_classes();
 		$table_classes[] = 'inbound-stock-list';
+		$table_classes[] = 'striped';
 
 		return $table_classes;
 	}
