@@ -16,6 +16,8 @@ namespace Atum\Legacy;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
+use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
 
 
