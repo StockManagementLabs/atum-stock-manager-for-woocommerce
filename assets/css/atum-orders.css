@@ -4309,6 +4309,629 @@ input[type="button"].btn-block {
   }
 }
 
+#posts-filter {
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 0 0 #e9ecef;
+  padding: 0 0 10px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.subsubsub {
+  background-color: #fff;
+  width: 100%;
+  position: relative;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  font-weight: bold;
+  text-transform: capitalize;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.subsubsub.extend-list-table {
+  width: inherit;
+  margin: 10px 20px;
+  border-radius: 0;
+  border-bottom: 0;
+}
+
+.subsubsub.extend-list-table li {
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  margin-left: 3px;
+}
+
+.subsubsub.extend-list-table li span.active {
+  border-radius: 5px;
+  background-color: #00B8DB;
+  font-size: 16px;
+  padding: 0 10px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .text-blue {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container a {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container a.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active a {
+  color: #fff;
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span.active a.empty, .subsubsub.extend-list-table li span.active a.tips, .subsubsub.extend-list-table li span.active a.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active a .active {
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span.active .count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .count.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span a {
+  color: #adb5bd;
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span a.current {
+  pointer-events: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.subsubsub.extend-list-table li span a .text-blue {
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span a.tips {
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span a.empty {
+  color: #adb5bd;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container.empty {
+  color: #adb5bd;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container.empty a {
+  padding: 0;
+  color: #adb5bd;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container a {
+  padding: 0;
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span .count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span .count.extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.subsubsub.extend-list-table li span .count.empty {
+  color: #adb5bd;
+}
+
+@media all and (max-width: 782px) {
+  .subsubsub {
+    margin: 10px 10px;
+  }
+}
+
+.subsubsub li {
+  color: #fff;
+  padding: 20px 0 20px 10px;
+  text-transform: uppercase;
+}
+
+.subsubsub li a {
+  color: #adb5bd;
+  padding: 0;
+}
+
+.subsubsub li a.current {
+  border-radius: 5px;
+  background-color: #00B8DB;
+  font-size: 16px;
+  padding: 6px 10px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.subsubsub li a.current .count {
+  color: white;
+}
+
+.subsubsub li a .count {
+  font-size: 14px;
+  font-weight: normal;
+  color: #00B8DB;
+}
+
+.subsubsub li a:active, .subsubsub li a:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.search-box {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  display: none;
+  float: right;
+  padding: 1px;
+  -webkit-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  z-index: 999;
+  float: right;
+  margin: 20px 10px 20px auto !important;
+  align-items: center;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  z-index: 999;
+  float: right;
+}
+
+.search-box.extend-list-table {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 0;
+  border: 0;
+  margin: 0 3px 3px auto;
+}
+
+.search-box #post-search-input {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  height: 28px;
+  padding: 0 12px;
+  font-weight: normal;
+}
+
+.search-box #post-search-input::placeholder {
+  font-size: 12px;
+  font-style: italic;
+  color: #adb5bd;
+}
+
+.search-box input[type=submit] {
+  font-weight: normal;
+}
+
+.search-box.inbound-stock-search {
+  border: 1px solid #e9ecef;
+  width: 280px;
+  height: 30px;
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  justify-content: space-between;
+  margin: 10px 20px;
+}
+
+.search-box.inbound-stock-search .atum-post-search {
+  width: 100%;
+  border-radius: 5px;
+}
+
+@media all and (max-width: 782px) {
+  .search-box.inbound-stock-search .atum-post-search {
+    margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .search-box.inbound-stock-search .atum-post-search {
+    width: 100%;
+  }
+}
+
+.search-box.inbound-stock-search input[type=submit] {
+  width: 87px;
+  height: 30px;
+}
+
+@media all and (max-width: 782px) {
+  .search-box.inbound-stock-search input[type=submit] {
+    margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .search-box.inbound-stock-search {
+    margin: 10px 10px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .search-box.inbound-stock-search {
+    margin: 10px 10px;
+    width: 95%;
+    flex-wrap: nowrap;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .search-box {
+    float: none;
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+}
+
+.search-box #search_column_btn {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.search-box .atum-post-search {
+  margin-right: 0;
+  border: none;
+  box-shadow: none;
+  width: 110px;
+}
+
+.search-box .atum-post-search::placeholder {
+  color: #adb5bd;
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: normal;
+  margin-left: 10px;
+}
+
+.search-box .input-group {
+  border-radius: 5px;
+  border: solid 1px #e9ecef;
+  background-color: #fff;
+  flex-wrap: nowrap;
+}
+
+@media all and (max-width: 480px) {
+  .search-box .input-group {
+    width: 100%;
+  }
+}
+
+.search-box .input-group-append {
+  border: none;
+}
+
+.search-box .dropdown-toggle {
+  width: 130px;
+  text-align: left;
+  border: none;
+  background-color: #f8f9fa;
+  font-size: 15px;
+  color: #6c757d;
+}
+
+.search-box .dropdown-toggle:after {
+  vertical-align: middle;
+  font-family: Linearicons;
+  content: "\e874";
+  display: inline;
+  font-size: 10px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+}
+
+.search-box .dropdown-toggle:focus, .search-box .dropdown-toggle:active, .search-box .dropdown-toggle:hover {
+  outline: 0;
+  box-shadow: none;
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.search-box .dropdown-menu {
+  margin-top: 0px;
+  right: 0px;
+}
+
+.search-box .dropdown-item {
+  width: auto;
+}
+
+.tablenav.top {
+  box-shadow: 0 1px 0 0 #e9ecef, 0 -1px 0 0 #e9ecef;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  -webkit-justify-content: left;
+  -moz-justify-content: left;
+  justify-content: left;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  padding: 10px 11px;
+  margin: 0;
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.top {
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+}
+
+.tablenav.top.extend-list-table {
+  padding: 0 11px;
+}
+
+.tablenav.top .tablenav-pages {
+  margin-left: auto;
+  text-align: right;
+  z-index: 998;
+  width: 300px;
+}
+
+.tablenav.top .tablenav-pages.one-page {
+  width: inherit;
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .tablenav-pages {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    margin: 0 0 10px;
+  }
+}
+
+@media all and (max-width: 1200px) {
+  .tablenav.top .tablenav-pages .displaying-num {
+    display: inline-block;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .tablenav-pages .displaying-num {
+    width: 100%;
+  }
+}
+
+.tablenav.top .filters-container-box {
+  width: 70%;
+  position: relative;
+}
+
+.tablenav.top .filters-container-box.not-pagination {
+  width: 90%;
+}
+
+@media screen and (max-width: 1200px) {
+  .tablenav.top .filters-container-box {
+    width: 62%;
+  }
+}
+
+@media screen and (max-width: 782px) {
+  .tablenav.top .filters-container-box {
+    width: inherit;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .filters-container-box {
+    width: 100% !important;
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 782px) {
+  .tablenav.top .filters-container-box .overflow-opacity-effect-right {
+    display: none !important;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .filters-container-box .overflow-opacity-effect-right {
+    display: none !important;
+  }
+}
+
+.tablenav.top .filters-container-box .overflow-opacity-effect-right, .tablenav.top .filters-container-box .overflow-opacity-effect-left {
+  height: 50px;
+}
+
+.tablenav.top .nav-with-scroll-effect {
+  width: 100%;
+  height: 52px;
+  justify-content: start;
+}
+
+.tablenav.top .nav-with-scroll-effect .actions {
+  overflow: initial;
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .nav-with-scroll-effect {
+    width: 100%;
+    display: contents;
+    white-space: normal;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.top .nav-with-scroll-effect {
+    right: 63%;
+    width: inherit;
+  }
+}
+
+.tablenav {
+  height: auto;
+}
+
+.tablenav .btn {
+  margin-left: 5px;
+}
+
+.tablenav .tablenav-pages {
+  margin-top: 0;
+}
+
+.tablenav .tablenav-pages a:not(.extend-list-table) {
+  display: inline-block;
+  border: none;
+  padding: 0;
+  background: #e9ecef;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+}
+
+.tablenav .tablenav-pages a:not(.extend-list-table):hover, .tablenav .tablenav-pages a:not(.extend-list-table):active, .tablenav .tablenav-pages a:not(.extend-list-table):focus {
+  background-color: #EFAF00;
+  color: #fff;
+}
+
+.tablenav #table-paging {
+  margin-left: 0;
+}
+
+@media all and (max-width: 782px) {
+  .tablenav #table-paging {
+    margin-left: 0;
+  }
+}
+
+.tablenav input[type=submit] {
+  font-size: 12px;
+}
+
+.tablenav.bottom {
+  margin: 10px 11px 0;
+}
+
+.tablenav.bottom .tablenav-pages {
+  margin-left: auto;
+  text-align: right;
+  z-index: 999;
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .tablenav-pages {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    margin: 0 0 10px;
+  }
+}
+
+@media all and (max-width: 1200px) {
+  .tablenav.bottom .tablenav-pages .displaying-num {
+    display: contents;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .tablenav-pages .displaying-num {
+    width: 100%;
+    display: inline-block;
+    position: inherit;
+    top: inherit;
+  }
+}
+
 .atum-list-wrapper {
   width: 100%;
   overflow: hidden;
@@ -4380,168 +5003,6 @@ input[type="button"].btn-block {
   }
 }
 
-.atum-list-wrapper .search-box {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  float: right;
-  margin-right: 3px;
-  margin-bottom: 3px;
-  flex-wrap: nowrap;
-  z-index: 999;
-  float: right;
-  margin-left: auto;
-  align-items: center;
-}
-
-.atum-list-wrapper .search-box.inbound-stock-search {
-  border: 1px solid #e9ecef;
-  width: 280px;
-  height: 30px;
-  border-radius: 5px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
-  justify-content: space-between;
-  margin: 10px 20px;
-}
-
-.atum-list-wrapper .search-box.inbound-stock-search .atum-post-search {
-  width: 100%;
-  border-radius: 5px;
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .search-box.inbound-stock-search .atum-post-search {
-    margin-bottom: 0;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .search-box.inbound-stock-search .atum-post-search {
-    width: 100%;
-  }
-}
-
-.atum-list-wrapper .search-box.inbound-stock-search input[type=submit] {
-  width: 87px;
-  height: 30px;
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .search-box.inbound-stock-search input[type=submit] {
-    margin-bottom: 0;
-  }
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .search-box.inbound-stock-search {
-    margin: 10px 10px;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .search-box.inbound-stock-search {
-    margin: 10px 10px;
-    width: 95%;
-    flex-wrap: nowrap;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .search-box {
-    float: none;
-    width: 100%;
-    justify-content: center;
-    margin: 0;
-    flex-wrap: wrap;
-  }
-}
-
-.atum-list-wrapper .search-box #search_column_btn {
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}
-
-.atum-list-wrapper .search-box .atum-post-search {
-  margin-right: 0;
-  border: none;
-  box-shadow: none;
-  width: 110px;
-}
-
-.atum-list-wrapper .search-box .atum-post-search::placeholder {
-  color: #adb5bd;
-  font-size: 12px;
-  font-style: italic;
-  letter-spacing: normal;
-  margin-left: 10px;
-}
-
-.atum-list-wrapper .search-box .input-group {
-  border-radius: 5px;
-  border: solid 1px #e9ecef;
-  background-color: #fff;
-  flex-wrap: nowrap;
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .search-box .input-group {
-    width: 100%;
-  }
-}
-
-.atum-list-wrapper .search-box .input-group-append {
-  border: none;
-}
-
-.atum-list-wrapper .search-box .dropdown-toggle {
-  width: 130px;
-  text-align: left;
-  border: none;
-  background-color: #f8f9fa;
-  font-size: 15px;
-  color: #6c757d;
-}
-
-.atum-list-wrapper .search-box .dropdown-toggle:after {
-  vertical-align: middle;
-  font-family: Linearicons;
-  content: "\e874";
-  display: inline;
-  font-size: 10px;
-  position: absolute;
-  right: 10px;
-  top: 8px;
-}
-
-.atum-list-wrapper .search-box .dropdown-toggle:focus, .atum-list-wrapper .search-box .dropdown-toggle:active, .atum-list-wrapper .search-box .dropdown-toggle:hover {
-  outline: 0;
-  box-shadow: none;
-  background-color: #f8f9fa;
-  color: #6c757d;
-}
-
-.atum-list-wrapper .search-box .dropdown-menu {
-  margin-top: 0px;
-  right: 0px;
-}
-
-.atum-list-wrapper .search-box .dropdown-item {
-  width: auto;
-}
-
 .atum-list-wrapper .search-submit {
   margin-left: 4px;
   background-color: #EFAF00;
@@ -4575,197 +5036,6 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .tablenav-pages, .atum-list-wrapper .search-box {
   position: relative;
-}
-
-.atum-list-wrapper .tablenav.top {
-  box-shadow: 0 1px 0 0 #e9ecef, 0 -1px 0 0 #e9ecef;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: nowrap;
-  -moz-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  -webkit-justify-content: left;
-  -moz-justify-content: left;
-  justify-content: left;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
-  padding: 0 11px;
-  margin: 0;
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .tablenav.top {
-    -webkit-flex-wrap: wrap;
-    -moz-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-  }
-}
-
-.atum-list-wrapper .tablenav.top .tablenav-pages {
-  margin-left: auto;
-  text-align: right;
-  z-index: 998;
-  width: 300px;
-}
-
-.atum-list-wrapper .tablenav.top .tablenav-pages.one-page {
-  width: inherit;
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.top .tablenav-pages {
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-    margin: 0 0 10px;
-  }
-}
-
-@media all and (max-width: 1200px) {
-  .atum-list-wrapper .tablenav.top .tablenav-pages .displaying-num {
-    display: inline-block;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.top .tablenav-pages .displaying-num {
-    width: 100%;
-  }
-}
-
-.atum-list-wrapper .tablenav.top .filters-container-box {
-  width: 70%;
-  position: relative;
-}
-
-.atum-list-wrapper .tablenav.top .filters-container-box.not-pagination {
-  width: 90%;
-}
-
-@media screen and (max-width: 1200px) {
-  .atum-list-wrapper .tablenav.top .filters-container-box {
-    width: 62%;
-  }
-}
-
-@media screen and (max-width: 782px) {
-  .atum-list-wrapper .tablenav.top .filters-container-box {
-    width: inherit;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.top .filters-container-box {
-    width: 100% !important;
-    margin-top: 10px;
-  }
-}
-
-@media screen and (max-width: 782px) {
-  .atum-list-wrapper .tablenav.top .filters-container-box .overflow-opacity-effect-right {
-    display: none !important;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.top .filters-container-box .overflow-opacity-effect-right {
-    display: none !important;
-  }
-}
-
-.atum-list-wrapper .tablenav.top .filters-container-box .overflow-opacity-effect-right, .atum-list-wrapper .tablenav.top .filters-container-box .overflow-opacity-effect-left {
-  height: 50px;
-}
-
-.atum-list-wrapper .tablenav.top .nav-with-scroll-effect {
-  width: 100%;
-  height: 52px;
-  justify-content: start;
-}
-
-.atum-list-wrapper .tablenav.top .nav-with-scroll-effect .actions {
-  overflow: initial;
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.top .nav-with-scroll-effect {
-    width: 100%;
-    display: contents;
-    white-space: normal;
-  }
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .tablenav.top .nav-with-scroll-effect {
-    right: 63%;
-    width: inherit;
-  }
-}
-
-.atum-list-wrapper .tablenav {
-  height: auto;
-}
-
-.atum-list-wrapper .tablenav .btn {
-  margin-left: 5px;
-}
-
-.atum-list-wrapper .tablenav .tablenav-pages {
-  margin-top: 0;
-}
-
-.atum-list-wrapper .tablenav #table-paging {
-  margin-left: 0;
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .tablenav #table-paging {
-    margin-left: 0;
-  }
-}
-
-.atum-list-wrapper .tablenav.bottom {
-  margin: 10px 11px 0;
-}
-
-.atum-list-wrapper .tablenav.bottom .tablenav-pages {
-  margin-left: auto;
-  text-align: right;
-  z-index: 999;
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.bottom .tablenav-pages {
-    margin: 0;
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-    margin: 0 0 10px;
-  }
-}
-
-@media all and (max-width: 1200px) {
-  .atum-list-wrapper .tablenav.bottom .tablenav-pages .displaying-num {
-    display: contents;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav.bottom .tablenav-pages .displaying-num {
-    width: 100%;
-    display: inline-block;
-    position: inherit;
-    top: inherit;
-  }
 }
 
 .atum-list-wrapper .stock-central-header {
@@ -5313,6 +5583,23 @@ input[type="button"].btn-block {
   table-layout: auto !important;
 }
 
+table.wp-list-table {
+  border: none;
+  border-top: 1px solid #e9ecef;
+}
+
+table.wp-list-table th.column-status, table.wp-list-table th.column-type, table.wp-list-table th.column-wc_order, table.wp-list-table th.column-actions, table.wp-list-table th.column-supplier, table.wp-list-table th.column-expected_date {
+  padding: 0;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
+}
+
+table.wp-list-table tbody tr:hover {
+  box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
+}
+
 .atum-list-table, .floatThead-container, .inbound-stock-list, .wp-list-table {
   margin-bottom: 15px;
   border-collapse: collapse;
@@ -5742,24 +6029,24 @@ input[type="button"].btn-block {
   color: #fff;
 }
 
-.atum-list-table tbody .main-row.active-row, .floatThead-container tbody .main-row.active-row, .inbound-stock-list tbody .main-row.active-row, .wp-list-table tbody .main-row.active-row {
+.atum-list-table tbody .main-row.active-row, .atum-list-table #the-list .main-row.active-row, .floatThead-container tbody .main-row.active-row, .floatThead-container #the-list .main-row.active-row, .inbound-stock-list tbody .main-row.active-row, .inbound-stock-list #the-list .main-row.active-row, .wp-list-table tbody .main-row.active-row, .wp-list-table #the-list .main-row.active-row {
   background-color: #dbf9ff;
 }
 
-.atum-list-table tbody td.column-title a, .atum-list-table tbody td.atum_order_title a, .floatThead-container tbody td.column-title a, .floatThead-container tbody td.atum_order_title a, .inbound-stock-list tbody td.column-title a, .inbound-stock-list tbody td.atum_order_title a, .wp-list-table tbody td.column-title a, .wp-list-table tbody td.atum_order_title a {
+.atum-list-table tbody td.column-title a, .atum-list-table tbody td.column-title .row-title, .atum-list-table tbody td.atum_order_title a, .atum-list-table tbody td.atum_order_title .row-title, .atum-list-table #the-list td.column-title a, .atum-list-table #the-list td.column-title .row-title, .atum-list-table #the-list td.atum_order_title a, .atum-list-table #the-list td.atum_order_title .row-title, .floatThead-container tbody td.column-title a, .floatThead-container tbody td.column-title .row-title, .floatThead-container tbody td.atum_order_title a, .floatThead-container tbody td.atum_order_title .row-title, .floatThead-container #the-list td.column-title a, .floatThead-container #the-list td.column-title .row-title, .floatThead-container #the-list td.atum_order_title a, .floatThead-container #the-list td.atum_order_title .row-title, .inbound-stock-list tbody td.column-title a, .inbound-stock-list tbody td.column-title .row-title, .inbound-stock-list tbody td.atum_order_title a, .inbound-stock-list tbody td.atum_order_title .row-title, .inbound-stock-list #the-list td.column-title a, .inbound-stock-list #the-list td.column-title .row-title, .inbound-stock-list #the-list td.atum_order_title a, .inbound-stock-list #the-list td.atum_order_title .row-title, .wp-list-table tbody td.column-title a, .wp-list-table tbody td.column-title .row-title, .wp-list-table tbody td.atum_order_title a, .wp-list-table tbody td.atum_order_title .row-title, .wp-list-table #the-list td.column-title a, .wp-list-table #the-list td.column-title .row-title, .wp-list-table #the-list td.atum_order_title a, .wp-list-table #the-list td.atum_order_title .row-title {
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.3px;
   color: #00B8DB;
 }
 
-.atum-list-table tbody td.column-_sku span, .floatThead-container tbody td.column-_sku span, .inbound-stock-list tbody td.column-_sku span, .wp-list-table tbody td.column-_sku span {
+.atum-list-table tbody td.column-_sku span, .atum-list-table #the-list td.column-_sku span, .floatThead-container tbody td.column-_sku span, .floatThead-container #the-list td.column-_sku span, .inbound-stock-list tbody td.column-_sku span, .inbound-stock-list #the-list td.column-_sku span, .wp-list-table tbody td.column-_sku span, .wp-list-table #the-list td.column-_sku span {
   font-size: 14px;
   letter-spacing: 0.3px;
   color: #00B8DB;
 }
 
-.atum-list-table tbody td.calc_purchase_order a, .floatThead-container tbody td.calc_purchase_order a, .inbound-stock-list tbody td.calc_purchase_order a, .wp-list-table tbody td.calc_purchase_order a {
+.atum-list-table tbody td.calc_purchase_order a, .atum-list-table #the-list td.calc_purchase_order a, .floatThead-container tbody td.calc_purchase_order a, .floatThead-container #the-list td.calc_purchase_order a, .inbound-stock-list tbody td.calc_purchase_order a, .inbound-stock-list #the-list td.calc_purchase_order a, .wp-list-table tbody td.calc_purchase_order a, .wp-list-table #the-list td.calc_purchase_order a {
   color: #00B8DB;
   font-weight: bold;
 }
@@ -5808,11 +6095,15 @@ input[type="button"].btn-block {
   min-width: 70px;
 }
 
-.atum-list-table td._supplier, .atum-list-table td.column-_supplier_sku, .atum-list-table td.column-calc_type, .atum-list-table td.stock-counters, .atum-list-table td.stock-negatives, .atum-list-table td.calc_sales_last_ndays, .atum-list-table td.calc_will_last, .atum-list-table td.calc_stock_out_days, .atum-list-table td.calc_lost_sales, .atum-list-table td.multi-inventory, .atum-list-table td.column-status, .atum-list-table td.column-type, .atum-list-table td.column-wc_order, .atum-list-table td.column-actions, .atum-list-table td.column-supplier, .atum-list-table td.column-expected_date, .atum-list-table td.column-date, .atum-list-table td.column-total, .atum-list-table th._supplier, .atum-list-table th.column-_supplier_sku, .atum-list-table th.column-calc_type, .atum-list-table th.stock-counters, .atum-list-table th.stock-negatives, .atum-list-table th.calc_sales_last_ndays, .atum-list-table th.calc_will_last, .atum-list-table th.calc_stock_out_days, .atum-list-table th.calc_lost_sales, .atum-list-table th.multi-inventory, .atum-list-table th.column-status, .atum-list-table th.column-type, .atum-list-table th.column-wc_order, .atum-list-table th.column-actions, .atum-list-table th.column-supplier, .atum-list-table th.column-expected_date, .atum-list-table th.column-date, .atum-list-table th.column-total, .floatThead-container td._supplier, .floatThead-container td.column-_supplier_sku, .floatThead-container td.column-calc_type, .floatThead-container td.stock-counters, .floatThead-container td.stock-negatives, .floatThead-container td.calc_sales_last_ndays, .floatThead-container td.calc_will_last, .floatThead-container td.calc_stock_out_days, .floatThead-container td.calc_lost_sales, .floatThead-container td.multi-inventory, .floatThead-container td.column-status, .floatThead-container td.column-type, .floatThead-container td.column-wc_order, .floatThead-container td.column-actions, .floatThead-container td.column-supplier, .floatThead-container td.column-expected_date, .floatThead-container td.column-date, .floatThead-container td.column-total, .floatThead-container th._supplier, .floatThead-container th.column-_supplier_sku, .floatThead-container th.column-calc_type, .floatThead-container th.stock-counters, .floatThead-container th.stock-negatives, .floatThead-container th.calc_sales_last_ndays, .floatThead-container th.calc_will_last, .floatThead-container th.calc_stock_out_days, .floatThead-container th.calc_lost_sales, .floatThead-container th.multi-inventory, .floatThead-container th.column-status, .floatThead-container th.column-type, .floatThead-container th.column-wc_order, .floatThead-container th.column-actions, .floatThead-container th.column-supplier, .floatThead-container th.column-expected_date, .floatThead-container th.column-date, .floatThead-container th.column-total, .inbound-stock-list td._supplier, .inbound-stock-list td.column-_supplier_sku, .inbound-stock-list td.column-calc_type, .inbound-stock-list td.stock-counters, .inbound-stock-list td.stock-negatives, .inbound-stock-list td.calc_sales_last_ndays, .inbound-stock-list td.calc_will_last, .inbound-stock-list td.calc_stock_out_days, .inbound-stock-list td.calc_lost_sales, .inbound-stock-list td.multi-inventory, .inbound-stock-list td.column-status, .inbound-stock-list td.column-type, .inbound-stock-list td.column-wc_order, .inbound-stock-list td.column-actions, .inbound-stock-list td.column-supplier, .inbound-stock-list td.column-expected_date, .inbound-stock-list td.column-date, .inbound-stock-list td.column-total, .inbound-stock-list th._supplier, .inbound-stock-list th.column-_supplier_sku, .inbound-stock-list th.column-calc_type, .inbound-stock-list th.stock-counters, .inbound-stock-list th.stock-negatives, .inbound-stock-list th.calc_sales_last_ndays, .inbound-stock-list th.calc_will_last, .inbound-stock-list th.calc_stock_out_days, .inbound-stock-list th.calc_lost_sales, .inbound-stock-list th.multi-inventory, .inbound-stock-list th.column-status, .inbound-stock-list th.column-type, .inbound-stock-list th.column-wc_order, .inbound-stock-list th.column-actions, .inbound-stock-list th.column-supplier, .inbound-stock-list th.column-expected_date, .inbound-stock-list th.column-date, .inbound-stock-list th.column-total, .wp-list-table td._supplier, .wp-list-table td.column-_supplier_sku, .wp-list-table td.column-calc_type, .wp-list-table td.stock-counters, .wp-list-table td.stock-negatives, .wp-list-table td.calc_sales_last_ndays, .wp-list-table td.calc_will_last, .wp-list-table td.calc_stock_out_days, .wp-list-table td.calc_lost_sales, .wp-list-table td.multi-inventory, .wp-list-table td.column-status, .wp-list-table td.column-type, .wp-list-table td.column-wc_order, .wp-list-table td.column-actions, .wp-list-table td.column-supplier, .wp-list-table td.column-expected_date, .wp-list-table td.column-date, .wp-list-table td.column-total, .wp-list-table th._supplier, .wp-list-table th.column-_supplier_sku, .wp-list-table th.column-calc_type, .wp-list-table th.stock-counters, .wp-list-table th.stock-negatives, .wp-list-table th.calc_sales_last_ndays, .wp-list-table th.calc_will_last, .wp-list-table th.calc_stock_out_days, .wp-list-table th.calc_lost_sales, .wp-list-table th.multi-inventory, .wp-list-table th.column-status, .wp-list-table th.column-type, .wp-list-table th.column-wc_order, .wp-list-table th.column-actions, .wp-list-table th.column-supplier, .wp-list-table th.column-expected_date, .wp-list-table th.column-date, .wp-list-table th.column-total {
+.atum-list-table td._supplier, .atum-list-table td.column-_supplier_sku, .atum-list-table td.column-calc_type, .atum-list-table td.stock-counters, .atum-list-table td.stock-negatives, .atum-list-table td.calc_sales_last_ndays, .atum-list-table td.calc_will_last, .atum-list-table td.calc_stock_out_days, .atum-list-table td.calc_lost_sales, .atum-list-table td.multi-inventory, .atum-list-table td.column-status, .atum-list-table td.column-type, .atum-list-table td.column-wc_order, .atum-list-table td.column-actions, .atum-list-table td.column-supplier, .atum-list-table td.column-expected_date, .atum-list-table td.column-date, .atum-list-table td.column-total, .atum-list-table td.company_code, .atum-list-table td.company_phone, .atum-list-table td.calc_inbound, .atum-list-table td.calc_date_ordered, .atum-list-table td.calc_date_expected, .atum-list-table th._supplier, .atum-list-table th.column-_supplier_sku, .atum-list-table th.column-calc_type, .atum-list-table th.stock-counters, .atum-list-table th.stock-negatives, .atum-list-table th.calc_sales_last_ndays, .atum-list-table th.calc_will_last, .atum-list-table th.calc_stock_out_days, .atum-list-table th.calc_lost_sales, .atum-list-table th.multi-inventory, .atum-list-table th.column-status, .atum-list-table th.column-type, .atum-list-table th.column-wc_order, .atum-list-table th.column-actions, .atum-list-table th.column-supplier, .atum-list-table th.column-expected_date, .atum-list-table th.column-date, .atum-list-table th.column-total, .atum-list-table th.company_code, .atum-list-table th.company_phone, .atum-list-table th.calc_inbound, .atum-list-table th.calc_date_ordered, .atum-list-table th.calc_date_expected, .floatThead-container td._supplier, .floatThead-container td.column-_supplier_sku, .floatThead-container td.column-calc_type, .floatThead-container td.stock-counters, .floatThead-container td.stock-negatives, .floatThead-container td.calc_sales_last_ndays, .floatThead-container td.calc_will_last, .floatThead-container td.calc_stock_out_days, .floatThead-container td.calc_lost_sales, .floatThead-container td.multi-inventory, .floatThead-container td.column-status, .floatThead-container td.column-type, .floatThead-container td.column-wc_order, .floatThead-container td.column-actions, .floatThead-container td.column-supplier, .floatThead-container td.column-expected_date, .floatThead-container td.column-date, .floatThead-container td.column-total, .floatThead-container td.company_code, .floatThead-container td.company_phone, .floatThead-container td.calc_inbound, .floatThead-container td.calc_date_ordered, .floatThead-container td.calc_date_expected, .floatThead-container th._supplier, .floatThead-container th.column-_supplier_sku, .floatThead-container th.column-calc_type, .floatThead-container th.stock-counters, .floatThead-container th.stock-negatives, .floatThead-container th.calc_sales_last_ndays, .floatThead-container th.calc_will_last, .floatThead-container th.calc_stock_out_days, .floatThead-container th.calc_lost_sales, .floatThead-container th.multi-inventory, .floatThead-container th.column-status, .floatThead-container th.column-type, .floatThead-container th.column-wc_order, .floatThead-container th.column-actions, .floatThead-container th.column-supplier, .floatThead-container th.column-expected_date, .floatThead-container th.column-date, .floatThead-container th.column-total, .floatThead-container th.company_code, .floatThead-container th.company_phone, .floatThead-container th.calc_inbound, .floatThead-container th.calc_date_ordered, .floatThead-container th.calc_date_expected, .inbound-stock-list td._supplier, .inbound-stock-list td.column-_supplier_sku, .inbound-stock-list td.column-calc_type, .inbound-stock-list td.stock-counters, .inbound-stock-list td.stock-negatives, .inbound-stock-list td.calc_sales_last_ndays, .inbound-stock-list td.calc_will_last, .inbound-stock-list td.calc_stock_out_days, .inbound-stock-list td.calc_lost_sales, .inbound-stock-list td.multi-inventory, .inbound-stock-list td.column-status, .inbound-stock-list td.column-type, .inbound-stock-list td.column-wc_order, .inbound-stock-list td.column-actions, .inbound-stock-list td.column-supplier, .inbound-stock-list td.column-expected_date, .inbound-stock-list td.column-date, .inbound-stock-list td.column-total, .inbound-stock-list td.company_code, .inbound-stock-list td.company_phone, .inbound-stock-list td.calc_inbound, .inbound-stock-list td.calc_date_ordered, .inbound-stock-list td.calc_date_expected, .inbound-stock-list th._supplier, .inbound-stock-list th.column-_supplier_sku, .inbound-stock-list th.column-calc_type, .inbound-stock-list th.stock-counters, .inbound-stock-list th.stock-negatives, .inbound-stock-list th.calc_sales_last_ndays, .inbound-stock-list th.calc_will_last, .inbound-stock-list th.calc_stock_out_days, .inbound-stock-list th.calc_lost_sales, .inbound-stock-list th.multi-inventory, .inbound-stock-list th.column-status, .inbound-stock-list th.column-type, .inbound-stock-list th.column-wc_order, .inbound-stock-list th.column-actions, .inbound-stock-list th.column-supplier, .inbound-stock-list th.column-expected_date, .inbound-stock-list th.column-date, .inbound-stock-list th.column-total, .inbound-stock-list th.company_code, .inbound-stock-list th.company_phone, .inbound-stock-list th.calc_inbound, .inbound-stock-list th.calc_date_ordered, .inbound-stock-list th.calc_date_expected, .wp-list-table td._supplier, .wp-list-table td.column-_supplier_sku, .wp-list-table td.column-calc_type, .wp-list-table td.stock-counters, .wp-list-table td.stock-negatives, .wp-list-table td.calc_sales_last_ndays, .wp-list-table td.calc_will_last, .wp-list-table td.calc_stock_out_days, .wp-list-table td.calc_lost_sales, .wp-list-table td.multi-inventory, .wp-list-table td.column-status, .wp-list-table td.column-type, .wp-list-table td.column-wc_order, .wp-list-table td.column-actions, .wp-list-table td.column-supplier, .wp-list-table td.column-expected_date, .wp-list-table td.column-date, .wp-list-table td.column-total, .wp-list-table td.company_code, .wp-list-table td.company_phone, .wp-list-table td.calc_inbound, .wp-list-table td.calc_date_ordered, .wp-list-table td.calc_date_expected, .wp-list-table th._supplier, .wp-list-table th.column-_supplier_sku, .wp-list-table th.column-calc_type, .wp-list-table th.stock-counters, .wp-list-table th.stock-negatives, .wp-list-table th.calc_sales_last_ndays, .wp-list-table th.calc_will_last, .wp-list-table th.calc_stock_out_days, .wp-list-table th.calc_lost_sales, .wp-list-table th.multi-inventory, .wp-list-table th.column-status, .wp-list-table th.column-type, .wp-list-table th.column-wc_order, .wp-list-table th.column-actions, .wp-list-table th.column-supplier, .wp-list-table th.column-expected_date, .wp-list-table th.column-date, .wp-list-table th.column-total, .wp-list-table th.company_code, .wp-list-table th.company_phone, .wp-list-table th.calc_inbound, .wp-list-table th.calc_date_ordered, .wp-list-table th.calc_date_expected {
   color: #6c757d;
 }
 
-.atum-list-table td.column-_stock, .atum-list-table td._out_stock_threshold, .atum-list-table th.column-_stock, .atum-list-table th._out_stock_threshold, .floatThead-container td.column-_stock, .floatThead-container td._out_stock_threshold, .floatThead-container th.column-_stock, .floatThead-container th._out_stock_threshold, .inbound-stock-list td.column-_stock, .inbound-stock-list td._out_stock_threshold, .inbound-stock-list th.column-_stock, .inbound-stock-list th._out_stock_threshold, .wp-list-table td.column-_stock, .wp-list-table td._out_stock_threshold, .wp-list-table th.column-_stock, .wp-list-table th._out_stock_threshold {
+.atum-list-table td.column-_stock, .atum-list-table td._out_stock_threshold, .atum-list-table td.assigned_to, .atum-list-table td.wc_order, .atum-list-table th.column-_stock, .atum-list-table th._out_stock_threshold, .atum-list-table th.assigned_to, .atum-list-table th.wc_order, .floatThead-container td.column-_stock, .floatThead-container td._out_stock_threshold, .floatThead-container td.assigned_to, .floatThead-container td.wc_order, .floatThead-container th.column-_stock, .floatThead-container th._out_stock_threshold, .floatThead-container th.assigned_to, .floatThead-container th.wc_order, .inbound-stock-list td.column-_stock, .inbound-stock-list td._out_stock_threshold, .inbound-stock-list td.assigned_to, .inbound-stock-list td.wc_order, .inbound-stock-list th.column-_stock, .inbound-stock-list th._out_stock_threshold, .inbound-stock-list th.assigned_to, .inbound-stock-list th.wc_order, .wp-list-table td.column-_stock, .wp-list-table td._out_stock_threshold, .wp-list-table td.assigned_to, .wp-list-table td.wc_order, .wp-list-table th.column-_stock, .wp-list-table th._out_stock_threshold, .wp-list-table th.assigned_to, .wp-list-table th.wc_order {
+  color: #00B8DB;
+}
+
+.atum-list-table td.column-_stock a, .atum-list-table td._out_stock_threshold a, .atum-list-table td.assigned_to a, .atum-list-table td.wc_order a, .atum-list-table th.column-_stock a, .atum-list-table th._out_stock_threshold a, .atum-list-table th.assigned_to a, .atum-list-table th.wc_order a, .floatThead-container td.column-_stock a, .floatThead-container td._out_stock_threshold a, .floatThead-container td.assigned_to a, .floatThead-container td.wc_order a, .floatThead-container th.column-_stock a, .floatThead-container th._out_stock_threshold a, .floatThead-container th.assigned_to a, .floatThead-container th.wc_order a, .inbound-stock-list td.column-_stock a, .inbound-stock-list td._out_stock_threshold a, .inbound-stock-list td.assigned_to a, .inbound-stock-list td.wc_order a, .inbound-stock-list th.column-_stock a, .inbound-stock-list th._out_stock_threshold a, .inbound-stock-list th.assigned_to a, .inbound-stock-list th.wc_order a, .wp-list-table td.column-_stock a, .wp-list-table td._out_stock_threshold a, .wp-list-table td.assigned_to a, .wp-list-table td.wc_order a, .wp-list-table th.column-_stock a, .wp-list-table th._out_stock_threshold a, .wp-list-table th.assigned_to a, .wp-list-table th.wc_order a {
   color: #00B8DB;
 }
 
@@ -6171,314 +6462,6 @@ img.tips {
   min-width: inherit;
 }
 
-.subsubsub {
-  background-color: #fff;
-  width: 100%;
-  position: relative;
-  font-size: 16px;
-  letter-spacing: 0.4px;
-  font-weight: bold;
-  text-transform: capitalize;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.subsubsub li {
-  color: #fff;
-  text-transform: uppercase;
-  padding: 20px 0 20px 10px;
-}
-
-.subsubsub li a {
-  color: #adb5bd;
-  padding: 0;
-}
-
-.subsubsub li a.current {
-  border-radius: 5px;
-  background-color: #00B8DB;
-  font-size: 16px;
-  padding: 6px 10px;
-  font-weight: bold;
-  letter-spacing: 0.4px;
-  color: #fff;
-}
-
-.subsubsub li a.current .count {
-  color: white;
-}
-
-.subsubsub li a .count {
-  font-size: 14px;
-  font-weight: normal;
-  color: #00B8DB;
-}
-
-.subsubsub li a:active, .subsubsub li a:focus {
-  border: none;
-  outline: none;
-  box-shadow: none;
-}
-
-.subsubsub .search-box {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  display: none;
-  float: right;
-  padding: 1px;
-  flex-wrap: nowrap;
-  z-index: 999;
-  float: right;
-  margin: 20px 10px 20px auto;
-  align-items: center;
-  border: 1px solid #e9ecef;
-  border-radius: 5px;
-}
-
-.subsubsub .search-box #post-search-input {
-  border: none;
-  box-shadow: none;
-  margin: 0;
-  height: 28px;
-  padding: 0 12px;
-  font-weight: normal;
-}
-
-.subsubsub .search-box #post-search-input::placeholder {
-  font-size: 12px;
-  font-style: italic;
-  color: #adb5bd;
-}
-
-.subsubsub .search-box input[type=submit] {
-  font-weight: normal;
-}
-
-#posts-filter {
-  width: 100%;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 4px 0 0 #e9ecef;
-  padding: 0 0 10px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.tablenav.top {
-  border-top: 1px solid #e9ecef;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: nowrap;
-  -moz-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  -webkit-justify-content: left;
-  -moz-justify-content: left;
-  justify-content: left;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
-  padding: 10px 11px;
-  margin: 0;
-}
-
-@media all and (max-width: 782px) {
-  .tablenav.top {
-    -webkit-flex-wrap: wrap;
-    -moz-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-  }
-}
-
-.tablenav.top .tablenav-pages {
-  margin-left: auto;
-  text-align: right;
-  z-index: 998;
-  width: 300px;
-}
-
-.tablenav.top .tablenav-pages.one-page {
-  width: inherit;
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.top .tablenav-pages {
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-    margin: 0 0 10px;
-  }
-}
-
-@media all and (max-width: 1200px) {
-  .tablenav.top .tablenav-pages .displaying-num {
-    display: inline-block;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.top .tablenav-pages .displaying-num {
-    width: 100%;
-  }
-}
-
-.tablenav.top .filters-container-box {
-  width: 70%;
-  position: relative;
-}
-
-.tablenav.top .filters-container-box.not-pagination {
-  width: 90%;
-}
-
-@media screen and (max-width: 1200px) {
-  .tablenav.top .filters-container-box {
-    width: 62%;
-  }
-}
-
-@media screen and (max-width: 782px) {
-  .tablenav.top .filters-container-box {
-    width: inherit;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.top .filters-container-box {
-    width: 100% !important;
-    margin-top: 10px;
-  }
-}
-
-@media screen and (max-width: 782px) {
-  .tablenav.top .filters-container-box .overflow-opacity-effect-right {
-    display: none !important;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.top .filters-container-box .overflow-opacity-effect-right {
-    display: none !important;
-  }
-}
-
-.tablenav.top .filters-container-box .overflow-opacity-effect-right, .tablenav.top .filters-container-box .overflow-opacity-effect-left {
-  height: 50px;
-}
-
-.tablenav.top .nav-with-scroll-effect {
-  width: 100%;
-  height: 52px;
-  justify-content: start;
-}
-
-.tablenav.top .nav-with-scroll-effect .actions {
-  overflow: initial;
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.top .nav-with-scroll-effect {
-    width: 100%;
-    display: contents;
-    white-space: normal;
-  }
-}
-
-@media all and (max-width: 782px) {
-  .tablenav.top .nav-with-scroll-effect {
-    right: 63%;
-    width: inherit;
-  }
-}
-
-.tablenav {
-  height: auto;
-}
-
-.tablenav .btn {
-  margin-left: 5px;
-}
-
-.tablenav .tablenav-pages {
-  margin-top: 0;
-}
-
-.tablenav .tablenav-pages a {
-  display: inline-block;
-  border: none;
-  padding: 0;
-  background: #e9ecef;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: center;
-  line-height: 30px;
-}
-
-.tablenav .tablenav-pages a:hover, .tablenav .tablenav-pages a:active, .tablenav .tablenav-pages a:focus {
-  background-color: #EFAF00;
-  color: #fff;
-}
-
-.tablenav #table-paging {
-  margin-left: 0;
-}
-
-@media all and (max-width: 782px) {
-  .tablenav #table-paging {
-    margin-left: 0;
-  }
-}
-
-.tablenav input[type=submit] {
-  font-size: 12px;
-}
-
-.tablenav.bottom {
-  margin: 10px 11px 0;
-}
-
-.tablenav.bottom .tablenav-pages {
-  margin-left: auto;
-  text-align: right;
-  z-index: 999;
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.bottom .tablenav-pages {
-    margin: 0;
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-    margin: 0 0 10px;
-  }
-}
-
-@media all and (max-width: 1200px) {
-  .tablenav.bottom .tablenav-pages .displaying-num {
-    display: contents;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .tablenav.bottom .tablenav-pages .displaying-num {
-    width: 100%;
-    display: inline-block;
-    position: inherit;
-    top: inherit;
-  }
-}
-
 #tiptip_holder {
   display: none;
   z-index: 8675309;
@@ -6552,23 +6535,6 @@ img.tips {
   width: 0;
 }
 
-table.wp-list-table {
-  border: none;
-  border-top: 1px solid #e9ecef;
-}
-
-table.wp-list-table th.column-status, table.wp-list-table th.column-type, table.wp-list-table th.column-wc_order, table.wp-list-table th.column-actions, table.wp-list-table th.column-supplier, table.wp-list-table th.column-expected_date {
-  padding: 0;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 0.3px;
-  color: #adb5bd;
-}
-
-table.wp-list-table tbody tr:hover {
-  box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
-}
-
 table.wp-list-table .column-notes {
   width: 48px;
   text-align: center;
@@ -6577,16 +6543,6 @@ table.wp-list-table .column-notes {
 table.wp-list-table .column-notes img {
   margin: 0 auto;
   padding-top: 0 !important;
-}
-
-table.wp-list-table .column-title {
-  width: 15%;
-}
-
-table.wp-list-table .column-title time {
-  display: block;
-  color: #999;
-  margin: 3px 0;
 }
 
 table.wp-list-table .column-actions {

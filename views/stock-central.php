@@ -43,7 +43,7 @@ defined( 'ABSPATH' ) || die;
 				</nav>
 			</div>
 
-			<div class="search-box">
+			<div class="search-box extend-list-table">
 				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">

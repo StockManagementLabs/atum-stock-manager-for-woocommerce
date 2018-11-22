@@ -1645,7 +1645,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->screen->render_screen_reader_content( 'heading_views' );
 
 		?>
-		<ul class="subsubsub">
+		<ul class="subsubsub extend-list-table">
 			<?php
 			foreach ( $views as $class => $view ) :
 				$views[ $class ] = "\t<li class='$class'>$view";
@@ -2842,7 +2842,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function display_tablenav( $which ) {
 
 		?>
-		<div class="tablenav <?php echo esc_attr( $which ); ?>">
+		<div class="tablenav <?php echo esc_attr( $which ); ?> extend-list-table">
 
 					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?> ">
@@ -2902,7 +2902,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( empty( $this->_pagination_args ) ) {
 			$output = '<span class="displaying-num">' . esc_html__( '0 items', ATUM_TEXT_DOMAIN ) . '</span>';
-			echo "<div class='tablenav-pages'>$output</div>"; // WPCS: XSS ok.
+			echo "<div class='tablenav-pages extend-list-table'>$output</div>"; // WPCS: XSS ok.
 			return;
 		}
 
