@@ -1585,6 +1585,12 @@
 			});
 		},
 		/**
+		 * Reload active class row
+		 */
+		reloadAddActiveClassRow: function() {
+			this.addActiveClassRow();
+		},
+		/**
 		 * Add horizontal scroll effect to menu views
 		 */
 		addHorizontalScrolleffect: function() {
@@ -1645,6 +1651,13 @@
 					$overflowOpacityEffectLeft.show();
 				}
 			});
+		},
+		
+		/**
+		 * Reload add Horizontal Scroll effect
+		 */
+		reloadAddHorizontalScrolleffect: function() {
+			this.addHorizontalScrolleffect();
 		},
 		
 		/**
@@ -1800,6 +1813,9 @@
 					else {
 						self.reloadScrollbar();
 					}
+					
+					self.reloadAddActiveClassRow();
+					self.reloadAddHorizontalScrolleffect();
 					
 					self.removeOverlay();
                     self.setupSalesLastNDaysVal();
