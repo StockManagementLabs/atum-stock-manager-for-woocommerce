@@ -482,14 +482,16 @@ class Upgrade {
 			// Insert a new row of data.
 			$inserted_row = $wpdb->insert( $wpdb->prefix . ATUM_PREFIX . 'product_data', $new_data );
 
+			// TODO: Move meta deletion to ATUM settings -> Tools
 			// If the row was inserted, delete the old meta.
-			if ( $inserted_row ) {
+			// phpcs:ignore Squiz.Commenting.BlockComment.NoNewLine
+			/*if ( $inserted_row ) {
 
 				foreach ( array_keys( $meta_keys_to_migrate ) as $meta_key ) {
 					delete_post_meta( $product->ID, $meta_key );
 				}
 
-			}
+			}*/
 
 		}
 
@@ -525,6 +527,7 @@ class Upgrade {
 	 *
 	 * @since 1.4.15
 	 */
+	// phpcs:ignore Squiz.Commenting.BlockComment.NoNewLine
 	/*private function create_atum_log_table() {
 
 		global $wpdb;

@@ -54,7 +54,7 @@ img.tips {
 		}
 		
 	}
-	input[type=submit] {
+	input[type=submit]:not(.save-atum-order) {
 		border-radius: 5px;
 		background-color: $orange;
 		font-size: 10px;
@@ -64,6 +64,7 @@ img.tips {
 		text-transform: uppercase;
 		box-shadow: none;
 		border: none;
+		height: 30px;
 		&:hover, &.active {
 			background-color: rgba($orange, 0.6);
 			color: $white;

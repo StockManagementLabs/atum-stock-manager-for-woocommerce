@@ -1256,7 +1256,7 @@ final class Ajax {
 				}
 
 				// Add the product to the ATUM Order.
-				$item    = $atum_order->add_product( wc_get_product( $item_to_add ) );
+				$item    = $atum_order->add_product( Helpers::get_atum_product( $item_to_add ) );
 				$item_id = $item->get_id();
 				$class   = 'new_row';
 				
