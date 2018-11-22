@@ -2329,7 +2329,6 @@ input[type="button"].btn-block {
 }
 
 [class^="atmi-"], [class*=" atmi-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "atum-icon-font" !important;
   speak: none;
   font-style: normal;
@@ -2337,7 +2336,6 @@ input[type="button"].btn-block {
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
