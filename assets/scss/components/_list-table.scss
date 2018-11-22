@@ -913,6 +913,8 @@
 	
 	thead .item-heads, tfoot {
 		background-color: $white;
+		border-top: 1px solid $gray-200;
+		border-bottom: 1px solid $gray-200;
 		
 		th, td {
 			border: none;
@@ -979,6 +981,8 @@
 	
 	tfoot {
 		.item-heads {
+			border-top: 1px solid $gray-200;
+			border-bottom: 1px solid $gray-200;
 			th {
 				padding: 3px 5px;
 				line-height: 1.1;
@@ -1557,19 +1561,19 @@
 
 	.show-locations{
 		cursor: pointer;
-		color: $blue;
+		color: $gray-500;
 		font-size: 20px;
 		&.not-empty {
-			color: $link-color;
+			color: $blue;
 		}
 	}
 	
 	.show-hierarchy {
 		cursor: pointer;
-		color: $blue;
+		color: $gray-500;
 		font-size: 20px;
 		&.not-empty {
-			color: $link-color;
+			color: $blue;
 		}
 	}
 	
