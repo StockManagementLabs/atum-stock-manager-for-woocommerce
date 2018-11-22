@@ -2074,8 +2074,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		else {
 
 			$this->wc_query_data[] = array(
-				'key'   => 'type',
-				'value' => Globals::get_product_types(),
+				'key'     => 'type',
+				'value'   => Globals::get_product_types(),
+				'compare' => 'IN',
 			);
 
 		}
