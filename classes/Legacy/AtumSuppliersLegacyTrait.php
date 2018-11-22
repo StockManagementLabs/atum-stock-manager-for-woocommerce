@@ -13,10 +13,21 @@
 
 namespace Atum\Legacy;
 
+use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
+
+
 defined( 'ABSPATH' ) || die;
 
 
 trait AtumSuppliersLegacyTrait {
+	
+	/**
+	 * Store current supplier id to allow getting it from the where clause
+	 *
+	 * @var int
+	 */
+	private static $current_supplier_id;
 
 	/**
 	 * Get all the products linked to the specified supplier
@@ -37,23 +48,20 @@ trait AtumSuppliersLegacyTrait {
 
 		$supplier = get_post( $supplier_id );
 
-		if ( self::POST_TYPE === $supplier->post_type ) {
-
+		if ( $supplier && self::POST_TYPE === $supplier->post_type ) {
+			
+			$atum_data_table           = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+			self::$current_supplier_id = $supplier_id;
+			
 			$args = array(
 				'post_type'      => $post_type,
 				'post_status'    => array( 'publish', 'private' ),
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
-				'meta_query'     => array(
-					array(
-						'key'   => self::SUPPLIER_META_KEY,
-						'value' => $supplier_id,
-					),
-				),
 			);
-
+			
 			$term_join = $term_where = '';
-
+			
 			if ( $type_filter ) {
 
 				// SC fathers default taxonomies and ready to override to MC (or others) requirements.
@@ -69,13 +77,18 @@ trait AtumSuppliersLegacyTrait {
 					),
 				);
 
-				$term_join  = "LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id)";
-				$term_where = 'AND tr.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ')';
+				$term_join  = " LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id) ";
+				$term_where = ' AND tr.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ') ';
 
 			}
-
+			
+			add_filter( 'posts_join', array( __CLASS__, 'supplier_join' ), 10 );
+			add_filter( 'posts_where', array( __CLASS__, 'supplier_where' ), 10, 2 );
 			// Father IDs.
-			$products = get_posts( apply_filters( 'atum/suppliers/supplier_products_args', $args ) );
+			$query    = new \WP_Query( apply_filters( 'atum/suppliers/supplier_products_args', $args ) );
+			$products = $query->posts;
+			remove_filter( 'posts_join', array( __CLASS__, 'supplier_join' ), 10 );
+			remove_filter( 'posts_where', array( __CLASS__, 'supplier_where' ), 10 );
 
 			if ( $type_filter ) {
 
@@ -91,9 +104,9 @@ trait AtumSuppliersLegacyTrait {
 	                AND p.ID IN (
 	                
 	                    SELECT DISTINCT sp.post_parent FROM $wpdb->posts sp
-	                    INNER JOIN $wpdb->postmeta AS mt1 ON (sp.ID = mt1.post_id)
+	                    INNER JOIN $atum_data_table AS apd ON (sp.ID = apd.product_id)
 	                    WHERE sp.post_type = 'product_variation'
-	                    AND (mt1.meta_key = '" . self::SUPPLIER_META_KEY . "' AND CAST(mt1.meta_value AS SIGNED) = %d)
+	                    AND apd.supplier_id = %d
 	                    AND sp.post_status IN ('publish', 'private')
 	                      
 	                )", $supplier_id ); // WPCS: unprepared SQL ok.
@@ -104,9 +117,9 @@ trait AtumSuppliersLegacyTrait {
 					// Get rebel childs.
 					$query_childs = $wpdb->prepare( "
 		                SELECT DISTINCT p.ID FROM $wpdb->posts p
-		                INNER JOIN $wpdb->postmeta AS mt1 ON (p.ID = mt1.post_id)
+		                INNER JOIN $atum_data_table AS apd ON (p.ID = apd.product_id)
 		                WHERE p.post_type = 'product_variation'
-		                AND (mt1.meta_key = '" . self::SUPPLIER_META_KEY . "' AND CAST(mt1.meta_value AS SIGNED) = %d)
+		                AND apd.supplier_id = %d
 		                AND p.post_parent IN ( " . implode( ',', $parent_ids ) . " )
 		                AND p.post_status IN ('publish', 'private')
 	                ", $supplier_id ); // WPCS: unprepared SQL ok.
@@ -125,5 +138,41 @@ trait AtumSuppliersLegacyTrait {
 		return FALSE;
 
 	}
-
+	
+	/**
+	 * Add Atum Data Table to the wp_query join clause
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $join
+	 *
+	 * @return string
+	 */
+	public static function supplier_join( $join ) {
+		
+		global $wpdb;
+		
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		
+		$join .= " INNER JOIN $atum_data_table apd ON ($wpdb->posts.ID = apd.product_id) ";
+		
+		return $join;
+	}
+	
+	/**
+	 * Add Atum Data Table to the wp_query join clause
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string    $where
+	 * @param \WP_Query $wp_query
+	 *
+	 * @return string
+	 */
+	public static function supplier_where( $where, $wp_query ) {
+		
+		$where .= sprintf( ' AND (apd.supplier_id = %d) ', self::$current_supplier_id );
+		
+		return $where;
+	}
 }
