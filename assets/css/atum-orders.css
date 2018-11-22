@@ -4169,6 +4169,15 @@ input[type="button"].btn-block {
 }
 
 .wrap h1.wp-heading-inline {
+  display: inline;
+  margin-right: 15px;
+  line-height: 1.5;
+  position: relative;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.wrap h1.wp-heading-inline.extend-list-table {
   line-height: 1.5;
   position: relative;
   font-size: 36px;
@@ -4183,39 +4192,6 @@ input[type="button"].btn-block {
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
-}
-
-.wrap h1.wp-heading-inline .page-title-action {
-  border-radius: 5px;
-  background-color: #69C61D;
-  color: #fff;
-  font-size: 12px;
-  font-weight: normal;
-  line-height: 30px;
-  text-transform: uppercase;
-  border: none;
-  padding: 0 12px;
-  top: 1px;
-  height: 30px;
-  margin-left: 14px;
-}
-
-.wrap h1.wp-heading-inline .page-title-action:hover {
-  background-color: rgba(105, 198, 29, 0.6);
-}
-
-@media all and (max-width: 782px) {
-  .wrap h1.wp-heading-inline .page-title-action {
-    font-size: 14px;
-    height: 35px;
-    line-height: 35px;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .wrap h1.wp-heading-inline .page-title-action {
-    margin: 0;
-  }
 }
 
 .wrap h1.wp-heading-inline #atum-update-list {
@@ -4267,6 +4243,63 @@ input[type="button"].btn-block {
     justify-content: center;
     margin: 0;
   }
+}
+
+.wrap .page-title-action, .wrap .page-title-action:active {
+  border-radius: 5px;
+  background-color: #69C61D;
+  color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 30px;
+  text-transform: uppercase;
+  border: none;
+  padding: 9px 11px;
+}
+
+.wrap .page-title-action.extend-list-table, .wrap .page-title-action:active.extend-list-table {
+  font-size: 12px;
+  padding: 0 12px;
+  top: 1px;
+  height: 30px;
+  margin-left: 14px;
+}
+
+.wrap .page-title-action:hover, .wrap .page-title-action:focus, .wrap .page-title-action:active:hover, .wrap .page-title-action:active:focus {
+  background-color: rgba(105, 198, 29, 0.6);
+}
+
+@media all and (max-width: 782px) {
+  .wrap .page-title-action, .wrap .page-title-action:active {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .wrap .page-title-action, .wrap .page-title-action:active {
+    margin: 0;
+  }
+}
+
+.wrap input[type=submit]:not(.save-atum-order) {
+  border-radius: 5px;
+  background-color: #EFAF00;
+  font-size: 10px;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: none;
+  border: none;
+  height: 30px;
+}
+
+.wrap input[type=submit]:not(.save-atum-order):hover, .wrap input[type=submit]:not(.save-atum-order).active {
+  background-color: rgba(239, 175, 0, 0.6);
+  color: #fff;
+  border: none;
 }
 
 @media all and (max-width: 782px) {
@@ -4474,6 +4507,8 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .search-box .dropdown-toggle {
+  width: 130px;
+  text-align: left;
   border: none;
   background-color: #f8f9fa;
   font-size: 15px;
@@ -4486,6 +4521,9 @@ input[type="button"].btn-block {
   content: "\e874";
   display: inline;
   font-size: 10px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
 }
 
 .atum-list-wrapper .search-box .dropdown-toggle:focus, .atum-list-wrapper .search-box .dropdown-toggle:active, .atum-list-wrapper .search-box .dropdown-toggle:hover {
@@ -6127,66 +6165,6 @@ input[type="button"].btn-block {
 
 img.tips {
   padding: 5px 0 0;
-}
-
-.wrap h1.wp-heading-inline {
-  display: inline;
-  margin-right: 15px;
-  line-height: 1.5;
-  position: relative;
-  font-size: 36px;
-  font-weight: bold;
-}
-
-.wrap .page-title-action {
-  width: 130px;
-  height: 35px;
-  border-radius: 5px;
-  background-color: #69C61D;
-  color: #fff;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 30px;
-  text-transform: uppercase;
-  border: none;
-  padding: 9px 11px;
-}
-
-.wrap .page-title-action:hover {
-  background-color: rgba(105, 198, 29, 0.6);
-}
-
-@media all and (max-width: 782px) {
-  .wrap .page-title-action {
-    font-size: 14px;
-    height: 35px;
-    line-height: 35px;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .wrap .page-title-action {
-    margin: 0;
-  }
-}
-
-.wrap input[type=submit]:not(.save-atum-order) {
-  border-radius: 5px;
-  background-color: #EFAF00;
-  font-size: 10px;
-  letter-spacing: normal;
-  text-align: center;
-  color: #fff;
-  text-transform: uppercase;
-  box-shadow: none;
-  border: none;
-  height: 30px;
-}
-
-.wrap input[type=submit]:not(.save-atum-order):hover, .wrap input[type=submit]:not(.save-atum-order).active {
-  background-color: rgba(239, 175, 0, 0.6);
-  color: #fff;
-  border: none;
 }
 
 .select2-container .select2-search__field {

@@ -16,14 +16,14 @@ defined( 'ABSPATH' ) || die;
 
 ?>
 <div class="wrap">
-	<h1 class="wp-heading-inline">
+	<h1 class="wp-heading-inline extend-list-table">
 		<?php echo esc_html( apply_filters( 'atum/stock_central/title', __( 'Stock Central', ATUM_TEXT_DOMAIN ) ) ) ?>
 
 		<?php if ( $is_uncontrolled_list ) : ?>
 			<?php esc_html_e( '(Uncontrolled)', ATUM_TEXT_DOMAIN ) ?>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
+		<a href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action extend-list-table"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
 		<?php do_action( 'atum/stock_central_list/page_title_buttons' ) ?>
 	</h1>
 

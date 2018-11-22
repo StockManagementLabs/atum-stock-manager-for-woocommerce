@@ -7,42 +7,20 @@
 .wrap {
 	
 	h1.wp-heading-inline {
+		display: inline;
+		margin-right: 15px;
 		line-height: 1.5;
 		position: relative;
 		font-size: 36px;
 		font-weight: bold;
-		width: 100%;
-		@include flexbox;
-		@include flex-align-items(center);
-		
-		.page-title-action {
-			border-radius: 5px;
-			background-color: $green;
-			color: $white;
-			font-size: 12px;
-			font-weight: normal;
-			line-height: 30px;
-			text-transform: uppercase;
-			border: none;
-			padding: 0 12px;
-			top: 1px;
-			height: 30px;
-			margin-left: 14px;
-			
-			&:hover {
-				background-color: $green-opacity;
-			}
-			
-			@media all and (max-width: 782px) {
-				font-size: 14px;
-				height: 35px;
-				line-height: 35px;
-			}
-			
-			@media all and (max-width: $screen-xs) {
-				margin: 0;
-			}
-			
+		&.extend-list-table {
+			line-height: 1.5;
+			position: relative;
+			font-size: 36px;
+			font-weight: bold;
+			width: 100%;
+			@include flexbox;
+			@include flex-align-items(center);
 		}
 		
 		#atum-update-list {
@@ -78,6 +56,59 @@
 		@media all and (max-width: $screen-xs) {
 			@include flex-justify-content(center);
 			margin: 0;
+		}
+	}
+	
+	.page-title-action, .page-title-action:active {
+		border-radius: 5px;
+		background-color: $green;
+		color: $white;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 30px;
+		text-transform: uppercase;
+		border: none;
+		padding: 9px 11px;
+		
+		&.extend-list-table {
+			font-size: 12px;
+			padding: 0 12px;
+			top: 1px;
+			height: 30px;
+			margin-left: 14px;
+		}
+		
+		&:hover, &:focus {
+			background-color: $green-opacity;
+		}
+		
+		@media all and (max-width: 782px) {
+			font-size: 14px;
+			height: 35px;
+			line-height: 35px;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			margin: 0;
+		}
+		
+	}
+	
+	input[type=submit]:not(.save-atum-order) {
+		border-radius: 5px;
+		background-color: $orange;
+		font-size: 10px;
+		letter-spacing: normal;
+		text-align: center;
+		color: $white;
+		text-transform: uppercase;
+		box-shadow: none;
+		border: none;
+		height: 30px;
+		&:hover, &.active {
+			background-color: rgba($orange, 0.6);
+			color: $white;
+			border: none;
 		}
 	}
 	
@@ -239,12 +270,17 @@
 		}
 		
 		.dropdown-toggle {
+			width: 130px;
+			text-align: left;
 			&:after {
 				vertical-align: middle;
 				font-family: Linearicons;
 				content: "\e874";
 				display: inline;
 				font-size: 10px;
+				position: absolute;
+				right: 10px;
+				top: 8px;
 			}
 			
 			border: none;

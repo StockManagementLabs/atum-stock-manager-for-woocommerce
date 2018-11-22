@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || die;
 
 ?>
 <div class="wrap">
-	<h1 class="wp-heading-inline">
+	<h1 class="wp-heading-inline extend-list-table">
 		<?php echo esc_html( apply_filters( 'atum/inbound_stock/title', __( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ) ) ?>
 	</h1>
 	<hr class="wp-header-end">

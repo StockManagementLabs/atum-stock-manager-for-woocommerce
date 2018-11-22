@@ -16,63 +16,6 @@ img.tips {
 	padding: 5px 0 0;
 }
 
-.wrap {
-	h1.wp-heading-inline {
-		display: inline;
-		margin-right: 15px;
-		line-height: 1.5;
-		position: relative;
-		font-size: 36px;
-		font-weight: bold;
-	}
-	.page-title-action {
-		width: 130px;
-		height: 35px;
-		border-radius: 5px;
-		
-		background-color: $green;
-		color: $white;
-		font-size: 14px;
-		font-weight: normal;
-		line-height: 30px;
-		text-transform: uppercase;
-		border: none;
-		padding: 9px 11px;
-		
-		&:hover {
-			background-color: $green-opacity;
-		}
-		
-		@media all and (max-width: 782px) {
-			font-size: 14px;
-			height: 35px;
-			line-height: 35px;
-		}
-		
-		@media all and (max-width: $screen-xs) {
-			margin: 0;
-		}
-		
-	}
-	input[type=submit]:not(.save-atum-order) {
-		border-radius: 5px;
-		background-color: $orange;
-		font-size: 10px;
-		letter-spacing: normal;
-		text-align: center;
-		color: $white;
-		text-transform: uppercase;
-		box-shadow: none;
-		border: none;
-		height: 30px;
-		&:hover, &.active {
-			background-color: rgba($orange, 0.6);
-			color: $white;
-			border: none;
-		}
-	}
-}
-
 .select2-container .select2-search__field {
 	min-width: inherit;
 }
