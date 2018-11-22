@@ -377,18 +377,34 @@ class Suppliers {
 	public function enqueue_scripts( $hook ) {
 
 		global $post_type;
-		if ( in_array( $hook, [ 'post.php', 'post-new.php', 'edit.php' ] ) && self::POST_TYPE === $post_type ) {
-			wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array(), ATUM_VERSION );
-			wp_register_script( 'atum-suppliers', ATUM_URL . 'assets/js/atum.listTables.js', FALSE, ATUM_VERSION, TRUE );
-			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
 
-			wp_localize_script( 'atum-suppliers', 'atumListTableVars', array(
-				'placeholderSearch' => __( 'Search Supplier...', ATUM_TEXT_DOMAIN ),
-			) );
-			wp_enqueue_style( 'atum-suppliers' );
-			wp_enqueue_script( 'atum-suppliers' );
-			wp_enqueue_script( 'select2' );
-			wp_enqueue_script( 'wc-enhanced-select' );
+		if ( self::POST_TYPE === $post_type ) {
+
+			if ( in_array( $hook, [ 'post.php', 'post-new.php', 'edit.php' ] ) ) {
+
+				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array(), ATUM_VERSION );
+				wp_enqueue_style( 'atum-suppliers' );
+
+				if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+
+					wp_enqueue_script( 'wc-enhanced-select' );
+
+				}
+				elseif ( 'edit.php' === $hook ) {
+
+					wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
+					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/atum.postTypeList.js', array( 'select2' ), ATUM_VERSION, TRUE );
+
+					wp_localize_script( 'atum-suppliers-table', 'atumPostTypeListVars', array(
+						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
+					) );
+
+					wp_enqueue_script( 'atum-suppliers-table' );
+
+				}
+
+			}
+
 		}
 
 	}

@@ -1,16 +1,16 @@
 /**
- * Atum List Tables
+ * Atum Post Type List Tables
  *
  * @copyright Stock Management Labs ©2018
  *
- * @since 0.0.2
+ * @since 1.5.0
  */
 
 ;( function( $, window, document, undefined ) {
 	"use strict";
 	
 	// Create the defaults once
-	var pluginName = 'atumListTables',
+	var pluginName = 'atumPostTypeList',
 	    defaults   = {
 		
 	    };
@@ -23,7 +23,7 @@
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
-		this.settings = $.extend( {}, defaults, atumListTableVars || {}, options || {} );
+		this.settings = $.extend( {}, defaults, atumPostTypeListVars || {}, options || {} );
 		
 		this._defaults = defaults;
 		this._name = pluginName;
@@ -31,12 +31,12 @@
 	}
 	
 	// Avoid Plugin.prototype conflicts
-	$.extend( Plugin.prototype, {
+	$.extend(Plugin.prototype, {
 		
-		navigationReady: false,
+		navigationReady  : false,
 		numHashParameters: 0,
 		
-		init: function () {
+		init: function() {
 			
 			var self = this;
 			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
@@ -45,7 +45,7 @@
 			$('.search-box').show();
 			$('select').select2();
 		},
-	} );
+	});
 	
 	// A really lightweight plugin wrapper around the constructor, preventing against multiple instantiations
 	$.fn[ pluginName ] = function( options ) {
@@ -62,7 +62,7 @@
 	$(function () {
 		
 		// Init ATUM Settings
-		$('.wrap').atumListTables();
+		$('.wrap').atumPostTypeList();
 		
 	});
 	

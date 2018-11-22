@@ -922,17 +922,17 @@ abstract class AtumOrderPostType {
 
 			}
 			elseif ( 'edit.php' === $hook ) {
-				wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
-				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/atum.listTables.js', FALSE, ATUM_VERSION, TRUE );
 
-				wp_localize_script( 'atum-orders', 'atumListTableVars', array(
+				wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
+				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.postTypeList.js', array( 'select2', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
+
+				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search PO...', ATUM_TEXT_DOMAIN ),
 				) );
 
 				wp_enqueue_style( 'atum-orders' );
-				wp_enqueue_script( 'jquery-tiptip' ); // WooCommerce's jQuery TipTip.
-				wp_enqueue_script( 'select2' );
-				wp_enqueue_script( 'atum-orders' );
+				wp_enqueue_script( 'atum-orders-table' );
+
 			}
 
 		}

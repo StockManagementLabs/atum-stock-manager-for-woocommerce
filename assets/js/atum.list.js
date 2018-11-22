@@ -1581,7 +1581,8 @@
 					var $checkbox = $(this).find('input[type=checkbox]');
 					if ( $checkbox.is(':checked') ) {
 						$(this).addClass('active-row');
-					}else {
+					}
+					else {
 						$(this).removeClass('active-row');
 					}
 				});
