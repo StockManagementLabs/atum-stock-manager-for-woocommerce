@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || die;
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
-				<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
+				<nav id="stock_central_nav" class="nav-with-scroll-effect">
 					<?php $list->views(); ?>
 				</nav>
 			</div>
