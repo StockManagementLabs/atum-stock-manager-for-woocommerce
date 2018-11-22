@@ -157,6 +157,7 @@ $settings-xs-min:          568px !default;
 		position: absolute;
 		margin: 0;
 		bottom: 0;
+		width: 100%;
 		
 		.nav-footer-logo {
 			@include flexbox;

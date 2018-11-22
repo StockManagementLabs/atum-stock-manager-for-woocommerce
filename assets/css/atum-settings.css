@@ -3415,6 +3415,7 @@ input[type="button"].btn-block {
   position: absolute;
   margin: 0;
   bottom: 0;
+  width: 100%;
 }
 
 .atum-settings-wrapper .nav-footer .nav-footer-logo {

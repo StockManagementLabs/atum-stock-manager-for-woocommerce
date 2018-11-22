@@ -39,11 +39,43 @@
 		init: function() {
 			
 			var self = this;
+			
+			this.$atumTable = $('.wp-list-table');
+			
 			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
 			$('#posts-filter').prepend($('.subsubsub'));
 			$('.subsubsub').append($('.search-box'));
 			$('.search-box').show();
 			$('select').select2();
+			
+			this.addActiveClassRow();
+		},
+		/**
+		 * Add/remove row active class when checkbox is clicked
+		 */
+		addActiveClassRow: function() {
+			var self = this;
+			self.$atumTable.find('tbody .check-column input:checkbox').change(function () {
+				var $checkboxRow = self.$atumTable.find("#post-" + $(this).val());
+				if ( $(this).is(':checked') ) {
+					$checkboxRow.addClass('active-row');
+				}
+				else{
+					$checkboxRow.removeClass('active-row');
+				}
+			});
+			
+			$('#cb-select-all-1').change(function () {
+				$('tbody tr').each(function () {
+					var $checkbox = $(this).find('input[type=checkbox]');
+					if ( $checkbox.is(':checked') ) {
+						$(this).addClass('active-row');
+					}
+					else {
+						$(this).removeClass('active-row');
+					}
+				});
+			});
 		},
 	});
 	

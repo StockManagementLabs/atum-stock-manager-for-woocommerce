@@ -1577,8 +1577,11 @@
 			});
 			
 			$('#cb-select-all-1').change(function () {
-				$('.main-row').each(function () {
-					var $checkbox = $(this).find('input[type=checkbox]');
+				$('tbody tr').each(function () {
+					var $checkbox = $(this).find('.check-column input[type=checkbox]');
+					if ($(this).hasClass('expandable')) {
+						console.log($checkbox);
+					}
 					if ( $checkbox.is(':checked') ) {
 						$(this).addClass('active-row');
 					}
