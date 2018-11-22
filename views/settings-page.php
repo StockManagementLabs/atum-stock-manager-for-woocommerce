@@ -32,10 +32,8 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 				<div class="atum-nav-header">
 					<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
 						<div class="atum-brand">
-							<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php echo esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
-							<span>
-							<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
-						</span>
+							<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php echo esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+							<span><?php esc_html_e( 'ATUM', ATUM_TEXT_DOMAIN ) ?></span>
 						</div>
 					</a>
 
@@ -45,10 +43,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 				</div>
 
 				<ul class="atum-nav-list">
+					<?php foreach ( $tabs as $tab => $atts ) :
 
-				<?php foreach ( $tabs as $tab => $atts ) :
-
-					if ( $tab === $active ) :
+						if ( $tab === $active ) :
 							$active_sections = $atts['sections'];
 						endif; ?>
 
@@ -67,14 +64,15 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 				<div class="nav-footer">
 					<div class="nav-footer-logo">
-						<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
-						<span>
-						<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
-						</span>
+						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+
+						<span><?php esc_html_e( 'ATUM', ATUM_TEXT_DOMAIN ) ?></span>
 					</div>
 					<p>
-						<?php echo esc_attr( __( 'Current version: ' . ATUM_VERSION, ATUM_TEXT_DOMAIN ) ); // phpcs:ignore ?>
-						<a href="#"><?php echo esc_attr( __( 'Check updates', ATUM_TEXT_DOMAIN ) ) ?></a>
+						<?php
+						/* translators: the current ATUM version */
+						echo esc_html( sprintf( __( 'Current version: %s', ATUM_TEXT_DOMAIN ), ATUM_VERSION ) );
+						?>
 					</p>
 				</div>
 			</nav>

@@ -43,6 +43,8 @@ final class Helpers {
 
 		global $wpdb;
 
+		/* TODO: ADD ANOTHER OPTION IF USING THE NEW TABLES. */
+
 		$query = $wpdb->prepare( "
 			SELECT $wpdb->terms.term_id FROM $wpdb->terms 
             INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
@@ -482,14 +484,10 @@ final class Helpers {
 				SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
 				MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
 				FROM `{$wpdb->posts}` AS `ORDERS`
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
-				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-				    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID`
-				        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-				    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY`
-				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-			        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL`
-				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
+			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
+			    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID` ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
+			  	INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
+		        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
 				WHERE (`ORDERS`.`ID` IN ($orders_query) AND `META_PROD_ID`.`meta_value` IN ($products)
 			    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
 			    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
@@ -614,11 +612,11 @@ final class Helpers {
 	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
 
 		// Save it as a global variable to not get the value each time.
-		global $global_options;
+		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
-		$option         = isset( $global_options[ $name ] ) ? $global_options[ $name ] : $default;
+		$atum_global_options = empty( $atum_global_options ) ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
+		$option              = isset( $atum_global_options[ $name ] ) ? $atum_global_options[ $name ] : $default;
 
 		if ( $echo ) {
 			echo apply_filters( "atum/print_option/$name", $option ); // WPCS: XSS ok.
@@ -641,16 +639,16 @@ final class Helpers {
 	public static function get_options() {
 
 		// Save it as a global variable to not get the value each time.
-		global $global_options;
+		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+		$atum_global_options = empty( $atum_global_options ) ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
 
-		if ( ! $global_options ) {
-			$global_options = array();
+		if ( ! $atum_global_options ) {
+			$atum_global_options = array();
 		}
 
-		return apply_filters( 'atum/get_options', $global_options );
+		return apply_filters( 'atum/get_options', $atum_global_options );
 
 	}
 

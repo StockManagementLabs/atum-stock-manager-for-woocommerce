@@ -108,14 +108,14 @@
             
             //
 			// Change sticky columns setting function
-			//--------------------------
-			this.changeStickyColumnsSetting();
+			//---------------------------------------
+			this.toggleStickyColumns();
 			
 			this.addActiveClassRow();
 			
 			//
 			// Add horizontal scroll effect to menu views
-			//--------------------------
+			//-------------------------------------------
 			this.addHorizontalScrolleffect();
 			
 			//
@@ -790,21 +790,22 @@
 		},
 		
 		/**
-		 * Active/Deactive sticky columns setting
+		 * Activate/Deactivate sticky columns' setting
 		 */
-		changeStickyColumnsSetting: function () {
+		toggleStickyColumns: function() {
+			
 			var self = this;
-			this.$stickyColsButton.click(function () {
-				var $buttonsContainer = $('.sticky-columns-button-container');
-				var option = $(this).data('option'),
-					data   = {
-					option: option
-				};
+			
+			this.$stickyColsButton.click(function() {
+				
+				var $buttonsContainer = $('.sticky-columns-button-container'),
+					option = $(this).data('option');
 
 				if ( option === 'yes' ) {
                     $buttonsContainer.find('button').first().addClass('active');
                     $buttonsContainer.find('button').last().removeClass('active');
-				}else {
+				}
+				else {
                     $buttonsContainer.find('button').first().removeClass('active');
                     $buttonsContainer.find('button').last().addClass('active');
 				}
@@ -813,9 +814,11 @@
 					url       : ajaxurl,
 					method    : 'POST',
 					data      : {
-						// token : this.settings.menuThemeNonce,
+						token : self.settings.menuThemeNonce,
 						action: 'atum_change_sticky_columns_value',
-						data  : data
+						data  : {
+							option: option
+						}
 					},
 					beforeSend: function () {
 						$('body').css('cursor', 'wait');
@@ -823,8 +826,7 @@
 					success   : function (response) {
                         $('body').css('cursor', 'auto');
 						self.removeOverlay();
-                        window.location.reload(true);
-
+                        location.reload(true);
                     },
 				});
 			});
@@ -1568,7 +1570,8 @@
 				var $checkboxRow = self.$atumList.find("[data-id='" + $(this).val() + "']");
 				if ( $(this).is(':checked') ) {
 					$checkboxRow.addClass('active-row');
-				}else{
+				}
+				else{
 					$checkboxRow.removeClass('active-row');
 				}
 			});
