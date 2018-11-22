@@ -3579,8 +3579,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 
-		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.js', array(), ATUM_VERSION, TRUE );
-
 		Helpers::maybe_es6_promise();
 
 		if ( wp_script_is( 'es6-promise', 'registered' ) ) {
@@ -3605,7 +3603,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead', 'dragscroll' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
