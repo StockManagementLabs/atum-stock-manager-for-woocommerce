@@ -13,12 +13,10 @@
 
 namespace Atum\Legacy;
 
-use Atum\Inc\Globals;
-use Atum\Inc\Helpers;
-
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 
 trait AtumSuppliersLegacyTrait {
 	
