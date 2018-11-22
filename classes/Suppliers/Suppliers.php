@@ -412,7 +412,7 @@ class Suppliers {
 		 * @since 1.5.0
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
-		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+		if ( ! Helpers::is_using_new_wc_tables() ) {
 			return self::get_supplier_products_legacy( $supplier_id, $post_type, $type_filter );
 		}
 

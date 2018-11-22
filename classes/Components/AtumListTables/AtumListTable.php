@@ -1756,7 +1756,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @since 1.5.0
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
-		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+		if ( ! Helpers::is_using_new_wc_tables() ) {
 			$this->prepare_items_legacy();
 			return;
 		}
@@ -2062,7 +2062,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @since 1.5.0
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
-		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+		if ( ! Helpers::is_using_new_wc_tables() ) {
 
 			$this->taxonomies[] = array(
 				'taxonomy' => 'product_type',
@@ -2181,7 +2181,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @since 1.5.0
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
-		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+		if ( ! Helpers::is_using_new_wc_tables() ) {
 			$this->set_views_data_legacy( $args );
 			return;
 		}
@@ -3179,7 +3179,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$search_column = esc_attr( $_REQUEST['search_column'] );
 
-		// # case A # search in post_title, post_excerpt and post_content like a pro.
+		//
+		// Search in post_title, post_excerpt and post_content.
+		// ---------------------------------------------------!
 		if ( empty( $search_column ) ) {
 
 			// Sanitize inputs.
@@ -3231,7 +3233,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( Helpers::in_multi_array( $search_column, Globals::SEARCHABLE_COLUMNS ) ) {
 
-				// Case B # search in IDs.
+				//
+				// Search in IDs.
+				// --------------!
 				if ( 'ID' === $search_column ) {
 
 					$term = absint( $term );
@@ -3283,7 +3287,9 @@ abstract class AtumListTable extends \WP_List_Table {
 					$where                = "AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
 
 				}
-				// Meta relational values.
+				//
+				// Search by Supplier.
+				// -------------------!
 				elseif ( Suppliers::SUPPLIER_META_KEY === $search_column ) {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
@@ -3305,17 +3311,21 @@ abstract class AtumListTable extends \WP_List_Table {
 					$supplier_products = array();
 
 					foreach ( $search_supplier_ids as $supplier_id ) {
-						$supplier_products = array_unique( array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) ) );
+						$supplier_products = array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) );
 					}
+
+					$supplier_products = array_unique( $supplier_products );
 
 					if ( empty( $supplier_products ) ) {
 						return $where_without_results;
 					}
 
-					$where = "AND ( $wpdb->posts.ID IN ( " . implode( ',', $supplier_products ) . ' ))';
+					$where = "AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
 
 				}
-				// # case C and Ds # (post title and other meta fields).
+				//
+				// Post title and other meta fields.
+				// ---------------------------------!
 				else {
 
 					$term = $wpdb->esc_like( strtolower( $_REQUEST['s'] ) );
@@ -3332,7 +3342,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 					elseif ( in_array( $search_column, Globals::SEARCHABLE_COLUMNS['numeric'] ) ) {
 
-						// Not numeric terms.
+						// Non numeric terms.
 						if ( ! is_numeric( $term ) ) {
 							return $where_without_results;
 						}
@@ -3625,7 +3635,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @since 1.5.0
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
-		if ( ! class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+		if ( ! Helpers::is_using_new_wc_tables() ) {
 			return $this->get_children_legacy( $parent_type, $post_in, $post_type );
 		}
 
