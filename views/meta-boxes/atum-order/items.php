@@ -25,11 +25,17 @@ if ( wc_tax_enabled() ) {
 
 $currency  = $atum_order->get_currency();
 $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
+
+$add_blocker = ! ( $atum_order->get_status() );
 ?>
 
 <div class="atum-meta-box <?php echo esc_attr( $post_type->name ) ?>_items">
 
 	<?php do_action( 'atum/atum_order/before_items_meta_box', $atum_order ) ?>
+	
+	<?php if ( $add_blocker ) : ?>
+		<div class="items-blocker"><h3><?php echo esc_attr( $atum_order->get_block_message() ) ?></h3></div>
+	<?php endif; ?>
 
 	<div class="atum_order_items_wrapper">
 		<table cellpadding="0" cellspacing="0" class="atum_order_items">
