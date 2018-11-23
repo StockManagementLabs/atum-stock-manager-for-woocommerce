@@ -1605,9 +1605,7 @@
 			
 			$('.nav-with-scroll-effect').bind('scroll',function () {
 				
-				if ( jQuery().select2 ) {
-					$('.enhanced').select2("close");
-				}
+				$('.enhanced').select2("close");
 				
 				var $nav = document.getElementById($(this).attr('id'));
 				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');

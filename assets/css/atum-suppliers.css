@@ -4955,7 +4955,7 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table .set-meta.unsaved, .floatThead-container .set-meta.unsaved, .inbound-stock-list .set-meta.unsaved, .wp-list-table .set-meta.unsaved {
-  color: #FF4848;
+  color: #FF4848 !important;
 }
 
 .atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header, .wp-list-table .set-header {
