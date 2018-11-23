@@ -1796,8 +1796,8 @@ final class Helpers {
 
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT ID FROM $wpdb->posts p
-                INNER JOIN $wpdb->prefix" . ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
-                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private')
+                INNER JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
+                WHERE p.post_status IN ('publish', 'future', 'private')
                 AND ap.out_stock_threshold IS NOT NULL;
             " ); // WPCS: unprepared SQL ok.
 
@@ -1816,6 +1816,7 @@ final class Helpers {
 				$product->save();
 
 			}
+			
 		}
 
 	}
@@ -1831,7 +1832,10 @@ final class Helpers {
 
 		global $wpdb;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . ' WHERE out_stock_threshold IS NOT NULL;' ); // WPCS: unprepared SQL ok.
+		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
+			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
+			WHERE ap.out_stock_threshold IS NOT NULL
+			AND  p.post_status IN ('publish', 'future', 'private');" ); // WPCS: unprepared SQL ok.
 
 		return $rowcount > 0;
 	}

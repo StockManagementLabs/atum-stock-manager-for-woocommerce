@@ -223,7 +223,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'out_stock_threshold', NULL === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
