@@ -1729,7 +1729,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function add_apply_bulk_action_button() {
 		?>
-		<button type="button" class="apply-bulk-action apply-bulk-action  btn btn-warning">
+		<button type="button" class="apply-bulk-action btn btn-warning" style="display: none">
 			<?php esc_html_e( 'Apply', ATUM_TEXT_DOMAIN ) ?>
 		</button>
 		<?php
