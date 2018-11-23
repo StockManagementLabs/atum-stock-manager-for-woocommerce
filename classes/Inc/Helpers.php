@@ -20,6 +20,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
+use Atum\Legacy\AtumHelpersLegacyTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Queries\ProductDataQuery;
@@ -708,7 +709,7 @@ final class Helpers {
 		if ( isset( $_REQUEST['sold_last_days'] ) ) { // WPCS: CSRF ok.
 
 			// Sanitize.
-			$value = absint( esc_attr( $_REQUEST['sold_last_days'] ) ); // WPCS: CSRF ok.
+			$value = absint( $_REQUEST['sold_last_days'] ); // WPCS: CSRF ok.
 
 			if ( $value > 0 && $value < 31 ) {
 				return $value;
@@ -721,6 +722,14 @@ final class Helpers {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy methods
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use AtumHelpersLegacyTrait;
+
+	/**
 	 * Get an array of products that are not managed by WC
 	 *
 	 * @since 1.4.1
@@ -731,46 +740,47 @@ final class Helpers {
 	 * @return array
 	 */
 	public static function get_unmanaged_products( $post_types, $get_stock_status = FALSE ) {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! self::is_using_new_wc_tables() ) {
+			return self::get_unmanaged_products_legacy( $post_types, $get_stock_status );
+		}
 		
 		global $wpdb;
+
+		$unmng_fields = array( 'posts.ID' );
 		
-		$unmng_join = apply_filters( 'atum/get_unmanaged_products/join_query', "
-			LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
-		" );
+		$unmng_join = array(
+			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
+			"LEFT JOIN {$wpdb->prefix}wc_products wpd ON (posts.ID = wpd.product_id)",
+		);
 		
 		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 		
-		// TODO: Change the query to remove the subquery and get the values with joins.
-		$stock_sql = $get_stock_status ? ", (SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' )" : '';
+		if ( $get_stock_status ) {
+			$unmng_fields[] = 'wpd.stock_status';
+		}
+
+		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products/join_query', $unmng_join );
 		
 		// Exclude the inheritable products from query (as are just containers in ATUM List Tables).
-		$excluded_types      = Globals::get_inheritable_product_types();
-		$excluded_type_terms = array();
-		
-		foreach ( $excluded_types as $excluded_type ) {
-			$excluded_type_terms[] = get_term_by( 'slug', $excluded_type, 'product_type' );
-		}
-		
-		$excluded_type_terms = wp_list_pluck( array_filter( $excluded_type_terms ), 'term_taxonomy_id' );
+		$excluded_types = Globals::get_inheritable_product_types();
 
-		$unmng_where = "
-			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
-            AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-		    AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
-			AND posts.ID NOT IN ( 
-				SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
-				WHERE term_taxonomy_id IN  (" . implode( ',', $excluded_type_terms ) . ") )
-				AND (posts.post_parent IN (
-					SELECT ID FROM $wpdb->posts 
-					WHERE post_type = 'product' AND post_status IN ('private','publish') 
-				)
-				OR posts.post_parent = 0
-			)
-		";
+		$unmng_where = array(
+			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
+			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
+			"AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))",
+			"AND wpd.type NOT IN ('" . implode( "','", $excluded_types ) . "')",
+		);
 		
-		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
+		$unmng_where = (array) apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
 		
-		$sql = "SELECT DISTINCT posts.ID{$stock_sql} FROM $wpdb->posts posts $unmng_join $unmng_where";
+		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
 		
 		return $wpdb->get_results( $sql, ARRAY_N ); // WPCS: unprepared SQL ok.
 		
