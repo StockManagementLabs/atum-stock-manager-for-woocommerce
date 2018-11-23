@@ -1602,42 +1602,16 @@
 		 */
 		addHorizontalScrolleffect: function() {
 			
-			var $nav = document.getElementById('stock_central_nav');
-			var stockCentralNav = new Hammer($nav);
-			
-			stockCentralNav.on('panright panleft', function (ev) {
-				var $nav = document.getElementById('stock_central_nav');
-				var paneStartX   = $nav.scrollLeft,
-				    offset       = 20,
-				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
-				if ( ev.type === 'panright' ) {
-					$nav.scrollLeft = displacement;
-				}else {
-					$nav.scrollLeft = displacement;
-				}
-				
-				
-			});
-			
-			var $nav = document.getElementById('filters_container');
-			var filtersContainerScroll = new Hammer($nav);
-			
-			filtersContainerScroll.on('panright panleft', function (ev) {
-				var $nav = document.getElementById('filters_container');
-				var paneStartX   = $nav.scrollLeft,
-				    offset       = 20,
-				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
-				if ( ev.type === 'panright' ) {
-					$nav.scrollLeft = displacement;
-				}else {
-					$nav.scrollLeft = displacement;
-				}
-				
-				
-			});
+			this.addHummerLibraryToNavsAndFilters('stock_central_nav');
+			this.addHummerLibraryToNavsAndFilters('filters_container');
 			
 			$('.nav-with-scroll-effect').bind('scroll',function () {
-				$('.wc-enhanced-select').select2("close");
+				
+				if ( jQuery().select2 ) {
+					$('.wc-enhanced-select').select2("close");
+					$('.wc-product-search').select2("close");
+				}
+				
 				var $nav = document.getElementById($(this).attr('id'));
 				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');
 				var $overflowOpacityEffectLeft  = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-left');
@@ -1658,6 +1632,31 @@
 					$overflowOpacityEffectLeft.show();
 				}
 			});
+		},
+		
+		/**
+		 * Add hammer.js to navs and filters
+		 */
+		addHummerLibraryToNavsAndFilters: function(elementId) {
+			var $nav = document.getElementById(elementId);
+			var containerScroll = new Hammer($nav, {
+				domEvents: false
+			});
+			
+			containerScroll.on('panright panleft', function (ev) {
+				$('select').click(false);
+				var $nav = document.getElementById(elementId);
+				var paneStartX   = $nav.scrollLeft,
+				    offset       = 20,
+				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
+				if ( ev.type === 'panright' ) {
+					$nav.scrollLeft = displacement;
+				}else {
+					$nav.scrollLeft = displacement;
+				}
+				
+			});
+			
 		},
 		
 		/**

@@ -1386,7 +1386,6 @@ final class Helpers {
 			</select>
 
 			<?php
-			wp_enqueue_script( 'wc-enhanced-select' );
 
 		endif;
 

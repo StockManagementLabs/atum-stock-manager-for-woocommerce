@@ -4560,7 +4560,7 @@ input[type="button"].btn-block {
   display: flex;
   border-radius: 0;
   border: 0;
-  margin: 0 3px 3px auto;
+  margin: 0 3px 3px auto !important;
 }
 
 .search-box #post-search-input {
@@ -5153,6 +5153,12 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .nav-with-scroll-effect .subsubsub {
   margin: 0;
+}
+
+.atum-list-wrapper *, .atum-list-wrapper *::after, .atum-list-wrapper *::before {
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-app-region: no-drag;
 }
 
 .atum-list-wrapper .subsubsub {

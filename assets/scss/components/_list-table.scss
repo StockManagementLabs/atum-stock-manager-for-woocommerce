@@ -293,7 +293,6 @@
 
 .search-box {
 	@include flexbox;
-	//display: inline-block;
 	display: none;
 	float: right;
 	padding: 1px;
@@ -304,8 +303,6 @@
 	align-items: center;
 	border: 1px solid $gray-200;
 	border-radius: 5px;
-	
-	
 	z-index: 999;
 	float: right;
 	
@@ -313,7 +310,7 @@
 		@include flexbox;
 		border-radius: 0;
 		border: 0;
-		margin: 0 3px 3px auto;
+		margin: 0 3px 3px auto !important;
 	}
 	
 	#post-search-input {
@@ -762,7 +759,11 @@
 		.subsubsub {
 			margin: 0;
 		}
-		
+	}
+	*, *::after, *::before {
+		-webkit-user-select: none;
+		-webkit-user-drag: none;
+		-webkit-app-region: no-drag;
 	}
 	.subsubsub {
 		position: relative;
