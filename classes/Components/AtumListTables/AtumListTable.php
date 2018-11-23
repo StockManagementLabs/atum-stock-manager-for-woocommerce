@@ -346,7 +346,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->show_cb         = $args['show_cb'];
 		$this->show_controlled = $args['show_controlled'];
 
-		if ( 'no' === $this->show_totals && Helpers::get_option( 'show_totals', 'yes' ) ) {
+		if ( TRUE === $this->show_totals && 'no' === Helpers::get_option( 'show_totals', 'yes' ) ) {
 			$this->show_totals = FALSE;
 		}
 
