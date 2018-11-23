@@ -3154,6 +3154,13 @@ h2 .atum-help-tip {
   margin: 0 3px 3px auto !important;
 }
 
+@media all and (max-width: 782px) {
+  .search-box.extend-list-table {
+    margin: 0 !important;
+    float: none;
+  }
+}
+
 .search-box #post-search-input {
   border: none;
   box-shadow: none;
@@ -3256,7 +3263,13 @@ h2 .atum-help-tip {
   margin-right: 0;
   border: none;
   box-shadow: none;
-  width: 110px;
+  width: 100%;
+}
+
+@media all and (max-width: 782px) {
+  .search-box .atum-post-search {
+    width: 110px;
+  }
 }
 
 .search-box .atum-post-search::placeholder {
@@ -3282,6 +3295,7 @@ h2 .atum-help-tip {
 
 .search-box .input-group-append {
   border: none;
+  width: 40%;
 }
 
 .search-box .dropdown-toggle {
@@ -3390,12 +3404,18 @@ h2 .atum-help-tip {
 }
 
 .tablenav.top .filters-container-box {
-  width: 70%;
+  width: 80%;
   position: relative;
 }
 
 .tablenav.top .filters-container-box.not-pagination {
   width: 90%;
+}
+
+@media screen and (max-width: 1400px) {
+  .tablenav.top .filters-container-box {
+    width: 70%;
+  }
 }
 
 @media screen and (max-width: 1200px) {
@@ -3671,6 +3691,11 @@ h2 .atum-help-tip {
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
   }
 }
 
@@ -3993,6 +4018,10 @@ h2 .atum-help-tip {
   }
 }
 
+.atum-list-wrapper .actions input[type=submit] {
+  font-size: 12px;
+}
+
 .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
   height: 30px;
   margin: 0 0 0 5px;
@@ -4112,6 +4141,12 @@ h2 .atum-help-tip {
   .atum-list-wrapper .tablenav .tablenav-pages {
     width: auto;
     margin: 0;
+  }
+}
+
+@media screen and (max-width: 782px) {
+  .atum-list-wrapper .tablenav .tablenav-pages {
+    margin: 0 0 0 auto;
   }
 }
 

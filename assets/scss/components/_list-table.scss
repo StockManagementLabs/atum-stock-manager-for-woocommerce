@@ -316,6 +316,10 @@
 		border-radius: 0;
 		border: 0;
 		margin: 0 3px 3px auto !important;
+		@media all and (max-width: 782px) {
+			margin: 0 !important;
+			float: none;
+		}
 	}
 	
 	#post-search-input {
@@ -392,7 +396,10 @@
 		margin-right: 0;
 		border: none;
 		box-shadow: none;
-		width: 110px;
+		width: 100%;
+		@media all and (max-width: 782px) {
+			width: 110px;
+		}
 		&::placeholder {
 			color: $gray-500;
 			font-size: 12px;
@@ -415,6 +422,7 @@
 	
 	.input-group-append {
 		border: none;
+		width: 40%;
 	}
 	
 	.dropdown-toggle {
@@ -494,11 +502,15 @@
 	}
 	
 	.filters-container-box {
-		width: 70%;
+		width: 80%;
 		position: relative;
 		
 		&.not-pagination {
 			width: 90%;
+		}
+		
+		@media screen and (max-width: 1400px) {
+			width: 70%;
 		}
 		
 		@media screen and (max-width: $screen-lg) {
@@ -709,6 +721,7 @@
 		}
 		@media all and (max-width: 782px) {
 			@include flex-wrap(wrap);
+			@include flex-justify-content(center);
 		}
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
@@ -956,6 +969,10 @@
 			}
 		}
 		
+		input[type=submit] {
+			font-size: 12px;
+		}
+		
 		input, select, .select2-container {
 			height: 30px;
 			margin: 0 0 0 5px;
@@ -1085,6 +1102,13 @@
 			}
 		}
 		
+	}
+	@media screen and (max-width: 782px) {
+		.tablenav {
+			.tablenav-pages {
+				margin: 0 0 0 auto;
+			}
+		}
 	}
 	@media screen and (max-width: $screen-xs) {
 		.tablenav {

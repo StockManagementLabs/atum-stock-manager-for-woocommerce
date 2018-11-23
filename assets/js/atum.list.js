@@ -1606,8 +1606,7 @@
 			$('.nav-with-scroll-effect').bind('scroll',function () {
 				
 				if ( jQuery().select2 ) {
-					$('.wc-enhanced-select').select2("close");
-					$('.wc-product-search').select2("close");
+					$('.enhanced').select2("close");
 				}
 				
 				var $nav = document.getElementById($(this).attr('id'));
@@ -1637,15 +1636,12 @@
 		 */
 		addHummerLibraryToNavsAndFilters: function(elementId) {
 			var $nav = document.getElementById(elementId);
-			var containerScroll = new Hammer($nav, {
-				domEvents: false
-			});
+			var containerScroll = new Hammer($nav);
 			
 			containerScroll.on('panright panleft', function (ev) {
-				$('select').click(false);
 				var $nav = document.getElementById(elementId);
 				var paneStartX   = $nav.scrollLeft,
-				    offset       = 20,
+				    offset       = 6,
 				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
 				if ( ev.type === 'panright' ) {
 					$nav.scrollLeft = displacement;
