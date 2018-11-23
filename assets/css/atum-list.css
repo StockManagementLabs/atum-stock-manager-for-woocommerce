@@ -4865,6 +4865,11 @@ input[type="button"].btn-block {
   }
 }
 
+.search-box.inbound-stock-search .atum-post-search:focus, .search-box.inbound-stock-search .atum-post-search:active {
+  border: none;
+  box-shadow: none;
+}
+
 .search-box.inbound-stock-search input[type=submit] {
   width: 87px;
   height: 30px;
