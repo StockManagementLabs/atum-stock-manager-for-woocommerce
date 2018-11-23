@@ -7,7 +7,9 @@
 .wrap {
 	
 	h1.wp-heading-inline {
-		display: inline;
+		width: 100%;
+		@include flexbox;
+		@include flex-align-items(center);
 		margin-right: 15px;
 		line-height: 1.5;
 		position: relative;
@@ -68,7 +70,9 @@
 		line-height: 30px;
 		text-transform: uppercase;
 		border: none;
-		padding: 9px 11px;
+		margin-left: 14px;
+		top: 0;
+		display: none;
 		
 		&.extend-list-table {
 			font-size: 12px;
@@ -76,6 +80,7 @@
 			top: 1px;
 			height: 30px;
 			margin-left: 14px;
+			display: inline-block;
 		}
 		
 		&:hover, &:focus {

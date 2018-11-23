@@ -42,12 +42,18 @@
 			
 			this.$atumTable = $('.wp-list-table');
 			
+			// Add placeholder to input search
 			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
+			// Change nav and search div position
 			$('#posts-filter').prepend($('.subsubsub'));
 			$('.subsubsub').append($('.search-box'));
 			$('.search-box').show();
+			$('.wp-heading-inline').append($('.page-title-action'));
+			$('.page-title-action').show();
+			
 			$('select').select2();
 			
+			// Add active class row function
 			this.addActiveClassRow();
 		},
 		/**
