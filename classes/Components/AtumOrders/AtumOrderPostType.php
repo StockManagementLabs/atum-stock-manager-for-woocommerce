@@ -927,7 +927,7 @@ abstract class AtumOrderPostType {
 				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
-					'placeholderSearch' => __( 'Search PO...', ATUM_TEXT_DOMAIN ),
+					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 				) );
 
 				wp_enqueue_style( 'atum-orders' );

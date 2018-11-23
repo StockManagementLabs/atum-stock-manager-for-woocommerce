@@ -45,10 +45,7 @@ class PurchaseOrder extends AtumOrderModel {
 		
 		// Add the button for setting the purchase price to products within POs.
 		add_action( 'atum/atum_order/item_meta_controls', array( $this, 'set_purchase_price_button' ) );
-
-		// Add the items blocker div to the items metabox within ATUM orders with _no supplier selected.
-		add_action( 'atum/atum_order/before_items_meta_box', array( $this, 'maybe_add_items_blocker' ) );
-
+		
 		// Add message before the PO product search.
 		add_action( 'atum/atum_order/before_product_search_modal', array( $this, 'product_search_message' ) );
 
@@ -60,6 +57,8 @@ class PurchaseOrder extends AtumOrderModel {
 		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
 
 		parent::__construct( $id, $read_items );
+		
+		$this->block_message = __( 'Set the Supplier field above and click the Create/Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
 
 	}
 
@@ -86,40 +85,6 @@ class PurchaseOrder extends AtumOrderModel {
 		if ( 'line_item' === $item->get_type() ) : ?>
 			<button type="button" class="button set-purchase-price"><?php esc_attr_e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php endif;
-	}
-
-	/**
-	 * Add the items blocker div to the items metabox within ATUM orders with no supplier selected
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param PurchaseOrder $po
-	 */
-	public function maybe_add_items_blocker( $po ) {
-
-		$unblocked_class        = '';
-		$message                = __( 'Set the Supplier field above and click the Create/Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
-		$supplier               = $po->get_supplier();
-		$has_multiple_suppliers = $po->has_multiple_suppliers();
-
-		if ( $has_multiple_suppliers ) {
-			$unblocked_class = ' unblocked';
-		}
-		elseif ( $supplier ) {
-
-			$products = Suppliers::get_supplier_products( $supplier->ID, [ 'product', 'product_variation' ], FALSE );
-
-			if ( empty( $products ) ) {
-				$message = __( 'This Supplier has no products assigned yet.', ATUM_TEXT_DOMAIN );
-			}
-			else {
-				$unblocked_class = ' unblocked';
-			}
-
-		}
-
-		echo '<div class="items-blocker' . esc_attr( $unblocked_class ) . '"><h3>' . esc_attr( $message ) . '</h3></div>';
-
 	}
 
 	/**

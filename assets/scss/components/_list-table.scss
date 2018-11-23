@@ -33,6 +33,9 @@
 			border-radius: 5px;
 			text-shadow: none;
 			box-shadow: none;
+			display: inline-block;
+			top: 1px;
+			height: 30px;
 			
 			&:hover {
 				background-color: rgba($blue, 0.6);
@@ -59,6 +62,10 @@
 			@include flex-justify-content(center);
 			margin: 0;
 		}
+	}
+	
+	.subtitle {
+		display: none;
 	}
 	
 	.page-title-action, .page-title-action:active {
@@ -99,22 +106,25 @@
 		
 	}
 	
-	input[type=submit]:not(.save-atum-order) {
+	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit) {
+		
 		border-radius: 5px;
 		background-color: $orange;
-		font-size: 10px;
+		font-size: 12px;
+		min-width: 70px;
 		letter-spacing: normal;
 		text-align: center;
 		color: $white;
 		text-transform: uppercase;
 		box-shadow: none;
 		border: none;
-		height: 30px;
+		height: 31px;
 		&:hover, &.active {
 			background-color: rgba($orange, 0.6);
 			color: $white;
 			border: none;
 		}
+		
 	}
 	
 	@media all and (max-width: 782px) {
@@ -129,8 +139,7 @@
 	background-color: $white;
 	box-shadow: 0 4px 0 0 $gray-200;
 	padding: 0 0 10px;
-	border-bottom-left-radius: 8px;
-	border-bottom-right-radius: 8px;
+	border-radius: 8px;
 }
 
 .subsubsub {
@@ -247,8 +256,6 @@
 	letter-spacing: 0.4px;
 	font-weight: bold;
 	text-transform: capitalize;
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid $gray-200;
@@ -293,7 +300,6 @@
 
 .search-box {
 	@include flexbox;
-	//display: inline-block;
 	display: none;
 	float: right;
 	padding: 1px;
@@ -304,8 +310,6 @@
 	align-items: center;
 	border: 1px solid $gray-200;
 	border-radius: 5px;
-	
-	
 	z-index: 999;
 	float: right;
 	
@@ -313,7 +317,11 @@
 		@include flexbox;
 		border-radius: 0;
 		border: 0;
-		margin: 0 3px 3px auto;
+		margin: 0 3px 3px auto !important;
+		@media all and (max-width: 782px) {
+			margin: 0 !important;
+			float: none;
+		}
 	}
 	
 	#post-search-input {
@@ -350,6 +358,10 @@
 			}
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
+			}
+			&:focus, &:active {
+				border: none;
+				box-shadow: none;
 			}
 		}
 		input[type=submit] {
@@ -390,7 +402,10 @@
 		margin-right: 0;
 		border: none;
 		box-shadow: none;
-		width: 110px;
+		width: 100%;
+		@media all and (max-width: 782px) {
+			width: 110px;
+		}
 		&::placeholder {
 			color: $gray-500;
 			font-size: 12px;
@@ -413,6 +428,7 @@
 	
 	.input-group-append {
 		border: none;
+		min-width: 45%;
 	}
 	
 	.dropdown-toggle {
@@ -492,11 +508,15 @@
 	}
 	
 	.filters-container-box {
-		width: 70%;
+		width: 80%;
 		position: relative;
 		
 		&.not-pagination {
 			width: 90%;
+		}
+		
+		@media screen and (max-width: 1400px) {
+			width: 70%;
 		}
 		
 		@media screen and (max-width: $screen-lg) {
@@ -607,6 +627,13 @@
 	}
 }
 
+#bulk-titles {
+	.ntdelbutton:before {
+		font-family: atum-icon-font;
+		content: $atmi-cross;
+	}
+}
+
 .atum-list-wrapper {
 	width: 100%;
 	overflow: hidden;
@@ -703,8 +730,11 @@
 		@include flex-align-items(center);
 		margin: 0 11px 0 11px;
 		@media screen and (max-width: $screen-lg) {
-			@include flex-wrap(wrap);
 			margin-bottom: 15px;
+		}
+		@media all and (max-width: 782px) {
+			@include flex-wrap(wrap);
+			@include flex-justify-content(center);
 		}
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
@@ -713,6 +743,9 @@
 			width: 70%;
 			position: relative;
 			@media screen and (max-width: $screen-lg) {
+				width: 59%;
+			}
+			@media all and (max-width: 782px) {
 				width: 100%;
 			}
 		}
@@ -762,7 +795,11 @@
 		.subsubsub {
 			margin: 0;
 		}
-		
+	}
+	*, *::after, *::before {
+		-webkit-user-select: none;
+		-webkit-user-drag: none;
+		-webkit-app-region: no-drag;
 	}
 	.subsubsub {
 		position: relative;
@@ -945,6 +982,10 @@
 			}
 		}
 		
+		input[type=submit] {
+			font-size: 12px;
+		}
+		
 		input, select, .select2-container {
 			height: 30px;
 			margin: 0 0 0 5px;
@@ -1074,6 +1115,13 @@
 			}
 		}
 		
+	}
+	@media screen and (max-width: 782px) {
+		.tablenav {
+			.tablenav-pages {
+				margin: 0 0 0 auto;
+			}
+		}
 	}
 	@media screen and (max-width: $screen-xs) {
 		.tablenav {
@@ -1393,7 +1441,7 @@ table.wp-list-table {
 	tr {
 		&.main-row, &.mi-row , &.expandable {
 			&:hover {
-				 box-shadow: -10px 1px 16px 2px rgba($black, 0.15) inset;
+				box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
 			}
 		}
 		
@@ -1612,49 +1660,60 @@ table.wp-list-table {
 	
 	tbody, #the-list {
 		
-		td {
-			&.column-title, &.atum_order_title {
-				a, .row-title {
-					font-size: 14px;
-					font-weight: bold;
-					letter-spacing: 0.3px;
-					color: $blue;
+		tr {
+			&.expanded {
+				&.variable {
+					td {
+						color: $white !important;
+						a {
+							color: $white !important;
+						}
+					}
 				}
 			}
-			&.column-calc_mi_status {
-				font-size: 20px;
-			}
-			&.column-_sku {
-				span {
-					font-size: 14px;
-					letter-spacing: 0.3px;
+			td {
+				&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
+				&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
+				&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
+				&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total,
+				&.company_code, &.company_phone, &.calc_inbound, &.calc_date_ordered, &.calc_date_expected, &.column-calc_mi_status {
+					color: $gray-600;
+				}
+				
+				&.column-_stock, &._out_stock_threshold, &.assigned_to, &.wc_order {
 					color: $blue;
+					a {
+						color: $blue;
+					}
+				}
+				
+				&.column-title, &.atum_order_title {
+					a, .row-title {
+						font-size: 14px;
+						font-weight: bold;
+						letter-spacing: 0.3px;
+						color: $blue;
+					}
+				}
+				&.column-calc_mi_status {
+					font-size: 20px;
+				}
+				&.column-_sku {
+					span {
+						font-size: 14px;
+						letter-spacing: 0.3px;
+						color: $blue;
+					}
+				}
+				&.calc_purchase_order {
+					a {
+						color: $blue;
+						font-weight: bold;
+					}
 				}
 			}
-			&.calc_purchase_order {
-				a {
-					color: $blue;
-					font-weight: bold;
-				}
-			}
-		}
-	}
-	
-	td {
-		&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
-		&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
-		&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
-		&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total,
-		&.company_code, &.company_phone, &.calc_inbound, &.calc_date_ordered, &.calc_date_expected, &.column-calc_mi_status {
-			color: $gray-600;
 		}
 		
-		&.column-_stock, &._out_stock_threshold, &.assigned_to, &.wc_order {
-			color: $blue;
-			a {
-				color: $blue;
-			}
-		}
 	}
 	
 	td, th {
@@ -1721,7 +1780,7 @@ table.wp-list-table {
 				font-weight: bold;
 				font-size: 14px;
 				.set-header {
-					color: $gray-500;
+					color: $blue;
 				}
 			}
 		}
@@ -1883,7 +1942,7 @@ table.wp-list-table {
 		}
 		
 		&.unsaved {
-			color: $danger;
+			color: $danger !important;
 		}
 	}
 

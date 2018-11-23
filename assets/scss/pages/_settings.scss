@@ -278,7 +278,7 @@ $settings-xs-min:          568px !default;
 			font-size: 15px;
 			font-weight: bold;
 			color: $white;
-			border-right: 3px solid $blue;
+			border-right: 3px solid $white;
 		}
 		
 	}
@@ -1697,7 +1697,7 @@ $settings-xs-min:          568px !default;
 		&.section-field-light {
 			background-color: $white;
 			tr:not(:last-child) {
-				border-bottom: 2px solid darken($light, 5%);
+				border-bottom: 1px solid darken($light, 5%);
 			}
 			th {
 				color: $gray-600;

@@ -346,7 +346,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->show_cb         = $args['show_cb'];
 		$this->show_controlled = $args['show_controlled'];
 
-		if ( 'no' === $this->show_totals && Helpers::get_option( 'show_totals', 'yes' ) ) {
+		if ( TRUE === $this->show_totals && 'no' === Helpers::get_option( 'show_totals', 'yes' ) ) {
 			$this->show_totals = FALSE;
 		}
 
@@ -2802,6 +2802,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'order'                => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
 			'orderby'              => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
 			'nonce'                => wp_create_nonce( 'atum-list-table-nonce' ),
+			'stickyColumnsNonce'   => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
 			'ajaxFilter'           => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 			'setValue'             => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
 			'setButton'            => __( 'Set', ATUM_TEXT_DOMAIN ),
@@ -3606,7 +3607,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";

@@ -84,12 +84,21 @@ abstract class AtumOrderModel {
 	protected $action = 'both';
 	
 	/**
+	 * Message shown in the item's blocker
+	 *
+	 * @var string
+	 */
+	protected $block_message = '';
+	
+	/**
 	 * AtumOrderModel constructor
 	 *
 	 * @param int  $id         Optional. The ATUM Order ID to initialize.
 	 * @param bool $read_items Optional. Whether to read the inner items.
 	 */
 	protected function __construct( $id = 0, $read_items = TRUE ) {
+		
+		$this->block_message = __( 'Click the Create button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
 
 		if ( $id ) {
 
@@ -1841,6 +1850,18 @@ abstract class AtumOrderModel {
 	public function get_action() {
 		
 		return $this->action;
+	}
+	
+	/**
+	 * Get the block items message
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return string
+	 */
+	public function get_block_message() {
+		
+		return $this->block_message;
 	}
 
 	/**********

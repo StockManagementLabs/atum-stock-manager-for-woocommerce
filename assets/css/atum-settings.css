@@ -1146,6 +1146,12 @@ input[type="button"].btn-block {
   width: 20px;
 }
 
+#bulk-edit .select2-selection__arrow {
+  right: 0px;
+  height: 30px;
+  top: 0;
+}
+
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
   border-color: #888 transparent transparent transparent;
   border-style: solid;
@@ -3582,7 +3588,7 @@ input[type="button"].btn-block {
   font-size: 15px;
   font-weight: bold;
   color: #fff;
-  border-right: 3px solid #00B8DB;
+  border-right: 3px solid #fff;
 }
 
 @media all and (max-width: 992px) {
@@ -5303,7 +5309,7 @@ input[type="button"].btn-block {
 }
 
 #atum-settings .section-fields.section-field-light tr:not(:last-child) {
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
 #atum-settings .section-fields.section-field-light th {

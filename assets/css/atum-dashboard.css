@@ -4383,14 +4383,14 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .add-widget-popup .swal2-close {
-  color: #f8f9fa;
+  color: #adb5bd;
   font-weight: 200;
   font-size: 32px;
   line-height: 1.7;
 }
 
 .add-widget-popup .swal2-close:hover {
-  color: #6c757d;
+  color: #00B8DB;
 }
 
 .add-widget-popup .widgets-list {

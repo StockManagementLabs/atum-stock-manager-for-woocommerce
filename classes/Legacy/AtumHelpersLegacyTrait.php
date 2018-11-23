@@ -13,6 +13,9 @@
 
 namespace Atum\Legacy;
 
+use Atum\Inc\Globals;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -34,7 +37,7 @@ trait AtumHelpersLegacyTrait {
 
 		$unmng_fields = array( 'posts.ID' );
 
-		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products/join_query', array(
+		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products_legacy/join_query', array(
 			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
 		) );
 
@@ -70,7 +73,7 @@ trait AtumHelpersLegacyTrait {
 			)",
 		);
 
-		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
+		$unmng_where = apply_filters( 'atum/get_unmanaged_products_legacy/where_query', $unmng_where );
 
 		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
 
