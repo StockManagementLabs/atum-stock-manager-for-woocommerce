@@ -5614,6 +5614,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
   height: 30px;
   margin: 0 0 0 5px;
+  float: none;
 }
 
 @media screen and (max-width: 782px) {
@@ -6280,6 +6281,10 @@ table.wp-list-table tbody tr:hover {
   font-weight: bold;
   letter-spacing: 0.3px;
   color: #00B8DB;
+}
+
+.atum-list-table tbody td.column-calc_mi_status, .atum-list-table #the-list td.column-calc_mi_status, .floatThead-container tbody td.column-calc_mi_status, .floatThead-container #the-list td.column-calc_mi_status, .inbound-stock-list tbody td.column-calc_mi_status, .inbound-stock-list #the-list td.column-calc_mi_status, .wp-list-table tbody td.column-calc_mi_status, .wp-list-table #the-list td.column-calc_mi_status {
+  font-size: 20px;
 }
 
 .atum-list-table tbody td.column-_sku span, .atum-list-table #the-list td.column-_sku span, .floatThead-container tbody td.column-_sku span, .floatThead-container #the-list td.column-_sku span, .inbound-stock-list tbody td.column-_sku span, .inbound-stock-list #the-list td.column-_sku span, .wp-list-table tbody td.column-_sku span, .wp-list-table #the-list td.column-_sku span {
