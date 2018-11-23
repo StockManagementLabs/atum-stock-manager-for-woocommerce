@@ -2249,11 +2249,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		// If it's a search or a product filtering, include only the filtered items to search for children.
 		$post_in = $this->is_filtering ? $products : array();
 
-		foreach ( $this->taxonomies as $index => $taxonomy ) {
+		// Loop all the registered product types.
+		foreach ( $this->wc_query_data as $wc_query_arg ) {
 
-			if ( 'product_type' === $taxonomy['taxonomy'] ) {
+			if ( isset( $wc_query_arg['key'] ) && 'type' === $wc_query_arg['key'] ) {
 
-				if ( in_array( 'variable', (array) $taxonomy['terms'] ) ) {
+				$types = (array) $wc_query_arg['value'];
+
+				if ( in_array( 'variable', $types, TRUE ) ) {
 
 					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
 
@@ -2262,7 +2265,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 
-				if ( in_array( 'grouped', (array) $taxonomy['terms'] ) ) {
+				if ( in_array( 'grouped', $types, TRUE ) ) {
 
 					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
 
@@ -2272,7 +2275,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 				// WC Subscriptions compatibility.
-				if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', (array) $taxonomy['terms'] ) ) {
+				if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', $types, TRUE ) ) {
 
 					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
 
@@ -2289,7 +2292,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					$this->count_views['count_all'] += count( $group_items );
 				}
 
-				do_action( 'atum/list_table/after_children_count', $taxonomy['terms'], $this );
+				do_action( 'atum/list_table/after_children_count', $types, $this );
 
 				break;
 

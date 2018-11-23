@@ -56,6 +56,7 @@ return array(
     'Atum\\InventoryLogs\\Models\\Log' => $baseDir . '/classes/InventoryLogs/Models/Log.php',
     'Atum\\InventoryLogs\\Models\\LogItem' => $baseDir . '/classes/InventoryLogs/Models/LogItem.php',
     'Atum\\Legacy\\AtumAjaxLegacyTrait' => $baseDir . '/classes/Legacy/AtumAjaxLegacyTrait.php',
+    'Atum\\Legacy\\AtumHelpersLegacyTrait' => $baseDir . '/classes/Legacy/AtumHelpersLegacyTrait.php',
     'Atum\\Legacy\\AtumListTableLegacyTrait' => $baseDir . '/classes/Legacy/AtumListTableLegacyTrait.php',
     'Atum\\Legacy\\AtumSuppliersLegacyTrait' => $baseDir . '/classes/Legacy/AtumSuppliersLegacyTrait.php',
     'Atum\\MetaBoxes\\ProductDataMetaBoxes' => $baseDir . '/classes/MetaBoxes/ProductDataMetaBoxes.php',

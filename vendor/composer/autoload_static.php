@@ -114,6 +114,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\InventoryLogs\\Models\\Log' => __DIR__ . '/../..' . '/classes/InventoryLogs/Models/Log.php',
         'Atum\\InventoryLogs\\Models\\LogItem' => __DIR__ . '/../..' . '/classes/InventoryLogs/Models/LogItem.php',
         'Atum\\Legacy\\AtumAjaxLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/AtumAjaxLegacyTrait.php',
+        'Atum\\Legacy\\AtumHelpersLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/AtumHelpersLegacyTrait.php',
         'Atum\\Legacy\\AtumListTableLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/AtumListTableLegacyTrait.php',
         'Atum\\Legacy\\AtumSuppliersLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/AtumSuppliersLegacyTrait.php',
         'Atum\\MetaBoxes\\ProductDataMetaBoxes' => __DIR__ . '/../..' . '/classes/MetaBoxes/ProductDataMetaBoxes.php',

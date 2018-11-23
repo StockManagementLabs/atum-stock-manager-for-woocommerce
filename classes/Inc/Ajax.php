@@ -1899,7 +1899,7 @@ final class Ajax {
 
 		if ( $product_id > 0 ) {
 
-			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, [ 'hide_empty' => FALSE ] );
+			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
 
 			if ( empty( $locations ) ) {
 				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No Locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
@@ -1907,10 +1907,10 @@ final class Ajax {
 			else {
 
 				$locations_tree = wp_list_categories( array(
-					'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-					'include'  => wp_list_pluck( $locations, 'term_id' ),
-					'title_li' => '',
-					'echo'     => FALSE,
+					'taxonomy'   => Globals::PRODUCT_LOCATION_TAXONOMY,
+					'include'    => wp_list_pluck( $locations, 'term_id' ),
+					'title_li'   => '',
+					'echo'       => FALSE,
 				) );
 
 				// Fix the list URLs to show the list of products within a location.
@@ -1924,9 +1924,10 @@ final class Ajax {
 
 			// Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
 			$locations_tree = wp_list_categories( array(
-				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-				'title_li' => '',
-				'echo'     => FALSE,
+				'taxonomy'   => Globals::PRODUCT_LOCATION_TAXONOMY,
+				'title_li'   => '',
+				'echo'       => FALSE,
+				'hide_empty' => FALSE,
 			) );
 
 		}
