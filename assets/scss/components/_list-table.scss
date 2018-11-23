@@ -33,6 +33,9 @@
 			border-radius: 5px;
 			text-shadow: none;
 			box-shadow: none;
+			display: inline-block;
+			top: 1px;
+			height: 30px;
 			
 			&:hover {
 				background-color: rgba($blue, 0.6);
@@ -99,7 +102,8 @@
 		
 	}
 	
-	input[type=submit]:not(.save-atum-order) {
+	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post) {
+		
 		border-radius: 5px;
 		background-color: $orange;
 		font-size: 10px;
@@ -115,6 +119,7 @@
 			color: $white;
 			border: none;
 		}
+		
 	}
 	
 	@media all and (max-width: 782px) {
@@ -700,8 +705,10 @@
 		@include flex-align-items(center);
 		margin: 0 11px 0 11px;
 		@media screen and (max-width: $screen-lg) {
-			@include flex-wrap(wrap);
 			margin-bottom: 15px;
+		}
+		@media all and (max-width: 782px) {
+			@include flex-wrap(wrap);
 		}
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
@@ -710,6 +717,9 @@
 			width: 70%;
 			position: relative;
 			@media screen and (max-width: $screen-lg) {
+				width: 59%;
+			}
+			@media all and (max-width: 782px) {
 				width: 100%;
 			}
 		}

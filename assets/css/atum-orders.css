@@ -4211,6 +4211,9 @@ input[type="button"].btn-block {
   border-radius: 5px;
   text-shadow: none;
   box-shadow: none;
+  display: inline-block;
+  top: 1px;
+  height: 30px;
 }
 
 .wrap h1.wp-heading-inline #atum-update-list:hover {
@@ -4295,7 +4298,7 @@ input[type="button"].btn-block {
   }
 }
 
-.wrap input[type=submit]:not(.save-atum-order) {
+.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post) {
   border-radius: 5px;
   background-color: #EFAF00;
   font-size: 10px;
@@ -4308,7 +4311,7 @@ input[type="button"].btn-block {
   height: 30px;
 }
 
-.wrap input[type=submit]:not(.save-atum-order):hover, .wrap input[type=submit]:not(.save-atum-order).active {
+.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post).active {
   background-color: rgba(239, 175, 0, 0.6);
   color: #fff;
   border: none;
@@ -5070,11 +5073,16 @@ input[type="button"].btn-block {
 
 @media screen and (max-width: 1200px) {
   .atum-list-wrapper .stock-central-header {
+    margin-bottom: 15px;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .stock-central-header {
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin-bottom: 15px;
   }
 }
 
@@ -5090,6 +5098,12 @@ input[type="button"].btn-block {
 }
 
 @media screen and (max-width: 1200px) {
+  .atum-list-wrapper .stock-central-header .sc-nav-containe-box {
+    width: 59%;
+  }
+}
+
+@media all and (max-width: 782px) {
   .atum-list-wrapper .stock-central-header .sc-nav-containe-box {
     width: 100%;
   }

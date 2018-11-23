@@ -13,6 +13,9 @@
 
 namespace Atum\Legacy;
 
+use Atum\Inc\Globals;
+
+
 defined( 'ABSPATH' ) || die;
 
 
