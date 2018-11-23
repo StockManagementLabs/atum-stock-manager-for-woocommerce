@@ -386,8 +386,9 @@ class Suppliers {
 				wp_enqueue_style( 'atum-suppliers' );
 
 				if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
-
+					wp_register_script( 'atum-suppliers', ATUM_URL . 'assets/js/atum.suppliers.js', FALSE, ATUM_VERSION, TRUE );
 					wp_enqueue_script( 'wc-enhanced-select' );
+					wp_enqueue_script( 'atum-suppliers' );
 
 				}
 				elseif ( 'edit.php' === $hook ) {

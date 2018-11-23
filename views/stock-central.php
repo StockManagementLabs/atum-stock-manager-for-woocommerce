@@ -24,6 +24,7 @@ defined( 'ABSPATH' ) || die;
 		<?php endif; ?>
 
 		<a href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action extend-list-table"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
+		<?php do_action( 'atum/stock_central_list/page_title_buttons' ) ?>
 	</h1>
 
 	<hr class="wp-header-end">

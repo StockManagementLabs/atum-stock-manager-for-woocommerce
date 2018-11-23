@@ -83,6 +83,10 @@
 				// Ask for importing the order items after linking an order
 				$('#wc_order').change(this.importOrderItems);
 				
+				// Change button page-title-action position
+				$('.wp-heading-inline').append($('.page-title-action'));
+				$('.page-title-action').show();
+				
 			},
 			
 			block: function() {
