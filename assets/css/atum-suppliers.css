@@ -2752,17 +2752,21 @@ h2 .atum-help-tip {
   margin-left: 0.25em;
 }
 
-.tips {
-  cursor: help;
-  text-decoration: none;
-}
-
-img.tips {
-  padding: 5px 0 0;
+#wpbody-content {
+  padding-bottom: 20px;
 }
 
 .wrap h1.wp-heading-inline {
-  display: inline;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
   margin-right: 15px;
   line-height: 1.5;
   position: relative;
@@ -2770,9 +2774,75 @@ img.tips {
   font-weight: bold;
 }
 
-.wrap .page-title-action {
-  width: 130px;
-  height: 35px;
+.wrap h1.wp-heading-inline.extend-list-table {
+  line-height: 1.5;
+  position: relative;
+  font-size: 36px;
+  font-weight: bold;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.wrap h1.wp-heading-inline #atum-update-list {
+  margin-left: 5px;
+  border-radius: 0;
+  vertical-align: middle;
+  background-color: #00B8DB;
+  border-radius: 5px;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.wrap h1.wp-heading-inline #atum-update-list:hover {
+  background-color: rgba(0, 184, 219, 0.6);
+}
+
+.wrap h1.wp-heading-inline #atum-update-list:active {
+  color: #fff;
+  padding: 0 10px 1px;
+  box-shadow: 0 1px 0 #0073AA;
+}
+
+@media all and (max-width: 782px) {
+  .wrap h1.wp-heading-inline {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: left;
+    -ms-flex-pack: left;
+    -webkit-justify-content: left;
+    -moz-justify-content: left;
+    justify-content: left;
+    margin: 0 10px;
+    padding-bottom: 15px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .wrap h1.wp-heading-inline {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    margin: 0;
+  }
+}
+
+.wrap .page-title-action, .wrap .page-title-action:active {
   border-radius: 5px;
   background-color: #69C61D;
   color: #fff;
@@ -2781,15 +2851,26 @@ img.tips {
   line-height: 30px;
   text-transform: uppercase;
   border: none;
-  padding: 9px 11px;
+  margin-left: 14px;
+  top: 0;
+  display: none;
 }
 
-.wrap .page-title-action:hover {
+.wrap .page-title-action.extend-list-table, .wrap .page-title-action:active.extend-list-table {
+  font-size: 12px;
+  padding: 0 12px;
+  top: 1px;
+  height: 30px;
+  margin-left: 14px;
+  display: inline-block;
+}
+
+.wrap .page-title-action:hover, .wrap .page-title-action:focus, .wrap .page-title-action:active:hover, .wrap .page-title-action:active:focus {
   background-color: rgba(105, 198, 29, 0.6);
 }
 
 @media all and (max-width: 782px) {
-  .wrap .page-title-action {
+  .wrap .page-title-action, .wrap .page-title-action:active {
     font-size: 14px;
     height: 35px;
     line-height: 35px;
@@ -2797,9 +2878,45 @@ img.tips {
 }
 
 @media all and (max-width: 480px) {
-  .wrap .page-title-action {
+  .wrap .page-title-action, .wrap .page-title-action:active {
     margin: 0;
   }
+}
+
+.wrap input[type=submit]:not(.save-atum-order) {
+  border-radius: 5px;
+  background-color: #EFAF00;
+  font-size: 10px;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: none;
+  border: none;
+  height: 30px;
+}
+
+.wrap input[type=submit]:not(.save-atum-order):hover, .wrap input[type=submit]:not(.save-atum-order).active {
+  background-color: rgba(239, 175, 0, 0.6);
+  color: #fff;
+  border: none;
+}
+
+@media all and (max-width: 782px) {
+  .wrap {
+    margin-right: 20px;
+    margin-left: 10px;
+  }
+}
+
+#posts-filter {
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 0 0 #e9ecef;
+  padding: 0 0 10px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .subsubsub {
@@ -2814,12 +2931,161 @@ img.tips {
   border-top-right-radius: 8px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.subsubsub.extend-list-table {
+  width: inherit;
+  margin: 10px 20px;
+  border-radius: 0;
+  border-bottom: 0;
+}
+
+.subsubsub.extend-list-table li {
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  margin-left: 3px;
+}
+
+.subsubsub.extend-list-table li span.active {
+  border-radius: 5px;
+  background-color: #00B8DB;
+  font-size: 16px;
+  padding: 0 10px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .text-blue {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container a {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .extra-links-container a.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active a {
+  color: #fff;
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span.active a.empty, .subsubsub.extend-list-table li span.active a.tips, .subsubsub.extend-list-table li span.active a.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active a .active {
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span.active .count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span.active .count.empty {
+  color: #fff;
+}
+
+.subsubsub.extend-list-table li span a {
+  color: #adb5bd;
+  padding: 0;
+}
+
+.subsubsub.extend-list-table li span a.current {
+  pointer-events: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.subsubsub.extend-list-table li span a .text-blue {
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span a.tips {
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span a.empty {
+  color: #adb5bd;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container.empty {
+  color: #adb5bd;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container.empty a {
+  padding: 0;
+  color: #adb5bd;
+}
+
+.subsubsub.extend-list-table li span .extra-links-container a {
+  padding: 0;
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span .count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #00B8DB;
+}
+
+.subsubsub.extend-list-table li span .count.extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.subsubsub.extend-list-table li span .count.empty {
+  color: #adb5bd;
+}
+
+@media all and (max-width: 782px) {
+  .subsubsub {
+    margin: 10px 10px;
+  }
 }
 
 .subsubsub li {
   color: #fff;
-  text-transform: uppercase;
   padding: 20px 0 20px 10px;
+  text-transform: uppercase;
 }
 
 .subsubsub li a {
@@ -2853,7 +3119,7 @@ img.tips {
   box-shadow: none;
 }
 
-.subsubsub .search-box {
+.search-box {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2861,57 +3127,198 @@ img.tips {
   display: none;
   float: right;
   padding: 1px;
+  -webkit-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
   z-index: 999;
   float: right;
-  margin: 20px 10px 20px auto;
+  margin: 20px 10px 20px auto !important;
   align-items: center;
   border: 1px solid #e9ecef;
   border-radius: 5px;
+  z-index: 999;
+  float: right;
 }
 
-.subsubsub .search-box #post-search-input {
+.search-box.extend-list-table {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 0;
+  border: 0;
+  margin: 0 3px 3px auto;
+}
+
+.search-box #post-search-input {
   border: none;
   box-shadow: none;
   margin: 0;
   height: 28px;
   padding: 0 12px;
+  font-weight: normal;
 }
 
-.subsubsub .search-box #post-search-input::placeholder {
+.search-box #post-search-input::placeholder {
   font-size: 12px;
   font-style: italic;
   color: #adb5bd;
 }
 
-.subsubsub .search-box input[type=submit] {
+.search-box input[type=submit] {
+  font-weight: normal;
+}
+
+.search-box.inbound-stock-search {
+  border: 1px solid #e9ecef;
+  width: 280px;
+  height: 30px;
   border-radius: 5px;
-  background-color: #EFAF00;
-  font-size: 10px;
-  letter-spacing: normal;
-  text-align: center;
-  color: #fff;
-  text-transform: uppercase;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  justify-content: space-between;
+  margin: 10px 20px;
+}
+
+.search-box.inbound-stock-search .atum-post-search {
+  width: 100%;
+  border-radius: 5px;
+}
+
+@media all and (max-width: 782px) {
+  .search-box.inbound-stock-search .atum-post-search {
+    margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .search-box.inbound-stock-search .atum-post-search {
+    width: 100%;
+  }
+}
+
+.search-box.inbound-stock-search input[type=submit] {
+  width: 87px;
+  height: 30px;
+}
+
+@media all and (max-width: 782px) {
+  .search-box.inbound-stock-search input[type=submit] {
+    margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .search-box.inbound-stock-search {
+    margin: 10px 10px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .search-box.inbound-stock-search {
+    margin: 10px 10px;
+    width: 95%;
+    flex-wrap: nowrap;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .search-box {
+    float: none;
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+}
+
+.search-box #search_column_btn {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.search-box .atum-post-search {
+  margin-right: 0;
+  border: none;
   box-shadow: none;
+  width: 110px;
+}
+
+.search-box .atum-post-search::placeholder {
+  color: #adb5bd;
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: normal;
+  margin-left: 10px;
+}
+
+.search-box .input-group {
+  border-radius: 5px;
+  border: solid 1px #e9ecef;
+  background-color: #fff;
+  flex-wrap: nowrap;
+}
+
+@media all and (max-width: 480px) {
+  .search-box .input-group {
+    width: 100%;
+  }
+}
+
+.search-box .input-group-append {
   border: none;
 }
 
-.subsubsub .search-box input[type=submit]:hover, .subsubsub .search-box input[type=submit].active {
-  background-color: rgba(239, 175, 0, 0.6);
+.search-box .dropdown-toggle {
+  width: 130px;
+  text-align: left;
+  border: none;
+  background-color: #f8f9fa;
+  font-size: 15px;
+  color: #6c757d;
 }
 
-#posts-filter {
-  width: 100%;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 4px 0 0 #e9ecef;
-  padding: 0 0 10px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+.search-box .dropdown-toggle:after {
+  vertical-align: middle;
+  font-family: Linearicons;
+  content: "\e874";
+  display: inline;
+  font-size: 10px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+}
+
+.search-box .dropdown-toggle:focus, .search-box .dropdown-toggle:active, .search-box .dropdown-toggle:hover {
+  outline: 0;
+  box-shadow: none;
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.search-box .dropdown-menu {
+  margin-top: 0px;
+  right: 0px;
+}
+
+.search-box .dropdown-item {
+  width: auto;
 }
 
 .tablenav.top {
-  border-top: 1px solid #e9ecef;
+  box-shadow: 0 1px 0 0 #e9ecef, 0 -1px 0 0 #e9ecef;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2941,6 +3348,10 @@ img.tips {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
   }
+}
+
+.tablenav.top.extend-list-table {
+  padding: 0 11px;
 }
 
 .tablenav.top .tablenav-pages {
@@ -3056,7 +3467,7 @@ img.tips {
   margin-top: 0;
 }
 
-.tablenav .tablenav-pages a {
+.tablenav .tablenav-pages a:not(.extend-list-table) {
   display: inline-block;
   border: none;
   padding: 0;
@@ -3067,7 +3478,7 @@ img.tips {
   line-height: 30px;
 }
 
-.tablenav .tablenav-pages a:hover, .tablenav .tablenav-pages a:active, .tablenav .tablenav-pages a:focus {
+.tablenav .tablenav-pages a:not(.extend-list-table):hover, .tablenav .tablenav-pages a:not(.extend-list-table):active, .tablenav .tablenav-pages a:not(.extend-list-table):focus {
   background-color: #EFAF00;
   color: #fff;
 }
@@ -3083,20 +3494,7 @@ img.tips {
 }
 
 .tablenav input[type=submit] {
-  border-radius: 5px;
-  background-color: #EFAF00;
   font-size: 12px;
-  line-height: 1.5;
-  letter-spacing: normal;
-  text-align: center;
-  color: #fff;
-  text-transform: uppercase;
-  box-shadow: none;
-  border: none;
-}
-
-.tablenav input[type=submit]:hover, .tablenav input[type=submit].active {
-  background-color: rgba(239, 175, 0, 0.6);
 }
 
 .tablenav.bottom {
@@ -3134,77 +3532,664 @@ img.tips {
   }
 }
 
-#tiptip_holder {
+.atum-list-wrapper {
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 0 0 #e9ecef;
+  padding: 0 0 10px;
+}
+
+.atum-list-wrapper a:focus {
+  box-shadow: none;
+}
+
+.atum-list-wrapper .rotate {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.atum-list-wrapper .sticky-columns-button-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  border: solid 1px #e9ecef;
+  background-color: #fff;
+  color: #6c757d;
+  cursor: pointer;
+  -webkit-transition: all 0.20s;
+  /* Safari */
+  transition: all 0.20s;
+  line-height: 2;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button:first-child {
+  margin-left: 9px;
+  margin-right: 5px;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button:focus {
+  outline: 0;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button.active, .atum-list-wrapper .sticky-columns-button-container button:hover {
+  background-color: #00B8DB;
+  color: white;
+}
+
+.atum-list-wrapper .sticky-columns-button-container button:hover {
+  background-color: rgba(0, 184, 219, 0.6);
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .sticky-columns-button-container {
+    display: none;
+  }
+}
+
+.atum-list-wrapper .search-submit {
+  margin-left: 4px;
+  background-color: #EFAF00;
+  color: #fff;
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 1.6px;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  box-shadow: none;
+  border: none;
+  border-radius: 5px;
+  height: 26px;
+  width: 63px;
+}
+
+.atum-list-wrapper .search-submit:hover, .atum-list-wrapper .search-submit:active, .atum-list-wrapper .search-submit:focus {
+  opacity: 0.6;
+  background-color: #EFAF00;
+  color: #fff;
+  box-shadow: none;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .search-submit {
+    height: 31px;
+    padding: 0;
+    margin-bottom: 0;
+  }
+}
+
+.atum-list-wrapper .tablenav-pages, .atum-list-wrapper .search-box {
+  position: relative;
+}
+
+.atum-list-wrapper .stock-central-header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  margin: 0 11px 0 11px;
+}
+
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .stock-central-header {
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .stock-central-header {
+    margin: 0 11px 15px;
+  }
+}
+
+.atum-list-wrapper .stock-central-header .sc-nav-containe-box {
+  width: 70%;
+  position: relative;
+}
+
+@media screen and (max-width: 1200px) {
+  .atum-list-wrapper .stock-central-header .sc-nav-containe-box {
+    width: 100%;
+  }
+}
+
+.atum-list-wrapper .overflow-opacity-effect-right, .atum-list-wrapper .overflow-opacity-effect-left {
+  width: 200px;
+  position: absolute;
+  z-index: 998;
+  height: 65px;
+  pointer-events: none;
+}
+
+.atum-list-wrapper .overflow-opacity-effect-right {
+  right: 0;
+  background: -webkit-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
+  background: -o-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
+  background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+}
+
+.atum-list-wrapper .overflow-opacity-effect-left {
   display: none;
-  z-index: 8675309;
+  left: 0;
+  background: -webkit-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
+  background: -o-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
+  background: -moz-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+}
+
+.atum-list-wrapper .nav-with-scroll-effect {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  width: 100%;
+  float: left;
+  margin: 0 11px 0 0;
+  height: 70px;
+}
+
+.atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
+  display: none;
+}
+
+.atum-list-wrapper .nav-with-scroll-effect .subsubsub {
+  margin: 0;
+}
+
+.atum-list-wrapper .subsubsub {
+  position: relative;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  font-weight: bold;
+  text-transform: capitalize;
+  margin: 10px 20px;
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .subsubsub {
+    margin: 10px 10px;
+  }
+}
+
+.atum-list-wrapper .subsubsub li {
+  margin-right: 15px;
+  color: #adb5bd;
+  text-transform: uppercase;
+}
+
+.atum-list-wrapper .subsubsub li span {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  margin-left: 3px;
+}
+
+.atum-list-wrapper .subsubsub li span.active {
+  border-radius: 5px;
+  background-color: #00B8DB;
+  font-size: 16px;
+  padding: 0 10px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active .text-blue {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active .extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active .extra-links-container.empty {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active .extra-links-container a {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active .extra-links-container a.empty {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active a {
+  color: #fff;
+  padding: 0;
+}
+
+.atum-list-wrapper .subsubsub li span.active a.empty, .atum-list-wrapper .subsubsub li span.active a.tips, .atum-list-wrapper .subsubsub li span.active a.empty {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active a .active {
+  padding: 0;
+}
+
+.atum-list-wrapper .subsubsub li span.active .count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span.active .count.empty {
+  color: #fff;
+}
+
+.atum-list-wrapper .subsubsub li span a {
+  color: #adb5bd;
+  padding: 0;
+}
+
+.atum-list-wrapper .subsubsub li span a.current {
+  pointer-events: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.atum-list-wrapper .subsubsub li span a .text-blue {
+  color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span a.tips {
+  color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span a.empty {
+  color: #adb5bd;
+}
+
+.atum-list-wrapper .subsubsub li span .extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+  color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span .extra-links-container.empty {
+  color: #adb5bd;
+}
+
+.atum-list-wrapper .subsubsub li span .extra-links-container.empty a {
+  padding: 0;
+  color: #adb5bd;
+}
+
+.atum-list-wrapper .subsubsub li span .extra-links-container a {
+  padding: 0;
+  color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span .count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #00B8DB;
+}
+
+.atum-list-wrapper .subsubsub li span .count.extra-links-container {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.atum-list-wrapper .subsubsub li span .count.empty {
+  color: #adb5bd;
+}
+
+.atum-list-wrapper .reset-filters {
+  border-radius: 50%;
+  width: 39px;
+  height: 24px;
+  text-align: center;
+  border: none;
+  background-color: #00B8DB;
+  color: #fff;
+  padding: 2px 0 0;
+  cursor: pointer;
+  z-index: 999;
+  margin-right: 5px;
+  -webkit-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+@media all and (max-width: 768px) {
+  .atum-list-wrapper .reset-filters {
+    width: 40px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .atum-list-wrapper .reset-filters {
+    width: 35px;
+    margin-bottom: 15px;
+  }
+}
+
+.atum-list-wrapper .reset-filters:focus {
+  outline: none;
+}
+
+.atum-list-wrapper .reset-filters:hover {
+  background-color: #00a3c2;
+}
+
+.atum-list-wrapper .reset-filters i {
+  font-size: 18px;
+}
+
+.atum-list-wrapper .actions.bulkactions {
+  padding-right: 0;
+}
+
+.atum-list-wrapper .actions.bulkactions select {
+  max-width: 150px;
+}
+
+.atum-list-wrapper .actions.bulkactions button {
+  height: 30px;
+  line-height: 0;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 782px) {
+  .atum-list-wrapper .actions.bulkactions button {
+    font-size: 14px;
+    height: 35px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .atum-list-wrapper .actions.bulkactions button {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .atum-list-wrapper .actions.bulkactions {
+    width: 100%;
+    float: none;
+  }
+}
+
+.atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
+  height: 30px;
+  margin: 0 0 0 5px;
+  float: none;
+}
+
+@media screen and (max-width: 782px) {
+  .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
+    height: 35px;
+  }
+  .atum-list-wrapper .actions input .select2-selection, .atum-list-wrapper .actions input .select2-selection__rendered, .atum-list-wrapper .actions input .select2-selection__arrow, .atum-list-wrapper .actions select .select2-selection, .atum-list-wrapper .actions select .select2-selection__rendered, .atum-list-wrapper .actions select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container .select2-selection, .atum-list-wrapper .actions .select2-container .select2-selection__rendered, .atum-list-wrapper .actions .select2-container .select2-selection__arrow {
+    height: 35px;
+    line-height: 35px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
+    width: 100% !important;
+    margin: 0;
+  }
+}
+
+.atum-list-wrapper .actions #select2-supplier-container {
+  padding: 0 30px 0 16px;
+}
+
+.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear {
+  visibility: hidden;
+}
+
+.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  line-height: 2;
+}
+
+.atum-list-wrapper .actions input[type=submit] {
+  line-height: 0;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 782px) {
+  .atum-list-wrapper .actions input[type=submit] {
+    font-size: 14px;
+    height: 35px;
+  }
+}
+
+.atum-list-wrapper .actions .filter-text {
+  display: inline;
+  float: left;
+  line-height: 28px;
+  padding-right: 10px;
+}
+
+.atum-list-wrapper .actions .dropdown_extra_filter {
+  max-width: 160px;
+}
+
+.atum-list-wrapper .floatThead-wrapper tr.size-row {
+  display: none;
+}
+
+.atum-list-wrapper .floatThead-wrapper .floatThead-container {
+  height: 0;
+}
+
+.atum-list-wrapper .floatThead-wrapper .floatThead-container .group-toggler {
+  display: none;
+}
+
+.atum-list-wrapper .atum-list-table.cloned {
+  width: auto;
   position: absolute;
   top: 0;
-  left: 0;
+  border-right: none;
+  box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
 }
 
-#tiptip_holder.tip_top {
-  padding-bottom: 5px;
+@media screen and (max-width: 782px) {
+  .atum-list-wrapper ul.subsubsub {
+    font-size: 16px;
+    float: none;
+    text-align: left;
+  }
+  .atum-list-wrapper .search-box {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .atum-list-wrapper .search-box input[type="text"], .atum-list-wrapper .search-box input[type="number"], .atum-list-wrapper .search-box button {
+    height: 30px;
+  }
+  .atum-list-wrapper .actions.bulkactions {
+    display: block;
+    float: left;
+  }
+  .atum-list-wrapper .actions.bulkactions select {
+    width: auto;
+    float: none;
+    display: block;
+    margin: auto;
+  }
+  .atum-list-wrapper .filter-box {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    float: none;
+    margin: auto;
+    width: 90%;
+  }
+  .atum-list-wrapper .tablenav .tablenav-pages {
+    width: auto;
+    margin: 0;
+  }
 }
 
-#tiptip_holder.tip_top #tiptip_arrow_inner {
-  margin-top: -7px;
-  margin-left: -6px;
-  border-top-color: #fff;
+@media screen and (max-width: 480px) {
+  .atum-list-wrapper .tablenav .tablenav-pages {
+    width: 100%;
+    margin: 0;
+  }
 }
 
-#tiptip_holder.tip_bottom {
-  padding-top: 5px;
+.atum-table-wrapper {
+  clear: both;
 }
 
-#tiptip_holder.tip_bottom #tiptip_arrow_inner {
-  margin-top: -5px;
-  margin-left: -6px;
-  border-bottom-color: #fff;
+.atum-table-wrapper .jspContainer {
+  overflow: hidden;
+  position: relative;
 }
 
-#tiptip_holder.tip_right {
-  padding-left: 5px;
-}
-
-#tiptip_holder.tip_right #tiptip_arrow_inner {
-  margin-top: -6px;
-  margin-left: -5px;
-  border-right-color: #fff;
-}
-
-#tiptip_holder.tip_left {
-  padding-right: 5px;
-}
-
-#tiptip_holder.tip_left #tiptip_arrow_inner {
-  margin-top: -6px;
-  margin-left: -7px;
-  border-left-color: #fff;
-}
-
-#tiptip_content {
-  color: #6c757d;
-  font-size: 0.8em;
-  max-width: 150px;
-  background: #fff;
-  text-align: center;
-  border-radius: 3px;
-  padding: 0.618em 1em;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-#tiptip_content code {
-  padding: 1px;
-  background: #888;
-}
-
-#tiptip_arrow, #tiptip_arrow_inner {
+.atum-table-wrapper .jspPane {
   position: absolute;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 6px;
-  height: 0;
-  width: 0;
+}
+
+.atum-table-wrapper .jspVerticalBar, .atum-table-wrapper .jspCap, .atum-table-wrapper .jspArrow {
+  display: none;
+}
+
+.atum-table-wrapper .jspHorizontalBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 16px;
+}
+
+.atum-table-wrapper .jspHorizontalBar .jspCap {
+  float: left;
+}
+
+.atum-table-wrapper .jspHorizontalBar .jspTrack, .atum-table-wrapper .jspHorizontalBar .jspDrag {
+  float: left;
+  height: 100%;
+}
+
+.atum-table-wrapper .jspHorizontalBar .jspArrow {
+  width: 16px;
+  float: left;
+  height: 100%;
+}
+
+.atum-table-wrapper .jspTrack {
+  background: rgba(108, 117, 125, 0.2);
+  position: relative;
+}
+
+.atum-table-wrapper .jspDrag {
+  background: #adb5bd;
+  position: relative;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.atum-table-wrapper .jspCorner {
+  background: #f8f9fa;
+  float: left;
+  height: 100%;
+}
+
+.select2-container .select2-search__field {
+  min-width: inherit;
+}
+
+.atum-list-table {
+  border: none !important;
+}
+
+.atum-list-table.cloned {
+  width: auto;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 0;
+  border-right: none;
+  box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
+}
+
+@media all and (max-width: 600px) {
+  .atum-list-table.cloned {
+    display: none !important;
+  }
+}
+
+.atum-list-table:not(.floatThead-table) {
+  table-layout: auto !important;
+}
+
+.active-row:not(.variable) {
+  background-color: #dbf9ff !important;
 }
 
 table.wp-list-table {
@@ -3212,7 +4197,7 @@ table.wp-list-table {
   border-top: 1px solid #e9ecef;
 }
 
-table.wp-list-table th.column-status, table.wp-list-table th.column-type, table.wp-list-table th.column-wc_order, table.wp-list-table th.column-actions, table.wp-list-table th.column-supplier, table.wp-list-table th.column-expected_date {
+table.wp-list-table thead th, table.wp-list-table tfoot th {
   padding: 0;
   font-size: 14px;
   font-weight: bold;
@@ -3224,220 +4209,554 @@ table.wp-list-table tbody tr:hover {
   box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
 }
 
-table.wp-list-table .column-notes {
-  width: 48px;
-  text-align: center;
+.atum-list-table, .floatThead-container, .inbound-stock-list, .wp-list-table {
+  margin-bottom: 15px;
+  border-collapse: collapse;
 }
 
-table.wp-list-table .column-notes img {
+.atum-list-table thead .item-heads, .atum-list-table tfoot, .floatThead-container thead .item-heads, .floatThead-container tfoot, .inbound-stock-list thead .item-heads, .inbound-stock-list tfoot, .wp-list-table thead .item-heads, .wp-list-table tfoot {
+  background-color: #fff;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.atum-list-table thead .item-heads th, .atum-list-table thead .item-heads td, .atum-list-table tfoot th, .atum-list-table tfoot td, .floatThead-container thead .item-heads th, .floatThead-container thead .item-heads td, .floatThead-container tfoot th, .floatThead-container tfoot td, .inbound-stock-list thead .item-heads th, .inbound-stock-list thead .item-heads td, .inbound-stock-list tfoot th, .inbound-stock-list tfoot td, .wp-list-table thead .item-heads th, .wp-list-table thead .item-heads td, .wp-list-table tfoot th, .wp-list-table tfoot td {
+  border: none;
+}
+
+.atum-list-table thead .item-heads th, .atum-list-table tfoot th, .floatThead-container thead .item-heads th, .floatThead-container tfoot th, .inbound-stock-list thead .item-heads th, .inbound-stock-list tfoot th, .wp-list-table thead .item-heads th, .wp-list-table tfoot th {
+  padding: 3px 5px;
+  line-height: 1.1;
+  font-size: 14px;
+  min-width: 50px;
+  height: 60px;
+  white-space: normal;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
+}
+
+.atum-list-table thead .item-heads th.column-_supplier_sku .sorting-indicator, .atum-list-table tfoot th.column-_supplier_sku .sorting-indicator, .floatThead-container thead .item-heads th.column-_supplier_sku .sorting-indicator, .floatThead-container tfoot th.column-_supplier_sku .sorting-indicator, .inbound-stock-list thead .item-heads th.column-_supplier_sku .sorting-indicator, .inbound-stock-list tfoot th.column-_supplier_sku .sorting-indicator, .wp-list-table thead .item-heads th.column-_supplier_sku .sorting-indicator, .wp-list-table tfoot th.column-_supplier_sku .sorting-indicator {
+  margin-top: 15px;
+}
+
+.atum-list-table thead .item-heads th .sorting-indicator, .atum-list-table tfoot th .sorting-indicator, .floatThead-container thead .item-heads th .sorting-indicator, .floatThead-container tfoot th .sorting-indicator, .inbound-stock-list thead .item-heads th .sorting-indicator, .inbound-stock-list tfoot th .sorting-indicator, .wp-list-table thead .item-heads th .sorting-indicator, .wp-list-table tfoot th .sorting-indicator {
+  visibility: visible;
+  margin-left: 4px;
+  margin-top: 7px;
+}
+
+.atum-list-table thead .item-heads th .sorting-indicator:before, .atum-list-table tfoot th .sorting-indicator:before, .floatThead-container thead .item-heads th .sorting-indicator:before, .floatThead-container tfoot th .sorting-indicator:before, .inbound-stock-list thead .item-heads th .sorting-indicator:before, .inbound-stock-list tfoot th .sorting-indicator:before, .wp-list-table thead .item-heads th .sorting-indicator:before, .wp-list-table tfoot th .sorting-indicator:before {
+  color: #adb5bd;
+  content: "\f140";
+}
+
+.atum-list-table thead .item-heads th .col-product-details .lnr, .atum-list-table tfoot th .col-product-details .lnr, .floatThead-container thead .item-heads th .col-product-details .lnr, .floatThead-container tfoot th .col-product-details .lnr, .inbound-stock-list thead .item-heads th .col-product-details .lnr, .inbound-stock-list tfoot th .col-product-details .lnr, .wp-list-table thead .item-heads th .col-product-details .lnr, .wp-list-table tfoot th .col-product-details .lnr {
+  font-size: 16px;
+  color: #adb5bd;
+}
+
+.atum-list-table thead .item-heads th .lnr, .atum-list-table thead .item-heads th .dashicons, .atum-list-table thead .item-heads th .atum-icon, .atum-list-table tfoot th .lnr, .atum-list-table tfoot th .dashicons, .atum-list-table tfoot th .atum-icon, .floatThead-container thead .item-heads th .lnr, .floatThead-container thead .item-heads th .dashicons, .floatThead-container thead .item-heads th .atum-icon, .floatThead-container tfoot th .lnr, .floatThead-container tfoot th .dashicons, .floatThead-container tfoot th .atum-icon, .inbound-stock-list thead .item-heads th .lnr, .inbound-stock-list thead .item-heads th .dashicons, .inbound-stock-list thead .item-heads th .atum-icon, .inbound-stock-list tfoot th .lnr, .inbound-stock-list tfoot th .dashicons, .inbound-stock-list tfoot th .atum-icon, .wp-list-table thead .item-heads th .lnr, .wp-list-table thead .item-heads th .dashicons, .wp-list-table thead .item-heads th .atum-icon, .wp-list-table tfoot th .lnr, .wp-list-table tfoot th .dashicons, .wp-list-table tfoot th .atum-icon {
+  display: block;
+  text-indent: -9999px;
+  position: relative;
+  height: 1em;
+  width: 1em;
   margin: 0 auto;
-  padding-top: 0 !important;
+  font-size: 16px;
+  color: #adb5bd;
 }
 
-table.wp-list-table .column-title {
-  width: 15%;
+.atum-list-table thead .item-heads th .lnr:before, .atum-list-table thead .item-heads th .dashicons:before, .atum-list-table thead .item-heads th .atum-icon:before, .atum-list-table tfoot th .lnr:before, .atum-list-table tfoot th .dashicons:before, .atum-list-table tfoot th .atum-icon:before, .floatThead-container thead .item-heads th .lnr:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container thead .item-heads th .atum-icon:before, .floatThead-container tfoot th .lnr:before, .floatThead-container tfoot th .dashicons:before, .floatThead-container tfoot th .atum-icon:before, .inbound-stock-list thead .item-heads th .lnr:before, .inbound-stock-list thead .item-heads th .dashicons:before, .inbound-stock-list thead .item-heads th .atum-icon:before, .inbound-stock-list tfoot th .lnr:before, .inbound-stock-list tfoot th .dashicons:before, .inbound-stock-list tfoot th .atum-icon:before, .wp-list-table thead .item-heads th .lnr:before, .wp-list-table thead .item-heads th .dashicons:before, .wp-list-table thead .item-heads th .atum-icon:before, .wp-list-table tfoot th .lnr:before, .wp-list-table tfoot th .dashicons:before, .wp-list-table tfoot th .atum-icon:before {
+  text-indent: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
-table.wp-list-table .column-title time {
-  display: block;
-  color: #999;
-  margin: 3px 0;
+.atum-list-table thead .item-heads th svg, .atum-list-table tfoot th svg, .floatThead-container thead .item-heads th svg, .floatThead-container tfoot th svg, .inbound-stock-list thead .item-heads th svg, .inbound-stock-list tfoot th svg, .wp-list-table thead .item-heads th svg, .wp-list-table tfoot th svg {
+  max-height: 14px;
 }
 
-table.wp-list-table .column-actions {
-  width: 110px;
+.atum-list-table tfoot .item-heads, .floatThead-container tfoot .item-heads, .inbound-stock-list tfoot .item-heads, .wp-list-table tfoot .item-heads {
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
-table.wp-list-table .column-actions a.button {
-  float: left;
-  margin: 0 4px 2px 0;
-  cursor: pointer;
-  height: inherit;
-  padding: 3px 4px;
+.atum-list-table tfoot .item-heads th, .floatThead-container tfoot .item-heads th, .inbound-stock-list tfoot .item-heads th, .wp-list-table tfoot .item-heads th {
+  padding: 3px 5px;
+  line-height: 1.1;
+  font-size: 14px;
+  min-width: 50px;
+  height: 60px;
+  white-space: normal;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
 }
 
-table.wp-list-table .column-actions a.button.complete:after {
-  font-family: atum-icon-font;
-  content: "";
-  color: #69C61D;
+.atum-list-table .item-heads td, .atum-list-table .item-heads th, .floatThead-container .item-heads td, .floatThead-container .item-heads th, .inbound-stock-list .item-heads td, .inbound-stock-list .item-heads th, .wp-list-table .item-heads td, .wp-list-table .item-heads th {
+  box-shadow: 0 1px 0 0 #e9ecef;
 }
 
-table.wp-list-table .column-actions a.button img {
-  display: block;
-  width: 12px;
-  height: auto;
+.atum-list-table .column-groups, .floatThead-container .column-groups, .inbound-stock-list .column-groups, .wp-list-table .column-groups {
+  background-color: #e9ecef;
 }
 
-table.wp-list-table .column-total, table.wp-list-table .column-date {
-  width: 9%;
-}
-
-table.wp-list-table .column-status {
-  text-align: center;
-}
-
-table.wp-list-table .column-status .order-status {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  line-height: 2.5em;
+.atum-list-table .column-groups th, .floatThead-container .column-groups th, .inbound-stock-list .column-groups th, .wp-list-table .column-groups th {
+  padding: 6px 20px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: normal;
+  min-width: 80px;
+  height: 20px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
   color: #6c757d;
-  background: #f8f9fa;
-  border-radius: 4px;
-  margin: -.25em 0;
-  cursor: inherit !important;
-  white-space: nowrap;
-  max-width: 100%;
-  height: 26px;
-  line-height: 26px;
 }
 
-table.wp-list-table .column-status .order-status.status-completed, table.wp-list-table .column-status .order-status.status-received {
-  background: #d5f5ba;
-  color: #69C61D;
+.atum-list-table .column-groups th:not(:last-child), .floatThead-container .column-groups th:not(:last-child), .inbound-stock-list .column-groups th:not(:last-child), .wp-list-table .column-groups th:not(:last-child) {
+  border-right: 1px solid #ced4da;
 }
 
-table.wp-list-table .column-status .order-status.status-on-hold {
-  background: #f8dda7;
-  color: #94660c;
+.atum-list-table .column-groups th .group-toggler, .floatThead-container .column-groups th .group-toggler, .inbound-stock-list .column-groups th .group-toggler, .wp-list-table .column-groups th .group-toggler {
+  float: right;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Linearicons';
 }
 
-table.wp-list-table .column-status .order-status.status-failed, table.wp-list-table .column-status .order-status.status-trash {
-  background: #eba3a3;
-  color: #761919;
+.atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before, .wp-list-table .column-groups th .group-toggler:before {
+  font-family: "atum-icon-font";
+  content: "";
 }
 
-table.wp-list-table .column-status .order-status.status-pending {
-  background: #ffe1e1;
-  color: #FF4848;
+.atum-list-table .column-groups th .group-toggler:hover, .floatThead-container .column-groups th .group-toggler:hover, .inbound-stock-list .column-groups th .group-toggler:hover, .wp-list-table .column-groups th .group-toggler:hover {
+  color: #00A0D2;
 }
 
-table.wp-list-table .column-status .order-status.status-ordered {
-  background: #ffedbc;
-  color: #EFAF00;
+.atum-list-table .column-groups th.collapsed, .floatThead-container .column-groups th.collapsed, .inbound-stock-list .column-groups th.collapsed, .wp-list-table .column-groups th.collapsed {
+  min-width: 0;
+  width: 37px;
 }
 
-table.wp-list-table .column-status .order-status.status-onthewayin {
-  background: #dbf9ff;
+.atum-list-table .column-groups th.collapsed .group-toggler, .floatThead-container .column-groups th.collapsed .group-toggler, .inbound-stock-list .column-groups th.collapsed .group-toggler, .wp-list-table .column-groups th.collapsed .group-toggler {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.atum-list-table th.sortable a, .atum-list-table th.sorted a, .floatThead-container th.sortable a, .floatThead-container th.sorted a, .inbound-stock-list th.sortable a, .inbound-stock-list th.sorted a, .wp-list-table th.sortable a, .wp-list-table th.sorted a {
+  padding: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #adb5bd;
+}
+
+.atum-list-table th.sortable[class*="column-calc_"] a, .atum-list-table th.sortable.column-_stock a, .atum-list-table th.sortable.column-_regular_price a, .atum-list-table th.sortable.column-_sale_price a, .atum-list-table th.sortable.column-_purchase_price a, .atum-list-table th.sortable.column-ID a, .atum-list-table th.sortable.column-_weight a, .atum-list-table th.sortable.column-_out_stock_threshold a, .atum-list-table th.sorted[class*="column-calc_"] a, .atum-list-table th.sorted.column-_stock a, .atum-list-table th.sorted.column-_regular_price a, .atum-list-table th.sorted.column-_sale_price a, .atum-list-table th.sorted.column-_purchase_price a, .atum-list-table th.sorted.column-ID a, .atum-list-table th.sorted.column-_weight a, .atum-list-table th.sorted.column-_out_stock_threshold a, .floatThead-container th.sortable[class*="column-calc_"] a, .floatThead-container th.sortable.column-_stock a, .floatThead-container th.sortable.column-_regular_price a, .floatThead-container th.sortable.column-_sale_price a, .floatThead-container th.sortable.column-_purchase_price a, .floatThead-container th.sortable.column-ID a, .floatThead-container th.sortable.column-_weight a, .floatThead-container th.sortable.column-_out_stock_threshold a, .floatThead-container th.sorted[class*="column-calc_"] a, .floatThead-container th.sorted.column-_stock a, .floatThead-container th.sorted.column-_regular_price a, .floatThead-container th.sorted.column-_sale_price a, .floatThead-container th.sorted.column-_purchase_price a, .floatThead-container th.sorted.column-ID a, .floatThead-container th.sorted.column-_weight a, .floatThead-container th.sorted.column-_out_stock_threshold a, .inbound-stock-list th.sortable[class*="column-calc_"] a, .inbound-stock-list th.sortable.column-_stock a, .inbound-stock-list th.sortable.column-_regular_price a, .inbound-stock-list th.sortable.column-_sale_price a, .inbound-stock-list th.sortable.column-_purchase_price a, .inbound-stock-list th.sortable.column-ID a, .inbound-stock-list th.sortable.column-_weight a, .inbound-stock-list th.sortable.column-_out_stock_threshold a, .inbound-stock-list th.sorted[class*="column-calc_"] a, .inbound-stock-list th.sorted.column-_stock a, .inbound-stock-list th.sorted.column-_regular_price a, .inbound-stock-list th.sorted.column-_sale_price a, .inbound-stock-list th.sorted.column-_purchase_price a, .inbound-stock-list th.sorted.column-ID a, .inbound-stock-list th.sorted.column-_weight a, .inbound-stock-list th.sorted.column-_out_stock_threshold a, .wp-list-table th.sortable[class*="column-calc_"] a, .wp-list-table th.sortable.column-_stock a, .wp-list-table th.sortable.column-_regular_price a, .wp-list-table th.sortable.column-_sale_price a, .wp-list-table th.sortable.column-_purchase_price a, .wp-list-table th.sortable.column-ID a, .wp-list-table th.sortable.column-_weight a, .wp-list-table th.sortable.column-_out_stock_threshold a, .wp-list-table th.sorted[class*="column-calc_"] a, .wp-list-table th.sorted.column-_stock a, .wp-list-table th.sorted.column-_regular_price a, .wp-list-table th.sorted.column-_sale_price a, .wp-list-table th.sorted.column-_purchase_price a, .wp-list-table th.sorted.column-ID a, .wp-list-table th.sorted.column-_weight a, .wp-list-table th.sorted.column-_out_stock_threshold a {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.atum-list-table th.sortable[class*="column-calc_"] a > span, .atum-list-table th.sortable.column-_stock a > span, .atum-list-table th.sortable.column-_regular_price a > span, .atum-list-table th.sortable.column-_sale_price a > span, .atum-list-table th.sortable.column-_purchase_price a > span, .atum-list-table th.sortable.column-ID a > span, .atum-list-table th.sortable.column-_weight a > span, .atum-list-table th.sortable.column-_out_stock_threshold a > span, .atum-list-table th.sorted[class*="column-calc_"] a > span, .atum-list-table th.sorted.column-_stock a > span, .atum-list-table th.sorted.column-_regular_price a > span, .atum-list-table th.sorted.column-_sale_price a > span, .atum-list-table th.sorted.column-_purchase_price a > span, .atum-list-table th.sorted.column-ID a > span, .atum-list-table th.sorted.column-_weight a > span, .atum-list-table th.sorted.column-_out_stock_threshold a > span, .floatThead-container th.sortable[class*="column-calc_"] a > span, .floatThead-container th.sortable.column-_stock a > span, .floatThead-container th.sortable.column-_regular_price a > span, .floatThead-container th.sortable.column-_sale_price a > span, .floatThead-container th.sortable.column-_purchase_price a > span, .floatThead-container th.sortable.column-ID a > span, .floatThead-container th.sortable.column-_weight a > span, .floatThead-container th.sortable.column-_out_stock_threshold a > span, .floatThead-container th.sorted[class*="column-calc_"] a > span, .floatThead-container th.sorted.column-_stock a > span, .floatThead-container th.sorted.column-_regular_price a > span, .floatThead-container th.sorted.column-_sale_price a > span, .floatThead-container th.sorted.column-_purchase_price a > span, .floatThead-container th.sorted.column-ID a > span, .floatThead-container th.sorted.column-_weight a > span, .floatThead-container th.sorted.column-_out_stock_threshold a > span, .inbound-stock-list th.sortable[class*="column-calc_"] a > span, .inbound-stock-list th.sortable.column-_stock a > span, .inbound-stock-list th.sortable.column-_regular_price a > span, .inbound-stock-list th.sortable.column-_sale_price a > span, .inbound-stock-list th.sortable.column-_purchase_price a > span, .inbound-stock-list th.sortable.column-ID a > span, .inbound-stock-list th.sortable.column-_weight a > span, .inbound-stock-list th.sortable.column-_out_stock_threshold a > span, .inbound-stock-list th.sorted[class*="column-calc_"] a > span, .inbound-stock-list th.sorted.column-_stock a > span, .inbound-stock-list th.sorted.column-_regular_price a > span, .inbound-stock-list th.sorted.column-_sale_price a > span, .inbound-stock-list th.sorted.column-_purchase_price a > span, .inbound-stock-list th.sorted.column-ID a > span, .inbound-stock-list th.sorted.column-_weight a > span, .inbound-stock-list th.sorted.column-_out_stock_threshold a > span, .wp-list-table th.sortable[class*="column-calc_"] a > span, .wp-list-table th.sortable.column-_stock a > span, .wp-list-table th.sortable.column-_regular_price a > span, .wp-list-table th.sortable.column-_sale_price a > span, .wp-list-table th.sortable.column-_purchase_price a > span, .wp-list-table th.sortable.column-ID a > span, .wp-list-table th.sortable.column-_weight a > span, .wp-list-table th.sortable.column-_out_stock_threshold a > span, .wp-list-table th.sorted[class*="column-calc_"] a > span, .wp-list-table th.sorted.column-_stock a > span, .wp-list-table th.sorted.column-_regular_price a > span, .wp-list-table th.sorted.column-_sale_price a > span, .wp-list-table th.sorted.column-_purchase_price a > span, .wp-list-table th.sorted.column-ID a > span, .wp-list-table th.sorted.column-_weight a > span, .wp-list-table th.sorted.column-_out_stock_threshold a > span {
+  float: none;
+}
+
+.atum-list-table th.sortable[class*="column-calc_"] a > span:first-child, .atum-list-table th.sortable.column-_stock a > span:first-child, .atum-list-table th.sortable.column-_regular_price a > span:first-child, .atum-list-table th.sortable.column-_sale_price a > span:first-child, .atum-list-table th.sortable.column-_purchase_price a > span:first-child, .atum-list-table th.sortable.column-ID a > span:first-child, .atum-list-table th.sortable.column-_weight a > span:first-child, .atum-list-table th.sortable.column-_out_stock_threshold a > span:first-child, .atum-list-table th.sorted[class*="column-calc_"] a > span:first-child, .atum-list-table th.sorted.column-_stock a > span:first-child, .atum-list-table th.sorted.column-_regular_price a > span:first-child, .atum-list-table th.sorted.column-_sale_price a > span:first-child, .atum-list-table th.sorted.column-_purchase_price a > span:first-child, .atum-list-table th.sorted.column-ID a > span:first-child, .atum-list-table th.sorted.column-_weight a > span:first-child, .atum-list-table th.sorted.column-_out_stock_threshold a > span:first-child, .floatThead-container th.sortable[class*="column-calc_"] a > span:first-child, .floatThead-container th.sortable.column-_stock a > span:first-child, .floatThead-container th.sortable.column-_regular_price a > span:first-child, .floatThead-container th.sortable.column-_sale_price a > span:first-child, .floatThead-container th.sortable.column-_purchase_price a > span:first-child, .floatThead-container th.sortable.column-ID a > span:first-child, .floatThead-container th.sortable.column-_weight a > span:first-child, .floatThead-container th.sortable.column-_out_stock_threshold a > span:first-child, .floatThead-container th.sorted[class*="column-calc_"] a > span:first-child, .floatThead-container th.sorted.column-_stock a > span:first-child, .floatThead-container th.sorted.column-_regular_price a > span:first-child, .floatThead-container th.sorted.column-_sale_price a > span:first-child, .floatThead-container th.sorted.column-_purchase_price a > span:first-child, .floatThead-container th.sorted.column-ID a > span:first-child, .floatThead-container th.sorted.column-_weight a > span:first-child, .floatThead-container th.sorted.column-_out_stock_threshold a > span:first-child, .inbound-stock-list th.sortable[class*="column-calc_"] a > span:first-child, .inbound-stock-list th.sortable.column-_stock a > span:first-child, .inbound-stock-list th.sortable.column-_regular_price a > span:first-child, .inbound-stock-list th.sortable.column-_sale_price a > span:first-child, .inbound-stock-list th.sortable.column-_purchase_price a > span:first-child, .inbound-stock-list th.sortable.column-ID a > span:first-child, .inbound-stock-list th.sortable.column-_weight a > span:first-child, .inbound-stock-list th.sortable.column-_out_stock_threshold a > span:first-child, .inbound-stock-list th.sorted[class*="column-calc_"] a > span:first-child, .inbound-stock-list th.sorted.column-_stock a > span:first-child, .inbound-stock-list th.sorted.column-_regular_price a > span:first-child, .inbound-stock-list th.sorted.column-_sale_price a > span:first-child, .inbound-stock-list th.sorted.column-_purchase_price a > span:first-child, .inbound-stock-list th.sorted.column-ID a > span:first-child, .inbound-stock-list th.sorted.column-_weight a > span:first-child, .inbound-stock-list th.sorted.column-_out_stock_threshold a > span:first-child, .wp-list-table th.sortable[class*="column-calc_"] a > span:first-child, .wp-list-table th.sortable.column-_stock a > span:first-child, .wp-list-table th.sortable.column-_regular_price a > span:first-child, .wp-list-table th.sortable.column-_sale_price a > span:first-child, .wp-list-table th.sortable.column-_purchase_price a > span:first-child, .wp-list-table th.sortable.column-ID a > span:first-child, .wp-list-table th.sortable.column-_weight a > span:first-child, .wp-list-table th.sortable.column-_out_stock_threshold a > span:first-child, .wp-list-table th.sorted[class*="column-calc_"] a > span:first-child, .wp-list-table th.sorted.column-_stock a > span:first-child, .wp-list-table th.sorted.column-_regular_price a > span:first-child, .wp-list-table th.sorted.column-_sale_price a > span:first-child, .wp-list-table th.sorted.column-_purchase_price a > span:first-child, .wp-list-table th.sorted.column-ID a > span:first-child, .wp-list-table th.sorted.column-_weight a > span:first-child, .wp-list-table th.sorted.column-_out_stock_threshold a > span:first-child {
+  padding-left: 10px;
+}
+
+.atum-list-table th.sortable .sorting-indicator, .atum-list-table th.sorted .sorting-indicator, .floatThead-container th.sortable .sorting-indicator, .floatThead-container th.sorted .sorting-indicator, .inbound-stock-list th.sortable .sorting-indicator, .inbound-stock-list th.sorted .sorting-indicator, .wp-list-table th.sortable .sorting-indicator, .wp-list-table th.sorted .sorting-indicator {
+  display: inline-block;
+  width: auto;
+}
+
+.atum-list-table th.column-_supplier_sku, .floatThead-container th.column-_supplier_sku, .inbound-stock-list th.column-_supplier_sku, .wp-list-table th.column-_supplier_sku {
+  white-space: pre-wrap;
+  max-width: 71px;
+}
+
+.atum-list-table th.check-column input[type=checkbox], .floatThead-container th.check-column input[type=checkbox], .inbound-stock-list th.check-column input[type=checkbox], .wp-list-table th.check-column input[type=checkbox] {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.atum-list-table tr.main-row:hover, .atum-list-table tr.mi-row:hover, .atum-list-table tr.expandable:hover, .floatThead-container tr.main-row:hover, .floatThead-container tr.mi-row:hover, .floatThead-container tr.expandable:hover, .inbound-stock-list tr.main-row:hover, .inbound-stock-list tr.mi-row:hover, .inbound-stock-list tr.expandable:hover, .wp-list-table tr.main-row:hover, .wp-list-table tr.mi-row:hover, .wp-list-table tr.expandable:hover {
+  box-shadow: -10px 1px 16px 2px rgba(0, 0, 0, 0.15) inset;
+}
+
+.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even, .wp-list-table tr.even {
+  background-color: #f8f9fa;
+}
+
+.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-stock-list tr.expanded, .wp-list-table tr.expanded {
+  -webkit-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+
+.atum-list-table tr.expanded.variable, .atum-list-table tr.expanded.variable-subscription, .floatThead-container tr.expanded.variable, .floatThead-container tr.expanded.variable-subscription, .inbound-stock-list tr.expanded.variable, .inbound-stock-list tr.expanded.variable-subscription, .wp-list-table tr.expanded.variable, .wp-list-table tr.expanded.variable-subscription {
+  background-color: #00B8DB;
+}
+
+.atum-list-table tr.expanded.group, .floatThead-container tr.expanded.group, .inbound-stock-list tr.expanded.group, .wp-list-table tr.expanded.group {
+  background-color: #EFAF00;
+}
+
+.atum-list-table tr.expanded.variable td, .atum-list-table tr.expanded.variable a, .atum-list-table tr.expanded.variable-subscription td, .atum-list-table tr.expanded.variable-subscription a, .atum-list-table tr.expanded.group td, .atum-list-table tr.expanded.group a, .floatThead-container tr.expanded.variable td, .floatThead-container tr.expanded.variable a, .floatThead-container tr.expanded.variable-subscription td, .floatThead-container tr.expanded.variable-subscription a, .floatThead-container tr.expanded.group td, .floatThead-container tr.expanded.group a, .inbound-stock-list tr.expanded.variable td, .inbound-stock-list tr.expanded.variable a, .inbound-stock-list tr.expanded.variable-subscription td, .inbound-stock-list tr.expanded.variable-subscription a, .inbound-stock-list tr.expanded.group td, .inbound-stock-list tr.expanded.group a, .wp-list-table tr.expanded.variable td, .wp-list-table tr.expanded.variable a, .wp-list-table tr.expanded.variable-subscription td, .wp-list-table tr.expanded.variable-subscription a, .wp-list-table tr.expanded.group td, .wp-list-table tr.expanded.group a {
+  color: #fff;
+}
+
+.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type:before, .inbound-stock-list tr.expanded.variable .column-calc_type .has-child.product-type:before, .inbound-stock-list tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .inbound-stock-list tr.expanded.group .column-calc_type .has-child.product-type:before, .wp-list-table tr.expanded.variable .column-calc_type .has-child.product-type:before, .wp-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type:before, .wp-list-table tr.expanded.group .column-calc_type .has-child.product-type:before {
+  content: "\e004";
+  color: #fff;
+}
+
+.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .atum-list-table tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .floatThead-container tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .inbound-stock-list tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .inbound-stock-list tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .inbound-stock-list tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1, .wp-list-table tr.expanded.variable .column-calc_type .has-child.product-type-icon svg .st1, .wp-list-table tr.expanded.variable-subscription .column-calc_type .has-child.product-type-icon svg .st1, .wp-list-table tr.expanded.group .column-calc_type .has-child.product-type-icon svg .st1 {
+  fill: #fff;
+}
+
+.atum-list-table tr.expandable .check-column input[type=checkbox], .floatThead-container tr.expandable .check-column input[type=checkbox], .inbound-stock-list tr.expandable .check-column input[type=checkbox], .wp-list-table tr.expandable .check-column input[type=checkbox] {
+  margin-left: 20px;
+}
+
+.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound-stock-list tr.variation, .wp-list-table tr.variation {
+  background-color: #dbf9ff;
+}
+
+.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even), .wp-list-table tr.variation:nth-child(even) {
+  background-color: #f5fdff;
+}
+
+.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow, .inbound-stock-list tr.variation td.title .child-arrow, .wp-list-table tr.variation td.title .child-arrow {
   color: #00B8DB;
 }
 
-table.wp-list-table .column-status .order-status.status-receiving {
-  background: #edddfd;
-  color: #BA7DF7;
+.atum-list-table tr.grouped, .floatThead-container tr.grouped, .inbound-stock-list tr.grouped, .wp-list-table tr.grouped {
+  background-color: #ffedbc;
 }
 
-table.wp-list-table .column-status .order-status > span {
-  margin: 0 1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even), .inbound-stock-list tr.grouped:nth-child(even), .wp-list-table tr.grouped:nth-child(even) {
+  background-color: #fff4d6;
 }
 
-table.wp-list-table td.column-status {
-  padding-top: 9px;
+.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow, .inbound-stock-list tr.grouped td.title .child-arrow, .wp-list-table tr.grouped td.title .child-arrow {
+  color: #EFAF00;
 }
 
-table.wp-list-table .column-notes .note-on {
-  display: block;
-  text-indent: -9999px;
-  position: relative;
-  height: 1em;
-  width: 1em;
-  margin: 0 auto;
-  color: #999;
+.atum-list-table tr.no-items td, .floatThead-container tr.no-items td, .inbound-stock-list tr.no-items td, .wp-list-table tr.no-items td {
+  padding: 10px 24px;
 }
 
-table.wp-list-table .column-notes .note-on::after {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
+.atum-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert, .inbound-stock-list tr.no-items td .alert, .wp-list-table tr.no-items td .alert {
+  margin-top: 15px;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.atum-list-table tr.no-items td .alert h3, .atum-list-table tr.no-items td .alert p, .floatThead-container tr.no-items td .alert h3, .floatThead-container tr.no-items td .alert p, .inbound-stock-list tr.no-items td .alert h3, .inbound-stock-list tr.no-items td .alert p, .wp-list-table tr.no-items td .alert h3, .wp-list-table tr.no-items td .alert p {
   width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
-  line-height: 16px;
 }
 
-table.wp-list-table .column-actions .complete, table.wp-list-table .column-actions .view, table.wp-list-table .column-actions .pdf {
-  display: block;
-  text-indent: -9999px;
+.atum-list-table tr.no-items td .alert h3, .floatThead-container tr.no-items td .alert h3, .inbound-stock-list tr.no-items td .alert h3, .wp-list-table tr.no-items td .alert h3 {
+  margin-bottom: 15px;
+}
+
+.atum-list-table tr.no-items td .alert i, .floatThead-container tr.no-items td .alert i, .inbound-stock-list tr.no-items td .alert i, .wp-list-table tr.no-items td .alert i {
+  margin-right: 0;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  line-height: 0.8;
+}
+
+.atum-list-table tr.no-items td .alert p, .floatThead-container tr.no-items td .alert p, .inbound-stock-list tr.no-items td .alert p, .wp-list-table tr.no-items td .alert p {
+  font-weight: bold;
+  padding-left: 10px;
+  margin-bottom: 0;
+}
+
+.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-items td .alert button, .inbound-stock-list tr.no-items td .alert button, .wp-list-table tr.no-items td .alert button {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 10px;
+}
+
+.atum-list-table tr.no-items td .alert .atum-spinner, .floatThead-container tr.no-items td .alert .atum-spinner, .inbound-stock-list tr.no-items td .alert .atum-spinner, .wp-list-table tr.no-items td .alert .atum-spinner {
+  display: inline-block;
+  vertical-align: 8px;
+  margin-left: 10px;
+}
+
+.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-container tr.no-items td .alert .atum-spinner span, .inbound-stock-list tr.no-items td .alert .atum-spinner span, .wp-list-table tr.no-items td .alert .atum-spinner span {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(108, 117, 125, 0.25);
+  border-top-color: #6c757d;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+  -moz-animation: loader-rotate 1s linear infinite;
+  -o-animation: loader-rotate 1s linear infinite;
+  animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals, .wp-list-table tr.totals {
+  background-color: #e9ecef;
+}
+
+.atum-list-table tr.totals td, .atum-list-table tr.totals th, .floatThead-container tr.totals td, .floatThead-container tr.totals th, .inbound-stock-list tr.totals td, .inbound-stock-list tr.totals th, .wp-list-table tr.totals td, .wp-list-table tr.totals th {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6c757d;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.atum-list-table tr.totals td.totals-heading span, .atum-list-table tr.totals th.totals-heading span, .floatThead-container tr.totals td.totals-heading span, .floatThead-container tr.totals th.totals-heading span, .inbound-stock-list tr.totals td.totals-heading span, .inbound-stock-list tr.totals th.totals-heading span, .wp-list-table tr.totals td.totals-heading span, .wp-list-table tr.totals th.totals-heading span {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #6c757d;
+  text-transform: uppercase;
+  background-color: transparent;
+}
+
+.atum-list-table tr.totals td span, .atum-list-table tr.totals th span, .floatThead-container tr.totals td span, .floatThead-container tr.totals th span, .inbound-stock-list tr.totals td span, .inbound-stock-list tr.totals th span, .wp-list-table tr.totals td span, .wp-list-table tr.totals th span {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  text-align: center;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #6c757d;
+  padding: 4px;
+}
+
+.atum-list-table tr.totals td span.danger, .atum-list-table tr.totals th span.danger, .floatThead-container tr.totals td span.danger, .floatThead-container tr.totals th span.danger, .inbound-stock-list tr.totals td span.danger, .inbound-stock-list tr.totals th span.danger, .wp-list-table tr.totals td span.danger, .wp-list-table tr.totals th span.danger {
+  background-color: #FF4848;
+}
+
+.atum-list-table .stock-selling-manager .atum-icon, .floatThead-container .stock-selling-manager .atum-icon, .inbound-stock-list .stock-selling-manager .atum-icon, .wp-list-table .stock-selling-manager .atum-icon {
+  font-size: 20px;
+}
+
+.atum-list-table .cell-green, .floatThead-container .cell-green, .inbound-stock-list .cell-green, .wp-list-table .cell-green {
+  color: #69C61D;
+}
+
+.atum-list-table .cell-yellow, .floatThead-container .cell-yellow, .inbound-stock-list .cell-yellow, .wp-list-table .cell-yellow {
+  color: #EFAF00 !important;
+}
+
+.atum-list-table .cell-yellow .set-meta, .floatThead-container .cell-yellow .set-meta, .inbound-stock-list .cell-yellow .set-meta, .wp-list-table .cell-yellow .set-meta {
+  color: #EFAF00 !important;
+}
+
+.atum-list-table .cell-red, .floatThead-container .cell-red, .inbound-stock-list .cell-red, .wp-list-table .cell-red {
+  color: #FF4848 !important;
+}
+
+.atum-list-table .cell-red .set-meta, .floatThead-container .cell-red .set-meta, .inbound-stock-list .cell-red .set-meta, .wp-list-table .cell-red .set-meta {
+  color: #FF4848 !important;
+}
+
+.atum-list-table .cell-blue, .floatThead-container .cell-blue, .inbound-stock-list .cell-blue, .wp-list-table .cell-blue {
+  color: #00B8DB;
+}
+
+.atum-list-table input[type=checkbox], .floatThead-container input[type=checkbox], .inbound-stock-list input[type=checkbox], .wp-list-table input[type=checkbox] {
+  border-radius: 3px;
+}
+
+.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked, .inbound-stock-list input[type=checkbox]:checked, .wp-list-table input[type=checkbox]:checked {
+  background-color: #00B8DB;
+  border: 0;
+}
+
+.atum-list-table input[type=checkbox]:before, .floatThead-container input[type=checkbox]:before, .inbound-stock-list input[type=checkbox]:before, .wp-list-table input[type=checkbox]:before {
+  color: #fff;
+}
+
+.atum-list-table tbody td.column-title a, .atum-list-table tbody td.column-title .row-title, .atum-list-table tbody td.atum_order_title a, .atum-list-table tbody td.atum_order_title .row-title, .atum-list-table #the-list td.column-title a, .atum-list-table #the-list td.column-title .row-title, .atum-list-table #the-list td.atum_order_title a, .atum-list-table #the-list td.atum_order_title .row-title, .floatThead-container tbody td.column-title a, .floatThead-container tbody td.column-title .row-title, .floatThead-container tbody td.atum_order_title a, .floatThead-container tbody td.atum_order_title .row-title, .floatThead-container #the-list td.column-title a, .floatThead-container #the-list td.column-title .row-title, .floatThead-container #the-list td.atum_order_title a, .floatThead-container #the-list td.atum_order_title .row-title, .inbound-stock-list tbody td.column-title a, .inbound-stock-list tbody td.column-title .row-title, .inbound-stock-list tbody td.atum_order_title a, .inbound-stock-list tbody td.atum_order_title .row-title, .inbound-stock-list #the-list td.column-title a, .inbound-stock-list #the-list td.column-title .row-title, .inbound-stock-list #the-list td.atum_order_title a, .inbound-stock-list #the-list td.atum_order_title .row-title, .wp-list-table tbody td.column-title a, .wp-list-table tbody td.column-title .row-title, .wp-list-table tbody td.atum_order_title a, .wp-list-table tbody td.atum_order_title .row-title, .wp-list-table #the-list td.column-title a, .wp-list-table #the-list td.column-title .row-title, .wp-list-table #the-list td.atum_order_title a, .wp-list-table #the-list td.atum_order_title .row-title {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: #00B8DB;
+}
+
+.atum-list-table tbody td.column-calc_mi_status, .atum-list-table #the-list td.column-calc_mi_status, .floatThead-container tbody td.column-calc_mi_status, .floatThead-container #the-list td.column-calc_mi_status, .inbound-stock-list tbody td.column-calc_mi_status, .inbound-stock-list #the-list td.column-calc_mi_status, .wp-list-table tbody td.column-calc_mi_status, .wp-list-table #the-list td.column-calc_mi_status {
+  font-size: 20px;
+}
+
+.atum-list-table tbody td.column-_sku span, .atum-list-table #the-list td.column-_sku span, .floatThead-container tbody td.column-_sku span, .floatThead-container #the-list td.column-_sku span, .inbound-stock-list tbody td.column-_sku span, .inbound-stock-list #the-list td.column-_sku span, .wp-list-table tbody td.column-_sku span, .wp-list-table #the-list td.column-_sku span {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: #00B8DB;
+}
+
+.atum-list-table tbody td.calc_purchase_order a, .atum-list-table #the-list td.calc_purchase_order a, .floatThead-container tbody td.calc_purchase_order a, .floatThead-container #the-list td.calc_purchase_order a, .inbound-stock-list tbody td.calc_purchase_order a, .inbound-stock-list #the-list td.calc_purchase_order a, .wp-list-table tbody td.calc_purchase_order a, .wp-list-table #the-list td.calc_purchase_order a {
+  color: #00B8DB;
+  font-weight: bold;
+}
+
+.atum-list-table td._supplier, .atum-list-table td.column-_supplier_sku, .atum-list-table td.column-calc_type, .atum-list-table td.stock-counters, .atum-list-table td.stock-negatives, .atum-list-table td.calc_sales_last_ndays, .atum-list-table td.calc_will_last, .atum-list-table td.calc_stock_out_days, .atum-list-table td.calc_lost_sales, .atum-list-table td.multi-inventory, .atum-list-table td.column-status, .atum-list-table td.column-type, .atum-list-table td.column-wc_order, .atum-list-table td.column-actions, .atum-list-table td.column-supplier, .atum-list-table td.column-expected_date, .atum-list-table td.column-date, .atum-list-table td.column-total, .atum-list-table td.company_code, .atum-list-table td.company_phone, .atum-list-table td.calc_inbound, .atum-list-table td.calc_date_ordered, .atum-list-table td.calc_date_expected, .atum-list-table td.column-calc_mi_status, .floatThead-container td._supplier, .floatThead-container td.column-_supplier_sku, .floatThead-container td.column-calc_type, .floatThead-container td.stock-counters, .floatThead-container td.stock-negatives, .floatThead-container td.calc_sales_last_ndays, .floatThead-container td.calc_will_last, .floatThead-container td.calc_stock_out_days, .floatThead-container td.calc_lost_sales, .floatThead-container td.multi-inventory, .floatThead-container td.column-status, .floatThead-container td.column-type, .floatThead-container td.column-wc_order, .floatThead-container td.column-actions, .floatThead-container td.column-supplier, .floatThead-container td.column-expected_date, .floatThead-container td.column-date, .floatThead-container td.column-total, .floatThead-container td.company_code, .floatThead-container td.company_phone, .floatThead-container td.calc_inbound, .floatThead-container td.calc_date_ordered, .floatThead-container td.calc_date_expected, .floatThead-container td.column-calc_mi_status, .inbound-stock-list td._supplier, .inbound-stock-list td.column-_supplier_sku, .inbound-stock-list td.column-calc_type, .inbound-stock-list td.stock-counters, .inbound-stock-list td.stock-negatives, .inbound-stock-list td.calc_sales_last_ndays, .inbound-stock-list td.calc_will_last, .inbound-stock-list td.calc_stock_out_days, .inbound-stock-list td.calc_lost_sales, .inbound-stock-list td.multi-inventory, .inbound-stock-list td.column-status, .inbound-stock-list td.column-type, .inbound-stock-list td.column-wc_order, .inbound-stock-list td.column-actions, .inbound-stock-list td.column-supplier, .inbound-stock-list td.column-expected_date, .inbound-stock-list td.column-date, .inbound-stock-list td.column-total, .inbound-stock-list td.company_code, .inbound-stock-list td.company_phone, .inbound-stock-list td.calc_inbound, .inbound-stock-list td.calc_date_ordered, .inbound-stock-list td.calc_date_expected, .inbound-stock-list td.column-calc_mi_status, .wp-list-table td._supplier, .wp-list-table td.column-_supplier_sku, .wp-list-table td.column-calc_type, .wp-list-table td.stock-counters, .wp-list-table td.stock-negatives, .wp-list-table td.calc_sales_last_ndays, .wp-list-table td.calc_will_last, .wp-list-table td.calc_stock_out_days, .wp-list-table td.calc_lost_sales, .wp-list-table td.multi-inventory, .wp-list-table td.column-status, .wp-list-table td.column-type, .wp-list-table td.column-wc_order, .wp-list-table td.column-actions, .wp-list-table td.column-supplier, .wp-list-table td.column-expected_date, .wp-list-table td.column-date, .wp-list-table td.column-total, .wp-list-table td.company_code, .wp-list-table td.company_phone, .wp-list-table td.calc_inbound, .wp-list-table td.calc_date_ordered, .wp-list-table td.calc_date_expected, .wp-list-table td.column-calc_mi_status {
+  color: #6c757d;
+}
+
+.atum-list-table td.column-_stock, .atum-list-table td._out_stock_threshold, .atum-list-table td.assigned_to, .atum-list-table td.wc_order, .floatThead-container td.column-_stock, .floatThead-container td._out_stock_threshold, .floatThead-container td.assigned_to, .floatThead-container td.wc_order, .inbound-stock-list td.column-_stock, .inbound-stock-list td._out_stock_threshold, .inbound-stock-list td.assigned_to, .inbound-stock-list td.wc_order, .wp-list-table td.column-_stock, .wp-list-table td._out_stock_threshold, .wp-list-table td.assigned_to, .wp-list-table td.wc_order {
+  color: #00B8DB;
+}
+
+.atum-list-table td.column-_stock a, .atum-list-table td._out_stock_threshold a, .atum-list-table td.assigned_to a, .atum-list-table td.wc_order a, .floatThead-container td.column-_stock a, .floatThead-container td._out_stock_threshold a, .floatThead-container td.assigned_to a, .floatThead-container td.wc_order a, .inbound-stock-list td.column-_stock a, .inbound-stock-list td._out_stock_threshold a, .inbound-stock-list td.assigned_to a, .inbound-stock-list td.wc_order a, .wp-list-table td.column-_stock a, .wp-list-table td._out_stock_threshold a, .wp-list-table td.assigned_to a, .wp-list-table td.wc_order a {
+  color: #00B8DB;
+}
+
+.atum-list-table td, .atum-list-table th, .floatThead-container td, .floatThead-container th, .inbound-stock-list td, .inbound-stock-list th, .wp-list-table td, .wp-list-table th {
   position: relative;
-  height: 1em;
-  width: 1em;
+  vertical-align: middle;
+  padding: 6px 5px;
+  height: 47px;
+  font-size: 14px;
+  color: #00B8DB;
+}
+
+.atum-list-table td.column-ID, .atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID, .inbound-stock-list td.column-ID, .inbound-stock-list th.column-ID, .wp-list-table td.column-ID, .wp-list-table th.column-ID {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: #6c757d;
+}
+
+.atum-list-table td.pro-version, .atum-list-table th.pro-version, .floatThead-container td.pro-version, .floatThead-container th.pro-version, .inbound-stock-list td.pro-version, .inbound-stock-list th.pro-version, .wp-list-table td.pro-version, .wp-list-table th.pro-version {
+  background-color: #6c757d;
+}
+
+.atum-list-table td.column-title, .atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title, .inbound-stock-list td.column-title, .inbound-stock-list th.column-title, .wp-list-table td.column-title, .wp-list-table th.column-title {
+  min-width: 150px;
+}
+
+.atum-list-table td.column-title > span, .atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span, .inbound-stock-list td.column-title > span, .inbound-stock-list th.column-title > span, .wp-list-table td.column-title > span, .wp-list-table th.column-title > span {
+  white-space: nowrap;
+}
+
+.atum-list-table td.column-title .child-arrow, .atum-list-table th.column-title .child-arrow, .floatThead-container td.column-title .child-arrow, .floatThead-container th.column-title .child-arrow, .inbound-stock-list td.column-title .child-arrow, .inbound-stock-list th.column-title .child-arrow, .wp-list-table td.column-title .child-arrow, .wp-list-table th.column-title .child-arrow {
+  display: inline-block;
+  margin-right: 2px;
+  margin-left: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.atum-list-table td.column-sku, .atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku, .inbound-stock-list td.column-sku, .inbound-stock-list th.column-sku, .wp-list-table td.column-sku, .wp-list-table th.column-sku {
+  min-width: 70px;
+}
+
+.atum-list-table td[class*="column-calc_"], .atum-list-table td.column-_stock, .atum-list-table td.column-_regular_price, .atum-list-table td.column-_sale_price, .atum-list-table td.column-_purchase_price, .atum-list-table td.column-ID, .atum-list-table td.column-_weight, .atum-list-table td.column-_out_stock_threshold, .atum-list-table th[class*="column-calc_"], .atum-list-table th.column-_stock, .atum-list-table th.column-_regular_price, .atum-list-table th.column-_sale_price, .atum-list-table th.column-_purchase_price, .atum-list-table th.column-ID, .atum-list-table th.column-_weight, .atum-list-table th.column-_out_stock_threshold, .floatThead-container td[class*="column-calc_"], .floatThead-container td.column-_stock, .floatThead-container td.column-_regular_price, .floatThead-container td.column-_sale_price, .floatThead-container td.column-_purchase_price, .floatThead-container td.column-ID, .floatThead-container td.column-_weight, .floatThead-container td.column-_out_stock_threshold, .floatThead-container th[class*="column-calc_"], .floatThead-container th.column-_stock, .floatThead-container th.column-_regular_price, .floatThead-container th.column-_sale_price, .floatThead-container th.column-_purchase_price, .floatThead-container th.column-ID, .floatThead-container th.column-_weight, .floatThead-container th.column-_out_stock_threshold, .inbound-stock-list td[class*="column-calc_"], .inbound-stock-list td.column-_stock, .inbound-stock-list td.column-_regular_price, .inbound-stock-list td.column-_sale_price, .inbound-stock-list td.column-_purchase_price, .inbound-stock-list td.column-ID, .inbound-stock-list td.column-_weight, .inbound-stock-list td.column-_out_stock_threshold, .inbound-stock-list th[class*="column-calc_"], .inbound-stock-list th.column-_stock, .inbound-stock-list th.column-_regular_price, .inbound-stock-list th.column-_sale_price, .inbound-stock-list th.column-_purchase_price, .inbound-stock-list th.column-ID, .inbound-stock-list th.column-_weight, .inbound-stock-list th.column-_out_stock_threshold, .wp-list-table td[class*="column-calc_"], .wp-list-table td.column-_stock, .wp-list-table td.column-_regular_price, .wp-list-table td.column-_sale_price, .wp-list-table td.column-_purchase_price, .wp-list-table td.column-ID, .wp-list-table td.column-_weight, .wp-list-table td.column-_out_stock_threshold, .wp-list-table th[class*="column-calc_"], .wp-list-table th.column-_stock, .wp-list-table th.column-_regular_price, .wp-list-table th.column-_sale_price, .wp-list-table th.column-_purchase_price, .wp-list-table th.column-ID, .wp-list-table th.column-_weight, .wp-list-table th.column-_out_stock_threshold {
+  text-align: center;
+}
+
+.atum-list-table td a, .atum-list-table th a, .floatThead-container td a, .floatThead-container th a, .inbound-stock-list td a, .inbound-stock-list th a, .wp-list-table td a, .wp-list-table th a {
+  cursor: pointer;
+}
+
+.atum-list-table td.ghost-column, .atum-list-table th.ghost-column, .floatThead-container td.ghost-column, .floatThead-container th.ghost-column, .inbound-stock-list td.ghost-column, .inbound-stock-list th.ghost-column, .wp-list-table td.ghost-column, .wp-list-table th.ghost-column {
+  width: 37px;
   padding: 0 !important;
-  height: 2em !important;
-  width: 2em;
+  min-width: 0 !important;
+  height: auto !important;
+  border-left: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
 }
 
-table.wp-list-table .column-actions .complete::after {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.atum-list-table th span.col-stock-counters, .atum-list-table th span.col-stock-negatives, .atum-list-table th span.col-stock-selling-manager, .floatThead-container th span.col-stock-counters, .floatThead-container th span.col-stock-negatives, .floatThead-container th span.col-stock-selling-manager, .inbound-stock-list th span.col-stock-counters, .inbound-stock-list th span.col-stock-negatives, .inbound-stock-list th span.col-stock-selling-manager, .wp-list-table th span.col-stock-counters, .wp-list-table th span.col-stock-negatives, .wp-list-table th span.col-stock-selling-manager {
+  color: #adb5bd;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.atum-list-table th span.col-stock-counters .set-header, .atum-list-table th span.col-stock-negatives .set-header, .atum-list-table th span.col-stock-selling-manager .set-header, .floatThead-container th span.col-stock-counters .set-header, .floatThead-container th span.col-stock-negatives .set-header, .floatThead-container th span.col-stock-selling-manager .set-header, .inbound-stock-list th span.col-stock-counters .set-header, .inbound-stock-list th span.col-stock-negatives .set-header, .inbound-stock-list th span.col-stock-selling-manager .set-header, .wp-list-table th span.col-stock-counters .set-header, .wp-list-table th span.col-stock-negatives .set-header, .wp-list-table th span.col-stock-selling-manager .set-header {
+  color: #adb5bd;
+}
+
+.atum-list-table td.column-title, .floatThead-container td.column-title, .inbound-stock-list td.column-title, .wp-list-table td.column-title {
+  font-weight: 500;
+}
+
+.atum-list-table .column-thumb, .floatThead-container .column-thumb, .inbound-stock-list .column-thumb, .wp-list-table .column-thumb {
+  height: 40px;
+}
+
+.atum-list-table .column-calc_type, .floatThead-container .column-calc_type, .inbound-stock-list .column-calc_type, .wp-list-table .column-calc_type {
+  max-width: 50px;
   text-align: center;
-  content: "";
-  line-height: 1.85;
 }
 
-table.wp-list-table .column-actions .view::after {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
-  line-height: 1.85;
-}
-
-table.wp-list-table .column-actions .pdf::after {
-  content: url("../images/pdf.svg");
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  z-index: 10;
-  text-indent: 0;
-}
-
-table.wp-list-table img {
-  margin: 1px 2px;
-}
-
-table.wp-list-table .row-actions, table.wp-list-table span.na {
-  color: #999;
-}
-
-table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-table .status_head {
+.atum-list-table .column-calc_type .wc-type, .floatThead-container .column-calc_type .wc-type, .inbound-stock-list .column-calc_type .wc-type, .wp-list-table .column-calc_type .wc-type {
   display: block;
   text-indent: -9999px;
   position: relative;
@@ -3446,30 +4765,296 @@ table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-
   margin: 0 auto;
 }
 
-table.wp-list-table .notes_head::after, table.wp-list-table .notes_head::after, table.wp-list-table .status_head::after {
-  font-family: 'WooCommerce';
+.atum-list-table .column-calc_type .wc-type:before, .floatThead-container .column-calc_type .wc-type:before, .inbound-stock-list .column-calc_type .wc-type:before, .wp-list-table .column-calc_type .wc-type:before {
+  font-family: WooCommerce;
+  content: "\e006";
+  position: absolute;
+  text-indent: 0;
+  font-size: 14px;
+  top: 0;
   speak: none;
-  font-weight: normal;
   font-variant: normal;
   text-transform: none;
-  line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
+  left: 0;
+}
+
+.atum-list-table .column-calc_type .product-type, .floatThead-container .column-calc_type .product-type, .inbound-stock-list .column-calc_type .product-type, .wp-list-table .column-calc_type .product-type {
+  display: block;
+  text-indent: -9999px;
+  position: relative;
+  height: 1em;
+  width: 1em;
+  font-size: 1.6em;
+  margin: 0 auto;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.atum-list-table .column-calc_type .product-type:before, .floatThead-container .column-calc_type .product-type:before, .inbound-stock-list .column-calc_type .product-type:before, .wp-list-table .column-calc_type .product-type:before {
+  font-family: WooCommerce;
+  speak: none;
+  font-weight: 400;
+  text-transform: none;
+  line-height: 1;
+  text-indent: 0px;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   text-align: center;
-  content: "";
+  content: "\e006";
+  font-variant: normal;
+  margin: 0;
 }
 
-table.wp-list-table .notes_head::after {
-  content: '\e028';
+.atum-list-table .column-calc_type .product-type.grouped:before, .floatThead-container .column-calc_type .product-type.grouped:before, .inbound-stock-list .column-calc_type .product-type.grouped:before, .wp-list-table .column-calc_type .product-type.grouped:before {
+  content: "\e002";
 }
 
-table.wp-list-table .status_head::after {
-  content: '\e011';
+.atum-list-table .column-calc_type .product-type.external::before, .floatThead-container .column-calc_type .product-type.external::before, .inbound-stock-list .column-calc_type .product-type.external::before, .wp-list-table .column-calc_type .product-type.external::before {
+  content: "\e034";
+}
+
+.atum-list-table .column-calc_type .product-type.variable::before, .floatThead-container .column-calc_type .product-type.variable::before, .inbound-stock-list .column-calc_type .product-type.variable::before, .wp-list-table .column-calc_type .product-type.variable::before {
+  content: "\e003";
+}
+
+.atum-list-table .column-calc_type .product-type.downloadable::before, .floatThead-container .column-calc_type .product-type.downloadable::before, .inbound-stock-list .column-calc_type .product-type.downloadable::before, .wp-list-table .column-calc_type .product-type.downloadable::before {
+  content: "\e001";
+}
+
+.atum-list-table .column-calc_type .product-type.virtual::before, .floatThead-container .column-calc_type .product-type.virtual::before, .inbound-stock-list .column-calc_type .product-type.virtual::before, .wp-list-table .column-calc_type .product-type.virtual::before {
+  content: "\e000";
+}
+
+.atum-list-table .column-calc_type .has-child, .floatThead-container .column-calc_type .has-child, .inbound-stock-list .column-calc_type .has-child, .wp-list-table .column-calc_type .has-child {
+  cursor: pointer;
+}
+
+.atum-list-table .column-calc_type .has-child.product-type.variable, .atum-list-table .column-calc_type .has-child.product-type.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type.variable, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type.variable, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription, .wp-list-table .column-calc_type .has-child.product-type.variable, .wp-list-table .column-calc_type .has-child.product-type.variable-subscription {
+  color: #00B8DB;
+}
+
+.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription:before, .wp-list-table .column-calc_type .has-child.product-type.variable-subscription:before {
+  content: "\e003";
+}
+
+.atum-list-table .column-calc_type .has-child.product-type.grouped, .floatThead-container .column-calc_type .has-child.product-type.grouped, .inbound-stock-list .column-calc_type .has-child.product-type.grouped, .wp-list-table .column-calc_type .has-child.product-type.grouped {
+  color: #EFAF00;
+}
+
+.atum-list-table .column-calc_type .has-child.product-type:hover:before, .floatThead-container .column-calc_type .has-child.product-type:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type:hover:before, .wp-list-table .column-calc_type .has-child.product-type:hover:before {
+  content: "\e005";
+}
+
+.atum-list-table .column-calc_type .variation:before, .atum-list-table .column-calc_type .grouped-item:before, .floatThead-container .column-calc_type .variation:before, .floatThead-container .column-calc_type .grouped-item:before, .inbound-stock-list .column-calc_type .variation:before, .inbound-stock-list .column-calc_type .grouped-item:before, .wp-list-table .column-calc_type .variation:before, .wp-list-table .column-calc_type .grouped-item:before {
+  content: "\e039";
+}
+
+.atum-list-table .column-calc_type .product-part, .atum-list-table .column-calc_type .raw-material, .floatThead-container .column-calc_type .product-part, .floatThead-container .column-calc_type .raw-material, .inbound-stock-list .column-calc_type .product-part, .inbound-stock-list .column-calc_type .raw-material, .wp-list-table .column-calc_type .product-part, .wp-list-table .column-calc_type .raw-material {
+  display: block;
+  padding-top: 6px;
+}
+
+.atum-list-table .show-locations, .floatThead-container .show-locations, .inbound-stock-list .show-locations, .wp-list-table .show-locations {
+  cursor: pointer;
+  color: #adb5bd;
+  font-size: 20px;
+}
+
+.atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty, .inbound-stock-list .show-locations.not-empty, .wp-list-table .show-locations.not-empty {
+  color: #00B8DB;
+}
+
+.atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy, .inbound-stock-list .show-hierarchy, .wp-list-table .show-hierarchy {
+  cursor: pointer;
+  color: #adb5bd;
+  font-size: 20px;
+}
+
+.atum-list-table .show-hierarchy.not-empty, .floatThead-container .show-hierarchy.not-empty, .inbound-stock-list .show-hierarchy.not-empty, .wp-list-table .show-hierarchy.not-empty {
+  color: #00B8DB;
+}
+
+.atum-list-table .set-meta, .floatThead-container .set-meta, .inbound-stock-list .set-meta, .wp-list-table .set-meta {
+  cursor: pointer;
+  color: #00B8DB;
+}
+
+.atum-list-table .set-meta:hover, .floatThead-container .set-meta:hover, .inbound-stock-list .set-meta:hover, .wp-list-table .set-meta:hover {
+  color: #00A0D2;
+}
+
+.atum-list-table .set-meta.unsaved, .floatThead-container .set-meta.unsaved, .inbound-stock-list .set-meta.unsaved, .wp-list-table .set-meta.unsaved {
+  color: #FF4848;
+}
+
+.atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header, .wp-list-table .set-header {
+  cursor: pointer;
+  color: #0073AA;
+}
+
+.atum-list-table .set-header:hover, .floatThead-container .set-header:hover, .inbound-stock-list .set-header:hover, .wp-list-table .set-header:hover {
+  color: #00A0D2;
+}
+
+.atum-list-table .highlight-danger, .floatThead-container .highlight-danger, .inbound-stock-list .highlight-danger, .wp-list-table .highlight-danger {
+  background-color: #FF4848;
+  color: #fff;
+  padding: 2px 3px;
+  border-radius: 2px;
+}
+
+.atum-list-table #calc_stock_out_days, .floatThead-container #calc_stock_out_days, .inbound-stock-list #calc_stock_out_days, .wp-list-table #calc_stock_out_days {
+  min-width: 56px;
+}
+
+.atum-list-table .column-calc_stock_indicator .dashicons, .floatThead-container .column-calc_stock_indicator .dashicons, .inbound-stock-list .column-calc_stock_indicator .dashicons, .wp-list-table .column-calc_stock_indicator .dashicons {
+  font-size: 1.4em !important;
+}
+
+.atum-list-table .atum-title-small, .floatThead-container .atum-title-small, .inbound-stock-list .atum-title-small, .wp-list-table .atum-title-small {
+  display: none;
+}
+
+.atum-list-table .column-groups th, .floatThead-container .column-groups th, .inbound-stock-list .column-groups th, .wp-list-table .column-groups th {
+  padding: 6px 20px !important;
+}
+
+@media screen and (max-width: 782px) {
+  .atum-list-table th, .atum-list-table td, .floatThead-container th, .floatThead-container td, .inbound-stock-list th, .inbound-stock-list td, .wp-list-table th, .wp-list-table td {
+    display: table-cell !important;
+    padding: 6px 5px !important;
+  }
+  .atum-list-table th.check-column input[type="checkbox"], .atum-list-table td.check-column input[type="checkbox"], .floatThead-container th.check-column input[type="checkbox"], .floatThead-container td.check-column input[type="checkbox"], .inbound-stock-list th.check-column input[type="checkbox"], .inbound-stock-list td.check-column input[type="checkbox"], .wp-list-table th.check-column input[type="checkbox"], .wp-list-table td.check-column input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+  .atum-list-table th.check-column input[type="checkbox"]:before, .atum-list-table td.check-column input[type="checkbox"]:before, .floatThead-container th.check-column input[type="checkbox"]:before, .floatThead-container td.check-column input[type="checkbox"]:before, .inbound-stock-list th.check-column input[type="checkbox"]:before, .inbound-stock-list td.check-column input[type="checkbox"]:before, .wp-list-table th.check-column input[type="checkbox"]:before, .wp-list-table td.check-column input[type="checkbox"]:before {
+    margin: -5px -8px;
+  }
+  .atum-list-table th, .floatThead-container th, .inbound-stock-list th, .wp-list-table th {
+    padding: 0 5px !important;
+  }
+  .atum-list-table th.column-primary, .floatThead-container th.column-primary, .inbound-stock-list th.column-primary, .wp-list-table th.column-primary {
+    width: auto !important;
+  }
+  .atum-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before, .floatThead-container tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before, .inbound-stock-list tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before, .wp-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
+    content: none;
+  }
+  .atum-list-table .column-primary .toggle-row, .floatThead-container .column-primary .toggle-row, .inbound-stock-list .column-primary .toggle-row, .wp-list-table .column-primary .toggle-row {
+    display: none;
+  }
+}
+
+.floatThead-wrapper tr.size-row {
+  display: none;
+}
+
+.floatThead-wrapper .floatThead-container {
+  height: 0;
+  overflow-y: hidden;
+  margin-bottom: 0;
+}
+
+.floatThead-wrapper .floatThead-container .group-toggler {
+  display: none;
+}
+
+.atum-notice {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+
+.atum-notice .manage-message {
+  position: relative;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -moz-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.atum-notice .notice-dismiss {
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.atum-notice .add-manage-option {
+  margin-top: 3px;
+}
+
+.contextual-help-tabs-wrap {
+  padding: 20px;
+}
+
+.contextual-help-tabs-wrap table tr td:first-child {
+  width: 20%;
+}
+
+.contextual-help-tabs-wrap .dashicons-format-image {
+  font-size: 18px;
+}
+
+.contextual-help-tabs-wrap .wc-type:before {
+  font-family: WooCommerce;
+  content: "\e006";
+  font-size: 18px;
+  top: 0;
+  speak: none;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  left: 0;
+}
+
+.popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
+  display: inline-block;
+  vertical-align: middle;
+  height: 30px;
+}
+
+.popover .popover-content > input[type=number], .popover .popover-content > input[type=text] {
+  width: 75%;
+}
+
+.popover .popover-content > .button {
+  margin-left: 3px;
+}
+
+.popover .popover-content > .button:disabled {
+  color: #f8f9fa !important;
+  opacity: 0.6;
+}
+
+@media all and (max-width: 768px) {
+  .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
+    width: 100%;
+  }
+  .popover .popover-content > .button {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}
+
+.popover.with-meta .popover-content input, .popover.with-meta .popover-content button {
+  width: 100%;
+  margin: 3px 0;
+}
+
+.popover.with-meta .popover-content hr {
+  border-color: #E3E8F5;
 }
 /*# sourceMappingURL=atum-suppliers.css.map */

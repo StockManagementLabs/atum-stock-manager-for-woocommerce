@@ -39,11 +39,49 @@
 		init: function() {
 			
 			var self = this;
-			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
 			
+			this.$atumTable = $('.wp-list-table');
+			
+			// Add placeholder to input search
+			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
+			// Change nav and search div position
+			$('#posts-filter').prepend($('.subsubsub'));
 			$('.subsubsub').append($('.search-box'));
 			$('.search-box').show();
+			$('.wp-heading-inline').append($('.page-title-action'));
+			$('.page-title-action').show();
+			
 			$('select').select2();
+			
+			// Add active class row function
+			this.addActiveClassRow();
+		},
+		/**
+		 * Add/remove row active class when checkbox is clicked
+		 */
+		addActiveClassRow: function() {
+			var self = this;
+			self.$atumTable.find('tbody .check-column input:checkbox').change(function () {
+				var $checkboxRow = self.$atumTable.find("#post-" + $(this).val());
+				if ( $(this).is(':checked') ) {
+					$checkboxRow.addClass('active-row');
+				}
+				else{
+					$checkboxRow.removeClass('active-row');
+				}
+			});
+			
+			$('#cb-select-all-1').change(function () {
+				$('tbody tr').each(function () {
+					var $checkbox = $(this).find('input[type=checkbox]');
+					if ( $checkbox.is(':checked') ) {
+						$(this).addClass('active-row');
+					}
+					else {
+						$(this).removeClass('active-row');
+					}
+				});
+			});
 		},
 	});
 	

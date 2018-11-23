@@ -38,7 +38,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 		
-		if ( version_compare( WC()->version, '3.5', '<' ) ) {
+		if ( version_compare( WC()->version, '3.5.0', '<' ) ) {
 			// Add the button for adding the inbound stock products to the WC stock.
 			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_button' ) );
 		}
