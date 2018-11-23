@@ -792,9 +792,7 @@
 		 * Activate/Deactivate sticky columns' setting
 		 */
 		toggleStickyColumns: function() {
-			
 			var self = this;
-			
 			this.$stickyColsButton.click(function() {
 				
 				var $buttonsContainer = $('.sticky-columns-button-container'),
@@ -813,7 +811,7 @@
 					url       : ajaxurl,
 					method    : 'POST',
 					data      : {
-						token : self.settings.menuThemeNonce,
+						token : self.settings.stickyColumnsNonce,
 						action: 'atum_change_sticky_columns_value',
 						data  : {
 							option: option
@@ -821,6 +819,7 @@
 					},
 					beforeSend: function () {
 						$('body').css('cursor', 'wait');
+						self.addOverlay();
 					},
 					success   : function (response) {
                         $('body').css('cursor', 'auto');

@@ -2799,6 +2799,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'order'                => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
 			'orderby'              => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
 			'nonce'                => wp_create_nonce( 'atum-list-table-nonce' ),
+			'stickyColumnsNonce'   => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
 			'ajaxFilter'           => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 			'setValue'             => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
 			'setButton'            => __( 'Set', ATUM_TEXT_DOMAIN ),

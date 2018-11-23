@@ -1376,7 +1376,7 @@ final class Helpers {
 			endif;
 			?>
 
-			<select name="supplier" class="<?php echo esc_attr( $class ) ?>" autocomplete="off" style="width: 165px">
+			<select name="supplier" class="wc-enhanced-select <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
 				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>

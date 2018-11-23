@@ -2142,7 +2142,7 @@ final class Ajax {
 	 */
 	public function change_sticky_columns_value() {
 
-		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
+		check_ajax_referer( 'atum-sticky-columns-button-nonce', 'token' );
 
 		$option = $_POST['data']['option'];
 

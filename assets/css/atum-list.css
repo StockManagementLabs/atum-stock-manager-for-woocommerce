@@ -4946,7 +4946,7 @@ input[type="button"].btn-block {
 
 .search-box .input-group-append {
   border: none;
-  width: 40%;
+  min-width: 45%;
 }
 
 .search-box .dropdown-toggle {
@@ -6113,7 +6113,7 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table tr.main-row:hover, .atum-list-table tr.mi-row:hover, .atum-list-table tr.expandable:hover, .floatThead-container tr.main-row:hover, .floatThead-container tr.mi-row:hover, .floatThead-container tr.expandable:hover, .inbound-stock-list tr.main-row:hover, .inbound-stock-list tr.mi-row:hover, .inbound-stock-list tr.expandable:hover, .wp-list-table tr.main-row:hover, .wp-list-table tr.mi-row:hover, .wp-list-table tr.expandable:hover {
-  box-shadow: -10px 1px 16px 2px rgba(0, 0, 0, 0.15) inset;
+  box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
 }
 
 .atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even, .wp-list-table tr.even {
@@ -6459,7 +6459,7 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table th span.col-stock-counters .set-header, .atum-list-table th span.col-stock-negatives .set-header, .atum-list-table th span.col-stock-selling-manager .set-header, .floatThead-container th span.col-stock-counters .set-header, .floatThead-container th span.col-stock-negatives .set-header, .floatThead-container th span.col-stock-selling-manager .set-header, .inbound-stock-list th span.col-stock-counters .set-header, .inbound-stock-list th span.col-stock-negatives .set-header, .inbound-stock-list th span.col-stock-selling-manager .set-header, .wp-list-table th span.col-stock-counters .set-header, .wp-list-table th span.col-stock-negatives .set-header, .wp-list-table th span.col-stock-selling-manager .set-header {
-  color: #adb5bd;
+  color: #00B8DB;
 }
 
 .atum-list-table td.column-title, .floatThead-container td.column-title, .inbound-stock-list td.column-title, .wp-list-table td.column-title {

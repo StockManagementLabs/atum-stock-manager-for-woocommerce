@@ -3588,7 +3588,7 @@ input[type="button"].btn-block {
   font-size: 15px;
   font-weight: bold;
   color: #fff;
-  border-right: 3px solid #00B8DB;
+  border-right: 3px solid #fff;
 }
 
 @media all and (max-width: 992px) {
