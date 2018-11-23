@@ -6110,11 +6110,11 @@ table.wp-list-table tbody tr:hover {
   color: #fff;
 }
 
-.atum-list-table tbody tr.expanded td, .atum-list-table #the-list tr.expanded td, .floatThead-container tbody tr.expanded td, .floatThead-container #the-list tr.expanded td, .inbound-stock-list tbody tr.expanded td, .inbound-stock-list #the-list tr.expanded td, .wp-list-table tbody tr.expanded td, .wp-list-table #the-list tr.expanded td {
+.atum-list-table tbody tr.expanded.variable td, .atum-list-table #the-list tr.expanded.variable td, .floatThead-container tbody tr.expanded.variable td, .floatThead-container #the-list tr.expanded.variable td, .inbound-stock-list tbody tr.expanded.variable td, .inbound-stock-list #the-list tr.expanded.variable td, .wp-list-table tbody tr.expanded.variable td, .wp-list-table #the-list tr.expanded.variable td {
   color: #fff !important;
 }
 
-.atum-list-table tbody tr.expanded td a, .atum-list-table #the-list tr.expanded td a, .floatThead-container tbody tr.expanded td a, .floatThead-container #the-list tr.expanded td a, .inbound-stock-list tbody tr.expanded td a, .inbound-stock-list #the-list tr.expanded td a, .wp-list-table tbody tr.expanded td a, .wp-list-table #the-list tr.expanded td a {
+.atum-list-table tbody tr.expanded.variable td a, .atum-list-table #the-list tr.expanded.variable td a, .floatThead-container tbody tr.expanded.variable td a, .floatThead-container #the-list tr.expanded.variable td a, .inbound-stock-list tbody tr.expanded.variable td a, .inbound-stock-list #the-list tr.expanded.variable td a, .wp-list-table tbody tr.expanded.variable td a, .wp-list-table #the-list tr.expanded.variable td a {
   color: #fff !important;
 }
 

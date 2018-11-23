@@ -1654,10 +1654,12 @@ table.wp-list-table {
 		
 		tr {
 			&.expanded {
-				td {
-					color: $white !important;
-					a {
+				&.variable {
+					td {
 						color: $white !important;
+						a {
+							color: $white !important;
+						}
 					}
 				}
 			}
