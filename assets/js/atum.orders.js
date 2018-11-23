@@ -889,29 +889,15 @@
 			toggleSupplierField: function() {
 				
 				var $body          = $('body'),
-				    $dropdownField = $('.dropdown_supplier').parent(),
-				    blockMultiple  = ($('#atum_order_has_multiple_suppliers').val() === 'false' && !$body.hasClass('post-new-php'));
+				    $dropdownField = $('.dropdown_supplier').parent();
 				
 				if ($(this).is(':checked')) {
 					$body.addClass('allow-multiple-suppliers');
 					$dropdownField.slideUp();
-					if ( blockMultiple ) {
-						atum_order_items.$itemsBlocker.removeClass('unblocked');
-					}
-					else {
-						atum_order_items.$itemsBlocker.addClass('unblocked');
-					}
 				}
 				else {
 					$body.removeClass('allow-multiple-suppliers');
 					$dropdownField.slideDown();
-					
-					if ($('#supplier').val() && blockMultiple) {
-						atum_order_items.$itemsBlocker.addClass('unblocked');
-					}
-					else {
-						atum_order_items.$itemsBlocker.removeClass('unblocked');
-					}
 				}
 				
 			},
