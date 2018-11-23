@@ -106,22 +106,19 @@
 		
 	}
 	
-	#post-query-submit, #doaction, #doaction2 {
-		font-size: 12px !important;
-	}
-	
-	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post) {
+	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit) {
 		
 		border-radius: 5px;
 		background-color: $orange;
-		font-size: 10px;
+		font-size: 12px;
+		min-width: 70px;
 		letter-spacing: normal;
 		text-align: center;
 		color: $white;
 		text-transform: uppercase;
 		box-shadow: none;
 		border: none;
-		height: 30px;
+		height: 31px;
 		&:hover, &.active {
 			background-color: rgba($orange, 0.6);
 			color: $white;
@@ -623,6 +620,13 @@
 				top: inherit;
 			}
 		}
+	}
+}
+
+#bulk-titles {
+	.ntdelbutton:before {
+		font-family: atum-icon-font;
+		content: $atmi-cross;
 	}
 }
 

@@ -257,6 +257,12 @@
   width: 20px;
 }
 
+#bulk-edit .select2-selection__arrow {
+  right: 0px;
+  height: 30px;
+  top: 0;
+}
+
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
   border-color: #888 transparent transparent transparent;
   border-style: solid;
@@ -4302,24 +4308,21 @@ input[type="button"].btn-block {
   }
 }
 
-.wrap #post-query-submit, .wrap #doaction, .wrap #doaction2 {
-  font-size: 12px !important;
-}
-
-.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post) {
+.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit) {
   border-radius: 5px;
   background-color: #EFAF00;
-  font-size: 10px;
+  font-size: 12px;
+  min-width: 70px;
   letter-spacing: normal;
   text-align: center;
   color: #fff;
   text-transform: uppercase;
   box-shadow: none;
   border: none;
-  height: 30px;
+  height: 31px;
 }
 
-.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post).active {
+.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit).active {
   background-color: rgba(239, 175, 0, 0.6);
   color: #fff;
   border: none;
@@ -4970,6 +4973,11 @@ input[type="button"].btn-block {
     position: inherit;
     top: inherit;
   }
+}
+
+#bulk-titles .ntdelbutton:before {
+  font-family: atum-icon-font;
+  content: "";
 }
 
 .atum-list-wrapper {
