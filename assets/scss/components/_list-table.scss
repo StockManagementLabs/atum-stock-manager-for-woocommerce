@@ -359,6 +359,10 @@
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
 			}
+			&:focus, &:active {
+				border: none;
+				box-shadow: none;
+			}
 		}
 		input[type=submit] {
 			width: 87px;

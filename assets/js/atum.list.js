@@ -407,7 +407,9 @@
 						}
 					}
 					// Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
-					else if (searchColumnBtnVal.length > 0) {
+					else if ( typeof searchColumnBtnVal != 'undefined' && searchColumnBtnVal.length > 0) {
+						$searchSubmitBtn.prop('disabled', false);
+					}else if (inputVal) {
 						$searchSubmitBtn.prop('disabled', false);
 					}
 					
@@ -441,7 +443,7 @@
 					var searchInputVal     = self.$searchInput.val(),
 					    searchColumnBtnVal = self.$searchColumnBtn.data('value');
 					
-					$searchSubmitBtn.prop('disabled', searchColumnBtnVal.length === 0 ? true : false);
+					$searchSubmitBtn.prop('disabled', typeof searchColumnBtnVal != 'undefined' && searchColumnBtnVal.length === 0 ? true : false);
 					
 					if (searchInputVal.length > 0) {
 						$.address.parameter('s', self.$searchInput.val());
@@ -1634,21 +1636,22 @@
 		 */
 		addHummerLibraryToNavsAndFilters: function(elementId) {
 			var $nav = document.getElementById(elementId);
-			var containerScroll = new Hammer($nav);
-			
-			containerScroll.on('panright panleft', function (ev) {
-				var $nav = document.getElementById(elementId);
-				var paneStartX   = $nav.scrollLeft,
-				    offset       = 6,
-				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
-				if ( ev.type === 'panright' ) {
-					$nav.scrollLeft = displacement;
-				}else {
-					$nav.scrollLeft = displacement;
-				}
+			if ( $nav > 0) {
+				var containerScroll = new Hammer($nav);
 				
-			});
-			
+				containerScroll.on('panright panleft', function (ev) {
+					var $nav = document.getElementById(elementId);
+					var paneStartX   = $nav.scrollLeft,
+					    offset       = 6,
+					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
+					if ( ev.type === 'panright' ) {
+						$nav.scrollLeft = displacement;
+					}else {
+						$nav.scrollLeft = displacement;
+					}
+					
+				});
+			}
 		},
 		
 		/**
@@ -2133,9 +2136,12 @@
 					self.updateHash(); // force clean search
 				}
 			}
-			else if (searchColumnBtnVal.length > 0) {
+			else if (typeof searchColumnBtnVal != 'undefined'  && searchColumnBtnVal.length > 0) {
 				$.address.parameter('s', searchInputVal);
 				$.address.parameter('search_column', searchColumnBtnVal);
+				self.updateHash();
+			}else if (searchInputVal.length > 0){
+				$.address.parameter('s', searchInputVal);
 				self.updateHash();
 			}
 		
