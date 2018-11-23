@@ -6,11 +6,11 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 **NEW UPDATE ALMOST EVERY WEEK!**
 
-ATUM is now the most advanced FREE WooCommerce inventory management tool in the Wordpress depository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
+ATUM is now the most advanced FREE WooCommerce inventory management tool in the WordPress repository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
 ATUM Dashboard creates an entirely new and we felt a necessary connection between the creators and users. The dashboard aims to become everyday screen with a quick link to support, documentation and most importantly business stats. We have developed brand new widget section that can be personalised from every corner.
 
-Stock Management Labs™, creators that have combined over 25 years of experience in inventory management, working very closely with a bunch of professional Wordpress developers since October 2016. The aim is to create the complete WooCommerce solution that will take care of all your business needs.
+Stock Management Labs™, creators that have combined over 25 years of experience in inventory management, working very closely with a bunch of professional WordPress developers since October 2016. The aim is to create the complete WooCommerce solution that will take care of all your business needs.
 
 In the preparation process for the development stage, we have tested and tried the most popular WooCommerce inventory management and cloud inventory management plugins in the world. With full confidence, we believe that ATUM will become unrivalled in every category.
 
