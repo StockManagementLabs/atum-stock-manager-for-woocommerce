@@ -1,6 +1,6 @@
 <?php
 /**
- * Shared trait for Atum Data Legacy Stores (using custom tables)
+ * Shared trait for Atum Data Legacy Stores (using legacy tables)
  *
  * @package         Atum\Models
  * @subpackage      DataStores
@@ -12,30 +12,32 @@
 
 namespace Atum\Models\DataStores;
 
+defined( 'ABSPATH' ) || die;
+
 use Atum\Inc\Globals;
 
 
-defined( 'ABSPATH' ) || die;
-
-trait AtumDataStoreLegacyCustomTableTrait {
+trait AtumDataStoreCPTTrait {
 	
 	/**
 	 * Read product data.
 	 *
-	 * @param \WC_Product $product Product object.
 	 * @since 1.5.0
+	 *
+	 * @param \WC_Product $product Product object.
 	 */
 	protected function read_product_data( &$product ) {
-		
-		$id = $product->get_id();
-		
+
+		$id        = $product->get_id();
 		$atum_data = $this->get_product_row_from_db( $id );
 		
 		$product->set_props(
 			$atum_data
 		);
+
 		parent::read_product_data( $product );
 	}
+
 	
 	
 	/**
@@ -70,13 +72,16 @@ trait AtumDataStoreLegacyCustomTableTrait {
 	/**
 	 * Helper method that updates all the post meta for a product based on it's settings in the WC_Product class.
 	 *
+	 * @since 1.5.0
+	 *
 	 * @param \WC_Product $product Product object.
 	 * @param bool        $force Force update. Used during create.
-	 * @since 1.5.0
 	 */
 	public function update_post_meta( &$product, $force = false ) {
 		
 		parent::update_post_meta( $product, $force );
 		$this->update_atum_product_data( $product );
+
 	}
+
 }

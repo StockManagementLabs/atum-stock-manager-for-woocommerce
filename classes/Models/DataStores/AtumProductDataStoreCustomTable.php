@@ -17,6 +17,6 @@ defined( 'ABSPATH' ) || die;
 class AtumProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface, \WC_Product_Data_Store_Interface {
 
 	// Just use the custom and overridden methods and leave the rest to parent class.
-	use AtumDataStoreCustomTableTrait, AtumDataStoreCommonCustomTableTrait;
+	use AtumDataStoreCustomTableTrait, AtumDataStoreCommonTrait;
 
 }

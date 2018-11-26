@@ -16,6 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 class AtumProductVariableDataStoreCPT extends \WC_Product_Variable_Data_Store_CPT {
 	
-	use AtumDataStoreLegacyCustomTableTrait, AtumDataStoreCommonCustomTableTrait;
+	use AtumDataStoreCPTTrait, AtumDataStoreCommonTrait;
 	
 }
