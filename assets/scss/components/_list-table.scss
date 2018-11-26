@@ -1273,12 +1273,14 @@
 
 #table-container {
 	overflow: scroll;
+	table {
+		min-width: 1200px;
+	}
 }
 
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid $gray-200;
-	min-width: 1200px;
 	
 	thead, tfoot {
 		th {

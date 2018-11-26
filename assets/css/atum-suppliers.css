@@ -4365,10 +4365,13 @@ h2 .atum-help-tip {
   overflow: scroll;
 }
 
+#table-container table {
+  min-width: 1200px;
+}
+
 table.wp-list-table {
   border: none;
   border-top: 1px solid #e9ecef;
-  min-width: 1200px;
 }
 
 table.wp-list-table thead th, table.wp-list-table tfoot th {
