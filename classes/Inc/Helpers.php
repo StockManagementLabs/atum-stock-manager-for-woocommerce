@@ -253,14 +253,14 @@ final class Helpers {
 
 		$namespace    = '\Atum\Models\Products';
 		$product_type = ucwords( $product_type, ' _-' );
-		$class_name   = "$namespace\WCProduct{$product_type}";
+		$class_name   = "$namespace\AtumProduct{$product_type}";
 
 		if ( class_exists( $class_name ) ) {
 			return $class_name;
 		}
 
 		// As fallback, return the simple product class.
-		return "$namespace\WCProductSimple";
+		return "$namespace\AtumProductSimple";
 
 	}
 	

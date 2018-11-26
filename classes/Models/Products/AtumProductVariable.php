@@ -1,6 +1,6 @@
 <?php
 /**
- * An abstraction layer of WC Subscription Product to be able to handle ATUM's custom data.
+ * An abstraction layer of WC Variable Product to be able to handle ATUM's custom data.
  *
  * @package         Atum\Models
  * @subpackage      Products
@@ -14,13 +14,13 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
-class WCProductSubscription extends \WC_Product_Subscription {
+class AtumProductVariable extends \WC_Product_Variable {
 
 	// Import the shared stuff.
 	use AtumProductTrait;
 
 	/**
-	 * Initialize ATUM simple product
+	 * Initialize ATUM variable product
 	 *
 	 * @since 1.5.0
 	 *
@@ -28,10 +28,10 @@ class WCProductSubscription extends \WC_Product_Subscription {
 	 */
 	public function __construct( $product = 0 ) {
 
-		$this->data = apply_filters( 'atum/model/product_subscription/data', array_merge( $this->data, $this->atum_data ) );
+		$this->data = apply_filters( 'atum/model/product_variable/data', array_merge( $this->data, $this->atum_data ) );
 		parent::__construct( $product );
 
-		do_action( 'atum/model/product_subscription', $product );
+		do_action( 'atum/model/product_variable', $product );
 
 	}
 
