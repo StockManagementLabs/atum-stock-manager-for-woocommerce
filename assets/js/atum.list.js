@@ -1635,13 +1635,13 @@
 		 */
 		addHummerLibraryToNavsAndFilters: function(elementId) {
 			var $nav = document.getElementById(elementId);
-			if ( $nav > 0) {
+			if ($nav) {
 				var containerScroll = new Hammer($nav);
 				
 				containerScroll.on('panright panleft', function (ev) {
 					var $nav = document.getElementById(elementId);
 					var paneStartX   = $nav.scrollLeft,
-					    offset       = 6,
+					    offset       = 7,
 					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
 					if ( ev.type === 'panright' ) {
 						$nav.scrollLeft = displacement;
