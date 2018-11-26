@@ -18,7 +18,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
-use Atum\Legacy\AtumSuppliersLegacyTrait;
+use Atum\Legacy\SuppliersLegacyTrait;
 
 
 class Suppliers {
@@ -418,7 +418,7 @@ class Suppliers {
 	 * @since 1.5.0
 	 * @deprecated Only for backwards compatibility and will be removed in a future version.
 	 */
-	use AtumSuppliersLegacyTrait;
+	use SuppliersLegacyTrait;
 
 	/**
 	 * Get all the products linked to the specified supplier

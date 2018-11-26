@@ -12,12 +12,11 @@
 
 namespace Atum\Models\DataStores;
 
-use Atum\Inc\Globals;
-
-
 defined( 'ABSPATH' ) || die;
 
-trait AtumDataStoreCommonCustomTableTrait {
+use Atum\Inc\Globals;
+
+trait AtumDataStoreCommonTrait {
 	
 	/**
 	 * Store data into ATUM's custom product data table

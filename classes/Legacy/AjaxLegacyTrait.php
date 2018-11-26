@@ -21,7 +21,7 @@ use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
 
 
-trait AtumAjaxLegacyTrait {
+trait AjaxLegacyTrait {
 
 	/**
 	 * Seach for products from enhanced selects

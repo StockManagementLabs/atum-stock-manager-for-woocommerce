@@ -46,7 +46,8 @@ trait AtumDataStoreCustomTableTrait {
 
 		global $wpdb;
 
-		$data = wp_cache_get( ATUM_PREFIX . 'woocommerce_product_' . $product_id, 'product' );
+		$cache_key = ATUM_PREFIX . "woocommerce_product_{$product_id}";
+		$data      = wp_cache_get( $cache_key, 'product' );
 
 		if ( FALSE === $data ) {
 
@@ -55,15 +56,16 @@ trait AtumDataStoreCustomTableTrait {
 
 			// Get the extra ATUM data for the product.
 			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: Unprepared SQL ok.
+			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: unprepared SQL ok.
 
-			$data = array_merge( $data, $atum_data );
-
-			wp_cache_set( ATUM_PREFIX . 'woocommerce_product_' . $product_id, $data, 'product' );
+			if ( ! empty( $atum_data ) ) {
+				$data = array_merge( $data, $atum_data );
+				wp_cache_set( $cache_key, $data, 'product' );
+			}
 
 		}
 
-		return (array) apply_filters( 'atum/model/product_data_store/product_data', $data, $product_id );
+		return (array) apply_filters( 'atum/model/product_data_store_custom_table/product_data', $data, $product_id );
 
 	}
 

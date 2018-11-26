@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
-trait AtumSuppliersLegacyTrait {
+trait SuppliersLegacyTrait {
 	
 	/**
 	 * Store current supplier id to allow getting it from the where clause

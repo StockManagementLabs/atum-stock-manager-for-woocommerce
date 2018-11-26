@@ -19,7 +19,7 @@ use Atum\Inc\Globals;
 defined( 'ABSPATH' ) || die;
 
 
-trait AtumHelpersLegacyTrait {
+trait HelpersLegacyTrait {
 
 	/**
 	 * Get an array of products that are not managed by WC
