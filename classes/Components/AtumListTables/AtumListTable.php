@@ -979,7 +979,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$location_terms_class = ! empty( $location_terms ) ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
-		$locations = '<a href="#" class="show-locations atum-icon atmi-store tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
+		$locations = '<a href="#" class="show-locations atum-icon atmi-map-marker tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
 
 		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
