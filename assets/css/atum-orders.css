@@ -5683,24 +5683,24 @@ input[type="button"].btn-block {
   }
 }
 
-.atum-table-wrapper {
+.atum-table-wrapper, #table-container {
   clear: both;
 }
 
-.atum-table-wrapper .jspContainer {
+.atum-table-wrapper .jspContainer, #table-container .jspContainer {
   overflow: hidden;
   position: relative;
 }
 
-.atum-table-wrapper .jspPane {
+.atum-table-wrapper .jspPane, #table-container .jspPane {
   position: absolute;
 }
 
-.atum-table-wrapper .jspVerticalBar, .atum-table-wrapper .jspCap, .atum-table-wrapper .jspArrow {
+.atum-table-wrapper .jspVerticalBar, .atum-table-wrapper .jspCap, .atum-table-wrapper .jspArrow, #table-container .jspVerticalBar, #table-container .jspCap, #table-container .jspArrow {
   display: none;
 }
 
-.atum-table-wrapper .jspHorizontalBar {
+.atum-table-wrapper .jspHorizontalBar, #table-container .jspHorizontalBar {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -5708,27 +5708,27 @@ input[type="button"].btn-block {
   height: 16px;
 }
 
-.atum-table-wrapper .jspHorizontalBar .jspCap {
+.atum-table-wrapper .jspHorizontalBar .jspCap, #table-container .jspHorizontalBar .jspCap {
   float: left;
 }
 
-.atum-table-wrapper .jspHorizontalBar .jspTrack, .atum-table-wrapper .jspHorizontalBar .jspDrag {
+.atum-table-wrapper .jspHorizontalBar .jspTrack, .atum-table-wrapper .jspHorizontalBar .jspDrag, #table-container .jspHorizontalBar .jspTrack, #table-container .jspHorizontalBar .jspDrag {
   float: left;
   height: 100%;
 }
 
-.atum-table-wrapper .jspHorizontalBar .jspArrow {
+.atum-table-wrapper .jspHorizontalBar .jspArrow, #table-container .jspHorizontalBar .jspArrow {
   width: 16px;
   float: left;
   height: 100%;
 }
 
-.atum-table-wrapper .jspTrack {
+.atum-table-wrapper .jspTrack, #table-container .jspTrack {
   background: rgba(108, 117, 125, 0.2);
   position: relative;
 }
 
-.atum-table-wrapper .jspDrag {
+.atum-table-wrapper .jspDrag, #table-container .jspDrag {
   background: #adb5bd;
   position: relative;
   top: 0;
@@ -5736,7 +5736,7 @@ input[type="button"].btn-block {
   cursor: pointer;
 }
 
-.atum-table-wrapper .jspCorner {
+.atum-table-wrapper .jspCorner, #table-container .jspCorner {
   background: #f8f9fa;
   float: left;
   height: 100%;
@@ -5773,9 +5773,14 @@ input[type="button"].btn-block {
   background-color: #dbf9ff !important;
 }
 
+#table-container {
+  overflow: scroll;
+}
+
 table.wp-list-table {
   border: none;
   border-top: 1px solid #e9ecef;
+  min-width: 1200px;
 }
 
 table.wp-list-table thead th, table.wp-list-table tfoot th {

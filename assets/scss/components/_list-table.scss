@@ -1180,7 +1180,7 @@
 	}
 }
 
-.atum-table-wrapper {
+.atum-table-wrapper, #table-container {
 	clear: both;
 	
 	// JScrollpane
@@ -1271,9 +1271,14 @@
 	background-color: $blue-light !important;
 }
 
+#table-container {
+	overflow: scroll;
+}
+
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid $gray-200;
+	min-width: 1200px;
 	
 	thead, tfoot {
 		th {
