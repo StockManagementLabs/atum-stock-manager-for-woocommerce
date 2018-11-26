@@ -47,7 +47,7 @@
 			// Change nav and search div position
 			$('#posts-filter').prepend($('.subsubsub'));
 			$('.subsubsub').append($('.search-box'));
-			$('.search-box').show();
+			// $('.search-box').style.cssText = '@include flexbox;';
 			$('.wp-heading-inline').append($('.page-title-action'));
 			$('.page-title-action').show();
 			
