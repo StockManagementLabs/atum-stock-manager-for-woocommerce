@@ -327,17 +327,18 @@ final class Globals {
 
 		// Check if we have to use the new custom tables or the old ones.
 		// TODO: WHEN WC MOVE THE NEW TABLES FROM THE FEATURE PLUGIN TO THE CORE, WILL PERHAPS CHANGE THE CLASS NAMES.
-		if ( class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
-			$data_stores['product']           = "{$data_stores_namespace}\WCProductDataStoreCustomTable";
-			$data_stores['product-grouped']   = "{$data_stores_namespace}\WCProductGroupedDataStoreCustomTable";
-			$data_stores['product-variable']  = "{$data_stores_namespace}\WCProductVariableDataStoreCustomTable";
-			$data_stores['product-variation'] = "{$data_stores_namespace}\WCProductVariationDataStoreCustomTable";
+		// TODO: ADD WC SUBSCRIPTIONS AND BOOKINGS COMPATIBILITY.
+		if ( Helpers::is_using_new_wc_tables() ) {
+			$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCustomTable";
+			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCustomTable";
+			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCustomTable";
+			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCustomTable";
 		}
 		else {
-			$data_stores['product']           = "{$data_stores_namespace}\WCProductDataStoreCPT";
-			$data_stores['product-grouped']   = "{$data_stores_namespace}\WCProductGroupedDataStoreCPT";
-			$data_stores['product-variable']  = "{$data_stores_namespace}\WCProductVariableDataStoreCPT";
-			$data_stores['product-variation'] = "{$data_stores_namespace}\WCProductVariationDataStoreCPT";
+			$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCPT";
+			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCPT";
+			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
+			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
 		}
 
 		return $data_stores;
