@@ -1,6 +1,6 @@
 <?php
 /**
- * An abstraction layer of WC Grouped Product to be able to handle ATUM's custom data.
+ * An abstraction layer of WC Variable Subscription Product to be able to handle ATUM's custom data.
  *
  * @package         Atum\Models
  * @subpackage      Products
@@ -14,13 +14,13 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
-class WCProductGrouped extends \WC_Product_Grouped {
+class AtumProductVariableSubscription extends \WC_Product_Variable_Subscription {
 
 	// Import the shared stuff.
 	use AtumProductTrait;
 
 	/**
-	 * Initialize ATUM grouped product
+	 * Initialize ATUM simple product
 	 *
 	 * @since 1.5.0
 	 *
@@ -28,10 +28,10 @@ class WCProductGrouped extends \WC_Product_Grouped {
 	 */
 	public function __construct( $product = 0 ) {
 
-		$this->data = apply_filters( 'atum/model/product_grouped/data', array_merge( $this->data, $this->atum_data ) );
+		$this->data = apply_filters( 'atum/model/product_variable_subscription/data', array_merge( $this->data, $this->atum_data ) );
 		parent::__construct( $product );
 
-		do_action( 'atum/model/product_grouped', $product );
+		do_action( 'atum/model/product_variable_subscription', $product );
 
 	}
 

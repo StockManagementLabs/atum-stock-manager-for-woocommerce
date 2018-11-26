@@ -18,7 +18,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Legacy\AtumListTableLegacyTrait;
+use Atum\Legacy\ListTableLegacyTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
@@ -979,7 +979,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$location_terms_class = ! empty( $location_terms ) ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
-		$locations = '<a href="#" class="show-locations atum-icon atmi-store tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
+		$locations = '<a href="#" class="show-locations atum-icon atmi-map-marker tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
 
 		return apply_filters( 'atum/list_table/column_locations', $locations, $item, $this->product, $this );
 
@@ -1741,7 +1741,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @since 1.5.0
 	 * @deprecated Only for backwards compatibility and will be removed in a future version.
 	 */
-	use AtumListTableLegacyTrait;
+	use ListTableLegacyTrait;
 
 	/**
 	 * Prepare the table data

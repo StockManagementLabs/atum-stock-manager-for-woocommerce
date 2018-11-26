@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Product data store: using new custom tables
+ * WC Grouped Product data store: using new custom tables
  *
  * @package         Atum\Models
  * @subpackage      DataStores
@@ -14,9 +14,9 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-class WCProductDataStoreCustomTable extends \WC_Product_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface, \WC_Product_Data_Store_Interface {
+class AtumProductGroupedDataStoreCustomTable extends \WC_Product_Grouped_Data_Store_Custom_Table implements \WC_Object_Data_Store_Interface {
 
 	// Just use the custom and overridden methods and leave the rest to parent class.
-	use AtumDataStoreCustomTableTrait, AtumDataStoreCommonCustomTableTrait;
+	use AtumDataStoreCustomTableTrait, AtumDataStoreCommonTrait;
 
 }

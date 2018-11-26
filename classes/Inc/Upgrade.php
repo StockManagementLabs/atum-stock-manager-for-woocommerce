@@ -416,7 +416,7 @@ class Upgrade {
 
 		$products = array();
 
-		if ( class_exists( '\WC_Product_Data_Store_Custom_Table' ) ) {
+		if ( Helpers::is_using_new_wc_tables() ) {
 			$products = $wpdb->get_results( "SELECT `product_id` AS ID, `type` FROM {$wpdb->prefix}wc_products ORDER BY `product_id`" );
 		}
 
@@ -511,12 +511,13 @@ class Upgrade {
 			'post_type'   => PurchaseOrders::get_post_type(),
 		] );
 		
-		$sql = "UPDATE $wpdb->postmeta pm
-					INNER JOIN $wpdb->posts p ON pm.post_id = p.ID
-					SET pm.meta_value = 'received'
-					WHERE p.post_type='atum_purchase_order' AND
-					pm.meta_key = '_status' AND
-					pm.meta_value = 'completed'";
+		$sql = "
+			UPDATE $wpdb->postmeta pm
+			INNER JOIN $wpdb->posts p ON pm.post_id = p.ID
+			SET pm.meta_value = 'received'
+			WHERE p.post_type='atum_purchase_order' AND
+			pm.meta_key = '_status' AND pm.meta_value = 'completed'
+		";
 		
 		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
 		

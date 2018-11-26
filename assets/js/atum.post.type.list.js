@@ -41,20 +41,26 @@
 			var self = this;
 			
 			this.$atumTable = $('.wp-list-table');
+			$('.top').after('<div id="table-container"></div>');
+			this.$tableContainer = $('#table-container');
 			
 			// Add placeholder to input search
 			$('#post-search-input').attr('placeholder', self.settings.placeholderSearch);
 			// Change nav and search div position
 			$('#posts-filter').prepend($('.subsubsub'));
 			$('.subsubsub').append($('.search-box'));
-			$('.search-box').show();
 			$('.wp-heading-inline').append($('.page-title-action'));
 			$('.page-title-action').show();
 			
-			$('select').select2();
+			// Table position and id
+			this.$tableContainer.append(this.$atumTable);
+			this.$atumTable.attr('id', 'list-table');
 			
 			// Add active class row function
 			this.addActiveClassRow();
+			this.addScrollBar();
+			
+			$('select').select2();
 		},
 		/**
 		 * Add/remove row active class when checkbox is clicked
@@ -81,6 +87,46 @@
 						$(this).removeClass('active-row');
 					}
 				});
+			});
+		},
+		/**
+		 * Add the horizontal scroll bar to the table
+		 */
+		addScrollBar: function() {
+			
+			// Wait until the thumbs are loaded and enable JScrollpane
+			var self          = this,
+			    $tableWrapper = self.$tableContainer,
+			    scrollOpts    = {
+				    horizontalGutter: 0,
+				    verticalGutter  : 0,
+				    resizeSensor    : true
+			    };
+			
+			self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
+			self.jScrollApi  = self.$scrollPane.data('jsp');
+			
+			// Bind events
+			self.$scrollPane
+				.on('jsp-initialised', function (event, isScrollable) {
+				
+				
+				})
+				.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
+				
+				});
+			
+			// Drag and drop scrolling on desktops
+			var hammertime = new Hammer(self.$scrollPane.get(0), {});
+			
+			hammertime.on('panright panleft', function (ev) {
+				
+				var paneStartX   = self.jScrollApi.getContentPositionX(),
+				    offset       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
+				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
+				
+				self.jScrollApi.scrollToX( displacement, false)
+				
 			});
 		},
 	});

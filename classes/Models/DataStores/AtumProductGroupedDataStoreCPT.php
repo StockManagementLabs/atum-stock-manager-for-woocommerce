@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Variation Product data store: using legacy tables
+ * WC Grouped Product data store: using legacy tables
  *
  * @package         Atum\Models
  * @subpackage      DataStores
@@ -14,7 +14,8 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-class WCProductVariationDataStoreCPT extends \WC_Product_Variation_Data_Store_CPT implements \WC_Object_Data_Store_Interface {
+class AtumProductGroupedDataStoreCPT extends \WC_Product_Grouped_Data_Store_CPT {
 	
-	use AtumDataStoreLegacyCustomTableTrait, AtumDataStoreCommonCustomTableTrait;
+	use AtumDataStoreCPTTrait, AtumDataStoreCommonTrait;
+	
 }

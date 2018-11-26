@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Variable Product data store: using legacy tables
+ * WC Product data store: using legacy tables
  *
  * @package         Atum\Models
  * @subpackage      DataStores
@@ -14,8 +14,8 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-class WCProductVariableDataStoreCPT extends \WC_Product_Variable_Data_Store_CPT {
+class AtumProductDataStoreCPT extends \WC_Product_Data_Store_CPT {
 	
-	use AtumDataStoreLegacyCustomTableTrait, AtumDataStoreCommonCustomTableTrait;
+	use AtumDataStoreCPTTrait, AtumDataStoreCommonTrait;
 	
 }

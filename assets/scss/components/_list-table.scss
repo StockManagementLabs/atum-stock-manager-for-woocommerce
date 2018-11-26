@@ -125,6 +125,10 @@
 			border: none;
 		}
 		
+		@media all and (max-width: 782px) {
+			min-width: inherit;
+		}
+		
 	}
 	
 	@media all and (max-width: 782px) {
@@ -145,7 +149,9 @@
 .subsubsub {
 	&.extend-list-table {
 		width: inherit;
-		margin: 10px 20px;
+		margin: 10px 20px !important;
+		@include flex-wrap(nowrap);
+		@include flex-justify-content(left);
 		border-radius: 0;
 		border-bottom: 0;
 		li {
@@ -256,12 +262,20 @@
 	letter-spacing: 0.4px;
 	font-weight: bold;
 	text-transform: capitalize;
-	display: flex;
-	align-items: center;
+	@include flexbox;
+	@include flex-align-items(center);
 	border-bottom: 1px solid $gray-200;
+	margin: 0;
+	
 	
 	@media all and (max-width: 782px) {
 		margin: 10px 10px;
+		@include flex-wrap(wrap);
+		@include flex-justify-content(center);
+		border-bottom: none;
+	}
+	@media all and (max-width: $screen-xs) {
+		@include flex-justify-content(left);
 	}
 	
 	li {
@@ -298,20 +312,29 @@
 	
 }
 
-.search-box {
+.search-box, p.search-box {
 	@include flexbox;
-	display: none;
+	//display: none;
 	float: right;
 	padding: 1px;
 	@include flex-wrap(nowrap);
 	z-index: 999;
 	float: right;
-	margin: 20px 10px 20px auto !important;
+	margin: 20px 10px 20px auto;
 	align-items: center;
 	border: 1px solid $gray-200;
 	border-radius: 5px;
 	z-index: 999;
 	float: right;
+	
+	@media all and (max-width: 782px) {
+		//float: right;
+		position: inherit;
+		//@include flexbox;
+		height: auto;
+		width: 50%;
+		margin: 0 0 15px 0;
+	}
 	
 	&.extend-list-table {
 		@include flexbox;
@@ -336,9 +359,15 @@
 			font-style: italic;
 			color: $gray-500;
 		}
+		@media all and (max-width: 782px) {
+			width: 70%;
+		}
 	}
 	input[type=submit] {
 		font-weight: normal;
+		@media all and (max-width: 782px) {
+			margin-bottom: 0;
+		}
 	}
 	
 	&.inbound-stock-search {
@@ -383,10 +412,10 @@
 	
 	@media all and (max-width: $screen-xs-min) {
 		float: none;
-		width: 100%;
+		width: 95%;
 		justify-content: center;
 		margin: 0;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 	}
 	
 	#search_column_btn{
@@ -404,7 +433,7 @@
 		box-shadow: none;
 		width: 100%;
 		@media all and (max-width: 782px) {
-			width: 110px;
+			width: 100%;
 		}
 		&::placeholder {
 			color: $gray-500;
@@ -472,24 +501,48 @@
 .tablenav.top {
 	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
 	@include flexbox;
-	@include flex-wrap(nowrap);
+	@include flex-wrap(wrap);
 	@include flex-justify-content(left);
 	@include flex-align-items(center);
 	padding: 10px 11px;
 	margin: 0;
 	@media all and (max-width: 782px) {
 		@include flex-wrap(wrap);
+		@include flex-justify-content(center);
 	}
 	&.extend-list-table {
 		padding: 0 11px;
+		@include flex-wrap(nowrap);
+		@media all and (max-width: 782px) {
+			@include flex-wrap(wrap);
+		}
+		.actions {
+			white-space: inherit;
+		}
+		@media all and (max-width: $screen-xs) {
+			padding: 10px 10px;
+		}
 	}
+	
+	.actions {
+		white-space: nowrap;
+		&.bulkactions {
+			@media all and (max-width: 782px) {
+				display: inline-block;
+			}
+		}
+	}
+	
 	.tablenav-pages {
-		margin-left: auto;
+		margin: 0 0 0 auto;
 		text-align: right;
 		z-index: 998;
 		width: 300px;
 		&.one-page {
 			width: inherit;
+		}
+		@media all and (max-width: 782px) {
+			margin: 5px 0 0 0;
 		}
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
@@ -729,12 +782,10 @@
 		@include flex-justify-content(space-between);
 		@include flex-align-items(center);
 		margin: 0 11px 0 11px;
-		@media screen and (max-width: $screen-lg) {
-			margin-bottom: 15px;
-		}
 		@media all and (max-width: 782px) {
 			@include flex-wrap(wrap);
 			@include flex-justify-content(center);
+			margin-bottom: 15px;
 		}
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
@@ -919,7 +970,7 @@
 	.reset-filters {
 		border-radius: 50%;
 		width: 39px;
-		height: 24px;
+		height: 25px;
 		text-align: center;
 		border: none;
 		background-color: $primary;
@@ -930,12 +981,8 @@
 		margin-right: 5px;
 		@include transition(0.2s ease-in-out);
 		
-		@media all and (max-width: 768px) {
-			width: 40px;
-		}
-		
 		@media all and (max-width: $screen-xs) {
-			width: 35px;
+			width: 29px;
 			margin-bottom: 15px;
 		}
 		
@@ -1079,7 +1126,7 @@
 			//margin: auto;
 			//width: 90%;
 			
-			input[type="text"], input[type="number"], button {
+			input[type="text"], input[type="number"], button:not(.reset-filters) {
 				height: 30px;
 			}
 		}
@@ -1133,7 +1180,7 @@
 	}
 }
 
-.atum-table-wrapper {
+.atum-table-wrapper, #table-container {
 	clear: both;
 	
 	// JScrollpane
@@ -1222,6 +1269,13 @@
 
 .active-row:not(.variable) {
 	background-color: $blue-light !important;
+}
+
+#table-container {
+	overflow: scroll;
+	table {
+		min-width: 1200px;
+	}
 }
 
 table.wp-list-table {

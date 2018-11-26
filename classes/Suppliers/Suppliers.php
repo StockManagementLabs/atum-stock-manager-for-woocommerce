@@ -18,7 +18,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
-use Atum\Legacy\AtumSuppliersLegacyTrait;
+use Atum\Legacy\SuppliersLegacyTrait;
 
 
 class Suppliers {
@@ -394,7 +394,9 @@ class Suppliers {
 				elseif ( 'edit.php' === $hook ) {
 
 					wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
-					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2' ), ATUM_VERSION, TRUE );
+					wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array(), ATUM_VERSION, TRUE );
+					wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
+					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jscrollpane' ), ATUM_VERSION, TRUE );
 
 					wp_localize_script( 'atum-suppliers-table', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
@@ -416,7 +418,7 @@ class Suppliers {
 	 * @since 1.5.0
 	 * @deprecated Only for backwards compatibility and will be removed in a future version.
 	 */
-	use AtumSuppliersLegacyTrait;
+	use SuppliersLegacyTrait;
 
 	/**
 	 * Get all the products linked to the specified supplier
