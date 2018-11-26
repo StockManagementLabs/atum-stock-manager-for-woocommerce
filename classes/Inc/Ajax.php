@@ -21,7 +21,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
-use Atum\Legacy\AtumAjaxLegacyTrait;
+use Atum\Legacy\AjaxLegacyTrait;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
@@ -848,7 +848,7 @@ final class Ajax {
 	 * @since 1.5.0
 	 * @deprecated Only for backwards compatibility and will be removed in a future version.
 	 */
-	use AtumAjaxLegacyTrait;
+	use AjaxLegacyTrait;
 
 	/**
 	 * Seach for products from enhanced selects

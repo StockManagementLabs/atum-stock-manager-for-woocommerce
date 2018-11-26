@@ -52,20 +52,21 @@ trait AtumDataStoreCPTTrait {
 	protected function get_product_row_from_db( $product_id ) {
 		
 		global $wpdb;
-		
-		$atum_data = wp_cache_get( ATUM_PREFIX . 'woocommerce_product_' . $product_id, 'product' );
+
+		$cache_key = ATUM_PREFIX . "woocommerce_product_{$product_id}";
+		$atum_data = wp_cache_get( $cache_key, 'product' );
 		
 		if ( FALSE === $atum_data ) {
 			
 			// Get the extra ATUM data for the product.
 			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: Unprepared SQL ok.
+			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: unprepared SQL ok.
 			
-			wp_cache_set( ATUM_PREFIX . 'woocommerce_product_' . $product_id, $atum_data, 'product' );
+			wp_cache_set( $cache_key, $atum_data, 'product' );
 			
 		}
 		
-		return (array) apply_filters( 'atum/model/product_data_store_legacy/product_data', $atum_data, $product_id );
+		return (array) apply_filters( 'atum/model/product_data_store_cpt/product_data', $atum_data, $product_id );
 		
 	}
 	

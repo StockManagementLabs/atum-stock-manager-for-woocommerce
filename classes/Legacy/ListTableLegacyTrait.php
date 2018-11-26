@@ -21,7 +21,7 @@ use Atum\Inc\Helpers;
 use Atum\Suppliers\Suppliers;
 
 
-trait AtumListTableLegacyTrait {
+trait ListTableLegacyTrait {
 
 	/**
 	 * Prepare the table data

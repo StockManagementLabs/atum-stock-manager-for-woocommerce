@@ -20,7 +20,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
-use Atum\Legacy\AtumHelpersLegacyTrait;
+use Atum\Legacy\HelpersLegacyTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Queries\ProductDataQuery;
@@ -727,7 +727,7 @@ final class Helpers {
 	 * @since 1.5.0
 	 * @deprecated Only for backwards compatibility and will be removed in a future version.
 	 */
-	use AtumHelpersLegacyTrait;
+	use HelpersLegacyTrait;
 
 	/**
 	 * Get an array of products that are not managed by WC
