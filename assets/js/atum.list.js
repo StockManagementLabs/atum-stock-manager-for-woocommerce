@@ -1247,7 +1247,7 @@
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
-				    value: $metaCell.data('input-type') === 'number' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
+				    value: $metaCell.data('input-type') === 'number' || $metaCell.text() === '-' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
 				    class: 'meta-value'
 			    };
 			
