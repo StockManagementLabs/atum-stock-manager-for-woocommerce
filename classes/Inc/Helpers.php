@@ -2096,4 +2096,57 @@ final class Helpers {
 		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
 	}
 
+	/**
+	 * Read the type of the parent product (variable) of a child product (variation) from db, caching the result to improve performance
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $child_id
+	 *
+	 * @return string   The product type slug
+	 */
+	public static function read_parent_product_type( $child_id ) {
+
+		$cache_key           = ATUM_PREFIX . "parent_product_type_{$child_id}";
+		$cache_group         = ATUM_TEXT_DOMAIN;
+		$parent_product_type = ! ATUM_DEBUG ? wp_cache_get( $cache_key, $cache_group ) : FALSE;
+
+		if ( ! $parent_product_type ) {
+
+			global $wpdb;
+
+			if ( self::is_using_new_wc_tables() ) {
+
+				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
+					SELECT `type` FROM {$wpdb->prefix}wc_products			  
+					WHERE product_id IN (
+				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
+					)
+				", $child_id ) );
+
+			}
+			else {
+
+				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
+					SELECT terms.slug FROM $wpdb->posts posts
+					LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
+				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = termrelations.term_taxonomy_id)
+					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)  
+					WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
+				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
+					)
+				", $child_id ) );
+
+			}
+
+			if ( $parent_product_type ) {
+				wp_cache_set( $cache_key, $parent_product_type, $cache_group, 20 );
+			}
+
+		}
+
+		return $parent_product_type;
+
+	}
+
 }
