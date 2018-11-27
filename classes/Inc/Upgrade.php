@@ -377,6 +377,7 @@ class Upgrade {
 			  	`out_stock_date` DATETIME NULL DEFAULT NULL,
 			  	`out_stock_threshold` DOUBLE NULL DEFAULT NULL,
 			  	`inheritable` TINYINT(1) NULL DEFAULT 0,
+			  	`bom_sellable` TINYINT(1) NULL DEFAULT NULL,
 			  	PRIMARY KEY  (`product_id`),
 				KEY `supplier_id` (`supplier_id`),
 				KEY `atum_controlled` (`atum_controlled`)
@@ -412,6 +413,7 @@ class Upgrade {
 			'_out_of_stock_date'   => 'out_stock_date',
 			'_out_stock_threshold' => 'out_stock_threshold',
 			'_inheritable'         => 'inheritable',
+			'_is_purchasable'      => 'bom_sellable',
 		);
 
 		$products = array();
@@ -454,6 +456,15 @@ class Upgrade {
 						case '_inheritable':
 							if ( isset( $metas['_inheritable'] ) ) {
 								$meta_value = 'yes' === $metas['_inheritable'][0] ? 1 : 0;
+							}
+							else {
+								$meta_value = 0;
+							}
+							break;
+
+						case '_is_purchasable':
+							if ( isset( $metas['_is_purchasable'] ) ) {
+								$meta_value = 'yes' === $metas['_is_purchasable'][0] ? 1 : 0;
 							}
 							else {
 								$meta_value = 0;
