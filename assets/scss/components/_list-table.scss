@@ -458,6 +458,7 @@
 	.input-group-append {
 		border: none;
 		min-width: 45%;
+		height: 30px;
 	}
 	
 	.dropdown-toggle {
@@ -510,6 +511,9 @@
 		@include flex-wrap(wrap);
 		@include flex-justify-content(center);
 	}
+	@media all and (max-width: $screen-xs) {
+		display: inline-block;
+	}
 	&.extend-list-table {
 		padding: 0 11px;
 		@include flex-wrap(nowrap);
@@ -521,14 +525,28 @@
 		}
 		@media all and (max-width: $screen-xs) {
 			padding: 10px 10px;
+			@include flexbox;
 		}
 	}
 	
 	.actions {
 		white-space: nowrap;
+		@media all and (max-width: $screen-xs) {
+			white-space: inherit;
+		}
 		&.bulkactions {
 			@media all and (max-width: 782px) {
 				display: inline-block;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				.select2-container {
+					width: 100% !important;
+				}
+				input[type=submit] {
+					width: 100%;
+					margin-top: 10px !important;
+				}
 			}
 		}
 	}
@@ -655,6 +673,27 @@
 
 .tablenav.bottom {
 	margin: 10px 11px 0;
+	.actions {
+		white-space: nowrap;
+		@media all and (max-width: $screen-xs) {
+			white-space: inherit;
+		}
+		&.bulkactions {
+			@media all and (max-width: 782px) {
+				display: inline-block;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				.select2-container {
+					width: 100% !important;
+				}
+				input[type=submit] {
+					width: 100%;
+					margin-top: 10px !important;
+				}
+			}
+		}
+	}
 	.tablenav-pages {
 		margin-left: auto;
 		text-align: right;
@@ -1273,12 +1312,14 @@
 
 #table-container {
 	overflow: scroll;
+	table {
+		min-width: 1200px;
+	}
 }
 
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid $gray-200;
-	min-width: 1200px;
 	
 	thead, tfoot {
 		th {
@@ -2000,7 +2041,11 @@ table.wp-list-table {
 
 	.set-header {
 		cursor: pointer;
-		color: $link-color;
+		color: $blue;
+		
+		.select2-selection__rendered {
+			padding-left: 8px;
+		}
 
 		&:hover {
 			color: $link-hover-color;

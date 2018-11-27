@@ -179,7 +179,7 @@ trait AtumProductTrait {
 
 		if ( $supplier_sku ) {
 
-			$supplier_sku_found = Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku );
+			$supplier_sku_found = apply_filters( 'atum/model/product/supplier_sku_found', Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku ), $supplier_sku, $this );
 
 			if ( $this->get_object_read() && $supplier_sku_found ) {
 				$this->error( 'product_invalid_supplier_sku', __( 'Invalid or duplicated Supplier SKU.', ATUM_TEXT_DOMAIN ), 400, array( 'resource_id' => $supplier_sku_found ) );

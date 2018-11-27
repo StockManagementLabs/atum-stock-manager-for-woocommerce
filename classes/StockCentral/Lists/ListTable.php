@@ -263,7 +263,7 @@ class ListTable extends AtumListTable {
 			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'calc_location'         => '<span class="lnr lnr-store tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_location'         => '<span class="atum-icon atmi-map-marker tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),

@@ -252,9 +252,9 @@
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 26px;
   position: absolute;
-  top: 1px;
-  right: 1px;
-  width: 20px;
+  top: 3px;
+  right: 0;
+  width: 18px;
 }
 
 #bulk-edit .select2-selection__arrow {
@@ -4784,6 +4784,7 @@ input[type="button"].btn-block {
 .search-box .input-group-append, p.search-box .input-group-append {
   border: none;
   min-width: 45%;
+  height: 30px;
 }
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
@@ -4860,6 +4861,12 @@ input[type="button"].btn-block {
   }
 }
 
+@media all and (max-width: 480px) {
+  .tablenav.top {
+    display: inline-block;
+  }
+}
+
 .tablenav.top.extend-list-table {
   padding: 0 11px;
   -webkit-flex-wrap: nowrap;
@@ -4884,6 +4891,10 @@ input[type="button"].btn-block {
 @media all and (max-width: 480px) {
   .tablenav.top.extend-list-table {
     padding: 10px 10px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
   }
 }
 
@@ -4891,9 +4902,28 @@ input[type="button"].btn-block {
   white-space: nowrap;
 }
 
+@media all and (max-width: 480px) {
+  .tablenav.top .actions {
+    white-space: inherit;
+  }
+}
+
 @media all and (max-width: 782px) {
   .tablenav.top .actions.bulkactions {
     display: inline-block;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .actions.bulkactions {
+    width: 100%;
+  }
+  .tablenav.top .actions.bulkactions .select2-container {
+    width: 100% !important;
+  }
+  .tablenav.top .actions.bulkactions input[type=submit] {
+    width: 100%;
+    margin-top: 10px !important;
   }
 }
 
@@ -5054,6 +5084,35 @@ input[type="button"].btn-block {
 
 .tablenav.bottom {
   margin: 10px 11px 0;
+}
+
+.tablenav.bottom .actions {
+  white-space: nowrap;
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .actions {
+    white-space: inherit;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.bottom .actions.bulkactions {
+    display: inline-block;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .actions.bulkactions {
+    width: 100%;
+  }
+  .tablenav.bottom .actions.bulkactions .select2-container {
+    width: 100% !important;
+  }
+  .tablenav.bottom .actions.bulkactions input[type=submit] {
+    width: 100%;
+    margin-top: 10px !important;
+  }
 }
 
 .tablenav.bottom .tablenav-pages {
@@ -5777,10 +5836,13 @@ input[type="button"].btn-block {
   overflow: scroll;
 }
 
+#table-container table {
+  min-width: 1200px;
+}
+
 table.wp-list-table {
   border: none;
   border-top: 1px solid #e9ecef;
-  min-width: 1200px;
 }
 
 table.wp-list-table thead th, table.wp-list-table tfoot th {
@@ -6486,7 +6548,11 @@ table.wp-list-table tbody tr:hover {
 
 .atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header, .wp-list-table .set-header {
   cursor: pointer;
-  color: #0073AA;
+  color: #00B8DB;
+}
+
+.atum-list-table .set-header .select2-selection__rendered, .floatThead-container .set-header .select2-selection__rendered, .inbound-stock-list .set-header .select2-selection__rendered, .wp-list-table .set-header .select2-selection__rendered {
+  padding-left: 8px;
 }
 
 .atum-list-table .set-header:hover, .floatThead-container .set-header:hover, .inbound-stock-list .set-header:hover, .wp-list-table .set-header:hover {

@@ -99,6 +99,9 @@
 					setTimeout(self.setupSearchColumnDropdown, 500); // performance
 				});
 			}
+			$(window).on('load', function() {
+				$('.enhanced').select2();
+			});
 			
 			//
 			// Setup the URL navigation
@@ -641,13 +644,14 @@
 	        $selectDays.html('<span class="textvalue">' + selectDaysText + '</span>');
 	        $selectDays.append($selectableDays);
 	        $selectDays.find('select').hide().val(selectDaysText);
-	
+			
 	        $selectableDays.change(function () {
 	        	
 	        	var $select = $(this);
 	        	
 		        $selectDays.find('.textvalue').text($select.val());
 		        $select.hide();
+		        $selectDays.find('.select2').hide();
 		        $selectDays.find('.textvalue').show();
 		        
 		        $.address.parameter('sold_last_days', parseInt($select.val()));
@@ -657,7 +661,8 @@
 	
 	        $selectDays.find('.textvalue').click(function () {
 		        $(this).hide();
-		        $selectDays.find('select').show();
+		        // $selectDays.find('select').show();
+		        $selectDays.find('select').select2();
 	        });
 
         },
@@ -1247,7 +1252,7 @@
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
-				    value: $metaCell.data('input-type') === 'number' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
+				    value: $metaCell.data('input-type') === 'number' || $metaCell.text() === '-' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
 				    class: 'meta-value'
 			    };
 			
@@ -1970,6 +1975,7 @@
 			
 			$('.select2-container--open').remove();
 			$('body').trigger('wc-enhanced-select-init');
+			$('.enhanced').select2();
 			
 		},
 		

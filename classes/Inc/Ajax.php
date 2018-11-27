@@ -2134,7 +2134,7 @@ final class Ajax {
 	 */
 	public function change_settings_menu_style() {
 
-		check_ajax_referer( 'atum-sticky-columns-button-nonce', 'token' );
+		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
 
 		$menu_theme = $_POST['data']['menu_theme'];
 		$user_id    = get_current_user_id();
