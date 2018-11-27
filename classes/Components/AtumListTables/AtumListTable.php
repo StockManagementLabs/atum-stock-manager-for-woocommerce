@@ -2509,7 +2509,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
 						WHERE p.post_type IN ('" . implode( "', '", $post_types ) . "')
 			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
-			            ) AS states
+			            ) AS status
 		            ';
 
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_status WHERE status IS FALSE;" );
