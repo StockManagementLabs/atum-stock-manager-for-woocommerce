@@ -240,7 +240,7 @@ class Wpml {
 			/* @noinspection PhpUndefinedClassInspection */
 			$custom_price_ui = new \WCML_Custom_Prices_UI( $this->wpml, $this->original_product_id );
 
-			if ( $custom_price_ui ) {
+			if ( $custom_price_ui && $this->multicurrency_active ) {
 
 				global $thepostid;
 				$keep_id   = $thepostid ?: 0;
