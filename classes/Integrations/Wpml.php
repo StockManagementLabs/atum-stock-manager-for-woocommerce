@@ -231,7 +231,7 @@ class Wpml {
 	public function load_wpml_product( $item, $list_table = NULL ) {
 
 		$product                   = $list_table->get_current_product();
-		$this->original_product_id = self::get_original_product_id( $product->get_id(), $product->get_type() );
+		$this->original_product_id = self::get_original_product_id( $product->get_id() );
 		$this->custom_prices       = FALSE;
 
 		if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
