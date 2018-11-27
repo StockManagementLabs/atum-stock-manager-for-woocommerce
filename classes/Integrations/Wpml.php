@@ -127,12 +127,12 @@ class Wpml {
 			// Hook into AtumListTable columns.
 			add_filter( 'atum/list_table/editable_column', array( $this, 'add_custom_prices_arg' ), 10, 2 );
 			add_filter( 'atum/list_table/args_purchase_price', array( $this, 'add_custom_purchase_price' ) );
-
+			
 			// Hook into Controlled and UnControlled Stock Central ListTables columns.
-			add_filter( 'atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
-			add_filter( 'atum/uncontrolled_stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ) );
-			add_filter( 'atum/stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ) );
-			add_filter( 'atum/uncontrolled_stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ) );
+			add_filter( 'atum/stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ), 10, 2 );
+			add_filter( 'atum/uncontrolled_stock_central_list/args_regular_price', array( $this, 'add_custom_regular_price' ), 10, 2 );
+			add_filter( 'atum/stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ), 10, 2 );
+			add_filter( 'atum/uncontrolled_stock_central_list/args_sale_price', array( $this, 'add_custom_sale_price' ), 10, 2 );
 			
 			// Hook into AtumListTable Product Search.
 			if ( $this->multicurrency_active ) {
@@ -232,7 +232,7 @@ class Wpml {
 	public function load_wpml_product( $item, $list_table = NULL ) {
 
 		$product                   = $list_table->get_current_product();
-		$this->original_product_id = self::get_original_product_id( $product->get_id(), $product->get_type() );
+		$this->original_product_id = self::get_original_product_id( $product->get_id() );
 		$this->custom_prices       = FALSE;
 
 		if ( get_post_meta( $this->original_product_id, '_wcml_custom_prices_status', TRUE ) ) {
@@ -333,51 +333,53 @@ class Wpml {
 	 * @since 1.4.1
 	 *
 	 * @param array $args
+	 * @param \WC_Product $product
 	 *
 	 * @return array
 	 */
-	public function add_custom_regular_price( $args ) {
-
+	public function add_custom_regular_price( $args, $product ) {
+		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-
+			
 			$regular_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_regular_price'];
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'trim_zeros' => TRUE,
 				'currency'   => $this->current_currency,
 			] ) : $args['value'];
-
+			
 			$args['currency']  = $this->current_currency;
 			$args['symbol']    = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
 			$args['is_custom'] = 'yes';
-
+			
 		}
-		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
-
-			$product             = wc_get_product( $this->original_product_id ); // We don't need the ATUM models here.
+		elseif ( $this->multicurrency_active && $this->original_product_id !== $product->get_id() ) {
+			
+			$product             = wc_get_product( $this->original_product_id );
 			$regular_price_value = $product->get_regular_price();
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'trim_zeros' => TRUE,
 				'currency'   => $args['currency'],
 			] ) : $args['value'];
-
+			
 		}
-
+		
 		return $args;
 	}
-
+	
 	/**
 	 * Add custom prices to sale price
 	 *
 	 * @since 1.4.1
 	 *
 	 * @param array $args
+	 * @param \WC_Product $product
 	 *
 	 * @return array
 	 */
-	public function add_custom_sale_price( $args ) {
-
+	public function add_custom_sale_price( $args, $product ) {
+		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-
+			
 			$args['currency'] = $this->current_currency;
 			$sale_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_sale_price'];
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
@@ -385,30 +387,30 @@ class Wpml {
 				'currency'   => $this->current_currency,
 			] ) : $args['value'];
 			$args['symbol']   = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
-
+			
 			// Dates come already formatted.
 			$args['extra_meta'][0]['value'] = $this->custom_prices[ $this->current_currency ]['sale_price_dates_from'];
 			$args['extra_meta'][1]['value'] = $this->custom_prices[ $this->current_currency ]['sale_price_dates_to'];
-
+			
 			$args['is_custom'] = 'yes';
 		}
-		elseif ( $this->multicurrency_active && $this->original_product_id !== $args['post_id'] ) {
-
-			$product          = wc_get_product( $this->original_product_id ); // We don't need to use the ATUM models here.
+		elseif ( $this->multicurrency_active && $this->original_product_id !== $product->get_id() ) {
+			
+			$product          = wc_get_product( $this->original_product_id );
 			$sale_price_value = $product->get_sale_price();
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
 				'trim_zeros' => TRUE,
 				'currency'   => $args['currency'],
 			] ) : $args['value'];
-
-			$date_from = $product->get_date_on_sale_from();
-			$date_to   = $product->get_date_on_sale_to();
-
+			
+			$date_from = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE );
+			$date_to   = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE );
+			
 			$args['extra_meta'][0]['value'] = $date_from ? date( 'Y-m-d', $date_from ) : '';
 			$args['extra_meta'][1]['value'] = $date_to ? date( 'Y-m-d', $date_to ) : '';
-
+			
 		}
-
+		
 		return $args;
 	}
 	
