@@ -2,7 +2,7 @@
 // Atum List Tables
 //------------------
 #wpbody-content {
-	padding-bottom: 20px;
+	padding-bottom: 0;
 }
 .wrap {
 	
@@ -733,6 +733,7 @@
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 $gray-200;
 	padding: 0 0 10px;
+	margin: 0 0 18px;
 	
 	a {
 		&:focus {

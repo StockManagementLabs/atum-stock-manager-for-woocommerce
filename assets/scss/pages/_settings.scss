@@ -7,9 +7,13 @@ $settings-menu-color:       $white;
 $settings-menu-active:      $white;
 $settings-xs-min:          568px !default;
 
+#wpbody-content {
+	padding-bottom: 0;
+}
 
 // Settings Menu
 .atum-settings-wrapper {
+	margin: 0 0 18px;
 	
 	h1 {
 		text-transform: capitalize;

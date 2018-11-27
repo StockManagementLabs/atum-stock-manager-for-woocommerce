@@ -2759,7 +2759,7 @@ h2 .atum-help-tip {
 }
 
 #wpbody-content {
-  padding-bottom: 20px;
+  padding-bottom: 0;
 }
 
 .wrap h1.wp-heading-inline {
@@ -3746,6 +3746,7 @@ h2 .atum-help-tip {
   border-radius: 8px;
   box-shadow: 0 4px 0 0 #e9ecef;
   padding: 0 0 10px;
+  margin: 0 0 18px;
 }
 
 .atum-list-wrapper a:focus {

@@ -13,10 +13,10 @@ $widget-icon:               $wp-gray-5;
 $widget-controls:           $card-text;
 $widget-controls-hover:     $primary;
 
-
 // Style the WP notices
 body.toplevel_page_atum-dashboard {
 	#wpbody-content {
+		padding-bottom: 0;
 		> .notice-error, > .notice-info, > .notice-success, > .notice-warning, > .error, > .updated, > .notice{
 			margin: ($grid-gutter-width/2) ($grid-gutter-width/2) ($grid-gutter-width/2) 0;
 		}

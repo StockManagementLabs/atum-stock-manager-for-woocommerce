@@ -910,6 +910,10 @@ input[type="button"].btn-block {
   }
 }
 
+#wpbody-content {
+  padding-bottom: 0;
+}
+
 .atum-addons h1 {
   margin-bottom: 15px;
 }

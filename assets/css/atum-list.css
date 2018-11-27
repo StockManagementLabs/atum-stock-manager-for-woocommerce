@@ -4397,7 +4397,7 @@ input[type="button"].btn-block {
 }
 
 #wpbody-content {
-  padding-bottom: 20px;
+  padding-bottom: 0;
 }
 
 .wrap h1.wp-heading-inline {
@@ -5384,6 +5384,7 @@ input[type="button"].btn-block {
   border-radius: 8px;
   box-shadow: 0 4px 0 0 #e9ecef;
   padding: 0 0 10px;
+  margin: 0 0 18px;
 }
 
 .atum-list-wrapper a:focus {
