@@ -121,6 +121,11 @@
 			this.addHorizontalScrolleffect();
 			
 			//
+			// Add input page function
+			// ------------------------------------------
+			this.inputPageChange();
+			
+			//
 			// Init the table scrollbar
 			// -------------------------
 			this.addScrollBar();
@@ -1631,6 +1636,25 @@
 					$overflowOpacityEffectLeft.hide();
 				}else {
 					$overflowOpacityEffectLeft.show();
+				}
+			});
+		},
+		/**
+		 * Add input page function
+		 */
+		inputPageChange: function() {
+			var self  = this;
+			self.$atumList.on('keypress', '#current-page-selector', function (e) {
+				if (e.which == 13) {
+					if ( location.href.indexOf('paged=' + $(this).data('current')) !== -1 ) {
+						location.href = location.href.replace('paged=' + $(this).data('current'), 'paged=' + $(this).val());
+					}else {
+						if ( location.href.indexOf('#/?') !== -1 ) {
+							location.href = location.href + '&paged=' + $(this).val();
+						}else {
+							location.href = location.href + '#/?paged=' + $(this).val();
+						}
+					}
 				}
 			});
 		},

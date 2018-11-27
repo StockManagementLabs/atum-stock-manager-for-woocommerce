@@ -3242,6 +3242,14 @@ input[type="button"].btn-block {
   }
 }
 
+#wpbody-content {
+  padding-bottom: 0;
+}
+
+.atum-settings-wrapper {
+  margin: 0 0 18px;
+}
+
 .atum-settings-wrapper h1 {
   text-transform: capitalize;
   margin-bottom: 15px;

@@ -2987,7 +2987,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		else {
 			$current_page_style = '';
-			$html_current_page  = sprintf( "%1\$s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
+			$html_current_page  = sprintf( "%1\$s<input class='current-page' data-current='%2\$s' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
 				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</label>',
 				$current,
 				strlen( $total_pages )

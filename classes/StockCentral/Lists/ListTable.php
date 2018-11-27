@@ -381,7 +381,7 @@ class ListTable extends AtumListTable {
 				'symbol'   => get_woocommerce_currency_symbol(),
 				'currency' => self::$default_currency,
 				'tooltip'  => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
-			) );
+			), $this->product );
 			
 			$regular_price = self::get_editable_column( $args );
 			
@@ -444,7 +444,7 @@ class ListTable extends AtumListTable {
 						'class'       => 'datepicker to',
 					),
 				),
-			) );
+			), $this->product );
 			
 			$sale_price = self::get_editable_column( $args );
 			

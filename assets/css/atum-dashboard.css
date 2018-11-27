@@ -3756,6 +3756,10 @@ input[type="button"].btn-block {
   padding-top: 100%;
 }
 
+body.toplevel_page_atum-dashboard #wpbody-content {
+  padding-bottom: 0;
+}
+
 body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel_page_atum-dashboard #wpbody-content > .notice-info, body.toplevel_page_atum-dashboard #wpbody-content > .notice-success, body.toplevel_page_atum-dashboard #wpbody-content > .notice-warning, body.toplevel_page_atum-dashboard #wpbody-content > .error, body.toplevel_page_atum-dashboard #wpbody-content > .updated, body.toplevel_page_atum-dashboard #wpbody-content > .notice {
   margin: 15px 15px 15px 0;
 }
