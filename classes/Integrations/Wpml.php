@@ -142,6 +142,7 @@ class Wpml {
 			// Update product meta translations.
 			add_filter( 'atum/product_data', array( $this, 'update_multicurrency_translations_data' ), 10, 2 );
 			add_action( 'atum/product_data_updated', array( $this, 'update_translations_data' ), 10, 2 );
+			add_filter( 'atum/model/product/supplier_sku_found', array( $this, 'skip_translations' ), 10, 3 );
 
 			// Filter current language translations from the unmanaged products query.
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
@@ -799,6 +800,31 @@ class Wpml {
 		
 		return $where_clause;
 		
+	}
+	
+	/**
+	 * Returns false if the product found is a translation of the current product
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int         $product_id
+	 * @param string      $supplier_sku
+	 * @param \WC_Product $product
+	 *
+	 * @return integer|bool
+	 */
+	public function skip_translations( $product_id, $supplier_sku, $product ) {
+		
+		if ( $product_id ) {
+			
+			$post_type = get_post_type( $product_id );
+			
+			if ( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ) === self::$sitepress->get_element_trid( $product->get_id(), 'post_' . $post_type ) ) {
+				return FALSE;
+			}
+		}
+		
+		return $product_id;
 	}
 
 	/**
