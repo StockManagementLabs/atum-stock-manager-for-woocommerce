@@ -3674,6 +3674,35 @@ h2 .atum-help-tip {
   margin: 10px 11px 0;
 }
 
+.tablenav.bottom .actions {
+  white-space: nowrap;
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .actions {
+    white-space: inherit;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.bottom .actions.bulkactions {
+    display: inline-block;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .actions.bulkactions {
+    width: 100%;
+  }
+  .tablenav.bottom .actions.bulkactions .select2-container {
+    width: 100% !important;
+  }
+  .tablenav.bottom .actions.bulkactions input[type=submit] {
+    width: 100%;
+    margin-top: 10px !important;
+  }
+}
+
 .tablenav.bottom .tablenav-pages {
   margin-left: auto;
   text-align: right;

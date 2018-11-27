@@ -673,6 +673,27 @@
 
 .tablenav.bottom {
 	margin: 10px 11px 0;
+	.actions {
+		white-space: nowrap;
+		@media all and (max-width: $screen-xs) {
+			white-space: inherit;
+		}
+		&.bulkactions {
+			@media all and (max-width: 782px) {
+				display: inline-block;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				.select2-container {
+					width: 100% !important;
+				}
+				input[type=submit] {
+					width: 100%;
+					margin-top: 10px !important;
+				}
+			}
+		}
+	}
 	.tablenav-pages {
 		margin-left: auto;
 		text-align: right;
