@@ -458,6 +458,7 @@
 	.input-group-append {
 		border: none;
 		min-width: 45%;
+		height: 30px;
 	}
 	
 	.dropdown-toggle {
@@ -2019,7 +2020,11 @@ table.wp-list-table {
 
 	.set-header {
 		cursor: pointer;
-		color: $link-color;
+		color: $blue;
+		
+		.select2-selection__rendered {
+			padding-left: 8px;
+		}
 
 		&:hover {
 			color: $link-hover-color;

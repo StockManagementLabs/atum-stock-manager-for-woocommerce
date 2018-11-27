@@ -252,9 +252,9 @@
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 26px;
   position: absolute;
-  top: 1px;
-  right: 1px;
-  width: 20px;
+  top: 3px;
+  right: 0;
+  width: 18px;
 }
 
 #bulk-edit .select2-selection__arrow {
@@ -4784,6 +4784,7 @@ input[type="button"].btn-block {
 .search-box .input-group-append, p.search-box .input-group-append {
   border: none;
   min-width: 45%;
+  height: 30px;
 }
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
@@ -6518,7 +6519,11 @@ table.wp-list-table tbody tr:hover {
 
 .atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header, .wp-list-table .set-header {
   cursor: pointer;
-  color: #0073AA;
+  color: #00B8DB;
+}
+
+.atum-list-table .set-header .select2-selection__rendered, .floatThead-container .set-header .select2-selection__rendered, .inbound-stock-list .set-header .select2-selection__rendered, .wp-list-table .set-header .select2-selection__rendered {
+  padding-left: 8px;
 }
 
 .atum-list-table .set-header:hover, .floatThead-container .set-header:hover, .inbound-stock-list .set-header:hover, .wp-list-table .set-header:hover {
