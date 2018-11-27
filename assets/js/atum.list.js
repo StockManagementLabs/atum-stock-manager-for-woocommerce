@@ -99,6 +99,9 @@
 					setTimeout(self.setupSearchColumnDropdown, 500); // performance
 				});
 			}
+			$(window).on('load', function() {
+				$('.dropdown_product_type').select2();
+			});
 			
 			//
 			// Setup the URL navigation
