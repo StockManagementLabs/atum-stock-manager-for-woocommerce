@@ -150,7 +150,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				'symbol'   => get_woocommerce_currency_symbol(),
 				'currency' => self::$default_currency,
 				'tooltip'  => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
-			) );
+			), $this->product );
 			
 			$regular_price = self::get_editable_column( $args );
 			
@@ -213,7 +213,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 						'class'       => 'datepicker to',
 					),
 				),
-			) );
+			), $this->product );
 			
 			$sale_price = self::get_editable_column( $args );
 			
