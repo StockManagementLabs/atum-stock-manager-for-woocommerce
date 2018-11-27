@@ -516,9 +516,11 @@
 	}
 	&.extend-list-table {
 		padding: 0 11px;
+		height: 52px;
 		@include flex-wrap(nowrap);
 		@media all and (max-width: 782px) {
 			@include flex-wrap(wrap);
+			height: auto;
 		}
 		.actions {
 			white-space: inherit;
@@ -817,7 +819,7 @@
 	}
 	
 	
-	.stock-central-header {
+	.stock-central-header, .manufactoring-central-header {
 		@include flexbox;
 		@include flex-justify-content(space-between);
 		@include flex-align-items(center);
@@ -830,7 +832,7 @@
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
 		}
-		.sc-nav-containe-box {
+		.sc-nav-containe-box, .mc-nav-containe-box {
 			width: 70%;
 			position: relative;
 			@media screen and (max-width: $screen-lg) {

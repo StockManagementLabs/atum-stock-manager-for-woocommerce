@@ -3457,6 +3457,7 @@ h2 .atum-help-tip {
 
 .tablenav.top.extend-list-table {
   padding: 0 11px;
+  height: 52px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -3469,6 +3470,7 @@ h2 .atum-help-tip {
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    height: auto;
   }
 }
 
@@ -3846,7 +3848,7 @@ h2 .atum-help-tip {
   position: relative;
 }
 
-.atum-list-wrapper .stock-central-header {
+.atum-list-wrapper .stock-central-header, .atum-list-wrapper .manufactoring-central-header {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3865,7 +3867,7 @@ h2 .atum-help-tip {
 }
 
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .stock-central-header {
+  .atum-list-wrapper .stock-central-header, .atum-list-wrapper .manufactoring-central-header {
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
@@ -3880,24 +3882,24 @@ h2 .atum-help-tip {
 }
 
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .stock-central-header {
+  .atum-list-wrapper .stock-central-header, .atum-list-wrapper .manufactoring-central-header {
     margin: 0 11px 15px;
   }
 }
 
-.atum-list-wrapper .stock-central-header .sc-nav-containe-box {
+.atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
   width: 70%;
   position: relative;
 }
 
 @media screen and (max-width: 1200px) {
-  .atum-list-wrapper .stock-central-header .sc-nav-containe-box {
+  .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
     width: 59%;
   }
 }
 
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .stock-central-header .sc-nav-containe-box {
+  .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
     width: 100%;
   }
 }
