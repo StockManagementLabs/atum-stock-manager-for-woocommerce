@@ -302,7 +302,7 @@ final class Globals {
 	 */
 	public static function get_atum_product_data_model_class( $wc_product_class, $product_type, $post_type, $product_id ) {
 
-		$atum_product_class = Helpers::get_atum_product_class( $product_type );
+		$atum_product_class = apply_filters( 'atum/models/product_data_class', Helpers::get_atum_product_class( $product_type ), $product_type, $post_type, $product_id );
 
 		if ( $atum_product_class ) {
 			return $atum_product_class;
