@@ -58,23 +58,29 @@
                 );
 
                 _window[addEventListener](
-                    mouseup, cont.mu = function() {pushed = 0;}, 0
+	                mouseup, cont.mu = function() {
+		                pushed = 0;
+		                // HERE
+		                setTimeout(function(){ el.classList.remove("dragging"); }, 100);
+	                }, 0
                 );
 
                 _window[addEventListener](
-                    mousemove,
-                    cont.mm = function(e) {
-                        if (pushed) {
-                            (scroller = el.scroller||el).scrollLeft -=
-                                newScrollX = (- lastClientX + (lastClientX=e.clientX));
-                            scroller.scrollTop -=
-                                newScrollY = (- lastClientY + (lastClientY=e.clientY));
-                            if (el == _document.body) {
-                                (scroller = _document.documentElement).scrollLeft -= newScrollX;
-                                scroller.scrollTop -= newScrollY;
-                            }
-                        }
-                    }, 0
+	                mousemove,
+	                cont.mm = function(e) {
+		                if (pushed) {
+			                // HERE
+			                el.classList.add("dragging");
+			                (scroller = el.scroller||el).scrollLeft -=
+				                newScrollX = (- lastClientX + (lastClientX=e.clientX));
+			                scroller.scrollTop -=
+				                newScrollY = (- lastClientY + (lastClientY=e.clientY));
+			                if (el == _document.body) {
+				                (scroller = _document.documentElement).scrollLeft -= newScrollX;
+				                scroller.scrollTop -= newScrollY;
+			                }
+		                }
+	                }, 0
                 );
              })(dragged[i++]);
         }

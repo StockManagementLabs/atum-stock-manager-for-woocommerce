@@ -877,6 +877,7 @@
 				self.jScrollApi  = self.$scrollPane.data('jsp');
 				var $scrollBar   = $('.jspPane');
 				$scrollBar.addClass('dragscroll').attr('id','jsp-pane');
+				dragscroll.reset();
 				
 				// Bind events
 				self.$scrollPane
@@ -928,9 +929,8 @@
 				
 				$scrollBar.on('scroll',function () {
 					var $nav = document.getElementById($(this).attr('id'));
-					if ($nav.scrollLeft > 0) {
-						self.jScrollApi.scrollToX( $nav.scrollLeft, false);
-					}
+					self.jScrollApi.scrollToX( $nav.scrollLeft, false);
+					
 				});
 				
 				$scrollBar.on("mousewheel", function() {
@@ -1642,8 +1642,12 @@
 				}
 			});
 			
-			
-			
+			$('.dragscroll a').click(function(event) {
+				if ($(this).closest('.dragscroll').hasClass('dragging')) {
+					event.preventDefault();
+					return false;
+				}
+			});
 			
 		},
 		/**
