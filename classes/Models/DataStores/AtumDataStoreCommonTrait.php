@@ -41,7 +41,7 @@ trait AtumDataStoreCommonTrait {
 			return;
 		}
 		
-		$columns = array(
+		$columns = apply_filters( 'atum/data_store/columns', array(
 			'purchase_price',
 			'supplier_id',
 			'supplier_sku',
@@ -49,25 +49,25 @@ trait AtumDataStoreCommonTrait {
 			'out_stock_date',
 			'out_stock_threshold',
 			'inheritable',
-		);
+		) );
 		
 		// Columns data need to be converted to datetime.
-		$date_columns = array(
+		$date_columns = apply_filters( 'atum/data_store/date_columns', array(
 			'out_stock_date',
-		);
+		) );
 		
 		// Switches and/or checkboxes.
-		$yes_no_columns = array(
+		$yes_no_columns = apply_filters( 'atum/data_store/yes_no_columns', array(
 			'atum_controlled',
 			'inheritable',
-		);
+		) );
 		
 		// Values which can be null in the database.
-		$allow_null = array(
+		$allow_null = apply_filters( 'atum/data_store/allow_null_columns', array(
 			'purchase_price',
 			'out_stock_date',
 			'out_stock_threshold',
-		);
+		) );
 		
 		foreach ( $columns as $column ) {
 			
@@ -79,7 +79,15 @@ trait AtumDataStoreCommonTrait {
 					$data[ $column ] = empty( $value ) ? NULL : gmdate( 'Y-m-d H:i:s', $product->{"get_$column"}( 'edit' )->getOffsetTimestamp() );
 				}
 				elseif ( in_array( $column, $yes_no_columns, TRUE ) ) {
-					$data[ $column ] = 'yes' === $value ? 1 : 0; // These columns are saved as integers in db.
+
+					// Some yes/no columns could allow NULL values too.
+					if ( in_array( $column, $allow_null, TRUE ) && is_null( $value ) ) {
+						$data[ $column ] = NULL;
+					}
+					else {
+						$data[ $column ] = 'yes' === $value ? 1 : 0; // These columns are saved as integers in db.
+					}
+
 				}
 				else {
 					$data[ $column ] = '' === $value && in_array( $column, $allow_null, TRUE ) ? NULL : $value;
@@ -97,7 +105,7 @@ trait AtumDataStoreCommonTrait {
 		
 		if ( $insert ) {
 			$data['product_id'] = $product->get_id();
-			$wpdb->insert( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, $data ); // WPCS: db call ok, cache ok.
+			$wpdb->insert( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, $data );
 		}
 		elseif ( ! empty( $data ) ) {
 			
@@ -107,7 +115,7 @@ trait AtumDataStoreCommonTrait {
 				array(
 					'product_id' => $product->get_id(),
 				)
-			); // WPCS: db call ok, cache ok.
+			);
 			
 		}
 		
