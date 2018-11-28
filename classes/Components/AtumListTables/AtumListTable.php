@@ -2499,7 +2499,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						GROUP BY IDs) AS sales
 					";
 
-					$str_status = "
+					$str_statuses = "
 						(SELECT p.ID, IF( 
 							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
 							CAST( IF( LENGTH(pr.stock_quantity) = 0 , 0, pr.stock_quantity) AS DECIMAL(10,2) ), TRUE, FALSE
@@ -2509,10 +2509,10 @@ abstract class AtumListTable extends \WP_List_Table {
 					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
 						WHERE p.post_type IN ('" . implode( "', '", $post_types ) . "')
 			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
-			            ) AS status
+			            ) AS statuses
 		            ';
 
-					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_status WHERE status IS FALSE;" );
+					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
 					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
