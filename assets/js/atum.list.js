@@ -937,12 +937,23 @@
 					return false;
 				});
 				
-				$('.dragscroll a').on('click',function(event) {
+				$('.dragscroll a').on('click mouseover',function(event) {
 					if ($(this).closest('.dragscroll').hasClass('dragging')) {
 						event.preventDefault();
+						self.destroyTooltips();
 						return false;
+					}else {
+						self.addTooltips();
 					}
 				});
+				
+				// $('.dragscroll a').on('mouseover', function(event) {
+				// 	if ($(this).closest('.dragscroll').hasClass('dragging')) {
+				// 		self.destroyTooltips();
+				// 	}else {
+				// 		self.addTooltips();
+				// 	}
+				// });
 				
 			});
 			
@@ -1645,23 +1656,15 @@
 				}
 			});
 			
-			$('.dragscroll a').on('click', function(event) {
+			$('.dragscroll a').on('click mouseover',function(event) {
 				if ($(this).closest('.dragscroll').hasClass('dragging')) {
 					event.preventDefault();
-					return false;
-				}
-			});
-			
-			$('.dragscroll a').on('mouseover', function(event) {
-				if ($(this).closest('.dragscroll').hasClass('dragging')) {
 					self.destroyTooltips();
+					return false;
 				}else {
 					self.addTooltips();
 				}
 			});
-			
-			
-			
 		},
 		/**
 		 * Add input page function

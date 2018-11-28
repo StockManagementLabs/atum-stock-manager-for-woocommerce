@@ -130,7 +130,7 @@
 				return false;
 			});
 			
-			$('.dragscroll a').click(function(event) {
+			$('.dragscroll a').on('click',function(event) {
 				if ($(this).closest('.dragscroll').hasClass('dragging')) {
 					event.preventDefault();
 					return false;
