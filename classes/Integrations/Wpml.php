@@ -728,15 +728,15 @@ class Wpml {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param string $unmng_where
+	 * @param array $unmng_where
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function unmanaged_products_where( $unmng_where ) {
 		
 		global $wpdb;
 		
-		$unmng_where .= "
+		$unmng_where[] = "
 			AND posts.ID IN (
 				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND language_code = '{$this->current_language}'
 			)

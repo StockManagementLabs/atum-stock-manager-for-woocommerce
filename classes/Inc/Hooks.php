@@ -303,7 +303,7 @@ class Hooks {
 			$out_stock_date = NULL;
 
 			if ( ! $current_stock ) {
-				$out_stock_date = Helpers::date_format( current_time( 'timestamp' ) );
+				$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE );
 			}
 
 			$product->set_out_stock_date( $out_stock_date );
