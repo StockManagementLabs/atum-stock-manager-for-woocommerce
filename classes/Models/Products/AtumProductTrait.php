@@ -32,7 +32,7 @@ trait AtumProductTrait {
 		'out_stock_date'      => NULL,
 		'out_stock_threshold' => '',
 		'inheritable'         => FALSE,
-		'bom_sellable'        => NULL,
+		'bom_sellable'        => FALSE,
 	);
 
 
@@ -142,13 +142,12 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string 'yes' or 'no' or NULL (global)
+	 * @return string 'yes' or 'no'
+	 *
+	 * TODO: MOVE TO PRODUCT LEVELS MODELS.
 	 */
 	public function get_bom_sellable( $context = 'view' ) {
-
-		$bom_sellable = $this->get_prop( 'bom_sellable', $context );
-
-		return is_null( $bom_sellable ) ? $bom_sellable : wc_bool_to_string( $bom_sellable );
+		return wc_bool_to_string( $this->get_prop( 'bom_sellable', $context ) );
 	}
 
 
@@ -260,9 +259,11 @@ trait AtumProductTrait {
 	 * @since 1.5.0
 	 *
 	 * @param string|bool $bom_sellable Whether or not the BOM product is sellable.
+	 *
+	 * TODO: MOVE TO PRODUCT LEVELS MODELS.
 	 */
 	public function set_bom_sellable( $bom_sellable ) {
-		$this->set_prop( 'bom_sellable', ! is_null( $bom_sellable ) ? wc_string_to_bool( $bom_sellable ) : NULL );
+		$this->set_prop( 'bom_sellable', wc_string_to_bool( $bom_sellable ) );
 	}
 
 	/**

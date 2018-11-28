@@ -89,9 +89,9 @@ class ProductDataMetaBoxes {
 				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
 			}
 
-			// Save the ATUM's product data meta boxes.
-			add_action( 'save_post_product', array( $this, 'save_product_meta_boxes' ), 11, 3 );
-			add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_meta_boxes' ), 11, 2 );
+			// Save the ATUM's product data meta boxes (once WC has saved all its own meta boxes).
+			add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_meta_boxes' ), PHP_INT_MAX, 2 );
+			add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_meta_boxes' ), PHP_INT_MAX, 2 );
 
 		}
 
@@ -463,11 +463,10 @@ class ProductDataMetaBoxes {
 	 *
 	 * @param int      $product_id The saved product's ID.
 	 * @param \WP_Post $post       The saved post.
-	 * @param bool     $update     Whether this is an existing post being updated or not.
 	 */
-	public function save_product_meta_boxes( $product_id, $post, $update ) {
+	public function save_product_meta_boxes( $product_id, $post ) {
 
-		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
 			return;
 		}
 
@@ -476,6 +475,8 @@ class ProductDataMetaBoxes {
 		$this->loop         = NULL;
 
 		$this->save_atum_meta_boxes();
+
+		do_action( 'atum/product_data/after_save_product_meta_boxes', $product_id, $post );
 
 	}
 
@@ -496,6 +497,8 @@ class ProductDataMetaBoxes {
 		$this->loop         = $loop;
 
 		$this->save_atum_meta_boxes();
+
+		do_action( 'atum/product_data/after_save_product_variation_meta_boxes', $variation_id, $loop );
 
 	}
 
