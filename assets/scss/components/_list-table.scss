@@ -218,6 +218,9 @@
 					}
 					&.tips {
 						color: $blue;
+						&:hover {
+							cursor: pointer;
+						}
 					}
 					&.empty {
 						color: $gray-500;
@@ -278,38 +281,45 @@
 		@include flex-justify-content(left);
 	}
 	
-	li {
-		color: $white;
-		padding: 20px 0 20px 10px;
-		text-transform: uppercase;
-		a {
-			color: $gray-500;
-			padding: 0;
-			&.current {
-				border-radius: 5px;
-				background-color: $blue;
-				font-size: 16px;
-				padding: 6px 10px;
-				font-weight: bold;
-				letter-spacing: 0.4px;
-				color: $white;
-				.count {
-					color: white;
+	&:not(.extend-list-table) {
+		li {
+			color: $white;
+			padding: 20px 0 20px 10px;
+			text-transform: uppercase;
+			a {
+				color: $gray-500;
+				padding: 0;
+				&.current:not(.extra-links-container a) {
+					border-radius: 5px;
+					background-color: $blue;
+					font-size: 16px;
+					padding: 6px 10px;
+					font-weight: bold;
+					letter-spacing: 0.4px;
+					color: $white;
+					.count {
+						color: white;
+					}
 				}
-			}
-			.count {
-				font-size: 14px;
-				font-weight: normal;
-				color: $blue;
-			}
-			&:active, &:focus {
-				border: none;
-				outline: none;
-				box-shadow: none;
+				.count {
+					font-size: 14px;
+					font-weight: normal;
+					color: $blue;
+				}
+				&:active, &:focus {
+					border: none;
+					outline: none;
+					box-shadow: none;
+				}
+				&.tips {
+					color: $blue;
+					&:hover {
+						cursor: pointer;
+					}
+				}
 			}
 		}
 	}
-	
 }
 
 .search-box, p.search-box {

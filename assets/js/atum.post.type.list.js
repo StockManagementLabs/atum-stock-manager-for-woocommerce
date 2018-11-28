@@ -129,6 +129,13 @@
 			$scrollBar.on("mousewheel", function() {
 				return false;
 			});
+			
+			$('.dragscroll a').click(function(event) {
+				if ($(this).closest('.dragscroll').hasClass('dragging')) {
+					event.preventDefault();
+					return false;
+				}
+			});
 		},
 	});
 	

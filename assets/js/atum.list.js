@@ -937,6 +937,13 @@
 					return false;
 				});
 				
+				$('.dragscroll a').on('click',function(event) {
+					if ($(this).closest('.dragscroll').hasClass('dragging')) {
+						event.preventDefault();
+						return false;
+					}
+				});
+				
 			});
 			
 		},
@@ -1612,8 +1619,8 @@
 		 * Add horizontal scroll effect to menu views
 		 */
 		addHorizontalScrolleffect: function() {
+			var self  = this;
 			$('.nav-with-scroll-effect').bind('scroll',function () {
-				var self  = this;
 
 				$('.enhanced').select2("close");
 
@@ -1638,12 +1645,22 @@
 				}
 			});
 			
-			$('.dragscroll a').click(function(event) {
+			$('.dragscroll a').on('click', function(event) {
 				if ($(this).closest('.dragscroll').hasClass('dragging')) {
 					event.preventDefault();
 					return false;
 				}
 			});
+			
+			$('.dragscroll a').on('mouseover', function(event) {
+				if ($(this).closest('.dragscroll').hasClass('dragging')) {
+					self.destroyTooltips();
+				}else {
+					self.addTooltips();
+				}
+			});
+			
+			
 			
 		},
 		/**

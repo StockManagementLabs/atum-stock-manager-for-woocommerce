@@ -1560,6 +1560,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( ( $views[ $key ]['managed'] === $view ) ) {
 						$man_class[] = 'current';
+						$active    = 'class="active"';
 					}
 					else {
 						$query_filters['paged'] = 1;
@@ -1594,6 +1595,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( ( $views[ $key ]['unmanaged'] === $view ) ) {
 						$unm_class[] = 'current';
+						$active    = 'class="active"';
 					}
 					else {
 						$query_filters['paged'] = 1;

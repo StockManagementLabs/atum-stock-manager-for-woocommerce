@@ -3071,6 +3071,10 @@ h2 .atum-help-tip {
   color: #00B8DB;
 }
 
+.subsubsub.extend-list-table li span a.tips:hover {
+  cursor: pointer;
+}
+
 .subsubsub.extend-list-table li span a.empty {
   color: #adb5bd;
 }
@@ -3136,18 +3140,18 @@ h2 .atum-help-tip {
   }
 }
 
-.subsubsub li {
+.subsubsub:not(.extend-list-table) li {
   color: #fff;
   padding: 20px 0 20px 10px;
   text-transform: uppercase;
 }
 
-.subsubsub li a {
+.subsubsub:not(.extend-list-table) li a {
   color: #adb5bd;
   padding: 0;
 }
 
-.subsubsub li a.current {
+.subsubsub:not(.extend-list-table) li a.current {
   border-radius: 5px;
   background-color: #00B8DB;
   font-size: 16px;
@@ -3157,20 +3161,28 @@ h2 .atum-help-tip {
   color: #fff;
 }
 
-.subsubsub li a.current .count {
+.subsubsub:not(.extend-list-table) li a.current .count {
   color: white;
 }
 
-.subsubsub li a .count {
+.subsubsub:not(.extend-list-table) li a .count {
   font-size: 14px;
   font-weight: normal;
   color: #00B8DB;
 }
 
-.subsubsub li a:active, .subsubsub li a:focus {
+.subsubsub:not(.extend-list-table) li a:active, .subsubsub:not(.extend-list-table) li a:focus {
   border: none;
   outline: none;
   box-shadow: none;
+}
+
+.subsubsub:not(.extend-list-table) li a.tips {
+  color: #00B8DB;
+}
+
+.subsubsub:not(.extend-list-table) li a.tips:hover {
+  cursor: pointer;
 }
 
 .search-box, p.search-box {
