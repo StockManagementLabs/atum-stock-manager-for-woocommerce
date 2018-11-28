@@ -3944,6 +3944,7 @@ h2 .atum-help-tip {
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
   justify-content: space-between;
+  cursor: grab;
   flex-wrap: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
@@ -4344,6 +4345,7 @@ h2 .atum-help-tip {
 
 .atum-table-wrapper .jspPane, #table-container .jspPane {
   position: absolute;
+  overflow: hidden;
 }
 
 .atum-table-wrapper .jspVerticalBar, .atum-table-wrapper .jspCap, .atum-table-wrapper .jspArrow, #table-container .jspVerticalBar, #table-container .jspCap, #table-container .jspArrow {

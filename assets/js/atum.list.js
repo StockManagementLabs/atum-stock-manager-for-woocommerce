@@ -875,6 +875,8 @@
 				
 				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 				self.jScrollApi  = self.$scrollPane.data('jsp');
+				var $scrollBar   = $('.jspPane');
+				$scrollBar.addClass('dragscroll').attr('id','jsp-pane');
 				
 				// Bind events
 				self.$scrollPane
@@ -889,7 +891,9 @@
 						
 					})
 					.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
+						document.getElementById('jsp-pane').scrollLeft = scrollPositionX;
 						
+						$scrollBar.css('left',0);
 						// Handle the sticky cols position and visibility when scrolling
 						if (self.$stickyCols !== null) {
 							
@@ -920,20 +924,18 @@
 						
 					});
 				
-				// Drag and drop scrolling on desktops
-				var hammertime = new Hammer(self.$scrollPane.get(0), {});
+				self.$atumList.trigger('atum-scroll-bar-loaded');
 				
-				hammertime.on('panright panleft', function (ev) {
-					
-					var paneStartX   = self.jScrollApi.getContentPositionX(),
-					    offset       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
-					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
-					
-					self.jScrollApi.scrollToX( displacement, false)
-					
+				$scrollBar.on('scroll',function () {
+					var $nav = document.getElementById($(this).attr('id'));
+					if ($nav.scrollLeft > 0) {
+						self.jScrollApi.scrollToX( $nav.scrollLeft, false);
+					}
 				});
 				
-				self.$atumList.trigger('atum-scroll-bar-loaded');
+				$scrollBar.on("mousewheel", function() {
+					return false;
+				});
 				
 			});
 			
@@ -1611,33 +1613,38 @@
 		 */
 		addHorizontalScrolleffect: function() {
 			
-			this.addHummerLibraryToNavsAndFilters('stock_central_nav');
-			this.addHummerLibraryToNavsAndFilters('filters_container');
+			// this.addHummerLibraryToNavsAndFilters('stock_central_nav');
+			// this.addHummerLibraryToNavsAndFilters('filters_container');
 			
 			$('.nav-with-scroll-effect').bind('scroll',function () {
-				
+				var self  = this;
+
 				$('.enhanced').select2("close");
-				
+
 				var $nav = document.getElementById($(this).attr('id'));
 				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');
 				var $overflowOpacityEffectLeft  = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-left');
 				var $leftMax                    = $nav.scrollWidth;
 				var $left                       = $nav.scrollLeft;
 				var $diff                       = $leftMax - $left;
-				
+
 				if ($diff === $('#' + $(this).attr('id')).outerWidth())
 				{
 					$overflowOpacityEffectRight.hide();
 				}else {
 					$overflowOpacityEffectRight.show();
 				}
-				
+
 				if ( $left === 0 ) {
 					$overflowOpacityEffectLeft.hide();
 				}else {
 					$overflowOpacityEffectLeft.show();
 				}
 			});
+			
+			
+			
+			
 		},
 		/**
 		 * Add input page function

@@ -871,6 +871,7 @@
 		@include flexbox;
 		@include flex-align-items(center);
 		@include flex-justify-content(space-between);
+		cursor: grab;
 		flex-wrap: nowrap;
 		overflow-x: auto;
 		overflow-y: hidden;
@@ -1233,6 +1234,7 @@
 	
 	.jspPane {
 		position: absolute;
+		overflow: hidden;
 	}
 	
 	.jspVerticalBar, .jspCap, .jspArrow {

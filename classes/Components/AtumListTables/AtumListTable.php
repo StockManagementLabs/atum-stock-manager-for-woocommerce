@@ -2850,7 +2850,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?> ">
-				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect' : ''; ?>">
+				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : ''; ?>">
 
 						<div class="alignleft actions bulkactions">
 							<?php $this->bulk_actions( $which ); ?>
@@ -3578,12 +3578,14 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 		// jScrollPane.
-		wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array(), ATUM_VERSION, TRUE );
-		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 		// Sweet Alert 2.
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+
+		// Dragscroll.
+		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.js', array(), ATUM_VERSION, TRUE );
 
 		Helpers::maybe_es6_promise();
 
@@ -3609,7 +3611,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";

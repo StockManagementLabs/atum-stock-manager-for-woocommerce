@@ -105,6 +105,8 @@
 			
 			self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 			self.jScrollApi  = self.$scrollPane.data('jsp');
+			var $scrollBar   = $('.jspPane');
+			$scrollBar.addClass('dragscroll').attr('id','jsp-pane');
 			
 			// Bind events
 			self.$scrollPane
@@ -113,20 +115,19 @@
 				
 				})
 				.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
-				
+					document.getElementById('jsp-pane').scrollLeft = scrollPositionX;
+					$scrollBar.css('left',0);
 				});
 			
-			// Drag and drop scrolling on desktops
-			var hammertime = new Hammer(self.$scrollPane.get(0), {});
+			$scrollBar.on('scroll',function () {
+				var $nav = document.getElementById($(this).attr('id'));
+				if ($nav.scrollLeft > 0) {
+					self.jScrollApi.scrollToX( $nav.scrollLeft, false);
+				}
+			});
 			
-			hammertime.on('panright panleft', function (ev) {
-				
-				var paneStartX   = self.jScrollApi.getContentPositionX(),
-				    offset       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
-				    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
-				
-				self.jScrollApi.scrollToX( displacement, false)
-				
+			$scrollBar.on("mousewheel", function() {
+				return false;
 			});
 		},
 	});
