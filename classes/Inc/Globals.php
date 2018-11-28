@@ -124,6 +124,7 @@ final class Globals {
 			'_sku',
 			Suppliers::SUPPLIER_SKU_META_KEY,
 			'IDs', // ID as string to allow the use of commas ex: s = '12, 13, 89'.
+			'_supplier',
 		),
 		'numeric' => array(
 			'ID',

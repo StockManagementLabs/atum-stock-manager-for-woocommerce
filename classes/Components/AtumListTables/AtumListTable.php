@@ -3313,10 +3313,12 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$supplier_products = array();
-
+					
+					remove_filter( 'posts_search', array( $this, 'product_search' ), 10);
 					foreach ( $search_supplier_ids as $supplier_id ) {
 						$supplier_products = array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) );
 					}
+					add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
 
 					$supplier_products = array_unique( $supplier_products );
 
