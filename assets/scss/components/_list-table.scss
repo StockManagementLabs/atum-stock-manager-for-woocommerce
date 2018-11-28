@@ -449,6 +449,7 @@
 		border-radius: 5px;
 		border: solid 1px $gray-200;
 		background-color: $white;
+		margin-left: 10px;
 		flex-wrap: nowrap;
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
@@ -1021,7 +1022,7 @@
 		padding: 2px 0 0;
 		cursor: pointer;
 		z-index: 999;
-		margin-right: 5px;
+		margin-left: 10px;
 		@include transition(0.2s ease-in-out);
 		
 		@media all and (max-width: $screen-xs) {

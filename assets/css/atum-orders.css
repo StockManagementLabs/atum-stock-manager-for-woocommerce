@@ -4772,6 +4772,7 @@ input[type="button"].btn-block {
   border-radius: 5px;
   border: solid 1px #e9ecef;
   background-color: #fff;
+  margin-left: 10px;
   flex-wrap: nowrap;
 }
 
@@ -5546,7 +5547,7 @@ input[type="button"].btn-block {
   padding: 2px 0 0;
   cursor: pointer;
   z-index: 999;
-  margin-right: 5px;
+  margin-left: 10px;
   -webkit-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;

@@ -1612,10 +1612,6 @@
 		 * Add horizontal scroll effect to menu views
 		 */
 		addHorizontalScrolleffect: function() {
-			
-			// this.addHummerLibraryToNavsAndFilters('stock_central_nav');
-			// this.addHummerLibraryToNavsAndFilters('filters_container');
-			
 			$('.nav-with-scroll-effect').bind('scroll',function () {
 				var self  = this;
 
@@ -1668,29 +1664,6 @@
 					}
 				}
 			});
-		},
-		
-		/**
-		 * Add hammer.js to navs and filters
-		 */
-		addHummerLibraryToNavsAndFilters: function(elementId) {
-			var $nav = document.getElementById(elementId);
-			if ($nav) {
-				var containerScroll = new Hammer($nav);
-				
-				containerScroll.on('panright panleft', function (ev) {
-					var $nav = document.getElementById(elementId);
-					var paneStartX   = $nav.scrollLeft,
-					    offset       = 7,
-					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
-					if ( ev.type === 'panright' ) {
-						$nav.scrollLeft = displacement;
-					}else {
-						$nav.scrollLeft = displacement;
-					}
-					
-				});
-			}
 		},
 		
 		/**
