@@ -259,7 +259,7 @@ abstract class AtumOrderPostType {
 			// Count all the orders with one of the ATUM Order's statuses.
 			if ( $object_types ) {
 				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
-				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . $this->get_statuses_simple( TRUE ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", $this->get_statuses_simple( TRUE ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
 			}
 
 			// This action is documented in wp-includes/taxonomy.php.
