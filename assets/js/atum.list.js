@@ -118,7 +118,26 @@
 			//
 			// Add horizontal scroll effect to menu views
 			// ------------------------------------------
-			this.addHorizontalScrolleffect();
+			// this.addHorizontalScrolleffect();
+			
+			$(window).on('resize', function () {
+				// var $nav = document.getElementById('stock_central_nav');
+				// if ($nav.scrollLeft === 0) {
+				// 	$('#scroll-stock_central_nav .overflow-opacity-effect-left').hide();
+				// 	$('#scroll-stock_central_nav .overflow-opacity-effect-right').hide();
+				// }
+				// var $filters = document.getElementById('filters_container');
+				// if ($filters.scrollLeft === 0) {
+				// 	$('#scroll-filters_container .overflow-opacity-effect-left').hide();
+				// 	$('#scroll-filters_container .overflow-opacity-effect-right').hide();
+				// }
+				self.addHorizontalScrolleffect('stock_central_nav', false);
+				self.addHorizontalScrolleffect('filters_container', false);
+			});
+			
+			$('.nav-with-scroll-effect').on('scroll',function () {
+				self.addHorizontalScrolleffect($(this).attr('id'), true);
+			});
 			
 			//
 			// Add input page function
@@ -875,9 +894,6 @@
 				
 				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 				self.jScrollApi  = self.$scrollPane.data('jsp');
-				var $scrollBar   = $('.jspPane');
-				$scrollBar.addClass('dragscroll').attr('id','jsp-pane');
-				dragscroll.reset();
 				
 				// Bind events
 				self.$scrollPane
@@ -892,9 +908,7 @@
 						
 					})
 					.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
-						document.getElementById('jsp-pane').scrollLeft = scrollPositionX;
 						
-						$scrollBar.css('left',0);
 						// Handle the sticky cols position and visibility when scrolling
 						if (self.$stickyCols !== null) {
 							
@@ -925,35 +939,20 @@
 						
 					});
 				
-				self.$atumList.trigger('atum-scroll-bar-loaded');
+				// Drag and drop scrolling on desktops
+				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
-				$scrollBar.on('scroll',function () {
-					var $nav = document.getElementById($(this).attr('id'));
-					self.jScrollApi.scrollToX( $nav.scrollLeft, false);
+				hammertime.on('panright panleft', function (ev) {
+					
+					var paneStartX   = self.jScrollApi.getContentPositionX(),
+					    offset       = 10, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
+					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
+					
+					self.jScrollApi.scrollToX( displacement, false)
 					
 				});
 				
-				$scrollBar.on("mousewheel", function() {
-					return false;
-				});
-				
-				$('.dragscroll a').on('click mouseover',function(event) {
-					if ($(this).closest('.dragscroll').hasClass('dragging')) {
-						event.preventDefault();
-						self.destroyTooltips();
-						return false;
-					}else {
-						self.addTooltips();
-					}
-				});
-				
-				// $('.dragscroll a').on('mouseover', function(event) {
-				// 	if ($(this).closest('.dragscroll').hasClass('dragging')) {
-				// 		self.destroyTooltips();
-				// 	}else {
-				// 		self.addTooltips();
-				// 	}
-				// });
+				self.$atumList.trigger('atum-scroll-bar-loaded');
 				
 			});
 			
@@ -966,15 +965,15 @@
 			
 			var self      = this,
 			    positionX = 0;
-			
+
 			if (this.jScrollApi !== null) {
 				positionX = this.jScrollApi.getContentPositionX();
 				this.jScrollApi.destroy();
 				this.jScrollApi = null;
 			}
-			
+
 			this.addScrollBar();
-			
+
 			if (positionX > 0) {
 				// Wait until the scroll bar is re-added to restore the position
 				this.$atumList.on('atum-scroll-bar-loaded', function () {
@@ -1629,32 +1628,32 @@
 		/**
 		 * Add horizontal scroll effect to menu views
 		 */
-		addHorizontalScrolleffect: function() {
-			var self  = this;
-			$('.nav-with-scroll-effect').bind('scroll',function () {
-
+		addHorizontalScrolleffect: function(elementId, checkEnhanced) {
+			var self = this;
+			
+			if ( checkEnhanced ) {
 				$('.enhanced').select2("close");
-
-				var $nav = document.getElementById($(this).attr('id'));
-				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');
-				var $overflowOpacityEffectLeft  = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-left');
-				var $leftMax                    = $nav.scrollWidth;
-				var $left                       = $nav.scrollLeft;
-				var $diff                       = $leftMax - $left;
-
-				if ($diff === $('#' + $(this).attr('id')).outerWidth())
-				{
-					$overflowOpacityEffectRight.hide();
-				}else {
-					$overflowOpacityEffectRight.show();
-				}
-
-				if ( $left === 0 ) {
-					$overflowOpacityEffectLeft.hide();
-				}else {
-					$overflowOpacityEffectLeft.show();
-				}
-			});
+			}
+			
+			var $nav = document.getElementById(elementId);
+			var $overflowOpacityEffectRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right');
+			var $overflowOpacityEffectLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left');
+			var $leftMax                    = $nav.scrollWidth;
+			var $left                       = $nav.scrollLeft;
+			var $diff                       = $leftMax - $left;
+			
+			if ($diff === $('#' + elementId).outerWidth())
+			{
+				$overflowOpacityEffectRight.hide();
+			}else {
+				$overflowOpacityEffectRight.show();
+			}
+			
+			if ( $left === 0 ) {
+				$overflowOpacityEffectLeft.hide();
+			}else {
+				$overflowOpacityEffectLeft.show();
+			}
 			
 			$('.dragscroll a').on('click mouseover',function(event) {
 				if ($(this).closest('.dragscroll').hasClass('dragging')) {

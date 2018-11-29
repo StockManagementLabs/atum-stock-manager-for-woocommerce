@@ -924,9 +924,10 @@ abstract class AtumOrderPostType {
 			elseif ( 'edit.php' === $hook ) {
 
 				wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
+				wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array(), ATUM_VERSION, TRUE );
 				// Dragscroll.
 				wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.js', FALSE, ATUM_VERSION, TRUE );
-				wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+				wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
 				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jquery-tiptip', 'jscrollpane', 'dragscroll' ), ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(

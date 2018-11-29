@@ -149,7 +149,7 @@
 .subsubsub {
 	&.extend-list-table {
 		width: inherit;
-		margin: 10px 20px !important;
+		margin: 10px 0 !important;
 		@include flex-wrap(nowrap);
 		@include flex-justify-content(left);
 		border-radius: 0;
@@ -350,6 +350,7 @@
 		@include flexbox;
 		border-radius: 0;
 		border: 0;
+		width: 400px;
 		margin: 0 3px 3px auto !important;
 		@media all and (max-width: 782px) {
 			margin: 0 !important;
@@ -441,7 +442,7 @@
 		margin-right: 0;
 		border: none;
 		box-shadow: none;
-		width: 100%;
+		width: 110px;
 		@media all and (max-width: 782px) {
 			width: 100%;
 		}
@@ -468,13 +469,18 @@
 	
 	.input-group-append {
 		border: none;
-		min-width: 45%;
 		height: 30px;
 	}
 	
 	.dropdown-toggle {
-		width: 130px;
+		width: 100px;
 		text-align: left;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		padding-left: 5px!important;
+		padding-right: 13px !important;
+		font-size: 15px!important;
 		&:after {
 			vertical-align: middle;
 			font-family: Linearicons;
@@ -482,7 +488,7 @@
 			display: inline;
 			font-size: 10px;
 			position: absolute;
-			right: 10px;
+			right: 2px;
 			top: 8px;
 		}
 		
@@ -844,10 +850,10 @@
 			margin: 0 11px 15px;
 		}
 		.sc-nav-containe-box, .mc-nav-containe-box {
-			width: 70%;
+			width: calc( 100% - 400px );
 			position: relative;
 			@media screen and (max-width: $screen-lg) {
-				width: 59%;
+				width: calc( 100% - 400px );
 			}
 			@media all and (max-width: 782px) {
 				width: 100%;
@@ -1245,7 +1251,7 @@
 	
 	.jspPane {
 		position: absolute;
-		overflow: hidden;
+		//overflow: hidden;
 	}
 	
 	.jspVerticalBar, .jspCap, .jspArrow {

@@ -4373,7 +4373,7 @@ input[type="button"].btn-block {
 
 .subsubsub.extend-list-table {
   width: inherit;
-  margin: 10px 20px !important;
+  margin: 10px 0 !important;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -4634,6 +4634,7 @@ input[type="button"].btn-block {
   display: flex;
   border-radius: 0;
   border: 0;
+  width: 400px;
   margin: 0 3px 3px auto !important;
 }
 
@@ -4763,7 +4764,7 @@ input[type="button"].btn-block {
   margin-right: 0;
   border: none;
   box-shadow: none;
-  width: 100%;
+  width: 110px;
 }
 
 @media all and (max-width: 782px) {
@@ -4796,13 +4797,18 @@ input[type="button"].btn-block {
 
 .search-box .input-group-append, p.search-box .input-group-append {
   border: none;
-  min-width: 45%;
   height: 30px;
 }
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
-  width: 130px;
+  width: 100px;
   text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 5px !important;
+  padding-right: 13px !important;
+  font-size: 15px !important;
   border: none;
   background-color: #f8f9fa;
   font-size: 15px;
@@ -4816,7 +4822,7 @@ input[type="button"].btn-block {
   display: inline;
   font-size: 10px;
   position: absolute;
-  right: 10px;
+  right: 2px;
   top: 8px;
 }
 
@@ -5313,13 +5319,13 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-  width: 70%;
+  width: calc( 100% - 400px);
   position: relative;
 }
 
 @media screen and (max-width: 1200px) {
   .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-    width: 59%;
+    width: calc( 100% - 400px);
   }
 }
 
@@ -5770,7 +5776,6 @@ input[type="button"].btn-block {
 
 .atum-table-wrapper .jspPane, #table-container .jspPane {
   position: absolute;
-  overflow: hidden;
 }
 
 .atum-table-wrapper .jspVerticalBar, .atum-table-wrapper .jspCap, .atum-table-wrapper .jspArrow, #table-container .jspVerticalBar, #table-container .jspCap, #table-container .jspArrow {
