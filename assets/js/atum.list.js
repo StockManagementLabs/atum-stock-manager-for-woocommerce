@@ -100,7 +100,9 @@
 				});
 			}
 			$(window).on('load', function() {
-				$('.enhanced').select2();
+				$('.dropdown_product_type').select2({
+					minimumResultsForSearch: 10
+				});
 			});
 			
 			//
@@ -118,26 +120,7 @@
 			//
 			// Add horizontal scroll effect to menu views
 			// ------------------------------------------
-			// this.addHorizontalScrolleffect();
-			
-			$(window).on('resize', function () {
-				// var $nav = document.getElementById('stock_central_nav');
-				// if ($nav.scrollLeft === 0) {
-				// 	$('#scroll-stock_central_nav .overflow-opacity-effect-left').hide();
-				// 	$('#scroll-stock_central_nav .overflow-opacity-effect-right').hide();
-				// }
-				// var $filters = document.getElementById('filters_container');
-				// if ($filters.scrollLeft === 0) {
-				// 	$('#scroll-filters_container .overflow-opacity-effect-left').hide();
-				// 	$('#scroll-filters_container .overflow-opacity-effect-right').hide();
-				// }
-				self.addHorizontalScrolleffect('stock_central_nav', false);
-				self.addHorizontalScrolleffect('filters_container', false);
-			});
-			
-			$('.nav-with-scroll-effect').on('scroll',function () {
-				self.addHorizontalScrolleffect($(this).attr('id'), true);
-			});
+			this.initHorizontalScrolleffect();
 			
 			//
 			// Add input page function
@@ -1625,6 +1608,22 @@
 		reloadAddActiveClassRow: function() {
 			this.addActiveClassRow();
 		},
+		
+		/**
+		 * Init horizontal scroll
+		 */
+		initHorizontalScrolleffect: function() {
+			var self = this;
+			$(window).on('resize', function () {
+				self.addHorizontalScrolleffect('stock_central_nav', false);
+				self.addHorizontalScrolleffect('filters_container', false);
+			});
+			
+			$('.nav-with-scroll-effect').on('scroll',function () {
+				self.addHorizontalScrolleffect($(this).attr('id'), true);
+			});
+			dragscroll.reset();
+		},
 		/**
 		 * Add horizontal scroll effect to menu views
 		 */
@@ -1689,7 +1688,7 @@
 		 * Reload add Horizontal Scroll effect
 		 */
 		reloadAddHorizontalScrolleffect: function() {
-			this.addHorizontalScrolleffect();
+			this.initHorizontalScrolleffect();
 		},
 		
 		/**
@@ -2002,7 +2001,9 @@
 			
 			$('.select2-container--open').remove();
 			$('body').trigger('wc-enhanced-select-init');
-			$('.enhanced').select2();
+			$('.dropdown_product_type').select2({
+				minimumResultsForSearch: 10
+			});
 			
 		},
 		

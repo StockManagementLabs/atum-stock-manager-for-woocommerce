@@ -5556,13 +5556,11 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .reset-filters {
   border-radius: 50%;
-  width: 39px;
-  height: 25px;
   text-align: center;
   border: none;
   background-color: #00B8DB;
   color: #fff;
-  padding: 2px 0 0;
+  padding: 2px 2px 0;
   cursor: pointer;
   z-index: 999;
   margin-left: 10px;
@@ -5573,7 +5571,6 @@ input[type="button"].btn-block {
 
 @media all and (max-width: 480px) {
   .atum-list-wrapper .reset-filters {
-    width: 29px;
     margin-bottom: 15px;
   }
 }

@@ -1029,20 +1029,17 @@
 	
 	.reset-filters {
 		border-radius: 50%;
-		width: 39px;
-		height: 25px;
 		text-align: center;
 		border: none;
 		background-color: $primary;
 		color: $white;
-		padding: 2px 0 0;
+		padding: 2px 2px 0;
 		cursor: pointer;
 		z-index: 999;
 		margin-left: 10px;
 		@include transition(0.2s ease-in-out);
 		
 		@media all and (max-width: $screen-xs) {
-			width: 29px;
 			margin-bottom: 15px;
 		}
 		
