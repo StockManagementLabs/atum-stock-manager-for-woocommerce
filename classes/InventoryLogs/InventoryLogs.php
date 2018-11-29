@@ -199,6 +199,15 @@ class InventoryLogs extends AtumOrderPostType {
 		// Add the Log post to the appropriate Log Type taxonomy.
 		if ( in_array( $log_type, array_keys( Log::get_log_types() ) ) ) {
 			wp_set_object_terms( $log_id, $log_type, self::TAXONOMY );
+			
+			// Update all Log counters.
+			$get_terms_args = array(
+				'taxonomy'   => self::TAXONOMY,
+				'fields'     => 'ids',
+				'hide_empty' => FALSE,
+			);
+			$update_terms   = get_terms( $get_terms_args );
+			wp_update_term_count_now( $update_terms, self::TAXONOMY );
 		}
 
 		// Set the Log description as post content.
