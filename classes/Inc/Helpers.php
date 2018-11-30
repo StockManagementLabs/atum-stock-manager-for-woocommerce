@@ -39,12 +39,12 @@ final class Helpers {
 	 * @param string $taxonomy
 	 *
 	 * @return array term_ids
+	 *
+	 * @deprecated Will be removed once ATUM only supports the new tables.
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
 
 		global $wpdb;
-
-		/* TODO: ADD ANOTHER OPTION IF USING THE NEW TABLES. */
 
 		$query = $wpdb->prepare( "
 			SELECT $wpdb->terms.term_id FROM $wpdb->terms 

@@ -62,8 +62,8 @@ trait SuppliersLegacyTrait {
 			
 			if ( $type_filter ) {
 
-				// SC fathers default taxonomies and ready to override to MC (or others) requirements.
-				$product_taxonomies = apply_filters( 'atum/suppliers/supplier_products_taxonomies', Globals::get_product_types() );
+				// SC parents default taxonomies and ready to override to MC (or others) requirements.
+				$product_taxonomies = apply_filters( 'atum/suppliers/supplier_product_types', Globals::get_product_types() );
 				$term_ids           = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
 
 				$args['tax_query'] = array(
