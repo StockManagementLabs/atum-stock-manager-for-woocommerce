@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || die;
 				<div class="overflow-opacity-effect-left" >
 
 				</div>
-				<nav id="stock_central_nav" class="nav-with-scroll-effect">
+				<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
 					<?php $list->views(); ?>
 				</nav>
 			</div>
@@ -52,7 +52,7 @@ defined( 'ABSPATH' ) || die;
 						</button>
 
 						<div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
-								data-product-title="<?php esc_attr_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
+								data-product-title="<?php esc_attr_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>"
 								data-no-option="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>"
 						></div>
 					</div>

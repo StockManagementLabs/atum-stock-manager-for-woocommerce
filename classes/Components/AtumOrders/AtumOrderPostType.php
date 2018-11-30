@@ -259,7 +259,7 @@ abstract class AtumOrderPostType {
 			// Count all the orders with one of the ATUM Order's statuses.
 			if ( $object_types ) {
 				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
-				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . $this->get_statuses_simple( TRUE ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", $this->get_statuses_simple( TRUE ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
 			}
 
 			// This action is documented in wp-includes/taxonomy.php.
@@ -925,8 +925,10 @@ abstract class AtumOrderPostType {
 
 				wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
 				wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array(), ATUM_VERSION, TRUE );
+				// Dragscroll.
+				wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.js', FALSE, ATUM_VERSION, TRUE );
 				wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
-				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jquery-tiptip', 'jscrollpane' ), ATUM_VERSION, TRUE );
+				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jquery-tiptip', 'jscrollpane', 'dragscroll' ), ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),

@@ -4373,7 +4373,7 @@ input[type="button"].btn-block {
 
 .subsubsub.extend-list-table {
   width: inherit;
-  margin: 10px 20px !important;
+  margin: 10px 0 !important;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -4483,6 +4483,10 @@ input[type="button"].btn-block {
   color: #00B8DB;
 }
 
+.subsubsub.extend-list-table li span a.tips:hover {
+  cursor: pointer;
+}
+
 .subsubsub.extend-list-table li span a.empty {
   color: #adb5bd;
 }
@@ -4548,18 +4552,18 @@ input[type="button"].btn-block {
   }
 }
 
-.subsubsub li {
+.subsubsub:not(.extend-list-table) li {
   color: #fff;
   padding: 20px 0 20px 10px;
   text-transform: uppercase;
 }
 
-.subsubsub li a {
+.subsubsub:not(.extend-list-table) li a {
   color: #adb5bd;
   padding: 0;
 }
 
-.subsubsub li a.current {
+.subsubsub:not(.extend-list-table) li a.current {
   border-radius: 5px;
   background-color: #00B8DB;
   font-size: 16px;
@@ -4569,20 +4573,28 @@ input[type="button"].btn-block {
   color: #fff;
 }
 
-.subsubsub li a.current .count {
+.subsubsub:not(.extend-list-table) li a.current .count {
   color: white;
 }
 
-.subsubsub li a .count {
+.subsubsub:not(.extend-list-table) li a .count {
   font-size: 14px;
   font-weight: normal;
   color: #00B8DB;
 }
 
-.subsubsub li a:active, .subsubsub li a:focus {
+.subsubsub:not(.extend-list-table) li a:active, .subsubsub:not(.extend-list-table) li a:focus {
   border: none;
   outline: none;
   box-shadow: none;
+}
+
+.subsubsub:not(.extend-list-table) li a.tips {
+  color: #00B8DB;
+}
+
+.subsubsub:not(.extend-list-table) li a.tips:hover {
+  cursor: pointer;
 }
 
 .search-box, p.search-box {
@@ -4622,6 +4634,7 @@ input[type="button"].btn-block {
   display: flex;
   border-radius: 0;
   border: 0;
+  width: 400px;
   margin: 0 3px 3px auto !important;
 }
 
@@ -4751,7 +4764,7 @@ input[type="button"].btn-block {
   margin-right: 0;
   border: none;
   box-shadow: none;
-  width: 100%;
+  width: 110px;
 }
 
 @media all and (max-width: 782px) {
@@ -4772,6 +4785,7 @@ input[type="button"].btn-block {
   border-radius: 5px;
   border: solid 1px #e9ecef;
   background-color: #fff;
+  margin-left: 10px;
   flex-wrap: nowrap;
 }
 
@@ -4783,13 +4797,18 @@ input[type="button"].btn-block {
 
 .search-box .input-group-append, p.search-box .input-group-append {
   border: none;
-  min-width: 45%;
   height: 30px;
 }
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
-  width: 130px;
+  width: 100px;
   text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 5px !important;
+  padding-right: 13px !important;
+  font-size: 15px !important;
   border: none;
   background-color: #f8f9fa;
   font-size: 15px;
@@ -4803,7 +4822,7 @@ input[type="button"].btn-block {
   display: inline;
   font-size: 10px;
   position: absolute;
-  right: 10px;
+  right: 2px;
   top: 8px;
 }
 
@@ -5300,13 +5319,13 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-  width: 70%;
+  width: calc( 100% - 400px);
   position: relative;
 }
 
 @media screen and (max-width: 1200px) {
   .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-    width: 59%;
+    width: calc( 100% - 400px);
   }
 }
 
@@ -5356,6 +5375,7 @@ input[type="button"].btn-block {
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
   justify-content: space-between;
+  cursor: grab;
   flex-wrap: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
@@ -5536,16 +5556,14 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .reset-filters {
   border-radius: 50%;
-  width: 39px;
-  height: 25px;
   text-align: center;
   border: none;
   background-color: #00B8DB;
   color: #fff;
-  padding: 2px 0 0;
+  padding: 2px 2px 0;
   cursor: pointer;
   z-index: 999;
-  margin-right: 5px;
+  margin-left: 10px;
   -webkit-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
@@ -5553,7 +5571,6 @@ input[type="button"].btn-block {
 
 @media all and (max-width: 480px) {
   .atum-list-wrapper .reset-filters {
-    width: 29px;
     margin-bottom: 15px;
   }
 }

@@ -99,9 +99,6 @@
 					setTimeout(self.setupSearchColumnDropdown, 500); // performance
 				});
 			}
-			$(window).on('load', function() {
-				$('.enhanced').select2();
-			});
 			
 			//
 			// Setup the URL navigation
@@ -118,7 +115,7 @@
 			//
 			// Add horizontal scroll effect to menu views
 			// ------------------------------------------
-			this.addHorizontalScrolleffect();
+			this.initHorizontalScrolleffect();
 			
 			//
 			// Add input page function
@@ -926,7 +923,7 @@
 				hammertime.on('panright panleft', function (ev) {
 					
 					var paneStartX   = self.jScrollApi.getContentPositionX(),
-					    offset       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
+					    offset       = 10, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
 					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
 					
 					self.jScrollApi.scrollToX( displacement, false)
@@ -946,15 +943,15 @@
 			
 			var self      = this,
 			    positionX = 0;
-			
+
 			if (this.jScrollApi !== null) {
 				positionX = this.jScrollApi.getContentPositionX();
 				this.jScrollApi.destroy();
 				this.jScrollApi = null;
 			}
-			
+
 			this.addScrollBar();
-			
+
 			if (positionX > 0) {
 				// Wait until the scroll bar is re-added to restore the position
 				this.$atumList.on('atum-scroll-bar-loaded', function () {
@@ -1606,36 +1603,65 @@
 		reloadAddActiveClassRow: function() {
 			this.addActiveClassRow();
 		},
+		
+		/**
+		 * Init horizontal scroll
+		 */
+		initHorizontalScrolleffect: function() {
+			var self = this;
+			$(window).on('resize', function () {
+				self.addHorizontalScrolleffect('stock_central_nav', false);
+				self.addHorizontalScrolleffect('filters_container', false);
+			});
+			
+			$('.nav-with-scroll-effect').on('scroll',function () {
+				self.addHorizontalScrolleffect($(this).attr('id'), true);
+			});
+			dragscroll.reset();
+		},
 		/**
 		 * Add horizontal scroll effect to menu views
 		 */
-		addHorizontalScrolleffect: function() {
+		addHorizontalScrolleffect: function(elementId, checkEnhanced) {
+			var self = this;
 			
-			this.addHummerLibraryToNavsAndFilters('stock_central_nav');
-			this.addHummerLibraryToNavsAndFilters('filters_container');
-			
-			$('.nav-with-scroll-effect').bind('scroll',function () {
-				
+			if ( checkEnhanced ) {
 				$('.enhanced').select2("close");
-				
-				var $nav = document.getElementById($(this).attr('id'));
-				var $overflowOpacityEffectRight = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-right');
-				var $overflowOpacityEffectLeft  = $('#scroll-' + $(this).attr('id') + ' .overflow-opacity-effect-left');
-				var $leftMax                    = $nav.scrollWidth;
-				var $left                       = $nav.scrollLeft;
-				var $diff                       = $leftMax - $left;
-				
-				if ($diff === $('#' + $(this).attr('id')).outerWidth())
-				{
-					$overflowOpacityEffectRight.hide();
+			}
+			
+			var $nav = document.getElementById(elementId);
+			var $overflowOpacityEffectRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right');
+			var $overflowOpacityEffectLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left');
+			var $leftMax                    = $nav.scrollWidth;
+			var $left                       = $nav.scrollLeft;
+			var $diff                       = $leftMax - $left;
+			
+			if ($diff === $('#' + elementId).outerWidth())
+			{
+				$overflowOpacityEffectRight.hide();
+			}else {
+				$overflowOpacityEffectRight.show();
+			}
+			
+			if ( $left === 0 ) {
+				$overflowOpacityEffectLeft.hide();
+			}else {
+				$overflowOpacityEffectLeft.show();
+			}
+			
+			if ( $overflowOpacityEffectLeft.is(":visible") || $overflowOpacityEffectRight.is(":visible") ) {
+				$('#' + elementId).css('cursor', 'grab');
+			}else {
+				$('#' + elementId).css('cursor', 'auto');
+			}
+			
+			$('.dragscroll a').on('click mouseover',function(event) {
+				if ($(this).closest('.dragscroll').hasClass('dragging')) {
+					event.preventDefault();
+					self.destroyTooltips();
+					return false;
 				}else {
-					$overflowOpacityEffectRight.show();
-				}
-				
-				if ( $left === 0 ) {
-					$overflowOpacityEffectLeft.hide();
-				}else {
-					$overflowOpacityEffectLeft.show();
+					self.addTooltips();
 				}
 			});
 		},
@@ -1660,33 +1686,10 @@
 		},
 		
 		/**
-		 * Add hammer.js to navs and filters
-		 */
-		addHummerLibraryToNavsAndFilters: function(elementId) {
-			var $nav = document.getElementById(elementId);
-			if ($nav) {
-				var containerScroll = new Hammer($nav);
-				
-				containerScroll.on('panright panleft', function (ev) {
-					var $nav = document.getElementById(elementId);
-					var paneStartX   = $nav.scrollLeft,
-					    offset       = 7,
-					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset;
-					if ( ev.type === 'panright' ) {
-						$nav.scrollLeft = displacement;
-					}else {
-						$nav.scrollLeft = displacement;
-					}
-					
-				});
-			}
-		},
-		
-		/**
 		 * Reload add Horizontal Scroll effect
 		 */
 		reloadAddHorizontalScrolleffect: function() {
-			this.addHorizontalScrolleffect();
+			this.initHorizontalScrolleffect();
 		},
 		
 		/**
@@ -1999,8 +2002,6 @@
 			
 			$('.select2-container--open').remove();
 			$('body').trigger('wc-enhanced-select-init');
-			$('.enhanced').select2();
-			
 		},
 		
 		/**

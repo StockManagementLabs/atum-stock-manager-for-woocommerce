@@ -443,8 +443,17 @@ class PurchaseOrder extends AtumOrderModel {
 				
 				$product = $atum_order_item->get_product();
 				
-				if ( $product ) {
-					$old_stock    = $product->get_stock_quantity();
+				if ( $product && $product->exists() && $product->managing_stock() ) {
+					
+					$old_stock = $product->get_stock_quantity();
+					
+					// if stock is null but WC is managing stock.
+					if ( is_null( $old_stock ) ) {
+						$old_stock = 0;
+						wc_update_product_stock( $product, $old_stock );
+						
+					}
+					
 					$stock_change = apply_filters( 'atum/purchase_orders/po/restore_atum_order_stock_quantity', $atum_order_item->get_quantity(), $item_id );
 					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
 					
