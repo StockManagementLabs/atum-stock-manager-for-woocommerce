@@ -33,15 +33,8 @@ trait AtumDataStoreCommonTrait {
 		$data    = [];
 		$insert  = FALSE;
 		$row     = $this->get_product_row_from_db( $product->get_id() );
-		
-		if ( ! $row ) {
-			$insert = TRUE;
-		}
-		elseif ( empty( $changes ) ) {
-			return;
-		}
-		
-		$columns = apply_filters( 'atum/data_store/columns', array(
+
+		$columns = (array) apply_filters( 'atum/data_store/columns', array(
 			'purchase_price',
 			'supplier_id',
 			'supplier_sku',
@@ -50,24 +43,32 @@ trait AtumDataStoreCommonTrait {
 			'out_stock_threshold',
 			'inheritable',
 		) );
-		
+
 		// Columns data need to be converted to datetime.
-		$date_columns = apply_filters( 'atum/data_store/date_columns', array(
+		$date_columns = (array) apply_filters( 'atum/data_store/date_columns', array(
 			'out_stock_date',
 		) );
-		
+
 		// Switches and/or checkboxes.
-		$yes_no_columns = apply_filters( 'atum/data_store/yes_no_columns', array(
+		$yes_no_columns = (array) apply_filters( 'atum/data_store/yes_no_columns', array(
 			'atum_controlled',
 			'inheritable',
 		) );
-		
+
 		// Values which can be null in the database.
-		$allow_null = apply_filters( 'atum/data_store/allow_null_columns', array(
+		$allow_null = (array) apply_filters( 'atum/data_store/allow_null_columns', array(
 			'purchase_price',
 			'out_stock_date',
 			'out_stock_threshold',
 		) );
+
+		// We should make an insert if the returning row is empty or has none of the ATUM columns.
+		if ( ! $row || empty( array_intersect( array_keys( $row ), $columns ) ) ) {
+			$insert = TRUE;
+		}
+		elseif ( empty( $changes ) ) {
+			return;
+		}
 		
 		foreach ( $columns as $column ) {
 			
