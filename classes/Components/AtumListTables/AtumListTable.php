@@ -334,7 +334,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] ); // WPCS: CSRF ok.
 		$this->query_filters = $this->get_filters_query_string();
 
-		// Filter the table data results to show specific produt types only.
+		// Filter the table data results to show specific product types only.
 		$this->set_product_types_query_data();
 
 		$args = wp_parse_args( $args, array(
