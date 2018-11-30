@@ -99,11 +99,6 @@
 					setTimeout(self.setupSearchColumnDropdown, 500); // performance
 				});
 			}
-			$(window).on('load', function() {
-				$('.dropdown_product_type').select2({
-					minimumResultsForSearch: 10
-				});
-			});
 			
 			//
 			// Setup the URL navigation
@@ -2007,10 +2002,6 @@
 			
 			$('.select2-container--open').remove();
 			$('body').trigger('wc-enhanced-select-init');
-			$('.dropdown_product_type').select2({
-				minimumResultsForSearch: 10
-			});
-			
 		},
 		
 		/**
