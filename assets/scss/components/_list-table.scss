@@ -453,7 +453,10 @@
 			letter-spacing: normal;
 			margin-left: 10px;
 		}
-		
+		&:focus, &:active {
+			border: none;
+			box-shadow: none;
+		}
 	}
 	
 	.input-group {

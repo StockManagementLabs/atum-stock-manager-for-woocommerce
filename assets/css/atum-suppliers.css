@@ -3369,6 +3369,11 @@ h2 .atum-help-tip {
   margin-left: 10px;
 }
 
+.search-box .atum-post-search:focus, .search-box .atum-post-search:active, p.search-box .atum-post-search:focus, p.search-box .atum-post-search:active {
+  border: none;
+  box-shadow: none;
+}
+
 .search-box .input-group, p.search-box .input-group {
   border-radius: 5px;
   border: solid 1px #e9ecef;

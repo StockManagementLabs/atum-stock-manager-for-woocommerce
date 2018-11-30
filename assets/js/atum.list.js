@@ -167,7 +167,6 @@
 			
 			// This event will trigger on the table when the header is floated and unfloated
 			this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
-				
 				if (isFloated) {
 					
 					$floatContainer.css('height', 'auto');
