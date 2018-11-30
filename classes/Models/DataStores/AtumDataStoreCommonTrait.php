@@ -71,7 +71,7 @@ trait AtumDataStoreCommonTrait {
 		
 		foreach ( $columns as $column ) {
 			
-			if ( $insert || array_key_exists( $column, $changes ) ) {
+			if ( ( $insert || array_key_exists( $column, $changes ) ) && is_callable( array( $product, "get_$column" ) ) ) {
 				
 				$value = $product->{"get_$column"}( 'edit' );
 				
