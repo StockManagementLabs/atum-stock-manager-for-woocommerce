@@ -70,30 +70,26 @@ class ProductDataMetaBoxes {
 	 */
 	private function __construct() {
 
-		if ( is_admin() ) {
+		// Add the ATUM Inventory panel and fields.
+		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
+		add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_tab_panel' ) );
+		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_product_variation_data_panel' ), 9, 3 );
 
-			// Add the ATUM Inventory panel and fields.
-			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
-			add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_tab_panel' ) );
-			add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_product_variation_data_panel' ), 9, 3 );
-
-			// Add out_stock_threshold field if required.
-			if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
-				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
-			}
-
-			// Add the supplier's fields to products if allowed.
-			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
-				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
-			}
-
-			// Save the ATUM's product data meta boxes (once WC has saved all its own meta boxes).
-			add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_meta_boxes' ), PHP_INT_MAX, 2 );
-			add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_meta_boxes' ), PHP_INT_MAX, 2 );
-
+		// Add out_stock_threshold field if required.
+		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
 		}
+
+		// Add the supplier's fields to products if allowed.
+		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
+			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
+		}
+
+		// Save the ATUM's product data meta boxes (once WC has saved all its own meta boxes).
+		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_meta_boxes' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_meta_boxes' ), PHP_INT_MAX, 2 );
 
 	}
 
