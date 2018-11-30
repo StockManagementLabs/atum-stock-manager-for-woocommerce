@@ -463,7 +463,7 @@ class Suppliers {
 					$product_types = array_merge( $product_types, Globals::get_child_product_types() );
 				}
 
-				$product_types = (array) apply_filters( 'atum/suppliers/supplier_products_taxonomies', $product_types );
+				$product_types = (array) apply_filters( 'atum/suppliers/supplier_product_types', $product_types );
 
 				$where .= " AND wcp.type IN ('" . implode( "','", $product_types ) . "')";
 

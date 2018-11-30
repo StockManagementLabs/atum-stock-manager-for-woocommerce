@@ -411,12 +411,9 @@ class ListTable extends AtumListTable {
 				'trim_zeros' => TRUE,
 				'currency'   => self::$default_currency,
 			] ) : $sale_price;
-			
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_from = $this->product->get_date_on_sale_from( 'edit' ) && ( $date = $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
 
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_to = $this->product->get_date_on_sale_to( 'edit' ) && ( $date = $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
+			$date_on_sale_from = $this->product->get_date_on_sale_from( 'edit' ) ? date( 'Y-m-d', $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
+			$date_on_sale_to   = $this->product->get_date_on_sale_to( 'edit' ) ? date( 'Y-m-d', $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
 
 			$args = apply_filters( 'atum/stock_central_list/args_sale_price', array(
 				'meta_key'   => 'sale_price',
@@ -429,7 +426,7 @@ class ListTable extends AtumListTable {
 						'name'        => '_sale_price_dates_from',
 						'type'        => 'text',
 						'placeholder' => _x( 'Sale date from...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
-						'value'       => $sale_price_dates_from,
+						'value'       => $date_on_sale_from,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
 						'class'       => 'datepicker from',
@@ -438,7 +435,7 @@ class ListTable extends AtumListTable {
 						'name'        => '_sale_price_dates_to',
 						'type'        => 'text',
 						'placeholder' => _x( 'Sale date to...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
-						'value'       => $sale_price_dates_to,
+						'value'       => $date_on_sale_to,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
 						'class'       => 'datepicker to',

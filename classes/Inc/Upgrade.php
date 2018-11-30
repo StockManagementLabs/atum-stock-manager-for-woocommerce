@@ -368,10 +368,10 @@ class Upgrade {
 			}
 
 			$sql = "
-			CREATE TABLE $product_meta_table (
+				CREATE TABLE $product_meta_table (
 				`product_id` BIGINT(20) NOT NULL,
 		  		`purchase_price` DOUBLE NULL DEFAULT NULL,
-			  	`supplier_id` BIGINT(20) NULL DEFAULT 0,
+			  	`supplier_id` BIGINT(20) NULL DEFAULT NULL,
 			  	`supplier_sku` VARCHAR(100) NULL DEFAULT '',
 			  	`atum_controlled` TINYINT(1) NULL DEFAULT 0,
 			  	`out_stock_date` DATETIME NULL DEFAULT NULL,
@@ -437,45 +437,32 @@ class Upgrade {
 
 			foreach ( $meta_keys_to_migrate as $meta_key => $new_field_name ) {
 
-				// Get the ATUM meta keys only.
-				if ( in_array( $meta_key, array_keys( $meta_keys_to_migrate ) ) ) {
+				switch ( $meta_key ) {
 
-					switch ( $meta_key ) {
+					// Yes/No metas.
+					case '_atum_manage_stock':
+					case '_inheritable':
+						if ( isset( $metas[ $meta_key ] ) ) {
+							$meta_value = 'yes' === $metas[ $meta_key ][0] ? 1 : 0;
+						}
+						else {
+							$meta_value = 0;
+						}
+						break;
 
-						case '_atum_manage_stock':
-							if ( isset( $metas['_atum_manage_stock'] ) ) {
-								$meta_value = 'yes' === $metas['_atum_manage_stock'][0] ? 1 : 0;
-							}
-							else {
-								$meta_value = 0;
-							}
-							break;
+					// Date metas.
+					case '_out_of_stock_date':
+						$meta_value = ( isset( $metas[ $meta_key ] ) && ! empty( $metas[ $meta_key ][0] ) ) ? $metas[ $meta_key ][0] : NULL;
+						break;
 
-						case '_inheritable':
-							if ( isset( $metas['_inheritable'] ) ) {
-								$meta_value = 'yes' === $metas['_inheritable'][0] ? 1 : 0;
-							}
-							else {
-								$meta_value = 0;
-							}
-							break;
-
-						case '_out_of_stock_date':
-							$meta_value = ( isset( $metas[ $meta_key ] ) && ! empty( $metas[ $meta_key ][0] ) ) ? $metas[ $meta_key ][0] : NULL;
-							break;
-
-						case '_purchase_price':
-						case '_supplier':
-						case '_supplier_sku':
-						case '_out_stock_threshold':
-							$meta_value = isset( $metas[ $meta_key ] ) ? $metas[ $meta_key ][0] : NULL;
-							break;
-
-					}
-
-					$new_data[ $new_field_name ] = $meta_value;
+					// Other metas.
+					default:
+						$meta_value = isset( $metas[ $meta_key ] ) ? $metas[ $meta_key ][0] : NULL;
+						break;
 
 				}
+
+				$new_data[ $new_field_name ] = $meta_value;
 
 			}
 
