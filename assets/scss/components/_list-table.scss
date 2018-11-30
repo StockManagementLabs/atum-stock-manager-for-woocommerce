@@ -1179,9 +1179,6 @@
 		
 		.search-box {
 			@include flexbox;
-			//float: none;
-			//margin: auto;
-			//width: 90%;
 			
 			input[type="text"], input[type="number"], button:not(.reset-filters) {
 				height: 30px;
@@ -1784,19 +1781,10 @@ table.wp-list-table {
 				}
 			}
 			td {
-				&._supplier, &.column-_supplier_sku, &.column-calc_type, &.stock-counters,
-				&.stock-negatives, &.calc_sales_last_ndays, &.calc_will_last, &.calc_stock_out_days,
-				&.calc_lost_sales, &.multi-inventory, &.column-status, &.column-type, &.column-wc_order,
-				&.column-actions, &.column-supplier, &.column-expected_date, &.column-date, &.column-total,
-				&.company_code, &.company_phone, &.calc_inbound, &.calc_date_ordered, &.calc_date_expected, &.column-calc_mi_status {
-					color: $gray-600;
-				}
+				color: $gray-600;
 				
-				&.column-_stock, &._out_stock_threshold, &.assigned_to, &.wc_order {
+				.set-meta {
 					color: $blue;
-					a {
-						color: $blue;
-					}
 				}
 				
 				&.column-title, &.atum_order_title {
@@ -2083,9 +2071,7 @@ table.wp-list-table {
 	}
 	
 	.column-calc_stock_indicator {
-		.dashicons {
-			font-size: 1.4em !important;
-		}
+		font-size: 20px;
 	}
 	
 	.atum-title-small {
