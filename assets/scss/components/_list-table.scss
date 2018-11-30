@@ -443,6 +443,7 @@
 		border: none;
 		box-shadow: none;
 		width: 110px;
+		max-width: 110px;
 		@media all and (max-width: 782px) {
 			width: 100%;
 		}
@@ -465,6 +466,7 @@
 		background-color: $white;
 		margin-left: 10px;
 		flex-wrap: nowrap;
+		width: unset;
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
 		}
@@ -1784,6 +1786,13 @@ table.wp-list-table {
 				}
 			}
 			td {
+				
+				&.stock-negatives {
+					&:first-child, &:last-child {
+						border-left: 1px solid $gray-200;
+					}
+				}
+				
 				color: $gray-600;
 				
 				.set-meta {
