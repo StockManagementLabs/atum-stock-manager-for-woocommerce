@@ -1654,6 +1654,12 @@
 				$overflowOpacityEffectLeft.show();
 			}
 			
+			if ( $overflowOpacityEffectLeft.is(":visible") || $overflowOpacityEffectRight.is(":visible") ) {
+				$('#' + elementId).css('cursor', 'grab');
+			}else {
+				$('#' + elementId).css('cursor', 'auto');
+			}
+			
 			$('.dragscroll a').on('click mouseover',function(event) {
 				if ($(this).closest('.dragscroll').hasClass('dragging')) {
 					event.preventDefault();
