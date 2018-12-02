@@ -3315,11 +3315,13 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$supplier_products = array();
-					
-					remove_filter( 'posts_search', array( $this, 'product_search' ), 10);
+
+					remove_filter( 'posts_search', array( $this, 'product_search' ), 10 );
+
 					foreach ( $search_supplier_ids as $supplier_id ) {
 						$supplier_products = array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) );
 					}
+
 					add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
 
 					$supplier_products = array_unique( $supplier_products );
@@ -3707,9 +3709,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param array  $post_in       Optional. If is a search query, get only the children from the filtered products.
 	 * @param string $post_type     Optional. The children post type.
 	 *
-	 * @return array|bool
+	 * @return array
 	 */
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
+
+		$cache_key    = ATUM_PREFIX . "get_children_{$parent_type}_" . implode( '_', $post_in ) . "_$post_type";
+		$cache_group  = ATUM_TEXT_DOMAIN;
+		$children_ids = wp_cache_get( $cache_key, $cache_group );
+
+		if ( FALSE !== $children_ids ) {
+			return $children_ids;
+		}
 
 		/**
 		 * If the site is not using the new tables, use the legacy method
@@ -3718,7 +3728,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
 		if ( ! Helpers::is_using_new_wc_tables() ) {
-			return $this->get_children_legacy( $parent_type, $post_in, $post_type );
+			$children_ids = $this->get_children_legacy( $parent_type, $post_in, $post_type );
+			wp_cache_set( $cache_key, $children_ids, $cache_group, 30 );
+			return $children_ids;
 		}
 
 		global $wpdb;
@@ -3822,6 +3834,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
 				$this->children_products = array_merge( $this->children_products, $children_ids );
+
+				wp_cache_set( $cache_key, $children_ids, $cache_group, 30 );
 
 				return $children_ids;
 

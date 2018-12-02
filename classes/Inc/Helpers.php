@@ -2109,7 +2109,7 @@ final class Helpers {
 
 		$cache_key           = ATUM_PREFIX . "parent_product_type_{$child_id}";
 		$cache_group         = ATUM_TEXT_DOMAIN;
-		$parent_product_type = ! ATUM_DEBUG ? wp_cache_get( $cache_key, $cache_group ) : FALSE;
+		$parent_product_type = wp_cache_get( $cache_key, $cache_group, 30 );
 
 		if ( ! $parent_product_type ) {
 
