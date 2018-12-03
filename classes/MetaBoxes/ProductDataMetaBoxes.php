@@ -328,10 +328,11 @@ class ProductDataMetaBoxes {
 			$field_id      = "variation_purchase_price{$loop}";
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
-
-		$product     = Helpers::get_atum_product( $product_id );
-		$field_value = (float) $product->get_purchase_price();
-		$price       = (float) $product->get_price();
+		
+		$product        = Helpers::get_atum_product( $product_id );
+		$purchase_price = $product->get_purchase_price();
+		$field_value    = '' === $purchase_price ? '' : (float) $purchase_price;
+		$price          = (float) $product->get_price();
 
 		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price', 'variation', 'loop' ) );
 
@@ -348,21 +349,21 @@ class ProductDataMetaBoxes {
 
 		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 		$old_purchase_price = $this->product->get_purchase_price();
-		$new_purchase_price = $old_purchase_price ?: NULL;
+		$new_purchase_price = $old_purchase_price ?: '';
 
 		// Variables, grouped and variations.
 		if ( Helpers::is_inheritable_type( $product_type ) ) {
 
 			if ( $this->is_variation && isset( $_POST[ 'variation' . Globals::PURCHASE_PRICE_KEY ][ $this->loop ] ) ) {
 				$purchase_price     = wc_clean( $_POST[ 'variation' . Globals::PURCHASE_PRICE_KEY ][ $this->loop ] );
-				$new_purchase_price = '' === $purchase_price ? NULL : $purchase_price;
+				$new_purchase_price = '' === $purchase_price ? '' : $purchase_price;
 			}
 
 		}
 		// Rest of product types (Bypass if "_puchase_price" meta is not coming).
 		elseif ( ! $this->is_variation && isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
 			$purchase_price     = wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
-			$new_purchase_price = '' === $purchase_price ? NULL : $purchase_price;
+			$new_purchase_price = '' === $purchase_price ? '' : $purchase_price;
 		}
 
 		$this->product_data['purchase_price'] = $new_purchase_price;

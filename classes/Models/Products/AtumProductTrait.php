@@ -152,7 +152,7 @@ trait AtumProductTrait {
 	 * @param string $purchase_price
 	 */
 	public function set_purchase_price( $purchase_price ) {
-		$this->set_prop( 'purchase_price', wc_format_decimal( $purchase_price ) );
+		$this->set_prop( 'purchase_price', '' === $purchase_price ? '' : wc_format_decimal( $purchase_price ) );
 	}
 
 	/**
@@ -223,7 +223,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', NULL === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'out_stock_threshold', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
