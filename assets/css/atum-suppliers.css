@@ -3191,7 +3191,6 @@ h2 .atum-help-tip {
   display: -ms-flexbox;
   display: flex;
   float: right;
-  padding: 1px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -3220,10 +3219,15 @@ h2 .atum-help-tip {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  justify-content: flex-end;
   border-radius: 0;
   border: 0;
   width: 400px;
-  margin: 0 3px 3px auto !important;
+  margin: 0 0 3px auto !important;
 }
 
 @media all and (max-width: 782px) {
@@ -3380,6 +3384,7 @@ h2 .atum-help-tip {
   border: solid 1px #e9ecef;
   background-color: #fff;
   margin-left: 10px;
+  padding-right: 1px;
   flex-wrap: nowrap;
   width: unset;
 }
@@ -3390,9 +3395,13 @@ h2 .atum-help-tip {
   }
 }
 
+.search-box .input-group input[type=submit], p.search-box .input-group input[type=submit] {
+  height: 29px !important;
+}
+
 .search-box .input-group-append, p.search-box .input-group-append {
   border: none;
-  height: 30px;
+  height: 31px;
 }
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
@@ -3401,9 +3410,10 @@ h2 .atum-help-tip {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  padding-left: 5px !important;
-  padding-right: 13px !important;
+  padding-left: 7px !important;
+  padding-right: 25px !important;
   font-size: 15px !important;
+  line-height: 15px !important;
   border: none;
   background-color: #f8f9fa;
   font-size: 15px;
@@ -3417,7 +3427,7 @@ h2 .atum-help-tip {
   display: inline;
   font-size: 10px;
   position: absolute;
-  right: 2px;
+  right: 10px;
   top: 8px;
 }
 
@@ -3826,11 +3836,13 @@ h2 .atum-help-tip {
 
 .atum-list-wrapper .sticky-columns-button-container button.active, .atum-list-wrapper .sticky-columns-button-container button:hover {
   background-color: #00B8DB;
-  color: white;
+  color: #fff;
+  border-color: #fff;
 }
 
 .atum-list-wrapper .sticky-columns-button-container button:hover {
   background-color: rgba(0, 184, 219, 0.6);
+  border-color: #fff;
 }
 
 @media all and (max-width: 480px) {
