@@ -1370,7 +1370,7 @@ table.wp-list-table {
 		border-top: 1px solid $gray-200;
 		border-bottom: 1px solid $gray-200;
 		
-		th, td {
+		th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory) {
 			border: none;
 		}
 		
@@ -1711,6 +1711,17 @@ table.wp-list-table {
 					}
 				}
 				
+				&.column-calc_returns, &.multi-inventory {
+					border-left: 1px solid $white;
+					border-bottom: none;
+					border-top: none;
+				}
+				&.column-calc_lost_in_post, &.multi-inventory {
+					border-right: 1px solid $white;
+					border-bottom: none;
+					border-top: none;
+				}
+				
 				span {
 					display: inline-block;
 					font-size: 16px;
@@ -1739,7 +1750,7 @@ table.wp-list-table {
 	
 	.cell {
 		&-green {
-			color: $success;
+			color: $success !important;
 		}
 		
 		&-yellow {
@@ -1757,7 +1768,7 @@ table.wp-list-table {
 		}
 		
 		&-blue {
-			color: $primary;
+			color: $primary !important;
 		}
 	}
 	
@@ -1786,12 +1797,6 @@ table.wp-list-table {
 				}
 			}
 			td {
-				
-				&.stock-negatives {
-					&:first-child, &:last-child {
-						border-left: 1px solid $gray-200;
-					}
-				}
 				
 				color: $gray-600;
 				
@@ -1859,6 +1864,17 @@ table.wp-list-table {
 				font-size: 14px;
 				@include transform(rotate(90deg));
 			}
+		}
+		
+		&.column-calc_returns, &.multi-inventory {
+			border-left: 1px solid $gray-200;
+			border-bottom: none;
+			border-top: none;
+		}
+		&.column-calc_lost_in_post, &.multi-inventory {
+			border-right: 1px solid $gray-200;
+			border-bottom: none;
+			border-top: none;
 		}
 		
 		&.column-sku {
