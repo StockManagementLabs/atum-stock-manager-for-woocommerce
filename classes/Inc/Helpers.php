@@ -207,32 +207,47 @@ final class Helpers {
 		
 		return '';
 	}
-
+	
 	/**
 	 * Get a list of all the products used for calculating stats
 	 *
 	 * @since 1.4.1
 	 *
 	 * @param array $args
+	 * @param bool  $remove_variables
 	 *
 	 * @return array
 	 */
-	public static function get_all_products( $args = array() ) {
-
-		$defaults = array(
+	public static function get_all_products( $args = array(), $remove_variables = FALSE ) {
+		
+		$defaults       = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 		);
+		$transient_name = $remove_variables ? 'all_products_no_variables' : 'all_products';
 
 		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
 
-		$product_ids_transient = self::get_transient_identifier( $args, 'all_products' );
+		$product_ids_transient = self::get_transient_identifier( $args, $transient_name );
 		$products              = self::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
 			$products = get_posts( $args );
+			
+			if ( $remove_variables ) {
+				
+				$args = (array) array_merge( $args, array(
+					'post_type' => 'product_variation',
+					'post__in'  => $products,
+					'fields'         => 'id=>parent',
+				) );
+				
+				$variables = array_unique( get_posts( $args ) );
+				$products  = array_diff( $products, $variables );
+			
+			}
 			self::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
 		}
 
