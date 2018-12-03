@@ -133,7 +133,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
-		// Change ATUM setttings menu style.
+		// Change ATUM settings menu style.
 		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
 
 		// Change sticky columns settting.

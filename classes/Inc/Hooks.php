@@ -104,8 +104,15 @@ class Hooks {
 			
 			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
 			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_variation_stock_status' ), 10, 2 );
-			add_action( 'woocommerce_before_product_object_save', array( $this, 'remove_order_stock_status_filter' ), 10, 2 );
-
+			
+			add_action( 'woocommerce_process_product_meta', array( $this, 'add_stock_status_threshold' ), 19 );
+			add_action( 'woocommerce_process_product_meta', array( $this, 'remove_stock_status_threshold' ), 21 );
+			
+			add_action( 'atum/product_data/before_save_product_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
+			add_action( 'atum/product_data/after_save_product_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
+			add_action( 'atum/product_data/before_save_product_variation_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
+			add_action( 'atum/product_data/after_save_product_variation_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
+		
 		}
 
 	}
@@ -528,7 +535,11 @@ class Hooks {
 			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 				
 				$this->stock_threshold = (int) $out_of_stock_threshold;
-				add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+				$this->add_stock_status_threshold();
+				
+				$product->save();
+				
+				$this->remove_stock_status_threshold();
 				
 			}
 			
@@ -558,27 +569,44 @@ class Hooks {
 			// TODO: TEST THIS WITH STOCK DECIMALS.
 			$this->stock_threshold = (int) $out_of_stock_threshold;
 			
-			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+			$this->add_stock_status_threshold();
 
 			$product->save();
-
-			remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+			
+			$this->remove_stock_status_threshold();
 			
 		}
 		
 	}
 	
 	/**
+	 * Add pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced.
+	 *
+	 * We don't need the parameter, so function can be called from various places.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param integer $product_id
+	 */
+	public function add_stock_status_threshold( $product_id = 0 ) {
+		
+		add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+		
+	}
+	
+	/**
 	 * Remove pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced
 	 *
-	 * @since 1.4.15
+	 * We don't need the parameter, so function can be called from various places.
 	 *
-	 * @param \WC_Product       $product
-	 * @param \WC_Data_Store_WP $data_store
+	 * @since 1.5.0
+	 *
+	 * @param integer $product_id
 	 */
-	public function remove_order_stock_status_filter( $product, $data_store ) {
+	public function remove_stock_status_threshold( $product_id = 0 ) {
 		
 		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+		
 	}
 	
 	/**
