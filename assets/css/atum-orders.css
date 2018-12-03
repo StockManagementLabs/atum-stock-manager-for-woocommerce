@@ -4603,6 +4603,7 @@ input[type="button"].btn-block {
   display: -ms-flexbox;
   display: flex;
   float: right;
+  padding: 1px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -4627,6 +4628,7 @@ input[type="button"].btn-block {
 }
 
 .search-box.extend-list-table, p.search-box.extend-list-table {
+  padding: 0;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -4672,6 +4674,7 @@ input[type="button"].btn-block {
 
 .search-box input[type=submit], p.search-box input[type=submit] {
   font-weight: normal;
+  height: 29px;
 }
 
 @media all and (max-width: 782px) {

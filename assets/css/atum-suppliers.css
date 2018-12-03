@@ -3191,6 +3191,7 @@ h2 .atum-help-tip {
   display: -ms-flexbox;
   display: flex;
   float: right;
+  padding: 1px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -3215,6 +3216,7 @@ h2 .atum-help-tip {
 }
 
 .search-box.extend-list-table, p.search-box.extend-list-table {
+  padding: 0;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3260,6 +3262,7 @@ h2 .atum-help-tip {
 
 .search-box input[type=submit], p.search-box input[type=submit] {
   font-weight: normal;
+  height: 29px;
 }
 
 @media all and (max-width: 782px) {

@@ -4829,6 +4829,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   display: -ms-flexbox;
   display: flex;
   float: right;
+  padding: 1px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
@@ -4853,6 +4854,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 .search-box.extend-list-table, p.search-box.extend-list-table {
+  padding: 0;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -4898,6 +4900,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .search-box input[type=submit], p.search-box input[type=submit] {
   font-weight: normal;
+  height: 29px;
 }
 
 @media all and (max-width: 782px) {

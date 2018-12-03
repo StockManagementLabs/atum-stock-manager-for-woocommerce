@@ -324,9 +324,8 @@
 
 .search-box, p.search-box {
 	@include flexbox;
-	//display: none;
 	float: right;
-	//padding: 1px;
+	padding: 1px;
 	@include flex-wrap(nowrap);
 	z-index: 999;
 	float: right;
@@ -338,15 +337,14 @@
 	float: right;
 	
 	@media all and (max-width: 782px) {
-		//float: right;
 		position: inherit;
-		//@include flexbox;
 		height: auto;
 		width: 50%;
 		margin: 0 0 15px 0;
 	}
 	
 	&.extend-list-table {
+		padding: 0;
 		@include flexbox;
 		@include flex-justify-content(flex-end);
 		border-radius: 0;
@@ -377,6 +375,7 @@
 	}
 	input[type=submit] {
 		font-weight: normal;
+		height: 29px;
 		@media all and (max-width: 782px) {
 			margin-bottom: 0;
 		}

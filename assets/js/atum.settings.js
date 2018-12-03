@@ -61,7 +61,7 @@
 			$('.js-switch-menu').on('change', function () {
 				self.changeMenuTheme();
 			});
-
+			
 			// Set the dirty fields
 			this.$form
 				
@@ -139,6 +139,7 @@
 				// Remove the dirty mark if the user tries to save
 				.on('click', 'input[type=submit]', function() {
 					self.$form.find('.dirty').removeClass('dirty');
+					self.$form.find('.form-settings-wrapper').addClass('overlay');
 				})
 				
 				// Script Runner fields
