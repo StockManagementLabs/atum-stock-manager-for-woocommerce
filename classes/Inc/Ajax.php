@@ -133,7 +133,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
-		// Change ATUM setttings menu style.
+		// Change ATUM settings menu style.
 		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
 
 		// Change sticky columns settting.
@@ -2097,23 +2097,25 @@ final class Ajax {
 				if ( Helpers::is_using_new_wc_tables() ) {
 					
 					$stock_success = $wpdb->query( "
-					UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
-	                WHERE stock_quantity IS NULL
-	                AND product_id IN (
-	                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-	                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-	                )
-	            " ); // WPCS: unprepared SQL ok.
+						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
+		                WHERE stock_quantity IS NULL
+		                AND product_id IN (
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                )
+		            " ); // WPCS: unprepared SQL ok.
 				}
 				else {
+
 					$stock_success = $wpdb->query( "
-					UPDATE {$wpdb->postmeta} SET meta_value = '0'
-	                WHERE meta_key = '_stock'
-	                AND post_id IN (
-	                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-	                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-	                )
-	            " ); // WPCS: unprepared SQL ok.
+						UPDATE {$wpdb->postmeta} SET meta_value = '0'
+		                WHERE meta_key = '_stock'
+		                AND post_id IN (
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                )
+		            " ); // WPCS: unprepared SQL ok.
+
 				}
 				
 			}

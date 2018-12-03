@@ -564,6 +564,8 @@ final class WidgetHelpers {
 				),
 			);
 
+			// TODO: 1.5.0.
+
 			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
 			$products_in_stock                 = $products_in_stock->posts;
 			$stock_counters['count_in_stock'] += count( $products_in_stock );

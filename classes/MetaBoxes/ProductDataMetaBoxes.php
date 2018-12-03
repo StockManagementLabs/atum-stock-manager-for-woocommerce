@@ -465,6 +465,8 @@ class ProductDataMetaBoxes {
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
 			return;
 		}
+		
+		do_action( 'atum/product_data/before_save_product_meta_boxes', $product_id, $post );
 
 		$this->product      = Helpers::get_atum_product( $product_id );
 		$this->is_variation = FALSE;
@@ -485,7 +487,9 @@ class ProductDataMetaBoxes {
 	 * @param int $loop
 	 */
 	public function save_product_variation_meta_boxes( $variation_id, $loop ) {
-
+		
+		do_action( 'atum/product_data/before_save_product_variation_meta_boxes', $variation_id, $loop );
+		
 		$this->product = Helpers::get_atum_product( $variation_id );
 		$this->product->set_object_read( TRUE );
 
