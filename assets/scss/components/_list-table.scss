@@ -835,6 +835,10 @@
 			box-shadow: none;
 		}
 		
+		&:disabled {
+			opacity: 1;
+		}
+		
 		@media all and (max-width: 782px) {
 			height: 31px;
 			padding: 0;

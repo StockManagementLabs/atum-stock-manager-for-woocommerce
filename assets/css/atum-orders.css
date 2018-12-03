@@ -5289,6 +5289,10 @@ input[type="button"].btn-block {
   box-shadow: none;
 }
 
+.atum-list-wrapper .search-submit:disabled {
+  opacity: 1;
+}
+
 @media all and (max-width: 782px) {
   .atum-list-wrapper .search-submit {
     height: 31px;
