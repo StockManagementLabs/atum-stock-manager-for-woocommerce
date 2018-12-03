@@ -294,19 +294,26 @@ class Hooks {
 	 */
 	public function record_out_of_stock_date( $product ) {
 
-		if ( in_array( $product->get_type(), Globals::get_product_types() ) ) {
+		// Handle the products managed by WC and from any of the allowed product types.
+		if ( $product->managing_stock() && in_array( $product->get_type(), Globals::get_product_types() ) ) {
 
 			// Reload the product using the ATUM data models.
-			$product        = Helpers::get_atum_product( $product );
-			$current_stock  = $product->get_stock_quantity();
-			$out_stock_date = NULL;
+			$product = Helpers::get_atum_product( $product );
 
-			if ( ! $current_stock ) {
-				$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+			// Do not record the date to products not controlled by ATUM.
+			if ( Helpers::is_atum_controlling_stock( $product ) ) {
+
+				$current_stock  = $product->get_stock_quantity();
+				$out_stock_date = NULL;
+
+				if ( ! $current_stock ) {
+					$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+				}
+
+				$product->set_out_stock_date( $out_stock_date );
+				$product->save_atum_data();
+
 			}
-
-			$product->set_out_stock_date( $out_stock_date );
-			$product->save_atum_data();
 
 			Helpers::delete_transients();
 

@@ -46,7 +46,7 @@ trait AtumDataStoreCustomTableTrait {
 
 		global $wpdb;
 
-		$cache_key = ATUM_PREFIX . "woocommerce_product_{$product_id}";
+		$cache_key = ATUM_PREFIX . "product_data_{$product_id}";
 		$data      = wp_cache_get( $cache_key, 'product' );
 
 		if ( FALSE === $data ) {

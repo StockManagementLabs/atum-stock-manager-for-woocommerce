@@ -154,7 +154,7 @@ trait AtumDataStoreCommonTrait {
 	protected function clear_caches( &$product ) {
 		
 		parent::clear_caches( $product );
-		wp_cache_delete( ATUM_PREFIX . 'woocommerce_product_' . $product->get_id(), 'product' );
+		wp_cache_delete( ATUM_PREFIX . 'product_data_' . $product->get_id(), 'product' );
 	}
 	
 }
