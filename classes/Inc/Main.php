@@ -111,7 +111,7 @@ class Main {
 		add_action( 'init', array( $this, 'add_menu_items' ), 1 );
 
 		// Load front stuff (priority must be higher than 10).
-		add_action( 'init', array( $this, 'load' ), 11 );
+		add_action( 'init', array( $this, 'init' ), 11 );
 
 		// Load ATUM modules.
 		add_action( 'setup_theme', array( $this, 'load_modules' ) );
@@ -124,7 +124,14 @@ class Main {
 	 *
 	 * @since 1.2.0
 	 */
-	public function load() {
+	public function init() {
+
+		$db_version = get_option( ATUM_PREFIX . 'version' );
+
+		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
+			// Do upgrade tasks.
+			new Upgrade( $db_version ?: '0.0.1' );
+		}
 
 		//
 		// Register the Locations taxonomy and link it to products
@@ -155,6 +162,8 @@ class Main {
 
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
+		do_action( 'atum/after_init' );
+
 	}
 	
 	/**
@@ -163,13 +172,6 @@ class Main {
 	 * @since 0.0.3
 	 */
 	public function admin_load() {
-
-		$db_version = get_option( ATUM_PREFIX . 'version' );
-		
-		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
-			// Do upgrade tasks.
-			new Upgrade( $db_version ?: '0.0.1' );
-		}
 
 		// Add the footer text to ATUM pages.
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
