@@ -51,6 +51,8 @@ final class WidgetHelpers {
 	 * }
 	 *
 	 * @return array
+	 *
+	 * @throws \Exception
 	 */
 	public static function get_sales_stats( $atts ) {
 
@@ -222,12 +224,14 @@ final class WidgetHelpers {
 	 * @param array  $types       Optional. An array of stats to get. Possible values: "sales" and/or "lost_sales".
 	 *
 	 * @return array
+	 *
+	 * @throws \Exception
 	 */
 	public static function get_sales_chart_data( $time_window, $types = [ 'sales' ] ) {
 
 		$products = Helpers::get_all_products( array(
 			'post_type' => [ 'product', 'product_variation' ],
-		) );
+		), TRUE );
 
 		$data = $dataset = array();
 
