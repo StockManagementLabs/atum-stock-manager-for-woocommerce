@@ -122,6 +122,39 @@ class Main {
 	}
 
 	/**
+	 * Do pre init tasks
+	 *
+	 * @since 1.3.6
+	 */
+	public function pre_init() {
+
+		// Upgrade if needed.
+		$db_version = get_option( ATUM_PREFIX . 'version' );
+
+		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
+			// Do upgrade tasks.
+			new Upgrade( $db_version ?: '0.0.1' );
+		}
+
+		// Add menu items.
+		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
+
+		foreach ( $this->menu_items as $menu_item ) {
+			$this->menu_items_order[] = array(
+				'slug'       => $menu_item['slug'],
+				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
+			);
+		}
+
+		// The first submenu will be the main (parent) menu too.
+		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
+		self::$main_menu_item = current( self::$main_menu_item );
+
+		do_action( 'atum/after_pre_init' );
+
+	}
+
+	/**
 	 * Initialize the front stuff
 	 * This will execute as a priority 11 within the "init" hook
 	 *
@@ -235,37 +268,6 @@ class Main {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Do pre init tasks
-	 *
-	 * @since 1.3.6
-	 */
-	public function pre_init() {
-		
-		// Upgrade if needed.
-		$db_version = get_option( ATUM_PREFIX . 'version' );
-		
-		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
-			// Do upgrade tasks.
-			new Upgrade( $db_version ?: '0.0.1' );
-		}
-
-		// Add menu items.
-		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
-
-		foreach ( $this->menu_items as $menu_item ) {
-			$this->menu_items_order[] = array(
-				'slug'       => $menu_item['slug'],
-				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
-			);
-		}
-
-		// The first submenu will be the main (parent) menu too.
-		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
-		self::$main_menu_item = current( self::$main_menu_item );
 
 	}
 	
