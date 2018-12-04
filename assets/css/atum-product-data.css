@@ -2563,6 +2563,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   height: auto;
   margin: 0;
   font-size: 0.875rem;
+  border: 1px solid #DDD;
 }
 
 .product_data .atum-field .select2-container .select2-selection--single .select2-selection__rendered {

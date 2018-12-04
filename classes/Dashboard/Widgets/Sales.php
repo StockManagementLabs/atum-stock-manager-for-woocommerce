@@ -60,7 +60,7 @@ class Sales extends AtumWidget {
 		// Get all the products IDs (including variations).
 		$products = Helpers::get_all_products( array(
 			'post_type' => [ 'product', 'product_variation' ],
-		) );
+		), TRUE );
 
 		if ( empty( $products ) ) {
 			return;

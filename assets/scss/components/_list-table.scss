@@ -324,7 +324,6 @@
 
 .search-box, p.search-box {
 	@include flexbox;
-	//display: none;
 	float: right;
 	padding: 1px;
 	@include flex-wrap(nowrap);
@@ -338,20 +337,20 @@
 	float: right;
 	
 	@media all and (max-width: 782px) {
-		//float: right;
 		position: inherit;
-		//@include flexbox;
 		height: auto;
 		width: 50%;
 		margin: 0 0 15px 0;
 	}
 	
 	&.extend-list-table {
+		padding: 0;
 		@include flexbox;
+		@include flex-justify-content(flex-end);
 		border-radius: 0;
 		border: 0;
 		width: 400px;
-		margin: 0 3px 3px auto !important;
+		margin: 0 0 3px auto !important;
 		@media all and (max-width: 782px) {
 			margin: 0 !important;
 			float: none;
@@ -376,6 +375,7 @@
 	}
 	input[type=submit] {
 		font-weight: normal;
+		height: 29px;
 		@media all and (max-width: 782px) {
 			margin-bottom: 0;
 		}
@@ -465,16 +465,20 @@
 		border: solid 1px $gray-200;
 		background-color: $white;
 		margin-left: 10px;
+		padding-right: 1px;
 		flex-wrap: nowrap;
 		width: unset;
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
 		}
+		input[type=submit] {
+			height: 29px !important;
+		}
 	}
 	
 	.input-group-append {
 		border: none;
-		height: 30px;
+		height: 31px;
 	}
 	
 	.dropdown-toggle {
@@ -483,8 +487,8 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
-		padding-left: 5px!important;
-		padding-right: 13px !important;
+		padding-left: 7px!important;
+		padding-right: 25px !important;
 		font-size: 15px!important;
 		&:after {
 			vertical-align: middle;
@@ -493,10 +497,10 @@
 			display: inline;
 			font-size: 10px;
 			position: absolute;
-			right: 2px;
+			right: 10px;
 			top: 8px;
 		}
-		
+		line-height: 15px !important;
 		border: none;
 		background-color: $gray-100;
 		font-size: 15px;
@@ -797,10 +801,12 @@
 			}
 			&.active, &:hover {
 				background-color: $blue;
-				color: white;
+				color: $white;
+				border-color: $white;
 			}
 			&:hover {
 				background-color: rgba($blue, 0.6);
+				border-color: $white;
 			}
 		}
 		@media all and (max-width: $screen-xs-min) {
@@ -827,6 +833,10 @@
 			background-color: $orange;
 			color: $white;
 			box-shadow: none;
+		}
+		
+		&:disabled {
+			opacity: 1;
 		}
 		
 		@media all and (max-width: 782px) {

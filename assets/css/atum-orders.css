@@ -4628,14 +4628,20 @@ input[type="button"].btn-block {
 }
 
 .search-box.extend-list-table, p.search-box.extend-list-table {
+  padding: 0;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  justify-content: flex-end;
   border-radius: 0;
   border: 0;
   width: 400px;
-  margin: 0 3px 3px auto !important;
+  margin: 0 0 3px auto !important;
 }
 
 @media all and (max-width: 782px) {
@@ -4668,6 +4674,7 @@ input[type="button"].btn-block {
 
 .search-box input[type=submit], p.search-box input[type=submit] {
   font-weight: normal;
+  height: 29px;
 }
 
 @media all and (max-width: 782px) {
@@ -4792,6 +4799,7 @@ input[type="button"].btn-block {
   border: solid 1px #e9ecef;
   background-color: #fff;
   margin-left: 10px;
+  padding-right: 1px;
   flex-wrap: nowrap;
   width: unset;
 }
@@ -4802,9 +4810,13 @@ input[type="button"].btn-block {
   }
 }
 
+.search-box .input-group input[type=submit], p.search-box .input-group input[type=submit] {
+  height: 29px !important;
+}
+
 .search-box .input-group-append, p.search-box .input-group-append {
   border: none;
-  height: 30px;
+  height: 31px;
 }
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
@@ -4813,9 +4825,10 @@ input[type="button"].btn-block {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  padding-left: 5px !important;
-  padding-right: 13px !important;
+  padding-left: 7px !important;
+  padding-right: 25px !important;
   font-size: 15px !important;
+  line-height: 15px !important;
   border: none;
   background-color: #f8f9fa;
   font-size: 15px;
@@ -4829,7 +4842,7 @@ input[type="button"].btn-block {
   display: inline;
   font-size: 10px;
   position: absolute;
-  right: 2px;
+  right: 10px;
   top: 8px;
 }
 
@@ -5238,11 +5251,13 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .sticky-columns-button-container button.active, .atum-list-wrapper .sticky-columns-button-container button:hover {
   background-color: #00B8DB;
-  color: white;
+  color: #fff;
+  border-color: #fff;
 }
 
 .atum-list-wrapper .sticky-columns-button-container button:hover {
   background-color: rgba(0, 184, 219, 0.6);
+  border-color: #fff;
 }
 
 @media all and (max-width: 480px) {
@@ -5272,6 +5287,10 @@ input[type="button"].btn-block {
   background-color: #EFAF00;
   color: #fff;
   box-shadow: none;
+}
+
+.atum-list-wrapper .search-submit:disabled {
+  opacity: 1;
 }
 
 @media all and (max-width: 782px) {
