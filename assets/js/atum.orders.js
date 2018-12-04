@@ -87,6 +87,14 @@
 				$('.wp-heading-inline').append($('.page-title-action'));
 				$('.page-title-action').show();
 				
+				// Footer position
+				$(window).on('load', function () {
+					if ( $('.footer-box').hasClass('no-style') ) {
+						$('#wpfooter').css('position', 'relative');
+						$('#wpcontent').css('min-height', '95vh');
+					}
+				});
+				
 			},
 			
 			block: function() {
@@ -868,6 +876,7 @@
 				this.$container.find('[data-toggle="tooltip"]').tooltip({
 					container: 'body'
 				});
+				
 			},
 			
 			toggleExtraFields: function() {

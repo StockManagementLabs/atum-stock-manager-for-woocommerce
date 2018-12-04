@@ -7,6 +7,12 @@ $settings-menu-color:       $white;
 $settings-menu-active:      $white;
 $settings-xs-min:          568px !default;
 
+//#wpfooter {
+//	position: relative;
+//	@include flexbox;
+//	@include flex-align-items(center);
+//	@include flex-justify-content(space-between);
+//}
 #wpbody-content {
 	padding-bottom: 0;
 }
@@ -88,6 +94,7 @@ $settings-xs-min:          568px !default;
 				cursor: default;
 				background-color: $blue-light;
 				color: $blue;
+				border-right: 3px solid $blue;
 				.menu-helper {
 					animation: inherit;
 				}

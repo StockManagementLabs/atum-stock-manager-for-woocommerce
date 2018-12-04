@@ -1202,7 +1202,17 @@
 			        html     : true,
 			        title    : $tipEl.data('tip'),
 			        container: 'body'
-	            });
+		        });
+	        });
+	
+	        $('.select2-selection__rendered').each(function() {
+		        var $tipEl = $(this);
+		
+		        $tipEl.tooltip({
+			        html     : true,
+			        title    : $tipEl.attr('title'),
+			        container: 'body'
+		        });
 	        });
 
 		},
@@ -1212,6 +1222,7 @@
 		 */
 		destroyTooltips: function() {
 			$('.tips').tooltip('destroy');
+			$('.select2-selection__rendered').tooltip('destroy');
 		},
 		
 		/**
@@ -1615,7 +1626,25 @@
 			
 			$('.nav-with-scroll-effect').on('scroll',function () {
 				self.addHorizontalScrolleffect($(this).attr('id'), true);
+				if ($(this).hasClass('dragging')) {
+					self.destroyTooltips();
+				}
 			});
+			
+			$('.select2-selection__rendered').on('mouseout', function () {
+				self.addTooltips();
+			});
+			
+			$('.dragscroll a').on('click mouseover',function(event) {
+				if ($(this).closest('.dragscroll').hasClass('dragging')) {
+					event.preventDefault();
+					self.destroyTooltips();
+					return false;
+				}else {
+					self.addTooltips();
+				}
+			});
+			
 			dragscroll.reset();
 		},
 		/**
@@ -1653,16 +1682,6 @@
 			}else {
 				$('#' + elementId).css('cursor', 'auto');
 			}
-			
-			$('.dragscroll a').on('click mouseover',function(event) {
-				if ($(this).closest('.dragscroll').hasClass('dragging')) {
-					event.preventDefault();
-					self.destroyTooltips();
-					return false;
-				}else {
-					self.addTooltips();
-				}
-			});
 		},
 		/**
 		 * Add input page function

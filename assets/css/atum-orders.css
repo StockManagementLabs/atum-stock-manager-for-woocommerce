@@ -4067,6 +4067,18 @@ input[type="button"].btn-block {
   justify-content: space-between;
 }
 
+#wpfooter .footer-box.no-style {
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  height: auto;
+}
+
+#wpfooter .footer-box.no-style .footer-atum-logo, #wpfooter .footer-box.no-style .footer-atum-buttons, #wpfooter .footer-box.no-style #footer-left, #wpfooter .footer-box.no-style .clear {
+  display: none;
+}
+
 #wpfooter .footer-box .footer-atum-logo {
   display: -webkit-box;
   display: -webkit-flex;
