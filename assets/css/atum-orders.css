@@ -6275,18 +6275,6 @@ table.wp-list-table tbody tr:hover {
   background-color: transparent;
 }
 
-.atum-list-table tr.totals td.column-calc_returns, .atum-list-table tr.totals td.multi-inventory, .atum-list-table tr.totals th.column-calc_returns, .atum-list-table tr.totals th.multi-inventory, .floatThead-container tr.totals td.column-calc_returns, .floatThead-container tr.totals td.multi-inventory, .floatThead-container tr.totals th.column-calc_returns, .floatThead-container tr.totals th.multi-inventory, .inbound-stock-list tr.totals td.column-calc_returns, .inbound-stock-list tr.totals td.multi-inventory, .inbound-stock-list tr.totals th.column-calc_returns, .inbound-stock-list tr.totals th.multi-inventory, .wp-list-table tr.totals td.column-calc_returns, .wp-list-table tr.totals td.multi-inventory, .wp-list-table tr.totals th.column-calc_returns, .wp-list-table tr.totals th.multi-inventory {
-  border-left: 1px solid #fff;
-  border-bottom: none;
-  border-top: none;
-}
-
-.atum-list-table tr.totals td.column-calc_lost_in_post, .atum-list-table tr.totals td.multi-inventory, .atum-list-table tr.totals th.column-calc_lost_in_post, .atum-list-table tr.totals th.multi-inventory, .floatThead-container tr.totals td.column-calc_lost_in_post, .floatThead-container tr.totals td.multi-inventory, .floatThead-container tr.totals th.column-calc_lost_in_post, .floatThead-container tr.totals th.multi-inventory, .inbound-stock-list tr.totals td.column-calc_lost_in_post, .inbound-stock-list tr.totals td.multi-inventory, .inbound-stock-list tr.totals th.column-calc_lost_in_post, .inbound-stock-list tr.totals th.multi-inventory, .wp-list-table tr.totals td.column-calc_lost_in_post, .wp-list-table tr.totals td.multi-inventory, .wp-list-table tr.totals th.column-calc_lost_in_post, .wp-list-table tr.totals th.multi-inventory {
-  border-right: 1px solid #fff;
-  border-bottom: none;
-  border-top: none;
-}
-
 .atum-list-table tr.totals td span, .atum-list-table tr.totals th span, .floatThead-container tr.totals td span, .floatThead-container tr.totals th span, .inbound-stock-list tr.totals td span, .inbound-stock-list tr.totals th span, .wp-list-table tr.totals td span, .wp-list-table tr.totals th span {
   display: inline-block;
   font-size: 16px;
@@ -6348,8 +6336,21 @@ table.wp-list-table tbody tr:hover {
   color: #fff !important;
 }
 
-.atum-list-table tbody tr.expanded.variable td a, .atum-list-table #the-list tr.expanded.variable td a, .floatThead-container tbody tr.expanded.variable td a, .floatThead-container #the-list tr.expanded.variable td a, .inbound-stock-list tbody tr.expanded.variable td a, .inbound-stock-list #the-list tr.expanded.variable td a, .wp-list-table tbody tr.expanded.variable td a, .wp-list-table #the-list tr.expanded.variable td a {
+.atum-list-table tbody tr.expanded.variable td a, .atum-list-table tbody tr.expanded.variable td span, .atum-list-table #the-list tr.expanded.variable td a, .atum-list-table #the-list tr.expanded.variable td span, .floatThead-container tbody tr.expanded.variable td a, .floatThead-container tbody tr.expanded.variable td span, .floatThead-container #the-list tr.expanded.variable td a, .floatThead-container #the-list tr.expanded.variable td span, .inbound-stock-list tbody tr.expanded.variable td a, .inbound-stock-list tbody tr.expanded.variable td span, .inbound-stock-list #the-list tr.expanded.variable td a, .inbound-stock-list #the-list tr.expanded.variable td span, .wp-list-table tbody tr.expanded.variable td a, .wp-list-table tbody tr.expanded.variable td span, .wp-list-table #the-list tr.expanded.variable td a, .wp-list-table #the-list tr.expanded.variable td span {
   color: #fff !important;
+}
+
+.atum-list-table tbody tr.expanded.variable td a:before, .atum-list-table tbody tr.expanded.variable td span:before, .atum-list-table #the-list tr.expanded.variable td a:before, .atum-list-table #the-list tr.expanded.variable td span:before, .floatThead-container tbody tr.expanded.variable td a:before, .floatThead-container tbody tr.expanded.variable td span:before, .floatThead-container #the-list tr.expanded.variable td a:before, .floatThead-container #the-list tr.expanded.variable td span:before, .inbound-stock-list tbody tr.expanded.variable td a:before, .inbound-stock-list tbody tr.expanded.variable td span:before, .inbound-stock-list #the-list tr.expanded.variable td a:before, .inbound-stock-list #the-list tr.expanded.variable td span:before, .wp-list-table tbody tr.expanded.variable td a:before, .wp-list-table tbody tr.expanded.variable td span:before, .wp-list-table #the-list tr.expanded.variable td a:before, .wp-list-table #the-list tr.expanded.variable td span:before {
+  color: #fff !important;
+}
+
+.atum-list-table tbody tr.variable td.column-calc_location a, .atum-list-table #the-list tr.variable td.column-calc_location a, .floatThead-container tbody tr.variable td.column-calc_location a, .floatThead-container #the-list tr.variable td.column-calc_location a, .inbound-stock-list tbody tr.variable td.column-calc_location a, .inbound-stock-list #the-list tr.variable td.column-calc_location a, .wp-list-table tbody tr.variable td.column-calc_location a, .wp-list-table #the-list tr.variable td.column-calc_location a {
+  pointer-events: none;
+}
+
+.atum-list-table tbody tr.variable td.column-calc_location a:before, .atum-list-table #the-list tr.variable td.column-calc_location a:before, .floatThead-container tbody tr.variable td.column-calc_location a:before, .floatThead-container #the-list tr.variable td.column-calc_location a:before, .inbound-stock-list tbody tr.variable td.column-calc_location a:before, .inbound-stock-list #the-list tr.variable td.column-calc_location a:before, .wp-list-table tbody tr.variable td.column-calc_location a:before, .wp-list-table #the-list tr.variable td.column-calc_location a:before {
+  content: '-';
+  color: #6c757d;
 }
 
 .atum-list-table tbody tr td, .atum-list-table #the-list tr td, .floatThead-container tbody tr td, .floatThead-container #the-list tr td, .inbound-stock-list tbody tr td, .inbound-stock-list #the-list tr td, .wp-list-table tbody tr td, .wp-list-table #the-list tr td {
@@ -6420,18 +6421,6 @@ table.wp-list-table tbody tr:hover {
   -o-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
-}
-
-.atum-list-table td.column-calc_returns, .atum-list-table td.multi-inventory, .atum-list-table th.column-calc_returns, .atum-list-table th.multi-inventory, .floatThead-container td.column-calc_returns, .floatThead-container td.multi-inventory, .floatThead-container th.column-calc_returns, .floatThead-container th.multi-inventory, .inbound-stock-list td.column-calc_returns, .inbound-stock-list td.multi-inventory, .inbound-stock-list th.column-calc_returns, .inbound-stock-list th.multi-inventory, .wp-list-table td.column-calc_returns, .wp-list-table td.multi-inventory, .wp-list-table th.column-calc_returns, .wp-list-table th.multi-inventory {
-  border-left: 1px solid #e9ecef;
-  border-bottom: none;
-  border-top: none;
-}
-
-.atum-list-table td.column-calc_lost_in_post, .atum-list-table td.multi-inventory, .atum-list-table th.column-calc_lost_in_post, .atum-list-table th.multi-inventory, .floatThead-container td.column-calc_lost_in_post, .floatThead-container td.multi-inventory, .floatThead-container th.column-calc_lost_in_post, .floatThead-container th.multi-inventory, .inbound-stock-list td.column-calc_lost_in_post, .inbound-stock-list td.multi-inventory, .inbound-stock-list th.column-calc_lost_in_post, .inbound-stock-list th.multi-inventory, .wp-list-table td.column-calc_lost_in_post, .wp-list-table td.multi-inventory, .wp-list-table th.column-calc_lost_in_post, .wp-list-table th.multi-inventory {
-  border-right: 1px solid #e9ecef;
-  border-bottom: none;
-  border-top: none;
 }
 
 .atum-list-table td.column-sku, .atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku, .inbound-stock-list td.column-sku, .inbound-stock-list th.column-sku, .wp-list-table td.column-sku, .wp-list-table th.column-sku {
