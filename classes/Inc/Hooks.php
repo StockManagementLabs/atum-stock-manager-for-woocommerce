@@ -28,7 +28,7 @@ class Hooks {
 	 *
 	 * @var int
 	 */
-	private $stock_threshold;
+	private $stock_threshold = NULL;
 
 	/**
 	 * The singleton instance holder
@@ -506,9 +506,7 @@ class Hooks {
 	 * @return mixed
 	 */
 	public function get_custom_stock_threshold( $pre, $option, $default ) {
-		
 		return is_null( $this->stock_threshold ) ? $pre : $this->stock_threshold;
-		
 	}
 	
 	/**
@@ -525,7 +523,7 @@ class Hooks {
 			// Ensure that is the product uses the ATUM models.
 			$product = Helpers::get_atum_product( $product );
 			
-			unset( $this->stock_threshold );
+			$this->stock_threshold = NULL;
 
 			$product_id             = $product->get_id();
 			$out_of_stock_threshold = $product->get_out_stock_threshold();
@@ -557,7 +555,7 @@ class Hooks {
 	 */
 	public function maybe_change_variation_stock_status( $variation_id, $i ) {
 
-		unset( $this->stock_threshold );
+		$this->stock_threshold = NULL;
 
 		$product                = Helpers::get_atum_product( $variation_id );
 		$out_of_stock_threshold = $product->get_out_stock_threshold();

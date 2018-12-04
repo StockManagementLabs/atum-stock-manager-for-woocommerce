@@ -111,7 +111,7 @@ class Main {
 		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' ); // phpcs:ignore: WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
 
 		// Create menu (priority must be lower than 10).
-		add_action( 'init', array( $this, 'add_menu_items' ), 1 );
+		add_action( 'init', array( $this, 'pre_init' ), 1 );
 
 		// Load front stuff (priority must be higher than 10).
 		add_action( 'init', array( $this, 'init' ), 11 );
@@ -122,19 +122,45 @@ class Main {
 	}
 
 	/**
-	 * Initialize the front stuff
-	 * This will execute as a priority 11 within the "init" hook
+	 * Do pre init tasks
 	 *
-	 * @since 1.2.0
+	 * @since 1.3.6
 	 */
-	public function init() {
+	public function pre_init() {
 
+		// Upgrade if needed.
 		$db_version = get_option( ATUM_PREFIX . 'version' );
 
 		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
 			// Do upgrade tasks.
 			new Upgrade( $db_version ?: '0.0.1' );
 		}
+
+		// Add menu items.
+		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
+
+		foreach ( $this->menu_items as $menu_item ) {
+			$this->menu_items_order[] = array(
+				'slug'       => $menu_item['slug'],
+				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
+			);
+		}
+
+		// The first submenu will be the main (parent) menu too.
+		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
+		self::$main_menu_item = current( self::$main_menu_item );
+
+		do_action( 'atum/after_pre_init' );
+
+	}
+
+	/**
+	 * Initialize the front stuff
+	 * This will execute as a priority 11 within the "init" hook
+	 *
+	 * @since 1.2.0
+	 */
+	public function init() {
 
 		//
 		// Register the Locations taxonomy and link it to products
@@ -242,28 +268,6 @@ class Main {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Add items to the ATUM menu
-	 *
-	 * @since 1.3.6
-	 */
-	public function add_menu_items() {
-
-		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
-
-		foreach ( $this->menu_items as $menu_item ) {
-			$this->menu_items_order[] = array(
-				'slug'       => $menu_item['slug'],
-				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
-			);
-		}
-
-		// The first submenu will be the main (parent) menu too.
-		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
-		self::$main_menu_item = current( self::$main_menu_item );
 
 	}
 	
