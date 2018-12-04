@@ -24,7 +24,7 @@ class POItem extends AtumOrderItemModel {
 	 *
 	 * @var string
 	 */
-	protected $cache_key = 'po-items';
+	protected $cache_key = 'po-item';
 
 	/**
 	 * LogItem constructor

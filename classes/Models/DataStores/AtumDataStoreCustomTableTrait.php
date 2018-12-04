@@ -14,6 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
 
 trait AtumDataStoreCustomTableTrait {
@@ -46,8 +47,8 @@ trait AtumDataStoreCustomTableTrait {
 
 		global $wpdb;
 
-		$cache_key = ATUM_PREFIX . "product_data_{$product_id}";
-		$data      = wp_cache_get( $cache_key, 'product' );
+		$cache_key = AtumCache::get_cache_key( 'product_data', $product_id );
+		$data      = AtumCache::get_cache( $cache_key );
 
 		if ( FALSE === $data ) {
 
@@ -60,7 +61,7 @@ trait AtumDataStoreCustomTableTrait {
 
 			if ( ! empty( $atum_data ) ) {
 				$data = array_merge( $data, $atum_data );
-				wp_cache_set( $cache_key, $data, 'product' );
+				AtumCache::set_cache( $cache_key, $data );
 			}
 
 		}

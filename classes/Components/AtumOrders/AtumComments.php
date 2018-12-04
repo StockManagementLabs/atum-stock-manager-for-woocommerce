@@ -14,6 +14,8 @@ namespace Atum\Components\AtumOrders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
+
 
 class AtumComments {
 
@@ -99,9 +101,11 @@ class AtumComments {
 
 		if ( 0 === $post_id ) {
 
-			$stats = get_transient( ATUM_PREFIX . 'count_comments' );
+			$comments_transient = AtumCache::get_transient_key( 'count_comments' );
+			$stats              = AtumCache::get_transient( $comments_transient );
 
 			if ( ! $stats ) {
+
 				$stats = array();
 
 				// *** The 'log_note' is deprecated and could be deleted in future versions ***
@@ -144,7 +148,8 @@ class AtumComments {
 				}
 
 				$stats = (object) $stats;
-				set_transient( ATUM_PREFIX . 'count_comments', $stats );
+				AtumCache::set_transient( $comments_transient, $stats );
+
 			}
 		}
 

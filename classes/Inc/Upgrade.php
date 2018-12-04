@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumLogs\AtumLogs;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
@@ -44,7 +45,7 @@ class Upgrade {
 		$this->current_atum_version = $db_version;
 
 		// Delete transients if there after every version change.
-		Helpers::delete_transients();
+		AtumCache::delete_transients();
 
 		/************************
 		 * UPGRADE ACTIONS START

@@ -14,6 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
 
 
@@ -53,16 +54,16 @@ trait AtumDataStoreCPTTrait {
 		
 		global $wpdb;
 
-		$cache_key = ATUM_PREFIX . "product_data_{$product_id}";
-		$atum_data = wp_cache_get( $cache_key, 'product' );
+		$cache_key = AtumCache::get_cache_key( 'product_data', $product_id );
+		$atum_data = AtumCache::get_cache( $cache_key );
 		
 		if ( FALSE === $atum_data ) {
 			
 			// Get the extra ATUM data for the product.
 			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: unprepared SQL ok.
-			
-			wp_cache_set( $cache_key, $atum_data, 'product' );
+
+			AtumCache::set_cache( $cache_key, $atum_data );
 			
 		}
 		

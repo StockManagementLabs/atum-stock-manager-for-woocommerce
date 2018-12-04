@@ -15,6 +15,7 @@ namespace Atum\Legacy;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -315,8 +316,8 @@ trait ListTableLegacyTrait {
 		unset( $args['paged'] );
 
 		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERALLY TO AVOID REPETITIVE WORK.
-		$all_transient = Helpers::get_transient_identifier( $args, 'list_table_all' );
-		$products      = Helpers::get_transient( $all_transient );
+		$all_transient = AtumCache::get_transient_key( 'list_table_all', $args );
+		$products      = AtumCache::get_transient( $all_transient );
 
 		if ( ! $products ) {
 
@@ -330,7 +331,7 @@ trait ListTableLegacyTrait {
 			$products = $wp_query->posts;
 
 			// Save it as a transient to improve the performance.
-			Helpers::set_transient( $all_transient, $products );
+			AtumCache::set_transient( $all_transient, $products );
 
 		}
 
@@ -480,13 +481,13 @@ trait ListTableLegacyTrait {
 				'post__in'       => $products,
 			);
 
-			$in_stock_transient = Helpers::get_transient_identifier( $in_stock_args, 'list_table_in_stock' );
-			$products_in_stock  = Helpers::get_transient( $in_stock_transient );
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', $in_stock_args );
+			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
 			if ( empty( $products_in_stock ) ) {
 				// As this query does not contain ATUM params, doesn't need the filters.
 				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $in_stock_args ) );
-				Helpers::set_transient( $in_stock_transient, $products_in_stock );
+				AtumCache::set_transient( $in_stock_transient, $products_in_stock );
 			}
 
 			$products_in_stock = $products_in_stock->posts;
@@ -522,13 +523,13 @@ trait ListTableLegacyTrait {
 				'post__in'       => $products_not_stock,
 			);
 
-			$back_order_transient = Helpers::get_transient_identifier( $back_order_args, 'list_table_back_order' );
-			$products_back_order  = Helpers::get_transient( $back_order_transient );
+			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', $back_order_args );
+			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 
 			if ( empty( $products_back_order ) ) {
 				// As this query does not contain ATUM params, doesn't need the filters.
 				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
-				Helpers::set_transient( $back_order_transient, $products_back_order );
+				AtumCache::set_transient( $back_order_transient, $products_back_order );
 			}
 
 			$products_back_order = $products_back_order->posts;
@@ -548,8 +549,8 @@ trait ListTableLegacyTrait {
 			 */
 			if ( $this->count_views['count_in_stock'] ) {
 
-				$low_stock_transient = Helpers::get_transient_identifier( $args, 'list_table_low_stock' );
-				$products_low_stock  = Helpers::get_transient( $low_stock_transient );
+				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', $args );
+				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
 
 				if ( empty( $products_low_stock ) ) {
 
@@ -581,7 +582,7 @@ trait ListTableLegacyTrait {
 
 					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
-					Helpers::set_transient( $low_stock_transient, $products_low_stock );
+					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
 
 				}
 
