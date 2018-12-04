@@ -14,6 +14,7 @@ namespace Atum\Components\AtumListTables;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
@@ -2220,8 +2221,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		unset( $args['paged'] );
 
 		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERICALLY TO AVOID REPETITIVE WORK.
-		$all_transient = Helpers::get_transient_identifier( $args, 'list_table_all' );
-		$products      = Helpers::get_transient( $all_transient );
+		$all_transient = AtumCache::get_transient_key( 'list_table_all', $args );
+		$products      = AtumCache::get_transient( $all_transient );
 
 		if ( ! $products ) {
 
@@ -2235,7 +2236,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$products = $wp_query->posts;
 
 			// Save it as a transient to improve the performance.
-			Helpers::set_transient( $all_transient, $products );
+			AtumCache::set_transient( $all_transient, $products );
 
 		}
 
@@ -2390,8 +2391,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				'compare' => '>',
 			);
 
-			$in_stock_transient = Helpers::get_transient_identifier( $in_stock_args, 'list_table_in_stock' );
-			$products_in_stock  = Helpers::get_transient( $in_stock_transient );
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', $in_stock_args );
+			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
 			if ( empty( $products_in_stock ) ) {
 
@@ -2400,7 +2401,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $in_stock_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 
-				Helpers::set_transient( $in_stock_transient, $products_in_stock );
+				AtumCache::set_transient( $in_stock_transient, $products_in_stock );
 
 			}
 
@@ -2441,8 +2442,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				'compare' => '<=',
 			);
 
-			$back_order_transient = Helpers::get_transient_identifier( $back_order_args, 'list_table_back_order' );
-			$products_back_order  = Helpers::get_transient( $back_order_transient );
+			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', $back_order_args );
+			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 
 			if ( empty( $products_back_order ) ) {
 
@@ -2451,7 +2452,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 
-				Helpers::set_transient( $back_order_transient, $products_back_order );
+				AtumCache::set_transient( $back_order_transient, $products_back_order );
 
 			}
 
@@ -2473,8 +2474,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			 */
 			if ( $this->count_views['count_in_stock'] ) {
 
-				$low_stock_transient = Helpers::get_transient_identifier( $args, 'list_table_low_stock' );
-				$products_low_stock  = Helpers::get_transient( $low_stock_transient );
+				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', $args );
+				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
 
 				if ( empty( $products_low_stock ) ) {
 
@@ -2518,7 +2519,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
-					Helpers::set_transient( $low_stock_transient, $products_low_stock );
+					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
 
 				}
 
@@ -3713,9 +3714,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
-		$cache_key    = ATUM_PREFIX . "get_children_{$parent_type}_" . implode( '_', $post_in ) . "_$post_type";
-		$cache_group  = ATUM_TEXT_DOMAIN;
-		$children_ids = wp_cache_get( $cache_key, $cache_group );
+		$cache_key    = AtumCache::get_cache_key( 'get_children', [ $parent_type, $post_in, $post_type ] );
+		$children_ids = AtumCache::get_cache( $cache_key );
 
 		if ( FALSE !== $children_ids ) {
 			return $children_ids;
@@ -3729,7 +3729,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 */
 		if ( ! Helpers::is_using_new_wc_tables() ) {
 			$children_ids = $this->get_children_legacy( $parent_type, $post_in, $post_type );
-			wp_cache_set( $cache_key, $children_ids, $cache_group, 30 );
+			AtumCache::set_cache( $cache_key, $children_ids );
 			return $children_ids;
 		}
 
@@ -3835,7 +3835,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
 				$this->children_products = array_merge( $this->children_products, $children_ids );
 
-				wp_cache_set( $cache_key, $children_ids, $cache_group, 30 );
+				AtumCache::set_cache( $cache_key );
 
 				return $children_ids;
 

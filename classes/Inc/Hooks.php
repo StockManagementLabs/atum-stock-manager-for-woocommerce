@@ -12,6 +12,7 @@
 
 namespace Atum\Inc;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Settings\Settings;
 
@@ -323,7 +324,7 @@ class Hooks {
 
 			}
 
-			Helpers::delete_transients();
+			AtumCache::delete_transients();
 
 		}
 
@@ -337,7 +338,7 @@ class Hooks {
 	 * @param \WC_Product $product   The product.
 	 */
 	public function delete_transients( $product ) {
-		Helpers::delete_transients();
+		AtumCache::delete_transients();
 		
 	}
 

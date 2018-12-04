@@ -14,10 +14,10 @@ namespace Atum\StockCentral\Lists;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
@@ -827,8 +827,8 @@ class ListTable extends AtumListTable {
 		$extra_filter = esc_attr( $_REQUEST['extra_filter'] ); // WPCS: CSRF ok.
 		$sorted       = FALSE;
 
-		$extra_filter_transient = Helpers::get_transient_identifier( $extra_filter, 'list_table_extra_filter' );
-		$filtered_products      = Helpers::get_transient( $extra_filter_transient );
+		$extra_filter_transient = AtumCache::get_transient_key( 'list_table_extra_filter', $extra_filter );
+		$filtered_products      = AtumCache::get_transient( $extra_filter_transient );
 
 		if ( empty( $filtered_products ) ) {
 
@@ -1003,7 +1003,7 @@ class ListTable extends AtumListTable {
 			}
 
 			// Set the transient to expire in 60 seconds.
-			Helpers::set_transient( $extra_filter_transient, $filtered_products, 60 );
+			AtumCache::set_transient( $extra_filter_transient, $filtered_products, 60 );
 
 		}
 

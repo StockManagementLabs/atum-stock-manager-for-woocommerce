@@ -14,6 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
 
 trait AtumDataStoreCommonTrait {
@@ -152,9 +153,9 @@ trait AtumDataStoreCommonTrait {
 	 * @param \WC_Product $product The product object.
 	 */
 	protected function clear_caches( &$product ) {
-		
 		parent::clear_caches( $product );
-		wp_cache_delete( ATUM_PREFIX . 'product_data_' . $product->get_id(), 'product' );
+		$cache_key = AtumCache::get_cache_key( 'product_data', $product->get_id() );
+		AtumCache::delete_cache( $cache_key );
 	}
 	
 }

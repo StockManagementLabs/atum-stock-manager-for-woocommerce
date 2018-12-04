@@ -14,6 +14,7 @@ namespace Atum\Components\AtumOrders\Models;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -21,7 +22,6 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
 
@@ -147,9 +147,8 @@ abstract class AtumOrderModel {
 	public function read_items( $type = '' ) {
 
 		// Get from cache if available.
-		$cache_key   = "{$this->cache_key}-{$this->id}";
-		$cache_group = $this->post->post_type;
-		$items       = wp_cache_get( $cache_key, $cache_group );
+		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+		$items     = AtumCache::get_cache( $cache_key );
 
 		if ( FALSE === $items ) {
 
@@ -159,7 +158,7 @@ abstract class AtumOrderModel {
 				return;
 			}
 
-			wp_cache_set( $cache_key, $items, $cache_group, 20 );
+			AtumCache::set_cache( $cache_key, $items );
 
 		}
 
@@ -1456,9 +1455,9 @@ abstract class AtumOrderModel {
 	protected function clear_caches() {
 
 		clean_post_cache( $this->id );
-		$cache_key   = "{$this->cache_key}-{$this->id}";
-		$cache_group = $this->post->post_type;
-		wp_cache_delete( $cache_key, $cache_group );
+		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+		AtumCache::delete_cache( $cache_key );
+
 	}
 
 	/**

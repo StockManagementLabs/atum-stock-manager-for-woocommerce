@@ -66,6 +66,9 @@ class Main {
 	 * @since 0.0.1
 	 */
 	private function __construct() {
+
+		// Make the ATUM cache group, non persistent.
+		wp_cache_add_non_persistent_groups( ATUM_TEXT_DOMAIN );
 		
 		if ( is_admin() ) {
 			$this->main_admin_hooks();

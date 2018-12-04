@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
@@ -228,12 +229,12 @@ final class Helpers {
 
 		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
 
-		$product_ids_transient = self::get_transient_identifier( $args, 'all_products' );
-		$products              = self::get_transient( $product_ids_transient );
+		$product_ids_transient = AtumCache::get_transient_key( 'all_products', $args );
+		$products              = AtumCache::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
 			$products = get_posts( $args );
-			self::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
+			AtumCache::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
 		}
 
 		return $products;
@@ -808,83 +809,7 @@ final class Helpers {
 
 	}
 	
-	/**
-	 * Set a transient adding ATUM stuff to unequivocal identify it
-	 *
-	 * @since 0.0.2
-	 *
-	 * @param string $transient_id  Transient identifier.
-	 * @param mixed  $value         Value to store.
-	 * @param int    $expiration    Optional. Time until expiration in seconds. By default is set to 0 (does not expire).
-	 * @param bool   $force         Optional. If set to TRUE, will set the transient in debug mode too.
-	 *
-	 * @return bool  FALSE if value was not set and TRUE if value was set
-	 */
-	public static function set_transient( $transient_id, $value, $expiration = 0, $force = FALSE ) {
-		
-		return ( $force || TRUE !== ATUM_DEBUG ) ? set_transient( $transient_id, $value, $expiration ) : FALSE;
-	}
 
-	/**
-	 * Get a transient adding ATUM stuff to unequivocal identify it
-	 *
-	 * @since 0.0.2
-	 *
-	 * @param string $transient_id  Transient identifier.
-	 * @param bool   $force         Optional. If set to TRUE, will get the transient in debug mode too.
-	 *
-	 * @return mixed|bool  The ATUM transient value or FALSE if the transient does not exist or debug mode is on
-	 */
-	public static function get_transient( $transient_id, $force = FALSE ) {
-
-		return ( $force || TRUE !== ATUM_DEBUG ) ? get_transient( $transient_id ) : FALSE;
-	}
-
-	/**
-	 * Get md5 hash of a array of args to create unique transient identifier
-	 *
-	 * @since 0.0.3
-	 *
-	 * @param array  $args      Optional. The args to hash.
-	 * @param string $prefix    Optional. The transient name prefix.
-	 *
-	 * @return string
-	 */
-	public static function get_transient_identifier( $args = array(), $prefix = '' ) {
-
-		$transient_id = ( empty( $prefix ) || 0 !== strpos( $prefix, ATUM_PREFIX ) ) ? ATUM_PREFIX . $prefix : $prefix;
-
-		if ( ! empty( $args ) ) {
-
-			if ( '_' !== substr( $transient_id, -1, 1 ) ) {
-				$transient_id .= '_';
-			}
-
-			$transient_id .= md5( maybe_serialize( $args ) );
-
-		}
-
-		return $transient_id;
-	}
-
-	/**
-	 * Delete all the ATUM transients
-	 *
-	 * @since 0.1.5
-	 *
-	 * @param string $type  Optional. If specified will remove specific type of ATUM transients.
-	 *
-	 * @return int|bool The number of transients deleted on success or false on error
-	 */
-	public static function delete_transients( $type = '' ) {
-
-		global $wpdb;
-
-		$type         = esc_attr( $type );
-		$transient_id = $type ?: ATUM_PREFIX;
-
-		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '_transient_{$transient_id}%'" ); // WPCS: unprepared SQL ok.
-	}
 	
 	/**
 	 * Display the template for the given view
@@ -2107,9 +2032,8 @@ final class Helpers {
 	 */
 	public static function read_parent_product_type( $child_id ) {
 
-		$cache_key           = ATUM_PREFIX . "parent_product_type_{$child_id}";
-		$cache_group         = ATUM_TEXT_DOMAIN;
-		$parent_product_type = wp_cache_get( $cache_key, $cache_group, 30 );
+		$cache_key           = AtumCache::get_cache_key( 'parent_product_type', $child_id );
+		$parent_product_type = AtumCache::get_cache( $cache_key );
 
 		if ( ! $parent_product_type ) {
 
@@ -2140,7 +2064,7 @@ final class Helpers {
 			}
 
 			if ( $parent_product_type ) {
-				wp_cache_set( $cache_key, $parent_product_type, $cache_group, 20 );
+				AtumCache::set_cache( $cache_key, $parent_product_type );
 			}
 
 		}
