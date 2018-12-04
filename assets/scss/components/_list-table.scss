@@ -1721,17 +1721,6 @@ table.wp-list-table {
 					}
 				}
 				
-				&.column-calc_returns, &.multi-inventory {
-					border-left: 1px solid $white;
-					border-bottom: none;
-					border-top: none;
-				}
-				&.column-calc_lost_in_post, &.multi-inventory {
-					border-right: 1px solid $white;
-					border-bottom: none;
-					border-top: none;
-				}
-				
 				span {
 					display: inline-block;
 					font-size: 16px;
@@ -1800,12 +1789,30 @@ table.wp-list-table {
 				&.variable {
 					td {
 						color: $white !important;
-						a {
+						a, span {
 							color: $white !important;
+							&:before {
+								color: $white !important;
+							}
 						}
 					}
 				}
 			}
+			
+			&.variable {
+				td {
+					&.column-calc_location {
+						a {
+							pointer-events: none;
+							&:before {
+								content: '-';
+								color: $gray-600;
+							}
+						}
+					}
+				}
+			}
+			
 			td {
 				
 				color: $gray-600;
@@ -1874,17 +1881,6 @@ table.wp-list-table {
 				font-size: 14px;
 				@include transform(rotate(90deg));
 			}
-		}
-		
-		&.column-calc_returns, &.multi-inventory {
-			border-left: 1px solid $gray-200;
-			border-bottom: none;
-			border-top: none;
-		}
-		&.column-calc_lost_in_post, &.multi-inventory {
-			border-right: 1px solid $gray-200;
-			border-bottom: none;
-			border-top: none;
 		}
 		
 		&.column-sku {
