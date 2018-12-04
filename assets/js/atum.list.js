@@ -1660,8 +1660,8 @@
 			var $nav = document.getElementById(elementId);
 			var $overflowOpacityEffectRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right');
 			var $overflowOpacityEffectLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left');
-			var $leftMax                    = $nav.scrollWidth;
-			var $left                       = $nav.scrollLeft;
+			var $leftMax                    = $nav ? $nav.scrollWidth : 0;
+			var $left                       = $nav ? $nav.scrollLeft : 0;
 			var $diff                       = $leftMax - $left;
 			
 			if ($diff === $('#' + elementId).outerWidth())
