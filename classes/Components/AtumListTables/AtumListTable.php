@@ -3835,7 +3835,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
 				$this->children_products = array_merge( $this->children_products, $children_ids );
 
-				AtumCache::set_cache( $cache_key );
+				AtumCache::set_cache( $cache_key, $children_ids );
 
 				return $children_ids;
 
