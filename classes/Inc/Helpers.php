@@ -1462,7 +1462,7 @@ final class Helpers {
 	 */
 	public static function get_atum_order_post_type_statuses( $post_type, $remove_finished = FALSE ) {
 		
-		// TODO: Modify to allow options to add simple "get_atum_order_post_type_statuses_simpl" functionality and prefix.
+		// TODO: Modify to allow options to add simple "get_atum_order_post_type_statuses_simple" functionality and prefix.
 		$statuses = [];
 		
 		switch ( $post_type ) {
