@@ -4689,7 +4689,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 #atum-settings .section-title #atum-settings .section-fields {
-  padding: 0px 20px 1px 25px;
+  padding: 0px 20px 120px 25px;
   background-color: #3b3d5a;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -5314,7 +5314,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 #atum-settings .section-fields {
-  padding: 0px 20px 1px 25px;
+  padding: 0px 20px 120px 25px;
   background-color: #3b3d5a;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
