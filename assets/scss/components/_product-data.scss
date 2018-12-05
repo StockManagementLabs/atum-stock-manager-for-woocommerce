@@ -55,10 +55,15 @@
 		
 		.select2-container, .select2-selection--single, .select2-selection__rendered {
 			font-size: 14px !important;
+			color: $wp-gray-dark !important;
 			&:focus {
 				box-shadow: none;
 				outline: none;
 			}
+		}
+		
+		.select2-selection__rendered {
+			padding-left: 5px !important;
 		}
 		
 		.select2-container {
@@ -73,6 +78,10 @@
 				
 				.select2-selection__rendered {
 					line-height: 1.8;
+				}
+				
+				.select2-selection__clear {
+					padding-right: 10px;
 				}
 				
 				.select2-selection__arrow {
