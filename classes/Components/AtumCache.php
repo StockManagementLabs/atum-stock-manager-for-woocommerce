@@ -43,8 +43,11 @@ final class AtumCache {
 			$args = (array) $args;
 		}
 		
-		$args = array_map( 'strval', $args );
-
+		array_walk_recursive( $args, function ( &$item, $key ) {
+			
+			$item = (string) $item;
+		} );
+		
 		return self::prepare_key( $name, $args );
 
 	}
