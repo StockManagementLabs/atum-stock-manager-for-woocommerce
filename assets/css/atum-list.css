@@ -4546,7 +4546,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   }
 }
 
-.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit) {
+.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
   border-radius: 5px;
   background-color: #EFAF00;
   font-size: 12px;
@@ -4560,14 +4560,14 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   height: 31px;
 }
 
-.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit).active {
+.wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
   background-color: rgba(239, 175, 0, 0.6);
   color: #fff;
   border: none;
 }
 
 @media all and (max-width: 782px) {
-  .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit) {
+  .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
     min-width: inherit;
   }
 }

@@ -106,7 +106,7 @@
 		
 	}
 	
-	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit) {
+	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
 		
 		border-radius: 5px;
 		background-color: $orange;
