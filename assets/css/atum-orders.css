@@ -6842,6 +6842,10 @@ img.tips {
   border-left-color: #fff;
 }
 
+.swal2-in #tiptip_holder {
+  z-index: 100000001;
+}
+
 #tiptip_content {
   color: #6c757d;
   font-size: 0.8em;
