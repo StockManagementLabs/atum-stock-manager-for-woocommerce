@@ -42,6 +42,8 @@ final class AtumCache {
 		if ( ! is_array( $args ) ) {
 			$args = (array) $args;
 		}
+		
+		$args = array_map( 'strval', $args );
 
 		return self::prepare_key( $name, $args );
 
