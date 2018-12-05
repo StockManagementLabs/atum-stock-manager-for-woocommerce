@@ -656,7 +656,7 @@ class Wpml {
 	}
 	
 	/**
-	 * Get the original product id from a translation
+	 * Get the original product id from a translation, . If there are not translations, it's the original one
 	 *
 	 * @since 1.4.1
 	 *
@@ -685,7 +685,7 @@ class Wpml {
 			
 			$results = $wpdb->get_col( $str_sql ); // WPCS: unprepared SQL ok.
 			
-			$results = $results ?: array( 0 );
+			$results = $results ?: $product_id;
 			
 		}
 		
