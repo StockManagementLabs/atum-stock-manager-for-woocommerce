@@ -4131,6 +4131,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 #wpfooter {
   position: inherit;
   padding-top: 0;
+  display: none;
 }
 
 #wpfooter .footer-box {

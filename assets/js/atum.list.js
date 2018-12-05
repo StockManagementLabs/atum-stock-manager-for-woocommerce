@@ -100,6 +100,11 @@
 				});
 			}
 			
+			// Footer position
+			$(window).on('load', function () {
+				$('#wpfooter').show();
+			});
+			
 			//
 			// Setup the URL navigation
 			// -------------------------

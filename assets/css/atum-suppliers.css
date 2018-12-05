@@ -2307,6 +2307,7 @@ input[type="button"].btn-block {
 #wpfooter {
   position: inherit;
   padding-top: 0;
+  display: none;
 }
 
 #wpfooter .footer-box {

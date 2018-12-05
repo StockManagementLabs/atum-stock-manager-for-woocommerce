@@ -3130,6 +3130,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 #wpfooter {
   position: inherit;
   padding-top: 0;
+  display: none;
 }
 
 #wpfooter .footer-box {
@@ -3324,6 +3325,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   position: relative;
   min-width: 230px;
   box-shadow: 0 4px 0 0 #e9ecef;
+  min-height: 550px;
 }
 
 .atum-settings-wrapper .atum-nav-light {

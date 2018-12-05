@@ -60,6 +60,11 @@
 			this.addActiveClassRow();
 			this.addScrollBar();
 			
+			// Footer position
+			$(window).on('load', function () {
+				$('#wpfooter').show();
+			});
+			
 			$('select').select2();
 		},
 		/**

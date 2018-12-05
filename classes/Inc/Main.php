@@ -474,9 +474,7 @@ class Main {
 			$footer_class = FALSE;
 			$screen_base  = get_current_screen()->base;
 
-			if ( 'edit' === $screen_base ||
-				'atum-inventory_page_atum-stock-central' === $screen_base ||
-				'atum-inventory_page_atum-inbound-stock' === $screen_base ) {
+			if ( 'edit' === $screen_base || 'atum-inventory_page_atum-stock-central' === $screen_base || 'atum-inventory_page_atum-manufacturing-central' === $screen_base || 'atum-inventory_page_atum-inbound-stock' === $screen_base ) {
 				$footer_class = TRUE;
 			}
 
