@@ -110,6 +110,9 @@
 			// --------------------------------------
 			this.toggleStickyColumns();
 			
+			//
+			// Add active crow style
+			// --------------------------------------
 			this.addActiveClassRow();
 			
 			//
