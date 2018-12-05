@@ -76,6 +76,10 @@ img.tips {
 	}
 }
 
+.swal2-in #tiptip_holder {
+	z-index: 100000001;
+}
+
 #tiptip_content {
 	color: $gray-600;
 	font-size: 0.8em;
