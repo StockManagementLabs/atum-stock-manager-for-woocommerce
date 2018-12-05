@@ -832,7 +832,6 @@
 					},
 					success   : function (response) {
                         $('body').css('cursor', 'auto');
-						self.removeOverlay();
                         location.reload(true);
                     },
 				});
