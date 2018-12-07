@@ -100,6 +100,11 @@
 				});
 			}
 			
+			// Footer position
+			$(window).on('load', function () {
+				$('#wpfooter').show();
+			});
+			
 			//
 			// Setup the URL navigation
 			// -------------------------
@@ -110,6 +115,9 @@
 			// --------------------------------------
 			this.toggleStickyColumns();
 			
+			//
+			// Add active crow style
+			// --------------------------------------
 			this.addActiveClassRow();
 			
 			//
@@ -829,7 +837,6 @@
 					},
 					success   : function (response) {
                         $('body').css('cursor', 'auto');
-						self.removeOverlay();
                         location.reload(true);
                     },
 				});
@@ -1202,7 +1209,17 @@
 			        html     : true,
 			        title    : $tipEl.data('tip'),
 			        container: 'body'
-	            });
+		        });
+	        });
+	
+	        $('.select2-selection__rendered').each(function() {
+		        var $tipEl = $(this);
+		
+		        $tipEl.tooltip({
+			        html     : true,
+			        title    : $tipEl.attr('title'),
+			        container: 'body'
+		        });
 	        });
 
 		},
@@ -1212,6 +1229,7 @@
 		 */
 		destroyTooltips: function() {
 			$('.tips').tooltip('destroy');
+			$('.select2-selection__rendered').tooltip('destroy');
 		},
 		
 		/**
@@ -1615,7 +1633,25 @@
 			
 			$('.nav-with-scroll-effect').on('scroll',function () {
 				self.addHorizontalScrolleffect($(this).attr('id'), true);
+				if ($(this).hasClass('dragging')) {
+					self.destroyTooltips();
+				}
 			});
+			
+			$('.select2-selection__rendered').on('mouseout', function () {
+				self.addTooltips();
+			});
+			
+			$('.dragscroll a').on('click mouseover',function(event) {
+				if ($(this).closest('.dragscroll').hasClass('dragging')) {
+					event.preventDefault();
+					self.destroyTooltips();
+					return false;
+				}else {
+					self.addTooltips();
+				}
+			});
+			
 			dragscroll.reset();
 		},
 		/**
@@ -1631,8 +1667,8 @@
 			var $nav = document.getElementById(elementId);
 			var $overflowOpacityEffectRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right');
 			var $overflowOpacityEffectLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left');
-			var $leftMax                    = $nav.scrollWidth;
-			var $left                       = $nav.scrollLeft;
+			var $leftMax                    = $nav ? $nav.scrollWidth : 0;
+			var $left                       = $nav ? $nav.scrollLeft : 0;
 			var $diff                       = $leftMax - $left;
 			
 			if ($diff === $('#' + elementId).outerWidth())
@@ -1653,16 +1689,6 @@
 			}else {
 				$('#' + elementId).css('cursor', 'auto');
 			}
-			
-			$('.dragscroll a').on('click mouseover',function(event) {
-				if ($(this).closest('.dragscroll').hasClass('dragging')) {
-					event.preventDefault();
-					self.destroyTooltips();
-					return false;
-				}else {
-					self.addTooltips();
-				}
-			});
 		},
 		/**
 		 * Add input page function

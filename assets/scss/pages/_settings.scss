@@ -7,6 +7,12 @@ $settings-menu-color:       $white;
 $settings-menu-active:      $white;
 $settings-xs-min:          568px !default;
 
+//#wpfooter {
+//	position: relative;
+//	@include flexbox;
+//	@include flex-align-items(center);
+//	@include flex-justify-content(space-between);
+//}
 #wpbody-content {
 	padding-bottom: 0;
 }
@@ -61,6 +67,7 @@ $settings-xs-min:          568px !default;
 		position: relative;
 		min-width: 230px;
 		box-shadow: 0 4px 0 0 $gray-200;
+		min-height: 550px;
 	}
 	
 	.atum-nav-light {
@@ -88,6 +95,7 @@ $settings-xs-min:          568px !default;
 				cursor: default;
 				background-color: $blue-light;
 				color: $blue;
+				border-right: 3px solid $blue;
 				.menu-helper {
 					animation: inherit;
 				}
@@ -1098,7 +1106,7 @@ $settings-xs-min:          568px !default;
 					}
 				}
 				
-				padding: 0px 20px 1px 25px;
+				padding: 0px 20px 120px 25px;
 				background-color: $blue-dark-lighten;
 				border-bottom-right-radius: 6px;
 				border-bottom-left-radius: 6px;
@@ -1708,7 +1716,7 @@ $settings-xs-min:          568px !default;
 			}
 		}
 		
-		padding: 0px 20px 1px 25px;
+		padding: 0px 20px 120px 25px;
 		background-color: $blue-dark-lighten;
 		border-bottom-right-radius: 6px;
 		border-bottom-left-radius: 6px;

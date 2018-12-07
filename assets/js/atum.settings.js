@@ -57,6 +57,14 @@
 			// Toggle Menu
 			this.toggleMenu();
 			
+			// Footer position
+			$(window).on('load', function () {
+				if ( $('.footer-box').hasClass('no-style') ) {
+					$('#wpfooter').css('position', 'relative').show();
+					$('#wpcontent').css('min-height', '95vh');
+				}
+			});
+			
 			// Change menu theme
 			$('.js-switch-menu').on('change', function () {
 				self.changeMenuTheme();

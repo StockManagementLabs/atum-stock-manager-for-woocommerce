@@ -1,8 +1,19 @@
 #wpfooter {
 	position: inherit;
 	padding-top: 0;
+	display: none;
 	
 	.footer-box {
+		&.no-style {
+			background-image: none;
+			background-color: transparent;
+			box-shadow: none;
+			padding: 0;
+			height: auto;
+			.footer-atum-logo, .footer-atum-buttons, #footer-left, .clear {
+				display: none;
+			}
+		}
 		height: 90px;
 		background: $white url("#{$img-path}stock-central/bg-footer.png") no-repeat center 86%;
 		background-size: cover;

@@ -42,7 +42,12 @@ final class AtumCache {
 		if ( ! is_array( $args ) ) {
 			$args = (array) $args;
 		}
-
+		
+		array_walk_recursive( $args, function ( &$item, $key ) {
+			
+			$item = (string) $item;
+		} );
+		
 		return self::prepare_key( $name, $args );
 
 	}

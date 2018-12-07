@@ -40,6 +40,14 @@
 			$('.wp-heading-inline').append($('.page-title-action'));
 			$('.page-title-action').show();
 			
+			// Footer position
+			$(window).on('load', function () {
+				if ( $('.footer-box').hasClass('no-style') ) {
+					$('#wpfooter').css('position', 'relative').show();
+					$('#wpcontent').css('min-height', '95vh');
+				}
+			});
+			
 		},
 	});
 	

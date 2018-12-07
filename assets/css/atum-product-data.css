@@ -2547,11 +2547,16 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .product_data .atum-field .select2-container, .product_data .atum-field .select2-selection--single, .product_data .atum-field .select2-selection__rendered {
   font-size: 14px !important;
+  color: #32373C !important;
 }
 
 .product_data .atum-field .select2-container:focus, .product_data .atum-field .select2-selection--single:focus, .product_data .atum-field .select2-selection__rendered:focus {
   box-shadow: none;
   outline: none;
+}
+
+.product_data .atum-field .select2-selection__rendered {
+  padding-left: 5px !important;
 }
 
 .product_data .atum-field .select2-container {
@@ -2568,6 +2573,10 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .product_data .atum-field .select2-container .select2-selection--single .select2-selection__rendered {
   line-height: 1.8;
+}
+
+.product_data .atum-field .select2-container .select2-selection--single .select2-selection__clear {
+  padding-right: 10px;
 }
 
 .product_data .atum-field .select2-container .select2-selection--single .select2-selection__arrow {

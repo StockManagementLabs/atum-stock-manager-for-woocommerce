@@ -3463,6 +3463,7 @@ input[type="button"].btn-block {
   font-family: inherit;
   font-size: 30px;
   line-height: 30px;
+  color: #6c757d;
 }
 
 .swal2-container .swal2-modal p {
@@ -4387,7 +4388,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .add-widget-popup .swal2-close {
-  color: #adb5bd;
+  color: #6c757d;
   font-weight: 200;
   font-size: 32px;
   line-height: 1.7;

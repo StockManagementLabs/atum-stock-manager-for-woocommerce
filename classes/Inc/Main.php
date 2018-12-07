@@ -471,8 +471,15 @@ class Main {
 
 			ob_start();
 
+			$footer_class = FALSE;
+			$screen_base  = get_current_screen()->base;
+
+			if ( 'edit' === $screen_base || 'atum-inventory_page_atum-stock-central' === $screen_base || 'atum-inventory_page_atum-manufacturing-central' === $screen_base || 'atum-inventory_page_atum-inbound-stock' === $screen_base ) {
+				$footer_class = TRUE;
+			}
+
 			?>
-			<div class="footer-box">
+			<div class="footer-box <?php echo ! $footer_class ? 'no-style' : ''; ?>">
 				<div class="footer-atum-content">
 					<div class="footer-atum-logo">
 						<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
