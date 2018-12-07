@@ -15,6 +15,7 @@ namespace Atum\Dashboard;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
+use Atum\Legacy\WidgetHelpersLegacyTrait;
 use Atum\Settings\Settings;
 
 
@@ -33,6 +34,20 @@ final class WidgetHelpers {
 	 * @var array
 	 */
 	private static $grouped_products = array();
+
+	/**
+	 * The ATUM product data used in WP_Query
+	 *
+	 * @var array
+	 */
+	protected static $atum_query_data = array();
+
+	/**
+	 * The WC product data used in WP_Query (when using the new tables)
+	 *
+	 * @var array
+	 */
+	protected static $wc_query_data = array();
 
 	/**
 	 * Get the stats of products that were sold after the specified date
@@ -453,6 +468,14 @@ final class WidgetHelpers {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy methods
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use WidgetHelpersLegacyTrait;
+
+	/**
 	 * Get the current stock levels
 	 *
 	 * @since 1.4.0
@@ -460,6 +483,16 @@ final class WidgetHelpers {
 	 * @return array
 	 */
 	public static function get_stock_levels() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			return self::get_stock_levels_legacy();
+		}
 
 		global $wpdb;
 
@@ -553,23 +586,17 @@ final class WidgetHelpers {
 				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'fields'         => 'ids',
 				'post__in'       => $products,
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'key'   => '_manage_stock',
-						'value' => 'yes',
-					),
-					array(
-						'key'     => '_stock',
-						'value'   => 0,
-						'type'    => 'numeric',
-						'compare' => '>',
-					),
-				),
 			);
 
-			// TODO: 1.5.0.
-			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			self::$wc_query_data[] = array(
+				'key'     => 'stock_status',
+				'value'   => array('instock', 'onbackorder'),
+			);
+
+			add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+			$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+
 			$products_in_stock                 = $products_in_stock->posts;
 			$stock_counters['count_in_stock'] += count( $products_in_stock );
 			
@@ -582,36 +609,14 @@ final class WidgetHelpers {
 				'posts_per_page' => - 1,
 				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'fields'         => 'ids',
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'relation' => 'OR',
-						array(
-							'key'     => '_stock',
-							'value'   => 0,
-							'type'    => 'numeric',
-							'compare' => '<=',
-						),
-						array(
-							'key'     => '_stock',
-							'compare' => 'NOT EXISTS',
-						),
-					),
-					array(
-						'relation' => 'OR',
-						array(
-							'key'   => '_backorders',
-							'value' => 'no',
-							'type'  => 'char',
-						),
-						array(
-							'key'     => '_backorders',
-							'compare' => 'NOT EXISTS',
-						),
-					),
-
-				),
 				'post__in'       => $products_not_stock,
+			);
+
+			self::$wc_query_data = array(
+				array(
+					'key'     => 'stock_status',
+					'value'   => 'outofstock',
+				),
 			);
 
 			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
@@ -685,31 +690,42 @@ final class WidgetHelpers {
 	 */
 	private static function get_children( $parent_type, $post_type = 'product' ) {
 
-		// Get the published Variables first.
-		$parent_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/parent_args', array(
-			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => $parent_type,
-				),
-			),
-		) );
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			return self::get_children_legacy( $parent_type, $post_type );
+		}
 
-		$parents = new \WP_Query( $parent_args );
+		global $wpdb;
 
-		if ( $parents->found_posts ) {
+		// Get all the published Variables first.
+		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$where         = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $post_statuses ) . "')";
+
+		if ( ! empty( $post_in ) ) {
+			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
+		}
+
+		$parents = $wpdb->get_col( $wpdb->prepare( "
+			SELECT p.ID FROM $wpdb->posts p  
+			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
+			WHERE $where AND pr.type = %s
+			GROUP BY p.ID
+		", $parent_type ) ); // WPCS: unprepared sql ok.
+
+		if ( ! empty( $parents ) ) {
 
 			// Save them to be used when preparing the list query.
-			if ( 'variable' === $parent_type ) {
-				self::$variable_products = array_merge( self::$variable_products, $parents->posts );
+			// TODO: WHAT ABOUT VARIABLE PRODUCT LEVELS?
+			if ( in_array( $parent_type, [ 'variable', 'variable-subscription'], TRUE ) ) {
+				self::$variable_products = array_merge( self::$variable_products, $parents );
 			}
-			else {
-				self::$grouped_products = array_merge( self::$grouped_products, $parents->posts );
+			elseif ( 'grouped' === $parent_type ) {
+				self::$grouped_products = array_merge( self::$grouped_products, $parents );
 			}
 
 			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
@@ -717,7 +733,7 @@ final class WidgetHelpers {
 				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
-				'post_parent__in' => $parents->posts,
+				'post_parent__in' => $parents,
 			) );
 
 			$children = new \WP_Query( $children_args );
@@ -730,6 +746,32 @@ final class WidgetHelpers {
 
 		return FALSE;
 
+	}
+
+	/**
+	 * Customize the WP_Query to handle ATUM product data
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $pieces
+	 *
+	 * @return array
+	 */
+	public static function atum_product_data_query_clauses( $pieces ) {
+		return Helpers::product_data_query_clauses( self::$atum_query_data, $pieces );
+	}
+
+	/**
+	 * Customize the WP_Query to handle WC product data from the new tables
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $pieces
+	 *
+	 * @return array
+	 */
+	public static function wc_product_data_query_clauses( $pieces ) {
+		return Helpers::product_data_query_clauses( self::$wc_query_data, $pieces, 'wc_products' );
 	}
 
 }
