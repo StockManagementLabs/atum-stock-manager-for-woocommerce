@@ -2472,7 +2472,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			/**
 			 * Products with low stock
 			 */
-			if ( $this->count_views['count_in_stock'] ) {
+			if ( ! empty( $products_in_stock ) ) {
 
 				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', $args );
 				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
@@ -2492,9 +2492,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				                WHERE meta_key = '_qty' AND order_item_id = itm.order_item_id
 				            ))/7*$this->last_days
 			            ) AS qty
-						FROM {$wpdb->posts} AS orders
+						FROM $wpdb->posts AS orders
 					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS itm ON (orders.ID = itm.order_id)
-						INNER JOIN {$wpdb->postmeta} AS order_meta ON (orders.ID = order_meta.post_id)
+						INNER JOIN $wpdb->postmeta AS order_meta ON (orders.ID = order_meta.post_id)
 						WHERE orders.post_type = 'shop_order'
 						AND orders.post_status IN ('wc-completed', 'wc-processing') AND itm.order_item_type ='line_item'
 						AND order_meta.meta_key = '_paid_date'
@@ -2507,11 +2507,11 @@ abstract class AtumListTable extends \WP_List_Table {
 							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
 							CAST( IF( LENGTH(pr.stock_quantity) = 0 , 0, pr.stock_quantity) AS DECIMAL(10,2) ), TRUE, FALSE
 						) AS status
-						FROM {$wpdb->posts} AS p
+						FROM $wpdb->posts AS p
 					    LEFT JOIN {$wpdb->prefix}wc_products AS pr ON (p.ID = pr.product_id)
 					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-						WHERE p.post_type IN ('" . implode( "', '", $post_types ) . "')
-			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
+						WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
+			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ') 
 			            ) AS statuses
 		            ';
 

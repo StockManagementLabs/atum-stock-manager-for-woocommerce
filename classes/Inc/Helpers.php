@@ -227,11 +227,11 @@ final class Helpers {
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 		);
-		
-		$transient_name = $remove_variables ? 'all_products_no_variables' : 'all_products';
-		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
 
-		$product_ids_transient = AtumCache::get_transient_key( transient_name, $args );
+		$transient_name = $remove_variables ? 'all_products_no_variables' : 'all_products';
+		$args           = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
+
+		$product_ids_transient = AtumCache::get_transient_key( $transient_name, $args );
 		$products              = AtumCache::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {

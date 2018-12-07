@@ -547,7 +547,7 @@ trait ListTableLegacyTrait {
 			/**
 			 * Products with low stock
 			 */
-			if ( $this->count_views['count_in_stock'] ) {
+			if ( ! empty( $products_in_stock ) ) {
 
 				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', $args );
 				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
@@ -555,30 +555,41 @@ trait ListTableLegacyTrait {
 				if ( empty( $products_low_stock ) ) {
 
 					// Compare last seven days average sales per day * re-order days with current stock.
-					// TODO: 1.5.0.
-					$str_sales = "(SELECT			   
-					    (SELECT MAX(CAST( meta_value AS SIGNED )) AS q FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key IN('_product_id', '_variation_id') AND order_item_id = `item`.`order_item_id`) AS IDs,
-					    CEIL(SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`))/7*$this->last_days) AS qty
-						FROM `{$wpdb->posts}` AS `order`
-						    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
-							INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
-						WHERE (`order`.`post_type` = 'shop_order'
-						    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
-						    AND `order_meta`.`meta_key` = '_paid_date'
-						    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
+					$str_sales = "
+						(SELECT	(
+							SELECT MAX(CAST( meta_value AS SIGNED )) AS q 
+							FROM {$wpdb->prefix}woocommerce_order_itemmeta 
+							WHERE meta_key IN('_product_id', '_variation_id') 
+							AND order_item_id = `item`.`order_item_id`
+						) AS IDs,
+				        CEIL(SUM((
+				                SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta 
+				                WHERE meta_key = '_qty' AND order_item_id = item.order_item_id
+				            ))/7*$this->last_days
+			            ) AS qty
+						FROM $wpdb->posts AS order
+					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS item ON (order.ID = item.order_id)
+						INNER JOIN {$wpdb->postmeta} AS order_meta ON (order.ID = order_meta.post_id)
+						WHERE order.post_type = 'shop_order'
+					    AND order.post_status IN ('wc-completed', 'wc-processing') AND item.order_item_type ='line_item'
+					    AND order_meta.meta_key = '_paid_date'
+					    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
 						GROUP BY IDs) AS sales";
 
-					$str_states = "(SELECT `{$wpdb->posts}`.`ID`,
-						IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
-							CAST( IF( LENGTH(`{$wpdb->postmeta}`.`meta_value`) = 0 , 0, `{$wpdb->postmeta}`.`meta_value`) AS DECIMAL(10,2) ), TRUE, FALSE) AS state
-						FROM `{$wpdb->posts}`
-						    LEFT JOIN `{$wpdb->postmeta}` ON (`{$wpdb->posts}`.`ID` = `{$wpdb->postmeta}`.`post_id`)
-						    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
-						WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
-				            AND `{$wpdb->posts}`.`post_type` IN ('" . implode( "', '", $post_types ) . "')
-				            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $products_in_stock ) . ')) )) AS states';
+					$str_statuses = "
+						(SELECT $wpdb->posts.ID, IF( 
+							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
+							CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
+						) AS status
+						FROM $wpdb->posts AS p
+					    LEFT JOIN $wpdb->postmeta ON (p.ID = {$wpdb->postmeta}.post_id)
+					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+						WHERE {$wpdb->postmeta}.meta_key = '_stock'
+			            AND p.post_type IN ('" . implode( "', '", $post_types ) . "')
+			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
+			            ) AS statuses';
 
-					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
+					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
 					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
