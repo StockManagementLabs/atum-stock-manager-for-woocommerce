@@ -1148,12 +1148,14 @@ abstract class AtumOrderModel {
 		$subtotal = 0;
 
 		if ( is_callable( array( $item, 'get_subtotal' ) ) ) {
+			
+			$qty = ! empty( $item->get_quantity() ) ? $item->get_quantity() : 1;
 
 			if ( $inc_tax ) {
-				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / max( 1, $item->get_quantity() );
+				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / $qty;
 			}
 			else {
-				$subtotal = ( floatval( $item->get_subtotal() ) / max( 1, $item->get_quantity() ) );
+				$subtotal = ( floatval( $item->get_subtotal() ) / $qty );
 			}
 
 			$subtotal = $round ? number_format( (float) $subtotal, wc_get_price_decimals(), '.', '' ) : $subtotal;
