@@ -4771,7 +4771,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .section-title #atum-settings .section-fields .atum-setting-info ul li {
   list-style: none;
-  line-height: 1.1;
+  line-height: 1.47;
+  margin-bottom: 0;
 }
 
 #atum-settings .section-title #atum-settings .section-fields .atum-setting-info ul li:before {
@@ -5397,6 +5398,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 #atum-settings .section-fields .atum-setting-info ul li {
   list-style: none;
   line-height: 1.1;
+  line-height: 1.47;
+  margin-bottom: 0;
 }
 
 #atum-settings .section-fields .atum-setting-info ul li:before {
@@ -5765,6 +5768,22 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .wp-picker-container .wp-picker-clear:hover {
   background-color: rgba(108, 117, 125, 0.8);
+}
+
+#atum-settings .atum-settings-html {
+  color: #adb5bd;
+  margin-bottom: 15px;
+  padding-top: 12px;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.47;
+}
+
+#atum-settings .atum-settings-html a {
+  color: #00B8DB;
+  text-decoration: none;
 }
 
 @media all and (max-width: 992px) {
