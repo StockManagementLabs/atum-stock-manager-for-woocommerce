@@ -2107,6 +2107,21 @@ $settings-xs-min:          568px !default;
 		}
 	}
 	
+	.atum-settings-html {
+		color: $gray-500;
+		margin-bottom: $grid-gutter-width/2;
+		padding-top: 12px;
+		font-size: 15px;
+		font-weight: normal;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.47;
+		a {
+			color: $blue;
+			text-decoration: none;
+		}
+	}
+	
 	// Desktop style
 	@media all and (max-width: $screen-md-min) {
 		.btn-group {
