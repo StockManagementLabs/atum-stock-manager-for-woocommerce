@@ -1603,7 +1603,6 @@
 				$('tbody tr').each(function () {
 					var $checkbox = $(this).find('.check-column input[type=checkbox]');
 					if ($(this).hasClass('expandable')) {
-						console.log($checkbox);
 					}
 					if ( $checkbox.is(':checked') ) {
 						$(this).addClass('active-row');

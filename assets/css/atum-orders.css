@@ -5417,7 +5417,7 @@ input[type="button"].btn-block {
   justify-content: space-between;
   cursor: grab;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -webkit-overflow-scrolling: touch;

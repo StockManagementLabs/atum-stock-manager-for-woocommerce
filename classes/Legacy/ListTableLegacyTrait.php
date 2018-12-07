@@ -556,28 +556,29 @@ trait ListTableLegacyTrait {
 
 					// Compare last seven days average sales per day * re-order days with current stock.
 					$str_sales = "
-						(SELECT	(
-							SELECT MAX(CAST( meta_value AS SIGNED )) AS q 
-							FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-							WHERE meta_key IN('_product_id', '_variation_id') 
-							AND order_item_id = `item`.`order_item_id`
-						) AS IDs,
+						(SELECT (
+					        SELECT MAX(CAST( meta_value AS SIGNED )) AS q
+					        FROM {$wpdb->prefix}woocommerce_order_itemmeta
+					        WHERE meta_key IN('_product_id', '_variation_id')
+					        AND order_item_id = itm.order_item_id
+				        ) AS IDs,
 				        CEIL(SUM((
-				                SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-				                WHERE meta_key = '_qty' AND order_item_id = item.order_item_id
+				                SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta
+				                WHERE meta_key = '_qty' AND order_item_id = itm.order_item_id
 				            ))/7*$this->last_days
 			            ) AS qty
 						FROM $wpdb->posts AS orders
-					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS item ON (orders.ID = item.order_id)
-						INNER JOIN {$wpdb->postmeta} AS order_meta ON (orders.ID = order_meta.post_id)
+					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS itm ON (orders.ID = itm.order_id)
+						INNER JOIN $wpdb->postmeta AS order_meta ON (orders.ID = order_meta.post_id)
 						WHERE orders.post_type = 'shop_order'
-					    AND orders.post_status IN ('wc-completed', 'wc-processing') AND item.order_item_type ='line_item'
-					    AND order_meta.meta_key = '_paid_date'
-					    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
-						GROUP BY IDs) AS sales";
-
+						AND orders.post_status IN ('wc-completed', 'wc-processing') AND itm.order_item_type ='line_item'
+						AND order_meta.meta_key = '_paid_date'
+						AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "'
+						GROUP BY IDs) AS sales
+					";
+					
 					$str_statuses = "
-						(SELECT $wpdb->posts.ID, IF( 
+						(SELECT p.ID, IF(
 							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
 							CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
 						) AS status
@@ -588,9 +589,9 @@ trait ListTableLegacyTrait {
 			            AND p.post_type IN ('" . implode( "', '", $post_types ) . "')
 			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
 			            ) AS statuses';
-
+					
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
-
+					
 					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
 					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
