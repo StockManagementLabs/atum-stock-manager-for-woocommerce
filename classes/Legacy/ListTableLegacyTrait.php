@@ -567,11 +567,11 @@ trait ListTableLegacyTrait {
 				                WHERE meta_key = '_qty' AND order_item_id = item.order_item_id
 				            ))/7*$this->last_days
 			            ) AS qty
-						FROM $wpdb->posts AS order
-					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS item ON (order.ID = item.order_id)
-						INNER JOIN {$wpdb->postmeta} AS order_meta ON (order.ID = order_meta.post_id)
-						WHERE order.post_type = 'shop_order'
-					    AND order.post_status IN ('wc-completed', 'wc-processing') AND item.order_item_type ='line_item'
+						FROM $wpdb->posts AS orders
+					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS item ON (orders.ID = item.order_id)
+						INNER JOIN {$wpdb->postmeta} AS order_meta ON (orders.ID = order_meta.post_id)
+						WHERE orders.post_type = 'shop_order'
+					    AND orders.post_status IN ('wc-completed', 'wc-processing') AND item.order_item_type ='line_item'
 					    AND order_meta.meta_key = '_paid_date'
 					    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
 						GROUP BY IDs) AS sales";
