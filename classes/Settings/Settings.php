@@ -176,6 +176,18 @@ class Settings {
 					'max' => 4,
 				),
 			),
+			'stock_quantity_step'       => array(
+				'section' => 'general',
+				'name'    => __( 'Step in Stock inputs', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enter the default step in stock quantities inputs.  Set 0 to adjust to stock quantity decimals.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => 0,
+				'options' => array(
+					'min'  => 0,
+					'max'  => 4,
+					'step' => 0.01,
+				),
+			),
 			'sales_last_ndays'          => array(
 				'section' => 'general',
 				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
