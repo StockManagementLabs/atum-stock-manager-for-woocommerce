@@ -178,8 +178,8 @@ class Settings {
 			),
 			'stock_quantity_step'       => array(
 				'section' => 'general',
-				'name'    => __( 'Step in Stock inputs', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Enter the default step in stock quantities inputs. Set to 0 to adjust it to stock quantity decimals.', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Stock change arrows behaviour', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Tell WooCommerce, how much to increase/decrease the stock value with each arrow click. Example: If set to ‘0.5’; the stock will change from value ‘5’ to value ‘5.5’ when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to ‘4.5’.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
