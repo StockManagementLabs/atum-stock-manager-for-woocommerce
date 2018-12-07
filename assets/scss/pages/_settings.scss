@@ -1167,7 +1167,8 @@ $settings-xs-min:          568px !default;
 						
 						li {
 							list-style: none;
-							line-height: 1.1;
+							line-height: 1.47;
+							margin-bottom: 0;
 							&:before {
 								content: "- ";
 							}
@@ -1778,6 +1779,8 @@ $settings-xs-min:          568px !default;
 				li {
 					list-style: none;
 					line-height: 1.1;
+					line-height: 1.47;
+					margin-bottom: 0;
 					&:before {
 						content: "- ";
 					}

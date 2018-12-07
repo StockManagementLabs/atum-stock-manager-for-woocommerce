@@ -4771,7 +4771,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .section-title #atum-settings .section-fields .atum-setting-info ul li {
   list-style: none;
-  line-height: 1.1;
+  line-height: 1.47;
+  margin-bottom: 0;
 }
 
 #atum-settings .section-title #atum-settings .section-fields .atum-setting-info ul li:before {
@@ -5397,6 +5398,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 #atum-settings .section-fields .atum-setting-info ul li {
   list-style: none;
   line-height: 1.1;
+  line-height: 1.47;
+  margin-bottom: 0;
 }
 
 #atum-settings .section-fields .atum-setting-info ul li:before {
