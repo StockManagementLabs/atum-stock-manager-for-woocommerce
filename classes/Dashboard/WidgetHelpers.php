@@ -36,13 +36,6 @@ final class WidgetHelpers {
 	private static $grouped_products = array();
 
 	/**
-	 * The ATUM product data used in WP_Query
-	 *
-	 * @var array
-	 */
-	protected static $atum_query_data = array();
-
-	/**
 	 * The WC product data used in WP_Query (when using the new tables)
 	 *
 	 * @var array
@@ -746,19 +739,6 @@ final class WidgetHelpers {
 
 		return FALSE;
 
-	}
-
-	/**
-	 * Customize the WP_Query to handle ATUM product data
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $pieces
-	 *
-	 * @return array
-	 */
-	public static function atum_product_data_query_clauses( $pieces ) {
-		return Helpers::product_data_query_clauses( self::$atum_query_data, $pieces );
 	}
 
 	/**
