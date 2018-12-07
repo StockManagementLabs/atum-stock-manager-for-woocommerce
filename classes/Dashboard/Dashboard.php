@@ -265,9 +265,9 @@ class Dashboard {
 			/*
 			 * Gridstack scripts
 			 */
-			wp_register_script( 'lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE ); // Custom handler required to not load the WP version.
 			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', array(), ATUM_VERSION, TRUE );
-			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'lodash' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'atum-lodash' ), ATUM_VERSION, TRUE );
 			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', array( 'gridstack' ), ATUM_VERSION, TRUE );
 
 			/*

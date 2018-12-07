@@ -67,7 +67,7 @@
 						stagePadding: 15
 					});
 					
-					// Video Carousel nav
+					// Video Carousel nav.
 					var $videoNextNav = $videoList.find('.carousel-nav-next'),
 					    $videoPrevNav = $videoList.find('.carousel-nav-prev');
 					
@@ -114,8 +114,8 @@
 				resizable             : {
 					autoHide   : true,
 					handles    : 'se, sw',
-					containment: 'parent'
-				}
+					containment: 'parent',
+				},
 			}).data('gridstack');
 			
 			// Bind events
@@ -125,7 +125,7 @@
 			});
 			
 			// Dynamic min height for widgets
-			$gridStackElem.on('resizestart', function (event, ui) {
+			$gridStackElem.on('resizestart', function(event, ui) {
 				var minHeight = ui.element.find('.widget-body').outerHeight() + ui.element.find('.widget-header').outerHeight();
 				ui.element.closest('.atum-widget').css('min-height', minHeight);
 			});
