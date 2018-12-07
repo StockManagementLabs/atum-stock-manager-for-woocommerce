@@ -179,7 +179,7 @@ class Settings {
 			'stock_quantity_step'       => array(
 				'section' => 'general',
 				'name'    => __( 'Step in Stock inputs', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Enter the default step in stock quantities inputs.  Set 0 to adjust to stock quantity decimals.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enter the default step in stock quantities inputs. Set to 0 to adjust it to stock quantity decimals.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
