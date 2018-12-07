@@ -5643,7 +5643,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   justify-content: space-between;
   cursor: grab;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -webkit-overflow-scrolling: touch;
