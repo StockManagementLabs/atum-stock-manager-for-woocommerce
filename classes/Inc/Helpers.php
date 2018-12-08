@@ -2040,7 +2040,8 @@ final class Helpers {
 	 */
 	public static function get_input_step() {
 		
-		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+		$step = self::get_option( 'stock_quantity_step' );
+		return $step ? $step : 10 / pow( 10, Globals::get_stock_decimals() + 1 );
 	}
 
 	/**

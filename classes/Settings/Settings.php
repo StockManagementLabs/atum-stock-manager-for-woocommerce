@@ -176,6 +176,18 @@ class Settings {
 					'max' => 4,
 				),
 			),
+			'stock_quantity_step'       => array(
+				'section' => 'general',
+				'name'    => __( 'Stock change arrows behaviour', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Tell WooCommerce, how much to increase/decrease the stock value with each arrow click. Example: If set to ‘0.5’; the stock will change from value ‘5’ to value ‘5.5’ when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to ‘4.5’.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => 0,
+				'options' => array(
+					'min'  => 0,
+					'max'  => 4,
+					'step' => 0.01,
+				),
+			),
 			'sales_last_ndays'          => array(
 				'section' => 'general',
 				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
