@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Inc\Helpers;
 use Atum\Legacy\WidgetHelpersLegacyTrait;
 use Atum\Settings\Settings;

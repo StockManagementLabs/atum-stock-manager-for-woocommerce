@@ -323,6 +323,13 @@ final class Helpers {
 			'fields'       => '',
 		) ) );
 
+		$cache_key = AtumCache::get_cache_key( 'orders', $atts );
+		$orders    = AtumCache::get_cache( $cache_key );
+
+		if ( FALSE !== $orders ) {
+			return $orders;
+		}
+
 		/**
 		 * Extract params
 		 *
@@ -440,24 +447,26 @@ final class Helpers {
 			$args['fields'] = $fields;
 		}
 		
-		$result = array();
+		$orders = array();
 		$query  = new \WP_Query( $args );
 		
 		if ( $query->post_count > 0 ) {
 			
 			if ( $fields ) {
-				$result = $query->posts;
+				$orders = $query->posts;
 			}
 			else {
 				foreach ( $query->posts as $post ) {
 					// We need the WooCommerce order, not the post.
-					$result[] = new \WC_Order( $post->ID );
+					$orders[] = new \WC_Order( $post->ID );
 				}
 			}
 			
 		}
+
+		AtumCache::set_cache( $cache_key, $orders );
 		
-		return $result;
+		return $orders;
 		
 	}
 
