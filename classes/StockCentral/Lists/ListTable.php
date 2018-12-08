@@ -220,15 +220,13 @@ class ListTable extends AtumListTable {
 		));
 
 		// Set the sticky columns.
-		if ( 'yes' === Helpers::get_option( 'sticky_columns', 'no' ) ) {
-			$this->sticky_columns = (array) apply_filters( 'atum/stock_central_list/sticky_columns', array(
-				'cb',
-				'thumb',
-				'ID',
-				'title',
-				'calc_type',
-			) );
-		}
+		$this->sticky_columns = (array) apply_filters( 'atum/stock_central_list/sticky_columns', array(
+			'cb',
+			'thumb',
+			'ID',
+			'title',
+			'calc_type',
+		) );
 
 		// Call the parent class once all the $args are set.
 		parent::__construct( $args );

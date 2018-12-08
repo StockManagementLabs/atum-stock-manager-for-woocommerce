@@ -137,7 +137,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
 
 		// Change sticky columns settting.
-		add_action( 'wp_ajax_atum_change_sticky_columns_value', array( $this, 'change_sticky_columns_value' ) );
+		add_action( 'wp_ajax_atum_change_sticky_columns_value', array( $this, 'change_sticky_columns_user_meta' ) );
 
 	}
 
@@ -2152,24 +2152,16 @@ final class Ajax {
 	}
 
 	/**
-	 * Change the value of a sticky_columns from stock central
+	 * Change the Stock Central's sticky columns status for the current user
 	 *
 	 * @since 1.5.0
 	 */
-	public function change_sticky_columns_value() {
+	public function change_sticky_columns_user_meta() {
 
 		check_ajax_referer( 'atum-sticky-columns-button-nonce', 'token' );
 
-		$option = $_POST['data']['option'];
-
-		global $atum_global_options;
-
-		if ( empty( $atum_global_options ) ) {
-			$atum_global_options = Helpers::get_options();
-		}
-
-		$atum_global_options['sticky_columns'] = $option;
-		update_option( Settings::OPTION_NAME, $atum_global_options );
+		$value = esc_attr( $_POST['enabled'] );
+		Helpers::set_atum_user_meta( 'enabled_sc_sticky_columns', $value );
 
 		wp_die();
 

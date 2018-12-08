@@ -2096,4 +2096,54 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Get the ATUM meta for the specified user
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key       Optional. If passed will return that specific key within the meta array.
+	 * @param int    $user_id   Optional. If passed will get the meta for that user, if not will get it from the current user.
+	 *
+	 * @return mixed
+	 */
+	public static function get_atum_user_meta( $key = '', $user_id = 0 ) {
+
+		$user_id = $user_id ?: get_current_user_id();
+		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+
+		if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE )  ) {
+			return $atum_user_meta[ $key ];
+		}
+
+		return $atum_user_meta;
+
+	}
+
+	/**
+	 * Set the ATUM meta for the specified user
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key       Set that specific key only and will preserve the others within the ATUM meta array.
+	 * @param mixed  $value     The value to set. Should be previously sanitized.
+	 * @param int    $user_id   Optional. If passed will set the meta for that user, if not will set it to the current user.
+	 *
+	 * @return mixed
+	 */
+	public static function set_atum_user_meta( $key, $value, $user_id = 0 ) {
+
+		$user_id        = $user_id ?: get_current_user_id();
+		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+
+		if ( ! is_array( $atum_user_meta ) ) {
+			$atum_user_meta = array();
+		}
+
+		$atum_user_meta[ $key ] = $value;
+
+
+		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
+
+	}
+
 }

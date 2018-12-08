@@ -30,7 +30,6 @@
 		this.$searchInput          = this.$atumList.find('.atum-post-search');
 		this.$searchColumnBtn      = this.$atumList.find('#search_column_btn');
 		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
-		this.$stickyColsButton     = this.$atumList.find('.sticky-columns-button');
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -146,7 +145,9 @@
 			//
 			// Make the first columns sticky
 			// -----------------------------
-			this.$stickyCols = this.createStickyColumns(this.$atumTable);
+			if (this.settings.enabledStickyColumns === 'yes') {
+				this.$stickyCols = this.createStickyColumns(this.$atumTable);
+			}
 			
 			//
 			// Hide/Show the toggleable group of columns with the toggler button
@@ -751,54 +752,56 @@
 			this.bindListLinks();
 			
 			// Hash history navigation
-			$.address.externalChange(function(e) {
-
-                if (self.settings.ajaxFilter != 'yes') {
-                	// Force enabled or disabled search button
-                    var searchInputVal = self.$searchInput.val();
-	                $('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true);
-                }
-
-				var numCurrentParams = $.address.parameterNames().length;
-				if(self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
-					self.updateTable();
-				}
+	        $.address.externalChange(function(e) {
+		
+		        if (self.settings.ajaxFilter != 'yes') {
+			        // Force enabled or disabled search button
+			        var searchInputVal = self.$searchInput.val();
+			        $('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true);
+		        }
+		
+		        var numCurrentParams = $.address.parameterNames().length;
+		        if (self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
+			        self.updateTable();
+		        }
+		
+		        self.navigationReady = true;
+		
+	        })
+	        .init(function() {
+		
+		        // When accessing externally or reloading the page, update the fields and the list
+		        if ($.address.parameterNames().length) {
+			
+			        // Init fields from hash parameters
+			        var s             = $.address.parameter('s'),
+			            search_column = $.address.parameter('search_column'),
+			            optionVal     = '';
+			        
+			        
+			        if (s) {
+				        self.$searchInput.val(s);
+			        }
+			        
+			        if (search_column) {
 				
-				self.navigationReady = true;
-				
-			})
-			.init(function() {
-				
-				// When accessing externally or reloading the page, update the fields and the list
-                if ($.address.parameterNames().length) {
-
-                    // Init fields from hash parameters
-                    var s = $.address.parameter('s');
-                    if (s) {
-                        self.$searchInput.val(s);
-                    }
-
-                    var search_column = $.address.parameter('search_column');
-                    if (search_column) {
-                        var optionVal = "";
-
-                        $('#adv-settings :checkbox').each(function () {
-                            optionVal = $(this).val();
-                            if (optionVal.search("calc_") < 0) { // calc values are not searchable, also we can't search on thumb
-
-                                if (optionVal != 'thumb' && optionVal == search_column) {
-                                    self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
-                                    return false;
-                                }
-                            }
-                        });
-                    }
-
-                    self.updateTable();
-					
-				}
-				
-			});
+				        $('#adv-settings :checkbox').each(function() {
+					        optionVal = $(this).val();
+					        if (optionVal.search("calc_") < 0) { // Calc values are not searchable, also we can't search on thumb
+						
+						        if (optionVal !== 'thumb' && optionVal == search_column) {
+							        self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
+							        return false;
+						        }
+					        }
+				        });
+			        }
+			
+			        self.updateTable();
+			
+		        }
+		
+	        });
 		
 		},
 		
@@ -806,39 +809,34 @@
 		 * Activate/Deactivate sticky columns' setting
 		 */
 		toggleStickyColumns: function() {
+			
 			var self = this;
-			this.$stickyColsButton.click(function() {
+			
+			this.$atumList.find('.sticky-columns-button').click(function() {
 				
-				var $buttonsContainer = $('.sticky-columns-button-container'),
-					option = $(this).data('option');
-
-				if ( option === 'yes' ) {
-                    $buttonsContainer.find('button').first().addClass('active');
-                    $buttonsContainer.find('button').last().removeClass('active');
+				var $button           = $(this),
+				    $buttonsContainer = $button.closest('.sticky-columns-button-container'),
+				    enabled           = $button.data('option');
+				
+				$buttonsContainer.find('button').toggleClass('active');
+				
+				if ('yes' === enabled) {
+					self.$stickyCols = self.createStickyColumns(self.$atumTable);
+					self.$scrollPane.trigger('jsp-initialised'); // Trigger the jScrollPane to add the sticky columns to the table.
 				}
 				else {
-                    $buttonsContainer.find('button').first().removeClass('active');
-                    $buttonsContainer.find('button').last().addClass('active');
+					self.destroyStickyColumns();
 				}
 				
+				// Save the sticky columns status as user meta.
 				$.ajax({
 					url       : ajaxurl,
 					method    : 'POST',
 					data      : {
-						token : self.settings.stickyColumnsNonce,
-						action: 'atum_change_sticky_columns_value',
-						data  : {
-							option: option
-						}
+						token  : self.settings.stickyColumnsNonce,
+						action : 'atum_change_sticky_columns_value',
+						enabled: enabled,
 					},
-					beforeSend: function () {
-						$('body').css('cursor', 'wait');
-						self.addOverlay();
-					},
-					success   : function (response) {
-                        $('body').css('cursor', 'auto');
-                        location.reload(true);
-                    },
 				});
 			});
 		},
@@ -846,7 +844,7 @@
 		/**
 		 * Bind the List Table links that will trigger URL hash changes
 		 */
-		bindListLinks: function () {
+		bindListLinks: function() {
 			this.$atumList.find('.subsubsub a, .tablenav-pages a, .item-heads a').address();
 		},
 		
@@ -1016,7 +1014,7 @@
 			$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
 			
 			// Remove all the columns that won't be sticky
-			$stickyCols.find('tr').each(function () {
+			$stickyCols.find('tr').each(function() {
 				
 				var $row = $(this);
 				
@@ -1054,6 +1052,23 @@
 			$stickyCols.find('.manage-column').removeClass('manage-column');
 			
 			return $stickyCols;
+		
+		},
+		
+		/**
+		 * Destroy the sticky columns previously set for the table
+		 *
+		 * @param jQuery The table that is holding the sticky columns
+		 */
+		destroyStickyColumns: function() {
+		
+			if (this.$stickyCols !== null) {
+				this.$stickyCols.remove();
+			}
+			
+			if (this.$floatTheadStickyCols !== null) {
+				this.$floatTheadStickyCols.remove();
+			}
 		
 		},
 		

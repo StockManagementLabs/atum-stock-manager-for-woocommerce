@@ -67,26 +67,19 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
-				<?php
-				$sticky_column = Helpers::get_option( 'sticky_columns' );
-				$active        = FALSE;
-				if ( 'yes' === $sticky_column ) {
-					$active = TRUE;
-				}
-				?>
+				<?php $enabled_sticky_column = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
 
 				<div class="sticky-columns-button-container">
-					<button type="button" class="sticky-columns-button tips sticky-on <?php echo esc_attr( $active ? 'active' : '' ); ?>" data-option="yes" data-tip="Enable Sticky Columns">
+					<button type="button" class="sticky-columns-button tips sticky-on <?php echo esc_attr( 'yes' === $enabled_sticky_column ? 'active' : '' ); ?>" data-option="yes" data-tip="Enable Sticky Columns">
 						<i class="atmi-view-col-fixed-outline"></i>
 					</button>
 
-					<button type="button" class="sticky-columns-button tips sticky-off <?php echo esc_attr( ! $active ? 'active' : '' ); ?>" data-option="no" data-tip="Disable Sticky Columns">
+					<button type="button" class="sticky-columns-button tips sticky-off <?php echo esc_attr( 'yes' !== $enabled_sticky_column ? 'active' : '' ); ?>" data-option="no" data-tip="Disable Sticky Columns">
 						<i class="atmi-view-list-outline"></i>
 					</button>
 				</div>
 			</div>
 		</div>
-
 
 		<?php $list->display(); ?>
 		

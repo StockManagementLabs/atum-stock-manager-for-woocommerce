@@ -2823,6 +2823,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'    => $this->default_searchable_columns,
 			'stickyColumns'        => $this->sticky_columns,
+			'enabledStickyColumns' => 'yes' === Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ) ? 'yes' : 'no',
 		);
 
 		if ( $this->first_edit_key ) {
