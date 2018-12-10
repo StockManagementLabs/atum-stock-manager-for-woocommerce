@@ -1379,10 +1379,11 @@ $settings-xs-min:          568px !default;
 							b {
 								display: none;
 							}
+							
 							&:after {
 								line-height: 30px;
-								font-family: Linearicons;
-								content: "\e874";
+								font-family: $atum-icon-font;
+								content: $atmi-chevron-down;
 								font-size: 10px;
 								color: $gray-500;
 							}
@@ -1627,9 +1628,10 @@ $settings-xs-min:          568px !default;
 		
 		.select2-search {
 			line-height: 1;
-			&::after {
-				font-family: 'Linearicons';
-				content: "\e86f";
+			
+			&:after {
+				font-family: $atum-icon-font;
+				content: $atmi-magnifier;
 				padding-right: 15px;
 				font-size: 12px;
 				top: 13px;
@@ -1970,27 +1972,30 @@ $settings-xs-min:          568px !default;
 			}
 			.select2-selection {
 				min-height: 30px;
+				border: 1px solid $gray-200;
+				
 				.select2-selection__rendered {
-					//line-height: 30px;
 					color: $gray-600;
 					padding-left: 16px;
+					
 					.select2-selection__placeholder {
 						color: $gray-600;
 					}
 				}
+				
 				.select2-selection__arrow {
 					b {
 						display: none;
 					}
 					&:after {
 						line-height: 30px;
-						font-family: Linearicons;
-						content: "\e874";
+						font-family: $atum-icon-font;
+						content: $atmi-chevron-down;
 						font-size: 10px;
 						color: $gray-500;
 					}
 				}
-				border: 1px solid $gray-200;
+				
 			}
 		}
 	}
@@ -2239,9 +2244,9 @@ $settings-xs-min:          568px !default;
 
 .select2-search {
 	line-height: 1;
-	&::after {
-		font-family: 'Linearicons';
-		content: "\e86f";
+	&:after {
+		font-family: $atum-icon-font;
+		content: $atmi-magnifier;
 		padding-right: 15px;
 		font-size: 12px;
 		top: 13px;

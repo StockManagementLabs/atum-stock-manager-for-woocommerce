@@ -1301,7 +1301,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
 			$classes .= ' cell-blue';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="lnr lnr-arrow-down-circle tips"' . $data_tip . '></span>';
+			$content  = '<span class="atum-icon atmi-arrow-down-circle tips"' . $data_tip . '></span>';
 		}
 		// In Stock.
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {

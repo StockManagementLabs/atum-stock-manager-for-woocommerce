@@ -38,7 +38,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 					</a>
 
 					<button class="toogle-menu">
-						<span class="lnr lnr-menu"></span>
+						<span class="atum-menu atmi-menu"></span>
 					</button>
 				</div>
 
