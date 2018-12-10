@@ -7,7 +7,7 @@
  */
 
 ;( function( $, window, document, undefined ) {
-	"use strict";
+	'use strict';
 	
 	// Create the defaults once
 	var pluginName = 'atumListTable',
@@ -21,14 +21,14 @@
 	    };
 	
 	// The actual plugin constructor
-	function Plugin ( element, options ) {
+	function Plugin( element, options ) {
 		
 		// Initialize selectors
-		this.$atumList             = $(element);
-		this.$atumTable            = this.$atumList.find('.atum-list-table');
-		this.$editInput            = this.$atumList.find('#atum-column-edits');
-		this.$searchInput          = this.$atumList.find('.atum-post-search');
-		this.$searchColumnBtn      = this.$atumList.find('#search_column_btn');
+		this.$atumList = $(element);
+		this.$atumTable = this.$atumList.find('.atum-list-table');
+		this.$editInput = this.$atumList.find('#atum-column-edits');
+		this.$searchInput = this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
 		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
 		
 		// We don't want to alter the default options for future instances of the plugin
@@ -97,7 +97,7 @@
 				this.setupSearchColumnDropdown();
 				
 				$('#adv-settings input[type=checkbox]').change(function() {
-					setTimeout(self.setupSearchColumnDropdown, 500); // performance
+					setTimeout(self.setupSearchColumnDropdown, 500); // Performance
 				});
 			}
 			
@@ -182,6 +182,7 @@
 					
 					$floatContainer.css('height', 'auto');
 					$('.jspContainer').height($('.jspPane').height());
+					
 					// Hide search dropdown on sticky
 					if (self.settings.searchDropdown === 'yes') {
 						$('#search_column_dropdown').hide();
@@ -195,13 +196,13 @@
 						$floatContainer.show();
 					}
 					
-					// Reposition the sticky cols to fit the floating header
-					if (self.$stickyCols !== null){
-						self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
-					}
-					
 					// Add the sticky columns to the floating header if needed
 					if (self.enabledStickyColumns) {
+						
+						// Reposition the sticky cols to fit the floating header
+						if (self.$stickyCols !== null) {
+							self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
+						}
 						
 						var $floatTheadTable = self.$atumList.find('.floatThead-table');
 						self.$floatTheadStickyCols = self.createStickyColumns($floatTheadTable);
@@ -234,7 +235,6 @@
 							self.$floatTheadStickyCols.find('.manage-column').removeClass('manage-column');
 							
 							$colGroup.prependTo(self.$floatTheadStickyCols);
-							
 							self.adjustStickyHeaders(self.$floatTheadStickyCols, $floatTheadTable);
 							
 						}
@@ -275,9 +275,9 @@
 			this.setFieldPopover();
 			
 			// Hide any other opened popover before opening a new one
-			this.$atumList.click( function(e) {
+			this.$atumList.click( function(evt) {
 				
-				var $target   = $(e.target),
+				var $target   = $(evt.target),
 				    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all
 				    $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
 				
@@ -313,8 +313,8 @@
 			//
 			// Hide/Show/Colspan column groups
 			// -------------------------------
-			$('#adv-settings .metabox-prefs input').change(function () {
-				self.$atumList.find('thead .column-groups th').each(function () {
+			$('#adv-settings .metabox-prefs input').change(function() {
+				self.$atumList.find('thead .column-groups th').each(function() {
 					
 					var $this = $(this),
 					    // These th only have one class
@@ -333,7 +333,7 @@
 			//
 			// Views, Pagination and Sortable links
 			// ------------------------------------
-			this.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', function (e) {
+			this.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', function(e) {
 				e.preventDefault();
 				self.updateHash();
 			});
@@ -443,7 +443,7 @@
 				
 				// When a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters
 				if (this.settings.searchDropdown === 'yes') {
-					this.$searchColumnBtn.on('search_column_data_changed', function(e) {
+					this.$searchColumnBtn.on('search_column_data_changed', function(evt) {
 						
 						var searchInputVal     = self.$searchInput.val(),
 						    searchColumnBtnVal = self.$searchColumnBtn.data('value');
@@ -451,7 +451,7 @@
 						if (searchInputVal.length > 0) {
 							$.address.parameter('s', searchInputVal);
 							$.address.parameter('search_column', searchColumnBtnVal);
-							self.keyUp(e);
+							self.keyUp(evt);
 						}
 						// Force clean s when required
 						else {
@@ -493,8 +493,8 @@
 				//
 				// Pagination text box
 				// -------------------
-				.on('keyup paste', '.current-page', function (e) {
-					self.keyUp(e);
+				.on('keyup paste', '.current-page', function(evt) {
+					self.keyUp(evt);
 				})
 			
 				//
@@ -558,9 +558,9 @@
 				//
 				// Locations tree
 				// --------------
-				.on('click', '.show-locations', function(e) {
+				.on('click', '.show-locations', function(evt) {
 					
-					e.preventDefault();
+					evt.preventDefault();
 					self.openLocationsPopup($(this));
 					
 				})
@@ -695,7 +695,7 @@
 				
 			});
 	
-	        $selectDays.find('.textvalue').click(function () {
+	        $selectDays.find('.textvalue').click(function() {
 		        $(this).hide();
 		        // $selectDays.find('select').show();
 		        $selectDays.find('select').select2();
@@ -712,15 +712,15 @@
 			    $searchColumnBtn      = $('#search_column_btn'),
 			    $searchColumnDropdown = $('#search_column_dropdown');
 			
-			// No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
+			// No option and Product title moved to /view/mc-sc-etc. We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
 			$searchColumnDropdown.empty();
-			$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($searchColumnDropdown.data('product-title'))); // 'Product Name'
+			$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($searchColumnDropdown.data('product-title')));
 			
 			$('#adv-settings input:checked').each(function() {
 				
 				var optionVal = $(this).val();
 				
-				if (optionVal.search('calc_') < 0 && optionVal != 'thumb') { // calc values are not searchable, also we can't search on thumb
+				if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') { // Calc values are not searchable, also we can't search on thumb
 					
 					$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
 					
@@ -733,15 +733,15 @@
 				
 			});
 			
-			$searchColumnBtn.click(function(e) {
+			$searchColumnBtn.click(function(evt) {
 				$(this).parent().find('.dropdown-menu').toggle();
-				e.stopPropagation();
+				evt.stopPropagation();
 			});
 			
 			// TODO click on drop element
-			$searchColumnDropdown.find('a').click(function(e) {
+			$searchColumnDropdown.find('a').click(function(evt) {
 				
-				e.preventDefault();
+				evt.preventDefault();
 				
 				self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
 				
@@ -778,9 +778,9 @@
 			this.bindListLinks();
 			
 			// Hash history navigation
-	        $.address.externalChange(function(e) {
+	        $.address.externalChange(function() {
 		
-		        if (self.settings.ajaxFilter != 'yes') {
+		        if (self.settings.ajaxFilter !== 'yes') {
 			        // Force enabled or disabled search button
 			        var searchInputVal = self.$searchInput.val();
 			        $('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true);
@@ -800,23 +800,24 @@
 		        if ($.address.parameterNames().length) {
 			
 			        // Init fields from hash parameters
-			        var s             = $.address.parameter('s'),
-			            search_column = $.address.parameter('search_column'),
-			            optionVal     = '';
+			        var s            = $.address.parameter('s'),
+			            searchColumn = $.address.parameter('search_column'),
+			            optionVal    = '';
 			        
 			        
 			        if (s) {
 				        self.$searchInput.val(s);
 			        }
 			        
-			        if (search_column) {
+			        if (searchColumn) {
 				
 				        $('#adv-settings :checkbox').each(function() {
 					        optionVal = $(this).val();
 					        if (optionVal.search("calc_") < 0) { // Calc values are not searchable, also we can't search on thumb
 						
-						        if (optionVal !== 'thumb' && optionVal == search_column) {
+						        if (optionVal !== 'thumb' && optionVal == searchColumn) {
 							        self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
+							        
 							        return false;
 						        }
 					        }
@@ -899,6 +900,7 @@
 			
 			if (this.jScrollApi !== null) {
 				this.reloadScrollbar();
+				
 				return;
 			}
 			
@@ -907,7 +909,7 @@
 			    $tableWrapper = $('.atum-table-wrapper'),
 			    scrollOpts    = {
 				    horizontalGutter: 0,
-				    verticalGutter  : 0
+				    verticalGutter  : 0,
 			    };
 			
 			// Reset the sticky cols position and visibility to avoid flickering
@@ -915,7 +917,7 @@
 				self.$stickyCols.hide().css('left', 0);
 			}
 			
-			$tableWrapper.imagesLoaded().then(function () {
+			$tableWrapper.imagesLoaded().then(function() {
 				
 				self.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 				self.jScrollApi  = self.$scrollPane.data('jsp');
@@ -967,11 +969,11 @@
 				// Drag and drop scrolling on desktops
 				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
-				hammertime.on('panright panleft', function (ev) {
+				hammertime.on('panright panleft', function(evt) {
 					
 					var paneStartX   = self.jScrollApi.getContentPositionX(),
 					    offset       = 10, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
-					    displacement = ev.type === 'panright' ? paneStartX - offset : paneStartX + offset
+					    displacement = evt.type === 'panright' ? paneStartX - offset : paneStartX + offset
 					
 					self.jScrollApi.scrollToX( displacement, false)
 					
@@ -1001,7 +1003,7 @@
 
 			if (positionX > 0) {
 				// Wait until the scroll bar is re-added to restore the position
-				this.$atumList.on('atum-scroll-bar-loaded', function () {
+				this.$atumList.on('atum-scroll-bar-loaded', function() {
 					self.jScrollApi.scrollToX(positionX);
 				});
 			}
@@ -1176,7 +1178,7 @@
 				
 				// Add a ghost column
 				var ghostColOpts = {
-					class: 'ghost-column ' + groupClass
+					class: 'ghost-column ' + groupClass,
 				};
 				
 				// The header could be floating (so in another table)
@@ -1282,7 +1284,7 @@
 		        $tipEl.tooltip({
 			        html     : true,
 			        title    : $tipEl.data('tip'),
-			        container: 'body'
+			        container: 'body',
 		        });
 	        });
 	
@@ -1292,7 +1294,7 @@
 		        $tipEl.tooltip({
 			        html     : true,
 			        title    : $tipEl.attr('title'),
-			        container: 'body'
+			        container: 'body',
 		        });
 	        });
 
@@ -1309,7 +1311,7 @@
 		/**
 		 * Enable "Set Field" popovers
 		 */
-		setFieldPopover: function ($metaCells) {
+		setFieldPopover: function($metaCells) {
 			
 			var self = this;
 			
@@ -1323,7 +1325,7 @@
 			});
 			
 			// Focus on the input field and set a reference to the popover to the editable column
-			$metaCells.on('shown.bs.popover', function () {
+			$metaCells.on('shown.bs.popover', function() {
 				var $activePopover = $('.popover.in');
 				$activePopover.find('.meta-value').focus();
 				self.setDatePickers();
@@ -1340,13 +1342,13 @@
 		bindPopover: function($metaCell) {
 			
 			var self              = this,
-				symbol            = $metaCell.data('symbol') || '',
+			    symbol            = $metaCell.data('symbol') || '',
 			    currentColumnText = this.$atumTable.find('tfoot tr.item-heads').children().eq($metaCell.closest('td').index()).text(),
 			    inputType         = $metaCell.data('input-type') || 'number',
 			    inputAtts         = {
 				    type : $metaCell.data('input-type') || 'number',
 				    value: $metaCell.data('input-type') === 'number' || $metaCell.text() === '-' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
-				    class: 'meta-value'
+				    class: 'meta-value',
 			    };
 			
 			if (inputType === 'number') {
@@ -1382,10 +1384,10 @@
 				content  : $content,
 				html     : true,
 				template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
-				'<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+					'<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
 				placement: 'bottom',
 				trigger  : 'click',
-				container: 'body'
+				container: 'body',
 			});
 			
 		},
@@ -1453,7 +1455,7 @@
 			    symbol     = $metaCell.data('symbol') || '',
 			    custom     = $metaCell.data('custom') || 'no',
 			    currency   = $metaCell.data('currency') || '',
-			    value      = (symbol) ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
+			    value      = symbol ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
 			    newValue   = $popover.find('.meta-value').val();
 			
 			// Update the cell value
@@ -1494,6 +1496,7 @@
 						$.each(extraMeta, function (index, elem) {
 							if (elem.name === input.name) {
 								extraMeta[index]['value'] = value;
+								
 								return false;
 							}
 						});
@@ -1514,24 +1517,24 @@
 		maybeAddSaveButton: function() {
 			
 			var self        = this,
-				$tableTitle = this.$atumList.siblings('.wp-heading-inline');
+			    $tableTitle = this.$atumList.siblings('.wp-heading-inline');
 			
 			if (!$tableTitle.find('#atum-update-list').length) {
-				$tableTitle.append( $('<button/>', {
-					id: 'atum-update-list',
+				$tableTitle.append($('<button/>', {
+					id   : 'atum-update-list',
 					class: 'page-title-action button-primary',
-					text: self.settings.saveButton
-				}) );
+					text : self.settings.saveButton,
+				}));
 				
 				// Check whether to show the first edit popup
 				if (typeof swal === 'function' && typeof this.settings.firstEditKey !== 'undefined') {
 					
 					swal({
-						title            : self.settings.important,
-						text             : self.settings.preventLossNotice,
-						type             : 'warning',
-						confirmButtonText: self.settings.ok,
-						confirmButtonColor: '#00b8db'
+						title             : self.settings.important,
+						text              : self.settings.preventLossNotice,
+						type              : 'warning',
+						confirmButtonText : self.settings.ok,
+						confirmButtonColor: '#00b8db',
 					});
 					
 				}
@@ -1552,7 +1555,7 @@
 				    data = {
 					    token : self.settings.nonce,
 					    action: 'atum_update_data',
-					    data  : self.$editInput.val()
+					    data  : self.$editInput.val(),
 				    };
 				
 				if (typeof this.settings.firstEditKey !== 'undefined') {
@@ -1564,11 +1567,11 @@
 					method    : 'POST',
 					dataType  : 'json',
 					data      : data,
-					beforeSend: function () {
+					beforeSend: function() {
 						$button.prop('disabled', true);
 						self.addOverlay();
 					},
-					success   : function (response) {
+					success   : function(response) {
 						
 						if (typeof response === 'object') {
 							var noticeType = (response.success) ? 'updated' : 'error';
@@ -1591,7 +1594,7 @@
 						}
 						
 					},
-					error: function() {
+					error     : function() {
 						$.atumDoingAjax = undefined;
 						$button.prop('disabled', false);
 						self.removeOverlay();
@@ -1599,7 +1602,7 @@
 						if (typeof self.settings.firstEditKey !== 'undefined') {
 							delete self.settings.firstEditKey;
 						}
-					}
+					},
 				});
 				
 			}
@@ -1626,17 +1629,17 @@
 				url       : ajaxurl,
 				method    : 'POST',
 				dataType  : 'json',
-				data: {
+				data      : {
 					token      : self.settings.nonce,
 					action     : 'atum_apply_bulk_action',
 					bulk_action: bulkAction,
-					ids        : selectedItems
+					ids        : selectedItems,
 				},
-				beforeSend: function () {
+				beforeSend: function() {
 					$bulkButton.prop('disabled', true);
 					self.addOverlay();
 				},
-				success   : function (response) {
+				success   : function(response) {
 					
 					if (typeof response === 'object') {
 						var noticeType = (response.success) ? 'updated' : 'error';
@@ -1651,10 +1654,10 @@
 					}
 					
 				},
-				error: function() {
+				error     : function() {
 					$bulkButton.prop('disabled', false);
 					self.removeOverlay();
-				}
+				},
 			});
 			
 		},
@@ -1662,23 +1665,25 @@
 		 * Add/remove row active class when checkbox is clicked
 		 */
 		addActiveClassRow: function() {
+			
 			var self = this;
-			self.$atumList.find('tbody .check-column input:checkbox').change(function () {
+			
+			self.$atumList.find('tbody .check-column input:checkbox').change(function() {
 				var $checkboxRow = self.$atumList.find("[data-id='" + $(this).val() + "']");
-				if ( $(this).is(':checked') ) {
+				if ($(this).is(':checked')) {
 					$checkboxRow.addClass('active-row');
 				}
-				else{
+				else {
 					$checkboxRow.removeClass('active-row');
 				}
 			});
 			
-			$('#cb-select-all-1').change(function () {
-				$('tbody tr').each(function () {
+			$('#cb-select-all-1').change(function() {
+				$('tbody tr').each(function() {
 					var $checkbox = $(this).find('.check-column input[type=checkbox]');
 					if ($(this).hasClass('expandable')) {
 					}
-					if ( $checkbox.is(':checked') ) {
+					if ($checkbox.is(':checked')) {
 						$(this).addClass('active-row');
 					}
 					else {
@@ -1686,6 +1691,7 @@
 					}
 				});
 			});
+			
 		},
 		/**
 		 * Reload active class row
@@ -1698,119 +1704,132 @@
 		 * Init horizontal scroll
 		 */
 		initHorizontalScrolleffect: function() {
+			
 			var self = this;
-			$(window).on('resize', function () {
+			
+			$(window).on('resize', function() {
 				self.addHorizontalScrolleffect('stock_central_nav', false);
 				self.addHorizontalScrolleffect('filters_container', false);
 			});
 			
-			$('.nav-with-scroll-effect').on('scroll',function () {
+			$('.nav-with-scroll-effect').on('scroll', function() {
 				self.addHorizontalScrolleffect($(this).attr('id'), true);
 				if ($(this).hasClass('dragging')) {
 					self.destroyTooltips();
 				}
 			});
 			
-			$('.select2-selection__rendered').on('mouseout', function () {
+			$('.select2-selection__rendered').on('mouseout', function() {
 				self.addTooltips();
 			});
 			
-			$('.dragscroll a').on('click mouseover',function(event) {
+			$('.dragscroll a').on('click mouseover', function(evt) {
 				if ($(this).closest('.dragscroll').hasClass('dragging')) {
-					event.preventDefault();
+					evt.preventDefault();
 					self.destroyTooltips();
+					
 					return false;
-				}else {
+				}
+				else {
 					self.addTooltips();
 				}
 			});
 			
 			dragscroll.reset();
+			
 		},
 		/**
 		 * Add horizontal scroll effect to menu views
 		 */
 		addHorizontalScrolleffect: function(elementId, checkEnhanced) {
-			var self = this;
 			
 			if ( checkEnhanced ) {
-				$('.enhanced').select2("close");
+				$('.enhanced').select2('close');
 			}
 			
-			var $nav = document.getElementById(elementId);
-			var $overflowOpacityEffectRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right');
-			var $overflowOpacityEffectLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left');
-			var $leftMax                    = $nav ? $nav.scrollWidth : 0;
-			var $left                       = $nav ? $nav.scrollLeft : 0;
-			var $diff                       = $leftMax - $left;
+			var $nav                  = document.getElementById(elementId),
+			    $overflowOpacityRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right'),
+			    $overflowOpacityLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left'),
+			    $leftMax              = $nav ? $nav.scrollWidth : 0,
+			    $left                 = $nav ? $nav.scrollLeft : 0,
+			    $diff                 = $leftMax - $left;
 			
-			if ($diff === $('#' + elementId).outerWidth())
-			{
-				$overflowOpacityEffectRight.hide();
-			}else {
-				$overflowOpacityEffectRight.show();
+			if ($diff === $('#' + elementId).outerWidth()) {
+				$overflowOpacityRight.hide();
+			}
+			else {
+				$overflowOpacityRight.show();
 			}
 			
-			if ( $left === 0 ) {
-				$overflowOpacityEffectLeft.hide();
-			}else {
-				$overflowOpacityEffectLeft.show();
+			if ($left === 0) {
+				$overflowOpacityLeft.hide();
+			}
+			else {
+				$overflowOpacityLeft.show();
 			}
 			
-			if ( $overflowOpacityEffectLeft.is(":visible") || $overflowOpacityEffectRight.is(":visible") ) {
+			if ($overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible')) {
 				$('#' + elementId).css('cursor', 'grab');
-			}else {
+			}
+			else {
 				$('#' + elementId).css('cursor', 'auto');
 			}
+			
 		},
+		
 		/**
 		 * Add input page function
 		 */
 		inputPageChange: function() {
+			
 			var self  = this;
-			self.$atumList.on('keypress', '#current-page-selector', function (e) {
-				if (e.which == 13) {
-					if ( location.href.indexOf('paged=' + $(this).data('current')) !== -1 ) {
+			
+			self.$atumList.on('keypress', '#current-page-selector', function(evt) {
+				if (evt.which === 13) {
+					if (location.href.indexOf('paged=' + $(this).data('current')) !== -1) {
 						location.href = location.href.replace('paged=' + $(this).data('current'), 'paged=' + $(this).val());
-					}else {
-						if ( location.href.indexOf('#/?') !== -1 ) {
+					}
+					else {
+						if (location.href.indexOf('#/?') !== -1) {
 							location.href = location.href + '&paged=' + $(this).val();
-						}else {
+						}
+						else {
 							location.href = location.href + '#/?paged=' + $(this).val();
 						}
 					}
 				}
 			});
+			
 		},
 		
 		/**
 		 * Reload add Horizontal Scroll effect
 		 */
-		reloadAddHorizontalScrolleffect: function() {
+		reloadAddHorizontalScroll: function() {
 			this.initHorizontalScrolleffect();
 		},
 		
 		/**
 		 * Update the URL hash with the current filters
 		 */
-		updateHash: function () {
+		updateHash: function() {
 
 			var self = this;
 			
-			this.filterData   = $.extend(this.filterData, {
+			this.filterData = $.extend(this.filterData, {
 				view          : $.address.parameter('view') || self.$atumList.find('.subsubsub a.current').attr('id') || '',
 				product_cat   : self.$atumList.find('.dropdown_product_cat').val() || '',
 				product_type  : self.$atumList.find('.dropdown_product_type').val() || '',
 				supplier      : self.$atumList.find('.dropdown_supplier').val() || '',
 				extra_filter  : self.$atumList.find('.dropdown_extra_filter').val() || '',
-				paged         : parseInt(  $.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged ),
+				paged         : parseInt($.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged),
 				//s             : self.$searchInput.val() || '',
-                //search_column : self.$searchColumnBtn.data('value') || '',
-                s             : $.address.parameter('s') || '',
-                search_column : $.address.parameter('search_column') || '',
-                sold_last_days: $.address.parameter('sold_last_days') || '',
+				//search_column : self.$searchColumnBtn.data('value') || '',
+				s             : $.address.parameter('s') || '',
+				search_column : $.address.parameter('search_column') || '',
+				sold_last_days: $.address.parameter('sold_last_days') || '',
 				orderby       : $.address.parameter('orderby') || self.settings.orderby,
-				order         : $.address.parameter('order') || self.settings.order
+				order         : $.address.parameter('order') || self.settings.order,
 			});
 			
 			// Update the URL hash parameters
@@ -1827,6 +1846,7 @@
 				// If it's the default value, is not needed
 				if (self.settings.hasOwnProperty(elem) && self.settings[elem] === self.filterData[elem]) {
 					$.address.parameter(elem, '');
+					
 					return true;
 				}
 				
@@ -1848,7 +1868,7 @@
 		/**
 		 * Send the ajax call and replace table parts with updated version
 		 */
-		updateTable: function () {
+		updateTable: function() {
 			
 			var self = this;
 			
@@ -1858,17 +1878,17 @@
 			
 			// Overwrite the filterData with the URL hash parameters
 			this.filterData = $.extend(this.filterData, {
-				view        	: $.address.parameter('view') || '',
-				product_cat 	: $.address.parameter('product_cat') || '',
-				product_type	: $.address.parameter('product_type') || '',
-				supplier    	: $.address.parameter('supplier') || '',
-				extra_filter	: $.address.parameter('extra_filter') || '',
-				paged       	: $.address.parameter('paged') || '',
-				order       	: $.address.parameter('order') || '',
-				orderby     	: $.address.parameter('orderby') || '',
-                search_column 	: $.address.parameter('search_column') || '',
-                sold_last_days 	: $.address.parameter('sold_last_days') || '',
-				s           	: $.address.parameter('s') || '',
+				view          : $.address.parameter('view') || '',
+				product_cat   : $.address.parameter('product_cat') || '',
+				product_type  : $.address.parameter('product_type') || '',
+				supplier      : $.address.parameter('supplier') || '',
+				extra_filter  : $.address.parameter('extra_filter') || '',
+				paged         : $.address.parameter('paged') || '',
+				order         : $.address.parameter('order') || '',
+				orderby       : $.address.parameter('orderby') || '',
+				search_column : $.address.parameter('search_column') || '',
+				sold_last_days: $.address.parameter('sold_last_days') || '',
+				s             : $.address.parameter('s') || '',
 			});
 			
 			this.doingAjax = $.ajax({
@@ -1876,15 +1896,15 @@
 				dataType  : 'json',
 				method    : 'GET',
 				data      : self.filterData,
-				beforeSend: function () {
+				beforeSend: function() {
 					self.destroyTooltips();
 					self.addOverlay();
 				},
 				// Handle the successful result
-				success   : function (response) {
-
+				success   : function(response) {
+					
 					self.doingAjax = null;
-
+					
 					if (typeof response === 'undefined' || !response) {
 						return false;
 					}
@@ -1945,18 +1965,18 @@
 					}
 					
 					self.reloadAddActiveClassRow();
-					self.reloadAddHorizontalScrolleffect();
+					self.reloadAddHorizontalScroll();
 					
 					self.removeOverlay();
-                    self.setupSalesLastNDaysVal();
-                    
-                    // Custom trigger after updating
-                    self.$atumList.trigger('atum-table-updated');
+					self.setupSalesLastNDaysVal();
+					
+					// Custom trigger after updating
+					self.$atumList.trigger('atum-table-updated');
 					
 				},
-				error     : function (error) {
+				error     : function() {
 					self.removeOverlay();
-				}
+				},
 			});
 			
 		},
@@ -1971,35 +1991,39 @@
 		 *
 		 * @return string|boolean The variable value if available, false else.
 		 */
-		__query: function (query, variable) {
+		__query: function(query, variable) {
 			
-			var vars = query.split("&");
+			var vars = query.split('&');
 			for (var i = 0; i < vars.length; i++) {
-				var pair = vars[i].split("=");
+				var pair = vars[i].split('=');
 				if (pair[0] === variable) {
 					return pair[1];
 				}
 			}
+			
 			return false;
+			
 		},
 		
 		/**
 		 * Add the overlay effect while loading data
 		 */
 		addOverlay: function() {
+			
 			$('.atum-table-wrapper').block({
 				message   : null,
 				overlayCSS: {
 					background: '#000',
-					opacity   : 0.5
-				}
+					opacity   : 0.5,
+				},
 			});
+			
 		},
 		
 		/**
 		 * Remove the overlay effect once the data is fully loaded
 		 */
-		removeOverlay: function() {;
+		removeOverlay: function() {
 			$('.atum-table-wrapper').unblock();
 		},
 		
@@ -2038,6 +2062,7 @@
 					// Filter the meta cell that was previously edited
 					var $metaCell = $('tr[data-id="' + itemId + '"] .set-meta');
 					if ($metaCell.length) {
+						
 						$.each(meta, function(key, value) {
 							
 							$metaCell = $metaCell.filter('[data-meta="' + key + '"]');
@@ -2060,6 +2085,7 @@
 								}
 							}
 						});
+						
 					}
 					
 				});
@@ -2082,10 +2108,10 @@
 			this.$atumList.before($notice.append($dismissButton));
 			$notice.slideDown(100);
 			
-			$dismissButton.on('click.wp-dismiss-notice', function (e) {
-				e.preventDefault();
-				$notice.fadeTo(100, 0, function () {
-					$notice.slideUp(100, function () {
+			$dismissButton.on('click.wp-dismiss-notice', function(evt) {
+				evt.preventDefault();
+				$notice.fadeTo(100, 0, function() {
+					$notice.slideUp(100, function() {
 						$notice.remove();
 					});
 				});
@@ -2177,7 +2203,7 @@
 			}
 			
 			// Re-enable the expanding again once the animation is completed
-			setTimeout(function () {
+			setTimeout(function() {
 				
 				delete self.isRowExpanding[rowId];
 				
@@ -2256,19 +2282,20 @@
 			
 			var self = this;
 			
-			if (searchInputVal.length == 0) {
+			if (searchInputVal.length === 0) {
 				
 				if (searchInputVal != $.address.parameter('s')) {
 					$.address.parameter('s', '');
 					$.address.parameter('search_column', '');
-					self.updateHash(); // force clean search
+					self.updateHash(); // Force clean search
 				}
 			}
-			else if (typeof searchColumnBtnVal != 'undefined'  && searchColumnBtnVal.length > 0) {
+			else if (typeof searchColumnBtnVal != 'undefined' && searchColumnBtnVal.length > 0) {
 				$.address.parameter('s', searchInputVal);
 				$.address.parameter('search_column', searchColumnBtnVal);
 				self.updateHash();
-			}else if (searchInputVal.length > 0){
+			}
+			else if (searchInputVal.length > 0) {
 				$.address.parameter('s', searchInputVal);
 				self.updateHash();
 			}
@@ -2368,7 +2395,7 @@
 							data      : {
 								action    : 'atum_get_locations_tree',
 								token     : self.settings.nonce,
-								product_id: -1 // Send -1 to get all the terms
+								product_id: -1, // Send -1 to get all the terms
 							},
 							beforeSend: function() {
 								$locationsTreeContainer.append('<div class="atum-loading" />');
@@ -2440,12 +2467,12 @@
 						
 					},
 					// Save clicked
-					preConfirm         : function () {
-						return new Promise(function (resolve, reject) {
+					preConfirm         : function() {
+						return new Promise(function(resolve, reject) {
 							
 							// ["cat-item-40", "cat-item-39"] -> [40, 39]
-							var toSetTerms = toSetLocations.map(function(x) {
-								return parseInt(x.substring(9));
+							var toSetTerms = toSetLocations.map(function(elem) {
+								return parseInt(elem.substring(9));
 							});
 							
 							$.ajax({
@@ -2502,7 +2529,7 @@
 	
 	
 	// Allow an event to fire after all images are loaded
-	$.fn.imagesLoaded = function () {
+	$.fn.imagesLoaded = function() {
 		
 		// Get all the images (excluding those with no src attribute)
 		var $imgs = this.find('img[src!=""]');
@@ -2513,15 +2540,15 @@
 		
 		// For each image, add a deferred object to the array which resolves when the image is loaded (or if loading fails)
 		var dfds = [];
-		$imgs.each(function () {
+		$imgs.each(function() {
 			
 			var dfd = $.Deferred();
 			dfds.push(dfd);
 			var img = new Image();
-			img.onload = function () {
+			img.onload = function() {
 				dfd.resolve();
 			}
-			img.onerror = function () {
+			img.onerror = function() {
 				dfd.resolve();
 			}
 			img.src = this.src;
@@ -2536,21 +2563,18 @@
 	
 	// Filter by data
 	$.fn.filterByData = function(prop, val) {
+		
 		var self = this;
+		
 		if (typeof val === 'undefined') {
-			return self.filter(
-				
-				function() {
-					return typeof $(this).data(prop) !== 'undefined';
-				});
+			return self.filter(function() {
+				return typeof $(this).data(prop) !== 'undefined';
+			});
 		}
 		
-		return self.filter(
-			
-			function() {
-				return $(this).data(prop) == val;
-			}
-		);
+		return self.filter(function() {
+			return $(this).data(prop) == val;
+		});
 	};
 	
 	
