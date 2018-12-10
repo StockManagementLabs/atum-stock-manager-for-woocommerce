@@ -181,7 +181,7 @@
 				if (isFloated) {
 					
 					$floatContainer.css('height', 'auto');
-					
+					$('.jspContainer').height($('.jspPane').height());
 					// Hide search dropdown on sticky
 					if (self.settings.searchDropdown === 'yes') {
 						$('#search_column_dropdown').hide();
@@ -907,8 +907,7 @@
 			    $tableWrapper = $('.atum-table-wrapper'),
 			    scrollOpts    = {
 				    horizontalGutter: 0,
-				    verticalGutter  : 0,
-				    resizeSensor    : true
+				    verticalGutter  : 0
 			    };
 			
 			// Reset the sticky cols position and visibility to avoid flickering
