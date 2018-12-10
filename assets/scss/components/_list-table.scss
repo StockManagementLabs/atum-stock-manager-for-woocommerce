@@ -777,9 +777,10 @@
 		transform: rotate(45deg);
 	}
 	
-	.sticky-columns-button-container {
+	.table-style-buttons {
 		@include flexbox;
 		@include flex-align-items(center);
+		
 		button {
 			width: 30px;
 			height: 30px;
@@ -788,30 +789,35 @@
 			background-color: $white;
 			color: $gray-600;
 			cursor: pointer;
-			-webkit-transition: all 0.20s; /* Safari */
-			transition: all 0.20s;
+			@include transition(all 0.20s);
 			line-height: 2;
 			
 			&:first-child {
 				margin-left: 9px;
 				margin-right: 5px;
 			}
+			
 			&:focus {
 				outline: 0;
 			}
+			
 			&.active, &:hover {
 				background-color: $blue;
 				color: $white;
 				border-color: $white;
 			}
+			
 			&:hover {
 				background-color: rgba($blue, 0.6);
 				border-color: $white;
 			}
+			
 		}
+		
 		@media all and (max-width: $screen-xs-min) {
 			display: none;
 		}
+		
 	}
 	
 	.search-submit {

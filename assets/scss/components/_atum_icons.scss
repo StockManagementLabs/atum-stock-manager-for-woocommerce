@@ -24,34 +24,19 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.atmi-view-sidebar-right-outline {
+.atmi-view-list {
 	&:before {
-		content: $atmi-view-sidebar-right-outline;
+		content: $atmi-view-list;
 	}
 }
-.atmi-info {
+.atmi-view-sidebar-left {
 	&:before {
-		content: $atmi-info;
+		content: $atmi-view-sidebar-left;
 	}
 }
-.atmi-view-grid-outline {
+.atmi-view-grid {
 	&:before {
-		content: $atmi-view-grid-outline;
-	}
-}
-.atmi-view-col-fixed-outline {
-	&:before {
-		content: $atmi-view-col-fixed-outline;
-	}
-}
-.atmi-view-list-outline {
-	&:before {
-		content: $atmi-view-list-outline;
-	}
-}
-.atmi-multi-inventory {
-	&:before {
-		content: $atmi-multi-inventory;
+		content: $atmi-view-grid;
 	}
 }
 .atmi-view-sidebar-right {
@@ -59,14 +44,19 @@
 		content: $atmi-view-sidebar-right;
 	}
 }
-.atmi-view-list {
+.atmi-view-sticky-header {
 	&:before {
-		content: $atmi-view-list;
+		content: $atmi-view-sticky-header;
 	}
 }
-.atmi-view-grid {
+.atmi-info {
 	&:before {
-		content: $atmi-view-grid;
+		content: $atmi-info;
+	}
+}
+.atmi-multi-inventory {
+	&:before {
+		content: $atmi-multi-inventory;
 	}
 }
 .atmi-view-list-2 {

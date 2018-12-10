@@ -55,11 +55,13 @@
 		$collapsedGroups     : null,
 		$stickyCols          : null,
 		$floatTheadStickyCols: null,
+		enabledStickyHeader  : false,
+		enabledStickyColumns : false,
 		
 		/**
 		 * Register our events and initialize the UI
 		 */
-		init: function () {
+		init: function() {
 			
 			var self         = this,
 			    inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
@@ -67,7 +69,7 @@
 			
 			//
 			// Initialize the filters' data
-			//-----------------------------
+			// -----------------------------
 			if (!$.isNumeric(inputPerPage)) {
 				perPage = this.settings.perPage || 20;
 			}
@@ -100,7 +102,7 @@
 			}
 			
 			// Footer position
-			$(window).on('load', function () {
+			$(window).on('load', function() {
 				$('#wpfooter').show();
 			});
 			
@@ -108,11 +110,6 @@
 			// Setup the URL navigation
 			// -------------------------
 			this.setupNavigation();
-			
-			//
-			// Change sticky columns setting function
-			// --------------------------------------
-			this.toggleStickyColumns();
 			
 			//
 			// Add active crow style
@@ -143,13 +140,6 @@
 			}).resize();
 			
 			//
-			// Make the first columns sticky
-			// -----------------------------
-			if (this.settings.enabledStickyColumns === 'yes') {
-				this.$stickyCols = this.createStickyColumns(this.$atumTable);
-			}
-			
-			//
 			// Hide/Show the toggleable group of columns with the toggler button
 			// -----------------------------------------------------------------
 			this.$atumList.on('click', '.group-toggler', function() {
@@ -161,7 +151,7 @@
 			// Show the toggleable group columns when opening the screen options
 			// to avoid the hidden columns to be disabled when switching column visibilities
 			// ------------------------------------------------------------------------------
-			$('#show-settings-link').click(function () {
+			$('#show-settings-link').click(function() {
 				
 				if (!$(this).hasClass('screen-meta-active')) {
 					self.$atumTable.find('.column-groups').find('th.collapsed').find('.group-toggler').click();
@@ -170,12 +160,24 @@
 			});
 			
 			//
+			// Make the first columns sticky
+			// -----------------------------
+			this.enabledStickyColumns = $('.sticky-columns-button').hasClass('active');
+			if (this.enabledStickyColumns) {
+				this.$stickyCols = this.createStickyColumns(this.$atumTable);
+			}
+			
+			//
 			// Add the floating table header
 			// -----------------------------
-			this.addFloatThead();
+			this.enabledStickyHeader = $('.sticky-header-button').hasClass('active');
+			if (this.enabledStickyHeader) {
+				this.addFloatThead();
+			}
 			
 			// This event will trigger on the table when the header is floated and unfloated
-			this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer){
+			this.$atumTable.on('floatThead', function(e, isFloated, $floatContainer) {
+				
 				if (isFloated) {
 					
 					$floatContainer.css('height', 'auto');
@@ -198,40 +200,44 @@
 						self.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
 					}
 					
-					// Add the sticky columns to the floating header too
-					var $floatTheadTable = self.$atumList.find('.floatThead-table');
-					self.$floatTheadStickyCols = self.createStickyColumns($floatTheadTable);
-					
-					if (self.$floatTheadStickyCols !== null) {
+					// Add the sticky columns to the floating header if needed
+					if (self.enabledStickyColumns) {
 						
-						$floatTheadTable.after(self.$floatTheadStickyCols);
-						self.$floatTheadStickyCols.css('width', self.$stickyCols.width() + 1);
+						var $floatTheadTable = self.$atumList.find('.floatThead-table');
+						self.$floatTheadStickyCols = self.createStickyColumns($floatTheadTable);
 						
-						// Add the colgroup tag with column widths
-						self.$floatTheadStickyCols.prepend('<colgroup />');
-						
-						var $colGroup = self.$floatTheadStickyCols.find('colgroup');
-						
-						$floatTheadTable.find('thead .item-heads').children().each(function() {
+						if (self.$floatTheadStickyCols !== null) {
 							
-							var $cell = $(this),
-							    id    = $cell.attr('id');
+							$floatTheadTable.after(self.$floatTheadStickyCols);
+							self.$floatTheadStickyCols.css('width', self.$stickyCols.width() + 1);
 							
-							if ($cell.hasClass('hidden')) {
-								return;
-							}
+							// Add the colgroup tag with column widths
+							self.$floatTheadStickyCols.prepend('<colgroup />');
 							
-							if (self.$floatTheadStickyCols.find('thead .item-heads').children('#' + id).length ) {
-								$colGroup.append('<col style="width:' + $cell.width() + 'px;">');
-							}
-						});
-						
-						// Remove the manage-column class to not conflict with the WP's Screen Options functionality
-						self.$floatTheadStickyCols.find('.manage-column').removeClass('manage-column');
-						
-						$colGroup.prependTo(self.$floatTheadStickyCols);
-						
-						self.adjustStickyHeaders(self.$floatTheadStickyCols, $floatTheadTable);
+							var $colGroup = self.$floatTheadStickyCols.find('colgroup');
+							
+							$floatTheadTable.find('thead .item-heads').children().each(function() {
+								
+								var $cell = $(this),
+								    id    = $cell.attr('id');
+								
+								if ($cell.hasClass('hidden')) {
+									return;
+								}
+								
+								if (self.$floatTheadStickyCols.find('thead .item-heads').children('#' + id).length) {
+									$colGroup.append('<col style="width:' + $cell.width() + 'px;">');
+								}
+							});
+							
+							// Remove the manage-column class to not conflict with the WP's Screen Options functionality
+							self.$floatTheadStickyCols.find('.manage-column').removeClass('manage-column');
+							
+							$colGroup.prependTo(self.$floatTheadStickyCols);
+							
+							self.adjustStickyHeaders(self.$floatTheadStickyCols, $floatTheadTable);
+							
+						}
 						
 					}
 					
@@ -240,14 +246,18 @@
 					
 					$floatContainer.css('height', 0);
 					
-					// Reset the sticky columns position
-					if (self.$stickyCols !== null){
-						self.$stickyCols.css('top', 0);
-					}
-					
-					// Remove the floating header's sticky columns
-					if (self.$floatTheadStickyCols !== null) {
-						self.$floatTheadStickyCols.remove();
+					if (self.enabledStickyColumns) {
+						
+						// Reset the sticky columns position
+						if (self.$stickyCols !== null) {
+							self.$stickyCols.css('top', 0);
+						}
+						
+						// Remove the floating header's sticky columns
+						if (self.$floatTheadStickyCols !== null) {
+							self.$floatTheadStickyCols.remove();
+						}
+						
 					}
 					
 				}
@@ -281,7 +291,7 @@
 			});
 			
 			//
-			// Handle the sales N days siwtcher
+			// Handle the sales N days switcher
 			// --------------------------------
 			this.setupSalesLastNDaysVal();
 
@@ -403,8 +413,8 @@
 					$searchSubmitBtn.prop('disabled', true);
 				}
 				
-				// if s is empty, search-submit must be disabled and ?s removed
-				// if s and searchColumnBtnVal have values, then we can push over search
+				// If s is empty, search-submit must be disabled and ?s removed
+				// If s and searchColumnBtnVal have values, then we can push over search
 				this.$searchInput.bind('input', function() {
 					
 					var searchColumnBtnVal = self.$searchColumnBtn.data('value'),
@@ -416,13 +426,14 @@
 						if (inputVal != $.address.parameter('s')) {
 							$.address.parameter('s', '');
 							$.address.parameter('search_column', '');
-							self.updateHash(); // force clean search
+							self.updateHash(); // Force clean search
 						}
 					}
 					// Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails)
 					else if ( typeof searchColumnBtnVal != 'undefined' && searchColumnBtnVal.length > 0) {
 						$searchSubmitBtn.prop('disabled', false);
-					}else if (inputVal) {
+					}
+					else if (inputVal) {
 						$searchSubmitBtn.prop('disabled', false);
 					}
 					
@@ -476,11 +487,12 @@
 				
 			}
 			
-			//
-			// Pagination text box
-			// -------------------
+			
 			this.$atumList
-				
+			
+				//
+				// Pagination text box
+				// -------------------
 				.on('keyup paste', '.current-page', function (e) {
 					self.keyUp(e);
 				})
@@ -596,6 +608,20 @@
 						},
 					});
 					
+				})
+			
+				//
+				// Table style buttons
+				// -------------------
+				.on('click', '.table-style-buttons button', function() {
+					
+					var $button = $(this),
+					    feature = $button.hasClass('sticky-columns-button') ? 'sticky-columns' : 'sticky-header';
+					
+					$button.toggleClass('active');
+					
+					self.toggleTableStyle(feature, $button.hasClass('active'));
+					
 				});
 				
 			//
@@ -637,12 +663,12 @@
 		/**
 		 * Sales Last Days switcher
 		 */
-        setupSalesLastNDaysVal: function() {
+		setupSalesLastNDaysVal: function() {
 	
 	        var self            = this,
 	            $selectDays     = $('#sales_last_ndays_val'),
 	            selectDaysText  = $selectDays.text(),
-	            days            = Array.apply(null, {length: 31}).map(Number.call, Number), //var o = [0, 1, 2, 3 ... 30];
+	            days            = Array.apply(null, {length: 31}).map(Number.call, Number), // [0, 1, 2, 3 ... 30]
 	            $selectableDays = $('<select/>');
 	        
 	        days.shift();
@@ -655,90 +681,90 @@
 	        $selectDays.append($selectableDays);
 	        $selectDays.find('select').hide().val(selectDaysText);
 			
-	        $selectableDays.change(function () {
-	        	
-	        	var $select = $(this);
-	        	
-		        $selectDays.find('.textvalue').text($select.val());
-		        $select.hide();
-		        $selectDays.find('.select2').hide();
-		        $selectDays.find('.textvalue').show();
-		        
-		        $.address.parameter('sold_last_days', parseInt($select.val()));
-		        self.updateHash();
-		        
-	        });
+			$selectableDays.change(function() {
+				
+				var $select = $(this);
+				
+				$selectDays.find('.textvalue').text($select.val());
+				$select.hide();
+				$selectDays.find('.select2').hide();
+				$selectDays.find('.textvalue').show();
+				
+				$.address.parameter('sold_last_days', parseInt($select.val()));
+				self.updateHash();
+				
+			});
 	
 	        $selectDays.find('.textvalue').click(function () {
 		        $(this).hide();
 		        // $selectDays.find('select').show();
 		        $selectDays.find('select').select2();
 	        });
-
-        },
+			
+		},
 
 		/**
 		 * Fill the search by column dropdown with the active screen options checkboxes
 		 */
-        setupSearchColumnDropdown: function() {
-        
+		setupSearchColumnDropdown: function() {
+			
 			var self                  = this,
 			    $searchColumnBtn      = $('#search_column_btn'),
 			    $searchColumnDropdown = $('#search_column_dropdown');
-
-            // No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
-            $searchColumnDropdown.empty();
-            $searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($searchColumnDropdown.data('product-title'))); // 'Product Name'
-
-            $('#adv-settings input:checked').each(function () {
-            	
-                var optionVal = $(this).val();
-                
-                if (optionVal.search('calc_') < 0 && optionVal != 'thumb') { // calc values are not searchable, also we can't search on thumb
-                    
-                    $searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
-
-                    // Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
-                    if ($.address.parameter('search_column') != $searchColumnBtn.data('value') && $searchColumnBtn.data('value') == optionVal) {
-                        self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
-                    }
-                    
-                }
-                
-            });
 			
-			$searchColumnBtn.click(function (e) {
-                $(this).parent().find('.dropdown-menu').toggle();
-                e.stopPropagation();
-            });
-
-            // TODO click on drop element
-			$searchColumnDropdown.find('a').click(function (e) {
-
-                e.preventDefault();
-
-                self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
-
-                $(this).parents().find('.dropdown-menu').hide();
-                $searchColumnDropdown.children('a.active').removeClass('active');
-                $(this).addClass('active');
-
-                var fieldTye = $.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1 ? 'number' : 'text';
+			// No option and Product title moved to /view/mc-sc-etc . We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
+			$searchColumnDropdown.empty();
+			$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($searchColumnDropdown.data('product-title'))); // 'Product Name'
+			
+			$('#adv-settings input:checked').each(function() {
+				
+				var optionVal = $(this).val();
+				
+				if (optionVal.search('calc_') < 0 && optionVal != 'thumb') { // calc values are not searchable, also we can't search on thumb
+					
+					$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
+					
+					// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
+					if ($.address.parameter('search_column') != $searchColumnBtn.data('value') && $searchColumnBtn.data('value') == optionVal) {
+						self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
+					}
+					
+				}
+				
+			});
+			
+			$searchColumnBtn.click(function(e) {
+				$(this).parent().find('.dropdown-menu').toggle();
+				e.stopPropagation();
+			});
+			
+			// TODO click on drop element
+			$searchColumnDropdown.find('a').click(function(e) {
+				
+				e.preventDefault();
+				
+				self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>']);
+				
+				$(this).parents().find('.dropdown-menu').hide();
+				$searchColumnDropdown.children('a.active').removeClass('active');
+				$(this).addClass('active');
+				
+				var fieldTye = $.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1 ? 'number' : 'text';
 				self.$searchInput.attr('type', fieldTye);
-
-                if (self.settings.ajaxFilter === 'yes') {
-                    $searchColumnBtn.trigger('search_column_data_changed');
-                }
-               
-            });
-
-            $(document).click(function () {
-	            $searchColumnDropdown.hide();
-            });
-
-        },
-
-        /**
+				
+				if (self.settings.ajaxFilter === 'yes') {
+					$searchColumnBtn.trigger('search_column_data_changed');
+				}
+				
+			});
+			
+			$(document).click(function() {
+				$searchColumnDropdown.hide();
+			});
+			
+		},
+		
+		/**
 		 * Setup the URL state navigation
 		 */
 		setupNavigation: function() {
@@ -806,39 +832,57 @@
 		},
 		
 		/**
-		 * Activate/Deactivate sticky columns' setting
+		 * Toggle table style feature from table style buttons
+		 *
+		 * @param string feature
+		 * @param boolean enabled
 		 */
-		toggleStickyColumns: function() {
+		toggleTableStyle: function(feature, enabled) {
 			
-			var self = this;
+			this.destroyTooltips();
 			
-			this.$atumList.find('.sticky-columns-button').click(function() {
+			// Toggle sticky columns
+			if ('sticky-columns' === feature) {
 				
-				var $button           = $(this),
-				    $buttonsContainer = $button.closest('.sticky-columns-button-container'),
-				    enabled           = $button.data('option');
+				this.enabledStickyColumns = enabled;
 				
-				$buttonsContainer.find('button').toggleClass('active');
-				
-				if ('yes' === enabled) {
-					self.$stickyCols = self.createStickyColumns(self.$atumTable);
-					self.$scrollPane.trigger('jsp-initialised'); // Trigger the jScrollPane to add the sticky columns to the table.
+				if (enabled) {
+					this.$stickyCols = this.createStickyColumns(this.$atumTable);
+					this.$scrollPane.trigger('jsp-initialised'); // Trigger the jScrollPane to add the sticky columns to the table.
 				}
 				else {
-					self.destroyStickyColumns();
+					this.destroyStickyColumns();
 				}
 				
-				// Save the sticky columns status as user meta.
-				$.ajax({
-					url       : ajaxurl,
-					method    : 'POST',
-					data      : {
-						token  : self.settings.stickyColumnsNonce,
-						action : 'atum_change_sticky_columns_value',
-						enabled: enabled,
-					},
-				});
+			}
+			// Toggle sticky header
+			else {
+				
+				this.enabledStickyHeader = enabled;
+				
+				if (enabled) {
+					this.addFloatThead();
+				}
+				else {
+					this.destroyFloatThead();
+				}
+				
+			}
+				
+			// Save the sticky columns status as user meta.
+			$.ajax({
+				url   : ajaxurl,
+				method: 'POST',
+				data  : {
+					token  : $('.table-style-buttons').data('nonce'),
+					action : 'atum_change_table_style_setting',
+					feature: feature,
+					enabled: enabled,
+				},
 			});
+			
+			this.addTooltips();
+			
 		},
 		
 		/**
@@ -879,7 +923,7 @@
 				
 				// Bind events
 				self.$scrollPane
-					.on('jsp-initialised', function (event, isScrollable) {
+					.on('jsp-initialised', function(event, isScrollable) {
 						
 						// Add the stickyCols table
 						if (self.$stickyCols !== null && !self.$atumList.find('.atum-list-table.cloned').length) {
@@ -889,7 +933,7 @@
 						}
 						
 					})
-					.on('jsp-scroll-x', function (event, scrollPositionX, isAtLeft, isAtRight) {
+					.on('jsp-scroll-x', function(event, scrollPositionX, isAtLeft, isAtRight) {
 						
 						// Handle the sticky cols position and visibility when scrolling
 						if (self.$stickyCols !== null) {
@@ -969,18 +1013,23 @@
 		 */
 		addFloatThead: function() {
 			
+			if (!this.enabledStickyHeader) {
+				return false;
+			}
+			
 			if (typeof this.$atumTable.data('floatTheadAttached') !== 'undefined' && this.$atumTable.data('floatTheadAttached') !== false) {
 				this.reloadFloatThead();
+				
 				return;
 			}
 			
 			this.$atumTable.floatThead({
-				responsiveContainer: function ($table) {
+				responsiveContainer: function($table) {
 					return $table.closest('.jspContainer');
 				},
 				position           : 'absolute',
 				top                : $('#wpadminbar').height(),
-				autoReflow         : true
+				autoReflow         : true,
 			});
 			
 		},
@@ -989,8 +1038,19 @@
 		 * Reload the floating table header
 		 */
 		reloadFloatThead: function() {
-			this.$atumTable.floatThead('destroy');
-			this.addFloatThead();
+			if (this.enabledStickyHeader) {
+				this.destroyFloatThead();
+				this.addFloatThead();
+			}
+		},
+		
+		/**
+		 * Destroy the floating table header
+		 */
+		destroyFloatThead: function() {
+			if (typeof this.$atumTable.data('floatTheadAttached') !== 'undefined' && this.$atumTable.data('floatTheadAttached') !== false) {
+				this.$atumTable.floatThead('destroy');
+			}
 		},
 		
 		/**
@@ -1033,7 +1093,7 @@
 					var columnNames   = self.settings.stickyColumns,
 					    columnClasses = [];
 					
-					$.each(columnNames, function (index, elem) {
+					$.each(columnNames, function(index, elem) {
 						columnClasses.push('.column-' + elem);
 					});
 					
@@ -1148,7 +1208,7 @@
 			
 			var self = this;
 			
-			this.$collapsedGroups.each(function () {
+			this.$collapsedGroups.each(function() {
 				var $groupCell = $(this);
 				$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));
 				$groupCell.children('span').not('.group-toggler').show();
@@ -1164,13 +1224,13 @@
 		 * @param object  e       The event data object
 		 * @param boolean noTimer Whether to delay before triggering the update (used for autosearch)
 		 */
-		keyUp: function (e, noTimer) {
-
-			var self    = this,
-			    delay   = 500,
-			    noTimer = noTimer || false;
-
-            var searchInputVal = this.$searchInput.val();
+		keyUp: function(e, noTimer) {
+			
+			var self           = this,
+			    delay          = 500,
+			    searchInputVal = this.$searchInput.val();
+			
+			noTimer = noTimer || false
 
 			/*
 			 * If user hit enter, we don't want to submit the form
@@ -1179,13 +1239,13 @@
 			 *
 			 * Also, if the S param is empty, we don't want to search anything
 			 */
-
-        	if( e.type != 'keyup' || searchInputVal.length > 0 ) {
-        	
+			
+			if (e.type !== 'keyup' || searchInputVal.length > 0) {
+				
 				if (13 === e.which) {
 					e.preventDefault();
 				}
-
+				
 				if (noTimer) {
 					self.updateHash();
 				}
@@ -1196,29 +1256,29 @@
 					 * we don't, the keyup event will trigger instantly and
 					 * thus may cause duplicate calls before sending the intended value
 					 */
-                    clearTimeout(self.timer);
-
-                    self.timer = setTimeout(function () {
-                        // TODO force ?vars on updateHash when ajax
-                        self.updateHash();
-                    }, delay);
-
-                }
-                
-            }
-            else {
-                e.preventDefault();
-            }
-
-        },
-
-        /**
+					clearTimeout(self.timer);
+					
+					self.timer = setTimeout(function() {
+						// TODO force ?vars on updateHash when ajax
+						self.updateHash();
+					}, delay);
+					
+				}
+				
+			}
+			else {
+				e.preventDefault();
+			}
+			
+		},
+		
+		/**
 		 * Enable tooltips
 		 */
-		addTooltips: function () {
+		addTooltips: function() {
 	
 	        $('.tips').each(function() {
-	        	var $tipEl = $(this);
+		        var $tipEl = $(this);
 		
 		        $tipEl.tooltip({
 			        html     : true,

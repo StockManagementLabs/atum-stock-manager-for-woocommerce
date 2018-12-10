@@ -137,7 +137,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
 
 		// Change sticky columns settting.
-		add_action( 'wp_ajax_atum_change_sticky_columns_value', array( $this, 'change_sticky_columns_user_meta' ) );
+		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
 
 	}
 
@@ -2042,6 +2042,9 @@ final class Ajax {
 	 *
 	 * @since 1.4.5
 	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 *
 	 * @param string $meta_key
 	 * @param string $status
 	 */
@@ -2130,7 +2133,9 @@ final class Ajax {
 	}
 
 	/**
-	 * Change the value of a meta key for show dark o light menu theme for atum setting
+	 * Change the value of a meta key for show dark o light menu theme for ATUM settings
+	 *
+	 * @package Settings
 	 *
 	 * @since 1.5.0
 	 */
@@ -2152,16 +2157,24 @@ final class Ajax {
 	}
 
 	/**
-	 * Change the Stock Central's sticky columns status for the current user
+	 * Change the List Table style status for the current user
+	 *
+	 * @package ATUM List Tables
 	 *
 	 * @since 1.5.0
 	 */
-	public function change_sticky_columns_user_meta() {
+	public function change_table_style_user_meta() {
 
-		check_ajax_referer( 'atum-sticky-columns-button-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-style', 'token' );
 
-		$value = esc_attr( $_POST['enabled'] );
-		Helpers::set_atum_user_meta( 'enabled_sc_sticky_columns', $value );
+		if ( ! isset( $_POST['enabled'], $_POST['feature'] ) ) {
+			wp_die( -1 );
+		}
+
+		$value = wc_bool_to_string( $_POST['enabled'] );
+		$key   = 'sticky-columns' === $_POST['feature'] ? 'enabled_sc_sticky_columns' : 'enabled_sc_sticky_header';
+
+		Helpers::set_atum_user_meta( $key, $value );
 
 		wp_die();
 

@@ -2347,40 +2347,32 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.atmi-view-sidebar-right-outline:before {
-  content: "";
+.atmi-view-list:before {
+  content: "";
+}
+
+.atmi-view-sidebar-left:before {
+  content: "";
+}
+
+.atmi-view-grid:before {
+  content: "";
+}
+
+.atmi-view-sidebar-right:before {
+  content: "";
+}
+
+.atmi-view-sticky-header:before {
+  content: "";
 }
 
 .atmi-info:before {
   content: "";
 }
 
-.atmi-view-grid-outline:before {
-  content: "";
-}
-
-.atmi-view-col-fixed-outline:before {
-  content: "";
-}
-
-.atmi-view-list-outline:before {
-  content: "";
-}
-
 .atmi-multi-inventory:before {
   content: "";
-}
-
-.atmi-view-sidebar-right:before {
-  content: "";
-}
-
-.atmi-view-list:before {
-  content: "";
-}
-
-.atmi-view-grid:before {
-  content: "";
 }
 
 .atmi-view-list-2:before {

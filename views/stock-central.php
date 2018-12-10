@@ -45,6 +45,7 @@ defined( 'ABSPATH' ) || die;
 
 			<div class="search-box extend-list-table">
 				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="dashicons dashicons-update"></i></button>
+
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,6 +57,7 @@ defined( 'ABSPATH' ) || die;
 								data-no-option="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>"
 						></div>
 					</div>
+
 					<input type="text" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
 							aria-label="Text input with dropdown button"
 							placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>"
@@ -67,16 +69,18 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
-				<?php $enabled_sticky_column = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
+				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) ?>">
 
-				<div class="sticky-columns-button-container">
-					<button type="button" class="sticky-columns-button tips sticky-on <?php echo esc_attr( 'yes' === $enabled_sticky_column ? 'active' : '' ); ?>" data-option="yes" data-tip="Enable Sticky Columns">
-						<i class="atmi-view-col-fixed-outline"></i>
+					<?php $enabled_sticky_columns = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
+					<button type="button" class="sticky-columns-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>">
+						<i class="atmi-view-sidebar-left"></i>
 					</button>
 
-					<button type="button" class="sticky-columns-button tips sticky-off <?php echo esc_attr( 'yes' !== $enabled_sticky_column ? 'active' : '' ); ?>" data-option="no" data-tip="Disable Sticky Columns">
-						<i class="atmi-view-list-outline"></i>
+					<?php $enabled_sticky_header = Helpers::get_atum_user_meta( 'enabled_sc_sticky_header' ); ?>
+					<button type="button" class="sticky-header-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_header ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Header', ATUM_TEXT_DOMAIN ) ?>">
+						<i class="atmi-view-sticky-header"></i>
 					</button>
+
 				</div>
 			</div>
 		</div>

@@ -745,40 +745,32 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.atmi-view-sidebar-right-outline:before {
-  content: "";
+.atmi-view-list:before {
+  content: "";
+}
+
+.atmi-view-sidebar-left:before {
+  content: "";
+}
+
+.atmi-view-grid:before {
+  content: "";
+}
+
+.atmi-view-sidebar-right:before {
+  content: "";
+}
+
+.atmi-view-sticky-header:before {
+  content: "";
 }
 
 .atmi-info:before {
   content: "";
 }
 
-.atmi-view-grid-outline:before {
-  content: "";
-}
-
-.atmi-view-col-fixed-outline:before {
-  content: "";
-}
-
-.atmi-view-list-outline:before {
-  content: "";
-}
-
 .atmi-multi-inventory:before {
   content: "";
-}
-
-.atmi-view-sidebar-right:before {
-  content: "";
-}
-
-.atmi-view-list:before {
-  content: "";
-}
-
-.atmi-view-grid:before {
-  content: "";
 }
 
 .atmi-view-list-2:before {
@@ -3815,7 +3807,7 @@ h2 .atum-help-tip {
   transform: rotate(45deg);
 }
 
-.atum-list-wrapper .sticky-columns-button-container {
+.atum-list-wrapper .table-style-buttons {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3827,7 +3819,7 @@ h2 .atum-help-tip {
   align-items: center;
 }
 
-.atum-list-wrapper .sticky-columns-button-container button {
+.atum-list-wrapper .table-style-buttons button {
   width: 30px;
   height: 30px;
   border-radius: 5px;
@@ -3835,34 +3827,34 @@ h2 .atum-help-tip {
   background-color: #fff;
   color: #6c757d;
   cursor: pointer;
-  -webkit-transition: all 0.20s;
-  /* Safari */
-  transition: all 0.20s;
+  -webkit-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
   line-height: 2;
 }
 
-.atum-list-wrapper .sticky-columns-button-container button:first-child {
+.atum-list-wrapper .table-style-buttons button:first-child {
   margin-left: 9px;
   margin-right: 5px;
 }
 
-.atum-list-wrapper .sticky-columns-button-container button:focus {
+.atum-list-wrapper .table-style-buttons button:focus {
   outline: 0;
 }
 
-.atum-list-wrapper .sticky-columns-button-container button.active, .atum-list-wrapper .sticky-columns-button-container button:hover {
+.atum-list-wrapper .table-style-buttons button.active, .atum-list-wrapper .table-style-buttons button:hover {
   background-color: #00B8DB;
   color: #fff;
   border-color: #fff;
 }
 
-.atum-list-wrapper .sticky-columns-button-container button:hover {
+.atum-list-wrapper .table-style-buttons button:hover {
   background-color: rgba(0, 184, 219, 0.6);
   border-color: #fff;
 }
 
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .sticky-columns-button-container {
+  .atum-list-wrapper .table-style-buttons {
     display: none;
   }
 }
