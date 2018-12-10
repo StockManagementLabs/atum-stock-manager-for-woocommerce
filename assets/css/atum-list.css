@@ -5005,6 +5005,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   box-shadow: none;
   width: 110px;
   max-width: 110px;
+  font-size: 15px;
 }
 
 @media all and (max-width: 782px) {
@@ -5015,7 +5016,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .search-box .atum-post-search::placeholder, p.search-box .atum-post-search::placeholder {
   color: #adb5bd;
-  font-size: 12px;
   font-style: italic;
   letter-spacing: normal;
   margin-left: 10px;
