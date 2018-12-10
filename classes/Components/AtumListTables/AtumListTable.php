@@ -126,7 +126,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $current_products;
+	protected $current_products = array();
 
 	/**
 	 * Used to include product variations in the Supplier filterings
