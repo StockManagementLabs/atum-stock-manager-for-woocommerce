@@ -68,6 +68,7 @@ defined( 'ABSPATH' ) || die;
 
 								<time>
 									<?php
+									/* @noinspection PhpUnhandledExceptionInspection */
 									$start = new \DateTime( '@0' ); // Unix epoch.
 									try {
 										$start->add( new \DateInterval( $video->contentDetails->duration ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar

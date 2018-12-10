@@ -49,7 +49,7 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 						<abbr class="exact-date" title="<?php echo esc_attr( $note->comment_date ) ?>">
 							<?php
 							/* translators: first one is the date added and second is the time */
-							printf( esc_html__( 'added on %1$s at %2$s', ATUM_TEXT_DOMAIN ), esc_html( date_i18n( wc_date_format(), strtotime( $note->comment_date ) ) ), esc_html( date_i18n( wc_time_format() ), esc_html( strtotime( $note->comment_date ) ) ) );
+							printf( esc_html__( 'added on %1$s at %2$s', ATUM_TEXT_DOMAIN ), esc_html( date_i18n( wc_date_format(), strtotime( $note->comment_date ) ) ), esc_html( date_i18n( wc_time_format(), strtotime( $note->comment_date ) ) ) );
 							?>
 						</abbr>
 
