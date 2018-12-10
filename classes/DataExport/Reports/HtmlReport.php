@@ -241,6 +241,7 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {

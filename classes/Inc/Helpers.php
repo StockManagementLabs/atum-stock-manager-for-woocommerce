@@ -547,6 +547,7 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date && $days > 0 ) {
@@ -600,6 +601,7 @@ final class Helpers {
 		}
 
 		// Check if the current product has the "Out of stock" date recorded.
+		/* @noinspection PhpUndefinedMethodInspection */
 		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date ) {
@@ -999,7 +1001,9 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		return $product->get_atum_controlled();
+
 	}
 
 	/**
@@ -1016,7 +1020,9 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
+		/* @noinspection PhpUndefinedMethodInspection */
 		$product->save_atum_data();
 	}
 
@@ -1034,6 +1040,7 @@ final class Helpers {
 			$product = wc_get_product( $product ); // We don't need to use the ATUM models here.
 		}
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		$product->set_manage_stock( ( 'enable' === $status ? 'yes' : 'no' ) );
 		$product->save();
 
@@ -1656,6 +1663,7 @@ final class Helpers {
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
+					/* @noinspection PhpUndefinedMethodInspection */
 					$product->set_purchase_price( $meta_value );
 					
 					unset( $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
@@ -1729,6 +1737,7 @@ final class Helpers {
 			$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
 
 			if ( $clean_meta ) {
+				/* @noinspection PhpUndefinedMethodInspection */
 				$product->set_out_stock_threshold( NULL );
 			}
 
@@ -1754,6 +1763,7 @@ final class Helpers {
 
 				// Delete _out_stock_threshold (avoid partial works to be done again).
 				if ( $clean_meta ) {
+					/* @noinspection PhpUndefinedMethodInspection */
 					$product->set_out_stock_threshold( NULL );
 				}
 
@@ -2127,8 +2137,6 @@ final class Helpers {
 	 * @param string $key       Set that specific key only and will preserve the others within the ATUM meta array.
 	 * @param mixed  $value     The value to set. Should be previously sanitized.
 	 * @param int    $user_id   Optional. If passed will set the meta for that user, if not will set it to the current user.
-	 *
-	 * @return mixed
 	 */
 	public static function set_atum_user_meta( $key, $value, $user_id = 0 ) {
 
@@ -2140,8 +2148,6 @@ final class Helpers {
 		}
 
 		$atum_user_meta[ $key ] = $value;
-
-
 		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
 
 	}

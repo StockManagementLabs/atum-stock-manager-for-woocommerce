@@ -12,12 +12,10 @@
 
 namespace Atum\Inc;
 
-use Atum\Components\AtumCache;
-use Atum\Components\AtumCapabilities;
-use Atum\Settings\Settings;
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
+use Atum\Settings\Settings;
 
 class Hooks {
 	
@@ -319,7 +317,9 @@ class Hooks {
 					$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE );
 				}
 
+				/* @noinspection PhpUndefinedMethodInspection */
 				$product->set_out_stock_date( $out_stock_date );
+				/* @noinspection PhpUndefinedMethodInspection */
 				$product->save_atum_data();
 
 			}
@@ -525,7 +525,8 @@ class Hooks {
 			
 			$this->stock_threshold = NULL;
 
-			$product_id             = $product->get_id();
+			$product_id = $product->get_id();
+			/* @noinspection PhpUndefinedMethodInspection */
 			$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 			// Allow to be hooked externally.
@@ -557,7 +558,8 @@ class Hooks {
 
 		$this->stock_threshold = NULL;
 
-		$product                = Helpers::get_atum_product( $variation_id );
+		$product = Helpers::get_atum_product( $variation_id );
+		/* @noinspection PhpUndefinedMethodInspection */
 		$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 		// Allow to be hooked externally.

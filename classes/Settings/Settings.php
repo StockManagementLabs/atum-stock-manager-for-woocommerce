@@ -55,7 +55,7 @@ class Settings {
 	 */
 	private $options;
 
-	/*
+	/**
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-settings';
@@ -731,7 +731,7 @@ class Settings {
 
 		?>
 		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="atum-select2" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
-			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
+			<?php wc()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
 

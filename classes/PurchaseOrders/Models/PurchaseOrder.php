@@ -15,7 +15,6 @@ namespace Atum\PurchaseOrders\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
-use Atum\Inc\Globals;
 use Atum\Suppliers\Suppliers;
 
 
@@ -38,7 +37,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 		
-		if ( version_compare( WC()->version, '3.5.0', '<' ) ) {
+		if ( version_compare( wc()->version, '3.5.0', '<' ) ) {
 			// Add the button for adding the inbound stock products to the WC stock.
 			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_button' ) );
 		}
@@ -361,6 +360,7 @@ class PurchaseOrder extends AtumOrderModel {
 	public function use_purchase_price( $price, $qty, $product ) {
 		
 		// Get the purchase price (if set).
+		/* @noinspection PhpUndefinedMethodInspection */
 		$price = $product->get_purchase_price();
 		
 		if ( ! $price ) {
@@ -438,6 +438,12 @@ class PurchaseOrder extends AtumOrderModel {
 			foreach ( $atum_order_items as $item_id => $atum_order_item ) {
 				
 				$product = $atum_order_item->get_product();
+
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Product $product
+				 */
 				
 				if ( $product && $product->exists() && $product->managing_stock() ) {
 					

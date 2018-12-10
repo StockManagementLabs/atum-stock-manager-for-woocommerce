@@ -915,7 +915,7 @@ abstract class AtumOrderPostType {
 					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
-					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
+					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
 				) );
 
 				wp_enqueue_script( 'atum-orders' );

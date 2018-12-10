@@ -36,7 +36,9 @@ trait AtumDataStoreCPTTrait {
 			$atum_data
 		);
 
+		/* @noinspection PhpUndefinedClassInspection */
 		parent::read_product_data( $product );
+
 	}
 
 	
@@ -79,8 +81,9 @@ trait AtumDataStoreCPTTrait {
 	 * @param \WC_Product $product Product object.
 	 * @param bool        $force Force update. Used during create.
 	 */
-	public function update_post_meta( &$product, $force = false ) {
-		
+	public function update_post_meta( &$product, $force = FALSE ) {
+
+		/* @noinspection PhpUndefinedClassInspection */
 		parent::update_post_meta( $product, $force );
 		$this->update_atum_product_data( $product );
 

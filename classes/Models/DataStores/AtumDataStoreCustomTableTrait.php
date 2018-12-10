@@ -28,6 +28,7 @@ trait AtumDataStoreCustomTableTrait {
 	 */
 	protected function update_product_data( &$product ) {
 
+		/* @noinspection PhpUndefinedClassInspection */
 		parent::update_product_data( $product );
 		$this->update_atum_product_data( $product );
 
@@ -53,6 +54,7 @@ trait AtumDataStoreCustomTableTrait {
 		if ( FALSE === $data ) {
 
 			// Get the default data from parent class.
+			/* @noinspection PhpUndefinedClassInspection */
 			$data = parent::get_product_row_from_db( $product_id );
 
 			// Get the extra ATUM data for the product.
