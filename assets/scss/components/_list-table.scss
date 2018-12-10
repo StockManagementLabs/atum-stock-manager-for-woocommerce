@@ -1578,6 +1578,7 @@ table.wp-list-table {
 		
 		
 		&.check-column {
+			padding: 11px 20px 0 3px;
 			input[type=checkbox] {
 				@include vertical-align-absolute;
 			}

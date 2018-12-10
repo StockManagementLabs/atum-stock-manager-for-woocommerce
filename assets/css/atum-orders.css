@@ -6086,6 +6086,10 @@ table.wp-list-table tbody tr:hover {
   max-width: 71px;
 }
 
+.atum-list-table th.check-column, .floatThead-container th.check-column, .inbound-stock-list th.check-column, .wp-list-table th.check-column {
+  padding: 11px 20px 0 3px;
+}
+
 .atum-list-table th.check-column input[type=checkbox], .floatThead-container th.check-column input[type=checkbox], .inbound-stock-list th.check-column input[type=checkbox], .wp-list-table th.check-column input[type=checkbox] {
   position: absolute;
   top: 50%;
