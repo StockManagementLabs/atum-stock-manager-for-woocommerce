@@ -4937,11 +4937,11 @@ table.wp-list-table tbody tr:hover {
   color: #fff !important;
 }
 
-.atum-list-table tbody tr.variable td.column-calc_location a, .atum-list-table #the-list tr.variable td.column-calc_location a, .floatThead-container tbody tr.variable td.column-calc_location a, .floatThead-container #the-list tr.variable td.column-calc_location a, .inbound-stock-list tbody tr.variable td.column-calc_location a, .inbound-stock-list #the-list tr.variable td.column-calc_location a, .wp-list-table tbody tr.variable td.column-calc_location a, .wp-list-table #the-list tr.variable td.column-calc_location a {
+.atum-list-table tbody tr.expandable td.column-calc_location a, .atum-list-table #the-list tr.expandable td.column-calc_location a, .floatThead-container tbody tr.expandable td.column-calc_location a, .floatThead-container #the-list tr.expandable td.column-calc_location a, .inbound-stock-list tbody tr.expandable td.column-calc_location a, .inbound-stock-list #the-list tr.expandable td.column-calc_location a, .wp-list-table tbody tr.expandable td.column-calc_location a, .wp-list-table #the-list tr.expandable td.column-calc_location a {
   pointer-events: none;
 }
 
-.atum-list-table tbody tr.variable td.column-calc_location a:before, .atum-list-table #the-list tr.variable td.column-calc_location a:before, .floatThead-container tbody tr.variable td.column-calc_location a:before, .floatThead-container #the-list tr.variable td.column-calc_location a:before, .inbound-stock-list tbody tr.variable td.column-calc_location a:before, .inbound-stock-list #the-list tr.variable td.column-calc_location a:before, .wp-list-table tbody tr.variable td.column-calc_location a:before, .wp-list-table #the-list tr.variable td.column-calc_location a:before {
+.atum-list-table tbody tr.expandable td.column-calc_location a:before, .atum-list-table #the-list tr.expandable td.column-calc_location a:before, .floatThead-container tbody tr.expandable td.column-calc_location a:before, .floatThead-container #the-list tr.expandable td.column-calc_location a:before, .inbound-stock-list tbody tr.expandable td.column-calc_location a:before, .inbound-stock-list #the-list tr.expandable td.column-calc_location a:before, .wp-list-table tbody tr.expandable td.column-calc_location a:before, .wp-list-table #the-list tr.expandable td.column-calc_location a:before {
   content: '-';
   color: #6c757d;
 }

@@ -983,6 +983,10 @@
 				
 			});
 			
+			$('.has-child').on('click', function () {
+				setTimeout(function(){ $('.jspContainer').height($('.jspPane').height()); }, 500);
+			});
+			
 		},
 		
 		/**
