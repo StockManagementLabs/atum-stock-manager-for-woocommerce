@@ -666,6 +666,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			else {
 
 				echo "<td $attributes>"; // WPCS: XSS ok.
+				/* @noinspection PhpParamsInspection */
 				echo $this->column_default( $item, $column_name ); // WPCS: XSS ok.
 				echo '</td>';
 
@@ -820,6 +821,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $supplier;
 		}
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {
@@ -865,6 +867,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $editable ) {
 
+			/* @noinspection PhpUndefinedMethodInspection */
 			$supplier_sku = $this->product->get_supplier_sku();
 
 			if ( 0 === strlen( $supplier_sku ) ) {
@@ -1005,6 +1008,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
+			/* @noinspection PhpUndefinedMethodInspection */
 			$purchase_price_value = $this->product->get_purchase_price();
 			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
 				'trim_zeros' => TRUE,
@@ -1038,6 +1042,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
 
+		/* @noinspection PhpUndefinedMethodInspection */
 		$out_stock_threshold = $this->product->get_out_stock_threshold();
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 
@@ -1137,6 +1142,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $is_out_stock_threshold_managed ) {
 
+				/* @noinspection PhpUndefinedMethodInspection */
 				$out_stock_threshold = $this->product->get_out_stock_threshold();
 
 				if ( strlen( $out_stock_threshold ) > 0 ) {
@@ -2990,7 +2996,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		else {
 			$current_page_style = '';
-			$html_current_page  = sprintf( "%1\$s<input class='current-page' data-current='%2\$s' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
+			/* @noinspection PhpFormatFunctionParametersMismatchInspection */
+			$html_current_page = sprintf( "%1\$s<input class='current-page' data-current='%2\$s' id='current-page-selector' type='text' name='paged' value='%2\$s' size='%3\$d' aria-describedby='table-paging' /><span class='tablenav-paging-text'>",
 				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', ATUM_TEXT_DOMAIN ) . '</label>',
 				$current,
 				strlen( $total_pages )
@@ -3165,7 +3172,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		global $pagenow, $wpdb;
 
 		// Changed the WooCommerce's "product_search" filter to allow Ajax requests.
-		/* @see \WC_Admin_Post_Types\product_search */
+		/* @see \WC_Admin_Post_Types::product_search */
 
 		if (
 			! is_admin() ||
@@ -3871,7 +3878,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			foreach ( $children as $child ) {
 
+				/* @noinspection PhpUndefinedMethodInspection */
 				$atum_control_status = $child->get_atum_controlled();
+
 				if (
 					( $this->show_controlled && 'yes' === $atum_control_status ) ||
 					( ! $this->show_controlled && 'yes' !== $atum_control_status )

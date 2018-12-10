@@ -14,7 +14,6 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumCache;
 use Atum\Inc\Helpers;
 use Atum\Legacy\WidgetHelpersLegacyTrait;
 use Atum\Settings\Settings;
@@ -60,8 +59,6 @@ final class WidgetHelpers {
 	 * }
 	 *
 	 * @return array
-	 *
-	 * @throws \Exception
 	 */
 	public static function get_sales_stats( $atts ) {
 
@@ -104,9 +101,11 @@ final class WidgetHelpers {
 				if ( in_array( 'lost_sales', $types ) && ! in_array( $row['PROD_ID'], $lost_processed ) ) {
 
 					if ( ! isset( $days ) || $days <= 0 ) {
+						/** @noinspection PhpUnhandledExceptionInspection */
 						$date_days_start = new \DateTime( $date_start );
-						$date_days_end   = new \DateTime( ( isset( $date_end ) ? $date_end : 'now' ) );
-						$days            = $date_days_end->diff( $date_days_start )->days;
+						/** @noinspection PhpUnhandledExceptionInspection */
+						$date_days_end = new \DateTime( ( isset( $date_end ) ? $date_end : 'now' ) );
+						$days          = $date_days_end->diff( $date_days_start )->days;
 					}
 
 					$lost_sales = Helpers::get_product_lost_sales( $row['PROD_ID'], $days );
@@ -165,6 +164,7 @@ final class WidgetHelpers {
 
 			if ( $order_discount ) {
 
+				/* @noinspection PhpWrongStringConcatenationInspection */
 				$stats['value'] += $order_discount;
 
 				$order_items = $order->get_items();
@@ -233,8 +233,6 @@ final class WidgetHelpers {
 	 * @param array  $types       Optional. An array of stats to get. Possible values: "sales" and/or "lost_sales".
 	 *
 	 * @return array
-	 *
-	 * @throws \Exception
 	 */
 	public static function get_sales_chart_data( $time_window, $types = [ 'sales' ] ) {
 
@@ -254,6 +252,7 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$date_now    = new \DateTime();
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 
@@ -317,7 +316,8 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -371,7 +371,8 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -453,8 +454,10 @@ final class WidgetHelpers {
 	 */
 	public static function get_date_period( $date_start, $date_end, $interval = '1 day' ) {
 
-		$start       = new \DateTime( $date_start );
-		$interval    = \DateInterval::createFromDateString( $interval );
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$start    = new \DateTime( $date_start );
+		$interval = \DateInterval::createFromDateString( $interval );
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$end         = new \DateTime( $date_end );
 		$date_period = new \DatePeriod( $start, $interval, $end );
 

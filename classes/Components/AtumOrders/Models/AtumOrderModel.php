@@ -438,6 +438,7 @@ abstract class AtumOrderModel {
 
 	}
 
+	/* @noinspection PhpDocSignatureInspection */
 	/**
 	 * Add a tax item to the ATUM Order
 	 *
@@ -1117,6 +1118,7 @@ abstract class AtumOrderModel {
 			$fee_total += $item->get_total();
 		}
 
+		/* @noinspection PhpWrongStringConcatenationInspection */
 		$grand_total = round( $cart_total + $fee_total + $this->get_shipping_total() + $this->get_cart_tax() + $this->get_shipping_tax(), wc_get_price_decimals() );
 
 		$this->set_discount_total( $cart_subtotal - $cart_total );
@@ -1152,6 +1154,7 @@ abstract class AtumOrderModel {
 			$qty = ! empty( $item->get_quantity() ) ? $item->get_quantity() : 1;
 
 			if ( $inc_tax ) {
+				/* @noinspection PhpWrongStringConcatenationInspection */
 				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / $qty;
 			}
 			else {
@@ -1184,6 +1187,7 @@ abstract class AtumOrderModel {
 		if ( is_callable( array( $item, 'get_total' ) ) ) {
 
 			if ( $inc_tax ) {
+				/* @noinspection PhpWrongStringConcatenationInspection */
 				$total = ( $item->get_total() + $item->get_total_tax() ) / max( 1, $item->get_quantity() );
 			}
 			else {
@@ -1212,6 +1216,7 @@ abstract class AtumOrderModel {
 		$total_discount = $this->get_discount_total();
 
 		if ( ! $ex_tax ) {
+			/* @noinspection PhpWrongStringConcatenationInspection */
 			$total_discount += $this->get_discount_tax();
 		}
 
@@ -1308,7 +1313,7 @@ abstract class AtumOrderModel {
 			}
 			else {
 				$tax_amount         = $this->get_total_tax();
-				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), WC()->countries->tax_or_vat() );
+				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), wc()->countries->tax_or_vat() );
 			}
 
 			if ( ! empty( $tax_string_array ) ) {
@@ -1499,37 +1504,50 @@ abstract class AtumOrderModel {
 	 *
 	 * @param string|integer|\WC_DateTime $value
 	 *
-	 * @return \WC_DateTime
+	 * @return \WC_DateTime|null
 	 */
 	protected function get_wc_time( $value ) {
+
+		$date_time = NULL;
+
 		try {
 			
 			if ( is_a( $value, 'WC_DateTime' ) ) {
-				$datetime = $value;
-			} elseif ( is_numeric( $value ) ) {
+				$date_time = $value;
+			}
+			elseif ( is_numeric( $value ) ) {
 				// Timestamps are handled as UTC timestamps in all cases.
-				$datetime = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
-			} else {
+				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
+			}
+			else {
+
 				// Strings are defined in local WP timezone. Convert to UTC.
 				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
 					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
 					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
-				} else {
+				}
+				else {
 					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
 				}
-				$datetime = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+
+				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+
 			}
 			
 			// Set local timezone or offset.
 			if ( get_option( 'timezone_string' ) ) {
-				$datetime->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
-			} else {
-				$datetime->set_utc_offset( wc_timezone_offset() );
+				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
+			}
+			else {
+				$date_time->set_utc_offset( wc_timezone_offset() );
 			}
 			
-			return $datetime;
-			
-		} catch ( \Exception $e ) {} // @codingStandardsIgnoreLine.
+		} catch ( \Exception $e ) {
+
+		}
+
+		return $date_time;
+
 	}
 
 	/**********

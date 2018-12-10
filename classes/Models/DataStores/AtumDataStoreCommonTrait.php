@@ -135,7 +135,8 @@ trait AtumDataStoreCommonTrait {
 		
 		global $wpdb;
 		$id = $product->get_id();
-		
+
+		/* @noinspection PhpUndefinedClassInspection */
 		parent::delete( $product, $args );
 		
 		// Delete the ATUM data for this product.
@@ -153,6 +154,7 @@ trait AtumDataStoreCommonTrait {
 	 * @param \WC_Product $product The product object.
 	 */
 	protected function clear_caches( &$product ) {
+		/* @noinspection PhpUndefinedClassInspection */
 		parent::clear_caches( $product );
 		$cache_key = AtumCache::get_cache_key( 'product_data', $product->get_id() );
 		AtumCache::delete_cache( $cache_key );

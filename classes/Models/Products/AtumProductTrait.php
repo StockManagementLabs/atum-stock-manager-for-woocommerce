@@ -245,6 +245,7 @@ trait AtumProductTrait {
 	public function save_atum_data() {
 
 		$data_store = $this->get_data_store();
+		/* @noinspection PhpUndefinedMethodInspection */
 		$data_store->update_atum_product_data( $this );
 
 	}

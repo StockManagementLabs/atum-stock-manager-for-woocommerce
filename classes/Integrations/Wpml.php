@@ -647,7 +647,9 @@ class Wpml {
 
 			if ( $translation->element_id !== $post_id ) {
 				$product = Helpers::get_atum_product( $post_id );
+				/* @noinspection PhpUndefinedMethodInspection */
 				$product->set_purchase_price( $purchase_price );
+				/* @noinspection PhpUndefinedMethodInspection */
 				$product->save_atum_data();
 			}
 

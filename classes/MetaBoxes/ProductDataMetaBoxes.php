@@ -248,8 +248,9 @@ class ProductDataMetaBoxes {
 
 		$woocommerce_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
 
-		$product_id          = empty( $variation ) ? $post->ID : $variation->ID;
-		$product             = Helpers::get_atum_product( $product_id );
+		$product_id = empty( $variation ) ? $post->ID : $variation->ID;
+		$product    = Helpers::get_atum_product( $product_id );
+		/* @noinspection PhpUndefinedMethodInspection */
 		$out_stock_threshold = $product->get_out_stock_threshold();
 		$product_type        = empty( $variation ) ? $product->get_type() : '';
 
@@ -329,7 +330,8 @@ class ProductDataMetaBoxes {
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
 		
-		$product        = Helpers::get_atum_product( $product_id );
+		$product = Helpers::get_atum_product( $product_id );
+		/* @noinspection PhpUndefinedMethodInspection */
 		$purchase_price = $product->get_purchase_price();
 		$field_value    = '' === $purchase_price ? '' : (float) $purchase_price;
 		$price          = (float) $product->get_price();
@@ -347,7 +349,8 @@ class ProductDataMetaBoxes {
 	 */
 	private function save_purchase_price() {
 
-		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
+		/* @noinspection PhpUndefinedMethodInspection */
 		$old_purchase_price = $this->product->get_purchase_price();
 		$new_purchase_price = $old_purchase_price ?: '';
 
@@ -403,8 +406,10 @@ class ProductDataMetaBoxes {
 		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
 		$supplier_meta     = Suppliers::SUPPLIER_META_KEY;
 		$supplier_sku_meta = Suppliers::SUPPLIER_SKU_META_KEY;
-		$supplier_id       = $product->get_supplier_id();
-		$supplier_sku      = $product->get_supplier_sku();
+		/* @noinspection PhpUndefinedMethodInspection */
+		$supplier_id = $product->get_supplier_id();
+		/* @noinspection PhpUndefinedMethodInspection */
+		$supplier_sku = $product->get_supplier_sku();
 
 		if ( $supplier_id ) {
 			$supplier = get_post( $supplier_id );
@@ -534,6 +539,7 @@ class ProductDataMetaBoxes {
 				\WC_Admin_Meta_Boxes::add_error( $errors->get_error_message() );
 			}
 
+			/* @noinspection PhpUndefinedMethodInspection */
 			$this->product->save_atum_data();
 
 			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {
