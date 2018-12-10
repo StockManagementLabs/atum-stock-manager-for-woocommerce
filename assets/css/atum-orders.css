@@ -1720,10 +1720,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   content: "";
 }
 
-.atmi-linearicons:before {
-  content: "";
-}
-
 .atmi-link:before {
   content: "";
 }
@@ -4807,7 +4803,7 @@ input[type="button"].btn-block {
   margin-left: 10px;
   padding-right: 1px;
   flex-wrap: nowrap;
-  width: unset;
+  width: auto;
 }
 
 @media all and (max-width: 480px) {
@@ -4827,10 +4823,10 @@ input[type="button"].btn-block {
 
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
   width: 100px;
-  text-align: left;
-  text-overflow: ellipsis;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: left;
   padding-left: 7px !important;
   padding-right: 25px !important;
   font-size: 15px !important;
@@ -4843,8 +4839,8 @@ input[type="button"].btn-block {
 
 .search-box .dropdown-toggle:after, p.search-box .dropdown-toggle:after {
   vertical-align: middle;
-  font-family: Linearicons;
-  content: "\e874";
+  font-family: "atum-icon-font";
+  content: "";
   display: inline;
   font-size: 10px;
   position: absolute;
@@ -6023,11 +6019,10 @@ table.wp-list-table tbody tr:hover {
   float: right;
   font-size: 16px;
   cursor: pointer;
-  font-family: 'Linearicons';
+  font-family: "atum-icon-font";
 }
 
 .atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before, .wp-list-table .column-groups th .group-toggler:before {
-  font-family: "atum-icon-font";
   content: "";
 }
 

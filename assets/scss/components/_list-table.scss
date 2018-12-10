@@ -483,7 +483,8 @@
 		margin-left: 10px;
 		padding-right: 1px;
 		flex-wrap: nowrap;
-		width: unset;
+		width: auto;
+		
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
 		}
@@ -499,28 +500,28 @@
 	
 	.dropdown-toggle {
 		width: 100px;
+		@include text-overflow();
 		text-align: left;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		white-space: nowrap;
-		padding-left: 7px!important;
+		padding-left: 7px !important;
 		padding-right: 25px !important;
-		font-size: 15px!important;
+		font-size: 15px !important;
+		line-height: 15px !important;
+		border: none;
+		background-color: $gray-100;
+		font-size: 15px;
+		color: $gray-600;
+		
 		&:after {
 			vertical-align: middle;
-			font-family: Linearicons;
-			content: "\e874";
+			font-family: $atum-icon-font;
+			content: $atmi-chevron-down;
 			display: inline;
 			font-size: 10px;
 			position: absolute;
 			right: 10px;
 			top: 8px;
 		}
-		line-height: 15px !important;
-		border: none;
-		background-color: $gray-100;
-		font-size: 15px;
-		color: $gray-600;
+		
 		&:focus, &:active, &:hover {
 			outline: 0;
 			box-shadow: none;
@@ -1511,10 +1512,9 @@ table.wp-list-table {
 				float: right;
 				font-size: 16px;
 				cursor: pointer;
-				font-family: 'Linearicons';
+				font-family: $atum-icon-font;
 				
 				&:before {
-					font-family: '#{$icomoon-font-family}';
 					content: $atmi-chevron-left-circle;
 				}
 				

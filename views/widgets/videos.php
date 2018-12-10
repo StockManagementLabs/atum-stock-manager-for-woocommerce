@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) || die;
 			</div>
 
 			<div class="video-list-wrapper">
-				<div class="carousel-nav-prev disabled"><i class="lnr lnr-chevron-left"></i></div>
+				<div class="carousel-nav-prev disabled"><i class="atum-icon atmi-chevron-left"></i></div>
 
 				<div class="scroll-box">
 					<?php foreach ( $videos as $index => $video ) :
@@ -109,7 +109,7 @@ defined( 'ABSPATH' ) || die;
 					<?php endforeach; ?>
 				</div>
 
-				<div class="carousel-nav-next"><i class="lnr lnr-chevron-right"></i></div>
+				<div class="carousel-nav-next"><i class="atum-icon atmi-chevron-right"></i></div>
 			</div>
 		</div>
 

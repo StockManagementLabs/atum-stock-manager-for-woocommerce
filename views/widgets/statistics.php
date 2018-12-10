@@ -17,13 +17,13 @@ defined( 'ABSPATH' ) || die;
 	<nav class="mobile-filter-nav">
 		<ul>
 			<li data-show-filter=".filter-controls">
-				<i class="lnr lnr-funnel"></i> <span><?php esc_html_e( 'Filters', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="atum-icon atmi-funnel"></i> <span><?php esc_html_e( 'Filters', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
 			</li>
 			<li data-show-filter=".chart-type">
-				<i class="lnr lnr-chart-bars"></i> <span><?php esc_html_e( 'Chart Type', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="atum-icon atmi-chart-bars"></i> <span><?php esc_html_e( 'Chart Type', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
 			</li>
 			<li data-show-filter=".chart-legend">
-				<i class="atmi-layers"></i> <span><?php esc_html_e( 'Layers', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
+				<i class="atum-icon atmi-layers"></i> <span><?php esc_html_e( 'Layers', ATUM_TEXT_DOMAIN ) ?></span> <span class="status">+</span>
 			</li>
 		</ul>
 	</nav>
