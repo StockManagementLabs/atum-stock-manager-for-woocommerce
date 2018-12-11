@@ -2809,12 +2809,18 @@ body .select2-dropdown {
   z-index: 1051;
 }
 
-body .select2-results {
+body body.select2-results {
   display: block;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  max-height: inherit;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow-x: inherit;
+  overflow-y: inherit;
 }
 
-body .select2-results .select2-results__option {
+body body.select2-results .select2-results__option {
   padding: 8px 10px;
 }
 
