@@ -20,6 +20,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Integrations\Wpml;
+use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
@@ -65,6 +66,9 @@ class Main {
 	 * @since 0.0.1
 	 */
 	private function __construct() {
+
+		// Make the ATUM cache group, non persistent.
+		wp_cache_add_non_persistent_groups( ATUM_TEXT_DOMAIN );
 		
 		if ( is_admin() ) {
 			$this->main_admin_hooks();
@@ -107,13 +111,46 @@ class Main {
 		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' ); // phpcs:ignore: WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
 
 		// Create menu (priority must be lower than 10).
-		add_action( 'init', array( $this, 'add_menu_items' ), 1 );
+		add_action( 'init', array( $this, 'pre_init' ), 1 );
 
 		// Load front stuff (priority must be higher than 10).
-		add_action( 'init', array( $this, 'load' ), 11 );
+		add_action( 'init', array( $this, 'init' ), 11 );
 
 		// Load ATUM modules.
 		add_action( 'setup_theme', array( $this, 'load_modules' ) );
+
+	}
+
+	/**
+	 * Do pre init tasks
+	 *
+	 * @since 1.3.6
+	 */
+	public function pre_init() {
+
+		// Upgrade if needed.
+		$db_version = get_option( ATUM_PREFIX . 'version' );
+
+		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
+			// Do upgrade tasks.
+			new Upgrade( $db_version ?: '0.0.1' );
+		}
+
+		// Add menu items.
+		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
+
+		foreach ( $this->menu_items as $menu_item ) {
+			$this->menu_items_order[] = array(
+				'slug'       => $menu_item['slug'],
+				'menu_order' => ! isset( $menu_item['menu_order'] ) ? 99 : $menu_item['menu_order'],
+			);
+		}
+
+		// The first submenu will be the main (parent) menu too.
+		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
+		self::$main_menu_item = current( self::$main_menu_item );
+
+		do_action( 'atum/after_pre_init' );
 
 	}
 
@@ -123,7 +160,7 @@ class Main {
 	 *
 	 * @since 1.2.0
 	 */
-	public function load() {
+	public function init() {
 
 		//
 		// Register the Locations taxonomy and link it to products
@@ -154,6 +191,8 @@ class Main {
 
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
+		do_action( 'atum/after_init' );
+
 	}
 	
 	/**
@@ -162,13 +201,6 @@ class Main {
 	 * @since 0.0.3
 	 */
 	public function admin_load() {
-
-		$db_version = get_option( ATUM_PREFIX . 'version' );
-		
-		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
-			// Do upgrade tasks.
-			new Upgrade( $db_version ?: '0.0.1' );
-		}
 
 		// Add the footer text to ATUM pages.
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -191,6 +223,7 @@ class Main {
 		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();
+		ProductDataMetaBoxes::get_instance();
 		
 		//
 		// Enable WPML module if needed
@@ -235,28 +268,6 @@ class Main {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Add items to the ATUM menu
-	 *
-	 * @since 1.3.6
-	 */
-	public function add_menu_items() {
-
-		$this->menu_items = (array) apply_filters( 'atum/admin/menu_items', array() );
-
-		foreach ( $this->menu_items as $menu_item ) {
-			$this->menu_items_order[] = array(
-				'slug'       => $menu_item['slug'],
-				'menu_order' => ( ! isset( $menu_item['menu_order'] ) ) ? 99 : $menu_item['menu_order'],
-			);
-		}
-
-		// The first submenu will be the main (parent) menu too.
-		self::$main_menu_item = array_slice( $this->menu_items, 0, 1 );
-		self::$main_menu_item = reset( self::$main_menu_item );
 
 	}
 	
@@ -448,7 +459,7 @@ class Main {
 				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
 				wc_enqueue_js( "
 					jQuery( 'a.wc-rating-link' ).click( function() {
-						jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );
+						jQuery.post( '" . wc()->ajax_url() . "', { action: 'atum_rated' } );
 						jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
 					});
 				" );
@@ -458,9 +469,44 @@ class Main {
 				$footer_text = __( 'Thank you for trusting in <strong>ATUM</strong> for managing your stock.', ATUM_TEXT_DOMAIN );
 			}
 
+			ob_start();
+
+			$footer_class = FALSE;
+			$screen_base  = get_current_screen()->base;
+
+			if ( 'edit' === $screen_base || 'atum-inventory_page_atum-stock-central' === $screen_base || 'atum-inventory_page_atum-manufacturing-central' === $screen_base || 'atum-inventory_page_atum-inbound-stock' === $screen_base ) {
+				$footer_class = TRUE;
+			}
+
+			?>
+			<div class="footer-box <?php echo ! $footer_class ? 'no-style' : ''; ?>">
+				<div class="footer-atum-content">
+					<div class="footer-atum-logo">
+						<img src="<?php echo esc_attr( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+						<span>
+						<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
+						</span>
+					</div>
+					<div class="footer-atum-text">
+						<span><?php esc_html_e( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) ?></span>
+						<?php echo wp_kses_post( $footer_text ) ?>
+					</div>
+				</div>
+
+				<div class="footer-atum-buttons">
+					<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" class="btn btn-primary footer-button">
+						<?php esc_html_e( 'Get Support', ATUM_TEXT_DOMAIN ); ?>
+					</a>
+					<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-success footer-button">
+						<?php esc_html_e( 'View Tutorials', ATUM_TEXT_DOMAIN ); ?>
+					</a>
+				</div>
+			</div>
+			<?php
+
 		}
 
-		return $footer_text;
+		return ob_get_clean();
 
 	}
 

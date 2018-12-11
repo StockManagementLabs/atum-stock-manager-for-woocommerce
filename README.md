@@ -6,11 +6,11 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 **NEW UPDATE ALMOST EVERY WEEK!**
 
-ATUM is now the most advanced FREE WooCommerce inventory management tool in the Wordpress depository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
+ATUM is now the most advanced FREE WooCommerce inventory management tool in the WordPress repository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
 ATUM Dashboard creates an entirely new and we felt a necessary connection between the creators and users. The dashboard aims to become everyday screen with a quick link to support, documentation and most importantly business stats. We have developed brand new widget section that can be personalised from every corner.
 
-Stock Management Labs™, creators that have combined over 25 years of experience in inventory management, working very closely with a bunch of professional Wordpress developers since October 2016. The aim is to create the complete WooCommerce solution that will take care of all your business needs.
+Stock Management Labs™, creators that have combined over 25 years of experience in inventory management, working very closely with a bunch of professional WordPress developers since October 2016. The aim is to create the complete WooCommerce solution that will take care of all your business needs.
 
 In the preparation process for the development stage, we have tested and tried the most popular WooCommerce inventory management and cloud inventory management plugins in the world. With full confidence, we believe that ATUM will become unrivalled in every category.
 
@@ -156,6 +156,60 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 ## Changelog
+
+---
+
+`1.5.0`
+
+*2018-12-11*
+
+**Features**
+
+* New style for Stock Central table.
+* New style for Settings page.
+* New style for Purchase Orders table.
+* New style for Inventory Logs table.
+* New style for Inbound Stock table.
+* Full responsive support for all the new ATUM styles.
+* Drag scroll functionality for the List Table filters.
+* Added buttons to Stock Central to switch between "Sticky Columns" and/or "Sticky Header" mode and "Standard" mode.
+* Added switch to settings to change between "Dark Mode" and "Light Mode".
+* Added new footer to ATUM pages.
+* Improved completely the ATUM data models to fit the upcoming WooCommerce tables.
+* Improved overall performance.
+* Added legacy methods for backwards compatibility.
+* Added auto-migration script to move the data from meta keys to the new product data table.
+* Added hooks to handle WP_Query calls when going to use ATUM data.
+* Allow to search by Supplier SKU when adding products to Purchase Orders or Inventory Logs.
+* Remove new ATUM's product data table when uninstalling ATUM if was set that way in Settings.
+* Added cache helper to manage cache and transients.
+* Improved overall performance with cache.
+* Added stock step to ATUM Settings when using decimals.
+
+**Changes**
+
+* Added new statuses for Purchase Orders ("Pending", "Ordered", "On the Way In", "Receiving" and "Received").
+* Added notes to ATUM Orders to record the status changes.
+* When using WooCommerce 3.5+, the Purchase Orders will update the stock automatically when switching between "Received" and any other status.
+* Removed "View" button from Purchas Orders list.
+* Prevent from adding duplicated Supplier SKUs to distinct products (must be unique).
+* Now ATUM uses its own custom icons font.
+* Moved all the product meta boxes' hooks to its own class.
+* Run Upgrade tasks globally and not only from admin side.
+
+**Fixes**
+
+* Full refactory.
+* Fixed WPML integration issues.
+* Fixed locations tree that was not showing locations that were not linked to any product.
+* Fixed all translations showning in ATUM Orders' searches.
+* Fixed Purchase Order stock not added when product stock value is NULL.
+* Set stock quantity to 0 when changing the "WC manage stock" form settings' tool.
+* Fixed Dashboard's promo sales showing today stats instead of month.
+* Avoid loading the WP 5.0 core's lodash library to not conflict with ATUM Dashboard's gridstack.
+* Prevent POs to change the stock to unmanaged products.
+* CSS fixes.
+* Refactory: code style.
 
 ---
 

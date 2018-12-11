@@ -175,8 +175,8 @@ class DataExport {
 
 			// Add the icon fonts to mPDF.
 			$fontdata = array(
-				'dashicons'   => array(
-					'R' => '../../../../assets/fonts/dashicons.ttf',
+				'atum-icon-font'   => array(
+					'R' => '../../../../assets/fonts/atum-icon-font.ttf',
 				),
 				'woocommerce' => array(
 					'R' => '../../../../assets/fonts/WooCommerce.ttf',

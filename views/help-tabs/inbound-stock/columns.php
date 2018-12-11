@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || die;
 	</thead>
 	<tbody>
 		<tr>
-			<td><span class="dashicons dashicons-format-image" title="<?php esc_attr_e( 'Thumbnail', ATUM_TEXT_DOMAIN ) ?>"></span></td>
+			<td><span class="atum-icon atmi-picture" title="<?php esc_attr_e( 'Thumbnail', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php esc_html_e( 'Product small image preview.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>

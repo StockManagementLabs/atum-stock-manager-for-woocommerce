@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Lists\ListTable;
-use Atum\Suppliers\Suppliers;
 
 
 class HtmlReport extends ListTable {
@@ -64,8 +63,8 @@ class HtmlReport extends ListTable {
 		parent::__construct( $args );
 
 		// Add the font icons inline for thumb and product type columns.
-		self::$table_columns['thumb']     = '<span class="wc-image" style="font-family: dashicons">&#xf128;</span>';
-		self::$table_columns['calc_type'] = '<span class="wc-type" style="font-family: woocommerce">&#xe006;</span>';
+		self::$table_columns['thumb']     = '<span class="atum-icon atmi-picture" style="font-family: atum-icon-font">&#xe827;</span>';
+		self::$table_columns['calc_type'] = '<span class="atum-icon atmi-tag" style="font-family: atum-icon-font">&#xe82f;</span>';
 	}
 
 	/**
@@ -134,7 +133,7 @@ class HtmlReport extends ListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product     = Helpers::get_atum_product( $item );
 		$type              = $this->product->get_type();
 		$this->allow_calcs = Helpers::is_inheritable_type( $type ) ? FALSE : TRUE;
 		$row_style         = '';
@@ -180,7 +179,7 @@ class HtmlReport extends ListTable {
 					}
 
 					$this->is_child = TRUE;
-					$this->product  = wc_get_product( $child_id );
+					$this->product  = Helpers::get_atum_product( $child_id );
 					$this->single_expandable_row( $this->product, ( 'grouped' === $type ? $type : 'variation' ) );
 				}
 			}
@@ -242,7 +241,8 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
-		$supplier_id = get_post_meta( $this->get_current_product_id(), Suppliers::SUPPLIER_META_KEY, TRUE );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {
 
@@ -342,7 +342,7 @@ class HtmlReport extends ListTable {
 		$product_id = $this->product->get_id();
 		$content    = '';
 		
-		$dashicons_style = ' style="font-family: dashicons; font-size: 20px;"';
+		$atum_icons_style = ' style="font-family: atum-icon-font; font-size: 20px;"';
 
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales.
 		if ( ! $this->allow_calcs ) {
@@ -352,7 +352,7 @@ class HtmlReport extends ListTable {
 		elseif ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 			
 			$wc_stock_status = $this->product->get_stock_status();
-			$content         = '<span class="dashicons"' . $dashicons_style . '>&#xf530;</span>';
+			$content         = '<span class="atum-icon"' . $atum_icons_style . '>&#xe87d;</span>';
 			
 			switch ( $wc_stock_status ) {
 				case 'instock':
@@ -373,23 +373,23 @@ class HtmlReport extends ListTable {
 		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
 			
 			if ( $this->product->backorders_allowed() ) {
-				$content = '<span class="dashicons"' . $dashicons_style . '>&#xf177;</span>';
+				$content = '<span class="atum-icon"' . $atum_icons_style . '>&#xe882;</span>';
 			}
 			else {
 				$classes .= ' cell-red';
-				$content  = '<span class="dashicons"' . $dashicons_style . '>&#xf153;</span>';
+				$content  = '<span class="atum-icon"' . $atum_icons_style . '>&#xe880;</span>';
 			}
 			
 		}
 		// Low Stock.
 		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
 			$classes .= ' cell-yellow';
-			$content  = '<span class="dashicons"' . $dashicons_style . '>&#xf534;</span>';
+			$content  = '<span class="atum-icon"' . $atum_icons_style . '>&#xe884;</span>';
 		}
 		// In Stock.
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
 			$classes .= ' cell-green';
-			$content  = '<span class="dashicons"' . $dashicons_style . '>&#xf147;</span>';
+			$content  = '<span class="atum-icon"' . $atum_icons_style . '>&#xe87f;</span>';
 		}
 		
 		$classes = $classes ? ' class="' . $classes . '"' : '';

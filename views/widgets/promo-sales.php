@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || die;
 		</select>
 	</div>
 
-	<div class="data" data-value="today">
+	<div class="data hidden" data-value="today">
 
 		<h3 class="widget-success"><?php echo esc_html( $stats_today['value'] ) ?></h3>
 		<h5><?php esc_html_e( 'Value', ATUM_TEXT_DOMAIN ) ?></h5>
@@ -48,7 +48,7 @@ defined( 'ABSPATH' ) || die;
 
 	</div>
 
-	<div class="data hidden" data-value="this_month">
+	<div class="data" data-value="this_month">
 
 		<h3 class="widget-success"><?php echo esc_html( $stats_this_month['value'] ) ?></h3>
 		<h5><?php esc_html_e( 'Value', ATUM_TEXT_DOMAIN ) ?></h5>

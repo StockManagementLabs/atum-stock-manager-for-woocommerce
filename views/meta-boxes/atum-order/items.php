@@ -9,6 +9,8 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\PurchaseOrders\PurchaseOrders;
+
 global $wpdb;
 
 // Get line items.
@@ -25,11 +27,17 @@ if ( wc_tax_enabled() ) {
 
 $currency  = $atum_order->get_currency();
 $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
+
+$add_blocker = ! ( $atum_order->get_status() );
 ?>
 
 <div class="atum-meta-box <?php echo esc_attr( $post_type->name ) ?>_items">
 
 	<?php do_action( 'atum/atum_order/before_items_meta_box', $atum_order ) ?>
+	
+	<?php if ( $add_blocker ) : ?>
+		<div class="items-blocker"><h3><?php echo esc_attr( $atum_order->get_block_message() ) ?></h3></div>
+	<?php endif; ?>
 
 	<div class="atum_order_items_wrapper">
 		<table cellpadding="0" cellspacing="0" class="atum_order_items">
@@ -99,7 +107,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 			<tbody id="atum_order_shipping_line_items">
 				<?php
-				$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
+				$shipping_methods = wc()->shipping() ? wc()->shipping->load_shipping_methods() : array();
 				foreach ( $line_items_shipping as $item_id => $item ) :
 					include 'item-shipping.php';
 				endforeach;
@@ -121,10 +129,12 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 		</table>
 	</div>
 
+	<?php if ( version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ) : // Only allow bulk edit before 3.5.0 VC Version. ?>
 	<div class="atum-order-data-row atum-order-item-bulk-edit" style="display:none;">
 		<button type="button" class="button bulk-delete-items"><?php esc_html_e( 'Delete selected row(s)', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php do_action( 'atum/atum_order/item_bulk_controls', $atum_order ); ?>
 	</div>
+	<?php endif; ?>
 
 	<div class="atum-order-data-row atum-order-totals-items">
 
@@ -243,7 +253,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 					<header class="wc-backbone-modal-header">
 						<h1><?php esc_html_e( 'Add products', ATUM_TEXT_DOMAIN ); ?></h1>
-						<button class="modal-close modal-close-link dashicons dashicons-no-alt">
+						<button class="modal-close modal-close-link">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', ATUM_TEXT_DOMAIN ) ?></span>
 						</button>
 					</header>
@@ -276,7 +286,7 @@ $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 					<header class="wc-backbone-modal-header">
 						<h1><?php esc_html_e( 'Add tax', ATUM_TEXT_DOMAIN ); ?></h1>
-						<button class="modal-close modal-close-link dashicons dashicons-no-alt">
+						<button class="modal-close modal-close-link">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', ATUM_TEXT_DOMAIN ) ?></span>
 						</button>
 					</header>

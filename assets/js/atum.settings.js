@@ -53,7 +53,23 @@
 			
 			// Enable Select2
 			this.doSelect2();
-
+			
+			// Toggle Menu
+			this.toggleMenu();
+			
+			// Footer position
+			$(window).on('load', function () {
+				if ( $('.footer-box').hasClass('no-style') ) {
+					$('#wpfooter').css('position', 'relative').show();
+					$('#wpcontent').css('min-height', '95vh');
+				}
+			});
+			
+			// Change menu theme
+			$('.js-switch-menu').on('change', function () {
+				self.changeMenuTheme();
+			});
+			
 			// Set the dirty fields
 			this.$form
 				
@@ -131,10 +147,11 @@
 				// Remove the dirty mark if the user tries to save
 				.on('click', 'input[type=submit]', function() {
 					self.$form.find('.dirty').removeClass('dirty');
+					self.$form.find('.form-settings-wrapper').addClass('overlay');
 				})
 				
 				// Script Runner fields
-				.on('click', '.script-runner button', function() {
+				.on('click', '.script-runner .tool-runner', function() {
 					self.runScript($(this));
 				})
 				
@@ -194,14 +211,58 @@
 		doSwitchers: function() {
 			
 			$('.js-switch').each(function () {
-				new Switchery(this, { size: 'small' });
+				new Switchery(this, {
+					size               : 'small',
+					color              : '#d5f5ba',
+					secondaryColor     : '#e9ecef',
+					jackColor          : '#69c61d',
+					jackSecondaryColor : '#adb5bd'
+				});
+			});
+			
+			$('.js-switch-menu').each(function () {
+				if ( $('.switch-interface-style .switchery').length === 0 ) {
+					new Switchery(this, {
+						size               : 'small',
+						color              : '#dbf9ff',
+						secondaryColor     : '#e9ecef',
+						jackColor          : '#00b8db',
+						jackSecondaryColor : '#adb5bd'
+					});
+				}
 			});
 			
 		},
 		doColorPickers: function() {
+			var self          = this;
+			// Custom color picker.
+			var colorPickerButtonText = $('.wp-color-result-text');
 			
-			$('.atum-color').each(function () {
-				$(this).wpColorPicker();
+			$('.atum-color').each(function (key) {
+				$(this).wpColorPicker(
+				{
+					change: function(event, ui){
+						var value = $(this).val();
+						$('.wp-picker-active .color-picker-preview').css('background-color', value);
+						$('.wp-picker-active .wp-color-result-text').html(value);
+					}
+				}
+				);
+			});
+			
+			$('.wp-color-result').prepend('<span class="color-picker-preview"></span>');
+			
+			$('.wp-picker-container').each(function () {
+				var value = $(this).find('.atum-color').val();
+				if ( value ) {
+					$(this).find('.color-picker-preview').css('background-color', value);
+					$(this).find('.wp-color-result-text').html(value);
+				}
+				else {
+					$(this).find('.color-picker-preview').css('background-color', value);
+					$(this).find('.wp-color-result-text').html(self.settings.selectColor);
+				}
+				
 			});
 		},
 		doSelect2: function() {
@@ -242,6 +303,41 @@
 				
 			}
 		
+		},
+		changeMenuTheme: function() {
+			//Change menu color syle
+			$('.atum-nav').toggleClass('atum-nav-light');
+			$('.section-general-title').toggleClass('section-general-title-light');
+			$('.section-title').toggleClass('section-title-light');
+			$('.section-fields').toggleClass('section-field-light');
+			$('.switch-interface-style').toggleClass('bg-light');
+			
+			var data = {
+				menu_theme    : $('.js-switch-menu').is(':checked') ? 1 : 0
+			}
+			
+			$.ajax({
+				url       : ajaxurl,
+				method    : 'POST',
+				data      : {
+					token : this.settings.menuThemeNonce,
+					action: this.settings.changeSettingsMenuStyle,
+					data  : data
+				}
+			});
+		},
+		toggleMenu    : function() {
+			$('.toogle-menu').click(function () {
+				$('.atum-nav-list').toggleClass('expand-menu');
+			});
+			
+			$('.atum-nav-link').click(function () {
+				$('.atum-nav-list').toggleClass('expand-menu');
+			});
+			
+			$(window).resize(function () {
+				$('.atum-nav-list').removeClass('expand-menu');
+			});
 		},
 		restoreSelects: function() {
 			

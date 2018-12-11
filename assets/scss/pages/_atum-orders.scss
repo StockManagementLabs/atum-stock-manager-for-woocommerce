@@ -1,7 +1,18 @@
 //
 // ATUM Orders list pages
 //------------------------
-
+//#wpfooter {
+//	position: relative;
+//	@include flexbox;
+//	@include flex-align-items(center);
+//	@include flex-justify-content(space-between);
+//	#wpbody-content {
+//		padding-bottom: 0;
+//	}
+//	.footer-atum-logo, .footer-atum-buttons, #footer-left, .clear {
+//		display: none;
+//	}
+//}
 
 //
 // Tooltips
@@ -30,7 +41,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -7px;
 			margin-left: -6px;
-			border-top-color: $dark;
+			border-top-color: $white;
 		}
 	}
 	
@@ -40,7 +51,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -5px;
 			margin-left: -6px;
-			border-bottom-color: $dark;
+			border-bottom-color: $white;
 		}
 	}
 	
@@ -50,7 +61,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -5px;
-			border-right-color: $dark;
+			border-right-color: $white;
 		}
 	}
 	
@@ -60,16 +71,20 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -7px;
-			border-left-color: $dark;
+			border-left-color: $white;
 		}
 	}
 }
 
+.swal2-in #tiptip_holder {
+	z-index: 100000001;
+}
+
 #tiptip_content {
-	color: $white;
+	color: $gray-600;
 	font-size: 0.8em;
 	max-width: 150px;
-	background: $dark;
+	background: $white;
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
@@ -106,25 +121,15 @@ table.wp-list-table {
 		}
 	}
 	
-	.column-title {
-		width: 15%;
-		
-		time {
-			display: block;
-			color: $wp-gray-1;
-			margin: 3px 0;
-		}
-	}
-	
 	.column-actions {
 		width: 110px;
 		
-		a.button {
+		a {
 			float: left;
 			margin: 0 4px 2px 0;
 			cursor: pointer;
+			height: inherit;
 			padding: 3px 4px;
-			height: auto;
 			
 			img {
 				display: block;
@@ -147,15 +152,16 @@ table.wp-list-table {
 			color: $secondary;
 			background: $light;
 			border-radius: 4px;
-			border-bottom: 1px solid rgba($black, .05);
 			margin: -.25em 0;
 			cursor: inherit !important;
 			white-space: nowrap;
 			max-width: 100%;
+			height: 26px;
+			line-height: 26px;
 			
-			&.status-completed {
-				background: $wc-blue-gray-light;
-				color: $wc-blue-gray;
+			&.status-completed, &.status-received {
+				background: $green-light;
+				color: $green;
 			}
 			
 			&.status-on-hold {
@@ -169,8 +175,24 @@ table.wp-list-table {
 			}
 			
 			&.status-pending {
-				background: $wc-green-light;
-				color: $wc-green;
+				background: $red-light;
+				color: $red;
+			}
+			
+			
+			&.status-ordered {
+				background: $orange-light;
+				color: $orange;
+			}
+			
+			&.status-onthewayin {
+				background: $blue-light;
+				color: $blue;
+			}
+			
+			&.status-receiving {
+				background: $purple-light;
+				color: $purple;
 			}
 			
 			> span {
@@ -192,8 +214,9 @@ table.wp-list-table {
 			margin: 0 auto;
 			color: $wp-gray-1;
 			
-			&::after {
-				@include icon_woocommerce( '\e027' );
+			&:after {
+				font-family: $atum-icon-font;
+				content: $atmi-bubble;
 				line-height: 16px;
 			}
 		}
@@ -201,36 +224,16 @@ table.wp-list-table {
 	
 	.column-actions {
 		
-		.pending, .complete, .view, .pdf{
-			@include ir();
-			padding: 0 !important;
-			height: 2em !important;
-			width: 2em;
+		.complete, .view, .pdf{
+			i {
+				font-size: 18px;
+			}
 		}
 		
-		.pending::after {
-			@include icon_woocommerce( '\e00f' );
-			line-height: 1.85;
-		}
-		
-		.complete::after {
-			@include icon_dashicons( '\f147' );
-			line-height: 1.85;
-		}
-		
-		.view::after {
-			@include icon_dashicons( '\f177' );
-			line-height: 1.85;
-		}
-		
-		.pdf::after {
-			content: url('#{$img-path}pdf.svg');
-			position: absolute;
-			top: 2px;
-			left: 2px;
-			width: 20px;
-			z-index: 10;
-			text-indent: 0;
+		.pdf {
+			i {
+				color: $danger;
+			}
 		}
 		
 	}
@@ -247,17 +250,17 @@ table.wp-list-table {
 		@include ir();
 		margin: 0 auto;
 		
-		&::after {
-			@include icon_woocommerce;
+		&:after {
+			font-family: $atum-icon-font;
 		}
 	}
 	
 	.notes_head::after {
-		content: '\e028';
+		content: $atmi-bubble;
 	}
 	
 	.status_head::after {
-		content: '\e011';
+		content: $atmi-cloud-sync;
 	}
 	
 }

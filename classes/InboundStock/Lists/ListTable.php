@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
-use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -54,20 +54,14 @@ class ListTable extends AtumListTable {
 		// Prevent unmanaged counters.
 		$this->show_unmanaged_counters = FALSE;
 
-		$this->taxonomies[] = array(
-			'taxonomy' => 'product_type',
-			'field'    => 'slug',
-			'terms'    => Globals::get_product_types(),
-		);
-
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
-			'thumb'               => '<span class="wc-image tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'               => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                  => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'           => '<span class="wc-type tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'           => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
@@ -128,6 +122,7 @@ class ListTable extends AtumListTable {
 
 		$table_classes   = parent::get_table_classes();
 		$table_classes[] = 'inbound-stock-list';
+		$table_classes[] = 'striped';
 
 		return $table_classes;
 	}
@@ -381,14 +376,14 @@ class ListTable extends AtumListTable {
 		}
 
 		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC'; // WPCS: CSRF ok.
-
+		
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
 			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` = 'atum_pending'
+			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "'
 			$search_query
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",
@@ -444,7 +439,7 @@ class ListTable extends AtumListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = wc_get_product( $item );
+		$this->product     = Helpers::get_atum_product( $item );
 		$this->allow_calcs = TRUE;
 
 		echo '<tr>';

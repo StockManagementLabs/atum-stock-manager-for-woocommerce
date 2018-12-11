@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Helpers;
+use Atum\InventoryLogs\InventoryLogs;
 
 $log_status = $atum_order->get_status();
 
@@ -95,7 +95,7 @@ $log_status = $atum_order->get_status();
 
 				<p class="form-field form-field-wide">
 					<label for="status"><?php esc_html_e( 'Log status', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php Helpers::atum_order_status_dropdown( 'status', $log_status ) ?>
+					<?php InventoryLogs::atum_order_status_dropdown( 'status', $log_status ); ?>
 				</p>
 
 				<p class="form-field form-field-wide">

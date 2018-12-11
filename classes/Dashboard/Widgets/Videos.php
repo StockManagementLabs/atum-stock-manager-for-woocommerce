@@ -120,7 +120,7 @@ class Videos extends AtumWidget {
 				}
 
 				$video_data['videos']      = $youtube->getVideosInfo( $filtered_vid_ids );
-				$video_data['first_video'] = reset( $video_data['videos'] );
+				$video_data['first_video'] = current( $video_data['videos'] );
 
 			}
 

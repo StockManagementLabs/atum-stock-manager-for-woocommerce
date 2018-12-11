@@ -210,6 +210,7 @@ class StockCentral extends AtumListPage {
 
 		$tabs['stock_central'] = array(
 			'tab_name' => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
+			'icon'     => 'atmi-layers',
 			'sections' => array(
 				'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN ),
 			),
@@ -257,14 +258,6 @@ class StockCentral extends AtumListPage {
 			'section' => 'stock_central',
 			'name'    => __( 'Expandable Rows', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Show variable and grouped products expanded (ON) or collapsed (OFF) by default.', ATUM_TEXT_DOMAIN ),
-			'type'    => 'switcher',
-			'default' => 'no',
-		);
-
-		$defaults['sticky_columns'] = array(
-			'section' => 'stock_central',
-			'name'    => __( 'Sticky Columns', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( 'Stick the first table columns to not lose context when scrolling horizontally. **EXPERIMENTAL**.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'no',
 		);

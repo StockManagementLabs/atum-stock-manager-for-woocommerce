@@ -24,10 +24,10 @@ if ( empty( $product ) ) {
 	return;
 }
 
-$step = \Atum\Inc\Helpers::get_input_step();
+$step         = \Atum\Inc\Helpers::get_input_step();
 $product_id   = 'variation' === $product->get_type() ? $product->get_parent_id() : $product->get_id();
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
-$thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
+$thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
 ?>
 <tr class="item <?php echo esc_attr( apply_filters( 'atum/atum_order/item_class', ! empty( $class ) ? $class : '', $item, $atum_order ) ) ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
 
@@ -44,7 +44,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php endif;
 
 		if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
-			$supplier_sku = get_post_meta( $product_id, Suppliers::SUPPLIER_SKU_META_KEY, TRUE );
+			$supplier_sku = $product->get_supplier_sku();
 
 			if ( $supplier_sku ) : ?>
 				<div class="atum-order-item-sku"><strong><?php esc_html_e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $supplier_sku ) ?></div>
@@ -73,11 +73,11 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 
 		<div class="item_status">
 			<?php if ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) : ?>
-				<i class="dashicons dashicons-hidden color-primary" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="atum-icon atum-icon atmi-question-circle color-primary" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 
 			<?php if ( $item->get_meta( '_stock_changed' ) ) : ?>
-				<i class="dashicons dashicons-admin-settings color-warning" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="atum-icon atmi-highlight color-warning" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 		</div>
 	</td>
@@ -86,7 +86,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 	do_action( 'atum/atum_order/item_values', $product, $item, absint( $item_id ) );
 
 	$locations      = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
-	$locations_list = ( ! empty( $locations ) ) ? implode( ', ', $locations ) : '&ndash;';
+	$locations_list = ! empty( $locations ) ? implode( ', ', $locations ) : '&ndash;';
 	?>
 	<td class="item_location"<?php if ($product) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
 		<?php echo esc_html( $locations_list ) ?>

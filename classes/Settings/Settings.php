@@ -55,7 +55,7 @@ class Settings {
 	 */
 	private $options;
 
-	/*
+	/**
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-settings';
@@ -96,12 +96,14 @@ class Settings {
 		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'atmi-cog',
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN ),
 				),
 			),
 			'store_details' => array(
 				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'atmi-store',
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
 					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN ),
@@ -172,6 +174,18 @@ class Settings {
 				'options' => array(
 					'min' => 0,
 					'max' => 4,
+				),
+			),
+			'stock_quantity_step'       => array(
+				'section' => 'general',
+				'name'    => __( 'Stock change arrows behaviour', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Tell WooCommerce, how much to increase/decrease the stock value with each arrow click. Example: If set to ‘0.5’; the stock will change from value ‘5’ to value ‘5.5’ when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to ‘4.5’.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => 0,
+				'options' => array(
+					'min'  => 0,
+					'max'  => 4,
+					'step' => 0.01,
 				),
 			),
 			'sales_last_ndays'          => array(
@@ -360,7 +374,7 @@ class Settings {
 	 * @param array $settings The settings.
 	 * @param array $defaults The default options.
 	 *
-	 * @return  array The options array mixed
+	 * @return  array       The options array mixed
 	 */
 	public function get_settings( $settings, $defaults ) {
 		
@@ -376,7 +390,7 @@ class Settings {
 				$options[ $field ] = $settings[ $field ];
 			}
 			elseif ( isset( $default['default'] ) ) {
-				$options[ $field ] = $default['default'];
+				$options[ $field ] =  $default['default'];
 			}
 
 		}
@@ -418,11 +432,14 @@ class Settings {
 				'run'                             => __( 'Run', ATUM_TEXT_DOMAIN ),
 				'ok'                              => __( 'OK', ATUM_TEXT_DOMAIN ),
 				'done'                            => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'selectColor'                     => __( 'Select Color', ATUM_TEXT_DOMAIN ),
 				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
+				'menuThemeNonce'                  => wp_create_nonce( 'atum-menu-theme-nonce' ),
 				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
+				'changeSettingsMenuStyle'         => 'atum_menu_style',
 				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
 			) );
@@ -552,36 +569,36 @@ class Settings {
 							$this->options[ $key ] = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
 							break;
 
-						case 'button_group':
+                        case 'button_group':
 							// The button groups could allow multiple values (checkboxes).
-							if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
+                        	if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
 
-								$values = array();
+                        		$values = array();
 
 								foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
 
 									// Save always the required value as checked.
 									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
 										$values[ $default_value ] = 'yes';
-									}
-									else {
+			                        }
+			                        else {
 										$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
-									}
+			                        }
 
-								}
+		                        }
 
 								$this->options[ $key ] = maybe_serialize( $values );
 
-							}
-							else {
+	                        }
+	                        else {
 								$this->options[ $key ] = ! empty( $input[ $key ] ) ? esc_attr( $input[ $key ] ) : $atts['default'];
-							}
+	                        }
 
-							break;
+	                        break;
 
-						case 'textarea':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
-							break;
+                        case 'textarea':
+	                        $this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
+	                        break;
 							
 						case 'color':
 							$this->options[ $key ] = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
@@ -624,7 +641,7 @@ class Settings {
 			'<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-			$placeholder,
+            $placeholder,
 			$this->options[ $args['id'] ],
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
@@ -647,13 +664,13 @@ class Settings {
 
 		$output = sprintf(
 			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d" cols="%3$d" name="%4$s" %5$s>%6$s</textarea>',
-			ATUM_PREFIX . $args['id'],
+            ATUM_PREFIX . $args['id'],
 			absint( $args['rows'] ),
 			absint( $args['cols'] ),
-			self::OPTION_NAME . "[{$args['id']}]",
+	        self::OPTION_NAME . "[{$args['id']}]",
 			$this->get_dependency( $args ) . $default,
-			$this->options[ $args['id'] ]
-		) . $this->get_description( $args );
+	        $this->options[ $args['id'] ]
+        ) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // WPCS: XSS ok.
 
@@ -668,15 +685,15 @@ class Settings {
 	 */
 	public function display_number( $args ) {
 
-		$step    = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
-		$min     = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
-		$max     = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
+		$step = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
+		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
+		$max  = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
 
 		$output = sprintf(
 			'<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
 			$min,
-			$max,
+            $max,
 			$step,
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
@@ -713,8 +730,8 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="wc-enhanced-select" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
-			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
+		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="atum-select2" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
+			<?php wc()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
 
@@ -797,12 +814,12 @@ class Settings {
 					$checked_str = checked( $is_active, TRUE, FALSE );
 				}
 
-				?>
+                ?>
 				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
 					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
 						autocomplete="off"<?php echo wp_kses_post( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
 						<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
-				</label>
+                </label>
 
 			<?php endforeach; ?>
 		</div>
@@ -823,9 +840,9 @@ class Settings {
 	 */
 	public function display_select( $args ) {
 
-		$name    = self::OPTION_NAME . "[{$args['id']}]";
-		$value   = $this->options[ $args['id'] ];
-		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->options[ $args['id'] ];
+		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
 
 		ob_start();
@@ -858,17 +875,19 @@ class Settings {
 		?>
 		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?>"
 			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo esc_attr( 'data-confirm="' . $args['options']['confirm_msg'] ) . '"' ?>>
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"' ?>>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ) : ?>
-			<select class="wc-enhanced-select" style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
+			<div class="atum-select2-container">
+			<select class="atum-select2" style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
 				<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
 				<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
-				<?php endforeach ?>
-			</select>
-			&nbsp;
+					<?php endforeach ?>
+				</select>
+				&nbsp;
+			</div>
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-primary tool-runner"<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] ) echo ' disabled="disabled"' ?>>
@@ -967,10 +986,10 @@ class Settings {
 	 *
 	 * @return string
 	 */
-	public function get_dependency( $args ) {
+	public function get_dependency($args) {
 
-		if ( isset( $args['dependency'] ) ) {
-			return " data-dependency='" . wp_json_encode( $args['dependency'] ) . "'";
+		if ( isset($args['dependency']) ) {
+			return " data-dependency='" . json_encode( $args['dependency'] ) . "'";
 		}
 
 		return '';
