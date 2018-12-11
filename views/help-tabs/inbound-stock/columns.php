@@ -29,11 +29,7 @@ defined( 'ABSPATH' ) || die;
 			<td><?php esc_html_e( "An SKU, or Stock Keeping Unit, is a code assigned to a product by the store admin to identify the price, product options and manufacturer of the merchandise. An SKU is used to track inventory in your retail store. They are critical in helping you maintain a profitable retail business. We recommend the introduction of SKUs in your store to take the full advantage of ATUM's features.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
-			<td><strong><?php esc_html_e( 'ID', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "A WooCommerce Product ID is sometimes needed when using shortcodes, widgets and links. ATUM's stock central page will display the appropriate ID of the product in this column.", ATUM_TEXT_DOMAIN ) ?></td>
-		</tr>
-		<tr>
-			<td><span class="wc-type" title="<?php esc_attr_e( 'Product Type', ATUM_TEXT_DOMAIN ) ?>"></span></td>
+			<td><span class="atum-icon atmi-tag" title="<?php esc_attr_e( 'Product Type', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php esc_html_e( 'This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>

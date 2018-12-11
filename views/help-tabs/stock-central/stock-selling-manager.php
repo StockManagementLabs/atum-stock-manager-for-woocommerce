@@ -17,12 +17,8 @@ defined( 'ABSPATH' ) || die;
 	</thead>
 	<tbody>
 		<tr>
-			<td><strong><?php esc_html_e( 'Sales Last 14 Days', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( 'Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last 14 days (We do not include the current day sales).', ATUM_TEXT_DOMAIN ) ?></td>
-		</tr>
-		<tr>
-			<td><strong><?php esc_html_e( 'Sales Last 7 Days', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( 'Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last seven days (We do not include the current day sales).', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><strong><?php esc_html_e( 'Sales Last X Days', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php esc_html_e( 'Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last X days (we do not include the current day sales). You can change the number of the days by simply clicking on its blue number.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ) ?></strong></td>

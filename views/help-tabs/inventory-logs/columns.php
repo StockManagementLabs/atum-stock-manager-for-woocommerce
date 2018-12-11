@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Log Status', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "This is the status of existing Inventory Logs. Orange clock means IL is in 'pending' status. When this status is active all products within these ILs will reflect their totals in Stock Central. The green tick means IL is 'completed,' products were rectified and stocks amended by the user. When this status is active, all products within are no longer reflected in Stock Central’s columns.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( "This is the status of existing Inventory Logs. When 'pending' status is activated, all products within these ILs will reflect their totals in Stock Central. When 'completed' status is activated products were rectified and stocks amended by the user. When this status is active, all products within are no longer reflected in Stock Central’s columns.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Type', ATUM_TEXT_DOMAIN ) ?></strong></td>
@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Actions', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( 'Inventory Log actions (Complete Log and View | Edit Log).', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( 'Inventory Log actions (Mark as completed).', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>

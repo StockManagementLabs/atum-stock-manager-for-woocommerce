@@ -18,7 +18,11 @@ defined( 'ABSPATH' ) || die;
 	<tbody>
 		<tr>
 			<td><strong><?php esc_html_e( 'Current Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( 'The current stock represents the number of products available to order (values update on the Stock Central refresh).', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( "The current stock represents the number of products available to order (values update on the Stock Central refresh). If the WC’s manage stock option is enabled, you can set the current stock in this column. After you click the 'Set' button and 'Save Data', the current stock will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
+		</tr>
+		<tr>
+			<td><strong><?php esc_html_e( 'Out of stock threshold', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php esc_html_e( "When stock quantity reaches the Out of Stock Threshold the stock status will change to 'Out of Stock'. You can set the Out of Stock Threshold in this column. After you click the 'Set' button and 'Save Data', the Out of Stock Threshold will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Inbound Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>

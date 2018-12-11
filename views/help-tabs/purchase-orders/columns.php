@@ -26,7 +26,26 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'PO Status', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "This is the status of existing Purchase Orders. Orange clock means Purchase Order is in 'pending' status. When this status is active all products within these POs will show in Inbound Stock list and reflect their totals in Stock Central. The green tick means PO is 'completed,' products were delivered and added to stock by the user. When this status is active, all products within are no longer listed in Inbound Stock list and their totals not reflected in Stock Central’s Inbound Stock column.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td>
+				<?php esc_html_e( 'This is the status of existing Purchase Orders. You can select from these PO status options:', ATUM_TEXT_DOMAIN ) ?>
+				<ul>
+					<li>
+						<?php esc_html_e( 'Pending: When create the PO but is not sent. All the products within these POs will show in the Inbound Stock list and reflect their totals in Stock Central.', ATUM_TEXT_DOMAIN ) ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'Ordered: When the PO is sent to the supplier (The products will keep in the Inbound Stock list).', ATUM_TEXT_DOMAIN ) ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'On the way in: When products are on the way (The products will keep in the Inbound Stock list).', ATUM_TEXT_DOMAIN ) ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'Receiving: When products were delivered but have not been registered yet (The products will keep in the Inbound Stock list).', ATUM_TEXT_DOMAIN ) ?>
+					</li>
+					<li>
+						<?php esc_html_e( 'Received: When products were delivered and registered in the warehouse. When this status is activated the products will be added to your stock automatically and are no longer listed in Inbound Stock list and their totals not reflected in Stock Central’s Inbound Stock column.', ATUM_TEXT_DOMAIN ) ?>
+					</li>
+				</ul>
+			</td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Supplier', ATUM_TEXT_DOMAIN ) ?></strong></td>
@@ -42,7 +61,7 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Actions', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( 'Purchase Order actions (Complete PO and View | Edit PO | Export to PDF).', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( 'Purchase Order actions (Mark as received | Export to PDF).', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 	</tbody>
 </table>
