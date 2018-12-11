@@ -15,7 +15,7 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**[WPML FULLY COMPATIBLE](https://wpml.org/plugin/atum-inventory-management-for-woocommerce/ "Visit the WPML compatibility page")**
+**New and Quicker, Redesigned ATUM 1.5** now fully compatible with soon to be released [WooCommerce Custom Product Tables](https://woocommerce.wordpress.com/2018/07/17/woocommerce-custom-product-tables-beta/) feature.
 
 ATUM is now the most advanced FREE WooCommerce inventory management tool in the WordPress plugins repository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -27,8 +27,9 @@ In the preparation process for the development stage, we have tested and tried t
 
 **[FOR ANY QUESTIONS OR TUTORIALS VISIT OUR FORUM](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
 
-
 = AVAILABLE FEATURES =
+
+**[WPML FULLY COMPATIBLE](https://wpml.org/plugin/atum-inventory-management-for-woocommerce/ "Visit the WPML compatibility page")**
 
 Most Advanced FREE WooCommerce Inventory Management - Inventory Statistics (Periodical Sales, Inventory Levels, Lost Sales, Promo Sales), Stock Central with Data Export, Inventory Logs (Reserved Stock, Lost In Post, Customer Returns, Inbound Stock, Warehouse Damages), One Page Updating, Quick Price Changes, Stock Levels Indicators, Suppliers, Purchase Orders and Premium Add-ons.
 
