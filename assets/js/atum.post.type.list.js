@@ -65,7 +65,9 @@
 				$('#wpfooter').show();
 			});
 			
-			$('select').select2();
+			$('select').select2({
+				minimumResultsForSearch: 10
+			});
 		},
 		/**
 		 * Add/remove row active class when checkbox is clicked
