@@ -4512,6 +4512,14 @@ table.wp-list-table thead th, table.wp-list-table tfoot th {
   color: #adb5bd;
 }
 
+table.wp-list-table td a {
+  color: #00B8DB;
+}
+
+table.wp-list-table td a:hover, table.wp-list-table td a:focus, table.wp-list-table td a:active {
+  color: #00B8DB;
+}
+
 table.wp-list-table tbody tr:hover {
   box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
 }
