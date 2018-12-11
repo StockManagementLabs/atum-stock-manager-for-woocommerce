@@ -3599,7 +3599,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 
 		// Dragscroll.
-		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.js', array(), ATUM_VERSION, TRUE );
+		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
 		Helpers::maybe_es6_promise();
 
