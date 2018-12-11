@@ -28,6 +28,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-pdf:before {
+  content: "";
+}
+
 .atmi-view-list:before {
   content: "";
 }

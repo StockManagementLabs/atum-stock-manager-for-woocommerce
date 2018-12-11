@@ -24,6 +24,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-pdf {
+	&:before {
+		content: $atmi-pdf;
+	}
+}
 .atmi-view-list {
 	&:before {
 		content: $atmi-view-list;

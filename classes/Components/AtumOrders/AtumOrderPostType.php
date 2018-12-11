@@ -462,6 +462,7 @@ abstract class AtumOrderPostType {
 							'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ static::FINISHED ] ),
 							'action' => 'complete',
 							'target' => '_self',
+							'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
 						);
 
 					}
@@ -469,7 +470,7 @@ abstract class AtumOrderPostType {
 					$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
 
 					foreach ( $actions as $action ) {
-						printf( '<a class="%s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
+						printf( '<a class="%1$s tips" target="%2$s" href="%3$s" data-tip="%4$s">%5$s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), $action['icon'] );
 					}
 
 					do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>

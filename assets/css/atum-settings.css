@@ -1656,6 +1656,10 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-pdf:before {
+  content: "";
+}
+
 .atmi-view-list:before {
   content: "";
 }
