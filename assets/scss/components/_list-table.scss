@@ -186,46 +186,57 @@
 							}
 						}
 					}
+					
 					a {
 						color: $white;
 						padding: 0;
+						
 						&.empty, &.tips, &.empty {
 							color: $white;
 						}
+						
 						.active {
 							padding: 0;
 						}
 					}
+					
 					.count {
 						font-size: 16px;
 						font-weight: bold;
 						color: $white;
+						
 						&.empty {
 							color: $white;
 						}
 					}
 				}
+				
 				a {
 					color: $gray-500;
 					padding: 0;
+					
 					&.current {
 						pointer-events: none;
 						color: $white;
 						font-weight: bold;
 					}
+					
 					.text-blue {
 						color: $blue;
 					}
+					
 					&.tips {
 						color: $blue;
 						&:hover {
 							cursor: pointer;
 						}
 					}
+					
 					&.empty {
 						color: $gray-500;
 					}
 				}
+				
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
@@ -242,14 +253,17 @@
 						color: $blue;
 					}
 				}
+				
 				.count {
 					font-size: 16px;
+					font-weight: bold;
+					color: $blue;
+					
 					&.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
 					}
-					font-weight: bold;
-					color: $blue;
+					
 					&.empty {
 						color: $gray-500;
 					}
@@ -297,20 +311,24 @@
 					font-weight: bold;
 					letter-spacing: 0.4px;
 					color: $white;
+					
 					.count {
-						color: white;
+						color: $white;
 					}
 				}
+				
 				.count {
 					font-size: 14px;
 					font-weight: normal;
 					color: $blue;
 				}
+				
 				&:active, &:focus {
 					border: none;
 					outline: none;
 					box-shadow: none;
 				}
+				
 				&.tips {
 					color: $blue;
 					&:hover {
@@ -994,6 +1012,7 @@
 				@include flex-justify-content(center);
 				@include flex-align-items(center);
 				margin-left: 3px;
+				
 				&.active {
 					border-radius: 5px;
 					background-color: $blue;
@@ -1002,16 +1021,20 @@
 					font-weight: bold;
 					letter-spacing: 0.4px;
 					color: $white;
+					
 					.text-blue {
 						color: $white;
 					}
+					
 					.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
 						color: $white;
+						
 						&.empty {
 							color: $white;
 						}
+						
 						a {
 							color: $white;
 							&.empty {
@@ -1019,6 +1042,7 @@
 							}
 						}
 					}
+					
 					a {
 						color: $white;
 						padding: 0;
@@ -1029,6 +1053,7 @@
 							padding: 0;
 						}
 					}
+					
 					.count {
 						font-size: 16px;
 						font-weight: bold;
@@ -1037,25 +1062,33 @@
 							color: $white;
 						}
 					}
+					
 				}
+				
 				a {
 					color: $gray-500;
 					padding: 0;
+					
 					&.current {
 						pointer-events: none;
 						color: $white;
 						font-weight: bold;
 					}
+					
 					.text-blue {
 						color: $blue;
 					}
+					
 					&.tips {
 						color: $blue;
 					}
+					
 					&.empty {
 						color: $gray-500;
 					}
+					
 				}
+				
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
@@ -1072,14 +1105,18 @@
 						color: $blue;
 					}
 				}
+				
 				.count {
 					font-size: 16px;
+					
 					&.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
 					}
+					
 					font-weight: bold;
 					color: $blue;
+					
 					&.empty {
 						color: $gray-500;
 					}
@@ -1886,9 +1923,13 @@ table.wp-list-table {
 						color: $blue;
 					}
 				}
+				
 				&.column-calc_mi_status {
-					font-size: 20px;
+					> span {
+						font-size: 22px;
+					}
 				}
+				
 				&.column-_sku {
 					span {
 						font-size: 14px;
@@ -1896,6 +1937,7 @@ table.wp-list-table {
 						color: $blue;
 					}
 				}
+				
 				&.calc_purchase_order {
 					a {
 						color: $blue;
