@@ -1809,24 +1809,36 @@ final class Helpers {
 	 * @return array
 	 */
 	public static function product_data_query_clauses( $query_data, $pieces, $table_name = '' ) {
-
+		
 		if ( empty( $query_data ) ) {
 			return $pieces;
 		}
-
-		$atum_product_data_query = new ProductDataQuery( $query_data );
-		$sql                     = $atum_product_data_query->get_sql( $table_name );
-
-		foreach ( [ 'join', 'where' ] as $key ) {
-
-			if ( ! empty( $sql[ $key ] ) ) {
-				$pieces[ $key ] .= ' ' . $sql[ $key ];
+		
+		if ( ! empty( $query_data['where'] ) ) {
+			$atum_product_data_query = new ProductDataQuery( $query_data );
+			$sql                     = $atum_product_data_query->get_sql( $table_name );
+			
+			foreach ( [ 'join', 'where' ] as $key ) {
+				
+				if ( ! empty( $sql[ $key ] ) ) {
+					$pieces[ $key ] .= ' ' . $sql[ $key ];
+				}
+				
 			}
-
 		}
-
+		
+		if ( ! empty( $query_data['order'] ) ) {
+			
+			global $wpdb;
+			
+			$table_name = $table_name ? $table_name : Globals::ATUM_PRODUCT_DATA_TABLE;
+			$operator   = 'NUMERIC' === $query_data['order']['type'] ? '+0' : '';
+			
+			$pieces['orderby'] = "{$wpdb->prefix}$table_name.{$query_data['order']['field']}$operator {$query_data['order']['order']}";
+		}
+		
 		return $pieces;
-
+		
 	}
 
 	/**
