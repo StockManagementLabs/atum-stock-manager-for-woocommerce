@@ -3669,7 +3669,7 @@ input[type="button"].btn-block {
 }
 
 .tooltip.in {
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .tooltip.top {

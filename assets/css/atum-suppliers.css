@@ -3159,7 +3159,7 @@ h2 .atum-help-tip {
 }
 
 .subsubsub:not(.extend-list-table) li a.current .count {
-  color: white;
+  color: #fff;
 }
 
 .subsubsub:not(.extend-list-table) li a .count {
@@ -4984,8 +4984,8 @@ table.wp-list-table tbody tr:hover {
   color: #00B8DB;
 }
 
-.atum-list-table tbody tr td.column-calc_mi_status, .atum-list-table #the-list tr td.column-calc_mi_status, .floatThead-container tbody tr td.column-calc_mi_status, .floatThead-container #the-list tr td.column-calc_mi_status, .inbound-stock-list tbody tr td.column-calc_mi_status, .inbound-stock-list #the-list tr td.column-calc_mi_status, .wp-list-table tbody tr td.column-calc_mi_status, .wp-list-table #the-list tr td.column-calc_mi_status {
-  font-size: 20px;
+.atum-list-table tbody tr td.column-calc_mi_status > span, .atum-list-table #the-list tr td.column-calc_mi_status > span, .floatThead-container tbody tr td.column-calc_mi_status > span, .floatThead-container #the-list tr td.column-calc_mi_status > span, .inbound-stock-list tbody tr td.column-calc_mi_status > span, .inbound-stock-list #the-list tr td.column-calc_mi_status > span, .wp-list-table tbody tr td.column-calc_mi_status > span, .wp-list-table #the-list tr td.column-calc_mi_status > span {
+  font-size: 22px;
 }
 
 .atum-list-table tbody tr td.column-_sku span, .atum-list-table #the-list tr td.column-_sku span, .floatThead-container tbody tr td.column-_sku span, .floatThead-container #the-list tr td.column-_sku span, .inbound-stock-list tbody tr td.column-_sku span, .inbound-stock-list #the-list tr td.column-_sku span, .wp-list-table tbody tr td.column-_sku span, .wp-list-table #the-list tr td.column-_sku span {
