@@ -9,6 +9,8 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\PurchaseOrders\PurchaseOrders;
+
 global $wpdb;
 
 // Get line items.
@@ -105,7 +107,7 @@ $add_blocker = ! ( $atum_order->get_status() );
 
 			<tbody id="atum_order_shipping_line_items">
 				<?php
-				$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
+				$shipping_methods = wc()->shipping() ? wc()->shipping->load_shipping_methods() : array();
 				foreach ( $line_items_shipping as $item_id => $item ) :
 					include 'item-shipping.php';
 				endforeach;
@@ -127,8 +129,7 @@ $add_blocker = ! ( $atum_order->get_status() );
 		</table>
 	</div>
 
-	<?php if ( version_compare( WC()->version, '3.5.0', '<' ) || \Atum\PurchaseOrders\PurchaseOrders::get_post_type() !== $post_type ) :
-		// Only allow bulk edit before 3.5.0 VC Version. ?>
+	<?php if ( version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ) : // Only allow bulk edit before 3.5.0 VC Version. ?>
 	<div class="atum-order-data-row atum-order-item-bulk-edit" style="display:none;">
 		<button type="button" class="button bulk-delete-items"><?php esc_html_e( 'Delete selected row(s)', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php do_action( 'atum/atum_order/item_bulk_controls', $atum_order ); ?>

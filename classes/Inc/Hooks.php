@@ -176,9 +176,7 @@ class Hooks {
 				var $script = $('#tmpl-wc-modal-add-products');
 				
 				$script.html($script.html().replace('step="1"', 'step="<?php echo esc_attr( $step ) ?>"')
-					.replace('placeholder="1"', 'placeholder="<?php echo esc_attr( $step ) ?>" value="<?php echo esc_attr( $step ) ?>"')
-					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>')
-					.replace('<?php echo esc_attr( 'placeholder="1"' ) ?>', '<?php echo esc_attr( 'placeholder="' . $step . '" value="' . $step . '"' ) ?>'));
+					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>'));
 				
 			});
 		</script>
@@ -353,10 +351,7 @@ class Hooks {
 
 		// Maybe allow decimals for WC products' stock quantity.
 		if ( Globals::get_stock_decimals() > 0 ) {
-
-			// Add min value to the quantity field (WC default = 1).
-			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
-
+			
 			// Add step value to the quantity field (WC default = 1).
 			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
 
