@@ -114,9 +114,15 @@ body {
 		z-index: 1051;
 	}
 	
-	.select2-results {
+	body.select2-results {
 		display: block;
 		box-shadow: $dropdown-box-shadow;
+		max-height: inherit;
+		padding: 0;
+		margin: 0;
+		position: relative;
+		overflow-x: inherit;
+		overflow-y: inherit;
 		.select2-results__option {
 			padding: 8px 10px;
 		}
