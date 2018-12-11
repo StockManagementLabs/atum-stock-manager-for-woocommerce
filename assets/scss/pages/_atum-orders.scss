@@ -121,31 +121,15 @@ table.wp-list-table {
 		}
 	}
 	
-	//.column-title {
-	//	width: 15%;
-	//
-	//	time {
-	//		display: block;
-	//		color: $wp-gray-1;
-	//		margin: 3px 0;
-	//	}
-	//}
-	
 	.column-actions {
 		width: 110px;
 		
-		a.button {
+		a {
 			float: left;
 			margin: 0 4px 2px 0;
 			cursor: pointer;
 			height: inherit;
 			padding: 3px 4px;
-			
-			&.complete:after {
-				font-family: atum-icon-font;
-				content: $atmi-checkmark-circle;
-				color: $green;
-			}
 			
 			img {
 				display: block;
@@ -230,7 +214,7 @@ table.wp-list-table {
 			margin: 0 auto;
 			color: $wp-gray-1;
 			
-			&::after {
+			&:after {
 				font-family: $atum-icon-font;
 				content: $atmi-bubble;
 				line-height: 16px;
@@ -241,26 +225,15 @@ table.wp-list-table {
 	.column-actions {
 		
 		.complete, .view, .pdf{
-			@include ir();
-			padding: 0 !important;
-			height: 2em !important;
-			width: 2em;
+			i {
+				font-size: 18px;
+			}
 		}
 		
-		.complete::after {
-			font-family: $atum-icon-font;
-			content: $atmi-checkmark-circle;
-			line-height: 1.85;
-		}
-		
-		.pdf::after {
-			content: url('#{$img-path}pdf.svg');
-			position: absolute;
-			top: 2px;
-			left: 2px;
-			width: 20px;
-			z-index: 10;
-			text-indent: 0;
+		.pdf {
+			i {
+				color: $danger;
+			}
 		}
 		
 	}
@@ -277,7 +250,7 @@ table.wp-list-table {
 		@include ir();
 		margin: 0 auto;
 		
-		&::after {
+		&:after {
 			font-family: $atum-icon-font;
 		}
 	}

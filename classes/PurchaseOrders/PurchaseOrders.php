@@ -462,6 +462,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
 				'action' => 'pdf',
 				'target' => '_blank',
+				'icon'   => '<i class="atum-icon atmi-pdf"></i>'
 			);
 		}
 		

@@ -1268,6 +1268,10 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-pdf:before {
+  content: "";
+}
+
 .atmi-view-list:before {
   content: "";
 }
@@ -6768,7 +6772,7 @@ table.wp-list-table .column-actions {
   width: 110px;
 }
 
-table.wp-list-table .column-actions a.button {
+table.wp-list-table .column-actions a {
   float: left;
   margin: 0 4px 2px 0;
   cursor: pointer;
@@ -6776,13 +6780,7 @@ table.wp-list-table .column-actions a.button {
   padding: 3px 4px;
 }
 
-table.wp-list-table .column-actions a.button.complete:after {
-  font-family: atum-icon-font;
-  content: "";
-  color: #69C61D;
-}
-
-table.wp-list-table .column-actions a.button img {
+table.wp-list-table .column-actions a img {
   display: block;
   width: 12px;
   height: auto;
@@ -6868,37 +6866,18 @@ table.wp-list-table .column-notes .note-on {
   color: #999;
 }
 
-table.wp-list-table .column-notes .note-on::after {
+table.wp-list-table .column-notes .note-on:after {
   font-family: "atum-icon-font";
   content: "";
   line-height: 16px;
 }
 
-table.wp-list-table .column-actions .complete, table.wp-list-table .column-actions .view, table.wp-list-table .column-actions .pdf {
-  display: block;
-  text-indent: -9999px;
-  position: relative;
-  height: 1em;
-  width: 1em;
-  padding: 0 !important;
-  height: 2em !important;
-  width: 2em;
+table.wp-list-table .column-actions .complete i, table.wp-list-table .column-actions .view i, table.wp-list-table .column-actions .pdf i {
+  font-size: 18px;
 }
 
-table.wp-list-table .column-actions .complete::after {
-  font-family: "atum-icon-font";
-  content: "";
-  line-height: 1.85;
-}
-
-table.wp-list-table .column-actions .pdf::after {
-  content: url("../images/pdf.svg");
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  z-index: 10;
-  text-indent: 0;
+table.wp-list-table .column-actions .pdf i {
+  color: #FF4848;
 }
 
 table.wp-list-table img {
@@ -6918,7 +6897,7 @@ table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-
   margin: 0 auto;
 }
 
-table.wp-list-table .notes_head::after, table.wp-list-table .notes_head::after, table.wp-list-table .status_head::after {
+table.wp-list-table .notes_head:after, table.wp-list-table .notes_head:after, table.wp-list-table .status_head:after {
   font-family: "atum-icon-font";
 }
 
