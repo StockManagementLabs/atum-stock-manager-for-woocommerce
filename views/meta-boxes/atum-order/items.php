@@ -253,7 +253,7 @@ $add_blocker = ! ( $atum_order->get_status() );
 
 					<header class="wc-backbone-modal-header">
 						<h1><?php esc_html_e( 'Add products', ATUM_TEXT_DOMAIN ); ?></h1>
-						<button class="modal-close modal-close-link dashicons dashicons-no-alt">
+						<button class="modal-close modal-close-link">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', ATUM_TEXT_DOMAIN ) ?></span>
 						</button>
 					</header>
@@ -286,7 +286,7 @@ $add_blocker = ! ( $atum_order->get_status() );
 
 					<header class="wc-backbone-modal-header">
 						<h1><?php esc_html_e( 'Add tax', ATUM_TEXT_DOMAIN ); ?></h1>
-						<button class="modal-close modal-close-link dashicons dashicons-no-alt">
+						<button class="modal-close modal-close-link">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', ATUM_TEXT_DOMAIN ) ?></span>
 						</button>
 					</header>

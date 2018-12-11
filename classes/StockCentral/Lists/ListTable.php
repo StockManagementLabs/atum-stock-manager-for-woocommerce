@@ -1104,7 +1104,7 @@ class ListTable extends AtumListTable {
 		?>
 		<div class="alert alert-primary">
 			<h3>
-				<i class="dashicons dashicons-megaphone"></i>
+				<i class="atum-icon atmi-bullhorn"></i>
 				<?php esc_attr_e( "Your products need to be set as 'Controlled by ATUM' to appear here", ATUM_TEXT_DOMAIN ) ?>
 			</h3>
 

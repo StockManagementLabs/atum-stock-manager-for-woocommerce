@@ -1966,8 +1966,8 @@ table.wp-list-table {
 			margin: 0 auto;
 			
 			&:before {
-				font-family: WooCommerce;
-				content: "\e006";
+				font-family: $atum-icon-font;
+				content: $atmi-tag;
 				position: absolute;
 				text-indent: 0;
 				font-size: 14px;
@@ -2232,22 +2232,8 @@ table.wp-list-table {
 		}
 	}
 	
-	.dashicons-format-image {
-		font-size: 18px;
-	}
-	
-	.wc-type {
-		&:before {
-			font-family: WooCommerce;
-			content: "\e006";
-			font-size: 18px;
-			top: 0;
-			speak: none;
-			font-variant: normal;
-			text-transform: none;
-			-webkit-font-smoothing: antialiased;
-			left: 0;
-		}
+	.atum-icon {
+		font-size: 16px;
 	}
 	
 }

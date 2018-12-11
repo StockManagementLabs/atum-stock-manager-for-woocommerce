@@ -39,13 +39,13 @@ defined( 'ABSPATH' ) || die;
 		<tr>
 			<td><strong><?php esc_html_e( 'Stock Indicator', ATUM_TEXT_DOMAIN ) ?></strong></td>
 			<td>
-				<p><i class="atmi-checkmark-circle" style="color: #82C342"></i> <?php esc_html_e( 'Product In Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="atmi-cross-circle" style="color: #FF4848"></i> <?php esc_html_e( 'Product Out of Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="atmi-arrow-down-circle" style="color: #00B8DB"></i> <?php esc_html_e( 'Product is Low Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="atmi-circle-minus" style="color: #EFAF00"></i> <?php esc_html_e( 'Product is Out of Stock, but Managed by WC and Set to Back Orders.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="atmi-warning" style="color: #82C342"></i> <?php esc_html_e( 'Product In Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="atmi-warning" style="color: #FF4848"></i> <?php esc_html_e( 'Product Out of Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
-				<p><i class="atmi-warning" style="color: #EFAF00"></i> <?php esc_html_e( 'Product set to Back Orders Only and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-checkmark-circle" style="color: #82C342"></i> <?php esc_html_e( 'Product In Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-cross-circle" style="color: #FF4848"></i> <?php esc_html_e( 'Product Out of Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-arrow-down-circle" style="color: #00B8DB"></i> <?php esc_html_e( 'Product is Low Stock and Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-circle-minus" style="color: #EFAF00"></i> <?php esc_html_e( 'Product is Out of Stock, but Managed by WC and Set to Back Orders.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-warning" style="color: #82C342"></i> <?php esc_html_e( 'Product In Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-warning" style="color: #FF4848"></i> <?php esc_html_e( 'Product Out of Stock and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
+				<p><i class="atum-icon atmi-warning" style="color: #EFAF00"></i> <?php esc_html_e( 'Product set to Back Orders Only and Not Managed by WC.', ATUM_TEXT_DOMAIN ) ?></p>
 			</td>
 		</tr>
 	</tbody>

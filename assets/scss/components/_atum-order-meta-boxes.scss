@@ -483,7 +483,8 @@ ul.atum_order_notes {
 					text-align: center;
 					
 					&::before {
-						@include icon_dashicons( '\f128' );
+						font-family: $atum-icon-font;
+						content: $atmi-picture;
 						width: 38px;
 						line-height: 38px;
 						display: block;
@@ -742,7 +743,8 @@ ul.atum_order_notes {
 				&.fee {
 					.thumb div {
 						&:before {
-							@include icon_woocommerce( '\e007' );
+							font-family: $atum-icon-font;
+							content: $atmi-plus-circle;
 						}
 					}
 				}
@@ -750,7 +752,8 @@ ul.atum_order_notes {
 				&.refund {
 					.thumb div {
 						&:before {
-							@include icon_woocommerce( '\e014' );
+							font-family: $atum-icon-font;
+							content: $atmi-sync;
 						}
 					}
 				}
@@ -758,7 +761,8 @@ ul.atum_order_notes {
 				&.shipping {
 					.thumb div {
 						&:before {
-							@include icon_woocommerce( '\e01a' );
+							font-family: $atum-icon-font;
+							content: $atmi-rocket;
 						}
 					}
 					
@@ -788,7 +792,8 @@ ul.atum_order_notes {
 					margin: 3px -18px 0 0;
 					
 					&:before {
-						@include icon_dashicons( '\f153' );
+						font-family: $atum-icon-font;
+						content: $atmi-cross-circle;
 						color: $wp-gray-1;
 					}
 					
@@ -814,7 +819,8 @@ ul.atum_order_notes {
 				margin-top: 0.5em;
 				
 				&:before {
-					@include icon_dashicons( '\f171' );
+					font-family: $atum-icon-font;
+					content: $atmi-undo;
 					position: relative;
 					top: auto;
 					left: auto;
@@ -873,7 +879,8 @@ ul.atum_order_notes {
 		
 		.edit-atum-order-item {
 			&:before {
-				@include icon_dashicons( '\f464' );
+				font-family: $atum-icon-font;
+				content: $atmi-pencil;
 				position: relative;
 			}
 			
@@ -885,7 +892,8 @@ ul.atum_order_notes {
 		.delete-atum-order-item, .delete_refund {
 			
 			&:before {
-				@include icon_dashicons( '\f158' );
+				font-family: $atum-icon-font;
+				content: $atmi-cross;
 				position: relative;
 			}
 			

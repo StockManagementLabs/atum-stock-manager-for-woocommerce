@@ -2195,11 +2195,11 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 }
 
-.wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link::before {
-  font: normal 22px/50px 'dashicons' !important;
+.wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:before {
+  font: normal 22px/50px "atum-icon-font" !important;
   color: #adb5bd;
   display: block;
-  content: '\f335';
+  content: "";
   font-weight: 300;
 }
 
@@ -2350,22 +2350,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 
 .atum-help-tip::after {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   cursor: help;
 }
 
@@ -2817,22 +2803,8 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items td.thumb .atum-order-item-thumbnail::before {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   width: 38px;
   line-height: 38px;
   display: block;
@@ -3076,60 +3048,18 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.refund .thumb div:before {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .shipping_method_name, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .shipping_method {
@@ -3154,22 +3084,8 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax .delete-atum-order-tax:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax .delete-atum-order-tax:before {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   color: #999;
 }
 
@@ -3189,22 +3105,8 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items small.refunded:before {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   position: relative;
   top: auto;
   left: auto;
@@ -3254,22 +3156,8 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .edit-atum-order-item:before {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   position: relative;
 }
 
@@ -3278,22 +3166,8 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:before, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:before {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   position: relative;
 }
 
@@ -6482,8 +6356,8 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table .column-calc_type .wc-type:before, .floatThead-container .column-calc_type .wc-type:before, .inbound-stock-list .column-calc_type .wc-type:before, .wp-list-table .column-calc_type .wc-type:before {
-  font-family: WooCommerce;
-  content: "\e006";
+  font-family: "atum-icon-font";
+  content: "";
   position: absolute;
   text-indent: 0;
   font-size: 14px;
@@ -6724,20 +6598,8 @@ table.wp-list-table tbody tr:hover {
   width: 20%;
 }
 
-.contextual-help-tabs-wrap .dashicons-format-image {
-  font-size: 18px;
-}
-
-.contextual-help-tabs-wrap .wc-type:before {
-  font-family: WooCommerce;
-  content: "\e006";
-  font-size: 18px;
-  top: 0;
-  speak: none;
-  font-variant: normal;
-  text-transform: none;
-  -webkit-font-smoothing: antialiased;
-  left: 0;
+.contextual-help-tabs-wrap .atum-icon {
+  font-size: 16px;
 }
 
 .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
@@ -6979,22 +6841,8 @@ table.wp-list-table .column-notes .note-on {
 }
 
 table.wp-list-table .column-notes .note-on::after {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   line-height: 16px;
 }
 
@@ -7010,42 +6858,8 @@ table.wp-list-table .column-actions .complete, table.wp-list-table .column-actio
 }
 
 table.wp-list-table .column-actions .complete::after {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
-  line-height: 1.85;
-}
-
-table.wp-list-table .column-actions .view::after {
-  font-family: 'Dashicons';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
+  content: "";
   line-height: 1.85;
 }
 
@@ -7077,29 +6891,14 @@ table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-
 }
 
 table.wp-list-table .notes_head::after, table.wp-list-table .notes_head::after, table.wp-list-table .status_head::after {
-  font-family: 'WooCommerce';
-  speak: none;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-  text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  content: "";
+  font-family: "atum-icon-font";
 }
 
 table.wp-list-table .notes_head::after {
-  content: '\e028';
+  content: "";
 }
 
 table.wp-list-table .status_head::after {
-  content: '\e011';
+  content: "";
 }
 /*# sourceMappingURL=atum-orders.css.map */

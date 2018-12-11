@@ -231,7 +231,8 @@ table.wp-list-table {
 			color: $wp-gray-1;
 			
 			&::after {
-				@include icon_woocommerce( '\e027' );
+				font-family: $atum-icon-font;
+				content: $atmi-bubble;
 				line-height: 16px;
 			}
 		}
@@ -247,12 +248,8 @@ table.wp-list-table {
 		}
 		
 		.complete::after {
-			@include icon_dashicons( '\f147' );
-			line-height: 1.85;
-		}
-		
-		.view::after {
-			@include icon_dashicons( '\f177' );
+			font-family: $atum-icon-font;
+			content: $atmi-checkmark-circle;
 			line-height: 1.85;
 		}
 		
@@ -281,16 +278,16 @@ table.wp-list-table {
 		margin: 0 auto;
 		
 		&::after {
-			@include icon_woocommerce;
+			font-family: $atum-icon-font;
 		}
 	}
 	
 	.notes_head::after {
-		content: '\e028';
+		content: $atmi-bubble;
 	}
 	
 	.status_head::after {
-		content: '\e011';
+		content: $atmi-cloud-sync;
 	}
 	
 }

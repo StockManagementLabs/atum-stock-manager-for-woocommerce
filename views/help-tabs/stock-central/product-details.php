@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || die;
 	</thead>
 	<tbody>
 		<tr>
-			<td><span class="dashicons dashicons-format-image" title="<?php esc_attr_e( 'Thumbnail', ATUM_TEXT_DOMAIN ) ?>"></span></td>
+			<td><span class="atum-icon atmi-picture" title="<?php esc_attr_e( 'Thumbnail', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php esc_html_e( 'Product small image preview.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || die;
 			<td><?php esc_html_e( "A WooCommerce Product ID is sometimes needed when using shortcodes, widgets and links. ATUM's stock central page will display the appropriate ID of the product in this column.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
-			<td><span class="wc-type" title="<?php esc_attr_e( 'Product Type', ATUM_TEXT_DOMAIN ) ?>"></span></td>
+			<td><span class="atum-icon atmi-tag" title="<?php esc_attr_e( 'Product Type', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php esc_html_e( 'This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
@@ -57,7 +57,7 @@ defined( 'ABSPATH' ) || die;
 			<td><?php esc_html_e( "You can configure the purchase price of the product. After you click the 'Set' button, the product price will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
-			<td><span class="dashicons dashicons-store" title="<?php esc_attr_e( 'Location', ATUM_TEXT_DOMAIN ) ?>"></span></td>
+			<td><span class="atum-icon atmi-map-marker" title="<?php esc_attr_e( 'Location', ATUM_TEXT_DOMAIN ) ?>"></span></td>
 			<td><?php esc_html_e( "Shows the product's Location hierarchy. Click ones to open the hierarchy in a popup.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 

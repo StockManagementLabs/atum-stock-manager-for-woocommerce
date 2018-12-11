@@ -164,11 +164,11 @@
 			-webkit-transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 			transition: color 0.1s ease-in-out, background 0.1s ease-in-out;
 			
-			&::before {
-				font: normal 22px/50px 'dashicons' !important;
+			&:before {
+				font: normal 22px/50px $atum-icon-font !important;
 				color: color('gray');
 				display: block;
-				content: '\f335';
+				content: $atmi-cross;
 				font-weight: 300;
 			}
 			
@@ -340,7 +340,8 @@
 	width: 16px;
 	
 	&::after {
-		@include icon_dashicons( '\f223' );
+		font-family: $atum-icon-font;
+		content: $atmi-question-circle;
 		cursor: help;
 	}
 }

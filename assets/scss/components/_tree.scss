@@ -103,7 +103,7 @@ span {
 		font-size: 17px;
 		display: inline-block;
 		vertical-align: top;
-		font-family: Dashicons;
+		font-family: $atum-icon-font;
 		cursor: pointer;
 		color: $dark;
 	}
@@ -129,7 +129,7 @@ span.easytree-expander {
 	
 	&:before {
 		font-family: atum-icon-font;
-		content: $atmi-plus-circle; // dashicons-plus
+		content: $atmi-plus-circle;
 	}
 	
 	&:hover {
@@ -141,7 +141,7 @@ span.easytree-expander {
 	span.easytree-expander {
 		&:before {
 			font-family: atum-icon-font;
-			content: $atmi-circle-minus; // dashicons-minus
+			content: $atmi-circle-minus;
 		}
 	}
 }

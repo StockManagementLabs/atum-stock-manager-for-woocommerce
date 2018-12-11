@@ -1284,7 +1284,7 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   font-size: 17px;
   display: inline-block;
   vertical-align: top;
-  font-family: Dashicons;
+  font-family: "atum-icon-font";
   cursor: pointer;
   color: #343a40;
 }
@@ -6011,8 +6011,8 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table .column-calc_type .wc-type:before, .floatThead-container .column-calc_type .wc-type:before, .inbound-stock-list .column-calc_type .wc-type:before, .wp-list-table .column-calc_type .wc-type:before {
-  font-family: WooCommerce;
-  content: "\e006";
+  font-family: "atum-icon-font";
+  content: "";
   position: absolute;
   text-indent: 0;
   font-size: 14px;
@@ -6253,20 +6253,8 @@ table.wp-list-table tbody tr:hover {
   width: 20%;
 }
 
-.contextual-help-tabs-wrap .dashicons-format-image {
-  font-size: 18px;
-}
-
-.contextual-help-tabs-wrap .wc-type:before {
-  font-family: WooCommerce;
-  content: "\e006";
-  font-size: 18px;
-  top: 0;
-  speak: none;
-  font-variant: normal;
-  text-transform: none;
-  -webkit-font-smoothing: antialiased;
-  left: 0;
+.contextual-help-tabs-wrap .atum-icon {
+  font-size: 16px;
 }
 
 .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {

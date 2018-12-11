@@ -447,32 +447,32 @@ abstract class AtumOrderPostType {
 				}
 
 				?><p>
-				<?php
+					<?php
 
-				do_action( "atum/$post_type/admin_actions_start", $atum_order );
+					do_action( "atum/$post_type/admin_actions_start", $atum_order );
 
-				$actions = array();
-				$status  = $atum_order->get_status();
+					$actions = array();
+					$status  = $atum_order->get_status();
 
-				if ( static::FINISHED !== $status ) {
-					
-					$actions['complete'] = array(
-						'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-						/* translators: Change the order's status to finished */
-						'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ static::FINISHED ] ),
-						'action' => 'complete',
-						'target' => '_self',
-					);
+					if ( static::FINISHED !== $status ) {
 
-				}
+						$actions['complete'] = array(
+							'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+							/* translators: Change the order's status to finished */
+							'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ static::FINISHED ] ),
+							'action' => 'complete',
+							'target' => '_self',
+						);
 
-				$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
-				
-				foreach ( $actions as $action ) {
-					printf( '<a class="button %s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
-				}
-				
-				do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>
+					}
+
+					$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
+
+					foreach ( $actions as $action ) {
+						printf( '<a class="%s tips" target="%s" href="%s" data-tip="%s">%s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), esc_attr( $action['name'] ) );
+					}
+
+					do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>
 				</p>
 				<?php
 				
