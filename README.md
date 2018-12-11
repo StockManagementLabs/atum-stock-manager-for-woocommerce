@@ -159,6 +159,60 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.0`
+
+*2018-12-11*
+
+**Features**
+
+* New style for Stock Central table.
+* New style for Settings page.
+* New style for Purchase Orders table.
+* New style for Inventory Logs table.
+* New style for Inbound Stock table.
+* Full responsive support for all the new ATUM styles.
+* Drag scroll functionality for the List Table filters.
+* Added buttons to Stock Central to switch between "Sticky Columns" and/or "Sticky Header" mode and "Standard" mode.
+* Added switch to settings to change between "Dark Mode" and "Light Mode".
+* Added new footer to ATUM pages.
+* Improved completely the ATUM data models to fit the upcoming WooCommerce tables.
+* Improved overall performance.
+* Added legacy methods for backwards compatibility.
+* Added auto-migration script to move the data from meta keys to the new product data table.
+* Added hooks to handle WP_Query calls when going to use ATUM data.
+* Allow to search by Supplier SKU when adding products to Purchase Orders or Inventory Logs.
+* Remove new ATUM's product data table when uninstalling ATUM if was set that way in Settings.
+* Added cache helper to manage cache and transients.
+* Improved overall performance with cache.
+* Added stock step to ATUM Settings when using decimals.
+
+**Changes**
+
+* Added new statuses for Purchase Orders ("Pending", "Ordered", "On the Way In", "Receiving" and "Received").
+* Added notes to ATUM Orders to record the status changes.
+* When using WooCommerce 3.5+, the Purchase Orders will update the stock automatically when switching between "Received" and any other status.
+* Removed "View" button from Purchas Orders list.
+* Prevent from adding duplicated Supplier SKUs to distinct products (must be unique).
+* Now ATUM uses its own custom icons font.
+* Moved all the product meta boxes' hooks to its own class.
+* Run Upgrade tasks globally and not only from admin side.
+
+**Fixes**
+
+* Full refactory.
+* Fixed WPML integration issues.
+* Fixed locations tree that was not showing locations that were not linked to any product.
+* Fixed all translations showning in ATUM Orders' searches.
+* Fixed Purchase Order stock not added when product stock value is NULL.
+* Set stock quantity to 0 when changing the "WC manage stock" form settings' tool.
+* Fixed Dashboard's promo sales showing today stats instead of month.
+* Avoid loading the WP 5.0 core's lodash library to not conflict with ATUM Dashboard's gridstack.
+* Prevent POs to change the stock to unmanaged products.
+* CSS fixes.
+* Refactory: code style.
+
+---
+
 `1.4.18.2`
 
 *2018-11-08*
