@@ -12,6 +12,9 @@
 
 namespace Atum\Components\AtumOrders\Items;
 
+use Atum\Inc\Helpers;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -70,6 +73,20 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 
 		$this->atum_order_item_model->save_meta( $save_values );
 
+	}
+	
+	/**
+	 * Get the associated product. Replaces WC_Order_Item_Product's method to add our properties
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return \WC_Product|bool
+	 */
+	public function get_product() {
+		
+		$product = Helpers::get_atum_product( $this->get_variation_id() ? $this->get_variation_id() : $this->get_product_id() );
+		
+		return apply_filters( 'atum/orders/item_product/product', $product, $this );
 	}
 
 }

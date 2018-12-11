@@ -11,6 +11,14 @@
 		
 		var $addonsList = $('.atum-addons');
 		
+		// Footer position
+		$(window).on('load', function () {
+			if ( $('.footer-box').hasClass('no-style') ) {
+				$('#wpfooter').css('position', 'relative').show();
+				$('#wpcontent').css('min-height', '95vh');
+			}
+		});
+		
 		// Validate, Activate and Deactivate buttons
 		$addonsList.on('click', '.addon-key button', function(e) {
 			

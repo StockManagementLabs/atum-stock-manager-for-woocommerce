@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 use Atum\InventoryLogs\InventoryLogs;
@@ -209,10 +210,12 @@ class Bootstrap {
 
 		if ( 'yes' === Helpers::get_option( 'delete_data' ) ) {
 
-			$items_table    = $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE;
-			$itemmeta_table = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
+			$product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+			$items_table        = $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE;
+			$itemmeta_table     = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
 
 			// Delete the ATUM tables in db.
+			$wpdb->query( "DROP TABLE IF EXISTS $product_data_table" ); // WPCS: unprepared SQL ok.
 			$wpdb->query( "DROP TABLE IF EXISTS $items_table" ); // WPCS: unprepared SQL ok.
 			$wpdb->query( "DROP TABLE IF EXISTS $itemmeta_table" ); // WPCS: unprepared SQL ok.
 

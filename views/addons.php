@@ -96,7 +96,7 @@ use Atum\Addons\Addons;
 
 							<?php if ( ! $is_coming_soon_addon ) : ?>
 								<div class="show-key" title="<?php esc_attr_e( 'Show/Hide the license key', ATUM_TEXT_DOMAIN ) ?>">
-									<i class="dashicons dashicons-admin-network"></i>
+									<i class="atum-icon atmi-tree"></i>
 								</div>
 							<?php endif ?>
 

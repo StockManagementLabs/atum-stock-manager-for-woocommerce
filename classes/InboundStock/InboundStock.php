@@ -30,7 +30,7 @@ class InboundStock extends AtumListPage {
 	 */
 	private static $instance;
 
-	/*
+	/**
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-inbound-stock';

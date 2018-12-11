@@ -14,15 +14,24 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumLogs\AtumLogs;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\StockCentral;
 use Atum\StockCentral\Lists\ListTable;
 
 
 class Upgrade {
+
+	/**
+	 * The current ATUM version
+	 *
+	 * @var string
+	 */
+	private $current_atum_version = '';
 
 	/**
 	 * Upgrade constructor
@@ -33,8 +42,10 @@ class Upgrade {
 	 */
 	public function __construct( $db_version ) {
 
+		$this->current_atum_version = $db_version;
+
 		// Delete transients if there after every version change.
-		Helpers::delete_transients();
+		AtumCache::delete_transients();
 
 		/************************
 		 * UPGRADE ACTIONS START
@@ -72,8 +83,14 @@ class Upgrade {
 			$this->check_post_meta_values();
 		}
 
-		// ** version 1.4.15 ** New table for ATUM Logs component.
-		/*if ( version_compare( $db_version, '1.4.15', '<' ) ) {
+		// ** version 1.5.0 ** New tables to store ATUM data for products.
+		if ( version_compare( $db_version, '1.5.0', '<' ) ) {
+			$this->create_product_data_table();
+			$this->update_po_status();
+		}
+
+		// ** version 1.6.0 ** New table for ATUM Logs component.
+		/*if ( version_compare( $db_version, '1.6.0', '<' ) ) {
 			$this->create_atum_log_table();
 		}*/
 
@@ -313,30 +330,193 @@ class Upgrade {
 	private function check_post_meta_values() {
 
 		global $wpdb;
-		$prefix = $wpdb->prefix;
 
-		$sql = 'SELECT postmeta.post_id, postmeta.meta_value 
-				FROM ' . $prefix . 'postmeta AS postmeta, ' . $prefix . 'posts AS post
-				WHERE postmeta.post_id = post.ID AND
-				postmeta.meta_key = "_out_of_stock_date" AND
-				post.post_type = "product";
-				  ';
+		$sql = "
+			SELECT pm.post_id, pm.meta_value 
+			FROM $wpdb->posts AS p
+			INNER JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
+			WHERE pm.meta_key = '" . Globals::OUT_OF_STOCK_DATE_KEY . "' 
+			AND pm.meta_value <> ''AND p.post_type IN ('product', 'product_variation');
+		";
 
 		$post_metas = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
 		foreach ( $post_metas as $post_meta ) {
-			$not_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
+			$non_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
 
-			if ( $not_latin_character ) {
-				delete_post_meta( $post_meta->post_id, '_out_of_stock_date' );
+			if ( $non_latin_character ) {
+				delete_post_meta( $post_meta->post_id, Globals::OUT_OF_STOCK_DATE_KEY );
 			}
 		}
 	}
 
 	/**
+	 * Create the table for the product data related to ATUM
+	 *
+	 * @since 1.5.0
+	 */
+	private function create_product_data_table() {
+
+		global $wpdb;
+
+		$product_meta_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
+
+		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$product_meta_table';" ) ) { // WPCS: unprepared SQL ok.
+
+			$collate = '';
+
+			if ( $wpdb->has_cap( 'collation' ) ) {
+				$collate = $wpdb->get_charset_collate();
+			}
+
+			$sql = "
+				CREATE TABLE $product_meta_table (
+				`product_id` BIGINT(20) NOT NULL,
+		  		`purchase_price` DOUBLE NULL DEFAULT NULL,
+			  	`supplier_id` BIGINT(20) NULL DEFAULT NULL,
+			  	`supplier_sku` VARCHAR(100) NULL DEFAULT '',
+			  	`atum_controlled` TINYINT(1) NULL DEFAULT 0,
+			  	`out_stock_date` DATETIME NULL DEFAULT NULL,
+			  	`out_stock_threshold` DOUBLE NULL DEFAULT NULL,
+			  	`inheritable` TINYINT(1) NULL DEFAULT 0,	
+			  	PRIMARY KEY  (`product_id`),
+				KEY `supplier_id` (`supplier_id`),
+				KEY `atum_controlled` (`atum_controlled`)
+			) $collate;
+			";
+
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
+
+			// Only need to migrate the data if ATUM was previously installed.
+			if ( version_compare( $this->current_atum_version, '0.0.1', '>' ) ) {
+				$this->migrate_atum_products_data();
+			}
+
+		}
+
+	}
+
+	/**
+	 * Migrate from the old metas to the new data tables
+	 *
+	 * @since 1.5.0
+	 */
+	private function migrate_atum_products_data() {
+
+		global $wpdb;
+
+		$meta_keys_to_migrate = array(
+			'_purchase_price'      => 'purchase_price',
+			'_supplier'            => 'supplier_id',
+			'_supplier_sku'        => 'supplier_sku',
+			'_atum_manage_stock'   => 'atum_controlled',
+			'_out_of_stock_date'   => 'out_stock_date',
+			'_out_stock_threshold' => 'out_stock_threshold',
+			'_inheritable'         => 'inheritable',
+		);
+
+		$products = array();
+
+		if ( Helpers::is_using_new_wc_tables() ) {
+			$products = $wpdb->get_results( "SELECT `product_id` AS ID, `type` FROM {$wpdb->prefix}wc_products ORDER BY `product_id`" );
+		}
+
+		if ( empty( $products ) ) {
+			$products = $wpdb->get_results(
+				"SELECT `ID`, `post_type` AS type FROM {$wpdb->posts} WHERE `post_type` IN ('product', 'product_variation') ORDER BY `ID`"
+			);
+		}
+
+		foreach ( $products as $product ) {
+
+			$metas      = get_post_meta( $product->ID );
+			$meta_value = NULL;
+
+			$new_data = array(
+				'product_id' => $product->ID,
+			);
+
+			foreach ( $meta_keys_to_migrate as $meta_key => $new_field_name ) {
+
+				switch ( $meta_key ) {
+
+					// Yes/No metas.
+					case '_atum_manage_stock':
+					case '_inheritable':
+						if ( isset( $metas[ $meta_key ] ) ) {
+							$meta_value = 'yes' === $metas[ $meta_key ][0] ? 1 : 0;
+						}
+						else {
+							$meta_value = 0;
+						}
+						break;
+
+					// Date metas.
+					case '_out_of_stock_date':
+						$meta_value = ( isset( $metas[ $meta_key ] ) && ! empty( $metas[ $meta_key ][0] ) ) ? $metas[ $meta_key ][0] : NULL;
+						break;
+
+					// Other metas.
+					default:
+						$meta_value = isset( $metas[ $meta_key ] ) ? $metas[ $meta_key ][0] : NULL;
+						break;
+
+				}
+
+				$new_data[ $new_field_name ] = $meta_value;
+
+			}
+
+			// Insert a new row of data.
+			$inserted_row = $wpdb->insert( $wpdb->prefix . ATUM_PREFIX . 'product_data', $new_data );
+
+			// TODO: Move meta deletion to ATUM settings -> Tools
+			// If the row was inserted, delete the old meta.
+			// phpcs:ignore Squiz.Commenting.BlockComment.NoNewLine
+			/*if ( $inserted_row ) {
+
+				foreach ( array_keys( $meta_keys_to_migrate ) as $meta_key ) {
+					delete_post_meta( $product->ID, $meta_key );
+				}
+
+			}*/
+
+		}
+
+	}
+	
+	/**
+	 * Update PO status completed to received.
+	 *
+	 * @since 1.5.0
+	 */
+	private function update_po_status() {
+		
+		global $wpdb;
+		
+		$wpdb->update( $wpdb->posts, [ 'post_status' => ATUM_PREFIX . 'received' ], [
+			'post_status' => ATUM_PREFIX . 'completed',
+			'post_type'   => PurchaseOrders::get_post_type(),
+		] );
+		
+		$sql = "
+			UPDATE $wpdb->postmeta pm
+			INNER JOIN $wpdb->posts p ON pm.post_id = p.ID
+			SET pm.meta_value = 'received'
+			WHERE p.post_type='atum_purchase_order' AND
+			pm.meta_key = '_status' AND pm.meta_value = 'completed'
+		";
+		
+		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+		
+	}
+	
+	/**
 	 * Create the table for the ATUM Logs
 	 *
 	 * @since 1.4.15
 	 */
+	// phpcs:ignore Squiz.Commenting.BlockComment.NoNewLine
 	/*private function create_atum_log_table() {
 
 		global $wpdb;

@@ -9,13 +9,14 @@
 	z-index: $zindex-popover;
 	display: none;
 	max-width: $popover-max-width;
-	padding: 1px;
+	//padding: 1px;
 	background-color: $popover-bg;
 	background-clip: padding-box;
-	border: 1px solid $popover-fallback-border-color;
-	border: 1px solid $popover-border-color;
+	//border: 1px solid $popover-fallback-border-color;
+	//border: 1px solid $popover-border-color;
+	border: none;
 	border-radius: $popover-border-radius;
-	box-shadow: 0 5px 10px rgba($black, .2);
+	box-shadow: 0 1px 5px 0 rgba($black, .15);
 	
 	// Offset the popover to account for the popover arrow
 	&.top {
@@ -40,9 +41,11 @@
 	padding: 6px 14px;
 	font-size: 14px;
 	background-color: $popover-title-bg;
-	border-bottom: 1px solid darken($popover-title-bg, 5%);
 	border-radius: ($popover-border-radius - 1) ($popover-border-radius - 1) 0 0;
 	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	color: $gray-600;
 	
 	.atum-list-table & {
 		text-align: center;
@@ -51,6 +54,28 @@
 
 .popover-content {
 	padding: 9px 14px;
+	button {
+		height: 30px;
+		line-height: 0;
+		margin-left: 5px;
+	}
+}
+
+.popover-content > input[type=number], .popover-content > input[type=text] {
+	border-radius: 5px;
+	background-color: $white;
+	border: 1px solid $gray-200;
+	font-size: 15px;
+	line-height: 1.47px;
+	text-align: right;
+	color: $gray-600;
+	box-shadow: none;
+	&:focus {
+		border-color: $blue;
+	}
+	&:hover {
+		border-color: $gray-600;
+	}
 }
 
 // Arrows
@@ -115,34 +140,38 @@
 		left: 50%;
 		margin-left: -$popover-arrow-outer-width;
 		border-top-width: 0;
-		border-bottom-color: $popover-arrow-outer-fallback-color; // IE8 fallback
-		border-bottom-color: $popover-arrow-outer-color;
+		//border-bottom-color: $popover-arrow-outer-fallback-color; // IE8 fallback
+		//border-bottom-color: $popover-arrow-outer-color;
 		top: -$popover-arrow-outer-width;
 		
 		&:after {
 			content: " ";
-			top: 2px;
 			margin-left: -$popover-arrow-width;
-			border-top-width: 0;
-			border-bottom-color: $popover-arrow-color;
-		}
+			z-index: -1;
+			margin-left: -10px;
+			content: "";
+			position: absolute;
+			background: $gray-100;
+			transform: rotate(45deg);
+			box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
 	}
+}
+
+&.left > .popover-arrow {
+	top: 50%;
+	right: -$popover-arrow-outer-width;
+	margin-top: -$popover-arrow-outer-width;
+	border-right-width: 0;
+	border-left-color: $popover-arrow-outer-fallback-color; // IE8 fallback
+	border-left-color: $popover-arrow-outer-color;
 	
-	&.left > .popover-arrow {
-		top: 50%;
-		right: -$popover-arrow-outer-width;
-		margin-top: -$popover-arrow-outer-width;
+	&:after {
+		content: " ";
+		right: 1px;
 		border-right-width: 0;
-		border-left-color: $popover-arrow-outer-fallback-color; // IE8 fallback
-		border-left-color: $popover-arrow-outer-color;
-		
-		&:after {
-			content: " ";
-			right: 1px;
-			border-right-width: 0;
-			border-left-color: $popover-arrow-color;
-			bottom: -$popover-arrow-width;
-		}
+		border-left-color: $popover-arrow-color;
+		bottom: -$popover-arrow-width;
 	}
-	
+}
+
 }

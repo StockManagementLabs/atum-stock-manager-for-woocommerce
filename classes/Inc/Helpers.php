@@ -15,13 +15,16 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
+use Atum\Legacy\HelpersLegacyTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Queries\ProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 
@@ -37,6 +40,8 @@ final class Helpers {
 	 * @param string $taxonomy
 	 *
 	 * @return array term_ids
+	 *
+	 * @deprecated Will be removed once ATUM only supports the new tables.
 	 */
 	public static function get_term_ids_by_slug( array $slug_terms, $taxonomy = 'product_type' ) {
 
@@ -117,28 +122,6 @@ final class Helpers {
 				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" alt="">
 			</span>
 		</span>
-		<?php
-
-	}
-
-	/**
-	 * Output a dropdown to choose the ATUM Order status
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param string $id        The select ID.
-	 * @param string $value     The selected option.
-	 */
-	public static function atum_order_status_dropdown( $id, $value ) {
-
-		?>
-		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select">
-			<?php
-			$statuses = AtumOrderPostType::get_statuses();
-			foreach ( $statuses as $status => $status_name ) : ?>
-				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
-			<?php endforeach; ?>
-		</select>
 		<?php
 
 	}
@@ -232,29 +215,68 @@ final class Helpers {
 	 * @since 1.4.1
 	 *
 	 * @param array $args
+	 * @param bool  $remove_variables
 	 *
 	 * @return array
 	 */
-	public static function get_all_products( $args = array() ) {
-
-		$defaults = array(
+	public static function get_all_products( $args = array(), $remove_variables = FALSE ) {
+		
+		$defaults       = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 		);
 
-		$args = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
+		$transient_name = $remove_variables ? 'all_products_no_variables' : 'all_products';
+		$args           = (array) apply_filters( 'atum/get_all_products/args', array_merge( $defaults, $args ) );
 
-		$product_ids_transient = self::get_transient_identifier( $args, 'all_products' );
-		$products              = self::get_transient( $product_ids_transient );
+		$product_ids_transient = AtumCache::get_transient_key( $transient_name, $args );
+		$products              = AtumCache::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
 			$products = get_posts( $args );
-			self::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
+			
+			if ( $remove_variables ) {
+				
+				$args = (array) array_merge( $args, array(
+					'post_type' => 'product_variation',
+					'post__in'  => $products,
+					'fields'         => 'id=>parent',
+				) );
+				
+				$variables = array_unique( get_posts( $args ) );
+				$products  = array_diff( $products, $variables );
+			
+			}
+			AtumCache::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
 		}
 
 		return $products;
+
+	}
+
+	/**
+	 * Get the right ATUM Product class when instantiating a WC product
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $product_type
+	 *
+	 * @return string
+	 */
+	public static function get_atum_product_class( $product_type ) {
+
+		$namespace    = '\Atum\Models\Products';
+		$product_type = ucwords( $product_type, ' _-' );
+		$class_name   = "$namespace\AtumProduct{$product_type}";
+
+		if ( class_exists( $class_name ) ) {
+			return $class_name;
+		}
+
+		// As fallback, return the simple product class.
+		return "$namespace\AtumProductSimple";
 
 	}
 	
@@ -300,6 +322,13 @@ final class Helpers {
 			'date_end'     => '',
 			'fields'       => '',
 		) ) );
+
+		$cache_key = AtumCache::get_cache_key( 'orders', $atts );
+		$orders    = AtumCache::get_cache( $cache_key );
+
+		if ( FALSE !== $orders ) {
+			return $orders;
+		}
 
 		/**
 		 * Extract params
@@ -418,24 +447,26 @@ final class Helpers {
 			$args['fields'] = $fields;
 		}
 		
-		$result = array();
+		$orders = array();
 		$query  = new \WP_Query( $args );
 		
 		if ( $query->post_count > 0 ) {
 			
 			if ( $fields ) {
-				$result = $query->posts;
+				$orders = $query->posts;
 			}
 			else {
 				foreach ( $query->posts as $post ) {
 					// We need the WooCommerce order, not the post.
-					$result[] = new \WC_Order( $post->ID );
+					$orders[] = new \WC_Order( $post->ID );
 				}
 			}
 			
 		}
+
+		AtumCache::set_cache( $cache_key, $orders );
 		
-		return $result;
+		return $orders;
 		
 	}
 
@@ -479,14 +510,10 @@ final class Helpers {
 				SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
 				MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
 				FROM `{$wpdb->posts}` AS `ORDERS`
-				    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` 
-				        ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-				    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID`
-				        ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-				    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY`
-				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-			        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL`
-				        ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
+			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
+			    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID` ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
+			  	INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
+		        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
 				WHERE (`ORDERS`.`ID` IN ($orders_query) AND `META_PROD_ID`.`meta_value` IN ($products)
 			    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
 			    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
@@ -507,35 +534,40 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int $product_id   The product ID to calculate the lost sales.
-	 * @param int $days         Optional. By default the calculation is made for 7 days average.
+	 * @param int|\WC_Product $product   The product ID or product object to calculate the lost sales.
+	 * @param int             $days      Optional. By default the calculation is made for 7 days average.
 	 *
 	 * @return bool|float       Returns the lost sales or FALSE if never had lost sales
 	 */
-	public static function get_product_lost_sales( $product_id, $days = 7 ) {
+	public static function get_product_lost_sales( $product, $days = 7 ) {
 
-		$lost_sales        = FALSE;
-		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
+		$lost_sales = FALSE;
+
+		if ( ! is_a( $product, '\WC_Product' ) ) {
+			$product = self::get_atum_product( $product );
+		}
+
+		/* @noinspection PhpUndefinedMethodInspection */
+		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date && $days > 0 ) {
 
-			$days_out_of_stock = self::get_product_out_of_stock_days( $product_id );
+			$days_out_of_stock = self::get_product_out_of_stock_days( $product );
 
 			if ( is_numeric( $days_out_of_stock ) ) {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( [ $product_id ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
+				$sold_last_days = self::get_sold_last_days( [ $product->get_id() ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
 				$lost_sales     = 0;
 
 				if ( ! empty( $sold_last_days ) ) {
 
-					$sold_last_days = reset( $sold_last_days );
+					$sold_last_days = current( $sold_last_days );
 
 					if ( ! empty( $sold_last_days['QTY'] ) && $sold_last_days['QTY'] > 0 ) {
 
 						$average_sales = $sold_last_days['QTY'] / $days;
-						$product       = wc_get_product( $product_id );
 						$price         = $product->get_regular_price();
 
 						$lost_sales = $days_out_of_stock * $average_sales * $price;
@@ -556,16 +588,21 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int $product_id   The product ID.
+	 * @param int|\WC_Product $product The product ID or product object.
 	 *
-	 * @return bool|int         Returns the number of days or FALSE if is not "Out of Stock".
+	 * @return bool|int  Returns the number of days or FALSE if is not "Out of Stock".
 	 */
-	public static function get_product_out_of_stock_days( $product_id ) {
+	public static function get_product_out_of_stock_days( $product ) {
 
 		$out_of_stock_days = FALSE;
 
+		if ( ! is_a( $product, '\WC_Product' ) ) {
+			$product = self::get_atum_product( $product );
+		}
+
 		// Check if the current product has the "Out of stock" date recorded.
-		$out_of_stock_date = get_post_meta( $product_id, Globals::OUT_OF_STOCK_DATE_KEY, TRUE );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date ) {
 			
@@ -577,7 +614,7 @@ final class Helpers {
 				$out_of_stock_days = $interval->days;
 
 			} catch ( \Exception $e ) {
-				error_log( __METHOD__ . ' || Product: ' . $product_id . ' || ' . $e->getMessage() );
+				error_log( __METHOD__ . ' || Product: ' . $product->get_id() . ' || ' . $e->getMessage() );
 				return $out_of_stock_days;
 			}
 			
@@ -603,11 +640,11 @@ final class Helpers {
 	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
 
 		// Save it as a global variable to not get the value each time.
-		global $global_options;
+		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
-		$option         = isset( $global_options[ $name ] ) ? $global_options[ $name ] : $default;
+		$atum_global_options = empty( $atum_global_options ) ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
+		$option              = isset( $atum_global_options[ $name ] ) ? $atum_global_options[ $name ] : $default;
 
 		if ( $echo ) {
 			echo apply_filters( "atum/print_option/$name", $option ); // WPCS: XSS ok.
@@ -630,16 +667,16 @@ final class Helpers {
 	public static function get_options() {
 
 		// Save it as a global variable to not get the value each time.
-		global $global_options;
+		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$global_options = empty( $global_options ) ? get_option( Settings::OPTION_NAME ) : $global_options;
+		$atum_global_options = empty( $atum_global_options ) ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
 
-		if ( ! $global_options ) {
-			$global_options = array();
+		if ( ! $atum_global_options ) {
+			$atum_global_options = array();
 		}
 
-		return apply_filters( 'atum/get_options', $global_options );
+		return apply_filters( 'atum/get_options', $atum_global_options );
 
 	}
 
@@ -699,7 +736,7 @@ final class Helpers {
 		if ( isset( $_REQUEST['sold_last_days'] ) ) { // WPCS: CSRF ok.
 
 			// Sanitize.
-			$value = absint( esc_attr( $_REQUEST['sold_last_days'] ) ); // WPCS: CSRF ok.
+			$value = absint( $_REQUEST['sold_last_days'] ); // WPCS: CSRF ok.
 
 			if ( $value > 0 && $value < 31 ) {
 				return $value;
@@ -712,6 +749,14 @@ final class Helpers {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy methods
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use HelpersLegacyTrait;
+
+	/**
 	 * Get an array of products that are not managed by WC
 	 *
 	 * @since 1.4.1
@@ -722,46 +767,47 @@ final class Helpers {
 	 * @return array
 	 */
 	public static function get_unmanaged_products( $post_types, $get_stock_status = FALSE ) {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! self::is_using_new_wc_tables() ) {
+			return self::get_unmanaged_products_legacy( $post_types, $get_stock_status );
+		}
 		
 		global $wpdb;
+
+		$unmng_fields = array( 'posts.ID' );
 		
-		$unmng_join = apply_filters( 'atum/get_unmanaged_products/join_query', "
-			LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')
-		" );
+		$unmng_join = array(
+			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
+			"LEFT JOIN {$wpdb->prefix}wc_products wpd ON (posts.ID = wpd.product_id)",
+		);
 		
 		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 		
-		// TODO: Change the query to remove the subquery and get the values with joins.
-		$stock_sql = $get_stock_status ? ", (SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' )" : '';
+		if ( $get_stock_status ) {
+			$unmng_fields[] = 'wpd.stock_status';
+		}
+
+		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products/join_query', $unmng_join );
 		
 		// Exclude the inheritable products from query (as are just containers in ATUM List Tables).
-		$excluded_types      = Globals::get_inheritable_product_types();
-		$excluded_type_terms = array();
-		
-		foreach ( $excluded_types as $excluded_type ) {
-			$excluded_type_terms[] = get_term_by( 'slug', $excluded_type, 'product_type' );
-		}
-		
-		$excluded_type_terms = wp_list_pluck( array_filter( $excluded_type_terms ), 'term_taxonomy_id' );
+		$excluded_types = Globals::get_inheritable_product_types();
 
-		$unmng_where = "
-			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
-            AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-		    AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))
-			AND posts.ID NOT IN ( 
-				SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
-				WHERE term_taxonomy_id IN  (" . implode( ',', $excluded_type_terms ) . ") )
-				AND (posts.post_parent IN (
-					SELECT ID FROM $wpdb->posts 
-					WHERE post_type = 'product' AND post_status IN ('private','publish') 
-				)
-				OR posts.post_parent = 0
-			)
-		";
+		$unmng_where = array(
+			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
+			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
+			"AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))",
+			"AND wpd.type NOT IN ('" . implode( "','", $excluded_types ) . "')",
+		);
 		
-		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
+		$unmng_where = (array) apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
 		
-		$sql = "SELECT DISTINCT posts.ID{$stock_sql} FROM $wpdb->posts posts $unmng_join $unmng_where";
+		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
 		
 		return $wpdb->get_results( $sql, ARRAY_N ); // WPCS: unprepared SQL ok.
 		
@@ -787,84 +833,6 @@ final class Helpers {
 
 		return apply_filters( 'atum/format_price', wp_strip_all_tags( wc_price( round( $price, 2 ), $args ) ) );
 
-	}
-	
-	/**
-	 * Set a transient adding ATUM stuff to unequivocal identify it
-	 *
-	 * @since 0.0.2
-	 *
-	 * @param string $transient_id  Transient identifier.
-	 * @param mixed  $value         Value to store.
-	 * @param int    $expiration    Optional. Time until expiration in seconds. By default is set to 0 (does not expire).
-	 * @param bool   $force         Optional. If set to TRUE, will set the transient in debug mode too.
-	 *
-	 * @return bool  FALSE if value was not set and TRUE if value was set
-	 */
-	public static function set_transient( $transient_id, $value, $expiration = 0, $force = FALSE ) {
-		
-		return ( $force || TRUE !== ATUM_DEBUG ) ? set_transient( $transient_id, $value, $expiration ) : FALSE;
-	}
-
-	/**
-	 * Get a transient adding ATUM stuff to unequivocal identify it
-	 *
-	 * @since 0.0.2
-	 *
-	 * @param string $transient_id  Transient identifier.
-	 * @param bool   $force         Optional. If set to TRUE, will get the transient in debug mode too.
-	 *
-	 * @return mixed|bool  The ATUM transient value or FALSE if the transient does not exist or debug mode is on
-	 */
-	public static function get_transient( $transient_id, $force = FALSE ) {
-
-		return ( $force || TRUE !== ATUM_DEBUG ) ? get_transient( $transient_id ) : FALSE;
-	}
-
-	/**
-	 * Get md5 hash of a array of args to create unique transient identifier
-	 *
-	 * @since 0.0.3
-	 *
-	 * @param array  $args      Optional. The args to hash.
-	 * @param string $prefix    Optional. The transient name prefix.
-	 *
-	 * @return string
-	 */
-	public static function get_transient_identifier( $args = array(), $prefix = '' ) {
-
-		$transient_id = ( empty( $prefix ) || 0 !== strpos( $prefix, ATUM_PREFIX ) ) ? ATUM_PREFIX . $prefix : $prefix;
-
-		if ( ! empty( $args ) ) {
-
-			if ( '_' !== substr( $transient_id, -1, 1 ) ) {
-				$transient_id .= '_';
-			}
-
-			$transient_id .= md5( maybe_serialize( $args ) );
-
-		}
-
-		return $transient_id;
-	}
-
-	/**
-	 * Delete all the ATUM transients
-	 *
-	 * @since 0.1.5
-	 *
-	 * @param string $type  Optional. If specified will remove specific type of ATUM transients.
-	 *
-	 * @return int|bool The number of transients deleted on success or false on error
-	 */
-	public static function delete_transients( $type = '' ) {
-
-		global $wpdb;
-
-		$type         = esc_attr( $type );
-		$transient_id = $type ?: ATUM_PREFIX;
-
-		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '_transient_{$transient_id}%'" ); // WPCS: unprepared SQL ok.
 	}
 	
 	/**
@@ -984,12 +952,12 @@ final class Helpers {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product
 	 *
 	 * @return bool
 	 */
-	public static function is_atum_controlling_stock( $product_id ) {
-		return 'yes' === self::get_atum_control_status( $product_id );
+	public static function is_atum_controlling_stock( $product ) {
+		return 'yes' === self::get_atum_control_status( $product );
 	}
 
 	/**
@@ -1023,56 +991,59 @@ final class Helpers {
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product
 	 *
 	 * @return string|bool  yes if On of FALSE if Off
 	 */
-	public static function get_atum_control_status( $product_id ) {
-		return get_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, TRUE );
+	public static function get_atum_control_status( $product ) {
+
+		if ( ! is_a( $product, '\WC_product' ) ) {
+			$product = self::get_atum_product( $product );
+		}
+
+		/* @noinspection PhpUndefinedMethodInspection */
+		return $product->get_atum_controlled();
+
 	}
 
 	/**
-	 * Enables the ATUM control switch for the specified product
+	 * Updates the ATUM control switch for the specified product
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product  The product ID or product object.
+	 * @param string          $status   Optional. Can be 'enable' or 'disable'.
 	 */
-	public static function enable_atum_control( $product_id ) {
-		update_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+	public static function update_atum_control( $product, $status = 'enable' ) {
+
+		if ( ! is_a( $product, '\WC_product' ) ) {
+			$product = self::get_atum_product( $product );
+		}
+
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product->save_atum_data();
 	}
 
 	/**
-	 * Enables the WC's manage stock for the specified product
+	 * Updates the WC's manage stock for the specified product
 	 *
 	 * @since 1.4.5
 	 *
-	 * @param int $product_id
+	 * @param int|\WC_Product $product  The product ID or product object.
+	 * @param string          $status   Optional. Can be 'enable' or 'disable'.
 	 */
-	public static function enable_wc_manage_stock( $product_id ) {
-		update_post_meta( $product_id, '_manage_stock', 'yes' );
-	}
+	public static function update_wc_manage_stock( $product, $status = 'enable' ) {
 
-	/**
-	 * Disables the ATUM control switch for the specified product
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param int $product_id
-	 */
-	public static function disable_atum_control( $product_id ) {
-		delete_post_meta( $product_id, Globals::ATUM_CONTROL_STOCK_KEY );
-	}
+		if ( ! is_a( $product, '\WC_product' ) ) {
+			$product = wc_get_product( $product ); // We don't need to use the ATUM models here.
+		}
 
-	/**
-	 * Disables the WC's manage stock for the specified product
-	 *
-	 * @since 1.4.5
-	 *
-	 * @param int $product_id
-	 */
-	public static function disable_wc_manage_stock( $product_id ) {
-		update_post_meta( $product_id, '_manage_stock', 'no' );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product->set_manage_stock( ( 'enable' === $status ? 'yes' : 'no' ) );
+		$product->save();
+
 	}
 
 	/**
@@ -1280,7 +1251,7 @@ final class Helpers {
 
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
-		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
+		$output  = '<select name="product_type" class="wc-enhanced-select ' . $class . '" autocomplete="off">';
 		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {
@@ -1359,7 +1330,7 @@ final class Helpers {
 			endif;
 			?>
 
-			<select name="supplier" class="<?php echo esc_attr( $class ) ?>" autocomplete="off" style="width: 165px">
+			<select name="supplier" class="wc-enhanced-select <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
 				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>
@@ -1379,7 +1350,6 @@ final class Helpers {
 			</select>
 
 			<?php
-			wp_enqueue_script( 'wc-enhanced-select' );
 
 		endif;
 
@@ -1484,34 +1454,150 @@ final class Helpers {
 		return new $model_class( $atum_order_id );
 
 	}
+
+	/**
+	 * Check whether WooCommerce is using the new tables
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return bool
+	 */
+	public static function is_using_new_wc_tables() {
+		return class_exists( '\WC_Product_Data_Store_Custom_Table' );
+	}
 	
 	/**
-	 * Update product meta from Stock Central List
+	 * Get the appropriate ATUM Order statuses depending on the post_type
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $post_type
+	 * @param bool   $remove_finished Whether to remove or not the finished status.
+	 *
+	 * @return array
+	 */
+	public static function get_atum_order_post_type_statuses( $post_type, $remove_finished = FALSE ) {
+		
+		// TODO: Modify to allow options to add simple "get_atum_order_post_type_statuses_simple" functionality and prefix.
+		$statuses = [];
+		
+		switch ( $post_type ) {
+			case InventoryLogs::POST_TYPE:
+				$post_type_class = '\Atum\InventoryLogs\InventoryLogs';
+				break;
+			
+			case PurchaseOrders::POST_TYPE:
+				$post_type_class = '\Atum\PurchaseOrders\PurchaseOrders';
+				break;
+		}
+		
+		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
+			$statuses = call_user_func( array( $post_type_class, 'get_statuses' ) );
+			
+			if ( $remove_finished ) {
+				
+				unset( $statuses[ constant( $post_type_class . '::FINISHED' ) ] );
+				
+			}
+			
+		}
+		
+		return $statuses;
+		
+	}
+	
+	/**
+	 * Get the appropriate ATUM Order list of statuses depending on the post_type
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $post_type
+	 * @param bool   $remove_finished Whether to remove or not the finished status.
+	 * @param bool   $add_prefix      Whether to add or not the ATUM prefix to each status.
+	 *
+	 * @return array
+	 */
+	public static function get_atum_order_post_type_statuses_simple( $post_type, $remove_finished = FALSE, $add_prefix = FALSE ) {
+		
+		$statuses = [];
+		
+		switch ( $post_type ) {
+			case InventoryLogs::POST_TYPE:
+				$post_type_class = '\Atum\InventoryLogs\InventoryLogs';
+				break;
+			
+			case PurchaseOrders::POST_TYPE:
+				$post_type_class = '\Atum\PurchaseOrders\PurchaseOrders';
+				break;
+		}
+		
+		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
+			$statuses = call_user_func( array( $post_type_class, 'get_statuses_simple' ), $add_prefix );
+			
+			if ( $remove_finished ) {
+				
+				$constant_name  = $add_prefix ? ATUM_PREFIX : '';
+				$constant_name .= constant( $post_type_class . '::FINISHED' );
+				
+				if ( ( $key = array_search( $constant_name, $statuses ) ) !== FALSE ) {
+					unset( $statuses[ $key ] );
+				}
+				
+			}
+			
+		}
+		
+		return $statuses;
+		
+	}
+	
+	
+	/**
+	 * Get a WooCommerce product using the ATUM's product data models
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param mixed $the_product Post object or post ID of the product.
+	 *
+	 * @return \WC_Product|null|false
+	 */
+	public static function get_atum_product( $the_product = FALSE ) {
+
+		Globals::enable_atum_product_data_models();
+		$product = wc_get_product( $the_product );
+		Globals::disable_atum_product_data_models();
+
+		return $product;
+
+	}
+	
+	/**
+	 * Update product meta from ATUM List tables
 	 *
 	 * @since 1.3.0
 	 *
 	 * @param int   $product_id
-	 * @param array $product_meta
+	 * @param array $product_data
 	 * @param bool  $skip_action
 	 */
-	public static function update_product_meta( $product_id, $product_meta, $skip_action = FALSE ) {
+	public static function update_product_data( $product_id, $product_data, $skip_action = FALSE ) {
 		
-		$product = wc_get_product( $product_id );
+		$product = self::get_atum_product( $product_id );
 		
 		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
 			return;
 		}
 		
-		$product_meta = apply_filters( 'atum/product_meta', $product_meta, $product_id );
+		$product_data = apply_filters( 'atum/product_data', $product_data, $product_id );
 		
-		foreach ( $product_meta as $meta_key => &$meta_value ) {
+		foreach ( $product_data as $meta_key => &$meta_value ) {
 			
 			$meta_key = esc_attr( $meta_key );
 			
 			switch ( $meta_key ) {
 				
 				case 'stock':
-					unset( $product_meta['stock_custom'], $product_meta['stock_currency'] );
+					unset( $product_data['stock_custom'], $product_data['stock_currency'] );
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
@@ -1526,7 +1612,7 @@ final class Helpers {
 						$product->set_price( $meta_value );
 					}
 						
-					unset( $product_meta['regular_price_custom'], $product_meta['regular_price_currency'] );
+					unset( $product_data['regular_price_custom'], $product_data['regular_price_currency'] );
 					
 					break;
 				
@@ -1540,10 +1626,11 @@ final class Helpers {
 					}
 
 					// Check for sale dates.
-					if ( isset( $product_meta['_sale_price_dates_from'], $product_meta['_sale_price_dates_to'] ) ) {
+					if ( isset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] ) ) {
 
-						$date_from = wc_clean( $product_meta['_sale_price_dates_from'] );
-						$date_to   = wc_clean( $product_meta['_sale_price_dates_to'] );
+						// TODO: USE WC_DATE.
+						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
+						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
 
 						$date_from = $date_from ? strtotime( $date_from ) : '';
 						$date_to   = $date_to ? strtotime( $date_to ) : '';
@@ -1571,20 +1658,27 @@ final class Helpers {
 
 					}
 						
-					unset( $product_meta['sale_price_custom'], $product_meta['sale_price_currency'] );
+					unset( $product_data['sale_price_custom'], $product_data['sale_price_currency'] );
 					
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
-					update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $meta_value ) );
+					/* @noinspection PhpUndefinedMethodInspection */
+					$product->set_purchase_price( $meta_value );
 					
-					unset( $product_meta['purchase_price_custom'], $product_meta['purchase_price_currency'] );
+					unset( $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
 					break;
 				
 				// Any other text meta.
 				default:
-					update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
-					unset( $product_meta[ '_' . $meta_key . '_custom' ], $product_meta[ '_' . $meta_key . 'currency' ] );
+					if ( is_callable( array( $product, "set_{$meta_key}" ) ) ) {
+						$product->{"set_{$meta_key}"}( $meta_value );
+					}
+					else {
+						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
+					}
+
+					unset( $product_data[ '_' . $meta_key . '_custom' ], $product_data[ '_' . $meta_key . 'currency' ] );
 					break;
 			}
 			
@@ -1593,7 +1687,7 @@ final class Helpers {
 		$product->save();
 		
 		if ( ! $skip_action ) {
-			do_action( 'atum/product_meta_updated', $product_id, $product_meta );
+			do_action( 'atum/product_data_updated', $product_id, $product_data );
 		}
 		
 	}
@@ -1641,32 +1735,37 @@ final class Helpers {
 
 			$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
 			$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
-			$product->save();
 
 			if ( $clean_meta ) {
-				delete_post_meta( $product->get_id(), Globals::OUT_STOCK_THRESHOLD_KEY );
+				/* @noinspection PhpUndefinedMethodInspection */
+				$product->set_out_stock_threshold( NULL );
 			}
+
+			$product->save();
 
 			return;
 
 		}
 
+		// TODO: IS THIS NEEDED?
 		if ( $all ) {
 
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
-                SELECT DISTINCT p.ID FROM $wpdb->posts p
-                INNER JOIN $wpdb->postmeta pm ON ( pm.meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "' AND pm.post_id = p.ID )
-                WHERE p.post_type IN ('product', 'product_variation') AND p.post_status IN ('publish', 'future', 'private');
+                SELECT DISTINCT ID FROM $wpdb->posts p
+                INNER JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
+                WHERE p.post_status IN ('publish', 'future', 'private')
+                AND ap.out_stock_threshold IS NOT NULL;
             " ); // WPCS: unprepared SQL ok.
 
 			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
+				$product = self::get_atum_product( $id_to_rebuild );
+
 				// Delete _out_stock_threshold (avoid partial works to be done again).
 				if ( $clean_meta ) {
-					delete_post_meta( $id_to_rebuild, Globals::OUT_STOCK_THRESHOLD_KEY );
+					/* @noinspection PhpUndefinedMethodInspection */
+					$product->set_out_stock_threshold( NULL );
 				}
-
-				$product = wc_get_product( $id_to_rebuild );
 
 				// Force change and save.
 				$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
@@ -1674,6 +1773,7 @@ final class Helpers {
 				$product->save();
 
 			}
+			
 		}
 
 	}
@@ -1689,9 +1789,56 @@ final class Helpers {
 
 		global $wpdb;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta where meta_key = '" . Globals::OUT_STOCK_THRESHOLD_KEY . "';" ); // WPCS: unprepared SQL ok.
+		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
+			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
+			WHERE ap.out_stock_threshold IS NOT NULL
+			AND  p.post_status IN ('publish', 'future', 'private');" ); // WPCS: unprepared SQL ok.
 
 		return $rowcount > 0;
+	}
+
+	/**
+	 * Customize the WP_Query to handle ATUM product data and product data from the new WC tables
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array  $query_data  The query data args.
+	 * @param array  $pieces      The pieces array that must be returned to the post_clauses filter.
+	 * @param string $table_name  Optional. If passed will use this table name instead of the ATUM product data table.
+	 *
+	 * @return array
+	 */
+	public static function product_data_query_clauses( $query_data, $pieces, $table_name = '' ) {
+		
+		if ( empty( $query_data ) ) {
+			return $pieces;
+		}
+		
+		if ( ! empty( $query_data['where'] ) ) {
+			$atum_product_data_query = new ProductDataQuery( $query_data );
+			$sql                     = $atum_product_data_query->get_sql( $table_name );
+			
+			foreach ( [ 'join', 'where' ] as $key ) {
+				
+				if ( ! empty( $sql[ $key ] ) ) {
+					$pieces[ $key ] .= ' ' . $sql[ $key ];
+				}
+				
+			}
+		}
+		
+		if ( ! empty( $query_data['order'] ) ) {
+			
+			global $wpdb;
+			
+			$table_name = $table_name ? $table_name : Globals::ATUM_PRODUCT_DATA_TABLE;
+			$operator   = 'NUMERIC' === $query_data['order']['type'] ? '+0' : '';
+			
+			$pieces['orderby'] = "{$wpdb->prefix}$table_name.{$query_data['order']['field']}$operator {$query_data['order']['order']}";
+		}
+		
+		return $pieces;
+		
 	}
 
 	/**
@@ -1915,7 +2062,106 @@ final class Helpers {
 	 */
 	public static function get_input_step() {
 		
-		return 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+		$step = self::get_option( 'stock_quantity_step' );
+		return $step ? $step : 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+	}
+
+	/**
+	 * Read the type of the parent product (variable) of a child product (variation) from db, caching the result to improve performance
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $child_id
+	 *
+	 * @return string   The product type slug
+	 */
+	public static function read_parent_product_type( $child_id ) {
+
+		$cache_key           = AtumCache::get_cache_key( 'parent_product_type', $child_id );
+		$parent_product_type = AtumCache::get_cache( $cache_key );
+
+		if ( ! $parent_product_type ) {
+
+			global $wpdb;
+
+			if ( self::is_using_new_wc_tables() ) {
+
+				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
+					SELECT `type` FROM {$wpdb->prefix}wc_products			  
+					WHERE product_id IN (
+				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
+					)
+				", $child_id ) );
+
+			}
+			else {
+
+				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
+					SELECT terms.slug FROM $wpdb->posts posts
+					LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
+				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = termrelations.term_taxonomy_id)
+					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)  
+					WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
+				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
+					)
+				", $child_id ) );
+
+			}
+
+			if ( $parent_product_type ) {
+				AtumCache::set_cache( $cache_key, $parent_product_type );
+			}
+
+		}
+
+		return $parent_product_type;
+
+	}
+
+	/**
+	 * Get the ATUM meta for the specified user
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key       Optional. If passed will return that specific key within the meta array.
+	 * @param int    $user_id   Optional. If passed will get the meta for that user, if not will get it from the current user.
+	 *
+	 * @return mixed
+	 */
+	public static function get_atum_user_meta( $key = '', $user_id = 0 ) {
+
+		$user_id = $user_id ?: get_current_user_id();
+		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+
+		if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE )  ) {
+			return $atum_user_meta[ $key ];
+		}
+
+		return $atum_user_meta;
+
+	}
+
+	/**
+	 * Set the ATUM meta for the specified user
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key       Set that specific key only and will preserve the others within the ATUM meta array.
+	 * @param mixed  $value     The value to set. Should be previously sanitized.
+	 * @param int    $user_id   Optional. If passed will set the meta for that user, if not will set it to the current user.
+	 */
+	public static function set_atum_user_meta( $key, $value, $user_id = 0 ) {
+
+		$user_id        = $user_id ?: get_current_user_id();
+		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+
+		if ( ! is_array( $atum_user_meta ) ) {
+			$atum_user_meta = array();
+		}
+
+		$atum_user_meta[ $key ] = $value;
+		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
+
 	}
 
 }

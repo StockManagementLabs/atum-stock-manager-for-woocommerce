@@ -15,6 +15,7 @@ namespace Atum\Dashboard;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
+use Atum\Legacy\WidgetHelpersLegacyTrait;
 use Atum\Settings\Settings;
 
 
@@ -33,6 +34,13 @@ final class WidgetHelpers {
 	 * @var array
 	 */
 	private static $grouped_products = array();
+
+	/**
+	 * The WC product data used in WP_Query (when using the new tables)
+	 *
+	 * @var array
+	 */
+	protected static $wc_query_data = array();
 
 	/**
 	 * Get the stats of products that were sold after the specified date
@@ -93,9 +101,11 @@ final class WidgetHelpers {
 				if ( in_array( 'lost_sales', $types ) && ! in_array( $row['PROD_ID'], $lost_processed ) ) {
 
 					if ( ! isset( $days ) || $days <= 0 ) {
+						/** @noinspection PhpUnhandledExceptionInspection */
 						$date_days_start = new \DateTime( $date_start );
-						$date_days_end   = new \DateTime( ( isset( $date_end ) ? $date_end : 'now' ) );
-						$days            = $date_days_end->diff( $date_days_start )->days;
+						/** @noinspection PhpUnhandledExceptionInspection */
+						$date_days_end = new \DateTime( ( isset( $date_end ) ? $date_end : 'now' ) );
+						$days          = $date_days_end->diff( $date_days_start )->days;
 					}
 
 					$lost_sales = Helpers::get_product_lost_sales( $row['PROD_ID'], $days );
@@ -154,6 +164,7 @@ final class WidgetHelpers {
 
 			if ( $order_discount ) {
 
+				/* @noinspection PhpWrongStringConcatenationInspection */
 				$stats['value'] += $order_discount;
 
 				$order_items = $order->get_items();
@@ -227,7 +238,7 @@ final class WidgetHelpers {
 
 		$products = Helpers::get_all_products( array(
 			'post_type' => [ 'product', 'product_variation' ],
-		) );
+		), TRUE );
 
 		$data = $dataset = array();
 
@@ -241,6 +252,7 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$date_now    = new \DateTime();
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 
@@ -304,7 +316,8 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -358,7 +371,8 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -440,13 +454,23 @@ final class WidgetHelpers {
 	 */
 	public static function get_date_period( $date_start, $date_end, $interval = '1 day' ) {
 
-		$start       = new \DateTime( $date_start );
-		$interval    = \DateInterval::createFromDateString( $interval );
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$start    = new \DateTime( $date_start );
+		$interval = \DateInterval::createFromDateString( $interval );
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$end         = new \DateTime( $date_end );
 		$date_period = new \DatePeriod( $start, $interval, $end );
 
 		return $date_period;
 	}
+
+	/**
+	 * If the site is not using the new tables, use the legacy methods
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use WidgetHelpersLegacyTrait;
 
 	/**
 	 * Get the current stock levels
@@ -456,6 +480,16 @@ final class WidgetHelpers {
 	 * @return array
 	 */
 	public static function get_stock_levels() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			return self::get_stock_levels_legacy();
+		}
 
 		global $wpdb;
 
@@ -549,22 +583,17 @@ final class WidgetHelpers {
 				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'fields'         => 'ids',
 				'post__in'       => $products,
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'key'   => '_manage_stock',
-						'value' => 'yes',
-					),
-					array(
-						'key'     => '_stock',
-						'value'   => 0,
-						'type'    => 'numeric',
-						'compare' => '>',
-					),
-				),
+			);
+			
+			self::$wc_query_data['where'][] = array(
+				'key'   => 'stock_status',
+				'value' => array( 'instock', 'onbackorder' ),
 			);
 
-			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+			$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+
 			$products_in_stock                 = $products_in_stock->posts;
 			$stock_counters['count_in_stock'] += count( $products_in_stock );
 			
@@ -577,36 +606,14 @@ final class WidgetHelpers {
 				'posts_per_page' => - 1,
 				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'fields'         => 'ids',
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'relation' => 'OR',
-						array(
-							'key'     => '_stock',
-							'value'   => 0,
-							'type'    => 'numeric',
-							'compare' => '<=',
-						),
-						array(
-							'key'     => '_stock',
-							'compare' => 'NOT EXISTS',
-						),
-					),
-					array(
-						'relation' => 'OR',
-						array(
-							'key'   => '_backorders',
-							'value' => 'no',
-							'type'  => 'char',
-						),
-						array(
-							'key'     => '_backorders',
-							'compare' => 'NOT EXISTS',
-						),
-					),
-
-				),
 				'post__in'       => $products_not_stock,
+			);
+
+			self::$wc_query_data['where'] = array(
+				array(
+					'key'     => 'stock_status',
+					'value'   => 'outofstock',
+				),
 			);
 
 			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
@@ -616,34 +623,45 @@ final class WidgetHelpers {
 			/*
 			 * Products with low stock
 			 */
-			if ( $stock_counters['count_in_stock'] ) {
+			if ( ! empty( $products_in_stock ) ) {
 
 				$days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 				// Compare last seven days average sales per day * re-order days with current stock.
-				$str_sales = "(SELECT			   
-				    (SELECT MAX(CAST( meta_value AS SIGNED )) AS q FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key IN ('_product_id', '_variation_id') AND order_item_id = `item`.`order_item_id`) AS IDs,
-				    CEIL(SUM((SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_qty' AND order_item_id = `item`.`order_item_id`))/7*$days_to_reorder) AS qty
-					FROM `{$wpdb->posts}` AS `order`
-					    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `item` ON (`order`.`ID` = `item`.`order_id`)
-						INNER JOIN `{$wpdb->postmeta}` AS `order_meta` ON (`order`.ID = `order_meta`.`post_id`)
-					WHERE (`order`.`post_type` = 'shop_order'
-					    AND `order`.`post_status` IN ('wc-completed', 'wc-processing') AND `item`.`order_item_type` ='line_item'
-					    AND `order_meta`.`meta_key` = '_paid_date'
-					    AND `order_meta`.`meta_value` >= '" . Helpers::date_format( '-7 days' ) . "')
+				$str_sales = "
+					(SELECT	(
+						SELECT MAX(CAST( meta_value AS SIGNED )) AS q 
+						FROM {$wpdb->prefix}woocommerce_order_itemmeta 
+						WHERE meta_key IN ('_product_id', '_variation_id') 
+						AND order_item_id = item.order_item_id
+					) AS IDs,
+				    CEIL(SUM((
+				        SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta 
+				        WHERE meta_key = '_qty' AND order_item_id = item.order_item_id))/7*$days_to_reorder
+			        ) AS qty
+					FROM $wpdb->posts AS orders
+				    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS item ON (orders.ID = item.order_id)
+					INNER JOIN $wpdb->postmeta AS order_meta ON (orders.ID = order_meta.post_id)
+					WHERE (orders.post_type = 'shop_order'
+				    AND orders.post_status IN ('wc-completed', 'wc-processing') AND item.order_item_type ='line_item'
+				    AND order_meta.meta_key = '_paid_date'
+				    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
 					GROUP BY IDs) AS sales";
 
-				$str_states = "(SELECT `{$wpdb->posts}`.`ID`,
-					IF( CAST( IFNULL(`sales`.`qty`, 0) AS DECIMAL(10,2) ) <= 
-						CAST( IF( LENGTH(`{$wpdb->postmeta}`.`meta_value`) = 0 , 0, `{$wpdb->postmeta}`.`meta_value`) AS DECIMAL(10,2) ), TRUE, FALSE) AS state
-					FROM `{$wpdb->posts}`
-					    LEFT JOIN `{$wpdb->postmeta}` ON (`{$wpdb->posts}`.`ID` = `{$wpdb->postmeta}`.`post_id`)
-					    LEFT JOIN " . $str_sales . " ON (`{$wpdb->posts}`.`ID` = `sales`.`IDs`)
-					WHERE (`{$wpdb->postmeta}`.`meta_key` = '_stock'
-			            AND `{$wpdb->posts}`.`post_type` IN ('" . implode( "','", $post_types ) . "')
-			            AND (`{$wpdb->posts}`.`ID` IN (" . implode( ', ', $products_in_stock ) . ')) )) AS states';
+				$str_statuses = "
+					(SELECT p.ID, IF( 
+						CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
+						CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
+					) AS status
+					FROM $wpdb->posts AS p
+				    LEFT JOIN {$wpdb->postmeta} ON (p.ID = {$wpdb->postmeta}.post_id)
+				    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+					WHERE {$wpdb->postmeta}.meta_key = '_stock'
+		            AND p.post_type IN ('" . implode( "','", $post_types ) . "')
+		            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
+		            ) AS statuses';
 
-				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT `ID` FROM $str_states WHERE state IS FALSE;" );
+				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
 				$products_low_stock                = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
@@ -669,31 +687,41 @@ final class WidgetHelpers {
 	 */
 	private static function get_children( $parent_type, $post_type = 'product' ) {
 
-		// Get the published Variables first.
-		$parent_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/parent_args', array(
-			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => $parent_type,
-				),
-			),
-		) );
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			return self::get_children_legacy( $parent_type, $post_type );
+		}
 
-		$parents = new \WP_Query( $parent_args );
+		global $wpdb;
 
-		if ( $parents->found_posts ) {
+		// Get all the published Variables first.
+		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$where         = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $post_statuses ) . "')";
+
+		if ( ! empty( $post_in ) ) {
+			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
+		}
+
+		$parents = $wpdb->get_col( $wpdb->prepare( "
+			SELECT p.ID FROM $wpdb->posts p  
+			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
+			WHERE $where AND pr.type = %s
+			GROUP BY p.ID
+		", $parent_type ) ); // WPCS: unprepared sql ok.
+
+		if ( ! empty( $parents ) ) {
 
 			// Save them to be used when preparing the list query.
-			if ( 'variable' === $parent_type ) {
-				self::$variable_products = array_merge( self::$variable_products, $parents->posts );
-			}
-			else {
-				self::$grouped_products = array_merge( self::$grouped_products, $parents->posts );
+			// TODO: WHAT ABOUT VARIABLE PRODUCT LEVELS?
+			if ( in_array( $parent_type, [ 'variable', 'variable-subscription' ], TRUE ) ) {
+				self::$variable_products = array_merge( self::$variable_products, $parents );
+			} elseif ( 'grouped' === $parent_type ) {
+				self::$grouped_products = array_merge( self::$grouped_products, $parents );
 			}
 
 			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
@@ -701,7 +729,7 @@ final class WidgetHelpers {
 				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'posts_per_page'  => - 1,
 				'fields'          => 'ids',
-				'post_parent__in' => $parents->posts,
+				'post_parent__in' => $parents,
 			) );
 
 			$children = new \WP_Query( $children_args );
@@ -714,6 +742,19 @@ final class WidgetHelpers {
 
 		return FALSE;
 
+	}
+
+	/**
+	 * Customize the WP_Query to handle WC product data from the new tables
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $pieces
+	 *
+	 * @return array
+	 */
+	public static function wc_product_data_query_clauses( $pieces ) {
+		return Helpers::product_data_query_clauses( self::$wc_query_data, $pieces, 'wc_products' );
 	}
 
 }

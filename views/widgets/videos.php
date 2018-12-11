@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) || die;
 			</div>
 
 			<div class="video-list-wrapper">
-				<div class="carousel-nav-prev disabled"><i class="lnr lnr-chevron-left"></i></div>
+				<div class="carousel-nav-prev disabled"><i class="atum-icon atmi-chevron-left"></i></div>
 
 				<div class="scroll-box">
 					<?php foreach ( $videos as $index => $video ) :
@@ -68,6 +68,7 @@ defined( 'ABSPATH' ) || die;
 
 								<time>
 									<?php
+									/* @noinspection PhpUnhandledExceptionInspection */
 									$start = new \DateTime( '@0' ); // Unix epoch.
 									try {
 										$start->add( new \DateInterval( $video->contentDetails->duration ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
@@ -109,7 +110,7 @@ defined( 'ABSPATH' ) || die;
 					<?php endforeach; ?>
 				</div>
 
-				<div class="carousel-nav-next"><i class="lnr lnr-chevron-right"></i></div>
+				<div class="carousel-nav-next"><i class="atum-icon atmi-chevron-right"></i></div>
 			</div>
 		</div>
 

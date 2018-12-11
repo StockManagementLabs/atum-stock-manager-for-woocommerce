@@ -14,6 +14,7 @@ namespace Atum\Components\AtumOrders\Models;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -21,7 +22,6 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
 
@@ -40,6 +40,13 @@ abstract class AtumOrderModel {
 	 * @var \WP_Post
 	 */
 	protected $post;
+	
+	/**
+	 * Database stored current Order status
+	 *
+	 * @var string
+	 */
+	protected $db_status;
 
 	/**
 	 * The array of items belonging to this Order
@@ -77,12 +84,21 @@ abstract class AtumOrderModel {
 	protected $action = 'both';
 	
 	/**
+	 * Message shown in the item's blocker
+	 *
+	 * @var string
+	 */
+	protected $block_message = '';
+	
+	/**
 	 * AtumOrderModel constructor
 	 *
 	 * @param int  $id         Optional. The ATUM Order ID to initialize.
 	 * @param bool $read_items Optional. Whether to read the inner items.
 	 */
 	protected function __construct( $id = 0, $read_items = TRUE ) {
+		
+		$this->block_message = __( 'Click the Create button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
 
 		if ( $id ) {
 
@@ -114,7 +130,9 @@ abstract class AtumOrderModel {
 	 * @since 1.2.4
 	 */
 	protected function load_post() {
-		$this->post = get_post( $this->id );
+		
+		$this->post      = get_post( $this->id );
+		$this->db_status = $this->get_status();
 	}
 
 	/**
@@ -129,9 +147,8 @@ abstract class AtumOrderModel {
 	public function read_items( $type = '' ) {
 
 		// Get from cache if available.
-		$cache_key   = "{$this->cache_key}-{$this->id}";
-		$cache_group = $this->post->post_type;
-		$items       = wp_cache_get( $cache_key, $cache_group );
+		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+		$items     = AtumCache::get_cache( $cache_key );
 
 		if ( FALSE === $items ) {
 
@@ -141,7 +158,7 @@ abstract class AtumOrderModel {
 				return;
 			}
 
-			wp_cache_set( $cache_key, $items, $cache_group, 20 );
+			AtumCache::set_cache( $cache_key, $items );
 
 		}
 
@@ -301,7 +318,7 @@ abstract class AtumOrderModel {
 		if ( is_a( $product, '\WC_Product' ) ) {
 			
 			if ( is_null( $qty ) ) {
-				$qty = Helpers::get_input_step();
+				$qty = $product->get_min_purchase_quantity();
 			}
 
 			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product );
@@ -421,6 +438,7 @@ abstract class AtumOrderModel {
 
 	}
 
+	/* @noinspection PhpDocSignatureInspection */
 	/**
 	 * Add a tax item to the ATUM Order
 	 *
@@ -728,6 +746,7 @@ abstract class AtumOrderModel {
 			$this->create();
 		}
 
+		$this->process_status();
 		$this->save_items();
 
 		return $this->id;
@@ -778,6 +797,35 @@ abstract class AtumOrderModel {
 		}
 
 	}
+	
+	/**
+	 * Process status changes
+	 *
+	 * @since 1.5.0
+	 */
+	public function process_status() {
+		
+		$new_status = $this->get_status();
+		$old_status = $this->db_status;
+		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
+		
+		// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
+		if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
+			$old_status = 'pending';
+		}
+		
+		if ( $new_status !== $old_status ) {
+			
+			do_action( "atum/orders/status_$new_status", $this->id, $this );
+			do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
+			do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
+			
+			/* translators: 1: old order status 2: new order status */
+			$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
+			$this->add_note( $transition_note );
+			
+		}
+	}
 
 	/***************
 	 * CRUD METHODS
@@ -800,7 +848,7 @@ abstract class AtumOrderModel {
 				'post_date'     => gmdate( 'Y-m-d H:i:s', $current_date->getOffsetTimestamp() ),
 				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $current_date->getTimestamp() ),
 				'post_type'     => $this->post->post_type,
-				'post_status'   => in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ? ATUM_PREFIX . $status : 'publish',
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? ATUM_PREFIX . $status : 'publish',
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
@@ -842,7 +890,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
 			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
-			'post_status'       => ( in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ) ? ATUM_PREFIX . $status : 'publish',
+			'post_status'       => ( in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ) ? ATUM_PREFIX . $status : 'publish',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -875,26 +923,18 @@ abstract class AtumOrderModel {
 	 * @param string $new_status    Status to set to the ATUM Order. No "atum_" prefix is required.
 	 */
 	public function update_status( $new_status ) {
-
-		$old_status = $this->get_status();
+		
 		$new_status = FALSE !== strpos( $new_status, ATUM_PREFIX ) ? str_replace( ATUM_PREFIX, '', $new_status ) : $new_status;
-		$statuses   = AtumOrderPostType::get_statuses();
+		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
 			$new_status = 'pending';
 		}
-
-		// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-		if ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) {
-			$old_status = 'pending';
-		}
-
-		if ( $new_status !== $old_status ) {
-			$this->set_status( $new_status );
-			$this->save();
-		}
-
+		
+		$this->set_status( $new_status );
+		$this->save();
+		
 	}
 
 	/***************
@@ -1078,6 +1118,7 @@ abstract class AtumOrderModel {
 			$fee_total += $item->get_total();
 		}
 
+		/* @noinspection PhpWrongStringConcatenationInspection */
 		$grand_total = round( $cart_total + $fee_total + $this->get_shipping_total() + $this->get_cart_tax() + $this->get_shipping_tax(), wc_get_price_decimals() );
 
 		$this->set_discount_total( $cart_subtotal - $cart_total );
@@ -1109,12 +1150,15 @@ abstract class AtumOrderModel {
 		$subtotal = 0;
 
 		if ( is_callable( array( $item, 'get_subtotal' ) ) ) {
+			
+			$qty = ! empty( $item->get_quantity() ) ? $item->get_quantity() : 1;
 
 			if ( $inc_tax ) {
-				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / max( 1, $item->get_quantity() );
+				/* @noinspection PhpWrongStringConcatenationInspection */
+				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / $qty;
 			}
 			else {
-				$subtotal = ( floatval( $item->get_subtotal() ) / max( 1, $item->get_quantity() ) );
+				$subtotal = ( floatval( $item->get_subtotal() ) / $qty );
 			}
 
 			$subtotal = $round ? number_format( (float) $subtotal, wc_get_price_decimals(), '.', '' ) : $subtotal;
@@ -1143,6 +1187,7 @@ abstract class AtumOrderModel {
 		if ( is_callable( array( $item, 'get_total' ) ) ) {
 
 			if ( $inc_tax ) {
+				/* @noinspection PhpWrongStringConcatenationInspection */
 				$total = ( $item->get_total() + $item->get_total_tax() ) / max( 1, $item->get_quantity() );
 			}
 			else {
@@ -1171,6 +1216,7 @@ abstract class AtumOrderModel {
 		$total_discount = $this->get_discount_total();
 
 		if ( ! $ex_tax ) {
+			/* @noinspection PhpWrongStringConcatenationInspection */
 			$total_discount += $this->get_discount_tax();
 		}
 
@@ -1267,7 +1313,7 @@ abstract class AtumOrderModel {
 			}
 			else {
 				$tax_amount         = $this->get_total_tax();
-				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), WC()->countries->tax_or_vat() );
+				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), wc()->countries->tax_or_vat() );
 			}
 
 			if ( ! empty( $tax_string_array ) ) {
@@ -1292,7 +1338,8 @@ abstract class AtumOrderModel {
 	 */
 	public function is_editable() {
 		$status = $this->get_status();
-		return apply_filters( 'atum/orders/is_editable', ! $status || 'pending' === $status, $this );
+		
+		return apply_filters( 'atum/orders/is_editable', ! $status || array_key_exists( $status, Helpers::get_atum_order_post_type_statuses( $this->post->post_type, TRUE ) ) );
 	}
 
 	/**
@@ -1415,9 +1462,9 @@ abstract class AtumOrderModel {
 	protected function clear_caches() {
 
 		clean_post_cache( $this->id );
-		$cache_key   = "{$this->cache_key}-{$this->id}";
-		$cache_group = $this->post->post_type;
-		wp_cache_delete( $cache_key, $cache_group );
+		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+		AtumCache::delete_cache( $cache_key );
+
 	}
 
 	/**
@@ -1457,37 +1504,50 @@ abstract class AtumOrderModel {
 	 *
 	 * @param string|integer|\WC_DateTime $value
 	 *
-	 * @return \WC_DateTime
+	 * @return \WC_DateTime|null
 	 */
 	protected function get_wc_time( $value ) {
+
+		$date_time = NULL;
+
 		try {
 			
 			if ( is_a( $value, 'WC_DateTime' ) ) {
-				$datetime = $value;
-			} elseif ( is_numeric( $value ) ) {
+				$date_time = $value;
+			}
+			elseif ( is_numeric( $value ) ) {
 				// Timestamps are handled as UTC timestamps in all cases.
-				$datetime = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
-			} else {
+				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
+			}
+			else {
+
 				// Strings are defined in local WP timezone. Convert to UTC.
 				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
 					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
 					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
-				} else {
+				}
+				else {
 					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
 				}
-				$datetime = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+
+				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+
 			}
 			
 			// Set local timezone or offset.
 			if ( get_option( 'timezone_string' ) ) {
-				$datetime->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
-			} else {
-				$datetime->set_utc_offset( wc_timezone_offset() );
+				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
+			}
+			else {
+				$date_time->set_utc_offset( wc_timezone_offset() );
 			}
 			
-			return $datetime;
-			
-		} catch ( \Exception $e ) {} // @codingStandardsIgnoreLine.
+		} catch ( \Exception $e ) {
+
+		}
+
+		return $date_time;
+
 	}
 
 	/**********
@@ -1809,6 +1869,18 @@ abstract class AtumOrderModel {
 	public function get_action() {
 		
 		return $this->action;
+	}
+	
+	/**
+	 * Get the block items message
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return string
+	 */
+	public function get_block_message() {
+		
+		return $this->block_message;
 	}
 
 	/**********

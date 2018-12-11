@@ -1,0 +1,92 @@
+#wpfooter {
+	position: inherit;
+	padding-top: 0;
+	display: none;
+	
+	.footer-box {
+		&.no-style {
+			background-image: none;
+			background-color: transparent;
+			box-shadow: none;
+			padding: 0;
+			height: auto;
+			.footer-atum-logo, .footer-atum-buttons, #footer-left, .clear {
+				display: none;
+			}
+		}
+		height: 90px;
+		background: $white url("#{$img-path}stock-central/bg-footer.png") no-repeat center 86%;
+		background-size: cover;
+		border-radius: 8px;
+		box-shadow: 0 4px 0 0 $gray-200;
+		padding: 0 23px;
+		@include flexbox;
+		@include flex-align-items(center);
+		@include flex-justify-content(space-between);
+		
+		.footer-atum-logo {
+			@include flexbox;
+			@include flex-align-items(center);
+			@include flex-justify-content(left);
+			padding: 6.4px 0 5px;
+			
+			img {
+				width: 34px;
+			}
+			
+			span {
+				color: $blue-dark;
+				font-size: 27px;
+				margin-left: 10px;
+				font-weight: bold;
+			}
+		}
+		
+		.footer-atum-text {
+			font-size: 12px;
+			
+			span {
+				color: $wp-link;
+			}
+			
+			.wc-rating-link {
+				text-decoration: none;
+			}
+		}
+		
+		.footer-atum-buttons {
+			@include flexbox;
+			@include flex-align-items(center);
+			
+			.footer-button {
+				padding: 0 22px;
+				font-size: 12px;
+				line-height: 30px;
+				text-decoration: none;
+				text-transform: uppercase;
+				
+				&:first-child {
+					margin-right: 10px;
+				}
+			}
+			
+			@media screen and (max-width: 782px) {
+				display: none;
+			}
+		}
+		
+		@media screen and (max-width: $screen-xs) {
+			padding: 14px 23px;
+		}
+		
+	}
+	
+	#footer-upgrade {
+		display: none;
+	}
+	
+	@media screen and (max-width: 782px) {
+		display: block;
+		margin-left: 0 !important;
+	}
+}

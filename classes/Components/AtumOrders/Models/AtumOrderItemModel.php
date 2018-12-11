@@ -14,6 +14,7 @@ namespace Atum\Components\AtumOrders\Models;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
@@ -95,15 +96,14 @@ abstract class AtumOrderItemModel {
 		try {
 
 			// Get from cache if available.
-			$cache_key   = "{$this->cache_key}-{$this->id}";
-			$cache_group = ATUM_SHORT_NAME;
-			$data        = wp_cache_get( $cache_key, $cache_group );
+			$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+			$data      = AtumCache::get_cache( $cache_key );
 
 			if ( FALSE === $data ) {
 				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d LIMIT 1;', $this->id ); // WPCS: unprepared SQL ok.
 				$data  = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 
-				wp_cache_set( $cache_key, $data, $cache_group, 20 );
+				AtumCache::set_cache( $cache_key, $data );
 			}
 
 			if ( ! $data ) {
@@ -333,9 +333,8 @@ abstract class AtumOrderItemModel {
 	 * @since 1.2.9
 	 */
 	public function clear_cache() {
-		$cache_key   = "{$this->cache_key}-{$this->id}";
-		$cache_group = ATUM_SHORT_NAME;
-		wp_cache_delete( $cache_key, $cache_group );
+		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+		AtumCache::delete_cache( $cache_key );
 	}
 
 	/**
@@ -351,7 +350,7 @@ abstract class AtumOrderItemModel {
 	public function get_meta( $meta_key = NULL, $single = TRUE ) {
 
 		if ( $meta_key && isset( $this->meta[ $meta_key ] ) ) {
-			return ( $single ) ? reset( $this->meta[ $meta_key ] ) : $this->meta[ $meta_key ];
+			return $single ? current( $this->meta[ $meta_key ] ) : $this->meta[ $meta_key ];
 		}
 		elseif ( ! $meta_key && ! empty( $this->meta ) ) {
 			return $this->meta;

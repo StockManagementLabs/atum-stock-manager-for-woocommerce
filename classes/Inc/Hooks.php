@@ -12,11 +12,10 @@
 
 namespace Atum\Inc;
 
-use Atum\Components\AtumCapabilities;
-use Atum\Settings\Settings;
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
+use Atum\Settings\Settings;
 
 class Hooks {
 	
@@ -27,7 +26,7 @@ class Hooks {
 	 *
 	 * @var int
 	 */
-	private $stock_threshold;
+	private $stock_threshold = NULL;
 
 	/**
 	 * The singleton instance holder
@@ -61,13 +60,7 @@ class Hooks {
 		// Add extra links to the plugin desc row.
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 
-		// Handle the ATUM customizations to the WC's Product Data meta box.
-		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
-		add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_tab_panel' ) );
-		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_product_variation_data_panel' ), 9, 3 );
-		add_action( 'save_post_product', array( $this, 'save_product_data_panel' ), 11, 3 );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_variation_data_panel' ), 10, 2 );
-
+		// Enqueue scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Show the right stock status on WC products list when ATUM is managing the stock.
@@ -82,14 +75,6 @@ class Hooks {
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
 		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
-
-		// Add out_stock_threshold actions if required.
-		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			add_action( 'save_post_product', array( $this, 'save_out_stock_threshold_field' ) );
-			add_action( 'woocommerce_save_product_variation', array( $this, 'save_out_stock_threshold_field' ) );
-			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
-			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
-		}
 
 	}
 
@@ -118,8 +103,15 @@ class Hooks {
 			
 			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
 			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_variation_stock_status' ), 10, 2 );
-			add_action( 'woocommerce_before_product_object_save', array( $this, 'remove_order_stock_status_filter' ), 10, 2 );
-
+			
+			add_action( 'woocommerce_process_product_meta', array( $this, 'add_stock_status_threshold' ), 19 );
+			add_action( 'woocommerce_process_product_meta', array( $this, 'remove_stock_status_threshold' ), 21 );
+			
+			add_action( 'atum/product_data/before_save_product_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
+			add_action( 'atum/product_data/after_save_product_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
+			add_action( 'atum/product_data/before_save_product_variation_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
+			add_action( 'atum/product_data/after_save_product_variation_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
+		
 		}
 
 	}
@@ -184,368 +176,12 @@ class Hooks {
 				var $script = $('#tmpl-wc-modal-add-products');
 				
 				$script.html($script.html().replace('step="1"', 'step="<?php echo esc_attr( $step ) ?>"')
-					.replace('placeholder="1"', 'placeholder="<?php echo esc_attr( $step ) ?>" value="<?php echo esc_attr( $step ) ?>"')
-					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>')
-					.replace('<?php echo esc_attr( 'placeholder="1"' ) ?>', '<?php echo esc_attr( 'placeholder="' . $step . '" value="' . $step . '"' ) ?>'));
+					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>'));
 				
 			});
 		</script>
 		
 		<?php
-	}
-
-	/**
-	 * Filters the Product data tabs settings to add ATUM settings
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param array $data_tabs
-	 *
-	 * @return array
-	 */
-	public function add_product_data_tab( $data_tabs ) {
-
-		// Add the ATUM tab to Simple and BOM products.
-		$bom_tab = (array) apply_filters( 'atum/product_data/tab', array(
-			'atum' => array(
-				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
-				'target'   => 'atum_product_data',
-				'class'    => array( 'show_if_simple', 'show_if_variable' ),
-				'priority' => 21,
-			),
-		) );
-
-		// Insert the ATUM tab under Inventory tab.
-		$data_tabs = array_merge( array_slice( $data_tabs, 0, 2 ), $bom_tab, array_slice( $data_tabs, 2 ) );
-
-		return $data_tabs;
-
-	}
-
-	/**
-	 * Add the fields to ATUM Inventory tab within WC's Product Data meta box
-	 *
-	 * @since 1.4.1
-	 */
-	public function add_product_data_tab_panel() {
-
-		$product_id               = get_the_ID();
-		$product_status           = get_post_status( $product_id );
-		$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple' ] );
-		$control_button_classes   = (array) apply_filters( 'atum/product_data/control_button/classes', [ 'show_if_variable' ] );
-
-		Helpers::load_view( 'meta-boxes/product-data/atum-tab-panel', compact( 'product_id', 'product_status', 'checkbox_wrapper_classes', 'control_button_classes' ) );
-
-	}
-
-	/**
-	 * Add the Product Levels meta boxes to the Product variations
-	 *
-	 * @since 0.0.3
-	 *
-	 * @param int      $loop             The current item in the loop of variations.
-	 * @param array    $variation_data   The current variation data.
-	 * @param \WP_Post $variation        The variation post.
-	 */
-	public function add_product_variation_data_panel( $loop, $variation_data, $variation ) {
-
-		Helpers::load_view( 'meta-boxes/product-data/atum-variation-panel', compact( 'loop', 'variation_data', 'variation' ) );
-
-	}
-
-	/**
-	 * Save all the fields within the Product Data's ATUM Inventory tab
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param int      $product_id The saved product's ID.
-	 * @param \WP_Post $post       The saved post.
-	 * @param bool     $update
-	 */
-	public function save_product_data_panel( $product_id, $post, $update ) {
-
-		// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification -- Nonce verification already handled by WP
-		if ( ! $update || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
-			return;
-		}
-
-		$product_tab_values     = isset( $_POST['atum_product_tab'] ) ? $_POST['atum_product_tab'] : array();
-		$product_tab_fields     = Globals::get_product_tab_fields();
-		$is_inheritable_product = Helpers::is_inheritable_type( $_POST['product-type'] );
-
-		// Update the "_inehritable" meta key.
-		if ( $is_inheritable_product ) {
-			update_post_meta( $product_id, Globals::IS_INHERITABLE_KEY, 'yes' );
-		}
-		else {
-			delete_post_meta( $product_id, Globals::IS_INHERITABLE_KEY );
-		}
-
-		foreach ( $product_tab_fields as $field_name => $field_type ) {
-
-			// The ATUM's stock control must be always 'yes' for inheritable products.
-			if ( Globals::ATUM_CONTROL_STOCK_KEY === $field_name && $is_inheritable_product ) {
-				Helpers::enable_atum_control( $product_id );
-				continue;
-			}
-
-			// Sanitize the fields.
-			$field_value = '';
-			switch ( $field_type ) {
-				case 'checkbox':
-					$field_value = isset( $product_tab_values[ $field_name ] ) ? 'yes' : '';
-					break;
-
-				case 'number_int':
-					if ( isset( $product_tab_values[ $field_name ] ) ) {
-						$field_value = absint( $product_tab_values[ $field_name ] );
-					}
-					break;
-
-				case 'number_float':
-					if ( isset( $product_tab_values[ $field_name ] ) ) {
-						$field_value = floatval( $product_tab_values[ $field_name ] );
-					}
-					break;
-
-				case 'text':
-				default:
-					if ( isset( $product_tab_values[ $field_name ] ) ) {
-						$field_value = wc_clean( $product_tab_values[ $field_name ] );
-					}
-					break;
-			}
-
-			if ( $field_value ) {
-				update_post_meta( $product_id, $field_name, $field_value );
-			}
-			else {
-				delete_post_meta( $product_id, $field_name );
-			}
-
-		}
-		
-	}
-
-	/**
-	 * Save all the fields within the Variation Product's ATUM Section
-	 *
-	 * @since 1.4.1
-	 *
-	 * @param int $variation_id
-	 * @param int $i
-	 */
-	public function save_product_variation_data_panel( $variation_id, $i ) {
-
-		if ( isset( $_POST['variation_atum_tab'][ Globals::ATUM_CONTROL_STOCK_KEY ][ $i ] ) ) {
-			Helpers::enable_atum_control( $variation_id );
-		}
-		else {
-			Helpers::disable_atum_control( $variation_id );
-		}
-
-	}
-
-	/**
-	 * Add hooks to show and save the Purchase Price field on products
-	 *
-	 * @since 1.3.8.3
-	 */
-	public function purchase_price_hooks() {
-
-		// Add the purchase price to WC products.
-		add_action( 'woocommerce_product_options_pricing', array( $this, 'add_purchase_price_field' ) );
-		add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_purchase_price_field' ), 10, 3 );
-
-		// Save the product purchase price meta.
-		add_action( 'save_post_product', array( $this, 'save_purchase_price' ) );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_purchase_price' ) );
-	}
-
-	/**
-	 * Add the individual out stock threshold field to WC's WC's product data meta box
-	 *
-	 * @since 1.4.10
-	 *
-	 * @param int      $loop            Only for variations. The loop item number.
-	 * @param array    $variation_data  Only for variations. The variation item data.
-	 * @param \WP_Post $variation       Only for variations. The variation product.
-	 */
-	public function add_out_stock_threshold_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
-
-		global $post;
-
-		$product_type = '';
-		$meta_key     = Globals::OUT_STOCK_THRESHOLD_KEY;
-
-		if ( empty( $variation ) ) {
-			$product      = wc_get_product( $post->ID );
-			$product_type = $product->get_type();
-		}
-
-		$woocommerce_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
-
-		$product_id          = empty( $variation ) ? $post->ID : $variation->ID;
-		$out_stock_threshold = get_post_meta( $product_id, $meta_key, TRUE );
-
-		$out_stock_threshold_field_name = empty( $variation ) ? $meta_key : "variation{$meta_key}[$loop]";
-		$out_stock_threshold_field_id   = empty( $variation ) ? $meta_key : $meta_key . $loop;
-
-		// If the user is not allowed to edit "Out of stock threshold", add a hidden input.
-		if ( ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) ) : ?>
-
-			<input type="hidden" value="<?php echo esc_attr( $out_stock_threshold ?: '' ) ?>" name="<?php echo esc_attr( $out_stock_threshold_field_name ) ?>" id="<?php echo esc_attr( $out_stock_threshold_field_id ) ?>">
-
-		<?php else :
-
-			$visibility_classes = array_map( function ( $val ) {
-				return "show_if_{$val}";
-			}, Globals::get_product_types_with_stock() );
-
-			$out_stock_threshold_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
-
-			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'out_stock_threshold_classes', 'woocommerce_notify_no_stock_amount' ) );
-
-		endif;
-
-	}
-
-	/**
-	 * Save the out of stock threshold field
-	 * Rebuild: force_rebuild_stock_status if _out_stock_threshold is empty, and check that this change is not comming from options.php to avoid nestings problems.
-	 *
-	 * @since 1.4.10
-	 *
-	 * @param int $post_id    The post ID.
-	 *
-	 * @throws \Exception
-	 */
-	public function save_out_stock_threshold_field( $post_id ) {
-
-		global $pagenow;
-
-		$product = wc_get_product( $post_id );
-
-		if ( ! is_a( $product, '\WC_Product' ) || ! in_array( $product->get_type(), Globals::get_product_types_with_stock(), TRUE ) ) {
-			return;
-		}
-
-		if ( ! isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) && ! isset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) && 'options.php' !== $pagenow ) {
-			// Force product validate and save to rebuild stock_status.
-			Helpers::force_rebuild_stock_status( $product );
-
-			return;
-		}
-
-		// Always save the supplier metas (nevermind it has value or not) to be able to sort by it in List Tables.
-		if ( isset( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
-
-			$out_stock_threshold = esc_attr( $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ] );
-
-			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
-				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-				Helpers::force_rebuild_stock_status( $product );
-			}
-
-			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
-
-		}
-
-		if ( isset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] ) ) {
-
-			$out_stock_threshold = reset( $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ] );
-
-			if ( empty( $out_stock_threshold ) && 'options.php' !== $pagenow ) {
-				// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-				Helpers::force_rebuild_stock_status( $product );
-			}
-
-			update_post_meta( $post_id, Globals::OUT_STOCK_THRESHOLD_KEY, $out_stock_threshold );
-
-		}
-
-	}
-
-	/**
-	 * Add the purchase price field to WC's product data meta box
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param int      $loop             Only for variations. The loop item number.
-	 * @param array    $variation_data   Only for variations. The variation item data.
-	 * @param \WP_Post $variation        Only for variations. The variation product.
-	 */
-	public function add_purchase_price_field( $loop = NULL, $variation_data = array(), $variation = NULL ) {
-
-		if ( ! current_user_can( ATUM_PREFIX . 'edit_purchase_price' ) ) {
-			return;
-		}
-
-		$field_title = __( 'Purchase price', ATUM_TEXT_DOMAIN ) . ' (' . get_woocommerce_currency_symbol() . ')';
-
-		if ( empty( $variation ) ) {
-			$product_id    = get_the_ID();
-			$wrapper_class = '_purchase_price_field';
-			$field_id      = $field_name = Globals::PURCHASE_PRICE_KEY;
-		}
-		else {
-			$product_id    = $variation->ID;
-			$field_name    = "variation_purchase_price[$loop]";
-			$field_id      = "variation_purchase_price{$loop}";
-			$wrapper_class = "$field_name form-row form-row-first";
-		}
-
-		$field_value = (float) get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
-		$product     = wc_get_product( $product_id );
-		$price       = (float) $product->get_price();
-
-		Helpers::load_view( 'meta-boxes/product-data/purchase-price-field', compact( 'wrapper_class', 'field_title', 'field_name', 'field_id', 'field_value', 'price', 'variation', 'loop' ) );
-
-	}
-
-	/**
-	 * Save the purchase price meta on product post savings
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param int $product_id
-	 */
-	public function save_purchase_price( $product_id ) {
-
-		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-		$old_purchase_price = get_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, TRUE );
-
-		// Variables, grouped and variations.
-		if ( Helpers::is_inheritable_type( $product_type ) ) {
-
-			// Inheritable products have no prices.
-			if ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
-				update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, '' );
-			}
-			elseif ( isset( $_POST['variation_purchase_price'] ) ) {
-
-				$product_key    = array_search( $product_id, $_POST['variable_post_id'] );
-				$purchase_price = (string) isset( $_POST['variation_purchase_price'] ) ? wc_clean( $_POST['variation_purchase_price'][ $product_key ] ) : '';
-				$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
-
-				update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, $purchase_price );
-
-			}
-
-		}
-		// Rest of product types (Bypass if "_puchase_price" meta is not coming).
-		elseif ( isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ) {
-
-			$purchase_price = (string) isset( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) ? wc_clean( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) : '';
-			$purchase_price = '' === $purchase_price ? '' : wc_format_decimal( $purchase_price );
-			update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, $purchase_price );
-
-		}
-		
-		if ( isset( $purchase_price ) ) {
-			do_action( 'atum/hooks/after_save_purchase_price', $product_id, $purchase_price, $old_purchase_price );
-		}
-
 	}
 
 	/**
@@ -576,7 +212,7 @@ class Hooks {
 				$stock_html = ' (';
 				foreach ( $variations as $variation_id ) {
 					
-					$variation_product = wc_get_product( $variation_id );
+					$variation_product = wc_get_product( $variation_id ); // We don't need to use ATUM models here.
 					$variation_stock   = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
 					$variation_status  = $variation_product->get_stock_status();
 					$style             = 'color:#a44';
@@ -654,7 +290,6 @@ class Hooks {
 		<?php
 	}
 
-
 	/**
 	 * Add/Remove the "Out of stock" date when WooCommerce updates the stock of a product
 	 *
@@ -664,21 +299,30 @@ class Hooks {
 	 */
 	public function record_out_of_stock_date( $product ) {
 
-		if ( in_array( $product->get_type(), Globals::get_product_types() ) ) {
+		// Handle the products managed by WC and from any of the allowed product types.
+		if ( $product->managing_stock() && in_array( $product->get_type(), Globals::get_product_types() ) ) {
 
-			$current_stock         = $product->get_stock_quantity();
-			$out_of_stock_date_key = Globals::OUT_OF_STOCK_DATE_KEY;
-			$product_id            = $product->get_id();
+			// Reload the product using the ATUM data models.
+			$product = Helpers::get_atum_product( $product );
 
-			if ( ! $current_stock ) {
-				update_post_meta( $product_id, $out_of_stock_date_key, Helpers::date_format( current_time( 'timestamp' ), TRUE ) );
-				Helpers::delete_transients();
+			// Do not record the date to products not controlled by ATUM.
+			if ( Helpers::is_atum_controlling_stock( $product ) ) {
+
+				$current_stock  = $product->get_stock_quantity();
+				$out_stock_date = NULL;
+
+				if ( ! $current_stock ) {
+					$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+				}
+
+				/* @noinspection PhpUndefinedMethodInspection */
+				$product->set_out_stock_date( $out_stock_date );
+				/* @noinspection PhpUndefinedMethodInspection */
+				$product->save_atum_data();
+
 			}
-			elseif ( get_post_meta( $product_id, $out_of_stock_date_key, TRUE ) ) {
-				// Meta key not needed anymore for this product.
-				delete_post_meta( $product_id, $out_of_stock_date_key );
-				Helpers::delete_transients();
-			}
+
+			AtumCache::delete_transients();
 
 		}
 
@@ -692,7 +336,7 @@ class Hooks {
 	 * @param \WC_Product $product   The product.
 	 */
 	public function delete_transients( $product ) {
-		Helpers::delete_transients();
+		AtumCache::delete_transients();
 		
 	}
 
@@ -707,10 +351,7 @@ class Hooks {
 
 		// Maybe allow decimals for WC products' stock quantity.
 		if ( Globals::get_stock_decimals() > 0 ) {
-
-			// Add min value to the quantity field (WC default = 1).
-			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
-
+			
 			// Add step value to the quantity field (WC default = 1).
 			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
 
@@ -748,7 +389,7 @@ class Hooks {
 		
 		return Helpers::get_input_step();
 	}
-	
+
 	/**
 	 * Customise the "Add to cart" messages to allow decimal places
 	 *
@@ -770,7 +411,7 @@ class Hooks {
 			$count   += $qty;
 		}
 
-		$titles = array_filter( $titles );
+		$titles     = array_filter( $titles );
 		/* translators: the titles of products added to the cart */
 		$added_text = sprintf( _n( '%s has been added to your cart.', '%s have been added to your cart.', $count, ATUM_TEXT_DOMAIN ), wc_format_list_of_items( $titles ) );
 
@@ -860,9 +501,7 @@ class Hooks {
 	 * @return mixed
 	 */
 	public function get_custom_stock_threshold( $pre, $option, $default ) {
-		
 		return is_null( $this->stock_threshold ) ? $pre : $this->stock_threshold;
-		
 	}
 	
 	/**
@@ -875,11 +514,15 @@ class Hooks {
 	public function maybe_change_stock_threshold( $product ) {
 		
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
-			
-			unset( $this->stock_threshold );
 
-			$product_id             = $product->get_id();
-			$out_of_stock_threshold = get_post_meta( $product_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+			// Ensure that is the product uses the ATUM models.
+			$product = Helpers::get_atum_product( $product );
+			
+			$this->stock_threshold = NULL;
+
+			$product_id = $product->get_id();
+			/* @noinspection PhpUndefinedMethodInspection */
+			$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 			// Allow to be hooked externally.
 			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product_id );
@@ -887,8 +530,11 @@ class Hooks {
 			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 				
 				$this->stock_threshold = (int) $out_of_stock_threshold;
+				$this->add_stock_status_threshold();
 				
-				add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+				$product->save();
+				
+				$this->remove_stock_status_threshold();
 				
 			}
 			
@@ -905,38 +551,58 @@ class Hooks {
 	 */
 	public function maybe_change_variation_stock_status( $variation_id, $i ) {
 
-		unset( $this->stock_threshold );
-		$out_of_stock_threshold = get_post_meta( $variation_id, Globals::OUT_STOCK_THRESHOLD_KEY, TRUE );
+		$this->stock_threshold = NULL;
+
+		$product = Helpers::get_atum_product( $variation_id );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 		// Allow to be hooked externally.
 		$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $variation_id );
 
 		if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
-			
+
+			// TODO: TEST THIS WITH STOCK DECIMALS.
 			$this->stock_threshold = (int) $out_of_stock_threshold;
 			
-			add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+			$this->add_stock_status_threshold();
 
-			$product = wc_get_product( $variation_id );
 			$product->save();
-
-			remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+			
+			$this->remove_stock_status_threshold();
 			
 		}
 		
 	}
 	
 	/**
+	 * Add pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced.
+	 *
+	 * We don't need the parameter, so function can be called from various places.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param integer $product_id
+	 */
+	public function add_stock_status_threshold( $product_id = 0 ) {
+		
+		add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ), 10, 3 );
+		
+	}
+	
+	/**
 	 * Remove pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced
 	 *
-	 * @since 1.4.15
+	 * We don't need the parameter, so function can be called from various places.
 	 *
-	 * @param \WC_Product       $product
-	 * @param \WC_Data_Store_WP $data_store
+	 * @since 1.5.0
+	 *
+	 * @param integer $product_id
 	 */
-	public function remove_order_stock_status_filter( $product, $data_store ) {
+	public function remove_stock_status_threshold( $product_id = 0 ) {
 		
 		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_stock_threshold' ) );
+		
 	}
 	
 	/**
@@ -963,6 +629,7 @@ class Hooks {
 		
 		return $links;
 	}
+
 	
 	/********************
 	 * Instance methods

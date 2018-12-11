@@ -20,6 +20,7 @@
 				
 				this.$container = $('#atum_order_items');
 				this.$itemsBlocker = this.$container.find('.items-blocker');
+				this.areItemsSelectable = atumOrder.enableSelectItems;
 				this.stupidtable.init();
 				this.isEditable = $('#atum_order_is_editable').val();
 				this.askRemoval = true;
@@ -37,8 +38,6 @@
 					.on( 'click', 'button.calculate-action', this.recalculate )
 					.on( 'click', 'a.edit-atum-order-item', this.edit_item )
 					.on( 'click', 'a.delete-atum-order-item', this.delete_item )
-					.on( 'click', 'tr.item, tr.fee, tr.shipping', this.select_row )
-					.on( 'click', 'tr.item :input, tr.fee :input, tr.shipping :input, tr.item a, tr.fee a, tr.shipping a', this.select_row_child )
 					
 					// Bulk actions
 					.on( 'click', 'button.bulk-delete-items', this.do_bulk_delete )
@@ -65,6 +64,12 @@
 					.on( 'click', 'button.remove-atum-order-item-meta', this.item_meta.remove )
 					.on( 'click', 'button.set-purchase-price', this.item_meta.set_purchase_price );
 				
+				if (this.areItemsSelectable) {
+					this.$container
+						.on('click', 'tr.item, tr.fee, tr.shipping', this.select_row)
+						.on('click', 'tr.item :input, tr.fee :input, tr.shipping :input, tr.item a, tr.fee a, tr.shipping a', this.select_row_child);
+				}
+				
 				$(document.body)
 					.on( 'wc_backbone_modal_loaded', this.backbone.init )
 					.on( 'wc_backbone_modal_response', this.backbone.response );
@@ -77,6 +82,18 @@
 				
 				// Ask for importing the order items after linking an order
 				$('#wc_order').change(this.importOrderItems);
+				
+				// Change button page-title-action position
+				$('.wp-heading-inline').append($('.page-title-action'));
+				$('.page-title-action').show();
+				
+				// Footer position
+				$(window).on('load', function () {
+					if ( $('.footer-box').hasClass('no-style') ) {
+						$('#wpfooter').css('position', 'relative').show();
+						$('#wpcontent').css('min-height', '95vh');
+					}
+				});
 				
 			},
 			
@@ -859,6 +876,7 @@
 				this.$container.find('[data-toggle="tooltip"]').tooltip({
 					container: 'body'
 				});
+				
 			},
 			
 			toggleExtraFields: function() {
@@ -884,29 +902,15 @@
 			toggleSupplierField: function() {
 				
 				var $body          = $('body'),
-				    $dropdownField = $('.dropdown_supplier').parent(),
-				    blockMultiple  = ($('#atum_order_has_multiple_suppliers').val() === 'false' && !$body.hasClass('post-new-php'));
+				    $dropdownField = $('.dropdown_supplier').parent();
 				
 				if ($(this).is(':checked')) {
 					$body.addClass('allow-multiple-suppliers');
 					$dropdownField.slideUp();
-					if ( blockMultiple ) {
-						atum_order_items.$itemsBlocker.removeClass('unblocked');
-					}
-					else {
-						atum_order_items.$itemsBlocker.addClass('unblocked');
-					}
 				}
 				else {
 					$body.removeClass('allow-multiple-suppliers');
 					$dropdownField.slideDown();
-					
-					if ($('#supplier').val() && blockMultiple) {
-						atum_order_items.$itemsBlocker.addClass('unblocked');
-					}
-					else {
-						atum_order_items.$itemsBlocker.removeClass('unblocked');
-					}
 				}
 				
 			},
@@ -1069,7 +1073,13 @@
 		
 		// Init switchers
 		$('.js-switch').each(function () {
-			new Switchery(this, { size: 'small' });
+			new Switchery(this, {
+				size               : 'small',
+				color              : '#d5f5ba',
+				secondaryColor     : '#e9ecef',
+				jackColor          : '#69c61d',
+				jackSecondaryColor : '#adb5bd'
+			});
 		});
 	
 	});

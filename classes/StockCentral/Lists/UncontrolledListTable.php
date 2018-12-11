@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumUncontrolledListTable;
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 
@@ -50,12 +49,6 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 	 * }
 	 */
 	public function __construct( $args = array() ) {
-
-		$this->taxonomies[] = array(
-			'taxonomy' => 'product_type',
-			'field'    => 'slug',
-			'terms'    => Globals::get_product_types(),
-		);
 
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
@@ -150,7 +143,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				'symbol'   => get_woocommerce_currency_symbol(),
 				'currency' => self::$default_currency,
 				'tooltip'  => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
-			) );
+			), $this->product );
 			
 			$regular_price = self::get_editable_column( $args );
 			
@@ -172,7 +165,6 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 	protected function column__sale_price( $item ) {
 
 		$sale_price = self::EMPTY_COL;
-		$product_id = $this->get_current_product_id();
 		
 		if ( $this->allow_calcs ) {
 			
@@ -183,9 +175,10 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 			] ) : $sale_price;
 			
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_from = ( $date = get_post_meta( $product_id, '_sale_price_dates_from', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
+			$sale_price_dates_from = $this->product->get_date_on_sale_from( 'edit' ) && ( $date = $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
+
 			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInTernaryCondition
-			$sale_price_dates_to = ( $date = get_post_meta( $product_id, '_sale_price_dates_to', TRUE ) ) ? date( 'Y-m-d', $date ) : '';
+			$sale_price_dates_to = $this->product->get_date_on_sale_to( 'edit' ) && ( $date = $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
 			
 			$args = apply_filters( 'atum/uncontrolled_stock_central_list/args_sale_price', array(
 				'meta_key'   => 'sale_price',
@@ -213,7 +206,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 						'class'       => 'datepicker to',
 					),
 				),
-			) );
+			), $this->product );
 			
 			$sale_price = self::get_editable_column( $args );
 			

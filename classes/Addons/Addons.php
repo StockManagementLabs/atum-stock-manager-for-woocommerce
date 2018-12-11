@@ -14,6 +14,7 @@ namespace Atum\Addons;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumException;
 use Atum\Inc\Helpers;
 
@@ -250,8 +251,8 @@ class Addons {
 	 */
 	private function get_addons_list() {
 		
-		$transient_name = Helpers::get_transient_identifier( [], 'addons_list' );
-		$addons         = Helpers::get_transient( $transient_name );
+		$transient_name = AtumCache::get_transient_key( 'addons_list' );
+		$addons         = AtumCache::get_transient( $transient_name );
 		
 		if ( ! $addons ) {
 			
@@ -294,7 +295,7 @@ class Addons {
 				return FALSE;
 			}
 			
-			Helpers::set_transient( $transient_name, $addons, DAY_IN_SECONDS );
+			AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS );
 			
 		}
 		
@@ -423,8 +424,8 @@ class Addons {
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug ) {
 
-		$transient_name = Helpers::get_transient_identifier( [ $addon_name ], 'addon_status' );
-		$addon_status   = Helpers::get_transient( $transient_name, TRUE );
+		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
+		$addon_status   = AtumCache::get_transient( $transient_name, TRUE );
 
 		if ( empty( $addon_status ) ) {
 
@@ -493,7 +494,7 @@ class Addons {
 					break;
 			}
 
-			Helpers::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
+			AtumCache::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
 
 		}
 
@@ -509,8 +510,8 @@ class Addons {
 	 * @param string $addon_name
 	 */
 	public static function delete_status_transient( $addon_name ) {
-		$transient_name = Helpers::get_transient_identifier( [ $addon_name ], 'addon_status' );
-		Helpers::delete_transients( $transient_name );
+		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
+		AtumCache::delete_transients( $transient_name );
 	}
 
 	/* @noinspection PhpDocRedundantThrowsInspection */

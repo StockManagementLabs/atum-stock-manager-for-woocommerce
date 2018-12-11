@@ -4,7 +4,7 @@
  *
  * @since 1.4.10
  *
- * @var array    $out_stock_threshold_classes
+ * @var array    $visibility_classes
  * @var string   $out_stock_threshold_field_id
  * @var string   $out_stock_threshold_field_name
  * @var int      $out_stock_threshold
@@ -18,13 +18,15 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
 
+$visibility_classes = implode( ' ', $visibility_classes );
+
 if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) : ?>
 
 	<?php if ( empty( $variation ) ) : ?>
-	<div class="options_group <?php echo esc_attr( implode( ' ', $out_stock_threshold_classes ) ) ?>">
+	<div class="options_group <?php echo esc_attr( $visibility_classes ) ?>">
 	<?php endif; ?>
 
-		<p class="form-field _out_stock_threshold_field <?php if ( ! empty( $variation ) ) echo ' show_if_variation_manage_stock form-row form-row-last' ?>">
+		<p class="form-field _out_stock_threshold_field <?php echo esc_attr( $visibility_classes ) ?><?php if ( ! empty( $variation ) ) echo ' show_if_variation_manage_stock form-row form-row-last' ?>">
 			<label for="<?php echo esc_attr( $out_stock_threshold_field_id ) ?>">
 				<?php esc_attr_e( 'Out of stock threshold', ATUM_TEXT_DOMAIN ) ?>
 			</label>

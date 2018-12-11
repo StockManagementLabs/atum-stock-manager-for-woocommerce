@@ -24,7 +24,7 @@ class LogItem extends AtumOrderItemModel {
 	 *
 	 * @var string
 	 */
-	protected $cache_key = 'inventory-log-items';
+	protected $cache_key = 'inventory-log-item';
 
 	/**
 	 * LogItem constructor

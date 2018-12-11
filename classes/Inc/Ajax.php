@@ -17,11 +17,11 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
-use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
+use Atum\Legacy\AjaxLegacyTrait;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
@@ -132,6 +132,12 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
+
+		// Change ATUM settings menu style.
+		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
+
+		// Change sticky columns settting.
+		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
 
 	}
 
@@ -244,7 +250,7 @@ final class Ajax {
 		ob_start();
 		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( esc_attr( $_POST['sortby'] ) ) );
 
-		wp_die( ob_get_clean() );
+		wp_die( ob_get_clean() ); // WPCS: XSS ok.
 
 	}
 
@@ -412,7 +418,7 @@ final class Ajax {
 		
 		foreach ( $data as $product_id => &$product_meta ) {
 			
-			Helpers::update_product_meta( $product_id, $product_meta );
+			Helpers::update_product_data( $product_id, $product_meta );
 			
 		}
 		
@@ -449,28 +455,28 @@ final class Ajax {
 		switch ( $_POST['bulk_action'] ) {
 			case 'uncontrol_stock':
 				foreach ( $ids as $id ) {
-					Helpers::disable_atum_control( $id );
+					Helpers::update_atum_control( $id, 'disable' );
 				}
 
 				break;
 
 			case 'control_stock':
 				foreach ( $ids as $id ) {
-					Helpers::enable_atum_control( $id );
+					Helpers::update_atum_control( $id );
 				}
 
 				break;
 
 			case 'unmanage_stock':
 				foreach ( $ids as $id ) {
-					Helpers::disable_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( $id, 'disable' );
 				}
 
 				break;
 
 			case 'manage_stock':
 				foreach ( $ids as $id ) {
-					Helpers::enable_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( $id );
 				}
 
 				break;
@@ -505,8 +511,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$key        = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name = esc_attr( $_POST['addon'] );
+		$key        = esc_attr( $_POST['key'] );
 
 		if ( ! $addon_name || ! $key ) {
 			wp_send_json_error( __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN ) );
@@ -627,8 +633,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$key           = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $key ) {
@@ -726,8 +732,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$key           = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $key ) {
@@ -786,9 +792,9 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] ); // WPCS: CSRF ok.
-		$addon_slug    = esc_attr( $_POST['slug'] ); // WPCS: CSRF ok.
-		$key           = esc_attr( $_POST['key'] ); // WPCS: CSRF ok.
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$addon_slug    = esc_attr( $_POST['slug'] );
+		$key           = esc_attr( $_POST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $addon_slug || ! $key ) {
@@ -826,6 +832,7 @@ final class Ajax {
 	 * @since 1.4.4
 	 */
 	public function dismiss_notice() {
+
 		check_ajax_referer( 'dismiss-atum-notice', 'token' );
 
 		if ( ! empty( $_POST['key'] ) ) {
@@ -836,6 +843,14 @@ final class Ajax {
 	}
 
 	/**
+	 * If the site is not using the new tables, use the legacy methods
+	 *
+	 * @since 1.5.0
+	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 */
+	use AjaxLegacyTrait;
+
+	/**
 	 * Seach for products from enhanced selects
 	 *
 	 * @package ATUM Orders
@@ -843,6 +858,17 @@ final class Ajax {
 	 * @since 1.3.7
 	 */
 	public function search_products() {
+
+		/**
+		 * If the site is not using the new tables, use the legacy method
+		 *
+		 * @since 1.5.0
+		 * @deprecated Only for backwards compatibility and will be removed in a future version.
+		 */
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			$this->search_products_legacy();
+			return;
+		}
 
 		check_ajax_referer( 'search-products', 'security' );
 
@@ -861,43 +887,31 @@ final class Ajax {
 		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 		$meta_join     = $meta_where = array();
 		$type_where    = '';
-		$join_counter  = 1;
 
-		// Search by meta keys.
-		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', [ '_sku' ] ) );
+		// Search by SKU.
+		$meta_join[]  = "LEFT JOIN {$wpdb->prefix}wc_products wcd ON posts.ID = wcd.product_id";
+		$meta_where[] = $wpdb->prepare( 'OR wcd.sku LIKE %s', $like_term );
 
-		foreach ( $searched_metas as $searched_meta ) {
-			$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
-			$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // WPCS: unprepared SQL ok.
-			$join_counter ++;
-		}
+		// Search by Supplier SKU.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$meta_join[]     = "LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id";
+		$meta_where[]    = $wpdb->prepare( 'OR apd.supplier_sku LIKE %s', $like_term );
 
 		// Exclude variable products from results.
 		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) );
 
 		if ( ! empty( $excluded_types ) ) {
 
-			$excluded_type_terms = array();
-
-			foreach ( $excluded_types as $excluded_type ) {
-				$excluded_type_terms[] = get_term_by( 'slug', $excluded_type, 'product_type' );
-			}
-
-			$excluded_type_terms = wp_list_pluck( array_filter( $excluded_type_terms ), 'term_taxonomy_id' );
-
 			$type_where = "AND posts.ID NOT IN (
-				SELECT p.ID FROM $wpdb->posts p
-				LEFT JOIN $wpdb->term_relationships tr ON p.ID = tr.object_id
-				WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
-				AND p.post_status IN ('" . implode( "','", $post_statuses ) . "')
-				AND tr.term_taxonomy_id IN (" . implode( ',', $excluded_type_terms ) . ')
-			)';
+				SELECT wpd1.product_id FROM {$wpdb->prefix}wc_products wpd1		
+				WHERE wpd1.type IN ('" . implode( "','", $excluded_types ) . "')
+			)";
 
 		}
-
-		$query = $wpdb->prepare( "
-			SELECT DISTINCT posts.ID FROM $wpdb->posts posts
-			" . implode( "\n", $meta_join ) . '
+		
+		$query_select = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
+		
+		$where_clause = $wpdb->prepare( '
 			WHERE (
 				posts.post_title LIKE %s
 				OR posts.post_content LIKE %s
@@ -905,12 +919,16 @@ final class Ajax {
 			)
 			AND posts.post_type IN ('" . implode( "','", $post_types ) . "')
 			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-			" . $type_where . '
-			ORDER BY posts.post_parent ASC, posts.post_title ASC
-			',
+			" . $type_where . ' ',
 			$like_term,
 			$like_term
 		); // WPCS: unprepared SQL ok.
+		
+		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
+		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
+		
+		$query = "$query_select $where_clause
+			ORDER BY posts.post_parent ASC, posts.post_title ASC";
 
 		$product_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
 
@@ -1073,9 +1091,9 @@ final class Ajax {
 
 		$query = $wpdb->prepare(
 			"SELECT DISTINCT ID, post_title from $wpdb->posts 
-			 WHERE post_type = %s $where
-			 AND post_status IN ('" . implode( "','", $post_statuses ) . "')
-			 LIMIT %d",
+			WHERE post_type = %s $where
+			AND post_status IN ('" . implode( "','", $post_statuses ) . "')
+			LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results
 		); // WPCS: unprepared SQL ok.
@@ -1237,7 +1255,7 @@ final class Ajax {
 				}
 
 				// Add the product to the ATUM Order.
-				$item    = $atum_order->add_product( wc_get_product( $item_to_add ) );
+				$item    = $atum_order->add_product( Helpers::get_atum_product( $item_to_add ) );
 				$item_id = $item->get_id();
 				$class   = 'new_row';
 				
@@ -1323,7 +1341,7 @@ final class Ajax {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
 			}
 
-			$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
+			$shipping_methods = wc()->shipping() ? wc()->shipping->load_shipping_methods() : array();
 
 			// Add new shipping cost line item.
 			$item    = $atum_order->add_shipping_cost();
@@ -1607,8 +1625,16 @@ final class Ajax {
 				$product = $atum_order_item->get_product();
 
 				if ( $product && $product->exists() && $product->managing_stock() && isset( $quantities[ $item_id ] ) && $quantities[ $item_id ] > 0 ) {
-
-					$old_stock    = $product->get_stock_quantity();
+					
+					$old_stock = $product->get_stock_quantity();
+					
+					// if stock is null but WC is managing stock.
+					if ( is_null( $old_stock ) ) {
+						$old_stock = 0;
+						wc_update_product_stock( $product, $old_stock );
+						
+					}
+					
 					$stock_change = apply_filters( 'atum/ajax/restore_atum_order_stock_quantity', $quantities[ $item_id ], $item_id );
 					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
 					$item_name    = $product->get_sku() ? $product->get_sku() : $product->get_id();
@@ -1672,13 +1698,16 @@ final class Ajax {
 
 		/* @noinspection PhpUndefinedMethodInspection */
 		$product_id = $atum_order_item->get_variation_id() ?: $atum_order_item->get_product_id();
-		$product    = wc_get_product( $product_id );
+		$product    = Helpers::get_atum_product( $product_id );
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
-		update_post_meta( $product_id, Globals::PURCHASE_PRICE_KEY, wc_format_decimal( $_POST[ Globals::PURCHASE_PRICE_KEY ] ) );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product->save_atum_data();
 
 		wp_send_json_success();
 
@@ -1803,10 +1832,9 @@ final class Ajax {
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
 			}
-
-			if ( $atum_order && in_array( $status, array_keys( AtumOrderPostType::get_statuses() ) ) ) {
+			
+			if ( $atum_order ) {
 				$atum_order->update_status( $status );
-				do_action( 'atum/atum_orders/edit_status', $atum_order->get_id(), $status );
 			}
 
 		}
@@ -1835,7 +1863,7 @@ final class Ajax {
 			wp_send_json_error( __( 'No status specified', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$product = wc_get_product( absint( $_POST['parent_id'] ) );
+		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
@@ -1845,14 +1873,7 @@ final class Ajax {
 		$variations = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
-
-			if ( 'uncontrolled' === $status ) {
-				Helpers::disable_atum_control( $variation_id );
-			}
-			else {
-				Helpers::enable_atum_control( $variation_id );
-			}
-
+			Helpers::update_atum_control( $variation_id, ( 'uncontrolled' === $status ? 'enable' : 'disable' ) );
 		}
 
 		wp_send_json_success( __( 'All the variations were updated successfully', ATUM_TEXT_DOMAIN ) );
@@ -1888,10 +1909,10 @@ final class Ajax {
 			else {
 
 				$locations_tree = wp_list_categories( array(
-					'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-					'include'  => wp_list_pluck( $locations, 'term_id' ),
-					'title_li' => '',
-					'echo'     => FALSE,
+					'taxonomy'   => Globals::PRODUCT_LOCATION_TAXONOMY,
+					'include'    => wp_list_pluck( $locations, 'term_id' ),
+					'title_li'   => '',
+					'echo'       => FALSE,
 				) );
 
 				// Fix the list URLs to show the list of products within a location.
@@ -1905,9 +1926,10 @@ final class Ajax {
 
 			// Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
 			$locations_tree = wp_list_categories( array(
-				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
-				'title_li' => '',
-				'echo'     => FALSE,
+				'taxonomy'   => Globals::PRODUCT_LOCATION_TAXONOMY,
+				'title_li'   => '',
+				'echo'       => FALSE,
+				'hide_empty' => FALSE,
 			) );
 
 		}
@@ -1957,7 +1979,7 @@ final class Ajax {
 		}
 
 		$option = esc_attr( $_POST['option'] );
-
+		
 		if ( in_array( $option, [ 'manage', 'unmanage' ] ) ) {
 			$manage_status = 'manage' === $option ? 'yes' : 'no';
 			$this->change_status_meta( '_manage_stock', $manage_status );
@@ -2007,25 +2029,13 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
 
-		$this->clear_out_stock_threshold_meta();
-
-		wp_send_json_error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
-
-	}
-
-	/**
-	 * Clear all the postmeta with OUT_STOCK_THRESHOLD_KEY, and rebuild all the _stock_status if
-	 * required to comeback to the $woocommerce_notify_no_stock_amount
-	 *
-	 * @since 1.4.10
-	 */
-	private function clear_out_stock_threshold_meta() {
-
-		Helpers::force_rebuild_stock_status( $product = NULL, $clean_meta = TRUE, $all = TRUE );
+		Helpers::force_rebuild_stock_status( NULL, TRUE, TRUE );
 
 		if ( FALSE === Helpers::is_any_out_stock_threshold_set() ) {
 			wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
 		}
+
+		wp_send_json_error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
 
 	}
 
@@ -2033,6 +2043,9 @@ final class Ajax {
 	 * Change the value of a meta key for all products at once
 	 *
 	 * @since 1.4.5
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
 	 *
 	 * @param string $meta_key
 	 * @param string $status
@@ -2042,34 +2055,130 @@ final class Ajax {
 		global $wpdb;
 		$wpdb->hide_errors();
 
-		// If there are products without the manage_stock meta key, insert it for them.
-		$insert_success = $wpdb->query( $wpdb->prepare("
-			INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
-			SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts as posts
-            LEFT JOIN $wpdb->postmeta as pm ON posts.ID = pm.post_id
-            WHERE posts.post_type IN ('product', 'product_variation')
-            AND posts.ID NOT IN (
-                SELECT DISTINCT post_id FROM $wpdb->postmeta
-                WHERE meta_key = %s
-            )",
-			$meta_key,
-			$status,
-			$meta_key
-		) );
+		$insert_success = $update_success = $stock_success = NULL;
 
-		// For the rest, just update those that don't have the right status.
-		$update_success = $wpdb->query( $wpdb->prepare("
-			UPDATE $wpdb->postmeta SET meta_value = %s		        		
-            WHERE meta_key = %s 
-            AND meta_value != %s",
-			$status,
-			$meta_key,
-			$status
-		) );
+		if ( Globals::ATUM_CONTROL_STOCK_KEY === $meta_key ) {
 
-		if ( FALSE !== $insert_success && FALSE !== $update_success ) {
+			$meta_value      = 'yes' === $status ? 1 : 0;
+			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			$update_success = $wpdb->query( $wpdb->prepare("
+				UPDATE $atum_data_table SET atum_controlled = %d		        		
+            	WHERE atum_controlled != %d",
+				$meta_value,
+				$meta_value
+			) ); // WPCS: unprepared SQL ok.
+
+		}
+		else {
+
+			// If there are products without the manage_stock meta key, insert it for them.
+			$insert_success = $wpdb->query( $wpdb->prepare("
+				INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
+				SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts AS posts
+	            LEFT JOIN $wpdb->postmeta AS pm ON posts.ID = pm.post_id
+	            WHERE posts.post_type IN ('product', 'product_variation')
+	            AND posts.ID NOT IN (
+	                SELECT DISTINCT post_id FROM $wpdb->postmeta
+	                WHERE meta_key = %s
+	            )",
+				$meta_key,
+				$status,
+				$meta_key
+			) );
+
+			// For the rest, just update those that don't have the right status.
+			$update_success = $wpdb->query( $wpdb->prepare("
+				UPDATE $wpdb->postmeta SET meta_value = %s		        		
+	            WHERE meta_key = %s AND meta_value != %s",
+				$status,
+				$meta_key,
+				$status
+			) );
+
+			// Ensure there is no _stock set to 0 for managed products.
+			if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
+
+				if ( Helpers::is_using_new_wc_tables() ) {
+					
+					$stock_success = $wpdb->query( "
+						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
+		                WHERE stock_quantity IS NULL
+		                AND product_id IN (
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                )
+		            " ); // WPCS: unprepared SQL ok.
+				}
+				else {
+
+					$stock_success = $wpdb->query( "
+						UPDATE {$wpdb->postmeta} SET meta_value = '0'
+		                WHERE meta_key = '_stock'
+		                AND post_id IN (
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                )
+		            " ); // WPCS: unprepared SQL ok.
+
+				}
+				
+			}
+
+		}
+
+		// If all goes fine, die with the message, if not, just do nothing (the next method will display the error).
+		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
 			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
 		}
+
+	}
+
+	/**
+	 * Change the value of a meta key for show dark o light menu theme for ATUM settings
+	 *
+	 * @package Settings
+	 *
+	 * @since 1.5.0
+	 */
+	public function change_settings_menu_style() {
+
+		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
+
+		$menu_theme = $_POST['data']['menu_theme'];
+		$user_id    = get_current_user_id();
+
+		if ( $menu_theme ) {
+			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
+		}
+		else {
+			update_user_meta( $user_id, 'menu_settings_theme', 'light' );
+		}
+
+		wp_send_json_success( __( 'Menu theme were updated successfully', ATUM_TEXT_DOMAIN ) );
+	}
+
+	/**
+	 * Change the List Table style status for the current user
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.5.0
+	 */
+	public function change_table_style_user_meta() {
+
+		check_ajax_referer( 'atum-list-table-style', 'token' );
+
+		if ( ! isset( $_POST['enabled'], $_POST['feature'] ) ) {
+			wp_die( -1 );
+		}
+
+		$value = wc_bool_to_string( $_POST['enabled'] );
+		$key   = 'sticky-columns' === $_POST['feature'] ? 'enabled_sc_sticky_columns' : 'enabled_sc_sticky_header';
+
+		Helpers::set_atum_user_meta( $key, $value );
+
+		wp_die();
 
 	}
 
