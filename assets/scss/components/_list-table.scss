@@ -1095,10 +1095,12 @@
 		border: none;
 		background-color: $primary;
 		color: $white;
-		padding: 2px 2px 0;
+		padding: 2px;
 		cursor: pointer;
 		z-index: 999;
 		margin-left: 10px;
+		width: 26px;
+		height: 26px;
 		@include transition(0.2s ease-in-out);
 		
 		@media all and (max-width: $screen-xs) {

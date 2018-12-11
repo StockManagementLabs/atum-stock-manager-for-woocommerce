@@ -5143,10 +5143,12 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border: none;
   background-color: #00B8DB;
   color: #fff;
-  padding: 2px 2px 0;
+  padding: 2px;
   cursor: pointer;
   z-index: 999;
   margin-left: 10px;
+  width: 26px;
+  height: 26px;
   -webkit-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
