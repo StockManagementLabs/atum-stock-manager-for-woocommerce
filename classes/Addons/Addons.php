@@ -424,6 +424,7 @@ class Addons {
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug ) {
 
+		// TODO: CLEAR TRANSIENTS WHEN AN ADD-ON IS DISABLED
 		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
 		$addon_status   = AtumCache::get_transient( $transient_name, TRUE );
 

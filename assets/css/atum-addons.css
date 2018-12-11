@@ -1861,8 +1861,9 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme .show-key i {
-  font-size: 15px;
-  padding-top: 17px;
+  position: relative;
+  font-size: 17px;
+  top: 17px;
   color: #00B8DB;
 }
 

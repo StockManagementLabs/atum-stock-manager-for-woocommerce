@@ -78,25 +78,25 @@ use Atum\Addons\Addons;
 							<div class="theme-actions <?php echo esc_attr( implode( ' ', $addon_classes ) ) ?>">
 
 								<?php if ( $is_coming_soon_addon ) : ?>
-									<span><?php esc_html_e( 'coming soon', ATUM_TEXT_DOMAIN ) ?></span>
+									<span><?php esc_html_e( 'Coming Soon', ATUM_TEXT_DOMAIN ) ?></span>
 								<?php elseif ( 'valid' === $addon_status['status'] ) : ?>
 
 									<?php if ( ! $addon_status['installed'] ) : ?>
 										<button type="button" title="<?php esc_attr_e( 'Click to install', ATUM_TEXT_DOMAIN ) ?>" class="button install-addon"><?php esc_html_e( 'Install', ATUM_TEXT_DOMAIN ) ?></button>
 									<?php else : ?>
-										<span><?php esc_html_e( 'installed', ATUM_TEXT_DOMAIN ) ?></span>
+										<span><?php esc_html_e( 'Installed', ATUM_TEXT_DOMAIN ) ?></span>
 									<?php endif ?>
 
 								<?php elseif ( 'inactive' === $addon_status['status'] ) : ?>
-									<span><?php esc_html_e( 'inactive key', ATUM_TEXT_DOMAIN ) ?></span>
+									<span><?php esc_html_e( 'Inactive Key', ATUM_TEXT_DOMAIN ) ?></span>
 								<?php elseif ( 'invalid' === $addon_status['status'] && $addon_status['key'] ) : ?>
-									<span><?php esc_html_e( 'invalid key', ATUM_TEXT_DOMAIN ) ?></span>
+									<span><?php esc_html_e( 'Invalid Key', ATUM_TEXT_DOMAIN ) ?></span>
 								<?php endif ?>
 							</div>
 
 							<?php if ( ! $is_coming_soon_addon ) : ?>
 								<div class="show-key" title="<?php esc_attr_e( 'Show/Hide the license key', ATUM_TEXT_DOMAIN ) ?>">
-									<i class="atum-icon atmi-tree"></i>
+									<i class="atum-icon atmi-license"></i>
 								</div>
 							<?php endif ?>
 
