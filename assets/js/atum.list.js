@@ -756,6 +756,8 @@
 					$searchColumnBtn.trigger('search_column_data_changed');
 				}
 				
+				$('.dropdown-toggle').attr('data-original-title', $(this).html());
+				
 			});
 			
 			$(document).click(function() {

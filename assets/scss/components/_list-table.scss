@@ -357,6 +357,10 @@
 		}
 	}
 	
+	&.search-mc {
+		width: 300px;
+	}
+	
 	#post-search-input {
 		border: none;
 		box-shadow: none;
@@ -476,6 +480,11 @@
 		}
 	}
 	
+	.atum-post-search-mc {
+		width: 130px;
+		max-width: 130px;
+	}
+	
 	.input-group {
 		border-radius: 5px;
 		border: solid 1px $gray-200;
@@ -530,14 +539,25 @@
 		}
 	}
 	
+	.dropdown-toggle-mc {
+		width: 130px;
+	}
+	
 	.dropdown-menu{
 		margin-top: 0px;
 		right: 0px;
-		
+		box-shadow: $dropdown-box-shadow;
+		background-color: $white;
+		border: none;
+		border-radius: 5px;
 	}
 	
 	.dropdown-item{
 		width: auto;
+		&.active, &:focus, &:active {
+			background-color: $blue-light;
+			color: $blue;
+		}
 	}
 	
 }
@@ -896,6 +916,10 @@
 			@media all and (max-width: 782px) {
 				width: 100%;
 			}
+		}
+		
+		.nav-mc {
+			width: calc( 100% - 360px );
 		}
 	}
 	
