@@ -36,13 +36,6 @@ class Suppliers {
 	 * @var array
 	 */
 	protected $labels = array();
-
-	/**
-	 * The ATUM product data used in WP_Query
-	 *
-	 * @var array
-	 */
-	protected static $query_data = array();
 	
 	/**
 	 * The Supplier post type name
@@ -489,19 +482,6 @@ class Suppliers {
 
 		return FALSE;
 
-	}
-
-	/**
-	 * Customize the WP_Query to handle ATUM product data
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $pieces
-	 *
-	 * @return array
-	 */
-	public static function supplier_data_query_clauses( $pieces ) {
-		return Helpers::product_data_query_clauses( self::$query_data, $pieces );
 	}
 	
 	/**

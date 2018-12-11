@@ -584,10 +584,10 @@ final class WidgetHelpers {
 				'fields'         => 'ids',
 				'post__in'       => $products,
 			);
-
-			self::$wc_query_data[] = array(
-				'key'     => 'stock_status',
-				'value'   => array('instock', 'onbackorder'),
+			
+			self::$wc_query_data['where'][] = array(
+				'key'   => 'stock_status',
+				'value' => array( 'instock', 'onbackorder' ),
 			);
 
 			add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
@@ -609,7 +609,7 @@ final class WidgetHelpers {
 				'post__in'       => $products_not_stock,
 			);
 
-			self::$wc_query_data = array(
+			self::$wc_query_data['where'] = array(
 				array(
 					'key'     => 'stock_status',
 					'value'   => 'outofstock',
@@ -718,10 +718,9 @@ final class WidgetHelpers {
 
 			// Save them to be used when preparing the list query.
 			// TODO: WHAT ABOUT VARIABLE PRODUCT LEVELS?
-			if ( in_array( $parent_type, [ 'variable', 'variable-subscription'], TRUE ) ) {
+			if ( in_array( $parent_type, [ 'variable', 'variable-subscription' ], TRUE ) ) {
 				self::$variable_products = array_merge( self::$variable_products, $parents );
-			}
-			elseif ( 'grouped' === $parent_type ) {
+			} elseif ( 'grouped' === $parent_type ) {
 				self::$grouped_products = array_merge( self::$grouped_products, $parents );
 			}
 

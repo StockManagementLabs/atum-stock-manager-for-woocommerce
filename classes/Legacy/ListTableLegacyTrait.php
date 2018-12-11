@@ -113,11 +113,11 @@ trait ListTableLegacyTrait {
 
 			$supplier = absint( $_REQUEST['supplier'] );
 
-			if ( ! empty( $this->atum_query_data ) ) {
-				$this->atum_query_data['relation'] = 'AND';
+			if ( ! empty( $this->atum_query_data['where'] ) ) {
+				$this->atum_query_data['where']['relation'] = 'AND';
 			}
 
-			$this->atum_query_data[] = array(
+			$this->atum_query_data['where'][] = array(
 				'key'   => 'supplier_id',
 				'value' => $supplier,
 				'type'  => 'NUMERIC',
@@ -147,25 +147,51 @@ trait ListTableLegacyTrait {
 		 */
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
-			$args['order'] = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+			
+			$atum_order_fields = array(
+				'_purchase_price'      => array(
+					'type'  => 'NUMERIC',
+					'field' => 'purchase_price',
+				),
+				'_supplier'            => array(
+					'type'  => 'NUMERIC',
+					'field' => 'supplier_id',
+				),
+				'_supplier_sku'        => array(
+					'type'  => '',
+					'field' => 'supplier_sku',
+				),
+				'_out_stock_threshold' => array(
+					'type'  => 'NUMERIC',
+					'field' => 'out_stock_threshold',
+				),
+			);
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
-
-				// All the meta key based columns are numeric except the SKU.
-				if ( '_sku' === $_REQUEST['orderby'] ) {
-					$args['orderby'] = 'meta_value';
+				
+				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
+					
+					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
+					$this->atum_query_data['order']['order'] = $order;
+					
+				} else {
+					// All the meta key based columns are numeric except the SKU.
+					if ( '_sku' === $_REQUEST['orderby'] ) {
+						$args['orderby'] = 'meta_value';
+					} else {
+						$args['orderby'] = 'meta_value_num';
+					}
+					
+					$args['meta_key'] = $_REQUEST['orderby'];
+					$args['order']    = $order;
 				}
-				else {
-					$args['orderby'] = 'meta_value_num';
-				}
-
-				$args['meta_key'] = $_REQUEST['orderby'];
-
 			}
 			// Standard Fields.
 			else {
 				$args['orderby'] = $_REQUEST['orderby'];
+				$args['order']   = $order;
 			}
 
 		}
@@ -701,13 +727,13 @@ trait ListTableLegacyTrait {
 
 			if ( ! empty( $this->supplier_variation_products ) ) {
 				
-				$this->atum_query_data[] = array(
+				$this->atum_query_data['where'][] = array(
 					'key'   => 'supplier_id',
 					'value' => absint( $_REQUEST['supplier'] ),
 					'type'  => 'NUMERIC',
 				);
 				
-				$this->atum_query_data['relation'] = 'AND';
+				$this->atum_query_data['where']['relation'] = 'AND';
 
 			}
 			
@@ -767,7 +793,7 @@ trait ListTableLegacyTrait {
 		
 		if ( $this->show_controlled ) {
 			
-			$this->atum_query_data = array(
+			$this->atum_query_data['where'] = array(
 				array(
 					'key'   => 'atum_controlled',
 					'value' => 1,
@@ -778,7 +804,7 @@ trait ListTableLegacyTrait {
 		}
 		else {
 			
-			$this->atum_query_data = array(
+			$this->atum_query_data['where'] = array(
 				array(
 					'relation' => 'OR',
 					array(
