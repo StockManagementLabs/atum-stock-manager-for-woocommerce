@@ -2068,7 +2068,15 @@ final class Ajax {
 				$meta_value,
 				$meta_value
 			) ); // WPCS: unprepared SQL ok.
-
+			
+			// Get product still not inserted.
+			$update_success_2 = $wpdb->query( "INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
+						FROM {$wpdb->posts} p
+						LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
+						WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL" ); // WPCS: unprepared SQL ok.
+			
+			$update_success = FALSE !== $update_success && FALSE !== $update_success_2;
+			
 		}
 		else {
 
