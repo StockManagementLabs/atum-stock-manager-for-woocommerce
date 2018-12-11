@@ -11,6 +11,19 @@ body {
 	}
 	
 	.select2-container {
+		.select2-results {
+			display: block;
+			box-shadow: $dropdown-box-shadow;
+			max-height: inherit;
+			padding: 0;
+			margin: 0;
+			position: relative;
+			overflow-x: inherit;
+			overflow-y: inherit;
+			.select2-results__option {
+				padding: 8px 10px;
+			}
+		}
 		font-size: 14px;
 		
 		&, * {
@@ -112,20 +125,6 @@ body {
 		left: -100000px;
 		width: 100%;
 		z-index: 1051;
-	}
-	
-	body.select2-results {
-		display: block;
-		box-shadow: $dropdown-box-shadow;
-		max-height: inherit;
-		padding: 0;
-		margin: 0;
-		position: relative;
-		overflow-x: inherit;
-		overflow-y: inherit;
-		.select2-results__option {
-			padding: 8px 10px;
-		}
 	}
 	
 	.select2-results__options {
