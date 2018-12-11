@@ -48,7 +48,9 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
-						<button class="btn btn-outline-secondary dropdown-toggle" id="search_column_btn" data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button class="btn btn-outline-secondary dropdown-toggle tips" id="search_column_btn"
+								title="<?php esc_html_e( 'Search in', ATUM_LEVELS_TEXT_DOMAIN ) ?>"
+								data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>
 						</button>
 
