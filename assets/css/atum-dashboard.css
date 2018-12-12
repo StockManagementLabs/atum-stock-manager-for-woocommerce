@@ -5109,6 +5109,73 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   }
 }
 
+.atum-widget.atum_current_stock_value_widget .widget-body {
+  padding: auto 30px;
+}
+
+@media all and (max-width: 768px) {
+  .atum-widget.atum_current_stock_value_widget .widget-body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.current-stock-value-widget h5 {
+  font-size: 15px;
+  color: #adb5bd;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+.current-stock-value-widget .current-stock-value-filters {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  -webkit-flex-wrap: no-wrap;
+  -moz-flex-wrap: no-wrap;
+  -ms-flex-wrap: no-wrap;
+  flex-wrap: no-wrap;
+}
+
+.current-stock-value-widget .current-stock-value-filters .nice-select {
+  margin-right: 10px;
+}
+
+.current-stock-value-widget .current-stock-value-filters .nice-select.open .list {
+  max-height: 200px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.current-stock-value-widget .current-stock-value-content {
+  text-align: left;
+  padding: 30px 30px;
+}
+
+.current-stock-value-widget .current-stock-value-content .total-items-purcharse-price, .current-stock-value-widget .current-stock-value-content .items-count {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.current-stock-value-widget .current-stock-value-content .total-items-purcharse-price {
+  color: #69C61D;
+}
+
+.current-stock-value-widget .current-stock-value-content .items-count {
+  color: #00B8DB;
+}
+
 .atum_videos_widget .grid-stack-item-content {
   overflow: hidden !important;
 }

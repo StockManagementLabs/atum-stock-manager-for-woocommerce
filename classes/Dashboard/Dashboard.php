@@ -40,56 +40,63 @@ class Dashboard {
 	 * @var array
 	 */
 	private static $default_widgets_layout = array(
-		ATUM_PREFIX . 'statistics_widget'    => array(
+		ATUM_PREFIX . 'statistics_widget'          => array(
 			'x'          => 0,                              // X edge position.
 			'y'          => 0,                              // Y edge position.
 			'width'      => 12,                             // Width in columns (based in 12 columns).
 			'height'     => 4,                              // Height in rows.
 			'min-height' => 5,                              // Min height in rows.
 		),
-		ATUM_PREFIX . 'sales_widget'         => array(
+		ATUM_PREFIX . 'sales_widget'               => array(
 			'x'          => 0,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'lost_sales_widget'    => array(
+		ATUM_PREFIX . 'lost_sales_widget'          => array(
 			'x'          => 3,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'orders_widget'        => array(
+		ATUM_PREFIX . 'orders_widget'              => array(
 			'x'          => 6,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'promo_sales_widget'   => array(
+		ATUM_PREFIX . 'promo_sales_widget'         => array(
 			'x'          => 9,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'stock_control_widget' => array(
+		ATUM_PREFIX . 'stock_control_widget'       => array(
 			'x'          => 0,
 			'y'          => 10,
 			'width'      => 6,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'news_widget'          => array(
+		ATUM_PREFIX . 'current_stock_value_widget' => array(
+			'x'          => 0,
+			'y'          => 10,
+			'width'      => 6,
+			'height'     => 4,
+			'min-height' => 5,
+		),
+		ATUM_PREFIX . 'news_widget'                => array(
 			'x'          => 6,
 			'y'          => 10,
 			'width'      => 6,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'videos_widget'        => array(
+		ATUM_PREFIX . 'videos_widget'              => array(
 			'x'          => 0,
 			'y'          => 15,
 			'width'      => 12,

@@ -757,4 +757,74 @@ final class WidgetHelpers {
 		return Helpers::product_data_query_clauses( self::$wc_query_data, $pieces, 'wc_products' );
 	}
 
+	/**
+	 * Get all products in stock count
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $category
+	 * @param string $product_type
+	 *
+	 * @return int
+	 */
+	public static function get_items_in_stock( $category = null, $product_type = null ) {
+		/*
+		 * Products In Stock
+		 */
+
+		$args = array(
+			'post_type'      => 'product',
+			'posts_per_page' => - 1,
+			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'tax_query'      => array(
+				'relation' => 'OR',
+			),
+		);
+
+		if ( $category ) {
+			array_push( $args['tax_query'], array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => array( $category ),
+			) );
+		}
+
+		if ( $product_type ) {
+			array_push( $args['tax_query'], array(
+				'taxonomy' => 'product_type',
+				'field'    => 'slug',
+				'terms'    => array( $product_type ),
+			) );
+		}
+
+		self::$wc_query_data['where'][] = array(
+			'key'   => 'stock_status',
+			'value' => array( 'instock', 'onbackorder' ),
+		);
+
+		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
+		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+
+		$counters = [
+			'items_stocks_counter'        => 0,
+			'items_purcharse_price_total' => 0,
+		];
+
+		foreach ( $products_in_stock->posts as $product_id ) {
+			$product                 = Helpers::get_atum_product( wc_get_product( $product_id ) );
+			$product_stock           = (int) $product->get_stock_quantity();
+			$product_purcharse_price = (int) $product->get_purchase_price();
+
+			if ( $product_stock ) {
+				$counters['items_stocks_counter'] += $product_stock;
+				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
+					$counters['items_purcharse_price_total'] += $product_purcharse_price;
+				}
+			}
+		}
+
+		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
+	}
+
 }

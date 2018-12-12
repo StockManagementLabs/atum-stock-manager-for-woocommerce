@@ -311,6 +311,13 @@
 			}
 			
 			/*
+			 * Current Stock Value widget
+			 */
+			if (typeof widgets === 'undefined' || $.inArray('atum_current_stock_value_widget', widgets) > -1) {
+				this.initCurrentStockValueWidget();
+			}
+			
+			/*
 			 * Videos widget
 			 */
 			if (typeof widgets === 'undefined' || $.inArray('atum_videos_widget', widgets) > -1) {
@@ -797,6 +804,40 @@
 				
 			}
 		
+		},
+		initCurrentStockValueWidget: function() {
+			
+			var self                = this,
+			    $currentStockValueWidget = $('.current-stock-value-widget');
+			
+			if ($currentStockValueWidget.length) {
+				$currentStockValueWidget.find('select').change(function (e) {
+					
+					$.ajax({
+						url       : ajaxurl,
+						method    : 'POST',
+						data      : {
+							token              : self.$widgetsContainer.data('nonce'),
+							action             : 'atum_current_stock_values',
+							categorySelected   : $('.categories-list').val(),
+							productTypeSelected: $('.product-types-list').val(),
+						},
+						dataType  : 'json',
+						// beforeSend: function () {
+						// 	$select.siblings('.nice-select.loading').removeClass('loading');
+						// 	$select.next('.nice-select').addClass('loading');
+						// },
+						success   : function (response) {
+							if (typeof response === 'object' && response.success === true) {
+								console.log(response.data);
+								$currentStockValueWidget.find('.total').html(response.data.current_stock_values.items_purcharse_price_total);
+								$currentStockValueWidget.find('.items-count').html(response.data.current_stock_values.items_stocks_counter);
+							}
+						}
+					});
+				});
+			}
+			
 		},
 		initVideosWidget: function () {
 			

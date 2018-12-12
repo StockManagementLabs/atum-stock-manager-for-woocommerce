@@ -454,7 +454,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		) );
 
 		// Product type filtering.
-		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '' ); // WPCS: XSS ok.
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select' ); // WPCS: XSS ok.
 
 		// Supplier filtering.
 		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // WPCS: XSS ok.

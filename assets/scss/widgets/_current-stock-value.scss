@@ -1,0 +1,63 @@
+//
+// "Current Stock Value" widget
+//-----------------------
+
+.atum-widget.atum_current_stock_value_widget {
+	.widget-body {
+		padding: auto 30px;
+		@media all and (max-width: $screen-sm-min) {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+	}
+}
+
+.current-stock-value-widget {
+	
+	h5 {
+		font-size: 15px;
+		color: $gray-500;
+		font-weight: 100;
+		text-transform: uppercase;
+	}
+
+	.current-stock-value-filters {
+		@include flexbox;
+		@include flex-justify-content(flex-start);
+		@include flex-align-items(center);
+		@include flex-wrap(no-wrap);
+		
+		.nice-select {
+			margin-right: 10px;
+			//width: 147px;
+			
+			&.open {
+				.list {
+					max-height: 200px;
+					overflow-x: hidden;
+					overflow-y: scroll;
+				}
+			}
+		}
+	}
+	
+	.current-stock-value-content {
+		text-align: left;
+		padding: 30px 30px;
+		
+		.total-items-purcharse-price, .items-count {
+			font-size: 36px;
+			font-weight: bold;
+		}
+		
+		.total-items-purcharse-price {
+			color: $green;
+		}
+		
+		.items-count {
+			color: $blue;
+		}
+		
+	}
+	
+}
