@@ -777,7 +777,7 @@ final class WidgetHelpers {
 			'posts_per_page' => - 1,
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'tax_query'      => array(
-				'relation' => 'OR',
+				'relation' => 'AND',
 			),
 		);
 
