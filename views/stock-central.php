@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) || die;
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary dropdown-toggle tips" id="search_column_btn"
-								title="<?php esc_html_e( 'Search in', ATUM_LEVELS_TEXT_DOMAIN ) ?>"
+								title="<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>"
 								data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>
 						</button>
@@ -71,7 +71,7 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
-				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) ?>">
+				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // WPCS: XSS ok. ?>">
 
 					<?php $enabled_sticky_columns = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
 					<button type="button" class="sticky-columns-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>">
