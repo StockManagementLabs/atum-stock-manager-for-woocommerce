@@ -326,13 +326,13 @@ class Wpml {
 
 		return $args;
 	}
-
+	
 	/**
 	 * Add custom prices to regular price
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param array $args
+	 * @param array       $args
 	 * @param \WC_Product $product
 	 *
 	 * @return array
