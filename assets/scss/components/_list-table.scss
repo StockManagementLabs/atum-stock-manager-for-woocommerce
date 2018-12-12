@@ -1880,7 +1880,7 @@ table.wp-list-table {
 		
 		tr {
 			&.expanded {
-				&.variable {
+				&.variable, &.group {
 					td {
 						color: $white !important;
 						a, span {
