@@ -3826,7 +3826,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   font-size: 12px;
   padding: 0 12px;
   top: 1px;
-  height: 30px;
   margin-left: 14px;
   display: inline-block;
 }
@@ -3867,12 +3866,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   background-color: rgba(239, 175, 0, 0.6);
   color: #fff;
   border: none;
-}
-
-@media all and (max-width: 782px) {
-  .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
-    min-width: inherit;
-  }
 }
 
 @media all and (max-width: 782px) {
@@ -4161,9 +4154,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 @media all and (max-width: 782px) {
   .search-box, p.search-box {
-    position: inherit;
+    position: static;
     height: auto;
-    width: 50%;
     margin: 0 0 15px 0;
   }
 }
@@ -4181,7 +4173,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   justify-content: flex-end;
   border-radius: 0;
   border: 0;
-  width: 400px;
   margin: 0 0 3px auto !important;
 }
 
@@ -4190,10 +4181,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
     margin: 0 !important;
     float: none;
   }
-}
-
-.search-box.search-mc, p.search-box.search-mc {
-  width: 300px;
 }
 
 .search-box #post-search-input, p.search-box #post-search-input {
@@ -4868,7 +4855,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   position: relative;
 }
 
-.atum-list-wrapper .stock-central-header, .atum-list-wrapper .manufactoring-central-header {
+.atum-list-wrapper .list-table-header {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -4887,7 +4874,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .stock-central-header, .atum-list-wrapper .manufactoring-central-header {
+  .atum-list-wrapper .list-table-header {
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
@@ -4902,30 +4889,15 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .stock-central-header, .atum-list-wrapper .manufactoring-central-header {
+  .atum-list-wrapper .list-table-header {
     margin: 0 11px 15px;
   }
 }
 
-.atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-  width: calc( 100% - 400px);
+.atum-list-wrapper .list-table-header .nav-container-box {
+  flex-grow: 1;
   position: relative;
-}
-
-@media screen and (max-width: 1200px) {
-  .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-    width: calc( 100% - 400px);
-  }
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .stock-central-header .sc-nav-containe-box, .atum-list-wrapper .stock-central-header .mc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .sc-nav-containe-box, .atum-list-wrapper .manufactoring-central-header .mc-nav-containe-box {
-    width: 100%;
-  }
-}
-
-.atum-list-wrapper .stock-central-header .nav-mc, .atum-list-wrapper .manufactoring-central-header .nav-mc {
-  width: calc( 100% - 360px);
+  overflow: hidden;
 }
 
 .atum-list-wrapper .overflow-opacity-effect-right, .atum-list-wrapper .overflow-opacity-effect-left {
@@ -5315,6 +5287,12 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    width: 100%;
   }
   .atum-list-wrapper .search-box input[type="text"], .atum-list-wrapper .search-box input[type="number"], .atum-list-wrapper .search-box button:not(.reset-filters) {
     height: 30px;
@@ -5912,15 +5890,15 @@ table.wp-list-table tbody tr:hover {
   color: #fff;
 }
 
-.atum-list-table tbody tr.expanded.variable td, .atum-list-table #the-list tr.expanded.variable td, .floatThead-container tbody tr.expanded.variable td, .floatThead-container #the-list tr.expanded.variable td, .inbound-stock-list tbody tr.expanded.variable td, .inbound-stock-list #the-list tr.expanded.variable td, .wp-list-table tbody tr.expanded.variable td, .wp-list-table #the-list tr.expanded.variable td {
+.atum-list-table tbody tr.expanded.variable td, .atum-list-table tbody tr.expanded.group td, .atum-list-table #the-list tr.expanded.variable td, .atum-list-table #the-list tr.expanded.group td, .floatThead-container tbody tr.expanded.variable td, .floatThead-container tbody tr.expanded.group td, .floatThead-container #the-list tr.expanded.variable td, .floatThead-container #the-list tr.expanded.group td, .inbound-stock-list tbody tr.expanded.variable td, .inbound-stock-list tbody tr.expanded.group td, .inbound-stock-list #the-list tr.expanded.variable td, .inbound-stock-list #the-list tr.expanded.group td, .wp-list-table tbody tr.expanded.variable td, .wp-list-table tbody tr.expanded.group td, .wp-list-table #the-list tr.expanded.variable td, .wp-list-table #the-list tr.expanded.group td {
   color: #fff !important;
 }
 
-.atum-list-table tbody tr.expanded.variable td a, .atum-list-table tbody tr.expanded.variable td span, .atum-list-table #the-list tr.expanded.variable td a, .atum-list-table #the-list tr.expanded.variable td span, .floatThead-container tbody tr.expanded.variable td a, .floatThead-container tbody tr.expanded.variable td span, .floatThead-container #the-list tr.expanded.variable td a, .floatThead-container #the-list tr.expanded.variable td span, .inbound-stock-list tbody tr.expanded.variable td a, .inbound-stock-list tbody tr.expanded.variable td span, .inbound-stock-list #the-list tr.expanded.variable td a, .inbound-stock-list #the-list tr.expanded.variable td span, .wp-list-table tbody tr.expanded.variable td a, .wp-list-table tbody tr.expanded.variable td span, .wp-list-table #the-list tr.expanded.variable td a, .wp-list-table #the-list tr.expanded.variable td span {
+.atum-list-table tbody tr.expanded.variable td a, .atum-list-table tbody tr.expanded.variable td span, .atum-list-table tbody tr.expanded.group td a, .atum-list-table tbody tr.expanded.group td span, .atum-list-table #the-list tr.expanded.variable td a, .atum-list-table #the-list tr.expanded.variable td span, .atum-list-table #the-list tr.expanded.group td a, .atum-list-table #the-list tr.expanded.group td span, .floatThead-container tbody tr.expanded.variable td a, .floatThead-container tbody tr.expanded.variable td span, .floatThead-container tbody tr.expanded.group td a, .floatThead-container tbody tr.expanded.group td span, .floatThead-container #the-list tr.expanded.variable td a, .floatThead-container #the-list tr.expanded.variable td span, .floatThead-container #the-list tr.expanded.group td a, .floatThead-container #the-list tr.expanded.group td span, .inbound-stock-list tbody tr.expanded.variable td a, .inbound-stock-list tbody tr.expanded.variable td span, .inbound-stock-list tbody tr.expanded.group td a, .inbound-stock-list tbody tr.expanded.group td span, .inbound-stock-list #the-list tr.expanded.variable td a, .inbound-stock-list #the-list tr.expanded.variable td span, .inbound-stock-list #the-list tr.expanded.group td a, .inbound-stock-list #the-list tr.expanded.group td span, .wp-list-table tbody tr.expanded.variable td a, .wp-list-table tbody tr.expanded.variable td span, .wp-list-table tbody tr.expanded.group td a, .wp-list-table tbody tr.expanded.group td span, .wp-list-table #the-list tr.expanded.variable td a, .wp-list-table #the-list tr.expanded.variable td span, .wp-list-table #the-list tr.expanded.group td a, .wp-list-table #the-list tr.expanded.group td span {
   color: #fff !important;
 }
 
-.atum-list-table tbody tr.expanded.variable td a:before, .atum-list-table tbody tr.expanded.variable td span:before, .atum-list-table #the-list tr.expanded.variable td a:before, .atum-list-table #the-list tr.expanded.variable td span:before, .floatThead-container tbody tr.expanded.variable td a:before, .floatThead-container tbody tr.expanded.variable td span:before, .floatThead-container #the-list tr.expanded.variable td a:before, .floatThead-container #the-list tr.expanded.variable td span:before, .inbound-stock-list tbody tr.expanded.variable td a:before, .inbound-stock-list tbody tr.expanded.variable td span:before, .inbound-stock-list #the-list tr.expanded.variable td a:before, .inbound-stock-list #the-list tr.expanded.variable td span:before, .wp-list-table tbody tr.expanded.variable td a:before, .wp-list-table tbody tr.expanded.variable td span:before, .wp-list-table #the-list tr.expanded.variable td a:before, .wp-list-table #the-list tr.expanded.variable td span:before {
+.atum-list-table tbody tr.expanded.variable td a:before, .atum-list-table tbody tr.expanded.variable td span:before, .atum-list-table tbody tr.expanded.group td a:before, .atum-list-table tbody tr.expanded.group td span:before, .atum-list-table #the-list tr.expanded.variable td a:before, .atum-list-table #the-list tr.expanded.variable td span:before, .atum-list-table #the-list tr.expanded.group td a:before, .atum-list-table #the-list tr.expanded.group td span:before, .floatThead-container tbody tr.expanded.variable td a:before, .floatThead-container tbody tr.expanded.variable td span:before, .floatThead-container tbody tr.expanded.group td a:before, .floatThead-container tbody tr.expanded.group td span:before, .floatThead-container #the-list tr.expanded.variable td a:before, .floatThead-container #the-list tr.expanded.variable td span:before, .floatThead-container #the-list tr.expanded.group td a:before, .floatThead-container #the-list tr.expanded.group td span:before, .inbound-stock-list tbody tr.expanded.variable td a:before, .inbound-stock-list tbody tr.expanded.variable td span:before, .inbound-stock-list tbody tr.expanded.group td a:before, .inbound-stock-list tbody tr.expanded.group td span:before, .inbound-stock-list #the-list tr.expanded.variable td a:before, .inbound-stock-list #the-list tr.expanded.variable td span:before, .inbound-stock-list #the-list tr.expanded.group td a:before, .inbound-stock-list #the-list tr.expanded.group td span:before, .wp-list-table tbody tr.expanded.variable td a:before, .wp-list-table tbody tr.expanded.variable td span:before, .wp-list-table tbody tr.expanded.group td a:before, .wp-list-table tbody tr.expanded.group td span:before, .wp-list-table #the-list tr.expanded.variable td a:before, .wp-list-table #the-list tr.expanded.variable td span:before, .wp-list-table #the-list tr.expanded.group td a:before, .wp-list-table #the-list tr.expanded.group td span:before {
   color: #fff !important;
 }
 

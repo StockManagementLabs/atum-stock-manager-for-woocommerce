@@ -83,15 +83,31 @@ class AtumHelpPointers {
 	public function register_pointers( $pntrs ) {
 
 		$pointers = NULL;
-
+		
+		// Get dismissed pointers.
+		$dismissed         = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', TRUE ) );
+		$targets_dismissed = [];
+		
+		foreach ( $pntrs as $key => $ptr ) {
+			
+			if ( in_array( $ptr['id'], $dismissed ) ) {
+				$targets_dismissed[] = $ptr['target'];
+				unset( $pntrs[ $key ] );
+			}
+		}
+		
 		foreach ( $pntrs as $ptr ) {
+			
+			if ( in_array( $ptr['id'], $dismissed ) ) {
+				continue;
+			}
 
 			if ( $ptr['screen'] === $this->screen_id ) {
 
 				$pointers[ $ptr['id'] ] = array(
 					'screen'  => $ptr['screen'],
 					'target'  => $ptr['target'],
-					'next'    => isset( $ptr['next'] ) ? $ptr['next'] : '',
+					'next'    => isset( $ptr['next'] ) && ! in_array( $ptr['next'], $targets_dismissed ) ? $ptr['next'] : '',
 					'options' => array(
 						'target'        => $ptr['target'],
 						'content'       => sprintf( '<h3>%s</h3> <p>%s</p>', $ptr['title'], $ptr['content'] ),
@@ -123,17 +139,13 @@ class AtumHelpPointers {
 			return;
 		}
 
-		// Get dismissed pointers.
-		$dismissed      = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', TRUE ) );
-		$valid_pointers = array();
-
 		// Check pointers and remove dismissed ones.
 		foreach ( $pointers as $pointer_id => $pointer ) {
 
 			// Make sure we have pointers & check if they have been dismissed.
 			if (
-				in_array( $pointer_id, $dismissed ) || empty( $pointer ) ||
-				empty( $pointer_id ) || empty( $pointer['target'] ) || empty( $pointer['options'] )
+				empty( $pointer ) || empty( $pointer_id ) ||
+				empty( $pointer['target'] ) || empty( $pointer['options'] )
 			) {
 				continue;
 			}

@@ -30,14 +30,12 @@ defined( 'ABSPATH' ) || die;
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
-		<div class="stock-central-header">
-			<div id="scroll-stock_central_nav" class="sc-nav-containe-box">
-				<div class="overflow-opacity-effect-right" >
+		<div class="list-table-header">
 
-				</div>
-				<div class="overflow-opacity-effect-left" >
+			<div id="scroll-stock_central_nav" class="nav-container-box">
+				<div class="overflow-opacity-effect-right"></div>
+				<div class="overflow-opacity-effect-left"></div>
 
-				</div>
 				<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
 					<?php $list->views(); ?>
 				</nav>
@@ -49,7 +47,7 @@ defined( 'ABSPATH' ) || die;
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary dropdown-toggle tips" id="search_column_btn"
-								title="<?php esc_html_e( 'Search in', ATUM_LEVELS_TEXT_DOMAIN ) ?>"
+								title="<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>"
 								data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>
 						</button>
@@ -71,7 +69,7 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
-				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) ?>">
+				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // WPCS: XSS ok. ?>">
 
 					<?php $enabled_sticky_columns = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
 					<button type="button" class="sticky-columns-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>">
