@@ -64,6 +64,17 @@ final class Globals {
 	private static $product_tab_fields = array(
 		self::ATUM_CONTROL_STOCK_KEY => 'checkbox',
 	);
+	
+	/**
+	 * Existent Order types identification in tables
+	 *
+	 * @var array
+	 */
+	private static $order_type_tables_id = array(
+		'shop_order'                   => 1,
+		ATUM_PREFIX . 'purchase_order' => 2,
+		ATUM_PREFIX . 'inventory_log'  => 2,
+	);
 
 	/**
 	 * The ATUM pages hook name
@@ -134,17 +145,6 @@ final class Globals {
 			'_weight',
 			'_stock',
 		),
-	);
-	
-	/**
-	 * Existent Order types identification in tables
-	 *
-	 * @var array
-	 */
-	const  ORDER_TYPE_TABLES_ID = array(
-		'shop_order'                   => 1,
-		ATUM_PREFIX . 'purchase_order' => 2,
-		ATUM_PREFIX . 'inventory_log'  => 2,
 	);
 	
 	/**
@@ -324,7 +324,7 @@ final class Globals {
 	}
 
 	/**
-	 * Replace the WooCommerce data stores with our custome ones
+	 * Replace the WooCommerce data stores with our customer ones
 	 *
 	 * @since 1.5.0
 	 *
@@ -367,9 +367,9 @@ final class Globals {
 	 */
 	public static function get_order_type_table_id( $type = '' ) {
 		
-		$type = ( $type && isset( self::ORDER_TYPE_TABLES_ID[ $type ] ) ) ? $type : 'shop_order';
+		$type = ( $type && isset( self::$order_type_tables_id[ $type ] ) ) ? $type : 'shop_order';
 		
-		return self::ORDER_TYPE_TABLES_ID[ $type ];
+		return self::$order_type_tables_id[ $type ];
 		
 	}
 	
