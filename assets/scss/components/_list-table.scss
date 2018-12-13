@@ -4,6 +4,7 @@
 #wpbody-content {
 	padding-bottom: 0;
 }
+
 .wrap {
 	
 	h1.wp-heading-inline {
@@ -15,6 +16,7 @@
 		position: relative;
 		font-size: 36px;
 		font-weight: bold;
+		
 		&.extend-list-table {
 			line-height: 1.5;
 			position: relative;
@@ -85,7 +87,6 @@
 			font-size: 12px;
 			padding: 0 12px;
 			top: 1px;
-			height: 30px;
 			margin-left: 14px;
 			display: inline-block;
 		}
@@ -107,7 +108,6 @@
 	}
 	
 	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
-		
 		border-radius: 5px;
 		background-color: $orange;
 		font-size: 12px;
@@ -119,14 +119,11 @@
 		box-shadow: none;
 		border: none;
 		height: 31px;
+		
 		&:hover, &.active {
 			background-color: rgba($orange, 0.6);
 			color: $white;
 			border: none;
-		}
-		
-		@media all and (max-width: 782px) {
-			min-width: inherit;
 		}
 		
 	}
@@ -154,13 +151,16 @@
 		@include flex-justify-content(left);
 		border-radius: 0;
 		border-bottom: 0;
+		
 		li {
 			padding: 0;
+			
 			span {
 				@include flexbox;
 				@include flex-justify-content(center);
 				@include flex-align-items(center);
 				margin-left: 3px;
+				
 				&.active {
 					border-radius: 5px;
 					background-color: $blue;
@@ -169,18 +169,23 @@
 					font-weight: bold;
 					letter-spacing: 0.4px;
 					color: $white;
+					
 					.text-blue {
 						color: $white;
 					}
+					
 					.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
 						color: $white;
+						
 						&.empty {
 							color: $white;
 						}
+						
 						a {
 							color: $white;
+							
 							&.empty {
 								color: $white;
 							}
@@ -296,13 +301,16 @@
 	}
 	
 	&:not(.extend-list-table) {
+		
 		li {
 			color: $white;
 			padding: 20px 0 20px 10px;
 			text-transform: uppercase;
+			
 			a {
 				color: $gray-500;
 				padding: 0;
+				
 				&.current:not(.extra-links-container a) {
 					border-radius: 5px;
 					background-color: $blue;
@@ -331,6 +339,7 @@
 				
 				&.tips {
 					color: $blue;
+					
 					&:hover {
 						cursor: pointer;
 					}
@@ -342,9 +351,9 @@
 
 .search-box, p.search-box {
 	@include flexbox;
+	@include flex-wrap(nowrap);
 	float: right;
 	padding: 1px;
-	@include flex-wrap(nowrap);
 	z-index: 999;
 	float: right;
 	margin: 20px 10px 20px auto;
@@ -355,9 +364,8 @@
 	float: right;
 	
 	@media all and (max-width: 782px) {
-		position: inherit;
+		position: static;
 		height: auto;
-		width: 50%;
 		margin: 0 0 15px 0;
 	}
 	
@@ -367,16 +375,12 @@
 		@include flex-justify-content(flex-end);
 		border-radius: 0;
 		border: 0;
-		width: 400px;
 		margin: 0 0 3px auto !important;
+		
 		@media all and (max-width: 782px) {
 			margin: 0 !important;
 			float: none;
 		}
-	}
-	
-	&.search-mc {
-		width: 300px;
 	}
 	
 	#post-search-input {
@@ -588,44 +592,56 @@
 	@include flex-align-items(center);
 	padding: 10px 11px;
 	margin: 0;
+	
 	@media all and (max-width: 782px) {
 		@include flex-wrap(wrap);
 		@include flex-justify-content(center);
 	}
+	
 	@media all and (max-width: $screen-xs) {
 		display: inline-block;
 	}
+	
 	&.extend-list-table {
 		padding: 0 11px;
 		height: 52px;
 		@include flex-wrap(nowrap);
+		
 		@media all and (max-width: 782px) {
 			@include flex-wrap(wrap);
 			height: auto;
 		}
+		
 		.actions {
 			white-space: inherit;
 		}
+		
 		@media all and (max-width: $screen-xs) {
 			padding: 10px 10px;
 			@include flexbox;
 		}
+		
 	}
 	
 	.actions {
 		white-space: nowrap;
+		
 		@media all and (max-width: $screen-xs) {
 			white-space: inherit;
 		}
+		
 		&.bulkactions {
 			@media all and (max-width: 782px) {
 				display: inline-block;
 			}
+			
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
+				
 				.select2-container {
 					width: 100% !important;
 				}
+				
 				input[type=submit] {
 					width: 100%;
 					margin-top: 10px !important;
@@ -639,18 +655,22 @@
 		text-align: right;
 		z-index: 998;
 		width: 300px;
+		
 		&.one-page {
 			width: inherit;
 		}
+		
 		@media all and (max-width: 782px) {
 			margin: 5px 0 0 0;
 		}
+		
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
 			text-align: center;
 			display: inline-block;
 			margin: 0 0 10px;
 		}
+		
 		.displaying-num {
 			@media all and (max-width: $screen-lg) {
 				display: inline-block;
@@ -659,6 +679,7 @@
 				width: 100%;
 			}
 		}
+		
 	}
 	
 	.filters-container-box {
@@ -912,33 +933,28 @@
 	}
 	
 	
-	.stock-central-header, .manufactoring-central-header {
+	.list-table-header {
 		@include flexbox;
 		@include flex-justify-content(space-between);
 		@include flex-align-items(center);
 		margin: 0 11px 0 11px;
+		
 		@media all and (max-width: 782px) {
 			@include flex-wrap(wrap);
 			@include flex-justify-content(center);
 			margin-bottom: 15px;
 		}
+		
 		@media all and (max-width: $screen-xs-min) {
 			margin: 0 11px 15px;
 		}
-		.sc-nav-containe-box, .mc-nav-containe-box {
-			width: calc( 100% - 400px );
+		
+		.nav-container-box {
+			flex-grow: 1;
 			position: relative;
-			@media screen and (max-width: $screen-lg) {
-				width: calc( 100% - 400px );
-			}
-			@media all and (max-width: 782px) {
-				width: 100%;
-			}
+			overflow: hidden;
 		}
 		
-		.nav-mc {
-			width: calc( 100% - 360px );
-		}
 	}
 	
 	.overflow-opacity-effect-right, .overflow-opacity-effect-left {
@@ -1280,6 +1296,8 @@
 		
 		.search-box {
 			@include flexbox;
+			@include flex-justify-content(center);
+			width: 100%;
 			
 			input[type="text"], input[type="number"], button:not(.reset-filters) {
 				height: 30px;

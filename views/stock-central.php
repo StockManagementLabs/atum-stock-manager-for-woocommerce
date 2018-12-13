@@ -30,14 +30,12 @@ defined( 'ABSPATH' ) || die;
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
-		<div class="stock-central-header">
-			<div id="scroll-stock_central_nav" class="sc-nav-containe-box">
-				<div class="overflow-opacity-effect-right" >
+		<div class="list-table-header">
 
-				</div>
-				<div class="overflow-opacity-effect-left" >
+			<div id="scroll-stock_central_nav" class="nav-container-box">
+				<div class="overflow-opacity-effect-right"></div>
+				<div class="overflow-opacity-effect-left"></div>
 
-				</div>
 				<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
 					<?php $list->views(); ?>
 				</nav>
