@@ -4136,12 +4136,12 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  float: right;
-  padding: 1px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
+  float: right;
+  padding: 1px;
   z-index: 999;
   float: right;
   margin: 20px 10px 20px auto;

@@ -768,7 +768,6 @@ final class WidgetHelpers {
 	 * @return int
 	 */
 	public static function get_items_in_stock( $category = null, $product_type = null ) {
-		$products = Helpers::get_all_products();
 		/*
 		 * Products In Stock
 		 */
@@ -777,12 +776,14 @@ final class WidgetHelpers {
 			'post_type'      => [ 'product', 'product_variation' ],
 			'posts_per_page' => - 1,
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'fields'         => 'ids',
 			'tax_query'      => array(
 				'relation' => 'AND',
 			),
-			'fields'         => 'ids',
-			'post__in'       => $products,
+
 		);
+
+		$temp_wc_query_data = self::$wc_query_data;
 
 		if ( $category ) {
 			array_push( $args['tax_query'], array(
@@ -793,17 +794,26 @@ final class WidgetHelpers {
 		}
 
 		if ( $product_type ) {
-			array_push( $args['tax_query'], array(
-				'taxonomy' => 'product_type',
-				'field'    => 'slug',
-				'terms'    => array( $product_type ),
-			) );
+			if ( 'grouped' === $product_type ) {
+				$group_items = self::get_children( 'grouped' );
+
+				if ( $group_items ) {
+					$args['post__in'] = $group_items;
+				}
+			}
+			else {
+				array_push( $args['tax_query'], array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => array( $product_type ),
+				) );
+			}
 		}
 
-//		self::$wc_query_data['where'][] = array(
-//			'key'   => 'stock_status',
-//			'value' => array( 'instock', 'onbackorder' ),
-//		);
+		self::$wc_query_data['where'] = array(
+			'key'   => 'stock_status',
+			'value' => array( 'instock' ),
+		);
 
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
@@ -826,6 +836,8 @@ final class WidgetHelpers {
 				}
 			}
 		}
+
+		self::$wc_query_data = $temp_wc_query_data; // Restore the original value.
 
 		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
 	}
