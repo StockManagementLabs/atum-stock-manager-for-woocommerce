@@ -135,7 +135,17 @@ final class Globals {
 			'_stock',
 		),
 	);
-
+	
+	/**
+	 * Existent Order types identification in tables
+	 *
+	 * @var array
+	 */
+	const  ORDER_TYPE_TABLES_ID = array(
+		'shop_order'                   => 1,
+		ATUM_PREFIX . 'purchase_order' => 2,
+		ATUM_PREFIX . 'inventory_log'  => 2,
+	);
 	
 	/**
 	 * Getter for the product_types property
@@ -344,6 +354,23 @@ final class Globals {
 
 		return $data_stores;
 
+	}
+	
+	/**
+	 * Get the current Order $table identifier. Defaults to 1 (WC Order)
+	 *
+	 * @since 1.5.0.2
+	 *
+	 * @param string $type
+	 *
+	 * @return int
+	 */
+	public static function get_order_type_table_id( $type = '' ) {
+		
+		$type = ( $type && isset( self::ORDER_TYPE_TABLES_ID[ $type ] ) ) ? $type : 'shop_order';
+		
+		return self::ORDER_TYPE_TABLES_ID[ $type ];
+		
 	}
 	
 }
