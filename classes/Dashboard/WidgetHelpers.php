@@ -768,17 +768,20 @@ final class WidgetHelpers {
 	 * @return int
 	 */
 	public static function get_items_in_stock( $category = null, $product_type = null ) {
+		$products = Helpers::get_all_products();
 		/*
 		 * Products In Stock
 		 */
 
 		$args = array(
-			'post_type'      => 'product',
+			'post_type'      => [ 'product', 'product_variation' ],
 			'posts_per_page' => - 1,
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'tax_query'      => array(
 				'relation' => 'AND',
 			),
+			'fields'         => 'ids',
+			'post__in'       => $products,
 		);
 
 		if ( $category ) {
@@ -797,10 +800,10 @@ final class WidgetHelpers {
 			) );
 		}
 
-		self::$wc_query_data['where'][] = array(
-			'key'   => 'stock_status',
-			'value' => array( 'instock', 'onbackorder' ),
-		);
+//		self::$wc_query_data['where'][] = array(
+//			'key'   => 'stock_status',
+//			'value' => array( 'instock', 'onbackorder' ),
+//		);
 
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
@@ -812,7 +815,7 @@ final class WidgetHelpers {
 		];
 
 		foreach ( $products_in_stock->posts as $product_id ) {
-			$product                 = Helpers::get_atum_product( wc_get_product( $product_id ) );
+			$product                 = Helpers::get_atum_product( $product_id );
 			$product_stock           = (int) $product->get_stock_quantity();
 			$product_purcharse_price = (int) $product->get_purchase_price();
 

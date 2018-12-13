@@ -331,6 +331,27 @@
 			this.buildNiceSelect();
 		
 		},
+		// /**
+		//  * Add the overlay effect while loading data
+		//  */
+		// addOverlay: function(container) {
+		//
+		// 	container.block({
+		// 		message   : null,
+		// 		overlayCSS: {
+		// 			background: '#000',
+		// 			opacity   : 0.5,
+		// 		},
+		// 	});
+		//
+		// },
+		//
+		// /**
+		//  * Remove the overlay effect once the data is fully loaded
+		//  */
+		// removeOverlay: function(container) {
+		// 	container.unblock();
+		// },
 		initStatisticsWidget: function() {
 			
 			// TODO: MOVE TO A NEW FILE (MODULE)
@@ -823,15 +844,15 @@
 							productTypeSelected: $('.product-types-list').val(),
 						},
 						dataType  : 'json',
-						// beforeSend: function () {
-						// 	$select.siblings('.nice-select.loading').removeClass('loading');
-						// 	$select.next('.nice-select').addClass('loading');
-						// },
+						beforeSend: function () {
+							$currentStockValueWidget.addClass('overlay');
+						},
 						success   : function (response) {
 							if (typeof response === 'object' && response.success === true) {
 								console.log(response.data);
 								$currentStockValueWidget.find('.total').html(response.data.current_stock_values.items_purcharse_price_total);
 								$currentStockValueWidget.find('.items-count').html(response.data.current_stock_values.items_stocks_counter);
+								$currentStockValueWidget.removeClass('overlay');
 							}
 						}
 					});

@@ -296,7 +296,7 @@ class Dashboard {
 			/*
 			 * Dependencies
 			 */
-			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery.nicescroll', 'owl.carousel' );
+			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery.nicescroll', 'owl.carousel', 'jquery-blockui' );
 
 			/*
 			 * Widgets scripts
@@ -350,6 +350,10 @@ class Dashboard {
 				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION, TRUE );
 				$deps[] = 'switchery';
 				$deps[] = 'jquery-ui-sortable';
+			}
+
+			if ( in_array( ATUM_PREFIX . 'current_stock_value_widget', $widget_keys ) ) {
+				$deps[] = 'jquery-blockui';
 			}
 
 			/*
