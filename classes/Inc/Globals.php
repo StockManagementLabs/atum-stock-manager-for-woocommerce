@@ -73,7 +73,7 @@ final class Globals {
 	private static $order_type_tables_id = array(
 		'shop_order'                   => 1,
 		ATUM_PREFIX . 'purchase_order' => 2,
-		ATUM_PREFIX . 'inventory_log'  => 2,
+		ATUM_PREFIX . 'inventory_log'  => 3,
 	);
 
 	/**
