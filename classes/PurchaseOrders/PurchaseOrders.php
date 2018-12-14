@@ -24,6 +24,7 @@ use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 
 
 class PurchaseOrders extends AtumOrderPostType {
@@ -484,9 +485,12 @@ class PurchaseOrders extends AtumOrderPostType {
 
 			try {
 
+				$uploads = wp_upload_dir();
+
 				$mpdf = new Mpdf( [
-					'mode'   => 'utf-8',
-					'format' => 'A4',
+					'mode'    => 'utf-8',
+					'format'  => 'A4',
+					'tempDir' => $uploads['basedir'],
 				] );
 
 				// Add support for non-Latin languages.
@@ -508,14 +512,10 @@ class PurchaseOrders extends AtumOrderPostType {
 				$mpdf->WriteHTML( $po_export->get_content() );
 
 				// Output a PDF file directly to the browser.
-				$mpdf->Output( "po-{$po_export->get_id()}.pdf", 'I' );
+				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) );
 
 			} catch ( MpdfException $e ) {
-
-				if ( ATUM_DEBUG ) {
-					error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
-				}
-
+				wp_die( $e->getMessage() );
 			}
 
 		}
