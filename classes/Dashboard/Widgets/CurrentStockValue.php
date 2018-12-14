@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
-use Atum\StockCentral\StockCentral;
 
 
 class CurrentStockValue extends AtumWidget {

@@ -198,6 +198,10 @@ class Dashboard {
 	 * @param array      $widget_layout
 	 */
 	public function add_widget( $widget, $widget_layout ) {
+		$user_widgets_layout = self::get_user_widgets_layout();
+		if ( empty( $user_widgets_layout ) ) {
+			$widget_layout = self::$default_widgets_layout[ $widget_layout['id'] ];
+		}
 
 		$widget_data = Helpers::array_to_data( $widget_layout, 'gs-' );
 		Helpers::load_view( 'widgets/widget-wrapper', compact( 'widget', 'widget_data' ) );
@@ -266,7 +270,11 @@ class Dashboard {
 
 			$min       = ! ATUM_DEBUG ? '.min' : '';
 			$dash_vars = array(
-				'availableWidgets' => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
+				'availableWidgets'    => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
+				'areYouSure'          => __( 'Are you sure ?', ATUM_TEXT_DOMAIN ),
+				'defaultsWillRestore' => __( 'Defaults will restore', ATUM_TEXT_DOMAIN ),
+				'continue'            => __( 'Continue', ATUM_TEXT_DOMAIN ),
+				'cancel'              => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			);
 
 			/*
