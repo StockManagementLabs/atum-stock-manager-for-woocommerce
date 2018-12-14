@@ -1812,7 +1812,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Change the product type tax query (initialized in constructor) to the current queried type.
-		if ( ! empty( $_REQUEST['product_type'] && ! empty( $this->wc_query_data['where'] ) ) ) {
+		if ( ! empty( $_REQUEST['product_type'] ) && ! empty( $this->wc_query_data['where'] ) ) {
 
 			$type = esc_attr( $_REQUEST['product_type'] );
 
