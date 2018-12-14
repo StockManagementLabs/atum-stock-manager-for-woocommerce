@@ -402,6 +402,7 @@ class PurchaseOrder extends AtumOrderModel {
 		// Any status !== finished is like pending, so reduce stock.
 		if ( $order && 'received' === $old_status && $old_status !== $new_status && apply_filters( 'atum/purchase_orders/can_reduce_order_stock', TRUE, $order ) ) {
 			$this->change_stock_levels( $order, 'decrease' );
+			do_action( 'atum/purchase_orders/po/after_decrease_stock_levels', $order );
 		}
 		
 	}
@@ -418,6 +419,7 @@ class PurchaseOrder extends AtumOrderModel {
 		
 		if ( $order && apply_filters( 'atum/purchase_orders/can_restore_order_stock', TRUE, $order ) ) {
 			$this->change_stock_levels( $order, 'increase' );
+			do_action( 'atum/purchase_orders/po/after_increase_stock_levels', $order );
 		}
 		
 	}
