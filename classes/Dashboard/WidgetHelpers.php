@@ -768,6 +768,11 @@ final class WidgetHelpers {
 	 * @return int
 	 */
 	public static function get_items_in_stock( $category = null, $product_type = null ) {
+
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			return self::get_items_in_stock_legacy( $category, $product_type );
+		}
+
 		/*
 		 * Products In Stock
 		 */

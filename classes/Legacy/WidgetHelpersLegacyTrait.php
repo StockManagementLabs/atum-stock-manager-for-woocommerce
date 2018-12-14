@@ -300,4 +300,111 @@ trait WidgetHelpersLegacyTrait {
 
 	}
 
+	/**
+	 * Get all the available children products of the published parent products (Variable and Grouped)
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $category
+	 * @param string $product_type
+	 *
+	 * @return int
+	 */
+	private static function get_items_in_stock_legacy( $category, $product_type ) {
+		/*
+		 * Products In Stock
+		 */
+
+		$args = array(
+			'post_type'      => [ 'product', 'product_variation' ],
+			'posts_per_page' => - 1,
+			'meta_query'     => array(
+				array(
+					'key'     => '_stock_status',
+					'value'   => 'instock',
+					'compare' => '=',
+				),
+			),
+			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'fields'         => 'ids',
+			'tax_query'      => array(
+				'relation' => 'AND',
+			),
+
+		);
+
+		// Check if category filter data exist.
+		if ( $category ) {
+			array_push( $args['tax_query'], array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => array( $category ),
+			) );
+		}
+
+		// Check if product type filter data exist.
+		if ( $product_type ) {
+			if ( 'grouped' === $product_type ) {
+				$group_items = self::get_children_legacy( 'grouped' );
+
+				if ( $group_items ) {
+					$args['post__in'] = $group_items;
+				}
+			}
+			elseif ( 'variable' === $product_type ) {
+				$variations = self::get_children_legacy( 'variable', 'product_variation' );
+				if ( $variations ) {
+					$args['post__in'] = $variations;
+				}
+			}
+			elseif ( 'downloadable' === $product_type ) {
+				array_push( $args['meta_query'], array(
+					'key'     => '_downloadable',
+					'value'   => 'yes',
+					'compare' => '=',
+				) );
+			}
+			elseif ( 'virtual' === $product_type ) {
+				array_push( $args['meta_query'], array(
+					'key'     => '_virtual',
+					'value'   => 'yes',
+					'compare' => '=',
+				) );
+			}
+			else {
+				array_push( $args['tax_query'], array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => array( $product_type ),
+				) );
+			}
+		}
+
+		// Get products.
+		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
+
+		// Init values counter.
+		$counters = [
+			'items_stocks_counter'        => 0,
+			'items_purcharse_price_total' => 0,
+		];
+
+		// Get current stock values.
+		foreach ( $products_in_stock->posts as $product_id ) {
+			$product                 = Helpers::get_atum_product( $product_id );
+			$product_stock           = (int) $product->get_stock_quantity();
+			$product_purcharse_price = (int) $product->get_purchase_price();
+
+			if ( $product_stock ) {
+				$counters['items_stocks_counter'] += $product_stock;
+				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
+					$counters['items_purcharse_price_total'] += $product_purcharse_price;
+				}
+			}
+		}
+
+		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
+
+	}
+
 }
