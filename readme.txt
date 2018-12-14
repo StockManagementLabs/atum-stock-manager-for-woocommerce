@@ -7,7 +7,7 @@ Tested up to: 5.0.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.2
-Stable tag: 1.5.0.1
+Stable tag: 1.5.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -198,6 +198,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.0.2`
+
+*2018-12-14*
+
+**Changes**
+
+* Changed Inventory Log table ID.
+* Added hooks when stock changes from Purchase Orders.
+* Changed mPDF temporary directory to WP uploads.
+
+**Fixes**
+
+* Fixed new ATUM product data table being queried before creation.
+* Minor bug fixes.
+* CSS fixes.
 
 ---
 
