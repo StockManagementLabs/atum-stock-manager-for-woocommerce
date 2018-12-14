@@ -5110,7 +5110,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-widget.atum_current_stock_value_widget .widget-body {
-  padding: auto 30px;
+  padding: 30px;
 }
 
 @media all and (max-width: 768px) {
@@ -5228,7 +5228,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .current-stock-value-widget .current-stock-value-content {
   text-align: left;
-  padding: 30px 30px;
+  padding: 30px 0;
 }
 
 .current-stock-value-widget .current-stock-value-content .total-items-purcharse-price, .current-stock-value-widget .current-stock-value-content .items-count {
@@ -5242,6 +5242,22 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .current-stock-value-widget .current-stock-value-content .items-count {
   color: #00B8DB;
+}
+
+.current-stock-value-widget .current-stock-value-content .separator-line {
+  width: 100%;
+  height: 1px;
+  background-color: #E5E5E5;
+  margin: 21px 0 26px 0;
+}
+
+.current-stock-value-widget .current-stock-value-content .items-without-purcharse-price {
+  border-radius: 4px;
+  background-color: #ffe1e1;
+  font-size: 12px;
+  line-height: 1;
+  color: #FF4848;
+  padding: 6px 7px;
 }
 
 .atum_videos_widget .grid-stack-item-content {

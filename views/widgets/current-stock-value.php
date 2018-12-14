@@ -32,7 +32,6 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="current-stock-value-content">
-
 		<div class="stock-counter">
 			<div class="total-items-purcharse-price">
 				<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>
@@ -42,12 +41,17 @@ defined( 'ABSPATH' ) || die;
 			</div>
 			<h5><?php esc_html_e( 'Stock value', ATUM_TEXT_DOMAIN ) ?></h5>
 
-			<hr/>
+			<div class="separator-line"></div>
 
 			<span class="items-count">
 				<?php echo esc_html( $current_stock_values['items_stocks_counter'] ); ?>
 			</span>
 			<h5><?php esc_html_e( 'Items in stock', ATUM_TEXT_DOMAIN ) ?></h5>
+		</div>
+		<div class="items-without-purcharse-price">
+			<i class="atmi-warning"></i>
+			<?php echo esc_html( $current_stock_values['items_without_purcharse_price'] ); ?>
+			<?php esc_html_e( ' items in stock without specified purchase price.', ATUM_TEXT_DOMAIN ); ?>
 		</div>
 	</div>
 

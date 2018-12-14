@@ -385,8 +385,9 @@ trait WidgetHelpersLegacyTrait {
 
 		// Init values counter.
 		$counters = [
-			'items_stocks_counter'        => 0,
-			'items_purcharse_price_total' => 0,
+			'items_stocks_counter'          => 0,
+			'items_purcharse_price_total'   => 0,
+			'items_without_purcharse_price' => 0,
 		];
 
 		// Get current stock values.
@@ -399,6 +400,9 @@ trait WidgetHelpersLegacyTrait {
 				$counters['items_stocks_counter'] += $product_stock;
 				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
 					$counters['items_purcharse_price_total'] += $product_purcharse_price;
+				}
+				else {
+					$counters['items_without_purcharse_price'] ++;
 				}
 			}
 		}
