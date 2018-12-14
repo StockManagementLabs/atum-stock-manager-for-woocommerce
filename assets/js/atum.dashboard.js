@@ -849,10 +849,18 @@
 						},
 						success   : function (response) {
 							if (typeof response === 'object' && response.success === true) {
-								console.log(response.data);
+								var $itemsWithoutPurcharsePrice = response.data.current_stock_values.items_without_purcharse_price;
 								$currentStockValueWidget.find('.total').html(response.data.current_stock_values.items_purcharse_price_total);
 								$currentStockValueWidget.find('.items-count').html(response.data.current_stock_values.items_stocks_counter);
+								$currentStockValueWidget.find('.items_without_purcharse_price').html($itemsWithoutPurcharsePrice);
 								$currentStockValueWidget.removeClass('overlay');
+								
+								if ($itemsWithoutPurcharsePrice === 0) {
+									$('.items-without-purcharse-price').hide();
+								}
+								else {
+									$('.items-without-purcharse-price').show();
+								}
 							}
 						}
 					});
