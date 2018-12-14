@@ -90,9 +90,151 @@ class Settings {
 
 		// Add the module menu.
 		add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
+
+	}
+
+	/**
+	 * Add the Settings menu
+	 *
+	 * @since 1.3.6
+	 *
+	 * @param array $menus
+	 *
+	 * @return array
+	 */
+	public function add_menu( $menus ) {
+
+		$menus['settings'] = array(
+			'title'      => __( 'Settings', ATUM_TEXT_DOMAIN ),
+			'callback'   => array( $this, 'display' ),
+			'slug'       => self::UI_SLUG,
+			'menu_order' => self::MENU_ORDER,
+		);
+
+		return $menus;
+
+	}
+	
+	/**
+	 * Display the settings page view
+	 *
+	 * @since 0.0.2
+	 */
+	public function display() {
+		
+		$this->options = $this->get_settings( Helpers::get_options(), $this->defaults );
+		
+		if ( isset( $_GET['tab'] ) ) {
+			$this->active_tab = $_GET['tab'];
+		}
+
+		Helpers::load_view( 'settings-page', array(
+			'tabs'   => $this->tabs,
+			'active' => $this->active_tab,
+		) );
+	}
+	
+	/**
+	 * Get the option settings and merge them with defaults. With parameters in case we need this function in Helpers
+	 *
+	 * @since   0.0.2
+	 *
+	 * @param array $settings The settings.
+	 * @param array $defaults The default options.
+	 *
+	 * @return  array       The options array mixed
+	 */
+	public function get_settings( $settings, $defaults ) {
+		
+		$options = array();
+		
+		if ( ! $settings || ! is_array( $settings ) ) {
+			$settings = array();
+		}
+		
+		foreach ( $defaults as $field => $default ) {
+
+			if ( array_key_exists( $field, $settings ) ) {
+				$options[ $field ] = $settings[ $field ];
+			}
+			elseif ( isset( $default['default'] ) ) {
+				$options[ $field ] =  $default['default'];
+			}
+
+		}
+		
+		return apply_filters( 'atum/settings/get_settings', $options );
+
+	}
+	
+	/**
+	 * Enqueues scripts and styles needed for the Settings Page
+	 *
+	 * @since 0.0.2
+	 *
+	 * @param string $hook
+	 */
+	public function enqueue_scripts( $hook ) {
+		
+		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
+
+			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
+
+			wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+			Helpers::maybe_es6_promise();
+
+			$min = ! ATUM_DEBUG ? '.min' : '';
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION );
+
+			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
+				'atumPrefix'                      => ATUM_PREFIX,
+				'areYouSure'                      => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'unsavedData'                     => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'continue'                        => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
+				'cancel'                          => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'run'                             => __( 'Run', ATUM_TEXT_DOMAIN ),
+				'ok'                              => __( 'OK', ATUM_TEXT_DOMAIN ),
+				'done'                            => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'selectColor'                     => __( 'Select Color', ATUM_TEXT_DOMAIN ),
+				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
+				'menuThemeNonce'                  => wp_create_nonce( 'atum-menu-theme-nonce' ),
+				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
+				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
+				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
+				'changeSettingsMenuStyle'         => 'atum_menu_style',
+				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
+				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
+			) );
+			
+			wp_enqueue_style( 'woocommerce_admin_styles' );
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_style( self::UI_SLUG );
+
+			if ( wp_script_is( 'es6-promise', 'registered' ) ) {
+				wp_enqueue_script( 'es6-promise' );
+			}
+
+			wp_enqueue_script( self::UI_SLUG );
+			
+		}
+
+	}
+	
+	/**
+	 * Register the settings using WP's Settings API
+	 *
+	 * @since 0.0.2
+	 */
+	public function register_settings() {
 		
 		$default_country = get_option( 'woocommerce_default_country' );
-
+		
 		$this->tabs = array(
 			'general'       => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
@@ -110,7 +252,7 @@ class Settings {
 				),
 			),
 		);
-
+		
 		$this->defaults = array(
 			'enable_ajax_filter'        => array(
 				'section' => 'general',
@@ -151,7 +293,7 @@ class Settings {
 				'section'                        => 'general',
 				'name'                           => __( 'Out of Stock Threshold per product', ATUM_TEXT_DOMAIN ),
 				'desc'                           => __( 'Activate the switch to disable WooCommerce global threshold settings and enable ATUM per product threshold. All products will inherit the WooCommerce global value that you can now amend.<br><br>
-								                        Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br> 
+								                        Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br>
 								                        We have a tool to reset or change all per product values in the Tool tab above.', ATUM_TEXT_DOMAIN ),
 				'type'                           => 'switcher',
 				'default'                        => 'no',
@@ -309,10 +451,10 @@ class Settings {
 				'default' => '',
 			),
 		);
-
+		
 		// WC Subscriptions compatibility.
 		if ( class_exists( '\WC_Subscriptions' ) ) {
-
+			
 			$this->defaults['show_subscriptions'] = array(
 				'section' => 'stock_central',
 				'name'    => __( 'Show WC Subscriptions', ATUM_TEXT_DOMAIN ),
@@ -320,150 +462,8 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes',
 			);
-
-		}
-
-	}
-
-	/**
-	 * Add the Settings menu
-	 *
-	 * @since 1.3.6
-	 *
-	 * @param array $menus
-	 *
-	 * @return array
-	 */
-	public function add_menu( $menus ) {
-
-		$menus['settings'] = array(
-			'title'      => __( 'Settings', ATUM_TEXT_DOMAIN ),
-			'callback'   => array( $this, 'display' ),
-			'slug'       => self::UI_SLUG,
-			'menu_order' => self::MENU_ORDER,
-		);
-
-		return $menus;
-
-	}
-	
-	/**
-	 * Display the settings page view
-	 *
-	 * @since 0.0.2
-	 */
-	public function display() {
-		
-		$this->options = $this->get_settings( Helpers::get_options(), $this->defaults );
-		
-		if ( isset( $_GET['tab'] ) ) {
-			$this->active_tab = $_GET['tab'];
-		}
-
-		Helpers::load_view( 'settings-page', array(
-			'tabs'   => $this->tabs,
-			'active' => $this->active_tab,
-		) );
-	}
-	
-	/**
-	 * Get the option settings and merge them with defaults. With parameters in case we need this function in Helpers
-	 *
-	 * @since   0.0.2
-	 *
-	 * @param array $settings The settings.
-	 * @param array $defaults The default options.
-	 *
-	 * @return  array       The options array mixed
-	 */
-	public function get_settings( $settings, $defaults ) {
-		
-		$options = array();
-		
-		if ( ! $settings || ! is_array( $settings ) ) {
-			$settings = array();
-		}
-		
-		foreach ( $defaults as $field => $default ) {
-
-			if ( array_key_exists( $field, $settings ) ) {
-				$options[ $field ] = $settings[ $field ];
-			}
-			elseif ( isset( $default['default'] ) ) {
-				$options[ $field ] =  $default['default'];
-			}
-
-		}
-		
-		return apply_filters( 'atum/settings/get_settings', $options );
-
-	}
-	
-	/**
-	 * Enqueues scripts and styles needed for the Settings Page
-	 *
-	 * @since 0.0.2
-	 *
-	 * @param string $hook
-	 */
-	public function enqueue_scripts( $hook ) {
-		
-		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
-
-			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
-
-			wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array(), ATUM_VERSION, TRUE );
-			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-			Helpers::maybe_es6_promise();
-
-			$min = ! ATUM_DEBUG ? '.min' : '';
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION );
-
-			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
-				'atumPrefix'                      => ATUM_PREFIX,
-				'areYouSure'                      => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'unsavedData'                     => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
-				'continue'                        => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
-				'cancel'                          => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'run'                             => __( 'Run', ATUM_TEXT_DOMAIN ),
-				'ok'                              => __( 'OK', ATUM_TEXT_DOMAIN ),
-				'done'                            => __( 'Done!', ATUM_TEXT_DOMAIN ),
-				'selectColor'                     => __( 'Select Color', ATUM_TEXT_DOMAIN ),
-				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
-				'menuThemeNonce'                  => wp_create_nonce( 'atum-menu-theme-nonce' ),
-				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
-				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
-				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
-				'changeSettingsMenuStyle'         => 'atum_menu_style',
-				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
-				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
-			) );
-			
-			wp_enqueue_style( 'woocommerce_admin_styles' );
-			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_style( self::UI_SLUG );
-
-			if ( wp_script_is( 'es6-promise', 'registered' ) ) {
-				wp_enqueue_script( 'es6-promise' );
-			}
-
-			wp_enqueue_script( self::UI_SLUG );
 			
 		}
-
-	}
-	
-	/**
-	 * Register the settings using WP's Settings API
-	 *
-	 * @since 0.0.2
-	 */
-	public function register_settings() {
 
 		// Load the tools tab.
 		Tools::get_instance();
