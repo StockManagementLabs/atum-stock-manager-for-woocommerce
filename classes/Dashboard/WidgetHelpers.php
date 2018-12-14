@@ -783,8 +783,17 @@ final class WidgetHelpers {
 
 		);
 
-		$temp_wc_query_data = self::$wc_query_data;
+		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
 
+		self::$wc_query_data['where'] = [];
+
+		// Query clauses.
+		self::$wc_query_data['where'][] = array(
+			'key'   => 'stock_status',
+			'value' => array( 'instock' ),
+		);
+
+		// Check if category filter data exist.
 		if ( $category ) {
 			array_push( $args['tax_query'], array(
 				'taxonomy' => 'product_cat',
@@ -793,6 +802,7 @@ final class WidgetHelpers {
 			) );
 		}
 
+		// Check if product type filter data exist.
 		if ( $product_type ) {
 			if ( 'grouped' === $product_type ) {
 				$group_items = self::get_children( 'grouped' );
@@ -800,6 +810,24 @@ final class WidgetHelpers {
 				if ( $group_items ) {
 					$args['post__in'] = $group_items;
 				}
+			}
+			elseif ( 'variable' === $product_type ) {
+				$variations = self::get_children( 'variable', 'product_variation' );
+				if ( $variations ) {
+					$args['post__in'] = $variations;
+				}
+			}
+			elseif ( 'downloadable' === $product_type ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'downloadable',
+					'value' => array( '1' ),
+				);
+			}
+			elseif ( 'virtual' === $product_type ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'virtual',
+					'value' => array( '1' ),
+				);
 			}
 			else {
 				array_push( $args['tax_query'], array(
@@ -810,20 +838,18 @@ final class WidgetHelpers {
 			}
 		}
 
-		self::$wc_query_data['where'] = array(
-			'key'   => 'stock_status',
-			'value' => array( 'instock' ),
-		);
-
+		// Get products.
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 
+		// Init values counter.
 		$counters = [
 			'items_stocks_counter'        => 0,
 			'items_purcharse_price_total' => 0,
 		];
 
+		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
 			$product                 = Helpers::get_atum_product( $product_id );
 			$product_stock           = (int) $product->get_stock_quantity();
