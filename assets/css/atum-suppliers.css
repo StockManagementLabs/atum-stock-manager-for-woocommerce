@@ -3180,20 +3180,21 @@ h2 .atum-help-tip {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  float: right;
-  padding: 1px;
   -webkit-flex-wrap: nowrap;
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
-  z-index: 999;
-  float: right;
-  margin: 20px 10px 20px auto;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   align-items: center;
+  float: right;
+  padding: 1px;
+  z-index: 999;
+  margin: 20px 10px 20px auto;
   border: 1px solid #e9ecef;
   border-radius: 5px;
-  z-index: 999;
-  float: right;
 }
 
 @media all and (max-width: 782px) {
