@@ -5298,6 +5298,9 @@ input[type="button"].btn-block {
   float: left;
   margin: 0 11px 0 0;
   height: 70px;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-app-region: no-drag;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
@@ -5308,7 +5311,7 @@ input[type="button"].btn-block {
   margin: 0;
 }
 
-.atum-list-wrapper *, .atum-list-wrapper *::after, .atum-list-wrapper *::before {
+.atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;

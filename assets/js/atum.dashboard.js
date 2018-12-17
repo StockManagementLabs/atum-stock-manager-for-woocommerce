@@ -163,8 +163,9 @@
 			// Add widget
 			$('body').on('click', '.add-widget-popup .add-widget', function() {
 				
-				var $button    = $(this),
-				    widgetId = $button.closest('li').data('widget');
+				var $button          = $(this),
+				    widgetId         = $button.closest('li').data('widget'),
+				    $widgetContainer = $('.add-widget-popup');
 				
 				$.ajax({
 					url       : ajaxurl,
@@ -176,7 +177,7 @@
 					},
 					dataType  : 'json',
 					beforeSend: function () {
-					
+						$widgetContainer.addClass('overlay');
 					},
 					success   : function (response) {
 						
@@ -186,6 +187,8 @@
 							self.initWidgets([widgetId]);
 							$button.hide().siblings('.btn-info').show();
 							self.toggleModalTemplateButtons(widgetId);
+							$widgetContainer.removeClass('overlay');
+							self.bindWidgetControls();
 						}
 						
 					}

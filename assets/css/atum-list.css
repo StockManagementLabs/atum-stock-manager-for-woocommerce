@@ -4140,16 +4140,17 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
   float: right;
   padding: 1px;
   z-index: 999;
-  float: right;
   margin: 20px 10px 20px auto;
-  align-items: center;
   border: 1px solid #e9ecef;
   border-radius: 5px;
-  z-index: 999;
-  float: right;
 }
 
 @media all and (max-width: 782px) {
@@ -4951,6 +4952,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   float: left;
   margin: 0 11px 0 0;
   height: 70px;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-app-region: no-drag;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
@@ -4961,7 +4965,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   margin: 0;
 }
 
-.atum-list-wrapper *, .atum-list-wrapper *::after, .atum-list-wrapper *::before {
+.atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
