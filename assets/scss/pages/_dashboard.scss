@@ -58,7 +58,7 @@ body.toplevel_page_atum-dashboard {
 		background: $header-bg url('#{$img-path}dashboard/header-bg.png') center bottom;
 		background-size: cover;
 		@include vertical-align-flex();
-		@include flex-wrap(wrap);
+		flex-wrap: wrap;
 		
 		.dash-header-buttons {
 			position: absolute;
@@ -147,7 +147,7 @@ body.toplevel_page_atum-dashboard {
 	.dash-cards {
 		
 		@media all and (min-width: $screen-xs-max) {
-			@include flexbox;
+			display: flex;
 		}
 		
 		.dash-card {
@@ -279,7 +279,7 @@ body.toplevel_page_atum-dashboard {
 						background-color: transparentize($white, 0.34);
 						border-radius: 15px;
 						box-shadow: 0 0 0 3px transparentize($white, 0.8);
-						@include flexbox;
+						display: flex;
 					}
 					
 					input[type=email] {
@@ -290,7 +290,7 @@ body.toplevel_page_atum-dashboard {
 						font-size: 10px;
 						font-weight: 300;
 						border-radius: 15px;
-						@include flex-grow(1);
+						flex-grow: 1;
 						
 						@media all and (max-width: $screen-sm-min) {
 							padding: 6px 10px;
@@ -320,14 +320,14 @@ body.toplevel_page_atum-dashboard {
 		min-height: 180px;
 		@include vertical-align-flex();
 		cursor: pointer;
-		@include transition(.15s ease-in-out);
+		transition: .15s ease-in-out;
 		
 		i, h2 {
 			display: inline-block;
 			vertical-align: middle;
 			color: $add-widget-color;
-			@include transition(.15s ease-in-out);
-			@include user-select(none);
+			transition: .15s ease-in-out;
+			user-select: none;
 		}
 		
 		i {
@@ -373,8 +373,8 @@ body.toplevel_page_atum-dashboard {
 			text-align: left;
 			cursor: move;
 			position: relative;
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 			
 			&:before {
 				content: '...';
@@ -383,19 +383,19 @@ body.toplevel_page_atum-dashboard {
 				@include vertical-align-absolute;
 				left: 17px;
 				letter-spacing: -4px;
-				@include transform(rotate(90deg) translateY(-50%));
-				@include transform-origin(top);
+				transform: rotate(90deg) translateY(-50%);
+				transform-origin: top;
 			}
 			
 			h2, i {
-				@include user-select(none);
+				user-select: none;
 			}
 			
 			h2 {
 				margin: 10px 10px 9px 15px;
 				font-size: 18px;
 				font-weight: bold;
-				@include flex-grow(1);
+				flex-grow: 1;
 			}
 			
 			i {
@@ -404,7 +404,7 @@ body.toplevel_page_atum-dashboard {
 				display: inline-block;
 				cursor: pointer;
 				margin-left: 3px;
-				@include transition(color 0.2s ease-in-out);
+				transition: color 0.2s ease-in-out;
 				
 				&:hover {
 					color: $widget-controls-hover;
@@ -596,8 +596,8 @@ body.toplevel_page_atum-dashboard {
 			width: 90%;
 			padding: 12px 0;
 			margin: auto;
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 			border-bottom: 0.5px solid transparentize($light, 0.5);
 			
 			&:first-child {
@@ -628,7 +628,7 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			@media all and (max-width: $screen-xs-min) {
-				@include flex-wrap(wrap);
+				flex-wrap: wrap;
 				border-bottom: none;
 				padding-bottom: 0;
 			}
@@ -638,7 +638,7 @@ body.toplevel_page_atum-dashboard {
 		.widget-details {
 			text-align: left;
 			margin: 0 10px;
-			@include flex-grow(1);
+			flex-grow: 1;
 			
 			h3 {
 				font-size: 15px;

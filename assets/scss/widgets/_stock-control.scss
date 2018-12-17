@@ -12,7 +12,7 @@
 }
 
 .stock-control-widget {
-	@include flexbox;
+	display: flex;
 	padding-top: 5px;
 	
 	@media all and (max-width: $screen-sm-min) {
@@ -36,9 +36,9 @@
 			background: rgba($black, .7);
 			color: $white;
 			border-radius: 3px;
-			@include transition(all .1s ease);
+			transition: all .1s ease;
 			pointer-events: none;
-			@include transform(translate(-50%, 0));
+			transform: translate(-50%, 0);
 			
 			table {
 				td {
@@ -110,7 +110,7 @@
 	}
 	
 	@media all and (max-width: $screen-xs-min) {
-		@include flex-wrap(wrap);
+		flex-wrap: wrap;
 		
 		> div {
 			width: 100%;

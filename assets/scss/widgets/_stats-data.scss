@@ -3,14 +3,14 @@
 //-----------------------
 
 .stats-data-widget {
-	@include flexbox;
-	@include flex-wrap(wrap);
-	@include flex-justify-content(center);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 	
 	.data {
 		margin-top: $grid-gutter-width*2;
 		width: 100%;
-		@include flex-grow(1);
+		flex-grow: 1;
 		
 		@media all and (max-width: $screen-sm-min) {
 			margin-top: $grid-gutter-width/2;
@@ -36,7 +36,7 @@
 	hr {
 		border: {
 			width: 1px;
-			color: transparentize(#000, 0.9);
+			color: transparentize($black, 0.9);
 			bottom: none;
 		}
 		margin: $grid-gutter-width 0;

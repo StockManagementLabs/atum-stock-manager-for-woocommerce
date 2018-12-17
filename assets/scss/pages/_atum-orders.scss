@@ -1,18 +1,6 @@
 //
 // ATUM Orders list pages
 //------------------------
-//#wpfooter {
-//	position: relative;
-//	@include flexbox;
-//	@include flex-align-items(center);
-//	@include flex-justify-content(space-between);
-//	#wpbody-content {
-//		padding-bottom: 0;
-//	}
-//	.footer-atum-logo, .footer-atum-buttons, #footer-left, .clear {
-//		display: none;
-//	}
-//}
 
 //
 // Tooltips
@@ -147,7 +135,7 @@ table.wp-list-table {
 		text-align: center;
 		
 		.order-status {
-			@include flex-inline;
+			display: inline-flex;
 			line-height: 2.5em;
 			color: $secondary;
 			background: $light;

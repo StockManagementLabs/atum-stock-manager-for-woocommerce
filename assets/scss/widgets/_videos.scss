@@ -9,16 +9,16 @@
 }
 
 .videos-widget {
-	@include flexbox;
-	@include flex-justify-content(space-between);
+	display: flex;
+	justify-content: space-between;
 	
 	> div {
 		width: 49%;
 	}
 	
 	@media all and (max-width: $screen-xs-min) {
-		@include flex-wrap(wrap);
-		@include flex-direction(column-reverse);
+		flex-wrap: wrap;
+		flex-direction: column-reverse;
 		
 		> div {
 			width: 100%;
@@ -51,7 +51,7 @@
 					display: block;
 					position: relative;
 					top: 50%;
-					@include transform(translateY(-50%));
+					transform: translateY(-50%);
 				}
 				
 				@media all and (max-width: $screen-xs-min) {
@@ -98,12 +98,12 @@
 		
 		article {
 			width: 99%;
-			@include flexbox;
-			@include flex-align-items(flex-start);
+			display: flex;
+			align-items: flex-start;
 			text-align: left;
 			padding: 10px 0;
 			border-bottom: 1px solid lighten($light, 7%);
-			@include transition(0.3s ease-in-out);
+			transition: 0.3s ease-in-out;
 			
 			&:last-child {
 				border-bottom: none;
@@ -117,7 +117,7 @@
 			}
 			
 			@media all and (max-width: $screen-xs-min) {
-				@include flex-wrap(wrap);
+				flex-wrap: wrap;
 				max-width: 143px;
 				border-bottom: none;
 				padding-bottom: 0;
@@ -134,7 +134,7 @@
 		.video-thumb {
 			position: relative;
 			margin-right: $grid-gutter-width/2;
-			@include transition(0.2s ease-in-out);
+			transition: 0.2s ease-in-out;
 			
 			img {
 				max-width: 143px;
@@ -163,7 +163,7 @@
 			font-size: 14px;
 			color: $dark;
 			font-weight: bold;
-			@include transition(0.2s ease-in-out);
+			transition: 0.2s ease-in-out;
 			
 			&:hover {
 				color: $primary;
@@ -187,8 +187,8 @@
 				width: 31.333%;
 				padding: 0 1% 2%;
 				float: left;
-				@include flex-wrap(wrap);
-				@include flex-justify-content(center);
+				flex-wrap: wrap;
+				justify-content: center;
 				border: none;
 				
 				&:last-child {
@@ -257,8 +257,8 @@
 	}
 	
 	.video-filter {
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		margin: $grid-gutter-width/2 auto 23px;
 		
 		@media all and (max-width: $screen-sm-min) {
@@ -271,7 +271,7 @@
 		}
 		
 		.filter-controls {
-			@include flex-grow(1);
+			flex-grow: 1;
 			text-align: left;
 			
 			@media all and (max-width: $screen-xs-min) {
@@ -300,7 +300,7 @@
 				margin-left: 5px;
 				float: left;
 				opacity: .4;
-				@include transition(opacity 0.2s ease-in-out);
+				transition: opacity 0.2s ease-in-out;
 				
 				@media all and (max-width: $screen-sm-min) {
 					max-width: 24px;
@@ -328,17 +328,17 @@
 		}
 	
 		.channel-info {
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 			
 			@media all and (max-width: $screen-xs-min) {
 				display: none;
 			}
 			
 			> span {
-				@include flexbox;
-				@include flex-grow(1);
-				@include flex-align-items(center);
+				display: flex;
+				flex-grow: 1;
+				align-items: center;
 				margin-left: -10px;
 				
 				img, h3 {

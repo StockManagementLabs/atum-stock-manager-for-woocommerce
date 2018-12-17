@@ -1627,34 +1627,40 @@ final class Helpers {
 
 					// Check for sale dates.
 					if ( isset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] ) ) {
-
-						// TODO: USE WC_DATE.
+						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
+						$now       = self::get_wc_time( current_time( 'timestamp', TRUE ) );
 
-						$date_from = $date_from ? strtotime( $date_from ) : '';
-						$date_to   = $date_to ? strtotime( $date_to ) : '';
+						$date_from = $date_from ? self::get_wc_time( $date_from ) : '';
+						$date_to   = $date_to ? self::get_wc_time( $date_to ) : '';
 
 						if ( $date_to && ! $date_from ) {
-							$date_from = current_time( 'timestamp', TRUE );
+							$date_from = $now;
 						}
 
 						// Update price if on sale.
 						if ( $product->is_on_sale( 'edit' ) ) {
 							$product->set_price( $sale_price );
+							$date_from_str = $date_from->getTimestamp();
+							$date_to_str   = $date_to->getTimestamp();
 						}
 						else {
-
+							
 							$product->set_price( $regular_price );
-
-							if ( $date_to && $date_to < current_time( 'timestamp', TRUE ) ) {
-								$date_from = $date_to = '';
+							
+							if ( $date_to && 0 > $date_to->diff( $now ) ) {
+								$date_from_str = $date_to_str = '';
 							}
-
+							else {
+								$date_from_str = $date_from->getTimestamp();
+								$date_to_str   = $date_to->getTimestamp();
+							}
+							
 						}
 
-						$product->set_date_on_sale_from( $date_from );
-						$product->set_date_on_sale_to( $date_to );
+						$product->set_date_on_sale_from( $date_from_str );
+						$product->set_date_on_sale_to( $date_to_str );
 
 					}
 						
@@ -2162,6 +2168,59 @@ final class Helpers {
 		$atum_user_meta[ $key ] = $value;
 		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
 
+	}
+	
+	/**
+	 * Sets a date prop whilst handling formatting and datetime objects.
+	 *
+	 * @since 1.5.0.3
+	 *
+	 * @param string|integer|\WC_DateTime $value
+	 *
+	 * @return \WC_DateTime|null
+	 */
+	public static function get_wc_time( $value ) {
+		
+		$date_time = NULL;
+		
+		try {
+			
+			if ( is_a( $value, 'WC_DateTime' ) ) {
+				$date_time = $value;
+			}
+			elseif ( is_numeric( $value ) ) {
+				// Timestamps are handled as UTC timestamps in all cases.
+				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
+			}
+			else {
+				
+				// Strings are defined in local WP timezone. Convert to UTC.
+				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
+					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
+					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
+				}
+				else {
+					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
+				}
+				
+				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+				
+			}
+			
+			// Set local timezone or offset.
+			if ( get_option( 'timezone_string' ) ) {
+				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
+			}
+			else {
+				$date_time->set_utc_offset( wc_timezone_offset() );
+			}
+			
+		} catch ( \Exception $e ) {
+		
+		}
+		
+		return $date_time;
+		
 	}
 
 }

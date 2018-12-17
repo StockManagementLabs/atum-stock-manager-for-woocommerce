@@ -4,10 +4,10 @@
 
 // Vertical align using display: flex
 @mixin vertical-align-flex($vertical-center: center, $text-center: center) {
-	@include flexbox;
-	@include flex-direction(row);
-	@include flex-justify-content($text-center);
-	@include flex-align-items($vertical-center);
+	display: flex;
+	flex-direction: row;
+	justify-content: $text-center;
+	align-items: $vertical-center;
 }
 
 // Vertical aligng using display: table-cell
@@ -23,7 +23,7 @@
 @mixin vertical-align-absolute{
 	position: absolute;
 	top: 50%;
-	@include transform(translateY(-50%));
+	transform: translateY(-50%);
 }
 
 // Ellipsis overflow
@@ -74,25 +74,25 @@
 	border-radius: 50%;
 	position: absolute;
 	z-index: $zindex;
-	@include animation(loader-rotate $duration linear infinite);
+	animation: loader-rotate $duration linear infinite;
 	@include loader-rotate-animation;
 }
 
 @mixin loader-rotate-animation {
-	@include keyframes('loader-rotate') {
+	keyframes loader-rotate {
 		from {
-			#{$browser}transform: rotate(0deg);
+			transform: rotate(0deg);
 		}
 		to {
-			#{$browser}transform: rotate(360deg);
+			transform: rotate(360deg);
 		}
 	}
 }
 
 @mixin loader-scale-animation {
-	@include keyframes('loader-rotate') {
+	@keyframes loader-rotate {
 		0% {
-			#{$browser}transform: scale(0);
+			transform: scale(0);
 			opacity: 0;
 		}
 		
@@ -101,7 +101,7 @@
 		}
 		
 		100% {
-			#{$browser}transform: scale(1);
+			transform: scale(1);
 			opacity: 0;
 		}
 	}

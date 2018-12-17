@@ -9,8 +9,8 @@
 	
 	h1.wp-heading-inline {
 		width: 100%;
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		margin-right: 15px;
 		line-height: 1.5;
 		position: relative;
@@ -23,8 +23,8 @@
 			font-size: 36px;
 			font-weight: bold;
 			width: 100%;
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 		}
 		
 		#atum-update-list {
@@ -51,17 +51,16 @@
 		}
 		
 		// At 782px, WordPress changes the list table views to mobile version
-		@media all and (max-width: 782px) {
-			@include flexbox;
-			@include flex-wrap(wrap);
-			@include flex-justify-content(left);
-			
+		@media all and (max-width: $screen-sm-min-wp) {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
 			margin: 0 10px;
 			padding-bottom: 15px;
 		}
 		
 		@media all and (max-width: $screen-xs) {
-			@include flex-justify-content(center);
+			justify-content: center;
 			margin: 0;
 		}
 	}
@@ -95,7 +94,7 @@
 			background-color: $green-opacity;
 		}
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			font-size: 14px;
 			height: 35px;
 			line-height: 35px;
@@ -119,16 +118,17 @@
 		box-shadow: none;
 		border: none;
 		height: 31px;
+		transition: .2s ease-in-out;
 		
 		&:hover, &.active {
-			background-color: rgba($orange, 0.6);
+			background-color: rgba($orange, 0.7);
 			color: $white;
 			border: none;
 		}
 		
 	}
 	
-	@media all and (max-width: 782px) {
+	@media all and (max-width: $screen-sm-min-wp) {
 		margin-right: 20px;
 		margin-left: 10px;
 	}
@@ -147,8 +147,8 @@
 	&.extend-list-table {
 		width: inherit;
 		margin: 10px 0 !important;
-		@include flex-wrap(nowrap);
-		@include flex-justify-content(left);
+		flex-wrap: nowrap;
+		justify-content: flex-start;
 		border-radius: 0;
 		border-bottom: 0;
 		
@@ -156,9 +156,9 @@
 			padding: 0;
 			
 			span {
-				@include flexbox;
-				@include flex-justify-content(center);
-				@include flex-align-items(center);
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				margin-left: 3px;
 				
 				&.active {
@@ -284,20 +284,20 @@
 	letter-spacing: 0.4px;
 	font-weight: bold;
 	text-transform: capitalize;
-	@include flexbox;
-	@include flex-align-items(center);
+	display: flex;
+	align-items: center;
 	border-bottom: 1px solid $gray-200;
 	margin: 0;
 	
-	
-	@media all and (max-width: 782px) {
+	@media all and (max-width: $screen-sm-min-wp) {
 		margin: 10px 10px;
-		@include flex-wrap(wrap);
-		@include flex-justify-content(center);
+		flex-wrap: wrap;
+		justify-content: center;
 		border-bottom: none;
 	}
+	
 	@media all and (max-width: $screen-xs) {
-		@include flex-justify-content(left);
+		justify-content: flex-start;
 	}
 	
 	&:not(.extend-list-table) {
@@ -350,9 +350,9 @@
 }
 
 .search-box, p.search-box {
-	@include flexbox;
-	@include flex-wrap(nowrap);
-	@include flex-align-items(center);
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
 	float: right;
 	padding: 1px;
 	z-index: 999;
@@ -360,7 +360,7 @@
 	border: 1px solid $gray-200;
 	border-radius: 5px;
 	
-	@media all and (max-width: 782px) {
+	@media all and (max-width: $screen-sm-min-wp) {
 		position: static;
 		height: auto;
 		margin: 0 0 15px 0;
@@ -368,13 +368,13 @@
 	
 	&.extend-list-table {
 		padding: 0;
-		@include flexbox;
-		@include flex-justify-content(flex-end);
+		display: flex;
+		justify-content: flex-end;
 		border-radius: 0;
 		border: 0;
 		margin: 0 0 3px auto !important;
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			margin: 0 !important;
 			float: none;
 		}
@@ -394,7 +394,7 @@
 			color: $gray-500;
 		}
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			width: 70%;
 		}
 	}
@@ -403,7 +403,7 @@
 		font-weight: normal;
 		height: 29px;
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			margin-bottom: 0;
 		}
 	}
@@ -413,16 +413,16 @@
 		width: 280px;
 		height: 30px;
 		border-radius: 5px;
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(space-between);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		margin: 10px 20px;
 		
 		.atum-post-search {
 			width: 100%;
 			border-radius: 5px;
 			
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				margin-bottom: 0;
 			}
 			
@@ -440,12 +440,12 @@
 			width: 87px;
 			height: 30px;
 			
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				margin-bottom: 0;
 			}
 		}
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			margin: 10px 10px;
 		}
 		
@@ -482,7 +482,7 @@
 		max-width: 110px;
 		font-size: 15px;
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			width: 100%;
 		}
 		
@@ -583,16 +583,16 @@
 
 .tablenav.top {
 	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
-	@include flexbox;
-	@include flex-wrap(wrap);
-	@include flex-justify-content(left);
-	@include flex-align-items(center);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
 	padding: 10px 11px;
 	margin: 0;
 	
-	@media all and (max-width: 782px) {
-		@include flex-wrap(wrap);
-		@include flex-justify-content(center);
+	@media all and (max-width: $screen-sm-min-wp) {
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 	
 	@media all and (max-width: $screen-xs) {
@@ -602,10 +602,10 @@
 	&.extend-list-table {
 		padding: 0 11px;
 		height: 52px;
-		@include flex-wrap(nowrap);
+		flex-wrap: nowrap;
 		
-		@media all and (max-width: 782px) {
-			@include flex-wrap(wrap);
+		@media all and (max-width: $screen-sm-min-wp) {
+			flex-wrap: wrap;
 			height: auto;
 		}
 		
@@ -614,8 +614,8 @@
 		}
 		
 		@media all and (max-width: $screen-xs) {
-			padding: 10px 10px;
-			@include flexbox;
+			padding: 10px;
+			display: flex;
 		}
 		
 	}
@@ -628,7 +628,7 @@
 		}
 		
 		&.bulkactions {
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				display: inline-block;
 			}
 			
@@ -657,7 +657,7 @@
 			width: inherit;
 		}
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			margin: 5px 0 0 0;
 		}
 		
@@ -695,7 +695,7 @@
 			width: 62%;
 		}
 		
-		@media screen and (max-width: 782px) {
+		@media screen and (max-width: $screen-sm-min-wp) {
 			width: inherit;
 		}
 		
@@ -706,7 +706,7 @@
 		
 		.overflow-opacity-effect-right {
 			
-			@media screen and (max-width: 782px) {
+			@media screen and (max-width: $screen-sm-min-wp) {
 				display: none !important;
 			}
 			
@@ -724,15 +724,18 @@
 		width: 100%;
 		height: 52px;
 		justify-content: start;
+		
 		.actions {
 			overflow: initial;
 		}
+		
 		@media all and (max-width: $screen-xs) {
 			width: 100%;
 			display: contents;
 			white-space: normal;
 		}
-		@media all and (max-width: 782px) {
+		
+		@media all and (max-width: $screen-sm-min-wp) {
 			right: 63%;
 			width: inherit;
 		}
@@ -763,7 +766,7 @@
 	}
 	#table-paging {
 		margin-left: 0;
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			margin-left: 0;
 		}
 	}
@@ -780,7 +783,7 @@
 			white-space: inherit;
 		}
 		&.bulkactions {
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				display: inline-block;
 			}
 			@media all and (max-width: $screen-xs) {
@@ -843,16 +846,12 @@
 	}
 
 	.rotate {
-		-webkit-transform: rotate(45deg);
-		-moz-transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		-o-transform: rotate(45deg);
 		transform: rotate(45deg);
 	}
 	
 	.table-style-buttons {
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		
 		button {
 			width: 30px;
@@ -862,7 +861,7 @@
 			background-color: $white;
 			color: $gray-600;
 			cursor: pointer;
-			@include transition(all 0.20s);
+			transition: all 0.20s;
 			line-height: 2;
 			
 			&:first-child {
@@ -907,9 +906,9 @@
 		border-radius: 5px;
 		height: 26px;
 		width: 63px;
+		
 		&:hover, &:active, &:focus {
-			opacity: 0.6;
-			background-color: $orange;
+			background-color: rgba($orange, 0.7);
 			color: $white;
 			box-shadow: none;
 		}
@@ -918,7 +917,7 @@
 			opacity: 1;
 		}
 		
-		@media all and (max-width: 782px) {
+		@media all and (max-width: $screen-sm-min-wp) {
 			height: 31px;
 			padding: 0;
 			margin-bottom: 0;
@@ -931,14 +930,14 @@
 	
 	
 	.list-table-header {
-		@include flexbox;
-		@include flex-justify-content(space-between);
-		@include flex-align-items(center);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		margin: 0 11px 0 11px;
 		
-		@media all and (max-width: 782px) {
-			@include flex-wrap(wrap);
-			@include flex-justify-content(center);
+		@media all and (max-width: $screen-sm-min-wp) {
+			flex-wrap: wrap;
+			justify-content: center;
 			margin-bottom: 15px;
 		}
 		
@@ -961,51 +960,49 @@
 		height: 65px;
 		pointer-events: none;
 	}
+	
 	.overflow-opacity-effect-right {
 		right: 0;
-		background: -webkit-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
-		background: -o-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
-		background: -moz-linear-gradient(to right, rgba($white,0.3), rgba($white,0.9));
-		background: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+		background-image: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+		background-repeat: no-repeat;
 	}
+	
 	.overflow-opacity-effect-left {
 		display: none;
 		left: 0;
-		background: -webkit-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
-		background: -o-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
-		background: -moz-linear-gradient(to left, rgba($white,0.3), rgba($white,0.9));
-		background: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+		backgroundimage: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+		background-repeat: no-repeat;
 	}
 	
 	.nav-with-scroll-effect {
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(space-between);
-		cursor: grab;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		flex-wrap: nowrap;
-		overflow-x: hidden;
-		overflow-y: hidden;
+		cursor: grab;
+		overflow: hidden;
 		-ms-overflow-style: -ms-autohiding-scrollbar;
 		-webkit-overflow-scrolling: touch;
 		white-space: nowrap;
 		width: 100%;
 		float: left;
 		margin: 0 11px 0 0;
+		height: 70px;
+		
 		&::-webkit-scrollbar {
 			display: none;
 		}
-		height: 70px;
 		
 		.subsubsub {
 			margin: 0;
 		}
 		
-		&, &::after, &::before {
-			-webkit-user-select: none;
-			-webkit-user-drag: none;
-			-webkit-app-region: no-drag;
+		&.dragging {
+			a {
+				pointer-events: none;
 		}
-		
+		}
+
 	}
 	
 	.subsubsub {
@@ -1015,7 +1012,8 @@
 		font-weight: bold;
 		text-transform: capitalize;
 		margin: 10px 20px;
-		@media all and (max-width: 782px) {
+		
+		@media all and (max-width: $screen-sm-min-wp) {
 			margin: 10px 10px;
 		}
 		
@@ -1023,10 +1021,11 @@
 			margin-right: 15px;
 			color: $gray-500;
 			text-transform: uppercase;
+			
 			span {
-				@include flexbox;
-				@include flex-justify-content(center);
-				@include flex-align-items(center);
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				margin-left: 3px;
 				
 				&.active {
@@ -1154,7 +1153,7 @@
 		margin-left: 10px;
 		width: 26px;
 		height: 26px;
-		@include transition(0.2s ease-in-out);
+		transition: 0.2s ease-in-out;
 		
 		@media all and (max-width: $screen-xs) {
 			margin-bottom: 15px;
@@ -1187,7 +1186,7 @@
 				line-height: 0;
 				text-transform: uppercase;
 				font-size: 12px;
-				@media screen and (max-width: 782px) {
+				@media screen and (max-width: $screen-sm-min-wp) {
 					font-size: 14px;
 					height: 35px;
 				}
@@ -1211,7 +1210,7 @@
 			height: 30px;
 			margin: 0 0 0 5px;
 			float: none;
-			@media screen and (max-width: 782px) {
+			@media screen and (max-width: $screen-sm-min-wp) {
 				height: 35px;
 				.select2-selection, .select2-selection__rendered, .select2-selection__arrow {
 					height: 35px;
@@ -1242,7 +1241,7 @@
 			line-height: 0;
 			text-transform: uppercase;
 			font-size: 12px;
-			@media screen and (max-width: 782px) {
+			@media screen and (max-width: $screen-sm-min-wp) {
 				font-size: 14px;
 				height: 35px;
 			}
@@ -1286,7 +1285,7 @@
 		box-shadow: rgba($black, 0.04) 5px 1px 10px;
 	}
 	
-	@media screen and (max-width: 782px) {
+	@media screen and (max-width: $screen-sm-min-wp) {
 		
 		ul.subsubsub {
 			font-size: 16px;
@@ -1295,8 +1294,8 @@
 		}
 		
 		.search-box {
-			@include flexbox;
-			@include flex-justify-content(center);
+			display: flex;
+			justify-content: center;
 			width: 100%;
 			
 			input[type="text"], input[type="number"], button:not(.reset-filters) {
@@ -1317,7 +1316,7 @@
 		}
 		
 		.filter-box {
-			@include flexbox;
+			display: flex;
 			float: none;
 			margin: auto;
 			width: 90%;
@@ -1336,7 +1335,7 @@
 		}
 		
 	}
-	@media screen and (max-width: 782px) {
+	@media screen and (max-width: $screen-sm-min-wp) {
 		.tablenav {
 			.tablenav-pages {
 				margin: 0 0 0 auto;
@@ -1618,7 +1617,7 @@ table.wp-list-table {
 				width: 37px;
 				
 				.group-toggler {
-					@include transform(rotate(180deg));
+					transform: rotate(180deg);
 				}
 			}
 			
@@ -1630,7 +1629,7 @@ table.wp-list-table {
 		&.sortable, &.sorted {
 			a {
 				padding: 0;
-				@include flexbox;
+				display: flex;
 				font-size: 14px;
 				font-weight: bold;
 				letter-spacing: 0.3px;
@@ -1640,8 +1639,8 @@ table.wp-list-table {
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
 			&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
 				a {
-					@include flex-justify-content(center);
-					@include flex-align-items(center);
+					justify-content: center;
+					align-items: center;
 					
 					> span {
 						float: none;
@@ -1686,7 +1685,7 @@ table.wp-list-table {
 		}
 		
 		&.expanded {
-			@include transition(all 0.1s ease-in-out);
+			transition: all 0.1s ease-in-out;
 			
 			&.variable, &.variable-subscription {
 				background-color: $primary;
@@ -1768,7 +1767,7 @@ table.wp-list-table {
 				padding: 10px 24px;
 				.alert {
 					margin-top: $grid-gutter-width/2;
-					@include flex-wrap(wrap);
+					flex-wrap: wrap;
 					
 					h3, p {
 						width: 100%;
@@ -1996,7 +1995,7 @@ table.wp-list-table {
 				margin-left: 5px;
 				font-weight: bold;
 				font-size: 14px;
-				@include transform(rotate(90deg));
+				transform: rotate(90deg);
 			}
 		}
 		
@@ -2235,7 +2234,7 @@ table.wp-list-table {
 		}
 	}
 	
-	@media screen and (max-width: 782px) {
+	@media screen and (max-width: $screen-sm-min-wp) {
 		
 		th, td {
 			display: table-cell !important;
@@ -2294,17 +2293,17 @@ table.wp-list-table {
 
 // Manage Stock notice
 .atum-notice {
-	@include flexbox;
-	@include flex-align-items(center);
+	display: flex;
+	align-items: center;
 	
 	.manage-message {
 		position: relative;
-		@include flex-grow(1);
+		flex-grow: 1;
 	}
 	
 	.notice-dismiss {
 		top: 50%;
-		@include transform(translateY(-50%));
+		transform: translateY(-50%);
 	}
 	
 	.add-manage-option {

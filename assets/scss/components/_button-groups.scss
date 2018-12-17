@@ -36,9 +36,9 @@
 
 // Optional: Group multiple button groups together for a toolbar
 .btn-toolbar {
-	@include flexbox;
-	@include flex-wrap(wrap);
-	@include flex-justify-content(flex-start);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
 	
 	.input-group {
 		width: auto;

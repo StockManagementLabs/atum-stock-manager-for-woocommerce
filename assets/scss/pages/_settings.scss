@@ -5,14 +5,8 @@
 $settings-menu-bg:          $blue-dark-lighten;
 $settings-menu-color:       $white;
 $settings-menu-active:      $white;
-$settings-xs-min:          568px !default;
+$settings-xs-min:           568px !default;
 
-//#wpfooter {
-//	position: relative;
-//	@include flexbox;
-//	@include flex-align-items(center);
-//	@include flex-justify-content(space-between);
-//}
 #wpbody-content {
 	padding-bottom: 0;
 }
@@ -35,8 +29,8 @@ $settings-xs-min:          568px !default;
 		@media all and (max-width: $settings-xs-min) {
 			flex-wrap: wrap;
 		}
-		@include flexbox;
-		@include flex-align-items(stretch);
+		display: flex;
+		align-items: stretch;
 		
 	}
 	
@@ -51,9 +45,10 @@ $settings-xs-min:          568px !default;
 		color: $white;
 		font-weight: bold;
 		font-size: 16px;
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		justify-content: space-evenly;
+		
 		&.bg-light {
 			background-color: $white;
 			color: $gray-600;
@@ -127,22 +122,25 @@ $settings-xs-min:          568px !default;
 	}
 	.atum-nav-header {
 		background-color: $blue-dark-lighten;
-		box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
-		@include flexbox;
-		@include flex-align-items(center);
+		box-shadow: 0 1px 0 0 rgba($white, 0.1);
+		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		border-top-right-radius: 6px;
 		border-top-left-radius: 6px;
+		
 		.toogle-menu {
 			font-size: 20px;
 			color: $gray-500;
 			display: none;
 		}
+		
 		.atum-brand-link {
 			text-decoration: none;
+			
 			.atum-brand {
-				@include flexbox;
-				@include flex-align-items(center);
+				display: flex;
+				align-items: center;
 				text-decoration: none;
 				color: $white;
 				height: 51px;
@@ -172,8 +170,8 @@ $settings-xs-min:          568px !default;
 		width: 100%;
 		
 		.nav-footer-logo {
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 			justify-content: center;
 			padding: 5px 24px;
 			img {
@@ -192,10 +190,10 @@ $settings-xs-min:          568px !default;
 			margin: 0;
 			font-size: 12px;
 			font-weight: normal;
-			@include flexbox;
-			@include flex-justify-content(center);
-			@include flex-align-items(center);
-			@include flex-wrap(wrap);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-wrap: wrap;
 			padding: 0 12px 9px 12px;
 			
 			a {
@@ -231,17 +229,17 @@ $settings-xs-min:          568px !default;
 		text-decoration: none;
 		padding: 0 20px 0 20px;
 		cursor: pointer;
-		@include user-select(none);
+		user-select: none;
 		-webkit-touch-callout: none;
 		-webkit-tap-highlight-color: rgba($black, 0);
 		position: relative;
 		overflow: hidden;
 		color: $settings-menu-color;
-		@include transition(color 0.3s);
+		transition: color 0.3s;
 		height: 51px;
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(left);
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
 		
 		&:hover, &:focus {
 			outline: none;
@@ -265,8 +263,8 @@ $settings-xs-min:          568px !default;
 				height: 1px;
 				opacity: 0;
 				background: $settings-menu-active;
-				@include transform(translate3d(0, -3em, 0));
-				@include transition(transform 0s 0.3s, opacity 0.2s);
+				transform: translate3d(0, -3em, 0);
+				transition: transform 0s 0.3s, opacity 0.2s;
 			}
 			
 			&:before {
@@ -343,11 +341,14 @@ $settings-xs-min:          568px !default;
 	
 	// Mobile style
 	@media all and (max-width: $settings-xs-min) {
+		
 		.atum-nav, .atum-nav-light {
 			width: 100%;
 			margin-bottom: 11px;
+			
 			.atum-brand-link {
 				width: inherit;
+				
 				.atum-brand {
 					padding-left: 10px;
 					span {
@@ -355,33 +356,34 @@ $settings-xs-min:          568px !default;
 					}
 				}
 			}
+			
 			.atum-nav-header {
 				border-bottom-right-radius: 6px;
 				border-bottom-left-radius: 6px;
+				
 				.toogle-menu {
 					display: block;
 					background-color: transparent;
 					border: none;
+					
 					&:focus, &:active {
 						outline: 0;
 					}
 				}
 			}
+			
 			.atum-nav-list {
 				display: none;
+				
 				.menu-helper {
 					width: 100%;
-					@include flexbox;
-					@include flex-align-items(center);
-					justify-content: left;
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					
 					span {
 						display: block;
 					}
-				}
-			}
-			.menu-helper {
-				span {
-				
 				}
 			}
 		
@@ -390,32 +392,17 @@ $settings-xs-min:          568px !default;
 			.atum-nav-header {
 				background-color: $blue;
 				box-shadow: 0 1px 0 0 $gray-200;
+				
 				.toogle-menu {
 					background-color: transparent;
 					border: none;
+					
 					&:focus, &:active {
 						outline: 0;
 					}
 				}
 			}
 		}
-	}
-}
-
-@include keyframes('anim-atum-menu') {
-	50% {
-		opacity: 0;
-		#{$browser}transform: translate3d(0, 100%, 0);
-	}
-	
-	51% {
-		opacity: 0;
-		#{$browser}transform: translate3d(0, -100%, 0);
-	}
-	
-	100% {
-		opacity: 1;
-		#{$browser}transform: translate3d(0, 0, 0);
 	}
 }
 
@@ -426,6 +413,7 @@ $settings-xs-min:          568px !default;
 	
 	.btn-group {
 		height: 30px;
+		
 		label {
 			margin-left: 1px;
 			margin-right: 1px;
@@ -484,8 +472,8 @@ $settings-xs-min:          568px !default;
 		background-color: $blue-dark-lighten;
 		border-radius: 6px;
 		height: 51px;
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		
 		.submit {
@@ -530,23 +518,14 @@ $settings-xs-min:          568px !default;
 		background-color: $blue-dark-lighten;
 		border-top-right-radius: 6px;
 		border-top-left-radius: 6px;
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(left);
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
 		height: 50px;
 		padding-left: 20px;
 		font-size: 18px;
 		font-weight: bold;
 		color: $white;
-		//
-		// Atum Settings
-		//---------------
-		
-		$settings-menu-bg:          $blue-dark-lighten;
-		$settings-menu-color:       $white;
-		$settings-menu-active:      $white;
-		$settings-xs-min:          568px !default;
-		
 		
 		// Settings Menu
 		.atum-settings-wrapper {
@@ -561,12 +540,12 @@ $settings-xs-min:          568px !default;
 			}
 			
 			.atum-settings-container {
-				// Mobile style
+				display: flex;
+				align-items: stretch;
+				
 				@media all and (max-width: $settings-xs-min) {
 					flex-wrap: wrap;
 				}
-				@include flexbox;
-				@include flex-align-items(stretch);
 				
 			}
 			
@@ -581,8 +560,8 @@ $settings-xs-min:          568px !default;
 				color: $gray-600;
 				font-weight: bold;
 				font-size: 16px;
-				@include flexbox;
-				@include flex-align-items(center);
+				display: flex;
+				align-items: center;
 				justify-content: space-evenly;
 			}
 			
@@ -650,22 +629,25 @@ $settings-xs-min:          568px !default;
 			}
 			.atum-nav-header {
 				background-color: $blue-dark-lighten;
-				box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
-				@include flexbox;
-				@include flex-align-items(center);
+				box-shadow: 0 1px 0 0 rgba($white, 0.1);
+				display: flex;
+				align-items: center;
 				justify-content: space-between;
 				border-top-right-radius: 6px;
 				border-top-left-radius: 6px;
+				
 				.toogle-menu {
 					font-size: 20px;
 					color: $gray-500;
 					display: none;
 				}
+				
 				.atum-brand-link {
 					text-decoration: none;
+					
 					.atum-brand {
-						@include flexbox;
-						@include flex-align-items(center);
+						display: flex;
+						align-items: center;
 						text-decoration: none;
 						color: $white;
 						height: 51px;
@@ -688,7 +670,6 @@ $settings-xs-min:          568px !default;
 				}
 			}
 			
-			
 			.nav-footer {
 				position: absolute;
 				left: 0;
@@ -696,13 +677,15 @@ $settings-xs-min:          568px !default;
 				bottom: 0;
 				
 				.nav-footer-logo {
-					@include flexbox;
-					@include flex-align-items(center);
-					@include flex-justify-content(center);
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					padding: 5px 24px;
+					
 					img {
 						width: 34px;
 					}
+					
 					span {
 						color: $white;
 						font-size: 27px;
@@ -716,15 +699,16 @@ $settings-xs-min:          568px !default;
 					margin: 0;
 					font-size: 12px;
 					font-weight: normal;
-					@include flexbox;
-					@include flex-align-items(center);
-					@include flex-justify-content(center);
-					@include flex-wrap(wrap);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex-wrap: wrap;
 					padding: 0 12px 9px 12px;
 					
 					a {
 						text-decoration: none;
 						color: $blue;
+						
 						&:hover {
 							color: $blue;
 						}
@@ -755,17 +739,17 @@ $settings-xs-min:          568px !default;
 				text-decoration: none;
 				padding: 0 20px 0 20px;
 				cursor: pointer;
-				@include user-select(none);
+				user-select: none;
 				-webkit-touch-callout: none;
 				-webkit-tap-highlight-color: rgba($black, 0);
 				position: relative;
 				overflow: hidden;
 				color: $settings-menu-color;
-				@include transition(color 0.3s);
+				transition: color 0.3s;
 				height: 51px;
-				@include flexbox;
-				@include flex-align-items(center);
-				@include flex-justify-content(left);
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
 				
 				&:hover, &:focus {
 					outline: none;
@@ -790,8 +774,8 @@ $settings-xs-min:          568px !default;
 						height: 1px;
 						opacity: 0;
 						background: $settings-menu-active;
-						@include transform(translate3d(0, -3em, 0));
-						@include transition(transform 0s 0.3s, opacity 0.2s);
+						transform: translate3d(0, -3em, 0);
+						transition: transform 0s 0.3s, opacity 0.2s;
 					}
 					
 					&:before {
@@ -818,13 +802,12 @@ $settings-xs-min:          568px !default;
 					border-right: 3px solid $blue;
 					
 					.menu-helper {
-						@include animation(anim-atum-menu 0.3s forwards);
+						animation: anim-atum-menu 0.3s forwards;
 						
 						&:before, &:after {
-							//opacity: 1;
-							@include transform(translate3d(0, 0, 0));
-							@include transition(transform 0.3s, opacity 0.1s);
-							@include transition-timing(cubic-bezier(0.4, 0, 0.2, 1));
+							transform: translate3d(0, 0, 0);
+							transition: transform 0.3s, opacity 0.1s;
+							transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 						}
 					}
 				}
@@ -905,55 +888,35 @@ $settings-xs-min:          568px !default;
 					}
 					.atum-nav-list {
 						display: none;
+						
 						.menu-helper {
 							width: 100%;
-							@include flexbox;
-							@include flex-align-items(center);
-							justify-content: left;
+							display: flex;
+							align-items: center;
+							justify-content: flex-start;
+							
 							span {
 								display: block;
 							}
 						}
 					}
-					.menu-helper {
-						span {
-						
-						}
-					}
-					.nav-footer {
-					
-					}
+				
 				}
 				.atum-nav-light {
 					.atum-nav-header {
 						background-color: $blue;
 						box-shadow: 0 1px 0 0 $gray-200;
+						
 						.toogle-menu {
 							background-color: transparent;
 							border: none;
+							
 							&:focus, &:active {
 								outline: 0;
 							}
 						}
 					}
 				}
-			}
-		}
-		
-		@include keyframes('anim-atum-menu') {
-			50% {
-				opacity: 0;
-				#{$browser}transform: translate3d(0, 100%, 0);
-			}
-			
-			51% {
-				opacity: 0;
-				#{$browser}transform: translate3d(0, -100%, 0);
-			}
-			
-			100% {
-				opacity: 1;
-				#{$browser}transform: translate3d(0, 0, 0);
 			}
 		}
 		
@@ -964,6 +927,7 @@ $settings-xs-min:          568px !default;
 			
 			.btn-group {
 				height: 30px;
+				
 				label {
 					margin-left: 1px;
 					margin-right: 1px;
@@ -1007,11 +971,13 @@ $settings-xs-min:          568px !default;
 			.btn-secondary {
 				background-color: $gray-500;
 				border: none;
+				
 				&:hover, &:active {
 					background-color: $green;
 					box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
 				}
 			}
+			
 			.active {
 				background-color: $green;
 				box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
@@ -1022,8 +988,8 @@ $settings-xs-min:          568px !default;
 				background-color: $blue-dark-lighten;
 				border-radius: 6px;
 				height: 51px;
-				@include flexbox;
-				@include flex-align-items(center);
+				display: flex;
+				align-items: center;
 				justify-content: space-between;
 				
 				.submit {
@@ -1068,9 +1034,9 @@ $settings-xs-min:          568px !default;
 				background-color: $blue-dark-lighten;
 				border-top-right-radius: 6px;
 				border-top-left-radius: 6px;
-				@include flexbox;
-				@include flex-align-items(center);
-				@include flex-justify-content(left);
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
 				height: 50px;
 				padding-left: 20px;
 				font-size: 18px;
@@ -1088,6 +1054,7 @@ $settings-xs-min:          568px !default;
 				&.section-title-light {
 					background-color: $white;
 					border-bottom: 2px solid darken($light, 5%);
+					
 					h2 {
 						color: $blue-dark;
 					}
@@ -1209,6 +1176,7 @@ $settings-xs-min:          568px !default;
 					width: 62px;
 					text-align: right;
 					margin-right: 2px;
+					
 					&::-webkit-inner-spin-button,
 					&::-webkit-outer-spin-button {
 						opacity: 1;
@@ -1216,8 +1184,8 @@ $settings-xs-min:          568px !default;
 				}
 				
 				.region-switcher {
-					@include flexbox;
-					@include flex-wrap(wrap !important);
+					display: flex;
+					flex-wrap: wrap !important;
 				}
 				
 				.region-switcher {
@@ -1227,11 +1195,10 @@ $settings-xs-min:          568px !default;
 				}
 				
 				.script-runner {
-					@include flexbox;
-					@include flex-wrap(nowrap);
+					display: flex;
+					flex-wrap: nowrap;
 					
 					.tool-runner {
-						//margin-left: 5px;
 						text-transform: uppercase;
 						font-size: 12px;
 						width: 110px;
@@ -1279,8 +1246,8 @@ $settings-xs-min:          568px !default;
 						margin-bottom: 20px;
 						
 						.repeatable-row {
-							@include flexbox;
-							@include flex-align-items(center);
+							display: flex;
+							align-items: center;
 							
 							> div {
 								margin-right: 10px;
@@ -1288,7 +1255,7 @@ $settings-xs-min:          568px !default;
 							
 							i {
 								cursor: pointer;
-								@include transition(0.2s ease-in-out);
+								transition: 0.2s ease-in-out;
 								
 								&:hover {
 									color: $primary;
@@ -1412,12 +1379,12 @@ $settings-xs-min:          568px !default;
 				box-shadow: none;
 				font-size: 12px;
 				border: none;
-				@include transition(all 0.2s ease-in-out);
+				transition: all 0.2s ease-in-out;
 				
 				&:hover, &:active {
 					background-color: lighten($primary, 10%);
 					border-color: lighten($primary, 10%);
-					@include transform(none);
+					transform: none;
 				}
 				
 			}
@@ -1823,6 +1790,7 @@ $settings-xs-min:          568px !default;
 			width: 62px;
 			text-align: right;
 			margin-right: 2px;
+			
 			&::-webkit-inner-spin-button,
 			&::-webkit-outer-spin-button {
 				opacity: 1;
@@ -1830,8 +1798,8 @@ $settings-xs-min:          568px !default;
 		}
 		
 		.region-switcher {
-			@include flexbox;
-			@include flex-wrap(wrap !important);
+			display: flex;
+			flex-wrap: wrap !important;
 		}
 		
 		.region-switcher {
@@ -1841,8 +1809,8 @@ $settings-xs-min:          568px !default;
 		}
 		
 		.script-runner {
-			@include flexbox;
-			@include flex-wrap(nowrap);
+			display: flex;
+			flex-wrap: nowrap;
 			
 			.tool-runner {
 				//margin-left: 5px;
@@ -1893,8 +1861,8 @@ $settings-xs-min:          568px !default;
 				margin-bottom: 20px;
 				
 				.repeatable-row {
-					@include flexbox;
-					@include flex-align-items(center);
+					display: flex;
+					align-items: center;
 					
 					> div {
 						margin-right: 10px;
@@ -1902,7 +1870,7 @@ $settings-xs-min:          568px !default;
 					
 					i {
 						cursor: pointer;
-						@include transition(0.2s ease-in-out);
+						transition: 0.2s ease-in-out;
 						
 						&:hover {
 							color: $primary;
@@ -2019,12 +1987,12 @@ $settings-xs-min:          568px !default;
 		box-shadow: none;
 		font-size: 12px;
 		border: none;
-		@include transition(all 0.2s ease-in-out);
+		transition: all 0.2s ease-in-out;
 		
 		&:hover, &:active {
 			background-color: lighten($primary, 10%);
 			border-color: lighten($primary, 10%);
-			@include transform(none);
+			transform: none;
 		}
 		
 	}

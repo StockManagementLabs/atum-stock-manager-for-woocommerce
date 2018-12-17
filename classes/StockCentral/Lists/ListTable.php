@@ -27,11 +27,11 @@ use Atum\PurchaseOrders\PurchaseOrders;
 class ListTable extends AtumListTable {
 
 	/**
-	 * No stock Threshold
+	 * WC's out of stock Threshold
 	 *
 	 * @var int
 	 */
-	protected $no_stock;
+	protected $wc_out_stock_threshold;
 	
 	/**
 	 * Time of query
@@ -121,7 +121,7 @@ class ListTable extends AtumListTable {
 	 */
 	public function __construct( $args = array() ) {
 		
-		$this->no_stock = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
+		$this->wc_out_stock_threshold = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		
 		// Activate managed/unmanaged counters separation.
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
@@ -527,8 +527,8 @@ class ListTable extends AtumListTable {
 				// TODO: threshold recalc if needed.
 				$stock_quantity = $this->product->get_stock_quantity();
 				$back_orders    = 0;
-				if ( $stock_quantity < $this->no_stock ) {
-					$back_orders = $this->no_stock - $stock_quantity;
+				if ( $stock_quantity < $this->wc_out_stock_threshold ) {
+					$back_orders = $this->wc_out_stock_threshold - $stock_quantity;
 				}
 
 			}
@@ -922,8 +922,8 @@ class ListTable extends AtumListTable {
 						$back_orders    = 0;
 						$stock_quantity = $wc_product->get_stock_quantity();
 
-						if ( $stock_quantity < $this->no_stock ) {
-							$back_orders = $this->no_stock - $stock_quantity;
+						if ( $stock_quantity < $this->wc_out_stock_threshold ) {
+							$back_orders = $this->wc_out_stock_threshold - $stock_quantity;
 						}
 
 						if ( $back_orders ) {

@@ -383,7 +383,7 @@ ul.atum_order_notes {
 					color: $wp-gray-1;
 					background: $wp-gray-6;
 					-webkit-touch-callout: none;
-					@include user-select(none);
+					user-select: none;
 					
 					&.sortable {
 						cursor: pointer;

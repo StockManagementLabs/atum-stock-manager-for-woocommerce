@@ -149,8 +149,8 @@
 		}
 		
 		.form-field {
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 			
 			&:first-of-type {
 				margin: 25px 0;

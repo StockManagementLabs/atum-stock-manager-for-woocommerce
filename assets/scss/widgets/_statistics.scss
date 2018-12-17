@@ -4,8 +4,8 @@
 
 .statistics-widget {
 	height: 322px;
-	@include flexbox;
-	@include flex-wrap(wrap);
+	display: flex;
+	flex-wrap: wrap;
 	
 	.mobile-filter-nav {
 		display: none;
@@ -19,7 +19,7 @@
 		
 		ul {
 			background-color: $gray-200;
-			@include flexbox;
+			display: flex;
 			
 			li {
 				display: inline-block;
@@ -27,7 +27,7 @@
 				color: $widget-text;
 				font-size: 15px;
 				font-weight: 100;
-				@include transition(.2s ease-in-out);
+				transition: .2s ease-in-out;
 				
 				&:hover, &.active {
 					color: $widget-success;
@@ -47,9 +47,9 @@
 	
 	.chart-filter {
 		width: 100%;
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(space-between);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		margin-bottom: $grid-gutter-width/2;
 		
 		@media all and (max-width: $screen-sm-min) {
@@ -64,7 +64,7 @@
 			}
 			
 			&.visible-filter {
-				@include animation(fadeInDown .3s map_get($easing, 'ease-in-quad'));
+				animation: fadeInDown .3s map_get($easing, 'ease-in-quad');
 				animation-fill-mode: both;
 			}
 		}
@@ -72,7 +72,7 @@
 	
 	.filter-controls {
 		margin: auto;
-		@include flexbox;
+		display: flex;
 	}
 	
 	.nice-select {
@@ -80,7 +80,7 @@
 		margin-right: 7px;
 		
 		&.loading {
-			@include transition(all 0.2s ease-in-out);
+			transition: all 0.2s ease-in-out;
 			
 			.current {
 				position: relative;
@@ -109,7 +109,7 @@
 			max-width: 32px;
 			max-height: 32px;
 			fill: $widget-text;
-			@include transition(0.2s ease-in-out);
+			transition: 0.2s ease-in-out;
 			
 			@media all and (max-width: $screen-sm-min) {
 				max-width: 25px;
@@ -136,7 +136,7 @@
 	
 	.chart-legend {
 		margin: auto;
-		@include flexbox;
+		display: flex;
 		
 		.legend-switch {
 			padding: 10px 40px;
@@ -145,7 +145,7 @@
 			background-color: transparentize($light, 0.8);
 			position: relative;
 			margin-left: 5px;
-			@include flexbox;
+			display: flex;
 			
 			&:before {
 				@extend .widget-header:before;
@@ -195,11 +195,11 @@
 	
 	.canvas-wrapper {
 		width: 100%;
-		@include flex-grow(1);
+		flex-grow: 1;
 	}
 	
 	.statistics-canvas {
-		@include user-select(none);
+		user-select: none;
 	}
 	
 	.stats-chart-tooltip {
@@ -209,8 +209,8 @@
 		color: $white;
 		font-size: 12px;
 		border-radius: 3px;
-		@include transition(all .1s ease);
-		@include transform(translate(-50%, 0));
+		transition: all .1s ease;
+		transform: translate(-50%, 0);
 		padding: 4px;
 		pointer-events: none;
 	}
