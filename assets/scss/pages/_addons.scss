@@ -18,9 +18,9 @@
 	
 	@media all and (min-width: 481px) {
 		.themes {
-			@include flexbox;
-			@include flex-wrap(wrap);
-			@include flex-align-items(flex-start);
+			display: flex;
+			flex-wrap: wrap;
+			align-items: flex-start;
 		}
 	}
 	
@@ -58,8 +58,8 @@
 		.theme-actions {
 			height: 39px;
 			right: 27px;
-			@include transform(translate3d(0, -50%, 0));
-			@include transition(0.2s ease-in-out);
+			transform: translate3d(0, -50%, 0);
+			transition: 0.2s ease-in-out;
 			
 			&.valid, &.invalid, &.inactive, &.coming-soon {
 				opacity: 1;
@@ -128,10 +128,10 @@
 			padding: 0 3px;
 			border-left: 1px solid rgba($black, 0.05);
 			cursor: pointer;
-			@include transform(translateX(100%));
+			transform: translateX(100%);
 			
 			&, i {
-				@include transition(all 0.2s ease-in-out);
+				transition: all 0.2s ease-in-out;
 			}
 			
 			i {
@@ -148,7 +148,7 @@
 			.theme-actions {
 				&:not(.coming-soon):not(.inactive):not(.not-installed) {
 					opacity: 0;
-					@include transform(translate3d(100%, -50%, 0));
+					transform: translate3d(100%, -50%, 0);
 				}
 			}
 			
@@ -159,7 +159,7 @@
 			.theme-screenshot {
 				&:hover {
 					.addon-details {
-						@include transform(translateY(0));
+						transform: translateY(0);
 					}
 					
 					.more-details {
@@ -171,7 +171,7 @@
 			.show-key {
 				opacity: 1 !important;
 				background-color: lighten($primary, 10%);
-				@include transform(translateX(0));
+				transform: translateX(0);
 				
 				i {
 					color: $white !important;
@@ -183,8 +183,8 @@
 		.more-details {
 			border-radius: 0;
 			top: 50%;
-			@include transform(translateY(-50%));
-			@include transition(opacity 0.3s ease-in-out);
+			transform: translateY(-50%);
+			transition: opacity 0.3s ease-in-out;
 		}
 		
 		.addon-details {
@@ -194,12 +194,12 @@
 			position: absolute;
 			color: $white;
 			padding: 10px;
-			@include flexbox;
-			@include flex-wrap(wrap);
-			@include flex-justify-content(center);
-			@include flex-align-items(center);
-			@include transform(translateY(-101%));
-			@include transition(transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955));
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			transform: translateY(-101%);
+			transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
 			
 			> p {
 				height: 65%;
@@ -208,8 +208,8 @@
 			
 			.more-details {
 				position: static;
-				@include transform(none);
-				@include transition-delay(0.2s);
+				transform: none;
+				transition-delay: 0.2s;
 				display: block;
 				font-size: 12px;
 				padding: 10px 14px;
@@ -220,9 +220,9 @@
 			display: none;
 			
 			.wrapper {
-				@include flexbox;
-				@include flex-wrap(nowrap);
-				@include flex-align-items(center);
+				display: flex;
+				flex-wrap: nowrap;
+				align-items: center;
 				padding: 5px;
 				border-top: 1px solid $wp-gray-4;
 				position: relative;
@@ -264,7 +264,7 @@
 			background-color: $primary;
 			color: $white;
 			border-radius: 0;
-			@include transition(all 0.2s ease-in-out);
+			transition: all 0.2s ease-in-out;
 			
 			&.install-addon {
 				background-color: $success;

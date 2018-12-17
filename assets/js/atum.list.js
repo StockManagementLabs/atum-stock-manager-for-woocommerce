@@ -969,6 +969,7 @@
 					});
 				
 				// Drag and drop scrolling on desktops
+				// TODO: IT'S NOT MOVING FLUIDLY. TRY TO FIX OR TO USE EVERYWHERE THE SAME DRAG SCROLL LIBRARY.
 				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
 				hammertime.on('panright panleft', function(evt) {

@@ -54,7 +54,7 @@ module.exports = {
 		"eqeqeq"                         : ["error", "smart"],
 		"func-call-spacing"              : ["error", "never"],
 		"global-require"                 : "error",
-		"id-length"                      : ["error", {"min": 3, "max": 25}],
+		"id-length"                      : ["error", {"min": 3, "max": 30}],
 		"indent"                         : ["error", "tab", { "SwitchCase": 1 , "VariableDeclarator": { "var": 2, "let": 2, "const": 3 }}],
 		"key-spacing"                    : ["error", {
 			"singleLine": {

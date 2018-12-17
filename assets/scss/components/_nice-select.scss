@@ -38,8 +38,8 @@ $ns-arrow-size:                    5px !default;;
 	padding-right: $ns-dropdown-padding + 12;
 	position: relative;
 	text-align: left !important;
-	@include transition(all 0.2s ease-in-out);
-	@include user-select(none);
+	transition: all 0.2s ease-in-out;
+	user-select: none;
 	white-space: nowrap;
 	width: auto;
 	color: $ns-dropdown-text-color;
@@ -60,23 +60,23 @@ $ns-arrow-size:                    5px !default;;
 		position: absolute;
 		right: 12px;
 		top: 50%;
-		@include transform-origin(66% 66%);
-		@include transform(rotate(45deg));
-		@include transition(all 0.15s ease-in-out);
+		transform-origin: 66% 66%;
+		transform: rotate(45deg);
+		transition: all 0.15s ease-in-out;
 		width: $ns-arrow-size;
 	}
 	
 	&.open {
-		@extend :active;
+		@extend .nice-select:active;
 		
 		&:after {
-			@include transform(rotate(-135deg));
+			transform: rotate(-135deg);
 		}
 		
 		.list {
 			opacity: 1;
 			pointer-events: auto;
-			@include transform(scale(1) translateY(0));
+			transform: scale(1) translateY(0);
 		}
 	}
 	
@@ -147,9 +147,9 @@ $ns-arrow-size:                    5px !default;;
 		pointer-events: none;
 		position: absolute;
 		top: 100%; left: 0;
-		@include transform-origin(50% 0);
-		@include transform(scale(.75) translateY(- $ns-dropdown-height / 2));
-		@include transition(all .2s cubic-bezier(0.5, 0, 0, 1.25), opacity .15s ease-out);
+		transform-origin: 50% 0;
+		transform: scale(.75) translateY(- $ns-dropdown-height / 2);
+		transition: all .2s cubic-bezier(0.5, 0, 0, 1.25), opacity .15s ease-out;
 		z-index: 9;
 		
 		&:hover .option:not(:hover) {
@@ -168,7 +168,7 @@ $ns-arrow-size:                    5px !default;;
 		padding-right: $ns-dropdown-padding + 11;
 		margin: 0;
 		text-align: left;
-		@include transition(all 0.2s);
+		transition: all 0.2s;
 		
 		&:hover, &.focus, &.selected.focus {
 			background-color: $gray-100;

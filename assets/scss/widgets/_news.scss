@@ -19,12 +19,12 @@
 	}
 	
 	article {
-		@include flexbox;
-		@include flex-align-items(flex-start);
+		display: flex;
+		align-items: flex-start;
 		text-align: left;
 		padding: 10px 0;
 		border-bottom: 1px solid lighten($light, 7%);
-		@include transition(0.3s ease-in-out);
+		transition: 0.3s ease-in-out;
 		
 		&:last-child {
 			border-bottom: none;
@@ -52,13 +52,13 @@
 				}
 				width: 123px;
 				height: 70px;
-				@include transition(0.3s ease-in-out);
+				transition: 0.3s ease-in-out;
 			}
 		}
 		
 		&:hover {
 			.thumb > div {
-				@include transform(scale(1.4) rotate(5deg))
+				transform: scale(1.4) rotate(5deg);
 			}
 		}
 	}
@@ -70,7 +70,7 @@
 		display: block;
 		line-height: 1;
 		margin-bottom: 3px;
-		@include transition(0.2s ease-in-out);
+		transition: 0.2s ease-in-out;
 		
 		&:hover {
 			color: $primary;

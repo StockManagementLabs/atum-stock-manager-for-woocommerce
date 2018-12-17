@@ -9,8 +9,8 @@
 	
 	h1.wp-heading-inline {
 		width: 100%;
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		margin-right: 15px;
 		line-height: 1.5;
 		position: relative;
@@ -23,8 +23,8 @@
 			font-size: 36px;
 			font-weight: bold;
 			width: 100%;
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 		}
 		
 		#atum-update-list {
@@ -52,16 +52,15 @@
 		
 		// At 782px, WordPress changes the list table views to mobile version
 		@media all and (max-width: $screen-sm-min-wp) {
-			@include flexbox;
-			@include flex-wrap(wrap);
-			@include flex-justify-content(left);
-			
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
 			margin: 0 10px;
 			padding-bottom: 15px;
 		}
 		
 		@media all and (max-width: $screen-xs) {
-			@include flex-justify-content(center);
+			justify-content: center;
 			margin: 0;
 		}
 	}
@@ -119,7 +118,7 @@
 		box-shadow: none;
 		border: none;
 		height: 31px;
-		@include transition(.2s ease-in-out);
+		transition: .2s ease-in-out;
 		
 		&:hover, &.active {
 			background-color: rgba($orange, 0.7);
@@ -148,8 +147,8 @@
 	&.extend-list-table {
 		width: inherit;
 		margin: 10px 0 !important;
-		@include flex-wrap(nowrap);
-		@include flex-justify-content(left);
+		flex-wrap: nowrap;
+		justify-content: left;
 		border-radius: 0;
 		border-bottom: 0;
 		
@@ -157,9 +156,9 @@
 			padding: 0;
 			
 			span {
-				@include flexbox;
-				@include flex-justify-content(center);
-				@include flex-align-items(center);
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				margin-left: 3px;
 				
 				&.active {
@@ -285,20 +284,20 @@
 	letter-spacing: 0.4px;
 	font-weight: bold;
 	text-transform: capitalize;
-	@include flexbox;
-	@include flex-align-items(center);
+	display: flex;
+	align-items: center;
 	border-bottom: 1px solid $gray-200;
 	margin: 0;
 	
-	
 	@media all and (max-width: $screen-sm-min-wp) {
 		margin: 10px 10px;
-		@include flex-wrap(wrap);
-		@include flex-justify-content(center);
+		flex-wrap: wrap;
+		justify-content: center;
 		border-bottom: none;
 	}
+	
 	@media all and (max-width: $screen-xs) {
-		@include flex-justify-content(left);
+		justify-content: flex-start;
 	}
 	
 	&:not(.extend-list-table) {
@@ -351,9 +350,9 @@
 }
 
 .search-box, p.search-box {
-	@include flexbox;
-	@include flex-wrap(nowrap);
-	@include flex-align-items(center);
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
 	float: right;
 	padding: 1px;
 	z-index: 999;
@@ -369,8 +368,8 @@
 	
 	&.extend-list-table {
 		padding: 0;
-		@include flexbox;
-		@include flex-justify-content(flex-end);
+		display: flex;
+		justify-content: flex-end;
 		border-radius: 0;
 		border: 0;
 		margin: 0 0 3px auto !important;
@@ -414,9 +413,9 @@
 		width: 280px;
 		height: 30px;
 		border-radius: 5px;
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(space-between);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		margin: 10px 20px;
 		
 		.atum-post-search {
@@ -584,16 +583,16 @@
 
 .tablenav.top {
 	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
-	@include flexbox;
-	@include flex-wrap(wrap);
-	@include flex-justify-content(left);
-	@include flex-align-items(center);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: left;
+	align-items: center;
 	padding: 10px 11px;
 	margin: 0;
 	
 	@media all and (max-width: $screen-sm-min-wp) {
-		@include flex-wrap(wrap);
-		@include flex-justify-content(center);
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 	
 	@media all and (max-width: $screen-xs) {
@@ -603,10 +602,10 @@
 	&.extend-list-table {
 		padding: 0 11px;
 		height: 52px;
-		@include flex-wrap(nowrap);
+		flex-wrap: nowrap;
 		
 		@media all and (max-width: $screen-sm-min-wp) {
-			@include flex-wrap(wrap);
+			flex-wrap: wrap;
 			height: auto;
 		}
 		
@@ -615,8 +614,8 @@
 		}
 		
 		@media all and (max-width: $screen-xs) {
-			padding: 10px 10px;
-			@include flexbox;
+			padding: 10px;
+			display: flex;
 		}
 		
 	}
@@ -847,16 +846,12 @@
 	}
 
 	.rotate {
-		-webkit-transform: rotate(45deg);
-		-moz-transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		-o-transform: rotate(45deg);
 		transform: rotate(45deg);
 	}
 	
 	.table-style-buttons {
-		@include flexbox;
-		@include flex-align-items(center);
+		display: flex;
+		align-items: center;
 		
 		button {
 			width: 30px;
@@ -866,7 +861,7 @@
 			background-color: $white;
 			color: $gray-600;
 			cursor: pointer;
-			@include transition(all 0.20s);
+			transition: all 0.20s;
 			line-height: 2;
 			
 			&:first-child {
@@ -935,14 +930,14 @@
 	
 	
 	.list-table-header {
-		@include flexbox;
-		@include flex-justify-content(space-between);
-		@include flex-align-items(center);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		margin: 0 11px 0 11px;
 		
 		@media all and (max-width: $screen-sm-min-wp) {
-			@include flex-wrap(wrap);
-			@include flex-justify-content(center);
+			flex-wrap: wrap;
+			justify-content: center;
 			margin-bottom: 15px;
 		}
 		
@@ -980,10 +975,10 @@
 	}
 	
 	.nav-with-scroll-effect {
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(space-between);
-		@include flex-wrap(nowrap);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: nowrap;
 		cursor: grab;
 		overflow: hidden;
 		-ms-overflow-style: -ms-autohiding-scrollbar;
@@ -1028,9 +1023,9 @@
 			text-transform: uppercase;
 			
 			span {
-				@include flexbox;
-				@include flex-justify-content(center);
-				@include flex-align-items(center);
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				margin-left: 3px;
 				
 				&.active {
@@ -1158,7 +1153,7 @@
 		margin-left: 10px;
 		width: 26px;
 		height: 26px;
-		@include transition(0.2s ease-in-out);
+		transition: 0.2s ease-in-out;
 		
 		@media all and (max-width: $screen-xs) {
 			margin-bottom: 15px;
@@ -1299,8 +1294,8 @@
 		}
 		
 		.search-box {
-			@include flexbox;
-			@include flex-justify-content(center);
+			display: flex;
+			justify-content: center;
 			width: 100%;
 			
 			input[type="text"], input[type="number"], button:not(.reset-filters) {
@@ -1321,7 +1316,7 @@
 		}
 		
 		.filter-box {
-			@include flexbox;
+			display: flex;
 			float: none;
 			margin: auto;
 			width: 90%;
@@ -1622,7 +1617,7 @@ table.wp-list-table {
 				width: 37px;
 				
 				.group-toggler {
-					@include transform(rotate(180deg));
+					transform: rotate(180deg);
 				}
 			}
 			
@@ -1634,7 +1629,7 @@ table.wp-list-table {
 		&.sortable, &.sorted {
 			a {
 				padding: 0;
-				@include flexbox;
+				display: flex;
 				font-size: 14px;
 				font-weight: bold;
 				letter-spacing: 0.3px;
@@ -1644,8 +1639,8 @@ table.wp-list-table {
 			&[class*="column-calc_"], &.column-_stock, &.column-_regular_price, &.column-_sale_price,
 			&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
 				a {
-					@include flex-justify-content(center);
-					@include flex-align-items(center);
+					justify-content: center;
+					align-items: center;
 					
 					> span {
 						float: none;
@@ -1690,7 +1685,7 @@ table.wp-list-table {
 		}
 		
 		&.expanded {
-			@include transition(all 0.1s ease-in-out);
+			transition: all 0.1s ease-in-out;
 			
 			&.variable, &.variable-subscription {
 				background-color: $primary;
@@ -1772,7 +1767,7 @@ table.wp-list-table {
 				padding: 10px 24px;
 				.alert {
 					margin-top: $grid-gutter-width/2;
-					@include flex-wrap(wrap);
+					flex-wrap: wrap;
 					
 					h3, p {
 						width: 100%;
@@ -2000,7 +1995,7 @@ table.wp-list-table {
 				margin-left: 5px;
 				font-weight: bold;
 				font-size: 14px;
-				@include transform(rotate(90deg));
+				transform: rotate(90deg);
 			}
 		}
 		
@@ -2298,17 +2293,17 @@ table.wp-list-table {
 
 // Manage Stock notice
 .atum-notice {
-	@include flexbox;
-	@include flex-align-items(center);
+	display: flex;
+	align-items: center;
 	
 	.manage-message {
 		position: relative;
-		@include flex-grow(1);
+		flex-grow: 1;
 	}
 	
 	.notice-dismiss {
 		top: 50%;
-		@include transform(translateY(-50%));
+		transform: translateY(-50%);
 	}
 	
 	.add-manage-option {

@@ -16,7 +16,7 @@
 	}
 	
 	.no-locations-set {
-		@include flex-justify-content(center);
+		justify-content: center;
 	}
 }
 
@@ -124,7 +124,7 @@ span {
 //-----------------------------------------------------------------
 
 span.easytree-expander {
-	@include transition(all .2s ease-in-out);
+	transition: all .2s ease-in-out;
 	margin-right: 3px;
 	
 	&:before {

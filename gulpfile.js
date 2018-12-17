@@ -6,13 +6,15 @@ var gulp         = require('gulp'),
     livereload   = require('gulp-livereload'),
     notify       = require('gulp-notify'),
     wrap         = require('gulp-wrap'),
+    autoprefix   = require('gulp-autoprefixer'),
     sass         = require('gulp-sass'),
     sourcemaps   = require('gulp-sourcemaps'),
 	composer     = require('gulp-composer'),
 	filter       = require('gulp-filter');
 
 // Plugin version
-var version = '1.4.16';
+var version = '1.5.0',
+    curDate = new Date();
 
 // Global config
 var config = {
@@ -32,7 +34,7 @@ var config = {
 			' * @author Be Rebel  \n',
 			' *\n',
 			' * Author URI: https://berebel.io \n',
-			' * License : Copyright 2018 Stock Management Labs \n',
+			' * License : ©' + curDate.getFullYear() + ' Stock Management Labs \n',
 			' */\n',
 			'\n <%= contents %>'
 		].join('')
@@ -81,18 +83,18 @@ var options = {
 gulp.task('sass::atum', function () {
 
 	var destDir = config.assetsDir + '/css';
-
+	
 	return gulp.src([
-			config.assetsDir + '/scss/*.scss'
-		])
+		config.assetsDir + '/scss/*.scss',
+	])
 		.pipe(plumber({errorHandler: onError}))
-		.pipe( gulpif(enabled.maps, sourcemaps.init()) )
+		.pipe(gulpif(enabled.maps, sourcemaps.init()))
 		.pipe(sass(options.sass))
+		.pipe(autoprefix('last 2 version'))
 		.pipe(wrap(config.decorate.templateCSS))
-		.pipe( gulpif(enabled.maps, sourcemaps.write('.', {
-				sourceRoot: 'assets/scss/'
-			}))
-		)
+		.pipe(gulpif(enabled.maps, sourcemaps.write('.', {
+			sourceRoot: 'assets/scss/',
+		})))
 		.pipe(gulp.dest(destDir))
 		.pipe(notify({message: 'sass task complete'}))
 		.pipe(filter("**/*.css"))

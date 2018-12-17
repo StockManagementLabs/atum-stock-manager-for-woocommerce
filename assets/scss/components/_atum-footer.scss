@@ -20,14 +20,14 @@
 		border-radius: 8px;
 		box-shadow: 0 4px 0 0 $gray-200;
 		padding: 0 23px;
-		@include flexbox;
-		@include flex-align-items(center);
-		@include flex-justify-content(space-between);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		
 		.footer-atum-logo {
-			@include flexbox;
-			@include flex-align-items(center);
-			@include flex-justify-content(left);
+			display: flex;
+			align-items: center;
+			justify-content: left;
 			padding: 6.4px 0 5px;
 			
 			img {
@@ -55,8 +55,8 @@
 		}
 		
 		.footer-atum-buttons {
-			@include flexbox;
-			@include flex-align-items(center);
+			display: flex;
+			align-items: center;
 			
 			.footer-button {
 				padding: 0 22px;

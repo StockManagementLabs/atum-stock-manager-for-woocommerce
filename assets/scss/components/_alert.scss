@@ -8,8 +8,8 @@
 	margin-bottom: $alert-margin-bottom;
 	border: $alert-border-width solid transparent;
 	border-radius: $alert-border-radius;
-	@include flexbox;
-	@include flex-align-items(center);
+	display: flex;
+	align-items: center;
 	
 	i {
 		margin-right: 5px;

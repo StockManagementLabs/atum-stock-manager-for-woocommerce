@@ -30,7 +30,7 @@
 		}
 		
 		button, a {
-			@include transition(background-color 0.2s ease-in-out);
+			transition: background-color 0.2s ease-in-out;
 			
 			&:focus {
 				outline: none;
@@ -45,7 +45,8 @@
 			padding: 9px 19px;
 			font-size: 13px;
 			letter-spacing: 1px;
-			.lnr {
+			
+			.atum-icon {
 				position: relative;
 				font-size: 1.15em;
 				top: .15em;

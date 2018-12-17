@@ -5,7 +5,7 @@
 //---------------------------------------
 
 // FadeIn
-@include keyframes(fadeIn){
+@keyframes fadeIn{
 	from {
 		opacity: 0;
 	}
@@ -16,15 +16,15 @@
 }
 
 // FadeInDown
-@include keyframes(fadeInDown) {
+@keyframes fadeInDown {
 	from {
 		opacity: 0;
-		#{$browser}transform: translate3d(0, -100%, 0);
+		transform: translate3d(0, -100%, 0);
 	}
 	
 	to {
 		opacity: 1;
-		#{$browser}transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
 	}
 }
 
@@ -32,17 +32,17 @@
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
-		#{$browser}transform: translate3d(0, 100%, 0);
+		transform: translate3d(0, 100%, 0);
 	}
 	
 	to {
 		opacity: 1;
-		#{$browser}transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
 	}
 }
 
 // FadeOut
-@include keyframes(fadeOut){
+@keyframes fadeOut {
 	from {
 		opacity: 1;
 	}
@@ -53,14 +53,14 @@
 }
 
 // FadeOutDown
-@include keyframes(fadeOutDown) {
+@keyframes fadeOutDown {
 	from {
 		opacity: 1;
 	}
 	
 	to {
 		opacity: 0;
-		#{$browser}transform: translate3d(0, 100%, 0);
+		transform: translate3d(0, 100%, 0);
 	}
 }
 
@@ -72,6 +72,24 @@
 	
 	to {
 		opacity: 1;
-		#{$browser}transform: translate3d(0, -100%, 0);
+		transform: translate3d(0, -100%, 0);
+	}
+}
+
+// ATUM menu animation
+@keyframes anim-atum-menu {
+	50% {
+		opacity: 0;
+		transform: translate3d(0, 100%, 0);
+	}
+	
+	51% {
+		opacity: 0;
+		transform: translate3d(0, -100%, 0);
+	}
+	
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
 	}
 }
