@@ -399,10 +399,10 @@ trait WidgetHelpersLegacyTrait {
 			if ( $product_stock ) {
 				$counters['items_stocks_counter'] += $product_stock;
 				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
-					$counters['items_purcharse_price_total'] += $product_purcharse_price;
+					$counters['items_purcharse_price_total'] += ( $product_purcharse_price * $product_stock );
 				}
 				else {
-					$counters['items_without_purcharse_price'] ++;
+					$counters['items_without_purcharse_price'] += $product_stock;
 				}
 			}
 		}
