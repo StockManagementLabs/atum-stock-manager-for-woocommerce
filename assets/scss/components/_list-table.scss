@@ -352,16 +352,13 @@
 .search-box, p.search-box {
 	@include flexbox;
 	@include flex-wrap(nowrap);
+	@include flex-align-items(center);
 	float: right;
 	padding: 1px;
 	z-index: 999;
-	float: right;
 	margin: 20px 10px 20px auto;
-	align-items: center;
 	border: 1px solid $gray-200;
 	border-radius: 5px;
-	z-index: 999;
-	float: right;
 	
 	@media all and (max-width: 782px) {
 		position: static;

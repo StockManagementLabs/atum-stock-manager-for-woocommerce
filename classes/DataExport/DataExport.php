@@ -22,6 +22,7 @@ use Atum\Inc\Helpers;
 use Atum\StockCentral\StockCentral;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 
 
 class DataExport {
@@ -161,9 +162,12 @@ class DataExport {
 
 		try {
 
+			$uploads = wp_upload_dir();
+
 			$mpdf = new Mpdf( [
-				'mode'   => 'utf-8',
-				'format' => $format,
+				'mode'    => 'utf-8',
+				'format'  => $format,
+				'tempDir' => $uploads['basedir'],
 			] );
 
 			// Add support for non-Latin languages.
@@ -265,14 +269,10 @@ class DataExport {
 			$mpdf->WriteHTML( $html_report );
 
 			$date_now = date( 'Y-m-d' );
-			echo $mpdf->Output( "atum-inventory-report-$date_now.pdf", \Mpdf\Output\Destination::INLINE ); // WPCS: XSS ok.
+			wp_die( $mpdf->Output( "atum-inventory-report-$date_now.pdf", Destination::INLINE ) ); // WPCS: XSS ok.
 
 		} catch ( MpdfException $e ) {
-
-			if ( ATUM_DEBUG ) {
-				error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
-			}
-
+			wp_die( $e->getMessage() );
 		}
 
 	}
