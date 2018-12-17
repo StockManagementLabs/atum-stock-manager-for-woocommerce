@@ -975,9 +975,11 @@
 					
 					var paneStartX   = self.jScrollApi.getContentPositionX(),
 					    offset       = 10, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
-					    displacement = evt.type === 'panright' ? paneStartX - offset : paneStartX + offset
+					    displacement = evt.type === 'panright' ? paneStartX - offset : paneStartX + offset;
 					
-					self.jScrollApi.scrollToX(displacement, false)
+					console.log(evt);
+					
+					self.jScrollApi.scrollToX(displacement, false);
 					
 				});
 				
@@ -987,8 +989,10 @@
 			
 			$('.jspContainer').height($('.jspPane').height());
 			
-			$('.has-child').on('click', function () {
-				setTimeout(function(){ $('.jspContainer').height($('.jspPane').height()); }, 500);
+			$('.has-child').on('click', function() {
+				setTimeout(function() {
+					$('.jspContainer').height($('.jspPane').height());
+				}, 500);
 			});
 			
 		},
@@ -1713,7 +1717,8 @@
 		 */
 		initHorizontalScrolleffect: function() {
 			
-			var self = this;
+			var self            = this,
+			    tooltipsTimeout = null;
 			
 			$(window).on('resize', function() {
 				self.addHorizontalScrolleffect('stock_central_nav', false);
@@ -1721,26 +1726,19 @@
 			});
 			
 			$('.nav-with-scroll-effect').on('scroll', function() {
+				
 				self.addHorizontalScrolleffect($(this).attr('id'), true);
-				if ($(this).hasClass('dragging')) {
-					self.destroyTooltips();
+				self.destroyTooltips();
+				
+				if (tooltipsTimeout !== null) {
+					clearTimeout(tooltipsTimeout);
+					tooltipsTimeout = null;
 				}
-			});
-			
-			$('.select2-selection__rendered').on('mouseout', function() {
-				self.addTooltips();
-			});
-			
-			$('.dragscroll a').on('click mouseover', function(evt) {
-				if ($(this).closest('.dragscroll').hasClass('dragging')) {
-					evt.preventDefault();
-					self.destroyTooltips();
-					
-					return false;
-				}
-				else {
+				
+				tooltipsTimeout = setTimeout(function() {
 					self.addTooltips();
-				}
+				}, 1000);
+				
 			});
 			
 			dragscroll.reset();

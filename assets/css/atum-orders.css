@@ -4206,10 +4206,13 @@ input[type="button"].btn-block {
   box-shadow: none;
   border: none;
   height: 31px;
+  -webkit-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
-  background-color: rgba(239, 175, 0, 0.6);
+  background-color: rgba(239, 175, 0, 0.7);
   color: #fff;
   border: none;
 }
@@ -5180,8 +5183,7 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .search-submit:hover, .atum-list-wrapper .search-submit:active, .atum-list-wrapper .search-submit:focus {
-  opacity: 0.6;
-  background-color: #EFAF00;
+  background-color: rgba(239, 175, 0, 0.7);
   color: #fff;
   box-shadow: none;
 }
@@ -5257,19 +5259,15 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .overflow-opacity-effect-right {
   right: 0;
-  background: -webkit-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
-  background: -o-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
-  background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  background-repeat: no-repeat;
 }
 
 .atum-list-wrapper .overflow-opacity-effect-left {
   display: none;
   left: 0;
-  background: -webkit-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
-  background: -o-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
-  background: -moz-linear-gradient(to left, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9));
-  background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  backgroundimage: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  background-repeat: no-repeat;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect {
@@ -5287,10 +5285,12 @@ input[type="button"].btn-block {
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
   justify-content: space-between;
-  cursor: grab;
+  -webkit-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  cursor: grab;
+  overflow: hidden;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
@@ -5298,9 +5298,6 @@ input[type="button"].btn-block {
   float: left;
   margin: 0 11px 0 0;
   height: 70px;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-app-region: no-drag;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
@@ -5311,10 +5308,8 @@ input[type="button"].btn-block {
   margin: 0;
 }
 
-.atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-app-region: no-drag;
+.atum-list-wrapper .nav-with-scroll-effect.dragging a {
+  pointer-events: none;
 }
 
 .atum-list-wrapper .subsubsub {

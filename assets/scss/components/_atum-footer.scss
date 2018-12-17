@@ -70,7 +70,7 @@
 				}
 			}
 			
-			@media screen and (max-width: 782px) {
+			@media screen and (max-width: $screen-sm-min-wp) {
 				display: none;
 			}
 		}
@@ -85,7 +85,7 @@
 		display: none;
 	}
 	
-	@media screen and (max-width: 782px) {
+	@media screen and (max-width: $screen-sm-min-wp) {
 		display: block;
 		margin-left: 0 !important;
 	}

@@ -13,7 +13,7 @@
 			height: 30px;
 			line-height: 30px;
 			text-decoration: none;
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				width: 35px;
 				height: 35px;
 			}
@@ -25,7 +25,7 @@
 				outline: 0;
 				box-shadow: none;
 			}
-			@media screen and (max-width: 782px) {
+			@media screen and (max-width: $screen-sm-min-wp) {
 				font-size: 13px;
 			}
 		}
@@ -37,17 +37,17 @@
 		.tablenav-current-page {
 			background-color: $gray-200;
 			padding: 8px 12px 6px;
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				padding: 8px 15px 11px;
 			}
 		}
 		.paging-input, .table-paging {
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				margin: 0;
 			}
 		}
 		
-		@media screen and (max-width: 782px) {
+		@media screen and (max-width: $screen-sm-min-wp) {
 			font-size: 13px;
 		}
 		
@@ -76,7 +76,7 @@
 				background-color: $gray-200;
 				color: $gray-500;
 			}
-			@media all and (max-width: 782px) {
+			@media all and (max-width: $screen-sm-min-wp) {
 				width: 35px;
 				height: 35px;
 			}
