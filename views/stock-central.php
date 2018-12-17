@@ -47,21 +47,19 @@ defined( 'ABSPATH' ) || die;
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary dropdown-toggle tips" id="search_column_btn"
-								title="<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>"
-								data-value="title" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<?php esc_html_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>
+								title="<?php esc_html_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>" data-value="title"
+								type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<?php esc_html_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>
 						</button>
 
 						<div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
-								data-product-title="<?php esc_attr_e( 'Search in', ATUM_TEXT_DOMAIN ) ?>"
-								data-no-option="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>"
-						></div>
+								data-product-title="<?php esc_attr_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
+								data-no-option="<?php esc_attr_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>">
+						</div>
 					</div>
 
 					<input type="search" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
-							placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>"
-							data-no-option="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>"
-							autocomplete="off">
+							placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
 
 					<?php if ( 'no' === $ajax ) : ?>
 						<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>" disabled>

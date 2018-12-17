@@ -710,23 +710,27 @@
 			
 			var self                  = this,
 			    $searchColumnBtn      = $('#search_column_btn'),
-			    $searchColumnDropdown = $('#search_column_dropdown');
+			    $searchColumnDropdown = $('#search_column_dropdown'),
+			    dropdownItem          = '<a class="dropdown-item" href="#"></a>';
 			
-			// No option and Product title moved to /view/mc-sc-etc. We can set new future values for new views, and also, now they are not dependent of AtumListTable.php
 			$searchColumnDropdown.empty();
-			$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', 'title').text($searchColumnDropdown.data('product-title')));
+			
+			// Append the no column and the title items.
+			$searchColumnDropdown.append($(dropdownItem).data('value', '').text($searchColumnDropdown.data('no-option')));
+			$searchColumnDropdown.append($(dropdownItem).data('value', 'title').text($searchColumnDropdown.data('product-title')));
 			
 			$('#adv-settings input:checked').each(function() {
 				
-				var optionVal = $(this).val();
+				var optionVal   = $(this).val(),
+				    columnLabel = $(this).parent().text();
 				
 				if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') { // Calc values are not searchable, also we can't search on thumb
 					
-					$searchColumnDropdown.append($('<a class="dropdown-item" href="#">-</a>').data('value', optionVal).text($(this).parent().text()));
+					$searchColumnDropdown.append($(dropdownItem).data('value', optionVal).text(columnLabel));
 					
 					// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
 					if ($.address.parameter('search_column') != $searchColumnBtn.data('value') && $searchColumnBtn.data('value') == optionVal) {
-						self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
+						self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, columnLabel + ' <span class="caret"></span>']);
 					}
 					
 				}
