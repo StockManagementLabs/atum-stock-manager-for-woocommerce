@@ -77,6 +77,26 @@ $ns-arrow-size:                    5px !default;;
 			opacity: 1;
 			pointer-events: auto;
 			@include transform(scale(1) translateY(0));
+			border-radius: 5px;
+			box-shadow: $dropdown-box-shadow;
+			background-color: $white;
+			
+			&::-webkit-scrollbar {
+				background-color: transparent;
+				border: none;
+				width: 7px;
+			}
+			
+			&::-webkit-scrollbar-track {
+				background-color: transparent;
+				border: none;
+			}
+			
+			&::-webkit-scrollbar-thumb {
+				-webkit-border-radius: 10px;
+				border-radius: 5px;
+				background-color: $gray-500;
+			}
 		}
 	}
 	
@@ -175,8 +195,8 @@ $ns-arrow-size:                    5px !default;;
 		}
 		
 		&.selected {
-			font-weight: bold;
-			color: $dark;
+			background-color: $blue-light !important;
+			color: $blue;
 		}
 		
 		&.disabled {

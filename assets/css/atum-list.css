@@ -4952,9 +4952,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   float: left;
   margin: 0 11px 0 0;
   height: 70px;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-app-region: no-drag;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
@@ -4965,7 +4962,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   margin: 0;
 }
 
-.atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
+.atum-list-wrapper .nav-with-scroll-effect, .atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;

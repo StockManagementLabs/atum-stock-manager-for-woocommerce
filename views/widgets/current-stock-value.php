@@ -21,6 +21,7 @@ defined( 'ABSPATH' ) || die;
 		// Category filtering.
 		wc_product_dropdown_categories( array(
 			'show_count'       => 0,
+			'hide_empty'       => 0,
 			'show_option_none' => __( 'All categories', ATUM_TEXT_DOMAIN ),
 			'class'            => 'categories-list',
 		) );

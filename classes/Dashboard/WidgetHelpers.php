@@ -773,6 +773,13 @@ final class WidgetHelpers {
 			return self::get_items_in_stock_legacy( $category, $product_type );
 		}
 
+		// Init values counter.
+		$counters = [
+			'items_stocks_counter'          => 0,
+			'items_purcharse_price_total'   => 0,
+			'items_without_purcharse_price' => 0,
+		];
+
 		/*
 		 * Products In Stock
 		 */
@@ -815,11 +822,17 @@ final class WidgetHelpers {
 				if ( $group_items ) {
 					$args['post__in'] = $group_items;
 				}
+				else {
+					return $counters;
+				}
 			}
 			elseif ( 'variable' === $product_type ) {
 				$variations = self::get_children( 'variable', 'product_variation' );
 				if ( $variations ) {
 					$args['post__in'] = $variations;
+				}
+				else {
+					return $counters;
 				}
 			}
 			elseif ( 'downloadable' === $product_type ) {
@@ -847,13 +860,6 @@ final class WidgetHelpers {
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
-
-		// Init values counter.
-		$counters = [
-			'items_stocks_counter'          => 0,
-			'items_purcharse_price_total'   => 0,
-			'items_without_purcharse_price' => 0,
-		];
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {

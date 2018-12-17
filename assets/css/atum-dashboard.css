@@ -3415,6 +3415,26 @@ input[type="button"].btn-block {
   -o-transform: scale(1) translateY(0);
   -ms-transform: scale(1) translateY(0);
   transform: scale(1) translateY(0);
+  border-radius: 5px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  background-color: #fff;
+}
+
+.nice-select.open .list::-webkit-scrollbar {
+  background-color: transparent;
+  border: none;
+  width: 7px;
+}
+
+.nice-select.open .list::-webkit-scrollbar-track {
+  background-color: transparent;
+  border: none;
+}
+
+.nice-select.open .list::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 5px;
+  background-color: #adb5bd;
 }
 
 .nice-select.disabled {
@@ -3523,8 +3543,8 @@ input[type="button"].btn-block {
 }
 
 .nice-select .option.selected {
-  font-weight: bold;
-  color: #343a40;
+  background-color: #dbf9ff !important;
+  color: #00B8DB;
 }
 
 .nice-select .option.disabled {

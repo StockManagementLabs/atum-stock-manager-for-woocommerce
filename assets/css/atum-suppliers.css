@@ -3996,9 +3996,6 @@ h2 .atum-help-tip {
   float: left;
   margin: 0 11px 0 0;
   height: 70px;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-app-region: no-drag;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
@@ -4009,7 +4006,7 @@ h2 .atum-help-tip {
   margin: 0;
 }
 
-.atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
+.atum-list-wrapper .nav-with-scroll-effect, .atum-list-wrapper .nav-with-scroll-effect::after, .atum-list-wrapper .nav-with-scroll-effect::before {
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
