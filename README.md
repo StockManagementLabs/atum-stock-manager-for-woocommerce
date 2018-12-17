@@ -159,6 +159,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.0.3`
+
+*2018-12-17*
+
+**Changes**
+
+* Now ATUM uses autoprefixer for SCSS to CSS compilations.
+
+**Fixes**
+
+* Removed map from hammer.js script.
+* Stock Central now saves the sale dates using WC_Datetime objects.
+* Fixed issue when trying to search within List Tables in Safari.
+* Fixed some typos in texts.
+* Re-added searching by product name to List Tables.
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.5.0.2`
 
 *2018-12-14*
