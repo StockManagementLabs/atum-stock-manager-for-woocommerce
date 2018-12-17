@@ -1627,8 +1627,7 @@ final class Helpers {
 
 					// Check for sale dates.
 					if ( isset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] ) ) {
-
-						// TODO: USE WC_DATE.
+						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
 						$now       = self::get_wc_time( current_time( 'timestamp', TRUE ) );
