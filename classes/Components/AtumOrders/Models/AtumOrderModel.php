@@ -840,7 +840,7 @@ abstract class AtumOrderModel {
 
 		try {
 
-			$current_date = $this->get_wc_time( current_time( 'timestamp', TRUE ) );
+			$current_date = Helpers::get_wc_time( current_time( 'timestamp', TRUE ) );
 			$this->set_currency( $this->get_currency() ?: get_woocommerce_currency() );
 			$status = $this->get_status();
 
@@ -880,7 +880,7 @@ abstract class AtumOrderModel {
 		
 		$status       = $this->get_status();
 		$date         = $this->get_date();
-		$created_date = $this->get_wc_time( $date );
+		$created_date = Helpers::get_wc_time( $date );
 		
 		if ( $this->post->post_date !== $date ) {
 			// Empty the post title to be updated by the get_title() method.
@@ -1495,59 +1495,6 @@ abstract class AtumOrderModel {
 	 */
 	public function error( $code, $message, $http_status_code = 400, $data = array() ) {
 		throw new AtumException( $code, $message, $http_status_code, $data );
-	}
-
-	/**
-	 * Sets a date prop whilst handling formatting and datetime objects.
-	 *
-	 * @since 1.4.18.2
-	 *
-	 * @param string|integer|\WC_DateTime $value
-	 *
-	 * @return \WC_DateTime|null
-	 */
-	protected function get_wc_time( $value ) {
-
-		$date_time = NULL;
-
-		try {
-			
-			if ( is_a( $value, 'WC_DateTime' ) ) {
-				$date_time = $value;
-			}
-			elseif ( is_numeric( $value ) ) {
-				// Timestamps are handled as UTC timestamps in all cases.
-				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
-			}
-			else {
-
-				// Strings are defined in local WP timezone. Convert to UTC.
-				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
-					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
-					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
-				}
-				else {
-					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
-				}
-
-				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
-
-			}
-			
-			// Set local timezone or offset.
-			if ( get_option( 'timezone_string' ) ) {
-				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
-			}
-			else {
-				$date_time->set_utc_offset( wc_timezone_offset() );
-			}
-			
-		} catch ( \Exception $e ) {
-
-		}
-
-		return $date_time;
-
 	}
 
 	/**********
