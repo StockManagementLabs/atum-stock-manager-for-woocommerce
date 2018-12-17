@@ -5110,7 +5110,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-widget.atum_current_stock_value_widget .widget-body {
-  padding: 30px;
+  padding: 10px 30px 0;
 }
 
 @media all and (max-width: 768px) {
@@ -5118,6 +5118,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
     padding-top: 0;
     padding-bottom: 0;
   }
+}
+
+.atum-widget.atum_current_stock_value_widget .grid-stack-item-content {
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .current-stock-value-widget.overlay:before {

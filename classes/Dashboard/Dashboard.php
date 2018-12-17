@@ -199,8 +199,10 @@ class Dashboard {
 	 */
 	public function add_widget( $widget, $widget_layout ) {
 		$user_widgets_layout = self::get_user_widgets_layout();
-		if ( empty( $user_widgets_layout ) ) {
-			$widget_layout = self::$default_widgets_layout[ $widget_layout['id'] ];
+		if ( empty( $user_widgets_layout[ $widget_layout['id'] ] ) ) {
+			$widget_id           = $widget_layout['id'];
+			$widget_layout       = self::$default_widgets_layout[ $widget_id ];
+			$widget_layout['id'] = $widget_id;
 		}
 
 		$widget_data = Helpers::array_to_data( $widget_layout, 'gs-' );
