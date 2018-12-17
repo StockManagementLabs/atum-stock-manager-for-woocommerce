@@ -3618,6 +3618,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// jquery.floatThead.
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
+		// Hammer.
 		wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 		// jScrollPane.

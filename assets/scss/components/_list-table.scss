@@ -999,15 +999,13 @@
 		.subsubsub {
 			margin: 0;
 		}
-		&::after, &::before {
+		
+		&, &::after, &::before {
 			-webkit-user-select: none;
 			-webkit-user-drag: none;
 			-webkit-app-region: no-drag;
 		}
 		
-		-webkit-user-select: none;
-		-webkit-user-drag: none;
-		-webkit-app-region: no-drag;
 	}
 	
 	.subsubsub {

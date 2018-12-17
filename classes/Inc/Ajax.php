@@ -2083,7 +2083,7 @@ final class Ajax {
 			$meta_value      = 'yes' === $status ? 1 : 0;
 			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-			$update_success = $wpdb->query( $wpdb->prepare("
+			$update_success = $wpdb->query( $wpdb->prepare( "
 				UPDATE $atum_data_table SET atum_controlled = %d		        		
             	WHERE atum_controlled != %d",
 				$meta_value,
@@ -2091,10 +2091,12 @@ final class Ajax {
 			) ); // WPCS: unprepared SQL ok.
 			
 			// Get product still not inserted.
-			$update_success_2 = $wpdb->query( "INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
-						FROM {$wpdb->posts} p
-						LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
-						WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL" ); // WPCS: unprepared SQL ok.
+			$update_success_2 = $wpdb->query( "
+				INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
+				FROM {$wpdb->posts} p
+				LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
+				WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL
+			" ); // WPCS: unprepared SQL ok.
 			
 			$update_success = FALSE !== $update_success && FALSE !== $update_success_2;
 			
@@ -2102,7 +2104,7 @@ final class Ajax {
 		else {
 
 			// If there are products without the manage_stock meta key, insert it for them.
-			$insert_success = $wpdb->query( $wpdb->prepare("
+			$insert_success = $wpdb->query( $wpdb->prepare( "
 				INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
 				SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts AS posts
 	            LEFT JOIN $wpdb->postmeta AS pm ON posts.ID = pm.post_id
@@ -2117,7 +2119,7 @@ final class Ajax {
 			) );
 
 			// For the rest, just update those that don't have the right status.
-			$update_success = $wpdb->query( $wpdb->prepare("
+			$update_success = $wpdb->query( $wpdb->prepare( "
 				UPDATE $wpdb->postmeta SET meta_value = %s		        		
 	            WHERE meta_key = %s AND meta_value != %s",
 				$status,
