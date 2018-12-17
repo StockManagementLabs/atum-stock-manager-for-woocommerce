@@ -239,7 +239,7 @@ $settings-xs-min:           568px !default;
 		height: 51px;
 		display: flex;
 		align-items: center;
-		justify-content: left;
+		justify-content: flex-start;
 		
 		&:hover, &:focus {
 			outline: none;
@@ -379,7 +379,7 @@ $settings-xs-min:           568px !default;
 					width: 100%;
 					display: flex;
 					align-items: center;
-					justify-content: left;
+					justify-content: flex-start;
 					
 					span {
 						display: block;
@@ -749,7 +749,7 @@ $settings-xs-min:           568px !default;
 				height: 51px;
 				display: flex;
 				align-items: center;
-				justify-content: left;
+				justify-content: flex-start;
 				
 				&:hover, &:focus {
 					outline: none;
@@ -893,7 +893,7 @@ $settings-xs-min:           568px !default;
 							width: 100%;
 							display: flex;
 							align-items: center;
-							justify-content: left;
+							justify-content: flex-start;
 							
 							span {
 								display: block;

@@ -148,7 +148,7 @@
 		width: inherit;
 		margin: 10px 0 !important;
 		flex-wrap: nowrap;
-		justify-content: left;
+		justify-content: flex-start;
 		border-radius: 0;
 		border-bottom: 0;
 		
@@ -585,7 +585,7 @@
 	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: left;
+	justify-content: flex-start;
 	align-items: center;
 	padding: 10px 11px;
 	margin: 0;

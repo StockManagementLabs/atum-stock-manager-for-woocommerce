@@ -2666,9 +2666,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   padding: 6.4px 0 5px;
 }
 
@@ -3024,9 +3024,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 .atum-settings-wrapper .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-link:focus {
@@ -3162,9 +3162,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    -webkit-box-pack: left;
-        -ms-flex-pack: left;
-            justify-content: left;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
   }
   .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper span, .atum-settings-wrapper .atum-nav-light .atum-nav-list .menu-helper span {
     display: block;
@@ -3608,9 +3608,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 #atum-settings .section-title .atum-settings-wrapper .atum-nav-link:hover, #atum-settings .section-title .atum-settings-wrapper .atum-nav-link:focus {
@@ -3762,9 +3762,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    -webkit-box-pack: left;
-        -ms-flex-pack: left;
-            justify-content: left;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
   }
   #atum-settings .section-title .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper span, #atum-settings .section-title .atum-settings-wrapper .atum-nav-light .atum-nav-list .menu-helper span {
     display: block;
