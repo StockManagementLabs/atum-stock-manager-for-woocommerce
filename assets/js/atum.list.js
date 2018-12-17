@@ -815,7 +815,7 @@
 				
 				        $('#adv-settings :checkbox').each(function() {
 					        optionVal = $(this).val();
-					        if (optionVal.search("calc_") < 0) { // Calc values are not searchable, also we can't search on thumb
+					        if (optionVal.search('calc_') < 0) { // Calc values are not searchable, also we can't search on thumb
 						
 						        if (optionVal !== 'thumb' && optionVal == searchColumn) {
 							        self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, $(this).parent().text() + ' <span class="caret"></span>']);
@@ -977,7 +977,7 @@
 					    offset       = 10, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
 					    displacement = evt.type === 'panright' ? paneStartX - offset : paneStartX + offset
 					
-					self.jScrollApi.scrollToX( displacement, false)
+					self.jScrollApi.scrollToX(displacement, false)
 					
 				});
 				
@@ -1751,16 +1751,16 @@
 		 */
 		addHorizontalScrolleffect: function(elementId, checkEnhanced) {
 			
-			if ( checkEnhanced ) {
-				$('.enhanced').select2('close');
-			}
-			
 			var $nav                  = document.getElementById(elementId),
 			    $overflowOpacityRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right'),
 			    $overflowOpacityLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left'),
 			    $leftMax              = $nav ? $nav.scrollWidth : 0,
 			    $left                 = $nav ? $nav.scrollLeft : 0,
 			    $diff                 = $leftMax - $left;
+			
+			if ( checkEnhanced ) {
+				$('.enhanced').select2('close');
+			}
 			
 			if ($diff === $('#' + elementId).outerWidth()) {
 				$overflowOpacityRight.hide();
@@ -1776,12 +1776,7 @@
 				$overflowOpacityLeft.show();
 			}
 			
-			if ($overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible')) {
-				$('#' + elementId).css('cursor', 'grab');
-			}
-			else {
-				$('#' + elementId).css('cursor', 'auto');
-			}
+			$('#' + elementId).css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
 			
 		},
 		

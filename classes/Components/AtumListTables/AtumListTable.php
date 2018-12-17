@@ -1812,7 +1812,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Change the product type tax query (initialized in constructor) to the current queried type.
-		if ( ! empty( $_REQUEST['product_type'] ) ) {
+		if ( ! empty( $_REQUEST['product_type'] ) && ! empty( $this->wc_query_data['where'] ) ) {
 
 			$type = esc_attr( $_REQUEST['product_type'] );
 
@@ -2284,51 +2284,55 @@ abstract class AtumListTable extends \WP_List_Table {
 		$post_in = $this->is_filtering ? $products : array();
 
 		// Loop all the registered product types.
-		foreach ( $this->wc_query_data['where'] as $wc_query_arg ) {
+		if ( ! empty( $this->wc_query_data['where'] ) ) {
 
-			if ( isset( $wc_query_arg['key'] ) && 'type' === $wc_query_arg['key'] ) {
+			foreach ( $this->wc_query_data['where'] as $wc_query_arg ) {
 
-				$types = (array) $wc_query_arg['value'];
+				if ( isset( $wc_query_arg['key'] ) && 'type' === $wc_query_arg['key'] ) {
 
-				if ( in_array( 'variable', $types, TRUE ) ) {
+					$types = (array) $wc_query_arg['value'];
 
-					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
+					if ( in_array( 'variable', $types, TRUE ) ) {
 
-					// Remove the variable containers from the array and add the variations.
-					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable'] ), $variations ) );
+						$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
+
+						// Remove the variable containers from the array and add the variations.
+						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable'] ), $variations ) );
+
+					}
+
+					if ( in_array( 'grouped', $types, TRUE ) ) {
+
+						$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
+
+						// Remove the grouped containers from the array and add the group items.
+						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_grouped'] ), $group_items ) );
+
+					}
+
+					// WC Subscriptions compatibility.
+					if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', $types, TRUE ) ) {
+
+						$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
+
+						// Remove the variable subscription containers from the array and add the subscription variations.
+						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
+
+					}
+
+					// Re-count the resulting products.
+					$this->count_views['count_all'] = count( $products );
+
+					// The grouped items must count once per group they belongs to and once individually.
+					if ( ! empty( $group_items ) ) {
+						$this->count_views['count_all'] += count( $group_items );
+					}
+
+					do_action( 'atum/list_table/after_children_count', $types, $this );
+
+					break;
 
 				}
-
-				if ( in_array( 'grouped', $types, TRUE ) ) {
-
-					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
-
-					// Remove the grouped containers from the array and add the group items.
-					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_grouped'] ), $group_items ) );
-
-				}
-
-				// WC Subscriptions compatibility.
-				if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', $types, TRUE ) ) {
-
-					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
-
-					// Remove the variable subscription containers from the array and add the subscription variations.
-					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
-
-				}
-
-				// Re-count the resulting products.
-				$this->count_views['count_all'] = count( $products );
-
-				// The grouped items must count once per group they belongs to and once individually.
-				if ( ! empty( $group_items ) ) {
-					$this->count_views['count_all'] += count( $group_items );
-				}
-
-				do_action( 'atum/list_table/after_children_count', $types, $this );
-
-				break;
 
 			}
 
@@ -3614,6 +3618,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// jquery.floatThead.
 		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
+		// Hammer.
 		wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 		// jScrollPane.

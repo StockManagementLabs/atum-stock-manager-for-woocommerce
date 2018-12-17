@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || die;
 	<hr class="wp-header-end">
 
 	<div class="atum-list-wrapper" data-action="atum_fetch_inbound_stock_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
-		<div class="stock-central-header">
+		<div class="list-table-header">
 			<?php $list->views(); ?>
 
 			<p class="search-box inbound-stock-search">
