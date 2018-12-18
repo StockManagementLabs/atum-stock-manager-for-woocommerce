@@ -46,6 +46,14 @@ abstract class AtumWidget {
 	protected $thumbnail = '';
 
 	/**
+	 * The widget default layout (for the "Add Widget" popup)
+	 *
+	 * @var array
+	 */
+	protected $default_layout = [];
+
+
+	/**
 	 * Whether the current widget has the config settings enabled
 	 *
 	 * @var bool
@@ -215,6 +223,18 @@ abstract class AtumWidget {
 	public function get_thumbnail() {
 
 		return $this->thumbnail;
+	}
+
+	/**
+	 * Getter for the default_layout
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return array
+	 */
+	public function get_default_layout() {
+
+		return $this->default_layout;
 	}
 
 	/**

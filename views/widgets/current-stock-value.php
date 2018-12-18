@@ -35,19 +35,24 @@ defined( 'ABSPATH' ) || die;
 	<div class="current-stock-value-content">
 		<div class="stock-counter">
 			<div class="total-items-purcharse-price">
-				<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>
-				<span class="total">
-					<?php echo esc_html( $current_stock_values['items_purcharse_price_total'] ); ?>
-				</span>
+				<div class="total" data-currency="<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>">
+					<?php echo esc_html( get_woocommerce_currency_symbol() ); ?> <?php echo esc_html( $current_stock_values['items_purcharse_price_total'] ); ?>
+				</div>
+				<div class="stock-value-title">
+					<h5><?php esc_html_e( 'Stock value', ATUM_TEXT_DOMAIN ) ?></h5>
+				</div>
 			</div>
-			<h5><?php esc_html_e( 'Stock value', ATUM_TEXT_DOMAIN ) ?></h5>
 
 			<div class="separator-line"></div>
 
-			<span class="items-count">
-				<?php echo esc_html( $current_stock_values['items_stocks_counter'] ); ?>
-			</span>
-			<h5><?php esc_html_e( 'Items in stock', ATUM_TEXT_DOMAIN ) ?></h5>
+			<div class="items-count">
+				<div class="total">
+					<?php echo esc_html( $current_stock_values['items_stocks_counter'] ); ?>
+				</div>
+				<div class="items-value-title">
+					<h5><?php esc_html_e( 'Items in stock', ATUM_TEXT_DOMAIN ) ?></h5>
+				</div>
+			</div>
 		</div>
 		<?php if ( 0 !== $current_stock_values['items_without_purcharse_price'] ) : ?>
 			<div class="items-without-purcharse-price">

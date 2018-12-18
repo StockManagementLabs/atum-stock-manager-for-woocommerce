@@ -5108,12 +5108,13 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .current-stock-value-widget .current-stock-value-filters .nice-select {
   margin-right: 10px;
+  margin-top: 10px;
 }
 
 .current-stock-value-widget .current-stock-value-filters .nice-select.open .list {
@@ -5124,7 +5125,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .current-stock-value-widget .current-stock-value-content {
   text-align: left;
-  padding: 30px 0;
+  padding: 40px 0;
 }
 
 .current-stock-value-widget .current-stock-value-content .total-items-purcharse-price, .current-stock-value-widget .current-stock-value-content .items-count {
@@ -5132,8 +5133,16 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   font-weight: bold;
 }
 
+.current-stock-value-widget .current-stock-value-content .total {
+  display: inline;
+}
+
 .current-stock-value-widget .current-stock-value-content .total-items-purcharse-price {
   color: #69C61D;
+}
+
+.current-stock-value-widget .current-stock-value-content .items-value-title h5, .current-stock-value-widget .current-stock-value-content .stock-value-title h5 {
+  margin: 17px 0;
 }
 
 .current-stock-value-widget .current-stock-value-content .items-count {
@@ -5144,7 +5153,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   width: 100%;
   height: 1px;
   background-color: #E5E5E5;
-  margin: 21px 0 26px 0;
+  margin: 21px 0 30px 0;
+}
+
+.current-stock-value-widget .current-stock-value-content .stock-counter {
+  padding-bottom: 25px;
 }
 
 .current-stock-value-widget .current-stock-value-content .items-without-purcharse-price {
