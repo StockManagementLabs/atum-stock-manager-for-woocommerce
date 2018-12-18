@@ -1,10 +1,10 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.4.16 
+ * @version 1.5.0 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : Copyright 2018 Stock Management Labs 
+ * License : ©2018 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -35,12 +35,14 @@
 }
 
 .swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
+  -webkit-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
 }
 
 .swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
   outline: none;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .swal2-container .swal2-modal button {
@@ -76,7 +78,8 @@
   border-radius: 50%;
   position: absolute;
   z-index: 50;
-  animation: loader-rotate 1s linear infinite;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
   top: 30px;
   left: 0;
   right: 0;
@@ -87,11 +90,13 @@
 }
 
 .swal2-container .atum-loading keyframes loader-rotate from {
-  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
 }
 
 .swal2-container .atum-loading keyframes loader-rotate to {
-  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
 }
 
 .btn {
@@ -100,13 +105,19 @@
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
   border-radius: 0.25rem;
+  -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 
 .btn:hover, .btn:focus {
@@ -115,12 +126,14 @@
 
 .btn:focus, .btn.focus {
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
 }
 
 .btn.disabled, .btn:disabled {
   opacity: 0.3;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .btn:not(:disabled):not(.disabled) {
@@ -152,7 +165,8 @@ fieldset:disabled a.btn {
 .btn-link:focus, .btn-link.focus {
   text-decoration: underline;
   border-color: transparent;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .btn-link:disabled, .btn-link.disabled {
@@ -186,7 +200,8 @@ fieldset:disabled a.btn {
 
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -205,7 +220,8 @@ fieldset:disabled a.btn {
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-secondary {
@@ -220,7 +236,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary:focus, .btn-secondary.focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
 .btn-secondary.disabled, .btn-secondary:disabled {
@@ -239,7 +256,8 @@ fieldset:disabled a.btn {
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
 .btn-success {
@@ -254,7 +272,8 @@ fieldset:disabled a.btn {
 
 .btn-success:focus, .btn-success.focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-success.disabled, .btn-success:disabled {
@@ -273,7 +292,8 @@ fieldset:disabled a.btn {
 .btn-success:not(:disabled):not(.disabled):active:focus, .btn-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-success.dropdown-toggle:focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-info {
@@ -288,7 +308,8 @@ fieldset:disabled a.btn {
 
 .btn-info:focus, .btn-info.focus {
   color: #212529;
-  box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
 }
 
 .btn-info.disabled, .btn-info:disabled {
@@ -307,7 +328,8 @@ fieldset:disabled a.btn {
 .btn-info:not(:disabled):not(.disabled):active:focus, .btn-info:not(:disabled):not(.disabled).active:focus,
 .show > .btn-info.dropdown-toggle:focus {
   color: #212529;
-  box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
 }
 
 .btn-warning {
@@ -322,7 +344,8 @@ fieldset:disabled a.btn {
 
 .btn-warning:focus, .btn-warning.focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-warning.disabled, .btn-warning:disabled {
@@ -341,7 +364,8 @@ fieldset:disabled a.btn {
 .btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-warning.dropdown-toggle:focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-danger {
@@ -356,7 +380,8 @@ fieldset:disabled a.btn {
 
 .btn-danger:focus, .btn-danger.focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
 }
 
 .btn-danger.disabled, .btn-danger:disabled {
@@ -375,7 +400,8 @@ fieldset:disabled a.btn {
 .btn-danger:not(:disabled):not(.disabled):active:focus, .btn-danger:not(:disabled):not(.disabled).active:focus,
 .show > .btn-danger.dropdown-toggle:focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
 }
 
 .btn-light {
@@ -390,7 +416,8 @@ fieldset:disabled a.btn {
 
 .btn-light:focus, .btn-light.focus {
   color: #212529;
-  box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
 }
 
 .btn-light.disabled, .btn-light:disabled {
@@ -409,7 +436,8 @@ fieldset:disabled a.btn {
 .btn-light:not(:disabled):not(.disabled):active:focus, .btn-light:not(:disabled):not(.disabled).active:focus,
 .show > .btn-light.dropdown-toggle:focus {
   color: #212529;
-  box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
 }
 
 .btn-dark {
@@ -424,7 +452,8 @@ fieldset:disabled a.btn {
 
 .btn-dark:focus, .btn-dark.focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
 .btn-dark.disabled, .btn-dark:disabled {
@@ -443,7 +472,8 @@ fieldset:disabled a.btn {
 .btn-dark:not(:disabled):not(.disabled):active:focus, .btn-dark:not(:disabled):not(.disabled).active:focus,
 .show > .btn-dark.dropdown-toggle:focus {
   color: #fff;
-  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
 .btn-outline-primary {
@@ -460,7 +490,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
@@ -477,7 +508,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-primary.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-outline-secondary {
@@ -494,7 +526,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-secondary:focus, .btn-outline-secondary.focus {
-  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
 .btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
@@ -511,7 +544,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-secondary.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
 .btn-outline-success {
@@ -528,7 +562,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-success:focus, .btn-outline-success.focus {
-  box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-outline-success.disabled, .btn-outline-success:disabled {
@@ -545,7 +580,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-success:not(:disabled):not(.disabled):active:focus, .btn-outline-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-success.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-outline-info {
@@ -562,7 +598,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-info:focus, .btn-outline-info.focus {
-  box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
 }
 
 .btn-outline-info.disabled, .btn-outline-info:disabled {
@@ -579,7 +616,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-info:not(:disabled):not(.disabled):active:focus, .btn-outline-info:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-info.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(227, 232, 245, 0.5);
 }
 
 .btn-outline-warning {
@@ -596,7 +634,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-warning:focus, .btn-outline-warning.focus {
-  box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-outline-warning.disabled, .btn-outline-warning:disabled {
@@ -613,7 +652,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-warning:not(:disabled):not(.disabled):active:focus, .btn-outline-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-warning.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-outline-danger {
@@ -630,7 +670,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-danger:focus, .btn-outline-danger.focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
 }
 
 .btn-outline-danger.disabled, .btn-outline-danger:disabled {
@@ -647,7 +688,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-danger:not(:disabled):not(.disabled):active:focus, .btn-outline-danger:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-danger.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(255, 72, 72, 0.5);
 }
 
 .btn-outline-light {
@@ -664,7 +706,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-light:focus, .btn-outline-light.focus {
-  box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
 }
 
 .btn-outline-light.disabled, .btn-outline-light:disabled {
@@ -681,7 +724,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-light:not(:disabled):not(.disabled):active:focus, .btn-outline-light:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-light.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
 }
 
 .btn-outline-dark {
@@ -698,7 +742,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-dark:focus, .btn-outline-dark.focus {
-  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
 .btn-outline-dark.disabled, .btn-outline-dark:disabled {
@@ -715,7 +760,8 @@ fieldset:disabled a.btn {
 
 .btn-outline-dark:not(:disabled):not(.disabled):active:focus, .btn-outline-dark:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-dark.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
 .btn-pill {
@@ -738,7 +784,8 @@ fieldset:disabled a.btn {
 .btn-link:focus, .btn-link.focus {
   text-decoration: underline;
   border-color: transparent;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .btn-link:disabled, .btn-link.disabled {
@@ -1564,17 +1611,25 @@ input[type="button"].btn-block {
   background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 86%;
   background-size: cover;
   border-radius: 8px;
-  box-shadow: 0 4px 0 0 #e9ecef;
+  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
+          box-shadow: 0 4px 0 0 #e9ecef;
   padding: 0 23px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 #wpfooter .footer-box.no-style {
   background-image: none;
   background-color: transparent;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   padding: 0;
   height: auto;
 }
@@ -1584,9 +1639,15 @@ input[type="button"].btn-block {
 }
 
 #wpfooter .footer-box .footer-atum-logo {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   padding: 6.4px 0 5px;
 }
 
@@ -1614,8 +1675,12 @@ input[type="button"].btn-block {
 }
 
 #wpfooter .footer-box .footer-atum-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 #wpfooter .footer-box .footer-atum-buttons .footer-button {
@@ -1667,9 +1732,14 @@ input[type="button"].btn-block {
 
 @media all and (min-width: 481px) {
   .atum-addons .themes {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
   }
 }
 
@@ -1705,7 +1775,9 @@ input[type="button"].btn-block {
 .atum-addons .theme .theme-actions {
   height: 39px;
   right: 27px;
-  transform: translate3d(0, -50%, 0);
+  -webkit-transform: translate3d(0, -50%, 0);
+          transform: translate3d(0, -50%, 0);
+  -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
 }
 
@@ -1767,10 +1839,12 @@ input[type="button"].btn-block {
   padding: 0 3px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
 }
 
 .atum-addons .theme .show-key, .atum-addons .theme .show-key i {
+  -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 
@@ -1783,7 +1857,8 @@ input[type="button"].btn-block {
 
 .atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed), .atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed), .atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed) {
   opacity: 0;
-  transform: translate3d(100%, -50%, 0);
+  -webkit-transform: translate3d(100%, -50%, 0);
+          transform: translate3d(100%, -50%, 0);
 }
 
 .atum-addons .theme:hover .more-details, .atum-addons .theme.inactive .more-details, .atum-addons .theme.invalid .more-details {
@@ -1791,7 +1866,8 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme:hover .theme-screenshot:hover .addon-details, .atum-addons .theme.inactive .theme-screenshot:hover .addon-details, .atum-addons .theme.invalid .theme-screenshot:hover .addon-details {
-  transform: translateY(0);
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
 }
 
 .atum-addons .theme:hover .theme-screenshot:hover .more-details, .atum-addons .theme.inactive .theme-screenshot:hover .more-details, .atum-addons .theme.invalid .theme-screenshot:hover .more-details {
@@ -1801,7 +1877,8 @@ input[type="button"].btn-block {
 .atum-addons .theme:hover .show-key, .atum-addons .theme.inactive .show-key, .atum-addons .theme.invalid .show-key {
   opacity: 1 !important;
   background-color: #0fd9ff;
-  transform: translateX(0);
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
 }
 
 .atum-addons .theme:hover .show-key i, .atum-addons .theme.inactive .show-key i, .atum-addons .theme.invalid .show-key i {
@@ -1811,7 +1888,9 @@ input[type="button"].btn-block {
 .atum-addons .theme .more-details {
   border-radius: 0;
   top: 50%;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  -webkit-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -1822,12 +1901,23 @@ input[type="button"].btn-block {
   position: absolute;
   color: #fff;
   padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  transform: translateY(-101%);
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transform: translateY(-101%);
+          transform: translateY(-101%);
+  -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  transition: -webkit-transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955), -webkit-transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .atum-addons .theme .addon-details > p {
@@ -1837,8 +1927,10 @@ input[type="button"].btn-block {
 
 .atum-addons .theme .addon-details .more-details {
   position: static;
-  transform: none;
-  transition-delay: 0.2s;
+  -webkit-transform: none;
+          transform: none;
+  -webkit-transition-delay: 0.2s;
+          transition-delay: 0.2s;
   display: block;
   font-size: 12px;
   padding: 10px 14px;
@@ -1849,9 +1941,14 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme .addon-key .wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 5px;
   border-top: 1px solid #DDD;
   position: relative;
@@ -1867,7 +1964,8 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme .addon-key input[type=text]:focus {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .atum-addons .theme .addon-key input[type=text].valid {
@@ -1884,12 +1982,14 @@ input[type="button"].btn-block {
 
 .atum-addons .theme .button {
   border: none;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   text-shadow: none;
   font-weight: normal;
   background-color: #00B8DB;
   color: #fff;
   border-radius: 0;
+  -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 
@@ -1930,15 +2030,18 @@ input[type="button"].btn-block {
   border-radius: 50%;
   position: absolute;
   z-index: 50;
-  animation: loader-rotate 1s linear infinite;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
 }
 
 .atum-addons .theme .atum-loading keyframes loader-rotate from {
-  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
 }
 
 .atum-addons .theme .atum-loading keyframes loader-rotate to {
-  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
 }
 
 @media only screen and (max-width: 780px) {

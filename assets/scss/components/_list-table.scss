@@ -1667,9 +1667,7 @@ table.wp-list-table {
 		&.check-column {
 			padding: 11px 20px 0 3px;
 			input[type=checkbox] {
-				position: absolute;
-				top: 50%;
-				transform: translateY(-50%);
+				@include vertical-align-absolute;
 			}
 		}
 	}
