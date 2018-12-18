@@ -520,6 +520,11 @@ class Hooks {
 			
 			$this->stock_threshold = NULL;
 
+			// When the product is being created, no change is needed.
+			if ( ! is_a( $product, '\WC_Product' ) ) {
+				return;
+			}
+
 			$product_id = $product->get_id();
 			/* @noinspection PhpUndefinedMethodInspection */
 			$out_of_stock_threshold = $product->get_out_stock_threshold();
