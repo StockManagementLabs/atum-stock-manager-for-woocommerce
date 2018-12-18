@@ -411,7 +411,7 @@ class Hooks {
 			$count   += $qty;
 		}
 
-		$titles     = array_filter( $titles );
+		$titles = array_filter( $titles );
 		/* translators: the titles of products added to the cart */
 		$added_text = sprintf( _n( '%s has been added to your cart.', '%s have been added to your cart.', $count, ATUM_TEXT_DOMAIN ), wc_format_list_of_items( $titles ) );
 
