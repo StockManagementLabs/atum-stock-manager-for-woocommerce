@@ -334,27 +334,7 @@
 			this.buildNiceSelect();
 		
 		},
-		// /**
-		//  * Add the overlay effect while loading data
-		//  */
-		// addOverlay: function(container) {
-		//
-		// 	container.block({
-		// 		message   : null,
-		// 		overlayCSS: {
-		// 			background: '#000',
-		// 			opacity   : 0.5,
-		// 		},
-		// 	});
-		//
-		// },
-		//
-		// /**
-		//  * Remove the overlay effect once the data is fully loaded
-		//  */
-		// removeOverlay: function(container) {
-		// 	container.unblock();
-		// },
+		
 		initStatisticsWidget: function() {
 			
 			// TODO: MOVE TO A NEW FILE (MODULE)

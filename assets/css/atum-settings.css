@@ -1066,14 +1066,26 @@ input[type="button"].btn-block {
   border-width: 3px;
 }
 
-.swal2-container .atum-loading keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
-.swal2-container .atum-loading keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 body .select2-container {
@@ -3233,14 +3245,15 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border-top-color: #6c757d;
 }
 
-#atum-settings .form-settings-wrapper.overlay:after keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-#atum-settings .form-settings-wrapper.overlay:after keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 #atum-settings .btn {
@@ -3833,14 +3846,15 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border-top-color: #6c757d;
 }
 
-#atum-settings .section-title #atum-settings .form-settings-wrapper.overlay:after keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-#atum-settings .section-title #atum-settings .form-settings-wrapper.overlay:after keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 #atum-settings .section-title #atum-settings .btn {
