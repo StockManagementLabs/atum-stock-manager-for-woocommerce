@@ -7,7 +7,7 @@ Tested up to: 5.0.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.2
-Stable tag: 1.5.0.2
+Stable tag: 1.5.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -198,6 +198,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.0.3`
+
+*2018-12-17*
+
+**Changes**
+
+* Now ATUM uses autoprefixer for SCSS to CSS compilations.
+
+**Fixes**
+
+* Removed map from hammer.js script.
+* Stock Central now saves the sale dates using WC_Datetime objects.
+* Fixed issue when trying to search within List Tables in Safari.
+* Fixed some typos in texts.
+* Re-added searching by product name to List Tables.
+* CSS fixes.
+* Refactory.
 
 ---
 
