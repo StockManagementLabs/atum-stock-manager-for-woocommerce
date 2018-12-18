@@ -172,29 +172,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 1.  New Menu Design with Easy Access to Individual Features
 2.  New Admin Bar Menu for Easier and Quicker Inventory Control
-3.  Extended Stock Central Control (New Filters)
-4.  Full Control of the Stock Central View - Screen Options
-5.  HELP Section for Easier Understanding of Stock Central's Columns
-6.  On and OFF Automatic Product Search Feature
-7.  Grouped Products Are Included in the Stock Central Interface
-8.  Variable Products within the Stock Central Interface
-9.  One Click SKU Edit Directly in Stock Central
-10. One Click Regular Price Edit Directly in Stock Central
-11. One Click Sale Price Edit Directly in Stock Central
-12. One Click Purchase Price Edit Directly in Stock Central
-13. One Click Stock Quantity Edit Directly in Stock Central
-14. General Settings for the Stock Central Interface
-15. Advanced Settings for the Stock Central Interface
-16. Brand New Add-Ons Screen For Further Shop Control
-17. New Editable Dashboard ATUM Statistics
-18. Inventory Logs - Preview of all Inventory Logs
-19. ADD New Log - Inventory Logs for WooCommerce
-20. Purchase Orders - Full List of Created Purchase Orders
-21. ADD New Purchase Order Screen - Control over your Incoming Items
-22. Suppliers - Preview of all Created Suppliers
-23. ADD New Supplier - Brand New Feature with Full Supplier Details
+3.  New Editable Dashboard ATUM Statistics
+4.  Extended Stock Central Control (New Filters)
+5.  Full Control of the Stock Central View - Screen Options
+6.  HELP Section for Easier Understanding of Stock Central's Columns
+7.  On and OFF Automatic Product Search Feature
+8.  Grouped Products Are Included in the Stock Central Interface
+9.  Variable Products within the Stock Central Interface
+10. One Click SKU Edit Directly in Stock Central
+11. One Click Regular Price Edit Directly in Stock Central
+12. One Click Sale Price Edit Directly in Stock Central
+13. One Click Purchase Price Edit Directly in Stock Central
+14. One Click Stock Quantity Edit Directly in Stock Central
+15. Purchase Orders - Full List of Created Purchase Orders
+16. ADD New Purchase Order Screen - Control over your Incoming Items
+17. NEW Inbound Stock Preview - See All Yours Incoming Items
+18. Suppliers - Preview of all Created Suppliers
+19. ADD New Supplier - Brand New Feature with Full Supplier Details
+20. Inventory Logs - Preview of all Inventory Logs
+21. ATUM Settings - Dark Mode
+22. ATUM Settings - Light Mode
+23. Brand New Add-Ons Screen For Further Shop Control
 24. Create Product Locations - Warehouse, Shelf, Page, etc.
-25. NEW Inbound Stock Preview - See All Yours Incoming Items
 
 
 == Changelog ==
