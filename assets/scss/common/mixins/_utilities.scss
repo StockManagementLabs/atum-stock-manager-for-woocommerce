@@ -79,7 +79,7 @@
 }
 
 @mixin loader-rotate-animation {
-	keyframes loader-rotate {
+	@keyframes loader-rotate {
 		from {
 			transform: rotate(0deg);
 		}

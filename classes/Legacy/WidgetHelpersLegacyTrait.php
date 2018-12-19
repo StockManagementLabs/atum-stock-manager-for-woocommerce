@@ -300,4 +300,130 @@ trait WidgetHelpersLegacyTrait {
 
 	}
 
+	/**
+	 * Get all the available children products of the published parent products (Variable and Grouped)
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $category
+	 * @param string $product_type
+	 *
+	 * @return int
+	 */
+	private static function get_items_in_stock_legacy( $category, $product_type ) {
+
+		// Get products out of threshold.
+		$products_out_of_threshold = Helpers::is_any_out_stock_threshold_set( TRUE );
+
+		/*
+		 * Products In Stock
+		 */
+
+		// Init values counter.
+		$counters = [
+			'items_stocks_counter'          => 0,
+			'items_purcharse_price_total'   => 0,
+			'items_without_purcharse_price' => 0,
+		];
+
+		$args = array(
+			'post_type'      => [ 'product', 'product_variation' ],
+			'posts_per_page' => - 1,
+			'meta_query'     => array(
+				array(
+					'key'     => '_stock_status',
+					'value'   => 'instock',
+					'compare' => '=',
+				),
+			),
+			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'fields'         => 'ids',
+			'tax_query'      => array(
+				'relation' => 'AND',
+			),
+
+		);
+
+		// Check if category filter data exist.
+		if ( $category ) {
+			array_push( $args['tax_query'], array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => array( $category ),
+			) );
+		}
+
+		// Check if product type filter data exist.
+		if ( $product_type ) {
+			if ( 'grouped' === $product_type ) {
+				$group_items = self::get_children_legacy( 'grouped' );
+
+				if ( $group_items ) {
+					$args['post__in'] = $group_items;
+				}
+				else {
+					return $counters;
+				}
+			}
+			elseif ( 'variable' === $product_type ) {
+				$variations = self::get_children_legacy( 'variable', 'product_variation' );
+				if ( $variations ) {
+					$args['post__in'] = $variations;
+				}
+				else {
+					return $counters;
+				}
+			}
+			elseif ( 'downloadable' === $product_type ) {
+				array_push( $args['meta_query'], array(
+					'key'     => '_downloadable',
+					'value'   => 'yes',
+					'compare' => '=',
+				) );
+			}
+			elseif ( 'virtual' === $product_type ) {
+				array_push( $args['meta_query'], array(
+					'key'     => '_virtual',
+					'value'   => 'yes',
+					'compare' => '=',
+				) );
+			}
+			else {
+				array_push( $args['tax_query'], array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => array( $product_type ),
+				) );
+			}
+		}
+
+		// Get products.
+		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
+
+		// Add out_of_threshold products.
+		if ( ! empty( $products_out_of_threshold ) ) {
+			$products_in_stock->posts = array_merge( $products_in_stock->posts, array_diff( $products_out_of_threshold, $products_in_stock->posts ) );
+		}
+
+		// Get current stock values.
+		foreach ( $products_in_stock->posts as $product_id ) {
+			$product                 = Helpers::get_atum_product( $product_id );
+			$product_stock           = (int) $product->get_stock_quantity();
+			$product_purcharse_price = (int) $product->get_purchase_price();
+
+			if ( $product_stock && $product_stock > 0 ) {
+				$counters['items_stocks_counter'] += $product_stock;
+				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
+					$counters['items_purcharse_price_total'] += ( $product_purcharse_price * $product_stock );
+				}
+				else {
+					$counters['items_without_purcharse_price'] += $product_stock;
+				}
+			}
+		}
+
+		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
+
+	}
+
 }

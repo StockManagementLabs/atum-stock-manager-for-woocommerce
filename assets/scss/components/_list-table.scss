@@ -987,7 +987,6 @@
 		width: 100%;
 		float: left;
 		margin: 0 11px 0 0;
-		height: 70px;
 		
 		&::-webkit-scrollbar {
 			display: none;
@@ -1000,7 +999,7 @@
 		&.dragging {
 			a {
 				pointer-events: none;
-			}
+		}
 		}
 
 	}

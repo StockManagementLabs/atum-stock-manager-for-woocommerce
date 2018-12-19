@@ -163,8 +163,9 @@
 			// Add widget
 			$('body').on('click', '.add-widget-popup .add-widget', function() {
 				
-				var $button    = $(this),
-				    widgetId = $button.closest('li').data('widget');
+				var $button          = $(this),
+				    widgetId         = $button.closest('li').data('widget'),
+				    $widgetContainer = $('.add-widget-popup');
 				
 				$.ajax({
 					url       : ajaxurl,
@@ -176,7 +177,7 @@
 					},
 					dataType  : 'json',
 					beforeSend: function () {
-					
+						$widgetContainer.addClass('overlay');
 					},
 					success   : function (response) {
 						
@@ -186,6 +187,8 @@
 							self.initWidgets([widgetId]);
 							$button.hide().siblings('.btn-info').show();
 							self.toggleModalTemplateButtons(widgetId);
+							$widgetContainer.removeClass('overlay');
+							self.bindWidgetControls();
 						}
 						
 					}
@@ -311,6 +314,13 @@
 			}
 			
 			/*
+			 * Current Stock Value widget
+			 */
+			if (typeof widgets === 'undefined' || $.inArray('atum_current_stock_value_widget', widgets) > -1) {
+				this.initCurrentStockValueWidget();
+			}
+			
+			/*
 			 * Videos widget
 			 */
 			if (typeof widgets === 'undefined' || $.inArray('atum_videos_widget', widgets) > -1) {
@@ -324,6 +334,7 @@
 			this.buildNiceSelect();
 		
 		},
+		
 		initStatisticsWidget: function() {
 			
 			// TODO: MOVE TO A NEW FILE (MODULE)
@@ -797,6 +808,49 @@
 				
 			}
 		
+		},
+		initCurrentStockValueWidget: function() {
+			
+			var self                = this,
+			    $currentStockValueWidget = $('.current-stock-value-widget');
+			
+			if ($currentStockValueWidget.length) {
+				$currentStockValueWidget.find('select').change(function (e) {
+					
+					$.ajax({
+						url       : ajaxurl,
+						method    : 'POST',
+						data      : {
+							token              : self.$widgetsContainer.data('nonce'),
+							action             : 'atum_current_stock_values',
+							categorySelected   : $('.categories-list').val(),
+							productTypeSelected: $('.product-types-list').val(),
+						},
+						dataType  : 'json',
+						beforeSend: function () {
+							$currentStockValueWidget.addClass('overlay');
+						},
+						success   : function (response) {
+							if (typeof response === 'object' && response.success === true) {
+								var $itemsWithoutPurcharsePrice = response.data.current_stock_values.items_without_purcharse_price,
+								    $totalPurcharsePrice        = $currentStockValueWidget.find('.total');
+								$totalPurcharsePrice.html($totalPurcharsePrice.data('currency') + ' ' + response.data.current_stock_values.items_purcharse_price_total);
+								$currentStockValueWidget.find('.items-count .total').html(response.data.current_stock_values.items_stocks_counter);
+								$currentStockValueWidget.find('.items_without_purcharse_price').html($itemsWithoutPurcharsePrice);
+								$currentStockValueWidget.removeClass('overlay');
+								
+								if ($itemsWithoutPurcharsePrice === 0) {
+									$('.items-without-purcharse-price').hide();
+								}
+								else {
+									$('.items-without-purcharse-price').show();
+								}
+							}
+						}
+					});
+				});
+			}
+			
 		},
 		initVideosWidget: function () {
 			

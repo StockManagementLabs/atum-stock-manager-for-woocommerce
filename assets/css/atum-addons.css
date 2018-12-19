@@ -89,14 +89,26 @@
   border-width: 3px;
 }
 
-.swal2-container .atum-loading keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
-.swal2-container .atum-loading keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .btn {
@@ -2034,14 +2046,15 @@ input[type="button"].btn-block {
           animation: loader-rotate 1s linear infinite;
 }
 
-.atum-addons .theme .atum-loading keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-.atum-addons .theme .atum-loading keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 @media only screen and (max-width: 780px) {

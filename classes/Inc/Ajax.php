@@ -61,6 +61,9 @@ final class Ajax {
 		// Sort the videos within the Videos Widget.
 		add_action( 'wp_ajax_atum_videos_widget_sorting', array( $this, 'videos_widget_sorting' ) );
 
+		// Filter current stock values.
+		add_action( 'wp_ajax_atum_current_stock_values', array( $this, 'current_stock_values' ) );
+
 		// Ajax callback for Stock Central ListTable.
 		add_action( 'wp_ajax_atum_fetch_stock_central_list', array( $this, 'fetch_stock_central_list' ) );
 
@@ -219,7 +222,9 @@ final class Ajax {
 		ob_start();
 
 		$grid_item_settings = $dashboard->get_widget_grid_item_defaults( $widget_id );
-		$dashboard->add_widget( $widget, $grid_item_settings );
+
+		$dashboard->add_widget( $widget, $grid_item_settings, TRUE );
+
 		$default_widgets_layout = Dashboard::get_default_widgets_layout();
 
 		$widget_data = array(
@@ -251,6 +256,24 @@ final class Ajax {
 		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( esc_attr( $_POST['sortby'] ) ) );
 
 		wp_die( ob_get_clean() ); // WPCS: XSS ok.
+
+	}
+
+	/**
+	 * Filter values within current stock values widget
+	 *
+	 * @package    Dashboard
+	 * @subpackage Current Stock Values Widget
+	 *
+	 * @since 1.5.0
+	 */
+	public function current_stock_values() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		$current_stock_values = WidgetHelpers::get_items_in_stock( $_POST['categorySelected'], $_POST['productTypeSelected'] );
+
+		wp_send_json_success( compact( 'current_stock_values' ) );
 
 	}
 
