@@ -1973,17 +1973,19 @@ table.wp-list-table {
 		height: 47px;
 		font-size: 14px;
 		color: $blue;
+		
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
 			color: $gray-600;
 		}
+		
 		&.pro-version {
 			background-color: $secondary;
 		}
 		
 		&.column-title {
-			min-width: 150px;
+			min-width: 162px;
 			
 			> span {
 				white-space: nowrap;

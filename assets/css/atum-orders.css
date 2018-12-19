@@ -6218,7 +6218,7 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table td.column-title, .atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title, .inbound-stock-list td.column-title, .inbound-stock-list th.column-title, .wp-list-table td.column-title, .wp-list-table th.column-title {
-  min-width: 150px;
+  min-width: 162px;
 }
 
 .atum-list-table td.column-title > span, .atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span, .inbound-stock-list td.column-title > span, .inbound-stock-list th.column-title > span, .wp-list-table td.column-title > span, .wp-list-table th.column-title > span {
