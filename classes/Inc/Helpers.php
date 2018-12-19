@@ -268,7 +268,7 @@ final class Helpers {
 	public static function get_atum_product_class( $product_type ) {
 
 		$namespace    = '\Atum\Models\Products';
-		$product_type = ucwords( $product_type, ' _-' );
+		$product_type = self::sanitize_psr4_class_name( $product_type );
 		$class_name   = "$namespace\AtumProduct{$product_type}";
 
 		if ( class_exists( $class_name ) ) {
@@ -278,6 +278,19 @@ final class Helpers {
 		// As fallback, return the simple product class.
 		return "$namespace\AtumProductSimple";
 
+	}
+
+	/**
+	 * Formats a class name following PSR-4 naming conventions
+	 *
+	 * @since 1.5.1
+	 *
+	 * @param string $class_name
+	 *
+	 * @return string
+	 */
+	public static function sanitize_psr4_class_name( $class_name ) {
+		return str_replace( array( '_', '-' ), '', ucwords( $class_name, ' _-' ) );
 	}
 	
 	/**
