@@ -4653,9 +4653,14 @@ table.wp-list-table tbody tr:hover {
           transform: translateY(-50%);
 }
 
+.atum-list-table tr.main-row, .atum-list-table tr.mi-row, .atum-list-table tr.expandable, .floatThead-container tr.main-row, .floatThead-container tr.mi-row, .floatThead-container tr.expandable, .inbound-stock-list tr.main-row, .inbound-stock-list tr.mi-row, .inbound-stock-list tr.expandable, .wp-list-table tr.main-row, .wp-list-table tr.mi-row, .wp-list-table tr.expandable {
+  -webkit-transition: .2s ease-in;
+  transition: .2s ease-in;
+}
+
 .atum-list-table tr.main-row:hover, .atum-list-table tr.mi-row:hover, .atum-list-table tr.expandable:hover, .floatThead-container tr.main-row:hover, .floatThead-container tr.mi-row:hover, .floatThead-container tr.expandable:hover, .inbound-stock-list tr.main-row:hover, .inbound-stock-list tr.mi-row:hover, .inbound-stock-list tr.expandable:hover, .wp-list-table tr.main-row:hover, .wp-list-table tr.mi-row:hover, .wp-list-table tr.expandable:hover {
-  -webkit-box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
-          box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
+  -webkit-box-shadow: 0 1px 19px 6px rgba(0, 0, 0, 0.04) inset;
+          box-shadow: 0 1px 19px 6px rgba(0, 0, 0, 0.04) inset;
 }
 
 .atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even, .wp-list-table tr.even {
@@ -4985,6 +4990,22 @@ table.wp-list-table tbody tr:hover {
 
 .atum-list-table .column-thumb, .floatThead-container .column-thumb, .inbound-stock-list .column-thumb, .wp-list-table .column-thumb {
   height: 40px;
+}
+
+.atum-list-table .column-thumb .thumb-placeholder, .floatThead-container .column-thumb .thumb-placeholder, .inbound-stock-list .column-thumb .thumb-placeholder, .wp-list-table .column-thumb .thumb-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #e9ecef;
+  display: inline-block;
+  text-align: center;
+}
+
+.atum-list-table .column-thumb .thumb-placeholder i, .floatThead-container .column-thumb .thumb-placeholder i, .inbound-stock-list .column-thumb .thumb-placeholder i, .wp-list-table .column-thumb .thumb-placeholder i {
+  font-size: 20px;
+  color: #adb5bd;
+  display: inline-block;
+  -webkit-transform: translateY(50%);
+          transform: translateY(50%);
 }
 
 .atum-list-table .column-calc_type, .floatThead-container .column-calc_type, .inbound-stock-list .column-calc_type, .wp-list-table .column-calc_type {

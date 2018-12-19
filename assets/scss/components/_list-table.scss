@@ -1667,6 +1667,7 @@ table.wp-list-table {
 		
 		&.check-column {
 			padding: 11px 20px 0 3px;
+			
 			input[type=checkbox] {
 				@include vertical-align-absolute;
 			}
@@ -1675,8 +1676,10 @@ table.wp-list-table {
 	
 	tr {
 		&.main-row, &.mi-row , &.expandable {
+			transition: .2s ease-in;
+			
 			&:hover {
-				box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
+				box-shadow: 0 1px 19px 6px rgba($black, 0.04) inset;
 			}
 		}
 		
@@ -2046,6 +2049,21 @@ table.wp-list-table {
 	
 	.column-thumb {
 		height: 40px;
+		
+		.thumb-placeholder {
+			width: 40px;
+			height: 40px;
+			background-color: $gray-200;
+			display: inline-block;
+			text-align: center;
+			
+			i {
+				font-size: 20px;
+				color: $gray-500;
+				display: inline-block;
+				transform: translateY(50%);
+			}
+		}
 	}
 	
 	.column-calc_type {

@@ -408,6 +408,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
 		}
 
+		// Custom image placeholder.
+		add_filter( 'woocommerce_placeholder_img', array( $this, 'image_placeholder' ), 10, 3 );
+
 		self::$default_currency = get_woocommerce_currency();
 
 	}
@@ -713,6 +716,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$thumb      = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $this->product->get_image( [ 40, 40 ] ) . '</a>';
 
 		return apply_filters( 'atum/list_table/column_thumb', $thumb, $item, $this->product, $this );
+
 	}
 
 	/**
@@ -2732,7 +2736,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$group_members = wp_list_pluck( $this->group_members, 'members' );
 		$column_keys   = array_keys( $columns );
 		$first_column  = current( $column_keys );
-		$second_column = current( array_slice( $column_keys, 1, 1 ) );
+		$second_column = next( $column_keys );
 
 		foreach ( $columns as $column_key => $column_display ) {
 
@@ -4066,6 +4070,21 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public static function is_report() {
 		return self::$is_report;
+	}
+
+	/**
+	 * Use our own custom image placeholder for products without image
+	 *
+	 * @since 1.5.0.4
+	 *
+	 * @param string $image
+	 * @param string $size
+	 * @param array  $dimensions
+	 *
+	 * @return string
+	 */
+	public function image_placeholder( $image, $size, $dimensions ) {
+		return '<span class="thumb-placeholder"><i class="atum-icon atmi-picture"></i></span>';
 	}
 
 }
