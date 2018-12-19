@@ -7,6 +7,7 @@
  * @var array $current_stock_values
  */
 
+use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
 
 
@@ -27,7 +28,7 @@ defined( 'ABSPATH' ) || die;
 		) );
 
 		// Product type filtering.
-		echo Helpers::product_types_dropdown( '', 'product-types-list' ); // WPCS: XSS ok.
+		echo WidgetHelpers::product_types_dropdown( '', 'product-types-list' ); // WPCS: XSS ok.
 
 		?>
 	</div>

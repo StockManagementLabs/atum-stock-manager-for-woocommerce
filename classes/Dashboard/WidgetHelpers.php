@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Legacy\WidgetHelpersLegacyTrait;
 use Atum\Settings\Settings;
@@ -758,6 +759,73 @@ final class WidgetHelpers {
 	}
 
 	/**
+	 * Builds a product type dowpdown for current stock value widget
+	 *
+	 * @since 1.5.0.3
+	 *
+	 * @param string $selected  The pre-selected option.
+	 * @param string $class     The dropdown class name.
+	 *
+	 * @return string
+	 */
+	public static function product_types_dropdown( $selected = '', $class = 'dropdown_product_type' ) {
+
+		$terms = get_terms( array(
+			'taxonomy'   => 'product_type',
+			'hide_empty' => FALSE,
+		) );
+
+		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
+
+		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
+		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
+
+		foreach ( $terms as $term ) {
+
+			if ( ! in_array( $term->slug, $allowed_types ) ) {
+				continue;
+			}
+
+			$output .= '<option value="' . sanitize_title( $term->name ) . '"' . selected( $term->slug, $selected, FALSE ) . '>';
+
+			switch ( $term->name ) {
+				case 'grouped':
+					$output .= __( 'Grouped product', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'variable':
+					$output .= __( 'Variable product', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'simple':
+					$output .= __( 'Simple product', ATUM_TEXT_DOMAIN );
+					break;
+
+				// Assuming that we'll have other types in future.
+				default:
+					$output .= ucfirst( $term->name );
+					break;
+			}
+
+			$output .= '</option>';
+
+			if ( 'simple' === $term->name ) {
+				$output .= '<option value="downloadable"' . selected( 'downloadable', $selected, FALSE ) . '> &rarr; ' . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
+				$output .= '<option value="virtual"' . selected( 'virtual', $selected, FALSE ) . '> &rarr; ' . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
+			}
+		}
+
+		$extra_output = '';
+
+		$output .= apply_filters( 'atum/dashboard_widgets/current_stock_counters/product_types_dropdown', $extra_output );
+
+		$output .= '</select>';
+
+		return $output;
+
+	}
+
+	/**
 	 * Get all products in stock count
 	 *
 	 * @since 1.5.0
@@ -845,6 +913,12 @@ final class WidgetHelpers {
 				self::$wc_query_data['where'][] = array(
 					'key'   => 'virtual',
 					'value' => array( '1' ),
+				);
+			}
+			elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'type',
+					'value' => $product_type,
 				);
 			}
 			else {

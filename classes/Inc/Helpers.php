@@ -1253,6 +1253,10 @@ final class Helpers {
 
 		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
 		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
+		$output .= '<option value="raw-material">Raw Material</option>';
+		$output .= '<option value="product-part">Product Part</option>';
+		$output .= '<option value="variable-raw-material">Variable Raw Material</option>';
+		$output .= '<option value="variable-product-part">Variable Product Part</option>';
 
 		foreach ( $terms as $term ) {
 
