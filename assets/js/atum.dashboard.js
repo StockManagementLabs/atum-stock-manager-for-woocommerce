@@ -835,7 +835,7 @@
 								var $itemsWithoutPurcharsePrice = response.data.current_stock_values.items_without_purcharse_price,
 								    $totalPurcharsePrice        = $currentStockValueWidget.find('.total');
 								$totalPurcharsePrice.html($totalPurcharsePrice.data('currency') + ' ' + response.data.current_stock_values.items_purcharse_price_total);
-								$currentStockValueWidget.find('.items-count').html(response.data.current_stock_values.items_stocks_counter);
+								$currentStockValueWidget.find('.items-count .total').html(response.data.current_stock_values.items_stocks_counter);
 								$currentStockValueWidget.find('.items_without_purcharse_price').html($itemsWithoutPurcharsePrice);
 								$currentStockValueWidget.removeClass('overlay');
 								
