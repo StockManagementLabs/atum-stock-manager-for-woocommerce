@@ -1930,7 +1930,6 @@ table.wp-list-table {
 			}
 			
 			td {
-				
 				color: $gray-600;
 				
 				.set-meta {
@@ -2040,12 +2039,6 @@ table.wp-list-table {
 					color: $blue;
 				}
 			}
-		}
-	}
-	
-	td {
-		&.column-title {
-			font-weight: 500;
 		}
 	}
 	

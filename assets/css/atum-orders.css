@@ -6274,10 +6274,6 @@ table.wp-list-table tbody tr:hover {
   color: #00B8DB;
 }
 
-.atum-list-table td.column-title, .floatThead-container td.column-title, .inbound-stock-list td.column-title, .wp-list-table td.column-title {
-  font-weight: 500;
-}
-
 .atum-list-table .column-thumb, .floatThead-container .column-thumb, .inbound-stock-list .column-thumb, .wp-list-table .column-thumb {
   height: 40px;
 }

@@ -973,16 +973,12 @@
 					});
 				
 				// Drag and drop scrolling on desktops
-				// TODO: IT'S NOT MOVING FLUIDLY. TRY TO FIX OR TO USE EVERYWHERE THE SAME DRAG SCROLL LIBRARY.
 				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
 				hammertime.on('panright panleft', function(evt) {
 					
 					var paneStartX   = self.jScrollApi.getContentPositionX(),
-					    offset       = 10, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
-					    displacement = evt.type === 'panright' ? paneStartX - offset : paneStartX + offset;
-					
-					console.log(evt);
+					    displacement = paneStartX - (evt.distance * evt.velocityX);
 					
 					self.jScrollApi.scrollToX(displacement, false);
 					
