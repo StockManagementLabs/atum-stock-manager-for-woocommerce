@@ -223,13 +223,9 @@ final class Ajax {
 
 		$grid_item_settings = $dashboard->get_widget_grid_item_defaults( $widget_id );
 
-		$dashboard->add_widget( $widget, $grid_item_settings );
+		$dashboard->add_widget( $widget, $grid_item_settings, TRUE );
 
 		$default_widgets_layout = Dashboard::get_default_widgets_layout();
-
-		if ( $widget->get_default_layout() ) {
-			$default_widgets_layout[ $widget_id ] = $widget->get_default_layout();
-		}
 
 		$widget_data = array(
 			'layout' => $default_widgets_layout[ $widget_id ],

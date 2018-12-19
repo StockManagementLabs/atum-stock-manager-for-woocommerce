@@ -40,61 +40,69 @@ class Dashboard {
 	 * @var array
 	 */
 	private static $default_widgets_layout = array(
-		ATUM_PREFIX . 'statistics_widget'    => array(
+		ATUM_PREFIX . 'statistics_widget'          => array(
 			'x'          => 0,                              // X edge position.
 			'y'          => 0,                              // Y edge position.
 			'width'      => 12,                             // Width in columns (based in 12 columns).
 			'height'     => 4,                              // Height in rows.
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'sales_widget'         => array(
+		ATUM_PREFIX . 'sales_widget'               => array(
 			'x'          => 0,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'lost_sales_widget'    => array(
+		ATUM_PREFIX . 'lost_sales_widget'          => array(
 			'x'          => 3,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'orders_widget'        => array(
+		ATUM_PREFIX . 'orders_widget'              => array(
 			'x'          => 6,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'promo_sales_widget'   => array(
+		ATUM_PREFIX . 'promo_sales_widget'         => array(
 			'x'          => 9,
 			'y'          => 5,
 			'width'      => 3,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'stock_control_widget' => array(
+		ATUM_PREFIX . 'stock_control_widget'       => array(
 			'x'          => 0,
 			'y'          => 10,
 			'width'      => 6,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'news_widget'          => array(
+		ATUM_PREFIX . 'news_widget'                => array(
 			'x'          => 6,
 			'y'          => 10,
 			'width'      => 6,
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'videos_widget'        => array(
+		ATUM_PREFIX . 'videos_widget'              => array(
 			'x'          => 0,
 			'y'          => 15,
 			'width'      => 12,
 			'height'     => 5,
 			'min-height' => 7,
+		),
+		ATUM_PREFIX . 'current_stock_value_widget' => array(
+			'x'          => 0,
+			'y'          => 20,
+			'width'      => 6,
+			'height'     => 4,
+			'min-height' => 5,
+			'default'    => FALSE,
 		),
 	);
 
@@ -189,8 +197,15 @@ class Dashboard {
 	 *
 	 * @param AtumWidget $widget
 	 * @param array      $widget_layout
+	 * @param bool       $new_widget
 	 */
-	public function add_widget( $widget, $widget_layout ) {
+	public function add_widget( $widget, $widget_layout, $new_widget = FALSE ) {
+		if ( $new_widget ) {
+			$widget_id           = $widget_layout['id'];
+			$widget_layout       = self::$default_widgets_layout[ $widget_layout['id'] ];
+			$widget_layout['id'] = $widget_id;
+		}
+
 		$widget_data = Helpers::array_to_data( $widget_layout, 'gs-' );
 		Helpers::load_view( 'widgets/widget-wrapper', compact( 'widget', 'widget_data' ) );
 	}
@@ -403,7 +418,14 @@ class Dashboard {
 
 			// If the current user has no layout, load the default and save it as user meta.
 			if ( '' === self::$user_widgets_layout ) {
-				self::$user_widgets_layout = self::get_default_widgets_layout();
+				$default_layouts = self::get_default_widgets_layout();
+
+				foreach ( $default_layouts as $key => $layout ) {
+					if ( isset( $layout['default'] ) && ! $layout['default'] ) {
+						unset( $default_layouts[ $key ] );
+					}
+				}
+				self::$user_widgets_layout = $default_layouts;
 				self::save_user_widgets_layout( $user_id, self::$user_widgets_layout );
 			}
 
