@@ -1670,6 +1670,8 @@ table.wp-list-table {
 			
 			input[type=checkbox] {
 				@include vertical-align-absolute;
+				box-shadow: none;
+				border-color: $gray-400;
 			}
 		}
 	}
@@ -1732,7 +1734,7 @@ table.wp-list-table {
 		&.expandable {
 			.check-column {
 				input[type=checkbox] {
-					margin-left: 20px;
+					margin-left: 13px;
 				}
 			}
 		}

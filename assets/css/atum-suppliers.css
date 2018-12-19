@@ -4651,6 +4651,9 @@ table.wp-list-table tbody tr:hover {
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  border-color: #ced4da;
 }
 
 .atum-list-table tr.main-row, .atum-list-table tr.mi-row, .atum-list-table tr.expandable, .floatThead-container tr.main-row, .floatThead-container tr.mi-row, .floatThead-container tr.expandable, .inbound-stock-list tr.main-row, .inbound-stock-list tr.mi-row, .inbound-stock-list tr.expandable, .wp-list-table tr.main-row, .wp-list-table tr.mi-row, .wp-list-table tr.expandable {
@@ -4694,7 +4697,7 @@ table.wp-list-table tbody tr:hover {
 }
 
 .atum-list-table tr.expandable .check-column input[type=checkbox], .floatThead-container tr.expandable .check-column input[type=checkbox], .inbound-stock-list tr.expandable .check-column input[type=checkbox], .wp-list-table tr.expandable .check-column input[type=checkbox] {
-  margin-left: 20px;
+  margin-left: 13px;
 }
 
 .atum-list-table tr.variation, .floatThead-container tr.variation, .inbound-stock-list tr.variation, .wp-list-table tr.variation {
