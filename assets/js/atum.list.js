@@ -977,8 +977,8 @@
 				
 				hammertime.on('panright panleft', function(evt) {
 					
-					var paneStartX   = self.jScrollApi.getContentPositionX(),
-					    displacement = paneStartX - (evt.distance * evt.velocityX);
+					var velocityModifier = 10,
+					    displacement     = self.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
 					
 					self.jScrollApi.scrollToX(displacement, false);
 					
