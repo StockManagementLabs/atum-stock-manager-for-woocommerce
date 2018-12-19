@@ -2732,10 +2732,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		$group_members = wp_list_pluck( $this->group_members, 'members' );
 		$column_keys   = array_keys( $columns );
 		$first_column  = current( $column_keys );
+		$second_column = current( array_slice( $column_keys, 1, 1 ) );
 
 		foreach ( $columns as $column_key => $column_display ) {
 
-			$class = array( 'manage-column', "column-$column_key" );
+			$class   = array( 'manage-column', "column-$column_key" );
+			$colspan = '';
 
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
@@ -2743,7 +2745,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $first_column === $column_key ) {
 				$class[]        = 'totals-heading';
+				$colspan        = 'colspan="2"';
 				$column_display = '<span>' . __( 'Totals', ATUM_TEXT_DOMAIN ) . '</span>';
+			}
+			elseif ( $second_column === $column_key ) {
+				continue; // Get rid of the second column as the first one will have a colspan.
 			}
 			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
 				$total          = $this->totalizers[ $column_key ];
@@ -2773,7 +2779,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
-			echo "<$tag $scope $class>$column_display</th>"; // WPCS: XSS ok.
+			echo "<$tag $scope $class $colspan>$column_display</th>"; // WPCS: XSS ok.
 
 		}
 
