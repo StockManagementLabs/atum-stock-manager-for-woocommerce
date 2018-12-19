@@ -1323,8 +1323,8 @@ span.easytree-expander:hover {
 }
 
 .easytree-ico-ef span.easytree-icon:before {
-  content: '\f480';
-  font-size: 18px;
+  font-family: atum-icon-font;
+  content: "";
 }
 
 .checked span.easytree-icon:before {
