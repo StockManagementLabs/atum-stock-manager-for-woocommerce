@@ -4075,7 +4075,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Use our own custom image placeholder for products without image
 	 *
-	 * @since 1.5.0.4
+	 * @since 1.5.1
 	 *
 	 * @param string $image
 	 * @param string $size
