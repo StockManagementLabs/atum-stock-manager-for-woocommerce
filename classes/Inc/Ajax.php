@@ -2178,17 +2178,14 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
 
-		$menu_theme = $_POST['data']['menu_theme'];
-		$user_id    = get_current_user_id();
-
-		if ( $menu_theme ) {
-			update_user_meta( $user_id, 'menu_settings_theme', 'dark' );
-		}
-		else {
-			update_user_meta( $user_id, 'menu_settings_theme', 'light' );
+		if ( ! isset( $_POST['theme'] ) ) {
+			wp_send_json_error();
 		}
 
-		wp_send_json_success( __( 'Menu theme were updated successfully', ATUM_TEXT_DOMAIN ) );
+		update_user_meta( get_current_user_id(), 'menu_settings_theme', 1 === absint( $_POST['theme'] ) ? 'dark' : 'light' );
+
+		wp_send_json_success( __( 'The Settings theme was updated successfully', ATUM_TEXT_DOMAIN ) );
+
 	}
 
 	/**
