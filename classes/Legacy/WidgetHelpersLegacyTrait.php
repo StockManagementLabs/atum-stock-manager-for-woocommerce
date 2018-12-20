@@ -311,10 +311,6 @@ trait WidgetHelpersLegacyTrait {
 	 * @return int
 	 */
 	private static function get_items_in_stock_legacy( $category, $product_type ) {
-
-		// Get products out of threshold.
-		$products_out_of_threshold = Helpers::is_any_out_stock_threshold_set( TRUE );
-
 		/*
 		 * Products In Stock
 		 */
@@ -329,13 +325,7 @@ trait WidgetHelpersLegacyTrait {
 		$args = array(
 			'post_type'      => [ 'product', 'product_variation' ],
 			'posts_per_page' => - 1,
-			'meta_query'     => array(
-				array(
-					'key'     => '_stock_status',
-					'value'   => 'instock',
-					'compare' => '=',
-				),
-			),
+			'meta_query'     => array(),
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'fields'         => 'ids',
 			'tax_query'      => array(
@@ -399,11 +389,6 @@ trait WidgetHelpersLegacyTrait {
 
 		// Get products.
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
-
-		// Add out_of_threshold products.
-		if ( ! empty( $products_out_of_threshold ) ) {
-			$products_in_stock->posts = array_merge( $products_in_stock->posts, array_diff( $products_out_of_threshold, $products_in_stock->posts ) );
-		}
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
