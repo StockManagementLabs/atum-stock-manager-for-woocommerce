@@ -120,6 +120,10 @@
 		height: 31px;
 		transition: .2s ease-in-out;
 		
+		@media all and (max-width: $screen-sm-min-wp) {
+			height: 35px;
+		}
+		
 		&:hover, &.active {
 			background-color: rgba($orange, 0.7);
 			color: $white;
@@ -486,6 +490,10 @@
 			width: 100%;
 		}
 		
+		@media all and (max-width: $screen-xs) {
+			max-width: inherit;
+		}
+		
 		&::placeholder {
 			color: $gray-500;
 			font-style: italic;
@@ -595,17 +603,13 @@
 		justify-content: center;
 	}
 	
-	@media all and (max-width: $screen-xs) {
-		display: inline-block;
-	}
-	
 	&.extend-list-table {
 		padding: 0 11px;
 		height: 52px;
 		flex-wrap: nowrap;
 		
 		@media all and (max-width: $screen-sm-min-wp) {
-			flex-wrap: wrap;
+			flex-wrap: nowrap;
 			height: auto;
 		}
 		
@@ -614,7 +618,7 @@
 		}
 		
 		@media all and (max-width: $screen-xs) {
-			padding: 10px;
+			flex-wrap: wrap;
 			display: flex;
 		}
 		
@@ -625,6 +629,7 @@
 		
 		@media all and (max-width: $screen-xs) {
 			white-space: inherit;
+			padding: 0;
 		}
 		
 		&.bulkactions {
@@ -647,52 +652,87 @@
 		}
 	}
 	
-	.tablenav-pages {
+	.tablenav-pages-container {
 		margin: 0 0 0 auto;
 		text-align: right;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		min-width: 350px;
 		z-index: 998;
-		width: 300px;
 		
-		&.one-page {
-			width: inherit;
-		}
-		
-		@media all and (max-width: $screen-sm-min-wp) {
-			margin: 5px 0 0 0;
-		}
-		
-		@media all and (max-width: $screen-xs) {
-			width: 100%;
-			text-align: center;
-			display: inline-block;
-			margin: 0 0 10px;
-		}
-		
-		.displaying-num {
-			@media all and (max-width: $screen-lg) {
-				display: inline-block;
+		.btn {
+			margin-left: 15px;
+			@media all and (max-width: $screen-sm-min-wp) {
+				margin: 0;
 			}
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
+				margin: 10px 0;
 			}
 		}
 		
+		&.one-page {
+			width: 100%;
+			min-width: 200px;
+		}
+		
+		@media all and (max-width: $screen-xs) {
+			flex-wrap: wrap;
+			min-width: 0;
+		}
+		
+		.tablenav-pages {
+			margin: 0 0 0 auto;
+			text-align: right;
+			
+			&.one-page {
+				width: inherit;
+			}
+			
+			@media all and (max-width: $screen-sm-min-wp) {
+				margin: 5px 0 5px auto;
+				text-align: right;
+			}
+			
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				margin: 5px 0 5px auto;
+				text-align: center;
+			}
+			
+			.displaying-num {
+				@media all and (max-width: $screen-lg) {
+					display: inline-block;
+				}
+				@media all and (max-width: $screen-xs) {
+					width: 100%;
+				}
+			}
+			
+		}
 	}
 	
 	.filters-container-box {
-		width: 80%;
 		position: relative;
 		
 		&.not-pagination {
-			width: 90%;
-		}
+			@media screen and (max-width: $screen-lg + 200px) {
+				width: calc(100% - 200px);
+			}
+			
+			@media screen and (max-width: $screen-sm-min-wp) {
+				width: inherit;
+			}
+			
+			@media all and (max-width: $screen-xs) {
+				width: 100% !important;
+				margin-top: 10px;
+			}
+		 }
 		
-		@media screen and (max-width: 1400px) {
-			width: 70%;
-		}
-		
-		@media screen and (max-width: $screen-lg) {
-			width: 62%;
+		@media screen and (max-width: $screen-lg + 200px) {
+			width: calc(100% - 400px);
 		}
 		
 		@media screen and (max-width: $screen-sm-min-wp) {
@@ -721,7 +761,6 @@
 	}
 	
 	.nav-with-scroll-effect {
-		width: 100%;
 		height: 52px;
 		justify-content: start;
 		
@@ -795,6 +834,18 @@
 					width: 100%;
 					margin-top: 10px !important;
 				}
+			}
+		}
+	}
+	.tablenav-pages-container {
+		.btn {
+			margin-left: 15px;
+			@media all and (max-width: $screen-sm-min-wp) {
+				margin-left: 30px;
+			}
+			@media all and (max-width: $screen-xs) {
+				width: 100%;
+				margin: 10px 0;
 			}
 		}
 	}
@@ -957,7 +1008,7 @@
 		width: 200px;
 		position: absolute;
 		z-index: 998;
-		height: 65px;
+		height: 51px;
 		pointer-events: none;
 	}
 	
