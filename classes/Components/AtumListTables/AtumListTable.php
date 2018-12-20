@@ -2893,7 +2893,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		<div class="tablenav <?php echo esc_attr( $which ); ?> extend-list-table">
 
 			<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
-			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?> ">
+			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
 				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : ''; ?>">
 
 					<div class="alignleft actions bulkactions">
@@ -2914,7 +2914,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Firefox fix to not preserve the pagination input value when reloading the page.
 			ob_start(); ?>
 
-			<div class="tablenav-pages-container <?php echo empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ? 'one-page' : ''; ?>">
+			<div class="tablenav-pages-container<?php echo empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ? ' one-page' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
 				<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
 					<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
 				<?php endif; ?>
