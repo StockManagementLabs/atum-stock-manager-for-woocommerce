@@ -159,6 +159,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.1.1`
+
+*2018-12-20*
+
+**Changes**
+
+* Make the submit filter button always visible when autosearch is disabled in List Tables.
+
+**Fixes**
+
+* Fixed issue with ATUM Orders list broken in WP 5.0.2.
+
+---
+
 `1.5.1`
 
 *2018-12-20*
