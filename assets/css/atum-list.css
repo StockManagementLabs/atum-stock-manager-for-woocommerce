@@ -3857,6 +3857,12 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   transition: .2s ease-in-out;
 }
 
+@media all and (max-width: 782px) {
+  .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
+    height: 35px;
+  }
+}
+
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
   background-color: rgba(239, 175, 0, 0.7);
   color: #fff;
@@ -4306,6 +4312,12 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   }
 }
 
+@media all and (max-width: 480px) {
+  .search-box .atum-post-search, p.search-box .atum-post-search {
+    max-width: inherit;
+  }
+}
+
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
   color: #adb5bd;
   font-style: italic;
@@ -4457,12 +4469,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   }
 }
 
-@media all and (max-width: 480px) {
-  .tablenav.top {
-    display: inline-block;
-  }
-}
-
 .tablenav.top.extend-list-table {
   padding: 0 11px;
   height: 52px;
@@ -4472,8 +4478,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 @media all and (max-width: 782px) {
   .tablenav.top.extend-list-table {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
     height: auto;
   }
 }
@@ -4484,7 +4490,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 @media all and (max-width: 480px) {
   .tablenav.top.extend-list-table {
-    padding: 10px;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -4498,6 +4505,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 @media all and (max-width: 480px) {
   .tablenav.top .actions {
     white-space: inherit;
+    padding: 0;
   }
 }
 
@@ -4520,62 +4528,112 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   }
 }
 
-.tablenav.top .tablenav-pages {
+.tablenav.top .tablenav-pages-container {
   margin: 0 0 0 auto;
   text-align: right;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  min-width: 350px;
   z-index: 998;
-  width: 300px;
 }
 
-.tablenav.top .tablenav-pages.one-page {
+.tablenav.top .tablenav-pages-container .btn {
+  margin-left: 15px;
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.top .tablenav-pages-container .btn {
+    margin: 0;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .tablenav-pages-container .btn {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+.tablenav.top .tablenav-pages-container.one-page {
+  width: 100%;
+  min-width: 200px;
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .tablenav-pages-container {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    min-width: 0;
+  }
+}
+
+.tablenav.top .tablenav-pages-container .tablenav-pages {
+  margin: 0 0 0 auto;
+  text-align: right;
+}
+
+.tablenav.top .tablenav-pages-container .tablenav-pages.one-page {
   width: inherit;
 }
 
 @media all and (max-width: 782px) {
-  .tablenav.top .tablenav-pages {
-    margin: 5px 0 0 0;
+  .tablenav.top .tablenav-pages-container .tablenav-pages {
+    margin: 5px 0 5px auto;
+    text-align: right;
   }
 }
 
 @media all and (max-width: 480px) {
-  .tablenav.top .tablenav-pages {
+  .tablenav.top .tablenav-pages-container .tablenav-pages {
     width: 100%;
+    margin: 5px 0 5px auto;
     text-align: center;
-    display: inline-block;
-    margin: 0 0 10px;
   }
 }
 
 @media all and (max-width: 1200px) {
-  .tablenav.top .tablenav-pages .displaying-num {
+  .tablenav.top .tablenav-pages-container .tablenav-pages .displaying-num {
     display: inline-block;
   }
 }
 
 @media all and (max-width: 480px) {
-  .tablenav.top .tablenav-pages .displaying-num {
+  .tablenav.top .tablenav-pages-container .tablenav-pages .displaying-num {
     width: 100%;
   }
 }
 
 .tablenav.top .filters-container-box {
-  width: 80%;
   position: relative;
 }
 
-.tablenav.top .filters-container-box.not-pagination {
-  width: 90%;
+@media screen and (max-width: 1400px) {
+  .tablenav.top .filters-container-box.not-pagination {
+    width: calc(100% - 200px);
+  }
+}
+
+@media screen and (max-width: 782px) {
+  .tablenav.top .filters-container-box.not-pagination {
+    width: inherit;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.top .filters-container-box.not-pagination {
+    width: 100% !important;
+    margin-top: 10px;
+  }
 }
 
 @media screen and (max-width: 1400px) {
   .tablenav.top .filters-container-box {
-    width: 70%;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .tablenav.top .filters-container-box {
-    width: 62%;
+    width: calc(100% - 400px);
   }
 }
 
@@ -4609,7 +4667,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 .tablenav.top .nav-with-scroll-effect {
-  width: 100%;
   height: 52px;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
@@ -4707,6 +4764,23 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   .tablenav.bottom .actions.bulkactions input[type=submit] {
     width: 100%;
     margin-top: 10px !important;
+  }
+}
+
+.tablenav.bottom .tablenav-pages-container .btn {
+  margin-left: 15px;
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.bottom .tablenav-pages-container .btn {
+    margin-left: 30px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav.bottom .tablenav-pages-container .btn {
+    width: 100%;
+    margin: 10px 0;
   }
 }
 
@@ -4897,7 +4971,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   width: 200px;
   position: absolute;
   z-index: 998;
-  height: 65px;
+  height: 51px;
   pointer-events: none;
 }
 

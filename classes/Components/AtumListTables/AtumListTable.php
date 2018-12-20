@@ -431,10 +431,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					<?php $this->table_nav_filters() ?>
 
-					<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
-						<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
-					<?php endif; ?>
-
 				</div>
 			</div>
 
@@ -2916,10 +2912,16 @@ abstract class AtumListTable extends \WP_List_Table {
 			<?php endif;
 
 			// Firefox fix to not preserve the pagination input value when reloading the page.
-			ob_start();
-			$this->pagination( $which );
-			echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() ); // WPCS: XSS ok. ?>
+			ob_start(); ?>
 
+			<div class="tablenav-pages-container <?php echo empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ? 'one-page' : ''; ?>">
+				<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
+					<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
+				<?php endif; ?>
+				<?php
+				$this->pagination( $which );
+				echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() ); // WPCS: XSS ok. ?>
+			</div>
 			<br class="clear"/>
 		</div>
 		<?php
