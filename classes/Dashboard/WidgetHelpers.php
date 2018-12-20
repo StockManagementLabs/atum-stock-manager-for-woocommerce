@@ -841,9 +841,6 @@ final class WidgetHelpers {
 			return self::get_items_in_stock_legacy( $category, $product_type );
 		}
 
-		// Get products out of threshold.
-		$products_out_of_threshold = Helpers::is_any_out_stock_threshold_set( TRUE );
-
 		// Init values counter.
 		$counters = [
 			'items_stocks_counter'          => 0,
@@ -869,12 +866,6 @@ final class WidgetHelpers {
 		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
 
 		self::$wc_query_data['where'] = [];
-
-		// Query clauses.
-		self::$wc_query_data['where'][] = array(
-			'key'   => 'stock_status',
-			'value' => array( 'instock' ),
-		);
 
 		// Check if category filter data exist.
 		if ( $category ) {
@@ -937,11 +928,6 @@ final class WidgetHelpers {
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
-
-		// Add out_of_threshold products.
-		if ( ! empty( $products_out_of_threshold ) ) {
-			$products_in_stock->posts = array_merge( $products_in_stock->posts, array_diff( $products_out_of_threshold, $products_in_stock->posts ) );
-		}
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
