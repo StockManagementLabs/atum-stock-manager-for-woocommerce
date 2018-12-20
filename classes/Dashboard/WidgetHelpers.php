@@ -828,7 +828,7 @@ final class WidgetHelpers {
 	/**
 	 * Get all products in stock count
 	 *
-	 * @since 1.5.0
+	 * @since 1.5.1
 	 *
 	 * @param string $category
 	 * @param string $product_type
@@ -932,8 +932,8 @@ final class WidgetHelpers {
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
 			$product                 = Helpers::get_atum_product( $product_id );
-			$product_stock           = (int) $product->get_stock_quantity();
-			$product_purcharse_price = (int) $product->get_purchase_price();
+			$product_stock           = (float) $product->get_stock_quantity();
+			$product_purcharse_price = (float) $product->get_purchase_price();
 
 			if ( $product_stock && $product_stock > 0 ) {
 				$counters['items_stocks_counter'] += $product_stock;
