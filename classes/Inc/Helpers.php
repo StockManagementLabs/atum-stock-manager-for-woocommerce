@@ -1264,8 +1264,8 @@ final class Helpers {
 
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
-		$output  = '<select name="product_type" class="wc-enhanced-select ' . $class . '" autocomplete="off">';
-		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'Show all product types', ATUM_TEXT_DOMAIN ) . '</option>';
+		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
+		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {
 
@@ -1802,18 +1802,30 @@ final class Helpers {
 	 *
 	 * @since 1.4.10
 	 *
+	 * @param bool $return_ids
+	 *
 	 * @return bool
 	 */
-	public static function is_any_out_stock_threshold_set() {
+	public static function is_any_out_stock_threshold_set( $return_ids = FALSE ) {
 
 		global $wpdb;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
-			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
-			WHERE ap.out_stock_threshold IS NOT NULL
-			AND  p.post_status IN ('publish', 'future', 'private');" ); // WPCS: unprepared SQL ok.
+		$data = 'COUNT(*)';
+		if ( $return_ids ) {
+			$data = 'ap.product_id';
+		}
 
-		return $rowcount > 0;
+		$query = "SELECT $data FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
+			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
+			WHERE ap.out_stock_threshold IS NOT NULL AND ap.out_stock_threshold > 0
+			AND  p.post_status IN ('publish', 'future', 'private');";
+
+		if ( $return_ids ) {
+			$result = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+			return $result;
+		}
+		$result = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+		return $result > 0;
 	}
 
 	/**

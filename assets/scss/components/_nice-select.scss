@@ -175,8 +175,8 @@ $ns-arrow-size:                    5px !default;;
 		}
 		
 		&.selected {
-			font-weight: bold;
-			color: $dark;
+			background-color: $blue-light !important;
+			color: $blue;
 		}
 		
 		&.disabled {

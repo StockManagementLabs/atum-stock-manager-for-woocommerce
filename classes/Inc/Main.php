@@ -438,7 +438,7 @@ class Main {
 	 * @return string
 	 */
 	public function admin_footer_text( $footer_text ) {
-
+		ob_start();
 		$current_screen = get_current_screen();
 
 		if ( isset( $current_screen->id ) && $current_screen->parent_base === self::$main_menu_item['slug'] ) {
@@ -468,8 +468,6 @@ class Main {
 			else {
 				$footer_text = __( 'Thank you for trusting in <strong>ATUM</strong> for managing your stock.', ATUM_TEXT_DOMAIN );
 			}
-
-			ob_start();
 
 			$footer_class = FALSE;
 			$screen_base  = get_current_screen()->base;
@@ -503,7 +501,7 @@ class Main {
 				</div>
 			</div>
 			<?php
-			
+
 			return ob_get_clean();
 
 		}

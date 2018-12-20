@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Legacy\WidgetHelpersLegacyTrait;
 use Atum\Settings\Settings;
@@ -755,6 +756,213 @@ final class WidgetHelpers {
 	 */
 	public static function wc_product_data_query_clauses( $pieces ) {
 		return Helpers::product_data_query_clauses( self::$wc_query_data, $pieces, 'wc_products' );
+	}
+
+	/**
+	 * Builds a product type dowpdown for current stock value widget
+	 *
+	 * @since 1.5.0.3
+	 *
+	 * @param string $selected  The pre-selected option.
+	 * @param string $class     The dropdown class name.
+	 *
+	 * @return string
+	 */
+	public static function product_types_dropdown( $selected = '', $class = 'dropdown_product_type' ) {
+
+		$terms = get_terms( array(
+			'taxonomy'   => 'product_type',
+			'hide_empty' => FALSE,
+		) );
+
+		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
+
+		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
+		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
+
+		foreach ( $terms as $term ) {
+
+			if ( ! in_array( $term->slug, $allowed_types ) ) {
+				continue;
+			}
+
+			$output .= '<option value="' . sanitize_title( $term->name ) . '"' . selected( $term->slug, $selected, FALSE ) . '>';
+
+			switch ( $term->name ) {
+				case 'grouped':
+					$output .= __( 'Grouped product', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'variable':
+					$output .= __( 'Variable product', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'simple':
+					$output .= __( 'Simple product', ATUM_TEXT_DOMAIN );
+					break;
+
+				// Assuming that we'll have other types in future.
+				default:
+					$output .= ucfirst( $term->name );
+					break;
+			}
+
+			$output .= '</option>';
+
+			if ( 'simple' === $term->name ) {
+				$output .= '<option value="downloadable"' . selected( 'downloadable', $selected, FALSE ) . '> &rarr; ' . __( 'Downloadable', ATUM_TEXT_DOMAIN ) . '</option>';
+				$output .= '<option value="virtual"' . selected( 'virtual', $selected, FALSE ) . '> &rarr; ' . __( 'Virtual', ATUM_TEXT_DOMAIN ) . '</option>';
+			}
+		}
+
+		$extra_output = '';
+
+		$output .= apply_filters( 'atum/dashboard_widgets/current_stock_counters/product_types_dropdown', $extra_output );
+
+		$output .= '</select>';
+
+		return $output;
+
+	}
+
+	/**
+	 * Get all products in stock count
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $category
+	 * @param string $product_type
+	 *
+	 * @return int
+	 */
+	public static function get_items_in_stock( $category = null, $product_type = null ) {
+
+		if ( ! Helpers::is_using_new_wc_tables() ) {
+			return self::get_items_in_stock_legacy( $category, $product_type );
+		}
+
+		// Get products out of threshold.
+		$products_out_of_threshold = Helpers::is_any_out_stock_threshold_set( TRUE );
+
+		// Init values counter.
+		$counters = [
+			'items_stocks_counter'          => 0,
+			'items_purcharse_price_total'   => 0,
+			'items_without_purcharse_price' => 0,
+		];
+
+		/*
+		 * Products In Stock
+		 */
+
+		$args = array(
+			'post_type'      => [ 'product', 'product_variation' ],
+			'posts_per_page' => - 1,
+			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'fields'         => 'ids',
+			'tax_query'      => array(
+				'relation' => 'AND',
+			),
+
+		);
+
+		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
+
+		self::$wc_query_data['where'] = [];
+
+		// Query clauses.
+		self::$wc_query_data['where'][] = array(
+			'key'   => 'stock_status',
+			'value' => array( 'instock' ),
+		);
+
+		// Check if category filter data exist.
+		if ( $category ) {
+			array_push( $args['tax_query'], array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => array( $category ),
+			) );
+		}
+
+		// Check if product type filter data exist.
+		if ( $product_type ) {
+			if ( 'grouped' === $product_type ) {
+				$group_items = self::get_children( 'grouped' );
+
+				if ( $group_items ) {
+					$args['post__in'] = $group_items;
+				}
+				else {
+					return $counters;
+				}
+			}
+			elseif ( 'variable' === $product_type ) {
+				$variations = self::get_children( 'variable', 'product_variation' );
+				if ( $variations ) {
+					$args['post__in'] = $variations;
+				}
+				else {
+					return $counters;
+				}
+			}
+			elseif ( 'downloadable' === $product_type ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'downloadable',
+					'value' => array( '1' ),
+				);
+			}
+			elseif ( 'virtual' === $product_type ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'virtual',
+					'value' => array( '1' ),
+				);
+			}
+			elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'type',
+					'value' => $product_type,
+				);
+			}
+			else {
+				array_push( $args['tax_query'], array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => array( $product_type ),
+				) );
+			}
+		}
+
+		// Get products.
+		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
+		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
+
+		// Add out_of_threshold products.
+		if ( ! empty( $products_out_of_threshold ) ) {
+			$products_in_stock->posts = array_merge( $products_in_stock->posts, array_diff( $products_out_of_threshold, $products_in_stock->posts ) );
+		}
+
+		// Get current stock values.
+		foreach ( $products_in_stock->posts as $product_id ) {
+			$product                 = Helpers::get_atum_product( $product_id );
+			$product_stock           = (int) $product->get_stock_quantity();
+			$product_purcharse_price = (int) $product->get_purchase_price();
+
+			if ( $product_stock && $product_stock > 0 ) {
+				$counters['items_stocks_counter'] += $product_stock;
+				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
+					$counters['items_purcharse_price_total'] += ( $product_purcharse_price * $product_stock );
+				}
+				else {
+					$counters['items_without_purcharse_price'] += $product_stock;
+				}
+			}
+		}
+
+		self::$wc_query_data = $temp_wc_query_data; // Restore the original value.
+
+		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
 	}
 
 }

@@ -3525,8 +3525,8 @@ input[type="button"].btn-block {
 }
 
 .nice-select .option.selected {
-  font-weight: bold;
-  color: #343a40;
+  background-color: #dbf9ff !important;
+  color: #00B8DB;
 }
 
 .nice-select .option.disabled {
@@ -3624,14 +3624,26 @@ input[type="button"].btn-block {
   border-width: 3px;
 }
 
-.swal2-container .atum-loading keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
-.swal2-container .atum-loading keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .tooltip {
@@ -3834,6 +3846,10 @@ body.toplevel_page_atum-dashboard #wpbody-content {
 
 body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel_page_atum-dashboard #wpbody-content > .notice-info, body.toplevel_page_atum-dashboard #wpbody-content > .notice-success, body.toplevel_page_atum-dashboard #wpbody-content > .notice-warning, body.toplevel_page_atum-dashboard #wpbody-content > .error, body.toplevel_page_atum-dashboard #wpbody-content > .updated, body.toplevel_page_atum-dashboard #wpbody-content > .notice {
   margin: 15px 15px 15px 0;
+}
+
+#wpfooter {
+  position: relative;
 }
 
 .atum-dashboard {
@@ -4407,6 +4423,47 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   overflow: hidden;
 }
 
+.add-widget-popup.overlay:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: #f8f9fa;
+  opacity: 0.5;
+}
+
+.add-widget-popup.overlay:after {
+  content: '';
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+  border-top-color: #6c757d;
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
 .add-widget-popup .swal2-content {
   margin-bottom: 0;
 }
@@ -4652,14 +4709,15 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   right: -8px;
 }
 
-.statistics-widget .nice-select.loading .current:after keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-.statistics-widget .nice-select.loading .current:after keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 @media all and (max-width: 768px) {
@@ -4976,6 +5034,141 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   }
 }
 
+.atum-widget.atum_current_stock_value_widget .widget-body {
+  padding: 10px 30px 0;
+}
+
+@media all and (max-width: 768px) {
+  .atum-widget.atum_current_stock_value_widget .widget-body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.atum-widget.atum_current_stock_value_widget .grid-stack-item-content {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.current-stock-value-widget.overlay:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: #f8f9fa;
+  opacity: 0.5;
+}
+
+.current-stock-value-widget.overlay:after {
+  content: '';
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+  border-top-color: #6c757d;
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.current-stock-value-widget h5 {
+  font-size: 15px;
+  color: #adb5bd;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+.current-stock-value-widget .current-stock-value-filters {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.current-stock-value-widget .current-stock-value-filters .nice-select {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.current-stock-value-widget .current-stock-value-filters .nice-select.open .list {
+  max-height: 200px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.current-stock-value-widget .current-stock-value-content {
+  text-align: left;
+  padding: 40px 0;
+}
+
+.current-stock-value-widget .current-stock-value-content .total-items-purcharse-price, .current-stock-value-widget .current-stock-value-content .items-count {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.current-stock-value-widget .current-stock-value-content .total {
+  display: inline;
+}
+
+.current-stock-value-widget .current-stock-value-content .total-items-purcharse-price {
+  color: #69C61D;
+}
+
+.current-stock-value-widget .current-stock-value-content .items-value-title h5, .current-stock-value-widget .current-stock-value-content .stock-value-title h5 {
+  margin: 17px 0;
+}
+
+.current-stock-value-widget .current-stock-value-content .items-count {
+  color: #00B8DB;
+}
+
+.current-stock-value-widget .current-stock-value-content .separator-line {
+  width: 100%;
+  height: 1px;
+  background-color: #E5E5E5;
+  margin: 21px 0 30px 0;
+}
+
+.current-stock-value-widget .current-stock-value-content .stock-counter {
+  padding-bottom: 25px;
+}
+
+.current-stock-value-widget .current-stock-value-content .items-without-purcharse-price {
+  border-radius: 4px;
+  background-color: #ffe1e1;
+  font-size: 12px;
+  line-height: 1;
+  color: #FF4848;
+  padding: 6px 7px;
+}
+
 .atum_videos_widget .grid-stack-item-content {
   overflow: hidden !important;
 }
@@ -5094,14 +5287,15 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   margin: auto;
 }
 
-.videos-widget .video-list .scroll-box.overlay:after keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-.videos-widget .video-list .scroll-box.overlay:after keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .videos-widget .video-list article {

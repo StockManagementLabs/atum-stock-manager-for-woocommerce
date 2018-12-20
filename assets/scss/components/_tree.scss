@@ -184,8 +184,8 @@ span.easytree-expander {
 .easytree-ico-ef {
 	span.easytree-icon {
 		&:before {
-			content: '\f480'; // dashicons-archive
-			font-size: 18px;
+			font-family: atum-icon-font;
+			content: $atmi-map-marker;
 		}
 	}
 }

@@ -1042,14 +1042,26 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border-width: 3px;
 }
 
-.swal2-container .atum-loading keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
-.swal2-container .atum-loading keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .blockUI.blockOverlay:before {
@@ -1073,14 +1085,15 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
           animation: loader-rotate 1s linear infinite;
 }
 
-.blockUI.blockOverlay:after keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-.blockUI.blockOverlay:after keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .note .blockUI.blockOverlay:after {
@@ -1096,14 +1109,15 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
           animation: loader-rotate 1s linear infinite;
 }
 
-.note .blockUI.blockOverlay:after keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-.note .blockUI.blockOverlay:after keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .color-primary {
@@ -5256,7 +5270,6 @@ input[type="button"].btn-block {
   width: 100%;
   float: left;
   margin: 0 11px 0 0;
-  height: 70px;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
@@ -6067,14 +6080,15 @@ table.wp-list-table tbody tr:hover {
           animation: loader-rotate 1s linear infinite;
 }
 
-.atum-list-table tr.no-items td .alert .atum-spinner span keyframes loader-rotate from, .floatThead-container tr.no-items td .alert .atum-spinner span keyframes loader-rotate from, .inbound-stock-list tr.no-items td .alert .atum-spinner span keyframes loader-rotate from, .wp-list-table tr.no-items td .alert .atum-spinner span keyframes loader-rotate from {
-  -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-}
-
-.atum-list-table tr.no-items td .alert .atum-spinner span keyframes loader-rotate to, .floatThead-container tr.no-items td .alert .atum-spinner span keyframes loader-rotate to, .inbound-stock-list tr.no-items td .alert .atum-spinner span keyframes loader-rotate to, .wp-list-table tr.no-items td .alert .atum-spinner span keyframes loader-rotate to {
-  -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 .atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals, .wp-list-table tr.totals {

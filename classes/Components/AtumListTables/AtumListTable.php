@@ -457,7 +457,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		) );
 
 		// Product type filtering.
-		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '' ); // WPCS: XSS ok.
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select' ); // WPCS: XSS ok.
 
 		// Supplier filtering.
 		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // WPCS: XSS ok.
@@ -2256,7 +2256,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		unset( $args['paged'] );
 
 		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERICALLY TO AVOID REPETITIVE WORK.
-		$all_transient = AtumCache::get_transient_key( 'list_table_all', $args );
+		$all_transient = AtumCache::get_transient_key( 'list_table_all', array_merge( $args, $this->wc_query_data, $this->atum_query_data ) );
 		$products      = AtumCache::get_transient( $all_transient );
 
 		if ( ! $products ) {
@@ -2430,7 +2430,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'compare' => '>',
 			);
 
-			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', $in_stock_args );
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', array_merge( $in_stock_args, $this->wc_query_data, $this->atum_query_data ) );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
 			if ( empty( $products_in_stock ) ) {
@@ -2481,7 +2481,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'compare' => '<=',
 			);
 
-			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', $back_order_args );
+			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $back_order_args, $this->wc_query_data, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 
 			if ( empty( $products_back_order ) ) {
@@ -2513,7 +2513,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', $args );
+				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', array_merge( $args, $this->wc_query_data, $this->atum_query_data ) );
 				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
 
 				if ( empty( $products_low_stock ) ) {
