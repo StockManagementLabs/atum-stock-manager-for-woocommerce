@@ -159,6 +159,34 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.1`
+
+*2018-12-20*
+
+**Features**
+
+* Added new Dashboard widget to display the monetary value of all warehouse present inventory.
+* Added compatibility with WooCommerce Bookings products to Stock Central.
+
+**Changes**
+
+* Adjusted product title column legth in List Tables.
+* Added a colspan to totals row header in List Tables.
+* Added custom image placeholder to List Tables.
+* Replaced all the WooCommerce icons by ATUM icons everywhere.
+
+**Fixes**
+
+* Fixed issue when creating variations.
+* Fixed issue with ATUM model class names for some product types like Variable Subscriptions.
+* Added missing font to mPDF.
+* Fixed List Table drag scroll fluidity.
+* Fixed issue with List Table searches due to identical transient names.
+* Refactory: code style.
+* CSS fixes.
+
+---
+
 `1.5.0.3`
 
 *2018-12-17*

@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, julianberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.0.1
+Tested up to: 5.0.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.2
-Stable tag: 1.5.0.3
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,34 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.1`
+
+*2018-12-20*
+
+**Features**
+
+* Added new Dashboard widget to display the monetary value of all warehouse present inventory.
+* Added compatibility with WooCommerce Bookings products to Stock Central.
+
+**Changes**
+
+* Adjusted product title column legth in List Tables.
+* Added a colspan to totals row header in List Tables.
+* Added custom image placeholder to List Tables.
+* Replaced all the WooCommerce icons by ATUM icons everywhere.
+
+**Fixes**
+
+* Fixed issue when creating variations.
+* Fixed issue with ATUM model class names for some product types like Variable Subscriptions.
+* Added missing font to mPDF.
+* Fixed List Table drag scroll fluidity.
+* Fixed issue with List Table searches due to identical transient names.
+* Refactory: code style.
+* CSS fixes.
 
 ---
 
