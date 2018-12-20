@@ -1480,7 +1480,7 @@ table.wp-list-table {
 	}
 }
 
-.atum-list-table, .floatThead-container, .inbound-stock-list, .wp-list-table  {
+table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list-table  {
 	
 	margin-bottom: 15px;
 	border-collapse: collapse;
@@ -1490,7 +1490,8 @@ table.wp-list-table {
 		border-top: 1px solid $gray-200;
 		border-bottom: 1px solid $gray-200;
 		
-		th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory) {
+		th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
+		td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory) {
 			border: none;
 		}
 		
@@ -1515,20 +1516,14 @@ table.wp-list-table {
 				visibility: visible;
 				margin-left: 4px;
 				margin-top: 7px;
+				
 				&:before {
 					color: $gray-500;
 					content: "\f140";
 				}
 			}
 			
-			.col-product-details {
-				.lnr {
-					font-size: 16px;
-					color: $gray-500;
-				}
-			}
-			
-			.lnr, .dashicons, .atum-icon {
+			.dashicons, .atum-icon {
 				display: block;
 				text-indent: -9999px;
 				position: relative;
@@ -1544,10 +1539,6 @@ table.wp-list-table {
 					left: 0;
 					top: 0;
 				}
-			}
-			
-			svg {
-				max-height: 14px;
 			}
 			
 		}
@@ -1669,8 +1660,6 @@ table.wp-list-table {
 			
 			input[type=checkbox] {
 				@include vertical-align-absolute;
-				box-shadow: none;
-				border-color: $gray-400;
 			}
 		}
 	}
@@ -1711,16 +1700,8 @@ table.wp-list-table {
 						
 						&.product-type {
 							&:before {
-								content: "\e004";
+								content: $atmi-wc-contract;
 								color: $white;
-							}
-						}
-						
-						&.product-type-icon {
-							svg {
-								.st1 {
-									fill: $white;
-								}
 							}
 						}
 						
@@ -1888,13 +1869,24 @@ table.wp-list-table {
 	
 	input[type=checkbox] {
 		border-radius: 3px;
+		box-shadow: none;
+		border-color: $gray-400;
+		
 		&:checked {
 			background-color: $blue;
 			border: 0;
+			
+			&:before {
+				color: $white;
+				content: $atmi-checkmark;
+				font-family: $atum-icon-font;
+				font-size: 14px;
+				margin: 1px 0 0;
+				font-weight: bold;
+			}
 		}
-		&:before {
-			color: $white;
-		}
+		
+		
 	}
 	
 	tbody, #the-list {
@@ -2064,41 +2056,20 @@ table.wp-list-table {
 		max-width: 50px;
 		text-align: center;
 		
-		.wc-type {
+		span.product-type {
 			display: block;
-			text-indent: -9999px;
-			position: relative;
-			height: 1em;
-			width: 1em;
-			margin: 0 auto;
-			
-			&:before {
-				font-family: $atum-icon-font;
-				content: $atmi-tag;
-				position: absolute;
-				text-indent: 0;
-				font-size: 14px;
-				top: 0;
-				speak: none;
-				font-variant: normal;
-				text-transform: none;
-				-webkit-font-smoothing: antialiased;
-				left: 0;
-			}
-		}
-		
-		.product-type {
-			display: block;
-			text-indent: -9999px;
 			position: relative;
 			height: 1em;
 			width: 1em;
 			font-size: 1.6em;
 			margin: 0 auto;
-			-moz-osx-font-smoothing: grayscale;
+			color: $gray-500;
 			
 			&:before {
-				font-family: WooCommerce;
+				content: $atmi-wc-simple;
+				font-family: $atum-icon-font !important; // important required to overwrite booking icon
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 				speak: none;
 				font-weight: 400;
 				text-transform: none;
@@ -2110,30 +2081,28 @@ table.wp-list-table {
 				width: 100%;
 				height: 100%;
 				text-align: center;
-				content: "\e006";
 				font-variant: normal;
 				margin: 0;
-				//color: $gray-600;
 			}
 			
-			&.grouped:before {
-				content: "\e002";
-			}
-			
-			&.external::before {
-				content: "\e034";
+			&.grouped::before {
+				content: $atmi-wc-grouped;
 			}
 			
 			&.variable::before {
-				content: "\e003";
+				content: $atmi-wc-variable;
 			}
 			
 			&.downloadable::before {
-				content: "\e001";
+				content: $atmi-wc-downloadable;
 			}
 			
 			&.virtual::before {
-				content: "\e000";
+				content: $atmi-wc-virtual;
+			}
+			
+			&.booking::before {
+				content: $atmi-calendar-full;
 			}
 			
 		}
@@ -2149,7 +2118,7 @@ table.wp-list-table {
 				
 				&.variable-subscription {
 					&:before {
-						content: "\e003";
+						content: $atmi-wc-variable;
 					}
 				}
 				
@@ -2159,7 +2128,7 @@ table.wp-list-table {
 				
 				&:hover {
 					&:before {
-						content: "\e005";
+						content: $atmi-wc-expand;
 					}
 				}
 				
@@ -2169,7 +2138,7 @@ table.wp-list-table {
 		
 		.variation, .grouped-item {
 			&:before {
-				content: "\e039";
+				content: $atmi-wc-status;
 			}
 		}
 		

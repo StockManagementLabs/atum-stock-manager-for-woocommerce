@@ -179,11 +179,8 @@ class DataExport {
 
 			// Add the icon fonts to mPDF.
 			$fontdata = array(
-				'atum-icon-font'   => array(
+				'atum-icon-font' => array(
 					'R' => '../../../../assets/fonts/atum-icon-font.ttf',
-				),
-				'woocommerce' => array(
-					'R' => '../../../../assets/fonts/WooCommerce.ttf',
 				),
 			);
 
@@ -272,7 +269,7 @@ class DataExport {
 			wp_die( $mpdf->Output( "atum-inventory-report-$date_now.pdf", Destination::INLINE ) ); // WPCS: XSS ok.
 
 		} catch ( MpdfException $e ) {
-			wp_die( $e->getMessage() );
+			wp_die( $e->getMessage() ); // WPCS: XSS ok.
 		}
 
 	}

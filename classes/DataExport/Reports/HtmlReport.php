@@ -274,26 +274,24 @@ class HtmlReport extends ListTable {
 		if ( isset( $product_types[ $type ] ) || $this->is_child ) {
 
 			/**
-			 * WooCommerce icons
-			 *
-			 * @see https://rawgit.com/woothemes/woocommerce-icons/master/demo.html
+			 * ATUM icons
 			 */
-			$icon_char = 'e006';
+			$icon_char = 'e9c3';
 
 			switch ( $type ) {
 				case 'simple':
 					if ( $this->is_child ) {
 						$type      = 'grouped-item';
-						$icon_char = 'e039';
+						$icon_char = 'e9c2';
 
 					}
 					elseif ( $this->product->is_downloadable() ) {
 						$type      = 'downloadable';
-						$icon_char = 'e001';
+						$icon_char = 'e9c1';
 					}
 					elseif ( $this->product->is_virtual() ) {
 						$type      = 'virtual';
-						$icon_char = 'e000';
+						$icon_char = 'e9c5';
 					}
 
 					break;
@@ -303,10 +301,10 @@ class HtmlReport extends ListTable {
 				case 'variable-subscription': // WC Subscriptions compatibility.
 					if ( $this->is_child ) {
 						$type      = 'grouped-item';
-						$icon_char = 'e039';
+						$icon_char = 'e9c9';
 					}
 					elseif ( $this->product->has_child() ) {
-						$icon_char = 'grouped' === $type ? 'e002' : 'e003';
+						$icon_char = 'grouped' === $type ? 'e9c2' : 'e9c4';
 						$type     .= ' has-child';
 					}
 
@@ -314,13 +312,13 @@ class HtmlReport extends ListTable {
 
 				// WC Bookings compatibility.
 				case 'booking':
-					$icon_char = 'e00e';
+					$icon_char = 'e926';
 
 					break;
 
 			}
 
-			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: woocommerce; font-size: 20px">&#x' . $icon_char . '</span>', $item, $this->product );
+			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: atum-icon-font; font-size: 20px">&#x' . $icon_char . ';</span>', $item, $this->product );
 
 		}
 
@@ -352,7 +350,7 @@ class HtmlReport extends ListTable {
 		elseif ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 			
 			$wc_stock_status = $this->product->get_stock_status();
-			$content         = '<span class="atum-icon"' . $atum_icons_style . '>&#xe87d;</span>';
+			$content         = '<span class="atum-icon atmi-question-circle"' . $atum_icons_style . '>&#xe991;</span>';
 			
 			switch ( $wc_stock_status ) {
 				case 'instock':
@@ -373,23 +371,23 @@ class HtmlReport extends ListTable {
 		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
 			
 			if ( $this->product->backorders_allowed() ) {
-				$content = '<span class="atum-icon"' . $atum_icons_style . '>&#xe882;</span>';
+				$content = '<span class="atum-icon atmi-circle-minus"' . $atum_icons_style . '>&#xe935;</span>';
 			}
 			else {
 				$classes .= ' cell-red';
-				$content  = '<span class="atum-icon"' . $atum_icons_style . '>&#xe880;</span>';
+				$content  = '<span class="atum-icon atmi-cross-circle"' . $atum_icons_style . '>&#xe941;</span>';
 			}
 			
 		}
 		// Low Stock.
 		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
 			$classes .= ' cell-yellow';
-			$content  = '<span class="atum-icon"' . $atum_icons_style . '>&#xe884;</span>';
+			$content  = '<span class="atum-icon atmi-arrow-down-circle"' . $atum_icons_style . '>&#xe915;</span>';
 		}
 		// In Stock.
 		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
 			$classes .= ' cell-green';
-			$content  = '<span class="atum-icon"' . $atum_icons_style . '>&#xe87f;</span>';
+			$content  = '<span class="atum-icon atmi-checkmark-circle"' . $atum_icons_style . '>&#xe92c;</span>';
 		}
 		
 		$classes = $classes ? ' class="' . $classes . '"' : '';

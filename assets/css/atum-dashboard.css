@@ -195,6 +195,50 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-wc-contract:before {
+  content: "";
+}
+
+.atmi-wc-expand:before {
+  content: "";
+}
+
+.atmi-wc-status:before {
+  content: "";
+}
+
+.atmi-wc-downloadable:before {
+  content: "";
+}
+
+.atmi-wc-grouped:before {
+  content: "";
+}
+
+.atmi-wc-simple:before {
+  content: "";
+}
+
+.atmi-wc-variable:before {
+  content: "";
+}
+
+.atmi-wc-virtual:before {
+  content: "";
+}
+
+.atmi-product-levels:before {
+  content: "";
+}
+
+.atmi-multi-inventory:before {
+  content: "";
+}
+
+.atmi-checkmark:before {
+  content: "";
+}
+
 .atmi-pdf:before {
   content: "";
 }
@@ -223,10 +267,6 @@
   content: "";
 }
 
-.atmi-multi-inventory:before {
-  content: "";
-}
-
 .atmi-view-list-2:before {
   content: "";
 }
@@ -253,10 +293,6 @@
 
 .atmi-product-part-variable:before {
   content: "";
-}
-
-.atmi-product-levels:before {
-  content: "";
 }
 
 .atmi-pencil2:before {
