@@ -299,7 +299,7 @@ abstract class AtumOrderPostType {
 			}
 
 			// Status.
-			if ( ! isset( $vars['post_status'] ) ) {
+			if ( empty( $vars['post_status'] ) ) {
 				
 				// All the ATUM Order posts must have the custom statuses created for them.
 				$statuses = $this->get_statuses_simple( TRUE );

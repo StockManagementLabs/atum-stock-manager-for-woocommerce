@@ -168,7 +168,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function save_meta_boxes( $log_id ) {
 
-		if ( ! isset( $_POST['status'], $_POST['atum_meta_nonce'] ) ) {
+		if ( empty( $_POST['status'] ) || empty( $_POST['atum_meta_nonce'] ) ) {
 			return;
 		}
 
