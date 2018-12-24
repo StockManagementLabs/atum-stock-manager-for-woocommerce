@@ -1060,6 +1060,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			$out_stock_threshold = self::EMPTY_COL;
 		}
 
+		$this->increase_total( '_out_stock_threshold', $out_stock_threshold );
+
 		if ( $editable ) {
 
 			$args = array(
@@ -2715,11 +2717,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Prints the totals row on table footer
+	 * Prints the totals columns on totals row at table footer
 	 *
 	 * @since 1.4.2
 	 */
-	public function print_column_totals() {
+	public function print_totals_columns() {
 
 		// Does not show the totals row if there are no results.
 		if ( empty( $this->items ) ) {
@@ -2733,6 +2735,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$column_keys   = array_keys( $columns );
 		$first_column  = current( $column_keys );
 		$second_column = next( $column_keys );
+
+		// Let to adjust the totals externally if needed.
+		$this->totalizers = apply_filters( 'atum/list_table/totalizers', $this->totalizers );
 
 		foreach ( $columns as $column_key => $column_display ) {
 
@@ -2819,7 +2824,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					<?php if ( $this->show_totals ) : ?>
 					<tr class="totals">
-						<?php $this->print_column_totals(); ?>
+						<?php $this->print_totals_columns(); ?>
 					</tr>
 					<?php endif ?>
 
@@ -3597,7 +3602,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->show_totals ) {
 			ob_start();
-			$this->print_column_totals();
+			$this->print_totals_columns();
 			$response['totals'] = ob_get_clean();
 		}
 
