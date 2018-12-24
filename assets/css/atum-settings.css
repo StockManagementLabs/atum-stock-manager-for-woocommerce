@@ -1827,8 +1827,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 .switchery-small {
   width: 48px;
   border-radius: 100px;
-  -webkit-box-shadow: inset -1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
-          box-shadow: inset -1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+  -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+          box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
   border: none;
 }
 
@@ -1837,8 +1837,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   width: 26px;
   top: -3px;
   background-color: #69C61D;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 @font-face {
@@ -3736,10 +3736,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   #atum-settings .section-title .atum-settings-wrapper .atum-nav {
     min-width: 200px;
   }
-  #atum-settings .section-title .atum-settings-wrapper .atum-nav .atum-nav-link {
-    font-size: 14px;
-  }
-  #atum-settings .section-title .atum-settings-wrapper .atum-nav .atum-nav-link:active {
+  #atum-settings .section-title .atum-settings-wrapper .atum-nav .atum-nav-link, #atum-settings .section-title .atum-settings-wrapper .atum-nav .atum-nav-link:active {
     font-size: 14px;
   }
 }
@@ -3998,7 +3995,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .section-title #atum-settings .section-title.section-title-light {
   background-color: #fff;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
 #atum-settings .section-title #atum-settings .section-title.section-title-light h2 {
@@ -4007,12 +4004,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .section-title #atum-settings .section-fields {
   padding: 0px 20px 120px 25px;
-  background-color: #3b3d5a;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
-  background-image: url("../images/settings/bg-settings.png");
-  background-position: bottom;
-  background-repeat: no-repeat;
+  background: #3b3d5a url("../images/settings/bg-settings.png") bottom no-repeat;
   background-size: contain;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
@@ -4092,7 +4086,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 #atum-settings .section-title #atum-settings .section-fields .atum-setting-info ul li:before {
-  content: "- ";
+  content: '- ';
 }
 
 #atum-settings .section-title #atum-settings .section-fields .atum-setting-info ul li strong {
@@ -4125,9 +4119,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 #atum-settings .section-title #atum-settings .section-fields input[type=number] {
-  width: 62px;
+  min-width: 62px;
   text-align: right;
-  margin-right: 2px;
+  padding-right: 5px;
 }
 
 #atum-settings .section-title #atum-settings .section-fields input[type=number]::-webkit-inner-spin-button, #atum-settings .section-title #atum-settings .section-fields input[type=number]::-webkit-outer-spin-button {
@@ -4426,7 +4420,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   visibility: hidden;
 }
 
-#atum-settings .section-title #atum-settings .wp-picker-container button.wp-color-result:focus .wp-color-result-text::before {
+#atum-settings .section-title #atum-settings .wp-picker-container button.wp-color-result:focus .wp-color-result-text:before {
   color: #6c757d;
   content: "|";
   visibility: visible;
@@ -4638,7 +4632,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .section-title.section-title-light {
   background-color: #fff;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
 #atum-settings .section-title.section-title-light h2 {
@@ -4747,6 +4741,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   height: 30px;
   color: #6c757d;
   border: 1px solid #e9ecef;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 #atum-settings .section-fields input[type=text]:hover, #atum-settings .section-fields input[type=number]:hover, #atum-settings .section-fields select:hover, #atum-settings .section-fields textarea:hover {
@@ -4768,7 +4764,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 #atum-settings .section-fields input[type=number] {
   width: 62px;
   text-align: right;
-  margin-right: 2px;
+  padding-right: 2px;
 }
 
 #atum-settings .section-fields input[type=number]::-webkit-inner-spin-button, #atum-settings .section-fields input[type=number]::-webkit-outer-spin-button {
@@ -5051,7 +5047,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   visibility: hidden;
 }
 
-#atum-settings .wp-picker-container button.wp-color-result:focus .wp-color-result-text::before {
+#atum-settings .wp-picker-container button.wp-color-result:focus .wp-color-result-text:before {
   color: #6c757d;
   content: "|";
   visibility: visible;
@@ -5068,12 +5064,13 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 #atum-settings .wp-picker-container button.wp-color-result .color-picker-preview {
   border-radius: 5px;
-  width: 23px;
-  height: 22px;
+  width: 22px;
+  height: 21px;
   background-color: transparent;
   position: absolute;
   left: 4px;
   top: 3px;
+  border: 1px solid #f8f9fa;
 }
 
 #atum-settings .wp-picker-container .wp-picker-clear {

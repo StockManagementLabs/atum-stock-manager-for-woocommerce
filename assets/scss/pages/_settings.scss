@@ -25,12 +25,13 @@ $settings-xs-min:           568px !default;
 	}
 	
 	.atum-settings-container {
+		display: flex;
+		align-items: stretch;
+		
 		// Mobile style
 		@media all and (max-width: $settings-xs-min) {
 			flex-wrap: wrap;
 		}
-		display: flex;
-		align-items: stretch;
 		
 	}
 	
@@ -67,14 +68,17 @@ $settings-xs-min:           568px !default;
 	
 	.atum-nav-light {
 		background-color: $white;
+		
 		.atum-nav-header {
 			background-color: $blue;
+			
 			.toogle-menu {
 				color: $white;
 			}
 		}
 		.atum-nav-link {
 			color: $blue;
+			
 			&:hover, &:focus {
 				background-color: $blue-light;
 				color: $blue;
@@ -91,6 +95,7 @@ $settings-xs-min:           568px !default;
 				background-color: $blue-light;
 				color: $blue;
 				border-right: 3px solid $blue;
+				
 				.menu-helper {
 					animation: inherit;
 				}
@@ -113,6 +118,7 @@ $settings-xs-min:           568px !default;
 				
 				a {
 					color: $blue;
+					
 					&:hover {
 						color: $blue;
 					}
@@ -174,9 +180,11 @@ $settings-xs-min:           568px !default;
 			align-items: center;
 			justify-content: center;
 			padding: 5px 24px;
+			
 			img {
 				width: 34px;
 			}
+			
 			span {
 				color: $white;
 				font-size: 27px;
@@ -199,6 +207,7 @@ $settings-xs-min:           568px !default;
 			a {
 				text-decoration: none;
 				color: $blue;
+				
 				&:hover {
 					color: $blue;
 				}
@@ -219,7 +228,7 @@ $settings-xs-min:           568px !default;
 	.atum-nav-item {
 		display: block;
 		margin: 0;
-		box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+		box-shadow: 0 1px 0 0 rgba($white, 0.1);
 	}
 	
 	.atum-nav-link {
@@ -297,8 +306,10 @@ $settings-xs-min:           568px !default;
 	@media all and (max-width: $screen-md-min) {
 		.atum-nav {
 			min-width: 200px;
+			
 			.atum-nav-link {
 				font-size: 14px;
+				
 				&:active {
 					font-size: 14px;
 				}
@@ -311,13 +322,16 @@ $settings-xs-min:           568px !default;
 		.atum-nav, .atum-nav-light {
 			width: 50px;
 			min-width: inherit;
+			
 			.atum-brand-link {
 				width: 100%;
+				
 				.atum-brand {
 					justify-content: center;
 					height: 51px;
 					text-align: center;
 					padding-left: 0;
+					
 					span {
 						display: none;
 					}
@@ -326,6 +340,7 @@ $settings-xs-min:           568px !default;
 			
 			.atum-nav-link {
 				padding: 0 15px 0 17px;
+				
 				.menu-helper {
 					span {
 						display: none;
@@ -351,6 +366,7 @@ $settings-xs-min:           568px !default;
 				
 				.atum-brand {
 					padding-left: 10px;
+					
 					span {
 						display: block;
 					}
@@ -457,14 +473,16 @@ $settings-xs-min:           568px !default;
 	.btn-secondary {
 		background-color: $gray-500;
 		border: none;
+		
 		&:hover, &:active {
 			background-color: $green;
-			box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+			box-shadow: inset -1px 1px 5px 0 rgba($black, 0.2);
 		}
 	}
+	
 	.active {
 		background-color: $green;
-		box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+		box-shadow: inset -1px 1px 5px 0 rgba($black, 0.2);
 	}
 	
 	.section-general-title {
@@ -498,9 +516,12 @@ $settings-xs-min:           568px !default;
 		h2 {
 			color: $white;
 		}
-		input[type=submit], input[type=submit]:hover {
-			background-color: $white;
-			color: $blue;
+		
+		input[type=submit] {
+			&, &:hover {
+				background-color: $white;
+				color: $blue;
+			}
 		}
 	}
 	
@@ -576,14 +597,17 @@ $settings-xs-min:           568px !default;
 			
 			.atum-nav-light {
 				background-color: $white;
+				
 				.atum-nav-header {
 					background-color: $blue;
+					
 					.toogle-menu {
 						color: $white;
 					}
 				}
 				.atum-nav-link {
 					color: $blue;
+					
 					&:hover, &:focus {
 						background-color: $blue-light;
 						color: $blue;
@@ -599,11 +623,13 @@ $settings-xs-min:           568px !default;
 						cursor: default;
 						background-color: $blue-light;
 						color: $blue;
+						
 						.menu-helper {
 							animation: inherit;
 						}
 					}
 				}
+				
 				.atum-nav-item {
 					box-shadow: 0 1px 0 0 $gray-200;
 				}
@@ -620,6 +646,7 @@ $settings-xs-min:           568px !default;
 						
 						a {
 							color: $blue;
+							
 							&:hover {
 								color: $blue;
 							}
@@ -627,6 +654,7 @@ $settings-xs-min:           568px !default;
 					}
 				}
 			}
+			
 			.atum-nav-header {
 				background-color: $blue-dark-lighten;
 				box-shadow: 0 1px 0 0 rgba($white, 0.1);
@@ -729,7 +757,7 @@ $settings-xs-min:           568px !default;
 			.atum-nav-item {
 				display: block;
 				margin: 0;
-				box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+				box-shadow: 0 1px 0 0 rgba($white, 0.1);
 			}
 			
 			.atum-nav-link {
@@ -818,9 +846,9 @@ $settings-xs-min:           568px !default;
 			@media all and (max-width: $screen-md-min) {
 				.atum-nav {
 					min-width: 200px;
+					
 					.atum-nav-link {
-						font-size: 14px;
-						&:active {
+						&, &:active {
 							font-size: 14px;
 						}
 					}
@@ -832,13 +860,16 @@ $settings-xs-min:           568px !default;
 				.atum-nav, .atum-nav-light {
 					width: 50px;
 					min-width: inherit;
+					
 					.atum-brand-link {
 						width: 100%;
+						
 						.atum-brand {
 							justify-content: center;
 							height: 51px;
 							text-align: center;
 							padding-left: 0;
+							
 							span {
 								display: none;
 							}
@@ -847,6 +878,7 @@ $settings-xs-min:           568px !default;
 					
 					.atum-nav-link {
 						padding: 0 15px 0 17px;
+						
 						.menu-helper {
 							span {
 								display: none;
@@ -865,10 +897,13 @@ $settings-xs-min:           568px !default;
 				.atum-nav, .atum-nav-light {
 					width: 100%;
 					margin-bottom: 11px;
+					
 					.atum-brand-link {
 						width: inherit;
+						
 						.atum-brand {
 							padding-left: 10px;
+							
 							span {
 								display: block;
 							}
@@ -877,15 +912,18 @@ $settings-xs-min:           568px !default;
 					.atum-nav-header {
 						border-bottom-right-radius: 6px;
 						border-bottom-left-radius: 6px;
+						
 						.toogle-menu {
 							display: block;
 							background-color: transparent;
 							border: none;
+							
 							&:focus, &:active {
 								outline: 0;
 							}
 						}
 					}
+					
 					.atum-nav-list {
 						display: none;
 						
@@ -902,6 +940,7 @@ $settings-xs-min:           568px !default;
 					}
 				
 				}
+				
 				.atum-nav-light {
 					.atum-nav-header {
 						background-color: $blue;
@@ -974,13 +1013,13 @@ $settings-xs-min:           568px !default;
 				
 				&:hover, &:active {
 					background-color: $green;
-					box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+					box-shadow: inset -1px 1px 5px 0 rgba($black, 0.2);
 				}
 			}
 			
 			.active {
 				background-color: $green;
-				box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+				box-shadow: inset -1px 1px 5px 0 rgba($black, 0.2);
 			}
 			
 			.section-general-title {
@@ -1053,7 +1092,7 @@ $settings-xs-min:           568px !default;
 				
 				&.section-title-light {
 					background-color: $white;
-					border-bottom: 2px solid darken($light, 5%);
+					border-bottom: 1px solid darken($light, 5%);
 					
 					h2 {
 						color: $blue-dark;
@@ -1062,26 +1101,24 @@ $settings-xs-min:           568px !default;
 			}
 			
 			.section-fields {
+				padding: 0px 20px 120px 25px;
+				border-bottom-right-radius: 6px;
+				border-bottom-left-radius: 6px;
+				background: $blue-dark-lighten url("#{$img-path}settings/bg-settings.png") bottom no-repeat;
+				background-size: contain;
+				box-shadow: 0 4px 0 0 $gray-200;
 				
 				&.section-field-light {
 					background-color: $white;
+					
 					tr:not(:last-child) {
 						border-bottom: 2px solid darken($light, 5%);
 					}
+					
 					th {
 						color: $gray-600;
 					}
 				}
-				
-				padding: 0px 20px 120px 25px;
-				background-color: $blue-dark-lighten;
-				border-bottom-right-radius: 6px;
-				border-bottom-left-radius: 6px;
-				background-image: url("../images/settings/bg-settings.png");
-				background-position: bottom;
-				background-repeat: no-repeat;
-				background-size: contain;
-				box-shadow: 0 4px 0 0 $gray-200;
 				
 				.form-table {
 					margin-top: 0;
@@ -1095,11 +1132,13 @@ $settings-xs-min:           568px !default;
 				
 				th, td {
 					padding-top: 20px;
+					
 					input[type=text] {
 						box-shadow: none;
 						padding-left: 10px;
 						font-size: 14px;
 						width: 350px;
+						
 						// Tablet style
 						@media all and (max-width: $screen-sm-min) {
 							width: 80% !important;
@@ -1136,9 +1175,11 @@ $settings-xs-min:           568px !default;
 							list-style: none;
 							line-height: 1.47;
 							margin-bottom: 0;
+							
 							&:before {
-								content: "- ";
+								content: '- ';
 							}
+							
 							strong {
 								font-weight: normal;
 							}
@@ -1153,12 +1194,11 @@ $settings-xs-min:           568px !default;
 					height: 30px;
 					color: $gray-600;
 					border: 1px solid $gray-200;
-				}
-				
-				input[type=text], input[type=number], select, textarea {
+					
 					&:hover {
 						border: solid 1px $gray-600;
 					}
+					
 					&:focus {
 						border: solid 1px $blue;
 					}
@@ -1173,9 +1213,9 @@ $settings-xs-min:           568px !default;
 				}
 				
 				input[type=number] {
-					width: 62px;
+					min-width: 62px;
 					text-align: right;
-					margin-right: 2px;
+					padding-right: 5px;
 					
 					&::-webkit-inner-spin-button,
 					&::-webkit-outer-spin-button {
@@ -1209,11 +1249,12 @@ $settings-xs-min:           568px !default;
 						height: 30px;
 						padding-bottom: 8px;
 						margin-right: 5px;
+						
 						@media all and (max-width: $screen-sm-min) {
 							width: 80%;
 							margin-right: 10px;
 						}
-						// Mobile
+						
 						@media all and (max-width: $settings-xs-min) {
 							width: 100%;
 							margin-right: 0;
@@ -1233,6 +1274,7 @@ $settings-xs-min:           568px !default;
 								.select2-search__field {
 									width: inherit !important;
 									@include placeholder($wp-gray-1);
+									
 									@media all and (max-width: $settings-xs-min) {
 										width: 100% !important;
 									}
@@ -1269,9 +1311,10 @@ $settings-xs-min:           568px !default;
 							}
 							.tool-fields-from, .tool-fields-to, .tool-controls {
 								width: 100%;
+								
 								.select2-container {
 									width: 200px !important;
-									// Mobile
+									
 									@media all and (max-width: $settings-xs-min) {
 										width: 100% !important;
 									}
@@ -1283,19 +1326,23 @@ $settings-xs-min:           568px !default;
 									background-color: $gray-500;
 									margin: 4px 5px 0 0;
 									color: $white;
+									
 									.select2-selection__choice__remove {
 										color: $white;
 									}
 								}
 							}
+							
 							.add-row {
 								width: 62px;
 								text-transform: uppercase;
 								height: 30px;
 								font-size: 12px;
 							}
+							
 							.tool-fields-to {
 								margin-right: 10px;
+								
 								.select2-selection__rendered {
 									padding-left: 4px;
 								}
@@ -1319,14 +1366,15 @@ $settings-xs-min:           568px !default;
 				
 				.select2-container {
 					width: 350px !important;
-					// Tablet style
+					
 					@media all and (max-width: $screen-sm-min) {
 						width: 80% !important;
 					}
-					// Mobile
+					
 					@media all and (max-width: $settings-xs-min) {
 						width: 100% !important;
 					}
+					
 					&, .selection, .select2-selection--single, .select2-selection__rendered {
 						&:focus {
 							outline: none;
@@ -1334,14 +1382,18 @@ $settings-xs-min:           568px !default;
 					}
 					.select2-selection {
 						min-height: 30px;
+						border: 1px solid $gray-200;
+						
 						.select2-selection__rendered {
 							line-height: 30px;
 							color: $gray-600;
 							padding-left: 16px;
+							
 							.select2-selection__placeholder {
 								color: $gray-600;
 							}
 						}
+						
 						.select2-selection__arrow {
 							b {
 								display: none;
@@ -1355,7 +1407,7 @@ $settings-xs-min:           568px !default;
 								color: $gray-500;
 							}
 						}
-						border: 1px solid $gray-200;
+						
 					}
 				}
 			}
@@ -1394,19 +1446,21 @@ $settings-xs-min:           568px !default;
 				#atum_mi_geoprompt_accent_color {
 					width: 110px;
 				}
-				// Tablet style
+				
 				@media all and (max-width: $screen-sm-min) {
 					.wp-picker-clear {
 						line-height: 0 !important;
 					}
 				}
-				// Mobile style
+				
 				@media all and (max-width: $settings-xs-min) {
 					.iris-picker {
 						width: 100% !important;
+						
 						.iris-square {
 							width: 76%!important;
 						}
+						
 						.iris-palette-container {
 							left: 10%;
 						}
@@ -1430,9 +1484,11 @@ $settings-xs-min:           568px !default;
 					
 					&:focus {
 						border-color: $blue;
+						
 						.wp-color-result-text {
 							visibility: hidden;
-							&::before {
+							
+							&:before {
 								color: $gray-600;
 								content: "|";
 								visibility: visible;
@@ -1448,6 +1504,7 @@ $settings-xs-min:           568px !default;
 						font-size: 12px;
 						line-height: 1.17px;
 					}
+					
 					.color-picker-preview {
 						border-radius: 5px;
 						width: 23px;
@@ -1472,7 +1529,6 @@ $settings-xs-min:           568px !default;
 				}
 			}
 			
-			// Desktop style
 			@media all and (max-width: $screen-md-min) {
 				.btn-group {
 					label {
@@ -1482,12 +1538,13 @@ $settings-xs-min:           568px !default;
 				}
 			}
 			
-			// Tablet style
 			@media all and (max-width: $screen-sm-min) {
 				margin-left: 10px;
+				
 				.section-fields {
 					.script-runner {
 						flex-wrap: nowrap;
+						
 						.tool-fields-wrapper {
 							.repeatable-row {
 								.tool-fields-to {
@@ -1496,10 +1553,9 @@ $settings-xs-min:           568px !default;
 							}
 						}
 					}
-					.tool-runner {
-						//margin-left: 10px;
-					}
+					
 				}
+				
 				.form-table {
 					th {
 						display: table-cell;
@@ -1510,7 +1566,6 @@ $settings-xs-min:           568px !default;
 				}
 			}
 			
-			// Mobile style
 			@media all and (max-width: $settings-xs-min) {
 				.btn-group {
 					label {
@@ -1518,29 +1573,38 @@ $settings-xs-min:           568px !default;
 						font-size: 12px;
 					}
 				}
+				
 				.section-general-title {
 					p {
 						display: none;
 					}
 				}
+				
 				.section-fields {
 					padding: 4px 10px;
+					
 					.script-runner {
+						flex-wrap: wrap;
+						
 						.tool-fields-wrapper {
 							margin-bottom: 5px;
 						}
-						flex-wrap: wrap;
+						
 						.tool-runner {
 							width: 100%;
 							margin-left: 0;
 						}
+						
 						.add-row {
 							width: 100% !important;
 						}
+						
 					}
 				}
+				
 				.submit {
 					text-align: center;
+					
 					input[type=submit] {
 						width: 100%;
 					}
@@ -1550,11 +1614,13 @@ $settings-xs-min:           568px !default;
 					margin: 0;
 					font-size: 12px;
 					width: 100%;
+					
 					th {
 						width: 100%;
 						display: block;
 						vertical-align: middle;
 					}
+					
 					th, td {
 						input[type=text] {
 							width: 100%;
@@ -1569,6 +1635,7 @@ $settings-xs-min:           568px !default;
 					.tool-fields-wrapper {
 						.repeatable-row {
 							flex-wrap: wrap;
+							
 							.tool-fields-to {
 								.select2-selection__rendered {
 									.select2-selection__choice {
@@ -1576,8 +1643,8 @@ $settings-xs-min:           568px !default;
 									}
 								}
 							}
+							
 							div {
-								//width: 100%;
 								margin-right: 0 !important;
 								margin-top: 11px;
 							}
@@ -1616,8 +1683,6 @@ $settings-xs-min:           568px !default;
 			}
 		}
 		
-		
-		// Mobile style
 		@media all and (max-width: $settings-xs-min) {
 			#atum-settings {
 				margin-left: 0;
@@ -1667,7 +1732,8 @@ $settings-xs-min:           568px !default;
 		
 		&.section-title-light {
 			background-color: $white;
-			border-bottom: 2px solid darken($light, 5%);
+			border-bottom: 1px solid darken($light, 5%);
+			
 			h2 {
 				color: $blue-dark;
 			}
@@ -1675,26 +1741,27 @@ $settings-xs-min:           568px !default;
 	}
 	
 	.section-fields {
-		
-		&.section-field-light {
-			background-color: $white;
-			tr:not(:last-child) {
-				border-bottom: 1px solid darken($light, 5%);
-			}
-			th {
-				color: $gray-600;
-			}
-		}
-		
 		padding: 0px 20px 120px 25px;
 		background-color: $blue-dark-lighten;
 		border-bottom-right-radius: 6px;
 		border-bottom-left-radius: 6px;
-		background-image: url("../images/settings/bg-settings.png");
+		background-image: url("#{$img-path}settings/bg-settings.png");
 		background-position: bottom;
 		background-repeat: no-repeat;
 		background-size: contain;
 		box-shadow: 0 4px 0 0 $gray-200;
+		
+		&.section-field-light {
+			background-color: $white;
+			
+			tr:not(:last-child) {
+				border-bottom: 1px solid darken($light, 5%);
+			}
+			
+			th {
+				color: $gray-600;
+			}
+		}
 		
 		.form-table {
 			margin-top: 0;
@@ -1708,16 +1775,17 @@ $settings-xs-min:           568px !default;
 		
 		th, td {
 			padding-top: 20px;
+			
 			input[type=text] {
 				box-shadow: none;
 				padding-left: 10px;
 				font-size: 14px;
 				width: 350px;
-				// Tablet style
+				
 				@media all and (max-width: $screen-sm-min) {
 					width: 80% !important;
 				}
-				// Mobile
+				
 				@media all and (max-width: $settings-xs-min) {
 					width: 100% !important;
 				}
@@ -1767,12 +1835,12 @@ $settings-xs-min:           568px !default;
 			height: 30px;
 			color: $gray-600;
 			border: 1px solid $gray-200;
-		}
-		
-		input[type=text], input[type=number], select, textarea {
+			box-shadow: none;
+			
 			&:hover {
 				border: solid 1px $gray-600;
 			}
+			
 			&:focus {
 				border: solid 1px $blue;
 			}
@@ -1789,7 +1857,7 @@ $settings-xs-min:           568px !default;
 		input[type=number] {
 			width: 62px;
 			text-align: right;
-			margin-right: 2px;
+			padding-right: 2px;
 			
 			&::-webkit-inner-spin-button,
 			&::-webkit-outer-spin-button {
@@ -1813,7 +1881,6 @@ $settings-xs-min:           568px !default;
 			flex-wrap: nowrap;
 			
 			.tool-runner {
-				//margin-left: 5px;
 				text-transform: uppercase;
 				font-size: 12px;
 				width: 110px;
@@ -1824,11 +1891,12 @@ $settings-xs-min:           568px !default;
 				height: 30px;
 				padding-bottom: 8px;
 				margin-right: 5px;
+				
 				@media all and (max-width: $screen-sm-min) {
 					width: 80%;
 					margin-right: 10px;
 				}
-				// Mobile
+				
 				@media all and (max-width: $settings-xs-min) {
 					width: 100%;
 					margin-right: 0;
@@ -1848,6 +1916,7 @@ $settings-xs-min:           568px !default;
 						.select2-search__field {
 							width: inherit !important;
 							@include placeholder($wp-gray-1);
+							
 							@media all and (max-width: $settings-xs-min) {
 								width: 100% !important;
 							}
@@ -1882,26 +1951,33 @@ $settings-xs-min:           568px !default;
 							}
 						}
 					}
+					
 					.tool-fields-from, .tool-fields-to, .tool-controls {
 						width: 100%;
+						
 						.select2-container {
 							width: inherit !important;
 						}
+						
 						.select2-selection__choice {
 							line-height: 24px;
+							
 							.select2-selection__choice__remove {
 								color: $white;
 							}
 						}
 					}
+					
 					.add-row {
 						width: 62px;
 						text-transform: uppercase;
 						height: 30px;
 						font-size: 12px;
 					}
+					
 					.tool-fields-to {
 						margin-right: 10px;
+						
 						.select2-selection__rendered {
 							padding-left: 4px;
 						}
@@ -1921,18 +1997,19 @@ $settings-xs-min:           568px !default;
 			button {
 				border-radius: 4px;
 			}
+			
 		}
 		
 		.select2-container {
-			//width: 350px !important;
-			// Tablet style
+			
 			@media all and (max-width: $screen-sm-min) {
 				width: 80% !important;
 			}
-			// Mobile
+			
 			@media all and (max-width: $settings-xs-min) {
 				width: 100% !important;
 			}
+			
 			&, .selection, .select2-selection--single, .select2-selection__rendered {
 				&:focus {
 					outline: none;
@@ -1955,6 +2032,7 @@ $settings-xs-min:           568px !default;
 					b {
 						display: none;
 					}
+					
 					&:after {
 						line-height: 30px;
 						font-family: $atum-icon-font;
@@ -2002,19 +2080,21 @@ $settings-xs-min:           568px !default;
 		#atum_mi_geoprompt_accent_color {
 			width: 110px;
 		}
-		// Tablet style
+		
 		@media all and (max-width: $screen-sm-min) {
 			.wp-picker-clear {
 				line-height: 0 !important;
 			}
 		}
-		// Mobile style
+		
 		@media all and (max-width: $settings-xs-min) {
 			.iris-picker {
 				width: 100% !important;
+				
 				.iris-square {
 					width: 76%!important;
 				}
+				
 				.iris-palette-container {
 					left: 10%;
 				}
@@ -2040,7 +2120,8 @@ $settings-xs-min:           568px !default;
 				border-color: $blue;
 				.wp-color-result-text {
 					visibility: hidden;
-					&::before {
+					
+					&:before {
 						color: $gray-600;
 						content: "|";
 						visibility: visible;
@@ -2055,15 +2136,17 @@ $settings-xs-min:           568px !default;
 				border-left: none;
 				font-size: 12px;
 				line-height: 1.17px;
-			 }
+			}
+			
 			.color-picker-preview {
 				border-radius: 5px;
-				width: 23px;
-				height: 22px;
+				width: 22px;
+				height: 21px;
 				background-color: transparent;
 				position: absolute;
 				left: 4px;
 				top: 3px;
+				border: 1px solid $light;
 			}
 		}
 		
@@ -2089,13 +2172,13 @@ $settings-xs-min:           568px !default;
 		font-style: normal;
 		font-stretch: normal;
 		line-height: 1.47;
+		
 		a {
 			color: $blue;
 			text-decoration: none;
 		}
 	}
 	
-	// Desktop style
 	@media all and (max-width: $screen-md-min) {
 		.btn-group {
 			label {
@@ -2105,12 +2188,13 @@ $settings-xs-min:           568px !default;
 		}
 	}
 	
-	// Tablet style
 	@media all and (max-width: $screen-sm-min) {
 		margin-left: 10px;
+		
 		.section-fields {
 			.script-runner {
 				flex-wrap: nowrap;
+				
 				.tool-fields-wrapper {
 					.repeatable-row {
 						.tool-fields-to {
@@ -2119,10 +2203,8 @@ $settings-xs-min:           568px !default;
 					}
 				}
 			}
-			.tool-runner {
-				//margin-left: 10px;
-			}
 		}
+		
 		.form-table {
 			th {
 				display: table-cell;
@@ -2133,7 +2215,6 @@ $settings-xs-min:           568px !default;
 		}
 	}
 	
-	// Mobile style
 	@media all and (max-width: $settings-xs-min) {
 		.btn-group {
 			label {
@@ -2141,29 +2222,37 @@ $settings-xs-min:           568px !default;
 				font-size: 12px;
 			}
 		}
+		
 		.section-general-title {
 			p {
 				display: none;
 			}
 		}
+		
 		.section-fields {
 			padding: 4px 10px;
+			
 			.script-runner {
+				flex-wrap: wrap;
+				
 				.tool-fields-wrapper {
 					margin-bottom: 5px;
 				}
-				flex-wrap: wrap;
+				
 				.tool-runner {
 					width: 100%;
 					margin-left: 0;
 				}
+				
 				.add-row {
 					width: 100% !important;
 				}
 			}
 		}
+		
 		.submit {
 			text-align: center;
+			
 			input[type=submit] {
 				width: 100%;
 			}
@@ -2173,11 +2262,13 @@ $settings-xs-min:           568px !default;
 			margin: 0;
 			font-size: 12px;
 			width: 100%;
+			
 			th {
 				width: 100%;
 				display: block;
 				vertical-align: middle;
 			}
+			
 			th, td {
 				input[type=text] {
 					width: 100%;
@@ -2192,8 +2283,8 @@ $settings-xs-min:           568px !default;
 			.tool-fields-wrapper {
 				.repeatable-row {
 					flex-wrap: wrap;
+					
 					div {
-						//width: 100%;
 						margin-right: 0 !important;
 						margin-top: 11px;
 					}
@@ -2205,6 +2296,7 @@ $settings-xs-min:           568px !default;
 
 .select2-dropdown {
 	margin-top: 4px;
+	
 	.select2-search {
 		display: none;
 	}
@@ -2212,6 +2304,7 @@ $settings-xs-min:           568px !default;
 
 .select2-search {
 	line-height: 1;
+	
 	&:after {
 		font-family: $atum-icon-font;
 		content: $atmi-magnifier;
@@ -2232,8 +2325,6 @@ input[type=search] {
 	}
 }
 
-
-// Mobile style
 @media all and (max-width: $settings-xs-min) {
 	#atum-settings {
 		margin-left: 0;
