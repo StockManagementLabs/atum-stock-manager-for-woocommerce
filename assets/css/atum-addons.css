@@ -928,7 +928,7 @@ input[type="button"].btn-block {
   content: "";
 }
 
-.atmi-raw-material-variable:before {
+.atmi-variable-raw-material:before {
   content: "";
 }
 
@@ -936,7 +936,7 @@ input[type="button"].btn-block {
   content: "";
 }
 
-.atmi-product-part-variable:before {
+.atmi-variable-product-part:before {
   content: "";
 }
 

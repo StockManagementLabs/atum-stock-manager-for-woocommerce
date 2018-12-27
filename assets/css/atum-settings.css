@@ -1949,7 +1949,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   content: "";
 }
 
-.atmi-raw-material-variable:before {
+.atmi-variable-raw-material:before {
   content: "";
 }
 
@@ -1957,7 +1957,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   content: "";
 }
 
-.atmi-product-part-variable:before {
+.atmi-variable-product-part:before {
   content: "";
 }
 

@@ -1763,6 +1763,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					color: $white;
 				}
 				
+				.check-column {
+					input[type=checkbox] {
+						border-color: transparent;
+					}
+				}
+				
 				.column-calc_type {
 					
 					.has-child {
@@ -1965,8 +1971,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.variable, &.group {
 					td {
 						color: $white !important;
+						
 						a, span {
 							color: $white !important;
+							
 							&:before {
 								color: $white !important;
 							}
@@ -2174,6 +2182,22 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				content: $atmi-calendar-full;
 			}
 			
+			&.product-part::before {
+				content: $atmi-product-part;
+			}
+			
+			&.variable-product-part::before {
+				content: $atmi-variable-product-part;
+			}
+			
+			&.raw-material::before {
+				content: $atmi-raw-material;
+			}
+			
+			&.variable-raw-material::before {
+				content: $atmi-variable-raw-material;
+			}
+			
 		}
 		
 		.has-child {
@@ -2181,8 +2205,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			&.product-type {
 				
-				&.variable, &.variable-subscription {
-					color: $primary;
+				&.variable {
+					&, &-subscription, &-product-part, &-raw-material {
+						color: $primary;
+					}
 				}
 				
 				&.variable-subscription {
@@ -2207,7 +2233,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		.variation, .grouped-item {
 			&:before {
-				content: $atmi-wc-status;
+				content: $atmi-wc-status !important;
 			}
 		}
 		

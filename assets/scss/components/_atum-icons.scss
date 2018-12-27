@@ -134,9 +134,9 @@
 		content: $atmi-raw-material;
 	}
 }
-.atmi-raw-material-variable {
+.atmi-variable-raw-material {
 	&:before {
-		content: $atmi-raw-material-variable;
+		content: $atmi-variable-raw-material;
 	}
 }
 .atmi-product-part {
@@ -144,9 +144,9 @@
 		content: $atmi-product-part;
 	}
 }
-.atmi-product-part-variable {
+.atmi-variable-product-part {
 	&:before {
-		content: $atmi-product-part-variable;
+		content: $atmi-variable-product-part;
 	}
 }
 .atmi-pencil2 {
