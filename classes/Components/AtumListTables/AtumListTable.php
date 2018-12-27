@@ -709,7 +709,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column_thumb( $item ) {
 
 		$product_id = $this->get_current_product_id();
-		$thumb      = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $this->product->get_image( [ 40, 40 ] ) . '</a>';
+		$img_src    = wp_get_attachment_image_src( $this->product->get_image_id() );
+		$url        = $img_src ? $img_src[0] : get_edit_post_link( $product_id );
+		$thumb      = '<a href="' . $url . '" target="_blank">' . $this->product->get_image( [ 40, 40 ] ) . '</a>';
 
 		return apply_filters( 'atum/list_table/column_thumb', $thumb, $item, $this->product, $this );
 
@@ -3640,6 +3642,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 
+		// Light Gallery.
+		wp_register_script( 'lightgallery', ATUM_URL . 'assets/js/vendor/lightgallery.min.js', array(), ATUM_VERSION, TRUE );
+
 		// Dragscroll.
 		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
@@ -3667,7 +3672,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";

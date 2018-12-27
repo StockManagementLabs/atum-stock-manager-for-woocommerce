@@ -127,6 +127,11 @@
 			this.inputPageChange();
 			
 			//
+			// Add Light Gallery function
+			// ------------------------------------------
+			this.addLightGallery();
+			
+			//
 			// Init the table scrollbar
 			// -------------------------
 			this.addScrollBar();
@@ -1800,6 +1805,32 @@
 						}
 					}
 				}
+			});
+			
+		},
+		
+		/**
+		 * Add input page function
+		 */
+		addLightGallery: function() {
+			
+			$('.thumb').each(function (index) {
+				var $image       = $(this).find('img'),
+				    $containerId = 'thumb' + index,
+				    $adminMenuMain = $('#adminmenumain'),
+				    $wpAdminBar = $('#wpadminbar');
+				$(this).attr('id', $containerId);
+				if ( $image.length > 0 ) {
+					lightGallery(document.getElementById($containerId));
+				}
+				$('#' + $containerId).on('onBeforeOpen.lg', function () {
+					$adminMenuMain.hide();
+					$wpAdminBar.hide();
+				});
+				$('#' + $containerId).on('onBeforeClose.lg', function () {
+					$adminMenuMain.show();
+					$wpAdminBar.show();
+				});
 			});
 			
 		},
