@@ -1,13 +1,14 @@
 .switchery-small {
 	width: 48px;
 	border-radius: 100px;
-	box-shadow: inset -1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+	box-shadow: inset 1px 1px 3px 0 rgba($black, 0.2) !important;
 	border: none;
+	
 	small {
 		height: 26px;
 		width: 26px;
 		top: -3px;
 		background-color: $green;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+		box-shadow: none;
 	}
 }
