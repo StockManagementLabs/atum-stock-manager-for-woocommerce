@@ -208,21 +208,6 @@ body:not(.lg-from-hash){
 	}
 }
 
-// Clearfix
-.group {
-    *zoom: 1;
-}
-
-.group:before, .group:after {
-    display: table;
-    content: "";
-    line-height: 0;
-}
-
-.group:after {
-    clear: both;
-}
-
 // lightgallery core
 .lg-outer {
     width: 100%;
