@@ -709,7 +709,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column_thumb( $item ) {
 
 		$product_id = $this->get_current_product_id();
-		$img_src    = wp_get_attachment_image_src( $this->product->get_image_id() );
+		$img_src    = wp_get_attachment_image_src( $this->product->get_image_id(), 'full' );
 		$url        = $img_src ? $img_src[0] : get_edit_post_link( $product_id );
 		$thumb      = '<a href="' . $url . '" target="_blank">' . $this->product->get_image( [ 40, 40 ] ) . '</a>';
 
