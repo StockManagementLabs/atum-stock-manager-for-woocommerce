@@ -18,7 +18,8 @@
 		font-weight: bold;
 		
 		&.extend-list-table {
-			line-height: 1.5;
+			line-height: 1;
+			margin-bottom: $grid-gutter-width/2;
 			position: relative;
 			font-size: 36px;
 			font-weight: bold;
