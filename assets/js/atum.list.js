@@ -1821,7 +1821,10 @@
 				    $wpAdminBar = $('#wpadminbar');
 				$(this).attr('id', $containerId);
 				if ( $image.length > 0 ) {
-					lightGallery(document.getElementById($containerId));
+					lightGallery(document.getElementById($containerId), {
+						download: false,
+						counter: false,
+					});
 				}
 				$('#' + $containerId).on('onBeforeOpen.lg', function () {
 					$adminMenuMain.hide();
