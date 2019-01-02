@@ -5330,7 +5330,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 #bulk-titles .ntdelbutton:before {
-  font-family: atum-icon-font;
+  font-family: "atum-icon-font";
   content: "";
 }
 
@@ -6052,7 +6052,7 @@ table.atum-list-table thead .item-heads th, table.atum-list-table tfoot th, .flo
   min-width: 50px;
   height: 60px;
   white-space: normal;
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 0.3px;
   color: #adb5bd;
 }
@@ -6072,18 +6072,18 @@ table.atum-list-table thead .item-heads th .sorting-indicator:before, table.atum
   content: "\f140";
 }
 
-table.atum-list-table thead .item-heads th .dashicons, table.atum-list-table thead .item-heads th .atum-icon, table.atum-list-table tfoot th .dashicons, table.atum-list-table tfoot th .atum-icon, .floatThead-container thead .item-heads th .dashicons, .floatThead-container thead .item-heads th .atum-icon, .floatThead-container tfoot th .dashicons, .floatThead-container tfoot th .atum-icon, .inbound-stock-list thead .item-heads th .dashicons, .inbound-stock-list thead .item-heads th .atum-icon, .inbound-stock-list tfoot th .dashicons, .inbound-stock-list tfoot th .atum-icon, table.wp-list-table thead .item-heads th .dashicons, table.wp-list-table thead .item-heads th .atum-icon, table.wp-list-table tfoot th .dashicons, table.wp-list-table tfoot th .atum-icon {
+table.atum-list-table thead .item-heads th .atum-icon, table.atum-list-table tfoot th .atum-icon, .floatThead-container thead .item-heads th .atum-icon, .floatThead-container tfoot th .atum-icon, .inbound-stock-list thead .item-heads th .atum-icon, .inbound-stock-list tfoot th .atum-icon, table.wp-list-table thead .item-heads th .atum-icon, table.wp-list-table tfoot th .atum-icon {
   display: block;
   text-indent: -9999px;
   position: relative;
   height: 1em;
   width: 1em;
   margin: 0 auto;
-  font-size: 16px;
+  font-size: 19px;
   color: #adb5bd;
 }
 
-table.atum-list-table thead .item-heads th .dashicons:before, table.atum-list-table thead .item-heads th .atum-icon:before, table.atum-list-table tfoot th .dashicons:before, table.atum-list-table tfoot th .atum-icon:before, .floatThead-container thead .item-heads th .dashicons:before, .floatThead-container thead .item-heads th .atum-icon:before, .floatThead-container tfoot th .dashicons:before, .floatThead-container tfoot th .atum-icon:before, .inbound-stock-list thead .item-heads th .dashicons:before, .inbound-stock-list thead .item-heads th .atum-icon:before, .inbound-stock-list tfoot th .dashicons:before, .inbound-stock-list tfoot th .atum-icon:before, table.wp-list-table thead .item-heads th .dashicons:before, table.wp-list-table thead .item-heads th .atum-icon:before, table.wp-list-table tfoot th .dashicons:before, table.wp-list-table tfoot th .atum-icon:before {
+table.atum-list-table thead .item-heads th .atum-icon:before, table.atum-list-table tfoot th .atum-icon:before, .floatThead-container thead .item-heads th .atum-icon:before, .floatThead-container tfoot th .atum-icon:before, .inbound-stock-list thead .item-heads th .atum-icon:before, .inbound-stock-list tfoot th .atum-icon:before, table.wp-list-table thead .item-heads th .atum-icon:before, table.wp-list-table tfoot th .atum-icon:before {
   text-indent: 0;
   position: absolute;
   left: 0;
@@ -6162,10 +6162,8 @@ table.atum-list-table th.sortable a, table.atum-list-table th.sorted a, .floatTh
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 0.3px;
   color: #adb5bd;
+  overflow: visible;
 }
 
 table.atum-list-table th.sortable[class*="column-calc_"] a, table.atum-list-table th.sortable.column-_supplier_sku a, table.atum-list-table th.sortable.column-_stock a, table.atum-list-table th.sortable.column-_regular_price a, table.atum-list-table th.sortable.column-_sale_price a, table.atum-list-table th.sortable.column-_purchase_price a, table.atum-list-table th.sortable.column-ID a, table.atum-list-table th.sortable.column-_weight a, table.atum-list-table th.sortable.column-_out_stock_threshold a, table.atum-list-table th.sorted[class*="column-calc_"] a, table.atum-list-table th.sorted.column-_supplier_sku a, table.atum-list-table th.sorted.column-_stock a, table.atum-list-table th.sorted.column-_regular_price a, table.atum-list-table th.sorted.column-_sale_price a, table.atum-list-table th.sorted.column-_purchase_price a, table.atum-list-table th.sorted.column-ID a, table.atum-list-table th.sorted.column-_weight a, table.atum-list-table th.sorted.column-_out_stock_threshold a, .floatThead-container th.sortable[class*="column-calc_"] a, .floatThead-container th.sortable.column-_supplier_sku a, .floatThead-container th.sortable.column-_stock a, .floatThead-container th.sortable.column-_regular_price a, .floatThead-container th.sortable.column-_sale_price a, .floatThead-container th.sortable.column-_purchase_price a, .floatThead-container th.sortable.column-ID a, .floatThead-container th.sortable.column-_weight a, .floatThead-container th.sortable.column-_out_stock_threshold a, .floatThead-container th.sorted[class*="column-calc_"] a, .floatThead-container th.sorted.column-_supplier_sku a, .floatThead-container th.sorted.column-_stock a, .floatThead-container th.sorted.column-_regular_price a, .floatThead-container th.sorted.column-_sale_price a, .floatThead-container th.sorted.column-_purchase_price a, .floatThead-container th.sorted.column-ID a, .floatThead-container th.sorted.column-_weight a, .floatThead-container th.sorted.column-_out_stock_threshold a, .inbound-stock-list th.sortable[class*="column-calc_"] a, .inbound-stock-list th.sortable.column-_supplier_sku a, .inbound-stock-list th.sortable.column-_stock a, .inbound-stock-list th.sortable.column-_regular_price a, .inbound-stock-list th.sortable.column-_sale_price a, .inbound-stock-list th.sortable.column-_purchase_price a, .inbound-stock-list th.sortable.column-ID a, .inbound-stock-list th.sortable.column-_weight a, .inbound-stock-list th.sortable.column-_out_stock_threshold a, .inbound-stock-list th.sorted[class*="column-calc_"] a, .inbound-stock-list th.sorted.column-_supplier_sku a, .inbound-stock-list th.sorted.column-_stock a, .inbound-stock-list th.sorted.column-_regular_price a, .inbound-stock-list th.sorted.column-_sale_price a, .inbound-stock-list th.sorted.column-_purchase_price a, .inbound-stock-list th.sorted.column-ID a, .inbound-stock-list th.sorted.column-_weight a, .inbound-stock-list th.sorted.column-_out_stock_threshold a, table.wp-list-table th.sortable[class*="column-calc_"] a, table.wp-list-table th.sortable.column-_supplier_sku a, table.wp-list-table th.sortable.column-_stock a, table.wp-list-table th.sortable.column-_regular_price a, table.wp-list-table th.sortable.column-_sale_price a, table.wp-list-table th.sortable.column-_purchase_price a, table.wp-list-table th.sortable.column-ID a, table.wp-list-table th.sortable.column-_weight a, table.wp-list-table th.sortable.column-_out_stock_threshold a, table.wp-list-table th.sorted[class*="column-calc_"] a, table.wp-list-table th.sorted.column-_supplier_sku a, table.wp-list-table th.sorted.column-_stock a, table.wp-list-table th.sorted.column-_regular_price a, table.wp-list-table th.sorted.column-_sale_price a, table.wp-list-table th.sorted.column-_purchase_price a, table.wp-list-table th.sorted.column-ID a, table.wp-list-table th.sorted.column-_weight a, table.wp-list-table th.sorted.column-_out_stock_threshold a {

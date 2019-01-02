@@ -924,7 +924,7 @@
 
 #bulk-titles {
 	.ntdelbutton:before {
-		font-family: atum-icon-font;
+		font-family: $atum-icon-font;
 		content: $atmi-cross;
 	}
 }
@@ -1601,7 +1601,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			min-width: 50px;
 			height: 60px;
 			white-space: normal;
-			font-weight: bold;
+			font-weight: 600;
 			letter-spacing: 0.3px;
 			color: $gray-500;
 			
@@ -1622,14 +1622,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			.dashicons, .atum-icon {
+			.atum-icon {
 				display: block;
 				text-indent: -9999px;
 				position: relative;
 				height: 1em;
 				width: 1em;
 				margin: 0 auto;
-				font-size: 16px;
+				font-size: 19px;
 				color: $gray-500;
 				
 				&:before {
@@ -1719,10 +1719,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				font-size: 14px;
-				font-weight: bold;
-				letter-spacing: 0.3px;
 				color: $gray-500;
+				overflow: visible;
 			}
 			
 			&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
