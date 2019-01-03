@@ -159,6 +159,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.2`
+
+*2019-01-03*
+
+**Features**
+
+* Open a lightbox with a full-sized image when clicking on a thumbnail in List Tables.
+* Allow searching multiple words in List Tables' searches. Now it works with the same logic as WooCommerce product searches.
+
+**Changes**
+
+* Use our own thumb placeholder for products with no image within List Tables.
+
+**Fixes**
+
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.5.1.1`
 
 *2018-12-20*
