@@ -846,11 +846,11 @@ abstract class AtumOrderPostType {
 
 			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
 			wp_register_style( 'jquery-ui-style', "https://code.jquery.com/ui/$jquery_version/themes/smoothness/jquery-ui.min.css", array(), $jquery_version );
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'jquery-ui-style', 'atum-marketing-popup' ), ATUM_VERSION );
-
-			// Sweet Alert.
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
+			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'jquery-ui-style', 'atum-marketing-popup', 'sweetalert2' ), ATUM_VERSION );
+
+			// Sweet Alert script.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
 
 			/*
