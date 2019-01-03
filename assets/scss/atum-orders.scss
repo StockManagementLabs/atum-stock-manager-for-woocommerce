@@ -1,20 +1,24 @@
 //
 // Atum Orders
 //-------------
+
 @import "common/functions";
 @import "common/variables";
 @import "common/mixins";
-@import "components/select2";
-@import "components/pagination";
-@import "components/tooltip";
-@import "components/sweet-alert";
-@import "components/block-ui";
-@import "components/utilities";
-@import "components/atum-icons";
-@import "components/meta-boxes";
-@import "components/atum-order-meta-boxes";
-@import "components/buttons";
-@import "components/atum-footer";
-@import "components/switchery";
-@import "components/list-table";
-@import "pages/atum-orders";
+@import "common/utilities";
+
+@import "atoms/select2";
+@import "atoms/tooltip";
+@import "atoms/atum-icons";
+@import "atoms/buttons";
+
+@import "molecules/pagination";
+@import "molecules/sweet-alert";
+@import "molecules/block-ui";
+@import "molecules/meta-boxes";
+@import "molecules/atum-order-meta-boxes";
+@import "molecules/atum-footer";
+@import "molecules/switchery";
+@import "molecules/list-table";
+
+@import "organisms/pages/atum-orders";

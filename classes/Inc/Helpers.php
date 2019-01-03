@@ -2236,4 +2236,19 @@ final class Helpers {
 		
 	}
 
+	/**
+	 * Use our own custom image placeholder for products without image
+	 *
+	 * @since 1.5.1
+	 *
+	 * @param string $image
+	 * @param string $size
+	 * @param array  $dimensions
+	 *
+	 * @return string
+	 */
+	public static function image_placeholder( $image, $size, $dimensions ) {
+		return '<span class="thumb-placeholder"><i class="atum-icon atmi-picture"></i></span>';
+	}
+
 }

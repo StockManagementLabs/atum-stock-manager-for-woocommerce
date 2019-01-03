@@ -5,20 +5,23 @@
 @import "common/functions";
 @import "common/variables";
 @import "common/mixins";
-@import "components/atum-icons";
-@import "components/tooltip";
-@import "components/popovers";
-@import "components/sweet-alert";
-@import "components/tree";
-@import "components/block-ui";
-@import "components/data-export";
-@import "components/input-group";
-@import "components/buttons";
-@import "components/pagination";
-@import "components/dropdown";
-@import "components/select2";
-@import "components/atum-footer";
-@import "components/alert";
-@import "components/lightgallery";
-@import "components/list-table";
+
+@import "atoms/thumb-placeholder";
+@import "atoms/atum-icons";
+@import "atoms/tooltip";
+@import "atoms/buttons";
+@import "atoms/select2";
+
+@import "molecules/popovers";
+@import "molecules/sweet-alert";
+@import "molecules/tree";
+@import "molecules/block-ui";
+@import "molecules/data-export";
+@import "molecules/input-group";
+@import "molecules/pagination";
+@import "molecules/dropdown";
+@import "molecules/atum-footer";
+@import "molecules/alert";
+@import "molecules/lightgallery";
+@import "molecules/list-table";
 

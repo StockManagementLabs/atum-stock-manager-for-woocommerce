@@ -118,7 +118,6 @@
 		text-transform: uppercase;
 		box-shadow: none;
 		border: none;
-		height: 31px;
 		transition: .2s ease-in-out;
 		
 		@media all and (max-width: $screen-sm-min-wp) {
@@ -667,10 +666,14 @@
 		}
 		
 		.btn {
-			margin-left: 15px;
+			margin-left: 5px;
+			padding: 0.29rem 0.75rem;
+			line-height: 1.55;
+			
 			@media all and (max-width: $screen-sm-min-wp) {
 				margin: 0;
 			}
+			
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
 				margin: 10px 0;
@@ -802,11 +805,14 @@
 
 .tablenav {
 	height: auto;
+	
 	.btn {
 		margin-left: 5px;
 	}
+	
 	.tablenav-pages {
 		margin-top: 0;
+		
 		a:not(.extend-list-table) {
 			display: inline-block;
 			border: none;
@@ -816,18 +822,22 @@
 			font-weight: 400;
 			text-align: center;
 			line-height: 30px;
+			
 			&:hover, &:active, &:focus {
 				background-color: $orange;
 				color: $white;
 			}
 		}
 	}
+	
 	#table-paging {
 		margin-left: 0;
+		
 		@media all and (max-width: $screen-sm-min-wp) {
 			margin-left: 0;
 		}
 	}
+	
 	input[type=submit] {
 		font-size: 12px;
 	}
@@ -835,20 +845,28 @@
 
 .tablenav.bottom {
 	margin: 10px 11px 0;
+	display: flex;
+	align-items: center;
+	
 	.actions {
 		white-space: nowrap;
+		
 		@media all and (max-width: $screen-xs) {
 			white-space: inherit;
 		}
+		
 		&.bulkactions {
 			@media all and (max-width: $screen-sm-min-wp) {
 				display: inline-block;
 			}
+			
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
+				
 				.select2-container {
 					width: 100% !important;
 				}
+				
 				input[type=submit] {
 					width: 100%;
 					margin-top: 10px !important;
@@ -856,22 +874,31 @@
 			}
 		}
 	}
+	
 	.tablenav-pages-container {
+		flex-grow: 1;
+		
 		.btn {
-			margin-left: 15px;
+			margin-left: 5px;
+			padding: 0.29rem 0.75rem;
+			line-height: 1.55;
+			
 			@media all and (max-width: $screen-sm-min-wp) {
 				margin-left: 30px;
 			}
+			
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
 				margin: 10px 0;
 			}
 		}
 	}
+	
 	.tablenav-pages {
 		margin-left: auto;
 		text-align: right;
 		z-index: 999;
+		
 		@media all and (max-width: $screen-xs) {
 			margin: 0;
 			width: 100%;
@@ -879,10 +906,12 @@
 			display: inline-block;
 			margin: 0 0 10px;
 		}
+		
 		.displaying-num {
 			@media all and (max-width: $screen-lg) {
 				display: contents;
 			}
+			
 			@media all and (max-width: $screen-xs) {
 				width: 100%;
 				display: inline-block;
@@ -895,7 +924,7 @@
 
 #bulk-titles {
 	.ntdelbutton:before {
-		font-family: atum-icon-font;
+		font-family: $atum-icon-font;
 		content: $atmi-cross;
 	}
 }
@@ -1572,7 +1601,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			min-width: 50px;
 			height: 60px;
 			white-space: normal;
-			font-weight: bold;
+			font-weight: 600;
 			letter-spacing: 0.3px;
 			color: $gray-500;
 			
@@ -1593,14 +1622,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			.dashicons, .atum-icon {
+			.atum-icon {
 				display: block;
 				text-indent: -9999px;
 				position: relative;
 				height: 1em;
 				width: 1em;
 				margin: 0 auto;
-				font-size: 16px;
+				font-size: 19px;
 				color: $gray-500;
 				
 				&:before {
@@ -1690,10 +1719,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				font-size: 14px;
-				font-weight: bold;
-				letter-spacing: 0.3px;
 				color: $gray-500;
+				overflow: visible;
 			}
 			
 			&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
@@ -2008,8 +2035,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-title, &.atum_order_title {
 					a, .row-title {
 						font-size: 14px;
-						font-weight: bold;
-						letter-spacing: 0.3px;
+						font-weight: 600;
 						color: $blue;
 					}
 				}
@@ -2023,7 +2049,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-_sku {
 					span {
 						font-size: 14px;
-						letter-spacing: 0.3px;
 						color: $blue;
 					}
 				}
@@ -2107,25 +2132,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				.set-header {
 					color: $blue;
 				}
-			}
-		}
-	}
-	
-	.column-thumb {
-		height: 40px;
-		
-		.thumb-placeholder {
-			width: 40px;
-			height: 40px;
-			background-color: $gray-200;
-			display: inline-block;
-			text-align: center;
-			
-			i {
-				font-size: 20px;
-				color: $gray-500;
-				display: inline-block;
-				transform: translateY(50%);
 			}
 		}
 	}

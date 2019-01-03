@@ -7,7 +7,7 @@ Tested up to: 5.0.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.3
-Stable tag: 1.5.1.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.2`
+
+*2019-01-03*
+
+**Features**
+
+* Open a lightbox with a full-sized image when clicking on a thumbnail in List Tables.
+* Allow searching multiple words in List Tables' searches. Now it works with the same logic as WooCommerce product searches.
+
+**Changes**
+
+* Use our own thumb placeholder for products with no image within List Tables.
+
+**Fixes**
+
+* CSS fixes.
+* Refactory.
 
 ---
 

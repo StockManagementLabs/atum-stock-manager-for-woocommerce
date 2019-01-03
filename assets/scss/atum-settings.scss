@@ -6,11 +6,14 @@
 @import "common/variables";
 @import "common/mixins";
 @import "common/animations";
-@import "components/buttons";
-@import "components/button-groups";
-@import "components/sweet-alert";
-@import "components/select2";
-@import "components/switchery";
-@import "components/atum-icons";
-@import "components/atum-footer";
-@import "pages/settings";
+
+@import "atoms/buttons";
+@import "atoms/select2";
+@import "atoms/atum-icons";
+
+@import "molecules/button-groups";
+@import "molecules/sweet-alert";
+@import "molecules/switchery";
+@import "molecules/atum-footer";
+
+@import "organisms/pages/settings";

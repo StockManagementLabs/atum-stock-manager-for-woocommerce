@@ -734,7 +734,7 @@
 					$searchColumnDropdown.append($(dropdownItem).data('value', optionVal).text(columnLabel));
 					
 					// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
-					if ($.address.parameter('search_column') != $searchColumnBtn.data('value') && $searchColumnBtn.data('value') == optionVal) {
+					if ($.address.parameter('search_column') !== $searchColumnBtn.data('value') && $searchColumnBtn.data('value') === optionVal) {
 						self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, columnLabel + ' <span class="caret"></span>']);
 					}
 					
@@ -758,8 +758,8 @@
 				$searchColumnDropdown.children('a.active').removeClass('active');
 				$(this).addClass('active');
 				
-				var fieldTye = $.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1 ? 'number' : 'text';
-				self.$searchInput.attr('type', fieldTye);
+				var fieldType = $.inArray($(this).data('value'), self.settings.searchableColumns.numeric) > -1 ? 'number' : 'search';
+				self.$searchInput.attr('type', fieldType);
 				
 				if (self.settings.ajaxFilter === 'yes') {
 					$searchColumnBtn.trigger('search_column_data_changed');
