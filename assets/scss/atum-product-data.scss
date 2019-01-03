@@ -5,9 +5,11 @@
 @import "common/functions";
 @import "common/variables";
 @import "common/mixins";
-@import "components/buttons";
-@import "components/atum-icons";
-@import "components/select2";
-@import "components/button-groups";
-@import "components/input-group";
-@import "components/product-data";
+
+@import "atoms/buttons";
+@import "atoms/atum-icons";
+@import "atoms/select2";
+
+@import "molecules/button-groups";
+@import "molecules/input-group";
+@import "molecules/product-data";

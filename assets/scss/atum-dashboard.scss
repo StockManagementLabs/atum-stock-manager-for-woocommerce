@@ -6,20 +6,21 @@
 @import "common/variables";
 @import "common/mixins";
 @import "common/animations";
+@import "common/utilities";
 
-@import "components/atum-icons";
-@import "components/gridstack";
-@import "components/buttons";
-@import "components/nice-select";
-@import "components/sweet-alert";
-@import "components/tooltip";
-@import "components/utilities";
+@import "atoms/atum-icons";
+@import "atoms/buttons";
+@import "atoms/nice-select";
+@import "atoms/tooltip";
 
-@import "pages/dashboard";
+@import "molecules/gridstack";
+@import "molecules/sweet-alert";
 
-@import "widgets/statistics";
-@import "widgets/stats-data";
-@import "widgets/stock-control";
-@import "widgets/current-stock-value";
-@import "widgets/videos";
-@import "widgets/news";
+@import "organisms/pages/dashboard";
+
+@import "organisms/widgets/statistics";
+@import "organisms/widgets/stats-data";
+@import "organisms/widgets/stock-control";
+@import "organisms/widgets/current-stock-value";
+@import "organisms/widgets/videos";
+@import "organisms/widgets/news";

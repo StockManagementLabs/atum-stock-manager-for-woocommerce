@@ -1,0 +1,22 @@
+//
+// Thumb Placeholder
+//------------------
+
+.thumb {
+	height: 40px;
+	
+	.thumb-placeholder {
+		width: 40px;
+		height: 40px;
+		background-color: $gray-200;
+		display: inline-block;
+		text-align: center;
+		
+		i {
+			font-size: 20px;
+			color: $gray-500;
+			display: inline-block;
+			transform: translateY(50%);
+		}
+	}
+}

@@ -5167,26 +5167,6 @@ table.atum-list-table th span.col-stock-counters .set-header, table.atum-list-ta
   color: #00B8DB;
 }
 
-table.atum-list-table .column-thumb, .floatThead-container .column-thumb, .inbound-stock-list .column-thumb, table.wp-list-table .column-thumb {
-  height: 40px;
-}
-
-table.atum-list-table .column-thumb .thumb-placeholder, .floatThead-container .column-thumb .thumb-placeholder, .inbound-stock-list .column-thumb .thumb-placeholder, table.wp-list-table .column-thumb .thumb-placeholder {
-  width: 40px;
-  height: 40px;
-  background-color: #e9ecef;
-  display: inline-block;
-  text-align: center;
-}
-
-table.atum-list-table .column-thumb .thumb-placeholder i, .floatThead-container .column-thumb .thumb-placeholder i, .inbound-stock-list .column-thumb .thumb-placeholder i, table.wp-list-table .column-thumb .thumb-placeholder i {
-  font-size: 20px;
-  color: #adb5bd;
-  display: inline-block;
-  -webkit-transform: translateY(50%);
-          transform: translateY(50%);
-}
-
 table.atum-list-table .column-calc_type, .floatThead-container .column-calc_type, .inbound-stock-list .column-calc_type, table.wp-list-table .column-calc_type {
   max-width: 50px;
   text-align: center;
