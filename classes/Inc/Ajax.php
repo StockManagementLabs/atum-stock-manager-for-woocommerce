@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
+use Atum\Components\AtumMarketingPopup;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
@@ -141,6 +142,9 @@ final class Ajax {
 
 		// Change sticky columns settting.
 		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
+
+		// Get marketing popup info.
+		add_action( 'wp_ajax_atum_get_marketing_popup_info', array( $this, 'get_marketing_popup_info' ) );
 
 	}
 
@@ -2209,6 +2213,33 @@ final class Ajax {
 		Helpers::set_atum_user_meta( $key, $value );
 
 		wp_die();
+
+	}
+
+	/**
+	 * Get marketing popup info
+	 *
+	 * @package ATUM List Tables
+	 *
+	 * @since 1.5.2
+	 */
+	public function get_marketing_popup_info() {
+
+		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
+
+		$marketing_popup = new AtumMarketingPopup();
+
+		$marketing_popup = [
+			'background'           => $marketing_popup->get_background(),
+			'text'                 => $marketing_popup->get_text(),
+			'image'                => $marketing_popup->get_image(),
+			'confirm_button_text'  => $marketing_popup->get_confirm_button_text(),
+			'confirm_button_color' => $marketing_popup->get_confirm_button_color(),
+			'cancel_button_text'   => $marketing_popup->get_cancel_button_text(),
+			'cancel_button_text'   => $marketing_popup->get_cancel_button_text(),
+		];
+
+		wp_send_json_success( compact( 'marketing_popup' ) );
 
 	}
 

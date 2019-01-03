@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumMarketingPopup;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
@@ -204,7 +205,7 @@ class Main {
 
 		// Add the footer text to ATUM pages.
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
-		
+		AtumMarketingPopup::get_instance();
 	}
 
 	/**
