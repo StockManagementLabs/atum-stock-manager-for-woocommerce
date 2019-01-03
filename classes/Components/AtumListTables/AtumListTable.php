@@ -409,7 +409,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Custom image placeholder.
-		add_filter( 'woocommerce_placeholder_img', array( $this, 'image_placeholder' ), 10, 3 );
+		add_filter( 'woocommerce_placeholder_img', array( '\Atum\Inc\Helpers', 'image_placeholder' ), 10, 3 );
 
 		self::$default_currency = get_woocommerce_currency();
 
@@ -4259,21 +4259,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public static function is_report() {
 		return self::$is_report;
-	}
-
-	/**
-	 * Use our own custom image placeholder for products without image
-	 *
-	 * @since 1.5.1
-	 *
-	 * @param string $image
-	 * @param string $size
-	 * @param array  $dimensions
-	 *
-	 * @return string
-	 */
-	public function image_placeholder( $image, $size, $dimensions ) {
-		return '<span class="thumb-placeholder"><i class="atum-icon atmi-picture"></i></span>';
 	}
 
 }
