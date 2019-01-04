@@ -34,34 +34,11 @@ class AtumMarketingPopup {
 	protected $image = '';
 
 	/**
-	 * The marketing popup confirm button text
+	 * The marketing popup url
 	 *
 	 * @var string
 	 */
-	protected $confirm_button_text = '';
-
-	/**
-	 * The marketing popup confirm button color
-	 *
-	 * @var string
-	 */
-	protected $confirm_button_color = '';
-
-
-
-	/**
-	 * The marketing popup cancel button text
-	 *
-	 * @var string
-	 */
-	protected $cancel_button_text = '';
-
-	/**
-	 * The marketing popup cancel button color
-	 *
-	 * @var string
-	 */
-	protected $cancel_button_color = '';
+	protected $url = '';
 
 	/**
 	 * The marketing popup background
@@ -120,14 +97,11 @@ class AtumMarketingPopup {
 			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
 
 			if ( $marketing_popup ) {
-				$this->background           = $marketing_popup->background_color . ' ' . $marketing_popup->background_image . ' ' . $marketing_popup->background_position . '/' . $marketing_popup->background_size . ' ' . $marketing_popup->background_repeat;
-				$this->image                = $marketing_popup->image;
-				$this->text                 = $marketing_popup->text;
-				$this->confirm_button_text  = $marketing_popup->confirm_button_text;
-				$this->confirm_button_color = $marketing_popup->confirm_button_color;
-				$this->cancel_button_text   = $marketing_popup->cancel_button_text;
-				$this->cancel_button_color  = $marketing_popup->cancel_button_color;
-				$this->transient_key        = $marketing_popup->transient_key;
+				$this->background    = $marketing_popup->background_color . ' ' . $marketing_popup->background_image . ' ' . $marketing_popup->background_position . '/100% 100% ' . $marketing_popup->background_repeat;
+				$this->image         = $marketing_popup->image;
+				$this->text          = $marketing_popup->text;
+				$this->url           = $marketing_popup->url;
+				$this->transient_key = $marketing_popup->transient_key;
 			}
 		}
 
@@ -158,51 +132,15 @@ class AtumMarketingPopup {
 	}
 
 	/**
-	 * Getter for the confirm button text
+	 * Getter for the url
 	 *
 	 * @since 1.5.2
 	 *
 	 * @return string
 	 */
-	public function get_confirm_button_text() {
+	public function get_url() {
 
-		return $this->confirm_button_text;
-	}
-
-	/**
-	 * Getter for the confirm button color
-	 *
-	 * @since 1.5.2
-	 *
-	 * @return string
-	 */
-	public function get_confirm_button_color() {
-
-		return $this->confirm_button_color;
-	}
-
-	/**
-	 * Getter for the cancel button text
-	 *
-	 * @since 1.5.2
-	 *
-	 * @return string
-	 */
-	public function get_cancel_button_text() {
-
-		return $this->cancel_button_text;
-	}
-
-	/**
-	 * Getter for the cancel button color
-	 *
-	 * @since 1.5.2
-	 *
-	 * @return string
-	 */
-	public function get_cancel_button_color() {
-
-		return $this->cancel_button_color;
+		return $this->url;
 	}
 
 	/**

@@ -3,7 +3,7 @@
  *
  * @copyright Stock Management Labs ©2018
  *
- * @since 1.5.0
+ * @since 1.5.2
  */
 
 ;( function( $, window, document, undefined ) {
@@ -59,15 +59,19 @@
 							customClass       : 'marketing-popup',
 							background        : response.data.marketing_popup.background,
 							showCloseButton   : true,
-							showCancelButton  : true,
+							showConfirmButton : false,
 							text              : response.data.marketing_popup.text,
 							imageUrl          : response.data.marketing_popup.image,
-							confirmButtonText : response.data.marketing_popup.confirm_button_text,
-							confirmButtonColor: response.data.marketing_popup.confirm_button_color,
-							cancelButtonText  : response.data.marketing_popup.cancel_button_text,
-							cancelButtonColor : response.data.marketing_popup.cancel_button_color,
 							onClose      : self.hideMarketingPopup(),
 						}).catch(swal.noop);
+						
+						if ( response.data.marketing_popup.url ) {
+							$('.marketing-popup .swal2-image')
+								.css('cursor','pointer')
+								.on('click', function () {
+									window.open(response.data.marketing_popup.url, '_blank');
+								});
+						}
 					}
 				},
 			});

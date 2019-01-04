@@ -2238,13 +2238,10 @@ final class Ajax {
 			if ( ! $hide_marketing_popup ) {
 
 				$marketing_popup = [
-					'background'           => $marketing_popup->get_background(),
-					'text'                 => $marketing_popup->get_text(),
-					'image'                => $marketing_popup->get_image(),
-					'confirm_button_text'  => $marketing_popup->get_confirm_button_text(),
-					'confirm_button_color' => $marketing_popup->get_confirm_button_color(),
-					'cancel_button_text'   => $marketing_popup->get_cancel_button_text(),
-					'cancel_button_text'   => $marketing_popup->get_cancel_button_text(),
+					'background' => $marketing_popup->get_background(),
+					'text'       => $marketing_popup->get_text(),
+					'image'      => $marketing_popup->get_image(),
+					'url'        => $marketing_popup->get_url(),
 				];
 
 				// Send marketing popup content.

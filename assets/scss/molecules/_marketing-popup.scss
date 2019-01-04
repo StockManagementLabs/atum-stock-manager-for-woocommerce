@@ -1,14 +1,18 @@
 .marketing-popup {
 		
-		.swal2-image {
-			width: 250px;
-			height: auto;
-		}
-		
-		.swal2-content {
-			font-size: 14px;
-			line-height: 1.29;
-			text-align: center;
-			color: $gray-500;
-		}
+	.swal2-image {
+		width: 250px;
+		height: auto;
+	}
+	
+	.swal2-content {
+		font-size: 14px;
+		line-height: 1.29;
+		text-align: center;
+		color: $gray-500;
+	}
+	
+	.swal2-confirm {
+		margin-right: 10px;
+	}
 }

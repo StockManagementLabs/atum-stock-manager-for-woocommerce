@@ -748,7 +748,7 @@ input[type="button"].btn-block {
   font-style: normal;
 }
 
-[class^="atmi-"], [class*=" atmi-"] {
+[class^="atmi-"], [class*=" atmi-"], .atum-icon {
   font-family: "atum-icon-font" !important;
   speak: none;
   font-style: normal;
