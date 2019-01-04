@@ -7,7 +7,7 @@ Tested up to: 5.0.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.3
-Stable tag: 1.5.2
+Stable tag: 1.5.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.2.1`
+
+*2019-01-04*
+
+**Changes**
+
+* Create the right ATUM tables from the start to avoid issues.
+
+**Fixes**
+
+* Create rows in ATUM product data table whether or not ATUM was previously installed.
 
 ---
 

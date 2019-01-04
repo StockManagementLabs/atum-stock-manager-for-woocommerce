@@ -159,6 +159,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.2.1`
+
+*2019-01-04*
+
+**Changes**
+
+* Create the right ATUM tables from the start to avoid issues.
+
+**Fixes**
+
+* Create rows in ATUM product data table whether or not ATUM was previously installed.
+
+---
+
 `1.5.2`
 
 *2019-01-03*
