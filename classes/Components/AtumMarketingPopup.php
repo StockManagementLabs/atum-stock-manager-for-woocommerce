@@ -14,7 +14,6 @@ namespace Atum\Components;
 
 use Atum\Inc\Helpers;
 
-
 defined( 'ABSPATH' ) || die;
 
 
@@ -69,14 +68,14 @@ class AtumMarketingPopup {
 	 *
 	 * @var string
 	 */
-	protected $background;
+	protected $background = '';
 
 	/**
-	 * The marketing popup plugin name
+	 * The hide popup transient key
 	 *
 	 * @var string
 	 */
-	protected $plugin_name;
+	protected $transient_key = '';
 
 	/**
 	 * The ATUM's addons store URL
@@ -114,55 +113,25 @@ class AtumMarketingPopup {
 			'cookies'     => array(),
 		);
 
-		// Call marketing poup info.
-		$info = wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );
+		// Call marketing popup info.
+		$marketing_popup = wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );
 
-		if ( ! is_wp_error( $info ) ) {
-			$info = json_decode( wp_remote_retrieve_body( $info ) );
+		if ( ! is_wp_error( $marketing_popup ) ) {
+			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
 
-			if ( $info ) {
-				$this->background           = $info->background_color . ' ' . $info->background_image . ' ' . $info->background_position . '/' . $info->background_size . ' ' . $info->background_repeat;
-				$this->image                = $info->image;
-				$this->text                 = $info->text;
-				$this->confirm_button_text  = $info->confirm_button_text;
-				$this->confirm_button_color = $info->confirm_button_color;
-				$this->cancel_button_text   = $info->cancel_button_text;
-				$this->cancel_button_color  = $info->cancel_button_color;
-				$this->plugin_name          = $info->plugin_name;
-
-				// Enqueue dashboard scripts.
-				//add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			if ( $marketing_popup ) {
+				$this->background           = $marketing_popup->background_color . ' ' . $marketing_popup->background_image . ' ' . $marketing_popup->background_position . '/' . $marketing_popup->background_size . ' ' . $marketing_popup->background_repeat;
+				$this->image                = $marketing_popup->image;
+				$this->text                 = $marketing_popup->text;
+				$this->confirm_button_text  = $marketing_popup->confirm_button_text;
+				$this->confirm_button_color = $marketing_popup->confirm_button_color;
+				$this->cancel_button_text   = $marketing_popup->cancel_button_text;
+				$this->cancel_button_color  = $marketing_popup->cancel_button_color;
+				$this->transient_key        = $marketing_popup->transient_key;
 			}
 		}
-	}
 
-//	/**
-//	 * Enqueue the required scripts
-//	 *
-//	 * @since 1.5.2
-//	 *
-//	 * @param string $hook
-//	 */
-//	public function enqueue_scripts( $hook ) {
-//
-//		$min                  = ! ATUM_DEBUG ? '.min' : '';
-//		$marketing_popup_vars = array(
-//			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-//		);
-//
-//		// Sweet Alert 2.
-//		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-//		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-//
-//		wp_register_style( 'atum-marketing-popup', ATUM_URL . "assets/css/atum-marketing-popup{$min}.css", array( 'sweetalert2' ), ATUM_VERSION );
-//
-//		wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup{$min}.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-//		wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
-//
-//		wp_enqueue_style( 'atum-marketing-popup' );
-//		wp_enqueue_script( 'atum-marketing-popup' );
-//
-//	}
+	}
 
 	/**
 	 * Getter for the text
@@ -250,15 +219,15 @@ class AtumMarketingPopup {
 	}
 
 	/**
-	 * Getter for the plugin name
+	 * Getter for the transient key
 	 *
 	 * @since 1.5.2
 	 *
 	 * @return string
 	 */
-	public function get_plugin_name() {
+	public function get_transient_key() {
 
-		return $this->plugin_name;
+		return $this->transient_key;
 
 	}
 

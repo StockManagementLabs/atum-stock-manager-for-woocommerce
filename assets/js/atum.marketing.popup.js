@@ -54,7 +54,7 @@
 				},
 				success   : function(response) {
 					
-					if (response.success === true) {
+					if (response.success === true && ! response.data.hide_marketing_popup) {
 						swal({
 							customClass       : 'marketing-popup',
 							background        : response.data.marketing_popup.background,
@@ -66,12 +66,25 @@
 							confirmButtonColor: response.data.marketing_popup.confirm_button_color,
 							cancelButtonText  : response.data.marketing_popup.cancel_button_text,
 							cancelButtonColor : response.data.marketing_popup.cancel_button_color,
-						});
+							onClose      : self.hideMarketingPopup(),
+						}).catch(swal.noop);
 					}
 				},
 			});
 			
-		}
+		},
+		hideMarketingPopup: function () {
+			var self = this;
+			$.ajax({
+				url       : ajaxurl,
+				dataType  : 'json',
+				method    : 'post',
+				data      : {
+					action    : 'atum_hide_marketing_popup',
+					token     : self.settings.nonce,
+				},
+			});
+		},
 	});
 	
 	// A really lightweight plugin wrapper around the constructor, preventing against multiple instantiations
