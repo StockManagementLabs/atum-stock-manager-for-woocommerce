@@ -2236,7 +2236,9 @@ final class Ajax {
 			if ( ! empty( $marketing_popup->get_transient_key() ) ) {
 				// Get if marketing popup is hide from transient.
 				$marketing_popup_state = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
-				$show_marketing_popup  = isset( $marketing_popup_state ) && ! $marketing_popup_state['show'] && in_array( get_current_user_id(), $marketing_popup_state['user_ids'] ) ? FALSE : TRUE;
+				if ( $marketing_popup_state ) {
+					$show_marketing_popup = ! $marketing_popup_state['show'] && in_array( get_current_user_id(), $marketing_popup_state['user_ids'] ) ? FALSE : TRUE;
+				}
 			}
 
 			if ( $show_marketing_popup ) {
@@ -2276,8 +2278,10 @@ final class Ajax {
 		if ( $marketing_popup ) {
 			$current_user_id = get_current_user_id();
 			$transient_key   = $marketing_popup->get_transient_key();
+			// Get saved transient.
 			$saved_transient = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
 
+			// Check if user is in array for hide the popup.
 			$transient_user_ids = [];
 			if ( $saved_transient ) {
 				$transient_user_ids = $saved_transient['user_ids'];
@@ -2289,6 +2293,7 @@ final class Ajax {
 				array_push( $transient_user_ids, $current_user_id );
 			}
 
+			// Prepare $marketing_popup_state object to save in transient.
 			$marketing_popup_state = [
 				'show'     => FALSE,
 				'user_ids' => $transient_user_ids,
