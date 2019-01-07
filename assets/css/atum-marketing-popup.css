@@ -1671,19 +1671,19 @@ input[type="button"].btn-block {
   }
 }
 
-.marketing-popup .swal2-image {
+.swal2-container .marketing-popup .swal2-image {
   width: 250px;
   height: auto;
 }
 
-.marketing-popup .swal2-content {
+.swal2-container .marketing-popup .swal2-content {
   font-size: 14px;
   line-height: 1.29;
   text-align: center;
   color: #adb5bd;
 }
 
-.marketing-popup .swal2-confirm {
+.swal2-container .marketing-popup .swal2-confirm {
   margin-right: 10px;
 }
 /*# sourceMappingURL=atum-marketing-popup.css.map */

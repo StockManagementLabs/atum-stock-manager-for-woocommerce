@@ -2238,10 +2238,10 @@ final class Ajax {
 			if ( ! $hide_marketing_popup ) {
 
 				$marketing_popup = [
-					'background' => $marketing_popup->get_background(),
-					'text'       => $marketing_popup->get_text(),
-					'image'      => $marketing_popup->get_image(),
-					'url'        => $marketing_popup->get_url(),
+					'background'  => $marketing_popup->get_background(),
+					'description' => $marketing_popup->get_description(),
+					'image'       => $marketing_popup->get_image(),
+					'url'         => $marketing_popup->get_url(),
 				];
 
 				// Send marketing popup content.

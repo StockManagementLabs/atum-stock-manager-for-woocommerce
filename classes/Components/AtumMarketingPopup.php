@@ -22,9 +22,9 @@ class AtumMarketingPopup {
 	/**
 	 * The marketing popup title
 	 *
-	 * @var string
+	 * @var object
 	 */
-	protected $text = '';
+	protected $description = [];
 
 	/**
 	 * The marketing popup title
@@ -43,9 +43,9 @@ class AtumMarketingPopup {
 	/**
 	 * The marketing popup background
 	 *
-	 * @var string
+	 * @var object
 	 */
-	protected $background = '';
+	protected $background = [];
 
 	/**
 	 * The hide popup transient key
@@ -85,9 +85,11 @@ class AtumMarketingPopup {
 			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
 
 			if ( $marketing_popup ) {
-				$this->background    = $marketing_popup->background_color . ' ' . $marketing_popup->background_image . ' ' . $marketing_popup->background_position . '/100% 100% ' . $marketing_popup->background_repeat;
+				$background_data = $marketing_popup->background;
+
+				$this->background    = $background_data->background_color . ' ' . $background_data->background_image . ' ' . $background_data->background_position . '/100% 100% ' . $background_data->background_repeat;
 				$this->image         = $marketing_popup->image;
-				$this->text          = $marketing_popup->text;
+				$this->description   = $marketing_popup->description;
 				$this->url           = $marketing_popup->url;
 				$this->transient_key = $marketing_popup->transient_key;
 			}
@@ -124,11 +126,11 @@ class AtumMarketingPopup {
 	 *
 	 * @since 1.5.2
 	 *
-	 * @return string
+	 * @return object
 	 */
-	public function get_text() {
+	public function get_description() {
 
-		return $this->text;
+		return $this->description;
 	}
 
 	/**
@@ -160,7 +162,7 @@ class AtumMarketingPopup {
 	 *
 	 * @since 1.5.2
 	 *
-	 * @return string
+	 * @return object
 	 */
 	public function get_background() {
 

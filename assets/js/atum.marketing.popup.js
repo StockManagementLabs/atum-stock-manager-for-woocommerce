@@ -60,11 +60,12 @@
 							background        : response.data.marketing_popup.background,
 							showCloseButton   : true,
 							showConfirmButton : false,
-							text              : response.data.marketing_popup.text,
+							html              : response.data.marketing_popup.description.text,
 							imageUrl          : response.data.marketing_popup.image,
 							onClose           : self.hideMarketingPopup(),
 						}).catch(swal.noop);
 						
+						// Add URL to popup if exist
 						if ( response.data.marketing_popup.url ) {
 							$('.marketing-popup .swal2-image')
 								.css('cursor','pointer')
@@ -72,6 +73,12 @@
 									window.open(response.data.marketing_popup.url, '_blank');
 								});
 						}
+						
+						// Change style text description
+						$('.marketing-popup .swal2-content')
+							.css('color',response.data.marketing_popup.description.text_color)
+							.css('font-size',response.data.marketing_popup.description.text_size)
+							.css('text-align',response.data.marketing_popup.description.text_align);
 					}
 				},
 			});
