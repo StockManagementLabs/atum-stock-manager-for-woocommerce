@@ -57,7 +57,7 @@ class AtumMarketingPopup {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const MARKETING_POPUP_STORE_URL = 'http://stockmanagementlabs.loc/';
+	const MARKETING_POPUP_STORE_URL = 'https://www.stockmanagementlabs.com/';
 
 	/**
 	 * The ATUM's addons API endpoint
