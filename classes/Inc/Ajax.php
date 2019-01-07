@@ -148,7 +148,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_get_marketing_popup_info', array( $this, 'get_marketing_popup_info' ) );
 
 		// Hide marketing popup.
-		add_action( 'wp_ajax_atum_hide_marketing_popup', array( $this, 'hide_marketing_popup' ) );
+		add_action( 'wp_ajax_atum_hide_marketing_popup', array( $this, 'marketing_popup_state' ) );
 
 	}
 
@@ -2230,15 +2230,16 @@ final class Ajax {
 	public function get_marketing_popup_info() {
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
 		$marketing_popup      = new AtumMarketingPopup();
-		$hide_marketing_popup = TRUE;
+		$show_marketing_popup = TRUE;
 
 		if ( $marketing_popup ) {
 			if ( ! empty( $marketing_popup->get_transient_key() ) ) {
-				// Get if marketing popup is hide from cache.
-				$hide_marketing_popup = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+				// Get if marketing popup is hide from transient.
+				$marketing_popup_state = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+				$show_marketing_popup  = isset( $marketing_popup_state ) && ! $marketing_popup_state['show'] && in_array( get_current_user_id(), $marketing_popup_state['user_ids'] ) ? FALSE : TRUE;
 			}
 
-			if ( ! $hide_marketing_popup ) {
+			if ( $show_marketing_popup ) {
 
 				$marketing_popup = [
 					'background'  => $marketing_popup->get_background(),
@@ -2249,11 +2250,11 @@ final class Ajax {
 				];
 
 				// Send marketing popup content.
-				wp_send_json_success( compact( 'marketing_popup' ) );
+				wp_send_json_success( compact( 'marketing_popup', 'show_marketing_popup' ) );
 			}
 
 			// Send hide marketing poup true.
-			wp_send_json_success( compact( 'hide_marketing_popup' ) );
+			wp_send_json_success( compact( 'show_marketing_popup' ) );
 		}
 
 		wp_die();
@@ -2267,14 +2268,32 @@ final class Ajax {
 	 *
 	 * @since 1.5.2
 	 */
-	public function hide_marketing_popup() {
+	public function marketing_popup_state() {
 
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
 		$marketing_popup = new AtumMarketingPopup();
 
 		if ( $marketing_popup ) {
-			$transient_key = $marketing_popup->get_transient_key();
-			AtumCache::set_transient( $transient_key, TRUE, 0, TRUE );
+			$current_user_id = get_current_user_id();
+			$transient_key   = $marketing_popup->get_transient_key();
+			$saved_transient = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+
+			$transient_user_ids = [];
+			if ( $saved_transient ) {
+				$transient_user_ids = $saved_transient['user_ids'];
+				if ( ! in_array( $current_user_id, $transient_user_ids ) ) {
+					array_push( $transient_user_ids, $current_user_id );
+				}
+			}
+			else {
+				array_push( $transient_user_ids, $current_user_id );
+			}
+
+			$marketing_popup_state = [
+				'show'     => FALSE,
+				'user_ids' => $transient_user_ids,
+			];
+			AtumCache::set_transient( $transient_key, $marketing_popup_state, 0, TRUE );
 		}
 
 		wp_die();

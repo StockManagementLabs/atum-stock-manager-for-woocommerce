@@ -54,7 +54,7 @@
 				},
 				success   : function(response) {
 					
-					if (response.success === true && ! response.data.hide_marketing_popup) {
+					if (response.success === true && response.data.show_marketing_popup) {
 						var $descriptionColor    = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.description.text_color + ';' : '',
 						    $descriptionFontSize = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.description.text_size + ';' : '',
 						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text_align:' + response.data.marketing_popup.description.text_align + ';' : '',
