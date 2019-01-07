@@ -144,6 +144,12 @@ class Updater {
 		}
 
 		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->name ] ) && FALSE === $this->wp_override ) {
+
+			// Unserialize plugin icons.
+			if ( isset( $_transient_data->response[ $this->name ]->icons ) && is_string( $_transient_data->response[ $this->name ]->icons ) ) {
+				$_transient_data->response[ $this->name ]->icons = maybe_unserialize( $_transient_data->response[ $this->name ]->icons );
+			}
+
 			return $_transient_data;
 		}
 
@@ -163,6 +169,11 @@ class Updater {
 
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 				$_transient_data->response[ $this->name ] = $version_info;
+			}
+
+			// Unserialize plugin icons.
+			if ( isset( $_transient_data->response[ $this->name ]->icons ) && is_string( $_transient_data->response[ $this->name ]->icons ) ) {
+				$_transient_data->response[ $this->name ]->icons = maybe_unserialize( $_transient_data->response[ $this->name ]->icons );
 			}
 
 			$_transient_data->last_checked           = current_time( 'timestamp' );
@@ -247,7 +258,7 @@ class Updater {
 			// $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 			/* <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">*/
 
-			echo '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">';
+			echo '<tr class="plugin-update-tr" id="' . esc_attr( $this->slug ) . '-update" data-slug="' . esc_attr( $this->slug ) . '" data-plugin="' . esc_attr( $this->slug ) . '/' . esc_attr( $file ) . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
 			echo '<div class="update-message notice inline notice-warning notice-alt">';
 
@@ -262,7 +273,7 @@ class Updater {
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
 					'</a>'
-				);
+				); // WPCS: XSS ok.
 
 			}
 			else {
@@ -276,7 +287,7 @@ class Updater {
 					'</a>',
 					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) . '">',
 					'</a>'
-				);
+				); // WPCS: XSS ok.
 
 			}
 
@@ -363,8 +374,8 @@ class Updater {
 		// Transform contributos array to reach WP required format.
 		if ( isset( $_data->contributors ) ) {
 			$new_contributors = array();
-			foreach ( $_data->contributors as $value ) {
-				$new_contributors[ $value ] = 0;
+			foreach ( $_data->contributors as $name => $data ) {
+				$new_contributors[ $name ] = 0;
 			}
 			
 			$_data->contributors = $new_contributors;
@@ -437,21 +448,21 @@ class Updater {
 
 		global $edd_plugin_data;
 
-		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) { // WPCS: CSRF ok.
+		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) {
 			return;
 		}
 
-		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) { // WPCS: CSRF ok.
+		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) {
 			return;
 		}
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
-			wp_die( __( 'You do not have permission to install plugin updates', ATUM_TEXT_DOMAIN ), __( 'Error', ATUM_TEXT_DOMAIN ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to install plugin updates', ATUM_TEXT_DOMAIN ), esc_html__( 'Error', ATUM_TEXT_DOMAIN ), array( 'response' => 403 ) );
 		}
 
-		$data         = $edd_plugin_data[ $_REQUEST['slug'] ]; // WPCS: CSRF ok.
+		$data         = $edd_plugin_data[ $_REQUEST['slug'] ];
 		$beta         = ! empty( $data['beta'] ) ? TRUE : FALSE;
-		$cache_key    = md5( ATUM_PREFIX . 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' ); // WPCS: CSRF ok.
+		$cache_key    = md5( ATUM_PREFIX . 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
 		$version_info = $this->get_cached_version_info( $cache_key );
 
 		if ( FALSE === $version_info ) {
@@ -481,7 +492,7 @@ class Updater {
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>';
+			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>'; // WPCS: XSS ok.
 		}
 
 		exit;
