@@ -15,8 +15,6 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
-use Atum\Components\AtumLogs\AtumLogs;
-use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -53,13 +51,8 @@ class Upgrade {
 
 		// ** version 1.2.4 ** The Inventory Logs was introduced.
 		if ( version_compare( $db_version, '1.2.4', '<' ) ) {
-			$this->create_inventory_log_tables();
+			$this->create_atum_order_items_tables();
 			add_action( 'admin_init', array( $this, 'create_inventory_log_types' ) );
-		}
-
-		// ** version 1.2.9 ** Refactory to change the log table names to something more generic.
-		if ( version_compare( $db_version, '1.2.9', '<' ) ) {
-			$this->alter_order_item_tables();
 		}
 
 		// ** version 1.4.1 ** ATUM now uses its own way to manage the stock of the products.
@@ -106,17 +99,17 @@ class Upgrade {
 	}
 
 	/**
-	 * Create the tables for the Inventory Log items
+	 * Create the tables for the ATUM Order items
 	 *
 	 * @since 1.2.4
 	 */
-	private function create_inventory_log_tables() {
+	private function create_atum_order_items_tables() {
 
 		global $wpdb;
 
-		// Create DB tables for the log items.
-		$items_table    = $wpdb->prefix . ATUM_PREFIX . 'log_items';
-		$itemmeta_table = $wpdb->prefix . ATUM_PREFIX . 'log_itemmeta';
+		// Create DB tables for the ATUM Order items.
+		$items_table    = $wpdb->prefix . ATUM_PREFIX . 'order_items';
+		$itemmeta_table = $wpdb->prefix . ATUM_PREFIX . 'order_itemmeta';
 
 		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$items_table';" ) ) { // WPCS: unprepared SQL ok.
 
@@ -128,21 +121,21 @@ class Upgrade {
 
 			$sql = "
 			CREATE TABLE $items_table (
-				log_item_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-		  		log_item_name TEXT NOT NULL,
-			  	log_item_type varchar(200) NOT NULL DEFAULT '',
-			  	log_id BIGINT UNSIGNED NOT NULL,
-			  	PRIMARY KEY  (log_item_id),
-			  	KEY log_id (log_id)
+			 	`order_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				`order_item_name` text NOT NULL,
+				`order_item_type` varchar(200) NOT NULL DEFAULT '',
+				`order_id` bigint(20) unsigned NOT NULL,
+				PRIMARY KEY (`order_item_id`),
+				KEY `order_id` (`order_id`)
 			) $collate;
 			CREATE TABLE $itemmeta_table (
-				meta_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-			  	log_item_id BIGINT UNSIGNED NOT NULL,
-			  	meta_key varchar(255) default NULL,
-			  	meta_value longtext NULL,
-			  	PRIMARY KEY  (meta_id),
-			  	KEY log_item_id (log_item_id),
-			  	KEY meta_key (meta_key(191))
+				`meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  				`order_item_id` bigint(20) unsigned NOT NULL,
+				`meta_key` varchar(255) DEFAULT NULL,
+				`meta_value` longtext,
+				PRIMARY KEY (`meta_id`),
+				KEY `meta_key` (`meta_key`(191)),
+				KEY `order_item_id` (`order_item_id`)
 			) $collate;
 			";
 
@@ -164,44 +157,9 @@ class Upgrade {
 		$log_type_taxonomy = InventoryLogs::get_type_taxonomy();
 		foreach ( Log::get_log_types() as $log_type_slug => $log_type_name ) {
 
-			if ( ! get_term_by( 'slug', $log_type_slug, $log_type_taxonomy ) ) {
+			if ( empty( term_exists( $log_type_slug, $log_type_taxonomy ) ) ) {
 				wp_insert_term( $log_type_name, $log_type_taxonomy, array( 'slug' => $log_type_slug ) );
 			}
-
-		}
-
-	}
-
-	/**
-	 * Alter the log item table names introduced in 1.2.4 to something more generic
-	 * to be used by other components across ATUM and its add-ons
-	 *
-	 * @since 1.2.9
-	 */
-	private function alter_order_item_tables() {
-
-		global $wpdb;
-
-		// The old table names.
-		$old_items_table    = $wpdb->prefix . ATUM_PREFIX . 'log_items';
-		$old_itemmeta_table = $wpdb->prefix . ATUM_PREFIX . 'log_itemmeta';
-
-		// Check whether the old tables exist.
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$old_items_table';" ) && $wpdb->get_var( "SHOW TABLES LIKE '$old_itemmeta_table';" ) ) { // WPCS: unprepared SQL ok.
-
-			$items_table    = $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE;
-			$itemmeta_table = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
-
-			// Change the table names.
-			$wpdb->query( "RENAME TABLE $old_items_table TO $items_table, $old_itemmeta_table TO $itemmeta_table;" ); // WPCS: unprepared SQL ok.
-
-			// Change the column names.
-			$wpdb->query( "ALTER TABLE $items_table CHANGE `log_item_id` `order_item_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "ALTER TABLE $items_table CHANGE `log_item_name` `order_item_name` TEXT NOT NULL;" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "ALTER TABLE $items_table CHANGE `log_item_type` `order_item_type` varchar(200) NOT NULL DEFAULT '';" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "ALTER TABLE $items_table CHANGE `log_id` `order_id` BIGINT UNSIGNED NOT NULL;" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "ALTER TABLE $itemmeta_table CHANGE `log_item_id` `order_item_id` BIGINT UNSIGNED NOT NULL;" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "ALTER TABLE $itemmeta_table DROP KEY `log_item_id`, ADD KEY order_item_id (order_item_id);" ); // WPCS: unprepared SQL ok.
 
 		}
 
@@ -387,10 +345,7 @@ class Upgrade {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 
-			// Only need to migrate the data if ATUM was previously installed.
-			if ( version_compare( $this->current_atum_version, '0.0.1', '>' ) ) {
-				$this->migrate_atum_products_data();
-			}
+			$this->migrate_atum_products_data();
 
 		}
 
