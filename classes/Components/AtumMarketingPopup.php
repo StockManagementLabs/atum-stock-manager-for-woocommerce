@@ -78,6 +78,30 @@ class AtumMarketingPopup {
 	 */
 	public function __construct() {
 
+		// Call marketing popup info.
+		$marketing_popup = $this->get_marketing_popup_content();
+
+		if ( ! is_wp_error( $marketing_popup ) ) {
+			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
+
+			if ( $marketing_popup ) {
+				$this->background    = $marketing_popup->background_color . ' ' . $marketing_popup->background_image . ' ' . $marketing_popup->background_position . '/100% 100% ' . $marketing_popup->background_repeat;
+				$this->image         = $marketing_popup->image;
+				$this->text          = $marketing_popup->text;
+				$this->url           = $marketing_popup->url;
+				$this->transient_key = $marketing_popup->transient_key;
+			}
+		}
+
+	}
+
+	/**
+	 * Get marketing popup content
+	 *
+	 * @return array|\WP_Error
+	 */
+	private static function get_marketing_popup_content() {
+
 		$request_params = array(
 			'method'      => 'POST',
 			'timeout'     => 15,
@@ -91,19 +115,7 @@ class AtumMarketingPopup {
 		);
 
 		// Call marketing popup info.
-		$marketing_popup = wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );
-
-		if ( ! is_wp_error( $marketing_popup ) ) {
-			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
-
-			if ( $marketing_popup ) {
-				$this->background    = $marketing_popup->background_color . ' ' . $marketing_popup->background_image . ' ' . $marketing_popup->background_position . '/100% 100% ' . $marketing_popup->background_repeat;
-				$this->image         = $marketing_popup->image;
-				$this->text          = $marketing_popup->text;
-				$this->url           = $marketing_popup->url;
-				$this->transient_key = $marketing_popup->transient_key;
-			}
-		}
+		return wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );
 
 	}
 

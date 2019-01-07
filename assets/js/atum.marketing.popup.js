@@ -62,7 +62,7 @@
 							showConfirmButton : false,
 							text              : response.data.marketing_popup.text,
 							imageUrl          : response.data.marketing_popup.image,
-							onClose      : self.hideMarketingPopup(),
+							onClose           : self.hideMarketingPopup(),
 						}).catch(swal.noop);
 						
 						if ( response.data.marketing_popup.url ) {
