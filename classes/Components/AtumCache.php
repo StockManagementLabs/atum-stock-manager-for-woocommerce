@@ -44,7 +44,6 @@ final class AtumCache {
 		}
 		
 		array_walk_recursive( $args, function ( &$item, $key ) {
-			
 			$item = (string) $item;
 		} );
 		

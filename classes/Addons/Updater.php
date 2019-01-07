@@ -12,6 +12,9 @@
 
 namespace Atum\Addons;
 
+use Atum\Components\AtumCache;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -64,7 +67,7 @@ class Updater {
 	 *
 	 * @var string
 	 */
-	private $cache_key = '';
+	private $transient_key = '';
 
 	/**
 	 * If we want to download a beta version
@@ -86,14 +89,14 @@ class Updater {
 
 		global $edd_plugin_data;
 
-		$this->api_url     = Addons::ADDONS_STORE_URL;
-		$this->api_data    = $api_data;
-		$this->name        = plugin_basename( $addon_file );
-		$this->slug        = basename( $addon_file, '.php' );
-		$this->version     = $api_data['version'];
-		$this->wp_override = isset( $api_data['wp_override'] ) ? (bool) $api_data['wp_override'] : FALSE;
-		$this->beta        = ! empty( $this->api_data['beta'] ) ? TRUE : FALSE;
-		$this->cache_key   = md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$this->api_url       = Addons::ADDONS_STORE_URL;
+		$this->api_data      = $api_data;
+		$this->name          = plugin_basename( $addon_file );
+		$this->slug          = basename( $addon_file, '.php' );
+		$this->version       = $api_data['version'];
+		$this->wp_override   = isset( $api_data['wp_override'] ) ? (bool) $api_data['wp_override'] : FALSE;
+		$this->beta          = ! empty( $this->api_data['beta'] ) ? TRUE : FALSE;
+		$this->transient_key = AtumCache::get_transient_key( $this->slug . '-updater', [ $this->api_data['license'], $this->beta ] );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -153,7 +156,7 @@ class Updater {
 			return $_transient_data;
 		}
 
-		$version_info = $this->get_cached_version_info();
+		$version_info = $this->get_version_info_transient();
 
 		if ( FALSE === $version_info ) {
 			$version_info = $this->api_request( array(
@@ -161,7 +164,7 @@ class Updater {
 				'beta' => $this->beta,
 			) );
 
-			$this->set_version_info_cache( $version_info );
+			$this->set_version_info_transient( $version_info );
 
 		}
 
@@ -220,7 +223,7 @@ class Updater {
 
 		if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->name ] ) ) {
 
-			$version_info = $this->get_cached_version_info();
+			$version_info = $this->get_version_info_transient();
 
 			if ( FALSE === $version_info ) {
 				$version_info = $this->api_request( array(
@@ -228,7 +231,7 @@ class Updater {
 					'beta' => $this->beta,
 				) );
 
-				$this->set_version_info_cache( $version_info );
+				$this->set_version_info_transient( $version_info );
 			}
 
 			if ( ! is_object( $version_info ) ) {
@@ -332,7 +335,7 @@ class Updater {
 		$cache_key = ATUM_PREFIX . 'api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
 
 		// Get the transient where we store the api request for this plugin for 24 hours.
-		$api_request_transient = $this->get_cached_version_info( $cache_key );
+		$api_request_transient = $this->get_version_info_transient( $cache_key );
 
 		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
 		if ( empty( $api_request_transient ) ) {
@@ -340,7 +343,7 @@ class Updater {
 			$api_response = $this->api_request( $to_send );
 
 			// Expires in 3 hours.
-			$this->set_version_info_cache( $api_response, $cache_key );
+			$this->set_version_info_transient( $api_response, $cache_key );
 
 			if ( FALSE !== $api_response ) {
 				$_data = $api_response;
@@ -462,13 +465,13 @@ class Updater {
 
 		$data         = $edd_plugin_data[ $_REQUEST['slug'] ];
 		$beta         = ! empty( $data['beta'] ) ? TRUE : FALSE;
-		$cache_key    = md5( ATUM_PREFIX . 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
-		$version_info = $this->get_cached_version_info( $cache_key );
+		$cache_key    = AtumCache::get_transient_key( 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_version_info', [ $beta ] );
+		$version_info = $this->get_version_info_transient( $cache_key );
 
 		if ( FALSE === $version_info ) {
 
 			$version = isset( $data['version'] ) ? $data['version'] : FALSE;
-			$request = Addons::get_version( $data['item_name'], $data['license'], $version, ! empty( $data['beta'] ) );
+			$request = Addons::get_version( $data['item_name'], $data['license'], $version, $beta );
 
 			if ( ! is_wp_error( $request ) ) {
 				$version_info = json_decode( wp_remote_retrieve_body( $request ) );
@@ -487,12 +490,12 @@ class Updater {
 				}
 			}
 
-			$this->set_version_info_cache( $version_info, $cache_key );
+			$this->set_version_info_transient( $version_info, $cache_key );
 
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>'; // WPCS: XSS ok.
+			echo '<div style="background:white;padding:10px;">' . $version_info->sections['changelog'] . '</div>'; // WPCS: XSS ok.
 		}
 
 		exit;
@@ -500,50 +503,42 @@ class Updater {
 	}
 
 	/**
-	 * Get the addon's version info previously cached
+	 * Get the addon's version info previously stored in a transient
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $cache_key
+	 * @param string $transient_key
 	 *
-	 * @return array|bool|mixed|object
+	 * @return array|bool
 	 */
-	public function get_cached_version_info( $cache_key = '' ) {
+	public function get_version_info_transient( $transient_key = '' ) {
 
-		if ( empty( $cache_key ) ) {
-			$cache_key = $this->cache_key;
+		if ( empty( $transient_key ) ) {
+			$transient_key = $this->transient_key;
 		}
 
-		$cache = get_option( $cache_key );
+		$transient = AtumCache::get_transient( $transient_key, TRUE );
 
-		if ( empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
-			return FALSE; // Cache has expired.
-		}
-
-		return json_decode( $cache['value'] );
+		return FALSE !== $transient ? json_decode( $transient ) : $transient;
 
 	}
 
 	/**
-	 * Save the addon's version info in cache
+	 * Store the addon's version info in a transient to minimize the number of API requests
 	 *
 	 * @since 1.2.0
 	 *
 	 * @param string $value
-	 * @param string $cache_key
+	 * @param string $transient_key
 	 */
-	public function set_version_info_cache( $value = '', $cache_key = '' ) {
+	public function set_version_info_transient( $value = '', $transient_key = '' ) {
 
-		if ( empty( $cache_key ) ) {
-			$cache_key = $this->cache_key;
+		if ( empty( $transient_key ) ) {
+			$transient_key = $this->transient_key;
 		}
 
-		$data = array(
-			'timeout' => strtotime( '+3 hours', current_time( 'timestamp' ) ),
-			'value'   => wp_json_encode( $value ),
-		);
-
-		update_option( $cache_key, $data );
+		// Set the transient to expire on 3 hours.
+		AtumCache::set_transient( $transient_key, wp_json_encode( $value ), 3 * HOUR_IN_SECONDS, TRUE );
 
 	}
 
