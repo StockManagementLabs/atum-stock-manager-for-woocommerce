@@ -55,12 +55,22 @@
 				success   : function(response) {
 					
 					if (response.success === true && ! response.data.hide_marketing_popup) {
+						var $descriptionColor    = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.description.text_color + ';' : '',
+						    $descriptionFontSize = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.description.text_size + ';' : '',
+						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text_align:' + response.data.marketing_popup.description.text_align + ';' : '',
+						    $description         = '<p style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + '">' + response.data.marketing_popup.description.text + '</p>',
+						    $titleColor          = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.title.text_color + ';' : '',
+						    $titleFontSize       = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.title.text_size + ';' : '',
+						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text_align:' + response.data.marketing_popup.title.text_align + ';' : '',
+						    $title               = '<h1 style="' + $titleColor + $titleFontSize + $titleAlign + '">' + response.data.marketing_popup.title.text + '</h1>';
+						
 						swal({
 							customClass       : 'marketing-popup',
+							title             : $title,
 							background        : response.data.marketing_popup.background,
 							showCloseButton   : true,
 							showConfirmButton : false,
-							html              : response.data.marketing_popup.description.text,
+							html              : $description,
 							imageUrl          : response.data.marketing_popup.image,
 							onClose           : self.hideMarketingPopup(),
 						}).catch(swal.noop);
@@ -73,12 +83,6 @@
 									window.open(response.data.marketing_popup.url, '_blank');
 								});
 						}
-						
-						// Change style text description
-						$('.marketing-popup .swal2-content')
-							.css('color',response.data.marketing_popup.description.text_color)
-							.css('font-size',response.data.marketing_popup.description.text_size)
-							.css('text-align',response.data.marketing_popup.description.text_align);
 					}
 				},
 			});

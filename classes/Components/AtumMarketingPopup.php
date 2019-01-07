@@ -24,10 +24,17 @@ class AtumMarketingPopup {
 	 *
 	 * @var object
 	 */
+	protected $title = [];
+
+	/**
+	 * The marketing popup description
+	 *
+	 * @var object
+	 */
 	protected $description = [];
 
 	/**
-	 * The marketing popup title
+	 * The marketing popup image
 	 *
 	 * @var string
 	 */
@@ -89,6 +96,7 @@ class AtumMarketingPopup {
 
 				$this->background    = $background_data->background_color . ' ' . $background_data->background_image . ' ' . $background_data->background_position . '/100% 100% ' . $background_data->background_repeat;
 				$this->image         = $marketing_popup->image;
+				$this->title         = $marketing_popup->title;
 				$this->description   = $marketing_popup->description;
 				$this->url           = $marketing_popup->url;
 				$this->transient_key = $marketing_popup->transient_key;
@@ -119,6 +127,18 @@ class AtumMarketingPopup {
 		// Call marketing popup info.
 		return wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );
 
+	}
+
+	/**
+	 * Getter for the title
+	 *
+	 * @since 1.5.2
+	 *
+	 * @return object
+	 */
+	public function get_title() {
+
+		return $this->title;
 	}
 
 	/**

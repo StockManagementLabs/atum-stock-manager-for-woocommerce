@@ -2229,16 +2229,20 @@ final class Ajax {
 	 */
 	public function get_marketing_popup_info() {
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
-		$marketing_popup = new AtumMarketingPopup();
+		$marketing_popup      = new AtumMarketingPopup();
+		$hide_marketing_popup = TRUE;
 
 		if ( $marketing_popup ) {
-			// Get if marketing popup is hide from cache.
-			$hide_marketing_popup = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+			if ( ! empty( $marketing_popup->get_transient_key() ) ) {
+				// Get if marketing popup is hide from cache.
+				$hide_marketing_popup = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+			}
 
 			if ( ! $hide_marketing_popup ) {
 
 				$marketing_popup = [
 					'background'  => $marketing_popup->get_background(),
+					'title'       => $marketing_popup->get_title(),
 					'description' => $marketing_popup->get_description(),
 					'image'       => $marketing_popup->get_image(),
 					'url'         => $marketing_popup->get_url(),
