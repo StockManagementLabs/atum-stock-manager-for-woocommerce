@@ -15,8 +15,10 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
+use Atum\Components\AtumMarketingPopup;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
@@ -141,6 +143,12 @@ final class Ajax {
 
 		// Change sticky columns settting.
 		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
+
+		// Get marketing popup info.
+		add_action( 'wp_ajax_atum_get_marketing_popup_info', array( $this, 'get_marketing_popup_info' ) );
+
+		// Hide marketing popup.
+		add_action( 'wp_ajax_atum_hide_marketing_popup', array( $this, 'hide_marketing_popup' ) );
 
 	}
 
@@ -2207,6 +2215,67 @@ final class Ajax {
 		$key   = 'sticky-columns' === $_POST['feature'] ? 'enabled_sc_sticky_columns' : 'enabled_sc_sticky_header';
 
 		Helpers::set_atum_user_meta( $key, $value );
+
+		wp_die();
+
+	}
+
+	/**
+	 * Get marketing popup info
+	 *
+	 * @package ATUM Marketing Popup
+	 *
+	 * @since 1.5.2
+	 */
+	public function get_marketing_popup_info() {
+		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
+		$marketing_popup      = new AtumMarketingPopup();
+		$hide_marketing_popup = TRUE;
+
+		if ( $marketing_popup ) {
+			if ( ! empty( $marketing_popup->get_transient_key() ) ) {
+				// Get if marketing popup is hide from cache.
+				$hide_marketing_popup = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+			}
+
+			if ( ! $hide_marketing_popup ) {
+
+				$marketing_popup = [
+					'background'  => $marketing_popup->get_background(),
+					'title'       => $marketing_popup->get_title(),
+					'description' => $marketing_popup->get_description(),
+					'image'       => $marketing_popup->get_image(),
+					'url'         => $marketing_popup->get_url(),
+				];
+
+				// Send marketing popup content.
+				wp_send_json_success( compact( 'marketing_popup' ) );
+			}
+
+			// Send hide marketing poup true.
+			wp_send_json_success( compact( 'hide_marketing_popup' ) );
+		}
+
+		wp_die();
+
+	}
+
+	/**
+	 * Hide marketing popup
+	 *
+	 * @package ATUM Marketing Popup
+	 *
+	 * @since 1.5.2
+	 */
+	public function hide_marketing_popup() {
+
+		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
+		$marketing_popup = new AtumMarketingPopup();
+
+		if ( $marketing_popup ) {
+			$transient_key = $marketing_popup->get_transient_key();
+			AtumCache::set_transient( $transient_key, TRUE, 0, TRUE );
+		}
 
 		wp_die();
 

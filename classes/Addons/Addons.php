@@ -164,12 +164,24 @@ class Addons {
 	public function load_addons_page() {
 
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2' ), ATUM_VERSION );
+		wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION );
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 		Helpers::maybe_es6_promise();
-		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+
+		/*
+		 * ATUM marketing popup script
+		 */
+		$marketing_popup_vars = array(
+			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
+		);
+
+		wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup{$min}.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+		wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+
+		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
