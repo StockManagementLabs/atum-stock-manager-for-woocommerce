@@ -13,6 +13,7 @@
 namespace Atum\Addons;
 
 use Atum\Components\AtumCache;
+use Atum\Inc\Helpers;
 
 
 defined( 'ABSPATH' ) || die;
@@ -96,7 +97,7 @@ class Updater {
 		$this->version       = $api_data['version'];
 		$this->wp_override   = isset( $api_data['wp_override'] ) ? (bool) $api_data['wp_override'] : FALSE;
 		$this->beta          = ! empty( $this->api_data['beta'] ) ? TRUE : FALSE;
-		$this->transient_key = AtumCache::get_transient_key( $this->slug . '-updater', [ $this->api_data['license'], $this->beta ] );
+		$this->transient_key = AtumCache::get_transient_key( 'updater_' . $this->slug, [ $this->api_data['license'], $this->beta ] );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -159,10 +160,13 @@ class Updater {
 		$version_info = $this->get_version_info_transient();
 
 		if ( FALSE === $version_info ) {
+
 			$version_info = $this->api_request( array(
 				'slug' => $this->slug,
 				'beta' => $this->beta,
 			) );
+
+			$version_info->plugin = "$this->slug/$this->slug.php";
 
 			$this->set_version_info_transient( $version_info );
 
@@ -332,10 +336,10 @@ class Updater {
 			),
 		);
 
-		$cache_key = ATUM_PREFIX . 'api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$transient_key = AtumCache::get_transient_key( 'addons_api_request_' . $this->slug, [ $this->api_data['license'], $this->beta ] );
 
 		// Get the transient where we store the api request for this plugin for 24 hours.
-		$api_request_transient = $this->get_version_info_transient( $cache_key );
+		$api_request_transient = $this->get_version_info_transient( $transient_key );
 
 		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
 		if ( empty( $api_request_transient ) ) {
@@ -343,7 +347,7 @@ class Updater {
 			$api_response = $this->api_request( $to_send );
 
 			// Expires in 3 hours.
-			$this->set_version_info_transient( $api_response, $cache_key );
+			$this->set_version_info_transient( $api_response, $transient_key );
 
 			if ( FALSE !== $api_response ) {
 				$_data = $api_response;
@@ -463,10 +467,10 @@ class Updater {
 			wp_die( esc_html__( 'You do not have permission to install plugin updates', ATUM_TEXT_DOMAIN ), esc_html__( 'Error', ATUM_TEXT_DOMAIN ), array( 'response' => 403 ) );
 		}
 
-		$data         = $edd_plugin_data[ $_REQUEST['slug'] ];
-		$beta         = ! empty( $data['beta'] ) ? TRUE : FALSE;
-		$cache_key    = AtumCache::get_transient_key( 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_version_info', [ $beta ] );
-		$version_info = $this->get_version_info_transient( $cache_key );
+		$data          = $edd_plugin_data[ $_REQUEST['slug'] ];
+		$beta          = ! empty( $data['beta'] ) ? TRUE : FALSE;
+		$transient_key = AtumCache::get_transient_key( 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_version_info', [ $beta ] );
+		$version_info  = $this->get_version_info_transient( $transient_key );
 
 		if ( FALSE === $version_info ) {
 
@@ -490,7 +494,7 @@ class Updater {
 				}
 			}
 
-			$this->set_version_info_transient( $version_info, $cache_key );
+			$this->set_version_info_transient( $version_info, $transient_key );
 
 		}
 

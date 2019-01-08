@@ -568,7 +568,7 @@ class Addons {
 		$upgrader  = new \WP_Upgrader( $skin );
 		$plugin    = "$addon_slug/$addon_slug.php";
 		$installed = Helpers::is_plugin_installed( $addon_slug );
-		$activate  = ( $installed ) ? ! is_plugin_active( $plugin ) : FALSE;
+		$activate  = $installed ? ! is_plugin_active( $plugin ) : FALSE;
 
 		// Install this new addon.
 		if ( ! $installed ) {
