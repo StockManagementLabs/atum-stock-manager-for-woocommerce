@@ -852,7 +852,7 @@ abstract class AtumOrderPostType {
 
 			// Sweet Alert script.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
-
+			$min = ! ATUM_DEBUG ? '.min' : '';
 			/*
 			 * ATUM marketing popup script
 			 */
@@ -860,7 +860,7 @@ abstract class AtumOrderPostType {
 				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 			);
 
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/atum.marketing.popup.js', array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
 			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {

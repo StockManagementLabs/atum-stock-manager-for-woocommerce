@@ -57,32 +57,47 @@
 					if (response.success === true && response.data.show_marketing_popup) {
 						var $descriptionColor    = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.description.text_color + ';' : '',
 						    $descriptionFontSize = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.description.text_size + ';' : '',
-						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text_align:' + response.data.marketing_popup.description.text_align + ';' : '',
-						    $description         = '<p style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + '">' + response.data.marketing_popup.description.text + '</p>',
+						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.description.text_align + ';' : '',
+						    $descriptionPadding  = response.data.marketing_popup.description.padding ? 'padding:' + response.data.marketing_popup.description.padding + ';' : '',
+						    $description         = '<p style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
 						    $titleColor          = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.title.text_color + ';' : '',
 						    $titleFontSize       = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.title.text_size + ';' : '',
-						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text_align:' + response.data.marketing_popup.title.text_align + ';' : '',
-						    $title               = '<h1 style="' + $titleColor + $titleFontSize + $titleAlign + '">' + response.data.marketing_popup.title.text + '</h1>';
+						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.title.text_align + ';' : '',
+						    $title               = '<h1 style="' + $titleColor + $titleFontSize + $titleAlign + '">' + response.data.marketing_popup.title.text + '</h1>',
+						    $buttonsArray        = response.data.marketing_popup.buttons,
+						    $buttons             = '',
+						    $imageTopLeft        = response.data.marketing_popup.images.top_left,
+						    $logo                = '<img class="mp-logo" src="' + response.data.marketing_popup.images.logo + '">';
+						
+						// Add buttons
+						if ( $buttonsArray.length > 0 ) {
+							$buttonsArray.forEach(function (button) {
+								$buttons += '<button data-url="' + button.url + '" class="' + button.class + ' popup-button" style="' + button.css + '">' + button.text + '</button>'
+							});
+						}
 						
 						swal({
+							width             : 520,
+							heightAuto        : false,
+							padding           : null,
 							customClass       : 'marketing-popup',
 							title             : $title,
 							background        : response.data.marketing_popup.background,
 							showCloseButton   : true,
 							showConfirmButton : false,
-							html              : $description,
-							imageUrl          : response.data.marketing_popup.image,
-							onClose           : self.hideMarketingPopup(),
+							html              : $logo + $description + $buttons,
+							imageUrl          : $imageTopLeft,
 						}).catch(swal.noop);
 						
-						// Add URL to popup if exist
-						if ( response.data.marketing_popup.url ) {
-							$('.marketing-popup .swal2-image')
-								.css('cursor','pointer')
-								.on('click', function () {
-									window.open(response.data.marketing_popup.url, '_blank');
-								});
-						}
+						// Redirect to button url
+						$('.popup-button').on('click', function () {
+							window.open($(this).data('url'), '_blank');
+						});
+						
+						// Hide popup when click un close button for this user
+						$('.marketing-popup .swal2-close').on('click',function () {
+							self.hideMarketingPopup();
+						});
 					}
 				},
 			});

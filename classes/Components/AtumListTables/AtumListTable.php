@@ -3830,6 +3830,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Dragscroll.
 		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
+		$min = ! ATUM_DEBUG ? '.min' : '';
 		/*
 		 * ATUM marketing popup
 		 */
@@ -3837,7 +3838,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 		);
 		wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-		wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/atum.marketing.popup.js', array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
 		wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 		Helpers::maybe_es6_promise();
