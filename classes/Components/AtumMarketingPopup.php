@@ -34,18 +34,18 @@ class AtumMarketingPopup {
 	protected $description = [];
 
 	/**
-	 * The marketing popup image
+	 * The marketing popup buttons
 	 *
-	 * @var string
+	 * @var array
 	 */
-	protected $image = '';
+	protected $buttons = [];
 
 	/**
-	 * The marketing popup url
+	 * The marketing popup images
 	 *
-	 * @var string
+	 * @var object
 	 */
-	protected $url = '';
+	protected $images = '';
 
 	/**
 	 * The marketing popup background
@@ -94,11 +94,11 @@ class AtumMarketingPopup {
 			if ( $marketing_popup ) {
 				$background_data = $marketing_popup->background;
 
-				$this->background    = $background_data->background_color . ' ' . $background_data->background_image . ' ' . $background_data->background_position . '/100% 100% ' . $background_data->background_repeat;
-				$this->image         = $marketing_popup->image;
+				$this->background    = $background_data->background_color . ' ' . $background_data->background_image . ' ' . $background_data->background_position . '/' . $background_data->background_size . ' ' . $background_data->background_repeat;
+				$this->images        = $marketing_popup->images;
 				$this->title         = $marketing_popup->title;
 				$this->description   = $marketing_popup->description;
-				$this->url           = $marketing_popup->url;
+				$this->buttons       = $marketing_popup->buttons;
 				$this->transient_key = $marketing_popup->transient_key;
 			}
 		}
@@ -154,27 +154,27 @@ class AtumMarketingPopup {
 	}
 
 	/**
-	 * Getter for the image
+	 * Getter for the buttons
 	 *
 	 * @since 1.5.2
 	 *
-	 * @return string
+	 * @return object
 	 */
-	public function get_image() {
+	public function get_buttons() {
 
-		return $this->image;
+		return $this->buttons;
 	}
 
 	/**
-	 * Getter for the url
+	 * Getter for the images
 	 *
 	 * @since 1.5.2
 	 *
 	 * @return string
 	 */
-	public function get_url() {
+	public function get_images() {
 
-		return $this->url;
+		return $this->images;
 	}
 
 	/**
