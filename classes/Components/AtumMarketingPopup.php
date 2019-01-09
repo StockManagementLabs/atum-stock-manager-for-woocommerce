@@ -64,7 +64,7 @@ class AtumMarketingPopup {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const MARKETING_POPUP_STORE_URL = 'https://www.stockmanagementlabs.com/';
+	const MARKETING_POPUP_STORE_URL = 'http://stockmanagementlabs.loc/';
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -89,18 +89,35 @@ class AtumMarketingPopup {
 		$marketing_popup = $this->get_marketing_popup_content();
 
 		if ( ! is_wp_error( $marketing_popup ) ) {
+
 			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
 
 			if ( $marketing_popup ) {
-				$background_data = $marketing_popup->background;
 
-				$this->background    = $background_data->background_color . ' ' . $background_data->background_image . ' ' . $background_data->background_position . '/' . $background_data->background_size . ' ' . $background_data->background_repeat;
-				$this->images        = $marketing_popup->images;
-				$this->title         = $marketing_popup->title;
-				$this->description   = $marketing_popup->description;
-				$this->buttons       = $marketing_popup->buttons;
-				$this->transient_key = $marketing_popup->transient_key;
+				// Check if background params exist.
+				$background_data = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
+
+				if ( ! empty( $background_data ) ) {
+
+					$background_color    = isset( $background_data->background_color ) ? $background_data->background_color : '';
+					$background_image    = isset( $background_data->background_image ) ? $background_data->background_image : '';
+					$background_position = isset( $background_data->background_position ) ? $background_data->background_position : '';
+					$background_size     = isset( $background_data->background_size ) ? $background_data->background_size : '';
+					$background_repeat   = isset( $background_data->background_repeat ) ? $background_data->background_repeat : '';
+
+					$this->background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
+
+				}
+
+				// Add attributes to marketing popup.
+				$this->images        = isset( $marketing_popup->images ) ? $marketing_popup->images : [];
+				$this->title         = isset( $marketing_popup->title ) ? $marketing_popup->title : '';
+				$this->description   = isset( $marketing_popup->description ) ? $marketing_popup->description : [];
+				$this->buttons       = isset( $marketing_popup->buttons ) ? $marketing_popup->buttons : [];
+				$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
+
 			}
+
 		}
 
 	}
