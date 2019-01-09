@@ -40,23 +40,23 @@
   content: "";
 }
 
-.atmi-wc-downloadable:before {
+.atmi-wc-downloadable:before, .atmi-downloadable:before {
   content: "";
 }
 
-.atmi-wc-grouped:before {
+.atmi-wc-grouped:before, .atmi-grouped:before {
   content: "";
 }
 
-.atmi-wc-simple:before {
+.atmi-wc-simple:before, .atmi-simple:before {
   content: "";
 }
 
-.atmi-wc-variable:before {
+.atmi-wc-variable:before, .atmi-variable:before {
   content: "";
 }
 
-.atmi-wc-virtual:before {
+.atmi-wc-virtual:before, .atmi-virtual:before {
   content: "";
 }
 
