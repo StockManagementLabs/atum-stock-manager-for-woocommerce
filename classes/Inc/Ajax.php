@@ -2235,7 +2235,7 @@ final class Ajax {
 		if ( $marketing_popup ) {
 			if ( ! empty( $marketing_popup->get_transient_key() ) ) {
 				// Get if marketing popup is hide from transient.
-				$marketing_popup_state = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+				$marketing_popup_state = AtumCache::get_transient( 'atum-marketing-popup-' . $marketing_popup->get_transient_key(), TRUE );
 				if ( $marketing_popup_state ) {
 					$show_marketing_popup = ! $marketing_popup_state['show'] && in_array( get_current_user_id(), $marketing_popup_state['user_ids'] ) ? FALSE : TRUE;
 				}
@@ -2279,7 +2279,7 @@ final class Ajax {
 			$current_user_id = get_current_user_id();
 			$transient_key   = $marketing_popup->get_transient_key();
 			// Get saved transient.
-			$saved_transient = AtumCache::get_transient( $marketing_popup->get_transient_key(), TRUE );
+			$saved_transient = AtumCache::get_transient( 'atum-marketing-popup-' . $marketing_popup->get_transient_key(), TRUE );
 
 			// Check if user is in array for hide the popup.
 			$transient_user_ids = [];
@@ -2290,6 +2290,17 @@ final class Ajax {
 				}
 			}
 			else {
+				// Delete old transients.
+				global $wpdb;
+
+				$sql = '
+					DELETE
+					FROM wp_options
+					WHERE option_name LIKE "%atum-marketing-popup%";
+				';
+
+				$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+
 				array_push( $transient_user_ids, $current_user_id );
 			}
 
@@ -2298,7 +2309,7 @@ final class Ajax {
 				'show'     => FALSE,
 				'user_ids' => $transient_user_ids,
 			];
-			AtumCache::set_transient( $transient_key, $marketing_popup_state, 0, TRUE );
+			AtumCache::set_transient( 'atum-marketing-popup-' . $transient_key, $marketing_popup_state, 0, TRUE );
 		}
 
 		wp_die();
