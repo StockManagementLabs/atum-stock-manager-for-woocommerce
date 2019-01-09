@@ -700,6 +700,10 @@ fieldset:disabled a.btn {
   border-radius: 16px;
 }
 
+.btn-mk-popup {
+  border-radius: 16px;
+}
+
 .btn-link {
   font-weight: 400;
   color: #0073AA;
@@ -1671,9 +1675,17 @@ input[type="button"].btn-block {
   }
 }
 
+.swal2-container .marketing-popup {
+  height: 433px;
+  padding: 10px;
+}
+
 .swal2-container .marketing-popup .swal2-image {
-  width: 250px;
+  width: 143px;
   height: auto;
+  position: absolute;
+  top: 0;
+  margin: 10px 0;
 }
 
 .swal2-container .marketing-popup .swal2-content {
@@ -1683,7 +1695,20 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
+.swal2-container .marketing-popup .swal2-content p {
+  margin: 0;
+}
+
+.swal2-container .marketing-popup .swal2-content button {
+  margin: 0 5px;
+}
+
 .swal2-container .marketing-popup .swal2-confirm {
   margin-right: 10px;
+}
+
+.swal2-container .marketing-popup .mp-logo {
+  width: 250px;
+  height: auto;
 }
 /*# sourceMappingURL=atum-marketing-popup.css.map */

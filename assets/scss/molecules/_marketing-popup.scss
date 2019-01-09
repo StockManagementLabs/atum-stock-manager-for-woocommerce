@@ -2,9 +2,15 @@
 	
 	.marketing-popup {
 		
+		height: 433px;
+		padding: 10px;
+		
 		.swal2-image {
-			width: 250px;
+			width: 143px;
 			height: auto;
+			position: absolute;
+			top: 0;
+			margin: 10px 0;
 		}
 		
 		.swal2-content {
@@ -12,12 +18,25 @@
 			line-height: 1.29;
 			text-align: center;
 			color: $gray-500;
+			
+			p {
+				margin: 0;
+			}
+			
+			button {
+				margin: 0 5px;
+			}
+			
 		}
 		
 		.swal2-confirm {
 			margin-right: 10px;
 		}
 		
+		.mp-logo {
+			width: 250px;
+			height: auto;
+		}
 	}
 	
 }
