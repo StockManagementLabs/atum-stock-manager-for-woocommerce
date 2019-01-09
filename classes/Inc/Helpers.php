@@ -1655,8 +1655,10 @@ final class Helpers {
 						// Update price if on sale.
 						if ( $product->is_on_sale( 'edit' ) ) {
 							$product->set_price( $sale_price );
-							$date_from_str = $date_from->getTimestamp();
-							$date_to_str   = $date_to->getTimestamp();
+							if ( $date_to ) {
+								$date_from_str = $date_from->getTimestamp();
+								$date_to_str   = $date_to->getTimestamp();
+							}
 						}
 						else {
 							
