@@ -1034,3 +1034,24 @@
 		content: $atmi-wheelchair;
 	}
 }
+
+
+//
+// Aliases
+// --------
+
+.atmi-grouped {
+	@extend .atmi-wc-grouped;
+}
+.atmi-downloadable {
+	@extend .atmi-wc-downloadable
+}
+.atmi-simple {
+	@extend .atmi-wc-simple;
+}
+.atmi-variable {
+	@extend .atmi-wc-variable;
+}
+.atmi-virtual {
+	@extend .atmi-wc-virtual;
+}
