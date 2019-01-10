@@ -78,14 +78,12 @@
 						
 						swal({
 							width             : 520,
-							heightAuto        : false,
 							padding           : null,
 							customClass       : 'marketing-popup',
-							title             : $title,
 							background        : response.data.marketing_popup.background,
 							showCloseButton   : true,
 							showConfirmButton : false,
-							html              : $logo + $description + $buttons,
+							html              : $logo + $title + $description + $buttons,
 							imageUrl          : $imageTopLeft,
 						}).catch(swal.noop);
 						
