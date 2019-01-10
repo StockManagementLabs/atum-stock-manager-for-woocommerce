@@ -4,7 +4,7 @@
 
 .atum-widget.atum_stock_control_widget {
 	.widget-body {
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			padding-top: 0;
 			padding-bottom: 0;
 		}
@@ -15,7 +15,7 @@
 	display: flex;
 	padding-top: 5px;
 	
-	@media all and (max-width: $screen-sm-min) {
+	@include tablet-max {
 		padding-top: $grid-gutter-width/2;
 	}
 	
@@ -23,7 +23,7 @@
 		width: 50%;
 		padding: 10px $grid-gutter-width/2;
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			padding: $grid-gutter-width/2;
 		}
 	}
@@ -66,11 +66,11 @@
 		font-size: 35px;
 		font-weight: bold;
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			float: right;
 		}
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			font-size: 24px;
 			line-height: 0;
 		}
@@ -82,11 +82,11 @@
 		font-weight: 100;
 		text-transform: uppercase;
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			float: left;
 		}
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			font-size: 12px;
 			line-height: 1;
 		}
@@ -97,19 +97,19 @@
 		border-bottom: none;
 		margin: $grid-gutter-width/2 0;
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			clear: both;
 			padding: $grid-gutter-width/3 0;
 			border-top: none;
 			border-bottom: 1px solid transparentize($black, 0.9);
 		}
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			padding: 3px 0;
 		}
 	}
 	
-	@media all and (max-width: $screen-xs-min) {
+	@include mobile-max {
 		flex-wrap: wrap;
 		
 		> div {

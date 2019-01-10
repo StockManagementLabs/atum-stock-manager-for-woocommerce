@@ -1672,7 +1672,6 @@ input[type="button"].btn-block {
 }
 
 #wpfooter {
-  position: inherit;
   padding-top: 0;
   display: none;
 }
@@ -1766,13 +1765,13 @@ input[type="button"].btn-block {
   margin-right: 10px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   #wpfooter .footer-box .footer-atum-buttons {
     display: none;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   #wpfooter .footer-box {
     padding: 14px 23px;
   }
@@ -1782,7 +1781,7 @@ input[type="button"].btn-block {
   display: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   #wpfooter {
     display: block;
     margin-left: 0 !important;
@@ -2116,7 +2115,7 @@ input[type="button"].btn-block {
   }
 }
 
-@media only screen and (max-width: 780px) {
+@media all and (max-width: 782px) {
   .atum-addons .theme .button {
     margin-bottom: 0;
   }

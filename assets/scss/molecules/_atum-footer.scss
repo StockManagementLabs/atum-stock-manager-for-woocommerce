@@ -1,19 +1,12 @@
+//
+// ATUM FOOTER
+//------------
+
 #wpfooter {
-	position: inherit;
 	padding-top: 0;
 	display: none;
 	
 	.footer-box {
-		&.no-style {
-			background-image: none;
-			background-color: transparent;
-			box-shadow: none;
-			padding: 0;
-			height: auto;
-			.footer-atum-logo, .footer-atum-buttons, #footer-left, .clear {
-				display: none;
-			}
-		}
 		height: 90px;
 		background: $white url("#{$img-path}stock-central/bg-footer.png") no-repeat center 81%;
 		background-size: cover;
@@ -23,6 +16,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		
+		&.no-style {
+			background-image: none;
+			background-color: transparent;
+			box-shadow: none;
+			padding: 0;
+			height: auto;
+			
+			.footer-atum-logo, .footer-atum-buttons, #footer-left, .clear {
+				display: none;
+			}
+		}
+		
 		
 		.footer-atum-logo {
 			display: flex;
@@ -70,12 +76,13 @@
 				}
 			}
 			
-			@media screen and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				display: none;
 			}
+			
 		}
 		
-		@media screen and (max-width: $screen-xs) {
+		@include mobile-max{
 			padding: 14px 23px;
 		}
 		
@@ -85,7 +92,7 @@
 		display: none;
 	}
 	
-	@media screen and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp{
 		display: block;
 		margin-left: 0 !important;
 	}

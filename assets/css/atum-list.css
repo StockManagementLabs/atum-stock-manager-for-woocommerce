@@ -3296,7 +3296,7 @@ span.easytree-expander:hover {
           box-shadow: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector {
     font-size: 13px;
   }
@@ -3323,13 +3323,13 @@ span.easytree-expander:hover {
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links, #posts-filter .pagination-links {
     font-size: 13px;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .pagination-links .tablenav-paging-text, #posts-filter .pagination-links .tablenav-paging-text {
     width: auto;
     float: none;
@@ -3490,7 +3490,6 @@ span.easytree-expander:hover {
 }
 
 #wpfooter {
-  position: inherit;
   padding-top: 0;
   display: none;
 }
@@ -3584,13 +3583,13 @@ span.easytree-expander:hover {
   margin-right: 10px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   #wpfooter .footer-box .footer-atum-buttons {
     display: none;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   #wpfooter .footer-box {
     padding: 14px 23px;
   }
@@ -3600,7 +3599,7 @@ span.easytree-expander:hover {
   display: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   #wpfooter {
     display: block;
     margin-left: 0 !important;
@@ -4213,7 +4212,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 #wpbody-content {
-  padding-bottom: 0;
+  padding-bottom: 100px;
 }
 
 .wrap h1.wp-heading-inline {
@@ -5104,10 +5103,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-@media all and (max-width: 1200px) {
-  .tablenav.top .tablenav-pages-container .tablenav-pages .displaying-num {
-    display: inline-block;
-  }
+.tablenav.top .tablenav-pages-container .tablenav-pages .displaying-num {
+  display: inline-block;
 }
 
 @media all and (max-width: 480px) {
@@ -5132,7 +5129,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .tablenav.top .filters-container-box.not-pagination {
     width: inherit;
   }
@@ -5157,7 +5154,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .tablenav.top .filters-container-box {
     width: inherit;
   }
@@ -5170,7 +5167,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .tablenav.top .filters-container-box .overflow-opacity-effect-right {
     display: none !important;
   }
@@ -5334,10 +5331,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-@media all and (max-width: 1200px) {
-  .tablenav.bottom .tablenav-pages .displaying-num {
-    display: contents;
-  }
+.tablenav.bottom .tablenav-pages .displaying-num {
+  display: contents;
 }
 
 @media all and (max-width: 480px) {
@@ -5754,21 +5749,21 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   font-size: 12px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .actions.bulkactions button {
     font-size: 14px;
     height: 35px;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .actions.bulkactions button {
     width: 100%;
     margin: 10px 0;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .actions.bulkactions {
     width: 100%;
     float: none;
@@ -5785,7 +5780,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   float: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
     height: 35px;
   }
@@ -5795,7 +5790,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
     width: 100% !important;
     margin: 0;
@@ -5823,7 +5818,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   font-size: 12px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .actions input[type=submit] {
     font-size: 14px;
     height: 35px;
@@ -5862,7 +5857,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
           box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper ul.subsubsub {
     font-size: 16px;
     float: none;
@@ -5900,17 +5895,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
   .atum-list-wrapper .tablenav .tablenav-pages {
     width: auto;
-    margin: 0;
-  }
-}
-
-@media screen and (max-width: 782px) {
-  .atum-list-wrapper .tablenav .tablenav-pages {
     margin: 0 0 0 auto;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .tablenav .tablenav-pages {
     width: 100%;
     margin: 0;
@@ -6731,7 +6720,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   padding: 6px 20px !important;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   table.atum-list-table th, table.atum-list-table td, .floatThead-container th, .floatThead-container td, .inbound-stock-list th, .inbound-stock-list td, table.wp-list-table th, table.wp-list-table td {
     display: table-cell !important;
     padding: 6px 5px !important;

@@ -301,7 +301,7 @@
 			@include loader(18px, $primary, 3px, 1s);
 		}
 		
-		@media only screen and (max-width: 780px) {
+		@include tablet-max-wp {
 			
 			.button {
 				margin-bottom: 0;
