@@ -19,6 +19,12 @@
 			text-align: center;
 			color: $gray-500;
 			
+			h1 {
+				font-weight: 400;
+				font-size: 34px;
+				margin: 0 0 10px;
+			}
+			
 			p {
 				margin: 0;
 			}
@@ -34,7 +40,7 @@
 		}
 		
 		.mp-logo {
-			width: 250px;
+			width: 150px;
 			height: auto;
 		}
 	}
