@@ -338,13 +338,13 @@ class Suppliers {
 	 */
 	public function save_meta_boxes( $supplier_id ) {
 
-		if ( ! isset( $_POST['supplier_details'], $_POST['billing_information'], $_POST['default_settings'] ) ) { // WPCS: CSRF ok.
+		if ( ! isset( $_POST['supplier_details'], $_POST['billing_information'], $_POST['default_settings'] ) ) {
 			return;
 		}
 
 		foreach ( [ 'supplier_details', 'billing_information', 'default_settings' ] as $metabox_key ) {
 
-			foreach ( array_map( 'esc_attr', $_POST[ $metabox_key ] ) as $meta_key => $meta_value ) { // WPCS: CSRF ok.
+			foreach ( array_map( 'esc_attr', $_POST[ $metabox_key ] ) as $meta_key => $meta_value ) {
 
 				// The meta key names will follow the format: _supplier_details_name.
 				if ( '' === $meta_value ) {

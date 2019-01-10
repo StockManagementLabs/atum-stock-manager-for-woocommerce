@@ -232,7 +232,7 @@ class ListTable extends AtumListTable {
 		parent::__construct( $args );
 
 		// Filtering with extra filters.
-		if ( ! empty( $_REQUEST['extra_filter'] ) ) { // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['extra_filter'] ) ) {
 			add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 		}
 
@@ -822,7 +822,7 @@ class ListTable extends AtumListTable {
 		}
 
 		global $wpdb;
-		$extra_filter = esc_attr( $_REQUEST['extra_filter'] ); // WPCS: CSRF ok.
+		$extra_filter = esc_attr( $_REQUEST['extra_filter'] );
 		$sorted       = FALSE;
 
 		$extra_filter_transient = AtumCache::get_transient_key( 'list_table_extra_filter', $extra_filter );

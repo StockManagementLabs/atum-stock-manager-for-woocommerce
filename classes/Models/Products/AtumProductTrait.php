@@ -25,20 +25,24 @@ trait AtumProductTrait {
 	 * @var bool
 	 */
 	protected $atum_data = array(
-		'purchase_price'      => '',
-		'supplier_id'         => 0,
-		'supplier_sku'        => '',
-		'atum_controlled'     => FALSE,
-		'out_stock_date'      => NULL,
-		'out_stock_threshold' => '',
-		'inheritable'         => FALSE,
+		'purchase_price'        => '',
+		'supplier_id'           => 0,
+		'supplier_sku'          => '',
+		'atum_controlled'       => FALSE,
+		'out_stock_date'        => NULL,
+		'out_stock_threshold'   => '',
+		'inheritable'           => FALSE,
+		// Extra props (from ATUM add-ons).
+		'minimum_threshold'     => NULL,
+		'available_to_purchase' => NULL,
+		'selling_priority'      => NULL,
 	);
 
 
 	/*
-	|--------------------------------------------------------------------------
-	| Getters
-	|--------------------------------------------------------------------------
+	|--------------------------------------------------
+	| GETTERS
+	|--------------------------------------------------
 	|
 	| Methods for getting data from the product object.
 	*/
@@ -135,10 +139,58 @@ trait AtumProductTrait {
 	}
 
 
+	/****************************************
+	 * EXTRA GETTERS USED BY PREMIUM ADD-ONS
+	 ****************************************/
+
+
+	/**
+	 * Returns the product's minimum threshold prop.
+	 *
+	 * @since   1.5.3
+	 * @package Product Levels
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_minimum_threshold( $context = 'view' ) {
+		return $this->get_prop( 'minimum_threshold', $context );
+	}
+
+	/**
+	 * Returns the product's available to purchase per user prop.
+	 *
+	 * @since   1.5.3
+	 * @package Product Levels
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_available_to_purchase( $context = 'view' ) {
+		return $this->get_prop( 'available_to_purchase', $context );
+	}
+
+	/**
+	 * Returns the product's selling priority prop.
+	 *
+	 * @since   1.5.3
+	 * @package Product Levels
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|null
+	 */
+	public function get_selling_priority( $context = 'view' ) {
+		return $this->get_prop( 'selling_priority', $context );
+	}
+
+
 	/*
-	|--------------------------------------------------------------------------
-	| Setters
-	|--------------------------------------------------------------------------
+	|----------------------------------------------------------------------------
+	| SETTERS
+	|----------------------------------------------------------------------------
 	|
 	| Functions for setting product data. These should not update anything in the
 	| database itself and should only change what is stored in the class object.
@@ -236,6 +288,48 @@ trait AtumProductTrait {
 	public function set_inheritable( $inheritable ) {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );
 	}
+
+
+	/****************************************
+	 * EXTRA SETTERS USED BY PREMIUM ADD-ONS
+	 ****************************************/
+
+	/**
+	 * Set minimum threshold for the current product.
+	 *
+	 * @since   1.5.3
+	 * @package Product Levels
+	 *
+	 * @param int|string $amount Empty string if value not set.
+	 */
+	public function set_minimum_threshold( $amount ) {
+		$this->set_prop( 'minimum_threshold', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	}
+
+	/**
+	 * Set available to purchase per user for the current product.
+	 *
+	 * @since   1.5.3
+	 * @package Product Levels
+	 *
+	 * @param int|string $amount Empty string if value not set.
+	 */
+	public function set_available_to_purchase( $amount ) {
+		$this->set_prop( 'available_to_purchase', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	}
+
+	/**
+	 * Set selling priority for the current product.
+	 *
+	 * @since   1.5.3
+	 * @package Product Levels
+	 *
+	 * @param int|string $amount Empty string if value not set.
+	 */
+	public function set_selling_priority( $amount ) {
+		$this->set_prop( 'selling_priority', NULL === $amount || '' === $amount ? '' : absint( $amount ) );
+	}
+
 
 	/**
 	 * Save the ATUM prodcut data

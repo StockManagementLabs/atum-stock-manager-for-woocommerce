@@ -746,10 +746,10 @@ final class Helpers {
 	 */
 	public static function get_sold_last_days_option() {
 
-		if ( isset( $_REQUEST['sold_last_days'] ) ) { // WPCS: CSRF ok.
+		if ( isset( $_REQUEST['sold_last_days'] ) ) {
 
 			// Sanitize.
-			$value = absint( $_REQUEST['sold_last_days'] ); // WPCS: CSRF ok.
+			$value = absint( $_REQUEST['sold_last_days'] );
 
 			if ( $value > 0 && $value < 31 ) {
 				return $value;

@@ -792,12 +792,12 @@ abstract class AtumOrderPostType {
 		// Check if any status changes happened.
 		foreach ( $statuses as $slug => $name ) {
 
-			if ( isset( $_REQUEST[ 'marked_' . str_replace( ATUM_PREFIX, '', $slug ) ] ) ) { // WPCS: CSRF ok.
+			if ( isset( $_REQUEST[ 'marked_' . str_replace( ATUM_PREFIX, '', $slug ) ] ) ) {
 
-				$number = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0; // WPCS: CSRF ok.
+				$number = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
 				/* translators: the number of changed statuses */
 				$message = sprintf( _n( 'Status changed.', '%s statuses changed.', $number, ATUM_TEXT_DOMAIN ), number_format_i18n( $number ) ); // phpcs:ignore
-				echo '<div class="updated"><p>' . $message . '</p></div>'; // WPCS: XSS ok.
+				echo '<div class="updated"><p>' . $message . '</p></div>';
 
 				break;
 			}
@@ -1014,7 +1014,7 @@ abstract class AtumOrderPostType {
 			return $query;
 		}
 
-		return wp_unslash( $_GET['s'] ); // WPCS: CSRF ok.
+		return wp_unslash( $_GET['s'] );
 
 	}
 
@@ -1066,7 +1066,7 @@ abstract class AtumOrderPostType {
 				'#',
 			),
 			'',
-			wc_clean( $_GET['s'] ) // WPCS: CSRF ok.
+			wc_clean( $_GET['s'] )
 		);
 
 		// Searches on meta data can be slow - this let you choose what fields to search.
@@ -1082,15 +1082,13 @@ abstract class AtumOrderPostType {
 			$atum_order_ids = array_unique( array_merge(
 				$atum_order_ids,
 				$wpdb->get_col(
-					// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQueryWithPlaceholder
-					$wpdb->prepare( "SELECT DISTINCT p1.post_id FROM {$wpdb->postmeta} p1 WHERE p1.meta_value LIKE '%%%s%%'", $wpdb->esc_like( $term ) ) .
+					"SELECT DISTINCT p1.post_id FROM $wpdb->postmeta p1 WHERE p1.meta_value LIKE '%" . $wpdb->esc_like( $term ) . "%'" .
 					" AND p1.meta_key IN ('" . implode( "','", array_map( 'esc_sql', $search_fields ) ) . "')"
 				),
 				$wpdb->get_col(
-					// phpcs:ignore
-					$wpdb->prepare( "SELECT order_id FROM {$wpdb->prefix}" . self::ORDER_ITEMS_TABLE . " WHERE order_item_name LIKE '%%%s%%'", $wpdb->esc_like( $term ) )
+					"SELECT order_id FROM $wpdb->prefix" . self::ORDER_ITEMS_TABLE . " WHERE order_item_name LIKE '%" . $wpdb->esc_like( $term ) . "%'"
 				)
-			) );
+			) ); // WPCS: unprepared SQL ok.
 
 		}
 

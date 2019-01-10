@@ -130,9 +130,9 @@ class Bootstrap {
 			$woo_inventory_page = 'page=wc-settings&tab=products&section=inventory';
 
 			// Special case for when the user is currently changing the stock option.
-			if ( isset( $_POST['_wp_http_referer'] ) && FALSE !== strpos( $_POST['_wp_http_referer'], $woo_inventory_page ) ) { // WPCS: CSRF ok.
+			if ( isset( $_POST['_wp_http_referer'] ) && FALSE !== strpos( $_POST['_wp_http_referer'], $woo_inventory_page ) ) {
 				// It's a checkbox, so it's not sent with the form if unchecked.
-				$display_stock_option_notice = ! isset( $_POST['woocommerce_manage_stock'] ); // WPCS: CSRF ok.
+				$display_stock_option_notice = ! isset( $_POST['woocommerce_manage_stock'] );
 			}
 			else {
 				$manage                      = get_option( 'woocommerce_manage_stock' );
@@ -144,16 +144,16 @@ class Bootstrap {
 				$stock_option_msg = __( "You need to enable WooCommerce 'Manage Stock' option for ATUM plugin to work.", ATUM_TEXT_DOMAIN );
 
 				if (
-					! isset( $_GET['page'] ) || 'wc-settings' !== $_GET['page'] || // WPCS: CSRF ok.
-					! isset( $_GET['tab'] ) || 'products' !== $_GET['tab'] || // WPCS: CSRF ok.
-					! isset( $_GET['section'] ) || 'inventory' !== $_GET['section'] // WPCS: CSRF ok.
+					! isset( $_GET['page'] ) || 'wc-settings' !== $_GET['page'] ||
+					! isset( $_GET['tab'] ) || 'products' !== $_GET['tab'] ||
+					! isset( $_GET['section'] ) || 'inventory' !== $_GET['section']
 				) {
 					$stock_option_msg .= ' ' . sprintf(
 						/* translators: the first one is the WC inventory settings page link and the second is the link closing tag */
-							__( 'Go to %1$sWooCommerce inventory settings%2$s to fix this.', ATUM_TEXT_DOMAIN ),
-							'<a href="' . self_admin_url( "admin.php?$woo_inventory_page" ) . '">',
-							'</a>'
-						);
+						__( 'Go to %1$sWooCommerce inventory settings%2$s to fix this.', ATUM_TEXT_DOMAIN ),
+						'<a href="' . self_admin_url( "admin.php?$woo_inventory_page" ) . '">',
+						'</a>'
+					);
 				}
 
 				throw new AtumException( 'woocommerce_manage_stock_disabled', $stock_option_msg, self::DEPENDENCIES_UNSATISFIED );
