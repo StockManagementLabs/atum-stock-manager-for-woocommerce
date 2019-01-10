@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumWidget;
 use Atum\Inc\Helpers;
 
@@ -181,11 +182,15 @@ class Dashboard {
 		// Load all the available widgets.
 		$this->load_widgets();
 		$user_widgets_layout = self::get_user_widgets_layout();
+
+		// Get Marketing popup content.
+		$marketing_popup = new AtumMarketingPopup();
 		
 		Helpers::load_view( 'dashboard', array_merge( array(
-			'widgets'   => $this->widgets,
-			'layout'    => $user_widgets_layout,
-			'dashboard' => $this,
+			'widgets'          => $this->widgets,
+			'layout'           => $user_widgets_layout,
+			'dashboard'        => $this,
+			'marketing_popup'  => $marketing_popup,
 		), Helpers::get_support_button() ) );
 		
 	}

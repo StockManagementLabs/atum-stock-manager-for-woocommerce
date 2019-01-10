@@ -235,6 +235,51 @@ body.toplevel_page_atum-dashboard {
 				}
 			}
 			
+			&.dash-marketing-banner {
+				width: 100%;
+				min-height: 200px;
+				background-size: cover !important;
+				
+				.image {
+					width: 143px;
+					height: auto;
+					position: absolute;
+					top: 0;
+					left: 0;
+					margin: 10px 10px;
+				}
+				
+				.content {
+					
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					padding: 0 20px 0 160px;
+					min-height: 200px;
+					
+					.content-description {
+						h1 {
+							font-weight: 400;
+							font-size: 34px;
+							margin: 0 0 10px;
+						}
+						
+						h1, p {
+							text-align: left !important;
+							padding-left: 22px;
+						}
+						
+					}
+					
+				}
+				
+				.mp-logo {
+					width: 150px;
+					height: auto;
+				}
+				
+			}
+			
 			&.docs {
 				background-image: url('#{$img-path}dashboard/card-docs-bg.png');
 				
