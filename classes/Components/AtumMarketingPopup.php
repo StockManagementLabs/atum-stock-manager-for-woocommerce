@@ -7,7 +7,7 @@
  * @author         Be Rebel - https://berebel.io
  * @copyright      ©2018 Stock Management Labs™
  *
- * @since          1.5.2
+ * @since          1.5.3
  */
 
 namespace Atum\Components;
@@ -64,7 +64,7 @@ class AtumMarketingPopup {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const MARKETING_POPUP_STORE_URL = 'https://stockmanagementlabs.com/';
+	const MARKETING_POPUP_STORE_URL = 'https://www.stockmanagementlabs.com/';
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -81,7 +81,7 @@ class AtumMarketingPopup {
 	/**
 	 * Singleton constructor
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 */
 	public function __construct() {
 
@@ -149,7 +149,7 @@ class AtumMarketingPopup {
 	/**
 	 * Getter for the title
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 *
 	 * @return object
 	 */
@@ -161,7 +161,7 @@ class AtumMarketingPopup {
 	/**
 	 * Getter for the text
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 *
 	 * @return object
 	 */
@@ -173,7 +173,7 @@ class AtumMarketingPopup {
 	/**
 	 * Getter for the buttons
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 *
 	 * @return object
 	 */
@@ -185,7 +185,7 @@ class AtumMarketingPopup {
 	/**
 	 * Getter for the images
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 *
 	 * @return string
 	 */
@@ -197,7 +197,7 @@ class AtumMarketingPopup {
 	/**
 	 * Getter for the background
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 *
 	 * @return object
 	 */
@@ -210,7 +210,7 @@ class AtumMarketingPopup {
 	/**
 	 * Getter for the transient key
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 *
 	 * @return string
 	 */

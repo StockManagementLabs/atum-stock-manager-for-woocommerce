@@ -1691,6 +1691,12 @@ input[type="button"].btn-block {
   color: #adb5bd;
 }
 
+.swal2-container .marketing-popup .swal2-content h1 {
+  font-weight: 400;
+  font-size: 34px;
+  margin: 0 0 10px;
+}
+
 .swal2-container .marketing-popup .swal2-content p {
   margin: 0;
 }
@@ -1704,7 +1710,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .marketing-popup .mp-logo {
-  width: 250px;
+  width: 150px;
   height: auto;
 }
 /*# sourceMappingURL=atum-marketing-popup.css.map */

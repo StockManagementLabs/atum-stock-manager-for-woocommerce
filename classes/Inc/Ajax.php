@@ -2225,7 +2225,7 @@ final class Ajax {
 	 *
 	 * @package ATUM Marketing Popup
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 */
 	public function get_marketing_popup_info() {
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
@@ -2237,7 +2237,7 @@ final class Ajax {
 				// Get if marketing popup is hide from transient.
 				$marketing_popup_state = AtumCache::get_transient( 'atum-marketing-popup-' . $marketing_popup->get_transient_key(), TRUE );
 				if ( $marketing_popup_state ) {
-					$show_marketing_popup = ! $marketing_popup_state['show'] && in_array( get_current_user_id(), $marketing_popup_state['user_ids'] ) ? FALSE : TRUE;
+					$show_marketing_popup = ! $marketing_popup_state['show'] && isset( $marketing_popup_state['user_ids'] ) && ! empty( $marketing_popup_state['user_ids'] ) && in_array( get_current_user_id(), $marketing_popup_state['user_ids'] ) ? FALSE : TRUE;
 				}
 			}
 
@@ -2268,7 +2268,7 @@ final class Ajax {
 	 *
 	 * @package ATUM Marketing Popup
 	 *
-	 * @since 1.5.2
+	 * @since 1.5.3
 	 */
 	public function marketing_popup_state() {
 
