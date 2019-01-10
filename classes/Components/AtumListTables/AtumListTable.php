@@ -2017,7 +2017,21 @@ abstract class AtumListTable extends \WP_List_Table {
 			remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
-			$posts       = $wp_query->posts;
+			$posts = $wp_query->posts;
+
+			if ( $found_posts > 0 && empty( $posts ) ) {
+				$args['paged']     = 1;
+				$_REQUEST['paged'] = $args['paged'];
+				// Pass through the ATUM query data filter.
+				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
+				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				$wp_query = new \WP_Query( $args );
+				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
+				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+
+				$posts = $wp_query->posts;
+			}
+
 			$product_ids = wp_list_pluck( $posts, 'ID' );
 
 			$this->current_products = $product_ids;
@@ -3777,6 +3791,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			),
 			'column_headers' => $headers,
 			'views'          => $views,
+			'paged'          => isset( $_REQUEST['paged'] ) ? $_REQUEST['paged'] : 0,
 		);
 
 		if ( $this->show_totals ) {

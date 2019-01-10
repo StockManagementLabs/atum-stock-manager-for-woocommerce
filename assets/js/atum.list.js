@@ -1952,6 +1952,14 @@
 						self.setFieldPopover();
 					}
 					
+					// Change page url parameter.
+					if (response.paged > 0) {
+						$.address.parameter(response.paged, self.filterData[response.paged]);
+						var numCurrentParams = $.address.parameterNames().length;
+						this.navigationReady   = true;
+						this.numHashParameters = numCurrentParams;
+					}
+					
 					// Update column headers for sorting
 					if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
 						self.$atumList.find('tr.item-heads').html(response.column_headers);
