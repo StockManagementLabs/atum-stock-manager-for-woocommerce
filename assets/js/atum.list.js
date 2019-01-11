@@ -1954,10 +1954,7 @@
 					
 					// Change page url parameter.
 					if (response.paged > 0) {
-						$.address.parameter(response.paged, self.filterData[response.paged]);
-						var numCurrentParams = $.address.parameterNames().length;
-						this.navigationReady   = true;
-						this.numHashParameters = numCurrentParams;
+						$.address.parameter('paged', response.paged);
 					}
 					
 					// Update column headers for sorting
