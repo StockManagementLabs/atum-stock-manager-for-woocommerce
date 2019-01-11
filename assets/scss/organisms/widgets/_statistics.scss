@@ -13,7 +13,7 @@
 		margin-right: -$grid-gutter-width/2;
 		margin-top: -$grid-gutter-width;
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			display: block;
 		}
 		
@@ -52,13 +52,13 @@
 		justify-content: space-between;
 		margin-bottom: $grid-gutter-width/2;
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			margin-bottom: $grid-gutter-width/2;
 		}
 	}
 	
 	.filter-controls, .chart-type, .chart-legend {
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			&:not(.visible-filter) {
 				display: none;
 			}
@@ -95,7 +95,7 @@
 			}
 		}
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			font-size: 12px;
 			height: 36px;
 			line-height: 34px;
@@ -111,7 +111,7 @@
 			fill: $widget-text;
 			transition: 0.2s ease-in-out;
 			
-			@media all and (max-width: $screen-sm-min) {
+			@include tablet-max {
 				max-width: 25px;
 				max-height: 25px;
 			}
@@ -181,7 +181,7 @@
 				}
 			}
 			
-			@media all and (max-width: $screen-sm-min) {
+			@include tablet-max {
 				padding: 6.5px 22px;
 				
 				label {

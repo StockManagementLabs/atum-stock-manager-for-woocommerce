@@ -361,7 +361,7 @@ class InventoryLogs extends AtumOrderPostType {
 			3  => __( 'Custom field deleted.', ATUM_TEXT_DOMAIN ),
 			4  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
 			/* translators: the revision name */
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Log restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE, // WPCS: CSRF ok.
+			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Log restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE,
 			6  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
 			7  => __( 'Log saved.', ATUM_TEXT_DOMAIN ),
 			8  => __( 'Log submitted.', ATUM_TEXT_DOMAIN ),

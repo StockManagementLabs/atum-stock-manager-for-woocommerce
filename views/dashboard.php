@@ -38,6 +38,39 @@ defined( 'ABSPATH' ) || die;
 		</div>
 	</section>
 
+	<section class="dash-cards owl-carousel owl-theme dash-marketing-banner-container">
+
+		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ); ?>;">
+			<span class="atmi-cross marketing-close"></span>
+			<img src="<?php echo esc_attr( $marketing_popup->get_images()->top_left ); ?>" class="image" alt="">
+			<div class="content">
+				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_images()->logo ); ?>">
+				<div class="content-description">
+					<?php $title = $marketing_popup->get_title(); ?>
+					<?php if ( isset( $title ) ) { ?>
+						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? 'color:' . $title->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? 'font-size:' . $title->text_size . ';' : '' ); ?>;<?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? 'text-align:' . $title->text_align . ';' : '' ); ?>"><?php echo isset( $title->text ) ? $title->text : ''; // WPCS: XSS ok. ?></h1>
+					<?php } ?>
+					<?php $description = $marketing_popup->get_description(); ?>
+					<?php if ( isset( $description ) ) { ?>
+						<p style="<?php echo esc_attr( isset( $description->text_color ) && '' !== $description->text_color ? 'color:' . $description->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $description->text_size ) && '' !== $description->text_size ? 'font-size:' . $description->text_size . ';' : '' ); ?>;<?php echo esc_attr( isset( $description->text_align ) && '' !== $description->text_align ? 'text-align:' . $description->text_align . ';' : '' ); ?>"><?php echo isset( $description->text ) ? $description->text : ''; // WPCS: XSS ok. ?></p>
+					<?php } ?>
+				</div>
+
+				<div class="content-buttons">
+					<?php $buttons = $marketing_popup->get_buttons(); ?>
+					<?php if ( isset( $buttons ) && ! empty( $buttons ) ) {
+						foreach ( $buttons as $button ) {
+							?>
+							<button data-url="<?php echo esc_attr( $button->url ); ?>" class="<?php echo esc_attr( $button->class ); ?> banner-button" style="<?php echo esc_attr( $button->css ); ?>"><?php echo esc_attr( $button->text ); ?></button>
+							<?php
+						}} ?>
+				</div>
+			</div>
+
+		</div>
+
+	</section>
+
 	<section class="dash-cards owl-carousel owl-theme">
 
 		<div class="dash-card docs">

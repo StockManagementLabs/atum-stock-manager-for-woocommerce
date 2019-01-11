@@ -13,7 +13,7 @@
 	.scroll-box {
 		max-height: 310px;
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			max-height: 250px;
 		}
 	}

@@ -169,9 +169,9 @@ class HtmlReport extends ListTable {
 				foreach ( $child_products as $child_id ) {
 
 					// Exclude some children if there is a "Views Filter" active.
-					if ( ! empty( $_REQUEST['view'] ) ) { // WPCS: CSRF ok.
+					if ( ! empty( $_REQUEST['view'] ) ) {
 
-						$view = esc_attr( $_REQUEST['view'] ); // WPCS: CSRF ok.
+						$view = esc_attr( $_REQUEST['view'] );
 						if ( ! in_array( $child_id, $this->id_views[ $view ] ) ) {
 							continue;
 						}
@@ -424,9 +424,9 @@ class HtmlReport extends ListTable {
 		$max_columns = count( $this->_args['table_columns'] );
 		$count_views = $this->count_views;
 
-		if ( ! empty( $_REQUEST['product_type'] ) ) { // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['product_type'] ) ) {
 
-			$type = esc_attr( $_REQUEST['product_type'] ); // WPCS: CSRF ok.
+			$type = esc_attr( $_REQUEST['product_type'] );
 			switch ( $type ) {
 				case 'grouped':
 					$product_type = __( 'Grouped', ATUM_TEXT_DOMAIN );
@@ -460,8 +460,8 @@ class HtmlReport extends ListTable {
 
 		}
 
-		if ( ! empty( $_REQUEST['product_cat'] ) ) { // WPCS: CSRF ok.
-			$category = ucfirst( esc_attr( $_REQUEST['product_cat'] ) ); // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['product_cat'] ) ) {
+			$category = ucfirst( esc_attr( $_REQUEST['product_cat'] ) );
 		}
 
 		$report = ob_get_clean();

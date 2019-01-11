@@ -318,7 +318,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			3  => __( 'Custom field deleted.', ATUM_TEXT_DOMAIN ),
 			4  => __( 'PO updated.', ATUM_TEXT_DOMAIN ),
 			/* translators: the PO's revision title */
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'PO restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE, // WPCS: CSRF ok.
+			5  => isset( $_GET['revision'] ) ? sprintf( __( 'PO restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE,
 			6  => __( 'PO updated.', ATUM_TEXT_DOMAIN ),
 			7  => __( 'PO saved.', ATUM_TEXT_DOMAIN ),
 			8  => __( 'PO submitted.', ATUM_TEXT_DOMAIN ),

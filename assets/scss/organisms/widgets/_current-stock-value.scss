@@ -5,7 +5,8 @@
 .atum-widget.atum_current_stock_value_widget {
 	.widget-body {
 		padding: 10px 30px 0;
-		@media all and (max-width: $screen-sm-min) {
+		
+		@include tablet-max {
 			padding-top: 0;
 			padding-bottom: 0;
 		}

@@ -197,8 +197,8 @@ class Wpml {
 	 */
 	public function hide_multilingual_content_setup_box() {
 
-		if ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) { // WPCS: CSRF ok.
-			remove_meta_box( 'icl_div_config', convert_to_screen( $_GET['post_type'] ), 'normal' ); // WPCS: CSRF ok.
+		if ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) {
+			remove_meta_box( 'icl_div_config', convert_to_screen( $_GET['post_type'] ), 'normal' );
 		}
 	}
 
@@ -211,8 +211,8 @@ class Wpml {
 
 		global $pagenow;
 
-		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) ? TRUE : FALSE; // WPCS: CSRF ok.
-		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE; // WPCS: CSRF ok.
+		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) ? TRUE : FALSE;
+		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE;
 		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), Globals::get_order_types() );
 
 		if ( $is_order_post_type || $is_order_edit ) {
@@ -606,7 +606,7 @@ class Wpml {
 			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) : ''; // WPCS: CSRF ok.
 		}
 		else {
-			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : ''; // WPCS: CSRF ok.
+			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : '';
 		}
 
 		return $prices;

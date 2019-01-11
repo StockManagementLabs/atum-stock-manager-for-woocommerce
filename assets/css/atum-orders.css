@@ -2532,7 +2532,7 @@ input[type="button"].btn-block {
           box-shadow: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector {
     font-size: 13px;
   }
@@ -2559,13 +2559,13 @@ input[type="button"].btn-block {
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links, #posts-filter .pagination-links {
     font-size: 13px;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .pagination-links .tablenav-paging-text, #posts-filter .pagination-links .tablenav-paging-text {
     width: auto;
     float: none;
@@ -3971,14 +3971,13 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #wpfooter {
-  position: inherit;
   padding-top: 0;
   display: none;
 }
 
 #wpfooter .footer-box {
   height: 90px;
-  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 86%;
+  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
   border-radius: 8px;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
@@ -4065,13 +4064,13 @@ ul.atum_order_notes li .note_content::after {
   margin-right: 10px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   #wpfooter .footer-box .footer-atum-buttons {
     display: none;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   #wpfooter .footer-box {
     padding: 14px 23px;
   }
@@ -4081,7 +4080,7 @@ ul.atum_order_notes li .note_content::after {
   display: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   #wpfooter {
     display: block;
     margin-left: 0 !important;
@@ -4106,7 +4105,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 #wpbody-content {
-  padding-bottom: 0;
+  padding-bottom: 100px;
 }
 
 .wrap h1.wp-heading-inline {
@@ -4997,10 +4996,8 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-@media all and (max-width: 1200px) {
-  .tablenav.top .tablenav-pages-container .tablenav-pages .displaying-num {
-    display: inline-block;
-  }
+.tablenav.top .tablenav-pages-container .tablenav-pages .displaying-num {
+  display: inline-block;
 }
 
 @media all and (max-width: 480px) {
@@ -5025,7 +5022,7 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .tablenav.top .filters-container-box.not-pagination {
     width: inherit;
   }
@@ -5050,7 +5047,7 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .tablenav.top .filters-container-box {
     width: inherit;
   }
@@ -5063,7 +5060,7 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .tablenav.top .filters-container-box .overflow-opacity-effect-right {
     display: none !important;
   }
@@ -5227,10 +5224,8 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-@media all and (max-width: 1200px) {
-  .tablenav.bottom .tablenav-pages .displaying-num {
-    display: contents;
-  }
+.tablenav.bottom .tablenav-pages .displaying-num {
+  display: contents;
 }
 
 @media all and (max-width: 480px) {
@@ -5647,21 +5642,21 @@ ul.atum_order_notes li .note_content::after {
   font-size: 12px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .actions.bulkactions button {
     font-size: 14px;
     height: 35px;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .actions.bulkactions button {
     width: 100%;
     margin: 10px 0;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .actions.bulkactions {
     width: 100%;
     float: none;
@@ -5678,7 +5673,7 @@ ul.atum_order_notes li .note_content::after {
   float: none;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
     height: 35px;
   }
@@ -5688,7 +5683,7 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
     width: 100% !important;
     margin: 0;
@@ -5716,7 +5711,7 @@ ul.atum_order_notes li .note_content::after {
   font-size: 12px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper .actions input[type=submit] {
     font-size: 14px;
     height: 35px;
@@ -5755,7 +5750,7 @@ ul.atum_order_notes li .note_content::after {
           box-shadow: rgba(0, 0, 0, 0.04) 5px 1px 10px;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   .atum-list-wrapper ul.subsubsub {
     font-size: 16px;
     float: none;
@@ -5793,17 +5788,11 @@ ul.atum_order_notes li .note_content::after {
   }
   .atum-list-wrapper .tablenav .tablenav-pages {
     width: auto;
-    margin: 0;
-  }
-}
-
-@media screen and (max-width: 782px) {
-  .atum-list-wrapper .tablenav .tablenav-pages {
     margin: 0 0 0 auto;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media all and (max-width: 480px) {
   .atum-list-wrapper .tablenav .tablenav-pages {
     width: 100%;
     margin: 0;
@@ -6624,7 +6613,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   padding: 6px 20px !important;
 }
 
-@media screen and (max-width: 782px) {
+@media all and (max-width: 782px) {
   table.atum-list-table th, table.atum-list-table td, .floatThead-container th, .floatThead-container td, .inbound-stock-list th, .inbound-stock-list td, table.wp-list-table th, table.wp-list-table td {
     display: table-cell !important;
     padding: 6px 5px !important;

@@ -5,7 +5,10 @@
 @import "common/functions";
 @import "common/variables";
 @import "common/mixins";
+@import "common/breakpoints";
+
 @import "atoms/buttons";
 @import "atoms/atum-icons";
+
 @import "molecules/sweet-alert";
 @import "molecules/marketing-popup";

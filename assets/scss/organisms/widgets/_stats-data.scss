@@ -12,7 +12,7 @@
 		width: 100%;
 		flex-grow: 1;
 		
-		@media all and (max-width: $screen-sm-min) {
+		@include tablet-max {
 			margin-top: $grid-gutter-width/2;
 		}
 	}
@@ -43,7 +43,7 @@
 	}
 	
 	.nice-select {
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			font-size: 12px;
 			height: 36px;
 			line-height: 34px;

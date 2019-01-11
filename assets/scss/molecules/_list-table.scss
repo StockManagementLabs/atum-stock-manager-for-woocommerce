@@ -1,8 +1,9 @@
 //
 // Atum List Tables
 //------------------
+
 #wpbody-content {
-	padding-bottom: 0;
+	padding-bottom: 100px;
 }
 
 .wrap {
@@ -52,7 +53,7 @@
 		}
 		
 		// At 782px, WordPress changes the list table views to mobile version
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp{
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-start;
@@ -60,7 +61,7 @@
 			padding-bottom: 15px;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max{
 			justify-content: center;
 			margin: 0;
 		}
@@ -95,13 +96,13 @@
 			background-color: $green-opacity;
 		}
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp{
 			font-size: 14px;
 			height: 35px;
 			line-height: 35px;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max{
 			margin: 0;
 		}
 		
@@ -120,7 +121,7 @@
 		border: none;
 		transition: .2s ease-in-out;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp{
 			height: 35px;
 		}
 		
@@ -132,7 +133,7 @@
 		
 	}
 	
-	@media all and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp{
 		margin-right: 20px;
 		margin-left: 10px;
 	}
@@ -293,14 +294,14 @@
 	border-bottom: 1px solid $gray-200;
 	margin: 0;
 	
-	@media all and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp{
 		margin: 10px 10px;
 		flex-wrap: wrap;
 		justify-content: center;
 		border-bottom: none;
 	}
 	
-	@media all and (max-width: $screen-xs) {
+	@include mobile-max{
 		justify-content: flex-start;
 	}
 	
@@ -364,7 +365,7 @@
 	border: 1px solid $gray-200;
 	border-radius: 5px;
 	
-	@media all and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp {
 		position: static;
 		height: auto;
 		margin: 0 0 15px 0;
@@ -378,7 +379,7 @@
 		border: 0;
 		margin: 0 0 3px auto !important;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			margin: 0 !important;
 			float: none;
 		}
@@ -398,7 +399,7 @@
 			color: $gray-500;
 		}
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp{
 			width: 70%;
 		}
 	}
@@ -407,7 +408,7 @@
 		font-weight: normal;
 		height: 29px;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp{
 			margin-bottom: 0;
 		}
 	}
@@ -426,11 +427,11 @@
 			width: 100%;
 			border-radius: 5px;
 			
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				margin-bottom: 0;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max{
 				width: 100%;
 			}
 			
@@ -444,16 +445,16 @@
 			width: 87px;
 			height: 30px;
 			
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				margin-bottom: 0;
 			}
 		}
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			margin: 10px 10px;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			margin: 10px 10px;
 			width: 95%;
 			flex-wrap: nowrap;
@@ -461,7 +462,7 @@
 		
 	}
 	
-	@media all and (max-width: $screen-xs-min) {
+	@include mobile-max {
 		float: none;
 		width: 95%;
 		justify-content: center;
@@ -486,11 +487,11 @@
 		max-width: 110px;
 		font-size: 15px;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			width: 100%;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			max-width: inherit;
 		}
 		
@@ -521,9 +522,10 @@
 		flex-wrap: nowrap;
 		width: auto;
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			width: 100%;
 		}
+		
 		input[type=submit] {
 			height: 29px !important;
 		}
@@ -598,7 +600,7 @@
 	padding: 10px 11px;
 	margin: 0;
 	
-	@media all and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp {
 		flex-wrap: wrap;
 		justify-content: center;
 	}
@@ -608,7 +610,7 @@
 		height: 52px;
 		flex-wrap: nowrap;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			flex-wrap: nowrap;
 			height: auto;
 		}
@@ -617,7 +619,7 @@
 			white-space: inherit;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			flex-wrap: wrap;
 			display: flex;
 		}
@@ -627,17 +629,17 @@
 	.actions {
 		white-space: nowrap;
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			white-space: inherit;
 			padding: 0;
 		}
 		
 		&.bulkactions {
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				display: inline-block;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100%;
 				
 				.select2-container {
@@ -670,11 +672,11 @@
 			padding: 0.29rem 0.75rem;
 			line-height: 1.55;
 			
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				margin: 0;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100%;
 				margin: 10px 0;
 			}
@@ -688,7 +690,7 @@
 			min-width: 200px;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			flex-wrap: wrap;
 			min-width: 0;
 		}
@@ -701,22 +703,21 @@
 				width: inherit;
 			}
 			
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp{
 				margin: 5px 0 5px auto;
 				text-align: right;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max{
 				width: 100%;
 				margin: 5px 0 5px auto;
 				text-align: center;
 			}
 			
 			.displaying-num {
-				@media all and (max-width: $screen-lg) {
-					display: inline-block;
-				}
-				@media all and (max-width: $screen-xs) {
+				display: inline-block;
+				
+				@include mobile-max{
 					width: 100%;
 				}
 			}
@@ -729,50 +730,51 @@
 		
 		&.not-pagination {
 			&.no-submit {
-				@media screen and (max-width: $screen-lg + 200px) {
+				@media screen and (max-width: $screen-lg-max + 200px) {
 					width: calc(100% - 100px);
 				}
 			}
-			@media screen and (max-width: $screen-lg + 200px) {
+			
+			@media screen and (max-width: $screen-lg-max + 200px) {
 				width: calc(100% - 200px);
 			}
 			
-			@media screen and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				width: inherit;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100% !important;
 				margin-top: 10px;
 			}
 		 }
 		
 		&.no-submit {
-			@media screen and (max-width: $screen-lg + 200px) {
+			@media screen and (max-width: $screen-lg-max + 200px) {
 				width: calc(100% - 300px);
 			}
 		}
 		
-		@media screen and (max-width: $screen-lg + 200px) {
+		@media screen and (max-width: $screen-lg-max + 200px) {
 			width: calc(100% - 400px);
 		}
 		
-		@media screen and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			width: inherit;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			width: 100% !important;
 			margin-top: 10px;
 		}
 		
 		.overflow-opacity-effect-right {
 			
-			@media screen and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				display: none !important;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				display: none !important;
 			}
 		}
@@ -790,13 +792,13 @@
 			overflow: initial;
 		}
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			width: 100%;
 			display: contents;
 			white-space: normal;
 		}
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			right: 63%;
 			width: inherit;
 		}
@@ -833,7 +835,7 @@
 	#table-paging {
 		margin-left: 0;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			margin-left: 0;
 		}
 	}
@@ -851,16 +853,16 @@
 	.actions {
 		white-space: nowrap;
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			white-space: inherit;
 		}
 		
 		&.bulkactions {
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				display: inline-block;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100%;
 				
 				.select2-container {
@@ -883,11 +885,11 @@
 			padding: 0.29rem 0.75rem;
 			line-height: 1.55;
 			
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				margin-left: 30px;
 			}
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100%;
 				margin: 10px 0;
 			}
@@ -899,7 +901,7 @@
 		text-align: right;
 		z-index: 999;
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			margin: 0;
 			width: 100%;
 			text-align: center;
@@ -908,11 +910,9 @@
 		}
 		
 		.displaying-num {
-			@media all and (max-width: $screen-lg) {
-				display: contents;
-			}
+			display: contents;
 			
-			@media all and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100%;
 				display: inline-block;
 				position: inherit;
@@ -985,7 +985,7 @@
 			
 		}
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			display: none;
 		}
 		
@@ -1016,7 +1016,7 @@
 			opacity: 1;
 		}
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			height: 31px;
 			padding: 0;
 			margin-bottom: 0;
@@ -1034,13 +1034,13 @@
 		align-items: center;
 		margin: 0 11px 0 11px;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			flex-wrap: wrap;
 			justify-content: center;
 			margin-bottom: 15px;
 		}
 		
-		@media all and (max-width: $screen-xs-min) {
+		@include mobile-max {
 			margin: 0 11px 15px;
 		}
 		
@@ -1111,7 +1111,7 @@
 		text-transform: capitalize;
 		margin: 10px 20px;
 		
-		@media all and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			margin: 10px 10px;
 		}
 		
@@ -1253,7 +1253,7 @@
 		height: 26px;
 		transition: 0.2s ease-in-out;
 		
-		@media all and (max-width: $screen-xs) {
+		@include mobile-max {
 			margin-bottom: 15px;
 		}
 		
@@ -1284,17 +1284,19 @@
 				line-height: 0;
 				text-transform: uppercase;
 				font-size: 12px;
-				@media screen and (max-width: $screen-sm-min-wp) {
+				
+				@include tablet-max-wp {
 					font-size: 14px;
 					height: 35px;
 				}
 				
-				@media screen and (max-width: $screen-xs) {
+				@include mobile-max {
 					width: 100%;
 					margin: 10px 0;
 				}
 			}
-			@media screen and (max-width: $screen-xs) {
+			
+			@include mobile-max {
 				width: 100%;
 				float: none;
 			}
@@ -1308,15 +1310,17 @@
 			height: 30px;
 			margin: 0 0 0 5px;
 			float: none;
-			@media screen and (max-width: $screen-sm-min-wp) {
+			
+			@include tablet-max-wp {
 				height: 35px;
+				
 				.select2-selection, .select2-selection__rendered, .select2-selection__arrow {
 					height: 35px;
 					line-height: 35px;
 				}
 			}
 			
-			@media screen and (max-width: $screen-xs) {
+			@include mobile-max {
 				width: 100% !important;
 				margin: 0;
 			}
@@ -1324,8 +1328,10 @@
 		
 		#select2-supplier-container {
 			padding: 0 30px 0 16px;
+			
 			.select2-selection__clear {
 				visibility: hidden;
+				
 				&:after {
 					font-family: atum-icon-font;
 					content: $atmi-cross;
@@ -1339,7 +1345,8 @@
 			line-height: 0;
 			text-transform: uppercase;
 			font-size: 12px;
-			@media screen and (max-width: $screen-sm-min-wp) {
+			
+			@include tablet-max-wp {
 				font-size: 14px;
 				height: 35px;
 			}
@@ -1383,7 +1390,7 @@
 		box-shadow: rgba($black, 0.04) 5px 1px 10px;
 	}
 	
-	@media screen and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp {
 		
 		ul.subsubsub {
 			font-size: 16px;
@@ -1420,27 +1427,16 @@
 			width: 90%;
 		}
 		
-		.tablenav.top {
-			.bulkactions {
-			}
-		}
-		
 		.tablenav {
 			.tablenav-pages {
 				width: auto;
-				margin: 0;
+				margin: 0 0 0 auto;
 			}
 		}
 		
 	}
-	@media screen and (max-width: $screen-sm-min-wp) {
-		.tablenav {
-			.tablenav-pages {
-				margin: 0 0 0 auto;
-			}
-		}
-	}
-	@media screen and (max-width: $screen-xs) {
+	
+	@include mobile-max {
 		.tablenav {
 			.tablenav-pages {
 				width: 100%;
@@ -2321,7 +2317,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 	}
 	
-	@media screen and (max-width: $screen-sm-min-wp) {
+	@include tablet-max-wp {
 		
 		th, td {
 			display: table-cell !important;
@@ -2443,7 +2439,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		
-		@media all and (max-width: $screen-sm) {
+		@include tablet-max {
 			> input[type=number], > input[type=text], > .button {
 				width: 100%;
 			}

@@ -43,6 +43,7 @@
 			this.bindWidgetControls();
 			this.bindConfigControls();
 			this.initWidgets();
+			this.marketingBannerConfig();
 			
 			$(window).resize(function() {
 				
@@ -333,6 +334,21 @@
 			// Selects
 			this.buildNiceSelect();
 		
+		},
+		
+		marketingBannerConfig: function() {
+			
+			// Hide banner
+			var $marketingBannerContainer = $('.dash-marketing-banner-container');
+			$('.marketing-close').on('click', function () {
+				$marketingBannerContainer.fadeOut();
+			});
+			
+			// Redirect to button url
+			$('.banner-button').on('click', function () {
+				window.open($(this).data('url'), '_blank');
+			});
+			
 		},
 		
 		initStatisticsWidget: function() {

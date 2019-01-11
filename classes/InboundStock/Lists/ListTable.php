@@ -346,23 +346,23 @@ class ListTable extends AtumListTable {
 		global $wpdb;
 
 		$search_query = '';
-		if ( ! empty( $_REQUEST['s'] ) ) { // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['s'] ) ) {
 
-			$search = esc_attr( $_REQUEST['s'] ); // WPCS: CSRF ok.
+			$search = esc_attr( $_REQUEST['s'] );
 
 			if ( is_numeric( $search ) ) {
-				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] ); // WPCS: CSRF ok.
+				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'"; // WPCS: CSRF ok.
+				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'";
 			}
 
 		}
 
 		$order_by = 'ORDER BY `order_id`';
-		if ( ! empty( $_REQUEST['orderby'] ) ) { // WPCS: CSRF ok.
+		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
-			switch ( $_REQUEST['orderby'] ) { // WPCS: CSRF ok.
+			switch ( $_REQUEST['orderby'] ) {
 				case 'title':
 					$order_by = 'ORDER BY `order_item_name`';
 					break;
@@ -375,7 +375,7 @@ class ListTable extends AtumListTable {
 
 		}
 
-		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC'; // WPCS: CSRF ok.
+		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
 		
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			

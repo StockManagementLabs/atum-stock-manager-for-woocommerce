@@ -170,7 +170,7 @@ class StockCentral extends AtumListPage {
 		$screen->set_help_sidebar( Helpers::load_view_to_string( 'help-tabs/help-sidebar' ) );
 
 		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( isset( $_GET['uncontrolled'] ) && 1 == $_GET['uncontrolled'] ) { // WPCS: CSRF ok.
+		if ( isset( $_GET['uncontrolled'] ) && 1 === absint( $_GET['uncontrolled'] ) ) {
 			$this->is_uncontrolled_list = TRUE;
 		}
 

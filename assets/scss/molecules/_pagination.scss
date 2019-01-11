@@ -4,6 +4,7 @@
 	}
 	.pagination-links {
 		color: $gray-600;
+		
 		.tablenav-pages-navspan, .tablenav-current-page, #current-page-selector {
 			border-radius: 5px;
 			border: none;
@@ -13,7 +14,8 @@
 			height: 30px;
 			line-height: 30px;
 			text-decoration: none;
-			@media all and (max-width: $screen-sm-min-wp) {
+			
+			@include tablet-max-wp {
 				width: 35px;
 				height: 35px;
 			}
@@ -21,11 +23,13 @@
 		
 		#current-page-selector {
 			border: 1px solid $gray-200;
+			
 			&:focus {
 				outline: 0;
 				box-shadow: none;
 			}
-			@media screen and (max-width: $screen-sm-min-wp) {
+			
+			@include tablet-max-wp {
 				font-size: 13px;
 			}
 		}
@@ -37,22 +41,24 @@
 		.tablenav-current-page {
 			background-color: $gray-200;
 			padding: 8px 12px 6px;
-			@media all and (max-width: $screen-sm-min-wp) {
+			
+			@include tablet-max-wp {
 				padding: 8px 15px 11px;
 			}
 		}
+		
 		.paging-input, .table-paging {
-			@media all and (max-width: $screen-sm-min-wp) {
+			@include tablet-max-wp {
 				margin: 0;
 			}
 		}
 		
-		@media screen and (max-width: $screen-sm-min-wp) {
+		@include tablet-max-wp {
 			font-size: 13px;
 		}
 		
 		.tablenav-paging-text {
-			@media screen and (max-width: $screen-xs) {
+			@include mobile-max{
 				width: auto;
 				float: none;
 				padding: 0;
@@ -72,11 +78,13 @@
 			height: 30px;
 			text-decoration: none;
 			background-color: $gray-200;
+			
 			&:hover, &:focus {
 				background-color: $gray-200;
 				color: $gray-500;
 			}
-			@media all and (max-width: $screen-sm-min-wp) {
+			
+			@include tablet-max-wp{
 				width: 35px;
 				height: 35px;
 			}
