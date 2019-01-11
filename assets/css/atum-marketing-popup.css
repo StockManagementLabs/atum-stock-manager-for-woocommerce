@@ -1705,6 +1705,19 @@ input[type="button"].btn-block {
   margin: 0 5px;
 }
 
+.swal2-container .marketing-popup .swal2-content button.btn-success, .swal2-container .marketing-popup .swal2-content button.btn-success:focus, .swal2-container .marketing-popup .swal2-content button.btn-outline-success, .swal2-container .marketing-popup .swal2-content button.btn-outline-success:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.swal2-container .marketing-popup .swal2-content button.btn-outline-success {
+  background: #fff;
+}
+
+.swal2-container .marketing-popup .swal2-content button.btn-outline-success:hover {
+  background: #69C61D;
+}
+
 .swal2-container .marketing-popup .swal2-confirm {
   margin-right: 10px;
 }
