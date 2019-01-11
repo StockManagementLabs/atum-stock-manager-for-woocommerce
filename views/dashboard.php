@@ -38,10 +38,10 @@ defined( 'ABSPATH' ) || die;
 		</div>
 	</section>
 
-	<section class="dash-cards owl-carousel owl-theme">
+	<section class="dash-cards owl-carousel owl-theme dash-marketing-banner-container">
 
-		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_background() ); ?>;">
-
+		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ); ?>;">
+			<span class="atmi-cross marketing-close"></span>
 			<img src="<?php echo esc_attr( $marketing_popup->get_images()->top_left ); ?>" class="image" alt="">
 			<div class="content">
 				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_images()->logo ); ?>">
@@ -61,12 +61,10 @@ defined( 'ABSPATH' ) || die;
 					<?php if ( isset( $buttons ) && ! empty( $buttons ) ) {
 						foreach ( $buttons as $button ) {
 							?>
-							<button data-url="<?php echo esc_attr( $button->text ); ?>" class="<?php echo esc_attr( $button->class ); ?> popup-button" style="<?php echo esc_attr( $button->css ); ?>"><?php echo esc_attr( $button->text ); ?></button>
+							<button data-url="<?php echo esc_attr( $button->url ); ?>" class="<?php echo esc_attr( $button->class ); ?> banner-button" style="<?php echo esc_attr( $button->css ); ?>"><?php echo esc_attr( $button->text ); ?></button>
 							<?php
-						}
-					} ?>
+						}} ?>
 				</div>
-
 			</div>
 
 		</div>
