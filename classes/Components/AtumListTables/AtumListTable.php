@@ -3251,8 +3251,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error.
 		$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
 
-		$search_column = esc_attr( $_REQUEST['search_column'] );
-		$search_term   = sanitize_text_field( $_REQUEST['s'] );
+		$search_column = esc_attr( stripslashes( $_REQUEST['search_column'] ) );
+		$search_term   = sanitize_text_field( stripslashes( $_REQUEST['s'] ) );
 
 		$cache_key = AtumCache::get_cache_key( 'product_search', [ $search_column, $search_term ] );
 		$where     = AtumCache::get_cache( $cache_key );
