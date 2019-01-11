@@ -341,7 +341,7 @@
 			// Hide banner
 			var $marketingBannerContainer = $('.dash-marketing-banner-container');
 			$('.marketing-close').on('click', function () {
-				$marketingBannerContainer.hide();
+				$marketingBannerContainer.fadeOut();
 			});
 			
 			// Redirect to button url

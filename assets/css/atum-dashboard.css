@@ -4200,7 +4200,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   min-height: 200px;
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 481px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
@@ -4212,7 +4212,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   width: 50%;
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 481px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description {
     width: 100%;
   }
@@ -4229,7 +4229,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   padding: 0 22px;
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 481px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
     text-align: center !important;
   }
@@ -4242,7 +4242,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   margin-left: auto;
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 481px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons {
     float: none;
     margin: 0;
