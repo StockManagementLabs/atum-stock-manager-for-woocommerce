@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumWidget;
 use Atum\Inc\Helpers;
 
@@ -181,11 +182,15 @@ class Dashboard {
 		// Load all the available widgets.
 		$this->load_widgets();
 		$user_widgets_layout = self::get_user_widgets_layout();
+
+		// Get Marketing popup content.
+		$marketing_popup = new AtumMarketingPopup();
 		
 		Helpers::load_view( 'dashboard', array_merge( array(
-			'widgets'   => $this->widgets,
-			'layout'    => $user_widgets_layout,
-			'dashboard' => $this,
+			'widgets'          => $this->widgets,
+			'layout'           => $user_widgets_layout,
+			'dashboard'        => $this,
+			'marketing_popup'  => $marketing_popup,
 		), Helpers::get_support_button() ) );
 		
 	}
@@ -268,8 +273,7 @@ class Dashboard {
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'owl.carousel', ATUM_URL . 'assets/css/vendor/owl.carousel.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'owl.carousel.theme', ATUM_URL . 'assets/css/vendor/owl.theme.default.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme', 'atum-marketing-popup' ), ATUM_VERSION );
+			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' ), ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
 			$min       = ! ATUM_DEBUG ? '.min' : '';
@@ -306,19 +310,9 @@ class Dashboard {
 			wp_register_script( 'owl.carousel', ATUM_URL . 'assets/js/vendor/owl.carousel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 			/*
-			 * ATUM marketing popup script
-			 */
-			$marketing_popup_vars = array(
-				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-			);
-
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup{$min}.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
-
-			/*
 			 * Dependencies
 			 */
-			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery.nicescroll', 'owl.carousel', 'jquery-blockui', 'atum-marketing-popup' );
+			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery.nicescroll', 'owl.carousel', 'jquery-blockui' );
 
 			/*
 			 * Widgets scripts

@@ -4156,6 +4156,121 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   }
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner {
+  width: 100%;
+  min-height: 200px;
+  margin: 20px 30px 0;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .marketing-close {
+  right: 0;
+  font-size: 20px;
+  font-weight: 100;
+  line-height: 30px;
+  color: #6c757d;
+  cursor: pointer;
+  margin: 0 10px;
+  position: absolute;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .marketing-close:hover {
+  color: #00B8DB;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .image {
+  width: 143px;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px 10px;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 0 20px 0 160px;
+  min-height: 200px;
+}
+
+@media all and (max-width: 768px) {
+  .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    padding: 100px 20px;
+  }
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description {
+  width: 50%;
+}
+
+@media all and (max-width: 768px) {
+  .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description {
+    width: 100%;
+  }
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 {
+  font-weight: 400;
+  font-size: 34px;
+  margin: 0 0 10px;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
+  text-align: left !important;
+  padding: 0 22px;
+}
+
+@media all and (max-width: 768px) {
+  .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
+    text-align: center !important;
+  }
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons {
+  width: 300px;
+  display: block;
+  float: right;
+  margin-left: auto;
+}
+
+@media all and (max-width: 768px) {
+  .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons {
+    float: none;
+    margin: 0;
+  }
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button {
+  max-width: 300px;
+  width: 100% !important;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button:first-child {
+  margin-bottom: 10px;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success {
+  background: #fff;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success:hover {
+  background: #69C61D;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .mp-logo {
+  width: 150px;
+  height: auto;
+}
+
 .atum-dashboard .dash-cards .dash-card.docs {
   background-image: url("../images/dashboard/card-docs-bg.png");
 }

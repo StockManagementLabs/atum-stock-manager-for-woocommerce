@@ -55,6 +55,13 @@ class AtumMarketingPopup {
 	protected $background = [];
 
 	/**
+	 * The marketing popup dash background
+	 *
+	 * @var object
+	 */
+	protected $dash_background = [];
+
+	/**
 	 * The hide popup transient key
 	 *
 	 * @var string
@@ -95,7 +102,8 @@ class AtumMarketingPopup {
 			if ( $marketing_popup ) {
 
 				// Check if background params exist.
-				$background_data = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
+				$background_data      = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
+				$dash_background_data = isset( $marketing_popup->dash_background ) ? $marketing_popup->dash_background : [];
 
 				if ( ! empty( $background_data ) ) {
 
@@ -106,6 +114,18 @@ class AtumMarketingPopup {
 					$background_repeat   = isset( $background_data->background_repeat ) ? $background_data->background_repeat : '';
 
 					$this->background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
+
+				}
+
+				if ( ! empty( $dash_background_data ) ) {
+
+					$background_color    = isset( $dash_background_data->background_color ) ? $dash_background_data->background_color : '';
+					$background_image    = isset( $dash_background_data->background_image ) ? $dash_background_data->background_image : '';
+					$background_position = isset( $dash_background_data->background_position ) ? $dash_background_data->background_position : '';
+					$background_size     = isset( $dash_background_data->background_size ) ? $dash_background_data->background_size : '';
+					$background_repeat   = isset( $dash_background_data->background_repeat ) ? $dash_background_data->background_repeat : '';
+
+					$this->dash_background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
 
 				}
 
@@ -204,6 +224,19 @@ class AtumMarketingPopup {
 	public function get_background() {
 
 		return $this->background;
+
+	}
+
+	/**
+	 * Getter for the dash_background
+	 *
+	 * @since 1.5.3
+	 *
+	 * @return object
+	 */
+	public function get_dash_background() {
+
+		return $this->dash_background;
 
 	}
 
