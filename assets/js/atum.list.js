@@ -1793,17 +1793,8 @@
 			
 			self.$atumList.on('keypress', '#current-page-selector', function(evt) {
 				if (evt.which === 13) {
-					if (location.href.indexOf('paged=' + $(this).data('current')) !== -1) {
-						location.href = location.href.replace('paged=' + $(this).data('current'), 'paged=' + $(this).val());
-					}
-					else {
-						if (location.href.indexOf('#/?') !== -1) {
-							location.href = location.href + '&paged=' + $(this).val();
-						}
-						else {
-							location.href = location.href + '#/?paged=' + $(this).val();
-						}
-					}
+					$.address.parameter('paged', $(this).data('current'));
+					self.updateHash();
 				}
 			});
 			
