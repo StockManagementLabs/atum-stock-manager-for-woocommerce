@@ -127,6 +127,11 @@
 			this.inputPageChange();
 			
 			//
+			// Show date selector filter function
+			// ------------------------------------------
+			this.showDateSelectorFilter();
+			
+			//
 			// Add Light Gallery function
 			// ------------------------------------------
 			this.addLightGallery();
@@ -1836,6 +1841,36 @@
 			this.initHorizontalScrolleffect();
 		},
 		
+		showDateSelectorFilter: function() {
+			
+			var self                = this,
+			    $showDateSelectorIn = ['best_seller', 'worst_seller'];
+			
+			$('.date-selector').on('change', function () {
+				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
+					swal({
+						title: '<strong>Date range:</strong>',
+						type: 'question',
+						html:
+						'<label for="date_from">From</label>, ' +
+						'<input type="date" name="date_from" class="date_from">' +
+						'<label for="date_to">To</label>' +
+						'<input type="date" name="date_to" class="date_to">',
+						showCloseButton: true,
+						showCancelButton: true,
+						focusConfirm: false,
+						confirmButtonText:
+							'<i class="atmi-checkmark"></i>',
+						confirmButtonAriaLabel: 'Confirm',
+						cancelButtonText:
+							'<i class="atmi-cross"></i>',
+						cancelButtonAriaLabel: 'Cancel',
+					}).catch(swal.noop);
+				}
+			});
+			
+		},
+		
 		/**
 		 * Update the URL hash with the current filters
 		 */
@@ -1857,10 +1892,12 @@
 				sold_last_days: $.address.parameter('sold_last_days') || '',
 				orderby       : $.address.parameter('orderby') || self.settings.orderby,
 				order         : $.address.parameter('order') || self.settings.order,
+				date_from     : $('.date_from').val() || '',
+				date_to       : $('.date_to').val() || '',
 			});
 			
 			// Update the URL hash parameters
-			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], function(index, elem) {
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days', 'date_from', 'date_to'], function(index, elem) {
 				
 				// Disable auto-update on each iteration until all the parameters have been set
 				self.navigationReady = false;
@@ -2001,6 +2038,8 @@
 					
 					self.removeOverlay();
 					self.setupSalesLastNDaysVal();
+					
+					self.showDateSelectorFilter();
 					
 					// Custom trigger after updating
 					self.$atumList.trigger('atum-table-updated');

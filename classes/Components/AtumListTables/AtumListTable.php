@@ -332,7 +332,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
-		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+		$this->is_filtering = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+
 		$this->query_filters = $this->get_filters_query_string();
 
 		// Filter the table data results to show specific product types only.
@@ -1887,6 +1888,21 @@ abstract class AtumListTable extends \WP_List_Table {
 		/**
 		 * Sorting
 		 */
+
+		// Check if best seller and worst seller in selected in extra filter.
+		if ( isset( $_REQUEST['extra_filter'] ) && in_array( $_REQUEST['extra_filter'], [ 'best_seller', 'worst_seller' ] ) ) {
+
+			if ( 'best_seller' === $_REQUEST['extra_filter'] ) {
+				$_REQUEST['order'] = 'desc';
+			}
+			else {
+				$_REQUEST['order'] = 'asc';
+			}
+
+			$_REQUEST['orderby'] = 'total_sales';
+
+		}
+
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
@@ -4256,7 +4272,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// The filters with default values should be excluded.
 		foreach ( $params as $param => $value ) {
-			if ( $value == $default_filters[ $param ] ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			if ( $value === $default_filters[ $param ] ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				unset( $params[ $param ] );
 			}
 		}
