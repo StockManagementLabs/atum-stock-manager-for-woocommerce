@@ -93,7 +93,7 @@
 		}
 		
 		&:hover, &:focus {
-			background-color: $green-opacity;
+			background-color: rgba($green, .6);
 		}
 		
 		@include tablet-max-wp{
