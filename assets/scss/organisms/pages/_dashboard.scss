@@ -322,6 +322,9 @@ body.toplevel_page_atum-dashboard {
 							&:first-child {
 								margin-bottom: 10px;
 							}
+							&.btn-success,&.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
+								box-shadow: none;
+							}
 							&.btn-outline-success {
 								background: $white;
 								&:hover {
