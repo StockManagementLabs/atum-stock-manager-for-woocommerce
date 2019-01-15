@@ -1886,6 +1886,19 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		/**
+		 *  If exist date_from or date_to filter beetwen this dates.
+		 */
+		if ( isset( $_REQUEST['date_from'] ) || isset( $_REQUEST['date_to'] ) ) {
+
+			$args['date_query'] = array(
+				'after'     => isset( $_REQUEST['date_from'] ) ? $_REQUEST['date_from'] : '',
+				'before'    => isset( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : '',
+				'inclusive' => true,
+			);
+
+		}
+
+		/**
 		 * Sorting
 		 */
 
@@ -3862,6 +3875,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
+
 		/*
 		 * ATUM marketing popup
 		 */
@@ -3896,7 +3910,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'jquery-ui-datepicker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";

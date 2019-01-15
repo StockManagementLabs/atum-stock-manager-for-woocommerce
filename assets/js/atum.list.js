@@ -1850,21 +1850,25 @@
 				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
 					swal({
 						title: '<strong>Date range:</strong>',
-						type: 'question',
 						html:
-						'<label for="date_from">From</label>, ' +
-						'<input type="date" name="date_from" class="date_from">' +
-						'<label for="date_to">To</label>' +
-						'<input type="date" name="date_to" class="date_to">',
+						'<label for="date_from">From</label><br/>' +
+						'<input type="text" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" /><br/>' +
+						'<label for="date_to">To</label><br/>' +
+						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" />',
 						showCloseButton: true,
 						showCancelButton: true,
-						focusConfirm: false,
 						confirmButtonText:
 							'<i class="atmi-checkmark"></i>',
-						confirmButtonAriaLabel: 'Confirm',
 						cancelButtonText:
 							'<i class="atmi-cross"></i>',
-						cancelButtonAriaLabel: 'Cancel',
+						onOpen: function() {
+							// Init datepickers
+							$( '.date-picker' ).datepicker({
+								dateFormat: 'yy-mm-dd',
+								numberOfMonths: 1,
+								showButtonPanel: true
+							});
+						},
 					}).catch(swal.noop);
 				}
 			});
