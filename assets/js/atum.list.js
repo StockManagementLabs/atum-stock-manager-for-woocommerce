@@ -1957,6 +1957,8 @@
 				search_column : $.address.parameter('search_column') || '',
 				sold_last_days: $.address.parameter('sold_last_days') || '',
 				s             : $.address.parameter('s') || '',
+				date_from     : $.address.parameter('date_from') || '',
+				date_to       : $.address.parameter('date_to') || '',
 			});
 			
 			this.doingAjax = $.ajax({

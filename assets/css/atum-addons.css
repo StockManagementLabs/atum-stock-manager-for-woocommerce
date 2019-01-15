@@ -1576,25 +1576,6 @@ input[type="button"].btn-block {
   margin-bottom: 30px;
 }
 
-.swal2-container .swal2-content input[type=text] {
-  padding: 6px;
-  margin: 0;
-  border-radius: 4px;
-  height: 30px;
-  color: #6c757d;
-  border: 1px solid #e9ecef;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
-.swal2-container .swal2-content input[type=text]:hover {
-  border: solid 1px #6c757d;
-}
-
-.swal2-container .swal2-content input[type=text]:focus {
-  border: solid 1px #00B8DB;
-}
-
 .swal2-container .swal2-title {
   line-height: 1.3;
   font-size: 23px;

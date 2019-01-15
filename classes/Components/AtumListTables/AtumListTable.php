@@ -1912,7 +1912,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				$_REQUEST['order'] = 'asc';
 			}
 
-			$_REQUEST['orderby'] = 'total_sales';
+			$this->wc_query_data['order'] = array(
+				'type'  => 'NUMERIC',
+				'field' => 'total_sales',
+				'order' => $_REQUEST['order'],
+			);
 
 		}
 
@@ -3820,8 +3824,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			),
 			'column_headers' => $headers,
 			'views'          => $views,
-			'paged'          => isset( $_REQUEST['paged'] ) ? $_REQUEST['paged'] : 0,
 		);
+
+		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
+			$response['paged'] = $_REQUEST['paged'];
+		}
 
 		if ( $this->show_totals ) {
 			ob_start();
