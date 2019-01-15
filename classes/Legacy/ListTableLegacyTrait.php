@@ -151,7 +151,7 @@ trait ListTableLegacyTrait {
 
 			$args['date_query'] = array(
 				'after'     => isset( $_REQUEST['date_from'] ) ? $_REQUEST['date_from'] : '',
-				'before'    => isset( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : '',
+				'before'    => isset( $_REQUEST['date_to'] ) && ! empty( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : date( 'Y-m-d' ),
 				'inclusive' => true,
 			);
 

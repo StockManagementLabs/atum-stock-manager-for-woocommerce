@@ -1847,9 +1847,10 @@
 		showDateSelectorFilter: function() {
 			
 			var self                = this,
-			    $showDateSelectorIn = ['best_seller', 'worst_seller'];
+			    $showDateSelectorIn = ['best_seller', 'worst_seller'],
+				$dateSelector       = $('.date-selector');
 			
-			$('.date-selector').on('change', function (e) {
+			$dateSelector.on('change', function (e) {
 				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
 					swal({
 						title: '<strong>Date range:</strong>',
