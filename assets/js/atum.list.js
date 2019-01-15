@@ -399,7 +399,10 @@
 						
 					})
 					.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function(e) {
-						self.keyUp(e);
+						var $ignoredValues = ['best_seller','worst_seller'];
+						if ( $ignoredValues.indexOf($(this).val()) === -1 ) {
+							self.keyUp(e);
+						}
 					});
 				
 				if (this.settings.searchDropdown === 'yes') {
@@ -1846,7 +1849,7 @@
 			var self                = this,
 			    $showDateSelectorIn = ['best_seller', 'worst_seller'];
 			
-			$('.date-selector').on('change', function () {
+			$('.date-selector').on('change', function (e) {
 				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
 					swal({
 						title: '<strong>Date range:</strong>',
@@ -1855,12 +1858,8 @@
 						'<input type="text" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" /><br/>' +
 						'<label for="date_to">To</label><br/>' +
 						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" />',
-						showCloseButton: true,
-						showCancelButton: true,
 						confirmButtonText:
 							'<i class="atmi-checkmark"></i>',
-						cancelButtonText:
-							'<i class="atmi-cross"></i>',
 						onOpen: function() {
 							// Init datepickers
 							$( '.date-picker' ).datepicker({
@@ -1869,6 +1868,12 @@
 								showButtonPanel: true
 							});
 						},
+						onClose: function() {
+							if ( self.settings.ajaxFilter === 'yes' ) {
+								self.keyUp(e);
+							}
+						},
+						
 					}).catch(swal.noop);
 				}
 			});
@@ -1957,8 +1962,6 @@
 				search_column : $.address.parameter('search_column') || '',
 				sold_last_days: $.address.parameter('sold_last_days') || '',
 				s             : $.address.parameter('s') || '',
-				date_from     : $.address.parameter('date_from') || '',
-				date_to       : $.address.parameter('date_to') || '',
 			});
 			
 			this.doingAjax = $.ajax({
