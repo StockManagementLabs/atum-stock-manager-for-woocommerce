@@ -1189,7 +1189,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// For inheritable products, show the compounded stock amount.
-		if ( ! $this->allow_calcs ) {
+		if ( Helpers::is_inheritable_type( $this->product->get_type() ) ) {
 
 			$children                 = $this->product->get_children();
 			$compounded_stock         = 0;
@@ -3886,9 +3886,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
-		/*
-		 * ATUM marketing popup
-		 */
+
+		// ATUM marketing popup.
 		$marketing_popup_vars = array(
 			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 		);
@@ -4052,6 +4051,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			GROUP BY p.ID
 		", $parent_type ) ); // WPCS: unprepared sql ok.
 
+		$parents_with_child = $grouped_products = array();
+
 		if ( ! empty( $parents ) ) {
 
 			switch ( $parent_type ) {
@@ -4061,6 +4062,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				case 'grouped':
 					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents ) );
+
+					// Get all the children from their corresponding meta key.
+					foreach ( $parents->posts as $parent_id ) {
+						$children = get_post_meta( $parent_id, '_children', TRUE );
+
+						if ( ! empty( $children ) && is_array( $children ) ) {
+							$grouped_products     = array_merge( $grouped_products, $children );
+							$parents_with_child[] = $parent_id;
+						}
+					}
+
 					break;
 
 				// WC Subscriptions compatibility.
@@ -4073,13 +4085,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			$temp_query_data = $this->atum_query_data;
 
 			$children_args = array(
-				'post_type'       => $post_type,
-				'post_status'     => $post_statuses,
-				'posts_per_page'  => - 1,
-				'post_parent__in' => $parents,
-				'orderby'         => 'menu_order',
-				'order'           => 'ASC',
+				'post_type'      => $post_type,
+				'post_status'    => $post_statuses,
+				'posts_per_page' => - 1,
+				'orderby'        => 'menu_order',
+				'order'          => 'ASC',
 			);
+
+			if ( 'grouped' === $parent_type ) {
+				$children_args['post__in'] = $grouped_products;
+			}
+			else {
+				$children_args['post_parent__in'] = $parents->posts;
+			}
 
 			/*
 			 * NOTE: we should apply here all the query filters related to individual child products
@@ -4109,7 +4127,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $children->found_posts ) {
 
-				$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
+				if ( 'grouped' !== $parent_type ) {
+					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
+				}
 
 				switch ( $parent_type ) {
 					case 'variable':
