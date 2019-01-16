@@ -15,6 +15,8 @@ namespace Atum\Components\AtumOrders\Items;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
+use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Helpers;
 
 
 trait AtumOrderItemTrait {
@@ -199,6 +201,18 @@ trait AtumOrderItemTrait {
 	public function is_internal_meta( $meta_key ) {
 
 		return in_array( $meta_key, $this->internal_meta_keys );
+	}
+	
+	/**
+	 * Get parent order object.
+	 *
+	 * @since 1.5.3
+	 *
+	 * @return AtumOrderModel|\WP_Error
+	 */
+	public function get_order() {
+		
+		return Helpers::get_atum_order_model( $this->get_atum_order_id() );
 	}
 
 }
