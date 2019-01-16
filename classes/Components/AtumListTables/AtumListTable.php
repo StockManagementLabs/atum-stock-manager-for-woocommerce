@@ -1129,42 +1129,31 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$classes_title             = '';
 		$tooltip_warning           = '';
-		$wc_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
+		$wc_notify_no_stock_amount = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
+		$is_grouped                = 'grouped' === $this->product->get_type();
 
-		if ( $this->allow_calcs ) {
+		// Do not show the stock if the product is not managed by WC.
+		if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
+			return $stock;
+		}
 
-			// Do not show the stock if the product is not managed by WC.
-			if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
-				return $stock;
-			}
-
+		if ( ! $is_grouped ) {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
-			$this->increase_total( '_stock', $stock );
+		}
 
-			// Setings value is on.
-			$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
+		$this->increase_total( '_stock', $stock );
 
-			if ( $is_out_stock_threshold_managed ) {
+		// Setings value is enabled?
+		$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
 
-				/* @noinspection PhpUndefinedMethodInspection */
-				$out_stock_threshold = $this->product->get_out_stock_threshold();
+		if ( $is_out_stock_threshold_managed && ! $is_grouped ) {
 
-				if ( strlen( $out_stock_threshold ) > 0 ) {
+			/* @noinspection PhpUndefinedMethodInspection */
+			$out_stock_threshold = $this->product->get_out_stock_threshold();
 
-					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
+			if ( strlen( $out_stock_threshold ) > 0 ) {
 
-						if ( ! $editable ) {
-							$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
-						}
-						else {
-							$classes_title   = ' class="cell-yellow"';
-							$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
-						}
-
-					}
-
-				}
-				elseif ( wc_stock_amount( $wc_notify_no_stock_amount ) >= $stock ) {
+				if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
 
 					if ( ! $editable ) {
 						$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
@@ -1177,11 +1166,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 			}
-			elseif ( wc_stock_amount( $wc_notify_no_stock_amount ) >= $stock ) {
+			elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
 				if ( ! $editable ) {
 					$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
-
 				}
 				else {
 					$classes_title   = ' class="cell-yellow"';
@@ -1190,21 +1178,76 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			if ( $editable ) {
+		}
+		elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
-				$args = array(
-					'meta_key' => 'stock',
-					'value'    => $stock,
-					'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
-				);
-
-				$stock = self::get_editable_column( $args );
-
+			if ( ! $editable ) {
+				$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
+			}
+			else {
+				$classes_title   = ' class="cell-yellow"';
+				$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
 			}
 
 		}
 
-		return apply_filters( 'atum/list_table/column_stock', "<span{$classes_title}>{$stock}</span>", $item, $this->product, $this );
+		// For inheritable products, show the compounded stock amount.
+		if ( Helpers::is_inheritable_type( $this->product->get_type() ) ) {
+
+			$children                 = $this->product->get_children();
+			$compounded_stock         = 0;
+			$has_unmanaged_variations = FALSE;
+
+			foreach ( $children as $child_id ) {
+
+				$child_product = wc_get_product( $child_id );
+
+				// Grouped products.
+				if ( $is_grouped ) {
+					$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+				}
+				// Variable products.
+				else {
+
+					// Check if the variation is being managed at product level.
+					if ( $child_product->managing_stock() ) {
+						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+					}
+					else {
+						$has_unmanaged_variations = TRUE;
+					}
+
+				}
+
+			}
+
+			// If the variable product has at least one unmanaged variation, add the variable stock to the compounded amount.
+			if ( $has_unmanaged_variations ) {
+				$compounded_stock += $stock;
+			}
+
+		}
+
+		if ( $editable && ! $is_grouped ) {
+
+			$args = array(
+				'meta_key' => 'stock',
+				'value'    => $stock,
+				'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
+			);
+
+			$stock = self::get_editable_column( $args );
+
+		}
+
+		$stock_html = "<span{$classes_title}>{$stock}</span>";
+
+		if ( isset( $compounded_stock ) ) {
+			$tooltip     = esc_attr__( 'Compounded stock quantity', ATUM_TEXT_DOMAIN );
+			$stock_html .= " | <span class='compounded tips' data-tip='$tooltip'>$compounded_stock</span>";
+		}
+
+		return apply_filters( 'atum/list_table/column_stock', $stock_html, $item, $this->product, $this );
 
 	}
 
@@ -1228,10 +1271,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$sql = $wpdb->prepare("
 				SELECT SUM(oim2.`meta_value`) AS quantity 			
-				FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
+				FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
+				LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
 				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
 				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' AND oim2.`meta_key` = '_qty'
 				GROUP BY oim.`meta_value`;",
@@ -3846,9 +3889,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
-		/*
-		 * ATUM marketing popup
-		 */
+
+		// ATUM marketing popup.
 		$marketing_popup_vars = array(
 			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 		);
@@ -4012,6 +4054,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			GROUP BY p.ID
 		", $parent_type ) ); // WPCS: unprepared sql ok.
 
+		$parents_with_child = $grouped_products = array();
+
 		if ( ! empty( $parents ) ) {
 
 			switch ( $parent_type ) {
@@ -4021,6 +4065,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				case 'grouped':
 					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents ) );
+
+					// Get all the children from their corresponding meta key.
+					foreach ( $parents->posts as $parent_id ) {
+						$children = get_post_meta( $parent_id, '_children', TRUE );
+
+						if ( ! empty( $children ) && is_array( $children ) ) {
+							$grouped_products     = array_merge( $grouped_products, $children );
+							$parents_with_child[] = $parent_id;
+						}
+					}
+
 					break;
 
 				// WC Subscriptions compatibility.
@@ -4033,13 +4088,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			$temp_query_data = $this->atum_query_data;
 
 			$children_args = array(
-				'post_type'       => $post_type,
-				'post_status'     => $post_statuses,
-				'posts_per_page'  => - 1,
-				'post_parent__in' => $parents,
-				'orderby'         => 'menu_order',
-				'order'           => 'ASC',
+				'post_type'      => $post_type,
+				'post_status'    => $post_statuses,
+				'posts_per_page' => - 1,
+				'orderby'        => 'menu_order',
+				'order'          => 'ASC',
 			);
+
+			if ( 'grouped' === $parent_type ) {
+				$children_args['post__in'] = $grouped_products;
+			}
+			else {
+				$children_args['post_parent__in'] = $parents->posts;
+			}
 
 			/*
 			 * NOTE: we should apply here all the query filters related to individual child products
@@ -4069,7 +4130,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $children->found_posts ) {
 
-				$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
+				if ( 'grouped' !== $parent_type ) {
+					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
+				}
 
 				switch ( $parent_type ) {
 					case 'variable':
