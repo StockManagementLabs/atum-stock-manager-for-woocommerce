@@ -1,19 +1,22 @@
 // Load all the modules from package.json
-var gulp         = require('gulp'),
-    plumber      = require('gulp-plumber'),
-    gulpif       = require('gulp-if'),
-    watch        = require('gulp-watch'),
-    livereload   = require('gulp-livereload'),
-    notify       = require('gulp-notify'),
-    wrap         = require('gulp-wrap'),
-    autoprefix   = require('gulp-autoprefixer'),
-    sass         = require('gulp-sass'),
-    sourcemaps   = require('gulp-sourcemaps'),
-	composer     = require('gulp-composer'),
-	filter       = require('gulp-filter');
+var gulp          = require('gulp'),
+    plumber       = require('gulp-plumber'),
+    gulpif        = require('gulp-if'),
+    watch         = require('gulp-watch'),
+    livereload    = require('gulp-livereload'),
+    notify        = require('gulp-notify'),
+    wrap          = require('gulp-wrap'),
+    autoprefix    = require('gulp-autoprefixer'),
+    sass          = require('gulp-sass'),
+    sourcemaps    = require('gulp-sourcemaps'),
+    composer      = require('gulp-composer'),
+    filter        = require('gulp-filter'),
+    webpack       = require('webpack'),
+    webpackStream = require('webpack-stream'),
+	path          = require('path');
 
 // Plugin version
-var version = '1.5.0',
+var version = '1.5.2',
     curDate = new Date();
 
 // Global config
@@ -77,8 +80,8 @@ var options = {
 };
 
 //
-// sass tasks
-//---------------
+// SASS task
+//-----------
 
 gulp.task('sass::atum', function () {
 
@@ -100,6 +103,71 @@ gulp.task('sass::atum', function () {
 		.pipe(filter("**/*.css"))
 		.pipe(livereload());
 
+});
+
+//
+// JS task
+//----------
+
+gulp.task('js::atum', function () {
+	return gulp.src(config.assetsDir + '/js/**/*.js')
+		// .pipe(webpackStream({
+		//   config: require('./webpack.config.js')
+		// }, webpack))
+		.pipe(webpackStream({
+			devtool: 'source-map',
+			
+			entry: {
+				"list.tables": ['babel-polyfill', path.join(__dirname, config.assetsDir + '/js/src/') + 'list.tables.js']
+				//app2: ['babel-polyfill', path.join(__dirname, config.assetsDir + '/js/src/') + 'app2.js'],
+			},
+			
+			output: {
+				filename: 'atum.[name].min.js'
+			},
+			
+			resolve: {
+				extensions: ['.js']
+			},
+			
+			module: {
+				rules: [
+					/* {
+						enforce: 'pre',
+						test   : /\.js$/,
+						exclude: /node_modules/,
+						use    : 'eslint-loader',
+					}, */
+					{
+						test: /\.js$/,
+						exclude: /node_modules/,
+						use: {
+							loader: 'babel-loader',
+							options: {
+								presets: ['babel-preset-env']
+							}
+						}
+					}
+				]
+			},
+			
+			plugins: [
+				
+				// Compress JS with UglifyJS
+				new webpack.optimize.UglifyJsPlugin({
+					compress : {
+						warnings: false,
+					},
+					output   : {
+						comments: false,
+					},
+					sourceMap: true
+				}),
+			
+			],
+			
+		}, webpack))
+		.pipe(gulp.dest(config.assetsDir + '/js/build/'));
 });
 
 //
