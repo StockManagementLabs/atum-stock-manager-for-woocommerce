@@ -1129,42 +1129,27 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$classes_title             = '';
 		$tooltip_warning           = '';
-		$wc_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
+		$wc_notify_no_stock_amount = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
 
-		if ( $this->allow_calcs ) {
+		// Do not show the stock if the product is not managed by WC.
+		if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
+			return $stock;
+		}
 
-			// Do not show the stock if the product is not managed by WC.
-			if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
-				return $stock;
-			}
+		$stock = wc_stock_amount( $this->product->get_stock_quantity() );
+		$this->increase_total( '_stock', $stock );
 
-			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
-			$this->increase_total( '_stock', $stock );
+		// Setings value is enabled?
+		$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
 
-			// Setings value is on.
-			$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
+		if ( $is_out_stock_threshold_managed && 'grouped' !== $this->product->get_type() ) {
 
-			if ( $is_out_stock_threshold_managed ) {
+			/* @noinspection PhpUndefinedMethodInspection */
+			$out_stock_threshold = $this->product->get_out_stock_threshold();
 
-				/* @noinspection PhpUndefinedMethodInspection */
-				$out_stock_threshold = $this->product->get_out_stock_threshold();
+			if ( strlen( $out_stock_threshold ) > 0 ) {
 
-				if ( strlen( $out_stock_threshold ) > 0 ) {
-
-					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
-
-						if ( ! $editable ) {
-							$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
-						}
-						else {
-							$classes_title   = ' class="cell-yellow"';
-							$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
-						}
-
-					}
-
-				}
-				elseif ( wc_stock_amount( $wc_notify_no_stock_amount ) >= $stock ) {
+				if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
 
 					if ( ! $editable ) {
 						$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
@@ -1177,11 +1162,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 			}
-			elseif ( wc_stock_amount( $wc_notify_no_stock_amount ) >= $stock ) {
+			elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
 				if ( ! $editable ) {
 					$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
-
 				}
 				else {
 					$classes_title   = ' class="cell-yellow"';
@@ -1190,21 +1174,77 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			if ( $editable ) {
+		}
+		elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
-				$args = array(
-					'meta_key' => 'stock',
-					'value'    => $stock,
-					'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
-				);
+			if ( ! $editable ) {
+				$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
 
-				$stock = self::get_editable_column( $args );
-
+			}
+			else {
+				$classes_title   = ' class="cell-yellow"';
+				$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
 			}
 
 		}
 
-		return apply_filters( 'atum/list_table/column_stock', "<span{$classes_title}>{$stock}</span>", $item, $this->product, $this );
+		// For inheritable products, show the compounded stock amount.
+		if ( ! $this->allow_calcs ) {
+
+			$children                 = $this->product->get_children();
+			$compounded_stock         = 0;
+			$has_unmanaged_variations = FALSE;
+
+			foreach ( $children as $child_id ) {
+
+				$child_product = wc_get_product( $child_id );
+
+				// Grouped products.
+				if ( 'grouped' === $this->product->get_type() ) {
+					$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+				}
+				// Variable products.
+				else {
+
+					// Check if the variation is being managed at product level.
+					if ( $child_product->managing_stock() ) {
+						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+					}
+					else {
+						$has_unmanaged_variations = TRUE;
+					}
+
+				}
+
+			}
+
+			// If the variable product has at least one unmanaged variation, add the variable stock to the compounded amount.
+			if ( $has_unmanaged_variations ) {
+				$compounded_stock += $stock;
+			}
+
+		}
+
+		if ( $editable ) {
+
+			$args = array(
+				'meta_key' => 'stock',
+				'value'    => $stock,
+				'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
+			);
+
+			$stock = self::get_editable_column( $args );
+
+		}
+
+		$stock_html = "<span{$classes_title}>{$stock}</span>";
+
+		if ( isset( $compounded_stock ) ) {
+			$tooltip     = esc_attr__( 'Compounded stock quantity', ATUM_TEXT_DOMAIN );
+			$stock_html .= " | <span class='compounded tips' data-tip='$tooltip'>$compounded_stock</span>";
+		}
+
+		return apply_filters( 'atum/list_table/column_stock', $stock_html, $item, $this->product, $this );
 
 	}
 
@@ -1228,10 +1268,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$sql = $wpdb->prepare("
 				SELECT SUM(oim2.`meta_value`) AS quantity 			
-				FROM `{$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-				LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
+				FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
+				LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
 				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
 				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' AND oim2.`meta_key` = '_qty'
 				GROUP BY oim.`meta_value`;",
