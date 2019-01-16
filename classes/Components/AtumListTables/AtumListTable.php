@@ -1130,19 +1130,23 @@ abstract class AtumListTable extends \WP_List_Table {
 		$classes_title             = '';
 		$tooltip_warning           = '';
 		$wc_notify_no_stock_amount = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
+		$is_grouped                = 'grouped' === $this->product->get_type();
 
 		// Do not show the stock if the product is not managed by WC.
 		if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 			return $stock;
 		}
 
-		$stock = wc_stock_amount( $this->product->get_stock_quantity() );
+		if ( ! $is_grouped ) {
+			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
+		}
+
 		$this->increase_total( '_stock', $stock );
 
 		// Setings value is enabled?
 		$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
 
-		if ( $is_out_stock_threshold_managed && 'grouped' !== $this->product->get_type() ) {
+		if ( $is_out_stock_threshold_managed && ! $is_grouped ) {
 
 			/* @noinspection PhpUndefinedMethodInspection */
 			$out_stock_threshold = $this->product->get_out_stock_threshold();
@@ -1179,7 +1183,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( ! $editable ) {
 				$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
-
 			}
 			else {
 				$classes_title   = ' class="cell-yellow"';
@@ -1200,7 +1203,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$child_product = wc_get_product( $child_id );
 
 				// Grouped products.
-				if ( 'grouped' === $this->product->get_type() ) {
+				if ( $is_grouped ) {
 					$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
 				}
 				// Variable products.
@@ -1225,7 +1228,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		if ( $editable ) {
+		if ( $editable && ! $is_grouped ) {
 
 			$args = array(
 				'meta_key' => 'stock',
