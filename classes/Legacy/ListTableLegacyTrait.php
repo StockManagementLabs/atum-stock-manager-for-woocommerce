@@ -681,8 +681,7 @@ trait ListTableLegacyTrait {
 	 */
 	protected function get_children_legacy( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
-		// Get the published Variables first.
-		// Get the published Variables first.
+		// Get the published products of the same type first.
 		$parent_args = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
@@ -704,7 +703,8 @@ trait ListTableLegacyTrait {
 		}
 		
 		// As this query does not contain ATUM params, doesn't need the filters.
-		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
+		$parents            = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
+		$parents_with_child = $grouped_products = array();
 		
 		if ( $parents->found_posts ) {
 			
@@ -715,6 +715,17 @@ trait ListTableLegacyTrait {
 				
 				case 'grouped':
 					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents->posts ) );
+
+					// Get all the children from their corresponding meta key.
+					foreach ( $parents->posts as $parent_id ) {
+						$children = get_post_meta( $parent_id, '_children', TRUE );
+
+						if ( ! empty( $children ) && is_array( $children ) ) {
+							$grouped_products     = array_merge( $grouped_products, $children );
+							$parents_with_child[] = $parent_id;
+						}
+					}
+
 					break;
 				
 				case 'variable-subscription':
@@ -723,13 +734,19 @@ trait ListTableLegacyTrait {
 			}
 
 			$children_args = array(
-				'post_type'       => $post_type,
-				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-				'posts_per_page'  => - 1,
-				'post_parent__in' => $parents->posts,
-				'orderby'         => 'menu_order',
-				'order'           => 'ASC',
+				'post_type'      => $post_type,
+				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'posts_per_page' => - 1,
+				'orderby'        => 'menu_order',
+				'order'          => 'ASC',
 			);
+
+			if ( 'grouped' === $parent_type ) {
+				$children_args['post__in'] = $grouped_products;
+			}
+			else {
+				$children_args['post_parent__in'] = $parents->posts;
+			}
 
 			/*
 			 * NOTE: we should apply here all the query filters related to individual child products
@@ -755,7 +772,9 @@ trait ListTableLegacyTrait {
 			
 			if ( $children->found_posts ) {
 
-				$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
+				if ( 'grouped' !== $parent_type ) {
+					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
+				}
 
 				switch ( $parent_type ) {
 					case 'variable':
