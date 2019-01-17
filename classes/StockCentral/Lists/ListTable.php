@@ -323,10 +323,12 @@ class ListTable extends AtumListTable {
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
 			'lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'best_seller'       => __( 'Best Seller', ATUM_TEXT_DOMAIN ),
+			'worst_seller'      => __( 'Worst Seller', ATUM_TEXT_DOMAIN ),
 		));
 
 		?>
-		<select name="extra_filter" class="wc-enhanced-select dropdown_extra_filter" autocomplete="off">
+		<select name="extra_filter" class="wc-enhanced-select dropdown_extra_filter date-selector" autocomplete="off">
 			<option value=""><?php esc_attr_e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
@@ -818,6 +820,10 @@ class ListTable extends AtumListTable {
 		}
 
 		if ( ! empty( $query->query_vars['post__in'] ) ) {
+			return;
+		}
+
+		if ( in_array( $_REQUEST['extra_filter'], [ 'best_seller', 'worst_seller' ] ) ) {
 			return;
 		}
 

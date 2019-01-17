@@ -333,6 +333,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+
 		$this->query_filters = $this->get_filters_query_string();
 
 		// Filter the table data results to show specific product types only.
@@ -1897,8 +1898,40 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		/**
+		 * Dates filter
+		 */
+		if ( isset( $_REQUEST['date_from'] ) || isset( $_REQUEST['date_to'] ) ) {
+
+			$args['date_query'] = array(
+				'after'     => isset( $_REQUEST['date_from'] ) ? $_REQUEST['date_from'] : '',
+				'before'    => isset( $_REQUEST['date_to'] ) && ! empty( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : date( 'Y-m-d' ),
+				'inclusive' => true,
+			);
+
+		}
+
+		/**
 		 * Sorting
 		 */
+
+		// Check if best seller and worst seller in selected in extra filter.
+		if ( isset( $_REQUEST['extra_filter'] ) && in_array( $_REQUEST['extra_filter'], [ 'best_seller', 'worst_seller' ] ) ) {
+
+			if ( 'best_seller' === $_REQUEST['extra_filter'] ) {
+				$_REQUEST['order'] = 'desc';
+			}
+			else {
+				$_REQUEST['order'] = 'asc';
+			}
+
+			$this->wc_query_data['order'] = array(
+				'type'  => 'NUMERIC',
+				'field' => 'total_sales',
+				'order' => $_REQUEST['order'],
+			);
+
+		}
+
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
@@ -3803,8 +3836,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			),
 			'column_headers' => $headers,
 			'views'          => $views,
-			'paged'          => isset( $_REQUEST['paged'] ) ? $_REQUEST['paged'] : 0,
 		);
+
+		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
+			$response['paged'] = $_REQUEST['paged'];
+		}
 
 		if ( $this->show_totals ) {
 			ob_start();
@@ -3859,7 +3895,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
 
-		// ATUM marketing popup.
+		/*
+		 * ATUM marketing popup
+		 */
 		$marketing_popup_vars = array(
 			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 		);
@@ -3887,11 +3925,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 		}
 
+		// Bootstrap datetimepicker.
+		wp_register_script( 'moment.js', ATUM_URL . 'assets/js/vendor/moment.min.js', array(), ATUM_VERSION, TRUE );
+		wp_register_script( 'bs-date-time-picker', ATUM_URL . 'assets/js/vendor/bootstrap-datetimepicker.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'moment.js', 'bs-date-time-picker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
@@ -4288,7 +4330,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// The filters with default values should be excluded.
 		foreach ( $params as $param => $value ) {
-			if ( $value == $default_filters[ $param ] ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			if ( $value === $default_filters[ $param ] ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				unset( $params[ $param ] );
 			}
 		}
