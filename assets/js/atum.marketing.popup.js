@@ -59,7 +59,7 @@
 						    $descriptionFontSize = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.description.text_size + ';' : '',
 						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.description.text_align + ';' : '',
 						    $descriptionPadding  = response.data.marketing_popup.description.padding ? 'padding:' + response.data.marketing_popup.description.padding + ';' : '',
-						    $description         = '<p style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
+						    $description         = '<p data-transient-key="' + response.data.marketing_popup.transient_key + '" style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
 						    $titleColor          = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.title.text_color + ';' : '',
 						    $titleFontSize       = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.title.text_size + ';' : '',
 						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.title.text_align + ';' : '',
@@ -94,7 +94,7 @@
 						
 						// Hide popup when click un close button for this user
 						$('.marketing-popup .swal2-close').on('click',function () {
-							self.hideMarketingPopup(response.data.marketing_popup.transient_key);
+							self.hideMarketingPopup($('.swal2-content p').data('transient-key'));
 						});
 					}
 				},

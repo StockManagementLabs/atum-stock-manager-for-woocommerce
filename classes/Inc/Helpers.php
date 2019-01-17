@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
@@ -2332,9 +2333,10 @@ final class Helpers {
 		$marketing_popup_transient = AtumCache::get_transient( 'atum-marketing-popup', TRUE );
 
 		if ( ! $marketing_popup_transient ) {
-			$marketing_popup           = new AtumMarketingPopup();
-			$transient_key             = $marketing_popup->get_transient_key();
-			$marketing_popup_transient = AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
+			$marketing_popup = new AtumMarketingPopup();
+			$transient_key   = $marketing_popup->get_transient_key();
+			AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
+			$marketing_popup_transient = $transient_key;
 		}
 
 		$show_marketing_popup = TRUE;
