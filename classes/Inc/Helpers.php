@@ -2320,4 +2320,36 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Check if it shows the marketing popup.
+	 *
+	 * @since 1.5.3
+	 *
+	 * @return bool
+	 */
+	public static function show_marketing_popup() {
+
+		$marketing_popup_transient = AtumCache::get_transient( 'atum-marketing-popup', TRUE );
+
+		if ( ! $marketing_popup_transient ) {
+			$marketing_popup           = new AtumMarketingPopup();
+			$transient_key             = $marketing_popup->get_transient_key();
+			$marketing_popup_transient = AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
+		}
+
+		$show_marketing_popup = TRUE;
+
+		// Get marketing popup user meta.
+		$marketing_popup_user_meta = get_user_meta( get_current_user_id(), 'marketing-popup', TRUE );
+
+		if ( $marketing_popup_user_meta && $marketing_popup_user_meta === $marketing_popup_transient ) {
+
+			$show_marketing_popup = FALSE;
+
+		}
+
+		return $show_marketing_popup;
+
+	}
+
 }
