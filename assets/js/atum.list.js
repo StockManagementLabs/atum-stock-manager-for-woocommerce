@@ -30,6 +30,7 @@
 		this.$searchInput = this.$atumList.find('.atum-post-search');
 		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
 		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
+		this.$dateSelectorValue = '';
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -588,6 +589,10 @@
 	                // TODO reset s and column search
 	                $.address.queryString('');
 	                self.$searchInput.val('');
+	                
+	                // Destroy date filters values.
+					$('.date_to').val('');
+					$('.date_from').val('');
 	                
 	                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') !== 'title') {
 						self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
@@ -1848,12 +1853,20 @@
 			
 			var self                = this,
 			    $showDateSelectorIn = ['best_seller', 'worst_seller'],
-				$dateSelector       = $('.date-selector'),
-			    $dateFromVal        = $.address.parameter('date_from') ? $.address.parameter('date_from') : '',
-			    $dateToVal        = $.address.parameter('date_to') ? $.address.parameter('date_to') : '';
+				$dateSelector       = self.$atumList.find('.date-selector'),
+			    $dateFromVal        = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(),
+			    $dateToVal          = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
 			
-			$dateSelector.on('change', function (e) {
+			$dateSelector.on('select2:open',function (e) {
 				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
+					$(this).val('');
+				}
+			});
+			
+			$dateSelector.on('select2:select',function (e) {
+				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
+					self.$dateSelectorValue  = self.$atumList.find('.date-selector').val();
+					
 					swal({
 						title: '<strong>Date range:</strong>',
 						html:
@@ -1877,6 +1890,9 @@
 						
 					}).catch(swal.noop);
 				}
+				else {
+					self.$dateSelectorValue  = '';
+				}
 			});
 			
 		},
@@ -1893,7 +1909,7 @@
 				product_cat   : self.$atumList.find('.dropdown_product_cat').val() || '',
 				product_type  : self.$atumList.find('.dropdown_product_type').val() || '',
 				supplier      : self.$atumList.find('.dropdown_supplier').val() || '',
-				extra_filter  : self.$atumList.find('.dropdown_extra_filter').val() || '',
+				extra_filter  : self.$dateSelectorValue || self.$atumList.find('.dropdown_extra_filter').val() || '',
 				paged         : parseInt($.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged),
 				//s             : self.$searchInput.val() || '',
 				//search_column : self.$searchColumnBtn.data('value') || '',

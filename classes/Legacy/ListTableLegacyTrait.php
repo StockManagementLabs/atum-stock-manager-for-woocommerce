@@ -143,10 +143,8 @@ trait ListTableLegacyTrait {
 		}
 
 		/**
-		 * Sorting
+		 * Dates filter
 		 */
-
-		// If exist date_from or date_to filter beetwen this dates.
 		if ( isset( $_REQUEST['date_from'] ) || isset( $_REQUEST['date_to'] ) ) {
 
 			$args['date_query'] = array(
@@ -156,6 +154,10 @@ trait ListTableLegacyTrait {
 			);
 
 		}
+
+		/**
+		 * Sorting
+		 */
 
 		// Check if best seller and worst seller in selected in extra filter.
 		if ( isset( $_REQUEST['extra_filter'] ) && in_array( $_REQUEST['extra_filter'], [ 'best_seller', 'worst_seller' ] ) ) {

@@ -2295,7 +2295,7 @@ final class Ajax {
 
 				$sql = '
 					DELETE
-					FROM ' . $wpdb->prefix . 'wp_options
+					FROM ' . $wpdb->prefix . 'options
 					WHERE option_name LIKE "%atum-marketing-popup%";
 				';
 

@@ -1886,13 +1886,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		/**
-		 *  If exist date_from or date_to filter beetwen this dates.
+		 * Dates filter
 		 */
 		if ( isset( $_REQUEST['date_from'] ) || isset( $_REQUEST['date_to'] ) ) {
 
 			$args['date_query'] = array(
 				'after'     => isset( $_REQUEST['date_from'] ) ? $_REQUEST['date_from'] : '',
-				'before'    => isset( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : '',
+				'before'    => isset( $_REQUEST['date_to'] ) && ! empty( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : date( 'Y-m-d' ),
 				'inclusive' => true,
 			);
 
