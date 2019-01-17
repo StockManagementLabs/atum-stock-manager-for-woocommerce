@@ -41,6 +41,9 @@ class Upgrade {
 	public function __construct( $db_version ) {
 
 		$this->current_atum_version = $db_version;
+		
+		// Update the db version to the current ATUM version before upgrade to prevent various executions.
+		update_option( ATUM_PREFIX . 'version', ATUM_VERSION );
 
 		// Delete transients if there after every version change.
 		AtumCache::delete_transients();
@@ -90,9 +93,6 @@ class Upgrade {
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
-
-		// Update the db version to the current ATUM version.
-		update_option( ATUM_PREFIX . 'version', ATUM_VERSION );
 
 		do_action( 'atum/after_upgrade', $db_version );
 

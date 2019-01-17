@@ -38,7 +38,6 @@
 		
 		init: function() {
 			
-			var self = this;
 			this.getPopupInfo();
 			
 		},
