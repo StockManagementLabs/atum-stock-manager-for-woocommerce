@@ -1897,41 +1897,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		/**
-		 * Dates filter
-		 */
-		if ( isset( $_REQUEST['date_from'] ) || isset( $_REQUEST['date_to'] ) ) {
-
-			$args['date_query'] = array(
-				'after'     => isset( $_REQUEST['date_from'] ) ? $_REQUEST['date_from'] : '',
-				'before'    => isset( $_REQUEST['date_to'] ) && ! empty( $_REQUEST['date_to'] ) ? $_REQUEST['date_to'] : date( 'Y-m-d' ),
-				'inclusive' => true,
-			);
-
-		}
-
-		/**
-		 * Sorting
-		 */
-
-		// Check if best seller and worst seller in selected in extra filter.
-		if ( isset( $_REQUEST['extra_filter'] ) && in_array( $_REQUEST['extra_filter'], [ 'best_seller', 'worst_seller' ] ) ) {
-
-			if ( 'best_seller' === $_REQUEST['extra_filter'] ) {
-				$_REQUEST['order'] = 'desc';
-			}
-			else {
-				$_REQUEST['order'] = 'asc';
-			}
-
-			$this->wc_query_data['order'] = array(
-				'type'  => 'NUMERIC',
-				'field' => 'total_sales',
-				'order' => $_REQUEST['order'],
-			);
-
-		}
-
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
