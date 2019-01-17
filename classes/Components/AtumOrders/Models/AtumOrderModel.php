@@ -548,13 +548,16 @@ abstract class AtumOrderModel {
 					$item->delete();
 					continue;
 				}
+				
+				$line_total    = $item_data['line_total'];
+				$line_subtotal = $item_data['line_subtotal'];
 
 				$item->set_props( array(
 					'name'      => $item_data['atum_order_item_name'],
 					'quantity'  => $item_data['atum_order_item_qty'],
 					'tax_class' => $item_data['atum_order_item_tax_class'],
-					'total'     => $item_data['line_total'],
-					'subtotal'  => $item_data['line_subtotal'],
+					'total'     => $line_total,
+					'subtotal'  => $line_subtotal < $line_total ? $line_total : $line_subtotal,
 					'taxes'     => array(
 						'total'    => $item_data['line_tax'],
 						'subtotal' => $item_data['line_subtotal_tax'],
