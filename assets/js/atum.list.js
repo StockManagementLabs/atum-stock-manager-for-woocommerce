@@ -980,14 +980,25 @@
 				// Drag and drop scrolling on desktops
 				var hammertime = new Hammer(self.$scrollPane.get(0), {});
 				
-				hammertime.on('panright panleft', function(evt) {
+				hammertime
+					// Horizontal drag scroll (JScrollpane)
+					.on('panright panleft', function(evt) {
 					
-					var velocityModifier = 10,
-					    displacement     = self.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
+						var velocityModifier = 10,
+						    displacement     = self.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
+						
+						self.jScrollApi.scrollToX(displacement, false);
+						
+					})
+					// Vertical drag scroll (browser scroll bar)
+					.on('panup pandown', function(evt) {
+						
+						var velocityModifier = 10,
+						    displacement     = $(window).scrollTop() - (evt.distance * (evt.velocityY / velocityModifier));
+						
+						$(window).scrollTop(displacement)
 					
-					self.jScrollApi.scrollToX(displacement, false);
-					
-				});
+					});
 				
 				self.$atumList.trigger('atum-scroll-bar-loaded');
 				
