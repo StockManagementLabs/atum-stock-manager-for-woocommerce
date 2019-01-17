@@ -1848,7 +1848,9 @@
 			
 			var self                = this,
 			    $showDateSelectorIn = ['best_seller', 'worst_seller'],
-				$dateSelector       = $('.date-selector');
+				$dateSelector       = $('.date-selector'),
+			    $dateFromVal        = $.address.parameter('date_from') ? $.address.parameter('date_from') : '',
+			    $dateToVal        = $.address.parameter('date_to') ? $.address.parameter('date_to') : '';
 			
 			$dateSelector.on('change', function (e) {
 				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
@@ -1856,17 +1858,15 @@
 						title: '<strong>Date range:</strong>',
 						html:
 						'<label for="date_from">From</label><br/>' +
-						'<input type="text" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" /><br/>' +
+						'<input type="text" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="' + $dateFromVal + '" /><br/>' +
 						'<label for="date_to">To</label><br/>' +
-						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" />',
+						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="' + $dateToVal + '" />',
 						confirmButtonText:
 							'<i class="atmi-checkmark"></i>',
 						onOpen: function() {
 							// Init datepickers
-							$( '.date-picker' ).datepicker({
-								dateFormat: 'yy-mm-dd',
-								numberOfMonths: 1,
-								showButtonPanel: true
+							$( '.date-picker' ).datetimepicker({
+								format: 'YYYY-MM-DD',
 							});
 						},
 						onClose: function() {

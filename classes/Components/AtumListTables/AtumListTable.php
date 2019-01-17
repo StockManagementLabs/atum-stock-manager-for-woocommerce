@@ -3913,11 +3913,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 		}
 
+		// Bootstrap datetimepicker.
+		wp_register_script( 'moment.js', ATUM_URL . 'assets/js/vendor/moment.min.js', array(), ATUM_VERSION, TRUE );
+		wp_register_script( 'bs-date-time-picker', ATUM_URL . 'assets/js/vendor/bootstrap-datetimepicker.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'jquery-ui-datepicker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'moment.js', 'bs-date-time-picker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
