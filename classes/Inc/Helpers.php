@@ -220,8 +220,8 @@ final class Helpers {
 	 * @return array
 	 */
 	public static function get_all_products( $args = array(), $remove_variables = FALSE ) {
-		
-		$defaults       = array(
+
+		$defaults = array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'posts_per_page' => - 1,
@@ -238,11 +238,11 @@ final class Helpers {
 			$products = get_posts( $args );
 			
 			if ( $remove_variables ) {
-				
+
 				$args = (array) array_merge( $args, array(
 					'post_type' => 'product_variation',
 					'post__in'  => $products,
-					'fields'         => 'id=>parent',
+					'fields'    => 'id=>parent',
 				) );
 				
 				$variables = array_unique( get_posts( $args ) );
@@ -729,7 +729,7 @@ final class Helpers {
 
 			}
 
-			$meta_value  = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
+			$meta_value = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
 
 		}
 
@@ -897,7 +897,7 @@ final class Helpers {
 		}
 		else {
 			/* @noinspection PhpIncludeInspection */
-			@include $file_path; // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			@include $file_path; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 		
 	}
@@ -1645,8 +1645,9 @@ final class Helpers {
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
 						$now       = self::get_wc_time( current_time( 'timestamp', TRUE ) );
 
-						$date_from = $date_from ? self::get_wc_time( $date_from ) : '';
-						$date_to   = $date_to ? self::get_wc_time( $date_to ) : '';
+						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
+						$date_to       = $date_to ? self::get_wc_time( $date_to ) : '';
+						$date_from_str = $date_to_str = '';
 
 						if ( $date_to && ! $date_from ) {
 							$date_from = $now;
@@ -1654,20 +1655,20 @@ final class Helpers {
 
 						// Update price if on sale.
 						if ( $product->is_on_sale( 'edit' ) ) {
+
 							$product->set_price( $sale_price );
+
 							if ( $date_to ) {
 								$date_from_str = $date_from->getTimestamp();
 								$date_to_str   = $date_to->getTimestamp();
 							}
+
 						}
 						else {
 							
 							$product->set_price( $regular_price );
 							
-							if ( $date_to && 0 > $date_to->diff( $now ) ) {
-								$date_from_str = $date_to_str = '';
-							}
-							else {
+							if ( ! $date_to || 0 < $date_to->diff( $now ) ) {
 								$date_from_str = $date_from->getTimestamp();
 								$date_to_str   = $date_to->getTimestamp();
 							}
@@ -1983,7 +1984,7 @@ final class Helpers {
 	 */
 	public static function load_psr4_classes( $path, $namespace, $is_singleton = TRUE ) {
 
-		$files = @scandir( $path, 1 ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$files = @scandir( $path, 1 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 		if ( ! empty( $files ) ) {
 
@@ -2151,10 +2152,10 @@ final class Helpers {
 	 */
 	public static function get_atum_user_meta( $key = '', $user_id = 0 ) {
 
-		$user_id = $user_id ?: get_current_user_id();
+		$user_id        = $user_id ?: get_current_user_id();
 		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
 
-		if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE )  ) {
+		if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE ) ) {
 			return $atum_user_meta[ $key ];
 		}
 
@@ -2231,7 +2232,7 @@ final class Helpers {
 			}
 			
 		} catch ( \Exception $e ) {
-		
+			error_log( __METHOD__ . '::' . $e->getMessage() );
 		}
 		
 		return $date_time;
@@ -2251,6 +2252,72 @@ final class Helpers {
 	 */
 	public static function image_placeholder( $image, $size, $dimensions ) {
 		return '<span class="thumb-placeholder"><i class="atum-icon atmi-picture"></i></span>';
+	}
+
+	/**
+	 * Get the compounded stock (sum of the stock quantities of all children products) of any inheritable product.
+	 *
+	 * @since 1.5.3
+	 *
+	 * @param \WC_Product $product
+	 *
+	 * @return int|float|bool
+	 */
+	public static function get_compounded_stock( \WC_Product $product ) {
+
+		if ( self::is_inheritable_type( $product->get_type() ) ) {
+
+			$stock                    = wc_stock_amount( $product->get_stock_quantity() );
+			$children                 = $product->get_children();
+			$compounded_stock         = 0;
+			$has_unmanaged_variations = FALSE;
+
+			foreach ( $children as $child_id ) {
+
+				$child_product = wc_get_product( $child_id );
+
+				if ( ! is_a( $child_product, '\WC_Product' ) ) {
+					continue;
+				}
+
+				// Grouped products.
+				if ( 'grouped' === $product->get_type() ) {
+
+					// In case the grouped products have inheritable products as children, we should apply recursivity.
+					if ( self::is_inheritable_type( $child_product->get_type() ) ) {
+						$compounded_stock += self::get_compounded_stock( $child_product );
+					}
+					else {
+						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+					}
+
+				}
+				// Variable products.
+				else {
+
+					// Check if the variation is being managed at product level.
+					if ( $child_product->managing_stock() ) {
+						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+					}
+					else {
+						$has_unmanaged_variations = TRUE;
+					}
+
+				}
+
+			}
+
+			// If the variable product has at least one unmanaged variation, add the variable stock to the compounded amount.
+			if ( $has_unmanaged_variations ) {
+				$compounded_stock += $stock;
+			}
+
+			return $compounded_stock;
+
+		}
+
+		return FALSE;
+
 	}
 
 }

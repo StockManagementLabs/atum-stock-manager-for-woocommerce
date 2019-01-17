@@ -1131,9 +1131,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		$tooltip_warning           = '';
 		$wc_notify_no_stock_amount = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		$is_grouped                = 'grouped' === $this->product->get_type();
+		$is_inheritable            = Helpers::is_inheritable_type( $this->product->get_type() );
 
 		// Do not show the stock if the product is not managed by WC.
-		if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
+		if ( ! $is_inheritable && ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) ) {
 			return $stock;
 		}
 
@@ -1192,40 +1193,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// For inheritable products, show the compounded stock amount.
-		if ( Helpers::is_inheritable_type( $this->product->get_type() ) ) {
-
-			$children                 = $this->product->get_children();
-			$compounded_stock         = 0;
-			$has_unmanaged_variations = FALSE;
-
-			foreach ( $children as $child_id ) {
-
-				$child_product = wc_get_product( $child_id );
-
-				// Grouped products.
-				if ( $is_grouped ) {
-					$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
-				}
-				// Variable products.
-				else {
-
-					// Check if the variation is being managed at product level.
-					if ( $child_product->managing_stock() ) {
-						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
-					}
-					else {
-						$has_unmanaged_variations = TRUE;
-					}
-
-				}
-
-			}
-
-			// If the variable product has at least one unmanaged variation, add the variable stock to the compounded amount.
-			if ( $has_unmanaged_variations ) {
-				$compounded_stock += $stock;
-			}
-
+		if ( $is_inheritable ) {
+			$compounded_stock = Helpers::get_compounded_stock( $this->product );
 		}
 
 		if ( $editable && ! $is_grouped ) {
