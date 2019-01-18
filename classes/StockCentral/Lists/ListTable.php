@@ -323,8 +323,8 @@ class ListTable extends AtumListTable {
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
 			'lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'best_seller'       => __( 'Best Seller', ATUM_TEXT_DOMAIN ),
-			'worst_seller'      => __( 'Worst Seller', ATUM_TEXT_DOMAIN ),
+			'best_seller'       => __( 'Best Sellers', ATUM_TEXT_DOMAIN ),
+			'worst_seller'      => __( 'Worst Sellers', ATUM_TEXT_DOMAIN ),
 		));
 
 		?>
