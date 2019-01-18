@@ -1888,7 +1888,7 @@
 						customClass: 'filter-range-dates-modal',
 						width: 440,
 						showCloseButton: true,
-						title: '<h1 class="title">Set Time Window</h1><span class="sub-title">Select the date range to filter the Best Seller produts.</span>',
+						title: '<h1 class="title">Set Time Window</h1><span class="sub-title">Select the date range to filter the produts.</span>',
 						html:
 						'<div class="input-date"><label for="date_from">From</label><br/>' +
 						'<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="' + $dateFromVal + '" /></div>' +
@@ -1926,6 +1926,7 @@
 					}).catch(swal.noop);
 					
 					$('.swal2-content .apply').on('click',function () {
+						self.keyUp(e);
 						swal.close();
 					});
 					
