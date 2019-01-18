@@ -76,10 +76,12 @@
 		
 		a {
 			text-decoration: none;
-			color: $success;
+			color: $wp-link !important;
 			
 			&:hover {
-				color: lighten($success, 10%);
+				
+				color: $wp-link-hover;
+				
 			}
 		}
 		

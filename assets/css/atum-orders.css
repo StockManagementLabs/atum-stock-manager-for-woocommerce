@@ -2672,11 +2672,11 @@ input[type="button"].btn-block {
 
 .swal2-container .swal2-modal a {
   text-decoration: none;
-  color: #69C61D;
+  color: #0073AA !important;
 }
 
 .swal2-container .swal2-modal a:hover {
-  color: #82e135;
+  color: #00A0D2;
 }
 
 .swal2-container .atum-loading {
@@ -6745,6 +6745,14 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   -webkit-box-align: end;
       -ms-flex-align: end;
           align-items: flex-end;
+}
+
+.filter-range-dates-modal .swal2-content a {
+  color: #0073AA !important;
+}
+
+.filter-range-dates-modal .swal2-content a:hover {
+  color: #00A0D2;
 }
 
 .filter-range-dates-modal .swal2-content button {

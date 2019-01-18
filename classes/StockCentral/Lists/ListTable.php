@@ -882,27 +882,30 @@ class ListTable extends AtumListTable {
 						$dates_and .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
 					}
 
-					$sql = 'SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
-							FROM ' . $wpdb->prefix . 'posts pr 
-							LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = \'_product_id\') 
-							LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = \'_qty\') 
-							LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
-							LEFT JOIN ' . $wpdb->prefix . 'posts ord ON (order_items.order_id = ord.ID) ' . $dates_and . '
-							WHERE pr.post_type IN (\'product\', \'product_variation\') 
-							GROUP BY product_id order by qty ASC;';
+					$sql_products_with_sales = 'SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+												FROM wp_posts pr 
+												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = \'_product_id\') 
+												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = \'_qty\') 
+												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+												LEFT JOIN ' . $wpdb->prefix . 'posts ord ON (order_items.order_id = ord.ID)
+												WHERE (pr.post_type IN (\'product\', \'product_variation\')
+												AND ord.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
+												 ' . $dates_and . ') or ord.post_date IS NULL
+												GROUP BY product_id order by qty ASC;';
 
-					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql_products_with_sales, OBJECT_K ); // WPCS: unprepared SQL ok.
 
 					if ( ! empty( $product_results ) ) {
 
 						array_walk( $product_results, function ( &$item ) {
-							$item = $item->order_item_qty;
+							$item = $item->qty;
 						} );
 
 						$filtered_products = $product_results;
 						$sorted            = TRUE;
 
 					}
+
 					break;
 				case 'inbound_stock':
 					// Get all the products within pending Purchase Orders.

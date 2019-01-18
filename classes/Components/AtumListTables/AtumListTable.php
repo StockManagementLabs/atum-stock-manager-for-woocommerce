@@ -43,7 +43,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var \WC_Product
 	 */
 	protected $product;
-	
+
 	/**
 	 * The table columns
 	 *
@@ -1898,9 +1898,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			
+
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-			
+
 			$atum_order_fields = array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
@@ -1919,15 +1919,15 @@ abstract class AtumListTable extends \WP_List_Table {
 					'field' => 'out_stock_threshold',
 				),
 			);
-			
+
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
-				
+
 				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
-					
+
 					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
-					
+
 				} else {
 					// All the meta key based columns are numeric except the SKU.
 					if ( '_sku' === $_REQUEST['orderby'] ) {
@@ -1935,7 +1935,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					} else {
 						$args['orderby'] = 'meta_value_num';
 					}
-					
+
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
 				}
@@ -1945,7 +1945,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['orderby'] = $_REQUEST['orderby'];
 				$args['order']   = $order;
 			}
-			
+
 		}
 		else {
 			$args['orderby'] = 'title';
@@ -4092,17 +4092,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			 * like the ATUM control switch or the supplier
 			 */
 			$this->set_controlled_query_data();
-			
+
 			if ( ! empty( $this->supplier_variation_products ) ) {
-				
+
 				$this->atum_query_data['where'][] = array(
 					'key'   => 'supplier_id',
 					'value' => absint( $_REQUEST['supplier'] ),
 					'type'  => 'NUMERIC',
 				);
-				
+
 				$this->atum_query_data['where']['relation'] = 'AND';
-				
+
 			}
 
 			// Pass through the ATUM query data filter.

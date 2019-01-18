@@ -2654,11 +2654,11 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .swal2-container .swal2-modal a {
   text-decoration: none;
-  color: #69C61D;
+  color: #0073AA !important;
 }
 
 .swal2-container .swal2-modal a:hover {
-  color: #82e135;
+  color: #00A0D2;
 }
 
 .swal2-container .atum-loading {

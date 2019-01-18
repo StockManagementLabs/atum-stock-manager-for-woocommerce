@@ -2442,6 +2442,17 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		justify-content: center;
 		align-items: flex-end;
 		
+		a {
+			
+			color: $wp-link !important;
+			
+			&:hover {
+				
+				color: $wp-link-hover;
+				
+			}
+		}
+		
 		button {
 			height: 30px;
 			width: 60px;

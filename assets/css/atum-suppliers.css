@@ -5440,6 +5440,14 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
           align-items: flex-end;
 }
 
+.filter-range-dates-modal .swal2-content a {
+  color: #0073AA !important;
+}
+
+.filter-range-dates-modal .swal2-content a:hover {
+  color: #00A0D2;
+}
+
 .filter-range-dates-modal .swal2-content button {
   height: 30px;
   width: 60px;
