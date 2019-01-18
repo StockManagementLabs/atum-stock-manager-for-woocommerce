@@ -2414,6 +2414,78 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 }
 
+// Filter Range Dates Modal
+.filter-range-dates-modal {
+	height: 200px;
+	min-height: 200px !important;
+	//overflow: hidden;
+	overflow-y: unset;
+	overflow-x: unset;
+	.swal2-title {
+		text-align: left;
+		line-height: 1;
+		
+		.title {
+			font-size: 26px;
+			font-weight: bold;
+			color: $blue-dark;
+			margin: 0;
+		}
+		.sub-title {
+			font-size: 15px;
+			color: $gray-500;
+			font-weight: 400;
+		}
+	}
+	.swal2-content {
+		display: flex !important;
+		justify-content: center;
+		align-items: flex-end;
+		
+		button {
+			height: 30px;
+			width: 60px;
+			box-shadow: none;
+			padding: 0;
+			font-size: 12px;
+			font-weight: 300;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+		
+		.input-date {
+			margin-right: 10px;
+			text-align: left;
+			label {
+				font-weight: 400;
+				font-size: 12px;
+				line-height: 1.67;
+				color: $gray-600;
+			}
+			
+			input {
+				width: 150px;
+				font-size: 15px;
+				line-height: 1;
+				color: $gray-600;
+				font-weight: 400;
+				&:after {
+					font-family: atum-icon-font;
+					content: $atmi-chevron-down;
+				}
+			}
+		}
+		
+		.date-picker::-webkit-input-placeholder {
+			font-size: 12px;
+			font-style: italic;
+			line-height: 1.67;
+			font-weight: 400;
+			color: $gray-500;
+		}
+	}
+}
+
 // Popovers' customisations
 .popover {
 	

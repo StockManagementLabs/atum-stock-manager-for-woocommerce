@@ -4249,6 +4249,25 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   margin: 2px 0;
   padding: 4px;
   width: 19em;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  padding: .5rem 0;
+  margin: .125rem 0 0;
+  font-size: .875rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: .25rem;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
 }
 
 @media (min-width: 481px) {
@@ -7138,6 +7157,88 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 
 .contextual-help-tabs-wrap .atum-icon {
   font-size: 16px;
+}
+
+.filter-range-dates-modal {
+  height: 200px;
+  min-height: 200px !important;
+  overflow-y: unset;
+  overflow-x: unset;
+}
+
+.filter-range-dates-modal .swal2-title {
+  text-align: left;
+  line-height: 1;
+}
+
+.filter-range-dates-modal .swal2-title .title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #27283B;
+  margin: 0;
+}
+
+.filter-range-dates-modal .swal2-title .sub-title {
+  font-size: 15px;
+  color: #adb5bd;
+  font-weight: 400;
+}
+
+.filter-range-dates-modal .swal2-content {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.filter-range-dates-modal .swal2-content button {
+  height: 30px;
+  width: 60px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.filter-range-dates-modal .swal2-content .input-date {
+  margin-right: 10px;
+  text-align: left;
+}
+
+.filter-range-dates-modal .swal2-content .input-date label {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.67;
+  color: #6c757d;
+}
+
+.filter-range-dates-modal .swal2-content .input-date input {
+  width: 150px;
+  font-size: 15px;
+  line-height: 1;
+  color: #6c757d;
+  font-weight: 400;
+}
+
+.filter-range-dates-modal .swal2-content .input-date input:after {
+  font-family: atum-icon-font;
+  content: "";
+}
+
+.filter-range-dates-modal .swal2-content .date-picker::-webkit-input-placeholder {
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.67;
+  font-weight: 400;
+  color: #adb5bd;
 }
 
 .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {

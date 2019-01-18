@@ -1857,6 +1857,23 @@
 			    $dateFromVal        = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(),
 			    $dateToVal          = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
 			
+			if ( ! $dateToVal ) {
+				var today = new Date();
+				var dd = today.getDate();
+				var mm = today.getMonth() + 1; //January is 0!
+				var yyyy = today.getFullYear();
+
+				if (dd < 10) {
+					dd = '0' + dd;
+				}
+
+				if (mm < 10) {
+					mm = '0' + mm;
+				}
+
+				$dateToVal = yyyy + '-' + mm + '-' + dd;
+			}
+			
 			$dateSelector.on('select2:open',function (e) {
 				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
 					$(this).val('');
@@ -1868,18 +1885,36 @@
 					self.$dateSelectorValue  = self.$atumList.find('.date-selector').val();
 					
 					swal({
-						title: '<strong>Date range:</strong>',
+						customClass: 'filter-range-dates-modal',
+						width: 440,
+						showCloseButton: true,
+						title: '<h1 class="title">Set Time Window</h1><span class="sub-title">Select the date range to filter the Best Seller produts.</span>',
 						html:
-						'<label for="date_from">From</label><br/>' +
-						'<input type="text" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="' + $dateFromVal + '" /><br/>' +
-						'<label for="date_to">To</label><br/>' +
-						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="' + $dateToVal + '" />',
-						confirmButtonText:
-							'<i class="atmi-checkmark"></i>',
+						'<div class="input-date"><label for="date_from">From</label><br/>' +
+						'<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="' + $dateFromVal + '" /></div>' +
+						'<div class="input-date"><label for="date_to">To</label><br/>' +
+						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="' + $dateToVal + '" /></div>' +
+						'<div><button class="btn btn-warning apply" />Apply</div>',
+						showConfirmButton: false,
 						onOpen: function() {
 							// Init datepickers
 							$( '.date-picker' ).datetimepicker({
 								format: 'YYYY-MM-DD',
+								useCurrent       : false,
+								showClose        : true,
+								icons            : {
+									time    : 'atum-icon atmi-clock',
+									date    : 'atum-icon atmi-calendar-full',
+									up      : 'atum-icon atmi-chevron-up',
+									down    : 'atum-icon atmi-chevron-down',
+									previous: 'atum-icon atmi-chevron-left',
+									next    : 'atum-icon atmi-chevron-right',
+									today   : 'atum-icon atmi-frame-expand',
+									clear   : 'atum-icon atmi-trash',
+									close   : 'atum-icon atmi-cross',
+								},
+								showClear        : true,
+								showTodayButton  : true,
 							});
 						},
 						onClose: function() {
@@ -1889,6 +1924,15 @@
 						},
 						
 					}).catch(swal.noop);
+					
+					$('.swal2-content .apply').on('click',function () {
+						swal.close();
+					});
+					
+					$('.swal2-close').on('click',function () {
+						$('.date_to').val('');
+						$('.date_from').val('');
+					});
 				}
 				else {
 					self.$dateSelectorValue  = '';

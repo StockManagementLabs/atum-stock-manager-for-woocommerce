@@ -835,12 +835,6 @@ class ListTable extends AtumListTable {
 			switch ( $extra_filter ) {
 
 				case 'best_seller':
-				case 'worst_seller':
-					$order = 'ASC';
-					if ( 'best_seller' === $extra_filter ) {
-						$order = 'DESC';
-					}
-
 					$dates_and = '';
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
@@ -862,7 +856,40 @@ class ListTable extends AtumListTable {
 							WHERE posts.post_type IN ( "shop_order","shop_order_refund" )
 							AND posts.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
 							' . $dates_and . '
-							GROUP BY product_id ORDER BY order_item_qty ' . $order;
+							GROUP BY product_id ORDER BY order_item_qty DESC';
+
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+
+					if ( ! empty( $product_results ) ) {
+
+						array_walk( $product_results, function ( &$item ) {
+							$item = $item->order_item_qty;
+						} );
+
+						$filtered_products = $product_results;
+						$sorted            = TRUE;
+
+					}
+					break;
+				case 'worst_seller':
+					$dates_and = '';
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
+					}
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
+					}
+
+					$sql = 'SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+							FROM ' . $wpdb->prefix . 'posts pr 
+							LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = \'_product_id\') 
+							LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = \'_qty\') 
+							LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+							LEFT JOIN ' . $wpdb->prefix . 'posts ord ON (order_items.order_id = ord.ID) ' . $dates_and . '
+							WHERE pr.post_type IN (\'product\', \'product_variation\') 
+							GROUP BY product_id order by qty ASC;';
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
 
