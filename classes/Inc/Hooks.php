@@ -75,7 +75,9 @@ class Hooks {
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
 		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
-
+		
+		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
+		
 	}
 
 	/**
@@ -633,6 +635,29 @@ class Hooks {
 		}
 		
 		return $links;
+	}
+	
+	/**
+	 * Save WC Order's paid date meta if not set when changing the order status to Completed
+	 *
+	 * @since 1.5.3
+	 *
+	 * @param int       $order_id
+	 * @param \WC_Order $order
+	 *
+	 * @throws \WC_Data_Exception
+	 */
+	public function maybe_save_paid_date( $order_id, $order ) {
+		
+		$paid_date = $order->get_date_paid();
+		
+		if ( ! $paid_date ) {
+			
+			$order_mod = wc_get_order( $order_id );
+			$order_mod->set_date_paid( current_time( 'timestamp', TRUE ) );
+			$order_mod->save();
+		}
+		
 	}
 
 	

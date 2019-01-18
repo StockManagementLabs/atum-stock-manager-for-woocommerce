@@ -53,12 +53,12 @@
 				},
 				success   : function(response) {
 					
-					if (response.success === true && response.data.show_marketing_popup) {
+					if (response.success === true) {
 						var $descriptionColor    = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.description.text_color + ';' : '',
 						    $descriptionFontSize = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.description.text_size + ';' : '',
 						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.description.text_align + ';' : '',
 						    $descriptionPadding  = response.data.marketing_popup.description.padding ? 'padding:' + response.data.marketing_popup.description.padding + ';' : '',
-						    $description         = '<p style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
+						    $description         = '<p data-transient-key="' + response.data.marketing_popup.transient_key + '" style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
 						    $titleColor          = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.title.text_color + ';' : '',
 						    $titleFontSize       = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.title.text_size + ';' : '',
 						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.title.text_align + ';' : '',
@@ -93,22 +93,23 @@
 						
 						// Hide popup when click un close button for this user
 						$('.marketing-popup .swal2-close').on('click',function () {
-							self.hideMarketingPopup();
+							self.hideMarketingPopup($('.swal2-content p').data('transient-key'));
 						});
 					}
 				},
 			});
 			
 		},
-		hideMarketingPopup: function () {
+		hideMarketingPopup: function (transientKey) {
 			var self = this;
 			$.ajax({
 				url       : ajaxurl,
 				dataType  : 'json',
 				method    : 'post',
 				data      : {
-					action    : 'atum_hide_marketing_popup',
-					token     : self.settings.nonce,
+					action       : 'atum_hide_marketing_popup',
+					token        : self.settings.nonce,
+					transientKey : transientKey,
 				},
 			});
 		},
