@@ -823,10 +823,6 @@ class ListTable extends AtumListTable {
 			return;
 		}
 
-//		if ( in_array( $_REQUEST['extra_filter'], [ 'best_seller', 'worst_seller' ] ) ) {
-//			return;
-//		}
-
 		global $wpdb;
 		$extra_filter = esc_attr( $_REQUEST['extra_filter'] );
 		$sorted       = FALSE;
@@ -849,24 +845,22 @@ class ListTable extends AtumListTable {
 							order_item_meta__product_id.meta_value as product_id,
 							SUM( order_item_meta__qty.meta_value) as order_item_qty
 							FROM 
-							wp_posts AS posts 
-							INNER JOIN wp_woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = \'line_item\') 
-							INNER JOIN wp_woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = \'_product_id\') 
-							INNER JOIN wp_woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = \'_qty\') 
-										WHERE 	posts.post_type 	IN ( "shop_order","shop_order_refund" )
-										
-											AND 	posts.post_status 	IN ( "wc-completed","wc-processing","wc-on-hold")
-										
-											AND 	posts.post_date >= "' . $_REQUEST['date_from'] . '"
-											AND 	posts.post_date < "' . $_REQUEST['date_to'] . '"
-										 GROUP BY product_id ORDER BY order_item_qty ' . $order;
+							' . $wpdb->prefix . 'posts AS posts 
+							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = \'line_item\') 
+							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = \'_product_id\') 
+							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = \'_qty\') 
+							WHERE posts.post_type IN ( "shop_order","shop_order_refund" )
+							AND posts.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
+							AND posts.post_date >= "' . $_REQUEST['date_from'] . '"
+							AND posts.post_date < "' . $_REQUEST['date_to'] . '"
+							GROUP BY product_id ORDER BY order_item_qty ' . $order;
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
 
 					if ( ! empty( $product_results ) ) {
 
 						array_walk( $product_results, function ( &$item ) {
-							$item = $item->qty;
+							$item = $item->order_item_qty;
 						} );
 
 						$filtered_products = $product_results;
