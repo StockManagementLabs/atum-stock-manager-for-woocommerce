@@ -6,7 +6,7 @@
  * @since 0.0.1
  */
 
-window.$ = window.jQuery;
+window.$ = window.jQuery
 
 /**
  * Third Party Plugins
@@ -18,7 +18,7 @@ window.$ = window.jQuery;
  * Utils
  */
 
-require('./utils/_responsive.js')._init();
+require('./utils/_responsive.js')._init()
 
 
 
@@ -26,12 +26,20 @@ require('./utils/_responsive.js')._init();
  * Components
  */
 
-import ListTable from './components/_list-table';
+import ListTable from './components/list-table/_list-table'
+import Router from './components/list-table/_router'
+import ScrollBar from './components/list-table/_scroll-bar'
+import DragScroll from './components/list-table/_drag-scroll'
+import SearchByColumn from './components/list-table/_search-by-column'
 
 
 // Modules that need to execute when the DOM is ready should go here
 $(function() {
 	
-	ListTable.init();
+	ListTable.init()
+	Router.init()
+	ScrollBar.init()
+	DragScroll.init()
+	SearchByColumn.init()
 	
-});
+})
