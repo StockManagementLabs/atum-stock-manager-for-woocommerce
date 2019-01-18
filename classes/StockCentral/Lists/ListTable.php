@@ -841,6 +841,16 @@ class ListTable extends AtumListTable {
 						$order = 'DESC';
 					}
 
+					$dates_and = '';
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND posts.post_date >= "' . $_REQUEST['date_from'] . '" ';
+					}
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND posts.post_date < "' . $_REQUEST['date_to'] . '" ';
+					}
+
 					$sql = 'SELECT  
 							order_item_meta__product_id.meta_value as product_id,
 							SUM( order_item_meta__qty.meta_value) as order_item_qty
@@ -851,8 +861,7 @@ class ListTable extends AtumListTable {
 							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = \'_qty\') 
 							WHERE posts.post_type IN ( "shop_order","shop_order_refund" )
 							AND posts.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
-							AND posts.post_date >= "' . $_REQUEST['date_from'] . '"
-							AND posts.post_date < "' . $_REQUEST['date_to'] . '"
+							' . $dates_and . '
 							GROUP BY product_id ORDER BY order_item_qty ' . $order;
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
