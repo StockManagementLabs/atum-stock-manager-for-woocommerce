@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, julianberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.0.2
+Tested up to: 5.0.3
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.3
-Stable tag: 1.5.2.1
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,39 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.3`
+
+*2019-01-17*
+
+**Features**
+
+* New cool popup for keeping the users informed about the newest ATUM features and add-ons.
+* New cool banner added to the ATUM Dashboard with the same content as the above popup.
+* Added editable stock quantity and compounded stock to inheritable products (variable and grouped) in Stock Central.
+* New custom filters for Stock Central: "Best Sellers" and "Worst Sellers" within a time window.
+* Added mouse-drag-scrolling functionality for List Tables in vertical direction too.
+
+**Changes**
+
+* Set paid date if not was previously set when changing an order status directly to completed.
+
+**Fixes**
+
+* Fixed automatic updates' icons for ATUM add-ons.
+* Fixed ATUM add-ons updater issue.
+* Fixed bug in Stock Central where "Sale Price" and "Sale Dates" were not being properly saved.
+* Fixed searches by product type.
+* Fixed Stock Central's pagination issue when the filtered results had no so many pages as the previously filtered results.
+* Fixed searches' escaping in ATUM List Tables.
+* Fixed current page selector input in ATUM List Tables.
+* Fixed item subtotal that wasn't being set properly in Atum Orders.
+* Prevent ATUM upgrades from running several times in some scenarios.
+* Fixed low stock calculation not being controlled for orders that never reached the "Processing" status.
+* CSS fixes.
+* Refactory.
 
 ---
 
