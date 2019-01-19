@@ -101,48 +101,48 @@ class AtumMarketingPopup {
 		// Call marketing popup info.
 		$marketing_popup = $this->get_marketing_popup_content();
 
-		if ( 200 === wp_remote_retrieve_response_code( $marketing_popup ) ) {
+		if ( ! empty( $marketing_popup ) /*200 === wp_remote_retrieve_response_code( $marketing_popup )*/ ) {
 
-			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
+			/*$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );*/
 
-			if ( $marketing_popup ) {
+			/*if ( $marketing_popup ) {*/
 
-				// Check if background params exist.
-				$background_data      = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
-				$dash_background_data = isset( $marketing_popup->dash_background ) ? $marketing_popup->dash_background : [];
+			// Check if background params exist.
+			$background_data      = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
+			$dash_background_data = isset( $marketing_popup->dash_background ) ? $marketing_popup->dash_background : [];
 
-				if ( ! empty( $background_data ) ) {
+			if ( ! empty( $background_data ) ) {
 
-					$background_color    = isset( $background_data->background_color ) ? $background_data->background_color : '';
-					$background_image    = isset( $background_data->background_image ) ? $background_data->background_image : '';
-					$background_position = isset( $background_data->background_position ) ? $background_data->background_position : '';
-					$background_size     = isset( $background_data->background_size ) ? $background_data->background_size : '';
-					$background_repeat   = isset( $background_data->background_repeat ) ? $background_data->background_repeat : '';
+				$background_color    = isset( $background_data->background_color ) ? $background_data->background_color : '';
+				$background_image    = isset( $background_data->background_image ) ? $background_data->background_image : '';
+				$background_position = isset( $background_data->background_position ) ? $background_data->background_position : '';
+				$background_size     = isset( $background_data->background_size ) ? $background_data->background_size : '';
+				$background_repeat   = isset( $background_data->background_repeat ) ? $background_data->background_repeat : '';
 
-					$this->background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
-
-				}
-
-				if ( ! empty( $dash_background_data ) ) {
-
-					$background_color    = isset( $dash_background_data->background_color ) ? $dash_background_data->background_color : '';
-					$background_image    = isset( $dash_background_data->background_image ) ? $dash_background_data->background_image : '';
-					$background_position = isset( $dash_background_data->background_position ) ? $dash_background_data->background_position : '';
-					$background_size     = isset( $dash_background_data->background_size ) ? $dash_background_data->background_size : '';
-					$background_repeat   = isset( $dash_background_data->background_repeat ) ? $dash_background_data->background_repeat : '';
-
-					$this->dash_background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
-
-				}
-
-				// Add attributes to marketing popup.
-				$this->images        = isset( $marketing_popup->images ) ? $marketing_popup->images : [];
-				$this->title         = isset( $marketing_popup->title ) ? $marketing_popup->title : '';
-				$this->description   = isset( $marketing_popup->description ) ? $marketing_popup->description : [];
-				$this->buttons       = isset( $marketing_popup->buttons ) ? $marketing_popup->buttons : [];
-				$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
+				$this->background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
 
 			}
+
+			if ( ! empty( $dash_background_data ) ) {
+
+				$background_color    = isset( $dash_background_data->background_color ) ? $dash_background_data->background_color : '';
+				$background_image    = isset( $dash_background_data->background_image ) ? $dash_background_data->background_image : '';
+				$background_position = isset( $dash_background_data->background_position ) ? $dash_background_data->background_position : '';
+				$background_size     = isset( $dash_background_data->background_size ) ? $dash_background_data->background_size : '';
+				$background_repeat   = isset( $dash_background_data->background_repeat ) ? $dash_background_data->background_repeat : '';
+
+				$this->dash_background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
+
+			}
+
+			// Add attributes to marketing popup.
+			$this->images        = isset( $marketing_popup->images ) ? $marketing_popup->images : [];
+			$this->title         = isset( $marketing_popup->title ) ? $marketing_popup->title : '';
+			$this->description   = isset( $marketing_popup->description ) ? $marketing_popup->description : [];
+			$this->buttons       = isset( $marketing_popup->buttons ) ? $marketing_popup->buttons : [];
+			$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
+
+			/*}*/
 
 			$this->loaded = TRUE;
 
@@ -159,7 +159,10 @@ class AtumMarketingPopup {
 	 */
 	private static function get_marketing_popup_content() {
 
-		$request_params = array(
+		// Until we find a solution for the API calls limit, we will use get the JSON locally.
+		return json_decode( file_get_contents( ATUM_PATH . 'includes/marketing-popup-content.json' ) );
+
+		/*$request_params = array(
 			'method'      => 'POST',
 			'timeout'     => 15,
 			'redirection' => 1,
@@ -172,7 +175,7 @@ class AtumMarketingPopup {
 		);
 
 		// Call marketing popup info.
-		return wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );
+		return wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );*/
 
 	}
 
