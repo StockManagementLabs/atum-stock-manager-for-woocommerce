@@ -382,18 +382,27 @@ class Suppliers {
 				/*
 				 * ATUM marketing popup
 				 */
-				$marketing_popup_vars = array(
-					'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-				);
-				wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-				wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-				wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+				$show_marketing_popup = Helpers::show_marketing_popup();
+				if ( $show_marketing_popup ) {
 
-				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array( 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION );
+					$marketing_popup_vars = array(
+						'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
+					);
+
+					wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+					wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+					wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+
+					wp_enqueue_style( 'atum-marketing-popup' );
+					wp_enqueue_script( 'atum-marketing-popup' );
+
+				}
+
+				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array( 'sweetalert2' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-suppliers' );
 
 				if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
-					wp_register_script( 'atum-suppliers', ATUM_URL . 'assets/js/atum.suppliers.js', array( 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION, TRUE );
+					wp_register_script( 'atum-suppliers', ATUM_URL . 'assets/js/atum.suppliers.js', array( 'sweetalert2' ), ATUM_VERSION, TRUE );
 					wp_enqueue_script( 'wc-enhanced-select' );
 					wp_enqueue_script( 'atum-suppliers' );
 
@@ -404,7 +413,7 @@ class Suppliers {
 					wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array(), ATUM_VERSION, TRUE );
 					wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 					wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
-					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jscrollpane', 'dragscroll', 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION, TRUE );
+					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jscrollpane', 'dragscroll', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 					wp_localize_script( 'atum-suppliers-table', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),

@@ -30,6 +30,7 @@
 		this.$searchInput = this.$atumList.find('.atum-post-search');
 		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
 		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
+		this.$dateSelectorValue = '';
 		
 		// We don't want to alter the default options for future instances of the plugin
 		// Load the localized vars to the plugin settings too
@@ -125,6 +126,11 @@
 			// Add input page function
 			// ------------------------------------------
 			this.inputPageChange();
+			
+			//
+			// Show date selector filter function
+			// ------------------------------------------
+			this.showDateSelectorFilter();
 			
 			//
 			// Add Light Gallery function
@@ -394,7 +400,10 @@
 						
 					})
 					.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', function(e) {
-						self.keyUp(e);
+						var $ignoredValues = ['best_seller','worst_seller'];
+						if ( $ignoredValues.indexOf($(this).val()) === -1 ) {
+							self.keyUp(e);
+						}
 					});
 				
 				if (this.settings.searchDropdown === 'yes') {
@@ -580,6 +589,10 @@
 	                // TODO reset s and column search
 	                $.address.queryString('');
 	                self.$searchInput.val('');
+	                
+	                // Destroy date filters values.
+					$('.date_to').val('');
+					$('.date_from').val('');
 	                
 	                if (self.settings.searchDropdown === 'yes' && self.$searchColumnBtn.data('value') !== 'title') {
 						self.$searchColumnBtn.trigger('setHtmlAndDataValue', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
@@ -1847,6 +1860,99 @@
 			this.initHorizontalScrolleffect();
 		},
 		
+		showDateSelectorFilter: function() {
+			
+			var self                = this,
+			    $showDateSelectorIn = ['best_seller', 'worst_seller'],
+				$dateSelector       = self.$atumList.find('.date-selector'),
+			    $dateFromVal        = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(),
+			    $dateToVal          = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
+			
+			if ( ! $dateToVal ) {
+				var today = new Date();
+				var dd = today.getDate();
+				var mm = today.getMonth() + 1; //January is 0!
+				var yyyy = today.getFullYear();
+
+				if (dd < 10) {
+					dd = '0' + dd;
+				}
+
+				if (mm < 10) {
+					mm = '0' + mm;
+				}
+
+				$dateToVal = yyyy + '-' + mm + '-' + dd;
+			}
+			
+			$dateSelector.on('select2:open',function (e) {
+				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
+					$(this).val('');
+				}
+			});
+			
+			$dateSelector.on('select2:select',function (e) {
+				if ( $showDateSelectorIn.indexOf($(this).val()) !== -1 ) {
+					self.$dateSelectorValue  = self.$atumList.find('.date-selector').val();
+					
+					swal({
+						customClass: 'filter-range-dates-modal',
+						width: 440,
+						showCloseButton: true,
+						title: '<h1 class="title">Set Time Window</h1><span class="sub-title">Select the date range to filter the produts.</span>',
+						html:
+						'<div class="input-date"><label for="date_from">From</label><br/>' +
+						'<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="' + $dateFromVal + '" /></div>' +
+						'<div class="input-date"><label for="date_to">To</label><br/>' +
+						'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="' + $dateToVal + '" /></div>' +
+						'<div><button class="btn btn-warning apply" />Apply</div>',
+						showConfirmButton: false,
+						onOpen: function() {
+							// Init datepickers
+							$( '.date-picker' ).datetimepicker({
+								format: 'YYYY-MM-DD',
+								useCurrent       : false,
+								showClose        : true,
+								icons            : {
+									time    : 'atum-icon atmi-clock',
+									date    : 'atum-icon atmi-calendar-full',
+									up      : 'atum-icon atmi-chevron-up',
+									down    : 'atum-icon atmi-chevron-down',
+									previous: 'atum-icon atmi-chevron-left',
+									next    : 'atum-icon atmi-chevron-right',
+									today   : 'atum-icon atmi-frame-expand',
+									clear   : 'atum-icon atmi-trash',
+									close   : 'atum-icon atmi-cross',
+								},
+								showClear        : true,
+								showTodayButton  : true,
+							});
+						},
+						onClose: function() {
+							if ( self.settings.ajaxFilter === 'yes' ) {
+								self.keyUp(e);
+							}
+						},
+						
+					}).catch(swal.noop);
+					
+					$('.swal2-content .apply').on('click',function () {
+						self.keyUp(e);
+						swal.close();
+					});
+					
+					$('.swal2-close').on('click',function () {
+						$('.date_to').val('');
+						$('.date_from').val('');
+					});
+				}
+				else {
+					self.$dateSelectorValue  = '';
+				}
+			});
+			
+		},
+		
 		/**
 		 * Update the URL hash with the current filters
 		 */
@@ -1859,7 +1965,7 @@
 				product_cat   : self.$atumList.find('.dropdown_product_cat').val() || '',
 				product_type  : self.$atumList.find('.dropdown_product_type').val() || '',
 				supplier      : self.$atumList.find('.dropdown_supplier').val() || '',
-				extra_filter  : self.$atumList.find('.dropdown_extra_filter').val() || '',
+				extra_filter  : self.$dateSelectorValue || self.$atumList.find('.dropdown_extra_filter').val() || '',
 				paged         : parseInt($.address.parameter('paged') || self.$atumList.find('.current-page').val() || self.settings.paged),
 				//s             : self.$searchInput.val() || '',
 				//search_column : self.$searchColumnBtn.data('value') || '',
@@ -1868,10 +1974,12 @@
 				sold_last_days: $.address.parameter('sold_last_days') || '',
 				orderby       : $.address.parameter('orderby') || self.settings.orderby,
 				order         : $.address.parameter('order') || self.settings.order,
+				date_from     : $('.date_from').val() || '',
+				date_to       : $('.date_to').val() || '',
 			});
 			
 			// Update the URL hash parameters
-			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], function(index, elem) {
+			$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days', 'date_from', 'date_to'], function(index, elem) {
 				
 				// Disable auto-update on each iteration until all the parameters have been set
 				self.navigationReady = false;
@@ -2012,6 +2120,8 @@
 					
 					self.removeOverlay();
 					self.setupSalesLastNDaysVal();
+					
+					self.showDateSelectorFilter();
 					
 					// Custom trigger after updating
 					self.$atumList.trigger('atum-table-updated');

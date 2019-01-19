@@ -159,6 +159,38 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.3`
+
+*2019-01-17*
+
+**Features**
+
+* New cool popup for keeping the users informed about the newest ATUM features and add-ons.
+* New cool banner added to the ATUM Dashboard with the same content as the above popup.
+* Added editable stock quantity and compounded stock to inheritable products (variable and grouped) in Stock Central.
+* New custom filters for Stock Central: "Best Sellers" and "Worst Sellers" within a time window.
+* Added mouse-drag-scrolling functionality for List Tables in vertical direction too.
+
+**Changes**
+
+* Set paid date if not was previously set when changing an order status directly to completed.
+
+**Fixes**
+
+* Fixed automatic updates' icons for ATUM add-ons.
+* Fixed ATUM add-ons updater issue.
+* Fixed bug in Stock Central where "Sale Price" and "Sale Dates" were not being properly saved.
+* Fixed searches by product type.
+* Fixed Stock Central's pagination issue when the filtered results had no so many pages as the previously filtered results.
+* Fixed searches' escaping in ATUM List Tables.
+* Fixed current page selector input in ATUM List Tables.
+* Fixed item subtotal that wasn't being set properly in Atum Orders.
+* Prevent ATUM upgrades from running several times in some scenarios.
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.5.2.1`
 
 *2019-01-04*

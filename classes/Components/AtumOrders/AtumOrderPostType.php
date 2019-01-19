@@ -843,25 +843,34 @@ abstract class AtumOrderPostType {
 		if ( static::POST_TYPE === $post_type ) {
 
 			global $wp_scripts, $post;
+			$min = ! ATUM_DEBUG ? '.min' : '';
 
 			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
 			wp_register_style( 'jquery-ui-style', "https://code.jquery.com/ui/$jquery_version/themes/smoothness/jquery-ui.min.css", array(), $jquery_version );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'jquery-ui-style', 'atum-marketing-popup', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'jquery-ui-style', 'sweetalert2' ), ATUM_VERSION );
+
+			/*
+			 * ATUM marketing popup
+			 */
+			$show_marketing_popup = Helpers::show_marketing_popup();
+			if ( $show_marketing_popup ) {
+
+				$marketing_popup_vars = array(
+					'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
+				);
+
+				wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+				wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+				wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+
+				wp_enqueue_style( 'atum-marketing-popup' );
+				wp_enqueue_script( 'atum-marketing-popup' );
+
+			}
 
 			// Sweet Alert script.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
-			$min = ! ATUM_DEBUG ? '.min' : '';
-			/*
-			 * ATUM marketing popup script
-			 */
-			$marketing_popup_vars = array(
-				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-			);
-
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 
@@ -880,6 +889,25 @@ abstract class AtumOrderPostType {
 				wp_enqueue_style( 'switchery' );
 				wp_enqueue_style( 'atum-orders' );
 
+				/*
+				 * ATUM marketing popup
+				 */
+				$show_marketing_popup = Helpers::show_marketing_popup();
+				if ( $show_marketing_popup ) {
+
+					$marketing_popup_vars = array(
+						'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
+					);
+
+					wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+					wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+					wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+
+					wp_enqueue_style( 'atum-marketing-popup' );
+					wp_enqueue_script( 'atum-marketing-popup' );
+
+				}
+
 				// Enqueue the script with the required WooCommerce dependencies.
 				$wc_dependencies = (array) apply_filters('atum/order_post_type/scripts/woocommerce_dependencies', array(
 					'wc-enhanced-select',
@@ -890,7 +918,6 @@ abstract class AtumOrderPostType {
 					'accounting',
 					'sweetalert2',
 					'switchery',
-					'atum-marketing-popup',
 				));
 
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/atum.orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
@@ -942,7 +969,7 @@ abstract class AtumOrderPostType {
 				// Dragscroll.
 				wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', FALSE, ATUM_VERSION, TRUE );
 				wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
-				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jquery-tiptip', 'jscrollpane', 'dragscroll', 'atum-marketing-popup' ), ATUM_VERSION, TRUE );
+				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/atum.post.type.list.js', array( 'select2', 'jquery-tiptip', 'jscrollpane', 'dragscroll' ), ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),

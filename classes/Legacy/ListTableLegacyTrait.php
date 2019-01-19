@@ -142,13 +142,10 @@ trait ListTableLegacyTrait {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		/**
-		 * Sorting
-		 */
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-			
+
 			$atum_order_fields = array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
@@ -170,12 +167,12 @@ trait ListTableLegacyTrait {
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
-				
+
 				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
-					
+
 					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
-					
+
 				} else {
 					// All the meta key based columns are numeric except the SKU.
 					if ( '_sku' === $_REQUEST['orderby'] ) {
@@ -183,7 +180,7 @@ trait ListTableLegacyTrait {
 					} else {
 						$args['orderby'] = 'meta_value_num';
 					}
-					
+
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
 				}

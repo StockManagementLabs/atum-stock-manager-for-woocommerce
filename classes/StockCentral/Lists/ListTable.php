@@ -323,10 +323,12 @@ class ListTable extends AtumListTable {
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
 			'lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'best_seller'       => __( 'Best Sellers', ATUM_TEXT_DOMAIN ),
+			'worst_seller'      => __( 'Worst Sellers', ATUM_TEXT_DOMAIN ),
 		));
 
 		?>
-		<select name="extra_filter" class="wc-enhanced-select dropdown_extra_filter" autocomplete="off">
+		<select name="extra_filter" class="wc-enhanced-select dropdown_extra_filter date-selector" autocomplete="off">
 			<option value=""><?php esc_attr_e( 'Show all', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
@@ -832,6 +834,79 @@ class ListTable extends AtumListTable {
 
 			switch ( $extra_filter ) {
 
+				case 'best_seller':
+					$dates_and = '';
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND posts.post_date >= "' . $_REQUEST['date_from'] . '" ';
+					}
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND posts.post_date < "' . $_REQUEST['date_to'] . '" ';
+					}
+
+					$sql = 'SELECT  
+							order_item_meta__product_id.meta_value as product_id,
+							SUM( order_item_meta__qty.meta_value) as order_item_qty
+							FROM 
+							' . $wpdb->prefix . 'posts AS posts 
+							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = \'line_item\') 
+							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = \'_product_id\') 
+							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = \'_qty\') 
+							WHERE posts.post_type IN ( "shop_order","shop_order_refund" )
+							AND posts.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
+							' . $dates_and . '
+							GROUP BY product_id ORDER BY order_item_qty DESC';
+
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+
+					if ( ! empty( $product_results ) ) {
+
+						array_walk( $product_results, function ( &$item ) {
+							$item = $item->order_item_qty;
+						} );
+
+						$filtered_products = $product_results;
+						$sorted            = TRUE;
+
+					}
+					break;
+				case 'worst_seller':
+					$dates_and = '';
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
+					}
+
+					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+						$dates_and .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
+					}
+
+					$sql_products_with_sales = 'SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+												FROM wp_posts pr 
+												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = \'_product_id\') 
+												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = \'_qty\') 
+												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+												LEFT JOIN ' . $wpdb->prefix . 'posts ord ON (order_items.order_id = ord.ID)
+												WHERE (pr.post_type IN (\'product\', \'product_variation\')
+												AND ord.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
+												 ' . $dates_and . ') or ord.post_date IS NULL
+												GROUP BY product_id order by qty ASC;';
+
+					$product_results = $wpdb->get_results( $sql_products_with_sales, OBJECT_K ); // WPCS: unprepared SQL ok.
+
+					if ( ! empty( $product_results ) ) {
+
+						array_walk( $product_results, function ( &$item ) {
+							$item = $item->qty;
+						} );
+
+						$filtered_products = $product_results;
+						$sorted            = TRUE;
+
+					}
+
+					break;
 				case 'inbound_stock':
 					// Get all the products within pending Purchase Orders.
 					$sql = $wpdb->prepare( "

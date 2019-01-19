@@ -43,7 +43,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var \WC_Product
 	 */
 	protected $product;
-	
+
 	/**
 	 * The table columns
 	 *
@@ -333,6 +333,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+
 		$this->query_filters = $this->get_filters_query_string();
 
 		// Filter the table data results to show specific product types only.
@@ -1896,13 +1897,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		/**
-		 * Sorting
-		 */
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			
+
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-			
+
 			$atum_order_fields = array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
@@ -1921,15 +1919,15 @@ abstract class AtumListTable extends \WP_List_Table {
 					'field' => 'out_stock_threshold',
 				),
 			);
-			
+
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
-				
+
 				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
-					
+
 					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
-					
+
 				} else {
 					// All the meta key based columns are numeric except the SKU.
 					if ( '_sku' === $_REQUEST['orderby'] ) {
@@ -1937,7 +1935,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					} else {
 						$args['orderby'] = 'meta_value_num';
 					}
-					
+
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
 				}
@@ -1947,7 +1945,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['orderby'] = $_REQUEST['orderby'];
 				$args['order']   = $order;
 			}
-			
+
 		}
 		else {
 			$args['orderby'] = 'title';
@@ -3803,8 +3801,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			),
 			'column_headers' => $headers,
 			'views'          => $views,
-			'paged'          => isset( $_REQUEST['paged'] ) ? $_REQUEST['paged'] : 0,
 		);
+
+		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
+			$response['paged'] = $_REQUEST['paged'];
+		}
 
 		if ( $this->show_totals ) {
 			ob_start();
@@ -3859,13 +3860,24 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$min = ! ATUM_DEBUG ? '.min' : '';
 
-		// ATUM marketing popup.
-		$marketing_popup_vars = array(
-			'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-		);
-		wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-		wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-		wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+		/*
+		 * ATUM marketing popup
+		 */
+		$show_marketing_popup = Helpers::show_marketing_popup();
+		if ( $show_marketing_popup ) {
+
+			$marketing_popup_vars = array(
+				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
+			);
+
+			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+
+			wp_enqueue_style( 'atum-marketing-popup' );
+			wp_enqueue_script( 'atum-marketing-popup' );
+
+		}
 
 		Helpers::maybe_es6_promise();
 
@@ -3887,11 +3899,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 		}
 
+		// Bootstrap datetimepicker.
+		wp_register_script( 'moment.js', ATUM_URL . 'assets/js/vendor/moment.min.js', array(), ATUM_VERSION, TRUE );
+		wp_register_script( 'bs-date-time-picker', ATUM_URL . 'assets/js/vendor/bootstrap-datetimepicker.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+
 		// List Table styles.
-		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2', 'atum-marketing-popup' ), ATUM_VERSION );
+		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select', 'atum-marketing-popup' );
+		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'moment.js', 'bs-date-time-picker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
@@ -4076,17 +4092,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			 * like the ATUM control switch or the supplier
 			 */
 			$this->set_controlled_query_data();
-			
+
 			if ( ! empty( $this->supplier_variation_products ) ) {
-				
+
 				$this->atum_query_data['where'][] = array(
 					'key'   => 'supplier_id',
 					'value' => absint( $_REQUEST['supplier'] ),
 					'type'  => 'NUMERIC',
 				);
-				
+
 				$this->atum_query_data['where']['relation'] = 'AND';
-				
+
 			}
 
 			// Pass through the ATUM query data filter.
@@ -4288,7 +4304,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// The filters with default values should be excluded.
 		foreach ( $params as $param => $value ) {
-			if ( $value == $default_filters[ $param ] ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			if ( $value === $default_filters[ $param ] ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 				unset( $params[ $param ] );
 			}
 		}
