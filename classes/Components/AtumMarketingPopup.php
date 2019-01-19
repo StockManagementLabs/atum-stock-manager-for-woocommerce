@@ -43,7 +43,7 @@ class AtumMarketingPopup {
 	 *
 	 * @var object
 	 */
-	protected $images = '';
+	protected $images = [];
 
 	/**
 	 * The marketing popup background
@@ -67,6 +67,13 @@ class AtumMarketingPopup {
 	protected $transient_key = '';
 
 	/**
+	 * Was the marketing popup content loaded?
+	 *
+	 * @var bool
+	 */
+	protected $loaded = FALSE;
+
+	/**
 	 * The ATUM's addons store URL
 	 */
 	const MARKETING_POPUP_STORE_URL = 'https://www.stockmanagementlabs.com/';
@@ -83,17 +90,18 @@ class AtumMarketingPopup {
 	 */
 	private static $instance;
 
+
 	/**
 	 * Singleton constructor
 	 *
 	 * @since 1.5.3
 	 */
-	public function __construct() {
+	private function __construct() {
 
 		// Call marketing popup info.
 		$marketing_popup = $this->get_marketing_popup_content();
 
-		if ( ! is_wp_error( $marketing_popup ) ) {
+		if ( 200 === wp_remote_retrieve_response_code( $marketing_popup ) ) {
 
 			$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );
 
@@ -136,12 +144,16 @@ class AtumMarketingPopup {
 
 			}
 
+			$this->loaded = TRUE;
+
 		}
 
 	}
 
 	/**
 	 * Get marketing popup content
+	 *
+	 * @since 1.5.3
 	 *
 	 * @return array|\WP_Error
 	 */
@@ -249,6 +261,15 @@ class AtumMarketingPopup {
 
 		return $this->transient_key;
 
+	}
+
+	/**
+	 * Getter for the loaded prop
+	 *
+	 * @return bool
+	 */
+	public function is_loaded() {
+		return $this->loaded;
 	}
 
 	/*******************

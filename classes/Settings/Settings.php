@@ -193,8 +193,7 @@ class Settings {
 			/*
 			 * ATUM marketing popup
 			 */
-			$show_marketing_popup = Helpers::show_marketing_popup();
-			if ( $show_marketing_popup ) {
+			if ( Helpers::show_marketing_popup() ) {
 
 				$marketing_popup_vars = array(
 					'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
@@ -209,7 +208,7 @@ class Settings {
 
 			}
 
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION, TRUE );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'atumPrefix'                      => ATUM_PREFIX,

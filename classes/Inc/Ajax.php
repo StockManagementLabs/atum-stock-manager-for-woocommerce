@@ -2228,21 +2228,23 @@ final class Ajax {
 	 * @since 1.5.3
 	 */
 	public function get_marketing_popup_info() {
+
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
-		$marketing_popup      = new AtumMarketingPopup();
 
-		if ( $marketing_popup ) {
+		if ( Helpers::show_marketing_popup() ) {
 
-				$marketing_popup = [
-					'background'  => $marketing_popup->get_background(),
-					'title'       => $marketing_popup->get_title(),
-					'description' => $marketing_popup->get_description(),
-					'buttons'     => $marketing_popup->get_buttons(),
-					'images'      => $marketing_popup->get_images(),
+			$marketing_popup = AtumMarketingPopup::get_instance();
+
+			$marketing_popup = [
+				'background'    => $marketing_popup->get_background(),
+				'title'         => $marketing_popup->get_title(),
+				'description'   => $marketing_popup->get_description(),
+				'buttons'       => $marketing_popup->get_buttons(),
+				'images'        => $marketing_popup->get_images(),
 				'transient_key' => $marketing_popup->get_transient_key(),
-				];
+			];
 
-				// Send marketing popup content.
+			// Send marketing popup content.
 			wp_send_json_success( compact( 'marketing_popup' ) );
 
 		}

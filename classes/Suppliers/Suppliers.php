@@ -382,8 +382,7 @@ class Suppliers {
 				/*
 				 * ATUM marketing popup
 				 */
-				$show_marketing_popup = Helpers::show_marketing_popup();
-				if ( $show_marketing_popup ) {
+				if ( Helpers::show_marketing_popup() ) {
 
 					$marketing_popup_vars = array(
 						'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
