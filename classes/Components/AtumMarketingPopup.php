@@ -14,6 +14,8 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
+
 
 class AtumMarketingPopup {
 
@@ -157,10 +159,10 @@ class AtumMarketingPopup {
 	 *
 	 * @return array|\WP_Error
 	 */
-	private static function get_marketing_popup_content() {
+	private function get_marketing_popup_content() {
 
 		// Until we find a solution for the API calls limit, we will use get the JSON locally.
-		return json_decode( file_get_contents( ATUM_PATH . 'includes/marketing-popup-content.json' ) );
+		return json_decode( file_get_contents( ATUM_PATH . 'includes/marketing-popup-content.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 		/*$request_params = array(
 			'method'      => 'POST',
@@ -176,6 +178,32 @@ class AtumMarketingPopup {
 
 		// Call marketing popup info.
 		return wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );*/
+
+	}
+
+	/**
+	 * Enqueue the Marketing popup scripts if needed
+	 *
+	 * @since 1.5.3.2
+	 */
+	public static function maybe_enqueue_scripts() {
+
+		if ( Helpers::show_marketing_popup() ) {
+
+			$min = ! ATUM_DEBUG ? '.min' : '';
+
+			$marketing_popup_vars = array(
+				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
+			);
+
+			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
+
+			wp_enqueue_style( 'atum-marketing-popup' );
+			wp_enqueue_script( 'atum-marketing-popup' );
+
+		}
 
 	}
 
@@ -274,6 +302,8 @@ class AtumMarketingPopup {
 	public function is_loaded() {
 		return $this->loaded;
 	}
+
+
 
 	/*******************
 	 * Instance methods

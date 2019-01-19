@@ -2264,9 +2264,13 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
 
-		$transient_key = $_POST['transientKey'];
+		if ( ! isset( $_POST['transientKey'] ) ) {
+			wp_die();
+		}
 
-		update_user_meta( get_current_user_id(), 'marketing-popup', $transient_key );
+		$transient_key = esc_attr( $_POST['transientKey'] );
+
+		update_user_meta( get_current_user_id(), 'atum-marketing-popup', $transient_key );
 
 		wp_die();
 

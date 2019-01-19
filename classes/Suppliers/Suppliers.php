@@ -374,28 +374,13 @@ class Suppliers {
 		if ( self::POST_TYPE === $post_type ) {
 
 			if ( in_array( $hook, [ 'post.php', 'post-new.php', 'edit.php' ] ) ) {
-				$min = ! ATUM_DEBUG ? '.min' : '';
+
 				// Sweet Alert 2.
 				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 
-				/*
-				 * ATUM marketing popup
-				 */
-				if ( Helpers::show_marketing_popup() ) {
-
-					$marketing_popup_vars = array(
-						'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-					);
-
-					wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-					wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-					wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
-
-					wp_enqueue_style( 'atum-marketing-popup' );
-					wp_enqueue_script( 'atum-marketing-popup' );
-
-				}
+				// ATUM marketing popup.
+				AtumMarketingPopup::maybe_enqueue_scripts();
 
 				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array( 'sweetalert2' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-suppliers' );

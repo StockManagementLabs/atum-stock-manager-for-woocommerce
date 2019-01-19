@@ -2343,6 +2343,7 @@ final class Helpers {
 			$transient_key = $marketing_popup->get_transient_key();
 			AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
 
+
 		}
 
 		// Get marketing popup user meta.

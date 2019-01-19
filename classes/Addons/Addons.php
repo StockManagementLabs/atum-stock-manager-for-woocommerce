@@ -170,23 +170,8 @@ class Addons {
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 		Helpers::maybe_es6_promise();
 
-		/*
-		 * ATUM marketing popup
-		 */
-		if ( Helpers::show_marketing_popup() ) {
-
-			$marketing_popup_vars = array(
-				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-			);
-
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
-
-			wp_enqueue_style( 'atum-marketing-popup' );
-			wp_enqueue_script( 'atum-marketing-popup' );
-
-		}
+		// ATUM marketing popup.
+		AtumMarketingPopup::maybe_enqueue_scripts();
 
 		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
