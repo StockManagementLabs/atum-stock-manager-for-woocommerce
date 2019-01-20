@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumException;
+use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;
 
 

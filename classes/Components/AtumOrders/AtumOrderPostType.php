@@ -15,6 +15,7 @@ namespace Atum\Components\AtumOrders;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
