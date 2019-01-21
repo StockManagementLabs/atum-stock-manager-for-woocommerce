@@ -14,6 +14,7 @@ namespace Atum\Settings;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
@@ -190,26 +191,10 @@ class Settings {
 
 			$min = ! ATUM_DEBUG ? '.min' : '';
 
-			/*
-			 * ATUM marketing popup
-			 */
-			$show_marketing_popup = Helpers::show_marketing_popup();
-			if ( $show_marketing_popup ) {
+			// ATUM marketing popup.
+			AtumMarketingPopup::maybe_enqueue_scripts();
 
-				$marketing_popup_vars = array(
-					'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
-				);
-
-				wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-				wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
-				wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
-
-				wp_enqueue_style( 'atum-marketing-popup' );
-				wp_enqueue_script( 'atum-marketing-popup' );
-
-			}
-
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION );
+			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION, TRUE );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'atumPrefix'                      => ATUM_PREFIX,

@@ -184,13 +184,13 @@ class Dashboard {
 		$user_widgets_layout = self::get_user_widgets_layout();
 
 		// Get Marketing popup content.
-		$marketing_popup = new AtumMarketingPopup();
-		
+		$marketing_popup = AtumMarketingPopup::get_instance();
+
 		Helpers::load_view( 'dashboard', array_merge( array(
-			'widgets'          => $this->widgets,
-			'layout'           => $user_widgets_layout,
-			'dashboard'        => $this,
-			'marketing_popup'  => $marketing_popup,
+			'widgets'         => $this->widgets,
+			'layout'          => $user_widgets_layout,
+			'dashboard'       => $this,
+			'marketing_popup' => $marketing_popup,
 		), Helpers::get_support_button() ) );
 		
 	}

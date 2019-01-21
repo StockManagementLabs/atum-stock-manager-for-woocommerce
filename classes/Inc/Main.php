@@ -205,7 +205,7 @@ class Main {
 
 		// Add the footer text to ATUM pages.
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
-		AtumMarketingPopup::get_instance();
+
 	}
 
 	/**

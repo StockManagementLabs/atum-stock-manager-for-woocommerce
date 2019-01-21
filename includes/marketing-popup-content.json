@@ -1,0 +1,49 @@
+{
+	"background": {
+		"background_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg')",
+		"background_position"     : "bottom",
+		"background_size"         : "contain",
+		"background_repeat"       : "no-repeat",
+		"background_color"        : "white"
+	},
+	"dash_background": {
+		"background_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory-opacity.svg')",
+		"background_position"     : "bottom",
+		"background_size"         : "cover",
+		"background_repeat"       : "no-repeat",
+		"background_color"        : "white"
+	},
+	"images": {
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/multi-inventory_icon.svg",
+		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/label-new.png"
+	},
+	"title": {
+		"text"      : "Multi-<strong>Inventory</strong>",
+		"text_color": "black",
+		"text_size" : "",
+		"text_align": "center"
+	},
+	"description": {
+		"text"           : "Our ATUM family has grown again! Create Multiple Inventories per product, add Expiry dates and Restrict sales by Regions.",
+		"text_color"     : "#adb5bd",
+		"text_size"      : "14px",
+		"text_align"     : "center",
+		"dash_text_align": "justify",
+		"padding"        : "0 35px 30px"
+	},
+	"buttons": [
+		{
+			"text"      : "More info",
+			"url"       : "https://www.stockmanagementlabs.com/addons/atum-multi-inventory/",
+			"class"     : "btn btn-success",
+			"css"       : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 30px; padding: 0;"
+		},
+		{
+			"text"  : "Live Demo",
+			"url"   : "http://demo.multi-inventory.stockmanagementlabs.com/",
+			"class" : "btn btn-outline-success",
+			"css"   : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 30px; padding: 0;"
+		}
+	],
+	"transient_key": "atum-multinventory"
+}

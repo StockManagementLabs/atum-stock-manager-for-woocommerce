@@ -7,7 +7,7 @@ Tested up to: 5.0.3
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.3
-Stable tag: 1.5.3
+Stable tag: 1.5.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.3.3`
+
+*2019-01-20*
+
+**Fixes**
+
+* Fixed missing namespace include.
+
+---
+
+`1.5.3.2`
+
+*2019-01-19*
+
+**Fixes**
+
+* Moved the Marketing Popup content to a local JSON to avoid API collapses.
+* Do not show the Marketing Popup if no valid content was retrieved.
+* Refactory.
 
 ---
 

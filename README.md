@@ -159,6 +159,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.3.3`
+
+*2019-01-20*
+
+**Fixes**
+
+* Fixed missing namespace include.
+
+---
+
+`1.5.3.2`
+
+*2019-01-19*
+
+**Fixes**
+
+* Moved the Marketing Popup content to a local JSON to avoid API collapses.
+* Do not show the Marketing Popup if no valid content was retrieved.
+* Refactory.
+
+---
+
 `1.5.3`
 
 *2019-01-17*
