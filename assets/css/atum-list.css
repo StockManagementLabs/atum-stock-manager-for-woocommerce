@@ -5425,7 +5425,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .tablenav.top .tablenav-pages-container.one-page {
   width: 100%;
-  min-width: 200px;
+  min-width: 150px;
 }
 
 .tablenav.top .tablenav-pages-container.one-page.no-submit {
@@ -5875,7 +5875,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .atum-list-wrapper .overflow-opacity-effect-left {
   display: none;
   left: 0;
-  backgroundimage: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  background-image: -webkit-gradient(linear, right top, left top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
   background-repeat: no-repeat;
 }
 

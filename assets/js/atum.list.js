@@ -1750,7 +1750,7 @@
 			var self            = this,
 			    tooltipsTimeout = null;
 			
-			$(window).on('resize', function() {
+			$(window).on('resize load', function() {
 				self.addHorizontalScrolleffect('stock_central_nav', false);
 				self.addHorizontalScrolleffect('filters_container', false);
 			});
