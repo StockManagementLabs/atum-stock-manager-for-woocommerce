@@ -106,6 +106,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		'all_grouped'               => [],
 		'variable_subscription'     => [],
 		'all_variable_subscription' => [],
+		'bundle'                    => [],
+		'all_bundle'                => [],
 	);
 
 	/**

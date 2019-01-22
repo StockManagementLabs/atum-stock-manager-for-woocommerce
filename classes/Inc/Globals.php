@@ -174,6 +174,15 @@ final class Globals {
 			array_push( self::$product_types, 'booking' );
 		}
 
+		// Add WC Product Bundles compatibility.
+		if (
+			class_exists( '\WC_Bundles' ) &&
+			! in_array( 'bundle', self::$product_types ) &&
+			'yes' === Helpers::get_option( 'show_bundles', 'yes' )
+		) {
+			self::$product_types = array_merge( self::$product_types, [ 'bundle' ] );
+		}
+
 		return (array) apply_filters( 'atum/allowed_product_types', self::$product_types );
 
 	}
@@ -194,6 +203,15 @@ final class Globals {
 			'yes' === Helpers::get_option( 'show_subscriptions', 'yes' )
 		) {
 			self::$inheritable_product_types[] = 'variable-subscription';
+		}
+
+		// Add WC Product Bundles compatibility.
+		if (
+			class_exists( '\WC_Bundles' ) &&
+			! in_array( 'bundle', self::$inheritable_product_types ) &&
+			'yes' === Helpers::get_option( 'show_bundles', 'yes' )
+		) {
+			self::$inheritable_product_types[] = 'bundle';
 		}
 
 		return (array) apply_filters( 'atum/allowed_inheritable_product_types', self::$inheritable_product_types );

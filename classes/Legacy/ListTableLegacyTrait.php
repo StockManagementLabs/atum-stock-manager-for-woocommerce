@@ -414,6 +414,16 @@ trait ListTableLegacyTrait {
 
 				}
 
+				// WC product bundles compatibility.
+				if ( class_exists( '\WC_Bundles' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
+
+					$bundle_items = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children_legacy( 'bundle', $post_in ), $post_in );
+
+					// Remove the variable subscription containers from the array and add the subscription variations.
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_bundle'] ), $bundle_items ) );
+
+				}
+
 				// Re-count the resulting products.
 				$this->count_views['count_all'] = count( $products );
 
@@ -698,10 +708,11 @@ trait ListTableLegacyTrait {
 		if ( ! empty( $post_in ) ) {
 			$parent_args['post__in'] = $post_in;
 		}
-		
+
 		// As this query does not contain ATUM params, doesn't need the filters.
-		$parents            = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
-		$parents_with_child = $grouped_products = array();
+		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
+
+		$parents_with_child = $grouped_products = $bundle_childrens = array();
 		
 		if ( $parents->found_posts ) {
 			
@@ -724,9 +735,27 @@ trait ListTableLegacyTrait {
 					}
 
 					break;
-				
 				case 'variable-subscription':
 					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents->posts ) );
+					break;
+				case 'bundle':
+					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents->posts ) );
+
+					$bundle_args = array(
+						'return'    => 'id=>product_id',
+						'bundle_id' => $parents->posts,
+					);
+
+					$bundle_childrens = \WC_PB_DB::query_bundled_items( $bundle_args );
+
+					// Get all the children from their corresponding meta key.
+					foreach ( $parents->posts as $parent_id ) {
+
+						if ( ! empty( $bundle_childrens ) && is_array( $bundle_childrens ) ) {
+							$bundle_childrens     = array_merge( $grouped_products, $bundle_childrens );
+							$parents_with_child[] = $parent_id;
+						}
+					}
 					break;
 			}
 
@@ -740,6 +769,9 @@ trait ListTableLegacyTrait {
 
 			if ( 'grouped' === $parent_type ) {
 				$children_args['post__in'] = $grouped_products;
+			}
+			if ( 'bundle' === $parent_type ) {
+				$children_args['post__in'] = $bundle_childrens;
 			}
 			else {
 				$children_args['post_parent__in'] = $parents->posts;
@@ -769,7 +801,7 @@ trait ListTableLegacyTrait {
 			
 			if ( $children->found_posts ) {
 
-				if ( 'grouped' !== $parent_type ) {
+				if ( 'grouped' !== $parent_type && 'bundle' !== $parent_type ) {
 					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
 				}
 
@@ -793,6 +825,12 @@ trait ListTableLegacyTrait {
 
 						// Exclude all those subscription variations with no children from the list.
 						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable_subscription'], $this->container_products['variable_subscription'] ) ) );
+						break;
+					case 'bundle':
+						$this->container_products['bundle'] = array_unique( array_merge( $this->container_products['bundle'], $parents_with_child ) );
+
+						// Exclude all those subscription variations with no children from the list.
+						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 						break;
 				}
 
