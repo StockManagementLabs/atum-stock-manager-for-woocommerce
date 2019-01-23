@@ -1773,7 +1773,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.expanded {
 			transition: all 0.1s ease-in-out;
 			
-			&.variable, &.variable-subscription {
+			&.variable, &.variable-subscription, &.bundle {
 				background-color: $primary;
 			}
 			
@@ -1781,7 +1781,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				background-color: $warning;
 			}
 			
-			&.variable, &.variable-subscription, &.group {
+			&.variable, &.variable-subscription, &.group, &.bundle {
 				
 				td, a {
 					color: $white;
@@ -1992,7 +1992,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		tr {
 			&.expanded {
-				&.variable, &.group {
+				&.variable, &.group, &.bundle {
 					td {
 						color: $white !important;
 						

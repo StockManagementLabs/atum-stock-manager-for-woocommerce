@@ -482,7 +482,16 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( Helpers::is_inheritable_type( $type ) ) {
 
 			$this->allow_calcs = FALSE;
-			$class_type        = 'grouped' === $type ? 'group' : 'variable';
+
+			if ( 'grouped' === $type ) {
+				$class_type = 'group';
+			}
+			elseif ( 'bundle' === $type ) {
+				$class_type = 'bundle';
+			}
+			else {
+				$class_type = 'variable';
+			}
 
 			$row_classes[] = $class_type;
 
@@ -506,8 +515,29 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the children products of each inheritable product type.
 		if ( ! $this->allow_calcs ) {
 
-			$product_type   = 'grouped' === $type ? 'product' : 'product_variation';
-			$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
+			if ( 'grouped' === $type ) {
+				$product_type = 'product';
+			}
+			elseif ( 'bundle' === $type ) {
+				$product_type = 'product_bundle';
+			}
+			else {
+				$product_type = 'product_variation';
+			}
+
+			if ( 'product_bundle' === $product_type ) {
+
+				$bundle_args = array(
+					'return'    => 'id=>product_id',
+					'bundle_id' => $this->product->get_id(),
+				);
+
+				$child_products = \WC_PB_DB::query_bundled_items( $bundle_args );
+
+			}
+			else {
+				$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
+			}
 
 			if ( ! empty( $child_products ) ) {
 
@@ -534,7 +564,18 @@ abstract class AtumListTable extends \WP_List_Table {
 					$this->is_child = TRUE;
 					// Save the child product to the product prop.
 					$this->product = Helpers::get_atum_product( $child_id );
-					$this->single_expandable_row( $this->product, ( 'grouped' === $type ? $type : 'variation' ) );
+
+					if ( 'grouped' === $type ) {
+						$child_type = 'grouped';
+					}
+					elseif ( 'bundle' === $type ) {
+						$child_type = 'bundle';
+					}
+					else {
+						$child_type = 'variation';
+					}
+
+					$this->single_expandable_row( $this->product, $child_type );
 				}
 			}
 
@@ -906,7 +947,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_calc_type( $item ) {
 
-		$type          = $this->product->get_type();
+		$type = $this->product->get_type();
+
 		$product_tip   = '';
 		$product_types = wc_get_product_types();
 
@@ -961,6 +1003,27 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'subscription_variation':
 					$type        = 'variation';
 					$product_tip = esc_attr__( 'Subscription Variation', ATUM_TEXT_DOMAIN );
+					break;
+
+				// WC Bundle Products compatibility.
+				case 'bundle':
+					if ( $this->is_child ) {
+						$type        = 'bundle-item';
+						$product_tip = esc_attr__( 'Bundle item', ATUM_TEXT_DOMAIN );
+					}
+
+					$childs = \WC_PB_DB::query_bundled_items( array(
+						'return'    => 'id=>product_id',
+						'bundle_id' => $this->product->get_id(),
+					) );
+
+					if ( $childs ) {
+						$product_tip .= '<br>' . sprintf(
+							/* translators: product type names */
+						esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), esc_attr__( 'bundle items', ATUM_TEXT_DOMAIN ) );
+						$type .= ' has-child';
+					}
+
 					break;
 			}
 
@@ -2347,6 +2410,16 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						// Remove the variable subscription containers from the array and add the subscription variations.
 						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
+
+					}
+
+					// WC product bundles compatibility.
+					if ( class_exists( '\WC_Product_Bundle' ) && in_array( 'bundle', $types, TRUE ) ) {
+
+						$bundle_items = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children_legacy( 'bundle', $post_in ), $post_in );
+
+						// Remove the variable subscription containers from the array and add the subscription variations.
+						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_bundle'] ), $bundle_items ) );
 
 					}
 
@@ -4024,7 +4097,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			GROUP BY p.ID
 		", $parent_type ) ); // WPCS: unprepared sql ok.
 
-		$parents_with_child = $grouped_products = array();
+		$parents_with_child = $grouped_products = $bundle_childrens = array();
 
 		if ( ! empty( $parents ) ) {
 
@@ -4037,7 +4110,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents ) );
 
 					// Get all the children from their corresponding meta key.
-					foreach ( $parents->posts as $parent_id ) {
+					foreach ( $parents as $parent_id ) {
 						$children = get_post_meta( $parent_id, '_children', TRUE );
 
 						if ( ! empty( $children ) && is_array( $children ) ) {
@@ -4051,6 +4124,25 @@ abstract class AtumListTable extends \WP_List_Table {
 				// WC Subscriptions compatibility.
 				case 'variable-subscription':
 					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents ) );
+					break;
+
+				// WC Bundle Producs compatibility.
+				case 'bundle':
+					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents ) );
+
+					$bundle_args = array(
+						'return'    => 'id=>product_id',
+						'bundle_id' => $parents->posts,
+					);
+
+					$bundle_childrens = \WC_PB_DB::query_bundled_items( $bundle_args );
+
+					foreach ( $parents->posts as $parent_id ) {
+
+						if ( ! empty( $bundle_childrens ) && is_array( $bundle_childrens ) ) {
+							$parents_with_child[] = $parent_id;
+						}
+					}
 					break;
 			}
 
@@ -4068,8 +4160,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( 'grouped' === $parent_type ) {
 				$children_args['post__in'] = $grouped_products;
 			}
+			if ( 'bundle' === $parent_type ) {
+				$children_args['post__in'] = $bundle_childrens;
+			}
 			else {
-				$children_args['post_parent__in'] = $parents->posts;
+				$children_args['post_parent__in'] = $parents;
 			}
 
 			/*
@@ -4100,7 +4195,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( $children->found_posts ) {
 
-				if ( 'grouped' !== $parent_type ) {
+				if ( 'grouped' !== $parent_type && 'bundle' !== $parent_type ) {
 					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
 				}
 
@@ -4124,6 +4219,13 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						// Exclude all those subscription variations with no children from the list.
 						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable_subscription'], $this->container_products['variable_subscription'] ) ) );
+						break;
+
+					case 'bundle':
+						$this->container_products['bundle'] = array_unique( array_merge( $this->container_products['bundle'], $parents_with_child ) );
+
+						// Exclude all those subscription variations with no children from the list.
+						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 						break;
 				}
 

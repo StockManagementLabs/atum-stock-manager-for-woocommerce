@@ -415,7 +415,7 @@ trait ListTableLegacyTrait {
 				}
 
 				// WC product bundles compatibility.
-				if ( class_exists( '\WC_Bundles' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
+				if ( class_exists( '\WC_Product_Bundle' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
 
 					$bundle_items = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children_legacy( 'bundle', $post_in ), $post_in );
 
@@ -735,9 +735,13 @@ trait ListTableLegacyTrait {
 					}
 
 					break;
+
+				// WC Subscriptions compatibility.
 				case 'variable-subscription':
 					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents->posts ) );
 					break;
+
+				// WC Bundle Producs compatibility.
 				case 'bundle':
 					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents->posts ) );
 
@@ -748,11 +752,9 @@ trait ListTableLegacyTrait {
 
 					$bundle_childrens = \WC_PB_DB::query_bundled_items( $bundle_args );
 
-					// Get all the children from their corresponding meta key.
 					foreach ( $parents->posts as $parent_id ) {
 
 						if ( ! empty( $bundle_childrens ) && is_array( $bundle_childrens ) ) {
-							$bundle_childrens     = array_merge( $grouped_products, $bundle_childrens );
 							$parents_with_child[] = $parent_id;
 						}
 					}
