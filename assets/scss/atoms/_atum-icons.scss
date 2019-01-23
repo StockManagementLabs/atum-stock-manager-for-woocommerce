@@ -24,6 +24,31 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-cog-solid {
+	&:before {
+		content: $atmi-cog-solid;
+	}
+}
+.atmi-database-solid {
+	&:before {
+		content: $atmi-database-solid;
+	}
+}
+.atmi-funnel-solid {
+	&:before {
+		content: $atmi-funnel-solid;
+	}
+}
+.atmi-highlight-solid {
+	&:before {
+		content: $atmi-highlight-solid;
+	}
+}
+.atmi-magic-wand-solid {
+	&:before {
+		content: $atmi-magic-wand-solid;
+	}
+}
 .atmi-wc-contract {
 	&:before {
 		content: $atmi-wc-contract;

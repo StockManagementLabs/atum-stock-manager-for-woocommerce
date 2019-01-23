@@ -760,6 +760,26 @@ input[type="button"].btn-block {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-cog-solid:before {
+  content: "";
+}
+
+.atmi-database-solid:before {
+  content: "";
+}
+
+.atmi-funnel-solid:before {
+  content: "";
+}
+
+.atmi-highlight-solid:before {
+  content: "";
+}
+
+.atmi-magic-wand-solid:before {
+  content: "";
+}
+
 .atmi-wc-contract:before {
   content: "";
 }
