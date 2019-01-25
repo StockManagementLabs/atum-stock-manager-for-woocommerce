@@ -2,16 +2,16 @@
    BULK ACTIONS FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings'
-import Globals from './_globals'
-import ListTable from './_list-table'
-import Utils from '../../utils/_utils'
+import Settings from '../../config/_settings';
+import Globals from './_globals';
+import ListTable from './_list-table';
+import Utils from '../../utils/_utils';
 
 let BulkActions = {
 	
 	init() {
 		
-		let self = this
+		let self = this;
 		
 		Globals.$atumList
 		
@@ -28,11 +28,11 @@ let BulkActions = {
 						type              : 'info',
 						confirmButtonText : Settings.get('ok'),
 						confirmButtonColor: '#00b8db',
-					})
+					});
 					
 				}
 				else {
-					self.applyBulk()
+					self.applyBulk();
 				}
 				
 			})
@@ -42,13 +42,13 @@ let BulkActions = {
 			// ----------------------
 			.on('change', '.bulkactions select', (evt) => {
 				
-				self.updateBulkButton()
+				self.updateBulkButton();
 				
 				if ($(evt.target).val() !== '-1') {
-					$('.apply-bulk-action').show()
+					$('.apply-bulk-action').show();
 				}
 				else {
-					$('.apply-bulk-action').hide()
+					$('.apply-bulk-action').hide();
 				}
 			})
 			
@@ -56,8 +56,8 @@ let BulkActions = {
 			// Change the Bulk Button text when selecting boxes.
 			// -------------------------------------------------
 			.on('change', '.check-column input:checkbox', () => {
-				self.updateBulkButton()
-			})
+				self.updateBulkButton();
+			});
 		
 	},
 	
@@ -70,11 +70,11 @@ let BulkActions = {
 		    bulkAction    = Globals.$atumList.find('.bulkactions select').filter( (index, elem) => {
 			    return $(elem).val() !== '-1'
 		    }).val(),
-		    selectedItems = []
+		    selectedItems = [];
 		
 		Globals.$atumList.find('tbody .check-column input:checkbox').filter(':checked').each( (index, elem) => {
-			selectedItems.push($(elem).val())
-		})
+			selectedItems.push($(elem).val());
+		});
 		
 		$.ajax({
 			url       : ajaxurl,
@@ -87,27 +87,27 @@ let BulkActions = {
 				ids        : selectedItems,
 			},
 			beforeSend: () => {
-				$bulkButton.prop('disabled', true)
-				ListTable.addOverlay()
+				$bulkButton.prop('disabled', true);
+				ListTable.addOverlay();
 			},
 			success   : (response) => {
 				
 				if (typeof response === 'object') {
-					const noticeType = response.success ? 'updated' : 'error'
-					Utils.addNotice(noticeType, response.data)
+					const noticeType = response.success ? 'updated' : 'error';
+					Utils.addNotice(noticeType, response.data);
 				}
 				
-				$bulkButton.prop('disabled', false)
+				$bulkButton.prop('disabled', false);
 				
 				if (response.success) {
-					$bulkButton.hide()
-					ListTable.updateTable()
+					$bulkButton.hide();
+					ListTable.updateTable();
 				}
 				
 			},
 			error     : () => {
-				$bulkButton.prop('disabled', false)
-				ListTable.removeOverlay()
+				$bulkButton.prop('disabled', false);
+				ListTable.removeOverlay();
 			},
 		})
 		
@@ -119,12 +119,12 @@ let BulkActions = {
 	updateBulkButton() {
 		
 		let numChecked = Globals.$atumList.find('.check-column input:checkbox:checked').length,
-		    buttonText = numChecked > 1 ? Settings.get('applyBulkAction') : Settings.get('applyAction')
+		    buttonText = numChecked > 1 ? Settings.get('applyBulkAction') : Settings.get('applyAction');
 		
-		$('.apply-bulk-action').text(buttonText)
+		$('.apply-bulk-action').text(buttonText);
 		
 	},
 	
 }
 
-module.exports = BulkActions
+module.exports = BulkActions;

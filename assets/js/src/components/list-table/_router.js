@@ -2,9 +2,9 @@
    ROUTER FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings'
-import Globals from './_globals'
-import ListTable from './_list-table'
+import Settings from '../../config/_settings';
+import Globals from './_globals';
+import ListTable from './_list-table';
 
 let Router = {
 	
@@ -14,26 +14,26 @@ let Router = {
 	init() {
 		
 		if (typeof $.address === 'undefined') {
-			return
+			return;
 		}
 		
-		let self = this
+		let self = this;
 		
 		// Hash history navigation.
 		$.address.externalChange( () => {
 			
 			if (Settings.get('ajaxFilter') !== 'yes') {
 				// Force enabled or disabled search button.
-				let searchInputVal = Globals.$searchInput.val()
-				$('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true)
+				let searchInputVal = Globals.$searchInput.val();
+				$('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true);
 			}
 			
 			let numCurrentParams = $.address.parameterNames().length;
 			if (self.navigationReady === true && (numCurrentParams || self.numHashParameters !== numCurrentParams)) {
-				ListTable.updateTable()
+				ListTable.updateTable();
 			}
 			
-			self.navigationReady = true
+			self.navigationReady = true;
 			
 		})
 		.init( () => {
@@ -44,49 +44,50 @@ let Router = {
 				// Init fields from hash parameters.
 				let s            = $.address.parameter('s'),
 				    searchColumn = $.address.parameter('search_column'),
-				    optionVal    = ''
-				
+				    optionVal    = '';
 				
 				if (s) {
-					Globals.$searchInput.val(s)
+					Globals.$searchInput.val(s);
 				}
 				
 				if (searchColumn) {
 					
 					$('#adv-settings :checkbox').each( (index, elem) => {
-						optionVal = $(elem).val()
+						
+						optionVal = $(elem).val();
+						
 						if (optionVal.search('calc_') < 0) { // Calc values are not searchable, also we can't search on thumb.
 							
 							if (optionVal !== 'thumb' && optionVal == searchColumn) {
-								Globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, $(elem).parent().text() + ' <span class="caret"></span>'])
+								Globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, $(elem).parent().text() + ' <span class="caret"></span>']);
 								
-								return false
+								return false;
 							}
 						}
-					})
+					});
 					
 				}
 				
-				ListTable.updateTable()
+				ListTable.updateTable();
 				
 			}
 			
 		})
 		
 		// Bind List Table links.
-		this.bindListLinks()
+		this.bindListLinks();
 		
 		// Bind pagination input textbox.
-		this.bindPageInput()
+		this.bindPageInput();
 		
 		// Re-bind the links after the List Table is updated.
-		Globals.$atumList.on('atum-table-updated', this.bindListLinks)
+		Globals.$atumList.on('atum-table-updated', this.bindListLinks);
 		
 		// Bind Views, Pagination and Sortable links.
 		Globals.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', (evt) => {
-			evt.preventDefault()
-			self.updateHash()
-		})
+			evt.preventDefault();
+			self.updateHash();
+		});
 	
 	},
 	
@@ -94,7 +95,7 @@ let Router = {
 	 * Bind the List Table links that will trigger URL hash changes
 	 */
 	bindListLinks() {
-		Globals.$atumList.find('.subsubsub a, .tablenav-pages a, .item-heads a').address()
+		Globals.$atumList.find('.subsubsub a, .tablenav-pages a, .item-heads a').address();
 	},
 	
 	/**
@@ -102,14 +103,14 @@ let Router = {
 	 */
 	bindPageInput() {
 		
-		let self = this
+		let self = this;
 		
 		Globals.$atumList.on('keypress', '#current-page-selector', (evt) => {
 			if (evt.which === 13) {
-				$.address.parameter('paged', $(evt.target).data('current'))
-				self.updateHash()
+				$.address.parameter('paged', $(evt.target).data('current'));
+				self.updateHash();
 			}
-		})
+		});
 		
 	},
 	
@@ -119,7 +120,7 @@ let Router = {
 	updateHash() {
 		
 		let self             = this,
-		    numCurrentParams = $.address.parameterNames().length
+		    numCurrentParams = $.address.parameterNames().length;
 		
 		Globals.filterData = $.extend(Globals.filterData, {
 			view          : $.address.parameter('view') || Globals.$atumList.find('.subsubsub a.current').attr('id') || '',
@@ -135,40 +136,40 @@ let Router = {
 			sold_last_days: $.address.parameter('sold_last_days') || '',
 			orderby       : $.address.parameter('orderby') || Settings.get('orderby'),
 			order         : $.address.parameter('order') || Settings.get('order'),
-		})
+		});
 		
 		// Update the URL hash parameters.
 		$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], (index, elem) => {
 			
 			// Disable auto-update on each iteration until all the parameters have been set.
-			self.navigationReady = false
+			self.navigationReady = false;
 			
 			// If it's not saved on the filter data, continue.
 			if ( typeof Globals.filterData[elem] === 'undefined' ) {
-				return true
+				return true;
 			}
 			
 			// If it's the default value, is not needed.
 			if (typeof Settings.get(elem) !== 'undefined' && Settings.get(elem) === Globals.filterData[elem]) {
-				$.address.parameter(elem, '')
+				$.address.parameter(elem, '');
 				
-				return true
+				return true;
 			}
 			
-			$.address.parameter(elem, Globals.filterData[elem])
+			$.address.parameter(elem, Globals.filterData[elem]);
 			
-		})
+		});
 		
 		// Restore navigation and update if needed.
 		if (numCurrentParams || this.numHashParameters !== numCurrentParams) {
 			ListTable.updateTable();
 		}
 		
-		this.navigationReady   = true
-		this.numHashParameters = numCurrentParams
+		this.navigationReady   = true;
+		this.numHashParameters = numCurrentParams;
 		
 	},
 	
 }
 
-module.exports = Router
+module.exports = Router;

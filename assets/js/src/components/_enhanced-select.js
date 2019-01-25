@@ -9,11 +9,11 @@ let EnhancedSelect = {
 	 */
 	maybeRestoreEnhancedSelect() {
 		
-		$('.select2-container--open').remove()
-		$('body').trigger('wc-enhanced-select-init')
+		$('.select2-container--open').remove();
+		$('body').trigger('wc-enhanced-select-init');
 		
 	},
 	
 }
 
-module.exports = EnhancedSelect
+module.exports = EnhancedSelect;

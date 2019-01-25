@@ -2,8 +2,8 @@
    DATE TIME PICKER
    ======================================= */
 
-import Settings from '../config/_settings'
-import moment from 'moment/min/moment.min'
+import Settings from '../config/_settings';
+import moment from 'moment/min/moment.min';
 
 let DateTimePicker = {
 	
@@ -59,27 +59,29 @@ let DateTimePicker = {
 	/**
 	 * Add the date time pickers
 	 *
-	 * @param {jQuery} $selector
-	 * @param {Object} opts
+	 * @param jQuery $selector
+	 * @param Object opts
 	 */
 	addDateTimePickers($selector, opts) {
 	
-		let self = this
+		let self = this;
 		
 		$selector.each( (index, elem) => {
 			
 			let $dateTimePicker = $(elem),
-			    mergedOpts      = {}
+			    mergedOpts      = {};
 			
-			// Extend the date picker options with data options
-			$.extend(mergedOpts, self.defaults, $dateTimePicker.data() || {}, opts || {})
+			// Extend the date picker options with data options.
+			$.extend(mergedOpts, self.defaults, $dateTimePicker.data() || {}, opts || {});
 			
-			$dateTimePicker.datetimepicker(mergedOpts)
+			$dateTimePicker.datetimepicker(mergedOpts);
 			
 		})
 		.on('dp.change', (evt) => {
-			const label = typeof evt.date === 'object' ? evt.date.format(Settings.get('dateFormat')) : Settings.get('none')
-			$(this).siblings('.field-label').addClass('unsaved').text(label)
+			
+			const label = typeof evt.date === 'object' ? evt.date.format(Settings.get('dateFormat')) : Settings.get('none');
+			$(this).siblings('.field-label').addClass('unsaved').text(label);
+			
 		})
 		.on('dp.show', (evt) => {
 			
@@ -87,19 +89,19 @@ let DateTimePicker = {
 			$selector.not($(evt.target)).filter( (index, elem) => {
 				
 				if ($(elem).children('.bootstrap-datetimepicker-widget').length) {
-					return true
+					return true;
 				}
 				
-				return false
+				return false;
 				
 			}).each( (index, elem) => {
 				$(elem).data('DateTimePicker').hide()
-			})
+			});
 			
-		})
+		});
 		
 	},
 	
 }
 
-module.exports = DateTimePicker
+module.exports = DateTimePicker;

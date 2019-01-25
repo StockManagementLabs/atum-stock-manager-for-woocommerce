@@ -2,17 +2,17 @@
    STICKY COLUMNS FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings'
-import Globals from './_globals'
+import Settings from '../../config/_settings';
+import Globals from './_globals';
 
 let StickyColumns = {
 	
 	init() {
 		
 		// Make the first columns sticky.
-		Globals.enabledStickyColumns = $('.sticky-columns-button').hasClass('active')
+		Globals.enabledStickyColumns = $('.sticky-columns-button').hasClass('active');
 		if (Globals.enabledStickyColumns) {
-			Globals.$stickyCols = this.createStickyColumns(Globals.$atumTable)
+			Globals.$stickyCols = this.createStickyColumns(Globals.$atumTable);
 		}
 	
 	},
@@ -20,81 +20,81 @@ let StickyColumns = {
 	/**
 	 * Make the first table columns sticky
 	 *
-	 * @param {jQuery} The table that will be used as a base to generate the sticky columns.
+	 * @param jQuery The table that will be used as a base to generate the sticky columns.
 	 *
 	 * @return jQuery|null The sticky cols (if enabled) or null.
 	 */
 	createStickyColumns($table) {
 		
-		// If there are no sticky columns in this table, do not continue
+		// If there are no sticky columns in this table, do not continue.
 		if (!Settings.get('stickyColumns').length) {
-			return null
+			return null;
 		}
 		
-		let $stickyCols = $table.clone()
+		let $stickyCols = $table.clone();
 		
 		// Remove table header and footer.
-		$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove()
+		$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
 		
 		// Remove all the columns that won't be sticky.
 		$stickyCols.find('tr').each( (index, elem) => {
 			
-			let $row = $(elem)
+			let $row = $(elem);
 			
 			// Add a prefix to the row ID to avoid problems when expanding/collapsing rows.
-			$row.data('id', 'c' + $row.data('id'))
+			$row.data('id', 'c' + $row.data('id'));
 			
 			// Remove all the column groups except first one.
 			if ($row.hasClass('column-groups')) {
-				let $colGroups = $row.children()
-				$colGroups.not(':first-child').remove()
-				$colGroups.first().attr('colspan', Settings.get('stickyColumns').length)
+				let $colGroups = $row.children();
+				$colGroups.not(':first-child').remove();
+				$colGroups.first().attr('colspan', Settings.get('stickyColumns').length);
 			}
 			// Remove all the non-sticky columns.
 			else {
 				
 				let columnNames   = Settings.get('stickyColumns'),
-				    columnClasses = []
+				    columnClasses = [];
 				
 				$.each(columnNames, (index, columnName) => {
-					columnClasses.push('.column-' + columnName)
+					columnClasses.push('.column-' + columnName);
 				})
 				
-				$row.children().not(columnClasses.join(',')).remove()
+				$row.children().not(columnClasses.join(',')).remove();
 				
 			}
 			
-		})
+		});
 		
 		// Do not add sticky columns with a low columns number.
 		if ($stickyCols.find('thead .item-heads').children().not('.hidden').length <= 2) {
-			return null
+			return null;
 		}
 		
 		// Remove the manage-column class to not conflict with the WP's Screen Options functionality.
-		$stickyCols.find('.manage-column').removeClass('manage-column')
+		$stickyCols.find('.manage-column').removeClass('manage-column');
 		
-		return $stickyCols
+		return $stickyCols;
 		
 	},
 	
 	/**
 	 * Destroy the sticky columns previously set for the table
 	 *
-	 * @param {jQuery} The table that is holding the sticky columns.
+	 * @param jQuery The table that is holding the sticky columns.
 	 */
 	destroyStickyColumns() {
 		
 		if (Globals.$stickyCols !== null) {
-			Globals.$stickyCols.remove()
+			Globals.$stickyCols.remove();
 		}
 		
 		if (Globals.$floatTheadStickyCols !== null) {
-			Globals.$floatTheadStickyCols.remove()
+			Globals.$floatTheadStickyCols.remove();
 		}
 		
 	},
 	
 }
 
-module.exports = StickyColumns
+module.exports = StickyColumns;

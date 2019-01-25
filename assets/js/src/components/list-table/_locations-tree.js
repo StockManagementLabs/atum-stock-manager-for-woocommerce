@@ -2,9 +2,9 @@
    LOCATIONS TREE FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings'
-import Globals from './_globals'
-import Tooltip from '../_tooltip'
+import Settings from '../../config/_settings';
+import Globals from './_globals';
+import Tooltip from '../_tooltip';
 
 let LocationsTree = {
 	
@@ -14,11 +14,11 @@ let LocationsTree = {
 	
 	init() {
 		
-		let self = this
+		let self = this;
 		
 		Globals.$atumList.on('click', '.show-locations', (evt) => {
-			evt.preventDefault()
-			self.showLocationsPopup($(evt.target))
+			evt.preventDefault();
+			self.showLocationsPopup($(evt.target));
 		})
 		
 	},
@@ -26,12 +26,12 @@ let LocationsTree = {
 	/**
 	 * Opens a popup with the locations' tree and allows to edit locations
 	 *
-	 * @param jQuery $button
+	 * @param {jQuery} $button
 	 */
 	showLocationsPopup($button) {
 		
-		let self = this
-		this.productId = $button.closest('tr').data('id')
+		let self = this;
+		this.productId = $button.closest('tr').data('id');
 		
 		// Open the view popup.
 		swal({
@@ -42,16 +42,12 @@ let LocationsTree = {
 			confirmButtonText : Settings.get('editProductLocations'),
 			confirmButtonColor: '#00b8db',
 			showCloseButton   : true,
-			onOpen            : () => {
-				self.onOpenViewPopup()
-			},
+			onOpen            : () => self.onOpenViewPopup(),
 			onClose           : self.onCloseViewPopup,
 		})
 		// Click on edit: open the edit popup.
-		.then( () => {
-			self.openEditPopup()
-		})
-		.catch(swal.noop)
+		.then( () => self.openEditPopup() )
+		.catch(swal.noop);
 		
 	},
 	
@@ -61,7 +57,7 @@ let LocationsTree = {
 	onOpenViewPopup() {
 		
 		let self                    = this,
-			$locationsTreeContainer = $('#atum-locations-tree')
+			$locationsTreeContainer = $('#atum-locations-tree');
 		
 		Tooltip.destroyTooltips();
 		
@@ -74,42 +70,40 @@ let LocationsTree = {
 				token     : Settings.get('nonce'),
 				product_id: self.productId,
 			},
-			beforeSend: () => {
-				$locationsTreeContainer.append('<div class="atum-loading" />')
-			},
+			beforeSend: () => $locationsTreeContainer.append('<div class="atum-loading" />'),
 			success   : (response) => {
 				
 				if (response.success === true) {
 					
-					$locationsTreeContainer.html(response.data)
+					$locationsTreeContainer.html(response.data);
 					
 					// If answer is like <span class="no-locations-set">...  don't put easytree on work.
 					// It will remove the span message.
 					if (!(response.data.indexOf('no-locations-set') > -1)) {
 						
-						$locationsTreeContainer.easytree()
+						$locationsTreeContainer.easytree();
 						
-						// Fill setedLocations
+						// Fill locationsSet.
 						$('#atum-locations-tree span[class^="cat-item-"], #atum-locations-tree span[class*="cat-item-"]').each( (index, elem) => {
 							
-							const classList = $(elem).attr('class').split(/\s+/)
+							const classList = $(elem).attr('class').split(/\s+/);
 							
 							$.each(classList, (index, item) => {
 								if (item.startsWith('cat-item-')) {
-									self.locationsSet.push(item)
+									self.locationsSet.push(item);
 								}
-							})
+							});
 							
-						})
+						});
 					}
 				
 				}
 				else {
-					$('#atum-locations-tree').html('<h4 class="color-danger">' + response.data + '</h4>')
+					$('#atum-locations-tree').html('<h4 class="color-danger">' + response.data + '</h4>');
 				}
 				
 			},
-		})
+		});
 		
 	},
 	
@@ -117,7 +111,7 @@ let LocationsTree = {
 	 * Triggers when the view popup is closed
 	 */
 	onCloseViewPopup() {
-		Tooltip.addTooltips()
+		Tooltip.addTooltips();
 	},
 	
 	/**
@@ -125,7 +119,7 @@ let LocationsTree = {
 	 */
 	openEditPopup() {
 		
-		let self = this
+		let self = this;
 		
 		swal({
 			title              : Settings.get('editProductLocations'),
@@ -136,15 +130,11 @@ let LocationsTree = {
 			showCloseButton    : true,
 			showCancelButton   : true,
 			showLoaderOnConfirm: true,
-			onOpen             : () => {
-				self.onOpenEditPopup()
-			},
-			preConfirm         : () => {
-				self.saveLocations()
-			},
+			onOpen             : () => self.onOpenEditPopup(),
+			preConfirm         : () => self.saveLocations(),
 		})
 		.then(self.onCloseEditPopup)
-		.catch(swal.noop)
+		.catch(swal.noop);
 		
 	},
 	
@@ -154,7 +144,7 @@ let LocationsTree = {
 	onOpenEditPopup() {
 		
 		let self                    = this,
-		    $locationsTreeContainer = $('#atum-locations-tree')
+		    $locationsTreeContainer = $('#atum-locations-tree');
 		
 		$.ajax({
 			url       : ajaxurl,
@@ -165,24 +155,22 @@ let LocationsTree = {
 				token     : Settings.get('nonce'),
 				product_id: -1, // Send -1 to get all the terms.
 			},
-			beforeSend: () => {
-				$locationsTreeContainer.append('<div class="atum-loading" />')
-			},
+			beforeSend: () => $locationsTreeContainer.append('<div class="atum-loading" />'),
 			success   : (response) => {
 				
 				if (response.success === true) {
 					
 					$locationsTreeContainer.html(response.data);
-					$locationsTreeContainer.easytree()
+					$locationsTreeContainer.easytree();
 					
 					// Add instructions alert.
-					$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + Settings.get('editLocationsInfo') + '</div>')
+					$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + Settings.get('editLocationsInfo') + '</div>');
 					
-					self.bindEditTreeEvents($locationsTreeContainer)
+					self.bindEditTreeEvents($locationsTreeContainer);
 					
 				}
 			},
-		})
+		});
 		
 	},
 	
@@ -197,7 +185,7 @@ let LocationsTree = {
 			text              : Settings.get('locationsSaved'),
 			confirmButtonText : Settings.get('ok'),
 			confirmButtonColor: '#00b8db',
-		})
+		});
 		
 	},
 	
@@ -208,7 +196,7 @@ let LocationsTree = {
 	 */
 	saveLocations() {
 		
-		let self = this
+		let self = this;
 		
 		return new Promise( (resolve, reject) => {
 			
@@ -230,15 +218,15 @@ let LocationsTree = {
 				success   : (response) => {
 					
 					if (response.success === true) {
-						resolve()
+						resolve();
 					}
 					else {
-						reject()
+						reject();
 					}
 				},
-			})
+			});
 			
-		})
+		});
 		
 	},
 	
@@ -247,59 +235,58 @@ let LocationsTree = {
 	 */
 	bindEditTreeEvents($locationsTreeContainer) {
 		
-		let self = this
-		
+		let self = this;
 		this.toSetLocations = this.locationsSet;
 		
 		// When clicking on link or icon, set node as checked.
 		$locationsTreeContainer.find('a, .easytree-icon').click( (evt) => {
 			
-			evt.preventDefault()
+			evt.preventDefault();
 			
 			let $this     = $(evt.target),
 			    catItem   = '',
-			    classList = $this.closest('.easytree-node').attr('class').split(/\s+/)
+			    classList = $this.closest('.easytree-node').attr('class').split(/\s+/);
 			
 			$.each(classList, (index, item) => {
 				if (item.lastIndexOf('cat-item-', 0) === 0) {
-					catItem = item
+					catItem = item;
 					
-					return false
+					return false;
 				}
-			})
+			});
 			
-			$('.' + catItem).toggleClass('checked')
+			$('.' + catItem).toggleClass('checked');
 			
 			if ($('.' + catItem).hasClass('checked')) {
-				self.toSetLocations.push(catItem)
+				self.toSetLocations.push(catItem);
 			}
 			else {
-				const pos = self.toSetLocations.indexOf(catItem)
+				const pos = self.toSetLocations.indexOf(catItem);
 				
 				if (pos > -1) {
-					self.toSetLocations.splice(pos, 1)
+					self.toSetLocations.splice(pos, 1);
 				}
 			}
 			
-		})
+		});
 		
 		// Set class checked the actual values on load.
 		$locationsTreeContainer.find('span[class^="cat-item-"], span[class*="cat-item-"]').each( (index, elem) => {
 			
-			const classList = $(elem).attr('class').split(/\s+/)
+			const classList = $(elem).attr('class').split(/\s+/);
 			
 			$.each(classList, (index, item) => {
 				
 				if (item.startsWith('cat-item-') && $.inArray(item, self.locationsSet) !== -1) {
-					$('.' + item).addClass('checked')
+					$('.' + item).addClass('checked');
 				}
 				
-			})
+			});
 			
-		})
+		});
 		
 	},
 	
 }
 
-module.exports = LocationsTree
+module.exports = LocationsTree;

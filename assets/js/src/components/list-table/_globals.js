@@ -2,8 +2,8 @@
    GLOBALS FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings'
-import Utils from '../../utils/_utils'
+import Settings from '../../config/_settings';
+import Utils from '../../utils/_utils';
 
 let Globals = {
 	
@@ -25,22 +25,22 @@ let Globals = {
 	init() {
 		
 		// Initialize selectors.
-		this.$atumList = $('.atum-list-wrapper')
-		this.$atumTable = this.$atumList.find('.atum-list-table')
-		this.$editInput = this.$atumList.find('#atum-column-edits')
-		this.$searchInput = this.$atumList.find('.atum-post-search')
-		this.$searchColumnBtn = this.$atumList.find('#search_column_btn')
-		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown')
+		this.$atumList = $('.atum-list-wrapper');
+		this.$atumTable = this.$atumList.find('.atum-list-table');
+		this.$editInput = this.$atumList.find('#atum-column-edits');
+		this.$searchInput = this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
+		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
 		
 		let inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
-		    perPage      = null
+		    perPage      = null;
 		
 		// Initialize the filters' data
 		if (!$.isNumeric(inputPerPage)) {
-			perPage = Settings.get('perPage') || 20
+			perPage = Settings.get('perPage') || 20;
 		}
 		else {
-			perPage = parseInt(inputPerPage)
+			perPage = parseInt(inputPerPage);
 		}
 		
 		this.filterData = {
@@ -58,4 +58,4 @@ let Globals = {
 	
 }
 
-module.exports = Globals
+module.exports = Globals;

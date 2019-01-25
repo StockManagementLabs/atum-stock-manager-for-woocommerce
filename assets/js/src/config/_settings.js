@@ -10,24 +10,24 @@ let Settings = {
 	init(varName, defaults) {
 	
 		// Get the settings from the localized var.
-		this.settings = $.extend( this.settings, defaults || {}, window[varName] || {})
+		this.settings = $.extend( this.settings, defaults || {}, window[varName] || {});
 		
 	},
 	
 	get(prop) {
 		
 		if (typeof this.settings[prop] !== 'undefined') {
-			return this.settings[prop]
+			return this.settings[prop];
 		}
 		
-		return undefined
+		return undefined;
 		
 	},
 	
 	getAll() {
-		return this.settings
+		return this.settings;
 	}
 	
 }
 
-module.exports = Settings
+module.exports = Settings;

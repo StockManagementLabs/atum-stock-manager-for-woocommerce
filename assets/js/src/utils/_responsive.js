@@ -13,36 +13,38 @@ let Responsive = {
 	
 	init() {
 		
-		// Set device size
-		this.setup()
+		// Set device size.
+		this.setup();
 		
-		this.events()
+		this.events();
 	},
 	
 	events() {
-		let self = this
 		
-		// Set device size again if the viewport size changes
+		let self = this;
+		
+		// Set device size again if the viewport size changes.
 		$(window).on('resize.Responsive', () => {
-			self.setup()
-		})
+			self.setup();
+		});
+		
 	},
 	
 	setup() {
 		
-		let viewportWidth = $(window).width()
+		let viewportWidth = $(window).width();
 		
 		if (viewportWidth <= this._XS) {
-			this._SIZE = 'xs'
+			this._SIZE = 'xs';
 		}
 		else if (viewportWidth <= this._SM) {
-			this._SIZE = 'sm'
+			this._SIZE = 'sm';
 		}
 		else if (viewportWidth <= this._MD) {
-			this._SIZE = 'md'
+			this._SIZE = 'md';
 		}
 		else if (viewportWidth <= this._LG) {
-			this._SIZE = 'lg'
+			this._SIZE = 'lg';
 		}
 		else {
 			this._SIZE = 'xl';
@@ -51,5 +53,4 @@ let Responsive = {
 	},
 }
 
-
-module.exports = Responsive
+module.exports = Responsive;

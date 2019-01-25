@@ -6,7 +6,7 @@ let Tooltip = {
 	
 	init() {
 		
-		this.addTooltips()
+		this.addTooltips();
 		
 	},
 	
@@ -17,27 +17,27 @@ let Tooltip = {
 		
 		$('.tips').each( (index, elem) => {
 			
-			const $tipEl = $(elem)
+			const $tipEl = $(elem);
 			
 			$tipEl.tooltip({
 				html     : true,
 				title    : $tipEl.data('tip'),
 				container: 'body',
-			})
+			});
 			
-		})
+		});
 		
 		$('.select2-selection__rendered').each( (index, elem) => {
 			
-			const $tipEl = $(elem)
+			const $tipEl = $(elem);
 			
 			$tipEl.tooltip({
 				html     : true,
 				title    : $tipEl.attr('title'),
 				container: 'body',
-			})
+			});
 			
-		})
+		});
 		
 	},
 	
@@ -45,9 +45,9 @@ let Tooltip = {
 	 * Destroy all the tooltips
 	 */
 	destroyTooltips() {
-		$('.tips, .select2-selection__rendered').tooltip('destroy')
+		$('.tips, .select2-selection__rendered').tooltip('destroy');
 	},
 	
 }
 
-module.exports = Tooltip
+module.exports = Tooltip;

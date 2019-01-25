@@ -2,26 +2,26 @@
    TABLE BUTTONS FOR LIST TABLES
    ======================================= */
 
-import Globals from './_globals'
-import Tooltip from '../_tooltip'
-import StickyColumns from './_sticky-columns'
-import StickyHeader from './_sticky-header'
+import Globals from './_globals';
+import Tooltip from '../_tooltip';
+import StickyColumns from './_sticky-columns';
+import StickyHeader from './_sticky-header';
 
 let TableButtons = {
 	
 	init() {
 		
-		let self = this
+		let self = this;
 		
 		// Table style buttons.
 		Globals.$atumList.on('click', '.table-style-buttons button', (evt) => {
 			
 			let $button = $(evt.target),
-			    feature = $button.hasClass('sticky-columns-button') ? 'sticky-columns' : 'sticky-header'
+			    feature = $button.hasClass('sticky-columns-button') ? 'sticky-columns' : 'sticky-header';
 			
-			$button.toggleClass('active')
+			$button.toggleClass('active');
 			
-			self.toggleTableStyle(feature, $button.hasClass('active'))
+			self.toggleTableStyle(feature, $button.hasClass('active'));
 			
 		})
 	
@@ -35,32 +35,32 @@ let TableButtons = {
 	 */
 	toggleTableStyle(feature, enabled) {
 		
-		Tooltip.destroyTooltips()
+		Tooltip.destroyTooltips();
 		
 		// Toggle sticky columns.
 		if ('sticky-columns' === feature) {
 			
-			Globals.enabledStickyColumns = enabled
+			Globals.enabledStickyColumns = enabled;
 			
 			if (enabled) {
-				Globals.$stickyCols = this.createStickyColumns(Globals.$atumTable)
-				Globals.$scrollPane.trigger('jsp-initialised') // Trigger the jScrollPane to add the sticky columns to the table.
+				Globals.$stickyCols = StickyColumns.createStickyColumns(Globals.$atumTable);
+				Globals.$scrollPane.trigger('jsp-initialised'); // Trigger the jScrollPane to add the sticky columns to the table.
 			}
 			else {
-				StickyColumns.destroyStickyColumns()
+				StickyColumns.destroyStickyColumns();
 			}
 			
 		}
 		// Toggle sticky header.
 		else {
 			
-			Globals.enabledStickyHeader = enabled
+			Globals.enabledStickyHeader = enabled;
 			
 			if (enabled) {
-				StickyHeader.addFloatThead()
+				StickyHeader.addFloatThead();
 			}
 			else {
-				StickyHeader.destroyFloatThead()
+				StickyHeader.destroyFloatThead();
 			}
 			
 		}
@@ -77,10 +77,10 @@ let TableButtons = {
 			},
 		})
 		
-		Tooltip.addTooltips()
+		Tooltip.addTooltips();
 		
 	},
 	
 }
 
-module.exports = TableButtons
+module.exports = TableButtons;

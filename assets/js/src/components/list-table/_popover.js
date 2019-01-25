@@ -2,34 +2,34 @@
    POPOVER FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings'
-import Globals from './_globals'
-import ListTable from './_list-table'
+import Settings from '../../config/_settings';
+import Globals from './_globals';
+import ListTable from './_list-table';
 
 let Popover = {
 	
 	init() {
 		
-		let self = this
+		let self = this;
 		
-		// Init popovers
-		this.setFieldPopover()
+		// Init popovers.
+		this.setFieldPopover();
 		
 		// Hide any other opened popover before opening a new one.
 		Globals.$atumList.click( (evt) => {
 			
 			let $target   = $(evt.target),
 			    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
-			    $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta')
+			    $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
 			
 			// Get only the cells with an opened popover.
 			$metaCell = $metaCell.filter( (index, elem) => {
-				return $(elem).data('bs.popover') !== 'undefined' && ($(elem).data('bs.popover').inState || false) && $(elem).data('bs.popover').inState.click === true
+				return $(elem).data('bs.popover') !== 'undefined' && ($(elem).data('bs.popover').inState || false) && $(elem).data('bs.popover').inState.click === true;
 			})
 			
-			self.destroyPopover($metaCell)
+			self.destroyPopover($metaCell);
 			
-		})
+		});
 		
 		// Popover's "Set" button.
 		$('body').on('click', '.popover button.set', (evt) => {
@@ -37,22 +37,22 @@ let Popover = {
 			let $button   = $(evt.target),
 			    $popover  = $button.closest('.popover'),
 			    popoverId = $popover.attr('id'),
-			    $setMeta  = $('[data-popover="' + popoverId + '"]')
+			    $setMeta  = $('[data-popover="' + popoverId + '"]');
 			
 			if ($setMeta.length) {
 				ListTable.maybeAddSaveButton();
-				ListTable.updateEditedColsInput($setMeta, $popover)
+				ListTable.updateEditedColsInput($setMeta, $popover);
 			}
 			
-		})
+		});
 		
 		// Restore the popovers after the List Table updates.
-		Globals.$atumList.on('atum-table-updated', this.setFieldPopover)
+		Globals.$atumList.on('atum-table-updated', this.setFieldPopover);
 		
 		// Destroy the popover when a meta cell is edited.
 		Globals.$atumList.on('atum-table-updated', ($metaCell) => {
-			self.destroyPopover($metaCell)
-		})
+			self.destroyPopover($metaCell);
+		});
 		
 	},
 	
@@ -61,18 +61,18 @@ let Popover = {
 	 */
 	setFieldPopover($metaCells) {
 		
-		let self = this
+		let self = this;
 		
 		if (typeof $metaCells === 'undefined') {
-			$metaCells = $('.set-meta')
+			$metaCells = $('.set-meta');
 		}
 		
-		// Set meta value for listed products
+		// Set meta value for listed products.
 		$metaCells.each( (index, elem) => {
-			self.bindPopover($(elem))
+			self.bindPopover($(elem));
 		});
 		
-		// Focus on the input field and set a reference to the popover to the editable column
+		// Focus on the input field and set a reference to the popover to the editable column.
 		$metaCells.on('shown.bs.popover', () => {
 			let $activePopover = $('.popover.in');
 			$activePopover.find('.meta-value').focus();
@@ -96,35 +96,35 @@ let Popover = {
 			    type : $metaCell.data('input-type') || 'number',
 			    value: $metaCell.data('input-type') === 'number' || $metaCell.text() === '-' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
 			    class: 'meta-value',
-		    }
+		    };
 		
 		if (inputType === 'number') {
-			inputAtts.min = '0'
+			inputAtts.min = '0';
 			// Allow decimals only for the pricing fields for now.
-			inputAtts.step = symbol ? '0.1' : '1'
+			inputAtts.step = symbol ? '0.1' : '1';
 		}
 		
 		let $input       = $('<input />', inputAtts),
 		    $setButton   = $('<button />', {type: 'button', class: 'set btn btn-primary button-small', text: Settings.get('setButton')}),
 		    extraMeta    = $metaCell.data('extra-meta'),
 		    $extraFields = '',
-		    popoverClass = ''
+		    popoverClass = '';
 		
-		// Check whether to add extra fields to the popover
+		// Check whether to add extra fields to the popover.
 		if (typeof extraMeta !== 'undefined') {
 			
-			popoverClass = ' with-meta'
-			$extraFields = $('<hr>')
+			popoverClass = ' with-meta';
+			$extraFields = $('<hr>');
 			
 			$.each(extraMeta, (index, metaAtts) => {
-				$extraFields = $extraFields.add($('<input />', metaAtts))
-			})
+				$extraFields = $extraFields.add($('<input />', metaAtts));
+			});
 			
 		}
 		
-		let $content = $extraFields.length ? $input.add($extraFields).add($setButton) : $input.add($setButton)
+		let $content = $extraFields.length ? $input.add($extraFields).add($setButton) : $input.add($setButton);
 		
-		// Create the meta edit popover
+		// Create the meta edit popover.
 		$metaCell.popover({
 			title    : Settings.get('setValue').replace('%%', currentColumnText),
 			content  : $content,
@@ -134,7 +134,7 @@ let Popover = {
 			placement: 'bottom',
 			trigger  : 'click',
 			container: 'body',
-		})
+		});
 		
 	},
 	
@@ -146,14 +146,15 @@ let Popover = {
 	destroyPopover($metaCell) {
 		
 		if ($metaCell.length) {
-			let self = this
-			$metaCell.popover('destroy')
-			$metaCell.removeAttr('data-popover')
+			
+			let self = this;
+			$metaCell.popover('destroy');
+			$metaCell.removeAttr('data-popover');
 			
 			// Give a small lapse to complete the 'fadeOut' animation before re-binding
 			setTimeout( () => {
-				self.setFieldPopover($metaCell)
-			}, 300)
+				self.setFieldPopover($metaCell);
+			}, 300);
 			
 		}
 		
@@ -161,4 +162,4 @@ let Popover = {
 	
 }
 
-module.exports = Popover
+module.exports = Popover;
