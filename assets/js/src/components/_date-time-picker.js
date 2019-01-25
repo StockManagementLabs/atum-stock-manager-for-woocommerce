@@ -95,7 +95,7 @@ let DateTimePicker = {
 				return false;
 				
 			}).each( (index, elem) => {
-				$(elem).data('DateTimePicker').hide()
+				$(elem).data('DateTimePicker').hide();
 			});
 			
 		});

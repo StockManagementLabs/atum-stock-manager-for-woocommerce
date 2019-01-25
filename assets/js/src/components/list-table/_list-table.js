@@ -268,8 +268,8 @@ let ListTable = {
 	/**
 	 * Set the table cell value with right format
 	 *
-	 * @param {jQuery}        $metaCell  The cell where will go the value.
-	 * @param {string|number} value      The value to set in the cell.
+	 * @param jQuery        $metaCell  The cell where will go the value.
+	 * @param String|Number value      The value to set in the cell.
 	 */
 	setCellValue($metaCell, value) {
 		
@@ -344,8 +344,8 @@ let ListTable = {
 	/**
 	 * Every time a cell is edited, update the input value
 	 *
-	 * @param {jQuery} $metaCell  The table cell that is being edited.
-	 * @param {jQuery} $popover   The popover attached to the above cell.
+	 * @param jQuery $metaCell  The table cell that is being edited.
+	 * @param jQuery $popover   The popover attached to the above cell.
 	 */
 	updateEditedColsInput($metaCell, $popover) {
 		
@@ -449,7 +449,7 @@ let ListTable = {
 	/**
 	 * Save the edited columns
 	 *
-	 * @param {jQuery} $button The "Save Data" button.
+	 * @param jQuery $button The "Save Data" button.
 	 */
 	saveData($button) {
 		
@@ -518,10 +518,10 @@ let ListTable = {
 	/**
 	 * Expand/Collapse rows with childrens
 	 *
-	 * @param {jQuery}  $row
-	 * @param {String}  expandableRowClass
-	 * @param {String}  stopRowSelector
-	 * @param {Boolean} stopPropagation
+	 * @param jQuery  $row
+	 * @param String  expandableRowClass
+	 * @param String  stopRowSelector
+	 * @param Boolean stopPropagation
 	 *
 	 * @return void|boolean
 	 */
@@ -612,7 +612,7 @@ let ListTable = {
 	/**
 	 * Checks/Unchecks the descendants rows when checking/unchecking their container
 	 *
-	 * @param {jQuery} $parentCheckbox
+	 * @param jQuery $parentCheckbox
 	 */
 	checkDescendats($parentCheckbox) {
 		

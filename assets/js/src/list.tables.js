@@ -56,6 +56,7 @@ import ColumnGroups from './components/list-table/_column-groups';
 import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
 import Filters from './components/list-table/_filters';
+import Popover from './components/list-table/_popover';
 import LightBox from './components/_light-box';
 import Tooltip from './components/_tooltip';
 import TableButtons from './components/list-table/_table-buttons';
@@ -88,6 +89,7 @@ $( () => {
 	StickyColumns.init();
 	StickyHeader.init();
 	Filters.init();
+	Popover.init();
 	LightBox.init();
 	Tooltip.init();
 	TableButtons.init();

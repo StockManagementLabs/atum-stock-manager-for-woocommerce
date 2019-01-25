@@ -23,13 +23,6 @@ use Atum\Modules\ModuleManager;
 class UncontrolledListTable extends AtumUncontrolledListTable {
 
 	/**
-	 * Whether to load the jQuery UI datepicker script (for sale price dates)
-	 *
-	 * @var bool
-	 */
-	protected $load_datepicker = TRUE;
-
-	/**
 	 * UncontrolledListTable Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args

@@ -316,7 +316,7 @@ let Filters = {
 						onOpen           : () => {
 							
 							// Init date time pickers.
-							DateTimePicker.addDateTimePickers($('.date-picker'), {format: 'YYYY-MM-DD'});
+							DateTimePicker.addDateTimePickers($('.date-picker'));
 							
 							$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
 								self.keyUp(evt);

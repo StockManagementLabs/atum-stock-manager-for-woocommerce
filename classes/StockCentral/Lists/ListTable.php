@@ -48,13 +48,6 @@ class ListTable extends AtumListTable {
 	protected $calc_columns = array();
 
 	/**
-	 * Whether to load the jQuery UI datepicker script (for sale price dates)
-	 *
-	 * @var bool
-	 */
-	protected $load_datepicker = TRUE;
-
-	/**
 	 * The columns hidden by default
 	 *
 	 * @var array

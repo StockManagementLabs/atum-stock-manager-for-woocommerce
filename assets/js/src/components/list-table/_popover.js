@@ -5,6 +5,7 @@
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 import ListTable from './_list-table';
+import DateTimePicker from '../_date-time-picker';
 
 let Popover = {
 	
@@ -74,10 +75,18 @@ let Popover = {
 		
 		// Focus on the input field and set a reference to the popover to the editable column.
 		$metaCells.on('shown.bs.popover', () => {
+			
 			let $activePopover = $('.popover.in');
 			$activePopover.find('.meta-value').focus();
-			self.setDatePickers(); // TODO: USE BOOTSTRAPDATETIMEPICKER
+			
+			let $dateInputs = $activePopover.find('.datepicker');
+			
+			if ( $dateInputs.length) {
+				DateTimePicker.addDateTimePickers($dateInputs);
+			}
+			
 			$(this).attr('data-popover', $activePopover.attr('id'));
+			
 		});
 		
 	},
