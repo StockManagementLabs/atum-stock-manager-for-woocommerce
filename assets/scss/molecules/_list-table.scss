@@ -2165,6 +2165,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				margin: 0;
 			}
 			
+			&.bundle::before {
+				content: $atmi-bundle;
+			}
+			
 			&.grouped::before {
 				content: $atmi-wc-grouped;
 			}

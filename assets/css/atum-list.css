@@ -30,13 +30,14 @@
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?rx8gye");
-  src: url("../fonts/atum-icon-font.eot?rx8gye#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?rx8gye") format("truetype"), url("../fonts/atum-icon-font.woff?rx8gye") format("woff"), url("../fonts/atum-icon-font.svg?rx8gye#atum-icon-font") format("svg");
+  src: url("../fonts//atum-icon-font.eot?f6kirk");
+  src: url("../fonts//atum-icon-font.eot?f6kirk#iefix") format("embedded-opentype"), url("../fonts//atum-icon-font.ttf?f6kirk") format("truetype"), url("../fonts//atum-icon-font.woff?f6kirk") format("woff"), url("../fonts//atum-icon-font.svg?f6kirk#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 
-[class^="atmi-"], [class*=" atmi-"], .atum-icon {
+[class^="atmi-"], [class*=" atmi-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "atum-icon-font" !important;
   speak: none;
   font-style: normal;
@@ -44,8 +45,33 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-boundle:before {
+  content: "";
+}
+
+.atmi-cog-solid:before {
+  content: "";
+}
+
+.atmi-database-solid:before {
+  content: "";
+}
+
+.atmi-funnel-solid:before {
+  content: "";
+}
+
+.atmi-highlight-solid:before {
+  content: "";
+}
+
+.atmi-magic-wand-solid:before {
+  content: "";
 }
 
 .atmi-wc-contract:before {
@@ -6946,6 +6972,10 @@ table.atum-list-table .column-calc_type span.product-type:before, .floatThead-co
   text-align: center;
   font-variant: normal;
   margin: 0;
+}
+
+table.atum-list-table .column-calc_type span.product-type.bundle::before, .floatThead-container .column-calc_type span.product-type.bundle::before, .inbound-stock-list .column-calc_type span.product-type.bundle::before, table.wp-list-table .column-calc_type span.product-type.bundle::before {
+  content: "";
 }
 
 table.atum-list-table .column-calc_type span.product-type.grouped::before, .floatThead-container .column-calc_type span.product-type.grouped::before, .inbound-stock-list .column-calc_type span.product-type.grouped::before, table.wp-list-table .column-calc_type span.product-type.grouped::before {
