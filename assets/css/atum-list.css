@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.0 
+ * @version 1.5.2 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -8,6 +8,85 @@
  */
 
  @charset "UTF-8";
+.color-primary {
+  color: #00B8DB;
+}
+
+.color-info {
+  color: #E3E8F5;
+}
+
+.color-success {
+  color: #69C61D;
+}
+
+.color-warning {
+  color: #EFAF00;
+}
+
+.color-danger {
+  color: #FF4848;
+}
+
+.bg-primary {
+  background-color: #00B8DB;
+}
+
+.bg-info {
+  background-color: #E3E8F5;
+}
+
+.bg-success {
+  background-color: #69C61D;
+}
+
+.bg-warning {
+  background-color: #EFAF00;
+}
+
+.bg-danger {
+  background-color: #FF4848;
+}
+
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive::before {
+  display: block;
+  content: "";
+}
+
+.embed-responsive .embed-responsive-item, .embed-responsive iframe, .embed-responsive embed, .embed-responsive object, .embed-responsive video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-responsive-21by9::before {
+  padding-top: 42.85714%;
+}
+
+.embed-responsive-16by9::before {
+  padding-top: 56.25%;
+}
+
+.embed-responsive-4by3::before {
+  padding-top: 75%;
+}
+
+.embed-responsive-1by1::before {
+  padding-top: 100%;
+}
+
 .thumb {
   height: 40px;
 }
