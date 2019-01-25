@@ -2895,6 +2895,33 @@ abstract class AtumListTable extends \WP_List_Table {
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'    => $this->default_searchable_columns,
 			'stickyColumns'        => $this->sticky_columns,
+			'dateSelectorFilters'  => [ 'best_seller', 'worst_seller' ],
+			'setTimeWindow'        => __( 'Set Time Window', ATUM_TEXT_DOMAIN ),
+			'selectDateRange'      => __( 'Select the date range to filter the produts.', ATUM_TEXT_DOMAIN ),
+			'from'                 => __( 'From', ATUM_TEXT_DOMAIN ),
+			'to'                   => __( 'To', ATUM_TEXT_DOMAIN ),
+			'apply'                => __( 'Apply', ATUM_TEXT_DOMAIN ),
+			'goToToday'            => __( 'Go to today', ATUM_TEXT_DOMAIN ),
+			'clearSelection'       => __( 'Clear selection', ATUM_TEXT_DOMAIN ),
+			'closePicker'          => __( 'Close the picker', ATUM_TEXT_DOMAIN ),
+			'selectMonth'          => __( 'Select Month', ATUM_TEXT_DOMAIN ),
+			'prevMonth'            => __( 'Previous Month', ATUM_TEXT_DOMAIN ),
+			'nextMonth'            => __( 'Next Month', ATUM_TEXT_DOMAIN ),
+			'selectYear'           => __( 'Select Year', ATUM_TEXT_DOMAIN ),
+			'prevYear'             => __( 'Previous Year', ATUM_TEXT_DOMAIN ),
+			'nextYear'             => __( 'Next Year', ATUM_TEXT_DOMAIN ),
+			'selectDecade'         => __( 'Select Decade', ATUM_TEXT_DOMAIN ),
+			'prevDecade'           => __( 'Previous Decade', ATUM_TEXT_DOMAIN ),
+			'nextDecade'           => __( 'Next Decade', ATUM_TEXT_DOMAIN ),
+			'prevCentury'          => __( 'Previous Century', ATUM_TEXT_DOMAIN ),
+			'nextCentury'          => __( 'Next Century', ATUM_TEXT_DOMAIN ),
+			'incrementHour'        => __( 'Increment Hour', ATUM_TEXT_DOMAIN ),
+			'pickHour'             => __( 'Pick Hour', ATUM_TEXT_DOMAIN ),
+			'decrementHour'        => __( 'Decrement Hour', ATUM_TEXT_DOMAIN ),
+			'incrementMinute'      => __( 'Increment Minute', ATUM_TEXT_DOMAIN ),
+			'pickMinute'           => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
+			'decrementMinute'      => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
+			'dateFormat'           => 'YYYY-MM-DD',
 		);
 
 		if ( $this->first_edit_key ) {
@@ -3837,27 +3864,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function enqueue_scripts( $hook ) {
 
-		// jQuery.address.
-		wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// jquery.floatThead.
-		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// Hammer.
-		wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// jScrollPane.
-		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
-
 		// Sweet Alert 2.
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-
-		// Light Gallery.
-		wp_register_script( 'lightgallery', ATUM_URL . 'assets/js/vendor/lightgallery.min.js', array(), ATUM_VERSION, TRUE );
-
-		// Dragscroll.
-		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
 		// ATUM marketing popup.
 		AtumMarketingPopup::maybe_enqueue_scripts();
@@ -3868,39 +3877,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script( 'es6-promise' );
 		}
 
-		// jQuery EasyTree.
-		wp_register_script( 'jquery-easytree', ATUM_URL . 'assets/js/vendor/jquery.easytree.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// jQuery UI datePicker.
-		if ( isset( $this->load_datepicker ) && TRUE === $this->load_datepicker ) {
-			global $wp_scripts;
-			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
-			wp_deregister_style( 'jquery-ui-style' );
-			wp_register_style( 'jquery-ui-style', 'https://code.jquery.com/ui/' . $jquery_version . '/themes/excite-bike/jquery-ui.min.css', array(), $jquery_version );
-
-			wp_enqueue_style( 'jquery-ui-style' );
-			wp_enqueue_script( 'jquery-ui-datepicker' );
-		}
-
-		// Bootstrap datetimepicker.
-		wp_register_script( 'moment.js', ATUM_URL . 'assets/js/vendor/moment.min.js', array(), ATUM_VERSION, TRUE );
-		wp_register_script( 'bs-date-time-picker', ATUM_URL . 'assets/js/vendor/bootstrap-datetimepicker.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'moment.js', 'bs-date-time-picker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
-
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
+		// TODO: WHAT IS THIS????
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
 		if ( ! get_user_meta( get_current_user_id(), $first_edit_key, TRUE ) ) {
 			$this->first_edit_key = $first_edit_key;
 		}
 
 		// List Table script.
-		$min = ! ATUM_DEBUG ? '.min' : '';
-		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum.list.tables.min.js', [ 'jquery', 'jquery-blockui', 'sweetalert2', 'wc-enhanced-select' ], ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
 
 		do_action( 'atum/list_table/after_enqueue_scripts', $this );
