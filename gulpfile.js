@@ -118,8 +118,7 @@ gulp.task('js::atum', function () {
 			devtool: 'source-map',
 			
 			entry: {
-				"list.tables": ['babel-polyfill', path.join(__dirname, config.assetsDir + '/js/src/') + 'list.tables.js']
-				//app2: ['babel-polyfill', path.join(__dirname, config.assetsDir + '/js/src/') + 'app2.js'],
+				"list.tables": path.join(__dirname, config.assetsDir + '/js/src/') + 'list.tables.js'
 			},
 			
 			output: {
@@ -163,6 +162,10 @@ gulp.task('js::atum', function () {
 					},
 					sourceMap: true
 				}),
+				
+				// Fixes warning in moment-with-locales.min.js
+				// Module not found: Error: Can't resolve './locale' in ...
+				new webpack.IgnorePlugin(/\.\/locale$/),
 			
 			],
 			

@@ -2,22 +2,22 @@
    SEARCH BY COLUMN FOR LIST TABLES
    ======================================= */
 
+import Settings from '../../config/_settings'
+import Globals from './_globals'
+
 let SearchByColumn = {
 	
-	$searchColumnBtn      : ListTable.$atumList.find('#search_column_btn'),
-	$searchColumnDropdown : ListTable.$atumList.find('#search_column_dropdown'),
-	$searchInput          : ListTable.$atumList.find('.atum-post-search-with-dropdown'),
-	
-	init: function() {
+	init() {
 		
-		if (this.$searchInput.length) {
+		if ($('.atum-post-search-with-dropdown').length) {
 			
 			let self = this
+			
 			this.setup()
 			
-			$('#adv-settings input[type=checkbox]').change(function() {
-				setTimeout(self.setup, 500) // Performance
-			});
+			$('#adv-settings input:checkbox').change( () => {
+				setTimeout(self.setup, 500) // Performance.
+			})
 		}
 	
 	},
@@ -25,68 +25,84 @@ let SearchByColumn = {
 	/**
 	 * Fill the search by column dropdown with the active screen options checkboxes
 	 */
-	setup: function() {
+	setup() {
 		
-		let self         = this,
-		    dropdownItem = '<a class="dropdown-item" href="#"></a>'
+		let dropdownItem = '<a class="dropdown-item" href="#"></a>'
 		
-		this.$searchColumnDropdown.empty()
+		Globals.$searchColumnDropdown.empty()
 		
 		// Append the no column and the title items.
-		this.$searchColumnDropdown.append($(dropdownItem).data('value', '').text(this.$searchColumnDropdown.data('no-option')))
-		this.$searchColumnDropdown.append($(dropdownItem).data('value', 'title').text(this.$searchColumnDropdown.data('product-title')))
+		Globals.$searchColumnDropdown.append($(dropdownItem).data('value', '').text(Globals.$searchColumnDropdown.data('no-option')))
+		Globals.$searchColumnDropdown.append($(dropdownItem).data('value', 'title').text(Globals.$searchColumnDropdown.data('product-title')))
 		
-		$('#adv-settings input:checked').each(function() {
+		$('#adv-settings input:checked').each( (index, elem) => {
 			
-			let optionVal   = $(this).val(),
-			    columnLabel = $(this).parent().text()
+			let optionVal   = $(elem).val(),
+			    columnLabel = $(elem).parent().text()
 			
-			if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') { // Calc values are not searchable, also we can't search on thumb
+			if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') { // Calc values are not searchable, also we can't search on thumb.
 				
-				self.$searchColumnDropdown.append($(dropdownItem).data('value', optionVal).text(columnLabel))
+				Globals.$searchColumnDropdown.append($(dropdownItem).data('value', optionVal).text(columnLabel))
 				
-				// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change
-				if ($.address.parameter('search_column') !== self.$searchColumnBtn.data('value') && self.$searchColumnBtn.data('value') === optionVal) {
-					self.$searchColumnBtn.trigger('setHtmlAndDataValue', [optionVal, columnLabel + ' <span class="caret"></span>'])
+				// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change.
+				if ($.address.parameter('search_column') !== Globals.$searchColumnBtn.data('value') && Globals.$searchColumnBtn.data('value') === optionVal) {
+					Globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, columnLabel + ' <span class="caret"></span>'])
 				}
 				
 			}
 			
-		});
+		})
 		
-		this.$searchColumnBtn.click(function(evt) {
-			$(this).parent().find('.dropdown-menu').toggle();
-			evt.stopPropagation();
-		});
 		
-		// TODO click on drop element
-		this.$searchColumnDropdown.find('a').click(function(evt) {
+		Globals.$searchColumnBtn
+		
+			// Bind clicks on search by column button.
+			.click( (evt) => {
+				$(evt.target).parent().find('.dropdown-menu').toggle()
+				evt.stopPropagation()
+			})
 			
-			evt.preventDefault();
+			// Set $searchColumnBtn data-value and html content.
+			.on('atum-search-column-set-data', (evt, value, html) => {
+				
+				let $searchColBtn = $(evt.target)
+				
+				$searchColBtn.html(html)
+				$searchColBtn.data('value', value)
+				
+				Globals.$searchColumnDropdown.children('a.active').removeClass('active')
+				Globals.$searchColumnDropdown.children('a').filterByData('value', value).addClass('active')
+				
+			})
+		
+		// Bind clicks on dropdown menu items.
+		Globals.$searchColumnDropdown.find('a').click( (evt) => {
 			
-			self.$searchColumnBtn.trigger('setHtmlAndDataValue', [$(this).data('value'), $(this).text() + ' <span class="caret"></span>'])
+			evt.preventDefault()
+			
+			Globals.$searchColumnBtn.trigger('atum-search-column-set-data', [$(evt.target).data('value'), $(evt.target).text() + ' <span class="caret"></span>'])
 			
 			$(this).parents().find('.dropdown-menu').hide()
-			self.$searchColumnDropdown.children('a.active').removeClass('active')
+			Globals.$searchColumnDropdown.children('a.active').removeClass('active')
 			$(this).addClass('active')
 			
-			const fieldType = $.inArray($(this).data('value'), ListTable.settings.searchableColumns.numeric) > -1 ? 'number' : 'search'
-			self.$searchInput.attr('type', fieldType)
+			const fieldType = $.inArray($(this).data('value'), Settings.get('searchableColumns').numeric) > -1 ? 'number' : 'search'
+			Globals.$searchInput.attr('type', fieldType)
 			
-			if (self.settings.ajaxFilter === 'yes') {
-				self.$searchColumnBtn.trigger('search_column_data_changed')
+			if (Settings.get('ajaxFilter') === 'yes') {
+				Globals.$searchColumnBtn.trigger('atum-search-column-data-changed')
 			}
 			
 			$('.dropdown-toggle').attr('data-original-title', $(this).html())
 			
-		});
+		})
 		
-		$(document).click(function() {
-			self.$searchColumnDropdown.hide()
-		});
+		$(document).click( () => {
+			Globals.$searchColumnDropdown.hide()
+		})
 		
 	},
 	
 }
 
-module.exports = SearchByColumn;
+module.exports = SearchByColumn
