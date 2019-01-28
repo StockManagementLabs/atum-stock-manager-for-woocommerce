@@ -2206,7 +2206,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		.has-child {
 			cursor: pointer;
 			
-			&.product-type {
+			&.product-type, &.product-type-icon {
 				
 				&.variable {
 					&, &-subscription, &-product-part, &-raw-material {
