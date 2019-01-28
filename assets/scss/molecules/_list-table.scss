@@ -2136,7 +2136,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		max-width: 50px;
 		text-align: center;
 		
-		span.product-type {
+		span.product-type, span.product-type-icon {
 			display: block;
 			position: relative;
 			height: 1em;
@@ -2210,7 +2210,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		.has-child {
 			cursor: pointer;
 			
-			&.product-type {
+			&.product-type, &.product-type-icon {
 				
 				&.variable {
 					&, &-subscription, &-product-part, &-raw-material {
