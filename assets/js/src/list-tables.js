@@ -29,7 +29,7 @@ import 'lodash/lodash.min';                          // From node_modules
 import 'moment/min/moment.min';                      // From node_modules
 import '../vendor/bootstrap-datetimepicker';         // A fixed version compatible with webpack
 import '../vendor/jquery.easytree.min';              // This has no package available for npm
-import '../vendor/bootstrap3-custom';                // TODO: USE BOOTSTRAP 4
+import '../vendor/bootstrap3-custom.min';            // TODO: USE BOOTSTRAP 4
 
 
 /**
@@ -56,7 +56,7 @@ import ColumnGroups from './components/list-table/_column-groups';
 import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
 import Filters from './components/list-table/_filters';
-import Popover from './components/list-table/_popover';
+import EditableCell from './components/list-table/_editable-cell';
 import LightBox from './components/_light-box';
 import Tooltip from './components/_tooltip';
 import TableButtons from './components/list-table/_table-buttons';
@@ -66,7 +66,7 @@ import LocationsTree from './components/list-table/_locations-tree';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-$( () => {
+jQuery( ($) => {
 	
 	// Get the settings from localized var.
 	Settings.init('atumListVars', {
@@ -89,7 +89,7 @@ $( () => {
 	StickyColumns.init();
 	StickyHeader.init();
 	Filters.init();
-	Popover.init();
+	EditableCell.init();
 	LightBox.init();
 	Tooltip.init();
 	TableButtons.init();

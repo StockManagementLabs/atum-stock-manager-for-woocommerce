@@ -418,7 +418,7 @@ $popover-arrow-outer-width:             ($popover-arrow-width + 1) !default;
 $popover-arrow-outer-color:             fade_in($popover-border-color, 0.05) !default;
 $popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%) !default;
 
-$zindex-popover:                        99999999 !default;
+$zindex-popover:                        99998 !default; // 1px lower than the WP admin bar
 
 // Alerts
 

@@ -798,6 +798,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'value'      => $sku,
 				'input_type' => 'text',
 				'tooltip'    => esc_attr__( 'Click to edit the SKU', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'SKU', ATUM_TEXT_DOMAIN ),
 			);
 
 			$sku = self::get_editable_column( $args );
@@ -882,7 +883,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				'meta_key'   => 'supplier_sku',
 				'value'      => $supplier_sku,
 				'input_type' => 'text',
-				'tooltip'    => esc_attr__( 'Click to edit the Supplier SKU', ATUM_TEXT_DOMAIN ),
+				'tooltip'    => esc_attr__( 'Click to edit the supplier SKU', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
 			) );
 
 			$supplier_sku = self::get_editable_column( $args );
@@ -1020,11 +1022,12 @@ abstract class AtumListTable extends \WP_List_Table {
 			] ) : $purchase_price;
 
 			$args = apply_filters( 'atum/list_table/args_purchase_price', array(
-				'meta_key' => 'purchase_price',
-				'value'    => $purchase_price_value,
-				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => self::$default_currency,
-				'tooltip'  => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
+				'meta_key'  => 'purchase_price',
+				'value'     => $purchase_price_value,
+				'symbol'    => get_woocommerce_currency_symbol(),
+				'currency'  => self::$default_currency,
+				'tooltip'   => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Purchase Price', ATUM_TEXT_DOMAIN ),
 			) );
 
 			$purchase_price = self::get_editable_column( $args );
@@ -1073,6 +1076,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'value'      => $out_stock_threshold,
 				'input_type' => 'number',
 				'tooltip'    => esc_attr__( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 			);
 
 			$out_stock_threshold = self::get_editable_column( $args );
@@ -1105,6 +1109,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'value'      => $weight,
 				'input_type' => 'number',
 				'tooltip'    => esc_attr__( 'Click to edit the weight', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Weight', ATUM_TEXT_DOMAIN ),
 			);
 
 			$weight = self::get_editable_column( $args );
@@ -1202,9 +1207,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $editable && ! $is_grouped ) {
 
 			$args = array(
-				'meta_key' => 'stock',
-				'value'    => $stock,
-				'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
+				'meta_key'  => 'stock',
+				'value'     => $stock,
+				'tooltip'   => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Stock Quantity', ATUM_TEXT_DOMAIN ),
 			);
 
 			$stock = self::get_editable_column( $args );
@@ -1409,6 +1415,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var array  $extra_meta
 		 * @var string $tooltip_position
 		 * @var string $currency
+		 * @var string $cell_name
 		 * @var array  $extra_data
 		 */
 		extract( wp_parse_args( $args, array(
@@ -1420,6 +1427,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'extra_meta'       => array(),
 			'tooltip_position' => 'top',
 			'currency'         => self::$default_currency,
+			'cell_name'        => '',
 			'extra_data'       => array(),
 		) ) );
 
@@ -1429,7 +1437,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
 			'" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
-			$input_type . '" data-currency="' . $currency . '"' . $extra_data . '>' . $value . '</span>';
+			$input_type . '" data-currency="' . $currency . '"' . $extra_data . ' data-cell-name="' . $cell_name . '">' . $value . '</span>';
 
 		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );
 

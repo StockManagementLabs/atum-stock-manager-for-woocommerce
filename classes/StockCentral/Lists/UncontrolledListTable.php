@@ -129,15 +129,16 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				'trim_zeros' => TRUE,
 				'currency'   => self::$default_currency,
 			] ) : $regular_price;
-			
+
 			$args = apply_filters( 'atum/uncontrolled_stock_central_list/args_regular_price', array(
-				'meta_key' => 'regular_price',
-				'value'    => $regular_price_value,
-				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => self::$default_currency,
-				'tooltip'  => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'meta_key'  => 'regular_price',
+				'value'     => $regular_price_value,
+				'symbol'    => get_woocommerce_currency_symbol(),
+				'currency'  => self::$default_currency,
+				'tooltip'   => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			), $this->product );
-			
+
 			$regular_price = self::get_editable_column( $args );
 			
 		}
@@ -179,6 +180,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 				'symbol'     => get_woocommerce_currency_symbol(),
 				'currency'   => self::$default_currency,
 				'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
 				'extra_meta' => array(
 					array(
 						'name'        => '_sale_price_dates_from',

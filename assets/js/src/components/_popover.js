@@ -1,11 +1,9 @@
 /* =======================================
-   POPOVER FOR LIST TABLES
+   POPOVER
    ======================================= */
 
-import Settings from '../../config/_settings';
-import Globals from './_globals';
-import ListTable from './_list-table';
-import DateTimePicker from '../_date-time-picker';
+import Settings from '../config/_settings';
+import DateTimePicker from './_date-time-picker';
 
 let Popover = {
 	
@@ -17,7 +15,7 @@ let Popover = {
 		this.setFieldPopover();
 		
 		// Hide any other opened popover before opening a new one.
-		Globals.$atumList.click( (evt) => {
+		$('body').click( (evt) => {
 			
 			let $target   = $(evt.target),
 			    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
@@ -26,33 +24,10 @@ let Popover = {
 			// Get only the cells with an opened popover.
 			$metaCell = $metaCell.filter( (index, elem) => {
 				return $(elem).data('bs.popover') !== 'undefined' && ($(elem).data('bs.popover').inState || false) && $(elem).data('bs.popover').inState.click === true;
-			})
+			});
 			
 			self.destroyPopover($metaCell);
 			
-		});
-		
-		// Popover's "Set" button.
-		$('body').on('click', '.popover button.set', (evt) => {
-			
-			let $button   = $(evt.target),
-			    $popover  = $button.closest('.popover'),
-			    popoverId = $popover.attr('id'),
-			    $setMeta  = $('[data-popover="' + popoverId + '"]');
-			
-			if ($setMeta.length) {
-				ListTable.maybeAddSaveButton();
-				ListTable.updateEditedColsInput($setMeta, $popover);
-			}
-			
-		});
-		
-		// Restore the popovers after the List Table updates.
-		Globals.$atumList.on('atum-table-updated', this.setFieldPopover);
-		
-		// Destroy the popover when a meta cell is edited.
-		Globals.$atumList.on('atum-table-updated', ($metaCell) => {
-			self.destroyPopover($metaCell);
 		});
 		
 	},
@@ -92,16 +67,16 @@ let Popover = {
 	},
 	
 	/**
-	 * Bind the editable column's popovers
+	 * Bind the editable cell's popovers
 	 *
 	 * @param jQuery $metaCell The cell where the popover will be attached.
 	 */
 	bindPopover($metaCell) {
 		
-		let symbol            = $metaCell.data('symbol') || '',
-		    currentColumnText = Globals.$atumTable.find('tfoot tr.item-heads').children().eq($metaCell.closest('td').index()).text(),
-		    inputType         = $metaCell.data('input-type') || 'number',
-		    inputAtts         = {
+		let symbol    = $metaCell.data('symbol') || '',
+		    cellName  = $metaCell.data('cell-name') || '',
+		    inputType = $metaCell.data('input-type') || 'number',
+		    inputAtts = {
 			    type : $metaCell.data('input-type') || 'number',
 			    value: $metaCell.data('input-type') === 'number' || $metaCell.text() === '-' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
 			    class: 'meta-value',
@@ -135,11 +110,14 @@ let Popover = {
 		
 		// Create the meta edit popover.
 		$metaCell.popover({
-			title    : Settings.get('setValue').replace('%%', currentColumnText),
+			title    : Settings.get('setValue') ? Settings.get('setValue').replace('%%', cellName) : cellName,
 			content  : $content,
 			html     : true,
-			template : '<div class="popover' + popoverClass + '" role="tooltip"><div class="popover-arrow"></div>' +
-				'<h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+			template : `<div class="popover ${popoverClass}" role="tooltip">
+							<div class="popover-arrow"></div>
+							<h3 class="popover-title"></h3>
+							<div class="popover-content"></div>
+						</div>`,
 			placement: 'bottom',
 			trigger  : 'click',
 			container: 'body',
@@ -150,7 +128,7 @@ let Popover = {
 	/**
 	 * Destroy a popover attached to a specified table cell
 	 *
-	 * @param jQuery $metaCell The table cell where is attached the visible popover
+	 * @param jQuery $metaCell The table cell where is attached the visible popover.
 	 */
 	destroyPopover($metaCell) {
 		
@@ -160,7 +138,7 @@ let Popover = {
 			$metaCell.popover('destroy');
 			$metaCell.removeAttr('data-popover');
 			
-			// Give a small lapse to complete the 'fadeOut' animation before re-binding
+			// Give a small lapse to complete the 'fadeOut' animation before re-binding.
 			setTimeout( () => {
 				self.setFieldPopover($metaCell);
 			}, 300);
