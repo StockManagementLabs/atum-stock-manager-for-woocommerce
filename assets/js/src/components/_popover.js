@@ -21,6 +21,11 @@ let Popover = {
 			    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
 			    $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
 			
+			// Do not hide any popover if the click is being performed within one.
+			if ($target.is('.popover') || $target.closest('.popover.in').length) {
+				return;
+			}
+			
 			// Get only the cells with an opened popover.
 			$metaCell = $metaCell.filter( (index, elem) => {
 				return $(elem).data('bs.popover') !== 'undefined' && ($(elem).data('bs.popover').inState || false) && $(elem).data('bs.popover').inState.click === true;
@@ -49,7 +54,7 @@ let Popover = {
 		});
 		
 		// Focus on the input field and set a reference to the popover to the editable column.
-		$metaCells.on('shown.bs.popover', () => {
+		$metaCells.on('shown.bs.popover', (evt) => {
 			
 			let $activePopover = $('.popover.in');
 			$activePopover.find('.meta-value').focus();
@@ -60,7 +65,7 @@ let Popover = {
 				DateTimePicker.addDateTimePickers($dateInputs);
 			}
 			
-			$(this).attr('data-popover', $activePopover.attr('id'));
+			$(evt.target).attr('data-popover', $activePopover.attr('id'));
 			
 		});
 		
@@ -77,10 +82,15 @@ let Popover = {
 		    cellName  = $metaCell.data('cell-name') || '',
 		    inputType = $metaCell.data('input-type') || 'number',
 		    inputAtts = {
-			    type : $metaCell.data('input-type') || 'number',
-			    value: $metaCell.data('input-type') === 'number' || $metaCell.text() === '-' ? $metaCell.text().replace(symbol, '').replace('-', '') : $metaCell.text(),
+			    type : inputType || 'number',
+			    value: $metaCell.text(),
 			    class: 'meta-value',
 		    };
+		
+		if (inputType === 'number' || $metaCell.text() === '-') {
+			const numericValue = Number($metaCell.text().replace(thousandsSeparator, '').replace('-', '').replace(symbol, ''));
+			inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
+		}
 		
 		if (inputType === 'number') {
 			inputAtts.min = '0';
@@ -89,7 +99,11 @@ let Popover = {
 		}
 		
 		let $input       = $('<input />', inputAtts),
-		    $setButton   = $('<button />', {type: 'button', class: 'set btn btn-primary button-small', text: Settings.get('setButton')}),
+		    $setButton   = $('<button />', {
+			    type: 'button',
+			    class: 'set btn btn-primary button-small',
+			    text: Settings.get('setButton'),
+		    }),
 		    extraMeta    = $metaCell.data('extra-meta'),
 		    $extraFields = '',
 		    popoverClass = '';
