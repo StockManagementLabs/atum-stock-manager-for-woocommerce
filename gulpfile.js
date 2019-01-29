@@ -118,7 +118,8 @@ gulp.task('js::atum', function () {
 			devtool: 'source-map',
 			
 			entry: {
-				"list.tables": path.join(__dirname, config.assetsDir + '/js/src/') + 'list.tables.js'
+				'list.tables' : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.js',
+				'product.data': path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.js',
 			},
 			
 			output: {

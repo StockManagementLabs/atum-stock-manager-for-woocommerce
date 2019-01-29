@@ -7,10 +7,12 @@ let Settings = {
 	
 	settings: {},
 	
-	init(varName, defaults) {
+	init(varName, defaults = {}) {
+		
+		let localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
 	
-		// Get the settings from the localized var.
-		this.settings = $.extend( this.settings, defaults || {}, window[varName] || {});
+		// Merge all the settings.
+		this.settings = $.extend( this.settings, defaults, localizedOpts );
 		
 	},
 	
