@@ -337,19 +337,22 @@ final class Globals {
 		$data_stores_namespace = '\Atum\Models\DataStores';
 
 		// Check if we have to use the new custom tables or the old ones.
-		// TODO: WHEN WC MOVE THE NEW TABLES FROM THE FEATURE PLUGIN TO THE CORE, WILL PERHAPS CHANGE THE CLASS NAMES.
-		// TODO: ADD WC SUBSCRIPTIONS AND BOOKINGS COMPATIBILITY.
+		// TODO: WHEN WC MOVE THE NEW TABLES FROM THE FEATURE PLUGIN TO THE CORE, WE SHOULD CHANGE THE CLASS NAMES.
 		if ( Helpers::is_using_new_wc_tables() ) {
 			$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCustomTable";
 			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCustomTable";
 			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCustomTable";
 			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCustomTable";
+			$data_stores['product-booking']   = "{$data_stores_namespace}\AtumProductBookingDataStoreCPT"; // For now WC Bookings does not support the new tables.
+			$data_stores['subscription']      = "{$data_stores_namespace}\AtumProductSubscriptionDataStoreCPT"; // For now WC Subscriptions does not support the new tables.
 		}
 		else {
 			$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCPT";
 			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCPT";
 			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
 			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
+			$data_stores['product-booking']   = "{$data_stores_namespace}\AtumProductBookingDataStoreCPT";
+			$data_stores['subscription']      = "{$data_stores_namespace}\AtumProductSubscriptionDataStoreCPT";
 		}
 
 		return $data_stores;

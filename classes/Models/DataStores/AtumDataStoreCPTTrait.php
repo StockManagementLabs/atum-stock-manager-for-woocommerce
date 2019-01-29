@@ -27,7 +27,7 @@ trait AtumDataStoreCPTTrait {
 	 *
 	 * @param \WC_Product $product Product object.
 	 */
-	protected function read_product_data( &$product ) {
+	public function read_product_data( &$product ) {
 
 		$id        = $product->get_id();
 		$atum_data = $this->get_product_row_from_db( $id );
@@ -40,8 +40,6 @@ trait AtumDataStoreCPTTrait {
 		parent::read_product_data( $product );
 
 	}
-
-	
 	
 	/**
 	 * Get product data row from the DB whilst utilising cache.
