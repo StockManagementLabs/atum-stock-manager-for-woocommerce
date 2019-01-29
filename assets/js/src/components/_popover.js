@@ -56,7 +56,9 @@ let Popover = {
 		// Focus on the input field and set a reference to the popover to the editable column.
 		$metaCells.on('shown.bs.popover', (evt) => {
 			
-			let $activePopover = $('.popover.in');
+			let $metaCell      = $(evt.target),
+				$activePopover = $('.popover.in');
+			
 			$activePopover.find('.meta-value').focus().select();
 			
 			let $dateInputs = $activePopover.find('.datepicker');
@@ -68,13 +70,18 @@ let Popover = {
 			// Click the "Set" button when hitting enter on an input field.
 			$activePopover.find('input').on('keyup', (evt) => {
 				
+				// Enter key.
 				if (13 === evt.which) {
 					$activePopover.find('.set').click();
+				}
+				// ESC key.
+				else if (27 === evt.which) {
+					self.destroyPopover($metaCell);
 				}
 				
 			});
 			
-			$(evt.target).attr('data-popover', $activePopover.attr('id'));
+			$metaCell.attr('data-popover', $activePopover.attr('id'));
 			
 		});
 		
