@@ -57,13 +57,22 @@ let Popover = {
 		$metaCells.on('shown.bs.popover', (evt) => {
 			
 			let $activePopover = $('.popover.in');
-			$activePopover.find('.meta-value').focus();
+			$activePopover.find('.meta-value').focus().select();
 			
 			let $dateInputs = $activePopover.find('.datepicker');
 			
 			if ( $dateInputs.length) {
 				DateTimePicker.addDateTimePickers($dateInputs);
 			}
+			
+			// Click the "Set" button when hitting enter on an input field.
+			$activePopover.find('input').on('keyup', (evt) => {
+				
+				if (13 === evt.which) {
+					$activePopover.find('.set').click();
+				}
+				
+			});
 			
 			$(evt.target).attr('data-popover', $activePopover.attr('id'));
 			

@@ -2573,6 +2573,9 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
           align-items: center;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .popover-content button {
@@ -2623,7 +2626,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   left: 50%;
   margin-left: -11px;
   border-bottom-width: 0;
-  border-top-color: #999999;
   border-top-color: rgba(0, 0, 0, 0.25);
   bottom: -11px;
 }
@@ -2641,7 +2643,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   left: -11px;
   margin-top: -11px;
   border-left-width: 0;
-  border-right-color: #999999;
   border-right-color: rgba(0, 0, 0, 0.25);
 }
 
@@ -2679,7 +2680,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   right: -11px;
   margin-top: -11px;
   border-right-width: 0;
-  border-left-color: #999999;
   border-left-color: rgba(0, 0, 0, 0.25);
 }
 

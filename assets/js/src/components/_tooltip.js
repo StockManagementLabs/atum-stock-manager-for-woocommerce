@@ -12,10 +12,16 @@ let Tooltip = {
 	
 	/**
 	 * Enable tooltips
+	 *
+	 * @param jQuery $wrapper   Optional. The wrapper where the elements with tooltips are contained,
 	 */
-	addTooltips() {
+	addTooltips($wrapper = null) {
 		
-		$('.tips').each( (index, elem) => {
+		if (!$wrapper) {
+			$wrapper = $('body');
+		}
+		
+		$wrapper.find('.tips, .atum-tooltip').each( (index, elem) => {
 			
 			const $tipEl = $(elem);
 			
@@ -27,7 +33,7 @@ let Tooltip = {
 			
 		});
 		
-		$('.select2-selection__rendered').each( (index, elem) => {
+		$wrapper.find('.select2-selection__rendered').each( (index, elem) => {
 			
 			const $tipEl = $(elem);
 			
@@ -43,9 +49,17 @@ let Tooltip = {
 	
 	/**
 	 * Destroy all the tooltips
+	 *
+	 * @param jQuery $wrapper   Optional. The wrapper where the elements with tooltips are contained
 	 */
-	destroyTooltips() {
-		$('.tips, .select2-selection__rendered').tooltip('destroy');
+	destroyTooltips($wrapper = null) {
+		
+		if (!$wrapper) {
+			$wrapper = $('body');
+		}
+		
+		$wrapper.find('.tips, .atum-tooltip, .select2-selection__rendered').tooltip('destroy');
+		
 	},
 	
 }
