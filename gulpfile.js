@@ -180,17 +180,29 @@ gulp.task('js::atum', function () {
 
 gulp.task('composer::install', function () {
 	// Installation + optimization
-	composer({ cwd: '.', o: true });
+	composer({
+		cwd: '.',
+		o  : true,
+		bin: '/usr/local/bin/composer',
+	});
 });
 
 gulp.task('composer::update', function () {
 	// Update + optinmization
-	composer('update', {cwd: '.', o: true});
+	composer('update', {
+		cwd: '.',
+		o  : true,
+		bin: '/usr/local/bin/composer',
+	});
 });
 
 gulp.task('composer::optimize', function () {
 	// Just optimization (classmap autoloader array generation)
-	composer('dumpautoload', {cwd: '.', optimize: true});
+	composer('dumpautoload', {
+		cwd     : '.',
+		optimize: true,
+		bin     : '/usr/local/bin/composer',
+	});
 });
 
 
