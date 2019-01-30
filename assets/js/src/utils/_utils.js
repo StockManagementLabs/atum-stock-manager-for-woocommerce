@@ -56,10 +56,11 @@ let Utils = {
 	addNotice(type, msg) {
 		
 		let $notice        = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(),
-		    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'});
+		    $dismissButton = $('<button />', {type: 'button', class: 'notice-dismiss'}),
+		    $headerEnd     = $('.wp-header-end');
 		
-		this.$atumList.siblings('.notice').remove();
-		this.$atumList.before($notice.append($dismissButton));
+		$headerEnd.siblings('.notice').remove();
+		$headerEnd.before($notice.append($dismissButton));
 		$notice.slideDown(100);
 		
 		$dismissButton.on('click.wp-dismiss-notice', (evt) => {
