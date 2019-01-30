@@ -1695,7 +1695,7 @@ final class Helpers {
 				// Any other text meta.
 				default:
 					if ( is_callable( array( $product, "set_{$meta_key}" ) ) ) {
-						$product->{"set_{$meta_key}"}( $meta_value );
+						call_user_func( array( $product, "set_{$meta_key}" ), $meta_value );
 					}
 					else {
 						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );

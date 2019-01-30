@@ -147,7 +147,7 @@ trait AtumProductTrait {
 	/**
 	 * Returns the product's minimum threshold prop.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
@@ -161,7 +161,7 @@ trait AtumProductTrait {
 	/**
 	 * Returns the product's available to purchase per user prop.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
@@ -175,7 +175,7 @@ trait AtumProductTrait {
 	/**
 	 * Returns the product's selling priority prop.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
@@ -297,7 +297,7 @@ trait AtumProductTrait {
 	/**
 	 * Set minimum threshold for the current product.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param int|string $amount Empty string if value not set.
@@ -309,7 +309,7 @@ trait AtumProductTrait {
 	/**
 	 * Set available to purchase per user for the current product.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param int|string $amount Empty string if value not set.
@@ -321,7 +321,7 @@ trait AtumProductTrait {
 	/**
 	 * Set selling priority for the current product.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param int|string $amount Empty string if value not set.

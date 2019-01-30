@@ -585,7 +585,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// If the current product has a method to get the prop, use it.
 			if ( is_callable( array( $this->product, "get{$column_name}" ) ) ) {
-				$column_item = $this->product->{"get{$column_name}"};
+				$column_item = call_user_func( array( $this->product, "get{$column_name}" ) );
 			}
 			else {
 				$column_item = get_post_meta( $id, $column_name, TRUE );
@@ -597,7 +597,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$column_item = self::EMPTY_COL;
 		}
 
-		return apply_filters( "atum/list_table/column_default_$column_name", $column_item, $item, $this->product, $this );
+		return apply_filters( "atum/list_table/column_default_$column_name", $column_item, $item, $this->product, $this, $column_name );
 
 	}
 
