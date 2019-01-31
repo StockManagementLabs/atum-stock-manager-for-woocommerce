@@ -4,7 +4,7 @@
 
 import Globals from './_globals';
 import Tooltip from '../_tooltip';
-import dragscroll from 'dragscroll/dragscroll';
+import dragscroll from '../../../vendor/dragscroll.min';
 import Hammer from 'hammerjs/hammer.min';
 
 let DragScroll = {
@@ -18,7 +18,9 @@ let DragScroll = {
 		this.initHorizontalDragScroll();
 		
 		// Re-add the horizontal drag-scroll when the List Table is updated.
-		Globals.$atumList.on('atum-table-updated', this.initHorizontalDragScroll);
+		Globals.$atumList.on('atum-table-updated', () => {
+			this.initHorizontalDragScroll
+		});
 	
 	},
 	

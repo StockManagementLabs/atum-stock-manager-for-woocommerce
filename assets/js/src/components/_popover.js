@@ -28,7 +28,7 @@ let Popover = {
 			
 			// Get only the cells with an opened popover.
 			$metaCell = $metaCell.filter( (index, elem) => {
-				return $(elem).data('bs.popover') !== 'undefined' && ($(elem).data('bs.popover').inState || false) && $(elem).data('bs.popover').inState.click === true;
+				return typeof $(elem).data('bs.popover') !== 'undefined' && typeof $(elem).data('bs.popover').inState !== 'undefined' && $(elem).data('bs.popover').inState.click === true;
 			});
 			
 			self.destroyPopover($metaCell);
