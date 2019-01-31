@@ -4714,8 +4714,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .wrap h1.wp-heading-inline #atum-update-list:active {
   color: #fff;
   padding: 0 10px 1px;
-  -webkit-box-shadow: 0 1px 0 #0073AA;
-          box-shadow: 0 1px 0 #0073AA;
 }
 
 @media all and (max-width: 782px) {

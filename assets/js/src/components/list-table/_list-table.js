@@ -477,12 +477,12 @@ let ListTable = {
 				},
 				success   : (response) => {
 					
-					if (typeof response === 'object') {
+					if (typeof response === 'object' && typeof response.success !== 'undefined') {
 						const noticeType = response.success ? 'updated' : 'error';
 						Utils.addNotice(noticeType, response.data);
 					}
 					
-					if (response.success) {
+					if (typeof response.success !== 'undefined' && response.success) {
 						$button.remove();
 						Globals.$editInput.val('');
 						self.updateTable();

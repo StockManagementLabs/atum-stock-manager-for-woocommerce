@@ -48,12 +48,11 @@
 			&:active {
 				color: $white;
 				padding: 0 10px 1px;
-				box-shadow: 0 1px 0 $wp-link;
 			}
 		}
 		
 		// At 782px, WordPress changes the list table views to mobile version
-		@include tablet-max-wp{
+		@include tablet-max-wp {
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-start;
@@ -61,7 +60,7 @@
 			padding-bottom: 15px;
 		}
 		
-		@include mobile-max{
+		@include mobile-max {
 			justify-content: center;
 			margin: 0;
 		}

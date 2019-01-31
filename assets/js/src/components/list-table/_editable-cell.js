@@ -15,7 +15,9 @@ let EditableCell = {
 		Globals.$atumList
 		
 			// Restore the popovers after the List Table updates.
-			.on('atum-table-updated', this.setFieldPopover)
+			.on('atum-table-updated', () => {
+				Popover.setFieldPopover();
+			})
 		
 			// Destroy the popover when a meta cell is edited.
 			.on('atum-edited-cols-input-updated', (evt, $metaCell) => {
