@@ -944,8 +944,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   font-style: normal;
 }
 
-[class^="atmi-"], [class*=" atmi-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
+[class^="atmi-"], [class*=" atmi-"], .atum-icon {
   font-family: "atum-icon-font" !important;
   speak: none;
   font-style: normal;
@@ -953,7 +952,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -6495,7 +6493,7 @@ table.atum-list-table .column-calc_type, .floatThead-container .column-calc_type
   text-align: center;
 }
 
-table.atum-list-table .column-calc_type span.product-type, .floatThead-container .column-calc_type span.product-type, .inbound-stock-list .column-calc_type span.product-type, table.wp-list-table .column-calc_type span.product-type {
+table.atum-list-table .column-calc_type span.product-type, table.atum-list-table .column-calc_type span.product-type-icon, .floatThead-container .column-calc_type span.product-type, .floatThead-container .column-calc_type span.product-type-icon, .inbound-stock-list .column-calc_type span.product-type, .inbound-stock-list .column-calc_type span.product-type-icon, table.wp-list-table .column-calc_type span.product-type, table.wp-list-table .column-calc_type span.product-type-icon {
   display: block;
   position: relative;
   height: 1em;
@@ -6505,7 +6503,7 @@ table.atum-list-table .column-calc_type span.product-type, .floatThead-container
   color: #adb5bd;
 }
 
-table.atum-list-table .column-calc_type span.product-type:before, .floatThead-container .column-calc_type span.product-type:before, .inbound-stock-list .column-calc_type span.product-type:before, table.wp-list-table .column-calc_type span.product-type:before {
+table.atum-list-table .column-calc_type span.product-type:before, table.atum-list-table .column-calc_type span.product-type-icon:before, .floatThead-container .column-calc_type span.product-type:before, .floatThead-container .column-calc_type span.product-type-icon:before, .inbound-stock-list .column-calc_type span.product-type:before, .inbound-stock-list .column-calc_type span.product-type-icon:before, table.wp-list-table .column-calc_type span.product-type:before, table.wp-list-table .column-calc_type span.product-type-icon:before {
   content: "";
   font-family: "atum-icon-font" !important;
   -webkit-font-smoothing: antialiased;
@@ -6525,43 +6523,43 @@ table.atum-list-table .column-calc_type span.product-type:before, .floatThead-co
   margin: 0;
 }
 
-table.atum-list-table .column-calc_type span.product-type.bundle::before, .floatThead-container .column-calc_type span.product-type.bundle::before, .inbound-stock-list .column-calc_type span.product-type.bundle::before, table.wp-list-table .column-calc_type span.product-type.bundle::before {
+table.atum-list-table .column-calc_type span.product-type.bundle::before, table.atum-list-table .column-calc_type span.product-type-icon.bundle::before, .floatThead-container .column-calc_type span.product-type.bundle::before, .floatThead-container .column-calc_type span.product-type-icon.bundle::before, .inbound-stock-list .column-calc_type span.product-type.bundle::before, .inbound-stock-list .column-calc_type span.product-type-icon.bundle::before, table.wp-list-table .column-calc_type span.product-type.bundle::before, table.wp-list-table .column-calc_type span.product-type-icon.bundle::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.grouped::before, .floatThead-container .column-calc_type span.product-type.grouped::before, .inbound-stock-list .column-calc_type span.product-type.grouped::before, table.wp-list-table .column-calc_type span.product-type.grouped::before {
+table.atum-list-table .column-calc_type span.product-type.grouped::before, table.atum-list-table .column-calc_type span.product-type-icon.grouped::before, .floatThead-container .column-calc_type span.product-type.grouped::before, .floatThead-container .column-calc_type span.product-type-icon.grouped::before, .inbound-stock-list .column-calc_type span.product-type.grouped::before, .inbound-stock-list .column-calc_type span.product-type-icon.grouped::before, table.wp-list-table .column-calc_type span.product-type.grouped::before, table.wp-list-table .column-calc_type span.product-type-icon.grouped::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.variable::before, .floatThead-container .column-calc_type span.product-type.variable::before, .inbound-stock-list .column-calc_type span.product-type.variable::before, table.wp-list-table .column-calc_type span.product-type.variable::before {
+table.atum-list-table .column-calc_type span.product-type.variable::before, table.atum-list-table .column-calc_type span.product-type-icon.variable::before, .floatThead-container .column-calc_type span.product-type.variable::before, .floatThead-container .column-calc_type span.product-type-icon.variable::before, .inbound-stock-list .column-calc_type span.product-type.variable::before, .inbound-stock-list .column-calc_type span.product-type-icon.variable::before, table.wp-list-table .column-calc_type span.product-type.variable::before, table.wp-list-table .column-calc_type span.product-type-icon.variable::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.downloadable::before, .floatThead-container .column-calc_type span.product-type.downloadable::before, .inbound-stock-list .column-calc_type span.product-type.downloadable::before, table.wp-list-table .column-calc_type span.product-type.downloadable::before {
+table.atum-list-table .column-calc_type span.product-type.downloadable::before, table.atum-list-table .column-calc_type span.product-type-icon.downloadable::before, .floatThead-container .column-calc_type span.product-type.downloadable::before, .floatThead-container .column-calc_type span.product-type-icon.downloadable::before, .inbound-stock-list .column-calc_type span.product-type.downloadable::before, .inbound-stock-list .column-calc_type span.product-type-icon.downloadable::before, table.wp-list-table .column-calc_type span.product-type.downloadable::before, table.wp-list-table .column-calc_type span.product-type-icon.downloadable::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.virtual::before, .floatThead-container .column-calc_type span.product-type.virtual::before, .inbound-stock-list .column-calc_type span.product-type.virtual::before, table.wp-list-table .column-calc_type span.product-type.virtual::before {
+table.atum-list-table .column-calc_type span.product-type.virtual::before, table.atum-list-table .column-calc_type span.product-type-icon.virtual::before, .floatThead-container .column-calc_type span.product-type.virtual::before, .floatThead-container .column-calc_type span.product-type-icon.virtual::before, .inbound-stock-list .column-calc_type span.product-type.virtual::before, .inbound-stock-list .column-calc_type span.product-type-icon.virtual::before, table.wp-list-table .column-calc_type span.product-type.virtual::before, table.wp-list-table .column-calc_type span.product-type-icon.virtual::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.booking::before, .floatThead-container .column-calc_type span.product-type.booking::before, .inbound-stock-list .column-calc_type span.product-type.booking::before, table.wp-list-table .column-calc_type span.product-type.booking::before {
+table.atum-list-table .column-calc_type span.product-type.booking::before, table.atum-list-table .column-calc_type span.product-type-icon.booking::before, .floatThead-container .column-calc_type span.product-type.booking::before, .floatThead-container .column-calc_type span.product-type-icon.booking::before, .inbound-stock-list .column-calc_type span.product-type.booking::before, .inbound-stock-list .column-calc_type span.product-type-icon.booking::before, table.wp-list-table .column-calc_type span.product-type.booking::before, table.wp-list-table .column-calc_type span.product-type-icon.booking::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.product-part::before, .floatThead-container .column-calc_type span.product-type.product-part::before, .inbound-stock-list .column-calc_type span.product-type.product-part::before, table.wp-list-table .column-calc_type span.product-type.product-part::before {
+table.atum-list-table .column-calc_type span.product-type.product-part::before, table.atum-list-table .column-calc_type span.product-type-icon.product-part::before, .floatThead-container .column-calc_type span.product-type.product-part::before, .floatThead-container .column-calc_type span.product-type-icon.product-part::before, .inbound-stock-list .column-calc_type span.product-type.product-part::before, .inbound-stock-list .column-calc_type span.product-type-icon.product-part::before, table.wp-list-table .column-calc_type span.product-type.product-part::before, table.wp-list-table .column-calc_type span.product-type-icon.product-part::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.variable-product-part::before, .floatThead-container .column-calc_type span.product-type.variable-product-part::before, .inbound-stock-list .column-calc_type span.product-type.variable-product-part::before, table.wp-list-table .column-calc_type span.product-type.variable-product-part::before {
+table.atum-list-table .column-calc_type span.product-type.variable-product-part::before, table.atum-list-table .column-calc_type span.product-type-icon.variable-product-part::before, .floatThead-container .column-calc_type span.product-type.variable-product-part::before, .floatThead-container .column-calc_type span.product-type-icon.variable-product-part::before, .inbound-stock-list .column-calc_type span.product-type.variable-product-part::before, .inbound-stock-list .column-calc_type span.product-type-icon.variable-product-part::before, table.wp-list-table .column-calc_type span.product-type.variable-product-part::before, table.wp-list-table .column-calc_type span.product-type-icon.variable-product-part::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.raw-material::before, .floatThead-container .column-calc_type span.product-type.raw-material::before, .inbound-stock-list .column-calc_type span.product-type.raw-material::before, table.wp-list-table .column-calc_type span.product-type.raw-material::before {
+table.atum-list-table .column-calc_type span.product-type.raw-material::before, table.atum-list-table .column-calc_type span.product-type-icon.raw-material::before, .floatThead-container .column-calc_type span.product-type.raw-material::before, .floatThead-container .column-calc_type span.product-type-icon.raw-material::before, .inbound-stock-list .column-calc_type span.product-type.raw-material::before, .inbound-stock-list .column-calc_type span.product-type-icon.raw-material::before, table.wp-list-table .column-calc_type span.product-type.raw-material::before, table.wp-list-table .column-calc_type span.product-type-icon.raw-material::before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type span.product-type.variable-raw-material::before, .floatThead-container .column-calc_type span.product-type.variable-raw-material::before, .inbound-stock-list .column-calc_type span.product-type.variable-raw-material::before, table.wp-list-table .column-calc_type span.product-type.variable-raw-material::before {
+table.atum-list-table .column-calc_type span.product-type.variable-raw-material::before, table.atum-list-table .column-calc_type span.product-type-icon.variable-raw-material::before, .floatThead-container .column-calc_type span.product-type.variable-raw-material::before, .floatThead-container .column-calc_type span.product-type-icon.variable-raw-material::before, .inbound-stock-list .column-calc_type span.product-type.variable-raw-material::before, .inbound-stock-list .column-calc_type span.product-type-icon.variable-raw-material::before, table.wp-list-table .column-calc_type span.product-type.variable-raw-material::before, table.wp-list-table .column-calc_type span.product-type-icon.variable-raw-material::before {
   content: "";
 }
 
@@ -6569,19 +6567,23 @@ table.atum-list-table .column-calc_type .has-child, .floatThead-container .colum
   cursor: pointer;
 }
 
-table.atum-list-table .column-calc_type .has-child.product-type.variable, table.atum-list-table .column-calc_type .has-child.product-type.variable-subscription, table.atum-list-table .column-calc_type .has-child.product-type.variable-product-part, table.atum-list-table .column-calc_type .has-child.product-type.variable-raw-material, .floatThead-container .column-calc_type .has-child.product-type.variable, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type.variable-product-part, .floatThead-container .column-calc_type .has-child.product-type.variable-raw-material, .inbound-stock-list .column-calc_type .has-child.product-type.variable, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type.variable-product-part, .inbound-stock-list .column-calc_type .has-child.product-type.variable-raw-material, table.wp-list-table .column-calc_type .has-child.product-type.variable, table.wp-list-table .column-calc_type .has-child.product-type.variable-subscription, table.wp-list-table .column-calc_type .has-child.product-type.variable-product-part, table.wp-list-table .column-calc_type .has-child.product-type.variable-raw-material {
+table.atum-list-table .column-calc_type .has-child.product-type.variable, table.atum-list-table .column-calc_type .has-child.product-type.variable-subscription, table.atum-list-table .column-calc_type .has-child.product-type.variable-product-part, table.atum-list-table .column-calc_type .has-child.product-type.variable-raw-material, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-subscription, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-product-part, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-raw-material, .floatThead-container .column-calc_type .has-child.product-type.variable, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type.variable-product-part, .floatThead-container .column-calc_type .has-child.product-type.variable-raw-material, .floatThead-container .column-calc_type .has-child.product-type-icon.variable, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-product-part, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-raw-material, .inbound-stock-list .column-calc_type .has-child.product-type.variable, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type.variable-product-part, .inbound-stock-list .column-calc_type .has-child.product-type.variable-raw-material, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-product-part, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-raw-material, table.wp-list-table .column-calc_type .has-child.product-type.variable, table.wp-list-table .column-calc_type .has-child.product-type.variable-subscription, table.wp-list-table .column-calc_type .has-child.product-type.variable-product-part, table.wp-list-table .column-calc_type .has-child.product-type.variable-raw-material, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-subscription, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-product-part, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-raw-material {
   color: #00B8DB;
 }
 
-table.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription:before, table.wp-list-table .column-calc_type .has-child.product-type.variable-subscription:before {
+table.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-subscription:before, table.wp-list-table .column-calc_type .has-child.product-type.variable-subscription:before, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-subscription:before {
   content: "";
 }
 
-table.atum-list-table .column-calc_type .has-child.product-type.grouped, .floatThead-container .column-calc_type .has-child.product-type.grouped, .inbound-stock-list .column-calc_type .has-child.product-type.grouped, table.wp-list-table .column-calc_type .has-child.product-type.grouped {
+table.atum-list-table .column-calc_type .has-child.product-type.grouped, table.atum-list-table .column-calc_type .has-child.product-type-icon.grouped, .floatThead-container .column-calc_type .has-child.product-type.grouped, .floatThead-container .column-calc_type .has-child.product-type-icon.grouped, .inbound-stock-list .column-calc_type .has-child.product-type.grouped, .inbound-stock-list .column-calc_type .has-child.product-type-icon.grouped, table.wp-list-table .column-calc_type .has-child.product-type.grouped, table.wp-list-table .column-calc_type .has-child.product-type-icon.grouped {
   color: #EFAF00;
 }
 
-table.atum-list-table .column-calc_type .has-child.product-type:hover:before, .floatThead-container .column-calc_type .has-child.product-type:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type:hover:before, table.wp-list-table .column-calc_type .has-child.product-type:hover:before {
+table.atum-list-table .column-calc_type .has-child.product-type.bundle, table.atum-list-table .column-calc_type .has-child.product-type-icon.bundle, .floatThead-container .column-calc_type .has-child.product-type.bundle, .floatThead-container .column-calc_type .has-child.product-type-icon.bundle, .inbound-stock-list .column-calc_type .has-child.product-type.bundle, .inbound-stock-list .column-calc_type .has-child.product-type-icon.bundle, table.wp-list-table .column-calc_type .has-child.product-type.bundle, table.wp-list-table .column-calc_type .has-child.product-type-icon.bundle {
+  color: #00B8DB;
+}
+
+table.atum-list-table .column-calc_type .has-child.product-type:hover:before, table.atum-list-table .column-calc_type .has-child.product-type-icon:hover:before, .floatThead-container .column-calc_type .has-child.product-type:hover:before, .floatThead-container .column-calc_type .has-child.product-type-icon:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type-icon:hover:before, table.wp-list-table .column-calc_type .has-child.product-type:hover:before, table.wp-list-table .column-calc_type .has-child.product-type-icon:hover:before {
   content: "";
 }
 

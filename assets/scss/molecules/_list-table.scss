@@ -2228,6 +2228,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					color: $warning;
 				}
 				
+				&.bundle {
+					color: $primary;
+				}
+				
 				&:hover {
 					&:before {
 						content: $atmi-wc-expand;
