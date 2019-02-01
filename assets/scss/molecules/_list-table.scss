@@ -938,6 +938,8 @@
 	margin: 0 0 18px;
 	
 	a {
+		transition: .2s ease-in-out;
+		
 		&:focus {
 			box-shadow: none;
 		}
@@ -1600,23 +1602,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			letter-spacing: 0.3px;
 			color: $gray-500;
 			
-			&.column-_supplier_sku {
-				.sorting-indicator {
-					margin-top: 15px;
-				}
-			}
-			
-			.sorting-indicator {
-				visibility: visible;
-				margin-left: 4px;
-				margin-top: 7px;
-				
-				&:before {
-					color: $gray-500;
-					content: "\f140";
-				}
-			}
-			
 			.atum-icon {
 				display: block;
 				text-indent: -9999px;
@@ -1716,6 +1701,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				display: flex;
 				color: $gray-500;
 				overflow: visible;
+				
+				&, span {
+					&:hover {
+						color: $blue;
+					}
+				}
 			}
 			
 			&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
@@ -1736,8 +1727,37 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			.sorting-indicator {
-				display: inline-block;
-				width: auto;
+				visibility: visible;
+				position: relative;
+				width: 10px;
+				
+				&:before {
+					@include vertical-align-absolute;
+					margin-top: -2px;
+					color: $gray-500;
+					content: "\f140";
+				}
+			}
+			
+			&.asc {
+				.sorting-indicator {
+					&:before {
+						content: "\f142";
+					}
+				}
+			}
+			
+		}
+		
+		&.sortable {
+			.sorting-indicator {
+				visibility: hidden !important;
+			}
+			
+			a:hover {
+				.sorting-indicator {
+					visibility: visible !important;
+				}
 			}
 		}
 		
