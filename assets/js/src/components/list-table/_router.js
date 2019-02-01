@@ -56,14 +56,12 @@ let Router = {
 						
 						optionVal = $(elem).val();
 						
-						if (optionVal.search('calc_') < 0) { // Calc values are not searchable, also we can't search on thumb.
-							
-							if (optionVal !== 'thumb' && optionVal == searchColumn) {
-								Globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, $(elem).parent().text() + ' <span class="caret"></span>']);
-								
-								return false;
-							}
+						// Calc values are not searchable, also we can't search on thumb.
+						if (optionVal.search('calc_') < 0 && optionVal !== 'thumb' && optionVal == searchColumn) {
+							Globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, $(elem).parent().text() + ' <span class="caret"></span>']);
+							return false;
 						}
+						
 					});
 					
 				}
@@ -122,7 +120,7 @@ let Router = {
 		let self             = this,
 		    numCurrentParams = $.address.parameterNames().length;
 		
-		Globals.filterData = $.extend(Globals.filterData, {
+		Object.assign(Globals.filterData, {
 			view          : $.address.parameter('view') || Globals.$atumList.find('.subsubsub a.current').attr('id') || '',
 			product_cat   : Globals.$atumList.find('.dropdown_product_cat').val() || '',
 			product_type  : Globals.$atumList.find('.dropdown_product_type').val() || '',
@@ -137,7 +135,7 @@ let Router = {
 			orderby       : $.address.parameter('orderby') || Settings.get('orderby'),
 			order         : $.address.parameter('order') || Settings.get('order'),
 		});
-		
+
 		// Update the URL hash parameters.
 		$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], (index, elem) => {
 			
@@ -146,13 +144,6 @@ let Router = {
 			
 			// If it's not saved on the filter data, continue.
 			if ( typeof Globals.filterData[elem] === 'undefined' ) {
-				return true;
-			}
-			
-			// If it's the default value, is not needed.
-			if (typeof Settings.get(elem) !== 'undefined' && Settings.get(elem) === Globals.filterData[elem]) {
-				$.address.parameter(elem, '');
-				
 				return true;
 			}
 			

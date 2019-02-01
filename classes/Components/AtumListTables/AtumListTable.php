@@ -1910,7 +1910,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 
-			$atum_order_fields = array(
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
 					'field' => 'purchase_price',
@@ -1927,27 +1927,32 @@ abstract class AtumListTable extends \WP_List_Table {
 					'type'  => 'NUMERIC',
 					'field' => 'out_stock_threshold',
 				),
-			);
+			) );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
 
-				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
+				if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
 
-					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
+					$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
 
-				} else {
-					// All the meta key based columns are numeric except the SKU.
+				}
+				// All the meta key based columns are numeric except the SKU.
+				else {
+
 					if ( '_sku' === $_REQUEST['orderby'] ) {
 						$args['orderby'] = 'meta_value';
-					} else {
+					}
+					else {
 						$args['orderby'] = 'meta_value_num';
 					}
 
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
+
 				}
+
 			}
 			// Standard Fields.
 			else {
@@ -2641,13 +2646,13 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$current_url     = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url     = remove_query_arg( 'paged', $current_url );
-		$current_orderby = isset( $_GET['orderby'] ) ? $_GET['orderby'] : '';
-		$current_order   = ( isset( $_GET['order'] ) && 'desc' === $_GET['order'] ) ? 'desc' : 'asc';
+		$current_orderby = isset( $_GET['orderby'] ) ? esc_attr( $_GET['orderby'] ) : '';
+		$current_order   = ( ! isset( $_GET['order'] ) || 'desc' === $_GET['order'] ) ? 'desc' : 'asc';
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 
-			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', ATUM_TEXT_DOMAIN ) . '</label>' .
+			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', ATUM_TEXT_DOMAIN ) . '</label>' .
 							'<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			$cb_counter++;
 		}
