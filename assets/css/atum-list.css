@@ -7385,6 +7385,11 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   margin: 3px 0;
 }
 
+.popover.with-meta .popover-content .btn-link {
+  font-size: 10px;
+  padding: 0;
+}
+
 .popover.with-meta .popover-content hr {
   border-color: #E3E8F5;
 }
