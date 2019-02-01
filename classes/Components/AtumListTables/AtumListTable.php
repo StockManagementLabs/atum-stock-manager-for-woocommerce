@@ -331,10 +331,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-
+		$this->last_days     = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
-
 		$this->query_filters = $this->get_filters_query_string();
 
 		// Filter the table data results to show specific product types only.
@@ -408,6 +406,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Hook the default_hidden_columns filter used within get_hidden_columns() function.
 		if ( ! empty( static::$default_hidden_columns ) ) {
 			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
+		}
+
+		// Allow adding searchable columns externally.
+		if ( ! empty( $this->default_searchable_columns ) ) {
+			$this->default_searchable_columns = (array) apply_filters( 'atum/list_table/default_serchable_columns', $this->default_searchable_columns );
 		}
 
 		// Custom image placeholder.
@@ -631,6 +634,14 @@ abstract class AtumListTable extends \WP_List_Table {
 					$classes .= " $group_key";
 					break;
 				}
+			}
+
+			// Check if it's a numeric cell.
+			if (
+				! empty( $this->default_searchable_columns['numeric'] ) && is_array( $this->default_searchable_columns['numeric'] ) &&
+				in_array( $column_name, $this->default_searchable_columns['numeric'], TRUE )
+			) {
+				$classes .= ' numeric';
 			}
 
 			// Comments column uses HTML in the display name with screen reader text.
@@ -2663,6 +2674,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
+			}
+
+			// Check if it's a numeric column.
+			if (
+				! empty( $this->default_searchable_columns['numeric'] ) && is_array( $this->default_searchable_columns['numeric'] ) &&
+				in_array( $column_key, $this->default_searchable_columns['numeric'], TRUE )
+			) {
+				$class[] = 'numeric';
 			}
 
 			if ( 'cb' === $column_key ) {

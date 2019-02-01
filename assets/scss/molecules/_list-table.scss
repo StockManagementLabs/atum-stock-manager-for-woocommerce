@@ -1709,8 +1709,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-			&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
+			&[class*="column-calc_"], &.column-_supplier_sku, &.numeric {
 				a {
 					justify-content: center;
 					align-items: center;
@@ -2118,8 +2117,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			min-width: 70px;
 		}
 		
-		&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-		&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
+		&[class*="column-calc_"], &.column-_supplier_sku, &.numeric {
 			text-align: center;
 		}
 		
