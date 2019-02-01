@@ -659,7 +659,6 @@ class Hooks {
 		}
 		
 	}
-
 	
 	/********************
 	 * Instance methods

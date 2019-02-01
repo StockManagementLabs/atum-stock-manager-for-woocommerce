@@ -368,7 +368,14 @@ final class Globals {
 			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCPT";
 			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
 			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
-			$data_stores['product-bundle']    = "{$data_stores_namespace}\AtumProductBundleDataStoreCPT";
+
+			// WC product bundles compatibility.
+			if ( class_exists( '\WC_Product_Bundle' ) ) {
+
+				$data_stores['product-bundle'] = "{$data_stores_namespace}\AtumProductBundleDataStoreCPT";
+
+			}
+
 		}
 
 		return $data_stores;
