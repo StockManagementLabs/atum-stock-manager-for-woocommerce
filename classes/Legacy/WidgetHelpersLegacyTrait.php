@@ -62,24 +62,25 @@ trait WidgetHelpersLegacyTrait {
 			$products                     = array_unique( array_merge( array_diff( $products, self::$grouped_products ), $group_items ) );
 
 		}
-
+		
 		// WC Subscriptions compatibility.
+		$subscription_variations = [];
 		if ( class_exists( '\WC_Subscriptions' ) ) {
-
+			
 			$subscription_variations = self::get_children_legacy( 'variable-subscription', 'product_variation' );
-
+			
 			// Add the Variations to the posts list.
 			if ( $subscription_variations ) {
 				// The Variable products are just containers and don't count for the list views.
 				$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
 				$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $subscription_variations ) );
 			}
-
+			
 		}
 
 		if ( $products ) {
 
-			$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+			$post_types = $variations || $subscription_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
 
 			/*
 			 * Unmanaged products

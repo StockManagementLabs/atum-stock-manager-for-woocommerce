@@ -526,6 +526,7 @@ final class WidgetHelpers {
 		}
 
 		// WC Subscriptions compatibility.
+		$subscription_variations = [];
 		if ( class_exists( '\WC_Subscriptions' ) ) {
 
 			$subscription_variations = self::get_children( 'variable-subscription', 'product_variation' );
@@ -541,7 +542,7 @@ final class WidgetHelpers {
 
 		if ( $products ) {
 
-			$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+			$post_types = $variations || $subscription_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
 
 			/*
 			 * Unmanaged products
