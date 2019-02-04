@@ -534,7 +534,7 @@ final class WidgetHelpers {
 			if ( $subscription_variations ) {
 				// The Variable products are just containers and don't count for the list views.
 				$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
-				$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $variations ) );
+				$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $subscription_variations ) );
 			}
 
 		}
