@@ -834,7 +834,7 @@ final class WidgetHelpers {
 	 * @param string $category
 	 * @param string $product_type
 	 *
-	 * @return int
+	 * @return array
 	 */
 	public static function get_items_in_stock( $category = null, $product_type = null ) {
 
@@ -852,77 +852,111 @@ final class WidgetHelpers {
 		/*
 		 * Products In Stock
 		 */
-
-		$args = array(
-			'post_type'      => [ 'product', 'product_variation' ],
-			'posts_per_page' => - 1,
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-			'fields'         => 'ids',
-			'tax_query'      => array(
-				'relation' => 'AND',
-			),
-
-		);
-
-		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
-
-		self::$wc_query_data['where'] = [];
-
-		// Check if category filter data exist.
-		if ( $category ) {
-			array_push( $args['tax_query'], array(
-				'taxonomy' => 'product_cat',
-				'field'    => 'slug',
-				'terms'    => array( $category ),
-			) );
+		
+		$products   = Helpers::get_all_products();
+		$variations = self::get_children( 'variable', 'product_variation' );
+		
+		// Add the Variations to the posts list. We skip grouped products.
+		if ( $variations ) {
+			$products = array_unique( array_merge( $products, $variations ) );
 		}
-
-		// Check if product type filter data exist.
-		if ( $product_type ) {
-			if ( 'grouped' === $product_type ) {
-				$group_items = self::get_children( 'grouped' );
-
-				if ( $group_items ) {
-					$args['post__in'] = $group_items;
-				}
-				else {
-					return $counters;
-				}
+		
+		// WC Subscriptions compatibility.
+		$subscription_variations = [];
+		if ( class_exists( '\WC_Subscriptions' ) ) {
+			
+			$subscription_variations = self::get_children( 'variable-subscription', 'product_variation' );
+			
+			// Add the Variations to the posts list.
+			if ( $subscription_variations ) {
+				$products = array_unique( array_merge( $products, $subscription_variations ) );
 			}
-			elseif ( 'variable' === $product_type ) {
-				$variations = self::get_children( 'variable', 'product_variation' );
-				if ( $variations ) {
-					$args['post__in'] = $variations;
-				}
-				else {
-					return $counters;
-				}
-			}
-			elseif ( 'downloadable' === $product_type ) {
-				self::$wc_query_data['where'][] = array(
-					'key'   => 'downloadable',
-					'value' => array( '1' ),
-				);
-			}
-			elseif ( 'virtual' === $product_type ) {
-				self::$wc_query_data['where'][] = array(
-					'key'   => 'virtual',
-					'value' => array( '1' ),
-				);
-			}
-			elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
-				self::$wc_query_data['where'][] = array(
-					'key'   => 'type',
-					'value' => $product_type,
-				);
-			}
-			else {
+			
+		}
+		
+		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
+		
+		self::$wc_query_data['where'] = [];
+		
+		if ( $products ) {
+			
+			$post_types = $variations || $subscription_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+			
+			$args = array(
+				'post_type'      => $post_types,
+				'posts_per_page' => - 1,
+				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'fields'         => 'ids',
+				'tax_query'      => array(
+					'relation' => 'AND',
+				),
+			
+			);
+			
+			// Check if category filter data exist.
+			if ( $category ) {
 				array_push( $args['tax_query'], array(
-					'taxonomy' => 'product_type',
+					'taxonomy' => 'product_cat',
 					'field'    => 'slug',
-					'terms'    => array( $product_type ),
+					'terms'    => array( $category ),
 				) );
 			}
+			
+			// Check if product type filter data exist.
+			if ( $product_type ) {
+				if ( 'grouped' === $product_type ) {
+					$group_items = self::get_children( 'grouped' );
+					
+					if ( $group_items ) {
+						$args['post__in'] = $group_items;
+					}
+					else {
+						return $counters;
+					}
+				}
+				elseif ( 'variable' === $product_type ) {
+					if ( $variations ) {
+						$args['post__in'] = $variations;
+					}
+					else {
+						return $counters;
+					}
+				}
+				elseif ( 'variable-subscription' === $product_type ) {
+					if ( $subscription_variations ) {
+						$args['post__in'] = $subscription_variations;
+					}
+					else {
+						return $counters;
+					}
+				}
+				elseif ( 'downloadable' === $product_type ) {
+					self::$wc_query_data['where'][] = array(
+						'key'   => 'downloadable',
+						'value' => array( '1' ),
+					);
+				}
+				elseif ( 'virtual' === $product_type ) {
+					self::$wc_query_data['where'][] = array(
+						'key'   => 'virtual',
+						'value' => array( '1' ),
+					);
+				}
+				elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
+					self::$wc_query_data['where'][] = array(
+						'key'   => 'type',
+						'value' => $product_type,
+					);
+				}
+				else {
+					array_push( $args['tax_query'], array(
+						'taxonomy' => 'product_type',
+						'field'    => 'slug',
+						'terms'    => array( $product_type ),
+					) );
+				}
+			}
+			
 		}
 
 		// Get products.

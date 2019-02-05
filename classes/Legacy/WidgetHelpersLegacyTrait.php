@@ -336,7 +336,7 @@ trait WidgetHelpersLegacyTrait {
 			
 			// Add the Variations to the posts list.
 			if ( $subscription_variations ) {
-				$products = array_unique( array_merge( $products, $variations ) );
+				$products = array_unique( array_merge( $products, $subscription_variations ) );
 			}
 			
 		}
