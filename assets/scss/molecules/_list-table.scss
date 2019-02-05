@@ -1773,8 +1773,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.expanded {
 			transition: all 0.1s ease-in-out;
 			
-			&.variable, &.variable-subscription, &.bundle {
+			&.variable, &.variable-subscription {
 				background-color: $primary;
+			}
+			
+			&.bundle {
+				background-color: $wc-default;
 			}
 			
 			&.group {
@@ -1814,6 +1818,28 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			.check-column {
 				input[type=checkbox] {
 					margin-left: 13px;
+				}
+			}
+			
+			&.bundle {
+				background-color: $wp-pink-light;
+				
+				&.even {
+					background-color: white;
+				}
+				
+				&.expanded {
+					background-color: $wc-default;
+				}
+				
+				td.title {
+					a {
+						color: $wc-default;
+					}
+					
+					.child-arrow {
+						color: $wc-default;
+					}
 				}
 			}
 		}
@@ -2229,7 +2255,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.bundle {
-					color: $primary;
+					color: $wc-default;
 				}
 				
 				&:hover {

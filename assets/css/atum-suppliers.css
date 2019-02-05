@@ -4862,8 +4862,12 @@ table.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-s
   transition: all 0.1s ease-in-out;
 }
 
-table.atum-list-table tr.expanded.variable, table.atum-list-table tr.expanded.variable-subscription, table.atum-list-table tr.expanded.bundle, .floatThead-container tr.expanded.variable, .floatThead-container tr.expanded.variable-subscription, .floatThead-container tr.expanded.bundle, .inbound-stock-list tr.expanded.variable, .inbound-stock-list tr.expanded.variable-subscription, .inbound-stock-list tr.expanded.bundle, table.wp-list-table tr.expanded.variable, table.wp-list-table tr.expanded.variable-subscription, table.wp-list-table tr.expanded.bundle {
+table.atum-list-table tr.expanded.variable, table.atum-list-table tr.expanded.variable-subscription, .floatThead-container tr.expanded.variable, .floatThead-container tr.expanded.variable-subscription, .inbound-stock-list tr.expanded.variable, .inbound-stock-list tr.expanded.variable-subscription, table.wp-list-table tr.expanded.variable, table.wp-list-table tr.expanded.variable-subscription {
   background-color: #00B8DB;
+}
+
+table.atum-list-table tr.expanded.bundle, .floatThead-container tr.expanded.bundle, .inbound-stock-list tr.expanded.bundle, table.wp-list-table tr.expanded.bundle {
+  background-color: #96588a;
 }
 
 table.atum-list-table tr.expanded.group, .floatThead-container tr.expanded.group, .inbound-stock-list tr.expanded.group, table.wp-list-table tr.expanded.group {
@@ -4885,6 +4889,26 @@ table.atum-list-table tr.expanded.variable .column-calc_type .has-child.product-
 
 table.atum-list-table tr.expandable .check-column input[type=checkbox], .floatThead-container tr.expandable .check-column input[type=checkbox], .inbound-stock-list tr.expandable .check-column input[type=checkbox], table.wp-list-table tr.expandable .check-column input[type=checkbox] {
   margin-left: 13px;
+}
+
+table.atum-list-table tr.expandable.bundle, .floatThead-container tr.expandable.bundle, .inbound-stock-list tr.expandable.bundle, table.wp-list-table tr.expandable.bundle {
+  background-color: #F5EBF3;
+}
+
+table.atum-list-table tr.expandable.bundle.even, .floatThead-container tr.expandable.bundle.even, .inbound-stock-list tr.expandable.bundle.even, table.wp-list-table tr.expandable.bundle.even {
+  background-color: white;
+}
+
+table.atum-list-table tr.expandable.bundle.expanded, .floatThead-container tr.expandable.bundle.expanded, .inbound-stock-list tr.expandable.bundle.expanded, table.wp-list-table tr.expandable.bundle.expanded {
+  background-color: #96588a;
+}
+
+table.atum-list-table tr.expandable.bundle td.title a, .floatThead-container tr.expandable.bundle td.title a, .inbound-stock-list tr.expandable.bundle td.title a, table.wp-list-table tr.expandable.bundle td.title a {
+  color: #96588a;
+}
+
+table.atum-list-table tr.expandable.bundle td.title .child-arrow, .floatThead-container tr.expandable.bundle td.title .child-arrow, .inbound-stock-list tr.expandable.bundle td.title .child-arrow, table.wp-list-table tr.expandable.bundle td.title .child-arrow {
+  color: #96588a;
 }
 
 table.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound-stock-list tr.variation, table.wp-list-table tr.variation {
@@ -5273,7 +5297,7 @@ table.atum-list-table .column-calc_type .has-child.product-type.grouped, table.a
 }
 
 table.atum-list-table .column-calc_type .has-child.product-type.bundle, table.atum-list-table .column-calc_type .has-child.product-type-icon.bundle, .floatThead-container .column-calc_type .has-child.product-type.bundle, .floatThead-container .column-calc_type .has-child.product-type-icon.bundle, .inbound-stock-list .column-calc_type .has-child.product-type.bundle, .inbound-stock-list .column-calc_type .has-child.product-type-icon.bundle, table.wp-list-table .column-calc_type .has-child.product-type.bundle, table.wp-list-table .column-calc_type .has-child.product-type-icon.bundle {
-  color: #00B8DB;
+  color: #96588a;
 }
 
 table.atum-list-table .column-calc_type .has-child.product-type:hover:before, table.atum-list-table .column-calc_type .has-child.product-type-icon:hover:before, .floatThead-container .column-calc_type .has-child.product-type:hover:before, .floatThead-container .column-calc_type .has-child.product-type-icon:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type:hover:before, .inbound-stock-list .column-calc_type .has-child.product-type-icon:hover:before, table.wp-list-table .column-calc_type .has-child.product-type:hover:before, table.wp-list-table .column-calc_type .has-child.product-type-icon:hover:before {
