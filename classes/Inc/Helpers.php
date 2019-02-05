@@ -1812,12 +1812,14 @@ final class Helpers {
 
 		global $wpdb;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
+		$row_count = $wpdb->get_var( "
+			SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
 			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
 			WHERE ap.out_stock_threshold IS NOT NULL
-			AND  p.post_status IN ('publish', 'future', 'private');" ); // WPCS: unprepared SQL ok.
+			AND  p.post_status IN ('publish', 'future', 'private');
+		" ); // WPCS: unprepared SQL ok.
 
-		return $rowcount > 0;
+		return $row_count > 0;
 	}
 
 	/**
