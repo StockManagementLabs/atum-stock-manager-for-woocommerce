@@ -780,6 +780,7 @@
 		
 		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 			height: 50px;
+			display: none;
 		}
 	}
 	
@@ -1070,7 +1071,7 @@
 	.overflow-opacity-effect-left {
 		display: none;
 		left: 0;
-		backgroundimage: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+		background-image: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
 		background-repeat: no-repeat;
 	}
 	
