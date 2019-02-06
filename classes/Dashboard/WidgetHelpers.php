@@ -898,6 +898,13 @@ final class WidgetHelpers {
 				'tax_query'      => array(
 					'relation' => 'AND',
 				),
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'   => '_manage_stock',
+						'value' => 'yes',
+					),
+				),
 			
 			);
 			
@@ -912,7 +919,7 @@ final class WidgetHelpers {
 			
 			// Check if product type filter data exist.
 			if ( $product_type ) {
-				if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
+				if ( in_array( $product_type, Globals::get_inheritable_product_types() ) && 'bundle' !== $product_type ) {
 					
 					if ( $filtered_variations ) {
 						$args['post__in'] = $filtered_variations;
@@ -939,25 +946,6 @@ final class WidgetHelpers {
 						'value' => $product_type,
 					);
 				}
-				// WC product bundles compatibility.
-				elseif ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $product_type ) {
-					array_push( $args['tax_query'], array(
-						'taxonomy' => 'product_type',
-						'field'    => 'slug',
-						'terms'    => array( $product_type ),
-					) );
-
-					$bundle_items = \WC_PB_DB::query_bundled_items( array(
-						'return'     => 'id=>product_id',
-						'meta_query' => array(
-							array(
-								'key'     => 'stock_status',
-								'value'   => 'in_stock',
-								'compare' => '=',
-							),
-						),
-					) );
-				}
 				else {
 					array_push( $args['tax_query'], array(
 						'taxonomy' => 'product_type',
@@ -973,17 +961,6 @@ final class WidgetHelpers {
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
-
-		// WC product bundles compatibility.
-		if ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $product_type ) {
-
-			if ( ! empty( $bundle_items ) ) {
-
-				$products_in_stock->posts = array_merge( $products_in_stock->posts, array_unique( $bundle_items ) );
-
-			}
-
-		}
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
