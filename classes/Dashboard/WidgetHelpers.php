@@ -854,24 +854,32 @@ final class WidgetHelpers {
 		 */
 		
 		$products   = Helpers::get_all_products();
-		$variations = self::get_children( 'variable', 'product_variation' );
+		$variations = $filtered_variations = [];
+		
+		foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
+			
+			if ( 'grouped' === $inheritable_product_type && 'grouped' === $product_type ) {
+				$filtered_variations = self::get_children( 'grouped' );
+			}
+			elseif ( 'grouped' !== $inheritable_product_type ) {
+				
+				$current_variations = self::get_children( $inheritable_product_type, 'product_variation' );
+				
+				if ( $inheritable_product_type === $product_type ) {
+					$filtered_variations = $current_variations;
+				}
+				
+				if ( $current_variations ) {
+					$variations = array_unique( array_merge( $variations, $current_variations ) );
+				}
+				
+			}
+			
+		}
 		
 		// Add the Variations to the posts list. We skip grouped products.
 		if ( $variations ) {
 			$products = array_unique( array_merge( $products, $variations ) );
-		}
-		
-		// WC Subscriptions compatibility.
-		$subscription_variations = [];
-		if ( class_exists( '\WC_Subscriptions' ) ) {
-			
-			$subscription_variations = self::get_children( 'variable-subscription', 'product_variation' );
-			
-			// Add the Variations to the posts list.
-			if ( $subscription_variations ) {
-				$products = array_unique( array_merge( $products, $subscription_variations ) );
-			}
-			
 		}
 		
 		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
@@ -880,7 +888,7 @@ final class WidgetHelpers {
 		
 		if ( $products ) {
 			
-			$post_types = $variations || $subscription_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+			$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
 			
 			$args = array(
 				'post_type'      => $post_types,
@@ -904,27 +912,10 @@ final class WidgetHelpers {
 			
 			// Check if product type filter data exist.
 			if ( $product_type ) {
-				if ( 'grouped' === $product_type ) {
-					$group_items = self::get_children( 'grouped' );
+				if ( in_array( $product_type, Globals::get_inheritable_product_types() ) ) {
 					
-					if ( $group_items ) {
-						$args['post__in'] = $group_items;
-					}
-					else {
-						return $counters;
-					}
-				}
-				elseif ( 'variable' === $product_type ) {
-					if ( $variations ) {
-						$args['post__in'] = $variations;
-					}
-					else {
-						return $counters;
-					}
-				}
-				elseif ( 'variable-subscription' === $product_type ) {
-					if ( $subscription_variations ) {
-						$args['post__in'] = $subscription_variations;
+					if ( $filtered_variations ) {
+						$args['post__in'] = $filtered_variations;
 					}
 					else {
 						return $counters;
