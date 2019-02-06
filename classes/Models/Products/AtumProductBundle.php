@@ -14,25 +14,31 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
-class AtumProductBundle extends \WC_Product_Bundle {
+if ( class_exists( '\WC_Product_Bundle' ) ) {
 
-	// Import the shared stuff.
-	use AtumProductTrait;
+	class AtumProductBundle extends \WC_Product_Bundle {
 
-	/**
-	 * Initialize ATUM bundle product
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param \WC_Product|int $product Product instance or ID.
-	 */
-	public function __construct( $product = 0 ) {
+		// Import the shared stuff.
+		use AtumProductTrait;
 
-		$this->data = apply_filters( 'atum/model/product_bundle/data', array_merge( $this->data, $this->atum_data ) );
-		parent::__construct( $product );
+		/**
+		 * Initialize ATUM bundle product
+		 *
+		 * @since 1.5.0
+		 *
+		 * @param \WC_Product|int $product Product instance or ID.
+		 */
+		public function __construct( $product = 0 ) {
 
-		do_action( 'atum/model/product_bundle', $product );
+			$this->data = apply_filters( 'atum/model/product_bundle/data', array_merge( $this->data, $this->atum_data ) );
+			parent::__construct( $product );
+
+			do_action( 'atum/model/product_bundle', $product );
+
+		}
 
 	}
 
 }
+
+
