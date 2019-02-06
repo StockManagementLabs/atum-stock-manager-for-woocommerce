@@ -6647,23 +6647,15 @@ table.atum-list-table tr.expandable .check-column input[type=checkbox], .floatTh
   margin-left: 13px;
 }
 
-table.atum-list-table tr.expandable.bundle, .floatThead-container tr.expandable.bundle, .inbound-stock-list tr.expandable.bundle, table.wp-list-table tr.expandable.bundle {
+table.atum-list-table tr.expandable.bundle, table.atum-list-table tr.expandable.mi-row, .floatThead-container tr.expandable.bundle, .floatThead-container tr.expandable.mi-row, .inbound-stock-list tr.expandable.bundle, .inbound-stock-list tr.expandable.mi-row, table.wp-list-table tr.expandable.bundle, table.wp-list-table tr.expandable.mi-row {
   background-color: #F5EBF3;
 }
 
-table.atum-list-table tr.expandable.bundle.even, .floatThead-container tr.expandable.bundle.even, .inbound-stock-list tr.expandable.bundle.even, table.wp-list-table tr.expandable.bundle.even {
-  background-color: white;
-}
-
-table.atum-list-table tr.expandable.bundle.expanded, .floatThead-container tr.expandable.bundle.expanded, .inbound-stock-list tr.expandable.bundle.expanded, table.wp-list-table tr.expandable.bundle.expanded {
+table.atum-list-table tr.expandable.bundle.expanded, table.atum-list-table tr.expandable.mi-row.expanded, .floatThead-container tr.expandable.bundle.expanded, .floatThead-container tr.expandable.mi-row.expanded, .inbound-stock-list tr.expandable.bundle.expanded, .inbound-stock-list tr.expandable.mi-row.expanded, table.wp-list-table tr.expandable.bundle.expanded, table.wp-list-table tr.expandable.mi-row.expanded {
   background-color: #96588a;
 }
 
-table.atum-list-table tr.expandable.bundle td.title a, .floatThead-container tr.expandable.bundle td.title a, .inbound-stock-list tr.expandable.bundle td.title a, table.wp-list-table tr.expandable.bundle td.title a {
-  color: #96588a;
-}
-
-table.atum-list-table tr.expandable.bundle td.title .child-arrow, .floatThead-container tr.expandable.bundle td.title .child-arrow, .inbound-stock-list tr.expandable.bundle td.title .child-arrow, table.wp-list-table tr.expandable.bundle td.title .child-arrow {
+table.atum-list-table tr.expandable.bundle td.title .child-arrow, table.atum-list-table tr.expandable.mi-row td.title .child-arrow, .floatThead-container tr.expandable.bundle td.title .child-arrow, .floatThead-container tr.expandable.mi-row td.title .child-arrow, .inbound-stock-list tr.expandable.bundle td.title .child-arrow, .inbound-stock-list tr.expandable.mi-row td.title .child-arrow, table.wp-list-table tr.expandable.bundle td.title .child-arrow, table.wp-list-table tr.expandable.mi-row td.title .child-arrow {
   color: #96588a;
 }
 

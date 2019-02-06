@@ -1821,21 +1821,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			&.bundle {
+			&.bundle, &.mi-row {
 				background-color: $wp-pink-light;
-				
-				&.even {
-					background-color: white;
-				}
 				
 				&.expanded {
 					background-color: $wc-default;
 				}
 				
 				td.title {
-					a {
-						color: $wc-default;
-					}
 					
 					.child-arrow {
 						color: $wc-default;
