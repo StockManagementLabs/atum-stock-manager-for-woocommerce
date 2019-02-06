@@ -275,7 +275,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'out_stock_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
@@ -303,7 +303,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_minimum_threshold( $amount ) {
-		$this->set_prop( 'minimum_threshold', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'minimum_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
@@ -315,7 +315,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_available_to_purchase( $amount ) {
-		$this->set_prop( 'available_to_purchase', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'available_to_purchase', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
@@ -327,7 +327,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_selling_priority( $amount ) {
-		$this->set_prop( 'selling_priority', NULL === $amount || '' === $amount ? '' : absint( $amount ) );
+		$this->set_prop( 'selling_priority', is_null( $amount ) || '' === $amount ? '' : absint( $amount ) );
 	}
 
 

@@ -178,20 +178,15 @@ class ListTable extends AtumListTable {
 
 		// Hide the purchase price column if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
-			unset( $args['table_columns']['_purchase_price'] );
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			unset( $args['table_columns']['_supplier'] );
-			unset( $args['table_columns']['_supplier_sku'] );
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_sku', '_supplier_sku' ] );
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
-			unset( $args['table_columns']['_purchase_price'] );
-			unset( $args['table_columns']['calc_inbound'] );
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
 			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ 'calc_inbound' ] );
 		}
@@ -293,7 +288,7 @@ class ListTable extends AtumListTable {
 			unset( $table_columns['calc_inbound'] );
 		}
 
-		return (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
+		return (array) apply_filters( 'atum/manufacturing_list_table/table_columns', $table_columns );
 
 	}
 
