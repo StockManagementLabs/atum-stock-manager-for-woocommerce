@@ -107,6 +107,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		'variable_subscription'     => [],
 		'all_variable_subscription' => [],
 	);
+	
+	/**
+	 * Store parent type when in an inheritable sub-loop
+	 *
+	 * @var string
+	 */
+	protected $parent_type = '';
 
 	/**
 	 * The array of IDs of children products
@@ -479,6 +486,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Inheritable products do not allow calcs.
 		if ( Helpers::is_inheritable_type( $type ) ) {
 
+			$this->parent_type = $type;
 			$this->allow_calcs = FALSE;
 			$class_type        = 'grouped' === $type ? 'group' : 'variable';
 
@@ -488,6 +496,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$row_classes[] = 'expanded';
 			}
 
+		}
+		else {
+			$this->parent_type = '';
 		}
 
 		$row_class = ' class="main-row ' . implode( ' ', $row_classes ) . '"';
@@ -1141,8 +1152,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! $is_grouped ) {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 		}
-
-		$this->increase_total( '_stock', $stock );
+		
+		if (  0 < $stock ) {
+			$this->increase_total( '_stock', $stock );
+		}
 
 		// Setings value is enabled?
 		$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
@@ -4250,7 +4263,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param int|float $amount
 	 */
 	protected function increase_total( $column_name, $amount ) {
-		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) ) {
+		
+		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && 'grouped' !== $this->parent_type ) {
 			$this->totalizers[ $column_name ] += floatval( $amount );
 		}
 	}
