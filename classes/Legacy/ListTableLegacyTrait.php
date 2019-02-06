@@ -803,7 +803,7 @@ trait ListTableLegacyTrait {
 			
 			if ( $children->found_posts ) {
 
-				if ( 'grouped' !== $parent_type && 'bundle' !== $parent_type ) {
+				if ( 'grouped' !== $parent_type ) {
 					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
 				}
 
@@ -828,12 +828,6 @@ trait ListTableLegacyTrait {
 						// Exclude all those subscription variations with no children from the list.
 						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable_subscription'], $this->container_products['variable_subscription'] ) ) );
 						break;
-					case 'bundle':
-						$this->container_products['bundle'] = array_unique( array_merge( $this->container_products['bundle'], $parents_with_child ) );
-
-						// Exclude all those subscription variations with no children from the list.
-						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
-						break;
 				}
 
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
@@ -841,6 +835,12 @@ trait ListTableLegacyTrait {
 
 				return $children_ids;
 
+			}
+			elseif ( 'bundle' === $parent_type ) {
+				$this->container_products['bundle'] = array_unique( array_merge( $this->container_products['bundle'], $parents_with_child ) );
+
+				// Exclude all those subscription variations with no children from the list.
+				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 			}
 			else {
 				$this->excluded = array_unique( array_merge( $this->excluded, $parents->posts ) );

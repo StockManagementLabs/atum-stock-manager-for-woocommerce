@@ -77,7 +77,7 @@ class Hooks {
 		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
 		
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
-		
+
 	}
 
 	/**
