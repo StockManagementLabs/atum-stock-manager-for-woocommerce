@@ -1064,8 +1064,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			$out_stock_threshold = self::EMPTY_COL;
 		}
 
-		$this->increase_total( '_out_stock_threshold', $out_stock_threshold );
-
 		if ( $editable ) {
 
 			$args = array(

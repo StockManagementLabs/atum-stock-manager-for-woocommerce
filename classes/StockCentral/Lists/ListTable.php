@@ -206,7 +206,6 @@ class ListTable extends AtumListTable {
 		// Initialize totalizers.
 		$this->totalizers = apply_filters( 'atum/stock_central_list/totalizers', array(
 			'_stock'                => 0,
-			'_out_stock_threshold'  => 0,
 			'calc_inbound'          => 0,
 			'calc_hold'             => 0,
 			'calc_reserved'         => 0,
