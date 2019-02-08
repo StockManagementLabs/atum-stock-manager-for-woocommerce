@@ -760,6 +760,34 @@ input[type="button"].btn-block {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-atum:before {
+  content: "";
+}
+
+.atmi-boundle:before {
+  content: "";
+}
+
+.atmi-cog-solid:before {
+  content: "";
+}
+
+.atmi-database-solid:before {
+  content: "";
+}
+
+.atmi-funnel-solid:before {
+  content: "";
+}
+
+.atmi-highlight-solid:before {
+  content: "";
+}
+
+.atmi-magic-wand-solid:before {
+  content: "";
+}
+
 .atmi-wc-contract:before {
   content: "";
 }
@@ -2626,19 +2654,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 .product_data_tabs .atum_tab a:before {
-  content: '' !important;
-  background-image: url("../images/atum-icon-mono.png");
-  width: 13px;
-  height: 13px;
-  background-size: cover;
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-
-.product_data_tabs .atum_tab a > span {
-  padding-left: 13px;
+  content: "" !important;
+  font-family: "atum-icon-font" !important;
 }
 
 .product_data .atum-field .input-group-text {

@@ -956,6 +956,34 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-atum:before {
+  content: "";
+}
+
+.atmi-boundle:before {
+  content: "";
+}
+
+.atmi-cog-solid:before {
+  content: "";
+}
+
+.atmi-database-solid:before {
+  content: "";
+}
+
+.atmi-funnel-solid:before {
+  content: "";
+}
+
+.atmi-highlight-solid:before {
+  content: "";
+}
+
+.atmi-magic-wand-solid:before {
+  content: "";
+}
+
 .atmi-wc-contract:before {
   content: "";
 }
