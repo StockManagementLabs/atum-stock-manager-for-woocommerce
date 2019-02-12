@@ -2730,7 +2730,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   }
 }
 
-.switchery-small {
+.switchery {
   width: 48px;
   border-radius: 100px;
   -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
@@ -2738,7 +2738,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border: none;
 }
 
-.switchery-small small {
+.switchery small {
   height: 26px;
   width: 26px;
   top: -3px;
