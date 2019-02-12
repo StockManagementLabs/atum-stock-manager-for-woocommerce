@@ -1329,27 +1329,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$inbound_stock = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-
-			// Calculate the inbound stock from pending purchase orders.
-			global $wpdb;
-
-			$sql = $wpdb->prepare("
-				SELECT SUM(oim2.`meta_value`) AS quantity 			
-				FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-				LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
-				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' AND oim2.`meta_key` = '_qty'
-				GROUP BY oim.`meta_value`;",
-				PurchaseOrders::POST_TYPE,
-				$this->get_current_product_id()
-			); // WPCS: unprepared SQL ok.
-
-			$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
-			$inbound_stock = $inbound_stock ?: 0;
+			$inbound_stock = Helpers::get_inbound_stock_for_product( $this->get_current_product_id() );
 			$this->increase_total( 'calc_inbound', $inbound_stock );
-
 		}
 
 		return apply_filters( 'atum/list_table/column_inbound_stock', $inbound_stock, $item, $this->product );
