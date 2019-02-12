@@ -5,7 +5,7 @@
  * @package     Atum
  * @subpackage  Settings
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2018 Stock Management Labs™
+ * @copyright   ©2019 Stock Management Labs™
  *
  * @since       0.0.2
  */
@@ -159,7 +159,7 @@ class Settings {
 				$options[ $field ] = $settings[ $field ];
 			}
 			elseif ( isset( $default['default'] ) ) {
-				$options[ $field ] =  $default['default'];
+				$options[ $field ] = $default['default'];
 			}
 
 		}
@@ -559,13 +559,13 @@ class Settings {
 					! empty( $this->tabs[ $input['settings_section'] ] ) &&
 					in_array( $atts['section'], array_keys( $this->tabs[ $input['settings_section'] ]['sections'] ) )
 				) {
-					
+
 					switch ( $this->defaults[ $key ]['type'] ) {
-						
+
 						case 'switcher':
 							$this->options[ $key ] = isset( $input[ $key ] ) ? 'yes' : 'no';
 							break;
-						
+
 						case 'number':
 							$this->options[ $key ] = isset( $input[ $key ] ) ? floatval( $input[ $key ] ) : $atts['default'];
 							break;
@@ -574,37 +574,37 @@ class Settings {
 							$this->options[ $key ] = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
 							break;
 
-                        case 'button_group':
+						case 'button_group':
 							// The button groups could allow multiple values (checkboxes).
-                        	if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
+							if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
 
-                        		$values = array();
+								$values = array();
 
 								foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
 
 									// Save always the required value as checked.
 									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
 										$values[ $default_value ] = 'yes';
-			                        }
-			                        else {
+									}
+									else {
 										$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
-			                        }
+									}
 
-		                        }
+								}
 
 								$this->options[ $key ] = maybe_serialize( $values );
 
-	                        }
-	                        else {
+							}
+							else {
 								$this->options[ $key ] = ! empty( $input[ $key ] ) ? esc_attr( $input[ $key ] ) : $atts['default'];
-	                        }
+							}
 
-	                        break;
+							break;
 
-                        case 'textarea':
-	                        $this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
-	                        break;
-							
+						case 'textarea':
+							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
+							break;
+
 						case 'color':
 							$this->options[ $key ] = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
 							break;
@@ -646,7 +646,7 @@ class Settings {
 			'<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-            $placeholder,
+			$placeholder,
 			$this->options[ $args['id'] ],
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
@@ -669,13 +669,13 @@ class Settings {
 
 		$output = sprintf(
 			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d" cols="%3$d" name="%4$s" %5$s>%6$s</textarea>',
-            ATUM_PREFIX . $args['id'],
+			ATUM_PREFIX . $args['id'],
 			absint( $args['rows'] ),
 			absint( $args['cols'] ),
-	        self::OPTION_NAME . "[{$args['id']}]",
+			self::OPTION_NAME . "[{$args['id']}]",
 			$this->get_dependency( $args ) . $default,
-	        $this->options[ $args['id'] ]
-        ) . $this->get_description( $args );
+			$this->options[ $args['id'] ]
+		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // WPCS: XSS ok.
 
@@ -690,15 +690,15 @@ class Settings {
 	 */
 	public function display_number( $args ) {
 
-		$step = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
-		$min  = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
-		$max  = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
+		$step    = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
+		$min     = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
+		$max     = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
 
 		$output = sprintf(
 			'<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
 			$min,
-            $max,
+			$max,
 			$step,
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
@@ -819,12 +819,12 @@ class Settings {
 					$checked_str = checked( $is_active, TRUE, FALSE );
 				}
 
-                ?>
+				?>
 				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
 					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
 						autocomplete="off"<?php echo wp_kses_post( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
 						<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
-                </label>
+				</label>
 
 			<?php endforeach; ?>
 		</div>
@@ -845,9 +845,9 @@ class Settings {
 	 */
 	public function display_select( $args ) {
 
-		$name  = self::OPTION_NAME . "[{$args['id']}]";
-		$value = $this->options[ $args['id'] ];
-		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
+		$name    = self::OPTION_NAME . "[{$args['id']}]";
+		$value   = $this->options[ $args['id'] ];
+		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
 
 		ob_start();
@@ -991,10 +991,10 @@ class Settings {
 	 *
 	 * @return string
 	 */
-	public function get_dependency($args) {
+	public function get_dependency( $args ) {
 
-		if ( isset($args['dependency']) ) {
-			return " data-dependency='" . json_encode( $args['dependency'] ) . "'";
+		if ( isset( $args['dependency'] ) ) {
+			return " data-dependency='" . wp_json_encode( $args['dependency'] ) . "'";
 		}
 
 		return '';

@@ -1,0 +1,21 @@
+//
+// Drag item
+// ---------
+
+.drag-item {
+	color: rgba($blue-dark, 0.3);
+	font-size: 32px;
+	font-weight: bold;
+	cursor: ns-resize;
+	width: 30px;
+	margin-left: -15px;
+	margin-right: 5px;
+	transition: 0.2s ease-in-out;
+	transform: rotate(-90deg);
+	transform-origin: center;
+	display: inline-block;
+	
+	&:hover {
+		color: $dark;
+	}
+}

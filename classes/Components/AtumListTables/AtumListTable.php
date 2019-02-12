@@ -340,10 +340,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->last_days = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-
+		$this->last_days     = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
-
 		$this->query_filters = $this->get_filters_query_string();
 
 		// Filter the table data results to show specific product types only.
@@ -417,6 +415,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Hook the default_hidden_columns filter used within get_hidden_columns() function.
 		if ( ! empty( static::$default_hidden_columns ) ) {
 			add_filter( 'default_hidden_columns', array( $this, 'hidden_columns' ), 10, 2 );
+		}
+
+		// Allow adding searchable columns externally.
+		if ( ! empty( $this->default_searchable_columns ) ) {
+			$this->default_searchable_columns = (array) apply_filters( 'atum/list_table/default_serchable_columns', $this->default_searchable_columns );
 		}
 
 		// Custom image placeholder.
@@ -639,7 +642,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// If the current product has a method to get the prop, use it.
 			if ( is_callable( array( $this->product, "get{$column_name}" ) ) ) {
-				$column_item = $this->product->{"get{$column_name}"};
+				$column_item = call_user_func( array( $this->product, "get{$column_name}" ) );
 			}
 			else {
 				$column_item = get_post_meta( $id, $column_name, TRUE );
@@ -651,7 +654,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$column_item = self::EMPTY_COL;
 		}
 
-		return apply_filters( "atum/list_table/column_default_$column_name", $column_item, $item, $this->product, $this );
+		return apply_filters( "atum/list_table/column_default_$column_name", $column_item, $item, $this->product, $this, $column_name );
 
 	}
 
@@ -685,6 +688,14 @@ abstract class AtumListTable extends \WP_List_Table {
 					$classes .= " $group_key";
 					break;
 				}
+			}
+
+			// Check if it's a numeric cell.
+			if (
+				! empty( $this->default_searchable_columns['numeric'] ) && is_array( $this->default_searchable_columns['numeric'] ) &&
+				in_array( $column_name, $this->default_searchable_columns['numeric'], TRUE )
+			) {
+				$classes .= ' numeric';
 			}
 
 			// Comments column uses HTML in the display name with screen reader text.
@@ -852,6 +863,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'value'      => $sku,
 				'input_type' => 'text',
 				'tooltip'    => esc_attr__( 'Click to edit the SKU', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'SKU', ATUM_TEXT_DOMAIN ),
 			);
 
 			$sku = self::get_editable_column( $args );
@@ -936,7 +948,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				'meta_key'   => 'supplier_sku',
 				'value'      => $supplier_sku,
 				'input_type' => 'text',
-				'tooltip'    => esc_attr__( 'Click to edit the Supplier SKU', ATUM_TEXT_DOMAIN ),
+				'tooltip'    => esc_attr__( 'Click to edit the supplier SKU', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
 			) );
 
 			$supplier_sku = self::get_editable_column( $args );
@@ -1096,11 +1109,12 @@ abstract class AtumListTable extends \WP_List_Table {
 			] ) : $purchase_price;
 
 			$args = apply_filters( 'atum/list_table/args_purchase_price', array(
-				'meta_key' => 'purchase_price',
-				'value'    => $purchase_price_value,
-				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => self::$default_currency,
-				'tooltip'  => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
+				'meta_key'  => 'purchase_price',
+				'value'     => $purchase_price_value,
+				'symbol'    => get_woocommerce_currency_symbol(),
+				'currency'  => self::$default_currency,
+				'tooltip'   => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Purchase Price', ATUM_TEXT_DOMAIN ),
 			) );
 
 			$purchase_price = self::get_editable_column( $args );
@@ -1147,6 +1161,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'value'      => $out_stock_threshold,
 				'input_type' => 'number',
 				'tooltip'    => esc_attr__( 'Click to edit the out of stock threshold', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 			);
 
 			$out_stock_threshold = self::get_editable_column( $args );
@@ -1179,6 +1194,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'value'      => $weight,
 				'input_type' => 'number',
 				'tooltip'    => esc_attr__( 'Click to edit the weight', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Weight', ATUM_TEXT_DOMAIN ),
 			);
 
 			$weight = self::get_editable_column( $args );
@@ -1278,9 +1294,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $editable && ! $is_grouped ) {
 
 			$args = array(
-				'meta_key' => 'stock',
-				'value'    => $stock,
-				'tooltip'  => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
+				'meta_key'  => 'stock',
+				'value'     => $stock,
+				'tooltip'   => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Stock Quantity', ATUM_TEXT_DOMAIN ),
 			);
 
 			$stock = self::get_editable_column( $args );
@@ -1485,6 +1502,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var array  $extra_meta
 		 * @var string $tooltip_position
 		 * @var string $currency
+		 * @var string $cell_name
 		 * @var array  $extra_data
 		 */
 		extract( wp_parse_args( $args, array(
@@ -1496,6 +1514,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'extra_meta'       => array(),
 			'tooltip_position' => 'top',
 			'currency'         => self::$default_currency,
+			'cell_name'        => '',
 			'extra_data'       => array(),
 		) ) );
 
@@ -1505,7 +1524,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
 			'" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
-			$input_type . '" data-currency="' . $currency . '"' . $extra_data . '>' . $value . '</span>';
+			$input_type . '" data-currency="' . $currency . '"' . $extra_data . ' data-cell-name="' . $cell_name . '">' . $value . '</span>';
 
 		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );
 
@@ -1978,7 +1997,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 
-			$atum_order_fields = array(
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
 					'field' => 'purchase_price',
@@ -1995,27 +2014,32 @@ abstract class AtumListTable extends \WP_List_Table {
 					'type'  => 'NUMERIC',
 					'field' => 'out_stock_threshold',
 				),
-			);
+			) );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
 
-				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
+				if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
 
-					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
+					$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
 
-				} else {
-					// All the meta key based columns are numeric except the SKU.
+				}
+				// All the meta key based columns are numeric except the SKU.
+				else {
+
 					if ( '_sku' === $_REQUEST['orderby'] ) {
 						$args['orderby'] = 'meta_value';
-					} else {
+					}
+					else {
 						$args['orderby'] = 'meta_value_num';
 					}
 
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
+
 				}
+
 			}
 			// Standard Fields.
 			else {
@@ -2719,13 +2743,13 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$current_url     = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url     = remove_query_arg( 'paged', $current_url );
-		$current_orderby = isset( $_GET['orderby'] ) ? $_GET['orderby'] : '';
-		$current_order   = ( isset( $_GET['order'] ) && 'desc' === $_GET['order'] ) ? 'desc' : 'asc';
+		$current_orderby = isset( $_GET['orderby'] ) ? esc_attr( $_GET['orderby'] ) : '';
+		$current_order   = ( ! isset( $_GET['order'] ) || 'desc' === $_GET['order'] ) ? 'desc' : 'asc';
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 
-			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', ATUM_TEXT_DOMAIN ) . '</label>' .
+			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', ATUM_TEXT_DOMAIN ) . '</label>' .
 							'<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			$cb_counter++;
 		}
@@ -2736,6 +2760,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
+			}
+
+			// Check if it's a numeric column.
+			if (
+				! empty( $this->default_searchable_columns['numeric'] ) && is_array( $this->default_searchable_columns['numeric'] ) &&
+				in_array( $column_key, $this->default_searchable_columns['numeric'], TRUE )
+			) {
+				$class[] = 'numeric';
 			}
 
 			if ( 'cb' === $column_key ) {
@@ -2981,6 +3013,33 @@ abstract class AtumListTable extends \WP_List_Table {
 			'done'                 => __( 'Done!', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'    => $this->default_searchable_columns,
 			'stickyColumns'        => $this->sticky_columns,
+			'dateSelectorFilters'  => [ 'best_seller', 'worst_seller' ],
+			'setTimeWindow'        => __( 'Set Time Window', ATUM_TEXT_DOMAIN ),
+			'selectDateRange'      => __( 'Select the date range to filter the produts.', ATUM_TEXT_DOMAIN ),
+			'from'                 => __( 'From', ATUM_TEXT_DOMAIN ),
+			'to'                   => __( 'To', ATUM_TEXT_DOMAIN ),
+			'apply'                => __( 'Apply', ATUM_TEXT_DOMAIN ),
+			'goToToday'            => __( 'Go to today', ATUM_TEXT_DOMAIN ),
+			'clearSelection'       => __( 'Clear selection', ATUM_TEXT_DOMAIN ),
+			'closePicker'          => __( 'Close the picker', ATUM_TEXT_DOMAIN ),
+			'selectMonth'          => __( 'Select Month', ATUM_TEXT_DOMAIN ),
+			'prevMonth'            => __( 'Previous Month', ATUM_TEXT_DOMAIN ),
+			'nextMonth'            => __( 'Next Month', ATUM_TEXT_DOMAIN ),
+			'selectYear'           => __( 'Select Year', ATUM_TEXT_DOMAIN ),
+			'prevYear'             => __( 'Previous Year', ATUM_TEXT_DOMAIN ),
+			'nextYear'             => __( 'Next Year', ATUM_TEXT_DOMAIN ),
+			'selectDecade'         => __( 'Select Decade', ATUM_TEXT_DOMAIN ),
+			'prevDecade'           => __( 'Previous Decade', ATUM_TEXT_DOMAIN ),
+			'nextDecade'           => __( 'Next Decade', ATUM_TEXT_DOMAIN ),
+			'prevCentury'          => __( 'Previous Century', ATUM_TEXT_DOMAIN ),
+			'nextCentury'          => __( 'Next Century', ATUM_TEXT_DOMAIN ),
+			'incrementHour'        => __( 'Increment Hour', ATUM_TEXT_DOMAIN ),
+			'pickHour'             => __( 'Pick Hour', ATUM_TEXT_DOMAIN ),
+			'decrementHour'        => __( 'Decrement Hour', ATUM_TEXT_DOMAIN ),
+			'incrementMinute'      => __( 'Increment Minute', ATUM_TEXT_DOMAIN ),
+			'pickMinute'           => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
+			'decrementMinute'      => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
+			'dateFormat'           => 'YYYY-MM-DD',
 		);
 
 		if ( $this->first_edit_key ) {
@@ -3923,27 +3982,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function enqueue_scripts( $hook ) {
 
-		// jQuery.address.
-		wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// jquery.floatThead.
-		wp_register_script( 'jquery.floatThead', ATUM_URL . 'assets/js/vendor/jquery.floatThead.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// Hammer.
-		wp_register_script( 'hammer', ATUM_URL . 'assets/js/vendor/hammer.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// jScrollPane.
-		wp_register_script( 'jscrollpane', ATUM_URL . 'assets/js/vendor/jquery.jscrollpane.min.js', array( 'jquery', 'hammer' ), ATUM_VERSION, TRUE );
-
 		// Sweet Alert 2.
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-
-		// Light Gallery.
-		wp_register_script( 'lightgallery', ATUM_URL . 'assets/js/vendor/lightgallery.min.js', array(), ATUM_VERSION, TRUE );
-
-		// Dragscroll.
-		wp_register_script( 'dragscroll', ATUM_URL . 'assets/js/vendor/dragscroll.min.js', array(), ATUM_VERSION, TRUE );
 
 		// ATUM marketing popup.
 		AtumMarketingPopup::maybe_enqueue_scripts();
@@ -3954,39 +3995,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			wp_enqueue_script( 'es6-promise' );
 		}
 
-		// jQuery EasyTree.
-		wp_register_script( 'jquery-easytree', ATUM_URL . 'assets/js/vendor/jquery.easytree.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-		// jQuery UI datePicker.
-		if ( isset( $this->load_datepicker ) && TRUE === $this->load_datepicker ) {
-			global $wp_scripts;
-			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
-			wp_deregister_style( 'jquery-ui-style' );
-			wp_register_style( 'jquery-ui-style', 'https://code.jquery.com/ui/' . $jquery_version . '/themes/excite-bike/jquery-ui.min.css', array(), $jquery_version );
-
-			wp_enqueue_style( 'jquery-ui-style' );
-			wp_enqueue_script( 'jquery-ui-datepicker' );
-		}
-
-		// Bootstrap datetimepicker.
-		wp_register_script( 'moment.js', ATUM_URL . 'assets/js/vendor/moment.min.js', array(), ATUM_VERSION, TRUE );
-		wp_register_script( 'bs-date-time-picker', ATUM_URL . 'assets/js/vendor/bootstrap-datetimepicker.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
-		$dependencies = array( 'jquery', 'jquery.address', 'jscrollpane', 'jquery-blockui', 'moment.js', 'bs-date-time-picker', 'sweetalert2', 'lightgallery', 'dragscroll', 'jquery-easytree', 'jquery.floatThead', 'wc-enhanced-select' );
-
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
+		// TODO: WHAT IS THIS????
 		$first_edit_key = ATUM_PREFIX . "first_edit_$hook";
 		if ( ! get_user_meta( get_current_user_id(), $first_edit_key, TRUE ) ) {
 			$this->first_edit_key = $first_edit_key;
 		}
 
 		// List Table script.
-		$min = ! ATUM_DEBUG ? '.min' : '';
-		wp_register_script( 'atum-list', ATUM_URL . "assets/js/atum.list$min.js", $dependencies, ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum.list.tables.min.js', [ 'jquery', 'jquery-blockui', 'sweetalert2', 'wc-enhanced-select' ], ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
 
 		do_action( 'atum/list_table/after_enqueue_scripts', $this );

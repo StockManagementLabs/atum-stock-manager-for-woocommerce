@@ -146,7 +146,7 @@ trait ListTableLegacyTrait {
 
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 
-			$atum_order_fields = array(
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
 					'field' => 'purchase_price',
@@ -163,27 +163,32 @@ trait ListTableLegacyTrait {
 					'type'  => 'NUMERIC',
 					'field' => 'out_stock_threshold',
 				),
-			);
+			) );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
 
-				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
+				if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
 
-					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
+					$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
 
-				} else {
-					// All the meta key based columns are numeric except the SKU.
+				}
+				// All the meta key based columns are numeric except the SKU.
+				else {
+
 					if ( '_sku' === $_REQUEST['orderby'] ) {
 						$args['orderby'] = 'meta_value';
-					} else {
+					}
+					else {
 						$args['orderby'] = 'meta_value_num';
 					}
 
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
+
 				}
+
 			}
 			// Standard Fields.
 			else {

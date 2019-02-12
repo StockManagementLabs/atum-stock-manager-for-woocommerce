@@ -147,7 +147,7 @@ trait AtumProductTrait {
 	/**
 	 * Returns the product's minimum threshold prop.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
@@ -161,7 +161,7 @@ trait AtumProductTrait {
 	/**
 	 * Returns the product's available to purchase per user prop.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
@@ -175,7 +175,7 @@ trait AtumProductTrait {
 	/**
 	 * Returns the product's selling priority prop.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
@@ -275,7 +275,7 @@ trait AtumProductTrait {
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'out_stock_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
@@ -297,37 +297,37 @@ trait AtumProductTrait {
 	/**
 	 * Set minimum threshold for the current product.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_minimum_threshold( $amount ) {
-		$this->set_prop( 'minimum_threshold', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'minimum_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
 	 * Set available to purchase per user for the current product.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_available_to_purchase( $amount ) {
-		$this->set_prop( 'available_to_purchase', NULL === $amount || '' === $amount ? '' : wc_stock_amount( $amount ) );
+		$this->set_prop( 'available_to_purchase', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
 	}
 
 	/**
 	 * Set selling priority for the current product.
 	 *
-	 * @since   1.5.3
+	 * @since   1.5.4
 	 * @package Product Levels
 	 *
 	 * @param int|string $amount Empty string if value not set.
 	 */
 	public function set_selling_priority( $amount ) {
-		$this->set_prop( 'selling_priority', NULL === $amount || '' === $amount ? '' : absint( $amount ) );
+		$this->set_prop( 'selling_priority', is_null( $amount ) || '' === $amount ? '' : absint( $amount ) );
 	}
 
 

@@ -75,7 +75,7 @@ trait AtumDataStoreCommonTrait {
 			
 			if ( ( $insert || array_key_exists( $column, $changes ) ) && is_callable( array( $product, "get_$column" ) ) ) {
 				
-				$value = $product->{"get_$column"}( 'edit' );
+				$value = call_user_func( array( $product, "get_$column" ), 'edit' );
 				
 				if ( in_array( $column, $date_columns, TRUE ) ) {
 					$data[ $column ] = empty( $value ) ? NULL : gmdate( 'Y-m-d H:i:s', $product->{"get_$column"}( 'edit' )->getOffsetTimestamp() );

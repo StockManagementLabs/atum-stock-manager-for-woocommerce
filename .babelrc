@@ -1,0 +1,15 @@
+{
+	"presets": [
+		[
+			"env",
+			{
+				"targets": {
+					"browsers": [
+						"ie >= 11"
+					]
+				},
+				"debug": true
+			}
+		]
+	]
+}
