@@ -1844,13 +1844,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				background-color: $wp-pink-light;
 				
 				&.expanded {
-					background-color: $wc-default;
+					background-color: $wc-purple;
 				}
 				
 				td.title {
 					
 					.child-arrow {
-						color: $wc-default;
+						color: $wc-purple;
 					}
 				}
 			}
@@ -2266,7 +2266,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.bundle {
-					color: $wc-default;
+					color: $wc-purple;
 				}
 				
 				&:hover {
