@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.0 
+ * @version 1.5.2 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -758,6 +758,34 @@ input[type="button"].btn-block {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-atum:before {
+  content: "";
+}
+
+.atmi-boundle:before {
+  content: "";
+}
+
+.atmi-cog-solid:before {
+  content: "";
+}
+
+.atmi-database-solid:before {
+  content: "";
+}
+
+.atmi-funnel-solid:before {
+  content: "";
+}
+
+.atmi-highlight-solid:before {
+  content: "";
+}
+
+.atmi-magic-wand-solid:before {
+  content: "";
 }
 
 .atmi-wc-contract:before {
@@ -2302,6 +2330,23 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #0073AA;
 }
 
+.switchery {
+  width: 48px;
+  border-radius: 100px;
+  -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+          box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+  border: none;
+}
+
+.switchery small {
+  height: 26px;
+  width: 26px;
+  top: -3px;
+  background-color: #69C61D;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 .btn-group {
   position: relative;
   display: -webkit-inline-box;
@@ -2626,19 +2671,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 .product_data_tabs .atum_tab a:before {
-  content: '' !important;
-  background-image: url("../images/atum-icon-mono.png");
-  width: 13px;
-  height: 13px;
-  background-size: cover;
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-
-.product_data_tabs .atum_tab a > span {
-  padding-left: 13px;
+  content: "" !important;
+  font-family: "atum-icon-font" !important;
 }
 
 .product_data .atum-field .input-group-text {
@@ -2780,7 +2814,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .woocommerce_variations .alert {
   margin: 10px auto;
-  padding: 0.35rem 0.75rem;
 }
 
 #tiptip_holder ul {

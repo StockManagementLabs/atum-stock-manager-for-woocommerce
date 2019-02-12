@@ -1695,7 +1695,7 @@ final class Helpers {
 				// Any other text meta.
 				default:
 					if ( is_callable( array( $product, "set_{$meta_key}" ) ) ) {
-						$product->{"set_{$meta_key}"}( $meta_value );
+						call_user_func( array( $product, "set_{$meta_key}" ), $meta_value );
 					}
 					else {
 						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
@@ -1812,12 +1812,14 @@ final class Helpers {
 
 		global $wpdb;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
+		$row_count = $wpdb->get_var( "
+			SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
 			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
 			WHERE ap.out_stock_threshold IS NOT NULL
-			AND  p.post_status IN ('publish', 'future', 'private');" ); // WPCS: unprepared SQL ok.
+			AND  p.post_status IN ('publish', 'future', 'private');
+		" ); // WPCS: unprepared SQL ok.
 
-		return $rowcount > 0;
+		return $row_count > 0;
 	}
 
 	/**
@@ -1853,11 +1855,17 @@ final class Helpers {
 		if ( ! empty( $query_data['order'] ) ) {
 			
 			global $wpdb;
-			
+
 			$table_name = $table_name ? $table_name : Globals::ATUM_PRODUCT_DATA_TABLE;
-			$operator   = 'NUMERIC' === $query_data['order']['type'] ? '+0' : '';
+			$column     = "{$wpdb->prefix}$table_name.{$query_data['order']['field']}";
+
+			// If is a numeric column, the NULL values should display at the end.
+			if ( 'NUMERIC' === $query_data['order']['type'] ) {
+				$column = "IFNULL($column, " . PHP_INT_MAX . ')';
+			}
 			
-			$pieces['orderby'] = "{$wpdb->prefix}$table_name.{$query_data['order']['field']}$operator {$query_data['order']['order']}";
+			$pieces['orderby'] = "$column {$query_data['order']['order']}";
+
 		}
 		
 		return $pieces;

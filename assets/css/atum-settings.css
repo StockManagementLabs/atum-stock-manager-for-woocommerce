@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.0 
+ * @version 1.5.2 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -1661,6 +1661,34 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-atum:before {
+  content: "";
+}
+
+.atmi-boundle:before {
+  content: "";
+}
+
+.atmi-cog-solid:before {
+  content: "";
+}
+
+.atmi-database-solid:before {
+  content: "";
+}
+
+.atmi-funnel-solid:before {
+  content: "";
+}
+
+.atmi-highlight-solid:before {
+  content: "";
+}
+
+.atmi-magic-wand-solid:before {
+  content: "";
+}
+
 .atmi-wc-contract:before {
   content: "";
 }
@@ -2702,7 +2730,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   }
 }
 
-.switchery-small {
+.switchery {
   width: 48px;
   border-radius: 100px;
   -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
@@ -2710,7 +2738,7 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border: none;
 }
 
-.switchery-small small {
+.switchery small {
   height: 26px;
   width: 26px;
   top: -3px;
