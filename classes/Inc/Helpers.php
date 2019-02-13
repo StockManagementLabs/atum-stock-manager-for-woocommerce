@@ -714,7 +714,7 @@ final class Helpers {
 	public static function get_product_setting( $product_id, $meta_key, $default, $prefix = '', $allow_global = FALSE ) {
 		
 		// Use cache to improve performance.
-		$cache_key  = AtumCache::get_cache_key( 'product_setting', $product_id );
+		$cache_key  = AtumCache::get_cache_key( "product_setting_$meta_key", $product_id );
 		$meta_value = AtumCache::get_cache( $cache_key, ATUM_MULTINV_TEXT_DOMAIN );
 		
 		if ( FALSE === $meta_value ) {
