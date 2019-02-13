@@ -1791,6 +1791,7 @@ final class Helpers {
 
 		if ( is_subclass_of( $product, '\WC_Abstract_Legacy_Product' ) && ! is_null( $product ) ) {
 
+			// TODO: THIS SHOULD BE DONE IN A MORE STANDARD WAY.
 			$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
 			$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
 
