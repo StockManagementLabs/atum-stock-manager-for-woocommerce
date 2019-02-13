@@ -146,7 +146,7 @@ trait ListTableLegacyTrait {
 
 			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 
-			$atum_order_fields = array(
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
 				'_purchase_price'      => array(
 					'type'  => 'NUMERIC',
 					'field' => 'purchase_price',
@@ -163,27 +163,32 @@ trait ListTableLegacyTrait {
 					'type'  => 'NUMERIC',
 					'field' => 'out_stock_threshold',
 				),
-			);
+			) );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
 
-				if ( array_key_exists( $_REQUEST['orderby'], $atum_order_fields ) ) {
+				if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
 
-					$this->atum_query_data['order']          = $atum_order_fields[ $_REQUEST['orderby'] ];
+					$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
 					$this->atum_query_data['order']['order'] = $order;
 
-				} else {
-					// All the meta key based columns are numeric except the SKU.
+				}
+				// All the meta key based columns are numeric except the SKU.
+				else {
+
 					if ( '_sku' === $_REQUEST['orderby'] ) {
 						$args['orderby'] = 'meta_value';
-					} else {
+					}
+					else {
 						$args['orderby'] = 'meta_value_num';
 					}
 
 					$args['meta_key'] = $_REQUEST['orderby'];
 					$args['order']    = $order;
+
 				}
+
 			}
 			// Standard Fields.
 			else {
@@ -411,16 +416,6 @@ trait ListTableLegacyTrait {
 
 					// Remove the variable subscription containers from the array and add the subscription variations.
 					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
-
-				}
-
-				// WC product bundles compatibility.
-				if ( class_exists( '\WC_Product_Bundle' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
-
-					$bundle_items = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children_legacy( 'bundle', $post_in ), $post_in );
-
-					// Remove the variable subscription containers from the array and add the subscription variations.
-					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_bundle'] ), $bundle_items ) );
 
 				}
 
@@ -771,9 +766,6 @@ trait ListTableLegacyTrait {
 
 			if ( 'grouped' === $parent_type ) {
 				$children_args['post__in'] = $grouped_products;
-			}
-			if ( 'bundle' === $parent_type ) {
-				$children_args['post__in'] = $bundle_childrens;
 			}
 			else {
 				$children_args['post_parent__in'] = $parents->posts;

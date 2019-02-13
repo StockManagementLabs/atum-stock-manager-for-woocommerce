@@ -448,15 +448,15 @@ final class Ajax {
 		$data = apply_filters( 'atum/ajax/before_update_product_meta', $data );
 		
 		foreach ( $data as $product_id => &$product_meta ) {
-			
 			Helpers::update_product_data( $product_id, $product_meta );
-			
 		}
 		
 		// If the first edit notice was already shown, save it as user meta.
 		if ( ! empty( $_POST['first_edit_key'] ) ) {
 			update_user_meta( get_current_user_id(), esc_attr( $_POST['first_edit_key'] ), 1 );
 		}
+
+		do_action( 'atum/ajax/after_update_list_data', $data );
 		
 		wp_send_json_success( __( 'Data saved.', ATUM_TEXT_DOMAIN ) );
 		
@@ -1932,7 +1932,7 @@ final class Ajax {
 
 		if ( $product_id > 0 ) {
 
-			$locations  = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
+			$locations = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
 
 			if ( empty( $locations ) ) {
 				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No Locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
@@ -1940,10 +1940,10 @@ final class Ajax {
 			else {
 
 				$locations_tree = wp_list_categories( array(
-					'taxonomy'   => Globals::PRODUCT_LOCATION_TAXONOMY,
-					'include'    => wp_list_pluck( $locations, 'term_id' ),
-					'title_li'   => '',
-					'echo'       => FALSE,
+					'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+					'include'  => wp_list_pluck( $locations, 'term_id' ),
+					'title_li' => '',
+					'echo'     => FALSE,
 				) );
 
 				// Fix the list URLs to show the list of products within a location.

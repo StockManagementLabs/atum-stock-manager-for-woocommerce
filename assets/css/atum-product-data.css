@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.0 
+ * @version 1.5.2 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -742,8 +742,8 @@ input[type="button"].btn-block {
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts//atum-icon-font.eot?f6kirk");
-  src: url("../fonts//atum-icon-font.eot?f6kirk#iefix") format("embedded-opentype"), url("../fonts//atum-icon-font.ttf?f6kirk") format("truetype"), url("../fonts//atum-icon-font.woff?f6kirk") format("woff"), url("../fonts//atum-icon-font.svg?f6kirk#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?rx8gye");
+  src: url("../fonts/atum-icon-font.eot?rx8gye#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?rx8gye") format("truetype"), url("../fonts/atum-icon-font.woff?rx8gye") format("woff"), url("../fonts/atum-icon-font.svg?rx8gye#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -760,7 +760,11 @@ input[type="button"].btn-block {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.atmi-boundle:before {
+.atmi-atum:before {
+  content: "";
+}
+
+.atmi-bundle:before {
   content: "";
 }
 
@@ -2326,6 +2330,23 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #0073AA;
 }
 
+.switchery {
+  width: 48px;
+  border-radius: 100px;
+  -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+          box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+  border: none;
+}
+
+.switchery small {
+  height: 26px;
+  width: 26px;
+  top: -3px;
+  background-color: #69C61D;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 .btn-group {
   position: relative;
   display: -webkit-inline-box;
@@ -2650,19 +2671,8 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 }
 
 .product_data_tabs .atum_tab a:before {
-  content: '' !important;
-  background-image: url("../images/atum-icon-mono.png");
-  width: 13px;
-  height: 13px;
-  background-size: cover;
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-
-.product_data_tabs .atum_tab a > span {
-  padding-left: 13px;
+  content: "" !important;
+  font-family: "atum-icon-font" !important;
 }
 
 .product_data .atum-field .input-group-text {
@@ -2804,7 +2814,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
 
 .woocommerce_variations .alert {
   margin: 10px auto;
-  padding: 0.35rem 0.75rem;
 }
 
 #tiptip_holder ul {

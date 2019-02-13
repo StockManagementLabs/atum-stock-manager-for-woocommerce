@@ -19,16 +19,8 @@
 			
 			a {
 				&:before {
-					content: '' !important;
-					background-image: url("#{$img-path}atum-icon-mono.png");
-					width: 13px;
-					height: 13px;
-					background-size: cover;
-					@include vertical-align-absolute;
-				}
-				
-				> span {
-					padding-left: 13px;
+					content: $atmi-atum !important;
+					font-family: $atum-icon-font !important;
 				}
 			}
 			
@@ -185,7 +177,6 @@
 	
 	.alert {
 		margin: 10px auto;
-		padding: 0.35rem 0.75rem;
 	}
 	
 }

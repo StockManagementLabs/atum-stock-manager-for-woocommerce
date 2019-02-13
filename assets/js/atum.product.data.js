@@ -88,7 +88,13 @@
 	function atumDoSwitchers() {
 		
 		$('.js-switch').each(function () {
-			new Switchery(this, { size: 'small' });
+			new Switchery(this, {
+				size               : 'small',
+				color              : '#d5f5ba',
+				secondaryColor     : '#e9ecef',
+				jackColor          : '#69c61d',
+				jackSecondaryColor : '#adb5bd'
+			});
 			$(this).removeClass('js-switch');
 		});
 		

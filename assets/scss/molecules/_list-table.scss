@@ -48,12 +48,11 @@
 			&:active {
 				color: $white;
 				padding: 0 10px 1px;
-				box-shadow: 0 1px 0 $wp-link;
 			}
 		}
 		
 		// At 782px, WordPress changes the list table views to mobile version
-		@include tablet-max-wp{
+		@include tablet-max-wp {
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-start;
@@ -61,7 +60,7 @@
 			padding-bottom: 15px;
 		}
 		
-		@include mobile-max{
+		@include mobile-max {
 			justify-content: center;
 			margin: 0;
 		}
@@ -781,6 +780,7 @@
 		
 		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
 			height: 50px;
+			display: none;
 		}
 	}
 	
@@ -939,6 +939,8 @@
 	margin: 0 0 18px;
 	
 	a {
+		transition: .2s ease-in-out;
+		
 		&:focus {
 			box-shadow: none;
 		}
@@ -1601,23 +1603,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			letter-spacing: 0.3px;
 			color: $gray-500;
 			
-			&.column-_supplier_sku {
-				.sorting-indicator {
-					margin-top: 15px;
-				}
-			}
-			
-			.sorting-indicator {
-				visibility: visible;
-				margin-left: 4px;
-				margin-top: 7px;
-				
-				&:before {
-					color: $gray-500;
-					content: "\f140";
-				}
-			}
-			
 			.atum-icon {
 				display: block;
 				text-indent: -9999px;
@@ -1717,10 +1702,15 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				display: flex;
 				color: $gray-500;
 				overflow: visible;
+				
+				&, span {
+					&:hover {
+						color: $blue;
+					}
+				}
 			}
 			
-			&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-			&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
+			&[class*="column-calc_"], &.column-_supplier_sku, &.numeric {
 				a {
 					justify-content: center;
 					align-items: center;
@@ -1737,8 +1727,37 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			.sorting-indicator {
-				display: inline-block;
-				width: auto;
+				visibility: visible;
+				position: relative;
+				width: 10px;
+				
+				&:before {
+					@include vertical-align-absolute;
+					margin-top: -2px;
+					color: $gray-500;
+					content: "\f140";
+				}
+			}
+			
+			&.asc {
+				.sorting-indicator {
+					&:before {
+						content: "\f142";
+					}
+				}
+			}
+			
+		}
+		
+		&.sortable {
+			.sorting-indicator {
+				visibility: hidden !important;
+			}
+			
+			a:hover {
+				.sorting-indicator {
+					visibility: visible !important;
+				}
 			}
 		}
 		
@@ -1778,7 +1797,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.bundle {
-				background-color: $wc-default;
+				background-color: $wc-purple;
 			}
 			
 			&.group {
@@ -1825,13 +1844,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				background-color: $wp-pink-light;
 				
 				&.expanded {
-					background-color: $wc-default;
+					background-color: $wc-purple;
 				}
 				
 				td.title {
 					
 					.child-arrow {
-						color: $wc-default;
+						color: $wc-purple;
 					}
 				}
 			}
@@ -2118,8 +2137,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			min-width: 70px;
 		}
 		
-		&[class*="column-calc_"], &.column-_supplier_sku, &.column-_stock, &.column-_regular_price, &.column-_sale_price,
-		&.column-_purchase_price, &.column-ID, &.column-_weight, &.column-_out_stock_threshold {
+		&[class*="column-calc_"], &.column-_supplier_sku, &.numeric {
 			text-align: center;
 		}
 		
@@ -2248,7 +2266,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.bundle {
-					color: $wc-default;
+					color: $wc-purple;
 				}
 				
 				&:hover {
@@ -2537,7 +2555,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		> input[type=number], > input[type=text] {
-			width: 75%;
+			width: 73%;
 		}
 		
 		> .button {
@@ -2569,6 +2587,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			input, button {
 				width: 100%;
 				margin: 3px 0;
+			}
+			
+			.btn-link {
+				font-size: 10px;
+				padding: 0;
 			}
 			
 			hr {

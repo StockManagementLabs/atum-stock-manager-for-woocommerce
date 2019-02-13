@@ -48,13 +48,6 @@ class ListTable extends AtumListTable {
 	protected $calc_columns = array();
 
 	/**
-	 * Whether to load the jQuery UI datepicker script (for sale price dates)
-	 *
-	 * @var bool
-	 */
-	protected $load_datepicker = TRUE;
-
-	/**
 	 * The columns hidden by default
 	 *
 	 * @var array
@@ -138,12 +131,12 @@ class ListTable extends AtumListTable {
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
 				'members' => array(
 					'thumb',
-					'title',
-					'_supplier',
-					'_sku',
-					'_supplier_sku',
 					'ID',
+					'title',
 					'calc_type',
+					'_sku',
+					'_supplier',
+					'_supplier_sku',
 					'calc_location',
 					'_regular_price',
 					'_sale_price',
@@ -185,20 +178,15 @@ class ListTable extends AtumListTable {
 
 		// Hide the purchase price column if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
-			unset( $args['table_columns']['_purchase_price'] );
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			unset( $args['table_columns']['_supplier'] );
-			unset( $args['table_columns']['_supplier_sku'] );
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_sku', '_supplier_sku' ] );
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
-			unset( $args['table_columns']['_purchase_price'] );
-			unset( $args['table_columns']['calc_inbound'] );
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
 			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ 'calc_inbound' ] );
 		}
@@ -375,11 +363,12 @@ class ListTable extends AtumListTable {
 			] ) : $regular_price;
 
 			$args = apply_filters( 'atum/stock_central_list/args_regular_price', array(
-				'meta_key' => 'regular_price',
-				'value'    => $regular_price_value,
-				'symbol'   => get_woocommerce_currency_symbol(),
-				'currency' => self::$default_currency,
-				'tooltip'  => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'meta_key'  => 'regular_price',
+				'value'     => $regular_price_value,
+				'symbol'    => get_woocommerce_currency_symbol(),
+				'currency'  => self::$default_currency,
+				'tooltip'   => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			), $this->product );
 			
 			$regular_price = self::get_editable_column( $args );
@@ -420,11 +409,12 @@ class ListTable extends AtumListTable {
 				'symbol'     => get_woocommerce_currency_symbol(),
 				'currency'   => self::$default_currency,
 				'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
 				'extra_meta' => array(
 					array(
 						'name'        => '_sale_price_dates_from',
 						'type'        => 'text',
-						'placeholder' => _x( 'Sale date from...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
+						'placeholder' => esc_attr_x( 'Sale date from...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
 						'value'       => $date_on_sale_from,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
@@ -433,7 +423,7 @@ class ListTable extends AtumListTable {
 					array(
 						'name'        => '_sale_price_dates_to',
 						'type'        => 'text',
-						'placeholder' => _x( 'Sale date to...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
+						'placeholder' => esc_attr_x( 'Sale date to...', 'placeholder', ATUM_TEXT_DOMAIN ) . ' YYYY-MM-DD',
 						'value'       => $date_on_sale_to,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
