@@ -2311,8 +2311,22 @@ final class Helpers {
 
 		if ( self::is_inheritable_type( $product->get_type() ) ) {
 
-			$stock                    = wc_stock_amount( $product->get_stock_quantity() );
-			$children                 = $product->get_children();
+			$stock = wc_stock_amount( $product->get_stock_quantity() );
+
+			if ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $product->get_type() ) {
+
+				$bundle_args = array(
+					'return'    => 'id=>product_id',
+					'bundle_id' => $product->get_id(),
+				);
+
+				$children = \WC_PB_DB::query_bundled_items( $bundle_args );
+
+			}
+			else {
+				$children = $product->get_children();
+			}
+
 			$compounded_stock         = 0;
 			$has_unmanaged_variations = FALSE;
 
