@@ -419,16 +419,6 @@ trait ListTableLegacyTrait {
 
 				}
 
-				// WC product bundles compatibility.
-				if ( class_exists( '\WC_Product_Bundle' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
-
-					$bundle_items = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children_legacy( 'bundle', $post_in ), $post_in );
-
-					// Remove the variable subscription containers from the array and add the subscription variations.
-					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_bundle'] ), $bundle_items ) );
-
-				}
-
 				// Re-count the resulting products.
 				$this->count_views['count_all'] = count( $products );
 
@@ -776,9 +766,6 @@ trait ListTableLegacyTrait {
 
 			if ( 'grouped' === $parent_type ) {
 				$children_args['post__in'] = $grouped_products;
-			}
-			if ( 'bundle' === $parent_type ) {
-				$children_args['post__in'] = $bundle_childrens;
 			}
 			else {
 				$children_args['post_parent__in'] = $parents->posts;

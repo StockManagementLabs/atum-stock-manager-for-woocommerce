@@ -397,7 +397,7 @@ class ProductDataMetaBoxes {
 		if ( empty( $variation ) ) {
 
 			// Do not add the field to variable products (every variation will have its own).
-			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ) ) ) {
 				return;
 			}
 
@@ -443,7 +443,7 @@ class ProductDataMetaBoxes {
 	 */
 	private function save_product_supplier_fields() {
 
-		if ( in_array( $this->product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+		if ( in_array( $this->product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ) ) ) {
 			return;
 		}
 

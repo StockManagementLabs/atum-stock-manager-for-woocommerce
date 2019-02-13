@@ -287,7 +287,7 @@ class ListTable extends AtumListTable {
 			unset( $table_columns['calc_inbound'] );
 		}
 
-		return (array) apply_filters( 'atum/manufacturing_list_table/table_columns', $table_columns );
+		return (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
 
 	}
 

@@ -32,7 +32,7 @@ let ScrollBar = {
 		})
 		
 		// Reload the scroll bar when the column groups are restored.
-		Globals.$atumList.on('atum-column-groups-restored', this.reloadScrollbar);
+		Globals.$atumList.on('atum-column-groups-restored', () => this.reloadScrollbar);
 		
 	},
 	

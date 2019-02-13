@@ -14,24 +14,28 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
-class AtumProductSubscription extends \WC_Product_Subscription {
+if ( class_exists( '\WC_Product_Subscription' ) ) {
 
-	// Import the shared stuff.
-	use AtumProductTrait;
+	class AtumProductSubscription extends \WC_Product_Subscription {
 
-	/**
-	 * Initialize ATUM simple product
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param \WC_Product|int $product Product instance or ID.
-	 */
-	public function __construct( $product = 0 ) {
+		// Import the shared stuff.
+		use AtumProductTrait;
 
-		$this->data = apply_filters( 'atum/model/product_subscription/data', array_merge( $this->data, $this->atum_data ) );
-		parent::__construct( $product );
+		/**
+		 * Initialize ATUM simple product
+		 *
+		 * @since 1.5.0
+		 *
+		 * @param \WC_Product|int $product Product instance or ID.
+		 */
+		public function __construct( $product = 0 ) {
 
-		do_action( 'atum/model/product_subscription', $product );
+			$this->data = apply_filters( 'atum/model/product_subscription/data', array_merge( $this->data, $this->atum_data ) );
+			parent::__construct( $product );
+
+			do_action( 'atum/model/product_subscription', $product );
+
+		}
 
 	}
 
