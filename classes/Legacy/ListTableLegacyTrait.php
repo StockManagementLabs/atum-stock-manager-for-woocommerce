@@ -767,9 +767,6 @@ trait ListTableLegacyTrait {
 			if ( 'grouped' === $parent_type ) {
 				$children_args['post__in'] = $grouped_products;
 			}
-			if ( 'bundle' === $parent_type ) {
-				$children_args['post__in'] = $bundle_childrens;
-			}
 			else {
 				$children_args['post_parent__in'] = $parents->posts;
 			}
