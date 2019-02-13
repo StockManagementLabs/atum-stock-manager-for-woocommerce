@@ -712,28 +712,37 @@ final class Helpers {
 	 * @return mixed
 	 */
 	public static function get_product_setting( $product_id, $meta_key, $default, $prefix = '', $allow_global = FALSE ) {
-
-		$meta_value = get_post_meta( $product_id, $meta_key, TRUE );
-
-		// If has no value saved, get the default.
-		if ( ! $meta_value || 'global' === $meta_value ) {
-
-			$option_name = "default{$meta_key}";
-
-			if ( ! empty( $prefix ) ) {
-
-				if ( '_' !== substr( $prefix, -1, 1 ) ) {
-					$prefix .= '_';
+		
+		// Use cache to improve performance.
+		$cache_key  = AtumCache::get_cache_key( 'product_setting', $product_id );
+		$meta_value = AtumCache::get_cache( $cache_key, ATUM_MULTINV_TEXT_DOMAIN );
+		
+		if ( FALSE === $meta_value ) {
+			$meta_value = get_post_meta( $product_id, $meta_key, TRUE );
+			
+			// If has no value saved, get the default.
+			if ( ! $meta_value || 'global' === $meta_value ) {
+				
+				$option_name = "default{$meta_key}";
+				
+				if ( ! empty( $prefix ) ) {
+					
+					if ( '_' !== substr( $prefix, -1, 1 ) ) {
+						$prefix .= '_';
+					}
+					
+					$option_name = $prefix . $option_name;
+					
 				}
-
-				$option_name = $prefix . $option_name;
-
+				
+				$meta_value = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
+				
 			}
-
-			$meta_value = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
-
+			
+			AtumCache::set_cache( $cache_key, $meta_value, ATUM_MULTINV_TEXT_DOMAIN );
+			
 		}
-
+		
 		return $meta_value;
 
 	}
