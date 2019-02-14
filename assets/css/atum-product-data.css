@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.2 
+ * @version 1.5.4 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -2769,12 +2769,6 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   padding-top: 15px;
 }
 
-.woocommerce_variations .atum-data-panel label:not(.btn) {
-  float: left;
-  margin-right: 10px;
-  min-width: 130px;
-}
-
 .woocommerce_variations .atum-data-panel .form-field {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2782,6 +2776,12 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.woocommerce_variations .atum-data-panel .form-field > label {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 .woocommerce_variations .atum-data-panel .form-field:first-of-type {
@@ -2800,9 +2800,18 @@ body .select2-container--classic.select2-container--open .select2-dropdown {
   font-weight: 600;
 }
 
+.woocommerce_variations h2.atum-section-title i {
+  font-size: 20px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: -20px;
+  margin-right: 5px;
+}
+
 .woocommerce_variations h2.atum-section-title img {
   vertical-align: -4px;
   margin-right: 5px;
+  margin-left: -18px;
 }
 
 .woocommerce_variations h4.atum-section-title {

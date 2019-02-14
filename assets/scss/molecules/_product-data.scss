@@ -132,17 +132,13 @@
 		border-top: 1px solid $wp-gray-4;
 		padding-top: $grid-gutter-width/2;
 		
-		label {
-			&:not(.btn) {
-				float: left;
-				margin-right: 10px;
-				min-width: 130px;
-			}
-		}
-		
 		.form-field {
 			display: flex;
 			align-items: center;
+			
+			> label {
+				flex-grow: 1;
+			}
 			
 			&:first-of-type {
 				margin: 25px 0;
@@ -162,9 +158,18 @@
 		text-align: center;
 		font-weight: 600;
 		
+		i {
+			font-size: 20px;
+			vertical-align: middle;
+			display: inline-block;
+			margin-left: -20px;
+			margin-right: 5px;
+		}
+		
 		img {
 			vertical-align: -4px;
 			margin-right: 5px;
+			margin-left: -18px;
 		}
 	}
 	
