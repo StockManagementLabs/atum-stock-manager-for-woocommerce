@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.5.2',
+var version = '1.5.4',
     curDate = new Date();
 
 // Global config
@@ -215,6 +215,7 @@ gulp.task('watch::atum', function () {
 	livereload.listen();
 
 	gulp.watch(config.assetsDir + '/scss/**/*.scss', ['sass::atum']);
+	gulp.watch(config.assetsDir + '/js/src/**/*.js', ['js::atum']);
 
 	gulp.watch([
 
@@ -222,13 +223,12 @@ gulp.task('watch::atum', function () {
 		'./**/*.php',
 
 		// JS files
-		config.assetsDir + '/js/**/*.js',
+		//config.assetsDir + '/js/src/**/*.js',
 
 		// Images
 		config.assetsDir + '/images/**/*',
 
 		// Excludes
-		'!' + config.assetsDir + '/js/**/*.min.js',
 		'!node_modules',
 
 	]).on('change', function (file) {
