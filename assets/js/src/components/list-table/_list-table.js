@@ -33,9 +33,17 @@ let ListTable = {
 		Globals.$atumList
 		
 			//
-			// Expanding/Collapsing inheritable products.
+			// Trigger expanding/collapsing event in inheritable products.
 			// ------------------------------------------
-			.on('click', '.calc_type .has-child', (evt) => self.expandRow( $(evt.target).closest('tr') ))
+			.on('click', '.calc_type .has-child', (evt) => {
+				$(evt.target).closest('tr').trigger('atum-list-expand-row');
+			})
+			//
+			// Triggers the expand/collapse row action
+			//
+			.on('atum-list-expand-row', 'tbody tr', (evt, expandableRowClass, stopRowSelector, stopPropagation) => {
+				self.expandRow($(evt.target), expandableRowClass, stopRowSelector, stopPropagation);
+			})
 			
 			//
 			// Expandable rows' checkboxes.
