@@ -355,7 +355,7 @@ class ProductDataMetaBoxes {
 		$new_purchase_price = $old_purchase_price ?: '';
 
 		// Variables, grouped and variations.
-		if ( Helpers::is_inheritable_type( $product_type ) ) {
+		if ( Helpers::is_inheritable_type( $product_type ) && 'bundle' !== $product_type ) {
 
 			if ( $this->is_variation && isset( $_POST[ 'variation' . Globals::PURCHASE_PRICE_KEY ][ $this->loop ] ) ) {
 				$purchase_price     = wc_clean( $_POST[ 'variation' . Globals::PURCHASE_PRICE_KEY ][ $this->loop ] );
