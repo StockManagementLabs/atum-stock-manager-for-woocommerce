@@ -288,9 +288,11 @@ let Filters = {
 		$dateSelector
 			
 			.on('select2:open', (evt) => {
+				
+				const $select = $(evt.target);
 			
-				if ( linkedFilters.indexOf($(this).val()) !== -1 ) {
-					$(evt.target).val('');
+				if ( linkedFilters.indexOf($select.val()) !== -1 ) {
+					$select.val('');
 				}
 				
 			})
