@@ -307,13 +307,18 @@ let Filters = {
 						customClass    : popupClass,
 						width          : 440,
 						showCloseButton: true,
-						title          : '<h1 class="title">' + Settings.get('setTimeWindow') + '</h1><span class="sub-title">' + Settings.get('selectDateRange') + '</span>',
-						html           :
-							'<div class="input-date"><label for="date_from">' + Settings.get('from') + '</label><br/>' +
-							'<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="' + dateFromVal + '" /></div>' +
-							'<div class="input-date"><label for="date_to">' + Settings.get('to') + '</label><br/>' +
-							'<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="' + dateToVal + '" /></div>' +
-							'<div><button class="btn btn-warning apply">' + Settings.get('apply') + '</button></div>',
+						title          : `<h1 class="title">${ Settings.get('setTimeWindow') }</h1><span class="sub-title">${ Settings.get('selectDateRange') }</span>`,
+						html           : `
+							<div class="input-date">
+								<label for="date_from">${ Settings.get('from') }</label><br/>
+								<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
+							</div>
+							<div class="input-date">
+								<label for="date_to">${ Settings.get('to') }</label><br/>
+								<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
+							</div>
+							<button class="btn btn-warning apply">${ Settings.get('apply') }</button>
+						`,
 						showConfirmButton: false,
 						onOpen           : () => {
 							
