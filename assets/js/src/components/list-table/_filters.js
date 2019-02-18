@@ -12,8 +12,6 @@ import Utils from '../../utils/_utils';
 
 let Filters = {
 	
-	timer: null,
-	
 	init() {
 		
 		let self = this;
@@ -138,7 +136,7 @@ let Filters = {
 				else {
 					$.address.parameter('s', '');
 					$.address.parameter('search_column', '');
-					self.updateHash();
+					Router.updateHash();
 				}
 				
 			});
@@ -188,8 +186,7 @@ let Filters = {
 	 */
 	keyUp(evt, noTimer) {
 		
-		let self           = this,
-		    delay          = 500,
+		let delay          = 500,
 		    searchInputVal = Globals.$searchInput.val();
 		
 		noTimer = noTimer || false;
@@ -207,7 +204,7 @@ let Filters = {
 			}
 			
 			if (noTimer) {
-				self.updateHash();
+				Router.updateHash();
 			}
 			else {
 				/*
@@ -216,10 +213,7 @@ let Filters = {
 				 * we don't, the keyup event will trigger instantly and
 				 * thus may cause duplicate calls before sending the intended value.
 				 */
-				clearTimeout(self.timer);
-				
-				self.timer = setTimeout( () => {
-					// TODO force ?vars on updateHash when ajax
+				Utils.delay( () => {
 					Router.updateHash();
 				}, delay);
 				
