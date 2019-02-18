@@ -4982,7 +4982,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .tablenav.top .tablenav-pages-container .btn {
-  margin-left: 5px;
+  margin-left: 0;
   padding: 0.29rem 0.75rem;
   line-height: 1.55;
 }
@@ -5236,7 +5236,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .tablenav.bottom .tablenav-pages-container .btn {
-  margin-left: 5px;
+  margin-left: 0;
   padding: 0.29rem 0.75rem;
   line-height: 1.55;
 }

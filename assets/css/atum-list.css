@@ -5520,7 +5520,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .tablenav.top .tablenav-pages-container .btn {
-  margin-left: 5px;
+  margin-left: 0;
   padding: 0.29rem 0.75rem;
   line-height: 1.55;
 }
@@ -5774,7 +5774,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .tablenav.bottom .tablenav-pages-container .btn {
-  margin-left: 5px;
+  margin-left: 0;
   padding: 0.29rem 0.75rem;
   line-height: 1.55;
 }

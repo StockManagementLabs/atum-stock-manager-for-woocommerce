@@ -3675,7 +3675,7 @@ h2 .atum-help-tip {
 }
 
 .tablenav.top .tablenav-pages-container .btn {
-  margin-left: 5px;
+  margin-left: 0;
   padding: 0.29rem 0.75rem;
   line-height: 1.55;
 }
@@ -3929,7 +3929,7 @@ h2 .atum-help-tip {
 }
 
 .tablenav.bottom .tablenav-pages-container .btn {
-  margin-left: 5px;
+  margin-left: 0;
   padding: 0.29rem 0.75rem;
   line-height: 1.55;
 }
