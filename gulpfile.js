@@ -119,6 +119,7 @@ gulp.task('js::atum', function () {
 			
 			entry: {
 				'list.tables' : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.js',
+				'post.type.list' : path.join(__dirname, config.assetsDir + '/js/src/') + 'post-type-list.js',
 				'product.data': path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.js',
 			},
 			
