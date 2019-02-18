@@ -6982,6 +6982,8 @@ table.atum-list-table tbody tr td.column-title a, table.atum-list-table tbody tr
 
 table.atum-list-table tbody tr td.column-calc_mi_status > span, table.atum-list-table #the-list tr td.column-calc_mi_status > span, .floatThead-container tbody tr td.column-calc_mi_status > span, .floatThead-container #the-list tr td.column-calc_mi_status > span, .inbound-stock-list tbody tr td.column-calc_mi_status > span, .inbound-stock-list #the-list tr td.column-calc_mi_status > span, table.wp-list-table tbody tr td.column-calc_mi_status > span, table.wp-list-table #the-list tr td.column-calc_mi_status > span {
   font-size: 22px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 table.atum-list-table tbody tr td.column-_sku span, table.atum-list-table #the-list tr td.column-_sku span, .floatThead-container tbody tr td.column-_sku span, .floatThead-container #the-list tr td.column-_sku span, .inbound-stock-list tbody tr td.column-_sku span, .inbound-stock-list #the-list tr td.column-_sku span, table.wp-list-table tbody tr td.column-_sku span, table.wp-list-table #the-list tr td.column-_sku span {
@@ -7027,8 +7029,12 @@ table.atum-list-table td.column-title .child-arrow, table.atum-list-table th.col
   margin-left: 5px;
   font-weight: bold;
   font-size: 14px;
+  position: relative;
+  top: -2px;
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 table.atum-list-table td.column-sku, table.atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku, .inbound-stock-list td.column-sku, .inbound-stock-list th.column-sku, table.wp-list-table td.column-sku, table.wp-list-table th.column-sku {

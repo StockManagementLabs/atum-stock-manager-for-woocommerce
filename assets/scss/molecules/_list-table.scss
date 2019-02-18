@@ -2077,6 +2077,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-calc_mi_status {
 					> span {
 						font-size: 22px;
+						-webkit-font-smoothing: antialiased;
+						-moz-osx-font-smoothing: grayscale;
 					}
 				}
 				
@@ -2129,7 +2131,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				margin-left: 5px;
 				font-weight: bold;
 				font-size: 14px;
+				position: relative;
+				top: -2px;
 				transform: rotate(90deg);
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 			}
 		}
 		
