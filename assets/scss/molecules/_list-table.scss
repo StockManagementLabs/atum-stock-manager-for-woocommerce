@@ -1330,17 +1330,6 @@
 		
 		#select2-supplier-container {
 			padding: 0 30px 0 16px;
-			
-			.select2-selection__clear {
-				visibility: hidden;
-				
-				&:after {
-					font-family: atum-icon-font;
-					content: $atmi-cross;
-					visibility: visible;
-					line-height: 2;
-				}
-			}
 		}
 		
 		input[type=submit] {

@@ -161,6 +161,14 @@ body .select2-container .select2-selection--single .select2-selection__rendered 
 
 body .select2-container .select2-selection--single .select2-selection__clear {
   position: relative;
+  visibility: hidden;
+}
+
+body .select2-container .select2-selection--single .select2-selection__clear:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  line-height: 2;
 }
 
 body .select2-container .select2-selection--multiple {
@@ -5744,17 +5752,6 @@ ul.atum_order_notes li .note_content::after {
 
 .atum-list-wrapper .actions #select2-supplier-container {
   padding: 0 30px 0 16px;
-}
-
-.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear {
-  visibility: hidden;
-}
-
-.atum-list-wrapper .actions #select2-supplier-container .select2-selection__clear:after {
-  font-family: atum-icon-font;
-  content: "";
-  visibility: visible;
-  line-height: 2;
 }
 
 .atum-list-wrapper .actions input[type=submit] {

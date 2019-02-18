@@ -71,6 +71,14 @@ body {
 			
 			.select2-selection__clear {
 				position: relative;
+				visibility: hidden;
+				
+				&:after {
+					font-family: atum-icon-font;
+					content: $atmi-cross;
+					visibility: visible;
+					line-height: 2;
+				}
 			}
 		}
 		

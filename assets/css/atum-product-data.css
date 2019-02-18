@@ -1670,6 +1670,14 @@ body .select2-container .select2-selection--single .select2-selection__rendered 
 
 body .select2-container .select2-selection--single .select2-selection__clear {
   position: relative;
+  visibility: hidden;
+}
+
+body .select2-container .select2-selection--single .select2-selection__clear:after {
+  font-family: atum-icon-font;
+  content: "";
+  visibility: visible;
+  line-height: 2;
 }
 
 body .select2-container .select2-selection--multiple {
