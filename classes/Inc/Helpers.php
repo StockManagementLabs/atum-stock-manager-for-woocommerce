@@ -2415,4 +2415,72 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Get the right ATUM icon classes for the specified product's type
+	 *
+	 * @since 1.5.4
+	 *
+	 * @param \WC_Product $product
+	 *
+	 * @return string
+	 */
+	public static function get_atum_icon_type( $product ) {
+
+		$product_type = $product->get_type();
+		$atum_icon    = 'atum-icon ';
+
+		switch ( $product_type ) {
+			case 'product-part':
+			case 'raw-material':
+				$atum_icon .= "atmi-$product_type";
+				break;
+
+			case 'product-part-variation':
+				$atum_icon .= 'atmi-variable-product-part';
+				break;
+
+			case 'raw-material-variation':
+				$atum_icon .= 'atmi-variable-raw-material';
+				break;
+
+			case 'variation':
+			case 'variable-subscription':
+				$atum_icon .= 'atmi-wc-variable';
+				break;
+
+			case 'grouped':
+			case 'variable':
+				$atum_icon .= "atmi-wc-$product_type";
+				break;
+
+			case 'booking':
+				$atum_icon .= 'atmi-calendar-full';
+				break;
+
+			case 'bundle':
+				$atum_icon .= 'atmi-bundle';
+				break;
+
+			default:
+				if ( 'simple' === $product_type ) {
+
+					if ( $product->is_downloadable() ) {
+						$atum_icon .= 'atmi-wc-downloadable';
+					}
+					elseif ( $product->is_virtual() ) {
+						$atum_icon .= 'atmi-wc-virtual';
+					}
+
+				}
+				else {
+					$atum_icon .= 'atmi-wc-simple';
+				}
+
+				break;
+		}
+
+		return $atum_icon;
+
+	}
+
 }
