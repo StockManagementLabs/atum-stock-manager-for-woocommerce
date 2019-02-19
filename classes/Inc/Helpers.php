@@ -2344,10 +2344,10 @@ final class Helpers {
 
 					// In case the grouped products have inheritable products as children, we should apply recursivity.
 					if ( self::is_inheritable_type( $child_product->get_type() ) ) {
-						$compounded_stock += self::get_compounded_stock( $child_product );
+						$compounded_stock += apply_filters( 'atum/stock_central/get_compounded_stock', wc_stock_amount( self::get_compounded_stock( $child_product ) ), $child_product );
 					}
 					else {
-						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+						$compounded_stock += apply_filters( 'atum/stock_central/get_compounded_stock', wc_stock_amount( $child_product->get_stock_quantity() ), $child_product );
 					}
 
 				}
@@ -2356,7 +2356,8 @@ final class Helpers {
 
 					// Check if the variation is being managed at product level.
 					if ( $child_product->managing_stock() ) {
-						$compounded_stock += wc_stock_amount( $child_product->get_stock_quantity() );
+						$child_stock       = apply_filters( 'atum/stock_central/get_compounded_stock', wc_stock_amount( $child_product->get_stock_quantity() ), $child_product );
+						$compounded_stock += $child_stock;
 					}
 					else {
 						$has_unmanaged_variations = TRUE;
