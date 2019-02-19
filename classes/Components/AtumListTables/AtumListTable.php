@@ -553,8 +553,9 @@ abstract class AtumListTable extends \WP_List_Table {
 					'bundle_id' => $this->product->get_id(),
 				);
 
-				$child_products = \WC_PB_DB::query_bundled_items( $bundle_args );
+//				$child_products = \WC_PB_DB::query_bundled_items( $bundle_args );
 
+				$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
 			}
 			else {
 				$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
@@ -4242,6 +4243,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
+
+				return $bundle_childrens;
 			}
 			else {
 				$this->excluded = array_unique( array_merge( $this->excluded, $parents ) );
