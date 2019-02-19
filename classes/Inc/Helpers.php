@@ -2471,6 +2471,9 @@ final class Helpers {
 					elseif ( $product->is_virtual() ) {
 						$atum_icon .= 'atmi-wc-virtual';
 					}
+					else {
+						$atum_icon .= 'atmi-wc-simple';
+					}
 
 				}
 				else {
