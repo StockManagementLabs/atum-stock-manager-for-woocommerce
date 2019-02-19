@@ -274,6 +274,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-variable-product-part:before {
+  content: "";
+}
+
+.atmi-variable-raw-material:before {
+  content: "";
+}
+
+.atmi-product-part:before {
+  content: "";
+}
+
+.atmi-raw-material:before {
+  content: "";
+}
+
 .atmi-atum:before {
   content: "";
 }
@@ -384,22 +400,6 @@
 
 .atmi-tree:before {
   content: "";
-}
-
-.atmi-raw-material:before {
-  content: "";
-}
-
-.atmi-variable-raw-material:before {
-  content: "";
-}
-
-.atmi-product-part:before {
-  content: "";
-}
-
-.atmi-variable-product-part:before {
-  content: "";
 }
 
 .atmi-pencil2:before {
