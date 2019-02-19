@@ -2879,7 +2879,7 @@ ul.easytree-container {
   font-weight: normal;
   line-height: 1.3;
   white-space: nowrap;
-  padding: 3px;
+  padding: 15px 10px !important;
   margin: 0;
   border: 1px solid #E3E8F5;
   border-radius: 6px;
@@ -2887,6 +2887,23 @@ ul.easytree-container {
   height: 100%;
   text-align: left;
   padding: 10px 5px;
+}
+
+ul.easytree-container > li:first-child {
+  padding-top: 3px;
+}
+
+ul.easytree-container > li:not(:first-child) {
+  padding: 15px 0;
+  border-top: 1px solid #e9ecef;
+}
+
+ul.easytree-container > li:nth-child(2) {
+  margin-top: 20px;
+}
+
+ul.easytree-container > li:last-child {
+  padding-bottom: 0;
 }
 
 ul.easytree-container:focus {
@@ -2946,6 +2963,7 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
 
 span.easytree-custom-icon {
   display: inline-block;
+  vertical-align: middle;
 }
 
 span.easytree-expander {
@@ -3020,6 +3038,22 @@ span.easytree-expander:hover {
 
 .easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-selected .easytree-title a, .easytree-focused span.easytree-active .easytree-title, .easytree-focused span.easytree-active .easytree-title a {
   color: #fff !important;
+}
+
+.tree-controls {
+  text-align: right;
+  margin-bottom: 5px;
+  padding-right: 5px;
+}
+
+.tree-controls a {
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.tree-controls a:not(:first-child) {
+  border-left: 1px solid #adb5bd;
+  padding-left: 5px;
 }
 
 .blockUI.blockOverlay:before {

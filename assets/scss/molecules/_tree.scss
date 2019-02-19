@@ -29,7 +29,7 @@ ul.easytree-container {
 	font-weight: normal;
 	line-height: 1.3;
 	white-space: nowrap;
-	padding: 3px;
+	padding: 15px 10px !important;
 	margin: 0;
 	border: 1px solid $info;
 	border-radius: 6px;
@@ -37,6 +37,26 @@ ul.easytree-container {
 	height: 100%;
 	text-align: left;
 	padding: 10px 5px;
+	
+	> li {
+		
+		&:first-child {
+			padding-top: 3px;
+		}
+		
+		&:not(:first-child) {
+			padding: $grid-gutter-width/2 0;
+			border-top: 1px solid $gray-200;
+		}
+		
+		&:nth-child(2) {
+			margin-top: 20px;
+		}
+		
+		&:last-child {
+			padding-bottom: 0;
+		}
+	}
 	
 	&:focus {
 		outline: none;
@@ -110,6 +130,7 @@ span {
 	
 	&.easytree-custom-icon {
 		display: inline-block;
+		vertical-align: middle;
 	}
 	
 }
@@ -237,4 +258,21 @@ span.easytree-expander {
 		}
 	}
 	
+}
+
+// Tree controls
+.tree-controls {
+	text-align: right;
+	margin-bottom: 5px;
+	padding-right: 5px;
+	
+	a {
+		font-size: 11px;
+		font-weight: 400;
+		
+		&:not(:first-child) {
+			border-left: 1px solid $gray-500;
+			padding-left: 5px;
+		}
+	}
 }
