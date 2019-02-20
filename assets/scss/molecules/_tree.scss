@@ -129,10 +129,11 @@ span {
 	}
 	
 	&.easytree-custom-icon {
-		display: inline-block;
+		display: inline-block !important;
 		vertical-align: middle;
 		color: $dark;
 		margin-left: 3px;
+		text-indent: 0 !important; // In case jQuery UI CSS is loaded
 	}
 	
 }

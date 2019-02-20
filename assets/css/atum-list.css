@@ -2962,10 +2962,11 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
 }
 
 span.easytree-custom-icon {
-  display: inline-block;
+  display: inline-block !important;
   vertical-align: middle;
   color: #343a40;
   margin-left: 3px;
+  text-indent: 0 !important;
 }
 
 span.easytree-expander {
