@@ -6902,6 +6902,7 @@ table.atum-list-table tr.totals td, table.atum-list-table tr.totals th, .floatTh
   color: #6c757d;
   padding-top: 0;
   padding-bottom: 0;
+  text-align: center;
 }
 
 table.atum-list-table tr.totals td.totals-heading span, table.atum-list-table tr.totals th.totals-heading span, .floatThead-container tr.totals td.totals-heading span, .floatThead-container tr.totals th.totals-heading span, .inbound-stock-list tr.totals td.totals-heading span, .inbound-stock-list tr.totals th.totals-heading span, table.wp-list-table tr.totals td.totals-heading span, table.wp-list-table tr.totals th.totals-heading span {
