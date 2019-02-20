@@ -2933,6 +2933,10 @@ ul.easytree-container ul li.easytree-lastsib {
   background-image: none;
 }
 
+ul.easytree-container ul li .selected-node .easytree-title a, ul.easytree-container ul li .selected-node .atum-icon {
+  color: #69C61D !important;
+}
+
 .ui-easytree-disabled ul.easytree-container {
   opacity: 0.5;
   background-color: #6c757d;
@@ -2963,7 +2967,7 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
 
 span.easytree-custom-icon {
   display: inline-block !important;
-  vertical-align: middle;
+  vertical-align: -1px;
   color: #343a40;
   margin-left: 3px;
   text-indent: 0 !important;
@@ -3035,11 +3039,11 @@ span.easytree-expander:hover {
   color: #00B8DB !important;
 }
 
-.easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-active .easytree-title {
+ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, ul.easytree-container.easytree-focused span.easytree-active .easytree-title {
   background-color: #00B8DB;
 }
 
-.easytree-focused span.easytree-selected .easytree-title, .easytree-focused span.easytree-selected .easytree-title a, .easytree-focused span.easytree-active .easytree-title, .easytree-focused span.easytree-active .easytree-title a {
+ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, ul.easytree-container.easytree-focused span.easytree-selected .easytree-title a, ul.easytree-container.easytree-focused span.easytree-active .easytree-title, ul.easytree-container.easytree-focused span.easytree-active .easytree-title a {
   color: #fff !important;
 }
 

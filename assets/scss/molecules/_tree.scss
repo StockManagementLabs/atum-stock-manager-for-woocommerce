@@ -82,6 +82,12 @@ ul.easytree-container {
 			&.easytree-lastsib {
 				background-image: none;
 			}
+			
+			.selected-node {
+				.easytree-title a, .atum-icon {
+					color: $success !important;
+				}
+			}
 		}
 	}
 	
@@ -130,7 +136,7 @@ span {
 	
 	&.easytree-custom-icon {
 		display: inline-block !important;
-		vertical-align: middle;
+		vertical-align: -1px;
 		color: $dark;
 		margin-left: 3px;
 		text-indent: 0 !important; // In case jQuery UI CSS is loaded
@@ -246,7 +252,7 @@ span.easytree-expander {
 	}
 }
 
-.easytree-focused {
+ul.easytree-container.easytree-focused {
 	
 	span {
 		&.easytree-selected, &.easytree-active {
