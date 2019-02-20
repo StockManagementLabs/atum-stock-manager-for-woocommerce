@@ -870,9 +870,16 @@ trait ListTableLegacyTrait {
 					$parents_with_child = [];
 
 				}
-				else{
+				else {
 
+					$bundle_parents = [];
+					foreach ( $bundle_childrens as $bundle_children ) {
 
+						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
+
+					}
+
+					$parents_with_child = $bundle_parents;
 
 				}
 
@@ -883,6 +890,7 @@ trait ListTableLegacyTrait {
 
 				$this->children_products = array_merge( $this->children_products, $bundle_childrens );
 				return $bundle_childrens;
+
 			}
 			else {
 				$this->excluded = array_unique( array_merge( $this->excluded, $parents->posts ) );

@@ -4239,12 +4239,58 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 			elseif ( 'bundle' === $parent_type ) {
+
+				foreach ( $bundle_childrens as $key => $bundle_children ) {
+
+					$product_children = Helpers::get_atum_product( $bundle_children );
+
+					if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
+
+						if ( ! $this->show_controlled ) {
+
+							unset( $bundle_childrens[ $key ] );
+
+						}
+
+					}
+					else {
+
+						if ( $this->show_controlled ) {
+
+							unset( $bundle_childrens[ $key ] );
+
+						}
+
+					}
+
+				}
+
+				if ( empty( $bundle_childrens ) ) {
+
+					$parents_with_child = [];
+
+				}
+				else {
+
+					$bundle_parents = [];
+					foreach ( $bundle_childrens as $bundle_children ) {
+
+						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
+
+					}
+
+					$parents_with_child = $bundle_parents;
+
+				}
+
 				$this->container_products['bundle'] = array_unique( array_merge( $this->container_products['bundle'], $parents_with_child ) );
 
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
+				$this->children_products = array_merge( $this->children_products, $bundle_childrens );
 				return $bundle_childrens;
+
 			}
 			else {
 				$this->excluded = array_unique( array_merge( $this->excluded, $parents ) );
