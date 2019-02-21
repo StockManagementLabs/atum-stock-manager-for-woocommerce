@@ -2272,6 +2272,7 @@ final class Ajax {
 		$transient_key = esc_attr( $_POST['transientKey'] );
 
 		update_user_meta( get_current_user_id(), 'atum-marketing-popup', $transient_key );
+		AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
 
 		wp_die();
 
