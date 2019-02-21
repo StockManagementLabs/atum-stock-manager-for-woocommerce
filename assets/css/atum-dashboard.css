@@ -4282,6 +4282,17 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   }
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description .version {
+  padding: 1px 12px;
+  height: 21px;
+  line-height: 20px;
+  border-radius: 11.5px;
+  position: relative;
+  top: -27px;
+  right: 20px;
+  font-size: 14px;
+}
+
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons {
   width: 300px;
   display: block;
@@ -4310,12 +4321,28 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
           box-shadow: none;
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-success.purple:hover, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-success:focus.purple:hover, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success.purple:hover, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success:focus.purple:hover {
+  opacity: 0.7;
+}
+
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success {
   background: #fff;
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success:hover {
   background: #69C61D;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success.purple {
+  background: #fff;
+  color: #9357cc;
+  border-color: #9357cc;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button.btn-outline-success.purple:hover {
+  background: #9357cc;
+  color: #fff;
+  border-color: #9357cc;
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .mp-logo {
