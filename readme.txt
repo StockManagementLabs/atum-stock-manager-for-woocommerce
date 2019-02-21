@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, julianberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.0.3
+Tested up to: 5.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.5.3
-Stable tag: 1.5.3.3
+WC tested up to: 3.5.4
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,45 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.4`
+
+*2019-02-20*
+
+**Features**
+
+* Added WC Product Bundles compatibility.
+* Javascript Modularization and adapted to ES6 syntax (work in progress).
+* Javascript code refactorized (work in progress).
+* Using now webpack to compile JS.
+* Decreased the number of enqueued dependency scripts.
+* Click the Popover's Set button when hitting enter after entering a value.
+* Close the Popovers when hitting the ESC key.
+* Added ATUM Data Stores for WC Bookings and WC Subscriptions.
+* Improved performance using cache in "get_product_setting".
+
+**Changes**
+
+* When sorting by column, show the NULL values at the end.
+* Added numeric class to List Table cells for easier alignment.
+* Removed "Out of Stock Threshold" totalizer.
+* Prevent adding grouped child quantities and counting negative stocks in Totalizers.
+* Replaced ATUM icon mono image by a font icon.
+* Updated gulpfile tasks.
+* Moved the ATUM footer to a view.
+
+**Fixes**
+
+* Fixed compatibility with WC Bookings and WC Subscriptions.
+* Fixed issue in sortable columns.
+* Fixed sorting indicator icons.
+* Fixed subscription variations weren't included in widgets counters.
+* Fixed wrong calculation in "Current Stock Value" widget.
+* Fixed: add all inheritable types to Current Stock Value.
+* Fixed compounded stock count in Stock Central.
+* CSS fixes.
 
 ---
 
