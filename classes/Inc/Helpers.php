@@ -2389,11 +2389,10 @@ final class Helpers {
 	 */
 	public static function show_marketing_popup() {
 
-		$transient_key = AtumCache::get_transient( 'atum-marketing-popup', TRUE );
+		$marketing_popup = AtumMarketingPopup::get_instance();
+		$transient_key   = AtumCache::get_transient( 'atum-marketing-popup', TRUE );
 
-		if ( ! $transient_key ) {
-
-			$marketing_popup = AtumMarketingPopup::get_instance();
+		if ( ! $transient_key || $marketing_popup->get_transient_key() !== $transient_key ) {
 
 			if ( ! $marketing_popup->is_loaded() ) {
 				return FALSE;
@@ -2401,7 +2400,6 @@ final class Helpers {
 
 			$transient_key = $marketing_popup->get_transient_key();
 			AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
-
 
 		}
 
