@@ -34,6 +34,13 @@ class AtumMarketingPopup {
 	protected $description = [];
 
 	/**
+	 * The marketing popup version
+	 *
+	 * @var object
+	 */
+	protected $version = [];
+
+	/**
 	 * The marketing popup buttons
 	 *
 	 * @var array
@@ -141,6 +148,7 @@ class AtumMarketingPopup {
 			$this->images        = isset( $marketing_popup->images ) ? $marketing_popup->images : [];
 			$this->title         = isset( $marketing_popup->title ) ? $marketing_popup->title : '';
 			$this->description   = isset( $marketing_popup->description ) ? $marketing_popup->description : [];
+			$this->version       = isset( $marketing_popup->version ) ? $marketing_popup->version : [];
 			$this->buttons       = isset( $marketing_popup->buttons ) ? $marketing_popup->buttons : [];
 			$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
 
@@ -229,6 +237,18 @@ class AtumMarketingPopup {
 	public function get_description() {
 
 		return $this->description;
+	}
+
+	/**
+	 * Getter for the version
+	 *
+	 * @since 1.5.3
+	 *
+	 * @return object
+	 */
+	public function get_version() {
+
+		return $this->version;
 	}
 
 	/**

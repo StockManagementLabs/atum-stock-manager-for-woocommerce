@@ -59,6 +59,9 @@
 						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.description.text_align + ';' : '',
 						    $descriptionPadding  = response.data.marketing_popup.description.padding ? 'padding:' + response.data.marketing_popup.description.padding + ';' : '',
 						    $description         = '<p data-transient-key="' + response.data.marketing_popup.transient_key + '" style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
+						    $versionColor        = response.data.marketing_popup.version.text_color ? 'color:' + response.data.marketing_popup.version.text_color + ';' : '',
+						    $versionBackground   = response.data.marketing_popup.version.background ? 'background:' + response.data.marketing_popup.version.background + ';' : '',
+						    $version             = '<span class="version" style="' + $versionBackground + $versionColor + '">' + response.data.marketing_popup.version.text + '</span>',
 						    $titleColor          = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.title.text_color + ';' : '',
 						    $titleFontSize       = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.title.text_size + ';' : '',
 						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.title.text_align + ';' : '',
@@ -82,7 +85,7 @@
 							background        : response.data.marketing_popup.background,
 							showCloseButton   : true,
 							showConfirmButton : false,
-							html              : $logo + $title + $description + $buttons,
+							html              : $logo + $title + $version + $description + $buttons,
 							imageUrl          : $imageTopLeft,
 						}).catch(swal.noop);
 						

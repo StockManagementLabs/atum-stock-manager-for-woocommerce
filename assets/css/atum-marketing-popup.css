@@ -1748,6 +1748,16 @@ input[type="button"].btn-block {
   margin: 0;
 }
 
+.swal2-container .marketing-popup .swal2-content .version {
+  padding: 1px 12px;
+  height: 21px;
+  line-height: 20px;
+  border-radius: 11.5px;
+  position: absolute;
+  top: 141px;
+  right: 113px;
+}
+
 .swal2-container .marketing-popup .swal2-content button {
   margin: 0 5px;
 }
@@ -1757,8 +1767,24 @@ input[type="button"].btn-block {
           box-shadow: none;
 }
 
+.swal2-container .marketing-popup .swal2-content button.btn-success.purple:hover, .swal2-container .marketing-popup .swal2-content button.btn-success:focus.purple:hover, .swal2-container .marketing-popup .swal2-content button.btn-outline-success.purple:hover, .swal2-container .marketing-popup .swal2-content button.btn-outline-success:focus.purple:hover {
+  opacity: 0.7;
+}
+
 .swal2-container .marketing-popup .swal2-content button.btn-outline-success {
   background: #fff;
+}
+
+.swal2-container .marketing-popup .swal2-content button.btn-outline-success.purple {
+  background: #fff;
+  color: #9357cc;
+  border-color: #9357cc;
+}
+
+.swal2-container .marketing-popup .swal2-content button.btn-outline-success.purple:hover {
+  background: #9357cc;
+  color: #fff;
+  border-color: #9357cc;
 }
 
 .swal2-container .marketing-popup .swal2-content button.btn-outline-success:hover {

@@ -29,12 +29,38 @@
 				margin: 0;
 			}
 			
+			.version {
+				
+				padding: 1px 12px;
+				height: 21px;
+				line-height: 20px;
+				border-radius: 11.5px;
+				position: absolute;
+				top: 141px;
+				right: 113px;
+				
+			}
+			
 			button {
 				margin: 0 5px;
 				&.btn-success,&.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
 					box-shadow: none;
+					
+					&.purple:hover {
+						opacity: 0.7;
+					}
 				}
 				&.btn-outline-success {
+					&.purple {
+						background: $white;
+						color: $purple-pl;
+						border-color: $purple-pl;
+						&:hover {
+							background: $purple-pl;
+							color: $white;
+							border-color: $purple-pl;
+						}
+					}
 					background: $white;
 					&:hover {
 						background: $green;

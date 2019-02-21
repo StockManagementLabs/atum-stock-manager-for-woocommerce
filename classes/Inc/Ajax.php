@@ -2239,6 +2239,7 @@ final class Ajax {
 				'background'    => $marketing_popup->get_background(),
 				'title'         => $marketing_popup->get_title(),
 				'description'   => $marketing_popup->get_description(),
+				'version'       => $marketing_popup->get_version(),
 				'buttons'       => $marketing_popup->get_buttons(),
 				'images'        => $marketing_popup->get_images(),
 				'transient_key' => $marketing_popup->get_transient_key(),

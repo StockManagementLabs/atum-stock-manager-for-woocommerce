@@ -46,9 +46,14 @@ defined( 'ABSPATH' ) || die;
 			<div class="content">
 				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_images()->logo ); ?>">
 				<div class="content-description">
+					<?php $version = $marketing_popup->get_version(); ?>
 					<?php $title = $marketing_popup->get_title(); ?>
 					<?php if ( isset( $title ) ) { ?>
-						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? 'color:' . $title->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? 'font-size:' . $title->text_size . ';' : '' ); ?>;<?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? 'text-align:' . $title->text_align . ';' : '' ); ?>"><?php echo isset( $title->text ) ? $title->text : ''; // WPCS: XSS ok. ?></h1>
+						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? 'color:' . $title->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? 'font-size:' . $title->text_size . ';' : '' ); ?>;<?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? 'text-align:' . $title->text_align . ';' : '' ); ?>"><?php echo isset( $title->text ) ? $title->text : ''; // WPCS: XSS ok. ?>
+							<?php if ( isset( $version ) ) { ?>
+								<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? 'color:' . $version->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? 'background:' . $version->background . ';' : '' ); ?>;"><?php echo isset( $version->text ) ? $version->text : ''; // WPCS: XSS ok. ?></span>
+							<?php } ?>
+						</h1>
 					<?php } ?>
 					<?php $description = $marketing_popup->get_description(); ?>
 					<?php if ( isset( $description ) ) { ?>
