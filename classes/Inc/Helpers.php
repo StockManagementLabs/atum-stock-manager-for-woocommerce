@@ -1776,7 +1776,6 @@ final class Helpers {
 	 * Force save with changes to validate_props and rebuild stock_status if required.
 	 * We can use it with 1 product/variation or set all to true to aply to all products OUT_STOCK_THRESHOLD_KEY
 	 * set and clean or not the OUT_STOCK_THRESHOLD_KEY meta keys
-	 * (@see clean OUT_STOCK_THRESHOLD_KEY tool).
 	 *
 	 * @since 1.4.10
 	 *
