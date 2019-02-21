@@ -268,7 +268,7 @@ class StockCentral extends AtumListPage {
 			$defaults['show_subscriptions'] = array(
 				'section' => 'stock_central',
 				'name'    => __( 'Show WC Subscriptions', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'When enabled, ATUM will show the WC Subscriptions in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabled, ATUM will show the WC Subscriptions's products in Stock Central.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes',
 			);
@@ -282,6 +282,19 @@ class StockCentral extends AtumListPage {
 				'section' => 'stock_central',
 				'name'    => __( 'Show Bookable Products', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, ATUM will show the Bookable products from WC Bookings add-on in Stock Central.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes',
+			);
+
+		}
+
+		// WC Bundles compatibility.
+		if ( class_exists( '\WC_Bundles' ) ) {
+
+			$defaults['show_bundles'] = array(
+				'section' => 'stock_central',
+				'name'    => __( 'Show WC Product Bundles', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabled, ATUM will show the WC Product Bundles' products in Stock Central.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes',
 			);
