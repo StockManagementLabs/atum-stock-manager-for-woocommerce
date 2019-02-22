@@ -30,6 +30,9 @@ let ListTable = {
 		// Bind active class rows.
 		this.addActiveClassRow();
 		
+		// Calculate compounded stocks.
+		this.calculateCompoundedStocks();
+		
 		Globals.$atumList
 		
 			//
@@ -241,6 +244,7 @@ let ListTable = {
 				EnhancedSelect.maybeRestoreEnhancedSelect();
 				self.addActiveClassRow();
 				self.removeOverlay();
+				self.calculateCompoundedStocks();
 				
 				// Custom trigger after updating.
 				Globals.$atumList.trigger('atum-table-updated');
@@ -648,6 +652,29 @@ let ListTable = {
 			$nextRow.find('.check-column input:checkbox').prop('checked', $parentCheckbox.is(':checked'));
 			$nextRow = $nextRow.next('.expandable');
 		}
+		
+	},
+	
+	/**
+	 * Calculate the compounded stock amounts for all the inheritable products
+	 */
+	calculateCompoundedStocks() {
+	
+		Globals.$atumTable.find('.compounded').each( (index, elem) => {
+			
+			let $compoundedCell = $(elem),
+			    $row            = $compoundedCell.closest('tr'),
+			    $nextRow        = $row.next('.expandable'),
+			    compoundedAmt   = 0;
+			
+			while ($nextRow.length) {
+				compoundedAmt += parseFloat($nextRow.find('._stock').text());
+				$nextRow = $nextRow.next('.expandable');
+			}
+			
+			$compoundedCell.text(compoundedAmt);
+		
+		});
 		
 	},
 	

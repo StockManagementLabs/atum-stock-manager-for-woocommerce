@@ -343,7 +343,7 @@ let Filters = {
 					$dateSelector.val('');
 				}
 				
-			})
+			});
 		
 	},
 	

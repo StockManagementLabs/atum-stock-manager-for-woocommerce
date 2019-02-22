@@ -1294,11 +1294,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		// For inheritable products, show the compounded stock amount.
-		if ( $is_inheritable ) {
-			$compounded_stock = Helpers::get_compounded_stock( $this->product );
-		}
-
 		if ( $editable && ! $is_grouped ) {
 
 			$args = array(
@@ -1314,9 +1309,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$stock_html = "<span{$classes_title}>{$stock}</span>";
 
-		if ( isset( $compounded_stock ) ) {
+		if ( $is_inheritable ) {
 			$tooltip     = esc_attr__( 'Compounded stock quantity', ATUM_TEXT_DOMAIN );
-			$stock_html .= " | <span class='compounded tips' data-tip='$tooltip'>$compounded_stock</span>";
+			$stock_html .= " | <span class='compounded tips' data-tip='$tooltip'>" . self::EMPTY_COL . '</span>';
 		}
 
 		return apply_filters( 'atum/list_table/column_stock', $stock_html, $item, $this->product, $this );
@@ -4238,7 +4233,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				return $children_ids;
 
 			}
-			elseif ( 'bundle' === $parent_type ) {
+			elseif ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $parent_type ) {
 
 				foreach ( $bundle_childrens as $key => $bundle_children ) {
 
@@ -4247,36 +4242,24 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
 
 						if ( ! $this->show_controlled ) {
-
 							unset( $bundle_childrens[ $key ] );
-
 						}
 
 					}
-					else {
-
-						if ( $this->show_controlled ) {
-
-							unset( $bundle_childrens[ $key ] );
-
-						}
-
+					elseif ( $this->show_controlled ) {
+						unset( $bundle_childrens[ $key ] );
 					}
 
 				}
 
 				if ( empty( $bundle_childrens ) ) {
-
 					$parents_with_child = [];
-
 				}
 				else {
 
 					$bundle_parents = [];
 					foreach ( $bundle_childrens as $bundle_children ) {
-
 						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
-
 					}
 
 					$parents_with_child = $bundle_parents;

@@ -7,7 +7,7 @@
  */
 
 // Only load Babel Polyfill if is not being included by another library
-if (!global._babelPolyfill) {
+if (!global._babelPolyfill && !window._babelPolyfill) {
 	require('babel-polyfill');
 }
 
