@@ -1659,6 +1659,13 @@ final class Helpers {
 
 					if ( 'regular_price' === $meta_key && ! $product->is_on_sale( 'edit' ) ) {
 						$product->set_price( $meta_value );
+
+					}
+
+					if ( class_exists( '\WC_Subscription' ) && in_array( $product->get_type(), [ 'subscription', 'variable-subscription' ] ) ) {
+
+						update_post_meta( $product_id, '_subscription_price', $meta_value );
+
 					}
 						
 					unset( $product_data['regular_price_custom'], $product_data['regular_price_currency'] );
