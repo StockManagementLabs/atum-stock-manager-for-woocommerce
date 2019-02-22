@@ -667,9 +667,21 @@ let ListTable = {
 			    $nextRow        = $row.next('.expandable'),
 			    compoundedAmt   = 0;
 			
+			if ($row.hasClass('expandable')) {
+				return;
+			}
+			
 			while ($nextRow.length) {
-				compoundedAmt += parseFloat($nextRow.find('._stock').text());
+				
+				const $stockCell = $nextRow.find('._stock');
+				
+				// TODO: If the product has an inheritable product inside, we can't calculate the stock correctly
+				if (!$stockCell.find('.compounded-sock').length) {
+					compoundedAmt += parseFloat($stockCell.find('.compounded-sock').text()) || 0;
+				}
+				
 				$nextRow = $nextRow.next('.expandable');
+				
 			}
 			
 			$compoundedCell.text(compoundedAmt);
