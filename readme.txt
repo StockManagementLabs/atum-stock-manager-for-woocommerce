@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.5.4
+WC tested up to: 3.5.5
 Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -202,18 +202,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.5.4`
 
-*2019-02-20*
+*2019-02-22*
 
 **Features**
 
 * Added WC Product Bundles compatibility.
-* Javascript Modularization and adapted to ES6 syntax (work in progress).
+* Allow handling bundles from Stock Central.
+* Added option to Settings to enable/disable product bundles in Stock Central.
+* Javascript Modularization and code upgraded to ES6 syntax (work in progress).
 * Javascript code refactorized (work in progress).
 * Using now webpack to compile JS.
 * Decreased the number of enqueued dependency scripts.
 * Click the Popover's Set button when hitting enter after entering a value.
 * Close the Popovers when hitting the ESC key.
-* Added ATUM Data Stores for WC Bookings and WC Subscriptions.
+* Added ATUM Data Stores for WC Bookings, WC Subscriptions and WC Product Bundles.
 * Improved performance using cache in "get_product_setting".
 
 **Changes**
@@ -225,6 +227,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Replaced ATUM icon mono image by a font icon.
 * Updated gulpfile tasks.
 * Moved the ATUM footer to a view.
+* Updated Marketing pop-up with new content.
 
 **Fixes**
 

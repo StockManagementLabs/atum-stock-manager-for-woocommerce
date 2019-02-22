@@ -159,6 +159,48 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.4`
+
+*2019-02-21*
+
+**Features**
+
+* Added WC Product Bundles compatibility.
+* Allow handling bundles from Stock Central.
+* Added option to Settings to enable/disable product bundles in Stock Central.
+* Javascript Modularization and code upgraded to ES6 syntax (work in progress).
+* Javascript code refactorized (work in progress).
+* Using now webpack to compile JS.
+* Decreased the number of enqueued dependency scripts.
+* Click the Popover's Set button when hitting enter after entering a value.
+* Close the Popovers when hitting the ESC key.
+* Added ATUM Data Stores for WC Bookings, WC Subscriptions and WC Product Bundles.
+* Improved performance using cache in "get_product_setting".
+
+**Changes**
+
+* When sorting by column, show the NULL values at the end.
+* Added numeric class to List Table cells for easier alignment.
+* Removed "Out of Stock Threshold" totalizer.
+* Prevent adding grouped child quantities and counting negative stocks in Totalizers.
+* Replaced ATUM icon mono image by a font icon.
+* Updated gulpfile tasks.
+* Moved the ATUM footer to a view.
+* Updated Marketing pop-up with new content.
+
+**Fixes**
+
+* Fixed compatibility with WC Bookings and WC Subscriptions.
+* Fixed issue in sortable columns.
+* Fixed sorting indicator icons.
+* Fixed subscription variations weren't included in widgets counters.
+* Fixed wrong calculation in "Current Stock Value" widget.
+* Fixed: add all inheritable types to Current Stock Value.
+* Fixed compounded stock count in Stock Central.
+* CSS fixes.
+
+---
+
 `1.5.3.3`
 
 *2019-01-20*
