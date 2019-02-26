@@ -21,6 +21,13 @@ final class AtumCache {
 	 * The generic group for ATUM caches
 	 */
 	const CACHE_GROUP = ATUM_TEXT_DOMAIN;
+	
+	/**
+	 * Store the distinct chace groups.
+	 *
+	 * @var array
+	 */
+	private static $cache_groups = [];
 
 
 	/****************
@@ -62,7 +69,10 @@ final class AtumCache {
 	 * @return mixed|bool  The ATUM cache value or FALSE if the cache does not exist
 	 */
 	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP ) {
-		return wp_cache_get( $cache_key, $cache_group );
+		
+		self::$cache_groups[ $cache_group ] = empty( self::$cache_groups[ $cache_group ] ) ? $cache_group : self::$cache_groups[ $cache_group ];
+		
+		return wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ] );
 	}
 
 	/**
@@ -78,7 +88,12 @@ final class AtumCache {
 	 * @return bool  FALSE if value was not set or TRUE if value was set
 	 */
 	public static function set_cache( $cache_key, $value, $cache_group = self::CACHE_GROUP, $expire = 30 ) {
-		return wp_cache_set( $cache_key, $value, $cache_group, $expire );
+		
+		if ( ! isset( self::$cache_groups[ $cache_group ] ) ) {
+			self::reset_group( $cache_group );
+		}
+		
+		return wp_cache_set( $cache_key, $value, self::$cache_groups[ $cache_group ], $expire );
 	}
 
 	/**
@@ -92,7 +107,24 @@ final class AtumCache {
 	 * @return bool
 	 */
 	public static function delete_cache( $cache_key, $cache_group = self::CACHE_GROUP ) {
+		
+		if ( ! isset( self::$cache_groups[ $cache_group ] ) ) {
+			self::reset_group( $cache_group );
+		}
+		
 		return wp_cache_delete( $cache_key, $cache_group );
+	}
+	
+	/**
+	 * Regenerate the group name to pretend like it's been erased.
+	 *
+	 * @since 1.5.5
+	 *
+	 * @param string $cache_group
+	 */
+	public static function reset_group( $cache_group = self::CACHE_GROUP ) {
+		
+		self::$cache_groups[ $cache_group ] = uniqid();
 	}
 
 	/********************
