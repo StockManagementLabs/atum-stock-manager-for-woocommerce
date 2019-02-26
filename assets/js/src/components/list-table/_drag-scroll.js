@@ -6,10 +6,14 @@ import Globals from './_globals';
 import Tooltip from '../_tooltip';
 import dragscroll from '../../../vendor/dragscroll.min';
 import Hammer from 'hammerjs/hammer.min';
+import Utils from '../../utils/_utils';
+import Popover from '../_popover';
 
 let DragScroll = {
 	
 	init() {
+		
+		let self = this;
 	
 		// Load Hammer for table dragging functionality.
 		Globals.$atumList.on('atum-scroll-bar-loaded', this.loadHammer);
@@ -19,7 +23,7 @@ let DragScroll = {
 		
 		// Re-add the horizontal drag-scroll when the List Table is updated.
 		Globals.$atumList.on('atum-table-updated', () => {
-			this.initHorizontalDragScroll
+			self.initHorizontalDragScroll();
 		});
 	
 	},
@@ -30,6 +34,11 @@ let DragScroll = {
 		const hammertime = new Hammer(Globals.$scrollPane.get(0), {});
 		
 		hammertime
+			
+			.on('panstart', () => {
+				// As the popoover is not being repositioned when scrolling horizontally, we have to destroy it.
+				Popover.destroyPopover();
+			})
 			
 			// Horizontal drag scroll (JScrollPane).
 			.on('panright panleft', (evt) => {
@@ -49,7 +58,7 @@ let DragScroll = {
 				
 				$(window).scrollTop(displacement);
 				
-			})
+			});
 		
 	},
 	
@@ -58,25 +67,19 @@ let DragScroll = {
 	 */
 	initHorizontalDragScroll() {
 		
-		let self            = this,
-		    tooltipsTimeout = null;
+		let self = this;
 		
 		$(window).on('resize', () => {
 			self.addHorizontalDragScroll('stock_central_nav', false);
 			self.addHorizontalDragScroll('filters_container', false);
 		});
 		
-		$('.nav-with-scroll-effect').on('scroll', (evt) => {
+		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt) => {
 			
 			self.addHorizontalDragScroll($(evt.target).attr('id'), true);
 			Tooltip.destroyTooltips();
 			
-			if (tooltipsTimeout !== null) {
-				clearTimeout(tooltipsTimeout);
-				tooltipsTimeout = null;
-			}
-			
-			tooltipsTimeout = setTimeout( () => {
+			Utils.delay( () => {
 				Tooltip.addTooltips();
 			}, 1000);
 			

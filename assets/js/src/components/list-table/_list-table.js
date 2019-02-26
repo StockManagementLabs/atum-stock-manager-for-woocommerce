@@ -667,9 +667,18 @@ let ListTable = {
 			    $nextRow        = $row.next('.expandable'),
 			    compoundedAmt   = 0;
 			
+			if ($row.hasClass('expandable')) {
+				return;
+			}
+			
 			while ($nextRow.length) {
-				compoundedAmt += parseFloat($nextRow.find('._stock').text());
+				
+				const $stockCell = $nextRow.find('._stock .set-meta'),
+				      stockValue = !$stockCell.length ? 0 : $stockCell.text();
+				
+				compoundedAmt += parseFloat(stockValue);
 				$nextRow = $nextRow.next('.expandable');
+				
 			}
 			
 			$compoundedCell.text(compoundedAmt);

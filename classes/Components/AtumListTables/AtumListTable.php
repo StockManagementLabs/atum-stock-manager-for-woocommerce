@@ -553,7 +553,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					'bundle_id' => $this->product->get_id(),
 				);
 
-//				$child_products = \WC_PB_DB::query_bundled_items( $bundle_args );
+				// $child_products = \WC_PB_DB::query_bundled_items( $bundle_args );
 
 				$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
 			}
@@ -2080,7 +2080,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					// Add the parent products again to the query.
-					$args['post__in'] = $get_parents ? $this->get_parents( $post_ids ) : $post_ids;
+					$args['post__in'] = $get_parents ? array_merge( $this->get_parents( $post_ids ), $post_ids ) : $post_ids;
 					$allow_query      = TRUE;
 					$found_posts      = $this->count_views[ "count_$key" ];
 
@@ -3043,7 +3043,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		<div class="tablenav <?php echo esc_attr( $which ); ?> extend-list-table">
 
 			<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
-			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'not-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
+			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
 				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : ''; ?>">
 
 					<div class="alignleft actions bulkactions">
@@ -4159,6 +4159,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'post_type'      => $post_type,
 				'post_status'    => $post_statuses,
 				'posts_per_page' => - 1,
+				'fields'         => 'id=>parent',
 				'orderby'        => 'menu_order',
 				'order'          => 'ASC',
 			);
@@ -4358,30 +4359,16 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_parents( $product_ids ) {
 
-		// Filter the parents of the current values.
-		$parents = array();
-		// TODO: PERHAPS WOULD BE MOST PERFORMANT TO DO A SINGLE SQL QUERY?
-		foreach ( $product_ids as $product_id ) {
+		// TODO: WHAT IF WE HAVE TO ADD A GROUPED PRODUCT OR BUNDLE?
+		global $wpdb;
 
-			$product = wc_get_product( $product_id );
+		$parents = "
+			SELECT DISTINCT post_parent FROM $wpdb->posts 		
+			WHERE ID IN (" . implode( ',', $product_ids ) . ")
+			AND post_parent > 0 AND post_type = 'product_variation'	
+		";
 
-			// For Variations.
-			if ( is_a( $product, '\WC_Product_Variation' ) ) {
-				$parents[] = $product->get_parent_id();
-			}
-			// For Group Items (these have the grouped ID as post_parent property).
-			else {
-
-				$product_post = get_post( $product_id );
-
-				if ( $product_post->post_parent ) {
-					$parents[] = $product_post->post_parent;
-				}
-
-			}
-		}
-
-		return array_merge( $product_ids, array_unique( $parents ) );
+		return $wpdb->get_col( $parents ); // WPCS: unprepared SQL ok.
 
 	}
 
