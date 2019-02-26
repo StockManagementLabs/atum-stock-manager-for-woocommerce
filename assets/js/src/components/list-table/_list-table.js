@@ -673,13 +673,10 @@ let ListTable = {
 			
 			while ($nextRow.length) {
 				
-				const $stockCell = $nextRow.find('._stock');
+				const $stockCell = $nextRow.find('._stock .set-meta'),
+				      stockValue = !$stockCell.length ? 0 : $stockCell.text();
 				
-				// TODO: If the product has an inheritable product inside, we can't calculate the stock correctly
-				if (!$stockCell.find('.compounded-sock').length) {
-					compoundedAmt += parseFloat($stockCell.find('.compounded-sock').text()) || 0;
-				}
-				
+				compoundedAmt += parseFloat(stockValue);
 				$nextRow = $nextRow.next('.expandable');
 				
 			}
