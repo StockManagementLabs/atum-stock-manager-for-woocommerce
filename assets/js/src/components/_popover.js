@@ -160,7 +160,12 @@ let Popover = {
 	 *
 	 * @param jQuery $metaCell The table cell where is attached the visible popover.
 	 */
-	destroyPopover($metaCell) {
+	destroyPopover($metaCell = null) {
+		
+		// If not passing the popover to destroy, try to find out the currently active.
+		if ($metaCell === null || !$metaCell.length) {
+			$metaCell = $('.set-meta[data-popover]');
+		}
 		
 		if ($metaCell.length) {
 			

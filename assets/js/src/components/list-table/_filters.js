@@ -49,7 +49,7 @@ let Filters = {
 				
 				Globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt) => {
 					self.pseudoKeyUpAjax($(evt.target).data('value'), Globals.$searchInput.val());
-				})
+				});
 				
 			}
 			
