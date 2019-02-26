@@ -159,8 +159,9 @@ class ProductDataQuery extends \WP_Meta_Query {
 		}
 
 		// Ensure unique clause keys, so none are overwritten.
-		$iterator = 1;
+		$iterator        = 1;
 		$clause_key_base = $clause_key;
+
 		while ( isset( $this->clauses[ $clause_key ] ) ) {
 			$clause_key = $clause_key_base . '-' . $iterator;
 			$iterator++;
@@ -195,7 +196,7 @@ class ProductDataQuery extends \WP_Meta_Query {
 				case 'BETWEEN':
 				case 'NOT BETWEEN':
 					$meta_value = array_slice( $meta_value, 0, 2 );
-					$where      = $wpdb->prepare( '%s AND %s', $meta_value );
+					$where      = $wpdb->prepare( '%s AND %s', $meta_value ); // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 					break;
 
 				case 'LIKE':

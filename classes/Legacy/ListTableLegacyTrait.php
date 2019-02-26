@@ -245,9 +245,30 @@ trait ListTableLegacyTrait {
 					}
 
 					// Add the parent products again to the query.
-					$args['post__in'] = $get_parents ? $this->get_parents( $post_ids ) : $post_ids;
-					$allow_query      = TRUE;
-					$found_posts      = $this->count_views[ "count_$key" ];
+					if ( $get_parents ) {
+
+						$parents = $this->get_parents( $post_ids );
+
+						// Exclude the parents with no children.
+						// For example: the current list may have the "Out of stock" filter applied and a variable product
+						// may have all of its variations in stock, but its own stock could be 0. The shouldn't appear empty.
+						$empty_variables = array_diff( $this->container_products['variable'], $parents );
+
+						foreach ( $empty_variables as $empty_variable ) {
+							if ( in_array( $empty_variable, $post_ids ) ) {
+								unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+							}
+						}
+
+						$args['post__in'] = array_merge( $parents, $post_ids );
+
+					}
+					else {
+						$args['post__in'] = $post_ids;
+					}
+
+					$allow_query = TRUE;
+					$found_posts = $this->count_views[ "count_$key" ];
 
 				}
 
@@ -278,14 +299,17 @@ trait ListTableLegacyTrait {
 			$posts = $wp_query->posts;
 
 			if ( $found_posts > 0 && empty( $posts ) ) {
+
 				$args['paged']     = 1;
 				$_REQUEST['paged'] = $args['paged'];
+
 				// Pass through the ATUM query data filter.
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$wp_query = new \WP_Query( $args );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
 				$posts = $wp_query->posts;
+
 			}
 
 			$product_ids = wp_list_pluck( $posts, 'ID' );
@@ -770,6 +794,7 @@ trait ListTableLegacyTrait {
 				'post_type'      => $post_type,
 				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'posts_per_page' => - 1,
+				'fields'         => 'id=>parent',
 				'orderby'        => 'menu_order',
 				'order'          => 'ASC',
 			);
@@ -838,7 +863,7 @@ trait ListTableLegacyTrait {
 				return $children_ids;
 
 			}
-			elseif ( 'bundle' === $parent_type ) {
+			elseif ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $parent_type ) {
 
 				foreach ( $bundle_childrens as $key => $bundle_children ) {
 
@@ -847,36 +872,24 @@ trait ListTableLegacyTrait {
 					if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
 
 						if ( ! $this->show_controlled ) {
-
 							unset( $bundle_childrens[ $key ] );
-
 						}
 
 					}
-					else {
-
-						if ( $this->show_controlled ) {
-
-							unset( $bundle_childrens[ $key ] );
-
-						}
-
+					elseif ( $this->show_controlled ) {
+						unset( $bundle_childrens[ $key ] );
 					}
 
 				}
 
 				if ( empty( $bundle_childrens ) ) {
-
 					$parents_with_child = [];
-
 				}
 				else {
 
 					$bundle_parents = [];
 					foreach ( $bundle_childrens as $bundle_children ) {
-
 						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
-
 					}
 
 					$parents_with_child = $bundle_parents;
@@ -889,6 +902,7 @@ trait ListTableLegacyTrait {
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
 				$this->children_products = array_merge( $this->children_products, $bundle_childrens );
+
 				return $bundle_childrens;
 
 			}
