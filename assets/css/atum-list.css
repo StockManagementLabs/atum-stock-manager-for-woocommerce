@@ -5643,25 +5643,25 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 @media screen and (max-width: 1400px) {
-  .tablenav.top .filters-container-box.not-pagination.no-submit {
+  .tablenav.top .filters-container-box.no-pagination.no-submit {
     width: calc(100% - 100px);
   }
 }
 
 @media screen and (max-width: 1400px) {
-  .tablenav.top .filters-container-box.not-pagination {
+  .tablenav.top .filters-container-box.no-pagination {
     width: calc(100% - 200px);
   }
 }
 
 @media all and (max-width: 782px) {
-  .tablenav.top .filters-container-box.not-pagination {
+  .tablenav.top .filters-container-box.no-pagination {
     width: inherit;
   }
 }
 
 @media all and (max-width: 480px) {
-  .tablenav.top .filters-container-box.not-pagination {
+  .tablenav.top .filters-container-box.no-pagination {
     width: 100% !important;
     margin-top: 10px;
   }
@@ -5714,6 +5714,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: start;
+  visibility: hidden;
 }
 
 .tablenav.top .nav-with-scroll-effect .actions {

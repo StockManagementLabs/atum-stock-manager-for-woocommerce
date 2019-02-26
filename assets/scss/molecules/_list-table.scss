@@ -727,7 +727,7 @@
 	.filters-container-box {
 		position: relative;
 		
-		&.not-pagination {
+		&.no-pagination {
 			&.no-submit {
 				@media screen and (max-width: $screen-lg-max + 200px) {
 					width: calc(100% - 100px);
@@ -787,6 +787,7 @@
 	.nav-with-scroll-effect {
 		height: 52px;
 		justify-content: start;
+		visibility: hidden;
 		
 		.actions {
 			overflow: initial;
