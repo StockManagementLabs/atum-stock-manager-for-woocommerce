@@ -1232,6 +1232,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$wc_notify_no_stock_amount = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		$is_grouped                = 'grouped' === $this->product->get_type();
 		$is_inheritable            = Helpers::is_inheritable_type( $this->product->get_type() );
+		$editable                  = apply_filters( 'atum/list_table/editable_column_stock', $editable, $this->product );
 
 		// Do not show the stock if the product is not managed by WC.
 		if ( ! $is_inheritable && ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) ) {
