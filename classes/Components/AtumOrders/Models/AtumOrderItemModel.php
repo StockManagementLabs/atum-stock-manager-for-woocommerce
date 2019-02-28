@@ -97,9 +97,9 @@ abstract class AtumOrderItemModel {
 
 			// Get from cache if available.
 			$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
-			$data      = AtumCache::get_cache( $cache_key );
+			$data      = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-			if ( FALSE === $data ) {
+			if ( ! $has_cache ) {
 				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d LIMIT 1;', $this->id ); // WPCS: unprepared SQL ok.
 				$data  = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 

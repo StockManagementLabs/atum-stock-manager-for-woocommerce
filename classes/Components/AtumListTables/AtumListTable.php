@@ -3385,9 +3385,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$search_term   = sanitize_text_field( stripslashes( $_REQUEST['s'] ) );
 
 		$cache_key = AtumCache::get_cache_key( 'product_search', [ $search_column, $search_term ] );
-		$where     = AtumCache::get_cache( $cache_key );
+		$where     = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( FALSE !== $where ) {
+		if ( $has_cache ) {
 			return $where;
 		}
 
@@ -4068,9 +4068,9 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
 		$cache_key    = AtumCache::get_cache_key( 'get_children', [ $parent_type, $post_in, $post_type ] );
-		$children_ids = AtumCache::get_cache( $cache_key );
+		$children_ids = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( FALSE !== $children_ids ) {
+		if ( $has_cache ) {
 			return $children_ids;
 		}
 

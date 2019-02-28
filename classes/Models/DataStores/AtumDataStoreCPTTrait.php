@@ -55,9 +55,9 @@ trait AtumDataStoreCPTTrait {
 		global $wpdb;
 
 		$cache_key = AtumCache::get_cache_key( 'product_data', $product_id );
-		$atum_data = AtumCache::get_cache( $cache_key );
+		$atum_data = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 		
-		if ( FALSE === $atum_data ) {
+		if ( ! $has_cache ) {
 			
 			// Get the extra ATUM data for the product.
 			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;

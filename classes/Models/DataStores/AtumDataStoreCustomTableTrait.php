@@ -49,9 +49,9 @@ trait AtumDataStoreCustomTableTrait {
 		global $wpdb;
 
 		$cache_key = AtumCache::get_cache_key( 'product_data', $product_id );
-		$data      = AtumCache::get_cache( $cache_key );
+		$data      = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( FALSE === $data ) {
+		if ( ! $has_cache ) {
 
 			// Get the default data from parent class.
 			/* @noinspection PhpUndefinedClassInspection */

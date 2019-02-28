@@ -148,9 +148,9 @@ abstract class AtumOrderModel {
 
 		// Get from cache if available.
 		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
-		$items     = AtumCache::get_cache( $cache_key );
+		$items     = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( FALSE === $items ) {
+		if ( ! $has_cache ) {
 
 			$items = Helpers::get_order_items( $this->id );
 

@@ -338,9 +338,9 @@ final class Helpers {
 		) ) );
 
 		$cache_key = AtumCache::get_cache_key( 'orders', $atts );
-		$orders    = AtumCache::get_cache( $cache_key );
+		$orders    = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( FALSE !== $orders ) {
+		if ( $has_cache ) {
 			return $orders;
 		}
 
@@ -2151,9 +2151,9 @@ final class Helpers {
 	public static function read_parent_product_type( $child_id ) {
 
 		$cache_key           = AtumCache::get_cache_key( 'parent_product_type', $child_id );
-		$parent_product_type = AtumCache::get_cache( $cache_key );
+		$parent_product_type = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( ! $parent_product_type ) {
+		if ( ! $has_cache ) {
 
 			global $wpdb;
 

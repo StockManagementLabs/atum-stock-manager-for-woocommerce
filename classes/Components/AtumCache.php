@@ -65,14 +65,16 @@ final class AtumCache {
 	 *
 	 * @param string $cache_key     The cache key.
 	 * @param string $cache_group   Optional. The cache group.
+	 * @param bool   $force         Optional. Whether to force an update of the local cache from the persistent cache.
+	 * @param bool   $found         Optional. Whether key was found in the cache. Disambiguates a return of false, a storable value.
 	 *
 	 * @return mixed|bool  The ATUM cache value or FALSE if the cache does not exist
 	 */
-	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP ) {
+	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP, $force = FALSE, &$found = NULL ) {
 		
 		self::$cache_groups[ $cache_group ] = empty( self::$cache_groups[ $cache_group ] ) ? $cache_group : self::$cache_groups[ $cache_group ];
 		
-		return wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ] );
+		return wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ], $force, $found );
 	}
 
 	/**
