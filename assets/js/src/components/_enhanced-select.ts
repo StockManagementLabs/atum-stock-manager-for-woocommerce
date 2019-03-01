@@ -2,7 +2,7 @@
    ENHANCED SELECT
    ======================================= */
 
-let EnhancedSelect = {
+export let EnhancedSelect = {
 	
 	/**
 	 * Restore the enhanced select filters (if any)
@@ -12,8 +12,6 @@ let EnhancedSelect = {
 		$('.select2-container--open').remove();
 		$('body').trigger('wc-enhanced-select-init');
 		
-	},
+	}
 	
 }
-
-module.exports = EnhancedSelect;

@@ -3,18 +3,18 @@
    ==================== */
 
 
-let Settings = {
+export default class Settings {
 	
-	settings: {},
+	settings = {};
 	
-	init(varName, defaults = {}) {
+	constructor(varName:string, defaults = {}) {
 		
 		let localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
 	
 		// Merge all the settings.
 		this.settings = $.extend( this.settings, defaults, localizedOpts );
 		
-	},
+	}
 	
 	get(prop) {
 		
@@ -24,12 +24,18 @@ let Settings = {
 		
 		return undefined;
 		
-	},
+	}
 	
 	getAll() {
 		return this.settings;
 	}
 	
+	delete(prop) {
+		
+		if ( this.settings.hasOwnProperty(prop)) {
+			delete this.settings[prop];
+		}
+		
+	}
+	
 }
-
-module.exports = Settings;

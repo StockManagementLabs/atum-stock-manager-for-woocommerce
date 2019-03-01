@@ -1,0 +1,182 @@
+/* =======================================
+   STICKY HEADER FOR LIST TABLES
+   ======================================= */
+
+import Settings from '../../config/_settings';
+import Globals from './_globals';
+import StickyColumns from './_sticky-columns';
+
+export default class StickyHeader {
+	
+	settings: Settings;
+	globals: Globals;
+	stickyCols: StickyColumns;
+	
+	constructor(settingsObj: Settings, globalsObj: Globals, stickyColsObj: StickyColumns) {
+		
+		this.settings = settingsObj;
+		this.globals = globalsObj;
+		this.stickyCols = stickyColsObj;
+		
+		// Add the floating table header.
+		this.globals.enabledStickyHeader = $('.sticky-header-button').hasClass('active');
+		if (this.globals.enabledStickyHeader) {
+			this.addFloatThead();
+		}
+		
+		// This event will trigger on the table when the header is floated and unfloated.
+		this.globals.$atumTable.on('floatThead', (evt: any, isFloated: boolean, $floatContainer: JQuery) => {
+			
+			if (isFloated) {
+				
+				$floatContainer.css('height', 'auto');
+				$('.jspContainer').height($('.jspPane').height());
+				
+				// Hide search dropdown on sticky.
+				if (this.settings.get('searchDropdown') === 'yes') {
+					$('#search_column_dropdown').hide();
+				}
+				
+				// Hide on mobile view.
+				if ($('#wpadminbar').css('position') === 'absolute') {
+					$floatContainer.hide();
+				}
+				else {
+					$floatContainer.show();
+				}
+				
+				// Add the sticky columns to the floating header if needed.
+				if (this.globals.enabledStickyColumns) {
+					
+					// Reposition the sticky cols to fit the floating header.
+					if (this.globals.$stickyCols !== null) {
+						this.globals.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));
+					}
+					
+					let $floatTheadTable = this.globals.$atumList.find('.floatThead-table');
+					this.globals.$floatTheadStickyCols = this.stickyCols.createStickyColumns($floatTheadTable);
+					
+					if (this.globals.$floatTheadStickyCols !== null) {
+						
+						$floatTheadTable.after(this.globals.$floatTheadStickyCols);
+						this.globals.$floatTheadStickyCols.css('width', this.globals.$stickyCols.width() + 1);
+						
+						// Add the colgroup tag with column widths.
+						this.globals.$floatTheadStickyCols.prepend('<colgroup />');
+						
+						let $colGroup = this.globals.$floatTheadStickyCols.find('colgroup');
+						
+						$floatTheadTable.find('thead .item-heads').children().each( (index: number, elem: any) => {
+							
+							let $cell = $(elem),
+							    id    = $cell.attr('id');
+							
+							if ($cell.hasClass('hidden')) {
+								return;
+							}
+							
+							if (this.globals.$floatTheadStickyCols.find('thead .item-heads').children('#' + id).length) {
+								$colGroup.append('<col style="width:' + $cell.width() + 'px;">');
+							}
+							
+						});
+						
+						// Remove the manage-column class to not conflict with the WP's Screen Options functionality.
+						this.globals.$floatTheadStickyCols.find('.manage-column').removeClass('manage-column');
+						
+						$colGroup.prependTo(this.globals.$floatTheadStickyCols);
+						this.adjustStickyHeaders(this.globals.$floatTheadStickyCols, $floatTheadTable);
+						
+					}
+					
+				}
+				
+			}
+			else {
+				
+				$floatContainer.css('height', 0);
+				
+				if (this.globals.enabledStickyColumns) {
+					
+					// Reset the sticky columns position.
+					if (this.globals.$stickyCols !== null) {
+						this.globals.$stickyCols.css('top', 0);
+					}
+					
+					// Remove the floating header's sticky columns.
+					if (this.globals.$floatTheadStickyCols !== null) {
+						this.globals.$floatTheadStickyCols.remove();
+					}
+					
+				}
+				
+			}
+			
+		});
+		
+	}
+	
+	/**
+	 * Add the floating header to the table
+	 */
+	addFloatThead() {
+		
+		if (!this.globals.enabledStickyHeader) {
+			return false;
+		}
+		
+		if (typeof this.globals.$atumTable.data('floatTheadAttached') !== 'undefined' && this.globals.$atumTable.data('floatTheadAttached') !== false) {
+			this.reloadFloatThead();
+			
+			return;
+		}
+		
+		(<any>this.globals.$atumTable).floatThead({
+			responsiveContainer: ($table) => {
+				return $table.closest('.jspContainer');
+			},
+			position           : 'absolute',
+			top                : $('#wpadminbar').height(),
+			autoReflow         : true,
+		});
+		
+	}
+	
+	/**
+	 * Reload the floating table header
+	 */
+	reloadFloatThead() {
+		
+		if (this.globals.enabledStickyHeader) {
+			this.destroyFloatThead();
+			this.addFloatThead();
+		}
+		
+	}
+	
+	/**
+	 * Destroy the floating table header
+	 */
+	destroyFloatThead() {
+		
+		if (typeof this.globals.$atumTable.data('floatTheadAttached') !== 'undefined' && this.globals.$atumTable.data('floatTheadAttached') !== false) {
+			(<any>this.globals.$atumTable).floatThead('destroy');
+		}
+		
+	}
+	
+	/**
+	 * Adjust the header heights to match the List Table heights
+	 *
+	 * @param jQuery $stickyTable
+	 * @param jQuery $origTable
+	 */
+	adjustStickyHeaders($stickyTable: JQuery, $origTable: JQuery) {
+		
+		$.each( ['column-groups', 'item-heads'], (index: number, className: string) => {
+			$stickyTable.find('.' + className + ' > th').first().css('height', $origTable.find('.' + className + ' > th').first().height());
+		});
+		
+	}
+	
+}

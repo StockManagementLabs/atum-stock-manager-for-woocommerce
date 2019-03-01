@@ -118,9 +118,9 @@ gulp.task('js::atum', function () {
 			devtool: 'source-map',
 			
 			entry: {
-				'list.tables'   : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.js',
-				'post.type.list': path.join(__dirname, config.assetsDir + '/js/src/') + 'post-type-list.js',
-				'product.data'  : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.js',
+				'list.tables'   : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.ts',
+				'post.type.list': path.join(__dirname, config.assetsDir + '/js/src/') + 'post-type-list-tables.ts',
+				//'product.data'  : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.js',
 			},
 			
 			output: {
@@ -128,7 +128,7 @@ gulp.task('js::atum', function () {
 			},
 			
 			resolve: {
-				extensions: ['.js']
+				extensions: ['.js', '.ts']
 			},
 			
 			module: {
@@ -140,15 +140,12 @@ gulp.task('js::atum', function () {
 						use    : 'eslint-loader',
 					}, */
 					{
-						test: /\.js$/,
+						test: /\.ts$/,
 						exclude: /node_modules/,
 						use: {
-							loader: 'babel-loader',
-							options: {
-								presets: ['babel-preset-env']
-							}
+							loader: 'ts-loader'
 						}
-					}
+					},
 				]
 			},
 			

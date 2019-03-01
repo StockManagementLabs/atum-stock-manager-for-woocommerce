@@ -4,28 +4,33 @@
 
 import Settings from '../../config/_settings';
 import Globals from './_globals';
-import Utils from '../../utils/_utils';
+import { Utils } from '../../utils/_utils';
 import Tooltip from '../_tooltip';
-import EnhancedSelect from '../_enhanced-select';
+import { EnhancedSelect } from '../_enhanced-select';
 
-let ListTable = {
+export default class ListTable {
 	
-	doingAjax  : null,
-	isRowExpanding : {},
+	settings: Settings;
+	globals: Globals;
+	tooltip: Tooltip;
+	doingAjax: any  = null;
+	isRowExpanding = {};
 	
-	init() {
+	constructor(settingsObj: Settings, globalsObj: Globals, toolTipObj: Tooltip) {
+		
+		this.settings = settingsObj;
+		this.globals = globalsObj;
+		this.tooltip = toolTipObj;
 		
 		// Bind events.
 		this.events();
 		
-	},
+	}
 	
 	/**
 	 * Bind List Table events
 	 */
 	events() {
-		
-		let self = this;
 		
 		// Bind active class rows.
 		this.addActiveClassRow();
@@ -33,40 +38,40 @@ let ListTable = {
 		// Calculate compounded stocks.
 		this.calculateCompoundedStocks();
 		
-		Globals.$atumList
+		this.globals.$atumList
 		
 			//
 			// Trigger expanding/collapsing event in inheritable products.
 			// ------------------------------------------
-			.on('click', '.calc_type .has-child', (evt) => {
-				$(evt.target).closest('tr').trigger('atum-list-expand-row');
+			.on('click', '.calc_type .has-child', (evt: any) => {
+				$(evt.currentTarget).closest('tr').trigger('atum-list-expand-row');
 			})
 			//
 			// Triggers the expand/collapse row action
 			//
-			.on('atum-list-expand-row', 'tbody tr', (evt, expandableRowClass, stopRowSelector, stopPropagation) => {
-				self.expandRow($(evt.target), expandableRowClass, stopRowSelector, stopPropagation);
+			.on('atum-list-expand-row', 'tbody tr', (evt: any, expandableRowClass: string, stopRowSelector: string, stopPropagation: boolean) => {
+				this.expandRow($(evt.currentTarget), expandableRowClass, stopRowSelector, stopPropagation);
 			})
 			
 			//
 			// Expandable rows' checkboxes.
 			// ----------------------------
-			.on('change', '.check-column input:checkbox', (evt) => self.checkDescendats( $(evt.target) ))
+			.on('change', '.check-column input:checkbox', (evt: any) => this.checkDescendats( $(evt.currentTarget) ))
 			
 			//
 			// "Control all products" button.
 			// ------------------------------
-			.on('click', '#control-all-products', (evt) => {
+			.on('click', '#control-all-products', (evt: any) => {
 				
-				let $button = $(evt.target);
+				let $button: JQuery = $(evt.currentTarget);
 				
 				$.ajax({
-					url       : ajaxurl,
+					url       : window['ajaxurl'],
 					method    : 'POST',
 					dataType  : 'json',
 					beforeSend: () => $button.prop('disabled', true).after('<span class="atum-spinner"><span></span></span>'),
 					data      : {
-						token : $(this).data('nonce'),
+						token : $button.data('nonce'),
 						action: 'atum_control_all_products',
 					},
 					success   : () => location.reload(),
@@ -78,7 +83,7 @@ let ListTable = {
 		//
 		// Global save for edited cells.
 		// -----------------------------
-		$('body').on('click', '#atum-update-list', (evt) => self.saveData($(evt.target)));
+		$('body').on('click', '#atum-update-list', (evt: any) => this.saveData( $(evt.currentTarget) ));
 		
 		
 		//
@@ -86,21 +91,19 @@ let ListTable = {
 		// -----------------------------------------------------------
 		$(window).bind('beforeunload', () => {
 			
-			if (!Globals.$editInput.val()) {
+			if (!this.globals.$editInput.val()) {
 				return;
 			}
 			
 			// Prevent multiple prompts - seen on Chrome and IE.
 			if (navigator.userAgent.toLowerCase().match(/msie|chrome/)) {
 				
-				if (window.aysHasPrompted) {
+				if (window['aysHasPrompted']) {
 					return;
 				}
 				
-				window.aysHasPrompted = true;
-				window.setTimeout( () => {
-					window.aysHasPrompted = false;
-				}, 900);
+				window['aysHasPrompted'] = true;
+				setTimeout( () => window['aysHasPrompted'] = false, 900);
 				
 			}
 			
@@ -111,18 +114,19 @@ let ListTable = {
 		// Display hidden footer.
 		.on('load', () => $('#wpfooter').show());
 		
-	},
+	}
 	
 	/**
 	 * Add/remove row active class when checkbox is clicked.
 	 */
 	addActiveClassRow() {
 		
-		Globals.$atumList.find('tbody .check-column input:checkbox').change( (evt) => {
+		this.globals.$atumList.find('tbody .check-column input:checkbox').change( (evt: any) => {
 			
-			let $checkboxRow = Globals.$atumList.find("[data-id='" + $(evt.target).val() + "']");
+			let $checkbox: JQuery    = $(evt.currentTarget),
+				$checkboxRow: JQuery = this.globals.$atumList.find("[data-id='" + $checkbox.val() + "']");
 			
-			if ($(this).is(':checked')) {
+			if ($checkbox.is(':checked')) {
 				$checkboxRow.addClass('active-row');
 			}
 			else {
@@ -134,9 +138,9 @@ let ListTable = {
 		// Selet all rows checkbox.
 		$('#cb-select-all-1').change( () => {
 			
-			Globals.$atumTable.find('tbody tr').each( (index, elem) => {
+			this.globals.$atumTable.find('tbody tr').each( (index: number, elem: any) => {
 				
-				let $elem = $(elem);
+				let $elem: JQuery = $(elem);
 				
 				if ($elem.find('.check-column input[type=checkbox]').is(':checked')) {
 					$elem.addClass('active-row');
@@ -149,21 +153,19 @@ let ListTable = {
 			
 		});
 		
-	},
+	}
 	
 	/**
 	 * Send the ajax call and replace table parts with updated version
 	 */
 	updateTable() {
 		
-		let self = this;
-		
 		if (this.doingAjax && this.doingAjax.readyState !== 4) {
 			this.doingAjax.abort();
 		}
 		
 		// Overwrite the filterData with the URL hash parameters
-		Globals.filterData = $.extend(Globals.filterData, {
+		this.globals.filterData = $.extend(this.globals.filterData, {
 			view          : $.address.parameter('view') || '',
 			product_cat   : $.address.parameter('product_cat') || '',
 			product_type  : $.address.parameter('product_type') || '',
@@ -178,18 +180,18 @@ let ListTable = {
 		});
 		
 		this.doingAjax = $.ajax({
-			url       : ajaxurl,
+			url       : window['ajaxurl'],
 			dataType  : 'json',
 			method    : 'GET',
-			data      : Globals.filterData,
+			data      : this.globals.filterData,
 			beforeSend: () => {
-				Tooltip.destroyTooltips();
-				self.addOverlay();
+				this.tooltip.destroyTooltips();
+				this.addOverlay();
 			},
 			// Handle the successful result.
-			success   : (response) => {
+			success   : (response: any) => {
 				
-				self.doingAjax = null;
+				this.doingAjax = null;
 				
 				if (typeof response === 'undefined' || !response) {
 					return false;
@@ -197,8 +199,8 @@ let ListTable = {
 				
 				// Update table with the coming rows.
 				if (typeof response.rows !== 'undefined' && response.rows.length) {
-					Globals.$atumList.find('#the-list').html(response.rows);
-					self.restoreMeta();
+					this.globals.$atumList.find('#the-list').html(response.rows);
+					this.restoreMeta();
 				}
 				
 				// Change page url parameter.
@@ -208,59 +210,61 @@ let ListTable = {
 				
 				// Update column headers for sorting.
 				if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-					Globals.$atumList.find('tr.item-heads').html(response.column_headers);
+					this.globals.$atumList.find('tr.item-heads').html(response.column_headers);
 				}
 				
 				// Update the views filters.
 				if (typeof response.views !== 'undefined' && response.views.length) {
-					Globals.$atumList.find('.subsubsub').replaceWith(response.views);
+					this.globals.$atumList.find('.subsubsub').replaceWith(response.views);
 				}
 				
 				// Update table navs.
 				if (typeof response.extra_t_n !== 'undefined') {
 					
 					if (response.extra_t_n.top.length) {
-						Globals.$atumList.find('.tablenav.top').replaceWith(response.extra_t_n.top);
+						this.globals.$atumList.find('.tablenav.top').replaceWith(response.extra_t_n.top);
 					}
 					
 					if (response.extra_t_n.bottom.length) {
-						Globals.$atumList.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
+						this.globals.$atumList.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
 					}
 					
 				}
 				
 				// Update the totals row.
 				if (typeof response.totals !== 'undefined') {
-					Globals.$atumList.find('tfoot tr.totals').html(response.totals);
+					this.globals.$atumList.find('tfoot tr.totals').html(response.totals);
 				}
 				
 				// If there are active filters, show the reset button.
 				if ($.address.parameterNames().length) {
-					Globals.$atumList.find('.reset-filters').removeClass('hidden');
+					this.globals.$atumList.find('.reset-filters').removeClass('hidden');
 				}
 				
 				// Regenerate the UI.
-				Tooltip.addTooltips();
+				this.tooltip.addTooltips();
 				EnhancedSelect.maybeRestoreEnhancedSelect();
-				self.addActiveClassRow();
-				self.removeOverlay();
-				self.calculateCompoundedStocks();
+				this.addActiveClassRow();
+				this.removeOverlay();
+				this.calculateCompoundedStocks();
 				
 				// Custom trigger after updating.
-				Globals.$atumList.trigger('atum-table-updated');
+				this.globals.$atumList.trigger('atum-table-updated');
 				
 			},
-			error     : () => self.removeOverlay(),
+			error     : () => this.removeOverlay(),
 		});
 		
-	},
+	}
 	
 	/**
 	 * Add the overlay effect while loading data
 	 */
 	addOverlay() {
 		
-		$('.atum-table-wrapper').block({
+		const $tableWrapper: any = $('.atum-table-wrapper');
+		
+		$tableWrapper.block({
 			message   : null,
 			overlayCSS: {
 				background: '#000',
@@ -268,14 +272,17 @@ let ListTable = {
 			},
 		});
 		
-	},
+	}
 	
 	/**
 	 * Remove the overlay effect once the data is fully loaded
 	 */
 	removeOverlay() {
-		$('.atum-table-wrapper').unblock();
-	},
+		
+		const $tableWrapper: any = $('.atum-table-wrapper');
+		$tableWrapper.unblock();
+		
+	}
 	
 	/**
 	 * Set the table cell value with right format
@@ -283,10 +290,10 @@ let ListTable = {
 	 * @param jQuery        $metaCell  The cell where will go the value.
 	 * @param String|Number value      The value to set in the cell.
 	 */
-	setCellValue($metaCell, value) {
+	setCellValue($metaCell: JQuery, value: string) {
 		
-		let symbol      = $metaCell.data('symbol') || '',
-		    currencyPos = Globals.$atumTable.data('currency-pos');
+		let symbol: string      = $metaCell.data('symbol') || '',
+		    currencyPos: string = this.globals.$atumTable.data('currency-pos');
 		
 		if (symbol) {
 			value = currencyPos === 'left' ? symbol + value : value + symbol;
@@ -294,41 +301,40 @@ let ListTable = {
 		
 		$metaCell.addClass('unsaved').text(value);
 		
-	},
+	}
 	
 	/**
 	 * Restore the edited meta after loading new table rows
 	 */
 	restoreMeta() {
 		
-		let self       = this,
-		    editedCols = Globals.$editInput.val();
+		let editedCols: any = this.globals.$editInput.val();
 		
 		if (editedCols) {
 			
 			editedCols = $.parseJSON(editedCols);
 			
-			$.each( editedCols, (itemId, meta) => {
+			$.each( editedCols, (itemId: string, meta: any) => {
 				
 				// Filter the meta cell that was previously edited.
-				let $metaCell = $('tr[data-id="' + itemId + '"] .set-meta');
+				let $metaCell: JQuery = $('tr[data-id="' + itemId + '"] .set-meta');
 				
 				if ($metaCell.length) {
 					
-					$.each(meta, (key, value) => {
+					$.each(meta, (key: string, value: any) => {
 						
 						$metaCell = $metaCell.filter('[data-meta="' + key + '"]');
 						
 						if ($metaCell.length) {
 							
-							self.setCellValue($metaCell, value);
+							this.setCellValue($metaCell, value);
 							
 							// Add the extra meta too.
-							let extraMeta = $metaCell.data('extra-meta');
+							let extraMeta: any = $metaCell.data('extra-meta');
 							
 							if (typeof extraMeta === 'object') {
 								
-								$.each(extraMeta, (index, extraMetaObj) => {
+								$.each(extraMeta, (index: number, extraMetaObj: any) => {
 									
 									// Restore the extra meta from the edit input
 									if (editedCols[itemId].hasOwnProperty(extraMetaObj.name)) {
@@ -351,7 +357,7 @@ let ListTable = {
 			
 		}
 		
-	},
+	}
 	
 	/**
 	 * Every time a cell is edited, update the input value
@@ -359,16 +365,16 @@ let ListTable = {
 	 * @param jQuery $metaCell  The table cell that is being edited.
 	 * @param jQuery $popover   The popover attached to the above cell.
 	 */
-	updateEditedColsInput($metaCell, $popover) {
+	updateEditedColsInput($metaCell: JQuery, $popover: JQuery) {
 		
-		let editedCols = Globals.$editInput.val(),
-		    itemId     = $metaCell.closest('tr').data('id'),
-		    meta       = $metaCell.data('meta'),
-		    symbol     = $metaCell.data('symbol') || '',
-		    custom     = $metaCell.data('custom') || 'no',
-		    currency   = $metaCell.data('currency') || '',
-		    value      = symbol ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
-		    newValue   = $popover.find('.meta-value').val();
+		let editedCols: any  = this.globals.$editInput.val(),
+		    itemId: number   = $metaCell.closest('tr').data('id'),
+		    meta: string     = $metaCell.data('meta'),
+		    symbol: string   = $metaCell.data('symbol') || '',
+		    custom: string   = $metaCell.data('custom') || 'no',
+		    currency: string = $metaCell.data('currency') || '',
+		    value: any       = symbol ? $metaCell.text().replace(symbol, '') : $metaCell.text(),
+		    newValue: any    = $popover.find('.meta-value').val();
 		
 		// Update the cell value.
 		this.setCellValue($metaCell, newValue);
@@ -396,11 +402,11 @@ let ListTable = {
 		// Add the extra meta data (if any).
 		if ($popover.hasClass('with-meta')) {
 			
-			let extraMeta = $metaCell.data('extra-meta');
+			let extraMeta: any = $metaCell.data('extra-meta');
 			
-			$popover.find('input').not('.meta-value').each( (index, input) => {
+			$popover.find('input').not('.meta-value').each( (index: number, input: any) => {
 				
-				let value = $(input).val();
+				let value: any = $(input).val();
 				editedCols[itemId][input.name] = value;
 				
 				// Save the meta values in the cell data for future uses.
@@ -422,72 +428,74 @@ let ListTable = {
 			
 		}
 		
-		Globals.$editInput.val( JSON.stringify(editedCols) );
-		Globals.$atumList.trigger('atum-edited-cols-input-updated', [$metaCell]);
+		this.globals.$editInput.val( JSON.stringify(editedCols) );
+		this.globals.$atumList.trigger('atum-edited-cols-input-updated', [$metaCell]);
 		
-	},
+	}
 	
 	/**
 	 * Check if we need to add the Update button
 	 */
 	maybeAddSaveButton() {
 		
-		let $tableTitle = Globals.$atumList.siblings('.wp-heading-inline');
+		let $tableTitle: JQuery = this.globals.$atumList.siblings('.wp-heading-inline');
 		
 		if (!$tableTitle.find('#atum-update-list').length) {
 			
 			$tableTitle.append($('<button/>', {
 				id   : 'atum-update-list',
 				class: 'page-title-action button-primary',
-				text : Settings.get('saveButton'),
+				text : this.settings.get('saveButton'),
 			}));
 			
 			// Check whether to show the first edit popup.
-			if (typeof swal === 'function' && typeof Settings.get('firstEditKey') !== 'undefined') {
+			if (typeof this.settings.get('firstEditKey') !== 'undefined') {
+				
+				const swal: any = window['swal'];
 				
 				swal({
-					title             : Settings.get('important'),
-					text              : Settings.get('preventLossNotice'),
+					title             : this.settings.get('important'),
+					text              : this.settings.get('preventLossNotice'),
 					type              : 'warning',
-					confirmButtonText : Settings.get('ok'),
+					confirmButtonText : this.settings.get('ok'),
 					confirmButtonColor: '#00b8db',
 				});
 				
 			}
 		}
 		
-	},
+	}
 	
 	/**
 	 * Save the edited columns
 	 *
 	 * @param jQuery $button The "Save Data" button.
 	 */
-	saveData($button) {
+	saveData($button: JQuery) {
 		
-		if (typeof $.atumDoingAjax === 'undefined') {
+		if (this.doingAjax) {
 			
-			let self = this,
-			    data = {
-				    token : Settings.get('nonce'),
-				    action: 'atum_update_data',
-				    data  : Globals.$editInput.val(),
-			    };
+			let data: any = {
+				token         : this.settings.get('nonce'),
+				action        : 'atum_update_data',
+				data          : this.globals.$editInput.val(),
+				first_edit_key: null,
+			};
 			
-			if (typeof Settings.get('firstEditKey') !== 'undefined') {
-				data.first_edit_key = Settings.get('firstEditKey');
+			if (typeof this.settings.get('firstEditKey') !== 'undefined') {
+				data.first_edit_key = this.settings.get('firstEditKey');
 			}
 			
-			$.atumDoingAjax = $.ajax({
-				url       : ajaxurl,
+			this.doingAjax = $.ajax({
+				url       : window['ajaxurl'],
 				method    : 'POST',
 				dataType  : 'json',
 				data      : data,
 				beforeSend: () => {
 					$button.prop('disabled', true);
-					self.addOverlay();
+					this.addOverlay();
 				},
-				success   : (response) => {
+				success   : (response: any) => {
 					
 					if (typeof response === 'object' && typeof response.success !== 'undefined') {
 						const noticeType = response.success ? 'updated' : 'error';
@@ -496,36 +504,32 @@ let ListTable = {
 					
 					if (typeof response.success !== 'undefined' && response.success) {
 						$button.remove();
-						Globals.$editInput.val('');
-						self.updateTable();
+						this.globals.$editInput.val('');
+						this.updateTable();
 					}
 					else {
 						$button.prop('disabled', false);
 					}
 					
-					$.atumDoingAjax = undefined;
+					this.doingAjax = null;
 					
-					if (typeof Settings.get('firstEditKey') !== 'undefined') {
-						delete Settings.get('firstEditKey');
-					}
+					this.settings.delete('firstEditKey');
 					
 				},
 				error     : () => {
 					
-					$.atumDoingAjax = undefined;
+					this.doingAjax = null;
 					$button.prop('disabled', false);
-					self.removeOverlay();
+					this.removeOverlay();
 					
-					if (typeof Settings.get('firstEditKey') !== 'undefined') {
-						delete Settings.get('firstEditKey');
-					}
+					this.settings.delete('firstEditKey');
 			
 				},
 			});
 			
 		}
 		
-	},
+	}
 	
 	/**
 	 * Expand/Collapse rows with childrens
@@ -537,9 +541,9 @@ let ListTable = {
 	 *
 	 * @return void|boolean
 	 */
-	expandRow($row, expandableRowClass, stopRowSelector, stopPropagation) {
+	expandRow($row: JQuery, expandableRowClass?: string, stopRowSelector?: string, stopPropagation?: boolean) {
 		
-		const rowId = $row.data('id');
+		const rowId: number = $row.data('id');
 		
 		if (typeof expandableRowClass === 'undefined') {
 			expandableRowClass = 'expandable';
@@ -550,10 +554,10 @@ let ListTable = {
 		}
 		
 		// Sync the sticky columns table.
-		if (Globals.$stickyCols !== null && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
+		if (this.globals.$stickyCols !== null && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
 			
-			let $siblingTable = $row.closest('.atum-list-table').siblings('.atum-list-table'),
-			    $syncRow      = $siblingTable.find('tr[data-id=' + rowId.toString().replace('c', '') + ']');
+			let $siblingTable: JQuery = $row.closest('.atum-list-table').siblings('.atum-list-table'),
+			    $syncRow: JQuery      = $siblingTable.find('tr[data-id=' + rowId.toString().replace('c', '') + ']');
 			
 			this.expandRow($syncRow, expandableRowClass, stopRowSelector, true);
 			
@@ -566,14 +570,13 @@ let ListTable = {
 		
 		this.isRowExpanding[rowId] = true;
 		
-		let self      = this,
-		    $rowTable = $row.closest('table'),
-		    $nextRow  = $row.next(),
-		    childRows = [];
+		let $rowTable: JQuery   = $row.closest('table'),
+		    $nextRow: JQuery    = $row.next(),
+		    childRows: JQuery[] = [];
 		
 		if ($nextRow.length) {
 			$row.toggleClass('expanded');
-			Tooltip.destroyTooltips();
+			this.tooltip.destroyTooltips();
 		}
 		
 		// Loop until reaching the next main row.
@@ -604,43 +607,43 @@ let ListTable = {
 		// Re-enable the expanding again once the animation is completed.
 		setTimeout( () => {
 			
-			delete self.isRowExpanding[rowId];
+			delete this.isRowExpanding[rowId];
 			
 			// Do this only when all the rows has been already expanded.
-			if (!Object.keys(self.isRowExpanding).length && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
-				Tooltip.addTooltips();
+			if (!Object.keys(this.isRowExpanding).length && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
+				this.tooltip.addTooltips();
 			}
 			
-			$.each(childRows, (index, $childRow) => {
+			$.each(childRows, (index: number, $childRow: JQuery) => {
 				$childRow.removeClass('expanding collapsing');
-			})
+			});
 			
 		}, 320);
 		
-		Globals.$atumList.trigger('atum-after-expand-row', [$row, expandableRowClass, stopRowSelector]);
+		this.globals.$atumList.trigger('atum-after-expand-row', [$row, expandableRowClass, stopRowSelector]);
 		
-	},
+	}
 	
 	/**
 	 * Checks/Unchecks the descendants rows when checking/unchecking their container
 	 *
 	 * @param jQuery $parentCheckbox
 	 */
-	checkDescendats($parentCheckbox) {
+	checkDescendats($parentCheckbox: JQuery) {
 		
-		let $containerRow = $parentCheckbox.closest('tr');
+		let $containerRow: JQuery = $parentCheckbox.closest('tr');
 		
 		// Handle clicks on the header checkbox.
 		if ($parentCheckbox.closest('td').hasClass('manage-column')) {
 			// Call this method recursively for all the checkboxes in the current page.
-			Globals.$atumTable.find('tr.variable, tr.group').find('input:checkbox').change();
+			this.globals.$atumTable.find('tr.variable, tr.group').find('input:checkbox').change();
 		}
 		
 		if (!$containerRow.hasClass('variable') && !$containerRow.hasClass('group')) {
 			return;
 		}
 		
-		let $nextRow = $containerRow.next('.expandable');
+		let $nextRow: JQuery = $containerRow.next('.expandable');
 		
 		// If is not expanded, expand it
 		if (!$containerRow.hasClass('expanded') && $parentCheckbox.is(':checked')) {
@@ -653,19 +656,19 @@ let ListTable = {
 			$nextRow = $nextRow.next('.expandable');
 		}
 		
-	},
+	}
 	
 	/**
 	 * Calculate the compounded stock amounts for all the inheritable products
 	 */
 	calculateCompoundedStocks() {
 	
-		Globals.$atumTable.find('.compounded').each( (index, elem) => {
+		this.globals.$atumTable.find('.compounded').each( (index: number, elem: any) => {
 			
-			let $compoundedCell = $(elem),
-			    $row            = $compoundedCell.closest('tr'),
-			    $nextRow        = $row.next('.expandable'),
-			    compoundedAmt   = 0;
+			let $compoundedCell: JQuery = $(elem),
+			    $row: JQuery            = $compoundedCell.closest('tr'),
+			    $nextRow: JQuery        = $row.next('.expandable'),
+			    compoundedAmt: number   = 0;
 			
 			if ($row.hasClass('expandable')) {
 				return;
@@ -674,7 +677,7 @@ let ListTable = {
 			while ($nextRow.length) {
 				
 				const $stockCell = $nextRow.find('._stock .set-meta'),
-				      stockValue = !$stockCell.length ? 0 : $stockCell.text();
+				      stockValue = !$stockCell.length ? '0' : $stockCell.text();
 				
 				compoundedAmt += parseFloat(stockValue);
 				$nextRow = $nextRow.next('.expandable');
@@ -685,8 +688,7 @@ let ListTable = {
 		
 		});
 		
-	},
+	}
 	
 }
 
-module.exports = ListTable;

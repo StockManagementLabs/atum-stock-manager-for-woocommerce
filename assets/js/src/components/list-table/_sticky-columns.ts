@@ -5,17 +5,23 @@
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 
-let StickyColumns = {
+export default class StickyColumns {
 	
-	init() {
+	settings: Settings;
+	globals: Globals;
+	
+	constructor(settingsObj: Settings, globalsObj: Globals) {
+		
+		this.settings = settingsObj;
+		this.globals = globalsObj;
 		
 		// Make the first columns sticky.
-		Globals.enabledStickyColumns = $('.sticky-columns-button').hasClass('active');
-		if (Globals.enabledStickyColumns) {
-			Globals.$stickyCols = this.createStickyColumns(Globals.$atumTable);
+		this.globals.enabledStickyColumns = $('.sticky-columns-button').hasClass('active');
+		if (this.globals.enabledStickyColumns) {
+			this.globals.$stickyCols = this.createStickyColumns(this.globals.$atumTable);
 		}
 	
-	},
+	}
 	
 	/**
 	 * Make the first table columns sticky
@@ -24,40 +30,42 @@ let StickyColumns = {
 	 *
 	 * @return jQuery|null The sticky cols (if enabled) or null.
 	 */
-	createStickyColumns($table) {
+	createStickyColumns($table?: JQuery) {
 		
 		// If there are no sticky columns in this table, do not continue.
-		if (!Settings.get('stickyColumns').length) {
+		if (!this.settings.get('stickyColumns').length) {
 			return null;
 		}
 		
-		let $stickyCols = $table.clone();
+		let $stickyCols: JQuery = $table.clone();
 		
 		// Remove table header and footer.
 		$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
 		
 		// Remove all the columns that won't be sticky.
-		$stickyCols.find('tr').each( (index, elem) => {
+		$stickyCols.find('tr').each( (index: number, elem: any) => {
 			
-			let $row = $(elem);
+			let $row: JQuery = $(elem);
 			
 			// Add a prefix to the row ID to avoid problems when expanding/collapsing rows.
-			$row.data('id', 'c' + $row.data('id'));
+			$row.data('id', `c${ $row.data('id') }`);
 			
 			// Remove all the column groups except first one.
 			if ($row.hasClass('column-groups')) {
+				
 				let $colGroups = $row.children();
 				$colGroups.not(':first-child').remove();
-				$colGroups.first().attr('colspan', Settings.get('stickyColumns').length);
+				$colGroups.first().attr('colspan', this.settings.get('stickyColumns').length);
+				
 			}
 			// Remove all the non-sticky columns.
 			else {
 				
-				let columnNames   = Settings.get('stickyColumns'),
+				let columnNames   = this.settings.get('stickyColumns'),
 				    columnClasses = [];
 				
-				$.each(columnNames, (index, columnName) => {
-					columnClasses.push('.column-' + columnName);
+				$.each(columnNames, (index: number, columnName: string) => {
+					columnClasses.push(`.column-${ columnName }`);
 				})
 				
 				$row.children().not(columnClasses.join(',')).remove();
@@ -76,7 +84,7 @@ let StickyColumns = {
 		
 		return $stickyCols;
 		
-	},
+	}
 	
 	/**
 	 * Destroy the sticky columns previously set for the table
@@ -85,16 +93,14 @@ let StickyColumns = {
 	 */
 	destroyStickyColumns() {
 		
-		if (Globals.$stickyCols !== null) {
-			Globals.$stickyCols.remove();
+		if (this.globals.$stickyCols !== null) {
+			this.globals.$stickyCols.remove();
 		}
 		
-		if (Globals.$floatTheadStickyCols !== null) {
-			Globals.$floatTheadStickyCols.remove();
+		if (this.globals.$floatTheadStickyCols !== null) {
+			this.globals.$floatTheadStickyCols.remove();
 		}
 		
-	},
+	}
 	
 }
-
-module.exports = StickyColumns;

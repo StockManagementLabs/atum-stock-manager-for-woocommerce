@@ -8,47 +8,63 @@ import ListTable from './_list-table';
 import Router from './_router';
 import Tooltip from '../_tooltip';
 import DateTimePicker from '../_date-time-picker';
-import Utils from '../../utils/_utils';
+import { Utils } from '../../utils/_utils';
 
-let Filters = {
+export default class Filters {
 	
-	init() {
+	settings: Settings;
+	globals: Globals;
+	listTable: ListTable;
+	router: Router;
+	tooltip: Tooltip;
+	dateTimePicker: DateTimePicker;
+	
+	constructor(
+		settingsObj: Settings, globalsObj: Globals, listTableObj: ListTable, routerObj: Router,
+		tooltipObj: Tooltip, dateTimePickerObj: DateTimePicker
+	) {
 		
-		let self = this;
+		this.settings = settingsObj;
+		this.globals = globalsObj;
+		this.listTable = listTableObj;
+		this.router = routerObj;
+		this.tooltip = tooltipObj;
+		this.dateTimePicker = dateTimePickerObj;
 		
 		//
 		// Ajax filters.
 		// -------------
-		if (Settings.get('ajaxFilter') === 'yes') {
+		if (this.settings.get('ajaxFilter') === 'yes') {
 			
-			Globals.$atumList
+			this.globals.$atumList
 				
 				// Dropdown filters.
 				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', (evt) => {
-					self.keyUp(evt);
+					this.keyUp(evt);
 				})
 				
 				// Search filter.
-				.on('keyup paste search input', '.atum-post-search', (evt) => {
+				.on('keyup paste search input', '.atum-post-search', (evt: any) => {
 					
-					let searchColumnBtnVal = Globals.$searchColumnBtn.data('value'),
-					    $searchInputVal    = $(evt.target).val();
+					let searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
+					    $searchInputVal: any       = $(evt.currentTarget).val();
 					
 					Utils.delay( () => {
-						self.pseudoKeyUpAjax(searchColumnBtnVal, $searchInputVal);
+						this.pseudoKeyUpAjax(searchColumnBtnVal, $searchInputVal);
 					}, 500);
 					
 				})
 				
 				// Pagination input changes.
-				.on('keyup paste', '.current-page', (evt) => {
-					self.keyUp(evt);
+				.on('keyup paste', '.current-page', (evt: any) => {
+					this.keyUp(evt);
 				});
 			
-			if (Settings.get('searchDropdown') === 'yes') {
+			
+			if (this.settings.get('searchDropdown') === 'yes') {
 				
-				Globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt) => {
-					self.pseudoKeyUpAjax($(evt.target).data('value'), Globals.$searchInput.val());
+				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: any) => {
+					this.pseudoKeyUpAjax($(evt.currentTarget).data('value'), this.globals.$searchInput.val());
 				});
 				
 			}
@@ -60,18 +76,18 @@ let Filters = {
 		// -----------------
 		else {
 			
-			let $searchSubmitBtn = Globals.$searchInput.siblings('.search-submit');
+			let $searchSubmitBtn: JQuery = this.globals.$searchInput.siblings('.search-submit');
 			
-			if (!Globals.$searchInput.val()) {
+			if (!this.globals.$searchInput.val()) {
 				$searchSubmitBtn.prop('disabled', true);
 			}
 			
 			// If s is empty, search-submit must be disabled and ?s removed.
 			// If s and searchColumnBtnVal have values, then we can push over search.
-			Globals.$searchInput.on('input', (evt) => {
+			this.globals.$searchInput.on('input', (evt: any) => {
 				
-				let searchColumnBtnVal = Globals.$searchColumnBtn.data('value'),
-				    inputVal           = $(evt.target).val();
+				let searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
+				    inputVal: any              = $(evt.currentTarget).val();
 				
 				if (!inputVal) {
 					
@@ -80,7 +96,7 @@ let Filters = {
 					if (inputVal != $.address.parameter('s')) {
 						$.address.parameter('s', '');
 						$.address.parameter('search_column', '');
-						Router.updateHash(); // Force clean search.
+						this.router.updateHash(); // Force clean search.
 					}
 					
 				}
@@ -96,18 +112,18 @@ let Filters = {
 			
 			// TODO on init address, check s i search_column values, and disable or not
 			// When a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters.
-			if (Settings.get('searchDropdown') === 'yes') {
+			if (this.settings.get('searchDropdown') === 'yes') {
 				
 				// TODO: IS THIS WORKING? IS NOT ONLY FOR AJAX FILTERS?
-				Globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt) => {
+				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: any) => {
 					
-					let searchInputVal     = Globals.$searchInput.val(),
-					    searchColumnBtnVal = $(evt.target).data('value');
+					let searchInputVal: any        = this.globals.$searchInput.val(),
+					    searchColumnBtnVal: string = $(evt.currentTarget).data('value');
 					
 					if (searchInputVal.length > 0) {
 						$.address.parameter('s', searchInputVal);
 						$.address.parameter('search_column', searchColumnBtnVal);
-						self.keyUp(evt);
+						this.keyUp(evt);
 					}
 					// Force clean s when required.
 					else {
@@ -119,24 +135,24 @@ let Filters = {
 				
 			}
 			
-			Globals.$atumList.on('click', '.search-category, .search-submit', () => {
+			this.globals.$atumList.on('click', '.search-category, .search-submit', () => {
 				
-				let searchInputVal     = Globals.$searchInput.val(),
-				    searchColumnBtnVal = Globals.$searchColumnBtn.data('value');
+				let searchInputVal: any        = this.globals.$searchInput.val(),
+				    searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value');
 				
 				$searchSubmitBtn.prop('disabled', typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length === 0 ? true : false);
 				
 				if (searchInputVal.length > 0) {
-					$.address.parameter('s', Globals.$searchInput.val());
-					$.address.parameter('search_column', Globals.$searchColumnBtn.data('value'));
+					$.address.parameter('s', this.globals.$searchInput.val());
+					$.address.parameter('search_column', this.globals.$searchColumnBtn.data('value'));
 					
-					Router.updateHash();
+					this.router.updateHash();
 				}
 				// Force clean s when required.
 				else {
 					$.address.parameter('s', '');
 					$.address.parameter('search_column', '');
-					Router.updateHash();
+					this.router.updateHash();
 				}
 				
 			});
@@ -146,29 +162,29 @@ let Filters = {
 		//
 		// Events common to all filters.
 		// -----------------------------
-		Globals.$atumList
+		this.globals.$atumList
 		
 			//
 			// Reset Filters button.
 			// ---------------------
-			.on('click', '.reset-filters', () => {
+			.on('click', '.reset-filters', (evt: any) => {
 				
-				Tooltip.destroyTooltips();
+				this.tooltip.destroyTooltips();
 				
 				// TODO reset s and column search
 				$.address.queryString('');
-				Globals.$searchInput.val('');
+				this.globals.$searchInput.val('');
 				
-				if (Settings.get('searchDropdown') === 'yes' && Globals.$searchColumnBtn.data('value') !== 'title') {
-					Globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
+				if (this.settings.get('searchDropdown') === 'yes' && this.globals.$searchColumnBtn.data('value') !== 'title') {
+					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
 				}
 				
-				ListTable.updateTable();
-				$(this).addClass('hidden');
+				this.listTable.updateTable();
+				$(evt.currentTarget).addClass('hidden');
 				
 			})
 			
-			.on('atum-table-updated', this.addDateSelectorFilter);
+			.on('atum-table-updated', () => this.addDateSelectorFilter());
 		
 		
 		//
@@ -176,18 +192,18 @@ let Filters = {
 		// -------------------------
 		this.addDateSelectorFilter();
 		
-	},
+	}
 	
 	/**
 	 * Search box keyUp event callback
 	 *
-	 * @param {Object}  evt       The event data object.
-	 * @param {Boolean} noTimer   Whether to delay before triggering the update (used for autosearch).
+	 * @param Object  evt       The event data object.
+	 * @param Boolean noTimer   Optional. Whether to delay before triggering the update (used for autosearch).
 	 */
-	keyUp(evt, noTimer) {
+	keyUp(evt: any, noTimer?: boolean) {
 		
-		let delay          = 500,
-		    searchInputVal = Globals.$searchInput.val();
+		let delay: number       = 500,
+		    searchInputVal: any = this.globals.$searchInput.val();
 		
 		noTimer = noTimer || false;
 		
@@ -204,7 +220,7 @@ let Filters = {
 			}
 			
 			if (noTimer) {
-				Router.updateHash();
+				this.router.updateHash();
 			}
 			else {
 				/*
@@ -214,7 +230,7 @@ let Filters = {
 				 * thus may cause duplicate calls before sending the intended value.
 				 */
 				Utils.delay( () => {
-					Router.updateHash();
+					this.router.updateHash();
 				}, delay);
 				
 			}
@@ -224,55 +240,54 @@ let Filters = {
 			evt.preventDefault();
 		}
 		
-	},
+	}
 	
-	pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal) {
+	pseudoKeyUpAjax(searchColumnBtnVal: string, searchInputVal: any) {
 		
 		if (searchInputVal.length === 0) {
 			
 			if (searchInputVal != $.address.parameter('s')) {
 				$.address.parameter('s', '');
 				$.address.parameter('search_column', '');
-				Router.updateHash(); // Force clean search.
+				this.router.updateHash(); // Force clean search.
 			}
 			
 		}
 		else if (typeof searchColumnBtnVal != 'undefined' && searchColumnBtnVal.length > 0) {
 			$.address.parameter('s', searchInputVal);
 			$.address.parameter('search_column', searchColumnBtnVal);
-			Router.updateHash();
+			this.router.updateHash();
 		}
 		else if (searchInputVal.length > 0) {
 			$.address.parameter('s', searchInputVal);
-			Router.updateHash();
+			this.router.updateHash();
 		}
 		
-	},
+	}
 	
 	/**
 	 * Add the date selector filter
 	 */
 	addDateSelectorFilter() {
 		
-		let self          = this,
-		    linkedFilters = Settings.get('dateSelectorFilters'),
-		    $dateSelector = Globals.$atumList.find('.date-selector'),
-		    dateFromVal   = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(),
-		    dateToVal     = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
+		let linkedFilters: string[] = this.settings.get('dateSelectorFilters'),
+		    $dateSelector: JQuery   = this.globals.$atumList.find('.date-selector'),
+		    dateFromVal: string     = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(),
+		    dateToVal: string       = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
 		
 		if ( ! dateToVal ) {
 			
-			let today = new Date(),
-			    dd    = today.getDate(),
-			    mm    = today.getMonth() + 1, // January is 0.
-			    yyyy  = today.getFullYear();
+			let today: Date = new Date(),
+			    dd: any     = today.getDate(),
+			    mm: any     = today.getMonth() + 1, // January is 0.
+			    yyyy: any   = today.getFullYear();
 			
 			if (dd < 10) {
-				dd = '0' + dd;
+				dd = '0' + dd.toString();
 			}
 			
 			if (mm < 10) {
-				mm = '0' + mm;
+				mm = '0' + mm.toString();
 			}
 			
 			dateToVal = yyyy + '-' + mm + '-' + dd;
@@ -281,46 +296,47 @@ let Filters = {
 		
 		$dateSelector
 			
-			.on('select2:open', (evt) => {
+			.on('select2:open', (evt: any) => {
 				
-				const $select = $(evt.target);
+				const $select: JQuery = $(evt.currentTarget);
 			
-				if ( linkedFilters.indexOf($select.val()) !== -1 ) {
+				if ( $.inArray($select.val(), linkedFilters) > -1 ) {
 					$select.val('');
 				}
 				
 			})
 		
-			.on('select2:select', (evt) => {
+			.on('select2:select', (evt: any) => {
 			
-				if ( linkedFilters.indexOf($(evt.target).val()) !== -1 ) {
+				if ( $.inArray($(evt.currentTarget).val(), linkedFilters) > -1 ) {
 					
-					const popupClass = 'filter-range-dates-modal';
+					const popupClass: string = 'filter-range-dates-modal',
+					      swal: any          = window['swal'];
 					
 					swal({
 						customClass    : popupClass,
 						width          : 440,
 						showCloseButton: true,
-						title          : `<h1 class="title">${ Settings.get('setTimeWindow') }</h1><span class="sub-title">${ Settings.get('selectDateRange') }</span>`,
+						title          : `<h1 class="title">${ this.settings.get('setTimeWindow') }</h1><span class="sub-title">${ this.settings.get('selectDateRange') }</span>`,
 						html           : `
 							<div class="input-date">
-								<label for="date_from">${ Settings.get('from') }</label><br/>
+								<label for="date_from">${ this.settings.get('from') }</label><br/>
 								<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
 							</div>
 							<div class="input-date">
-								<label for="date_to">${ Settings.get('to') }</label><br/>
+								<label for="date_to">${ this.settings.get('to') }</label><br/>
 								<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
 							</div>
-							<button class="btn btn-warning apply">${ Settings.get('apply') }</button>
+							<button class="btn btn-warning apply">${ this.settings.get('apply') }</button>
 						`,
 						showConfirmButton: false,
 						onOpen           : () => {
 							
 							// Init date time pickers.
-							DateTimePicker.addDateTimePickers($('.date-picker'));
+							this.dateTimePicker.addDateTimePickers($('.date-picker'));
 							
 							$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
-								self.keyUp(evt);
+								this.keyUp(evt);
 								swal.close();
 							});
 							
@@ -330,9 +346,11 @@ let Filters = {
 						
 						},
 						onClose: () => {
-							if ( Settings.get('ajaxFilter') === 'yes' ) {
-								self.keyUp(evt);
+							
+							if ( this.settings.get('ajaxFilter') === 'yes' ) {
+								this.keyUp(evt);
 							}
+							
 						},
 						
 					})
@@ -345,8 +363,6 @@ let Filters = {
 				
 			});
 		
-	},
+	}
 	
 }
-
-module.exports = Filters;

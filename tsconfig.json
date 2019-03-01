@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "./assets/js/build/",
+		"module": "es6",
+		"target": "es5",
+		"sourceMap": true,
+		"removeComments": true,
+		"moduleResolution": "node",
+		"typeRoots": [ "./assets/js/src/types", "./node_modules/@types"]
+	},
+	"exclude": [
+		"node_modules",
+		"./assets/js/src/types"
+	]
+}

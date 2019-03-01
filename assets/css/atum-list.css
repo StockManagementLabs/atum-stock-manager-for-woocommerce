@@ -3952,7 +3952,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   padding: 8px 10px 9px;
   position: absolute;
   top: 50%;
-  z-index: 1080;
+  z-index: 100080;
 }
 
 .lg-actions .lg-next.disabled, .lg-actions .lg-prev.disabled {
@@ -4041,12 +4041,12 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 }
 
 .lg-toolbar {
-  z-index: 1082;
+  z-index: 100082;
   left: 0;
   position: absolute;
   top: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: transparent;
 }
 
 .lg-toolbar .lg-icon {
@@ -4089,7 +4089,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   position: fixed;
   right: 0;
   text-align: center;
-  z-index: 1080;
+  z-index: 100080;
 }
 
 .lg-sub-html h4 {
@@ -4164,7 +4164,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1050;
+  z-index: 100050;
   opacity: 0;
   -webkit-transition: opacity 0.15s ease 0s;
   transition: opacity 0.15s ease 0s;
@@ -4269,7 +4269,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .lg-outer .lg-item.lg-current {
-  z-index: 1060;
+  z-index: 100060;
 }
 
 .lg-outer .lg-image {
@@ -4305,7 +4305,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1040;
+  z-index: 100040;
   background-color: #000;
   opacity: 0;
   -webkit-transition: opacity 0.15s ease 0s;

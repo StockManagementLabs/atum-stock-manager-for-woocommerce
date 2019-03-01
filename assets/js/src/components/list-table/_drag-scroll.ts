@@ -6,47 +6,51 @@ import Globals from './_globals';
 import Tooltip from '../_tooltip';
 import dragscroll from '../../../vendor/dragscroll.min';
 import Hammer from 'hammerjs/hammer.min';
-import Utils from '../../utils/_utils';
+import { Utils } from '../../utils/_utils';
 import Popover from '../_popover';
 
-let DragScroll = {
+export default class DragScroll {
 	
-	init() {
+	globals: Globals;
+	tooltip: Tooltip;
+	popover: Popover;
+	
+	constructor(globalsObj: Globals, tooltipObj: Tooltip, popoverObj: Popover) {
 		
-		let self = this;
+		this.globals = globalsObj;
+		this.tooltip = tooltipObj;
+		this.popover = popoverObj;
 	
 		// Load Hammer for table dragging functionality.
-		Globals.$atumList.on('atum-scroll-bar-loaded', this.loadHammer);
+		this.globals.$atumList.on('atum-scroll-bar-loaded', () => this.loadHammer());
 		
 		// Add horizontal drag-scroll to table filters.
 		this.initHorizontalDragScroll();
 		
 		// Re-add the horizontal drag-scroll when the List Table is updated.
-		Globals.$atumList.on('atum-table-updated', () => {
-			self.initHorizontalDragScroll();
-		});
+		this.globals.$atumList.on('atum-table-updated', () => this.initHorizontalDragScroll());
 	
-	},
+	}
 	
 	loadHammer() {
 		
 		// Drag and drop scrolling on desktops.
-		const hammertime = new Hammer(Globals.$scrollPane.get(0), {});
+		const hammertime = new Hammer(this.globals.$scrollPane.get(0), {});
 		
 		hammertime
 			
 			.on('panstart', () => {
 				// As the popoover is not being repositioned when scrolling horizontally, we have to destroy it.
-				Popover.destroyPopover();
+				this.popover.destroyPopover();
 			})
 			
 			// Horizontal drag scroll (JScrollPane).
 			.on('panright panleft', (evt) => {
 				
 				const velocityModifier = 10,
-				      displacement     = Globals.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
+				      displacement     = this.globals.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
 				
-				Globals.jScrollApi.scrollToX(displacement, false);
+				this.globals.jScrollApi.scrollToX(displacement, false);
 				
 			})
 			
@@ -60,49 +64,47 @@ let DragScroll = {
 				
 			});
 		
-	},
+	}
 	
 	/**
 	 * Init horizontal scroll
 	 */
 	initHorizontalDragScroll() {
 		
-		let self = this;
-		
 		$(window).on('resize', () => {
-			self.addHorizontalDragScroll('stock_central_nav', false);
-			self.addHorizontalDragScroll('filters_container', false);
+			this.addHorizontalDragScroll('stock_central_nav', false);
+			this.addHorizontalDragScroll('filters_container', false);
 		});
 		
-		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt) => {
+		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: any) => {
 			
-			self.addHorizontalDragScroll($(evt.target).attr('id'), true);
-			Tooltip.destroyTooltips();
+			this.addHorizontalDragScroll($(evt.currentTarget).attr('id'), true);
+			this.tooltip.destroyTooltips();
 			
 			Utils.delay( () => {
-				Tooltip.addTooltips();
+				this.tooltip.addTooltips();
 			}, 1000);
 			
 		});
 		
 		dragscroll.reset();
 		
-	},
+	}
 	
 	/**
 	 * Add horizontal scroll effect to menu views
 	 */
-	addHorizontalDragScroll(elementId, checkEnhanced) {
+	addHorizontalDragScroll(elementId: string, checkEnhanced: boolean) {
 		
-		let $nav                  = document.getElementById(elementId),
-		    $overflowOpacityRight = $('#scroll-' + elementId + ' .overflow-opacity-effect-right'),
-		    $overflowOpacityLeft  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left'),
-		    $leftMax              = $nav ? $nav.scrollWidth : 0,
-		    $left                 = $nav ? $nav.scrollLeft : 0,
-		    $diff                 = $leftMax - $left;
+		let $nav: any                     = document.getElementById(elementId),
+		    $overflowOpacityRight: JQuery = $('#scroll-' + elementId + ' .overflow-opacity-effect-right'),
+		    $overflowOpacityLeft: JQuery  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left'),
+		    $leftMax: number              = $nav ? $nav.scrollWidth : 0,
+		    $left: number                 = $nav ? $nav.scrollLeft : 0,
+		    $diff: number                 = $leftMax - $left;
 		
 		if ( checkEnhanced ) {
-			$('.enhanced').select2('close');
+			(<any>$('.enhanced')).select2('close');
 		}
 		
 		if ($diff === $('#' + elementId).outerWidth()) {
@@ -121,8 +123,7 @@ let DragScroll = {
 		
 		$('#' + elementId).css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
 		
-	},
+	}
 	
 }
 
-module.exports = DragScroll;

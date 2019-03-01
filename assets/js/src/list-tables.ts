@@ -6,12 +6,7 @@
  * @since 0.0.1
  */
 
-// Only load Babel Polyfill if is not being included by another library
-if (!global._babelPolyfill && !window._babelPolyfill) {
-	require('babel-polyfill');
-}
-
-window.$ = window.jQuery;
+window['$'] = window['jQuery'];
 
 /**
  * Third Party Plugins
@@ -24,7 +19,7 @@ import 'lightgallery.js/dist/js/lightgallery.min';   // From node_modules
 import '../vendor/dragscroll.min';                   // A patched fork of dragscroll
 import 'hammerjs/hammer.min';                        // From node_modules
 import '../vendor/select2';                          // A fixed version compatible with webpack
-//import '../vendor/sweetalert2'                     // Is not working within our webpack configuration
+//import '../vendor/sweetalert2'                     // Is not working with our webpack configuration
 import 'lodash/lodash.min';                          // From node_modules
 import 'moment/min/moment.min';                      // From node_modules
 import '../vendor/bootstrap-datetimepicker';         // A fixed version compatible with webpack
@@ -33,43 +28,36 @@ import '../vendor/bootstrap3-custom.min';            // TODO: USE BOOTSTRAP 4
 
 
 /**
- * Utils
- */
-
-//require('./utils/_responsive').init();
-require('./utils/_utils');
-require('./utils/_plugins');
-
-
-/**
  * Components
  */
 
-import Settings from './config/_settings';
-import Globals from './components/list-table/_globals';
-import ListTable from './components/list-table/_list-table';
-import Router from './components/list-table/_router';
-import ScrollBar from './components/list-table/_scroll-bar';
+import BulkActions from './components/list-table/_bulk-actions';
+import DateTimePicker from './components/_date-time-picker';
 import DragScroll from './components/list-table/_drag-scroll';
-import SearchByColumn from './components/list-table/_search-by-column';
 import ColumnGroups from './components/list-table/_column-groups';
+import EditableCell from './components/list-table/_editable-cell';
+import Filters from './components/list-table/_filters';
+import Globals from './components/list-table/_globals';
+import LightBox from './components/_light-box';
+import ListTable from './components/list-table/_list-table';
+import LocationsTree from './components/list-table/_locations-tree';
+import Popover from './components/_popover';
+import Router from './components/list-table/_router';
+import SalesLastDays from './components/list-table/_sales-last-days';
+import ScrollBar from './components/list-table/_scroll-bar';
+import SearchByColumn from './components/list-table/_search-by-column';
+import Settings from './config/_settings';
 import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
-import Filters from './components/list-table/_filters';
-import EditableCell from './components/list-table/_editable-cell';
-import LightBox from './components/_light-box';
-import Tooltip from './components/_tooltip';
 import TableButtons from './components/list-table/_table-buttons';
-import SalesLastDays from './components/list-table/_sales-last-days';
-import BulkActions from './components/list-table/_bulk-actions';
-import LocationsTree from './components/list-table/_locations-tree';
+import Tooltip from './components/_tooltip';
 
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
 	
 	// Get the settings from localized var.
-	Settings.init('atumListVars', {
+	let settings = new Settings('atumListVars', {
 		ajaxFilter    : 'yes',
 		view          : 'all_stock',
 		order         : 'desc',
@@ -78,23 +66,25 @@ jQuery( ($) => {
 		searchDropdown: 'no',
 	});
 	
-	// Initialize components.
-	Globals.init();
-	ListTable.init();
-	Router.init();
-	ScrollBar.init();
-	DragScroll.init();
-	SearchByColumn.init();
-	ColumnGroups.init();
-	StickyColumns.init();
-	StickyHeader.init();
-	Filters.init();
-	EditableCell.init();
-	LightBox.init();
-	Tooltip.init();
-	TableButtons.init();
-	SalesLastDays.init();
-	BulkActions.init();
-	LocationsTree.init();
+	// Initialize components with dependency injection.
+	let globals = new Globals(settings);
+	let tooltip = new Tooltip();
+	let listTable = new ListTable(settings, globals, tooltip);
+	let router = new Router(settings, globals, listTable);
+	let stickyCols = new StickyColumns(settings, globals);
+	let stickyHeader = new StickyHeader(settings, globals, stickyCols);
+	let dateTimePicker = new DateTimePicker(settings);
+	let popover = new Popover(settings, dateTimePicker);
+	new ScrollBar(globals, stickyHeader, tooltip);
+	new DragScroll(globals, tooltip, popover);
+	new SearchByColumn(settings, globals);
+	new ColumnGroups(globals, stickyHeader);
+	new Filters(settings, globals, listTable, router, tooltip, dateTimePicker);
+	new EditableCell(globals, popover, listTable);
+	new LightBox();
+	new TableButtons(globals, tooltip, stickyCols, stickyHeader);
+	new SalesLastDays(globals, router);
+	new BulkActions(settings, globals, listTable);
+	new LocationsTree(settings, globals, tooltip);
 	
 });

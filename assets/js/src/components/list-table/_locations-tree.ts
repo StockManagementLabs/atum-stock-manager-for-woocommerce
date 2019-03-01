@@ -6,72 +6,76 @@ import Settings from '../../config/_settings';
 import Globals from './_globals';
 import Tooltip from '../_tooltip';
 
-let LocationsTree = {
+export default class LocationsTree {
 	
-	locationsSet  : [],
-	toSetLocations: [],
-	productId     : null,
+	settings: Settings;
+	globals: Globals;
+	tooltip: Tooltip;
+	locationsSet: string[];
+	toSetLocations: string[];
+	productId: number = null;
 	
-	init() {
+	constructor(settingsObj: Settings, globalsObj: Globals, tooltipObj: Tooltip) {
 		
-		let self = this;
+		this.settings = settingsObj;
+		this.globals = globalsObj;
+		this.tooltip = tooltipObj;
 		
-		Globals.$atumList.on('click', '.show-locations', (evt) => {
+		this.globals.$atumList.on('click', '.show-locations', (evt: any) => {
 			evt.preventDefault();
-			self.showLocationsPopup($(evt.target));
+			this.showLocationsPopup($(evt.currentTarget));
 		})
 		
-	},
+	}
 	
 	/**
 	 * Opens a popup with the locations' tree and allows to edit locations
 	 *
-	 * @param {jQuery} $button
+	 * @param jQuery $button
 	 */
-	showLocationsPopup($button) {
+	showLocationsPopup($button: JQuery) {
 		
-		let self = this;
+		const swal: any = window['swal'];
 		this.productId = $button.closest('tr').data('id');
 		
 		// Open the view popup.
 		swal({
-			title             : Settings.get('productLocations'),
+			title             : this.settings.get('productLocations'),
 			html              : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			showCancelButton  : false,
 			showConfirmButton : true,
-			confirmButtonText : Settings.get('editProductLocations'),
+			confirmButtonText : this.settings.get('editProductLocations'),
 			confirmButtonColor: '#00b8db',
 			showCloseButton   : true,
-			onOpen            : () => self.onOpenViewPopup(),
-			onClose           : self.onCloseViewPopup,
+			onOpen            : () => this.onOpenViewPopup(),
+			onClose           : () => this.onCloseViewPopup(),
 		})
 		// Click on edit: open the edit popup.
-		.then( () => self.openEditPopup() )
+		.then( () => this.openEditPopup() )
 		.catch(swal.noop);
 		
-	},
+	}
 	
 	/**
 	 * Triggers when the view popup opens
 	 */
 	onOpenViewPopup() {
 		
-		let self                    = this,
-			$locationsTreeContainer = $('#atum-locations-tree');
+		let $locationsTreeContainer: JQuery = $('#atum-locations-tree');
 		
-		Tooltip.destroyTooltips();
+		this.tooltip.destroyTooltips();
 		
 		$.ajax({
-			url       : ajaxurl,
+			url       : window['ajaxurl'],
 			dataType  : 'json',
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : Settings.get('nonce'),
-				product_id: self.productId,
+				token     : this.settings.get('nonce'),
+				product_id: this.productId,
 			},
 			beforeSend: () => $locationsTreeContainer.append('<div class="atum-loading" />'),
-			success   : (response) => {
+			success   : (response: any) => {
 				
 				if (response.success === true) {
 					
@@ -81,16 +85,16 @@ let LocationsTree = {
 					// It will remove the span message.
 					if (!(response.data.indexOf('no-locations-set') > -1)) {
 						
-						$locationsTreeContainer.easytree();
+						(<any>$locationsTreeContainer).easytree();
 						
 						// Fill locationsSet.
-						$('#atum-locations-tree span[class^="cat-item-"], #atum-locations-tree span[class*="cat-item-"]').each( (index, elem) => {
+						$('#atum-locations-tree span[class^="cat-item-"], #atum-locations-tree span[class*="cat-item-"]').each( (index: number, elem: any) => {
 							
 							const classList = $(elem).attr('class').split(/\s+/);
 							
-							$.each(classList, (index, item) => {
+							$.each(classList, (index: number, item: string) => {
 								if (item.startsWith('cat-item-')) {
-									self.locationsSet.push(item);
+									this.locationsSet.push(item);
 								}
 							});
 							
@@ -105,117 +109,116 @@ let LocationsTree = {
 			},
 		});
 		
-	},
+	}
 	
 	/**
 	 * Triggers when the view popup is closed
 	 */
 	onCloseViewPopup() {
-		Tooltip.addTooltips();
-	},
+		this.tooltip.addTooltips();
+	}
 	
 	/**
 	 * Opens the edit popup
 	 */
 	openEditPopup() {
 		
-		let self = this;
+		const swal: any = window['swal'];
 		
 		swal({
-			title              : Settings.get('editProductLocations'),
+			title              : this.settings.get('editProductLocations'),
 			html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
-			text               : Settings.get('textToShow'),
-			confirmButtonText  : Settings.get('saveButton'),
+			text               : this.settings.get('textToShow'),
+			confirmButtonText  : this.settings.get('saveButton'),
 			confirmButtonColor : '#00b8db',
 			showCloseButton    : true,
 			showCancelButton   : true,
 			showLoaderOnConfirm: true,
-			onOpen             : () => self.onOpenEditPopup(),
-			preConfirm         : () => self.saveLocations(),
+			onOpen             : () => this.onOpenEditPopup(),
+			preConfirm         : () => this.saveLocations(),
 		})
-		.then(self.onCloseEditPopup)
+		.then( () => this.onCloseEditPopup() )
 		.catch(swal.noop);
 		
-	},
+	}
 	
 	/**
 	 * Triggers when the edit popup opens
 	 */
 	onOpenEditPopup() {
 		
-		let self                    = this,
-		    $locationsTreeContainer = $('#atum-locations-tree');
+		let $locationsTreeContainer: JQuery = $('#atum-locations-tree');
 		
 		$.ajax({
-			url       : ajaxurl,
+			url       : window['ajaxurl'],
 			dataType  : 'json',
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : Settings.get('nonce'),
+				token     : this.settings.get('nonce'),
 				product_id: -1, // Send -1 to get all the terms.
 			},
 			beforeSend: () => $locationsTreeContainer.append('<div class="atum-loading" />'),
-			success   : (response) => {
+			success   : (response: any) => {
 				
 				if (response.success === true) {
 					
 					$locationsTreeContainer.html(response.data);
-					$locationsTreeContainer.easytree();
+					(<any>$locationsTreeContainer).easytree();
 					
 					// Add instructions alert.
-					$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + Settings.get('editLocationsInfo') + '</div>');
+					$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + this.settings.get('editLocationsInfo') + '</div>');
 					
-					self.bindEditTreeEvents($locationsTreeContainer);
+					this.bindEditTreeEvents($locationsTreeContainer);
 					
 				}
 			},
 		});
 		
-	},
+	}
 	
 	/**
 	 * Triggers when the view popup is closed
 	 */
 	onCloseEditPopup() {
 		
+		const swal: any = window['swal'];
+		
 		swal({
-			title             : Settings.get('done'),
+			title             : this.settings.get('done'),
 			type              : 'success',
-			text              : Settings.get('locationsSaved'),
-			confirmButtonText : Settings.get('ok'),
+			text              : this.settings.get('locationsSaved'),
+			confirmButtonText : this.settings.get('ok'),
 			confirmButtonColor: '#00b8db',
 		});
 		
-	},
+	}
 	
 	/**
 	 * Saves the checked locations
 	 *
-	 * @return {Promise}
+	 * @return Promise
 	 */
 	saveLocations() {
 		
-		let self = this;
-		
-		return new Promise( (resolve, reject) => {
+		return new Promise( (resolve: Function, reject: Function) => {
 			
 			// ["cat-item-40", "cat-item-39"] -> [40, 39]
-			const toSetTerms = self.toSetLocations.map( (elem) => {
+			const toSetTerms = this.toSetLocations.map( (elem: string) => {
 				return parseInt(elem.substring(9));
-			})
+			});
 			
 			$.ajax({
-				url       : ajaxurl,
+				url       : window['ajaxurl'],
 				dataType  : 'json',
 				method    : 'post',
 				data      : {
 					action    : 'atum_set_locations_tree',
-					token     : Settings.get('nonce'),
-					product_id: self.productId,
+					token     : this.settings.get('nonce'),
+					product_id: this.productId,
 					terms     : toSetTerms,
 				},
-				success   : (response) => {
+				success   : (response: any) => {
 					
 					if (response.success === true) {
 						resolve();
@@ -223,31 +226,31 @@ let LocationsTree = {
 					else {
 						reject();
 					}
+					
 				},
 			});
 			
 		});
 		
-	},
+	}
 	
 	/**
 	 * Bind the events for the editable tree
 	 */
-	bindEditTreeEvents($locationsTreeContainer) {
+	bindEditTreeEvents($locationsTreeContainer: JQuery) {
 		
-		let self = this;
 		this.toSetLocations = this.locationsSet;
 		
 		// When clicking on link or icon, set node as checked.
-		$locationsTreeContainer.find('a, .easytree-icon').click( (evt) => {
+		$locationsTreeContainer.find('a, .easytree-icon').click( (evt: any) => {
 			
 			evt.preventDefault();
 			
-			let $this     = $(evt.target),
-			    catItem   = '',
-			    classList = $this.closest('.easytree-node').attr('class').split(/\s+/);
+			let $this: JQuery       = $(evt.currentTarget),
+			    catItem: string     = '',
+			    classList: string[] = $this.closest('.easytree-node').attr('class').split(/\s+/);
 			
-			$.each(classList, (index, item) => {
+			$.each(classList, (index: number, item: string) => {
 				if (item.lastIndexOf('cat-item-', 0) === 0) {
 					catItem = item;
 					
@@ -258,35 +261,35 @@ let LocationsTree = {
 			$('.' + catItem).toggleClass('checked');
 			
 			if ($('.' + catItem).hasClass('checked')) {
-				self.toSetLocations.push(catItem);
+				this.toSetLocations.push(catItem);
 			}
 			else {
-				const pos = self.toSetLocations.indexOf(catItem);
+				
+				const pos: number = this.toSetLocations.indexOf(catItem);
 				
 				if (pos > -1) {
-					self.toSetLocations.splice(pos, 1);
+					this.toSetLocations.splice(pos, 1);
 				}
+				
 			}
 			
 		});
 		
 		// Set class checked the actual values on load.
-		$locationsTreeContainer.find('span[class^="cat-item-"], span[class*="cat-item-"]').each( (index, elem) => {
+		$locationsTreeContainer.find('span[class^="cat-item-"], span[class*="cat-item-"]').each( (index: number, elem: any) => {
 			
-			const classList = $(elem).attr('class').split(/\s+/);
+			const classList: string[] = $(elem).attr('class').split(/\s+/);
 			
-			$.each(classList, (index, item) => {
+			$.each(classList, (index: number, className: string) => {
 				
-				if (item.startsWith('cat-item-') && $.inArray(item, self.locationsSet) !== -1) {
-					$('.' + item).addClass('checked');
+				if (className.startsWith('cat-item-') && $.inArray(className, this.locationsSet) > -1) {
+					$('.' + className).addClass('checked');
 				}
 				
 			});
 			
 		});
 		
-	},
+	}
 	
 }
-
-module.exports = LocationsTree;

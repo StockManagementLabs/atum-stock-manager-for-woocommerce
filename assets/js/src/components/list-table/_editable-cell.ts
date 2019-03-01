@@ -6,35 +6,42 @@ import Globals from './_globals';
 import Popover from '../_popover';
 import ListTable from './_list-table';
 
-let EditableCell = {
+export default class EditableCell {
 	
-	init() {
+	globals: Globals;
+	popover: Popover;
+	listTable: ListTable;
 	
-		Popover.init();
+	constructor(globalsObj: Globals, popoverObj: Popover, listTableObj: ListTable) {
+	
+		this.globals = globalsObj;
+		this.popover = popoverObj;
+		this.listTable = listTableObj;
 		
-		Globals.$atumList
+		this.globals.$atumList
 		
 			// Restore the popovers after the List Table updates.
 			.on('atum-table-updated', () => {
-				Popover.setFieldPopover();
+				this.popover.setFieldPopover();
 			})
 		
 			// Destroy the popover when a meta cell is edited.
-			.on('atum-edited-cols-input-updated', (evt, $metaCell) => {
-				Popover.destroyPopover($metaCell);
+			.on('atum-edited-cols-input-updated', (evt: any, $metaCell: JQuery) => {
+				this.popover.destroyPopover($metaCell);
 			});
 			
+		
 		// Runs once the popover's set-meta button is clicked.
-		$('body').on('click', '.popover button.set', (evt) => {
+		$('body').on('click', '.popover button.set', (evt: any) => {
 			
-			let $button   = $(evt.target),
+			let $button   = $(evt.currentTarget),
 				$popover  = $button.closest('.popover'),
 				popoverId = $popover.attr('id'),
 				$setMeta  = $('[data-popover="' + popoverId + '"]');
 			
 			if ($setMeta.length) {
-				ListTable.maybeAddSaveButton();
-				ListTable.updateEditedColsInput($setMeta, $popover);
+				this.listTable.maybeAddSaveButton();
+				this.listTable.updateEditedColsInput($setMeta, $popover);
 			}
 			
 		});
@@ -42,5 +49,3 @@ let EditableCell = {
 	}
 	
 }
-
-module.exports = EditableCell;

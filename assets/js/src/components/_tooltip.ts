@@ -2,28 +2,28 @@
    TOOLTIP
    ======================================= */
 
-let Tooltip = {
+export default class Tooltip {
 	
-	init() {
+	constructor() {
 		
 		this.addTooltips();
 		
-	},
+	}
 	
 	/**
 	 * Enable tooltips
 	 *
 	 * @param jQuery $wrapper   Optional. The wrapper where the elements with tooltips are contained,
 	 */
-	addTooltips($wrapper = null) {
+	addTooltips($wrapper:any = null) {
 		
 		if (!$wrapper) {
 			$wrapper = $('body');
 		}
 		
-		$wrapper.find('.tips, .atum-tooltip').each( (index, elem) => {
+		$wrapper.find('.tips, .atum-tooltip').each( (index:number, elem:JQueryParam) => {
 			
-			const $tipEl = $(elem);
+			const $tipEl: any = $(elem);
 			
 			$tipEl.tooltip({
 				html     : true,
@@ -33,9 +33,9 @@ let Tooltip = {
 			
 		});
 		
-		$wrapper.find('.select2-selection__rendered').each( (index, elem) => {
+		$wrapper.find('.select2-selection__rendered').each( (index:number, elem:JQueryParam) => {
 			
-			const $tipEl = $(elem);
+			const $tipEl: any = $(elem);
 			
 			$tipEl.tooltip({
 				html     : true,
@@ -45,7 +45,7 @@ let Tooltip = {
 			
 		});
 		
-	},
+	}
 	
 	/**
 	 * Destroy all the tooltips
@@ -60,8 +60,6 @@ let Tooltip = {
 		
 		$wrapper.find('.tips, .atum-tooltip, .select2-selection__rendered').tooltip('destroy');
 		
-	},
+	}
 	
 }
-
-module.exports = Tooltip;
