@@ -7,7 +7,7 @@ Tested up to: 5.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.5
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,33 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.5`
+
+*2019-03-01*
+
+**Features**
+
+* Added method to reset group cache.
+* Added new filter to editable stock column.
+* Refactory JS to TypeScript.
+
+**Changes**
+
+* Hide any opened popover when scrolling the table horizontally.
+* Check if the bootstrap's tooltip is already loaded by another plugin to avoid issues.
+* Cache refactoring.
+* Back Orders column refactory to be reusable by other add-ons.
+
+**Fixes**
+
+* Fixed updating WC subscription price from Stock Central.
+* Fixed compounded stock quantity when a filter is applied in Stock Central.
+* Fixed orphan variable products showing in SC when some filters are applied.
+* Fixed compounded stock calculator.
+* CSS fixes.
 
 ---
 

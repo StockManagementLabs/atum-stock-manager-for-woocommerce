@@ -159,6 +159,33 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.5`
+
+*2019-03-01*
+
+**Features**
+
+* Added method to reset group cache.
+* Added new filter to editable stock column.
+* Refactory JS to TypeScript.
+
+**Changes**
+
+* Hide any opened popover when scrolling the table horizontally.
+* Check if the bootstrap's tooltip is already loaded by another plugin to avoid issues.
+* Cache refactoring.
+* Back Orders column refactory to be reusable by other add-ons.
+
+**Fixes**
+
+* Fixed updating WC subscription price from Stock Central.
+* Fixed compounded stock quantity when a filter is applied in Stock Central.
+* Fixed orphan variable products showing in SC when some filters are applied.
+* Fixed compounded stock calculator.
+* CSS fixes.
+
+---
+
 `1.5.4`
 
 *2019-02-21*
