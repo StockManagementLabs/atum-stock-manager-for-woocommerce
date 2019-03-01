@@ -25,13 +25,6 @@ use Atum\PurchaseOrders\PurchaseOrders;
 
 
 class ListTable extends AtumListTable {
-
-	/**
-	 * WC's out of stock Threshold
-	 *
-	 * @var int
-	 */
-	protected $wc_out_stock_threshold;
 	
 	/**
 	 * Time of query
@@ -113,8 +106,6 @@ class ListTable extends AtumListTable {
 	 * }
 	 */
 	public function __construct( $args = array() ) {
-		
-		$this->wc_out_stock_threshold = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
 		
 		// Activate managed/unmanaged counters separation.
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
@@ -495,41 +486,6 @@ class ListTable extends AtumListTable {
 		$this->increase_total( 'calc_reserved', $reserved_stock );
 
 		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product );
-	}
-	
-	/**
-	 * Column for back orders amount: show amount if items pending to serve and without existences
-	 *
-	 * @since 0.0.1
-	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
-	 *
-	 * @return int|string
-	 */
-	protected function column_calc_back_orders( $item ) {
-
-		$back_orders = self::EMPTY_COL;
-
-		if ( $this->allow_calcs ) {
-
-			$back_orders = '--';
-			if ( $this->product->backorders_allowed() ) {
-
-				// TODO: threshold recalc if needed.
-				$stock_quantity = $this->product->get_stock_quantity();
-				$back_orders    = 0;
-				if ( $stock_quantity < $this->wc_out_stock_threshold ) {
-					$back_orders = $this->wc_out_stock_threshold - $stock_quantity;
-				}
-
-			}
-
-			$this->increase_total( 'calc_back_orders', $back_orders );
-
-		}
-		
-		return apply_filters( 'atum/stock_central_list/column_back_orders', $back_orders, $item, $this->product );
-		
 	}
 	
 	/**
