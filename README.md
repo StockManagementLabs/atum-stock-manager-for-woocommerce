@@ -159,6 +159,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.5.1`
+
+*2019-03-02*
+
+**Fixes**
+
+* JS fixes for Stock Central list.
+
+---
+
 `1.5.5`
 
 *2019-03-01*
