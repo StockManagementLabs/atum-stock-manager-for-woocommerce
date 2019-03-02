@@ -21,7 +21,7 @@ export default class Popover {
 		// Hide any other opened popover before opening a new one.
 		$('body').click( (evt: any) => {
 			
-			let $target: JQuery   = $(evt.currentTarget),
+			let $target: JQuery   = $(evt.target),
 			    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
 			    $metaCell: JQuery = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
 			

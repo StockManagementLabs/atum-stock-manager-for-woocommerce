@@ -473,61 +473,60 @@ export default class ListTable {
 	 */
 	saveData($button: JQuery) {
 		
-		if (this.doingAjax) {
-			
-			let data: any = {
-				token         : this.settings.get('nonce'),
-				action        : 'atum_update_data',
-				data          : this.globals.$editInput.val(),
-				first_edit_key: null,
-			};
-			
-			if (typeof this.settings.get('firstEditKey') !== 'undefined') {
-				data.first_edit_key = this.settings.get('firstEditKey');
-			}
-			
-			this.doingAjax = $.ajax({
-				url       : window['ajaxurl'],
-				method    : 'POST',
-				dataType  : 'json',
-				data      : data,
-				beforeSend: () => {
-					$button.prop('disabled', true);
-					this.addOverlay();
-				},
-				success   : (response: any) => {
-					
-					if (typeof response === 'object' && typeof response.success !== 'undefined') {
-						const noticeType = response.success ? 'updated' : 'error';
-						Utils.addNotice(noticeType, response.data);
-					}
-					
-					if (typeof response.success !== 'undefined' && response.success) {
-						$button.remove();
-						this.globals.$editInput.val('');
-						this.updateTable();
-					}
-					else {
-						$button.prop('disabled', false);
-					}
-					
-					this.doingAjax = null;
-					
-					this.settings.delete('firstEditKey');
-					
-				},
-				error     : () => {
-					
-					this.doingAjax = null;
-					$button.prop('disabled', false);
-					this.removeOverlay();
-					
-					this.settings.delete('firstEditKey');
-			
-				},
-			});
-			
+		if (this.doingAjax && this.doingAjax.readyState !== 4) {
+			this.doingAjax.abort();
 		}
+			
+		let data: any = {
+			token         : this.settings.get('nonce'),
+			action        : 'atum_update_data',
+			data          : this.globals.$editInput.val(),
+			first_edit_key: null,
+		};
+		
+		if (typeof this.settings.get('firstEditKey') !== 'undefined') {
+			data.first_edit_key = this.settings.get('firstEditKey');
+		}
+		
+		this.doingAjax = $.ajax({
+			url       : window['ajaxurl'],
+			method    : 'POST',
+			dataType  : 'json',
+			data      : data,
+			beforeSend: () => {
+				$button.prop('disabled', true);
+				this.addOverlay();
+			},
+			success   : (response: any) => {
+				
+				if (typeof response === 'object' && typeof response.success !== 'undefined') {
+					const noticeType = response.success ? 'updated' : 'error';
+					Utils.addNotice(noticeType, response.data);
+				}
+				
+				if (typeof response.success !== 'undefined' && response.success) {
+					$button.remove();
+					this.globals.$editInput.val('');
+					this.updateTable();
+				}
+				else {
+					$button.prop('disabled', false);
+				}
+				
+				this.doingAjax = null;
+				this.settings.delete('firstEditKey');
+				
+			},
+			error     : () => {
+				
+				this.doingAjax = null;
+				$button.prop('disabled', false);
+				this.removeOverlay();
+				
+				this.settings.delete('firstEditKey');
+		
+			},
+		});
 		
 	}
 	
