@@ -20,9 +20,9 @@ export default class SearchByColumn {
 			
 			this.setup();
 			
-			$('#adv-settings input:checkbox').change(() => {
-				setTimeout( () => this.setup(), 500); // Performance.
-			});
+			$('#adv-settings input:checkbox').change( () => {
+				setTimeout( () => this.setup(), 500 ); // Performance.
+			} );
 		}
 		
 	}
@@ -37,8 +37,8 @@ export default class SearchByColumn {
 		this.globals.$searchColumnDropdown.empty();
 		
 		// Append the no column and the title items.
-		this.globals.$searchColumnDropdown.append( $dropdownItem.data('value', '').text( this.globals.$searchColumnDropdown.data('no-option') ) );
-		this.globals.$searchColumnDropdown.append( $dropdownItem.data('value', 'title').text( this.globals.$searchColumnDropdown.data('product-title') ) );
+		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', '').text( this.globals.$searchColumnDropdown.data('no-option') ) );
+		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', 'title').text( this.globals.$searchColumnDropdown.data('product-title') ) );
 		
 		$('#adv-settings input:checked').each( (index: number, elem: any) => {
 			
@@ -46,9 +46,10 @@ export default class SearchByColumn {
 			    optionVal: string   = $elem.val(),
 			    columnLabel: string = $elem.parent().text();
 			
-			if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') { // Calc values are not searchable, also we can't search on thumb.
+			// Calc values are not searchable, also we can't search on thumb.
+			if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') {
 				
-				this.globals.$searchColumnDropdown.append( $dropdownItem.data('value', optionVal).text(columnLabel) );
+				this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', optionVal).text(columnLabel) );
 				
 				// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change.
 				if ($.address.parameter('search_column') !== this.globals.$searchColumnBtn.data('value') && this.globals.$searchColumnBtn.data('value') === optionVal) {

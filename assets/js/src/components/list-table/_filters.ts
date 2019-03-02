@@ -39,7 +39,7 @@ export default class Filters {
 			this.globals.$atumList
 				
 				// Dropdown filters.
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', (evt) => {
+				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', (evt: any) => {
 					this.keyUp(evt);
 				})
 				
@@ -294,74 +294,63 @@ export default class Filters {
 			
 		}
 		
-		$dateSelector
+		$dateSelector.on('select2:select', (evt: any) => {
 			
-			.on('select2:open', (evt: any) => {
-				
-				const $select: JQuery = $(evt.currentTarget);
-			
-				if ( $.inArray($select.val(), linkedFilters) > -1 ) {
-					$select.val('');
-				}
-				
-			})
+			const $select: JQuery = $(evt.currentTarget);
 		
-			.on('select2:select', (evt: any) => {
-			
-				if ( $.inArray($(evt.currentTarget).val(), linkedFilters) > -1 ) {
-					
-					const popupClass: string = 'filter-range-dates-modal',
-					      swal: any          = window['swal'];
-					
-					swal({
-						customClass    : popupClass,
-						width          : 440,
-						showCloseButton: true,
-						title          : `<h1 class="title">${ this.settings.get('setTimeWindow') }</h1><span class="sub-title">${ this.settings.get('selectDateRange') }</span>`,
-						html           : `
-							<div class="input-date">
-								<label for="date_from">${ this.settings.get('from') }</label><br/>
-								<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
-							</div>
-							<div class="input-date">
-								<label for="date_to">${ this.settings.get('to') }</label><br/>
-								<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
-							</div>
-							<button class="btn btn-warning apply">${ this.settings.get('apply') }</button>
-						`,
-						showConfirmButton: false,
-						onOpen           : () => {
-							
-							// Init date time pickers.
-							this.dateTimePicker.addDateTimePickers($('.date-picker'));
-							
-							$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
-								this.keyUp(evt);
-								swal.close();
-							});
-							
-							$('.' + popupClass).find('.swal2-close').on('click', () => {
-								$('.' + popupClass).find('.date_to, .date_from').val('');
-							});
-						
-						},
-						onClose: () => {
-							
-							if ( this.settings.get('ajaxFilter') === 'yes' ) {
-								this.keyUp(evt);
-							}
-							
-						},
-						
-					})
-					.catch(swal.noop);
-					
-				}
-				else {
-					$dateSelector.val('');
-				}
+			if ( $.inArray($select.val(), linkedFilters) > -1 ) {
 				
-			});
+				$select.val('');
+				
+				const popupClass: string = 'filter-range-dates-modal',
+				      swal: any          = window['swal'];
+				
+				swal({
+					customClass    : popupClass,
+					width          : 440,
+					showCloseButton: true,
+					title          : `<h1 class="title">${ this.settings.get('setTimeWindow') }</h1><span class="sub-title">${ this.settings.get('selectDateRange') }</span>`,
+					html           : `
+						<div class="input-date">
+							<label for="date_from">${ this.settings.get('from') }</label><br/>
+							<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
+						</div>
+						<div class="input-date">
+							<label for="date_to">${ this.settings.get('to') }</label><br/>
+							<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
+						</div>
+						<button class="btn btn-warning apply">${ this.settings.get('apply') }</button>
+					`,
+					showConfirmButton: false,
+					onOpen           : () => {
+						
+						// Init date time pickers.
+						this.dateTimePicker.addDateTimePickers($('.date-picker'));
+						
+						$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
+							this.keyUp(evt);
+							swal.close();
+						});
+						
+						$('.' + popupClass).find('.swal2-close').on('click', () => {
+							$('.' + popupClass).find('.date_to, .date_from').val('');
+						});
+					
+					},
+					onClose: () => {
+						
+						if ( this.settings.get('ajaxFilter') === 'yes' ) {
+							this.keyUp(evt);
+						}
+						
+					},
+					
+				})
+				.catch(swal.noop);
+				
+			}
+			
+		});
 		
 	}
 	

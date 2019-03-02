@@ -11,8 +11,8 @@ export default class LocationsTree {
 	settings: Settings;
 	globals: Globals;
 	tooltip: Tooltip;
-	locationsSet: string[];
-	toSetLocations: string[];
+	locationsSet: string[] = [];
+	toSetLocations: string[] = [];
 	productId: number = null;
 	
 	constructor(settingsObj: Settings, globalsObj: Globals, tooltipObj: Tooltip) {
