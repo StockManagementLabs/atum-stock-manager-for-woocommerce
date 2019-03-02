@@ -120,8 +120,6 @@ export default class Router {
 	 */
 	updateHash() {
 		
-		let numCurrentParams: number = $.address.parameterNames().length;
-		
 		Object.assign(this.globals.filterData, {
 			view          : $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '',
 			product_cat   : this.globals.$atumList.find('.dropdown_product_cat').val() || '',
@@ -154,6 +152,7 @@ export default class Router {
 		});
 		
 		// Restore navigation and update if needed.
+		let numCurrentParams: number = $.address.parameterNames().length;
 		if (numCurrentParams || this.numHashParameters !== numCurrentParams) {
 			this.listTable.updateTable();
 		}
