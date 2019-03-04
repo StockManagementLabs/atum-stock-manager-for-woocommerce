@@ -138,15 +138,6 @@
 	}
 }
 
-#posts-filter {
-	width: 100%;
-	overflow: hidden;
-	background-color: $white;
-	box-shadow: 0 4px 0 0 $gray-200;
-	padding: 0 0 10px;
-	border-radius: 8px;
-}
-
 .subsubsub {
 	&.extend-list-table {
 		width: inherit;
@@ -644,6 +635,7 @@
 	
 	.tablenav-pages {
 		margin-top: 0;
+		margin-bottom: 0;
 		text-align: right;
 		
 		a:not(.extend-list-table) {

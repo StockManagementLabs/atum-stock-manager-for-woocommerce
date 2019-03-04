@@ -2067,7 +2067,7 @@ body .select2-container--default .select2-selection--single .select2-selection__
   line-height: 27px;
   color: #6c757d;
   font-size: 15px;
-  padding-left: 16px;
+  padding-left: 10px;
 }
 
 body .select2-container--default .select2-selection--single .select2-selection__clear {
@@ -4898,16 +4898,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-#posts-filter {
-  width: 100%;
-  overflow: hidden;
-  background-color: #fff;
-  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
-          box-shadow: 0 4px 0 0 #e9ecef;
-  padding: 0 0 10px;
-  border-radius: 8px;
-}
-
 .subsubsub {
   background-color: #fff;
   width: 100%;
@@ -5523,6 +5513,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .tablenav .tablenav-pages {
   margin-top: 0;
+  margin-bottom: 0;
   text-align: right;
 }
 
@@ -7442,5 +7433,22 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 
 .popover.with-meta .popover-content hr {
   border-color: #E3E8F5;
+}
+
+#posts-filter {
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
+          box-shadow: 0 4px 0 0 #e9ecef;
+  padding: 0 0 10px;
+  border-radius: 8px;
+}
+
+#posts-filter .tablenav-pages {
+  float: none;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 /*# sourceMappingURL=atum-list.css.map */

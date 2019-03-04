@@ -258,12 +258,18 @@ class PurchaseOrders extends AtumOrderPostType {
 				$supplier = $po->get_supplier();
 				
 				if ( $supplier ) {
-					echo esc_attr( $supplier->post_title );
+					echo esc_html( $supplier->post_title );
 				}
 				break;
 
 			case 'expected_date':
-				echo esc_attr( $po->get_expected_at_location_date() );
+				$expected_date = $po->get_expected_at_location_date();
+
+				if ( $expected_date ) {
+					$expected_date = '<abbr title="' . $expected_date . '">' . date_i18n( 'Y-m-d', strtotime( $expected_date ) ) . '</abbr>';
+				}
+
+				echo $expected_date; // WPCS: XSS ok.
 				break;
 
 		}

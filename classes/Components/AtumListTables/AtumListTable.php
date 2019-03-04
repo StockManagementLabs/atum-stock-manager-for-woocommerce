@@ -3087,34 +3087,38 @@ abstract class AtumListTable extends \WP_List_Table {
 		<div class="tablenav <?php echo esc_attr( $which ); ?> extend-list-table">
 
 			<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
-			<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
-				<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : ''; ?>">
+				<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
+					<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : ''; ?>">
 
-					<div class="alignleft actions bulkactions">
-						<?php $this->bulk_actions( $which ); ?>
+						<div class="alignleft actions bulkactions">
+							<?php $this->bulk_actions( $which ); ?>
+						</div>
+
+						<?php $this->extra_tablenav( $which ); ?>
+
+						<?php if ( 'top' === $which ) : ?>
+							<div class="overflow-opacity-effect-right"></div>
+							<div class="overflow-opacity-effect-left"></div>
+						<?php endif; ?>
+
 					</div>
-
-					<?php $this->extra_tablenav( $which ); ?>
-
-					<?php if ( 'top' === $which ) : ?>
-						<div class="overflow-opacity-effect-right"></div>
-						<div class="overflow-opacity-effect-left"></div>
-					<?php endif; ?>
-
 				</div>
-			</div>
 			<?php endif;
 
 			// Firefox fix to not preserve the pagination input value when reloading the page.
 			ob_start(); ?>
 
 			<div class="tablenav-pages-container<?php echo empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ? ' one-page' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
+
 				<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
 					<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
 				<?php endif; ?>
+
 				<?php
 				$this->pagination( $which );
-				echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() ); // WPCS: XSS ok. ?>
+				echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() ); // WPCS: XSS ok.
+				?>
+
 			</div>
 		</div>
 		<?php

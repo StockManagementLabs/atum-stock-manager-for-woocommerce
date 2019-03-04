@@ -265,7 +265,7 @@ body .select2-container--default .select2-selection--single .select2-selection__
   line-height: 27px;
   color: #6c757d;
   font-size: 15px;
-  padding-left: 16px;
+  padding-left: 10px;
 }
 
 body .select2-container--default .select2-selection--single .select2-selection__clear {
@@ -3012,16 +3012,6 @@ h2 .atum-help-tip {
   }
 }
 
-#posts-filter {
-  width: 100%;
-  overflow: hidden;
-  background-color: #fff;
-  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
-          box-shadow: 0 4px 0 0 #e9ecef;
-  padding: 0 0 10px;
-  border-radius: 8px;
-}
-
 .subsubsub {
   background-color: #fff;
   width: 100%;
@@ -3637,6 +3627,7 @@ h2 .atum-help-tip {
 
 .tablenav .tablenav-pages {
   margin-top: 0;
+  margin-bottom: 0;
   text-align: right;
 }
 
