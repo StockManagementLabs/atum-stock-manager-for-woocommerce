@@ -71,6 +71,9 @@ export default class DragScroll {
 	 */
 	initHorizontalDragScroll() {
 		
+		this.addHorizontalDragScroll('stock_central_nav', false);
+		this.addHorizontalDragScroll('filters_container', false);
+		
 		$(window).on('resize', () => {
 			this.addHorizontalDragScroll('stock_central_nav', false);
 			this.addHorizontalDragScroll('filters_container', false);
@@ -96,11 +99,11 @@ export default class DragScroll {
 	 */
 	addHorizontalDragScroll(elementId: string, checkEnhanced: boolean) {
 		
-		let $nav: any                     = document.getElementById(elementId),
-		    $overflowOpacityRight: JQuery = $('#scroll-' + elementId + ' .overflow-opacity-effect-right'),
-		    $overflowOpacityLeft: JQuery  = $('#scroll-' + elementId + ' .overflow-opacity-effect-left'),
-		    $leftMax: number              = $nav ? $nav.scrollWidth : 0,
-		    $left: number                 = $nav ? $nav.scrollLeft : 0,
+		let $nav: JQuery                  = $(`#${ elementId }`),
+		    $overflowOpacityRight: JQuery = $nav.find('.overflow-opacity-effect-right'),
+		    $overflowOpacityLeft: JQuery  = $nav.find('.overflow-opacity-effect-left'),
+		    $leftMax: number              = $nav ? $nav.get(0).scrollWidth : 0,
+		    $left: number                 = $nav ? $nav.get(0).scrollLeft : 0,
 		    $diff: number                 = $leftMax - $left;
 		
 		if ( checkEnhanced ) {
@@ -121,7 +124,7 @@ export default class DragScroll {
 			$overflowOpacityLeft.show();
 		}
 		
-		$('#' + elementId).css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
+		$nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
 		
 	}
 	

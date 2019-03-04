@@ -590,47 +590,16 @@
 	
 }
 
-.tablenav.top {
-	box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
+.tablenav {
+	height: auto;
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
 	align-items: center;
-	padding: 10px 11px;
-	margin: 0;
-	
-	@include tablet-max-wp {
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-	
-	&.extend-list-table {
-		padding: 0 11px;
-		height: 52px;
-		flex-wrap: nowrap;
-		
-		@include tablet-max-wp {
-			flex-wrap: nowrap;
-			height: auto;
-		}
-		
-		.actions {
-			white-space: inherit;
-		}
-		
-		@include mobile-max {
-			flex-wrap: wrap;
-			display: flex;
-		}
-		
-	}
 	
 	.actions {
 		white-space: nowrap;
 		
 		@include mobile-max {
 			white-space: inherit;
-			padding: 0;
 		}
 		
 		&.bulkactions {
@@ -651,24 +620,14 @@
 				}
 			}
 		}
+		
 	}
 	
 	.tablenav-pages-container {
-		margin: 0 0 0 auto;
-		text-align: right;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		min-width: 350px;
-		z-index: 998;
-		
-		&.no-submit {
-			min-width: 300px;
-		}
 		
 		.btn {
-			margin-left: 0;
-			padding: 0.29rem 0.75rem;
+			margin-left: 5px;
+			padding: 0.344rem 0.75rem;
 			line-height: 1.55;
 			
 			@include tablet-max-wp {
@@ -681,140 +640,11 @@
 			}
 		}
 		
-		&.one-page {
-			&.no-submit {
-				min-width: 100px;
-			}
-			width: 100%;
-			min-width: 150px;
-		}
-		
-		@include mobile-max {
-			flex-wrap: wrap;
-			min-width: 0;
-		}
-		
-		.tablenav-pages {
-			margin: 0 0 0 auto;
-			text-align: right;
-			
-			&.one-page {
-				width: inherit;
-			}
-			
-			@include tablet-max-wp{
-				margin: 5px 0 5px auto;
-				text-align: right;
-			}
-			
-			@include mobile-max{
-				width: 100%;
-				margin: 5px 0 5px auto;
-				text-align: center;
-			}
-			
-			.displaying-num {
-				display: inline-block;
-				
-				@include mobile-max{
-					width: 100%;
-				}
-			}
-			
-		}
-	}
-	
-	.filters-container-box {
-		position: relative;
-		
-		&.no-pagination {
-			&.no-submit {
-				@media screen and (max-width: $screen-lg-max + 200px) {
-					width: calc(100% - 100px);
-				}
-			}
-			
-			@media screen and (max-width: $screen-lg-max + 200px) {
-				width: calc(100% - 200px);
-			}
-			
-			@include tablet-max-wp {
-				width: inherit;
-			}
-			
-			@include mobile-max {
-				width: 100% !important;
-				margin-top: 10px;
-			}
-		 }
-		
-		&.no-submit {
-			@media screen and (max-width: $screen-lg-max + 200px) {
-				width: calc(100% - 300px);
-			}
-		}
-		
-		@media screen and (max-width: $screen-lg-max + 200px) {
-			width: calc(100% - 400px);
-		}
-		
-		@include tablet-max-wp {
-			width: inherit;
-		}
-		
-		@include mobile-max {
-			width: 100% !important;
-			margin-top: 10px;
-		}
-		
-		.overflow-opacity-effect-right {
-			
-			@include tablet-max-wp {
-				display: none !important;
-			}
-			
-			@include mobile-max {
-				display: none !important;
-			}
-		}
-		
-		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-			height: 50px;
-			display: none;
-		}
-	}
-	
-	.nav-with-scroll-effect {
-		height: 52px;
-		justify-content: start;
-		visibility: hidden;
-		
-		.actions {
-			overflow: initial;
-		}
-		
-		@include mobile-max {
-			width: 100%;
-			display: contents;
-			white-space: normal;
-		}
-		
-		@include tablet-max-wp {
-			right: 63%;
-			width: inherit;
-		}
-	}
-}
-
-.tablenav {
-	height: auto;
-	
-	.btn {
-		margin-left: 5px;
 	}
 	
 	.tablenav-pages {
 		margin-top: 0;
+		text-align: right;
 		
 		a:not(.extend-list-table) {
 			display: inline-block;
@@ -831,6 +661,18 @@
 				color: $white;
 			}
 		}
+		
+		.displaying-num {
+			@include mobile-max{
+				width: 100%;
+			}
+		}
+		
+		@include mobile-max{
+			width: 100%;
+			text-align: center;
+		}
+		
 	}
 	
 	#table-paging {
@@ -844,82 +686,209 @@
 	input[type=submit] {
 		font-size: 12px;
 	}
-}
-
-.tablenav.bottom {
-	margin: 10px 11px 0;
-	display: flex;
-	align-items: center;
 	
-	.actions {
-		white-space: nowrap;
+	&.top {
+		box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		padding: 10px 11px;
+		margin: 0;
 		
-		@include mobile-max {
-			white-space: inherit;
+		@include tablet-max-wp {
+			flex-wrap: wrap;
+			justify-content: center;
 		}
 		
-		&.bulkactions {
+		&.extend-list-table {
+			padding: 0 11px;
+			height: 52px;
+			flex-wrap: nowrap;
+			
 			@include tablet-max-wp {
-				display: inline-block;
+				flex-wrap: nowrap;
+				height: auto;
+			}
+			
+			.actions {
+				white-space: inherit;
 			}
 			
 			@include mobile-max {
-				width: 100%;
-				
-				.select2-container {
-					width: 100% !important;
-				}
-				
-				input[type=submit] {
-					width: 100%;
-					margin-top: 10px !important;
-				}
+				flex-wrap: wrap;
+				display: flex;
 			}
-		}
-	}
-	
-	.tablenav-pages-container {
-		flex-grow: 1;
-		
-		.btn {
-			margin-left: 0;
-			padding: 0.29rem 0.75rem;
-			line-height: 1.55;
 			
-			@include tablet-max-wp {
-				margin-left: 30px;
-			}
+		}
+		
+		.actions {
 			
 			@include mobile-max {
-				width: 100%;
-				margin: 10px 0;
+				padding: 0;
 			}
+			
 		}
-	}
-	
-	.tablenav-pages {
-		margin-left: auto;
-		text-align: right;
-		z-index: 999;
 		
-		@include mobile-max {
-			margin: 0;
+		.tablenav-pages-container {
+			margin: 0 0 0 auto;
+			text-align: right;
+			display: flex;
+			align-items: center;
 			width: 100%;
-			text-align: center;
-			display: inline-block;
-			margin: 0 0 10px;
+			min-width: 350px;
+			z-index: 998;
+			
+			&.no-submit {
+				min-width: 300px;
+			}
+			
+			&.one-page {
+				width: 100%;
+				min-width: 150px;
+				
+				&.no-submit {
+					min-width: 100px;
+				}
+				
+			}
+			
+			@include mobile-max {
+				flex-wrap: wrap;
+				min-width: 0;
+			}
+			
+			.tablenav-pages {
+				margin: 0 0 0 auto;
+				
+				&.one-page {
+					width: inherit;
+				}
+				
+				@include tablet-max-wp{
+					margin: 5px 0 5px auto;
+					text-align: right;
+				}
+				
+				@include mobile-max{
+					margin: 5px 0 5px auto;
+				}
+				
+				.displaying-num {
+					display: inline-block;
+				}
+				
+			}
 		}
 		
-		.displaying-num {
-			display: contents;
+		.filters-container-box {
+			position: relative;
+			
+			&.no-pagination {
+				&.no-submit {
+					@media screen and (max-width: $screen-lg-max + 200px) {
+						width: calc(100% - 100px);
+					}
+				}
+				
+				@media screen and (max-width: $screen-lg-max + 200px) {
+					width: calc(100% - 200px);
+				}
+				
+				@include tablet-max-wp {
+					width: inherit;
+				}
+				
+				@include mobile-max {
+					width: 100% !important;
+					margin-top: 10px;
+				}
+			}
+			
+			&.no-submit {
+				@media screen and (max-width: $screen-lg-max + 200px) {
+					width: calc(100% - 300px);
+				}
+			}
+			
+			@media screen and (max-width: $screen-lg-max + 200px) {
+				width: calc(100% - 400px);
+			}
+			
+			@include tablet-max-wp {
+				width: inherit;
+			}
+			
+			@include mobile-max {
+				width: 100% !important;
+				margin-top: 10px;
+			}
+			
+			.overflow-opacity-effect-right {
+				
+				@include tablet-max-wp {
+					display: none !important;
+				}
+				
+				@include mobile-max {
+					display: none !important;
+				}
+			}
+			
+			.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+				height: 50px;
+				display: none;
+			}
+		}
+		
+		.nav-with-scroll-effect {
+			height: 52px;
+			justify-content: start;
+			visibility: hidden;
+			
+			.actions {
+				overflow: initial;
+			}
 			
 			@include mobile-max {
 				width: 100%;
-				display: inline-block;
-				position: inherit;
-				top: inherit;
+				display: contents;
+				white-space: normal;
+			}
+			
+			@include tablet-max-wp {
+				right: 63%;
+				width: inherit;
 			}
 		}
+	}
+	
+	&.bottom {
+		margin: 10px 11px 0;
+		
+		.tablenav-pages-container {
+			flex-grow: 1;
+		}
+		
+		.tablenav-pages {
+			margin-left: auto;
+			margin-bottom: 0;
+			z-index: 999;
+			
+			@include mobile-max {
+				display: inline-block;
+				margin: 0 0 10px;
+			}
+			
+			.displaying-num {
+				display: contents;
+				
+				@include mobile-max {
+					display: inline-block;
+					position: inherit;
+					top: inherit;
+				}
+			}
+		}
+		
 	}
 }
 

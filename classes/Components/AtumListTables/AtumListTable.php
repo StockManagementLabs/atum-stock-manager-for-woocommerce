@@ -3096,12 +3096,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					<?php $this->extra_tablenav( $which ); ?>
 
-				</div>
+					<?php if ( 'top' === $which ) : ?>
+						<div class="overflow-opacity-effect-right"></div>
+						<div class="overflow-opacity-effect-left"></div>
+					<?php endif; ?>
 
-				<?php if ( 'top' === $which ) : ?>
-					<div class="overflow-opacity-effect-right"></div>
-					<div class="overflow-opacity-effect-left"></div>
-				<?php endif; ?>
+				</div>
 			</div>
 			<?php endif;
 
