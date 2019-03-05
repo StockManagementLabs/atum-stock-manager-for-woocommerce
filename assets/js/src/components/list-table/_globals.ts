@@ -23,17 +23,17 @@ export default class Globals {
 	$collapsedGroups: JQuery = null;
 	filterData = {};
 	
-	constructor(settingsObj: Settings) {
+	constructor(settingsObj: Settings, defaults?: any) {
 		
 		this.settings = settingsObj;
 		
 		// Initialize selectors.
-		this.$atumList = $('.atum-list-wrapper');
-		this.$atumTable = this.$atumList.find('.atum-list-table');
-		this.$editInput = this.$atumList.find('#atum-column-edits');
-		this.$searchInput = this.$atumList.find('.atum-post-search');
-		this.$searchColumnBtn = this.$atumList.find('#search_column_btn');
-		this.$searchColumnDropdown = this.$atumList.find('#search_column_dropdown');
+		this.$atumList = (defaults && defaults.$atumList) || $('.atum-list-wrapper');
+		this.$atumTable = (defaults && defaults.$atumTable) || this.$atumList.find('.atum-list-table');
+		this.$editInput = (defaults && defaults.$editInput) || this.$atumList.find('#atum-column-edits');
+		this.$searchInput = (defaults && defaults.$searchInput) || this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn = (defaults && defaults.$searchColumnBtn) || this.$atumList.find('#search_column_btn');
+		this.$searchColumnDropdown = (defaults && defaults.$searchColumnDropdown) || this.$atumList.find('#search_column_dropdown');
 		
 		let inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
 		    perPage      = null;
@@ -46,7 +46,7 @@ export default class Globals {
 			perPage = parseInt(inputPerPage);
 		}
 		
-		this.filterData = {
+		this.filterData = (defaults && defaults.filterData) || {
 			token          : this.settings.get('nonce'),
 			action         : this.$atumList.data('action'),
 			screen         : this.$atumList.data('screen'),

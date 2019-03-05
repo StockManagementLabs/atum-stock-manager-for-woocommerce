@@ -5,18 +5,21 @@
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 import StickyColumns from './_sticky-columns';
+import Tooltip from '../_tooltip';
 
 export default class StickyHeader {
 	
 	settings: Settings;
 	globals: Globals;
 	stickyCols: StickyColumns;
+	tooltip: Tooltip;
 	
-	constructor(settingsObj: Settings, globalsObj: Globals, stickyColsObj: StickyColumns) {
+	constructor(settingsObj: Settings, globalsObj: Globals, stickyColsObj: StickyColumns, tooltipObj: Tooltip) {
 		
 		this.settings = settingsObj;
 		this.globals = globalsObj;
 		this.stickyCols = stickyColsObj;
+		this.tooltip = tooltipObj;
 		
 		// Add the floating table header.
 		this.globals.enabledStickyHeader = $('.sticky-header-button').hasClass('active');
@@ -107,6 +110,47 @@ export default class StickyHeader {
 					if (this.globals.$floatTheadStickyCols !== null) {
 						this.globals.$floatTheadStickyCols.remove();
 					}
+					
+				}
+				
+			}
+			
+		});
+		
+		// Bind Scroll-X events.
+		this.globals.$atumList.on('atum-scroll-bar-scroll-x', (evt: any, origEvt: any, scrollPositionX: number, isAtLeft: boolean, isAtRight: boolean) => {
+			
+			// Handle the sticky cols position and visibility when scrolling.
+			if (this.globals.enabledStickyColumns === true && this.globals.$stickyCols !== null) {
+				
+				// Add the stickyCols table (if enabled).
+				if (!this.globals.$atumList.find('.atum-list-table.cloned').length) {
+					this.globals.$atumTable.after(this.globals.$stickyCols);
+					this.tooltip.addTooltips();
+					this.globals.$atumList.trigger('atum-added-sticky-columns');
+				}
+				
+				// Hide the sticky cols when reaching the left side of the panel.
+				if (scrollPositionX <= 0) {
+					
+					this.globals.$stickyCols.hide().css('left', 0);
+					
+					if (this.globals.$floatTheadStickyCols !== null) {
+						this.globals.$floatTheadStickyCols.hide().css('left', 0);
+					}
+					
+				}
+				// Reposition the sticky cols while scrolling the pane.
+				else {
+					
+					this.globals.$stickyCols.show().css('left', scrollPositionX);
+					
+					if (this.globals.$floatTheadStickyCols !== null) {
+						this.globals.$floatTheadStickyCols.show().css('left', scrollPositionX);
+					}
+					
+					// Ensure sticky column heights are matching.
+					this.adjustStickyHeaders(this.globals.$stickyCols, this.globals.$atumTable);
 					
 				}
 				

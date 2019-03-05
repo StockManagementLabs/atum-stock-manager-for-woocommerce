@@ -7,6 +7,7 @@ import Globals from './_globals';
 import { Utils } from '../../utils/_utils';
 import Tooltip from '../_tooltip';
 import { EnhancedSelect } from '../_enhanced-select';
+import { ActiveRow } from './_active-row';
 
 export default class ListTable {
 	
@@ -33,7 +34,7 @@ export default class ListTable {
 	events() {
 		
 		// Bind active class rows.
-		this.addActiveClassRow();
+		ActiveRow.addActiveClassRow(this.globals.$atumTable);
 		
 		// Calculate compounded stocks.
 		this.calculateCompoundedStocks();
@@ -113,45 +114,6 @@ export default class ListTable {
 		
 		// Display hidden footer.
 		.on('load', () => $('#wpfooter').show());
-		
-	}
-	
-	/**
-	 * Add/remove row active class when checkbox is clicked.
-	 */
-	addActiveClassRow() {
-		
-		this.globals.$atumList.find('tbody .check-column input:checkbox').change( (evt: any) => {
-			
-			let $checkbox: JQuery    = $(evt.currentTarget),
-				$checkboxRow: JQuery = this.globals.$atumList.find("[data-id='" + $checkbox.val() + "']");
-			
-			if ($checkbox.is(':checked')) {
-				$checkboxRow.addClass('active-row');
-			}
-			else {
-				$checkboxRow.removeClass('active-row');
-			}
-			
-		});
-		
-		// Selet all rows checkbox.
-		$('#cb-select-all-1').change( () => {
-			
-			this.globals.$atumTable.find('tbody tr').each( (index: number, elem: any) => {
-				
-				let $elem: JQuery = $(elem);
-				
-				if ($elem.find('.check-column input[type=checkbox]').is(':checked')) {
-					$elem.addClass('active-row');
-				}
-				else {
-					$elem.removeClass('active-row');
-				}
-				
-			});
-			
-		});
 		
 	}
 	
@@ -244,7 +206,7 @@ export default class ListTable {
 				// Regenerate the UI.
 				this.tooltip.addTooltips();
 				EnhancedSelect.maybeRestoreEnhancedSelect();
-				this.addActiveClassRow();
+				ActiveRow.addActiveClassRow(this.globals.$atumTable);
 				this.removeOverlay();
 				this.calculateCompoundedStocks();
 				

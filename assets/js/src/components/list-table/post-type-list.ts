@@ -4,85 +4,48 @@
 
 import Settings from '../../config/_settings';
 import Hammer from 'hammerjs/hammer.min';
+import { ActiveRow } from './_active-row';
+import { EnhancedSelect } from '../_enhanced-select';
+import Globals from './_globals';
 
 export default class PostTypeList {
 	
 	settings: Settings;
-	$atumTable: JQuery;
+	globals: Globals;
 	$tableContainer: JQuery;
 	$scrollPane: JQuery;
 	jScrollApi: any;
 	
-	constructor(settingsObj: Settings) {
+	constructor(settingsObj: Settings, globalsObj: Globals) {
 		
 		this.settings = settingsObj;
+		this.globals = globalsObj;
 		
-		this.$atumTable = $('.wp-list-table');
-		$('.top').after('<div id="table-container"></div>');
-		this.$tableContainer = $('#table-container');
+		this.$tableContainer = $('<div class="atum-table-wrapper" />');
+		$('.tablenav.top').after( this.$tableContainer );
 		
 		// Add placeholder to input search.
 		$('#post-search-input').attr('placeholder', this.settings.get('placeholderSearch'));
 		
 		// Change nav and search div position.
-		$('#posts-filter').prepend($('.subsubsub'));
+		this.globals.$atumList.prepend($('.subsubsub'));
 		$('.subsubsub').append($('.search-box'));
 		$('.wp-heading-inline').append($('.page-title-action'));
 		$('.page-title-action').show();
 		
 		// Table position and id.
-		this.$tableContainer.append(this.$atumTable);
-		this.$atumTable.attr('id', 'list-table');
+		this.$tableContainer.append( this.globals.$atumTable );
+		this.globals.$atumTable.attr('id', 'list-table');
 		
 		// Add active class row function.
-		this.addActiveClassRow();
-		this.addScrollBar();
+		ActiveRow.addActiveClassRow( this.globals.$atumTable );
 		
 		// Footer position.
 		$(window).on('load', () => {
 			$('#wpfooter').show();
 		});
 		
-		(<any>$('select')).select2({
-			minimumResultsForSearch: 10,
-		});
-		
-	}
-	
-	/**
-	 * Add/remove row active class when checkbox is clicked
-	 */
-	addActiveClassRow() {
-		
-		this.$atumTable.find('tbody .check-column input:checkbox').change( () => {
-			
-			let $checkboxRow = this.$atumTable.find("#post-" + $(this).val());
-			
-			if ( $(this).is(':checked') ) {
-				$checkboxRow.addClass('active-row');
-			}
-			else{
-				$checkboxRow.removeClass('active-row');
-			}
-			
-		});
-		
-		$('#cb-select-all-1').change( () => {
-			
-			$('tbody tr').each( (index: number, elem: any) => {
-				
-				let $row: JQuery = $(elem);
-				
-				if ( $row.find('input[type=checkbox]').is(':checked') ) {
-					$row.addClass('active-row');
-				}
-				else {
-					$row.removeClass('active-row');
-				}
-				
-			});
-			
-		});
+		EnhancedSelect.doSelect2( $('select') );
 		
 	}
 	
@@ -101,19 +64,24 @@ export default class PostTypeList {
 		
 		this.$scrollPane = (<any>$tableWrapper).jScrollPane(scrollOpts);
 		this.jScrollApi  = this.$scrollPane.data('jsp');
+		this.addDragScroll();
+		
+	}
+	
+	addDragScroll() {
 		
 		// Drag and drop scrolling on desktops
-		let hammertime = new Hammer(this.$scrollPane.get(0), {});
+		let hammertime: any = new Hammer(this.$scrollPane.get(0), {});
 		
 		hammertime.on('panright panleft', (evt: any) => {
 			
-			const paneStartX: number   = this.jScrollApi.getContentPositionX(),
-			      offset: number       = 20, // Move 20px each time (knowing that hammer gives the pan event a default threshold of 10)
-			      displacement: number = evt.type === 'panright' ? paneStartX - offset : paneStartX + offset;
+			const velocityModifier = 10,
+			      displacement     = this.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
 			
-			this.jScrollApi.scrollToX( displacement, false);
+			this.jScrollApi.scrollToX(displacement, false);
 			
 		});
+		
 	}
 	
 }

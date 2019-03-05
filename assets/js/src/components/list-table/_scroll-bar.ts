@@ -3,21 +3,15 @@
    ======================================= */
 
 import Globals from './_globals';
-import StickyHeader from './_sticky-header';
-import Tooltip from '../_tooltip';
 import { Utils } from '../../utils/_utils';
 
 export default class ScrollBar {
 	
 	globals: Globals;
-	stickyHeader: StickyHeader;
-	tooltip: Tooltip;
 	
-	constructor(globalsObj: Globals, stickyHeaderObj: StickyHeader, tooltipObj: Tooltip) {
+	constructor(globalsObj: Globals) {
 		
 		this.globals = globalsObj;
-		this.stickyHeader = stickyHeaderObj;
-		this.tooltip = tooltipObj;
 		
 		// Init the table scrollbar.
 		this.addScrollBar();
@@ -55,8 +49,8 @@ export default class ScrollBar {
 		}
 		
 		// Wait until the thumbs are loaded and enable JScrollpane.
-		let $tableWrapper: any = $('.atum-table-wrapper'),
-		    scrollOpts    = {
+		let $tableWrapper: any    = $('.atum-table-wrapper'),
+		    scrollOpts: any       = {
 			    horizontalGutter: 0,
 			    verticalGutter  : 0,
 		    };
@@ -71,56 +65,24 @@ export default class ScrollBar {
 			this.globals.$scrollPane = $tableWrapper.jScrollPane(scrollOpts);
 			this.globals.jScrollApi  = this.globals.$scrollPane.data('jsp');
 			
-			// Bind Scroll-X events.
 			this.globals.$scrollPane.on('jsp-scroll-x', (evt: any, scrollPositionX: number, isAtLeft: boolean, isAtRight: boolean) => {
-					
-				// Handle the sticky cols position and visibility when scrolling.
-				if (this.globals.enabledStickyColumns === true && this.globals.$stickyCols !== null) {
-					
-					// Add the stickyCols table (if enabled).
-					if (!this.globals.$atumList.find('.atum-list-table.cloned').length) {
-						this.globals.$atumTable.after(this.globals.$stickyCols);
-						this.tooltip.addTooltips();
-						this.globals.$atumList.trigger('atum-added-sticky-columns');
-					}
-					
-					// Hide the sticky cols when reaching the left side of the panel.
-					if (scrollPositionX <= 0) {
-						
-						this.globals.$stickyCols.hide().css('left', 0);
-						
-						if (this.globals.$floatTheadStickyCols !== null) {
-							this.globals.$floatTheadStickyCols.hide().css('left', 0);
-						}
-						
-					}
-					// Reposition the sticky cols while scrolling the pane.
-					else {
-						
-						this.globals.$stickyCols.show().css('left', scrollPositionX);
-						
-						if (this.globals.$floatTheadStickyCols !== null) {
-							this.globals.$floatTheadStickyCols.show().css('left', scrollPositionX);
-						}
-						
-						// Ensure sticky column heights are matching.
-						this.stickyHeader.adjustStickyHeaders(this.globals.$stickyCols, this.globals.$atumTable);
-						
-					}
-					
-				}
+				this.globals.$atumList.trigger('atum-scroll-bar-scroll-x', [evt, scrollPositionX, isAtLeft, isAtRight]);
+			});
+			
+			let $jspContainer: JQuery = this.globals.$atumList.find('.jspContainer'),
+			    $jsPane: JQuery       = this.globals.$atumList.find('.jspPane');
+			
+			console.log($jspContainer, $jsPane);
+			
+			$jspContainer.height( $jsPane.height() );
+			
+			this.globals.$atumList.on('click', '.has-child', () => {
+				
+				setTimeout( () => $jspContainer.height( $jsPane.height() ), 500);
 				
 			});
 			
 			this.globals.$atumList.trigger('atum-scroll-bar-loaded');
-			
-		})
-		
-		$('.jspContainer').height($('.jspPane').height());
-		
-		$('.has-child').on('click', () => {
-			
-			setTimeout( () => $('.jspContainer').height( $('.jspPane').height() ), 500);
 			
 		});
 		

@@ -66,16 +66,18 @@ jQuery( ($) => {
 		searchDropdown: 'no',
 	});
 	
-	// Initialize components with dependency injection.
+	// Set globals.
 	let globals = new Globals(settings);
+	
+	// Initialize components with dependency injection.
 	let tooltip = new Tooltip();
 	let listTable = new ListTable(settings, globals, tooltip);
 	let router = new Router(settings, globals, listTable);
 	let stickyCols = new StickyColumns(settings, globals);
-	let stickyHeader = new StickyHeader(settings, globals, stickyCols);
+	let stickyHeader = new StickyHeader(settings, globals, stickyCols, tooltip);
 	let dateTimePicker = new DateTimePicker(settings);
 	let popover = new Popover(settings, dateTimePicker);
-	new ScrollBar(globals, stickyHeader, tooltip);
+	new ScrollBar(globals);
 	new DragScroll(globals, tooltip, popover);
 	new SearchByColumn(settings, globals);
 	new ColumnGroups(globals, stickyHeader);

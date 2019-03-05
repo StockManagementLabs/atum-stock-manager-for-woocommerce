@@ -35,7 +35,7 @@ export default class DragScroll {
 	loadHammer() {
 		
 		// Drag and drop scrolling on desktops.
-		const hammertime = new Hammer(this.globals.$scrollPane.get(0), {});
+		const hammertime: any = new Hammer(this.globals.$scrollPane.get(0), {});
 		
 		hammertime
 			

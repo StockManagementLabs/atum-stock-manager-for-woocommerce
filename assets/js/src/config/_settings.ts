@@ -5,18 +5,18 @@
 
 export default class Settings {
 	
-	settings = {};
+	settings: any = {};
 	
 	constructor(varName:string, defaults = {}) {
 		
-		let localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
+		let localizedOpts: any = typeof window[varName] !== 'undefined' ? window[varName] : {};
 	
 		// Merge all the settings.
 		this.settings = $.extend( this.settings, defaults, localizedOpts );
 		
 	}
 	
-	get(prop) {
+	get(prop: string) {
 		
 		if (typeof this.settings[prop] !== 'undefined') {
 			return this.settings[prop];
@@ -30,9 +30,9 @@ export default class Settings {
 		return this.settings;
 	}
 	
-	delete(prop) {
+	delete(prop: string) {
 		
-		if ( this.settings.hasOwnProperty(prop)) {
+		if (this.settings.hasOwnProperty(prop)) {
 			delete this.settings[prop];
 		}
 		
