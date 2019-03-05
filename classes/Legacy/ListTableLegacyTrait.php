@@ -601,7 +601,7 @@ trait ListTableLegacyTrait {
 			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $back_order_args, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 
-			if ( empty( $products_back_order ) ) {
+			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
 				// As this query does not contain ATUM params, doesn't need the filters.
 				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
 				AtumCache::set_transient( $back_order_transient, $products_back_order );
