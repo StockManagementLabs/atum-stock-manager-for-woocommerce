@@ -6,7 +6,7 @@ import Settings from '../../config/_settings';
 import Globals from './_globals';
 import { Utils } from '../../utils/_utils';
 import Tooltip from '../_tooltip';
-import { EnhancedSelect } from '../_enhanced-select';
+import EnhancedSelect from '../_enhanced-select';
 import { ActiveRow } from './_active-row';
 
 export default class ListTable {
@@ -14,14 +14,16 @@ export default class ListTable {
 	settings: Settings;
 	globals: Globals;
 	tooltip: Tooltip;
+	enhancedSelect: EnhancedSelect;
 	doingAjax: any  = null;
 	isRowExpanding = {};
 	
-	constructor(settingsObj: Settings, globalsObj: Globals, toolTipObj: Tooltip) {
+	constructor(settingsObj: Settings, globalsObj: Globals, toolTipObj: Tooltip, enhancedSelectObj: EnhancedSelect) {
 		
 		this.settings = settingsObj;
 		this.globals = globalsObj;
 		this.tooltip = toolTipObj;
+		this.enhancedSelect = enhancedSelectObj;
 		
 		// Bind events.
 		this.events();
@@ -205,7 +207,7 @@ export default class ListTable {
 				
 				// Regenerate the UI.
 				this.tooltip.addTooltips();
-				EnhancedSelect.maybeRestoreEnhancedSelect();
+				this.enhancedSelect.maybeRestoreEnhancedSelect();
 				ActiveRow.addActiveClassRow(this.globals.$atumTable);
 				this.removeOverlay();
 				this.calculateCompoundedStocks();

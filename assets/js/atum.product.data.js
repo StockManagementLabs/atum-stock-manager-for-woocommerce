@@ -80,6 +80,13 @@
 		
 		});
 		
+		// TODO: THIS IS BEING EXECUTED ON THE ENHANCEDSELECT.TS. NEEDS REFACTORY
+		addAtumSelectClasses();
+		
+		$('body').on('wc-enhanced-select-init', function() {
+			addAtumSelectClasses();
+		});
+		
 	});
 	
 	/**
@@ -98,6 +105,24 @@
 			$(this).removeClass('js-switch');
 		});
 		
+	}
+	
+	/**
+	 * Add custom classes to enhanced selects
+	 */
+	function addAtumSelectClasses() {
+		
+		$('select').filter('.atum-select2, .atum-enhanced-select').each( function() {
+			
+			var $select           = $(this),
+			    $select2Container = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select');
+			
+			if ($select2Container.length) {
+				$select2Container.addClass( $select.hasClass('atum-select2') ? 'atum-select2' : 'atum-enhanced-select' );
+			}
+			
+		});
+	
 	}
 	
 	/**

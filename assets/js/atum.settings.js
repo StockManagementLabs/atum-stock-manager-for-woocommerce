@@ -278,7 +278,8 @@
 					}
 					
 					$select.select2({
-						minimumResultsForSearch: 20
+						minimumResultsForSearch: 20,
+						containerCssClass: 'atum-select2',
 					})
 					// Avoid selecting empty values in select multiples
 					.on('select2:selecting', function() {
@@ -298,6 +299,12 @@
 						}
 						
 					});
+					
+					var $select2Container = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select');
+					
+					if ($select2Container.length) {
+						$select2Container.addClass( 'atum-select2' );
+					}
 					
 				});
 				

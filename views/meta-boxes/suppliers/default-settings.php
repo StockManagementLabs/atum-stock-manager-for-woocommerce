@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || die;
 			'selected'         => get_post_meta( $supplier_id, '_default_settings_assigned_to', TRUE ),
 			'name'             => 'default_settings[assigned_to]',
 			'id'               => 'assigned_to',
-			'class'            => 'wc-enhanced-select',
+			'class'            => 'wc-enhanced-select atum-enhanced-select',
 		);
 		wp_dropdown_users( $args );
 		?>

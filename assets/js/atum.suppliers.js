@@ -34,8 +34,6 @@
 		
 		init: function() {
 			
-			var self = this;
-			
 			// Change button position
 			$('.wp-heading-inline').append($('.page-title-action'));
 			$('.page-title-action').show();

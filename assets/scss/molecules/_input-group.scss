@@ -63,14 +63,18 @@
 	}
 	
 	> .select2-container {
-		z-index: 0;
 		
-		.select2-selection--single {
-			border-bottom-left-radius: 0;
-			border-top-left-radius: 0;
-			border-bottom-right-radius: $input-border-radius;
-			border-top-right-radius: $input-border-radius;
+		&.atum-select2, &.atum-enhanced-select {
+			z-index: 0;
+			
+			.select2-selection--single {
+				border-bottom-left-radius: 0;
+				border-top-left-radius: 0;
+				border-bottom-right-radius: $input-border-radius;
+				border-top-right-radius: $input-border-radius;
+			}
 		}
+		
 	}
 	
 	&.invalid {

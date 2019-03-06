@@ -471,11 +471,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
 			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
-			'class'      => 'wc-enhanced-select dropdown_product_cat',
+			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat',
 		) );
 
 		// Product type filtering.
-		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select dropdown_product_type' ); // WPCS: XSS ok.
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type' ); // WPCS: XSS ok.
 
 		// Supplier filtering.
 		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // WPCS: XSS ok.
@@ -554,20 +554,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$product_type = 'product_variation';
 			}
 
-			if ( 'product_bundle' === $product_type ) {
-
-				$bundle_args = array(
-					'return'    => 'id=>product_id',
-					'bundle_id' => $this->product->get_id(),
-				);
-
-				// $child_products = \WC_PB_DB::query_bundled_items( $bundle_args );
-
-				$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
-			}
-			else {
-				$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
-			}
+			$child_products = $this->get_children( $type, [ $this->product->get_id() ], $product_type );
 
 			if ( ! empty( $child_products ) ) {
 
@@ -1859,7 +1846,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
-		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
 			<option value="-1"><?php esc_html_e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>

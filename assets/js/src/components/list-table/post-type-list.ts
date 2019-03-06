@@ -5,23 +5,25 @@
 import Settings from '../../config/_settings';
 import Hammer from 'hammerjs/hammer.min';
 import { ActiveRow } from './_active-row';
-import { EnhancedSelect } from '../_enhanced-select';
+import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 
 export default class PostTypeList {
 	
 	settings: Settings;
 	globals: Globals;
+	enhancedSelect: EnhancedSelect;
 	$tableContainer: JQuery;
 	$scrollPane: JQuery;
 	jScrollApi: any;
 	
-	constructor(settingsObj: Settings, globalsObj: Globals) {
+	constructor(settingsObj: Settings, globalsObj: Globals, enhancedSelectObj: EnhancedSelect) {
 		
 		this.settings = settingsObj;
 		this.globals = globalsObj;
-		
+		this.enhancedSelect = enhancedSelectObj;
 		this.$tableContainer = $('<div class="atum-table-wrapper" />');
+		
 		$('.tablenav.top').after( this.$tableContainer );
 		
 		// Add placeholder to input search.
@@ -45,7 +47,7 @@ export default class PostTypeList {
 			$('#wpfooter').show();
 		});
 		
-		EnhancedSelect.doSelect2( $('select') );
+		this.enhancedSelect.doSelect2( $('select') );
 		
 	}
 	
@@ -56,10 +58,10 @@ export default class PostTypeList {
 		
 		// Wait until the thumbs are loaded and enable JScrollpane.
 		let $tableWrapper: JQuery = this.$tableContainer,
-		    scrollOpts: any    = {
+		    scrollOpts: any       = {
 			    horizontalGutter: 0,
 			    verticalGutter  : 0,
-			    resizeSensor    : true
+			    resizeSensor    : true,
 		    };
 		
 		this.$scrollPane = (<any>$tableWrapper).jScrollPane(scrollOpts);

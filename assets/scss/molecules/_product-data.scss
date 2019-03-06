@@ -48,6 +48,7 @@
 		.select2-container, .select2-selection--single, .select2-selection__rendered {
 			font-size: 14px !important;
 			color: $wp-gray-dark !important;
+			
 			&:focus {
 				box-shadow: none;
 				outline: none;
@@ -59,30 +60,34 @@
 		}
 		
 		.select2-container {
-			float: none;
-			max-width: calc(80% - 31px) !important;
 			
-			.select2-selection--single {
-				height: auto;
-				margin: 0;
-				font-size: $font-size-base;
-				border: 1px solid $wp-gray-4;
+			&.atum-select2, &.atum-enhanced-select {
+				float: none;
+				max-width: calc(80% - 31px) !important;
 				
-				.select2-selection__rendered {
-					line-height: 1.8;
+				.select2-selection--single {
+					height: auto;
+					margin: 0;
+					font-size: $font-size-base;
+					border: 1px solid $wp-gray-4;
+					
+					.select2-selection__rendered {
+						line-height: 1.8;
+					}
+					
+					.select2-selection__clear {
+						padding-right: 10px;
+					}
+					
+					.select2-selection__arrow {
+						height: 25px;
+					}
+					
+					&:focus {
+						border-color: $input-focus;
+					}
 				}
 				
-				.select2-selection__clear {
-					padding-right: 10px;
-				}
-				
-				.select2-selection__arrow {
-					height: 25px;
-				}
-				
-				&:focus {
-					border-color: $input-focus;
-				}
 			}
 		}
 		
@@ -116,7 +121,9 @@
 			}
 			
 			.select2-container {
-				max-width: calc(100% - 33px) !important;
+				&.atum-select2, &.atum-enhanced-select {
+					max-width: calc(100% - 33px) !important;
+				}
 			}
 			
 			.woocommerce-help-tip {

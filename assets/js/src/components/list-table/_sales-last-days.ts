@@ -53,9 +53,15 @@ export default class SalesLastDays {
 		});
 		
 		$selectDays.find('.textvalue').click( (evt: any) => {
+			
 			$(evt.currentTarget).hide();
 			// $selectDays.find('select').show();
-			$selectDays.find('select').select2();
+			
+			// TODO: USE ENHANCEDSELECT COMPONENT?
+			const $select = $selectDays.find('select');
+			$select.select2();
+			$select.siblings('.select2-container').addClass('atum-select2');
+			
 		});
 		
 	}

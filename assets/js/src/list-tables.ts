@@ -5,6 +5,7 @@
  *
  * @since 0.0.1
  */
+import EnhancedSelect from './components/_enhanced-select';
 
 window['$'] = window['jQuery'];
 
@@ -71,7 +72,8 @@ jQuery( ($) => {
 	
 	// Initialize components with dependency injection.
 	let tooltip = new Tooltip();
-	let listTable = new ListTable(settings, globals, tooltip);
+	let enhancedSelect = new EnhancedSelect();
+	let listTable = new ListTable(settings, globals, tooltip, enhancedSelect);
 	let router = new Router(settings, globals, listTable);
 	let stickyCols = new StickyColumns(settings, globals);
 	let stickyHeader = new StickyHeader(settings, globals, stickyCols, tooltip);

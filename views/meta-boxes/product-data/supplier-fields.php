@@ -28,9 +28,9 @@ if ( empty( $variation ) ) : ?>
 		<span class="atum-field input-group">
 			<?php Helpers::atum_field_input_addon() ?>
 
-			<select class="wc-product-search" id="<?php echo esc_attr( $supplier_field_id ) ?>" name="<?php echo esc_attr( $supplier_field_name ) ?>" style="width: <?php echo ( empty( $variation ) ) ? 80 : 100 ?>%"
+			<select class="wc-product-search atum-enhanced-select" id="<?php echo esc_attr( $supplier_field_id ) ?>" name="<?php echo esc_attr( $supplier_field_name ) ?>" style="width: <?php echo ( empty( $variation ) ) ? 80 : 100 ?>%"
 				data-allow_clear="true" data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-				data-multiple="false" data-selected="" data-minimum_input_length="1"
+				data-multiple="false" data-selected="" data-minimum_input_length="1" data-container-css="atum-enhanced-select"
 				<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_extra_atts', '', $variation, $loop ); // WPCS: XSS ok. ?>
 				>
 
