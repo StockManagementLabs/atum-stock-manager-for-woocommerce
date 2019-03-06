@@ -1908,7 +1908,7 @@ final class Ajax {
 		$variations = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
-			Helpers::update_atum_control( $variation_id, ( 'uncontrolled' === $status ? 'enable' : 'disable' ) );
+			Helpers::update_atum_control( $variation_id, ( 'uncontrolled' === $status ? 'disable' : 'enable' ) );
 		}
 
 		wp_send_json_success( __( 'All the variations were updated successfully', ATUM_TEXT_DOMAIN ) );
