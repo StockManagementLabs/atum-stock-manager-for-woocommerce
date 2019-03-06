@@ -2111,22 +2111,27 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			foreach ( $this->id_views as $key => $post_ids ) {
 
-				if ( $view === $key && ! empty( $post_ids ) ) {
-
-					$get_parents = FALSE;
-					foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
-
-						if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
-							$get_parents = TRUE;
-							break;
+				if ( $view === $key ) {
+					
+					$this->supplier_variation_products = array_intersect( $this->supplier_variation_products, $post_ids );
+					
+					if ( ! empty( $post_ids ) ) {
+						
+						$get_parents = FALSE;
+						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
+							
+							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
+								$get_parents = TRUE;
+								break;
+							}
+							
 						}
-
+						
+						// Add the parent products again to the query.
+						$args['post__in'] = $get_parents ? array_merge( $this->get_parents( $post_ids ), $post_ids ) : $post_ids;
+						$allow_query      = TRUE;
+						$found_posts      = $this->count_views[ "count_$key" ];
 					}
-
-					// Add the parent products again to the query.
-					$args['post__in'] = $get_parents ? array_merge( $this->get_parents( $post_ids ), $post_ids ) : $post_ids;
-					$allow_query      = TRUE;
-					$found_posts      = $this->count_views[ "count_$key" ];
 
 				}
 
@@ -2635,8 +2640,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $back_order_args, $this->wc_query_data, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
-
-			if ( empty( $products_back_order ) ) {
+			
+			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
 
 				// Pass through the WC query data filter (new tables).
 				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );

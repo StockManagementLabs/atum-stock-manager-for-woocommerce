@@ -375,6 +375,10 @@ final class Ajax {
 		);
 		
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
+		
+		if ( ! empty( $_REQUEST['view'] ) && 'all_stock' === $_REQUEST['view'] ) {
+			$_REQUEST['view'] = '';
+		}
 
 		$namespace  = '\Atum\StockCentral\Lists';
 		$list_class = $args['show_controlled'] ? "$namespace\ListTable" : "$namespace\UncontrolledListTable";

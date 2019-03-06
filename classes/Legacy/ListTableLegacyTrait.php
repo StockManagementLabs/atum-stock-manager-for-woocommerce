@@ -232,48 +232,54 @@ trait ListTableLegacyTrait {
 
 			foreach ( $this->id_views as $key => $post_ids ) {
 
-				if ( $view === $key && ! empty( $post_ids ) ) {
-
-					$get_parents = FALSE;
-					foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
-
-						if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
-							$get_parents = TRUE;
-							break;
-						}
-
-					}
-
-					// Add the parent products again to the query.
-					if ( $get_parents ) {
-
-						$parents = $this->get_parents( $post_ids );
-
-						// Exclude the parents with no children.
-						// For example: the current list may have the "Out of stock" filter applied and a variable product
-						// may have all of its variations in stock, but its own stock could be 0. The shouldn't appear empty.
-						$empty_variables = array_diff( $this->container_products['variable'], $parents );
-
-						foreach ( $empty_variables as $empty_variable ) {
-							if ( in_array( $empty_variable, $post_ids ) ) {
-								unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+				if ( $view === $key ) {
+					
+					$this->supplier_variation_products = array_intersect( $this->supplier_variation_products, $post_ids );
+					
+					if ( ! empty( $post_ids ) ) {
+						
+						$get_parents = FALSE;
+						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
+							
+							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
+								$get_parents = TRUE;
+								break;
 							}
+							
 						}
-
-						$args['post__in'] = array_merge( $parents, $post_ids );
-
+						
+						// Add the parent products again to the query.
+						if ( $get_parents ) {
+							
+							$parents = $this->get_parents( $post_ids );
+							
+							// Exclude the parents with no children.
+							// For example: the current list may have the "Out of stock" filter applied and a variable product
+							// may have all of its variations in stock, but its own stock could be 0. The shouldn't appear empty.
+							$empty_variables = array_diff( $this->container_products['variable'], $parents );
+							
+							foreach ( $empty_variables as $empty_variable ) {
+								if ( in_array( $empty_variable, $post_ids ) ) {
+									unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+								}
+							}
+							
+							$args['post__in'] = array_merge( $parents, $post_ids );
+							
+						}
+						else {
+							$args['post__in'] = $post_ids;
+						}
+						
+						$allow_query = TRUE;
+						$found_posts = $this->count_views[ "count_$key" ];
 					}
-					else {
-						$args['post__in'] = $post_ids;
-					}
-
-					$allow_query = TRUE;
-					$found_posts = $this->count_views[ "count_$key" ];
 
 				}
 
 			}
 		}
+		
 
 		if ( $allow_query ) {
 
@@ -600,7 +606,7 @@ trait ListTableLegacyTrait {
 			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $back_order_args, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 
-			if ( empty( $products_back_order ) ) {
+			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
 				// As this query does not contain ATUM params, doesn't need the filters.
 				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
 				AtumCache::set_transient( $back_order_transient, $products_back_order );
