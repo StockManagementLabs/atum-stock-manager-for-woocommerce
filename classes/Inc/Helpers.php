@@ -1383,40 +1383,50 @@ final class Helpers {
 	 */
 	public static function get_logs( $type, $status = '' ) {
 
-		// Filter by log type meta key.
-		$log_types = Log::get_log_types();
+		$cache_key = AtumCache::get_cache_key( 'get_logs', [ $type, $status ] );
+		$logs      = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( ! in_array( $type, array_keys( $log_types ) ) ) {
-			return FALSE;
-		}
+		if ( ! $has_cache ) {
 
-		$args = array(
-			'post_type'      => InventoryLogs::POST_TYPE,
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'meta_query'     => array(
-				array(
-					'key'   => '_type',
-					'value' => $type,
-				),
-			),
-		);
+			// Filter by log type meta key.
+			$log_types = Log::get_log_types();
 
-		// Filter by log status.
-		if ( $status ) {
-
-			if ( FALSE === strpos( $status, ATUM_PREFIX ) ) {
-				$status = ATUM_PREFIX . $status;
+			if ( ! in_array( $type, array_keys( $log_types ) ) ) {
+				return FALSE;
 			}
 
-			$args['post_status'] = $status;
+			$args = array(
+				'post_type'      => InventoryLogs::POST_TYPE,
+				'posts_per_page' => - 1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'   => '_type',
+						'value' => $type,
+					),
+				),
+			);
+
+			// Filter by log status.
+			if ( $status ) {
+
+				if ( FALSE === strpos( $status, ATUM_PREFIX ) ) {
+					$status = ATUM_PREFIX . $status;
+				}
+
+				$args['post_status'] = $status;
+
+			}
+			else {
+				$args['post_status'] = 'any';
+			}
+
+			$logs = get_posts( apply_filters( 'atum/get_logs_args', $args ) );
+			AtumCache::set_cache( $cache_key, $logs );
 
 		}
-		else {
-			$args['post_status'] = 'any';
-		}
 
-		return get_posts( apply_filters( 'atum/get_logs_args', $args ) );
+		return $logs;
 
 	}
 
@@ -1480,10 +1490,15 @@ final class Helpers {
 	 */
 	public static function get_inbound_stock_for_product( $product_id ) {
 
-		// Calculate the inbound stock from pending purchase orders.
-		global $wpdb;
+		$cache_key     = AtumCache::get_cache_key( 'inbound_stock_for_product', $product_id );
+		$inbound_stock = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		$sql = $wpdb->prepare("
+		if ( ! $has_cache ) {
+
+			// Calculate the inbound stock from pending purchase orders.
+			global $wpdb;
+
+			$sql = $wpdb->prepare( "
 				SELECT SUM(oim2.`meta_value`) AS quantity 			
 				FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
@@ -1493,12 +1508,16 @@ final class Helpers {
 				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' 
 				AND oim2.`meta_key` = '_qty'
 				GROUP BY oim.`meta_value`;",
-			PurchaseOrders::POST_TYPE,
-			$product_id
-		); // WPCS: unprepared SQL ok.
+				PurchaseOrders::POST_TYPE,
+				$product_id
+			); // WPCS: unprepared SQL ok.
 
-		$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
-		$inbound_stock = $inbound_stock ?: 0;
+			$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
+			$inbound_stock = $inbound_stock ?: 0;
+
+			AtumCache::set_cache( $cache_key, $inbound_stock );
+
+		}
 
 		return $inbound_stock;
 

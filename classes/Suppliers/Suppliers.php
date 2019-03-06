@@ -14,6 +14,7 @@ namespace Atum\Suppliers;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
@@ -538,21 +539,31 @@ class Suppliers {
 	 */
 	public static function get_product_id_by_supplier_sku( $product_id, $supplier_sku ) {
 
-		global $wpdb;
+		$cache_key  = AtumCache::get_cache_key( 'product_id_by_supplier_sku', [ $product_id, $supplier_sku ] );
+		$product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		if ( ! $has_cache ) {
 
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT p.ID
+			global $wpdb;
+
+			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			$product_id = $wpdb->get_var( $wpdb->prepare( "
+				SELECT p.ID
 				FROM $wpdb->posts p
 				LEFT JOIN $atum_data_table apd ON ( p.ID = apd.product_id )
-				WHERE p.post_status != 'trash'
-				AND apd.supplier_sku = %s AND p.ID <> %d
+				WHERE p.post_status != 'trash' AND apd.supplier_sku = %s AND p.ID <> %d
 				LIMIT 1",
-				wp_slash( $supplier_sku ), $product_id
-			)
-		); // WPCS: unprepared SQL ok.
+				wp_slash( $supplier_sku ),
+				$product_id
+			) ); // WPCS: unprepared SQL ok.
+
+			AtumCache::set_cache( $cache_key, $product_id );
+
+		}
+
+		return $product_id;
+
 	}
 
 

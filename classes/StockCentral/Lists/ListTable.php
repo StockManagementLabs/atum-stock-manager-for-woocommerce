@@ -446,29 +446,41 @@ class ListTable extends AtumListTable {
 
 		if ( $this->allow_calcs ) {
 
-			global $wpdb;
-			$product_id_key = Helpers::is_child_type( $this->product->get_type() ) ? '_variation_id' : '_product_id';
+			$cache_key     = AtumCache::get_cache_key( 'stock_on_hold', $this->product->get_id() );
+			$stock_on_hold = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-			$sql = $wpdb->prepare("
-				SELECT SUM(omq.`meta_value`) AS qty 
-				FROM `{$wpdb->prefix}woocommerce_order_items` oi			
-				LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
-				LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
-				WHERE `order_id` IN (
-					SELECT `ID` FROM $wpdb->posts WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
-				)
-				AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` = %s AND omp.`meta_value` = %d 
-				GROUP BY omp.`meta_value`",
-				$product_id_key,
-				$this->product->get_id()
-			);
+			if ( ! $has_cache ) {
 
-			$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
+				global $wpdb;
+
+				$product_id_key = Helpers::is_child_type( $this->product->get_type() ) ? '_variation_id' : '_product_id';
+
+				$sql = $wpdb->prepare( "
+					SELECT SUM(omq.`meta_value`) AS qty 
+					FROM `{$wpdb->prefix}woocommerce_order_items` oi			
+					LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
+					LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
+					WHERE `order_id` IN (
+						SELECT `ID` FROM $wpdb->posts WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
+					)
+					AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` = %s AND omp.`meta_value` = %d 
+					GROUP BY omp.`meta_value`",
+					$product_id_key,
+					$this->product->get_id()
+				);
+
+				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
+
+				AtumCache::set_cache( $cache_key, $stock_on_hold );
+
+			}
+
 			$this->increase_total( 'calc_hold', $stock_on_hold );
 
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
+
 	}
 
 	/**
@@ -707,46 +719,48 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param string $log_type   Type of log.
-	 * @param int    $item_id    Item (WC Product) ID to check.
-	 * @param string $log_status Optional. Log status (completed or pending).
+	 * @param string $log_type      Type of log.
+	 * @param int    $product_id    Product ID to check.
+	 * @param string $log_status    Optional. Log status (completed or pending).
 	 *
-	 * @return int
+	 * @return int|float
 	 */
-	protected function get_log_item_qty( $log_type, $item_id, $log_status = 'pending' ) {
+	protected function get_log_item_qty( $log_type, $product_id, $log_status = 'pending' ) {
 
 		$qty     = 0;
 		$log_ids = Helpers::get_logs( $log_type, $log_status );
 
 		if ( ! empty( $log_ids ) ) {
 
-			global $wpdb;
+			$cache_key = AtumCache::get_cache_key( 'log_item_qty', [ $log_ids, $product_id ] );
+			$qty       = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-			foreach ( $log_ids as $log_id ) {
+			if ( ! $has_cache ) {
 
-				// Get the _qty meta for the specified product in the specified log.
-				$query = $wpdb->prepare(
-					"SELECT SUM(meta_value) 				  
-					 FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
-		             JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . " oi
-		             ON om.order_item_id = oi.order_item_id
-					 WHERE order_id = %d AND order_item_type = %s 
+				global $wpdb;
+
+				// Get the sum of quantities for the specified product in the logs of that type.
+				$query = $wpdb->prepare( "
+					SELECT SUM(meta_value) 				  
+					 FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
+		             LEFT JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' oi ON om.order_item_id = oi.order_item_id
+					 WHERE order_id IN (' . implode( ',', $log_ids ) . ") AND order_item_type = 'line_item' 
 					 AND meta_key = '_qty' AND om.order_item_id IN (
-					 	SELECT order_item_id FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
-					 	WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
+					    SELECT order_item_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
+					    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
 					 )",
-					$log_id,
-					'line_item',
-					$item_id
+					$product_id
 				); // WPCS: unprepared SQL ok.
 
-				$qty += $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+				$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+
+				AtumCache::set_cache( $cache_key, $qty );
 
 			}
 
 		}
 
-		return absint( $qty );
+		return floatval( $qty );
 
 	}
 
