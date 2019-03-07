@@ -747,7 +747,7 @@ trait ListTableLegacyTrait {
 		// As this query does not contain ATUM params, doesn't need the filters.
 		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
 
-		$parents_with_child = $grouped_products = $bundle_childrens = array();
+		$parents_with_child = $grouped_products = $bundle_children = array();
 		
 		if ( $parents->found_posts ) {
 			
@@ -780,16 +780,14 @@ trait ListTableLegacyTrait {
 				case 'bundle':
 					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents->posts ) );
 
-					$bundle_args = array(
+					$bundle_children = Helpers::get_bundle_items( array(
 						'return'    => 'id=>product_id',
 						'bundle_id' => $parents->posts,
-					);
-
-					$bundle_childrens = \WC_PB_DB::query_bundled_items( $bundle_args );
+					) );
 
 					foreach ( $parents->posts as $parent_id ) {
 
-						if ( ! empty( $bundle_childrens ) && is_array( $bundle_childrens ) ) {
+						if ( ! empty( $bundle_children ) && is_array( $bundle_children ) ) {
 							$parents_with_child[] = $parent_id;
 						}
 					}
@@ -871,31 +869,31 @@ trait ListTableLegacyTrait {
 			}
 			elseif ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $parent_type ) {
 
-				foreach ( $bundle_childrens as $key => $bundle_children ) {
+				foreach ( $bundle_children as $key => $bundle_child ) {
 
-					$product_children = Helpers::get_atum_product( $bundle_children );
+					$product_child = Helpers::get_atum_product( $bundle_child );
 
-					if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
+					if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
 
 						if ( ! $this->show_controlled ) {
-							unset( $bundle_childrens[ $key ] );
+							unset( $bundle_children[ $key ] );
 						}
 
 					}
 					elseif ( $this->show_controlled ) {
-						unset( $bundle_childrens[ $key ] );
+						unset( $bundle_children[ $key ] );
 					}
 
 				}
 
-				if ( empty( $bundle_childrens ) ) {
+				if ( empty( $bundle_children ) ) {
 					$parents_with_child = [];
 				}
 				else {
 
 					$bundle_parents = [];
-					foreach ( $bundle_childrens as $bundle_children ) {
-						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
+					foreach ( $bundle_children as $bundle_child ) {
+						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_child ) );
 					}
 
 					$parents_with_child = $bundle_parents;
@@ -907,9 +905,9 @@ trait ListTableLegacyTrait {
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
-				$this->children_products = array_merge( $this->children_products, $bundle_childrens );
+				$this->children_products = array_merge( $this->children_products, $bundle_children );
 
-				return $bundle_childrens;
+				return $bundle_children;
 
 			}
 			else {

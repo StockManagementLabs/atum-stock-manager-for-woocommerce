@@ -35,8 +35,8 @@
 
 .btn:focus, .btn.focus {
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25);
 }
 
 .btn.disabled, .btn:disabled {
@@ -56,8 +56,8 @@
 }
 
 .btn:not(:disabled):not(.disabled):active:focus, .btn:not(:disabled):not(.disabled).active:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
 a.btn.disabled,
@@ -106,40 +106,40 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #00B8DB;
+  background-color: #016B7F;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: rgba(0, 184, 219, 0.6);
+  background-color: rgba(1, 107, 127, 0.6);
 }
 
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: #fff;
-  background-color: #00B8DB;
-  border-color: #00B8DB;
+  background-color: #016B7F;
+  border-color: #016B7F;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: rgba(0, 184, 219, 0.6);
-  border-color: rgba(0, 184, 219, 0.6);
+  background-color: rgba(1, 107, 127, 0.6);
+  border-color: rgba(1, 107, 127, 0.6);
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
 }
 
 .btn-secondary {
@@ -409,39 +409,39 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary {
-  color: #00B8DB;
+  color: #016B7F;
   background-color: transparent;
   background-image: none;
-  border-color: #00B8DB;
+  border-color: #016B7F;
 }
 
 .btn-outline-primary:hover {
   color: #fff;
-  background-color: #00B8DB;
-  border-color: #00B8DB;
+  background-color: #016B7F;
+  border-color: #016B7F;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
-  color: #00B8DB;
+  color: #016B7F;
   background-color: transparent;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
 .show > .btn-outline-primary.dropdown-toggle {
   color: #fff;
-  background-color: #00B8DB;
-  border-color: #00B8DB;
+  background-color: #016B7F;
+  border-color: #016B7F;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
 }
 
 .btn-outline-secondary {
@@ -1620,7 +1620,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border: solid 1px #00B8DB;
+  border: solid 1px #016B7F;
 }
 
 .swal2-container .swal2-title {
@@ -1680,8 +1680,8 @@ input[type="button"].btn-block {
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00B8DB;
+  border: 3px solid rgba(1, 107, 127, 0.25);
+  border-top-color: #016B7F;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -1944,7 +1944,7 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme .theme-actions.coming-soon {
-  background-color: #0fd9ff;
+  background-color: #0196b2;
   right: 0;
 }
 
@@ -1969,7 +1969,7 @@ input[type="button"].btn-block {
   position: relative;
   font-size: 17px;
   top: 17px;
-  color: #00B8DB;
+  color: #016B7F;
 }
 
 .atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed), .atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed), .atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed) {
@@ -1993,7 +1993,7 @@ input[type="button"].btn-block {
 
 .atum-addons .theme:hover .show-key, .atum-addons .theme.inactive .show-key, .atum-addons .theme.invalid .show-key {
   opacity: 1 !important;
-  background-color: #0fd9ff;
+  background-color: #0196b2;
   -webkit-transform: translateX(0);
           transform: translateX(0);
 }
@@ -2103,7 +2103,7 @@ input[type="button"].btn-block {
           box-shadow: none;
   text-shadow: none;
   font-weight: normal;
-  background-color: #00B8DB;
+  background-color: #016B7F;
   color: #fff;
   border-radius: 0;
   -webkit-transition: all 0.2s ease-in-out;
@@ -2122,14 +2122,14 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme .button:disabled {
-  background-color: #00B8DB !important;
+  background-color: #016B7F !important;
   text-shadow: none !important;
   color: #fff !important;
   opacity: 0.6;
 }
 
 .atum-addons .theme .button:hover {
-  background-color: #0fd9ff;
+  background-color: #0196b2;
 }
 
 .atum-addons .theme.active .addon-key {
@@ -2142,8 +2142,8 @@ input[type="button"].btn-block {
   top: 11px;
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00B8DB;
+  border: 3px solid rgba(1, 107, 127, 0.25);
+  border-top-color: #016B7F;
   border-radius: 50%;
   position: absolute;
   z-index: 50;

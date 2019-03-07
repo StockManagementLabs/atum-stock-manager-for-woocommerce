@@ -73,9 +73,9 @@ $grays: map-merge((
 		"900": $gray-900
 ), $grays);
 
-$blue:                                  #00B8DB !default;
+$blue:                                  #016B7F !default;
 $blue-dark:                             #27283B !default;
-$blue-dark-lighten:                     #3b3d5a;
+$blue-dark-lighten:                     #3B3D5A;
 $blue-dark-light-2:                     lighten($blue-dark, 40%) !default;
 $blue-light:                            lighten($blue, 50%) !default;
 $blue-light-2:                          lighten($blue, 55%) !default;
@@ -91,7 +91,7 @@ $green-light:                           lighten($green, 40%) !default;
 $green-light-2:                         lighten($green, 50%) !default;
 $purple:                                #BA7DF7 !default;
 $purple-light:                          lighten($purple, 20%) !default;
-$purple-pl:                             #9357cc !default;
+$purple-pl:                             #9357CC !default;
 
 $colors: () !default;
 $colors: map-merge((
