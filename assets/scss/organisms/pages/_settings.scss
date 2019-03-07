@@ -1443,8 +1443,9 @@ $settings-xs-min:           568px !default;
 			
 			// Color Pickers
 			.wp-picker-container {
-				#atum_mi_geoprompt_accent_color {
-					width: 110px;
+				
+				.wp-color-picker {
+					max-width: 85px;
 				}
 				
 				@include tablet-max {
@@ -2051,8 +2052,9 @@ $settings-xs-min:           568px !default;
 	
 	// Color Pickers
 	.wp-picker-container {
-		#atum_mi_geoprompt_accent_color {
-			width: 110px;
+		
+		.wp-color-picker {
+			max-width: 85px;
 		}
 		
 		@include tablet-max {
@@ -2092,6 +2094,7 @@ $settings-xs-min:           568px !default;
 			
 			&:focus {
 				border-color: $blue;
+				
 				.wp-color-result-text {
 					visibility: hidden;
 					
@@ -2110,6 +2113,8 @@ $settings-xs-min:           568px !default;
 				border-left: none;
 				font-size: 12px;
 				line-height: 1.17px;
+				text-align: left;
+				padding-left: 13px;
 			}
 			
 			.color-picker-preview {
