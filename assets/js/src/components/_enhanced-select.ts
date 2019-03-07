@@ -33,15 +33,13 @@ export default class EnhancedSelect {
 	 */
 	doSelect2($selector: JQuery, options: any = {}, avoidEmptySelections: boolean = false) {
 		
-		if (typeof $.fn['select2'] === 'function') {
+		if (typeof $.fn['select2'] !== 'function') {
 			return;
 		}
 		
 		options = Object.assign( {
 			minimumResultsForSearch: 10,
 		}, options);
-		
-		console.log(options);
 		
 		$selector.each( (index: number, elem: Element) => {
 			

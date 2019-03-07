@@ -15,11 +15,10 @@ export let ColorPicker = {
 			$colorField.wpColorPicker({
 				change: function(evt: any, ui: any){
 					
-					console.log(evt);
-					console.log(ui);
-					const value = $(this).val();
+					const value = $(evt.target).val();
 					$('.wp-picker-active .color-picker-preview').css('background-color', value);
 					$('.wp-picker-active .wp-color-result-text').html(value);
+					
 				}
 			});
 			
@@ -42,6 +41,7 @@ export let ColorPicker = {
 			}
 			
 		});
+		
 	},
 	
 }

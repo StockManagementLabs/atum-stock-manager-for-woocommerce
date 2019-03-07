@@ -48,7 +48,7 @@ export default class SettingsPage {
 		this.toggleMenu();
 		
 		// Change menu theme
-		$('.js-switch-menu').on('change', () => {
+		$('input[name="interface_style"]').on('change', () => {
 			this.changeTheme();
 		});
 		
