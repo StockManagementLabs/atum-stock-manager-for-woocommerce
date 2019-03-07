@@ -46,7 +46,7 @@
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 25px;
-  color: #00B8DB;
+  color: #016B7F;
   text-transform: uppercase;
 }
 
@@ -60,7 +60,7 @@
 
 .content-address h4 {
   font-size: 18px;
-  background-color: #00B8DB;
+  background-color: #016B7F;
   color: #fff;
   padding: 5px 10px;
   margin: 0;
@@ -77,7 +77,7 @@
 }
 
 .content-lines .po-li-head {
-  background-color: #00B8DB;
+  background-color: #016B7F;
 }
 
 .content-lines .po-li-head th {
@@ -103,16 +103,16 @@
 }
 
 .content-lines td.total, .content-lines .po-lines tr:nth-child(even) td {
-  background-color: rgba(0, 184, 219, 0.1);
+  background-color: rgba(1, 107, 127, 0.1);
 }
 
 .content-totals .subtotal td {
-  border-top: 2px solid #00B8DB;
+  border-top: 2px solid #016B7F;
   padding-top: 20px;
 }
 
 .po-total .label, .po-total .total {
-  border-top: 2px solid #00B8DB;
+  border-top: 2px solid #016B7F;
   font-weight: bold;
 }
 
