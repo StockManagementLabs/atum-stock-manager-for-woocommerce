@@ -5,7 +5,6 @@
  *
  * @since 0.0.1
  */
-import EnhancedSelect from './components/_enhanced-select';
 
 window['$'] = window['jQuery'];
 
@@ -37,6 +36,7 @@ import DateTimePicker from './components/_date-time-picker';
 import DragScroll from './components/list-table/_drag-scroll';
 import ColumnGroups from './components/list-table/_column-groups';
 import EditableCell from './components/list-table/_editable-cell';
+import EnhancedSelect from './components/_enhanced-select';
 import Filters from './components/list-table/_filters';
 import Globals from './components/list-table/_globals';
 import LightBox from './components/_light-box';

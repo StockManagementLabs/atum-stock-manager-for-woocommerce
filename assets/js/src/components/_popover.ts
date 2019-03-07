@@ -10,10 +10,13 @@ export default class Popover {
 	settings: Settings;
 	dateTimePicker: DateTimePicker;
 	
-	constructor(settingsObj: Settings, dateTimePickerObj: DateTimePicker) {
+	constructor(settingsObj: Settings, dateTimePickerObj?: DateTimePicker) {
 		
 		this.settings = settingsObj;
-		this.dateTimePicker = dateTimePickerObj;
+		
+		if (dateTimePickerObj) {
+			this.dateTimePicker = dateTimePickerObj;
+		}
 		
 		// Init popovers.
 		this.setFieldPopover();
@@ -63,10 +66,14 @@ export default class Popover {
 			
 			$activePopover.find('.meta-value').focus().select();
 			
-			let $dateInputs: JQuery = $activePopover.find('.datepicker');
-			
-			if ( $dateInputs.length) {
-				this.dateTimePicker.addDateTimePickers($dateInputs);
+			if (this.dateTimePicker) {
+				
+				let $dateInputs: JQuery = $activePopover.find('.datepicker');
+				
+				if ($dateInputs.length) {
+					this.dateTimePicker.addDateTimePickers($dateInputs);
+				}
+				
 			}
 			
 			// Click the "Set" button when hitting enter on an input field.

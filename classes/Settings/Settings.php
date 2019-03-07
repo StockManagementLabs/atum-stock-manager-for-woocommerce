@@ -183,18 +183,13 @@ class Settings {
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
 
-			wp_register_script( 'jquery.address', ATUM_URL . 'assets/js/vendor/jquery.address.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-			wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', array(), ATUM_VERSION, TRUE );
-			wp_register_script( 'select2', ATUM_URL . 'assets/js/vendor/select2.min.js', array(), ATUM_VERSION, TRUE );
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
-
-			$min = ! ATUM_DEBUG ? '.min' : '';
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::maybe_enqueue_scripts();
 
-			wp_register_script( self::UI_SLUG, ATUM_URL . "assets/js/atum.settings$min.js", array( 'jquery', 'jquery.address', 'switchery', 'sweetalert2', 'select2', 'wp-color-picker' ), ATUM_VERSION, TRUE );
+			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum.settings.min.js', array( 'jquery', 'sweetalert2', 'wp-color-picker' ), ATUM_VERSION, TRUE );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'atumPrefix'                      => ATUM_PREFIX,

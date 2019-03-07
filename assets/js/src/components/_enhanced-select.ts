@@ -27,18 +27,58 @@ export default class EnhancedSelect {
 	/**
 	 * Add the select2 to the specified selectors
 	 *
-	 * @param jQuery $selector
-	 * @param Object options
+	 * @param jQuery  $selector
+	 * @param Object  options
+	 * @param Boolean avoidEmptySelections
 	 */
-	doSelect2($selector: any, options?: any) {
+	doSelect2($selector: JQuery, options: any = {}, avoidEmptySelections: boolean = false) {
 		
-		options = options || {
+		if (typeof $.fn['select2'] === 'function') {
+			return;
+		}
+		
+		options = Object.assign( {
 			minimumResultsForSearch: 10,
-		};
-	
-		$selector.select2(options);
+		}, options);
 		
-		$selector.siblings('.select2-container').addClass('atum-select2');
+		console.log(options);
+		
+		$selector.each( (index: number, elem: Element) => {
+			
+			const $select: any = $(elem);
+			
+			if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
+				$select.prop('multiple', true);
+			}
+			
+			if (avoidEmptySelections) {
+				
+				$select.on('select2:selecting', (evt: Event) => {
+					
+					let $this = $(evt.currentTarget),
+					    value = $this.val();
+					
+					// Avoid selecting the "None" option
+					if ($.isArray(value) && $.inArray('', value) > -1) {
+						
+						$.each(value, function (index: number, elem: string) {
+							if (elem === '') {
+								value.splice(index, 1);
+							}
+						});
+						
+						$this.val(value);
+						
+					}
+					
+				});
+				
+			}
+			
+			$select.select2(options);
+			$select.siblings('.select2-container').addClass('atum-select2');
+			
+		} );
 	
 	}
 	
@@ -47,7 +87,7 @@ export default class EnhancedSelect {
 	 */
 	addAtumClasses() {
 		
-		$('select').filter('.atum-select2, .atum-enhanced-select').each( (index: number, elem: any) => {
+		$('select').filter('.atum-select2, .atum-enhanced-select').each( (index: number, elem: Element) => {
 			
 			const $select: JQuery           = $(elem),
 			      $select2Container: JQuery = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select')
