@@ -1039,12 +1039,12 @@ abstract class AtumListTable extends \WP_List_Table {
 						$product_tip = esc_attr__( 'Bundle item', ATUM_TEXT_DOMAIN );
 					}
 
-					$childs = \WC_PB_DB::query_bundled_items( array(
+					$children = Helpers::get_bundle_items( array(
 						'return'    => 'id=>product_id',
 						'bundle_id' => $this->product->get_id(),
 					) );
 
-					if ( $childs ) {
+					if ( $children ) {
 						$product_tip .= '<br>' . sprintf(
 							/* translators: product type names */
 						esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), esc_attr__( 'bundle items', ATUM_TEXT_DOMAIN ) );
@@ -4143,7 +4143,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			GROUP BY p.ID
 		", $parent_type ) ); // WPCS: unprepared sql ok.
 
-		$parents_with_child = $grouped_products = $bundle_childrens = array();
+		$parents_with_child = $grouped_products = $bundle_children = array();
 
 		if ( ! empty( $parents ) ) {
 
@@ -4176,20 +4176,21 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'bundle':
 					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents ) );
 
-					$bundle_args = array(
+					$bundle_children = Helpers::get_bundle_items( array(
 						'return'    => 'id=>product_id',
 						'bundle_id' => $parents->posts,
-					);
-
-					$bundle_childrens = \WC_PB_DB::query_bundled_items( $bundle_args );
+					) );
 
 					foreach ( $parents->posts as $parent_id ) {
 
-						if ( ! empty( $bundle_childrens ) && is_array( $bundle_childrens ) ) {
+						if ( ! empty( $bundle_children ) && is_array( $bundle_children ) ) {
 							$parents_with_child[] = $parent_id;
 						}
+
 					}
+
 					break;
+					
 			}
 
 			// Store the main query data to not lose when returning back.
@@ -4276,30 +4277,30 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			elseif ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $parent_type ) {
 
-				foreach ( $bundle_childrens as $key => $bundle_children ) {
+				foreach ( $bundle_children as $key => $bundle_children ) {
 
 					$product_children = Helpers::get_atum_product( $bundle_children );
 
 					if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
 
 						if ( ! $this->show_controlled ) {
-							unset( $bundle_childrens[ $key ] );
+							unset( $bundle_children[ $key ] );
 						}
 
 					}
 					elseif ( $this->show_controlled ) {
-						unset( $bundle_childrens[ $key ] );
+						unset( $bundle_children[ $key ] );
 					}
 
 				}
 
-				if ( empty( $bundle_childrens ) ) {
+				if ( empty( $bundle_children ) ) {
 					$parents_with_child = [];
 				}
 				else {
 
 					$bundle_parents = [];
-					foreach ( $bundle_childrens as $bundle_children ) {
+					foreach ( $bundle_children as $bundle_children ) {
 						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
 					}
 
@@ -4312,8 +4313,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
-				$this->children_products = array_merge( $this->children_products, $bundle_childrens );
-				return $bundle_childrens;
+				$this->children_products = array_merge( $this->children_products, $bundle_children );
+				return $bundle_children;
 
 			}
 			else {

@@ -2429,4 +2429,27 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Get the items for a bundle product
+	 *
+	 * @since 1.5.6
+	 *
+	 * @param array $args
+	 *
+	 * @return array|bool
+	 */
+	public static function get_bundle_items( $args ) {
+
+		$cache_key = AtumCache::get_cache_key( 'query_bundled_items', $args );
+		$children  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( ! $has_cache ) {
+			$children = \WC_PB_DB::query_bundled_items( $args );
+			AtumCache::set_cache( $cache_key, $children );
+		}
+
+		return $children;
+
+	}
+
 }
