@@ -42,7 +42,7 @@ $log_status = $atum_order->get_status();
 				<p class="form-field form-field-wide">
 					<label for="atum_order_type"><?php esc_html_e( 'Log type', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<select id="atum_order_type" name="atum_order_type" class="wc-enhanced-select">
+					<select id="atum_order_type" name="atum_order_type" class="wc-enhanced-select atum-enhanced-select">
 						<?php
 						$log_types           = $atum_order::get_log_types();
 						$atum_order_log_type = $atum_order->get_log_type();
@@ -101,7 +101,7 @@ $log_status = $atum_order->get_status();
 				<p class="form-field form-field-wide">
 					<label for="customer_user"><?php esc_html_e( 'Order', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<select class="wc-product-search" id="wc_order" name="wc_order" data-allow_clear="true" data-action="atum_json_search_orders"
+					<select class="wc-product-search atum-enhanced-select" id="wc_order" name="wc_order" data-allow_clear="true" data-action="atum_json_search_orders"
 							data-placeholder="<?php esc_attr_e( 'Search by Order ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"
 							data-selected="" data-minimum_input_length="1"
 							>

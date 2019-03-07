@@ -1515,21 +1515,22 @@ table.wp-list-table {
 	td {
 		a {
 			color: $blue;
+			
 			&:hover, &:focus, &:active {
 				color: $blue;
 			}
 		}
 	}
+	
 	tbody {
 		tr:hover {
-			box-shadow: -1px -1px 19px -1px rgba(0, 0, 0, 0.15) inset;
+			box-shadow: -1px -1px 19px -1px rgba($black, 0.15) inset;
 			
 		}
 	}
 }
 
 table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list-table  {
-	
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
@@ -2559,4 +2560,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 	}
 	
+}
+
+// Hide filter button on Inbound Stock list
+[data-screen="atum-inventory_page_atum-inbound-stock"] {
+	.tablenav {
+		[name="filter_action"] {
+			visibility: hidden;
+		}
+	}
 }

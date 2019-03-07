@@ -1180,7 +1180,7 @@ abstract class AtumOrderPostType {
 	public static function atum_order_status_dropdown( $id, $value ) {
 		
 		?>
-		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select">
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select atum-enhanced-select">
 			<?php
 			$statuses = static::get_statuses();
 			foreach ( $statuses as $status => $status_name ) : ?>

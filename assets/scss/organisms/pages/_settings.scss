@@ -1250,24 +1250,28 @@ $settings-xs-min:           568px !default;
 					}
 					
 					.select2-container {
-						.select2-selection--multiple {
-							border-radius: 4px;
-							line-height: 1;
-							margin-top: 2px;
+						&.atum-select2, &.atum-enhanced-select {
 							
-							.select2-search.select2-search--inline {
-								margin: 0;
-								height: 28px;
+							.select2-selection--multiple {
+								border-radius: 4px;
+								line-height: 1;
+								margin-top: 2px;
 								
-								.select2-search__field {
-									width: inherit !important;
-									@include placeholder($wp-gray-1);
+								.select2-search.select2-search--inline {
+									margin: 0;
+									height: 28px;
 									
-									@include mobile-max {
-										width: 100% !important;
+									.select2-search__field {
+										width: inherit !important;
+										@include placeholder($wp-gray-1);
+										
+										@include mobile-max {
+											width: 100% !important;
+										}
 									}
 								}
 							}
+							
 						}
 					}
 					
@@ -1297,14 +1301,17 @@ $settings-xs-min:           568px !default;
 									}
 								}
 							}
+							
 							.tool-fields-from, .tool-fields-to, .tool-controls {
 								width: 100%;
 								
 								.select2-container {
-									width: 200px !important;
-									
-									@include mobile-max {
-										width: 100% !important;
+									&.atum-select2, &.atum-enhanced-select {
+										width: 200px !important;
+										
+										@include mobile-max {
+											width: 100% !important;
+										}
 									}
 								}
 								
@@ -1354,49 +1361,53 @@ $settings-xs-min:           568px !default;
 				}
 				
 				.select2-container {
-					width: 350px !important;
 					
-					@include tablet-max {
-						width: 80% !important;
-					}
-					
-					@include mobile-max {
-						width: 100% !important;
-					}
-					
-					&, .selection, .select2-selection--single, .select2-selection__rendered {
-						&:focus {
-							outline: none;
-						}
-					}
-					.select2-selection {
-						min-height: 30px;
-						border: 1px solid $gray-200;
+					&.atum-select2, &.atum-enhanced-select {
+						width: 350px !important;
 						
-						.select2-selection__rendered {
-							line-height: 30px;
-							color: $gray-600;
-							padding-left: 16px;
-							
-							.select2-selection__placeholder {
-								color: $gray-600;
+						@include tablet-max {
+							width: 80% !important;
+						}
+						
+						@include mobile-max {
+							width: 100% !important;
+						}
+						
+						&, .selection, .select2-selection--single, .select2-selection__rendered {
+							&:focus {
+								outline: none;
 							}
 						}
 						
-						.select2-selection__arrow {
-							b {
-								display: none;
-							}
+						.select2-selection {
+							min-height: 30px;
+							border: 1px solid $gray-200;
 							
-							&:after {
+							.select2-selection__rendered {
 								line-height: 30px;
-								font-family: $atum-icon-font;
-								content: $atmi-chevron-down;
-								font-size: 10px;
-								color: $gray-500;
+								color: $gray-600;
+								padding-left: 16px;
+								
+								.select2-selection__placeholder {
+									color: $gray-600;
+								}
 							}
+							
+							.select2-selection__arrow {
+								b {
+									display: none;
+								}
+								
+								&:after {
+									line-height: 30px;
+									font-family: $atum-icon-font;
+									content: $atmi-chevron-down;
+									font-size: 10px;
+									color: $gray-500;
+								}
+							}
+							
 						}
-						
 					}
 				}
 			}
@@ -1432,8 +1443,9 @@ $settings-xs-min:           568px !default;
 			
 			// Color Pickers
 			.wp-picker-container {
-				#atum_mi_geoprompt_accent_color {
-					width: 110px;
+				
+				.wp-color-picker {
+					max-width: 85px;
 				}
 				
 				@include tablet-max {
@@ -1891,24 +1903,29 @@ $settings-xs-min:           568px !default;
 			}
 			
 			.select2-container {
-				.select2-selection--multiple {
-					border-radius: 4px;
-					line-height: 1;
-					margin-top: 2px;
+				
+				&.atum-select2, &.atum-enhanced-select {
 					
-					.select2-search.select2-search--inline {
-						margin: 0;
-						height: 28px;
+					.select2-selection--multiple {
+						border-radius: 4px;
+						line-height: 1;
+						margin-top: 2px;
 						
-						.select2-search__field {
-							width: inherit !important;
-							@include placeholder($wp-gray-1);
+						.select2-search.select2-search--inline {
+							margin: 0;
+							height: 28px;
 							
-							@include mobile-max {
-								width: 100% !important;
+							.select2-search__field {
+								width: inherit !important;
+								@include placeholder($wp-gray-1);
+								
+								@include mobile-max {
+									width: 100% !important;
+								}
 							}
 						}
 					}
+					
 				}
 			}
 			
@@ -1943,7 +1960,9 @@ $settings-xs-min:           568px !default;
 						width: 100%;
 						
 						.select2-container {
-							width: inherit !important;
+							&.atum-select2, &.atum-enhanced-select {
+								width: inherit !important;
+							}
 						}
 						
 						.select2-selection__choice {
@@ -1989,46 +2008,15 @@ $settings-xs-min:           568px !default;
 		
 		.select2-container {
 			
-			@include tablet-max {
-				width: 80% !important;
-			}
-			
-			@include mobile-max {
-				width: 100% !important;
-			}
-			
-			&, .selection, .select2-selection--single, .select2-selection__rendered {
-				&:focus {
-					outline: none;
-				}
-			}
-			.select2-selection {
-				min-height: 30px;
-				border: 1px solid $gray-200;
+			&.atum-select2, &.atum-enhanced-select {
 				
-				.select2-selection__rendered {
-					color: $gray-600;
-					padding-left: 16px;
-					
-					.select2-selection__placeholder {
-						color: $gray-600;
-					}
+				@include tablet-max {
+					width: 80% !important;
 				}
 				
-				.select2-selection__arrow {
-					b {
-						display: none;
-					}
-					
-					&:after {
-						line-height: 30px;
-						font-family: $atum-icon-font;
-						content: $atmi-chevron-down;
-						font-size: 10px;
-						color: $gray-500;
-					}
+				@include mobile-max {
+					width: 100% !important;
 				}
-				
 			}
 		}
 	}
@@ -2064,8 +2052,9 @@ $settings-xs-min:           568px !default;
 	
 	// Color Pickers
 	.wp-picker-container {
-		#atum_mi_geoprompt_accent_color {
-			width: 110px;
+		
+		.wp-color-picker {
+			max-width: 85px;
 		}
 		
 		@include tablet-max {
@@ -2105,6 +2094,7 @@ $settings-xs-min:           568px !default;
 			
 			&:focus {
 				border-color: $blue;
+				
 				.wp-color-result-text {
 					visibility: hidden;
 					
@@ -2123,6 +2113,8 @@ $settings-xs-min:           568px !default;
 				border-left: none;
 				font-size: 12px;
 				line-height: 1.17px;
+				text-align: left;
+				padding-left: 13px;
 			}
 			
 			.color-picker-preview {

@@ -99,8 +99,13 @@ export default class DragScroll {
 	 */
 	addHorizontalDragScroll(elementId: string, checkEnhanced: boolean) {
 		
-		let $nav: JQuery                  = $(`#${ elementId }`),
-		    $overflowOpacityRight: JQuery = $nav.find('.overflow-opacity-effect-right'),
+		const $nav: JQuery = $(`#${ elementId }`);
+		
+		if (!$nav.length) {
+			return;
+		}
+		
+		let $overflowOpacityRight: JQuery = $nav.find('.overflow-opacity-effect-right'),
 		    $overflowOpacityLeft: JQuery  = $nav.find('.overflow-opacity-effect-left'),
 		    $leftMax: number              = $nav ? $nav.get(0).scrollWidth : 0,
 		    $left: number                 = $nav ? $nav.get(0).scrollLeft : 0,

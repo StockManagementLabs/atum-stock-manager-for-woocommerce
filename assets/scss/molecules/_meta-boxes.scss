@@ -13,7 +13,7 @@
 		width: 48%;
 		padding: 0;
 		margin: 9px 0 0;
-		color: #777;
+		color: $wp-gray-7;
 		
 		label {
 			display: block;
@@ -150,7 +150,7 @@
 		
 		.modal-close-link {
 			cursor: pointer;
-			color: #777;
+			color: $wp-gray-7;
 			height: 54px;
 			width: 54px;
 			padding: 0;
@@ -214,7 +214,7 @@
 		padding: 1em 1.5em;
 		background: #fcfcfc;
 		border-top: 1px solid #dfdfdf;
-		box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 -4px 4px -4px rgba($black, 0.1);
 		
 		.inner {
 			float: right;
@@ -249,77 +249,81 @@
 }
 
 .select2-dropdown--below {
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 1px rgba($black, 0.1);
 }
 
 .select2-dropdown--above {
-	box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 -1px 1px rgba($black, 0.1);
 }
 
 .select2-container {
 	
-	.select2-selection__rendered.ui-sortable li {
-		cursor: move;
-	}
+	&.atum-select2, &.atum-enhanced-select {
 	
-	.select2-selection {
-		border-color: $wp-gray-4;
-	}
-	
-	.select2-search__field {
-		min-width: 150px;
-	}
-	
-	.select2-selection--single {
-		height: 32px;
-		
-		.select2-selection__rendered {
-			line-height: 28px;
-			padding-right: 24px;
+		.select2-selection__rendered.ui-sortable li {
+			cursor: move;
 		}
 		
-		.select2-selection__arrow {
-			right: 3px;
-			height: 30px;
-			top: 4px;
+		.select2-selection {
+			border-color: $wp-gray-4;
 		}
-		
-	}
-	
-	.select2-selection--multiple {
-		min-height: 28px;
-		border-radius: 0;
-		line-height: 1.5;
-		
-		li {
-			margin: 0;
-		}
-		
-		.select2-selection__choice {
-			padding: 2px 6px;
-		}
-	}
-	
-	.select2-selection__clear {
-		color: #999;
-		margin-top: -1px;
-	}
-	
-	.select2-search--inline {
 		
 		.select2-search__field {
-			font-family: inherit;
-			font-size: inherit;
-			font-weight: inherit;
-			padding: 3px 0;
+			min-width: 150px;
 		}
 		
-	}
-	
-	&, .selection, .select2-selection--single {
-		&:focus {
-			outline: none;
+		.select2-selection--single {
+			height: 32px;
+			
+			.select2-selection__rendered {
+				line-height: 28px;
+				padding-right: 24px;
+			}
+			
+			.select2-selection__arrow {
+				right: 3px;
+				height: 30px;
+				top: 4px;
+			}
+			
 		}
+		
+		.select2-selection--multiple {
+			min-height: 28px;
+			border-radius: 0;
+			line-height: 1.5;
+			
+			li {
+				margin: 0;
+			}
+			
+			.select2-selection__choice {
+				padding: 2px 6px;
+			}
+		}
+		
+		.select2-selection__clear {
+			color: $wp-gray-1;
+			margin-top: -1px;
+		}
+		
+		.select2-search--inline {
+			
+			.select2-search__field {
+				font-family: inherit;
+				font-size: inherit;
+				font-weight: inherit;
+				padding: 3px 0;
+			}
+			
+		}
+		
+		&, .selection, .select2-selection--single {
+			&:focus {
+				outline: none;
+			}
+		}
+		
 	}
 	
 }

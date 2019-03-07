@@ -120,7 +120,8 @@ gulp.task('js::atum', function () {
 			entry: {
 				'list.tables'   : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.ts',
 				'post.type.list': path.join(__dirname, config.assetsDir + '/js/src/') + 'post-type-list-tables.ts',
-				//'product.data'  : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.js',
+				'product.data'  : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.ts',
+				'settings'      : path.join(__dirname, config.assetsDir + '/js/src/') + 'settings.ts',
 			},
 			
 			output: {
@@ -146,7 +147,8 @@ gulp.task('js::atum', function () {
 							loader: 'ts-loader'
 						}
 					},
-				]
+				],
+				noParse: /switchery/
 			},
 			
 			plugins: [

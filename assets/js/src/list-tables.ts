@@ -36,6 +36,7 @@ import DateTimePicker from './components/_date-time-picker';
 import DragScroll from './components/list-table/_drag-scroll';
 import ColumnGroups from './components/list-table/_column-groups';
 import EditableCell from './components/list-table/_editable-cell';
+import EnhancedSelect from './components/_enhanced-select';
 import Filters from './components/list-table/_filters';
 import Globals from './components/list-table/_globals';
 import LightBox from './components/_light-box';
@@ -71,7 +72,8 @@ jQuery( ($) => {
 	
 	// Initialize components with dependency injection.
 	let tooltip = new Tooltip();
-	let listTable = new ListTable(settings, globals, tooltip);
+	let enhancedSelect = new EnhancedSelect();
+	let listTable = new ListTable(settings, globals, tooltip, enhancedSelect);
 	let router = new Router(settings, globals, listTable);
 	let stickyCols = new StickyColumns(settings, globals);
 	let stickyHeader = new StickyHeader(settings, globals, stickyCols, tooltip);

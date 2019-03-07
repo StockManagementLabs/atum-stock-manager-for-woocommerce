@@ -7,12 +7,12 @@ export default class Settings {
 	
 	settings: any = {};
 	
-	constructor(varName:string, defaults = {}) {
+	constructor(varName: string, defaults: any = {}) {
 		
-		let localizedOpts: any = typeof window[varName] !== 'undefined' ? window[varName] : {};
+		const localizedOpts: any = typeof window[varName] !== 'undefined' ? window[varName] : {};
 	
 		// Merge all the settings.
-		this.settings = $.extend( this.settings, defaults, localizedOpts );
+		Object.assign( this.settings, defaults, localizedOpts );
 		
 	}
 	
