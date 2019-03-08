@@ -193,7 +193,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		$log->save_meta( array(
 			'_status'                    => esc_attr( $_POST['status'] ),
 			'_date_created'              => $po_date,
-			Suppliers::SUPPLIER_META_KEY => 'no' === $multiple_suppliers ? absint( $_POST['supplier'] ) : '',
+			Suppliers::SUPPLIER_META_KEY => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? absint( $_POST['supplier'] ) : '',
 			'_multiple_suppliers'        => $multiple_suppliers,
 			'_expected_at_location_date' => $expected_at_location_date,
 		) );
