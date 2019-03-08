@@ -1417,11 +1417,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		// Out of stock.
 		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
-
 			$classes .= ' cell-red';
 			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 			$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
-
 		}
 		// Back Orders.
 		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
@@ -1442,6 +1440,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$content  = '<span class="atum-icon atmi-checkmark-circle tips"' . $data_tip . '></span>';
 		}
 
+		$classes = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
 		echo '<td ' . $data . $classes . '>' . apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product, $this ) . '</td>'; // WPCS: XSS ok.

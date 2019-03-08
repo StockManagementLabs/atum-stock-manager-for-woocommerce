@@ -279,7 +279,6 @@ trait ListTableLegacyTrait {
 
 			}
 		}
-		
 
 		if ( $allow_query ) {
 
