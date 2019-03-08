@@ -14,6 +14,10 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( ! class_exists( '\WC_Product_Booking' ) ) {
+	return;
+}
+
 class AtumProductBooking extends \WC_Product_Booking {
 
 	// Import the shared stuff.

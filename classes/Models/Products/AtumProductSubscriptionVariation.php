@@ -14,6 +14,10 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( ! class_exists( '\WC_Product_Subscription_Variation' ) ) {
+	return;
+}
+
 class WCSubscriptionVariation extends \WC_Product_Subscription_Variation {
 
 	// Import the shared stuff.
