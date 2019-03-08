@@ -159,6 +159,35 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.6`
+
+*2019-03-08*
+
+**Features**
+
+* Performance improvements: reduced the number of db queries using cache.
+* Refactory JS to TypeScript (work in progress).
+
+**Changes**
+
+* Check that 3rd party plugins are loaded before adding an ATUM model for them.
+
+**Fixes**
+
+* Fixed dragscroll opacity effect.
+* Post Type List Tables' CSS fixes.
+* Prevent showing 'all_stock' view.
+* Fixed all back ordererd products counted in views if any filters applied in List Tables.
+* Fixed filter by supplier in Stock Central had variable products included although no children available.
+* Fixed variable ATUM control button for variations working inverted.
+* Avoid CSS conflicts with other plugins using Select2.
+* Fixed ATUM Dashboard not loading widgets.
+* Fixed Purchase Orders message that is conditionally displayed if a supplier is selected.
+* PHP notice fixed when saving Purchase Orders.
+* Minor CSS fixes.
+
+---
+
 `1.5.5.1`
 
 *2019-03-02*
