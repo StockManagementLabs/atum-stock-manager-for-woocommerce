@@ -9,7 +9,7 @@
 
  @charset "UTF-8";
 .color-primary {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .color-info {
@@ -17,11 +17,11 @@
 }
 
 .color-success {
-  color: #34AD27;
+  color: #69C61D;
 }
 
 .color-warning {
-  color: #9C6B00;
+  color: #EFAF00;
 }
 
 .color-danger {
@@ -29,7 +29,7 @@
 }
 
 .bg-primary {
-  background-color: #016B7F;
+  background-color: #00B8DB;
 }
 
 .bg-info {
@@ -37,11 +37,11 @@
 }
 
 .bg-success {
-  background-color: #34AD27;
+  background-color: #69C61D;
 }
 
 .bg-warning {
-  background-color: #9C6B00;
+  background-color: #EFAF00;
 }
 
 .bg-danger {
@@ -541,13 +541,13 @@ body .select2-container--default.atum-select2 .select2-results__option[aria-disa
 }
 
 body .select2-container--default.atum-select2 .select2-results__option[aria-selected=true], body .select2-container--default.atum-enhanced-select .select2-results__option[aria-selected=true] {
-  background-color: #81eafe;
-  color: #016B7F;
+  background-color: #dbf9ff;
+  color: #00B8DB;
 }
 
 body .select2-container--default.atum-select2 .select2-results__option[data-selected=true], body .select2-container--default.atum-enhanced-select .select2-results__option[data-selected=true] {
-  background-color: #81eafe;
-  color: #016B7F;
+  background-color: #dbf9ff;
+  color: #00B8DB;
 }
 
 body .select2-container--default.atum-select2 .select2-results__option.select2-results__message, body .select2-container--default.atum-enhanced-select .select2-results__option.select2-results__message {
@@ -812,7 +812,7 @@ body .select2-container--classic.atum-select2 .select2-results__option[aria-disa
 }
 
 body .select2-container--classic.atum-select2 .select2-results__option--highlighted[aria-selected], body .select2-container--classic.atum-enhanced-select .select2-results__option--highlighted[aria-selected] {
-  background-color: #016B7F;
+  background-color: #00B8DB;
   color: #fff;
 }
 
@@ -1824,8 +1824,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .btn:focus, .btn.focus {
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
 }
 
 .btn.disabled, .btn:disabled {
@@ -1845,8 +1845,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .btn:not(:disabled):not(.disabled):active:focus, .btn:not(:disabled):not(.disabled).active:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25), inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
 a.btn.disabled,
@@ -1895,40 +1895,40 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #016B7F;
+  background-color: #00B8DB;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: rgba(1, 107, 127, 0.6);
+  background-color: rgba(0, 184, 219, 0.6);
 }
 
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: #fff;
-  background-color: #016B7F;
-  border-color: #016B7F;
+  background-color: #00B8DB;
+  border-color: #00B8DB;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: rgba(1, 107, 127, 0.6);
-  border-color: rgba(1, 107, 127, 0.6);
+  background-color: rgba(0, 184, 219, 0.6);
+  border-color: rgba(0, 184, 219, 0.6);
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-secondary {
@@ -1971,40 +1971,40 @@ fieldset:disabled a.btn {
 
 .btn-success {
   color: #fff;
-  background-color: #34AD27;
+  background-color: #69C61D;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-success:hover {
   color: #fff;
-  background-color: rgba(52, 173, 39, 0.6);
+  background-color: rgba(105, 198, 29, 0.6);
 }
 
 .btn-success:focus, .btn-success.focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-success.disabled, .btn-success:disabled {
   color: #fff;
-  background-color: #34AD27;
-  border-color: #34AD27;
+  background-color: #69C61D;
+  border-color: #69C61D;
 }
 
 .btn-success:not(:disabled):not(.disabled):active, .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
   color: #fff;
-  background-color: rgba(52, 173, 39, 0.6);
-  border-color: rgba(52, 173, 39, 0.6);
+  background-color: rgba(105, 198, 29, 0.6);
+  border-color: rgba(105, 198, 29, 0.6);
 }
 
 .btn-success:not(:disabled):not(.disabled):active:focus, .btn-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-success.dropdown-toggle:focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-info {
@@ -2047,40 +2047,40 @@ fieldset:disabled a.btn {
 
 .btn-warning {
   color: #fff;
-  background-color: #9C6B00;
+  background-color: #EFAF00;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-warning:hover {
   color: #fff;
-  background-color: rgba(156, 107, 0, 0.6);
+  background-color: rgba(239, 175, 0, 0.6);
 }
 
 .btn-warning:focus, .btn-warning.focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-warning.disabled, .btn-warning:disabled {
   color: #fff;
-  background-color: #9C6B00;
-  border-color: #9C6B00;
+  background-color: #EFAF00;
+  border-color: #EFAF00;
 }
 
 .btn-warning:not(:disabled):not(.disabled):active, .btn-warning:not(:disabled):not(.disabled).active,
 .show > .btn-warning.dropdown-toggle {
   color: #fff;
-  background-color: rgba(156, 107, 0, 0.6);
-  border-color: rgba(156, 107, 0, 0.6);
+  background-color: rgba(239, 175, 0, 0.6);
+  border-color: rgba(239, 175, 0, 0.6);
 }
 
 .btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-warning.dropdown-toggle:focus {
   color: #fff;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-danger {
@@ -2198,39 +2198,39 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary {
-  color: #016B7F;
+  color: #00B8DB;
   background-color: transparent;
   background-image: none;
-  border-color: #016B7F;
+  border-color: #00B8DB;
 }
 
 .btn-outline-primary:hover {
   color: #fff;
-  background-color: #016B7F;
-  border-color: #016B7F;
+  background-color: #00B8DB;
+  border-color: #00B8DB;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
-  color: #016B7F;
+  color: #00B8DB;
   background-color: transparent;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
 .show > .btn-outline-primary.dropdown-toggle {
   color: #fff;
-  background-color: #016B7F;
-  border-color: #016B7F;
+  background-color: #00B8DB;
+  border-color: #00B8DB;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(1, 107, 127, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.5);
 }
 
 .btn-outline-secondary {
@@ -2270,39 +2270,39 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-success {
-  color: #34AD27;
+  color: #69C61D;
   background-color: transparent;
   background-image: none;
-  border-color: #34AD27;
+  border-color: #69C61D;
 }
 
 .btn-outline-success:hover {
   color: #fff;
-  background-color: #34AD27;
-  border-color: #34AD27;
+  background-color: #69C61D;
+  border-color: #69C61D;
 }
 
 .btn-outline-success:focus, .btn-outline-success.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-outline-success.disabled, .btn-outline-success:disabled {
-  color: #34AD27;
+  color: #69C61D;
   background-color: transparent;
 }
 
 .btn-outline-success:not(:disabled):not(.disabled):active, .btn-outline-success:not(:disabled):not(.disabled).active,
 .show > .btn-outline-success.dropdown-toggle {
   color: #fff;
-  background-color: #34AD27;
-  border-color: #34AD27;
+  background-color: #69C61D;
+  border-color: #69C61D;
 }
 
 .btn-outline-success:not(:disabled):not(.disabled):active:focus, .btn-outline-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-success.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(52, 173, 39, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
 }
 
 .btn-outline-info {
@@ -2342,39 +2342,39 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-warning {
-  color: #9C6B00;
+  color: #EFAF00;
   background-color: transparent;
   background-image: none;
-  border-color: #9C6B00;
+  border-color: #EFAF00;
 }
 
 .btn-outline-warning:hover {
   color: #fff;
-  background-color: #9C6B00;
-  border-color: #9C6B00;
+  background-color: #EFAF00;
+  border-color: #EFAF00;
 }
 
 .btn-outline-warning:focus, .btn-outline-warning.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-outline-warning.disabled, .btn-outline-warning:disabled {
-  color: #9C6B00;
+  color: #EFAF00;
   background-color: transparent;
 }
 
 .btn-outline-warning:not(:disabled):not(.disabled):active, .btn-outline-warning:not(:disabled):not(.disabled).active,
 .show > .btn-outline-warning.dropdown-toggle {
   color: #fff;
-  background-color: #9C6B00;
-  border-color: #9C6B00;
+  background-color: #EFAF00;
+  border-color: #EFAF00;
 }
 
 .btn-outline-warning:not(:disabled):not(.disabled):active:focus, .btn-outline-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-warning.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(156, 107, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-outline-danger {
@@ -2655,7 +2655,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border: solid 1px #016B7F;
+  border: solid 1px #00B8DB;
 }
 
 .swal2-container .swal2-title {
@@ -2715,8 +2715,8 @@ input[type="button"].btn-block {
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(1, 107, 127, 0.25);
-  border-top-color: #016B7F;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
   border-radius: 50%;
   position: absolute;
   z-index: 50;
@@ -2907,7 +2907,7 @@ input[type="button"].btn-block {
 }
 
 .wc-backbone-modal .alert {
-  background-color: #35defd;
+  background-color: #8fedff;
   padding: 4px 6px;
   display: block;
   font-size: 12px;
@@ -4151,7 +4151,7 @@ ul.atum_order_notes li .note_content::after {
   height: 26px;
   width: 26px;
   top: -3px;
-  background-color: #34AD27;
+  background-color: #69C61D;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -4194,7 +4194,7 @@ ul.atum_order_notes li .note_content::after {
   margin-left: 5px;
   border-radius: 0;
   vertical-align: middle;
-  background-color: #016B7F;
+  background-color: #00B8DB;
   border-radius: 5px;
   text-shadow: none;
   -webkit-box-shadow: none;
@@ -4205,7 +4205,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .wrap h1.wp-heading-inline #atum-update-list:hover {
-  background-color: rgba(1, 107, 127, 0.6);
+  background-color: rgba(0, 184, 219, 0.6);
 }
 
 .wrap h1.wp-heading-inline #atum-update-list:active {
@@ -4243,7 +4243,7 @@ ul.atum_order_notes li .note_content::after {
 
 .wrap .page-title-action, .wrap .page-title-action:active {
   border-radius: 5px;
-  background-color: #34AD27;
+  background-color: #69C61D;
   color: #fff;
   font-size: 14px;
   font-weight: normal;
@@ -4264,7 +4264,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .wrap .page-title-action:hover, .wrap .page-title-action:focus, .wrap .page-title-action:active:hover, .wrap .page-title-action:active:focus {
-  background-color: rgba(52, 173, 39, 0.6);
+  background-color: rgba(105, 198, 29, 0.6);
 }
 
 @media all and (max-width: 782px) {
@@ -4283,7 +4283,7 @@ ul.atum_order_notes li .note_content::after {
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
   border-radius: 5px;
-  background-color: #9C6B00;
+  background-color: #EFAF00;
   font-size: 12px;
   min-width: 70px;
   letter-spacing: normal;
@@ -4304,7 +4304,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
-  background-color: rgba(156, 107, 0, 0.7);
+  background-color: rgba(239, 175, 0, 0.7);
   color: #fff;
   border: none;
 }
@@ -4365,7 +4365,7 @@ ul.atum_order_notes li .note_content::after {
 
 .subsubsub.extend-list-table li span.active {
   border-radius: 5px;
-  background-color: #016B7F;
+  background-color: #00B8DB;
   font-size: 16px;
   padding: 0 10px;
   font-weight: bold;
@@ -4430,11 +4430,11 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .subsubsub.extend-list-table li span a .text-blue {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub.extend-list-table li span a.tips {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub.extend-list-table li span a.tips:hover {
@@ -4448,7 +4448,7 @@ ul.atum_order_notes li .note_content::after {
 .subsubsub.extend-list-table li span .extra-links-container {
   font-size: 14px;
   font-weight: normal;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub.extend-list-table li span .extra-links-container.empty {
@@ -4462,13 +4462,13 @@ ul.atum_order_notes li .note_content::after {
 
 .subsubsub.extend-list-table li span .extra-links-container a {
   padding: 0;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub.extend-list-table li span .count {
   font-size: 16px;
   font-weight: bold;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub.extend-list-table li span .count.extra-links-container {
@@ -4513,7 +4513,7 @@ ul.atum_order_notes li .note_content::after {
 
 .subsubsub:not(.extend-list-table) li a.current {
   border-radius: 5px;
-  background-color: #016B7F;
+  background-color: #00B8DB;
   font-size: 16px;
   padding: 6px 10px;
   font-weight: bold;
@@ -4528,7 +4528,7 @@ ul.atum_order_notes li .note_content::after {
 .subsubsub:not(.extend-list-table) li a .count {
   font-size: 14px;
   font-weight: normal;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub:not(.extend-list-table) li a:active, .subsubsub:not(.extend-list-table) li a:focus {
@@ -4539,7 +4539,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .subsubsub:not(.extend-list-table) li a.tips {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .subsubsub:not(.extend-list-table) li a.tips:hover {
@@ -4867,8 +4867,8 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .search-box .dropdown-item.active, .search-box .dropdown-item:focus, .search-box .dropdown-item:active, p.search-box .dropdown-item.active, p.search-box .dropdown-item:focus, p.search-box .dropdown-item:active {
-  background-color: #81eafe;
-  color: #016B7F;
+  background-color: #dbf9ff;
+  color: #00B8DB;
 }
 
 .tablenav {
@@ -4947,7 +4947,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .tablenav .tablenav-pages a:not(.extend-list-table):hover, .tablenav .tablenav-pages a:not(.extend-list-table):active, .tablenav .tablenav-pages a:not(.extend-list-table):focus {
-  background-color: #9C6B00;
+  background-color: #EFAF00;
   color: #fff;
 }
 
@@ -5291,13 +5291,13 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .atum-list-wrapper .table-style-buttons button.active, .atum-list-wrapper .table-style-buttons button:hover {
-  background-color: #016B7F;
+  background-color: #00B8DB;
   color: #fff;
   border-color: #fff;
 }
 
 .atum-list-wrapper .table-style-buttons button:hover {
-  background-color: rgba(1, 107, 127, 0.6);
+  background-color: rgba(0, 184, 219, 0.6);
   border-color: #fff;
 }
 
@@ -5309,7 +5309,7 @@ ul.atum_order_notes li .note_content::after {
 
 .atum-list-wrapper .search-submit {
   margin-left: 4px;
-  background-color: #9C6B00;
+  background-color: #EFAF00;
   color: #fff;
   font-size: 10px;
   font-weight: normal;
@@ -5325,7 +5325,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .atum-list-wrapper .search-submit:hover, .atum-list-wrapper .search-submit:active, .atum-list-wrapper .search-submit:focus {
-  background-color: rgba(156, 107, 0, 0.7);
+  background-color: rgba(239, 175, 0, 0.7);
   color: #fff;
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -5479,7 +5479,7 @@ ul.atum_order_notes li .note_content::after {
 
 .atum-list-wrapper .subsubsub li span.active {
   border-radius: 5px;
-  background-color: #016B7F;
+  background-color: #00B8DB;
   font-size: 16px;
   padding: 0 10px;
   font-weight: bold;
@@ -5544,11 +5544,11 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .atum-list-wrapper .subsubsub li span a .text-blue {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .atum-list-wrapper .subsubsub li span a.tips {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .atum-list-wrapper .subsubsub li span a.empty {
@@ -5558,7 +5558,7 @@ ul.atum_order_notes li .note_content::after {
 .atum-list-wrapper .subsubsub li span .extra-links-container {
   font-size: 14px;
   font-weight: normal;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .atum-list-wrapper .subsubsub li span .extra-links-container.empty {
@@ -5572,13 +5572,13 @@ ul.atum_order_notes li .note_content::after {
 
 .atum-list-wrapper .subsubsub li span .extra-links-container a {
   padding: 0;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .atum-list-wrapper .subsubsub li span .count {
   font-size: 16px;
   font-weight: bold;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 .atum-list-wrapper .subsubsub li span .count.extra-links-container {
@@ -5594,7 +5594,7 @@ ul.atum_order_notes li .note_content::after {
   border-radius: 50%;
   text-align: center;
   border: none;
-  background-color: #016B7F;
+  background-color: #00B8DB;
   color: #fff;
   padding: 2px;
   cursor: pointer;
@@ -5617,7 +5617,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .atum-list-wrapper .reset-filters:hover {
-  background-color: #015666;
+  background-color: #00a3c2;
 }
 
 .atum-list-wrapper .reset-filters i {
@@ -5873,7 +5873,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .active-row:not(.variable) {
-  background-color: #81eafe !important;
+  background-color: #dbf9ff !important;
 }
 
 #table-container {
@@ -5898,11 +5898,11 @@ table.wp-list-table thead th, table.wp-list-table tfoot th {
 }
 
 table.wp-list-table td a {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.wp-list-table td a:hover, table.wp-list-table td a:focus, table.wp-list-table td a:active {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.wp-list-table tbody tr:hover {
@@ -6040,7 +6040,7 @@ table.atum-list-table th.sortable a, table.atum-list-table th.sorted a, .floatTh
 }
 
 table.atum-list-table th.sortable a:hover, table.atum-list-table th.sortable a span:hover, table.atum-list-table th.sorted a:hover, table.atum-list-table th.sorted a span:hover, .floatThead-container th.sortable a:hover, .floatThead-container th.sortable a span:hover, .floatThead-container th.sorted a:hover, .floatThead-container th.sorted a span:hover, .inbound-stock-list th.sortable a:hover, .inbound-stock-list th.sortable a span:hover, .inbound-stock-list th.sorted a:hover, .inbound-stock-list th.sorted a span:hover, table.wp-list-table th.sortable a:hover, table.wp-list-table th.sortable a span:hover, table.wp-list-table th.sorted a:hover, table.wp-list-table th.sorted a span:hover {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table th.sortable[class*="column-calc_"] a, table.atum-list-table th.sortable.column-_supplier_sku a, table.atum-list-table th.sortable.numeric a, table.atum-list-table th.sorted[class*="column-calc_"] a, table.atum-list-table th.sorted.column-_supplier_sku a, table.atum-list-table th.sorted.numeric a, .floatThead-container th.sortable[class*="column-calc_"] a, .floatThead-container th.sortable.column-_supplier_sku a, .floatThead-container th.sortable.numeric a, .floatThead-container th.sorted[class*="column-calc_"] a, .floatThead-container th.sorted.column-_supplier_sku a, .floatThead-container th.sorted.numeric a, .inbound-stock-list th.sortable[class*="column-calc_"] a, .inbound-stock-list th.sortable.column-_supplier_sku a, .inbound-stock-list th.sortable.numeric a, .inbound-stock-list th.sorted[class*="column-calc_"] a, .inbound-stock-list th.sorted.column-_supplier_sku a, .inbound-stock-list th.sorted.numeric a, table.wp-list-table th.sortable[class*="column-calc_"] a, table.wp-list-table th.sortable.column-_supplier_sku a, table.wp-list-table th.sortable.numeric a, table.wp-list-table th.sorted[class*="column-calc_"] a, table.wp-list-table th.sorted.column-_supplier_sku a, table.wp-list-table th.sorted.numeric a {
@@ -6124,7 +6124,7 @@ table.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-s
 }
 
 table.atum-list-table tr.expanded.variable, table.atum-list-table tr.expanded.variable-subscription, .floatThead-container tr.expanded.variable, .floatThead-container tr.expanded.variable-subscription, .inbound-stock-list tr.expanded.variable, .inbound-stock-list tr.expanded.variable-subscription, table.wp-list-table tr.expanded.variable, table.wp-list-table tr.expanded.variable-subscription {
-  background-color: #016B7F;
+  background-color: #00B8DB;
 }
 
 table.atum-list-table tr.expanded.bundle, .floatThead-container tr.expanded.bundle, .inbound-stock-list tr.expanded.bundle, table.wp-list-table tr.expanded.bundle {
@@ -6132,7 +6132,7 @@ table.atum-list-table tr.expanded.bundle, .floatThead-container tr.expanded.bund
 }
 
 table.atum-list-table tr.expanded.group, .floatThead-container tr.expanded.group, .inbound-stock-list tr.expanded.group, table.wp-list-table tr.expanded.group {
-  background-color: #9C6B00;
+  background-color: #EFAF00;
 }
 
 table.atum-list-table tr.expanded.variable td, table.atum-list-table tr.expanded.variable a, table.atum-list-table tr.expanded.variable-subscription td, table.atum-list-table tr.expanded.variable-subscription a, table.atum-list-table tr.expanded.group td, table.atum-list-table tr.expanded.group a, table.atum-list-table tr.expanded.bundle td, table.atum-list-table tr.expanded.bundle a, .floatThead-container tr.expanded.variable td, .floatThead-container tr.expanded.variable a, .floatThead-container tr.expanded.variable-subscription td, .floatThead-container tr.expanded.variable-subscription a, .floatThead-container tr.expanded.group td, .floatThead-container tr.expanded.group a, .floatThead-container tr.expanded.bundle td, .floatThead-container tr.expanded.bundle a, .inbound-stock-list tr.expanded.variable td, .inbound-stock-list tr.expanded.variable a, .inbound-stock-list tr.expanded.variable-subscription td, .inbound-stock-list tr.expanded.variable-subscription a, .inbound-stock-list tr.expanded.group td, .inbound-stock-list tr.expanded.group a, .inbound-stock-list tr.expanded.bundle td, .inbound-stock-list tr.expanded.bundle a, table.wp-list-table tr.expanded.variable td, table.wp-list-table tr.expanded.variable a, table.wp-list-table tr.expanded.variable-subscription td, table.wp-list-table tr.expanded.variable-subscription a, table.wp-list-table tr.expanded.group td, table.wp-list-table tr.expanded.group a, table.wp-list-table tr.expanded.bundle td, table.wp-list-table tr.expanded.bundle a {
@@ -6165,27 +6165,27 @@ table.atum-list-table tr.expandable.bundle td.title .child-arrow, table.atum-lis
 }
 
 table.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound-stock-list tr.variation, table.wp-list-table tr.variation {
-  background-color: #81eafe;
+  background-color: #dbf9ff;
 }
 
 table.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even), table.wp-list-table tr.variation:nth-child(even) {
-  background-color: #9aeefe;
+  background-color: #f5fdff;
 }
 
 table.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow, .inbound-stock-list tr.variation td.title .child-arrow, table.wp-list-table tr.variation td.title .child-arrow {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table tr.grouped, .floatThead-container tr.grouped, .inbound-stock-list tr.grouped, table.wp-list-table tr.grouped {
-  background-color: #ffd069;
+  background-color: #ffedbc;
 }
 
 table.atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even), .inbound-stock-list tr.grouped:nth-child(even), table.wp-list-table tr.grouped:nth-child(even) {
-  background-color: #ffdd92;
+  background-color: #fff8e5;
 }
 
 table.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow, .inbound-stock-list tr.grouped td.title .child-arrow, table.wp-list-table tr.grouped td.title .child-arrow {
-  color: #9C6B00;
+  color: #EFAF00;
 }
 
 table.atum-list-table tr.no-items td, .floatThead-container tr.no-items td, .inbound-stock-list tr.no-items td, table.wp-list-table tr.no-items td {
@@ -6298,15 +6298,15 @@ table.atum-list-table .stock-selling-manager .atum-icon, .floatThead-container .
 }
 
 table.atum-list-table .cell-green, .floatThead-container .cell-green, .inbound-stock-list .cell-green, table.wp-list-table .cell-green {
-  color: #34AD27 !important;
+  color: #69C61D !important;
 }
 
 table.atum-list-table .cell-yellow, .floatThead-container .cell-yellow, .inbound-stock-list .cell-yellow, table.wp-list-table .cell-yellow {
-  color: #9C6B00 !important;
+  color: #EFAF00 !important;
 }
 
 table.atum-list-table .cell-yellow .set-meta, .floatThead-container .cell-yellow .set-meta, .inbound-stock-list .cell-yellow .set-meta, table.wp-list-table .cell-yellow .set-meta {
-  color: #9C6B00 !important;
+  color: #EFAF00 !important;
 }
 
 table.atum-list-table .cell-red, .floatThead-container .cell-red, .inbound-stock-list .cell-red, table.wp-list-table .cell-red {
@@ -6318,7 +6318,7 @@ table.atum-list-table .cell-red .set-meta, .floatThead-container .cell-red .set-
 }
 
 table.atum-list-table .cell-blue, .floatThead-container .cell-blue, .inbound-stock-list .cell-blue, table.wp-list-table .cell-blue {
-  color: #016B7F !important;
+  color: #00B8DB !important;
 }
 
 table.atum-list-table input[type=checkbox], .floatThead-container input[type=checkbox], .inbound-stock-list input[type=checkbox], table.wp-list-table input[type=checkbox] {
@@ -6329,7 +6329,7 @@ table.atum-list-table input[type=checkbox], .floatThead-container input[type=che
 }
 
 table.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked, .inbound-stock-list input[type=checkbox]:checked, table.wp-list-table input[type=checkbox]:checked {
-  background-color: #016B7F;
+  background-color: #00B8DB;
   border: 0;
 }
 
@@ -6368,13 +6368,13 @@ table.atum-list-table tbody tr td, table.atum-list-table #the-list tr td, .float
 }
 
 table.atum-list-table tbody tr td .set-meta, table.atum-list-table #the-list tr td .set-meta, .floatThead-container tbody tr td .set-meta, .floatThead-container #the-list tr td .set-meta, .inbound-stock-list tbody tr td .set-meta, .inbound-stock-list #the-list tr td .set-meta, table.wp-list-table tbody tr td .set-meta, table.wp-list-table #the-list tr td .set-meta {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table tbody tr td.column-title a, table.atum-list-table tbody tr td.column-title .row-title, table.atum-list-table tbody tr td.atum_order_title a, table.atum-list-table tbody tr td.atum_order_title .row-title, table.atum-list-table #the-list tr td.column-title a, table.atum-list-table #the-list tr td.column-title .row-title, table.atum-list-table #the-list tr td.atum_order_title a, table.atum-list-table #the-list tr td.atum_order_title .row-title, .floatThead-container tbody tr td.column-title a, .floatThead-container tbody tr td.column-title .row-title, .floatThead-container tbody tr td.atum_order_title a, .floatThead-container tbody tr td.atum_order_title .row-title, .floatThead-container #the-list tr td.column-title a, .floatThead-container #the-list tr td.column-title .row-title, .floatThead-container #the-list tr td.atum_order_title a, .floatThead-container #the-list tr td.atum_order_title .row-title, .inbound-stock-list tbody tr td.column-title a, .inbound-stock-list tbody tr td.column-title .row-title, .inbound-stock-list tbody tr td.atum_order_title a, .inbound-stock-list tbody tr td.atum_order_title .row-title, .inbound-stock-list #the-list tr td.column-title a, .inbound-stock-list #the-list tr td.column-title .row-title, .inbound-stock-list #the-list tr td.atum_order_title a, .inbound-stock-list #the-list tr td.atum_order_title .row-title, table.wp-list-table tbody tr td.column-title a, table.wp-list-table tbody tr td.column-title .row-title, table.wp-list-table tbody tr td.atum_order_title a, table.wp-list-table tbody tr td.atum_order_title .row-title, table.wp-list-table #the-list tr td.column-title a, table.wp-list-table #the-list tr td.column-title .row-title, table.wp-list-table #the-list tr td.atum_order_title a, table.wp-list-table #the-list tr td.atum_order_title .row-title {
   font-size: 14px;
   font-weight: 600;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table tbody tr td.column-calc_mi_status > span, table.atum-list-table #the-list tr td.column-calc_mi_status > span, .floatThead-container tbody tr td.column-calc_mi_status > span, .floatThead-container #the-list tr td.column-calc_mi_status > span, .inbound-stock-list tbody tr td.column-calc_mi_status > span, .inbound-stock-list #the-list tr td.column-calc_mi_status > span, table.wp-list-table tbody tr td.column-calc_mi_status > span, table.wp-list-table #the-list tr td.column-calc_mi_status > span {
@@ -6385,11 +6385,11 @@ table.atum-list-table tbody tr td.column-calc_mi_status > span, table.atum-list-
 
 table.atum-list-table tbody tr td.column-_sku span, table.atum-list-table #the-list tr td.column-_sku span, .floatThead-container tbody tr td.column-_sku span, .floatThead-container #the-list tr td.column-_sku span, .inbound-stock-list tbody tr td.column-_sku span, .inbound-stock-list #the-list tr td.column-_sku span, table.wp-list-table tbody tr td.column-_sku span, table.wp-list-table #the-list tr td.column-_sku span {
   font-size: 14px;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table tbody tr td.calc_purchase_order a, table.atum-list-table #the-list tr td.calc_purchase_order a, .floatThead-container tbody tr td.calc_purchase_order a, .floatThead-container #the-list tr td.calc_purchase_order a, .inbound-stock-list tbody tr td.calc_purchase_order a, .inbound-stock-list #the-list tr td.calc_purchase_order a, table.wp-list-table tbody tr td.calc_purchase_order a, table.wp-list-table #the-list tr td.calc_purchase_order a {
-  color: #016B7F;
+  color: #00B8DB;
   font-weight: bold;
 }
 
@@ -6399,7 +6399,7 @@ table.atum-list-table td, table.atum-list-table th, .floatThead-container td, .f
   padding: 6px 5px;
   height: 47px;
   font-size: 14px;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table td.column-ID, table.atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID, .inbound-stock-list td.column-ID, .inbound-stock-list th.column-ID, table.wp-list-table td.column-ID, table.wp-list-table th.column-ID {
@@ -6462,7 +6462,7 @@ table.atum-list-table th span.col-stock-counters, table.atum-list-table th span.
 }
 
 table.atum-list-table th span.col-stock-counters .set-header, table.atum-list-table th span.col-stock-negatives .set-header, table.atum-list-table th span.col-stock-selling-manager .set-header, .floatThead-container th span.col-stock-counters .set-header, .floatThead-container th span.col-stock-negatives .set-header, .floatThead-container th span.col-stock-selling-manager .set-header, .inbound-stock-list th span.col-stock-counters .set-header, .inbound-stock-list th span.col-stock-negatives .set-header, .inbound-stock-list th span.col-stock-selling-manager .set-header, table.wp-list-table th span.col-stock-counters .set-header, table.wp-list-table th span.col-stock-negatives .set-header, table.wp-list-table th span.col-stock-selling-manager .set-header {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table .column-calc_type, .floatThead-container .column-calc_type, .inbound-stock-list .column-calc_type, table.wp-list-table .column-calc_type {
@@ -6545,7 +6545,7 @@ table.atum-list-table .column-calc_type .has-child, .floatThead-container .colum
 }
 
 table.atum-list-table .column-calc_type .has-child.product-type.variable, table.atum-list-table .column-calc_type .has-child.product-type.variable-subscription, table.atum-list-table .column-calc_type .has-child.product-type.variable-product-part, table.atum-list-table .column-calc_type .has-child.product-type.variable-raw-material, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-subscription, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-product-part, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-raw-material, .floatThead-container .column-calc_type .has-child.product-type.variable, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type.variable-product-part, .floatThead-container .column-calc_type .has-child.product-type.variable-raw-material, .floatThead-container .column-calc_type .has-child.product-type-icon.variable, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-subscription, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-product-part, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-raw-material, .inbound-stock-list .column-calc_type .has-child.product-type.variable, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type.variable-product-part, .inbound-stock-list .column-calc_type .has-child.product-type.variable-raw-material, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-subscription, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-product-part, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-raw-material, table.wp-list-table .column-calc_type .has-child.product-type.variable, table.wp-list-table .column-calc_type .has-child.product-type.variable-subscription, table.wp-list-table .column-calc_type .has-child.product-type.variable-product-part, table.wp-list-table .column-calc_type .has-child.product-type.variable-raw-material, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-subscription, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-product-part, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-raw-material {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table .column-calc_type .has-child.product-type.variable-subscription:before, table.atum-list-table .column-calc_type .has-child.product-type-icon.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type.variable-subscription:before, .floatThead-container .column-calc_type .has-child.product-type-icon.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type.variable-subscription:before, .inbound-stock-list .column-calc_type .has-child.product-type-icon.variable-subscription:before, table.wp-list-table .column-calc_type .has-child.product-type.variable-subscription:before, table.wp-list-table .column-calc_type .has-child.product-type-icon.variable-subscription:before {
@@ -6553,7 +6553,7 @@ table.atum-list-table .column-calc_type .has-child.product-type.variable-subscri
 }
 
 table.atum-list-table .column-calc_type .has-child.product-type.grouped, table.atum-list-table .column-calc_type .has-child.product-type-icon.grouped, .floatThead-container .column-calc_type .has-child.product-type.grouped, .floatThead-container .column-calc_type .has-child.product-type-icon.grouped, .inbound-stock-list .column-calc_type .has-child.product-type.grouped, .inbound-stock-list .column-calc_type .has-child.product-type-icon.grouped, table.wp-list-table .column-calc_type .has-child.product-type.grouped, table.wp-list-table .column-calc_type .has-child.product-type-icon.grouped {
-  color: #9C6B00;
+  color: #EFAF00;
 }
 
 table.atum-list-table .column-calc_type .has-child.product-type.bundle, table.atum-list-table .column-calc_type .has-child.product-type-icon.bundle, .floatThead-container .column-calc_type .has-child.product-type.bundle, .floatThead-container .column-calc_type .has-child.product-type-icon.bundle, .inbound-stock-list .column-calc_type .has-child.product-type.bundle, .inbound-stock-list .column-calc_type .has-child.product-type-icon.bundle, table.wp-list-table .column-calc_type .has-child.product-type.bundle, table.wp-list-table .column-calc_type .has-child.product-type-icon.bundle {
@@ -6580,7 +6580,7 @@ table.atum-list-table .show-locations, .floatThead-container .show-locations, .i
 }
 
 table.atum-list-table .show-locations.not-empty, .floatThead-container .show-locations.not-empty, .inbound-stock-list .show-locations.not-empty, table.wp-list-table .show-locations.not-empty {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy, .inbound-stock-list .show-hierarchy, table.wp-list-table .show-hierarchy {
@@ -6590,12 +6590,12 @@ table.atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy, .i
 }
 
 table.atum-list-table .show-hierarchy.not-empty, .floatThead-container .show-hierarchy.not-empty, .inbound-stock-list .show-hierarchy.not-empty, table.wp-list-table .show-hierarchy.not-empty {
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table .set-meta, .floatThead-container .set-meta, .inbound-stock-list .set-meta, table.wp-list-table .set-meta {
   cursor: pointer;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table .set-meta:hover, .floatThead-container .set-meta:hover, .inbound-stock-list .set-meta:hover, table.wp-list-table .set-meta:hover {
@@ -6608,7 +6608,7 @@ table.atum-list-table .set-meta.unsaved, .floatThead-container .set-meta.unsaved
 
 table.atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header, table.wp-list-table .set-header {
   cursor: pointer;
-  color: #016B7F;
+  color: #00B8DB;
 }
 
 table.atum-list-table .set-header .select2-selection__rendered, .floatThead-container .set-header .select2-selection__rendered, .inbound-stock-list .set-header .select2-selection__rendered, table.wp-list-table .set-header .select2-selection__rendered {
@@ -7014,8 +7014,8 @@ table.wp-list-table .column-status .order-status {
 }
 
 table.wp-list-table .column-status .order-status.status-completed, table.wp-list-table .column-status .order-status.status-received {
-  background: #b8eeb2;
-  color: #34AD27;
+  background: #d5f5ba;
+  color: #69C61D;
 }
 
 table.wp-list-table .column-status .order-status.status-on-hold {
@@ -7034,13 +7034,13 @@ table.wp-list-table .column-status .order-status.status-pending {
 }
 
 table.wp-list-table .column-status .order-status.status-ordered {
-  background: #ffd069;
-  color: #9C6B00;
+  background: #ffedbc;
+  color: #EFAF00;
 }
 
 table.wp-list-table .column-status .order-status.status-onthewayin {
-  background: #81eafe;
-  color: #016B7F;
+  background: #dbf9ff;
+  color: #00B8DB;
 }
 
 table.wp-list-table .column-status .order-status.status-receiving {
