@@ -961,7 +961,7 @@ ul.atum_order_notes {
 		}
 	}
 	
-	&.unblocked {
+	&.unblocked, .allow-multiple-suppliers & {
 		display: none;
 	}
 }

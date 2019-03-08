@@ -25,6 +25,8 @@
 				this.isEditable = $('#atum_order_is_editable').val();
 				this.askRemoval = true;
 				
+				var self = this;
+				
 				// Bind items' events
 				this.$container
 					.on( 'click', 'button.add-line-item', this.add_line_item )
@@ -79,6 +81,18 @@
 				
 				// Trigger multiple suppliers' dependent fields
 				$('#multiple_suppliers').change(this.toggleSupplierField);
+				
+				// Hide/show the blocker section on supplier dropdown changes.
+				$('.dropdown_supplier').change(function() {
+					
+					if ($(this).val()) {
+						self.$itemsBlocker.addClass('unblocked');
+					}
+					else {
+						self.$itemsBlocker.removeClass('unblocked');
+					}
+					
+				});
 				
 				// Ask for importing the order items after linking an order
 				$('#wc_order').change(this.importOrderItems);
@@ -905,16 +919,18 @@
 			
 			toggleSupplierField: function() {
 				
-				var $body          = $('body'),
-				    $dropdownField = $('.dropdown_supplier').parent();
+				var $body            = $('body'),
+				    $dropdown        = $('.dropdown_supplier'),
+				    $dropdownWrapper = $dropdown.parent();
 				
 				if ($(this).is(':checked')) {
 					$body.addClass('allow-multiple-suppliers');
-					$dropdownField.slideUp();
+					$dropdownWrapper.slideUp();
+					$dropdown.val('');
 				}
 				else {
 					$body.removeClass('allow-multiple-suppliers');
-					$dropdownField.slideDown();
+					$dropdownWrapper.slideDown();
 				}
 				
 			},

@@ -4018,7 +4018,7 @@ ul.atum_order_notes li .note_content::after {
   display: none;
 }
 
-.items-blocker.unblocked {
+.items-blocker.unblocked, .allow-multiple-suppliers .items-blocker {
   display: none;
 }
 
