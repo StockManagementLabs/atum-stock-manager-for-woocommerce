@@ -33,11 +33,11 @@ defined( 'ABSPATH' ) || die;
 		<div class="list-table-header">
 
 			<div id="scroll-stock_central_nav" class="nav-container-box">
-				<div class="overflow-opacity-effect-right"></div>
-				<div class="overflow-opacity-effect-left"></div>
-
 				<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
 					<?php $list->views(); ?>
+
+					<div class="overflow-opacity-effect-right"></div>
+					<div class="overflow-opacity-effect-left"></div>
 				</nav>
 			</div>
 

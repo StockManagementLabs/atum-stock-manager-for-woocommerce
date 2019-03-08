@@ -45,20 +45,20 @@ export default class DragScroll {
 			})
 			
 			// Horizontal drag scroll (JScrollPane).
-			.on('panright panleft', (evt) => {
+			.on('panright panleft', (evt: any) => {
 				
-				const velocityModifier = 10,
-				      displacement     = this.globals.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
+				const velocityModifier: number = 10,
+				      displacement: number     = this.globals.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
 				
 				this.globals.jScrollApi.scrollToX(displacement, false);
 				
 			})
 			
 			// Vertical drag scroll (browser scroll bar).
-			.on('panup pandown', (evt) => {
+			.on('panup pandown', (evt: any) => {
 				
-				const velocityModifier = 10,
-				      displacement     = $(window).scrollTop() - (evt.distance * (evt.velocityY / velocityModifier));
+				const velocityModifier: number = 10,
+				      displacement: number     = $(window).scrollTop() - (evt.distance * (evt.velocityY / velocityModifier));
 				
 				$(window).scrollTop(displacement);
 				
@@ -79,9 +79,9 @@ export default class DragScroll {
 			this.addHorizontalDragScroll('filters_container', false);
 		});
 		
-		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: any) => {
+		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
 			
-			this.addHorizontalDragScroll($(evt.currentTarget).attr('id'), true);
+			this.addHorizontalDragScroll( $(evt.currentTarget).attr('id'), true );
 			this.tooltip.destroyTooltips();
 			
 			Utils.delay( () => {
@@ -107,22 +107,22 @@ export default class DragScroll {
 		
 		let $overflowOpacityRight: JQuery = $nav.find('.overflow-opacity-effect-right'),
 		    $overflowOpacityLeft: JQuery  = $nav.find('.overflow-opacity-effect-left'),
-		    $leftMax: number              = $nav ? $nav.get(0).scrollWidth : 0,
-		    $left: number                 = $nav ? $nav.get(0).scrollLeft : 0,
-		    $diff: number                 = $leftMax - $left;
+		    leftMax: number               = $nav ? $nav.get(0).scrollWidth : 0,
+		    left: number                  = $nav ? $nav.get(0).scrollLeft : 0,
+		    diff: number                  = leftMax - left;
 		
 		if ( checkEnhanced ) {
 			(<any>$('.enhanced')).select2('close');
 		}
 		
-		if ($diff === $('#' + elementId).outerWidth()) {
+		if (diff === $nav.outerWidth()) {
 			$overflowOpacityRight.hide();
 		}
 		else {
 			$overflowOpacityRight.show();
 		}
 		
-		if ($left === 0) {
+		if (left === 0) {
 			$overflowOpacityLeft.hide();
 		}
 		else {

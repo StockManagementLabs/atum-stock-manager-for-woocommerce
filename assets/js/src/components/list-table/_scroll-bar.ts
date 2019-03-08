@@ -72,8 +72,6 @@ export default class ScrollBar {
 			let $jspContainer: JQuery = this.globals.$atumList.find('.jspContainer'),
 			    $jsPane: JQuery       = this.globals.$atumList.find('.jspPane');
 			
-			console.log($jspContainer, $jsPane);
-			
 			$jspContainer.height( $jsPane.height() );
 			
 			this.globals.$atumList.on('click', '.has-child', () => {

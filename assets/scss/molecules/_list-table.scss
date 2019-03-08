@@ -1017,24 +1017,23 @@
 	}
 	
 	.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-		width: 200px;
+		width: 100px;
 		position: absolute;
 		z-index: 998;
-		height: 51px;
+		height: 49px;
 		pointer-events: none;
+		background-repeat: no-repeat;
 	}
 	
 	.overflow-opacity-effect-right {
 		right: 0;
 		background-image: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
-		background-repeat: no-repeat;
 	}
 	
 	.overflow-opacity-effect-left {
 		display: none;
 		left: 0;
 		background-image: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
-		background-repeat: no-repeat;
 	}
 	
 	.nav-with-scroll-effect {

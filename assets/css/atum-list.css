@@ -5965,18 +5965,18 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .atum-list-wrapper .overflow-opacity-effect-right, .atum-list-wrapper .overflow-opacity-effect-left {
-  width: 200px;
+  width: 100px;
   position: absolute;
   z-index: 998;
-  height: 51px;
+  height: 49px;
   pointer-events: none;
+  background-repeat: no-repeat;
 }
 
 .atum-list-wrapper .overflow-opacity-effect-right {
   right: 0;
   background-image: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
-  background-repeat: no-repeat;
 }
 
 .atum-list-wrapper .overflow-opacity-effect-left {
@@ -5984,7 +5984,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   left: 0;
   background-image: -webkit-gradient(linear, right top, left top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
-  background-repeat: no-repeat;
 }
 
 .atum-list-wrapper .nav-with-scroll-effect {
