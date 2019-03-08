@@ -3050,6 +3050,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'pickMinute'           => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
 			'decrementMinute'      => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
 			'dateFormat'           => 'YYYY-MM-DD',
+			'emptyCol'             => self::EMPTY_COL,
 		);
 
 		if ( $this->first_edit_key ) {

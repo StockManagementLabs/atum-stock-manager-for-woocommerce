@@ -22,7 +22,7 @@ export default class TableButtons {
 		this.stickyHeader = stickyHeaderObj;
 		
 		// Table style buttons.
-		this.globals.$atumList.on('click', '.table-style-buttons button', (evt: any) => {
+		this.globals.$atumList.on('click', '.table-style-buttons button', (evt: JQueryEventObject) => {
 			
 			let $button: JQuery = $(evt.currentTarget),
 			    feature: string = $button.hasClass('sticky-columns-button') ? 'sticky-columns' : 'sticky-header';

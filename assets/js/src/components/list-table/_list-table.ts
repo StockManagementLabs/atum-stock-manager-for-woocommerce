@@ -2,12 +2,13 @@
    LIST TABLE
    ======================================= */
 
-import Settings from '../../config/_settings';
-import Globals from './_globals';
-import { Utils } from '../../utils/_utils';
-import Tooltip from '../_tooltip';
-import EnhancedSelect from '../_enhanced-select';
 import { ActiveRow } from './_active-row';
+import { BeforeUnload } from '../_before-unload';
+import EnhancedSelect from '../_enhanced-select';
+import Globals from './_globals';
+import Settings from '../../config/_settings';
+import Tooltip from '../_tooltip';
+import { Utils } from '../../utils/_utils';
 
 export default class ListTable {
 	
@@ -46,25 +47,25 @@ export default class ListTable {
 			//
 			// Trigger expanding/collapsing event in inheritable products.
 			// ------------------------------------------
-			.on('click', '.calc_type .has-child', (evt: any) => {
+			.on('click', '.calc_type .has-child', (evt: JQueryEventObject) => {
 				$(evt.currentTarget).closest('tr').trigger('atum-list-expand-row');
 			})
 			//
 			// Triggers the expand/collapse row action
 			//
-			.on('atum-list-expand-row', 'tbody tr', (evt: any, expandableRowClass: string, stopRowSelector: string, stopPropagation: boolean) => {
+			.on('atum-list-expand-row', 'tbody tr', (evt: JQueryEventObject, expandableRowClass: string, stopRowSelector: string, stopPropagation: boolean) => {
 				this.expandRow($(evt.currentTarget), expandableRowClass, stopRowSelector, stopPropagation);
 			})
 			
 			//
 			// Expandable rows' checkboxes.
 			// ----------------------------
-			.on('change', '.check-column input:checkbox', (evt: any) => this.checkDescendats( $(evt.currentTarget) ))
+			.on('change', '.check-column input:checkbox', (evt: JQueryEventObject) => this.checkDescendats( $(evt.currentTarget) ))
 			
 			//
 			// "Control all products" button.
 			// ------------------------------
-			.on('click', '#control-all-products', (evt: any) => {
+			.on('click', '#control-all-products', (evt: JQueryEventObject) => {
 				
 				let $button: JQuery = $(evt.currentTarget);
 				
@@ -86,36 +87,16 @@ export default class ListTable {
 		//
 		// Global save for edited cells.
 		// -----------------------------
-		$('body').on('click', '#atum-update-list', (evt: any) => this.saveData( $(evt.currentTarget) ));
+		$('body').on('click', '#atum-update-list', (evt: JQueryEventObject) => this.saveData( $(evt.currentTarget) ));
 		
 		
 		//
 		// Warn the user about unsaved changes before navigating away.
 		// -----------------------------------------------------------
-		$(window).bind('beforeunload', () => {
-			
-			if (!this.globals.$editInput.val()) {
-				return;
-			}
-			
-			// Prevent multiple prompts - seen on Chrome and IE.
-			if (navigator.userAgent.toLowerCase().match(/msie|chrome/)) {
-				
-				if (window['aysHasPrompted']) {
-					return;
-				}
-				
-				window['aysHasPrompted'] = true;
-				setTimeout( () => window['aysHasPrompted'] = false, 900);
-				
-			}
-			
-			return false;
-			
-		})
+		BeforeUnload.addPrompt( () => !this.globals.$editInput.val() );
 		
 		// Display hidden footer.
-		.on('load', () => $('#wpfooter').show());
+		$(window).on('load', () => $('#wpfooter').show());
 		
 	}
 	
@@ -259,7 +240,10 @@ export default class ListTable {
 		let symbol: string      = $metaCell.data('symbol') || '',
 		    currencyPos: string = this.globals.$atumTable.data('currency-pos');
 		
-		if (symbol) {
+		if (value === '') {
+			value = this.settings.get('emptyCol');
+		}
+		else if (symbol) {
 			value = currencyPos === 'left' ? symbol + value : value + symbol;
 		}
 		
@@ -368,17 +352,20 @@ export default class ListTable {
 			
 			let extraMeta: any = $metaCell.data('extra-meta');
 			
-			$popover.find('input').not('.meta-value').each( (index: number, input: any) => {
+			$popover.find('input').not('.meta-value').each( (index: number, input: Element) => {
 				
-				let value: any = $(input).val();
-				editedCols[itemId][input.name] = value;
+				const $input: JQuery = $(input),
+				      value: any     = $input.val(),
+				      name: string   = $input.attr('name');
+				
+				editedCols[itemId][name] = value;
 				
 				// Save the meta values in the cell data for future uses.
 				if (typeof extraMeta === 'object') {
 					
-					$.each(extraMeta, (index, elem) => {
+					$.each(extraMeta, (index: number, elem: any) => {
 						
-						if (elem.name === input.name) {
+						if (elem.name === name) {
 							extraMeta[index]['value'] = value;
 							
 							return false;
@@ -626,7 +613,7 @@ export default class ListTable {
 	 */
 	calculateCompoundedStocks() {
 	
-		this.globals.$atumTable.find('.compounded').each( (index: number, elem: any) => {
+		this.globals.$atumTable.find('.compounded').each( (index: number, elem: Element) => {
 			
 			let $compoundedCell: JQuery = $(elem),
 			    $row: JQuery            = $compoundedCell.closest('tr'),

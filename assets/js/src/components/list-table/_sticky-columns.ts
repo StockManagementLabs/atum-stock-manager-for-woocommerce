@@ -43,7 +43,7 @@ export default class StickyColumns {
 		$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
 		
 		// Remove all the columns that won't be sticky.
-		$stickyCols.find('tr').each( (index: number, elem: any) => {
+		$stickyCols.find('tr').each( (index: number, elem: Element) => {
 			
 			let $row: JQuery = $(elem);
 			

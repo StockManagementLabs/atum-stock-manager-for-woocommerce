@@ -2,6 +2,7 @@
    SALES LAST DAYS LIST TABLES
    ======================================= */
 
+import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 import Router from './_router';
 
@@ -9,11 +10,13 @@ export default class SalesLastDays {
 	
 	globals: Globals;
 	router: Router;
+	enhancedSelect: EnhancedSelect;
 	
-	constructor(globalsObj: Globals, routerObj: Router) {
+	constructor(globalsObj: Globals, routerObj: Router, enhancedSelectObj: EnhancedSelect) {
 		
 		this.globals = globalsObj;
 		this.router = routerObj;
+		this.enhancedSelect = enhancedSelectObj;
 		
 		this.setup();
 		
@@ -38,7 +41,7 @@ export default class SalesLastDays {
 		$selectDays.append($selectableDays);
 		$selectDays.find('select').hide().val(selectDaysText);
 		
-		$selectableDays.change( (evt: any) => {
+		$selectableDays.change( (evt: JQueryEventObject) => {
 			
 			let $select: JQuery = $(evt.currentTarget);
 			
@@ -52,15 +55,10 @@ export default class SalesLastDays {
 			
 		});
 		
-		$selectDays.find('.textvalue').click( (evt: any) => {
+		$selectDays.find('.textvalue').click( (evt: JQueryEventObject) => {
 			
 			$(evt.currentTarget).hide();
-			// $selectDays.find('select').show();
-			
-			// TODO: USE ENHANCEDSELECT COMPONENT?
-			const $select = $selectDays.find('select');
-			$select.select2();
-			$select.siblings('.select2-container').addClass('atum-select2');
+			this.enhancedSelect.doSelect2( $selectDays.find('select') );
 			
 		});
 		

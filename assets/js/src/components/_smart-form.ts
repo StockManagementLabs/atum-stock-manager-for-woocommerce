@@ -2,6 +2,7 @@
    SMART FORM
    ======================================= */
 
+import { BeforeUnload } from './_before-unload';
 import Settings from '../config/_settings';
 
 export default class SmartForm {
@@ -45,7 +46,7 @@ export default class SmartForm {
 				
 				if ($.isArray(dependency)) {
 					
-					$.each(dependency, function (index, dependencyElem) {
+					$.each(dependency, (index: number, dependencyElem: Element) =>  {
 						this.checkDependency($field, dependencyElem, value);
 					});
 					
@@ -64,29 +65,7 @@ export default class SmartForm {
 		
 		
 		// Before unload alert.
-		$(window).bind('beforeunload', () => {
-			
-			if (!$form.find('.dirty').length) {
-				return;
-			}
-			
-			// Prevent multiple prompts - seen on Chrome and IE.
-			if (navigator.userAgent.toLowerCase().match(/msie|chrome/)) {
-				
-				if (window['aysHasPrompted']) {
-					return;
-				}
-				
-				window['aysHasPrompted'] = true;
-				window.setTimeout(function() {
-					window['aysHasPrompted'] = false;
-				}, 900);
-				
-			}
-			
-			return false;
-			
-		});
+		BeforeUnload.addPrompt( () => !$form.find('.dirty').length );
 		
 	}
 	

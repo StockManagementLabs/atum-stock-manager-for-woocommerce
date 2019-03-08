@@ -11,7 +11,7 @@ export const ActiveRow = {
 	 */
 	addActiveClassRow($listTable: JQuery) {
 		
-		$listTable.find('tbody .check-column input:checkbox').change( (evt: any) => {
+		$listTable.find('tbody .check-column input:checkbox').change( (evt: JQueryEventObject) => {
 			
 			let $checkbox: JQuery    = $(evt.currentTarget),
 			    id: number           = $checkbox.val(),
@@ -29,7 +29,7 @@ export const ActiveRow = {
 		// Selet all rows checkbox.
 		$('#cb-select-all-1').change( () => {
 			
-			$listTable.find('tbody tr').each( (index: number, elem: any) => {
+			$listTable.find('tbody tr').each( (index: number, elem: Element) => {
 				
 				let $elem: JQuery = $(elem);
 				

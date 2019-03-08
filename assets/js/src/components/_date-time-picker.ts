@@ -71,15 +71,15 @@ export default class DateTimePicker {
 	 * @param jQuery $selector
 	 * @param Object opts
 	 */
-	addDateTimePickers($selector: any, opts?: Object) {
+	addDateTimePickers($selector: any, opts: any = {}) {
 		
-		$selector.each( (index: number, elem: any) => {
+		$selector.each( (index: number, elem: Element) => {
 			
 			let $dateTimePicker: any = $(elem),
 			    mergedOpts: any      = {};
 			
 			// Extend the date picker options with data options.
-			$.extend(mergedOpts, this.defaults, $dateTimePicker.data() || {}, opts || {});
+			Object.assign(mergedOpts, this.defaults, $dateTimePicker.data() || {}, opts);
 			
 			$dateTimePicker.datetimepicker(mergedOpts);
 			
@@ -93,7 +93,7 @@ export default class DateTimePicker {
 		.on('dp.show', (evt: any) => {
 			
 			// Hide others opened.
-			$selector.not($(evt.currentTarget)).filter( (index: number, elem: any) => {
+			$selector.not($(evt.currentTarget)).filter( (index: number, elem: Element) => {
 				
 				if ($(elem).children('.bootstrap-datetimepicker-widget').length) {
 					return true;
@@ -101,7 +101,7 @@ export default class DateTimePicker {
 				
 				return false;
 				
-			}).each( (index: number, elem: any) => {
+			}).each( (index: number, elem: Element) => {
 				$(elem).data('DateTimePicker').hide();
 			});
 			

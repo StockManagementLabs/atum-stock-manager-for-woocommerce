@@ -13,7 +13,7 @@ export let ColorPicker = {
 			const $colorField: any = $(elem);
 			
 			$colorField.wpColorPicker({
-				change: function(evt: any, ui: any){
+				change: (evt: any, ui: any) => {
 					
 					const value = $(evt.target).val();
 					$('.wp-picker-active .color-picker-preview').css('background-color', value);

@@ -32,7 +32,7 @@ export default class EditableCell {
 			
 		
 		// Runs once the popover's set-meta button is clicked.
-		$('body').on('click', '.popover button.set', (evt: any) => {
+		$('body').on('click', '.popover button.set', (evt: JQueryEventObject) => {
 			
 			let $button   = $(evt.currentTarget),
 				$popover  = $button.closest('.popover'),

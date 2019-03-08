@@ -39,12 +39,12 @@ export default class Filters {
 			this.globals.$atumList
 				
 				// Dropdown filters.
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', (evt: any) => {
+				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', (evt: JQueryEventObject) => {
 					this.keyUp(evt);
 				})
 				
 				// Search filter.
-				.on('keyup paste search input', '.atum-post-search', (evt: any) => {
+				.on('keyup paste search input', '.atum-post-search', (evt: JQueryEventObject) => {
 					
 					let searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
 					    $searchInputVal: any       = $(evt.currentTarget).val();
@@ -56,14 +56,14 @@ export default class Filters {
 				})
 				
 				// Pagination input changes.
-				.on('keyup paste', '.current-page', (evt: any) => {
+				.on('keyup paste', '.current-page', (evt: JQueryEventObject) => {
 					this.keyUp(evt);
 				});
 			
 			
 			if (this.settings.get('searchDropdown') === 'yes') {
 				
-				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: any) => {
+				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
 					this.pseudoKeyUpAjax($(evt.currentTarget).data('value'), this.globals.$searchInput.val());
 				});
 				
@@ -84,7 +84,7 @@ export default class Filters {
 			
 			// If s is empty, search-submit must be disabled and ?s removed.
 			// If s and searchColumnBtnVal have values, then we can push over search.
-			this.globals.$searchInput.on('input', (evt: any) => {
+			this.globals.$searchInput.on('input', (evt: JQueryEventObject) => {
 				
 				let searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
 				    inputVal: any              = $(evt.currentTarget).val();
@@ -115,7 +115,7 @@ export default class Filters {
 			if (this.settings.get('searchDropdown') === 'yes') {
 				
 				// TODO: IS THIS WORKING? IS NOT ONLY FOR AJAX FILTERS?
-				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: any) => {
+				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
 					
 					let searchInputVal: any        = this.globals.$searchInput.val(),
 					    searchColumnBtnVal: string = $(evt.currentTarget).data('value');
@@ -167,7 +167,7 @@ export default class Filters {
 			//
 			// Reset Filters button.
 			// ---------------------
-			.on('click', '.reset-filters', (evt: any) => {
+			.on('click', '.reset-filters', (evt: JQueryEventObject) => {
 				
 				this.tooltip.destroyTooltips();
 				
@@ -200,7 +200,7 @@ export default class Filters {
 	 * @param Object  evt       The event data object.
 	 * @param Boolean noTimer   Optional. Whether to delay before triggering the update (used for autosearch).
 	 */
-	keyUp(evt: any, noTimer?: boolean) {
+	keyUp(evt: JQueryEventObject, noTimer?: boolean) {
 		
 		let delay: number       = 500,
 		    searchInputVal: any = this.globals.$searchInput.val();

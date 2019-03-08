@@ -40,7 +40,7 @@ export default class SearchByColumn {
 		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', '').text( this.globals.$searchColumnDropdown.data('no-option') ) );
 		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', 'title').text( this.globals.$searchColumnDropdown.data('product-title') ) );
 		
-		$('#adv-settings input:checked').each( (index: number, elem: any) => {
+		$('#adv-settings input:checked').each( (index: number, elem: Element) => {
 			
 			let $elem: JQuery       = $(elem),
 			    optionVal: string   = $elem.val(),
@@ -63,13 +63,13 @@ export default class SearchByColumn {
 		this.globals.$searchColumnBtn
 		
 			// Bind clicks on search by column button.
-			.click( (evt: any) => {
+			.click( (evt: JQueryEventObject) => {
 				$(evt.currentTarget).parent().find('.dropdown-menu').toggle();
 				evt.stopPropagation();
 			})
 			
 			// Set $searchColumnBtn data-value and html content.
-			.on('atum-search-column-set-data', (evt: any, value: string, html: string) => {
+			.on('atum-search-column-set-data', (evt: JQueryEventObject, value: string, html: string) => {
 				
 				let $searchColBtn: JQuery  = $(evt.currentTarget),
 				    $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children('a');
@@ -84,7 +84,7 @@ export default class SearchByColumn {
 			});
 		
 		// Bind clicks on dropdown menu items.
-		this.globals.$searchColumnDropdown.find('a').click( (evt: any) => {
+		this.globals.$searchColumnDropdown.find('a').click( (evt: JQueryEventObject) => {
 			
 			evt.preventDefault();
 			

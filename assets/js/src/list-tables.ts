@@ -87,7 +87,7 @@ jQuery( ($) => {
 	new EditableCell(globals, popover, listTable);
 	new LightBox();
 	new TableButtons(globals, tooltip, stickyCols, stickyHeader);
-	new SalesLastDays(globals, router);
+	new SalesLastDays(globals, router, enhancedSelect);
 	new BulkActions(settings, globals, listTable);
 	new LocationsTree(settings, globals, tooltip);
 	

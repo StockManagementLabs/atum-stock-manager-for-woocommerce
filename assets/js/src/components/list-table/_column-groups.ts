@@ -16,7 +16,7 @@ export default class ColumnGroups {
 		this.globals = globalsObj;
 		
 		// Hide/Show the toggleable group of columns with the toggler button.
-		this.globals.$atumList.on('click', '.group-toggler', (evt: any) => {
+		this.globals.$atumList.on('click', '.group-toggler', (evt: JQueryEventObject) => {
 			
 			const $groupToggler: any = $(evt.currentTarget);
 			
@@ -27,7 +27,7 @@ export default class ColumnGroups {
 		
 		// Show the toggleable group columns when opening the screen options.
 		// to avoid the hidden columns to be disabled when switching column visibilities.
-		$('#show-settings-link').click( (evt: any) => {
+		$('#show-settings-link').click( (evt: JQueryEventObject) => {
 			
 			if (!$(evt.currentTarget).hasClass('screen-meta-active')) {
 				this.globals.$atumTable.find('.column-groups').find('th.collapsed').find('.group-toggler').click();
@@ -38,7 +38,7 @@ export default class ColumnGroups {
 		// Hide/Show/Colspan column groups.
 		$('#adv-settings .metabox-prefs input').change( () => {
 			
-			this.globals.$atumList.find('thead .column-groups th').each( (index: number, elem: any) => {
+			this.globals.$atumList.find('thead .column-groups th').each( (index: number, elem: Element) => {
 				
 				let $elem: JQuery = $(elem),
 				    // These th only have one class.
@@ -105,7 +105,7 @@ export default class ColumnGroups {
 			$('<th />', ghostColOpts).insertBefore( this.globals.$atumTable.find('tfoot .item-heads th.' + groupClass).first() );
 			$('<th />', ghostColOpts).insertBefore( this.globals.$atumTable.find('tfoot .totals th.' + groupClass).first() );
 			
-			this.globals.$atumTable.find('tbody tr').each( (index: number, elem: any) => {
+			this.globals.$atumTable.find('tbody tr').each( (index: number, elem: Element) => {
 				$('<td />', ghostColOpts).insertBefore( $(elem).find('td.' + groupClass).first() );
 			});
 			
@@ -127,7 +127,7 @@ export default class ColumnGroups {
 	 */
 	restoreCollapsedGroups() {
 		
-		this.globals.$collapsedGroups.each( (index: number, elem: any) => {
+		this.globals.$collapsedGroups.each( (index: number, elem: Element) => {
 			
 			let $groupCell: JQuery = $(elem);
 			$groupCell.removeClass('collapsed').attr('colspan', $groupCell.data('colspan'));

@@ -22,7 +22,7 @@ export default class Popover {
 		this.setFieldPopover();
 		
 		// Hide any other opened popover before opening a new one.
-		$('body').click( (evt: any) => {
+		$('body').click( (evt: JQueryEventObject) => {
 			
 			let $target: JQuery   = $(evt.target),
 			    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
@@ -34,7 +34,7 @@ export default class Popover {
 			}
 			
 			// Get only the cells with an opened popover.
-			$metaCell = $metaCell.filter( (index: number, elem: any) => {
+			$metaCell = $metaCell.filter( (index: number, elem: Element) => {
 				return typeof $(elem).data('bs.popover') !== 'undefined' && typeof $(elem).data('bs.popover').inState !== 'undefined' && $(elem).data('bs.popover').inState.click === true;
 			});
 			
@@ -54,12 +54,12 @@ export default class Popover {
 		}
 		
 		// Set meta value for listed products.
-		$metaCells.each( (index: number, elem: any) => {
+		$metaCells.each( (index: number, elem: Element) => {
 			this.bindPopover($(elem));
 		});
 		
 		// Focus on the input field and set a reference to the popover to the editable column.
-		$metaCells.on('shown.bs.popover', (evt: any) => {
+		$metaCells.on('shown.bs.popover', (evt: JQueryEventObject) => {
 			
 			let $metaCell: JQuery      = $(evt.currentTarget),
 				$activePopover: JQuery = $('.popover.in');
@@ -77,7 +77,7 @@ export default class Popover {
 			}
 			
 			// Click the "Set" button when hitting enter on an input field.
-			$activePopover.find('input').on('keyup', (evt: any) => {
+			$activePopover.find('input').on('keyup', (evt: JQueryEventObject) => {
 				
 				// Enter key.
 				if (13 === evt.which) {

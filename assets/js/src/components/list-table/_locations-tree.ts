@@ -14,6 +14,7 @@ export default class LocationsTree {
 	locationsSet: string[] = [];
 	toSetLocations: string[] = [];
 	productId: number = null;
+	swal: any = window['swal'];
 	
 	constructor(settingsObj: Settings, globalsObj: Globals, tooltipObj: Tooltip) {
 		
@@ -21,7 +22,7 @@ export default class LocationsTree {
 		this.globals = globalsObj;
 		this.tooltip = tooltipObj;
 		
-		this.globals.$atumList.on('click', '.show-locations', (evt: any) => {
+		this.globals.$atumList.on('click', '.show-locations', (evt: JQueryEventObject) => {
 			evt.preventDefault();
 			this.showLocationsPopup($(evt.currentTarget));
 		})
@@ -35,11 +36,10 @@ export default class LocationsTree {
 	 */
 	showLocationsPopup($button: JQuery) {
 		
-		const swal: any = window['swal'];
 		this.productId = $button.closest('tr').data('id');
 		
 		// Open the view popup.
-		swal({
+		this.swal({
 			title             : this.settings.get('productLocations'),
 			html              : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			showCancelButton  : false,
@@ -52,7 +52,7 @@ export default class LocationsTree {
 		})
 		// Click on edit: open the edit popup.
 		.then( () => this.openEditPopup() )
-		.catch(swal.noop);
+		.catch(this.swal.noop);
 		
 	}
 	
@@ -88,7 +88,7 @@ export default class LocationsTree {
 						(<any>$locationsTreeContainer).easytree();
 						
 						// Fill locationsSet.
-						$('#atum-locations-tree span[class^="cat-item-"], #atum-locations-tree span[class*="cat-item-"]').each( (index: number, elem: any) => {
+						$('#atum-locations-tree span[class^="cat-item-"], #atum-locations-tree span[class*="cat-item-"]').each( (index: number, elem: Element) => {
 							
 							const classList = $(elem).attr('class').split(/\s+/);
 							
@@ -123,9 +123,7 @@ export default class LocationsTree {
 	 */
 	openEditPopup() {
 		
-		const swal: any = window['swal'];
-		
-		swal({
+		this.swal({
 			title              : this.settings.get('editProductLocations'),
 			html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			text               : this.settings.get('textToShow'),
@@ -138,7 +136,7 @@ export default class LocationsTree {
 			preConfirm         : () => this.saveLocations(),
 		})
 		.then( () => this.onCloseEditPopup() )
-		.catch(swal.noop);
+		.catch(this.swal.noop);
 		
 	}
 	
@@ -182,9 +180,7 @@ export default class LocationsTree {
 	 */
 	onCloseEditPopup() {
 		
-		const swal: any = window['swal'];
-		
-		swal({
+		this.swal({
 			title             : this.settings.get('done'),
 			type              : 'success',
 			text              : this.settings.get('locationsSaved'),
@@ -242,7 +238,7 @@ export default class LocationsTree {
 		this.toSetLocations = this.locationsSet;
 		
 		// When clicking on link or icon, set node as checked.
-		$locationsTreeContainer.find('a, .easytree-icon').click( (evt: any) => {
+		$locationsTreeContainer.find('a, .easytree-icon').click( (evt: JQueryEventObject) => {
 			
 			evt.preventDefault();
 			
@@ -258,9 +254,11 @@ export default class LocationsTree {
 				}
 			});
 			
-			$('.' + catItem).toggleClass('checked');
+			const $catItme: JQuery = $('.' + catItem);
 			
-			if ($('.' + catItem).hasClass('checked')) {
+			$catItme.toggleClass('checked');
+			
+			if ($catItme.hasClass('checked')) {
 				this.toSetLocations.push(catItem);
 			}
 			else {
@@ -276,7 +274,7 @@ export default class LocationsTree {
 		});
 		
 		// Set class checked the actual values on load.
-		$locationsTreeContainer.find('span[class^="cat-item-"], span[class*="cat-item-"]').each( (index: number, elem: any) => {
+		$locationsTreeContainer.find('span[class^="cat-item-"], span[class*="cat-item-"]').each( (index: number, elem: Element) => {
 			
 			const classList: string[] = $(elem).attr('class').split(/\s+/);
 			

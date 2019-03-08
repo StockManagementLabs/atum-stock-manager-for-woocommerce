@@ -48,7 +48,7 @@ export default class BulkActions {
 			//
 			// Bulk actions dropdown.
 			// ----------------------
-			.on('change', '.bulkactions select', (evt: any) => {
+			.on('change', '.bulkactions select', (evt: JQueryEventObject) => {
 				
 				this.updateBulkButton();
 				
@@ -76,12 +76,12 @@ export default class BulkActions {
 	applyBulk() {
 		
 		let $bulkButton: JQuery     = $('.apply-bulk-action'),
-		    bulkAction: string      = this.globals.$atumList.find('.bulkactions select').filter((index: number, elem: any) => {
+		    bulkAction: string      = this.globals.$atumList.find('.bulkactions select').filter((index: number, elem: Element) => {
 			    return $(elem).val() !== '-1'
 		    }).val(),
 		    selectedItems: string[] = [];
 		
-		this.globals.$atumList.find('tbody .check-column input:checkbox').filter(':checked').each( (index: number, elem: any) => {
+		this.globals.$atumList.find('tbody .check-column input:checkbox').filter(':checked').each( (index: number, elem: Element) => {
 			selectedItems.push( $(elem).val() );
 		});
 		

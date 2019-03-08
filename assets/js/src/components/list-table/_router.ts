@@ -57,7 +57,7 @@ export default class Router {
 				
 				if (searchColumn) {
 					
-					$('#adv-settings :checkbox').each( (index: number, elem: any) => {
+					$('#adv-settings :checkbox').each( (index: number, elem: Element) => {
 						
 						optionVal = $(elem).val();
 						
@@ -87,7 +87,7 @@ export default class Router {
 		this.globals.$atumList.on('atum-table-updated', () => this.bindListLinks());
 		
 		// Bind Views, Pagination and Sortable links.
-		this.globals.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', (evt: any) => {
+		this.globals.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', (evt: JQueryEventObject) => {
 			evt.preventDefault();
 			this.updateHash();
 		});
@@ -106,7 +106,7 @@ export default class Router {
 	 */
 	bindPageInput() {
 		
-		this.globals.$atumList.on('keypress', '#current-page-selector', (evt: any) => {
+		this.globals.$atumList.on('keypress', '#current-page-selector', (evt: JQueryEventObject) => {
 			if (evt.which === 13) {
 				$.address.parameter('paged', $(evt.currentTarget).data('current'));
 				this.updateHash();

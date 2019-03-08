@@ -69,7 +69,7 @@ export default class StickyHeader {
 						
 						let $colGroup = this.globals.$floatTheadStickyCols.find('colgroup');
 						
-						$floatTheadTable.find('thead .item-heads').children().each( (index: number, elem: any) => {
+						$floatTheadTable.find('thead .item-heads').children().each( (index: number, elem: Element) => {
 							
 							let $cell = $(elem),
 							    id    = $cell.attr('id');

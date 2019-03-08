@@ -15,13 +15,13 @@ export default class Tooltip {
 	 *
 	 * @param jQuery $wrapper   Optional. The wrapper where the elements with tooltips are contained,
 	 */
-	addTooltips($wrapper:any = null) {
+	addTooltips($wrapper?: JQuery) {
 		
 		if (!$wrapper) {
 			$wrapper = $('body');
 		}
 		
-		$wrapper.find('.tips, .atum-tooltip').each( (index:number, elem:JQueryParam) => {
+		$wrapper.find('.tips, .atum-tooltip').each( (index: number, elem: Element) => {
 			
 			const $tipEl: any = $(elem);
 			
@@ -33,7 +33,7 @@ export default class Tooltip {
 			
 		});
 		
-		$wrapper.find('.select2-selection__rendered').each( (index:number, elem:JQueryParam) => {
+		$wrapper.find('.select2-selection__rendered').each( (index: number, elem: Element) => {
 			
 			const $tipEl: any = $(elem);
 			
@@ -52,13 +52,13 @@ export default class Tooltip {
 	 *
 	 * @param jQuery $wrapper   Optional. The wrapper where the elements with tooltips are contained
 	 */
-	destroyTooltips($wrapper = null) {
+	destroyTooltips($wrapper?: JQuery) {
 		
 		if (!$wrapper) {
 			$wrapper = $('body');
 		}
 		
-		$wrapper.find('.tips, .atum-tooltip, .select2-selection__rendered').tooltip('destroy');
+		(<any>$wrapper.find('.tips, .atum-tooltip, .select2-selection__rendered')).tooltip('destroy');
 		
 	}
 	

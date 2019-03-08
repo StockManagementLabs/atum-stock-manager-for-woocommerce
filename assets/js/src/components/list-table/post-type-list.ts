@@ -54,7 +54,7 @@ export default class PostTypeList {
 	/**
 	 * Add the horizontal scroll bar to the table
 	 */
-	addScrollBar() {
+	/*addScrollBar() {
 		
 		// Wait until the thumbs are loaded and enable JScrollpane.
 		let $tableWrapper: JQuery = this.$tableContainer,
@@ -84,6 +84,6 @@ export default class PostTypeList {
 			
 		});
 		
-	}
+	}*/
 	
 }
