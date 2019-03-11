@@ -57,7 +57,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		parent::__construct( $id, $read_items );
 		
-		$this->block_message = __( 'Set the Supplier field above and click the Create/Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
+		$this->block_message = __( 'Set the Supplier field above in order to add/edit items.', ATUM_TEXT_DOMAIN );
 
 	}
 

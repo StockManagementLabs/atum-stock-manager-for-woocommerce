@@ -80,7 +80,9 @@
 				$('#atum_order_type').change(this.toggleExtraFields).change();
 				
 				// Trigger multiple suppliers' dependent fields
-				$('#multiple_suppliers').change(this.toggleSupplierField);
+				$('#multiple_suppliers').change( function() {
+					self.toggleSupplierField($(this));
+				});
 				
 				// Hide/show the blocker section on supplier dropdown changes.
 				$('.dropdown_supplier').change(function() {
@@ -917,19 +919,21 @@
 			
 			},
 			
-			toggleSupplierField: function() {
+			toggleSupplierField: function($checkbox) {
 				
 				var $body            = $('body'),
 				    $dropdown        = $('.dropdown_supplier'),
 				    $dropdownWrapper = $dropdown.parent();
 				
-				if ($(this).is(':checked')) {
+				if ($checkbox.is(':checked')) {
 					$body.addClass('allow-multiple-suppliers');
+					this.$itemsBlocker.addClass('unblocked');
 					$dropdownWrapper.slideUp();
 					$dropdown.val('');
 				}
 				else {
 					$body.removeClass('allow-multiple-suppliers');
+					this.$itemsBlocker.removeClass('unblocked');
 					$dropdownWrapper.slideDown();
 				}
 				
