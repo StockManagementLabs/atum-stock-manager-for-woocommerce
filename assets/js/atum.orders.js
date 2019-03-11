@@ -82,7 +82,7 @@
 				// Trigger multiple suppliers' dependent fields
 				$('#multiple_suppliers').change( function() {
 					self.toggleSupplierField($(this));
-				});
+				}).change();
 				
 				// Hide/show the blocker section on supplier dropdown changes.
 				$('.dropdown_supplier').change(function() {
@@ -94,7 +94,7 @@
 						self.$itemsBlocker.removeClass('unblocked');
 					}
 					
-				});
+				}).change();
 				
 				// Ask for importing the order items after linking an order
 				$('#wc_order').change(this.importOrderItems);
@@ -926,10 +926,10 @@
 				    $dropdownWrapper = $dropdown.parent();
 				
 				if ($checkbox.is(':checked')) {
+					$dropdown.val('').change();
 					$body.addClass('allow-multiple-suppliers');
 					this.$itemsBlocker.addClass('unblocked');
 					$dropdownWrapper.slideUp();
-					$dropdown.val('');
 				}
 				else {
 					$body.removeClass('allow-multiple-suppliers');
