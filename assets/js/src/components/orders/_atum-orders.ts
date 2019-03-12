@@ -36,7 +36,7 @@ export default class AtumOrders {
 		new AtumOrderItems(this.settings, this.$container, this);
 		new OrdersBulkActions(this.settings, this.$container, this);
 		new AddItemsPopup(this.settings, this.$container, this, this.tooltip);
-		this.dateTimePicker.addDateTimePickers( $('.date-picker') );
+		this.dateTimePicker.addDateTimePickers( $('.date-picker'), {minDate: false} );
 		Switcher.doSwitchers();
 		
 		this.bindEvents();

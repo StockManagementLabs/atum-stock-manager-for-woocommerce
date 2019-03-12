@@ -28,7 +28,7 @@ export default class DateTimePicker {
 				clear   : 'atum-icon atmi-trash',
 				close   : 'atum-icon atmi-cross',
 			},
-			minDate          : moment(),
+			minDate          : moment(), // By default, we are not allowing to select dates before today
 			showClear        : true,
 			showTodayButton  : true,
 			widgetPositioning: {

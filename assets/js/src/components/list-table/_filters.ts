@@ -315,7 +315,7 @@ export default class Filters {
 					onOpen           : () => {
 						
 						// Init date time pickers.
-						this.dateTimePicker.addDateTimePickers($('.date-picker'));
+						this.dateTimePicker.addDateTimePickers($('.date-picker'), {minDate: false});
 						
 						$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
 							this.keyUp(evt);
