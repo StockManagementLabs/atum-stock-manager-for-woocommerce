@@ -54,14 +54,15 @@
 				success   : function(response) {
 					
 					if (response.success === true) {
+						
 						var $descriptionColor    = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.description.text_color + ';' : '',
 						    $descriptionFontSize = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.description.text_size + ';' : '',
 						    $descriptionAlign    = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.description.text_align + ';' : '',
 						    $descriptionPadding  = response.data.marketing_popup.description.padding ? 'padding:' + response.data.marketing_popup.description.padding + ';' : '',
 						    $description         = '<p data-transient-key="' + response.data.marketing_popup.transient_key + '" style="' + $descriptionColor + $descriptionFontSize + $descriptionAlign + $descriptionPadding + '">' + response.data.marketing_popup.description.text + '</p>',
-						    $versionColor        = response.data.marketing_popup.version.text_color ? 'color:' + response.data.marketing_popup.version.text_color + ';' : '',
-						    $versionBackground   = response.data.marketing_popup.version.background ? 'background:' + response.data.marketing_popup.version.background + ';' : '',
-						    $version             = '<span class="version" style="' + $versionBackground + $versionColor + '">' + response.data.marketing_popup.version.text + '</span>',
+						    $versionColor        = '',
+						    $versionBackground   = '',
+						    $version             = '',
 						    $titleColor          = response.data.marketing_popup.description.text_color ? 'color:' + response.data.marketing_popup.title.text_color + ';' : '',
 						    $titleFontSize       = response.data.marketing_popup.description.text_size ? 'font-size:' + response.data.marketing_popup.title.text_size + ';' : '',
 						    $titleAlign          = response.data.marketing_popup.description.text_align ? 'text-align:' + response.data.marketing_popup.title.text_align + ';' : '',
@@ -70,6 +71,12 @@
 						    $buttons             = '',
 						    $imageTopLeft        = response.data.marketing_popup.images.top_left,
 						    $logo                = '<img class="mp-logo" src="' + response.data.marketing_popup.images.logo + '">';
+						
+						if (response.data.marketing_popup.version.length) {
+							$versionColor        = response.data.marketing_popup.version.text_color ? 'color:' + response.data.marketing_popup.version.text_color + ';' : '';
+							$versionBackground   = response.data.marketing_popup.version.background ? 'background:' + response.data.marketing_popup.version.background + ';' : '';
+							$version             = '<span class="version" style="' + $versionBackground + $versionColor + '">' + response.data.marketing_popup.version.text + '</span>';
+						}
 						
 						// Add buttons
 						if ( $buttonsArray.length > 0 ) {

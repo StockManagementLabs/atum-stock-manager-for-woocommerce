@@ -14,23 +14,17 @@
 		"background_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/product-levels_icon.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/02/label-update-280x280.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/marketing-popup/plugin-madness.png"
 	},
 	"title": {
-		"text"      : "Product<strong>levels</strong>",
-		"text_color": "black",
-		"text_size" : "",
+		"text"      : "<strong>Please, help us WIN and<br>grow faster in 2019</strong>",
+		"text_color": "#00B8DB",
+		"text_size" : "27px",
 		"text_align": "center"
 	},
-	"version": {
-		"text"      : "v1.3",
-		"text_color": "white",
-		"background": "#9357cc"
-	},
 	"description": {
-		"text"           : "Finally HERE! Product Levels just got even better! Activate the bill of materials (BOM) stock control to automate the front end inventory offering.",
-		"text_color"     : "#adb5bd",
+		"text"           : "Torque's Plugin Madness is back! Authors selected ATUM for this competition that pits plugins against each to find the most popular one in each category. Thank you!",
+		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",
@@ -38,17 +32,11 @@
 	},
 	"buttons": [
 		{
-			"text"      : "More info",
-			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
+			"text"      : "Vore for ATUM",
+			"url"       : "https://torquemag.io/pluginmadness/",
 			"class"     : "btn btn-success purple",
-			"css"       : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;background-color:#9357cc;"
-		},
-		{
-			"text"  : "Live Demo",
-			"url"   : "http://demo.productlevels.stockmanagementlabs.com/",
-			"class" : "btn btn-outline-success purple",
-			"css"   : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;"
+			"css"       : "width: 300px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;background-color:#00B8DB;"
 		}
 	],
-	"transient_key": "atum-product-levels"
+	"transient_key": "torque-plugin-madness"
 }

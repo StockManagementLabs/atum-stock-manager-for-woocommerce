@@ -4245,11 +4245,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 0 20px 0 160px;
+  padding: 0 20px 0 20px;
   min-height: 200px;
 }
 
-@media all and (max-width: 481px) {
+@media all and (max-width: 768px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
@@ -4261,7 +4261,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   width: 50%;
 }
 
-@media all and (max-width: 481px) {
+@media all and (max-width: 768px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description {
     width: 100%;
   }
@@ -4271,6 +4271,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   font-weight: 400;
   font-size: 34px;
   margin: 0 0 10px;
+  line-height: 1.1;
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
@@ -4278,7 +4279,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   padding: 0 22px;
 }
 
-@media all and (max-width: 481px) {
+@media all and (max-width: 768px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
     text-align: center !important;
   }
@@ -4302,7 +4303,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   margin-left: auto;
 }
 
-@media all and (max-width: 481px) {
+@media all and (max-width: 768px) {
   .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons {
     float: none;
     margin: 0;
@@ -4348,7 +4349,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .mp-logo {
-  width: 150px;
+  width: 255px;
   height: auto;
 }
 

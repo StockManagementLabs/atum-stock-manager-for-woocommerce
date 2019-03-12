@@ -257,25 +257,22 @@ body.toplevel_page_atum-dashboard {
 				}
 				
 				.image {
-					
 					width: 143px;
 					height: auto;
 					position: absolute;
 					top: 0;
 					left: 0;
 					margin: 10px 10px;
-					
 				}
 				
 				.content {
-					
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					padding: 0 20px 0 160px;
+					padding: 0 20px 0 20px;
 					min-height: 200px;
 					
-					@media all and (max-width: $screen-sm-min) {
+					@include tablet-max {
 						flex-wrap: wrap;
 						padding: 100px 20px;
 					}
@@ -283,7 +280,7 @@ body.toplevel_page_atum-dashboard {
 					.content-description {
 						width: 50%;
 						
-						@media all and (max-width: $screen-sm-min) {
+						@include tablet-max{
 							width: 100%;
 						}
 						
@@ -291,20 +288,20 @@ body.toplevel_page_atum-dashboard {
 							font-weight: 400;
 							font-size: 34px;
 							margin: 0 0 10px;
+							line-height: 1.1;
 						}
 						
 						h1, p {
 							text-align: left !important;
 							padding: 0 22px;
 							
-							@media all and (max-width: $screen-sm-min) {
+							@include tablet-max{
 								text-align: center !important;
 							}
 							
 						}
 						
 						.version {
-							
 							padding: 1px 12px;
 							height: 21px;
 							line-height: 20px;
@@ -313,7 +310,6 @@ body.toplevel_page_atum-dashboard {
 							top: -27px;
 							right: 20px;
 							font-size: 14px;
-							
 						}
 						
 					}
@@ -324,7 +320,7 @@ body.toplevel_page_atum-dashboard {
 						float: right;
 						margin-left: auto;
 						
-						@media all and (max-width: $screen-sm-min) {
+						@include tablet-max{
 							float: none;
 							margin: 0;
 						}
@@ -336,15 +332,18 @@ body.toplevel_page_atum-dashboard {
 							&:first-child {
 								margin-bottom: 10px;
 							}
-							&.btn-success,&.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
+							
+							&.btn-success, &.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
 								box-shadow: none;
 								
 								&.purple:hover {
 									opacity: 0.7;
 								}
 							}
+							
 							&.btn-outline-success {
 								background: $white;
+								
 								&:hover {
 									background: $green;
 								}
@@ -353,6 +352,7 @@ body.toplevel_page_atum-dashboard {
 									background: $white;
 									color: $purple-pl;
 									border-color: $purple-pl;
+									
 									&:hover {
 										background: $purple-pl;
 										color: $white;
@@ -367,7 +367,7 @@ body.toplevel_page_atum-dashboard {
 				}
 				
 				.mp-logo {
-					width: 150px;
+					width: 255px;
 					height: auto;
 				}
 				
