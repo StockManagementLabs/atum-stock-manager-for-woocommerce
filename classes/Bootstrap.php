@@ -243,14 +243,30 @@ class Bootstrap {
 
 			}
 
+			$atum_prefix = 'atum_';
+
 			// Delete all the ATUM order notes.
 			$wpdb->query( "DELETE FROM $wpdb->comments WHERE comment_type LIKE '" . ATUM_PREFIX . "%'" ); // WPCS: unprepared SQL ok.
 
 			// Delete the ATUM options.
-			$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name IN ('" . ATUM_PREFIX . "version', '" . ATUM_PREFIX . "settings')" ); // WPCS: unprepared SQL ok.
+			$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name IN ('" . ATUM_PREFIX . "version')" ); // WPCS: unprepared SQL ok.
 
 			// Delete all the user meta related to ATUM.
 			$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE '" . ATUM_PREFIX . "%'" ); // WPCS: unprepared SQL ok.
+
+			$settings = get_option( ATUM_PREFIX . 'settings') ;
+
+			// Save delete data setting.
+			if ( $settings && ! empty( $settings ) ) {
+				$delete_data_setting = [
+					'delete_data' => $settings['delete_data']
+				];
+
+				update_option( ATUM_PREFIX . 'settings', $delete_data_setting );
+			}
+
+			// Delete marketing popup transient.
+			delete_transient( 'atum-marketing-popup' );
 
 		}
 
