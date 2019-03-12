@@ -83,14 +83,13 @@ export default class AtumOrders {
 		$('#multiple_suppliers').change( (evt: JQueryEventObject) => this.toggleSupplierField(evt) ).change();
 		
 		// Hide/show the blocker section on supplier dropdown changes.
-		$('.dropdown_supplier').change( (evt: JQueryEventObject) => this.toggleItemsBlocker( $(evt.currentTarget).val() !== '' ) ).change();
+		$('.dropdown_supplier').change( (evt: JQueryEventObject) => this.toggleItemsBlocker( $(evt.currentTarget).val() !== null ) ).change();
 		
 		// Ask for importing the order items after linking an order
 		$('#wc_order').change( () => this.importOrderItems() );
 		
 		// Change button page-title-action position
-		$('.wp-heading-inline').append( $('.page-title-action') );
-		$('.page-title-action').show();
+		$('.wp-heading-inline').append( $('.page-title-action').show() );
 		
 		// Footer position
 		$(window).on('load', () => {
