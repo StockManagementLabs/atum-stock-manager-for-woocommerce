@@ -32,7 +32,7 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Vore for ATUM",
+			"text"      : "Vote for ATUM",
 			"url"       : "https://torquemag.io/pluginmadness/",
 			"class"     : "btn btn-success purple",
 			"css"       : "width: 300px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;background-color:#00B8DB;"
