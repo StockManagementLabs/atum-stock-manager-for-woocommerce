@@ -21,7 +21,7 @@ export default class Tooltip {
 			$wrapper = $('body');
 		}
 		
-		$wrapper.find('.tips, .atum-tooltip, .select2-selection__rendered').each( (index: number, elem: Element) => {
+		$wrapper.find('.tips, .atum-tooltip').each( (index: number, elem: Element) => {
 			
 			const $tipEl: any = $(elem);
 			
@@ -46,7 +46,7 @@ export default class Tooltip {
 			$wrapper = $('body');
 		}
 		
-		(<any>$wrapper.find('.tips, .atum-tooltip, .select2-selection__rendered')).tooltip('destroy');
+		(<any>$wrapper.find('.tips, .atum-tooltip')).tooltip('destroy');
 		
 	}
 	

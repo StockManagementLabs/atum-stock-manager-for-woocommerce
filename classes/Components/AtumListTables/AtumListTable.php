@@ -471,7 +471,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
 			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
-			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat',
+			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip',
 		) );
 
 		// Product type filtering.
@@ -1845,7 +1845,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
-		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select atum-tooltip" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
 			<option value="-1"><?php esc_html_e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>

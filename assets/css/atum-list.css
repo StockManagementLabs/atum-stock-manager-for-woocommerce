@@ -5641,6 +5641,10 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   min-width: 100px;
 }
 
+.tablenav.top .tablenav-pages-container input.btn {
+  visibility: hidden;
+}
+
 @media all and (max-width: 480px) {
   .tablenav.top .tablenav-pages-container {
     -ms-flex-wrap: wrap;

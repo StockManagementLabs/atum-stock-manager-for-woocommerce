@@ -743,6 +743,10 @@
 				
 			}
 			
+			input.btn {
+				visibility: hidden;
+			}
+			
 			@include mobile-max {
 				flex-wrap: wrap;
 				min-width: 0;

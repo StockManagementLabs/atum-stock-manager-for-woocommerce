@@ -5404,6 +5404,10 @@ ul.atum_order_notes li .note_content::after {
   min-width: 100px;
 }
 
+.tablenav.top .tablenav-pages-container input.btn {
+  visibility: hidden;
+}
+
 @media all and (max-width: 480px) {
   .tablenav.top .tablenav-pages-container {
     -ms-flex-wrap: wrap;

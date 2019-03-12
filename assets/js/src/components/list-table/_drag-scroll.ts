@@ -75,7 +75,9 @@ export default class DragScroll {
 			this.addHorizontalDragScroll('filters_container', false);
 		});
 		
-		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
+		this.globals.$atumList.find('.tablenav.top').find('input.btn').css('visibility', 'visible');
+		
+		this.globals.$atumList.find('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
 			
 			this.addHorizontalDragScroll( $(evt.currentTarget).attr('id'), true );
 			this.tooltip.destroyTooltips();

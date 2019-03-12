@@ -75,6 +75,7 @@ export default class EnhancedSelect {
 			
 			$select.select2(options);
 			$select.siblings('.select2-container').addClass('atum-select2');
+			this.maybeAddTooltip($select);
 			
 		} );
 	
@@ -92,9 +93,21 @@ export default class EnhancedSelect {
 			
 			if ($select2Container.length) {
 				$select2Container.addClass( $select.hasClass('atum-select2') ? 'atum-select2' : 'atum-enhanced-select' );
+				
+				// Pass any attached tooltip
+				this.maybeAddTooltip($select);
 			}
 			
 		});
+		
+	}
+	
+	maybeAddTooltip($select: JQuery) {
+		
+		if ( $select.hasClass('atum-tooltip') ) {
+			const $select2Rendered: JQuery = $select.siblings('.select2-container').find('.select2-selection__rendered');
+			$select2Rendered.addClass('atum-tooltip');
+		}
 		
 	}
 	
