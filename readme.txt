@@ -7,7 +7,7 @@ Tested up to: 5.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.6
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.7`
+
+*2019-03-12*
+
+**Features**
+
+* Refactory JS to TypeScript (work in progress).
+* Added new marketing popup.
+
+**Changes**
+
+* Add current atum_order to item meta filters.
+* Switched to new Datepicker in ATUM orders.
+
+**Fixes**
+
+* Fixed POs message and items visibility when adding a new one.
+* Remove any previously supplier set when enabling Multiple Suppliers in POs.
+* Added missing text domain.
+* Fixed wrong hook name in item.php.
 
 ---
 
