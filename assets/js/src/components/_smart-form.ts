@@ -13,7 +13,7 @@ export default class SmartForm {
 	/**
 	 * Constructor.
 	 *
-	 * @param {JQuery} $form  The form selector that will control
+	 * @param JQuery $form  The form selector that will control
 	 */
 	constructor($form: JQuery, settingsObj: Settings) {
 		

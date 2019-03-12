@@ -12,24 +12,14 @@ import { Utils } from '../../utils/_utils';
 
 export default class Filters {
 	
-	settings: Settings;
-	globals: Globals;
-	listTable: ListTable;
-	router: Router;
-	tooltip: Tooltip;
-	dateTimePicker: DateTimePicker;
-	
 	constructor(
-		settingsObj: Settings, globalsObj: Globals, listTableObj: ListTable, routerObj: Router,
-		tooltipObj: Tooltip, dateTimePickerObj: DateTimePicker
+		private settings: Settings,
+		private globals: Globals,
+		private listTable: ListTable,
+		private router: Router,
+		private tooltip: Tooltip,
+		private dateTimePicker: DateTimePicker
 	) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.listTable = listTableObj;
-		this.router = routerObj;
-		this.tooltip = tooltipObj;
-		this.dateTimePicker = dateTimePickerObj;
 		
 		//
 		// Ajax filters.

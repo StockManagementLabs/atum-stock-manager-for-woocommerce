@@ -29,7 +29,7 @@ export let Utils = {
 	 *
 	 * @return String|Boolean The variable value if available, false else.
 	 */
-	filterQuery(query: string, variable: string) {
+	filterQuery(query: string, variable: string): string|boolean {
 		
 		const vars = query.split('&');
 		
@@ -91,7 +91,7 @@ export let Utils = {
 		
 	},
 	
-	imagesLoaded($wrapper: JQuery) {
+	imagesLoaded($wrapper: JQuery): JQueryPromise<any> {
 		
 		// Get all the images (excluding those with no src attribute).
 		let $imgs: JQuery = $wrapper.find('img[src!=""]');

@@ -11,15 +11,11 @@ import Popover from '../_popover';
 
 export default class DragScroll {
 	
-	globals: Globals;
-	tooltip: Tooltip;
-	popover: Popover;
-	
-	constructor(globalsObj: Globals, tooltipObj: Tooltip, popoverObj: Popover) {
-		
-		this.globals = globalsObj;
-		this.tooltip = tooltipObj;
-		this.popover = popoverObj;
+	constructor(
+		private globals: Globals,
+		private tooltip: Tooltip,
+		private popover: Popover
+	) {
 	
 		// Load Hammer for table dragging functionality.
 		this.globals.$atumList.on('atum-scroll-bar-loaded', () => this.loadHammer());

@@ -7,7 +7,7 @@ export let BeforeUnload = {
 	addPrompt(checkCallback: Function) {
 		
 		// Before unload alert.
-		$(window).bind('beforeunload', () => {
+		$(window).bind('beforeunload', (): boolean|void => {
 			
 			if (checkCallback()) {
 				return;

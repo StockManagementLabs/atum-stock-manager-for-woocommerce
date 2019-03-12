@@ -74,7 +74,7 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 	<div class="add_note">
 		<p>
-			<label for="add_atum_order_note"><?php esc_html_e( 'Add Note', ATUM_TEXT_DOMAIN ); ?> <span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( 'Add a note for your reference', ATUM_TEXT_DOMAIN ) ?>"></span></label>
+			<label for="add_atum_order_note"><?php esc_html_e( 'Add Note', ATUM_TEXT_DOMAIN ); ?> <span class="atum-help-tip atum-tooltip" data-tip="<?php esc_attr_e( 'Add a note for your reference', ATUM_TEXT_DOMAIN ) ?>"></span></label>
 			<textarea type="text" name="atum_order_note" id="add_atum_order_note" class="input-text" cols="20" rows="5"></textarea>
 		</p>
 

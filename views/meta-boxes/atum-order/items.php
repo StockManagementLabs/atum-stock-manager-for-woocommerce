@@ -76,7 +76,7 @@ $add_blocker = ! $atum_order->get_status() || ( PurchaseOrders::get_post_type() 
 							/* translators: first one is the tax name and second is the tax class name */
 							$column_tip = sprintf( esc_html__( '%1$s (%2$s)', ATUM_TEXT_DOMAIN ), $tax_item['name'], $tax_class_name );
 							?>
-							<th class="line_tax" data-toggle="tooltip" title="<?php echo esc_attr( $column_tip ); ?>">
+							<th class="line_tax atum-tooltip" data-tip="<?php echo esc_attr( $column_tip ); ?>">
 								<?php echo esc_attr( $column_label ); ?>
 								<input type="hidden" class="atum-order-tax-id" name="atum_order_taxes[<?php echo esc_attr( $tax_id ) ?>]" value="<?php echo esc_attr( $tax_item['rate_id'] ); ?>">
 								<a class="delete-atum-order-tax" href="#" data-rate_id="<?php echo esc_attr( $tax_id ) ?>"></a>
@@ -140,7 +140,7 @@ $add_blocker = ! $atum_order->get_status() || ( PurchaseOrders::get_post_type() 
 
 		<table class="atum-order-totals">
 			<!--<tr>
-				<td class="label"><span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
+				<td class="label"><span class="atum-help-tip atum-tooltip" data-toggle="tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
 				<td width="1%"></td>
 				<td class="total">
 					<?php // echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
@@ -152,7 +152,7 @@ $add_blocker = ! $atum_order->get_status() || ( PurchaseOrders::get_post_type() 
 			<tr>
 				<td class="label">
 					<?php /* translators: the post type name */ ?>
-					<span class="atum-help-tip" data-toggle="tooltip" title="<?php esc_attr_e( sprintf( 'This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name ) ), ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
+					<span class="atum-help-tip atum-tooltip" data-tip="<?php esc_attr_e( sprintf( 'This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name ) ), ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
 				</td>
 				<td width="1%"></td>
 				<td class="total">
@@ -217,7 +217,7 @@ $add_blocker = ! $atum_order->get_status() || ( PurchaseOrders::get_post_type() 
 			<?php else : ?>
 				<span class="description">
 					<?php /* translators: the post type name */ ?>
-					<span class="atum-help-tip" data-toggle="tooltip" title="<?php printf( esc_attr__( "To edit %s items change the status back to 'Pending'", ATUM_TEXT_DOMAIN ), esc_attr( strtolower( $post_type->labels->singular_name ) ) ) ?>"></span> <?php printf( esc_html__( 'These %s items are no longer editable.', ATUM_TEXT_DOMAIN ), esc_attr( strtolower( $post_type->labels->singular_name ) ) ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
+					<span class="atum-help-tip atum-tooltip" data-tip="<?php printf( esc_attr__( "To edit %s items change the status back to 'Pending'", ATUM_TEXT_DOMAIN ), esc_attr( strtolower( $post_type->labels->singular_name ) ) ) ?>"></span> <?php printf( esc_html__( 'These %s items are no longer editable.', ATUM_TEXT_DOMAIN ), esc_attr( strtolower( $post_type->labels->singular_name ) ) ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
 				</span>
 			<?php endif;
 

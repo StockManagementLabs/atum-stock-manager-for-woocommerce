@@ -8,21 +8,18 @@ import ListTable from './_list-table';
 
 export default class Router {
 	
-	settings: Settings;
-	globals: Globals;
-	listTable: ListTable;
 	navigationReady: boolean = false;
 	numHashParameters: number = 0;
 	
-	constructor(settingsObj: Settings, globalsObj: Globals, listTableObj: ListTable) {
+	constructor(
+		private settings: Settings,
+		private globals: Globals,
+		private listTable: ListTable
+	) {
 		
 		if (typeof $.address === 'undefined') {
 			return;
 		}
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.listTable = listTableObj;
 		
 		// Hash history navigation.
 		$.address.externalChange( () => {

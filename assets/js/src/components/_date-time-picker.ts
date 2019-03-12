@@ -7,12 +7,11 @@ import Settings from '../config/_settings';
 
 export default class DateTimePicker {
 	
-	settings: Settings;
 	defaults: any = {};
 	
-	constructor(settingsObj: Settings) {
-		
-		this.settings = settingsObj;
+	constructor(
+		private settings: Settings
+	) {
 		
 		this.defaults = {
 			format           : this.settings.get('dateFormat'),
@@ -75,13 +74,12 @@ export default class DateTimePicker {
 		
 		$selector.each( (index: number, elem: Element) => {
 			
-			let $dateTimePicker: any = $(elem),
-			    mergedOpts: any      = {};
+			let $dateTimePicker: any = $(elem);
 			
 			// Extend the date picker options with data options.
-			Object.assign(mergedOpts, this.defaults, $dateTimePicker.data() || {}, opts);
+			opts = Object.assign( this.defaults, $dateTimePicker.data() || {}, opts );
 			
-			$dateTimePicker.datetimepicker(mergedOpts);
+			$dateTimePicker.datetimepicker(opts);
 			
 		})
 		.on('dp.change', (evt: any) => {

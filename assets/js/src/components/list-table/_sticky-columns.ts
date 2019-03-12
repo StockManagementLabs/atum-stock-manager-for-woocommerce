@@ -7,13 +7,10 @@ import Globals from './_globals';
 
 export default class StickyColumns {
 	
-	settings: Settings;
-	globals: Globals;
-	
-	constructor(settingsObj: Settings, globalsObj: Globals) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
+	constructor(
+		private settings: Settings,
+		private globals: Globals
+	) {
 		
 		// Make the first columns sticky.
 		this.globals.enabledStickyColumns = $('.sticky-columns-button').hasClass('active');
@@ -30,7 +27,7 @@ export default class StickyColumns {
 	 *
 	 * @return jQuery|null The sticky cols (if enabled) or null.
 	 */
-	createStickyColumns($table?: JQuery) {
+	createStickyColumns($table?: JQuery): JQuery|null {
 		
 		// If there are no sticky columns in this table, do not continue.
 		if (!this.settings.get('stickyColumns').length) {
