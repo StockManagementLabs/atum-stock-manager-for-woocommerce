@@ -30,8 +30,7 @@ export default class PostTypeList {
 		// Change nav and search div position.
 		this.globals.$atumList.prepend($('.subsubsub'));
 		$('.subsubsub').append($('.search-box'));
-		$('.wp-heading-inline').append($('.page-title-action'));
-		$('.page-title-action').show();
+		$('.wp-heading-inline').append( $('.page-title-action').show() );
 		
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );
