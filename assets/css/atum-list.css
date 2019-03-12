@@ -4415,7 +4415,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 1000;
+  z-index: 9995;
   display: none;
   float: left;
   min-width: 10rem;

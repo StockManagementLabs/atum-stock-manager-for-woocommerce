@@ -7,12 +7,11 @@ import Settings from '../config/_settings';
 
 export default class DateTimePicker {
 	
-	settings: Settings;
 	defaults: any = {};
 	
-	constructor(settingsObj: Settings) {
-		
-		this.settings = settingsObj;
+	constructor(
+		private settings: Settings
+	) {
 		
 		this.defaults = {
 			format           : this.settings.get('dateFormat'),

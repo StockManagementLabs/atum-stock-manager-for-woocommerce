@@ -7,7 +7,10 @@ export default class Settings {
 	
 	settings: any = {};
 	
-	constructor(varName: string, defaults: any = {}) {
+	constructor(
+		private varName: string,
+		private defaults: any = {}
+	) {
 		
 		const localizedOpts: any = typeof window[varName] !== 'undefined' ? window[varName] : {};
 	

@@ -7,7 +7,6 @@ import { Utils } from '../../utils/_utils';
 
 export default class Globals {
 	
-	settings: Settings;
 	$atumList: JQuery = null;
 	$atumTable: JQuery = null;
 	$editInput: JQuery = null;
@@ -23,9 +22,10 @@ export default class Globals {
 	$collapsedGroups: JQuery = null;
 	filterData = {};
 	
-	constructor(settingsObj: Settings, defaults?: any) {
-		
-		this.settings = settingsObj;
+	constructor(
+		private settings: Settings,
+		private defaults?: any
+	) {
 		
 		// Initialize selectors.
 		this.$atumList = (defaults && defaults.$atumList) || $('.atum-list-wrapper');

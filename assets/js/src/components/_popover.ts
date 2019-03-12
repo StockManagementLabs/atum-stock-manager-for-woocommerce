@@ -7,16 +7,10 @@ import DateTimePicker from './_date-time-picker';
 
 export default class Popover {
 	
-	settings: Settings;
-	dateTimePicker: DateTimePicker;
-	
-	constructor(settingsObj: Settings, dateTimePickerObj?: DateTimePicker) {
-		
-		this.settings = settingsObj;
-		
-		if (dateTimePickerObj) {
-			this.dateTimePicker = dateTimePickerObj;
-		}
+	constructor(
+		private settings: Settings,
+		private dateTimePicker?: DateTimePicker
+	) {
 		
 		// Init popovers.
 		this.setFieldPopover();

@@ -8,15 +8,11 @@ import Router from './_router';
 
 export default class SalesLastDays {
 	
-	globals: Globals;
-	router: Router;
-	enhancedSelect: EnhancedSelect;
-	
-	constructor(globalsObj: Globals, routerObj: Router, enhancedSelectObj: EnhancedSelect) {
-		
-		this.globals = globalsObj;
-		this.router = routerObj;
-		this.enhancedSelect = enhancedSelectObj;
+	constructor(
+		private globals: Globals,
+		private router: Router,
+		private enhancedSelect: EnhancedSelect
+	) {
 		
 		this.setup();
 		

@@ -12,19 +12,15 @@ import { Utils } from '../../utils/_utils';
 
 export default class ListTable {
 	
-	settings: Settings;
-	globals: Globals;
-	tooltip: Tooltip;
-	enhancedSelect: EnhancedSelect;
 	doingAjax: any  = null;
 	isRowExpanding = {};
 	
-	constructor(settingsObj: Settings, globalsObj: Globals, toolTipObj: Tooltip, enhancedSelectObj: EnhancedSelect) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.tooltip = toolTipObj;
-		this.enhancedSelect = enhancedSelectObj;
+	constructor(
+		private settings: Settings,
+		private globals: Globals,
+		private toolTip: Tooltip,
+		private enhancedSelect: EnhancedSelect
+	) {
 		
 		// Bind events.
 		this.events();
@@ -130,7 +126,7 @@ export default class ListTable {
 			method    : 'GET',
 			data      : this.globals.filterData,
 			beforeSend: () => {
-				this.tooltip.destroyTooltips();
+				this.toolTip.destroyTooltips();
 				this.addOverlay();
 			},
 			// Handle the successful result.
@@ -187,7 +183,7 @@ export default class ListTable {
 				}
 				
 				// Regenerate the UI.
-				this.tooltip.addTooltips();
+				this.toolTip.addTooltips();
 				this.enhancedSelect.maybeRestoreEnhancedSelect();
 				ActiveRow.addActiveClassRow(this.globals.$atumTable);
 				this.removeOverlay();
@@ -491,7 +487,7 @@ export default class ListTable {
 	 *
 	 * @return void|boolean
 	 */
-	expandRow($row: JQuery, expandableRowClass?: string, stopRowSelector?: string, stopPropagation?: boolean) {
+	expandRow($row: JQuery, expandableRowClass?: string, stopRowSelector?: string, stopPropagation?: boolean): boolean|void {
 		
 		const rowId: number = $row.data('id');
 		
@@ -526,7 +522,7 @@ export default class ListTable {
 		
 		if ($nextRow.length) {
 			$row.toggleClass('expanded');
-			this.tooltip.destroyTooltips();
+			this.toolTip.destroyTooltips();
 		}
 		
 		// Loop until reaching the next main row.
@@ -561,7 +557,7 @@ export default class ListTable {
 			
 			// Do this only when all the rows has been already expanded.
 			if (!Object.keys(this.isRowExpanding).length && (typeof stopPropagation === 'undefined' || stopPropagation !== true)) {
-				this.tooltip.addTooltips();
+				this.toolTip.addTooltips();
 			}
 			
 			$.each(childRows, (index: number, $childRow: JQuery) => {

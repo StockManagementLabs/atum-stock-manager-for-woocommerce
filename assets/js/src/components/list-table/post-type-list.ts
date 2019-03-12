@@ -10,18 +10,16 @@ import Globals from './_globals';
 
 export default class PostTypeList {
 	
-	settings: Settings;
-	globals: Globals;
-	enhancedSelect: EnhancedSelect;
 	$tableContainer: JQuery;
 	$scrollPane: JQuery;
 	jScrollApi: any;
 	
-	constructor(settingsObj: Settings, globalsObj: Globals, enhancedSelectObj: EnhancedSelect) {
+	constructor(
+		private settings: Settings,
+		private globals: Globals,
+		private enhancedSelect: EnhancedSelect
+	) {
 		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.enhancedSelect = enhancedSelectObj;
 		this.$tableContainer = $('<div class="atum-table-wrapper" />');
 		
 		$('.tablenav.top').after( this.$tableContainer );

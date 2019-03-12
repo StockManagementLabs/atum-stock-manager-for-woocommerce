@@ -7,13 +7,10 @@ import StickyHeader from './_sticky-header';
 
 export default class ColumnGroups {
 	
-	globals: Globals;
-	stickyHeader: StickyHeader;
-	
-	constructor(globalsObj: Globals, stickyHeaderObj: StickyHeader) {
-		
-		this.stickyHeader = stickyHeaderObj;
-		this.globals = globalsObj;
+	constructor(
+		private globals: Globals,
+		private stickyHeader: StickyHeader
+	) {
 		
 		// Hide/Show the toggleable group of columns with the toggler button.
 		this.globals.$atumList.on('click', '.group-toggler', (evt: JQueryEventObject) => {

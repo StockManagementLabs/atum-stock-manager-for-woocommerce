@@ -9,8 +9,6 @@ import { Switcher } from '../_switcher';
 
 export default class SettingsPage {
 	
-	settings: Settings;
-	enhancedSelect: EnhancedSelect;
 	$settingsWrapper: JQuery;
 	$nav: JQuery;
 	$form: JQuery;
@@ -18,10 +16,10 @@ export default class SettingsPage {
 	numHashParameters: number = 0;
 	swal: any = window['swal'];
 	
-	constructor(settingsObj: Settings, enhancedSelectObj: EnhancedSelect) {
-		
-		this.settings = settingsObj;
-		this.enhancedSelect = enhancedSelectObj;
+	constructor(
+		private settings: Settings,
+		private enhancedSelect: EnhancedSelect
+	) {
 		
 		// Initialize selectors.
 		this.$settingsWrapper = $('.atum-settings-wrapper');
@@ -236,7 +234,7 @@ export default class SettingsPage {
 				reverseButtons     : true,
 				allowOutsideClick  : false,
 				showLoaderOnConfirm: true,
-				preConfirm         : () => {
+				preConfirm         : (): Promise<any> => {
 					
 					return new Promise( (resolve: Function, reject: Function) => {
 						
@@ -302,7 +300,7 @@ export default class SettingsPage {
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
-			preConfirm: () => {
+			preConfirm: (): Promise<any> => {
 				
 				return new Promise( (resolve: Function, reject: Function) => {
 					

@@ -8,15 +8,11 @@ import ListTable from './_list-table';
 
 export default class EditableCell {
 	
-	globals: Globals;
-	popover: Popover;
-	listTable: ListTable;
-	
-	constructor(globalsObj: Globals, popoverObj: Popover, listTableObj: ListTable) {
-	
-		this.globals = globalsObj;
-		this.popover = popoverObj;
-		this.listTable = listTableObj;
+	constructor(
+		private globals: Globals,
+		private popover: Popover,
+		private listTable: ListTable
+	) {
 		
 		this.globals.$atumList
 		

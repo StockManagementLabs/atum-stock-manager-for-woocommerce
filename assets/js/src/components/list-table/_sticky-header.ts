@@ -9,17 +9,12 @@ import Tooltip from '../_tooltip';
 
 export default class StickyHeader {
 	
-	settings: Settings;
-	globals: Globals;
-	stickyCols: StickyColumns;
-	tooltip: Tooltip;
-	
-	constructor(settingsObj: Settings, globalsObj: Globals, stickyColsObj: StickyColumns, tooltipObj: Tooltip) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.stickyCols = stickyColsObj;
-		this.tooltip = tooltipObj;
+	constructor(
+		private settings: Settings,
+		private globals: Globals,
+		private stickyCols: StickyColumns,
+		private tooltip: Tooltip
+	) {
 		
 		// Add the floating table header.
 		this.globals.enabledStickyHeader = $('.sticky-header-button').hasClass('active');
@@ -176,7 +171,7 @@ export default class StickyHeader {
 		}
 		
 		(<any>this.globals.$atumTable).floatThead({
-			responsiveContainer: ($table) => {
+			responsiveContainer: ($table: JQuery) => {
 				return $table.closest('.jspContainer');
 			},
 			position           : 'absolute',
