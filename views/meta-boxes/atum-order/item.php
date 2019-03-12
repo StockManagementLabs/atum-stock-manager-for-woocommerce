@@ -69,7 +69,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 
 		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, $product ) ?>
 		<?php require 'item-meta.php'; ?>
-		<?php do_action( 'atum/atum_order/ater_item_meta', $item_id, $item, $product ) ?>
+		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, $product ) ?>
 
 		<div class="item_status">
 			<?php if ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) : ?>
