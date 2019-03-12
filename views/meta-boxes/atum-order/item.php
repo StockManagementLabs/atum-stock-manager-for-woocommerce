@@ -67,9 +67,9 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<input type="hidden" class="atum_order_item_id" name="atum_order_item_id[]" value="<?php echo esc_attr( $item_id ); ?>" />
 		<input type="hidden" name="atum_order_item_tax_class[<?php echo absint( $item_id ); ?>]" value="<?php echo esc_attr( $item->get_tax_class() ); ?>" />
 
-		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, $product ) ?>
+		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, $product, $atum_order ) ?>
 		<?php require 'item-meta.php'; ?>
-		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, $product ) ?>
+		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, $product, $atum_order ) ?>
 
 		<div class="item_status">
 			<?php if ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) : ?>
