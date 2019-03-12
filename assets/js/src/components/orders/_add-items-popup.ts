@@ -17,8 +17,8 @@ export default class AddItemsPopup {
 	) {
 		
 		$('body')
-			.on( 'wc_backbone_modal_loaded', this.init )
-			.on( 'wc_backbone_modal_response', this.response );
+			.on( 'wc_backbone_modal_loaded', (evt: Event, target: string) => this.init(evt, target) )
+			.on( 'wc_backbone_modal_response', (evt: Event, target: string, data: any) => this.response(evt, target, data) );
 		
 	}
 	

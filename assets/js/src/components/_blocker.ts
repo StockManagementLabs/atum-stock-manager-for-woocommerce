@@ -6,7 +6,7 @@ export let Blocker = {
 	
 	block($selector: any, opts?: any) {
 		
-		Object.assign({
+		opts = Object.assign({
 			message   : null,
 			overlayCSS: {
 				background: '#000',
