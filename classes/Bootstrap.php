@@ -248,11 +248,11 @@ class Bootstrap {
 			// Delete all the ATUM order notes.
 			$wpdb->query( "DELETE FROM $wpdb->comments WHERE comment_type LIKE '" . ATUM_PREFIX . "%'" ); // WPCS: unprepared SQL ok.
 
-			// Delete the ATUM options.
-			$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name IN ('" . ATUM_PREFIX . "version')" ); // WPCS: unprepared SQL ok.
-
 			// Delete all the user meta related to ATUM.
 			$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE '" . ATUM_PREFIX . "%'" ); // WPCS: unprepared SQL ok.
+
+			// Delete the ATUM options.
+			delete_option( ATUM_PREFIX . 'version' );
 
 			$settings = get_option( ATUM_PREFIX . 'settings') ;
 
