@@ -919,7 +919,7 @@ abstract class AtumOrderPostType {
 					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
 				);
 
-				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars( [ 'dateFormat' => 'YY-MM-DD' ] ) );
+				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
 
 				wp_localize_script( 'atum-orders', 'atumOrder', $vars );
 				wp_enqueue_script( 'atum-orders' );
