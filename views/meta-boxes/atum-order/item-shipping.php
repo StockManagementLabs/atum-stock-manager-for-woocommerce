@@ -53,9 +53,9 @@ $currency = $atum_order->get_currency();
 			</select>
 		</div>
 
-		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, null ) ?>
+		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, null, $atum_order ) ?>
 		<?php require 'item-meta.php'; ?>
-		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, null ) ?>
+		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, null, $atum_order ) ?>
 	</td>
 
 	<?php do_action( 'atum/atum_order/shipping_item_values', null, $item, $item_id ); ?>
