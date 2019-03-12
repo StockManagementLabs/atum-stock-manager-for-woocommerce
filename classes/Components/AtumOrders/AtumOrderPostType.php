@@ -843,12 +843,10 @@ abstract class AtumOrderPostType {
 		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post_type ) {
 
-			global $wp_scripts, $post;
+			global $post;
 
-			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.12.1';
-			wp_register_style( 'jquery-ui-style', "https://code.jquery.com/ui/$jquery_version/themes/smoothness/jquery-ui.min.css", array(), $jquery_version );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'jquery-ui-style', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2' ), ATUM_VERSION );
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::maybe_enqueue_scripts();
@@ -866,7 +864,6 @@ abstract class AtumOrderPostType {
 
 				// Switchery.
 				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
-				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION, TRUE );
 
 				// Enqueue styles.
 				wp_enqueue_style( 'sweetalert2' );
@@ -878,16 +875,14 @@ abstract class AtumOrderPostType {
 					'wc-enhanced-select',
 					'wc-backbone-modal',
 					'jquery-blockui',
-					'jquery-ui-datepicker',
 					'stupidtable',
 					'accounting',
 					'sweetalert2',
-					'switchery',
 				));
 
-				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/atum.orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
+				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum.orders.min.js', $wc_dependencies, ATUM_VERSION, TRUE );
 
-				wp_localize_script( 'atum-orders', 'atumOrder', array(
+				$vars = array(
 					'add_note_nonce'           => wp_create_nonce( 'add-atum-order-note' ),
 					'delete_note_nonce'        => wp_create_nonce( 'delete-atum-order-note' ),
 					'delete_note'              => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
@@ -922,8 +917,11 @@ abstract class AtumOrderPostType {
 					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
 					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
-				) );
+				);
 
+				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
+
+				wp_localize_script( 'atum-orders', 'atumOrder', $vars );
 				wp_enqueue_script( 'atum-orders' );
 
 			}

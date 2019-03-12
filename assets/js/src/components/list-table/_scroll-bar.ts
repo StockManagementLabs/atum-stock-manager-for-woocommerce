@@ -7,11 +7,9 @@ import { Utils } from '../../utils/_utils';
 
 export default class ScrollBar {
 	
-	globals: Globals;
-	
-	constructor(globalsObj: Globals) {
-		
-		this.globals = globalsObj;
+	constructor(
+		private globals: Globals
+	) {
 		
 		// Init the table scrollbar.
 		this.addScrollBar();

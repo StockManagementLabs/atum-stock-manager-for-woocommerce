@@ -1741,7 +1741,7 @@ input[type="button"].btn-block {
 .swal2-container .marketing-popup .swal2-content h1 {
   font-weight: 400;
   font-size: 34px;
-  margin: 0 0 10px;
+  margin: 26px auto 10px;
 }
 
 .swal2-container .marketing-popup .swal2-content p {
@@ -1796,7 +1796,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .marketing-popup .mp-logo {
-  width: 150px;
+  width: 255px;
   height: auto;
 }
 /*# sourceMappingURL=atum-marketing-popup.css.map */

@@ -1,7 +1,6 @@
 .swal2-container {
 	
 	.marketing-popup {
-		
 		height: 433px;
 		padding: 10px;
 		
@@ -22,7 +21,7 @@
 			h1 {
 				font-weight: 400;
 				font-size: 34px;
-				margin: 0 0 10px;
+				margin: 26px auto 10px;
 			}
 			
 			p {
@@ -30,7 +29,6 @@
 			}
 			
 			.version {
-				
 				padding: 1px 12px;
 				height: 21px;
 				line-height: 20px;
@@ -38,11 +36,11 @@
 				position: absolute;
 				top: 141px;
 				right: 113px;
-				
 			}
 			
 			button {
 				margin: 0 5px;
+				
 				&.btn-success,&.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
 					box-shadow: none;
 					
@@ -50,18 +48,22 @@
 						opacity: 0.7;
 					}
 				}
+				
 				&.btn-outline-success {
+					background: $white;
+					
 					&.purple {
 						background: $white;
 						color: $purple-pl;
 						border-color: $purple-pl;
+						
 						&:hover {
 							background: $purple-pl;
 							color: $white;
 							border-color: $purple-pl;
 						}
 					}
-					background: $white;
+					
 					&:hover {
 						background: $green;
 					}
@@ -75,7 +77,7 @@
 		}
 		
 		.mp-logo {
-			width: 150px;
+			width: 255px;
 			height: auto;
 		}
 	}

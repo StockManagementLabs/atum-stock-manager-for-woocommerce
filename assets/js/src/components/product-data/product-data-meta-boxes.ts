@@ -7,11 +7,9 @@ import Settings from '../../config/_settings';
 
 export default class ProductDataMetaBoxes {
 	
-	settings: Settings;
-	
-	constructor(settingsObj: Settings) {
-		
-		this.settings = settingsObj;
+	constructor(
+		private settings: Settings
+	) {
 		
 		// Add switchery.
 		Switcher.doSwitchers();
@@ -42,7 +40,7 @@ export default class ProductDataMetaBoxes {
 				cancelButtonText   : this.settings.get('cancel'),
 				reverseButtons     : true,
 				showLoaderOnConfirm: true,
-				preConfirm         : () => {
+				preConfirm         : (): Promise<any> => {
 					
 					return new Promise( (resolve: Function, reject: Function) => {
 						
@@ -71,7 +69,7 @@ export default class ProductDataMetaBoxes {
 					});
 					
 				},
-				allowOutsideClick  : () => {
+				allowOutsideClick  : (): boolean => {
 					return !swal.isLoading();
 				}
 			}).then( (result: string) => {

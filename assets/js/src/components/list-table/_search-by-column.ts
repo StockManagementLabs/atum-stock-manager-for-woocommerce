@@ -7,14 +7,11 @@ import Globals from './_globals';
 import { Utils } from '../../utils/_utils';
 
 export default class SearchByColumn {
-	
-	settings: Settings;
-	globals: Globals;
-	
-	constructor(settingsObj: Settings, globalsObj: Globals) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
+
+	constructor(
+		private settings: Settings,
+		private globals: Globals
+	) {
 		
 		if ($('.atum-post-search-with-dropdown').length) {
 			

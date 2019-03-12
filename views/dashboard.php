@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || die;
 			<!--<a href="#" target="_blank" type="button" class="btn btn-success btn-pill"><?php esc_html_e( 'Upgrade Now', ATUM_TEXT_DOMAIN ) ?></a>-->
 			<a href="<?php echo esc_url( $support_link ) ?>" target="_blank" class="btn btn-primary btn-pill"><?php echo esc_html( $support_button_text ) ?></a>
 
-			<button type="button" class="restore-defaults btn btn-warning" title="<?php esc_attr_e( 'Restore widgets and layout to defaults', ATUM_TEXT_DOMAIN ) ?>" data-toggle="tooltip" data-placement="bottom"><i class="atum-icon atmi-redo"></i></button>
+			<button type="button" class="restore-defaults btn btn-warning atum-tooltip" title="<?php esc_attr_e( 'Restore widgets and layout to defaults', ATUM_TEXT_DOMAIN ) ?>" data-placement="bottom"><i class="atum-icon atmi-redo"></i></button>
 		</div>
 
 		<div class="dash-header-logo">

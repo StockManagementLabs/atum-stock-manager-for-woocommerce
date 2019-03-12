@@ -9,17 +9,12 @@ import StickyHeader from './_sticky-header';
 
 export default class TableButtons {
 	
-	globals: Globals;
-	tooltip: Tooltip;
-	stickyCols: StickyColumns;
-	stickyHeader: StickyHeader;
-	
-	constructor(globalsObj: Globals, tooltipObj: Tooltip, stickyColsObj: StickyColumns, stickyHeaderObj: StickyHeader) {
-		
-		this.globals = globalsObj;
-		this.tooltip = tooltipObj;
-		this.stickyCols = stickyColsObj;
-		this.stickyHeader = stickyHeaderObj;
+	constructor(
+		private globals: Globals,
+		private tooltip: Tooltip,
+		private stickyCols: StickyColumns,
+		private stickyHeader: StickyHeader
+	) {
 		
 		// Table style buttons.
 		this.globals.$atumList.on('click', '.table-style-buttons button', (evt: JQueryEventObject) => {

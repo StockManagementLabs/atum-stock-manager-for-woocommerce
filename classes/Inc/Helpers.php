@@ -1265,7 +1265,7 @@ final class Helpers {
 
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
-		$output  = '<select name="product_type" class="' . $class . '" autocomplete="off">';
+		$output  = '<select name="product_type" class="' . $class . ' atum-tooltip" autocomplete="off">';
 		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {
@@ -1344,7 +1344,7 @@ final class Helpers {
 			endif;
 			?>
 
-			<select name="supplier" class="wc-enhanced-select atum-enhanced-select <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
+			<select name="supplier" class="wc-enhanced-select atum-enhanced-select atum-tooltip <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
 				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>
@@ -1354,9 +1354,9 @@ final class Helpers {
 
 		<?php else : ?>
 
-			<select class="wc-product-search atum-enhanced-select <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
-					data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-					data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
+			<select class="wc-product-search atum-enhanced-select atum-tooltip <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
+				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>
 					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ) ?></option>

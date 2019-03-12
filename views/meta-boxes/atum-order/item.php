@@ -67,17 +67,17 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<input type="hidden" class="atum_order_item_id" name="atum_order_item_id[]" value="<?php echo esc_attr( $item_id ); ?>" />
 		<input type="hidden" name="atum_order_item_tax_class[<?php echo absint( $item_id ); ?>]" value="<?php echo esc_attr( $item->get_tax_class() ); ?>" />
 
-		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, $product ) ?>
+		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, $product, $atum_order ) ?>
 		<?php require 'item-meta.php'; ?>
-		<?php do_action( 'atum/atum_order/ater_item_meta', $item_id, $item, $product ) ?>
+		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, $product, $atum_order ) ?>
 
 		<div class="item_status">
 			<?php if ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) : ?>
-				<i class="atum-icon atum-icon atmi-question-circle color-primary" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="atum-icon atum-icon atmi-question-circle color-primary atum-tooltip" data-tip="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 
 			<?php if ( $item->get_meta( '_stock_changed' ) ) : ?>
-				<i class="atum-icon atmi-highlight color-warning" data-toggle="tooltip" title="<?php esc_attr_e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
+				<i class="atum-icon atmi-highlight color-warning atum-tooltip" data-tip="<?php esc_attr_e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 		</div>
 	</td>
@@ -196,7 +196,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 	<td class="atum-order-edit-line-item" width="1%">
 		<div class="atum-order-edit-line-item-actions">
 			<?php if ( $atum_order->is_editable() ) : ?>
-				<a class="edit-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
+				<a class="edit-atum-order-item atum-tooltip" href="#" data-tip="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
 			<?php endif; ?>
 		</div>
 	</td>

@@ -57,7 +57,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		parent::__construct( $id, $read_items );
 		
-		$this->block_message = __( 'Set the Supplier field above and click the Create/Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
+		$this->block_message = __( 'Set the Supplier field above in order to add/edit items.', ATUM_TEXT_DOMAIN );
 
 	}
 
@@ -117,7 +117,7 @@ class PurchaseOrder extends AtumOrderModel {
 	public function get_title() {
 
 		// phpcs:ignore WordPress.WP.I18n.MissingArgDomain
-		if ( ! empty( $this->post->post_title ) && __( 'Auto Draft' ) !== $this->post->post_title ) {
+		if ( ! empty( $this->post->post_title ) && __( 'Auto Draft', ATUM_TEXT_DOMAIN ) !== $this->post->post_title ) {
 			$post_title = $this->post->post_title;
 		}
 		else {

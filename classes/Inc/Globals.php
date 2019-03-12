@@ -424,5 +424,43 @@ final class Globals {
 		return self::$order_type_tables_id[ $type ];
 		
 	}
-	
+
+	/**
+	 * Get the JS localization vars for the DateTimePicker
+	 *
+	 * @since 1.5.7
+	 *
+	 * @param array $replace Optional. Only needed if want to modify any default value.
+	 *
+	 * @return array
+	 */
+	public static function get_date_time_picker_js_vars( $replace = array() ) {
+
+		$defaults = array(
+			'goToToday'       => __( 'Go to today', ATUM_TEXT_DOMAIN ),
+			'clearSelection'  => __( 'Clear selection', ATUM_TEXT_DOMAIN ),
+			'closePicker'     => __( 'Close the picker', ATUM_TEXT_DOMAIN ),
+			'selectMonth'     => __( 'Select Month', ATUM_TEXT_DOMAIN ),
+			'prevMonth'       => __( 'Previous Month', ATUM_TEXT_DOMAIN ),
+			'nextMonth'       => __( 'Next Month', ATUM_TEXT_DOMAIN ),
+			'selectYear'      => __( 'Select Year', ATUM_TEXT_DOMAIN ),
+			'prevYear'        => __( 'Previous Year', ATUM_TEXT_DOMAIN ),
+			'nextYear'        => __( 'Next Year', ATUM_TEXT_DOMAIN ),
+			'selectDecade'    => __( 'Select Decade', ATUM_TEXT_DOMAIN ),
+			'prevDecade'      => __( 'Previous Decade', ATUM_TEXT_DOMAIN ),
+			'nextDecade'      => __( 'Next Decade', ATUM_TEXT_DOMAIN ),
+			'prevCentury'     => __( 'Previous Century', ATUM_TEXT_DOMAIN ),
+			'nextCentury'     => __( 'Next Century', ATUM_TEXT_DOMAIN ),
+			'incrementHour'   => __( 'Increment Hour', ATUM_TEXT_DOMAIN ),
+			'pickHour'        => __( 'Pick Hour', ATUM_TEXT_DOMAIN ),
+			'decrementHour'   => __( 'Decrement Hour', ATUM_TEXT_DOMAIN ),
+			'incrementMinute' => __( 'Increment Minute', ATUM_TEXT_DOMAIN ),
+			'pickMinute'      => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
+			'decrementMinute' => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
+			'dateFormat'      => 'YYYY-MM-DD',
+		);
+
+		return array_merge( $defaults, $replace );
+
+	}
 }

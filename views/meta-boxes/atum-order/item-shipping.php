@@ -53,9 +53,9 @@ $currency = $atum_order->get_currency();
 			</select>
 		</div>
 
-		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, null ) ?>
+		<?php do_action( 'atum/atum_order/before_item_meta', $item_id, $item, null, $atum_order ) ?>
 		<?php require 'item-meta.php'; ?>
-		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, null ) ?>
+		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, null, $atum_order ) ?>
 	</td>
 
 	<?php do_action( 'atum/atum_order/shipping_item_values', null, $item, $item_id ); ?>
@@ -112,7 +112,7 @@ $currency = $atum_order->get_currency();
 	<td class="atum-order-edit-line-item" width="1%">
 		<div class="atum-order-edit-line-item-actions">
 			<?php if ( $atum_order->is_editable() ) : ?>
-				<a class="edit-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
+				<a class="edit-atum-order-item atum-tooltip" href="#" data-tip="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
 			<?php endif; ?>
 		</div>
 	</td>

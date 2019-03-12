@@ -471,7 +471,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
 			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
-			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat',
+			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip',
 		) );
 
 		// Product type filtering.
@@ -1845,7 +1845,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
-		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select atum-tooltip" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
 			<option value="-1"><?php esc_html_e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>
@@ -3028,29 +3028,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			'from'                 => __( 'From', ATUM_TEXT_DOMAIN ),
 			'to'                   => __( 'To', ATUM_TEXT_DOMAIN ),
 			'apply'                => __( 'Apply', ATUM_TEXT_DOMAIN ),
-			'goToToday'            => __( 'Go to today', ATUM_TEXT_DOMAIN ),
-			'clearSelection'       => __( 'Clear selection', ATUM_TEXT_DOMAIN ),
-			'closePicker'          => __( 'Close the picker', ATUM_TEXT_DOMAIN ),
-			'selectMonth'          => __( 'Select Month', ATUM_TEXT_DOMAIN ),
-			'prevMonth'            => __( 'Previous Month', ATUM_TEXT_DOMAIN ),
-			'nextMonth'            => __( 'Next Month', ATUM_TEXT_DOMAIN ),
-			'selectYear'           => __( 'Select Year', ATUM_TEXT_DOMAIN ),
-			'prevYear'             => __( 'Previous Year', ATUM_TEXT_DOMAIN ),
-			'nextYear'             => __( 'Next Year', ATUM_TEXT_DOMAIN ),
-			'selectDecade'         => __( 'Select Decade', ATUM_TEXT_DOMAIN ),
-			'prevDecade'           => __( 'Previous Decade', ATUM_TEXT_DOMAIN ),
-			'nextDecade'           => __( 'Next Decade', ATUM_TEXT_DOMAIN ),
-			'prevCentury'          => __( 'Previous Century', ATUM_TEXT_DOMAIN ),
-			'nextCentury'          => __( 'Next Century', ATUM_TEXT_DOMAIN ),
-			'incrementHour'        => __( 'Increment Hour', ATUM_TEXT_DOMAIN ),
-			'pickHour'             => __( 'Pick Hour', ATUM_TEXT_DOMAIN ),
-			'decrementHour'        => __( 'Decrement Hour', ATUM_TEXT_DOMAIN ),
-			'incrementMinute'      => __( 'Increment Minute', ATUM_TEXT_DOMAIN ),
-			'pickMinute'           => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
-			'decrementMinute'      => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
-			'dateFormat'           => 'YYYY-MM-DD',
 			'emptyCol'             => self::EMPTY_COL,
 		);
+
+		$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
 
 		if ( $this->first_edit_key ) {
 			$vars['firstEditKey']      = $this->first_edit_key;

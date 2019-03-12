@@ -71,8 +71,8 @@ jQuery( ($) => {
 	let globals = new Globals(settings);
 	
 	// Initialize components with dependency injection.
-	let tooltip = new Tooltip();
 	let enhancedSelect = new EnhancedSelect();
+	let tooltip = new Tooltip();
 	let listTable = new ListTable(settings, globals, tooltip, enhancedSelect);
 	let router = new Router(settings, globals, listTable);
 	let stickyCols = new StickyColumns(settings, globals);

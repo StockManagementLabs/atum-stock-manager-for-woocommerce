@@ -76,7 +76,7 @@ $currency = $atum_order->get_currency();
 	<td class="atum-order-edit-line-item" width="1%">
 		<div class="atum-order-edit-line-item-actions">
 			<?php if ( $atum_order->is_editable() ) : ?>
-				<a class="edit-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
+				<a class="edit-atum-order-item atum-tooltip" href="#" data-tip="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
 			<?php endif; ?>
 		</div>
 	</td>

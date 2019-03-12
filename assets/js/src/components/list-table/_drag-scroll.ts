@@ -11,15 +11,11 @@ import Popover from '../_popover';
 
 export default class DragScroll {
 	
-	globals: Globals;
-	tooltip: Tooltip;
-	popover: Popover;
-	
-	constructor(globalsObj: Globals, tooltipObj: Tooltip, popoverObj: Popover) {
-		
-		this.globals = globalsObj;
-		this.tooltip = tooltipObj;
-		this.popover = popoverObj;
+	constructor(
+		private globals: Globals,
+		private tooltip: Tooltip,
+		private popover: Popover
+	) {
 	
 		// Load Hammer for table dragging functionality.
 		this.globals.$atumList.on('atum-scroll-bar-loaded', () => this.loadHammer());
@@ -79,7 +75,9 @@ export default class DragScroll {
 			this.addHorizontalDragScroll('filters_container', false);
 		});
 		
-		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
+		this.globals.$atumList.find('.tablenav.top').find('input.btn').css('visibility', 'visible');
+		
+		this.globals.$atumList.find('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
 			
 			this.addHorizontalDragScroll( $(evt.currentTarget).attr('id'), true );
 			this.tooltip.destroyTooltips();

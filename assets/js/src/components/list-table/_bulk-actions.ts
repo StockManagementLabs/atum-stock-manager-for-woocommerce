@@ -9,15 +9,11 @@ import { Utils } from '../../utils/_utils';
 
 export default class BulkActions {
 	
-	settings: Settings;
-	globals: Globals;
-	listTable: ListTable;
-	
-	constructor(settingsObj: Settings, globalsObj: Globals, listTableObj: ListTable) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.listTable = listTableObj;
+	constructor(
+		private settings: Settings,
+		private globals: Globals,
+		private listTable: ListTable
+	) {
 		
 		this.globals.$atumList
 		

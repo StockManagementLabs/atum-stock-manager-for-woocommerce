@@ -8,19 +8,16 @@ import Tooltip from '../_tooltip';
 
 export default class LocationsTree {
 	
-	settings: Settings;
-	globals: Globals;
-	tooltip: Tooltip;
 	locationsSet: string[] = [];
 	toSetLocations: string[] = [];
 	productId: number = null;
 	swal: any = window['swal'];
 	
-	constructor(settingsObj: Settings, globalsObj: Globals, tooltipObj: Tooltip) {
-		
-		this.settings = settingsObj;
-		this.globals = globalsObj;
-		this.tooltip = tooltipObj;
+	constructor(
+		private settings: Settings,
+		private globals: Globals,
+		private tooltip: Tooltip
+	) {
 		
 		this.globals.$atumList.on('click', '.show-locations', (evt: JQueryEventObject) => {
 			evt.preventDefault();
@@ -195,7 +192,7 @@ export default class LocationsTree {
 	 *
 	 * @return Promise
 	 */
-	saveLocations() {
+	saveLocations(): Promise<any> {
 		
 		return new Promise( (resolve: Function, reject: Function) => {
 			
