@@ -123,6 +123,7 @@ gulp.task('js::atum', function () {
 				'product.data'  : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.ts',
 				'settings'      : path.join(__dirname, config.assetsDir + '/js/src/') + 'settings.ts',
 				'orders'        : path.join(__dirname, config.assetsDir + '/js/src/') + 'orders.ts',
+				'data.export'   : path.join(__dirname, config.assetsDir + '/js/src/') + 'data-export.ts',
 			},
 			
 			output: {

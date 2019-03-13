@@ -126,6 +126,34 @@ export let Utils = {
 		// IE - when all the images are loaded
 		return $.when.apply($, dfds);
 		
+	},
+	
+	/**
+	 * Helper to get parameters from the URL
+	 *
+	 * @param string name
+	 *
+	 * @return string
+	 */
+	getUrlParameter(name: string) {
+		
+		if (typeof URLSearchParams !== 'undefined') {
+			
+			const urlParams = new URLSearchParams(window.location.search);
+			
+			return urlParams.get(name);
+			
+		}
+		// Deprecated: Only for old browsers non supporting URLSearchParams.
+		else {
+			
+			name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+			const regex: RegExp     = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+			      results: string[] = regex.exec(window.location.search);
+			
+			return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+		}
+		
 	}
 	
 }

@@ -62,8 +62,7 @@ class DataExport {
 
 		if ( in_array( $hook, $allowed_pages, TRUE ) ) {
 
-			$min = ! ATUM_DEBUG ? '.min' : '';
-			wp_register_script( 'atum-data-export', ATUM_URL . "assets/js/atum.data.export$min.js", array( 'jquery' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-data-export', ATUM_URL . 'assets/js/build/atum.data.export.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 			ob_start();
 			wc_product_dropdown_categories( array(
