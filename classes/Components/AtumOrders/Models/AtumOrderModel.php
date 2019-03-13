@@ -321,7 +321,7 @@ abstract class AtumOrderModel {
 				$qty = $product->get_min_purchase_quantity();
 			}
 
-			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product );
+			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product, $this );
 
 			$default_args = array(
 				'name'         => $product->get_name(),
