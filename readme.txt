@@ -215,6 +215,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Switched to new Datepicker in ATUM orders.
 * Delete all ATUM data when the option in Setting is enabled.
 * Removed unneeded suppliers script.
+* Removed lodash dependency.
 
 **Fixes**
 
