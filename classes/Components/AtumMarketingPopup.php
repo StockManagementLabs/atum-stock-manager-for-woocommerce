@@ -122,25 +122,25 @@ class AtumMarketingPopup {
 
 			if ( ! empty( $background_data ) ) {
 
-				$background_color    = isset( $background_data->background_color ) ? $background_data->background_color : '';
-				$background_image    = isset( $background_data->background_image ) ? $background_data->background_image : '';
-				$background_position = isset( $background_data->background_position ) ? $background_data->background_position : '';
-				$background_size     = isset( $background_data->background_size ) ? $background_data->background_size : '';
-				$background_repeat   = isset( $background_data->background_repeat ) ? $background_data->background_repeat : '';
+				$background_color    = isset( $background_data->bg_color ) ? $background_data->bg_color : '';
+				$background_image    = isset( $background_data->bg_image ) ? $background_data->bg_image : '';
+				$background_position = isset( $background_data->bg_position ) ? $background_data->bg_position : '';
+				$background_size     = isset( $background_data->bg_size ) ? $background_data->bg_size : '';
+				$background_repeat   = isset( $background_data->bg_repeat ) ? $background_data->bg_repeat : '';
 
-				$this->background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
+				$this->background = "$background_color $background_image $background_position/$background_size $background_repeat;";
 
 			}
 
 			if ( ! empty( $dash_background_data ) ) {
 
-				$background_color    = isset( $dash_background_data->background_color ) ? $dash_background_data->background_color : '';
-				$background_image    = isset( $dash_background_data->background_image ) ? $dash_background_data->background_image : '';
-				$background_position = isset( $dash_background_data->background_position ) ? $dash_background_data->background_position : '';
-				$background_size     = isset( $dash_background_data->background_size ) ? $dash_background_data->background_size : '';
-				$background_repeat   = isset( $dash_background_data->background_repeat ) ? $dash_background_data->background_repeat : '';
+				$background_color    = isset( $dash_background_data->bg_color ) ? $dash_background_data->bg_color : '';
+				$background_image    = isset( $dash_background_data->bg_image ) ? $dash_background_data->bg_image : '';
+				$background_position = isset( $dash_background_data->bg_position ) ? $dash_background_data->bg_position : '';
+				$background_size     = isset( $dash_background_data->bg_size ) ? $dash_background_data->bg_size : '';
+				$background_repeat   = isset( $dash_background_data->bg_repeat ) ? $dash_background_data->bg_repeat : '';
 
-				$this->dash_background = $background_color . ' ' . $background_image . ' ' . $background_position . '/' . $background_size . ' ' . $background_repeat;
+				$this->dash_background = "$background_color $background_image $background_position/$background_size $background_repeat;";
 
 			}
 
@@ -198,14 +198,12 @@ class AtumMarketingPopup {
 
 		if ( Helpers::show_marketing_popup() ) {
 
-			$min = ! ATUM_DEBUG ? '.min' : '';
-
 			$marketing_popup_vars = array(
 				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 			);
 
 			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . "assets/js/atum.marketing.popup$min.js", array( 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum.marketing.popup.min.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			wp_enqueue_style( 'atum-marketing-popup' );

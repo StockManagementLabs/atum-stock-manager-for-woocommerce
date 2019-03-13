@@ -2239,7 +2239,7 @@ final class Ajax {
 
 			$marketing_popup = AtumMarketingPopup::get_instance();
 
-			$marketing_popup = [
+			$marketing_popup_data = [
 				'background'    => $marketing_popup->get_background(),
 				'title'         => $marketing_popup->get_title(),
 				'description'   => $marketing_popup->get_description(),
@@ -2250,7 +2250,7 @@ final class Ajax {
 			];
 
 			// Send marketing popup content.
-			wp_send_json_success( compact( 'marketing_popup' ) );
+			wp_send_json_success( $marketing_popup_data );
 
 		}
 
