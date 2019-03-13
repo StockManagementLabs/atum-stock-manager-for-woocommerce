@@ -161,7 +161,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.5.7`
 
-*2019-03-12*
+*2019-03-13*
 
 **Features**
 
@@ -172,6 +172,8 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 * Add current atum_order to item meta filters.
 * Switched to new Datepicker in ATUM orders.
+* Delete all ATUM data when the option in Setting is enabled.
+* Removed unneeded suppliers script.
 
 **Fixes**
 
