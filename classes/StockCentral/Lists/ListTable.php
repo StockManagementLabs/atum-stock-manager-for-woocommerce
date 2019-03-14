@@ -153,6 +153,7 @@ class ListTable extends AtumListTable {
 					'calc_returns',
 					'calc_damages',
 					'calc_lost_in_post',
+					'calc_other',
 				),
 			),
 			'stock-selling-manager' => array(
@@ -254,6 +255,7 @@ class ListTable extends AtumListTable {
 			'calc_returns'          => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'calc_damages'          => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
 			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'calc_other'            => __( 'Other', ATUM_TEXT_DOMAIN ),
 			/* translators: the number of sales during last days */
 			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . $sold_last_days . '</span>' ),
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
@@ -301,6 +303,7 @@ class ListTable extends AtumListTable {
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
 			'lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'other'             => __( 'Other', ATUM_TEXT_DOMAIN ),
 			'best_seller'       => __( 'Best Sellers', ATUM_TEXT_DOMAIN ),
 			'worst_seller'      => __( 'Worst Sellers', ATUM_TEXT_DOMAIN ),
 		));
@@ -573,6 +576,23 @@ class ListTable extends AtumListTable {
 		$this->increase_total( 'calc_lost_in_post', $lost_in_post );
 
 		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
+	}
+
+	/**
+	 * Column for other: sums the items within "Other" logs
+	 *
+	 * @since 1.1.1.2
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
+	 *
+	 * @return int
+	 */
+	protected function column_calc_other( $item ) {
+
+		$others = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'other', $this->product->get_id() );
+		$this->increase_total( 'calc_other', $others );
+
+		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $others, $item, $this->product );
 	}
 
 	/**
@@ -1017,6 +1037,10 @@ class ListTable extends AtumListTable {
 				case 'lost_in_post':
 					// Get all the products within 'Lost in Post' logs.
 					$filtered_products = $this->get_log_products( 'lost-in-post', 'pending' );
+					break;
+				case 'other':
+					// Get all the products within 'Other' logs.
+					$filtered_products = $this->get_log_products( 'other', 'pending' );
 					break;
 
 			}
