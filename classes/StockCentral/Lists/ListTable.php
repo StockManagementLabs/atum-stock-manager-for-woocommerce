@@ -56,6 +56,7 @@ class ListTable extends AtumListTable {
 		'calc_returns',
 		'calc_damages',
 		'calc_lost_in_post',
+		'calc_other',
 		'calc_sales_last_ndays',
 		'calc_will_last',
 		'calc_stock_out_days',
@@ -194,6 +195,7 @@ class ListTable extends AtumListTable {
 			'calc_returns'          => 0,
 			'calc_damages'          => 0,
 			'calc_lost_in_post'     => 0,
+			'calc_other'            => 0,
 			'calc_sales_last_ndays' => 0,
 			'calc_lost_sales'       => 0,
 		));

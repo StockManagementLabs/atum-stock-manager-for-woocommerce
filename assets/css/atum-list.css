@@ -6503,15 +6503,15 @@ table.atum-list-table thead .item-heads, table.atum-list-table tfoot, .floatThea
   border-bottom: 1px solid #e9ecef;
 }
 
-table.atum-list-table thead .item-heads th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-table.atum-list-table thead .item-heads td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), table.atum-list-table tfoot th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-table.atum-list-table tfoot td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), .floatThead-container thead .item-heads th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-.floatThead-container thead .item-heads td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), .floatThead-container tfoot th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-.floatThead-container tfoot td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), .inbound-stock-list thead .item-heads th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-.inbound-stock-list thead .item-heads td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), .inbound-stock-list tfoot th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-.inbound-stock-list tfoot td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), table.wp-list-table thead .item-heads th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-table.wp-list-table thead .item-heads td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory), table.wp-list-table tfoot th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-table.wp-list-table tfoot td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory) {
+table.atum-list-table thead .item-heads th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+table.atum-list-table thead .item-heads td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), table.atum-list-table tfoot th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+table.atum-list-table tfoot td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), .floatThead-container thead .item-heads th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+.floatThead-container thead .item-heads td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), .floatThead-container tfoot th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+.floatThead-container tfoot td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), .inbound-stock-list thead .item-heads th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+.inbound-stock-list thead .item-heads td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), .inbound-stock-list tfoot th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+.inbound-stock-list tfoot td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), table.wp-list-table thead .item-heads th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+table.wp-list-table thead .item-heads td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory), table.wp-list-table tfoot th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+table.wp-list-table tfoot td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
   border: none;
 }
 
