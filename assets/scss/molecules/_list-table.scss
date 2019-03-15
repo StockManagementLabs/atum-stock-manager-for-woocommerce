@@ -1542,8 +1542,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		border-top: 1px solid $gray-200;
 		border-bottom: 1px solid $gray-200;
 		
-		th:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory),
-		td:not(.column-calc_returns):not(.column-calc_lost_in_post):not(.multi-inventory) {
+		th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+		td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
 			border: none;
 		}
 		

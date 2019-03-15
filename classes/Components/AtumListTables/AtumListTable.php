@@ -3110,7 +3110,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			/* translators: the search query */
-			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), esc_attr( $_REQUEST['s'] ) ); // WPCS: XSS ok.
+			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), stripslashes( esc_attr( $_REQUEST['s'] ) ) ); // WPCS: XSS ok.
 		}
 
 	}
@@ -3525,7 +3525,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					// Get suppliers.
 					$query = $wpdb->prepare(
-						"SELECT p.ID FROM $wpdb->posts
+						"SELECT ID FROM $wpdb->posts
 					    WHERE post_type = %s AND $search_query",
 						Suppliers::POST_TYPE
 					); // WPCS: unprepared SQL ok.
@@ -3867,7 +3867,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 
 				default:
-					$term = "'%" . $wpdb->esc_like( $term ) . "%'";
+					$term = "'%" . esc_sql( $wpdb->esc_like( $term ) ) . "%'";
 					break;
 			}
 
