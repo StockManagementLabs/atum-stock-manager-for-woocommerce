@@ -4,6 +4,7 @@
 
 import Settings from '../config/_settings';
 import DateTimePicker from './_date-time-picker';
+import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4
 
 export default class Popover {
 	

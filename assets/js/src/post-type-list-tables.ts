@@ -13,9 +13,7 @@ window['$'] = window['jQuery'];
  * Third Party Plugins
  */
 
-import '../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
-import 'hammerjs/hammer.min';                        // From node_modules
-import '../vendor/select2';                          // A fixed version compatible with webpack
+import '../vendor/select2';      // A fixed version compatible with webpack
 
 
 /**

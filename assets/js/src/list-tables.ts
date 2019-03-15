@@ -14,16 +14,8 @@ window['$'] = window['jQuery'];
 
 import '../vendor/jquery.address.min';               // This is not downloading the sources
 import '../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
-import '../vendor/jquery.floatThead';                // A fixed version compatible with webpack
-import 'lightgallery.js/dist/js/lightgallery.min';   // From node_modules
-import '../vendor/dragscroll.min';                   // A patched fork of dragscroll
-import 'hammerjs/hammer.min';                        // From node_modules
 import '../vendor/select2';                          // A fixed version compatible with webpack
 //import '../vendor/sweetalert2'                     // Is not working with our webpack configuration
-import 'moment/min/moment.min';                      // From node_modules
-import '../vendor/bootstrap-datetimepicker';         // A fixed version compatible with webpack
-import '../vendor/jquery.easytree.min';              // This has no package available for npm
-import '../vendor/bootstrap3-custom.min';            // TODO: USE BOOTSTRAP 4
 
 
 /**

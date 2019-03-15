@@ -1,27 +1,26 @@
 /**
- * Atum Product Data
+ * Atum Addons
  *
  * @copyright Stock Management Labs ©2019
  *
- * @since 1.4.1
+ * @since 1.2.0
  */
 
 window['$'] = window['jQuery'];
-
 
 /**
  * Components
  */
 
 import Settings from './config/_settings';
-import ProductDataMetaBoxes from './components/product-data/product-data-meta-boxes';
+import AddonsPage from './components/addons-page/_addons-page';
 
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
 	
-	// Get the settings from localized var.
-	let settings = new Settings('atumProductData');
-	new ProductDataMetaBoxes(settings);
+	// Get the options from the localized var.
+	let settings = new Settings('atumAddons');
+	new AddonsPage(settings);
 	
 });

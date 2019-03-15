@@ -1,17 +1,17 @@
 {
 	"background": {
-		"background_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
-		"background_position"     : "bottom",
-		"background_size"         : "contain",
-		"background_repeat"       : "no-repeat",
-		"background_color"        : "white"
+		"bg_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
+		"bg_position"     : "bottom",
+		"bg_size"         : "contain",
+		"bg_repeat"       : "no-repeat",
+		"bg_color"        : "white"
 	},
 	"dash_background": {
-		"background_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
-		"background_position"     : "bottom",
-		"background_size"         : "cover",
-		"background_repeat"       : "no-repeat",
-		"background_color"        : "white"
+		"bg_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
+		"bg_position"     : "bottom",
+		"bg_size"         : "cover",
+		"bg_repeat"       : "no-repeat",
+		"bg_color"        : "white"
 	},
 	"images": {
 		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/marketing-popup/plugin-madness.png"

@@ -7,23 +7,20 @@ import Settings from '../config/_settings';
 
 export default class SmartForm {
 	
-	form: JQuery;
-	settings: Settings;
-	
 	/**
 	 * Constructor.
 	 *
-	 * @param JQuery $form  The form selector that will control
+	 * @param JQuery $form  The form selector that will control.
 	 */
-	constructor($form: JQuery, settingsObj: Settings) {
+	constructor(
+		private $form: JQuery,
+		private settings: Settings
+	) {
 		
-		this.form = $form;
-		this.settings = settingsObj;
-		
-		$form
+		this.$form
 		
 			// Set the dirty fields.
-			.on('change', 'input, select, textarea', (evt: JQueryEventObject) => {
+			.on('change', ':input, select, textarea', (evt: JQueryEventObject) => {
 				
 				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
 					$(evt.currentTarget).addClass('dirty');
@@ -44,9 +41,11 @@ export default class SmartForm {
 				    value: any      = $field.val(),
 				    dependency: any = $field.data('dependency');
 				
+				console.log($field);
+				
 				if ($.isArray(dependency)) {
 					
-					$.each(dependency, (index: number, dependencyElem: Element) =>  {
+					$.each(dependency, (index: number, dependencyElem: any) =>  {
 						this.checkDependency($field, dependencyElem, value);
 					});
 					
@@ -88,11 +87,11 @@ export default class SmartForm {
 		}
 		
 		if (dependency.hasOwnProperty('section')) {
-			$dependantWraper = this.form.find('[data-section="' + dependency.section + '"]');
+			$dependantWraper = this.$form.find('[data-section="' + dependency.section + '"]');
 		}
 		else if (dependency.hasOwnProperty('field')) {
 			
-			$dependantInput = $( '#' + this.settings.get('atumPrefix') + dependency.field );
+			$dependantInput = $( `#${ this.settings.get('atumPrefix') + dependency.field}` );
 			
 			if ($dependantInput.length) {
 				$dependantWraper = $dependantInput.closest('tr').find('th, td');
@@ -102,7 +101,7 @@ export default class SmartForm {
 		
 		if (typeof $dependantWraper !== 'undefined' && $dependantWraper.length) {
 			
-			// Show/Hide the field
+			// Show/Hide the field.
 			if (visibility === true) {
 				if (!dependency.hasOwnProperty('animated') || dependency.animated === true) {
 					$dependantWraper.slideDown('fast');
@@ -120,11 +119,11 @@ export default class SmartForm {
 					$dependantWraper.hide();
 				}
 				
-				// Check if we have to reset the dependant input to default when hiding the field
+				// Check if we have to reset the dependant input to default when hiding the field.
 				if (dependency.hasOwnProperty('resetDefault') && dependency.resetDefault === true) {
 					
-					var defaultValue = $dependantInput.data('default'),
-					    curValue     = $dependantInput.val();
+					const defaultValue: string = $dependantInput.data('default'),
+					      curValue: string     = $dependantInput.val();
 					
 					if ($dependantInput.is(':radio') || $dependantInput.is(':checkbox')) {
 						$dependantInput.prop('checked', defaultValue === curValue);

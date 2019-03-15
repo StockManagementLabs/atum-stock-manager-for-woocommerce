@@ -2,10 +2,14 @@
    DRAG-SCROLL FOR LIST TABLES
    ======================================= */
 
+/**
+ * Third party plugins
+ */
+import dragscroll from '../../../vendor/dragscroll.min';         // A patched fork of dragscroll
+import Hammer from 'hammerjs/hammer.min';                        // From node_modules
+
 import Globals from './_globals';
 import Tooltip from '../_tooltip';
-import dragscroll from '../../../vendor/dragscroll.min';
-import Hammer from 'hammerjs/hammer.min';
 import { Utils } from '../../utils/_utils';
 import Popover from '../_popover';
 

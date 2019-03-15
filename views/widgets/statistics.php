@@ -83,12 +83,12 @@ defined( 'ABSPATH' ) || die;
 		<div class="chart-legend">
 
 			<span class="legend-switch">
-				<input type="checkbox" id="value-chart" checked value="on" class="js-switch">
+				<input type="checkbox" id="value-chart" checked value="on" class="js-switch value-chart">
 				<label for="value-chart"><?php echo esc_html( $legends['value'] ) ?></label>
 			</span>
 
 			<span class="legend-switch">
-				<input type="checkbox" id="products-chart" checked value="on" class="js-switch">
+				<input type="checkbox" id="products-chart" checked value="on" class="js-switch products-chart">
 				<label for="products-chart"><?php echo esc_html( $legends['products'] ) ?></label>
 			</span>
 

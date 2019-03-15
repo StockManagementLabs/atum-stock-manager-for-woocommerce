@@ -2,6 +2,8 @@
    LIGHT BOX
    ======================================= */
 
+import 'lightgallery.js/dist/js/lightgallery.min';   // From node_modules
+
 export default class LightBox {
 	
 	lightGallery: Function;

@@ -276,15 +276,6 @@ class Dashboard {
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' ), ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
-			$min       = ! ATUM_DEBUG ? '.min' : '';
-			$dash_vars = array(
-				'availableWidgets'    => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
-				'areYouSure'          => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'defaultsWillRestore' => __( 'Defaults will restore', ATUM_TEXT_DOMAIN ),
-				'continue'            => __( 'Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'              => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-			);
-
 			/*
 			 * Gridstack scripts
 			 */
@@ -300,71 +291,18 @@ class Dashboard {
 			Helpers::maybe_es6_promise();
 
 			/*
-			 * NiceScroll
-			 */
-			wp_register_script( 'jquery.nicescroll', ATUM_URL . 'assets/js/vendor/jquery.nicescroll.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-			/*
-			 * Owl Carousel
-			 */
-			wp_register_script( 'owl.carousel', ATUM_URL . 'assets/js/vendor/owl.carousel.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-			/*
 			 * Dependencies
 			 */
-			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery.nicescroll', 'owl.carousel', 'jquery-blockui' );
+			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-blockui' );
 
 			/*
 			 * Widgets scripts
 			 */
 			$widget_keys = array_keys( $user_widgets_layout );
 
-			if ( in_array( ATUM_PREFIX . 'statistics_widget', $widget_keys ) || in_array( ATUM_PREFIX . 'stock_control_widget', $widget_keys ) ) {
-				wp_register_script( 'chart-js-bundle', ATUM_URL . 'assets/js/vendor/Chart.bundle.min.js', array(), ATUM_VERSION, TRUE );
-				$deps[]    = 'chart-js-bundle';
-				$dash_vars = array_merge( $dash_vars, array(
-					'inStockLabel'          => __( 'In Stock', ATUM_PREFIX ),
-					'lowStockLabel'         => __( 'Low Stock', ATUM_PREFIX ),
-					'outStockLabel'         => __( 'Out of Stock', ATUM_PREFIX ),
-					'unmanagedLabel'        => __( 'Unmanaged by WC', ATUM_PREFIX ),
-					'months'                => array(
-						__( 'January', ATUM_TEXT_DOMAIN ),
-						__( 'February', ATUM_TEXT_DOMAIN ),
-						__( 'March', ATUM_TEXT_DOMAIN ),
-						__( 'April', ATUM_TEXT_DOMAIN ),
-						__( 'May', ATUM_TEXT_DOMAIN ),
-						__( 'June', ATUM_TEXT_DOMAIN ),
-						__( 'July', ATUM_TEXT_DOMAIN ),
-						__( 'August', ATUM_TEXT_DOMAIN ),
-						__( 'September', ATUM_TEXT_DOMAIN ),
-						__( 'October', ATUM_TEXT_DOMAIN ),
-						__( 'November', ATUM_TEXT_DOMAIN ),
-						__( 'December', ATUM_TEXT_DOMAIN ),
-					),
-					'days'                  => array(
-						__( 'Monday', ATUM_TEXT_DOMAIN ),
-						__( 'Tuesday', ATUM_TEXT_DOMAIN ),
-						__( 'Wednesday', ATUM_TEXT_DOMAIN ),
-						__( 'Thursday', ATUM_TEXT_DOMAIN ),
-						__( 'Friday', ATUM_TEXT_DOMAIN ),
-						__( 'Saturday', ATUM_TEXT_DOMAIN ),
-						__( 'Sunday', ATUM_TEXT_DOMAIN ),
-					),
-					'numDaysCurMonth'       => date_i18n( 't' ),
-					'statsValueCurSymbol'   => get_woocommerce_currency_symbol(),
-					'statsValueCurPosition' => get_option( 'woocommerce_currency_pos' ),
-					'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-					'defaultsWillRestore'   => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
-					'continue'              => __( 'Yes, restore it!', ATUM_TEXT_DOMAIN ),
-					'cancel'                => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				) );
-			}
-
 			if ( in_array( ATUM_PREFIX . 'statistics_widget', $widget_keys ) ) {
 				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
 				wp_enqueue_style( 'switchery' );
-				wp_register_script( 'switchery', ATUM_URL . 'assets/js/vendor/switchery.min.js', FALSE, ATUM_VERSION, TRUE );
-				$deps[] = 'switchery';
 				$deps[] = 'jquery-ui-sortable';
 			}
 
@@ -375,7 +313,50 @@ class Dashboard {
 			/*
 			 * ATUM Dashboard script
 			 */
-			wp_register_script( 'atum-dashboard', ATUM_URL . "assets/js/atum.dashboard{$min}.js", $deps, ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum.dashboard.min.js', $deps, ATUM_VERSION, TRUE );
+
+			$dash_vars = array(
+				'availableWidgets'      => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
+				'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'defaultsWillRestore'   => __( 'Defaults will restore', ATUM_TEXT_DOMAIN ),
+				'continue'              => __( 'Continue', ATUM_TEXT_DOMAIN ),
+				'cancel'                => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'inStockLabel'          => __( 'In Stock', ATUM_PREFIX ),
+				'lowStockLabel'         => __( 'Low Stock', ATUM_PREFIX ),
+				'outStockLabel'         => __( 'Out of Stock', ATUM_PREFIX ),
+				'unmanagedLabel'        => __( 'Unmanaged by WC', ATUM_PREFIX ),
+				'months'                => array(
+					__( 'January', ATUM_TEXT_DOMAIN ),
+					__( 'February', ATUM_TEXT_DOMAIN ),
+					__( 'March', ATUM_TEXT_DOMAIN ),
+					__( 'April', ATUM_TEXT_DOMAIN ),
+					__( 'May', ATUM_TEXT_DOMAIN ),
+					__( 'June', ATUM_TEXT_DOMAIN ),
+					__( 'July', ATUM_TEXT_DOMAIN ),
+					__( 'August', ATUM_TEXT_DOMAIN ),
+					__( 'September', ATUM_TEXT_DOMAIN ),
+					__( 'October', ATUM_TEXT_DOMAIN ),
+					__( 'November', ATUM_TEXT_DOMAIN ),
+					__( 'December', ATUM_TEXT_DOMAIN ),
+				),
+				'days'                  => array(
+					__( 'Monday', ATUM_TEXT_DOMAIN ),
+					__( 'Tuesday', ATUM_TEXT_DOMAIN ),
+					__( 'Wednesday', ATUM_TEXT_DOMAIN ),
+					__( 'Thursday', ATUM_TEXT_DOMAIN ),
+					__( 'Friday', ATUM_TEXT_DOMAIN ),
+					__( 'Saturday', ATUM_TEXT_DOMAIN ),
+					__( 'Sunday', ATUM_TEXT_DOMAIN ),
+				),
+				'numDaysCurMonth'       => date_i18n( 't' ),
+				'statsValueCurSymbol'   => get_woocommerce_currency_symbol(),
+				'statsValueCurPosition' => get_option( 'woocommerce_currency_pos' ),
+				'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'defaultsWillRestore'   => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
+				'continue'              => __( 'Yes, restore it!', ATUM_TEXT_DOMAIN ),
+				'cancel'                => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+			);
+
 			wp_localize_script( 'atum-dashboard', 'atumDashVars', $dash_vars );
 			wp_enqueue_script( 'atum-dashboard' );
 

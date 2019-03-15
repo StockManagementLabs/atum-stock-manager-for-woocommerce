@@ -167,14 +167,13 @@ class Addons {
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2' ), ATUM_VERSION );
 
-		$min = ! ATUM_DEBUG ? '.min' : '';
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 		Helpers::maybe_es6_promise();
 
 		// ATUM marketing popup.
 		AtumMarketingPopup::maybe_enqueue_scripts();
 
-		wp_register_script( 'atum-addons', ATUM_URL . "assets/js/atum.addons$min.js", array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum.addons.min.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
