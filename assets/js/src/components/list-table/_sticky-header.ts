@@ -2,6 +2,11 @@
    STICKY HEADER FOR LIST TABLES
    ======================================= */
 
+/**
+ * Third party plugins
+ */
+import '../../../vendor/jquery.floatThead';                // A fixed version compatible with webpack
+
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 import StickyColumns from './_sticky-columns';

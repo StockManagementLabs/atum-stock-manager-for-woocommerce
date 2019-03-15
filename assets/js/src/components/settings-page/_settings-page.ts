@@ -3,9 +3,11 @@
    ======================================= */
 
 import EnhancedSelect from '../_enhanced-select';
+import { ButtonGroup } from '../_button-group';
 import { ColorPicker } from '../_color-picker';
 import Settings from '../../config/_settings';
 import { Switcher } from '../_switcher';
+import SmartForm from '../_smart-form';
 
 export default class SettingsPage {
 	
@@ -42,6 +44,9 @@ export default class SettingsPage {
 		// Enable Select2.
 		this.enhancedSelect.doSelect2($('.atum-select2'), {}, true);
 		
+		// Enable button groups.
+		ButtonGroup.doButtonGroups(this.$form);
+		
 		// Toggle Menu.
 		this.toggleMenu();
 		
@@ -62,6 +67,9 @@ export default class SettingsPage {
 			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => {
 				this.runScript($(evt.currentTarget));
 			});
+		
+		
+		new SmartForm(this.$form, this.settings);
 		
 		
 		// Footer positioning.
@@ -139,9 +147,11 @@ export default class SettingsPage {
 				cancelButtonText   : this.settings.get('cancel'),
 				reverseButtons     : true,
 				allowOutsideClick  : false
-			}).then( () => {
+			})
+			.then( () => {
 				this.moveToTab($navLink);
-			}, (dismiss: string) => {
+			},
+			(dismiss: string) => {
 				$navLink.blur();
 			});
 			

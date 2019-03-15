@@ -2,6 +2,11 @@
    SCROLL BAR FOR LIST TABLES
    ======================================= */
 
+/**
+ * Third party plugins
+ */
+import '../../../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
+
 import Globals from './_globals';
 import { Utils } from '../../utils/_utils';
 

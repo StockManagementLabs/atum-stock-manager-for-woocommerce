@@ -2,6 +2,11 @@
    LOCATIONS TREE FOR LIST TABLES
    ======================================= */
 
+/**
+ * Third party plugins
+ */
+import '../../../vendor/jquery.easytree.min';         // This has no package available for npm
+
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 import Tooltip from '../_tooltip';

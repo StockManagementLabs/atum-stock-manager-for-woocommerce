@@ -9,14 +9,6 @@
 window['$'] = window['jQuery'];
 
 /**
- * Third Party Plugins
- */
-
-import '../vendor/bootstrap3-custom.min';       // TODO: USE BOOTSTRAP 4
-import 'moment/min/moment.min';                 // From node_modules
-import '../vendor/bootstrap-datetimepicker';    // A fixed version compatible with webpack
-
-/**
  * Components
  */
 

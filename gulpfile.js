@@ -126,6 +126,7 @@ gulp.task('js::atum', function () {
 				'data.export'    : path.join(__dirname, config.assetsDir + '/js/src/') + 'data-export.ts',
 				'addons'         : path.join(__dirname, config.assetsDir + '/js/src/') + 'addons.ts',
 				'marketing.popup': path.join(__dirname, config.assetsDir + '/js/src/') + 'marketing-popup.ts',
+				'dashboard'      : path.join(__dirname, config.assetsDir + '/js/src/') + 'dashboard.ts',
 			},
 			
 			output: {

@@ -2,6 +2,8 @@
    TOOLTIP
    ======================================= */
 
+import '../../vendor/bootstrap3-custom.min';  // TODO: USE BOOTSTRAP 4
+
 export default class Tooltip {
 	
 	constructor() {

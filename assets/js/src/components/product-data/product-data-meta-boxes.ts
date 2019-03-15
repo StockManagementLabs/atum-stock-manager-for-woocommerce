@@ -2,21 +2,31 @@
    PRODUCT DATA META BOXES
    ======================================= */
 
-import { Switcher } from '../_switcher';
+import { ButtonGroup } from '../_button-group';
 import Settings from '../../config/_settings';
+import { Switcher } from '../_switcher';
 
 export default class ProductDataMetaBoxes {
+	
+	$productDataMetaBox: JQuery;
+	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings
 	) {
 		
+		this.$productDataMetaBox = $('#woocommerce-product-data');
+		
 		// Add switchery.
 		Switcher.doSwitchers();
 		
+		// Enable button groups.
+		ButtonGroup.doButtonGroups(this.$productDataMetaBox);
+		
 		// Add switches to variations once are loaded by WC.
-		$('#woocommerce-product-data').on('woocommerce_variations_added woocommerce_variations_loaded', () => {
+		this.$productDataMetaBox.on('woocommerce_variations_added woocommerce_variations_loaded', () => {
 			Switcher.doSwitchers();
+			ButtonGroup.doButtonGroups(this.$productDataMetaBox.find('.woocommerce_variations'));
 		});
 		
 		// Toggle the "Out of Stock Threshold" field visibility.
@@ -28,10 +38,9 @@ export default class ProductDataMetaBoxes {
 		$('.product-tab-runner').find('.run-script').click( (evt: JQueryEventObject) => {
 			
 			const $button: JQuery = $(evt.currentTarget),
-			      status: string  = $button.siblings('select').val(),
-			      swal: any       = window['swal'];
+			      status: string  = $button.siblings('select').val();
 			
-			swal({
+			this.swal({
 				title              : this.settings.get('areYouSure'),
 				text               : $button.data('confirm').replace('%s', '"' + status + '"'),
 				type               : 'warning',
@@ -70,19 +79,22 @@ export default class ProductDataMetaBoxes {
 					
 				},
 				allowOutsideClick  : (): boolean => {
-					return !swal.isLoading();
+					return !this.swal.isLoading();
 				}
-			}).then( (result: string) => {
+			})
+			.then( (result: string) => {
 				
-				swal({
+				this.swal({
 					type : 'success',
 					title: this.settings.get('success'),
 					text : result
-				}).then( () => {
+				})
+				.then( () => {
 					location.reload();
 				});
 				
-			}).catch(swal.noop);
+			})
+			.catch(this.swal.noop);
 			
 		});
 		

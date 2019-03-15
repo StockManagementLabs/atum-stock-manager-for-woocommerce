@@ -2,7 +2,12 @@
    DATE TIME PICKER
    ======================================= */
 
+/**
+ * Third party plugins
+ */
 import moment from 'moment/min/moment.min';
+import '../../vendor/bootstrap-datetimepicker';     // A fixed version compatible with webpack
+
 import Settings from '../config/_settings';
 
 export default class DateTimePicker {
