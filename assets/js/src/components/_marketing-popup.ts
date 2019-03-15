@@ -66,8 +66,6 @@ export default class MarketingPopup {
 					
 					let popupSettings: MPopupSettings = response.data;
 					
-					console.log(popupSettings);
-					
 					let descriptionColor: string    = popupSettings.description.text_color ? `color:${ popupSettings.description.text_color };` : '',
 					    descriptionFontSize: string = popupSettings.description.text_size ? `font-size:${ popupSettings.description.text_size };` : '',
 					    descriptionAlign: string    = popupSettings.description.text_align ? `text-align:${ popupSettings.description.text_align };` : '',

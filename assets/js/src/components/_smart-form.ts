@@ -41,8 +41,6 @@ export default class SmartForm {
 				    value: any      = $field.val(),
 				    dependency: any = $field.data('dependency');
 				
-				console.log($field);
-				
 				if ($.isArray(dependency)) {
 					
 					$.each(dependency, (index: number, dependencyElem: any) =>  {
