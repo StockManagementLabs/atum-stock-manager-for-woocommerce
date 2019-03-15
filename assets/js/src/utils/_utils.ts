@@ -50,13 +50,13 @@ export let Utils = {
 	filterByData($elem: JQuery, prop: string, val: any) {
 		
 		if (typeof val === 'undefined') {
-			return $elem.filter(function() {
-				return typeof $(this).data(prop) !== 'undefined'
+			return $elem.filter( (index: number, elem: Element) => {
+				return typeof $(elem).data(prop) !== 'undefined'
 			});
 		};
 		
-		return $elem.filter(function() {
-			return $(this).data(prop) == val
+		return $elem.filter( (index: number, elem: Element) => {
+			return $(elem).data(prop) == val
 		});
 		
 	},

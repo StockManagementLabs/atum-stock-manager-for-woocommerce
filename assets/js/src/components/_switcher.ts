@@ -4,6 +4,14 @@
 
 import Switchery from 'switchery-npm/index';
 
+interface SwitcherOptions {
+	size?: string;
+	color?: string;
+	secondaryColor?: string;
+	jackColor?: string;
+	jackSecondaryColor?: string;
+}
+
 export let Switcher = {
 	
 	/**
@@ -12,7 +20,7 @@ export let Switcher = {
 	 * @param string selectorClass
 	 * @param Object options
 	 */
-	doSwitchers(selectorClass: string = '.js-switch', options: any = {}) {
+	doSwitchers(selectorClass: string = '.js-switch', options?: SwitcherOptions) {
 		
 		options = Object.assign( {
 			size               : 'small',
@@ -20,7 +28,7 @@ export let Switcher = {
 			secondaryColor     : '#e9ecef',
 			jackColor          : '#69c61d',
 			jackSecondaryColor : '#adb5bd'
-		}, options);
+		}, options || {});
 		
 		$(selectorClass).each( (index: number, elem: Element) => {
 			

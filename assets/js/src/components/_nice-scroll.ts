@@ -2,8 +2,6 @@
    NICE SCROLL
    ======================================= */
 
-import 'jquery.nicescroll/dist/jquery.nicescroll.min';
-
 export let NiceScroll = {
 	
 	getScrollBars($elem: JQuery) {

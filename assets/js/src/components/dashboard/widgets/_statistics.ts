@@ -125,16 +125,14 @@ export default class StatisticsWidget {
 				    enabled  : false,
 				    mode     : 'nearest',
 				    intersect: false,
-				    custom   : function (tooltip: any) { // TODO: FIND A WAY TO SWITCH TO AN ARROW FUNCTION.
+				    custom   : (tooltip: any) => {
 					
-					    $(this._chart.canvas).css('cursor', 'pointer');
+					    $(this.statsChart.canvas).css('cursor', 'pointer');
 					
-					    const positionY: number = this._chart.canvas.offsetTop,
-					          positionX: number = this._chart.canvas.offsetLeft;
+					    const positionY: number = this.statsChart.canvas.offsetTop,
+					          positionX: number = this.statsChart.canvas.offsetLeft;
 					
-					    $('.stats-chart-tooltip').css({
-						    opacity: 0,
-					    });
+					    $('.stats-chart-tooltip').css('opacity', 0);
 					
 					    if (!tooltip || !tooltip.opacity) {
 						    return;
@@ -159,7 +157,7 @@ export default class StatisticsWidget {
 							    }
 							
 							    const content: string  = dataPoint.yLabel,
-							          $tooltip: JQuery = $('#stats-chart-tooltip-' + dataPoint.datasetIndex);
+							          $tooltip: JQuery = $(`#stats-chart-tooltip-${ dataPoint.datasetIndex}`);
 							
 							    $tooltip.html(content);
 							    $tooltip.css({
@@ -215,12 +213,11 @@ export default class StatisticsWidget {
 	doLegendSwitches() {
 		
 		// Enable switches.
-		Switcher.doSwitchers('.value-chart', {
-			color: this.settings.get('chartColors').green
-		});
+		Switcher.doSwitchers('.value-chart');
 		
 		Switcher.doSwitchers('.products-chart', {
-			color: this.settings.get('chartColors').blue
+			color    : this.settings.get('chartColors').blueTrans,
+			jackColor: this.settings.get('chartColors').blue,
 		});
 		
 		// Hide/show charts with legend switches.

@@ -273,11 +273,9 @@ class Dashboard {
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'owl.carousel', ATUM_URL . 'assets/css/vendor/owl.carousel.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'owl.carousel.theme', ATUM_URL . 'assets/css/vendor/owl.theme.default.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' ), ATUM_VERSION );
-			wp_enqueue_style( 'atum-dashboard' );
 
 			/*
-			 * Gridstack scripts
+			 * Gridstack scripts.
 			 */
 			wp_register_script( 'atum-lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE ); // Custom handler required to not load the WP version.
 			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', array(), ATUM_VERSION, TRUE );
@@ -285,15 +283,21 @@ class Dashboard {
 			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', array( 'gridstack' ), ATUM_VERSION, TRUE );
 
 			/*
-			 * SweetAlert 2
+			 * NiceScroll.
+			 */
+			wp_register_script( 'jquery-nice-scroll', ATUM_URL . 'assets/js/vendor/jquery.nicescroll.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+
+			/*
+			 * SweetAlert 2.
 			 */
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
 			/*
-			 * Dependencies
+			 * Dependencies.
 			 */
-			$deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-blockui' );
+			$script_deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-blockui' );
+			$style_deps  = array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' );
 
 			/*
 			 * Widgets scripts
@@ -302,18 +306,21 @@ class Dashboard {
 
 			if ( in_array( ATUM_PREFIX . 'statistics_widget', $widget_keys ) ) {
 				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
-				wp_enqueue_style( 'switchery' );
-				$deps[] = 'jquery-ui-sortable';
+				$style_deps[]  = 'switchery';
+				$script_deps[] = 'jquery-ui-sortable';
 			}
 
 			if ( in_array( ATUM_PREFIX . 'current_stock_value_widget', $widget_keys ) ) {
-				$deps[] = 'jquery-blockui';
+				$script_deps[] = 'jquery-blockui';
 			}
 
 			/*
-			 * ATUM Dashboard script
+			 * ATUM Dashboard scripts.
 			 */
-			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum.dashboard.min.js', $deps, ATUM_VERSION, TRUE );
+			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', $style_deps, ATUM_VERSION );
+			wp_enqueue_style( 'atum-dashboard' );
+
+			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum.dashboard.min.js', $script_deps, ATUM_VERSION, TRUE );
 
 			$dash_vars = array(
 				'availableWidgets'      => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),

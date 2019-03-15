@@ -2143,6 +2143,23 @@ input[type="button"].btn-block {
   border-bottom-color: #fff;
 }
 
+.switchery {
+  width: 48px;
+  border-radius: 100px;
+  -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+          box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+  border: none;
+}
+
+.switchery small {
+  height: 26px;
+  width: 26px;
+  top: -3px;
+  background-color: #69C61D;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 :root .grid-stack-item > .ui-resizable-handle {
   -webkit-filter: none;
           filter: none;

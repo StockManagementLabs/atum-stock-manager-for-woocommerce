@@ -30,7 +30,7 @@ import Tooltip from './components/_tooltip';
 jQuery( ($) => {
 	
 	// Get the settings from localized var.
-	let settings = new Settings('atumDashboard', {
+	let settings = new Settings('atumDashVars', {
 		chartColors: {
 			red       : '#ff4848',
 			orange    : '#efaf00',

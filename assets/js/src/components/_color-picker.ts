@@ -8,7 +8,7 @@ export let ColorPicker = {
 	
 	doColorPickers(selectColorText: string) {
 		
-		$('.atum-color').each(function (index: number, elem: Element) {
+		$('.atum-color').each( (index: number, elem: Element) => {
 			
 			const $colorField: any = $(elem);
 			

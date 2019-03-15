@@ -59,7 +59,7 @@ export default class EnhancedSelect {
 					// Avoid selecting the "None" option
 					if ($.isArray(value) && $.inArray('', value) > -1) {
 						
-						$.each(value, function (index: number, elem: string) {
+						$.each(value, (index: number, elem: string) => {
 							if (elem === '') {
 								value.splice(index, 1);
 							}
