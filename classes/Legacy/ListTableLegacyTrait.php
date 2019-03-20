@@ -872,15 +872,17 @@ trait ListTableLegacyTrait {
 
 					$product_child = Helpers::get_atum_product( $bundle_child );
 
-					if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
+					if ( $product_child ) {
+						if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
 
-						if ( ! $this->show_controlled ) {
+							if ( ! $this->show_controlled ) {
+								unset( $bundle_children[ $key ] );
+							}
+
+						}
+						elseif ( $this->show_controlled ) {
 							unset( $bundle_children[ $key ] );
 						}
-
-					}
-					elseif ( $this->show_controlled ) {
-						unset( $bundle_children[ $key ] );
 					}
 
 				}

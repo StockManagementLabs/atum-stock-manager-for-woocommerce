@@ -2448,7 +2448,21 @@ final class Helpers {
 			AtumCache::set_cache( $cache_key, $children );
 		}
 
-		return $children;
+		$bundle_items = [];
+
+		// Check if bundle item exist.
+		if ( ! empty( $children ) ) {
+
+			foreach ( $children as $item ) {
+				$product = Helpers::get_atum_product( $item );
+				if ( $product ) {
+					array_push( $bundle_items, $product );
+				}
+			}
+
+		}
+
+		return $bundle_items;
 
 	}
 

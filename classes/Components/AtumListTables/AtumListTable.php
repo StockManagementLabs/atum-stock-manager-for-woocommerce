@@ -3286,7 +3286,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_current_product_id() {
-
+		
 		if ( 'variation' === $this->product->get_type() ) {
 			/**
 			 * Deprecated notice
@@ -4262,15 +4262,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$product_children = Helpers::get_atum_product( $bundle_children );
 
-					if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
+					if ( $product_children ) {
+						if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
 
-						if ( ! $this->show_controlled ) {
+							if ( ! $this->show_controlled ) {
+								unset( $bundle_children[ $key ] );
+							}
+
+						}
+						elseif ( $this->show_controlled ) {
 							unset( $bundle_children[ $key ] );
 						}
-
-					}
-					elseif ( $this->show_controlled ) {
-						unset( $bundle_children[ $key ] );
 					}
 
 				}
