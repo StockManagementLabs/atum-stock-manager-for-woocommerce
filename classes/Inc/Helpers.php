@@ -2454,9 +2454,9 @@ final class Helpers {
 		if ( ! empty( $children ) ) {
 
 			foreach ( $children as $item ) {
-				$product = Helpers::get_atum_product( $item );
+				$product = self::get_atum_product( $item );
 				if ( $product ) {
-					array_push( $bundle_items, $product );
+					array_push( $bundle_items, $item );
 				}
 			}
 
