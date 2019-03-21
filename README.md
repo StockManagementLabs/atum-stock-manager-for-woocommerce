@@ -159,6 +159,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.7.1`
+
+*2019-03-21*
+
+**Features**
+
+* Refactory JS to TypeScript (work in progress).
+* Add 'Other' column to stock negatives in Stock Central.
+
+**Changes**
+
+* Changed the marketing popup content.
+
+**Fixes**
+
+* Fixed AtumListTable escaped slashes in suppliers and product name searches.
+* Various CSS fixes.
+* Fixed a bug that was making SC hang when bundle plugin products were deleted.
+
+---
+
 `1.5.7`
 
 *2019-03-13*
