@@ -1,30 +1,36 @@
 {
 	"background": {
-		"bg_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
-		"bg_position"     : "bottom",
-		"bg_size"         : "contain",
-		"bg_repeat"       : "no-repeat",
-		"bg_color"        : "white"
+		"background_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
+		"background_position"     : "bottom",
+		"background_size"         : "contain",
+		"background_repeat"       : "no-repeat",
+		"background_color"        : "white"
 	},
 	"dash_background": {
-		"bg_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
-		"bg_position"     : "bottom",
-		"bg_size"         : "cover",
-		"bg_repeat"       : "no-repeat",
-		"bg_color"        : "white"
+		"background_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
+		"background_position"     : "bottom",
+		"background_size"         : "cover",
+		"background_repeat"       : "no-repeat",
+		"background_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/marketing-popup/plugin-madness.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/product-levels_icon.svg",
+		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/02/label-update-280x280.png"
 	},
 	"title": {
-		"text"      : "<strong>Please, help us WIN and<br>grow faster in 2019</strong>",
-		"text_color": "#00B8DB",
-		"text_size" : "27px",
+		"text"      : "Product<strong>levels</strong>",
+		"text_color": "black",
+		"text_size" : "",
 		"text_align": "center"
 	},
+	"version": {
+		"text"      : "v1.3",
+		"text_color": "white",
+		"background": "#9357cc"
+	},
 	"description": {
-		"text"           : "Torque's Plugin Madness is back! Authors selected ATUM for this competition that pits plugins against each to find the most popular one in each category. Thank you!",
-		"text_color"     : "#6c757d",
+		"text"           : "Finally HERE! Product Levels just got even better! Activate the bill of materials (BOM) stock control to automate the front end inventory offering.",
+		"text_color"     : "#adb5bd",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",
@@ -32,11 +38,17 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Vote for ATUM",
-			"url"       : "https://torquemag.io/pluginmadness/",
+			"text"      : "More info",
+			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
 			"class"     : "btn btn-success purple",
-			"css"       : "width: 300px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;background-color:#00B8DB;"
+			"css"       : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;background-color:#9357cc;"
+		},
+		{
+			"text"  : "Live Demo",
+			"url"   : "http://demo.productlevels.stockmanagementlabs.com/",
+			"class" : "btn btn-outline-success purple",
+			"css"   : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;"
 		}
 	],
-	"transient_key": "torque-plugin-madness"
+	"transient_key": "atum-product-levels"
 }
