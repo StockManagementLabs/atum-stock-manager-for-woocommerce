@@ -6450,10 +6450,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-.atum-list-table:not(.floatThead-table) {
-  table-layout: auto !important;
-}
-
 .active-row:not(.variable) {
   background-color: #dbf9ff !important;
 }

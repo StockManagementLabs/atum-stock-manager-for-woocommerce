@@ -6213,10 +6213,6 @@ ul.atum_order_notes li .note_content::after {
   }
 }
 
-.atum-list-table:not(.floatThead-table) {
-  table-layout: auto !important;
-}
-
 .active-row:not(.variable) {
   background-color: #dbf9ff !important;
 }
