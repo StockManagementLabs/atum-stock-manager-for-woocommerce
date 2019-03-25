@@ -622,7 +622,7 @@ export default class ListTable {
 			
 			while ($nextRow.length) {
 				
-				const $stockCell = $nextRow.find('._stock .set-meta'),
+				const $stockCell = $nextRow.find('._stock .set-meta, .stock-meta'),
 				      stockValue = !$stockCell.length ? '0' : $stockCell.text();
 				
 				compoundedAmt += parseFloat(stockValue);
