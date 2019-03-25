@@ -613,7 +613,7 @@ export default class ListTable {
 			
 			let $compoundedCell: JQuery = $(elem),
 			    $row: JQuery            = $compoundedCell.closest('tr'),
-			    $nextRow: JQuery        = $row.next('.expandable'),
+			    $nextRow: JQuery        = $row.next('.has-compounded'),
 			    compoundedAmt: number   = 0;
 			
 			if ($row.hasClass('expandable')) {
@@ -622,11 +622,11 @@ export default class ListTable {
 			
 			while ($nextRow.length) {
 				
-				const $stockCell = $nextRow.find('._stock .set-meta, .stock-meta'),
+				const $stockCell = $nextRow.find('._stock .set-meta'),
 				      stockValue = !$stockCell.length ? '0' : $stockCell.text();
 				
 				compoundedAmt += parseFloat(stockValue);
-				$nextRow = $nextRow.next('.expandable');
+				$nextRow = $nextRow.next('.has-compounded');
 				
 			}
 			

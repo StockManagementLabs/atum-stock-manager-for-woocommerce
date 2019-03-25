@@ -617,7 +617,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		do_action( 'atum/list_table/before_single_expandable_row', $item, $this );
 
-		echo '<tr data-id="' . absint( $this->get_current_product_id() ) . '" class="expandable ' . esc_attr( $type ) . '"' . $row_style . '>'; // WPCS: XSS ok.
+		echo '<tr data-id="' . absint( $this->get_current_product_id() ) . '" class="expandable has-compounded ' . esc_attr( $type ) . '"' . $row_style . '>'; // WPCS: XSS ok.
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
