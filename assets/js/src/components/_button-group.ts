@@ -17,8 +17,8 @@ export let ButtonGroup = {
 			
 			// Wait until Bootstrap manage to do its stuff.
 			setTimeout( () => {
-				
-				const $button: JQuery = $(evt.currentTarget);
+
+                const $button: JQuery = $(evt.target);
 				$button.find('input').change();
 				
 			}, 100);
