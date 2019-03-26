@@ -493,7 +493,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				
 				$uploads = wp_upload_dir();
 				
-				$temp_dir = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/pdf_folder', '/atum-purchase-orders' );
+				$temp_dir = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/pdf_folder', '/atum-temp' );
 				
 				if ( ! is_dir( $temp_dir ) ) {
 					

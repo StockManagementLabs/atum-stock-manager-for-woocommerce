@@ -162,11 +162,25 @@ class DataExport {
 		try {
 
 			$uploads = wp_upload_dir();
-
+			
+			$temp_dir = $uploads['basedir'] . apply_filters( 'atum/data_export/pdf_folder', '/atum-temp' );
+			
+			if ( ! is_dir( $temp_dir ) ) {
+				
+				// Try to create it.
+				$success = mkdir( $temp_dir, 0777, TRUE );
+				
+				// If can't create it, use default uploads folder.
+				if ( ! $success || ! is_writable( $temp_dir ) ) {
+					$temp_dir = $uploads['basedir'];
+				}
+				
+			}
+			
 			$mpdf = new Mpdf( [
 				'mode'    => 'utf-8',
-				'format'  => $format,
-				'tempDir' => $uploads['basedir'],
+				'format'  => 'A4',
+				'tempDir' => $temp_dir,
 			] );
 
 			// Add support for non-Latin languages.
