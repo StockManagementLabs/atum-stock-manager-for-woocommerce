@@ -490,13 +490,27 @@ class PurchaseOrders extends AtumOrderPostType {
 			$po_export = new POExport( $atum_order_id );
 
 			try {
-
+				
 				$uploads = wp_upload_dir();
+				
+				$temp_dir = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/pdf_folder', '/atum-purchase-orders' );
+				
+				if ( ! is_dir( $temp_dir ) ) {
+					
+					// Try to create it.
+					$success = mkdir( $temp_dir, 0777, TRUE );
+					
+					// If can't create it, use default uploads folder.
+					if ( ! $success || ! is_writable( $temp_dir ) ) {
+						$temp_dir = $uploads['basedir'];
+					}
+					
+				}
 
 				$mpdf = new Mpdf( [
 					'mode'    => 'utf-8',
 					'format'  => 'A4',
-					'tempDir' => $uploads['basedir'],
+					'tempDir' => $temp_dir,
 				] );
 
 				// Add support for non-Latin languages.
