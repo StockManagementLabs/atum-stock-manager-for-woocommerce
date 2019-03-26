@@ -163,7 +163,7 @@ class DataExport {
 
 			$uploads = wp_upload_dir();
 			
-			$temp_dir = $uploads['basedir'] . apply_filters( 'atum/data_export/pdf_folder', '/atum-temp' );
+			$temp_dir = $uploads['basedir'] . apply_filters( 'atum/data_export/pdf_folder', '/atum' );
 			
 			if ( ! is_dir( $temp_dir ) ) {
 				
