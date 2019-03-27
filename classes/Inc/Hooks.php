@@ -141,7 +141,7 @@ class Hooks {
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
-			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum.product.data.min.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),

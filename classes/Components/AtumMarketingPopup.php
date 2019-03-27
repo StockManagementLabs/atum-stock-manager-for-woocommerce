@@ -203,7 +203,7 @@ class AtumMarketingPopup {
 			);
 
 			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum.marketing.popup.min.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum-marketing-popup.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			wp_enqueue_style( 'atum-marketing-popup' );

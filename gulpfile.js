@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.5.4',
+var version = '1.5.8',
     curDate = new Date();
 
 // Global config
@@ -118,19 +118,19 @@ gulp.task('js::atum', function () {
 			devtool: 'source-map',
 			
 			entry: {
-				'list.tables'    : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.ts',
-				'post.type.list' : path.join(__dirname, config.assetsDir + '/js/src/') + 'post-type-list-tables.ts',
-				'product.data'   : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.ts',
+				'list-tables'    : path.join(__dirname, config.assetsDir + '/js/src/') + 'list-tables.ts',
+				'post-type-list' : path.join(__dirname, config.assetsDir + '/js/src/') + 'post-type-list-tables.ts',
+				'product-data'   : path.join(__dirname, config.assetsDir + '/js/src/') + 'product-data.ts',
 				'settings'       : path.join(__dirname, config.assetsDir + '/js/src/') + 'settings.ts',
 				'orders'         : path.join(__dirname, config.assetsDir + '/js/src/') + 'orders.ts',
-				'data.export'    : path.join(__dirname, config.assetsDir + '/js/src/') + 'data-export.ts',
+				'data-export'    : path.join(__dirname, config.assetsDir + '/js/src/') + 'data-export.ts',
 				'addons'         : path.join(__dirname, config.assetsDir + '/js/src/') + 'addons.ts',
-				'marketing.popup': path.join(__dirname, config.assetsDir + '/js/src/') + 'marketing-popup.ts',
+				'marketing-popup': path.join(__dirname, config.assetsDir + '/js/src/') + 'marketing-popup.ts',
 				'dashboard'      : path.join(__dirname, config.assetsDir + '/js/src/') + 'dashboard.ts',
 			},
 			
 			output: {
-				filename: 'atum.[name].min.js'
+				filename: 'atum-[name].js'
 			},
 			
 			resolve: {

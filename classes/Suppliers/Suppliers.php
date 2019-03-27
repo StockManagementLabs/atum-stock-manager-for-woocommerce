@@ -393,7 +393,7 @@ class Suppliers {
 				}
 				elseif ( 'edit.php' === $hook ) {
 
-					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/build/atum.post.type.list.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/build/atum-post-type-list.js', array( 'jquery' ), ATUM_VERSION, TRUE );
 
 					wp_localize_script( 'atum-suppliers-table', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),

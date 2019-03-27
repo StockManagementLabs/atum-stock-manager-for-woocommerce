@@ -1469,6 +1469,7 @@
 }
 
 .atum-list-table {
+	border: none !important;
 	
 	// Fixed columns
 	&.cloned {
@@ -1484,14 +1485,6 @@
 		}
 	}
 	
-	border: none !important;
-	&:not(.floatThead-table) {
-		//table-layout: auto !important; // FloatTHead fix
-	}
-}
-
-.active-row:not(.variable) {
-	background-color: $blue-light !important;
 }
 
 #table-container {
@@ -1727,6 +1720,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			input[type=checkbox] {
 				@include vertical-align-absolute;
+				z-index: 10;
 			}
 		}
 	}
@@ -1795,15 +1789,22 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			&.bundle, &.mi-row {
-				background-color: $wp-pink-light;
+			&.bundle {
+				background-color: darken($wp-pink-light, 6%);
+				
+				&:nth-child(even) {
+					background-color: $wp-pink-light;
+				}
+				
+				&.active-row:not(.expanded) {
+					background-color: darken($wp-pink-light, 8%);
+				}
 				
 				&.expanded {
 					background-color: $wc-purple;
 				}
 				
 				td.title {
-					
 					.child-arrow {
 						color: $wc-purple;
 					}
@@ -1818,6 +1819,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				background-color: $blue-light-2;
 			}
 			
+			&.active-row {
+				background-color: darken($blue-light, 10%);
+			}
+			
 			td.title {
 				.child-arrow {
 					color: $blue;
@@ -1830,6 +1835,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			&:nth-child(even) {
 				background-color: $orange-light-2;
+			}
+			
+			&.active-row {
+				background-color: darken($orange-light, 10%);
 			}
 			
 			td.title {

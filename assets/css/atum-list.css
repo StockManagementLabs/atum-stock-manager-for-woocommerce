@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.4 
+ * @version 1.5.8 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -6450,10 +6450,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
-.active-row:not(.variable) {
-  background-color: #dbf9ff !important;
-}
-
 #table-container {
   overflow: scroll;
 }
@@ -6680,6 +6676,7 @@ table.atum-list-table th.check-column input[type=checkbox], .floatThead-containe
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
+  z-index: 10;
 }
 
 table.atum-list-table tr.main-row, table.atum-list-table tr.mi-row, table.atum-list-table tr.expandable, .floatThead-container tr.main-row, .floatThead-container tr.mi-row, .floatThead-container tr.expandable, .inbound-stock-list tr.main-row, .inbound-stock-list tr.mi-row, .inbound-stock-list tr.expandable, table.wp-list-table tr.main-row, table.wp-list-table tr.mi-row, table.wp-list-table tr.expandable {
@@ -6730,15 +6727,23 @@ table.atum-list-table tr.expandable .check-column input[type=checkbox], .floatTh
   margin-left: 13px;
 }
 
-table.atum-list-table tr.expandable.bundle, table.atum-list-table tr.expandable.mi-row, .floatThead-container tr.expandable.bundle, .floatThead-container tr.expandable.mi-row, .inbound-stock-list tr.expandable.bundle, .inbound-stock-list tr.expandable.mi-row, table.wp-list-table tr.expandable.bundle, table.wp-list-table tr.expandable.mi-row {
+table.atum-list-table tr.expandable.bundle, .floatThead-container tr.expandable.bundle, .inbound-stock-list tr.expandable.bundle, table.wp-list-table tr.expandable.bundle {
+  background-color: #ebd7e7;
+}
+
+table.atum-list-table tr.expandable.bundle:nth-child(even), .floatThead-container tr.expandable.bundle:nth-child(even), .inbound-stock-list tr.expandable.bundle:nth-child(even), table.wp-list-table tr.expandable.bundle:nth-child(even) {
   background-color: #F5EBF3;
 }
 
-table.atum-list-table tr.expandable.bundle.expanded, table.atum-list-table tr.expandable.mi-row.expanded, .floatThead-container tr.expandable.bundle.expanded, .floatThead-container tr.expandable.mi-row.expanded, .inbound-stock-list tr.expandable.bundle.expanded, .inbound-stock-list tr.expandable.mi-row.expanded, table.wp-list-table tr.expandable.bundle.expanded, table.wp-list-table tr.expandable.mi-row.expanded {
+table.atum-list-table tr.expandable.bundle.active-row:not(.expanded), .floatThead-container tr.expandable.bundle.active-row:not(.expanded), .inbound-stock-list tr.expandable.bundle.active-row:not(.expanded), table.wp-list-table tr.expandable.bundle.active-row:not(.expanded) {
+  background-color: #e7d0e3;
+}
+
+table.atum-list-table tr.expandable.bundle.expanded, .floatThead-container tr.expandable.bundle.expanded, .inbound-stock-list tr.expandable.bundle.expanded, table.wp-list-table tr.expandable.bundle.expanded {
   background-color: #96588a;
 }
 
-table.atum-list-table tr.expandable.bundle td.title .child-arrow, table.atum-list-table tr.expandable.mi-row td.title .child-arrow, .floatThead-container tr.expandable.bundle td.title .child-arrow, .floatThead-container tr.expandable.mi-row td.title .child-arrow, .inbound-stock-list tr.expandable.bundle td.title .child-arrow, .inbound-stock-list tr.expandable.mi-row td.title .child-arrow, table.wp-list-table tr.expandable.bundle td.title .child-arrow, table.wp-list-table tr.expandable.mi-row td.title .child-arrow {
+table.atum-list-table tr.expandable.bundle td.title .child-arrow, .floatThead-container tr.expandable.bundle td.title .child-arrow, .inbound-stock-list tr.expandable.bundle td.title .child-arrow, table.wp-list-table tr.expandable.bundle td.title .child-arrow {
   color: #96588a;
 }
 
@@ -6748,6 +6753,10 @@ table.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound
 
 table.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even), table.wp-list-table tr.variation:nth-child(even) {
   background-color: #f5fdff;
+}
+
+table.atum-list-table tr.variation.active-row, .floatThead-container tr.variation.active-row, .inbound-stock-list tr.variation.active-row, table.wp-list-table tr.variation.active-row {
+  background-color: #a8f1ff;
 }
 
 table.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow, .inbound-stock-list tr.variation td.title .child-arrow, table.wp-list-table tr.variation td.title .child-arrow {
@@ -6760,6 +6769,10 @@ table.atum-list-table tr.grouped, .floatThead-container tr.grouped, .inbound-sto
 
 table.atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even), .inbound-stock-list tr.grouped:nth-child(even), table.wp-list-table tr.grouped:nth-child(even) {
   background-color: #fff8e5;
+}
+
+table.atum-list-table tr.grouped.active-row, .floatThead-container tr.grouped.active-row, .inbound-stock-list tr.grouped.active-row, table.wp-list-table tr.grouped.active-row {
+  background-color: #ffdf89;
 }
 
 table.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow, .inbound-stock-list tr.grouped td.title .child-arrow, table.wp-list-table tr.grouped td.title .child-arrow {

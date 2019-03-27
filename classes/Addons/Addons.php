@@ -173,7 +173,7 @@ class Addons {
 		// ATUM marketing popup.
 		AtumMarketingPopup::maybe_enqueue_scripts();
 
-		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum.addons.min.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),

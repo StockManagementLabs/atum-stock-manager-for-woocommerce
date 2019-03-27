@@ -319,7 +319,7 @@ class Dashboard {
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', $style_deps, ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
-			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum.dashboard.min.js', $script_deps, ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum-dashboard.js', $script_deps, ATUM_VERSION, TRUE );
 
 			$dash_vars = array(
 				'availableWidgets'      => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),

@@ -585,13 +585,13 @@ export default class ListTable {
 			this.globals.$atumTable.find('tr.variable, tr.group').find('input:checkbox').change();
 		}
 		
-		if (!$containerRow.hasClass('variable') && !$containerRow.hasClass('group')) {
+		let $nextRow: JQuery = $containerRow.next('.expandable');
+		
+		if (!$nextRow.length || $containerRow.hasClass('expandable')) {
 			return;
 		}
 		
-		let $nextRow: JQuery = $containerRow.next('.expandable');
-		
-		// If is not expanded, expand it
+		// If is not expanded, expand it.
 		if (!$containerRow.hasClass('expanded') && $parentCheckbox.is(':checked')) {
 			$containerRow.find('.calc_type .has-child').click();
 		}
