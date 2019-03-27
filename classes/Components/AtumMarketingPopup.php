@@ -128,7 +128,7 @@ class AtumMarketingPopup {
 				$background_size     = isset( $background_data->bg_size ) ? $background_data->bg_size : '';
 				$background_repeat   = isset( $background_data->bg_repeat ) ? $background_data->bg_repeat : '';
 
-				$this->background = "$background_color $background_image $background_position/$background_size $background_repeat;";
+				$this->background = "$background_color $background_image $background_position/$background_size $background_repeat";
 
 			}
 
