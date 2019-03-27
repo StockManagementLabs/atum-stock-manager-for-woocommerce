@@ -21,7 +21,7 @@ import '../vendor/select2';      // A fixed version compatible with webpack
  */
 
 import Settings from './config/_settings';
-import PostTypeList from './components/list-table/post-type-list';
+import PostTypeList from './components/list-table/_post-type-list';
 import ScrollBar from './components/list-table/_scroll-bar';
 import EnhancedSelect from './components/_enhanced-select';
 import DragScroll from "./components/list-table/_drag-scroll";

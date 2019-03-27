@@ -14,7 +14,7 @@ window['$'] = window['jQuery'];
  */
 
 import Settings from './config/_settings';
-import ProductDataMetaBoxes from './components/product-data/product-data-meta-boxes';
+import ProductDataMetaBoxes from './components/product-data/_product-data-meta-boxes';
 
 
 // Modules that need to execute when the DOM is ready should go here.

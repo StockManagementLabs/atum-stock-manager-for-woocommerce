@@ -4002,7 +4002,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// List Table script.
-		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum.list.tables.min.js', [ 'jquery', 'jquery-blockui', 'sweetalert2', 'wc-enhanced-select' ], ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum-list-tables.js', [ 'jquery', 'jquery-blockui', 'sweetalert2', 'wc-enhanced-select' ], ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
 
 		do_action( 'atum/list_table/after_enqueue_scripts', $this );

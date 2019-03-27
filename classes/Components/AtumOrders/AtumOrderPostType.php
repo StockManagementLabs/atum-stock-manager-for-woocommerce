@@ -880,7 +880,7 @@ abstract class AtumOrderPostType {
 					'sweetalert2',
 				));
 
-				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum.orders.min.js', $wc_dependencies, ATUM_VERSION, TRUE );
+				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum-orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
 
 				$vars = array(
 					'add_note_nonce'           => wp_create_nonce( 'add-atum-order-note' ),
@@ -927,7 +927,7 @@ abstract class AtumOrderPostType {
 			}
 			elseif ( 'edit.php' === $hook ) {
 
-				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/build/atum.post.type.list.min.js', array( 'jquery', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
+				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/build/atum-post-type-list.js', array( 'jquery', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
