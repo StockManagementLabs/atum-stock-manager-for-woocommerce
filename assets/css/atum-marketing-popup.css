@@ -1754,7 +1754,7 @@ input[type="button"].btn-block {
   line-height: 20px;
   border-radius: 11.5px;
   position: absolute;
-  top: 141px;
+  top: 160px;
   right: 113px;
 }
 
@@ -1796,7 +1796,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .marketing-popup .mp-logo {
-  width: 255px;
+  width: 150px;
   height: auto;
 }
 /*# sourceMappingURL=atum-marketing-popup.css.map */

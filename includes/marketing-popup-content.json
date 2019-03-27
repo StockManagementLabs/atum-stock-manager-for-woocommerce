@@ -1,6 +1,6 @@
 {
 	"background": {
-		"bg_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "contain",
 		"bg_repeat"       : "no-repeat",
