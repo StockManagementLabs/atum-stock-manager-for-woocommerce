@@ -79,9 +79,9 @@ export default class DragScroll {
 			this.addHorizontalDragScroll('filters_container', false);
 		});
 		
-		this.globals.$atumList.find('.tablenav.top').find('input.btn').css('visibility', 'visible');
+		$('.tablenav.top').find('input.btn').css('visibility', 'visible');
 		
-		this.globals.$atumList.find('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
+		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
 			
 			this.addHorizontalDragScroll( $(evt.currentTarget).attr('id'), true );
 			this.tooltip.destroyTooltips();
@@ -116,7 +116,7 @@ export default class DragScroll {
 		if ( checkEnhanced ) {
 			(<any>$('.enhanced')).select2('close');
 		}
-		
+
 		if (diff === $nav.outerWidth()) {
 			$overflowOpacityRight.hide();
 		}

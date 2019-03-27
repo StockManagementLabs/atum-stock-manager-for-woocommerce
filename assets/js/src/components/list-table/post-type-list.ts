@@ -26,11 +26,22 @@ export default class PostTypeList {
 		
 		// Add placeholder to input search.
 		$('#post-search-input').attr('placeholder', this.settings.get('placeholderSearch'));
-		
-		// Change nav and search div position.
-		this.globals.$atumList.prepend($('.subsubsub'));
-		$('.subsubsub').append($('.search-box'));
-		$('.wp-heading-inline').append( $('.page-title-action').show() );
+
+        // Add nav with dragging functionality.
+        $('.subsubsub')
+            .after( '<div class="list-table-header">' +
+                        '<div id="scroll-stock_central_nav" class="nav-container-box">' +
+                            '<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">' +
+                                '<div class="overflow-opacity-effect-right"></div>' +
+                                '<div class="overflow-opacity-effect-left"></div>' +
+                            '</nav>' +
+                        '</div>'+
+                    '</div>');
+
+        $('.nav-with-scroll-effect').prepend($('.subsubsub'));
+        $('.list-table-header')
+            .append($('.search-box'))
+            .addClass('no-margin');
 		
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );
