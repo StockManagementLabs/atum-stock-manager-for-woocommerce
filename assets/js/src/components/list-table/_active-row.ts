@@ -7,42 +7,43 @@ export const ActiveRow = {
 	/**
 	 * Add/remove row active class when checkbox is clicked.
 	 *
-	 * @param jQuery $listTable
+	 * @param JQuery $listTable
 	 */
 	addActiveClassRow($listTable: JQuery) {
 		
-		$listTable.find('tbody .check-column input:checkbox').change( (evt: JQueryEventObject) => {
-			
-			let $checkbox: JQuery    = $(evt.currentTarget),
-			    id: number           = $checkbox.val(),
-			    $checkboxRow: JQuery = $listTable.find(`[data-id="${ id }"], #post-${ id }`);
-			
-			if ($checkbox.is(':checked')) {
-				$checkboxRow.addClass('active-row');
-			}
-			else {
-				$checkboxRow.removeClass('active-row');
-			}
-			
-		});
+		$listTable.find('tbody .check-column input:checkbox').change( (evt: JQueryEventObject) => this.switchActiveClass( $(evt.currentTarget) ) );
 		
 		// Selet all rows checkbox.
-		$('#cb-select-all-1').change( () => {
+		$('#cb-select-all-1').change( (evt: JQueryEventObject) => {
 			
-			$listTable.find('tbody tr').each( (index: number, elem: Element) => {
+			const $selectAll = $(evt.currentTarget);
+			
+			$listTable.find('.check-column input:checkbox').each( (index: number, elem: Element) => {
 				
-				let $elem: JQuery = $(elem);
+				const $checkbox = $(elem);
 				
-				if ($elem.find('.check-column input[type=checkbox]').is(':checked')) {
-					$elem.addClass('active-row');
+				if ($selectAll.is($checkbox)) {
+					return;
 				}
-				else {
-					$elem.removeClass('active-row');
-				}
+				
+				this.switchActiveClass($checkbox);
 				
 			});
 			
 		});
+		
+	},
+	
+	switchActiveClass($checkbox: JQuery) {
+		
+		const $checkboxRow: JQuery = $checkbox.closest('tr');
+		
+		if ($checkbox.is(':checked')) {
+			$checkboxRow.addClass('active-row');
+		}
+		else {
+			$checkboxRow.removeClass('active-row');
+		}
 		
 	}
 	
