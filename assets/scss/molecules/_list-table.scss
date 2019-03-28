@@ -281,7 +281,6 @@
 	text-transform: capitalize;
 	display: flex;
 	align-items: center;
-	border-bottom: 1px solid $gray-200;
 	margin: 0;
 	
 	@include tablet-max-wp{
@@ -995,81 +994,6 @@
 		position: relative;
 	}
 	
-	
-	.list-table-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin: 0 11px 0 11px;
-		
-		@include tablet-max-wp {
-			flex-wrap: wrap;
-			justify-content: center;
-			margin-bottom: 15px;
-		}
-		
-		@include mobile-max {
-			margin: 0 11px 15px;
-		}
-		
-		.nav-container-box {
-			flex-grow: 1;
-			position: relative;
-			overflow: hidden;
-		}
-		
-	}
-	
-	.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-		width: 100px;
-		position: absolute;
-		z-index: 998;
-		height: 49px;
-		pointer-events: none;
-		background-repeat: no-repeat;
-	}
-	
-	.overflow-opacity-effect-right {
-		right: 0;
-		background-image: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
-	}
-	
-	.overflow-opacity-effect-left {
-		display: none;
-		left: 0;
-		background-image: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
-	}
-	
-	.nav-with-scroll-effect {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: nowrap;
-		cursor: grab;
-		overflow: hidden;
-		-ms-overflow-style: -ms-autohiding-scrollbar;
-		-webkit-overflow-scrolling: touch;
-		white-space: nowrap;
-		width: 100%;
-		float: left;
-		margin: 0 11px 0 0;
-		
-		&::-webkit-scrollbar {
-			display: none;
-		}
-		
-		.subsubsub {
-			margin: 0;
-		}
-		
-		&.dragging {
-			a {
-				pointer-events: none;
-		}
-		}
-
-	}
-	
 	.subsubsub {
 		position: relative;
 		font-size: 16px;
@@ -1402,6 +1326,88 @@
 	}
 }
 
+.list-table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0 11px 0 11px;
+	background-color: $white;
+	border-bottom: 1px solid $gray-200;
+	
+	&.no-margin {
+		margin: 0;
+		border-top-right-radius: 8px;
+		border-top-left-radius: 8px;
+	}
+	
+	@include tablet-max-wp {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-bottom: 15px;
+	}
+	
+	@include mobile-max {
+		margin: 0 11px 15px;
+	}
+	
+	.nav-container-box {
+		flex-grow: 1;
+		position: relative;
+		overflow: hidden;
+	}
+	
+}
+
+.nav-with-scroll-effect {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	cursor: grab;
+	overflow: hidden;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+	-webkit-overflow-scrolling: touch;
+	white-space: nowrap;
+	width: 100%;
+	float: left;
+	margin: 0 11px 0 0;
+	
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	
+	.subsubsub {
+		margin: 0;
+	}
+	
+	&.dragging {
+		a {
+			pointer-events: none;
+		}
+	}
+	
+}
+
+.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+	width: 100px;
+	position: absolute;
+	z-index: 998;
+	height: 49px;
+	pointer-events: none;
+	background-repeat: no-repeat;
+}
+
+.overflow-opacity-effect-right {
+	right: 0;
+	background-image: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+}
+
+.overflow-opacity-effect-left {
+	display: none;
+	left: 0;
+	background-image: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+}
+
 .atum-table-wrapper, #table-container {
 	clear: both;
 	
@@ -1497,6 +1503,7 @@
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid $gray-200;
+	min-width: 1200px;
 	
 	thead, tfoot {
 		th {

@@ -8,7 +8,8 @@
 	background-color: $white;
 	box-shadow: 0 4px 0 0 $gray-200;
 	padding: 0 0 10px;
-	border-radius: 8px;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
 	
 	.tablenav-pages {
 		float: none;

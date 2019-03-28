@@ -4909,7 +4909,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  border-bottom: 1px solid #e9ecef;
   margin: 0;
 }
 
@@ -5930,101 +5929,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   position: relative;
 }
 
-.atum-list-wrapper .list-table-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin: 0 11px 0 11px;
-}
-
-@media all and (max-width: 782px) {
-  .atum-list-wrapper .list-table-header {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    margin-bottom: 15px;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .atum-list-wrapper .list-table-header {
-    margin: 0 11px 15px;
-  }
-}
-
-.atum-list-wrapper .list-table-header .nav-container-box {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.atum-list-wrapper .overflow-opacity-effect-right, .atum-list-wrapper .overflow-opacity-effect-left {
-  width: 100px;
-  position: absolute;
-  z-index: 998;
-  height: 49px;
-  pointer-events: none;
-  background-repeat: no-repeat;
-}
-
-.atum-list-wrapper .overflow-opacity-effect-right {
-  right: 0;
-  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
-}
-
-.atum-list-wrapper .overflow-opacity-effect-left {
-  display: none;
-  left: 0;
-  background-image: -webkit-gradient(linear, right top, left top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
-}
-
-.atum-list-wrapper .nav-with-scroll-effect {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-  cursor: -webkit-grab;
-  cursor: grab;
-  overflow: hidden;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
-  -webkit-overflow-scrolling: touch;
-  white-space: nowrap;
-  width: 100%;
-  float: left;
-  margin: 0 11px 0 0;
-}
-
-.atum-list-wrapper .nav-with-scroll-effect::-webkit-scrollbar {
-  display: none;
-}
-
-.atum-list-wrapper .nav-with-scroll-effect .subsubsub {
-  margin: 0;
-}
-
-.atum-list-wrapper .nav-with-scroll-effect.dragging a {
-  pointer-events: none;
-}
-
 .atum-list-wrapper .subsubsub {
   position: relative;
   font-size: 16px;
@@ -6367,6 +6271,109 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   }
 }
 
+.list-table-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0 11px 0 11px;
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.list-table-header.no-margin {
+  margin: 0;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+@media all and (max-width: 782px) {
+  .list-table-header {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    margin-bottom: 15px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .list-table-header {
+    margin: 0 11px 15px;
+  }
+}
+
+.list-table-header .nav-container-box {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-with-scroll-effect {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  cursor: -webkit-grab;
+  cursor: grab;
+  overflow: hidden;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  width: 100%;
+  float: left;
+  margin: 0 11px 0 0;
+}
+
+.nav-with-scroll-effect::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-with-scroll-effect .subsubsub {
+  margin: 0;
+}
+
+.nav-with-scroll-effect.dragging a {
+  pointer-events: none;
+}
+
+.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+  width: 100px;
+  position: absolute;
+  z-index: 998;
+  height: 49px;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+.overflow-opacity-effect-right {
+  right: 0;
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+}
+
+.overflow-opacity-effect-left {
+  display: none;
+  left: 0;
+  background-image: -webkit-gradient(linear, right top, left top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+}
+
 .atum-table-wrapper, #table-container {
   clear: both;
 }
@@ -6461,6 +6468,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 table.wp-list-table {
   border: none;
   border-top: 1px solid #e9ecef;
+  min-width: 1200px;
 }
 
 table.wp-list-table thead th, table.wp-list-table tfoot th {
@@ -7455,7 +7463,8 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
   padding: 0 0 10px;
-  border-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 #posts-filter .tablenav-pages {

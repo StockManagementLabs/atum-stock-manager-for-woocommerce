@@ -24,6 +24,10 @@ import Settings from './config/_settings';
 import PostTypeList from './components/list-table/_post-type-list';
 import ScrollBar from './components/list-table/_scroll-bar';
 import EnhancedSelect from './components/_enhanced-select';
+import DragScroll from "./components/list-table/_drag-scroll";
+import Popover from './components/_popover';
+import Tooltip from './components/_tooltip';
+import DateTimePicker from "./components/_date-time-picker";
 
 
 // Modules that need to execute when the DOM is ready should go here.
@@ -37,8 +41,12 @@ jQuery( ($) => {
 		filterData: {},
 	});
 	let enhancedSelect = new EnhancedSelect();
-	
+    let tooltip = new Tooltip();
+    let dateTimePicker = new DateTimePicker(settings);
+    let popover = new Popover(settings, dateTimePicker);
+
 	new PostTypeList(settings, globals, enhancedSelect);
-	new ScrollBar(globals);
+    new DragScroll(globals, tooltip, popover);
+    new ScrollBar(globals);
 	
 });
