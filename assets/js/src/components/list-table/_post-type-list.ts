@@ -42,6 +42,9 @@ export default class PostTypeList {
         $('.list-table-header')
             .append($('.search-box'))
             .addClass('no-margin');
+
+        // Show add button in head.
+        $('.wp-heading-inline').append( $('.page-title-action').show() );
 		
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );
