@@ -43,11 +43,10 @@ export default class ListTable {
 			//
 			// Trigger expanding/collapsing event in inheritable products.
 			// ------------------------------------------
-			.on('click', '.calc_type .has-child', (evt: JQueryEventObject) => {
-				$(evt.currentTarget).closest('tr').trigger('atum-list-expand-row');
-			})
+			.on('click', '.calc_type .has-child', (evt: JQueryEventObject) => $(evt.currentTarget).closest('tr').trigger('atum-list-expand-row') )
+			
 			//
-			// Triggers the expand/collapse row action
+			// Triggers the expand/collapse row action.
 			//
 			.on('atum-list-expand-row', 'tbody tr', (evt: JQueryEventObject, expandableRowClass: string, stopRowSelector: string, stopPropagation: boolean) => {
 				this.expandRow($(evt.currentTarget), expandableRowClass, stopRowSelector, stopPropagation);
@@ -540,10 +539,10 @@ export default class ListTable {
 			childRows.push($nextRow);
 			
 			if ( ($rowTable.is(':visible') && !$nextRow.is(':visible')) || (!$rowTable.is(':visible') && $nextRow.css('display') === 'none')) {
-				$nextRow.addClass('expanding').show(300);
+				$nextRow.addClass('expanding').show();
 			}
 			else {
-				$nextRow.addClass('collapsing').hide(300);
+				$nextRow.addClass('collapsing').hide();
 			}
 			
 			$nextRow = $nextRow.next();
@@ -578,28 +577,37 @@ export default class ListTable {
 	checkDescendats($parentCheckbox: JQuery) {
 		
 		let $containerRow: JQuery = $parentCheckbox.closest('tr');
+		const isChecked: boolean = $parentCheckbox.is(':checked');
 		
-		// Handle clicks on the header checkbox.
-		if ($parentCheckbox.closest('td').hasClass('manage-column')) {
-			// Call this method recursively for all the checkboxes in the current page.
-			this.globals.$atumTable.find('tr.variable, tr.group').find('input:checkbox').change();
-		}
-		
-		let $nextRow: JQuery = $containerRow.next('.expandable');
-		
-		if (!$nextRow.length || $containerRow.hasClass('expandable')) {
-			return;
-		}
-		
-		// If is not expanded, expand it.
-		if (!$containerRow.hasClass('expanded') && $parentCheckbox.is(':checked')) {
-			$containerRow.find('.calc_type .has-child').click();
-		}
-		
-		// Check/Uncheck all the children rows.
-		while ($nextRow.length) {
-			$nextRow.find('.check-column input:checkbox').prop('checked', $parentCheckbox.is(':checked'));
-			$nextRow = $nextRow.next('.expandable');
+		if ($containerRow.find('.has-child').length) {
+			
+			// If is not expanded, expand it.
+			if ($containerRow.hasClass('main-row') && !$containerRow.hasClass('expanded') && isChecked) {
+				$containerRow.find('.has-child').click();
+			}
+			
+			let $nextRow: JQuery = $containerRow.next();
+			
+			// Check/Uncheck all the children rows.
+			while ($nextRow.length && !$nextRow.hasClass('main-row')) {
+				
+				const $checkbox: JQuery = $nextRow.find('.check-column input:checkbox');
+				
+				$checkbox.prop('checked', isChecked);
+				ActiveRow.switchActiveClass($checkbox);
+				
+				if (isChecked) {
+					$nextRow.find('.has-child').click()
+				}
+				
+				$nextRow = $nextRow.next();
+				
+				if (!$containerRow.hasClass('main-row') && $nextRow.hasClass('expandable')) {
+					break;
+				}
+				
+			}
+			
 		}
 		
 	}

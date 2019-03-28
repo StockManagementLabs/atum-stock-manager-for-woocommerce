@@ -504,9 +504,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// WC product bundles compatibility.
 			if ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $type ) {
-
 				$this->allow_calcs = TRUE;
-
 			}
 
 			if ( 'grouped' === $type ) {
