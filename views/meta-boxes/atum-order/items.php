@@ -28,6 +28,7 @@ if ( wc_tax_enabled() ) {
 $currency  = $atum_order->get_currency();
 $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
+// ! wp_doing_ajax allow add taxes in still non-created order items.
 $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( PurchaseOrders::get_post_type() === $post_type->name && empty( $line_items ) && ! $atum_order->has_multiple_suppliers() );
 ?>
 
