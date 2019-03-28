@@ -1720,13 +1720,9 @@ final class Helpers {
 
 							$product->set_price( $sale_price );
 
-							if ( ! empty( $date_to ) && ! empty( $date_from ) ) {
-
-								if ( $date_to ) {
-									$date_from_str = $date_from->getTimestamp();
-									$date_to_str   = $date_to->getTimestamp();
-								}
-
+							if ( $date_to ) {
+								$date_from_str = ! empty( $date_from ) ? $date_from->getTimestamp() : '';
+								$date_to_str   = ! empty( $date_to ) ? $date_to->getTimestamp() : '';
 							}
 
 						}
@@ -1734,13 +1730,9 @@ final class Helpers {
 							
 							$product->set_price( $regular_price );
 
-							if ( ! empty( $date_to ) && ! empty( $date_from ) ) {
-
-								if ( ! $date_to || 0 < $date_to->diff( $now ) ) {
-									$date_from_str = $date_from->getTimestamp();
-									$date_to_str   = $date_to->getTimestamp();
-								}
-
+							if ( ! $date_to || ( ! empty( $date_to ) && 0 < $date_to->diff( $now ) ) ) {
+								$date_from_str = ! empty( $date_from ) ? $date_from->getTimestamp() : '';
+								$date_to_str   = ! empty( $date_to ) ? $date_to->getTimestamp() : '';
 							}
 							
 						}
