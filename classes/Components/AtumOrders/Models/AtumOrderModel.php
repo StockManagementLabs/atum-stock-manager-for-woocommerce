@@ -809,25 +809,31 @@ abstract class AtumOrderModel {
 	public function process_status() {
 		
 		$new_status = $this->get_status();
-		$old_status = $this->db_status;
-		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
 		
-		// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-		if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
-			$old_status = 'pending';
+		// if ! $new_status, order is still being created, so there aren't status changes.
+		if ( $new_status ) {
+			
+			$old_status = $this->db_status;
+			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
+			
+			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
+			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
+				$old_status = 'pending';
+			}
+			
+			if ( $new_status !== $old_status ) {
+				
+				do_action( "atum/orders/status_$new_status", $this->id, $this );
+				do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
+				do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
+				
+				/* translators: 1: old order status 2: new order status */
+				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
+				$this->add_note( $transition_note );
+				
+			}
 		}
 		
-		if ( $new_status !== $old_status ) {
-			
-			do_action( "atum/orders/status_$new_status", $this->id, $this );
-			do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
-			do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
-			
-			/* translators: 1: old order status 2: new order status */
-			$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
-			$this->add_note( $transition_note );
-			
-		}
 	}
 
 	/***************
