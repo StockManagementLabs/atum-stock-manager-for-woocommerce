@@ -461,13 +461,15 @@ class PurchaseOrder extends AtumOrderModel {
 					$stock_change = apply_filters( 'atum/purchase_orders/po/restore_atum_order_stock_quantity', $atum_order_item->get_quantity(), $item_id );
 					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
 					
+					$old_stock_note =  'increase' === $action ? $new_quantity - $stock_change : $new_quantity + $stock_change;
+					
 					$item_name = $product->get_sku() ? $product->get_sku() : $product->get_id();
 					$note      = sprintf(
 						/* translators: first is the item name, second is the action, third is the old stock and forth is the new stock */
 						__( 'Item %1$s stock %2$s from %3$s to %4$s.', ATUM_TEXT_DOMAIN ),
 						$item_name,
 						'increase' === $action ? __( 'increased', ATUM_TEXT_DOMAIN ) : __( 'decreased', ATUM_TEXT_DOMAIN ),
-						$old_stock,
+						$old_stock_note,
 						$new_quantity
 					);
 					
