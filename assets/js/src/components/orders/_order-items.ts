@@ -137,9 +137,11 @@ export default class AtumOrderItems {
 	}
 	
 	deleteTax(evt: JQueryEventObject) {
-		
+
 		evt.preventDefault();
-		
+
+		let $item: JQuery = $(evt.currentTarget);
+
 		this.swal({
 			text               : this.settings.get('delete_tax_notice'),
 			type               : 'warning',
@@ -150,18 +152,18 @@ export default class AtumOrderItems {
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
-				
+
 				return new Promise( (resolve: Function, reject: Function) => {
-					
+
 					this.atumOrders.loadItemsTable({
 						action       : 'atum_order_remove_tax',
-						rate_id      : $(this).data('rate_id'),
+						rate_id      : $item.data('rate_id'),
 						atum_order_id: this.settings.get('post_id'),
 						security     : this.settings.get('atum_order_item_nonce'),
 					}, 'html', resolve);
-					
+
 				});
-				
+
 			}
 		}).catch(this.swal.noop);
 		
