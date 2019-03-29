@@ -6,8 +6,8 @@ Requires at least: 4.4
 Tested up to: 5.1.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.5.6
-Stable tag: 1.5.7.1
+WC tested up to: 3.5.7
+Stable tag: 1.5.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,31 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.7.2`
+
+*2019-03-29*
+
+**Changes**
+
+* Changed Purchase Order PDF's default temporary directory.
+* Unblock ATUM order items when doing Ajax.
+* Prevent processing ATUM order changes before creating the order.
+* Array checking when trying to counting products in Stock Central.
+
+**Fixes**
+
+* Fixed compounded stock for variables when Multi-Inventory is enabled in variations.
+* Fixed hide/show fields in products.
+* Fixed marketing popup background.
+* Fixed the "add stadistics" widget from dashboard.
+* Fixed drag-to-scroll tabs in Purchase Orders and Inventory Logs list tables.
+* Fixed Stock Central checkboxes selection behaviour.
+* Fixed error when updating sale price product without date in Stock Central.
+* Fixed taxes non being deleted in ATUM Orders.
+* CSS fixes.
 
 ---
 
