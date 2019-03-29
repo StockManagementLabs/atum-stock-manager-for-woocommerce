@@ -405,7 +405,7 @@ trait ListTableLegacyTrait {
 		}
 
 		// Let others play here.
-		$products = apply_filters( 'atum/list_table/views_data_products', $products );
+		$products = (array) apply_filters( 'atum/list_table/views_data_products', $products );
 
 		$this->count_views['count_all'] = count( $products );
 
@@ -572,7 +572,7 @@ trait ListTableLegacyTrait {
 			$products_in_stock = $products_in_stock->posts;
 
 			$this->id_views['in_stock']          = $products_in_stock;
-			$this->count_views['count_in_stock'] = count( $products_in_stock );
+			$this->count_views['count_in_stock'] = is_array( $products_in_stock ) ? count( $products_in_stock ) : 0;
 
 			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
 
@@ -614,7 +614,7 @@ trait ListTableLegacyTrait {
 			$products_back_order = $products_back_order->posts;
 
 			$this->id_views['back_order']          = $products_back_order;
-			$this->count_views['count_back_order'] = count( $products_back_order );
+			$this->count_views['count_back_order'] = is_array( $products_back_order ) ? count( $products_back_order ) : 0;
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
 			if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
@@ -678,7 +678,7 @@ trait ListTableLegacyTrait {
 				}
 
 				$this->id_views['low_stock']          = $products_low_stock;
-				$this->count_views['count_low_stock'] = count( $products_low_stock );
+				$this->count_views['count_low_stock'] = is_array( $products_low_stock ) ? count( $products_low_stock ) : 0;
 
 			}
 
