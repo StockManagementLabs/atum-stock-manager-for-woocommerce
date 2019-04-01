@@ -151,23 +151,22 @@ export default class OrdersBulkActions {
 			preConfirm         : (): Promise<any> => {
 				
 				return new Promise( (resolve: Function, reject: Function) => {
-					
-					let $rows: JQuery     = $('table.atum_order_items').find('tr.selected'),
-					    quantities: any   = {},
-					    itemIds: number[] = $.map($rows, ($row: JQuery) => {
-						    return parseInt($row.data('atum_order_item_id'), 10);
-					    });
-					
+
+                    let $rows: JQuery = $('table.atum_order_items').find('tr.selected'),
+                        quantities: any = {},
+                        itemIds: number[] = [];
+
 					$rows.each( (index: number, elem: Element) => {
 						
 						const $elem: JQuery = $(elem);
-						
+
+						itemIds.push(parseInt($elem.data('atum_order_item_id'), 10));
 						if ($elem.find('input.quantity').length) {
 							quantities[ $elem.data('atum_order_item_id') ] = $elem.find('input.quantity').val();
 						}
-						
+
 					});
-					
+
 					$.ajax({
 						url     : window['ajaxurl'],
 						data    : {
