@@ -140,7 +140,17 @@ class HtmlReport extends ListTable {
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline.
 		if ( ! $this->allow_calcs ) {
-			$row_color  = 'grouped' === $type ? '#EFAF00' : '#00B8DB';
+
+			if ( 'grouped' === $type ) {
+				$row_color = '#EFAF00';
+			}
+			elseif ( 'bundle' === $type ) {
+				$row_color = '#96588a';
+			}
+			else {
+				$row_color = '#00B8DB';
+			}
+
 			$row_style .= ' style="background-color:' . $row_color . '" class="expanded"';
 
 		}
@@ -313,6 +323,11 @@ class HtmlReport extends ListTable {
 				// WC Bookings compatibility.
 				case 'booking':
 					$icon_char = 'e926';
+
+					break;
+				// WC Bundle compatibility.
+				case 'bundle':
+					$icon_char = 'e9cf';
 
 					break;
 
