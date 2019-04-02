@@ -1837,6 +1837,20 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		
+		&.bundle-item {
+			background-color: $wp-pink-light;
+			
+			&.active-row {
+				background-color: darken($wp-pink-light, 10%);
+			}
+
+			td.title {
+				.child-arrow {
+					color: $wp-pink-light;
+				}
+			}
+		}
+		
 		&.grouped {
 			background-color: $orange-light;
 			

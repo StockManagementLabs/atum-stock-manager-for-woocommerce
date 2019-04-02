@@ -584,7 +584,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$child_type = 'grouped';
 					}
 					elseif ( 'bundle' === $type ) {
-						$child_type = 'bundle';
+						$child_type = 'bundle-item';
 					}
 					else {
 						$child_type = 'variation';
