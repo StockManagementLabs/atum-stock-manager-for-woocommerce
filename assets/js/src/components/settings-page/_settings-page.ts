@@ -59,14 +59,10 @@ export default class SettingsPage {
 		this.$form
 			
 			// Out of stock threshold option updates.
-			.on('change', '#atum_out_stock_threshold', (evt: JQueryEventObject) => {
-				this.maybeClearOutStockThreshold($(evt.currentTarget));
-			})
+			.on('change', '#atum_out_stock_threshold', (evt: JQueryEventObject) => this.maybeClearOutStockThreshold($(evt.currentTarget)) )
 			
 			// Script Runner fields.
-			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => {
-				this.runScript($(evt.currentTarget));
-			});
+			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => this.runScript($(evt.currentTarget)) );
 		
 		
 		new SmartForm(this.$form, this.settings);

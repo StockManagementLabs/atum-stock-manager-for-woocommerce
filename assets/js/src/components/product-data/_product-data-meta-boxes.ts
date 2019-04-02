@@ -30,9 +30,7 @@ export default class ProductDataMetaBoxes {
 		});
 		
 		// Toggle the "Out of Stock Threshold" field visibility.
-		$('#_manage_stock').change( (evt: JQueryEventObject) => {
-			$('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none');
-		}).change();
+		$('#_manage_stock').change( (evt: JQueryEventObject) => $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none') ).change();
 		
 		// Change stock control for all variations at once.
 		$('.product-tab-runner').find('.run-script').click( (evt: JQueryEventObject) => {
@@ -42,7 +40,7 @@ export default class ProductDataMetaBoxes {
 			
 			this.swal({
 				title              : this.settings.get('areYouSure'),
-				text               : $button.data('confirm').replace('%s', '"' + status + '"'),
+				text               : $button.data('confirm').replace('%s', `"${ status }"`),
 				type               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('continue'),
