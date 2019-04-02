@@ -140,18 +140,19 @@ class HtmlReport extends ListTable {
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline.
 		if ( ! $this->allow_calcs ) {
-			$text_color = '';
+			$class_row = '';
 			if ( 'grouped' === $type ) {
 				$row_color = '#EFAF00';
 			}
 			elseif ( 'bundle' === $type ) {
-				$row_color = '#ebd7e7';
+				$row_color = '#96588a';
+				$class_row = ' main-bundle';
 			}
 			else {
 				$row_color = '#00B8DB';
 			}
 
-			$row_style .= ' style="background-color:' . $row_color . ';" class="expanded"';
+			$row_style .= ' style="background-color:' . $row_color . ';" class="expanded' . $class_row . '"';
 
 		}
 
