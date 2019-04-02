@@ -20,8 +20,9 @@
 			
 			h1 {
 				font-weight: 400;
-				font-size: 34px;
-				margin: 26px auto 10px;
+				font-size: 40px;
+				margin: -25px 0 10px;
+				letter-spacing: 4px;
 			}
 			
 			p {
@@ -29,13 +30,13 @@
 			}
 			
 			.version {
-				padding: 1px 12px;
+				padding: 1px 9px;
 				height: 21px;
 				line-height: 20px;
 				border-radius: 11.5px;
 				position: absolute;
-				top: 160px;
-				right: 113px;
+				top: 140px;
+				right: 73px;
 			}
 			
 			button {
@@ -77,7 +78,7 @@
 		}
 		
 		.mp-logo {
-			width: 150px;
+			width: 170px;
 			height: auto;
 		}
 	}

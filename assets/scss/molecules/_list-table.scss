@@ -1837,6 +1837,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		
+		&.main-bundle {
+			background-color: darken($wp-pink-light, 6%);
+			td {
+				color: $white;
+				&.column-ID {
+					color: $white;
+				}
+			}
+		}
+		
 		&.bundle-item {
 			background-color: $wp-pink-light;
 			
