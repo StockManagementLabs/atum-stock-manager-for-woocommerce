@@ -220,20 +220,18 @@ gulp.task('watch::atum', function () {
 	livereload.listen();
 
 	gulp.watch(config.assetsDir + '/scss/**/*.scss', ['sass::atum']);
-	gulp.watch(config.assetsDir + '/js/src/**/*.js', ['js::atum']);
+	gulp.watch(config.assetsDir + '/js/src/**/*.ts', ['js::atum']);
 
 	gulp.watch([
 
 		// PHP files
 		'./**/*.php',
 
-		// JS files
-		//config.assetsDir + '/js/src/**/*.js',
-
 		// Images
 		config.assetsDir + '/images/**/*',
 
 		// Excludes
+		'!' + config.assetsDir + '/js/build/**/*.js',
 		'!node_modules',
 
 	]).on('change', function (file) {
@@ -243,6 +241,6 @@ gulp.task('watch::atum', function () {
 });
 
 // Default task
-gulp.task('default', ['sass::atum'], function () {
+gulp.task('default', ['sass::atum', 'js::atum'], function () {
 	
 });
