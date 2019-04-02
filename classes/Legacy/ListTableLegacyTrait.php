@@ -571,10 +571,10 @@ trait ListTableLegacyTrait {
 
 			$products_in_stock = $products_in_stock->posts;
 
-			$this->id_views['in_stock']          = $products_in_stock;
+			$this->id_views['in_stock']          = (array) $products_in_stock;
 			$this->count_views['count_in_stock'] = is_array( $products_in_stock ) ? count( $products_in_stock ) : 0;
 
-			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
+			$products_not_stock = array_diff( (array) $products, (array) $products_in_stock, (array) $products_unmanaged );
 
 			/**
 			 * Products on Back Order
@@ -613,13 +613,13 @@ trait ListTableLegacyTrait {
 
 			$products_back_order = $products_back_order->posts;
 
-			$this->id_views['back_order']          = $products_back_order;
+			$this->id_views['back_order']          = (array) $products_back_order;
 			$this->count_views['count_back_order'] = is_array( $products_back_order ) ? count( $products_back_order ) : 0;
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
 			if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
-				$this->count_views['count_in_stock']   += count( array_intersect( $group_items, $products_in_stock ) );
-				$this->count_views['count_back_order'] += count( array_intersect( $group_items, $products_back_order ) );
+				$this->count_views['count_in_stock']   += count( array_intersect( $group_items, (array) $products_in_stock ) );
+				$this->count_views['count_back_order'] += count( array_intersect( $group_items, (array) $products_back_order ) );
 
 			}
 
@@ -677,7 +677,7 @@ trait ListTableLegacyTrait {
 
 				}
 
-				$this->id_views['low_stock']          = $products_low_stock;
+				$this->id_views['low_stock']          = (array) $products_low_stock;
 				$this->count_views['count_low_stock'] = is_array( $products_low_stock ) ? count( $products_low_stock ) : 0;
 
 			}
@@ -685,7 +685,7 @@ trait ListTableLegacyTrait {
 			/**
 			 * Products out of stock
 			 */
-			$products_out_stock = array_diff( $products_not_stock, $products_back_order );
+			$products_out_stock = array_diff( (array) $products_not_stock, (array) $products_back_order );
 
 			$this->id_views['out_stock']          = $products_out_stock;
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];

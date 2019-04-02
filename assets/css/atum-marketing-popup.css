@@ -1740,8 +1740,9 @@ input[type="button"].btn-block {
 
 .swal2-container .marketing-popup .swal2-content h1 {
   font-weight: 400;
-  font-size: 34px;
-  margin: 26px auto 10px;
+  font-size: 40px;
+  margin: -25px 0 10px;
+  letter-spacing: 4px;
 }
 
 .swal2-container .marketing-popup .swal2-content p {
@@ -1749,13 +1750,13 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .marketing-popup .swal2-content .version {
-  padding: 1px 12px;
+  padding: 1px 9px;
   height: 21px;
   line-height: 20px;
   border-radius: 11.5px;
   position: absolute;
-  top: 160px;
-  right: 113px;
+  top: 140px;
+  right: 73px;
 }
 
 .swal2-container .marketing-popup .swal2-content button {
@@ -1796,7 +1797,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .marketing-popup .mp-logo {
-  width: 150px;
+  width: 170px;
   height: auto;
 }
 /*# sourceMappingURL=atum-marketing-popup.css.map */

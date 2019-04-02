@@ -257,7 +257,7 @@ body.toplevel_page_atum-dashboard {
 				}
 				
 				.image {
-					width: 143px;
+					width: 100px;
 					height: auto;
 					position: absolute;
 					top: 0;
@@ -269,7 +269,7 @@ body.toplevel_page_atum-dashboard {
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					padding: 0 20px 0 20px;
+					padding: 0 20px 0 100px;
 					min-height: 200px;
 					
 					@include tablet-max {
@@ -286,9 +286,10 @@ body.toplevel_page_atum-dashboard {
 						
 						h1 {
 							font-weight: 400;
-							font-size: 34px;
+							font-size: 40px;
 							margin: 0 0 10px;
 							line-height: 1.1;
+							letter-spacing: 2px;
 						}
 						
 						h1, p {
@@ -302,7 +303,7 @@ body.toplevel_page_atum-dashboard {
 						}
 						
 						.version {
-							padding: 1px 12px;
+							padding: 2px 7px;
 							height: 21px;
 							line-height: 20px;
 							border-radius: 11.5px;
@@ -367,7 +368,7 @@ body.toplevel_page_atum-dashboard {
 				}
 				
 				.mp-logo {
-					width: 255px;
+					width: 170px;
 					height: auto;
 				}
 				
