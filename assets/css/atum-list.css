@@ -6771,6 +6771,18 @@ table.atum-list-table tr.variation td.title .child-arrow, .floatThead-container 
   color: #00B8DB;
 }
 
+table.atum-list-table tr.main-bundle, .floatThead-container tr.main-bundle, .inbound-stock-list tr.main-bundle, table.wp-list-table tr.main-bundle {
+  background-color: #ebd7e7;
+}
+
+table.atum-list-table tr.main-bundle td, .floatThead-container tr.main-bundle td, .inbound-stock-list tr.main-bundle td, table.wp-list-table tr.main-bundle td {
+  color: #fff;
+}
+
+table.atum-list-table tr.main-bundle td.column-ID, .floatThead-container tr.main-bundle td.column-ID, .inbound-stock-list tr.main-bundle td.column-ID, table.wp-list-table tr.main-bundle td.column-ID {
+  color: #fff;
+}
+
 table.atum-list-table tr.bundle-item, .floatThead-container tr.bundle-item, .inbound-stock-list tr.bundle-item, table.wp-list-table tr.bundle-item {
   background-color: #F5EBF3;
 }
