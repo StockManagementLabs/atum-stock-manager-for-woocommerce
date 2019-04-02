@@ -140,18 +140,18 @@ class HtmlReport extends ListTable {
 
 		// mPDF has problems reading multiple classes so we have to add the row bg color inline.
 		if ( ! $this->allow_calcs ) {
-
+			$text_color = '';
 			if ( 'grouped' === $type ) {
 				$row_color = '#EFAF00';
 			}
 			elseif ( 'bundle' === $type ) {
-				$row_color = '#96588a';
+				$row_color = '#ebd7e7';
 			}
 			else {
 				$row_color = '#00B8DB';
 			}
 
-			$row_style .= ' style="background-color:' . $row_color . '" class="expanded"';
+			$row_style .= ' style="background-color:' . $row_color . ';" class="expanded"';
 
 		}
 
@@ -169,8 +169,15 @@ class HtmlReport extends ListTable {
 			$product_class  = '\WC_Product_' . ucwords( str_replace( '-', '_', $type ), '_' );
 			$parent_product = new $product_class( $this->product->get_id() );
 
-			/* @noinspection PhpUndefinedMethodInspection */
-			$child_products = $parent_product->get_children();
+			if ( 'bundle' === $type ) {
+				$child_products = Helpers::get_bundle_items( array(
+					'return'    => 'id=>product_id',
+					'bundle_id' => $this->product->get_id(),
+				) );
+			}else {
+				/* @noinspection PhpUndefinedMethodInspection */
+				$child_products = $parent_product->get_children();
+			}
 
 			if ( ! empty( $child_products ) ) {
 
@@ -190,7 +197,18 @@ class HtmlReport extends ListTable {
 
 					$this->is_child = TRUE;
 					$this->product  = Helpers::get_atum_product( $child_id );
-					$this->single_expandable_row( $this->product, ( 'grouped' === $type ? $type : 'variation' ) );
+
+					if ( 'grouped' === $type ) {
+						$return_type = 'grouped';
+					}
+					elseif ( 'bundle' === $type ) {
+						$return_type = 'bundle-item';
+					}
+					else {
+						$return_type = 'variation';
+					}
+
+					$this->single_expandable_row( $this->product, ( $return_type ) );
 				}
 			}
 
