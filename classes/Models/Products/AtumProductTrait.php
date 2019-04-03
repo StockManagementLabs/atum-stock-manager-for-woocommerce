@@ -32,6 +32,18 @@ trait AtumProductTrait {
 		'out_stock_date'        => NULL,
 		'out_stock_threshold'   => '',
 		'inheritable'           => FALSE,
+		'inbound_stock'         => NULL,
+		'stock_on_hold'         => NULL,
+		'reserved_stock'        => NULL,
+		'sold_today'            => NULL,
+		'sales_last_days'       => NULL,
+		'customer_returns'      => NULL,
+		'warehouse_damages'     => NULL,
+		'lost_in_post'          => NULL,
+		'other_logs'            => NULL,
+		'stock_will_last'       => NULL,
+		'out_stock_days'        => NULL,
+		'lost_sales'            => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,
 		'available_to_purchase' => NULL,
@@ -136,6 +148,162 @@ trait AtumProductTrait {
 	 */
 	public function get_inheritable( $context = 'view' ) {
 		return wc_bool_to_string( $this->get_prop( 'inheritable', $context ) );
+	}
+
+	/**
+	 * Returns the product's inbound stock.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_inbound_stock( $context = 'view' ) {
+		return $this->get_prop( 'inbound_stock', $context );
+	}
+
+	/**
+	 * Returns the product's stock on hold.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_stock_on_hold( $context = 'view' ) {
+		return $this->get_prop( 'stock_on_hold', $context );
+	}
+
+	/**
+	 * Returns the product's reserved stock.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_reserved_stock( $context = 'view' ) {
+		return $this->get_prop( 'reserved_stock', $context );
+	}
+
+	/**
+	 * Returns the product's sold today.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_sold_today( $context = 'view' ) {
+		return $this->get_prop( 'sold_today', $context );
+	}
+
+	/**
+	 * Returns the product's sales last days.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_sales_last_days( $context = 'view' ) {
+		return $this->get_prop( 'sales_last_days', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "customer returns" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_customer_returns( $context = 'view' ) {
+		return $this->get_prop( 'customer_returns', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "warehouse damage" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_warehouse_damages( $context = 'view' ) {
+		return $this->get_prop( 'warehouse_damages', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "lost in post" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_lost_in_post( $context = 'view' ) {
+		return $this->get_prop( 'lost_in_post', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "other" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_other_logs( $context = 'view' ) {
+		return $this->get_prop( 'other_logs', $context );
+	}
+
+	/**
+	 * Returns the product's stock will last days.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|null
+	 */
+	public function get_stock_will_last( $context = 'view' ) {
+		return $this->get_prop( 'stock_will_last', $context );
+	}
+
+	/**
+	 * Returns the product's out of stock days.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|null
+	 */
+	public function get_out_stock_days( $context = 'view' ) {
+		return $this->get_prop( 'out_stock_days', $context );
+	}
+
+	/**
+	 * Returns the product's lost sales.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_lost_sales( $context = 'view' ) {
+		return $this->get_prop( 'lost_sales', $context );
 	}
 
 
@@ -287,6 +455,138 @@ trait AtumProductTrait {
 	 */
 	public function set_inheritable( $inheritable ) {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );
+	}
+
+	/**
+	 * Set inbound stock for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $inbound_stock
+	 */
+	public function set_inbound_stock( $inbound_stock ) {
+		$this->set_prop( 'inbound_stock', wc_stock_amount( $inbound_stock ) );
+	}
+
+	/**
+	 * Set stock on hold for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $stock_on_hold
+	 */
+	public function set_stock_on_hold( $stock_on_hold ) {
+		$this->set_prop( 'stock_on_hold', wc_stock_amount( $stock_on_hold ) );
+	}
+
+	/**
+	 * Set reserved stock for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $reserved_stock
+	 */
+	public function set_reserved_stock( $reserved_stock ) {
+		$this->set_prop( 'reserved_stock', wc_stock_amount( $reserved_stock ) );
+	}
+
+	/**
+	 * Set sold today for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $sold_today
+	 */
+	public function set_sold_today( $sold_today ) {
+		$this->set_prop( 'sold_today', wc_stock_amount( $sold_today ) );
+	}
+
+	/**
+	 * Set sales last days for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $sales_last_days
+	 */
+	public function set_sales_last_days( $sales_last_days ) {
+		$this->set_prop( 'sales_last_days', wc_stock_amount( $sales_last_days ) );
+	}
+
+	/**
+	 * Set customer returns for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $customer_returns
+	 */
+	public function set_customer_returns( $customer_returns ) {
+		$this->set_prop( 'customer_returns', wc_stock_amount( $customer_returns ) );
+	}
+
+	/**
+	 * Set warehouse damages for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $warehouse_damages
+	 */
+	public function set_warehouse_damages( $warehouse_damages ) {
+		$this->set_prop( 'warehouse_damages', wc_stock_amount( $warehouse_damages ) );
+	}
+
+	/**
+	 * Set lost in post for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $lost_in_post
+	 */
+	public function set_lost_in_post( $lost_in_post ) {
+		$this->set_prop( 'lost_in_post', wc_stock_amount( $lost_in_post ) );
+	}
+
+	/**
+	 * Set other logs for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $other_logs
+	 */
+	public function set_other_logs( $other_logs ) {
+		$this->set_prop( 'other_logs', wc_stock_amount( $other_logs ) );
+	}
+
+	/**
+	 * Set stock will last for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int $stock_will_last
+	 */
+	public function set_stock_will_last( $stock_will_last ) {
+		$this->set_prop( 'stock_will_last', wc_stock_amount( $stock_will_last ) );
+	}
+
+	/**
+	 * Set out of stock days for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int $out_stock_days
+	 */
+	public function set_out_stock_days( $out_stock_days ) {
+		$this->set_prop( 'out_stock_days', wc_stock_amount( $out_stock_days ) );
+	}
+
+	/**
+	 * Set lost sales for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $lost_sales
+	 */
+	public function set_lost_sales( $lost_sales ) {
+		$this->set_prop( 'lost_sales', wc_stock_amount( $lost_sales ) );
 	}
 
 
