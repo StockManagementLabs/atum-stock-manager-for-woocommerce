@@ -93,6 +93,7 @@ $purple:                                #BA7DF7 !default;
 $purple-light:                          lighten($purple, 20%) !default;
 $purple-pl:                             #9357cc !default;
 
+
 $colors: () !default;
 $colors: map-merge((
 		"blue":            $blue,
@@ -115,6 +116,7 @@ $warning:                               $orange !default;
 $danger:                                $red !default;
 $light:                                 $gray-100 !default;
 $dark:                                  $gray-800 !default;
+
 
 $theme-colors: () !default;
 $theme-colors: map-merge((

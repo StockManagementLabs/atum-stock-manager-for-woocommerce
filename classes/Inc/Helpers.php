@@ -2466,4 +2466,35 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Get selected visual mode style
+	 *
+	 * @since 1.5.7.3
+	 *
+	 * @param string $mode
+	 *
+	 * @return string
+	 */
+	public static function get_visual_mode_style( $mode ) {
+
+		$style = '';
+
+		if ( 'hc' === $mode ) {
+			$hc_blue = '#016b7f';
+			$style = ":root{
+				    --gray-500: #27283b;
+				    --blue: $hc_blue;
+				    --primary: $hc_blue;
+				    --orange: $hc_blue;
+				    --warning: $hc_blue;
+				    --danger: $hc_blue;
+				    --success: $hc_blue;
+				    --info: $hc_blue;
+					}";
+		}
+
+		return $style;
+
+	}
+
 }
