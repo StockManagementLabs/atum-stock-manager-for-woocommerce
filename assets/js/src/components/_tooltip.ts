@@ -31,9 +31,6 @@ export default class Tooltip {
 			// Only if the container is smaller than the content.
 			if ( typeof $tipEl.data('tooltip') !== 'undefined' && $tipEl.data('tooltip') === 'overflown' ) {
 
-			    console.log($tipEl[0].scrollWidth);
-                console.log($tipEl.innerWidth());
-
 			    if ( $tipEl[0].scrollWidth > $tipEl.innerWidth()) {
 			        doTooltip = true;
                 }
