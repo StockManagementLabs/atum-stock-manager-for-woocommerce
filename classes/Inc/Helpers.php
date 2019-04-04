@@ -2479,21 +2479,39 @@ final class Helpers {
 
 		$style = '';
 
-		if ( 'hc' === $mode ) {
-			$hc_blue = '#016b7f';
-			$style = ":root{
-				    --gray-500: #27283b;
-				    --blue: $hc_blue;
-				    --primary: $hc_blue;
-				    --orange: $hc_blue;
-				    --warning: $hc_blue;
-				    --danger: $hc_blue;
-				    --success: $hc_blue;
-				    --info: $hc_blue;
-					}";
+		$theme_settings = self::get_option( 'theme_settings' );
+		$gray_500       = '#adb5bd';
+
+		if ( 'hc_mode' === $theme_settings ) {
+			$hc_blue      = '#016b7f';
+			$hc_dark_blue = '#27283b';
+			$style        = ":root{
+							--gray-100: white;
+						    --gray-500: $hc_blue;
+						    --gray-600: $hc_dark_blue;
+						    --blue: $hc_blue;
+						    --green-light: #e6fbff;
+						    --blue-light: #e6fbff;
+						    --light: transparent;
+						    --wp-link: $hc_blue;
+						    --primary: $hc_blue;
+						    --orange: $hc_blue;
+						    --warning: $hc_blue;
+						    --danger: $hc_blue;
+						    --success: $hc_blue;
+						    --info: $hc_blue;
+						    --atum-border: $gray_500;
+						    --atum-table-item-heads: $hc_dark_blue;
+						    --atum-table-views-tabs: $hc_dark_blue;
+						    --atum-select2-border: $gray_500;
+						    --atum-input-placeholder: $hc_dark_blue;
+						    --atum-pagination-bg: white;
+						    --atum-pagination-border: $gray_500;
+						    --atum-pagination-border-disabled: #e9ecef;
+							}";
 		}
 
-		return $style;
+		return apply_filters( 'atum/get_visual_mode_style', $style );
 
 	}
 

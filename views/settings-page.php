@@ -114,6 +114,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 											case 'atum_setting_company':
 												$header_settings_title = __( 'Store Details', ATUM_TEXT_DOMAIN );
 												break;
+											case 'atum_setting_visual_settings':
+												$header_settings_title = __( 'Visual Settings', ATUM_TEXT_DOMAIN );
+												break;
 											case 'atum_setting_module_manager':
 												$header_settings_title = __( 'Modules', ATUM_TEXT_DOMAIN );
 												break;

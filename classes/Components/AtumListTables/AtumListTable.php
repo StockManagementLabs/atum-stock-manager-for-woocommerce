@@ -3991,7 +3991,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 
-		//Get visual mode style.
+		// Get visual mode style selected.
 		wp_add_inline_style(
 			'atum-list',
 			Helpers::get_visual_mode_style( 'hc' )

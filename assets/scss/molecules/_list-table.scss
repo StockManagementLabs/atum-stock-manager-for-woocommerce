@@ -207,7 +207,7 @@
 				}
 				
 				a {
-					color: var(--gray-500);
+					color: var(--atum-table-views-tabs);
 					padding: 0;
 					
 					&.current {
@@ -228,7 +228,7 @@
 					}
 					
 					&.empty {
-						color: var(--gray-500);
+						color: var(--atum-table-views-tabs);
 					}
 				}
 				
@@ -237,10 +237,10 @@
 					font-weight: normal;
 					color: var(--blue);
 					&.empty {
-						color: var(--gray-500);
+						color: var(--atum-table-views-tabs);
 						a {
 							padding: 0;
-							color: var(--gray-500);
+							color: var(--atum-table-views-tabs);
 						}
 					}
 					a {
@@ -260,7 +260,7 @@
 					}
 					
 					&.empty {
-						color: var(--gray-500);
+						color: var(--atum-table-views-tabs);
 					}
 				}
 			}
@@ -297,7 +297,7 @@
 			text-transform: uppercase;
 			
 			a {
-				color: var(--gray-500);
+				color: var(--atum-table-views-tabs);
 				padding: 0;
 				
 				&.current:not(.extra-links-container a) {
@@ -346,7 +346,7 @@
 	padding: 1px;
 	z-index: 999;
 	margin: 20px 10px 20px auto;
-	border: 1px solid var(--gray-200);
+	border: 1px solid var(--atum-border);
 	border-radius: 5px;
 	
 	@include tablet-max-wp {
@@ -380,7 +380,7 @@
 		&::placeholder {
 			font-size: 12px;
 			font-style: italic;
-			color: var(--gray-500);
+			color: var(--atum-input-placeholder);
 		}
 		
 		@include tablet-max-wp{
@@ -398,7 +398,7 @@
 	}
 	
 	&.inbound-stock-search {
-		border: 1px solid var(--gray-200);
+		border: 1px solid var(--atum-border);
 		width: 280px;
 		height: 30px;
 		border-radius: 5px;
@@ -480,7 +480,7 @@
 		}
 		
 		&::placeholder {
-			color: var(--gray-500);
+			color: var(--atum-input-placeholder);
 			font-style: italic;
 			letter-spacing: normal;
 			margin-left: 10px;
@@ -499,7 +499,7 @@
 	
 	.input-group {
 		border-radius: 5px;
-		border: solid 1px var(--gray-200);
+		border: solid 1px var(--atum-border);
 		background-color:  var(--white);
 		margin-left: 10px;
 		padding-right: 1px;
@@ -636,7 +636,8 @@
 			display: inline-block;
 			border: none;
 			padding: 0;
-			background: var(--gray-200);
+			background: var(--atum-pagination-bg);
+			border: 1px solid var(--atum-pagination-border);
 			font-size: 16px;
 			font-weight: 400;
 			text-align: center;
@@ -647,6 +648,7 @@
 				color:  var(--white);
 			}
 		}
+		
 		
 		.displaying-num {
 			@include mobile-max{
@@ -674,7 +676,7 @@
 	}
 	
 	&.top {
-		box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 var(--gray-200);
+		box-shadow: 0 1px 0 0 var(--atum-border), 0 -1px 0 0 var(--atum-border);
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		padding: 10px 11px;
@@ -918,7 +920,7 @@
 			width: 30px;
 			height: 30px;
 			border-radius: 5px;
-			border: solid 1px var(--gray-200);
+			border: solid 1px var(--atum-border);
 			background-color:  var(--white);
 			color: var(--gray-600);
 			cursor: pointer;
@@ -1003,7 +1005,7 @@
 		
 		li {
 			margin-right: 15px;
-			color: var(--gray-500);
+			color: var(--atum-table-views-tabs);
 			text-transform: uppercase;
 			
 			span {
@@ -1065,7 +1067,7 @@
 				}
 				
 				a {
-					color: var(--gray-500);
+					color: var(--atum-table-views-tabs);
 					padding: 0;
 					
 					&.current {
@@ -1083,7 +1085,7 @@
 					}
 					
 					&.empty {
-						color: var(--gray-500);
+						color: var(--atum-table-views-tabs);
 					}
 					
 				}
@@ -1093,10 +1095,10 @@
 					font-weight: normal;
 					color:  var(--blue);
 					&.empty {
-						color: var(--gray-500);
+						color: var(--atum-table-views-tabs);
 						a {
 							padding: 0;
-							color: var(--gray-500);
+							color: var(--atum-table-views-tabs);
 						}
 					}
 					a {
@@ -1117,7 +1119,7 @@
 					color: var(--blue);
 					
 					&.empty {
-						color: var(--gray-500);
+						color: var(--atum-table-views-tabs);
 					}
 				}
 			}
@@ -1327,7 +1329,7 @@
 	align-items: center;
 	margin: 0 11px 0 11px;
 	background-color:  var(--white);
-	border-bottom: 1px solid var(--gray-200);
+	border-bottom: 1px solid var(--atum-border);
 	
 	&.no-margin {
 		margin: 0;
@@ -1497,7 +1499,7 @@
 
 table.wp-list-table {
 	border: none;
-	border-top: 1px solid var(--gray-200);
+	border-top: 1px solid var(--atum-border);
 	min-width: 1200px;
 	
 	thead, tfoot {
@@ -1534,8 +1536,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	thead .item-heads, tfoot {
 		background-color:  var(--white);
-		border-top: 1px solid var(--gray-200);
-		border-bottom: 1px solid var(--gray-200);
+		border-top: 1px solid var(--atum-border);
+		border-bottom: 1px solid var(--atum-border);
 		
 		th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
 		td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
@@ -1561,7 +1563,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				width: 1em;
 				margin: 0 auto;
 				font-size: 19px;
-				color: var(--gray-500);
+				color: var(--atum-table-item-heads);
 				
 				&:before {
 					text-indent: 0;
@@ -1576,8 +1578,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tfoot {
 		.item-heads {
-			border-top: 1px solid var(--gray-200);
-			border-bottom: 1px solid var(--gray-200);
+			border-top: 1px solid var(--atum-border);
+			border-bottom: 1px solid var(--atum-border);
 			th {
 				padding: 3px 5px;
 				line-height: 1.1;
@@ -1588,13 +1590,23 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-weight: bold;
 				letter-spacing: 0.3px;
 				color: var(--gray-500);
+				
 			}
 		}
 	}
 	
-	.item-heads {
-		td, th {
-			box-shadow: 0 1px 0 0 var(--gray-200);
+	tfoot, thead {
+		.item-heads {
+			td, th {
+				box-shadow: 0 1px 0 0 var(--atum-border);
+				a {
+					color: var(--atum-table-item-heads);
+				}
+			}
+		}
+		th {
+			border-top: 1px solid var(--atum-border);
+			border-bottom: 1px solid var(--atum-border);
 		}
 	}
 	
@@ -1613,7 +1625,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			color: var(--gray-600);
 			
 			&:not(:last-child) {
-				border-right: 1px solid var(--gray-400);
+				border-right: 1px solid var(--atum-border);
 			}
 			
 			.group-toggler {
@@ -1728,6 +1740,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	tr {
+		box-shadow: 0 1px 0 0 var(--atum-border);
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
 			
@@ -1738,6 +1751,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.even {
 			background-color: var(--light);
+		}
+		
+		&.active-row {
+			background-color: var(--blue-light);
 		}
 		
 		&.expanded {
@@ -1822,7 +1839,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.active-row {
-				background-color: darken($blue-light, 10%);
+				background-color: var(--blue-light);
 			}
 			
 			td.title {
@@ -2147,8 +2164,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			padding: 0 !important;
 			min-width: 0 !important;
 			height: auto !important;
-			border-left: 1px solid var(--gray-200);
-			border-right: 1px solid var(--gray-200);
+			border-left: 1px solid var(--atum-border);
+			border-right: 1px solid var(--atum-border);
 		}
 		
 	}
@@ -2156,7 +2173,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	th {
 		span {
 			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
-				color: var(--gray-500);
+				color: var(--atum-table-item-heads);
 				font-weight: bold;
 				font-size: 14px;
 				.set-header {
@@ -2534,7 +2551,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			font-style: italic;
 			line-height: 1.67;
 			font-weight: 400;
-			color: var(--gray-500);
+			color: var(--atum-input-placeholder);
 		}
 	}
 }

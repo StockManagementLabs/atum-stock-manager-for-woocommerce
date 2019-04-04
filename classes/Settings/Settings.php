@@ -236,19 +236,26 @@ class Settings {
 		$default_country = get_option( 'woocommerce_default_country' );
 		
 		$this->tabs = array(
-			'general'       => array(
+			'general'         => array(
 				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-cog',
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN ),
 				),
 			),
-			'store_details' => array(
+			'store_details'   => array(
 				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-store',
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
 					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN ),
+				),
+			),
+			'visual_settings' => array(
+				'tab_name' => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'atmi-eye',
+				'sections' => array(
+					'visual_settings' => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
 				),
 			),
 		);
@@ -449,6 +456,21 @@ class Settings {
 				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => '',
+			),
+			'theme_settings'            => array(
+				'section' => 'visual_settings',
+				'name'    => __( 'Theme settings', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Select a option for change visual setting to dark, high contrast o default mode.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'select',
+				'default' => '',
+				'options' => array(
+					'values' => array(
+						''          => __( 'Default', ATUM_TEXT_DOMAIN ),
+						'dark_mode' => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
+						'hc_mode'   => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
+					),
+					'style'  => 'width:200px',
+				),
 			),
 		);
 

@@ -148,6 +148,24 @@ $wp-gray-5:                             #E5E5E5 !default;
 $wp-gray-6:                             #f9f9f9 !default;
 $wp-gray-7:                             #888 !default;
 
+$wp-colors: () !default;
+$wp-colors: map-merge((
+		"wp-link":         $wp-link,
+		"wp-link-hover":   $wp-link-hover,
+		"wp-input-focus":  $wp-input-focus,
+		"wp-pink":         $wp-pink,
+		"wp-pink-light":   $wp-pink-light,
+		"wp-pink-lighter": $wp-pink-lighter,
+		"wp-gray-dark":    $wp-gray-dark,
+		"wp-gray-1":       $wp-gray-1,
+		"wp-gray-3":       $wp-gray-3,
+		"wp-gray-4":       $wp-gray-4,
+		"wp-gray-5":       $wp-gray-5,
+		"wp-gray-6":       $wp-gray-6,
+		"wp-gray-7":       $wp-gray-7
+		
+), $wp-colors);
+
 // WC Colors
 
 $wc-blue-gray:                          #2e4453 !default;

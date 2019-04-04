@@ -638,7 +638,7 @@ $settings-xs-min:           568px !default;
 			border-bottom-right-radius: 6px;
 			border-bottom-left-radius: 6px;
 			background: $blue-dark-lighten url("#{$img-path}settings/bg-settings.png") no-repeat bottom;
-			background-size: contain;
+			background-size: cover;
 			box-shadow: 0 4px 0 0 $gray-200;
 			
 			&.section-field-light {
