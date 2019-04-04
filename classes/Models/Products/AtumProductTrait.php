@@ -34,16 +34,17 @@ trait AtumProductTrait {
 		'inheritable'           => FALSE,
 		'inbound_stock'         => NULL,
 		'stock_on_hold'         => NULL,
-		'reserved_stock'        => NULL,
 		'sold_today'            => NULL,
 		'sales_last_days'       => NULL,
+		'reserved_stock'        => NULL,
 		'customer_returns'      => NULL,
-		'warehouse_damages'     => NULL,
+		'warehouse_damage'      => NULL,
 		'lost_in_post'          => NULL,
 		'other_logs'            => NULL,
 		'stock_will_last'       => NULL,
 		'out_stock_days'        => NULL,
 		'lost_sales'            => NULL,
+		'updated'               => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,
 		'available_to_purchase' => NULL,
@@ -177,19 +178,6 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Returns the product's reserved stock.
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return float|null
-	 */
-	public function get_reserved_stock( $context = 'view' ) {
-		return $this->get_prop( 'reserved_stock', $context );
-	}
-
-	/**
 	 * Returns the product's sold today.
 	 *
 	 * @since 1.5.8
@@ -216,6 +204,19 @@ trait AtumProductTrait {
 	}
 
 	/**
+	 * Returns the units of this product that were included in ILs with the "reserved stock" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_reserved_stock( $context = 'view' ) {
+		return $this->get_prop( 'reserved_stock', $context );
+	}
+
+	/**
 	 * Returns the units of this product that were included in ILs with the "customer returns" type.
 	 *
 	 * @since 1.5.8
@@ -237,8 +238,8 @@ trait AtumProductTrait {
 	 *
 	 * @return float|null
 	 */
-	public function get_warehouse_damages( $context = 'view' ) {
-		return $this->get_prop( 'warehouse_damages', $context );
+	public function get_warehouse_damage( $context = 'view' ) {
+		return $this->get_prop( 'warehouse_damage', $context );
 	}
 
 	/**
@@ -304,6 +305,19 @@ trait AtumProductTrait {
 	 */
 	public function get_lost_sales( $context = 'view' ) {
 		return $this->get_prop( 'lost_sales', $context );
+	}
+
+	/**
+	 * Returns the product's update date.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return \WC_DateTime|NULL object if the date is set or null if there is no date.
+	 */
+	public function get_update_date( $context = 'view' ) {
+		return $this->get_prop( 'update_date', $context );
 	}
 
 
@@ -480,17 +494,6 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Set reserved stock for the current product.
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param int|float $reserved_stock
-	 */
-	public function set_reserved_stock( $reserved_stock ) {
-		$this->set_prop( 'reserved_stock', wc_stock_amount( $reserved_stock ) );
-	}
-
-	/**
 	 * Set sold today for the current product.
 	 *
 	 * @since 1.5.8
@@ -513,6 +516,17 @@ trait AtumProductTrait {
 	}
 
 	/**
+	 * Set reserved stock for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $reserved_stock
+	 */
+	public function set_reserved_stock( $reserved_stock ) {
+		$this->set_prop( 'reserved_stock', wc_stock_amount( $reserved_stock ) );
+	}
+
+	/**
 	 * Set customer returns for the current product.
 	 *
 	 * @since 1.5.8
@@ -528,10 +542,10 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param int|float $warehouse_damages
+	 * @param int|float $warehouse_damage
 	 */
-	public function set_warehouse_damages( $warehouse_damages ) {
-		$this->set_prop( 'warehouse_damages', wc_stock_amount( $warehouse_damages ) );
+	public function set_warehouse_damage( $warehouse_damage ) {
+		$this->set_prop( 'warehouse_damage', wc_stock_amount( $warehouse_damage ) );
 	}
 
 	/**
@@ -587,6 +601,19 @@ trait AtumProductTrait {
 	 */
 	public function set_lost_sales( $lost_sales ) {
 		$this->set_prop( 'lost_sales', wc_stock_amount( $lost_sales ) );
+	}
+
+	/**
+	 * Set update date for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string|integer|null $update_date UTC timestamp, or ISO 8601 DateTime.
+	 *                                         If the DateTime string has no timezone or offset, WordPress site timezone will be assumed.
+	 *                                         Null if there is no date.
+	 */
+	public function set_update_date( $update_date = NULL ) {
+		$this->set_date_prop( 'update_date', $update_date );
 	}
 
 

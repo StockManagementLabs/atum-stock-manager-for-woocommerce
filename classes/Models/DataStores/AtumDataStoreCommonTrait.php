@@ -43,11 +43,25 @@ trait AtumDataStoreCommonTrait {
 			'out_stock_date',
 			'out_stock_threshold',
 			'inheritable',
+			'inbound_stock',
+			'stock_on_hold',
+			'reserved_stock',
+			'sold_today',
+			'sales_last_days',
+			'customer_returns',
+			'warehouse_damage',
+			'lost_in_post',
+			'other_logs',
+			'stock_will_last',
+			'out_stock_days',
+			'lost_sales',
+			'update_date',
 		) );
 
 		// Columns data need to be converted to datetime.
 		$date_columns = (array) apply_filters( 'atum/data_store/date_columns', array(
 			'out_stock_date',
+			'update_date',
 		) );
 
 		// Switches and/or checkboxes.
@@ -61,6 +75,19 @@ trait AtumDataStoreCommonTrait {
 			'purchase_price',
 			'out_stock_date',
 			'out_stock_threshold',
+			'inbound_stock',
+			'stock_on_hold',
+			'reserved_stock',
+			'sold_today',
+			'sales_last_days',
+			'customer_returns',
+			'warehouse_damage',
+			'lost_in_post',
+			'other_logs',
+			'stock_will_last',
+			'out_stock_days',
+			'lost_sales',
+			'update_date',
 		) );
 
 		// We should make an insert if the returning row is empty or has none of the ATUM columns.
@@ -104,6 +131,14 @@ trait AtumDataStoreCommonTrait {
 		if ( empty( $data ) ) {
 			return;
 		}
+
+		// If not passing the updated date, add the current date.
+		if ( ! array_key_exists( 'update_date', $changes ) ) {
+			$data['update_date']   = gmdate( 'Y-m-d H:i:s' );
+			$this->updated_props[] = 'update_date';
+		}
+
+		do_action( 'atum/data_store/before_saving_product_data', $data );
 		
 		if ( $insert ) {
 			$data['product_id'] = $product->get_id();
@@ -120,6 +155,8 @@ trait AtumDataStoreCommonTrait {
 			);
 			
 		}
+
+		do_action( 'atum/data_store/after_saving_product_data', $data );
 		
 	}
 	
@@ -134,14 +171,13 @@ trait AtumDataStoreCommonTrait {
 	public function delete( &$product, $args = array() ) {
 		
 		global $wpdb;
-		$id = $product->get_id();
 
 		/* @noinspection PhpUndefinedClassInspection */
 		parent::delete( $product, $args );
 		
 		// Delete the ATUM data for this product.
 		if ( $args['force_delete'] ) {
-			$wpdb->delete( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, array( 'product_id' => $id ), array( '%d' ) );
+			$wpdb->delete( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, array( 'product_id' => $product->get_id() ), array( '%d' ) );
 		}
 		
 	}

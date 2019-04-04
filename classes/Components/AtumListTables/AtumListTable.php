@@ -539,6 +539,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		do_action( 'atum/list_table/after_single_row', $item, $this );
 
+		// If the current product has been modified within any of the columns, save it.
+		if ( ! empty( $this->product->get_changes() ) ) {
+			$this->product->save();
+		}
+
 		// Add the children products of each inheritable product type.
 		if ( ! $this->allow_calcs || 'bundle' === $type ) {
 
@@ -591,6 +596,12 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$this->single_expandable_row( $this->product, $child_type );
+
+					// If the current product has been modified within any of the columns, save it.
+					if ( ! empty( $this->product->get_changes() ) ) {
+						$this->product->save();
+					}
+
 				}
 			}
 
@@ -1361,7 +1372,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$inbound_stock = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-			$inbound_stock = Helpers::get_inbound_stock_for_product( $this->get_current_product_id() );
+			$inbound_stock = Helpers::get_inbound_stock_for_product( $this->product );
 			$this->increase_total( 'calc_inbound', $inbound_stock );
 		}
 

@@ -483,18 +483,19 @@ class Upgrade {
 		$db_name         = DB_NAME;
 		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		$columns         = array(
-			'inbound_stock'     => 'DOUBLE',
-			'stock_on_hold'     => 'DOUBLE',
-			'reserved_stock'    => 'DOUBLE',
-			'sold_today'        => 'BIGINT(20)',
-			'sales_last_days'   => 'BIGINT(20)',
-			'customer_returns'  => 'BIGINT(20)',
-			'warehouse_damages' => 'BIGINT(20)',
-			'lost_in_post'      => 'BIGINT(20)',
-			'other_logs'        => 'BIGINT(20)',
-			'stock_will_last'   => 'INT(11)',
-			'out_stock_days'    => 'INT(11)',
-			'lost_sales'        => 'BIGINT(20)',
+			'inbound_stock'    => 'DOUBLE',
+			'stock_on_hold'    => 'DOUBLE',
+			'sold_today'       => 'BIGINT(20)',
+			'sales_last_days'  => 'BIGINT(20)',
+			'reserved_stock'   => 'BIGINT(20)',
+			'customer_returns' => 'BIGINT(20)',
+			'warehouse_damage' => 'BIGINT(20)',
+			'lost_in_post'     => 'BIGINT(20)',
+			'other_logs'       => 'BIGINT(20)',
+			'stock_will_last'  => 'INT(11)',
+			'out_stock_days'   => 'INT(11)',
+			'lost_sales'       => 'BIGINT(20)',
+			'update_date'      => 'DATETIME',
 		);
 
 		foreach ( array_keys( $columns ) as $column_name ) {

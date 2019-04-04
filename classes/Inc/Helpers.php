@@ -1484,36 +1484,47 @@ final class Helpers {
 	 *
 	 * @since 1.5.4
 	 *
-	 * @param int $product_id
+	 * @param \WC_Product $product
 	 *
 	 * @return float
 	 */
-	public static function get_inbound_stock_for_product( $product_id ) {
+	public static function get_inbound_stock_for_product( &$product ) {
 
+		$product_id    = $product->get_id();
 		$cache_key     = AtumCache::get_cache_key( 'inbound_stock_for_product', $product_id );
 		$inbound_stock = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
 
-			// Calculate the inbound stock from pending purchase orders.
-			global $wpdb;
+			// Check if the inbound stock is already saved on the ATUM product table.
+			$inbound_stock = $product->get_inbound_stock();
 
-			$sql = $wpdb->prepare( "
-				SELECT SUM(oim2.`meta_value`) AS quantity 			
-				FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-				LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
-				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' 
-				AND oim2.`meta_key` = '_qty'
-				GROUP BY oim.`meta_value`;",
-				PurchaseOrders::POST_TYPE,
-				$product_id
-			); // WPCS: unprepared SQL ok.
+			if ( is_null( $inbound_stock ) ) {
 
-			$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
-			$inbound_stock = $inbound_stock ?: 0;
+				// Calculate the inbound stock from pending purchase orders.
+				global $wpdb;
+
+				$sql = $wpdb->prepare( "
+					SELECT SUM(oim2.`meta_value`) AS quantity 			
+					FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
+					LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
+					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
+					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' 
+					AND oim2.`meta_key` = '_qty'
+					GROUP BY oim.`meta_value`;",
+					PurchaseOrders::POST_TYPE,
+					$product_id
+				); // WPCS: unprepared SQL ok.
+
+				$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
+				$inbound_stock = $inbound_stock ?: 0;
+
+				// Save it for future quicker access.
+				$product->set_inbound_stock( $inbound_stock );
+
+			}
 
 			AtumCache::set_cache( $cache_key, $inbound_stock );
 
