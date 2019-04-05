@@ -494,6 +494,7 @@ class Upgrade {
 			'other_logs'       => 'BIGINT(20)',
 			'out_stock_days'   => 'INT(11)',
 			'lost_sales'       => 'BIGINT(20)',
+			'has_location'     => 'TINYINT(1)',
 			'update_date'      => 'DATETIME',
 		);
 

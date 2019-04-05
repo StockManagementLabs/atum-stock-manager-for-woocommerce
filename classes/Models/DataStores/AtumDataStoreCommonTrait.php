@@ -54,6 +54,7 @@ trait AtumDataStoreCommonTrait {
 			'other_logs',
 			'out_stock_days',
 			'lost_sales',
+			'has_location',
 			'update_date',
 		) );
 
@@ -63,10 +64,11 @@ trait AtumDataStoreCommonTrait {
 			'update_date',
 		) );
 
-		// Switches and/or checkboxes.
+		// Switches, checkboxes and flags.
 		$yes_no_columns = (array) apply_filters( 'atum/data_store/yes_no_columns', array(
 			'atum_controlled',
 			'inheritable',
+			'has_location',
 		) );
 
 		// Values which can be null in the database.
@@ -85,6 +87,7 @@ trait AtumDataStoreCommonTrait {
 			'other_logs',
 			'out_stock_days',
 			'lost_sales',
+			'has_location',
 			'update_date',
 		) );
 

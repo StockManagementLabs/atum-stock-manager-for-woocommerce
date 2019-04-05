@@ -1084,8 +1084,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column_calc_location( $item ) {
 
-		$location_terms       = wp_get_post_terms( $this->get_current_product_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
-		$location_terms_class = ! empty( $location_terms ) ? ' not-empty' : '';
+		$has_location = $this->product->get_has_location();
+
+		if ( is_null( $has_location ) ) {
+			$location_terms = wp_get_post_terms( $this->get_current_product_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
+			$has_location   = ! empty( $location_terms );
+			$this->product->set_has_location( $has_location );
+		}
+
+		$location_terms_class = $has_location ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
 		$locations = '<a href="#" class="show-locations atum-icon atmi-map-marker tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';

@@ -43,6 +43,7 @@ trait AtumProductTrait {
 		'other_logs'            => NULL,
 		'out_stock_days'        => NULL,
 		'lost_sales'            => NULL,
+		'has_location'          => NULL,
 		'update_date'           => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,
@@ -291,6 +292,20 @@ trait AtumProductTrait {
 	 */
 	public function get_lost_sales( $context = 'view' ) {
 		return $this->get_prop( 'lost_sales', $context );
+	}
+
+	/**
+	 * Checks whether the product has any linked location.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string|null 'yes' or 'no' or NULL
+	 */
+	public function get_has_location( $context = 'view' ) {
+		$has_location = $this->get_prop( 'has_location', $context );
+		return is_null( $has_location ) ? $has_location : wc_bool_to_string( $has_location );
 	}
 
 	/**
@@ -576,6 +591,17 @@ trait AtumProductTrait {
 	 */
 	public function set_lost_sales( $lost_sales ) {
 		$this->set_prop( 'lost_sales', wc_stock_amount( $lost_sales ) );
+	}
+
+	/**
+	 * Set whether the product has any linked location.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string|bool $has_location Whether or not the product is inheritable by others.
+	 */
+	public function set_has_location( $has_location ) {
+		$this->set_prop( 'has_location', wc_string_to_bool( $has_location ) );
 	}
 
 	/**
