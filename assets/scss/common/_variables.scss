@@ -82,6 +82,7 @@ $blue-light-2:                          lighten($blue, 55%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
 $orange:                                #EFAF00 !default;
 $orange-light:                          lighten($orange, 40%) !default;
+$orange-dark-light:                     darken($orange-light, 10%);
 $orange-light-2:                        lighten($orange, 48%) !default;
 $red:                                   #FF4848 !default;
 $red-light:                             lighten($red, 30%) !default;
@@ -101,6 +102,7 @@ $colors: map-merge((
 		"orange":          $orange,
 		"red":             $red,
 		"green":           $green,
+		"green-light":      $green-light,
 		"blue-light":      $blue-light,
 		"white":           $white,
 		"gray":            $gray-500,
@@ -138,6 +140,7 @@ $wp-link-hover:                         #00A0D2 !default;
 $wp-input-focus:                        #5B9DD9 !default;
 $wp-pink:                               #E6CCE1 !default;
 $wp-pink-light:                         #F5EBF3 !default;
+$wp-pink-darken:                        darken($wp-pink-light, 8%);
 $wp-pink-lighter:                       #FBF9FB !default;
 $wp-gray-dark:                          #32373C !default;
 $wp-gray-1:                             #999 !default;
@@ -177,6 +180,21 @@ $wc-orange-light:                       #f8dda7 !default;
 $wc-red:                                #761919 !default;
 $wc-red-light:                          #eba3a3 !default;
 $wc-purple:                             #96588a !default;
+
+$wc-colors: () !default;
+$wc-colors: map-merge((
+		"wc-blue-gray":       $wc-blue-gray,
+		"wc-blue-gray-light": $wc-blue-gray-light,
+		"wc-green":           $wc-green,
+		"wc-green-light":     $wc-green-light,
+		"wc-orange":          $wc-orange,
+		"wc-orange-light":    $wc-orange-light,
+		"orange-light-2":     $orange-light-2,
+		"wc-red":             $wc-red,
+		"wc-red-light":       $wc-red-light,
+		"wc-purple":          $wc-purple,
+
+), $wc-colors);
 
 
 // Body

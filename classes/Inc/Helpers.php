@@ -2483,23 +2483,33 @@ final class Helpers {
 		$gray_500       = '#adb5bd';
 
 		if ( 'hc_mode' === $theme_settings ) {
-			$hc_blue      = '#016b7f';
-			$hc_dark_blue = '#27283b';
-			$style        = ":root{
+			$hc_blue       = '#016b7f';
+			$hc_dark_blue  = '#27283b';
+			$hc_blue_light = '#e6fbff';
+			$style         = ":root{
 							--gray-100: white;
 						    --gray-500: $hc_blue;
 						    --gray-600: $hc_dark_blue;
 						    --blue: $hc_blue;
-						    --green-light: #e6fbff;
-						    --blue-light: #e6fbff;
+						    --green-light: $hc_blue_light;
+						    --blue-light: $hc_blue_light;
 						    --light: transparent;
 						    --wp-link: $hc_blue;
 						    --primary: $hc_blue;
 						    --orange: $hc_blue;
+						    --orange-light-2: $hc_blue_light;
 						    --warning: $hc_blue;
 						    --danger: $hc_blue;
 						    --success: $hc_blue;
 						    --info: $hc_blue;
+						    --wp-pink-darken-expanded: $hc_blue;
+						    --orange-dark-light: $hc_blue_light;
+						    --wc-purple-expanded: $hc_blue;
+						    --wc-purple: $hc_blue;
+							--blue-light-expanded: $hc_blue;
+							--green-light-expanded: $hc_blue;
+							--wp-pink-light: $hc_blue_light;
+							--green-light: $hc_blue_light;
 						    --atum-border: $gray_500;
 						    --atum-table-item-heads: $hc_dark_blue;
 						    --atum-table-views-tabs: $hc_dark_blue;

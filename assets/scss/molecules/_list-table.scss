@@ -1754,7 +1754,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.active-row {
-			background-color: var(--blue-light);
+			background-color: var(--blue-light-expanded);
 		}
 		
 		&.expanded {
@@ -1765,7 +1765,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.bundle {
-				background-color: $wc-purple;
+				background-color: var(--wc-purple-expanded);
 			}
 			
 			&.group {
@@ -1809,23 +1809,23 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.bundle {
-				background-color: darken($wp-pink-light, 6%);
+				background-color: var(--wp-pink-darken-expanded);
 				
 				&:nth-child(even) {
-					background-color: $wp-pink-light;
+					background-color: var(--wp-pink-light);
 				}
 				
 				&.active-row:not(.expanded) {
-					background-color: darken($wp-pink-light, 8%);
+					background-color: var(--wp-pink-darken-expanded);
 				}
 				
 				&.expanded {
-					background-color: $wc-purple;
+					background-color: var(--wc-purple);
 				}
 				
 				td.title {
 					.child-arrow {
-						color: $wc-purple;
+						color: var(--wc-purple);
 					}
 				}
 			}
@@ -1839,7 +1839,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.active-row {
-				background-color: var(--blue-light);
+				background-color: var(--blue-light-expanded);
 			}
 			
 			td.title {
@@ -1860,15 +1860,15 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.bundle-item {
-			background-color: $wp-pink-light;
+			background-color: var(--wp-pink-light);
 			
 			&.active-row {
-				background-color: darken($wp-pink-light, 10%);
+				background-color: var(--wp-pink-darken-expanded);
 			}
 
 			td.title {
 				.child-arrow {
-					color: $wp-pink-light;
+					color: var(--wp-pink-light);
 				}
 			}
 		}
@@ -1881,7 +1881,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.active-row {
-				background-color: darken($orange-light, 10%);
+				background-color: var(--orange-dark-light);
 			}
 			
 			td.title {
@@ -2280,7 +2280,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.bundle {
-					color: $wc-purple;
+					color: var(--wc-purple);
 				}
 				
 				&:hover {

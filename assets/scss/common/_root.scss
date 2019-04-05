@@ -16,6 +16,14 @@
 		--#{$color}: #{$value};
 	}
 	
+	@each $color, $value in $wc-colors {
+		--#{$color}: #{$value};
+	}
+	
+	--wp-pink-darken-expanded: $wp-pink-darken;
+	--wc-purple-expanded: $wc-purple;
+	--blue-light-expanded: $blue-light;
+	--green-light-expanded: $green-light;
 	--atum-border: #{$gray-200};
 	--atum-table-item-heads: #{$gray-500};
 	--atum-table-views-tabs: #{$gray-500};
