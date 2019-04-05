@@ -489,17 +489,18 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param array $items      Array of Product IDs we want to calculate sales from.
-	 * @param int   $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime).
-	 * @param int   $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array|int $items      Array of Product IDs (or single ID) we want to calculate sales from.
+	 * @param int       $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime).
+	 * @param int       $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
 	 *
 	 * @return array
 	 */
-	public static function get_sold_last_days( $items, $date_start, $date_end = NULL ) {
+	public static function get_sold_last_days( $items, $date_start, $date_end = NULL, $colums = [ 'qty' ] ) {
 
 		$items_sold = array();
 
-		if ( ! empty( $items ) ) {
+		if ( ! empty( $items ) && ! empty( $colums ) ) {
 
 			global $wpdb;
 
@@ -518,24 +519,71 @@ final class Helpers {
 				AND post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-completed')				  
 			";
 
-			$products = implode( ',', $items );
+			if ( is_array( $items ) ) {
+				$products_where = 'IN (' . implode( ',', $items ) . ')';
+			}
+			else {
+				$products_where = "= $items";
+			}
 
+			$query_columns = $query_joins = [];
+
+			if ( in_array( 'qty', $colums ) ) {
+				$query_columns[] = 'SUM(`mt_qty`.`meta_value`) AS `QTY`';
+				$query_joins[]   = "INNER JOIN `$wpdb->order_itemmeta` AS `mt_qty` ON (`mt_id`.`order_item_id` = `mt_qty`.`order_item_id`) AND `mt_qty`.`meta_key` = '_qty'";
+			}
+
+			if ( in_array( 'total', $colums ) ) {
+				$query_columns[] = 'SUM(`mt_total`.`meta_value`) AS `TOTAL`';
+				$query_joins[]   = "INNER JOIN `$wpdb->order_itemmeta` AS `mt_total` ON (`mt_id`.`order_item_id` = `mt_total`.`order_item_id`) AND `mt_total`.`meta_key` = '_line_total'";
+			}
+
+			if ( in_array( 'prod_id', $colums ) ) {
+				$query_columns[] = 'MAX(CAST(`mt_id`.`meta_value` AS SIGNED)) AS `PROD_ID`';
+			}
+
+			$query_columns_str = implode( ', ', $query_columns );
+			$query_joins_str   = implode( "\n", $query_joins );
+
+			// TODO: USE LOOK UP TABLE AVAILABLE SINCE WC 3.6 FOR BETTER PERFORMANCE.
 			$query = "
-				SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
-				MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
-				FROM `{$wpdb->posts}` AS `ORDERS`
-			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-			    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID` ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-			  	INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-		        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
-				WHERE (`ORDERS`.`ID` IN ($orders_query) AND `META_PROD_ID`.`meta_value` IN ($products)
-			    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
-			    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
-				GROUP BY `META_PROD_ID`.`meta_value`
-				HAVING (`QTY` IS NOT NULL);
+				SELECT $query_columns_str
+				FROM `$wpdb->posts` AS `orders`
+			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)	
+			    INNER JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)		  
+		        $query_joins_str	        
+				WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_value` $products_where
+			    AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')	
+				GROUP BY `mt_id`.`meta_value`
+				HAVING `QTY` IS NOT NULL;
 			";
 
-			$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+			// For single products.
+			if ( ! is_array( $items ) || count( $items ) === 1 ) {
+
+				// When only 1 single result is requested.
+				if ( count( $colums ) === 1 ) {
+					$items_sold = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+				}
+				// Multiple results requested.
+				else {
+					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+				}
+
+			}
+			// For multiple products.
+			else {
+
+				// When only 1 single result for each product is requested.
+				if ( count( $colums ) === 1 ) {
+					$items_sold = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+				}
+				// Multiple results requested for each product.
+				else {
+					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+				}
+
+			}
 
 		}
 
@@ -572,21 +620,15 @@ final class Helpers {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( [ $product->get_id() ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
+				$sold_last_days = self::get_sold_last_days( $product->get_id(), "$out_of_stock_date -$days days", $out_of_stock_date );
 				$lost_sales     = 0;
 
-				if ( ! empty( $sold_last_days ) ) {
+				if ( $sold_last_days > 0 ) {
 
-					$sold_last_days = current( $sold_last_days );
+					$average_sales = $sold_last_days / $days;
+					$price         = $product->get_regular_price();
 
-					if ( ! empty( $sold_last_days['QTY'] ) && $sold_last_days['QTY'] > 0 ) {
-
-						$average_sales = $sold_last_days['QTY'] / $days;
-						$price         = $product->get_regular_price();
-
-						$lost_sales = $days_out_of_stock * $average_sales * $price;
-
-					}
+					$lost_sales = $days_out_of_stock * $average_sales * $price;
 
 				}
 			}
@@ -604,11 +646,11 @@ final class Helpers {
 	 *
 	 * @param int|\WC_Product $product The product ID or product object.
 	 *
-	 * @return bool|int  Returns the number of days or FALSE if is not "Out of Stock".
+	 * @return bool|null  Returns the number of days or NULL if is not "Out of Stock".
 	 */
 	public static function get_product_out_of_stock_days( $product ) {
 
-		$out_of_stock_days = FALSE;
+		$out_of_stock_days = NULL;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			$product = self::get_atum_product( $product );
@@ -2475,6 +2517,19 @@ final class Helpers {
 
 		return $bundle_items;
 
+	}
+
+	/**
+	 * Checks if the passed product was not updated recently and requires a new update
+	 *
+	 * @param \WC_Product $product      The product to check.
+	 * @param string      $time_frame   Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 *
+	 * @return bool
+	 */
+	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
+
+		return is_null( $product->get_update_date() ) || strtotime( $product->get_update_date() ) <= strtotime( $time_frame );
 	}
 
 }

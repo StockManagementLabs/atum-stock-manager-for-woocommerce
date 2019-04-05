@@ -22,6 +22,7 @@ use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Settings\Settings;
 
 
 class ListTable extends AtumListTable {
@@ -32,13 +33,13 @@ class ListTable extends AtumListTable {
 	 * @var string
 	 */
 	protected $day;
-	
+
 	/**
-	 * Values for the calculated columns form current page products
+	 * Number of days for Sold Last Days calculations
 	 *
-	 * @var array
+	 * @var int
 	 */
-	protected $calc_columns = array();
+	protected static $sale_days;
 
 	/**
 	 * The columns hidden by default
@@ -112,7 +113,8 @@ class ListTable extends AtumListTable {
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
 		
 		// TODO: Allow to specify the day of query in constructor atts.
-		$this->day = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+		$this->day       = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+		self::$sale_days = Helpers::get_sold_last_days_option();
 
 		// Prepare the table columns.
 		$args['table_columns'] = self::get_table_columns();
@@ -228,9 +230,6 @@ class ListTable extends AtumListTable {
 	 */
 	public static function get_table_columns() {
 
-		// Get the ndays set to last sales column.
-		$sold_last_days = Helpers::get_sold_last_days_option();
-
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
@@ -259,7 +258,7 @@ class ListTable extends AtumListTable {
 			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'calc_other'            => __( 'Other', ATUM_TEXT_DOMAIN ),
 			/* translators: the number of sales during last days */
-			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . $sold_last_days . '</span>' ),
+			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', self::$sale_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . self::$sale_days . '</span>' ),
 			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
@@ -530,7 +529,14 @@ class ListTable extends AtumListTable {
 			$sold_today = self::EMPTY_COL;
 		}
 		else {
-			$sold_today = empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
+
+			$sold_today = $this->product->get_sold_today();
+
+			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
+				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today 00:00:00', $this->day );
+				$this->product->set_sold_today( $sold_today );
+			}
+
 		}
 
 		$this->increase_total( 'calc_sold_today', $sold_today );
@@ -624,7 +630,20 @@ class ListTable extends AtumListTable {
 		}
 		else {
 
-			$sales_last_ndays = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'];
+			$sale_days        = self::$sale_days;
+			$sales_last_ndays = $this->product->get_sales_last_days();
+
+			if (
+				is_null( $sales_last_ndays ) || is_null( $this->product->get_update_date() ) ||
+				Settings::DEFAULT_SALE_DAYS !== $sale_days ||
+				strtotime( $this->product->get_update_date() ) <= strtotime( '-1 day' )
+			) {
+
+				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
+				$this->product->set_sales_last_days( $sales_last_ndays );
+
+			}
+
 			if ( $add_to_total ) {
 				$this->increase_total( 'calc_sales_last_ndays', $sales_last_ndays );
 			}
@@ -646,8 +665,6 @@ class ListTable extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_will_last( $item ) {
-
-		$sold_last_days = Helpers::get_sold_last_days_option();
 			
 		$will_last = self::EMPTY_COL;
 
@@ -656,7 +673,8 @@ class ListTable extends AtumListTable {
 			$stock = $this->product->get_stock_quantity();
 
 			if ( $stock > 0 && $sales > 0 ) {
-				$will_last = ceil( $stock / ( $sales / $sold_last_days ) );
+				$sale_days = max( 1, self::$sale_days );
+				$will_last = ceil( $stock / ( $sales / $sale_days ) );
 			}
 			elseif ( $stock > 0 ) {
 				$will_last = '>30';
@@ -681,7 +699,14 @@ class ListTable extends AtumListTable {
 		$out_of_stock_days = '';
 
 		if ( $this->allow_calcs ) {
-			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
+
+			$out_of_stock_days = $this->product->get_out_stock_days();
+
+			if ( is_null( $out_of_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
+				$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
+				$this->product->set_out_stock_days( $out_of_stock_days );
+			}
+
 		}
 
 		$out_of_stock_days = is_numeric( $out_of_stock_days ) ? $out_of_stock_days : self::EMPTY_COL;
@@ -704,7 +729,14 @@ class ListTable extends AtumListTable {
 		$lost_sales = '';
 
 		if ( $this->allow_calcs ) {
-			$lost_sales = Helpers::get_product_lost_sales( $this->product );
+
+			$lost_sales = $this->product->get_lost_sales();
+
+			if ( is_null( $this->product->get_lost_sales() ) || Helpers::is_product_data_outdated( $this->product ) ) {
+				$lost_sales = Helpers::get_product_lost_sales( $this->product );
+				$this->product->set_lost_sales( $this->product );
+			}
+
 		}
 
 		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales, [ 'trim_zeros' => TRUE ] ) : self::EMPTY_COL;
@@ -723,24 +755,6 @@ class ListTable extends AtumListTable {
 
 		parent::prepare_items();
 		$calc_products = array_merge( $this->current_products, $this->children_products );
-
-		// Calc products sold today (since midnight).
-		$rows = Helpers::get_sold_last_days( $calc_products, 'today 00:00:00', $this->day );
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_today'] = $row['QTY'];
-			}
-		}
-
-		// Calc products sold during the last ndays_settings.
-		$sold_last_days = Helpers::get_sold_last_days_option();
-		$rows           = Helpers::get_sold_last_days( $calc_products, "$this->day  -$sold_last_days days", $this->day );
-		
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays'] = $row['QTY'];
-			}
-		}
 
 		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products, $this->day );
 		

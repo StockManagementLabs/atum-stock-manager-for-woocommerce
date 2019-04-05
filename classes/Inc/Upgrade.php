@@ -492,7 +492,6 @@ class Upgrade {
 			'warehouse_damage' => 'BIGINT(20)',
 			'lost_in_post'     => 'BIGINT(20)',
 			'other_logs'       => 'BIGINT(20)',
-			'stock_will_last'  => 'INT(11)',
 			'out_stock_days'   => 'INT(11)',
 			'lost_sales'       => 'BIGINT(20)',
 			'update_date'      => 'DATETIME',

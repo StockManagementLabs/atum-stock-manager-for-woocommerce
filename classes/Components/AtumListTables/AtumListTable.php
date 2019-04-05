@@ -723,10 +723,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				echo '</th>';
 
 			}
-			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), '_column_' . $column_name ) ) {
+			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), "_column_$column_name" ) ) {
 
 				echo call_user_func(
-					array( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), '_column_' . $column_name ),
+					array( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), "_column_$column_name" ),
 					$item,
 					$classes,
 					$data,
@@ -734,10 +734,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				); // WPCS: XSS ok.
 
 			}
-			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), 'column_' . $column_name ) ) {
+			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), "column_$column_name" ) ) {
 
 				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), 'column_' . $column_name ), $item ); // WPCS: XSS ok.
+				echo call_user_func( array( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), "column_$column_name" ), $item ); // WPCS: XSS ok.
 				echo '</td>';
 
 			}

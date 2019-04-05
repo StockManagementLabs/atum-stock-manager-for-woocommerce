@@ -41,10 +41,9 @@ trait AtumProductTrait {
 		'warehouse_damage'      => NULL,
 		'lost_in_post'          => NULL,
 		'other_logs'            => NULL,
-		'stock_will_last'       => NULL,
 		'out_stock_days'        => NULL,
 		'lost_sales'            => NULL,
-		'updated'               => NULL,
+		'update_date'           => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,
 		'available_to_purchase' => NULL,
@@ -266,19 +265,6 @@ trait AtumProductTrait {
 	 */
 	public function get_other_logs( $context = 'view' ) {
 		return $this->get_prop( 'other_logs', $context );
-	}
-
-	/**
-	 * Returns the product's stock will last days.
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return int|null
-	 */
-	public function get_stock_will_last( $context = 'view' ) {
-		return $this->get_prop( 'stock_will_last', $context );
 	}
 
 	/**
@@ -568,17 +554,6 @@ trait AtumProductTrait {
 	 */
 	public function set_other_logs( $other_logs ) {
 		$this->set_prop( 'other_logs', wc_stock_amount( $other_logs ) );
-	}
-
-	/**
-	 * Set stock will last for the current product.
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param int $stock_will_last
-	 */
-	public function set_stock_will_last( $stock_will_last ) {
-		$this->set_prop( 'stock_will_last', wc_stock_amount( $stock_will_last ) );
 	}
 
 	/**
