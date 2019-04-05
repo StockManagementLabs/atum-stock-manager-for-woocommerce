@@ -541,7 +541,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// If the current product has been modified within any of the columns, save it.
 		if ( ! empty( $this->product->get_changes() ) ) {
-			$this->product->save();
+			$this->product->save_atum_data();
 		}
 
 		// Add the children products of each inheritable product type.
@@ -599,7 +599,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					// If the current product has been modified within any of the columns, save it.
 					if ( ! empty( $this->product->get_changes() ) ) {
-						$this->product->save();
+						$this->product->save_atum_data();
 					}
 
 				}

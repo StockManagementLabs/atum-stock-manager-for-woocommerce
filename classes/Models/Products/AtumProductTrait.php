@@ -49,6 +49,7 @@ trait AtumProductTrait {
 		'minimum_threshold'     => NULL,
 		'available_to_purchase' => NULL,
 		'selling_priority'      => NULL,
+		'calculated_stock'      => NULL,
 	);
 
 
@@ -369,6 +370,20 @@ trait AtumProductTrait {
 		return $this->get_prop( 'selling_priority', $context );
 	}
 
+	/**
+	 * Returns the product's calculated stock prop.
+	 *
+	 * @since   1.5.8
+	 * @package Product Levels
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|null
+	 */
+	public function get_calculated_stock( $context = 'view' ) {
+		return $this->get_prop( 'calculated_stock', $context );
+	}
+
 
 	/*
 	|----------------------------------------------------------------------------
@@ -455,10 +470,10 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $out_stock_threshold Empty string if value not set.
 	 */
-	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_out_stock_threshold( $out_stock_threshold ) {
+		$this->set_prop( 'out_stock_threshold', is_null( $out_stock_threshold ) || '' === $out_stock_threshold ? '' : wc_stock_amount( $out_stock_threshold ) );
 	}
 
 	/**
@@ -628,10 +643,10 @@ trait AtumProductTrait {
 	 * @since   1.5.4
 	 * @package Product Levels
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $minimum_threshold Empty string if value not set.
 	 */
-	public function set_minimum_threshold( $amount ) {
-		$this->set_prop( 'minimum_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_minimum_threshold( $minimum_threshold ) {
+		$this->set_prop( 'minimum_threshold', is_null( $minimum_threshold ) || '' === $minimum_threshold ? '' : wc_stock_amount( $minimum_threshold ) );
 	}
 
 	/**
@@ -640,10 +655,10 @@ trait AtumProductTrait {
 	 * @since   1.5.4
 	 * @package Product Levels
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $available_to_purchase Empty string if value not set.
 	 */
-	public function set_available_to_purchase( $amount ) {
-		$this->set_prop( 'available_to_purchase', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_available_to_purchase( $available_to_purchase ) {
+		$this->set_prop( 'available_to_purchase', is_null( $available_to_purchase ) || '' === $available_to_purchase ? '' : wc_stock_amount( $available_to_purchase ) );
 	}
 
 	/**
@@ -652,11 +667,24 @@ trait AtumProductTrait {
 	 * @since   1.5.4
 	 * @package Product Levels
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $selling_priority Empty string if value not set.
 	 */
-	public function set_selling_priority( $amount ) {
-		$this->set_prop( 'selling_priority', is_null( $amount ) || '' === $amount ? '' : absint( $amount ) );
+	public function set_selling_priority( $selling_priority ) {
+		$this->set_prop( 'selling_priority', is_null( $selling_priority ) || '' === $selling_priority ? '' : absint( $selling_priority ) );
 	}
+
+	/**
+	 * Set calculated stock for the current product.
+	 *
+	 * @since   1.5.8
+	 * @package Product Levels
+	 *
+	 * @param int|string $calculated_stock Empty string if value not set.
+	 */
+	public function set_calculated_stock( $calculated_stock ) {
+		$this->set_prop( 'calculated_stock', is_null( $calculated_stock ) || '' === $calculated_stock ? '' : wc_stock_amount( $calculated_stock ) );
+	}
+
 
 
 	/**
