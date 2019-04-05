@@ -101,13 +101,18 @@ $colors: map-merge((
 		"blue-gray-light": $blue-gray-light,
 		"orange":          $orange,
 		"red":             $red,
+		"red-light":       $red-light,
+		"red-light-2":     $red-light-2,
 		"green":           $green,
 		"green-light":      $green-light,
 		"blue-light":      $blue-light,
 		"white":           $white,
 		"gray":            $gray-500,
 		"gray-light":      $gray-200,
-		"gray-dark":       $gray-800
+		"gray-dark":       $gray-800,
+		"purple":          $purple,
+		"purple-light":    $purple-light,
+		"purple-pl":       $purple-pl,
 ), $colors);
 
 $primary:                               $blue !default;

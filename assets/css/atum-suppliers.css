@@ -8,6 +8,78 @@
  */
 
  @charset "UTF-8";
+:root {
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --blue: #00B8DB;
+  --blue-gray-light: #E3E8F5;
+  --orange: #EFAF00;
+  --red: #FF4848;
+  --red-light: #ffe1e1;
+  --red-light-2: #fff5f5;
+  --green: #69C61D;
+  --green-light: #d5f5ba;
+  --blue-light: #dbf9ff;
+  --white: #fff;
+  --gray: #adb5bd;
+  --gray-light: #e9ecef;
+  --gray-dark: #343a40;
+  --purple: #BA7DF7;
+  --purple-light: #edddfd;
+  --purple-pl: #9357cc;
+  --primary: #00B8DB;
+  --secondary: #6c757d;
+  --success: #69C61D;
+  --info: #E3E8F5;
+  --warning: #EFAF00;
+  --danger: #FF4848;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --wp-link: #0073AA;
+  --wp-link-hover: #00A0D2;
+  --wp-input-focus: #5B9DD9;
+  --wp-pink: #E6CCE1;
+  --wp-pink-light: #F5EBF3;
+  --wp-pink-lighter: #FBF9FB;
+  --wp-gray-dark: #32373C;
+  --wp-gray-1: #999;
+  --wp-gray-3: #B4B9BE;
+  --wp-gray-4: #DDD;
+  --wp-gray-5: #E5E5E5;
+  --wp-gray-6: #f9f9f9;
+  --wp-gray-7: #888;
+  --wc-blue-gray: #2e4453;
+  --wc-blue-gray-light: #C8D7E1;
+  --wc-green: #5B841B;
+  --wc-green-light: #C6E1C6;
+  --wc-orange: #94660c;
+  --wc-orange-light: #f8dda7;
+  --orange-light-2: #fff8e5;
+  --wc-red: #761919;
+  --wc-red-light: #eba3a3;
+  --wc-purple: #96588a;
+  --wp-pink-darken-expanded: $wp-pink-darken;
+  --wc-purple-expanded: $wc-purple;
+  --blue-light-expanded: $blue-light;
+  --green-light-expanded: $green-light;
+  --atum-border: #e9ecef;
+  --atum-table-item-heads: #adb5bd;
+  --atum-table-views-tabs: #adb5bd;
+  --atum-select2-border: #e9ecef;
+  --atum-input-placeholder: #adb5bd;
+  --atum-pagination-bg: #e9ecef;
+  --atum-pagination-border: transparent;
+  --atum-pagination-border-disabled: transparent;
+  --order-green-light: #d5f5ba;
+}
+
 body .select2-container.atum-select2, body .select2-container.atum-enhanced-select {
   font-size: 14px;
   -webkit-box-sizing: border-box;
@@ -507,6 +579,11 @@ body .select2-container--default .select2-results__option .select2-results__opti
 body .select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
   margin-left: -5em;
   padding-left: 6em;
+}
+
+body .select2-container--default .select2-results__option .select2-results__option--highlighted {
+  background-color: var(--blue-light);
+  color: var(--blue);
 }
 
 body .select2-container--default .select2-results__group {
@@ -4825,7 +4902,7 @@ table.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-lis
 }
 
 table.atum-list-table tr.active-row, .floatThead-container tr.active-row, .inbound-stock-list tr.active-row, table.wp-list-table tr.active-row {
-  background-color: var(--blue-light-expanded);
+  background-color: var(--blue-light);
 }
 
 table.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-stock-list tr.expanded, table.wp-list-table tr.expanded {
@@ -4914,7 +4991,7 @@ table.atum-list-table tr.bundle-item, .floatThead-container tr.bundle-item, .inb
   background-color: var(--wp-pink-light);
 }
 
-table.atum-list-table tr.bundle-item.active-row, .floatThead-container tr.bundle-item.active-row, .inbound-stock-list tr.bundle-item.active-row, table.wp-list-table tr.bundle-item.active-row {
+table.atum-list-table tr.bundle-item.active-row:not(.expandable), .floatThead-container tr.bundle-item.active-row:not(.expandable), .inbound-stock-list tr.bundle-item.active-row:not(.expandable), table.wp-list-table tr.bundle-item.active-row:not(.expandable) {
   background-color: var(--wp-pink-darken-expanded);
 }
 

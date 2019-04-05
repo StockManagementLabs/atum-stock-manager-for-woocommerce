@@ -3994,7 +3994,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Get visual mode style selected.
 		wp_add_inline_style(
 			'atum-list',
-			Helpers::get_visual_mode_style( 'hc' )
+			Helpers::get_visual_mode_style()
 		);
 
 		wp_enqueue_style( 'atum-list' );

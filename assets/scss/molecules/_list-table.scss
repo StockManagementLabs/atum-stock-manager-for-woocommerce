@@ -1754,7 +1754,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.active-row {
-			background-color: var(--blue-light-expanded);
+			background-color: var(--blue-light);
 		}
 		
 		&.expanded {
@@ -1862,7 +1862,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.bundle-item {
 			background-color: var(--wp-pink-light);
 			
-			&.active-row {
+			&.active-row:not(.expandable) {
 				background-color: var(--wp-pink-darken-expanded);
 			}
 

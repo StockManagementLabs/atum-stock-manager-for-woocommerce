@@ -22,6 +22,8 @@
   --blue-gray-light: #E3E8F5;
   --orange: #EFAF00;
   --red: #FF4848;
+  --red-light: #ffe1e1;
+  --red-light-2: #fff5f5;
   --green: #69C61D;
   --green-light: #d5f5ba;
   --blue-light: #dbf9ff;
@@ -29,6 +31,9 @@
   --gray: #adb5bd;
   --gray-light: #e9ecef;
   --gray-dark: #343a40;
+  --purple: #BA7DF7;
+  --purple-light: #edddfd;
+  --purple-pl: #9357cc;
   --primary: #00B8DB;
   --secondary: #6c757d;
   --success: #69C61D;
@@ -72,6 +77,7 @@
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
   --atum-pagination-border-disabled: transparent;
+  --order-green-light: #d5f5ba;
 }
 
 .color-primary {
@@ -2375,6 +2381,11 @@ body .select2-container--default .select2-results__option .select2-results__opti
 body .select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
   margin-left: -5em;
   padding-left: 6em;
+}
+
+body .select2-container--default .select2-results__option .select2-results__option--highlighted {
+  background-color: var(--blue-light);
+  color: var(--blue);
 }
 
 body .select2-container--default .select2-results__group {
@@ -6778,7 +6789,7 @@ table.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-lis
 }
 
 table.atum-list-table tr.active-row, .floatThead-container tr.active-row, .inbound-stock-list tr.active-row, table.wp-list-table tr.active-row {
-  background-color: var(--blue-light-expanded);
+  background-color: var(--blue-light);
 }
 
 table.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-stock-list tr.expanded, table.wp-list-table tr.expanded {
@@ -6867,7 +6878,7 @@ table.atum-list-table tr.bundle-item, .floatThead-container tr.bundle-item, .inb
   background-color: var(--wp-pink-light);
 }
 
-table.atum-list-table tr.bundle-item.active-row, .floatThead-container tr.bundle-item.active-row, .inbound-stock-list tr.bundle-item.active-row, table.wp-list-table tr.bundle-item.active-row {
+table.atum-list-table tr.bundle-item.active-row:not(.expandable), .floatThead-container tr.bundle-item.active-row:not(.expandable), .inbound-stock-list tr.bundle-item.active-row:not(.expandable), table.wp-list-table tr.bundle-item.active-row:not(.expandable) {
   background-color: var(--wp-pink-darken-expanded);
 }
 

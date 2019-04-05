@@ -385,6 +385,11 @@ class Suppliers {
 				AtumMarketingPopup::maybe_enqueue_scripts();
 
 				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array( 'sweetalert2' ), ATUM_VERSION );
+				// Get visual mode style selected.
+				wp_add_inline_style(
+					'atum-suppliers',
+					Helpers::get_visual_mode_style()
+				);
 				wp_enqueue_style( 'atum-suppliers' );
 
 				if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {

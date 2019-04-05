@@ -29,7 +29,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -7px;
 			margin-left: -6px;
-			border-top-color: $white;
+			border-top-color: var(--white);
 		}
 	}
 	
@@ -39,7 +39,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -5px;
 			margin-left: -6px;
-			border-bottom-color: $white;
+			border-bottom-color: var(--white);
 		}
 	}
 	
@@ -49,7 +49,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -5px;
-			border-right-color: $white;
+			border-right-color: var(--white);
 		}
 	}
 	
@@ -59,7 +59,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -7px;
-			border-left-color: $white;
+			border-left-color: var(--white);
 		}
 	}
 }
@@ -69,10 +69,10 @@ img.tips {
 }
 
 #tiptip_content {
-	color: $gray-600;
+	color: var(--gray-600);
 	font-size: 0.8em;
 	max-width: 150px;
-	background: $white;
+	background: var(--white);
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
@@ -80,7 +80,7 @@ img.tips {
 	
 	code {
 		padding: 1px;
-		background: $wp-gray-7;
+		background: var(--wp-gray-7);
 	}
 }
 
@@ -137,8 +137,8 @@ table.wp-list-table {
 		.order-status {
 			display: inline-flex;
 			line-height: 2.5em;
-			color: $secondary;
-			background: $light;
+			color: var(--secondary);
+			background: var(--light);
 			border-radius: 4px;
 			margin: -.25em 0;
 			cursor: inherit !important;
@@ -148,39 +148,39 @@ table.wp-list-table {
 			line-height: 26px;
 			
 			&.status-completed, &.status-received {
-				background: $green-light;
-				color: $green;
+				background: var(--order-green-light);
+				color: var(--green);
 			}
 			
 			&.status-on-hold {
-				background: $wc-orange-light;
-				color: $wc-orange;
+				background: var(--wc-orange-light);
+				color: var(--wc-orange);
 			}
 			
 			&.status-failed, &.status-trash {
-				background: $wc-red-light;
-				color: $wc-red;
+				background: var(--wc-red-light);
+				color: var(--wc-red);
 			}
 			
 			&.status-pending {
-				background: $red-light;
-				color: $red;
+				background: var(--red-light);
+				color: var(--red);
 			}
 			
 			
 			&.status-ordered {
-				background: $orange-light;
-				color: $orange;
+				background: var(--orange-light);
+				color: var(--orange);
 			}
 			
 			&.status-onthewayin {
-				background: $blue-light;
-				color: $blue;
+				background: var(--blue-light);
+				color: var(--blue);
 			}
 			
 			&.status-receiving {
-				background: $purple-light;
-				color: $purple;
+				background: var(--purple-light);
+				color: var(--purple);
 			}
 			
 			> span {
@@ -192,6 +192,13 @@ table.wp-list-table {
 		}
 	}
 	
+	tbody > :nth-child(odd), ul.striped > :nth-child(odd), .alternate {
+		background-color: var(--wp-gray-6);
+		&.active-row {
+			background-color: var(--blue-light);
+		}
+	}
+	
 	td.column-status {
 		padding-top: 9px;
 	}
@@ -200,7 +207,7 @@ table.wp-list-table {
 		.note-on {
 			@include ir();
 			margin: 0 auto;
-			color: $wp-gray-1;
+			color: var(--wp-gray-1);
 			
 			&:after {
 				font-family: $atum-icon-font;
@@ -220,7 +227,7 @@ table.wp-list-table {
 		
 		.pdf {
 			i {
-				color: $danger;
+				color: var(--danger);
 			}
 		}
 		
@@ -231,7 +238,7 @@ table.wp-list-table {
 	}
 	
 	.row-actions, span.na {
-		color: $wp-gray-1;
+		color: var(--wp-gray-1);
 	}
 	
 	.notes_head, .notes_head, .status_head {

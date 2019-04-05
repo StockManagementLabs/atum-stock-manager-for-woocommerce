@@ -189,6 +189,8 @@
   --blue-gray-light: #E3E8F5;
   --orange: #EFAF00;
   --red: #FF4848;
+  --red-light: #ffe1e1;
+  --red-light-2: #fff5f5;
   --green: #69C61D;
   --green-light: #d5f5ba;
   --blue-light: #dbf9ff;
@@ -196,6 +198,9 @@
   --gray: #adb5bd;
   --gray-light: #e9ecef;
   --gray-dark: #343a40;
+  --purple: #BA7DF7;
+  --purple-light: #edddfd;
+  --purple-pl: #9357cc;
   --primary: #00B8DB;
   --secondary: #6c757d;
   --success: #69C61D;
@@ -239,6 +244,7 @@
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
   --atum-pagination-border-disabled: transparent;
+  --order-green-light: #d5f5ba;
 }
 
 .btn {
@@ -1472,6 +1478,11 @@ body .select2-container--default .select2-results__option .select2-results__opti
 body .select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
   margin-left: -5em;
   padding-left: 6em;
+}
+
+body .select2-container--default .select2-results__option .select2-results__option--highlighted {
+  background-color: var(--blue-light);
+  color: var(--blue);
 }
 
 body .select2-container--default .select2-results__group {

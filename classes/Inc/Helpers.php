@@ -2471,11 +2471,9 @@ final class Helpers {
 	 *
 	 * @since 1.5.7.3
 	 *
-	 * @param string $mode
-	 *
 	 * @return string
 	 */
-	public static function get_visual_mode_style( $mode ) {
+	public static function get_visual_mode_style() {
 
 		$style = '';
 
@@ -2494,6 +2492,7 @@ final class Helpers {
 						    --green-light: $hc_blue_light;
 						    --blue-light: $hc_blue_light;
 						    --light: transparent;
+						    --wp-gray-6: transparent;
 						    --wp-link: $hc_blue;
 						    --primary: $hc_blue;
 						    --orange: $hc_blue;
