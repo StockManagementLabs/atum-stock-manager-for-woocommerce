@@ -7,7 +7,7 @@ Tested up to: 5.1.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.5.7
-Stable tag: 1.5.7.2
+Stable tag: 1.5.7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.7.3`
+
+*2019-04-06*
+
+**Changes**
+
+* Added bundle color and icon to export data PDF.
+* Added bundle items to export data PDF.
+* Updated to latest version of TypeScript.
+* Added option to only add the tooltip if the container is smaller than the content.
+
+**Fixes**
+
+* Print correct PO  stock quantities in order notes.
+* Deleted unused file.
+* Fixed increase/decrease stock not working in Inventory Logs.
+* Marketing popup css fixes.
+* Cast to array to avoid issues on some scenarios.
 
 ---
 
