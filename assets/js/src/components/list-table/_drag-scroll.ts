@@ -9,9 +9,9 @@ import dragscroll from '../../../vendor/dragscroll.min';         // A patched fo
 import Hammer from 'hammerjs/hammer.min';                        // From node_modules
 
 import Globals from './_globals';
+import Popover from '../_popover';
 import Tooltip from '../_tooltip';
 import { Utils } from '../../utils/_utils';
-import Popover from '../_popover';
 
 export default class DragScroll {
 	
