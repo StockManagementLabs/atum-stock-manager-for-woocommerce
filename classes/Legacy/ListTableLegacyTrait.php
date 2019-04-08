@@ -861,7 +861,7 @@ trait ListTableLegacyTrait {
 				}
 
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
-				$this->children_products = array_merge( $this->children_products, $children_ids );
+				$this->children_products = array_unique( array_merge( $this->children_products, $children_ids ) );
 
 				return $children_ids;
 
@@ -906,7 +906,7 @@ trait ListTableLegacyTrait {
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
-				$this->children_products = array_merge( $this->children_products, $bundle_children );
+				$this->children_products = array_unique( array_merge( $this->children_products, array_map( 'intval', $bundle_children ) ) );
 
 				return $bundle_children;
 

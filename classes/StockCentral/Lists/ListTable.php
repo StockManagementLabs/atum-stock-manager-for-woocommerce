@@ -634,9 +634,8 @@ class ListTable extends AtumListTable {
 			$sales_last_ndays = $this->product->get_sales_last_days();
 
 			if (
-				is_null( $sales_last_ndays ) || is_null( $this->product->get_update_date() ) ||
-				Settings::DEFAULT_SALE_DAYS !== $sale_days ||
-				strtotime( $this->product->get_update_date() ) <= strtotime( '-1 day' )
+				is_null( $sales_last_ndays ) || Settings::DEFAULT_SALE_DAYS !== $sale_days ||
+				Helpers::is_product_data_outdated( $this->product )
 			) {
 
 				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
@@ -732,9 +731,9 @@ class ListTable extends AtumListTable {
 
 			$lost_sales = $this->product->get_lost_sales();
 
-			if ( is_null( $this->product->get_lost_sales() ) || Helpers::is_product_data_outdated( $this->product ) ) {
+			if ( is_null( $lost_sales ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$lost_sales = Helpers::get_product_lost_sales( $this->product );
-				$this->product->set_lost_sales( $this->product );
+				$this->product->set_lost_sales( $lost_sales );
 			}
 
 		}
@@ -754,7 +753,7 @@ class ListTable extends AtumListTable {
 	public function prepare_items() {
 
 		parent::prepare_items();
-		$calc_products = array_merge( $this->current_products, $this->children_products );
+		$calc_products = array_unique( array_merge( $this->current_products, $this->children_products ) );
 
 		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products, $this->day );
 		

@@ -2570,6 +2570,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
+			$products = (array) $products;
+
 			/*
 			 * Products in stock
 			 */
@@ -2603,13 +2605,13 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			$products_in_stock   = $products_in_stock->posts;
+			$products_in_stock   = (array) $products_in_stock->posts;
 			$this->wc_query_data = $temp_wc_query_data; // Restore the original value.
 
-			$this->id_views['in_stock']          = (Array) $products_in_stock;
-			$this->count_views['count_in_stock'] = is_array( $products_in_stock ) ? count( $products_in_stock ) : 0;
+			$this->id_views['in_stock']          = $products_in_stock;
+			$this->count_views['count_in_stock'] = count( $products_in_stock );
 
-			$products_not_stock = array_diff( (Array) $products, (Array) $products_in_stock, (Array) $products_unmanaged );
+			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
 
 			/**
 			 * Products on Back Order
@@ -2654,11 +2656,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			$products_back_order = $products_back_order->posts;
+			$products_back_order = (array) $products_back_order->posts;
 			$this->wc_query_data = $temp_wc_query_data;
 
-			$this->id_views['back_order']          = (Array) $products_back_order;
-			$this->count_views['count_back_order'] = is_array( $products_back_order ) ? count( $products_back_order ) : 0;
+			$this->id_views['back_order']          = $products_back_order;
+			$this->count_views['count_back_order'] = count( $products_back_order );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
 			if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
@@ -2721,15 +2723,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 
-				$this->id_views['low_stock']          = (Array) $products_low_stock;
-				$this->count_views['count_low_stock'] = is_array( $products_low_stock ) ? count( $products_low_stock ) : 0;
+				$this->id_views['low_stock']          = (array) $products_low_stock;
+				$this->count_views['count_low_stock'] = count( $products_low_stock );
 
 			}
 
 			/**
 			 * Products out of stock
 			 */
-			$products_out_stock = array_diff( (Array) $products_not_stock, (Array) $products_back_order );
+			$products_out_stock = array_diff( $products_not_stock, $products_back_order );
 
 			$this->id_views['out_stock']          = $products_out_stock;
 			$this->count_views['count_out_stock'] = max( 0, $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'] );
@@ -4265,7 +4267,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
-				$this->children_products = array_merge( $this->children_products, $children_ids );
+				$this->children_products = array_unique( array_merge( $this->children_products, $children_ids ) );
 
 				AtumCache::set_cache( $cache_key, $children_ids );
 
@@ -4312,7 +4314,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
-				$this->children_products = array_merge( $this->children_products, $bundle_children );
+				$this->children_products = array_unique( array_merge( $this->children_products, array_map( 'intval', $bundle_children ) ) );
+
 				return $bundle_children;
 
 			}

@@ -555,7 +555,7 @@ final class Helpers {
 				WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_value` $products_where
 			    AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')	
 				GROUP BY `mt_id`.`meta_value`
-				HAVING `QTY` IS NOT NULL;
+				HAVING (`QTY` IS NOT NULL);
 			";
 
 			// For single products.
