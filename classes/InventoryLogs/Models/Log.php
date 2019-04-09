@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -15,9 +15,23 @@ namespace Atum\InventoryLogs\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Helpers;
 
 
 class Log extends AtumOrderModel {
+
+	/**
+	 * ATUM product data's DB columns associated to each log type
+	 *
+	 * @var array
+	 */
+	protected static $log_type_columns = array(
+		'reserved-stock'   => 'reserved_stock',
+		'customer-returns' => 'customer_returns',
+		'warehouse-damage' => 'warehouse_damage',
+		'lost-in-post'     => 'lost_in_post',
+		'other'            => 'other_logs',
+	);
 
 	/**
 	 * Log constructor
@@ -31,6 +45,9 @@ class Log extends AtumOrderModel {
 
 		// Add the buttons for increasing/decreasing the Log products' stock.
 		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
+
+		// Handle the inventory log type changes to update the associated ATUM product data.
+		add_action( 'atum/order/before_save_meta_type', array( $this, 'handle_log_type_changes' ), 10, 2 );
 
 		parent::__construct( $id, $read_items );
 
@@ -109,6 +126,18 @@ class Log extends AtumOrderModel {
 			'lost-in-post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'other'            => __( 'Other', ATUM_TEXT_DOMAIN ),
 		) );
+
+	}
+
+	/**
+	 * Getter for the log_type_columns prop
+	 *
+	 * @since 1.5.8
+	 *
+	 * @return array
+	 */
+	public static function get_log_type_columns() {
+		return self::$log_type_columns;
 	}
 
 	/**
@@ -337,6 +366,58 @@ class Log extends AtumOrderModel {
 
 			default:
 				return '';
+		}
+
+	}
+
+	/**
+	 * Handle the inventory log type changes to update the associated ATUM product data.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $new_log_type
+	 * @param Log    $log
+	 */
+	public function handle_log_type_changes( $new_log_type, $log ) {
+
+		$current_log_type = $log->get_log_type();
+
+		// Only needed when there is a change.
+		if ( $current_log_type !== $new_log_type ) {
+
+			$items = $log->get_items();
+
+			foreach ( $items as $item ) {
+
+				/**
+				 * Variable definition
+				 *
+				 * @var LogItem $item
+				 */
+				$product_id = $item->get_meta( '_variation_id' ) ?: $item->get_meta( '_product_id' );
+				$product    = Helpers::get_atum_product( $product_id );
+				$item_qty   = floatval( $item->get_meta( '_qty' ) );
+
+				if ( is_a( $product, '\WC_Product' ) && $item_qty > 0 ) {
+
+					// First deduct the items from the old log type prop.
+					if ( isset( self::$log_type_columns[ $current_log_type ] ) && is_callable( array( $product, 'get_' . self::$log_type_columns[ $current_log_type ] ) ) ) {
+						$old_log_type_val = call_user_func( array( $product, 'get_' . self::$log_type_columns[ $current_log_type ] ) );
+						call_user_func( array( $product, 'set_' . self::$log_type_columns[ $current_log_type ] ), max( $old_log_type_val - $item_qty, 0 ) );
+					}
+
+					// Now add the items to the new log type prop.
+					if ( isset( self::$log_type_columns[ $new_log_type ] ) && is_callable( array( $product, 'get_' . self::$log_type_columns[ $new_log_type ] ) ) ) {
+						$old_log_type_val = call_user_func( array( $product, 'get_' . self::$log_type_columns[ $new_log_type ] ) );
+						call_user_func( array( $product, 'set_' . self::$log_type_columns[ $new_log_type ] ), $old_log_type_val + $item_qty );
+					}
+
+					$product->save_atum_data();
+
+				}
+
+			}
+
 		}
 
 	}
