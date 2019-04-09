@@ -535,6 +535,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today 00:00:00', $this->day );
 				$this->product->set_sold_today( $sold_today );
+				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
 			}
 
 		}
@@ -640,6 +641,7 @@ class ListTable extends AtumListTable {
 
 				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
 				$this->product->set_sales_last_days( $sales_last_ndays );
+				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
 
 			}
 
@@ -704,6 +706,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $out_of_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
 				$this->product->set_out_stock_days( $out_of_stock_days );
+				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
 			}
 
 		}
@@ -734,6 +737,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $lost_sales ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$lost_sales = Helpers::get_product_lost_sales( $this->product );
 				$this->product->set_lost_sales( $lost_sales );
+				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
 			}
 
 		}
@@ -772,14 +776,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function get_log_item_qty( $log_type, $product_id, $log_status = 'pending' ) {
 
-		$log_types = array(
-			'reserved-stock'   => 'reserved_stock',
-			'customer-returns' => 'customer_returns',
-			'warehouse-damage' => 'warehouse_damage',
-			'lost-in-post'     => 'lost_in_post',
-			'other'            => 'other_logs',
-		);
-
+		$log_types   = Log::get_log_type_columns();
 		$column_name = isset( $log_types[ $log_type ] ) ? $log_types[ $log_type ] : '';
 
 		if ( $column_name && is_callable( array( $this->product, "get_$column_name" ) ) ) {
