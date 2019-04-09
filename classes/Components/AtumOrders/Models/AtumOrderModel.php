@@ -5,7 +5,7 @@
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -1430,7 +1430,11 @@ abstract class AtumOrderModel {
 				$value = Helpers::trim_input( $value );
 			}
 
+			do_action( "atum/order/before_save_meta$key", $value, $this );
+
 			$this->set_meta( $key, $value );
+
+			do_action( "atum/order/after_save_meta$key", $value, $this );
 
 		}
 

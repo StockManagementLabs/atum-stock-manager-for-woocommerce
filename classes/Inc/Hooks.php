@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.3.8.2
  */
@@ -75,7 +75,8 @@ class Hooks {
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
 		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
-		
+
+		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
 	}
