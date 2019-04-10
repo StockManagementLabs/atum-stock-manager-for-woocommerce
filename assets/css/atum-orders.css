@@ -3192,6 +3192,14 @@ h2 .atum-help-tip {
   font-size: 16px;
 }
 
+#atum_order_data .panel select {
+  display: none;
+}
+
+#atum_order_data .panel select + .select2-container {
+  max-width: 297px;
+}
+
 #atum_order_data .panel .atum_order_data_column_container {
   clear: both;
   margin-top: 15px;

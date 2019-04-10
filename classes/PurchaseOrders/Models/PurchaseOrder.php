@@ -498,7 +498,6 @@ class PurchaseOrder extends AtumOrderModel {
 	public function after_po_save( $po ) {
 
 		$items = $po->get_items();
-		error_log('saving po');
 
 		foreach ( $items as $item ) {
 
