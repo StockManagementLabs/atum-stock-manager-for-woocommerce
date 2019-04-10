@@ -1503,7 +1503,9 @@
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid $gray-200;
-	min-width: 1200px;
+	&:not(.cloned) {
+		min-width: 1200px;
+	}
 	
 	thead, tfoot {
 		th {

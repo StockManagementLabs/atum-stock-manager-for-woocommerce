@@ -150,7 +150,7 @@ export default class ListTable {
 				
 				// Update column headers for sorting.
 				if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-					this.globals.$atumList.find('tr.item-heads').html(response.column_headers);
+					this.globals.$atumList.find('table').not('.cloned').find('tr.item-heads').html(response.column_headers);
 				}
 				
 				// Update the views filters.
@@ -173,7 +173,7 @@ export default class ListTable {
 				
 				// Update the totals row.
 				if (typeof response.totals !== 'undefined') {
-					this.globals.$atumList.find('tfoot tr.totals').html(response.totals);
+					this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(response.totals);
 				}
 				
 				// If there are active filters, show the reset button.

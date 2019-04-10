@@ -4582,6 +4582,9 @@ h2 .atum-help-tip {
 table.wp-list-table {
   border: none;
   border-top: 1px solid #e9ecef;
+}
+
+table.wp-list-table:not(.cloned) {
   min-width: 1200px;
 }
 
