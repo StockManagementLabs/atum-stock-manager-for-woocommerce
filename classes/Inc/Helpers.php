@@ -1592,22 +1592,23 @@ final class Helpers {
 	 *
 	 * @since 1.5.4
 	 *
-	 * @param \WC_Product $product
+	 * @param \WC_Product $product  The product to check.
+	 * @param bool        $force    Optional. Whether to force the recalculation from db.
 	 *
 	 * @return float
 	 */
-	public static function get_inbound_stock_for_product( &$product ) {
+	public static function get_inbound_stock_for_product( &$product, $force = FALSE ) {
 
 		$product_id    = $product->get_id();
 		$cache_key     = AtumCache::get_cache_key( 'inbound_stock_for_product', $product_id );
 		$inbound_stock = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( ! $has_cache ) {
+		if ( ! $has_cache || $force ) {
 
 			// Check if the inbound stock is already saved on the ATUM product table.
 			$inbound_stock = $product->get_inbound_stock();
 
-			if ( is_null( $inbound_stock ) ) {
+			if ( is_null( $inbound_stock ) || $force ) {
 
 				// Calculate the inbound stock from pending purchase orders.
 				global $wpdb;
