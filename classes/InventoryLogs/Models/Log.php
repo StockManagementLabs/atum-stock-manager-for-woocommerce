@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\Items\LogItemProduct;
 
 
 class Log extends AtumOrderModel {
@@ -46,8 +47,8 @@ class Log extends AtumOrderModel {
 		// Add the buttons for increasing/decreasing the Log products' stock.
 		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
 
-		// Handle the inventory log type changes to update the associated ATUM product data.
-		add_action( 'atum/order/before_save_meta_type', array( $this, 'handle_log_type_changes' ), 10, 2 );
+		// Recalculate the IL's data props every time a log is saved.
+		add_action( 'atum/order/after_object_save', array( $this, 'after_log_save' ) );
 
 		parent::__construct( $id, $read_items );
 
@@ -371,50 +372,33 @@ class Log extends AtumOrderModel {
 	}
 
 	/**
-	 * Handle the inventory log type changes to update the associated ATUM product data.
+	 * Recalculate the IL's data props every time a log is saved.
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param string $new_log_type
-	 * @param Log    $log
+	 * @param Log $log
 	 */
-	public function handle_log_type_changes( $new_log_type, $log ) {
+	public function after_log_save( $log ) {
 
-		$current_log_type = $log->get_log_type();
+		$items = $log->get_items();
 
-		// Only needed when there is a change.
-		if ( $current_log_type !== $new_log_type ) {
+		foreach ( $items as $item ) {
 
-			$items = $log->get_items();
+			/**
+			 * Variable definition
+			 *
+			 * @var LogItemProduct $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
 
-			foreach ( $items as $item ) {
+			if ( is_a( $product, '\WC_Product' ) ) {
 
-				/**
-				 * Variable definition
-				 *
-				 * @var LogItem $item
-				 */
-				$product_id = $item->get_meta( '_variation_id' ) ?: $item->get_meta( '_product_id' );
-				$product    = Helpers::get_atum_product( $product_id );
-				$item_qty   = floatval( $item->get_meta( '_qty' ) );
-
-				if ( is_a( $product, '\WC_Product' ) && $item_qty > 0 ) {
-
-					// First deduct the items from the old log type prop.
-					if ( isset( self::$log_type_columns[ $current_log_type ] ) && is_callable( array( $product, 'get_' . self::$log_type_columns[ $current_log_type ] ) ) ) {
-						$old_log_type_val = call_user_func( array( $product, 'get_' . self::$log_type_columns[ $current_log_type ] ) );
-						call_user_func( array( $product, 'set_' . self::$log_type_columns[ $current_log_type ] ), max( $old_log_type_val - $item_qty, 0 ) );
-					}
-
-					// Now add the items to the new log type prop.
-					if ( isset( self::$log_type_columns[ $new_log_type ] ) && is_callable( array( $product, 'get_' . self::$log_type_columns[ $new_log_type ] ) ) ) {
-						$old_log_type_val = call_user_func( array( $product, 'get_' . self::$log_type_columns[ $new_log_type ] ) );
-						call_user_func( array( $product, 'set_' . self::$log_type_columns[ $new_log_type ] ), $old_log_type_val + $item_qty );
-					}
-
-					$product->save_atum_data();
-
+				foreach ( self::$log_type_columns as $log_type => $log_type_column ) {
+					Helpers::get_log_item_qty( $log_type, $product, 'pending', TRUE ); // This already sets the prop to the column, so we just need to save it later.
 				}
+
+				$product->save_atum_data();
 
 			}
 

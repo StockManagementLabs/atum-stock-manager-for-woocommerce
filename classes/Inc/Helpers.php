@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2018 Stock Management Labs™
+ * @copyright      ©2019 Stock Management Labs™
  *
  * @since          0.0.1
  */
@@ -677,6 +677,72 @@ final class Helpers {
 		}
 
 		return $out_of_stock_days;
+
+	}
+
+	/**
+	 * Get the Inventory Log item quantity for a specific type of log
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param string      $log_type     Type of log.
+	 * @param \WC_Product $product      Product to check.
+	 * @param string      $log_status   Optional. Log status (completed or pending).
+	 * @param bool        $force        Optional. Force to retrieve the data from db.
+	 *
+	 * @return int|float
+	 */
+	public static function get_log_item_qty( $log_type, &$product, $log_status = 'pending', $force = FALSE ) {
+
+		$log_types   = Log::get_log_type_columns();
+		$column_name = isset( $log_types[ $log_type ] ) ? $log_types[ $log_type ] : '';
+
+		if ( ! $force && $column_name && is_callable( array( $product, "get_$column_name" ) ) ) {
+			$qty = call_user_func( array( $product, "get_$column_name" ) );
+		}
+
+		if ( ! isset( $qty ) || is_null( $qty ) ) {
+
+			$cache_key = AtumCache::get_cache_key( 'log_item_qty', $product->get_id() );
+			$qty       = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+			if ( ! $has_cache || $force ) {
+
+				$log_ids = self::get_logs( $log_type, $log_status );
+
+				if ( ! empty( $log_ids ) ) {
+
+					global $wpdb;
+
+					// Get the sum of quantities for the specified product in the logs of that type.
+					$query = $wpdb->prepare( "
+						SELECT SUM(meta_value) 				  
+					 	FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
+		                LEFT JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' oi ON om.order_item_id = oi.order_item_id
+					    WHERE order_id IN (' . implode( ',', $log_ids ) . ") AND order_item_type = 'line_item' 
+					    AND meta_key = '_qty' AND om.order_item_id IN (
+					        SELECT order_item_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
+						    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
+						 )",
+						$product->get_id()
+					); // WPCS: unprepared SQL ok.
+
+					$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+
+					// Save it for future quicker access.
+					if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
+						call_user_func( array( $product, "set_$column_name" ), $qty );
+					}
+
+				}
+
+			}
+
+			AtumCache::set_cache( $cache_key, $qty );
+
+		}
+
+		return floatval( $qty );
 
 	}
 

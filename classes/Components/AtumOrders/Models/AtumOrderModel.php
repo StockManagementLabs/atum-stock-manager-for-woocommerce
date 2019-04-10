@@ -752,6 +752,8 @@ abstract class AtumOrderModel {
 		$this->process_status();
 		$this->save_items();
 
+		do_action( 'atum/order/after_object_save', $this );
+
 		return $this->id;
 
 	}

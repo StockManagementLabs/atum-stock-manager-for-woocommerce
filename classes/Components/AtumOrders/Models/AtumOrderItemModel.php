@@ -192,13 +192,13 @@ abstract class AtumOrderItemModel {
 		// Trigger action before saving to the DB. Allows to adjust object props before save.
 		do_action( 'atum/orders/before_item_save', $this );
 
-		$atum_order_id = $this->atum_order_item->get_atum_order_id();
+		$this->atum_order_id = $this->atum_order_item->get_atum_order_id();
 
-		if ( ! $atum_order_id ) {
+		if ( ! $this->atum_order_id ) {
 			return new \WP_Error( 'empty_props', __( 'Please provide a valid ATUM Order ID', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$post_type        = get_post_type( $atum_order_id );
+		$post_type        = get_post_type( $this->atum_order_id );
 		$post_type_obj    = get_post_type_object( $post_type );
 		$atum_order_label = $post_type_obj->labels->singular_name;
 
@@ -244,11 +244,10 @@ abstract class AtumOrderItemModel {
 		if ( $inserted ) {
 			$this->id = $wpdb->insert_id;
 			$this->atum_order_item->set_id( $this->id );
+			do_action( 'atum/orders/new_item', $this );
 		}
 
 		$this->clear_cache();
-
-		do_action( 'atum/orders/new_item', $this->id, $this->atum_order_item );
 
 	}
 
@@ -271,9 +270,9 @@ abstract class AtumOrderItemModel {
 			array( 'order_item_id' => $this->id )
 		);
 
-		$this->clear_cache();
+		do_action( 'atum/orders/update_item', $this );
 
-		do_action( 'atum/orders/update_item', $this->id, $this->atum_order_item );
+		$this->clear_cache();
 
 	}
 
@@ -286,10 +285,10 @@ abstract class AtumOrderItemModel {
 
 		if ( $this->id ) {
 			global $wpdb;
-			do_action( 'atum/orders/before_delete_item', $this->id );
+			do_action( 'atum/orders/before_delete_item', $this );
 			$wpdb->delete( $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE, array( 'order_item_id' => $this->id ) );
 			$wpdb->delete( $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE, array( 'order_item_id' => $this->id ) );
-			do_action( 'atum/orders/after_delete_item', $this->id );
+			do_action( 'atum/orders/after_delete_item', $this );
 		}
 
 	}

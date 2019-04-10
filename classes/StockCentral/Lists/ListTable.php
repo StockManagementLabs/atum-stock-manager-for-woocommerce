@@ -5,7 +5,7 @@
  * @package         Atum\StockCentral
  * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -508,7 +508,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_reserved( $item ) {
 
-		$reserved_stock = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
+		$reserved_stock = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'reserved-stock', $this->product );
 		$this->increase_total( 'calc_reserved', $reserved_stock );
 
 		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product );
@@ -557,7 +557,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_returns( $item ) {
 
-		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
+		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'customer-returns', $this->product );
 		$this->increase_total( 'calc_returns', $consumer_returns );
 
 		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product );
@@ -574,7 +574,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_damages( $item ) {
 
-		$warehouse_damages = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
+		$warehouse_damages = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'warehouse-damage', $this->product );
 		$this->increase_total( 'calc_damages', $warehouse_damages );
 
 		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product );
@@ -591,7 +591,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_lost_in_post( $item ) {
 
-		$lost_in_post = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
+		$lost_in_post = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'lost-in-post', $this->product );
 		$this->increase_total( 'calc_lost_in_post', $lost_in_post );
 
 		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
@@ -608,7 +608,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_other( $item ) {
 
-		$others = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'other', $this->product->get_id() );
+		$others = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'other', $this->product );
 		$this->increase_total( 'calc_other', $others );
 
 		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $others, $item, $this->product );
@@ -761,71 +761,6 @@ class ListTable extends AtumListTable {
 
 		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products, $this->day );
 		
-	}
-
-	/**
-	 * Get the Inventory Log item quantity for a specific type of log
-	 *
-	 * @since 1.2.4
-	 *
-	 * @param string $log_type      Type of log.
-	 * @param int    $product_id    Product ID to check.
-	 * @param string $log_status    Optional. Log status (completed or pending).
-	 *
-	 * @return int|float
-	 */
-	protected function get_log_item_qty( $log_type, $product_id, $log_status = 'pending' ) {
-
-		$log_types   = Log::get_log_type_columns();
-		$column_name = isset( $log_types[ $log_type ] ) ? $log_types[ $log_type ] : '';
-
-		if ( $column_name && is_callable( array( $this->product, "get_$column_name" ) ) ) {
-			$qty = call_user_func( array( $this->product, "get_$column_name" ) );
-		}
-
-		if ( ! isset( $qty ) || is_null( $qty ) ) {
-
-			$cache_key = AtumCache::get_cache_key( 'log_item_qty', $product_id );
-			$qty       = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
-
-			if ( ! $has_cache ) {
-
-				$log_ids = Helpers::get_logs( $log_type, $log_status );
-
-				if ( ! empty( $log_ids ) ) {
-
-					global $wpdb;
-
-					// Get the sum of quantities for the specified product in the logs of that type.
-					$query = $wpdb->prepare( "
-						SELECT SUM(meta_value) 				  
-					 	FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
-		                LEFT JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' oi ON om.order_item_id = oi.order_item_id
-					    WHERE order_id IN (' . implode( ',', $log_ids ) . ") AND order_item_type = 'line_item' 
-					    AND meta_key = '_qty' AND om.order_item_id IN (
-					        SELECT order_item_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
-						    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
-						 )",
-						$product_id
-					); // WPCS: unprepared SQL ok.
-
-					$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
-
-					// Save it for future quicker access.
-					if ( $column_name && is_callable( array( $this->product, "set_$column_name" ) ) ) {
-						call_user_func( array( $this->product, "set_$column_name" ), $qty );
-					}
-
-				}
-
-			}
-
-			AtumCache::set_cache( $cache_key, $qty );
-
-		}
-
-		return floatval( $qty );
-
 	}
 
 	/**
