@@ -901,7 +901,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
 			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
-			'post_status'       => ( in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ) ? ATUM_PREFIX . $status : 'publish',
+			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? ATUM_PREFIX . $status : 'publish',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),

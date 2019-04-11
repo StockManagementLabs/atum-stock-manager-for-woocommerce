@@ -113,7 +113,7 @@ class ListTable extends AtumListTable {
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
 		
 		// TODO: Allow to specify the day of query in constructor atts.
-		$this->day       = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+		$this->day       = Helpers::date_format( current_time( 'timestamp' ), TRUE, TRUE );
 		self::$sale_days = Helpers::get_sold_last_days_option();
 
 		// Prepare the table columns.
@@ -449,48 +449,8 @@ class ListTable extends AtumListTable {
 		$stock_on_hold = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-
-			$cache_key     = AtumCache::get_cache_key( 'stock_on_hold', $this->product->get_id() );
-			$stock_on_hold = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
-
-			if ( ! $has_cache ) {
-
-				// Check if the inbound stock is already saved on the ATUM product table.
-				$stock_on_hold = $this->product->get_stock_on_hold();
-
-				if ( is_null( $stock_on_hold ) ) {
-
-					global $wpdb;
-
-					$product_id_key = Helpers::is_child_type( $this->product->get_type() ) ? '_variation_id' : '_product_id';
-
-					$sql = $wpdb->prepare( "
-						SELECT SUM(omq.`meta_value`) AS qty 
-						FROM `{$wpdb->prefix}woocommerce_order_items` oi			
-						LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
-						LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
-						WHERE `order_id` IN (
-							SELECT `ID` FROM $wpdb->posts WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
-						)
-						AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` = %s AND omp.`meta_value` = %d 
-						GROUP BY omp.`meta_value`",
-						$product_id_key,
-						$this->product->get_id()
-					);
-
-					$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
-
-					// Save it for future quicker access.
-					$this->product->set_stock_on_hold( $stock_on_hold );
-
-				}
-
-				AtumCache::set_cache( $cache_key, $stock_on_hold );
-
-			}
-
+			$stock_on_hold = Helpers::get_stock_on_hold_for_product( $this->product );
 			$this->increase_total( 'calc_hold', $stock_on_hold );
-
 		}
 
 		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
@@ -759,7 +719,7 @@ class ListTable extends AtumListTable {
 		parent::prepare_items();
 		$calc_products = array_unique( array_merge( $this->current_products, $this->children_products ) );
 
-		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products, $this->day );
+		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products );
 		
 	}
 
@@ -793,28 +753,28 @@ class ListTable extends AtumListTable {
 			switch ( $extra_filter ) {
 
 				case 'best_seller':
-					$dates_and = '';
+					$dates_where = '';
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND posts.post_date >= "' . $_REQUEST['date_from'] . '" ';
+						$dates_where .= " AND posts.post_date >= '" . $_REQUEST['date_from'] . "' ";
 					}
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND posts.post_date < "' . $_REQUEST['date_to'] . '" ';
+						$dates_where .= " AND posts.post_date < '" . $_REQUEST['date_to'] . "' ";
 					}
 
-					$sql = 'SELECT  
-							order_item_meta__product_id.meta_value as product_id,
-							SUM( order_item_meta__qty.meta_value) as order_item_qty
-							FROM 
-							' . $wpdb->prefix . 'posts AS posts 
-							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = \'line_item\') 
-							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = \'_product_id\') 
-							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = \'_qty\') 
-							WHERE posts.post_type IN ( "shop_order","shop_order_refund" )
-							AND posts.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
-							' . $dates_and . '
-							GROUP BY product_id ORDER BY order_item_qty DESC';
+					$sql = "
+						SELECT order_item_meta__product_id.meta_value as product_id,
+						SUM( order_item_meta__qty.meta_value) as order_item_qty
+						FROM $wpdb->posts AS posts 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = 'line_item') 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = '_product_id') 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = '_qty') 
+						WHERE posts.post_type IN ( 'shop_order', 'shop_order_refund' )
+						AND posts.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
+						$dates_where
+						GROUP BY product_id ORDER BY order_item_qty DESC
+					";
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
 
@@ -828,30 +788,34 @@ class ListTable extends AtumListTable {
 						$sorted            = TRUE;
 
 					}
+
 					break;
+
 				case 'worst_seller':
-					$dates_and = '';
+					$dates_where = '';
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
+						$dates_where .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
 					}
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
+						$dates_where .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
 					}
 
-					$sql_products_with_sales = 'SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
-												FROM wp_posts pr 
-												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = \'_product_id\') 
-												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = \'_qty\') 
-												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
-												LEFT JOIN ' . $wpdb->prefix . 'posts ord ON (order_items.order_id = ord.ID)
-												WHERE (pr.post_type IN (\'product\', \'product_variation\')
-												AND ord.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
-												 ' . $dates_and . ') or ord.post_date IS NULL
-												GROUP BY product_id order by qty ASC;';
+					$sql = "
+						SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+						FROM $wpdb->posts pr 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = '_product_id') 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+						LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
+						WHERE (pr.post_type IN ('product', 'product_variation')
+						AND ord.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
+						$dates_where ) OR ord.post_date IS NULL
+						GROUP BY product_id order by qty ASC;
+					";
 
-					$product_results = $wpdb->get_results( $sql_products_with_sales, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
 
 					if ( ! empty( $product_results ) ) {
 
@@ -865,6 +829,7 @@ class ListTable extends AtumListTable {
 					}
 
 					break;
+
 				case 'inbound_stock':
 					// Get all the products within pending Purchase Orders.
 					$sql = $wpdb->prepare( "

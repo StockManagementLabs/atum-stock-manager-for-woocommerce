@@ -133,17 +133,18 @@ final class Helpers {
 	 * @since 0.1.3
 	 *
 	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true).
-	 * @param bool       $is_timestamp Whether the first param is a Unix timesptamp.
+	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
+	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
 	 *
 	 * @return string                   The formatted date
 	 */
-	public static function date_format( $date, $is_timestamp = FALSE ) {
+	public static function date_format( $date, $is_timestamp = FALSE, $gmt_date = FALSE ) {
 
 		if ( ! $is_timestamp ) {
 			$date = strtotime( $date );
 		}
 
-		return date( 'Y-m-d H:i:s', $date );
+		return ! $gmt_date ? date( 'Y-m-d H:i:s', $date ) : gmdate( 'Y-m-d H:i:s', $date );
 	}
 
 	/**
@@ -490,8 +491,8 @@ final class Helpers {
 	 * @since 1.2.3
 	 *
 	 * @param array|int $items      Array of Product IDs (or single ID) we want to calculate sales from.
-	 * @param int       $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime).
-	 * @param int       $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param int       $date_start The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
+	 * @param int       $date_end   Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
 	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
 	 *
 	 * @return array
@@ -505,12 +506,12 @@ final class Helpers {
 			global $wpdb;
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$date_start = date( 'Y-m-d H:i:s', strtotime( $date_start ) );
-			$date_where = $wpdb->prepare( 'WHERE post_date >= %s', $date_start );
+			$date_start = gmdate( 'Y-m-d H:i:s', strtotime( $date_start ) );
+			$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
 
 			if ( $date_end ) {
-				$date_end    = date( 'Y-m-d H:i:s', strtotime( $date_end ) );
-				$date_where .= $wpdb->prepare( ' AND post_date <= %s', $date_end );
+				$date_end    = gmdate( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
 			}
 
 			$orders_query = "
@@ -1595,7 +1596,7 @@ final class Helpers {
 	 * @param \WC_Product $product  The product to check.
 	 * @param bool        $force    Optional. Whether to force the recalculation from db.
 	 *
-	 * @return float
+	 * @return int|float
 	 */
 	public static function get_inbound_stock_for_product( &$product, $force = FALSE ) {
 
@@ -1640,6 +1641,61 @@ final class Helpers {
 		}
 
 		return $inbound_stock;
+
+	}
+
+	/**
+	 * Get the stock on hold amount for the specified product
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param \WC_Product $product
+	 * @param bool        $force
+	 *
+	 * @return int|float
+	 */
+	public static function get_stock_on_hold_for_product( &$product, $force = FALSE ) {
+
+		$cache_key     = AtumCache::get_cache_key( 'stock_on_hold', $product->get_id() );
+		$stock_on_hold = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( ! $has_cache || $force ) {
+
+			// Check if the inbound stock is already saved on the ATUM product table.
+			$stock_on_hold = $product->get_stock_on_hold();
+
+			if ( is_null( $stock_on_hold ) || $force ) {
+
+				global $wpdb;
+
+				$product_id_key = self::is_child_type( $product->get_type() ) ? '_variation_id' : '_product_id';
+
+				$sql = $wpdb->prepare( "
+					SELECT SUM(omq.meta_value) AS qty 
+					FROM {$wpdb->prefix}woocommerce_order_items oi			
+					LEFT JOIN $wpdb->order_itemmeta omq ON omq.`order_item_id` = oi.`order_item_id`
+					LEFT JOIN $wpdb->order_itemmeta omp ON omp.`order_item_id` = oi.`order_item_id`			  
+					WHERE order_id IN (
+						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-pending', 'wc-on-hold')
+					)
+					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value = %d 
+					GROUP BY omp.meta_value",
+					$product_id_key,
+					$product->get_id()
+				);
+
+				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
+
+				// Save it for future quicker access.
+				$product->set_stock_on_hold( $stock_on_hold );
+
+			}
+
+			AtumCache::set_cache( $cache_key, $stock_on_hold );
+
+		}
+
+		return $stock_on_hold;
 
 	}
 
