@@ -26,20 +26,6 @@ use Atum\Settings\Settings;
 
 
 class ListTable extends AtumListTable {
-	
-	/**
-	 * Time of query
-	 *
-	 * @var string
-	 */
-	protected $day;
-
-	/**
-	 * Number of days for Sold Last Days calculations
-	 *
-	 * @var int
-	 */
-	protected static $sale_days;
 
 	/**
 	 * The columns hidden by default
@@ -111,10 +97,8 @@ class ListTable extends AtumListTable {
 		
 		// Activate managed/unmanaged counters separation.
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
-		
-		// TODO: Allow to specify the day of query in constructor atts.
-		$this->day       = Helpers::date_format( current_time( 'timestamp' ), TRUE, TRUE );
-		self::$sale_days = Helpers::get_sold_last_days_option();
+
+		$this->days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		// Prepare the table columns.
 		$args['table_columns'] = self::get_table_columns();
@@ -495,7 +479,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today 00:00:00', $this->day );
 				$this->product->set_sold_today( $sold_today );
-				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
 			}
 
 		}
@@ -601,7 +585,7 @@ class ListTable extends AtumListTable {
 
 				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
 				$this->product->set_sales_last_days( $sales_last_ndays );
-				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
 
 			}
 
@@ -666,7 +650,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $out_of_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
 				$this->product->set_out_stock_days( $out_of_stock_days );
-				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
 			}
 
 		}
@@ -697,7 +681,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $lost_sales ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$lost_sales = Helpers::get_product_lost_sales( $this->product );
 				$this->product->set_lost_sales( $lost_sales );
-				$this->product->set_update_date( current_time( 'timestamp' ) ); // This will force the update even when the values didn't chnage.
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
 			}
 
 		}

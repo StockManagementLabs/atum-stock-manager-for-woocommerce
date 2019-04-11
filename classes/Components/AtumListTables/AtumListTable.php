@@ -201,11 +201,25 @@ abstract class AtumListTable extends \WP_List_Table {
 	);
 
 	/**
-	 * Sale days from settings
+	 * Days to re-order from settings
 	 *
 	 * @var int
 	 */
-	protected $last_days;
+	protected $days_to_reorder;
+
+	/**
+	 * Time of query
+	 *
+	 * @var string
+	 */
+	protected $day;
+
+	/**
+	 * Number of days for Sold Last Days calculations
+	 *
+	 * @var int
+	 */
+	protected static $sale_days;
 
 	/**
 	 * Whether the currently displayed product is an expandable child product
@@ -347,10 +361,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->last_days              = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		$this->is_filtering           = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
 		$this->query_filters          = $this->get_filters_query_string();
 		$this->wc_out_stock_threshold = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
+		$this->day                    = Helpers::date_format( current_time( 'timestamp' ), TRUE, TRUE );
+		self::$sale_days              = Helpers::get_sold_last_days_option();
 
 		// Filter the table data results to show specific product types only.
 		$this->set_product_types_query_data();
@@ -2690,7 +2705,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				        CEIL(SUM((
 				                SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta 
 				                WHERE meta_key = '_qty' AND order_item_id = itm.order_item_id
-				            ))/7*$this->last_days
+				            ))/7*$this->days_to_reorder
 			            ) AS qty
 						FROM $wpdb->posts AS orders
 					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS itm ON (orders.ID = itm.order_id)
