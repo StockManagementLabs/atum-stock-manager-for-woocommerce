@@ -459,6 +459,22 @@ class ProductDataMetaBoxes {
 	}
 
 	/**
+	 * Save extra product data.
+	 *
+	 * @since 1.5.8
+	 */
+	private function save_extra_data() {
+
+		// If it's out of stock, how many days?
+		$this->product_data['out_stock_days'] = Helpers::get_product_out_of_stock_days( $this->product );
+
+		// Has location terms assigned?
+		$location_terms                     = wp_get_post_terms( $this->product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
+		$this->product_data['has_location'] = ! empty( $location_terms );
+
+	}
+
+	/**
 	 * Hook callback after saving a product
 	 *
 	 * @since 1.5.0
@@ -528,6 +544,9 @@ class ProductDataMetaBoxes {
 		if ( $this->purchase_price_allowed ) {
 			$purchase_price = $this->save_purchase_price();
 		}
+
+		// Save extra data (out of stock date, has_location, etc).
+		$this->save_extra_data();
 
 		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data );
 
