@@ -2,22 +2,37 @@
 	// Custom variable values only support SassScript inside `#{}`.
 	@each $color, $value in $grays {
 		--gray-#{$color}: #{$value};
+		--gray-#{$color}-hover: #{rgba($value,0.6)};
+		--gray-#{$color}-shadow-light: #{rgba($value, 0.04)};
+		--gray-#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $colors {
 		--#{$color}: #{$value};
+		--#{$color}-hover: #{rgba($value,0.6)};
+		--#{$color}-shadow-light: #{rgba($value, 0.04)};
+		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $theme-colors {
 		--#{$color}: #{$value};
+		--#{$color}-hover: #{rgba($value,0.6)};
+		--#{$color}-shadow-light: #{rgba($value, 0.04)};
+		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $wp-colors {
 		--#{$color}: #{$value};
+		--#{$color}-hover: #{rgba($value,0.6)};
+		--#{$color}-shadow-light: #{rgba($value, 0.04)};
+		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $wc-colors {
 		--#{$color}: #{$value};
+		--#{$color}-hover: #{rgba($value,0.6)};
+		--#{$color}-shadow-light: #{rgba($value, 0.04)};
+		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	--wp-yiq-text-dark: #{$yiq-text-dark};
@@ -35,4 +50,5 @@
 	--atum-pagination-border: transparent;
 	--atum-pagination-border-disabled: transparent;
 	--order-green-light: #{$green-light};
+	--atum-row-shadow: #{rgba($black, 0.04)};
 }

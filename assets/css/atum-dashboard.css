@@ -1215,7 +1215,7 @@ fieldset:disabled a.btn {
 
 .btn-primary:hover {
   color: var(--wp-yiq-text-light);
-  background-color: var(--rgba(0, 184, 219, 0.6));
+  background-color: var(--primary-hover);
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -1226,15 +1226,15 @@ fieldset:disabled a.btn {
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: var(--wp-yiq-text-light);
-  background-color: #00B8DB;
-  border-color: #00B8DB;
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: var(--wp-yiq-text-light);
-  background-color: rgba(0, 184, 219, 0.6);
-  border-color: rgba(0, 184, 219, 0.6);
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
@@ -1253,7 +1253,7 @@ fieldset:disabled a.btn {
 
 .btn-secondary:hover {
   color: var(--wp-yiq-text-light);
-  background-color: var(--rgba(108, 117, 125, 0.6));
+  background-color: var(--secondary-hover);
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -1264,15 +1264,15 @@ fieldset:disabled a.btn {
 
 .btn-secondary.disabled, .btn-secondary:disabled {
   color: var(--wp-yiq-text-light);
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: var(--secondary);
+  border-color: var(--secondary);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle {
   color: var(--wp-yiq-text-light);
-  background-color: rgba(108, 117, 125, 0.6);
-  border-color: rgba(108, 117, 125, 0.6);
+  background-color: var(--secondary-hover);
+  border-color: var(--secondary-hover);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
@@ -1291,7 +1291,7 @@ fieldset:disabled a.btn {
 
 .btn-success:hover {
   color: var(--wp-yiq-text-light);
-  background-color: var(--rgba(105, 198, 29, 0.6));
+  background-color: var(--success-hover);
 }
 
 .btn-success:focus, .btn-success.focus {
@@ -1302,15 +1302,15 @@ fieldset:disabled a.btn {
 
 .btn-success.disabled, .btn-success:disabled {
   color: var(--wp-yiq-text-light);
-  background-color: #69C61D;
-  border-color: #69C61D;
+  background-color: var(--success);
+  border-color: var(--success);
 }
 
 .btn-success:not(:disabled):not(.disabled):active, .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
   color: var(--wp-yiq-text-light);
-  background-color: rgba(105, 198, 29, 0.6);
-  border-color: rgba(105, 198, 29, 0.6);
+  background-color: var(--success-hover);
+  border-color: var(--success-hover);
 }
 
 .btn-success:not(:disabled):not(.disabled):active:focus, .btn-success:not(:disabled):not(.disabled).active:focus,
@@ -1329,7 +1329,7 @@ fieldset:disabled a.btn {
 
 .btn-info:hover {
   color: var(--wp-yiq-text-dark);
-  background-color: var(--rgba(227, 232, 245, 0.6));
+  background-color: var(--info-hover);
 }
 
 .btn-info:focus, .btn-info.focus {
@@ -1340,15 +1340,15 @@ fieldset:disabled a.btn {
 
 .btn-info.disabled, .btn-info:disabled {
   color: var(--wp-yiq-text-dark);
-  background-color: #E3E8F5;
-  border-color: #E3E8F5;
+  background-color: var(--info);
+  border-color: var(--info);
 }
 
 .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active,
 .show > .btn-info.dropdown-toggle {
   color: var(--wp-yiq-text-dark);
-  background-color: rgba(227, 232, 245, 0.6);
-  border-color: rgba(227, 232, 245, 0.6);
+  background-color: var(--info-hover);
+  border-color: var(--info-hover);
 }
 
 .btn-info:not(:disabled):not(.disabled):active:focus, .btn-info:not(:disabled):not(.disabled).active:focus,
@@ -1367,7 +1367,7 @@ fieldset:disabled a.btn {
 
 .btn-warning:hover {
   color: var(--wp-yiq-text-light);
-  background-color: var(--rgba(239, 175, 0, 0.6));
+  background-color: var(--warning-hover);
 }
 
 .btn-warning:focus, .btn-warning.focus {
@@ -1378,15 +1378,15 @@ fieldset:disabled a.btn {
 
 .btn-warning.disabled, .btn-warning:disabled {
   color: var(--wp-yiq-text-light);
-  background-color: #EFAF00;
-  border-color: #EFAF00;
+  background-color: var(--warning);
+  border-color: var(--warning);
 }
 
 .btn-warning:not(:disabled):not(.disabled):active, .btn-warning:not(:disabled):not(.disabled).active,
 .show > .btn-warning.dropdown-toggle {
   color: var(--wp-yiq-text-light);
-  background-color: rgba(239, 175, 0, 0.6);
-  border-color: rgba(239, 175, 0, 0.6);
+  background-color: var(--warning-hover);
+  border-color: var(--warning-hover);
 }
 
 .btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -1405,7 +1405,7 @@ fieldset:disabled a.btn {
 
 .btn-danger:hover {
   color: var(--wp-yiq-text-light);
-  background-color: var(--rgba(255, 72, 72, 0.6));
+  background-color: var(--danger-hover);
 }
 
 .btn-danger:focus, .btn-danger.focus {
@@ -1416,15 +1416,15 @@ fieldset:disabled a.btn {
 
 .btn-danger.disabled, .btn-danger:disabled {
   color: var(--wp-yiq-text-light);
-  background-color: #FF4848;
-  border-color: #FF4848;
+  background-color: var(--danger);
+  border-color: var(--danger);
 }
 
 .btn-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   color: var(--wp-yiq-text-light);
-  background-color: rgba(255, 72, 72, 0.6);
-  border-color: rgba(255, 72, 72, 0.6);
+  background-color: var(--danger-hover);
+  border-color: var(--danger-hover);
 }
 
 .btn-danger:not(:disabled):not(.disabled):active:focus, .btn-danger:not(:disabled):not(.disabled).active:focus,
@@ -1443,7 +1443,7 @@ fieldset:disabled a.btn {
 
 .btn-light:hover {
   color: var(--wp-yiq-text-dark);
-  background-color: var(--rgba(248, 249, 250, 0.6));
+  background-color: var(--light-hover);
 }
 
 .btn-light:focus, .btn-light.focus {
@@ -1454,15 +1454,15 @@ fieldset:disabled a.btn {
 
 .btn-light.disabled, .btn-light:disabled {
   color: var(--wp-yiq-text-dark);
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
+  background-color: var(--light);
+  border-color: var(--light);
 }
 
 .btn-light:not(:disabled):not(.disabled):active, .btn-light:not(:disabled):not(.disabled).active,
 .show > .btn-light.dropdown-toggle {
   color: var(--wp-yiq-text-dark);
-  background-color: rgba(248, 249, 250, 0.6);
-  border-color: rgba(248, 249, 250, 0.6);
+  background-color: var(--light-hover);
+  border-color: var(--light-hover);
 }
 
 .btn-light:not(:disabled):not(.disabled):active:focus, .btn-light:not(:disabled):not(.disabled).active:focus,
@@ -1481,7 +1481,7 @@ fieldset:disabled a.btn {
 
 .btn-dark:hover {
   color: var(--wp-yiq-text-light);
-  background-color: var(--rgba(52, 58, 64, 0.6));
+  background-color: var(--dark-hover);
 }
 
 .btn-dark:focus, .btn-dark.focus {
@@ -1492,15 +1492,15 @@ fieldset:disabled a.btn {
 
 .btn-dark.disabled, .btn-dark:disabled {
   color: var(--wp-yiq-text-light);
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: var(--dark);
+  border-color: var(--dark);
 }
 
 .btn-dark:not(:disabled):not(.disabled):active, .btn-dark:not(:disabled):not(.disabled).active,
 .show > .btn-dark.dropdown-toggle {
   color: var(--wp-yiq-text-light);
-  background-color: rgba(52, 58, 64, 0.6);
-  border-color: rgba(52, 58, 64, 0.6);
+  background-color: var(--dark-hover);
+  border-color: var(--dark-hover);
 }
 
 .btn-dark:not(:disabled):not(.disabled):active:focus, .btn-dark:not(:disabled):not(.disabled).active:focus,

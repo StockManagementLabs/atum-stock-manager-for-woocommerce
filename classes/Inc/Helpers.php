@@ -2482,6 +2482,7 @@ final class Helpers {
 
 		if ( 'hc_mode' === $theme_settings ) {
 			$hc_blue       = '#016b7f';
+			$hc_blue_rgb   = '1,107,127';
 			$hc_dark_blue  = '#27283b';
 			$hc_blue_light = '#e6fbff';
 			$style         = ":root{
@@ -2489,22 +2490,35 @@ final class Helpers {
 						    --gray-500: $hc_blue;
 						    --gray-600: $hc_dark_blue;
 						    --blue: $hc_blue;
+						    --blue-hover: rgba($hc_blue_rgb,0.6);
+						    --green-hover: rgba($hc_blue_rgb,0.6);
 						    --green-light: $hc_blue_light;
 						    --blue-light: $hc_blue_light;
 						    --light: transparent;
 						    --wp-gray-6: transparent;
 						    --wp-link: $hc_blue;
+						    --wp-link-hover: rgba($hc_blue_rgb,0.6);
 						    --primary: $hc_blue;
+						    --primary-hover: rgba($hc_blue_rgb,0.6);
+						    --darken: $hc_blue;
+						    --black-shadow-light: rgba($hc_blue_rgb,0.04);
 						    --orange: $hc_blue;
+						    --orange: rgba($hc_blue_rgb,0.6);
 						    --orange-light-2: $hc_blue_light;
 						    --warning: $hc_blue;
+						    --warning-hover: rgba($hc_blue_rgb,0.6);
 						    --danger: $hc_blue;
+						    --danger-hover: rgba($hc_blue_rgb,0.6);
 						    --success: $hc_blue;
+						    --success-hover: rgba($hc_blue_rgb,0.6);
 						    --info: $hc_blue;
+						    --info-hover: rgba($hc_blue_rgb,0.6);
+						    --secondary-shadow: rgba($hc_blue_rgb,0.2);
 						    --wp-pink-darken-expanded: $hc_blue;
 						    --orange-dark-light: $hc_blue_light;
 						    --wc-purple-expanded: $hc_blue;
 						    --wc-purple: $hc_blue;
+						    --wc-purple-hover: rgba($hc_blue_rgb,0.6);
 							--blue-light-expanded: $hc_blue;
 							--green-light-expanded: $hc_blue;
 							--wp-pink-light: $hc_blue_light;
@@ -2517,6 +2531,7 @@ final class Helpers {
 						    --atum-pagination-bg: white;
 						    --atum-pagination-border: $gray_500;
 						    --atum-pagination-border-disabled: #e9ecef;
+						    --atum-row-shadow: 0;
 							}";
 		}
 

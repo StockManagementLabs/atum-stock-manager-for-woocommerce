@@ -3,14 +3,65 @@
 // Easily pump out default styles, as well as :hover, :focus, :active,
 // and disabled options for all buttons
 
+//@mixin button-variant($background, $border, $hover-background: rgba($background, 0.6), $hover-border: rgba($border, 0.6), $active-background: rgba($background, 0.6), $active-border: rgba($border, 0.6)) {
+//	color: color-yiq($background);
+//	@include gradient-bg($background);
+//	@include box-shadow($btn-box-shadow);
+//
+//	@include hover {
+//		color: color-yiq($hover-background);
+//		@include gradient-bg($hover-background);
+//	}
+//
+//	&:focus,
+//	&.focus {
+//		color: color-yiq($hover-background);
+//		// Avoid using mixin so we can pass custom focus shadow properly
+//		@if $enable-shadows {
+//			box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba($border, .5);
+//		} @else {
+//			box-shadow: 0 0 0 $btn-focus-width rgba($border, .5);
+//		}
+//	}
+//
+//	// Disabled comes first so active can properly restyle
+//	&.disabled,
+//	&:disabled {
+//		color: color-yiq($background);
+//		background-color: $background;
+//		border-color: $border;
+//	}
+//
+//	&:not(:disabled):not(.disabled):active,
+//	&:not(:disabled):not(.disabled).active,
+//	.show > &.dropdown-toggle {
+//		color: color-yiq($active-background);
+//		background-color: $active-background;
+//		@if $enable-gradients {
+//			background-image: none; // Remove the gradient for the pressed/active state
+//		}
+//		border-color: $active-border;
+//
+//		&:focus {
+//			color: color-yiq($hover-background);
+//			// Avoid using mixin so we can pass custom focus shadow properly
+//			@if $enable-shadows {
+//				box-shadow: $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($border, .5);
+//			} @else {
+//				box-shadow: 0 0 0 $btn-focus-width rgba($border, .5);
+//			}
+//		}
+//	}
+//}
+
 @mixin button-variant($color, $background, $border, $hover-background: rgba($background, 0.6), $hover-border: rgba($border, 0.6), $active-background: rgba($background, 0.6), $active-border: rgba($border, 0.6)) {
 	color: color-yiq($background);
-	@include gradient-bg($color);
+	background-color: var(--#{$color});
 	@include box-shadow($btn-box-shadow);
 	
 	@include hover {
 		color: color-yiq($hover-background);
-		@include gradient-bg($hover-background);
+		background-color: var(--#{$color}-hover);
 	}
 	
 	&:focus,
@@ -28,19 +79,19 @@
 	&.disabled,
 	&:disabled {
 		color: color-yiq($background);
-		background-color: $background;
-		border-color: $border;
+		background-color: var(--#{$color});
+		border-color: var(--#{$color});
 	}
 	
 	&:not(:disabled):not(.disabled):active,
 	&:not(:disabled):not(.disabled).active,
 	.show > &.dropdown-toggle {
 		color: color-yiq($active-background);
-		background-color: $active-background;
+		background-color: var(--#{$color}-hover);
 		@if $enable-gradients {
 			background-image: none; // Remove the gradient for the pressed/active state
 		}
-		border-color: $active-border;
+		border-color: var(--#{$color}-hover);
 		
 		&:focus {
 			color: color-yiq($hover-background);

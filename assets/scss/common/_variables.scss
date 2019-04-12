@@ -113,6 +113,7 @@ $colors: map-merge((
 		"purple":          $purple,
 		"purple-light":    $purple-light,
 		"purple-pl":       $purple-pl,
+		"black":           $black,
 ), $colors);
 
 $primary:                               $blue !default;
