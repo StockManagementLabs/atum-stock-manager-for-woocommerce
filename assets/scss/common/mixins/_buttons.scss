@@ -3,9 +3,9 @@
 // Easily pump out default styles, as well as :hover, :focus, :active,
 // and disabled options for all buttons
 
-@mixin button-variant($background, $border, $hover-background: rgba($background, 0.6), $hover-border: rgba($border, 0.6), $active-background: rgba($background, 0.6), $active-border: rgba($border, 0.6)) {
+@mixin button-variant($color, $background, $border, $hover-background: rgba($background, 0.6), $hover-border: rgba($border, 0.6), $active-background: rgba($background, 0.6), $active-border: rgba($border, 0.6)) {
 	color: color-yiq($background);
-	@include gradient-bg($background);
+	@include gradient-bg($color);
 	@include box-shadow($btn-box-shadow);
 	
 	@include hover {

@@ -2,9 +2,9 @@
 
 @mixin gradient-bg($color) {
   @if $enable-gradients {
-    background: $color linear-gradient(180deg, mix($body-bg, $color, 15%), $color) repeat-x;
+    background: var(--#{$color}) linear-gradient(180deg, mix($body-bg, $color, 15%), $color) repeat-x;
   } @else {
-    background-color: $color;
+    background-color: var(--#{$color});
   }
 }
 
