@@ -18,7 +18,6 @@
 		font-size: 36px;
 		font-weight: bold;
 		
-		
 		&.extend-list-table {
 			line-height: 1;
 			margin-bottom: $grid-gutter-width/2;
@@ -648,7 +647,6 @@
 				color:  var(--white);
 			}
 		}
-		
 		
 		.displaying-num {
 			@include mobile-max{
@@ -1500,7 +1498,9 @@
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid var(--atum-border);
+	&:not(.cloned) {
 	min-width: 1200px;
+	}
 	
 	thead, tfoot {
 		th {
