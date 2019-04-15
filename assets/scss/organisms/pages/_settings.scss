@@ -2,11 +2,6 @@
 // Atum Settings
 //---------------
 
-$settings-menu-bg:          $blue-dark-lighten;
-$settings-menu-color:       $white;
-$settings-menu-active:      $white;
-$settings-xs-min:           568px !default;
-
 #wpbody-content {
 	padding-bottom: 0;
 }
@@ -19,7 +14,7 @@ $settings-xs-min:           568px !default;
 		text-transform: capitalize;
 		margin-bottom: $grid-gutter-width/2;
 		font-weight: bold;
-		color: $blue-dark;
+		color: var(--blue-dark);
 		font-size: 36px;
 		margin-bottom: 20px;
 	}
@@ -40,98 +35,34 @@ $settings-xs-min:           568px !default;
 		width: 165px;
 		height: 44px;
 		border-radius: 8px;
-		box-shadow: 0 4px 0 0 $gray-200;
-		background-color: $blue-dark-lighten;
-		color: $white;
+		box-shadow: 0 4px 0 0 var(--gray-200);
+		background-color: var(--blue-dark-lighten);
+		color: var(--white);
 		font-weight: bold;
 		font-size: 16px;
 		display: flex;
 		align-items: center;
 		justify-content: space-evenly;
-
-		&.bg-light {
-			background-color: $white;
-			color: $gray-600;
-		}
+		
 	}
 
 	.atum-nav {
 		border: none;
-		background-color: $settings-menu-bg;
+		background-color: var(--atum-dark-bg);
 		border-radius: 6px;
 		position: relative;
 		min-width: 230px;
-		box-shadow: 0 4px 0 0 $gray-200;
+		box-shadow: 0 4px 0 0 var(--gray-200);
 		min-height: 550px;
 		
 		@include mobile-max {
 			min-height: inherit;
 		}
 	}
-
-	.atum-nav-light {
-		background-color: $white;
-
-		.atum-nav-header {
-			background-color: $blue;
-
-			.toogle-menu {
-				color: $white;
-			}
-		}
-		.atum-nav-link {
-			color: $blue;
-
-			&:hover, &:focus {
-				background-color: $blue-light;
-				color: $blue;
-			}
-
-			.menu-helper {
-				&:before, &:after {
-					background: transparent;
-				}
-			}
-
-			&.active {
-				cursor: default;
-				background-color: $blue-light;
-				color: $blue;
-				border-right: 3px solid $blue;
-
-				.menu-helper {
-					animation: inherit;
-				}
-			}
-		}
-
-		.atum-nav-item {
-			box-shadow: 0 1px 0 0 $gray-200;
-		}
-
-		.nav-footer {
-			.nav-footer-logo {
-				span {
-					color: $blue-dark;
-				}
-			}
-
-			p {
-				color: $gray-500;
-
-				a {
-					color: $blue;
-
-					&:hover {
-						color: $blue;
-					}
-				}
-			}
-		}
-	}
+	
 	.atum-nav-header {
-		background-color: $blue-dark-lighten;
-		box-shadow: 0 1px 0 0 rgba($white, 0.1);
+		background-color: var(--blue-dark-lighten);
+		box-shadow: 0 1px 0 0 var(--white-shadow);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -140,7 +71,7 @@ $settings-xs-min:           568px !default;
 
 		.toogle-menu {
 			font-size: 20px;
-			color: $gray-500;
+			color: var(--gray-500);
 			display: none;
 		}
 
@@ -151,7 +82,7 @@ $settings-xs-min:           568px !default;
 				display: flex;
 				align-items: center;
 				text-decoration: none;
-				color: $white;
+				color: var(--white);
 				height: 51px;
 				font-size: 21px;
 				font-weight: bold;
@@ -189,7 +120,7 @@ $settings-xs-min:           568px !default;
 			}
 
 			span {
-				color: $white;
+				color: var(--atum-settings-text-logo);
 				font-size: 27px;
 				margin-left: 10px;
 				font-weight: bold;
@@ -197,7 +128,7 @@ $settings-xs-min:           568px !default;
 		}
 
 		p {
-			color: $white;
+			color: var(--atum-settings-text-logo);
 			margin: 0;
 			font-size: 12px;
 			font-weight: normal;
@@ -209,10 +140,10 @@ $settings-xs-min:           568px !default;
 
 			a {
 				text-decoration: none;
-				color: $blue;
+				color: var(--blue);
 
 				&:hover {
-					color: $blue;
+					color: var(--blue);
 				}
 			}
 		}
@@ -231,7 +162,7 @@ $settings-xs-min:           568px !default;
 	.atum-nav-item {
 		display: block;
 		margin: 0;
-		box-shadow: 0 1px 0 0 rgba($white, 0.1);
+		box-shadow: 0 1px 0 0 var(--white-shadow);
 	}
 
 	.atum-nav-link {
@@ -246,7 +177,7 @@ $settings-xs-min:           568px !default;
 		-webkit-tap-highlight-color: rgba($black, 0);
 		position: relative;
 		overflow: hidden;
-		color: $settings-menu-color;
+		color: var(--atum-settings-nav-link);
 		transition: color 0.3s;
 		height: 51px;
 		display: flex;
@@ -255,11 +186,13 @@ $settings-xs-min:           568px !default;
 
 		&:hover, &:focus {
 			outline: none;
-			color: $white;
+			color: var(--atum-settings-nav-link);
 			box-shadow: none;
-			background-color: $blue-dark-light-2;
+			background-color: var(--blue-dark-light-2);
 			font-size: 15px;
 			font-weight: bold;
+			border-right: 3px solid var(--atum-settings-nav-link);
+			
 		}
 
 		.menu-helper {
@@ -274,7 +207,7 @@ $settings-xs-min:           568px !default;
 				width: 100%;
 				height: 1px;
 				opacity: 0;
-				background: $settings-menu-active;
+				background: var(--atum-bg-white);
 				transform: translate3d(0, -3em, 0);
 				transition: transform 0s 0.3s, opacity 0.2s;
 			}
@@ -296,11 +229,11 @@ $settings-xs-min:           568px !default;
 
 		&.active {
 			cursor: default;
-			background-color: $blue-dark-light-2;
+			background-color: var(--blue-dark-light-2);
 			font-size: 15px;
 			font-weight: bold;
-			color: $white;
-			border-right: 3px solid $white;
+			color: var(--atum-settings-nav-link);
+			border-right: 3px solid var(--atum-settings-nav-link);
 		}
 
 	}
@@ -404,21 +337,7 @@ $settings-xs-min:           568px !default;
 			}
 
 		}
-		.atum-nav-light {
-			.atum-nav-header {
-				background-color: $blue;
-				box-shadow: 0 1px 0 0 $gray-200;
-
-				.toogle-menu {
-					background-color: transparent;
-					border: none;
-
-					&:focus, &:active {
-						outline: 0;
-					}
-				}
-			}
-		}
+		
 	}
 	
 	// Settings form
@@ -449,7 +368,7 @@ $settings-xs-min:           568px !default;
 					top: 0;
 					bottom: 0;
 					z-index: 10;
-					background-color: $gray-100;
+					background-color: var(--gray-100);
 					opacity: 0.5;
 				}
 				
@@ -460,7 +379,7 @@ $settings-xs-min:           568px !default;
 					right: 0;
 					margin: auto;
 					@include loader(50px, $info, 3px);
-					border-top-color: $gray-600;
+					border-top-color: var(--gray-600);
 				}
 			}
 		}
@@ -470,23 +389,24 @@ $settings-xs-min:           568px !default;
 		}
 		
 		.btn-secondary {
-			background-color: $gray-500;
+			background-color: var(--secondary);
 			border: none;
+			color: var(--white);
 			
 			&:hover, &:active {
-				background-color: $green;
-				box-shadow: inset -1px 1px 5px 0 rgba($black, 0.2);
+				background-color: var(--green);
+				box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
 			}
 		}
 		
 		.active {
-			background-color: $green;
-			box-shadow: inset -1px 1px 5px 0 rgba($black, 0.2);
+			background-color: var(--green);
+			box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
 		}
 		
 		.section-general-title {
 			padding: 0 20px;
-			background-color: $blue-dark-lighten;
+			background-color: var(--blue-dark-lighten);
 			border-radius: 6px;
 			height: 51px;
 			display: flex;
@@ -499,28 +419,13 @@ $settings-xs-min:           568px !default;
 			}
 			
 			h2 {
-				color: $white;
+				color: var(--white);
 				margin: 0;
 				text-transform: uppercase;
 				font-size: 18px;
 				font-weight: bold;
 				padding-left: 5px;
 				font-weight: bold;
-			}
-		}
-		
-		.section-general-title-light {
-			background-color: $blue;
-			
-			h2 {
-				color: $white;
-			}
-			
-			input[type=submit] {
-				&, &:hover {
-					background-color: $white;
-					color: $blue;
-				}
 			}
 		}
 		
@@ -534,8 +439,8 @@ $settings-xs-min:           568px !default;
 		
 		.section-title {
 			margin-top: 11px;
-			border-bottom: 2px solid rgba($white, 0.1);
-			background-color: $blue-dark-lighten;
+			border-bottom: 2px solid var(--white-shadow);
+			background-color: var(--atum-dark-bg);
 			border-top-right-radius: 6px;
 			border-top-left-radius: 6px;
 			display: flex;
@@ -545,7 +450,7 @@ $settings-xs-min:           568px !default;
 			padding-left: 20px;
 			font-size: 18px;
 			font-weight: bold;
-			color: $white;
+			color: var(--atum-settings-section-text);
 			
 			.select2-dropdown {
 				.select2-search {
@@ -570,7 +475,7 @@ $settings-xs-min:           568px !default;
 			input[type=search] {
 				&::placeholder {
 					font-style: italic !important;
-					color: $gray-500 !important;
+					color: var(--gray-500) !important;
 					font-size: 12px;
 					padding-left: 7px;
 				}
@@ -616,42 +521,22 @@ $settings-xs-min:           568px !default;
 			}
 			
 			h2 {
-				color: $white;
+				color: var(--atum-settings-section-text);
 				margin: 0;
 				text-transform: capitalize;
 				font-size: 18px;
 				font-weight: bold;
 			}
 			
-			&.section-title-light {
-				background-color: $white;
-				border-bottom: 1px solid darken($light, 5%);
-				
-				h2 {
-					color: $blue-dark;
-				}
-			}
 		}
 		
 		.section-fields {
 			padding: 0px 20px 120px 25px;
 			border-bottom-right-radius: 6px;
 			border-bottom-left-radius: 6px;
-			background: $blue-dark-lighten url("#{$img-path}settings/bg-settings.png") no-repeat bottom;
+			background: var(--atum-dark-bg) url("#{$img-path}settings/bg-settings.png") no-repeat bottom;
 			background-size: cover;
-			box-shadow: 0 4px 0 0 $gray-200;
-			
-			&.section-field-light {
-				background-color: $white;
-				
-				tr:not(:last-child) {
-					border-bottom: 1px solid darken($light, 5%);
-				}
-				
-				th {
-					color: $gray-600;
-				}
-			}
+			box-shadow: 0 4px 0 0 var(--gray-200);
 			
 			.form-table {
 				margin-top: 0;
@@ -659,7 +544,7 @@ $settings-xs-min:           568px !default;
 			
 			tr {
 				&:not(:last-child) {
-					border-bottom: 0.5px solid rgba($white, 0.1);
+					border-bottom: 0.5px solid var(--white-shadow);
 				}
 			}
 			
@@ -684,14 +569,14 @@ $settings-xs-min:           568px !default;
 			
 			th {
 				width: 37%;
-				color: $white;
+				color: var(--atum-settings-section-text);
 				font-weight: bold;
 				font-size: 15px;
 				padding-top: 25px;
 			}
 			
 			.atum-setting-info {
-				color: $gray-500;
+				color: var(--atum-settings-section-description);
 				margin-bottom: $grid-gutter-width/2;
 				padding-top: 12px;
 				font-size: 15px;
@@ -721,16 +606,16 @@ $settings-xs-min:           568px !default;
 				margin: 0;
 				border-radius: 4px;
 				height: 30px;
-				color: $gray-600;
-				border: 1px solid $gray-200;
+				color: var(--gray-600);
+				border: 1px solid var(--atum-settings-input-border);
 				box-shadow: none;
 				
 				&:hover {
-					border: solid 1px $gray-600;
+					border: solid 1px var(--gray-600)
 				}
 				
 				&:focus {
-					border: solid 1px $blue;
+					border: solid 1px var(--blue);
 				}
 			}
 			
@@ -835,12 +720,12 @@ $settings-xs-min:           568px !default;
 							transition: 0.2s ease-in-out;
 							
 							&:hover {
-								color: $primary;
+								color: var(--primary);
 							}
 							
 							&.remove-row {
 								&:hover {
-									color: $danger;
+									color: var(--danger);
 								}
 							}
 						}
@@ -858,7 +743,7 @@ $settings-xs-min:           568px !default;
 								line-height: 24px;
 								
 								.select2-selection__choice__remove {
-									color: $white;
+									color: var(--white);
 								}
 							}
 						}
@@ -881,7 +766,7 @@ $settings-xs-min:           568px !default;
 					
 					.error-message {
 						display: block;
-						color: $danger;
+						color: var(--danger);
 						margin-top: $grid-gutter-width/2;
 						font-weight: normal;
 						font-size: 12px;
@@ -923,17 +808,18 @@ $settings-xs-min:           568px !default;
 			padding: 11px 20px 9px;
 			line-height: 1;
 			height: auto;
-			background: $primary;
+			background: var(--atum-settings-btn-save);
 			border-radius: 5px;
 			text-shadow: none;
 			box-shadow: none;
 			font-size: 12px;
 			border: none;
 			transition: all 0.2s ease-in-out;
+			color: var(--atum-text-white);
 			
 			&:hover, &:active {
-				background-color: lighten($primary, 10%);
-				border-color: lighten($primary, 10%);
+				background-color: var(--atum-settings-btn-save-hover);
+				border-color: var(--atum-settings-btn-save-hover);
 				transform: none;
 			}
 			
@@ -972,23 +858,23 @@ $settings-xs-min:           568px !default;
 				border-radius: 5px;
 				width: 110px;
 				margin-right: 10px;
-				border: solid 0.5px $wp-gray-5;
+				border: solid 0.5px var(--wp-gray-5);
 				background-color: transparent !important;
 				position: relative;
 				padding: 0 0 0 20px;
 				
 				&:hover {
-					border-color: $gray-600;
+					border-color: var(--gray-600);
 				}
 				
 				&:focus {
-					border-color: $blue;
+					border-color: var(--blue);
 					
 					.wp-color-result-text {
 						visibility: hidden;
 						
 						&:before {
-							color: $gray-600;
+							color: var(--gray-600);
 							content: "|";
 							visibility: visible;
 						}
@@ -998,7 +884,7 @@ $settings-xs-min:           568px !default;
 				.wp-color-result-text {
 					line-height: 29px;
 					background-color: transparent;
-					color: $gray-600;
+					color: var(--gray-600);
 					border-left: none;
 					font-size: 12px;
 					line-height: 1.17px;
@@ -1014,25 +900,25 @@ $settings-xs-min:           568px !default;
 					position: absolute;
 					left: 4px;
 					top: 3px;
-					box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+					box-shadow: inset 0 0 1px var(--black-shadow);
 				}
 			}
 			
 			.wp-picker-clear {
-				background-color: $secondary;
+				background-color: var(--secondary);
 				color: $white;
 				border: none;
 				height: 31px;
 				line-height: 31px;
 				
 				&:hover {
-					background-color: rgba($secondary, .8);
+					background-color: var(--secondary-hover);
 				}
 			}
 		}
 		
 		.atum-settings-html {
-			color: $gray-500;
+			color: var(--gray-500);
 			margin-bottom: $grid-gutter-width/2;
 			padding-top: 12px;
 			font-size: 15px;
@@ -1042,7 +928,7 @@ $settings-xs-min:           568px !default;
 			line-height: 1.47;
 			
 			a {
-				color: $blue;
+				color: var(--blue);
 				text-decoration: none;
 			}
 		}
@@ -1189,7 +1075,7 @@ $settings-xs-min:           568px !default;
 input[type=search] {
 	&::placeholder {
 		font-style: italic !important;
-		color: $gray-500 !important;
+		color: var(--gray-500) !important;
 		font-size: 12px;
 		padding-left: 7px;
 	}

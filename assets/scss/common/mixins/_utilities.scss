@@ -37,11 +37,11 @@
 @mixin placeholder($color: $input-color-placeholder) {
 	// Firefox
 	&::-moz-placeholder {
-		color: $color;
+		color: var(--#{$color});
 		opacity: 1; // Override Firefox's unusual default opacity
 	}
-	&:-ms-input-placeholder { color: $color; } // Internet Explorer 10+
-	&::-webkit-input-placeholder  { color: $color; } // Safari and Chrome
+	&:-ms-input-placeholder { color: var(--#{$color}); } // Internet Explorer 10+
+	&::-webkit-input-placeholder  { color: var(--#{$color}); } // Safari and Chrome
 }
 
 // Clearfix

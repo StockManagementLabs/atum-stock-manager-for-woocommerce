@@ -181,6 +181,7 @@ class Settings {
 
 			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+
 			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
 
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
@@ -214,6 +215,11 @@ class Settings {
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'wp-color-picker' );
+			// Get visual mode style selected.
+			wp_add_inline_style(
+				'atum-settings',
+				Helpers::get_visual_mode_style()
+			);
 			wp_enqueue_style( self::UI_SLUG );
 
 			if ( wp_script_is( 'es6-promise', 'registered' ) ) {

@@ -325,6 +325,11 @@ body {
 	
 	.select2-container--default {
 		
+		.select2-results__option--highlighted[aria-selected] {
+			background-color: var(--primary);
+			color: var(--white);
+		}
+		
 		&.atum-select2, &.atum-enhanced-select {
 			
 			&.select2-container--disabled {
@@ -817,7 +822,7 @@ body {
 				}
 			}
 			
-			.select2-results__option--highlighted[aria-selected] {
+			.select2-results__option--highlighted[aria-selected], .select2-results__option--highlighted {
 				background-color: var(--primary);
 				color: var(--white);
 			}

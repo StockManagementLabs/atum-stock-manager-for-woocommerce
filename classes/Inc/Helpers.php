@@ -2475,12 +2475,19 @@ final class Helpers {
 	 */
 	public static function get_visual_mode_style() {
 
+		global $wp;
+
 		$style = '';
 
 		$theme_settings = self::get_option( 'theme_settings' );
 		$gray_500       = '#adb5bd';
+		$gray_500_rgb   = '173,181,189';
+		$page           = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : NULL;
 
 		if ( 'hc_mode' === $theme_settings ) {
+
+
+
 			$hc_blue       = '#016b7f';
 			$hc_blue_rgb   = '1,107,127';
 			$hc_dark_blue  = '#27283b';
@@ -2491,6 +2498,9 @@ final class Helpers {
 						    --gray-600: $hc_dark_blue;
 						    --blue: $hc_blue;
 						    --blue-hover: rgba($hc_blue_rgb,0.6);
+						    --blue-dark-lighten: $hc_blue;
+						    --blue-dark-light-2: $hc_blue_light;
+						    --green: $hc_blue;
 						    --green-hover: rgba($hc_blue_rgb,0.6);
 						    --green-light: $hc_blue_light;
 						    --blue-light: $hc_blue_light;
@@ -2502,6 +2512,9 @@ final class Helpers {
 						    --primary-hover: rgba($hc_blue_rgb,0.6);
 						    --darken: $hc_blue;
 						    --black-shadow-light: rgba($hc_blue_rgb,0.04);
+						    --bg-white: $hc_blue_light;
+						    --white-shadow: rgba($gray_500_rgb,0.2);
+						    --atum-text-white: $hc_blue;
 						    --orange: $hc_blue;
 						    --orange: rgba($hc_blue_rgb,0.6);
 						    --orange-light-2: $hc_blue_light;
@@ -2531,7 +2544,14 @@ final class Helpers {
 						    --atum-pagination-bg: white;
 						    --atum-pagination-border: $gray_500;
 						    --atum-pagination-border-disabled: #e9ecef;
-						    --atum-row-shadow: 0;
+						    --atum-dark-bg: white;
+						    --atum-settings-nav-link: $hc_blue;
+						    --atum-settings-section-text: $hc_dark_blue;
+						    --atum-settings-section-description: $hc_dark_blue;
+						    --atum-settings-text-logo: $hc_dark_blue;
+						    --atum-settings-input-border: $gray_500;
+						    --atum-settings-btn-save: white;
+						    --atum-settings-btn-save-hover: $hc_blue_light;
 							}";
 		}
 

@@ -248,6 +248,10 @@
   --blue-light-hover: rgba(219, 249, 255, 0.6);
   --blue-light-shadow-light: rgba(219, 249, 255, 0.04);
   --blue-light-shadow: rgba(219, 249, 255, 0.2);
+  --blue-dark-lighten: #3b3d5a;
+  --blue-dark-lighten-hover: rgba(59, 61, 90, 0.6);
+  --blue-dark-lighten-shadow-light: rgba(59, 61, 90, 0.04);
+  --blue-dark-lighten-shadow: rgba(59, 61, 90, 0.2);
   --white: #fff;
   --white-hover: rgba(255, 255, 255, 0.6);
   --white-shadow-light: rgba(255, 255, 255, 0.04);
@@ -284,10 +288,10 @@
   --primary-hover: rgba(0, 184, 219, 0.6);
   --primary-shadow-light: rgba(0, 184, 219, 0.04);
   --primary-shadow: rgba(0, 184, 219, 0.2);
-  --secondary: #6c757d;
-  --secondary-hover: rgba(108, 117, 125, 0.6);
-  --secondary-shadow-light: rgba(108, 117, 125, 0.04);
-  --secondary-shadow: rgba(108, 117, 125, 0.2);
+  --secondary: #adb5bd;
+  --secondary-hover: rgba(173, 181, 189, 0.6);
+  --secondary-shadow-light: rgba(173, 181, 189, 0.04);
+  --secondary-shadow: rgba(173, 181, 189, 0.2);
   --success: #69C61D;
   --success-hover: rgba(105, 198, 29, 0.6);
   --success-shadow-light: rgba(105, 198, 29, 0.04);
@@ -404,6 +408,8 @@
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow-light: rgba(150, 88, 138, 0.04);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
+  --atum-bg-white: #fff;
+  --atum-text-white: #fff;
   --wp-yiq-text-dark: #212529;
   --wp-yiq-text-light: #fff;
   --wp-pink-darken-expanded: #e7d0e3;
@@ -420,6 +426,14 @@
   --atum-pagination-border-disabled: transparent;
   --order-green-light: #d5f5ba;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
+  --atum-dark-bg: #3b3d5a;
+  --atum-settings-nav-link: #fff;
+  --atum-settings-section-text: #fff;
+  --atum-settings-section-description: #adb5bd;
+  --atum-settings-text-logo: #fff;
+  --atum-settings-input-border: #e9ecef;
+  --atum-settings-btn-save: #00B8DB;
+  --atum-settings-btn-save-hover: lighten($primary, 10%);
 }
 
 .btn {
@@ -557,41 +571,41 @@ fieldset:disabled a.btn {
 }
 
 .btn-secondary {
-  color: var(--wp-yiq-text-light);
+  color: var(--wp-yiq-text-dark);
   background-color: var(--secondary);
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-secondary:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--wp-yiq-text-dark);
   background-color: var(--secondary-hover);
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
-  color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  color: var(--wp-yiq-text-dark);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
 }
 
 .btn-secondary.disabled, .btn-secondary:disabled {
-  color: var(--wp-yiq-text-light);
+  color: var(--wp-yiq-text-dark);
   background-color: var(--secondary);
   border-color: var(--secondary);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle {
-  color: var(--wp-yiq-text-light);
+  color: var(--wp-yiq-text-dark);
   background-color: var(--secondary-hover);
   border-color: var(--secondary-hover);
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
-  color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  color: var(--wp-yiq-text-dark);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
 }
 
 .btn-success {
@@ -859,39 +873,39 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-secondary {
-  color: #6c757d;
+  color: #adb5bd;
   background-color: transparent;
   background-image: none;
-  border-color: #6c757d;
+  border-color: #adb5bd;
 }
 
 .btn-outline-secondary:hover {
-  color: var(--wp-yiq-text-light);
-  background-color: #6c757d;
-  border-color: #6c757d;
+  color: var(--wp-yiq-text-dark);
+  background-color: #adb5bd;
+  border-color: #adb5bd;
 }
 
 .btn-outline-secondary:focus, .btn-outline-secondary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
 }
 
 .btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
-  color: #6c757d;
+  color: #adb5bd;
   background-color: transparent;
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-outline-secondary.dropdown-toggle {
-  color: var(--wp-yiq-text-light);
-  background-color: #6c757d;
-  border-color: #6c757d;
+  color: var(--wp-yiq-text-dark);
+  background-color: #adb5bd;
+  border-color: #adb5bd;
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-secondary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
 }
 
 .btn-outline-success {
@@ -1457,6 +1471,11 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
   right: auto;
 }
 
+body .select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--single, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--single {
   background-color: #E5E5E5;
   cursor: default;
@@ -1883,7 +1902,7 @@ body .select2-container--classic.atum-select2 .select2-results__option[aria-disa
   color: #999;
 }
 
-body .select2-container--classic.atum-select2 .select2-results__option--highlighted[aria-selected], body .select2-container--classic.atum-enhanced-select .select2-results__option--highlighted[aria-selected] {
+body .select2-container--classic.atum-select2 .select2-results__option--highlighted[aria-selected], body .select2-container--classic.atum-select2 .select2-results__option--highlighted, body .select2-container--classic.atum-enhanced-select .select2-results__option--highlighted[aria-selected], body .select2-container--classic.atum-enhanced-select .select2-results__option--highlighted {
   background-color: var(--primary);
   color: var(--white);
 }
@@ -2990,8 +3009,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 .switchery {
   width: 48px;
   border-radius: 100px;
-  -webkit-box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
-          box-shadow: inset 1px 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+  -webkit-box-shadow: inset 1px 1px 3px 0 var(--black-shadow) !important;
+          box-shadow: inset 1px 1px 3px 0 var(--black-shadow) !important;
   border: none;
 }
 
@@ -2999,7 +3018,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   height: 26px;
   width: 26px;
   top: -3px;
-  background-color: #69C61D;
+  background-color: var(--green);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -3133,7 +3152,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   text-transform: capitalize;
   margin-bottom: 15px;
   font-weight: bold;
-  color: #27283B;
+  color: var(--blue-dark);
   font-size: 36px;
   margin-bottom: 20px;
 }
@@ -3159,10 +3178,10 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   width: 165px;
   height: 44px;
   border-radius: 8px;
-  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
-          box-shadow: 0 4px 0 0 #e9ecef;
-  background-color: #3b3d5a;
-  color: #fff;
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
+          box-shadow: 0 4px 0 0 var(--gray-200);
+  background-color: var(--blue-dark-lighten);
+  color: var(--white);
   font-weight: bold;
   font-size: 16px;
   display: -webkit-box;
@@ -3176,19 +3195,14 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
           justify-content: space-evenly;
 }
 
-.atum-settings-wrapper .switch-interface-style.bg-light {
-  background-color: #fff;
-  color: #6c757d;
-}
-
 .atum-settings-wrapper .atum-nav {
   border: none;
-  background-color: #3b3d5a;
+  background-color: var(--atum-dark-bg);
   border-radius: 6px;
   position: relative;
   min-width: 230px;
-  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
-          box-shadow: 0 4px 0 0 #e9ecef;
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
+          box-shadow: 0 4px 0 0 var(--gray-200);
   min-height: 550px;
 }
 
@@ -3198,68 +3212,10 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   }
 }
 
-.atum-settings-wrapper .atum-nav-light {
-  background-color: #fff;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-header {
-  background-color: #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
-  color: #fff;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link {
-  color: #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-light .atum-nav-link:focus {
-  background-color: #dbf9ff;
-  color: #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:before, .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:after {
-  background: transparent;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link.active {
-  cursor: default;
-  background-color: #dbf9ff;
-  color: #00B8DB;
-  border-right: 3px solid #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link.active .menu-helper {
-  -webkit-animation: inherit;
-          animation: inherit;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-item {
-  -webkit-box-shadow: 0 1px 0 0 #e9ecef;
-          box-shadow: 0 1px 0 0 #e9ecef;
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer .nav-footer-logo span {
-  color: #27283B;
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer p {
-  color: #adb5bd;
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer p a {
-  color: #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer p a:hover {
-  color: #00B8DB;
-}
-
 .atum-settings-wrapper .atum-nav-header {
-  background-color: #3b3d5a;
-  -webkit-box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
-          box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  background-color: var(--blue-dark-lighten);
+  -webkit-box-shadow: 0 1px 0 0 var(--white-shadow);
+          box-shadow: 0 1px 0 0 var(--white-shadow);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3275,7 +3231,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper .atum-nav-header .toogle-menu {
   font-size: 20px;
-  color: #adb5bd;
+  color: var(--gray-500);
   display: none;
 }
 
@@ -3291,7 +3247,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
       -ms-flex-align: center;
           align-items: center;
   text-decoration: none;
-  color: #fff;
+  color: var(--white);
   height: 51px;
   font-size: 21px;
   font-weight: bold;
@@ -3336,14 +3292,14 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper .nav-footer .nav-footer-logo span {
-  color: #fff;
+  color: var(--atum-settings-text-logo);
   font-size: 27px;
   margin-left: 10px;
   font-weight: bold;
 }
 
 .atum-settings-wrapper .nav-footer p {
-  color: #fff;
+  color: var(--atum-settings-text-logo);
   margin: 0;
   font-size: 12px;
   font-weight: normal;
@@ -3363,11 +3319,11 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper .nav-footer p a {
   text-decoration: none;
-  color: #00B8DB;
+  color: var(--blue);
 }
 
 .atum-settings-wrapper .nav-footer p a:hover {
-  color: #00B8DB;
+  color: var(--blue);
 }
 
 .atum-settings-wrapper .atum-nav-list {
@@ -3383,8 +3339,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 .atum-settings-wrapper .atum-nav-item {
   display: block;
   margin: 0;
-  -webkit-box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
-          box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  -webkit-box-shadow: 0 1px 0 0 var(--white-shadow);
+          box-shadow: 0 1px 0 0 var(--white-shadow);
 }
 
 .atum-settings-wrapper .atum-nav-link {
@@ -3402,7 +3358,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   position: relative;
   overflow: hidden;
-  color: #fff;
+  color: var(--atum-settings-nav-link);
   -webkit-transition: color 0.3s;
   transition: color 0.3s;
   height: 51px;
@@ -3419,12 +3375,13 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-link:focus {
   outline: none;
-  color: #fff;
+  color: var(--atum-settings-nav-link);
   -webkit-box-shadow: none;
           box-shadow: none;
-  background-color: #8284ac;
+  background-color: var(--blue-dark-light-2);
   font-size: 15px;
   font-weight: bold;
+  border-right: 3px solid var(--atum-settings-nav-link);
 }
 
 .atum-settings-wrapper .atum-nav-link .menu-helper {
@@ -3440,7 +3397,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   width: 100%;
   height: 1px;
   opacity: 0;
-  background: #fff;
+  background: var(--atum-bg-white);
   -webkit-transform: translate3d(0, -3em, 0);
           transform: translate3d(0, -3em, 0);
   -webkit-transition: opacity 0.2s, -webkit-transform 0s 0.3s;
@@ -3464,11 +3421,11 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper .atum-nav-link.active {
   cursor: default;
-  background-color: #8284ac;
+  background-color: var(--blue-dark-light-2);
   font-size: 15px;
   font-weight: bold;
-  color: #fff;
-  border-right: 3px solid #fff;
+  color: var(--atum-settings-nav-link);
+  border-right: 3px solid var(--atum-settings-nav-link);
 }
 
 @media all and (max-width: 992px) {
@@ -3557,18 +3514,6 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper span, .atum-settings-wrapper .atum-nav-light .atum-nav-list .menu-helper span {
     display: block;
   }
-  .atum-settings-wrapper .atum-nav-light .atum-nav-header {
-    background-color: #00B8DB;
-    -webkit-box-shadow: 0 1px 0 0 #e9ecef;
-            box-shadow: 0 1px 0 0 #e9ecef;
-  }
-  .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
-    background-color: transparent;
-    border: none;
-  }
-  .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:active {
-    outline: 0;
-  }
 }
 
 .atum-settings-wrapper #atum-settings {
@@ -3599,7 +3544,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   top: 0;
   bottom: 0;
   z-index: 10;
-  background-color: #f8f9fa;
+  background-color: var(--gray-100);
   opacity: 0.5;
 }
 
@@ -3618,7 +3563,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   z-index: 50;
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
-  border-top-color: #6c757d;
+  border-top-color: var(--gray-600);
 }
 
 @keyframes loader-rotate {
@@ -3637,25 +3582,26 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .btn-secondary {
-  background-color: #adb5bd;
+  background-color: var(--secondary);
   border: none;
+  color: var(--white);
 }
 
 .atum-settings-wrapper #atum-settings .btn-secondary:hover, .atum-settings-wrapper #atum-settings .btn-secondary:active {
-  background-color: #69C61D;
-  -webkit-box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
-          box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+  background-color: var(--green);
+  -webkit-box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
+          box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
 }
 
 .atum-settings-wrapper #atum-settings .active {
-  background-color: #69C61D;
-  -webkit-box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
-          box-shadow: inset -1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+  background-color: var(--green);
+  -webkit-box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
+          box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
 }
 
 .atum-settings-wrapper #atum-settings .section-general-title {
   padding: 0 20px;
-  background-color: #3b3d5a;
+  background-color: var(--blue-dark-lighten);
   border-radius: 6px;
   height: 51px;
   display: -webkit-box;
@@ -3675,26 +3621,13 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-general-title h2 {
-  color: #fff;
+  color: var(--white);
   margin: 0;
   text-transform: uppercase;
   font-size: 18px;
   font-weight: bold;
   padding-left: 5px;
   font-weight: bold;
-}
-
-.atum-settings-wrapper #atum-settings .section-general-title-light {
-  background-color: #00B8DB;
-}
-
-.atum-settings-wrapper #atum-settings .section-general-title-light h2 {
-  color: #fff;
-}
-
-.atum-settings-wrapper #atum-settings .section-general-title-light input[type=submit], .atum-settings-wrapper #atum-settings .section-general-title-light input[type=submit]:hover {
-  background-color: #fff;
-  color: #00B8DB;
 }
 
 .atum-settings-wrapper #atum-settings .settings-section {
@@ -3707,8 +3640,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper #atum-settings .section-title {
   margin-top: 11px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  background-color: #3b3d5a;
+  border-bottom: 2px solid var(--white-shadow);
+  background-color: var(--atum-dark-bg);
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
   display: -webkit-box;
@@ -3724,7 +3657,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   padding-left: 20px;
   font-size: 18px;
   font-weight: bold;
-  color: #fff;
+  color: var(--atum-settings-section-text);
 }
 
 .atum-settings-wrapper #atum-settings .section-title .select2-dropdown .select2-search {
@@ -3747,28 +3680,28 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper #atum-settings .section-title input[type=search]::-webkit-input-placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
 
 .atum-settings-wrapper #atum-settings .section-title input[type=search]:-ms-input-placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
 
 .atum-settings-wrapper #atum-settings .section-title input[type=search]::-ms-input-placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
 
 .atum-settings-wrapper #atum-settings .section-title input[type=search]::placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
@@ -3806,42 +3739,21 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-title h2 {
-  color: #fff;
+  color: var(--atum-settings-section-text);
   margin: 0;
   text-transform: capitalize;
   font-size: 18px;
   font-weight: bold;
 }
 
-.atum-settings-wrapper #atum-settings .section-title.section-title-light {
-  background-color: #fff;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.atum-settings-wrapper #atum-settings .section-title.section-title-light h2 {
-  color: #27283B;
-}
-
 .atum-settings-wrapper #atum-settings .section-fields {
   padding: 0px 20px 120px 25px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
-  background: #3b3d5a url("../images/settings/bg-settings.png") no-repeat bottom;
+  background: var(--atum-dark-bg) url("../images/settings/bg-settings.png") no-repeat bottom;
   background-size: cover;
-  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
-          box-shadow: 0 4px 0 0 #e9ecef;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields.section-field-light {
-  background-color: #fff;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields.section-field-light tr:not(:last-child) {
-  border-bottom: 1px solid #e9ecef;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields.section-field-light th {
-  color: #6c757d;
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
+          box-shadow: 0 4px 0 0 var(--gray-200);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .form-table {
@@ -3849,7 +3761,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-fields tr:not(:last-child) {
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 0.5px solid var(--white-shadow);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields th, .atum-settings-wrapper #atum-settings .section-fields td {
@@ -3878,14 +3790,14 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper #atum-settings .section-fields th {
   width: 37%;
-  color: #fff;
+  color: var(--atum-settings-section-text);
   font-weight: bold;
   font-size: 15px;
   padding-top: 25px;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .atum-setting-info {
-  color: #adb5bd;
+  color: var(--atum-settings-section-description);
   margin-bottom: 15px;
   padding-top: 12px;
   font-size: 15px;
@@ -3915,18 +3827,18 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   margin: 0;
   border-radius: 4px;
   height: 30px;
-  color: #6c757d;
-  border: 1px solid #e9ecef;
+  color: var(--gray-600);
+  border: 1px solid var(--atum-settings-input-border);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields input[type=text]:hover, .atum-settings-wrapper #atum-settings .section-fields input[type=number]:hover, .atum-settings-wrapper #atum-settings .section-fields select:hover, .atum-settings-wrapper #atum-settings .section-fields textarea:hover {
-  border: solid 1px #6c757d;
+  border: solid 1px var(--gray-600);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields input[type=text]:focus, .atum-settings-wrapper #atum-settings .section-fields input[type=number]:focus, .atum-settings-wrapper #atum-settings .section-fields select:focus, .atum-settings-wrapper #atum-settings .section-fields textarea:focus {
-  border: solid 1px #00B8DB;
+  border: solid 1px var(--blue);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields textarea {
@@ -4010,16 +3922,16 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .select2-container.atum-select2 .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-moz-placeholder, .atum-settings-wrapper #atum-settings .section-fields .script-runner .select2-container.atum-enhanced-select .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-moz-placeholder {
-  color: #999;
+  color: var(--#999);
   opacity: 1;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .select2-container.atum-select2 .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field:-ms-input-placeholder, .atum-settings-wrapper #atum-settings .section-fields .script-runner .select2-container.atum-enhanced-select .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field:-ms-input-placeholder {
-  color: #999;
+  color: var(--#999);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .select2-container.atum-select2 .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-webkit-input-placeholder, .atum-settings-wrapper #atum-settings .section-fields .script-runner .select2-container.atum-enhanced-select .select2-selection--multiple .select2-search.select2-search--inline .select2-search__field::-webkit-input-placeholder {
-  color: #999;
+  color: var(--#999);
 }
 
 @media all and (max-width: 480px) {
@@ -4053,11 +3965,11 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row i:hover {
-  color: #00B8DB;
+  color: var(--primary);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row i.remove-row:hover {
-  color: #FF4848;
+  color: var(--danger);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls {
@@ -4073,7 +3985,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .select2-selection__choice .select2-selection__choice__remove, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .select2-selection__choice .select2-selection__choice__remove, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .select2-selection__choice .select2-selection__choice__remove {
-  color: #fff;
+  color: var(--white);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .add-row {
@@ -4093,7 +4005,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .error-message {
   display: block;
-  color: #FF4848;
+  color: var(--danger);
   margin-top: 15px;
   font-weight: normal;
   font-size: 12px;
@@ -4128,7 +4040,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   padding: 11px 20px 9px;
   line-height: 1;
   height: auto;
-  background: #00B8DB;
+  background: var(--atum-settings-btn-save);
   border-radius: 5px;
   text-shadow: none;
   -webkit-box-shadow: none;
@@ -4137,11 +4049,12 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   border: none;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+  color: var(--atum-text-white);
 }
 
 .atum-settings-wrapper #atum-settings input[type=submit]:hover, .atum-settings-wrapper #atum-settings input[type=submit]:active {
-  background-color: #0fd9ff;
-  border-color: #0fd9ff;
+  background-color: var(--atum-settings-btn-save-hover);
+  border-color: var(--atum-settings-btn-save-hover);
   -webkit-transform: none;
           transform: none;
 }
@@ -4175,18 +4088,18 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   border-radius: 5px;
   width: 110px;
   margin-right: 10px;
-  border: solid 0.5px #E5E5E5;
+  border: solid 0.5px var(--wp-gray-5);
   background-color: transparent !important;
   position: relative;
   padding: 0 0 0 20px;
 }
 
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result:hover {
-  border-color: #6c757d;
+  border-color: var(--gray-600);
 }
 
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result:focus {
-  border-color: #00B8DB;
+  border-color: var(--blue);
 }
 
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result:focus .wp-color-result-text {
@@ -4194,7 +4107,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result:focus .wp-color-result-text:before {
-  color: #6c757d;
+  color: var(--gray-600);
   content: "|";
   visibility: visible;
 }
@@ -4202,7 +4115,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result .wp-color-result-text {
   line-height: 29px;
   background-color: transparent;
-  color: #6c757d;
+  color: var(--gray-600);
   border-left: none;
   font-size: 12px;
   line-height: 1.17px;
@@ -4218,12 +4131,12 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   position: absolute;
   left: 4px;
   top: 3px;
-  -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-          box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 1px var(--black-shadow);
+          box-shadow: inset 0 0 1px var(--black-shadow);
 }
 
 .atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-clear {
-  background-color: #6c757d;
+  background-color: var(--secondary);
   color: #fff;
   border: none;
   height: 31px;
@@ -4231,11 +4144,11 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-clear:hover {
-  background-color: rgba(108, 117, 125, 0.8);
+  background-color: var(--secondary-hover);
 }
 
 .atum-settings-wrapper #atum-settings .atum-settings-html {
-  color: #adb5bd;
+  color: var(--gray-500);
   margin-bottom: 15px;
   padding-top: 12px;
   font-size: 15px;
@@ -4246,7 +4159,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .atum-settings-html a {
-  color: #00B8DB;
+  color: var(--blue);
   text-decoration: none;
 }
 
@@ -4358,28 +4271,28 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 input[type=search]::-webkit-input-placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
 
 input[type=search]:-ms-input-placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
 
 input[type=search]::-ms-input-placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }
 
 input[type=search]::placeholder {
   font-style: italic !important;
-  color: #adb5bd !important;
+  color: var(--gray-500) !important;
   font-size: 12px;
   padding-left: 7px;
 }

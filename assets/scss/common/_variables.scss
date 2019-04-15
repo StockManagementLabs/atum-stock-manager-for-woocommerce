@@ -97,27 +97,29 @@ $purple-pl:                             #9357cc !default;
 
 $colors: () !default;
 $colors: map-merge((
-		"blue":            $blue,
-		"blue-gray-light": $blue-gray-light,
-		"orange":          $orange,
-		"red":             $red,
-		"red-light":       $red-light,
-		"red-light-2":     $red-light-2,
-		"green":           $green,
-		"green-light":      $green-light,
-		"blue-light":      $blue-light,
-		"white":           $white,
-		"gray":            $gray-500,
-		"gray-light":      $gray-200,
-		"gray-dark":       $gray-800,
-		"purple":          $purple,
-		"purple-light":    $purple-light,
-		"purple-pl":       $purple-pl,
-		"black":           $black,
+		"blue":              $blue,
+		"blue-gray-light":   $blue-gray-light,
+		"orange":            $orange,
+		"red":               $red,
+		"red-light":         $red-light,
+		"red-light-2":       $red-light-2,
+		"green":             $green,
+		"green-light":       $green-light,
+		"blue-light":        $blue-light,
+		"blue-dark-lighten": $blue-dark-lighten,
+		"white":             $white,
+		"gray":              $gray-500,
+		"gray-light":        $gray-200,
+		"gray-dark":         $gray-800,
+		"purple":            $purple,
+		"purple-light":      $purple-light,
+		"purple-pl":         $purple-pl,
+		"black":             $black,
+		
 ), $colors);
 
 $primary:                               $blue !default;
-$secondary:                             $gray-600 !default;
+$secondary:                             $gray-500 !default;
 $success:                               $green !default;
 $info:                                  $blue-gray-light !default;
 $warning:                               $orange !default;

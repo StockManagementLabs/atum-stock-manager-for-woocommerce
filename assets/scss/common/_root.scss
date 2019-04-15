@@ -35,6 +35,8 @@
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
+	--atum-bg-white: #{$white};
+	--atum-text-white: #{$white};
 	--wp-yiq-text-dark: #{$yiq-text-dark};
 	--wp-yiq-text-light: #{$yiq-text-light};
 	--wp-pink-darken-expanded: #{$wp-pink-darken};
@@ -51,4 +53,12 @@
 	--atum-pagination-border-disabled: transparent;
 	--order-green-light: #{$green-light};
 	--atum-row-shadow: #{rgba($black, 0.04)};
+	--atum-dark-bg: #{$blue-dark-lighten};
+	--atum-settings-nav-link: #{$white};
+	--atum-settings-section-text: #{$white};
+	--atum-settings-section-description: #{$gray-500};
+	--atum-settings-text-logo: #{$white};
+	--atum-settings-input-border: #{$gray-200};
+	--atum-settings-btn-save: #{$primary};
+	--atum-settings-btn-save-hover: lighten($primary, 10%);
 }
