@@ -5209,6 +5209,8 @@ ul.atum_order_notes li .note_content::after {
   background-color: #fff;
   border: none;
   border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .search-box .dropdown-item, p.search-box .dropdown-item {
@@ -6808,10 +6810,20 @@ table.atum-list-table td.pro-version, table.atum-list-table th.pro-version, .flo
 
 table.atum-list-table td.column-title, table.atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title, .inbound-stock-list td.column-title, .inbound-stock-list th.column-title, table.wp-list-table td.column-title, table.wp-list-table th.column-title {
   min-width: 162px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 table.atum-list-table td.column-title > span, table.atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span, .inbound-stock-list td.column-title > span, .inbound-stock-list th.column-title > span, table.wp-list-table td.column-title > span, table.wp-list-table th.column-title > span {
   white-space: nowrap;
+}
+
+table.atum-list-table td.column-title > span i, table.atum-list-table th.column-title > span i, .floatThead-container td.column-title > span i, .floatThead-container th.column-title > span i, .inbound-stock-list td.column-title > span i, .inbound-stock-list th.column-title > span i, table.wp-list-table td.column-title > span i, table.wp-list-table th.column-title > span i {
+  margin-right: 4px;
 }
 
 table.atum-list-table td.column-title .child-arrow, table.atum-list-table th.column-title .child-arrow, .floatThead-container td.column-title .child-arrow, .floatThead-container th.column-title .child-arrow, .inbound-stock-list td.column-title .child-arrow, .inbound-stock-list th.column-title .child-arrow, table.wp-list-table td.column-title .child-arrow, table.wp-list-table th.column-title .child-arrow {
