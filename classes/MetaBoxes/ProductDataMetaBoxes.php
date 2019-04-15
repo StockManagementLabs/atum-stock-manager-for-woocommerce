@@ -4,7 +4,7 @@
  *
  * @package     Atum\MetaBoxes
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2018 Stock Management Labs™
+ * @copyright   ©2019 Stock Management Labs™
  *
  * @since       1.5.0
  */
@@ -466,7 +466,7 @@ class ProductDataMetaBoxes {
 	private function save_extra_data() {
 
 		// If it's out of stock, how many days?
-		$this->product_data['out_stock_days'] = Helpers::get_product_out_of_stock_days( $this->product );
+		$this->product_data['out_stock_days'] = Helpers::get_product_out_stock_days( $this->product );
 
 		// Has location terms assigned?
 		$location_terms                     = wp_get_post_terms( $this->product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY );

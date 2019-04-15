@@ -615,7 +615,7 @@ final class Helpers {
 
 		if ( $out_of_stock_date && $days > 0 ) {
 
-			$days_out_of_stock = self::get_product_out_of_stock_days( $product );
+			$days_out_of_stock = self::get_product_out_stock_days( $product );
 
 			if ( is_numeric( $days_out_of_stock ) ) {
 
@@ -649,9 +649,9 @@ final class Helpers {
 	 *
 	 * @return bool|null  Returns the number of days or NULL if is not "Out of Stock".
 	 */
-	public static function get_product_out_of_stock_days( $product ) {
+	public static function get_product_out_stock_days( $product ) {
 
-		$out_of_stock_days = NULL;
+		$out_stock_days = NULL;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			$product = self::get_atum_product( $product );
@@ -659,25 +659,25 @@ final class Helpers {
 
 		// Check if the current product has the "Out of stock" date recorded.
 		/* @noinspection PhpUndefinedMethodInspection */
-		$out_of_stock_date = $product->get_out_stock_date();
+		$out_stock_date = $product->get_out_stock_date();
 
-		if ( $out_of_stock_date ) {
+		if ( $out_stock_date ) {
 			
 			try {
-				$out_date_time = new \DateTime( $out_of_stock_date );
+				$out_date_time = new \DateTime( $out_stock_date );
 				$now_date_time = new \DateTime( 'now' );
 				$interval      = date_diff( $out_date_time, $now_date_time );
 
-				$out_of_stock_days = $interval->days;
+				$out_stock_days = $interval->days;
 
 			} catch ( \Exception $e ) {
 				error_log( __METHOD__ . ' || Product: ' . $product->get_id() . ' || ' . $e->getMessage() );
-				return $out_of_stock_days;
+				return $out_stock_days;
 			}
 			
 		}
 
-		return $out_of_stock_days;
+		return $out_stock_days;
 
 	}
 

@@ -118,8 +118,8 @@ class Hooks {
 		}
 
 		// Save the orders-related data every time an order status is changed.
-		add_action( 'woocommerce_reduce_order_stock', array( $this, 'save_order_items_props' ), 100 );
-		add_action( 'woocommerce_restore_order_stock', array( $this, 'save_order_items_props' ), 100 );
+		add_action( 'woocommerce_reduce_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
+		add_action( 'woocommerce_restore_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
 
 	}
 
@@ -701,7 +701,7 @@ class Hooks {
 				$product->set_sales_last_days( $sales_last_ndays );
 
 				// Out stock days.
-				$out_of_stock_days = Helpers::get_product_out_of_stock_days( $product );
+				$out_of_stock_days = Helpers::get_product_out_stock_days( $product );
 				$product->set_out_stock_days( $out_of_stock_days );
 
 				// Lost sales.
@@ -710,7 +710,7 @@ class Hooks {
 
 				$product->save_atum_data();
 
-				do_action( 'atum/after_save_order_item_props', $product );
+				do_action( 'atum/after_save_order_item_props', $item, $order );
 
 			}
 

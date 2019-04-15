@@ -63,14 +63,14 @@ class ListTable extends AtumListTable {
 			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'calc_type'           => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'_inbound_stock'      => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
 			'calc_date_expected'  => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
 			'calc_purchase_order' => __( 'PO', ATUM_TEXT_DOMAIN ),
 		);
 
 		// Initialize totalizers.
-		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( 'calc_inbound' => 0 ) );
+		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( '_inbound_stock' => 0 ) );
 
 		parent::__construct( $args );
 		
@@ -280,11 +280,11 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column_calc_inbound( $item ) {
+	protected function column__inbound_stock( $item ) {
 
 		// Get the quantity for the ATUM Order Item.
 		$qty = AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' );
-		$this->increase_total( 'calc_inbound', $qty );
+		$this->increase_total( '_inbound_stock', $qty );
 
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
 

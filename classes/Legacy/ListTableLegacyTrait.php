@@ -144,26 +144,8 @@ trait ListTableLegacyTrait {
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
-			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-
-			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
-				'_purchase_price'      => array(
-					'type'  => 'NUMERIC',
-					'field' => 'purchase_price',
-				),
-				'_supplier'            => array(
-					'type'  => 'NUMERIC',
-					'field' => 'supplier_id',
-				),
-				'_supplier_sku'        => array(
-					'type'  => '',
-					'field' => 'supplier_sku',
-				),
-				'_out_stock_threshold' => array(
-					'type'  => 'NUMERIC',
-					'field' => 'out_stock_threshold',
-				),
-			) );
+			$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {

@@ -62,9 +62,16 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * What columns are numeric and searchable? and strings? append to this two keys
 	 *
-	 * @var array string keys
+	 * @var array
 	 */
 	protected $default_searchable_columns = array();
+
+	/**
+	 * Set up the ATUM columns and types for correct sorting
+	 *
+	 * @var array
+	 */
+	protected $atum_sortable_columns = array();
 
 	/**
 	 * The previously selected items
@@ -1389,13 +1396,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_inbound( $item ) {
+	protected function column__inbound_stock( $item ) {
 
 		$inbound_stock = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
 			$inbound_stock = Helpers::get_inbound_stock_for_product( $this->product );
-			$this->increase_total( 'calc_inbound', $inbound_stock );
+			$this->increase_total( '_inbound_stock', $inbound_stock );
 		}
 
 		return apply_filters( 'atum/list_table/column_inbound_stock', $inbound_stock, $item, $this->product );
@@ -2040,26 +2047,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
-			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-
-			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
-				'_purchase_price'      => array(
-					'type'  => 'NUMERIC',
-					'field' => 'purchase_price',
-				),
-				'_supplier'            => array(
-					'type'  => 'NUMERIC',
-					'field' => 'supplier_id',
-				),
-				'_supplier_sku'        => array(
-					'type'  => '',
-					'field' => 'supplier_sku',
-				),
-				'_out_stock_threshold' => array(
-					'type'  => 'NUMERIC',
-					'field' => 'out_stock_threshold',
-				),
-			) );
+			$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
