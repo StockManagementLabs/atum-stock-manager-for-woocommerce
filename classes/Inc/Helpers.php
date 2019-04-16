@@ -704,7 +704,7 @@ final class Helpers {
 
 		if ( ! isset( $qty ) || is_null( $qty ) ) {
 
-			$cache_key = AtumCache::get_cache_key( 'log_item_qty', $product->get_id() );
+			$cache_key = AtumCache::get_cache_key( 'log_item_qty', [ $product->get_id(), $log_type, $log_status ] );
 			$qty       = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 			if ( ! $has_cache || $force ) {
@@ -724,7 +724,7 @@ final class Helpers {
 					    AND meta_key = '_qty' AND om.order_item_id IN (
 					        SELECT order_item_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
 						    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
-						 )",
+						)",
 						$product->get_id()
 					); // WPCS: unprepared SQL ok.
 
@@ -1598,10 +1598,10 @@ final class Helpers {
 	 *
 	 * @return int|float
 	 */
-	public static function get_inbound_stock_for_product( &$product, $force = FALSE ) {
+	public static function get_product_inbound_stock( &$product, $force = FALSE ) {
 
 		$product_id    = $product->get_id();
-		$cache_key     = AtumCache::get_cache_key( 'inbound_stock_for_product', $product_id );
+		$cache_key     = AtumCache::get_cache_key( 'product_inbound_stock', $product_id );
 		$inbound_stock = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache || $force ) {
@@ -1621,7 +1621,7 @@ final class Helpers {
 					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
 					LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
 					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' 
+					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . PurchaseOrders::FINISHED . "' 
 					AND oim2.`meta_key` = '_qty'
 					GROUP BY oim.`meta_value`;",
 					PurchaseOrders::POST_TYPE,
@@ -1654,9 +1654,9 @@ final class Helpers {
 	 *
 	 * @return int|float
 	 */
-	public static function get_stock_on_hold_for_product( &$product, $force = FALSE ) {
+	public static function get_product_stock_on_hold( &$product, $force = FALSE ) {
 
-		$cache_key     = AtumCache::get_cache_key( 'stock_on_hold', $product->get_id() );
+		$cache_key     = AtumCache::get_cache_key( 'product_stock_on_hold', $product->get_id() );
 		$stock_on_hold = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache || $force ) {

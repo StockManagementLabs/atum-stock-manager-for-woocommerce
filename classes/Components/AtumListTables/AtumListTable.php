@@ -1383,7 +1383,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return apply_filters( 'atum/list_table/column_back_orders', $back_orders, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_back_orders', $back_orders, $item, $this->product, $this );
 
 	}
 
@@ -1401,11 +1401,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		$inbound_stock = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-			$inbound_stock = Helpers::get_inbound_stock_for_product( $this->product );
+			$inbound_stock = Helpers::get_product_inbound_stock( $this->product );
 			$this->increase_total( '_inbound_stock', $inbound_stock );
 		}
 
-		return apply_filters( 'atum/list_table/column_inbound_stock', $inbound_stock, $item, $this->product );
+		return apply_filters( 'atum/list_table/column_inbound_stock', $inbound_stock, $item, $this->product, $this );
 	}
 
 	/**

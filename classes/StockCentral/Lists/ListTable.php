@@ -511,11 +511,11 @@ class ListTable extends AtumListTable {
 		$stock_on_hold = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-			$stock_on_hold = Helpers::get_stock_on_hold_for_product( $this->product );
+			$stock_on_hold = Helpers::get_product_stock_on_hold( $this->product );
 			$this->increase_total( '_stock_on_hold', $stock_on_hold );
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product, $this );
 
 	}
 
@@ -533,7 +533,7 @@ class ListTable extends AtumListTable {
 		$reserved_stock = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'reserved-stock', $this->product );
 		$this->increase_total( '_reserved_stock', $reserved_stock );
 
-		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product, $this );
 	}
 	
 	/**
@@ -564,7 +564,7 @@ class ListTable extends AtumListTable {
 
 		$this->increase_total( '_sold_today', $sold_today );
 		
-		return apply_filters( 'atum/stock_central_list/column_sold_today', $sold_today, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_today', $sold_today, $item, $this->product, $this );
 		
 	}
 
@@ -582,7 +582,7 @@ class ListTable extends AtumListTable {
 		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'customer-returns', $this->product );
 		$this->increase_total( '_customer_returns', $consumer_returns );
 
-		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product, $this );
 	}
 
 	/**
@@ -599,7 +599,7 @@ class ListTable extends AtumListTable {
 		$warehouse_damages = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'warehouse-damage', $this->product );
 		$this->increase_total( '_warehouse_damage', $warehouse_damages );
 
-		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product, $this );
 	}
 
 	/**
@@ -616,7 +616,7 @@ class ListTable extends AtumListTable {
 		$lost_in_post = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'lost-in-post', $this->product );
 		$this->increase_total( '_lost_in_post', $lost_in_post );
 
-		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product, $this );
 	}
 
 	/**
@@ -633,7 +633,7 @@ class ListTable extends AtumListTable {
 		$others = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'other', $this->product );
 		$this->increase_total( '_other_logs', $others );
 
-		return apply_filters( 'atum/stock_central_list/column_other_logs', $others, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_other_logs', $others, $item, $this->product, $this );
 	}
 
 	/**
@@ -673,7 +673,7 @@ class ListTable extends AtumListTable {
 
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays', $sales_last_ndays, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sales_last_days', $sales_last_ndays, $item, $this->product, $this );
 
 	}
 	
@@ -704,7 +704,7 @@ class ListTable extends AtumListTable {
 			}
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last, $item, $this->product, $this );
 		
 	}
 	
@@ -735,7 +735,7 @@ class ListTable extends AtumListTable {
 
 		$out_stock_days = is_numeric( $out_stock_days ) ? $out_stock_days : self::EMPTY_COL;
 		
-		return apply_filters( 'atum/stock_central_list/column_out_stock_days', $out_stock_days, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_out_stock_days', $out_stock_days, $item, $this->product, $this );
 		
 	}
 
@@ -767,7 +767,7 @@ class ListTable extends AtumListTable {
 		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales, [ 'trim_zeros' => TRUE ] ) : self::EMPTY_COL;
 		$this->increase_total( '_lost_sales', $lost_sales );
 
-		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product, $this );
 
 	}
 	
@@ -901,14 +901,15 @@ class ListTable extends AtumListTable {
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 							WHERE `order_id` IN (
-								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "'
+								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` <> %s
 							)
 							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
 							GROUP BY oi.order_item_id
 						) AS T 
 						GROUP BY product_id
 						ORDER by qty DESC;",
-						PurchaseOrders::POST_TYPE
+						PurchaseOrders::POST_TYPE,
+						PurchaseOrders::FINISHED
 					); // WPCS: unprepared SQL ok.
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.

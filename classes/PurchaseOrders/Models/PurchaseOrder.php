@@ -510,7 +510,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( is_a( $product, '\WC_Product' ) ) {
-				Helpers::get_inbound_stock_for_product( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
+				Helpers::get_product_inbound_stock( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
 				$product->save_atum_data();
 			}
 

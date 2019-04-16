@@ -690,7 +690,7 @@ class Hooks {
 			if ( is_a( $product, '\WC_Product' ) ) {
 
 				// Set stock "On Hold".
-				Helpers::get_stock_on_hold_for_product( $product, TRUE ); // This already sets the value to the product.
+				Helpers::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
 
 				// Set sold today.
 				$sold_today = Helpers::get_sold_last_days( $product_id, 'today 00:00:00', $current_time );
