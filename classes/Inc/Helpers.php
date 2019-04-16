@@ -2467,6 +2467,18 @@ final class Helpers {
 	}
 
 	/**
+	 * Returns whether current execution is executing or not from a an ATUM Ajax action call
+	 *
+	 * @since 1.5.8
+	 *
+	 * @return bool
+	 */
+	public static function is_atum_ajax() {
+
+		return defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['action'] && 'atum_' === substr( $_POST['action'], 0, 5 ) );
+	}
+	
+	/**
 	 * Get selected visual mode style
 	 *
 	 * @since 1.5.7.3
