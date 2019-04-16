@@ -35,6 +35,7 @@
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
+	--light: #{$light};
 	--atum-bg-white: #{$white};
 	--atum-text-white: #{$white};
 	--wp-yiq-text-dark: #{$yiq-text-dark};
@@ -61,4 +62,11 @@
 	--atum-settings-input-border: #{$gray-200};
 	--atum-settings-btn-save: #{$primary};
 	--atum-settings-btn-save-hover: lighten($primary, 10%);
+	--wp-nth-child: #{$gray-100};
+	--dash-card-text: #{$gray-500};
+	--dash-atum-version: transparentize($black, 0.9);
+	--dash-widget-primary: #{$widget-primary};
+	--dash-widget-success: #{$widget-success};
+	--dash-widget-warning: #{$widget-warning};
+	--dash-widget-danger: #{$widget-danger};
 }

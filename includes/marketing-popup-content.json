@@ -40,13 +40,13 @@
 		{
 			"text"      : "More info",
 			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
-			"class"     : "btn btn-success purple",
-			"css"       : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;background-color:#9357cc;"
+			"class"     : "btn btn-purple-pl",
+			"css"       : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;"
 		},
 		{
 			"text"  : "Live Demo",
 			"url"   : "http://demo.productlevels.stockmanagementlabs.com/",
-			"class" : "btn btn-outline-success purple",
+			"class" : "btn btn-outline-purple-pl",
 			"css"   : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;"
 		}
 	],

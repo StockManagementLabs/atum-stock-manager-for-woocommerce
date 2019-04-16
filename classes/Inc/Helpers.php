@@ -2475,14 +2475,11 @@ final class Helpers {
 	 */
 	public static function get_visual_mode_style() {
 
-		global $wp;
-
 		$style = '';
 
 		$theme_settings = self::get_option( 'theme_settings' );
 		$gray_500       = '#adb5bd';
 		$gray_500_rgb   = '173,181,189';
-		$page           = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : NULL;
 
 		if ( 'hc_mode' === $theme_settings ) {
 
@@ -2494,6 +2491,7 @@ final class Helpers {
 			$hc_blue_light = '#e6fbff';
 			$style         = ":root{
 							--gray-100: white;
+							--gray-200-shadow: $gray_500;
 						    --gray-500: $hc_blue;
 						    --gray-600: $hc_dark_blue;
 						    --blue: $hc_blue;
@@ -2526,7 +2524,10 @@ final class Helpers {
 						    --success-hover: rgba($hc_blue_rgb,0.6);
 						    --info: $hc_blue;
 						    --info-hover: rgba($hc_blue_rgb,0.6);
+						    --secondary: $gray_500;
 						    --secondary-shadow: rgba($hc_blue_rgb,0.2);
+						    --purple-pl: $hc_blue;
+						    --purple-pl-hover: rgba($hc_blue_rgb,0.6);
 						    --wp-pink-darken-expanded: $hc_blue;
 						    --orange-dark-light: $hc_blue_light;
 						    --wc-purple-expanded: $hc_blue;
@@ -2552,6 +2553,14 @@ final class Helpers {
 						    --atum-settings-input-border: $gray_500;
 						    --atum-settings-btn-save: white;
 						    --atum-settings-btn-save-hover: $hc_blue_light;
+						    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
+						    --wp-nth-child: transparent;
+						    --dash-card-text: $hc_dark_blue;
+						    --dash-widget-primary: $hc_blue;
+						    --dash-widget-success: $hc_blue;
+						    --dash-widget-warning: $hc_blue;
+						    --dash-widget-danger: $hc_blue;
+						    
 							}";
 		}
 

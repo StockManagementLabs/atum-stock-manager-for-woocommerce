@@ -2,16 +2,16 @@
 // Atum Dashboard
 //----------------
 
-$header-bg:                 $blue-light;
+$header-bg:                 var(--blue-light);
 $header-height:             300px;
-$card-border:               $wp-gray-5;
-$card-bg:                   $white;
-$card-text:                 $gray-500;
-$add-widget-color:          $gray-500;
+$card-border:               var(--wp-gray-5);
+$card-bg:                   var(--white);
+$card-text:                 var(--dash-card-text);
+$add-widget-color:          var(--gray-500);
 $widget-bg:                 $card-bg;
-$widget-icon:               $wp-gray-5;
+$widget-icon:               var(--wp-gray-5);
 $widget-controls:           $card-text;
-$widget-controls-hover:     $primary;
+$widget-controls-hover:     var(--primary);
 
 // Style the WP notices
 body.toplevel_page_atum-dashboard {
@@ -109,8 +109,8 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.atum-version {
-			color: $white;
-			background-color: transparentize($black, 0.9);
+			color: var(--white);
+			background-color: var(--dash-atum-version);
 			border-radius: 30px;
 			padding: 1px 15px;
 			font-weight: 100;
@@ -128,7 +128,7 @@ body.toplevel_page_atum-dashboard {
 			font-size: 11px;
 			
 			span {
-				color: $primary;
+				color: var(--primary);
 			}
 			
 			@include tablet-max {
@@ -246,13 +246,13 @@ body.toplevel_page_atum-dashboard {
 					font-size: 20px;
 					font-weight: 100;
 					line-height: 30px;
-					color: $gray-600;
+					color: var(--gray-600);
 					cursor: pointer;
 					margin: 0 10px;
 					position: absolute;
 					
 					&:hover {
-						color: $blue;
+						color: var(--blue);
 					}
 				}
 				
@@ -337,29 +337,29 @@ body.toplevel_page_atum-dashboard {
 							&.btn-success, &.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
 								box-shadow: none;
 								
-								&.purple:hover {
-									opacity: 0.7;
-								}
+								//&.purple:hover {
+								//	opacity: 0.7;
+								//}
 							}
 							
 							&.btn-outline-success {
-								background: $white;
+								background: var(--white);
 								
 								&:hover {
-									background: $green;
+									background: var(--green);
 								}
 								
-								&.purple {
-									background: $white;
-									color: $purple-pl;
-									border-color: $purple-pl;
-									
-									&:hover {
-										background: $purple-pl;
-										color: $white;
-										border-color: $purple-pl;
-									}
-								}
+								//&.purple {
+								//	background: $white;
+								//	color: $purple-pl;
+								//	border-color: $purple-pl;
+								//
+								//	&:hover {
+								//		background: $purple-pl;
+								//		color: $white;
+								//		border-color: $purple-pl;
+								//	}
+								//}
 							}
 						}
 						
@@ -476,10 +476,10 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		&:hover {
-			border-color: $widget-primary;
+			border-color: var(--dash-widget-primary);
 			
 			i, h2 {
-				color: $widget-primary;
+				color: var(--dash-widget-primary);
 			}
 		}
 		
@@ -500,7 +500,7 @@ body.toplevel_page_atum-dashboard {
 		.widget-wrapper {
 			background-color: $widget-bg;
 			border-radius: 5px;
-			box-shadow: 0 3px 2px $gray-200;
+			box-shadow: 0 3px 2px var(--gray-200);
 		}
 		
 		.widget-header, .widget-body {
@@ -589,25 +589,25 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			.config-controls {
-				border-top: 1px solid $light;
+				border-top: 1px solid var(--light);
 				padding-top: $grid-gutter-width/2;
 			}
 		}
 		
 		.widget-primary {
-			color: $widget-primary;
+			color: var(--dash-widget-primary);
 		}
 		
 		.widget-success {
-			color: $widget-success;
+			color: var(--dash-widget-success);
 		}
 		
 		.widget-warning {
-			color: $widget-warning;
+			color: var(--dash-widget-warning);
 		}
 		
 		.widget-danger {
-			color: $widget-danger;
+			color: var(--dash-widget-danger);
 		}
 		
 		@include tablet-max {

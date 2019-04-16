@@ -1741,7 +1741,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	tr {
-		box-shadow: 0 1px 0 0 var(--atum-border);
+		box-shadow: 0 1px 0 0 var(--gray-200-shadow);
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
 			
@@ -2036,6 +2036,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	tbody, #the-list {
+		
+		:nth-child(odd) {
+			background-color: var(--wp-nth-child);
+		}
 		
 		tr {
 			&.expanded {

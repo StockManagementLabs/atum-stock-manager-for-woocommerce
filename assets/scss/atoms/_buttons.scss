@@ -111,7 +111,7 @@ fieldset:disabled a.btn {
 
 @each $color, $value in $theme-colors {
 	.btn-outline-#{$color} {
-		@include button-outline-variant($value);
+		@include button-outline-variant($color, $value);
 	}
 }
 
