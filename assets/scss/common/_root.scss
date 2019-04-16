@@ -64,6 +64,7 @@
 	--atum-settings-btn-save-hover: lighten(#{$primary}, 10%);
 	--wp-nth-child: #{$gray-100};
 	--dash-card-text: #{$gray-500};
+	--dash-widget-text: #{$widget-text};
 	--dash-atum-version: transparentize(#{$black}, 0.9);
 	--dash-widget-primary: #{$widget-primary};
 	--dash-widget-success: #{$widget-success};
@@ -77,4 +78,14 @@
 	--dash-nice-select-arrow-color: #{$gray-500};
 	--dash-nice-select-option-hover: #{$gray-100};
 	--dash-widget-list-border: transparentize(#{$light}, 0.5);
+	--dash-stock-control-widget-primary: #{$widget-primary};
+	--dash-stock-control-widget-success: #{$widget-success};
+	--dash-widget-current-stock-value-bg: #{$red-light};
+	--dash-widget-current-stock-value-text: #{$red};
+	--dash-add-widget-color: #{$gray-500};
+	--dash-blue-trans: rgba(0, 183, 219, 0.79);
+	--dash-green-trans: rgba(106, 200, 30, 0.79);
+	--dash-green-light: rgba(180, 240, 0, 0.79);
+	--dash-green-blue: rgba(30, 200, 149, 0.79);
+	
 }

@@ -524,6 +524,7 @@
   --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
+  --dash-widget-text: #adb5bd;
   --dash-atum-version: transparentize(#000, 0.9);
   --dash-widget-primary: #00B8DB;
   --dash-widget-success: #69C61D;
@@ -537,6 +538,15 @@
   --dash-nice-select-arrow-color: #adb5bd;
   --dash-nice-select-option-hover: #f8f9fa;
   --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
+  --dash-stock-control-widget-primary: #00B8DB;
+  --dash-stock-control-widget-success: #69C61D;
+  --dash-widget-current-stock-value-bg: #ffe1e1;
+  --dash-widget-current-stock-value-text: #FF4848;
+  --dash-add-widget-color: #adb5bd;
+  --dash-blue-trans: rgba(0, 183, 219, 0.79);
+  --dash-green-trans: rgba(106, 200, 30, 0.79);
+  --dash-green-light: rgba(180, 240, 0, 0.79);
+  --dash-green-blue: rgba(30, 200, 149, 0.79);
 }
 
 @font-face {
@@ -4794,7 +4804,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .add-dash-widget {
-  border: 1px dashed var(--gray-500);
+  border: 1px dashed var(--dash-add-widget-color);
   border-radius: 5px;
   margin: 30px 30px 0;
   min-height: 180px;
@@ -4819,7 +4829,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .atum-dashboard .add-dash-widget i, .atum-dashboard .add-dash-widget h2 {
   display: inline-block;
   vertical-align: middle;
-  color: var(--gray-500);
+  color: var(--dash-add-widget-color);
   -webkit-transition: .15s ease-in-out;
   transition: .15s ease-in-out;
   -webkit-user-select: none;
@@ -5237,7 +5247,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .statistics-widget .mobile-filter-nav ul li {
   display: inline-block;
   padding: 15px 10px;
-  color: #adb5bd;
+  color: var(--dash-widget-text);
   font-size: 15px;
   font-weight: 100;
   -webkit-transition: .2s ease-in-out;
@@ -5352,7 +5362,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .statistics-widget .chart-type svg {
   max-width: 32px;
   max-height: 32px;
-  fill: #adb5bd;
+  fill: var(--dash-widget-text);
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
 }
@@ -5500,7 +5510,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .stats-data-widget h5 {
   font-size: 15px;
-  color: #adb5bd;
+  color: var(--dash-widget-text);
   font-weight: 100;
   text-transform: uppercase;
 }
@@ -5549,6 +5559,14 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   .stock-control-widget > div {
     padding: 15px;
   }
+}
+
+.stock-control-widget .stock-data .widget-primary {
+  color: var(--dash-stock-control-widget-primary);
+}
+
+.stock-control-widget .stock-data .widget-success {
+  color: var(--dash-stock-control-widget-success);
 }
 
 .stock-control-widget .stock-chart .stock-chart-tooltip {
@@ -5600,7 +5618,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .stock-control-widget h5 {
   font-size: 15px;
-  color: var(--gray-500);
+  color: var(--dash-widget-text);
   font-weight: 100;
   text-transform: uppercase;
 }
@@ -5675,7 +5693,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   top: 0;
   bottom: 0;
   z-index: 10;
-  background-color: #f8f9fa;
+  background-color: var(--gray-100);
   opacity: 0.5;
 }
 
@@ -5694,7 +5712,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   z-index: 50;
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
-  border-top-color: #6c757d;
+  border-top-color: var(--gray-600);
 }
 
 @keyframes loader-rotate {
@@ -5710,7 +5728,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .current-stock-value-widget h5 {
   font-size: 15px;
-  color: #adb5bd;
+  color: var(--gray-500);
   font-weight: 100;
   text-transform: uppercase;
 }
@@ -5755,7 +5773,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .current-stock-value-widget .current-stock-value-content .total-items-purcharse-price {
-  color: #69C61D;
+  color: var(--green);
 }
 
 .current-stock-value-widget .current-stock-value-content .items-value-title h5, .current-stock-value-widget .current-stock-value-content .stock-value-title h5 {
@@ -5763,13 +5781,13 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .current-stock-value-widget .current-stock-value-content .items-count {
-  color: #00B8DB;
+  color: var(--blue);
 }
 
 .current-stock-value-widget .current-stock-value-content .separator-line {
   width: 100%;
   height: 1px;
-  background-color: #E5E5E5;
+  background-color: var(--wp-gray-5);
   margin: 21px 0 30px 0;
 }
 
@@ -5779,10 +5797,10 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .current-stock-value-widget .current-stock-value-content .items-without-purcharse-price {
   border-radius: 4px;
-  background-color: #ffe1e1;
+  background-color: var(--dash-widget-current-stock-value-bg);
   font-size: 12px;
   line-height: 1;
-  color: #FF4848;
+  color: var(--dash-widget-current-stock-value-text);
   padding: 6px 7px;
 }
 
@@ -5826,7 +5844,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-list .video-list-wrapper .carousel-nav-next, .videos-widget .video-list .video-list-wrapper .carousel-nav-prev {
-  background-color: #f8f9fa;
+  background-color: var(--light);
   padding: 3px;
   position: absolute;
   top: 10px;
@@ -5935,7 +5953,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-list article.active a {
-  color: #00B8DB;
+  color: var(--primary);
   pointer-events: none;
 }
 
@@ -5970,8 +5988,8 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   position: absolute;
   bottom: 6px;
   right: 2px;
-  color: #fff;
-  background-color: #000;
+  color: var(--white);
+  background-color: var(--black);
   border-radius: 2px;
   font-size: 9px;
   line-height: 1;
@@ -5985,14 +6003,14 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .videos-widget .video-list .video-title {
   display: block;
   font-size: 14px;
-  color: #343a40;
+  color: var(--dark);
   font-weight: bold;
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
 }
 
 .videos-widget .video-list .video-title:hover {
-  color: #00B8DB;
+  color: var(--primary);
 }
 
 @media all and (max-width: 768px) {
@@ -6060,7 +6078,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-meta, .videos-widget .video-desc {
-  color: #adb5bd;
+  color: var(--dash-widget-text);
 }
 
 @media all and (max-width: 480px) {
@@ -6227,7 +6245,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .videos-widget .video-preview .channel-info > span .subscriptions {
   display: block;
   font-size: 11px;
-  color: #adb5bd;
+  color: var(--dash-widget-text);
   font-weight: 100;
 }
 
@@ -6248,7 +6266,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-preview .video-player .embed-responsive {
-  background-color: #f8f9fa;
+  background-color: var(--light);
 }
 
 .videos-widget .video-preview .video-player .video-title {
@@ -6355,7 +6373,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .news-widget .post-meta, .news-widget .post-excerpt {
-  color: #adb5bd;
+  color: var(--dash-widget-text);
 }
 
 .news-widget .post-meta {

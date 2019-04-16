@@ -24,7 +24,7 @@
 			li {
 				display: inline-block;
 				padding: $grid-gutter-width/2 10px;
-				color: $widget-text;
+				color: var(--dash-widget-text);
 				font-size: 15px;
 				font-weight: 100;
 				transition: .2s ease-in-out;
@@ -108,7 +108,7 @@
 		svg {
 			max-width: 32px;
 			max-height: 32px;
-			fill: $widget-text;
+			fill: var(--dash-widget-text);
 			transition: 0.2s ease-in-out;
 			
 			@include tablet-max {

@@ -2513,6 +2513,7 @@ final class Helpers {
 						    --green: $hc_blue;
 						    --green-hover: rgba($hc_blue_rgb,0.6);
 						    --green-light: $hc_blue_light;
+						    --dash-blue-trans: $hc_blue_light;
 						    --blue-light: $hc_blue_light;
 						    --light: transparent;
 						    --wp-gray-6: transparent;
@@ -2570,13 +2571,14 @@ final class Helpers {
 						    --dash-card-text: $hc_dark_blue;
 						    --dash-widget-primary: $hc_blue;
 						    --dash-widget-success: $hc_blue;
-						    --dash-widget-warning: $hc_blue;
-						    --dash-widget-danger: $hc_blue;
 						    --dash-nice-select-border: $gray_500;
 						    --dash-nice-select-hover: $hc_dark_blue;
 						    --dash-nice-select-text: $hc_dark_blue;
 						    --dash-nice-select-arrow-color: $hc_dark_blue;
 						    --dash-nice-select-option-hover: $hc_blue_light;
+						    --dash-widget-current-stock-value-bg: $hc_blue;
+							--dash-widget-current-stock-value-text: white;
+							--dash-widget-text: $hc_dark_blue;
 						    
 							}";
 		}

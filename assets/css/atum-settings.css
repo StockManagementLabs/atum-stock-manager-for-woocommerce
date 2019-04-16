@@ -445,6 +445,7 @@
   --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
+  --dash-widget-text: #adb5bd;
   --dash-atum-version: transparentize(#000, 0.9);
   --dash-widget-primary: #00B8DB;
   --dash-widget-success: #69C61D;
@@ -458,6 +459,15 @@
   --dash-nice-select-arrow-color: #adb5bd;
   --dash-nice-select-option-hover: #f8f9fa;
   --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
+  --dash-stock-control-widget-primary: #00B8DB;
+  --dash-stock-control-widget-success: #69C61D;
+  --dash-widget-current-stock-value-bg: #ffe1e1;
+  --dash-widget-current-stock-value-text: #FF4848;
+  --dash-add-widget-color: #adb5bd;
+  --dash-blue-trans: rgba(0, 183, 219, 0.79);
+  --dash-green-trans: rgba(106, 200, 30, 0.79);
+  --dash-green-light: rgba(180, 240, 0, 0.79);
+  --dash-green-blue: rgba(30, 200, 149, 0.79);
 }
 
 .btn {

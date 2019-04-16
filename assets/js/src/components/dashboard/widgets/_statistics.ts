@@ -216,8 +216,8 @@ export default class StatisticsWidget {
 		Switcher.doSwitchers('.value-chart');
 		
 		Switcher.doSwitchers('.products-chart', {
-			color    : this.settings.get('chartColors').blueTrans,
-			jackColor: this.settings.get('chartColors').blue,
+			color    : 'var(--dash-blue-trans)',
+			jackColor: 'var(--blue)',
 		});
 		
 		// Hide/show charts with legend switches.

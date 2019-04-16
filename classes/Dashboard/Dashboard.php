@@ -276,6 +276,7 @@ class Dashboard {
 
 			/*
 			 * Gridstack scripts.
+			 * Gridstack scripts.
 			 */
 			wp_register_script( 'atum-lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE ); // Custom handler required to not load the WP version.
 			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', array(), ATUM_VERSION, TRUE );

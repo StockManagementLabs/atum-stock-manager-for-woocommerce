@@ -453,7 +453,7 @@ body.toplevel_page_atum-dashboard {
 	
 	// Add Widget Zone
 	.add-dash-widget {
-		border: 1px dashed $add-widget-color;
+		border: 1px dashed var(--dash-add-widget-color);
 		border-radius: 5px;
 		margin: $grid-gutter-width $grid-gutter-width 0;
 		min-height: 180px;
@@ -464,7 +464,7 @@ body.toplevel_page_atum-dashboard {
 		i, h2 {
 			display: inline-block;
 			vertical-align: middle;
-			color: $add-widget-color;
+			color: var(--dash-add-widget-color);
 			transition: .15s ease-in-out;
 			user-select: none;
 		}

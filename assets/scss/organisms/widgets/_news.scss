@@ -78,7 +78,7 @@
 	}
 	
 	.post-meta, .post-excerpt {
-		color: $widget-text;
+		color: var(--dash-widget-text);
 	}
 	
 	.post-meta {
