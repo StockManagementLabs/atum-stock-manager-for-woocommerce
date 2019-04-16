@@ -2560,6 +2560,11 @@ final class Helpers {
 						    --dash-widget-success: $hc_blue;
 						    --dash-widget-warning: $hc_blue;
 						    --dash-widget-danger: $hc_blue;
+						    --dash-nice-select-border: $gray_500;
+						    --dash-nice-select-hover: $hc_dark_blue;
+						    --dash-nice-select-text: $hc_dark_blue;
+						    --dash-nice-select-arrow-color: $hc_dark_blue;
+						    --dash-nice-select-option-hover: $hc_blue_light;
 						    
 							}";
 		}

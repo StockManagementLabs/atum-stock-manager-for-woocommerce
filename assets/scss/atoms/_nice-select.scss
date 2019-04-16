@@ -11,19 +11,18 @@ $ns-dropdown-border-radius:        30px !default;
 $ns-list-border-radius:            10px !default;
 $ns-dropdown-height:               42px !default;
 $ns-dropdown-height-small:         36px !default;
-$ns-dropdown-padding:              18px !default;
-$ns-dropdown-text-color:           $gray-500 !default;
+$ns-dropdown-padding:              18px !default
 
-$ns-arrow-color:                   $gray-500 !default;
+$ns-arrow-color:                   var(--dash-nice-select-arrow-color) !default;
 $ns-arrow-size:                    5px !default;;
 
 
 // Style the dropdown
 .nice-select {
 	-webkit-tap-highlight-color: rgba($black, 0);
-	background-color: $white;
+	background-color: var(--white);
 	border-radius: $ns-dropdown-border-radius;
-	border: solid 1px $gray-200;
+	border: solid 1px var(--dash-nice-select-border);
 	box-sizing: border-box;
 	clear: both;
 	cursor: pointer;
@@ -42,10 +41,10 @@ $ns-arrow-size:                    5px !default;;
 	user-select: none;
 	white-space: nowrap;
 	width: auto;
-	color: $ns-dropdown-text-color;
+	color: var(--dash-nice-select-text);
 	
 	&:hover, &:active, &:focus {
-		border-color: darken($gray-200, 10%);
+		border-color: var(--dash-nice-select-hover);
 	}
 	
 	// Arrow
@@ -81,12 +80,12 @@ $ns-arrow-size:                    5px !default;;
 	}
 	
 	&.disabled {
-		border-color: lighten($gray-200, 2%);
-		color: $gray-500;
+		border-color: var(--dash-nice-select-disabled);
+		color: var(--gray-500);
 		pointer-events: none;
 		
 		&:after {
-			border-color: lighten($ns-arrow-color, 20%);
+			border-color: var(--dash-nice-select-disabled-after);
 		}
 	}
 	
@@ -136,9 +135,9 @@ $ns-arrow-size:                    5px !default;;
 	
 	// List and options
 	.list {
-		background-color: $white;
+		background-color: var(--white);
 		border-radius: $ns-list-border-radius;
-		box-shadow: 0 0 0 1px rgba($dark, .11);
+		box-shadow: 0 0 0 1px var(--dark-shadow);
 		box-sizing: border-box;
 		margin-top: 4px;
 		opacity: 0;
@@ -171,17 +170,17 @@ $ns-arrow-size:                    5px !default;;
 		transition: all 0.2s;
 		
 		&:hover, &.focus, &.selected.focus {
-			background-color: $gray-100;
+			background-color: var(--dash-nice-select-option-hover);
 		}
 		
 		&.selected {
-			background-color: $blue-light !important;
-			color: $blue;
+			background-color: var(--blue-light) !important;
+			color: var(--blue);
 		}
 		
 		&.disabled {
 			background-color: transparent;
-			color: $gray-500;
+			color: var(--gray-500);
 			cursor: default;
 		}
 	}

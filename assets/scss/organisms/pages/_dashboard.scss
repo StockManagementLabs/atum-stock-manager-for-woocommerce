@@ -684,7 +684,7 @@ body.toplevel_page_atum-dashboard {
 			top: 0;
 			bottom: 0;
 			z-index: 10;
-			background-color: $gray-100;
+			background-color: var(--gray-100);
 			opacity: 0.5;
 		}
 		
@@ -695,7 +695,7 @@ body.toplevel_page_atum-dashboard {
 			right: 0;
 			margin: auto;
 			@include loader(50px, $info, 3px);
-			border-top-color: $gray-600;
+			border-top-color: var(--gray-600);
 		}
 	}
 	
@@ -707,20 +707,20 @@ body.toplevel_page_atum-dashboard {
 		position: relative;
 		font-size: 17px;
 		text-align: left;
-		color: $dark;
-		border-bottom: 1px solid $light;
+		color: var(--dark);
+		border-bottom: 1px solid var(--light);
 		padding: 20px;
 		margin: -$grid-gutter-width/2 0 0;
 	}
 	
 	.swal2-close {
-		color: $gray-600;
+		color: var(--gray-600);
 		font-weight: 200;
 		font-size: 32px;
 		line-height: 1.7;
 		
 		&:hover {
-			color: $blue;
+			color: var(--blue);
 		}
 	}
 	
@@ -737,7 +737,7 @@ body.toplevel_page_atum-dashboard {
 			margin: auto;
 			display: flex;
 			align-items: center;
-			border-bottom: 0.5px solid transparentize($light, 0.5);
+			border-bottom: 0.5px solid var(--dash-widget-list-border);
 			
 			&:first-child {
 				padding-top: 3px;

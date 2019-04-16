@@ -274,14 +274,22 @@
   --atum-settings-text-logo: #fff;
   --atum-settings-input-border: #e9ecef;
   --atum-settings-btn-save: #00B8DB;
-  --atum-settings-btn-save-hover: lighten($primary, 10%);
+  --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
-  --dash-atum-version: transparentize($black, 0.9);
+  --dash-atum-version: transparentize(#000, 0.9);
   --dash-widget-primary: #00B8DB;
   --dash-widget-success: #69C61D;
   --dash-widget-warning: #EFAF00;
   --dash-widget-danger: #FF4848;
+  --dash-nice-select-text: #adb5bd;
+  --dash-nice-select-border: #e9ecef;
+  --dash-nice-select-hover: darken(#e9ecef, 10%);
+  --dash-nice-select-disabled: lighten(#e9ecef, 2%);
+  --dash-nice-select-disabled-after: lighten(#adb5bd, 20%);
+  --dash-nice-select-arrow-color: #adb5bd;
+  --dash-nice-select-option-hover: #f8f9fa;
+  --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
 }
 
 body {

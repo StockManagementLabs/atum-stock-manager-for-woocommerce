@@ -521,14 +521,22 @@
   --atum-settings-text-logo: #fff;
   --atum-settings-input-border: #e9ecef;
   --atum-settings-btn-save: #00B8DB;
-  --atum-settings-btn-save-hover: lighten($primary, 10%);
+  --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
-  --dash-atum-version: transparentize($black, 0.9);
+  --dash-atum-version: transparentize(#000, 0.9);
   --dash-widget-primary: #00B8DB;
   --dash-widget-success: #69C61D;
   --dash-widget-warning: #EFAF00;
   --dash-widget-danger: #FF4848;
+  --dash-nice-select-text: #adb5bd;
+  --dash-nice-select-border: #e9ecef;
+  --dash-nice-select-hover: darken(#e9ecef, 10%);
+  --dash-nice-select-disabled: lighten(#e9ecef, 2%);
+  --dash-nice-select-disabled-after: lighten(#adb5bd, 20%);
+  --dash-nice-select-arrow-color: #adb5bd;
+  --dash-nice-select-option-hover: #f8f9fa;
+  --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
 }
 
 @font-face {
@@ -2195,9 +2203,9 @@ input[type="button"].btn-block {
 
 .nice-select {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 30px;
-  border: solid 1px #e9ecef;
+  border: solid 1px var(--dash-nice-select-border);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   clear: both;
@@ -2221,16 +2229,16 @@ input[type="button"].btn-block {
           user-select: none;
   white-space: nowrap;
   width: auto;
-  color: #adb5bd;
+  color: var(--dash-nice-select-text);
 }
 
 .nice-select:hover, .nice-select:active, .nice-select.open, .nice-select:focus {
-  border-color: #cbd3da;
+  border-color: var(--dash-nice-select-hover);
 }
 
 .nice-select:after {
-  border-bottom: 1px solid #adb5bd;
-  border-right: 1px solid #adb5bd;
+  border-bottom: 1px solid var(--dash-nice-select-arrow-color);
+  border-right: 1px solid var(--dash-nice-select-arrow-color);
   content: '';
   display: block;
   height: 5px;
@@ -2261,13 +2269,13 @@ input[type="button"].btn-block {
 }
 
 .nice-select.disabled {
-  border-color: #eff1f3;
-  color: #adb5bd;
+  border-color: var(--dash-nice-select-disabled);
+  color: var(--gray-500);
   pointer-events: none;
 }
 
 .nice-select.disabled:after {
-  border-color: #e6e8ea;
+  border-color: var(--dash-nice-select-disabled-after);
 }
 
 .nice-select.wide {
@@ -2314,10 +2322,10 @@ input[type="button"].btn-block {
 }
 
 .nice-select .list {
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 10px;
-  -webkit-box-shadow: 0 0 0 1px rgba(52, 58, 64, 0.11);
-          box-shadow: 0 0 0 1px rgba(52, 58, 64, 0.11);
+  -webkit-box-shadow: 0 0 0 1px var(--dark-shadow);
+          box-shadow: 0 0 0 1px var(--dark-shadow);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   margin-top: 4px;
@@ -2357,17 +2365,17 @@ input[type="button"].btn-block {
 }
 
 .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
-  background-color: #f8f9fa;
+  background-color: var(--dash-nice-select-option-hover);
 }
 
 .nice-select .option.selected {
-  background-color: #dbf9ff !important;
-  color: #00B8DB;
+  background-color: var(--blue-light) !important;
+  color: var(--blue);
 }
 
 .nice-select .option.disabled {
   background-color: transparent;
-  color: #adb5bd;
+  color: var(--gray-500);
   cursor: default;
 }
 
@@ -5040,7 +5048,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   top: 0;
   bottom: 0;
   z-index: 10;
-  background-color: #f8f9fa;
+  background-color: var(--gray-100);
   opacity: 0.5;
 }
 
@@ -5059,7 +5067,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   z-index: 50;
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
-  border-top-color: #6c757d;
+  border-top-color: var(--gray-600);
 }
 
 @keyframes loader-rotate {
@@ -5081,21 +5089,21 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   position: relative;
   font-size: 17px;
   text-align: left;
-  color: #343a40;
-  border-bottom: 1px solid #f8f9fa;
+  color: var(--dark);
+  border-bottom: 1px solid var(--light);
   padding: 20px;
   margin: -15px 0 0;
 }
 
 .add-widget-popup .swal2-close {
-  color: #6c757d;
+  color: var(--gray-600);
   font-weight: 200;
   font-size: 32px;
   line-height: 1.7;
 }
 
 .add-widget-popup .swal2-close:hover {
-  color: #00B8DB;
+  color: var(--blue);
 }
 
 .add-widget-popup .widgets-list {
@@ -5116,7 +5124,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  border-bottom: 0.5px solid rgba(248, 249, 250, 0.5);
+  border-bottom: 0.5px solid var(--dash-widget-list-border);
 }
 
 .add-widget-popup .widgets-list li:first-child {
@@ -5220,7 +5228,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .mobile-filter-nav ul {
-  background-color: #e9ecef;
+  background-color: var(--gray-200);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -5237,7 +5245,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .mobile-filter-nav ul li:hover, .statistics-widget .mobile-filter-nav ul li.active {
-  color: #69C61D;
+  color: var(--dash-widget-success);
 }
 
 .statistics-widget .mobile-filter-nav ul li span, .statistics-widget .mobile-filter-nav ul li i {
@@ -5362,11 +5370,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   background-color: rgba(248, 249, 250, 0.2);
   padding: 3px 7px;
   border-radius: 4px;
-  border: 0.5px solid #e9ecef;
+  border: 0.5px solid var(--gray-200);
 }
 
 .statistics-widget .chart-type a.active svg, .statistics-widget .chart-type a:hover svg {
-  fill: #EFAF00;
+  fill: var(--warning);
 }
 
 .statistics-widget .chart-legend {
@@ -5378,7 +5386,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .statistics-widget .chart-legend .legend-switch {
   padding: 10px 40px;
-  border: 0.5px solid #e9ecef;
+  border: 0.5px solid var(--gray-200);
   border-radius: 4px;
   background-color: rgba(248, 249, 250, 0.2);
   position: relative;
@@ -5410,11 +5418,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .chart-legend .legend-switch #value-chart ~ label {
-  color: #69C61D;
+  color: var(--dash-widget-success);
 }
 
 .statistics-widget .chart-legend .legend-switch #products-chart ~ label {
-  color: #00B8DB;
+  color: var(--dash-widget-primary);
 }
 
 @media all and (max-width: 768px) {
@@ -5444,8 +5452,8 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .statistics-widget .stats-chart-tooltip {
   opacity: 0;
   position: absolute;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
+  background: var(--black-hover);
+  color: var(--white);
   font-size: 12px;
   border-radius: 3px;
   -webkit-transition: all .1s ease;
@@ -5592,7 +5600,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .stock-control-widget h5 {
   font-size: 15px;
-  color: #adb5bd;
+  color: var(--gray-500);
   font-weight: 100;
   text-transform: uppercase;
 }
