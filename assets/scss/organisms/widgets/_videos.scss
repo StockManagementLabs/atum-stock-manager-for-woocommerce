@@ -230,7 +230,7 @@
 	}
 	
 	.video-meta, .video-desc {
-		color: var(--dash-widget-text);
+		color: var(--dash-video-subs-text);
 		
 		@include mobile-max {
 			display: none;
@@ -358,12 +358,13 @@
 					font-size: 14px;
 					text-align: left;
 					margin: 0;
+					color: var(--dash-widget-text);
 				}
 				
 				.subscriptions {
 					display: block;
 					font-size: 11px;
-					color: var(--dash-widget-text);
+					color: var(--dash-video-subs-text);
 					font-weight: 100;
 				}
 			}
@@ -388,6 +389,7 @@
 			}
 			
 			.video-title {
+				color: var(--dash-widget-text);
 				font-size: 15px;
 				margin-bottom: 5px;
 				
@@ -404,6 +406,10 @@
 				max-height: 30px;
 				overflow: hidden;
 			}
+			
+			//.video-desc, .video-meta {
+			//	color: var(--dash-video-subs-text);
+			//}
 			
 			@include mobile-max {
 				margin-bottom: 10px;

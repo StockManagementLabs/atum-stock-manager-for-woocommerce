@@ -544,6 +544,7 @@
   --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
   --dash-stock-control-widget-primary: #00B8DB;
   --dash-stock-control-widget-success: #69C61D;
+  --dash-stock-control-chart-border: #fff;
   --dash-widget-current-stock-value-bg: #ffe1e1;
   --dash-widget-current-stock-value-text: #FF4848;
   --dash-add-widget-color: #adb5bd;
@@ -561,6 +562,12 @@
   --dash-statistics-ticks: #27283B;
   --dash-statistics-grid-lines: #e9ecef;
   --dash-statistics-chart-type-bg: transparentize(#f8f9fa, 0.8);
+  --dash-border: #e9ecef;
+  --dash-statistics-chart-type-selected-bg: transparent;
+  --dash-statistics-chart-type-selected-text: #EFAF00;
+  --dash-statistics-legend-switch-bg: transparentize(#f8f9fa, 0.8);
+  --dash-next-text:  #e9ecef;
+  --dash-video-subs-text: #adb5bd;
 }
 
 @font-face {
@@ -5421,11 +5428,15 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   background-color: var(--dash-statistics-chart-type-bg);
   padding: 3px 7px;
   border-radius: 4px;
-  border: 0.5px solid var(--gray-200);
+  border: 0.5px solid var(--dash-border);
+}
+
+.statistics-widget .chart-type a.active, .statistics-widget .chart-type a:hover {
+  background-color: var(--dash-statistics-chart-type-selected-bg);
 }
 
 .statistics-widget .chart-type a.active svg, .statistics-widget .chart-type a:hover svg {
-  fill: var(--warning);
+  fill: var(--dash-statistics-chart-type-selected-text);
 }
 
 .statistics-widget .chart-legend {
@@ -5437,9 +5448,9 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .statistics-widget .chart-legend .legend-switch {
   padding: 10px 40px;
-  border: 0.5px solid var(--gray-200);
+  border: 0.5px solid var(--dash-border);
   border-radius: 4px;
-  background-color: rgba(248, 249, 250, 0.2);
+  background-color: var(--dash-statistics-legend-switch-bg);
   position: relative;
   margin-left: 5px;
   display: -webkit-box;
@@ -5769,7 +5780,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .current-stock-value-widget h5 {
   font-size: 15px;
-  color: var(--gray-500);
+  color: var(--dash-widget-text);
   font-weight: 100;
   text-transform: uppercase;
 }
@@ -5828,7 +5839,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .current-stock-value-widget .current-stock-value-content .separator-line {
   width: 100%;
   height: 1px;
-  background-color: var(--wp-gray-5);
+  background-color: var(--dash-border);
   margin: 21px 0 30px 0;
 }
 
@@ -6119,7 +6130,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-meta, .videos-widget .video-desc {
-  color: var(--dash-widget-text);
+  color: var(--dash-video-subs-text);
 }
 
 @media all and (max-width: 480px) {
@@ -6281,12 +6292,13 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   font-size: 14px;
   text-align: left;
   margin: 0;
+  color: var(--dash-widget-text);
 }
 
 .videos-widget .video-preview .channel-info > span .subscriptions {
   display: block;
   font-size: 11px;
-  color: var(--dash-widget-text);
+  color: var(--dash-video-subs-text);
   font-weight: 100;
 }
 
@@ -6311,6 +6323,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .videos-widget .video-preview .video-player .video-title {
+  color: var(--dash-widget-text);
   font-size: 15px;
   margin-bottom: 5px;
 }
@@ -6413,14 +6426,15 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   color: #00B8DB;
 }
 
-.news-widget .post-meta, .news-widget .post-excerpt {
-  color: var(--dash-widget-text);
+.news-widget .post-excerpt {
+  color: var(--dash-next-text);
 }
 
 .news-widget .post-meta {
   font-size: 9px;
   line-height: 1.1;
   margin-bottom: 5px;
+  color: var(--dash-widget-text);
 }
 
 .news-widget .post-excerpt {

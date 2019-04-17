@@ -23,7 +23,8 @@ export default class StockControlWidget {
 	}
 	
 	initChart() {
-		
+        let style = getComputedStyle(document.body);
+
 		const $pieCanvas: JQuery = this.$stockControlWidget.find('canvas'),
 		      chartOptions: any  = {
 			      type   : 'doughnut',
@@ -36,11 +37,18 @@ export default class StockControlWidget {
 						      $pieCanvas.data('unmanaged'),
 					      ],
 					      backgroundColor: [
-						      this.settings.get('chartColors').orange,
-						      this.settings.get('chartColors').red,
-						      this.settings.get('chartColors').green,
-						      this.settings.get('chartColors').blue,
+                              style.getPropertyValue('--dash-widget-warning'),
+                              style.getPropertyValue('--dash-widget-danger'),
+                              style.getPropertyValue('--dash-widget-success'),
+                              style.getPropertyValue('--dash-widget-primary'),
 					      ],
+                          hoverBackgroundColor: [
+                              style.getPropertyValue('--dash-widget-warning'),
+                              style.getPropertyValue('--dash-widget-danger'),
+                              style.getPropertyValue('--dash-widget-success'),
+                              style.getPropertyValue('--dash-widget-primary'),
+                          ],
+                          borderColor: style.getPropertyValue('--dash-stock-control-chart-border')
 				      }],
 				      labels  : [
 					      this.settings.get('lowStockLabel'),

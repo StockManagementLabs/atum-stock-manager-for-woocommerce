@@ -2492,6 +2492,9 @@ final class Helpers {
 		$theme_settings = self::get_option( 'theme_settings' );
 		$gray_500       = '#adb5bd';
 		$gray_500_rgb   = '173,181,189';
+		$white          = '#ffffff';
+		$blue           = '#00b8db';
+		$blue_light     = '#dbf9ff';
 
 		if ( 'hc_mode' === $theme_settings ) {
 
@@ -2500,7 +2503,7 @@ final class Helpers {
 			$hc_dark_blue  = '#27283b';
 			$hc_blue_light = '#e6fbff';
 			$style         = ":root{
-							--gray-100: white;
+							--gray-100: $white;
 							--gray-200-shadow: $gray_500;
 						    --gray-500: $hc_blue;
 						    --gray-600: $hc_dark_blue;
@@ -2553,20 +2556,22 @@ final class Helpers {
 						    --atum-table-views-tabs: $hc_dark_blue;
 						    --atum-select2-border: $gray_500;
 						    --atum-input-placeholder: $hc_dark_blue;
-						    --atum-pagination-bg: white;
+						    --atum-pagination-bg: $white;
 						    --atum-pagination-border: $gray_500;
 						    --atum-pagination-border-disabled: #e9ecef;
-						    --atum-dark-bg: white;
+						    --atum-dark-bg: $white;
 						    --atum-settings-nav-link: $hc_blue;
 						    --atum-settings-section-text: $hc_dark_blue;
 						    --atum-settings-section-description: $hc_dark_blue;
 						    --atum-settings-text-logo: $hc_dark_blue;
 						    --atum-settings-input-border: $gray_500;
-						    --atum-settings-btn-save: white;
+						    --atum-settings-btn-save: $white;
 						    --atum-settings-btn-save-hover: $hc_blue_light;
 						    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
 						    --wp-nth-child: transparent;
 						    --dash-card-text: $hc_dark_blue;
+						    --dash-next-text: $hc_dark_blue;
+						    --dash-border: $gray_500;
 						    --dash-widget-primary: $hc_blue;
 						    --dash-widget-success: $hc_blue;
 						    --dash-nice-select-border: $gray_500;
@@ -2576,23 +2581,24 @@ final class Helpers {
 						    --dash-nice-select-option-hover-bg: $hc_blue_light;
 						    --dash-nice-select-text-highlighted: $hc_blue;
 						    --dash-widget-current-stock-value-bg: $hc_blue;
-							--dash-widget-current-stock-value-text: white;
+							--dash-widget-current-stock-value-text: $white;
 							--dash-widget-text: $hc_dark_blue;
+							--dash-video-subs-text: $hc_dark_blue;
 						    
 							}";
 		}
 		elseif ( 'dark_mode' === $theme_settings ) {
-			$dm_blue       = '#a8f1ff';
-			$dm_blue_rgb   = '168,241,255';
-			$dm_orange     = '#ffdf89';
-			$dm_orange_rgb = '255,223,137';
-			$dm_green      = '#baef8d';
-			$dm_green_rgb  = '186,239,141';
-			$dm_red        = '#ffaeae';
-			$dm_red_rgb    = '255,174,174';
-			$dm_dark_blue  = '#31324a';
-			$blue_light    = '#dbf9ff';
-			$blue          = '#00b8db';
+			$dm_blue         = '#a8f1ff';
+			$dm_blue_rgb     = '168,241,255';
+			$dm_green_blue2  = '#f5fdff';
+			$dm_orange       = '#ffdf89';
+			$dm_orange_rgb   = '255,223,137';
+			$dm_green        = '#baef8d';
+			$dm_green_light2 = '#f0fbe7';
+			$dm_green_rgb    = '186,239,141';
+			$dm_red          = '#ffaeae';
+			$dm_red_rgb      = '255,174,174';
+			$dm_dark_blue    = '#31324a';
 //			$style         = ":root{
 //							--gray-100: white;
 //							--gray-200-shadow: $gray_500;
@@ -2681,10 +2687,12 @@ final class Helpers {
 						    --blue-light: $dm_dark_blue;
 						    --blue: $dm_blue;
 						    --blue-hover: $dm_blue;
+						    --dash-blue-trans: $dm_green_blue2;
 						    --primary: $dm_blue;
 						    --primary-hover: rgba($dm_blue_rgb,0.6);
 						    --green: $dm_green;
 						    --green-hover: $dm_green;
+						    --green-light: $dm_green_light2;
 						    --success: $dm_green;
 						    --success-hover: rgba($dm_green_rgb,0.6);
 						    --orange: $dm_orange;
@@ -2698,25 +2706,39 @@ final class Helpers {
 							--purple-pl: #BA7DF7;
 						    --purple-pl-hover: rgba(186,125,247,0.6);
 							--atum-marketing-popup-bg: $dm_dark_blue;
-							--dash-card-text: white;
+							--dash-card-text: $gray_500;
+							--dash-border: rgba(255, 255, 255, 0.5);
 							--dash-card-bg: $dm_dark_blue;
-							--dash-h5-text: white;
+							--dash-h5-text: $white;
 							--dash-nice-select-bg: $dm_dark_blue;
 							--dash-nice-select-list-bg: $dm_dark_blue;
 							--dash-nice-select-border: rgba(255, 255, 255, 0.5);
-						    --dash-nice-select-hover: white;
-						    --dash-nice-select-text: white;
-						    --dash-nice-select-arrow-color: white;
+						    --dash-nice-select-hover: $white;
+						    --dash-nice-select-text: $white;
+						    --dash-nice-select-arrow-color: $white;
 						    --dash-nice-select-option-hover: $blue_light;
 						    --dash-nice-select-option-selected-bg: $blue_light;
 						    --dash-nice-select-text-highlighted: $blue;
 							--dash-input-group-bg: rgba(0, 0, 0, 0.3);
 							--dash-input-group-shadow: rgba(0, 0, 0, 0.3);
-							--dash-input-placeholder: white;
-							--dash-widget-header-title: white;
-							--dash-statistics-ticks: white;
+							--dash-input-placeholder: $white;
+							--dash-widget-header-title: $white;
+							--dash-statistics-ticks: $white;
 							--dash-statistics-grid-lines: rgba(255, 255, 255, 0.2);
 							--dash-statistics-chart-type-bg: transparent;
+							--dash-statistics-chart-type-selected-bg: $dm_orange;
+							--dash-statistics-chart-type-selected-text: $dm_dark_blue;
+							--dash-statistics-legend-switch-bg: transparent;
+							--dash-widget-primary: $dm_blue;
+						    --dash-widget-success: $dm_green;
+						    --dash-widget-danger: $dm_red;
+						    --dash-widget-warning: $dm_orange;
+						    --dash-widget-text: $white;
+						    --dash-stock-control-widget-primary: $dm_blue;
+							--dash-stock-control-widget-success: $dm_green;
+							--dash-stock-control-chart-border: $dm_dark_blue;
+							--dash-next-text: $gray_500;
+							--dash-video-subs-text $gray_500;
 							
 							}";
 		}

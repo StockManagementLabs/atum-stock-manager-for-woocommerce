@@ -123,11 +123,12 @@
 			background-color: var(--dash-statistics-chart-type-bg);
 			padding: 3px 7px;
 			border-radius: 4px;
-			border: 0.5px solid var(--gray-200);
+			border: 0.5px solid var(--dash-border);
 			
 			&.active, &:hover {
+				background-color: var(--dash-statistics-chart-type-selected-bg);
 				svg {
-					fill: var(--warning);
+					fill: var(--dash-statistics-chart-type-selected-text);
 				}
 			}
 		}
@@ -140,9 +141,9 @@
 		
 		.legend-switch {
 			padding: 10px 40px;
-			border: 0.5px solid var(--gray-200);
+			border: 0.5px solid var(--dash-border);
 			border-radius: 4px;
-			background-color: transparentize($light, 0.8);
+			background-color: var(--dash-statistics-legend-switch-bg);
 			position: relative;
 			margin-left: 5px;
 			display: flex;

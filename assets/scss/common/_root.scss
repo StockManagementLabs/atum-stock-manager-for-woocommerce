@@ -84,6 +84,7 @@
 	--dash-widget-list-border: transparentize(#{$light}, 0.5);
 	--dash-stock-control-widget-primary: #{$widget-primary};
 	--dash-stock-control-widget-success: #{$widget-success};
+	--dash-stock-control-chart-border: #{$white};
 	--dash-widget-current-stock-value-bg: #{$red-light};
 	--dash-widget-current-stock-value-text: #{$red};
 	--dash-add-widget-color: #{$gray-500};
@@ -101,4 +102,10 @@
 	--dash-statistics-ticks: #{$blue-dark};
 	--dash-statistics-grid-lines: #{$gray-200};
 	--dash-statistics-chart-type-bg: transparentize(#{$light}, 0.8);
+	--dash-border: #{$gray-200};
+	--dash-statistics-chart-type-selected-bg: transparent;
+	--dash-statistics-chart-type-selected-text: #{$warning};
+	--dash-statistics-legend-switch-bg: transparentize(#{$light}, 0.8);
+	--dash-next-text:  #{$gray-200};
+	--dash-video-subs-text: #{$gray-500};
 }
