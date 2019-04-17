@@ -2495,8 +2495,6 @@ final class Helpers {
 
 		if ( 'hc_mode' === $theme_settings ) {
 
-
-
 			$hc_blue       = '#016b7f';
 			$hc_blue_rgb   = '1,107,127';
 			$hc_dark_blue  = '#27283b';
@@ -2575,11 +2573,151 @@ final class Helpers {
 						    --dash-nice-select-hover: $hc_dark_blue;
 						    --dash-nice-select-text: $hc_dark_blue;
 						    --dash-nice-select-arrow-color: $hc_dark_blue;
-						    --dash-nice-select-option-hover: $hc_blue_light;
+						    --dash-nice-select-option-hover-bg: $hc_blue_light;
+						    --dash-nice-select-text-highlighted: $hc_blue;
 						    --dash-widget-current-stock-value-bg: $hc_blue;
 							--dash-widget-current-stock-value-text: white;
 							--dash-widget-text: $hc_dark_blue;
 						    
+							}";
+		}
+		elseif ( 'dark_mode' === $theme_settings ) {
+			$dm_blue       = '#a8f1ff';
+			$dm_blue_rgb   = '168,241,255';
+			$dm_orange     = '#ffdf89';
+			$dm_orange_rgb = '255,223,137';
+			$dm_green      = '#baef8d';
+			$dm_green_rgb  = '186,239,141';
+			$dm_red        = '#ffaeae';
+			$dm_red_rgb    = '255,174,174';
+			$dm_dark_blue  = '#31324a';
+			$blue_light    = '#dbf9ff';
+			$blue          = '#00b8db';
+//			$style         = ":root{
+//							--gray-100: white;
+//							--gray-200-shadow: $gray_500;
+//						    --gray-500: $dm_blue;
+//						    --gray-600: $dm_dark_blue;
+//						    --blue: $dm_blue;
+//						    --blue-hover: rgba($hc_blue_rgb,0.6);
+//						    --blue-dark-lighten: $dm_blue;
+//						    --blue-dark-light-2: $hc_blue_light;
+//						    --green: $dm_blue;
+//						    --green-hover: rgba($hc_blue_rgb,0.6);
+//						    --green-light: $hc_blue_light;
+//						    --dash-blue-trans: $hc_blue_light;
+//						    --blue-light: $dm_dark_blue;
+//						    --light: transparent;
+//						    --wp-gray-6: transparent;
+//						    --wp-link: $dm_blue;
+//						    --wp-link-hover: rgba($hc_blue_rgb,0.6);
+//						    --primary: $dm_blue;
+//						    --primary-hover: rgba($hc_blue_rgb,0.6);
+//						    --darken: $dm_blue;
+//						    --black-shadow-light: rgba($hc_blue_rgb,0.04);
+//						    --bg-white: $hc_blue_light;
+//						    --white-shadow: rgba($gray_500_rgb,0.2);
+//						    --atum-text-white: $dm_blue;
+//						    --orange: $dm_blue;
+//						    --orange: rgba($hc_blue_rgb,0.6);
+//						    --orange-light-2: $hc_blue_light;
+//						    --warning: $dm_blue;
+//						    --warning-hover: rgba($hc_blue_rgb,0.6);
+//						    --danger: $dm_blue;
+//						    --danger-hover: rgba($hc_blue_rgb,0.6);
+//						    --success: $dm_blue;
+//						    --success-hover: rgba($hc_blue_rgb,0.6);
+//						    --info: $dm_blue;
+//						    --info-hover: rgba($hc_blue_rgb,0.6);
+//						    --secondary: $gray_500;
+//						    --secondary-shadow: rgba($hc_blue_rgb,0.2);
+//						    --purple-pl: $dm_blue;
+//						    --purple-pl-hover: rgba($hc_blue_rgb,0.6);
+//						    --wp-pink-darken-expanded: $dm_blue;
+//						    --orange-dark-light: $hc_blue_light;
+//						    --wc-purple-expanded: $dm_blue;
+//						    --wc-purple: $dm_blue;
+//						    --wc-purple-hover: rgba($hc_blue_rgb,0.6);
+//							--blue-light-expanded: $dm_blue;
+//							--green-light-expanded: $dm_blue;
+//							--wp-pink-light: $hc_blue_light;
+//							--green-light: $hc_blue_light;
+//						    --atum-border: $gray_500;
+//						    --atum-table-item-heads: $dm_dark_blue;
+//						    --atum-table-views-tabs: $dm_dark_blue;
+//						    --atum-select2-border: $gray_500;
+//						    --atum-input-placeholder: $dm_dark_blue;
+//						    --atum-pagination-bg: white;
+//						    --atum-pagination-border: $gray_500;
+//						    --atum-pagination-border-disabled: #e9ecef;
+//						    --atum-dark-bg: white;
+//						    --atum-settings-nav-link: $dm_blue;
+//						    --atum-settings-section-text: $dm_dark_blue;
+//						    --atum-settings-section-description: $dm_dark_blue;
+//						    --atum-settings-text-logo: $dm_dark_blue;
+//						    --atum-settings-input-border: $gray_500;
+//						    --atum-settings-btn-save: white;
+//						    --atum-settings-btn-save-hover: $hc_blue_light;
+//						    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
+//						    --wp-nth-child: transparent;
+//						    --dash-card-text: $dm_dark_blue;
+//						    --dash-widget-primary: $dm_blue;
+//						    --dash-widget-success: $dm_blue;
+//						    --dash-nice-select-border: $gray_500;
+//						    --dash-nice-select-hover: $dm_dark_blue;
+//						    --dash-nice-select-text: $dm_dark_blue;
+//						    --dash-nice-select-arrow-color: $dm_dark_blue;
+//						    --dash-nice-select-option-hover: $hc_blue_light;
+//						    --dash-widget-current-stock-value-bg: $dm_blue;
+//							--dash-widget-current-stock-value-text: white;
+//							--dash-widget-text: $dm_dark_blue;
+//							--atum-marketing-popup-bg: $dm_dark_blue;
+//
+//							}";
+
+			$style         = ":root{
+							--wp-yiq-text-light: $dm_dark_blue;
+							--dark-shadow: rgba(0, 0, 0, 0.6);
+						    --blue-light: $dm_dark_blue;
+						    --blue: $dm_blue;
+						    --blue-hover: $dm_blue;
+						    --primary: $dm_blue;
+						    --primary-hover: rgba($dm_blue_rgb,0.6);
+						    --green: $dm_green;
+						    --green-hover: $dm_green;
+						    --success: $dm_green;
+						    --success-hover: rgba($dm_green_rgb,0.6);
+						    --orange: $dm_orange;
+						    --orange-hover: $dm_orange;
+						    --warning: $dm_orange;
+						    --warning-hover: rgba($dm_orange_rgb,0.6);
+						    --red: $dm_red;
+						    --red-hover: $dm_red;
+						    --danger: $dm_red;
+						    --danger-hover: rgba($dm_red_rgb,0.6);
+							--purple-pl: #BA7DF7;
+						    --purple-pl-hover: rgba(186,125,247,0.6);
+							--atum-marketing-popup-bg: $dm_dark_blue;
+							--dash-card-text: white;
+							--dash-card-bg: $dm_dark_blue;
+							--dash-h5-text: white;
+							--dash-nice-select-bg: $dm_dark_blue;
+							--dash-nice-select-list-bg: $dm_dark_blue;
+							--dash-nice-select-border: rgba(255, 255, 255, 0.5);
+						    --dash-nice-select-hover: white;
+						    --dash-nice-select-text: white;
+						    --dash-nice-select-arrow-color: white;
+						    --dash-nice-select-option-hover: $blue_light;
+						    --dash-nice-select-option-selected-bg: $blue_light;
+						    --dash-nice-select-text-highlighted: $blue;
+							--dash-input-group-bg: rgba(0, 0, 0, 0.3);
+							--dash-input-group-shadow: rgba(0, 0, 0, 0.3);
+							--dash-input-placeholder: white;
+							--dash-widget-header-title: white;
+							--dash-statistics-ticks: white;
+							--dash-statistics-grid-lines: rgba(255, 255, 255, 0.2);
+							--dash-statistics-chart-type-bg: transparent;
+							
 							}";
 		}
 

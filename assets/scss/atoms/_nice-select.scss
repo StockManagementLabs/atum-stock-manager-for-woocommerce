@@ -20,7 +20,7 @@ $ns-arrow-size:                    5px !default;;
 // Style the dropdown
 .nice-select {
 	-webkit-tap-highlight-color: rgba($black, 0);
-	background-color: var(--white);
+	background-color: var(--dash-nice-select-bg);
 	border-radius: $ns-dropdown-border-radius;
 	border: solid 1px var(--dash-nice-select-border);
 	box-sizing: border-box;
@@ -135,9 +135,9 @@ $ns-arrow-size:                    5px !default;;
 	
 	// List and options
 	.list {
-		background-color: var(--white);
+		background-color: var(--dash-nice-select-list-bg);
 		border-radius: $ns-list-border-radius;
-		box-shadow: 0 0 0 1px var(--dark-shadow);
+		box-shadow: 0 0 10px 0 var(--dark-shadow);
 		box-sizing: border-box;
 		margin-top: 4px;
 		opacity: 0;
@@ -170,12 +170,13 @@ $ns-arrow-size:                    5px !default;;
 		transition: all 0.2s;
 		
 		&:hover, &.focus, &.selected.focus {
-			background-color: var(--dash-nice-select-option-hover);
+			background-color: var(--dash-nice-select-option-hover-bg);
+			color: var(--dash-nice-select-text-highlighted);
 		}
 		
 		&.selected {
-			background-color: var(--blue-light) !important;
-			color: var(--blue);
+			background-color: var(--dash-nice-select-option-selected-bg) !important;
+			color: var(--dash-nice-select-text-highlighted);
 		}
 		
 		&.disabled {

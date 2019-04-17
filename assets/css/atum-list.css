@@ -152,10 +152,10 @@
   --green-hover: rgba(105, 198, 29, 0.6);
   --green-shadow-light: rgba(105, 198, 29, 0.04);
   --green-shadow: rgba(105, 198, 29, 0.2);
-  --green-light: #d5f5ba;
-  --green-light-hover: rgba(213, 245, 186, 0.6);
-  --green-light-shadow-light: rgba(213, 245, 186, 0.04);
-  --green-light-shadow: rgba(213, 245, 186, 0.2);
+  --green-light: rgba(180, 240, 0, 0.79);
+  --green-light-hover: rgba(180, 240, 0, 0.6);
+  --green-light-shadow-light: rgba(180, 240, 0, 0.04);
+  --green-light-shadow: rgba(180, 240, 0, 0.2);
   --blue-light: #dbf9ff;
   --blue-light-hover: rgba(219, 249, 255, 0.6);
   --blue-light-shadow-light: rgba(219, 249, 255, 0.04);
@@ -336,7 +336,7 @@
   --wp-pink-darken-expanded: #e7d0e3;
   --wc-purple-expanded: #96588a;
   --blue-light-expanded: #dbf9ff;
-  --green-light-expanded: #d5f5ba;
+  --green-light-expanded: rgba(180, 240, 0, 0.79);
   --atum-border: #e9ecef;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
@@ -345,7 +345,7 @@
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
   --atum-pagination-border-disabled: transparent;
-  --order-green-light: #d5f5ba;
+  --order-green-light: rgba(180, 240, 0, 0.79);
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
@@ -363,23 +363,37 @@
   --dash-widget-success: #69C61D;
   --dash-widget-warning: #EFAF00;
   --dash-widget-danger: #FF4848;
+  --dash-nice-select-bg: #fff;
+  --dash-nice-select-list-bg: #fff;
   --dash-nice-select-text: #adb5bd;
   --dash-nice-select-border: #e9ecef;
   --dash-nice-select-hover: darken(#e9ecef, 10%);
   --dash-nice-select-disabled: lighten(#e9ecef, 2%);
   --dash-nice-select-disabled-after: lighten(#adb5bd, 20%);
   --dash-nice-select-arrow-color: #adb5bd;
-  --dash-nice-select-option-hover: #f8f9fa;
+  --dash-nice-select-option-hover-bg: #f8f9fa;
+  --dash-nice-select-option-selected-bg: #dbf9ff;
+  --dash-nice-select-text-highlighted: #00B8DB;
   --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
   --dash-stock-control-widget-primary: #00B8DB;
   --dash-stock-control-widget-success: #69C61D;
   --dash-widget-current-stock-value-bg: #ffe1e1;
   --dash-widget-current-stock-value-text: #FF4848;
   --dash-add-widget-color: #adb5bd;
+  --dash-card-bg: #fff;
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
   --dash-green-trans: rgba(106, 200, 30, 0.79);
   --dash-green-light: rgba(180, 240, 0, 0.79);
   --dash-green-blue: rgba(30, 200, 149, 0.79);
+  --dash-h5-text: #444;
+  --atum-marketing-popup-bg: #fff;
+  --dash-input-group-bg: transparentize(#fff, 0.34);
+  --dash-input-group-shadow: transparentize(#fff, 0.8);
+  --dash-input-placeholder: #adb5bd;
+  --dash-widget-header-title: #27283B;
+  --dash-statistics-ticks: #27283B;
+  --dash-statistics-grid-lines: #e9ecef;
+  --dash-statistics-chart-type-bg: transparentize(#f8f9fa, 0.8);
 }
 
 .thumb {

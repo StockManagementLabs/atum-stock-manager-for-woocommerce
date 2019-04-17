@@ -93,6 +93,10 @@ $green-light-2:                         lighten($green, 50%) !default;
 $purple:                                #BA7DF7 !default;
 $purple-light:                          lighten($purple, 20%) !default;
 $purple-pl:                             #9357cc !default;
+$blue-trans:                            rgba(0, 183, 219, 0.79);
+$green-trans:                           rgba(106, 200, 30, 0.79);
+$green-light:                           rgba(180, 240, 0, 0.79);
+$green-blue:                            rgba(30, 200, 149, 0.79);
 
 
 $colors: () !default;

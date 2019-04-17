@@ -11,7 +11,7 @@
 		"bg_position"     : "bottom",
 		"bg_size"         : "cover",
 		"bg_repeat"       : "no-repeat",
-		"bg_color"        : "white"
+		"bg_color"        : "var(--atum-marketing-popup-bg)"
 	},
 	"images": {
 		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/product-levels_icon.svg",
@@ -19,7 +19,7 @@
 	},
 	"title": {
 		"text"      : "Product<strong>levels</strong>",
-		"text_color": "black",
+		"text_color": "var(--black)",
 		"text_size" : "",
 		"text_align": "center"
 	},
@@ -30,7 +30,7 @@
 	},
 	"description": {
 		"text"           : "Finally HERE! Product Levels just got even better! Activate the bill of materials (BOM) stock control to automate the front end inventory offering.",
-		"text_color"     : "#adb5bd",
+		"text_color"     : "var(--gray-500)",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",
