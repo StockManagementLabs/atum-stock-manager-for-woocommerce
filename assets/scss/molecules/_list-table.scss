@@ -1817,7 +1817,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						&.product-type {
 							&:before {
 								content: $atmi-wc-contract;
-								color:  var(--white);
+								color:  var(--atum-table-icon);
 							}
 						}
 						
@@ -2220,7 +2220,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			width: 1em;
 			font-size: 1.6em;
 			margin: 0 auto;
-			color: var(--gray-500);
+			color: var(--atum-table-icon);
 			
 			&:before {
 				content: $atmi-wc-simple;
@@ -2333,7 +2333,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 	.show-locations{
 		cursor: pointer;
-		color: var(--gray-500);
+		color: var(--atum-table-icon);
 		font-size: 20px;
 		&.not-empty {
 			color: var(--blue);

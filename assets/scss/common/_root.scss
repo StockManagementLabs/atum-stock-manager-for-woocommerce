@@ -60,14 +60,15 @@
 	--atum-row-shadow: #{rgba($black, 0.04)};
 	--atum-footer-totals: #{$gray-200};
 	--atum-table-bg: #{$white};
-	--overflow-opacity-rigth: linear-gradient(to right, rgba(#{$white},0), rgba(#{$white},0.9));
-	--overflow-opacity-left: linear-gradient(to left, rgba(#{$white},0), rgba(#{$white},0.9));
+	--overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
+	--overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
 	--atum-select2-selected-bg: #{$blue-light};
 	--atum-select2-selected-text: #{$blue};
 	--atum-column-groups-bg: #{$gray-200};
 	--atum-row-active: #{$blue-light};
 	--atum-table-link-active: #{$blue};
 	--atum-table-check: #{$blue};
+	--atum-table-icon: #{$gray-500};
 	--atum-dark-bg: #{$blue-dark-lighten};
 	--atum-settings-nav-link: #{$white};
 	--atum-settings-section-text: #{$white};

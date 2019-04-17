@@ -520,14 +520,15 @@
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
   --atum-footer-totals: #e9ecef;
   --atum-table-bg: #fff;
-  --overflow-opacity-rigth: linear-gradient(to right, rgba(#fff,0), rgba(#fff,0.9));
-  --overflow-opacity-left: linear-gradient(to left, rgba(#fff,0), rgba(#fff,0.9));
+  --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --atum-select2-selected-bg: #dbf9ff;
   --atum-select2-selected-text: #00B8DB;
   --atum-column-groups-bg: #e9ecef;
   --atum-row-active: #dbf9ff;
   --atum-table-link-active: #00B8DB;
   --atum-table-check: #00B8DB;
+  --atum-table-icon: #adb5bd;
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
   --atum-settings-section-text: #fff;
