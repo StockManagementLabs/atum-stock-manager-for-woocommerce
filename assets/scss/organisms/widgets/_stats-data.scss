@@ -22,6 +22,14 @@
 	}
 	
 	h3 {
+		&.widget-success {
+			color: var(--dash-stats-data-widget-success) !important;
+		}
+		
+		&.widget-primary {
+			color: var(--dash-stats-data-widget-primary) !important;
+		}
+		
 		font-size: 35px;
 		font-weight: bold;
 	}

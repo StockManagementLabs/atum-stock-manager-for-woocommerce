@@ -266,7 +266,7 @@
 		}
 	}
 	
-	background-color:  var(--white);
+	background-color:  var(--atum-table-bg);
 	width: 100%;
 	position: relative;
 	font-size: 16px;
@@ -469,6 +469,7 @@
 		width: 110px;
 		max-width: 110px;
 		font-size: 15px;
+		background-color: var(--atum-table-bg);
 		
 		@include tablet-max-wp {
 			width: 100%;
@@ -528,7 +529,7 @@
 		font-size: 15px !important;
 		line-height: 15px !important;
 		border: none;
-		background-color: var(--gray-100);
+		background-color: var(--atum-dropdown-toggle-bg);
 		font-size: 15px;
 		color: var(--gray-600);
 		
@@ -546,7 +547,7 @@
 		&:focus, &:active, &:hover {
 			outline: 0;
 			box-shadow: none;
-			background-color: var(--gray-100);
+			background-color: var(--atum-dropdown-toggle-bg);
 			color: var(--gray-600);
 		}
 	}
@@ -892,7 +893,7 @@
 .atum-list-wrapper {
 	width: 100%;
 	overflow: hidden;
-	background-color:  var(--white);
+	background-color:  var(--atum-table-bg);
 	border-radius: 8px;
 	box-shadow: 0 4px 0 0 var(--gray-200);
 	padding: 0 0 10px;
@@ -919,7 +920,7 @@
 			height: 30px;
 			border-radius: 5px;
 			border: solid 1px var(--atum-border);
-			background-color:  var(--white);
+			background-color:  var(--atum-table-bg);
 			color: var(--gray-600);
 			cursor: pointer;
 			transition: all 0.20s;
@@ -1014,39 +1015,39 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--blue);
+					background-color: var(--atum-table-views-tabs-active);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color:  var(--white);
+					color:  var(--atum-table-views-tabs-active-text);
 					
 					.text-blue {
-						color:  var(--white);
+						color:  var(--atum-table-views-tabs-active-text);
 					}
 					
 					.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
-						color:  var(--white);
+						color:  var(--atum-table-views-tabs-active-text);
 						
 						&.empty {
-							color:  var(--white);
+							color:  var(--atum-table-views-tabs-active-text);
 						}
 						
 						a {
-							color:  var(--white);
+							color:  var(--atum-table-views-tabs-active-text);
 							&.empty {
-								color:  var(--white);
+								color:  var(--atum-table-views-tabs-active-text);
 							}
 						}
 					}
 					
 					a {
-						color:  var(--white);
+						color:  var(--atum-table-views-tabs-active-text);
 						padding: 0;
 						&.empty, &.tips, &.empty {
-							color:  var(--white);
+							color:  var(--atum-table-views-tabs-active-text);
 						}
 						.active {
 							padding: 0;
@@ -1056,9 +1057,9 @@
 					.count {
 						font-size: 16px;
 						font-weight: bold;
-						color:  var(--white);
+						color:  var(--atum-table-views-tabs-active-text);
 						&.empty {
-							color:  var(--white);
+							color:  var(--atum-table-views-tabs-active-text);
 						}
 					}
 					
@@ -1326,7 +1327,7 @@
 	justify-content: space-between;
 	align-items: center;
 	margin: 0 11px 0 11px;
-	background-color:  var(--white);
+	background-color:  var(--atum-table-bg);
 	border-bottom: 1px solid var(--atum-border);
 	
 	&.no-margin {
@@ -1394,13 +1395,13 @@
 
 .overflow-opacity-effect-right {
 	right: 0;
-	background-image: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+	background-image: var(--overflow-opacity-rigth);
 }
 
 .overflow-opacity-effect-left {
 	display: none;
 	left: 0;
-	background-image: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+	background-image: var(--overflow-opacity-left);
 }
 
 .atum-table-wrapper, #table-container {
@@ -1536,7 +1537,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	border-collapse: collapse;
 	
 	thead .item-heads, tfoot {
-		background-color:  var(--white);
+		background-color:  var(--atum-table-bg);
 		border-top: 1px solid var(--atum-border);
 		border-bottom: 1px solid var(--atum-border);
 		
@@ -1612,7 +1613,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	.column-groups {
-		background-color: var(--gray-200);
+		background-color: var(--atum-column-groups-bg);
 		
 		th {
 			padding: 6px 20px;
@@ -1744,6 +1745,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		box-shadow: 0 1px 0 0 var(--gray-200-shadow);
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
+			background-color: var(--atum-table-row-odd);
+			border: 1px solid var(--atum-row-shadow);
+			
+			&:last-child {
+				border: none;
+			}
 			
 			&:hover {
 				box-shadow: 0 1px 19px 6px var(--atum-row-shadow) inset;
@@ -1751,11 +1758,29 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.even {
-			background-color: var(--light);
+			background-color: var(--atum-table-row-even);
 		}
 		
 		&.active-row {
-			background-color: var(--blue-light);
+			background-color: var(--atum-row-active);
+			
+			.set-meta, a {
+				color: var(--atum-table-link-active) !important;
+			}
+			
+		}
+		
+		.set-meta {
+			cursor: pointer;
+			color:  var(--blue);
+			
+			&:hover {
+				color: var(--wp-link-hover);
+			}
+			
+			&.unsaved {
+				color: var(--danger) !important;
+			}
 		}
 		
 		&.expanded {
@@ -1942,7 +1967,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.totals {
-			background-color: var(--gray-200);
+			background-color: var(--atum-footer-totals);
 			
 			td, th {
 				font-size: 12px;
@@ -2019,7 +2044,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		border-color: var(--gray-400);
 		
 		&:checked {
-			background-color: var(--blue);
+			background-color: var(--atum-table-check);
 			border: 0;
 			
 			&:before {
@@ -2037,9 +2062,9 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tbody, #the-list {
 		
-		:nth-child(odd) {
-			background-color: var(--wp-nth-child);
-		}
+		//:nth-child(odd) {
+		//	background-color: var(--wp-nth-child);
+		//}
 		
 		tr {
 			&.expanded {
@@ -2074,10 +2099,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			td {
 				color: var(--gray-600);
-				
-				.set-meta {
-					color:  var(--blue);
-				}
 				
 				&.column-title, &.atum_order_title {
 					a, .row-title {
@@ -2325,19 +2346,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		font-size: 20px;
 		&.not-empty {
 			color: var(--blue);
-		}
-	}
-	
-	.set-meta {
-		cursor: pointer;
-		color:  var(--blue);
-		
-		&:hover {
-			color: var(--wp-link-hover);
-		}
-		
-		&.unsaved {
-			color: var(--danger) !important;
 		}
 	}
 

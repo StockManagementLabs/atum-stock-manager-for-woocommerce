@@ -48,6 +48,7 @@ export default class StockControlWidget {
                               style.getPropertyValue('--dash-widget-success'),
                               style.getPropertyValue('--dash-widget-primary'),
                           ],
+                          hoverBorderColor: style.getPropertyValue('--dash-stock-control-chart-border'),
                           borderColor: style.getPropertyValue('--dash-stock-control-chart-border')
 				      }],
 				      labels  : [

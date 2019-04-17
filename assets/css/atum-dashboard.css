@@ -495,7 +495,8 @@
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow-light: rgba(150, 88, 138, 0.04);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
-  --light: #f8f9fa;
+  --atum-table-row-even: #f8f9fa;
+  --atum-table-row-odd: transparent;
   --atum-bg-white: #fff;
   --atum-text-white: #fff;
   --wp-yiq-text-dark: #212529;
@@ -507,6 +508,9 @@
   --atum-border: #e9ecef;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
+  --atum-table-views-tabs-active: #00B8DB;
+  --atum-table-views-tabs-active-text: #fff;
+  --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
   --atum-input-placeholder: #adb5bd;
   --atum-pagination-bg: #e9ecef;
@@ -514,6 +518,16 @@
   --atum-pagination-border-disabled: transparent;
   --order-green-light: rgba(180, 240, 0, 0.79);
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
+  --atum-footer-totals: #e9ecef;
+  --atum-table-bg: #fff;
+  --overflow-opacity-rigth: linear-gradient(to right, rgba(#fff,0), rgba(#fff,0.9));
+  --overflow-opacity-left: linear-gradient(to left, rgba(#fff,0), rgba(#fff,0.9));
+  --atum-select2-selected-bg: #dbf9ff;
+  --atum-select2-selected-text: #00B8DB;
+  --atum-column-groups-bg: #e9ecef;
+  --atum-row-active: #dbf9ff;
+  --atum-table-link-active: #00B8DB;
+  --atum-table-check: #00B8DB;
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
   --atum-settings-section-text: #fff;
@@ -542,8 +556,8 @@
   --dash-nice-select-option-selected-bg: #dbf9ff;
   --dash-nice-select-text-highlighted: #00B8DB;
   --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
-  --dash-stock-control-widget-primary: #00B8DB;
-  --dash-stock-control-widget-success: #69C61D;
+  --dash-stats-data-widget-primary: #00B8DB;
+  --dash-stats-data-widget-success: #69C61D;
   --dash-stock-control-chart-border: #fff;
   --dash-widget-current-stock-value-bg: #ffe1e1;
   --dash-widget-current-stock-value-text: #FF4848;
@@ -4422,7 +4436,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-header h3 {
-  color: var(--white);
+  color: var(--dash-widget-header-title);
 }
 
 .atum-dashboard .dash-header .dash-header-buttons {
@@ -4480,7 +4494,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .atum-dashboard .dash-header .atum-version {
   color: var(--white);
-  background-color: var(--dash-atum-version);
+  background-color: var(--black-shadow);
   border-radius: 30px;
   padding: 1px 15px;
   font-weight: 100;
@@ -4496,7 +4510,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   padding-left: 15px;
   padding-bottom: 5px;
   font-size: 11px;
-  color: var(--white);
+  color: var(--dash-widget-header-title);
   font-weight: 300;
 }
 
@@ -5560,6 +5574,14 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   font-weight: bold;
 }
 
+.stats-data-widget h3.widget-success {
+  color: var(--dash-stats-data-widget-success) !important;
+}
+
+.stats-data-widget h3.widget-primary {
+  color: var(--dash-stats-data-widget-primary) !important;
+}
+
 .stats-data-widget h5 {
   font-size: 15px;
   color: var(--dash-widget-text);
@@ -5611,14 +5633,6 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   .stock-control-widget > div {
     padding: 15px;
   }
-}
-
-.stock-control-widget .stock-data .widget-primary {
-  color: var(--dash-stock-control-widget-primary);
-}
-
-.stock-control-widget .stock-data .widget-success {
-  color: var(--dash-stock-control-widget-success);
 }
 
 .stock-control-widget .stock-chart .stock-chart-tooltip {

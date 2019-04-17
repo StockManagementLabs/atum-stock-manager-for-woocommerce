@@ -128,7 +128,7 @@ body {
 	
 	.select2-dropdown {
 		box-shadow: $dropdown-box-shadow;
-		background-color: var(--white);
+		background-color: var(--atum-table-bg);
 		border: 1px solid var(--gray-500);
 		border-radius: 5px;
 		overflow: hidden;
@@ -251,6 +251,7 @@ body {
 				height: 30px;
 				border-radius: 5px;
 				border: 1px solid var(--atum-select2-border);
+				background-color: var(--atum-table-bg);
 				
 				.select2-selection__rendered {
 					line-height: 27px;
@@ -518,13 +519,13 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				background-color: var(--blue-light);
-				color: var(--blue);
+				background-color: var(--atum-select2-selected-bg);
+				color: var(--atum-select2-selected-text);
 			}
 			
 			&[data-selected=true] {
-				background-color: var(--blue-light);
-				color: var(--blue);
+				background-color: var(--atum-select2-selected-bg);
+				color: var(--atum-select2-selected-text);
 			}
 			
 			&.select2-results__message {

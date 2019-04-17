@@ -35,7 +35,8 @@
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
-	--light: #{$light};
+	--atum-table-row-even: #{$light};
+	--atum-table-row-odd: transparent;
 	--atum-bg-white: #{$white};
 	--atum-text-white: #{$white};
 	--wp-yiq-text-dark: #{$yiq-text-dark};
@@ -47,6 +48,9 @@
 	--atum-border: #{$gray-200};
 	--atum-table-item-heads: #{$gray-500};
 	--atum-table-views-tabs: #{$gray-500};
+	--atum-table-views-tabs-active: #{$blue};
+	--atum-table-views-tabs-active-text: #{$white};
+	--atum-dropdown-toggle-bg: #{$gray-100};
 	--atum-select2-border: #{$gray-200};
 	--atum-input-placeholder: #{$gray-500};
 	--atum-pagination-bg: #{$gray-200};
@@ -54,6 +58,16 @@
 	--atum-pagination-border-disabled: transparent;
 	--order-green-light: #{$green-light};
 	--atum-row-shadow: #{rgba($black, 0.04)};
+	--atum-footer-totals: #{$gray-200};
+	--atum-table-bg: #{$white};
+	--overflow-opacity-rigth: linear-gradient(to right, rgba(#{$white},0), rgba(#{$white},0.9));
+	--overflow-opacity-left: linear-gradient(to left, rgba(#{$white},0), rgba(#{$white},0.9));
+	--atum-select2-selected-bg: #{$blue-light};
+	--atum-select2-selected-text: #{$blue};
+	--atum-column-groups-bg: #{$gray-200};
+	--atum-row-active: #{$blue-light};
+	--atum-table-link-active: #{$blue};
+	--atum-table-check: #{$blue};
 	--atum-dark-bg: #{$blue-dark-lighten};
 	--atum-settings-nav-link: #{$white};
 	--atum-settings-section-text: #{$white};
@@ -82,8 +96,8 @@
 	--dash-nice-select-option-selected-bg: #{$blue-light};
 	--dash-nice-select-text-highlighted: #{$blue};
 	--dash-widget-list-border: transparentize(#{$light}, 0.5);
-	--dash-stock-control-widget-primary: #{$widget-primary};
-	--dash-stock-control-widget-success: #{$widget-success};
+	--dash-stats-data-widget-primary: #{$widget-primary};
+	--dash-stats-data-widget-success: #{$widget-success};
 	--dash-stock-control-chart-border: #{$white};
 	--dash-widget-current-stock-value-bg: #{$red-light};
 	--dash-widget-current-stock-value-text: #{$red};

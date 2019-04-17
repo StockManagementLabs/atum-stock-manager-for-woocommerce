@@ -328,7 +328,8 @@
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow-light: rgba(150, 88, 138, 0.04);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
-  --light: #f8f9fa;
+  --atum-table-row-even: #f8f9fa;
+  --atum-table-row-odd: transparent;
   --atum-bg-white: #fff;
   --atum-text-white: #fff;
   --wp-yiq-text-dark: #212529;
@@ -340,6 +341,9 @@
   --atum-border: #e9ecef;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
+  --atum-table-views-tabs-active: #00B8DB;
+  --atum-table-views-tabs-active-text: #fff;
+  --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
   --atum-input-placeholder: #adb5bd;
   --atum-pagination-bg: #e9ecef;
@@ -347,6 +351,16 @@
   --atum-pagination-border-disabled: transparent;
   --order-green-light: rgba(180, 240, 0, 0.79);
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
+  --atum-footer-totals: #e9ecef;
+  --atum-table-bg: #fff;
+  --overflow-opacity-rigth: linear-gradient(to right, rgba(#fff,0), rgba(#fff,0.9));
+  --overflow-opacity-left: linear-gradient(to left, rgba(#fff,0), rgba(#fff,0.9));
+  --atum-select2-selected-bg: #dbf9ff;
+  --atum-select2-selected-text: #00B8DB;
+  --atum-column-groups-bg: #e9ecef;
+  --atum-row-active: #dbf9ff;
+  --atum-table-link-active: #00B8DB;
+  --atum-table-check: #00B8DB;
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
   --atum-settings-section-text: #fff;
@@ -375,8 +389,8 @@
   --dash-nice-select-option-selected-bg: #dbf9ff;
   --dash-nice-select-text-highlighted: #00B8DB;
   --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
-  --dash-stock-control-widget-primary: #00B8DB;
-  --dash-stock-control-widget-success: #69C61D;
+  --dash-stats-data-widget-primary: #00B8DB;
+  --dash-stats-data-widget-success: #69C61D;
   --dash-stock-control-chart-border: #fff;
   --dash-widget-current-stock-value-bg: #ffe1e1;
   --dash-widget-current-stock-value-text: #FF4848;
@@ -415,8 +429,8 @@ body .select2-container.atum-select2, body .select2-container.atum-enhanced-sele
 
 body .select2-container.atum-select2 .select2-results, body .select2-container.atum-enhanced-select .select2-results {
   display: block;
-  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
   max-height: inherit;
   padding: 0;
   margin: 0;
@@ -528,9 +542,9 @@ body .select2-container.atum-select2 .select2-search--inline .select2-search__fi
 }
 
 body .select2-dropdown {
-  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  background-color: var(--white);
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  background-color: var(--atum-table-bg);
   border: 1px solid var(--gray-500);
   border-radius: 5px;
   overflow: hidden;
@@ -651,6 +665,7 @@ body .select2-container--default.atum-select2 .select2-selection--single, body .
   height: 30px;
   border-radius: 5px;
   border: 1px solid var(--atum-select2-border);
+  background-color: var(--atum-table-bg);
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__rendered, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__rendered {
@@ -862,13 +877,13 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: var(--blue-light);
-  color: var(--blue);
+  background-color: var(--atum-select2-selected-bg);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default .select2-results__option[data-selected=true] {
-  background-color: var(--blue-light);
-  color: var(--blue);
+  background-color: var(--atum-select2-selected-bg);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default .select2-results__option.select2-results__message {
@@ -2947,17 +2962,17 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .displaying-num, #posts-filter .displaying-num {
-  color: #6c757d;
+  color: var(--gray-600);
 }
 
 .atum-list-wrapper .pagination-links, #posts-filter .pagination-links {
-  color: #6c757d;
+  color: var(--gray-600);
 }
 
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .tablenav-current-page, .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-current-page, #posts-filter .pagination-links #current-page-selector {
   border-radius: 5px;
   border: none;
-  color: #adb5bd;
+  color: var(--gray-500);
   padding: 0;
   width: 30px;
   height: 30px;
@@ -3028,7 +3043,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .tablenav-pages a, #posts-filter .tablenav-pages a {
   border-radius: 5px;
   border: none;
-  color: #adb5bd;
+  color: var(--gray-500);
   padding: 0;
   line-height: 30px;
   width: 30px;
@@ -3039,7 +3054,7 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .tablenav-pages a:hover, .atum-list-wrapper .tablenav-pages a:focus, #posts-filter .tablenav-pages a:hover, #posts-filter .tablenav-pages a:focus {
   background-color: var(--atum-pagination-bg);
-  color: #adb5bd;
+  color: var(--gray-500);
 }
 
 @media all and (max-width: 782px) {
@@ -5054,7 +5069,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .subsubsub {
-  background-color: var(--white);
+  background-color: var(--atum-table-bg);
   width: 100%;
   position: relative;
   font-size: 16px;
@@ -5470,6 +5485,7 @@ ul.atum_order_notes li .note_content::after {
   width: 110px;
   max-width: 110px;
   font-size: 15px;
+  background-color: var(--atum-table-bg);
 }
 
 @media all and (max-width: 782px) {
@@ -5560,7 +5576,7 @@ ul.atum_order_notes li .note_content::after {
   font-size: 15px !important;
   line-height: 15px !important;
   border: none;
-  background-color: var(--gray-100);
+  background-color: var(--atum-dropdown-toggle-bg);
   font-size: 15px;
   color: var(--gray-600);
 }
@@ -5580,7 +5596,7 @@ ul.atum_order_notes li .note_content::after {
   outline: 0;
   -webkit-box-shadow: none;
           box-shadow: none;
-  background-color: var(--gray-100);
+  background-color: var(--atum-dropdown-toggle-bg);
   color: var(--gray-600);
 }
 
@@ -5591,8 +5607,8 @@ ul.atum_order_notes li .note_content::after {
 .search-box .dropdown-menu, p.search-box .dropdown-menu {
   margin-top: 0px;
   right: 0px;
-  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
   background-color: var(--white);
   border: none;
   border-radius: 5px;
@@ -5977,7 +5993,7 @@ ul.atum_order_notes li .note_content::after {
 .atum-list-wrapper {
   width: 100%;
   overflow: hidden;
-  background-color: var(--white);
+  background-color: var(--atum-table-bg);
   border-radius: 8px;
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
@@ -6014,7 +6030,7 @@ ul.atum_order_notes li .note_content::after {
   height: 30px;
   border-radius: 5px;
   border: solid 1px var(--atum-border);
-  background-color: var(--white);
+  background-color: var(--atum-table-bg);
   color: var(--gray-600);
   cursor: pointer;
   -webkit-transition: all 0.20s;
@@ -6124,43 +6140,43 @@ ul.atum_order_notes li .note_content::after {
 
 .atum-list-wrapper .subsubsub li span.active {
   border-radius: 5px;
-  background-color: var(--blue);
+  background-color: var(--atum-table-views-tabs-active);
   font-size: 16px;
   padding: 0 10px;
   font-weight: bold;
   letter-spacing: 0.4px;
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active .text-blue {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active .extra-links-container {
   font-size: 14px;
   font-weight: normal;
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active .extra-links-container.empty {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active .extra-links-container a {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active .extra-links-container a.empty {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active a {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
   padding: 0;
 }
 
 .atum-list-wrapper .subsubsub li span.active a.empty, .atum-list-wrapper .subsubsub li span.active a.tips, .atum-list-wrapper .subsubsub li span.active a.empty {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active a .active {
@@ -6170,11 +6186,11 @@ ul.atum_order_notes li .note_content::after {
 .atum-list-wrapper .subsubsub li span.active .count {
   font-size: 16px;
   font-weight: bold;
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span.active .count.empty {
-  color: var(--white);
+  color: var(--atum-table-views-tabs-active-text);
 }
 
 .atum-list-wrapper .subsubsub li span a {
@@ -6441,7 +6457,7 @@ ul.atum_order_notes li .note_content::after {
       -ms-flex-align: center;
           align-items: center;
   margin: 0 11px 0 11px;
-  background-color: var(--white);
+  background-color: var(--atum-table-bg);
   border-bottom: 1px solid var(--atum-border);
 }
 
@@ -6522,15 +6538,13 @@ ul.atum_order_notes li .note_content::after {
 
 .overflow-opacity-effect-right {
   right: 0;
-  background-image: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  background-image: var(--overflow-opacity-rigth);
 }
 
 .overflow-opacity-effect-left {
   display: none;
   left: 0;
-  background-image: -webkit-gradient(linear, right top, left top, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.9)));
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  background-image: var(--overflow-opacity-left);
 }
 
 .atum-table-wrapper, #table-container {
@@ -6660,7 +6674,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 }
 
 table.atum-list-table thead .item-heads, table.atum-list-table tfoot, .floatThead-container thead .item-heads, .floatThead-container tfoot, .inbound-stock-list thead .item-heads, .inbound-stock-list tfoot, table.wp-list-table thead .item-heads, table.wp-list-table tfoot {
-  background-color: var(--white);
+  background-color: var(--atum-table-bg);
   border-top: 1px solid var(--atum-border);
   border-bottom: 1px solid var(--atum-border);
 }
@@ -6739,7 +6753,7 @@ table.atum-list-table tfoot th, table.atum-list-table thead th, .floatThead-cont
 }
 
 table.atum-list-table .column-groups, .floatThead-container .column-groups, .inbound-stock-list .column-groups, table.wp-list-table .column-groups {
-  background-color: var(--gray-200);
+  background-color: var(--atum-column-groups-bg);
 }
 
 table.atum-list-table .column-groups th, .floatThead-container .column-groups th, .inbound-stock-list .column-groups th, table.wp-list-table .column-groups th {
@@ -6866,6 +6880,12 @@ table.atum-list-table tr, .floatThead-container tr, .inbound-stock-list tr, tabl
 table.atum-list-table tr.main-row, table.atum-list-table tr.mi-row, table.atum-list-table tr.expandable, .floatThead-container tr.main-row, .floatThead-container tr.mi-row, .floatThead-container tr.expandable, .inbound-stock-list tr.main-row, .inbound-stock-list tr.mi-row, .inbound-stock-list tr.expandable, table.wp-list-table tr.main-row, table.wp-list-table tr.mi-row, table.wp-list-table tr.expandable {
   -webkit-transition: .2s ease-in;
   transition: .2s ease-in;
+  background-color: var(--atum-table-row-odd);
+  border: 1px solid var(--atum-row-shadow);
+}
+
+table.atum-list-table tr.main-row:last-child, table.atum-list-table tr.mi-row:last-child, table.atum-list-table tr.expandable:last-child, .floatThead-container tr.main-row:last-child, .floatThead-container tr.mi-row:last-child, .floatThead-container tr.expandable:last-child, .inbound-stock-list tr.main-row:last-child, .inbound-stock-list tr.mi-row:last-child, .inbound-stock-list tr.expandable:last-child, table.wp-list-table tr.main-row:last-child, table.wp-list-table tr.mi-row:last-child, table.wp-list-table tr.expandable:last-child {
+  border: none;
 }
 
 table.atum-list-table tr.main-row:hover, table.atum-list-table tr.mi-row:hover, table.atum-list-table tr.expandable:hover, .floatThead-container tr.main-row:hover, .floatThead-container tr.mi-row:hover, .floatThead-container tr.expandable:hover, .inbound-stock-list tr.main-row:hover, .inbound-stock-list tr.mi-row:hover, .inbound-stock-list tr.expandable:hover, table.wp-list-table tr.main-row:hover, table.wp-list-table tr.mi-row:hover, table.wp-list-table tr.expandable:hover {
@@ -6874,11 +6894,28 @@ table.atum-list-table tr.main-row:hover, table.atum-list-table tr.mi-row:hover, 
 }
 
 table.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even, table.wp-list-table tr.even {
-  background-color: var(--light);
+  background-color: var(--atum-table-row-even);
 }
 
 table.atum-list-table tr.active-row, .floatThead-container tr.active-row, .inbound-stock-list tr.active-row, table.wp-list-table tr.active-row {
-  background-color: var(--blue-light);
+  background-color: var(--atum-row-active);
+}
+
+table.atum-list-table tr.active-row .set-meta, table.atum-list-table tr.active-row a, .floatThead-container tr.active-row .set-meta, .floatThead-container tr.active-row a, .inbound-stock-list tr.active-row .set-meta, .inbound-stock-list tr.active-row a, table.wp-list-table tr.active-row .set-meta, table.wp-list-table tr.active-row a {
+  color: var(--atum-table-link-active) !important;
+}
+
+table.atum-list-table tr .set-meta, .floatThead-container tr .set-meta, .inbound-stock-list tr .set-meta, table.wp-list-table tr .set-meta {
+  cursor: pointer;
+  color: var(--blue);
+}
+
+table.atum-list-table tr .set-meta:hover, .floatThead-container tr .set-meta:hover, .inbound-stock-list tr .set-meta:hover, table.wp-list-table tr .set-meta:hover {
+  color: var(--wp-link-hover);
+}
+
+table.atum-list-table tr .set-meta.unsaved, .floatThead-container tr .set-meta.unsaved, .inbound-stock-list tr .set-meta.unsaved, table.wp-list-table tr .set-meta.unsaved {
+  color: var(--danger) !important;
 }
 
 table.atum-list-table tr.expanded, .floatThead-container tr.expanded, .inbound-stock-list tr.expanded, table.wp-list-table tr.expanded {
@@ -7059,7 +7096,7 @@ table.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-cont
 }
 
 table.atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals, table.wp-list-table tr.totals {
-  background-color: var(--gray-200);
+  background-color: var(--atum-footer-totals);
 }
 
 table.atum-list-table tr.totals td, table.atum-list-table tr.totals th, .floatThead-container tr.totals td, .floatThead-container tr.totals th, .inbound-stock-list tr.totals td, .inbound-stock-list tr.totals th, table.wp-list-table tr.totals td, table.wp-list-table tr.totals th {
@@ -7132,7 +7169,7 @@ table.atum-list-table input[type=checkbox], .floatThead-container input[type=che
 }
 
 table.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked, .inbound-stock-list input[type=checkbox]:checked, table.wp-list-table input[type=checkbox]:checked {
-  background-color: var(--blue);
+  background-color: var(--atum-table-check);
   border: 0;
 }
 
@@ -7143,10 +7180,6 @@ table.atum-list-table input[type=checkbox]:checked:before, .floatThead-container
   font-size: 14px;
   margin: 1px 0 0;
   font-weight: bold;
-}
-
-table.atum-list-table tbody :nth-child(odd), table.atum-list-table #the-list :nth-child(odd), .floatThead-container tbody :nth-child(odd), .floatThead-container #the-list :nth-child(odd), .inbound-stock-list tbody :nth-child(odd), .inbound-stock-list #the-list :nth-child(odd), table.wp-list-table tbody :nth-child(odd), table.wp-list-table #the-list :nth-child(odd) {
-  background-color: var(--wp-nth-child);
 }
 
 table.atum-list-table tbody tr.expanded.variable td, table.atum-list-table tbody tr.expanded.group td, table.atum-list-table tbody tr.expanded.bundle td, table.atum-list-table #the-list tr.expanded.variable td, table.atum-list-table #the-list tr.expanded.group td, table.atum-list-table #the-list tr.expanded.bundle td, .floatThead-container tbody tr.expanded.variable td, .floatThead-container tbody tr.expanded.group td, .floatThead-container tbody tr.expanded.bundle td, .floatThead-container #the-list tr.expanded.variable td, .floatThead-container #the-list tr.expanded.group td, .floatThead-container #the-list tr.expanded.bundle td, .inbound-stock-list tbody tr.expanded.variable td, .inbound-stock-list tbody tr.expanded.group td, .inbound-stock-list tbody tr.expanded.bundle td, .inbound-stock-list #the-list tr.expanded.variable td, .inbound-stock-list #the-list tr.expanded.group td, .inbound-stock-list #the-list tr.expanded.bundle td, table.wp-list-table tbody tr.expanded.variable td, table.wp-list-table tbody tr.expanded.group td, table.wp-list-table tbody tr.expanded.bundle td, table.wp-list-table #the-list tr.expanded.variable td, table.wp-list-table #the-list tr.expanded.group td, table.wp-list-table #the-list tr.expanded.bundle td {
@@ -7172,10 +7205,6 @@ table.atum-list-table tbody tr.expandable td.column-calc_location a:before, tabl
 
 table.atum-list-table tbody tr td, table.atum-list-table #the-list tr td, .floatThead-container tbody tr td, .floatThead-container #the-list tr td, .inbound-stock-list tbody tr td, .inbound-stock-list #the-list tr td, table.wp-list-table tbody tr td, table.wp-list-table #the-list tr td {
   color: var(--gray-600);
-}
-
-table.atum-list-table tbody tr td .set-meta, table.atum-list-table #the-list tr td .set-meta, .floatThead-container tbody tr td .set-meta, .floatThead-container #the-list tr td .set-meta, .inbound-stock-list tbody tr td .set-meta, .inbound-stock-list #the-list tr td .set-meta, table.wp-list-table tbody tr td .set-meta, table.wp-list-table #the-list tr td .set-meta {
-  color: var(--blue);
 }
 
 table.atum-list-table tbody tr td.column-title a, table.atum-list-table tbody tr td.column-title .row-title, table.atum-list-table tbody tr td.atum_order_title a, table.atum-list-table tbody tr td.atum_order_title .row-title, table.atum-list-table #the-list tr td.column-title a, table.atum-list-table #the-list tr td.column-title .row-title, table.atum-list-table #the-list tr td.atum_order_title a, table.atum-list-table #the-list tr td.atum_order_title .row-title, .floatThead-container tbody tr td.column-title a, .floatThead-container tbody tr td.column-title .row-title, .floatThead-container tbody tr td.atum_order_title a, .floatThead-container tbody tr td.atum_order_title .row-title, .floatThead-container #the-list tr td.column-title a, .floatThead-container #the-list tr td.column-title .row-title, .floatThead-container #the-list tr td.atum_order_title a, .floatThead-container #the-list tr td.atum_order_title .row-title, .inbound-stock-list tbody tr td.column-title a, .inbound-stock-list tbody tr td.column-title .row-title, .inbound-stock-list tbody tr td.atum_order_title a, .inbound-stock-list tbody tr td.atum_order_title .row-title, .inbound-stock-list #the-list tr td.column-title a, .inbound-stock-list #the-list tr td.column-title .row-title, .inbound-stock-list #the-list tr td.atum_order_title a, .inbound-stock-list #the-list tr td.atum_order_title .row-title, table.wp-list-table tbody tr td.column-title a, table.wp-list-table tbody tr td.column-title .row-title, table.wp-list-table tbody tr td.atum_order_title a, table.wp-list-table tbody tr td.atum_order_title .row-title, table.wp-list-table #the-list tr td.column-title a, table.wp-list-table #the-list tr td.column-title .row-title, table.wp-list-table #the-list tr td.atum_order_title a, table.wp-list-table #the-list tr td.atum_order_title .row-title {
@@ -7398,19 +7427,6 @@ table.atum-list-table .show-hierarchy, .floatThead-container .show-hierarchy, .i
 
 table.atum-list-table .show-hierarchy.not-empty, .floatThead-container .show-hierarchy.not-empty, .inbound-stock-list .show-hierarchy.not-empty, table.wp-list-table .show-hierarchy.not-empty {
   color: var(--blue);
-}
-
-table.atum-list-table .set-meta, .floatThead-container .set-meta, .inbound-stock-list .set-meta, table.wp-list-table .set-meta {
-  cursor: pointer;
-  color: var(--blue);
-}
-
-table.atum-list-table .set-meta:hover, .floatThead-container .set-meta:hover, .inbound-stock-list .set-meta:hover, table.wp-list-table .set-meta:hover {
-  color: var(--wp-link-hover);
-}
-
-table.atum-list-table .set-meta.unsaved, .floatThead-container .set-meta.unsaved, .inbound-stock-list .set-meta.unsaved, table.wp-list-table .set-meta.unsaved {
-  color: var(--danger) !important;
 }
 
 table.atum-list-table .set-header, .floatThead-container .set-header, .inbound-stock-list .set-header, table.wp-list-table .set-header {

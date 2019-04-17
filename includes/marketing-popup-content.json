@@ -19,7 +19,7 @@
 	},
 	"title": {
 		"text"      : "Product<strong>levels</strong>",
-		"text_color": "var(--black)",
+		"text_color": "var(--dash-widget-header-title)",
 		"text_size" : "",
 		"text_align": "center"
 	},

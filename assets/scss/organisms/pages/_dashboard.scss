@@ -62,7 +62,7 @@ body.toplevel_page_atum-dashboard {
 		flex-wrap: wrap;
 		
 		h3 {
-			color: var(--white);
+			color: var(--dash-widget-header-title);
 		}
 		
 		.dash-header-buttons {
@@ -114,7 +114,7 @@ body.toplevel_page_atum-dashboard {
 		
 		.atum-version {
 			color: var(--white);
-			background-color: var(--dash-atum-version);
+			background-color: var(--black-shadow);
 			border-radius: 30px;
 			padding: 1px 15px;
 			font-weight: 100;
@@ -130,7 +130,7 @@ body.toplevel_page_atum-dashboard {
 			padding-left: $grid-gutter-width/2;
 			padding-bottom: 5px;
 			font-size: 11px;
-			color: var(--white);
+			color: var(--dash-widget-header-title);
 			font-weight: 300;
 			
 			span {
