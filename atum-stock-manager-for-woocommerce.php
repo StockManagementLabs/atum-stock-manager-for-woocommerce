@@ -18,7 +18,7 @@
  * Tested up to:         5.1.1
  * Requires PHP:         5.6
  * WC requires at least: 2.7.0
- * WC tested up to:      3.5.7
+ * WC tested up to:      3.6.1
  * Text Domain:          atum-stock-manager-for-woocommerce
  * Domain Path:          /languages
  * License:              GPLv2 or later
