@@ -48,6 +48,9 @@ export default class PostTypeList {
 
         // Add list-table-header inside form.
         $('#posts-filter').prepend($('.list-table-header'));
+
+        $('#post-query-submit').attr('class', 'btn btn-warning');
+        $('#doaction, #doaction2').attr('class', 'btn btn-warning action');
 		
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );

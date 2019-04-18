@@ -3,38 +3,35 @@
 	@each $color, $value in $grays {
 		--gray-#{$color}: #{$value};
 		--gray-#{$color}-hover: #{rgba($value,0.6)};
-		--gray-#{$color}-shadow-light: #{rgba($value, 0.04)};
 		--gray-#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $colors {
 		--#{$color}: #{$value};
 		--#{$color}-hover: #{rgba($value,0.6)};
-		--#{$color}-shadow-light: #{rgba($value, 0.04)};
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $theme-colors {
 		--#{$color}: #{$value};
 		--#{$color}-hover: #{rgba($value,0.6)};
-		--#{$color}-shadow-light: #{rgba($value, 0.04)};
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $wp-colors {
 		--#{$color}: #{$value};
 		--#{$color}-hover: #{rgba($value,0.6)};
-		--#{$color}-shadow-light: #{rgba($value, 0.04)};
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
 	@each $color, $value in $wc-colors {
 		--#{$color}: #{$value};
 		--#{$color}-hover: #{rgba($value,0.6)};
-		--#{$color}-shadow-light: #{rgba($value, 0.04)};
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
+	
+	--black-shadow-light: #{rgba($black, 0.04)};
 	--atum-table-row-even: #{$light};
 	--atum-table-row-odd: transparent;
 	--atum-bg-white: #{$white};
@@ -50,6 +47,8 @@
 	--atum-table-views-tabs: #{$gray-500};
 	--atum-table-views-tabs-active: #{$blue};
 	--atum-table-views-tabs-active-text: #{$white};
+	--atum-table-link-child: #{$blue};
+	--atum-table-link-text: #{$gray-600};
 	--atum-dropdown-toggle-bg: #{$gray-100};
 	--atum-select2-border: #{$gray-200};
 	--atum-input-placeholder: #{$gray-500};
@@ -66,9 +65,14 @@
 	--atum-select2-selected-text: #{$blue};
 	--atum-column-groups-bg: #{$gray-200};
 	--atum-row-active: #{$blue-light};
+	--atum-table-row-variation-text: #{$white};
+	--atum-table-row-child-variation-even: #{$blue-light-2};
+	--atum-table-row-child-variation: #{$blue-light};
 	--atum-table-link-active: #{$blue};
 	--atum-table-check: #{$blue};
 	--atum-table-icon: #{$gray-500};
+	--atum-table-icon-active: #{$gray-500};
+	--atum-table-text-active: #{$gray-500};
 	--atum-dark-bg: #{$blue-dark-lighten};
 	--atum-settings-nav-link: #{$white};
 	--atum-settings-section-text: #{$white};

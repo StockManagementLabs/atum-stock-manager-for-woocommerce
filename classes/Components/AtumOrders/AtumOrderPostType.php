@@ -360,7 +360,7 @@ abstract class AtumOrderPostType {
 					$status      = $atum_order->get_status();
 					$status_name = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
 
-					printf( '<mark class="order-status status-%s tips" data-tip="%s"><span>%s</span></mark>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					printf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 

@@ -306,10 +306,10 @@
 					padding: 6px 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color:  var(--white);
+					color:  var(--atum-table-views-tabs-active-text);
 					
 					.count {
-						color:  var(--white);
+						color:  var(--atum-table-views-tabs-active-text);
 					}
 				}
 				
@@ -375,6 +375,8 @@
 		height: 28px;
 		padding: 0 12px;
 		font-weight: normal;
+		background-color: var(--atum-table-bg);
+		color: var(--gray-600);
 		
 		&::placeholder {
 			font-size: 12px;
@@ -500,7 +502,7 @@
 	.input-group {
 		border-radius: 5px;
 		border: solid 1px var(--atum-border);
-		background-color:  var(--white);
+		background-color:  var(--atum-table-bg);
 		margin-left: 10px;
 		padding-right: 1px;
 		flex-wrap: nowrap;
@@ -643,8 +645,12 @@
 			text-align: center;
 			line-height: 30px;
 			
-			&:hover, &:active, &:focus {
+			&:active, &:focus {
 				background-color: var(--warning);
+				color:  var(--white);
+			}
+			&:hover {
+				background-color: var(--warning) !important;
 				color:  var(--white);
 			}
 		}
@@ -937,13 +943,13 @@
 			
 			&.active, &:hover {
 				background-color: var(--blue);
-				color:  var(--white);
-				border-color:  var(--white);
+				color:  var(--atum-table-bg);
+				border-color:  var(--atum-table-bg);
 			}
 			
 			&:hover {
 				background-color: var(--blue-hover);
-				border-color:  var(--white);
+				border-color:  var(--atum-table-bg);
 			}
 			
 		}
@@ -1131,7 +1137,7 @@
 		text-align: center;
 		border: none;
 		background-color: var(--primary);
-		color:  var(--white);
+		color:  var(--atum-table-bg);
 		padding: 2px;
 		cursor: pointer;
 		z-index: 999;
@@ -1591,7 +1597,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				white-space: normal;
 				font-weight: bold;
 				letter-spacing: 0.3px;
-				color: var(--gray-500);
+				color: var(--atum-table-item-heads);
 				
 			}
 		}
@@ -1606,7 +1612,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 		}
-		th {
+		th, td {
 			border-top: 1px solid var(--atum-border);
 			border-bottom: 1px solid var(--atum-border);
 		}
@@ -1743,6 +1749,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tr {
 		box-shadow: 0 1px 0 0 var(--gray-200-shadow);
+		background-color: var(--atum-table-row-even);
+		
+		&:nth-child(odd) {
+			background-color: var(--atum-table-row-odd);
+		}
+		
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
 			background-color: var(--atum-table-row-odd);
@@ -1757,13 +1769,24 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		
+		&.expandable {
+			.set-meta, a {
+				color: var(--atum-table-link-child) !important;
+			}
+		}
+		
 		&.even {
 			background-color: var(--atum-table-row-even);
 		}
 		
 		&.active-row {
 			background-color: var(--atum-row-active);
-			
+			td {
+				color: var(--atum-table-text-active) !important;
+				.product-type {
+					color: var(--atum-table-icon-active);
+				}
+			}
 			.set-meta, a {
 				color: var(--atum-table-link-active) !important;
 			}
@@ -1858,10 +1881,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.variation {
-			background-color:  var(--blue-light);
+			background-color:  var(--atum-table-row-child-variation);
 			
 			&:nth-child(even) {
-				background-color:  var(--blue-light-2);
+				background-color:  var(--atum-table-row-child-variation-even);
 			}
 			
 			&.active-row {
@@ -1994,7 +2017,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					font-weight: bold;
 					letter-spacing: 0.4px;
 					text-align: center;
-					color:  var(--white);
+					color:  var(--atum-table-bg);
 					border-radius: 5px;
 					background-color: var(--gray-600);
 					padding: 4px;
@@ -2068,7 +2091,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		tr {
 			&.expanded {
-				&.variable, &.group, &.bundle {
+				&.group, &.bundle {
 					td {
 						color: var(--white) !important;
 						
@@ -2081,10 +2104,29 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						}
 					}
 				}
+				
+				&.variable {
+					td {
+						color: var(--atum-table-row-variation-text) !important;
+						
+						a, span {
+							color: var(--atum-table-row-variation-text) !important;
+							
+							&:before {
+								color: var(--atum-table-row-variation-text) !important;
+							}
+						}
+					}
+				}
+				
 			}
 			
 			&.expandable {
 				td {
+					color: var(--atum-table-link-text);
+					span:not(.atum-icon) {
+						color: var(--atum-table-link-text);
+					}
 					&.column-calc_location {
 						a {
 							pointer-events: none;
@@ -2342,7 +2384,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.show-hierarchy {
 		cursor: pointer;
-		color: var(--gray-500);
+		color: var(--atum-table-icon);
 		font-size: 20px;
 		&.not-empty {
 			color: var(--blue);
@@ -2634,7 +2676,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 [data-screen="atum-inventory_page_atum-inbound-stock"] {
 	.tablenav {
 		[name="filter_action"] {
-			visibility: hidden;
+			visibility: hidden !important;
 		}
 	}
 }

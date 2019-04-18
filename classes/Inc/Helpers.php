@@ -2565,6 +2565,8 @@ final class Helpers {
 				    --atum-table-item-heads: $hc_dark_blue;
 				    --atum-table-views-tabs: $hc_dark_blue;
 				    --atum-table-views-tabs-active: $hc_blue;
+				    --atum-table-link-child: $hc_blue;
+				    --atum-table-link-text: $hc_dark_blue;
 				    --overflow-opacity-rigth: linear-gradient(to right, rgba($white_rgb,0), rgba($white_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($white_rgb,0), rgba($white_rgb,0.9));
 				    --atum-dropdown-toggle-bg: $white;
@@ -2582,7 +2584,10 @@ final class Helpers {
 				    --atum-settings-btn-save: $white;
 				    --atum-settings-btn-save-hover: $hc_blue_light;
 				    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
+					--atum-table-row-child-variation: $hc_blue_light;
 				    --atum-table-icon: $hc_blue;
+				    --atum-table-icon-active: $hc_blue;
+				    --atum-table-text-active: $hc_blue;
 				    --wp-nth-child: transparent;
 				    --dash-card-text: $hc_dark_blue;
 				    --dash-next-text: $hc_dark_blue;
@@ -2625,7 +2630,6 @@ final class Helpers {
 				    --blue-light: $dm_dark_blue;
 				    --atum-row-active: $blue_light;
 				    --blue: $dm_blue;
-				    --white: $dm_dark_blue;
 				    --atum-table-link-active: $blue;
 				    --atum-table-check: $blue;
 				    --blue-hover: $dm_blue;
@@ -2653,6 +2657,8 @@ final class Helpers {
 				    --atum-table-views-tabs: $white;
 				    --atum-table-views-tabs-active: $dm_blue;
 				    --atum-table-views-tabs-active-text: $dm_dark_blue;
+				    --atum-table-link-child: $blue;
+				    --atum-table-link-text: $dm_dark_blue;
 				    --atum-dropdown-toggle-bg: $blue_dark_lighten;
 				    --atum-pagination-border-disabled: $white;
 				    --atum-column-groups-bg: $blue_dark;
@@ -2660,8 +2666,13 @@ final class Helpers {
 				    --atum-table-row-odd: $blue_dark_lighten;
 					--atum-marketing-popup-bg: $dm_dark_blue;
 					--atum-row-shadow: rgba($white_rgb, 0.2);
+					--atum-table-row-child-variation: $blue_light;
+					--atum-table-row-child-variation-even: $blue_light;
+					--atum-table-row-variation-text: $dm_dark_blue;
 					--atum-footer-totals: $blue_dark;
 					--atum-table-icon: $white;
+					--atum-table-icon-active: $dm_dark_blue;
+					--atum-table-text-active: $dm_dark_blue;
 					--dash-card-text: $gray_500;
 					--atum-table-bg: $dm_dark_blue;
 					--overflow-opacity-rigth: linear-gradient(to right, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
