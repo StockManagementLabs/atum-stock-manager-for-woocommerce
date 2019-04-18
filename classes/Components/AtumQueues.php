@@ -66,6 +66,7 @@ class AtumQueues {
 			$next_scheduled_date = $wc_queue->get_next( $hook_name );
 
 			if ( is_null( $next_scheduled_date ) ) {
+				$wc_queue->cancel_all( $hook_name ); // Ensure all the actions are cancelled before adding a new one.
 				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name );
 			}
 
