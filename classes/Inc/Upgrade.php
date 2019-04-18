@@ -513,6 +513,26 @@ class Upgrade {
 
 		}
 
+		// Add extra key indexes to ATUM tables to improve performance.
+		$indexes = array(
+			'inheritable',
+		);
+
+		foreach ( $indexes as $index ) {
+
+			// Avoid adding the index if was already added.
+			$index_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+				WHERE table_schema = %s AND TABLE_NAME = %s AND index_name = %s;
+			', $db_name, $atum_data_table, $index );
+
+			// Add the new index to the table.
+			if ( ! $wpdb->get_var( $index_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD INDEX `$index` (`$index`)" ); // WPCS: unprepared SQL ok.
+			}
+
+		}
+
 	}
 	
 	/**
