@@ -565,7 +565,7 @@ class ProductDataMetaBoxes {
 				do_action( 'atum/product_data/after_save_purchase_price', $this->product->get_id(), $purchase_price['new_purchase_price'], $purchase_price['old_purchase_price'] );
 			}
 
-			do_action( 'atum/product_data/after_save_data', $this->product_data );
+			do_action( 'atum/product_data/after_save_data', $this->product_data, $this->product );
 
 		}
 

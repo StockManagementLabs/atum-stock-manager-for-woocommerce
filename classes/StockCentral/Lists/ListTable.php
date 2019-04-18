@@ -555,7 +555,7 @@ class ListTable extends AtumListTable {
 			$sold_today = $this->product->get_sold_today();
 
 			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
-				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today 00:00:00', $this->day );
+				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today midnight', $this->day );
 				$this->product->set_sold_today( $sold_today );
 				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
 			}
@@ -1002,7 +1002,7 @@ class ListTable extends AtumListTable {
 					// Get the orders processed today.
 					$atts = array(
 						'status'     => [ 'wc-processing', 'wc-completed' ],
-						'date_start' => 'today 00:00:00',
+						'date_start' => 'today midnight',
 					);
 
 					$today_orders = Helpers::get_orders( $atts );

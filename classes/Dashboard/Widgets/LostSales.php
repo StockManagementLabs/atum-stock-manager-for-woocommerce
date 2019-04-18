@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Dashboard\Widgets
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.3.9
  */
@@ -69,13 +69,13 @@ class LostSales extends AtumWidget {
 		$stats_this_month = WidgetHelpers::get_sales_stats( array(
 			'types'      => array( 'lost_sales' ),
 			'products'   => $products,
-			'date_start' => 'first day of this month 00:00:00',
+			'date_start' => 'first day of this month midnight',
 		) );
 
 		$stats_today = WidgetHelpers::get_sales_stats( array(
 			'types'      => array( 'lost_sales' ),
 			'products'   => $products,
-			'date_start' => 'today 00:00:00',
+			'date_start' => 'midnight today',
 			'days'       => 1,
 		) );
 

@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Dashboard
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2018 Stock Management Labs™
+ * @copyright      ©2019 Stock Management Labs™
  *
  * @since          1.4.0
  */
@@ -425,15 +425,15 @@ final class WidgetHelpers {
 
 		switch ( $period_time ) {
 			case 'year':
-				$period = self::get_date_period( "first day of January $which year 00:00:00", "last day of December $which year 23:59:59", '1 month' );
+				$period = self::get_date_period( "first day of January $which year midnight", "last day of December $which year 23:59:59", '1 month' );
 				break;
 
 			case 'month':
-				$period = self::get_date_period( "first day of $which month 00:00:00", "last day of $which month 23:59:59" );
+				$period = self::get_date_period( "first day of $which month midnight", "last day of $which month 23:59:59" );
 				break;
 
 			case 'week':
-				$period = self::get_date_period( "$which week 00:00:00", "$which week +6 days 23:59:59" );
+				$period = self::get_date_period( "$which week midnight", "$which week +6 days 23:59:59" );
 				break;
 
 		}
