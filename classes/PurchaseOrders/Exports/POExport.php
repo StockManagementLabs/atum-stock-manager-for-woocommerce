@@ -5,7 +5,7 @@
  * @package         Atum\DataExport
  * @subpackage      Reports
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.3.9
  */
