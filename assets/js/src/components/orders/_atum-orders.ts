@@ -80,7 +80,7 @@ export default class AtumOrders {
 		$('#atum_order_type').change( (evt: JQueryEventObject) => this.toggleExtraFields(evt) ).change();
 		
 		// Trigger multiple suppliers' dependent fields
-		$('#multiple_suppliers').change( (evt: JQueryEventObject) => this.toggleSupplierField(evt) ).change();
+		$('#multiple_suppliers').change( (evt: JQueryEventObject) => this.toggleSupplierField(evt) );
 		
 		// Hide/show the blocker section on supplier dropdown changes.
 		$('.dropdown_supplier').change( (evt: JQueryEventObject) => this.toggleItemsBlocker( $(evt.currentTarget).val() !== null ) ).change();
@@ -282,7 +282,7 @@ export default class AtumOrders {
 	}
 	
 	toggleSupplierField(evt: JQueryEventObject) {
-		
+
 		const $checkbox: JQuery        = $(evt.currentTarget),
 		      $body: JQuery            = $('body'),
 		      $dropdown: JQuery        = $('.dropdown_supplier'),
@@ -299,6 +299,11 @@ export default class AtumOrders {
 			this.toggleItemsBlocker(false);
 			$dropdownWrapper.slideDown();
 		}
+
+		if ($('.items-blocker').length === 0) {
+            $('.atum_order_items_wrapper').before('<div class="items-blocker"><h3>' + this.settings.get('itemBlocker') + '</h3></div>');
+        }
+
 		
 	}
 	

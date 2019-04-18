@@ -458,6 +458,7 @@ final class Globals {
 			'pickMinute'      => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
 			'decrementMinute' => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
 			'dateFormat'      => 'YYYY-MM-DD',
+			'dateTimeFormat'  => 'YYYY-MM-DD HH:mm',
 		);
 
 		return array_merge( $defaults, $replace );

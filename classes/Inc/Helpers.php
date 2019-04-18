@@ -2660,6 +2660,18 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
+	 * @return bool
+	 */
+	public static function is_atum_ajax() {
+
+		return defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['action'] && 'atum_' === substr( $_POST['action'], 0, 5 ) );
+	}
+
+/**
+	 * Update the expiring data for the specified product.
+	 *
+	 * @since 1.5.8
+	 *
 	 * @param \WC_Product $product
 	 */
 	public static function update_expiring_product_data( $product ) {

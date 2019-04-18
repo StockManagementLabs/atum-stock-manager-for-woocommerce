@@ -45,6 +45,9 @@ export default class PostTypeList {
 
         // Show add button in head.
         $('.wp-heading-inline').append( $('.page-title-action').show() );
+
+        // Add list-table-header inside form.
+        $('#posts-filter').prepend($('.list-table-header'));
 		
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );
