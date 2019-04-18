@@ -43,7 +43,7 @@ final class Globals {
 	private static $child_product_types = [ 'variation' ];
 	
 	/**
-	 * ATUM existent order types
+	 * ATUM order types
 	 *
 	 * @var array
 	 */

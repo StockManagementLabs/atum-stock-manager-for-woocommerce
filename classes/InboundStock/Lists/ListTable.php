@@ -63,14 +63,14 @@ class ListTable extends AtumListTable {
 			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
 			'calc_type'           => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'        => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'_inbound_stock'      => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
 			'calc_date_expected'  => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
 			'calc_purchase_order' => __( 'PO', ATUM_TEXT_DOMAIN ),
 		);
 
 		// Initialize totalizers.
-		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( 'calc_inbound' => 0 ) );
+		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( '_inbound_stock' => 0 ) );
 
 		parent::__construct( $args );
 		
@@ -280,11 +280,11 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column_calc_inbound( $item ) {
+	protected function column__inbound_stock( $item ) {
 
 		// Get the quantity for the ATUM Order Item.
 		$qty = AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' );
-		$this->increase_total( 'calc_inbound', $qty );
+		$this->increase_total( '_inbound_stock', $qty );
 
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
 
@@ -383,7 +383,7 @@ class ListTable extends AtumListTable {
 			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "'
+			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` <> '" . PurchaseOrders::FINISHED . "'
 			$search_query
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",

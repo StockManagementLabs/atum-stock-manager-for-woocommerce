@@ -85,6 +85,11 @@ class Upgrade {
 			$this->update_po_status();
 		}
 
+		// ** version 1.5.8 ** New tables to store ATUM data for products.
+		if ( version_compare( $db_version, '1.5.8', '<' ) ) {
+			$this->create_list_table_columns();
+		}
+
 		// ** version 1.6.0 ** New table for ATUM Logs component.
 		/*if ( version_compare( $db_version, '1.6.0', '<' ) ) {
 			$this->create_atum_log_table();
@@ -464,6 +469,50 @@ class Upgrade {
 		
 		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
 		
+	}
+
+	/**
+	 * Create the new columns for the ATUM product data table
+	 *
+	 * @since 1.5.8
+	 */
+	private function create_list_table_columns() {
+
+		global $wpdb;
+
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$columns         = array(
+			'inbound_stock'    => 'DOUBLE',
+			'stock_on_hold'    => 'DOUBLE',
+			'sold_today'       => 'BIGINT(20)',
+			'sales_last_days'  => 'BIGINT(20)',
+			'reserved_stock'   => 'BIGINT(20)',
+			'customer_returns' => 'BIGINT(20)',
+			'warehouse_damage' => 'BIGINT(20)',
+			'lost_in_post'     => 'BIGINT(20)',
+			'other_logs'       => 'BIGINT(20)',
+			'out_stock_days'   => 'INT(11)',
+			'lost_sales'       => 'BIGINT(20)',
+			'has_location'     => 'TINYINT(1)',
+			'update_date'      => 'DATETIME',
+		);
+
+		foreach ( array_keys( $columns ) as $column_name ) {
+
+			// Avoid adding the column if was already added.
+			$column_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = %s
+			', $db_name, $atum_data_table, $column_name );
+
+			// Add the new column to the table.
+			if ( ! $wpdb->get_var( $column_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // WPCS: unprepared SQL ok.
+			}
+
+		}
+
 	}
 	
 	/**

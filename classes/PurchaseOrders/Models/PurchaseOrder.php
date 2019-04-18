@@ -15,6 +15,8 @@ namespace Atum\PurchaseOrders\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Helpers;
+use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\Suppliers\Suppliers;
 
 
@@ -54,6 +56,9 @@ class PurchaseOrder extends AtumOrderModel {
 		// Maybe change product stock when order status change.
 		add_action( 'atum/orders/status_received', array( $this, 'maybe_increase_stock_levels' ), 10, 2 );
 		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
+
+		// Recalculate the inbound stock for products within POs, every time a PO is saved.
+		add_action( 'atum/order/after_object_save', array( $this, 'after_po_save' ) );
 
 		parent::__construct( $id, $read_items );
 		
@@ -481,6 +486,36 @@ class PurchaseOrder extends AtumOrderModel {
 			}
 		}
 		
+	}
+
+	/**
+	 * Recalculate the inbound stock for products within POs, every time a PO is saved.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param PurchaseOrder $po
+	 */
+	public function after_po_save( $po ) {
+
+		$items = $po->get_items();
+
+		foreach ( $items as $item ) {
+
+			/**
+			 * Variable definition
+			 *
+			 * @var LogItemProduct $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+				Helpers::get_product_inbound_stock( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
+				$product->save_atum_data();
+			}
+
+		}
+
 	}
 
 }

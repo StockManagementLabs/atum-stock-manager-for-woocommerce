@@ -537,8 +537,8 @@ class Suppliers {
 	 */
 	public static function get_product_id_by_supplier_sku( $product_id, $supplier_sku ) {
 
-		$cache_key  = AtumCache::get_cache_key( 'product_id_by_supplier_sku', [ $product_id, $supplier_sku ] );
-		$product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$cache_key        = AtumCache::get_cache_key( 'product_id_by_supplier_sku', [ $product_id, $supplier_sku ] );
+		$found_product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
 
@@ -546,7 +546,7 @@ class Suppliers {
 
 			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-			$product_id = $wpdb->get_var( $wpdb->prepare( "
+			$found_product_id = $wpdb->get_var( $wpdb->prepare( "
 				SELECT p.ID
 				FROM $wpdb->posts p
 				LEFT JOIN $atum_data_table apd ON ( p.ID = apd.product_id )
@@ -556,11 +556,11 @@ class Suppliers {
 				$product_id
 			) ); // WPCS: unprepared SQL ok.
 
-			AtumCache::set_cache( $cache_key, $product_id );
+			AtumCache::set_cache( $cache_key, $found_product_id );
 
 		}
 
-		return $product_id;
+		return $found_product_id;
 
 	}
 

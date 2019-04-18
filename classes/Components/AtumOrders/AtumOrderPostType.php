@@ -471,7 +471,7 @@ abstract class AtumOrderPostType {
 					$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
 
 					foreach ( $actions as $action ) {
-						printf( '<a class="%1$s tips" target="%2$s" href="%3$s" data-tip="%4$s">%5$s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), $action['icon'] );
+						printf( '<a class="%1$s tips" target="%2$s" href="%3$s" data-tip="%4$s">%5$s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), $action['icon'] ); // WPCS: XSS ok.
 					}
 
 					do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>
@@ -797,8 +797,8 @@ abstract class AtumOrderPostType {
 
 				$number = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
 				/* translators: the number of changed statuses */
-				$message = sprintf( _n( 'Status changed.', '%s statuses changed.', $number, ATUM_TEXT_DOMAIN ), number_format_i18n( $number ) ); // phpcs:ignore
-				echo '<div class="updated"><p>' . $message . '</p></div>';
+				$message = sprintf( _n( '%s status changed.', '%s statuses changed.', $number, ATUM_TEXT_DOMAIN ), number_format_i18n( $number ) );
+				echo '<div class="updated"><p>' . esc_html( $message ) . '</p></div>';
 
 				break;
 			}

@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.3.8.2
  */
@@ -75,7 +75,8 @@ class Hooks {
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
 		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
-		
+
+		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
 	}
@@ -115,6 +116,10 @@ class Hooks {
 			add_action( 'atum/product_data/after_save_product_variation_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
 		
 		}
+
+		// Save the orders-related data every time an order status is changed.
+		add_action( 'woocommerce_reduce_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
+		add_action( 'woocommerce_restore_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
 
 	}
 
@@ -313,7 +318,7 @@ class Hooks {
 				$out_stock_date = NULL;
 
 				if ( ! $current_stock ) {
-					$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+					$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE, TRUE );
 				}
 
 				/* @noinspection PhpUndefinedMethodInspection */
@@ -658,6 +663,37 @@ class Hooks {
 		}
 		
 	}
+
+	/**
+	 * Save the order-related props every time the stock is reduced/increased for the products within a WC order
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param \WC_Order $order
+	 */
+	public function save_order_items_props( $order ) {
+
+		$items = $order->get_items();
+
+		foreach ( $items as $item ) {
+
+			/**
+			 * Variable definition
+			 *
+			 * @var \WC_Order_Item_Product $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+				Helpers::update_expiring_product_data( $product );
+				do_action( 'atum/after_save_order_item_props', $item, $order );
+			}
+
+		}
+
+	}
+
 	
 	/********************
 	 * Instance methods

@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -15,9 +15,24 @@ namespace Atum\InventoryLogs\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Helpers;
+use Atum\InventoryLogs\Items\LogItemProduct;
 
 
 class Log extends AtumOrderModel {
+
+	/**
+	 * ATUM product data's DB columns associated to each log type
+	 *
+	 * @var array
+	 */
+	protected static $log_type_columns = array(
+		'reserved-stock'   => 'reserved_stock',
+		'customer-returns' => 'customer_returns',
+		'warehouse-damage' => 'warehouse_damage',
+		'lost-in-post'     => 'lost_in_post',
+		'other'            => 'other_logs',
+	);
 
 	/**
 	 * Log constructor
@@ -31,6 +46,9 @@ class Log extends AtumOrderModel {
 
 		// Add the buttons for increasing/decreasing the Log products' stock.
 		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
+
+		// Recalculate the IL's data props every time a log is saved.
+		add_action( 'atum/order/after_object_save', array( $this, 'after_log_save' ) );
 
 		parent::__construct( $id, $read_items );
 
@@ -109,6 +127,18 @@ class Log extends AtumOrderModel {
 			'lost-in-post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
 			'other'            => __( 'Other', ATUM_TEXT_DOMAIN ),
 		) );
+
+	}
+
+	/**
+	 * Getter for the log_type_columns prop
+	 *
+	 * @since 1.5.8
+	 *
+	 * @return array
+	 */
+	public static function get_log_type_columns() {
+		return self::$log_type_columns;
 	}
 
 	/**
@@ -337,6 +367,41 @@ class Log extends AtumOrderModel {
 
 			default:
 				return '';
+		}
+
+	}
+
+	/**
+	 * Recalculate the IL's data props every time a log is saved.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param Log $log
+	 */
+	public function after_log_save( $log ) {
+
+		$items = $log->get_items();
+
+		foreach ( $items as $item ) {
+
+			/**
+			 * Variable definition
+			 *
+			 * @var LogItemProduct $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+
+				foreach ( self::$log_type_columns as $log_type => $log_type_column ) {
+					Helpers::get_log_item_qty( $log_type, $product, 'pending', TRUE ); // This already sets the prop to the column, so we just need to save it later.
+				}
+
+				$product->save_atum_data();
+
+			}
+
 		}
 
 	}

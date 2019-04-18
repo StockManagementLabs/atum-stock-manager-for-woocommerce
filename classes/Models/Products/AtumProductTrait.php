@@ -32,10 +32,24 @@ trait AtumProductTrait {
 		'out_stock_date'        => NULL,
 		'out_stock_threshold'   => '',
 		'inheritable'           => FALSE,
+		'inbound_stock'         => NULL,
+		'stock_on_hold'         => NULL,
+		'sold_today'            => NULL,
+		'sales_last_days'       => NULL,
+		'reserved_stock'        => NULL,
+		'customer_returns'      => NULL,
+		'warehouse_damage'      => NULL,
+		'lost_in_post'          => NULL,
+		'other_logs'            => NULL,
+		'out_stock_days'        => NULL,
+		'lost_sales'            => NULL,
+		'has_location'          => NULL,
+		'update_date'           => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,
 		'available_to_purchase' => NULL,
 		'selling_priority'      => NULL,
+		'calculated_stock'      => NULL,
 	);
 
 
@@ -138,6 +152,176 @@ trait AtumProductTrait {
 		return wc_bool_to_string( $this->get_prop( 'inheritable', $context ) );
 	}
 
+	/**
+	 * Returns the product's inbound stock.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_inbound_stock( $context = 'view' ) {
+		return $this->get_prop( 'inbound_stock', $context );
+	}
+
+	/**
+	 * Returns the product's stock on hold.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_stock_on_hold( $context = 'view' ) {
+		return $this->get_prop( 'stock_on_hold', $context );
+	}
+
+	/**
+	 * Returns the product's sold today.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_sold_today( $context = 'view' ) {
+		return $this->get_prop( 'sold_today', $context );
+	}
+
+	/**
+	 * Returns the product's sales last days.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_sales_last_days( $context = 'view' ) {
+		return $this->get_prop( 'sales_last_days', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "reserved stock" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_reserved_stock( $context = 'view' ) {
+		return $this->get_prop( 'reserved_stock', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "customer returns" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_customer_returns( $context = 'view' ) {
+		return $this->get_prop( 'customer_returns', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "warehouse damage" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_warehouse_damage( $context = 'view' ) {
+		return $this->get_prop( 'warehouse_damage', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "lost in post" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_lost_in_post( $context = 'view' ) {
+		return $this->get_prop( 'lost_in_post', $context );
+	}
+
+	/**
+	 * Returns the units of this product that were included in ILs with the "other" type.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_other_logs( $context = 'view' ) {
+		return $this->get_prop( 'other_logs', $context );
+	}
+
+	/**
+	 * Returns the product's out of stock days.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|null
+	 */
+	public function get_out_stock_days( $context = 'view' ) {
+		return $this->get_prop( 'out_stock_days', $context );
+	}
+
+	/**
+	 * Returns the product's lost sales.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return float|null
+	 */
+	public function get_lost_sales( $context = 'view' ) {
+		return $this->get_prop( 'lost_sales', $context );
+	}
+
+	/**
+	 * Checks whether the product has any linked location.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string|null 'yes' or 'no' or NULL
+	 */
+	public function get_has_location( $context = 'view' ) {
+		$has_location = $this->get_prop( 'has_location', $context );
+		return is_null( $has_location ) ? $has_location : wc_bool_to_string( $has_location );
+	}
+
+	/**
+	 * Returns the product's update date.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return \WC_DateTime|NULL object if the date is set or null if there is no date.
+	 */
+	public function get_update_date( $context = 'view' ) {
+		return $this->get_prop( 'update_date', $context );
+	}
+
 
 	/****************************************
 	 * EXTRA GETTERS USED BY PREMIUM ADD-ONS
@@ -184,6 +368,20 @@ trait AtumProductTrait {
 	 */
 	public function get_selling_priority( $context = 'view' ) {
 		return $this->get_prop( 'selling_priority', $context );
+	}
+
+	/**
+	 * Returns the product's calculated stock prop.
+	 *
+	 * @since   1.5.8
+	 * @package Product Levels
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|null
+	 */
+	public function get_calculated_stock( $context = 'view' ) {
+		return $this->get_prop( 'calculated_stock', $context );
 	}
 
 
@@ -272,10 +470,10 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $out_stock_threshold Empty string if value not set.
 	 */
-	public function set_out_stock_threshold( $amount ) {
-		$this->set_prop( 'out_stock_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_out_stock_threshold( $out_stock_threshold ) {
+		$this->set_prop( 'out_stock_threshold', is_null( $out_stock_threshold ) || '' === $out_stock_threshold ? '' : wc_stock_amount( $out_stock_threshold ) );
 	}
 
 	/**
@@ -289,6 +487,151 @@ trait AtumProductTrait {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );
 	}
 
+	/**
+	 * Set inbound stock for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $inbound_stock
+	 */
+	public function set_inbound_stock( $inbound_stock ) {
+		$this->set_prop( 'inbound_stock', wc_stock_amount( $inbound_stock ) );
+	}
+
+	/**
+	 * Set stock on hold for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $stock_on_hold
+	 */
+	public function set_stock_on_hold( $stock_on_hold ) {
+		$this->set_prop( 'stock_on_hold', wc_stock_amount( $stock_on_hold ) );
+	}
+
+	/**
+	 * Set sold today for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $sold_today
+	 */
+	public function set_sold_today( $sold_today ) {
+		$this->set_prop( 'sold_today', wc_stock_amount( $sold_today ) );
+	}
+
+	/**
+	 * Set sales last days for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $sales_last_days
+	 */
+	public function set_sales_last_days( $sales_last_days ) {
+		$this->set_prop( 'sales_last_days', wc_stock_amount( $sales_last_days ) );
+	}
+
+	/**
+	 * Set reserved stock for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $reserved_stock
+	 */
+	public function set_reserved_stock( $reserved_stock ) {
+		$this->set_prop( 'reserved_stock', wc_stock_amount( $reserved_stock ) );
+	}
+
+	/**
+	 * Set customer returns for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $customer_returns
+	 */
+	public function set_customer_returns( $customer_returns ) {
+		$this->set_prop( 'customer_returns', wc_stock_amount( $customer_returns ) );
+	}
+
+	/**
+	 * Set warehouse damages for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $warehouse_damage
+	 */
+	public function set_warehouse_damage( $warehouse_damage ) {
+		$this->set_prop( 'warehouse_damage', wc_stock_amount( $warehouse_damage ) );
+	}
+
+	/**
+	 * Set lost in post for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $lost_in_post
+	 */
+	public function set_lost_in_post( $lost_in_post ) {
+		$this->set_prop( 'lost_in_post', wc_stock_amount( $lost_in_post ) );
+	}
+
+	/**
+	 * Set other logs for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $other_logs
+	 */
+	public function set_other_logs( $other_logs ) {
+		$this->set_prop( 'other_logs', wc_stock_amount( $other_logs ) );
+	}
+
+	/**
+	 * Set out of stock days for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int $out_stock_days
+	 */
+	public function set_out_stock_days( $out_stock_days ) {
+		$this->set_prop( 'out_stock_days', wc_stock_amount( $out_stock_days ) );
+	}
+
+	/**
+	 * Set lost sales for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int|float $lost_sales
+	 */
+	public function set_lost_sales( $lost_sales ) {
+		$this->set_prop( 'lost_sales', wc_stock_amount( $lost_sales ) );
+	}
+
+	/**
+	 * Set whether the product has any linked location.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string|bool $has_location Whether or not the product is inheritable by others.
+	 */
+	public function set_has_location( $has_location ) {
+		$this->set_prop( 'has_location', wc_string_to_bool( $has_location ) );
+	}
+
+	/**
+	 * Set update date for the current product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param string|integer|null $update_date UTC timestamp, or ISO 8601 DateTime.
+	 *                                         If the DateTime string has no timezone or offset, WordPress site timezone will be assumed.
+	 *                                         Null if there is no date.
+	 */
+	public function set_update_date( $update_date = NULL ) {
+		$this->set_date_prop( 'update_date', $update_date );
+	}
+
 
 	/****************************************
 	 * EXTRA SETTERS USED BY PREMIUM ADD-ONS
@@ -300,10 +643,10 @@ trait AtumProductTrait {
 	 * @since   1.5.4
 	 * @package Product Levels
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $minimum_threshold Empty string if value not set.
 	 */
-	public function set_minimum_threshold( $amount ) {
-		$this->set_prop( 'minimum_threshold', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_minimum_threshold( $minimum_threshold ) {
+		$this->set_prop( 'minimum_threshold', is_null( $minimum_threshold ) || '' === $minimum_threshold ? '' : wc_stock_amount( $minimum_threshold ) );
 	}
 
 	/**
@@ -312,10 +655,10 @@ trait AtumProductTrait {
 	 * @since   1.5.4
 	 * @package Product Levels
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $available_to_purchase Empty string if value not set.
 	 */
-	public function set_available_to_purchase( $amount ) {
-		$this->set_prop( 'available_to_purchase', is_null( $amount ) || '' === $amount ? '' : wc_stock_amount( $amount ) );
+	public function set_available_to_purchase( $available_to_purchase ) {
+		$this->set_prop( 'available_to_purchase', is_null( $available_to_purchase ) || '' === $available_to_purchase ? '' : wc_stock_amount( $available_to_purchase ) );
 	}
 
 	/**
@@ -324,11 +667,24 @@ trait AtumProductTrait {
 	 * @since   1.5.4
 	 * @package Product Levels
 	 *
-	 * @param int|string $amount Empty string if value not set.
+	 * @param int|string $selling_priority Empty string if value not set.
 	 */
-	public function set_selling_priority( $amount ) {
-		$this->set_prop( 'selling_priority', is_null( $amount ) || '' === $amount ? '' : absint( $amount ) );
+	public function set_selling_priority( $selling_priority ) {
+		$this->set_prop( 'selling_priority', is_null( $selling_priority ) || '' === $selling_priority ? '' : absint( $selling_priority ) );
 	}
+
+	/**
+	 * Set calculated stock for the current product.
+	 *
+	 * @since   1.5.8
+	 * @package Product Levels
+	 *
+	 * @param int|string $calculated_stock Empty string if value not set.
+	 */
+	public function set_calculated_stock( $calculated_stock ) {
+		$this->set_prop( 'calculated_stock', is_null( $calculated_stock ) || '' === $calculated_stock ? '' : wc_stock_amount( $calculated_stock ) );
+	}
+
 
 
 	/**

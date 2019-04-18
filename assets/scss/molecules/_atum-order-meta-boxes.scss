@@ -46,6 +46,15 @@
 			}
 		}
 		
+		select {
+			display: none;
+		
+			+ .select2-container {
+				max-width: 297px;
+			}
+		
+		}
+		
 		.atum_order_data_column_container {
 			clear: both;
 			margin-top: $grid-gutter-width/2;

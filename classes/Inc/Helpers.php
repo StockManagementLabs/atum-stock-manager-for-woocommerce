@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2018 Stock Management Labs™
+ * @copyright      ©2019 Stock Management Labs™
  *
  * @since          0.0.1
  */
@@ -133,17 +133,18 @@ final class Helpers {
 	 * @since 0.1.3
 	 *
 	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true).
-	 * @param bool       $is_timestamp Whether the first param is a Unix timesptamp.
+	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
+	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
 	 *
 	 * @return string                   The formatted date
 	 */
-	public static function date_format( $date, $is_timestamp = FALSE ) {
+	public static function date_format( $date, $is_timestamp = FALSE, $gmt_date = FALSE ) {
 
 		if ( ! $is_timestamp ) {
 			$date = strtotime( $date );
 		}
 
-		return date( 'Y-m-d H:i:s', $date );
+		return ! $gmt_date ? date( 'Y-m-d H:i:s', $date ) : gmdate( 'Y-m-d H:i:s', $date );
 	}
 
 	/**
@@ -489,27 +490,28 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param array $items      Array of Product IDs we want to calculate sales from.
-	 * @param int   $date_start The date from when to start the items' sales calculations (must be a string format convertible with strtotime).
-	 * @param int   $date_end   Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array|int $items      Array of Product IDs (or single ID) we want to calculate sales from.
+	 * @param int       $date_start The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
+	 * @param int       $date_end   Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
 	 *
 	 * @return array
 	 */
-	public static function get_sold_last_days( $items, $date_start, $date_end = NULL ) {
+	public static function get_sold_last_days( $items, $date_start, $date_end = NULL, $colums = [ 'qty' ] ) {
 
 		$items_sold = array();
 
-		if ( ! empty( $items ) ) {
+		if ( ! empty( $items ) && ! empty( $colums ) ) {
 
 			global $wpdb;
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$date_start = date( 'Y-m-d H:i:s', strtotime( $date_start ) );
-			$date_where = $wpdb->prepare( 'WHERE post_date >= %s', $date_start );
+			$date_start = gmdate( 'Y-m-d H:i:s', strtotime( $date_start ) );
+			$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
 
 			if ( $date_end ) {
-				$date_end    = date( 'Y-m-d H:i:s', strtotime( $date_end ) );
-				$date_where .= $wpdb->prepare( ' AND post_date <= %s', $date_end );
+				$date_end    = gmdate( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
 			}
 
 			$orders_query = "
@@ -518,24 +520,71 @@ final class Helpers {
 				AND post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-completed')				  
 			";
 
-			$products = implode( ',', $items );
+			if ( is_array( $items ) ) {
+				$products_where = 'IN (' . implode( ',', $items ) . ')';
+			}
+			else {
+				$products_where = "= $items";
+			}
 
+			$query_columns = $query_joins = [];
+
+			if ( in_array( 'qty', $colums ) ) {
+				$query_columns[] = 'SUM(`mt_qty`.`meta_value`) AS `QTY`';
+				$query_joins[]   = "INNER JOIN `$wpdb->order_itemmeta` AS `mt_qty` ON (`mt_id`.`order_item_id` = `mt_qty`.`order_item_id`) AND `mt_qty`.`meta_key` = '_qty'";
+			}
+
+			if ( in_array( 'total', $colums ) ) {
+				$query_columns[] = 'SUM(`mt_total`.`meta_value`) AS `TOTAL`';
+				$query_joins[]   = "INNER JOIN `$wpdb->order_itemmeta` AS `mt_total` ON (`mt_id`.`order_item_id` = `mt_total`.`order_item_id`) AND `mt_total`.`meta_key` = '_line_total'";
+			}
+
+			if ( in_array( 'prod_id', $colums ) ) {
+				$query_columns[] = 'MAX(CAST(`mt_id`.`meta_value` AS SIGNED)) AS `PROD_ID`';
+			}
+
+			$query_columns_str = implode( ', ', $query_columns );
+			$query_joins_str   = implode( "\n", $query_joins );
+
+			// TODO: USE LOOK UP TABLE AVAILABLE SINCE WC 3.6 FOR BETTER PERFORMANCE.
 			$query = "
-				SELECT SUM(`META_PROD_QTY`.`meta_value`) AS `QTY`, SUM(`META_PROD_TOTAL`.`meta_value`) AS `TOTAL`, 
-				MAX(CAST(`META_PROD_ID`.`meta_value` AS SIGNED)) AS `PROD_ID`
-				FROM `{$wpdb->posts}` AS `ORDERS`
-			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `ITEMS` ON (`ORDERS`.`ID` = `ITEMS`.`order_id`)
-			    INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_ID` ON (`ITEMS`.`order_item_id` = `META_PROD_ID`.`order_item_id`)
-			  	INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_QTY` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_QTY`.`order_item_id`)
-		        INNER JOIN `$wpdb->order_itemmeta` AS `META_PROD_TOTAL` ON (`META_PROD_ID`.`order_item_id` = `META_PROD_TOTAL`.`order_item_id`)
-				WHERE (`ORDERS`.`ID` IN ($orders_query) AND `META_PROD_ID`.`meta_value` IN ($products)
-			    AND `META_PROD_ID`.`meta_key` IN ('_product_id', '_variation_id')
-			    AND `META_PROD_QTY`.`meta_key` = '_qty' AND `META_PROD_TOTAL`.`meta_key` = '_line_total')
-				GROUP BY `META_PROD_ID`.`meta_value`
+				SELECT $query_columns_str
+				FROM `$wpdb->posts` AS `orders`
+			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)	
+			    INNER JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)		  
+		        $query_joins_str	        
+				WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_value` $products_where
+			    AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')	
+				GROUP BY `mt_id`.`meta_value`
 				HAVING (`QTY` IS NOT NULL);
 			";
 
-			$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+			// For single products.
+			if ( ! is_array( $items ) || count( $items ) === 1 ) {
+
+				// When only 1 single result is requested.
+				if ( count( $colums ) === 1 ) {
+					$items_sold = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+				}
+				// Multiple results requested.
+				else {
+					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+				}
+
+			}
+			// For multiple products.
+			else {
+
+				// When only 1 single result for each product is requested.
+				if ( count( $colums ) === 1 ) {
+					$items_sold = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+				}
+				// Multiple results requested for each product.
+				else {
+					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+				}
+
+			}
 
 		}
 
@@ -566,27 +615,21 @@ final class Helpers {
 
 		if ( $out_of_stock_date && $days > 0 ) {
 
-			$days_out_of_stock = self::get_product_out_of_stock_days( $product );
+			$days_out_of_stock = self::get_product_out_stock_days( $product );
 
 			if ( is_numeric( $days_out_of_stock ) ) {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( [ $product->get_id() ], $out_of_stock_date . " -{$days} days", $out_of_stock_date );
+				$sold_last_days = self::get_sold_last_days( $product->get_id(), "$out_of_stock_date -$days days", $out_of_stock_date );
 				$lost_sales     = 0;
 
-				if ( ! empty( $sold_last_days ) ) {
+				if ( $sold_last_days > 0 ) {
 
-					$sold_last_days = current( $sold_last_days );
+					$average_sales = $sold_last_days / $days;
+					$price         = $product->get_regular_price();
 
-					if ( ! empty( $sold_last_days['QTY'] ) && $sold_last_days['QTY'] > 0 ) {
-
-						$average_sales = $sold_last_days['QTY'] / $days;
-						$price         = $product->get_regular_price();
-
-						$lost_sales = $days_out_of_stock * $average_sales * $price;
-
-					}
+					$lost_sales = $days_out_of_stock * $average_sales * $price;
 
 				}
 			}
@@ -604,11 +647,11 @@ final class Helpers {
 	 *
 	 * @param int|\WC_Product $product The product ID or product object.
 	 *
-	 * @return bool|int  Returns the number of days or FALSE if is not "Out of Stock".
+	 * @return bool|null  Returns the number of days or NULL if is not "Out of Stock".
 	 */
-	public static function get_product_out_of_stock_days( $product ) {
+	public static function get_product_out_stock_days( $product ) {
 
-		$out_of_stock_days = FALSE;
+		$out_stock_days = NULL;
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			$product = self::get_atum_product( $product );
@@ -616,25 +659,91 @@ final class Helpers {
 
 		// Check if the current product has the "Out of stock" date recorded.
 		/* @noinspection PhpUndefinedMethodInspection */
-		$out_of_stock_date = $product->get_out_stock_date();
+		$out_stock_date = $product->get_out_stock_date();
 
-		if ( $out_of_stock_date ) {
+		if ( $out_stock_date ) {
 			
 			try {
-				$out_date_time = new \DateTime( $out_of_stock_date );
+				$out_date_time = new \DateTime( $out_stock_date );
 				$now_date_time = new \DateTime( 'now' );
 				$interval      = date_diff( $out_date_time, $now_date_time );
 
-				$out_of_stock_days = $interval->days;
+				$out_stock_days = $interval->days;
 
 			} catch ( \Exception $e ) {
 				error_log( __METHOD__ . ' || Product: ' . $product->get_id() . ' || ' . $e->getMessage() );
-				return $out_of_stock_days;
+				return $out_stock_days;
 			}
 			
 		}
 
-		return $out_of_stock_days;
+		return $out_stock_days;
+
+	}
+
+	/**
+	 * Get the Inventory Log item quantity for a specific type of log
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param string      $log_type     Type of log.
+	 * @param \WC_Product $product      Product to check.
+	 * @param string      $log_status   Optional. Log status (completed or pending).
+	 * @param bool        $force        Optional. Force to retrieve the data from db.
+	 *
+	 * @return int|float
+	 */
+	public static function get_log_item_qty( $log_type, &$product, $log_status = 'pending', $force = FALSE ) {
+
+		$log_types   = Log::get_log_type_columns();
+		$column_name = isset( $log_types[ $log_type ] ) ? $log_types[ $log_type ] : '';
+
+		if ( ! $force && $column_name && is_callable( array( $product, "get_$column_name" ) ) ) {
+			$qty = call_user_func( array( $product, "get_$column_name" ) );
+		}
+
+		if ( ! isset( $qty ) || is_null( $qty ) ) {
+
+			$cache_key = AtumCache::get_cache_key( 'log_item_qty', [ $product->get_id(), $log_type, $log_status ] );
+			$qty       = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+			if ( ! $has_cache || $force ) {
+
+				$log_ids = self::get_logs( $log_type, $log_status );
+
+				if ( ! empty( $log_ids ) ) {
+
+					global $wpdb;
+
+					// Get the sum of quantities for the specified product in the logs of that type.
+					$query = $wpdb->prepare( "
+						SELECT SUM(meta_value) 				  
+					 	FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
+		                LEFT JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' oi ON om.order_item_id = oi.order_item_id
+					    WHERE order_id IN (' . implode( ',', $log_ids ) . ") AND order_item_type = 'line_item' 
+					    AND meta_key = '_qty' AND om.order_item_id IN (
+					        SELECT order_item_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
+						    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
+						)",
+						$product->get_id()
+					); // WPCS: unprepared SQL ok.
+
+					$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+
+					// Save it for future quicker access.
+					if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
+						call_user_func( array( $product, "set_$column_name" ), $qty );
+					}
+
+				}
+
+			}
+
+			AtumCache::set_cache( $cache_key, $qty );
+
+		}
+
+		return floatval( $qty );
 
 	}
 
@@ -1484,42 +1593,109 @@ final class Helpers {
 	 *
 	 * @since 1.5.4
 	 *
-	 * @param int $product_id
+	 * @param \WC_Product $product  The product to check.
+	 * @param bool        $force    Optional. Whether to force the recalculation from db.
 	 *
-	 * @return float
+	 * @return int|float
 	 */
-	public static function get_inbound_stock_for_product( $product_id ) {
+	public static function get_product_inbound_stock( &$product, $force = FALSE ) {
 
-		$cache_key     = AtumCache::get_cache_key( 'inbound_stock_for_product', $product_id );
+		$product_id    = $product->get_id();
+		$cache_key     = AtumCache::get_cache_key( 'product_inbound_stock', $product_id );
 		$inbound_stock = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( ! $has_cache ) {
+		if ( ! $has_cache || $force ) {
 
-			// Calculate the inbound stock from pending purchase orders.
-			global $wpdb;
+			// Check if the inbound stock is already saved on the ATUM product table.
+			$inbound_stock = $product->get_inbound_stock();
 
-			$sql = $wpdb->prepare( "
-				SELECT SUM(oim2.`meta_value`) AS quantity 			
-				FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-				LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-				LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
-				WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-				AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "' 
-				AND oim2.`meta_key` = '_qty'
-				GROUP BY oim.`meta_value`;",
-				PurchaseOrders::POST_TYPE,
-				$product_id
-			); // WPCS: unprepared SQL ok.
+			if ( is_null( $inbound_stock ) || $force ) {
 
-			$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
-			$inbound_stock = $inbound_stock ?: 0;
+				// Calculate the inbound stock from pending purchase orders.
+				global $wpdb;
+
+				$sql = $wpdb->prepare( "
+					SELECT SUM(oim2.`meta_value`) AS quantity 			
+					FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
+					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
+					LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
+					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
+					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . PurchaseOrders::FINISHED . "' 
+					AND oim2.`meta_key` = '_qty'
+					GROUP BY oim.`meta_value`;",
+					PurchaseOrders::POST_TYPE,
+					$product_id
+				); // WPCS: unprepared SQL ok.
+
+				$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
+				$inbound_stock = $inbound_stock ?: 0;
+
+				// Save it for future quicker access.
+				$product->set_inbound_stock( $inbound_stock );
+
+			}
 
 			AtumCache::set_cache( $cache_key, $inbound_stock );
 
 		}
 
 		return $inbound_stock;
+
+	}
+
+	/**
+	 * Get the stock on hold amount for the specified product
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param \WC_Product $product
+	 * @param bool        $force
+	 *
+	 * @return int|float
+	 */
+	public static function get_product_stock_on_hold( &$product, $force = FALSE ) {
+
+		$cache_key     = AtumCache::get_cache_key( 'product_stock_on_hold', $product->get_id() );
+		$stock_on_hold = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( ! $has_cache || $force ) {
+
+			// Check if the inbound stock is already saved on the ATUM product table.
+			$stock_on_hold = $product->get_stock_on_hold();
+
+			if ( is_null( $stock_on_hold ) || $force ) {
+
+				global $wpdb;
+
+				$product_id_key = self::is_child_type( $product->get_type() ) ? '_variation_id' : '_product_id';
+
+				$sql = $wpdb->prepare( "
+					SELECT SUM(omq.meta_value) AS qty 
+					FROM {$wpdb->prefix}woocommerce_order_items oi			
+					LEFT JOIN $wpdb->order_itemmeta omq ON omq.`order_item_id` = oi.`order_item_id`
+					LEFT JOIN $wpdb->order_itemmeta omp ON omp.`order_item_id` = oi.`order_item_id`			  
+					WHERE order_id IN (
+						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-pending', 'wc-on-hold')
+					)
+					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value = %d 
+					GROUP BY omp.meta_value",
+					$product_id_key,
+					$product->get_id()
+				);
+
+				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
+
+				// Save it for future quicker access.
+				$product->set_stock_on_hold( $stock_on_hold );
+
+			}
+
+			AtumCache::set_cache( $cache_key, $stock_on_hold );
+
+		}
+
+		return $stock_on_hold;
 
 	}
 
@@ -2463,6 +2639,55 @@ final class Helpers {
 		}
 
 		return $bundle_items;
+
+	}
+
+	/**
+	 * Checks if the passed product was not updated recently and requires a new update
+	 *
+	 * @param \WC_Product $product      The product to check.
+	 * @param string      $time_frame   Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 *
+	 * @return bool
+	 */
+	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
+
+		return is_null( $product->get_update_date() ) || strtotime( $product->get_update_date() ) <= strtotime( $time_frame );
+	}
+
+	/**
+	 * Update the expiring data for the specified product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param \WC_Product $product
+	 */
+	public static function update_expiring_product_data( $product ) {
+
+		$current_time = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
+		$sale_days    = self::get_sold_last_days_option();
+		$product_id   = $product->get_id();
+
+		// Set stock "On Hold".
+		self::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
+
+		// Set sold today.
+		$sold_today = self::get_sold_last_days( $product_id, 'today midnight', $current_time );
+		$product->set_sold_today( $sold_today );
+
+		// Sales last days.
+		$sales_last_ndays = self::get_sold_last_days( $product_id, "$current_time -$sale_days days", $current_time );
+		$product->set_sales_last_days( $sales_last_ndays );
+
+		// Out stock days.
+		$out_of_stock_days = self::get_product_out_stock_days( $product );
+		$product->set_out_stock_days( $out_of_stock_days );
+
+		// Lost sales.
+		$lost_sales = self::get_product_lost_sales( $product );
+		$product->set_lost_sales( $lost_sales );
+
+		$product->save_atum_data();
 
 	}
 

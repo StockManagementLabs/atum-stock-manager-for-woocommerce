@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Dashboard
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2018 Stock Management Labs™
+ * @copyright      ©2019 Stock Management Labs™
  *
  * @since          1.4.0
  */
@@ -87,7 +87,7 @@ final class WidgetHelpers {
 			$stats['lost_products'] = 0;
 		}
 
-		$products_sold  = Helpers::get_sold_last_days( $products, $date_start, ( isset( $date_end ) ? $date_end : NULL ) );
+		$products_sold  = Helpers::get_sold_last_days( $products, $date_start, ( isset( $date_end ) ? $date_end : NULL ), [ 'qty', 'total', 'prod_id' ] );
 		$lost_processed = array();
 
 		if ( $products_sold ) {
@@ -102,9 +102,9 @@ final class WidgetHelpers {
 				if ( in_array( 'lost_sales', $types ) && ! in_array( $row['PROD_ID'], $lost_processed ) ) {
 
 					if ( ! isset( $days ) || $days <= 0 ) {
-						/** @noinspection PhpUnhandledExceptionInspection */
+						/* @noinspection PhpUnhandledExceptionInspection */
 						$date_days_start = new \DateTime( $date_start );
-						/** @noinspection PhpUnhandledExceptionInspection */
+						/* @noinspection PhpUnhandledExceptionInspection */
 						$date_days_end = new \DateTime( ( isset( $date_end ) ? $date_end : 'now' ) );
 						$days          = $date_days_end->diff( $date_days_start )->days;
 					}
@@ -253,7 +253,7 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		/** @noinspection PhpUnhandledExceptionInspection */
+		/* @noinspection PhpUnhandledExceptionInspection */
 		$date_now    = new \DateTime();
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 
@@ -318,7 +318,7 @@ final class WidgetHelpers {
 		}
 
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-		/** @noinspection PhpUnhandledExceptionInspection */
+		/* @noinspection PhpUnhandledExceptionInspection */
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -373,7 +373,7 @@ final class WidgetHelpers {
 		}
 
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-		/** @noinspection PhpUnhandledExceptionInspection */
+		/* @noinspection PhpUnhandledExceptionInspection */
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -425,15 +425,15 @@ final class WidgetHelpers {
 
 		switch ( $period_time ) {
 			case 'year':
-				$period = self::get_date_period( "first day of January $which year 00:00:00", "last day of December $which year 23:59:59", '1 month' );
+				$period = self::get_date_period( "first day of January $which year midnight", "last day of December $which year 23:59:59", '1 month' );
 				break;
 
 			case 'month':
-				$period = self::get_date_period( "first day of $which month 00:00:00", "last day of $which month 23:59:59" );
+				$period = self::get_date_period( "first day of $which month midnight", "last day of $which month 23:59:59" );
 				break;
 
 			case 'week':
-				$period = self::get_date_period( "$which week 00:00:00", "$which week +6 days 23:59:59" );
+				$period = self::get_date_period( "$which week midnight", "$which week +6 days 23:59:59" );
 				break;
 
 		}
@@ -455,10 +455,10 @@ final class WidgetHelpers {
 	 */
 	public static function get_date_period( $date_start, $date_end, $interval = '1 day' ) {
 
-		/** @noinspection PhpUnhandledExceptionInspection */
+		/* @noinspection PhpUnhandledExceptionInspection */
 		$start    = new \DateTime( $date_start );
 		$interval = \DateInterval::createFromDateString( $interval );
-		/** @noinspection PhpUnhandledExceptionInspection */
+		/* @noinspection PhpUnhandledExceptionInspection */
 		$end         = new \DateTime( $date_end );
 		$date_period = new \DatePeriod( $start, $interval, $end );
 
@@ -613,8 +613,8 @@ final class WidgetHelpers {
 
 			self::$wc_query_data['where'] = array(
 				array(
-					'key'     => 'stock_status',
-					'value'   => 'outofstock',
+					'key'   => 'stock_status',
+					'value' => 'outofstock',
 				),
 			);
 
@@ -886,75 +886,75 @@ final class WidgetHelpers {
 		
 		self::$wc_query_data['where'] = [];
 		
-		if ( $products ) {
+		if ( ! $products ) {
+			return $counters;
+		}
 			
-			$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
-			
-			$args = array(
-				'post_type'      => $post_types,
-				'posts_per_page' => - 1,
-				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-				'fields'         => 'ids',
-				'tax_query'      => array(
-					'relation' => 'AND',
+		$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+
+		$args = array(
+			'post_type'      => $post_types,
+			'posts_per_page' => - 1,
+			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'fields'         => 'ids',
+			'tax_query'      => array(
+				'relation' => 'AND',
+			),
+			'meta_query'     => array(
+				'relation' => 'AND',
+				array(
+					'key'   => '_manage_stock',
+					'value' => 'yes',
 				),
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'key'   => '_manage_stock',
-						'value' => 'yes',
-					),
-				),
-			
-			);
-			
-			// Check if category filter data exist.
-			if ( $category ) {
-				array_push( $args['tax_query'], array(
-					'taxonomy' => 'product_cat',
-					'field'    => 'slug',
-					'terms'    => array( $category ),
-				) );
-			}
-			
-			// Check if product type filter data exist.
-			if ( $product_type ) {
-				if ( in_array( $product_type, Globals::get_inheritable_product_types() ) && 'bundle' !== $product_type ) {
-					
-					if ( $filtered_variations ) {
-						$args['post__in'] = $filtered_variations;
-					}
-					else {
-						return $counters;
-					}
-				}
-				elseif ( 'downloadable' === $product_type ) {
-					self::$wc_query_data['where'][] = array(
-						'key'   => 'downloadable',
-						'value' => array( '1' ),
-					);
-				}
-				elseif ( 'virtual' === $product_type ) {
-					self::$wc_query_data['where'][] = array(
-						'key'   => 'virtual',
-						'value' => array( '1' ),
-					);
-				}
-				elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
-					self::$wc_query_data['where'][] = array(
-						'key'   => 'type',
-						'value' => $product_type,
-					);
+			),
+
+		);
+
+		// Check if category filter data exist.
+		if ( $category ) {
+			array_push( $args['tax_query'], array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => array( $category ),
+			) );
+		}
+
+		// Check if product type filter data exist.
+		if ( $product_type ) {
+			if ( in_array( $product_type, Globals::get_inheritable_product_types() ) && 'bundle' !== $product_type ) {
+
+				if ( $filtered_variations ) {
+					$args['post__in'] = $filtered_variations;
 				}
 				else {
-					array_push( $args['tax_query'], array(
-						'taxonomy' => 'product_type',
-						'field'    => 'slug',
-						'terms'    => array( $product_type ),
-					) );
+					return $counters;
 				}
 			}
-			
+			elseif ( 'downloadable' === $product_type ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'downloadable',
+					'value' => array( '1' ),
+				);
+			}
+			elseif ( 'virtual' === $product_type ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'virtual',
+					'value' => array( '1' ),
+				);
+			}
+			elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
+				self::$wc_query_data['where'][] = array(
+					'key'   => 'type',
+					'value' => $product_type,
+				);
+			}
+			else {
+				array_push( $args['tax_query'], array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => array( $product_type ),
+				) );
+			}
 		}
 
 		// Get products.
@@ -964,8 +964,9 @@ final class WidgetHelpers {
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
-			$product                 = Helpers::get_atum_product( $product_id );
-			$product_stock           = (float) $product->get_stock_quantity();
+			$product       = Helpers::get_atum_product( $product_id );
+			$product_stock = (float) $product->get_stock_quantity();
+			/* @noinspection PhpUndefinedMethodInspection */
 			$product_purcharse_price = (float) $product->get_purchase_price();
 
 			if ( $product_stock && $product_stock > 0 ) {

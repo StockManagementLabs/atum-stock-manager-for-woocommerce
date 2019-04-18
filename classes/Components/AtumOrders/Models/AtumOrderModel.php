@@ -5,7 +5,7 @@
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -752,6 +752,8 @@ abstract class AtumOrderModel {
 		$this->process_status();
 		$this->save_items();
 
+		do_action( 'atum/order/after_object_save', $this );
+
 		return $this->id;
 
 	}
@@ -899,7 +901,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
 			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
-			'post_status'       => ( in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ) ? ATUM_PREFIX . $status : 'publish',
+			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? ATUM_PREFIX . $status : 'publish',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -1430,7 +1432,11 @@ abstract class AtumOrderModel {
 				$value = Helpers::trim_input( $value );
 			}
 
+			do_action( "atum/order/before_save_meta$key", $value, $this );
+
 			$this->set_meta( $key, $value );
+
+			do_action( "atum/order/after_save_meta$key", $value, $this );
 
 		}
 
