@@ -367,6 +367,7 @@
   --wc-purple-expanded: #96588a;
   --blue-light-expanded: #dbf9ff;
   --green-light-expanded: rgba(180, 240, 0, 0.79);
+  --atum-page-title-action: #69C61D;
   --atum-border: #e9ecef;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
@@ -400,12 +401,16 @@
   --atum-table-text-active: #adb5bd;
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
+  --atum-settings-nav-link-selected: #fff;
   --atum-settings-section-text: #fff;
   --atum-settings-section-description: #adb5bd;
   --atum-settings-text-logo: #fff;
   --atum-settings-input-border: #e9ecef;
+  --atum-settings-input-text: #6c757d;
   --atum-settings-btn-save: #00B8DB;
   --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
+  --atum-settings-wp-color-bg: transparent;
+  --atum-settings-wp-color-text: #6c757d;
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
   --dash-widget-text: #adb5bd;
@@ -1565,8 +1570,8 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
 }
 
 body .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--atum-select2-selected-bg);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--single, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--single {
@@ -3468,13 +3473,13 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-link:focus {
   outline: none;
-  color: var(--atum-settings-nav-link);
+  color: var(--atum-settings-nav-link-selected);
   -webkit-box-shadow: none;
           box-shadow: none;
   background-color: var(--blue-dark-light-2);
   font-size: 15px;
   font-weight: bold;
-  border-right: 3px solid var(--atum-settings-nav-link);
+  border-right: 3px solid var(--atum-settings-nav-link-selected);
 }
 
 .atum-settings-wrapper .atum-nav-link .menu-helper {
@@ -3517,8 +3522,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   background-color: var(--blue-dark-light-2);
   font-size: 15px;
   font-weight: bold;
-  color: var(--atum-settings-nav-link);
-  border-right: 3px solid var(--atum-settings-nav-link);
+  color: var(--atum-settings-nav-link-selected);
+  border-right: 3px solid var(--atum-settings-nav-link-selected);
 }
 
 @media all and (max-width: 992px) {
@@ -3684,12 +3689,14 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   background-color: var(--green);
   -webkit-box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
           box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
+  color: var(--atum-table-bg);
 }
 
 .atum-settings-wrapper #atum-settings .active {
   background-color: var(--green);
   -webkit-box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
           box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
+  color: var(--atum-table-bg);
 }
 
 .atum-settings-wrapper #atum-settings .section-general-title {
@@ -3920,7 +3927,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   margin: 0;
   border-radius: 4px;
   height: 30px;
-  color: var(--gray-600);
+  color: var(--atum-settings-input-text);
   border: 1px solid var(--atum-settings-input-border);
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -4182,7 +4189,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   width: 110px;
   margin-right: 10px;
   border: solid 0.5px var(--wp-gray-5);
-  background-color: transparent !important;
+  background-color: var(--atum-settings-wp-color-bg) !important;
   position: relative;
   padding: 0 0 0 20px;
 }
@@ -4208,7 +4215,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result .wp-color-result-text {
   line-height: 29px;
   background-color: transparent;
-  color: var(--gray-600);
+  color: var(--atum-settings-wp-color-text);
   border-left: none;
   font-size: 12px;
   line-height: 1.17px;

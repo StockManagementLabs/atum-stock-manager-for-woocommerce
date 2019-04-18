@@ -72,7 +72,7 @@
 	
 	.page-title-action, .page-title-action:active {
 		border-radius: 5px;
-		background-color: var(--success);
+		background-color: var(--atum-page-title-action);
 		color:  var(--white);
 		font-size: 14px;
 		font-weight: normal;
@@ -562,16 +562,17 @@
 		margin-top: 0px;
 		right: 0px;
 		box-shadow: $dropdown-box-shadow;
-		background-color:  var(--white);
+		background-color:  var(--atum-table-bg);
 		border: none;
 		border-radius: 5px;
 	}
 	
 	.dropdown-item{
 		width: auto;
-		&.active, &:focus, &:active {
-			background-color:  var(--blue-light);
-			color: var(--blue);
+		color: var(--gray-600);
+		&:hover, &.active, &:focus, &:active {
+			background-color: var(--atum-select2-selected-bg);
+			color: var(--atum-select2-selected-text);
 		}
 	}
 	

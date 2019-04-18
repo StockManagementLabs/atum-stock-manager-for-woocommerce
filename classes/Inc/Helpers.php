@@ -2498,6 +2498,7 @@ final class Helpers {
 		$blue_dark         = '#27283b';
 		$blue_dark_lighten = '#3b3d5a';
 		$white_rgb         = '255,255,255';
+		$green             = '#69C61D';
 
 		if ( 'hc_mode' === $theme_settings ) {
 
@@ -2577,12 +2578,15 @@ final class Helpers {
 				    --atum-pagination-border-disabled: #e9ecef;
 				    --atum-dark-bg: $white;
 				    --atum-settings-nav-link: $hc_blue;
+				    --atum-settings-nav-link-selected: $hc_blue;
 				    --atum-settings-section-text: $hc_dark_blue;
 				    --atum-settings-section-description: $hc_dark_blue;
 				    --atum-settings-text-logo: $hc_dark_blue;
 				    --atum-settings-input-border: $gray_500;
 				    --atum-settings-btn-save: $white;
 				    --atum-settings-btn-save-hover: $hc_blue_light;
+				    --atum-settings-wp-color-text: $hc_dark_blue;
+				    --atum-settings-input-text: $hc_dark_blue;
 				    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
 					--atum-table-row-child-variation: $hc_blue_light;
 				    --atum-table-icon: $hc_blue;
@@ -2628,6 +2632,7 @@ final class Helpers {
 					--wp-yiq-text-light: $dm_dark_blue;
 					--dark-shadow: rgba(0, 0, 0, 0.6);
 				    --blue-light: $dm_dark_blue;
+				    --blue-dark-light-2: $blue_light;
 				    --atum-row-active: $blue_light;
 				    --blue: $dm_blue;
 				    --atum-table-link-active: $blue;
@@ -2648,9 +2653,11 @@ final class Helpers {
 				    --red: $dm_red;
 				    --red-hover: $dm_red;
 				    --danger: $dm_red;
+				    --atum-page-title-action: $green;
 				    --danger-hover: rgba($dm_red_rgb,0.6);
 					--purple-pl: #BA7DF7;
 				    --purple-pl-hover: rgba(186,125,247,0.6);
+				    --atum-text-white: $dm_dark_blue;
 				    --atum-select2-selected-bg: $blue_light;
 				    --atum-select2-selected-text: $blue;
 				    --atum-table-item-heads: $white;
@@ -2673,6 +2680,12 @@ final class Helpers {
 					--atum-table-icon: $white;
 					--atum-table-icon-active: $dm_dark_blue;
 					--atum-table-text-active: $dm_dark_blue;
+					--atum-settings-nav-link-selected: $dm_dark_blue;
+					--atum-settings-wp-color-bg: $white;
+					--atum-settings-wp-color-text: $dm_dark_blue;
+					--atum-settings-btn-save: $dm_blue;
+				    --atum-settings-btn-save-hover: rgba($dm_blue_rgb,0.6);
+				    --atum-settings-input-text: $dm_dark_blue;
 					--dash-card-text: $gray_500;
 					--atum-table-bg: $dm_dark_blue;
 					--overflow-opacity-rigth: linear-gradient(to right, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));

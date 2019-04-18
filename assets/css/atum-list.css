@@ -279,6 +279,7 @@
   --wc-purple-expanded: #96588a;
   --blue-light-expanded: #dbf9ff;
   --green-light-expanded: rgba(180, 240, 0, 0.79);
+  --atum-page-title-action: #69C61D;
   --atum-border: #e9ecef;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
@@ -312,12 +313,16 @@
   --atum-table-text-active: #adb5bd;
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
+  --atum-settings-nav-link-selected: #fff;
   --atum-settings-section-text: #fff;
   --atum-settings-section-description: #adb5bd;
   --atum-settings-text-logo: #fff;
   --atum-settings-input-border: #e9ecef;
+  --atum-settings-input-text: #6c757d;
   --atum-settings-btn-save: #00B8DB;
   --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
+  --atum-settings-wp-color-bg: transparent;
+  --atum-settings-wp-color-text: #6c757d;
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
   --dash-widget-text: #adb5bd;
@@ -2468,8 +2473,8 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
 }
 
 body .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--atum-select2-selected-bg);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--single, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--single {
@@ -5201,7 +5206,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .wrap .page-title-action, .wrap .page-title-action:active {
   border-radius: 5px;
-  background-color: var(--success);
+  background-color: var(--atum-page-title-action);
   color: var(--white);
   font-size: 14px;
   font-weight: normal;
@@ -5811,18 +5816,19 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   right: 0px;
   -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
           box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
-  background-color: var(--white);
+  background-color: var(--atum-table-bg);
   border: none;
   border-radius: 5px;
 }
 
 .search-box .dropdown-item, p.search-box .dropdown-item {
   width: auto;
+  color: var(--gray-600);
 }
 
-.search-box .dropdown-item.active, .search-box .dropdown-item:focus, .search-box .dropdown-item:active, p.search-box .dropdown-item.active, p.search-box .dropdown-item:focus, p.search-box .dropdown-item:active {
-  background-color: var(--blue-light);
-  color: var(--blue);
+.search-box .dropdown-item:hover, .search-box .dropdown-item.active, .search-box .dropdown-item:focus, .search-box .dropdown-item:active, p.search-box .dropdown-item:hover, p.search-box .dropdown-item.active, p.search-box .dropdown-item:focus, p.search-box .dropdown-item:active {
+  background-color: var(--atum-select2-selected-bg);
+  color: var(--atum-select2-selected-text);
 }
 
 .tablenav {

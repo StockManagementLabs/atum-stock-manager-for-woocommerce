@@ -199,6 +199,7 @@
   --wc-purple-expanded: #96588a;
   --blue-light-expanded: #dbf9ff;
   --green-light-expanded: rgba(180, 240, 0, 0.79);
+  --atum-page-title-action: #69C61D;
   --atum-border: #e9ecef;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
@@ -232,12 +233,16 @@
   --atum-table-text-active: #adb5bd;
   --atum-dark-bg: #3b3d5a;
   --atum-settings-nav-link: #fff;
+  --atum-settings-nav-link-selected: #fff;
   --atum-settings-section-text: #fff;
   --atum-settings-section-description: #adb5bd;
   --atum-settings-text-logo: #fff;
   --atum-settings-input-border: #e9ecef;
+  --atum-settings-input-text: #6c757d;
   --atum-settings-btn-save: #00B8DB;
   --atum-settings-btn-save-hover: lighten(#00B8DB, 10%);
+  --atum-settings-wp-color-bg: transparent;
+  --atum-settings-wp-color-text: #6c757d;
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
   --dash-widget-text: #adb5bd;

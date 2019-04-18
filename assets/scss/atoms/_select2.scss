@@ -327,8 +327,8 @@ body {
 	.select2-container--default {
 		
 		.select2-results__option--highlighted[aria-selected] {
-			background-color: var(--primary);
-			color: var(--white);
+			background-color: var(--atum-select2-selected-bg);
+			color: var(--atum-select2-selected-text);
 		}
 		
 		&.atum-select2, &.atum-enhanced-select {
