@@ -2645,6 +2645,8 @@ final class Helpers {
 	/**
 	 * Checks if the passed product was not updated recently and requires a new update
 	 *
+	 * @since 1.5.8
+	 *
 	 * @param \WC_Product $product      The product to check.
 	 * @param string      $time_frame   Optional. A time string compatible with strtotime. By default is 1 day in the past.
 	 *
@@ -2667,7 +2669,7 @@ final class Helpers {
 		return defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['action'] && 'atum_' === substr( $_POST['action'], 0, 5 ) );
 	}
 
-/**
+	/**
 	 * Update the expiring data for the specified product.
 	 *
 	 * @since 1.5.8
