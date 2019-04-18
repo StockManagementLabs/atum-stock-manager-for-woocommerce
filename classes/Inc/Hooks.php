@@ -673,9 +673,7 @@ class Hooks {
 	 */
 	public function save_order_items_props( $order ) {
 
-		$items        = $order->get_items();
-		$current_time = Helpers::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
-		$sale_days    = Helpers::get_sold_last_days_option();
+		$items = $order->get_items();
 
 		foreach ( $items as $item ) {
 
@@ -688,35 +686,14 @@ class Hooks {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( is_a( $product, '\WC_Product' ) ) {
-
-				// Set stock "On Hold".
-				Helpers::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
-
-				// Set sold today.
-				$sold_today = Helpers::get_sold_last_days( $product_id, 'today 00:00:00', $current_time );
-				$product->set_sold_today( $sold_today );
-
-				// Sales last days.
-				$sales_last_ndays = Helpers::get_sold_last_days( $product_id, "$current_time -$sale_days days", $current_time );
-				$product->set_sales_last_days( $sales_last_ndays );
-
-				// Out stock days.
-				$out_of_stock_days = Helpers::get_product_out_stock_days( $product );
-				$product->set_out_stock_days( $out_of_stock_days );
-
-				// Lost sales.
-				$lost_sales = Helpers::get_product_lost_sales( $product );
-				$product->set_lost_sales( $lost_sales );
-
-				$product->save_atum_data();
-
+				Helpers::update_expiring_product_data( $product );
 				do_action( 'atum/after_save_order_item_props', $item, $order );
-
 			}
 
 		}
 
 	}
+
 	
 	/********************
 	 * Instance methods

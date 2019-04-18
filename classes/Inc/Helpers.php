@@ -2655,4 +2655,40 @@ final class Helpers {
 		return is_null( $product->get_update_date() ) || strtotime( $product->get_update_date() ) <= strtotime( $time_frame );
 	}
 
+	/**
+	 * Update the expiring data for the specified product.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param \WC_Product $product
+	 */
+	public static function update_expiring_product_data( $product ) {
+
+		$current_time = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
+		$sale_days    = self::get_sold_last_days_option();
+		$product_id   = $product->get_id();
+
+		// Set stock "On Hold".
+		self::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
+
+		// Set sold today.
+		$sold_today = self::get_sold_last_days( $product_id, 'today midnight', $current_time );
+		$product->set_sold_today( $sold_today );
+
+		// Sales last days.
+		$sales_last_ndays = self::get_sold_last_days( $product_id, "$current_time -$sale_days days", $current_time );
+		$product->set_sales_last_days( $sales_last_ndays );
+
+		// Out stock days.
+		$out_of_stock_days = self::get_product_out_stock_days( $product );
+		$product->set_out_stock_days( $out_of_stock_days );
+
+		// Lost sales.
+		$lost_sales = self::get_product_lost_sales( $product );
+		$product->set_lost_sales( $lost_sales );
+
+		$product->save_atum_data();
+
+	}
+
 }
