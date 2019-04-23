@@ -5155,7 +5155,7 @@ table.atum-list-table td.pro-version, table.atum-list-table th.pro-version, .flo
 }
 
 table.atum-list-table td.column-title, table.atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title, .inbound-stock-list td.column-title, .inbound-stock-list th.column-title, table.wp-list-table td.column-title, table.wp-list-table th.column-title {
-  min-width: 162px;
+  min-width: 171px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
