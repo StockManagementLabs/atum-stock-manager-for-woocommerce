@@ -467,15 +467,14 @@ class Settings {
 				'section' => 'visual_settings',
 				'name'    => __( 'Theme settings', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Select a option for change visual setting to dark, high contrast o default mode.', ATUM_TEXT_DOMAIN ),
-				'type'    => 'select',
 				'default' => '',
+				'type'    => 'theme_selector',
 				'options' => array(
 					'values' => array(
 						''          => __( 'Default', ATUM_TEXT_DOMAIN ),
 						'dark_mode' => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
 						'hc_mode'   => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
 					),
-					'style'  => 'width:200px',
 				),
 			),
 		);
@@ -970,8 +969,42 @@ class Settings {
 		
 	}
 
+	/**
+	 * Get the settings theme selector.
+	 *
+	 * @since 1.5.7.5
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_theme_selector( $args ) {
 
-	
+		$name           = self::OPTION_NAME . "[{$args['id']}]";
+		$value          = $this->options[ $args['id'] ];
+		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
+
+		$default = '';
+		if ( isset( $args['default'] ) ) {
+			$default = is_array( $args['default'] ) ? wp_json_encode( $args['default'] ) : $args['default'];
+			$default = ' data-default="' . $default . '"';
+		}
+
+		ob_start();
+		?>
+		<div class="theme-selector-wrapper">
+			<?php foreach ( $args['options']['values'] as $option => $value ) : ?>
+				<input type="radio" id="<?php echo esc_attr( $value ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $option ); ?>">
+				<div class="selector-box" data-value="<?php echo esc_attr( $option ); ?>">
+					<p><?php echo esc_attr( $value ); ?></p>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<?php
+		echo wp_kses_post( $this->get_description( $args ) );
+
+		echo apply_filters( 'atum/settings/display_theme_selector', ob_get_clean(), $args ); // WPCS: XSS ok.
+
+	}
+
 	/**
 	 * Print field description if it exists
 	 *

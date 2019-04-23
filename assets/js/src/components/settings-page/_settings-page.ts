@@ -46,7 +46,10 @@ export default class SettingsPage {
 		
 		// Enable button groups.
 		ButtonGroup.doButtonGroups(this.$form);
-		
+
+		// Enable theme selector
+        this.doThemeSelector();
+
 		// Toggle Menu.
 		this.toggleMenu();
 		
@@ -360,5 +363,16 @@ export default class SettingsPage {
 		}).catch(this.swal.noop);
 		
 	}
+
+    doThemeSelector() {
+        let $themeSelectorWrapper = $('.theme-selector-wrapper'),
+            $themeOptions         = $themeSelectorWrapper.find('.selector-box');
+
+        $themeOptions.on('click', (evt: JQueryEventObject) => {
+            let element     = evt.currentTarget;
+            console.log(element);
+                // $radioInput = $themeSelectorWrapper.find(`#${element.data('')}`)
+        })
+    }
 	
 }

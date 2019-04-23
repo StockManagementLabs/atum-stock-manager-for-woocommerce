@@ -227,15 +227,6 @@
 
 		}
 
-		//&.active {
-		//	cursor: default;
-		//	background-color: var(--atum-settings-nav-link-selected-bg);
-		//	font-size: 15px;
-		//	font-weight: bold;
-		//	color: var(--atum-settings-nav-link-selected);
-		//	border-right: 3px solid var(--atum-settings-nav-link-selected);
-		//}
-
 	}
 
 	@include desktop-max {
@@ -575,6 +566,18 @@
 				font-weight: bold;
 				font-size: 15px;
 				padding-top: 25px;
+			}
+			
+			.theme-selector-wrapper {
+				display: flex;
+				flex-direction: column;
+				.selector-box {
+					width: 171px;
+					height: 129px;
+					background-color: #eee;
+					cursor: pointer;
+					
+				}
 			}
 			
 			.atum-setting-info {
