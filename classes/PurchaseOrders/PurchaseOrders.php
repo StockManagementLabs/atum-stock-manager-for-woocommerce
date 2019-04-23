@@ -131,6 +131,10 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Add the hooks for the Purchase Price field.
 		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
 
+		// Recalculate the inbound stock for products within POs, every time a PO is moved or restored from trash.
+		add_action( 'trashed_post', array( $this, 'check_inbound_stock' ) );
+		add_action( 'untrashed_post', array( $this, 'check_inbound_stock' ) );
+
 	}
 
 	/**
@@ -469,7 +473,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
 				'action' => 'pdf',
 				'target' => '_blank',
-				'icon'   => '<i class="atum-icon atmi-pdf"></i>'
+				'icon'   => '<i class="atum-icon atmi-pdf"></i>',
 			);
 		}
 		
@@ -532,13 +536,31 @@ class PurchaseOrders extends AtumOrderPostType {
 				$mpdf->WriteHTML( $po_export->get_content() );
 
 				// Output a PDF file directly to the browser.
-				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) );
+				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) ); // WPCS: XSS ok.
 
 			} catch ( MpdfException $e ) {
-				wp_die( $e->getMessage() );
+				wp_die( $e->getMessage() ); // WPCS: XSS ok.
 			}
 
 		}
+
+	}
+
+	/**
+	 * Check the inbound stock for the PO items every time the PO status is changed
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int $po_id
+	 */
+	public function check_inbound_stock( $po_id ) {
+
+		if ( self::POST_TYPE !== get_post_type( $po_id ) ) {
+			return;
+		}
+
+		$po = new PurchaseOrder( $po_id );
+		$po->after_po_save( $po );
 
 	}
 
