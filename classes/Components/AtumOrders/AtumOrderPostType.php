@@ -20,6 +20,7 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
+use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -134,6 +135,10 @@ abstract class AtumOrderPostType {
 			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
 			
 		}
+
+		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
+		add_action( 'trashed_post', array( $this, 'update_order_item_props' ) );
+		add_action( 'untrashed_post', array( $this, 'update_order_item_props' ) );
 		
 		do_action( 'atum/order_post_type/init', $post_type );
 
@@ -1094,6 +1099,24 @@ abstract class AtumOrderPostType {
 			// Search by found posts.
 			$query->query_vars['post__in'] = array_merge( $atum_order_ids, array( 0 ) );
 		}
+
+	}
+
+	/**
+	 * Check the inbound stock for the PO items every time the PO status is changed
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int $po_id
+	 */
+	public function update_order_item_props( $po_id ) {
+
+		if ( static::POST_TYPE !== get_post_type( $po_id ) ) {
+			return;
+		}
+
+		$atum_order = $this->get_current_atum_order( $po_id );
+		$atum_order->after_save( $atum_order );
 
 	}
 

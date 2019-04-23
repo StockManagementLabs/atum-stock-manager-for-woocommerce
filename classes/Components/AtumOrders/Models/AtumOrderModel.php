@@ -111,6 +111,9 @@ abstract class AtumOrderModel {
 
 		}
 
+		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is saved.
+		add_action( 'atum/order/after_object_save', array( $this, 'after_save' ) );
+
 	}
 
 	/**
@@ -1250,7 +1253,7 @@ abstract class AtumOrderModel {
 			$subtotal += $item->get_subtotal();
 		}
 
-		return apply_filters( 'atum/orders/get_subtotal', (double) $subtotal, $this );
+		return apply_filters( 'atum/orders/get_subtotal', (float) $subtotal, $this );
 
 	}
 
@@ -1996,5 +1999,14 @@ abstract class AtumOrderModel {
 
 		$this->post->post_content = wp_kses( $value, $allowed_html );
 	}
+
+	/**
+	 * Do stuff after saving an ATUM Order
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int $atum_order_id
+	 */
+	abstract public function after_save( $atum_order_id );
 
 }
