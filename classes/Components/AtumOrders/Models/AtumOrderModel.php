@@ -820,7 +820,7 @@ abstract class AtumOrderModel {
 			
 			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
 			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
-				$old_status = 'pending';
+				$old_status = ATUM_PREFIX . 'pending';
 			}
 			
 			if ( $new_status !== $old_status ) {
@@ -859,7 +859,7 @@ abstract class AtumOrderModel {
 				'post_date'     => gmdate( 'Y-m-d H:i:s', $current_date->getOffsetTimestamp() ),
 				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $current_date->getTimestamp() ),
 				'post_type'     => $this->post->post_type,
-				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? ATUM_PREFIX . $status : 'publish',
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? $status : ATUM_PREFIX . 'pending',
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
@@ -901,7 +901,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
 			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
-			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? ATUM_PREFIX . $status : 'publish',
+			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? $status : ATUM_PREFIX . 'pending',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -934,13 +934,12 @@ abstract class AtumOrderModel {
 	 * @param string $new_status    Status to set to the ATUM Order. No "atum_" prefix is required.
 	 */
 	public function update_status( $new_status ) {
-		
-		$new_status = FALSE !== strpos( $new_status, ATUM_PREFIX ) ? str_replace( ATUM_PREFIX, '', $new_status ) : $new_status;
-		$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
+
+		$statuses = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
-			$new_status = 'pending';
+			$new_status = ATUM_PREFIX . 'pending';
 		}
 		
 		$this->set_status( $new_status );
@@ -1568,7 +1567,9 @@ abstract class AtumOrderModel {
 	 * @return string
 	 */
 	public function get_status() {
-		return $this->get_meta( '_status' );
+		$status = $this->get_meta( '_status' );
+
+		return $status && strpos( $status, ATUM_PREFIX ) !== 0 ? ATUM_PREFIX . $status : $status;
 	}
 
 	/**
@@ -1956,6 +1957,11 @@ abstract class AtumOrderModel {
 	 * @param string $value
 	 */
 	public function set_status( $value ) {
+
+		if ( $value && strpos( $value, ATUM_PREFIX ) !== 0 ) {
+			$value = ATUM_PREFIX . $value;
+		}
+
 		$this->set_meta( '_status', wc_clean( $value ) );
 	}
 

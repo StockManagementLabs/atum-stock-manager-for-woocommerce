@@ -56,7 +56,7 @@ abstract class AtumOrderPostType {
 	/**
 	 * Status that means an ATUM Order is finished
 	 */
-	const FINISHED = 'completed';
+	const FINISHED = ATUM_PREFIX . 'completed';
 
 	/**
 	 * The ATUM Order items table name
@@ -182,7 +182,7 @@ abstract class AtumOrderPostType {
 			
 			$count = "$label <span class='count'>(%s)</span>";
 			
-			$atum_statuses[ ATUM_PREFIX . $status ] = array(
+			$atum_statuses[ $status ] = array(
 				'label'                     => $label,
 				'public'                    => FALSE,
 				'exclude_from_search'       => FALSE,
@@ -260,7 +260,7 @@ abstract class AtumOrderPostType {
 			// Count all the orders with one of the ATUM Order's statuses.
 			if ( $object_types ) {
 				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
-				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", $this->get_statuses_simple( TRUE ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", array_keys( $this->get_statuses() ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
 			}
 
 			// This action is documented in wp-includes/taxonomy.php.
@@ -303,7 +303,7 @@ abstract class AtumOrderPostType {
 			if ( empty( $vars['post_status'] ) ) {
 				
 				// All the ATUM Order posts must have the custom statuses created for them.
-				$statuses = $this->get_statuses_simple( TRUE );
+				$statuses = array_keys( $this->get_statuses() );
 				
 				foreach ( $statuses as $key => $status ) {
 					if ( isset( $wp_post_statuses[ $status ] ) && FALSE === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
@@ -360,7 +360,7 @@ abstract class AtumOrderPostType {
 					$status      = $atum_order->get_status();
 					$status_name = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
 
-					printf( '<mark class="order-status status-%s tips" data-tip="%s"><span>%s</span></mark>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					printf( '<mark class="order-status status-%1$s"><span>%2$s</span></mark>', esc_attr( sanitize_html_class( str_replace( ATUM_PREFIX, '', $status ) ) ), esc_html( $status_name ) );
 
 				}
 
@@ -452,19 +452,23 @@ abstract class AtumOrderPostType {
 
 					do_action( "atum/$post_type/admin_actions_start", $atum_order );
 
-					$actions = array();
-					$status  = $atum_order->get_status();
+					$actions  = array();
+					$statuses = static::get_statuses();
 
-					if ( static::FINISHED !== $status ) {
+					if ( static::FINISHED !== $atum_order->get_status() ) {
 
-						$actions['complete'] = array(
-							'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-							/* translators: Change the order's status to finished */
-							'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), static::get_statuses()[ static::FINISHED ] ),
-							'action' => 'complete',
-							'target' => '_self',
-							'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
-						);
+						if ( isset( $statuses[ static::FINISHED ] ) ) {
+
+							$actions['complete'] = array(
+								'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+								/* translators: Change the order's status to finished */
+								'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $statuses[ static::FINISHED ] ),
+								'action' => 'complete',
+								'target' => '_self',
+								'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
+							);
+
+						}
 
 					}
 
@@ -741,8 +745,8 @@ abstract class AtumOrderPostType {
 		}
 
 		$statuses      = static::get_statuses();
-		$new_status    = substr( $action, 16 ); // Get the status name from action.
-		$report_action = 'marked_' . $new_status;
+		$new_status    = substr( $action, 16 ); // Get the status name from action (removing 'atum_order_mark_' = 16 characters).
+		$report_action = "marked_$new_status";
 
 		// Sanity check: bail out if this is actually not a status, or is not a registered status.
 		if ( ! isset( $statuses[ $new_status ] ) ) {
@@ -766,7 +770,7 @@ abstract class AtumOrderPostType {
 			'post_type'    => $post_type,
 			$report_action => TRUE,
 			'changed'      => $changed,
-			'ids'          => join( ',', $ids ),
+			'ids'          => implode( ',', $ids ),
 		), $redirect_to );
 
 		return esc_url_raw( $redirect_to );
@@ -793,7 +797,7 @@ abstract class AtumOrderPostType {
 		// Check if any status changes happened.
 		foreach ( $statuses as $slug => $name ) {
 
-			if ( isset( $_REQUEST[ 'marked_' . str_replace( ATUM_PREFIX, '', $slug ) ] ) ) {
+			if ( isset( $_REQUEST[ "marked_$slug" ] ) ) {
 
 				$number = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
 				/* translators: the number of changed statuses */
@@ -1140,32 +1144,10 @@ abstract class AtumOrderPostType {
 	public static function get_statuses() {
 		
 		return (array) apply_filters( 'atum/inventory_logs/statuses', array(
-			'pending'   => _x( 'Pending', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
-			'completed' => _x( 'Completed', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'pending'   => _x( 'Pending', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'completed' => _x( 'Completed', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
 		) );
-	}
-	
-	/**
-	 * Get the available ATUM Order statuses (only the statuses without any additional info)
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param bool $add_prefix Whether to add or not the ATUM Prefix to each status, default FALSE.
-	 *
-	 * @return array
-	 */
-	public static function get_statuses_simple( $add_prefix = FALSE ) {
-		
-		$statuses = array_keys( static::get_statuses() );
-		
-		if ( $add_prefix ) {
-			array_walk( $statuses, function ( &$value, $key ) {
-				
-				$value = ATUM_PREFIX . $value;
-			} );
-		}
-		
-		return $statuses;
+
 	}
 	
 	/**
@@ -1180,10 +1162,8 @@ abstract class AtumOrderPostType {
 		
 		?>
 		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select atum-enhanced-select">
-			<?php
-			$statuses = static::get_statuses();
-			foreach ( $statuses as $status => $status_name ) : ?>
-				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_name ) ?></option>
+			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
+				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_label ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
