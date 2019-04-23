@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      PurchaseOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -405,11 +405,11 @@ class PurchaseOrders extends AtumOrderPostType {
 	public static function get_statuses() {
 		
 		return (array) apply_filters( 'atum/purchase_orders/statuses', array(
-			'pending'    => _x( 'Pending', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			'ordered'    => _x( 'Ordered', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			'onthewayin' => _x( 'On the Way In', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			'receiving'  => _x( 'Receiving', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			'received'   => _x( 'Received', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'pending'    => _x( 'Pending', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'ordered'    => _x( 'Ordered', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'onthewayin' => _x( 'On the Way In', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'receiving'  => _x( 'Receiving', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			ATUM_PREFIX . 'received'   => _x( 'Received', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
 		) );
 		
 	}
@@ -469,7 +469,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
 				'action' => 'pdf',
 				'target' => '_blank',
-				'icon'   => '<i class="atum-icon atmi-pdf"></i>'
+				'icon'   => '<i class="atum-icon atmi-pdf"></i>',
 			);
 		}
 		
@@ -532,10 +532,10 @@ class PurchaseOrders extends AtumOrderPostType {
 				$mpdf->WriteHTML( $po_export->get_content() );
 
 				// Output a PDF file directly to the browser.
-				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) );
+				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) ); // WPCS: XSS ok.
 
 			} catch ( MpdfException $e ) {
-				wp_die( $e->getMessage() );
+				wp_die( $e->getMessage() ); // WPCS: XSS ok.
 			}
 
 		}

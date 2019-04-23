@@ -5,7 +5,7 @@
  * @package         Atum\PurchaseOrders
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -56,9 +56,6 @@ class PurchaseOrder extends AtumOrderModel {
 		// Maybe change product stock when order status change.
 		add_action( 'atum/orders/status_received', array( $this, 'maybe_increase_stock_levels' ), 10, 2 );
 		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
-
-		// Recalculate the inbound stock for products within POs, every time a PO is saved.
-		add_action( 'atum/order/after_object_save', array( $this, 'after_po_save' ) );
 
 		parent::__construct( $id, $read_items );
 		
@@ -495,7 +492,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @param PurchaseOrder $po
 	 */
-	public function after_po_save( $po ) {
+	public function after_save( $po ) {
 
 		$items = $po->get_items();
 

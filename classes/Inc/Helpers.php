@@ -1611,6 +1611,9 @@ final class Helpers {
 
 			if ( is_null( $inbound_stock ) || $force ) {
 
+				// Get all the valid statuses excluding the finished.
+				$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
+
 				// Calculate the inbound stock from pending purchase orders.
 				global $wpdb;
 
@@ -1621,7 +1624,7 @@ final class Helpers {
 					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
 					LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
 					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` <> '" . PurchaseOrders::FINISHED . "' 
+					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` IN ('" . implode( "','", $statuses ) . "') 
 					AND oim2.`meta_key` = '_qty'
 					GROUP BY oim.`meta_value`;",
 					PurchaseOrders::POST_TYPE,
@@ -1739,54 +1742,7 @@ final class Helpers {
 			$statuses = call_user_func( array( $post_type_class, 'get_statuses' ) );
 			
 			if ( $remove_finished ) {
-				
 				unset( $statuses[ constant( $post_type_class . '::FINISHED' ) ] );
-				
-			}
-			
-		}
-		
-		return $statuses;
-		
-	}
-	
-	/**
-	 * Get the appropriate ATUM Order list of statuses depending on the post_type
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $post_type
-	 * @param bool   $remove_finished Whether to remove or not the finished status.
-	 * @param bool   $add_prefix      Whether to add or not the ATUM prefix to each status.
-	 *
-	 * @return array
-	 */
-	public static function get_atum_order_post_type_statuses_simple( $post_type, $remove_finished = FALSE, $add_prefix = FALSE ) {
-		
-		$statuses = [];
-		
-		switch ( $post_type ) {
-			case InventoryLogs::POST_TYPE:
-				$post_type_class = '\Atum\InventoryLogs\InventoryLogs';
-				break;
-			
-			case PurchaseOrders::POST_TYPE:
-				$post_type_class = '\Atum\PurchaseOrders\PurchaseOrders';
-				break;
-		}
-		
-		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
-			$statuses = call_user_func( array( $post_type_class, 'get_statuses_simple' ), $add_prefix );
-			
-			if ( $remove_finished ) {
-				
-				$constant_name  = $add_prefix ? ATUM_PREFIX : '';
-				$constant_name .= constant( $post_type_class . '::FINISHED' );
-				
-				if ( ( $key = array_search( $constant_name, $statuses ) ) !== FALSE ) {
-					unset( $statuses[ $key ] );
-				}
-				
 			}
 			
 		}
