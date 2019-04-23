@@ -27,7 +27,7 @@ use Atum\Inc\Helpers;
 			'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
 			'name'        => 'variation_atum_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
 			'value'       => $variation->get_atum_controlled(),
-			'class'       => 'js-switch',
+			'class'       => 'js-switch variation-atum-controlled',
 			'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
 			'description' => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
 			'desc_tip'    => TRUE,
