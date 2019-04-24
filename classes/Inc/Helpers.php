@@ -2622,7 +2622,7 @@ final class Helpers {
 	 */
 	public static function is_atum_ajax() {
 
-		return defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['action'] && 'atum_' === substr( $_POST['action'], 0, 5 ) );
+		return defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['action'] ) && 'atum_' === substr( $_POST['action'], 0, 5 );
 	}
 
 	/**
