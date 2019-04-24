@@ -5,7 +5,7 @@
  * @package         Atum\PurchaseOrders
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -15,6 +15,8 @@ namespace Atum\PurchaseOrders\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Helpers;
+use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\Suppliers\Suppliers;
 
 
@@ -481,6 +483,36 @@ class PurchaseOrder extends AtumOrderModel {
 			}
 		}
 		
+	}
+
+	/**
+	 * Recalculate the inbound stock for products within POs, every time a PO is saved.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param PurchaseOrder $po
+	 */
+	public function after_save( $po ) {
+
+		$items = $po->get_items();
+
+		foreach ( $items as $item ) {
+
+			/**
+			 * Variable definition
+			 *
+			 * @var LogItemProduct $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+				Helpers::get_product_inbound_stock( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
+				$product->save_atum_data();
+			}
+
+		}
+
 	}
 
 }

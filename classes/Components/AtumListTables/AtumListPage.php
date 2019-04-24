@@ -5,7 +5,7 @@
  * @package         Atum\Components
  * @subpackage      AtumListTables
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2017 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.1.2
  */

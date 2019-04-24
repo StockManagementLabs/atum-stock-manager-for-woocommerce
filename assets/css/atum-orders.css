@@ -3572,6 +3572,14 @@ h2 .atum-help-tip {
   font-size: 16px;
 }
 
+#atum_order_data .panel select {
+  display: none;
+}
+
+#atum_order_data .panel select + .select2-container {
+  max-width: 297px;
+}
+
 #atum_order_data .panel .atum_order_data_column_container {
   clear: both;
   margin-top: 15px;
@@ -5578,6 +5586,8 @@ ul.atum_order_notes li .note_content::after {
   background-color: var(--atum-table-bg);
   border: none;
   border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .search-box .dropdown-item, p.search-box .dropdown-item {
@@ -7258,11 +7268,21 @@ table.atum-list-table td.pro-version, table.atum-list-table th.pro-version, .flo
 }
 
 table.atum-list-table td.column-title, table.atum-list-table th.column-title, .floatThead-container td.column-title, .floatThead-container th.column-title, .inbound-stock-list td.column-title, .inbound-stock-list th.column-title, table.wp-list-table td.column-title, table.wp-list-table th.column-title {
-  min-width: 162px;
+  min-width: 171px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 table.atum-list-table td.column-title > span, table.atum-list-table th.column-title > span, .floatThead-container td.column-title > span, .floatThead-container th.column-title > span, .inbound-stock-list td.column-title > span, .inbound-stock-list th.column-title > span, table.wp-list-table td.column-title > span, table.wp-list-table th.column-title > span {
   white-space: nowrap;
+}
+
+table.atum-list-table td.column-title > span i, table.atum-list-table th.column-title > span i, .floatThead-container td.column-title > span i, .floatThead-container th.column-title > span i, .inbound-stock-list td.column-title > span i, .inbound-stock-list th.column-title > span i, table.wp-list-table td.column-title > span i, table.wp-list-table th.column-title > span i {
+  margin-right: 4px;
 }
 
 table.atum-list-table td.column-title .child-arrow, table.atum-list-table th.column-title .child-arrow, .floatThead-container td.column-title .child-arrow, .floatThead-container th.column-title .child-arrow, .inbound-stock-list td.column-title .child-arrow, .inbound-stock-list th.column-title .child-arrow, table.wp-list-table td.column-title .child-arrow, table.wp-list-table th.column-title .child-arrow {
@@ -7696,8 +7716,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
   padding: 0 0 10px;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
+  border-radius: 8px;
 }
 
 #posts-filter .tablenav-pages {
@@ -7705,6 +7724,10 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+}
+
+.wp-heading-inline ~ .subsubsub {
+  display: none;
 }
 
 .tips {

@@ -4,7 +4,7 @@
  *
  * @package         Atum\Legacy
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @deprecated      This legacy class is only here for backwards compatibility and will be removed in a future version.
  *
@@ -144,26 +144,8 @@ trait ListTableLegacyTrait {
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
-			$order = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-
-			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', array(
-				'_purchase_price'      => array(
-					'type'  => 'NUMERIC',
-					'field' => 'purchase_price',
-				),
-				'_supplier'            => array(
-					'type'  => 'NUMERIC',
-					'field' => 'supplier_id',
-				),
-				'_supplier_sku'        => array(
-					'type'  => '',
-					'field' => 'supplier_sku',
-				),
-				'_out_stock_threshold' => array(
-					'type'  => 'NUMERIC',
-					'field' => 'out_stock_threshold',
-				),
-			) );
+			$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+			$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
 
 			// Columns starting by underscore are based in meta keys, so can be sorted.
 			if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
@@ -422,7 +404,7 @@ trait ListTableLegacyTrait {
 
 				if ( in_array( 'variable', (array) $taxonomy['terms'] ) ) {
 
-					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children_legacy( 'variable', $post_in, 'product_variation' ), $post_in );
+					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
 
 					// Remove the variable containers from the array and add the variations.
 					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable'] ), $variations ) );
@@ -431,7 +413,7 @@ trait ListTableLegacyTrait {
 
 				if ( in_array( 'grouped', (array) $taxonomy['terms'] ) ) {
 
-					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children_legacy( 'grouped', $post_in ), $post_in );
+					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
 
 					// Remove the grouped containers from the array and add the group items.
 					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_grouped'] ), $group_items ) );
@@ -441,7 +423,7 @@ trait ListTableLegacyTrait {
 				// WC Subscriptions compatibility.
 				if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', (array) $taxonomy['terms'] ) ) {
 
-					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children_legacy( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
+					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
 
 					// Remove the variable subscription containers from the array and add the subscription variations.
 					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
@@ -451,7 +433,7 @@ trait ListTableLegacyTrait {
 				// WC Product Bundle compatibility.
 				if ( class_exists( '\WC_Product_Bundle' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
 
-					$sc_bundles = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children_legacy( 'bundle', $post_in ), $post_in );
+					$sc_bundles = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children( 'bundle', $post_in ), $post_in );
 
 					// Remove the bundle containers from the array and add the subscription variations.
 					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_bundle'] ), $sc_bundles ) );
@@ -644,7 +626,7 @@ trait ListTableLegacyTrait {
 				        CEIL(SUM((
 				                SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta
 				                WHERE meta_key = '_qty' AND order_item_id = itm.order_item_id
-				            ))/7*$this->last_days
+				            ))/7*$this->days_to_reorder
 			            ) AS qty
 						FROM $wpdb->posts AS orders
 					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS itm ON (orders.ID = itm.order_id)
@@ -861,7 +843,7 @@ trait ListTableLegacyTrait {
 				}
 
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
-				$this->children_products = array_merge( $this->children_products, $children_ids );
+				$this->children_products = array_unique( array_merge( $this->children_products, $children_ids ) );
 
 				return $children_ids;
 
@@ -906,7 +888,7 @@ trait ListTableLegacyTrait {
 				// Exclude all those subscription variations with no children from the list.
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
-				$this->children_products = array_merge( $this->children_products, $bundle_children );
+				$this->children_products = array_unique( array_merge( $this->children_products, array_map( 'intval', $bundle_children ) ) );
 
 				return $bundle_children;
 

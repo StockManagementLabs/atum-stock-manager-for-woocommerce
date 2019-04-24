@@ -4,7 +4,7 @@
  *
  * @package     Atum\MetaBoxes
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2018 Stock Management Labs™
+ * @copyright   ©2019 Stock Management Labs™
  *
  * @since       1.5.0
  */
@@ -459,6 +459,22 @@ class ProductDataMetaBoxes {
 	}
 
 	/**
+	 * Save extra product data.
+	 *
+	 * @since 1.5.8
+	 */
+	private function save_extra_data() {
+
+		// If it's out of stock, how many days?
+		$this->product_data['out_stock_days'] = Helpers::get_product_out_stock_days( $this->product );
+
+		// Has location terms assigned?
+		$location_terms                     = wp_get_post_terms( $this->product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY );
+		$this->product_data['has_location'] = ! empty( $location_terms );
+
+	}
+
+	/**
 	 * Hook callback after saving a product
 	 *
 	 * @since 1.5.0
@@ -529,6 +545,9 @@ class ProductDataMetaBoxes {
 			$purchase_price = $this->save_purchase_price();
 		}
 
+		// Save extra data (out of stock date, has_location, etc).
+		$this->save_extra_data();
+
 		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data );
 
 		if ( ! empty( $this->product_data ) ) {
@@ -546,7 +565,7 @@ class ProductDataMetaBoxes {
 				do_action( 'atum/product_data/after_save_purchase_price', $this->product->get_id(), $purchase_price['new_purchase_price'], $purchase_price['old_purchase_price'] );
 			}
 
-			do_action( 'atum/product_data/after_save_data', $this->product_data );
+			do_action( 'atum/product_data/after_save_data', $this->product_data, $this->product );
 
 		}
 

@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -83,6 +83,11 @@ class Upgrade {
 		if ( version_compare( $db_version, '1.5.0', '<' ) ) {
 			$this->create_product_data_table();
 			$this->update_po_status();
+		}
+
+		// ** version 1.5.8 ** New tables to store ATUM data for products.
+		if ( version_compare( $db_version, '1.5.8', '<' ) ) {
+			$this->create_list_table_columns();
 		}
 
 		// ** version 1.6.0 ** New table for ATUM Logs component.
@@ -464,6 +469,70 @@ class Upgrade {
 		
 		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
 		
+	}
+
+	/**
+	 * Create the new columns for the ATUM product data table
+	 *
+	 * @since 1.5.8
+	 */
+	private function create_list_table_columns() {
+
+		global $wpdb;
+
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$columns         = array(
+			'inbound_stock'    => 'DOUBLE',
+			'stock_on_hold'    => 'DOUBLE',
+			'sold_today'       => 'BIGINT(20)',
+			'sales_last_days'  => 'BIGINT(20)',
+			'reserved_stock'   => 'BIGINT(20)',
+			'customer_returns' => 'BIGINT(20)',
+			'warehouse_damage' => 'BIGINT(20)',
+			'lost_in_post'     => 'BIGINT(20)',
+			'other_logs'       => 'BIGINT(20)',
+			'out_stock_days'   => 'INT(11)',
+			'lost_sales'       => 'BIGINT(20)',
+			'has_location'     => 'TINYINT(1)',
+			'update_date'      => 'DATETIME',
+		);
+
+		foreach ( array_keys( $columns ) as $column_name ) {
+
+			// Avoid adding the column if was already added.
+			$column_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = %s
+			', $db_name, $atum_data_table, $column_name );
+
+			// Add the new column to the table.
+			if ( ! $wpdb->get_var( $column_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // WPCS: unprepared SQL ok.
+			}
+
+		}
+
+		// Add extra key indexes to ATUM tables to improve performance.
+		$indexes = array(
+			'inheritable',
+		);
+
+		foreach ( $indexes as $index ) {
+
+			// Avoid adding the index if was already added.
+			$index_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+				WHERE table_schema = %s AND TABLE_NAME = %s AND index_name = %s;
+			', $db_name, $atum_data_table, $index );
+
+			// Add the new index to the table.
+			if ( ! $wpdb->get_var( $index_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD INDEX `$index` (`$index`)" ); // WPCS: unprepared SQL ok.
+			}
+
+		}
+
 	}
 	
 	/**

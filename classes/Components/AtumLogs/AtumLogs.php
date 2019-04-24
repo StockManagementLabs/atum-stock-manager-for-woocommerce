@@ -4,7 +4,7 @@
  *
  * @package     Components\AtumLogs
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2018 Stock Management Labs™
+ * @copyright   ©2019 Stock Management Labs™
  *
  * @since       1.4.15
  */

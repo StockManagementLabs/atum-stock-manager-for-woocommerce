@@ -224,9 +224,9 @@ export default class StatisticsWidget {
 	doLegendSwitches() {
 		
 		// Enable switches.
-		Switcher.doSwitchers('.value-chart');
+		Switcher.doSwitchers(false, '.value-chart');
 		
-		Switcher.doSwitchers('.products-chart', {
+		Switcher.doSwitchers(false, '.products-chart', {
 			color    : 'var(--dash-blue-trans)',
 			jackColor: 'var(--blue)',
 		});

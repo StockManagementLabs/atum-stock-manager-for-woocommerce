@@ -20,14 +20,14 @@ import '../vendor/select2';      // A fixed version compatible with webpack
  * Components
  */
 
-import Settings from './config/_settings';
+import DateTimePicker from "./components/_date-time-picker";
+import DragScroll from "./components/list-table/_drag-scroll";
+import EnhancedSelect from './components/_enhanced-select';
+import Popover from './components/_popover';
 import PostTypeList from './components/list-table/_post-type-list';
 import ScrollBar from './components/list-table/_scroll-bar';
-import EnhancedSelect from './components/_enhanced-select';
-import DragScroll from "./components/list-table/_drag-scroll";
-import Popover from './components/_popover';
+import Settings from './config/_settings';
 import Tooltip from './components/_tooltip';
-import DateTimePicker from "./components/_date-time-picker";
 
 
 // Modules that need to execute when the DOM is ready should go here.

@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumMarketingPopup;
+use Atum\Components\AtumQueues;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
@@ -225,6 +225,7 @@ class Main {
 		Ajax::get_instance();
 		Settings::get_instance();
 		ProductDataMetaBoxes::get_instance();
+		AtumQueues::get_instance();
 		
 		//
 		// Enable WPML module if needed

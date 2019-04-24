@@ -33,7 +33,7 @@ export default class SettingsPage {
 		
 		// Enable switchers.
 		Switcher.doSwitchers();
-		Switcher.doSwitchers('.js-switch-menu', {
+		Switcher.doSwitchers(false, '.js-switch-menu', {
 			color    : '#dbf9ff',
 			jackColor: '#00b8db',
 		});

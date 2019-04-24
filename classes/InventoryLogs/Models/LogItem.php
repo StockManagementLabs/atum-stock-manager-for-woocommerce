@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -34,8 +34,11 @@ class LogItem extends AtumOrderItemModel {
 	 * @throws \Atum\Components\AtumException
 	 */
 	public function __construct( \WC_Order_Item $log_item ) {
+
 		$this->atum_order_item = $log_item;
+
 		parent::__construct( $log_item->get_id() );
+
 	}
 
 }

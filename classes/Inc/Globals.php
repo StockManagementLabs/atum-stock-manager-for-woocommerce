@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           0.1.4
  */
@@ -43,7 +43,7 @@ final class Globals {
 	private static $child_product_types = [ 'variation' ];
 	
 	/**
-	 * ATUM existent order types
+	 * ATUM order types
 	 *
 	 * @var array
 	 */
@@ -125,6 +125,11 @@ final class Globals {
 	 * The meta key name used for inheritable products (Grouped, Variables...)
 	 */
 	const IS_INHERITABLE_KEY = '_inheritable';
+
+	/**
+	 * Tha key for the constant to ignore the ATUM cache;
+	 */
+	const IGNORE_CACHE_KEY = 'ATUM_IGNORE_CACHE';
 
 	/**
 	 * Searchable columns and their types

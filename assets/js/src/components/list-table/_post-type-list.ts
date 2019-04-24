@@ -2,11 +2,10 @@
    LIST TABLE COMPONENT FOR POST TYPE LISTS
    ======================================== */
 
-import Settings from '../../config/_settings';
-import Hammer from 'hammerjs/hammer.min';
 import { ActiveRow } from './_active-row';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
+import Settings from '../../config/_settings';
 
 export default class PostTypeList {
 	
@@ -28,20 +27,21 @@ export default class PostTypeList {
 		$('#post-search-input').attr('placeholder', this.settings.get('placeholderSearch'));
 
         // Add nav with dragging functionality.
-        $('.subsubsub')
-            .after( '<div class="list-table-header">' +
-                        '<div id="scroll-stock_central_nav" class="nav-container-box">' +
-                            '<nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">' +
-                                '<div class="overflow-opacity-effect-right"></div>' +
-                                '<div class="overflow-opacity-effect-left"></div>' +
-                            '</nav>' +
-                        '</div>'+
-                    '</div>');
+        $('.subsubsub').after( `
+			<div class="list-table-header">
+                <div id="scroll-stock_central_nav" class="nav-container-box">
+                    <nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
+                        <div class="overflow-opacity-effect-right"></div>
+                        <div class="overflow-opacity-effect-left"></div>
+                    </nav>
+                </div>
+            </div>`);
 
         $('.nav-with-scroll-effect').prepend($('.subsubsub'));
         $('.list-table-header')
             .append($('.search-box'))
-            .addClass('no-margin');
+            .addClass('no-margin')
+	        .prependTo($('form#posts-filter'));
 
         // Show add button in head.
         $('.wp-heading-inline').append( $('.page-title-action').show() );

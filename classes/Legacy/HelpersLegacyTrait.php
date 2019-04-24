@@ -4,7 +4,7 @@
  *
  * @package         Atum\Legacy
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @deprecated      This legacy class is only here for backwards compatibility and will be removed in a future version.
  *
@@ -35,10 +35,12 @@ trait HelpersLegacyTrait {
 
 		global $wpdb;
 
-		$unmng_fields = array( 'posts.ID' );
+		$unmng_fields    = array( 'posts.ID' );
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
 		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products_legacy/join_query', array(
 			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
+			"LEFT JOIN $atum_data_table AS apd ON (posts.ID = apd.product_id)",
 		) );
 
 		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
@@ -48,29 +50,11 @@ trait HelpersLegacyTrait {
 			$unmng_fields[] = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' ) AS stock_status";
 		}
 
-		// Exclude the inheritable products from query (as are just containers in ATUM List Tables).
-		$excluded_types      = Globals::get_inheritable_product_types();
-		$excluded_type_terms = array();
-
-		foreach ( $excluded_types as $excluded_type ) {
-			$excluded_type_terms[] = get_term_by( 'slug', $excluded_type, 'product_type' );
-		}
-
-		$excluded_type_terms = wp_list_pluck( array_filter( $excluded_type_terms ), 'term_taxonomy_id' );
-
 		$unmng_where = array(
 			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
 			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
-			"AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))",
-			"AND posts.ID NOT IN ( 
-				SELECT DISTINCT object_id FROM {$wpdb->term_relationships}
-				WHERE term_taxonomy_id IN  (" . implode( ',', $excluded_type_terms ) . ") )
-				AND (posts.post_parent IN (
-					SELECT ID FROM $wpdb->posts 
-					WHERE post_type = 'product' AND post_status IN ('private','publish') 
-				)
-				OR posts.post_parent = 0
-			)",
+			"AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')",
+			'AND apd.inheritable != 1', // Exclude the inheritable products from query (as are just containers in ATUM List Tables).
 		);
 
 		$unmng_where = apply_filters( 'atum/get_unmanaged_products_legacy/where_query', $unmng_where );

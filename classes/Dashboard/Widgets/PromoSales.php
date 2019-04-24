@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Dashboard\Widgets
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           1.4.0
  */
@@ -64,7 +64,7 @@ class PromoSales extends AtumWidget {
 		 */
 		$stats_this_month = WidgetHelpers::get_promo_sales_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'first day of this month 00:00:00',
+			'date_start' => 'first day of this month midnight',
 		) );
 
 		/**
@@ -72,7 +72,7 @@ class PromoSales extends AtumWidget {
 		 */
 		$stats_previous_month = WidgetHelpers::get_promo_sales_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'first day of last month 00:00:00',
+			'date_start' => 'first day of last month midnight',
 			'date_end'   => 'last day of last month 23:59:59',
 		) );
 
@@ -81,7 +81,7 @@ class PromoSales extends AtumWidget {
 		 */
 		$stats_this_week = WidgetHelpers::get_promo_sales_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'this week 00:00:00',
+			'date_start' => 'this week midnight',
 		) );
 
 		/**
@@ -89,7 +89,7 @@ class PromoSales extends AtumWidget {
 		 */
 		$stats_today = WidgetHelpers::get_promo_sales_stats( array(
 			'status'     => $order_status,
-			'date_start' => 'today 00:00:00',
+			'date_start' => 'today midnight',
 		) );
 
 		$config = $this->get_config();

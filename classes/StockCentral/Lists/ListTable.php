@@ -5,7 +5,7 @@
  * @package         Atum\StockCentral
  * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2018 Stock Management Labs™
+ * @copyright       ©2019 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -22,23 +22,10 @@ use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Settings\Settings;
 
 
 class ListTable extends AtumListTable {
-	
-	/**
-	 * Time of query
-	 *
-	 * @var string
-	 */
-	protected $day;
-	
-	/**
-	 * Values for the calculated columns form current page products
-	 *
-	 * @var array
-	 */
-	protected $calc_columns = array();
 
 	/**
 	 * The columns hidden by default
@@ -48,19 +35,19 @@ class ListTable extends AtumListTable {
 	protected static $default_hidden_columns = array(
 		'ID',
 		'_weight',
-		'calc_inbound',
-		'calc_hold',
-		'calc_reserved',
+		'_inbound_stock',
+		'_stock_on_hold',
+		'_reserved_stock',
 		'calc_back_orders',
-		'calc_sold_today',
-		'calc_returns',
-		'calc_damages',
-		'calc_lost_in_post',
-		'calc_other',
-		'calc_sales_last_ndays',
+		'_sold_today',
+		'_customer_returns',
+		'_warehouse_damage',
+		'_lost_in_post',
+		'_other_logs',
+		'_sales_last_days',
 		'calc_will_last',
-		'calc_stock_out_days',
-		'calc_lost_sales',
+		'_out_stock_days',
+		'_lost_sales',
 	);
 
 	/**
@@ -83,9 +70,87 @@ class ListTable extends AtumListTable {
 			'_weight',
 			'_stock',
 			'_out_stock_threshold',
+			'_inbound_stock',
+			'_stock_on_hold',
+			'_reserved_stock',
+			'_sold_today',
+			'_customer_returns',
+			'_warehouse_damage',
+			'_lost_in_post',
+			'_other_logs',
+			'_sales_last_days',
+			'_out_stock_days',
+			'_lost_sales',
 		),
 	);
 
+	/**
+	 * Set up the ATUM columns and types for correct sorting
+	 *
+	 * @var array
+	 */
+	protected $atum_sortable_columns = array(
+		'_purchase_price'      => array(
+			'type'  => 'NUMERIC',
+			'field' => 'purchase_price',
+		),
+		'_supplier'            => array(
+			'type'  => 'NUMERIC',
+			'field' => 'supplier_id',
+		),
+		'_supplier_sku'        => array(
+			'type'  => '',
+			'field' => 'supplier_sku',
+		),
+		'_out_stock_threshold' => array(
+			'type'  => 'NUMERIC',
+			'field' => 'out_stock_threshold',
+		),
+		'_inbound_stock'       => array(
+			'type'  => 'NUMERIC',
+			'field' => 'inbound_stock',
+		),
+		'_stock_on_hold'       => array(
+			'type'  => 'NUMERIC',
+			'field' => 'stock_on_hold',
+		),
+		'_reserved_stock'      => array(
+			'type'  => 'NUMERIC',
+			'field' => 'reserved_stock',
+		),
+		'_sold_today'          => array(
+			'type'  => 'NUMERIC',
+			'field' => 'sold_today',
+		),
+		'_customer_returns'    => array(
+			'type'  => 'NUMERIC',
+			'field' => 'customer_returns',
+		),
+		'_warehouse_damage'    => array(
+			'type'  => 'NUMERIC',
+			'field' => 'warehouse_damage',
+		),
+		'_lost_in_post'        => array(
+			'type'  => 'NUMERIC',
+			'field' => 'lost_in_post',
+		),
+		'_other_logs'          => array(
+			'type'  => 'NUMERIC',
+			'field' => 'other_logs',
+		),
+		'_sales_last_days'     => array(
+			'type'  => 'NUMERIC',
+			'field' => 'sales_last_days',
+		),
+		'_out_stock_days'      => array(
+			'type'  => 'NUMERIC',
+			'field' => 'out_stock_days',
+		),
+		'_lost_sales'          => array(
+			'type'  => 'NUMERIC',
+			'field' => 'lost_sales',
+		),
+	);
 
 	/**
 	 * ListTable Constructor
@@ -110,9 +175,8 @@ class ListTable extends AtumListTable {
 		
 		// Activate managed/unmanaged counters separation.
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
-		
-		// TODO: Allow to specify the day of query in constructor atts.
-		$this->day = Helpers::date_format( current_time( 'timestamp' ), TRUE );
+
+		$this->days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
 		// Prepare the table columns.
 		$args['table_columns'] = self::get_table_columns();
@@ -141,29 +205,29 @@ class ListTable extends AtumListTable {
 				'members' => array(
 					'_stock',
 					'_out_stock_threshold',
-					'calc_inbound',
-					'calc_hold',
-					'calc_reserved',
+					'_inbound_stock',
+					'_stock_on_hold',
+					'_reserved_stock',
 					'calc_back_orders',
-					'calc_sold_today',
+					'_sold_today',
 				),
 			),
 			'stock-negatives'       => array(
 				'title'   => __( 'Stock Negatives', ATUM_TEXT_DOMAIN ),
 				'members' => array(
-					'calc_returns',
-					'calc_damages',
-					'calc_lost_in_post',
-					'calc_other',
+					'_customer_returns',
+					'_warehouse_damage',
+					'_lost_in_post',
+					'_other_logs',
 				),
 			),
 			'stock-selling-manager' => array(
 				'title'   => __( 'Stock Selling Manager', ATUM_TEXT_DOMAIN ),
 				'members' => array(
-					'calc_sales_last_ndays',
+					'_sales_last_days',
 					'calc_will_last',
-					'calc_stock_out_days',
-					'calc_lost_sales',
+					'_out_stock_days',
+					'_lost_sales',
 					'calc_stock_indicator',
 				),
 			),
@@ -181,24 +245,24 @@ class ListTable extends AtumListTable {
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
 			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
-			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ 'calc_inbound' ] );
+			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ '_inbound_stock' ] );
 		}
 
 		// Initialize totalizers.
 		$this->totalizers = apply_filters( 'atum/stock_central_list/totalizers', array(
-			'_stock'                => 0,
-			'calc_inbound'          => 0,
-			'calc_hold'             => 0,
-			'calc_reserved'         => 0,
-			'calc_back_orders'      => 0,
-			'calc_sold_today'       => 0,
-			'calc_returns'          => 0,
-			'calc_damages'          => 0,
-			'calc_lost_in_post'     => 0,
-			'calc_other'            => 0,
-			'calc_sales_last_ndays' => 0,
-			'calc_lost_sales'       => 0,
-		));
+			'_stock'            => 0,
+			'_inbound_stock'    => 0,
+			'_stock_on_hold'    => 0,
+			'_reserved_stock'   => 0,
+			'calc_back_orders'  => 0,
+			'_sold_today'       => 0,
+			'_customer_returns' => 0,
+			'_warehouse_damage' => 0,
+			'_lost_in_post'     => 0,
+			'_other_logs'       => 0,
+			'_sales_last_days'  => 0,
+			'_lost_sales'       => 0,
+		) );
 
 		// Set the sticky columns.
 		$this->sticky_columns = (array) apply_filters( 'atum/stock_central_list/sticky_columns', array(
@@ -228,42 +292,39 @@ class ListTable extends AtumListTable {
 	 */
 	public static function get_table_columns() {
 
-		// Get the ndays set to last sales column.
-		$sold_last_days = Helpers::get_sold_last_days_option();
-
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$table_columns = array(
-			'thumb'                 => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '</span>',
-			'ID'                    => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'title'                 => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'             => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_sku'                  => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_supplier'             => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'_supplier_sku'         => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'calc_location'         => '<span class="atum-icon atmi-map-marker tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_regular_price'        => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
-			'_sale_price'           => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
-			'_purchase_price'       => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-			'_weight'               => __( 'Weight', ATUM_TEXT_DOMAIN ),
-			'_stock'                => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
-			'_out_stock_threshold'  => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
-			'calc_inbound'          => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_hold'             => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
-			'calc_reserved'         => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'      => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
-			'calc_sold_today'       => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
-			'calc_returns'          => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
-			'calc_damages'          => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'calc_lost_in_post'     => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'calc_other'            => __( 'Other', ATUM_TEXT_DOMAIN ),
+			'thumb'                => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '</span>',
+			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'calc_type'            => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'_supplier'            => __( 'Supplier', ATUM_TEXT_DOMAIN ),
+			'_supplier_sku'        => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
+			'calc_location'        => '<span class="atum-icon atmi-map-marker tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_regular_price'       => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			'_sale_price'          => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
+			'_purchase_price'      => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'_weight'              => __( 'Weight', ATUM_TEXT_DOMAIN ),
+			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_out_stock_threshold' => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+			'_inbound_stock'       => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'_stock_on_hold'       => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+			'_reserved_stock'      => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+			'calc_back_orders'     => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'_sold_today'          => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+			'_customer_returns'    => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+			'_warehouse_damage'    => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+			'_lost_in_post'        => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+			'_other_logs'          => __( 'Other Logs', ATUM_TEXT_DOMAIN ),
 			/* translators: the number of sales during last days */
-			'calc_sales_last_ndays' => sprintf( _n( 'Sales last %s day', 'Sales last %s days', $sold_last_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . $sold_last_days . '</span>' ),
-			'calc_will_last'        => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_stock_out_days'   => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
-			'calc_lost_sales'       => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator'  => '<span class="atum-icon atmi-layers stock-indicator-icon tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_sales_last_days'     => sprintf( _n( 'Sales last %s day', 'Sales last %s days', self::$sale_days, ATUM_TEXT_DOMAIN ), '<span class="set-header" id="sales_last_ndays_val" title="' . __( 'Click to change days', ATUM_TEXT_DOMAIN ) . '">' . self::$sale_days . '</span>' ),
+			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
+			'_out_stock_days'      => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
+			'_lost_sales'          => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
+			'calc_stock_indicator' => '<span class="atum-icon atmi-layers stock-indicator-icon tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
 		// Hide the purchase price column if the current user has not the capability.
@@ -279,7 +340,7 @@ class ListTable extends AtumListTable {
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
 			unset( $table_columns['_purchase_price'] );
-			unset( $table_columns['calc_inbound'] );
+			unset( $table_columns['_inbound_stock'] );
 		}
 
 		return (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
@@ -445,46 +506,16 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_hold( $item ) {
+	protected function column__stock_on_hold( $item ) {
 
 		$stock_on_hold = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-
-			$cache_key     = AtumCache::get_cache_key( 'stock_on_hold', $this->product->get_id() );
-			$stock_on_hold = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
-
-			if ( ! $has_cache ) {
-
-				global $wpdb;
-
-				$product_id_key = Helpers::is_child_type( $this->product->get_type() ) ? '_variation_id' : '_product_id';
-
-				$sql = $wpdb->prepare( "
-					SELECT SUM(omq.`meta_value`) AS qty 
-					FROM `{$wpdb->prefix}woocommerce_order_items` oi			
-					LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
-					LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
-					WHERE `order_id` IN (
-						SELECT `ID` FROM $wpdb->posts WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
-					)
-					AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` = %s AND omp.`meta_value` = %d 
-					GROUP BY omp.`meta_value`",
-					$product_id_key,
-					$this->product->get_id()
-				);
-
-				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
-
-				AtumCache::set_cache( $cache_key, $stock_on_hold );
-
-			}
-
-			$this->increase_total( 'calc_hold', $stock_on_hold );
-
+			$stock_on_hold = Helpers::get_product_stock_on_hold( $this->product );
+			$this->increase_total( '_stock_on_hold', $stock_on_hold );
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_stock_hold', $stock_on_hold, $item, $this->product, $this );
 
 	}
 
@@ -497,12 +528,12 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_reserved( $item ) {
+	protected function column__reserved_stock( $item ) {
 
-		$reserved_stock = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'reserved-stock', $this->product->get_id() );
-		$this->increase_total( 'calc_reserved', $reserved_stock );
+		$reserved_stock = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'reserved-stock', $this->product );
+		$this->increase_total( '_reserved_stock', $reserved_stock );
 
-		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_reserved_stock', $reserved_stock, $item, $this->product, $this );
 	}
 	
 	/**
@@ -514,18 +545,26 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_sold_today( $item ) {
+	protected function column__sold_today( $item ) {
 
 		if ( ! $this->allow_calcs ) {
 			$sold_today = self::EMPTY_COL;
 		}
 		else {
-			$sold_today = empty( $this->calc_columns[ $this->product->get_id() ]['sold_today'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_today'];
+
+			$sold_today = $this->product->get_sold_today();
+
+			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
+				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today midnight', $this->day );
+				$this->product->set_sold_today( $sold_today );
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+			}
+
 		}
 
-		$this->increase_total( 'calc_sold_today', $sold_today );
+		$this->increase_total( '_sold_today', $sold_today );
 		
-		return apply_filters( 'atum/stock_central_list/column_sold_today', $sold_today, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sold_today', $sold_today, $item, $this->product, $this );
 		
 	}
 
@@ -538,12 +577,12 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_returns( $item ) {
+	protected function column__customer_returns( $item ) {
 
-		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'customer-returns', $this->product->get_id() );
-		$this->increase_total( 'calc_returns', $consumer_returns );
+		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'customer-returns', $this->product );
+		$this->increase_total( '_customer_returns', $consumer_returns );
 
-		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product, $this );
 	}
 
 	/**
@@ -555,12 +594,12 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_damages( $item ) {
+	protected function column__warehouse_damage( $item ) {
 
-		$warehouse_damages = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'warehouse-damage', $this->product->get_id() );
-		$this->increase_total( 'calc_damages', $warehouse_damages );
+		$warehouse_damages = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'warehouse-damage', $this->product );
+		$this->increase_total( '_warehouse_damage', $warehouse_damages );
 
-		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_warehouse_damage', $warehouse_damages, $item, $this->product, $this );
 	}
 
 	/**
@@ -572,12 +611,12 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_lost_in_post( $item ) {
+	protected function column__lost_in_post( $item ) {
 
-		$lost_in_post = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'lost-in-post', $this->product->get_id() );
-		$this->increase_total( 'calc_lost_in_post', $lost_in_post );
+		$lost_in_post = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'lost-in-post', $this->product );
+		$this->increase_total( '_lost_in_post', $lost_in_post );
 
-		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_lost_in_post', $lost_in_post, $item, $this->product, $this );
 	}
 
 	/**
@@ -589,12 +628,12 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_other( $item ) {
+	protected function column__other_logs( $item ) {
 
-		$others = ! $this->allow_calcs ? self::EMPTY_COL : $this->get_log_item_qty( 'other', $this->product->get_id() );
-		$this->increase_total( 'calc_other', $others );
+		$others = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'other', $this->product );
+		$this->increase_total( '_other_logs', $others );
 
-		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $others, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_other_logs', $others, $item, $this->product, $this );
 	}
 
 	/**
@@ -607,21 +646,34 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int
 	 */
-	protected function column_calc_sales_last_ndays( $item, $add_to_total = TRUE ) {
+	protected function column__sales_last_days( $item, $add_to_total = TRUE ) {
 
 		if ( ! $this->allow_calcs ) {
 			$sales_last_ndays = self::EMPTY_COL;
 		}
 		else {
 
-			$sales_last_ndays = empty( $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'] ) ? 0 : $this->calc_columns[ $this->product->get_id() ]['sold_last_ndays'];
+			$sale_days        = self::$sale_days;
+			$sales_last_ndays = $this->product->get_sales_last_days();
+
+			if (
+				is_null( $sales_last_ndays ) || Settings::DEFAULT_SALE_DAYS !== $sale_days ||
+				Helpers::is_product_data_outdated( $this->product )
+			) {
+
+				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
+				$this->product->set_sales_last_days( $sales_last_ndays );
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+
+			}
+
 			if ( $add_to_total ) {
-				$this->increase_total( 'calc_sales_last_ndays', $sales_last_ndays );
+				$this->increase_total( '_sales_last_days', $sales_last_ndays );
 			}
 
 		}
 
-		return apply_filters( 'atum/stock_central_list/column_sold_last_ndays', $sales_last_ndays, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_sales_last_days', $sales_last_ndays, $item, $this->product, $this );
 
 	}
 	
@@ -636,24 +688,23 @@ class ListTable extends AtumListTable {
 	 * @return int|string
 	 */
 	protected function column_calc_will_last( $item ) {
-
-		$sold_last_days = Helpers::get_sold_last_days_option();
 			
 		$will_last = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
-			$sales = $this->column_calc_sales_last_ndays( $item, FALSE );
+			$sales = $this->column__sales_last_days( $item, FALSE );
 			$stock = $this->product->get_stock_quantity();
 
 			if ( $stock > 0 && $sales > 0 ) {
-				$will_last = ceil( $stock / ( $sales / $sold_last_days ) );
+				$sale_days = max( 1, self::$sale_days );
+				$will_last = ceil( $stock / ( $sales / $sale_days ) );
 			}
 			elseif ( $stock > 0 ) {
 				$will_last = '>30';
 			}
 		}
 		
-		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last, $item, $this->product, $this );
 		
 	}
 	
@@ -666,17 +717,25 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int|string
 	 */
-	protected function column_calc_stock_out_days( $item ) {
+	protected function column__out_stock_days( $item ) {
 
-		$out_of_stock_days = '';
+		$out_stock_days = '';
 
 		if ( $this->allow_calcs ) {
-			$out_of_stock_days = Helpers::get_product_out_of_stock_days( $this->product );
+
+			$out_stock_days = $this->product->get_out_stock_days();
+
+			if ( is_null( $out_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
+				$out_stock_days = Helpers::get_product_out_stock_days( $this->product );
+				$this->product->set_out_stock_days( $out_stock_days );
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+			}
+
 		}
 
-		$out_of_stock_days = is_numeric( $out_of_stock_days ) ? $out_of_stock_days : self::EMPTY_COL;
+		$out_stock_days = is_numeric( $out_stock_days ) ? $out_stock_days : self::EMPTY_COL;
 		
-		return apply_filters( 'atum/stock_central_list/column_stock_out_days', $out_of_stock_days, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_out_stock_days', $out_stock_days, $item, $this->product, $this );
 		
 	}
 
@@ -689,18 +748,26 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return int|string
 	 */
-	protected function column_calc_lost_sales( $item ) {
+	protected function column__lost_sales( $item ) {
 
 		$lost_sales = '';
 
 		if ( $this->allow_calcs ) {
-			$lost_sales = Helpers::get_product_lost_sales( $this->product );
+
+			$lost_sales = $this->product->get_lost_sales();
+
+			if ( is_null( $lost_sales ) || Helpers::is_product_data_outdated( $this->product ) ) {
+				$lost_sales = Helpers::get_product_lost_sales( $this->product );
+				$this->product->set_lost_sales( $lost_sales );
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+			}
+
 		}
 
 		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales, [ 'trim_zeros' => TRUE ] ) : self::EMPTY_COL;
-		$this->increase_total( 'calc_lost_sales', $lost_sales );
+		$this->increase_total( '_lost_sales', $lost_sales );
 
-		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product );
+		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product, $this );
 
 	}
 	
@@ -712,78 +779,10 @@ class ListTable extends AtumListTable {
 	public function prepare_items() {
 
 		parent::prepare_items();
-		$calc_products = array_merge( $this->current_products, $this->children_products );
+		$calc_products = array_unique( array_merge( $this->current_products, $this->children_products ) );
 
-		// Calc products sold today (since midnight).
-		$rows = Helpers::get_sold_last_days( $calc_products, 'today 00:00:00', $this->day );
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_today'] = $row['QTY'];
-			}
-		}
-
-		// Calc products sold during the last ndays_settings.
-		$sold_last_days = Helpers::get_sold_last_days_option();
-		$rows           = Helpers::get_sold_last_days( $calc_products, $this->day . ' -' . $sold_last_days . ' days', $this->day );
+		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products );
 		
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$this->calc_columns[ $row['PROD_ID'] ]['sold_last_ndays'] = $row['QTY'];
-			}
-		}
-
-		do_action( 'atum/stock_central_list/after_prepare_items', $calc_products, $this->day );
-		
-	}
-
-	/**
-	 * Get the Inventory Log item quantity for a specific type of log
-	 *
-	 * @since 1.2.4
-	 *
-	 * @param string $log_type      Type of log.
-	 * @param int    $product_id    Product ID to check.
-	 * @param string $log_status    Optional. Log status (completed or pending).
-	 *
-	 * @return int|float
-	 */
-	protected function get_log_item_qty( $log_type, $product_id, $log_status = 'pending' ) {
-
-		$qty     = 0;
-		$log_ids = Helpers::get_logs( $log_type, $log_status );
-
-		if ( ! empty( $log_ids ) ) {
-
-			$cache_key = AtumCache::get_cache_key( 'log_item_qty', [ $log_ids, $product_id ] );
-			$qty       = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
-
-			if ( ! $has_cache ) {
-
-				global $wpdb;
-
-				// Get the sum of quantities for the specified product in the logs of that type.
-				$query = $wpdb->prepare( "
-					SELECT SUM(meta_value) 				  
-					 FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
-		             LEFT JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' oi ON om.order_item_id = oi.order_item_id
-					 WHERE order_id IN (' . implode( ',', $log_ids ) . ") AND order_item_type = 'line_item' 
-					 AND meta_key = '_qty' AND om.order_item_id IN (
-					    SELECT order_item_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " 
-					    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
-					 )",
-					$product_id
-				); // WPCS: unprepared SQL ok.
-
-				$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
-
-				AtumCache::set_cache( $cache_key, $qty );
-
-			}
-
-		}
-
-		return floatval( $qty );
-
 	}
 
 	/**
@@ -816,28 +815,28 @@ class ListTable extends AtumListTable {
 			switch ( $extra_filter ) {
 
 				case 'best_seller':
-					$dates_and = '';
+					$dates_where = '';
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND posts.post_date >= "' . $_REQUEST['date_from'] . '" ';
+						$dates_where .= " AND posts.post_date >= '" . $_REQUEST['date_from'] . "' ";
 					}
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND posts.post_date < "' . $_REQUEST['date_to'] . '" ';
+						$dates_where .= " AND posts.post_date < '" . $_REQUEST['date_to'] . "' ";
 					}
 
-					$sql = 'SELECT  
-							order_item_meta__product_id.meta_value as product_id,
-							SUM( order_item_meta__qty.meta_value) as order_item_qty
-							FROM 
-							' . $wpdb->prefix . 'posts AS posts 
-							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = \'line_item\') 
-							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = \'_product_id\') 
-							INNER JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = \'_qty\') 
-							WHERE posts.post_type IN ( "shop_order","shop_order_refund" )
-							AND posts.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
-							' . $dates_and . '
-							GROUP BY product_id ORDER BY order_item_qty DESC';
+					$sql = "
+						SELECT order_item_meta__product_id.meta_value as product_id,
+						SUM( order_item_meta__qty.meta_value) as order_item_qty
+						FROM $wpdb->posts AS posts 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = 'line_item') 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = '_product_id') 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = '_qty') 
+						WHERE posts.post_type IN ( 'shop_order', 'shop_order_refund' )
+						AND posts.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
+						$dates_where
+						GROUP BY product_id ORDER BY order_item_qty DESC
+					";
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
 
@@ -851,30 +850,34 @@ class ListTable extends AtumListTable {
 						$sorted            = TRUE;
 
 					}
+
 					break;
+
 				case 'worst_seller':
-					$dates_and = '';
+					$dates_where = '';
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
+						$dates_where .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
 					}
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_and .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
+						$dates_where .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
 					}
 
-					$sql_products_with_sales = 'SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
-												FROM wp_posts pr 
-												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = \'_product_id\') 
-												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = \'_qty\') 
-												LEFT JOIN ' . $wpdb->prefix . 'woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
-												LEFT JOIN ' . $wpdb->prefix . 'posts ord ON (order_items.order_id = ord.ID)
-												WHERE (pr.post_type IN (\'product\', \'product_variation\')
-												AND ord.post_status IN ( "wc-completed","wc-processing","wc-on-hold")
-												 ' . $dates_and . ') or ord.post_date IS NULL
-												GROUP BY product_id order by qty ASC;';
+					$sql = "
+						SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+						FROM $wpdb->posts pr 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = '_product_id') 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+						LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
+						WHERE (pr.post_type IN ('product', 'product_variation')
+						AND ord.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
+						$dates_where ) OR ord.post_date IS NULL
+						GROUP BY product_id order by qty ASC;
+					";
 
-					$product_results = $wpdb->get_results( $sql_products_with_sales, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
 
 					if ( ! empty( $product_results ) ) {
 
@@ -888,6 +891,7 @@ class ListTable extends AtumListTable {
 					}
 
 					break;
+
 				case 'inbound_stock':
 					// Get all the products within pending Purchase Orders.
 					$sql = $wpdb->prepare( "
@@ -897,14 +901,15 @@ class ListTable extends AtumListTable {
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 							WHERE `order_id` IN (
-								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` <> '" . ATUM_PREFIX . PurchaseOrders::FINISHED . "'
+								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` <> %s
 							)
 							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
 							GROUP BY oi.order_item_id
 						) AS T 
 						GROUP BY product_id
 						ORDER by qty DESC;",
-						PurchaseOrders::POST_TYPE
+						PurchaseOrders::POST_TYPE,
+						PurchaseOrders::FINISHED
 					); // WPCS: unprepared SQL ok.
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
@@ -997,7 +1002,7 @@ class ListTable extends AtumListTable {
 					// Get the orders processed today.
 					$atts = array(
 						'status'     => [ 'wc-processing', 'wc-completed' ],
-						'date_start' => 'today 00:00:00',
+						'date_start' => 'today midnight',
 					);
 
 					$today_orders = Helpers::get_orders( $atts );

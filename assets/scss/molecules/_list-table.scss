@@ -565,6 +565,8 @@
 		background-color:  var(--atum-table-bg);
 		border: none;
 		border-radius: 5px;
+		max-height: 300px;
+		overflow-y: auto;
 	}
 	
 	.dropdown-item{
@@ -2196,10 +2198,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.column-title {
-			min-width: 162px;
+			min-width: 171px;
+			display: flex;
+			align-items: center;
 			
 			> span {
 				white-space: nowrap;
+				
+				i {
+					margin-right: 4px;
+				}
 			}
 			
 			.child-arrow {
