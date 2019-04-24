@@ -24,9 +24,14 @@ export default class ProductDataMetaBoxes {
 		ButtonGroup.doButtonGroups(this.$productDataMetaBox);
 		
 		// Add switches to variations once are loaded by WC.
-		this.$productDataMetaBox.on('woocommerce_variations_added woocommerce_variations_loaded', () => {
+		this.$productDataMetaBox.on('woocommerce_variations_loaded', () => {
 			Switcher.doSwitchers();
 			ButtonGroup.doButtonGroups(this.$productDataMetaBox.find('.woocommerce_variations'));
+		});
+
+		this.$productDataMetaBox.on('woocommerce_variations_added', () => {
+            Switcher.doSwitchers(true);
+            ButtonGroup.doButtonGroups(this.$productDataMetaBox.find('.woocommerce_variations'));
 		});
 		
 		// Toggle the "Out of Stock Threshold" field visibility.

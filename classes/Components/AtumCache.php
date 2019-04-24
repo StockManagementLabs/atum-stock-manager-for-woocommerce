@@ -12,6 +12,9 @@
 
 namespace Atum\Components;
 
+use Atum\Inc\Globals;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -71,10 +74,10 @@ final class AtumCache {
 	 * @return mixed|bool  The ATUM cache value or FALSE if the cache does not exist
 	 */
 	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP, $force = FALSE, &$found = NULL ) {
-		
+
 		self::$cache_groups[ $cache_group ] = empty( self::$cache_groups[ $cache_group ] ) ? $cache_group : self::$cache_groups[ $cache_group ];
-		
-		return wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ], $force, $found );
+
+		return defined( Globals::IGNORE_CACHE_KEY ) && 1 === constant( Globals::IGNORE_CACHE_KEY ) ? FALSE : wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ], $force, $found );
 	}
 
 	/**

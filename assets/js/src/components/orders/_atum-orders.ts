@@ -287,24 +287,33 @@ export default class AtumOrders {
 		      $body: JQuery            = $('body'),
 		      $dropdown: JQuery        = $('.dropdown_supplier'),
 		      $dropdownWrapper: JQuery = $dropdown.parent();
-		
+
+		let $cheked: String = null;
+
 		if ($checkbox.is(':checked')) {
+            $cheked = 'yes';
 			$dropdown.val('').change();
 			$body.addClass('allow-multiple-suppliers');
 			this.toggleItemsBlocker();
 			$dropdownWrapper.slideUp();
 		}
 		else {
+            $cheked = 'no';
 			$body.removeClass('allow-multiple-suppliers');
 			this.toggleItemsBlocker(false);
 			$dropdownWrapper.slideDown();
 		}
 
+        if ( $cheked === $('.item-blocker-old-value').val() ) {
+		    $('.items-blocker').hide();
+        }else {
+            $('.items-blocker').show();
+        }
+
 		if ($('.items-blocker').length === 0) {
             $('.atum_order_items_wrapper').before('<div class="items-blocker"><h3>' + this.settings.get('itemBlocker') + '</h3></div>');
         }
 
-		
 	}
 	
 	toggleItemsBlocker(on: boolean = true) {
