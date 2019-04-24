@@ -513,6 +513,8 @@ class PurchaseOrder extends AtumOrderModel {
 
 		}
 
+		do_action( 'atum/purchase_orders/after_save', $po, $items );
+
 	}
 
 }

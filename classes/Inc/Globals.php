@@ -47,7 +47,10 @@ final class Globals {
 	 *
 	 * @var array
 	 */
-	private static $order_types = [ ATUM_PREFIX . 'purchase_order', ATUM_PREFIX . 'inventory_log' ];
+	private static $order_types = [
+		ATUM_PREFIX . 'purchase_order',
+		ATUM_PREFIX . 'inventory_log',
+	];
 
 	/**
 	 * The number of decimals specified in settings to round the stock quantities
@@ -61,9 +64,7 @@ final class Globals {
 	 *
 	 * @var array
 	 */
-	private static $product_tab_fields = array(
-		self::ATUM_CONTROL_STOCK_KEY => 'checkbox',
-	);
+	private static $product_tab_fields = [ self::ATUM_CONTROL_STOCK_KEY => 'checkbox' ];
 	
 	/**
 	 * Existent Order types identification in tables
