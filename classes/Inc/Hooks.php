@@ -118,8 +118,8 @@ class Hooks {
 		
 		}
 
-		// Save the orders-related data every time an order status is changed.
-		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
+		// Save the orders-related data every time an order is saved.
+		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
 
 	}
 
@@ -665,24 +665,26 @@ class Hooks {
 	}
 
 	/**
-	 * Save the order-related props every time the stock is reduced/increased for the products within a WC order
+	 * Save the order-related props every time a WC order is saved
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param int   $order_id
-	 * @param array $items
+	 * @param int      $order_id
+	 * @param \WP_Post $post
 	 */
-	public function save_order_items_props( $order_id, $items ) {
+	public function save_order_items_props( $order_id, $post ) {
 
-		if ( ! empty( $items['order_item_id'] ) ) {
+		$order = wc_get_order( $order_id );
 
-			foreach ( $items['order_item_id'] as $item_id ) {
+		if ( ! is_a( $order, '\WC_Order' ) ) {
+			return;
+		}
 
-				$item = \WC_Order_Factory::get_order_item( absint( $item_id ) );
+		$items = $order->get_items();
 
-				if ( ! is_a( $item, '\WC_Order_Item_Product' ) ) {
-					continue;
-				}
+		if ( ! empty( $items ) ) {
+
+			foreach ( $items as $item ) {
 
 				/**
 				 * Variable definition
