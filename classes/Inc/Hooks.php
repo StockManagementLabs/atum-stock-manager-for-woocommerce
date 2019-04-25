@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Settings\Settings;
 
+
 class Hooks {
 	
 	/**
@@ -118,8 +119,7 @@ class Hooks {
 		}
 
 		// Save the orders-related data every time an order status is changed.
-		add_action( 'woocommerce_reduce_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
-		add_action( 'woocommerce_restore_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
+		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
 
 	}
 
@@ -669,25 +669,34 @@ class Hooks {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Order $order
+	 * @param int   $order_id
+	 * @param array $items
 	 */
-	public function save_order_items_props( $order ) {
+	public function save_order_items_props( $order_id, $items ) {
 
-		$items = $order->get_items();
+		if ( ! empty( $items['order_item_id'] ) ) {
 
-		foreach ( $items as $item ) {
+			foreach ( $items['order_item_id'] as $item_id ) {
 
-			/**
-			 * Variable definition
-			 *
-			 * @var \WC_Order_Item_Product $item
-			 */
-			$product_id = $item->get_variation_id() ?: $item->get_product_id();
-			$product    = Helpers::get_atum_product( $product_id );
+				$item = \WC_Order_Factory::get_order_item( absint( $item_id ) );
 
-			if ( is_a( $product, '\WC_Product' ) ) {
-				Helpers::update_expiring_product_data( $product );
-				do_action( 'atum/after_save_order_item_props', $item, $order );
+				if ( ! is_a( $item, '\WC_Order_Item_Product' ) ) {
+					continue;
+				}
+
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Order_Item_Product $item
+				 */
+				$product_id = $item->get_variation_id() ?: $item->get_product_id();
+				$product    = Helpers::get_atum_product( $product_id );
+
+				if ( is_a( $product, '\WC_Product' ) ) {
+					Helpers::update_expiring_product_data( $product );
+					do_action( 'atum/after_save_order_item_props', $item, $order_id );
+				}
+
 			}
 
 		}
