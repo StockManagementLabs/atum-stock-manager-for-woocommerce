@@ -504,26 +504,19 @@ class Settings {
 				'type'    => 'color',
 				'default' => '#00B8DB',
 			),
-			'scheme_color2'             => array(
+			'secondary_color'           => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Color 2', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Color 2', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
 				'default' => '#fff',
 			),
-			'scheme_color3'             => array(
+			'tertiary_color'            => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Color 3', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Color 3', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#fff',
-			),
-			'scheme_color4'             => array(
-				'section' => 'scheme_color',
-				'name'    => __( 'Color 4', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Color 4', ATUM_TEXT_DOMAIN ),
-				'type'    => 'color',
-				'default' => '#fff',
+				'default' => '#dbf9ff',
 			),
 		);
 

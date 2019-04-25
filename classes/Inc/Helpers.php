@@ -2638,41 +2638,43 @@ final class Helpers {
 
 		$style = '';
 
-		$theme_settings    = self::get_option( 'theme_settings' );
-		$gray_500          = '#adb5bd';
-		$gray_500_rgb      = '173,181,189';
-		$white             = '#ffffff';
-		$blue              = '#00b8db';
-		$blue_light        = '#dbf9ff';
-		$blue_dark         = '#27283b';
-		$blue_dark_lighten = '#3b3d5a';
-		$white_rgb         = '255,255,255';
-		$green             = '#69C61D';
-		$primary_color     = self::get_option( 'primary_color' );
+		$theme_settings      = self::get_option( 'theme_settings' );
+		$gray_500            = '#adb5bd';
+		$gray_500_rgb        = self::convert_hexadecimal_to_rgb( $gray_500 );
+		$white               = '#ffffff';
+		$blue                = '#00b8db';
+		$blue_light          = '#dbf9ff';
+		$blue_dark           = '#27283b';
+		$blue_dark_lighten   = '#3b3d5a';
+		$white_rgb           = self::convert_hexadecimal_to_rgb( $white );
+		$green               = '#69C61D';
+		$primary_color       = self::get_option( 'primary_color' );
+		$primary_color_rgb   = self::convert_hexadecimal_to_rgb( $primary_color );
+		$secondary_color     = self::get_option( 'secondary_color' );
+		$secondary_color_rgb = self::convert_hexadecimal_to_rgb( $secondary_color );
+		$tertiary_color      = self::get_option( 'tertiary_color' );
+		$tertiary_color_rgb  = self::convert_hexadecimal_to_rgb( $tertiary_color );
 
 		if ( 'hc_mode' === $theme_settings ) {
 
 			$hc_blue       = '#016b7f';
-			$hc_blue_rgb   = '1,107,127';
-			$hc_dark_blue  = '#27283b';
 			$hc_blue_light = '#e6fbff';
 
-//			$primary_color = $hc_blue;
 
 			$style = ":root{
-					--gray-100: $white;
+					--gray-100: $tertiary_color;
 					--gray-200-shadow: $gray_500;
 				    --gray-500: $primary_color;
-				    --gray-600: $hc_dark_blue;
+				    --gray-600: $secondary_color;
 				    --blue: $primary_color;
 				    --atum-table-link-active: $primary_color;
 				    --atum-table-check: $primary_color;
-				    --blue-hover: rgba($hc_blue_rgb,0.6);
+				    --blue-hover: rgba($primary_color_rgb,0.6);
 				    --blue-dark: $primary_color;
 				    --blue-dark-lighten: $primary_color;
 				    --blue-dark-light-2: $hc_blue_light;
 				    --green: $primary_color;
-				    --green-hover: rgba($hc_blue_rgb,0.6);
+				    --green-hover: rgba($primary_color_rgb,0.6);
 				    --green-light: $hc_blue_light;
 				    --dash-blue-trans: $hc_blue_light;
 				    --blue-light: $hc_blue_light;
@@ -2680,52 +2682,52 @@ final class Helpers {
 				    --atum-table-row-even: transparent;
 				    --wp-gray-6: transparent;
 				    --wp-link: $primary_color;
-				    --wp-link-hover: rgba($hc_blue_rgb,0.6);
+				    --wp-link-hover: rgba($primary_color_rgb,0.6);
 				    --primary: $primary_color;
-				    --primary-hover: rgba($hc_blue_rgb,0.6);
+				    --primary-hover: rgba($primary_color_rgb,0.6);
 				    --darken: $primary_color;
-				    --black-shadow-light: rgba($hc_blue_rgb,0.04);
+				    --black-shadow-light: rgba($primary_color_rgb,0.04);
 				    --bg-white: $hc_blue_light;
 				    --white-shadow: rgba($gray_500_rgb,0.2);
 				    --atum-text-white: $primary_color;
 				    --orange: $primary_color;
-				    --orange: rgba($hc_blue_rgb,0.6);
+				    --orange: rgba($primary_color_rgb,0.6);
 				    --orange-light-2: $hc_blue_light;
 				    --warning: $primary_color;
-				    --warning-hover: rgba($hc_blue_rgb,0.6);
+				    --warning-hover: rgba($primary_color_rgb,0.6);
 				    --danger: $primary_color;
-				    --danger-hover: rgba($hc_blue_rgb,0.6);
+				    --danger-hover: rgba($primary_color_rgb,0.6);
 				    --success: $primary_color;
-				    --success-hover: rgba($hc_blue_rgb,0.6);
+				    --success-hover: rgba($primary_color_rgb,0.6);
 				    --info: $primary_color;
-				    --info-hover: rgba($hc_blue_rgb,0.6);
+				    --info-hover: rgba($primary_color_rgb,0.6);
 				    --secondary: $gray_500;
-				    --secondary-shadow: rgba($hc_blue_rgb,0.2);
+				    --secondary-shadow: rgba($primary_color_rgb,0.2);
 				    --purple-pl: $primary_color;
-				    --purple-pl-hover: rgba($hc_blue_rgb,0.6);
+				    --purple-pl-hover: rgba($primary_color_rgb,0.6);
 				    --wp-pink-darken-expanded: $primary_color;
 				    --orange-dark-light: $hc_blue_light;
 				    --wc-purple-expanded: $primary_color;
 				    --wc-purple: $primary_color;
-				    --wc-purple-hover: rgba($hc_blue_rgb,0.6);
+				    --wc-purple-hover: rgba($primary_color_rgb,0.6);
 					--blue-light-expanded: $primary_color;
 					--green-light-expanded: $primary_color;
 					--wp-pink-light: $hc_blue_light;
 					--green-light: $hc_blue_light;
 					--atum-table-bg: $white;
 				    --atum-border: $gray_500;
-				    --atum-select2-selected-bg: $hc_blue_light;
+				    --atum-select2-selected-bg: $tertiary_color;
 				    --atum-select2-selected-text: $primary_color;
-				    --atum-table-item-heads: $hc_dark_blue;
-				    --atum-table-views-tabs: $hc_dark_blue;
+				    --atum-table-item-heads: $secondary_color;
+				    --atum-table-views-tabs: $secondary_color;
 				    --atum-table-views-tabs-active: $primary_color;
 				    --atum-table-link-child: $primary_color;
-				    --atum-table-link-text: $hc_dark_blue;
+				    --atum-table-link-text: $secondary_color;
 				    --overflow-opacity-rigth: linear-gradient(to right, rgba($white_rgb,0), rgba($white_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($white_rgb,0), rgba($white_rgb,0.9));
 				    --atum-dropdown-toggle-bg: $white;
 				    --atum-select2-border: $gray_500;
-				    --atum-input-placeholder: $hc_dark_blue;
+				    --atum-input-placeholder: $secondary_color;
 				    --atum-pagination-bg: $white;
 				    --atum-pagination-border: $gray_500;
 				    --atum-pagination-border-disabled: #e9ecef;
@@ -2733,75 +2735,77 @@ final class Helpers {
 				    --atum-settings-nav-bg: $white;
 				    --atum-settings-heads-bg: $primary_color;
 				    --atum-settings-nav-link: $primary_color;
+				    --atum-settings-nav-link-selected-bg: $tertiary_color;
 				    --atum-settings-nav-link-selected: $primary_color;
 				    --atum-settings-section-bg: $white;
-				    --atum-settings-section-text: $hc_dark_blue;
-				    --atum-settings-section-title: $hc_dark_blue;
-				    --atum-settings-section-description: $hc_dark_blue;
-				    --atum-settings-text-logo: $hc_dark_blue;
+				    --atum-settings-section-text: $secondary_color;
+				    --atum-settings-section-title: $secondary_color;
+				    --atum-settings-section-description: $secondary_color;
+				    --atum-settings-text-logo: $secondary_color;
 				    --atum-settings-input-border: $gray_500;
 				    --atum-settings-btn-save: $white;
-				    --atum-settings-btn-save-text: $hc_dark_blue;
+				    --atum-settings-btn-save-text: $secondary_color;
 				    --atum-settings-btn-save-hover: $hc_blue_light;
-				    --atum-settings-wp-color-text: $hc_dark_blue;
-				    --atum-settings-input-text: $hc_dark_blue;
-				    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
+				    --atum-settings-wp-color-text: $secondary_color;
+				    --atum-settings-input-text: $secondary_color;
+				    --atum-row-shadow: rgba($primary_color_rgb,0.2);
 					--atum-table-row-child-variation: $hc_blue_light;
 				    --atum-table-icon: $primary_color;
 				    --atum-table-icon-active: $primary_color;
 				    --atum-table-text-active: $primary_color;
 				    --wp-nth-child: transparent;
-				    --dash-card-text: $hc_dark_blue;
-				    --dash-next-text: $hc_dark_blue;
+				    --dash-card-text: $secondary_color;
+				    --dash-next-text: $secondary_color;
 				    --dash-border: $gray_500;
 					--dash-statistics-chart-type-selected-text: $primary_color;
 				    --dash-stats-data-widget-primary: $primary_color;
 				    --dash-stats-data-widget-success: $primary_color;
 				    --dash-nice-select-border: $gray_500;
-				    --dash-nice-select-hover: $hc_dark_blue;
-				    --dash-nice-select-text: $hc_dark_blue;
-				    --dash-nice-select-arrow-color: $hc_dark_blue;
+				    --dash-nice-select-hover: $secondary_color;
+				    --dash-nice-select-text: $secondary_color;
+				    --dash-nice-select-arrow-color: $secondary_color;
 				    --dash-nice-select-option-hover-bg: $hc_blue_light;
 				    --dash-nice-select-text-highlighted: $primary_color;
 				    --dash-widget-current-stock-value-bg: $primary_color;
 					--dash-widget-current-stock-value-text: $white;
-					--dash-widget-text: $hc_dark_blue;
-					--dash-video-subs-text: $hc_dark_blue;
+					--dash-widget-text: $secondary_color;
+					--dash-video-subs-text: $secondary_color;
 				    
 					}";
 		}
 		elseif ( 'dark_mode' === $theme_settings ) {
 			$dm_blue          = '#a8f1ff';
-			$dm_blue_rgb      = '168,241,255';
+			$dm_blue_rgb      = self::convert_hexadecimal_to_rgb( $dm_blue );
 			$dm_green_blue2   = '#f5fdff';
 			$dm_orange        = '#ffdf89';
-			$dm_orange_rgb    = '255,223,137';
+			$dm_orange_rgb    = self::convert_hexadecimal_to_rgb( $dm_orange );
 			$dm_green         = '#baef8d';
 			$dm_green_light2  = '#f0fbe7';
-			$dm_green_rgb     = '186,239,141';
+			$dm_green_rgb     = self::convert_hexadecimal_to_rgb( $dm_green );
 			$dm_red           = '#ffaeae';
-			$dm_red_rgb       = '255,174,174';
+			$dm_red_rgb       = self::convert_hexadecimal_to_rgb( $dm_red );
 			$dm_dark_blue     = '#31324a';
-			$dm_dark_blue_rgb = '49,50,74';
+			$dm_dark_blue_rgb = self::convert_hexadecimal_to_rgb( $dm_dark_blue );
 
 //			$primary_color = $dm_dark_blue;
 
 			$style = ":root{
-					--gray-600: $white;
+					--white: $tertiary_color;
+					--gray-600: $tertiary_color;
 					--gray-100: $primary_color;
 					--wp-yiq-text-light: $primary_color;
 					--dark-shadow: rgba(0, 0, 0, 0.6);
 				    --blue-light: $primary_color;
 				    --blue-dark: $primary_color;
-				    --blue-dark-light-2: $blue_light;
-				    --atum-row-active: $blue_light;
-				    --blue: $dm_blue;
+				    --blue-dark-light-2: $secondary_color;
+				    --atum-row-active: $secondary_color;
+				    --blue: $secondary_color;
 				    --atum-table-link-active: $blue;
 				    --atum-table-check: $blue;
-				    --blue-hover: $dm_blue;
+				    --blue-hover: $secondary_color;
 				    --dash-blue-trans: $dm_green_blue2;
-				    --primary: $dm_blue;
-				    --primary-hover: rgba($dm_blue_rgb,0.6);
+				    --primary: $secondary_color;
+				    --primary-hover: rgba($secondary_color_rgb,0.6);
 				    --green: $dm_green;
 				    --green-hover: $dm_green;
 				    --green-light: $dm_green_light2;
@@ -2819,74 +2823,75 @@ final class Helpers {
 					--purple-pl: #BA7DF7;
 				    --purple-pl-hover: rgba(186,125,247,0.6);
 				    --atum-text-white: $primary_color;
-				    --atum-select2-selected-bg: $blue_light;
+				    --atum-select2-selected-bg: $secondary_color;
 				    --atum-select2-selected-text: $blue;
-				    --atum-table-item-heads: $white;
-				    --atum-table-views-tabs: $white;
-				    --atum-table-views-tabs-active: $dm_blue;
+				    --atum-table-item-heads: $tertiary_color;
+				    --atum-table-views-tabs: $tertiary_color;
+				    --atum-table-views-tabs-active: $secondary_color;
 				    --atum-table-views-tabs-active-text: $primary_color;
 				    --atum-table-link-child: $blue;
 				    --atum-table-link-text: $primary_color;
 				    --atum-dropdown-toggle-bg: $blue_dark_lighten;
-				    --atum-pagination-border-disabled: $white;
+				    --atum-pagination-border-disabled: $tertiary_color;
 				    --atum-column-groups-bg: $blue_dark;
 				    --atum-table-row-even: $primary_color;
 				    --atum-table-row-odd: $blue_dark_lighten;
 					--atum-marketing-popup-bg: $primary_color;
-					--atum-row-shadow: rgba($white_rgb, 0.2);
-					--atum-table-row-child-variation: $blue_light;
-					--atum-table-row-child-variation-even: $blue_light;
+					--atum-row-shadow: rgba($tertiary_color_rgb, 0.2);
+					--atum-table-row-child-variation: $secondary_color;
+					--atum-table-row-child-variation-even: $secondary_color;
 					--atum-table-row-variation-text: $primary_color;
 					--atum-footer-totals: $blue_dark;
-					--atum-table-icon: $white;
+					--atum-table-icon: $tertiary_color;
 					--atum-table-icon-active: $primary_color;
 					--atum-table-text-active: $primary_color;
 					--atum-settings-nav-bg: $primary_color;
 					--atum-settings-heads-bg: $primary_color;
-					--atum-settings-nav-link: $white;
-					--atum-settings-nav-link-selected-bg: $blue_light;
+					--atum-settings-nav-link: $tertiary_color;
+					--atum-settings-nav-link-selected-bg: $secondary_color;
 					--atum-settings-nav-link-selected: $primary_color;
 					--atum-settings-wp-color-bg: $white;
 					--atum-settings-wp-color-text: $primary_color;
-					--atum-settings-btn-save: $dm_blue;
+					--atum-settings-btn-save: $secondary_color;
 					--atum-settings-btn-save-text: $primary_color;
-				    --atum-settings-btn-save-hover: rgba($dm_blue_rgb,0.6);
+				    --atum-settings-btn-save-hover: rgba($secondary_color_rgb,0.6);
 				    --atum-settings-input-text: $primary_color;
 				    --atum-settings-section-bg: $primary_color;
-				    --atum-settings-section-title: $white;
-				    --atum-settings-section-text: $white;
+				    --atum-settings-section-title: $tertiary_color;
+				    --atum-settings-section-text: $tertiary_color;
+				    --atum-settings-text-logo: $tertiary_color;
 					--dash-card-text: $gray_500;
 					--atum-table-bg: $primary_color;
 					--overflow-opacity-rigth: linear-gradient(to right, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
-					--atum-border: rgba($white_rgb, 0.2);
+					--atum-border: rgba($tertiary_color_rgb, 0.2);
 					--dash-card-bg: $primary_color;
-					--dash-h5-text: $white;
+					--dash-h5-text: $tertiary_color;
 					--dash-nice-select-bg: $primary_color;
 					--dash-nice-select-list-bg: $primary_color;
-					--dash-nice-select-border: rgba($white_rgb, 0.5);
-				    --dash-nice-select-hover: $white;
-				    --dash-nice-select-text: $white;
-				    --dash-nice-select-arrow-color: $white;
-				    --dash-nice-select-option-hover: $blue_light;
-				    --dash-nice-select-option-selected-bg: $blue_light;
+					--dash-nice-select-border: rgba($tertiary_color_rgb, 0.5);
+				    --dash-nice-select-hover: $tertiary_color;
+				    --dash-nice-select-text: $tertiary_color;
+				    --dash-nice-select-arrow-color: $tertiary_color;
+				    --dash-nice-select-option-hover: $secondary_color;
+				    --dash-nice-select-option-selected-bg: $secondary_color;
 				    --dash-nice-select-text-highlighted: $blue;
 					--dash-input-group-bg: rgba(0, 0, 0, 0.3);
 					--dash-input-group-shadow: rgba(0, 0, 0, 0.3);
-					--dash-input-placeholder: $white;
-					--dash-widget-header-title: $white;
-					--dash-statistics-ticks: $white;
-					--dash-statistics-grid-lines: rgba($white_rgb, 0.2);
+					--dash-input-placeholder: $tertiary_color;
+					--dash-widget-header-title: $tertiary_color;
+					--dash-statistics-ticks: $tertiary_color;
+					--dash-statistics-grid-lines: rgba($tertiary_color_rgb, 0.2);
 					--dash-statistics-chart-type-bg: transparent;
 					--dash-statistics-chart-type-selected-bg: $dm_orange;
 					--dash-statistics-chart-type-selected-text: $primary_color;
 					--dash-statistics-legend-switch-bg: transparent;
-					--dash-widget-primary: $dm_blue;
+					--dash-widget-primary: $secondary_color;
 				    --dash-widget-success: $dm_green;
 				    --dash-widget-danger: $dm_red;
 				    --dash-widget-warning: $dm_orange;
-				    --dash-widget-text: $white;
-					--dash-stats-data-widget-primary: $dm_blue;
+				    --dash-widget-text: $tertiary_color;
+					--dash-stats-data-widget-primary: $secondary_color;
 				    --dash-stats-data-widget-success: $dm_green;
 					--dash-stock-control-chart-border: $primary_color;
 					--dash-next-text: $gray_500;
@@ -2895,6 +2900,22 @@ final class Helpers {
 		}
 
 		return apply_filters( 'atum/get_visual_mode_style', $style );
+
+	}
+
+	/**
+	 * Convert hexadecimal to rgb
+	 *
+	 * @param string $hex_value
+	 *
+	 * @since 1.5.7.5
+	 *
+	 * @return string
+	 */
+	public static function convert_hexadecimal_to_rgb( $hex_value ) {
+
+		list($r, $g, $b) = sscanf( $hex_value, '#%02x%02x%02x' );
+		return "$r, $g, $b";
 
 	}
 

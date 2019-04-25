@@ -373,13 +373,12 @@ export default class SettingsPage {
         let $themeSelectorWrapper = $('.theme-selector-wrapper'),
             $themeOptions         = $themeSelectorWrapper.find('.selector-container .selector-box');
 
-        let element            = $element,
-            themeSelectedValue = element.data('value'),
+        let themeSelectedValue = $element.data('value'),
             $radioInput        = $('#' + themeSelectedValue);
 
         $radioInput.prop("checked", true);
         $themeOptions.removeClass('active');
-        element.addClass('active');
+        $element.addClass('active');
 
         $.ajax({
             url   : window['ajaxurl'],
@@ -397,6 +396,13 @@ export default class SettingsPage {
                 if (response.success === true) {
                     console.log('Done');
                     ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
+                    ColorPicker.updateColorPicker($('#atum_secondary_color'), response.data.secondary_color);
+                    ColorPicker.updateColorPicker($('#atum_tertiary_color'), response.data.tertiary_color);
+
+                    // if () {
+                    //     $('.section-title h2 span').html()
+                    // }
+
                     $formSettingsWrapper.removeClass('overlay');
                 }
                 else {

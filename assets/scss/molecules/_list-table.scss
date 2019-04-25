@@ -472,6 +472,7 @@
 		max-width: 110px;
 		font-size: 15px;
 		background-color: var(--atum-table-bg);
+		color: var(--gray-500);
 		
 		@include tablet-max-wp {
 			width: 100%;

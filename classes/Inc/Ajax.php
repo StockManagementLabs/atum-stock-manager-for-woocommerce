@@ -2296,21 +2296,23 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-scheme-color-nonce', 'token' );
 
-		$colors = [
-			'primary_color' => '',
-		];
-
 		if ( 'dark_mode' === $_POST['theme'] ) {
-			$primary_color = '#31324a';
+			$primary_color   = '#31324A';
+			$secondary_color = '#DBF9FF';
+			$tertiary_color  = '#FFFFFF';
 		}
 		elseif ( 'hc_mode' === $_POST['theme'] ) {
-			$primary_color = '#016b7f';
+			$primary_color   = '#016B7F';
+			$secondary_color = '#27283B';
+			$tertiary_color  = '#DBF9FF';
 		}
 		else {
-			$primary_color = '#00B8DB';
+			$primary_color   = '#00B8DB';
+			$secondary_color = '#FFFFFF';
+			$tertiary_color  = '#DBF9FF';
 		}
 
-		wp_send_json_success( compact( 'primary_color' ) );
+		wp_send_json_success( compact( 'primary_color', 'secondary_color', 'tertiary_color' ) );
 
 	}
 

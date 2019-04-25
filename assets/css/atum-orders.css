@@ -5460,6 +5460,7 @@ ul.atum_order_notes li .note_content::after {
   max-width: 110px;
   font-size: 15px;
   background-color: var(--atum-table-bg);
+  color: var(--gray-500);
 }
 
 @media all and (max-width: 782px) {

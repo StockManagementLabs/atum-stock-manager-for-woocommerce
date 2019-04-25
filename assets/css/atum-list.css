@@ -5703,6 +5703,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   max-width: 110px;
   font-size: 15px;
   background-color: var(--atum-table-bg);
+  color: var(--gray-500);
 }
 
 @media all and (max-width: 782px) {
