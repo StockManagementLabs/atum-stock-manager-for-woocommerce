@@ -648,10 +648,9 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column__sales_last_days( $item, $add_to_total = TRUE ) {
 
-		if ( ! $this->allow_calcs ) {
-			$sales_last_ndays = self::EMPTY_COL;
-		}
-		else {
+		$sales_last_ndays = self::EMPTY_COL;
+
+		if ( $this->allow_calcs ) {
 
 			$sale_days        = self::$sale_days;
 			$sales_last_ndays = $this->product->get_sales_last_days();
