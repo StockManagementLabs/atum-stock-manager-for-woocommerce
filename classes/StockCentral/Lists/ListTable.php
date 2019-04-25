@@ -666,6 +666,10 @@ class ListTable extends AtumListTable {
 
 			}
 
+			if ( ! is_numeric( $sales_last_ndays ) ) {
+				$sales_last_ndays = 0;
+			}
+
 			if ( $add_to_total ) {
 				$this->increase_total( '_sales_last_days', $sales_last_ndays );
 			}
