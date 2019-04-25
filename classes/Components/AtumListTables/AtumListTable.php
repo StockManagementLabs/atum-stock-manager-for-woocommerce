@@ -1114,7 +1114,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->product->set_has_location( $has_location );
 		}
 
-		$location_terms_class = $has_location ? ' not-empty' : '';
+		$location_terms_class = $has_location && 'no' !== $has_location ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
 		$locations = '<a href="#" class="show-locations atum-icon atmi-map-marker tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
