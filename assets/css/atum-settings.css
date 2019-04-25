@@ -3907,11 +3907,45 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
           flex-direction: column;
 }
 
-.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-box {
-  width: 171px;
-  height: 129px;
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper input[type=radio] {
+  display: none;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 56px;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box {
+  min-width: 171px;
+  min-height: 129px;
   background-color: #eee;
   cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box.active {
+  border: 2px solid var(--blue);
+  -webkit-box-shadow: 0 10px 20px 0 var(--black-shadow);
+          box-shadow: 0 10px 20px 0 var(--black-shadow);
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-description {
+  padding: 0 15px;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-description div {
+  color: var(--atum-settings-section-text);
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .atum-setting-info {

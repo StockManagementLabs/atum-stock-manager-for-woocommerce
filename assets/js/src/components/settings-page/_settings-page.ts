@@ -365,14 +365,50 @@ export default class SettingsPage {
 	}
 
     doThemeSelector() {
+        const $formSettingsWrapper: JQuery = this.$form.find('.form-settings-wrapper');
+
         let $themeSelectorWrapper = $('.theme-selector-wrapper'),
-            $themeOptions         = $themeSelectorWrapper.find('.selector-box');
+            $themeOptions         = $themeSelectorWrapper.find('.selector-container .selector-box');
+
+        $('.selector-box').click(function () {
+           console.log('hello');
+        });
 
         $themeOptions.on('click', (evt: JQueryEventObject) => {
-            let element     = evt.currentTarget;
-            console.log(element);
-                // $radioInput = $themeSelectorWrapper.find(`#${element.data('')}`)
+
+            let element            = $(evt.currentTarget),
+                themeSelectedValue = element.data('value'),
+                $radioInput        = $('#' + themeSelectedValue);
+
+            $radioInput.prop("checked", true);
+            $themeOptions.removeClass('active');
+            element.addClass('active');
+
+            $.ajax({
+                url   : window['ajaxurl'],
+                method: 'POST',
+                data  : {
+                    token : this.settings.get('schemeColorNonce'),
+                    action: this.settings.get('getSchemeColor'),
+                    theme : themeSelectedValue,
+                },
+                beforeSend: () => {
+                    $formSettingsWrapper.addClass('overlay');
+                },
+                success : (response: any) => {
+
+                    if (response.success === true) {
+                        console.log('Done');
+                        ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
+                    }
+                    else {
+                        console.log('Error');
+                    }
+
+                }
+            });
         })
+
     }
 	
 }

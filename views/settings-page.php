@@ -10,6 +10,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
 $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE );
@@ -114,7 +115,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 											case 'atum_setting_company':
 												$header_settings_title = __( 'Store Details', ATUM_TEXT_DOMAIN );
 												break;
-											case 'atum_setting_visual_settings':
+											case 'atum_setting_color_mode':
 												$header_settings_title = __( 'Visual Settings', ATUM_TEXT_DOMAIN );
 												break;
 											case 'atum_setting_module_manager':
@@ -146,7 +147,34 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 							<?php if ( $section['title'] ) : ?>
 									<div class="section-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-title-light' : '' ?>">
-									<h2><?php echo esc_html( $section['title'] ) ?></h2>
+									<h2>
+										<?php
+										if ( 'atum_setting_scheme_color' === $section['id'] ) :
+
+											$theme_setting = Helpers::get_option( 'theme_settings' );
+
+											if ( 'dark_mode' === $theme_setting ) {
+												$theme_style = 'Dark';
+											}
+											elseif ( 'hc_mode' === $theme_setting ) {
+												$theme_style = 'High Contrast';
+											}
+											else {
+												$theme_style = 'Branded';
+											}
+
+											?>
+											<span class="">
+											<?php
+												echo esc_html( $theme_style );
+											?>
+											</span>
+											<?php
+
+										endif;
+										?>
+										<?php echo esc_html( $section['title'] ) ?>
+									</h2>
 									</div>
 							<?php endif; ?>
 

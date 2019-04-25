@@ -571,12 +571,38 @@
 			.theme-selector-wrapper {
 				display: flex;
 				flex-direction: column;
-				.selector-box {
-					width: 171px;
-					height: 129px;
-					background-color: #eee;
-					cursor: pointer;
+				
+				input[type=radio] {
+					display: none;
+				}
+				
+				.selector-container {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					margin-bottom: 56px;
 					
+					.selector-box {
+						min-width: 171px;
+						min-height: 129px;
+						background-color: #eee;
+						cursor: pointer;
+						border: 2px solid transparent;
+						
+						&.active {
+							border: 2px solid var(--blue);
+							box-shadow: 0 10px 20px 0 var(--black-shadow);
+						}
+					}
+					
+					.selector-description {
+						padding: 0 15px;
+						div {
+							color: var(--atum-settings-section-text);
+							font-weight: bold;
+							font-size: 15px;
+						}
+					}
 				}
 			}
 			

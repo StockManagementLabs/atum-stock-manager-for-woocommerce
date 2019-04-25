@@ -205,10 +205,12 @@ class Settings {
 				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
 				'menuThemeNonce'                  => wp_create_nonce( 'atum-menu-theme-nonce' ),
+				'schemeColorNonce'                => wp_create_nonce( 'atum-scheme-color-nonce' ),
 				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
 				'changeSettingsMenuStyle'         => 'atum_menu_style',
+				'getSchemeColor'                  => 'atum_get_scheme_color',
 				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
 			) );
@@ -261,7 +263,8 @@ class Settings {
 				'tab_name' => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-eye',
 				'sections' => array(
-					'visual_settings' => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
+					'color_mode'   => __( 'Color Mode', ATUM_TEXT_DOMAIN ),
+					'scheme_color' => __( 'Scheme Color', ATUM_TEXT_DOMAIN ),
 				),
 			),
 		);
@@ -463,24 +466,70 @@ class Settings {
 				'default' => '',
 			),
 			'theme_settings'            => array(
-				'section' => 'visual_settings',
+				'section' => 'color_mode',
 				'name'    => __( 'Theme settings', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Select a option for change visual setting to dark, high contrast o default mode.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'NOTE: All ATUM pages will change and the setting will deactivate all colour options on this page.', ATUM_TEXT_DOMAIN ),
 				'default' => '',
 				'type'    => 'theme_selector',
 				'options' => array(
 					'values' => array(
-						''          => __( 'Default', ATUM_TEXT_DOMAIN ),
-						'dark_mode' => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
-						'hc_mode'   => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
+						array(
+							'key'  => 'branded_mode',
+							'name' => __( 'Branded Mode', ATUM_TEXT_DOMAIN ),
+							'desc' => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
+											elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+											natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ', ATUM_TEXT_DOMAIN ),
+						),
+						array(
+							'key'  => 'dark_mode',
+							'name' => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
+							'desc' => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
+											elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+											natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ', ATUM_TEXT_DOMAIN ),
+						),
+						array(
+							'key'  => 'hc_mode',
+							'name' => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
+							'desc' => __( 'Activate the high contrast mode. This mode is for users that find 
+											difficult viewing data while browsing 
+											the interface in ATUM\'s branded colours.', ATUM_TEXT_DOMAIN ),
+						),
 					),
 				),
+			),
+			'primary_color'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'default' => '#00B8DB',
+			),
+			'scheme_color2'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Color 2', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Color 2', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'default' => '#fff',
+			),
+			'scheme_color3'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Color 3', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Color 3', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'default' => '#fff',
+			),
+			'scheme_color4'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Color 4', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Color 4', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'default' => '#fff',
 			),
 		);
 
 		// Load the tools tab.
 		Tools::get_instance();
-		
+
 		// Add the tabs.
 		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs );
 		foreach ( $this->tabs as $tab => $tab_data ) {
@@ -977,24 +1026,25 @@ class Settings {
 	 */
 	public function display_theme_selector( $args ) {
 
-		$name           = self::OPTION_NAME . "[{$args['id']}]";
-		$value          = $this->options[ $args['id'] ];
-		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
-
-		$default = '';
-		if ( isset( $args['default'] ) ) {
-			$default = is_array( $args['default'] ) ? wp_json_encode( $args['default'] ) : $args['default'];
-			$default = ' data-default="' . $default . '"';
-		}
+		$name               = self::OPTION_NAME . "[{$args['id']}]";
+		$theme_setting_save = Helpers::get_option( 'theme_settings' );
 
 		ob_start();
 		?>
 		<div class="theme-selector-wrapper">
-			<?php foreach ( $args['options']['values'] as $option => $value ) : ?>
-				<input type="radio" id="<?php echo esc_attr( $value ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $option ); ?>">
-				<div class="selector-box" data-value="<?php echo esc_attr( $option ); ?>">
-					<p><?php echo esc_attr( $value ); ?></p>
+			<?php foreach ( $args['options']['values'] as $option ) : ?>
+				<input type="radio" id="<?php echo esc_attr( $option['key'] ); ?>" name="<?php echo esc_attr( $name ); ?>"
+						value="<?php echo esc_attr( $option['key'] ); ?>"
+						<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? 'checked' : ''; ?>>
+				<div class="selector-container">
+					<div class="selector-box<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? ' active' : ''; ?>"
+							data-value="<?php echo esc_attr( $option['key'] ); ?>"></div>
+					<div class="selector-description">
+						<div><?php echo esc_attr( $option['name'] ); ?></div>
+						<p class="atum-setting-info"><?php echo esc_attr( $option['desc'] ); ?></p>
+					</div>
 				</div>
+
 			<?php endforeach; ?>
 		</div>
 		<?php

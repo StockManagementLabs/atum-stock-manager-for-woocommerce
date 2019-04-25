@@ -2628,6 +2628,8 @@ final class Helpers {
 	/**
 	 * Get selected visual mode style
 	 *
+	 * @param array $colors
+	 *
 	 * @since 1.5.7.3
 	 *
 	 * @return string
@@ -2646,6 +2648,7 @@ final class Helpers {
 		$blue_dark_lighten = '#3b3d5a';
 		$white_rgb         = '255,255,255';
 		$green             = '#69C61D';
+		$primary_color     = self::get_option( 'primary_color' );
 
 		if ( 'hc_mode' === $theme_settings ) {
 
@@ -2654,19 +2657,21 @@ final class Helpers {
 			$hc_dark_blue  = '#27283b';
 			$hc_blue_light = '#e6fbff';
 
+//			$primary_color = $hc_blue;
+
 			$style = ":root{
 					--gray-100: $white;
 					--gray-200-shadow: $gray_500;
-				    --gray-500: $hc_blue;
+				    --gray-500: $primary_color;
 				    --gray-600: $hc_dark_blue;
-				    --blue: $hc_blue;
-				    --atum-table-link-active: $hc_blue;
-				    --atum-table-check: $hc_blue;
+				    --blue: $primary_color;
+				    --atum-table-link-active: $primary_color;
+				    --atum-table-check: $primary_color;
 				    --blue-hover: rgba($hc_blue_rgb,0.6);
-				    --blue-dark: $hc_blue;
-				    --blue-dark-lighten: $hc_blue;
+				    --blue-dark: $primary_color;
+				    --blue-dark-lighten: $primary_color;
 				    --blue-dark-light-2: $hc_blue_light;
-				    --green: $hc_blue;
+				    --green: $primary_color;
 				    --green-hover: rgba($hc_blue_rgb,0.6);
 				    --green-light: $hc_blue_light;
 				    --dash-blue-trans: $hc_blue_light;
@@ -2674,47 +2679,47 @@ final class Helpers {
 				    --atum-row-active: $hc_blue_light;
 				    --atum-table-row-even: transparent;
 				    --wp-gray-6: transparent;
-				    --wp-link: $hc_blue;
+				    --wp-link: $primary_color;
 				    --wp-link-hover: rgba($hc_blue_rgb,0.6);
-				    --primary: $hc_blue;
+				    --primary: $primary_color;
 				    --primary-hover: rgba($hc_blue_rgb,0.6);
-				    --darken: $hc_blue;
+				    --darken: $primary_color;
 				    --black-shadow-light: rgba($hc_blue_rgb,0.04);
 				    --bg-white: $hc_blue_light;
 				    --white-shadow: rgba($gray_500_rgb,0.2);
-				    --atum-text-white: $hc_blue;
-				    --orange: $hc_blue;
+				    --atum-text-white: $primary_color;
+				    --orange: $primary_color;
 				    --orange: rgba($hc_blue_rgb,0.6);
 				    --orange-light-2: $hc_blue_light;
-				    --warning: $hc_blue;
+				    --warning: $primary_color;
 				    --warning-hover: rgba($hc_blue_rgb,0.6);
-				    --danger: $hc_blue;
+				    --danger: $primary_color;
 				    --danger-hover: rgba($hc_blue_rgb,0.6);
-				    --success: $hc_blue;
+				    --success: $primary_color;
 				    --success-hover: rgba($hc_blue_rgb,0.6);
-				    --info: $hc_blue;
+				    --info: $primary_color;
 				    --info-hover: rgba($hc_blue_rgb,0.6);
 				    --secondary: $gray_500;
 				    --secondary-shadow: rgba($hc_blue_rgb,0.2);
-				    --purple-pl: $hc_blue;
+				    --purple-pl: $primary_color;
 				    --purple-pl-hover: rgba($hc_blue_rgb,0.6);
-				    --wp-pink-darken-expanded: $hc_blue;
+				    --wp-pink-darken-expanded: $primary_color;
 				    --orange-dark-light: $hc_blue_light;
-				    --wc-purple-expanded: $hc_blue;
-				    --wc-purple: $hc_blue;
+				    --wc-purple-expanded: $primary_color;
+				    --wc-purple: $primary_color;
 				    --wc-purple-hover: rgba($hc_blue_rgb,0.6);
-					--blue-light-expanded: $hc_blue;
-					--green-light-expanded: $hc_blue;
+					--blue-light-expanded: $primary_color;
+					--green-light-expanded: $primary_color;
 					--wp-pink-light: $hc_blue_light;
 					--green-light: $hc_blue_light;
 					--atum-table-bg: $white;
 				    --atum-border: $gray_500;
 				    --atum-select2-selected-bg: $hc_blue_light;
-				    --atum-select2-selected-text: $hc_blue;
+				    --atum-select2-selected-text: $primary_color;
 				    --atum-table-item-heads: $hc_dark_blue;
 				    --atum-table-views-tabs: $hc_dark_blue;
-				    --atum-table-views-tabs-active: $hc_blue;
-				    --atum-table-link-child: $hc_blue;
+				    --atum-table-views-tabs-active: $primary_color;
+				    --atum-table-link-child: $primary_color;
 				    --atum-table-link-text: $hc_dark_blue;
 				    --overflow-opacity-rigth: linear-gradient(to right, rgba($white_rgb,0), rgba($white_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($white_rgb,0), rgba($white_rgb,0.9));
@@ -2726,9 +2731,9 @@ final class Helpers {
 				    --atum-pagination-border-disabled: #e9ecef;
 				    --atum-dark-bg: $white;
 				    --atum-settings-nav-bg: $white;
-				    --atum-settings-heads-bg: $hc_blue;
-				    --atum-settings-nav-link: $hc_blue;
-				    --atum-settings-nav-link-selected: $hc_blue;
+				    --atum-settings-heads-bg: $primary_color;
+				    --atum-settings-nav-link: $primary_color;
+				    --atum-settings-nav-link-selected: $primary_color;
 				    --atum-settings-section-bg: $white;
 				    --atum-settings-section-text: $hc_dark_blue;
 				    --atum-settings-section-title: $hc_dark_blue;
@@ -2742,23 +2747,23 @@ final class Helpers {
 				    --atum-settings-input-text: $hc_dark_blue;
 				    --atum-row-shadow: rgba($hc_blue_rgb,0.2);
 					--atum-table-row-child-variation: $hc_blue_light;
-				    --atum-table-icon: $hc_blue;
-				    --atum-table-icon-active: $hc_blue;
-				    --atum-table-text-active: $hc_blue;
+				    --atum-table-icon: $primary_color;
+				    --atum-table-icon-active: $primary_color;
+				    --atum-table-text-active: $primary_color;
 				    --wp-nth-child: transparent;
 				    --dash-card-text: $hc_dark_blue;
 				    --dash-next-text: $hc_dark_blue;
 				    --dash-border: $gray_500;
-					--dash-statistics-chart-type-selected-text: $hc_blue;
-				    --dash-stats-data-widget-primary: $hc_blue;
-				    --dash-stats-data-widget-success: $hc_blue;
+					--dash-statistics-chart-type-selected-text: $primary_color;
+				    --dash-stats-data-widget-primary: $primary_color;
+				    --dash-stats-data-widget-success: $primary_color;
 				    --dash-nice-select-border: $gray_500;
 				    --dash-nice-select-hover: $hc_dark_blue;
 				    --dash-nice-select-text: $hc_dark_blue;
 				    --dash-nice-select-arrow-color: $hc_dark_blue;
 				    --dash-nice-select-option-hover-bg: $hc_blue_light;
-				    --dash-nice-select-text-highlighted: $hc_blue;
-				    --dash-widget-current-stock-value-bg: $hc_blue;
+				    --dash-nice-select-text-highlighted: $primary_color;
+				    --dash-widget-current-stock-value-bg: $primary_color;
 					--dash-widget-current-stock-value-text: $white;
 					--dash-widget-text: $hc_dark_blue;
 					--dash-video-subs-text: $hc_dark_blue;
@@ -2779,13 +2784,15 @@ final class Helpers {
 			$dm_dark_blue     = '#31324a';
 			$dm_dark_blue_rgb = '49,50,74';
 
+//			$primary_color = $dm_dark_blue;
+
 			$style = ":root{
 					--gray-600: $white;
-					--gray-100: $dm_dark_blue;
-					--wp-yiq-text-light: $dm_dark_blue;
+					--gray-100: $primary_color;
+					--wp-yiq-text-light: $primary_color;
 					--dark-shadow: rgba(0, 0, 0, 0.6);
-				    --blue-light: $dm_dark_blue;
-				    --blue-dark: $dm_dark_blue;
+				    --blue-light: $primary_color;
+				    --blue-dark: $primary_color;
 				    --blue-dark-light-2: $blue_light;
 				    --atum-row-active: $blue_light;
 				    --blue: $dm_blue;
@@ -2811,52 +2818,52 @@ final class Helpers {
 				    --danger-hover: rgba($dm_red_rgb,0.6);
 					--purple-pl: #BA7DF7;
 				    --purple-pl-hover: rgba(186,125,247,0.6);
-				    --atum-text-white: $dm_dark_blue;
+				    --atum-text-white: $primary_color;
 				    --atum-select2-selected-bg: $blue_light;
 				    --atum-select2-selected-text: $blue;
 				    --atum-table-item-heads: $white;
 				    --atum-table-views-tabs: $white;
 				    --atum-table-views-tabs-active: $dm_blue;
-				    --atum-table-views-tabs-active-text: $dm_dark_blue;
+				    --atum-table-views-tabs-active-text: $primary_color;
 				    --atum-table-link-child: $blue;
-				    --atum-table-link-text: $dm_dark_blue;
+				    --atum-table-link-text: $primary_color;
 				    --atum-dropdown-toggle-bg: $blue_dark_lighten;
 				    --atum-pagination-border-disabled: $white;
 				    --atum-column-groups-bg: $blue_dark;
-				    --atum-table-row-even: $dm_dark_blue;
+				    --atum-table-row-even: $primary_color;
 				    --atum-table-row-odd: $blue_dark_lighten;
-					--atum-marketing-popup-bg: $dm_dark_blue;
+					--atum-marketing-popup-bg: $primary_color;
 					--atum-row-shadow: rgba($white_rgb, 0.2);
 					--atum-table-row-child-variation: $blue_light;
 					--atum-table-row-child-variation-even: $blue_light;
-					--atum-table-row-variation-text: $dm_dark_blue;
+					--atum-table-row-variation-text: $primary_color;
 					--atum-footer-totals: $blue_dark;
 					--atum-table-icon: $white;
-					--atum-table-icon-active: $dm_dark_blue;
-					--atum-table-text-active: $dm_dark_blue;
-					--atum-settings-nav-bg: $dm_dark_blue;
-					--atum-settings-heads-bg: $dm_dark_blue;
+					--atum-table-icon-active: $primary_color;
+					--atum-table-text-active: $primary_color;
+					--atum-settings-nav-bg: $primary_color;
+					--atum-settings-heads-bg: $primary_color;
 					--atum-settings-nav-link: $white;
 					--atum-settings-nav-link-selected-bg: $blue_light;
-					--atum-settings-nav-link-selected: $dm_dark_blue;
+					--atum-settings-nav-link-selected: $primary_color;
 					--atum-settings-wp-color-bg: $white;
-					--atum-settings-wp-color-text: $dm_dark_blue;
+					--atum-settings-wp-color-text: $primary_color;
 					--atum-settings-btn-save: $dm_blue;
-					--atum-settings-btn-save-text: $dm_dark_blue;
+					--atum-settings-btn-save-text: $primary_color;
 				    --atum-settings-btn-save-hover: rgba($dm_blue_rgb,0.6);
-				    --atum-settings-input-text: $dm_dark_blue;
-				    --atum-settings-section-bg: $dm_dark_blue;
+				    --atum-settings-input-text: $primary_color;
+				    --atum-settings-section-bg: $primary_color;
 				    --atum-settings-section-title: $white;
 				    --atum-settings-section-text: $white;
 					--dash-card-text: $gray_500;
-					--atum-table-bg: $dm_dark_blue;
+					--atum-table-bg: $primary_color;
 					--overflow-opacity-rigth: linear-gradient(to right, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
 					--atum-border: rgba($white_rgb, 0.2);
-					--dash-card-bg: $dm_dark_blue;
+					--dash-card-bg: $primary_color;
 					--dash-h5-text: $white;
-					--dash-nice-select-bg: $dm_dark_blue;
-					--dash-nice-select-list-bg: $dm_dark_blue;
+					--dash-nice-select-bg: $primary_color;
+					--dash-nice-select-list-bg: $primary_color;
 					--dash-nice-select-border: rgba($white_rgb, 0.5);
 				    --dash-nice-select-hover: $white;
 				    --dash-nice-select-text: $white;
@@ -2872,7 +2879,7 @@ final class Helpers {
 					--dash-statistics-grid-lines: rgba($white_rgb, 0.2);
 					--dash-statistics-chart-type-bg: transparent;
 					--dash-statistics-chart-type-selected-bg: $dm_orange;
-					--dash-statistics-chart-type-selected-text: $dm_dark_blue;
+					--dash-statistics-chart-type-selected-text: $primary_color;
 					--dash-statistics-legend-switch-bg: transparent;
 					--dash-widget-primary: $dm_blue;
 				    --dash-widget-success: $dm_green;
@@ -2881,7 +2888,7 @@ final class Helpers {
 				    --dash-widget-text: $white;
 					--dash-stats-data-widget-primary: $dm_blue;
 				    --dash-stats-data-widget-success: $dm_green;
-					--dash-stock-control-chart-border: $dm_dark_blue;
+					--dash-stock-control-chart-border: $primary_color;
 					--dash-next-text: $gray_500;
 					--dash-video-subs-text $gray_500;
 				}";

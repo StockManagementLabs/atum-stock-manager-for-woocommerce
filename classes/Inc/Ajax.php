@@ -150,6 +150,9 @@ final class Ajax {
 		// Hide marketing popup.
 		add_action( 'wp_ajax_atum_hide_marketing_popup', array( $this, 'marketing_popup_state' ) );
 
+		// Get scheme color.
+		add_action( 'wp_ajax_atum_get_scheme_color', array( $this, 'get_scheme_color' ) );
+
 	}
 
 	/**
@@ -2282,7 +2285,36 @@ final class Ajax {
 
 	}
 
-	
+	/**
+	 * Settings - Get Scheme Color
+	 *
+	 * @package ATUM Settings
+	 *
+	 * @since 1.5.7.5
+	 */
+	public function get_scheme_color() {
+
+		check_ajax_referer( 'atum-scheme-color-nonce', 'token' );
+
+		$colors = [
+			'primary_color' => '',
+		];
+
+		if ( 'dark_mode' === $_POST['theme'] ) {
+			$primary_color = '#31324a';
+		}
+		elseif ( 'hc_mode' === $_POST['theme'] ) {
+			$primary_color = '#016b7f';
+		}
+		else {
+			$primary_color = '#00B8DB';
+		}
+
+		wp_send_json_success( compact( 'primary_color' ) );
+
+	}
+
+
 	/*******************
 	 * Instance methods
 	 *******************/
