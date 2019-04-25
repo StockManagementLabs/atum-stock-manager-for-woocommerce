@@ -154,6 +154,21 @@ export let Utils = {
 			return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 		}
 		
-	}
+	},
+	
+	/**
+	 * Get a sanitized HTML code and returns valid HTML code
+	 *
+	 * @param string input
+	 *
+	 * @return string
+	 */
+	htmlDecode(input: string){
+		
+		const e: HTMLElement = document.createElement('div');
+		e.innerHTML = input;
+		
+		return e.childNodes[0].nodeValue;
+	},
 	
 }

@@ -401,6 +401,8 @@ class Log extends AtumOrderModel {
 
 		}
 
+		do_action( 'atum/inventory_logs/after_save', $log, $items );
+
 	}
 
 }
