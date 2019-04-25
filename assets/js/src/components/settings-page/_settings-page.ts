@@ -48,7 +48,7 @@ export default class SettingsPage {
 		ButtonGroup.doButtonGroups(this.$form);
 
 		// Enable theme selector
-        this.doThemeSelector();
+        // this.doThemeSelector();
 
 		// Toggle Menu.
 		this.toggleMenu();
@@ -65,7 +65,10 @@ export default class SettingsPage {
 			.on('change', '#atum_out_stock_threshold', (evt: JQueryEventObject) => this.maybeClearOutStockThreshold($(evt.currentTarget)) )
 			
 			// Script Runner fields.
-			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => this.runScript($(evt.currentTarget)) );
+			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => this.runScript($(evt.currentTarget)) )
+
+            // Theme selector fields.
+            .on('click', '.selector-box', (evt: JQueryEventObject) => this.doThemeSelector($(evt.currentTarget)) );
 		
 		
 		new SmartForm(this.$form, this.settings);
@@ -364,50 +367,44 @@ export default class SettingsPage {
 		
 	}
 
-    doThemeSelector() {
+    doThemeSelector($element: JQuery) {
         const $formSettingsWrapper: JQuery = this.$form.find('.form-settings-wrapper');
 
         let $themeSelectorWrapper = $('.theme-selector-wrapper'),
             $themeOptions         = $themeSelectorWrapper.find('.selector-container .selector-box');
 
-        $('.selector-box').click(function () {
-           console.log('hello');
-        });
+        let element            = $element,
+            themeSelectedValue = element.data('value'),
+            $radioInput        = $('#' + themeSelectedValue);
 
-        $themeOptions.on('click', (evt: JQueryEventObject) => {
+        $radioInput.prop("checked", true);
+        $themeOptions.removeClass('active');
+        element.addClass('active');
 
-            let element            = $(evt.currentTarget),
-                themeSelectedValue = element.data('value'),
-                $radioInput        = $('#' + themeSelectedValue);
+        $.ajax({
+            url   : window['ajaxurl'],
+            method: 'POST',
+            data  : {
+                token : this.settings.get('schemeColorNonce'),
+                action: this.settings.get('getSchemeColor'),
+                theme : themeSelectedValue,
+            },
+            beforeSend: () => {
+                $formSettingsWrapper.addClass('overlay');
+            },
+            success : (response: any) => {
 
-            $radioInput.prop("checked", true);
-            $themeOptions.removeClass('active');
-            element.addClass('active');
-
-            $.ajax({
-                url   : window['ajaxurl'],
-                method: 'POST',
-                data  : {
-                    token : this.settings.get('schemeColorNonce'),
-                    action: this.settings.get('getSchemeColor'),
-                    theme : themeSelectedValue,
-                },
-                beforeSend: () => {
-                    $formSettingsWrapper.addClass('overlay');
-                },
-                success : (response: any) => {
-
-                    if (response.success === true) {
-                        console.log('Done');
-                        ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
-                    }
-                    else {
-                        console.log('Error');
-                    }
-
+                if (response.success === true) {
+                    console.log('Done');
+                    ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
+                    $formSettingsWrapper.removeClass('overlay');
                 }
-            });
-        })
+                else {
+                    console.log('Error');
+                }
+
+            }
+        });
 
     }
 	
