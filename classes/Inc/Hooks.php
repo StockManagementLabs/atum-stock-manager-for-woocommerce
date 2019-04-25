@@ -121,6 +121,10 @@ class Hooks {
 		// Save the orders-related data every time an order is saved.
 		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
 
+		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
+		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
+		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
+
 	}
 
 	/**
@@ -665,14 +669,14 @@ class Hooks {
 	}
 
 	/**
-	 * Save the order-related props every time a WC order is saved
+	 * Save the order-related ATUM props every time a WC order is saved
 	 *
 	 * @since 1.5.8
 	 *
 	 * @param int      $order_id
 	 * @param \WP_Post $post
 	 */
-	public function save_order_items_props( $order_id, $post ) {
+	public function save_order_items_props( $order_id, $post = NULL ) {
 
 		$order = wc_get_order( $order_id );
 
@@ -702,6 +706,23 @@ class Hooks {
 			}
 
 		}
+
+	}
+
+	/**
+	 * When an order is moved or restored from trash, update the items' ATUM props
+	 *
+	 * @param int $order_id
+	 *
+	 * @since 1.5.8
+	 */
+	public function maybe_save_order_items_props( $order_id ) {
+
+		if ( 'shop_order' !== get_post_type( $order_id ) ) {
+			return;
+		}
+
+		$this->save_order_items_props( $order_id );
 
 	}
 
