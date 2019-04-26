@@ -12,9 +12,6 @@
 
 namespace Atum\Components;
 
-use Atum\Inc\Globals;
-
-
 defined( 'ABSPATH' ) || die;
 
 
@@ -31,6 +28,13 @@ final class AtumCache {
 	 * @var array
 	 */
 	private static $cache_groups = [];
+
+	/**
+	 * Indicates whether to disable the cache temporarily
+	 *
+	 * @var bool
+	 */
+	private static $disable_cache = FALSE;
 
 
 	/****************
@@ -77,7 +81,12 @@ final class AtumCache {
 
 		self::$cache_groups[ $cache_group ] = empty( self::$cache_groups[ $cache_group ] ) ? $cache_group : self::$cache_groups[ $cache_group ];
 
-		return defined( Globals::IGNORE_CACHE_KEY ) && 1 === constant( Globals::IGNORE_CACHE_KEY ) ? FALSE : wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ], $force, $found );
+		if ( self::$disable_cache ) {
+			$found = FALSE;
+			return $found;
+		}
+
+		return wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ], $force, $found );
 	}
 
 	/**
@@ -234,4 +243,46 @@ final class AtumCache {
 		return $key;
 
 	}
+
+	/**
+	 * Whether the ATUM cache is actually disabled
+	 *
+	 * @since 1.5.8
+	 *
+	 * @return bool
+	 */
+	public static function is_cache_disabled() {
+
+		return self::$disable_cache;
+	}
+
+	/**
+	 * Set the disable cache prop
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param bool $disable_cache
+	 */
+	public static function set_disable_cache( $disable_cache ) {
+		self::$disable_cache = $disable_cache;
+	}
+
+	/**
+	 * Enable the ATUM Cache
+	 *
+	 * @since 1.5.8
+	 */
+	public static function enable_cache() {
+		self::$disable_cache = FALSE;
+	}
+
+	/**
+	 * Disable the ATUM Cache
+	 *
+	 * @since 1.5.8
+	 */
+	public static function disable_cache() {
+		self::$disable_cache = TRUE;
+	}
+
 }
