@@ -21,6 +21,7 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
 
@@ -284,11 +285,23 @@ abstract class AtumOrderItemModel {
 	public function delete() {
 
 		if ( $this->id ) {
-			global $wpdb;
+
 			do_action( 'atum/orders/before_delete_item', $this );
+
+			global $wpdb;
 			$wpdb->delete( $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE, array( 'order_item_id' => $this->id ) );
 			$wpdb->delete( $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE, array( 'order_item_id' => $this->id ) );
-			do_action( 'atum/orders/after_delete_item', $this );
+
+			// Recalculate ATUM props for this item.
+			if ( 'line_item' === $this->atum_order_item->get_type() ) {
+				$product_id = $this->atum_order_item->get_variation_id() ?: $this->atum_order_item->get_product_id();
+				$product    = Helpers::get_atum_product( $product_id );
+				$order      = $this->atum_order_item->get_order();
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $order->get_type() ) );
+			}
+
+			do_action( 'atum/orders/after_delete_item', $this, $this->atum_order_item );
+
 		}
 
 	}
@@ -304,7 +317,7 @@ abstract class AtumOrderItemModel {
 
 		$query = $wpdb->prepare( "
 			SELECT meta_id AS `id`, meta_key AS `key`, meta_value AS `value`
-			FROM {$wpdb->atum_order_itemmeta}
+			FROM $wpdb->atum_order_itemmeta
 			WHERE order_item_id = %d
 			ORDER BY meta_id
 		", $this->id );

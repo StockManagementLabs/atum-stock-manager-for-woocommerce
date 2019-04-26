@@ -27,7 +27,7 @@ class POItem extends AtumOrderItemModel {
 	protected $cache_key = 'po-item';
 
 	/**
-	 * LogItem constructor
+	 * POItem constructor
 	 *
 	 * @param \WC_Order_Item $po_item The factory object for initialization.
 	 *

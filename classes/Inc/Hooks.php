@@ -699,7 +699,7 @@ class Hooks {
 				$product    = Helpers::get_atum_product( $product_id );
 
 				if ( is_a( $product, '\WC_Product' ) ) {
-					Helpers::update_expiring_product_data( $product );
+					Helpers::update_order_item_product_data( $product );
 					do_action( 'atum/after_save_order_item_props', $item, $order_id );
 				}
 

@@ -15,6 +15,7 @@ namespace Atum\PurchaseOrders\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\Suppliers\Suppliers;
@@ -507,8 +508,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( is_a( $product, '\WC_Product' ) ) {
-				Helpers::get_product_inbound_stock( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
-				$product->save_atum_data();
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
 			}
 
 		}

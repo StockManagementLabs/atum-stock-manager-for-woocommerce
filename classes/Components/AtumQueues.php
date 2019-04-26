@@ -97,7 +97,7 @@ class AtumQueues {
 			$product = Helpers::get_atum_product( $product_id );
 
 			if ( is_a( $product, '\WC_Product' ) ) {
-				Helpers::update_expiring_product_data( $product );
+				Helpers::update_order_item_product_data( $product );
 			}
 
 		}
