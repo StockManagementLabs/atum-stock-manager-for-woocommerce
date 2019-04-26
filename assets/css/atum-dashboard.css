@@ -462,6 +462,7 @@
   --atum-input-placeholder: #adb5bd;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
+  --atum-pagination-bg-disabled: #f8f9fa;
   --atum-pagination-border-disabled: transparent;
   --order-green-light: rgba(180, 240, 0, 0.79);
   --atum-row-shadow: rgba(0, 0, 0, 0.04);

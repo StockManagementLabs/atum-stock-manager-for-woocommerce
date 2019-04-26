@@ -191,6 +191,17 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>
 
+									<?php
+									if ( 'atum_setting_scheme_color' === $section['id'] ) :
+
+										?>
+											<button class="btn btn-primary reset-default-colors"
+													type="button" data-value="<?php echo esc_attr( $theme_setting ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
+										<?php
+
+									endif;
+									?>
+
 								</div>
 
 							</div>

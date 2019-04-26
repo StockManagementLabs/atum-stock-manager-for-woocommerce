@@ -2300,19 +2300,25 @@ final class Ajax {
 			$primary_color   = '#31324A';
 			$secondary_color = '#DBF9FF';
 			$tertiary_color  = '#FFFFFF';
+			$bg_1_color      = '#31324A';
+			$bg_2_color      = '#3b3d5a';
 		}
 		elseif ( 'hc_mode' === $_POST['theme'] ) {
 			$primary_color   = '#016B7F';
 			$secondary_color = '#27283B';
 			$tertiary_color  = '#DBF9FF';
+			$bg_1_color      = '#FFFFFF';
+			$bg_2_color      = '#FFFFFF';
 		}
 		else {
 			$primary_color   = '#00B8DB';
 			$secondary_color = '#ADB5BD';
 			$tertiary_color  = '#6C757D';
+			$bg_1_color      = '#FFFFFF';
+			$bg_2_color      = '#F8F9FA';
 		}
 
-		wp_send_json_success( compact( 'primary_color', 'secondary_color', 'tertiary_color' ) );
+		wp_send_json_success( compact( 'primary_color', 'secondary_color', 'tertiary_color', 'bg_1_color', 'bg_2_color' ) );
 
 	}
 

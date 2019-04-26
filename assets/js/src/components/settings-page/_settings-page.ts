@@ -68,7 +68,7 @@ export default class SettingsPage {
 			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => this.runScript($(evt.currentTarget)) )
 
             // Theme selector fields.
-            .on('click', '.selector-box', (evt: JQueryEventObject) => this.doThemeSelector($(evt.currentTarget)) );
+            .on('click', '.selector-box, .reset-default-colors', (evt: JQueryEventObject) => this.doThemeSelector($(evt.currentTarget)) );
 		
 		
 		new SmartForm(this.$form, this.settings);
@@ -371,14 +371,17 @@ export default class SettingsPage {
         const $formSettingsWrapper: JQuery = this.$form.find('.form-settings-wrapper');
 
         let $themeSelectorWrapper = $('.theme-selector-wrapper'),
-            $themeOptions         = $themeSelectorWrapper.find('.selector-container .selector-box');
+            $themeOptions         = $themeSelectorWrapper.find('.selector-container .selector-box img');
 
-        let themeSelectedValue = $element.data('value'),
-            $radioInput        = $('#' + themeSelectedValue);
+        let themeSelectedValue  = $element.data('value'),
+            $radioInput         = $('#' + themeSelectedValue),
+            $resetDefaultColors = $('.reset-default-colors');
 
         $radioInput.prop("checked", true);
         $themeOptions.removeClass('active');
-        $element.addClass('active');
+        $element.find('img').addClass('active');
+        $resetDefaultColors.data('value', themeSelectedValue);
+
 
         $.ajax({
             url   : window['ajaxurl'],
@@ -398,6 +401,8 @@ export default class SettingsPage {
                     ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
                     ColorPicker.updateColorPicker($('#atum_secondary_color'), response.data.secondary_color);
                     ColorPicker.updateColorPicker($('#atum_tertiary_color'), response.data.tertiary_color);
+                    ColorPicker.updateColorPicker($('#atum_bg_1_color'), response.data.bg_1_color);
+                    ColorPicker.updateColorPicker($('#atum_bg_2_color'), response.data.bg_2_color);
 
                     if (themeSelectedValue === 'dark_mode') {
                         $('.section-title h2 span').html('Dark');

@@ -530,6 +530,12 @@
 			background: var(--atum-settings-section-bg) url("#{$img-path}settings/bg-settings.png") no-repeat bottom;
 			background-size: cover;
 			box-shadow: 0 4px 0 0 var(--gray-200);
+			position: relative;
+			
+			.reset-default-colors {
+				position: absolute;
+				right: 20px;
+			}
 			
 			.form-table {
 				margin-top: 0;
@@ -585,14 +591,19 @@
 					.selector-box {
 						min-width: 171px;
 						min-height: 129px;
-						background-color: #eee;
 						cursor: pointer;
-						border: 2px solid transparent;
 						
-						&.active {
-							border: 2px solid var(--blue);
-							box-shadow: 0 10px 20px 0 var(--black-shadow);
+						img {
+							width: 171px;
+							height: 129px;
+							border: 2px solid var(--gray-500);
+							border-radius: 5px;
 							
+							&.active {
+								border: 2px solid var(--blue);
+								box-shadow: 0 10px 20px 0 var(--black-shadow);
+								
+							}
 						}
 					}
 					

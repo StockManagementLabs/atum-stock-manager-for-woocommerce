@@ -2654,6 +2654,10 @@ final class Helpers {
 		$secondary_color_rgb = self::convert_hexadecimal_to_rgb( $secondary_color );
 		$tertiary_color      = self::get_option( 'tertiary_color' );
 		$tertiary_color_rgb  = self::convert_hexadecimal_to_rgb( $tertiary_color );
+		$bg_1_color          = self::get_option( 'bg_1_color' );
+		$bg_1_color_rgb      = self::convert_hexadecimal_to_rgb( $bg_1_color );
+		$bg_2_color          = self::get_option( 'bg_2_color' );
+		$bg_2_color_rgb      = self::convert_hexadecimal_to_rgb( $bg_2_color );
 
 		if ( 'hc_mode' === $theme_settings ) {
 
@@ -2679,7 +2683,8 @@ final class Helpers {
 				    --dash-blue-trans: $hc_blue_light;
 				    --blue-light: $hc_blue_light;
 				    --atum-row-active: $hc_blue_light;
-				    --atum-table-row-even: transparent;
+				    --atum-table-row-even: $bg_2_color;
+				    --atum-table-row-odd: $bg_1_color;
 				    --wp-gray-6: transparent;
 				    --wp-link: $primary_color;
 				    --wp-link-hover: rgba($primary_color_rgb,0.6);
@@ -2714,7 +2719,7 @@ final class Helpers {
 					--green-light-expanded: $primary_color;
 					--wp-pink-light: $hc_blue_light;
 					--green-light: $hc_blue_light;
-					--atum-table-bg: $white;
+					--atum-table-bg: $bg_1_color;
 				    --atum-border: $gray_500;
 				    --atum-select2-selected-bg: $tertiary_color;
 				    --atum-select2-selected-text: $primary_color;
@@ -2723,13 +2728,14 @@ final class Helpers {
 				    --atum-table-views-tabs-active: $primary_color;
 				    --atum-table-link-child: $primary_color;
 				    --atum-table-link-text: $secondary_color;
-				    --overflow-opacity-rigth: linear-gradient(to right, rgba($white_rgb,0), rgba($white_rgb,0.9));
-					--overflow-opacity-left: linear-gradient(to left, rgba($white_rgb,0), rgba($white_rgb,0.9));
-				    --atum-dropdown-toggle-bg: $white;
+				    --overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
+					--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
+				    --atum-dropdown-toggle-bg: $bg_2_color;
 				    --atum-select2-border: $gray_500;
 				    --atum-input-placeholder: $secondary_color;
 				    --atum-pagination-bg: $white;
 				    --atum-pagination-border: $gray_500;
+				    --atum-pagination-bg-disabled: $bg_2_color;
 				    --atum-pagination-border-disabled: #e9ecef;
 				    --atum-dark-bg: $white;
 				    --atum-settings-nav-bg: $white;
@@ -2748,6 +2754,7 @@ final class Helpers {
 				    --atum-settings-btn-save-hover: $hc_blue_light;
 				    --atum-settings-wp-color-text: $secondary_color;
 				    --atum-settings-input-text: $secondary_color;
+				    --atum-footer-totals: $bg_1_color;
 				    --atum-row-shadow: rgba($primary_color_rgb,0.2);
 					--atum-table-row-child-variation: $hc_blue_light;
 				    --atum-table-icon: $primary_color;
@@ -2831,17 +2838,18 @@ final class Helpers {
 				    --atum-table-views-tabs-active-text: $primary_color;
 				    --atum-table-link-child: $blue;
 				    --atum-table-link-text: $primary_color;
-				    --atum-dropdown-toggle-bg: $blue_dark_lighten;
+				    --atum-dropdown-toggle-bg: $bg_2_color;
+				    --atum-pagination-bg-disabled: $bg_2_color;
 				    --atum-pagination-border-disabled: $tertiary_color;
 				    --atum-column-groups-bg: $blue_dark;
-				    --atum-table-row-even: $primary_color;
-				    --atum-table-row-odd: $blue_dark_lighten;
+				    --atum-table-row-even: $bg_2_color;
+				    --atum-table-row-odd: $bg_1_color;
 					--atum-marketing-popup-bg: $primary_color;
 					--atum-row-shadow: rgba($tertiary_color_rgb, 0.2);
 					--atum-table-row-child-variation: $secondary_color;
 					--atum-table-row-child-variation-even: $secondary_color;
 					--atum-table-row-variation-text: $primary_color;
-					--atum-footer-totals: $blue_dark;
+					--atum-footer-totals: $bg_1_color;
 					--atum-table-icon: $tertiary_color;
 					--atum-table-icon-active: $primary_color;
 					--atum-table-text-active: $primary_color;
@@ -2861,9 +2869,9 @@ final class Helpers {
 				    --atum-settings-section-text: $tertiary_color;
 				    --atum-settings-text-logo: $tertiary_color;
 					--dash-card-text: $gray_500;
-					--atum-table-bg: $primary_color;
-					--overflow-opacity-rigth: linear-gradient(to right, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
-					--overflow-opacity-left: linear-gradient(to left, rgba($dm_dark_blue_rgb,0), rgba($dm_dark_blue_rgb,0.9));
+					--atum-table-bg: $bg_1_color;
+					--overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
+					--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
 					--atum-border: rgba($tertiary_color_rgb, 0.2);
 					--dash-card-bg: $primary_color;
 					--dash-h5-text: $tertiary_color;
@@ -3013,6 +3021,8 @@ final class Helpers {
 					--blue: $primary_color;
 					--gray-600:$tertiary_color;
 					--atum-table-item-heads: $secondary_color;
+					--atum-table-row-even: $bg_2_color;
+				    --atum-table-row-odd: $bg_1_color;
 					--atum-table-views-tabs: $secondary_color;
 					--atum-table-views-tabs-active: $primary_color;
 					--atum-table-link-child: $primary_color;
@@ -3020,14 +3030,20 @@ final class Helpers {
 					--atum-select2-selected-text: $primary_color;
 					--atum-table-link-active: $primary_color;
 					--atum-table-check: $primary_color;
+					--atum-table-bg: $bg_1_color;
 					--atum-table-icon: $secondary_color;
 					--atum-table-icon-active: $secondary_color;
 					--atum-table-text-active: $secondary_color;
 					--atum-settings-heads-bg: $primary_color;
 					--atum-settings-nav-link: $primary_color;
+					--atum-pagination-bg-disabled: $bg_2_color;
+					--atum-footer-totals: $bg_1_color;
+					--atum-dropdown-toggle-bg: $bg_2_color;
 					--atum-settings-nav-link-selected: $primary_color;
 					--atum-settings-section-description: $secondary_color;
 					--atum-settings-btn-save-text: $primary_color;
+					--overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
+					--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
 					--dash-card-text: $secondary_color;
 					--dash-nice-select-text: $secondary_color;
 					--dash-nice-select-disabled-after: lighten($secondary_color_rgb, 20%);

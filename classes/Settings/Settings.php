@@ -474,23 +474,26 @@ class Settings {
 				'options' => array(
 					'values' => array(
 						array(
-							'key'  => 'branded_mode',
-							'name' => __( 'Branded Mode', ATUM_TEXT_DOMAIN ),
-							'desc' => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
+							'key'   => 'branded_mode',
+							'name'  => __( 'Branded Mode', ATUM_TEXT_DOMAIN ),
+							'thumb' => 'branded_mode.png',
+							'desc'  => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
 											elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
 											natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ', ATUM_TEXT_DOMAIN ),
 						),
 						array(
-							'key'  => 'dark_mode',
-							'name' => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
-							'desc' => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
+							'key'   => 'dark_mode',
+							'name'  => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
+							'thumb' => 'dark_mode.png',
+							'desc'  => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
 											elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
 											natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ', ATUM_TEXT_DOMAIN ),
 						),
 						array(
-							'key'  => 'hc_mode',
-							'name' => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
-							'desc' => __( 'Activate the high contrast mode. This mode is for users that find 
+							'key'   => 'hc_mode',
+							'name'  => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
+							'thumb' => 'hc_mode.png',
+							'desc'  => __( 'Activate the high contrast mode. This mode is for users that find 
 											difficult viewing data while browsing 
 											the interface in ATUM\'s branded colours.', ATUM_TEXT_DOMAIN ),
 						),
@@ -509,14 +512,28 @@ class Settings {
 				'name'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#fff',
+				'default' => '#FFFFFF',
 			),
 			'tertiary_color'            => array(
 				'section' => 'scheme_color',
 				'name'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#dbf9ff',
+				'default' => '#DBF9FF',
+			),
+			'bg_1_color'                => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Table Background 1 Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Table Background 1 Color', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'default' => '#FFFFFF',
+			),
+			'bg_2_color'                => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Table Background 2 Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Table Background 2 Color', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'default' => '#F8F9FA',
 			),
 		);
 
@@ -1030,8 +1047,10 @@ class Settings {
 						value="<?php echo esc_attr( $option['key'] ); ?>"
 						<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? 'checked' : ''; ?>>
 				<div class="selector-container">
-					<div class="selector-box<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? ' active' : ''; ?>"
-							data-value="<?php echo esc_attr( $option['key'] ); ?>"></div>
+					<div class="selector-box" data-value="<?php echo esc_attr( $option['key'] ); ?>">
+						<img src="<?php echo esc_attr( ATUM_URL . 'assets/images/settings/' . $option['thumb'] ); ?>" alt=""
+								class="<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? ' active' : ''; ?>">
+					</div>
 					<div class="selector-description">
 						<div><?php echo esc_attr( $option['name'] ); ?></div>
 						<p class="atum-setting-info"><?php echo esc_attr( $option['desc'] ); ?></p>

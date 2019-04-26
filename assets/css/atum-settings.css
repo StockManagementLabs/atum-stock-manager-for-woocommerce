@@ -383,6 +383,7 @@
   --atum-input-placeholder: #adb5bd;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
+  --atum-pagination-bg-disabled: #f8f9fa;
   --atum-pagination-border-disabled: transparent;
   --order-green-light: rgba(180, 240, 0, 0.79);
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
@@ -3855,6 +3856,12 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   background-size: cover;
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
+  position: relative;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .reset-default-colors {
+  position: absolute;
+  right: 20px;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .form-table {
@@ -3927,12 +3934,17 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 .atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box {
   min-width: 171px;
   min-height: 129px;
-  background-color: #eee;
   cursor: pointer;
-  border: 2px solid transparent;
 }
 
-.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box.active {
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box img {
+  width: 171px;
+  height: 129px;
+  border: 2px solid var(--gray-500);
+  border-radius: 5px;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box img.active {
   border: 2px solid var(--blue);
   -webkit-box-shadow: 0 10px 20px 0 var(--black-shadow);
           box-shadow: 0 10px 20px 0 var(--black-shadow);
