@@ -399,9 +399,15 @@ export default class SettingsPage {
                     ColorPicker.updateColorPicker($('#atum_secondary_color'), response.data.secondary_color);
                     ColorPicker.updateColorPicker($('#atum_tertiary_color'), response.data.tertiary_color);
 
-                    // if () {
-                    //     $('.section-title h2 span').html()
-                    // }
+                    if (themeSelectedValue === 'dark_mode') {
+                        $('.section-title h2 span').html('Dark');
+                    }
+                    else if(themeSelectedValue === 'hc_mode'){
+                        $('.section-title h2 span').html('High Contrast');
+                    }
+                    else{
+                        $('.section-title h2 span').html('Branded');
+                    }
 
                     $formSettingsWrapper.removeClass('overlay');
                 }

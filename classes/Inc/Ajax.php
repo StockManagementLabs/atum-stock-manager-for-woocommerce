@@ -2308,8 +2308,8 @@ final class Ajax {
 		}
 		else {
 			$primary_color   = '#00B8DB';
-			$secondary_color = '#FFFFFF';
-			$tertiary_color  = '#DBF9FF';
+			$secondary_color = '#ADB5BD';
+			$tertiary_color  = '#6C757D';
 		}
 
 		wp_send_json_success( compact( 'primary_color', 'secondary_color', 'tertiary_color' ) );
