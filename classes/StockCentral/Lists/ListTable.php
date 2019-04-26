@@ -582,7 +582,7 @@ class ListTable extends AtumListTable {
 		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'customer-returns', $this->product );
 		$this->increase_total( '_customer_returns', $consumer_returns );
 
-		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product, $this );
+		return apply_filters( 'atum/stock_central_list/column_customer_returns', $consumer_returns, $item, $this->product, $this );
 	}
 
 	/**
