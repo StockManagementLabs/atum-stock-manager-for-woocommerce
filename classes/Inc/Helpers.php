@@ -730,11 +730,14 @@ final class Helpers {
 
 					$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
 
-					// Save it for future quicker access.
-					if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
-						call_user_func( array( $product, "set_$column_name" ), $qty );
-					}
+				}
+				else {
+					$qty = 0;
+				}
 
+				// Save it for future quicker access.
+				if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
+					call_user_func( array( $product, "set_$column_name" ), $qty );
 				}
 
 			}
