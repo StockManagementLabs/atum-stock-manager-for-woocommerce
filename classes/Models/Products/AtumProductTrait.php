@@ -28,7 +28,7 @@ trait AtumProductTrait {
 		'purchase_price'        => '',
 		'supplier_id'           => 0,
 		'supplier_sku'          => '',
-		'atum_controlled'       => FALSE,
+		'atum_controlled'       => TRUE, // When a new product is created, the ATUM controlled should be enabled by default.
 		'out_stock_date'        => NULL,
 		'out_stock_threshold'   => '',
 		'inheritable'           => FALSE,

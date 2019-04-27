@@ -12,7 +12,6 @@
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
-use Atum\Inc\Helpers;
 
 ?>
 <div class="atum-data-panel">
