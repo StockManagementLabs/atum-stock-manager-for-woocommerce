@@ -2297,9 +2297,9 @@ final class Ajax {
 		check_ajax_referer( 'atum-scheme-color-nonce', 'token' );
 
 		if ( 'dark_mode' === $_POST['theme'] ) {
-			$primary_color   = '#31324A';
+			$primary_color   = '#FFFFFF';
 			$secondary_color = '#DBF9FF';
-			$tertiary_color  = '#FFFFFF';
+			$tertiary_color  = '#31324A';
 			$bg_1_color      = '#31324A';
 			$bg_2_color      = '#3b3d5a';
 		}

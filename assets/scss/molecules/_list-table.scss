@@ -396,6 +396,7 @@
 		@include tablet-max-wp{
 			margin-bottom: 0;
 		}
+		
 	}
 	
 	&.inbound-stock-search {
@@ -1554,6 +1555,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
 		td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
 			border: none;
+			box-shadow: none;
 		}
 		
 		th {
@@ -1617,8 +1619,15 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		th, td {
-			border-top: 1px solid var(--atum-border);
-			border-bottom: 1px solid var(--atum-border);
+			&:not(.column-title) {
+				border-top: 1px solid var(--atum-border);
+				border-bottom: 1px solid var(--atum-border);
+			}
+			
+			&.column-title {
+				border-bottom: none;
+			}
+			
 		}
 	}
 	
@@ -1754,6 +1763,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	tr {
 		box-shadow: 0 1px 0 0 var(--gray-200-shadow);
 		background-color: var(--atum-table-row-even);
+		border-top: 1px solid var(--atum-border);
+		border-bottom: 1px solid var(--atum-border);
 		
 		&:nth-child(odd) {
 			background-color: var(--atum-table-row-odd);
@@ -1762,7 +1773,9 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
 			background-color: var(--atum-table-row-odd);
-			border: 1px solid var(--atum-row-shadow);
+			border: 1px solid var(--atum-border);
+			border-left: none;
+			border-right: none;
 			
 			&:last-child {
 				border: none;
