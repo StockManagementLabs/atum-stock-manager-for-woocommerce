@@ -193,12 +193,12 @@ abstract class AtumOrderModel {
 		global $wpdb;
 
 		if ( ! empty( $type ) ) {
-			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d AND items.order_item_type = %s', $this->id, $type ) ); // WPCS: unprepared SQL ok.
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d AND order_item_type = %s', $this->id, $type ) ); // WPCS: unprepared SQL ok.
+			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d AND items.order_item_type = %s', $this->id, $type ) ); // WPCS: unprepared SQL ok.
+			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d AND order_item_type = %s', $this->id, $type ) ); // WPCS: unprepared SQL ok.
 		}
 		else {
-			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d', $this->id ) ); // WPCS: unprepared SQL ok.
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d', $this->id ) ); // WPCS: unprepared SQL ok.
+			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d', $this->id ) ); // WPCS: unprepared SQL ok.
+			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d', $this->id ) ); // WPCS: unprepared SQL ok.
 		}
 
 		$this->clear_caches();

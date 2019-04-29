@@ -128,11 +128,6 @@ final class Globals {
 	const IS_INHERITABLE_KEY = '_inheritable';
 
 	/**
-	 * Tha key for the constant to ignore the ATUM cache;
-	 */
-	const IGNORE_CACHE_KEY = 'ATUM_IGNORE_CACHE';
-
-	/**
 	 * Searchable columns and their types
 	 */
 	const SEARCHABLE_COLUMNS = array(

@@ -1114,7 +1114,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->product->set_has_location( $has_location );
 		}
 
-		$location_terms_class = $has_location ? ' not-empty' : '';
+		$location_terms_class = $has_location && 'no' !== $has_location ? ' not-empty' : '';
 
 		$data_tip  = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Show Locations', ATUM_TEXT_DOMAIN ) . '"' : '';
 		$locations = '<a href="#" class="show-locations atum-icon atmi-map-marker tips' . $location_terms_class . '"' . $data_tip . ' data-locations=""></a>';
@@ -1421,61 +1421,62 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 
 		$product_id = $this->get_current_product_id();
-		$content    = '';
+		$content    = self::EMPTY_COL;
 
 		// Add css class to the <td> elements depending on the quantity in stock compared to the last days sales.
-		if ( ! $this->allow_calcs ) {
-			$content = self::EMPTY_COL;
-		}
-		// Stock not managed by WC.
-		elseif ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
+		if ( $this->allow_calcs ) {
 
-			$wc_stock_status = $this->product->get_stock_status();
+			// Stock not managed by WC.
+			if ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
 
-			switch ( $wc_stock_status ) {
-				case 'instock':
-					$classes .= ' cell-green';
-					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
-					break;
+				$wc_stock_status = $this->product->get_stock_status();
 
-				case 'outofstock':
-					$classes .= ' cell-red';
-					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
-					break;
+				switch ( $wc_stock_status ) {
+					case 'instock':
+						$classes .= ' cell-green';
+						$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
+						$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
+						break;
 
-				case 'onbackorder':
-					$classes .= ' cell-yellow';
-					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
-					$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
-					break;
+					case 'outofstock':
+						$classes .= ' cell-red';
+						$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
+						$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
+						break;
+
+					case 'onbackorder':
+						$classes .= ' cell-yellow';
+						$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'On Backorder (not managed by WC)', ATUM_TEXT_DOMAIN ) . '"' : '';
+						$content  = '<span class="atum-icon atmi-question-circle tips"' . $data_tip . '></span>';
+						break;
+				}
+
+			}
+			// Out of stock.
+			elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
+				$classes .= ' cell-red';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
+			}
+			// Back Orders.
+			elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
+				$classes .= ' cell-yellow';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$content  = '<span class="atum-icon atmi-circle-minus tips"' . $data_tip . '></span>';
+			}
+			// Low Stock.
+			elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
+				$classes .= ' cell-blue';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$content  = '<span class="atum-icon atmi-arrow-down-circle tips"' . $data_tip . '></span>';
+			}
+			// In Stock.
+			elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
+				$classes .= ' cell-green';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$content  = '<span class="atum-icon atmi-checkmark-circle tips"' . $data_tip . '></span>';
 			}
 
-		}
-		// Out of stock.
-		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
-			$classes .= ' cell-red';
-			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
-		}
-		// Back Orders.
-		elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
-			$classes .= ' cell-yellow';
-			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="atum-icon atmi-circle-minus tips"' . $data_tip . '></span>';
-		}
-		// Low Stock.
-		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
-			$classes .= ' cell-blue';
-			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="atum-icon atmi-arrow-down-circle tips"' . $data_tip . '></span>';
-		}
-		// In Stock.
-		elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
-			$classes .= ' cell-green';
-			$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
-			$content  = '<span class="atum-icon atmi-checkmark-circle tips"' . $data_tip . '></span>';
 		}
 
 		$classes = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );

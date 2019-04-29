@@ -15,6 +15,7 @@ namespace Atum\InventoryLogs\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemProduct;
 
@@ -390,13 +391,7 @@ class Log extends AtumOrderModel {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( is_a( $product, '\WC_Product' ) ) {
-
-				foreach ( self::$log_type_columns as $log_type => $log_type_column ) {
-					Helpers::get_log_item_qty( $log_type, $product, 'pending', TRUE ); // This already sets the prop to the column, so we just need to save it later.
-				}
-
-				$product->save_atum_data();
-
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
 			}
 
 		}

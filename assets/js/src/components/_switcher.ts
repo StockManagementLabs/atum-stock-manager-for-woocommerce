@@ -20,7 +20,7 @@ export let Switcher = {
 	 * @param string selectorClass
 	 * @param Object options
 	 */
-	doSwitchers(defaultValue: boolean = false, selectorClass: string = '.js-switch', options?: SwitcherOptions) {
+	doSwitchers(selectorClass: string = '.js-switch', options?: SwitcherOptions) {
 		
 		options = Object.assign( {
 			size               : 'small',
@@ -31,13 +31,8 @@ export let Switcher = {
 		}, options || {});
 		
 		$(selectorClass).each( (index: number, elem: Element) => {
-			
-			let switchery = new Switchery(elem, options);
+			new Switchery(elem, options);
 			$(elem).removeClass( selectorClass.replace('.', '') );
-			if (defaultValue && $(elem).hasClass('variation-atum-controlled')) {
-                switchery.element.checked = true; // or false or (item.active == 1)
-                switchery.setPosition();
-            }
 		} );
 		
 	}

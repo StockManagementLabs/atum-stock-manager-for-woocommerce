@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Settings\Settings;
 
+
 class Hooks {
 	
 	/**
@@ -117,9 +118,12 @@ class Hooks {
 		
 		}
 
-		// Save the orders-related data every time an order status is changed.
-		add_action( 'woocommerce_reduce_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
-		add_action( 'woocommerce_restore_order_stock', array( $this, 'save_order_items_props' ), PHP_INT_MAX );
+		// Save the orders-related data every time an order is saved.
+		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
+
+		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
+		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
+		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
 	}
 
@@ -665,32 +669,60 @@ class Hooks {
 	}
 
 	/**
-	 * Save the order-related props every time the stock is reduced/increased for the products within a WC order
+	 * Save the order-related ATUM props every time a WC order is saved
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Order $order
+	 * @param int      $order_id
+	 * @param \WP_Post $post
 	 */
-	public function save_order_items_props( $order ) {
+	public function save_order_items_props( $order_id, $post = NULL ) {
+
+		$order = wc_get_order( $order_id );
+
+		if ( ! is_a( $order, '\WC_Order' ) ) {
+			return;
+		}
 
 		$items = $order->get_items();
 
-		foreach ( $items as $item ) {
+		if ( ! empty( $items ) ) {
 
-			/**
-			 * Variable definition
-			 *
-			 * @var \WC_Order_Item_Product $item
-			 */
-			$product_id = $item->get_variation_id() ?: $item->get_product_id();
-			$product    = Helpers::get_atum_product( $product_id );
+			foreach ( $items as $item ) {
 
-			if ( is_a( $product, '\WC_Product' ) ) {
-				Helpers::update_expiring_product_data( $product );
-				do_action( 'atum/after_save_order_item_props', $item, $order );
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Order_Item_Product $item
+				 */
+				$product_id = $item->get_variation_id() ?: $item->get_product_id();
+				$product    = Helpers::get_atum_product( $product_id );
+
+				if ( is_a( $product, '\WC_Product' ) ) {
+					Helpers::update_order_item_product_data( $product );
+					do_action( 'atum/after_save_order_item_props', $item, $order_id );
+				}
+
 			}
 
 		}
+
+	}
+
+	/**
+	 * When an order is moved or restored from trash, update the items' ATUM props
+	 *
+	 * @param int $order_id
+	 *
+	 * @since 1.5.8
+	 */
+	public function maybe_save_order_items_props( $order_id ) {
+
+		if ( 'shop_order' !== get_post_type( $order_id ) ) {
+			return;
+		}
+
+		$this->save_order_items_props( $order_id );
 
 	}
 

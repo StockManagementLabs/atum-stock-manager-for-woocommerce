@@ -30,7 +30,7 @@ export default class ProductDataMetaBoxes {
 		});
 
 		this.$productDataMetaBox.on('woocommerce_variations_added', () => {
-            Switcher.doSwitchers(true);
+            Switcher.doSwitchers();
             ButtonGroup.doButtonGroups(this.$productDataMetaBox.find('.woocommerce_variations'));
 		});
 		

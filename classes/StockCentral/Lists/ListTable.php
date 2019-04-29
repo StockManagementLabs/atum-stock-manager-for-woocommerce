@@ -582,7 +582,7 @@ class ListTable extends AtumListTable {
 		$consumer_returns = ! $this->allow_calcs ? self::EMPTY_COL : Helpers::get_log_item_qty( 'customer-returns', $this->product );
 		$this->increase_total( '_customer_returns', $consumer_returns );
 
-		return apply_filters( 'atum/stock_central_list/column_cutomer_returns', $consumer_returns, $item, $this->product, $this );
+		return apply_filters( 'atum/stock_central_list/column_customer_returns', $consumer_returns, $item, $this->product, $this );
 	}
 
 	/**
@@ -648,10 +648,9 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column__sales_last_days( $item, $add_to_total = TRUE ) {
 
-		if ( ! $this->allow_calcs ) {
-			$sales_last_ndays = self::EMPTY_COL;
-		}
-		else {
+		$sales_last_ndays = self::EMPTY_COL;
+
+		if ( $this->allow_calcs ) {
 
 			$sale_days        = self::$sale_days;
 			$sales_last_ndays = $this->product->get_sales_last_days();
@@ -665,6 +664,10 @@ class ListTable extends AtumListTable {
 				$this->product->set_sales_last_days( $sales_last_ndays );
 				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
 
+			}
+
+			if ( ! is_numeric( $sales_last_ndays ) ) {
+				$sales_last_ndays = 0;
 			}
 
 			if ( $add_to_total ) {

@@ -29,6 +29,12 @@ export default class AtumOrders {
 		
 		this.$container = $('#atum_order_items');
 		this.$itemsBlocker = this.$container.find('.items-blocker');
+		
+		if (this.$itemsBlocker.length === 0) {
+			$('.atum_order_items_wrapper').before(`<div class="items-blocker"><h3>${ this.settings.get('itemBlocker') }</h3></div>`);
+			this.$itemsBlocker = this.$container.find('.items-blocker');
+		}
+		
 		this.areItemsSelectable = this.settings.get('enableSelectItems');
 		this.isEditable = $('#atum_order_is_editable').val();
 		
@@ -79,11 +85,11 @@ export default class AtumOrders {
 		// Trigger ATUM order type dependent fields
 		$('#atum_order_type').change( (evt: JQueryEventObject) => this.toggleExtraFields(evt) ).change();
 		
-		// Trigger multiple suppliers' dependent fields
-		$('#multiple_suppliers').change( (evt: JQueryEventObject) => this.toggleSupplierField(evt) );
-		
 		// Hide/show the blocker section on supplier dropdown changes.
 		$('.dropdown_supplier').change( (evt: JQueryEventObject) => this.toggleItemsBlocker( $(evt.currentTarget).val() !== null ) ).change();
+		
+		// Trigger multiple suppliers' dependent fields
+		$('#multiple_suppliers').change( (evt: JQueryEventObject) => this.toggleSupplierField(evt) ).change();
 		
 		// Ask for importing the order items after linking an order
 		$('#wc_order').change( () => this.importOrderItems() );
@@ -133,12 +139,12 @@ export default class AtumOrders {
 		);
 		
 		// Taxes
-		$( 'input.line_tax', $row ).each( (index: number, elem: Element) => {
+		$row.find('input.line_tax').each( (index: number, elem: Element) => {
 			
 			let $lineTotalTax: JQuery    = $(elem),
 			    taxId: string            = $lineTotalTax.data('tax_id'),
 			    unitTotalTax: number     = this.accounting.unformat($lineTotalTax.data('total_tax'), this.settings.get('mon_decimal_point')) / oQty,
-			    $lineSubtotalTax: JQuery = $row.find('input.line_subtotal_tax[data-tax_id="' + taxId + '"]'),
+			    $lineSubtotalTax: JQuery = $row.find(`input.line_subtotal_tax[data-tax_id="${ taxId }"]`),
 			    unitSubtotalTax: number  = this.accounting.unformat($lineSubtotalTax.data('subtotal_tax'), this.settings.get('mon_decimal_point')) / oQty;
 			
 			if ( 0 < unitTotalTax ) {
@@ -288,31 +294,17 @@ export default class AtumOrders {
 		      $dropdown: JQuery        = $('.dropdown_supplier'),
 		      $dropdownWrapper: JQuery = $dropdown.parent();
 
-		let $cheked: String = null;
-
 		if ($checkbox.is(':checked')) {
-            $cheked = 'yes';
 			$dropdown.val('').change();
 			$body.addClass('allow-multiple-suppliers');
 			this.toggleItemsBlocker();
 			$dropdownWrapper.slideUp();
 		}
 		else {
-            $cheked = 'no';
 			$body.removeClass('allow-multiple-suppliers');
-			this.toggleItemsBlocker(false);
+			this.toggleItemsBlocker( $dropdown.val() !== null ); // Only block the items if there is no supplier selected.
 			$dropdownWrapper.slideDown();
 		}
-
-        if ( $cheked === $('.item-blocker-old-value').val() ) {
-		    $('.items-blocker').hide();
-        }else {
-            $('.items-blocker').show();
-        }
-
-		if ($('.items-blocker').length === 0) {
-            $('.atum_order_items_wrapper').before('<div class="items-blocker"><h3>' + this.settings.get('itemBlocker') + '</h3></div>');
-        }
 
 	}
 	

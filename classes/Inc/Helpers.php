@@ -730,11 +730,14 @@ final class Helpers {
 
 					$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
 
-					// Save it for future quicker access.
-					if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
-						call_user_func( array( $product, "set_$column_name" ), $qty );
-					}
+				}
+				else {
+					$qty = 0;
+				}
 
+				// Save it for future quicker access.
+				if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
+					call_user_func( array( $product, "set_$column_name" ), $qty );
 				}
 
 			}
@@ -3084,31 +3087,51 @@ final class Helpers {
 	 * @since 1.5.8
 	 *
 	 * @param \WC_Product $product
+	 * @param int         $order_type_id
 	 */
-	public static function update_expiring_product_data( $product ) {
+	public static function update_order_item_product_data( $product, $order_type_id = 1 ) {
 
-		$current_time = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
-		$sale_days    = self::get_sold_last_days_option();
-		$product_id   = $product->get_id();
+		switch ( $order_type_id ) {
+			// Purchase Orders.
+			case 2:
+				self::get_product_inbound_stock( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
+				break;
 
-		// Set stock "On Hold".
-		self::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
+			// Inventory Logs.
+			case 3:
+				foreach ( Log::get_log_type_columns() as $log_type => $log_type_column ) {
+					self::get_log_item_qty( $log_type, $product, 'pending', TRUE ); // This already sets the prop to the column, so we just need to save it later.
+				}
 
-		// Set sold today.
-		$sold_today = self::get_sold_last_days( $product_id, 'today midnight', $current_time );
-		$product->set_sold_today( $sold_today );
+				break;
 
-		// Sales last days.
-		$sales_last_ndays = self::get_sold_last_days( $product_id, "$current_time -$sale_days days", $current_time );
-		$product->set_sales_last_days( $sales_last_ndays );
+			// WC Orders.
+			default:
+				$current_time = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
+				$sale_days    = self::get_sold_last_days_option();
+				$product_id   = $product->get_id();
 
-		// Out stock days.
-		$out_of_stock_days = self::get_product_out_stock_days( $product );
-		$product->set_out_stock_days( $out_of_stock_days );
+				// Set stock "On Hold".
+				self::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
 
-		// Lost sales.
-		$lost_sales = self::get_product_lost_sales( $product );
-		$product->set_lost_sales( $lost_sales );
+				// Set sold today.
+				$sold_today = self::get_sold_last_days( $product_id, 'today midnight', $current_time );
+				$product->set_sold_today( $sold_today );
+
+				// Sales last days.
+				$sales_last_ndays = self::get_sold_last_days( $product_id, "$current_time -$sale_days days", $current_time );
+				$product->set_sales_last_days( $sales_last_ndays );
+
+				// Out stock days.
+				$out_of_stock_days = self::get_product_out_stock_days( $product );
+				$product->set_out_stock_days( $out_of_stock_days );
+
+				// Lost sales.
+				$lost_sales = self::get_product_lost_sales( $product );
+				$product->set_lost_sales( $lost_sales );
+
+				break;
+		}
 
 		$product->save_atum_data();
 

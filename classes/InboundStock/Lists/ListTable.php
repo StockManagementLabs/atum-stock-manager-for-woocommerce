@@ -31,6 +31,17 @@ class ListTable extends AtumListTable {
 	protected static $default_hidden_columns = array( 'ID' );
 
 	/**
+	 * Just to center the numeric columns on this table
+	 *
+	 * @var array
+	 */
+	protected $default_searchable_columns = array(
+		'numeric' => array(
+			'_inbound_stock',
+		),
+	);
+
+	/**
 	 * ListTable Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args

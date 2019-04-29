@@ -16,6 +16,7 @@ export default class LocationsTree {
 	locationsSet: string[] = [];
 	toSetLocations: string[] = [];
 	productId: number = null;
+	productTitle: string = '';
 	swal: any = window['swal'];
 	
 	constructor(
@@ -38,11 +39,16 @@ export default class LocationsTree {
 	 */
 	showLocationsPopup($button: JQuery) {
 		
-		this.productId = $button.closest('tr').data('id');
+		const $row: JQuery = $button.closest('tr');
+		
+		this.productId      = $row.data('id');
+		this.productTitle   = $row.find('.column-title').find('.atum-title-small').length ? $row.find('.column-title').find('.atum-title-small').text() : $row.find('.column-title').text();
+		this.toSetLocations = [];
+		this.locationsSet   = [];
 		
 		// Open the view popup.
 		this.swal({
-			title             : this.settings.get('productLocations'),
+			title             : `${ this.settings.get('productLocations') }<br><small>(${ this.productTitle })</small>`,
 			html              : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			showCancelButton  : false,
 			showConfirmButton : true,
@@ -105,7 +111,7 @@ export default class LocationsTree {
 				
 				}
 				else {
-					$('#atum-locations-tree').html('<h4 class="color-danger">' + response.data + '</h4>');
+					$('#atum-locations-tree').html(`<h4 class="color-danger">${ response.data }</h4>`);
 				}
 				
 			},
@@ -126,7 +132,7 @@ export default class LocationsTree {
 	openEditPopup() {
 		
 		this.swal({
-			title              : this.settings.get('editProductLocations'),
+			title              : `${ this.settings.get('editProductLocations') }<br><small>(${ this.productTitle })</small>`,
 			html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			text               : this.settings.get('textToShow'),
 			confirmButtonText  : this.settings.get('saveButton'),
@@ -167,7 +173,7 @@ export default class LocationsTree {
 					(<any>$locationsTreeContainer).easytree();
 					
 					// Add instructions alert.
-					$locationsTreeContainer.append('<div class="alert alert-primary"><i class="atmi-info"></i> ' + this.settings.get('editLocationsInfo') + '</div>');
+					$locationsTreeContainer.append(`<div class="alert alert-primary"><i class="atmi-info"></i> ${ this.settings.get('editLocationsInfo') }</div>`);
 					
 					this.bindEditTreeEvents($locationsTreeContainer);
 					
@@ -256,11 +262,11 @@ export default class LocationsTree {
 				}
 			});
 			
-			const $catItme: JQuery = $('.' + catItem);
+			const $catItem: JQuery = $(`.${ catItem }`);
 			
-			$catItme.toggleClass('checked');
+			$catItem.toggleClass('checked');
 			
-			if ($catItme.hasClass('checked')) {
+			if ($catItem.hasClass('checked')) {
 				this.toSetLocations.push(catItem);
 			}
 			else {
@@ -283,7 +289,7 @@ export default class LocationsTree {
 			$.each(classList, (index: number, className: string) => {
 				
 				if (className.startsWith('cat-item-') && $.inArray(className, this.locationsSet) > -1) {
-					$('.' + className).addClass('checked');
+					$(`.${ className }`).addClass('checked');
 				}
 				
 			});
