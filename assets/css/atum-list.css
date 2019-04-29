@@ -317,6 +317,7 @@
   --atum-table-icon-active: #adb5bd;
   --atum-table-text-active: #adb5bd;
   --atum-dark-bg: #3b3d5a;
+  --popover-black-shadow: rgba(0, 0, 0, 0.2);
   --atum-settings-nav-bg: #fff;
   --atum-settings-heads-bg: #00B8DB;
   --atum-settings-section-general-bg: #3b3d5a;
@@ -2937,12 +2938,12 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   z-index: 99998;
   display: none;
   max-width: 276px;
-  background-color: #fff;
+  background-color: var(--atum-table-bg);
   background-clip: padding-box;
   border: none;
   border-radius: 6px;
-  -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
-          box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 1px 5px 0 var(--popover-black-shadow);
+          box-shadow: 0 1px 5px 0 var(--popover-black-shadow);
 }
 
 .popover.top {
@@ -2965,12 +2966,12 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   margin: 0;
   padding: 6px 14px;
   font-size: 14px;
-  background-color: #f8f9fa;
+  background-color: var(--gray-100);
   border-radius: 5px 5px 0 0;
   text-align: center;
   font-size: 14px;
   font-weight: bold;
-  color: #6c757d;
+  color: var(--gray-600);
 }
 
 .atum-list-table .popover-title {
@@ -3000,22 +3001,22 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .popover-content > input[type=number], .popover-content > input[type=text] {
   border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid #e9ecef;
+  background-color: var(--atum-table-bg);
+  border: 1px solid var(--gray-200);
   font-size: 15px;
   line-height: 1.47px;
   text-align: right;
-  color: #6c757d;
+  color: var(--gray-600);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
 .popover-content > input[type=number]:focus, .popover-content > input[type=text]:focus {
-  border-color: #00B8DB;
+  border-color: var(--blue);
 }
 
 .popover-content > input[type=number]:hover, .popover-content > input[type=text]:hover {
-  border-color: #6c757d;
+  border-color: var(--gray-600);
 }
 
 .popover > .popover-arrow, .popover > .popover-arrow:after {
@@ -3040,7 +3041,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   left: 50%;
   margin-left: -11px;
   border-bottom-width: 0;
-  border-top-color: rgba(0, 0, 0, 0.25);
+  border-top-color: var(--popover-black-shadow);
   bottom: -11px;
 }
 
@@ -3049,7 +3050,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   bottom: 1px;
   margin-left: -10px;
   border-bottom-width: 0;
-  border-top-color: #f8f9fa;
+  border-top-color: var(--gray-100);
 }
 
 .popover.right > .popover-arrow {
@@ -3057,7 +3058,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   left: -11px;
   margin-top: -11px;
   border-left-width: 0;
-  border-right-color: rgba(0, 0, 0, 0.25);
+  border-right-color: var(--popover-black-shadow);
 }
 
 .popover.right > .popover-arrow:after {
@@ -3065,7 +3066,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   left: 1px;
   bottom: -10px;
   border-left-width: 0;
-  border-right-color: #f8f9fa;
+  border-right-color: var(--gray-100);
 }
 
 .popover.bottom > .popover-arrow {
@@ -3082,11 +3083,11 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   margin-left: -10px;
   content: "";
   position: absolute;
-  background: #f8f9fa;
+  background: var(--gray-100);
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
-  -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 0 5px 1px var(--popover-black-shadow);
+          box-shadow: 0 0 5px 1px var(--popover-black-shadow);
 }
 
 .popover.left > .popover-arrow {
@@ -3094,14 +3095,14 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   right: -11px;
   margin-top: -11px;
   border-right-width: 0;
-  border-left-color: rgba(0, 0, 0, 0.25);
+  border-left-color: var(--popover-black-shadow);
 }
 
 .popover.left > .popover-arrow:after {
   content: " ";
   right: 1px;
   border-right-width: 0;
-  border-left-color: #f8f9fa;
+  border-left-color: var(--gray-100);
   bottom: -10px;
 }
 

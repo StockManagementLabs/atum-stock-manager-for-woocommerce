@@ -2814,6 +2814,7 @@ final class Helpers {
 				    --orange-hover: $dm_orange;
 				    --warning: $dm_orange;
 				    --warning-hover: rgba($dm_orange_rgb,0.6);
+				    --popover-black-shadow: rgba($primary_color_rgb,0.6);
 				    --red: $dm_red;
 				    --red-hover: $dm_red;
 				    --danger: $dm_red;

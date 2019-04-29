@@ -9,11 +9,11 @@
 	z-index: $zindex-popover;
 	display: none;
 	max-width: $popover-max-width;
-	background-color: $popover-bg;
+	background-color: var(--atum-table-bg);
 	background-clip: padding-box;
 	border: none;
 	border-radius: $popover-border-radius;
-	box-shadow: 0 1px 5px 0 rgba($black, .15);
+	box-shadow: 0 1px 5px 0 var(--popover-black-shadow);
 	
 	// Offset the popover to account for the popover arrow
 	&.top {
@@ -37,12 +37,12 @@
 	margin: 0; // reset heading margin
 	padding: 6px 14px;
 	font-size: 14px;
-	background-color: $popover-title-bg;
+	background-color: var(--gray-100);
 	border-radius: ($popover-border-radius - 1) ($popover-border-radius - 1) 0 0;
 	text-align: center;
 	font-size: 14px;
 	font-weight: bold;
-	color: $gray-600;
+	color: var(--gray-600);
 	
 	.atum-list-table & {
 		text-align: center;
@@ -65,20 +65,20 @@
 
 .popover-content > input[type=number], .popover-content > input[type=text] {
 	border-radius: 5px;
-	background-color: $white;
-	border: 1px solid $gray-200;
+	background-color: var(--atum-table-bg);
+	border: 1px solid var(--gray-200);
 	font-size: 15px;
 	line-height: 1.47px;
 	text-align: right;
-	color: $gray-600;
+	color: var(--gray-600);
 	box-shadow: none;
 	
 	&:focus {
-		border-color: $blue;
+		border-color: var(--blue);
 	}
 	
 	&:hover {
-		border-color: $gray-600;
+		border-color: var(--gray-600);
 	}
 }
 
@@ -112,7 +112,7 @@
 		left: 50%;
 		margin-left: -$popover-arrow-outer-width;
 		border-bottom-width: 0;
-		border-top-color: $popover-arrow-outer-color;
+		border-top-color: var(--popover-black-shadow);
 		bottom: -$popover-arrow-outer-width;
 		
 		&:after {
@@ -120,7 +120,7 @@
 			bottom: 1px;
 			margin-left: -$popover-arrow-width;
 			border-bottom-width: 0;
-			border-top-color: $popover-arrow-color;
+			border-top-color: var(--gray-100);
 		}
 	}
 	
@@ -129,14 +129,14 @@
 		left: -$popover-arrow-outer-width;
 		margin-top: -$popover-arrow-outer-width;
 		border-left-width: 0;
-		border-right-color: $popover-arrow-outer-color;
+		border-right-color: var(--popover-black-shadow);
 		
 		&:after {
 			content: " ";
 			left: 1px;
 			bottom: -$popover-arrow-width;
 			border-left-width: 0;
-			border-right-color: $popover-arrow-color;
+			border-right-color: var(--gray-100);
 		}
 	}
 	
@@ -153,9 +153,9 @@
 				margin-left: -10px;
 				content: "";
 				position: absolute;
-				background: $gray-100;
+				background: var(--gray-100);
 				transform: rotate(45deg);
-				box-shadow: 0 0 5px 1px rgba($black, 0.15);
+				box-shadow: 0 0 5px 1px var(--popover-black-shadow);
 		}
 	}
 	
@@ -164,13 +164,13 @@
 		right: -$popover-arrow-outer-width;
 		margin-top: -$popover-arrow-outer-width;
 		border-right-width: 0;
-		border-left-color: $popover-arrow-outer-color;
+		border-left-color: var(--popover-black-shadow);
 		
 		&:after {
 			content: " ";
 			right: 1px;
 			border-right-width: 0;
-			border-left-color: $popover-arrow-color;
+			border-left-color: var(--gray-100);
 			bottom: -$popover-arrow-width;
 		}
 	}
