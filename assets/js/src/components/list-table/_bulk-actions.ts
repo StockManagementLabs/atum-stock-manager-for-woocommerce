@@ -31,7 +31,7 @@ export default class BulkActions {
 						text              : this.settings.get('selectItems'),
 						type              : 'info',
 						confirmButtonText : this.settings.get('ok'),
-						confirmButtonColor: '#00b8db',
+						confirmButtonColor: 'var(--primary)',
 					});
 					
 				}

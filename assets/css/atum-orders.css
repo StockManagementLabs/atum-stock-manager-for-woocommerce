@@ -298,6 +298,7 @@
   --atum-pagination-bg-disabled: #f8f9fa;
   --atum-pagination-border-disabled: transparent;
   --order-green-light: rgba(180, 240, 0, 0.79);
+  --atum-icon-tree: #343a40;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
   --atum-footer-totals: #e9ecef;
   --atum-table-bg: #fff;
@@ -3042,23 +3043,24 @@ input[type="button"].btn-block {
   margin: 0;
   border-radius: 4px;
   height: 30px;
-  color: #6c757d;
-  border: 1px solid #e9ecef;
+  color: var(--gray-600);
+  border: 1px solid var(--gray-200);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
 .swal2-container .swal2-content input[type=text]:hover {
-  border: solid 1px #6c757d;
+  border: solid 1px var(--gray-600);
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border: solid 1px #00B8DB;
+  border: solid 1px var(--blue);
 }
 
 .swal2-container .swal2-title {
   line-height: 1.3;
   font-size: 23px;
+  color: var(--gray-600);
 }
 
 .swal2-container .swal2-close {
@@ -3066,7 +3068,7 @@ input[type="button"].btn-block {
   font-family: inherit;
   font-size: 30px;
   line-height: 30px;
-  color: #6c757d;
+  color: var(--gray-600);
 }
 
 .swal2-container .swal2-modal p {
@@ -3092,6 +3094,7 @@ input[type="button"].btn-block {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
+  color: var(--atum-table-bg);
 }
 
 .swal2-container .swal2-modal button .atum-icon {
@@ -3103,11 +3106,11 @@ input[type="button"].btn-block {
 
 .swal2-container .swal2-modal a {
   text-decoration: none;
-  color: #0073AA !important;
+  color: var(--wp-link) !important;
 }
 
 .swal2-container .swal2-modal a:hover {
-  color: #00A0D2;
+  color: var(--wp-link-hover);
 }
 
 .swal2-container .atum-loading {

@@ -57,6 +57,7 @@ export default class LocationsTree {
 			showCloseButton   : true,
 			onOpen            : () => this.onOpenViewPopup(),
 			onClose           : () => this.onCloseViewPopup(),
+            background        : 'var(--atum-table-bg)'
 		})
 		// Click on edit: open the edit popup.
 		.then( () => this.openEditPopup() )
@@ -142,6 +143,7 @@ export default class LocationsTree {
 			showLoaderOnConfirm: true,
 			onOpen             : () => this.onOpenEditPopup(),
 			preConfirm         : () => this.saveLocations(),
+            background         : 'var(--atum-table-bg)'
 		})
 		.then( () => this.onCloseEditPopup() )
 		.catch(this.swal.noop);
@@ -194,6 +196,7 @@ export default class LocationsTree {
 			text              : this.settings.get('locationsSaved'),
 			confirmButtonText : this.settings.get('ok'),
 			confirmButtonColor: 'var(--primary)',
+            background        : 'var(--atum-table-bg)'
 		});
 		
 	}

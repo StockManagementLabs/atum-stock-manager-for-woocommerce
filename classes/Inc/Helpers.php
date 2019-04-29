@@ -2717,6 +2717,7 @@ final class Helpers {
 					--green-light: $hc_blue_light;
 					--atum-table-bg: $bg_1_color;
 				    --atum-border: $gray_500;
+				    --atum-icon-tree: $primary_color;
 				    --atum-select2-selected-bg: $tertiary_color;
 				    --atum-select2-selected-text: $primary_color;
 				    --atum-table-item-heads: $secondary_color;
@@ -2777,14 +2778,14 @@ final class Helpers {
 					}";
 		}
 		elseif ( 'dark_mode' === $theme_settings ) {
-			$dm_green_blue2   = '#f5fdff';
-			$dm_orange        = '#ffdf89';
-			$dm_orange_rgb    = self::convert_hexadecimal_to_rgb( $dm_orange );
-			$dm_green         = '#baef8d';
-			$dm_green_light2  = '#f0fbe7';
-			$dm_green_rgb     = self::convert_hexadecimal_to_rgb( $dm_green );
-			$dm_red           = '#ffaeae';
-			$dm_red_rgb       = self::convert_hexadecimal_to_rgb( $dm_red );
+			$dm_green_blue2  = '#f5fdff';
+			$dm_orange       = '#ffdf89';
+			$dm_orange_rgb   = self::convert_hexadecimal_to_rgb( $dm_orange );
+			$dm_green        = '#baef8d';
+			$dm_green_light2 = '#f0fbe7';
+			$dm_green_rgb    = self::convert_hexadecimal_to_rgb( $dm_green );
+			$dm_red          = '#ffaeae';
+			$dm_red_rgb      = self::convert_hexadecimal_to_rgb( $dm_red );
 
 			$style = ":root{
 					--white: $primary_color;
@@ -2800,6 +2801,7 @@ final class Helpers {
 				    --atum-table-link-active: $blue;
 				    --atum-table-check: $blue;
 				    --blue-hover: $secondary_color;
+				    --wp-link: $secondary_color;
 				    --dash-blue-trans: $dm_green_blue2;
 				    --primary: $secondary_color;
 				    --primary-hover: rgba($secondary_color_rgb,0.6);
@@ -2827,6 +2829,7 @@ final class Helpers {
 				    --atum-table-views-tabs-active: $secondary_color;
 				    --atum-table-views-tabs-active-text: $tertiary_color;
 				    --atum-table-link-child: $blue;
+				    --atum-icon-tree: $primary_color;
 				    --atum-table-link-text: $primary_color;
 				    --atum-dropdown-toggle-bg: $bg_2_color;
 				    --atum-pagination-bg-disabled: $bg_2_color;
@@ -2896,6 +2899,7 @@ final class Helpers {
 					--dash-video-subs-text $gray_500;
 				}";
 		}else {
+
 			$style = ":root{
 					--blue: $primary_color;
 					--gray-600:$tertiary_color;
@@ -2919,6 +2923,7 @@ final class Helpers {
 					--atum-pagination-bg-disabled: $bg_2_color;
 					--atum-footer-totals: $bg_1_color;
 					--atum-dropdown-toggle-bg: $bg_2_color;
+					--atum-icon-tree: $tertiary_color;
 					--atum-settings-nav-link-selected: $primary_color;
 					--atum-settings-section-description: $secondary_color;
 					--atum-settings-btn-save-text: $primary_color;
