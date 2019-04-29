@@ -2866,7 +2866,7 @@ final class Helpers {
 					--atum-table-bg: $bg_1_color;
 					--overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
-					--atum-border: rgba($tertiary_color_rgb, 0.2);
+					--atum-border: rgba($primary_color_rgb, 0.2);
 					--dash-card-bg: $primary_color;
 					--dash-h5-text: $primary_color;
 					--dash-nice-select-bg: $tertiary_color;
