@@ -3258,7 +3258,7 @@ ul.easytree-container {
   white-space: nowrap;
   padding: 15px 10px !important;
   margin: 0;
-  border: 1px solid #E3E8F5;
+  border: 1px solid var(--info);
   border-radius: 6px;
   overflow: auto;
   height: 100%;
@@ -3272,7 +3272,7 @@ ul.easytree-container > li:first-child {
 
 ul.easytree-container > li:not(:first-child) {
   padding: 15px 0;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--gray-200);
 }
 
 ul.easytree-container > li:nth-child(2) {
@@ -3303,7 +3303,7 @@ ul.easytree-container ul li {
 }
 
 ul.easytree-container ul li, ul.easytree-container ul li a {
-  color: #343a40;
+  color: var(--dark);
 }
 
 ul.easytree-container ul li.easytree-lastsib {
@@ -3311,12 +3311,12 @@ ul.easytree-container ul li.easytree-lastsib {
 }
 
 ul.easytree-container ul li .selected-node .easytree-title a, ul.easytree-container ul li .selected-node .atum-icon {
-  color: #69C61D !important;
+  color: var(--success) !important;
 }
 
 .ui-easytree-disabled ul.easytree-container {
   opacity: 0.5;
-  background-color: #6c757d;
+  background-color: var(--secondary);
 }
 
 ul.easytree-container img {
@@ -3339,13 +3339,13 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   vertical-align: top;
   font-family: "atum-icon-font";
   cursor: pointer;
-  color: #343a40;
+  color: var(--dark);
 }
 
 span.easytree-custom-icon {
   display: inline-block !important;
   vertical-align: -1px;
-  color: #343a40;
+  color: var(--dark);
   margin-left: 3px;
   text-indent: 0 !important;
 }
@@ -3362,7 +3362,7 @@ span.easytree-expander:before {
 }
 
 span.easytree-expander:hover {
-  color: #00B8DB !important;
+  color: var(--primary) !important;
 }
 
 .easytree-exp-e span.easytree-expander:before, .easytree-exp-ed span.easytree-expander:before, .easytree-exp-el span.easytree-expander:before, .easytree-exp-edl span.easytree-expander:before {
@@ -3394,7 +3394,7 @@ span.easytree-expander:hover {
 }
 
 .checked span.easytree-icon:before {
-  color: #00B8DB;
+  color: var(--blue);
 }
 
 .easytree-title {
@@ -3409,19 +3409,19 @@ span.easytree-expander:hover {
 }
 
 .easytree-title a {
-  color: #343a40 !important;
+  color: var(--dark) !important;
 }
 
 .easytree-title a:hover {
-  color: #00B8DB !important;
+  color: var(--primary) !important;
 }
 
 ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, ul.easytree-container.easytree-focused span.easytree-active .easytree-title {
-  background-color: #00B8DB;
+  background-color: var(--primary);
 }
 
 ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, ul.easytree-container.easytree-focused span.easytree-selected .easytree-title a, ul.easytree-container.easytree-focused span.easytree-active .easytree-title, ul.easytree-container.easytree-focused span.easytree-active .easytree-title a {
-  color: #fff !important;
+  color: var(--white) !important;
 }
 
 .tree-controls {
@@ -3436,7 +3436,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 }
 
 .tree-controls a:not(:first-child) {
-  border-left: 1px solid #adb5bd;
+  border-left: 1px solid var(--gray-500);
   padding-left: 5px;
 }
 

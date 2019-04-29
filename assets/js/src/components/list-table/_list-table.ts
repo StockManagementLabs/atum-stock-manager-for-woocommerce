@@ -404,7 +404,7 @@ export default class ListTable {
 					text              : this.settings.get('preventLossNotice'),
 					type              : 'warning',
 					confirmButtonText : this.settings.get('ok'),
-					confirmButtonColor: '#00b8db',
+					confirmButtonColor: 'var(--primary)',
 				});
 				
 			}
