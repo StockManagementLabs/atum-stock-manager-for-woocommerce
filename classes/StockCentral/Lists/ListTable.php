@@ -1123,9 +1123,8 @@ class ListTable extends AtumListTable {
 							continue;
 						}
 
-						$qty          = $log_item->get_quantity();
-						$variation_id = $log_item->get_variation_id();
-						$product_id   = $variation_id ?: $log_item->get_product_id();
+						$qty        = $log_item->get_quantity();
+						$product_id = $log_item->get_variation_id() ?: $log_item->get_product_id();
 
 						if ( isset( $products[ $product_id ] ) ) {
 							$products[ $product_id ] += $qty;

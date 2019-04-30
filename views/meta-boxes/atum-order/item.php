@@ -14,7 +14,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
 use Atum\Components\AtumCapabilities;
-use Atum\Suppliers\Suppliers;
 
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
