@@ -159,6 +159,50 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8`
+
+*2019-04-30*
+
+**Features**
+
+* Performance improvement: reduced number of db queries performed in Stock Central to the half.
+* Performance improvement: added new columns to ATUM product data table to reduce calculations on every page load.
+* Performance improvement: added new key indexes to ATUM tables.
+* Performance improvement: SQL queries refactorized to use new db columns.
+* Performance improvement: re-save the new columns when needed.
+* Performance improvement: added scheduled action to recalculate sales' columns once per day.
+* Added all the new columns to the Stock Central's search by column feature.
+* Allow sorting by the new columns in Stock Central.
+* Update Inbound Stock every time a PO si moved or restored from trash.
+* Update all the ATUM props related to ATUM orders when moving or restoring from trash.
+* Added ability to disable ATUM cache temporarily.
+
+**Changes**
+
+* Date adjustments for queries.
+* Add alert to updated order when the multiple suppliers switch changes.
+* Changed hook used for saving order ATUM props.
+* Updated mPDF to version 8.0.0.
+* Enable the ATUM control switch by default when creating a new product.
+
+**Fixes**
+
+* Fixed search on ATUM Orders' tables.
+* Fixed sticky column when using pagination in Stock Central.
+* CSS fixes.
+* Fixed height on search dropdown menu.
+* Fixed bug with ATUM Order status names change.
+* Fixed showing/hiding blocker when Multiple Suppliers switch is changed.
+* Fixed bug on "is_atum_ajax" helper.
+* Fixed blank cells showing on Sales Last Days column.
+* Fixed blank cells on Stock Indicator column.
+* Show the right color on location icons with no locations.
+* Fixed issue with ATUM locations editing in Stock Central.
+* Center the numeric columns.
+* Fixed POs not decreasing/increasing the stock when changing their status.
+
+---
+
 `1.5.7.4`
 
 *2019-04-08*
