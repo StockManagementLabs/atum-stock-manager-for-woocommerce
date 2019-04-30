@@ -432,6 +432,7 @@
   --dash-widget-success: #69C61D;
   --dash-widget-warning: #EFAF00;
   --dash-widget-danger: #FF4848;
+  --dash-subscription-input: rgba(255, 255, 255, 0.7);
   --dash-nice-select-bg: #fff;
   --dash-nice-select-list-bg: #fff;
   --dash-nice-select-text: #adb5bd;

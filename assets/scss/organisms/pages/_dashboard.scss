@@ -435,13 +435,13 @@ body.toplevel_page_atum-dashboard {
 					input[type=email] {
 						border: none;
 						box-shadow: none;
-						background: transparent;
+						background: var(--dash-subscription-input);
 						padding: 7px 15px;
 						font-size: 10px;
 						font-weight: 300;
 						border-radius: 15px;
 						flex-grow: 1;
-						color: var(--white);
+						color: var(--dash-widget-text);
 						
 						@include placeholder(dash-input-placeholder);
 						

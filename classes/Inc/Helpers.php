@@ -2791,7 +2791,7 @@ final class Helpers {
 					--white: $primary_color;
 					--gray-600: $primary_color;
 					--gray-100: $tertiary_color;
-					--wp-yiq-text-light: $primary_color;
+					--wp-yiq-text-light: $tertiary_color;
 					--dark-shadow: rgba(0, 0, 0, 0.6);
 				    --blue-light: $tertiary_color;
 				    --blue-dark: $tertiary_color;
@@ -2867,7 +2867,8 @@ final class Helpers {
 					--overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
 					--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
 					--atum-border: rgba($primary_color_rgb, 0.2);
-					--dash-card-bg: $primary_color;
+					--dash-subscription-input: rgba($primary_color_rgb, 0.7);
+					--dash-card-bg: $tertiary_color;
 					--dash-h5-text: $primary_color;
 					--dash-nice-select-bg: $tertiary_color;
 					--dash-nice-select-list-bg: $tertiary_color;

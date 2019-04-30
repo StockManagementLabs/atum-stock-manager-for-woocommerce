@@ -511,6 +511,7 @@
   --dash-widget-success: #69C61D;
   --dash-widget-warning: #EFAF00;
   --dash-widget-danger: #FF4848;
+  --dash-subscription-input: rgba(255, 255, 255, 0.7);
   --dash-nice-select-bg: #fff;
   --dash-nice-select-list-bg: #fff;
   --dash-nice-select-text: #adb5bd;
@@ -4793,7 +4794,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   border: none;
   -webkit-box-shadow: none;
           box-shadow: none;
-  background: transparent;
+  background: var(--dash-subscription-input);
   padding: 7px 15px;
   font-size: 10px;
   font-weight: 300;
@@ -4801,7 +4802,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  color: var(--white);
+  color: var(--dash-widget-text);
 }
 
 .atum-dashboard .dash-cards .dash-card.subscription form input[type=email]::-moz-placeholder {
@@ -5463,11 +5464,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .chart-legend .legend-switch #value-chart ~ label {
-  color: var(--dash-widget-success);
+  color: var(--dash-stats-data-widget-success);
 }
 
 .statistics-widget .chart-legend .legend-switch #products-chart ~ label {
-  color: var(--dash-widget-primary);
+  color: var(--dash-stats-data-widget-primary);
 }
 
 @media all and (max-width: 768px) {
