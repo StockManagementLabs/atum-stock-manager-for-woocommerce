@@ -141,6 +141,20 @@ final class AtumCache {
 		self::$cache_groups[ $cache_group ] = uniqid();
 	}
 
+	/**
+	 * Regenerate all groups names to pretend like the've been erased
+	 *
+	 * @since 1.5.8
+	 */
+	public static function reset_all_cache() {
+
+		if ( self::$cache_groups ) {
+			foreach ( self::$cache_groups as $cache_group ) {
+				self::reset_group( $cache_group );
+			}
+		}
+	}
+
 	/********************
 	 * TRANSIENTS HELPERS
 	 ********************/
