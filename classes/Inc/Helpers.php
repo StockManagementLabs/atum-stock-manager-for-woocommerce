@@ -2646,15 +2646,15 @@ final class Helpers {
 		$blue                = '#00b8db';
 		$blue_dark           = '#27283b';
 		$green               = '#69C61D';
-		$primary_color       = self::get_option( 'primary_color' );
+		$primary_color       = self::get_option( 'primary_color' ) ? self::get_option( 'primary_color' ) : '#00B8DB';
 		$primary_color_rgb   = self::convert_hexadecimal_to_rgb( $primary_color );
-		$secondary_color     = self::get_option( 'secondary_color' );
+		$secondary_color     = self::get_option( 'secondary_color' ) ? self::get_option( 'secondary_color' ) : '#ADB5BD';
 		$secondary_color_rgb = self::convert_hexadecimal_to_rgb( $secondary_color );
-		$tertiary_color      = self::get_option( 'tertiary_color' );
+		$tertiary_color      = self::get_option( 'tertiary_color' ) ? self::get_option( 'tertiary_color' ) : '#6C757D';
 		$tertiary_color_rgb  = self::convert_hexadecimal_to_rgb( $tertiary_color );
-		$bg_1_color          = self::get_option( 'bg_1_color' );
+		$bg_1_color          = self::get_option( 'bg_1_color' ) ? self::get_option( 'bg_1_color' ) : '#FFFFFF';
 		$bg_1_color_rgb      = self::convert_hexadecimal_to_rgb( $bg_1_color );
-		$bg_2_color          = self::get_option( 'bg_2_color' );
+		$bg_2_color          = self::get_option( 'bg_2_color' ) ? self::get_option( 'bg_2_color' ) : '#F8F9FA';
 
 		if ( 'hc_mode' === $theme_settings ) {
 
