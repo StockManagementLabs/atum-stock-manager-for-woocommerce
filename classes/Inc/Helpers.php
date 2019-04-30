@@ -2793,6 +2793,7 @@ final class Helpers {
 					--gray-100: $tertiary_color;
 					--wp-yiq-text-light: $tertiary_color;
 					--dark-shadow: rgba(0, 0, 0, 0.6);
+					--dark: $primary_color;
 				    --blue-light: $tertiary_color;
 				    --blue-dark: $tertiary_color;
 				    --blue-dark-light-2: $secondary_color;
