@@ -1788,7 +1788,7 @@ body .select2-container--default .select2-results__option .select2-results__opti
 
 body .select2-container--default .select2-results__option .select2-results__option--highlighted {
   background-color: var(--blue-light);
-  color: var(--blue);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default .select2-results__group {
@@ -3933,7 +3933,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-bottom: 56px;
+  padding: 35px;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box {

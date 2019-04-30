@@ -2691,7 +2691,7 @@ body .select2-container--default .select2-results__option .select2-results__opti
 
 body .select2-container--default .select2-results__option .select2-results__option--highlighted {
   background-color: var(--blue-light);
-  color: var(--blue);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default .select2-results__group {
@@ -2967,7 +2967,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   margin: 0;
   padding: 6px 14px;
   font-size: 14px;
-  background-color: var(--gray-100);
+  background-color: var(--atum-table-bg);
   border-radius: 5px 5px 0 0;
   text-align: center;
   font-size: 14px;
@@ -3837,7 +3837,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .tablenav-current-page, .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-current-page, #posts-filter .pagination-links #current-page-selector {
   border-radius: 5px;
   border: none;
-  color: var(--gray-500);
+  color: var(--atum-pagination-text);
   padding: 0;
   width: 30px;
   height: 30px;
@@ -3871,6 +3871,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan {
   background-color: var(--atum-pagination-bg-disabled);
   border: 1px solid var(--atum-pagination-border-disabled);
+  color: var(--atum-pagination-disabled);
 }
 
 .atum-list-wrapper .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page {
@@ -3908,7 +3909,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 .atum-list-wrapper .tablenav-pages a, #posts-filter .tablenav-pages a {
   border-radius: 5px;
   border: none;
-  color: var(--gray-500);
+  color: var(--atum-pagination-text);
   padding: 0;
   line-height: 30px;
   width: 30px;
@@ -6826,7 +6827,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .atum-table-wrapper .jspDrag, #table-container .jspDrag {
-  background: var(--gray-500);
+  background: var(--js-scroll-bg);
   position: relative;
   top: 0;
   left: 0;

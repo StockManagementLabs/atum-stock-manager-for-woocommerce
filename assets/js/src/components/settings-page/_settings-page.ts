@@ -399,8 +399,17 @@ export default class SettingsPage {
                 if (response.success === true) {
                     console.log('Done');
                     ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
+                    ColorPicker.updateColorPicker($('#atum_primary_color_light'), response.data.primary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_primary_color_dark'), response.data.primary_color_dark);
                     ColorPicker.updateColorPicker($('#atum_secondary_color'), response.data.secondary_color);
+                    ColorPicker.updateColorPicker($('#atum_secondary_color_light'), response.data.secondary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_secondary_color_dark'), response.data.secondary_color_dark);
                     ColorPicker.updateColorPicker($('#atum_tertiary_color'), response.data.tertiary_color);
+                    ColorPicker.updateColorPicker($('#atum_tertiary_color_light'), response.data.tertiary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_tertiary_color_dark'), response.data.tertiary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_text_color'), response.data.text_color);
+                    ColorPicker.updateColorPicker($('#atum_text_color_2'), response.data.text_color_2);
+                    ColorPicker.updateColorPicker($('#atum_border_color'), response.data.border_color);
                     ColorPicker.updateColorPicker($('#atum_bg_1_color'), response.data.bg_1_color);
                     ColorPicker.updateColorPicker($('#atum_bg_2_color'), response.data.bg_2_color);
 

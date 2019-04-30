@@ -2477,7 +2477,7 @@ body .select2-container--default .select2-results__option .select2-results__opti
 
 body .select2-container--default .select2-results__option .select2-results__option--highlighted {
   background-color: var(--blue-light);
-  color: var(--blue);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default .select2-results__group {

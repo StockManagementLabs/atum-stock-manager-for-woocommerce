@@ -2297,28 +2297,72 @@ final class Ajax {
 		check_ajax_referer( 'atum-scheme-color-nonce', 'token' );
 
 		if ( 'dark_mode' === $_POST['theme'] ) {
-			$primary_color   = '#FFFFFF';
-			$secondary_color = '#DBF9FF';
-			$tertiary_color  = '#31324A';
-			$bg_1_color      = '#31324A';
-			$bg_2_color      = '#3b3d5a';
+			$primary_color         = '#a8f1ff';
+			$primary_color_light   = '#dbf9ff';
+			$primary_color_dark    = '#00b8db';
+			$secondary_color       = '#ffdf89';
+			$secondary_color_light = '#ffdf89';
+			$secondary_color_dark  = '#ffdf89';
+			$tertiary_color        = '#baef8d';
+			$tertiary_color_light  = '#69C61D';
+			$tertiary_color_dark   = '#69C61D';
+			$text_color            = '#FFFFFF';
+			$text_color_2          = '#31324A';
+			$border_color          = '#ffffff';
+			$bg_1_color            = '#31324A';
+			$bg_2_color            = '#3b3d5a';
 		}
 		elseif ( 'hc_mode' === $_POST['theme'] ) {
-			$primary_color   = '#016B7F';
-			$secondary_color = '#27283B';
-			$tertiary_color  = '#DBF9FF';
-			$bg_1_color      = '#FFFFFF';
-			$bg_2_color      = '#FFFFFF';
+			$primary_color         = '#016B7F';
+			$primary_color_light   = '#f5fdff';
+			$primary_color_dark    = '#e6fbff';
+			$secondary_color       = '#016B7F';
+			$secondary_color_light = '#f5fdff';
+			$secondary_color_dark  = '#e6fbff';
+			$tertiary_color        = '#016B7F';
+			$tertiary_color_light  = '#f5fdff';
+			$tertiary_color_dark   = '#e6fbff';
+			$text_color            = '#016B7F';
+			$text_color_2          = '#27283b';
+			$border_color          = '#adb5bd';
+			$bg_1_color            = '#ffffff';
+			$bg_2_color            = '#ffffff';
 		}
 		else {
-			$primary_color   = '#00B8DB';
-			$secondary_color = '#ADB5BD';
-			$tertiary_color  = '#6C757D';
-			$bg_1_color      = '#FFFFFF';
-			$bg_2_color      = '#F8F9FA';
+			$primary_color         = '#00B8DB';
+			$primary_color_light   = '#f5fdff';
+			$primary_color_dark    = '#dbf9ff';
+			$secondary_color       = '#EFAF00';
+			$secondary_color_light = '#fff4d6';
+			$secondary_color_dark  = '#ffedbc';
+			$tertiary_color        = '#69C61D';
+			$tertiary_color_light  = '#69C61D';
+			$tertiary_color_dark   = '#b4f000c9';
+			$text_color            = '#6C757D';
+			$text_color_2          = '#adb5bd';
+			$border_color          = '#e9ecef';
+			$bg_1_color            = '#ffffff';
+			$bg_2_color            = '#F8F9FA';
 		}
 
-		wp_send_json_success( compact( 'primary_color', 'secondary_color', 'tertiary_color', 'bg_1_color', 'bg_2_color' ) );
+		wp_send_json_success(
+			compact(
+				'primary_color',
+				'primary_color_light',
+				'primary_color_dark',
+				'secondary_color',
+				'secondary_color_light',
+				'secondary_color_dark',
+				'tertiary_color',
+				'tertiary_color_light',
+				'tertiary_color_dark',
+				'text_color',
+				'text_color_2',
+				'border_color',
+				'bg_1_color',
+				'bg_2_color'
+			)
+		);
 
 	}
 

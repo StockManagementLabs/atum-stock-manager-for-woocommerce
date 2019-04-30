@@ -8,7 +8,7 @@
 		.tablenav-pages-navspan, .tablenav-current-page, #current-page-selector {
 			border-radius: 5px;
 			border: none;
-			color: var(--gray-500);
+			color: var(--atum-pagination-text);
 			padding: 0;
 			width: 30px;
 			height: 30px;
@@ -37,6 +37,7 @@
 		.tablenav-pages-navspan {
 			background-color: var(--atum-pagination-bg-disabled);
 			border: 1px solid var(--atum-pagination-border-disabled);
+			color: var(--atum-pagination-disabled);
 		}
 		
 		.tablenav-current-page {
@@ -72,7 +73,7 @@
 		a {
 			border-radius: 5px;
 			border: none;
-			color: var(--gray-500);
+			color: var(--atum-pagination-text);
 			padding: 0;
 			line-height: 30px;
 			width: 30px;

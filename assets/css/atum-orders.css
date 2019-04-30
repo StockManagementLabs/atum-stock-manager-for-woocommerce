@@ -894,7 +894,7 @@ body .select2-container--default .select2-results__option .select2-results__opti
 
 body .select2-container--default .select2-results__option .select2-results__option--highlighted {
   background-color: var(--blue-light);
-  color: var(--blue);
+  color: var(--atum-select2-selected-text);
 }
 
 body .select2-container--default .select2-results__group {
@@ -2940,7 +2940,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .tablenav-current-page, .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-current-page, #posts-filter .pagination-links #current-page-selector {
   border-radius: 5px;
   border: none;
-  color: var(--gray-500);
+  color: var(--atum-pagination-text);
   padding: 0;
   width: 30px;
   height: 30px;
@@ -2974,6 +2974,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan {
   background-color: var(--atum-pagination-bg-disabled);
   border: 1px solid var(--atum-pagination-border-disabled);
+  color: var(--atum-pagination-disabled);
 }
 
 .atum-list-wrapper .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page {
@@ -3011,7 +3012,7 @@ input[type="button"].btn-block {
 .atum-list-wrapper .tablenav-pages a, #posts-filter .tablenav-pages a {
   border-radius: 5px;
   border: none;
-  color: var(--gray-500);
+  color: var(--atum-pagination-text);
   padding: 0;
   line-height: 30px;
   width: 30px;
@@ -6582,7 +6583,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .atum-table-wrapper .jspDrag, #table-container .jspDrag {
-  background: var(--gray-500);
+  background: var(--js-scroll-bg);
   position: relative;
   top: 0;
   left: 0;
