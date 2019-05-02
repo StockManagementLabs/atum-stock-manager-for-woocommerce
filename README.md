@@ -159,6 +159,17 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.1`
+
+*2019-05-02*
+
+**Fixes**
+
+* Do not use ATUM queues in WC versions that does not support them.
+* Fixed Inventory Logs' items blocker message showing all the time.
+
+---
+
 `1.5.8`
 
 *2019-04-30*

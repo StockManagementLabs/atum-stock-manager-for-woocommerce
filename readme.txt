@@ -7,7 +7,7 @@ Tested up to: 5.1.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.6.2
-Stable tag: 1.5.8
+Stable tag: 1.5.8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,17 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.8.1`
+
+*2019-05-02*
+
+**Fixes**
+
+* Do not use ATUM queues in WC versions that does not support them.
+* Fixed Inventory Logs' items blocker message showing all the time.
 
 ---
 
