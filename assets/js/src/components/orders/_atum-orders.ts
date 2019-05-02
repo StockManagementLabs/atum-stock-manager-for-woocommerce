@@ -30,7 +30,7 @@ export default class AtumOrders {
 		this.$container = $('#atum_order_items');
 		this.$itemsBlocker = this.$container.find('.items-blocker');
 		
-		if (this.$itemsBlocker.length === 0) {
+		if (!this.$itemsBlocker.length && typeof this.settings.get('itemBlocker') !== 'undefined') {
 			$('.atum_order_items_wrapper').before(`<div class="items-blocker"><h3>${ this.settings.get('itemBlocker') }</h3></div>`);
 			this.$itemsBlocker = this.$container.find('.items-blocker');
 		}
@@ -309,6 +309,10 @@ export default class AtumOrders {
 	}
 	
 	toggleItemsBlocker(on: boolean = true) {
+		
+		if (!this.$itemsBlocker.length) {
+			return;
+		}
 		
 		if (on === true) {
 			this.$itemsBlocker.addClass('unblocked');
