@@ -450,13 +450,14 @@ export default class ListTable {
 					Utils.addNotice(noticeType, response.data);
 				}
 				
-				if (typeof response.success !== 'undefined' && response.success) {
+				if (typeof response.success !== 'undefined' && response.success === true) {
 					$button.remove();
 					this.globals.$editInput.val('');
 					this.updateTable();
 				}
 				else {
 					$button.prop('disabled', false);
+					this.removeOverlay();
 				}
 				
 				this.doingAjax = null;
