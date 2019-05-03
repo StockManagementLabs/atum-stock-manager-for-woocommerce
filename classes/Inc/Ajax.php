@@ -442,27 +442,33 @@ final class Ajax {
 		if ( empty( $_POST['data'] ) ) {
 			wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
 		}
-		
-		$data = json_decode( stripslashes( $_POST['data'] ), TRUE );
-		
-		if ( empty( $data ) ) {
-			wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
-		}
-		
-		$data = apply_filters( 'atum/ajax/before_update_product_meta', $data );
-		
-		foreach ( $data as $product_id => &$product_meta ) {
-			Helpers::update_product_data( $product_id, $product_meta );
-		}
-		
-		// If the first edit notice was already shown, save it as user meta.
-		if ( ! empty( $_POST['first_edit_key'] ) ) {
-			update_user_meta( get_current_user_id(), esc_attr( $_POST['first_edit_key'] ), 1 );
-		}
 
-		do_action( 'atum/ajax/after_update_list_data', $data );
-		
-		wp_send_json_success( __( 'Data saved.', ATUM_TEXT_DOMAIN ) );
+		try {
+
+			$data = json_decode( stripslashes( $_POST['data'] ), TRUE );
+
+			if ( empty( $data ) ) {
+				wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
+			}
+
+			$data = apply_filters( 'atum/ajax/before_update_product_meta', $data );
+
+			foreach ( $data as $product_id => &$product_meta ) {
+				Helpers::update_product_data( $product_id, $product_meta );
+			}
+
+			// If the first edit notice was already shown, save it as user meta.
+			if ( ! empty( $_POST['first_edit_key'] ) ) {
+				update_user_meta( get_current_user_id(), esc_attr( $_POST['first_edit_key'] ), 1 );
+			}
+
+			do_action( 'atum/ajax/after_update_list_data', $data );
+
+			wp_send_json_success( __( 'Data saved.', ATUM_TEXT_DOMAIN ) );
+
+		} catch ( \Exception $e ) {
+			wp_send_json_error( $e->getMessage() );
+		}
 		
 	}
 
