@@ -15,15 +15,6 @@ $settings-xs-min:           568px !default;
 .atum-settings-wrapper {
 	margin: 0 0 18px;
 
-	h1 {
-		text-transform: capitalize;
-		margin-bottom: $grid-gutter-width/2;
-		font-weight: bold;
-		color: $blue-dark;
-		font-size: 36px;
-		margin-bottom: 20px;
-	}
-
 	.atum-settings-container {
 		display: flex;
 		align-items: stretch;

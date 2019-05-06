@@ -1,0 +1,16 @@
+//
+// Page Title
+//------------
+
+.wrap {
+	h1 {
+		&.wp-heading-inline {
+			text-transform: capitalize;
+			margin-bottom: $grid-gutter-width/2;
+			font-weight: bold;
+			color: $blue-dark;
+			font-size: 36px;
+			margin-bottom: 20px;
+		}
+	}
+}

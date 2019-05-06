@@ -2502,6 +2502,15 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   content: "";
 }
 
+.wrap h1.wp-heading-inline {
+  text-transform: capitalize;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #27283B;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
 .btn-group {
   position: relative;
   display: -webkit-inline-box;
@@ -2875,15 +2884,6 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper {
   margin: 0 0 18px;
-}
-
-.atum-settings-wrapper h1 {
-  text-transform: capitalize;
-  margin-bottom: 15px;
-  font-weight: bold;
-  color: #27283B;
-  font-size: 36px;
-  margin-bottom: 20px;
 }
 
 .atum-settings-wrapper .atum-settings-container {
