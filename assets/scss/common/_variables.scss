@@ -4,8 +4,9 @@
 
 // Paths
 
-$font-path:                             "../fonts/" !default;
-$img-path:                              "../images/" !default;
+$atum-assets-path:                      "../" !default;
+$atum-font-path:                        "#{$atum-assets-path}fonts/" !default;
+$atum-img-path:                         "#{$atum-assets-path}images/" !default;
 
 // Fonts
 

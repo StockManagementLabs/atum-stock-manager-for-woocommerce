@@ -56,7 +56,7 @@ body.toplevel_page_atum-dashboard {
 	.dash-header {
 		position: relative;
 		height: $header-height;
-		background: $header-bg url('#{$img-path}dashboard/header-bg.png') center bottom;
+		background: $header-bg url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
 		background-size: cover;
 		@include vertical-align-flex();
 		flex-wrap: wrap;
@@ -375,7 +375,7 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			&.docs {
-				background-image: url('#{$img-path}dashboard/card-docs-bg.png');
+				background-image: url('#{$atum-img-path}dashboard/card-docs-bg.png');
 				
 				.card-img {
 					img {
@@ -387,7 +387,7 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			&.add-ons {
-				background-image: url('#{$img-path}dashboard/card-add-ons-bg.png');
+				background-image: url('#{$atum-img-path}dashboard/card-add-ons-bg.png');
 				
 				.card-img {
 					img {
@@ -399,7 +399,7 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			&.subscription {
-				background-image: url('#{$img-path}dashboard/card-subscription-bg.png');
+				background-image: url('#{$atum-img-path}dashboard/card-subscription-bg.png');
 				
 				.card-img {
 					img {
