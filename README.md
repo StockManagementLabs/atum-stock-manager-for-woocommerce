@@ -159,6 +159,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.2`
+
+*2019-05-08*
+
+**Features**
+
+* Delete the ATUM data when a product is removed from database.
+
+**Changes**
+
+* Catch any possible exception that may arise when saving the SC data.
+* Remove the Stock Central's overlay when an error is returned when saving data.
+
+**Fixes**
+
+* Fixed issue with back orders counting on Stock Central.
+* Save the ATUM data when the variations are created from attributes.
+* Refactory.
+
+---
+
 `1.5.8.1`
 
 *2019-05-02*
