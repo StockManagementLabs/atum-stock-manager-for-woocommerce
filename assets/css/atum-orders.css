@@ -4054,11 +4054,12 @@ ul.atum_order_notes li .note_content::after {
 
 #wpfooter .footer-box {
   height: 90px;
-  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
-  background-size: cover;
-  border-radius: 8px;
+  border-radius: 5px;
+  background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
+  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
+  background-size: cover;
   padding: 0 23px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -4094,7 +4095,7 @@ ul.atum_order_notes li .note_content::after {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  padding: 6.4px 0 5px;
+  padding: 6px 0 5px;
 }
 
 #wpfooter .footer-box .footer-atum-logo img {
@@ -5591,8 +5592,8 @@ ul.atum_order_notes li .note_content::after {
 .atum-list-wrapper {
   width: 100%;
   overflow: hidden;
+  border-radius: 5px;
   background-color: #fff;
-  border-radius: 8px;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
   padding: 0 0 10px;
@@ -7269,11 +7270,11 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 #posts-filter {
   width: 100%;
   overflow: hidden;
+  border-radius: 5px;
   background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
   padding: 0 0 10px;
-  border-radius: 8px;
 }
 
 #posts-filter .tablenav-pages {

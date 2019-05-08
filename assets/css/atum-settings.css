@@ -2768,11 +2768,12 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 #wpfooter .footer-box {
   height: 90px;
-  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
-  background-size: cover;
-  border-radius: 8px;
+  border-radius: 5px;
+  background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
+  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
+  background-size: cover;
   padding: 0 23px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2808,7 +2809,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  padding: 6.4px 0 5px;
+  padding: 6px 0 5px;
 }
 
 #wpfooter .footer-box .footer-atum-logo img {
@@ -2906,7 +2907,8 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   float: right;
   width: 165px;
   height: 44px;
-  border-radius: 8px;
+  border-radius: 5px;
+  background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
   background-color: #3b3d5a;
@@ -2931,12 +2933,13 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper .atum-nav {
   border: none;
-  background-color: #3b3d5a;
-  border-radius: 6px;
-  position: relative;
-  min-width: 230px;
+  border-radius: 5px;
+  background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
+  background-color: #3b3d5a;
+  position: relative;
+  min-width: 230px;
   min-height: 550px;
 }
 

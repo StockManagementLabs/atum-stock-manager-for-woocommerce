@@ -899,9 +899,7 @@
 .atum-list-wrapper {
 	width: 100%;
 	overflow: hidden;
-	background-color: $white;
-	border-radius: 8px;
-	box-shadow: 0 4px 0 0 $gray-200;
+	@include atum-panel();
 	padding: 0 0 10px;
 	margin: 0 0 18px;
 	

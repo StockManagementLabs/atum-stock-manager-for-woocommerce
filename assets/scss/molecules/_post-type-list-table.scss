@@ -5,10 +5,8 @@
 #posts-filter {
 	width: 100%;
 	overflow: hidden;
-	background-color: $white;
-	box-shadow: 0 4px 0 0 $gray-200;
+	@include atum-panel();
 	padding: 0 0 10px;
-	border-radius: 8px;
 	
 	.tablenav-pages {
 		float: none;

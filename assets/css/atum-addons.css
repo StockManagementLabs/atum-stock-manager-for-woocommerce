@@ -1725,11 +1725,12 @@ input[type="button"].btn-block {
 
 #wpfooter .footer-box {
   height: 90px;
-  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
-  background-size: cover;
-  border-radius: 8px;
+  border-radius: 5px;
+  background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
+  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
+  background-size: cover;
   padding: 0 23px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1765,7 +1766,7 @@ input[type="button"].btn-block {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  padding: 6.4px 0 5px;
+  padding: 6px 0 5px;
 }
 
 #wpfooter .footer-box .footer-atum-logo img {
