@@ -172,15 +172,15 @@ trait AtumDataStoreCommonTrait {
 	public function delete( &$product, $args = array() ) {
 		
 		global $wpdb;
-
-		/* @noinspection PhpUndefinedClassInspection */
-		parent::delete( $product, $args );
 		
 		// Delete the ATUM data for this product.
-		if ( $args['force_delete'] ) {
+		if ( ! empty( $args['force_delete'] ) && TRUE === $args['force_delete'] ) {
 			$wpdb->delete( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, array( 'product_id' => $product->get_id() ), array( '%d' ) );
 		}
-		
+
+		// TODO: REMOVE PL AND MI DATA.
+		do_action( 'atum/data_store/after_deleting_product_data', $product, $args );
+
 	}
 	
 	/**
