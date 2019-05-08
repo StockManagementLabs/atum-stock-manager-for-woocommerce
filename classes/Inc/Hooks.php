@@ -80,6 +80,13 @@ class Hooks {
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
+		// Clean up the ATUM data when a product is deleted from database.
+		add_action( 'woocommerce_delete_product', array( $this, 'after_delete_product' ) );
+		add_action( 'woocommerce_delete_product_variation', array( $this, 'after_delete_product' ) );
+
+		// Save the ATUM product data for all the variations when created from attibutes.
+		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
+
 	}
 
 	/**
@@ -723,6 +730,40 @@ class Hooks {
 		}
 
 		$this->save_order_items_props( $order_id );
+
+	}
+
+	/**
+	 * Remove the ATUM data when a product is removed from database
+	 *
+	 * @since 1.5.8.2
+	 *
+	 * @param int $product_id
+	 */
+	public function after_delete_product( $product_id ) {
+
+		$product = Helpers::get_atum_product( $product_id );
+
+		if ( is_a( $product, '\WC_Product' ) ) {
+			$product->delete_atum_data();
+		}
+
+	}
+
+	/**
+	 * Save the ATUM data for the variation created from an attribute
+	 *
+	 * @since 1.5.8.2
+	 *
+	 * @param int $variation_id
+	 */
+	public function save_variation_atum_data( $variation_id ) {
+
+		$product = Helpers::get_atum_product( $variation_id );
+
+		if ( is_a( $product, '\WC_Product' ) ) {
+			$product->save_atum_data();
+		}
 
 	}
 

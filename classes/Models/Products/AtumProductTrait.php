@@ -688,7 +688,7 @@ trait AtumProductTrait {
 
 
 	/**
-	 * Save the ATUM prodcut data
+	 * Save the ATUM product data
 	 *
 	 * @since 1.5.0
 	 */
@@ -697,6 +697,19 @@ trait AtumProductTrait {
 		$data_store = $this->get_data_store();
 		/* @noinspection PhpUndefinedMethodInspection */
 		$data_store->update_atum_product_data( $this );
+
+	}
+
+	/**
+	 * Delete the ATUM product data
+	 *
+	 * @since 1.5.8.2
+	 */
+	public function delete_atum_data() {
+
+		$data_store = $this->get_data_store();
+		/* @noinspection PhpUndefinedMethodInspection */
+		$data_store->delete( $this, [ 'force_delete' => TRUE ] );
 
 	}
 
