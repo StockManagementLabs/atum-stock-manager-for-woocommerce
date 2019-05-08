@@ -215,44 +215,44 @@ trait ListTableLegacyTrait {
 			foreach ( $this->id_views as $key => $post_ids ) {
 
 				if ( $view === $key ) {
-					
+
 					$this->supplier_variation_products = array_intersect( $this->supplier_variation_products, $post_ids );
-					
+
 					if ( ! empty( $post_ids ) ) {
-						
+
 						$get_parents = FALSE;
 						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
-							
+
 							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
 								$get_parents = TRUE;
 								break;
 							}
-							
+
 						}
-						
+
 						// Add the parent products again to the query.
 						if ( $get_parents ) {
-							
+
 							$parents = $this->get_parents( $post_ids );
-							
+
 							// Exclude the parents with no children.
 							// For example: the current list may have the "Out of stock" filter applied and a variable product
 							// may have all of its variations in stock, but its own stock could be 0. The shouldn't appear empty.
 							$empty_variables = array_diff( $this->container_products['variable'], $parents );
-							
+
 							foreach ( $empty_variables as $empty_variable ) {
 								if ( in_array( $empty_variable, $post_ids ) ) {
 									unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
 								}
 							}
-							
+
 							$args['post__in'] = array_merge( $parents, $post_ids );
-							
+
 						}
 						else {
 							$args['post__in'] = $post_ids;
 						}
-						
+
 						$allow_query = TRUE;
 						$found_posts = $this->count_views[ "count_$key" ];
 					}
@@ -590,10 +590,12 @@ trait ListTableLegacyTrait {
 			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
 				// As this query does not contain ATUM params, doesn't need the filters.
 				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
+				$products_back_order = $products_back_order->posts;
 				AtumCache::set_transient( $back_order_transient, $products_back_order );
 			}
-
-			$products_back_order = $products_back_order->posts;
+			else {
+				$products_back_order = array();
+			}
 
 			$this->id_views['back_order']          = (array) $products_back_order;
 			$this->count_views['count_back_order'] = is_array( $products_back_order ) ? count( $products_back_order ) : 0;
@@ -637,7 +639,7 @@ trait ListTableLegacyTrait {
 						AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "'
 						GROUP BY IDs) AS sales
 					";
-					
+
 					$str_statuses = "
 						(SELECT p.ID, IF(
 							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
@@ -650,9 +652,9 @@ trait ListTableLegacyTrait {
 			            AND p.post_type IN ('" . implode( "', '", $post_types ) . "')
 			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
 			            ) AS statuses';
-					
+
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
-					
+
 					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
 					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
@@ -672,10 +674,11 @@ trait ListTableLegacyTrait {
 			$this->id_views['out_stock']          = $products_out_stock;
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];
 
+			/**
+			 * Calculate totals
+			 */
 			if ( $this->show_unmanaged_counters ) {
-				/**
-				 * Calculate totals
-				 */
+
 				$this->id_views['all_in_stock']          = array_merge( $this->id_views['in_stock'], $this->id_views['unm_in_stock'] );
 				$this->count_views['count_all_in_stock'] = $this->count_views['count_in_stock'] + $this->count_views['count_unm_in_stock'];
 
@@ -720,7 +723,7 @@ trait ListTableLegacyTrait {
 				),
 			),
 		);
-		
+
 		if ( ! empty( $post_in ) ) {
 			$parent_args['post__in'] = $post_in;
 		}
@@ -729,14 +732,14 @@ trait ListTableLegacyTrait {
 		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
 
 		$parents_with_child = $grouped_products = $bundle_children = array();
-		
+
 		if ( $parents->found_posts ) {
-			
+
 			switch ( $parent_type ) {
 				case 'variable':
 					$this->container_products['all_variable'] = array_unique( array_merge( $this->container_products['all_variable'], $parents->posts ) );
 					break;
-				
+
 				case 'grouped':
 					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents->posts ) );
 
@@ -798,21 +801,21 @@ trait ListTableLegacyTrait {
 			$this->set_controlled_query_data();
 
 			if ( ! empty( $this->supplier_variation_products ) ) {
-				
+
 				$this->atum_query_data['where'][] = array(
 					'key'   => 'supplier_id',
 					'value' => absint( $_REQUEST['supplier'] ),
 					'type'  => 'NUMERIC',
 				);
-				
+
 				$this->atum_query_data['where']['relation'] = 'AND';
 
 			}
-			
+
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-			
+
 			if ( $children->found_posts ) {
 
 				if ( 'grouped' !== $parent_type ) {
@@ -902,16 +905,16 @@ trait ListTableLegacyTrait {
 		return array();
 
 	}
-	
+
 	/**
 	 * Set the query data for filtering the Controlled/Uncontrolled products.
 	 *
 	 * @since 1.5.0
 	 */
 	protected function set_controlled_query_data() {
-		
+
 		if ( $this->show_controlled ) {
-			
+
 			$this->atum_query_data['where'] = array(
 				array(
 					'key'   => 'atum_controlled',
@@ -919,10 +922,10 @@ trait ListTableLegacyTrait {
 					'type'  => 'NUMERIC',
 				),
 			);
-			
+
 		}
 		else {
-			
+
 			$this->atum_query_data['where'] = array(
 				array(
 					'relation' => 'OR',
@@ -938,9 +941,9 @@ trait ListTableLegacyTrait {
 					),
 				),
 			);
-			
+
 		}
-		
+
 	}
 
 }
