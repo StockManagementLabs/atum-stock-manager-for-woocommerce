@@ -8,6 +8,7 @@ import { ColorPicker } from '../_color-picker';
 import Settings from '../../config/_settings';
 import { Switcher } from '../_switcher';
 import SmartForm from '../_smart-form';
+import TabLoader from '../_tab-loader';
 
 export default class SettingsPage {
 	
@@ -17,6 +18,7 @@ export default class SettingsPage {
 	navigationReady: boolean = false;
 	numHashParameters: number = 0;
 	swal: any = window['swal'];
+	tabLoader: TabLoader;
 	
 	constructor(
 		private settings: Settings,
@@ -82,79 +84,44 @@ export default class SettingsPage {
 	
 	setupNavigation() {
 		
-		if (typeof $.address === 'undefined') {
-			return;
-		}
+		// Instantiate the loader to register the jQuery.address and the events.
+		this.tabLoader = new TabLoader(this.$settingsWrapper, this.$nav);
 		
-		// Hash history navigation.
-		$.address.change( (evt: JQueryEventObject) => {
+		
+		this.$settingsWrapper
+		
+			// Show the form after the page is loaded.
+			.on('atum-tab-loader-init', () => this.$form.show())
+		
+			// Tab clicked.
+			.on('atum-tab-loader-clicked-tab', (evt: JQueryEventObject, $navLink: JQuery, tab: string) => {
 			
-			const pathNames: string[]    = $.address.pathNames(),
-			    numCurrentParams: number = pathNames.length;
+				if (this.$form.find('.dirty').length) {
+					
+					// Warn the user about unsaved data.
+					this.swal({
+						title              : this.settings.get('areYouSure'),
+						text               : this.settings.get('unsavedData'),
+						type               : 'warning',
+						showCancelButton   : true,
+						confirmButtonText  : this.settings.get('continue'),
+						cancelButtonText   : this.settings.get('cancel'),
+						reverseButtons     : true,
+						allowOutsideClick  : false
+					})
+					.then( () => {
+						this.moveToTab($navLink);
+					},
+					(dismiss: string) => {
+						$navLink.blur();
+					});
+					
+				}
+				else {
+					this.moveToTab($navLink);
+				}
 			
-			if(this.navigationReady === true && (numCurrentParams || this.numHashParameters !== numCurrentParams)) {
-				this.clickTab(pathNames[0]);
-			}
-			
-			this.navigationReady = true;
-			
-		})
-		.init( () => {
-			
-			const pathNames = $.address.pathNames();
-			
-			// When accessing externally or reloading the page, update the fields and the list.
-			if (pathNames.length) {
-				this.clickTab(pathNames[0]);
-			}
-			else {
-				this.$form.show();
-			}
-			
-			const searchQuery: string = location.search.substr(1),
-			      searchParams: any   = {};
-			
-			searchQuery.split('&').forEach( (part: string) => {
-				const item: string[] = part.split('=');
-				searchParams[item[0]] = decodeURIComponent(item[1]);
 			});
-			
-			if (searchParams.hasOwnProperty('tab')) {
-				this.$settingsWrapper.trigger('atum-settings-page-loaded', [searchParams.tab]);
-			}
-			
-		});
-		
-	}
-	
-	clickTab(tab: string) {
-		
-		const $navLink: JQuery = this.$nav.find('.atum-nav-link[data-tab="' + tab + '"]');
-		
-		if (this.$form.find('.dirty').length) {
-			
-			// Warn the user about unsaved data.
-			this.swal({
-				title              : this.settings.get('areYouSure'),
-				text               : this.settings.get('unsavedData'),
-				type               : 'warning',
-				showCancelButton   : true,
-				confirmButtonText  : this.settings.get('continue'),
-				cancelButtonText   : this.settings.get('cancel'),
-				reverseButtons     : true,
-				allowOutsideClick  : false
-			})
-			.then( () => {
-				this.moveToTab($navLink);
-			},
-			(dismiss: string) => {
-				$navLink.blur();
-			});
-			
-		}
-		else {
-			this.moveToTab($navLink);
-		}
 		
 	}
 	
@@ -167,7 +134,7 @@ export default class SettingsPage {
 		
 		$formSettingsWrapper.addClass('overlay');
 		
-		this.$form.load( $navLink.attr('href') + ' .form-settings-wrapper', () => {
+		this.$form.load( `${ $navLink.attr('href') } .form-settings-wrapper`, () => {
 			
 			Switcher.doSwitchers();
 			ColorPicker.doColorPickers(this.settings.get('selectColor'));
