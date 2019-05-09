@@ -410,10 +410,7 @@ class ProductDataMetaBoxes {
 		$supplier_id = $product->get_supplier_id();
 		/* @noinspection PhpUndefinedMethodInspection */
 		$supplier_sku = $product->get_supplier_sku();
-
-		if ( $supplier_id ) {
-			$supplier = get_post( $supplier_id );
-		}
+		$supplier     = $supplier_id ? get_post( $supplier_id ) : NULL;
 
 		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
 		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
