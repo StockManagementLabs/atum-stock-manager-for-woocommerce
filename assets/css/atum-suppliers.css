@@ -1707,8 +1707,6 @@ fieldset:disabled a.btn {
 .btn-primary {
   color: #fff;
   background-color: #00B8DB;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-primary:hover {
@@ -1745,8 +1743,6 @@ fieldset:disabled a.btn {
 .btn-secondary {
   color: #fff;
   background-color: #6c757d;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-secondary:hover {
@@ -1783,8 +1779,6 @@ fieldset:disabled a.btn {
 .btn-success {
   color: #fff;
   background-color: #69C61D;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-success:hover {
@@ -1821,8 +1815,6 @@ fieldset:disabled a.btn {
 .btn-info {
   color: #212529;
   background-color: #E3E8F5;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-info:hover {
@@ -1859,8 +1851,6 @@ fieldset:disabled a.btn {
 .btn-warning {
   color: #fff;
   background-color: #EFAF00;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-warning:hover {
@@ -1897,8 +1887,6 @@ fieldset:disabled a.btn {
 .btn-danger {
   color: #fff;
   background-color: #FF4848;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-danger:hover {
@@ -1935,8 +1923,6 @@ fieldset:disabled a.btn {
 .btn-light {
   color: #212529;
   background-color: #f8f9fa;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-light:hover {
@@ -1973,8 +1959,6 @@ fieldset:disabled a.btn {
 .btn-dark {
   color: #fff;
   background-color: #343a40;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-dark:hover {
