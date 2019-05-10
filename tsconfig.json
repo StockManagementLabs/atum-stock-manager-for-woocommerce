@@ -12,6 +12,7 @@
 	},
 	"exclude": [
 		"node_modules",
-		"./assets/js/src/types"
+		"./assets/js/src/types",
+		"./vendor"
 	]
 }
