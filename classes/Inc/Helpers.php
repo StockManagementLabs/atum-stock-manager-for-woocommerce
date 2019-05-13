@@ -1918,7 +1918,7 @@ final class Helpers {
 	 *
 	 * @return array
 	 */
-	public static function get_support_button() {
+	public static function get_support_buttons() {
 		
 		if ( Addons::has_valid_key() ) {
 			$support['support_link']        = 'https://stockmanagementlabs.ticksy.com/';

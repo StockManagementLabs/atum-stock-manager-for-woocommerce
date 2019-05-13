@@ -191,7 +191,7 @@ class Dashboard {
 			'layout'          => $user_widgets_layout,
 			'dashboard'       => $this,
 			'marketing_popup' => $marketing_popup,
-		), Helpers::get_support_button() ) );
+		), Helpers::get_support_buttons() ) );
 		
 	}
 

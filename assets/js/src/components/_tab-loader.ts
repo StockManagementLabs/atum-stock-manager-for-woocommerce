@@ -66,4 +66,11 @@ export default class TabLoader {
 		
 	}
 	
+	public static getCurrentTab(): string {
+		
+		const pathNames = $.address.pathNames();
+		return pathNames.length ? pathNames[0] : ''; // We understand that there is only one param here.
+		
+	}
+	
 }
