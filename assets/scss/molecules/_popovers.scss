@@ -153,9 +153,10 @@
 				margin-left: -10px;
 				content: "";
 				position: absolute;
-				background: $gray-100;
+				background: $popover-bg;
 				transform: rotate(45deg);
-				box-shadow: 0 0 5px 1px rgba($black, 0.15);
+				box-shadow: none;
+				top: 2px;
 		}
 	}
 	

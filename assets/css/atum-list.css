@@ -2690,11 +2690,12 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   margin-left: -10px;
   content: "";
   position: absolute;
-  background: #f8f9fa;
+  background: #fff;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
-  -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  top: 2px;
 }
 
 .popover.left > .popover-arrow {
