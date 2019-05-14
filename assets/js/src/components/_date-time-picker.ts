@@ -75,14 +75,14 @@ export default class DateTimePicker {
 	 * @param jQuery $selector
 	 * @param Object opts
 	 */
-	addDateTimePickers($selector: any, opts: any = {}) {
+	addDateTimePickers($selector: JQuery, opts: any = {}) {
 		
 		$selector.each( (index: number, elem: Element) => {
 			
 			let $dateTimePicker: any = $(elem);
 			
 			// Extend the date picker options with data options.
-			opts = Object.assign( this.defaults, $dateTimePicker.data() || {}, opts );
+			opts = Object.assign( {}, this.defaults, $dateTimePicker.data() || {}, opts );
 			
 			$dateTimePicker.datetimepicker(opts);
 			
@@ -107,6 +107,20 @@ export default class DateTimePicker {
 			}).each( (index: number, elem: Element) => {
 				$(elem).data('DateTimePicker').hide();
 			});
+			
+		});
+		
+	}
+	
+	destroyDateTimePickers($selector: JQuery) {
+		
+		$selector.each( (index: number, elem: Element) => {
+			
+			let dateTimePicker: any = $(elem).data('DateTimePicker');
+			
+			if (typeof dateTimePicker !== 'undefined') {
+				dateTimePicker.destroy();
+			}
 			
 		});
 		
