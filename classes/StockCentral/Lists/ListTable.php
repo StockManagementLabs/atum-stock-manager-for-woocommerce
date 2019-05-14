@@ -475,7 +475,7 @@ class ListTable extends AtumListTable {
 						'value'       => $date_on_sale_from,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'datepicker from',
+						'class'       => 'bs-datepicker from',
 					),
 					array(
 						'name'        => '_sale_price_dates_to',
@@ -484,7 +484,7 @@ class ListTable extends AtumListTable {
 						'value'       => $date_on_sale_to,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'datepicker to',
+						'class'       => 'bs-datepicker to',
 					),
 				),
 			), $this->product );

@@ -5,7 +5,7 @@
  Copyright (c) 2015 Jonathan Peterson
  =========================================================
  
- MODIFIED BY ATUM TO BE COMPATIBLE WITH WEBPACK
+ MODIFIED BY ATUM TO BE COMPATIBLE WITH WEBPACK AND REPLACED datepicker CLASS TO bs-datepicker
  */
 /*
  The MIT License (MIT)
@@ -31,7 +31,7 @@
  THE SOFTWARE.
  */
 
-import moment from 'moment/min/moment-with-locales.min'
+import moment from 'moment/min/moment-with-locales.min';
 
 (function ($, moment) {
 	'use strict';
@@ -311,8 +311,8 @@ import moment from 'moment/min/moment-with-locales.min'
 		
 		    getTemplate = function () {
 			    var template = $('<div>').addClass('bootstrap-datetimepicker-widget dropdown-menu'),
-			        dateView = $('<div>').addClass('datepicker').append(getDatePickerTemplate()),
-			        timeView = $('<div>').addClass('timepicker').append(getTimePickerTemplate()),
+			        dateView = $('<div>').addClass('bs-datepicker').append(getDatePickerTemplate()),
+			        timeView = $('<div>').addClass('bs-timepicker').append(getTimePickerTemplate()),
 			        content = $('<ul>').addClass('list-unstyled'),
 			        toolbar = $('<li>').addClass('picker-switch' + (options.collapse ? ' accordion-toggle' : '')).append(getToolbar());
 			
@@ -480,7 +480,7 @@ import moment from 'moment/min/moment-with-locales.min'
 			    if (dir) {
 				    currentViewMode = Math.max(minViewModeNumber, Math.min(3, currentViewMode + dir));
 			    }
-			    widget.find('.datepicker > div').hide().filter('.datepicker-' + datePickerModes[currentViewMode].clsName).show();
+			    widget.find('.bs-datepicker > div').hide().filter('.datepicker-' + datePickerModes[currentViewMode].clsName).show();
 		    },
 		
 		    fillDow = function () {
@@ -2506,7 +2506,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().subtract(7, 'd'));
 				} else {
 					this.date(d.clone().add(this.stepping(), 'm'));
@@ -2518,7 +2518,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().add(7, 'd'));
 				} else {
 					this.date(d.clone().subtract(this.stepping(), 'm'));
@@ -2529,7 +2529,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().subtract(1, 'y'));
 				} else {
 					this.date(d.clone().add(1, 'h'));
@@ -2540,7 +2540,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().add(1, 'y'));
 				} else {
 					this.date(d.clone().subtract(1, 'h'));
@@ -2551,7 +2551,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().subtract(1, 'd'));
 				}
 			},
@@ -2560,7 +2560,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().add(1, 'd'));
 				}
 			},
@@ -2569,7 +2569,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().subtract(1, 'M'));
 				}
 			},
@@ -2578,7 +2578,7 @@ import moment from 'moment/min/moment-with-locales.min'
 					return;
 				}
 				var d = this.date() || this.getMoment();
-				if (widget.find('.datepicker').is(':visible')) {
+				if (widget.find('.bs-datepicker').is(':visible')) {
 					this.date(d.clone().add(1, 'M'));
 				}
 			},

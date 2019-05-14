@@ -5,7 +5,7 @@
 /**
  * Third party plugins
  */
-import moment from 'moment/min/moment.min';
+import moment from 'moment/min/moment-with-locales.min';
 import '../../vendor/bootstrap-datetimepicker';     // A fixed version compatible with webpack
 
 import Settings from '../config/_settings';
