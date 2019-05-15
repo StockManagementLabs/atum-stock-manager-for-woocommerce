@@ -80,11 +80,19 @@ export default class DateTimePicker {
 		$selector.each( (index: number, elem: Element) => {
 			
 			let $dateTimePicker: any = $(elem);
+			const data: any = $dateTimePicker.data() || {};
 			
-			// Extend the date picker options with data options.
-			opts = Object.assign( {}, this.defaults, $dateTimePicker.data() || {}, opts );
+			// If the current element has a DateTimePicker attached, destroy it first.
+			if (data.hasOwnProperty('DateTimePicker')) {
+				this.destroyDateTimePickers($dateTimePicker);
+			}
 			
-			$dateTimePicker.datetimepicker(opts);
+			// Use the spread operator to create a new options object in order to not conflict with other DateTimePicker options.
+			$dateTimePicker.datetimepicker({
+				...this.defaults,
+				...data,
+				...opts
+			});
 			
 		})
 		.on('dp.change', (evt: any) => {
