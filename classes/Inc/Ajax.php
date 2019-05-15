@@ -445,6 +445,12 @@ final class Ajax {
 
 		try {
 
+			// Disable cache to avoid saving the wrong data.
+			$was_cache_disabled = AtumCache::is_cache_disabled();
+			if ( ! $was_cache_disabled ) {
+				AtumCache::disable_cache();
+			}
+
 			$data = json_decode( stripslashes( $_POST['data'] ), TRUE );
 
 			if ( empty( $data ) ) {
@@ -463,6 +469,10 @@ final class Ajax {
 			}
 
 			do_action( 'atum/ajax/after_update_list_data', $data );
+
+			if ( ! $was_cache_disabled ) {
+				AtumCache::enable_cache();
+			}
 
 			wp_send_json_success( __( 'Data saved.', ATUM_TEXT_DOMAIN ) );
 
