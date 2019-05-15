@@ -13,6 +13,7 @@ namespace Atum\MetaBoxes;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -484,6 +485,12 @@ class ProductDataMetaBoxes {
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
 			return;
 		}
+
+		// Disable cache to avoid saving the wrong data.
+		$was_cache_disabled = AtumCache::is_cache_disabled();
+		if ( ! $was_cache_disabled ) {
+			AtumCache::disable_cache();
+		}
 		
 		do_action( 'atum/product_data/before_save_product_meta_boxes', $product_id, $post );
 
@@ -494,6 +501,10 @@ class ProductDataMetaBoxes {
 		$this->save_atum_meta_boxes();
 
 		do_action( 'atum/product_data/after_save_product_meta_boxes', $product_id, $post );
+
+		if ( ! $was_cache_disabled ) {
+			AtumCache::enable_cache();
+		}
 
 	}
 
@@ -506,6 +517,12 @@ class ProductDataMetaBoxes {
 	 * @param int $loop
 	 */
 	public function save_product_variation_meta_boxes( $variation_id, $loop ) {
+
+		// Disable cache to avoid saving the wrong data.
+		$was_cache_disabled = AtumCache::is_cache_disabled();
+		if ( ! $was_cache_disabled ) {
+			AtumCache::disable_cache();
+		}
 		
 		do_action( 'atum/product_data/before_save_product_variation_meta_boxes', $variation_id, $loop );
 		
@@ -518,6 +535,10 @@ class ProductDataMetaBoxes {
 		$this->save_atum_meta_boxes();
 
 		do_action( 'atum/product_data/after_save_product_variation_meta_boxes', $variation_id, $loop );
+
+		if ( ! $was_cache_disabled ) {
+			AtumCache::enable_cache();
+		}
 
 	}
 
