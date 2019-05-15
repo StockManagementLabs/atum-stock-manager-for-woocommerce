@@ -686,8 +686,8 @@ class Wpml {
   							 AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL";
 			
 			$results = $wpdb->get_col( $str_sql ); // WPCS: unprepared SQL ok.
-			
-			$results = $results ?: $product_id;
+
+			$results = array_map( 'intval', $results ?: $product_id );
 			
 		}
 		
