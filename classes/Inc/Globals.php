@@ -240,19 +240,38 @@ final class Globals {
 	}
 
 	/**
+	 * Get all ATUM compatible product types
+	 *
+	 * @since 1.5.8.3
+	 */
+	public static function get_all_compatible_products() {
+
+		return (array) apply_filters( 'atum/compatible_product_types', array_unique( array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() ) ) );
+
+	}
+
+	/**
 	 * Get all the product types that allow stock management
 	 *
 	 * @since 1.4.11
 	 */
 	public static function get_product_types_with_stock() {
 
-		// Get all the product types used for List Tables except grouped.
-		$product_types = array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() );
-
-		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( array_unique( $product_types ), [ 'grouped' ] ) );
+		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( self::get_all_compatible_products(), [ 'grouped' ] ) );
 
 	}
-	
+
+	/**
+	 * Get all product types installed but not compatible with ATUM
+	 *
+	 * @since 1.5.8.3
+	 */
+	public static function get_incompatible_products() {
+
+		return (array) apply_filters( 'atum/incompatible_product_types', array_diff( array_keys( wc_get_product_types() ), self::get_all_compatible_products() ) );
+
+	}
+
 	/**
 	 * Get all ATUM order types
 	 *
