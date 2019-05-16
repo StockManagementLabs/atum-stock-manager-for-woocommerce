@@ -547,12 +547,14 @@ class Wpml {
 		$post_type = get_post_type( $product_id );
 
 		/* @noinspection PhpUndefinedMethodInspection */
-		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
+		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
 
 		foreach ( $product_translations as $translation ) {
-			if ( $translation->element_id !== $product_id ) {
+
+			if ( $product_id !== (int) $translation->element_id ) {
 				Helpers::update_product_data( $translation->element_id, $product_data, TRUE );
 			}
+
 		}
 
 	}
@@ -928,9 +930,11 @@ class Wpml {
 			// Ensure all meta data in the ATUM table is properly copied to all translations.
 			$product_meta_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
 			
-			$results = $wpdb->get_results("SELECT DISTINCT t.trid, apd.* FROM {$wpdb->prefix}icl_translations t
-					INNER JOIN $product_meta_table apd ON (t.element_id = apd.product_id)
-						WHERE NULLIF(t.source_language_code, '') IS NULL AND t.element_type IN ('post_product', 'post_product_variation');"); // WPCS: unprepared SQL ok.
+			$results = $wpdb->get_results("
+				SELECT DISTINCT t.trid, apd.* FROM {$wpdb->prefix}icl_translations t
+				INNER JOIN $product_meta_table apd ON (t.element_id = apd.product_id)
+				WHERE NULLIF(t.source_language_code, '') IS NULL AND t.element_type IN ('post_product', 'post_product_variation');
+			"); // WPCS: unprepared SQL ok.
 			
 			if ( $results ) {
 				
@@ -943,15 +947,18 @@ class Wpml {
 						if ( ( $key = array_search( $result->product_id, $ids ) ) !== FALSE ) {
 							unset( $ids[ $key ] );
 						}
-						$update = "UPDATE $product_meta_table
-									SET purchase_price = " . ( is_null( $result->purchase_price ) ? 'NULL' : $result->purchase_price ) . ',
-										supplier_id =' . ( is_null( $result->supplier_id ) ? 'NULL' : $result->supplier_id ) . ',
-										supplier_sku = ' . ( is_null( $result->supplier_sku ) ? 'NULL' : "'$result->supplier_sku'" ) . ',
-										atum_controlled = ' . ( is_null( $result->atum_controlled ) ? 'NULL' : $result->atum_controlled ) . ',
-										out_stock_date = ' . ( is_null( $result->out_stock_date ) ? 'NULL' : "'$result->out_stock_date'" ) . ',
-										out_stock_threshold = ' . ( is_null( $result->out_stock_threshold ) ? 'NULL' : $result->out_stock_threshold ) . ',
-										inheritable = ' . ( is_null( $result->inheritable ) ? 'NULL' : $result->inheritable ) . "
-										WHERE product_id IN ('" . implode( ',', $ids ) . "');";
+
+						$update = "
+							UPDATE $product_meta_table
+							SET purchase_price = " . ( is_null( $result->purchase_price ) ? 'NULL' : $result->purchase_price ) . ',
+							supplier_id =' . ( is_null( $result->supplier_id ) ? 'NULL' : $result->supplier_id ) . ',
+							supplier_sku = ' . ( is_null( $result->supplier_sku ) ? 'NULL' : "'$result->supplier_sku'" ) . ',
+							atum_controlled = ' . ( is_null( $result->atum_controlled ) ? 'NULL' : $result->atum_controlled ) . ',
+							out_stock_date = ' . ( is_null( $result->out_stock_date ) ? 'NULL' : "'$result->out_stock_date'" ) . ',
+							out_stock_threshold = ' . ( is_null( $result->out_stock_threshold ) ? 'NULL' : $result->out_stock_threshold ) . ',
+							inheritable = ' . ( is_null( $result->inheritable ) ? 'NULL' : $result->inheritable ) . "
+							WHERE product_id IN ('" . implode( ',', $ids ) . "');
+						";
 						
 						$wpdb->query( $update ); // WPCS: unprepared SQL ok.
 						
