@@ -108,7 +108,9 @@ trait AtumOrderItemTrait {
 	 * @param bool $force_read
 	 */
 	public function read_meta_data( $force_read = FALSE ) {
-		$this->meta_data = $this->atum_order_item_model->get_all_meta();
+		if ( $this->atum_order_item_model ) {
+			$this->meta_data = $this->atum_order_item_model->get_all_meta();
+		}
 	}
 
 	/**
