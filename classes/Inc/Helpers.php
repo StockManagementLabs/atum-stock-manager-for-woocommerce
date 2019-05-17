@@ -2684,4 +2684,25 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Return the classes (product types ) to hide option groups in WC data panels
+	 *
+	 * @since 1.5.8.3
+	 *
+	 * @param bool $is_array Whether to return an array or a string.
+	 *
+	 * @return array|string
+	 */
+	public static function get_option_group_hidden_classes( $is_array = TRUE ) {
+
+		$classes = [];
+
+		foreach ( Globals::get_incompatible_products() as $product_type ) {
+
+			$classes[] = "hide_if_$product_type";
+		}
+
+		return $is_array ? $classes : implode( ' ', $classes );
+	}
+
 }

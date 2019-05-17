@@ -125,7 +125,7 @@ class ProductDataMetaBoxes {
 			'atum' => array(
 				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
-				'class'    => array( 'show_if_simple', 'show_if_variable' ),
+				'class'    => array_merge( array( 'show_if_simple', 'show_if_variable' ), Helpers::get_option_group_hidden_classes() ),
 				'priority' => 21,
 			),
 		) );
@@ -269,7 +269,7 @@ class ProductDataMetaBoxes {
 				return "show_if_{$val}";
 			}, Globals::get_product_types_with_stock() );
 
-			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
+			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', array_merge( $visibility_classes, Helpers::get_option_group_hidden_classes( ) ) );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'visibility_classes', 'woocommerce_notify_no_stock_amount' ) );
 
@@ -321,7 +321,7 @@ class ProductDataMetaBoxes {
 
 		if ( empty( $variation ) ) {
 			$product_id    = get_the_ID();
-			$wrapper_class = '_purchase_price_field';
+			$wrapper_class = '_purchase_price_field ' . Helpers::get_option_group_hidden_classes( FALSE );
 			$field_id      = $field_name = Globals::PURCHASE_PRICE_KEY;
 		}
 		else {
@@ -426,7 +426,7 @@ class ProductDataMetaBoxes {
 
 		<?php else :
 
-			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
+			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', array_merge( [ 'show_if_simple' ], Helpers::get_option_group_hidden_classes() ) );
 
 			Helpers::load_view( 'meta-boxes/product-data/supplier-fields', compact( 'supplier_field_name', 'supplier_field_id', 'variation', 'loop', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes' ) );
 
