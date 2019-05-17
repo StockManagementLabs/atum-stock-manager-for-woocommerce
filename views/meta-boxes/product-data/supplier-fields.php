@@ -18,11 +18,13 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
 
+$classes = ' ' . esc_attr( implode( ' ', $supplier_fields_classes ) );
+
 if ( empty( $variation ) ) : ?>
-<div class="options_group <?php echo esc_attr( implode( ' ', $supplier_fields_classes ) ) ?>">
+<div class="options_group<?php echo $classes ?>">
 <?php endif; ?>
 
-	<p class="form-field _supplier_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first' ?>">
+	<p class="form-field _supplier_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first ' ?><?php echo $classes ?>">
 		<label for="<?php echo esc_attr( $supplier_field_id ) ?>"><?php esc_html_e( 'Supplier', ATUM_TEXT_DOMAIN ) ?></label>
 
 		<span class="atum-field input-group">
@@ -45,7 +47,7 @@ if ( empty( $variation ) ) : ?>
 		</span>
 	</p>
 
-	<p class="form-field _supplier_sku_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-last' ?>">
+	<p class="form-field _supplier_sku_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-last' ?><?php echo $classes ?>">
 		<label for="<?php echo esc_attr( $supplier_sku_field_id ) ?>">
 			<abbr title="<?php esc_attr_e( "Supplier's Stock Keeping Unit", ATUM_TEXT_DOMAIN ) ?>"><?php esc_html_e( "Supplier's SKU", ATUM_TEXT_DOMAIN ) ?></abbr>
 		</label>
