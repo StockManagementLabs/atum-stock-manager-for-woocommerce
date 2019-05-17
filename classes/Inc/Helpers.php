@@ -627,7 +627,7 @@ final class Helpers {
 				if ( $sold_last_days > 0 ) {
 
 					$average_sales = $sold_last_days / $days;
-					$price         = $product->get_regular_price();
+					$price         = floatval( $product->get_regular_price() );
 
 					$lost_sales = $days_out_of_stock * $average_sales * $price;
 
