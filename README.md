@@ -159,6 +159,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.3`
+
+*2019-05-17*
+
+**Changes**
+
+* Added exclude path to TypeScript config.
+* Disable cache while saving ATUM meta boxes to avoid issues.
+* Disabled the cache when saving products through SC to avod saving the wrong data.
+* Ensure that WPML get original translation returns int values.
+* Hide Atum fields for all the product types that are not officially recognized by ATUM.
+
+**Fixes**
+
+* Select2 CSS fixes.
+* Fixed PHP notice when no supplier ID is returned.
+* Avoid conflicts with jQuery UI's datepicker.
+* Fixed popover arrow background.
+* Fixed DateTimePicker options object passed by reference.
+* Fixed string to number conversion issue.
+
+---
+
 `1.5.8.2`
 
 *2019-05-08*
