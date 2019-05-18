@@ -202,7 +202,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.5.8.3`
 
-*2019-05-17*
+*2019-05-18*
 
 **Changes**
 
