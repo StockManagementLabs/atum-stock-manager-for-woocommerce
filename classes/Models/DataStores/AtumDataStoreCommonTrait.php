@@ -157,7 +157,7 @@ trait AtumDataStoreCommonTrait {
 			
 		}
 
-		do_action( 'atum/data_store/after_saving_product_data', $data );
+		do_action( 'atum/data_store/after_saving_product_data', $data, $product->get_id() );
 		
 	}
 	

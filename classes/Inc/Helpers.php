@@ -2704,5 +2704,32 @@ final class Helpers {
 
 		return $is_array ? $classes : implode( ' ', $classes );
 	}
-
+	
+	/**
+	 * Duplicates an entry from atum product data table.
+	 * Needs to be updated when the database changes.
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param integer $original_id
+	 * @param integer $destination_id
+	 */
+	public static function duplicate_atum_product( $original_id, $destination_id ) {
+		
+		global $wpdb;
+		
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		
+		$wpdb->query( "INSERT IGNORE INTO $atum_product_data_table
+						  	SELECT
+							$destination_id, purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+							out_stock_threshold,inheritable,bom_sellable,minimum_threshold,available_to_purchase,
+							selling_priority,inbound_stock,stock_on_hold,sold_today,sales_last_days,reserved_stock,
+							customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,lost_sales,
+							has_location,update_date,calculated_stock
+							FROM $atum_product_data_table WHERE product_id = $original_id;" ); // WPCS: unprepared SQL ok.
+		
+	}
+	
+	
 }
