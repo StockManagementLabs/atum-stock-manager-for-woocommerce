@@ -19,8 +19,9 @@ export let Switcher = {
 	 *
 	 * @param string selectorClass
 	 * @param Object options
+	 * @param JQuery $wrapper
 	 */
-	doSwitchers(selectorClass: string = '.js-switch', options?: SwitcherOptions) {
+	doSwitchers(selectorClass: string = '.js-switch', options?: SwitcherOptions, $wrapper?: JQuery) {
 		
 		options = Object.assign( {
 			size               : 'small',
@@ -30,7 +31,9 @@ export let Switcher = {
 			jackSecondaryColor : '#adb5bd'
 		}, options || {});
 		
-		$(selectorClass).each( (index: number, elem: Element) => {
+		const $selector : JQuery = $wrapper ? $wrapper.find(selectorClass) : $(selectorClass);
+		
+		$selector.each( (index: number, elem: Element) => {
 			new Switchery(elem, options);
 			$(elem).removeClass( selectorClass.replace('.', '') );
 		} );

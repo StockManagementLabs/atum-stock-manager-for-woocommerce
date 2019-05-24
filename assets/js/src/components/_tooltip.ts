@@ -6,9 +6,11 @@ import '../../vendor/bootstrap3-custom.min';  // TODO: USE BOOTSTRAP 4
 
 export default class Tooltip {
 	
-	constructor() {
+	constructor(initialize: boolean = true) {
 		
-		this.addTooltips();
+		if (initialize) {
+			this.addTooltips();
+		}
 		
 	}
 
