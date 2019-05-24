@@ -159,6 +159,17 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.4`
+
+*2019-05-24*
+
+**Fixes**
+
+* Added ATUM data sync to translations in WPML.
+* Refactory.
+
+---
+
 `1.5.8.3`
 
 *2019-05-18*
