@@ -115,6 +115,9 @@ class Wpml {
 	 */
 	public function register_hooks() {
 
+		add_action( 'atum/data_store/after_saving_product_data', array( $this, 'update_atum_data' ), 10, 2 );
+		add_action( 'atum/data_store/after_deleting_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
+		
 		if ( is_admin() ) {
 
 			// Make Atum orders not translatable.
@@ -157,6 +160,10 @@ class Wpml {
 			// Filter original product parts shown in product json search.
 			add_filter( 'atum/product_levels/ajax/search_products/select', array( $this, 'select_add_icl_translations' ), 10, 3 );
 			add_filter( 'atum/product_levels/ajax/search_products/where', array( $this, 'where_add_icl_translations' ), 10, 3 );
+			
+			// Add Atum data rows when translations are created.
+			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
+			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate'), 111, 4 );
 			
 		}
 
@@ -832,7 +839,149 @@ class Wpml {
 		
 		return $product_id;
 	}
-
+	
+	/**
+	 * Duplicate the ATUM data
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param integer $master_post_id post id where the duplication was called
+	 * @param string  $lang
+	 * @param array   $postarr
+	 * @param integer $id             New post id
+	 */
+	public function icl_make_duplicate( $master_post_id, $lang, $postarr, $id  ) {
+		
+		if( 'product' === get_post_type( $master_post_id ) ) {
+			
+			$master_post_id = $this->wpml->products->get_original_product_id( $master_post_id );
+			
+			Helpers::duplicate_atum_product( $master_post_id, $id );
+			
+			$product = wc_get_product( $id );
+			
+			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
+			
+				$childs = $product->get_children();
+				
+				foreach ( $childs as $child_id ) {
+					
+					$original_product_id = $this->wpml->products->get_original_product_id( $child_id );
+					
+					Helpers::duplicate_atum_product( $original_product_id, $child_id);
+				}
+				
+			}
+		}
+	}
+	
+	/**
+	 * Ensure all translations have the same data
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param array   $data
+	 * @param integer $product_id
+	 */
+	public function update_atum_data( $data, $product_id ) {
+		
+		global $wpdb;
+		
+		$post_type        = get_post_type( $product_id );
+		$translations_ids = [];
+		
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
+		
+		foreach ( $product_translations as $translation ) {
+			
+			$translation_id = (int) $translation->element_id;
+			if ( $product_id !== $translation_id ) {
+				
+				$translations_ids[] = $translation_id;
+			}
+			
+		}
+		
+		if ( $translations_ids ) {
+			// Don't need prepare, all are integers.
+			$translations_ids_str = implode( ',', $translations_ids );
+			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+			$in_atum              = $wpdb->get_col( "SELECT product_id FROM $table
+					WHERE product_id IN( $translations_ids_str )" ); // WPCS: unprepared SQL ok.
+			
+			foreach ( $translations_ids as $translation_id ) {
+				
+				if ( in_array( $translation_id, $in_atum ) ) {
+					
+					// If present it's not needed.
+					unset( $data['product_id'] );
+					
+					$wpdb->update(
+						$wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE,
+						$data,
+						array(
+							'product_id' => $translation_id,
+						)
+					);
+				}
+				else {
+					
+					// if inserting, it's needed.
+					$data['product_id'] = $translation_id;
+					$wpdb->insert( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, $data );
+				}
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Ensure all translation ATUM data is removed when removing a product
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param \WC_Product $product The product object.
+	 * @param array       $args    Array of args passed to the delete method.
+	 */
+	public function delete_atum_data( $product, $args ) {
+		
+		global $wpdb;
+		
+		// Delete the ATUM data for this product.
+		if ( ! empty( $args['force_delete'] ) && TRUE === $args['force_delete'] ) {
+			
+			$product_id       = $product->get_id();
+			$post_type        = get_post_type( $product_id );
+			$translations_ids = [];
+			
+			/* @noinspection PhpUndefinedMethodInspection */
+			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
+			
+			foreach ( $product_translations as $translation ) {
+				
+				$translation_id = (int) $translation->element_id;
+				if ( $product_id !== $translation_id ) {
+					
+					$translations_ids[] = $translation_id;
+				}
+				
+			}
+			
+			if ( $translations_ids ) {
+				
+				// Don't need prepare, all are integers.
+				$translations_ids_str = implode( ',', $translations_ids );
+				$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+				
+				$wpdb->query( "DELETE FROM $table
+						WHERE product_id IN( $translations_ids_str)");
+			}
+		}
+		
+	}
+	
 	/**
 	 * Do upgrade tasks after ATUM's updated
 	 *
