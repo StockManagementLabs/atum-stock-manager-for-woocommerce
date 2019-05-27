@@ -768,7 +768,6 @@ abstract class AtumOrderPostType {
 		foreach ( $ids as $id ) {
 			$atum_order = Helpers::get_atum_order_model( $id );
 			$atum_order->update_status( $new_status );
-			$atum_order->save();
 			$changed++;
 		}
 
