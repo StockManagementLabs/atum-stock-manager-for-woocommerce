@@ -67,7 +67,7 @@ export default class SettingsPage {
 			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => this.runScript($(evt.currentTarget)) );
 		
 		
-		new SmartForm(this.$form, this.settings);
+		new SmartForm(this.$form, this.settings.get('atumPrefix'));
 		
 		
 		// Footer positioning.

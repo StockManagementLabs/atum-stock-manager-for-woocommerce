@@ -5,11 +5,15 @@
 import Switchery from 'switchery-npm/index';
 
 interface SwitcherOptions {
-	size?: string;
+	className?: string;
 	color?: string;
-	secondaryColor?: string;
+	disabled?: boolean;
+	disabledOpacity?: number;
 	jackColor?: string;
 	jackSecondaryColor?: string;
+	secondaryColor?: string;
+	size?: string;
+	speed?: string;
 }
 
 export let Switcher = {
@@ -34,8 +38,8 @@ export let Switcher = {
 		const $selector : JQuery = $wrapper ? $wrapper.find(selectorClass) : $(selectorClass);
 		
 		$selector.each( (index: number, elem: Element) => {
-			new Switchery(elem, options);
-			$(elem).removeClass( selectorClass.replace('.', '') );
+			const switchery: any = new Switchery(elem, options);
+			$(elem).removeClass( selectorClass.replace('.', '') ).data('switchery-instance', switchery);
 		} );
 		
 	}

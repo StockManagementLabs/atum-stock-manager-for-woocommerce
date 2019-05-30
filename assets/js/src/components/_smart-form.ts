@@ -3,7 +3,6 @@
    ======================================= */
 
 import { BeforeUnload } from './_before-unload';
-import Settings from '../config/_settings';
 
 export default class SmartForm {
 	
@@ -14,13 +13,14 @@ export default class SmartForm {
 	 */
 	constructor(
 		private $form: JQuery,
-		private settings: Settings
+		private atumPrefix: string,
+		private dependantWrapperSelector?: string
 	) {
 		
 		this.$form
 		
 			// Set the dirty fields.
-			.on('change', ':input, select, textarea', (evt: JQueryEventObject) => {
+			.on('change', ':input', (evt: JQueryEventObject) => {
 				
 				if(!$('.atum-nav-link.active').parent().hasClass('no-submit')) {
 					$(evt.currentTarget).addClass('dirty');
@@ -29,7 +29,7 @@ export default class SmartForm {
 			})
 			
 			// Remove the dirty mark if the user tries to save.
-			.on('click', 'input[type=submit]', (evt: JQueryEventObject) => {
+			.on('click', 'input[type=submit]', () => {
 				$form.find('.dirty').removeClass('dirty');
 				$form.find('.form-settings-wrapper').addClass('overlay');
 			})
@@ -37,16 +37,12 @@ export default class SmartForm {
 			// Field dependencies.
 			.on('change','[data-dependency]', (evt: JQueryEventObject) => {
 				
-				let $field: JQuery  = $(evt.currentTarget),
-				    value: any      = $field.val(),
-				    dependency: any = $field.data('dependency');
+				let $field: JQuery         = $(evt.currentTarget),
+				    value: number | string = $field.val(),
+				    dependency: any        = $field.data('dependency');
 				
 				if ($.isArray(dependency)) {
-					
-					$.each(dependency, (index: number, dependencyElem: any) =>  {
-						this.checkDependency($field, dependencyElem, value);
-					});
-					
+					$.each(dependency, (index: number, dependencyElem: any) => this.checkDependency($field, dependencyElem, value) );
 				}
 				else {
 					this.checkDependency($field, dependency, value);
@@ -85,14 +81,22 @@ export default class SmartForm {
 		}
 		
 		if (dependency.hasOwnProperty('section')) {
-			$dependantWraper = this.$form.find('[data-section="' + dependency.section + '"]');
+			$dependantWraper = this.$form.find(`[data-section="${ dependency.section }"]`);
 		}
 		else if (dependency.hasOwnProperty('field')) {
 			
-			$dependantInput = $( `#${ this.settings.get('atumPrefix') + dependency.field}` );
+			$dependantInput = $( `#${ this.atumPrefix + dependency.field}` );
 			
 			if ($dependantInput.length) {
-				$dependantWraper = $dependantInput.closest('tr').find('th, td');
+				
+				if (this.dependantWrapperSelector) {
+					$dependantWraper = $dependantInput.closest(this.dependantWrapperSelector);
+				}
+				else {
+					// This is the default wrapper (as used in the Settings page)
+					$dependantWraper = $dependantInput.closest('tr').find('th, td');
+				}
+				
 			}
 			
 		}
@@ -101,12 +105,14 @@ export default class SmartForm {
 			
 			// Show/Hide the field.
 			if (visibility === true) {
+				
 				if (!dependency.hasOwnProperty('animated') || dependency.animated === true) {
 					$dependantWraper.slideDown('fast');
 				}
 				else {
 					$dependantWraper.show();
 				}
+				
 			}
 			else {
 				
@@ -131,6 +137,8 @@ export default class SmartForm {
 					}
 					
 					$dependantInput.change();
+					
+					this.$form.trigger('atum-smart-form-reset-default', [$dependantInput]);
 					
 				}
 				
