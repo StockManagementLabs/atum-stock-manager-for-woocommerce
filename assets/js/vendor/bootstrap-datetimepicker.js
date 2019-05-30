@@ -5,7 +5,7 @@
  Copyright (c) 2015 Jonathan Peterson
  =========================================================
  
- MODIFIED BY ATUM TO BE COMPATIBLE WITH WEBPACK AND REPLACED datepicker CLASS TO bs-datepicker
+ MODIFIED BY ATUM TO BE COMPATIBLE WITH WEBPACK AND REPLACED datepicker AND timepicker CLASSES TO bs-datepicker AND bs-timepicker
  */
 /*
  The MIT License (MIT)
@@ -799,10 +799,10 @@ import moment from 'moment/min/moment-with-locales.min';
 		    },
 		
 		    fillTime = function () {
-			    var toggle, newDate, timeComponents = widget.find('.timepicker span[data-time-component]');
+			    var toggle, newDate, timeComponents = widget.find('.bs-timepicker span[data-time-component]');
 			
 			    if (!use24Hours) {
-				    toggle = widget.find('.timepicker [data-action=togglePeriod]');
+				    toggle = widget.find('.bs-timepicker [data-action=togglePeriod]');
 				    newDate = date.clone().add((date.hours() >= 12) ? -12 : 12, 'h');
 				
 				    toggle.text(date.format('A'));
@@ -1113,23 +1113,23 @@ import moment from 'moment/min/moment-with-locales.min';
 			    },
 			
 			    showPicker: function () {
-				    widget.find('.timepicker > div:not(.timepicker-picker)').hide();
-				    widget.find('.timepicker .timepicker-picker').show();
+				    widget.find('.bs-timepicker > div:not(.timepicker-picker)').hide();
+				    widget.find('.bs-timepicker .timepicker-picker').show();
 			    },
 			
 			    showHours: function () {
-				    widget.find('.timepicker .timepicker-picker').hide();
-				    widget.find('.timepicker .timepicker-hours').show();
+				    widget.find('.bs-timepicker .timepicker-picker').hide();
+				    widget.find('.bs-timepicker .timepicker-hours').show();
 			    },
 			
 			    showMinutes: function () {
-				    widget.find('.timepicker .timepicker-picker').hide();
-				    widget.find('.timepicker .timepicker-minutes').show();
+				    widget.find('.bs-timepicker .timepicker-picker').hide();
+				    widget.find('.bs-timepicker .timepicker-minutes').show();
 			    },
 			
 			    showSeconds: function () {
-				    widget.find('.timepicker .timepicker-picker').hide();
-				    widget.find('.timepicker .timepicker-seconds').show();
+				    widget.find('.bs-timepicker .timepicker-picker').hide();
+				    widget.find('.bs-timepicker .timepicker-seconds').show();
 			    },
 			
 			    selectHour: function (e) {
@@ -2596,7 +2596,7 @@ import moment from 'moment/min/moment-with-locales.min';
 				if (!widget) {
 					return;
 				}
-				if (widget.find('.timepicker').is(':visible')) {
+				if (widget.find('.bs-timepicker').is(':visible')) {
 					widget.find('.btn[data-action="togglePeriod"]').click();
 				}
 			},
