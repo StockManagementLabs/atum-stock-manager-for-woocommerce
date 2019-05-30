@@ -24,6 +24,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-hidden {
+	&:before {
+		content: $atmi-hidden;
+	}
+}
 .atmi-variable-product-part {
 	&:before {
 		content: $atmi-variable-product-part;

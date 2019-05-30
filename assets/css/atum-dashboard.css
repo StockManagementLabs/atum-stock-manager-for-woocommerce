@@ -274,6 +274,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-hidden:before {
+  content: "";
+}
+
 .atmi-variable-product-part:before {
   content: "";
 }

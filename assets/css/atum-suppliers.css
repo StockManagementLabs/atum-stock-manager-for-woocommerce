@@ -773,6 +773,10 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-hidden:before {
+  content: "";
+}
+
 .atmi-variable-product-part:before {
   content: "";
 }
