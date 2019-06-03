@@ -159,6 +159,22 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.5`
+
+*2019-06-03*
+
+**Changes**
+
+* Updated ATUM icon font.
+
+**Fixes**
+
+* Fixed stock double increased/decreased when using the PO’s bulk actions.
+* Fixed TimePicker not showing numbers.
+* Refactory.
+
+---
+
 `1.5.8.4`
 
 *2019-05-24*
