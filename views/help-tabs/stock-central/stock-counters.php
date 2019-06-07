@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Stock on Hold', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "The 'Stock on Hold' value is an important indicator for stores that allow customers to add items to their baskets and leave them there unattended for a while. Products left in baskets are still physically in the warehouse, but not included in the 'Current Stock' indicator. You can set the time of the product being held by a customer under 'WooCommerce' - 'Settings' - 'Products' and the 'Inventory' tab.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( 'All products within paid orders that are still in the warehouse but not yet shipped (order status processing or on hold).', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Reserved Stock', ATUM_TEXT_DOMAIN ) ?></strong></td>

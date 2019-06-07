@@ -1651,7 +1651,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Get the stock on hold amount for the specified product
+	 * Get the stock on hold amount (orders that have been paid but are not marked as completed yet) for the specified product
 	 *
 	 * @since 1.5.8
 	 *
@@ -1682,7 +1682,7 @@ final class Helpers {
 					LEFT JOIN $wpdb->order_itemmeta omq ON omq.`order_item_id` = oi.`order_item_id`
 					LEFT JOIN $wpdb->order_itemmeta omp ON omp.`order_item_id` = oi.`order_item_id`			  
 					WHERE order_id IN (
-						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-pending', 'wc-on-hold')
+						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')
 					)
 					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value = %d 
 					GROUP BY omp.meta_value",
@@ -2720,14 +2720,15 @@ final class Helpers {
 		
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		
-		$wpdb->query( "INSERT IGNORE INTO $atum_product_data_table
-						  	SELECT
-							$destination_id, purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-							out_stock_threshold,inheritable,bom_sellable,minimum_threshold,available_to_purchase,
-							selling_priority,inbound_stock,stock_on_hold,sold_today,sales_last_days,reserved_stock,
-							customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,lost_sales,
-							has_location,update_date,calculated_stock
-							FROM $atum_product_data_table WHERE product_id = $original_id;" ); // WPCS: unprepared SQL ok.
+		$wpdb->query( "
+			INSERT IGNORE INTO $atum_product_data_table
+			SELECT $destination_id, purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+			out_stock_threshold,inheritable,bom_sellable,minimum_threshold,available_to_purchase,
+			selling_priority,inbound_stock,stock_on_hold,sold_today,sales_last_days,reserved_stock,
+			customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,lost_sales,
+			has_location,update_date,calculated_stock
+			FROM $atum_product_data_table WHERE product_id = $original_id;
+		" ); // WPCS: unprepared SQL ok.
 		
 	}
 	
