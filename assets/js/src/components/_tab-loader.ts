@@ -33,7 +33,7 @@ export default class TabLoader {
 		})
 		.init( () => {
 			
-			const pathNames = $.address.pathNames();
+			const pathNames: string[] = $.address.pathNames();
 			
 			// When accessing externally or reloading the page, update the fields and the list.
 			if (pathNames.length) {
@@ -66,9 +66,9 @@ export default class TabLoader {
 		
 	}
 	
-	public static getCurrentTab(): string {
+	static getCurrentTab(): string {
 		
-		const pathNames = $.address.pathNames();
+		const pathNames: string[] = $.address.pathNames();
 		return pathNames.length ? pathNames[0] : ''; // We understand that there is only one param here.
 		
 	}
