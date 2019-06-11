@@ -2540,7 +2540,7 @@ body .select2-container--default .select2-results__group {
 }
 
 body .select2-container--default.select2-container--open .select2-dropdown {
-  border-color: #0073AA;
+  border-color: #fff;
 }
 
 .popover {
@@ -6558,7 +6558,7 @@ table.atum-list-table tfoot .item-heads th, .floatThead-container tfoot .item-he
   min-width: 50px;
   height: 60px;
   white-space: normal;
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 0.3px;
   color: #adb5bd;
 }

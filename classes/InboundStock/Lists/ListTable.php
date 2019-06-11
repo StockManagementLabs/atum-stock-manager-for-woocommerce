@@ -365,7 +365,7 @@ class ListTable extends AtumListTable {
 				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'";
+				$search_query .= "AND `order_item_name` LIKE '%{$search}%'";
 			}
 
 		}
@@ -386,7 +386,7 @@ class ListTable extends AtumListTable {
 
 		}
 
-		$order    = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
+		$order    = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
 		$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
 		
 		$sql = $wpdb->prepare("

@@ -1585,6 +1585,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		.item-heads {
 			border-top: 1px solid $gray-200;
 			border-bottom: 1px solid $gray-200;
+			
 			th {
 				padding: 3px 5px;
 				line-height: 1.1;
@@ -1592,7 +1593,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				min-width: 50px;
 				height: 60px;
 				white-space: normal;
-				font-weight: bold;
+				font-weight: 600;
 				letter-spacing: 0.3px;
 				color: $gray-500;
 			}

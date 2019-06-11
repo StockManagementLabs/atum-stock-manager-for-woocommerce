@@ -97,8 +97,24 @@ export default class DateTimePicker {
 		})
 		.on('dp.change', (evt: any) => {
 			
-			const label: string = typeof evt.date === 'object' ? evt.date.format(this.settings.get('dateFormat')) : this.settings.get('none');
-			$(evt.currentTarget).siblings('.field-label').addClass('unsaved').text(label);
+			evt.stopImmediatePropagation();
+			
+			const $fieldLabel: JQuery = $(evt.currentTarget).siblings('.field-label');
+			
+			if ($fieldLabel.length) {
+				
+				const currentLabel: string = $fieldLabel.text(),
+				      newLabel: string     = typeof evt.date === 'object' ? evt.date.format(this.settings.get('dateFormat')) : this.settings.get('none');
+				
+				// Only update it if changed.
+				if (newLabel !== currentLabel) {
+					$fieldLabel.addClass('unsaved').text(newLabel);
+				}
+				else {
+					$fieldLabel.removeClass('unsaved');
+				}
+				
+			}
 			
 		})
 		.on('dp.show', (evt: any) => {
