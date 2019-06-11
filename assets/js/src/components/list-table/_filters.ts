@@ -54,7 +54,7 @@ export default class Filters {
 			if (this.settings.get('searchDropdown') === 'yes') {
 				
 				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
-					this.pseudoKeyUpAjax($(evt.currentTarget).data('value'), this.globals.$searchInput.val());
+					this.pseudoKeyUpAjax( $(evt.currentTarget).data('value'), decodeURIComponent( this.globals.$searchInput.val() ) );
 				});
 				
 			}
@@ -76,8 +76,8 @@ export default class Filters {
 			// If s and searchColumnBtnVal have values, then we can push over search.
 			this.globals.$searchInput.on('input', (evt: JQueryEventObject) => {
 				
-				let searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
-				    inputVal: any              = $(evt.currentTarget).val();
+				const searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
+				      inputVal: any              = $(evt.currentTarget).val();
 				
 				if (!inputVal) {
 					
@@ -127,14 +127,14 @@ export default class Filters {
 			
 			this.globals.$atumList.on('click', '.search-category, .search-submit', () => {
 				
-				let searchInputVal: any        = this.globals.$searchInput.val(),
-				    searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value');
+				const searchInputVal: string     = this.globals.$searchInput.val(),
+				      searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value');
 				
 				$searchSubmitBtn.prop('disabled', typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length === 0 ? true : false);
 				
 				if (searchInputVal.length > 0) {
-					$.address.parameter('s', this.globals.$searchInput.val());
-					$.address.parameter('search_column', this.globals.$searchColumnBtn.data('value'));
+					$.address.parameter('s', searchInputVal);
+					$.address.parameter('search_column', searchColumnBtnVal);
 					
 					this.router.updateHash();
 				}
@@ -166,7 +166,7 @@ export default class Filters {
 				this.globals.$searchInput.val('');
 				
 				if (this.settings.get('searchDropdown') === 'yes' && this.globals.$searchColumnBtn.data('value') !== 'title') {
-					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['title', $('#search_column_dropdown').data('product-title') + ' <span class="caret"></span>']);
+					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['title', `${ this.globals.$searchColumnDropdown.data('product-title') } <span class="caret"></span>`]);
 				}
 				
 				this.listTable.updateTable();

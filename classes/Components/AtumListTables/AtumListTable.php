@@ -2094,8 +2094,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $_REQUEST['search_column'] ) ) {
 			$args['search_column'] = esc_attr( $_REQUEST['search_column'] );
 		}
+
 		if ( ! empty( $_REQUEST['s'] ) ) {
-			$args['s'] = esc_attr( $_REQUEST['s'] );
+			$args['s'] = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
 		}
 
 		// Let others play.
@@ -3426,7 +3427,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
 
 		$search_column = esc_attr( stripslashes( $_REQUEST['search_column'] ) );
-		$search_term   = sanitize_text_field( stripslashes( $_REQUEST['s'] ) );
+		$search_term   = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
 
 		$cache_key = AtumCache::get_cache_key( 'product_search', [ $search_column, $search_term ] );
 		$where     = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
