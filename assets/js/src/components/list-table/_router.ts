@@ -44,8 +44,8 @@ export default class Router {
 			if ($.address.parameterNames().length) {
 				
 				// Init fields from hash parameters.
-				let s: string            = decodeURIComponent( $.address.parameter('s') ),
-				    searchColumn: string = $.address.parameter('search_column'),
+				let s: string            = decodeURIComponent( $.address.parameter('s') || '' ),
+				    searchColumn: string = $.address.parameter('search_column') || '',
 				    optionVal: string    = '';
 				
 				if (s) {
