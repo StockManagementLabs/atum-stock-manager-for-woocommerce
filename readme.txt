@@ -6,8 +6,8 @@ Requires at least: 4.4
 Tested up to: 5.2.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.6.3
-Stable tag: 1.5.8.5
+WC tested up to: 3.6.4
+Stable tag: 1.5.8.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.8.6`
+
+*2019-06-13*
+
+**Changes**
+
+* Changed stock on hold formula.
+
+**Fixes**
+
+* Fixed action links positioning on post type list tables.
+* Fixed orphan items showing in Inbound Stock list for Purchase Orders with wrong status.
+* Fixed special characters not working in search terms when filtering.
+* Refactory.
+* CSS fixes.
 
 ---
 
