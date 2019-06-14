@@ -117,7 +117,7 @@ class ModuleManager {
 		$defaults['purchase_orders_module'] = array(
 			'section' => 'module_manager',
 			'name'    => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( "Enables/Disables the Purchase Orders module. It'll disable the dependant modules too (Inbound Stock, Suppliers and Product Locations).", ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "Enables/Disables the Purchase Orders module. It'll disable the dependant modules too (Inbound Stock, Suppliers, Product Locations and Purchase Price).", ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'yes',
 		);
