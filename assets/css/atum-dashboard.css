@@ -3830,7 +3830,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container {
-  z-index: 100000000;
+  z-index: 100000000 !important;
 }
 
 .swal2-container .swal2-content, .swal2-container .swal2-title {
@@ -4267,7 +4267,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description {
-  width: 50%;
+  width: 59%;
 }
 
 @media all and (max-width: 768px) {
@@ -4279,14 +4279,26 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 {
   font-weight: 400;
   font-size: 40px;
-  margin: 0 0 10px;
+  margin: 20px 0 5px;
   line-height: 1.1;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 > span {
+  position: relative;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 strong {
+  font-weight: 600;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 span {
+  font-weight: 300;
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
   text-align: left !important;
-  padding: 0 22px;
+  padding: 0 15px;
 }
 
 @media all and (max-width: 768px) {
@@ -4301,13 +4313,22 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   line-height: 20px;
   border-radius: 11.5px;
   position: relative;
-  top: -27px;
-  right: 20px;
+  top: -36px;
+  right: 34px;
   font-size: 14px;
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description .footer-notice {
+  font-size: 10px;
+  color: #000;
+  border-radius: 5px;
+  padding: 5px 10px;
+  max-width: 445px;
+  margin-left: 15px;
+}
+
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons {
-  width: 300px;
+  width: 256px;
   display: block;
   float: right;
   margin-left: auto;

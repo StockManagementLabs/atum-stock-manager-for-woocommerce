@@ -278,7 +278,7 @@ body.toplevel_page_atum-dashboard {
 					}
 					
 					.content-description {
-						width: 50%;
+						width: 59%;
 						
 						@include tablet-max{
 							width: 100%;
@@ -287,14 +287,26 @@ body.toplevel_page_atum-dashboard {
 						h1 {
 							font-weight: 400;
 							font-size: 40px;
-							margin: 0 0 10px;
+							margin: 20px 0 5px;
 							line-height: 1.1;
-							letter-spacing: 2px;
+							letter-spacing: 1px;
+							
+							> span {
+								position: relative;
+							}
+							
+							strong {
+								font-weight: 600;
+							}
+							
+							span {
+								font-weight: 300;
+							}
 						}
 						
 						h1, p {
 							text-align: left !important;
-							padding: 0 22px;
+							padding: 0 15px;
 							
 							@include tablet-max{
 								text-align: center !important;
@@ -308,15 +320,24 @@ body.toplevel_page_atum-dashboard {
 							line-height: 20px;
 							border-radius: 11.5px;
 							position: relative;
-							top: -27px;
-							right: 20px;
+							top: -36px;
+							right: 34px;
 							font-size: 14px;
+						}
+						
+						.footer-notice {
+							font-size: 10px;
+							color: $black;
+							border-radius: 5px;
+							padding: 5px 10px;
+							max-width: 445px;
+							margin-left: $grid-gutter-width/2;
 						}
 						
 					}
 					
 					.content-buttons {
-						width: 300px;
+						width: 256px;
 						display: block;
 						float: right;
 						margin-left: auto;
