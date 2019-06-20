@@ -27,6 +27,11 @@ interface MPopupButton {
 	css: string;
 }
 
+interface MPopupFooterNotice {
+	text: string;
+	bg_color: string;
+}
+
 interface MPopupSettings {
 	background: string;
 	title: MPopupText;
@@ -34,6 +39,7 @@ interface MPopupSettings {
 	version?: MPopupLabel;
 	buttons?: MPopupButton[];
 	images: any;
+	footerNotice?: MPopupFooterNotice;
 	transient_key: string;
 }
 
@@ -64,7 +70,8 @@ export default class MarketingPopup {
 				
 				if (response.success === true) {
 					
-					let popupSettings: MPopupSettings = response.data;
+					const popupSettings: MPopupSettings = response.data;
+					console.log(popupSettings);
 					
 					let descriptionColor: string    = popupSettings.description.text_color ? `color:${ popupSettings.description.text_color };` : '',
 					    descriptionFontSize: string = popupSettings.description.text_size ? `font-size:${ popupSettings.description.text_size };` : '',
@@ -74,19 +81,23 @@ export default class MarketingPopup {
 					    versionColor: string        = '',
 					    versionBackground: string   = '',
 					    version: string             = '',
-					    titleColor: string          = popupSettings.description.text_color ? `color:${ popupSettings.title.text_color };` : '',
-					    titleFontSize: string       = popupSettings.description.text_size ? `font-size:${ popupSettings.title.text_size };` : '',
-					    titleAlign: string          = popupSettings.description.text_align ? `text-align:${ popupSettings.title.text_align };` : '',
-					    title: string               = `<h1 style="${ titleColor + titleFontSize + titleAlign }">${ popupSettings.title.text }</h1>`,
+					    titleColor: string          = popupSettings.title.text_color ? `color:${ popupSettings.title.text_color };` : '',
+					    titleFontSize: string       = popupSettings.title.text_size ? `font-size:${ popupSettings.title.text_size };` : '',
+					    titleAlign: string          = popupSettings.title.text_align ? `text-align:${ popupSettings.title.text_align };` : '',
+					    title: string,
 					    buttons: string             = '',
 					    imageTopLeft: string        = popupSettings.images.top_left,
-					    logo: string                = `<img class="mp-logo" src="${ popupSettings.images.logo }">`;
+					    logo: string                = `<img class="mp-logo" src="${ popupSettings.images.logo }">`,
+					    footerNoticeStyle: string   = popupSettings.footerNotice.bg_color ? ` style="background-color:${ popupSettings.footerNotice.bg_color };"` : '',
+						footerNotice: string        = popupSettings.footerNotice.text ? `<div class="footer-notice"${ footerNoticeStyle }>${ popupSettings.footerNotice.text }</div>` : '';
 					
 					if (popupSettings.version && Object.keys(popupSettings.version).length) {
 						versionColor        = popupSettings.version.text_color ? `color:${ popupSettings.version.text_color };` : '';
 						versionBackground   = popupSettings.version.background ? `background:${ popupSettings.version.background };` : '';
 						version             = `<span class="version" style="${ versionBackground + versionColor }">${ popupSettings.version.text }</span>`;
 					}
+					
+					title = `<h1 style="${ titleColor + titleFontSize + titleAlign }"><span>${ popupSettings.title.text + version }</span></h1>`
 					
 					// Add buttons.
 					if (popupSettings.buttons && popupSettings.buttons.length) {
@@ -102,7 +113,7 @@ export default class MarketingPopup {
 						background        : popupSettings.background,
 						showCloseButton   : true,
 						showConfirmButton : false,
-						html              : logo + title + version + description + buttons,
+						html              : logo + title + description + buttons + footerNotice,
 						imageUrl          : imageTopLeft,
 					}).catch(this.swal.noop);
 					

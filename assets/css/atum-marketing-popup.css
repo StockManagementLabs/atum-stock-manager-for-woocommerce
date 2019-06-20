@@ -1616,12 +1616,16 @@ input[type="button"].btn-block {
   font-size: 23px;
 }
 
-.swal2-container .swal2-close {
+.swal2-container .swal2-modal {
+  font-family: inherit;
+}
+
+.swal2-container .swal2-modal .swal2-close {
   font-weight: 100;
   font-family: inherit;
   font-size: 30px;
   line-height: 30px;
-  color: #6c757d;
+  color: #adb5bd;
 }
 
 .swal2-container .swal2-modal p {
@@ -1724,27 +1728,42 @@ input[type="button"].btn-block {
   line-height: 1.29;
   text-align: center;
   color: #adb5bd;
+  height: 100%;
 }
 
 .swal2-container .marketing-popup .swal2-content h1 {
   font-weight: 400;
   font-size: 40px;
-  margin: -25px 0 10px;
-  letter-spacing: 4px;
+  margin: -3px 0 10px;
+  letter-spacing: 1px;
+}
+
+.swal2-container .marketing-popup .swal2-content h1 > span {
+  position: relative;
+}
+
+.swal2-container .marketing-popup .swal2-content h1 strong {
+  font-weight: 600;
+}
+
+.swal2-container .marketing-popup .swal2-content h1 span {
+  font-weight: 300;
 }
 
 .swal2-container .marketing-popup .swal2-content p {
   margin: 0;
+  line-height: 1.3;
+  font-weight: normal;
 }
 
 .swal2-container .marketing-popup .swal2-content .version {
+  font-size: 14px;
   padding: 1px 9px;
-  height: 21px;
   line-height: 20px;
   border-radius: 11.5px;
   position: absolute;
-  top: 140px;
-  right: 73px;
+  top: -15px;
+  right: -25px;
 }
 
 .swal2-container .marketing-popup .swal2-content button {
@@ -1778,6 +1797,19 @@ input[type="button"].btn-block {
 
 .swal2-container .marketing-popup .swal2-content button.btn-outline-success:hover {
   background: #69C61D;
+}
+
+.swal2-container .marketing-popup .swal2-content .footer-notice {
+  font-size: 10px;
+  color: #000;
+  border-radius: 5px;
+  padding: 5px 10px;
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  max-width: 445px;
+  margin: auto;
 }
 
 .swal2-container .marketing-popup .swal2-confirm {

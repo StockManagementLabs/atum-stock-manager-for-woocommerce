@@ -2674,12 +2674,16 @@ input[type="button"].btn-block {
   font-size: 23px;
 }
 
-.swal2-container .swal2-close {
+.swal2-container .swal2-modal {
+  font-family: inherit;
+}
+
+.swal2-container .swal2-modal .swal2-close {
   font-weight: 100;
   font-family: inherit;
   font-size: 30px;
   line-height: 30px;
-  color: #6c757d;
+  color: #adb5bd;
 }
 
 .swal2-container .swal2-modal p {

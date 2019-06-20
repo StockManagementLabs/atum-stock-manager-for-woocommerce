@@ -17,26 +17,41 @@
 			line-height: 1.29;
 			text-align: center;
 			color: $gray-500;
+			height: 100%;
 			
 			h1 {
 				font-weight: 400;
 				font-size: 40px;
-				margin: -25px 0 10px;
-				letter-spacing: 4px;
+				margin: -3px 0 10px;
+				letter-spacing: 1px;
+				
+				> span {
+					position: relative;
+				}
+				
+				strong {
+					font-weight: 600;
+				}
+				
+				span {
+					font-weight: 300;
+				}
 			}
 			
 			p {
 				margin: 0;
+				line-height: 1.3;
+				font-weight: normal;
 			}
 			
 			.version {
+				font-size: 14px;
 				padding: 1px 9px;
-				height: 21px;
 				line-height: 20px;
 				border-radius: 11.5px;
 				position: absolute;
-				top: 140px;
-				right: 73px;
+				top: -15px;
+				right: -25px;
 			}
 			
 			button {
@@ -69,6 +84,19 @@
 						background: $green;
 					}
 				}
+			}
+			
+			.footer-notice {
+				font-size: 10px;
+				color: $black;
+				border-radius: 5px;
+				padding: 5px 10px;
+				position: absolute;
+				bottom: 5px;
+				left: 0;
+				right: 0;
+				max-width: 445px;
+				margin: auto;
 			}
 			
 		}

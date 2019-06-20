@@ -55,6 +55,13 @@ class AtumMarketingPopup {
 	protected $images = [];
 
 	/**
+	 * The footer notice
+	 *
+	 * @var object
+	 */
+	protected $footer_notice = [];
+
+	/**
 	 * The marketing popup background
 	 *
 	 * @var object
@@ -150,6 +157,7 @@ class AtumMarketingPopup {
 			$this->description   = isset( $marketing_popup->description ) ? $marketing_popup->description : [];
 			$this->version       = isset( $marketing_popup->version ) ? $marketing_popup->version : [];
 			$this->buttons       = isset( $marketing_popup->buttons ) ? $marketing_popup->buttons : [];
+			$this->footer_notice = isset( $marketing_popup->footer_notice ) ? $marketing_popup->footer_notice : [];
 			$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
 
 			/*}*/
@@ -271,6 +279,18 @@ class AtumMarketingPopup {
 	public function get_images() {
 
 		return $this->images;
+	}
+
+	/**
+	 * Getter for the footer notice
+	 *
+	 * @since 1.5.8.7
+	 *
+	 * @return string
+	 */
+	public function get_footer_notice() {
+
+		return $this->footer_notice;
 	}
 
 	/**
