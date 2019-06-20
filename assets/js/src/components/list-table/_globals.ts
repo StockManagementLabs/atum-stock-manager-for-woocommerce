@@ -23,20 +23,26 @@ export default class Globals {
 	filterData = {};
 	
 	constructor(
-		private settings: Settings,
-		private defaults?: any
+		protected settings: Settings,
+		protected defaults?: any
 	) {
 		
-		// Initialize selectors.
-		this.$atumList = (defaults && defaults.$atumList) || $('.atum-list-wrapper');
-		this.$atumTable = (defaults && defaults.$atumTable) || this.$atumList.find('.atum-list-table');
-		this.$editInput = (defaults && defaults.$editInput) || this.$atumList.find('#atum-column-edits');
-		this.$searchInput = (defaults && defaults.$searchInput) || this.$atumList.find('.atum-post-search');
-		this.$searchColumnBtn = (defaults && defaults.$searchColumnBtn) || this.$atumList.find('#search_column_btn');
-		this.$searchColumnDropdown = (defaults && defaults.$searchColumnDropdown) || this.$atumList.find('#search_column_dropdown');
+		this.initProps();
+	
+	}
+	
+	initProps() {
 		
-		let inputPerPage = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
-		    perPage      = null;
+		// Initialize selectors.
+		this.$atumList = (this.defaults && this.defaults.$atumList) || $('.atum-list-wrapper');
+		this.$atumTable = (this.defaults && this.defaults.$atumTable) || this.$atumList.find('.atum-list-table');
+		this.$editInput = (this.defaults && this.defaults.$editInput) || this.$atumList.find('#atum-column-edits');
+		this.$searchInput = (this.defaults && this.defaults.$searchInput) || this.$atumList.find('.atum-post-search');
+		this.$searchColumnBtn = (this.defaults && this.defaults.$searchColumnBtn) || this.$atumList.find('#search_column_btn');
+		this.$searchColumnDropdown = (this.defaults && this.defaults.$searchColumnDropdown) || this.$atumList.find('#search_column_dropdown');
+		
+		let inputPerPage: string = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val(),
+		    perPage: number      = null;
 		
 		// Initialize the filters' data
 		if (!$.isNumeric(inputPerPage)) {
@@ -46,7 +52,7 @@ export default class Globals {
 			perPage = parseInt(inputPerPage);
 		}
 		
-		this.filterData = (defaults && defaults.filterData) || {
+		this.filterData = (this.defaults && this.defaults.filterData) || {
 			token          : this.settings.get('nonce'),
 			action         : this.$atumList.data('action'),
 			screen         : this.$atumList.data('screen'),
@@ -56,7 +62,7 @@ export default class Globals {
 			order          : this.settings.get('order'),
 			orderby        : this.settings.get('orderby'),
 		}
-	
+		
 	}
 	
 }

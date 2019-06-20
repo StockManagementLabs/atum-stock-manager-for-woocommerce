@@ -36,11 +36,11 @@ export default class Filters {
 				// Search filter.
 				.on('keyup paste search input', '.atum-post-search', (evt: JQueryEventObject) => {
 					
-					let searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
-					    $searchInputVal: any       = $(evt.currentTarget).val();
+					const searchColumnBtnVal: string      = this.globals.$searchColumnBtn.data('value'),
+					      searchInputVal: string | number = $(evt.currentTarget).val();
 					
 					Utils.delay( () => {
-						this.pseudoKeyUpAjax(searchColumnBtnVal, $searchInputVal);
+						this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal);
 					}, 500);
 					
 				})
@@ -243,7 +243,7 @@ export default class Filters {
 			}
 			
 		}
-		else if (typeof searchColumnBtnVal != 'undefined' && searchColumnBtnVal.length > 0) {
+		else if (typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0) {
 			$.address.parameter('s', searchInputVal);
 			$.address.parameter('search_column', searchColumnBtnVal);
 			this.router.updateHash();
