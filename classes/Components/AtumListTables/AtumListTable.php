@@ -3175,7 +3175,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$disable_first = $disable_last = $disable_prev = $disable_next = FALSE;
 
-
 		if ( 1 === $current ) {
 			$disable_first = TRUE;
 			$disable_prev  = TRUE;
