@@ -159,6 +159,22 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.7`
+
+*2019-06-21*
+
+**Changes**
+
+* Added new Marketing Popup for ATUM Export Pro beta-testing registration.
+* Added dashboard's marketing widget for ATUM Export Pro.
+
+**Fixes**
+
+* Fixed undefined value added to ListTable search box when not searching anything.
+* Refactory.
+
+---
+
 `1.5.8.6`
 
 *2019-06-13*

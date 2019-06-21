@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.2.1
+Tested up to: 5.2.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.6.4
-Stable tag: 1.5.8.6
+Stable tag: 1.5.8.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,22 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.8.7`
+
+*2019-06-21*
+
+**Changes**
+
+* Added new Marketing Popup for ATUM Export Pro beta-testing registration.
+* Added dashboard's marketing widget for ATUM Export Pro.
+
+**Fixes**
+
+* Fixed undefined value added to ListTable search box when not searching anything.
+* Refactory.
 
 ---
 
