@@ -2,7 +2,7 @@
 	
 	.marketing-popup {
 		height: 433px;
-		padding: 10px;
+		padding: 10px 10px 20px 10px;
 		
 		.swal2-image {
 			width: 143px;
@@ -100,7 +100,9 @@
 			}
 			
 		}
-		
+		.swal2-title, .swal2-content {
+			margin-bottom: 0;
+		}
 		.swal2-confirm {
 			margin-right: 10px;
 		}

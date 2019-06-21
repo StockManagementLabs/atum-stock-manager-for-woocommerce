@@ -1712,7 +1712,7 @@ input[type="button"].btn-block {
 
 .swal2-container .marketing-popup {
   height: 433px;
-  padding: 10px;
+  padding: 10px 10px 20px 10px;
 }
 
 .swal2-container .marketing-popup .swal2-image {
@@ -1810,6 +1810,10 @@ input[type="button"].btn-block {
   right: 0;
   max-width: 445px;
   margin: auto;
+}
+
+.swal2-container .marketing-popup .swal2-title, .swal2-container .marketing-popup .swal2-content {
+  margin-bottom: 0;
 }
 
 .swal2-container .marketing-popup .swal2-confirm {
