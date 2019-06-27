@@ -709,7 +709,10 @@ trait AtumProductTrait {
 
 		$data_store = $this->get_data_store();
 		/* @noinspection PhpUndefinedMethodInspection */
-		$data_store->delete( $this, [ 'force_delete' => TRUE ] );
+		$data_store->delete( $this, [
+			'force_delete'   => TRUE,
+			'delete_product' => FALSE,
+		] );
 
 	}
 

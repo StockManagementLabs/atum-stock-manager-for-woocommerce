@@ -115,8 +115,8 @@ class Wpml {
 	 */
 	public function register_hooks() {
 
-		add_action( 'atum/data_store/after_saving_product_data', array( $this, 'update_atum_data' ), 10, 2 );
-		add_action( 'atum/data_store/after_deleting_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
+		add_action( 'atum/data_store/after_save_product_data', array( $this, 'update_atum_data' ), 10, 2 );
+		add_action( 'atum/data_store/after_delete_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
 		
 		if ( is_admin() ) {
 
