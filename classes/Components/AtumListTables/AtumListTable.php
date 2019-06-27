@@ -513,7 +513,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = Helpers::get_atum_product( $item );
+		$this->product = Helpers::get_atum_product( $item );
+
+		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+			return;
+		}
+
 		$type              = $this->product->get_type();
 		$this->allow_calcs = TRUE;
 		$row_classes       = array( ( ++ $this->row_count % 2 ? 'even' : 'odd' ) );
@@ -604,24 +609,29 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$this->is_child = TRUE;
+
 					// Save the child product to the product prop.
 					$this->product = Helpers::get_atum_product( $child_id );
 
-					if ( 'grouped' === $type ) {
-						$child_type = 'grouped';
-					}
-					elseif ( 'bundle' === $type ) {
-						$child_type = 'bundle-item';
-					}
-					else {
-						$child_type = 'variation';
-					}
+					if ( is_a( $this->product, '\WC_Product' ) ) {
 
-					$this->single_expandable_row( $this->product, $child_type );
+						if ( 'grouped' === $type ) {
+							$child_type = 'grouped';
+						}
+						elseif ( 'bundle' === $type ) {
+							$child_type = 'bundle-item';
+						}
+						else {
+							$child_type = 'variation';
+						}
 
-					// If the current product has been modified within any of the columns, save it.
-					if ( ! empty( $this->product->get_changes() ) ) {
-						$this->product->save_atum_data();
+						$this->single_expandable_row( $this->product, $child_type );
+
+						// If the current product has been modified within any of the columns, save it.
+						if ( ! empty( $this->product->get_changes() ) ) {
+							$this->product->save_atum_data();
+						}
+
 					}
 
 				}

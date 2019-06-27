@@ -423,9 +423,12 @@ class ListTable extends AtumListTable {
 				if ( $post ) {
 					$post->po_id      = $po_product->order_id;
 					$post->po_item_id = $po_product->order_item_id;
+					$this->items[]    = $post;
 				}
-
-				$this->items[] = $post;
+				// In case there are some products still added to POs but not exists on the shop anymore.
+				else {
+					$found_posts--;
+				}
 
 			}
 
@@ -451,7 +454,12 @@ class ListTable extends AtumListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = Helpers::get_atum_product( $item );
+		$this->product = Helpers::get_atum_product( $item );
+
+		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+			return;
+		}
+
 		$this->allow_calcs = TRUE;
 
 		echo '<tr>';
