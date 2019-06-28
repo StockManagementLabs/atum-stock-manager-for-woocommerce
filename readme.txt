@@ -7,7 +7,7 @@ Tested up to: 5.2.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.6.4
-Stable tag: 1.5.8.8
+Stable tag: 1.5.8.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.8.9`
+
+*2019-06-28*
+
+**Fixes**
+
+* Prevent "no tags" error on dashboard's video widget when a video doesn't have tags.
+* Check that a product still exists before trying to display it on List Tables.
+* Fixed BOM variations removal.
+* Avoid memory leaks when deleting cache groups.
+* Refactory.
 
 ---
 

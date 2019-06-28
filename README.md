@@ -159,6 +159,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.9`
+
+*2019-06-28*
+
+**Fixes**
+
+* Prevent "no tags" error on dashboard's video widget when a video doesn't have tags.
+* Check that a product still exists before trying to display it on List Tables.
+* Fixed BOM variations removal.
+* Avoid memory leaks when deleting cache groups.
+* Refactory.
+
+---
+
 `1.5.8.8`
 
 *2019-06-21*
