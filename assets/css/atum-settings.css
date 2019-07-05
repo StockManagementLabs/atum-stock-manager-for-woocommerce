@@ -2617,7 +2617,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 .swal2-container {
-  z-index: 100000000 !important;
+  z-index: 100000 !important;
 }
 
 .swal2-container .swal2-content, .swal2-container .swal2-title {
@@ -2641,6 +2641,10 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 
 .swal2-container .swal2-content input[type=text]:focus {
   border: solid 1px #00B8DB;
+}
+
+.swal2-container .swal2-content .atum-link {
+  text-decoration: underline;
 }
 
 .swal2-container .swal2-title {
@@ -3501,13 +3505,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding-left: 7px;
 }
 
-.atum-settings-wrapper #atum-settings .section-title input[type=search]::-moz-placeholder {
-  font-style: italic !important;
-  color: #adb5bd !important;
-  font-size: 12px;
-  padding-left: 7px;
-}
-
 .atum-settings-wrapper #atum-settings .section-title input[type=search]:-ms-input-placeholder {
   font-style: italic !important;
   color: #adb5bd !important;
@@ -4113,13 +4110,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 input[type=search]::-webkit-input-placeholder {
-  font-style: italic !important;
-  color: #adb5bd !important;
-  font-size: 12px;
-  padding-left: 7px;
-}
-
-input[type=search]::-moz-placeholder {
   font-style: italic !important;
   color: #adb5bd !important;
   font-size: 12px;

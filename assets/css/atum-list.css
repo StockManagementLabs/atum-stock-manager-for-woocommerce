@@ -969,7 +969,7 @@
 
 .tooltip {
   position: absolute;
-  z-index: 1070;
+  z-index: 1000070;
   display: block;
   opacity: 0;
   font-size: 12px;
@@ -2720,7 +2720,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 .swal2-container {
-  z-index: 100000000 !important;
+  z-index: 100000 !important;
 }
 
 .swal2-container .swal2-content, .swal2-container .swal2-title {
@@ -2744,6 +2744,10 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 
 .swal2-container .swal2-content input[type=text]:focus {
   border: solid 1px #00B8DB;
+}
+
+.swal2-container .swal2-content .atum-link {
+  text-decoration: underline;
 }
 
 .swal2-container .swal2-title {
@@ -3552,7 +3556,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 1000;
+  z-index: 1000000;
   display: none;
   float: left;
   min-width: 10rem;
@@ -5185,12 +5189,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   color: #adb5bd;
 }
 
-.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
-  font-size: 12px;
-  font-style: italic;
-  color: #adb5bd;
-}
-
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -5333,13 +5331,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
-  color: #adb5bd;
-  font-style: italic;
-  letter-spacing: normal;
-  margin-left: 10px;
-}
-
-.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: #adb5bd;
   font-style: italic;
   letter-spacing: normal;

@@ -834,7 +834,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 
 .tooltip {
   position: absolute;
-  z-index: 1070;
+  z-index: 1000070;
   display: block;
   opacity: 0;
   font-size: 12px;
@@ -2643,7 +2643,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container {
-  z-index: 100000000 !important;
+  z-index: 100000 !important;
 }
 
 .swal2-container .swal2-content, .swal2-container .swal2-title {
@@ -2667,6 +2667,10 @@ input[type="button"].btn-block {
 
 .swal2-container .swal2-content input[type=text]:focus {
   border: solid 1px #00B8DB;
+}
+
+.swal2-container .swal2-content .atum-link {
+  text-decoration: underline;
 }
 
 .swal2-container .swal2-title {
@@ -4955,12 +4959,6 @@ ul.atum_order_notes li .note_content::after {
   color: #adb5bd;
 }
 
-.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
-  font-size: 12px;
-  font-style: italic;
-  color: #adb5bd;
-}
-
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -5103,13 +5101,6 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
-  color: #adb5bd;
-  font-style: italic;
-  letter-spacing: normal;
-  margin-left: 10px;
-}
-
-.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: #adb5bd;
   font-style: italic;
   letter-spacing: normal;
