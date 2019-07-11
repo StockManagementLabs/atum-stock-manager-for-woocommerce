@@ -71,6 +71,11 @@
 			font-size: 13px;
 			letter-spacing: 1px;
 			
+			&.btn-sm {
+				padding: 0.25rem 0.5rem;
+				font-size: 12px;
+			}
+			
 			.atum-icon {
 				position: relative;
 				font-size: 1.15em;

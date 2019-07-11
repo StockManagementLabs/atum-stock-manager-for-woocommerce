@@ -1029,7 +1029,7 @@ body .select2-dropdown {
   position: absolute;
   left: -100000px;
   width: 100%;
-  z-index: 1051;
+  z-index: 100000;
 }
 
 body .select2-results__options {
@@ -2636,11 +2636,11 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 .swal2-container .swal2-content input[type=text]:hover {
-  border: solid 1px #6c757d;
+  border-color: #6c757d;
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border: solid 1px #00B8DB;
+  border-color: #00B8DB;
 }
 
 .swal2-container .swal2-content .atum-link {
@@ -2687,6 +2687,11 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
+}
+
+.swal2-container .swal2-modal button.btn-sm, .swal2-container .swal2-modal .btn-group-sm > button.btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 12px;
 }
 
 .swal2-container .swal2-modal button .atum-icon {

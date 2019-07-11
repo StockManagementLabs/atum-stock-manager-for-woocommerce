@@ -138,7 +138,7 @@ body {
 		position: absolute;
 		left: -100000px;
 		width: 100%;
-		z-index: 1051;
+		z-index: 100000; // Same as the sweet alert's index, so we can use it within modals
 	}
 	
 	.select2-results__options {

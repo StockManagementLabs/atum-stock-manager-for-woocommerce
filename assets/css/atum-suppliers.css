@@ -146,7 +146,7 @@ body .select2-dropdown {
   position: absolute;
   left: -100000px;
   width: 100%;
-  z-index: 1051;
+  z-index: 100000;
 }
 
 body .select2-results__options {

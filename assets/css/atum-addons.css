@@ -1604,11 +1604,11 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .swal2-content input[type=text]:hover {
-  border: solid 1px #6c757d;
+  border-color: #6c757d;
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border: solid 1px #00B8DB;
+  border-color: #00B8DB;
 }
 
 .swal2-container .swal2-content .atum-link {
@@ -1655,6 +1655,11 @@ input[type="button"].btn-block {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
+}
+
+.swal2-container .swal2-modal button.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 12px;
 }
 
 .swal2-container .swal2-modal button .atum-icon {
