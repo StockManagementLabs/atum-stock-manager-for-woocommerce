@@ -88,7 +88,7 @@ export default class DateTimePicker {
 			}
 			
 			// Use the spread operator to create a new options object in order to not conflict with other DateTimePicker options.
-			$dateTimePicker.datetimepicker({
+			$dateTimePicker.bsDatetimepicker({
 				...this.defaults,
 				...data,
 				...opts

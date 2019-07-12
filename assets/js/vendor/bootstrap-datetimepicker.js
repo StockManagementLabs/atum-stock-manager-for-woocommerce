@@ -5,7 +5,9 @@
  Copyright (c) 2015 Jonathan Peterson
  =========================================================
  
- MODIFIED BY ATUM TO BE COMPATIBLE WITH WEBPACK AND REPLACED datepicker AND timepicker CLASSES TO bs-datepicker AND bs-timepicker
+ MODIFIED BY ATUM TO BE COMPATIBLE WITH WEBPACK
+ ALSO REPLACED datepicker AND timepicker CLASSES TO bs-datepicker AND bs-timepicker
+ AND CHANGED PLUGIN NAME FROM datetimepicker TO bsDatetimepicker
  */
 /*
  The MIT License (MIT)
@@ -1480,7 +1482,7 @@ import moment from 'moment/min/moment-with-locales.min';
 			$.each(options, function (key, value) {
 				if (picker[key] !== undefined) {
 					picker[key](value);
-				} else {
+				} else if (options.debug) {
 					throw new TypeError('option ' + key + ' is not recognized!');
 				}
 			});
@@ -1488,13 +1490,13 @@ import moment from 'moment/min/moment-with-locales.min';
 		};
 		
 		picker.date = function (newDate) {
-			///<signature helpKeyword="$.fn.datetimepicker.date">
+			///<signature helpKeyword="$.fn.bsDatetimepicker.date">
 			///<summary>Returns the component's model current date, a moment object or null if not set.</summary>
 			///<returns type="Moment">date.clone()</returns>
 			///</signature>
 			///<signature>
 			///<summary>Sets the components model current moment to it. Passing a null value unsets the components model current moment. Parsing of the newDate parameter is made using moment library with the options.format and options.useStrict components configuration.</summary>
-			///<param name="newDate" locid="$.fn.datetimepicker.date_p:newDate">Takes string, Date, moment, null parameter.</param>
+			///<param name="newDate" locid="$.fn.bsDatetimepicker.date_p:newDate">Takes string, Date, moment, null parameter.</param>
 			///</signature>
 			if (arguments.length === 0) {
 				if (unset) {
@@ -1574,14 +1576,14 @@ import moment from 'moment/min/moment-with-locales.min';
 		};
 		
 		picker.disabledDates = function (dates) {
-			///<signature helpKeyword="$.fn.datetimepicker.disabledDates">
+			///<signature helpKeyword="$.fn.bsDatetimepicker.disabledDates">
 			///<summary>Returns an array with the currently set disabled dates on the component.</summary>
 			///<returns type="array">options.disabledDates</returns>
 			///</signature>
 			///<signature>
 			///<summary>Setting this takes precedence over options.minDate, options.maxDate configuration. Also calling this function removes the configuration of
 			///options.enabledDates if such exist.</summary>
-			///<param name="dates" locid="$.fn.datetimepicker.disabledDates_p:dates">Takes an [ string or Date or moment ] of values and allows the user to select only from those days.</param>
+			///<param name="dates" locid="$.fn.bsDatetimepicker.disabledDates_p:dates">Takes an [ string or Date or moment ] of values and allows the user to select only from those days.</param>
 			///</signature>
 			if (arguments.length === 0) {
 				return (options.disabledDates ? $.extend({}, options.disabledDates) : options.disabledDates);
@@ -1602,13 +1604,13 @@ import moment from 'moment/min/moment-with-locales.min';
 		};
 		
 		picker.enabledDates = function (dates) {
-			///<signature helpKeyword="$.fn.datetimepicker.enabledDates">
+			///<signature helpKeyword="$.fn.bsDatetimepicker.enabledDates">
 			///<summary>Returns an array with the currently set enabled dates on the component.</summary>
 			///<returns type="array">options.enabledDates</returns>
 			///</signature>
 			///<signature>
 			///<summary>Setting this takes precedence over options.minDate, options.maxDate configuration. Also calling this function removes the configuration of options.disabledDates if such exist.</summary>
-			///<param name="dates" locid="$.fn.datetimepicker.enabledDates_p:dates">Takes an [ string or Date or moment ] of values and allows the user to select only from those days.</param>
+			///<param name="dates" locid="$.fn.bsDatetimepicker.enabledDates_p:dates">Takes an [ string or Date or moment ] of values and allows the user to select only from those days.</param>
 			///</signature>
 			if (arguments.length === 0) {
 				return (options.enabledDates ? $.extend({}, options.enabledDates) : options.enabledDates);
@@ -1746,7 +1748,7 @@ import moment from 'moment/min/moment-with-locales.min';
 			///</signature>
 			///<signature>
 			///<summary>Will set the picker's inital date. If a boolean:false value is passed the options.defaultDate parameter is cleared.</summary>
-			///<param name="defaultDate" locid="$.fn.datetimepicker.defaultDate_p:defaultDate">Takes a string, Date, moment, boolean:false</param>
+			///<param name="defaultDate" locid="$.fn.bsDatetimepicker.defaultDate_p:defaultDate">Takes a string, Date, moment, boolean:false</param>
 			///</signature>
 			if (arguments.length === 0) {
 				return options.defaultDate ? options.defaultDate.clone() : options.defaultDate;
@@ -2184,14 +2186,14 @@ import moment from 'moment/min/moment-with-locales.min';
 		};
 		
 		picker.disabledTimeIntervals = function (disabledTimeIntervals) {
-			///<signature helpKeyword="$.fn.datetimepicker.disabledTimeIntervals">
+			///<signature helpKeyword="$.fn.bsDatetimepicker.disabledTimeIntervals">
 			///<summary>Returns an array with the currently set disabled dates on the component.</summary>
 			///<returns type="array">options.disabledTimeIntervals</returns>
 			///</signature>
 			///<signature>
 			///<summary>Setting this takes precedence over options.minDate, options.maxDate configuration. Also calling this function removes the configuration of
 			///options.enabledDates if such exist.</summary>
-			///<param name="dates" locid="$.fn.datetimepicker.disabledTimeIntervals_p:dates">Takes an [ string or Date or moment ] of values and allows the user to select only from those days.</param>
+			///<param name="dates" locid="$.fn.bsDatetimepicker.disabledTimeIntervals_p:dates">Takes an [ string or Date or moment ] of values and allows the user to select only from those days.</param>
 			///</signature>
 			if (arguments.length === 0) {
 				return (options.disabledTimeIntervals ? $.extend({}, options.disabledTimeIntervals) : options.disabledTimeIntervals);
@@ -2211,14 +2213,14 @@ import moment from 'moment/min/moment-with-locales.min';
 		};
 		
 		picker.disabledHours = function (hours) {
-			///<signature helpKeyword="$.fn.datetimepicker.disabledHours">
+			///<signature helpKeyword="$.fn.bsDatetimepicker.disabledHours">
 			///<summary>Returns an array with the currently set disabled hours on the component.</summary>
 			///<returns type="array">options.disabledHours</returns>
 			///</signature>
 			///<signature>
 			///<summary>Setting this takes precedence over options.minDate, options.maxDate configuration. Also calling this function removes the configuration of
 			///options.enabledHours if such exist.</summary>
-			///<param name="hours" locid="$.fn.datetimepicker.disabledHours_p:hours">Takes an [ int ] of values and disallows the user to select only from those hours.</param>
+			///<param name="hours" locid="$.fn.bsDatetimepicker.disabledHours_p:hours">Takes an [ int ] of values and disallows the user to select only from those hours.</param>
 			///</signature>
 			if (arguments.length === 0) {
 				return (options.disabledHours ? $.extend({}, options.disabledHours) : options.disabledHours);
@@ -2250,13 +2252,13 @@ import moment from 'moment/min/moment-with-locales.min';
 		};
 		
 		picker.enabledHours = function (hours) {
-			///<signature helpKeyword="$.fn.datetimepicker.enabledHours">
+			///<signature helpKeyword="$.fn.bsDatetimepicker.enabledHours">
 			///<summary>Returns an array with the currently set enabled hours on the component.</summary>
 			///<returns type="array">options.enabledHours</returns>
 			///</signature>
 			///<signature>
 			///<summary>Setting this takes precedence over options.minDate, options.maxDate configuration. Also calling this function removes the configuration of options.disabledHours if such exist.</summary>
-			///<param name="hours" locid="$.fn.datetimepicker.enabledHours_p:hours">Takes an [ int ] of values and allows the user to select only from those hours.</param>
+			///<param name="hours" locid="$.fn.bsDatetimepicker.enabledHours_p:hours">Takes an [ int ] of values and allows the user to select only from those hours.</param>
 			///</signature>
 			if (arguments.length === 0) {
 				return (options.enabledHours ? $.extend({}, options.enabledHours) : options.enabledHours);
@@ -2385,10 +2387,10 @@ import moment from 'moment/min/moment-with-locales.min';
 	 */
 	/**
 	 * Show comments
-	 * @class datetimepicker
+	 * @class bsDatetimepicker
 	 * @memberOf jQuery.fn
 	 */
-	$.fn.datetimepicker = function (options) {
+	$.fn.bsDatetimepicker = function (options) {
 		options = options || {};
 		
 		var args = Array.prototype.slice.call(arguments, 1),
@@ -2402,7 +2404,7 @@ import moment from 'moment/min/moment-with-locales.min';
 				    _options;
 				if (!$this.data('DateTimePicker')) {
 					// create a private copy of the defaults object
-					_options = $.extend(true, {}, $.fn.datetimepicker.defaults, options);
+					_options = $.extend(true, {}, $.fn.bsDatetimepicker.defaults, options);
 					$this.data('DateTimePicker', dateTimePicker($this, _options));
 				}
 			});
@@ -2428,7 +2430,7 @@ import moment from 'moment/min/moment-with-locales.min';
 		throw new TypeError('Invalid arguments for DateTimePicker: ' + options);
 	};
 	
-	$.fn.datetimepicker.defaults = {
+	$.fn.bsDatetimepicker.defaults = {
 		timeZone: '',
 		format: false,
 		dayViewHeaderFormat: 'MMMM YYYY',
@@ -2615,6 +2617,6 @@ import moment from 'moment/min/moment-with-locales.min';
 		viewDate: false
 	};
 	
-	return $.fn.datetimepicker;
+	return $.fn.bsDatetimepicker;
 	
 }(jQuery, moment));
