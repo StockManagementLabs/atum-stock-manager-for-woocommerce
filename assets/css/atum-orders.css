@@ -967,6 +967,10 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-export:before {
+  content: "󩣚";
+}
+
 .atmi-hidden:before {
   content: "";
 }
@@ -1099,8 +1103,8 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   content: "";
 }
 
-.atmi-pencil2:before {
-  content: "";
+.atmi-pencil:before {
+  content: "";
 }
 
 .atmi-options:before {
@@ -1565,10 +1569,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 
 .atmi-paw:before {
   content: "";
-}
-
-.atmi-pencil:before {
-  content: "";
 }
 
 .atmi-phone-handset:before {

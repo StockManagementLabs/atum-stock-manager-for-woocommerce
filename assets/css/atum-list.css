@@ -127,6 +127,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-export:before {
+  content: "󩣚";
+}
+
 .atmi-hidden:before {
   content: "";
 }
@@ -259,8 +263,8 @@
   content: "";
 }
 
-.atmi-pencil2:before {
-  content: "";
+.atmi-pencil:before {
+  content: "";
 }
 
 .atmi-options:before {
@@ -725,10 +729,6 @@
 
 .atmi-paw:before {
   content: "";
-}
-
-.atmi-pencil:before {
-  content: "";
 }
 
 .atmi-phone-handset:before {

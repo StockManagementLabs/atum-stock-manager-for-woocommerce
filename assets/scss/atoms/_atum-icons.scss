@@ -24,6 +24,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-export {
+	&:before {
+		content: $atmi-export;
+	}
+}
 .atmi-hidden {
 	&:before {
 		content: $atmi-hidden;
@@ -189,9 +194,9 @@
 		content: $atmi-tree;
 	}
 }
-.atmi-pencil2 {
+.atmi-pencil {
 	&:before {
-		content: $atmi-pencil2;
+		content: $atmi-pencil;
 	}
 }
 .atmi-options {
@@ -772,11 +777,6 @@
 .atmi-paw {
 	&:before {
 		content: $atmi-paw;
-	}
-}
-.atmi-pencil {
-	&:before {
-		content: $atmi-pencil;
 	}
 }
 .atmi-phone-handset {
