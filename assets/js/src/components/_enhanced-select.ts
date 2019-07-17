@@ -27,9 +27,9 @@ export default class EnhancedSelect {
 	/**
 	 * Add the select2 to the specified selectors
 	 *
-	 * @param jQuery  $selector
-	 * @param Object  options
-	 * @param Boolean avoidEmptySelections
+	 * @param {JQuery}  $selector
+	 * @param {any}     options
+	 * @param {boolean} avoidEmptySelections
 	 */
 	doSelect2($selector: JQuery, options: any = {}, avoidEmptySelections: boolean = false) {
 		
