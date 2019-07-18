@@ -2496,6 +2496,40 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   content: "";
 }
 
+.atmi-spin {
+  display: inline-block;
+  -webkit-animation-name: spin;
+          animation-name: spin;
+  -webkit-animation-duration: 3000ms;
+          animation-duration: 3000ms;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
 .wrap h1.wp-heading-inline {
   text-transform: capitalize;
   margin-bottom: 15px;
@@ -3510,6 +3544,13 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding-left: 7px;
 }
 
+.atum-settings-wrapper #atum-settings .section-title input[type=search]::-moz-placeholder {
+  font-style: italic !important;
+  color: #adb5bd !important;
+  font-size: 12px;
+  padding-left: 7px;
+}
+
 .atum-settings-wrapper #atum-settings .section-title input[type=search]:-ms-input-placeholder {
   font-style: italic !important;
   color: #adb5bd !important;
@@ -4115,6 +4156,13 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 input[type=search]::-webkit-input-placeholder {
+  font-style: italic !important;
+  color: #adb5bd !important;
+  font-size: 12px;
+  padding-left: 7px;
+}
+
+input[type=search]::-moz-placeholder {
   font-style: italic !important;
   color: #adb5bd !important;
   font-size: 12px;
