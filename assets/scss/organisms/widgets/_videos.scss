@@ -102,7 +102,7 @@
 			align-items: flex-start;
 			text-align: left;
 			padding: 10px 0;
-			border-bottom: 1px solid lighten($light, 7%);
+			
 			transition: 0.3s ease-in-out;
 			
 			&:last-child {
@@ -161,7 +161,7 @@
 		.video-title {
 			display: block;
 			font-size: 14px;
-			color: var(--dark);
+			color: var(--dash-video-title);
 			font-weight: bold;
 			transition: 0.2s ease-in-out;
 			

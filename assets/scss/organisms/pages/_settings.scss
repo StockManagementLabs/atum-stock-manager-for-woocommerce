@@ -432,7 +432,7 @@
 		
 		.section-title {
 			margin-top: 11px;
-			border-bottom: 2px solid var(--gray-200);
+			border-bottom: 2px solid var(--atum-settings-border-color);
 			background-color: var(--atum-settings-section-bg);
 			border-top-right-radius: 6px;
 			border-top-left-radius: 6px;
@@ -528,7 +528,7 @@
 			border-bottom-right-radius: 6px;
 			border-bottom-left-radius: 6px;
 			background: var(--atum-settings-section-bg) url("#{$img-path}settings/bg-settings.png") no-repeat bottom;
-			background-size: cover;
+			background-size: 100% auto;
 			box-shadow: 0 4px 0 0 var(--gray-200);
 			position: relative;
 			
@@ -543,7 +543,7 @@
 			
 			tr {
 				&:not(:last-child) {
-					border-bottom: 0.5px solid var(--white-shadow);
+					border-bottom: 0.5px solid var(--atum-settings-separator);
 				}
 			}
 			
@@ -582,11 +582,14 @@
 					display: none;
 				}
 				
+				.selector-container:not(:last-child) {
+					border-bottom: solid 1px var(--atum-settings-border-color);
+				}
+				
 				.selector-container {
 					display: flex;
 					justify-content: flex-start;
-					align-items: center;
-					padding: 35px;
+					padding: 35px 0;
 					
 					.selector-box {
 						min-width: 171px;
@@ -863,6 +866,7 @@
 			&:hover, &:active {
 				background-color: var(--atum-settings-btn-save-hover);
 				border-color: var(--atum-settings-btn-save-hover);
+				color: var(--atum-settings-btn-save-text-hover);
 				transform: none;
 			}
 			
@@ -899,9 +903,9 @@
 				height: 30px;
 				box-shadow: none;
 				border-radius: 5px;
-				width: 110px;
+				width: 180px;
 				margin-right: 10px;
-				border: solid 0.5px var(--wp-gray-5);
+				border: solid 0.5px var(--atum-settings-input-border);
 				background-color: var(--atum-settings-wp-color-bg) !important;
 				position: relative;
 				padding: 0 0 0 20px;

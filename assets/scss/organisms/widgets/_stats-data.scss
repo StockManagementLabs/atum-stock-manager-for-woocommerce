@@ -27,7 +27,7 @@
 		}
 		
 		&.widget-primary {
-			color: var(--dash-stats-data-widget-primary) !important;
+			color: var(--primary) !important;
 		}
 		
 		font-size: 35px;
@@ -44,7 +44,7 @@
 	hr {
 		border: {
 			width: 1px;
-			color: transparentize($black, 0.9);
+			color: var(--dash-widget-separator);
 			bottom: none;
 		}
 		margin: $grid-gutter-width 0;

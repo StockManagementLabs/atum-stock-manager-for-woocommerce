@@ -95,7 +95,6 @@ $purple-light:                          lighten($purple, 20%) !default;
 $purple-pl:                             #9357cc !default;
 $blue-trans:                            rgba(0, 183, 219, 0.79);
 $green-trans:                           rgba(106, 200, 30, 0.79);
-$green-light:                           rgba(180, 240, 0, 0.79);
 $green-blue:                            rgba(30, 200, 149, 0.79);
 
 
@@ -410,7 +409,8 @@ $dropdown-border-color:                 rgba($black, .15) !default;
 $dropdown-border-radius:                $border-radius !default;
 $dropdown-border-width:                 $border-width !default;
 $dropdown-divider-bg:                   $gray-200 !default;
-$dropdown-box-shadow:                   0 0 10px 0 rgba($black, .6) !default;
+$dropdown-box-shadow:                   0 0 6px 0 rgba(0, 0, 0, 0.2);
+//$dropdown-box-shadow:                   0 0 10px 0 rgba($black, .6) !default;
 
 $dropdown-link-color:                   $gray-900 !default;
 $dropdown-link-hover-color:             darken($gray-900, 5%) !default;

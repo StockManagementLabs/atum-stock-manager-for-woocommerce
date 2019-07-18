@@ -191,6 +191,7 @@ class Dashboard {
 			'layout'          => $user_widgets_layout,
 			'dashboard'       => $this,
 			'marketing_popup' => $marketing_popup,
+			'darkmode'        => ( 'dark_mode' === Helpers::get_option( 'theme_settings' ) ) ? 1 : 0,
 		), Helpers::get_support_button() ) );
 		
 	}

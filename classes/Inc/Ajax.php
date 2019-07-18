@@ -2294,6 +2294,84 @@ final class Ajax {
 	 */
 	public function get_scheme_color() {
 
+		$custom_settings = array();
+		$def_settings    = array(
+			'dm_primary_color'         => '#a8f1ff',
+			'dm_primary_color_light'   => '#dbf9ff',
+			'dm_primary_color_dark'    => '#00b8db',
+			'dm_secondary_color'       => '#ffdf89',
+			'dm_secondary_color_light' => '#ffdf89',
+			'dm_secondary_color_dark'  => '#ffdf89',
+			'dm_tertiary_color'        => '#baef8d',
+			'dm_tertiary_color_light'  => '#69C61D',
+			'dm_tertiary_color_dark'   => '#d5f5ba',
+			'dm_text_color'            => '#FFFFFF',
+			'dm_text_color_2'          => '#31324A',
+			'dm_text_color_expanded'   => '#27283b',
+			'dm_border_color'          => '#ffffff',
+			'dm_bg_1_color'            => '#31324A',
+			'dm_bg_2_color'            => '#3b3d5a',
+			'dm_danger_color'          => '#ffaeae',
+			'dm_title_color'           => '#FFFFFF',
+
+			'hc_primary_color'         => '#016B7F',
+			'hc_primary_color_light'   => '#f5fdff',
+			'hc_primary_color_dark'    => '#e6fbff',
+			'hc_secondary_color'       => '#016B7F',
+			'hc_secondary_color_light' => '#f5fdff',
+			'hc_secondary_color_dark'  => '#e6fbff',
+			'hc_tertiary_color'        => '#016B7F',
+			'hc_tertiary_color_light'  => '#f5fdff',
+			'hc_tertiary_color_dark'   => '#e6fbff',
+			'hc_text_color'            => '#016B7F',
+			'hc_text_color_2'          => '#27283b',
+			'hc_text_color_expanded'   => '#ffffff',
+			'hc_border_color'          => '#adb5bd',
+			'hc_bg_1_color'            => '#ffffff',
+			'hc_bg_2_color'            => '#ffffff',
+			'hc_danger_color'          => '#FF4848',
+			'hc_title_color'           => '#27283b',
+
+			'bm_primary_color'         => '#00B8DB',
+			'bm_primary_color_light'   => '#f5fdff',
+			'bm_primary_color_dark'    => '#dbf9ff',
+			'bm_secondary_color'       => '#EFAF00',
+			'bm_secondary_color_light' => '#fff4d6',
+			'bm_secondary_color_dark'  => '#ffedbc',
+			'bm_tertiary_color'        => '#69C61D',
+			'bm_tertiary_color_light'  => '#69C61D',
+			'bm_tertiary_color_dark'   => '#b4f000c9',
+			'bm_text_color'            => '#6C757D',
+			'bm_text_color_2'          => '#adb5bd',
+			'bm_text_color_expanded'   => '#ffffff',
+			'bm_border_color'          => '#e9ecef',
+			'bm_bg_1_color'            => '#ffffff',
+			'bm_bg_2_color'            => '#F8F9FA',
+			'bm_danger_color'          => '#FF4848',
+			'bm_title_color'           => '#27283B',
+		);
+
+		foreach ( $def_settings as $dset => $dval ) {
+
+			$val = Helpers::get_option( $dset );
+
+			if ( $val && $val !== $dval )
+				$custom_settings[ $dset ] = $val;
+
+		}
+
+		if ( count( $custom_settings ) > 0 ) {
+			foreach ( $custom_settings as $cset => $cval ) {
+				if ( 0 === intval( $_POST['reset'] ) ) {
+					$def_settings[ $cset ] = $cval;
+				}
+			}
+		}
+
+		wp_send_json_success( $def_settings );
+
+		/*
+		* Desactivado temporalmente
 		check_ajax_referer( 'atum-scheme-color-nonce', 'token' );
 
 		if ( 'dark_mode' === $_POST['theme'] ) {
@@ -2308,9 +2386,11 @@ final class Ajax {
 			$tertiary_color_dark   = '#69C61D';
 			$text_color            = '#FFFFFF';
 			$text_color_2          = '#31324A';
+			$text_color_expanded   => '#ffffff',
 			$border_color          = '#ffffff';
 			$bg_1_color            = '#31324A';
 			$bg_2_color            = '#3b3d5a';
+			$danger_color          = '#ffaeae';
 		}
 		elseif ( 'hc_mode' === $_POST['theme'] ) {
 			$primary_color         = '#016B7F';
@@ -2324,9 +2404,11 @@ final class Ajax {
 			$tertiary_color_dark   = '#e6fbff';
 			$text_color            = '#016B7F';
 			$text_color_2          = '#27283b';
+			text_color_expanded   => '#ffffff',
 			$border_color          = '#adb5bd';
 			$bg_1_color            = '#ffffff';
 			$bg_2_color            = '#ffffff';
+			$danger_color          = '#FF4848';
 		}
 		else {
 			$primary_color         = '#00B8DB';
@@ -2340,9 +2422,11 @@ final class Ajax {
 			$tertiary_color_dark   = '#b4f000c9';
 			$text_color            = '#6C757D';
 			$text_color_2          = '#adb5bd';
+			text_color_expanded   => '#ffffff',
 			$border_color          = '#e9ecef';
 			$bg_1_color            = '#ffffff';
 			$bg_2_color            = '#F8F9FA';
+			$danger_color          = '#FF4848';
 		}
 
 		wp_send_json_success(
@@ -2358,12 +2442,14 @@ final class Ajax {
 				'tertiary_color_dark',
 				'text_color',
 				'text_color_2',
+				'text_color_expanded',
 				'border_color',
 				'bg_1_color',
-				'bg_2_color'
+				'bg_2_color',
+				'danger_color'
 			)
 		);
-
+		*/
 	}
 
 

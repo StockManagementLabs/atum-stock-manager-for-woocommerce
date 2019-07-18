@@ -92,7 +92,10 @@
 		}
 		
 		&:hover, &:focus {
-			background-color: var(--green-hover);
+			opacity: 0.7;
+			color: var(--white);
+			background-color:  var(--atum-page-title-action);
+			border-radius: 5px;
 		}
 		
 		@include tablet-max-wp{
@@ -113,7 +116,6 @@
 		min-width: 70px;
 		text-transform: uppercase;
 		box-shadow: none;
-		border: none;
 		transition: .2s ease-in-out;
 		
 		@include tablet-max-wp{
@@ -143,6 +145,7 @@
 		
 		li {
 			padding: 0;
+			color: transparent;
 			
 			span {
 				display: flex;
@@ -291,7 +294,7 @@
 	&:not(.extend-list-table) {
 		
 		li {
-			color:  var(--white);
+			color: transparent;
 			padding: 20px 0 20px 10px;
 			text-transform: uppercase;
 			
@@ -366,6 +369,11 @@
 			margin: 0 !important;
 			float: none;
 		}
+	}
+	
+	#search-submit {
+		background-color: var(--atum-table-search-bg) !important;
+		color: var(--atum-table-search-text) !important;
 	}
 	
 	#post-search-input {
@@ -516,6 +524,13 @@
 		
 		input[type=submit] {
 			height: 29px !important;
+			color: var(--atum-table-search-text) !important;
+			background-color: var(--atum-table-search-submit-bg);
+			
+			&:disabled {
+				color: var(--atum-table-search-text-disabled) !important;
+			}
+			
 		}
 	}
 	
@@ -614,7 +629,6 @@
 		}
 		
 	}
-	
 	.tablenav-pages-container {
 		
 		.btn {
@@ -967,8 +981,8 @@
 	
 	.search-submit {
 		margin-left: 4px;
-		background-color: var(--warning);
-		color:  var(--white);
+		background-color: var(--atum-table-search-bg) !important;
+		color: var(--atum-table-search-text) !important;
 		font-size: 10px;
 		font-weight: normal;
 		line-height: 1.6px;
@@ -1521,7 +1535,7 @@ table.wp-list-table {
 			font-size: 14px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: var(--gray-500);
+			color: var(--atum-table-item-heads);
 		}
 	}
 	
@@ -1547,7 +1561,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
-	thead .item-heads, tfoot {
+	&.widefat {
+		background: none;
+	}
+	
+	thead .item-heads, tfoot .item-heads {
 		background-color:  var(--atum-table-bg);
 		border-top: 1px solid var(--atum-border);
 		border-bottom: 1px solid var(--atum-border);
@@ -1567,7 +1585,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			white-space: normal;
 			font-weight: 600;
 			letter-spacing: 0.3px;
-			color: var(--gray-500);
+			color: var(--atum-table-item-heads);
 			
 			.atum-icon {
 				display: block;
@@ -1610,6 +1628,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	tfoot, thead {
+		tr.totals {
+			th, td {
+				border-top: none;
+			}
+		}
 		.item-heads {
 			td, th {
 				box-shadow: 0 1px 0 0 var(--atum-border);
@@ -1625,14 +1648,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.column-title {
-				border-bottom: none;
+				border: none;
 			}
 			
 		}
 	}
 	
 	.column-groups {
-		background-color: var(--atum-column-groups-bg);
+		background-color: var(--atum-column-groups-bg) !important;
 		
 		th {
 			padding: 6px 20px;
@@ -1683,7 +1706,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				color: var(--gray-500);
+				color: var(--atum-table-item-heads);
 				overflow: visible;
 				
 				&, span {
@@ -1766,6 +1789,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		border-top: 1px solid var(--atum-border);
 		border-bottom: 1px solid var(--atum-border);
 		
+		&.type-atum_supplier {
+			.row-actions {
+				padding: 0;
+				margin: -1px 0 0 6px;
+			}
+		}
+		
 		&:nth-child(odd) {
 			background-color: var(--atum-table-row-odd);
 		}
@@ -1773,7 +1803,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
 			background-color: var(--atum-table-row-odd);
-			border: 1px solid var(--atum-border);
+			border: 1px solid var(--atum-border-expanded);
 			border-left: none;
 			border-right: none;
 			
@@ -1835,13 +1865,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.group {
-				background-color: var(--warning);
+				background-color: var(--orange);
 			}
 			
 			&.variable, &.variable-subscription, &.group, &.bundle {
 				
 				td, a {
-					color:  var(--white);
+					color:  var(--atum-table-text-expanded);
 				}
 				
 				.check-column {
@@ -2110,13 +2140,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			&.expanded {
 				&.group, &.bundle {
 					td {
-						color: var(--white) !important;
+						color: var(--atum-table-text-expanded) !important;
 						
 						a, span {
-							color: var(--white) !important;
+							color: var(--atum-table-text-expanded) !important;
 							
 							&:before {
-								color: var(--white) !important;
+								color: var(--atum-table-text-expanded) !important;
 							}
 						}
 					}
@@ -2124,13 +2154,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				
 				&.variable {
 					td {
-						color: var(--atum-table-row-variation-text) !important;
+						color: var(--atum-table-text-expanded) !important;
 						
 						a, span {
-							color: var(--atum-table-row-variation-text) !important;
+							color: var(--atum-table-text-expanded) !important;
 							
 							&:before {
-								color: var(--atum-table-row-variation-text) !important;
+								color: var(--atum-table-text-expanded) !important;
 							}
 						}
 					}
@@ -2213,7 +2243,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.column-title {
 			min-width: 171px;
-			display: flex;
 			align-items: center;
 			
 			> span {
@@ -2633,6 +2662,26 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 	}
 }
+
+.btn.btn-warning:hover {
+	background-color: var(--warning-hover);
+	color: var(--warning-hover-text);
+	border-radius: 5px;
+	border: var(--warning-hover-border) !important;
+}
+.btn.btn-primary:hover {
+	background-color: var(--primary-hover);
+	color: var(--primary-hover-text);
+	border-radius: 5px;
+	border: var(--primary-hover-border) !important;
+}
+.btn.btn-success:hover {
+	background-color: var(--success-hover);
+	color: var(--success-hover-text);
+	border-radius: 5px;
+	border: var(--success-hover-border) !important;
+}
+
 
 // Popovers' customisations
 .popover {

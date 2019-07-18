@@ -164,6 +164,19 @@ export default class SettingsPage {
 		
 	}
 	
+	hideColors() {
+		//console.log("Yeeee haaaaa");
+		
+		if($("#atum-table-color-settings").length>0) {
+			let mode = $("#atum-table-color-settings").data('display');
+			$("#atum-table-color-settings .atum-settings-input.atum-color").each(function() {
+				if($(this).data('display')!=mode) {
+					$(this).parents('tr').hide();
+				}
+			});
+		}
+	}
+	
 	moveToTab($navLink: JQuery) {
 		
 		const $formSettingsWrapper: JQuery = this.$form.find('.form-settings-wrapper');
@@ -193,6 +206,9 @@ export default class SettingsPage {
 			
 			this.$settingsWrapper.trigger('atum-settings-page-loaded', [ $navLink.data('tab') ]);
 			
+			if ( 'visual_settings' === $navLink.data('tab') ) {
+				this.hideColors();
+			}
 		});
 		
 	}
@@ -374,6 +390,7 @@ export default class SettingsPage {
             $themeOptions         = $themeSelectorWrapper.find('.selector-container .selector-box img');
 
         let themeSelectedValue  = $element.data('value'),
+            resetDefault        = $element.data('reset'),
             $radioInput         = $('#' + themeSelectedValue),
             $resetDefaultColors = $('.reset-default-colors');
 
@@ -390,6 +407,7 @@ export default class SettingsPage {
                 token : this.settings.get('schemeColorNonce'),
                 action: this.settings.get('getSchemeColor'),
                 theme : themeSelectedValue,
+	            reset : resetDefault
             },
             beforeSend: () => {
                 $formSettingsWrapper.addClass('overlay');
@@ -398,21 +416,61 @@ export default class SettingsPage {
 
                 if (response.success === true) {
                     console.log('Done');
-                    ColorPicker.updateColorPicker($('#atum_primary_color'), response.data.primary_color);
-                    ColorPicker.updateColorPicker($('#atum_primary_color_light'), response.data.primary_color_light);
-                    ColorPicker.updateColorPicker($('#atum_primary_color_dark'), response.data.primary_color_dark);
-                    ColorPicker.updateColorPicker($('#atum_secondary_color'), response.data.secondary_color);
-                    ColorPicker.updateColorPicker($('#atum_secondary_color_light'), response.data.secondary_color_light);
-                    ColorPicker.updateColorPicker($('#atum_secondary_color_dark'), response.data.secondary_color_dark);
-                    ColorPicker.updateColorPicker($('#atum_tertiary_color'), response.data.tertiary_color);
-                    ColorPicker.updateColorPicker($('#atum_tertiary_color_light'), response.data.tertiary_color_light);
-                    ColorPicker.updateColorPicker($('#atum_tertiary_color_dark'), response.data.tertiary_color_dark);
-                    ColorPicker.updateColorPicker($('#atum_text_color'), response.data.text_color);
-                    ColorPicker.updateColorPicker($('#atum_text_color_2'), response.data.text_color_2);
-                    ColorPicker.updateColorPicker($('#atum_border_color'), response.data.border_color);
-                    ColorPicker.updateColorPicker($('#atum_bg_1_color'), response.data.bg_1_color);
-                    ColorPicker.updateColorPicker($('#atum_bg_2_color'), response.data.bg_2_color);
-
+                    
+                    ColorPicker.updateColorPicker($('#atum_bm_primary_color'), response.data.bm_primary_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_primary_color_light'), response.data.bm_primary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_bm_primary_color_dark'), response.data.bm_primary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_bm_secondary_color'), response.data.bm_secondary_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_secondary_color_light'), response.data.bm_secondary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_bm_secondary_color_dark'), response.data.bm_secondary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_bm_tertiary_color'), response.data.bm_tertiary_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_tertiary_color_light'), response.data.bm_tertiary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_bm_tertiary_color_dark'), response.data.bm_tertiary_color_dark);
+	                ColorPicker.updateColorPicker($('#atum_bm_danger_color'), response.data.bm_danger_color);
+	                ColorPicker.updateColorPicker($('#atum_bm_title_color'), response.data.bm_title_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_text_color'), response.data.bm_text_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_text_color_2'), response.data.bm_text_color_2);
+                    ColorPicker.updateColorPicker($('#atum_bm_text_color_expanded'), response.data.bm_text_color_expanded);
+                    ColorPicker.updateColorPicker($('#atum_bm_border_color'), response.data.bm_border_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_bg_1_color'), response.data.bm_bg_1_color);
+                    ColorPicker.updateColorPicker($('#atum_bm_bg_2_color'), response.data.bm_bg_2_color);
+                    
+                    ColorPicker.updateColorPicker($('#atum_dm_primary_color'), response.data.dm_primary_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_primary_color_light'), response.data.dm_primary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_dm_primary_color_dark'), response.data.dm_primary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_dm_secondary_color'), response.data.dm_secondary_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_secondary_color_light'), response.data.dm_secondary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_dm_secondary_color_dark'), response.data.dm_secondary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_dm_tertiary_color'), response.data.dm_tertiary_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_tertiary_color_light'), response.data.dm_tertiary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_dm_tertiary_color_dark'), response.data.dm_tertiary_color_dark);
+	                ColorPicker.updateColorPicker($('#atum_dm_danger_color'), response.data.dm_danger_color);
+	                ColorPicker.updateColorPicker($('#atum_dm_title_color'), response.data.dm_title_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_text_color'), response.data.dm_text_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_text_color_2'), response.data.dm_text_color_2);
+                    ColorPicker.updateColorPicker($('#atum_dm_text_color_expanded'), response.data.dm_text_color_expanded);
+                    ColorPicker.updateColorPicker($('#atum_dm_border_color'), response.data.dm_border_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_bg_1_color'), response.data.dm_bg_1_color);
+                    ColorPicker.updateColorPicker($('#atum_dm_bg_2_color'), response.data.dm_bg_2_color);
+                    
+                    ColorPicker.updateColorPicker($('#atum_hc_primary_color'), response.data.hc_primary_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_primary_color_light'), response.data.hc_primary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_hc_primary_color_dark'), response.data.hc_primary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_hc_secondary_color'), response.data.hc_secondary_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_secondary_color_light'), response.data.hc_secondary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_hc_secondary_color_dark'), response.data.hc_secondary_color_dark);
+                    ColorPicker.updateColorPicker($('#atum_hc_tertiary_color'), response.data.hc_tertiary_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_tertiary_color_light'), response.data.hc_tertiary_color_light);
+                    ColorPicker.updateColorPicker($('#atum_hc_tertiary_color_dark'), response.data.hc_tertiary_color_dark);
+	                ColorPicker.updateColorPicker($('#atum_hc_danger_color'), response.data.hc_danger_color);
+	                ColorPicker.updateColorPicker($('#atum_hc_title_color'), response.data.hc_title_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_text_color'), response.data.hc_text_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_text_color_2'), response.data.hc_text_color_2);
+                    ColorPicker.updateColorPicker($('#atum_hc_text_color_expanded'), response.data.hc_text_color_expanded);
+                    ColorPicker.updateColorPicker($('#atum_hc_border_color'), response.data.hc_border_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_bg_1_color'), response.data.hc_bg_1_color);
+                    ColorPicker.updateColorPicker($('#atum_hc_bg_2_color'), response.data.hc_bg_2_color);
+                    
                     if (themeSelectedValue === 'dark_mode') {
                         $('.section-title h2 span').html('Dark');
                     }
@@ -424,6 +482,8 @@ export default class SettingsPage {
                     }
 
                     $formSettingsWrapper.removeClass('overlay');
+                    
+                    $('.button-primary').click();
                 }
                 else {
                     console.log('Error');

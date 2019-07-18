@@ -60,9 +60,11 @@
 	@include box-shadow($btn-box-shadow);
 	
 	@include hover {
-		color: color-yiq($hover-background);
+		color: var(--#{$color}-hover-text);
 		background-color: var(--#{$color}-hover);
+		border: var(--#{$color}-hover-border) !important;
 	}
+	
 	
 	&:focus,
 	&.focus {

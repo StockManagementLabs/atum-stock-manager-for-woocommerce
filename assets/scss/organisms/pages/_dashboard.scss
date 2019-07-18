@@ -113,8 +113,8 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.atum-version {
-			color: var(--white);
-			background-color: var(--black-shadow);
+			color: var(--atum-version);
+			background-color: var(--atum-version-bg);
 			border-radius: 30px;
 			padding: 1px 15px;
 			font-weight: 100;
@@ -202,7 +202,18 @@ body.toplevel_page_atum-dashboard {
 				h5, h2 {
 					margin: 5px 0;
 					color: var(--dash-h5-text);
+					
+					&.h5-primary {
+						color: var(--primary);
+					}
+					&.h5-secondary {
+						color: var(--success);
+					}
+					&.h5-tertiary {
+						color: var(--warning);
+					}
 				}
+				
 				
 				h2, p {
 					color: $card-text;
@@ -490,10 +501,10 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		&:hover {
-			border-color: var(--dash-widget-primary);
+			border-color: var(--dash-add-widget-color-dark);
 			
 			i, h2 {
-				color: var(--dash-widget-primary);
+				color: var(--dash-add-widget-color-dark);
 			}
 		}
 		
@@ -522,7 +533,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-header {
-			border-bottom: 1px solid $card-border;
+			border-bottom: 1px solid var(--dash-widget-separator);
 			text-align: left;
 			cursor: move;
 			position: relative;
@@ -531,7 +542,7 @@ body.toplevel_page_atum-dashboard {
 			
 			&:before {
 				content: '...';
-				color: $widget-icon;
+				color: var(--dash-widget-icon);
 				font-size: 63px;
 				@include vertical-align-absolute;
 				left: 17px;
@@ -689,6 +700,7 @@ body.toplevel_page_atum-dashboard {
 	min-height: 0 !important;
 	max-width: 98%;
 	overflow: hidden;
+	background-color: var(--atum-add-widget-bg) !important;
 	
 	&.overlay {
 		&:before {
@@ -722,10 +734,14 @@ body.toplevel_page_atum-dashboard {
 		position: relative;
 		font-size: 17px;
 		text-align: left;
-		color: var(--dark);
-		border-bottom: 1px solid var(--light);
+		color: var(--atum-add-widget-title);
+		border-bottom: 1px solid var(--atum-add-widget-separator);
 		padding: 20px;
 		margin: -$grid-gutter-width/2 0 0;
+	}
+	
+	h3 {
+		color: var(--atum-add-widget-title);
 	}
 	
 	.swal2-close {

@@ -153,33 +153,33 @@ table.wp-list-table {
 				line-height: 26px;
 				margin: 0 5px 0 0;
 				
-				&.status-completed, &.status-received {
-					background: var(--green);
+				&.status-atum_completed, &.status-atum_received {
+					background: #69c61d;
 				}
 				
-				&.status-on-hold {
-					background: var(--wc-orange);
+				&.status-atum_on-hold {
+					background: #94660c;
 				}
 				
-				&.status-failed, &.status-trash {
-					background: var(--wc-red);
+				&.status-atum_failed, &.status-atum_trash {
+					background: #761919;
 				}
 				
-				&.status-pending {
-					background: var(--red);
+				&.status-atum_pending {
+					background: #ff4848;
 				}
 				
 				
-				&.status-ordered {
-					background: var(--orange);
+				&.status-atum_ordered {
+					background: #efaf00;
 				}
 				
-				&.status-onthewayin {
-					background: var(--blue);
+				&.status-atum_onthewayin {
+					background: #00b8db;
 				}
 				
-				&.status-receiving {
-					background: var(--purple);
+				&.status-atum_receiving {
+					background: #ba7df7;
 				}
 				
 				> span {

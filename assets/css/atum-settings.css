@@ -224,9 +224,9 @@
   --green: #69C61D;
   --green-hover: rgba(105, 198, 29, 0.6);
   --green-shadow: rgba(105, 198, 29, 0.2);
-  --green-light: rgba(180, 240, 0, 0.79);
-  --green-light-hover: rgba(180, 240, 0, 0.6);
-  --green-light-shadow: rgba(180, 240, 0, 0.2);
+  --green-light: #d5f5ba;
+  --green-light-hover: rgba(213, 245, 186, 0.6);
+  --green-light-shadow: rgba(213, 245, 186, 0.2);
   --blue-light: #dbf9ff;
   --blue-light-hover: rgba(219, 249, 255, 0.6);
   --blue-light-shadow: rgba(219, 249, 255, 0.2);
@@ -369,9 +369,10 @@
   --wp-pink-darken-expanded: #e7d0e3;
   --wc-purple-expanded: #96588a;
   --blue-light-expanded: #dbf9ff;
-  --green-light-expanded: rgba(180, 240, 0, 0.79);
+  --green-light-expanded: #d5f5ba;
   --atum-page-title-action: #69C61D;
   --atum-border: #e9ecef;
+  --atum-border-expanded: #adb5bd;
   --atum-table-item-heads: #adb5bd;
   --atum-table-views-tabs: #adb5bd;
   --atum-table-views-tabs-active: #00B8DB;
@@ -385,11 +386,12 @@
   --atum-pagination-border: transparent;
   --atum-pagination-bg-disabled: #f8f9fa;
   --atum-pagination-border-disabled: transparent;
-  --order-green-light: rgba(180, 240, 0, 0.79);
+  --order-green-light: #d5f5ba;
   --atum-icon-tree: #343a40;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
   --atum-footer-totals: #e9ecef;
   --atum-table-bg: #fff;
+  --atum-footer-bg: #fff;
   --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --atum-select2-selected-bg: #dbf9ff;
@@ -404,6 +406,9 @@
   --atum-table-icon: #adb5bd;
   --atum-table-icon-active: #adb5bd;
   --atum-table-text-active: #adb5bd;
+  --atum-table-text-expanded: #fff;
+  --atum-table-search-text: #fff;
+  --atum-table-search-bg: #EFAF00;
   --atum-dark-bg: #3b3d5a;
   --popover-black-shadow: rgba(0, 0, 0, 0.2);
   --atum-settings-nav-bg: #fff;
@@ -418,6 +423,7 @@
   --atum-settings-section-description: #adb5bd;
   --atum-settings-text-logo: #27283B;
   --atum-settings-input-border: #e9ecef;
+  --atum-settings-border-color: #e9ecef;
   --atum-settings-input-text: #6c757d;
   --atum-settings-btn-save: #fff;
   --atum-settings-btn-save-text: #00B8DB;
@@ -427,24 +433,25 @@
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
   --dash-widget-text: #adb5bd;
-  --dash-atum-version: transparentize(#000, 0.9);
+  --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-widget-primary: #00B8DB;
   --dash-widget-success: #69C61D;
   --dash-widget-warning: #EFAF00;
   --dash-widget-danger: #FF4848;
+  --dash-widget-separator: #f8f9fa;
   --dash-subscription-input: rgba(255, 255, 255, 0.7);
   --dash-nice-select-bg: #fff;
   --dash-nice-select-list-bg: #fff;
   --dash-nice-select-text: #adb5bd;
   --dash-nice-select-border: #e9ecef;
-  --dash-nice-select-hover: darken(#e9ecef, 10%);
-  --dash-nice-select-disabled: lighten(#e9ecef, 2%);
-  --dash-nice-select-disabled-after: lighten(#adb5bd, 20%);
+  --dash-nice-select-hover: #cbd3da;
+  --dash-nice-select-disabled: #eff1f3;
+  --dash-nice-select-disabled-after: #e6e8ea;
   --dash-nice-select-arrow-color: #adb5bd;
   --dash-nice-select-option-hover-bg: #f8f9fa;
   --dash-nice-select-option-selected-bg: #dbf9ff;
   --dash-nice-select-text-highlighted: #00B8DB;
-  --dash-widget-list-border: transparentize(#f8f9fa, 0.5);
+  --dash-widget-list-border: rgba(248, 249, 250, 0.5);
   --dash-stats-data-widget-primary: #00B8DB;
   --dash-stats-data-widget-success: #69C61D;
   --dash-stock-control-chart-border: #fff;
@@ -454,23 +461,44 @@
   --dash-card-bg: #fff;
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
   --dash-green-trans: rgba(106, 200, 30, 0.79);
-  --dash-green-light: rgba(180, 240, 0, 0.79);
+  --dash-green-light: #d5f5ba;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
   --dash-h5-text: #444;
   --atum-marketing-popup-bg: #fff;
-  --dash-input-group-bg: transparentize(#fff, 0.34);
-  --dash-input-group-shadow: transparentize(#fff, 0.8);
+  --dash-input-group-bg: rgba(255, 255, 255, 0.66);
+  --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
   --dash-input-placeholder: #adb5bd;
   --dash-widget-header-title: #27283B;
   --dash-statistics-ticks: #27283B;
   --dash-statistics-grid-lines: #e9ecef;
-  --dash-statistics-chart-type-bg: transparentize(#f8f9fa, 0.8);
+  --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
   --dash-border: #e9ecef;
+  --dash-widget-icon: #adb5bd;
   --dash-statistics-chart-type-selected-bg: transparent;
   --dash-statistics-chart-type-selected-text: #EFAF00;
-  --dash-statistics-legend-switch-bg: transparentize(#f8f9fa, 0.8);
+  --dash-statistics-legend-switch-bg: rgba(248, 249, 250, 0.2);
   --dash-next-text:  #e9ecef;
+  --dash-video-title: #343a40;
   --dash-video-subs-text: #adb5bd;
+  --atum-add-widget-bg: #fff;
+  --dash-add-widget-color-dark: #00B8DB;
+  --atum-add-widget-title: #343a40;
+  --atum-add-widget-separator: #f8f9fa;
+  --atum-version: #fff;
+  --atum-version-bg: rgba(0, 0, 0, 0.2);
+  --atum-table-search-submit-bg: #adb5bd;
+  --atum-table-filter-dropdown: #adb5bd;
+  --atum-settings-separator: rgba(255, 255, 255, 0.2);
+  --atum-settings-btn-save-text-hover: #fff;
+  --atum-footer-title: #27283B;
+  --atum-footer-link: #0073AA;
+  --atum-footer-text: #555d66;
+  --success-hover-text: #69C61D;
+  --success-hover-border: none;
+  --primary-hover-text: #00B8DB;
+  --primary-hover-border: none;
+  --warning-hover-text: #EFAF00;
+  --warning-hover-border: none;
 }
 
 .btn {
@@ -577,8 +605,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--primary-hover-text);
   background-color: var(--primary-hover);
+  border: var(--primary-hover-border) !important;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -615,8 +644,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-secondary:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--secondary-hover-text);
   background-color: var(--secondary-hover);
+  border: var(--secondary-hover-border) !important;
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -653,8 +683,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-success:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--success-hover-text);
   background-color: var(--success-hover);
+  border: var(--success-hover-border) !important;
 }
 
 .btn-success:focus, .btn-success.focus {
@@ -691,8 +722,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-info:hover {
-  color: var(--wp-yiq-text-dark);
+  color: var(--info-hover-text);
   background-color: var(--info-hover);
+  border: var(--info-hover-border) !important;
 }
 
 .btn-info:focus, .btn-info.focus {
@@ -729,8 +761,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-warning:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--warning-hover-text);
   background-color: var(--warning-hover);
+  border: var(--warning-hover-border) !important;
 }
 
 .btn-warning:focus, .btn-warning.focus {
@@ -767,8 +800,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-danger:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--danger-hover-text);
   background-color: var(--danger-hover);
+  border: var(--danger-hover-border) !important;
 }
 
 .btn-danger:focus, .btn-danger.focus {
@@ -805,8 +839,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-light:hover {
-  color: var(--wp-yiq-text-dark);
+  color: var(--light-hover-text);
   background-color: var(--light-hover);
+  border: var(--light-hover-border) !important;
 }
 
 .btn-light:focus, .btn-light.focus {
@@ -843,8 +878,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-dark:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--dark-hover-text);
   background-color: var(--dark-hover);
+  border: var(--dark-hover-border) !important;
 }
 
 .btn-dark:focus, .btn-dark.focus {
@@ -881,8 +917,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-purple-pl:hover {
-  color: var(--wp-yiq-text-light);
+  color: var(--purple-pl-hover-text);
   background-color: var(--purple-pl-hover);
+  border: var(--purple-pl-hover-border) !important;
 }
 
 .btn-purple-pl:focus, .btn-purple-pl.focus {
@@ -1291,8 +1328,8 @@ body .select2-container.atum-select2, body .select2-container.atum-enhanced-sele
 
 body .select2-container.atum-select2 .select2-results, body .select2-container.atum-enhanced-select .select2-results {
   display: block;
-  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
-          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
   max-height: inherit;
   padding: 0;
   margin: 0;
@@ -1324,7 +1361,7 @@ body .select2-container.atum-select2 .select2-selection__arrow:after, body .sele
   font-family: atum-icon-font;
   content: "";
   font-size: 10px;
-  color: var(--gray-500);
+  color: var(--atum-table-filter-dropdown);
 }
 
 body .select2-container.atum-select2 .select2-selection--single, body .select2-container.atum-enhanced-select .select2-selection--single {
@@ -1404,8 +1441,8 @@ body .select2-container.atum-select2 .select2-search--inline .select2-search__fi
 }
 
 body .select2-dropdown {
-  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
-          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
   background-color: var(--atum-table-bg);
   border: 1px solid var(--gray-500);
   border-radius: 5px;
@@ -3144,7 +3181,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 #wpfooter .footer-box {
   height: 90px;
-  background: #fff url("../images/stock-central/bg-footer.png") no-repeat center 81%;
+  background: var(--atum-footer-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
   border-radius: 8px;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
@@ -3192,7 +3229,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 #wpfooter .footer-box .footer-atum-logo span {
-  color: #27283B;
+  color: var(--atum-footer-title);
   font-size: 27px;
   margin-left: 10px;
   font-weight: bold;
@@ -3200,14 +3237,16 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 #wpfooter .footer-box .footer-atum-text {
   font-size: 12px;
+  color: var(--atum-footer-text);
 }
 
 #wpfooter .footer-box .footer-atum-text span {
-  color: #0073AA;
+  color: var(--atum-footer-link);
 }
 
 #wpfooter .footer-box .footer-atum-text .wc-rating-link {
   text-decoration: none;
+  color: var(--atum-footer-link);
 }
 
 #wpfooter .footer-box .footer-atum-buttons {
@@ -3747,7 +3786,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 
 .atum-settings-wrapper #atum-settings .section-title {
   margin-top: 11px;
-  border-bottom: 2px solid var(--gray-200);
+  border-bottom: 2px solid var(--atum-settings-border-color);
   background-color: var(--atum-settings-section-bg);
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
@@ -3858,7 +3897,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
   background: var(--atum-settings-section-bg) url("../images/settings/bg-settings.png") no-repeat bottom;
-  background-size: cover;
+  background-size: 100% auto;
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
   position: relative;
@@ -3874,7 +3913,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 }
 
 .atum-settings-wrapper #atum-settings .section-fields tr:not(:last-child) {
-  border-bottom: 0.5px solid var(--white-shadow);
+  border-bottom: 0.5px solid var(--atum-settings-separator);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields th, .atum-settings-wrapper #atum-settings .section-fields td {
@@ -3923,6 +3962,10 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   display: none;
 }
 
+.atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container:not(:last-child) {
+  border-bottom: solid 1px var(--atum-settings-border-color);
+}
+
 .atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3930,10 +3973,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 35px;
+  padding: 35px 0;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container .selector-box {
@@ -4224,6 +4264,7 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
 .atum-settings-wrapper #atum-settings input[type=submit]:hover, .atum-settings-wrapper #atum-settings input[type=submit]:active {
   background-color: var(--atum-settings-btn-save-hover);
   border-color: var(--atum-settings-btn-save-hover);
+  color: var(--atum-settings-btn-save-text-hover);
   -webkit-transform: none;
           transform: none;
 }
@@ -4255,9 +4296,9 @@ body .select2-container--classic.atum-select2.select2-container--open .select2-d
   -webkit-box-shadow: none;
           box-shadow: none;
   border-radius: 5px;
-  width: 110px;
+  width: 180px;
   margin-right: 10px;
-  border: solid 0.5px var(--wp-gray-5);
+  border: solid 0.5px var(--atum-settings-input-border);
   background-color: var(--atum-settings-wp-color-bg) !important;
   position: relative;
   padding: 0 0 0 20px;

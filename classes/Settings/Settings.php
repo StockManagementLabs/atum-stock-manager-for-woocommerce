@@ -163,7 +163,7 @@ class Settings {
 			}
 
 		}
-		
+
 		return apply_filters( 'atum/settings/get_settings', $options );
 
 	}
@@ -185,6 +185,7 @@ class Settings {
 			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
 
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', array( 'wp-color-picker' ), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
 			// ATUM marketing popup.
@@ -228,8 +229,9 @@ class Settings {
 				wp_enqueue_script( 'es6-promise' );
 			}
 
+			wp_enqueue_script( 'color-picker-alpha' );
 			wp_enqueue_script( self::UI_SLUG );
-			
+
 		}
 
 	}
@@ -468,7 +470,7 @@ class Settings {
 			'theme_settings'            => array(
 				'section' => 'color_mode',
 				'name'    => __( 'Theme settings', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'NOTE: All ATUM pages will change and the setting will deactivate all colour options on this page.', ATUM_TEXT_DOMAIN ),
+				'desc'    => '',
 				'default' => '',
 				'type'    => 'theme_selector',
 				'options' => array(
@@ -477,126 +479,280 @@ class Settings {
 							'key'   => 'branded_mode',
 							'name'  => __( 'Branded Mode', ATUM_TEXT_DOMAIN ),
 							'thumb' => 'branded_mode.png',
-							'desc'  => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
-											elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
-											natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ', ATUM_TEXT_DOMAIN ),
+							'desc'  => __( 'Activate the Branded mode. Colour mode for the ATUM default branded colours.', ATUM_TEXT_DOMAIN ),
 						),
 						array(
 							'key'   => 'dark_mode',
 							'name'  => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
 							'thumb' => 'dark_mode.png',
-							'desc'  => __( 'Lorem ipsum dolor sit amet, consectetuer adipiscing 
-											elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
-											natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ', ATUM_TEXT_DOMAIN ),
+							'desc'  => __( 'Activate the Dark mode. Colour Mode for tired/weary eyes.', ATUM_TEXT_DOMAIN ),
 						),
 						array(
 							'key'   => 'hc_mode',
 							'name'  => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
 							'thumb' => 'hc_mode.png',
-							'desc'  => __( 'Activate the high contrast mode. This mode is for users that find 
-											difficult viewing data while browsing 
-											the interface in ATUM\'s branded colours.', ATUM_TEXT_DOMAIN ),
+							'desc'  => __( 'Activate the High Contrast mode.
+											This mode is for users that find difficult viewing data
+											while browsing the interface in ATUM\'s branded colours.', ATUM_TEXT_DOMAIN ),
 						),
 					),
 				),
 			),
-			'primary_color'             => array(
+			'bm_primary_color'          => array(
 				'section' => 'scheme_color',
 				'name'    => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
+				'display' => 'branded_mode',
 				'default' => '#00B8DB',
 			),
-			'primary_color_light'       => array(
+			'hc_primary_color'          => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Primary light color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Primary light color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#f5fdff',
+				'display' => 'hc_mode',
+				'default' => '#016B7F',
 			),
-			'primary_color_dark'        => array(
+			'dm_primary_color'          => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Primary dark color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Primary dark color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#dbf9ff',
+				'display' => 'dark_mode',
+				'default' => '#a8f1ff',
 			),
-			'secondary_color'           => array(
+			'bm_secondary_color'        => array(
 				'section' => 'scheme_color',
 				'name'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
+				'display' => 'branded_mode',
 				'default' => '#EFAF00',
 			),
-			'secondary_color_light'     => array(
+			'dm_secondary_color'        => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Secondary light color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Secondary light color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#fff4d6',
+				'display' => 'dark_mode',
+				'default' => '#ffdf89',
 			),
-			'secondary_color_dark'      => array(
-				'section' => 'scheme_color',
-				'name'    => __( 'Secondary dark color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Secondary dark color', ATUM_TEXT_DOMAIN ),
-				'type'    => 'color',
-				'default' => '#ffedbc',
-			),
-			'tertiary_color'            => array(
+			'bm_tertiary_color'         => array(
 				'section' => 'scheme_color',
 				'name'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
+				'display' => 'branded_mode',
 				'default' => '#69C61D',
 			),
-			'tertiary_color_light'      => array(
+			'dm_tertiary_color'         => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Tertiary light color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Tertiary light color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#baef8d',
+			),
+			'dm_tertiary_color_light'   => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Outside Elements Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons outside of ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
 				'default' => '#69C61D',
 			),
-			'tertiary_color_dark'       => array(
+			'bm_danger_color'           => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Tertiary dark color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Tertiary dark color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Danger Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#b4f000c9',
+				'display' => 'branded_mode',
+				'default' => '#FF4848',
 			),
-			'text_color'                => array(
+			'dm_danger_color'           => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Text Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Text Color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Danger Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#6C757D',
+				'display' => 'dark_mode',
+				'default' => '#ffaeae',
 			),
-			'text_color_2'              => array(
+			'bm_title_color'            => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Text 2 Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Text 2 Color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Titles Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#adb5bd',
+				'display' => 'branded_mode',
+				'default' => '#27283B',
 			),
-			'border_color'              => array(
+			'dm_title_color'            => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Table Border Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Table Border Color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Titles Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
-				'default' => '#e9ecef',
-			),
-			'bg_1_color'                => array(
-				'section' => 'scheme_color',
-				'name'    => __( 'Table Background 1 Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Table Background 1 Color', ATUM_TEXT_DOMAIN ),
-				'type'    => 'color',
+				'display' => 'dark_mode',
 				'default' => '#FFFFFF',
 			),
-			'bg_2_color'                => array(
+			'bm_text_color'             => array(
 				'section' => 'scheme_color',
-				'name'    => __( 'Table Background 2 Color', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Table Background 2 Color', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Main Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#6C757D',
+			),
+			'dm_text_color'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Main Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#FFFFFF',
+			),
+			'bm_text_color_2'           => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Soft Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#adb5bd',
+			),
+			'dm_text_color_2'           => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Soft Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#31324A',
+			),
+			'bm_text_color_expanded'    => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Light Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#ffffff',
+			),
+			'dm_text_color_expanded'    => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Light Text Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#ffffff',
+			),
+			'bm_border_color'           => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Borders Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#e9ecef',
+			),
+			'dm_border_color'           => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Borders Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#ffffff',
+			),
+			'bm_bg_1_color'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Primary Background Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for background color in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#ffffff',
+			),
+			'bm_bg_2_color'             => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Secondary Background Color', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the background color of striped rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
 				'default' => '#F8F9FA',
+			),
+			'bm_primary_color_light'    => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#f5fdff',
+			),
+			'hc_primary_color_light'    => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'hc_mode',
+				'default' => '#f5fdff',
+			),
+			'dm_primary_color_light'    => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#dbf9ff',
+			),
+			'bm_primary_color_dark'     => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#dbf9ff',
+			),
+			'hc_primary_color_dark'     => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'hc_mode',
+				'default' => '#e6fbff',
+			),
+			'dm_primary_color_dark'     => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#00b8db',
+			),
+			'bm_secondary_color_light'  => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 3', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#fff4d6',
+			),
+			'dm_secondary_color_light'  => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 3', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#ffdf89',
+			),
+			'bm_secondary_color_dark'   => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 4', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'branded_mode',
+				'default' => '#ffedbc',
+			),
+			'dm_secondary_color_dark'   => array(
+				'section' => 'scheme_color',
+				'name'    => __( 'Colored Background Color 4', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'color',
+				'display' => 'dark_mode',
+				'default' => '#ffdf89',
 			),
 		);
 
@@ -631,9 +787,9 @@ class Settings {
 		// Add the fields.
 		$this->defaults = (array) apply_filters( 'atum/settings/defaults', $this->defaults );
 		foreach ( $this->defaults as $field => $options ) {
-			
+
 			$options['id'] = $field;
-			
+
 			add_settings_field(
 				$field,                                             // ID.
 				$options['name'],                                   // Title.
@@ -643,7 +799,7 @@ class Settings {
 				$options
 			);
 		}
-		
+
 	}
 	
 	/**
@@ -1052,10 +1208,11 @@ class Settings {
 		$value   = $this->options[ $args['id'] ];
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
-		
+		$display = isset( $args['display'] ) ? str_replace( '_', '-', $args['display'] ) : '';
+
 		ob_start();
 		?>
-		<input class="atum-settings-input atum-color" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
 		type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo esc_attr( $default . $style ) ?>>
 		
 		<?php
@@ -1110,7 +1267,7 @@ class Settings {
 						value="<?php echo esc_attr( $option['key'] ); ?>"
 						<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? 'checked' : ''; ?>>
 				<div class="selector-container">
-					<div class="selector-box" data-value="<?php echo esc_attr( $option['key'] ); ?>">
+					<div class="selector-box" data-value="<?php echo esc_attr( $option['key'] ); ?>" data-reset="0">
 						<img src="<?php echo esc_attr( ATUM_URL . 'assets/images/settings/' . $option['thumb'] ); ?>" alt=""
 								class="<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? ' active' : ''; ?>">
 					</div>

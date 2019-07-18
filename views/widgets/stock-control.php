@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || die;
 
 <div class="stock-control-widget">
 
-	<div class="stock-data">
+	<div class="stock-data<?php echo esc_attr( ' ' . $mode ); ?>">
 
 		<a href="<?php echo esc_url( $sc_links['in_stock'] ) ?>" title="<?php esc_html_e( 'View Products In Stock', ATUM_TEXT_DOMAIN ) ?>">
 			<h3 class="widget-success"><?php echo esc_html( $stock_counters['count_in_stock'] ) ?></h3>
@@ -44,8 +44,8 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="stock-chart">
-		<canvas data-instock="<?php echo esc_attr( $stock_counters['count_in_stock'] ) ?>" data-outstock="<?php echo esc_attr( $stock_counters['count_out_stock'] ) ?>"
-				data-lowstock="<?php echo esc_attr( $stock_counters['count_low_stock'] ) ?>" data-unmanaged="<?php echo esc_attr( $stock_counters['count_unmanaged'] ) ?>">
+		<canvas data-instock="<?php echo esc_attr( $stock_counters['count_in_stock'] ) ?>" data-lowstock="<?php echo esc_attr( $stock_counters['count_low_stock'] ) ?>"
+				data-outstock="<?php echo esc_attr( $stock_counters['count_out_stock'] ) ?>" data-unmanaged="<?php echo esc_attr( $stock_counters['count_unmanaged'] ) ?>">
 		</canvas>
 		<div class="stock-chart-tooltip">
 			<table></table>

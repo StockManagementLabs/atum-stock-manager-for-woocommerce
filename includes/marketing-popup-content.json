@@ -30,7 +30,7 @@
 	},
 	"description": {
 		"text"           : "Finally HERE! Product Levels just got even better! Activate the bill of materials (BOM) stock control to automate the front end inventory offering.",
-		"text_color"     : "var(--gray-500)",
+		"text_color"     : "var(--dash-card-text)",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",

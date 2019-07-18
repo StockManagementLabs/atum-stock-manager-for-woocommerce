@@ -182,8 +182,10 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									continue;
 								endif; ?>
 
+								<?php $theme_setting = str_replace( '_', '-', Helpers::get_option( 'theme_settings' ) ); ?>
+
 								<div class="section-fields <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-field-light' : '' ?>">
-									<table class="form-table">
+									<table class="form-table" id="atum-table-color-settings" data-display="<?php echo esc_html( $theme_setting ); ?>">
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>
 
@@ -191,7 +193,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									if ( 'atum_setting_scheme_color' === $section['id'] ) :
 
 										?>
-											<button class="btn btn-primary reset-default-colors"
+											<button class="btn btn-primary reset-default-colors" data-reset="1"
 													type="button" data-value="<?php echo esc_attr( $theme_setting ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
 										<?php
 

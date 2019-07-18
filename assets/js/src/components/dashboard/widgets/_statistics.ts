@@ -224,11 +224,14 @@ export default class StatisticsWidget {
 	doLegendSwitches() {
 		
 		// Enable switches.
-		Switcher.doSwitchers('.value-chart');
+		Switcher.doSwitchers('.value-chart', {
+			color    : 'var(--success-hover)',
+			jackColor: 'var(--success)',
+		});
 		
 		Switcher.doSwitchers('.products-chart', {
-			color    : 'var(--dash-blue-trans)',
-			jackColor: 'var(--blue)',
+			color    : 'var(--primary-hover)',
+			jackColor: 'var(--primary)',
 		});
 		
 		// Hide/show charts with legend switches.

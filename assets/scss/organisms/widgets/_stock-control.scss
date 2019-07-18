@@ -15,6 +15,40 @@
 	display: flex;
 	padding-top: 5px;
 	
+	.stock-data.hc_mode {
+		
+		
+		h3 {
+			color: var(--dash-card-text);
+			margin: 3px 0 3px 0;
+			
+			&:before {
+				width: 29px;
+				height: 29px;
+				border-radius: 5px;
+				content: ' ';
+				display: inline-block;
+				margin-right: 10px;
+			}
+			&.widget-success:before {
+				background-color: var(--dash-widget-success);
+			}
+			&.widget-warning:before {
+				background-color: var(--dash-widget-warning);
+			}
+			&.widget-danger:before {
+				background-color: var(--dash-widget-danger);
+			}
+			&.widget-primary:before {
+				background-color: var(--dash-widget-primary);
+			}
+		}
+		
+		h5 {
+			margin: 0;
+		}
+	}
+	
 	@include tablet-max {
 		padding-top: $grid-gutter-width/2;
 	}
@@ -93,7 +127,7 @@
 	}
 	
 	hr {
-		border-top: 1px solid transparentize($black, 0.9);
+		border-top: 1px solid var(--dash-widget-separator);
 		border-bottom: none;
 		margin: $grid-gutter-width/2 0;
 		
@@ -101,7 +135,7 @@
 			clear: both;
 			padding: $grid-gutter-width/3 0;
 			border-top: none;
-			border-bottom: 1px solid transparentize($black, 0.9);
+			border-bottom: 1px solid var(--dash-widget-separator);
 		}
 		
 		@include mobile-max {

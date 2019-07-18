@@ -31,6 +31,11 @@ jQuery( ($) => {
 	// Get the options from the localized var.
 	let settings = new Settings('atumSettingsVars');
 	let enhancedSelect = new EnhancedSelect();
-	new SettingsPage(settings, enhancedSelect);
+	let settingsPage = new SettingsPage(settings, enhancedSelect);
+	
+	if($("#atum-table-color-settings").length>0) {
+		settingsPage.hideColors();
+	}
 	
 });
+
