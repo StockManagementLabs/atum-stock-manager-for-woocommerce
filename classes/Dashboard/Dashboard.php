@@ -192,7 +192,7 @@ class Dashboard {
 			'dashboard'       => $this,
 			'marketing_popup' => $marketing_popup,
 			'darkmode'        => ( 'dark_mode' === Helpers::get_option( 'theme_settings' ) ) ? 1 : 0,
-		), Helpers::get_support_button() ) );
+		), Helpers::get_support_buttons() ) );
 		
 	}
 
@@ -228,7 +228,7 @@ class Dashboard {
 
 		foreach ( $widgets_paths as $widgets_path ) {
 
-			$widgets_dir = @scandir( $widgets_path ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			$widgets_dir = @scandir( $widgets_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 			if ( ! empty( $widgets_dir ) ) {
 
