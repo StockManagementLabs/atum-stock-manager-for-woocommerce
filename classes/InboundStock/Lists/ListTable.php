@@ -365,7 +365,7 @@ class ListTable extends AtumListTable {
 				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$search_query .= "AND `order_item_name` LIKE '%{$_REQUEST['s']}%'";
+				$search_query .= "AND `order_item_name` LIKE '%{$search}%'";
 			}
 
 		}
@@ -386,7 +386,8 @@ class ListTable extends AtumListTable {
 
 		}
 
-		$order = ( ! empty( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], [ 'asc', 'desc' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
+		$order    = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
+		$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
 		
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
@@ -394,7 +395,7 @@ class ListTable extends AtumListTable {
 			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` <> '" . PurchaseOrders::FINISHED . "'
+			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` IN ('" . implode( "','", $statuses ) . "')
 			$search_query
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",
@@ -422,9 +423,12 @@ class ListTable extends AtumListTable {
 				if ( $post ) {
 					$post->po_id      = $po_product->order_id;
 					$post->po_item_id = $po_product->order_item_id;
+					$this->items[]    = $post;
 				}
-
-				$this->items[] = $post;
+				// In case there are some products still added to POs but not exists on the shop anymore.
+				else {
+					$found_posts--;
+				}
 
 			}
 
@@ -450,7 +454,12 @@ class ListTable extends AtumListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = Helpers::get_atum_product( $item );
+		$this->product = Helpers::get_atum_product( $item );
+
+		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+			return;
+		}
+
 		$this->allow_calcs = TRUE;
 
 		echo '<tr>';

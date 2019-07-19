@@ -115,6 +115,7 @@ body {
 					font-size: 100%;
 					margin-top: 5px;
 					padding: 0;
+					background-image: none !important;
 					
 					&::-webkit-search-cancel-button {
 						appearance: none;
@@ -137,7 +138,7 @@ body {
 		position: absolute;
 		left: -100000px;
 		width: 100%;
-		z-index: 1051;
+		z-index: 100000; // Same as the sweet alert's index, so we can use it within modals
 	}
 	
 	.select2-results__options {
@@ -205,6 +206,8 @@ body {
 			width: 100%;
 			box-sizing: border-box;
 			min-width: inherit;
+			border-radius: 5px;
+			border-color: var(--gray-500);
 			
 			&::-webkit-search-cancel-button {
 				appearance: none;
@@ -489,6 +492,8 @@ body {
 				}
 			}
 			
+		}
+		
 			.select2-search--dropdown {
 				.select2-search__field {
 					border: 1px solid var(--gray-400);
@@ -507,8 +512,6 @@ body {
 				}
 			}
 			
-		}
-		
 		.select2-results__option {
 			
 			&[role=group] {
@@ -578,6 +581,7 @@ body {
 			display: block;
 			padding: 6px;
 		}
+			
 	}
 	
 	.select2-container--classic {
@@ -794,6 +798,12 @@ body {
 				}
 			}
 			
+		}
+		
+	}
+	
+	.select2-container--default {
+		
 			.select2-dropdown {
 				background-color: var(--white);
 				border: 1px solid transparent;
@@ -801,15 +811,17 @@ body {
 			
 			.select2-dropdown--above {
 				border-bottom: none;
+			@include border-bottom-radius(0);
 			}
 			
 			.select2-dropdown--below {
 				border-top: none;
+			@include border-top-radius(0);
 			}
 			
 			.select2-results {
 				> .select2-results__options {
-					max-height: inherit;
+				max-height: 210px;
 					overflow-y: auto;
 				}
 			}
@@ -836,7 +848,7 @@ body {
 			}
 			
 			&.select2-container--open .select2-dropdown {
-				border-color: var(--wp-link);
+				border-color: var(--white);
 			}
 			
 		}

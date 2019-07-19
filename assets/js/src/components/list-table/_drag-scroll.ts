@@ -18,7 +18,7 @@ export default class DragScroll {
 	constructor(
 		private globals: Globals,
 		private tooltip: Tooltip,
-		private popover: Popover
+		private popover?: Popover
 	) {
 	
 		// Load Hammer for table dragging functionality.
@@ -41,7 +41,9 @@ export default class DragScroll {
 			
 			.on('panstart', () => {
 				// As the popoover is not being repositioned when scrolling horizontally, we have to destroy it.
-				this.popover.destroyPopover();
+				if (this.popover) {
+					this.popover.destroyPopover();
+				}
 			})
 			
 			// Horizontal drag scroll (JScrollPane).

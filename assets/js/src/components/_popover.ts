@@ -63,7 +63,7 @@ export default class Popover {
 			
 			if (this.dateTimePicker) {
 				
-				let $dateInputs: JQuery = $activePopover.find('.datepicker');
+				let $dateInputs: JQuery = $activePopover.find('.bs-datepicker');
 				
 				if ($dateInputs.length) {
 					this.dateTimePicker.addDateTimePickers($dateInputs);

@@ -513,7 +513,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = Helpers::get_atum_product( $item );
+		$this->product = Helpers::get_atum_product( $item );
+
+		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+			return;
+		}
+
 		$type              = $this->product->get_type();
 		$this->allow_calcs = TRUE;
 		$row_classes       = array( ( ++ $this->row_count % 2 ? 'even' : 'odd' ) );
@@ -604,24 +609,29 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$this->is_child = TRUE;
+
 					// Save the child product to the product prop.
 					$this->product = Helpers::get_atum_product( $child_id );
 
-					if ( 'grouped' === $type ) {
-						$child_type = 'grouped';
-					}
-					elseif ( 'bundle' === $type ) {
-						$child_type = 'bundle-item';
-					}
-					else {
-						$child_type = 'variation';
-					}
+					if ( is_a( $this->product, '\WC_Product' ) ) {
 
-					$this->single_expandable_row( $this->product, $child_type );
+						if ( 'grouped' === $type ) {
+							$child_type = 'grouped';
+						}
+						elseif ( 'bundle' === $type ) {
+							$child_type = 'bundle-item';
+						}
+						else {
+							$child_type = 'variation';
+						}
 
-					// If the current product has been modified within any of the columns, save it.
-					if ( ! empty( $this->product->get_changes() ) ) {
-						$this->product->save_atum_data();
+						$this->single_expandable_row( $this->product, $child_type );
+
+						// If the current product has been modified within any of the columns, save it.
+						if ( ! empty( $this->product->get_changes() ) ) {
+							$this->product->save_atum_data();
+						}
+
 					}
 
 				}
@@ -2094,8 +2104,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $_REQUEST['search_column'] ) ) {
 			$args['search_column'] = esc_attr( $_REQUEST['search_column'] );
 		}
+
 		if ( ! empty( $_REQUEST['s'] ) ) {
-			$args['s'] = esc_attr( $_REQUEST['s'] );
+			$args['s'] = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
 		}
 
 		// Let others play.
@@ -3178,8 +3189,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$disable_first = TRUE;
 			$disable_prev  = TRUE;
 		}
-
-		if ( 2 === $current ) {
+		elseif ( 2 === $current ) {
 			$disable_first = TRUE;
 		}
 
@@ -3187,8 +3197,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$disable_last = TRUE;
 			$disable_next = TRUE;
 		}
-
-		if ( $current === $total_pages - 1 ) {
+		elseif ( $current === $total_pages - 1 ) {
 			$disable_last = TRUE;
 		}
 
@@ -3426,7 +3435,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
 
 		$search_column = esc_attr( stripslashes( $_REQUEST['search_column'] ) );
-		$search_term   = sanitize_text_field( stripslashes( $_REQUEST['s'] ) );
+		$search_term   = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
 
 		$cache_key = AtumCache::get_cache_key( 'product_search', [ $search_column, $search_term ] );
 		$where     = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
@@ -4437,7 +4446,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function increase_total( $column_name, $amount ) {
 		
-		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && 'grouped' !== $this->parent_type && 'bundle' !== $this->parent_type ) {
+		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && ! in_array( $this->parent_type, [ 'grouped', 'bundle' ], TRUE ) ) {
 			$this->totalizers[ $column_name ] += floatval( $amount );
 		}
 	}

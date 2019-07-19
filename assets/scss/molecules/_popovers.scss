@@ -156,7 +156,8 @@
 				position: absolute;
 				background: var(--gray-100);
 				transform: rotate(45deg);
-				box-shadow: 0 0 5px 1px var(--popover-black-shadow);
+				box-shadow: none;
+				top: 2px;
 		}
 	}
 	

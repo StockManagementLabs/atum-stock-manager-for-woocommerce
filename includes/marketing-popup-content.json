@@ -1,54 +1,52 @@
 {
 	"background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/waves-export.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "contain",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"dash_background": {
-		"bg_image"        : "url('https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg')",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/waves-export.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "cover",
 		"bg_repeat"       : "no-repeat",
-		"bg_color"        : "var(--atum-marketing-popup-bg)"
+		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/product-levels_icon.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/02/label-update-280x280.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/atum-icon-export-pro.svg",
+		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/label-register.png"
 	},
 	"title": {
-		"text"      : "Product<strong>levels</strong>",
-		"text_color": "var(--dash-widget-header-title)",
+		"text"      : "<strong>ATUM</strong><span>ExportPRO</span>",
+		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "v1.3",
+		"text"      : "Beta",
 		"text_color": "white",
-		"background": "var(--purple-pl)"
+		"background": "#efaf00"
 	},
 	"description": {
-		"text"           : "Finally HERE! Product Levels just got even better! Activate the bill of materials (BOM) stock control to automate the front end inventory offering.",
-		"text_color"     : "var(--dash-card-text)",
+		"text"           : "The most advanced Export tool ever released, now with free Import to complete the package. Register quick to be the first to receive the download link. Install the beta in your staging site and give it a full test run.",
+		"text_color"     : "#adb5bd",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",
-		"padding"        : "0 35px 25px"
+		"padding"        : "0 9px 25px"
 	},
 	"buttons": [
 		{
-			"text"      : "More info",
-			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
-			"class"     : "btn btn-purple-pl",
-			"css"       : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;"
-		},
-		{
-			"text"  : "Live Demo",
-			"url"   : "http://demo.productlevels.stockmanagementlabs.com/",
-			"class" : "btn btn-outline-purple-pl",
-			"css"   : "width: 130px;height: 30px; font-size:12px; font-weight: 300; letter-spacing: 1px; border-radius: 5px; padding: 0;"
+			"text"      : "Go to registration form",
+			"url"       : "https://www.stockmanagementlabs.com/beta-registration/",
+			"class"     : "btn btn-warning",
+			"css"       : "width: 213px;height: 30px; font-size:12px; font-weight: 300; border-radius: 5px; padding: 0;"
 		}
 	],
-	"transient_key": "atum-product-levels"
+	"footer_notice" : {
+		"text"    : "WE WILL GRANT <strong>50% SUBSCRIPTION COUPON</strong> TO ALL COOPERATIVE BETA TESTERS!",
+		"bg_color": "rgba(255, 255, 255, 0.6)"
+	},
+	"transient_key": "atum-export-pro-beta"
 }

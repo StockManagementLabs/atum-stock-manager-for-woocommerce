@@ -459,7 +459,6 @@ class PurchaseOrder extends AtumOrderModel {
 					if ( is_null( $old_stock ) ) {
 						$old_stock = 0;
 						wc_update_product_stock( $product, $old_stock );
-						
 					}
 					
 					$stock_change = apply_filters( 'atum/purchase_orders/po/restore_atum_order_stock_quantity', $atum_order_item->get_quantity(), $item_id );

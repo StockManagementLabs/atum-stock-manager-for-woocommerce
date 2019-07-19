@@ -475,7 +475,7 @@ class ListTable extends AtumListTable {
 						'value'       => $date_on_sale_from,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'datepicker from',
+						'class'       => 'bs-datepicker from',
 					),
 					array(
 						'name'        => '_sale_price_dates_to',
@@ -484,7 +484,7 @@ class ListTable extends AtumListTable {
 						'value'       => $date_on_sale_to,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'datepicker to',
+						'class'       => 'bs-datepicker to',
 					),
 				),
 			), $this->product );
@@ -896,6 +896,8 @@ class ListTable extends AtumListTable {
 					break;
 
 				case 'inbound_stock':
+					$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
+
 					// Get all the products within pending Purchase Orders.
 					$sql = $wpdb->prepare( "
 						SELECT product_id, SUM(qty) AS qty FROM (
@@ -904,15 +906,15 @@ class ListTable extends AtumListTable {
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 							WHERE `order_id` IN (
-								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND `post_status` <> %s
+								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND 
+								`post_status` IN ('" . implode( "','", $statuses ) . "')
 							)
 							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
 							GROUP BY oi.order_item_id
 						) AS T 
 						GROUP BY product_id
 						ORDER by qty DESC;",
-						PurchaseOrders::POST_TYPE,
-						PurchaseOrders::FINISHED
+						PurchaseOrders::POST_TYPE
 					); // WPCS: unprepared SQL ok.
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
@@ -1123,9 +1125,8 @@ class ListTable extends AtumListTable {
 							continue;
 						}
 
-						$qty          = $log_item->get_quantity();
-						$variation_id = $log_item->get_variation_id();
-						$product_id   = $variation_id ?: $log_item->get_product_id();
+						$qty        = $log_item->get_quantity();
+						$product_id = $log_item->get_variation_id() ?: $log_item->get_product_id();
 
 						if ( isset( $products[ $product_id ] ) ) {
 							$products[ $product_id ] += $qty;

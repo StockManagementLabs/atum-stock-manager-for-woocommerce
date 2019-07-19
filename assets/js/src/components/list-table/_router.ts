@@ -26,11 +26,11 @@ export default class Router {
 			
 			if (this.settings.get('ajaxFilter') !== 'yes') {
 				// Force enabled or disabled search button.
-				let searchInputVal: any = this.globals.$searchInput.val();
+				const searchInputVal: any = this.globals.$searchInput.val();
 				$('.search-submit').prop('disabled', searchInputVal.length > 0 ? false : true);
 			}
 			
-			let numCurrentParams: number = $.address.parameterNames().length;
+			const numCurrentParams: number = $.address.parameterNames().length;
 			if (this.navigationReady === true && (numCurrentParams || this.numHashParameters !== numCurrentParams)) {
 				this.listTable.updateTable();
 			}
@@ -44,8 +44,8 @@ export default class Router {
 			if ($.address.parameterNames().length) {
 				
 				// Init fields from hash parameters.
-				let s: string            = $.address.parameter('s'),
-				    searchColumn: string = $.address.parameter('search_column'),
+				let s: string            = decodeURIComponent( $.address.parameter('s') || '' ),
+				    searchColumn: string = $.address.parameter('search_column') || '',
 				    optionVal: string    = '';
 				
 				if (s) {
@@ -54,13 +54,20 @@ export default class Router {
 				
 				if (searchColumn) {
 					
+					// Activate the dropdown item coming from the hash.
+					const $selectedSearchColumn: JQuery = this.globals.$searchColumnDropdown.find('.dropdown-item').filter( (index: number, elem: Element) => {
+						return $(elem).data('value') === searchColumn;
+					}).addClass('active');
+					this.globals.$searchColumnBtn.attr('data-original-title', $selectedSearchColumn.text()).text( $selectedSearchColumn.text() );
+					
+					// Update the Screen Options' checkboxes.
 					$('#adv-settings :checkbox').each( (index: number, elem: Element) => {
 						
 						optionVal = $(elem).val();
 						
 						// Calc values are not searchable, also we can't search on thumb.
 						if (optionVal.search('calc_') < 0 && optionVal !== 'thumb' && optionVal == searchColumn) {
-							this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, $(elem).parent().text() + ' <span class="caret"></span>']);
+							this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, `${ $(elem).parent().text() } <span class="caret"></span>`]);
 							return false;
 						}
 						
@@ -124,9 +131,7 @@ export default class Router {
 			supplier      : this.globals.$atumList.find('.dropdown_supplier').val() || '',
 			extra_filter  : this.globals.$atumList.find('.dropdown_extra_filter').val() || '',
 			paged         : parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged')),
-			//s             : self.$searchInput.val() || '',
-			//search_column : self.$searchColumnBtn.data('value') || '',
-			s             : $.address.parameter('s') || '',
+			s             : decodeURIComponent( $.address.parameter('s') || '' ),
 			search_column : $.address.parameter('search_column') || '',
 			sold_last_days: $.address.parameter('sold_last_days') || '',
 			orderby       : $.address.parameter('orderby') || this.settings.get('orderby'),
@@ -149,7 +154,7 @@ export default class Router {
 		});
 		
 		// Restore navigation and update if needed.
-		let numCurrentParams: number = $.address.parameterNames().length;
+		const numCurrentParams: number = $.address.parameterNames().length;
 		if (numCurrentParams || this.numHashParameters !== numCurrentParams) {
 			this.listTable.updateTable();
 		}

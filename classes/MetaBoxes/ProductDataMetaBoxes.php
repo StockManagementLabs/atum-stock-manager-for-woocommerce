@@ -13,6 +13,7 @@ namespace Atum\MetaBoxes;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -124,7 +125,7 @@ class ProductDataMetaBoxes {
 			'atum' => array(
 				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
-				'class'    => array( 'show_if_simple', 'show_if_variable' ),
+				'class'    => array_merge( array( 'show_if_simple', 'show_if_variable' ), Helpers::get_option_group_hidden_classes() ),
 				'priority' => 21,
 			),
 		) );
@@ -268,7 +269,7 @@ class ProductDataMetaBoxes {
 				return "show_if_{$val}";
 			}, Globals::get_product_types_with_stock() );
 
-			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', $visibility_classes );
+			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', array_merge( $visibility_classes, Helpers::get_option_group_hidden_classes( ) ) );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'visibility_classes', 'woocommerce_notify_no_stock_amount' ) );
 
@@ -320,7 +321,7 @@ class ProductDataMetaBoxes {
 
 		if ( empty( $variation ) ) {
 			$product_id    = get_the_ID();
-			$wrapper_class = '_purchase_price_field';
+			$wrapper_class = '_purchase_price_field ' . Helpers::get_option_group_hidden_classes( FALSE );
 			$field_id      = $field_name = Globals::PURCHASE_PRICE_KEY;
 		}
 		else {
@@ -410,10 +411,7 @@ class ProductDataMetaBoxes {
 		$supplier_id = $product->get_supplier_id();
 		/* @noinspection PhpUndefinedMethodInspection */
 		$supplier_sku = $product->get_supplier_sku();
-
-		if ( $supplier_id ) {
-			$supplier = get_post( $supplier_id );
-		}
+		$supplier     = $supplier_id ? get_post( $supplier_id ) : NULL;
 
 		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
 		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
@@ -428,7 +426,7 @@ class ProductDataMetaBoxes {
 
 		<?php else :
 
-			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', [ 'show_if_simple' ] );
+			$supplier_fields_classes = (array) apply_filters( 'atum/product_data/supplier/classes', array_merge( [ 'show_if_simple' ], Helpers::get_option_group_hidden_classes() ) );
 
 			Helpers::load_view( 'meta-boxes/product-data/supplier-fields', compact( 'supplier_field_name', 'supplier_field_id', 'variation', 'loop', 'supplier', 'supplier_sku', 'supplier_sku_field_name', 'supplier_sku_field_id', 'supplier_fields_classes' ) );
 
@@ -487,6 +485,12 @@ class ProductDataMetaBoxes {
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
 			return;
 		}
+
+		// Disable cache to avoid saving the wrong data.
+		$was_cache_disabled = AtumCache::is_cache_disabled();
+		if ( ! $was_cache_disabled ) {
+			AtumCache::disable_cache();
+		}
 		
 		do_action( 'atum/product_data/before_save_product_meta_boxes', $product_id, $post );
 
@@ -497,6 +501,10 @@ class ProductDataMetaBoxes {
 		$this->save_atum_meta_boxes();
 
 		do_action( 'atum/product_data/after_save_product_meta_boxes', $product_id, $post );
+
+		if ( ! $was_cache_disabled ) {
+			AtumCache::enable_cache();
+		}
 
 	}
 
@@ -509,6 +517,12 @@ class ProductDataMetaBoxes {
 	 * @param int $loop
 	 */
 	public function save_product_variation_meta_boxes( $variation_id, $loop ) {
+
+		// Disable cache to avoid saving the wrong data.
+		$was_cache_disabled = AtumCache::is_cache_disabled();
+		if ( ! $was_cache_disabled ) {
+			AtumCache::disable_cache();
+		}
 		
 		do_action( 'atum/product_data/before_save_product_variation_meta_boxes', $variation_id, $loop );
 		
@@ -521,6 +535,10 @@ class ProductDataMetaBoxes {
 		$this->save_atum_meta_boxes();
 
 		do_action( 'atum/product_data/after_save_product_variation_meta_boxes', $variation_id, $loop );
+
+		if ( ! $was_cache_disabled ) {
+			AtumCache::enable_cache();
+		}
 
 	}
 

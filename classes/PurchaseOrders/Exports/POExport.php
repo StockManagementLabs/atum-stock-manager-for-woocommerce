@@ -48,7 +48,7 @@ class POExport extends PurchaseOrder {
 		
 		if ( PurchaseOrders::get_post_type() !== $post_type ) {
 			/* translators: the post ID */
-			wp_die( sprintf( __( 'Not a Purchase Order (%d)', ATUM_TEXT_DOMAIN ), $id ) );
+			wp_die( sprintf( esc_html__( 'Not a Purchase Order (%d)', ATUM_TEXT_DOMAIN ), (int) $id ) );
 		}
 		
 		// Always read items.

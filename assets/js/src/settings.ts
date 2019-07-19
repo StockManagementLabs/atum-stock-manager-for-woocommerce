@@ -12,7 +12,6 @@ window['$'] = window['jQuery'];
  * Third Party Plugins
  */
 
-import '../vendor/jquery.address.min';  // This is not downloading the sources
 import '../vendor/select2';             // A fixed version compatible with webpack
 
 

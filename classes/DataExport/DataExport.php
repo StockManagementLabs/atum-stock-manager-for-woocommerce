@@ -97,52 +97,6 @@ class DataExport {
 
 	}
 
-	/* @noinspection PhpUnusedPrivateMethodInspection */
-	/**
-	 * Set the reponse header to make the returning file downloadable
-	 *
-	 * @since 1.2.5
-	 *
-	 * @param string $filename  The output file name.
-	 * @param string $type       The file type.
-	 */
-	private function set_file_headers( $filename, $type ) {
-
-		if ( FALSE === strpos( $filename, ".$type" ) ) {
-			$filename .= ".$type";
-		}
-
-		$mime_type = '';
-		switch ( $type ) {
-
-			case 'pdf':
-				$mime_type = 'application/pdf';
-				break;
-
-			case 'xls':
-				$mime_type = 'application/vnd.ms-excel';
-				break;
-
-			case 'xslx':
-				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-				break;
-
-			case 'csv':
-				$mime_type = 'text/csv';
-				break;
-
-		}
-
-		header( 'Content-Description: File Transfer' );
-		header( "Content-type: $mime_type" );
-		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
-		header( 'Content-Transfer-Encoding: binary' );
-		header( 'Expires: 0' );
-		header( 'Cache-Control: must-revalidate' );
-		header( 'Pragma: public' );
-
-	}
-
 	/**
 	 * Export the ATUM data to file
 	 *

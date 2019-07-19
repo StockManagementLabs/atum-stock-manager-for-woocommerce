@@ -1,13 +1,13 @@
 === ATUM Inventory Management for WooCommerce ===
 
-Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, julianberebel
+Contributors: stockmanagementlabs, salvamb, japiera, agimeno82
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.1.1
+Tested up to: 5.2.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.6.1
-Stable tag: 1.5.8
+WC tested up to: 3.6.4
+Stable tag: 1.5.8.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,202 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.5.8.10`
+
+*2019-07-15*
+
+**Fixes**
+
+* Fixed conflicts with ATUM's datepickers and 3rd party plugins.
+* CSS fixes.
+* Refactory.
+
+---
+
+`1.5.8.9`
+
+*2019-06-28*
+
+**Fixes**
+
+* Prevent "no tags" error on dashboard's video widget when a video doesn't have tags.
+* Check that a product still exists before trying to display it on List Tables.
+* Fixed BOM variations removal.
+* Avoid memory leaks when deleting cache groups.
+* Refactory.
+
+---
+
+`1.5.8.8`
+
+*2019-06-21*
+
+**Fixes**
+
+* Fixed Marketing Poput for ATUM Export css.
+
+---
+
+`1.5.8.7`
+
+*2019-06-21*
+
+**Changes**
+
+* Added new Marketing Popup for ATUM Export Pro beta-testing registration.
+* Added dashboard's marketing widget for ATUM Export Pro.
+
+**Fixes**
+
+* Fixed undefined value added to ListTable search box when not searching anything.
+* Refactory.
+
+---
+
+`1.5.8.6`
+
+*2019-06-13*
+
+**Changes**
+
+* Changed stock on hold formula.
+
+**Fixes**
+
+* Fixed action links positioning on post type list tables.
+* Fixed orphan items showing in Inbound Stock list for Purchase Orders with wrong status.
+* Fixed special characters not working in search terms when filtering.
+* Refactory.
+* CSS fixes.
+
+---
+
+`1.5.8.5`
+
+*2019-06-03*
+
+**Changes**
+
+* Updated ATUM icon font.
+
+**Fixes**
+
+* Fixed stock double increased/decreased when using the PO’s bulk actions.
+* Fixed TimePicker not showing numbers.
+* Refactory.
+
+---
+
+`1.5.8.4`
+
+*2019-05-24*
+
+**Fixes**
+
+* Added ATUM data sync to translations in WPML.
+* Refactory.
+
+---
+
+`1.5.8.3`
+
+*2019-05-18*
+
+**Changes**
+
+* Added exclude path to TypeScript config.
+* Disable cache while saving ATUM meta boxes to avoid issues.
+* Disabled the cache when saving products through SC to avod saving the wrong data.
+* Ensure that WPML get original translation returns int values.
+* Hide Atum fields for all the product types that are not officially recognized by ATUM.
+
+**Fixes**
+
+* Select2 CSS fixes.
+* Fixed PHP notice when no supplier ID is returned.
+* Avoid conflicts with jQuery UI's datepicker.
+* Fixed popover arrow background.
+* Fixed DateTimePicker options object passed by reference.
+* Fixed string to number conversion issue.
+
+---
+
+`1.5.8.2`
+
+*2019-05-08*
+
+**Features**
+
+* Delete the ATUM data when a product is removed from database.
+
+**Changes**
+
+* Catch any possible exception that may arise when saving the SC data.
+* Remove the Stock Central's overlay when an error is returned when saving data.
+
+**Fixes**
+
+* Fixed issue with back orders counting on Stock Central.
+* Save the ATUM data when the variations are created from attributes.
+* Refactory.
+
+---
+
+`1.5.8.1`
+
+*2019-05-02*
+
+**Fixes**
+
+* Do not use ATUM queues in WC versions that does not support them.
+* Fixed Inventory Logs' items blocker message showing all the time.
+
+---
+
+`1.5.8`
+
+*2019-04-30*
+
+**Features**
+
+* Performance improvement: reduced number of db queries performed in Stock Central to the half.
+* Performance improvement: added new columns to ATUM product data table to reduce calculations on every page load.
+* Performance improvement: added new key indexes to ATUM tables.
+* Performance improvement: SQL queries refactorized to use new db columns.
+* Performance improvement: re-save the new columns when needed.
+* Performance improvement: added scheduled action to recalculate sales' columns once per day.
+* Added all the new columns to the Stock Central's search by column feature.
+* Allow sorting by the new columns in Stock Central.
+* Update Inbound Stock every time a PO si moved or restored from trash.
+* Update all the ATUM props related to ATUM orders when moving or restoring from trash.
+* Added ability to disable ATUM cache temporarily.
+
+**Changes**
+
+* Date adjustments for queries.
+* Add alert to updated order when the multiple suppliers switch changes.
+* Changed hook used for saving order ATUM props.
+* Updated mPDF to version 8.0.0.
+* Enable the ATUM control switch by default when creating a new product.
+
+**Fixes**
+
+* Fixed search on ATUM Orders' tables.
+* Fixed sticky column when using pagination in Stock Central.
+* CSS fixes.
+* Fixed height on search dropdown menu.
+* Fixed bug with ATUM Order status names change.
+* Fixed showing/hiding blocker when Multiple Suppliers switch is changed.
+* Fixed bug on "is_atum_ajax" helper.
+* Fixed blank cells showing on Sales Last Days column.
+* Fixed blank cells on Stock Indicator column.
+* Show the right color on location icons with no locations.
+* Fixed issue with ATUM locations editing in Stock Central.
+* Center the numeric columns.
+* Fixed POs not decreasing/increasing the stock when changing their status.
 
 ---
 

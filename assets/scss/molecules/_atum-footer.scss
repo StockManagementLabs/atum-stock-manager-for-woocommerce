@@ -8,10 +8,9 @@
 	
 	.footer-box {
 		height: 90px;
-		background: var(--atum-footer-bg) url("#{$img-path}stock-central/bg-footer.png") no-repeat center 81%;
+		@include atum-panel();
+		background: var(--atum-footer-bg) url("#{$atum-img-path}stock-central/bg-footer.png") no-repeat center 81%;
 		background-size: cover;
-		border-radius: 8px;
-		box-shadow: 0 4px 0 0 $gray-200;
 		padding: 0 23px;
 		display: flex;
 		align-items: center;
@@ -34,7 +33,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: flex-start;
-			padding: 6.4px 0 5px;
+			padding: 6px 0 5px;
 			
 			img {
 				width: 34px;

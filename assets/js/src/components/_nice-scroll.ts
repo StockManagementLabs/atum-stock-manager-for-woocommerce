@@ -10,7 +10,7 @@ export let NiceScroll = {
 	
 	addScrollBars($elem: JQuery, opts?: any) {
 		
-		const $boxSelector: any  = this.getScrollBars($elem);
+		const $boxSelector: any = this.getScrollBars($elem);
 		
 		if ($boxSelector.length) {
 			

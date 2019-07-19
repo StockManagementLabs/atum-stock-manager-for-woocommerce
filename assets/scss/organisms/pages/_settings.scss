@@ -34,8 +34,7 @@
 		float: right;
 		width: 165px;
 		height: 44px;
-		border-radius: 8px;
-		box-shadow: 0 4px 0 0 var(--gray-200);
+		@include atum-panel();
 		background-color: var(--blue-dark-lighten);
 		color: var(--white);
 		font-weight: bold;
@@ -43,23 +42,86 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-evenly;
-		
+
+		&.bg-light {
+			background-color: var(--white);
+			color: var(--gray-600);
+		}
 	}
 
 	.atum-nav {
 		border: none;
+		@include atum-panel();
 		background-color: var(--atum-settings-nav-bg);
-		border-radius: 6px;
 		position: relative;
 		min-width: 230px;
-		box-shadow: 0 4px 0 0 var(--gray-200);
 		min-height: 550px;
 		
 		@include mobile-max {
 			min-height: inherit;
 		}
 	}
-	
+
+	.atum-nav-light {
+		background-color: var(--white);
+
+		.atum-nav-header {
+			background-color: var(--blue);
+
+			.toogle-menu {
+				color: var(--white);
+			}
+		}
+		.atum-nav-link {
+			color: $blue;
+
+			&:hover, &:focus {
+				background-color: var(--blue-light);
+				color: var(--blue);
+			}
+
+			.menu-helper {
+				&:before, &:after {
+					background: transparent;
+				}
+			}
+
+			&.active {
+				cursor: default;
+				background-color: var(--blue-light);
+				color: va(--blue);
+				border-right: 3px solid var(--blue);
+
+				.menu-helper {
+					animation: inherit;
+				}
+			}
+		}
+
+		.atum-nav-item {
+			box-shadow: 0 1px 0 0 var(--gray-200);
+		}
+
+		.nav-footer {
+			.nav-footer-logo {
+				span {
+					color: var(--blue-dark);
+				}
+			}
+
+			p {
+				color: var(--gray-500);
+
+				a {
+					color: var(--blue);
+
+					&:hover {
+						color: var(--blue);
+					}
+				}
+			}
+		}
+	}
 	.atum-nav-header {
 		background-color: var(--atum-settings-heads-bg);
 		box-shadow: 0 1px 0 0 var(--white-shadow);
@@ -227,6 +289,15 @@
 
 		}
 
+		&.active {
+			cursor: default;
+			background-color: var(--blue-dark-light-2);
+			font-size: 15px;
+			font-weight: bold;
+			color: var(--white);
+			border-right: 3px solid var(--white);
+		}
+
 	}
 
 	@include desktop-max {
@@ -328,7 +399,21 @@
 			}
 
 		}
-		
+		.atum-nav-light {
+			.atum-nav-header {
+				background-color: var(--blue);
+				box-shadow: 0 1px 0 0 var(--gray-200);
+
+				.toogle-menu {
+					background-color: transparent;
+					border: none;
+
+					&:focus, &:active {
+						outline: 0;
+					}
+				}
+			}
+		}
 	}
 	
 	// Settings form
@@ -353,14 +438,7 @@
 			&.overlay {
 				&:before {
 					content: '';
-					position: absolute;
-					left: 0;
-					right: 0;
-					top: 0;
-					bottom: 0;
-					z-index: 10;
-					background-color: var(--gray-100);
-					opacity: 0.5;
+					@include overlay(var(--gray-100), 0.5, 10);
 				}
 				
 				&:after {
@@ -419,6 +497,21 @@
 				font-weight: bold;
 				padding-left: 5px;
 				font-weight: bold;
+			}
+		}
+		
+		.section-general-title-light {
+			background-color: var(--blue);
+			
+			h2 {
+				color: var(--white);
+			}
+			
+			input[type=submit] {
+				&, &:hover {
+					background-color: var(--white);
+					color: var(--blue);
+				}
 			}
 		}
 		
@@ -521,16 +614,36 @@
 				font-weight: bold;
 			}
 			
+			&.section-title-light {
+				background-color: var(--white);
+				border-bottom: 1px solid darken($light, 5%);
+				
+				h2 {
+					color: $blue-dark;
+				}
+			}
 		}
 		
 		.section-fields {
 			padding: 0px 20px 120px 25px;
 			border-bottom-right-radius: 6px;
 			border-bottom-left-radius: 6px;
-			background: var(--atum-settings-section-bg) url("#{$img-path}settings/bg-settings.png") no-repeat bottom;
+			background: var(--atum-settings-section-bg) url("#{$atum-img-path}settings/bg-settings.png") no-repeat bottom;
 			background-size: 100% auto;
 			box-shadow: 0 4px 0 0 var(--gray-200);
 			position: relative;
+			
+			&.section-field-light {
+				background-color: $white;
+				
+				tr:not(:last-child) {
+					border-bottom: 1px solid darken($light, 5%);
+				}
+				
+				th {
+					color: $gray-600;
+				}
+			}
 			
 			.reset-default-colors {
 				position: absolute;

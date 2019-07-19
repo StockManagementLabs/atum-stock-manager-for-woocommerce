@@ -627,7 +627,7 @@ final class Helpers {
 				if ( $sold_last_days > 0 ) {
 
 					$average_sales = $sold_last_days / $days;
-					$price         = $product->get_regular_price();
+					$price         = floatval( $product->get_regular_price() );
 
 					$lost_sales = $days_out_of_stock * $average_sales * $price;
 
@@ -1651,7 +1651,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Get the stock on hold amount for the specified product
+	 * Get the stock on hold amount (orders that have been paid but are not marked as completed yet) for the specified product
 	 *
 	 * @since 1.5.8
 	 *
@@ -1682,7 +1682,7 @@ final class Helpers {
 					LEFT JOIN $wpdb->order_itemmeta omq ON omq.`order_item_id` = oi.`order_item_id`
 					LEFT JOIN $wpdb->order_itemmeta omp ON omp.`order_item_id` = oi.`order_item_id`			  
 					WHERE order_id IN (
-						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-pending', 'wc-on-hold')
+						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')
 					)
 					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value = %d 
 					GROUP BY omp.meta_value",
@@ -1918,7 +1918,7 @@ final class Helpers {
 	 *
 	 * @return array
 	 */
-	public static function get_support_button() {
+	public static function get_support_buttons() {
 		
 		if ( Addons::has_valid_key() ) {
 			$support['support_link']        = 'https://stockmanagementlabs.ticksy.com/';
@@ -3165,4 +3165,52 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Return the classes (product types ) to hide option groups in WC data panels
+	 *
+	 * @since 1.5.8.3
+	 *
+	 * @param bool $is_array Whether to return an array or a string.
+	 *
+	 * @return array|string
+	 */
+	public static function get_option_group_hidden_classes( $is_array = TRUE ) {
+
+		$classes = [];
+
+		foreach ( Globals::get_incompatible_products() as $product_type ) {
+
+			$classes[] = "hide_if_$product_type";
+		}
+
+		return $is_array ? $classes : implode( ' ', $classes );
+	}
+	
+	/**
+	 * Duplicates an entry from atum product data table.
+	 * Needs to be updated when the database changes.
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param integer $original_id
+	 * @param integer $destination_id
+	 */
+	public static function duplicate_atum_product( $original_id, $destination_id ) {
+		
+		global $wpdb;
+		
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		
+		$wpdb->query( "
+			INSERT IGNORE INTO $atum_product_data_table
+			SELECT $destination_id, purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+			out_stock_threshold,inheritable,bom_sellable,minimum_threshold,available_to_purchase,
+			selling_priority,inbound_stock,stock_on_hold,sold_today,sales_last_days,reserved_stock,
+			customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,lost_sales,
+			has_location,update_date,calculated_stock
+			FROM $atum_product_data_table WHERE product_id = $original_id;
+		" ); // WPCS: unprepared SQL ok.
+		
+	}
+	
 }

@@ -3,7 +3,7 @@
 //----------------------------
 
 .swal2-container {
-	z-index: 100000000;
+	z-index: 100000 !important;
 	
 	.swal2-content, .swal2-title {
 		margin-bottom: $grid-gutter-width;
@@ -20,12 +20,16 @@
 			box-shadow: none;
 			
 			&:hover {
-				border: solid 1px var(--gray-600);
+				border-color: var(--gray-600);
 			}
 			
 			&:focus {
-				border: solid 1px var(--blue);
+				border-color: var(--blue);
 			}
+		}
+		
+		.atum-link {
+			text-decoration: underline;
 		}
 	}
 	
@@ -35,16 +39,17 @@
 		color: var(--gray-600);
 	}
 	
+	.swal2-modal {
+		font-family: inherit;
+		
 	.swal2-close {
 		font-weight: 100;
 		font-family: inherit;
 		font-size: 30px;
 		line-height: 30px;
-		color: var(--gray-600);
+			color: var(--gray-500);
 	}
 	
-	.swal2-modal {
-		
 		p {
 			font-size: 15px;
 			text-align: center;
@@ -67,6 +72,11 @@
 			font-size: 13px;
 			letter-spacing: 1px;
 			color: var(--atum-table-bg);
+			
+			&.btn-sm {
+				padding: 0.25rem 0.5rem;
+				font-size: 12px;
+			}
 			
 			.atum-icon {
 				position: relative;

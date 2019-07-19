@@ -20,6 +20,7 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 
@@ -767,7 +768,6 @@ abstract class AtumOrderPostType {
 		foreach ( $ids as $id ) {
 			$atum_order = Helpers::get_atum_order_model( $id );
 			$atum_order->update_status( $new_status );
-			$atum_order->save();
 			$changed++;
 		}
 
@@ -919,7 +919,6 @@ abstract class AtumOrderPostType {
 					'purchase_price_changed'   => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
 					'purchase_price_field'     => Globals::PURCHASE_PRICE_KEY,
 					'remove_all_items_notice'  => __( 'This will remove all the items previously added to this order', ATUM_TEXT_DOMAIN ),
-					'itemBlocker'              => __( 'Click the Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN ),
 					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
 					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
@@ -928,6 +927,10 @@ abstract class AtumOrderPostType {
 					// Disable order item selection for only PO when WC version >= 3.5.0.
 					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
 				);
+
+				if ( InventoryLogs::POST_TYPE !== $post_type ) {
+					$vars['itemBlocker'] = __( 'Click the Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
+				}
 
 				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
 

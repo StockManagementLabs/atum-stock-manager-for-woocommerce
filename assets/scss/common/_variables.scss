@@ -4,8 +4,9 @@
 
 // Paths
 
-$font-path:                             "../fonts/" !default;
-$img-path:                              "../images/" !default;
+$atum-assets-path:                      "../" !default;
+$atum-font-path:                        "#{$atum-assets-path}fonts/" !default;
+$atum-img-path:                         "#{$atum-assets-path}images/" !default;
 
 // Fonts
 
@@ -381,7 +382,7 @@ $btn-line-height-lg:                    $input-btn-line-height-lg !default;
 $btn-border-width:                      $input-btn-border-width !default;
 
 $btn-font-weight:                       $font-weight-normal !default;
-$btn-box-shadow:                        inset 0 1px 0 rgba($white, .15), 0 1px 1px rgba($black, .075) !default;
+$btn-box-shadow:                        none !default;
 $btn-focus-width:                       $input-btn-focus-width !default;
 $btn-focus-box-shadow:                  $input-btn-focus-box-shadow !default;
 $btn-disabled-opacity:                  .3 !default;
@@ -432,12 +433,12 @@ $dropdown-header-color:                 $gray-600 !default;
 // Warning: Avoid customizing these values. They're used for a bird's eye view
 // of components dependent on the z-axis and are designed to all work together
 
-$zindex-dropdown:                       1000 !default;
-$zindex-sticky:                         1020 !default;
-$zindex-fixed:                          1030 !default;
-$zindex-modal-backdrop:                 1040 !default;
-$zindex-modal:                          1050 !default;
-$zindex-tooltip:                        1070 !default;
+$zindex-dropdown:                       1000000 !default;
+$zindex-sticky:                         1000020 !default;
+$zindex-fixed:                          1000030 !default;
+$zindex-modal-backdrop:                 1000040 !default;
+$zindex-modal:                          1000050 !default;
+$zindex-tooltip:                        1000070 !default;
 
 
 // Navs
@@ -514,6 +515,8 @@ $widget-danger:                         $danger !default;
 
 $atum-icon-font: "atum-icon-font" !default;
 
+$atmi-export: "\e98da";
+$atmi-hidden: "\e9d1";
 $atmi-variable-product-part: "\e908";
 $atmi-variable-raw-material: "\e90a";
 $atmi-product-part: "\e907";
@@ -546,7 +549,7 @@ $atmi-info: "\e9be";
 $atmi-view-list-2: "\e904";
 $atmi-view-grid-2: "\e905";
 $atmi-tree: "\e906";
-$atmi-pencil2: "\e90c";
+$atmi-pencil: "\e982";
 $atmi-options: "\e90d";
 $atmi-chart-solid: "\e90e";
 $atmi-chart-outline: "\e90f";
@@ -663,7 +666,6 @@ $atmi-neutral: "\e97e";
 $atmi-page-break: "\e97f";
 $atmi-paperclip: "\e980";
 $atmi-paw: "\e981";
-$atmi-pencil: "\e982";
 $atmi-phone-handset: "\e983";
 $atmi-phone: "\e984";
 $atmi-picture: "\e985";

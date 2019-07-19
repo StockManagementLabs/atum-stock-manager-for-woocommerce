@@ -92,10 +92,7 @@
 		}
 		
 		&:hover, &:focus {
-			opacity: 0.7;
-			color: var(--white);
 			background-color:  var(--atum-page-title-action);
-			border-radius: 5px;
 		}
 		
 		@include tablet-max-wp{
@@ -112,10 +109,15 @@
 	
 	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
 		border-radius: 5px;
+		background-color: var(--orange);
 		font-size: 12px;
 		min-width: 70px;
+		letter-spacing: normal;
+		text-align: center;
+		color: var(--white);
 		text-transform: uppercase;
 		box-shadow: none;
+		border: none;
 		transition: .2s ease-in-out;
 		
 		@include tablet-max-wp{
@@ -123,6 +125,8 @@
 		}
 		
 		&:hover, &.active {
+			background-color: rgba($orange, 0.7);
+			color: var(--white);
 			border: none;
 		}
 		
@@ -629,6 +633,7 @@
 		}
 		
 	}
+	
 	.tablenav-pages-container {
 		
 		.btn {
@@ -918,9 +923,8 @@
 .atum-list-wrapper {
 	width: 100%;
 	overflow: hidden;
+	@include atum-panel();
 	background-color:  var(--atum-table-bg);
-	border-radius: 8px;
-	box-shadow: 0 4px 0 0 var(--gray-200);
 	padding: 0 0 10px;
 	margin: 0 0 18px;
 	
@@ -1496,7 +1500,6 @@
 }
 
 .atum-list-table {
-	
 	border: none !important;
 	
 	// Fixed columns
@@ -1612,6 +1615,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		.item-heads {
 			border-top: 1px solid var(--atum-border);
 			border-bottom: 1px solid var(--atum-border);
+			
 			th {
 				padding: 3px 5px;
 				line-height: 1.1;
@@ -2132,10 +2136,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tbody, #the-list {
 		
-		//:nth-child(odd) {
-		//	background-color: var(--wp-nth-child);
-		//}
-		
 		tr {
 			&.expanded {
 				&.group, &.bundle {
@@ -2241,8 +2241,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			background-color: var(--secondary);
 		}
 		
-		&.column-title {
+		// Where page is not a post type list.
+		body:not(.edit-php) &.column-title {
 			min-width: 171px;
+			display: flex;
 			align-items: center;
 			
 			> span {

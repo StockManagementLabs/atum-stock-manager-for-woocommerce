@@ -133,7 +133,12 @@ class HtmlReport extends ListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product     = Helpers::get_atum_product( $item );
+		$this->product = Helpers::get_atum_product( $item );
+
+		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+			return;
+		}
+
 		$type              = $this->product->get_type();
 		$this->allow_calcs = Helpers::is_inheritable_type( $type ) ? FALSE : TRUE;
 		$row_style         = '';
@@ -199,17 +204,21 @@ class HtmlReport extends ListTable {
 					$this->is_child = TRUE;
 					$this->product  = Helpers::get_atum_product( $child_id );
 
-					if ( 'grouped' === $type ) {
-						$return_type = 'grouped';
-					}
-					elseif ( 'bundle' === $type ) {
-						$return_type = 'bundle-item';
-					}
-					else {
-						$return_type = 'variation';
-					}
+					if ( is_a( $this->product, '\WC_Product' ) ) {
 
-					$this->single_expandable_row( $this->product, ( $return_type ) );
+						if ( 'grouped' === $type ) {
+							$return_type = 'grouped';
+						}
+						elseif ( 'bundle' === $type ) {
+							$return_type = 'bundle-item';
+						}
+						else {
+							$return_type = 'variation';
+						}
+
+						$this->single_expandable_row( $this->product, ( $return_type ) );
+
+					}
 				}
 			}
 

@@ -5,7 +5,7 @@
 /**
  * Third party plugins
  */
-import moment from 'moment/min/moment.min';
+import moment from 'moment/min/moment-with-locales.min';
 import '../../vendor/bootstrap-datetimepicker';     // A fixed version compatible with webpack
 
 import Settings from '../config/_settings';
@@ -75,22 +75,46 @@ export default class DateTimePicker {
 	 * @param jQuery $selector
 	 * @param Object opts
 	 */
-	addDateTimePickers($selector: any, opts: any = {}) {
+	addDateTimePickers($selector: JQuery, opts: any = {}) {
 		
 		$selector.each( (index: number, elem: Element) => {
 			
 			let $dateTimePicker: any = $(elem);
+			const data: any = $dateTimePicker.data() || {};
 			
-			// Extend the date picker options with data options.
-			opts = Object.assign( this.defaults, $dateTimePicker.data() || {}, opts );
+			// If the current element has a DateTimePicker attached, destroy it first.
+			if (data.hasOwnProperty('DateTimePicker')) {
+				this.destroyDateTimePickers($dateTimePicker);
+			}
 			
-			$dateTimePicker.datetimepicker(opts);
+			// Use the spread operator to create a new options object in order to not conflict with other DateTimePicker options.
+			$dateTimePicker.bsDatetimepicker({
+				...this.defaults,
+				...data,
+				...opts
+			});
 			
 		})
 		.on('dp.change', (evt: any) => {
 			
-			const label: string = typeof evt.date === 'object' ? evt.date.format(this.settings.get('dateFormat')) : this.settings.get('none');
-			$(evt.currentTarget).siblings('.field-label').addClass('unsaved').text(label);
+			evt.stopImmediatePropagation();
+			
+			const $fieldLabel: JQuery = $(evt.currentTarget).siblings('.field-label');
+			
+			if ($fieldLabel.length) {
+				
+				const currentLabel: string = $fieldLabel.text(),
+				      newLabel: string     = typeof evt.date === 'object' ? evt.date.format(this.settings.get('dateFormat')) : this.settings.get('none');
+				
+				// Only update it if changed.
+				if (newLabel !== currentLabel) {
+					$fieldLabel.addClass('unsaved').text(newLabel);
+				}
+				else {
+					$fieldLabel.removeClass('unsaved');
+				}
+				
+			}
 			
 		})
 		.on('dp.show', (evt: any) => {
@@ -107,6 +131,20 @@ export default class DateTimePicker {
 			}).each( (index: number, elem: Element) => {
 				$(elem).data('DateTimePicker').hide();
 			});
+			
+		});
+		
+	}
+	
+	destroyDateTimePickers($selector: JQuery) {
+		
+		$selector.each( (index: number, elem: Element) => {
+			
+			let dateTimePicker: any = $(elem).data('DateTimePicker');
+			
+			if (typeof dateTimePicker !== 'undefined') {
+				dateTimePicker.destroy();
+			}
 			
 		});
 		

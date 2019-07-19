@@ -8,10 +8,12 @@
 		"removeComments": true,
 		"moduleResolution": "node",
 		"typeRoots": [ "./assets/js/src/types", "./node_modules/@types"],
-		"incremental": true
+		"incremental": true,
+		"tsBuildInfoFile": "./assets/js/build/buildcache"
 	},
 	"exclude": [
 		"node_modules",
-		"./assets/js/src/types"
+		"./assets/js/src/types",
+		"./vendor"
 	]
 }

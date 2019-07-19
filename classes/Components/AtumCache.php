@@ -23,7 +23,7 @@ final class AtumCache {
 	const CACHE_GROUP = ATUM_TEXT_DOMAIN;
 	
 	/**
-	 * Store the distinct chace groups.
+	 * Store the distinct cache groups.
 	 *
 	 * @var array
 	 */
@@ -79,14 +79,12 @@ final class AtumCache {
 	 */
 	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP, $force = FALSE, &$found = NULL ) {
 
-		self::$cache_groups[ $cache_group ] = empty( self::$cache_groups[ $cache_group ] ) ? $cache_group : self::$cache_groups[ $cache_group ];
-
 		if ( self::$disable_cache ) {
 			$found = FALSE;
 			return $found;
 		}
 
-		return wp_cache_get( $cache_key, self::$cache_groups[ $cache_group ], $force, $found );
+		return wp_cache_get( $cache_key, $cache_group, $force, $found );
 	}
 
 	/**
@@ -102,12 +100,13 @@ final class AtumCache {
 	 * @return bool  FALSE if value was not set or TRUE if value was set
 	 */
 	public static function set_cache( $cache_key, $value, $cache_group = self::CACHE_GROUP, $expire = 30 ) {
-		
-		if ( ! isset( self::$cache_groups[ $cache_group ] ) ) {
-			self::reset_group( $cache_group );
+
+		// Save the current key under its own group to be able to delete the entire group later.
+		if ( $cache_group && ( ! isset( self::$cache_groups[ $cache_group ] ) || ! in_array( $cache_key, self::$cache_groups[ $cache_group ] ) ) ) {
+			self::$cache_groups[ $cache_group ][] = $cache_key;
 		}
 		
-		return wp_cache_set( $cache_key, $value, self::$cache_groups[ $cache_group ], $expire );
+		return wp_cache_set( $cache_key, $value, $cache_group, $expire );
 	}
 
 	/**
@@ -122,10 +121,6 @@ final class AtumCache {
 	 */
 	public static function delete_cache( $cache_key, $cache_group = self::CACHE_GROUP ) {
 		
-		if ( ! isset( self::$cache_groups[ $cache_group ] ) ) {
-			self::reset_group( $cache_group );
-		}
-		
 		return wp_cache_delete( $cache_key, $cache_group );
 	}
 	
@@ -136,9 +131,33 @@ final class AtumCache {
 	 *
 	 * @param string $cache_group
 	 */
-	public static function reset_group( $cache_group = self::CACHE_GROUP ) {
-		
-		self::$cache_groups[ $cache_group ] = uniqid();
+	public static function delete_group_cache( $cache_group = self::CACHE_GROUP ) {
+
+		if ( $cache_group && isset( self::$cache_groups[ $cache_group ] ) ) {
+
+			foreach ( self::$cache_groups[ $cache_group ] as $cache_key ) {
+				self::delete_cache( $cache_key, $cache_group );
+			}
+
+			unset( self::$cache_groups[ $cache_group ] );
+
+		}
+	}
+
+	/**
+	 * Regenerate all groups names to pretend like the've been erased
+	 *
+	 * @since 1.5.8
+	 */
+	public static function delete_all_atum_caches() {
+
+		if ( ! empty( self::$cache_groups ) ) {
+
+			foreach ( array_keys( self::$cache_groups ) as $cache_group ) {
+				self::delete_group_cache( $cache_group );
+			}
+
+		}
 	}
 
 	/********************

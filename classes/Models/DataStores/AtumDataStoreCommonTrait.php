@@ -16,6 +16,8 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
+use Atum\Inc\Hooks;
+
 
 trait AtumDataStoreCommonTrait {
 	
@@ -157,7 +159,7 @@ trait AtumDataStoreCommonTrait {
 			
 		}
 
-		do_action( 'atum/data_store/after_saving_product_data', $data );
+		do_action( 'atum/data_store/after_save_product_data', $data, $product->get_id() );
 		
 	}
 	
@@ -173,14 +175,56 @@ trait AtumDataStoreCommonTrait {
 		
 		global $wpdb;
 
-		/* @noinspection PhpUndefinedClassInspection */
-		parent::delete( $product, $args );
-		
-		// Delete the ATUM data for this product.
-		if ( $args['force_delete'] ) {
-			$wpdb->delete( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, array( 'product_id' => $product->get_id() ), array( '%d' ) );
+		$id = $product->get_id();
+
+		$args = wp_parse_args(
+			$args,
+			array(
+				'force_delete'   => FALSE, // If the product is being trashed or removed completely.
+				'delete_product' => TRUE,  // If the product itself must be removed too.
+			)
+		);
+
+		if ( ! $id ) {
+			return;
 		}
 		
+		// Delete the ATUM data for this product.
+		if ( TRUE === $args['force_delete'] ) {
+
+			$wpdb->delete(
+				$wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE,
+				[ 'product_id' => $id ],
+				[ '%d' ]
+			);
+
+			do_action( 'atum/data_store/after_delete_product_data', $product, $args );
+
+		}
+
+		if ( TRUE === $args['delete_product'] ) {
+
+			$post_type = $product->is_type( 'variation' ) ? 'product_variation' : 'product';
+
+			if ( $args['force_delete'] ) {
+
+				// Avoid our custom hook to run this method again.
+				remove_action( "woocommerce_delete_$post_type", array( Hooks::get_instance(), 'after_delete_product' ) );
+
+				do_action( "woocommerce_before_delete_$post_type", $id ); // Default WC action for compatibility.
+				wp_delete_post( $id );
+				$product->set_id( 0 );
+				do_action( "woocommerce_delete_$post_type", $id ); // Default WC action for compatibility.
+
+			}
+			else {
+				wp_trash_post( $id );
+				$product->set_status( 'trash' );
+				do_action( "woocommerce_trash_$post_type", $id ); // Default WC action for compatibility.
+			}
+
+		}
+
 	}
 	
 	/**

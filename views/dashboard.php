@@ -8,6 +8,7 @@
  * @var string                    $support_button_text
  * @var array                     $widgets
  * @var \Atum\Dashboard\Dashboard $dashboard
+ * @var \Atum\Components\AtumMarketingPopup $marketing_popup
  */
 
 defined( 'ABSPATH' ) || die;
@@ -41,34 +42,49 @@ defined( 'ABSPATH' ) || die;
 	<section class="dash-cards owl-carousel owl-theme dash-marketing-banner-container">
 
 		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ); ?>;">
+
 			<span class="atmi-cross marketing-close"></span>
 			<img src="<?php echo esc_attr( $marketing_popup->get_images()->top_left ); ?>" class="image" alt="">
+
 			<div class="content">
 				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_images()->logo ); ?>">
+
 				<div class="content-description">
+
 					<?php $version = $marketing_popup->get_version(); ?>
 					<?php $title = $marketing_popup->get_title(); ?>
-					<?php if ( isset( $title ) ) { ?>
-						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? 'color:' . $title->text_color . ';' : '' ); ?><?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? 'font-size:' . $title->text_size . ';' : '' ); ?><?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? 'text-align:' . $title->text_align . ';' : '' ); ?>"><?php echo isset( $title->text ) ? $title->text : ''; // WPCS: XSS ok. ?>
-							<?php if ( isset( $version ) ) { ?>
-								<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? 'color:' . $version->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? 'background:' . $version->background . ';' : '' ); ?>;"><?php echo isset( $version->text ) ? $version->text : ''; // WPCS: XSS ok. ?></span>
-							<?php } ?>
+					<?php if ( ! empty( $title ) ) : ?>
+						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? "color:{$title->text_color};" : '' ) ?><?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? "font-size:{$title->text_size};" : '' ) ?><?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? "text-align:{$title->text_align};" : '' ) ?>">
+
+							<?php echo isset( $title->text ) ? $title->text : ''; // WPCS: XSS ok. ?>
+
+							<?php if ( ! empty( $version ) ) : ?>
+								<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? "color:{$version->text_color};" : '' ) ?><?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? "background:{$version->background};" : '' ) ?>"><?php echo isset( $version->text ) ? $version->text : ''; // WPCS: XSS ok. ?></span>
+							<?php endif; ?>
+
 						</h1>
-					<?php } ?>
+					<?php endif; ?>
+
 					<?php $description = $marketing_popup->get_description(); ?>
-					<?php if ( isset( $description ) ) { ?>
-						<p style="<?php echo esc_attr( isset( $description->text_color ) && '' !== $description->text_color ? 'color:' . $description->text_color . ';' : '' ); ?>;<?php echo esc_attr( isset( $description->text_size ) && '' !== $description->text_size ? 'font-size:' . $description->text_size . ';' : '' ); ?>;<?php echo esc_attr( isset( $description->text_align ) && '' !== $description->text_align ? 'text-align:' . $description->text_align . ';' : '' ); ?>"><?php echo isset( $description->text ) ? $description->text : ''; // WPCS: XSS ok. ?></p>
-					<?php } ?>
+					<?php if ( ! empty( $description ) ) : ?>
+						<p style="<?php echo esc_attr( isset( $description->text_color ) && '' !== $description->text_color ? "color:{$description->text_color};" : '' ) ?><?php echo esc_attr( isset( $description->text_size ) && '' !== $description->text_size ? "font-size:{$description->text_size};" : '' ) ?><?php echo esc_attr( isset( $description->text_align ) && '' !== $description->text_align ? "text-align:{$description->text_align};" : '' ) ?>"><?php echo isset( $description->text ) ? $description->text : ''; // WPCS: XSS ok. ?></p>
+					<?php endif; ?>
+
+					<?php $footer_notice = $marketing_popup->get_footer_notice() ?>
+					<?php if ( ! empty( $footer_notice ) ) : ?>
+						<div class="footer-notice"<?php echo ! empty( $footer_notice->bg_color ) ? ' style="background-color:' . esc_attr( $footer_notice->bg_color ) . '"' : ''; // WPCS: XSS ok. ?>>
+							<?php echo $footer_notice->text; // WPCS: XSS ok. ?>
+						</div>
+					<?php endif; ?>
 				</div>
 
 				<div class="content-buttons">
 					<?php $buttons = $marketing_popup->get_buttons(); ?>
-					<?php if ( isset( $buttons ) && ! empty( $buttons ) ) {
-						foreach ( $buttons as $button ) {
-							?>
+					<?php if ( ! empty( $buttons ) ) :
+						foreach ( $buttons as $button ) : ?>
 							<button data-url="<?php echo esc_attr( $button->url ); ?>" class="<?php echo esc_attr( $button->class ); ?> banner-button" style="<?php echo esc_attr( $button->css ); ?>"><?php echo esc_attr( $button->text ); ?></button>
-							<?php
-						}} ?>
+						<?php endforeach;
+					endif;?>
 				</div>
 			</div>
 

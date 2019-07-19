@@ -471,10 +471,15 @@ class Main {
 				$footer_text = __( 'Thank you for trusting in <strong>ATUM</strong> for managing your stock.', ATUM_TEXT_DOMAIN );
 			}
 
-			$footer_class = FALSE;
-			$screen_base  = get_current_screen()->base;
+			$footer_class        = FALSE;
+			$screen_base         = get_current_screen()->base;
+			$allow_styled_footer = apply_filters( 'atum/admin/allow_styled_footer', [
+				'edit',
+				'atum-inventory_page_atum-stock-central',
+				'atum-inventory_page_atum-inbound-stock',
+			] );
 
-			if ( 'edit' === $screen_base || 'atum-inventory_page_atum-stock-central' === $screen_base || 'atum-inventory_page_atum-manufacturing-central' === $screen_base || 'atum-inventory_page_atum-inbound-stock' === $screen_base ) {
+			if ( in_array( $screen_base, $allow_styled_footer, TRUE ) ) {
 				$footer_class = TRUE;
 			}
 

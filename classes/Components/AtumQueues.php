@@ -59,7 +59,14 @@ class AtumQueues {
 	 */
 	public function check_queues() {
 
-		$wc_queue = wc()->queue();
+		$wc = wc();
+
+		// Ensure that the current WC version supports queues.
+		if ( ! is_callable( array( $wc, 'queue' ) ) ) {
+			return;
+		}
+
+		$wc_queue = $wc->queue();
 
 		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
 
