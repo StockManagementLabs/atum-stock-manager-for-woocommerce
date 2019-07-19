@@ -147,7 +147,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										<?php
 										if ( 'atum_setting_scheme_color' === $section['id'] ) :
 
-											$theme_setting = Helpers::get_option( 'theme_settings' );
+											$theme_setting = Helpers::get_option( 'theme_settings' ) ? Helpers::get_option( 'theme_settings' ) : 'branded_mode';
 
 											if ( 'dark_mode' === $theme_setting ) {
 												$theme_style = 'Dark';
@@ -182,7 +182,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									continue;
 								endif; ?>
 
-								<?php $theme_setting = str_replace( '_', '-', Helpers::get_option( 'theme_settings' ) ); ?>
+								<?php $theme_setting = Helpers::get_option( 'theme_settings' ) ? str_replace( '_', '-', Helpers::get_option( 'theme_settings' ) ) : 'branded-mode'; ?>
 
 								<div class="section-fields <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-field-light' : '' ?>">
 									<table class="form-table" id="atum-table-color-settings" data-display="<?php echo esc_html( $theme_setting ); ?>">
