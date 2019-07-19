@@ -159,6 +159,18 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.5.8.10`
+
+*2019-07-15*
+
+**Fixes**
+
+* Fixed conflicts with ATUM's datepickers and 3rd party plugins.
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.5.8.9`
 
 *2019-06-28*
