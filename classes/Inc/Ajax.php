@@ -2368,21 +2368,22 @@ final class Ajax {
 			'bm_title_color'           => '#27283B',
 		);
 
-		foreach ( $def_settings as $dset => $dval ) {
+		if ( 0 === intval( $_POST['reset'] ) ) {
 
-			$val = Helpers::get_option( $dset );
+			foreach ( $def_settings as $dset => $dval ) {
+				$val = Helpers::get_option( $dset );
 
-			if ( $val && $val !== $dval )
-				$custom_settings[ $dset ] = $val;
+				if ( $val && $val !== $dval )
+					$custom_settings[ $dset ] = $val;
 
-		}
+			}
 
-		if ( count( $custom_settings ) > 0 ) {
-			foreach ( $custom_settings as $cset => $cval ) {
-				if ( 0 === intval( $_POST['reset'] ) ) {
+			if ( count( $custom_settings ) > 0 ) {
+				foreach ( $custom_settings as $cset => $cval ) {
 					$def_settings[ $cset ] = $cval;
 				}
 			}
+
 		}
 
 		wp_send_json_success( $def_settings );

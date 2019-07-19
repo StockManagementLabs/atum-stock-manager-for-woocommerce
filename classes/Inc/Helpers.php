@@ -2639,7 +2639,8 @@ final class Helpers {
 
 		$style = '';
 
-		$theme_settings = self::get_option( 'theme_settings' );
+		$theme_settings = self::get_option( 'theme_settings' ) ? self::get_option( 'theme_settings' ) : 'branded_mode';
+
 		if ( 'dark_mode' === $theme_settings ) {
 			$prefix = 'dm_';
 		}
@@ -2685,7 +2686,7 @@ final class Helpers {
 		$bg_1_color_rgb        = self::convert_hexadecimal_to_rgb( $bg_1_color );
 		$bg_2_color            = self::get_option( $prefix . 'bg_2_color' ) ? self::get_option( $prefix . 'bg_2_color' ) : $gray_100;
 		$danger_color          = self::get_option( $prefix . 'danger_color' ) ? self::get_option( $prefix . 'danger_color' ) : '#ff4848';
-		$title_color           = self::get_option( $prefix . 'title_color' ) ? self::get_option( $prefix . 'title_color' ) : '#ffffff';
+		$title_color           = self::get_option( $prefix . 'title_color' ) ? self::get_option( $prefix . 'title_color' ) : '#27283B';
 
 		if ( 'hc_mode' === $theme_settings ) {
 			$secondary_color       = $primary_color;
