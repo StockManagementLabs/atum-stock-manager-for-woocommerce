@@ -147,7 +147,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 										<?php
 										if ( 'atum_setting_scheme_color' === $section['id'] ) :
 
-											$theme_setting = Helpers::get_option( 'theme_settings' ) ? Helpers::get_option( 'theme_settings' ) : 'branded_mode';
+											$theme_setting = Helpers::get_option( 'theme_settings', 'branded_mode' );
 
 											if ( 'dark_mode' === $theme_setting ) {
 												$theme_style = 'Dark';
