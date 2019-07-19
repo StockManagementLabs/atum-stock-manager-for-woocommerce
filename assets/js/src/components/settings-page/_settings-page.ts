@@ -174,6 +174,10 @@ export default class SettingsPage {
 					$(this).parents('tr').hide();
 				}
 			});
+			$("#atum-table-color-settings tr").each(function() {
+				if($(this).css('display') == 'none')
+					$(this).prependTo($("#atum-table-color-settings tbody"));
+			});
 		}
 	}
 	
