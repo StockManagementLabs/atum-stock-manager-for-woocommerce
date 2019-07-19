@@ -191,7 +191,8 @@ class Dashboard {
 			'layout'          => $user_widgets_layout,
 			'dashboard'       => $this,
 			'marketing_popup' => $marketing_popup,
-		), Helpers::get_support_buttons() ) );
+			'darkmode'        => ( 'dark_mode' === Helpers::get_option( 'theme_settings' ) ) ? 1 : 0,
+		), Helpers::get_support_button() ) );
 		
 	}
 
@@ -317,6 +318,11 @@ class Dashboard {
 			 * ATUM Dashboard scripts.
 			 */
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', $style_deps, ATUM_VERSION );
+			// Get visual mode style selected.
+			wp_add_inline_style(
+				'atum-dashboard',
+				Helpers::get_visual_mode_style()
+			);
 			wp_enqueue_style( 'atum-dashboard' );
 
 			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum-dashboard.js', $script_deps, ATUM_VERSION, TRUE );

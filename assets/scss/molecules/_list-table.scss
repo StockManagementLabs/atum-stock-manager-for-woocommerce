@@ -33,7 +33,7 @@
 			margin-left: 5px;
 			border-radius: 0;
 			vertical-align: middle;
-			background-color: $blue;
+			background-color: var(--blue);
 			border-radius: 5px;
 			text-shadow: none;
 			box-shadow: none;
@@ -42,11 +42,11 @@
 			height: 30px;
 			
 			&:hover {
-				background-color: rgba($blue, 0.6);
+				background-color: var(--blue-hover);
 			}
 			
 			&:active {
-				color: $white;
+				color:  var(--white);
 				padding: 0 10px 1px;
 			}
 		}
@@ -72,8 +72,8 @@
 	
 	.page-title-action, .page-title-action:active {
 		border-radius: 5px;
-		background-color: $green;
-		color: $white;
+		background-color: var(--atum-page-title-action);
+		color:  var(--white);
 		font-size: 14px;
 		font-weight: normal;
 		line-height: 30px;
@@ -92,7 +92,7 @@
 		}
 		
 		&:hover, &:focus {
-			background-color: rgba($green, .6);
+			background-color:  var(--atum-page-title-action);
 		}
 		
 		@include tablet-max-wp{
@@ -109,12 +109,12 @@
 	
 	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
 		border-radius: 5px;
-		background-color: $orange;
+		background-color: var(--orange);
 		font-size: 12px;
 		min-width: 70px;
 		letter-spacing: normal;
 		text-align: center;
-		color: $white;
+		color: var(--white);
 		text-transform: uppercase;
 		box-shadow: none;
 		border: none;
@@ -126,7 +126,7 @@
 		
 		&:hover, &.active {
 			background-color: rgba($orange, 0.7);
-			color: $white;
+			color: var(--white);
 			border: none;
 		}
 		
@@ -149,6 +149,7 @@
 		
 		li {
 			padding: 0;
+			color: transparent;
 			
 			span {
 				display: flex;
@@ -158,41 +159,41 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: $blue;
+					background-color: var(--blue);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color: $white;
+					color:  var(--white);
 					
 					.text-blue {
-						color: $white;
+						color:  var(--white);
 					}
 					
 					.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
-						color: $white;
+						color:  var(--white);
 						
 						&.empty {
-							color: $white;
+							color:  var(--white);
 						}
 						
 						a {
-							color: $white;
+							color:  var(--white);
 							
 							&.empty {
-								color: $white;
+								color:  var(--white);
 							}
 						}
 					}
 					
 					a {
-						color: $white;
+						color:  var(--white);
 						padding: 0;
 						
 						&.empty, &.tips, &.empty {
-							color: $white;
+							color:  var(--white);
 						}
 						
 						.active {
@@ -203,61 +204,61 @@
 					.count {
 						font-size: 16px;
 						font-weight: bold;
-						color: $white;
+						color:  var(--white);
 						
 						&.empty {
-							color: $white;
+							color:  var(--white);
 						}
 					}
 				}
 				
 				a {
-					color: $gray-500;
+					color: var(--atum-table-views-tabs);
 					padding: 0;
 					
 					&.current {
 						pointer-events: none;
-						color: $white;
+						color:  var(--white);
 						font-weight: bold;
 					}
 					
 					.text-blue {
-						color: $blue;
+						color:  var(--blue);
 					}
 					
 					&.tips {
-						color: $blue;
+						color:  var(--blue);
 						&:hover {
 							cursor: pointer;
 						}
 					}
 					
 					&.empty {
-						color: $gray-500;
+						color: var(--atum-table-views-tabs);
 					}
 				}
 				
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
-					color: $blue;
+					color: var(--blue);
 					&.empty {
-						color: $gray-500;
+						color: var(--atum-table-views-tabs);
 						a {
 							padding: 0;
-							color: $gray-500;
+							color: var(--atum-table-views-tabs);
 						}
 					}
 					a {
 						padding: 0;
-						color: $blue;
+						color:  var(--blue);
 					}
 				}
 				
 				.count {
 					font-size: 16px;
 					font-weight: bold;
-					color: $blue;
+					color:  var(--blue);
 					
 					&.extra-links-container {
 						font-size: 14px;
@@ -265,14 +266,14 @@
 					}
 					
 					&.empty {
-						color: $gray-500;
+						color: var(--atum-table-views-tabs);
 					}
 				}
 			}
 		}
 	}
 	
-	background-color: $white;
+	background-color:  var(--atum-table-bg);
 	width: 100%;
 	position: relative;
 	font-size: 16px;
@@ -297,32 +298,32 @@
 	&:not(.extend-list-table) {
 		
 		li {
-			color: $white;
+			color: transparent;
 			padding: 20px 0 20px 10px;
 			text-transform: uppercase;
 			
 			a {
-				color: $gray-500;
+				color: var(--atum-table-views-tabs);
 				padding: 0;
 				
 				&.current:not(.extra-links-container a) {
 					border-radius: 5px;
-					background-color: $blue;
+					background-color: var(--blue);
 					font-size: 16px;
 					padding: 6px 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color: $white;
+					color:  var(--atum-table-views-tabs-active-text);
 					
 					.count {
-						color: $white;
+						color:  var(--atum-table-views-tabs-active-text);
 					}
 				}
 				
 				.count {
 					font-size: 14px;
 					font-weight: normal;
-					color: $blue;
+					color: var(--blue);
 				}
 				
 				&:active, &:focus {
@@ -332,7 +333,7 @@
 				}
 				
 				&.tips {
-					color: $blue;
+					color: var(--blue);
 					
 					&:hover {
 						cursor: pointer;
@@ -351,7 +352,7 @@
 	padding: 1px;
 	z-index: 999;
 	margin: 20px 10px 20px auto;
-	border: 1px solid $gray-200;
+	border: 1px solid var(--atum-border);
 	border-radius: 5px;
 	
 	@include tablet-max-wp {
@@ -374,6 +375,11 @@
 		}
 	}
 	
+	#search-submit {
+		background-color: var(--atum-table-search-bg) !important;
+		color: var(--atum-table-search-text) !important;
+	}
+	
 	#post-search-input {
 		border: none;
 		box-shadow: none;
@@ -381,11 +387,13 @@
 		height: 28px;
 		padding: 0 12px;
 		font-weight: normal;
+		background-color: var(--atum-table-bg);
+		color: var(--gray-600);
 		
 		&::placeholder {
 			font-size: 12px;
 			font-style: italic;
-			color: $gray-500;
+			color: var(--atum-input-placeholder);
 		}
 		
 		@include tablet-max-wp{
@@ -400,10 +408,11 @@
 		@include tablet-max-wp{
 			margin-bottom: 0;
 		}
+		
 	}
 	
 	&.inbound-stock-search {
-		border: 1px solid $gray-200;
+		border: 1px solid var(--atum-border);
 		width: 280px;
 		height: 30px;
 		border-radius: 5px;
@@ -475,6 +484,8 @@
 		width: 110px;
 		max-width: 110px;
 		font-size: 15px;
+		background-color: var(--atum-table-bg);
+		color: var(--gray-500);
 		
 		@include tablet-max-wp {
 			width: 100%;
@@ -485,7 +496,7 @@
 		}
 		
 		&::placeholder {
-			color: $gray-500;
+			color: var(--atum-input-placeholder);
 			font-style: italic;
 			letter-spacing: normal;
 			margin-left: 10px;
@@ -504,8 +515,8 @@
 	
 	.input-group {
 		border-radius: 5px;
-		border: solid 1px $gray-200;
-		background-color: $white;
+		border: solid 1px var(--atum-border);
+		background-color:  var(--atum-table-bg);
 		margin-left: 10px;
 		padding-right: 1px;
 		flex-wrap: nowrap;
@@ -517,6 +528,13 @@
 		
 		input[type=submit] {
 			height: 29px !important;
+			color: var(--atum-table-search-text) !important;
+			background-color: var(--atum-table-search-submit-bg);
+			
+			&:disabled {
+				color: var(--atum-table-search-text-disabled) !important;
+			}
+			
 		}
 	}
 	
@@ -534,9 +552,9 @@
 		font-size: 15px !important;
 		line-height: 15px !important;
 		border: none;
-		background-color: $gray-100;
+		background-color: var(--atum-dropdown-toggle-bg);
 		font-size: 15px;
-		color: $gray-600;
+		color: var(--gray-600);
 		
 		&:after {
 			vertical-align: middle;
@@ -552,8 +570,8 @@
 		&:focus, &:active, &:hover {
 			outline: 0;
 			box-shadow: none;
-			background-color: $gray-100;
-			color: $gray-600;
+			background-color: var(--atum-dropdown-toggle-bg);
+			color: var(--gray-600);
 		}
 	}
 	
@@ -565,7 +583,7 @@
 		margin-top: 0px;
 		right: 0px;
 		box-shadow: $dropdown-box-shadow;
-		background-color: $white;
+		background-color:  var(--atum-table-bg);
 		border: none;
 		border-radius: 5px;
 		max-height: 300px;
@@ -574,9 +592,10 @@
 	
 	.dropdown-item{
 		width: auto;
-		&.active, &:focus, &:active {
-			background-color: $blue-light;
-			color: $blue;
+		color: var(--gray-600);
+		&:hover, &.active, &:focus, &:active {
+			background-color: var(--atum-select2-selected-bg);
+			color: var(--atum-select2-selected-text);
 		}
 	}
 	
@@ -643,15 +662,20 @@
 			display: inline-block;
 			border: none;
 			padding: 0;
-			background: $gray-200;
+			background: var(--atum-pagination-bg);
+			border: 1px solid var(--atum-pagination-border);
 			font-size: 16px;
 			font-weight: 400;
 			text-align: center;
 			line-height: 30px;
 			
-			&:hover, &:active, &:focus {
-				background-color: $orange;
-				color: $white;
+			&:active, &:focus {
+				background-color: var(--warning);
+				color:  var(--white);
+			}
+			&:hover {
+				background-color: var(--warning) !important;
+				color:  var(--white);
 			}
 		}
 		
@@ -681,7 +705,7 @@
 	}
 	
 	&.top {
-		box-shadow: 0 1px 0 0 $gray-200, 0 -1px 0 0 $gray-200;
+		box-shadow: 0 1px 0 0 var(--atum-border), 0 -1px 0 0 var(--atum-border);
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		padding: 10px 11px;
@@ -900,6 +924,7 @@
 	width: 100%;
 	overflow: hidden;
 	@include atum-panel();
+	background-color:  var(--atum-table-bg);
 	padding: 0 0 10px;
 	margin: 0 0 18px;
 	
@@ -923,9 +948,9 @@
 			width: 30px;
 			height: 30px;
 			border-radius: 5px;
-			border: solid 1px $gray-200;
-			background-color: $white;
-			color: $gray-600;
+			border: solid 1px var(--atum-border);
+			background-color:  var(--atum-table-bg);
+			color: var(--gray-600);
 			cursor: pointer;
 			transition: all 0.20s;
 			line-height: 2;
@@ -940,14 +965,14 @@
 			}
 			
 			&.active, &:hover {
-				background-color: $blue;
-				color: $white;
-				border-color: $white;
+				background-color: var(--blue);
+				color:  var(--atum-table-bg);
+				border-color:  var(--atum-table-bg);
 			}
 			
 			&:hover {
-				background-color: rgba($blue, 0.6);
-				border-color: $white;
+				background-color: var(--blue-hover);
+				border-color:  var(--atum-table-bg);
 			}
 			
 		}
@@ -960,8 +985,8 @@
 	
 	.search-submit {
 		margin-left: 4px;
-		background-color: $orange;
-		color: $white;
+		background-color: var(--atum-table-search-bg) !important;
+		color: var(--atum-table-search-text) !important;
 		font-size: 10px;
 		font-weight: normal;
 		line-height: 1.6px;
@@ -974,8 +999,8 @@
 		width: 63px;
 		
 		&:hover, &:active, &:focus {
-			background-color: rgba($orange, 0.7);
-			color: $white;
+			background-color: var(--warning-hover);
+			color:  var(--white);
 			box-shadow: none;
 		}
 		
@@ -1008,7 +1033,7 @@
 		
 		li {
 			margin-right: 15px;
-			color: $gray-500;
+			color: var(--atum-table-views-tabs);
 			text-transform: uppercase;
 			
 			span {
@@ -1019,39 +1044,39 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: $blue;
+					background-color: var(--atum-table-views-tabs-active);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color: $white;
+					color:  var(--atum-table-views-tabs-active-text);
 					
 					.text-blue {
-						color: $white;
+						color:  var(--atum-table-views-tabs-active-text);
 					}
 					
 					.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
-						color: $white;
+						color:  var(--atum-table-views-tabs-active-text);
 						
 						&.empty {
-							color: $white;
+							color:  var(--atum-table-views-tabs-active-text);
 						}
 						
 						a {
-							color: $white;
+							color:  var(--atum-table-views-tabs-active-text);
 							&.empty {
-								color: $white;
+								color:  var(--atum-table-views-tabs-active-text);
 							}
 						}
 					}
 					
 					a {
-						color: $white;
+						color:  var(--atum-table-views-tabs-active-text);
 						padding: 0;
 						&.empty, &.tips, &.empty {
-							color: $white;
+							color:  var(--atum-table-views-tabs-active-text);
 						}
 						.active {
 							padding: 0;
@@ -1061,34 +1086,34 @@
 					.count {
 						font-size: 16px;
 						font-weight: bold;
-						color: $white;
+						color:  var(--atum-table-views-tabs-active-text);
 						&.empty {
-							color: $white;
+							color:  var(--atum-table-views-tabs-active-text);
 						}
 					}
 					
 				}
 				
 				a {
-					color: $gray-500;
+					color: var(--atum-table-views-tabs);
 					padding: 0;
 					
 					&.current {
 						pointer-events: none;
-						color: $white;
+						color:  var(--white);
 						font-weight: bold;
 					}
 					
 					.text-blue {
-						color: $blue;
+						color:  var(--blue);
 					}
 					
 					&.tips {
-						color: $blue;
+						color:  var(--blue);
 					}
 					
 					&.empty {
-						color: $gray-500;
+						color: var(--atum-table-views-tabs);
 					}
 					
 				}
@@ -1096,17 +1121,17 @@
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
-					color: $blue;
+					color:  var(--blue);
 					&.empty {
-						color: $gray-500;
+						color: var(--atum-table-views-tabs);
 						a {
 							padding: 0;
-							color: $gray-500;
+							color: var(--atum-table-views-tabs);
 						}
 					}
 					a {
 						padding: 0;
-						color: $blue;
+						color:  var(--blue);
 					}
 				}
 				
@@ -1119,10 +1144,10 @@
 					}
 					
 					font-weight: bold;
-					color: $blue;
+					color: var(--blue);
 					
 					&.empty {
-						color: $gray-500;
+						color: var(--atum-table-views-tabs);
 					}
 				}
 			}
@@ -1134,8 +1159,8 @@
 		border-radius: 50%;
 		text-align: center;
 		border: none;
-		background-color: $primary;
-		color: $white;
+		background-color: var(--primary);
+		color:  var(--atum-table-bg);
 		padding: 2px;
 		cursor: pointer;
 		z-index: 999;
@@ -1153,7 +1178,7 @@
 		}
 		
 		&:hover {
-			background-color: darken($primary, 5%);
+			background-color: var(--primary-hover);
 		}
 		
 		i {
@@ -1267,7 +1292,7 @@
 		position: absolute;
 		top: 0;
 		border-right: none;
-		box-shadow: rgba($black, 0.04) 5px 1px 10px;
+		box-shadow: var(--black-shadow-light) 5px 1px 10px;
 	}
 	
 	@include tablet-max-wp {
@@ -1331,8 +1356,8 @@
 	justify-content: space-between;
 	align-items: center;
 	margin: 0 11px 0 11px;
-	background-color: $white;
-	border-bottom: 1px solid $gray-200;
+	background-color:  var(--atum-table-bg);
+	border-bottom: 1px solid var(--atum-border);
 	
 	&.no-margin {
 		margin: 0;
@@ -1399,13 +1424,13 @@
 
 .overflow-opacity-effect-right {
 	right: 0;
-	background-image: linear-gradient(to right, rgba($white,0), rgba($white,0.9));
+	background-image: var(--overflow-opacity-rigth);
 }
 
 .overflow-opacity-effect-left {
 	display: none;
 	left: 0;
-	background-image: linear-gradient(to left, rgba($white,0), rgba($white,0.9));
+	background-image: var(--overflow-opacity-left);
 }
 
 .atum-table-wrapper, #table-container {
@@ -1450,12 +1475,12 @@
 	}
 	
 	.jspTrack {
-		background: rgba($secondary, 0.2);
+		background: var(--secondary-shadow);
 		position: relative;
 	}
 	
 	.jspDrag {
-		background: $gray-500;
+		background: var(--js-scroll-bg);
 		position: relative;
 		top: 0;
 		left: 0;
@@ -1463,7 +1488,7 @@
 	}
 	
 	.jspCorner {
-		background: $light;
+		background: var(--light);
 		float: left;
 		height: 100%;
 	}
@@ -1484,7 +1509,7 @@
 		bottom: 0;
 		margin-bottom: 0;
 		border-right: none;
-		box-shadow: rgba($black, 0.04) 5px 1px 10px;
+		box-shadow: var(--black-shadow-light) 5px 1px 10px;
 		
 		@media all and (max-width: 600px) {
 			display: none !important;
@@ -1502,9 +1527,9 @@
 
 table.wp-list-table {
 	border: none;
-	border-top: 1px solid $gray-200;
+	border-top: 1px solid var(--atum-border);
 	&:not(.cloned) {
-		min-width: 1200px;
+	min-width: 1200px;
 	}
 	
 	thead, tfoot {
@@ -1513,23 +1538,23 @@ table.wp-list-table {
 			font-size: 14px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: $gray-500;
+			color: var(--atum-table-item-heads);
 		}
 	}
 	
 	td {
 		a {
-			color: $blue;
+			color:  var(--blue);
 			
 			&:hover, &:focus, &:active {
-				color: $blue;
+				color:  var(--blue);
 			}
 		}
 	}
 	
 	tbody {
 		tr:hover {
-			box-shadow: -1px -1px 19px -1px rgba($black, 0.15) inset;
+			box-shadow: -1px -1px 19px -1px var(--atum-row-shadow) inset;
 			
 		}
 	}
@@ -1539,14 +1564,19 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
-	thead .item-heads, tfoot {
-		background-color: $white;
-		border-top: 1px solid $gray-200;
-		border-bottom: 1px solid $gray-200;
+	&.widefat {
+		background: none;
+	}
+	
+	thead .item-heads, tfoot .item-heads {
+		background-color:  var(--atum-table-bg);
+		border-top: 1px solid var(--atum-border);
+		border-bottom: 1px solid var(--atum-border);
 		
 		th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
 		td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
 			border: none;
+			box-shadow: none;
 		}
 		
 		th {
@@ -1558,7 +1588,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			white-space: normal;
 			font-weight: 600;
 			letter-spacing: 0.3px;
-			color: $gray-500;
+			color: var(--atum-table-item-heads);
 			
 			.atum-icon {
 				display: block;
@@ -1568,7 +1598,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				width: 1em;
 				margin: 0 auto;
 				font-size: 19px;
-				color: $gray-500;
+				color: var(--atum-table-item-heads);
 				
 				&:before {
 					text-indent: 0;
@@ -1583,8 +1613,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tfoot {
 		.item-heads {
-			border-top: 1px solid $gray-200;
-			border-bottom: 1px solid $gray-200;
+			border-top: 1px solid var(--atum-border);
+			border-bottom: 1px solid var(--atum-border);
 			
 			th {
 				padding: 3px 5px;
@@ -1593,21 +1623,43 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				min-width: 50px;
 				height: 60px;
 				white-space: normal;
-				font-weight: 600;
+				font-weight: bold;
 				letter-spacing: 0.3px;
-				color: $gray-500;
+				color: var(--atum-table-item-heads);
+				
 			}
 		}
 	}
 	
-	.item-heads {
-		td, th {
-			box-shadow: 0 1px 0 0 $gray-200;
+	tfoot, thead {
+		tr.totals {
+			th, td {
+				border-top: none;
+			}
+		}
+		.item-heads {
+			td, th {
+				box-shadow: 0 1px 0 0 var(--atum-border);
+				a {
+					color: var(--atum-table-item-heads);
+				}
+			}
+		}
+		th, td {
+			&:not(.column-title) {
+				border-top: 1px solid var(--atum-border);
+				border-bottom: 1px solid var(--atum-border);
+			}
+			
+			&.column-title {
+				border: none;
+			}
+			
 		}
 	}
 	
 	.column-groups {
-		background-color: $gray-200;
+		background-color: var(--atum-column-groups-bg) !important;
 		
 		th {
 			padding: 6px 20px;
@@ -1618,10 +1670,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			height: 20px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: $gray-600;
+			color: var(--gray-600);
 			
 			&:not(:last-child) {
-				border-right: 1px solid $gray-400;
+				border-right: 1px solid var(--atum-border);
 			}
 			
 			.group-toggler {
@@ -1635,7 +1687,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&:hover {
-					color: $wp-link-hover;
+					color: var(--wp-link-hover);
 				}
 				
 			}
@@ -1658,12 +1710,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				color: $gray-500;
+				color: var(--atum-table-item-heads);
 				overflow: visible;
 				
 				&, span {
 					&:hover {
-						color: $blue;
+						color: var(--blue);
 					}
 				}
 			}
@@ -1692,7 +1744,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&:before {
 					@include vertical-align-absolute;
 					margin-top: -2px;
-					color: $gray-500;
+					color: var(--gray-500);
 					content: "\f140";
 				}
 			}
@@ -1736,37 +1788,94 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	tr {
+		box-shadow: 0 1px 0 0 var(--gray-200-shadow);
+		background-color: var(--atum-table-row-even);
+		border-top: 1px solid var(--atum-border);
+		border-bottom: 1px solid var(--atum-border);
+		
+		&.type-atum_supplier {
+			.row-actions {
+				padding: 0;
+				margin: -1px 0 0 6px;
+			}
+		}
+		
+		&:nth-child(odd) {
+			background-color: var(--atum-table-row-odd);
+		}
+		
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
+			background-color: var(--atum-table-row-odd);
+			border: 1px solid var(--atum-border-expanded);
+			border-left: none;
+			border-right: none;
+			
+			&:last-child {
+				border: none;
+			}
 			
 			&:hover {
-				box-shadow: 0 1px 19px 6px rgba($black, 0.04) inset;
+				box-shadow: 0 1px 19px 6px var(--atum-row-shadow) inset;
+			}
+		}
+		
+		&.expandable {
+			.set-meta, a {
+				color: var(--atum-table-link-child) !important;
 			}
 		}
 		
 		&.even {
-			background-color: $light;
+			background-color: var(--atum-table-row-even);
+		}
+		
+		&.active-row {
+			background-color: var(--atum-row-active);
+			td {
+				color: var(--atum-table-text-active) !important;
+				.product-type {
+					color: var(--atum-table-icon-active);
+				}
+			}
+			.set-meta, a {
+				color: var(--atum-table-link-active) !important;
+			}
+			
+		}
+		
+		.set-meta {
+			cursor: pointer;
+			color:  var(--blue);
+			
+			&:hover {
+				color: var(--wp-link-hover);
+			}
+			
+			&.unsaved {
+				color: var(--danger) !important;
+			}
 		}
 		
 		&.expanded {
 			transition: all 0.1s ease-in-out;
 			
 			&.variable, &.variable-subscription {
-				background-color: $primary;
+				background-color: var(--primary);
 			}
 			
 			&.bundle {
-				background-color: $wc-purple;
+				background-color: var(--wc-purple-expanded);
 			}
 			
 			&.group {
-				background-color: $warning;
+				background-color: var(--orange);
 			}
 			
 			&.variable, &.variable-subscription, &.group, &.bundle {
 				
 				td, a {
-					color: $white;
+					color:  var(--atum-table-text-expanded);
 				}
 				
 				.check-column {
@@ -1782,7 +1891,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						&.product-type {
 							&:before {
 								content: $atmi-wc-contract;
-								color: $white;
+								color:  var(--atum-table-icon);
 							}
 						}
 						
@@ -1800,42 +1909,42 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.bundle {
-				background-color: darken($wp-pink-light, 6%);
+				background-color: var(--wp-pink-darken-expanded);
 				
 				&:nth-child(even) {
-					background-color: $wp-pink-light;
+					background-color: var(--wp-pink-light);
 				}
 				
 				&.active-row:not(.expanded) {
-					background-color: darken($wp-pink-light, 8%);
+					background-color: var(--wp-pink-darken-expanded);
 				}
 				
 				&.expanded {
-					background-color: $wc-purple;
+					background-color: var(--wc-purple);
 				}
 				
 				td.title {
 					.child-arrow {
-						color: $wc-purple;
+						color: var(--wc-purple);
 					}
 				}
 			}
 		}
 		
 		&.variation {
-			background-color: $blue-light;
+			background-color:  var(--atum-table-row-child-variation);
 			
 			&:nth-child(even) {
-				background-color: $blue-light-2;
+				background-color:  var(--atum-table-row-child-variation-even);
 			}
 			
 			&.active-row {
-				background-color: darken($blue-light, 10%);
+				background-color: var(--blue-light-expanded);
 			}
 			
 			td.title {
 				.child-arrow {
-					color: $blue;
+					color: var(--blue);
 				}
 			}
 		}
@@ -1843,41 +1952,41 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.main-bundle {
 			background-color: darken($wp-pink-light, 6%);
 			td {
-				color: $white;
+				color:  var(--white);
 				&.column-ID {
-					color: $white;
+					color:  var(--white);
 				}
 			}
 		}
 		
 		&.bundle-item {
-			background-color: $wp-pink-light;
+			background-color: var(--wp-pink-light);
 			
-			&.active-row {
-				background-color: darken($wp-pink-light, 10%);
+			&.active-row:not(.expandable) {
+				background-color: var(--wp-pink-darken-expanded);
 			}
 
 			td.title {
 				.child-arrow {
-					color: $wp-pink-light;
+					color: var(--wp-pink-light);
 				}
 			}
 		}
 		
 		&.grouped {
-			background-color: $orange-light;
+			background-color:  var(--orange-light);
 			
 			&:nth-child(even) {
-				background-color: $orange-light-2;
+				background-color:  var(--orange-light-2);
 			}
 			
 			&.active-row {
-				background-color: darken($orange-light, 10%);
+				background-color: var(--orange-dark-light);
 			}
 			
 			td.title {
 				.child-arrow {
-					color: $orange;
+					color:  var(--orange);
 				}
 			}
 		}
@@ -1932,12 +2041,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.totals {
-			background-color: $gray-200;
+			background-color: var(--atum-footer-totals);
 			
 			td, th {
 				font-size: 12px;
 				font-weight: 400;
-				color: $gray-600;
+				color: var(--gray-600);
 				padding-top: 0;
 				padding-bottom: 0;
 				text-align: center;
@@ -1947,7 +2056,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						font-size: 14px;
 						font-weight: bold;
 						letter-spacing: 0.3px;
-						color: $gray-600;
+						color: var(--gray-600);
 						text-transform: uppercase;
 						background-color: transparent;
 					}
@@ -1959,13 +2068,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					font-weight: bold;
 					letter-spacing: 0.4px;
 					text-align: center;
-					color: $white;
+					color:  var(--atum-table-bg);
 					border-radius: 5px;
-					background-color: $gray-600;
+					background-color: var(--gray-600);
 					padding: 4px;
 					
 					&.danger {
-						background-color: $danger;
+						background-color: var(--danger);
 					}
 				}
 			}
@@ -1981,39 +2090,39 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.cell {
 		&-green {
-			color: $success !important;
+			color: var(--success)!important;
 		}
 		
 		&-yellow {
-			color: $warning !important;
+			color: var(--warning) !important;
 			.set-meta {
-				color: $warning !important;
+				color: var(--warning) !important;
 			}
 		}
 
 		&-red {
-			color: $danger !important;
+			color: var(--danger) !important;
 			.set-meta {
-				color: $danger !important;
+				color: var(--danger) !important;
 			}
 		}
 		
 		&-blue {
-			color: $primary !important;
+			color: var(--primary) !important;
 		}
 	}
 	
 	input[type=checkbox] {
 		border-radius: 3px;
 		box-shadow: none;
-		border-color: $gray-400;
+		border-color: var(--gray-400);
 		
 		&:checked {
-			background-color: $blue;
+			background-color: var(--atum-table-check);
 			border: 0;
 			
 			&:before {
-				color: $white;
+				color:  var(--white);
 				content: $atmi-checkmark;
 				font-family: $atum-icon-font;
 				font-size: 14px;
@@ -2029,29 +2138,48 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		tr {
 			&.expanded {
-				&.variable, &.group, &.bundle {
+				&.group, &.bundle {
 					td {
-						color: $white !important;
+						color: var(--atum-table-text-expanded) !important;
 						
 						a, span {
-							color: $white !important;
+							color: var(--atum-table-text-expanded) !important;
 							
 							&:before {
-								color: $white !important;
+								color: var(--atum-table-text-expanded) !important;
 							}
 						}
 					}
 				}
+				
+				&.variable {
+					td {
+						color: var(--atum-table-text-expanded) !important;
+						
+						a, span {
+							color: var(--atum-table-text-expanded) !important;
+							
+							&:before {
+								color: var(--atum-table-text-expanded) !important;
+							}
+						}
+					}
+				}
+				
 			}
 			
 			&.expandable {
 				td {
+					color: var(--atum-table-link-text);
+					span:not(.atum-icon) {
+						color: var(--atum-table-link-text);
+					}
 					&.column-calc_location {
 						a {
 							pointer-events: none;
 							&:before {
 								content: '-';
-								color: $gray-600;
+								color: var(--gray-600);
 							}
 						}
 					}
@@ -2059,17 +2187,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			td {
-				color: $gray-600;
-				
-				.set-meta {
-					color: $blue;
-				}
+				color: var(--gray-600);
 				
 				&.column-title, &.atum_order_title {
 					a, .row-title {
 						font-size: 14px;
 						font-weight: 600;
-						color: $blue;
+						color: var(--blue);
 					}
 				}
 				
@@ -2084,13 +2208,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-_sku {
 					span {
 						font-size: 14px;
-						color: $blue;
+						color: var(--blue);
 					}
 				}
 				
 				&.calc_purchase_order {
 					a {
-						color: $blue;
+						color:  var(--blue);
 						font-weight: bold;
 					}
 				}
@@ -2105,16 +2229,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		padding: 6px 5px;
 		height: 47px;
 		font-size: 14px;
-		color: $blue;
+		color: var(--blue);
 		
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
-			color: $gray-600;
+			color: var(--gray-600);
 		}
 		
 		&.pro-version {
-			background-color: $secondary;
+			background-color: var(--secondary);
 		}
 		
 		// Where page is not a post type list.
@@ -2162,8 +2286,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			padding: 0 !important;
 			min-width: 0 !important;
 			height: auto !important;
-			border-left: 1px solid $gray-200;
-			border-right: 1px solid $gray-200;
+			border-left: 1px solid var(--atum-border);
+			border-right: 1px solid var(--atum-border);
 		}
 		
 	}
@@ -2171,11 +2295,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	th {
 		span {
 			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
-				color: $gray-500;
+				color: var(--atum-table-item-heads);
 				font-weight: bold;
 				font-size: 14px;
 				.set-header {
-					color: $blue;
+					color: var(--blue);
 				}
 			}
 		}
@@ -2192,7 +2316,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			width: 1em;
 			font-size: 1.6em;
 			margin: 0 auto;
-			color: $gray-500;
+			color: var(--atum-table-icon);
 			
 			&:before {
 				content: $atmi-wc-simple;
@@ -2263,7 +2387,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				
 				&.variable {
 					&, &-subscription, &-product-part, &-raw-material {
-						color: $primary;
+						color: var(--primary);
 					}
 				}
 				
@@ -2274,11 +2398,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.grouped {
-					color: $warning;
+					color: var(--warning);
 				}
 				
 				&.bundle {
-					color: $wc-purple;
+					color: var(--wc-purple);
 				}
 				
 				&:hover {
@@ -2305,51 +2429,38 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 	.show-locations{
 		cursor: pointer;
-		color: $gray-500;
+		color: var(--atum-table-icon);
 		font-size: 20px;
 		&.not-empty {
-			color: $blue;
+			color: var(--blue);
 		}
 	}
 	
 	.show-hierarchy {
 		cursor: pointer;
-		color: $gray-500;
+		color: var(--atum-table-icon);
 		font-size: 20px;
 		&.not-empty {
-			color: $blue;
-		}
-	}
-	
-	.set-meta {
-		cursor: pointer;
-		color: $blue;
-		
-		&:hover {
-			color: $link-hover-color;
-		}
-		
-		&.unsaved {
-			color: $danger !important;
+			color: var(--blue);
 		}
 	}
 
 	.set-header {
 		cursor: pointer;
-		color: $blue;
+		color: var(--blue);
 		
 		.select2-selection__rendered {
 			padding-left: 8px;
 		}
 
 		&:hover {
-			color: $link-hover-color;
+			color: var(--wp-link-hover);
 		}
 	}
 	
 	.highlight-danger {
-		background-color: $danger;
-		color: $white;
+		background-color: var(--danger);
+		color:  var(--white);
 		padding: 2px 3px;
 		border-radius: 2px;
 	}
@@ -2485,12 +2596,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		.title {
 			font-size: 26px;
 			font-weight: bold;
-			color: $blue-dark;
+			color:  var(--blue-dark);
 			margin: 0;
 		}
 		.sub-title {
 			font-size: 15px;
-			color: $gray-500;
+			color: var(--gray-500);
 			font-weight: 400;
 		}
 	}
@@ -2501,11 +2612,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		a {
 			
-			color: $wp-link !important;
+			color: var(--wp-link) !important;
 			
 			&:hover {
 				
-				color: $wp-link-hover;
+				color: var(--wp-link-hover);
 				
 			}
 		}
@@ -2528,14 +2639,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-weight: 400;
 				font-size: 12px;
 				line-height: 1.67;
-				color: $gray-600;
+				color: var(--gray-600);
 			}
 			
 			input {
 				width: 150px;
 				font-size: 15px;
 				line-height: 1;
-				color: $gray-600;
+				color: var(--gray-600);
 				font-weight: 400;
 				&:after {
 					font-family: atum-icon-font;
@@ -2549,10 +2660,30 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			font-style: italic;
 			line-height: 1.67;
 			font-weight: 400;
-			color: $gray-500;
+			color: var(--atum-input-placeholder);
 		}
 	}
 }
+
+.btn.btn-warning:hover {
+	background-color: var(--warning-hover);
+	color: var(--warning-hover-text);
+	border-radius: 5px;
+	border: var(--warning-hover-border) !important;
+}
+.btn.btn-primary:hover {
+	background-color: var(--primary-hover);
+	color: var(--primary-hover-text);
+	border-radius: 5px;
+	border: var(--primary-hover-border) !important;
+}
+.btn.btn-success:hover {
+	background-color: var(--success-hover);
+	color: var(--success-hover-text);
+	border-radius: 5px;
+	border: var(--success-hover-border) !important;
+}
+
 
 // Popovers' customisations
 .popover {
@@ -2574,7 +2705,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			margin-left: 3px;
 			
 			&:disabled {
-				color: $light !important;
+				color: var(--light) !important;
 				opacity: 0.6;
 			}
 		}
@@ -2607,7 +2738,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			hr {
-				border-color: $info;
+				border-color: var(--info);
 			}
 		}
 		
@@ -2619,7 +2750,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 [data-screen="atum-inventory_page_atum-inbound-stock"] {
 	.tablenav {
 		[name="filter_action"] {
-			visibility: hidden;
+			visibility: hidden !important;
 		}
 	}
 }

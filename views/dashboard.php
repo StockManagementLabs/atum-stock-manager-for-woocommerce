@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || die;
 		</div>
 
 		<div class="dash-header-logo">
-			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/header-logo.svg" alt="ATUM">
+			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/header-logo<?php if ( $darkmode ) echo '-white'; ?>.svg" alt="ATUM">
 			<h3><?php esc_html_e( 'Inventory Management for WooCommerce', ATUM_TEXT_DOMAIN ) ?></h3>
 			<a href="https://www.stockmanagementlabs.com/the-changelog/" target="_blank" class="atum-version">v<?php echo esc_html( ATUM_VERSION ) ?></a>
 		</div>
@@ -97,7 +97,7 @@ defined( 'ABSPATH' ) || die;
 		<div class="dash-card docs">
 
 			<div class="card-content">
-				<h5><?php esc_html_e( 'Documentation', ATUM_TEXT_DOMAIN ) ?></h5>
+				<h5 class="h5-primary"><?php esc_html_e( 'Documentation', ATUM_TEXT_DOMAIN ) ?></h5>
 				<h2><?php esc_html_e( 'Complete Tutorials', ATUM_TEXT_DOMAIN ) ?></h2>
 
 				<p><?php esc_html_e( "Our team is working daily to document ATUM's fast-growing content. Browse our detailed tutorials, ask questions or share feature requests with our team.", ATUM_TEXT_DOMAIN ) ?></p>
@@ -114,7 +114,7 @@ defined( 'ABSPATH' ) || die;
 		<div class="dash-card add-ons">
 
 			<div class="card-content">
-				<h5><?php esc_html_e( 'Add-ons', ATUM_TEXT_DOMAIN ) ?></h5>
+				<h5 class="h5-secondary"><?php esc_html_e( 'Add-ons', ATUM_TEXT_DOMAIN ) ?></h5>
 				<h2><?php esc_html_e( 'Endless Possibilities', ATUM_TEXT_DOMAIN ) ?></h2>
 
 				<p><?php esc_html_e( 'Expand your inventory control with our premium add-ons. No storage is left unattended, no item uncounted and no production line inefficient.', ATUM_TEXT_DOMAIN ) ?></p>
@@ -131,7 +131,7 @@ defined( 'ABSPATH' ) || die;
 		<div class="dash-card subscription">
 
 			<div class="card-content">
-				<h5><?php esc_html_e( 'Newsletter', ATUM_TEXT_DOMAIN ) ?></h5>
+				<h5 class="h5-tertiary"><?php esc_html_e( 'Newsletter', ATUM_TEXT_DOMAIN ) ?></h5>
 				<h2><?php esc_html_e( 'Earn Regular Rewards', ATUM_TEXT_DOMAIN ) ?></h2>
 
 				<p><?php esc_html_e( 'Thank you very much for choosing ATUM as your inventory manager. Please, subscribe to receive news and updates and earn regular rewards.', ATUM_TEXT_DOMAIN ) ?></p>

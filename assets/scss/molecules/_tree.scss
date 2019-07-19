@@ -31,7 +31,7 @@ ul.easytree-container {
 	white-space: nowrap;
 	padding: 15px 10px !important;
 	margin: 0;
-	border: 1px solid $info;
+	border: 1px solid var(--info);
 	border-radius: 6px;
 	overflow: auto;
 	height: 100%;
@@ -46,7 +46,7 @@ ul.easytree-container {
 		
 		&:not(:first-child) {
 			padding: $grid-gutter-width/2 0;
-			border-top: 1px solid $gray-200;
+			border-top: 1px solid var(--gray-200);
 		}
 		
 		&:nth-child(2) {
@@ -76,7 +76,7 @@ ul.easytree-container {
 			padding: 2px 0;
 			
 			&, a {
-				color: $dark;
+				color: var(--dark);
 			}
 			
 			&.easytree-lastsib {
@@ -85,7 +85,7 @@ ul.easytree-container {
 			
 			.selected-node {
 				.easytree-title a, .atum-icon {
-					color: $success !important;
+					color: var(--success) !important;
 				}
 			}
 		}
@@ -94,7 +94,7 @@ ul.easytree-container {
 	// Style, when control is disabled
 	.ui-easytree-disabled & {
 		opacity: 0.5;
-		background-color: $secondary;
+		background-color: var(--secondary);
 	}
 	
 	// Custom icons
@@ -131,13 +131,13 @@ span {
 		vertical-align: top;
 		font-family: $atum-icon-font;
 		cursor: pointer;
-		color: $dark;
+		color: var(--atum-icon-tree);
 	}
 	
 	&.easytree-custom-icon {
 		display: inline-block !important;
 		vertical-align: -1px;
-		color: $dark;
+		color: var(--atum-icon-tree);
 		margin-left: 3px;
 		text-indent: 0 !important; // In case jQuery UI CSS is loaded
 	}
@@ -163,7 +163,7 @@ span.easytree-expander {
 	}
 	
 	&:hover {
-		color: $primary !important;
+		color: var(--primary) !important;
 	}
 }
 
@@ -224,7 +224,7 @@ span.easytree-expander {
 .checked{
 	span.easytree-icon {
 		&:before {
-			color: $blue;
+			color: var(--blue);
 		}
 	}
 }
@@ -244,10 +244,10 @@ span.easytree-expander {
 	cursor: pointer;
 	
 	a {
-		color: $dark !important;
+		color: var(--dark) !important;
 		
 		&:hover {
-			color: $primary !important;
+			color: var(--primary) !important;
 		}
 	}
 }
@@ -257,10 +257,10 @@ ul.easytree-container.easytree-focused {
 	span {
 		&.easytree-selected, &.easytree-active {
 			.easytree-title {
-				background-color: $primary;
+				background-color: var(--primary);
 				
 				&, a {
-					color: $white !important;
+					color: var(--atum-table-bg) !important;
 				}
 				
 			}
@@ -280,8 +280,9 @@ ul.easytree-container.easytree-focused {
 		font-weight: 400;
 		
 		&:not(:first-child) {
-			border-left: 1px solid $gray-500;
+			border-left: 1px solid var(--gray-500);
 			padding-left: 5px;
 		}
+		
 	}
 }

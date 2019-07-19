@@ -29,7 +29,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -7px;
 			margin-left: -6px;
-			border-top-color: $white;
+			border-top-color: var(--white);
 		}
 	}
 	
@@ -39,7 +39,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -5px;
 			margin-left: -6px;
-			border-bottom-color: $white;
+			border-bottom-color: var(--white);
 		}
 	}
 	
@@ -49,7 +49,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -5px;
-			border-right-color: $white;
+			border-right-color: var(--white);
 		}
 	}
 	
@@ -59,7 +59,7 @@ img.tips {
 		#tiptip_arrow_inner {
 			margin-top: -6px;
 			margin-left: -7px;
-			border-left-color: $white;
+			border-left-color: var(--white);
 		}
 	}
 }
@@ -69,18 +69,18 @@ img.tips {
 }
 
 #tiptip_content {
-	color: $gray-600;
+	color: var(--gray-600);
 	font-size: 0.8em;
 	max-width: 150px;
-	background: $white;
+	background: var(--white);
 	text-align: center;
 	border-radius: 3px;
 	padding: 0.618em 1em;
-	box-shadow: 0 1px 3px rgba($black, 0.2);
+	box-shadow: 0 1px 3px var(--black-shadow);
 	
 	code {
 		padding: 1px;
-		background: $wp-gray-7;
+		background: var(--wp-gray-7);
 	}
 }
 
@@ -134,61 +134,69 @@ table.wp-list-table {
 	.column-status {
 		text-align: center;
 		
-		.order-status {
-			display: inline-flex;
-			line-height: 2.5em;
-			color: $secondary;
-			background: $light;
-			border-radius: 4px;
-			margin: -.25em 0;
-			cursor: inherit !important;
-			white-space: nowrap;
-			max-width: 100%;
-			height: 26px;
-			line-height: 26px;
-			
-			&.status-completed, &.status-received {
-				background: $green-light;
-				color: $green;
+		.order-status-container {
+			display: flex;
+			flex-wrap: nowrap;
+			align-items: center;
+			justify-content: center;
+			.order-status {
+				display: inline-flex;
+				line-height: 2.5em;
+				color: var(--secondary);
+				background: var(--light);
+				border-radius: 4px;
+				cursor: inherit !important;
+				white-space: nowrap;
+				max-width: 100%;
+				width: 16px;
+				height: 16px;
+				line-height: 26px;
+				margin: 0 5px 0 0;
+				
+				&.status-atum_completed, &.status-atum_received {
+					background: #69c61d;
+				}
+				
+				&.status-atum_on-hold {
+					background: #94660c;
+				}
+				
+				&.status-atum_failed, &.status-atum_trash {
+					background: #761919;
+				}
+				
+				&.status-atum_pending {
+					background: #ff4848;
+				}
+				
+				
+				&.status-atum_ordered {
+					background: #efaf00;
+				}
+				
+				&.status-atum_onthewayin {
+					background: #00b8db;
+				}
+				
+				&.status-atum_receiving {
+					background: #ba7df7;
+				}
+				
+				> span {
+					margin: 0 1em;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+				
 			}
-			
-			&.status-on-hold {
-				background: $wc-orange-light;
-				color: $wc-orange;
-			}
-			
-			&.status-failed, &.status-trash {
-				background: $wc-red-light;
-				color: $wc-red;
-			}
-			
-			&.status-pending {
-				background: $red-light;
-				color: $red;
-			}
-			
-			
-			&.status-ordered {
-				background: $orange-light;
-				color: $orange;
-			}
-			
-			&.status-onthewayin {
-				background: $blue-light;
-				color: $blue;
-			}
-			
-			&.status-receiving {
-				background: $purple-light;
-				color: $purple;
-			}
-			
-			> span {
-				margin: 0 1em;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-			
+		}
+		
+	}
+	
+	tbody > :nth-child(odd), ul.striped > :nth-child(odd), .alternate {
+		background-color: var(--atum-table-row-odd);
+		&.active-row {
+			background-color: var(--atum-row-active);
 		}
 	}
 	
@@ -200,7 +208,7 @@ table.wp-list-table {
 		.note-on {
 			@include ir();
 			margin: 0 auto;
-			color: $wp-gray-1;
+			color: var(--wp-gray-1);
 			
 			&:after {
 				font-family: $atum-icon-font;
@@ -220,7 +228,7 @@ table.wp-list-table {
 		
 		.pdf {
 			i {
-				color: $danger;
+				color: var(--danger);
 			}
 		}
 		
@@ -231,7 +239,7 @@ table.wp-list-table {
 	}
 	
 	.row-actions, span.na {
-		color: $wp-gray-1;
+		color: var(--wp-gray-1);
 	}
 	
 	.notes_head, .notes_head, .status_head {

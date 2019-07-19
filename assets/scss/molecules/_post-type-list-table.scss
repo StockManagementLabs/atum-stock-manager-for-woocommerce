@@ -6,6 +6,7 @@
 	width: 100%;
 	overflow: hidden;
 	@include atum-panel();
+	background-color: var(--atum-table-bg);
 	padding: 0 0 10px;
 	
 	.tablenav-pages {

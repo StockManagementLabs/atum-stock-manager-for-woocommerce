@@ -53,10 +53,11 @@ export default class LocationsTree {
 			showCancelButton  : false,
 			showConfirmButton : true,
 			confirmButtonText : this.settings.get('editProductLocations'),
-			confirmButtonColor: '#00b8db',
+			confirmButtonColor: 'var(--primary)',
 			showCloseButton   : true,
 			onOpen            : () => this.onOpenViewPopup(),
 			onClose           : () => this.onCloseViewPopup(),
+            background        : 'var(--atum-table-bg)'
 		})
 		// Click on edit: open the edit popup.
 		.then( () => this.openEditPopup() )
@@ -136,12 +137,13 @@ export default class LocationsTree {
 			html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			text               : this.settings.get('textToShow'),
 			confirmButtonText  : this.settings.get('saveButton'),
-			confirmButtonColor : '#00b8db',
+			confirmButtonColor : 'var(--primary)',
 			showCloseButton    : true,
 			showCancelButton   : true,
 			showLoaderOnConfirm: true,
 			onOpen             : () => this.onOpenEditPopup(),
 			preConfirm         : () => this.saveLocations(),
+            background         : 'var(--atum-table-bg)'
 		})
 		.then( () => this.onCloseEditPopup() )
 		.catch(this.swal.noop);
@@ -193,7 +195,8 @@ export default class LocationsTree {
 			type              : 'success',
 			text              : this.settings.get('locationsSaved'),
 			confirmButtonText : this.settings.get('ok'),
-			confirmButtonColor: '#00b8db',
+			confirmButtonColor: 'var(--primary)',
+            background        : 'var(--atum-table-bg)'
 		});
 		
 	}

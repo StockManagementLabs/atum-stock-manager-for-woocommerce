@@ -366,7 +366,7 @@ abstract class AtumOrderPostType {
 					$status      = $atum_order->get_status();
 					$status_name = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
 
-					printf( '<mark class="order-status status-%1$s"><span>%2$s</span></mark>', esc_attr( sanitize_html_class( str_replace( ATUM_PREFIX, '', $status ) ) ), esc_html( $status_name ) );
+					printf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 
@@ -458,23 +458,23 @@ abstract class AtumOrderPostType {
 
 					do_action( "atum/$post_type/admin_actions_start", $atum_order );
 
-					$actions  = array();
+					$actions = array();
 					$statuses = static::get_statuses();
 
 					if ( static::FINISHED !== $atum_order->get_status() ) {
 
 						if ( isset( $statuses[ static::FINISHED ] ) ) {
 
-							$actions['complete'] = array(
-								'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-								/* translators: Change the order's status to finished */
+						$actions['complete'] = array(
+							'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+							/* translators: Change the order's status to finished */
 								'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $statuses[ static::FINISHED ] ),
-								'action' => 'complete',
-								'target' => '_self',
-								'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
-							);
+							'action' => 'complete',
+							'target' => '_self',
+							'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
+						);
 
-						}
+					}
 
 					}
 
@@ -945,6 +945,12 @@ abstract class AtumOrderPostType {
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 				) );
+
+				// Get visual mode style selected.
+				wp_add_inline_style(
+					'atum-orders',
+					Helpers::get_visual_mode_style()
+				);
 
 				wp_enqueue_style( 'atum-orders' );
 				wp_enqueue_script( 'atum-orders-table' );

@@ -29,10 +29,10 @@ export let Switcher = {
 		
 		options = Object.assign( {
 			size               : 'small',
-			color              : '#d5f5ba',
-			secondaryColor     : '#e9ecef',
-			jackColor          : '#69c61d',
-			jackSecondaryColor : '#adb5bd'
+			color              : 'var(--green-light)',
+			secondaryColor     : 'var(--gray-200)',
+			jackColor          : 'var(--green)',
+			jackSecondaryColor : 'var(--secondary)'
 		}, options || {});
 		
 		const $selector : JQuery = $wrapper ? $wrapper.find(selectorClass) : $(selectorClass);

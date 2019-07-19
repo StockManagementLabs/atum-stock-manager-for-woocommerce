@@ -210,6 +210,7 @@ export default class Dashboard {
 								this.$atumDashboard.addClass('overlay');
 							},
 							success   : () => {
+								this.saveWidgetsLayout();
 								resolve();
 							},
 							error: () => {

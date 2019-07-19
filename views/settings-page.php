@@ -10,6 +10,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
 $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE );
@@ -17,10 +18,6 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 ?>
 <div class="wrap">
 	<div class="atum-settings-wrapper">
-		<div class="switch-interface-style <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'bg-light' : '' ?>">
-			<?php wp_nonce_field( 'add_atum_nonce_field', 'menu-theme-nonce' ); ?>
-			<?php echo esc_attr( __( 'Dark Mode', ATUM_TEXT_DOMAIN ) ); ?> <input type="checkbox" class="js-switch-menu" name="interface_style" <?php echo isset( $menu_theme ) && 'dark' === $menu_theme ? 'checked' : '' ?>>
-		</div>
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', ATUM_TEXT_DOMAIN ) ?></h1>
 		<hr class="wp-header-end">
 		
@@ -114,6 +111,9 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 											case 'atum_setting_company':
 												$header_settings_title = __( 'Store Details', ATUM_TEXT_DOMAIN );
 												break;
+											case 'atum_setting_color_mode':
+												$header_settings_title = __( 'Visual Settings', ATUM_TEXT_DOMAIN );
+												break;
 											case 'atum_setting_module_manager':
 												$header_settings_title = __( 'Modules', ATUM_TEXT_DOMAIN );
 												break;
@@ -143,7 +143,34 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 							<?php if ( $section['title'] ) : ?>
 									<div class="section-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-title-light' : '' ?>">
-									<h2><?php echo esc_html( $section['title'] ) ?></h2>
+									<h2>
+										<?php
+										if ( 'atum_setting_scheme_color' === $section['id'] ) :
+
+											$theme_setting = Helpers::get_option( 'theme_settings', 'branded_mode' );
+
+											if ( 'dark_mode' === $theme_setting ) {
+												$theme_style = 'Dark';
+											}
+											elseif ( 'hc_mode' === $theme_setting ) {
+												$theme_style = 'High Contrast';
+											}
+											else {
+												$theme_style = 'Branded';
+											}
+
+											?>
+											<span class="">
+											<?php
+												echo esc_html( $theme_style );
+											?>
+											</span>
+											<?php
+
+										endif;
+										?>
+										<?php echo esc_html( $section['title'] ) ?>
+									</h2>
 									</div>
 							<?php endif; ?>
 
@@ -155,10 +182,23 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 									continue;
 								endif; ?>
 
+								<?php $theme_setting = Helpers::get_option( 'theme_settings' ) ? str_replace( '_', '-', Helpers::get_option( 'theme_settings' ) ) : 'branded-mode'; ?>
+
 								<div class="section-fields <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-field-light' : '' ?>">
-									<table class="form-table">
+									<table class="form-table" id="atum-table-color-settings" data-display="<?php echo esc_html( $theme_setting ); ?>">
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>
+
+									<?php
+									if ( 'atum_setting_scheme_color' === $section['id'] ) :
+
+										?>
+											<button class="btn btn-primary reset-default-colors" data-reset="1"
+													type="button" data-value="<?php echo esc_attr( $theme_setting ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
+										<?php
+
+									endif;
+									?>
 
 								</div>
 

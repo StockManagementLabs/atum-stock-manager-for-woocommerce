@@ -52,7 +52,7 @@ body {
 					font-family: atum-icon-font;
 					content: $atmi-chevron-down;
 					font-size: 10px;
-					color: $gray-500;
+					color: var(--atum-table-filter-dropdown);
 				}
 			}
 			
@@ -129,8 +129,8 @@ body {
 	
 	.select2-dropdown {
 		box-shadow: $dropdown-box-shadow;
-		background-color: $white;
-		border: 1px solid $gray-500;
+		background-color: var(--atum-table-bg);
+		border: 1px solid var(--gray-500);
 		border-radius: 5px;
 		overflow: hidden;
 		box-sizing: border-box;
@@ -159,19 +159,20 @@ body {
 		
 		&::-webkit-scrollbar-thumb {
 			border-radius: 5px;
-			background-color: $gray-500;
+			background-color: var(--gray-500);
 		}
 	}
 	
 	.select2-results__option {
 		padding: 6px;
 		user-select: none;
-		color: $gray-600;
+		color: var(--gray-600);
 		font-size: 12px;
 		
 		&:focus {
 			outline: none;
 		}
+		
 	}
 	
 	.select2-results__option[aria-selected] {
@@ -206,7 +207,7 @@ body {
 			box-sizing: border-box;
 			min-width: inherit;
 			border-radius: 5px;
-			border-color: $gray-500;
+			border-color: var(--gray-500);
 			
 			&::-webkit-search-cancel-button {
 				appearance: none;
@@ -232,7 +233,7 @@ body {
 		width: auto;
 		opacity: 0;
 		z-index: 99;
-		background-color: $white;
+		background-color: var(--white);
 	}
 	
 	.select2-hidden-accessible {
@@ -253,11 +254,12 @@ body {
 			.select2-selection--single {
 				height: 30px;
 				border-radius: 5px;
-				border: 1px solid $gray-200;
+				border: 1px solid var(--atum-select2-border);
+				background-color: var(--atum-table-bg);
 				
 				.select2-selection__rendered {
 					line-height: 27px;
-					color: $gray-600;
+					color: var(--gray-600);
 					font-size: 15px;
 					padding-left: 10px;
 				}
@@ -269,7 +271,7 @@ body {
 				}
 				
 				.select2-selection__placeholder {
-					color: $gray-600;
+					color: var(--gray-600);
 				}
 				
 				.select2-selection__arrow {
@@ -328,6 +330,11 @@ body {
 	
 	.select2-container--default {
 		
+		.select2-results__option--highlighted[aria-selected] {
+			background-color: var(--atum-select2-selected-bg);
+			color: var(--atum-select2-selected-text);
+		}
+		
 		&.atum-select2, &.atum-enhanced-select {
 			
 			&.select2-container--disabled {
@@ -349,8 +356,8 @@ body {
 			}
 			
 			.select2-selection--multiple {
-				background-color: $white;
-				border: 1px solid $gray-500;
+				background-color: var(--white);
+				border: 1px solid var(--gray-500);
 				border-radius: 4px;
 				cursor: text;
 				
@@ -381,7 +388,7 @@ body {
 				}
 				
 				.select2-selection__choice {
-					background-color: $gray-500;
+					background-color: var(--gray-500);
 					border: none;
 					border-radius: 4px;
 					cursor: default;
@@ -391,7 +398,7 @@ body {
 					height: 24px;
 					overflow: hidden;
 					margin: 4px 5px 0 0;
-					color: $white;
+					color: var(--white);
 					
 				}
 				
@@ -411,11 +418,11 @@ body {
 						position: relative;
 						left: -8px;
 						font-size: 14px;
-						color: $white;
+						color: var(--white);
 					}
 					
 					&:hover {
-						color: $gray-800;
+						color: var(--gray-800);
 					}
 				}
 			}
@@ -453,7 +460,7 @@ body {
 			
 			&.select2-container--focus {
 				.select2-selection--multiple {
-					border: solid $black 1px;
+					border: solid var(--black) 1px;
 					outline: 0;
 				}
 			}
@@ -487,24 +494,24 @@ body {
 			
 		}
 		
-		.select2-search--dropdown {
-			.select2-search__field {
-				border: 1px solid $gray-400;
-				box-shadow: none;
-				border-radius: 4px;
+			.select2-search--dropdown {
+				.select2-search__field {
+					border: 1px solid var(--gray-400);
+					box-shadow: none;
+					border-radius: 4px;
+				}
 			}
-		}
-		
-		.select2-search--inline {
-			.select2-search__field {
-				background: transparent;
-				border: none;
-				outline: 0;
-				box-shadow: none;
-				appearance: textfield;
+			
+			.select2-search--inline {
+				.select2-search__field {
+					background: transparent;
+					border: none;
+					outline: 0;
+					box-shadow: none;
+					appearance: textfield;
+				}
 			}
-		}
-		
+			
 		.select2-results__option {
 			
 			&[role=group] {
@@ -516,13 +523,13 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				background-color: $blue-light;
-				color: $blue;
+				background-color: var(--atum-select2-selected-bg);
+				color: var(--atum-select2-selected-text);
 			}
 			
 			&[data-selected=true] {
-				background-color: $blue-light;
-				color: $blue;
+				background-color: var(--atum-select2-selected-bg);
+				color: var(--atum-select2-selected-text);
 			}
 			
 			&.select2-results__message {
@@ -562,6 +569,11 @@ body {
 					}
 				}
 			}
+			
+			.select2-results__option--highlighted {
+				background-color: var(--blue-light);
+				color: var(--atum-select2-selected-text);
+			}
 		}
 		
 		.select2-results__group {
@@ -569,7 +581,7 @@ body {
 			display: block;
 			padding: 6px;
 		}
-		
+			
 	}
 	
 	.select2-container--classic {
@@ -577,19 +589,19 @@ body {
 		&.atum-select2, &.atum-enhanced-select {
 			
 			.select2-selection--single {
-				background-color: $gray-100;
-				border: 1px solid $gray-500;
+				background-color: var(--gray-100);
+				border: 1px solid var(--gray-500);
 				border-radius: 4px;
 				outline: 0;
 				background-image: linear-gradient(to bottom, $white 50%, $wp-gray-5 100%);
 				background-repeat: repeat-x;
 				
 				&:focus {
-					border: 1px solid $wp-link;
+					border: 1px solid var(--wp-link);
 				}
 				
 				.select2-selection__rendered {
-					color: $gray-700;
+					color: var(--gray-700);
 					line-height: 28px;
 				}
 				
@@ -601,13 +613,13 @@ body {
 				}
 				
 				.select2-selection__placeholder {
-					color: $dark;
+					color: var(--dark);
 				}
 				
 				.select2-selection__arrow {
 					background-color: $wp-gray-4;
 					border: none;
-					border-left: 1px solid $gray-500;
+					border-left: 1px solid var(--gray-500);
 					border-top-right-radius: 4px;
 					border-bottom-right-radius: 4px;
 					height: 26px;
@@ -641,7 +653,7 @@ body {
 					
 					.select2-selection__arrow {
 						border: none;
-						border-right: 1px solid $gray-500;
+						border-right: 1px solid var(--gray-500);
 						border-radius: 0;
 						border-top-left-radius: 4px;
 						border-bottom-left-radius: 4px;
@@ -653,7 +665,7 @@ body {
 			
 			&.select2-container--open {
 				.select2-selection--single {
-					border: 1px solid $wp-link;
+					border: 1px solid var(--wp-link);
 					
 					.select2-selection__arrow {
 						background: transparent;
@@ -688,14 +700,14 @@ body {
 			}
 			
 			.select2-selection--multiple {
-				background-color: $white;
-				border: 1px solid $gray-500;
+				background-color: var(--white);
+				border: 1px solid var(--gray-500);
 				border-radius: 4px;
 				cursor: text;
 				outline: 0;
 				
 				&:focus {
-					border: 1px solid $wp-link;
+					border: 1px solid var(--wp-link);
 				}
 				
 				.select2-selection__rendered {
@@ -710,7 +722,7 @@ body {
 				
 				.select2-selection__choice {
 					background-color: $wp-gray-5;
-					border: 1px solid $gray-500;
+					border: 1px solid var(--gray-500);
 					border-radius: 4px;
 					cursor: default;
 					float: left;
@@ -752,7 +764,7 @@ body {
 			
 			&.select2-container--open {
 				.select2-selection--multiple {
-					border: 1px solid $wp-link;
+					border: 1px solid var(--wp-link);
 				}
 				
 				&.select2-container--above {
@@ -774,7 +786,7 @@ body {
 			
 			.select2-search--dropdown {
 				.select2-search__field {
-					border: 1px solid $gray-500;
+					border: 1px solid var(--gray-500);
 					outline: 0;
 				}
 			}
@@ -793,7 +805,8 @@ body {
 	.select2-container--default {
 		
 		.select2-dropdown {
-			background-color: $white;
+			background-color: var(--white);
+			border: 1px solid transparent;
 		}
 		
 		.select2-dropdown--above {
@@ -808,7 +821,7 @@ body {
 		
 		.select2-results {
 			> .select2-results__options {
-				max-height: 210px;
+			max-height: 210px;
 				overflow-y: auto;
 			}
 		}
@@ -823,9 +836,9 @@ body {
 			}
 		}
 		
-		.select2-results__option--highlighted[aria-selected] {
-			background-color: $primary;
-			color: $white;
+		.select2-results__option--highlighted[aria-selected], .select2-results__option--highlighted {
+			background-color: var(--primary);
+			color: var(--white);
 		}
 		
 		.select2-results__group {
@@ -835,9 +848,9 @@ body {
 		}
 		
 		&.select2-container--open .select2-dropdown {
-			border-color: $white;
+			border-color: var(--white);
 		}
-		
+			
 	}
-	
+		
 }

@@ -71,7 +71,9 @@ class StockControl extends AtumWidget {
 
 		$config = $this->get_config();
 
-		Helpers::load_view( 'widgets/stock-control', compact( 'stock_counters', 'sc_links', 'config' ) );
+		$mode = Helpers::get_option( 'theme_settings', 'branded_mode' );
+
+		Helpers::load_view( 'widgets/stock-control', compact( 'stock_counters', 'sc_links', 'config', 'mode' ) );
 
 	}
 

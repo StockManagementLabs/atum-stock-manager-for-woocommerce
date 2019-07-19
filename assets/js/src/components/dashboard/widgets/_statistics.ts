@@ -81,7 +81,9 @@ export default class StatisticsWidget {
 		    tooltipBackground   : 'linear-gradient(135deg, ' + this.settings.get('chartColors').blue + ', ' + this.settings.get('chartColors').greenBlue + ')',
 		    fill                : false
 	    }];
-		
+
+        var style = getComputedStyle(document.body);
+
 	    this.statsChartConfig = {
 		    type   : 'line',
 		    data   : {
@@ -109,16 +111,25 @@ export default class StatisticsWidget {
 						    display        : false,
 						    drawBorder     : false,
 						    drawOnChartArea: true,
-						    drawTicks      : true
-					    }
+						    drawTicks      : true,
+                            color          : style.getPropertyValue('--dash-statistics-grid-lines')
+					    },
+                        ticks: {
+                            fontColor: style.getPropertyValue('--dash-statistics-ticks'),
+                        }
+
 				    }],
 				    yAxes: [{
 					    gridLines: {
 						    display        : true,
 						    drawBorder     : false,
 						    drawOnChartArea: true,
-						    drawTicks      : true
-					    }
+						    drawTicks      : true,
+                            color          : style.getPropertyValue('--dash-statistics-grid-lines')
+					    },
+                        ticks: {
+                            fontColor: style.getPropertyValue('--dash-statistics-ticks'),
+                        }
 				    }]
 			    },
 			    tooltips           : {
@@ -213,11 +224,14 @@ export default class StatisticsWidget {
 	doLegendSwitches() {
 		
 		// Enable switches.
-		Switcher.doSwitchers('.value-chart');
+		Switcher.doSwitchers('.value-chart', {
+			color    : 'var(--success-hover)',
+			jackColor: 'var(--success)',
+		});
 		
 		Switcher.doSwitchers('.products-chart', {
-			color    : this.settings.get('chartColors').blueTrans,
-			jackColor: this.settings.get('chartColors').blue,
+			color    : 'var(--primary-hover)',
+			jackColor: 'var(--primary)',
 		});
 		
 		// Hide/show charts with legend switches.

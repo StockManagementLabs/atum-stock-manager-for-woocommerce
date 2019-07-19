@@ -22,13 +22,21 @@
 	}
 	
 	h3 {
+		&.widget-success {
+			color: var(--dash-stats-data-widget-success) !important;
+		}
+		
+		&.widget-primary {
+			color: var(--primary) !important;
+		}
+		
 		font-size: 35px;
 		font-weight: bold;
 	}
 	
 	h5 {
 		font-size: 15px;
-		color: $widget-text;
+		color: var(--dash-widget-text);
 		font-weight: 100;
 		text-transform: uppercase;
 	}
@@ -36,7 +44,7 @@
 	hr {
 		border: {
 			width: 1px;
-			color: transparentize($black, 0.9);
+			color: var(--dash-widget-separator);
 			bottom: none;
 		}
 		margin: $grid-gutter-width 0;

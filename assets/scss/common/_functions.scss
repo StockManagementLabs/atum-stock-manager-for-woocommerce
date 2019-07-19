@@ -57,9 +57,11 @@
   $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 
   @if ($yiq >= $yiq-contrasted-threshold) {
-    @return $yiq-text-dark;
+    //@return $yiq-text-dark;
+	  @return var(--wp-yiq-text-dark);
   } @else {
-    @return $yiq-text-light;
+    //@return $yiq-text-light;
+	  @return var(--wp-yiq-text-light);
   }
 }
 

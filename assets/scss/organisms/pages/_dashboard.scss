@@ -2,16 +2,16 @@
 // Atum Dashboard
 //----------------
 
-$header-bg:                 $blue-light;
+$header-bg:                 var(--blue-light);
 $header-height:             300px;
-$card-border:               $wp-gray-5;
-$card-bg:                   $white;
-$card-text:                 $gray-500;
-$add-widget-color:          $gray-500;
+$card-border:               var(--wp-gray-5);
+$card-bg:                   var(--dash-card-bg);
+$card-text:                 var(--dash-card-text);
+$add-widget-color:          var(--gray-500);
 $widget-bg:                 $card-bg;
-$widget-icon:               $wp-gray-5;
+$widget-icon:               var(--wp-gray-5);
 $widget-controls:           $card-text;
-$widget-controls-hover:     $primary;
+$widget-controls-hover:     var(--primary);
 
 // Style the WP notices
 body.toplevel_page_atum-dashboard {
@@ -61,6 +61,10 @@ body.toplevel_page_atum-dashboard {
 		@include vertical-align-flex();
 		flex-wrap: wrap;
 		
+		h3 {
+			color: var(--dash-widget-header-title);
+		}
+		
 		.dash-header-buttons {
 			position: absolute;
 			left: 0;
@@ -109,8 +113,8 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.atum-version {
-			color: $white;
-			background-color: transparentize($black, 0.9);
+			color: var(--atum-version);
+			background-color: var(--atum-version-bg);
 			border-radius: 30px;
 			padding: 1px 15px;
 			font-weight: 100;
@@ -126,9 +130,15 @@ body.toplevel_page_atum-dashboard {
 			padding-left: $grid-gutter-width/2;
 			padding-bottom: 5px;
 			font-size: 11px;
+			color: var(--dash-widget-header-title);
+			font-weight: 300;
 			
 			span {
-				color: $primary;
+				color: var(--primary);
+			}
+			
+			.wc-rating-link {
+				color: var(--primary);
 			}
 			
 			@include tablet-max {
@@ -191,7 +201,19 @@ body.toplevel_page_atum-dashboard {
 				
 				h5, h2 {
 					margin: 5px 0;
+					color: var(--dash-h5-text);
+					
+					&.h5-primary {
+						color: var(--primary);
+					}
+					&.h5-secondary {
+						color: var(--success);
+					}
+					&.h5-tertiary {
+						color: var(--warning);
+					}
 				}
+				
 				
 				h2, p {
 					color: $card-text;
@@ -246,13 +268,13 @@ body.toplevel_page_atum-dashboard {
 					font-size: 20px;
 					font-weight: 100;
 					line-height: 30px;
-					color: $gray-600;
+					color: var(--dash-card-text);
 					cursor: pointer;
 					margin: 0 10px;
 					position: absolute;
 					
 					&:hover {
-						color: $blue;
+						color: var(--blue);
 					}
 				}
 				
@@ -358,29 +380,29 @@ body.toplevel_page_atum-dashboard {
 							&.btn-success, &.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
 								box-shadow: none;
 								
-								&.purple:hover {
-									opacity: 0.7;
-								}
+								//&.purple:hover {
+								//	opacity: 0.7;
+								//}
 							}
 							
 							&.btn-outline-success {
-								background: $white;
+								background: var(--white);
 								
 								&:hover {
-									background: $green;
+									background: var(--green);
 								}
 								
-								&.purple {
-									background: $white;
-									color: $purple-pl;
-									border-color: $purple-pl;
-									
-									&:hover {
-										background: $purple-pl;
-										color: $white;
-										border-color: $purple-pl;
-									}
-								}
+								//&.purple {
+								//	background: $white;
+								//	color: $purple-pl;
+								//	border-color: $purple-pl;
+								//
+								//	&:hover {
+								//		background: $purple-pl;
+								//		color: $white;
+								//		border-color: $purple-pl;
+								//	}
+								//}
 							}
 						}
 						
@@ -436,21 +458,24 @@ body.toplevel_page_atum-dashboard {
 					margin: auto;
 					
 					.input-group {
-						background-color: transparentize($white, 0.34);
+						background-color: var(--dash-input-group-bg);
 						border-radius: 15px;
-						box-shadow: 0 0 0 3px transparentize($white, 0.8);
+						box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
 						display: flex;
 					}
 					
 					input[type=email] {
 						border: none;
 						box-shadow: none;
-						background: transparent;
+						background: var(--dash-subscription-input);
 						padding: 7px 15px;
 						font-size: 10px;
 						font-weight: 300;
 						border-radius: 15px;
 						flex-grow: 1;
+						color: var(--dash-widget-text);
+						
+						@include placeholder(dash-input-placeholder);
 						
 						@include tablet-max {
 							padding: 6px 10px;
@@ -474,7 +499,7 @@ body.toplevel_page_atum-dashboard {
 	
 	// Add Widget Zone
 	.add-dash-widget {
-		border: 1px dashed $add-widget-color;
+		border: 1px dashed var(--dash-add-widget-color);
 		border-radius: 5px;
 		margin: $grid-gutter-width $grid-gutter-width 0;
 		min-height: 180px;
@@ -485,7 +510,7 @@ body.toplevel_page_atum-dashboard {
 		i, h2 {
 			display: inline-block;
 			vertical-align: middle;
-			color: $add-widget-color;
+			color: var(--dash-add-widget-color);
 			transition: .15s ease-in-out;
 			user-select: none;
 		}
@@ -497,10 +522,10 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		&:hover {
-			border-color: $widget-primary;
+			border-color: var(--dash-add-widget-color-dark);
 			
 			i, h2 {
-				color: $widget-primary;
+				color: var(--dash-add-widget-color-dark);
 			}
 		}
 		
@@ -521,7 +546,7 @@ body.toplevel_page_atum-dashboard {
 		.widget-wrapper {
 			background-color: $widget-bg;
 			border-radius: 5px;
-			box-shadow: 0 3px 2px $gray-200;
+			box-shadow: 0 3px 2px var(--gray-200);
 		}
 		
 		.widget-header, .widget-body {
@@ -529,7 +554,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-header {
-			border-bottom: 1px solid $card-border;
+			border-bottom: 1px solid var(--dash-widget-separator);
 			text-align: left;
 			cursor: move;
 			position: relative;
@@ -538,7 +563,7 @@ body.toplevel_page_atum-dashboard {
 			
 			&:before {
 				content: '...';
-				color: $widget-icon;
+				color: var(--dash-widget-icon);
 				font-size: 63px;
 				@include vertical-align-absolute;
 				left: 17px;
@@ -556,6 +581,7 @@ body.toplevel_page_atum-dashboard {
 				font-size: 18px;
 				font-weight: bold;
 				flex-grow: 1;
+				color: var(--dash-widget-header-title);
 			}
 			
 			i {
@@ -610,25 +636,25 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			.config-controls {
-				border-top: 1px solid $light;
+				border-top: 1px solid var(--light);
 				padding-top: $grid-gutter-width/2;
 			}
 		}
 		
 		.widget-primary {
-			color: $widget-primary;
+			color: var(--dash-widget-primary);
 		}
 		
 		.widget-success {
-			color: $widget-success;
+			color: var(--dash-widget-success);
 		}
 		
 		.widget-warning {
-			color: $widget-warning;
+			color: var(--dash-widget-warning);
 		}
 		
 		.widget-danger {
-			color: $widget-danger;
+			color: var(--dash-widget-danger);
 		}
 		
 		@include tablet-max {
@@ -695,6 +721,7 @@ body.toplevel_page_atum-dashboard {
 	min-height: 0 !important;
 	max-width: 98%;
 	overflow: hidden;
+	background-color: var(--atum-add-widget-bg) !important;
 	
 	&.overlay {
 		&:before {
@@ -705,7 +732,7 @@ body.toplevel_page_atum-dashboard {
 			top: 0;
 			bottom: 0;
 			z-index: 10;
-			background-color: $gray-100;
+			background-color: var(--gray-100);
 			opacity: 0.5;
 		}
 		
@@ -716,7 +743,7 @@ body.toplevel_page_atum-dashboard {
 			right: 0;
 			margin: auto;
 			@include loader(50px, $info, 3px);
-			border-top-color: $gray-600;
+			border-top-color: var(--gray-600);
 		}
 	}
 	
@@ -728,20 +755,24 @@ body.toplevel_page_atum-dashboard {
 		position: relative;
 		font-size: 17px;
 		text-align: left;
-		color: $dark;
-		border-bottom: 1px solid $light;
+		color: var(--atum-add-widget-title);
+		border-bottom: 1px solid var(--atum-add-widget-separator);
 		padding: 20px;
 		margin: -$grid-gutter-width/2 0 0;
 	}
 	
+	h3 {
+		color: var(--atum-add-widget-title);
+	}
+	
 	.swal2-close {
-		color: $gray-600;
+		color: var(--gray-600);
 		font-weight: 200;
 		font-size: 32px;
 		line-height: 1.7;
 		
 		&:hover {
-			color: $blue;
+			color: var(--blue);
 		}
 	}
 	
@@ -758,7 +789,7 @@ body.toplevel_page_atum-dashboard {
 			margin: auto;
 			display: flex;
 			align-items: center;
-			border-bottom: 0.5px solid transparentize($light, 0.5);
+			border-bottom: 0.5px solid var(--dash-widget-list-border);
 			
 			&:first-child {
 				padding-top: 3px;

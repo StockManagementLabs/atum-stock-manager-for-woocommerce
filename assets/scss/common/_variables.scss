@@ -83,6 +83,7 @@ $blue-light-2:                          lighten($blue, 55%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
 $orange:                                #EFAF00 !default;
 $orange-light:                          lighten($orange, 40%) !default;
+$orange-dark-light:                     darken($orange-light, 10%);
 $orange-light-2:                        lighten($orange, 48%) !default;
 $red:                                   #FF4848 !default;
 $red-light:                             lighten($red, 30%) !default;
@@ -93,19 +94,34 @@ $green-light-2:                         lighten($green, 50%) !default;
 $purple:                                #BA7DF7 !default;
 $purple-light:                          lighten($purple, 20%) !default;
 $purple-pl:                             #9357cc !default;
+$blue-trans:                            rgba(0, 183, 219, 0.79);
+$green-trans:                           rgba(106, 200, 30, 0.79);
+$green-blue:                            rgba(30, 200, 149, 0.79);
+
 
 $colors: () !default;
 $colors: map-merge((
-		"blue":            $blue,
-		"blue-gray-light": $blue-gray-light,
-		"orange":          $orange,
-		"red":             $red,
-		"green":           $green,
-		"blue-light":      $blue-light,
-		"white":           $white,
-		"gray":            $gray-500,
-		"gray-light":      $gray-200,
-		"gray-dark":       $gray-800
+		"blue":              $blue,
+		"blue-gray-light":   $blue-gray-light,
+		"orange":            $orange,
+		"red":               $red,
+		"red-light":         $red-light,
+		"red-light-2":       $red-light-2,
+		"green":             $green,
+		"green-light":       $green-light,
+		"blue-light":        $blue-light,
+		"blue-dark":         $blue-dark,
+		"blue-dark-lighten": $blue-dark-lighten,
+		"blue-dark-light-2": $blue-dark-light-2,
+		"white":             $white,
+		"gray":              $gray-500,
+		"gray-light":        $gray-200,
+		"gray-dark":         $gray-800,
+		"purple":            $purple,
+		"purple-light":      $purple-light,
+		"purple-pl":         $purple-pl,
+		"black":             $black,
+		
 ), $colors);
 
 $primary:                               $blue !default;
@@ -117,6 +133,7 @@ $danger:                                $red !default;
 $light:                                 $gray-100 !default;
 $dark:                                  $gray-800 !default;
 
+
 $theme-colors: () !default;
 $theme-colors: map-merge((
 		"primary":    $primary,
@@ -126,7 +143,8 @@ $theme-colors: map-merge((
 		"warning":    $warning,
 		"danger":     $danger,
 		"light":      $light,
-		"dark":       $dark
+		"dark":       $dark,
+		"purple-pl":  $purple-pl,
 ), $theme-colors);
 
 
@@ -137,6 +155,7 @@ $wp-link-hover:                         #00A0D2 !default;
 $wp-input-focus:                        #5B9DD9 !default;
 $wp-pink:                               #E6CCE1 !default;
 $wp-pink-light:                         #F5EBF3 !default;
+$wp-pink-darken:                        darken($wp-pink-light, 8%);
 $wp-pink-lighter:                       #FBF9FB !default;
 $wp-gray-dark:                          #32373C !default;
 $wp-gray-1:                             #999 !default;
@@ -146,6 +165,24 @@ $wp-gray-4:                             #DDD    !default;
 $wp-gray-5:                             #E5E5E5 !default;
 $wp-gray-6:                             #f9f9f9 !default;
 $wp-gray-7:                             #888 !default;
+
+$wp-colors: () !default;
+$wp-colors: map-merge((
+		"wp-link":         $wp-link,
+		"wp-link-hover":   $wp-link-hover,
+		"wp-input-focus":  $wp-input-focus,
+		"wp-pink":         $wp-pink,
+		"wp-pink-light":   $wp-pink-light,
+		"wp-pink-lighter": $wp-pink-lighter,
+		"wp-gray-dark":    $wp-gray-dark,
+		"wp-gray-1":       $wp-gray-1,
+		"wp-gray-3":       $wp-gray-3,
+		"wp-gray-4":       $wp-gray-4,
+		"wp-gray-5":       $wp-gray-5,
+		"wp-gray-6":       $wp-gray-6,
+		"wp-gray-7":       $wp-gray-7
+		
+), $wp-colors);
 
 // WC Colors
 
@@ -158,6 +195,21 @@ $wc-orange-light:                       #f8dda7 !default;
 $wc-red:                                #761919 !default;
 $wc-red-light:                          #eba3a3 !default;
 $wc-purple:                             #96588a !default;
+
+$wc-colors: () !default;
+$wc-colors: map-merge((
+		"wc-blue-gray":       $wc-blue-gray,
+		"wc-blue-gray-light": $wc-blue-gray-light,
+		"wc-green":           $wc-green,
+		"wc-green-light":     $wc-green-light,
+		"wc-orange":          $wc-orange,
+		"wc-orange-light":    $wc-orange-light,
+		"orange-light-2":     $orange-light-2,
+		"wc-red":             $wc-red,
+		"wc-red-light":       $wc-red-light,
+		"wc-purple":          $wc-purple,
+
+), $wc-colors);
 
 
 // Body
@@ -358,7 +410,8 @@ $dropdown-border-color:                 rgba($black, .15) !default;
 $dropdown-border-radius:                $border-radius !default;
 $dropdown-border-width:                 $border-width !default;
 $dropdown-divider-bg:                   $gray-200 !default;
-$dropdown-box-shadow:                   0 .5rem 1rem rgba($black, .175) !default;
+$dropdown-box-shadow:                   0 0 6px 0 rgba(0, 0, 0, 0.2);
+//$dropdown-box-shadow:                   0 0 10px 0 rgba($black, .6) !default;
 
 $dropdown-link-color:                   $gray-900 !default;
 $dropdown-link-hover-color:             darken($gray-900, 5%) !default;

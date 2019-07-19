@@ -18,19 +18,19 @@
 		}
 		
 		ul {
-			background-color: $gray-200;
+			background-color: var(--gray-200);
 			display: flex;
 			
 			li {
 				display: inline-block;
 				padding: $grid-gutter-width/2 10px;
-				color: $widget-text;
+				color: var(--dash-widget-text);
 				font-size: 15px;
 				font-weight: 100;
 				transition: .2s ease-in-out;
 				
 				&:hover, &.active {
-					color: $widget-success;
+					color: var(--dash-widget-success);
 				}
 				
 				span, i {
@@ -108,7 +108,7 @@
 		svg {
 			max-width: 32px;
 			max-height: 32px;
-			fill: $widget-text;
+			fill: var(--dash-widget-text);
 			transition: 0.2s ease-in-out;
 			
 			@include tablet-max {
@@ -120,14 +120,16 @@
 		a {
 			display: inline-block;
 			margin-right: 5px;
-			background-color: transparentize($light, 0.8);
+			background-color: var(--dash-statistics-chart-type-bg);
+			color: var(--primary);
 			padding: 3px 7px;
 			border-radius: 4px;
-			border: 0.5px solid $gray-200;
+			border: 0.5px solid var(--dash-border);
 			
 			&.active, &:hover {
+				background-color: var(--dash-statistics-chart-type-selected-bg);
 				svg {
-					fill: $warning;
+					fill: var(--dash-statistics-chart-type-selected-text);
 				}
 			}
 		}
@@ -140,9 +142,9 @@
 		
 		.legend-switch {
 			padding: 10px 40px;
-			border: 0.5px solid $gray-200;
+			border: 0.5px solid var(--dash-border);
 			border-radius: 4px;
-			background-color: transparentize($light, 0.8);
+			background-color: var(--dash-statistics-legend-switch-bg);
 			position: relative;
 			margin-left: 5px;
 			display: flex;
@@ -171,13 +173,13 @@
 			
 			#value-chart {
 				~ label {
-					color: $widget-success;
+					color: var(--dash-stats-data-widget-success);
 				}
 			}
 			
 			#products-chart {
 				~ label {
-					color: $widget-primary;
+					color: var(--dash-stats-data-widget-primary);
 				}
 			}
 			
@@ -205,8 +207,8 @@
 	.stats-chart-tooltip {
 		opacity: 0;
 		position: absolute;
-		background: rgba($black, .7);
-		color: $white;
+		background: var(--black-hover);
+		color: var(--white);
 		font-size: 12px;
 		border-radius: 3px;
 		transition: all .1s ease;

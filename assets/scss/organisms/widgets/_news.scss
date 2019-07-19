@@ -23,7 +23,6 @@
 		align-items: flex-start;
 		text-align: left;
 		padding: 10px 0;
-		border-bottom: 1px solid lighten($light, 7%);
 		transition: 0.3s ease-in-out;
 		
 		&:last-child {
@@ -73,18 +72,19 @@
 		transition: 0.2s ease-in-out;
 		
 		&:hover {
-			color: $primary;
+			color: var(--primary);
 		}
 	}
 	
-	.post-meta, .post-excerpt {
-		color: $widget-text;
+	.post-excerpt {
+		color: var(--dash-next-text);
 	}
 	
 	.post-meta {
 		font-size: 9px;
 		line-height: 1.1;
 		margin-bottom: 5px;
+		color: var(--dash-widget-text);
 	}
 	
 	.post-excerpt {
