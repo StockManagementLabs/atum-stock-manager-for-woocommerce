@@ -1257,7 +1257,7 @@ class Settings {
 	public function display_theme_selector( $args ) {
 
 		$name               = self::OPTION_NAME . "[{$args['id']}]";
-		$theme_setting_save = Helpers::get_option( 'theme_settings' ) ? Helpers::get_option( 'theme_settings' ) : 'branded_mode';
+		$theme_setting_save = Helpers::get_option( 'theme_settings', 'branded_mode' );
 
 		ob_start();
 		?>

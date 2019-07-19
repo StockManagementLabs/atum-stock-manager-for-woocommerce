@@ -2639,7 +2639,7 @@ final class Helpers {
 
 		$style = '';
 
-		$theme_settings = self::get_option( 'theme_settings' ) ? self::get_option( 'theme_settings' ) : 'branded_mode';
+		$theme_settings = self::get_option( 'theme_settings', 'branded_mode' );
 
 		if ( 'dark_mode' === $theme_settings ) {
 			$prefix = 'dm_';
