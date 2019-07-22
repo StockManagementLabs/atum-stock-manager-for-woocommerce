@@ -2359,10 +2359,20 @@ final class Helpers {
 	public static function get_atum_user_meta( $key = '', $user_id = 0 ) {
 
 		$user_id        = $user_id ?: get_current_user_id();
-		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+		$cache_key      = AtumCache::get_cache_key( 'get_atum_user_meta', [ $key, $user_id ] );
+		$atum_user_meta = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE ) ) {
-			return $atum_user_meta[ $key ];
+		if ( ! $has_cache ) {
+
+			$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+
+			if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE ) ) {
+				$atum_user_meta = $atum_user_meta[ $key ];
+			}
+
+			AtumCache::set_cache( $cache_key, $atum_user_meta );
+
+
 		}
 
 		return $atum_user_meta;
@@ -2381,7 +2391,7 @@ final class Helpers {
 	public static function set_atum_user_meta( $key, $value, $user_id = 0 ) {
 
 		$user_id        = $user_id ?: get_current_user_id();
-		$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+		$atum_user_meta = self::get_atum_user_meta();
 
 		if ( ! is_array( $atum_user_meta ) ) {
 			$atum_user_meta = array();
@@ -2389,6 +2399,10 @@ final class Helpers {
 
 		$atum_user_meta[ $key ] = $value;
 		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
+
+		// Delete any saved user meta after updating its value.
+		$cache_key = AtumCache::get_cache_key( 'get_atum_user_meta', [ $key, $user_id ] );
+		AtumCache::delete_cache( $cache_key );
 
 	}
 	
@@ -2638,10 +2652,10 @@ final class Helpers {
 	 */
 	public static function get_visual_mode_style() {
 
-		$theme_settings = self::get_option( 'theme_settings', 'branded_mode' );
-		$atum_colors    = AtumColors::get_instance();
+		$theme       = AtumColors::get_user_theme();
+		$atum_colors = AtumColors::get_instance();
 
-		switch ( $theme_settings ) {
+		switch ( $theme ) {
 			case 'dark_mode':
 				return $atum_colors->get_dark_mode_colors();
 

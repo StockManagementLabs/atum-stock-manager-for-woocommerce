@@ -3422,64 +3422,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   }
 }
 
-.atum-settings-wrapper .atum-nav-light {
-  background-color: var(--white);
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-header {
-  background-color: var(--blue);
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
-  color: var(--white);
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link {
-  color: #00B8DB;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link:hover, .atum-settings-wrapper .atum-nav-light .atum-nav-link:focus {
-  background-color: var(--blue-light);
-  color: var(--blue);
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:before, .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper:after {
-  background: transparent;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link.active {
-  cursor: default;
-  background-color: var(--blue-light);
-  color: va(--blue);
-  border-right: 3px solid var(--blue);
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-link.active .menu-helper {
-  -webkit-animation: inherit;
-          animation: inherit;
-}
-
-.atum-settings-wrapper .atum-nav-light .atum-nav-item {
-  -webkit-box-shadow: 0 1px 0 0 var(--gray-200);
-          box-shadow: 0 1px 0 0 var(--gray-200);
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer .nav-footer-logo span {
-  color: var(--blue-dark);
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer p {
-  color: var(--gray-500);
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer p a {
-  color: var(--blue);
-}
-
-.atum-settings-wrapper .atum-nav-light .nav-footer p a:hover {
-  color: var(--blue);
-}
-
 .atum-settings-wrapper .atum-nav-header {
   background-color: var(--atum-settings-heads-bg);
   -webkit-box-shadow: 0 1px 0 0 var(--white-shadow);
@@ -3709,14 +3651,14 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 @media all and (max-width: 768px) {
-  .atum-settings-wrapper .atum-nav, .atum-settings-wrapper .atum-nav-light {
+  .atum-settings-wrapper .atum-nav {
     width: 50px;
     min-width: inherit;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand-link, .atum-settings-wrapper .atum-nav-light .atum-brand-link {
+  .atum-settings-wrapper .atum-nav .atum-brand-link {
     width: 100%;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand {
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
@@ -3724,50 +3666,50 @@ body .select2-container--default.select2-container--open .select2-dropdown {
     text-align: center;
     padding-left: 0;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand span {
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand span {
     display: none;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-link, .atum-settings-wrapper .atum-nav-light .atum-nav-link {
+  .atum-settings-wrapper .atum-nav .atum-nav-link {
     padding: 0 15px 0 17px;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-link .menu-helper span, .atum-settings-wrapper .atum-nav-light .atum-nav-link .menu-helper span {
+  .atum-settings-wrapper .atum-nav .atum-nav-link .menu-helper span {
     display: none;
   }
-  .atum-settings-wrapper .atum-nav .nav-footer, .atum-settings-wrapper .atum-nav-light .nav-footer {
+  .atum-settings-wrapper .atum-nav .nav-footer {
     display: none;
   }
 }
 
 @media all and (max-width: 480px) {
-  .atum-settings-wrapper .atum-nav, .atum-settings-wrapper .atum-nav-light {
+  .atum-settings-wrapper .atum-nav {
     width: 100%;
     margin-bottom: 11px;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand-link, .atum-settings-wrapper .atum-nav-light .atum-brand-link {
+  .atum-settings-wrapper .atum-nav .atum-brand-link {
     width: inherit;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand {
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand {
     padding-left: 10px;
   }
-  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand span, .atum-settings-wrapper .atum-nav-light .atum-brand-link .atum-brand span {
+  .atum-settings-wrapper .atum-nav .atum-brand-link .atum-brand span {
     display: block;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-header, .atum-settings-wrapper .atum-nav-light .atum-nav-header {
+  .atum-settings-wrapper .atum-nav .atum-nav-header {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
+  .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu {
     display: block;
     background-color: transparent;
     border: none;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu:active, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:active {
+  .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav .atum-nav-header .toogle-menu:active {
     outline: 0;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-list, .atum-settings-wrapper .atum-nav-light .atum-nav-list {
+  .atum-settings-wrapper .atum-nav .atum-nav-list {
     display: none;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper, .atum-settings-wrapper .atum-nav-light .atum-nav-list .menu-helper {
+  .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper {
     width: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -3779,20 +3721,8 @@ body .select2-container--default.select2-container--open .select2-dropdown {
         -ms-flex-pack: start;
             justify-content: flex-start;
   }
-  .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper span, .atum-settings-wrapper .atum-nav-light .atum-nav-list .menu-helper span {
+  .atum-settings-wrapper .atum-nav .atum-nav-list .menu-helper span {
     display: block;
-  }
-  .atum-settings-wrapper .atum-nav-light .atum-nav-header {
-    background-color: var(--blue);
-    -webkit-box-shadow: 0 1px 0 0 var(--gray-200);
-            box-shadow: 0 1px 0 0 var(--gray-200);
-  }
-  .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu {
-    background-color: transparent;
-    border: none;
-  }
-  .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:focus, .atum-settings-wrapper .atum-nav-light .atum-nav-header .toogle-menu:active {
-    outline: 0;
   }
 }
 
@@ -3910,19 +3840,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   font-weight: bold;
   padding-left: 5px;
   font-weight: bold;
-}
-
-.atum-settings-wrapper #atum-settings .section-general-title-light {
-  background-color: var(--blue);
-}
-
-.atum-settings-wrapper #atum-settings .section-general-title-light h2 {
-  color: var(--white);
-}
-
-.atum-settings-wrapper #atum-settings .section-general-title-light input[type=submit], .atum-settings-wrapper #atum-settings .section-general-title-light input[type=submit]:hover {
-  background-color: var(--white);
-  color: var(--blue);
 }
 
 .atum-settings-wrapper #atum-settings .settings-section {
@@ -4048,15 +3965,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   font-weight: bold;
 }
 
-.atum-settings-wrapper #atum-settings .section-title.section-title-light {
-  background-color: var(--white);
-  border-bottom: 1px solid #e9ecef;
-}
-
-.atum-settings-wrapper #atum-settings .section-title.section-title-light h2 {
-  color: #27283B;
-}
-
 .atum-settings-wrapper #atum-settings .section-fields {
   padding: 0px 20px 120px 25px;
   border-bottom-right-radius: 6px;
@@ -4066,18 +3974,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
   position: relative;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields.section-field-light {
-  background-color: #fff;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields.section-field-light tr:not(:last-child) {
-  border-bottom: 1px solid #e9ecef;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields.section-field-light th {
-  color: #6c757d;
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .reset-default-colors {

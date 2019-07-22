@@ -138,9 +138,6 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 
-		// Change ATUM settings menu style.
-		add_action( 'wp_ajax_atum_menu_style', array( $this, 'change_settings_menu_style' ) );
-
 		// Change sticky columns settting.
 		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
 
@@ -2195,27 +2192,6 @@ final class Ajax {
 		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
 			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
 		}
-
-	}
-
-	/**
-	 * Change the value of a meta key for show dark o light menu theme for ATUM settings
-	 *
-	 * @package Settings
-	 *
-	 * @since 1.5.0
-	 */
-	public function change_settings_menu_style() {
-
-		check_ajax_referer( 'atum-menu-theme-nonce', 'token' );
-
-		if ( ! isset( $_POST['theme'] ) ) {
-			wp_send_json_error();
-		}
-
-		update_user_meta( get_current_user_id(), 'menu_settings_theme', 1 === absint( $_POST['theme'] ) ? 'dark' : 'light' );
-
-		wp_send_json_success( __( 'The Settings theme was updated successfully', ATUM_TEXT_DOMAIN ) );
 
 	}
 

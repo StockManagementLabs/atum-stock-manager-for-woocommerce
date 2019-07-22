@@ -10,10 +10,8 @@
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
-
-$menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE );
+use Atum\Components\AtumColors;
 
 ?>
 <div class="wrap">
@@ -24,7 +22,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 		<?php settings_errors(); ?>
 
 		<div class="atum-settings-container">
-			<nav class="atum-nav <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'atum-nav-light' : '' ?>">
+			<nav class="atum-nav">
 
 				<div class="atum-nav-header">
 					<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
@@ -83,7 +81,7 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 					foreach ( array_keys( $active_sections ) as $active_section_key => $active_section ) :
 
 						// Check if is last section.
-						$last_section = count( $active_sections ) - 1 === $active_section_key ? true : false;
+						$last_section = count( $active_sections ) - 1 === $active_section_key ? TRUE : FALSE;
 
 						// This prints out all hidden setting fields.
 						settings_fields( ATUM_PREFIX . "setting_$active_section" );
@@ -96,15 +94,15 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 						foreach ( (array) $wp_settings_sections[ $page ] as $section ) : ?>
 
-						<div id="<?php echo esc_attr( $section['id'] ) ?>" class="settings-section" data-section="<?php echo esc_attr( str_replace( [ ATUM_PREFIX, 'setting_' ], '', $section['id'] ) ) ?>">
+							<div id="<?php echo esc_attr( $section['id'] ) ?>" class="settings-section" data-section="<?php echo esc_attr( str_replace( [ ATUM_PREFIX, 'setting_' ], '', $section['id'] ) ) ?>">
 
 								<?php if ( ! $last_section || 1 === count( $active_sections ) ) : ?>
-									<?php $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE ); ?>
-									<div class="section-general-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-general-title-light' : '' ?>">
-										<?php
 
-										$header_settings_title = null;
-										switch ( $section['id'] ) {
+									<div class="section-general-title">
+										<?php
+										$header_settings_title = NULL;
+
+										switch ( $section['id'] ) :
 											case 'atum_setting_general':
 												$header_settings_title = __( 'General', ATUM_TEXT_DOMAIN );
 												break;
@@ -121,84 +119,68 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 												$header_settings_title = __( 'Stock Central', ATUM_TEXT_DOMAIN );
 												break;
 											case 'atum_setting_multi_inventory':
-												$header_settings_title = __( 'MULTI-INVENTORY', ATUM_TEXT_DOMAIN );
+												$header_settings_title = __( 'Multi-Inventory', ATUM_TEXT_DOMAIN );
 												break;
 											case 'atum_setting_product_levels':
-												$header_settings_title = __( 'PRODUCT LEVELS', ATUM_TEXT_DOMAIN );
+												$header_settings_title = __( 'Product Levels', ATUM_TEXT_DOMAIN );
 												break;
 											case 'atum_setting_tools':
 												$header_settings_title = __( 'Tools', ATUM_TEXT_DOMAIN );
 												break;
-										}
-
+										endswitch;
 										?>
+
 										<h2><?php echo esc_attr( $header_settings_title ) ?></h2>
-										<?php
 
-										submit_button( __( 'Save Changes', ATUM_TEXT_DOMAIN ) );
-
-										?>
+										<?php submit_button( __( 'Save Changes', ATUM_TEXT_DOMAIN ) ); ?>
 									</div>
 								<?php endif; ?>
 
-							<?php if ( $section['title'] ) : ?>
-									<div class="section-title <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-title-light' : '' ?>">
-									<h2>
-										<?php
-										if ( 'atum_setting_scheme_color' === $section['id'] ) :
+								<?php if ( $section['title'] ) : ?>
+									<div class="section-title">
+										<h2>
+											<?php if ( 'atum_setting_scheme_color' === $section['id'] ) :
 
-											$theme_setting = Helpers::get_option( 'theme_settings', 'branded_mode' );
+												$theme = AtumColors::get_user_theme();
 
-											if ( 'dark_mode' === $theme_setting ) {
-												$theme_style = 'Dark';
-											}
-											elseif ( 'hc_mode' === $theme_setting ) {
-												$theme_style = 'High Contrast';
-											}
-											else {
-												$theme_style = 'Branded';
-											}
+												if ( 'dark_mode' === $theme ) :
+													$theme_style = __( 'Dark', ATUM_TEXT_DOMAIN );
+												elseif ( 'hc_mode' === $theme ) :
+													$theme_style = __( 'High Contrast', ATUM_TEXT_DOMAIN );
+												else :
+													$theme_style = __( 'Branded', ATUM_TEXT_DOMAIN );
+												endif;
+												?>
 
-											?>
-											<span class="">
-											<?php
-												echo esc_html( $theme_style );
-											?>
-											</span>
-											<?php
+												<span>
+													<?php echo esc_html( $theme_style ) ?>
+												</span>
+											<?php endif; ?>
 
-										endif;
-										?>
-										<?php echo esc_html( $section['title'] ) ?>
-									</h2>
+											<?php echo esc_html( $section['title'] ) ?>
+										</h2>
 									</div>
 							<?php endif; ?>
 
 							<?php if ( $section['callback'] ) :
-									call_user_func( $section['callback'], $section );
+								call_user_func( $section['callback'], $section );
 							endif; ?>
 
 							<?php if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[ $page ] ) || ! isset( $wp_settings_fields[ $page ][ $section['id'] ] ) ) :
-									continue;
-								endif; ?>
+								continue;
+							endif; ?>
 
-								<?php $theme_setting = Helpers::get_option( 'theme_settings' ) ? str_replace( '_', '-', Helpers::get_option( 'theme_settings' ) ) : 'branded-mode'; ?>
+								<?php $theme = str_replace( '_', '-', AtumColors::get_user_theme() ); ?>
 
-								<div class="section-fields <?php echo isset( $menu_theme ) && 'light' === $menu_theme ? 'section-field-light' : '' ?>">
-									<table class="form-table" id="atum-table-color-settings" data-display="<?php echo esc_html( $theme_setting ); ?>">
+								<div class="section-fields">
+									<table class="form-table" id="atum-table-color-settings" data-display="<?php echo esc_html( $theme ); ?>">
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>
 
-									<?php
-									if ( 'atum_setting_scheme_color' === $section['id'] ) :
-
-										?>
-											<button class="btn btn-primary reset-default-colors" data-reset="1"
-													type="button" data-value="<?php echo esc_attr( $theme_setting ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
-										<?php
-
-									endif;
-									?>
+									<?php if ( 'atum_setting_scheme_color' === $section['id'] ) : ?>
+										<button class="btn btn-primary reset-default-colors" data-reset="1"
+											type="button" data-value="<?php echo esc_attr( $theme ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
+									<?php endif; ?>
 
 								</div>
 
@@ -206,19 +188,15 @@ $menu_theme = get_user_meta( get_current_user_id(), 'menu_settings_theme', TRUE 
 
 						<?php endforeach;
 
-					endforeach;
+					endforeach; ?>
 
-					?>
-
-				<input type="hidden" id="atum_settings_section" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[settings_section]" value="<?php echo esc_attr( $active ) ?>">
+					<input type="hidden" id="atum_settings_section" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[settings_section]" value="<?php echo esc_attr( $active ) ?>">
 
 					<?php
 					// Add a hidden field to restore WooCommerce manage_stock individual settings.
 					if ( 'stock_central' === $active ) : ?>
-					<input type="hidden" id="atum_restore_option_stock" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[restore_option_stock]" value="no">
-					<?php endif;
-
-					?>
+						<input type="hidden" id="atum_restore_option_stock" name="<?php echo esc_attr( Settings::OPTION_NAME ) ?>[restore_option_stock]" value="no">
+					<?php endif ?>
 
 				</div>
 			</form>

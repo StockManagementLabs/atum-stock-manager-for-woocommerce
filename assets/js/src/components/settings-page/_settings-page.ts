@@ -55,11 +55,6 @@ export default class SettingsPage {
 		// Toggle Menu.
 		this.toggleMenu();
 		
-		// Change menu theme
-		$('input[name="interface_style"]').on('change', () => {
-			this.changeTheme();
-		});
-		
 		
 		this.$form
 			
@@ -194,27 +189,6 @@ export default class SettingsPage {
 		
 		$(window).resize( () => {
 			$navList.removeClass('expand-menu');
-		});
-		
-	}
-	
-	changeTheme() {
-		
-		// Change Settings theme.
-		this.$nav.toggleClass('atum-nav-light');
-		$('.section-general-title').toggleClass('section-general-title-light');
-		$('.section-title').toggleClass('section-title-light');
-		$('.section-fields').toggleClass('section-field-light');
-		$('.switch-interface-style').toggleClass('bg-light');
-		
-		$.ajax({
-			url   : window['ajaxurl'],
-			method: 'POST',
-			data  : {
-				token : this.settings.get('menuThemeNonce'),
-				action: this.settings.get('changeSettingsMenuStyle'),
-				theme : $('.js-switch-menu').is(':checked') ? 1 : 0,
-			},
 		});
 		
 	}

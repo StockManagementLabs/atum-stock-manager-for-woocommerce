@@ -14,6 +14,7 @@ namespace Atum\Settings;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -48,6 +49,13 @@ class Settings {
 	 * @var array
 	 */
 	private $defaults;
+
+	/**
+	 * Store the fields that should be stored as user meta
+	 *
+	 * @var array
+	 */
+	private $user_meta_options = [];
 	
 	/**
 	 * Holds the values to be used in the fields callbacks
@@ -210,7 +218,6 @@ class Settings {
 				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
-				'changeSettingsMenuStyle'         => 'atum_menu_style',
 				'getSchemeColor'                  => 'atum_get_scheme_color',
 				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
@@ -500,6 +507,17 @@ class Settings {
 				ATUM_PREFIX . 'setting_' . $options['section'],     // Section.
 				$options
 			);
+
+			// Register the fields that must be saved as user meta.
+			if ( ! empty( $options['to_user_meta'] ) ) {
+
+				if ( ! isset( $this->user_meta_options[ $options['to_user_meta'] ] ) ) {
+					$this->user_meta_options[ $options['to_user_meta'] ] = array();
+				}
+
+				$this->user_meta_options[ $options['to_user_meta'] ][] = $field;
+			}
+
 		}
 
 	}
@@ -516,6 +534,24 @@ class Settings {
 	public function sanitize( $input ) {
 		
 		$this->options = Helpers::get_options();
+
+		// Save the the user meta options and exclude them from global settings.
+		if ( ! empty( $this->user_meta_options ) ) {
+
+			foreach ( $this->user_meta_options as $user_meta_key => $user_meta_options ) {
+
+				$user_options = array();
+
+				foreach ( $user_meta_options as $user_meta_option ) {
+					$user_options[ $user_meta_option ] = $this->sanitize_option( $user_meta_option, $input, $this->defaults[ $user_meta_option ] );
+					unset( $this->options[ $user_meta_option ] ); // Don't save the user meta on global options.
+				}
+
+				Helpers::set_atum_user_meta( $user_meta_key, $user_options );
+
+			}
+
+		}
 
 		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
 		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
@@ -548,66 +584,12 @@ class Settings {
 					in_array( $atts['section'], array_keys( $this->tabs[ $input['settings_section'] ]['sections'] ) )
 				) {
 
-					switch ( $this->defaults[ $key ]['type'] ) {
-
-						case 'switcher':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? 'yes' : 'no';
-							break;
-
-						case 'number':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? floatval( $input[ $key ] ) : $atts['default'];
-							break;
-
-						case 'select':
-							$this->options[ $key ] = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
-							break;
-
-						case 'button_group':
-							// The button groups could allow multiple values (checkboxes).
-							if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
-
-								$values = array();
-
-								foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
-
-									// Save always the required value as checked.
-									if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
-										$values[ $default_value ] = 'yes';
-									}
-									else {
-										$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
-									}
-
-								}
-
-								$this->options[ $key ] = maybe_serialize( $values );
-
-							}
-							else {
-								$this->options[ $key ] = ! empty( $input[ $key ] ) ? esc_attr( $input[ $key ] ) : $atts['default'];
-							}
-
-							break;
-
-						case 'textarea':
-							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
-							break;
-
-						case 'color':
-							$this->options[ $key ] = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
-							break;
-						case 'html':
-							// Don't save.
-							if ( array_key_exists( $key, $this->options ) ) {
-								unset( $this->options[ $key ] );
-							}
-							break;
-						case 'text':
-						default:
-							$this->options[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
-							break;
-
+					// Don't save.
+					if ( 'html' === $this->defaults[ $key ]['type'] && array_key_exists( $key, $this->options ) ) {
+						unset( $this->options[ $key ] );
 					}
+
+					$this->options[ $key ] = $this->sanitize_option( $key, $input, $atts );
 					
 				}
 			}
@@ -616,6 +598,79 @@ class Settings {
 		
 		return apply_filters( 'atum/settings/sanitize', $this->options );
 		
+	}
+
+	/**
+	 * Sanitize an option before saving
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $key
+	 * @param array  $input
+	 * @param array  $atts
+	 *
+	 * @return mixed
+	 */
+	private function sanitize_option( $key, $input, $atts ) {
+
+		switch ( $this->defaults[ $key ]['type'] ) {
+
+			case 'switcher':
+				$sanitized_option = isset( $input[ $key ] ) ? 'yes' : 'no';
+				break;
+
+			case 'number':
+				$sanitized_option = isset( $input[ $key ] ) ? floatval( $input[ $key ] ) : $atts['default'];
+				break;
+
+			case 'select':
+				$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
+				break;
+
+			case 'button_group':
+				// The button groups could allow multiple values (checkboxes).
+				if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
+
+					$values = array();
+
+					foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
+
+						// Save always the required value as checked.
+						if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
+							$values[ $default_value ] = 'yes';
+						}
+						else {
+							$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
+						}
+
+					}
+
+					$sanitized_option = maybe_serialize( $values );
+
+				}
+				else {
+					$sanitized_option = ! empty( $input[ $key ] ) ? esc_attr( $input[ $key ] ) : $atts['default'];
+				}
+
+				break;
+
+			case 'textarea':
+				$sanitized_option = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
+				break;
+
+			case 'color':
+				$sanitized_option = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
+				break;
+
+			case 'text':
+			default:
+				$sanitized_option = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
+				break;
+
+		}
+
+		return $sanitized_option;
+
 	}
 	
 	/**
@@ -635,7 +690,7 @@ class Settings {
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
 			$placeholder,
-			$this->options[ $args['id'] ],
+			$this->find_option_value( $args['id'] ),
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 		
@@ -662,7 +717,7 @@ class Settings {
 			absint( $args['cols'] ),
 			self::OPTION_NAME . "[{$args['id']}]",
 			$this->get_dependency( $args ) . $default,
-			$this->options[ $args['id'] ]
+			$this->find_option_value( $args['id'] )
 		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // WPCS: XSS ok.
@@ -690,7 +745,7 @@ class Settings {
 			$step,
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-			$this->options[ $args['id'] ],
+			$this->find_option_value( $args['id'] ),
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 
@@ -749,7 +804,7 @@ class Settings {
 			'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="js-switch atum-settings-input" style="display: none" %4$s>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
-			checked( 'yes', $this->options[ $args['id'] ], FALSE ),
+			checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 		
@@ -769,7 +824,7 @@ class Settings {
 
 		$name           = self::OPTION_NAME . "[{$args['id']}]";
 		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; // allow to send array.
-		$value          = $multiple ? maybe_unserialize( $this->options[ $args['id'] ] ) : $this->options[ $args['id'] ];
+		$value          = $multiple ? maybe_unserialize( $this->find_option_value( $args['id'] ) ) : $this->find_option_value( $args['id'] );
 		$style          = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
 		$size           = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
 		$input_type     = isset( $args['options']['input_type'] ) ? $args['options']['input_type'] : 'radio';
@@ -834,7 +889,7 @@ class Settings {
 	public function display_select( $args ) {
 
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
-		$value   = $this->options[ $args['id'] ];
+		$value   = $this->find_option_value( $args['id'] );
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
 
@@ -907,10 +962,10 @@ class Settings {
 	public function display_color( $args ) {
 		
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
-		$value   = $this->options[ $args['id'] ];
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
 		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
 		$display = isset( $args['display'] ) ? str_replace( '_', '-', $args['display'] ) : '';
+		$value   = $this->find_option_value( $args['id'] );
 
 		ob_start();
 		?>
@@ -952,27 +1007,31 @@ class Settings {
 	/**
 	 * Get the settings theme selector.
 	 *
-	 * @since 1.5.7.5
+	 * @since 1.5.9
 	 *
 	 * @param array $args Field arguments.
 	 */
 	public function display_theme_selector( $args ) {
 
-		$name               = self::OPTION_NAME . "[{$args['id']}]";
-		$theme_setting_save = Helpers::get_option( 'theme_settings', 'branded_mode' );
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$theme = AtumColors::get_user_theme();
 
 		ob_start();
 		?>
 		<div class="theme-selector-wrapper">
+
 			<?php foreach ( $args['options']['values'] as $option ) : ?>
+
 				<input type="radio" id="<?php echo esc_attr( $option['key'] ); ?>" name="<?php echo esc_attr( $name ); ?>"
 						value="<?php echo esc_attr( $option['key'] ); ?>"
-						<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? 'checked' : ''; ?>>
+						<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? 'checked' : ''; ?>>
+
 				<div class="selector-container">
 					<div class="selector-box" data-value="<?php echo esc_attr( $option['key'] ); ?>" data-reset="0">
 						<img src="<?php echo esc_attr( ATUM_URL . 'assets/images/settings/' . $option['thumb'] ); ?>" alt=""
-								class="<?php echo ! $theme_setting_save && 'branded_mode' === $option['key'] || $theme_setting_save === $option['key'] ? ' active' : ''; ?>">
+								class="<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? ' active' : ''; ?>">
 					</div>
+
 					<div class="selector-description">
 						<div><?php echo esc_attr( $option['name'] ); ?></div>
 						<p class="atum-setting-info"><?php echo esc_attr( $option['desc'] ); ?></p>
@@ -980,6 +1039,7 @@ class Settings {
 				</div>
 
 			<?php endforeach; ?>
+
 		</div>
 		<?php
 		echo wp_kses_post( $this->get_description( $args ) );
@@ -1024,6 +1084,35 @@ class Settings {
 		}
 
 		return '';
+
+	}
+
+	/**
+	 * Find a value for a given option.
+	 * First searches on user meta and if not found, it tries to get it from the options prop
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $option_key
+	 *
+	 * @return string|bool  The meta key if it exists of FALSE if not.
+	 */
+	public function find_option_value( $option_key ) {
+
+		if ( ! empty( $this->user_meta_options ) ) {
+
+			foreach ( $this->user_meta_options as $user_meta_key => $user_meta_options ) {
+
+				if ( in_array( $option_key, $user_meta_options, TRUE ) ) {
+					$user_saved_meta = Helpers::get_atum_user_meta( $user_meta_key );
+					return isset( $user_saved_meta[ $option_key ] ) ? $user_saved_meta[ $option_key ] : $this->defaults[ $option_key ]['default'];
+				}
+
+			}
+
+		}
+
+		return $this->options[ $option_key ];
 
 	}
 

@@ -61,67 +61,7 @@
 			min-height: inherit;
 		}
 	}
-
-	.atum-nav-light {
-		background-color: var(--white);
-
-		.atum-nav-header {
-			background-color: var(--blue);
-
-			.toogle-menu {
-				color: var(--white);
-			}
-		}
-		.atum-nav-link {
-			color: $blue;
-
-			&:hover, &:focus {
-				background-color: var(--blue-light);
-				color: var(--blue);
-			}
-
-			.menu-helper {
-				&:before, &:after {
-					background: transparent;
-				}
-			}
-
-			&.active {
-				cursor: default;
-				background-color: var(--blue-light);
-				color: va(--blue);
-				border-right: 3px solid var(--blue);
-
-				.menu-helper {
-					animation: inherit;
-				}
-			}
-		}
-
-		.atum-nav-item {
-			box-shadow: 0 1px 0 0 var(--gray-200);
-		}
-
-		.nav-footer {
-			.nav-footer-logo {
-				span {
-					color: var(--blue-dark);
-				}
-			}
-
-			p {
-				color: var(--gray-500);
-
-				a {
-					color: var(--blue);
-
-					&:hover {
-						color: var(--blue);
-					}
-				}
-			}
-		}
-	}
+	
 	.atum-nav-header {
 		background-color: var(--atum-settings-heads-bg);
 		box-shadow: 0 1px 0 0 var(--white-shadow);
@@ -315,7 +255,7 @@
 	}
 
 	@include tablet-max {
-		.atum-nav, .atum-nav-light {
+		.atum-nav {
 			width: 50px;
 			min-width: inherit;
 
@@ -352,7 +292,7 @@
 
 	@include mobile-max {
 
-		.atum-nav, .atum-nav-light {
+		.atum-nav {
 			width: 100%;
 			margin-bottom: 11px;
 
@@ -399,21 +339,7 @@
 			}
 
 		}
-		.atum-nav-light {
-			.atum-nav-header {
-				background-color: var(--blue);
-				box-shadow: 0 1px 0 0 var(--gray-200);
-
-				.toogle-menu {
-					background-color: transparent;
-					border: none;
-
-					&:focus, &:active {
-						outline: 0;
-					}
-				}
-			}
-		}
+		
 	}
 	
 	// Settings form
@@ -497,21 +423,6 @@
 				font-weight: bold;
 				padding-left: 5px;
 				font-weight: bold;
-			}
-		}
-		
-		.section-general-title-light {
-			background-color: var(--blue);
-			
-			h2 {
-				color: var(--white);
-			}
-			
-			input[type=submit] {
-				&, &:hover {
-					background-color: var(--white);
-					color: var(--blue);
-				}
 			}
 		}
 		
@@ -614,14 +525,6 @@
 				font-weight: bold;
 			}
 			
-			&.section-title-light {
-				background-color: var(--white);
-				border-bottom: 1px solid darken($light, 5%);
-				
-				h2 {
-					color: $blue-dark;
-				}
-			}
 		}
 		
 		.section-fields {
@@ -632,18 +535,6 @@
 			background-size: 100% auto;
 			box-shadow: 0 4px 0 0 var(--gray-200);
 			position: relative;
-			
-			&.section-field-light {
-				background-color: $white;
-				
-				tr:not(:last-child) {
-					border-bottom: 1px solid darken($light, 5%);
-				}
-				
-				th {
-					color: $gray-600;
-				}
-			}
 			
 			.reset-default-colors {
 				position: absolute;

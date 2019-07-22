@@ -14,6 +14,7 @@ namespace Atum\Dashboard\Widgets;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumColors;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
@@ -70,8 +71,7 @@ class StockControl extends AtumWidget {
 		);
 
 		$config = $this->get_config();
-
-		$mode = Helpers::get_option( 'theme_settings', 'branded_mode' );
+		$mode   = AtumColors::get_user_theme();
 
 		Helpers::load_view( 'widgets/stock-control', compact( 'stock_counters', 'sc_links', 'config', 'mode' ) );
 
