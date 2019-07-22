@@ -86,6 +86,9 @@ class AtumCapabilities {
 		'create_order_notes',
 		'delete_order_notes',
 
+		// Visual settings caps.
+		'edit_visual_settings',
+
 		// Other caps.
 		'export_data',
 		'view_statistics',
