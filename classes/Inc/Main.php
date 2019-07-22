@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
@@ -269,6 +270,10 @@ class Main {
 				}
 			}
 
+		}
+
+		if ( ModuleManager::is_module_active( 'visual_settings' ) && AtumCapabilities::current_user_can( 'edit_visual_settings' ) ) {
+			AtumColors::get_instance();
 		}
 
 	}

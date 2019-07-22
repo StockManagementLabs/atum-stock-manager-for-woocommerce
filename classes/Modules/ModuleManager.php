@@ -31,7 +31,7 @@ class ModuleManager {
 	 *
 	 * @var array
 	 */
-	private $modules = [ 'dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export' ];
+	private $modules = [ 'dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'visual_settings' ];
 
 	/**
 	 * The current status of each module
@@ -126,6 +126,14 @@ class ModuleManager {
 			'section' => 'module_manager',
 			'name'    => __( 'Data Export', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Data Export module.', ATUM_TEXT_DOMAIN ),
+			'type'    => 'switcher',
+			'default' => 'yes',
+		);
+
+		$defaults['visual_settings_module'] = array(
+			'section' => 'module_manager',
+			'name'    => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Enables/Disables the Visual Settings module.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'yes',
 		);
