@@ -213,7 +213,6 @@ class Settings {
 				'selectColor'                     => __( 'Select Color', ATUM_TEXT_DOMAIN ),
 				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
-				'menuThemeNonce'                  => wp_create_nonce( 'atum-menu-theme-nonce' ),
 				'schemeColorNonce'                => wp_create_nonce( 'atum-scheme-color-nonce' ),
 				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
@@ -221,6 +220,9 @@ class Settings {
 				'getSchemeColor'                  => 'atum_get_scheme_color',
 				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
 				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
+				'dark'                            => __( 'Dark', ATUM_TEXT_DOMAIN ),
+				'highContrast'                    => __( 'High Contrast', ATUM_TEXT_DOMAIN ),
+				'branded'                         => __( 'Branded', ATUM_TEXT_DOMAIN ),
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );

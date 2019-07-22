@@ -49,9 +49,9 @@ export let ColorPicker = {
 	    element.wpColorPicker('color', selectColorText);
 
         $('.wp-picker-container').each( (index: number, elem: Element) => {
-
-            const $colorPicker: JQuery = $(elem),
-                value: string        = $colorPicker.find('.atum-color').val();
+	
+	        const $colorPicker: JQuery = $(elem),
+	              value: string        = $colorPicker.find('.atum-color').val();
 
             if ( value ) {
                 $colorPicker.find('.color-picker-preview').css('background-color', value);
