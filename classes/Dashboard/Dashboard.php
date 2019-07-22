@@ -83,20 +83,6 @@ class Dashboard {
 			'height'     => 4,
 			'min-height' => 5,
 		),
-		ATUM_PREFIX . 'news_widget'                => array(
-			'x'          => 6,
-			'y'          => 10,
-			'width'      => 6,
-			'height'     => 4,
-			'min-height' => 5,
-		),
-		ATUM_PREFIX . 'videos_widget'              => array(
-			'x'          => 0,
-			'y'          => 15,
-			'width'      => 12,
-			'height'     => 5,
-			'min-height' => 7,
-		),
 		ATUM_PREFIX . 'current_stock_value_widget' => array(
 			'x'          => 0,
 			'y'          => 20,
@@ -104,6 +90,20 @@ class Dashboard {
 			'height'     => 4,
 			'min-height' => 5,
 			'default'    => FALSE,
+		),
+		/*ATUM_PREFIX . 'news_widget'                => array(
+			'x'          => 6,
+			'y'          => 10,
+			'width'      => 6,
+			'height'     => 4,
+			'min-height' => 5,
+		),*/
+		ATUM_PREFIX . 'videos_widget'              => array(
+			'x'          => 0,
+			'y'          => 15,
+			'width'      => 12,
+			'height'     => 5,
+			'min-height' => 7,
 		),
 	);
 

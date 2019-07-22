@@ -17,8 +17,8 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumWidget;
 use Atum\Inc\Helpers;
 
-
-class News extends AtumWidget {
+/** NEWS WIDGET DISABLED */
+class News_DISABLED extends AtumWidget {
 
 	/**
 	 * The id of this widget
