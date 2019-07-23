@@ -946,14 +946,11 @@ abstract class AtumOrderPostType {
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 				) );
 
-				// Get visual mode style selected.
-				wp_add_inline_style(
-					'atum-orders',
-					Helpers::get_visual_mode_style()
-				);
-
 				wp_enqueue_style( 'atum-orders' );
 				wp_enqueue_script( 'atum-orders-table' );
+
+				// Load the ATUM colors.
+				Helpers::enqueue_atum_colors( 'atum-orders' );
 
 			}
 

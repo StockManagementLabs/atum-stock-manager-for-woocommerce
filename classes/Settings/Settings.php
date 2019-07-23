@@ -227,9 +227,10 @@ class Settings {
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'wp-color-picker' );
-			// Get visual mode style selected.
-			wp_add_inline_style( 'atum-settings', Helpers::get_visual_mode_style() );
 			wp_enqueue_style( self::UI_SLUG );
+
+			// Load the ATUM colors.
+			Helpers::enqueue_atum_colors( self::UI_SLUG );
 
 			if ( wp_script_is( 'es6-promise', 'registered' ) ) {
 				wp_enqueue_script( 'es6-promise' );
