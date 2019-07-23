@@ -172,8 +172,9 @@ class AtumColors {
 			--purple-pl: {$this->colors['primary_color']};
 		    --purple-pl-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 		    --wp-pink-darken-expanded: {$this->colors['primary_color']};
-			--gray-600:$text_color_2;
+			--gray-600: $text_color_2;
 			--green: $tertiary_color;
+			--white: {$this->colors['white']};
 			--white-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
 			--green-light: {$this->colors['primary_color_dark']};
 			--green-light-2: $tertiary_color_light;
@@ -272,7 +273,7 @@ class AtumColors {
 			--dash-video-title: {$this->colors['dark']};
 			--dash-video-subs-text $text_color_2;
 			--atum-marketing-popup-bg: $bg_1_color;
-			--dash-widget-current-stock-value-text: white;
+			--dash-widget-current-stock-value-text: {$this->colors['white']};
 			--dash-widget-current-stock-value-bg: {$this->colors['primary_color']};
 			--atum-select2-border: $border_color;
 			--atum-version: {$this->colors['blue_dark']};
@@ -322,6 +323,7 @@ class AtumColors {
 			--green: {$this->colors['tertiary_color_light']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--green-light-2: {$this->colors['tertiary_color_light']};
+			--white: {$this->colors['white']};
 			--success: {$this->colors['tertiary_color']};
 			--success-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--success-hover-text: {$this->colors['blue_dark']};
@@ -471,6 +473,7 @@ class AtumColors {
 			--gray-600: {$this->colors['text_color']};
 			--green: {$this->colors['tertiary_color']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
+			--white: {$this->colors['white']};
 			--atum-pagination-border-disabled: {$this->colors['border_color']};
 			--success: {$this->colors['tertiary_color']};
 			--success-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
