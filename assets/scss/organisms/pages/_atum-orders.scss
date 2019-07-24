@@ -196,7 +196,7 @@ table.wp-list-table {
 	tbody > :nth-child(odd), ul.striped > :nth-child(odd), .alternate {
 		background-color: var(--atum-table-row-odd);
 		&.active-row {
-			background-color: var(--atum-row-active);
+			background-color: var(--primary-dark-bg);
 		}
 	}
 	

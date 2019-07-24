@@ -477,7 +477,7 @@ body.toplevel_page_atum-dashboard {
 						flex-grow: 1;
 						color: var(--text-color-var1);
 						
-						@include placeholder(dash-input-placeholder);
+						@include placeholder(atum-text-color);
 						
 						@include tablet-max {
 							padding: 6px 10px;
@@ -556,7 +556,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-header {
-			border-bottom: 1px solid var(--dash-widget-separator);
+			border-bottom: 1px solid var(--atum-border);
 			text-align: left;
 			cursor: move;
 			position: relative;
@@ -652,7 +652,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-warning {
-			color: var(--dash-widget-warning);
+			color: var(--secondary);
 		}
 		
 		.widget-danger {

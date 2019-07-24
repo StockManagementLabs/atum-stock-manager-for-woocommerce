@@ -37,13 +37,13 @@ export default class StockControlWidget {
 						      $pieCanvas.data('unmanaged'),
 					      ],
 					      backgroundColor: [
-                              style.getPropertyValue('--dash-widget-warning'),
+                              style.getPropertyValue('--secondary'),
                               style.getPropertyValue('--danger'),
                               style.getPropertyValue('--tertiary'),
                               style.getPropertyValue('--primary'),
 					      ],
                           hoverBackgroundColor: [
-                              style.getPropertyValue('--dash-widget-warning'),
+                              style.getPropertyValue('--secondary'),
                               style.getPropertyValue('--danger'),
                               style.getPropertyValue('--tertiary'),
                               style.getPropertyValue('--primary'),

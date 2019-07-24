@@ -331,7 +331,7 @@ body {
 	.select2-container--default {
 		
 		.select2-results__option--highlighted[aria-selected] {
-			background-color: var(--atum-select2-selected-bg);
+			background-color: var(--primary-dark-bg);
 			color: var(--primary-var-dark);
 		}
 		
@@ -523,12 +523,12 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				background-color: var(--atum-select2-selected-bg);
+				background-color: var(--primary-dark-bg);
 				color: var(--primary-var-dark);
 			}
 			
 			&[data-selected=true] {
-				background-color: var(--atum-select2-selected-bg);
+				background-color: var(--primary-dark-bg);
 				color: var(--primary-var-dark);
 			}
 			

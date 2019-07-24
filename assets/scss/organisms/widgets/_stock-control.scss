@@ -31,10 +31,10 @@
 				margin-right: 10px;
 			}
 			&.widget-success:before {
-				background-color: var(--dash-widget-success);
+				background-color: var(--tertiary);
 			}
 			&.widget-warning:before {
-				background-color: var(--dash-widget-warning);
+				background-color: var(--secondary);
 			}
 			&.widget-danger:before {
 				background-color: var(--danger);
@@ -127,7 +127,7 @@
 	}
 	
 	hr {
-		border-top: 1px solid var(--dash-widget-separator);
+		border-top: 1px solid var(--atum-border);
 		border-bottom: none;
 		margin: $grid-gutter-width/2 0;
 		
@@ -135,7 +135,7 @@
 			clear: both;
 			padding: $grid-gutter-width/3 0;
 			border-top: none;
-			border-bottom: 1px solid var(--dash-widget-separator);
+			border-bottom: 1px solid var(--atum-border);
 		}
 		
 		@include mobile-max {

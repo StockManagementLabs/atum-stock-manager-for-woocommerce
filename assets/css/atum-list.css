@@ -275,11 +275,14 @@
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
   --success: #69C61D;
-  --secondary: #EFAF00;
+  --secondary: #6c757d;
+  --secondary-var: #EFAF00;
+  --secondary-light-var: #fff8e5;
+  --secondary-dark: #ffedbc;
   --secondary-hover: rgba(239, 175, 0, 0.6);
   --black-shadow-light: rgba(0, 0, 0, 0.04);
-  --atum-table-row-even: #f8f9fa;
-  --atum-table-row-odd: transparent;
+  --atum-table-bg: #fff;
+  --atum-table-bg2: #f8f9fa;
   --atum-bg-white: #fff;
   --atum-text-white: #fff;
   --wp-yiq-text-dark: #212529;
@@ -289,7 +292,7 @@
   --blue-light-expanded: #dbf9ff;
   --green-light-expanded: #d5f5ba;
   --tertiary-var: #69C61D;
-  --atum-border: #e9ecef;
+  --atum-border: rgba(255, 255, 255, 0.2);
   --atum-border-expanded: #adb5bd;
   --text-color-var1: #adb5bd;
   --text-color-var2: #adb5bd;
@@ -301,27 +304,21 @@
   --atum-table-link-text: #6c757d;
   --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
-  --atum-input-text-search: #6c757d;
+  --atum-text-color-dark2: #6c757d;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
-  --atum-pagination-bg-disabled: #f8f9fa;
   --atum-pagination-border-disabled: transparent;
   --order-green-light: #d5f5ba;
-  --atum-icon-tree: #343a40;
+  --atum-text-color: #343a40;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
   --atum-footer-totals: #e9ecef;
-  --atum-table-bg: #fff;
   --atum-footer-bg: #fff;
   --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
-  --atum-select2-selected-bg: #dbf9ff;
   --atum-column-groups-bg: #e9ecef;
-  --atum-row-active: #dbf9ff;
+  --primary-dark-bg: #dbf9ff;
   --atum-table-row-variation-text: #fff;
   --atum-table-row-child-variation-even: #f5fdff;
-  --atum-table-row-child-variation: #dbf9ff;
-  --atum-table-icon-active: #adb5bd;
-  --atum-table-text-active: #adb5bd;
   --atum-table-text-expanded: #fff;
   --atum-table-search-text: #fff;
   --atum-dark-bg: #3b3d5a;
@@ -331,30 +328,21 @@
   --atum-settings-section-general-bg: #3b3d5a;
   --atum-settings-section-bg: #fff;
   --atum-settings-nav-link: #00B8DB;
-  --atum-settings-nav-link-selected-bg: #dbf9ff;
   --title-color: #27283B;
   --atum-settings-text-logo: #27283B;
   --atum-settings-input-border: #e9ecef;
-  --atum-settings-border-color: #e9ecef;
-  --atum-settings-input-text: #6c757d;
   --atum-settings-btn-save: #fff;
   --atum-settings-btn-save-hover: #dbf9ff;
   --atum-settings-wp-color-bg: transparent;
-  --atum-settings-wp-color-text: #6c757d;
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
-  --dash-widget-success: #69C61D;
-  --dash-widget-warning: #6c757d;
-  --dash-widget-separator: #f8f9fa;
   --dash-subscription-input: rgba(255, 255, 255, 0.7);
   --dash-nice-select-bg: #fff;
   --dash-nice-select-list-bg: #fff;
-  --dash-nice-select-border: #e9ecef;
   --dash-nice-select-hover: #cbd3da;
   --dash-nice-select-disabled: #eff1f3;
   --dash-nice-select-disabled-after: #e6e8ea;
-  --dash-nice-select-arrow-color: #adb5bd;
   --dash-nice-select-option-hover-bg: #f8f9fa;
   --dash-nice-select-option-selected-bg: #dbf9ff;
   --dash-widget-list-border: rgba(248, 249, 250, 0.5);
@@ -373,11 +361,10 @@
   --atum-marketing-popup-bg: #fff;
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
-  --dash-input-placeholder: #adb5bd;
   --dash-statistics-ticks: #27283B;
   --dash-statistics-grid-lines: #e9ecef;
   --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
-  --dash-border: #e9ecef;
+  --atum-border-var: #e9ecef;
   --dash-widget-icon: #adb5bd;
   --dash-statistics-chart-type-selected-bg: transparent;
   --dash-statistics-chart-type-selected-text: #EFAF00;
@@ -393,7 +380,6 @@
   --atum-version-bg: rgba(0, 0, 0, 0.2);
   --atum-table-search-submit-bg: #adb5bd;
   --atum-table-filter-dropdown: #adb5bd;
-  --atum-settings-separator: rgba(255, 255, 255, 0.2);
   --atum-footer-title: #27283B;
   --atum-footer-link: #0073AA;
   --atum-footer-text: #555d66;
@@ -2612,7 +2598,7 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
 }
 
 body .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
@@ -2767,12 +2753,12 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
 body .select2-container--default .select2-results__option[data-selected=true] {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
@@ -3488,13 +3474,13 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   vertical-align: top;
   font-family: "atum-icon-font";
   cursor: pointer;
-  color: var(--atum-icon-tree);
+  color: var(--atum-text-color);
 }
 
 span.easytree-custom-icon {
   display: inline-block !important;
   vertical-align: -1px;
-  color: var(--atum-icon-tree);
+  color: var(--atum-text-color);
   margin-left: 3px;
   text-indent: 0 !important;
 }
@@ -4016,7 +4002,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 }
 
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan {
-  background-color: var(--atum-pagination-bg-disabled);
+  background-color: var(--atum-table-bg2);
   border: 1px solid var(--atum-pagination-border-disabled);
   color: var(--atum-pagination-disabled);
 }
@@ -5434,7 +5420,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
   border-radius: 5px;
-  background-color: var(--orange);
+  background-color: var(--secondary-var);
   font-size: 12px;
   min-width: 70px;
   letter-spacing: normal;
@@ -5455,7 +5441,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
-  background-color: rgba(239, 175, 0, 0.7);
+  background-color: rgba(var(--secondary-var), 0.7);
   color: var(--white);
   border: none;
 }
@@ -5893,7 +5879,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   max-width: 110px;
   font-size: 15px;
   background-color: var(--atum-table-bg);
-  color: var(--atum-input-text-search);
+  color: var(--atum-text-color-dark2);
 }
 
 @media all and (max-width: 782px) {
@@ -6036,7 +6022,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .dropdown-item:hover, .search-box .dropdown-item.active, .search-box .dropdown-item:focus, .search-box .dropdown-item:active, p.search-box .dropdown-item:hover, p.search-box .dropdown-item.active, p.search-box .dropdown-item:focus, p.search-box .dropdown-item:active {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
@@ -7312,7 +7298,7 @@ table.atum-list-table th.check-column input[type=checkbox], .floatThead-containe
 table.atum-list-table tr, .floatThead-container tr, .inbound-stock-list tr, table.wp-list-table tr {
   -webkit-box-shadow: 0 1px 0 0 var(--gray-200-shadow);
           box-shadow: 0 1px 0 0 var(--gray-200-shadow);
-  background-color: var(--atum-table-row-even);
+  background-color: var(--atum-table-bg2);
   border-top: 1px solid var(--atum-border);
   border-bottom: 1px solid var(--atum-border);
 }
@@ -7323,13 +7309,13 @@ table.atum-list-table tr.type-atum_supplier .row-actions, .floatThead-container 
 }
 
 table.atum-list-table tr:nth-child(odd), .floatThead-container tr:nth-child(odd), .inbound-stock-list tr:nth-child(odd), table.wp-list-table tr:nth-child(odd) {
-  background-color: var(--atum-table-row-odd);
+  background-color: var(--atum-table-bg);
 }
 
 table.atum-list-table tr.main-row, table.atum-list-table tr.mi-row, table.atum-list-table tr.expandable, .floatThead-container tr.main-row, .floatThead-container tr.mi-row, .floatThead-container tr.expandable, .inbound-stock-list tr.main-row, .inbound-stock-list tr.mi-row, .inbound-stock-list tr.expandable, table.wp-list-table tr.main-row, table.wp-list-table tr.mi-row, table.wp-list-table tr.expandable {
   -webkit-transition: .2s ease-in;
   transition: .2s ease-in;
-  background-color: var(--atum-table-row-odd);
+  background-color: var(--atum-table-bg);
   border: 1px solid var(--atum-border-expanded);
   border-left: none;
   border-right: none;
@@ -7349,19 +7335,19 @@ table.atum-list-table tr.expandable .set-meta, table.atum-list-table tr.expandab
 }
 
 table.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even, table.wp-list-table tr.even {
-  background-color: var(--atum-table-row-even);
+  background-color: var(--atum-table-bg2);
 }
 
 table.atum-list-table tr.active-row, .floatThead-container tr.active-row, .inbound-stock-list tr.active-row, table.wp-list-table tr.active-row {
-  background-color: var(--atum-row-active);
+  background-color: var(--primary-dark-bg);
 }
 
 table.atum-list-table tr.active-row td, .floatThead-container tr.active-row td, .inbound-stock-list tr.active-row td, table.wp-list-table tr.active-row td {
-  color: var(--atum-table-text-active) !important;
+  color: var(--atum-text-color-dark2) !important;
 }
 
 table.atum-list-table tr.active-row td .product-type, .floatThead-container tr.active-row td .product-type, .inbound-stock-list tr.active-row td .product-type, table.wp-list-table tr.active-row td .product-type {
-  color: var(--atum-table-icon-active);
+  color: var(--atum-text-color-dark2);
 }
 
 table.atum-list-table tr.active-row .set-meta, table.atum-list-table tr.active-row a, .floatThead-container tr.active-row .set-meta, .floatThead-container tr.active-row a, .inbound-stock-list tr.active-row .set-meta, .inbound-stock-list tr.active-row a, table.wp-list-table tr.active-row .set-meta, table.wp-list-table tr.active-row a {
@@ -7395,7 +7381,7 @@ table.atum-list-table tr.expanded.bundle, .floatThead-container tr.expanded.bund
 }
 
 table.atum-list-table tr.expanded.group, .floatThead-container tr.expanded.group, .inbound-stock-list tr.expanded.group, table.wp-list-table tr.expanded.group {
-  background-color: var(--orange);
+  background-color: var(--secondary-var);
 }
 
 table.atum-list-table tr.expanded.variable td, table.atum-list-table tr.expanded.variable a, table.atum-list-table tr.expanded.variable-subscription td, table.atum-list-table tr.expanded.variable-subscription a, table.atum-list-table tr.expanded.group td, table.atum-list-table tr.expanded.group a, table.atum-list-table tr.expanded.bundle td, table.atum-list-table tr.expanded.bundle a, .floatThead-container tr.expanded.variable td, .floatThead-container tr.expanded.variable a, .floatThead-container tr.expanded.variable-subscription td, .floatThead-container tr.expanded.variable-subscription a, .floatThead-container tr.expanded.group td, .floatThead-container tr.expanded.group a, .floatThead-container tr.expanded.bundle td, .floatThead-container tr.expanded.bundle a, .inbound-stock-list tr.expanded.variable td, .inbound-stock-list tr.expanded.variable a, .inbound-stock-list tr.expanded.variable-subscription td, .inbound-stock-list tr.expanded.variable-subscription a, .inbound-stock-list tr.expanded.group td, .inbound-stock-list tr.expanded.group a, .inbound-stock-list tr.expanded.bundle td, .inbound-stock-list tr.expanded.bundle a, table.wp-list-table tr.expanded.variable td, table.wp-list-table tr.expanded.variable a, table.wp-list-table tr.expanded.variable-subscription td, table.wp-list-table tr.expanded.variable-subscription a, table.wp-list-table tr.expanded.group td, table.wp-list-table tr.expanded.group a, table.wp-list-table tr.expanded.bundle td, table.wp-list-table tr.expanded.bundle a {
@@ -7436,7 +7422,7 @@ table.atum-list-table tr.expandable.bundle td.title .child-arrow, .floatThead-co
 }
 
 table.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound-stock-list tr.variation, table.wp-list-table tr.variation {
-  background-color: var(--atum-table-row-child-variation);
+  background-color: var(--primary-dark-bg);
 }
 
 table.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even), table.wp-list-table tr.variation:nth-child(even) {
@@ -7476,11 +7462,11 @@ table.atum-list-table tr.bundle-item td.title .child-arrow, .floatThead-containe
 }
 
 table.atum-list-table tr.grouped, .floatThead-container tr.grouped, .inbound-stock-list tr.grouped, table.wp-list-table tr.grouped {
-  background-color: var(--orange-light);
+  background-color: var(--secondary-dark);
 }
 
 table.atum-list-table tr.grouped:nth-child(even), .floatThead-container tr.grouped:nth-child(even), .inbound-stock-list tr.grouped:nth-child(even), table.wp-list-table tr.grouped:nth-child(even) {
-  background-color: var(--orange-light-2);
+  background-color: var(--secondary-light-var);
 }
 
 table.atum-list-table tr.grouped.active-row, .floatThead-container tr.grouped.active-row, .inbound-stock-list tr.grouped.active-row, table.wp-list-table tr.grouped.active-row {
@@ -7488,7 +7474,7 @@ table.atum-list-table tr.grouped.active-row, .floatThead-container tr.grouped.ac
 }
 
 table.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow, .inbound-stock-list tr.grouped td.title .child-arrow, table.wp-list-table tr.grouped td.title .child-arrow {
-  color: var(--orange);
+  color: var(--secondary-var);
 }
 
 table.atum-list-table tr.no-items td, .floatThead-container tr.no-items td, .inbound-stock-list tr.no-items td, table.wp-list-table tr.no-items td {

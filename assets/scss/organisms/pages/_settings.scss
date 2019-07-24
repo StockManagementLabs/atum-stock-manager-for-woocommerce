@@ -165,7 +165,7 @@
 		display: block;
 		margin: 0;
 		box-shadow: 0 1px 0 0 var(--white-shadow);
-		border-bottom: solid 1px var(--atum-settings-separator);
+		border-bottom: solid 1px var(--atum-border);
 	}
 
 	.atum-nav-link {
@@ -191,7 +191,7 @@
 			outline: none;
 			color: var(--primary-var-text2);
 			box-shadow: none;
-			background-color: var(--atum-settings-nav-link-selected-bg);
+			background-color: var(--primary-dark-bg);
 			font-size: 15px;
 			font-weight: bold;
 			border-right: 3px solid var(--primary-var-text2);
@@ -428,7 +428,7 @@
 		
 		.section-title {
 			margin-top: 11px;
-			border-bottom: 2px solid var(--atum-settings-border-color);
+			border-bottom: 2px solid var(--atum-border);
 			background-color: var(--atum-settings-section-bg);
 			border-top-right-radius: 6px;
 			border-top-left-radius: 6px;
@@ -539,7 +539,7 @@
 			
 			tr {
 				&:not(:last-child) {
-					border-bottom: 0.5px solid var(--atum-settings-separator);
+					border-bottom: 0.5px solid var(--atum-border);
 				}
 			}
 			
@@ -579,7 +579,7 @@
 				}
 				
 				.selector-container:not(:last-child) {
-					border-bottom: solid 1px var(--atum-settings-border-color);
+					border-bottom: solid 1px var(--atum-border);
 				}
 				
 				.selector-container {
@@ -648,7 +648,7 @@
 				margin: 0;
 				border-radius: 4px;
 				height: 30px;
-				color: var(--atum-settings-input-text);
+				color: var(--atum-text-color-dark2);
 				border: 1px solid var(--atum-settings-input-border);
 				box-shadow: none;
 				
@@ -927,7 +927,7 @@
 				.wp-color-result-text {
 					line-height: 29px;
 					background-color: transparent;
-					color: var(--atum-settings-wp-color-text);
+					color: var(--atum-text-color);
 					border-left: none;
 					font-size: 12px;
 					line-height: 1.17px;

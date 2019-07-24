@@ -363,11 +363,14 @@
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
   --success: #69C61D;
-  --secondary: #EFAF00;
+  --secondary: #6c757d;
+  --secondary-var: #EFAF00;
+  --secondary-light-var: #fff8e5;
+  --secondary-dark: #ffedbc;
   --secondary-hover: rgba(239, 175, 0, 0.6);
   --black-shadow-light: rgba(0, 0, 0, 0.04);
-  --atum-table-row-even: #f8f9fa;
-  --atum-table-row-odd: transparent;
+  --atum-table-bg: #fff;
+  --atum-table-bg2: #f8f9fa;
   --atum-bg-white: #fff;
   --atum-text-white: #fff;
   --wp-yiq-text-dark: #212529;
@@ -377,7 +380,7 @@
   --blue-light-expanded: #dbf9ff;
   --green-light-expanded: #d5f5ba;
   --tertiary-var: #69C61D;
-  --atum-border: #e9ecef;
+  --atum-border: rgba(255, 255, 255, 0.2);
   --atum-border-expanded: #adb5bd;
   --text-color-var1: #adb5bd;
   --text-color-var2: #adb5bd;
@@ -389,27 +392,21 @@
   --atum-table-link-text: #6c757d;
   --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
-  --atum-input-text-search: #6c757d;
+  --atum-text-color-dark2: #6c757d;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
-  --atum-pagination-bg-disabled: #f8f9fa;
   --atum-pagination-border-disabled: transparent;
   --order-green-light: #d5f5ba;
-  --atum-icon-tree: #343a40;
+  --atum-text-color: #343a40;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
   --atum-footer-totals: #e9ecef;
-  --atum-table-bg: #fff;
   --atum-footer-bg: #fff;
   --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
-  --atum-select2-selected-bg: #dbf9ff;
   --atum-column-groups-bg: #e9ecef;
-  --atum-row-active: #dbf9ff;
+  --primary-dark-bg: #dbf9ff;
   --atum-table-row-variation-text: #fff;
   --atum-table-row-child-variation-even: #f5fdff;
-  --atum-table-row-child-variation: #dbf9ff;
-  --atum-table-icon-active: #adb5bd;
-  --atum-table-text-active: #adb5bd;
   --atum-table-text-expanded: #fff;
   --atum-table-search-text: #fff;
   --atum-dark-bg: #3b3d5a;
@@ -419,30 +416,21 @@
   --atum-settings-section-general-bg: #3b3d5a;
   --atum-settings-section-bg: #fff;
   --atum-settings-nav-link: #00B8DB;
-  --atum-settings-nav-link-selected-bg: #dbf9ff;
   --title-color: #27283B;
   --atum-settings-text-logo: #27283B;
   --atum-settings-input-border: #e9ecef;
-  --atum-settings-border-color: #e9ecef;
-  --atum-settings-input-text: #6c757d;
   --atum-settings-btn-save: #fff;
   --atum-settings-btn-save-hover: #dbf9ff;
   --atum-settings-wp-color-bg: transparent;
-  --atum-settings-wp-color-text: #6c757d;
   --wp-nth-child: #f8f9fa;
   --dash-card-text: #adb5bd;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
-  --dash-widget-success: #69C61D;
-  --dash-widget-warning: #6c757d;
-  --dash-widget-separator: #f8f9fa;
   --dash-subscription-input: rgba(255, 255, 255, 0.7);
   --dash-nice-select-bg: #fff;
   --dash-nice-select-list-bg: #fff;
-  --dash-nice-select-border: #e9ecef;
   --dash-nice-select-hover: #cbd3da;
   --dash-nice-select-disabled: #eff1f3;
   --dash-nice-select-disabled-after: #e6e8ea;
-  --dash-nice-select-arrow-color: #adb5bd;
   --dash-nice-select-option-hover-bg: #f8f9fa;
   --dash-nice-select-option-selected-bg: #dbf9ff;
   --dash-widget-list-border: rgba(248, 249, 250, 0.5);
@@ -461,11 +449,10 @@
   --atum-marketing-popup-bg: #fff;
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
-  --dash-input-placeholder: #adb5bd;
   --dash-statistics-ticks: #27283B;
   --dash-statistics-grid-lines: #e9ecef;
   --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
-  --dash-border: #e9ecef;
+  --atum-border-var: #e9ecef;
   --dash-widget-icon: #adb5bd;
   --dash-statistics-chart-type-selected-bg: transparent;
   --dash-statistics-chart-type-selected-text: #EFAF00;
@@ -481,7 +468,6 @@
   --atum-version-bg: rgba(0, 0, 0, 0.2);
   --atum-table-search-submit-bg: #adb5bd;
   --atum-table-filter-dropdown: #adb5bd;
-  --atum-settings-separator: rgba(255, 255, 255, 0.2);
   --atum-footer-title: #27283B;
   --atum-footer-link: #0073AA;
   --atum-footer-text: #555d66;
@@ -1671,7 +1657,7 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
 }
 
 body .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
@@ -1826,12 +1812,12 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
 body .select2-container--default .select2-results__option[data-selected=true] {
-  background-color: var(--atum-select2-selected-bg);
+  background-color: var(--primary-dark-bg);
   color: var(--primary-var-dark);
 }
 
@@ -3616,7 +3602,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   margin: 0;
   -webkit-box-shadow: 0 1px 0 0 var(--white-shadow);
           box-shadow: 0 1px 0 0 var(--white-shadow);
-  border-bottom: solid 1px var(--atum-settings-separator);
+  border-bottom: solid 1px var(--atum-border);
 }
 
 .atum-settings-wrapper .atum-nav-link {
@@ -3654,7 +3640,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   color: var(--primary-var-text2);
   -webkit-box-shadow: none;
           box-shadow: none;
-  background-color: var(--atum-settings-nav-link-selected-bg);
+  background-color: var(--primary-dark-bg);
   font-size: 15px;
   font-weight: bold;
   border-right: 3px solid var(--primary-var-text2);
@@ -3909,7 +3895,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 
 .atum-settings-wrapper #atum-settings .section-title {
   margin-top: 11px;
-  border-bottom: 2px solid var(--atum-settings-border-color);
+  border-bottom: 2px solid var(--atum-border);
   background-color: var(--atum-settings-section-bg);
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
@@ -4036,7 +4022,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 .atum-settings-wrapper #atum-settings .section-fields tr:not(:last-child) {
-  border-bottom: 0.5px solid var(--atum-settings-separator);
+  border-bottom: 0.5px solid var(--atum-border);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields th, .atum-settings-wrapper #atum-settings .section-fields td {
@@ -4086,7 +4072,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container:not(:last-child) {
-  border-bottom: solid 1px var(--atum-settings-border-color);
+  border-bottom: solid 1px var(--atum-border);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields .theme-selector-wrapper .selector-container {
@@ -4159,7 +4145,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   margin: 0;
   border-radius: 4px;
   height: 30px;
-  color: var(--atum-settings-input-text);
+  color: var(--atum-text-color-dark2);
   border: 1px solid var(--atum-settings-input-border);
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -4448,7 +4434,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 .atum-settings-wrapper #atum-settings .wp-picker-container button.wp-color-result .wp-color-result-text {
   line-height: 29px;
   background-color: transparent;
-  color: var(--atum-settings-wp-color-text);
+  color: var(--atum-text-color);
   border-left: none;
   font-size: 12px;
   line-height: 1.17px;

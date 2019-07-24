@@ -131,13 +131,13 @@ span {
 		vertical-align: top;
 		font-family: $atum-icon-font;
 		cursor: pointer;
-		color: var(--atum-icon-tree);
+		color: var(--atum-text-color);
 	}
 	
 	&.easytree-custom-icon {
 		display: inline-block !important;
 		vertical-align: -1px;
-		color: var(--atum-icon-tree);
+		color: var(--atum-text-color);
 		margin-left: 3px;
 		text-indent: 0 !important; // In case jQuery UI CSS is loaded
 	}
