@@ -40,13 +40,13 @@ export default class StockControlWidget {
                               style.getPropertyValue('--dash-widget-warning'),
                               style.getPropertyValue('--danger'),
                               style.getPropertyValue('--tertiary'),
-                              style.getPropertyValue('--dash-widget-primary'),
+                              style.getPropertyValue('--primary'),
 					      ],
                           hoverBackgroundColor: [
                               style.getPropertyValue('--dash-widget-warning'),
                               style.getPropertyValue('--danger'),
                               style.getPropertyValue('--tertiary'),
-                              style.getPropertyValue('--dash-widget-primary'),
+                              style.getPropertyValue('--primary'),
                           ],
                           hoverBorderColor: style.getPropertyValue('--dash-stock-control-chart-border'),
                           borderColor: style.getPropertyValue('--dash-stock-control-chart-border')

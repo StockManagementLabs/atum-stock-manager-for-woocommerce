@@ -166,7 +166,7 @@ body {
 	.select2-results__option {
 		padding: 6px;
 		user-select: none;
-		color: var(--gray-600);
+		color: var(--text-color-var1);
 		font-size: 12px;
 		
 		&:focus {
@@ -259,7 +259,7 @@ body {
 				
 				.select2-selection__rendered {
 					line-height: 27px;
-					color: var(--gray-600);
+					color: var(--text-color-var1);
 					font-size: 15px;
 					padding-left: 10px;
 				}
@@ -271,7 +271,7 @@ body {
 				}
 				
 				.select2-selection__placeholder {
-					color: var(--gray-600);
+					color: var(--text-color-var1);
 				}
 				
 				.select2-selection__arrow {
@@ -332,7 +332,7 @@ body {
 		
 		.select2-results__option--highlighted[aria-selected] {
 			background-color: var(--atum-select2-selected-bg);
-			color: var(--atum-select2-selected-text);
+			color: var(--primary-var-dark);
 		}
 		
 		&.atum-select2, &.atum-enhanced-select {
@@ -524,12 +524,12 @@ body {
 			
 			&[aria-selected=true] {
 				background-color: var(--atum-select2-selected-bg);
-				color: var(--atum-select2-selected-text);
+				color: var(--primary-var-dark);
 			}
 			
 			&[data-selected=true] {
 				background-color: var(--atum-select2-selected-bg);
-				color: var(--atum-select2-selected-text);
+				color: var(--primary-var-dark);
 			}
 			
 			&.select2-results__message {
@@ -572,7 +572,7 @@ body {
 			
 			.select2-results__option--highlighted {
 				background-color: var(--blue-light);
-				color: var(--atum-select2-selected-text);
+				color: var(--primary-var-dark);
 			}
 		}
 		

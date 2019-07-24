@@ -72,7 +72,7 @@
 	
 	.page-title-action, .page-title-action:active {
 		border-radius: 5px;
-		background-color: var(--atum-page-title-action);
+		background-color: var(--tertiary-var);
 		color:  var(--white);
 		font-size: 14px;
 		font-weight: normal;
@@ -92,7 +92,7 @@
 		}
 		
 		&:hover, &:focus {
-			background-color:  var(--atum-page-title-action);
+			background-color:  var(--tertiary-var);
 			opacity: 0.6;
 		}
 		
@@ -389,12 +389,12 @@
 		padding: 0 12px;
 		font-weight: normal;
 		background-color: var(--atum-table-bg);
-		color: var(--gray-600);
+		color: var(--text-color-var1);
 		
 		&::placeholder {
 			font-size: 12px;
 			font-style: italic;
-			color: var(--atum-input-placeholder);
+			color: var(--text-color-var2);
 		}
 		
 		@include tablet-max-wp{
@@ -497,7 +497,7 @@
 		}
 		
 		&::placeholder {
-			color: var(--atum-input-placeholder);
+			color: var(--text-color-var2);
 			font-style: italic;
 			letter-spacing: normal;
 			margin-left: 10px;
@@ -555,7 +555,7 @@
 		border: none;
 		background-color: var(--atum-dropdown-toggle-bg);
 		font-size: 15px;
-		color: var(--gray-600);
+		color: var(--text-color-var1);
 		
 		&:after {
 			vertical-align: middle;
@@ -572,7 +572,7 @@
 			outline: 0;
 			box-shadow: none;
 			background-color: var(--atum-dropdown-toggle-bg);
-			color: var(--gray-600);
+			color: var(--text-color-var1);
 		}
 	}
 	
@@ -593,10 +593,10 @@
 	
 	.dropdown-item{
 		width: auto;
-		color: var(--gray-600);
+		color: var(--text-color-var1);
 		&:hover, &.active, &:focus, &:active {
 			background-color: var(--atum-select2-selected-bg);
-			color: var(--atum-select2-selected-text);
+			color: var(--primary-var-dark);
 		}
 	}
 	
@@ -951,7 +951,7 @@
 			border-radius: 5px;
 			border: solid 1px var(--atum-border);
 			background-color:  var(--atum-table-bg);
-			color: var(--gray-600);
+			color: var(--text-color-var1);
 			cursor: pointer;
 			transition: all 0.20s;
 			line-height: 2;
@@ -1045,7 +1045,7 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--atum-table-views-tabs-active);
+					background-color: var(--primary);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
@@ -1539,7 +1539,7 @@ table.wp-list-table {
 			font-size: 14px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: var(--atum-table-item-heads);
+			color: var(--text-color-var2);
 		}
 	}
 	
@@ -1589,7 +1589,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			white-space: normal;
 			font-weight: 600;
 			letter-spacing: 0.3px;
-			color: var(--atum-table-item-heads);
+			color: var(--text-color-var2);
 			
 			.atum-icon {
 				display: block;
@@ -1599,7 +1599,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				width: 1em;
 				margin: 0 auto;
 				font-size: 19px;
-				color: var(--atum-table-item-heads);
+				color: var(--text-color-var2);
 				
 				&:before {
 					text-indent: 0;
@@ -1626,7 +1626,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				white-space: normal;
 				font-weight: bold;
 				letter-spacing: 0.3px;
-				color: var(--atum-table-item-heads);
+				color: var(--text-color-var2);
 				
 			}
 		}
@@ -1642,7 +1642,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			td, th {
 				box-shadow: 0 1px 0 0 var(--atum-border);
 				a {
-					color: var(--atum-table-item-heads);
+					color: var(--text-color-var2);
 				}
 			}
 		}
@@ -1671,7 +1671,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			height: 20px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: var(--gray-600);
+			color: var(--text-color-var1);
 			
 			&:not(:last-child) {
 				border-right: 1px solid var(--atum-border);
@@ -1711,7 +1711,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				color: var(--atum-table-item-heads);
+				color: var(--text-color-var2);
 				overflow: visible;
 				
 				&, span {
@@ -1823,7 +1823,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.expandable {
 			.set-meta, a {
-				color: var(--atum-table-link-child) !important;
+				color: var(--primary-var-dark) !important;
 			}
 		}
 		
@@ -1840,7 +1840,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			.set-meta, a {
-				color: var(--atum-table-link-active) !important;
+				color: var(--primary-var-dark) !important;
 			}
 			
 		}
@@ -1892,7 +1892,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						&.product-type {
 							&:before {
 								content: $atmi-wc-contract;
-								color:  var(--atum-table-icon);
+								color:  var(--text-color-var1);
 							}
 						}
 						
@@ -2047,7 +2047,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			td, th {
 				font-size: 12px;
 				font-weight: 400;
-				color: var(--gray-600);
+				color: var(--text-color-var1);
 				padding-top: 0;
 				padding-bottom: 0;
 				text-align: center;
@@ -2057,7 +2057,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						font-size: 14px;
 						font-weight: bold;
 						letter-spacing: 0.3px;
-						color: var(--gray-600);
+						color: var(--text-color-var1);
 						text-transform: uppercase;
 						background-color: transparent;
 					}
@@ -2071,7 +2071,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					text-align: center;
 					color:  var(--atum-table-bg);
 					border-radius: 5px;
-					background-color: var(--gray-600);
+					background-color: var(--text-color-var1);
 					padding: 4px;
 					
 					&.danger {
@@ -2119,7 +2119,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		border-color: var(--gray-400);
 		
 		&:checked {
-			background-color: var(--atum-table-check);
+			background-color: var(--primary-var-dark);
 			border: 0;
 			
 			&:before {
@@ -2180,7 +2180,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 							pointer-events: none;
 							&:before {
 								content: '-';
-								color: var(--gray-600);
+								color: var(--text-color-var1);
 							}
 						}
 					}
@@ -2188,7 +2188,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			td {
-				color: var(--gray-600);
+				color: var(--text-color-var1);
 				
 				&.column-title, &.atum_order_title {
 					a, .row-title {
@@ -2235,7 +2235,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
-			color: var(--gray-600);
+			color: var(--text-color-var1);
 		}
 		
 		&.pro-version {
@@ -2296,7 +2296,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	th {
 		span {
 			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
-				color: var(--atum-table-item-heads);
+				color: var(--text-color-var2);
 				font-weight: bold;
 				font-size: 14px;
 				.set-header {
@@ -2317,7 +2317,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			width: 1em;
 			font-size: 1.6em;
 			margin: 0 auto;
-			color: var(--atum-table-icon);
+			color: var(--text-color-var1);
 			
 			&:before {
 				content: $atmi-wc-simple;
@@ -2430,7 +2430,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 	.show-locations{
 		cursor: pointer;
-		color: var(--atum-table-icon);
+		color: var(--text-color-var1);
 		font-size: 20px;
 		&.not-empty {
 			color: var(--primary);
@@ -2439,7 +2439,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.show-hierarchy {
 		cursor: pointer;
-		color: var(--atum-table-icon);
+		color: var(--text-color-var1);
 		font-size: 20px;
 		&.not-empty {
 			color: var(--primary);
@@ -2640,14 +2640,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-weight: 400;
 				font-size: 12px;
 				line-height: 1.67;
-				color: var(--gray-600);
+				color: var(--text-color-var1);
 			}
 			
 			input {
 				width: 150px;
 				font-size: 15px;
 				line-height: 1;
-				color: var(--gray-600);
+				color: var(--text-color-var1);
 				font-weight: 400;
 				&:after {
 					font-family: atum-icon-font;
@@ -2661,7 +2661,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			font-style: italic;
 			line-height: 1.67;
 			font-weight: 400;
-			color: var(--atum-input-placeholder);
+			color: var(--text-color-var2);
 		}
 	}
 }

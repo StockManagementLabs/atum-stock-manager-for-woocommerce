@@ -41,7 +41,7 @@ $ns-arrow-size:                    5px !default;;
 	user-select: none;
 	white-space: nowrap;
 	width: auto;
-	color: var(--dash-nice-select-text);
+	color: var(--text-color-var1);
 	
 	&:hover, &:active, &:focus {
 		border-color: var(--dash-nice-select-hover);
@@ -171,12 +171,12 @@ $ns-arrow-size:                    5px !default;;
 		
 		&:hover, &.focus, &.selected.focus {
 			background-color: var(--dash-nice-select-option-hover-bg);
-			color: var(--dash-nice-select-text-highlighted);
+			color: var(--primary-var-dark);
 		}
 		
 		&.selected {
 			background-color: var(--dash-nice-select-option-selected-bg) !important;
-			color: var(--dash-nice-select-text-highlighted);
+			color: var(--primary-var-dark);
 		}
 		
 		&.disabled {

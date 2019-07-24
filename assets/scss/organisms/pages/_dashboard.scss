@@ -391,7 +391,7 @@ body.toplevel_page_atum-dashboard {
 								background: var(--white);
 								
 								&:hover {
-									background: var(--green);
+									background: var(--tertiary-var);
 								}
 								
 								//&.purple {
@@ -475,7 +475,7 @@ body.toplevel_page_atum-dashboard {
 						font-weight: 300;
 						border-radius: 15px;
 						flex-grow: 1;
-						color: var(--dash-widget-text);
+						color: var(--text-color-var1);
 						
 						@include placeholder(dash-input-placeholder);
 						
@@ -644,7 +644,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-primary {
-			color: var(--dash-widget-primary);
+			color: var(--primary);
 		}
 		
 		.widget-success {
@@ -745,7 +745,7 @@ body.toplevel_page_atum-dashboard {
 			right: 0;
 			margin: auto;
 			@include loader(50px, $info, 3px);
-			border-top-color: var(--gray-600);
+			border-top-color: var(--text-color-var1);
 		}
 	}
 	
@@ -768,7 +768,7 @@ body.toplevel_page_atum-dashboard {
 	}
 	
 	.swal2-close {
-		color: var(--gray-600);
+		color: var(--text-color-var1);
 		font-weight: 200;
 		font-size: 32px;
 		line-height: 1.7;
