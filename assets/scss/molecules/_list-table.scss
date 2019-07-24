@@ -33,7 +33,7 @@
 			margin-left: 5px;
 			border-radius: 0;
 			vertical-align: middle;
-			background-color: var(--blue);
+			background-color: var(--primary);
 			border-radius: 5px;
 			text-shadow: none;
 			box-shadow: none;
@@ -93,6 +93,7 @@
 		
 		&:hover, &:focus {
 			background-color:  var(--atum-page-title-action);
+			opacity: 0.6;
 		}
 		
 		@include tablet-max-wp{
@@ -159,7 +160,7 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--blue);
+					background-color: var(--primary);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
@@ -223,11 +224,11 @@
 					}
 					
 					.text-blue {
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 					
 					&.tips {
-						color:  var(--blue);
+						color:  var(--primary);
 						&:hover {
 							cursor: pointer;
 						}
@@ -241,7 +242,7 @@
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
-					color: var(--blue);
+					color: var(--primary);
 					&.empty {
 						color: var(--atum-table-views-tabs);
 						a {
@@ -251,14 +252,14 @@
 					}
 					a {
 						padding: 0;
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 				}
 				
 				.count {
 					font-size: 16px;
 					font-weight: bold;
-					color:  var(--blue);
+					color:  var(--primary);
 					
 					&.extra-links-container {
 						font-size: 14px;
@@ -308,7 +309,7 @@
 				
 				&.current:not(.extra-links-container a) {
 					border-radius: 5px;
-					background-color: var(--blue);
+					background-color: var(--primary);
 					font-size: 16px;
 					padding: 6px 10px;
 					font-weight: bold;
@@ -323,7 +324,7 @@
 				.count {
 					font-size: 14px;
 					font-weight: normal;
-					color: var(--blue);
+					color: var(--primary);
 				}
 				
 				&:active, &:focus {
@@ -333,7 +334,7 @@
 				}
 				
 				&.tips {
-					color: var(--blue);
+					color: var(--primary);
 					
 					&:hover {
 						cursor: pointer;
@@ -376,7 +377,7 @@
 	}
 	
 	#search-submit {
-		background-color: var(--atum-table-search-bg) !important;
+		background-color: var(--secondary) !important;
 		color: var(--atum-table-search-text) !important;
 	}
 	
@@ -485,7 +486,7 @@
 		max-width: 110px;
 		font-size: 15px;
 		background-color: var(--atum-table-bg);
-		color: var(--gray-500);
+		color: var(--atum-input-text-search);
 		
 		@include tablet-max-wp {
 			width: 100%;
@@ -670,11 +671,11 @@
 			line-height: 30px;
 			
 			&:active, &:focus {
-				background-color: var(--warning);
+				background-color: var(--secondary);
 				color:  var(--white);
 			}
 			&:hover {
-				background-color: var(--warning) !important;
+				background-color: var(--secondary) !important;
 				color:  var(--white);
 			}
 		}
@@ -965,7 +966,7 @@
 			}
 			
 			&.active, &:hover {
-				background-color: var(--blue);
+				background-color: var(--primary);
 				color:  var(--atum-table-bg);
 				border-color:  var(--atum-table-bg);
 			}
@@ -985,7 +986,7 @@
 	
 	.search-submit {
 		margin-left: 4px;
-		background-color: var(--atum-table-search-bg) !important;
+		background-color: var(--secondary) !important;
 		color: var(--atum-table-search-text) !important;
 		font-size: 10px;
 		font-weight: normal;
@@ -999,7 +1000,7 @@
 		width: 63px;
 		
 		&:hover, &:active, &:focus {
-			background-color: var(--warning-hover);
+			background-color: var(--secondary-hover);
 			color:  var(--white);
 			box-shadow: none;
 		}
@@ -1105,11 +1106,11 @@
 					}
 					
 					.text-blue {
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 					
 					&.tips {
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 					
 					&.empty {
@@ -1121,7 +1122,7 @@
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
-					color:  var(--blue);
+					color:  var(--primary);
 					&.empty {
 						color: var(--atum-table-views-tabs);
 						a {
@@ -1131,7 +1132,7 @@
 					}
 					a {
 						padding: 0;
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 				}
 				
@@ -1144,7 +1145,7 @@
 					}
 					
 					font-weight: bold;
-					color: var(--blue);
+					color: var(--primary);
 					
 					&.empty {
 						color: var(--atum-table-views-tabs);
@@ -1544,10 +1545,10 @@ table.wp-list-table {
 	
 	td {
 		a {
-			color:  var(--blue);
+			color:  var(--primary);
 			
 			&:hover, &:focus, &:active {
-				color:  var(--blue);
+				color:  var(--primary);
 			}
 		}
 	}
@@ -1715,7 +1716,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				
 				&, span {
 					&:hover {
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 			}
@@ -1846,7 +1847,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		.set-meta {
 			cursor: pointer;
-			color:  var(--blue);
+			color:  var(--primary);
 			
 			&:hover {
 				color: var(--wp-link-hover);
@@ -1944,7 +1945,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			td.title {
 				.child-arrow {
-					color: var(--blue);
+					color: var(--primary);
 				}
 			}
 		}
@@ -2090,13 +2091,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.cell {
 		&-green {
-			color: var(--success)!important;
+			color: var(--tertiary)!important;
 		}
 		
 		&-yellow {
-			color: var(--warning) !important;
+			color: var(--secondary) !important;
 			.set-meta {
-				color: var(--warning) !important;
+				color: var(--secondary) !important;
 			}
 		}
 
@@ -2193,7 +2194,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					a, .row-title {
 						font-size: 14px;
 						font-weight: 600;
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 				
@@ -2208,13 +2209,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-_sku {
 					span {
 						font-size: 14px;
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 				
 				&.calc_purchase_order {
 					a {
-						color:  var(--blue);
+						color:  var(--primary);
 						font-weight: bold;
 					}
 				}
@@ -2229,7 +2230,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		padding: 6px 5px;
 		height: 47px;
 		font-size: 14px;
-		color: var(--blue);
+		color: var(--primary);
 		
 		&.column-ID {
 			font-size: 14px;
@@ -2299,7 +2300,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-weight: bold;
 				font-size: 14px;
 				.set-header {
-					color: var(--blue);
+					color: var(--primary);
 				}
 			}
 		}
@@ -2398,7 +2399,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.grouped {
-					color: var(--warning);
+					color: var(--secondary);
 				}
 				
 				&.bundle {
@@ -2432,7 +2433,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		color: var(--atum-table-icon);
 		font-size: 20px;
 		&.not-empty {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 	
@@ -2441,13 +2442,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		color: var(--atum-table-icon);
 		font-size: 20px;
 		&.not-empty {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 
 	.set-header {
 		cursor: pointer;
-		color: var(--blue);
+		color: var(--primary);
 		
 		.select2-selection__rendered {
 			padding-left: 8px;
@@ -2612,7 +2613,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		a {
 			
-			color: var(--wp-link) !important;
+			color: var(--primary) !important;
 			
 			&:hover {
 				
@@ -2666,10 +2667,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 }
 
 .btn.btn-warning:hover {
-	background-color: var(--warning-hover);
-	color: var(--warning-hover-text);
+	background-color: var(--secondary-hover);
+	color: var(--secondary-hover-text);
 	border-radius: 5px;
-	border: var(--warning-hover-border) !important;
+	border: var(--secondary-hover-border) !important;
 }
 .btn.btn-primary:hover {
 	background-color: var(--primary-hover);
@@ -2678,10 +2679,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	border: var(--primary-hover-border) !important;
 }
 .btn.btn-success:hover {
-	background-color: var(--success-hover);
-	color: var(--success-hover-text);
+	background-color: var(--tertiary-hover);
+	color: var(--tertiary-hover-text);
 	border-radius: 5px;
-	border: var(--success-hover-border) !important;
+	border: var(--tertiary-hover-border) !important;
 }
 
 

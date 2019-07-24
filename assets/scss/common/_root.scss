@@ -30,7 +30,9 @@
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
-	
+	--success: #{$tertiary};
+	--secondary: #{$warning};
+	--secondary-hover: #{rgba($warning, 0.6)};
 	--black-shadow-light: #{rgba($black, 0.04)};
 	--atum-table-row-even: #{$light};
 	--atum-table-row-odd: transparent;
@@ -42,7 +44,7 @@
 	--wc-purple-expanded: #{$wc-purple};
 	--blue-light-expanded: #{$blue-light};
 	--green-light-expanded: #{$green-light};
-	--atum-page-title-action: #{$success};
+	--atum-page-title-action: #{$tertiary};
 	--atum-border: #{$gray-200};
 	--atum-border-expanded: #{$gray-500};
 	--atum-table-item-heads: #{$gray-500};
@@ -54,6 +56,7 @@
 	--atum-dropdown-toggle-bg: #{$gray-100};
 	--atum-select2-border: #{$gray-200};
 	--atum-input-placeholder: #{$gray-500};
+	--atum-input-text-search: #{$gray-600};
 	--atum-pagination-bg: #{$gray-200};
 	--atum-pagination-border: transparent;
 	--atum-pagination-bg-disabled: #{$gray-100};
@@ -80,7 +83,6 @@
 	--atum-table-text-active: #{$gray-500};
 	--atum-table-text-expanded: #{$white};
 	--atum-table-search-text: #{$white};
-	--atum-table-search-bg: #{$orange};
 	--atum-dark-bg: #{$blue-dark-lighten};
 	--popover-black-shadow: #{rgba($black, 0.2)};
 	--atum-settings-nav-bg: #{$white};
@@ -90,7 +92,7 @@
 	--atum-settings-nav-link: #{$blue};
 	--atum-settings-nav-link-selected: #{$blue};
 	--atum-settings-nav-link-selected-bg: #{$blue-light};
-	--atum-settings-section-title: #{$blue-dark};
+	--title-color: #{$blue-dark};
 	--atum-settings-section-text: #{$gray-600};
 	--atum-settings-section-description: #{$gray-500};
 	--atum-settings-text-logo: #{$blue-dark};
@@ -107,9 +109,8 @@
 	--dash-widget-text: #{$widget-text};
 	--dash-atum-version: #{transparentize($black, 0.9)};
 	--dash-widget-primary: #{$widget-primary};
-	--dash-widget-success: #{$widget-success};
+	--dash-widget-success: #{$tertiary};
 	--dash-widget-warning: #{$widget-warning};
-	--dash-widget-danger: #{$widget-danger};
 	--dash-widget-separator: #{$gray-100};
 	--dash-subscription-input: #{rgba($white, 0.7)};
 	--dash-nice-select-bg: #{$white};
@@ -140,7 +141,6 @@
 	--dash-input-group-bg: #{transparentize($white, 0.34)};
 	--dash-input-group-shadow: #{transparentize($white, 0.8)};
 	--dash-input-placeholder: #{$gray-500};
-	--dash-widget-header-title: #{$blue-dark};
 	--dash-statistics-ticks: #{$blue-dark};
 	--dash-statistics-grid-lines: #{$gray-200};
 	--dash-statistics-chart-type-bg: #{transparentize($light, 0.8)};
@@ -165,10 +165,10 @@
 	--atum-footer-title: #{$blue-dark};
 	--atum-footer-link: #{$wp-link};
 	--atum-footer-text: #555d66;
-	--success-hover-text: #{$green};
-	--success-hover-border: none;
+	--tertiary-hover-text: #{$green};
+	--tertiary-hover-border: none;
 	--primary-hover-text: #{$blue};
 	--primary-hover-border: none;
-	--warning-hover-text: #EFAF00;
-	--warning-hover-border: none;
+	--secondary-hover-text: #EFAF00;
+	--secondary-hover-border: none;
 }

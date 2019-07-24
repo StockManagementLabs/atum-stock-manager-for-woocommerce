@@ -62,7 +62,7 @@ body.toplevel_page_atum-dashboard {
 		flex-wrap: wrap;
 		
 		h3 {
-			color: var(--dash-widget-header-title);
+			color: var(--title-color);
 		}
 		
 		.dash-header-buttons {
@@ -130,7 +130,7 @@ body.toplevel_page_atum-dashboard {
 			padding-left: $grid-gutter-width/2;
 			padding-bottom: 5px;
 			font-size: 11px;
-			color: var(--dash-widget-header-title);
+			color: var(--title-color);
 			font-weight: 300;
 			
 			span {
@@ -207,10 +207,10 @@ body.toplevel_page_atum-dashboard {
 						color: var(--primary);
 					}
 					&.h5-secondary {
-						color: var(--success);
+						color: var(--tertiary);
 					}
 					&.h5-tertiary {
-						color: var(--warning);
+						color: var(--secondary);
 					}
 				}
 				
@@ -262,6 +262,7 @@ body.toplevel_page_atum-dashboard {
 				width: 100%;
 				min-height: 200px;
 				margin: 20px 30px 0;
+				background-color: var(--dash-card-bg) !important;
 				
 				.marketing-close {
 					right: 0;
@@ -274,7 +275,7 @@ body.toplevel_page_atum-dashboard {
 					position: absolute;
 					
 					&:hover {
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 				
@@ -329,6 +330,7 @@ body.toplevel_page_atum-dashboard {
 						h1, p {
 							text-align: left !important;
 							padding: 0 15px;
+							color: var(--dash-card-text) !important;
 							
 							@include tablet-max{
 								text-align: center !important;
@@ -581,7 +583,7 @@ body.toplevel_page_atum-dashboard {
 				font-size: 18px;
 				font-weight: bold;
 				flex-grow: 1;
-				color: var(--dash-widget-header-title);
+				color: var(--title-color);
 			}
 			
 			i {
@@ -646,7 +648,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-success {
-			color: var(--dash-widget-success);
+			color: var(--tertiary);
 		}
 		
 		.widget-warning {
@@ -654,7 +656,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.widget-danger {
-			color: var(--dash-widget-danger);
+			color: var(--danger);
 		}
 		
 		@include tablet-max {
@@ -772,7 +774,7 @@ body.toplevel_page_atum-dashboard {
 		line-height: 1.7;
 		
 		&:hover {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 	

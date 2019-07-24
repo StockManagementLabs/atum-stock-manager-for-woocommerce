@@ -188,7 +188,7 @@
 }
 
 .color-warning {
-  color: #EFAF00;
+  color: #6c757d;
 }
 
 .color-danger {
@@ -208,7 +208,7 @@
 }
 
 .bg-warning {
-  background-color: #EFAF00;
+  background-color: #6c757d;
 }
 
 .bg-danger {
@@ -348,6 +348,9 @@
   --secondary: #6c757d;
   --secondary-hover: rgba(108, 117, 125, 0.6);
   --secondary-shadow: rgba(108, 117, 125, 0.2);
+  --tertiary: #69C61D;
+  --tertiary-hover: rgba(105, 198, 29, 0.6);
+  --tertiary-shadow: rgba(105, 198, 29, 0.2);
   --success: #69C61D;
   --success-hover: rgba(105, 198, 29, 0.6);
   --success-shadow: rgba(105, 198, 29, 0.2);
@@ -438,6 +441,9 @@
   --wc-purple: #96588a;
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
+  --success: #69C61D;
+  --secondary: #EFAF00;
+  --secondary-hover: rgba(239, 175, 0, 0.6);
   --black-shadow-light: rgba(0, 0, 0, 0.04);
   --atum-table-row-even: #f8f9fa;
   --atum-table-row-odd: transparent;
@@ -461,6 +467,7 @@
   --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
   --atum-input-placeholder: #adb5bd;
+  --atum-input-text-search: #6c757d;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
   --atum-pagination-bg-disabled: #f8f9fa;
@@ -487,7 +494,6 @@
   --atum-table-text-active: #adb5bd;
   --atum-table-text-expanded: #fff;
   --atum-table-search-text: #fff;
-  --atum-table-search-bg: #EFAF00;
   --atum-dark-bg: #3b3d5a;
   --popover-black-shadow: rgba(0, 0, 0, 0.2);
   --atum-settings-nav-bg: #fff;
@@ -497,7 +503,7 @@
   --atum-settings-nav-link: #00B8DB;
   --atum-settings-nav-link-selected: #00B8DB;
   --atum-settings-nav-link-selected-bg: #dbf9ff;
-  --atum-settings-section-title: #27283B;
+  --title-color: #27283B;
   --atum-settings-section-text: #6c757d;
   --atum-settings-section-description: #adb5bd;
   --atum-settings-text-logo: #27283B;
@@ -515,8 +521,7 @@
   --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-widget-primary: #00B8DB;
   --dash-widget-success: #69C61D;
-  --dash-widget-warning: #EFAF00;
-  --dash-widget-danger: #FF4848;
+  --dash-widget-warning: #6c757d;
   --dash-widget-separator: #f8f9fa;
   --dash-subscription-input: rgba(255, 255, 255, 0.7);
   --dash-nice-select-bg: #fff;
@@ -547,7 +552,6 @@
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
   --dash-input-placeholder: #adb5bd;
-  --dash-widget-header-title: #27283B;
   --dash-statistics-ticks: #27283B;
   --dash-statistics-grid-lines: #e9ecef;
   --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
@@ -572,12 +576,12 @@
   --atum-footer-title: #27283B;
   --atum-footer-link: #0073AA;
   --atum-footer-text: #555d66;
-  --success-hover-text: #69C61D;
-  --success-hover-border: none;
+  --tertiary-hover-text: #69C61D;
+  --tertiary-hover-border: none;
   --primary-hover-text: #00B8DB;
   --primary-hover-border: none;
-  --warning-hover-text: #EFAF00;
-  --warning-hover-border: none;
+  --secondary-hover-text: #EFAF00;
+  --secondary-hover-border: none;
 }
 
 @font-face {
@@ -1644,6 +1648,43 @@ fieldset:disabled a.btn {
           box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
+.btn-tertiary {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+}
+
+.btn-tertiary:hover {
+  color: var(--tertiary-hover-text);
+  background-color: var(--tertiary-hover);
+  border: var(--tertiary-hover-border) !important;
+}
+
+.btn-tertiary:focus, .btn-tertiary.focus {
+  color: var(--wp-yiq-text-light);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+}
+
+.btn-tertiary.disabled, .btn-tertiary:disabled {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.btn-tertiary:not(:disabled):not(.disabled):active, .btn-tertiary:not(:disabled):not(.disabled).active,
+.show > .btn-tertiary.dropdown-toggle {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary-hover);
+  border-color: var(--tertiary-hover);
+}
+
+.btn-tertiary:not(:disabled):not(.disabled):active:focus, .btn-tertiary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-tertiary.dropdown-toggle:focus {
+  color: var(--wp-yiq-text-light);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+}
+
 .btn-success {
   color: var(--wp-yiq-text-light);
   background-color: var(--success);
@@ -1973,6 +2014,42 @@ fieldset:disabled a.btn {
 .show > .btn-outline-secondary.dropdown-toggle:focus {
   -webkit-box-shadow: 0 0 0 0.2rem var(--secondary-shadow);
           box-shadow: 0 0 0 0.2rem var(--secondary-shadow);
+}
+
+.btn-outline-tertiary {
+  color: var(--tertiary);
+  background-color: transparent;
+  background-image: none;
+  border-color: var(--tertiary);
+}
+
+.btn-outline-tertiary:hover {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.btn-outline-tertiary:focus, .btn-outline-tertiary.focus {
+  -webkit-box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
+          box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
+}
+
+.btn-outline-tertiary.disabled, .btn-outline-tertiary:disabled {
+  color: "tertiary";
+  background-color: transparent;
+}
+
+.btn-outline-tertiary:not(:disabled):not(.disabled):active, .btn-outline-tertiary:not(:disabled):not(.disabled).active,
+.show > .btn-outline-tertiary.dropdown-toggle {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.btn-outline-tertiary:not(:disabled):not(.disabled):active:focus, .btn-outline-tertiary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-tertiary.dropdown-toggle:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
+          box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
 }
 
 .btn-outline-success {
@@ -4295,7 +4372,7 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border-color: var(--blue);
+  border-color: var(--primary);
 }
 
 .swal2-container .swal2-content .atum-link {
@@ -4360,7 +4437,7 @@ input[type="button"].btn-block {
 
 .swal2-container .swal2-modal a {
   text-decoration: none;
-  color: var(--wp-link) !important;
+  color: var(--primary) !important;
 }
 
 .swal2-container .swal2-modal a:hover {
@@ -4476,7 +4553,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-header h3 {
-  color: var(--dash-widget-header-title);
+  color: var(--title-color);
 }
 
 .atum-dashboard .dash-header .dash-header-buttons {
@@ -4550,7 +4627,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   padding-left: 15px;
   padding-bottom: 5px;
   font-size: 11px;
-  color: var(--dash-widget-header-title);
+  color: var(--title-color);
   font-weight: 300;
 }
 
@@ -4637,11 +4714,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-cards .dash-card .card-content h5.h5-secondary, .atum-dashboard .dash-cards .dash-card .card-content h2.h5-secondary {
-  color: var(--success);
+  color: var(--tertiary);
 }
 
 .atum-dashboard .dash-cards .dash-card .card-content h5.h5-tertiary, .atum-dashboard .dash-cards .dash-card .card-content h2.h5-tertiary {
-  color: var(--warning);
+  color: var(--secondary);
 }
 
 .atum-dashboard .dash-cards .dash-card .card-content h2, .atum-dashboard .dash-cards .dash-card .card-content p {
@@ -4694,6 +4771,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   width: 100%;
   min-height: 200px;
   margin: 20px 30px 0;
+  background-color: var(--dash-card-bg) !important;
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .marketing-close {
@@ -4708,7 +4786,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .marketing-close:hover {
-  color: var(--blue);
+  color: var(--primary);
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .image {
@@ -4775,6 +4853,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
   text-align: left !important;
   padding: 0 15px;
+  color: var(--dash-card-text) !important;
 }
 
 @media all and (max-width: 768px) {
@@ -5053,7 +5132,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  color: var(--dash-widget-header-title);
+  color: var(--title-color);
 }
 
 .atum-dashboard .atum-widget .widget-header i {
@@ -5116,7 +5195,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .atum-widget .widget-success {
-  color: var(--dash-widget-success);
+  color: var(--tertiary);
 }
 
 .atum-dashboard .atum-widget .widget-warning {
@@ -5124,7 +5203,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .atum-widget .widget-danger {
-  color: var(--dash-widget-danger);
+  color: var(--danger);
 }
 
 @media all and (max-width: 768px) {
@@ -5253,7 +5332,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .add-widget-popup .swal2-close:hover {
-  color: var(--blue);
+  color: var(--primary);
 }
 
 .add-widget-popup .widgets-list {
@@ -5395,7 +5474,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .mobile-filter-nav ul li:hover, .statistics-widget .mobile-filter-nav ul li.active {
-  color: var(--dash-widget-success);
+  color: var(--tertiary);
 }
 
 .statistics-widget .mobile-filter-nav ul li span, .statistics-widget .mobile-filter-nav ul li i {
@@ -5720,7 +5799,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-danger:before {
-  background-color: var(--dash-widget-danger);
+  background-color: var(--danger);
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-primary:before {

@@ -126,6 +126,7 @@ $colors: map-merge((
 
 $primary:                               $blue !default;
 $secondary:                             $gray-600 !default;
+$tertiary:                              $green !default;
 $success:                               $green !default;
 $info:                                  $blue-gray-light !default;
 $warning:                               $orange !default;
@@ -138,7 +139,8 @@ $theme-colors: () !default;
 $theme-colors: map-merge((
 		"primary":    $primary,
 		"secondary":  $secondary,
-		"success":    $success,
+		"tertiary":   $tertiary,
+		"success":    $tertiary,
 		"info":       $info,
 		"warning":    $warning,
 		"danger":     $danger,
@@ -506,9 +508,9 @@ $input-border-color: $wp-gray-4;
 // Widgets
 
 $widget-text:                           $gray-500 !default;
-$widget-success:                        $green !default;
+$widget-success:                        $tertiary !default;
 $widget-primary:                        $primary !default;
-$widget-warning:                        $warning !default;
+$widget-warning:                        $secondary !default;
 $widget-danger:                         $danger !default;
 
 // Atum Icons

@@ -85,7 +85,7 @@ ul.easytree-container {
 			
 			.selected-node {
 				.easytree-title a, .atum-icon {
-					color: var(--success) !important;
+					color: var(--tertiary) !important;
 				}
 			}
 		}
@@ -224,7 +224,7 @@ span.easytree-expander {
 .checked{
 	span.easytree-icon {
 		&:before {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 }

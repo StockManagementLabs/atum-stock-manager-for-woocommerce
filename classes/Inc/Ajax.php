@@ -2296,7 +2296,7 @@ final class Ajax {
 			'dm_primary_color_dark'    => '#00B8DB',
 			'dm_secondary_color'       => '#FFDF89',
 			'dm_secondary_color_light' => '#FFDF89',
-			'dm_secondary_color_dark'  => '#FFDF89',
+			'dm_secondary_color_dark'  => '#EFAF00',
 			'dm_tertiary_color'        => '#BAEF8D',
 			'dm_tertiary_color_light'  => '#69C61D',
 			'dm_text_color'            => '#FFFFFF',

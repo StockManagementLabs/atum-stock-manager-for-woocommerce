@@ -597,7 +597,7 @@ body {
 				background-repeat: repeat-x;
 				
 				&:focus {
-					border: 1px solid var(--wp-link);
+					border: 1px solid var(--primary);
 				}
 				
 				.select2-selection__rendered {
@@ -665,7 +665,7 @@ body {
 			
 			&.select2-container--open {
 				.select2-selection--single {
-					border: 1px solid var(--wp-link);
+					border: 1px solid var(--primary);
 					
 					.select2-selection__arrow {
 						background: transparent;
@@ -707,7 +707,7 @@ body {
 				outline: 0;
 				
 				&:focus {
-					border: 1px solid var(--wp-link);
+					border: 1px solid var(--primary);
 				}
 				
 				.select2-selection__rendered {
@@ -764,7 +764,7 @@ body {
 			
 			&.select2-container--open {
 				.select2-selection--multiple {
-					border: 1px solid var(--wp-link);
+					border: 1px solid var(--primary);
 				}
 				
 				&.select2-container--above {

@@ -24,7 +24,7 @@
 			}
 			
 			&:focus {
-				border-color: var(--blue);
+				border-color: var(--primary);
 			}
 		}
 		
@@ -88,7 +88,7 @@
 		
 		a {
 			text-decoration: none;
-			color: var(--wp-link) !important;
+			color: var(--primary) !important;
 			
 			&:hover {
 				
