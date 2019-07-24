@@ -319,12 +319,10 @@ class Dashboard {
 			 * ATUM Dashboard scripts.
 			 */
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', $style_deps, ATUM_VERSION );
-			// Get visual mode style selected.
-			wp_add_inline_style(
-				'atum-dashboard',
-				Helpers::get_visual_mode_style()
-			);
 			wp_enqueue_style( 'atum-dashboard' );
+
+			// Load the ATUM colors.
+			Helpers::enqueue_atum_colors( 'atum-dashboard' );
 
 			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum-dashboard.js', $script_deps, ATUM_VERSION, TRUE );
 

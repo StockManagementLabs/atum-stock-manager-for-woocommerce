@@ -2372,7 +2372,6 @@ final class Helpers {
 
 			AtumCache::set_cache( $cache_key, $atum_user_meta );
 
-
 		}
 
 		return $atum_user_meta;
@@ -2666,6 +2665,17 @@ final class Helpers {
 				return $atum_colors->get_branded_mode_colors();
 		}
 
+	}
+
+	/**
+	 * Add the inline style for the ATUM colors
+	 *
+	 * @sine 1.5.9
+	 *
+	 * @param string $handle  The enqueued stylesheet handle needed to add the extra CSS styles to.
+	 */
+	public static function enqueue_atum_colors( $handle ) {
+		wp_add_inline_style( $handle, self::get_visual_mode_style() );
 	}
 
 	/**

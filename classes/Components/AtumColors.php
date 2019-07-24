@@ -172,6 +172,7 @@ class AtumColors {
 		    --wp-pink-darken-expanded: {$this->colors['primary_color']};
 			--gray-600:$text_color_2;
 			--green: $tertiary_color;
+			--white: {$this->colors['white']};
 			--white-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
 			--green-light: {$this->colors['primary_color_dark']};
 			--green-light-2: $tertiary_color_light;
@@ -316,6 +317,7 @@ class AtumColors {
 			--green: {$this->colors['tertiary_color_light']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--green-light-2: {$this->colors['tertiary_color_light']};
+			--white: {$this->colors['white']};
 			--tertiary: {$this->colors['tertiary_color']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--tertiary-hover-text: {$this->colors['blue_dark']};
