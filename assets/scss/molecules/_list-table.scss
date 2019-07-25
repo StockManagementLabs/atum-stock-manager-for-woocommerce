@@ -33,7 +33,7 @@
 			margin-left: 5px;
 			border-radius: 0;
 			vertical-align: middle;
-			background-color: var(--blue);
+			background-color: var(--primary);
 			border-radius: 5px;
 			text-shadow: none;
 			box-shadow: none;
@@ -72,7 +72,7 @@
 	
 	.page-title-action, .page-title-action:active {
 		border-radius: 5px;
-		background-color: var(--atum-page-title-action);
+		background-color: var(--tertiary-var);
 		color:  var(--white);
 		font-size: 14px;
 		font-weight: normal;
@@ -92,7 +92,8 @@
 		}
 		
 		&:hover, &:focus {
-			background-color:  var(--atum-page-title-action);
+			background-color:  var(--tertiary-var);
+			opacity: 0.6;
 		}
 		
 		@include tablet-max-wp{
@@ -109,7 +110,7 @@
 	
 	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
 		border-radius: 5px;
-		background-color: var(--orange);
+		background-color: var(--secondary-var);
 		font-size: 12px;
 		min-width: 70px;
 		letter-spacing: normal;
@@ -125,7 +126,7 @@
 		}
 		
 		&:hover, &.active {
-			background-color: rgba($orange, 0.7);
+			background-color: rgba(var(--secondary-var), 0.7);
 			color: var(--white);
 			border: none;
 		}
@@ -159,7 +160,7 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--blue);
+					background-color: var(--primary);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
@@ -223,11 +224,11 @@
 					}
 					
 					.text-blue {
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 					
 					&.tips {
-						color:  var(--blue);
+						color:  var(--primary);
 						&:hover {
 							cursor: pointer;
 						}
@@ -241,7 +242,7 @@
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
-					color: var(--blue);
+					color: var(--primary);
 					&.empty {
 						color: var(--atum-table-views-tabs);
 						a {
@@ -251,14 +252,14 @@
 					}
 					a {
 						padding: 0;
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 				}
 				
 				.count {
 					font-size: 16px;
 					font-weight: bold;
-					color:  var(--blue);
+					color:  var(--primary);
 					
 					&.extra-links-container {
 						font-size: 14px;
@@ -308,7 +309,7 @@
 				
 				&.current:not(.extra-links-container a) {
 					border-radius: 5px;
-					background-color: var(--blue);
+					background-color: var(--primary);
 					font-size: 16px;
 					padding: 6px 10px;
 					font-weight: bold;
@@ -323,7 +324,7 @@
 				.count {
 					font-size: 14px;
 					font-weight: normal;
-					color: var(--blue);
+					color: var(--primary);
 				}
 				
 				&:active, &:focus {
@@ -333,7 +334,7 @@
 				}
 				
 				&.tips {
-					color: var(--blue);
+					color: var(--primary);
 					
 					&:hover {
 						cursor: pointer;
@@ -352,7 +353,7 @@
 	padding: 1px;
 	z-index: 999;
 	margin: 20px 10px 20px auto;
-	border: 1px solid var(--atum-border);
+	border: 1px solid var(--main-border);
 	border-radius: 5px;
 	
 	@include tablet-max-wp {
@@ -376,8 +377,8 @@
 	}
 	
 	#search-submit {
-		background-color: var(--atum-table-search-bg) !important;
-		color: var(--atum-table-search-text) !important;
+		background-color: var(--secondary) !important;
+		color: var(--main-text-expanded) !important;
 	}
 	
 	#post-search-input {
@@ -388,12 +389,12 @@
 		padding: 0 12px;
 		font-weight: normal;
 		background-color: var(--atum-table-bg);
-		color: var(--gray-600);
+		color: var(--atum-text-color-var1);
 		
 		&::placeholder {
 			font-size: 12px;
 			font-style: italic;
-			color: var(--atum-input-placeholder);
+			color: var(--atum-text-color-var2);
 		}
 		
 		@include tablet-max-wp{
@@ -412,7 +413,7 @@
 	}
 	
 	&.inbound-stock-search {
-		border: 1px solid var(--atum-border);
+		border: 1px solid var(--main-border);
 		width: 280px;
 		height: 30px;
 		border-radius: 5px;
@@ -485,7 +486,7 @@
 		max-width: 110px;
 		font-size: 15px;
 		background-color: var(--atum-table-bg);
-		color: var(--gray-500);
+		color: var(--atum-text-color-dark2);
 		
 		@include tablet-max-wp {
 			width: 100%;
@@ -496,7 +497,7 @@
 		}
 		
 		&::placeholder {
-			color: var(--atum-input-placeholder);
+			color: var(--atum-text-color-var2);
 			font-style: italic;
 			letter-spacing: normal;
 			margin-left: 10px;
@@ -515,7 +516,7 @@
 	
 	.input-group {
 		border-radius: 5px;
-		border: solid 1px var(--atum-border);
+		border: solid 1px var(--main-border);
 		background-color:  var(--atum-table-bg);
 		margin-left: 10px;
 		padding-right: 1px;
@@ -528,7 +529,7 @@
 		
 		input[type=submit] {
 			height: 29px !important;
-			color: var(--atum-table-search-text) !important;
+			color: var(--main-text-expanded) !important;
 			background-color: var(--atum-table-search-submit-bg);
 			
 			&:disabled {
@@ -554,7 +555,7 @@
 		border: none;
 		background-color: var(--atum-dropdown-toggle-bg);
 		font-size: 15px;
-		color: var(--gray-600);
+		color: var(--atum-text-color-var1);
 		
 		&:after {
 			vertical-align: middle;
@@ -571,7 +572,7 @@
 			outline: 0;
 			box-shadow: none;
 			background-color: var(--atum-dropdown-toggle-bg);
-			color: var(--gray-600);
+			color: var(--atum-text-color-var1);
 		}
 	}
 	
@@ -592,10 +593,10 @@
 	
 	.dropdown-item{
 		width: auto;
-		color: var(--gray-600);
+		color: var(--atum-text-color-var1);
 		&:hover, &.active, &:focus, &:active {
-			background-color: var(--atum-select2-selected-bg);
-			color: var(--atum-select2-selected-text);
+			background-color: var(--primary-dark);
+			color: var(--primary-var-dark);
 		}
 	}
 	
@@ -670,11 +671,11 @@
 			line-height: 30px;
 			
 			&:active, &:focus {
-				background-color: var(--warning);
+				background-color: var(--secondary);
 				color:  var(--white);
 			}
 			&:hover {
-				background-color: var(--warning) !important;
+				background-color: var(--secondary) !important;
 				color:  var(--white);
 			}
 		}
@@ -705,7 +706,7 @@
 	}
 	
 	&.top {
-		box-shadow: 0 1px 0 0 var(--atum-border), 0 -1px 0 0 var(--atum-border);
+		box-shadow: 0 1px 0 0 var(--main-border), 0 -1px 0 0 var(--main-border);
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		padding: 10px 11px;
@@ -948,9 +949,9 @@
 			width: 30px;
 			height: 30px;
 			border-radius: 5px;
-			border: solid 1px var(--atum-border);
+			border: solid 1px var(--main-border);
 			background-color:  var(--atum-table-bg);
-			color: var(--gray-600);
+			color: var(--atum-text-color-var1);
 			cursor: pointer;
 			transition: all 0.20s;
 			line-height: 2;
@@ -965,7 +966,7 @@
 			}
 			
 			&.active, &:hover {
-				background-color: var(--blue);
+				background-color: var(--primary);
 				color:  var(--atum-table-bg);
 				border-color:  var(--atum-table-bg);
 			}
@@ -985,8 +986,8 @@
 	
 	.search-submit {
 		margin-left: 4px;
-		background-color: var(--atum-table-search-bg) !important;
-		color: var(--atum-table-search-text) !important;
+		background-color: var(--secondary) !important;
+		color: var(--main-text-expanded) !important;
 		font-size: 10px;
 		font-weight: normal;
 		line-height: 1.6px;
@@ -999,7 +1000,7 @@
 		width: 63px;
 		
 		&:hover, &:active, &:focus {
-			background-color: var(--warning-hover);
+			background-color: var(--secondary-hover);
 			color:  var(--white);
 			box-shadow: none;
 		}
@@ -1044,7 +1045,7 @@
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--atum-table-views-tabs-active);
+					background-color: var(--primary);
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
@@ -1105,11 +1106,11 @@
 					}
 					
 					.text-blue {
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 					
 					&.tips {
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 					
 					&.empty {
@@ -1121,7 +1122,7 @@
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
-					color:  var(--blue);
+					color:  var(--primary);
 					&.empty {
 						color: var(--atum-table-views-tabs);
 						a {
@@ -1131,7 +1132,7 @@
 					}
 					a {
 						padding: 0;
-						color:  var(--blue);
+						color:  var(--primary);
 					}
 				}
 				
@@ -1144,7 +1145,7 @@
 					}
 					
 					font-weight: bold;
-					color: var(--blue);
+					color: var(--primary);
 					
 					&.empty {
 						color: var(--atum-table-views-tabs);
@@ -1357,7 +1358,7 @@
 	align-items: center;
 	margin: 0 11px 0 11px;
 	background-color:  var(--atum-table-bg);
-	border-bottom: 1px solid var(--atum-border);
+	border-bottom: 1px solid var(--main-border);
 	
 	&.no-margin {
 		margin: 0;
@@ -1527,7 +1528,7 @@
 
 table.wp-list-table {
 	border: none;
-	border-top: 1px solid var(--atum-border);
+	border-top: 1px solid var(--main-border);
 	&:not(.cloned) {
 	min-width: 1200px;
 	}
@@ -1538,16 +1539,16 @@ table.wp-list-table {
 			font-size: 14px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: var(--atum-table-item-heads);
+			color: var(--atum-text-color-var2);
 		}
 	}
 	
 	td {
 		a {
-			color:  var(--blue);
+			color:  var(--primary);
 			
 			&:hover, &:focus, &:active {
-				color:  var(--blue);
+				color:  var(--primary);
 			}
 		}
 	}
@@ -1570,8 +1571,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	thead .item-heads, tfoot .item-heads {
 		background-color:  var(--atum-table-bg);
-		border-top: 1px solid var(--atum-border);
-		border-bottom: 1px solid var(--atum-border);
+		border-top: 1px solid var(--main-border);
+		border-bottom: 1px solid var(--main-border);
 		
 		th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
 		td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
@@ -1588,7 +1589,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			white-space: normal;
 			font-weight: 600;
 			letter-spacing: 0.3px;
-			color: var(--atum-table-item-heads);
+			color: var(--atum-text-color-var2);
 			
 			.atum-icon {
 				display: block;
@@ -1598,7 +1599,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				width: 1em;
 				margin: 0 auto;
 				font-size: 19px;
-				color: var(--atum-table-item-heads);
+				color: var(--atum-text-color-var2);
 				
 				&:before {
 					text-indent: 0;
@@ -1613,8 +1614,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tfoot {
 		.item-heads {
-			border-top: 1px solid var(--atum-border);
-			border-bottom: 1px solid var(--atum-border);
+			border-top: 1px solid var(--main-border);
+			border-bottom: 1px solid var(--main-border);
 			
 			th {
 				padding: 3px 5px;
@@ -1625,7 +1626,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				white-space: normal;
 				font-weight: bold;
 				letter-spacing: 0.3px;
-				color: var(--atum-table-item-heads);
+				color: var(--atum-text-color-var2);
 				
 			}
 		}
@@ -1639,16 +1640,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		.item-heads {
 			td, th {
-				box-shadow: 0 1px 0 0 var(--atum-border);
+				box-shadow: 0 1px 0 0 var(--main-border);
 				a {
-					color: var(--atum-table-item-heads);
+					color: var(--atum-text-color-var2);
 				}
 			}
 		}
 		th, td {
 			&:not(.column-title) {
-				border-top: 1px solid var(--atum-border);
-				border-bottom: 1px solid var(--atum-border);
+				border-top: 1px solid var(--main-border);
+				border-bottom: 1px solid var(--main-border);
 			}
 			
 			&.column-title {
@@ -1670,10 +1671,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			height: 20px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: var(--gray-600);
+			color: var(--atum-text-color-var1);
 			
 			&:not(:last-child) {
-				border-right: 1px solid var(--atum-border);
+				border-right: 1px solid var(--main-border);
 			}
 			
 			.group-toggler {
@@ -1710,12 +1711,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				color: var(--atum-table-item-heads);
+				color: var(--atum-text-color-var2);
 				overflow: visible;
 				
 				&, span {
 					&:hover {
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 			}
@@ -1789,9 +1790,9 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	tr {
 		box-shadow: 0 1px 0 0 var(--gray-200-shadow);
-		background-color: var(--atum-table-row-even);
-		border-top: 1px solid var(--atum-border);
-		border-bottom: 1px solid var(--atum-border);
+		background-color: var(--atum-table-bg2);
+		border-top: 1px solid var(--main-border);
+		border-bottom: 1px solid var(--main-border);
 		
 		&.type-atum_supplier {
 			.row-actions {
@@ -1801,12 +1802,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&:nth-child(odd) {
-			background-color: var(--atum-table-row-odd);
+			background-color: var(--atum-table-bg);
 		}
 		
 		&.main-row, &.mi-row , &.expandable {
 			transition: .2s ease-in;
-			background-color: var(--atum-table-row-odd);
+			background-color: var(--atum-table-bg);
 			border: 1px solid var(--atum-border-expanded);
 			border-left: none;
 			border-right: none;
@@ -1822,31 +1823,31 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.expandable {
 			.set-meta, a {
-				color: var(--atum-table-link-child) !important;
+				color: var(--primary-var-dark) !important;
 			}
 		}
 		
 		&.even {
-			background-color: var(--atum-table-row-even);
+			background-color: var(--atum-table-bg2);
 		}
 		
 		&.active-row {
-			background-color: var(--atum-row-active);
+			background-color: var(--primary-dark);
 			td {
-				color: var(--atum-table-text-active) !important;
+				color: var(--atum-text-color-dark2) !important;
 				.product-type {
-					color: var(--atum-table-icon-active);
+					color: var(--atum-text-color-dark2);
 				}
 			}
 			.set-meta, a {
-				color: var(--atum-table-link-active) !important;
+				color: var(--primary-var-dark) !important;
 			}
 			
 		}
 		
 		.set-meta {
 			cursor: pointer;
-			color:  var(--blue);
+			color:  var(--primary);
 			
 			&:hover {
 				color: var(--wp-link-hover);
@@ -1869,13 +1870,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			&.group {
-				background-color: var(--orange);
+				background-color: var(--secondary-var);
 			}
 			
 			&.variable, &.variable-subscription, &.group, &.bundle {
 				
 				td, a {
-					color:  var(--atum-table-text-expanded);
+					color:  var(--main-text-expanded);
 				}
 				
 				.check-column {
@@ -1891,7 +1892,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						&.product-type {
 							&:before {
 								content: $atmi-wc-contract;
-								color:  var(--atum-table-icon);
+								color:  var(--atum-text-color-var1);
 							}
 						}
 						
@@ -1932,10 +1933,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.variation {
-			background-color:  var(--atum-table-row-child-variation);
+			background-color:  var(--primary-dark);
 			
 			&:nth-child(even) {
-				background-color:  var(--atum-table-row-child-variation-even);
+				background-color:  var(--primary-light);
 			}
 			
 			&.active-row {
@@ -1944,7 +1945,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			td.title {
 				.child-arrow {
-					color: var(--blue);
+					color: var(--primary);
 				}
 			}
 		}
@@ -1974,10 +1975,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.grouped {
-			background-color:  var(--orange-light);
+			background-color:  var(--secondary-dark);
 			
 			&:nth-child(even) {
-				background-color:  var(--orange-light-2);
+				background-color:  var(--secondary-light);
 			}
 			
 			&.active-row {
@@ -1986,7 +1987,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			td.title {
 				.child-arrow {
-					color:  var(--orange);
+					color:  var(--secondary-var);
 				}
 			}
 		}
@@ -2041,12 +2042,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.totals {
-			background-color: var(--atum-footer-totals);
+			background-color: var(--atum-expanded-bg);
 			
 			td, th {
 				font-size: 12px;
 				font-weight: 400;
-				color: var(--gray-600);
+				color: var(--atum-text-color-var1);
 				padding-top: 0;
 				padding-bottom: 0;
 				text-align: center;
@@ -2056,7 +2057,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						font-size: 14px;
 						font-weight: bold;
 						letter-spacing: 0.3px;
-						color: var(--gray-600);
+						color: var(--atum-text-color-var1);
 						text-transform: uppercase;
 						background-color: transparent;
 					}
@@ -2070,7 +2071,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					text-align: center;
 					color:  var(--atum-table-bg);
 					border-radius: 5px;
-					background-color: var(--gray-600);
+					background-color: var(--atum-text-color-var1);
 					padding: 4px;
 					
 					&.danger {
@@ -2090,13 +2091,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.cell {
 		&-green {
-			color: var(--success)!important;
+			color: var(--tertiary)!important;
 		}
 		
 		&-yellow {
-			color: var(--warning) !important;
+			color: var(--secondary) !important;
 			.set-meta {
-				color: var(--warning) !important;
+				color: var(--secondary) !important;
 			}
 		}
 
@@ -2118,7 +2119,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		border-color: var(--gray-400);
 		
 		&:checked {
-			background-color: var(--atum-table-check);
+			background-color: var(--primary-var-dark);
 			border: 0;
 			
 			&:before {
@@ -2140,13 +2141,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			&.expanded {
 				&.group, &.bundle {
 					td {
-						color: var(--atum-table-text-expanded) !important;
+						color: var(--main-text-expanded) !important;
 						
 						a, span {
-							color: var(--atum-table-text-expanded) !important;
+							color: var(--main-text-expanded) !important;
 							
 							&:before {
-								color: var(--atum-table-text-expanded) !important;
+								color: var(--main-text-expanded) !important;
 							}
 						}
 					}
@@ -2154,13 +2155,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				
 				&.variable {
 					td {
-						color: var(--atum-table-text-expanded) !important;
+						color: var(--main-text-expanded) !important;
 						
 						a, span {
-							color: var(--atum-table-text-expanded) !important;
+							color: var(--main-text-expanded) !important;
 							
 							&:before {
-								color: var(--atum-table-text-expanded) !important;
+								color: var(--main-text-expanded) !important;
 							}
 						}
 					}
@@ -2179,7 +2180,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 							pointer-events: none;
 							&:before {
 								content: '-';
-								color: var(--gray-600);
+								color: var(--atum-text-color-var1);
 							}
 						}
 					}
@@ -2187,13 +2188,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			td {
-				color: var(--gray-600);
+				color: var(--atum-text-color-var1);
 				
 				&.column-title, &.atum_order_title {
 					a, .row-title {
 						font-size: 14px;
 						font-weight: 600;
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 				
@@ -2208,13 +2209,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-_sku {
 					span {
 						font-size: 14px;
-						color: var(--blue);
+						color: var(--primary);
 					}
 				}
 				
 				&.calc_purchase_order {
 					a {
-						color:  var(--blue);
+						color:  var(--primary);
 						font-weight: bold;
 					}
 				}
@@ -2229,12 +2230,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		padding: 6px 5px;
 		height: 47px;
 		font-size: 14px;
-		color: var(--blue);
+		color: var(--primary);
 		
 		&.column-ID {
 			font-size: 14px;
 			letter-spacing: 0.3px;
-			color: var(--gray-600);
+			color: var(--atum-text-color-var1);
 		}
 		
 		&.pro-version {
@@ -2286,8 +2287,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			padding: 0 !important;
 			min-width: 0 !important;
 			height: auto !important;
-			border-left: 1px solid var(--atum-border);
-			border-right: 1px solid var(--atum-border);
+			border-left: 1px solid var(--main-border);
+			border-right: 1px solid var(--main-border);
 		}
 		
 	}
@@ -2295,11 +2296,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	th {
 		span {
 			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
-				color: var(--atum-table-item-heads);
+				color: var(--atum-text-color-var2);
 				font-weight: bold;
 				font-size: 14px;
 				.set-header {
-					color: var(--blue);
+					color: var(--primary);
 				}
 			}
 		}
@@ -2316,7 +2317,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			width: 1em;
 			font-size: 1.6em;
 			margin: 0 auto;
-			color: var(--atum-table-icon);
+			color: var(--atum-text-color-var1);
 			
 			&:before {
 				content: $atmi-wc-simple;
@@ -2398,7 +2399,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				&.grouped {
-					color: var(--warning);
+					color: var(--secondary);
 				}
 				
 				&.bundle {
@@ -2429,25 +2430,25 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 	.show-locations{
 		cursor: pointer;
-		color: var(--atum-table-icon);
+		color: var(--atum-text-color-var1);
 		font-size: 20px;
 		&.not-empty {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 	
 	.show-hierarchy {
 		cursor: pointer;
-		color: var(--atum-table-icon);
+		color: var(--atum-text-color-var1);
 		font-size: 20px;
 		&.not-empty {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 
 	.set-header {
 		cursor: pointer;
-		color: var(--blue);
+		color: var(--primary);
 		
 		.select2-selection__rendered {
 			padding-left: 8px;
@@ -2612,7 +2613,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		a {
 			
-			color: var(--wp-link) !important;
+			color: var(--primary) !important;
 			
 			&:hover {
 				
@@ -2639,14 +2640,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-weight: 400;
 				font-size: 12px;
 				line-height: 1.67;
-				color: var(--gray-600);
+				color: var(--atum-text-color-var1);
 			}
 			
 			input {
 				width: 150px;
 				font-size: 15px;
 				line-height: 1;
-				color: var(--gray-600);
+				color: var(--atum-text-color-var1);
 				font-weight: 400;
 				&:after {
 					font-family: atum-icon-font;
@@ -2660,16 +2661,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			font-style: italic;
 			line-height: 1.67;
 			font-weight: 400;
-			color: var(--atum-input-placeholder);
+			color: var(--atum-text-color-var2);
 		}
 	}
 }
 
 .btn.btn-warning:hover {
-	background-color: var(--warning-hover);
-	color: var(--warning-hover-text);
+	background-color: var(--secondary-hover);
+	color: var(--secondary-hover-text);
 	border-radius: 5px;
-	border: var(--warning-hover-border) !important;
+	border: var(--secondary-hover-border) !important;
 }
 .btn.btn-primary:hover {
 	background-color: var(--primary-hover);
@@ -2678,10 +2679,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	border: var(--primary-hover-border) !important;
 }
 .btn.btn-success:hover {
-	background-color: var(--success-hover);
-	color: var(--success-hover-text);
+	background-color: var(--tertiary-hover);
+	color: var(--tertiary-hover-text);
 	border-radius: 5px;
-	border: var(--success-hover-border) !important;
+	border: var(--tertiary-hover-border) !important;
 }
 
 

@@ -1,9 +1,9 @@
 .atum-list-wrapper, #posts-filter {
 	.displaying-num {
-		color: var(--gray-600);
+		color: var(--atum-text-color-var1);
 	}
 	.pagination-links {
-		color: var(--gray-600);
+		color: var(--atum-text-color-var1);
 		
 		.tablenav-pages-navspan, .tablenav-current-page, #current-page-selector {
 			border-radius: 5px;
@@ -22,12 +22,12 @@
 		}
 		
 		#current-page-selector {
-			border: 1px solid var(--atum-border);
+			border: 1px solid var(--main-border);
 			-webkit-box-sizing: content-box;
 			-moz-box-sizing: content-box;
 			box-sizing: content-box;
 			vertical-align: top;
-			background-color: var(--atum-border);
+			background-color: var(--main-border);
 			
 			&:focus {
 				outline: 0;
@@ -40,7 +40,7 @@
 		}
 		
 		.tablenav-pages-navspan {
-			background-color: var(--atum-pagination-bg-disabled);
+			background-color: var(--atum-table-bg2);
 			border: 1px solid var(--atum-pagination-border-disabled);
 			color: var(--atum-pagination-disabled);
 		}

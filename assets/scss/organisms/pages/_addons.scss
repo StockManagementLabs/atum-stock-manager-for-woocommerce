@@ -74,7 +74,7 @@
 			}
 			
 			&.valid {
-				background-color: $success;
+				background-color: $tertiary;
 				
 				+ .show-key {
 					opacity: 0;
@@ -82,7 +82,7 @@
 				
 				&.not-installed {
 					
-					background-color: $success;
+					background-color: $tertiary;
 					right: 0;
 					width: 105px;
 					height: 50px;
@@ -93,7 +93,7 @@
 				&:not(.not-installed) {
 					+ .show-key {
 						i {
-							color: $success;
+							color: $tertiary;
 						}
 					}
 				}
@@ -106,7 +106,7 @@
 			}
 			
 			&.inactive {
-				background-color: $warning;
+				background-color: $secondary;
 			}
 			
 			&.not-installed {
@@ -241,11 +241,11 @@
 				}
 				
 				&.valid {
-					border-color: $success;
+					border-color: $tertiary;
 				}
 				
 				&.inactive {
-					border-color: $warning;
+					border-color: $secondary;
 				}
 				
 				&.invalid {
@@ -267,12 +267,12 @@
 			transition: all 0.2s ease-in-out;
 			
 			&.install-addon {
-				background-color: $success;
+				background-color: $tertiary;
 				height: 100%;
 				width: 100%;
 				margin-left: 0;
 				&:hover {
-					background-color: lighten($success, 10%);
+					background-color: lighten($tertiary, 10%);
 				}
 			}
 			

@@ -178,6 +178,43 @@ fieldset:disabled a.btn {
           box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
+.btn-tertiary {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+}
+
+.btn-tertiary:hover {
+  color: var(--tertiary-hover-text);
+  background-color: var(--tertiary-hover);
+  border: var(--tertiary-hover-border) !important;
+}
+
+.btn-tertiary:focus, .btn-tertiary.focus {
+  color: var(--wp-yiq-text-light);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+}
+
+.btn-tertiary.disabled, .btn-tertiary:disabled {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.btn-tertiary:not(:disabled):not(.disabled):active, .btn-tertiary:not(:disabled):not(.disabled).active,
+.show > .btn-tertiary.dropdown-toggle {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary-hover);
+  border-color: var(--tertiary-hover);
+}
+
+.btn-tertiary:not(:disabled):not(.disabled):active:focus, .btn-tertiary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-tertiary.dropdown-toggle:focus {
+  color: var(--wp-yiq-text-light);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.5);
+}
+
 .btn-success {
   color: var(--wp-yiq-text-light);
   background-color: var(--success);
@@ -507,6 +544,42 @@ fieldset:disabled a.btn {
 .show > .btn-outline-secondary.dropdown-toggle:focus {
   -webkit-box-shadow: 0 0 0 0.2rem var(--secondary-shadow);
           box-shadow: 0 0 0 0.2rem var(--secondary-shadow);
+}
+
+.btn-outline-tertiary {
+  color: var(--tertiary);
+  background-color: transparent;
+  background-image: none;
+  border-color: var(--tertiary);
+}
+
+.btn-outline-tertiary:hover {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.btn-outline-tertiary:focus, .btn-outline-tertiary.focus {
+  -webkit-box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
+          box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
+}
+
+.btn-outline-tertiary.disabled, .btn-outline-tertiary:disabled {
+  color: "tertiary";
+  background-color: transparent;
+}
+
+.btn-outline-tertiary:not(:disabled):not(.disabled):active, .btn-outline-tertiary:not(:disabled):not(.disabled).active,
+.show > .btn-outline-tertiary.dropdown-toggle {
+  color: var(--wp-yiq-text-light);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.btn-outline-tertiary:not(:disabled):not(.disabled):active:focus, .btn-outline-tertiary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-tertiary.dropdown-toggle:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
+          box-shadow: 0 0 0 0.2rem var(--tertiary-shadow);
 }
 
 .btn-outline-success {
@@ -1712,18 +1785,18 @@ input[type="button"].btn-block {
   margin: 0;
   border-radius: 4px;
   height: 30px;
-  color: var(--gray-600);
+  color: var(--atum-text-color-var1);
   border: 1px solid var(--gray-200);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
 .swal2-container .swal2-content input[type=text]:hover {
-  border-color: var(--gray-600);
+  border-color: var(--atum-text-color-var1);
 }
 
 .swal2-container .swal2-content input[type=text]:focus {
-  border-color: var(--blue);
+  border-color: var(--primary);
 }
 
 .swal2-container .swal2-content .atum-link {
@@ -1733,7 +1806,7 @@ input[type="button"].btn-block {
 .swal2-container .swal2-title {
   line-height: 1.3;
   font-size: 23px;
-  color: var(--gray-600);
+  color: var(--atum-text-color-var1);
 }
 
 .swal2-container .swal2-modal {
@@ -1788,7 +1861,7 @@ input[type="button"].btn-block {
 
 .swal2-container .swal2-modal a {
   text-decoration: none;
-  color: var(--wp-link) !important;
+  color: var(--primary) !important;
 }
 
 .swal2-container .swal2-modal a:hover {

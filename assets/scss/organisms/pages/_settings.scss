@@ -45,7 +45,7 @@
 
 		&.bg-light {
 			background-color: var(--white);
-			color: var(--gray-600);
+			color: var(--atum-text-color-var1);
 		}
 	}
 
@@ -142,10 +142,10 @@
 
 			a {
 				text-decoration: none;
-				color: var(--blue);
+				color: var(--primary);
 
 				&:hover {
-					color: var(--blue);
+					color: var(--primary);
 				}
 			}
 		}
@@ -165,6 +165,7 @@
 		display: block;
 		margin: 0;
 		box-shadow: 0 1px 0 0 var(--white-shadow);
+		border-bottom: solid 1px var(--main-border);
 	}
 
 	.atum-nav-link {
@@ -188,12 +189,12 @@
 		
 		&.active, &:hover, &:focus {
 			outline: none;
-			color: var(--atum-settings-nav-link-selected);
+			color: var(--primary-var-text2);
 			box-shadow: none;
-			background-color: var(--atum-settings-nav-link-selected-bg);
+			background-color: var(--primary-dark);
 			font-size: 15px;
 			font-weight: bold;
-			border-right: 3px solid var(--atum-settings-nav-link-selected);
+			border-right: 3px solid var(--primary-var-text2);
 			
 		}
 
@@ -227,15 +228,6 @@
 				font-size: 16px;
 			}
 
-		}
-
-		&.active {
-			cursor: default;
-			background-color: var(--blue-dark-light-2);
-			font-size: 15px;
-			font-weight: bold;
-			color: var(--white);
-			border-right: 3px solid var(--white);
 		}
 
 	}
@@ -374,7 +366,7 @@
 					right: 0;
 					margin: auto;
 					@include loader(50px, $info, 3px);
-					border-top-color: var(--gray-600);
+					border-top-color: var(--atum-text-color-var1);
 				}
 			}
 		}
@@ -389,14 +381,14 @@
 			color: var(--white);
 			
 			&:hover, &:active {
-				background-color: var(--green);
+				background-color: var(--tertiary-var);
 				box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
 				color: var(--atum-table-bg);
 			}
 		}
 		
 		.active {
-			background-color: var(--green);
+			background-color: var(--tertiary-var);
 			box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
 			color: var(--atum-table-bg);
 		}
@@ -436,7 +428,7 @@
 		
 		.section-title {
 			margin-top: 11px;
-			border-bottom: 2px solid var(--atum-settings-border-color);
+			border-bottom: 2px solid var(--main-border);
 			background-color: var(--atum-settings-section-bg);
 			border-top-right-radius: 6px;
 			border-top-left-radius: 6px;
@@ -447,7 +439,7 @@
 			padding-left: 20px;
 			font-size: 18px;
 			font-weight: bold;
-			color: var(--atum-settings-section-title);
+			color: var(--main-title);
 			
 			.select2-dropdown {
 				.select2-search {
@@ -518,7 +510,7 @@
 			}
 			
 			h2 {
-				color: var(--atum-settings-section-title);
+				color: var(--main-title);
 				margin: 0;
 				text-transform: capitalize;
 				font-size: 18px;
@@ -547,7 +539,7 @@
 			
 			tr {
 				&:not(:last-child) {
-					border-bottom: 0.5px solid var(--atum-settings-separator);
+					border-bottom: 0.5px solid var(--main-border);
 				}
 			}
 			
@@ -572,7 +564,7 @@
 			
 			th {
 				width: 37%;
-				color: var(--atum-settings-section-text);
+				color: var(--atum-text-color-var1);
 				font-weight: bold;
 				font-size: 15px;
 				padding-top: 25px;
@@ -587,7 +579,7 @@
 				}
 				
 				.selector-container:not(:last-child) {
-					border-bottom: solid 1px var(--atum-settings-border-color);
+					border-bottom: solid 1px var(--main-border);
 				}
 				
 				.selector-container {
@@ -617,7 +609,7 @@
 					.selector-description {
 						padding: 0 15px;
 						div {
-							color: var(--atum-settings-section-text);
+							color: var(--atum-text-color-var1);
 							font-weight: bold;
 							font-size: 15px;
 						}
@@ -626,7 +618,7 @@
 			}
 			
 			.atum-setting-info {
-				color: var(--atum-settings-section-description);
+				color: var(--atum-text-color-var2);
 				margin-bottom: $grid-gutter-width/2;
 				padding-top: 12px;
 				font-size: 15px;
@@ -656,12 +648,12 @@
 				margin: 0;
 				border-radius: 4px;
 				height: 30px;
-				color: var(--atum-settings-input-text);
+				color: var(--atum-text-color-dark2);
 				border: 1px solid var(--atum-settings-input-border);
 				box-shadow: none;
 				
 				&:hover {
-					border: solid 1px var(--gray-600)
+					border: solid 1px var(--atum-text-color-var1)
 				}
 				
 				&:focus {
@@ -865,12 +857,12 @@
 			font-size: 12px;
 			border: none;
 			transition: all 0.2s ease-in-out;
-			color: var(--atum-settings-btn-save-text);
+			color: var(--primary-var-text2);
 			
 			&:hover, &:active {
 				background-color: var(--atum-settings-btn-save-hover);
 				border-color: var(--atum-settings-btn-save-hover);
-				color: var(--atum-settings-btn-save-text-hover);
+				color: var(--primary-var-text2);
 				transform: none;
 			}
 			
@@ -915,7 +907,7 @@
 				padding: 0 0 0 20px;
 				
 				&:hover {
-					border-color: var(--gray-600);
+					border-color: var(--atum-text-color-var1);
 				}
 				
 				&:focus {
@@ -925,7 +917,7 @@
 						visibility: hidden;
 						
 						&:before {
-							color: var(--gray-600);
+							color: var(--atum-text-color-var1);
 							content: "|";
 							visibility: visible;
 						}
@@ -935,7 +927,7 @@
 				.wp-color-result-text {
 					line-height: 29px;
 					background-color: transparent;
-					color: var(--atum-settings-wp-color-text);
+					color: var(--main-text);
 					border-left: none;
 					font-size: 12px;
 					line-height: 1.17px;

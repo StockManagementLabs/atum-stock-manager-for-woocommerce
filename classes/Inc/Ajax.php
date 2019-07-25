@@ -2296,7 +2296,7 @@ final class Ajax {
 			'dm_primary_color_dark'    => '#00B8DB',
 			'dm_secondary_color'       => '#FFDF89',
 			'dm_secondary_color_light' => '#FFDF89',
-			'dm_secondary_color_dark'  => '#FFDF89',
+			'dm_secondary_color_dark'  => '#EFAF00',
 			'dm_tertiary_color'        => '#BAEF8D',
 			'dm_tertiary_color_light'  => '#69C61D',
 			'dm_text_color'            => '#FFFFFF',
@@ -2346,7 +2346,7 @@ final class Ajax {
 		if ( 0 === absint( $_POST['reset'] ) ) {
 
 			foreach ( $def_settings as $dset => $dval ) {
-				$val = Helpers::get_option( $dset );
+				$val = Helpers::get_color_value( $dset );
 
 				if ( $val && $val !== $dval ) {
 					$custom_settings[ $dset ] = $val;

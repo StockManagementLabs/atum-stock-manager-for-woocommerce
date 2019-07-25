@@ -38,15 +38,16 @@ class AtumColors {
 	 * @var array
 	 */
 	private $colors = array(
-		'gray_100'  => '#F8F9FA',
-		'gray_500'  => '#ADB5BD',
-		'dark'      => '#343A40',
-		'white'     => '#FFFFFF',
-		'black'     => '#000000',
-		'blue'      => '#00B8DB',
-		'blue_dark' => '#27283B',
-		'green'     => '#69C61D',
-		'orange'    => '#EFAF00',
+		'gray_100'   => '#F8F9FA',
+		'gray_500'   => '#ADB5BD',
+		'dark'       => '#343A40',
+		'white'      => '#FFFFFF',
+		'black'      => '#000000',
+		'blue'       => '#00B8DB',
+		'blue_dark'  => '#27283B',
+		'blue_light' => '#DBF9FF',
+		'green'      => '#69C61D',
+		'orange'     => '#EFAF00',
 	);
 
 	/**
@@ -82,7 +83,7 @@ class AtumColors {
 		$this->colors['primary_color_rgb']     = $this->convert_hexadecimal_to_rgb( $this->colors['primary_color'] );
 		$this->colors['primary_color_light']   = ! empty( $visual_settings[ "{$prefix}primary_color_light" ] ) ? $visual_settings[ "{$prefix}primary_color_light" ] : '#F5FDFF';
 		$this->colors['primary_color_dark']    = ! empty( $visual_settings[ "{$prefix}primary_color_dark" ] ) ? $visual_settings[ "{$prefix}primary_color_dark" ] : '#DBF9FF';
-		$this->colors['secondary_color']       = ! empty( $visual_settings[ "{$prefix}secondary_color" ] ) ? $visual_settings[ "{$prefix}secondary_color" ] : '#EFAF00';
+		$this->colors['secondary_color']       = ! empty( $visual_settings[ "{$prefix}secondary_color" ] ) ? $visual_settings[ "{$prefix}secondary_color" ] : $this->colors['orange'];
 		$this->colors['secondary_color_rgb']   = $this->convert_hexadecimal_to_rgb( $this->colors['secondary_color'] );
 		$this->colors['secondary_color_light'] = ! empty( $visual_settings[ "{$prefix}secondary_color_light" ] ) ? $visual_settings[ "{$prefix}secondary_color_light" ] : '#FFF4D6';
 		$this->colors['secondary_color_dark']  = ! empty( $visual_settings[ "{$prefix}secondary_color_dark" ] ) ? $visual_settings[ "{$prefix}secondary_color_dark" ] : '#FFEDBC';
@@ -92,7 +93,7 @@ class AtumColors {
 		$this->colors['tertiary_color_dark']   = ! empty( $visual_settings[ "{$prefix}tertiary_color_dark" ] ) ? $visual_settings[ "{$prefix}tertiary_color_dark" ] : '#B4F0C9';
 		$this->colors['text_color']            = ! empty( $visual_settings[ "{$prefix}text_color" ] ) ? $visual_settings[ "{$prefix}text_color" ] : '#6C757D';
 		$this->colors['text_color_rgb']        = $this->convert_hexadecimal_to_rgb( $this->colors['text_color'] );
-		$this->colors['text_color_2']          = ! empty( $visual_settings[ "{$prefix}text_color_2" ] ) ? $visual_settings[ "{$prefix}text_color_2" ] : '#ADB5BD';
+		$this->colors['text_color_2']          = ! empty( $visual_settings[ "{$prefix}text_color_2" ] ) ? $visual_settings[ "{$prefix}text_color_2" ] : $this->colors['gray_500'];
 		$this->colors['text_color_2_rgb']      = $this->convert_hexadecimal_to_rgb( $this->colors['text_color_2'] );
 		$this->colors['text_color_expanded']   = ! empty( $visual_settings[ "{$prefix}text_color_expanded" ] ) ? $visual_settings[ "{$prefix}text_color_expanded" ] : $this->colors['white'];
 		$this->colors['border_color']          = ! empty( $visual_settings[ "{$prefix}border_color" ] ) ? $visual_settings[ "{$prefix}border_color" ] : '#E9ECEF';
@@ -101,7 +102,7 @@ class AtumColors {
 		$this->colors['bg_1_color_rgb']        = $this->convert_hexadecimal_to_rgb( $this->colors['bg_1_color'] );
 		$this->colors['bg_2_color']            = ! empty( $visual_settings[ "{$prefix}bg_2_color" ] ) ? $visual_settings[ "{$prefix}bg_2_color" ] : $this->colors['gray_100'];
 		$this->colors['danger_color']          = ! empty( $visual_settings[ "{$prefix}danger_color" ] ) ? $visual_settings[ "{$prefix}danger_color" ] : '#FF4848';
-		$this->colors['title_color']           = ! empty( $visual_settings[ "{$prefix}title_color" ] ) ? $visual_settings[ "{$prefix}title_color" ] : '#27283B';
+		$this->colors['title_color']           = ! empty( $visual_settings[ "{$prefix}title_color" ] ) ? $visual_settings[ "{$prefix}title_color" ] : $this->colors['blue_dark'];
 
 		// Add the Visual Settings to ATUM settings.
 		if ( ModuleManager::is_module_active( 'visual_settings' ) && AtumCapabilities::current_user_can( 'edit_visual_settings' ) ) {
@@ -152,135 +153,95 @@ class AtumColors {
 		$title_color           = $this->colors['primary_color'];
 
 		$scheme = ":root {
-			--wp-yiq-text-light: $text_color_expanded;
-			--danger: $danger_color;
-			--blue: {$this->colors['primary_color']};
-			--wp-link: {$this->colors['primary_color']};
-			--primary: {$this->colors['primary_color']};
-			--primary-hover: {$this->colors['white']};
-			--primary-hover-text: {$this->colors['primary_color']};
-			--primary-hover-border: solid 1px {$this->colors['primary_color']};
-			--orange: $secondary_color;
-			--dash-blue-trans: {$this->colors['primary_color_light']};
-			--orange-light-2: $secondary_color_light;
-			--orange-light: $secondary_color_dark;
-			--warning: $secondary_color;
+			--atum-border-expanded: $border_color;
+			--atum-border-var: $border_color;
+			--atum-dropdown-toggle-bg: {$this->colors['gray_100']};
+			--atum-expanded-bg: $bg_1_color;
+			--atum-footer-title: $text_color_2;
+			--atum-marketing-popup-bg: $bg_1_color;
 			--atum-pagination-border-disabled: $border_color;
-			--warning-hover: {$this->colors['white']};
-			--warning-hover-text: $secondary_color;
-			--warning-hover-border: solid 1px $secondary_color;
-			--purple-pl: {$this->colors['primary_color']};
-		    --purple-pl-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
-		    --wp-pink-darken-expanded: {$this->colors['primary_color']};
-			--gray-600: $text_color_2;
-			--green: $tertiary_color;
-			--white: {$this->colors['white']};
-			--white-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
-			--green-light: {$this->colors['primary_color_dark']};
-			--green-light-2: $tertiary_color_light;
-			--success: $tertiary_color;
-			--success-hover: {$this->colors['white']};
-			--success-hover-text: $tertiary_color;
-			--success-hover-border: solid 1px $tertiary_color;
-			--atum-page-title-action: $tertiary_color;
-			--atum-table-item-heads: $text_color_2;
-			--atum-table-row-even: $bg_2_color;
-			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
-		    --atum-table-row-odd: $bg_1_color;
-		    --atum-row-active: {$this->colors['primary_color_dark']};
-			--atum-table-views-tabs: $text_color;
-			--atum-table-views-tabs-active: {$this->colors['primary_color']};
-			--atum-table-link-child: {$this->colors['primary_color']};
-			--atum-input-placeholder: $text_color_2;
-			--atum-select2-selected-text: {$this->colors['primary_color']};
-			--atum-select2-selected-bg: {$this->colors['primary_color_dark']};
-			--atum-table-link-active: {$this->colors['primary_color']};
-			--atum-table-check: {$this->colors['primary_color']};
-			--atum-table-bg: $bg_1_color;
-			--atum-table-icon: $text_color_2;
-			--js-scroll-bg: {$this->colors['primary_color']};
-			--atum-table-icon-active: $text_color;
-			--atum-table-text-active: $text_color;
-			--atum-table-text-expanded: $text_color_expanded;
-			--atum-table-search-text: $text_color_expanded;
-			--atum-table-search-text-disabled: $text_color_2;
-			--atum-table-search-bg: $secondary_color;
-			--atum-settings-heads-bg: {$this->colors['primary_color']};
-			--atum-settings-nav-link: {$this->colors['primary_color']};
-			--atum-pagination-bg-disabled: $bg_2_color;
 			--atum-pagination-disabled: $text_color_2;
 			--atum-pagination-text: $text_color_2;
-			--atum-border: $border_color;
-			--atum-border-expanded: $border_color;
-			--atum-footer-totals: $bg_1_color;
-			--atum-footer-bg: {$this->colors['white']};
-			--atum-dropdown-toggle-bg: {$this->colors['gray_100']};
-			--atum-icon-tree: $text_color;
-			--atum-settings-nav-link-selected: {$this->colors['primary_color']};
-			--atum-settings-nav-link-selected-bg: {$this->colors['primary_color_dark']};
-			--atum-settings-section-title: $title_color;
-			--atum-settings-section-description: $text_color_2;
-			--atum-settings-btn-save-text: {$this->colors['primary_color']};
-			--atum-settings-btn-save-text-hover:
-			--overflow-opacity-rigth: linear-gradient(to right, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
-			--overflow-opacity-left: linear-gradient(to left, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
-			--dash-card-text: {$this->colors['blue_dark']};
-			--dash-nice-select-text: $text_color;
-			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
-			--dash-nice-select-arrow-color: $text_color;
-			--dash-nice-select-text-highlighted: {$this->colors['primary_color']};
-			--dash-add-widget-color: {$this->colors['gray_500']};
-			--dash-input-placeholder: $text_color;
-			--dash-video-subs-text: $text_color_2;
-			--atum-settings-section-text: $text_color_2;
-			--atum-settings-input-text: $text_color;
-			--atum-settings-wp-color-text: $text_color;
+			--atum-select2-border: $border_color;
+			--atum-settings-heads-bg: {$this->colors['primary_color']};
 			--atum-settings-input-border: $border_color;
-			--atum-settings-border-color: $border_color;
-			--atum-settings-separator: $border_color;
-			--atum-table-row-child-variation: {$this->colors['primary_color_dark']};
-			--atum-table-row-child-variation-even: {$this->colors['primary_color_light']};
-			--dash-border: $border_color;
-			--dash-subscription-input: transparent;
+			--atum-settings-nav-link: {$this->colors['primary_color']};
+			--atum-table-bg: $bg_1_color;
+			--atum-table-bg2: $bg_2_color;
+			--atum-table-filter-dropdown: $text_color_2;
+			--atum-table-link-text: $text_color;
+			--atum-table-search-text-disabled: $text_color_2;
+			--atum-table-views-tabs: $text_color;
+			--atum-text-color-dark2: $text_color;
+			--atum-text-color-var1:$text_color_2;
+			--atum-text-color-var2: $text_color_2;
+			--atum-version: $text_color_2;
+			--atum-version-bg: rgba({$this->colors['black_rgb']}, 0.1);
+			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
+			--danger: $danger_color;
+			--dash-add-widget-color: {$this->colors['gray_500']};
+			--dash-blue-trans: {$this->colors['primary_color_light']};
 			--dash-card-bg: $bg_1_color;
+			--dash-card-text: $text_color_2;
 			--dash-h5-text: {$this->colors['primary_color']};
-			--dash-nice-select-bg: $bg_1_color;
-			--dash-nice-select-list-bg: $bg_1_color;
-			--dash-nice-select-border: $border_color;
-		    --dash-nice-select-hover: {$this->colors['primary_color']};
-		    --dash-nice-select-text: $text_color_2;
-		    --dash-nice-select-arrow-color: $text_color;
-		    --dash-nice-select-option-hover: {$this->colors['primary_color_light']};
-		    --dash-nice-select-option-selected-bg: {$this->colors['primary_color_light']};
-		    --dash-nice-select-text-highlighted: {$this->colors['primary_color']};
 			--dash-input-group-bg: rgba({$this->colors['bg_1_color_rgb']}, 0.3);
 			--dash-input-group-shadow: rgba({$this->colors['bg_1_color_rgb']}, 0.3);
-			--dash-input-placeholder: {$this->colors['primary_color']};
-			--dash-widget-header-title: $title_color;
-			--dash-statistics-ticks: $text_color;
-			--dash-statistics-grid-lines: rgba({$this->colors['text_color_rgb']}, 0.2);
+			--dash-next-text: $text_color_2;
+			--dash-nice-select-bg: $bg_1_color;
+			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
+		    --dash-nice-select-hover: {$this->colors['primary_color']};
+			--dash-nice-select-list-bg: $bg_1_color;
+		    --dash-nice-select-option-hover: {$this->colors['primary_color_light']};
+		    --dash-nice-select-option-selected-bg: {$this->colors['primary_color_light']};
 			--dash-statistics-chart-type-bg: transparent;
 			--dash-statistics-chart-type-selected-bg: $secondary_color;
 			--dash-statistics-chart-type-selected-text: $text_color_expanded;
+			--dash-statistics-grid-lines: rgba({$this->colors['text_color_rgb']}, 0.2);
 			--dash-statistics-legend-switch-bg: transparent;
-			--dash-widget-separator: $border_color;
-			--dash-widget-icon: $border_color;
-		    --dash-widget-text: $text_color_2;
+			--dash-statistics-ticks: $text_color;
 			--dash-stats-data-widget-primary: {$this->colors['primary_color']};
-		    --dash-stats-data-widget-success: $tertiary_color;
-			--dash-stock-control-chart-border: $bg_1_color;
-			--dash-next-text: $text_color_2;
+			--dash-subscription-input: transparent;
+			--dash-video-subs-text: $text_color_2;
 			--dash-video-title: {$this->colors['dark']};
-			--dash-video-subs-text $text_color_2;
-			--atum-marketing-popup-bg: $bg_1_color;
-			--dash-widget-current-stock-value-text: {$this->colors['white']};
 			--dash-widget-current-stock-value-bg: {$this->colors['primary_color']};
-			--atum-select2-border: $border_color;
-			--atum-version: {$this->colors['blue_dark']};
-			--atum-version-bg: rgba({$this->colors['black_rgb']}, 0.1);
-			--atum-table-filter-dropdown: {$this->colors['blue_dark']};
-			--atum-footer-title: {$this->colors['blue_dark']};
-			--atum-table-link-text: $text_color;
+			--dash-widget-current-stock-value-text: white;
+			--dash-widget-icon: $border_color;
+			--green-light: {$this->colors['primary_color_dark']};
+			--js-scroll-bg: {$this->colors['primary_color']};
+			--main-border: $border_color;
+			--main-text: $text_color;
+			--main-text-2: {$this->colors['text_color_2']};
+			--main-text-expanded: $text_color_expanded;
+			--main-title: $title_color;
+			--overflow-opacity-rigth: linear-gradient(to right, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
+			--overflow-opacity-left: linear-gradient(to left, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
+			--primary: {$this->colors['primary_color']};
+		    --primary-dark: {$this->colors['primary_color_dark']};
+			--primary-hover: {$this->colors['white']};
+			--primary-hover-border: solid 1px {$this->colors['primary_color']};
+			--primary-hover-text: {$this->colors['primary_color']};
+			--primary-light: {$this->colors['primary_color_light']};
+			--primary-var-dark: {$this->colors['primary_color']};
+			--primary-var-text2: {$this->colors['primary_color']};
+			--purple-pl: {$this->colors['primary_color']};
+		    --purple-pl-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
+			--secondary: $secondary_color;
+			--secondary-dark: $secondary_color_dark;
+			--secondary-hover: {$this->colors['white']};
+			--secondary-hover-text: $secondary_color;
+			--secondary-hover-border: solid 1px $secondary_color;
+			--secondary-light: $secondary_color_light;
+			--secondary-var: $secondary_color;
+			--tertiary: $tertiary_color;
+			--tertiary-hover: {$this->colors['white']};
+			--tertiary-hover-border: solid 1px $tertiary_color;
+			--tertiary-hover-text: $tertiary_color;
+			--tertiary-light: $tertiary_color_light;
+			--tertiary-var: $tertiary_color;
+			--white: {$this->colors['white']};
+			--white-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
+			--wp-yiq-text-light: $text_color_expanded;
+		    --wp-pink-darken-expanded: {$this->colors['primary_color']};
 		}";
 
 		return apply_filters( 'atum/get_high_contrast_mode_colors', $scheme );
@@ -301,144 +262,100 @@ class AtumColors {
 		$bg_2_color     = '#3B3D5A';
 
 		$scheme = ":root {
-			--wp-yiq-text-light: {$this->colors['text_color_2']};
-			--danger: {$this->colors['danger_color']};
-			--blue: {$this->colors['primary_color']};
-			--blue-light: $bg_1_color;
-			--wp-link: {$this->colors['primary_color']};
-			--primary: {$this->colors['primary_color']};
-			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
-			--primary-hover-text: {$this->colors['blue_dark']};
-			--primary-hover-border: 1px solid transparent;
-			--orange: {$this->colors['orange']};
-			--atum-pagination-border-disabled: rgba({$this->colors['border_color_rgb']}, 0.0);
-			--orange-light-2: {$this->colors['secondary_color_light']};
-			--orange-light: {$this->colors['secondary_color_dark']};
-			--warning: {$this->colors['secondary_color']}; 
-			--warning-hover: rgba({$this->colors['secondary_color_rgb']}, 0.6); 
-			--warning-hover-text: {$this->colors['blue_dark']};
-			--warning-hover-border: 1px solid transparent;
-			--gray-600: {$this->colors['text_color']};
-			--gray-500: {$this->colors['text_color']};
-			--green: {$this->colors['tertiary_color_light']};
-			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
-			--green-light-2: {$this->colors['tertiary_color_light']};
-			--white: {$this->colors['white']};
-			--success: {$this->colors['tertiary_color']};
-			--success-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
-			--success-hover-text: {$this->colors['blue_dark']};
-			--success-hover-border: 1px solid transparent;
-			--atum-page-title-action: {$this->colors['tertiary_color_light']};
-			--atum-table-item-heads: {$this->colors['text_color']};
-			--atum-table-row-even: $bg_2_color;
-			--blue-hover: rgba({$this->colors['primary_color_rgb']},0.6);
-		    --atum-table-row-odd: $bg_1_color;
-		    --atum-column-groups-bg: {$this->colors['blue_dark']};
-		    --atum-border: rgba({$this->colors['border_color_rgb']}, 0.2);
+			--atum-add-widget-separator: rgba({$this->colors['border_color_rgb']},0.2);
+			--atum-add-widget-title: {$this->colors['text_color']};
 		    --atum-border-expanded: rgba({$this->colors['border_color_rgb']}, 0.2);
-		    --popover-black-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
-		    --atum-table-row-variation-text: {$this->colors['text_color_2']};
-		    --atum-row-active: {$this->colors['primary_color_light']};
-		    --js-scroll-bg: {$this->colors['text_color']};
-			--atum-table-views-tabs: {$this->colors['text_color']};
-			--atum-table-views-tabs-active: {$this->colors['primary_color']};
-			--atum-table-views-tabs-active-text: {$this->colors['text_color_2']};
-			--atum-table-link-child: {$this->colors['primary_color_dark']};
-			--atum-input-placeholder: {$this->colors['text_color']};
-			--atum-select2-selected-text: {$this->colors['primary_color_dark']};
-			--atum-select2-selected-bg: {$this->colors['primary_color_light']};
-			--atum-table-link-active: {$this->colors['primary_color_dark']};
-			--atum-table-check: {$this->colors['primary_color_dark']};
-			--atum-table-bg: $bg_1_color;
-			--atum-table-icon: {$this->colors['text_color']};
-			--atum-table-icon-active: {$this->colors['text_color_2']};
-			--atum-table-text-active: {$this->colors['text_color_2']};
-			--atum-table-text-expanded: {$this->colors['text_color_expanded']};
-			--atum-table-search-text: {$this->colors['blue_dark']};
-			--atum-table-search-text-disabled: {$this->colors['blue_dark']};
-			--atum-table-search-bg: {$this->colors['secondary_color']};
-			--atum-pagination-bg-disabled: $bg_2_color;
+			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
+		    --atum-column-groups-bg: {$this->colors['text_color_expanded']};
+			--atum-dropdown-toggle-bg: $bg_2_color;
+			--atum-expanded-bg: {$this->colors['text_color_expanded']};
+			--atum-footer-link: {$this->colors['primary_color']};
+			--atum-footer-text: {$this->colors['white']};
+			--atum-footer-title: {$this->colors['white']};
+			--atum-marketing-popup-bg: $bg_1_color;
+			--atum-pagination-border-disabled: rgba({$this->colors['border_color_rgb']}, 0.0);
 			--atum-pagination-disabled: {$this->colors['text_color']};
 			--atum-pagination-text: {$this->colors['text_color_2']};
-			--atum-footer-totals: {$this->colors['blue_dark']};
-			--atum-footer-bg: {$this->colors['blue_dark']};
-			--atum-dropdown-toggle-bg: $bg_2_color;
-			--atum-icon-tree: {$this->colors['text_color']};
-			--atum-settings-nav-bg: $bg_1_color;
-			--atum-settings-heads-bg: $bg_1_color;
-			--atum-settings-nav-link: {$this->colors['text_color']};
-			--atum-settings-section-bg: $bg_1_color;
-			--atum-settings-nav-link-selected: {$this->colors['text_color_2']};
-			--atum-settings-nav-link-selected-bg: {$this->colors['primary_color_light']};
-			--atum-settings-section-title: {$this->colors['title_color']};
-			--atum-settings-section-description: {$this->colors['text_color']};
+			--atum-select2-border: rgba({$this->colors['border_color_rgb']},0.5);
 			--atum-settings-btn-save: {$this->colors['primary_color']};
 			--atum-settings-btn-save-hover: rgba({$this->colors['primary_color_rgb']},0.7);
-			--atum-settings-btn-save-text: {$this->colors['text_color_2']};
-			--atum-settings-btn-save-text-hover: {$this->colors['text_color_2']};
+			--atum-settings-heads-bg: $bg_1_color;
+			--atum-settings-nav-bg: $bg_1_color;
+			--atum-settings-nav-link: {$this->colors['text_color']};
+			--atum-settings-section-bg: $bg_1_color;
 			--atum-settings-text-logo: {$this->colors['text_color']};
-			--atum-settings-separator: rgba({$this->colors['border_color_rgb']},0.2);
-			--overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
-			--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
-			--dash-border: rgba({$this->colors['text_color_rgb']}, 0.5);
-			--dash-card-text: {$this->colors['text_color']};
-			--dash-nice-select-text: {$this->colors['text_color']};
-			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
-			--dash-nice-select-arrow-color: {$this->colors['text_color']};
-			--dash-nice-select-text-highlighted: {$this->colors['primary_color']};
+			--atum-table-bg: $bg_1_color;
+			--atum-table-bg2: $bg_2_color;
+			--atum-table-filter-dropdown: {$this->colors['white']};
+			--atum-table-link-text: {$this->colors['text_color_expanded']};
+		    --atum-table-row-variation-text: {$this->colors['text_color_2']};
+			--atum-table-search-text-disabled: {$this->colors['text_color_expanded']};
+			--atum-table-views-tabs: {$this->colors['text_color']};
+			--atum-table-views-tabs-active-text: {$this->colors['text_color_2']};
+			--atum-text-color-dark2: {$this->colors['text_color_2']};
+			--atum-text-color-var1: {$this->colors['text_color']};
+			--atum-text-color-var2: {$this->colors['text_color']};
+			--blue-hover: rgba({$this->colors['primary_color_rgb']},0.6);
+			--blue-light: $bg_1_color;
+			--danger: {$this->colors['danger_color']};
 			--dash-add-widget-color: {$this->colors['gray_500']};
-			--dash-add-widget-color-dark: {$this->colors['blue_dark']};
-			--dash-input-placeholder: {$this->colors['text_color']};
-			--atum-settings-section-text: {$this->colors['text_color']};
-			--atum-settings-input-text: {$this->colors['text_color_2']};
-			--atum-settings-border-color: rgba({$this->colors['border_color_rgb']}, 0.2);
-			--atum-settings-wp-color-text: {$this->colors['text_color']};
-			--atum-table-row-child-variation: {$this->colors['primary_color_light']};
-			--atum-table-row-child-variation-even: {$this->colors['primary_color_light']};
-			--dash-subscription-input: transparent;
+			--dash-add-widget-color-dark: {$this->colors['text_color_expanded']};
 			--dash-card-bg: $bg_1_color;
+			--dash-card-text: {$this->colors['text_color']};
 			--dash-h5-text: {$this->colors['primary_color']};
+			--dash-next-text: {$this->colors['gray_500']};
 			--dash-nice-select-bg: $bg_1_color;
 			--dash-nice-select-list-bg: $bg_1_color;
-			--dash-nice-select-border: rgba({$this->colors['text_color_rgb']}, 0.5);
 		    --dash-nice-select-hover: {$this->colors['primary_color_light']};
-		    --dash-nice-select-text: {$this->colors['text_color']};
-		    --dash-nice-select-arrow-color: {$this->colors['text_color']};
 		    --dash-nice-select-option-hover: {$this->colors['primary_color_light']};
 		    --dash-nice-select-option-selected-bg: {$this->colors['primary_color_light']};
-		    --dash-nice-select-text-highlighted: {$this->colors['primary_color_dark']};
+			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
 			--dash-input-group-bg: rgba(0, 0, 0, 0.3);
 			--dash-input-group-shadow: rgba(0, 0, 0, 0.3);
-			--dash-input-placeholder: {$this->colors['primary_color']};
-			--dash-widget-header-title: {$this->colors['title_color']};
 			--dash-statistics-ticks: {$this->colors['text_color']};
 			--dash-statistics-grid-lines: rgba({$this->colors['text_color_rgb']}, 0.2);
 			--dash-statistics-chart-type-bg: transparent;
 			--dash-statistics-chart-type-selected-bg: $bg_1_color;
 			--dash-statistics-chart-type-selected-text: {$this->colors['secondary_color']};
 			--dash-statistics-legend-switch-bg: transparent;
-			--dash-widget-separator: rgba({$this->colors['border_color_rgb']}, 0.2);
-			--dash-widget-primary: {$this->colors['primary_color']};
-		    --dash-widget-success: {$this->colors['tertiary_color']};
-		    --dash-widget-warning: {$this->colors['secondary_color_light']};
-		    --dash-widget-danger: {$this->colors['danger_color']};
-		    --dash-widget-text: {$this->colors['text_color']};
 			--dash-stats-data-widget-primary: {$this->colors['primary_color_light']};
-		    --dash-stats-data-widget-success: {$this->colors['tertiary_color']};
-			--dash-stock-control-chart-border: {$this->colors['blue_dark']};
-			--dash-next-text: {$this->colors['gray_500']};
+			--dash-subscription-input: transparent;
 			--dash-video-title: {$this->colors['text_color']};
 			--dash-video-subs-text: {$this->colors['gray_500']};
-			--atum-marketing-popup-bg: $bg_1_color;
-			--atum-select2-border: rgba({$this->colors['border_color_rgb']},0.5);
-			--atum-add-widget-bg: {$this->colors['blue_dark']};
-			--atum-add-widget-title: {$this->colors['text_color']};
-			--atum-add-widget-separator: rgba({$this->colors['border_color_rgb']},0.2);
-			--atum-table-filter-dropdown: {$this->colors['white']};
-			--atum-footer-title: {$this->colors['white']};
-			--atum-footer-link: {$this->colors['primary_color']};
-			--atum-footer-text: {$this->colors['white']};
-			--atum-table-link-text: {$this->colors['text_color_expanded']};
+			--gray-500: {$this->colors['text_color']};
+			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
+		    --js-scroll-bg: {$this->colors['text_color']};
+		    --main-border: rgba({$this->colors['border_color_rgb']}, 0.2);
+			--main-text: {$this->colors['text_color']};
+			--main-text-2: {$this->colors['text_color_2']};
+			--main-text-expanded: {$this->colors['text_color_expanded']};
+			--main-title: {$this->colors['title_color']};
+			--overflow-opacity-rigth: linear-gradient(to right, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
+			--overflow-opacity-left: linear-gradient(to left, rgba($bg_1_color_rgb,0), rgba($bg_1_color_rgb,0.9));
+		    --popover-black-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
+			--primary: {$this->colors['primary_color']};
+		    --primary-dark: {$this->colors['primary_color_light']};
+			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
+			--primary-hover-border: 1px solid transparent;
+			--primary-hover-text: {$this->colors['text_color_expanded']};
+			--primary-light: {$this->colors['primary_color_light']};
+			--primary-var-dark: {$this->colors['primary_color_dark']};
+			--primary-var-text2: {$this->colors['text_color_2']};
+			--secondary: {$this->colors['secondary_color']}; 
+			--secondary-dark: {$this->colors['secondary_color']};
+			--secondary-hover: rgba({$this->colors['secondary_color_rgb']}, 0.6); 
+			--secondary-hover-border: 1px solid transparent;
+			--secondary-hover-text: {$this->colors['text_color_expanded']};
+			--secondary-light: {$this->colors['secondary_color']};
+			--secondary-var: {$this->colors['secondary_color_dark']};
+			--tertiary: {$this->colors['tertiary_color']};
+			--tertiary-var: {$this->colors['tertiary_color_light']};
+			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
+			--tertiary-hover-text: {$this->colors['text_color_expanded']};
+			--tertiary-hover-border: 1px solid transparent;
+			--tertiary-light: {$this->colors['tertiary_color_light']};
+			--white: {$this->colors['white']};
+			--wp-yiq-text-light: {$this->colors['text_color_2']};
 		}";
 
 		return apply_filters( 'atum/get_dark_mode_colors', $scheme );
@@ -455,108 +372,70 @@ class AtumColors {
 	public function get_branded_mode_colors() {
 
 		$scheme = ":root {
-			--wp-yiq-text-light: {$this->colors['text_color_expanded']};
+			--atum-border-expanded: rgba({$this->colors['border_color_rgb']}, 0.2);
+			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
+			--atum-dropdown-toggle-bg: {$this->colors['bg_2_color']};
+			--atum-expanded-bg: {$this->colors['bg_1_color']};
+		    --atum-footer-title: {$this->colors['title_color']};
+			--atum-pagination-border-disabled: {$this->colors['border_color']};
+			--atum-pagination-disabled: {$this->colors['text_color']};
+			--atum-pagination-text: {$this->colors['text_color']};
+		    --atum-select2-border: {$this->colors['border_color']};
+			--atum-settings-btn-save: {$this->colors['white']};
+			--atum-settings-btn-save-hover: rgba({$this->colors['white_rgb']}, 0.7);
+			--atum-settings-heads-bg: {$this->colors['primary_color']};
+			--atum-settings-input-border: {$this->colors['border_color']};
+			--atum-settings-nav-link: {$this->colors['primary_color']};
+		    --atum-table-bg: {$this->colors['bg_1_color']};
+			--atum-table-bg2: {$this->colors['bg_2_color']};
+		    --atum-table-filter-dropdown: {$this->colors['gray_500']};
+		    --atum-table-link-text: {$this->colors['text_color']};
+			--atum-table-search-text-disabled: {$this->colors['text_color_expanded']};
+			--atum-table-views-tabs: {$this->colors['text_color_2']};
+			--atum-text-color-dark2: {$this->colors['text_color']};
+			--atum-text-color-var1: {$this->colors['text_color']};
+			--atum-text-color-var2: {$this->colors['text_color_2']};
+			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--danger: {$this->colors['danger_color']};
-			--blue: {$this->colors['primary_color']};
-			--wp-link: {$this->colors['primary_color']};
+			--dash-card-text: {$this->colors['text_color']};
+			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
+			--dash-add-widget-color: {$this->colors['gray_500']};
+			--dash-add-widget-color-dark: {$this->colors['primary_color']};
+		    --dash-statistics-chart-type-selected-text: {$this->colors['secondary_color']};
+			--dash-stats-data-widget-primary: {$this->colors['primary_color']};
+			--dash-video-title: {$this->colors['dark']};
+			--dash-video-subs-text: {$this->colors['text_color']};
+			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
+		    --js-scroll-bg: {$this->colors['text_color_2']};
+			--main-border: {$this->colors['border_color']};
+			--main-text: {$this->colors['text_color']};
+			--main-text-2: {$this->colors['text_color_2']};
+			--main-text-expanded: {$this->colors['text_color_expanded']};
+			--main-title: {$this->colors['title_color']};
+			--overflow-opacity-rigth: linear-gradient(to right, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
+			--overflow-opacity-left: linear-gradient(to left, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
 			--primary: {$this->colors['primary_color']};
+		    --primary-dark: {$this->colors['primary_color_dark']};
 			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-hover-text: {$this->colors['text_color_expanded']};
 			--primary-hover-border: 1px solid transparent;
-			--orange: {$this->colors['secondary_color']};
-			--orange-light-2: {$this->colors['secondary_color_light']};
-			--orange-light: {$this->colors['secondary_color_dark']};
-			--warning: {$this->colors['secondary_color']}; 
-			--warning-hover: rgba({$this->colors['secondary_color_rgb']}, 0.6);
-			--warning-hover-text: {$this->colors['text_color_expanded']};
-			--warning-hover-border: 1px solid transparent;
-			--gray-600: {$this->colors['text_color']};
-			--green: {$this->colors['tertiary_color']};
-			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
-			--white: {$this->colors['white']};
-			--atum-pagination-border-disabled: {$this->colors['border_color']};
-			--success: {$this->colors['tertiary_color']};
-			--success-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
-			--success-hover-text: {$this->colors['text_color_expanded']};
-			--success-hover-border: 1px solid transparent;
-			--atum-page-title-action: {$this->colors['tertiary_color']};
-			--atum-table-item-heads: {$this->colors['text_color_2']};
-			--atum-table-row-even: {$this->colors['bg_2_color']};
-			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
-		    --atum-table-row-odd: {$this->colors['bg_1_color']};
-		    --js-scroll-bg: {$this->colors['text_color_2']};
-		    --atum-row-active: {$this->colors['primary_color_dark']};
-			--atum-table-views-tabs: {$this->colors['text_color']};
-			--atum-table-views-tabs-active: {$this->colors['primary_color']};
-			--atum-table-link-child: {$this->colors['primary_color']};
-			--atum-input-placeholder: {$this->colors['text_color']};
-			--atum-select2-selected-text: {$this->colors['primary_color']};
-			--atum-select2-selected-bg: {$this->colors['primary_color_dark']};
-			--atum-table-link-active: {$this->colors['primary_color']};
-			--atum-table-check: {$this->colors['primary_color']};
-			--atum-table-bg: {$this->colors['bg_1_color']};
-			--atum-border: {$this->colors['border_color']};
-			--atum-border-expanded: rgba({$this->colors['border_color_rgb']}, 0.2);
-			--atum-table-icon: {$this->colors['text_color']};
-			--atum-table-icon-active: {$this->colors['text_color']};
-			--atum-table-text-active: {$this->colors['text_color']};
-			--atum-table-text-expanded: {$this->colors['text_color_expanded']};
-			--atum-table-search-text: {$this->colors['text_color_expanded']};
-			--atum-table-search-text-disabled: {$this->colors['text_color_expanded']};
-			--atum-table-search-bg: {$this->colors['secondary_color']};
-			--atum-settings-heads-bg: {$this->colors['primary_color']};
-			--atum-settings-nav-link: {$this->colors['primary_color']};
-			--atum-pagination-bg-disabled: {$this->colors['bg_2_color']};
-			--atum-pagination-disabled: {$this->colors['text_color']};
-			--atum-pagination-text: {$this->colors['text_color']};
-			--atum-footer-totals: {$this->colors['bg_1_color']};
-			--atum-footer-bg: {$this->colors['white']};
-			--atum-dropdown-toggle-bg: {$this->colors['bg_2_color']};
-			--atum-icon-tree: {$this->colors['text_color']};
-			--atum-settings-nav-link-selected: {$this->colors['primary_color']};
-			--atum-settings-nav-link-selected-bg: {$this->colors['primary_color_dark']};
-			--atum-settings-section-title: {$this->colors['title_color']};
-			--atum-settings-section-description: {$this->colors['text_color_2']};
-			--atum-settings-btn-save: {$this->colors['white']};
-			--atum-settings-btn-save-hover: rgba({$this->colors['white_rgb']}, 0.7);
-			--atum-settings-btn-save-text: {$this->colors['primary_color']};
-			--atum-settings-btn-save-text-hover: {$this->colors['primary_color']};
-			--atum-settings-input-border: {$this->colors['border_color']};
-			--atum-settings-border-color: {$this->colors['border_color']};
-			--atum-settings-separator: {$this->colors['border_color']};
-			--overflow-opacity-rigth: linear-gradient(to right, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
-			--overflow-opacity-left: linear-gradient(to left, rgba({$this->colors['bg_1_color_rgb']}, 0), rgba({$this->colors['bg_1_color_rgb']}, 0.9));
-			--dash-border: rgba({$this->colors['text_color_rgb']}, 0.5);
-			--dash-card-text: {$this->colors['text_color']};
-			--dash-nice-select-text: {$this->colors['text_color']};
-			--dash-nice-select-border: rgba({$this->colors['text_color_rgb']}, 0.5);
-			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
-			--dash-nice-select-arrow-color: {$this->colors['text_color']};
-			--dash-nice-select-text-highlighted: {$this->colors['primary_color']};
-			--dash-add-widget-color: {$this->colors['gray_500']};
-			--dash-add-widget-color-dark: {$this->colors['primary_color']};
-			--dash-input-placeholder: {$this->colors['text_color']};
-			--dash-video-title: {$this->colors['dark']};
-			--dash-video-subs-text: {$this->colors['text_color']};
-			--dash-widget-separator: {$this->colors['border_color']};
-			--atum-settings-section-text: {$this->colors['text_color']};
-			--atum-settings-input-text: {$this->colors['text_color']};
-			--atum-settings-wp-color-text: {$this->colors['text_color']};
-			--atum-table-row-child-variation: {$this->colors['primary_color_dark']};
-			--atum-table-row-child-variation-even: {$this->colors['primary_color_light']};
-			--dash-widget-primary: {$this->colors['primary_color']};
-		    --dash-widget-success: {$this->colors['tertiary_color']};
-		    --dash-widget-warning: {$this->colors['secondary_color']};
-		    --dash-widget-danger: {$this->colors['danger_color']};
-			--dash-widget-header-title: {$this->colors['title_color']};
-		    --dash-statistics-chart-type-selected-text: {$this->colors['secondary_color']};
-		    --dash-widget-text: {$this->colors['text_color']};
-			--dash-stats-data-widget-primary: {$this->colors['primary_color']};
-		    --dash-stats-data-widget-success: {$this->colors['tertiary_color']};
-		    --atum-select2-border: {$this->colors['border_color']};
-		    --atum-table-filter-dropdown: {$this->colors['gray_500']};
-		    --atum-footer-title: {$this->colors['blue_dark']};
-		    --atum-table-link-text: {$this->colors['text_color']};
+			--primary-light: {$this->colors['primary_color_light']};
+			--primary-var-dark: {$this->colors['primary_color']};
+			--primary-var-text2: {$this->colors['primary_color']};
+			--secondary: {$this->colors['secondary_color']}; 
+			--secondary-dark: {$this->colors['secondary_color_dark']};
+			--secondary-hover: rgba({$this->colors['secondary_color_rgb']}, 0.6);
+			--secondary-hover-text: {$this->colors['text_color_expanded']};
+			--secondary-hover-border: 1px solid transparent;
+			--secondary-light: {$this->colors['secondary_color_light']};
+			--secondary-var: {$this->colors['secondary_color']};
+			--tertiary: {$this->colors['tertiary_color']};
+			--tertiary-var: {$this->colors['tertiary_color']};
+			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
+			--tertiary-hover-text: {$this->colors['text_color_expanded']};
+			--tertiary-hover-border: 1px solid transparent;
+			--tertiary-light: {$this->colors['tertiary_color_light']};
+			--wp-yiq-text-light: {$this->colors['text_color_expanded']};
 		}";
 
 		return apply_filters( 'atum/get_branded_mode_colors', $scheme );
@@ -913,7 +792,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFDF89',
+				'default'      => '#EFAF00',
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 		);
@@ -937,6 +816,25 @@ class AtumColors {
 		$theme           = isset( $visual_settings['theme'] ) ? $visual_settings['theme'] : 'branded_mode';
 
 		return $theme;
+
+	}
+
+	/**
+	 * Get a specified color for the selected user
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $color_name
+	 * @param int    $user_id Optional. If not passed will return the theme for the current user.
+	 *
+	 * @return string
+	 */
+	public static function get_user_color( $color_name, $user_id = 0 ) {
+
+		$visual_settings = Helpers::get_atum_user_meta( self::VISUAL_SETTINGS_USER_META, $user_id );
+		$color           = isset( $visual_settings[ $color_name ] ) ? $visual_settings[ $color_name ] : false;
+
+		return $color;
 
 	}
 

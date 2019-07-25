@@ -119,7 +119,7 @@ defined( 'ABSPATH' ) || die;
 
 				<p><?php esc_html_e( 'Expand your inventory control with our premium add-ons. No storage is left unattended, no item uncounted and no production line inefficient.', ATUM_TEXT_DOMAIN ) ?></p>
 
-				<a href="https://www.stockmanagementlabs.com/addons/" class="btn btn-success btn-pill" target="_blank"><?php esc_html_e( 'View Add-ons', ATUM_TEXT_DOMAIN ) ?></a>
+				<a href="https://www.stockmanagementlabs.com/addons/" class="btn btn-tertiary btn-pill" target="_blank"><?php esc_html_e( 'View Add-ons', ATUM_TEXT_DOMAIN ) ?></a>
 			</div>
 
 			<div class="card-img">
@@ -144,7 +144,7 @@ defined( 'ABSPATH' ) || die;
 			<form action="https://stockmanagementlabs.us12.list-manage.com/subscribe/post?u=bc146f9acefd460717d243671&id=b0263fe4a6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 				<div class="input-group">
 					<input type="email" name="EMAIL" id="mce-EMAIL"  placeholder="<?php esc_attr_e( 'Enter your email address', ATUM_TEXT_DOMAIN ) ?>" required>
-					<button type="submit" class="btn btn-warning btn-pill" name="subscribe" id="mc-embedded-subscribe"><?php esc_html_e( 'Subscribe', ATUM_TEXT_DOMAIN ) ?></button>
+					<button type="submit" class="btn btn-secondary btn-pill" name="subscribe" id="mc-embedded-subscribe"><?php esc_html_e( 'Subscribe', ATUM_TEXT_DOMAIN ) ?></button>
 				</div>
 			</form>
 

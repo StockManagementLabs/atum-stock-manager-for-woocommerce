@@ -85,7 +85,7 @@ ul.easytree-container {
 			
 			.selected-node {
 				.easytree-title a, .atum-icon {
-					color: var(--success) !important;
+					color: var(--tertiary) !important;
 				}
 			}
 		}
@@ -131,13 +131,13 @@ span {
 		vertical-align: top;
 		font-family: $atum-icon-font;
 		cursor: pointer;
-		color: var(--atum-icon-tree);
+		color: var(--main-text);
 	}
 	
 	&.easytree-custom-icon {
 		display: inline-block !important;
 		vertical-align: -1px;
-		color: var(--atum-icon-tree);
+		color: var(--main-text);
 		margin-left: 3px;
 		text-indent: 0 !important; // In case jQuery UI CSS is loaded
 	}
@@ -224,7 +224,7 @@ span.easytree-expander {
 .checked{
 	span.easytree-icon {
 		&:before {
-			color: var(--blue);
+			color: var(--primary);
 		}
 	}
 }

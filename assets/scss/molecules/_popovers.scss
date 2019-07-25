@@ -42,7 +42,7 @@
 	text-align: center;
 	font-size: 14px;
 	font-weight: bold;
-	color: var(--gray-600);
+	color: var(--atum-text-color-var1);
 	
 	.atum-list-table & {
 		text-align: center;
@@ -71,15 +71,15 @@
 	font-size: 15px;
 	line-height: 1.47px;
 	text-align: right;
-	color: var(--gray-600);
+	color: var(--atum-text-color-var1);
 	box-shadow: none;
 	
 	&:focus {
-		border-color: var(--blue);
+		border-color: var(--primary);
 	}
 	
 	&:hover {
-		border-color: var(--gray-600);
+		border-color: var(--atum-text-color-var1);
 	}
 }
 

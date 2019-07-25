@@ -31,7 +31,7 @@ export let Switcher = {
 			size               : 'small',
 			color              : 'var(--green-light)',
 			secondaryColor     : 'var(--gray-200)',
-			jackColor          : 'var(--green)',
+			jackColor          : 'var(--tertiary-var)',
 			jackSecondaryColor : 'var(--secondary)'
 		}, options || {});
 		

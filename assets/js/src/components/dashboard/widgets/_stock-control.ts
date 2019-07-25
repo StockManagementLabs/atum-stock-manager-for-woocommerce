@@ -37,19 +37,19 @@ export default class StockControlWidget {
 						      $pieCanvas.data('unmanaged'),
 					      ],
 					      backgroundColor: [
-                              style.getPropertyValue('--dash-widget-warning'),
-                              style.getPropertyValue('--dash-widget-danger'),
-                              style.getPropertyValue('--dash-widget-success'),
-                              style.getPropertyValue('--dash-widget-primary'),
+                              style.getPropertyValue('--secondary'),
+                              style.getPropertyValue('--danger'),
+                              style.getPropertyValue('--tertiary'),
+                              style.getPropertyValue('--primary'),
 					      ],
                           hoverBackgroundColor: [
-                              style.getPropertyValue('--dash-widget-warning'),
-                              style.getPropertyValue('--dash-widget-danger'),
-                              style.getPropertyValue('--dash-widget-success'),
-                              style.getPropertyValue('--dash-widget-primary'),
+                              style.getPropertyValue('--secondary'),
+                              style.getPropertyValue('--danger'),
+                              style.getPropertyValue('--tertiary'),
+                              style.getPropertyValue('--primary'),
                           ],
-                          hoverBorderColor: style.getPropertyValue('--dash-stock-control-chart-border'),
-                          borderColor: style.getPropertyValue('--dash-stock-control-chart-border')
+                          hoverBorderColor: style.getPropertyValue('--main-text-expanded'),
+                          borderColor: style.getPropertyValue('--main-text-expanded')
 				      }],
 				      labels  : [
 					      this.settings.get('lowStockLabel'),
