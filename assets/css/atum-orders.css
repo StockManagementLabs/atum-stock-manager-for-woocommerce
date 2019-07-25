@@ -2334,7 +2334,7 @@ fieldset:disabled a.btn {
 .btn-tertiary:hover {
   color: var(--tertiary-hover-text);
   background-color: var(--tertiary-hover);
-  border: var(--tertiary-hover-border) !important;
+  border-color: var(--tertiary-hover-border) !important;
 }
 
 .btn-tertiary:focus, .btn-tertiary.focus {
@@ -5491,6 +5491,12 @@ ul.atum_order_notes li .note_content::after {
   color: var(--atum-text-color-var2);
 }
 
+.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--atum-text-color-var2);
+}
+
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -5635,6 +5641,13 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
+  color: var(--atum-text-color-var2);
+  font-style: italic;
+  letter-spacing: normal;
+  margin-left: 10px;
+}
+
+.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;

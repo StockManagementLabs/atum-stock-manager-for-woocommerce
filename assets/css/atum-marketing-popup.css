@@ -186,7 +186,7 @@ fieldset:disabled a.btn {
 .btn-tertiary:hover {
   color: var(--tertiary-hover-text);
   background-color: var(--tertiary-hover);
-  border: var(--tertiary-hover-border) !important;
+  border-color: var(--tertiary-hover-border) !important;
 }
 
 .btn-tertiary:focus, .btn-tertiary.focus {
