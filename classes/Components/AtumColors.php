@@ -828,6 +828,25 @@ class AtumColors {
 
 	}
 
+	/**
+	 * Get a specified color for the selected user
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $color_name
+	 * @param int    $user_id Optional. If not passed will return the theme for the current user.
+	 *
+	 * @return string
+	 */
+	public static function get_user_color( $color_name, $user_id = 0 ) {
+
+		$visual_settings = Helpers::get_atum_user_meta( self::VISUAL_SETTINGS_USER_META, $user_id );
+		$color           = isset( $visual_settings[ $color_name ] ) ? $visual_settings[ $color_name ] : false;
+
+		return $color;
+
+	}
+
 
 	/*******************
 	 * Instance methods

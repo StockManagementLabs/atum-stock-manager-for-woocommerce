@@ -2668,6 +2668,21 @@ final class Helpers {
 	}
 
 	/**
+	 * Get selected color value
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $color_name
+	 *
+	 * @return string
+	 */
+	public static function get_color_value( $color_name ) {
+
+		return AtumColors::get_user_color( $color_name, 0 );
+
+	}
+
+	/**
 	 * Add the inline style for the ATUM colors
 	 *
 	 * @sine 1.5.9

@@ -2346,7 +2346,7 @@ final class Ajax {
 		if ( 0 === absint( $_POST['reset'] ) ) {
 
 			foreach ( $def_settings as $dset => $dval ) {
-				$val = Helpers::get_option( $dset );
+				$val = Helpers::get_color_value( $dset );
 
 				if ( $val && $val !== $dval ) {
 					$custom_settings[ $dset ] = $val;
