@@ -24,7 +24,7 @@
 			li {
 				display: inline-block;
 				padding: $grid-gutter-width/2 10px;
-				color: var(--text-color-var1);
+				color: var(--atum-text-color-var1);
 				font-size: 15px;
 				font-weight: 100;
 				transition: .2s ease-in-out;
@@ -108,7 +108,7 @@
 		svg {
 			max-width: 32px;
 			max-height: 32px;
-			fill: var(--text-color-var1);
+			fill: var(--atum-text-color-var1);
 			transition: 0.2s ease-in-out;
 			
 			@include tablet-max {

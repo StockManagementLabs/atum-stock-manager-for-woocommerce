@@ -166,7 +166,7 @@ body {
 	.select2-results__option {
 		padding: 6px;
 		user-select: none;
-		color: var(--text-color-var1);
+		color: var(--atum-text-color-var1);
 		font-size: 12px;
 		
 		&:focus {
@@ -259,7 +259,7 @@ body {
 				
 				.select2-selection__rendered {
 					line-height: 27px;
-					color: var(--text-color-var1);
+					color: var(--atum-text-color-var1);
 					font-size: 15px;
 					padding-left: 10px;
 				}
@@ -271,7 +271,7 @@ body {
 				}
 				
 				.select2-selection__placeholder {
-					color: var(--text-color-var1);
+					color: var(--atum-text-color-var1);
 				}
 				
 				.select2-selection__arrow {
@@ -331,7 +331,7 @@ body {
 	.select2-container--default {
 		
 		.select2-results__option--highlighted[aria-selected] {
-			background-color: var(--primary-dark-bg);
+			background-color: var(--primary-dark);
 			color: var(--primary-var-dark);
 		}
 		
@@ -523,12 +523,12 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				background-color: var(--primary-dark-bg);
+				background-color: var(--primary-dark);
 				color: var(--primary-var-dark);
 			}
 			
 			&[data-selected=true] {
-				background-color: var(--primary-dark-bg);
+				background-color: var(--primary-dark);
 				color: var(--primary-var-dark);
 			}
 			

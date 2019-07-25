@@ -42,7 +42,7 @@
 	text-align: center;
 	font-size: 14px;
 	font-weight: bold;
-	color: var(--text-color-var1);
+	color: var(--atum-text-color-var1);
 	
 	.atum-list-table & {
 		text-align: center;
@@ -71,7 +71,7 @@
 	font-size: 15px;
 	line-height: 1.47px;
 	text-align: right;
-	color: var(--text-color-var1);
+	color: var(--atum-text-color-var1);
 	box-shadow: none;
 	
 	&:focus {
@@ -79,7 +79,7 @@
 	}
 	
 	&:hover {
-		border-color: var(--text-color-var1);
+		border-color: var(--atum-text-color-var1);
 	}
 }
 

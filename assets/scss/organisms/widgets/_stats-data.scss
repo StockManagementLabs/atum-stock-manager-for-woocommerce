@@ -36,7 +36,7 @@
 	
 	h5 {
 		font-size: 15px;
-		color: var(--text-color-var1);
+		color: var(--atum-text-color-var1);
 		font-weight: 100;
 		text-transform: uppercase;
 	}
@@ -44,7 +44,7 @@
 	hr {
 		border: {
 			width: 1px;
-			color: var(--atum-border);
+			color: var(--main-border);
 			bottom: none;
 		}
 		margin: $grid-gutter-width 0;

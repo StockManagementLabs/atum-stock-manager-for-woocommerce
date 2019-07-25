@@ -112,7 +112,7 @@
 	
 	h5 {
 		font-size: 15px;
-		color: var(--text-color-var1);
+		color: var(--atum-text-color-var1);
 		font-weight: 100;
 		text-transform: uppercase;
 		
@@ -127,7 +127,7 @@
 	}
 	
 	hr {
-		border-top: 1px solid var(--atum-border);
+		border-top: 1px solid var(--main-border);
 		border-bottom: none;
 		margin: $grid-gutter-width/2 0;
 		
@@ -135,7 +135,7 @@
 			clear: both;
 			padding: $grid-gutter-width/3 0;
 			border-top: none;
-			border-bottom: 1px solid var(--atum-border);
+			border-bottom: 1px solid var(--main-border);
 		}
 		
 		@include mobile-max {

@@ -13,7 +13,7 @@ $ns-dropdown-height:               42px !default;
 $ns-dropdown-height-small:         36px !default;
 $ns-dropdown-padding:              18px !default
 
-$ns-arrow-color:                   var(--atum-text-color) !default;
+$ns-arrow-color:                   var(--main-text) !default;
 $ns-arrow-size:                    5px !default;;
 
 
@@ -41,7 +41,7 @@ $ns-arrow-size:                    5px !default;;
 	user-select: none;
 	white-space: nowrap;
 	width: auto;
-	color: var(--text-color-var1);
+	color: var(--atum-text-color-var1);
 	
 	&:hover, &:active, &:focus {
 		border-color: var(--dash-nice-select-hover);
