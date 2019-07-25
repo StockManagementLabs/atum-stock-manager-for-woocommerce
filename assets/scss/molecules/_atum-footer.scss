@@ -9,7 +9,7 @@
 	.footer-box {
 		height: 90px;
 		@include atum-panel();
-		background: var(--atum-footer-bg) url("#{$atum-img-path}stock-central/bg-footer.png") no-repeat center 81%;
+		background: var(--atum-expanded-bg) url("#{$atum-img-path}stock-central/bg-footer.png") no-repeat center 81%;
 		background-size: cover;
 		padding: 0 23px;
 		display: flex;

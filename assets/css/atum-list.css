@@ -315,8 +315,7 @@
   --order-green-light: #d5f5ba;
   --main-text: #343a40;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
-  --atum-footer-totals: #e9ecef;
-  --atum-footer-bg: #fff;
+  --atum-expanded-bg: #fff;
   --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --atum-column-groups-bg: #e9ecef;
@@ -324,7 +323,6 @@
   --atum-table-row-variation-text: #fff;
   --primary-light: #f5fdff;
   --main-text-expanded: #fff;
-  --atum-table-search-text: #fff;
   --atum-table-search-text-disabled: #fff;
   --atum-dark-bg: #3b3d5a;
   --popover-black-shadow: rgba(0, 0, 0, 0.2);
@@ -353,7 +351,6 @@
   --dash-widget-list-border: rgba(248, 249, 250, 0.5);
   --dash-stats-data-widget-primary: #00B8DB;
   --dash-stats-data-widget-success: #69C61D;
-  --dash-stock-control-chart-border: #fff;
   --dash-widget-current-stock-value-bg: #ffe1e1;
   --dash-widget-current-stock-value-text: #FF4848;
   --dash-add-widget-color: #adb5bd;
@@ -377,7 +374,6 @@
   --dash-next-text:  #e9ecef;
   --dash-video-title: #343a40;
   --dash-video-subs-text: #adb5bd;
-  --atum-add-widget-bg: #fff;
   --dash-add-widget-color-dark: #00B8DB;
   --atum-add-widget-title: #343a40;
   --atum-add-widget-separator: #f8f9fa;
@@ -4209,7 +4205,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   background-color: var(--white);
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
-  background: var(--atum-footer-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
+  background: var(--atum-expanded-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
   padding: 0 23px;
   display: -webkit-box;
@@ -5733,7 +5729,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .search-box #search-submit, p.search-box #search-submit {
   background-color: var(--secondary) !important;
-  color: var(--atum-table-search-text) !important;
+  color: var(--main-text-expanded) !important;
 }
 
 .search-box #post-search-input, p.search-box #post-search-input {
@@ -5955,7 +5951,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .search-box .input-group input[type=submit], p.search-box .input-group input[type=submit] {
   height: 29px !important;
-  color: var(--atum-table-search-text) !important;
+  color: var(--main-text-expanded) !important;
   background-color: var(--atum-table-search-submit-bg);
 }
 
@@ -6479,7 +6475,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .atum-list-wrapper .search-submit {
   margin-left: 4px;
   background-color: var(--secondary) !important;
-  color: var(--atum-table-search-text) !important;
+  color: var(--main-text-expanded) !important;
   font-size: 10px;
   font-weight: normal;
   line-height: 1.6px;
@@ -7548,7 +7544,7 @@ table.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-cont
 }
 
 table.atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals, table.wp-list-table tr.totals {
-  background-color: var(--atum-footer-totals);
+  background-color: var(--atum-expanded-bg);
 }
 
 table.atum-list-table tr.totals td, table.atum-list-table tr.totals th, .floatThead-container tr.totals td, .floatThead-container tr.totals th, .inbound-stock-list tr.totals td, .inbound-stock-list tr.totals th, table.wp-list-table tr.totals td, table.wp-list-table tr.totals th {

@@ -71,8 +71,7 @@
 	--order-green-light: #{$green-light};
 	--main-text: #{$dark};
 	--atum-row-shadow: #{rgba($black, 0.04)};
-	--atum-footer-totals: #{$gray-200};
-	--atum-footer-bg: #{$white};
+	--atum-expanded-bg: #{$white};
 	--overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
 	--overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
 	--atum-column-groups-bg: #{$gray-200};
@@ -80,7 +79,6 @@
 	--atum-table-row-variation-text: #{$white};
 	--primary-light: #{$blue-light-2};
 	--main-text-expanded: #{$white};
-	--atum-table-search-text: #{$white};
 	--atum-table-search-text-disabled: #{$white};
 	--atum-dark-bg: #{$blue-dark-lighten};
 	--popover-black-shadow: #{rgba($black, 0.2)};
@@ -109,7 +107,6 @@
 	--dash-widget-list-border: #{transparentize($light, 0.5)};
 	--dash-stats-data-widget-primary: #{$widget-primary};
 	--dash-stats-data-widget-success: #{$widget-success};
-	--dash-stock-control-chart-border: #{$white};
 	--dash-widget-current-stock-value-bg: #{$red-light};
 	--dash-widget-current-stock-value-text: #{$red};
 	--dash-add-widget-color: #{$gray-500};
@@ -133,7 +130,6 @@
 	--dash-next-text:  #{$gray-200};
 	--dash-video-title: #{$dark};
 	--dash-video-subs-text: #{$gray-500};
-	--atum-add-widget-bg: #{$white};
 	--dash-add-widget-color-dark: #{$blue};
 	--atum-add-widget-title: #{$dark};
 	--atum-add-widget-separator: #{$light};

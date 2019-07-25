@@ -378,7 +378,7 @@
 	
 	#search-submit {
 		background-color: var(--secondary) !important;
-		color: var(--atum-table-search-text) !important;
+		color: var(--main-text-expanded) !important;
 	}
 	
 	#post-search-input {
@@ -529,7 +529,7 @@
 		
 		input[type=submit] {
 			height: 29px !important;
-			color: var(--atum-table-search-text) !important;
+			color: var(--main-text-expanded) !important;
 			background-color: var(--atum-table-search-submit-bg);
 			
 			&:disabled {
@@ -987,7 +987,7 @@
 	.search-submit {
 		margin-left: 4px;
 		background-color: var(--secondary) !important;
-		color: var(--atum-table-search-text) !important;
+		color: var(--main-text-expanded) !important;
 		font-size: 10px;
 		font-weight: normal;
 		line-height: 1.6px;
@@ -2042,7 +2042,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.totals {
-			background-color: var(--atum-footer-totals);
+			background-color: var(--atum-expanded-bg);
 			
 			td, th {
 				font-size: 12px;

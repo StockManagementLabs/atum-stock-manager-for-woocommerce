@@ -482,8 +482,7 @@
   --order-green-light: #d5f5ba;
   --main-text: #343a40;
   --atum-row-shadow: rgba(0, 0, 0, 0.04);
-  --atum-footer-totals: #e9ecef;
-  --atum-footer-bg: #fff;
+  --atum-expanded-bg: #fff;
   --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
   --atum-column-groups-bg: #e9ecef;
@@ -491,7 +490,6 @@
   --atum-table-row-variation-text: #fff;
   --primary-light: #f5fdff;
   --main-text-expanded: #fff;
-  --atum-table-search-text: #fff;
   --atum-table-search-text-disabled: #fff;
   --atum-dark-bg: #3b3d5a;
   --popover-black-shadow: rgba(0, 0, 0, 0.2);
@@ -520,7 +518,6 @@
   --dash-widget-list-border: rgba(248, 249, 250, 0.5);
   --dash-stats-data-widget-primary: #00B8DB;
   --dash-stats-data-widget-success: #69C61D;
-  --dash-stock-control-chart-border: #fff;
   --dash-widget-current-stock-value-bg: #ffe1e1;
   --dash-widget-current-stock-value-text: #FF4848;
   --dash-add-widget-color: #adb5bd;
@@ -544,7 +541,6 @@
   --dash-next-text:  #e9ecef;
   --dash-video-title: #343a40;
   --dash-video-subs-text: #adb5bd;
-  --atum-add-widget-bg: #fff;
   --dash-add-widget-color-dark: #00B8DB;
   --atum-add-widget-title: #343a40;
   --atum-add-widget-separator: #f8f9fa;
@@ -5239,7 +5235,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   min-height: 0 !important;
   max-width: 98%;
   overflow: hidden;
-  background-color: var(--atum-add-widget-bg) !important;
+  background-color: var(--atum-expanded-bg) !important;
 }
 
 .add-widget-popup.overlay:before {

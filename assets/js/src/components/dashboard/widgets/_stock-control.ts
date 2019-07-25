@@ -48,8 +48,8 @@ export default class StockControlWidget {
                               style.getPropertyValue('--tertiary'),
                               style.getPropertyValue('--primary'),
                           ],
-                          hoverBorderColor: style.getPropertyValue('--dash-stock-control-chart-border'),
-                          borderColor: style.getPropertyValue('--dash-stock-control-chart-border')
+                          hoverBorderColor: style.getPropertyValue('--main-text-expanded'),
+                          borderColor: style.getPropertyValue('--main-text-expanded')
 				      }],
 				      labels  : [
 					      this.settings.get('lowStockLabel'),
