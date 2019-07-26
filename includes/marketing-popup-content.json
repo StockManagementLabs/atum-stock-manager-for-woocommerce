@@ -26,7 +26,7 @@
 	"version": {
 		"text"      : "Beta",
 		"text_color": "white",
-		"background": "#efaf00"
+		"background": "var(--secondary)"
 	},
 	"description": {
 		"text"           : "The most advanced Export tool ever released, now with free Import to complete the package. Register quick to be the first to receive the download link. Install the beta in your staging site and give it a full test run.",
@@ -40,7 +40,7 @@
 		{
 			"text"      : "Go to registration form",
 			"url"       : "https://www.stockmanagementlabs.com/beta-registration/",
-			"class"     : "btn btn-warning",
+			"class"     : "btn btn-secondary",
 			"css"       : "width: 213px;height: 30px; font-size:12px; font-weight: 300; border-radius: 5px; padding: 0;"
 		}
 	],

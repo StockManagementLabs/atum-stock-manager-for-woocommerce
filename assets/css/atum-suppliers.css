@@ -99,9 +99,9 @@
   --primary: #00B8DB;
   --primary-hover: rgba(0, 184, 219, 0.6);
   --primary-shadow: rgba(0, 184, 219, 0.2);
-  --secondary: #6c757d;
-  --secondary-hover: rgba(108, 117, 125, 0.6);
-  --secondary-shadow: rgba(108, 117, 125, 0.2);
+  --secondary: #EFAF00;
+  --secondary-hover: rgba(239, 175, 0, 0.6);
+  --secondary-shadow: rgba(239, 175, 0, 0.2);
   --tertiary: #69C61D;
   --tertiary-hover: rgba(105, 198, 29, 0.6);
   --tertiary-shadow: rgba(105, 198, 29, 0.2);
@@ -195,8 +195,9 @@
   --wc-purple: #96588a;
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
+  --warning: #EFAF00;
   --success: #69C61D;
-  --secondary: #6c757d;
+  --secondary: #EFAF00;
   --secondary-var: #EFAF00;
   --secondary-light: #fff8e5;
   --secondary-dark: #ffedbc;
@@ -224,6 +225,8 @@
   --atum-table-views-tabs: #adb5bd;
   --atum-table-views-tabs-active: #00B8DB;
   --atum-table-views-tabs-active-text: #fff;
+  --atum-menu-text: #00B8DB;
+  --atum-menu-text-highlight: #00B8DB;
   --primary-var-dark: #00B8DB;
   --primary-var-text2: #00B8DB;
   --atum-table-link-text: #6c757d;
@@ -280,7 +283,6 @@
   --dash-green-trans: rgba(106, 200, 30, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
-  --dash-h5-text: #444;
   --atum-marketing-popup-bg: #fff;
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
@@ -439,7 +441,7 @@ body .select2-container.atum-select2 .select2-search--inline .select2-search__fi
 body .select2-dropdown {
   -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
-  background-color: var(--atum-table-bg);
+  background-color: var(--atum-table-bg) !important;
   border: 1px solid var(--gray-500);
   border-radius: 5px;
   overflow: hidden;
@@ -480,7 +482,7 @@ body .select2-results__option {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  color: var(--atum-text-color-var1);
+  color: var(--atum-menu-text);
   font-size: 12px;
 }
 
@@ -775,12 +777,12 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
   background-color: var(--primary-dark);
-  color: var(--primary-var-dark);
+  color: var(--atum-menu-text-highlight);
 }
 
 body .select2-container--default .select2-results__option[data-selected=true] {
   background-color: var(--primary-dark);
-  color: var(--primary-var-dark);
+  color: var(--atum-menu-text-highlight);
 }
 
 body .select2-container--default .select2-results__option.select2-results__message {
@@ -1054,8 +1056,8 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option--highlighted[aria-selected], body .select2-container--default .select2-results__option--highlighted {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--primary-dark);
+  color: var(--atum-menu-text-highlight);
 }
 
 body .select2-container--default .select2-results__group {
@@ -2108,8 +2110,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary:focus, .btn-secondary.focus {
   color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-secondary.disabled, .btn-secondary:disabled {
@@ -2128,8 +2130,8 @@ fieldset:disabled a.btn {
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
   color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-tertiary {
@@ -3611,9 +3613,9 @@ h2 .atum-help-tip {
 }
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
-  background-color: rgba(var(--secondary-var), 0.7);
-  color: var(--white);
-  border: none;
+  background-color: var(--secondary-hover);
+  color: var(--secondary-hover-text);
+  border: var(--secondary-hover-border);
 }
 
 @media all and (max-width: 782px) {
@@ -5707,8 +5709,8 @@ table.atum-list-table tr.no-items td .alert .atum-spinner, .floatThead-container
 table.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-container tr.no-items td .alert .atum-spinner span, .inbound-stock-list tr.no-items td .alert .atum-spinner span, table.wp-list-table tr.no-items td .alert .atum-spinner span {
   width: 15px;
   height: 15px;
-  border: 2px solid rgba(108, 117, 125, 0.25);
-  border-top-color: #6c757d;
+  border: 2px solid rgba(239, 175, 0, 0.25);
+  border-top-color: #EFAF00;
   border-radius: 50%;
   position: absolute;
   z-index: 50;

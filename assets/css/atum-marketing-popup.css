@@ -154,8 +154,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary:focus, .btn-secondary.focus {
   color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-secondary.disabled, .btn-secondary:disabled {
@@ -174,8 +174,8 @@ fieldset:disabled a.btn {
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
   color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-tertiary {

@@ -30,6 +30,7 @@
 		--#{$color}-shadow: #{rgba($value, 0.2)};
 	}
 	
+	--warning: #{$secondary};
 	--success: #{$tertiary};
 	--secondary: #{$secondary};
 	--secondary-var: #{$orange};
@@ -59,6 +60,8 @@
 	--atum-table-views-tabs: #{$gray-500};
 	--atum-table-views-tabs-active: #{$blue};
 	--atum-table-views-tabs-active-text: #{$white};
+	--atum-menu-text: #{$primary};
+	--atum-menu-text-highlight: #{$primary};
 	--primary-var-dark: #{$blue};
 	--primary-var-text2: #{$blue};
 	--atum-table-link-text: #{$gray-600};
@@ -115,7 +118,6 @@
 	--dash-green-trans: #{$green-trans};
 	--dash-green-light: #{$green-light};
 	--dash-green-blue: #{$green-blue};
-	--dash-h5-text: #444;
 	--atum-marketing-popup-bg: #{$white};
 	--dash-input-group-bg: #{transparentize($white, 0.34)};
 	--dash-input-group-shadow: #{transparentize($white, 0.8)};

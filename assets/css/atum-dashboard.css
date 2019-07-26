@@ -188,7 +188,7 @@
 }
 
 .color-warning {
-  color: #6c757d;
+  color: #EFAF00;
 }
 
 .color-danger {
@@ -208,7 +208,7 @@
 }
 
 .bg-warning {
-  background-color: #6c757d;
+  background-color: #EFAF00;
 }
 
 .bg-danger {
@@ -345,9 +345,9 @@
   --primary: #00B8DB;
   --primary-hover: rgba(0, 184, 219, 0.6);
   --primary-shadow: rgba(0, 184, 219, 0.2);
-  --secondary: #6c757d;
-  --secondary-hover: rgba(108, 117, 125, 0.6);
-  --secondary-shadow: rgba(108, 117, 125, 0.2);
+  --secondary: #EFAF00;
+  --secondary-hover: rgba(239, 175, 0, 0.6);
+  --secondary-shadow: rgba(239, 175, 0, 0.2);
   --tertiary: #69C61D;
   --tertiary-hover: rgba(105, 198, 29, 0.6);
   --tertiary-shadow: rgba(105, 198, 29, 0.2);
@@ -441,8 +441,9 @@
   --wc-purple: #96588a;
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
+  --warning: #EFAF00;
   --success: #69C61D;
-  --secondary: #6c757d;
+  --secondary: #EFAF00;
   --secondary-var: #EFAF00;
   --secondary-light: #fff8e5;
   --secondary-dark: #ffedbc;
@@ -470,6 +471,8 @@
   --atum-table-views-tabs: #adb5bd;
   --atum-table-views-tabs-active: #00B8DB;
   --atum-table-views-tabs-active-text: #fff;
+  --atum-menu-text: #00B8DB;
+  --atum-menu-text-highlight: #00B8DB;
   --primary-var-dark: #00B8DB;
   --primary-var-text2: #00B8DB;
   --atum-table-link-text: #6c757d;
@@ -526,7 +529,6 @@
   --dash-green-trans: rgba(106, 200, 30, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
-  --dash-h5-text: #444;
   --atum-marketing-popup-bg: #fff;
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
@@ -1597,8 +1599,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary:focus, .btn-secondary.focus {
   color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-secondary.disabled, .btn-secondary:disabled {
@@ -1617,8 +1619,8 @@ fieldset:disabled a.btn {
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
   color: var(--wp-yiq-text-light);
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(239, 175, 0, 0.5);
 }
 
 .btn-tertiary {
@@ -4679,7 +4681,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .atum-dashboard .dash-cards .dash-card .card-content h5, .atum-dashboard .dash-cards .dash-card .card-content h2 {
   margin: 5px 0;
-  color: var(--dash-h5-text);
+  color: var(--main-title) !important;
 }
 
 .atum-dashboard .dash-cards .dash-card .card-content h5.h5-primary, .atum-dashboard .dash-cards .dash-card .card-content h2.h5-primary {
