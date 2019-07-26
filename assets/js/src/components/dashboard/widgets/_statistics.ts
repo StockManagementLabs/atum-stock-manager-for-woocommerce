@@ -225,12 +225,12 @@ export default class StatisticsWidget {
 		
 		// Enable switches.
 		Switcher.doSwitchers('.value-chart', {
-			color    : 'var(--tertiary-hover)',
+			color    : 'var(--green-light)',
 			jackColor: 'var(--tertiary)',
 		});
 		
 		Switcher.doSwitchers('.products-chart', {
-			color    : 'var(--primary-hover)',
+			color    : 'var(--primary-switcher-bg)',
 			jackColor: 'var(--primary)',
 		});
 		
