@@ -441,8 +441,6 @@
   --wc-purple: #96588a;
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
-  --warning: #EFAF00;
-  --success: #69C61D;
   --secondary: #EFAF00;
   --secondary-var: #EFAF00;
   --secondary-light: #fff8e5;
@@ -4825,10 +4823,17 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   font-weight: 300;
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 {
+  color: var(--main-title) !important;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
+  color: var(--dash-card-text) !important;
+}
+
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
   text-align: left !important;
   padding: 0 15px;
-  color: var(--dash-card-text) !important;
 }
 
 @media all and (max-width: 768px) {
@@ -5766,11 +5771,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-success:before {
-  background-color: var(--tertiary);
+  background-color: var(--success);
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-warning:before {
-  background-color: var(--secondary);
+  background-color: var(--warning);
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-danger:before {
@@ -6014,7 +6019,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .current-stock-value-widget .current-stock-value-content .items-count {
-  color: var(--blue);
+  color: var(--primary);
 }
 
 .current-stock-value-widget .current-stock-value-content .separator-line {
