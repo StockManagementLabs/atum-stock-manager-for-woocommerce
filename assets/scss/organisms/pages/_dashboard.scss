@@ -201,7 +201,7 @@ body.toplevel_page_atum-dashboard {
 				
 				h5, h2 {
 					margin: 5px 0;
-					color: var(--dash-h5-text);
+					color: var(--main-title) !important;
 					
 					&.h5-primary {
 						color: var(--primary);

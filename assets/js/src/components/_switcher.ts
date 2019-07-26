@@ -32,7 +32,7 @@ export let Switcher = {
 			color              : 'var(--green-light)',
 			secondaryColor     : 'var(--gray-200)',
 			jackColor          : 'var(--tertiary-var)',
-			jackSecondaryColor : 'var(--secondary)'
+			jackSecondaryColor : 'var(--gray-500)'
 		}, options || {});
 		
 		const $selector : JQuery = $wrapper ? $wrapper.find(selectorClass) : $(selectorClass);
