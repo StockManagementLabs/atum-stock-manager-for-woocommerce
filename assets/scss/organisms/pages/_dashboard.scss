@@ -327,10 +327,16 @@ body.toplevel_page_atum-dashboard {
 							}
 						}
 						
+						h1 {
+							color: var(--main-title) !important;
+						}
+						p {
+							color: var(--dash-card-text) !important;
+						}
+						
 						h1, p {
 							text-align: left !important;
 							padding: 0 15px;
-							color: var(--dash-card-text) !important;
 							
 							@include tablet-max{
 								text-align: center !important;

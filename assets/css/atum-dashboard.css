@@ -441,7 +441,7 @@
   --wc-purple: #96588a;
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
-  --warning: #EFAF00;
+  --warning:  #EFAF00;
   --success: #69C61D;
   --secondary: #EFAF00;
   --secondary-var: #EFAF00;
@@ -4825,10 +4825,17 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   font-weight: 300;
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1 {
+  color: var(--main-title) !important;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
+  color: var(--dash-card-text) !important;
+}
+
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description h1, .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description p {
   text-align: left !important;
   padding: 0 15px;
-  color: var(--dash-card-text) !important;
 }
 
 @media all and (max-width: 768px) {

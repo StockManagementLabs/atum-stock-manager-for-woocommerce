@@ -207,6 +207,7 @@ class AtumColors {
 			--dash-widget-current-stock-value-bg: {$this->colors['primary_color']};
 			--dash-widget-current-stock-value-text: white;
 			--dash-widget-icon: $border_color;
+			--green: {$this->colors['primary_color']};
 			--green-light: {$this->colors['primary_color_dark']};
 			--js-scroll-bg: {$this->colors['primary_color']};
 			--main-border: $border_color;
@@ -233,12 +234,14 @@ class AtumColors {
 			--secondary-hover-border: solid 1px $secondary_color;
 			--secondary-light: $secondary_color_light;
 			--secondary-var: $secondary_color;
+			--success: $tertiary_color;
 			--tertiary: $tertiary_color;
 			--tertiary-hover: {$this->colors['white']};
 			--tertiary-hover-border: solid 1px $tertiary_color;
 			--tertiary-hover-text: $tertiary_color;
 			--tertiary-light: $tertiary_color_light;
 			--tertiary-var: $tertiary_color;
+			--warning: $secondary_color;
 			--white: {$this->colors['white']};
 			--white-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
 			--wp-yiq-text-light: $text_color_expanded;
@@ -325,6 +328,7 @@ class AtumColors {
 			--dash-video-title: {$this->colors['text_color']};
 			--dash-video-subs-text: {$this->colors['gray_500']};
 			--gray-500: {$this->colors['text_color']};
+			--green: {$this->colors['tertiary_color']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color']};
 		    --main-border: rgba({$this->colors['border_color_rgb']}, 0.2);
@@ -350,12 +354,14 @@ class AtumColors {
 			--secondary-hover-text: {$this->colors['text_color_expanded']};
 			--secondary-light: {$this->colors['secondary_color']};
 			--secondary-var: {$this->colors['secondary_color_dark']};
+			--success: {$this->colors['tertiary_color']};
 			--tertiary: {$this->colors['tertiary_color']};
 			--tertiary-var: {$this->colors['tertiary_color_light']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.7);
 			--tertiary-hover-text: {$this->colors['text_color_expanded']};
 			--tertiary-hover-border: 1px solid transparent;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
+			--warning: {$this->colors['secondary_color']};
 			--white: {$this->colors['white']};
 			--wp-yiq-text-light: {$this->colors['text_color_2']};
 		}";
@@ -374,7 +380,7 @@ class AtumColors {
 	public function get_branded_mode_colors() {
 
 		$scheme = ":root {
-			--atum-border-expanded: rgba({$this->colors['border_color_rgb']}, 0.2);
+			--atum-border-expanded: {$this->colors['border_color']};
 			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
 			--atum-dropdown-toggle-bg: {$this->colors['bg_2_color']};
 			--atum-expanded-bg: {$this->colors['bg_1_color']};
@@ -409,6 +415,7 @@ class AtumColors {
 			--dash-stats-data-widget-primary: {$this->colors['primary_color']};
 			--dash-video-title: {$this->colors['dark']};
 			--dash-video-subs-text: {$this->colors['text_color']};
+			--green: {$this->colors['tertiary_color']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color_2']};
 			--main-border: {$this->colors['border_color']};
@@ -433,12 +440,15 @@ class AtumColors {
 			--secondary-hover-border: 1px solid transparent;
 			--secondary-light: {$this->colors['secondary_color_light']};
 			--secondary-var: {$this->colors['secondary_color']};
+			--success: {$this->colors['tertiary_color']};
 			--tertiary: {$this->colors['tertiary_color']};
 			--tertiary-var: {$this->colors['tertiary_color']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--tertiary-hover-text: {$this->colors['text_color_expanded']};
 			--tertiary-hover-border: 1px solid transparent;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
+			--warning: {$this->colors['secondary_color']};
+			--white: {$this->colors['white']};
 			--wp-yiq-text-light: {$this->colors['text_color_expanded']};
 		}";
 
