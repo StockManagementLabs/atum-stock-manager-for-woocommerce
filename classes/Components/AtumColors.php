@@ -177,6 +177,7 @@ class AtumColors {
 			--atum-text-color-dark2: $text_color;
 			--atum-text-color-var1:$text_color_2;
 			--atum-text-color-var2: $text_color_2;
+			--atum-text-color-var3: $text_color_2;
 			--atum-version: $text_color_2;
 			--atum-version-bg: rgba({$this->colors['black_rgb']}, 0.1);
 			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
@@ -304,6 +305,7 @@ class AtumColors {
 			--atum-text-color-dark2: {$this->colors['text_color_2']};
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color']};
+			--atum-text-color-var3: {$this->colors['text_color_2']};
 			--blue-hover: rgba({$this->colors['primary_color_rgb']},0.6);
 			--blue-light: $bg_1_color;
 			--danger: {$this->colors['danger_color']};
@@ -411,6 +413,7 @@ class AtumColors {
 			--atum-text-color-dark2: {$this->colors['text_color']};
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color_2']};
+			--atum-text-color-var3: {$this->colors['text_color']};
 			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--danger: {$this->colors['danger_color']};
 			--dash-card-text: {$this->colors['text_color']};
