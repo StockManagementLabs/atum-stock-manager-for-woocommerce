@@ -12,7 +12,7 @@ import { Utils } from '../../utils/_utils';
 
 export default class ListTable {
 	
-	doingAjax: any  = null;
+	doingAjax: JQueryXHR  = null;
 	isRowExpanding = {};
 	
 	constructor(
