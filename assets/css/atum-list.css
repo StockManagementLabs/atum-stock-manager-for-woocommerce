@@ -5736,6 +5736,12 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   color: var(--atum-text-color-var2);
 }
 
+.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--atum-text-color-var2);
+}
+
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -5880,6 +5886,13 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
+  color: var(--atum-text-color-var2);
+  font-style: italic;
+  letter-spacing: normal;
+  margin-left: 10px;
+}
+
+.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
