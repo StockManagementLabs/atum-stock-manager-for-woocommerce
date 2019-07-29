@@ -1847,7 +1847,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		.set-meta {
 			cursor: pointer;
-			color:  var(--primary);
+			color:  var(--blue);
 			
 			&:hover {
 				color: var(--wp-link-hover);
@@ -2209,7 +2209,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-_sku {
 					span {
 						font-size: 14px;
-						color: var(--primary);
+						color: var(--blue);
 					}
 				}
 				
@@ -2230,7 +2230,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		padding: 6px 5px;
 		height: 47px;
 		font-size: 14px;
-		color: var(--primary);
 		
 		&.column-ID {
 			font-size: 14px;

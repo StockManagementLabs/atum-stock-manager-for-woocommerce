@@ -7341,7 +7341,7 @@ table.atum-list-table tr.active-row .set-meta, table.atum-list-table tr.active-r
 
 table.atum-list-table tr .set-meta, .floatThead-container tr .set-meta, .inbound-stock-list tr .set-meta, table.wp-list-table tr .set-meta {
   cursor: pointer;
-  color: var(--primary);
+  color: var(--blue);
 }
 
 table.atum-list-table tr .set-meta:hover, .floatThead-container tr .set-meta:hover, .inbound-stock-list tr .set-meta:hover, table.wp-list-table tr .set-meta:hover {
@@ -7671,7 +7671,7 @@ table.atum-list-table tbody tr td.column-calc_mi_status > span, table.atum-list-
 
 table.atum-list-table tbody tr td.column-_sku span, table.atum-list-table #the-list tr td.column-_sku span, .floatThead-container tbody tr td.column-_sku span, .floatThead-container #the-list tr td.column-_sku span, .inbound-stock-list tbody tr td.column-_sku span, .inbound-stock-list #the-list tr td.column-_sku span, table.wp-list-table tbody tr td.column-_sku span, table.wp-list-table #the-list tr td.column-_sku span {
   font-size: 14px;
-  color: var(--primary);
+  color: var(--blue);
 }
 
 table.atum-list-table tbody tr td.calc_purchase_order a, table.atum-list-table #the-list tr td.calc_purchase_order a, .floatThead-container tbody tr td.calc_purchase_order a, .floatThead-container #the-list tr td.calc_purchase_order a, .inbound-stock-list tbody tr td.calc_purchase_order a, .inbound-stock-list #the-list tr td.calc_purchase_order a, table.wp-list-table tbody tr td.calc_purchase_order a, table.wp-list-table #the-list tr td.calc_purchase_order a {
@@ -7685,7 +7685,6 @@ table.atum-list-table td, table.atum-list-table th, .floatThead-container td, .f
   padding: 6px 5px;
   height: 47px;
   font-size: 14px;
-  color: var(--primary);
 }
 
 table.atum-list-table td.column-ID, table.atum-list-table th.column-ID, .floatThead-container td.column-ID, .floatThead-container th.column-ID, .inbound-stock-list td.column-ID, .inbound-stock-list th.column-ID, table.wp-list-table td.column-ID, table.wp-list-table th.column-ID {

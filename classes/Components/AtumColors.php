@@ -835,11 +835,7 @@ class AtumColors {
 
 		foreach ( $color_settings as $key => $data ) {
 			if ( 'color' !== $data['type'] ) continue;
-			$this->defaults[] = array(
-				'name'    => $key,
-				'display' => $data['display'],
-				'default' => $data['default'],
-			);
+			$this->defaults[ $key ] = $data['default'];
 		}
 
 		return array_merge( $defaults, $color_settings );
