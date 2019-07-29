@@ -40,13 +40,13 @@ export default class StockControlWidget {
                               style.getPropertyValue('--warning'),
                               style.getPropertyValue('--danger'),
                               style.getPropertyValue('--success'),
-                              style.getPropertyValue('--primary'),
+                              style.getPropertyValue('--blue'),
 					      ],
                           hoverBackgroundColor: [
                               style.getPropertyValue('--warning'),
                               style.getPropertyValue('--danger'),
                               style.getPropertyValue('--success'),
-                              style.getPropertyValue('--primary'),
+                              style.getPropertyValue('--blue'),
                           ],
                           hoverBorderColor: style.getPropertyValue('--main-text-expanded'),
                           borderColor: style.getPropertyValue('--main-text-expanded')

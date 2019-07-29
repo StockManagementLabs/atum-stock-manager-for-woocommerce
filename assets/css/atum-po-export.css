@@ -219,6 +219,8 @@
   --atum-border-expanded: #adb5bd;
   --atum-text-color-var1: #adb5bd;
   --atum-text-color-var2: #adb5bd;
+  --atum-text-color-var3: #6c757d;
+  --atum-text-color-dark2: #6c757d;
   --atum-table-views-tabs: #adb5bd;
   --atum-table-views-tabs-active: #00B8DB;
   --atum-table-views-tabs-active-text: #fff;
@@ -229,7 +231,6 @@
   --atum-table-link-text: #6c757d;
   --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
-  --atum-text-color-dark2: #6c757d;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
   --atum-pagination-border-disabled: transparent;
@@ -280,7 +281,6 @@
   --dash-green-trans: rgba(106, 200, 30, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
-  --atum-marketing-popup-bg: #fff;
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
   --dash-statistics-ticks: #27283B;

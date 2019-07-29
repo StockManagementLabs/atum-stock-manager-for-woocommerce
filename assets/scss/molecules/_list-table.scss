@@ -110,12 +110,12 @@
 	
 	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
 		border-radius: 5px;
-		background-color: var(--secondary-var);
+		background-color: var(--secondary);
 		font-size: 12px;
 		min-width: 70px;
 		letter-spacing: normal;
 		text-align: center;
-		color: var(--white);
+		color: var(--main-text-expanded);
 		text-transform: uppercase;
 		box-shadow: none;
 		border: none;
@@ -1179,7 +1179,7 @@
 		}
 		
 		&:hover {
-			background-color: var(--primary-hover);
+			background-color: var(--primary-hover-var);
 		}
 		
 		i {
@@ -1476,7 +1476,7 @@
 	}
 	
 	.jspTrack {
-		background: var(--secondary-shadow);
+		background: var(--atum-table-bg2);
 		position: relative;
 	}
 	
@@ -2188,7 +2188,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			td {
-				color: var(--atum-text-color-var3);
+				//color: var(--atum-text-color-var3);
 				
 				&.column-title, &.atum_order_title {
 					a, .row-title {

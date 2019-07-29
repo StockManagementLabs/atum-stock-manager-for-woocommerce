@@ -330,11 +330,6 @@ body {
 	
 	.select2-container--default {
 		
-		.select2-results__option--highlighted[aria-selected] {
-			background-color: var(--primary-dark);
-			color: var(--primary-var-dark);
-		}
-		
 		&.atum-select2, &.atum-enhanced-select {
 			
 			&.select2-container--disabled {
@@ -523,8 +518,8 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				background-color: var(--primary-dark);
-				color: var(--atum-menu-text-highlight);
+				color: var(--primary-dark);
+				background-color: var(--atum-menu-text-highlight);
 			}
 			
 			&[data-selected=true] {
@@ -570,10 +565,6 @@ body {
 				}
 			}
 			
-			.select2-results__option--highlighted {
-				background-color: var(--blue-light);
-				color: var(--primary-var-dark);
-			}
 		}
 		
 		.select2-results__group {
@@ -834,11 +825,6 @@ body {
 			&[aria-disabled=true] {
 				color: $wp-gray-1;
 			}
-		}
-		
-		.select2-results__option--highlighted[aria-selected], .select2-results__option--highlighted {
-			background-color: var(--primary-dark);
-			color: var(--atum-menu-text-highlight);
 		}
 		
 		.select2-results__group {

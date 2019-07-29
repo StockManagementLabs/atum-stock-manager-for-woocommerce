@@ -299,6 +299,8 @@
   --atum-border-expanded: #adb5bd;
   --atum-text-color-var1: #adb5bd;
   --atum-text-color-var2: #adb5bd;
+  --atum-text-color-var3: #6c757d;
+  --atum-text-color-dark2: #6c757d;
   --atum-table-views-tabs: #adb5bd;
   --atum-table-views-tabs-active: #00B8DB;
   --atum-table-views-tabs-active-text: #fff;
@@ -309,7 +311,6 @@
   --atum-table-link-text: #6c757d;
   --atum-dropdown-toggle-bg: #f8f9fa;
   --atum-select2-border: #e9ecef;
-  --atum-text-color-dark2: #6c757d;
   --atum-pagination-bg: #e9ecef;
   --atum-pagination-border: transparent;
   --atum-pagination-border-disabled: transparent;
@@ -360,7 +361,6 @@
   --dash-green-trans: rgba(106, 200, 30, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
-  --atum-marketing-popup-bg: #fff;
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
   --dash-statistics-ticks: #27283B;
@@ -2596,11 +2596,6 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
   right: auto;
 }
 
-body .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: var(--primary-dark);
-  color: var(--primary-var-dark);
-}
-
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--single, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--single {
   background-color: #E5E5E5;
   cursor: default;
@@ -2752,8 +2747,8 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: var(--primary-dark);
-  color: var(--atum-menu-text-highlight);
+  color: var(--primary-dark);
+  background-color: var(--atum-menu-text-highlight);
 }
 
 body .select2-container--default .select2-results__option[data-selected=true] {
@@ -2797,11 +2792,6 @@ body .select2-container--default .select2-results__option .select2-results__opti
 body .select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
   margin-left: -5em;
   padding-left: 6em;
-}
-
-body .select2-container--default .select2-results__option .select2-results__option--highlighted {
-  background-color: var(--blue-light);
-  color: var(--primary-var-dark);
 }
 
 body .select2-container--default .select2-results__group {
@@ -3029,11 +3019,6 @@ body .select2-container--default .select2-results__option[role=group] {
 
 body .select2-container--default .select2-results__option[aria-disabled=true] {
   color: #999;
-}
-
-body .select2-container--default .select2-results__option--highlighted[aria-selected], body .select2-container--default .select2-results__option--highlighted {
-  background-color: var(--primary-dark);
-  color: var(--atum-menu-text-highlight);
 }
 
 body .select2-container--default .select2-results__group {
@@ -3295,7 +3280,8 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
-  color: var(--atum-table-bg);
+  color: var(--main-text);
+  background-color: var(--atum-table-bg2);
 }
 
 .swal2-container .swal2-modal button.btn-sm {
@@ -5419,12 +5405,12 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
   border-radius: 5px;
-  background-color: var(--secondary-var);
+  background-color: var(--secondary);
   font-size: 12px;
   min-width: 70px;
   letter-spacing: normal;
   text-align: center;
-  color: var(--white);
+  color: var(--main-text-expanded);
   text-transform: uppercase;
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -5750,12 +5736,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   color: var(--atum-text-color-var2);
 }
 
-.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
-  font-size: 12px;
-  font-style: italic;
-  color: var(--atum-text-color-var2);
-}
-
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -5900,13 +5880,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
-  color: var(--atum-text-color-var2);
-  font-style: italic;
-  letter-spacing: normal;
-  margin-left: 10px;
-}
-
-.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
@@ -6699,7 +6672,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .atum-list-wrapper .reset-filters:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--primary-hover-var);
 }
 
 .atum-list-wrapper .reset-filters i {
@@ -7009,7 +6982,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .atum-table-wrapper .jspTrack, #table-container .jspTrack {
-  background: var(--secondary-shadow);
+  background: var(--atum-table-bg2);
   position: relative;
 }
 
@@ -7682,10 +7655,6 @@ table.atum-list-table tbody tr.expandable td.column-calc_location a, table.atum-
 table.atum-list-table tbody tr.expandable td.column-calc_location a:before, table.atum-list-table #the-list tr.expandable td.column-calc_location a:before, .floatThead-container tbody tr.expandable td.column-calc_location a:before, .floatThead-container #the-list tr.expandable td.column-calc_location a:before, .inbound-stock-list tbody tr.expandable td.column-calc_location a:before, .inbound-stock-list #the-list tr.expandable td.column-calc_location a:before, table.wp-list-table tbody tr.expandable td.column-calc_location a:before, table.wp-list-table #the-list tr.expandable td.column-calc_location a:before {
   content: '-';
   color: var(--atum-text-color-var1);
-}
-
-table.atum-list-table tbody tr td, table.atum-list-table #the-list tr td, .floatThead-container tbody tr td, .floatThead-container #the-list tr td, .inbound-stock-list tbody tr td, .inbound-stock-list #the-list tr td, table.wp-list-table tbody tr td, table.wp-list-table #the-list tr td {
-  color: var(--atum-text-color-var3);
 }
 
 table.atum-list-table tbody tr td.column-title a, table.atum-list-table tbody tr td.column-title .row-title, table.atum-list-table tbody tr td.atum_order_title a, table.atum-list-table tbody tr td.atum_order_title .row-title, table.atum-list-table #the-list tr td.column-title a, table.atum-list-table #the-list tr td.column-title .row-title, table.atum-list-table #the-list tr td.atum_order_title a, table.atum-list-table #the-list tr td.atum_order_title .row-title, .floatThead-container tbody tr td.column-title a, .floatThead-container tbody tr td.column-title .row-title, .floatThead-container tbody tr td.atum_order_title a, .floatThead-container tbody tr td.atum_order_title .row-title, .floatThead-container #the-list tr td.column-title a, .floatThead-container #the-list tr td.column-title .row-title, .floatThead-container #the-list tr td.atum_order_title a, .floatThead-container #the-list tr td.atum_order_title .row-title, .inbound-stock-list tbody tr td.column-title a, .inbound-stock-list tbody tr td.column-title .row-title, .inbound-stock-list tbody tr td.atum_order_title a, .inbound-stock-list tbody tr td.atum_order_title .row-title, .inbound-stock-list #the-list tr td.column-title a, .inbound-stock-list #the-list tr td.column-title .row-title, .inbound-stock-list #the-list tr td.atum_order_title a, .inbound-stock-list #the-list tr td.atum_order_title .row-title, table.wp-list-table tbody tr td.column-title a, table.wp-list-table tbody tr td.column-title .row-title, table.wp-list-table tbody tr td.atum_order_title a, table.wp-list-table tbody tr td.atum_order_title .row-title, table.wp-list-table #the-list tr td.column-title a, table.wp-list-table #the-list tr td.column-title .row-title, table.wp-list-table #the-list tr td.atum_order_title a, table.wp-list-table #the-list tr td.atum_order_title .row-title {

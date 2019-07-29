@@ -33,12 +33,20 @@ class AtumColors {
 	private static $instance;
 
 	/**
+	 * Defaults values for custom colors
+	 *
+	 * @var defaults
+	 */
+	private $defaults;
+
+	/**
 	 * The ATUM colors
 	 *
 	 * @var array
 	 */
 	private $colors = array(
 		'gray_100'   => '#F8F9FA',
+		'gray_200'   => '#E9ECEF',
 		'gray_500'   => '#ADB5BD',
 		'dark'       => '#343A40',
 		'white'      => '#FFFFFF',
@@ -155,10 +163,10 @@ class AtumColors {
 		$scheme = ":root {
 			--atum-border-expanded: $border_color;
 			--atum-border-var: $border_color;
+			--atum-column-groups-bg: {$this->colors['gray_200']};
 			--atum-dropdown-toggle-bg: {$this->colors['gray_100']};
 			--atum-expanded-bg: $bg_1_color;
 			--atum-footer-title: $text_color_2;
-			--atum-marketing-popup-bg: $bg_1_color;
 			--atum-menu-text: {$this->colors['primary_color']};
 			--atum-menu-text-highlight: {$this->colors['primary_color']};
 			--atum-pagination-border-disabled: $border_color;
@@ -193,7 +201,7 @@ class AtumColors {
 			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
 		    --dash-nice-select-hover: {$this->colors['primary_color']};
 			--dash-nice-select-list-bg: $bg_1_color;
-		    --dash-nice-select-option-hover: {$this->colors['primary_color_light']};
+		    --dash-nice-select-option-hover-bg: {$this->colors['primary_color_light']};
 		    --dash-nice-select-option-selected-bg: {$this->colors['primary_color_light']};
 			--dash-statistics-chart-type-bg: transparent;
 			--dash-statistics-chart-type-selected-bg: $secondary_color;
@@ -223,6 +231,7 @@ class AtumColors {
 		    --primary-dark: {$this->colors['primary_color_dark']};
 		    --primary-switcher-bg: {$this->colors['primary_color_dark']};
 			--primary-hover: {$this->colors['white']};
+			--primary-hover-var: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-hover-border: solid 1px {$this->colors['primary_color']};
 			--primary-hover-text: {$this->colors['primary_color']};
 			--primary-light: {$this->colors['primary_color_light']};
@@ -280,7 +289,6 @@ class AtumColors {
 			--atum-footer-link: {$this->colors['primary_color']};
 			--atum-footer-text: {$this->colors['white']};
 			--atum-footer-title: {$this->colors['white']};
-			--atum-marketing-popup-bg: $bg_1_color;
 			--atum-menu-text: {$this->colors['white']};
 			--atum-menu-text-highlight: $bg_2_color;
 			--atum-pagination-border-disabled: rgba({$this->colors['border_color_rgb']}, 0.0);
@@ -317,7 +325,7 @@ class AtumColors {
 			--dash-nice-select-bg: $bg_1_color;
 			--dash-nice-select-list-bg: $bg_1_color;
 		    --dash-nice-select-hover: {$this->colors['primary_color_light']};
-		    --dash-nice-select-option-hover: {$this->colors['primary_color_light']};
+		    --dash-nice-select-option-hover-bg: {$this->colors['primary_color_light']};
 		    --dash-nice-select-option-selected-bg: {$this->colors['primary_color_light']};
 			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
 			--dash-input-group-bg: rgba(0, 0, 0, 0.3);
@@ -333,7 +341,6 @@ class AtumColors {
 			--dash-subscription-input: transparent;
 			--dash-video-title: {$this->colors['text_color']};
 			--dash-video-subs-text: {$this->colors['gray_500']};
-			--gray-500: {$this->colors['text_color']};
 			--green: {$this->colors['tertiary_color']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color']};
@@ -348,6 +355,7 @@ class AtumColors {
 			--primary: {$this->colors['primary_color']};
 		    --primary-dark: {$this->colors['primary_color_light']};
 			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.7);
+			--primary-hover-var: rgba({$this->colors['primary_color_rgb']}, 0.7);
 			--primary-hover-border: 1px solid transparent;
 			--primary-hover-text: {$this->colors['text_color_expanded']};
 			--primary-light: {$this->colors['primary_color_light']};
@@ -390,6 +398,7 @@ class AtumColors {
 		$scheme = ":root {
 			--atum-border-expanded: {$this->colors['border_color']};
 			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
+			--atum-column-groups-bg: {$this->colors['gray_200']};
 			--atum-dropdown-toggle-bg: {$this->colors['bg_2_color']};
 			--atum-expanded-bg: {$this->colors['bg_1_color']};
 		    --atum-footer-title: {$this->colors['title_color']};
@@ -438,6 +447,7 @@ class AtumColors {
 			--primary: {$this->colors['primary_color']};
 		    --primary-dark: {$this->colors['primary_color_dark']};
 			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
+			--primary-hover-var: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-hover-text: {$this->colors['text_color_expanded']};
 			--primary-hover-border: 1px solid transparent;
 			--primary-light: {$this->colors['primary_color_light']};
@@ -822,6 +832,15 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 		);
+
+		foreach ( $color_settings as $key => $data ) {
+			if ( 'color' !== $data['type'] ) continue;
+			$this->defaults[] = array(
+				'name'    => $key,
+				'display' => $data['display'],
+				'default' => $data['default'],
+			);
+		}
 
 		return array_merge( $defaults, $color_settings );
 

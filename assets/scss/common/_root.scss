@@ -55,6 +55,8 @@
 	--atum-border-expanded: #{$gray-500};
 	--atum-text-color-var1: #{$gray-500};
 	--atum-text-color-var2: #{$gray-500};
+	--atum-text-color-var3: #{$gray-600};
+	--atum-text-color-dark2: #{$gray-600};
 	--atum-table-views-tabs: #{$gray-500};
 	--atum-table-views-tabs-active: #{$blue};
 	--atum-table-views-tabs-active-text: #{$white};
@@ -65,7 +67,6 @@
 	--atum-table-link-text: #{$gray-600};
 	--atum-dropdown-toggle-bg: #{$gray-100};
 	--atum-select2-border: #{$gray-200};
-	--atum-text-color-dark2: #{$gray-600};
 	--atum-pagination-bg: #{$gray-200};
 	--atum-pagination-border: transparent;
 	--atum-pagination-border-disabled: transparent;
@@ -116,7 +117,6 @@
 	--dash-green-trans: #{$green-trans};
 	--dash-green-light: #{$green-light};
 	--dash-green-blue: #{$green-blue};
-	--atum-marketing-popup-bg: #{$white};
 	--dash-input-group-bg: #{transparentize($white, 0.34)};
 	--dash-input-group-shadow: #{transparentize($white, 0.8)};
 	--dash-statistics-ticks: #{$blue-dark};
