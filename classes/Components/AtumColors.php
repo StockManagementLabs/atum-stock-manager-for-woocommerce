@@ -110,6 +110,7 @@ class AtumColors {
 		$this->colors['bg_1_color_rgb']        = $this->convert_hexadecimal_to_rgb( $this->colors['bg_1_color'] );
 		$this->colors['bg_2_color']            = ! empty( $visual_settings[ "{$prefix}bg_2_color" ] ) ? $visual_settings[ "{$prefix}bg_2_color" ] : $this->colors['gray_100'];
 		$this->colors['danger_color']          = ! empty( $visual_settings[ "{$prefix}danger_color" ] ) ? $visual_settings[ "{$prefix}danger_color" ] : '#FF4848';
+		$this->colors['danger_color_rgb']      = $this->convert_hexadecimal_to_rgb( $this->colors['danger_color'] );
 		$this->colors['title_color']           = ! empty( $visual_settings[ "{$prefix}title_color" ] ) ? $visual_settings[ "{$prefix}title_color" ] : $this->colors['blue_dark'];
 
 		// Add the Visual Settings to ATUM settings.
@@ -190,6 +191,9 @@ class AtumColors {
 			--atum-version-bg: rgba({$this->colors['black_rgb']}, 0.1);
 			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--danger: $danger_color;
+			--danger-hover: rgba({$this->colors['danger_color_rgb']}, 0.6);
+			--danger-hover-border: none;
+			--danger-hover-text: auto;
 			--dash-add-widget-color: {$this->colors['gray_500']};
 			--dash-blue-trans: {$this->colors['primary_color_light']};
 			--dash-card-bg: $bg_1_color;
@@ -229,9 +233,9 @@ class AtumColors {
 			--primary: {$this->colors['primary_color']};
 		    --primary-dark: {$this->colors['primary_color_dark']};
 		    --primary-switcher-bg: {$this->colors['primary_color_dark']};
-			--primary-hover: {$this->colors['white']};
+			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-hover-var: rgba({$this->colors['primary_color_rgb']}, 0.6);
-			--primary-hover-border: solid 1px {$this->colors['primary_color']};
+			--primary-hover-border: none;
 			--primary-hover-text: {$this->colors['primary_color']};
 			--primary-light: {$this->colors['primary_color_light']};
 			--primary-var-dark: {$this->colors['primary_color']};
@@ -240,16 +244,16 @@ class AtumColors {
 		    --purple-pl-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--secondary: $secondary_color;
 			--secondary-dark: $secondary_color_dark;
-			--secondary-hover: {$this->colors['white']};
+			--secondary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--secondary-hover-text: $secondary_color;
-			--secondary-hover-border: solid 1px $secondary_color;
+			--secondary-hover-border: none;
 			--secondary-light: $secondary_color_light;
 			--secondary-shadow: rgba({$this->colors['primary_color_rgb']}, 0.2);
 			--secondary-var: $secondary_color;
 			--success: $tertiary_color;
 			--tertiary: $tertiary_color;
-			--tertiary-hover: {$this->colors['white']};
-			--tertiary-hover-border: solid 1px $tertiary_color;
+			--tertiary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
+			--tertiary-hover-border: none;
 			--tertiary-hover-text: $tertiary_color;
 			--tertiary-light: $tertiary_color_light;
 			--tertiary-var: $tertiary_color;
@@ -317,6 +321,9 @@ class AtumColors {
 			--blue-hover: rgba({$this->colors['primary_color_rgb']},0.6);
 			--blue-light: $bg_1_color;
 			--danger: {$this->colors['danger_color']};
+			--danger-hover: rgba({$this->colors['danger_color_rgb']}, 0.6);
+			--danger-hover-border: none;
+			--danger-hover-text: auto;
 			--dash-add-widget-color: {$this->colors['gray_500']};
 			--dash-add-widget-color-dark: {$this->colors['text_color_expanded']};
 			--dash-card-bg: $bg_1_color;
@@ -355,7 +362,7 @@ class AtumColors {
 		    --primary-dark: {$this->colors['primary_color_light']};
 			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.7);
 			--primary-hover-var: rgba({$this->colors['primary_color_rgb']}, 0.7);
-			--primary-hover-border: 1px solid transparent;
+			--primary-hover-border: none;
 			--primary-hover-text: {$this->colors['text_color_expanded']};
 			--primary-light: {$this->colors['primary_color_light']};
 			--primary-switcher-bg: rgba({$this->colors['primary_color_rgb']}, 0.7);
@@ -364,7 +371,7 @@ class AtumColors {
 			--secondary: {$this->colors['secondary_color']}; 
 			--secondary-dark: {$this->colors['secondary_color']};
 			--secondary-hover: rgba({$this->colors['secondary_color_rgb']}, 0.7); 
-			--secondary-hover-border: 1px solid transparent;
+			--secondary-hover-border: none;
 			--secondary-hover-text: {$this->colors['text_color_expanded']};
 			--secondary-light: {$this->colors['secondary_color']};
 			--secondary-shadow: rgba({$this->colors['secondary_color_rgb']}, 0.2);
@@ -374,7 +381,7 @@ class AtumColors {
 			--tertiary-var: {$this->colors['tertiary_color_light']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.7);
 			--tertiary-hover-text: {$this->colors['text_color_expanded']};
-			--tertiary-hover-border: 1px solid transparent;
+			--tertiary-hover-border: none;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
 			--warning: {$this->colors['secondary_color']};
 			--white: {$this->colors['white']};
@@ -425,6 +432,9 @@ class AtumColors {
 			--atum-text-color-var3: {$this->colors['text_color']};
 			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--danger: {$this->colors['danger_color']};
+			--danger-hover: rgba({$this->colors['danger_color_rgb']}, 0.6);
+			--danger-hover-border: none;
+			--danger-hover-text: auto;
 			--dash-card-text: {$this->colors['text_color']};
 			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
 			--dash-add-widget-color: {$this->colors['gray_500']};
@@ -449,7 +459,7 @@ class AtumColors {
 			--primary-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-hover-var: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-hover-text: {$this->colors['text_color_expanded']};
-			--primary-hover-border: 1px solid transparent;
+			--primary-hover-border: none;
 			--primary-light: {$this->colors['primary_color_light']};
 			--primary-switcher-bg: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--primary-var-dark: {$this->colors['primary_color']};
@@ -458,7 +468,7 @@ class AtumColors {
 			--secondary-dark: {$this->colors['secondary_color_dark']};
 			--secondary-hover: rgba({$this->colors['secondary_color_rgb']}, 0.6);
 			--secondary-hover-text: {$this->colors['text_color_expanded']};
-			--secondary-hover-border: 1px solid transparent;
+			--secondary-hover-border: none;
 			--secondary-light: {$this->colors['secondary_color_light']};
 			--secondary-shadow: rgba({$this->colors['secondary_color_rgb']}, 0.2);
 			--secondary-var: {$this->colors['secondary_color']};
@@ -467,7 +477,7 @@ class AtumColors {
 			--tertiary-var: {$this->colors['tertiary_color']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--tertiary-hover-text: {$this->colors['text_color_expanded']};
-			--tertiary-hover-border: 1px solid transparent;
+			--tertiary-hover-border: none;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
 			--warning: {$this->colors['secondary_color']};
 			--white: {$this->colors['white']};

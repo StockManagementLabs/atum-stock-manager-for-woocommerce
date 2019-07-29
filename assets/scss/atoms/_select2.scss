@@ -166,7 +166,7 @@ body {
 	.select2-results__option {
 		padding: 6px;
 		user-select: none;
-		color: var(--atum-menu-text);
+		color: var(--atum-text-color-var1);
 		font-size: 12px;
 		
 		&:focus {
@@ -518,13 +518,13 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				color: var(--primary-dark);
+				color: var(--white);
 				background-color: var(--atum-menu-text-highlight);
 			}
 			
 			&[data-selected=true] {
 				background-color: var(--primary-dark);
-				color: var(--atum-menu-text-highlight);
+				color: var(--atum-text-color-var3);
 			}
 			
 			&.select2-results__message {
@@ -834,7 +834,10 @@ body {
 		}
 		
 		&.select2-container--open .select2-dropdown {
-			border-color: var(--white);
+			//border-color: var(--white);
+			-webkit-box-shadow: 0 0 0 2px var(--main-border);
+			-moz-box-shadow: 0 0 0 2px var(--main-border);
+			box-shadow: 0 0 0 2px var(--main-border);
 		}
 			
 	}

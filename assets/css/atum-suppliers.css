@@ -483,7 +483,7 @@ body .select2-results__option {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  color: var(--atum-menu-text);
+  color: var(--atum-text-color-var1);
   font-size: 12px;
 }
 
@@ -772,13 +772,13 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
-  color: var(--primary-dark);
+  color: var(--white);
   background-color: var(--atum-menu-text-highlight);
 }
 
 body .select2-container--default .select2-results__option[data-selected=true] {
   background-color: var(--primary-dark);
-  color: var(--atum-menu-text-highlight);
+  color: var(--atum-text-color-var3);
 }
 
 body .select2-container--default .select2-results__option.select2-results__message {
@@ -1053,7 +1053,8 @@ body .select2-container--default .select2-results__group {
 }
 
 body .select2-container--default.select2-container--open .select2-dropdown {
-  border-color: var(--white);
+  -webkit-box-shadow: 0 0 0 2px var(--main-border);
+  box-shadow: 0 0 0 2px var(--main-border);
 }
 
 @font-face {
@@ -1960,7 +1961,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -2014,15 +2014,12 @@ fieldset:disabled a.btn {
 }
 
 .btn-link:hover {
-  color: #00A0D2;
   text-decoration: underline;
   background-color: transparent;
-  border-color: transparent;
 }
 
 .btn-link:focus, .btn-link.focus {
   text-decoration: underline;
-  border-color: transparent;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -5710,7 +5707,7 @@ table.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-cont
 }
 
 table.atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals, table.wp-list-table tr.totals {
-  background-color: var(--atum-expanded-bg);
+  background-color: var(--atum-column-groups-bg);
 }
 
 table.atum-list-table tr.totals td, table.atum-list-table tr.totals th, .floatThead-container tr.totals td, .floatThead-container tr.totals th, .inbound-stock-list tr.totals td, .inbound-stock-list tr.totals th, table.wp-list-table tr.totals td, table.wp-list-table tr.totals th {
@@ -6283,21 +6280,18 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   background-color: var(--secondary-hover);
   color: var(--secondary-hover-text);
   border-radius: 5px;
-  border: var(--secondary-hover-border) !important;
 }
 
 .btn.btn-primary:hover {
   background-color: var(--primary-hover);
   color: var(--primary-hover-text);
   border-radius: 5px;
-  border: var(--primary-hover-border) !important;
 }
 
 .btn.btn-success:hover {
   background-color: var(--tertiary-hover);
   color: var(--tertiary-hover-text);
   border-radius: 5px;
-  border: var(--tertiary-hover-border) !important;
 }
 
 .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {

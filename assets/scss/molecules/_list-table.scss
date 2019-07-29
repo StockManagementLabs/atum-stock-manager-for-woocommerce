@@ -2051,7 +2051,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.totals {
-			background-color: var(--atum-expanded-bg);
+			background-color: var(--atum-column-groups-bg);
 			
 			td, th {
 				font-size: 12px;
@@ -2692,19 +2692,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	background-color: var(--secondary-hover);
 	color: var(--secondary-hover-text);
 	border-radius: 5px;
-	border: var(--secondary-hover-border) !important;
 }
 .btn.btn-primary:hover {
 	background-color: var(--primary-hover);
 	color: var(--primary-hover-text);
 	border-radius: 5px;
-	border: var(--primary-hover-border) !important;
 }
 .btn.btn-success:hover {
 	background-color: var(--tertiary-hover);
 	color: var(--tertiary-hover-text);
 	border-radius: 5px;
-	border: var(--tertiary-hover-border) !important;
 }
 
 

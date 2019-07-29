@@ -13,7 +13,6 @@
 	white-space: nowrap;
 	vertical-align: middle;
 	user-select: none;
-	border: $btn-border-width solid transparent;
 	@include button-size($btn-padding-y, $btn-padding-x, $font-size-base, $btn-line-height, $btn-border-radius);
 	transition: $btn-transition;
 	
@@ -64,16 +63,13 @@ fieldset:disabled a.btn {
 	background-color: transparent;
 	
 	@include hover {
-		color: $link-hover-color;
 		text-decoration: $link-hover-decoration;
 		background-color: transparent;
-		border-color: transparent;
 	}
 	
 	&:focus,
 	&.focus {
 		text-decoration: $link-hover-decoration;
-		border-color: transparent;
 		box-shadow: none;
 	}
 	
