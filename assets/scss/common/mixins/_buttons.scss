@@ -8,9 +8,7 @@
 	background-color: var(--#{$color});
 	
 	@include hover {
-		color: var(--#{$color}-hover-text);
 		background-color: var(--#{$color}-hover);
-		border-color: var(--#{$color}-hover-border) !important;
 	}
 	
 	&:focus,

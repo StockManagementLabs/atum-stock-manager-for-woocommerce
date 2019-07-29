@@ -388,7 +388,7 @@
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
   --secondary-hover-border: none;
-  --danger-hover-text: #FF4848;
+  --danger-hover-text: #fff;
   --danger-hover-border: none;
   --wp-link-hover: #00B8DB;
 }
@@ -1432,6 +1432,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -1520,9 +1521,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary:hover {
-  color: var(--primary-hover-text);
   background-color: var(--primary-hover);
-  border-color: var(--primary-hover-border) !important;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -1557,9 +1556,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-secondary:hover {
-  color: var(--secondary-hover-text);
   background-color: var(--secondary-hover);
-  border-color: var(--secondary-hover-border) !important;
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -1594,9 +1591,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-tertiary:hover {
-  color: var(--tertiary-hover-text);
   background-color: var(--tertiary-hover);
-  border-color: var(--tertiary-hover-border) !important;
 }
 
 .btn-tertiary:focus, .btn-tertiary.focus {
@@ -1631,9 +1626,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-success:hover {
-  color: var(--success-hover-text);
   background-color: var(--success-hover);
-  border-color: var(--success-hover-border) !important;
 }
 
 .btn-success:focus, .btn-success.focus {
@@ -1668,9 +1661,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-info:hover {
-  color: var(--info-hover-text);
   background-color: var(--info-hover);
-  border-color: var(--info-hover-border) !important;
 }
 
 .btn-info:focus, .btn-info.focus {
@@ -1705,9 +1696,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-warning:hover {
-  color: var(--warning-hover-text);
   background-color: var(--warning-hover);
-  border-color: var(--warning-hover-border) !important;
 }
 
 .btn-warning:focus, .btn-warning.focus {
@@ -1742,9 +1731,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-danger:hover {
-  color: var(--danger-hover-text);
   background-color: var(--danger-hover);
-  border-color: var(--danger-hover-border) !important;
 }
 
 .btn-danger:focus, .btn-danger.focus {
@@ -1779,9 +1766,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-light:hover {
-  color: var(--light-hover-text);
   background-color: var(--light-hover);
-  border-color: var(--light-hover-border) !important;
 }
 
 .btn-light:focus, .btn-light.focus {
@@ -1816,9 +1801,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-dark:hover {
-  color: var(--dark-hover-text);
   background-color: var(--dark-hover);
-  border-color: var(--dark-hover-border) !important;
 }
 
 .btn-dark:focus, .btn-dark.focus {
@@ -1853,9 +1836,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-purple-pl:hover {
-  color: var(--purple-pl-hover-text);
   background-color: var(--purple-pl-hover);
-  border-color: var(--purple-pl-hover-border) !important;
 }
 
 .btn-purple-pl:focus, .btn-purple-pl.focus {

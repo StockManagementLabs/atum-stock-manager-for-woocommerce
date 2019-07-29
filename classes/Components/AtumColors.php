@@ -434,7 +434,7 @@ class AtumColors {
 			--danger: {$this->colors['danger_color']};
 			--danger-hover: rgba({$this->colors['danger_color_rgb']}, 0.6);
 			--danger-hover-border: none;
-			--danger-hover-text: auto;
+			--danger-hover-text: {$this->colors['white']};;
 			--dash-card-text: {$this->colors['text_color']};
 			--dash-nice-select-disabled-after: lighten({$this->colors['text_color_rgb']}, 20%);
 			--dash-add-widget-color: {$this->colors['gray_500']};
