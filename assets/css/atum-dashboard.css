@@ -555,6 +555,9 @@
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
   --secondary-hover-border: none;
+  --danger-hover-text: #FF4848;
+  --danger-hover-border: none;
+  --wp-link-hover: #00B8DB;
 }
 
 @font-face {
@@ -5772,11 +5775,11 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-success:before {
-  background-color: var(--success);
+  background-color: var(--green);
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-warning:before {
-  background-color: var(--warning);
+  background-color: var(--orange);
 }
 
 .stock-control-widget .stock-data.hc_mode h3.widget-danger:before {

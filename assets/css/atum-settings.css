@@ -476,6 +476,9 @@
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
   --secondary-hover-border: none;
+  --danger-hover-text: #FF4848;
+  --danger-hover-border: none;
+  --wp-link-hover: #00B8DB;
 }
 
 .btn {

@@ -217,7 +217,6 @@ class AtumColors {
 			--dash-widget-current-stock-value-bg: {$this->colors['primary_color']};
 			--dash-widget-current-stock-value-text: white;
 			--dash-widget-icon: $border_color;
-			--green: {$this->colors['primary_color']};
 			--green-light: {$this->colors['primary_color_dark']};
 			--js-scroll-bg: {$this->colors['primary_color']};
 			--main-border: $border_color;
@@ -247,17 +246,18 @@ class AtumColors {
 			--secondary-light: $secondary_color_light;
 			--secondary-shadow: rgba({$this->colors['primary_color_rgb']}, 0.2);
 			--secondary-var: $secondary_color;
-			--success: {$this->colors['green']};
+			--success: $tertiary_color;
 			--tertiary: $tertiary_color;
 			--tertiary-hover: {$this->colors['white']};
 			--tertiary-hover-border: solid 1px $tertiary_color;
 			--tertiary-hover-text: $tertiary_color;
 			--tertiary-light: $tertiary_color_light;
 			--tertiary-var: $tertiary_color;
-			--warning: {$this->colors['orange']};
+			--warning: $secondary_color;
 			--white: {$this->colors['white']};
 			--white-shadow: rgba({$this->colors['border_color_rgb']}, 0.2);
 			--wp-yiq-text-light: $text_color_expanded;
+			--wp-link-hover: {$this->colors['primary_color']};
 		    --wp-pink-darken-expanded: {$this->colors['primary_color']};
 		}";
 
@@ -341,7 +341,6 @@ class AtumColors {
 			--dash-subscription-input: transparent;
 			--dash-video-title: {$this->colors['text_color']};
 			--dash-video-subs-text: {$this->colors['gray_500']};
-			--green: {$this->colors['tertiary_color']};
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color']};
 		    --main-border: rgba({$this->colors['border_color_rgb']}, 0.2);
@@ -370,15 +369,16 @@ class AtumColors {
 			--secondary-light: {$this->colors['secondary_color']};
 			--secondary-shadow: rgba({$this->colors['secondary_color_rgb']}, 0.2);
 			--secondary-var: {$this->colors['secondary_color_dark']};
-			--success: {$this->colors['green']};
+			--success: {$this->colors['tertiary_color']};
 			--tertiary: {$this->colors['tertiary_color']};
 			--tertiary-var: {$this->colors['tertiary_color_light']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.7);
 			--tertiary-hover-text: {$this->colors['text_color_expanded']};
 			--tertiary-hover-border: 1px solid transparent;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
-			--warning: {$this->colors['orange']};
+			--warning: {$this->colors['secondary_color']};
 			--white: {$this->colors['white']};
+			--wp-link-hover: {$this->colors['primary_color']};
 			--wp-yiq-text-light: {$this->colors['text_color_2']};
 		}";
 
@@ -462,15 +462,16 @@ class AtumColors {
 			--secondary-light: {$this->colors['secondary_color_light']};
 			--secondary-shadow: rgba({$this->colors['secondary_color_rgb']}, 0.2);
 			--secondary-var: {$this->colors['secondary_color']};
-			--success: {$this->colors['green']};
+			--success: {$this->colors['tertiary_color']};
 			--tertiary: {$this->colors['tertiary_color']};
 			--tertiary-var: {$this->colors['tertiary_color']};
 			--tertiary-hover: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 			--tertiary-hover-text: {$this->colors['text_color_expanded']};
 			--tertiary-hover-border: 1px solid transparent;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
-			--warning: {$this->colors['orange']};
+			--warning: {$this->colors['secondary_color']};
 			--white: {$this->colors['white']};
+			--wp-link-hover: {$this->colors['primary_color']};
 			--wp-yiq-text-light: {$this->colors['text_color_expanded']};
 		}";
 

@@ -31,10 +31,10 @@
 				margin-right: 10px;
 			}
 			&.widget-success:before {
-				background-color: var(--success);
+				background-color: var(--green);
 			}
 			&.widget-warning:before {
-				background-color: var(--warning);
+				background-color: var(--orange);
 			}
 			&.widget-danger:before {
 				background-color: var(--danger);

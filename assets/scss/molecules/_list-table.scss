@@ -1567,6 +1567,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	&.widefat {
 		background: none;
+		
+		tr:not(.extra-indent) {
+			td {
+				color: var(--main-text);
+				
+				&.column-_supplier {
+					color: var(--atum-text-color-var1);
+				}
+			}
+		}
 	}
 	
 	thead .item-heads, tfoot .item-heads {
@@ -1847,7 +1857,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		.set-meta {
 			cursor: pointer;
-			color:  var(--blue);
 			
 			&:hover {
 				color: var(--wp-link-hover);
@@ -2081,6 +2090,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		
+		
 	}
 	
 	.stock-selling-manager {
@@ -2209,7 +2219,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-_sku {
 					span {
 						font-size: 14px;
-						color: var(--blue);
 					}
 				}
 				
@@ -2288,6 +2297,20 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			height: auto !important;
 			border-left: 1px solid var(--main-border);
 			border-right: 1px solid var(--main-border);
+		}
+		
+		&.column-title {
+			.child-arrow, .atmi-multi-inventory {
+				color: var(--tertiary-var) !important;
+			}
+		}
+		
+		&.calc_mi_status {
+			.multi-inventory {
+				i {
+					color: var(--tertiary-var);
+				}
+			}
 		}
 		
 	}
