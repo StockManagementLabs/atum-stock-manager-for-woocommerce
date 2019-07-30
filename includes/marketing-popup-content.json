@@ -25,7 +25,7 @@
 	},
 	"version": {
 		"text"      : "Beta",
-		"text_color": "white",
+		"text_color": "var(--main-text-expanded)",
 		"background": "var(--secondary)"
 	},
 	"description": {

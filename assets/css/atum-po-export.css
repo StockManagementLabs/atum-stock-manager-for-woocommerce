@@ -308,8 +308,11 @@
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
   --secondary-hover-border: none;
-  --danger-hover-text: #FF4848;
-  --danger-hover-border: none;
+  --danger-hover-text: #fff;
+  --danger-hover-border: 1px solid transparent;
+  --success-hover-border: 1px solid transparent;
+  --warning-hover-border: 1px solid transparent;
+  --info-hover-border: 1px solid transparent;
   --wp-link-hover: #00B8DB;
 }
 

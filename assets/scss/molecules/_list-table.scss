@@ -118,7 +118,6 @@
 		color: var(--main-text-expanded);
 		text-transform: uppercase;
 		box-shadow: none;
-		border: none;
 		transition: .2s ease-in-out;
 		
 		@include tablet-max-wp{
@@ -127,7 +126,7 @@
 		
 		&:hover, &.active {
 			background-color: var(--secondary-hover);
-			color: var(--secondary-hover-text);
+			color: var(--main-text-expanded);
 			border: var(--secondary-hover-border);
 		}
 		
@@ -2690,18 +2689,21 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 .btn.btn-warning:hover {
 	background-color: var(--secondary-hover);
-	color: var(--secondary-hover-text);
+	//color: var(--secondary-hover-text);
 	border-radius: 5px;
+	border: var(--secondary-hover-border) !important;
 }
 .btn.btn-primary:hover {
 	background-color: var(--primary-hover);
-	color: var(--primary-hover-text);
+	//color: var(--primary-hover-text);
 	border-radius: 5px;
+	border: var(--primary-hover-border) !important;
 }
 .btn.btn-success:hover {
 	background-color: var(--tertiary-hover);
-	color: var(--tertiary-hover-text);
+	//color: var(--tertiary-hover-text);
 	border-radius: 5px;
+	border: var(--tertiary-hover-border) !important;
 }
 
 

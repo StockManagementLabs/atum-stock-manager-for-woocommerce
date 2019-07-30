@@ -388,8 +388,11 @@
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
   --secondary-hover-border: none;
-  --danger-hover-text: #FF4848;
-  --danger-hover-border: none;
+  --danger-hover-text: #fff;
+  --danger-hover-border: 1px solid transparent;
+  --success-hover-border: 1px solid transparent;
+  --warning-hover-border: 1px solid transparent;
+  --info-hover-border: 1px solid transparent;
   --wp-link-hover: #00B8DB;
 }
 
@@ -2155,6 +2158,7 @@ body .select2-container--default.select2-container--open .select2-dropdown {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -2240,12 +2244,13 @@ fieldset:disabled a.btn {
 .btn-primary {
   color: var(--wp-yiq-text-light);
   background-color: var(--primary);
+  border: var(--primary-hover-border) !important;
 }
 
 .btn-primary:hover {
-  color: var(--primary-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--primary-hover);
-  border-color: var(--primary-hover-border) !important;
+  border: var(--primary-hover-border) !important;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -2277,12 +2282,13 @@ fieldset:disabled a.btn {
 .btn-secondary {
   color: var(--wp-yiq-text-light);
   background-color: var(--secondary);
+  border: var(--secondary-hover-border) !important;
 }
 
 .btn-secondary:hover {
-  color: var(--secondary-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--secondary-hover);
-  border-color: var(--secondary-hover-border) !important;
+  border: var(--secondary-hover-border) !important;
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -2314,12 +2320,13 @@ fieldset:disabled a.btn {
 .btn-tertiary {
   color: var(--wp-yiq-text-light);
   background-color: var(--tertiary);
+  border: var(--tertiary-hover-border) !important;
 }
 
 .btn-tertiary:hover {
-  color: var(--tertiary-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--tertiary-hover);
-  border-color: var(--tertiary-hover-border) !important;
+  border: var(--tertiary-hover-border) !important;
 }
 
 .btn-tertiary:focus, .btn-tertiary.focus {
@@ -2351,12 +2358,13 @@ fieldset:disabled a.btn {
 .btn-success {
   color: var(--wp-yiq-text-light);
   background-color: var(--success);
+  border: var(--success-hover-border) !important;
 }
 
 .btn-success:hover {
-  color: var(--success-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--success-hover);
-  border-color: var(--success-hover-border) !important;
+  border: var(--success-hover-border) !important;
 }
 
 .btn-success:focus, .btn-success.focus {
@@ -2388,12 +2396,13 @@ fieldset:disabled a.btn {
 .btn-info {
   color: var(--wp-yiq-text-dark);
   background-color: var(--info);
+  border: var(--info-hover-border) !important;
 }
 
 .btn-info:hover {
-  color: var(--info-hover-text);
+  color: var(--wp-yiq-text-dark);
   background-color: var(--info-hover);
-  border-color: var(--info-hover-border) !important;
+  border: var(--info-hover-border) !important;
 }
 
 .btn-info:focus, .btn-info.focus {
@@ -2425,12 +2434,13 @@ fieldset:disabled a.btn {
 .btn-warning {
   color: var(--wp-yiq-text-light);
   background-color: var(--warning);
+  border: var(--warning-hover-border) !important;
 }
 
 .btn-warning:hover {
-  color: var(--warning-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--warning-hover);
-  border-color: var(--warning-hover-border) !important;
+  border: var(--warning-hover-border) !important;
 }
 
 .btn-warning:focus, .btn-warning.focus {
@@ -2462,12 +2472,13 @@ fieldset:disabled a.btn {
 .btn-danger {
   color: var(--wp-yiq-text-light);
   background-color: var(--danger);
+  border: var(--danger-hover-border) !important;
 }
 
 .btn-danger:hover {
-  color: var(--danger-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--danger-hover);
-  border-color: var(--danger-hover-border) !important;
+  border: var(--danger-hover-border) !important;
 }
 
 .btn-danger:focus, .btn-danger.focus {
@@ -2499,12 +2510,13 @@ fieldset:disabled a.btn {
 .btn-light {
   color: var(--wp-yiq-text-dark);
   background-color: var(--light);
+  border: var(--light-hover-border) !important;
 }
 
 .btn-light:hover {
-  color: var(--light-hover-text);
+  color: var(--wp-yiq-text-dark);
   background-color: var(--light-hover);
-  border-color: var(--light-hover-border) !important;
+  border: var(--light-hover-border) !important;
 }
 
 .btn-light:focus, .btn-light.focus {
@@ -2536,12 +2548,13 @@ fieldset:disabled a.btn {
 .btn-dark {
   color: var(--wp-yiq-text-light);
   background-color: var(--dark);
+  border: var(--dark-hover-border) !important;
 }
 
 .btn-dark:hover {
-  color: var(--dark-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--dark-hover);
-  border-color: var(--dark-hover-border) !important;
+  border: var(--dark-hover-border) !important;
 }
 
 .btn-dark:focus, .btn-dark.focus {
@@ -2573,12 +2586,13 @@ fieldset:disabled a.btn {
 .btn-purple-pl {
   color: var(--wp-yiq-text-light);
   background-color: var(--purple-pl);
+  border: var(--purple-pl-hover-border) !important;
 }
 
 .btn-purple-pl:hover {
-  color: var(--purple-pl-hover-text);
+  color: var(--wp-yiq-text-light);
   background-color: var(--purple-pl-hover);
-  border-color: var(--purple-pl-hover-border) !important;
+  border: var(--purple-pl-hover-border) !important;
 }
 
 .btn-purple-pl:focus, .btn-purple-pl.focus {
@@ -5155,7 +5169,6 @@ ul.atum_order_notes li .note_content::after {
   text-transform: uppercase;
   -webkit-box-shadow: none;
           box-shadow: none;
-  border: none;
   -webkit-transition: .2s ease-in-out;
   transition: .2s ease-in-out;
 }
@@ -5168,7 +5181,7 @@ ul.atum_order_notes li .note_content::after {
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
   background-color: var(--secondary-hover);
-  color: var(--secondary-hover-text);
+  color: var(--main-text-expanded);
   border: var(--secondary-hover-border);
 }
 
@@ -7862,20 +7875,20 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 
 .btn.btn-warning:hover {
   background-color: var(--secondary-hover);
-  color: var(--secondary-hover-text);
   border-radius: 5px;
+  border: var(--secondary-hover-border) !important;
 }
 
 .btn.btn-primary:hover {
   background-color: var(--primary-hover);
-  color: var(--primary-hover-text);
   border-radius: 5px;
+  border: var(--primary-hover-border) !important;
 }
 
 .btn.btn-success:hover {
   background-color: var(--tertiary-hover);
-  color: var(--tertiary-hover-text);
   border-radius: 5px;
+  border: var(--tertiary-hover-border) !important;
 }
 
 .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
