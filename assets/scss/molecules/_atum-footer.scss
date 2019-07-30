@@ -63,7 +63,11 @@
 		
 		&.no-style {
 			.footer-atum-text {
-				color: var(--gray-500);
+				color: var(--gray-700);
+				
+				span, .wc-rating-link {
+					color: var(--primary-var-dark);
+				}
 			}
 		}
 		
