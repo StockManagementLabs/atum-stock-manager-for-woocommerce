@@ -61,6 +61,12 @@
 			}
 		}
 		
+		&.no-style {
+			.footer-atum-text {
+				color: var(--gray-500);
+			}
+		}
+		
 		.footer-atum-buttons {
 			display: flex;
 			align-items: center;

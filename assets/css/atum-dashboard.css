@@ -5650,7 +5650,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .statistics-widget .chart-legend .legend-switch #products-chart ~ label {
-  color: var(--dash-stats-data-widget-primary);
+  color: var(--primary);
 }
 
 @media all and (max-width: 768px) {

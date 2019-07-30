@@ -4270,6 +4270,10 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   color: var(--atum-footer-link);
 }
 
+#wpfooter .footer-box.no-style .footer-atum-text {
+  color: var(--gray-500);
+}
+
 #wpfooter .footer-box .footer-atum-buttons {
   display: -webkit-box;
   display: -ms-flexbox;
