@@ -40,8 +40,14 @@
 		{
 			"text"      : "More info",
 			"url"       : "https://www.stockmanagementlabs.com/addons/atum-export-pro",
-			"class"     : "btn btn-warning",
-			"css"       : "width:130px;height:30px;font-size:12px;font-weight:300;border-radius:5px;padding:0;"
+			"class"     : "btn btn-sm btn-warning",
+			"css"       : "width:130px"
+		},
+		{
+			"text"      : "Live demo",
+			"url"       : "https://demo.export-pro.stockmanagementlabs.com/",
+			"class"     : "btn btn-sm btn-outline-warning",
+			"css"       : "width:130px;"
 		}
 	],
 	"transient_key": "atum-export-pro-release"
