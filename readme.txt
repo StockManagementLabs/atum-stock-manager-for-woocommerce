@@ -1,13 +1,13 @@
 === ATUM Inventory Management for WooCommerce ===
 
-Contributors: stockmanagementlabs, salvamb, japiera, agimeno82
+Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, miguelangelberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
 Tested up to: 5.2.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.6.4
-Stable tag: 1.5.8.10
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -200,14 +200,32 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
-`1.5.8.10`
+`1.6.0`
 
-*2019-07-15*
+*2019-07-31*
+
+**Features**
+
+* Added theme switcher to settings for selecting default ATUM UI's colors.
+* 3 default themes available (Branded Mode, Dark Mode and High Contrast Mode).
+* Allow customizing colors for each theme.
+* Allow resetting customized colors to default values.
+* Allow distinct users to save their own color scheme independently.
+* Added a new module to enable/disable the new Visual Settings feature.
+* Added a new capability ('edit_visual_settings') to manage the user roles that are allowed to edit the Visual Settings.
+
+**Changes**
+
+* Updated icons font.
+* Updated npm packages.
+* Add calculated class to compounded stocks in Stock Central.
+* Added new marketing popup to announce the new ATUM Export add-on release.
 
 **Fixes**
 
 * Fixed conflicts with ATUM's datepickers and 3rd party plugins.
 * CSS fixes.
+* Fixed tsconfig.json to support TypeScript 3.5.3.
 * Refactory.
 
 ---
