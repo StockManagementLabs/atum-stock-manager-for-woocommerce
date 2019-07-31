@@ -349,7 +349,7 @@ class AtumColors {
 			--dash-statistics-chart-type-selected-bg: $bg_1_color;
 			--dash-statistics-chart-type-selected-text: {$this->colors['secondary_color']};
 			--dash-statistics-legend-switch-bg: transparent;
-			--dash-stats-data-widget-primary: {$this->colors['primary_color_light']};
+			--dash-stats-data-widget-primary: {$this->colors['primary_color']};
 			--dash-stats-data-widget-success: {$this->colors['tertiary_color']};
 			--dash-subscription-input: transparent;
 			--dash-video-title: {$this->colors['text_color']};
@@ -376,7 +376,7 @@ class AtumColors {
 			--primary-var-text2: {$this->colors['text_color_2']};
 			--secondary: {$this->colors['secondary_color']}; 
 			--secondary-dark: {$this->colors['secondary_color']};
-			--secondary-hover: rgba({$this->colors['secondary_color_rgb']}, 0.7); 
+			--secondary-hover: rgba({$this->colors['secondary_color_rgb']}, 0.7);
 			--secondary-hover-border: 1px solid transparent;
 			--secondary-hover-text: {$this->colors['text_color_expanded']};
 			--secondary-light: {$this->colors['secondary_color']};
@@ -393,7 +393,7 @@ class AtumColors {
 			--tertiary-hover-border: 1px solid transparent;
 			--tertiary-light: {$this->colors['tertiary_color_light']};
 			--warning: {$this->colors['secondary_color']};
-			--warning-hover: rgba({$this->colors['secondary_color_rgb']}, 0.7); 
+			--warning-hover: rgba({$this->colors['secondary_color_rgb']}, 0.7);
 			--warning-hover-border: 1px solid transparent;
 			--warning-hover-text: {$this->colors['text_color_expanded']};
 			--white: {$this->colors['white']};
@@ -905,6 +905,21 @@ class AtumColors {
 		$color           = isset( $visual_settings[ $color_name ] ) ? $visual_settings[ $color_name ] : false;
 
 		return $color;
+
+	}
+
+	/**
+	 * Get the default value for a color
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $color_name
+	 *
+	 * @return string
+	 */
+	public function get_default_color( $color_name ) {
+
+		return $this->defaults[ $color_name ];
 
 	}
 

@@ -383,7 +383,7 @@
   --atum-table-filter-dropdown: #adb5bd;
   --atum-footer-title: #27283B;
   --atum-footer-link: #0073AA;
-  --atum-footer-text: #555d66;
+  --atum-footer-text: #495057;
   --primary-hover-text: #00B8DB;
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
@@ -3294,8 +3294,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
-  color: var(--main-text);
-  background-color: var(--atum-table-bg2);
 }
 
 .swal2-container .swal2-modal button.btn-sm {
@@ -4268,6 +4266,14 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 #wpfooter .footer-box .footer-atum-text .wc-rating-link {
   text-decoration: none;
   color: var(--atum-footer-link);
+}
+
+#wpfooter .footer-box.no-style .footer-atum-text {
+  color: var(--gray-700);
+}
+
+#wpfooter .footer-box.no-style .footer-atum-text span, #wpfooter .footer-box.no-style .footer-atum-text .wc-rating-link {
+  color: var(--primary-var-dark);
 }
 
 #wpfooter .footer-box .footer-atum-buttons {

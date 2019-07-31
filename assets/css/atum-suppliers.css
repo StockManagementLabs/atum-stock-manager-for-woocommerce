@@ -304,7 +304,7 @@
   --atum-table-filter-dropdown: #adb5bd;
   --atum-footer-title: #27283B;
   --atum-footer-link: #0073AA;
-  --atum-footer-text: #555d66;
+  --atum-footer-text: #495057;
   --primary-hover-text: #00B8DB;
   --primary-hover-border: none;
   --secondary-hover-text: #EFAF00;
@@ -2972,6 +2972,14 @@ input[type="button"].btn-block {
 #wpfooter .footer-box .footer-atum-text .wc-rating-link {
   text-decoration: none;
   color: var(--atum-footer-link);
+}
+
+#wpfooter .footer-box.no-style .footer-atum-text {
+  color: var(--gray-700);
+}
+
+#wpfooter .footer-box.no-style .footer-atum-text span, #wpfooter .footer-box.no-style .footer-atum-text .wc-rating-link {
+  color: var(--primary-var-dark);
 }
 
 #wpfooter .footer-box .footer-atum-buttons {

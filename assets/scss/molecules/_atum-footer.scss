@@ -61,6 +61,16 @@
 			}
 		}
 		
+		&.no-style {
+			.footer-atum-text {
+				color: var(--gray-700);
+				
+				span, .wc-rating-link {
+					color: var(--primary-var-dark);
+				}
+			}
+		}
+		
 		.footer-atum-buttons {
 			display: flex;
 			align-items: center;
