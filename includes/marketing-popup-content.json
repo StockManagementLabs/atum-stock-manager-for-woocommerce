@@ -15,7 +15,7 @@
 	},
 	"images": {
 		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/atum-icon-export-pro.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/label-register.png"
+		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/07/label-out-now.png"
 	},
 	"title": {
 		"text"      : "<strong>ATUM</strong><span>ExportPRO</span>",
@@ -24,12 +24,12 @@
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "Beta",
+		"text"      : "v1.0.0",
 		"text_color": "var(--main-text-expanded)",
 		"background": "var(--secondary)"
 	},
 	"description": {
-		"text"           : "The most advanced Export tool ever released, now with free Import to complete the package. Register quick to be the first to receive the download link. Install the beta in your staging site and give it a full test run.",
+		"text"           : "Finally HERE! The most advanced Export tool ever released and soon with free Import to complete the package. Generate manual or automated exports of almost any data in your stores.",
 		"text_color"     : "#adb5bd",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -38,15 +38,11 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Go to registration form",
-			"url"       : "https://www.stockmanagementlabs.com/beta-registration/",
-			"class"     : "btn btn-secondary",
-			"css"       : "width: 213px;height: 30px; font-size:12px; font-weight: 300; border-radius: 5px; padding: 0;"
+			"text"      : "More info",
+			"url"       : "https://www.stockmanagementlabs.com/addons/atum-export-pro",
+			"class"     : "btn btn-warning",
+			"css"       : "width:130px;height:30px;font-size:12px;font-weight:300;border-radius:5px;padding:0;"
 		}
 	],
-	"footer_notice" : {
-		"text"    : "WE WILL GRANT <strong>50% SUBSCRIPTION COUPON</strong> TO ALL COOPERATIVE BETA TESTERS!",
-		"bg_color": "rgba(255, 255, 255, 0.6)"
-	},
-	"transient_key": "atum-export-pro-beta"
+	"transient_key": "atum-export-pro-release"
 }

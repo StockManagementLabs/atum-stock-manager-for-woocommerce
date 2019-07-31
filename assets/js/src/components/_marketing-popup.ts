@@ -71,7 +71,7 @@ export default class MarketingPopup {
 				if (response.success === true) {
 					
 					const popupSettings: MPopupSettings = response.data;
-					console.log(popupSettings);
+					//console.log(popupSettings);
 					
 					let descriptionColor: string    = popupSettings.description.text_color ? `color:${ popupSettings.description.text_color };` : '',
 					    descriptionFontSize: string = popupSettings.description.text_size ? `font-size:${ popupSettings.description.text_size };` : '',
