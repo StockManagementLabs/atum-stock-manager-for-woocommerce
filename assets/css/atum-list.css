@@ -3294,8 +3294,6 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
-  color: var(--main-text);
-  background-color: var(--atum-table-bg2);
 }
 
 .swal2-container .swal2-modal button.btn-sm {
