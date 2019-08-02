@@ -16,6 +16,7 @@
 		--#{$color}: #{$value};
 		--#{$color}-hover: #{rgba($value,0.6)};
 		--#{$color}-shadow: #{rgba($value, 0.2)};
+		--#{$color}-hover-border: none;
 	}
 	
 	@each $color, $value in $wp-colors {
