@@ -551,11 +551,11 @@ final class Helpers {
 			$query = "
 				SELECT $query_columns_str
 				FROM `$wpdb->posts` AS `orders`
-			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)	
-			    INNER JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)		  
-		        $query_joins_str	        
+			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
+			    INNER JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
+		        $query_joins_str
 				WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_value` $products_where
-			    AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')	
+			    AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')
 				GROUP BY `mt_id`.`meta_value`
 				HAVING (`QTY` IS NOT NULL);
 			";

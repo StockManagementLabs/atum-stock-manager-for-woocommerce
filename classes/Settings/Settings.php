@@ -14,6 +14,7 @@ namespace Atum\Settings;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
@@ -580,7 +581,7 @@ class Settings {
 			
 			// Only accept settings defined.
 			foreach ( $this->defaults as $key => $atts ) {
-				
+
 				// Save only current section.
 				if (
 					! empty( $this->tabs[ $input['settings_section'] ] ) &&
@@ -592,8 +593,13 @@ class Settings {
 						unset( $this->options[ $key ] );
 					}
 
+					// Remove transients if this config changes.
+					if ( ( 'sale_days' === $key || 'sales_last_ndays' === $key ) && $input[ $key ] !== $this->options[ $key ] ) {
+						AtumCache::delete_transients();
+					}
+
 					$this->options[ $key ] = $this->sanitize_option( $key, $input, $atts );
-					
+
 				}
 			}
 			

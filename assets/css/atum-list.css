@@ -7561,6 +7561,7 @@ table.atum-list-table tr.active-row .set-meta, table.atum-list-table tr.active-r
 
 table.atum-list-table tr .set-meta, .floatThead-container tr .set-meta, .inbound-stock-list tr .set-meta, table.wp-list-table tr .set-meta {
   cursor: pointer;
+  color: var(--primary);
 }
 
 table.atum-list-table tr .set-meta:hover, .floatThead-container tr .set-meta:hover, .inbound-stock-list tr .set-meta:hover, table.wp-list-table tr .set-meta:hover {

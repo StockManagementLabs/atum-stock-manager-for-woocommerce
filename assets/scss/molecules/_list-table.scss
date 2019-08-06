@@ -1855,7 +1855,9 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		.set-meta {
+			
 			cursor: pointer;
+			color: var(--primary);
 			
 			&:hover {
 				color: var(--wp-link-hover);
