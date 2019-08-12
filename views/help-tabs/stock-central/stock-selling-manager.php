@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || die;
 	<tbody>
 		<tr>
 			<td><strong><?php esc_html_e( 'Sales Last X Days', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( 'Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last X days (we do not include the current day sales). You can change the number of the days by simply clicking on its blue number.', ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( 'Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last X days (sold products are items included in \'completed\' and \'processing\' orders only. Ordered items, but pending payment will show in the \'Stock on Hold\' column instead). You can change the number of the days by simply clicking on its blue number.', ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ) ?></strong></td>
