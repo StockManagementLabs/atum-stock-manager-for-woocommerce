@@ -50,14 +50,17 @@ export default class SalesLastDays {
 			this.router.updateHash();
 			
 		});
-		
-		$selectDays.find('.textvalue').click( (evt: JQueryEventObject) => {
-			
-			$(evt.currentTarget).hide();
-			this.enhancedSelect.doSelect2( $selectDays.find('select') );
-			
-		});
-		
+        setTimeout(() =>{
+            $selectDays.find('.textvalue').click( (evt: JQueryEventObject) => {
+
+                evt.preventDefault();
+                evt.stopPropagation();
+                $(evt.currentTarget).hide();
+                this.enhancedSelect.doSelect2( $selectDays.find('select') );
+
+            });
+        }, 100);
+
 	}
 	
 }
