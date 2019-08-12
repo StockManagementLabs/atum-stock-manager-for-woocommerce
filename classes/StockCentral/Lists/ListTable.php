@@ -292,6 +292,9 @@ class ListTable extends AtumListTable {
 	 */
 	public static function get_table_columns() {
 
+		// Can be called statically so it should need the sale_days before initializing the list.
+		self::$sale_days = Helpers::get_sold_last_days_option();
+
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
