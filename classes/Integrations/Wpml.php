@@ -163,7 +163,7 @@ class Wpml {
 			
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
-			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate'), 111, 4 );
+			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
 			
 		}
 
@@ -372,13 +372,13 @@ class Wpml {
 		
 		return $args;
 	}
-	
+
 	/**
 	 * Add custom prices to sale price
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param array $args
+	 * @param array       $args
 	 * @param \WC_Product $product
 	 *
 	 * @return array
@@ -615,7 +615,7 @@ class Wpml {
 			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) : ''; // WPCS: CSRF ok.
 		}
 		else {
-			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : '';
+			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : ''; // WPCS: CSRF ok.
 		}
 
 		return $prices;
@@ -845,14 +845,14 @@ class Wpml {
 	 *
 	 * @since 1.5.8.4
 	 *
-	 * @param integer $master_post_id post id where the duplication was called
+	 * @param integer $master_post_id post id where the duplication was called.
 	 * @param string  $lang
 	 * @param array   $postarr
-	 * @param integer $id             New post id
+	 * @param integer $id             New post id.
 	 */
-	public function icl_make_duplicate( $master_post_id, $lang, $postarr, $id  ) {
+	public function icl_make_duplicate( $master_post_id, $lang, $postarr, $id ) {
 		
-		if( 'product' === get_post_type( $master_post_id ) ) {
+		if ( 'product' === get_post_type( $master_post_id ) ) {
 			
 			$master_post_id = $this->wpml->products->get_original_product_id( $master_post_id );
 			
@@ -868,7 +868,7 @@ class Wpml {
 					
 					$original_product_id = $this->wpml->products->get_original_product_id( $child_id );
 					
-					Helpers::duplicate_atum_product( $original_product_id, $child_id);
+					Helpers::duplicate_atum_product( $original_product_id, $child_id );
 				}
 				
 			}
@@ -976,7 +976,7 @@ class Wpml {
 				$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 				
 				$wpdb->query( "DELETE FROM $table
-						WHERE product_id IN( $translations_ids_str)");
+						WHERE product_id IN( $translations_ids_str)"); // WPCS: unprepared SQL ok.
 			}
 		}
 		
