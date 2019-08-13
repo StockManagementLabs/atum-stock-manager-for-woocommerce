@@ -2785,7 +2785,7 @@ final class Helpers {
 
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', array() );
+		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
 		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
 
 		$wpdb->query( "
