@@ -159,6 +159,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.0.1`
+
+*2019-08-16*
+
+**Changes**
+
+* Remove the sale days transient when changing the Sale Days number of days value.
+* Change sales last days help description to adjust it to last changes.
+* Add filter to Helper to duplicate ATUM data function to allow other plugins add fields.
+
+
+**Fixes**
+
+* CSS fixes.
+* Fixed Stock Central doesn't show sales "N" days in the column header.
+* Fixed change sales "N" days in Stock Central doesn't work.
+* Fixed Helper to duplicate ATUM data fails if Product Levels is not installed.
+* Refactory
+
+---
+
 `1.6.0`
 
 *2019-07-31*

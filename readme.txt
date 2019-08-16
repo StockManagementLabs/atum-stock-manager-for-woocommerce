@@ -7,7 +7,7 @@ Tested up to: 5.2.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.6.4
-Stable tag: 1.6.0
+Stable tag: 1.6.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,32 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**New and Quicker, Redesigned ATUM 1.5** now fully compatible with soon to be released [WooCommerce Custom Product Tables](https://woocommerce.wordpress.com/2018/07/17/woocommerce-custom-product-tables-beta/) feature.
+**With The Advanced [ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/) comes ATUM 1.6** - yet the best, faster and more user friendly ATUM Inventory Management for WooCommerce.
+
+**NEW Colour Modes added to improve your management experience**
+
+= AVAILABLE PREMIUM ADD-ONS =
+
+[Product Levels - Bill Of Materials Management](https://www.stockmanagementlabs.com/addons/atum-product-levels/)
+
+A bill of materials (also known as a BOM or bill of material) is a broad list of items, product parts, raw materials, assemblies, and other components mandatory to create a product. Even the guidance or direction needed for preparation is understood to be part of BOM. We interpret the bill of materials as the recipe for creating a final product. To start a manufacturing process, every entrepreneur no matter what trade has to start by establishing a bill of materials (BOM).
+
+The current version of Product Levels introduces the first two levels of BOM. ATUM inventory management for WooCommerce lets you set company\’s Raw Materials and Product Parts. Retailers, distributors, wholesalers, standard manufacturers, or any other businesses that need to take complete control over their growth will find this premium add-on irreplaceable. Our experienced team of developers and designers bring new features on monthly basis. Many other components of the manufacturing process are still to come. Read the full list of currently included functions below.
+
+[Multi-Inventory for WooCommerce](https://www.stockmanagementlabs.com/addons/atum-multi-inventory/)
+
+WooCommerce, as the most popular WordPress e-commerce solution, did not include an option for business selling from different warehouses or using several suppliers. Up until now, shop owners have had a choice to either find a 3rd party solution or to have one built specifically for their site. Neither solution is ideal unless the shop has a significant budget to cover the cost.
+
+ATUM\’s Multi-Inventory premium add-on is trying to remove the above issues and brings advanced features for a fracture of the cost charged by 3rd party service. Now you, as a shop owner have the option to add as many inventory records per product as your business needs. What is even better, the system is trying to push the editing boundaries far beyond the usual standard. Scroll below to find out about all existing and soon to come features or even try the demo FREE of charge.
+
+[ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
+
+Generate manual or automated exports of almost any data in your stores. We believe the most advanced tool of its kind with XML, CSV, and JSON exports to be available at launch. If it was not enough, we are adding an import tool as a bonus.
+
+Exports of data are done automatically instead of copying and pasting manually. The ability to export data has an enormous economic advantage. Such data can then be used in further business controlling systems or in other business software.
+
+
+= FREE VERSION DESCRIPTION =
 
 ATUM is now the most advanced FREE WooCommerce inventory management tool in the WordPress plugins repository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
@@ -197,6 +222,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.0.1`
+
+*2019-08-16*
+
+**Changes**
+
+* Remove the sale days transient when changing the Sale Days number of days value.
+* Change sales last days help description to adjust it to last changes.
+* Add filter to Helper to duplicate ATUM data function to allow other plugins add fields.
+
+
+**Fixes**
+
+* CSS fixes.
+* Fixed Stock Central doesn't show sales "N" days in the column header.
+* Fixed change sales "N" days in Stock Central doesn't work.
+* Fixed Helper to duplicate ATUM data fails if Product Levels is not installed.
+* Refactory
 
 ---
 
