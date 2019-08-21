@@ -2917,6 +2917,11 @@ body .select2-container--default .select2-search--inline .select2-search__field 
           appearance: textfield;
 }
 
+body .select2-container--default .select2-results__option--highlighted {
+  color: var(--white) !important;
+  background-color: var(--atum-menu-text-highlight);
+}
+
 body .select2-container--default .select2-results__option[role=group] {
   padding: 0;
 }
@@ -2926,7 +2931,7 @@ body .select2-container--default .select2-results__option[aria-disabled=true] {
 }
 
 body .select2-container--default .select2-results__option[aria-selected=true] {
-  color: var(--white);
+  color: var(--white) !important;
   background-color: var(--atum-menu-text-highlight);
 }
 

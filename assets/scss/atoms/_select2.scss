@@ -506,7 +506,12 @@ body {
 					appearance: textfield;
 				}
 			}
-			
+		
+		.select2-results__option--highlighted {
+			color: var(--white) !important;
+			background-color: var(--atum-menu-text-highlight);
+		}
+		
 		.select2-results__option {
 			
 			&[role=group] {
@@ -518,7 +523,7 @@ body {
 			}
 			
 			&[aria-selected=true] {
-				color: var(--white);
+				color: var(--white) !important;
 				background-color: var(--atum-menu-text-highlight);
 			}
 			
@@ -572,7 +577,7 @@ body {
 			display: block;
 			padding: 6px;
 		}
-			
+	
 	}
 	
 	.select2-container--classic {
