@@ -2801,5 +2801,46 @@ final class Helpers {
 			FROM $atum_product_data_table WHERE product_id = $original_id;
 		" ); // WPCS: unprepared SQL ok.
 	}
+
+	/**
+	 * Checks if the current request is a WP REST API request.
+	 * As we don't have an official coditional tag yet, we have to use our own
+	 *
+	 * Case #1: After WP_REST_Request initialisation
+	 * Case #2: Support "plain" permalink settings
+	 * Case #3: It can happen that WP_Rewrite is not yet initialized,
+	 *          so do this (wp-settings.php)
+	 * Case #4: URL Path begins with wp-json/ (your REST prefix)
+	 *          Also supports WP installations in subfolders
+	 *
+	 * @since   1.6.0.2
+	 * @returns boolean
+	 * @author  matzeeable
+	 * @link    https://wordpress.stackexchange.com/questions/221202/does-something-like-is-rest-exist
+	 */
+	public static function is_rest_request() {
+
+		$prefix = rest_get_url_prefix();
+		if (
+			defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
+			|| isset( $_GET['rest_route'] ) // (#2)
+			&& strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 ) === 0
+		) {
+			return TRUE;
+		}
+
+		// (#3)
+		global $wp_rewrite;
+		if ( $wp_rewrite === NULL ) {
+			$wp_rewrite = new \WP_Rewrite();
+		}
+
+		// (#4)
+		$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
+		$current_url = wp_parse_url( add_query_arg( [] ) );
+
+		return strpos( $current_url['path'], $rest_url['path'], 0 ) === 0;
+
+	}
 	
 }
