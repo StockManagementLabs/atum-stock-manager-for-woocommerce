@@ -46,12 +46,13 @@ final class AtumCache {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $name  The cache name.
-	 * @param mixed  $args  Optional. The args to hash.
+	 * @param string $name   The cache name.
+	 * @param mixed  $args   Optional. The args to hash.
+	 * @param string $prefix Optional. The prefix to use for the key.
 	 *
 	 * @return string
 	 */
-	public static function get_cache_key( $name, $args = array() ) {
+	public static function get_cache_key( $name, $args = array(), $prefix = ATUM_PREFIX ) {
 
 		if ( ! is_array( $args ) ) {
 			$args = (array) $args;
@@ -61,7 +62,7 @@ final class AtumCache {
 			$item = (string) $item;
 		} );
 		
-		return self::prepare_key( $name, $args );
+		return self::prepare_key( $name, $args, $prefix );
 
 	}
 
@@ -169,18 +170,19 @@ final class AtumCache {
 	 *
 	 * @since 0.0.3
 	 *
-	 * @param string $name  The transient name.
-	 * @param mixed  $args  Optional. The args to hash.
+	 * @param string $name   The transient name.
+	 * @param mixed  $args   Optional. The args to hash.
+	 * @param string $prefix Optional. The prefix to use for the key.
 	 *
 	 * @return string
 	 */
-	public static function get_transient_key( $name, $args = array() ) {
+	public static function get_transient_key( $name, $args = array(), $prefix = ATUM_PREFIX ) {
 
 		if ( ! is_array( $args ) ) {
 			$args = (array) $args;
 		}
 
-		return self::prepare_key( $name, $args );
+		return self::prepare_key( $name, $args, $prefix );
 	}
 
 	/**
@@ -220,16 +222,17 @@ final class AtumCache {
 	 *
 	 * @since 0.1.5
 	 *
-	 * @param string $type  Optional. If specified will remove specific type of ATUM transients.
+	 * @param string $type   Optional. If specified will remove specific type of ATUM transients.
+	 * @param string $prefix Optional. The prefix for the transients that should be deleted.
 	 *
 	 * @return int|bool The number of transients deleted on success or false on error
 	 */
-	public static function delete_transients( $type = '' ) {
+	public static function delete_transients( $type = '', $prefix = ATUM_PREFIX ) {
 
 		global $wpdb;
 
 		$type         = esc_attr( $type );
-		$transient_id = $type ?: ATUM_PREFIX;
+		$transient_id = $type ?: $prefix;
 
 		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '_transient_{$transient_id}%'" ); // WPCS: unprepared SQL ok.
 	}
@@ -239,14 +242,15 @@ final class AtumCache {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $name  The cache name.
-	 * @param array  $args  Optional. The args to hash.
+	 * @param string $name   The cache name.
+	 * @param array  $args   The args to hash.
+	 * @param string $prefix Optional. The prefix to use for the key.
 	 *
 	 * @return string
 	 */
-	private static function prepare_key( $name, $args ) {
+	private static function prepare_key( $name, $args, $prefix = ATUM_PREFIX ) {
 
-		$key = 0 !== strpos( $name, ATUM_PREFIX ) ? ATUM_PREFIX . $name : $name;
+		$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
 
 		if ( ! empty( $args ) ) {
 
