@@ -1,13 +1,13 @@
 === ATUM Inventory Management for WooCommerce ===
 
-Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, miguelangelberebel
+Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.2.2
+Tested up to: 5.2.3
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.7.0
-Stable tag: 1.6.0.1
+Stable tag: 1.6.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -225,6 +225,23 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.0.2`
+
+*2019-09-05*
+
+**Changes**
+
+* Added new helper to detect REST API requests.
+* Updated JS dependencies.
+* Updated gulpfile.
+* Improved AtumCache key generation to allow distinct prefixes.
+
+**Fixes**
+
+* Fixed lost color variable for Select2 components.
+
+---
+
 `1.6.0.1`
 
 *2019-08-16*
@@ -234,7 +251,6 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Remove the sale days transient when changing the Sale Days number of days value.
 * Change sales last days help description to adjust it to last changes.
 * Add filter to Helper to duplicate ATUM data function to allow other plugins add fields.
-
 
 **Fixes**
 
