@@ -35,6 +35,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         ),
         'D' => 
         array (
+            'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
         ),
         'A' => 
@@ -75,6 +76,10 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Madcoda\\Youtube\\' => 
         array (
             0 => __DIR__ . '/..' . '/madcoda/php-youtube-api/src',
+        ),
+        'Doctrine\\Instantiator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
         'DeepCopy\\' => 
         array (
