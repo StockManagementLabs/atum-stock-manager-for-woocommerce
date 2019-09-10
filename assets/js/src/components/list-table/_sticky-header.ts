@@ -36,9 +36,7 @@ export default class StickyHeader {
 				$('.jspContainer').height($('.jspPane').height());
 				
 				// Hide search dropdown on sticky.
-				if (this.settings.get('searchDropdown') === 'yes') {
-					$('#search_column_dropdown').hide();
-				}
+				this.globals.$searchColumnDropdown.hide();
 				
 				// Hide on mobile view.
 				if ($('#wpadminbar').css('position') === 'absolute') {

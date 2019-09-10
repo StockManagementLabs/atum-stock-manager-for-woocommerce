@@ -47,7 +47,7 @@ export let Utils = {
 		
 	},
 	
-	filterByData($elem: JQuery, prop: string, val: any) {
+	filterByData($elem: JQuery, prop: string, val: any): JQuery {
 		
 		if (typeof val === 'undefined') {
 			return $elem.filter( (index: number, elem: Element) => {
