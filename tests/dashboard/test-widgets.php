@@ -143,7 +143,8 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	}
 
 	public function test_get_items_in_stock() {
-		//TODO: Aquí tamos
+		$stats = WidgetHelpers::get_items_in_stock();
+		$this->assertIsString( $stats );
 	}
 
 	public function get_time_window() {

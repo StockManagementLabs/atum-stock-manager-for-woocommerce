@@ -9,7 +9,9 @@
 		"php": ">=5.4.0",
 		"mpdf/mpdf": "^8.0.0",
 		"madcoda/php-youtube-api": "^1.2",
-		"jimmiw/php-time-ago": "^2.0"
+		"jimmiw/php-time-ago": "^2.0",
+		"symfony/dom-crawler": "^4.3",
+		"symfony/css-selector": "^4.3"
 	},
 	"require-dev": {
 	},

@@ -43,11 +43,11 @@ class UpdaterTest extends WP_UnitTestCase {
 					$response = ob_get_clean();
 
 					$html = new Crawler( $response );
-					$this->assertTrue($response);
+					$this->assertTrue( $response );
 
 					var_dump($instance);
 				} else {
-					$this->assertFalse($addon_info);
+					$this->assertFalse( $addon_info );
 				}
 			}
 		}

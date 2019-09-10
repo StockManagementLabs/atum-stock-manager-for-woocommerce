@@ -32,7 +32,6 @@ class AtumColorsTest extends WP_UnitTestCase {
 	public function test_get_high_contrast_mode_colors() {
 		$instance = AtumColors::get_instance();
 		$colors = $instance->get_branded_mode_colors();
-		print_r($colors);
 		$this->assertGreaterThan( 100, strlen($colors) );
 	}
 
