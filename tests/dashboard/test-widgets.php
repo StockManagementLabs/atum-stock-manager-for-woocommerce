@@ -8,7 +8,14 @@
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
 use Symfony\Component\DomCrawler\Crawler;
-
+use Atum\Dashboard\Widgets\CurrentStockValue;
+use Atum\Dashboard\Widgets\LostSales;
+use Atum\Dashboard\Widgets\Orders;
+use Atum\Dashboard\Widgets\PromoSales;
+use Atum\Dashboard\Widgets\Sales;
+use Atum\Dashboard\Widgets\Statistics;
+use Atum\Dashboard\Widgets\StockControl;
+use Atum\Dashboard\Widgets\Videos;
 
 /**
  * Sample test case.
@@ -143,10 +150,107 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	}
 
 	public function test_get_items_in_stock() {
-		$stats = WidgetHelpers::get_items_in_stock();
-		$this->assertIsString( $stats );
+		//Product needed
+		$p = $this->factory->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+
+		if( $p > 0 ) {
+			$stats = WidgetHelpers::get_items_in_stock();
+
+			$this->assertIsArray( $stats );
+			$this->assertArrayHasKey( 'items_stocks_counter', $stats );
+			$this->assertArrayHasKey( 'items_purcharse_price_total', $stats );
+			$this->assertArrayHasKey( 'items_without_purcharse_price', $stats );
+		} else {
+			$this->assertFalse( true, 'Product was not created.' );
+		}
+
 	}
 
+	public function test_current_stock_value_widget() {
+		$widget = new CurrentStockValue();
+		//Product needed
+		$this->factory->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertEquals( 1, $html->filter( 'div.current-stock-value-filters' )->count() );
+	}
+
+	public function test_lost_sales_widget() {
+		$widget = new LostSales();
+		//Product needed
+		$this->factory->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertEquals( 1, $html->filter( 'div.stats-data-widget' )->count() );
+	}
+
+	public function test_promo_sales_widget() {
+		$widget = new PromoSales();
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertEquals( 1, $html->filter( 'div.stats-data-widget' )->count() );
+	}
+
+	public function test_orders_widget() {
+		$widget = new Orders();
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertEquals( 1, $html->filter( 'div.stats-data-widget' )->count() );
+	}
+
+	public function test_statistics_widget() {
+		$widget = new Statistics();
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertEquals( 1, $html->filter( 'div.statistics-widget' )->count() );
+	}
+
+	public function test_stock_control_widget() {
+		$widget = new StockControl();
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertEquals( 1, $html->filter( 'div.stock-control-widget' )->count() );
+	}
+
+	public function test_videos_widget() {
+		$widget = new Videos();
+
+		ob_start();
+		$widget->render();
+		$response = ob_get_clean();
+
+		$html = new Crawler( $response );
+		$this->assertGreaterThan( 0, $html->filter( 'div.video-details' )->count() );
+	}
+
+
+	/**
+	 * Aux methods.
+	 */
 	public function get_time_window() {
 		return [ "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week" ];
 	}
