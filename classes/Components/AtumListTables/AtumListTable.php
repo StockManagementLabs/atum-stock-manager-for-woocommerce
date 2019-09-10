@@ -1286,7 +1286,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 		}
 
-		if ( 0 < $stock ) {
+		if ( 0 !== $stock ) {
 			$this->increase_total( '_stock', $stock );
 		}
 
