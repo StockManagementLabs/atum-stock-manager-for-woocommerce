@@ -17,14 +17,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         array (
             'setasign\\Fpdi\\' => 14,
         ),
-        'p' => 
-        array (
-            'phpDocumentor\\Reflection\\' => 25,
-        ),
-        'W' => 
-        array (
-            'Webmozart\\Assert\\' => 17,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -35,7 +27,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'P' => 
         array (
             'Psr\\Log\\' => 8,
-            'Prophecy\\' => 9,
         ),
         'M' => 
         array (
@@ -44,7 +35,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         ),
         'D' => 
         array (
-            'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
         ),
         'A' => 
@@ -57,16 +47,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'setasign\\Fpdi\\' => 
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
-        ),
-        'phpDocumentor\\Reflection\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-        ),
-        'Webmozart\\Assert\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -88,10 +68,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Prophecy\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
-        ),
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
@@ -99,10 +75,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Madcoda\\Youtube\\' => 
         array (
             0 => __DIR__ . '/..' . '/madcoda/php-youtube-api/src',
-        ),
-        'Doctrine\\Instantiator\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
         'DeepCopy\\' => 
         array (
