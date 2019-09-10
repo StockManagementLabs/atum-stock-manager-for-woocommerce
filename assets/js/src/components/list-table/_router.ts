@@ -5,6 +5,7 @@
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 import ListTable from './_list-table';
+import { Utils } from '../../utils/_utils';
 
 export default class Router {
 	
@@ -124,6 +125,8 @@ export default class Router {
 	 */
 	updateHash() {
 		
+		const beforeFilters: any = {...this.globals.filterData};
+		
 		Object.assign(this.globals.filterData, {
 			view          : $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '',
 			product_cat   : this.globals.$atumList.find('.dropdown_product_cat').val() || '',
@@ -137,6 +140,11 @@ export default class Router {
 			orderby       : $.address.parameter('orderby') || this.settings.get('orderby'),
 			order         : $.address.parameter('order') || this.settings.get('order'),
 		});
+		
+		// If the filter data has not changed, we don't need to update the hash.
+		if (Utils.areEquivalent(beforeFilters, this.globals.filterData)) {
+			return;
+		}
 
 		// Update the URL hash parameters.
 		$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], (index: number, elem: any) => {

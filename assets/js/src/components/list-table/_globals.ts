@@ -57,10 +57,19 @@ export default class Globals {
 			action         : this.$atumList.data('action'),
 			screen         : this.$atumList.data('screen'),
 			per_page       : perPage,
+			paged          : 1,
 			show_cb        : this.settings.get('showCb'),
 			show_controlled: (Utils.filterQuery(location.search.substring(1), 'uncontrolled') !== '1' && $.address.parameter('uncontrolled') !== '1') ? 1 : 0,
 			order          : this.settings.get('order'),
 			orderby        : this.settings.get('orderby'),
+			product_cat    : '',
+			product_type   : '',
+			s              : '',
+			search_column  : '',
+			sold_last_days : '',
+			supplier       : '',
+			view           : '',
+			extra_filter   : '',
 		}
 		
 	}
