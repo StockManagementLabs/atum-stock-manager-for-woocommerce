@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	>
+	<testsuites>
+		<testsuite name="atum-stock-manager-addons">
+			<directory prefix="test-" suffix=".php">./tests/addons/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-components">
+			<directory prefix="test-" suffix=".php">./tests/components/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-dashboard">
+			<directory prefix="test-" suffix=".php">./tests/dashboard/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
