@@ -6,6 +6,8 @@
  */
 
 use Atum\Components\AtumMarketingPopup;
+use Atum\Inc\Helpers;
+
 
 /**
  * Sample test case.
@@ -14,6 +16,18 @@ class AtumMarketingPopupTest extends WP_UnitTestCase {
 
 	public function test_get_instance() {
 		$this->assertInstanceOf( AtumMarketingPopup::class, AtumMarketingPopup::get_instance() );
+	}
+
+	public function test_maybe_enqueue_scripts() {
+		$this->assertFalse( wp_script_is( 'atum-marketing-popup', 'registered' ) );
+		$this->assertFalse( wp_style_is( 'atum-marketing-popup', 'registered' ) );
+		if ( Helpers::show_marketing_popup() ) {
+			AtumMarketingPopup::maybe_enqueue_scripts();
+			$this->assertTrue( wp_script_is( 'atum-marketing-popup', 'registered' ) );
+			$this->assertTrue( wp_style_is( 'atum-marketing-popup', 'registered' ) );
+		} else {
+			$this->assertTrue( TRUE );
+		}
 	}
 
 	public function test_get_title() {

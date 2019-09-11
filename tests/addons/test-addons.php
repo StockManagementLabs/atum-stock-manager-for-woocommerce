@@ -55,6 +55,11 @@ class AddonsTest extends WP_UnitTestCase {
 	public function test_load_addons_page() {
 		$instance = Addons::get_instance();
 
+		$this->assertFalse( wp_script_is( 'sweetalert2', 'registered' ) );
+		$this->assertFalse( wp_script_is( 'atum-addons', 'registered' ) );
+		$this->assertFalse( wp_style_is( 'sweetalert2', 'registered' ) );
+		$this->assertFalse( wp_style_is( 'atum-addons', 'registered' ) );
+
 		ob_start();
 		$instance->load_addons_page();
 		$response = ob_get_clean();
@@ -64,7 +69,7 @@ class AddonsTest extends WP_UnitTestCase {
 		$this->assertTrue( wp_style_is( 'sweetalert2', 'registered' ) );
 		$this->assertTrue( wp_style_is( 'atum-addons', 'registered' ) );
 
-		$html     = new Crawler( $response );
+		$html = new Crawler( $response );
 
 		$this->assertEquals( 1, $html->filter('div.atum-addons')->count() );
 		$this->assertGreaterThan( 0, $html->filter('div.theme')->count() );

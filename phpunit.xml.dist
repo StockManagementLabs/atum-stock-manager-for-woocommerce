@@ -17,5 +17,11 @@
 		<testsuite name="atum-stock-manager-dashboard">
 			<directory prefix="test-" suffix=".php">./tests/dashboard/</directory>
 		</testsuite>
+		<testsuite name="atum-stock-manager-data-export">
+			<directory prefix="test-" suffix=".php">./tests/dataexport/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-inbound-stick">
+			<directory prefix="test-" suffix=".php">./tests/inbound/stock/</directory>
+		</testsuite>
 	</testsuites>
 </phpunit>
