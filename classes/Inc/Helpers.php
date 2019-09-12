@@ -808,11 +808,11 @@ final class Helpers {
 	}
 
 	/**
-	 * Get the a setting for the specified product
-	 * First checks if has a meta key, if the meta value is distinct than global, returns that value,
-	 * but if it's set to global, returns the global ATUM setting default for it.
+	 * Get a setting for the specified product
+	 * First checks if has a meta key, if the meta value is distinct to the global one, returns that value,
+	 * but if it's set to global, returns the global's ATUM setting default for it.
 	 *
-	 * NOTE: The global setting must have the same name as the individual meta key but starting with the keyword "default".
+	 * NOTE: The global setting MUST HAVE the same name as the individual meta key but starting with the keyword "default".
 	 *
 	 * @since 1.4.18
 	 *
