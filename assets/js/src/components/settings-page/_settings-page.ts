@@ -198,12 +198,12 @@ export default class SettingsPage {
 		if ($checkbox.is(':checked') && this.settings.get('isAnyOutStockThresholdSet')) {
 			
 			this.swal({
-				title              : this.settings.get('areYouSure'),
+				title              : '',
 				text               : this.settings.get('outStockThresholdSetClearText'),
 				type               : 'question',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('startFresh'),
-				cancelButtonText   : this.settings.get('cancel'),
+				cancelButtonText   : this.settings.get('useSavedValues'),
 				reverseButtons     : true,
 				allowOutsideClick  : false,
 				showLoaderOnConfirm: true,
@@ -251,7 +251,7 @@ export default class SettingsPage {
 		else if (!$checkbox.is(':checked')) {
 			
 			this.swal({
-				title: this.settings.get('areYouSure'),
+				title: '',
 				text : this.settings.get('outStockThresholdDisable'),
 				type : 'info'
 			});
