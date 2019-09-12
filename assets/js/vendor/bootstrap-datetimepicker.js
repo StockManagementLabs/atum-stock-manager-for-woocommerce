@@ -939,6 +939,11 @@ import moment from 'moment/min/moment-with-locales.min';
 		
 		    clear = function () {
 			    setValue(null);
+			
+			    // ATUM enhancement to notify date clears.
+			    notifyEvent({
+				    type: 'dp.clear'
+			    });
 		    },
 		
 		    parseInputDate = function (inputDate) {

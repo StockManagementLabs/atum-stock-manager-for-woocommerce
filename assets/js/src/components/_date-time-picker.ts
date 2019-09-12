@@ -95,7 +95,7 @@ export default class DateTimePicker {
 			});
 			
 		})
-		.on('dp.change', (evt: any) => {
+		.on('dp.change dp.clear', (evt: any) => {
 			
 			evt.stopImmediatePropagation();
 			
