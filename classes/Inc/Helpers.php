@@ -759,18 +759,19 @@ final class Helpers {
 	 * @since   0.0.2
 	 *
 	 * @param string  $name    The option key to retrieve.
-	 * @param mixed   $default The default value returned if the option was not found.
-	 * @param boolean $echo    If the option has to be returned or printed.
+	 * @param mixed   $default Optional. The default value returned if the option was not found.
+	 * @param bool    $echo    Optional. If the option has to be returned or printed.
+	 * @param bool    $force   Optional. Whether to get the option from db instead of using the cached value.
 	 *
 	 * @return mixed
 	 */
-	public static function get_option( $name, $default = FALSE, $echo = FALSE ) {
+	public static function get_option( $name, $default = FALSE, $echo = FALSE, $force = FALSE ) {
 
 		// Save it as a global variable to not get the value each time.
 		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$atum_global_options = empty( $atum_global_options ) ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
+		$atum_global_options = empty( $atum_global_options ) || $force ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
 		$option              = isset( $atum_global_options[ $name ] ) ? $atum_global_options[ $name ] : $default;
 
 		if ( $echo ) {
@@ -1941,24 +1942,32 @@ final class Helpers {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param \WC_Product $product    Any subclass of WC_Abstract_Legacy_Product.
-	 * @param bool        $clean_meta
-	 * @param bool        $all
+	 * @param \WC_Product $product    Optional. The product to rebuild the threshold for.
+	 * @param bool        $clean_meta Optional. Whether to clean the threshold value.
+	 * @param bool        $all        Optional. Whether to apply to all the products that reached the individual threshold.
 	 */
 	public static function force_rebuild_stock_status( $product = NULL, $clean_meta = FALSE, $all = FALSE ) {
 
 		global $wpdb;
 		$wpdb->hide_errors();
 
-		if ( is_subclass_of( $product, '\WC_Abstract_Legacy_Product' ) && ! is_null( $product ) ) {
-
-			// TODO: THIS SHOULD BE DONE IN A MORE STANDARD WAY.
-			$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
-			$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
+		if ( $product && is_a( $product, '\WC_Product' ) ) {
 
 			if ( $clean_meta ) {
 				/* @noinspection PhpUndefinedMethodInspection */
 				$product->set_out_stock_threshold( NULL );
+			}
+
+			if ( $product->managing_stock() ) {
+
+				// Trigger the "Out of Stock threshold" hooks.
+				if ( $product->is_type( 'variation' ) ) {
+					do_action( 'woocommerce_variation_set_stock', $product );
+				}
+				else {
+					do_action( 'woocommerce_product_set_stock', $product );
+				}
+
 			}
 
 			$product->save();
@@ -1967,30 +1976,45 @@ final class Helpers {
 
 		}
 
-		// TODO: IS THIS NEEDED?
+		// When disabling the "Out of stock threshold", we must restore the stock status to its correct value.
 		if ( $all ) {
 
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT ID FROM $wpdb->posts p
-                INNER JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
+                LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
+                LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND pm.meta_key = '_stock')
                 WHERE p.post_status IN ('publish', 'future', 'private')
-                AND ap.out_stock_threshold IS NOT NULL;
+                AND ap.out_stock_threshold > 0 AND ap.out_stock_threshold >= pm.meta_value
+                AND p.post_type IN ('product', 'product_variation');
             " ); // WPCS: unprepared SQL ok.
 
 			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
 				$product = self::get_atum_product( $id_to_rebuild );
 
-				// Delete _out_stock_threshold (avoid partial works to be done again).
-				if ( $clean_meta ) {
-					/* @noinspection PhpUndefinedMethodInspection */
-					$product->set_out_stock_threshold( NULL );
-				}
+				if ( is_a( $product, '\WC_Product' ) ){
 
-				// Force change and save.
-				$product->set_stock_quantity( $product->get_stock_quantity() + 1 );
-				$product->set_stock_quantity( $product->get_stock_quantity() - 1 );
-				$product->save();
+					// Delete _out_stock_threshold (avoid partial works to be done again).
+					if ( $clean_meta ) {
+						/* @noinspection PhpUndefinedMethodInspection */
+						$product->set_out_stock_threshold( NULL );
+					}
+
+					if ( $product->managing_stock() ) {
+
+						// Trigger the "Out of Stock threshold" hooks.
+						if ( $product->is_type( 'variation' ) ) {
+							do_action( 'woocommerce_variation_set_stock', $product );
+						}
+						else {
+							do_action( 'woocommerce_product_set_stock', $product );
+						}
+
+					}
+
+					$product->save();
+
+				}
 
 			}
 			
@@ -2010,10 +2034,10 @@ final class Helpers {
 		global $wpdb;
 
 		$row_count = $wpdb->get_var( "
-			SELECT COUNT(*) FROM $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap
-			INNER JOIN $wpdb->posts p  ON p.ID = ap.product_id
-			WHERE ap.out_stock_threshold IS NOT NULL
-			AND  p.post_status IN ('publish', 'future', 'private');
+			SELECT COUNT(*) FROM $wpdb->posts p
+            LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id    
+            WHERE p.post_status IN ('publish', 'future', 'private') AND p.post_type IN ('product', 'product_variation')
+            AND ap.out_stock_threshold IS NOT NULL;
 		" ); // WPCS: unprepared SQL ok.
 
 		return $row_count > 0;

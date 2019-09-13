@@ -459,9 +459,26 @@ class Hooks {
 
 		if (
 			Settings::OPTION_NAME === $option_name && isset( $option_value['out_stock_threshold'] ) &&
-			'no' === $option_value['out_stock_threshold'] && Helpers::is_any_out_stock_threshold_set()
+			Helpers::is_any_out_stock_threshold_set() && isset( $_POST['option_page'] ) && 'atum_setting_general' === $_POST['option_page']
 		) {
+
+			// When updating the out of stock threshold on ATUM settings,
+			// the hooks that trigger the stock status changes should be added or removed depending on the
+			// new option.
+			$out_stock_threshold_option = Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
+			$hooks                      = Hooks::get_instance();
+
+			if ( 'no' === $out_stock_threshold_option ) {
+				remove_action( 'woocommerce_product_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
+				remove_action( 'woocommerce_variation_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
+			}
+			else {
+				add_action( 'woocommerce_product_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
+				add_action( 'woocommerce_variation_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
+			}
+
 			Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
+
 		}
 
 	}
