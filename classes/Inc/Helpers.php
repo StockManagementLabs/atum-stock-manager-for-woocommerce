@@ -1992,7 +1992,7 @@ final class Helpers {
 
 				$product = self::get_atum_product( $id_to_rebuild );
 
-				if ( is_a( $product, '\WC_Product' ) ){
+				if ( is_a( $product, '\WC_Product' ) ) {
 
 					// Delete _out_stock_threshold (avoid partial works to be done again).
 					if ( $clean_meta ) {
@@ -2002,7 +2002,7 @@ final class Helpers {
 
 					if ( $product->managing_stock() ) {
 
-						// Trigger the "Out of Stock threshold" hooks.
+						// Trigger the "Out of Stock threshold" hooks (when enabled).
 						if ( $product->is_type( 'variation' ) ) {
 							do_action( 'woocommerce_variation_set_stock', $product );
 						}
@@ -2017,6 +2017,8 @@ final class Helpers {
 				}
 
 			}
+
+			do_action( 'atum/out_stock_threshold/after_rebuild', $clean_meta );
 			
 		}
 
