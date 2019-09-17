@@ -303,6 +303,14 @@ class InventoryLogs extends AtumOrderPostType {
 
 				if ( in_array( $log_type, array_keys( $types ) ) ) {
 					echo $types[ $log_type ]; // WPCS: XSS ok.
+
+					if ( 'other' === $log_type ) {
+						$custom_name = $log->get_custom_name();
+
+						if ( $custom_name ) {
+							echo ': <small><strong>' . esc_html( $custom_name ) . '</strong></small>';
+						}
+					}
 				}
 
 				break;
@@ -485,7 +493,7 @@ class InventoryLogs extends AtumOrderPostType {
 	public function search_fields( $fields ) {
 
 		// NOTE: For now we are going to support searches within the custom columns displayed on the ILs list.
-		return array_merge( $fields, [ '_order', '_total', '_type' ] );
+		return array_merge( $fields, [ '_order', '_total', '_type', '_custom_name' ] );
 
 	}
 
