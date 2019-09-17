@@ -1,7 +1,13 @@
+//
+// Pagination
+//-------------
+
 .atum-list-wrapper, #posts-filter {
+	
 	.displaying-num {
 		color: var(--atum-text-color-var1);
 	}
+	
 	.pagination-links {
 		color: var(--atum-text-color-var1);
 		
@@ -12,7 +18,7 @@
 			padding: 0;
 			width: 30px;
 			height: 30px;
-			line-height: 30px;
+			line-height: 27px;
 			text-decoration: none;
 			
 			@include tablet-max-wp {
@@ -21,13 +27,16 @@
 			}
 		}
 		
+		a {
+			box-shadow: none;
+			line-height: 27px !important;
+		}
+		
 		#current-page-selector {
 			border: 1px solid var(--main-border);
-			-webkit-box-sizing: content-box;
-			-moz-box-sizing: content-box;
-			box-sizing: content-box;
-			vertical-align: top;
+			vertical-align: 0;
 			background-color: var(--main-border);
+			box-shadow: none;
 			
 			&:focus {
 				outline: 0;
@@ -58,6 +67,7 @@
 			width: 30px;
 			height: 30px;
 			line-height: 30px;
+			
 			@include tablet-max-wp {
 				margin: 0;
 			}
