@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Inc\Globals;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
@@ -130,6 +131,10 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Add the hooks for the Purchase Price field.
 		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
+
+		// Add custom search for POs.
+		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'po_search' ), 10, 3 );
+		add_filter( 'atum/' . self:: POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
 
 	}
 
@@ -266,7 +271,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				$expected_date = $po->get_expected_at_location_date();
 
 				if ( $expected_date ) {
-					$expected_date = '<abbr title="' . $expected_date . '">' . date_i18n( 'Y-m-d', strtotime( $expected_date ) ) . '</abbr>';
+					$expected_date = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $expected_date ) ) . '">' . gmdate( 'Y/m/d', strtotime( $expected_date ) ) . '</abbr>';
 				}
 
 				echo $expected_date; // WPCS: XSS ok.
@@ -539,6 +544,73 @@ class PurchaseOrders extends AtumOrderPostType {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Set the custom fields that are available for searches within the IL's list
+	 *
+	 * @since 1.6.1
+	 *
+	 * @param array $fields
+	 *
+	 * @return array
+	 */
+	public function search_fields( $fields ) {
+
+		// NOTE: For now we are going to support searches within the custom columns displayed on the ILs list.
+		return array_merge( $fields, [ '_total' ] );
+
+	}
+
+	/**
+	 * Search within custom fields on PO searches
+	 *
+	 * @since 1.6.1
+	 *
+	 * @param array $atum_order_ids
+	 * @param mixed $term
+	 * @param array $search_fields
+	 *
+	 * @return array
+	 */
+	public function po_search( $atum_order_ids, $term, $search_fields ) {
+
+		global $wpdb;
+
+		// NOTE: For now we are going to support searches within the custom columns displayed on the POs list.
+
+		// Dates: search in post_modified and date_expected dates.
+		if ( ! is_numeric( $term ) && strtotime( $term ) ) {
+
+			// Format the date in MySQL format.
+			$date = gmdate( 'Y-m-d', strtotime( $term ) );
+			$term = "%$date%";
+
+			$ids = $wpdb->get_col( $wpdb->prepare( "
+				SELECT ID FROM $wpdb->posts p
+				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = '_expected_at_location_date')
+				WHERE (meta_value LIKE %s OR post_date_gmt LIKE %s)
+				AND post_type = %s			
+			", $term, $term, self::POST_TYPE ) );
+
+		}
+		// Strings: search in supplier names.
+		else {
+
+			$ids = $wpdb->get_col( $wpdb->prepare( "
+				SELECT ID FROM $wpdb->posts p
+				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = %s)
+				WHERE meta_value IN (
+					SELECT ID FROM $wpdb->posts
+					WHERE post_title LIKE %s AND post_type = %s
+				)	
+				AND post_type = %s			
+			", Suppliers::SUPPLIER_META_KEY, '%' . $wpdb->esc_like( $term ) . '%', Suppliers::POST_TYPE, self::POST_TYPE ) );
+
+		}
+
+		return array_unique( array_merge( $atum_order_ids, $ids ) );
 
 	}
 
