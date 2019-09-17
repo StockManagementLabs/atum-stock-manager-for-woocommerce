@@ -513,7 +513,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 			$ids = $wpdb->get_col( $wpdb->prepare( "
 				SELECT ID FROM $wpdb->posts p
-				WHERE post_date_gmt LIKE %s) AND post_type = %s			
+				WHERE post_date_gmt LIKE %s AND post_type = %s			
 			", $term, self::POST_TYPE ) );
 
 			$atum_order_ids = array_unique( array_merge( $atum_order_ids, $ids ) );
