@@ -1489,10 +1489,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		$classes = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );
-		$classes = $classes ? ' class="' . $classes . '"' : '';
+		$stock_indicator = apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product, $this );
+		$classes         = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );
+		$classes         = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . $data . $classes . '>' . apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product, $this ) . '</td>'; // WPCS: XSS ok.
+		echo '<td ' . $data . $classes . '>' . $stock_indicator . '</td>'; // WPCS: XSS ok.
 
 	}
 
