@@ -117,6 +117,10 @@ class InventoryLogs extends AtumOrderPostType {
 
 		// Add the help tab to Inventory Logs' list page.
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+
+		// Add custom search for ILs.
+		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'il_search' ), 10, 3 );
+		add_filter( 'atum/' . self:: POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
 		
 	}
 
@@ -467,6 +471,57 @@ class InventoryLogs extends AtumOrderPostType {
 	public function help_tabs_content( $screen, $tab ) {
 
 		Helpers::load_view( 'help-tabs/inventory-logs/' . $tab['name'] );
+	}
+
+	/**
+	 * Set the custom fields that are available for searches within the IL's list
+	 *
+	 * @since 1.6.1
+	 *
+	 * @param array $fields
+	 *
+	 * @return array
+	 */
+	public function search_fields( $fields ) {
+
+		// NOTE: For now we are going to support searches within the custom columns displayed on the ILs list.
+		return array_merge( $fields, [ '_order', '_total', '_type' ] );
+
+	}
+
+	/**
+	 * Search within custom fields on IL searches
+	 *
+	 * @since 1.6.1
+	 *
+	 * @param array $atum_order_ids
+	 * @param mixed $term
+	 * @param array $search_fields
+	 *
+	 * @return array
+	 */
+	public function il_search( $atum_order_ids, $term, $search_fields ) {
+
+		global $wpdb;
+
+		// Dates: search in post_modified and date_expected dates.
+		if ( strtotime( $term ) ) {
+
+			// Format the date in MySQL format.
+			$date = gmdate( 'Y-m-d', strtotime( $term ) );
+			$term = "%$date%";
+
+			$ids = $wpdb->get_col( $wpdb->prepare( "
+				SELECT ID FROM $wpdb->posts p
+				WHERE post_date_gmt LIKE %s) AND post_type = %s			
+			", $term, self::POST_TYPE ) );
+
+			$atum_order_ids = array_unique( array_merge( $atum_order_ids, $ids ) );
+
+		}
+
+		return $atum_order_ids;
+
 	}
 
 }
