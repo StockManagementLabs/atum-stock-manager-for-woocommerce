@@ -151,7 +151,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 
 	public function test_get_items_in_stock() {
 		//Product needed
-		$p = $this->factory->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+		$p = $this->factory()->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
 
 		if( $p > 0 ) {
 			$stats = WidgetHelpers::get_items_in_stock();
@@ -169,7 +169,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	public function test_current_stock_value_widget() {
 		$widget = new CurrentStockValue();
 		//Product needed
-		$this->factory->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+		$this->factory()->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
 
 		ob_start();
 		$widget->render();
@@ -182,7 +182,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	public function test_lost_sales_widget() {
 		$widget = new LostSales();
 		//Product needed
-		$this->factory->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+		$this->factory()->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
 
 		ob_start();
 		$widget->render();
