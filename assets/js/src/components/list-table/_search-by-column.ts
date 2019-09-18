@@ -50,7 +50,7 @@ export default class SearchByColumn {
 				
 				// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change.
 				if ($.address.parameter('search_column') !== this.globals.$searchColumnBtn.data('value') && this.globals.$searchColumnBtn.data('value') === optionVal) {
-					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, columnLabel + ' <span class="caret"></span>']);
+					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, columnLabel]);
 				}
 				
 			}
@@ -65,18 +65,18 @@ export default class SearchByColumn {
 				evt.stopPropagation();
 			})
 			
-			// Set $searchColumnBtn data-value and html content.
-			.on('atum-search-column-set-data', (evt: JQueryEventObject, value: string, html: string) => {
+			// Set $searchColumnBtn data-value and label.
+			.on('atum-search-column-set-data', (evt: JQueryEventObject, value: string, label: string) => {
 				
 				let $searchColBtn: JQuery  = $(evt.currentTarget),
 				    $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children('a');
 				
-				$searchColBtn.html(html);
+				$searchColBtn.text(label);
 				$searchColBtn.data('value', value);
+				$searchColBtn.attr('data-original-title', label === this.globals.$searchColumnDropdown.data('no-option') ? this.globals.$searchColumnDropdown.data('no-option-title') : label);
 				
 				$dropDownLinks.filter('.active').removeClass('active');
-				Utils.filterByData($dropDownLinks, 'value', value);
-				$dropDownLinks.addClass('active');
+				Utils.filterByData($dropDownLinks, 'value', value).addClass('active');
 				
 			});
 		
@@ -87,13 +87,13 @@ export default class SearchByColumn {
 			
 			let $item: JQuery = $(evt.currentTarget);
 			
-			this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [$item.data('value'), $item.text() + ' <span class="caret"></span>']);
+			this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [$item.data('value'), $item.text()]);
 			
 			$item.parents().find('.dropdown-menu').hide();
 			this.globals.$searchColumnDropdown.children('a.active').removeClass('active');
 			$item.addClass('active');
 			
-			const fieldType = $.inArray($item.data('value'), this.settings.get('searchableColumns').numeric) > -1 ? 'number' : 'search';
+			const fieldType: string = $.inArray($item.data('value'), this.settings.get('searchableColumns').numeric) > -1 ? 'number' : 'search';
 			this.globals.$searchInput.attr('type', fieldType);
 			
 			if (this.settings.get('ajaxFilter') === 'yes') {

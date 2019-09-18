@@ -203,27 +203,30 @@ class Settings {
 			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum-settings.js', array( 'jquery', 'sweetalert2', 'wp-color-picker' ), ATUM_VERSION, TRUE );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
-				'atumPrefix'                      => ATUM_PREFIX,
-				'areYouSure'                      => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'unsavedData'                     => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
-				'continue'                        => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
-				'cancel'                          => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'run'                             => __( 'Run', ATUM_TEXT_DOMAIN ),
-				'ok'                              => __( 'OK', ATUM_TEXT_DOMAIN ),
-				'done'                            => __( 'Done!', ATUM_TEXT_DOMAIN ),
-				'selectColor'                     => __( 'Select Color', ATUM_TEXT_DOMAIN ),
-				'error'                           => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'runnerNonce'                     => wp_create_nonce( 'atum-script-runner-nonce' ),
-				'schemeColorNonce'                => wp_create_nonce( 'atum-scheme-color-nonce' ),
-				'isAnyOutStockThresholdSet'       => Helpers::is_any_out_stock_threshold_set(),
-				'startFresh'                      => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
-				'outStockThresholdSetClearScript' => 'atum_tool_clear_out_stock_threshold',
-				'getSchemeColor'                  => 'atum_get_scheme_color',
-				'outStockThresholdSetClearText'   => __( 'We have saved all your products values the last time you used this option. Would you like to clear all saved data and start fresh? If you added new products since, these will inherit the global WooCommerce value.', ATUM_TEXT_DOMAIN ),
-				'outStockThresholdDisable'        => __( 'We will save all your values for future use, in case you decide to re-enable the ATUM Out of Stock per product threshold. Press OK to start using the WooCommerce global Out of Stock threshold value.', ATUM_TEXT_DOMAIN ),
-				'dark'                            => __( 'Dark', ATUM_TEXT_DOMAIN ),
-				'highContrast'                    => __( 'High Contrast', ATUM_TEXT_DOMAIN ),
-				'branded'                         => __( 'Branded', ATUM_TEXT_DOMAIN ),
+				'areYouSure'         => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+				'atumPrefix'         => ATUM_PREFIX,
+				'branded'            => __( 'Branded', ATUM_TEXT_DOMAIN ),
+				'cancel'             => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'continue'           => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
+				'dark'               => __( 'Dark', ATUM_TEXT_DOMAIN ),
+ 				'done'               => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'error'              => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'getSchemeColor'     => 'atum_get_scheme_color',
+				'highContrast'       => __( 'High Contrast', ATUM_TEXT_DOMAIN ),
+				'isAnyOostSet'       => Helpers::is_any_out_stock_threshold_set(),
+				'ok'                 => __( 'OK', ATUM_TEXT_DOMAIN ),
+				'oostDisableAction'  => 'atum_disable_out_stock_threshold',
+				'oostDisableNonce'   => wp_create_nonce( 'atum-out-stock-threshold-disable-nonce' ),
+				'oostDisableText'    => __( "We are going to leave your saved values in your database in case you decide to re-enable the ATUM's Out of Stock threshold per product again. From now on, your system will start using the WooCommerce's global Out of Stock threshold value (if set).", ATUM_TEXT_DOMAIN ),
+				'oostSetClearScript' => 'atum_tool_clear_out_stock_threshold',
+				'oostSetClearText'   => __( "We did save all your previous 'Out of stock' values the last time you used this option. Would you like to clear all the saved data and to start fresh? If you've added new products since then, these will just use the global WooCommerce value (if set).", ATUM_TEXT_DOMAIN ),
+				'run'                => __( 'Run', ATUM_TEXT_DOMAIN ),
+				'runnerNonce'        => wp_create_nonce( 'atum-script-runner-nonce' ),
+				'schemeColorNonce'   => wp_create_nonce( 'atum-scheme-color-nonce' ),
+				'selectColor'        => __( 'Select Color', ATUM_TEXT_DOMAIN ),
+				'startFresh'         => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
+				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
+				'unsavedData'        => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );
@@ -310,9 +313,9 @@ class Settings {
 			'out_stock_threshold'       => array(
 				'section'     => 'general',
 				'name'        => __( 'Out of Stock Threshold per product', ATUM_TEXT_DOMAIN ),
-				'desc'        => __( 'Activate the switch to disable WooCommerce global threshold settings and enable ATUM per product threshold. All products will inherit the WooCommerce global value that you can now amend.<br><br>
-			                          Deactivate the switch to disable ATUM per product threshold and re-enable the WooCommerce global threshold. All your amended per product values will remain saved in the system and ready for future use, in case you decide to return to per product control.<br><br>
-				                      We have a tool to reset or change all per product values in the Tool tab above.', ATUM_TEXT_DOMAIN ),
+				'desc'        => __( "Activate the switch to disable WooCommerce's global out of stock threshold setting and enable ATUM's out of stock threshold per product. All products will inherit the WooCommerce's global value by default (if set).<br><br>
+			                          Deactivate the switch to disable ATUM's out of stock threshold per product and re-enable the WooCommerce's global out of stock threshold. All your saved individual values will remain untouched in your database and ready for a future use, in case you decide to return to the individual control.<br><br>
+				                      We have a specific tool to clear all the individual out of stock threshold values in the 'Tools' section.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'switcher',
 				'default'     => 'no',
 				'confirm_msg' => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) ),

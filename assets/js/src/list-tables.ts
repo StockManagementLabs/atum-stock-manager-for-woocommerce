@@ -55,7 +55,6 @@ jQuery( ($) => {
 		order         : 'desc',
 		orderby       : 'date',
 		paged         : 1,
-		searchDropdown: 'no',
 	});
 	
 	// Set globals.

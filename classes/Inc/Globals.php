@@ -12,11 +12,10 @@
 
 namespace Atum\Inc;
 
-use Atum\Suppliers\Suppliers;
-
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
+use Atum\Suppliers\Suppliers;
 
 final class Globals {
 	
@@ -197,6 +196,13 @@ final class Globals {
 	 */
 	public static function get_inheritable_product_types() {
 
+		$cache_key                 = AtumCache::get_cache_key( 'inheritable_product_types' );
+		$inheritable_product_types = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( $has_cache ) {
+			return $inheritable_product_types;
+		}
+
 		// Add WC Subscriptions compatibility.
 		if (
 			class_exists( '\WC_Subscriptions' ) &&
@@ -215,7 +221,11 @@ final class Globals {
 			self::$inheritable_product_types[] = 'bundle';
 		}
 
-		return (array) apply_filters( 'atum/allowed_inheritable_product_types', self::$inheritable_product_types );
+		$inheritable_product_types = (array) apply_filters( 'atum/allowed_inheritable_product_types', self::$inheritable_product_types );
+		AtumCache::set_cache( $cache_key, $inheritable_product_types );
+
+		return $inheritable_product_types;
+
 	}
 
 	/**

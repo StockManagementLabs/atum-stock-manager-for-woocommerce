@@ -127,18 +127,15 @@ table.wp-list-table {
 		}
 	}
 	
-	.column-total, .column-date {
-		width: 9%;
-	}
-	
 	.column-status {
-		text-align: center;
+		text-align: left;
 		
 		.order-status-container {
 			display: flex;
 			flex-wrap: nowrap;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start;
+			
 			.order-status {
 				display: inline-flex;
 				line-height: 2.5em;

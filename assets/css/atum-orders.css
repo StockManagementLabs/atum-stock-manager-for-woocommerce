@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.8 
+ * @version 1.6.0 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -3228,7 +3228,7 @@ input[type="button"].btn-block {
   padding: 0;
   width: 30px;
   height: 30px;
-  line-height: 30px;
+  line-height: 27px;
   text-decoration: none;
 }
 
@@ -3239,12 +3239,18 @@ input[type="button"].btn-block {
   }
 }
 
+.atum-list-wrapper .pagination-links a, #posts-filter .pagination-links a {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  line-height: 27px !important;
+}
+
 .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector {
   border: 1px solid var(--main-border);
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-  vertical-align: top;
+  vertical-align: 0;
   background-color: var(--main-border);
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .atum-list-wrapper .pagination-links #current-page-selector:focus, #posts-filter .pagination-links #current-page-selector:focus {
@@ -5666,6 +5672,12 @@ ul.atum_order_notes li .note_content::after {
   color: var(--atum-text-color-var2);
 }
 
+.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--atum-text-color-var2);
+}
+
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -5810,6 +5822,13 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
+  color: var(--atum-text-color-var2);
+  font-style: italic;
+  letter-spacing: normal;
+  margin-left: 10px;
+}
+
+.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
@@ -8241,12 +8260,8 @@ table.wp-list-table .column-actions a img {
   height: auto;
 }
 
-table.wp-list-table .column-total, table.wp-list-table .column-date {
-  width: 9%;
-}
-
 table.wp-list-table .column-status {
-  text-align: center;
+  text-align: left;
 }
 
 table.wp-list-table .column-status .order-status-container {
@@ -8258,9 +8273,9 @@ table.wp-list-table .column-status .order-status-container {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 table.wp-list-table .column-status .order-status-container .order-status {

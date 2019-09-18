@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.8 
+ * @version 1.6.0 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -3542,7 +3542,7 @@ h2 .atum-help-tip {
   padding: 0;
   width: 30px;
   height: 30px;
-  line-height: 30px;
+  line-height: 27px;
   text-decoration: none;
 }
 
@@ -3553,12 +3553,18 @@ h2 .atum-help-tip {
   }
 }
 
+.atum-list-wrapper .pagination-links a, #posts-filter .pagination-links a {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  line-height: 27px !important;
+}
+
 .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector {
   border: 1px solid var(--main-border);
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-  vertical-align: top;
+  vertical-align: 0;
   background-color: var(--main-border);
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .atum-list-wrapper .pagination-links #current-page-selector:focus, #posts-filter .pagination-links #current-page-selector:focus {
@@ -4097,6 +4103,12 @@ h2 .atum-help-tip {
   color: var(--atum-text-color-var2);
 }
 
+.search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--atum-text-color-var2);
+}
+
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
   font-size: 12px;
   font-style: italic;
@@ -4241,6 +4253,13 @@ h2 .atum-help-tip {
 }
 
 .search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
+  color: var(--atum-text-color-var2);
+  font-style: italic;
+  letter-spacing: normal;
+  margin-left: 10px;
+}
+
+.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;

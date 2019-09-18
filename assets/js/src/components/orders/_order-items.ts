@@ -289,7 +289,7 @@ export default class AtumOrderItems {
 		    $row: string    =  `
 				<tr data-meta_id="0">
 			        <td>
-			            <input type="text" placeholder="${ this.settings.get('placeholder_name') }" name="meta_key[ ${ $item.data('atum_order_item_id') }][new-${ index }]" />
+			            <input type="text" placeholder="${ this.settings.get('placeholder_name') }" name="meta_key[${ $item.data('atum_order_item_id') }][new-${ index }]" />
 			            <textarea placeholder="${ this.settings.get('placeholder_value') }" name="meta_value[${ $item.data('atum_order_item_id') }][new-${ index }]"></textarea>
 			        </td>
 			        <td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>

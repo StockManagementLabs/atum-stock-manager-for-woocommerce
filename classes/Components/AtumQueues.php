@@ -32,7 +32,7 @@ class AtumQueues {
 	 * @var array
 	 */
 	private $recurring_hooks = array(
-		'update_expiring_product_props' => [
+		'atum/update_expiring_product_props' => [
 			'time'     => 'midnight tomorrow',
 			'interval' => DAY_IN_SECONDS,
 		],
@@ -47,8 +47,8 @@ class AtumQueues {
 
 		add_action( 'init', array( $this, 'check_queues' ) );
 
-		// Add the recurring hooks.
-		add_action( 'update_expiring_product_props', array( $this, 'update_expiring_product_props_action' ) );
+		// Add the ATUM's recurring hooks.
+		add_action( 'atum/update_expiring_product_props', array( $this, 'update_expiring_product_props_action' ) );
 
 	}
 
@@ -68,13 +68,17 @@ class AtumQueues {
 
 		$wc_queue = $wc->queue();
 
+		// Allow registering queues externally.
+		$this->recurring_hooks = apply_filters( 'atum/queues/recurring_hooks', $this->recurring_hooks );
+
 		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
 
-			$next_scheduled_date = $wc_queue->get_next( $hook_name );
+			$schedule_args       = isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ? $hook_data['args'] : [];
+			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args );
 
 			if ( is_null( $next_scheduled_date ) ) {
-				$wc_queue->cancel_all( $hook_name ); // Ensure all the actions are cancelled before adding a new one.
-				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name );
+				$wc_queue->cancel_all( $hook_name, $schedule_args ); // Ensure all the actions are cancelled before adding a new one.
+				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args );
 			}
 
 		}

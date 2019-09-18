@@ -32,7 +32,7 @@ jQuery( ($) => {
 	let enhancedSelect = new EnhancedSelect();
 	let settingsPage = new SettingsPage(settings, enhancedSelect);
 	
-	if($("#atum-table-color-settings").length>0) {
+	if( $('#atum-table-color-settings').length ) {
 		settingsPage.hideColors();
 	}
 	

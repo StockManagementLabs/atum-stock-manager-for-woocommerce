@@ -939,6 +939,11 @@ import moment from 'moment/min/moment-with-locales.min';
 		
 		    clear = function () {
 			    setValue(null);
+			
+			    // ATUM enhancement to notify date clears.
+			    notifyEvent({
+				    type: 'dp.clear'
+			    });
 		    },
 		
 		    parseInputDate = function (inputDate) {
@@ -1681,7 +1686,12 @@ import moment from 'moment/min/moment-with-locales.min';
 			}
 			
 			if (typeof maxDate === 'string') {
-				if (maxDate === 'now' || maxDate === 'moment') {
+				
+				// ATUM enhancement to allow using the today button when the maxDate is set to "moment+1"
+				if (maxDate === 'moment+1') {
+					maxDate = getMoment( moment().add(1, 'minutes') );
+				}
+				else if (maxDate === 'now' || maxDate === 'moment') {
 					maxDate = getMoment();
 				}
 			}

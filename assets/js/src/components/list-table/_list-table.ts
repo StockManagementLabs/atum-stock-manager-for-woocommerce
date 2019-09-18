@@ -111,7 +111,7 @@ export default class ListTable {
 			product_type  : $.address.parameter('product_type') || '',
 			supplier      : $.address.parameter('supplier') || '',
 			extra_filter  : $.address.parameter('extra_filter') || '',
-			paged         : $.address.parameter('paged') || '',
+			paged         : $.address.parameter('paged') || 1,
 			order         : $.address.parameter('order') || '',
 			orderby       : $.address.parameter('orderby') || '',
 			search_column : $.address.parameter('search_column') || '',

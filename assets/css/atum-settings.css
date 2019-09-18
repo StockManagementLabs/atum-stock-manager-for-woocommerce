@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.5.8 
+ * @version 1.6.0 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -4117,6 +4117,13 @@ body .select2-container--default.select2-container--open .select2-dropdown {
   padding-left: 7px;
 }
 
+.atum-settings-wrapper #atum-settings .section-title input[type=search]::-moz-placeholder {
+  font-style: italic !important;
+  color: var(--gray-500) !important;
+  font-size: 12px;
+  padding-left: 7px;
+}
+
 .atum-settings-wrapper #atum-settings .section-title input[type=search]:-ms-input-placeholder {
   font-style: italic !important;
   color: var(--gray-500) !important;
@@ -4766,6 +4773,13 @@ body .select2-container--default.select2-container--open .select2-dropdown {
 }
 
 input[type=search]::-webkit-input-placeholder {
+  font-style: italic !important;
+  color: var(--gray-500) !important;
+  font-size: 12px;
+  padding-left: 7px;
+}
+
+input[type=search]::-moz-placeholder {
   font-style: italic !important;
   color: var(--gray-500) !important;
   font-size: 12px;

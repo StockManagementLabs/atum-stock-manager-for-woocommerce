@@ -1053,7 +1053,6 @@ abstract class AtumOrderPostType {
 		}
 
 		// Remove non-needed strings from search terms.
-		// TODO: IF WE ADD MORE ATUM ORDER TYPES IT WOULD BE BETTER USING A FILTER HERE.
 		$term = str_replace(
 			array(
 				__( 'Order #', ATUM_TEXT_DOMAIN ),
@@ -1070,8 +1069,8 @@ abstract class AtumOrderPostType {
 			wc_clean( $_GET['s'] )
 		);
 
-		// Searches on meta data can be slow - this let you choose what fields to search.
-		$search_fields  = array_map( 'wc_clean', apply_filters( "atum/$post_type/search_fields", array( '_order' ) ) );
+		// Searches on meta data can be slow - this let you choose what fields to search in.
+		$search_fields  = array_map( 'wc_clean', apply_filters( "atum/$post_type/search_fields", [] ) );
 		$atum_order_ids = array();
 
 		if ( is_numeric( $term ) ) {

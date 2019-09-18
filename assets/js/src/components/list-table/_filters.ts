@@ -49,15 +49,10 @@ export default class Filters {
 				.on('keyup paste', '.current-page', (evt: JQueryEventObject) => {
 					this.keyUp(evt);
 				});
-			
-			
-			if (this.settings.get('searchDropdown') === 'yes') {
 				
-				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
-					this.pseudoKeyUpAjax( $(evt.currentTarget).data('value'), decodeURIComponent( this.globals.$searchInput.val() ) );
-				});
-				
-			}
+			this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
+				this.pseudoKeyUpAjax( $(evt.currentTarget).data('value'), decodeURIComponent( this.globals.$searchInput.val() ) );
+			});
 			
 		}
 		
@@ -100,30 +95,26 @@ export default class Filters {
 				
 			});
 			
-			// TODO on init address, check s i search_column values, and disable or not
+			
 			// When a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters.
-			if (this.settings.get('searchDropdown') === 'yes') {
+			// TODO: IS THIS WORKING HERE? IS NOT ONLY FOR AJAX FILTERS?
+			this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
 				
-				// TODO: IS THIS WORKING? IS NOT ONLY FOR AJAX FILTERS?
-				this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
-					
-					let searchInputVal: any        = this.globals.$searchInput.val(),
-					    searchColumnBtnVal: string = $(evt.currentTarget).data('value');
-					
-					if (searchInputVal.length > 0) {
-						$.address.parameter('s', searchInputVal);
-						$.address.parameter('search_column', searchColumnBtnVal);
-						this.keyUp(evt);
-					}
-					// Force clean s when required.
-					else {
-						$.address.parameter('s', '');
-						$.address.parameter('search_column', '');
-					}
-					
-				});
+				let searchInputVal: any        = this.globals.$searchInput.val(),
+				    searchColumnBtnVal: string = $(evt.currentTarget).data('value');
 				
-			}
+				if (searchInputVal.length > 0) {
+					$.address.parameter('s', searchInputVal);
+					$.address.parameter('search_column', searchColumnBtnVal);
+					this.keyUp(evt);
+				}
+				// Force clean s when required.
+				else {
+					$.address.parameter('s', '');
+					$.address.parameter('search_column', '');
+				}
+				
+			});
 			
 			this.globals.$atumList.on('click', '.search-category, .search-submit', () => {
 				
@@ -161,12 +152,11 @@ export default class Filters {
 				
 				this.tooltip.destroyTooltips();
 				
-				// TODO reset s and column search
 				$.address.queryString('');
 				this.globals.$searchInput.val('');
 				
-				if (this.settings.get('searchDropdown') === 'yes' && this.globals.$searchColumnBtn.data('value') !== 'title') {
-					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['title', `${ this.globals.$searchColumnDropdown.data('product-title') } <span class="caret"></span>`]);
+				if (this.globals.$searchColumnBtn.data('value')) {
+					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['', this.globals.$searchColumnDropdown.data('no-option')]);
 				}
 				
 				this.listTable.updateTable();

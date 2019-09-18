@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.6.0',
+var version = '1.6.1',
     curDate = new Date();
 
 // Global config
@@ -88,8 +88,8 @@ gulp.task('sass::atum', function () {
 	var destDir = config.assetsDir + '/css';
 	
 	return gulp.src([
-		config.assetsDir + '/scss/*.scss',
-	])
+			config.assetsDir + '/scss/*.scss',
+		])
 		.pipe(plumber({errorHandler: onError}))
 		.pipe(gulpif(enabled.maps, sourcemaps.init()))
 		.pipe(sass(options.sass))
@@ -99,7 +99,7 @@ gulp.task('sass::atum', function () {
 			sourceRoot: 'assets/scss/',
 		})))
 		.pipe(gulp.dest(destDir))
-		.pipe(notify({message: 'sass task complete'}))
+		//.pipe(notify({message: 'sass task complete'}))
 		.pipe(filter("**/*.css"))
 		.pipe(livereload());
 
@@ -219,8 +219,8 @@ gulp.task('watch::atum', function () {
 
 	livereload.listen();
 
-	gulp.watch(config.assetsDir + '/scss/**/*.scss', ['sass::atum']);
-	gulp.watch(config.assetsDir + '/js/src/**/*.ts', ['js::atum']);
+	gulp.watch(config.assetsDir + '/scss/**/*.scss', gulp.series(['sass::atum']));
+	gulp.watch(config.assetsDir + '/js/src/**/*.ts', gulp.series(['js::atum']));
 
 	gulp.watch([
 
@@ -241,6 +241,6 @@ gulp.task('watch::atum', function () {
 });
 
 // Default task
-gulp.task('default', ['sass::atum', 'js::atum'], function () {
+gulp.task('default', gulp.series(['sass::atum', 'js::atum']), function () {
 	
 });

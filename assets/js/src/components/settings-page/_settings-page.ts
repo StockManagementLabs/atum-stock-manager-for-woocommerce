@@ -195,15 +195,15 @@ export default class SettingsPage {
 	
 	maybeClearOutStockThreshold($checkbox: JQuery) {
 		
-		if ($checkbox.is(':checked') && this.settings.get('isAnyOutStockThresholdSet')) {
+		if ($checkbox.is(':checked') && this.settings.get('isAnyOostSet')) {
 			
 			this.swal({
-				title              : this.settings.get('areYouSure'),
-				text               : this.settings.get('outStockThresholdSetClearText'),
+				title              : '',
+				text               : this.settings.get('oostSetClearText'),
 				type               : 'question',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('startFresh'),
-				cancelButtonText   : this.settings.get('cancel'),
+				cancelButtonText   : this.settings.get('useSavedValues'),
 				reverseButtons     : true,
 				allowOutsideClick  : false,
 				showLoaderOnConfirm: true,
@@ -211,16 +211,14 @@ export default class SettingsPage {
 					
 					return new Promise( (resolve: Function, reject: Function) => {
 						
-						const data: any = {
-							action: this.settings.get('outStockThresholdSetClearScript'),
-							token : this.settings.get('runnerNonce'),
-						};
-						
 						$.ajax({
 							url     : window['ajaxurl'],
 							method  : 'POST',
 							dataType: 'json',
-							data    : data,
+							data    : {
+								action: this.settings.get('oostSetClearScript'),
+								token : this.settings.get('runnerNonce'),
+							},
 							success : (response: any) => {
 								
 								if (response.success === true) {
@@ -251,10 +249,12 @@ export default class SettingsPage {
 		else if (!$checkbox.is(':checked')) {
 			
 			this.swal({
-				title: this.settings.get('areYouSure'),
-				text : this.settings.get('outStockThresholdDisable'),
-				type : 'info'
+				title            : '',
+				text             : this.settings.get('oostDisableText'),
+				type             : 'info',
+				confirmButtonText: this.settings.get('ok'),
 			});
+			
 		}
 		
 	}

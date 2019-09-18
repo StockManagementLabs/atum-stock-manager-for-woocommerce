@@ -63,10 +63,10 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 						continue;
 					endif;
 					?>
-					<tr data-meta_id="<?php echo esc_attr( $meta_id ); ?>">
+					<tr data-meta_id="<?php echo esc_attr( $meta_id ) ?>">
 						<td>
-							<input type="text" placeholder="<?php esc_attr_e( 'Name (required)', ATUM_TEXT_DOMAIN ); ?>" name="meta_key[<?php echo esc_attr( $item_id ); ?>][<?php echo esc_attr( $meta_id ); ?>]" value="<?php echo esc_attr( $meta->key ); ?>" />
-							<textarea placeholder="<?php esc_attr_e( 'Value (required)', ATUM_TEXT_DOMAIN ); ?>" name="meta_value[<?php echo esc_attr( $item_id ); ?>][<?php echo esc_attr( $meta_id ); ?>]"><?php echo esc_textarea( rawurldecode( $meta->value ) ); ?></textarea>
+							<input type="text" placeholder="<?php esc_attr_e( 'Name (required)', ATUM_TEXT_DOMAIN ) ?>" name="meta_key[<?php echo esc_attr( $item_id ) ?>][<?php echo esc_attr( $meta_id ) ?>]" value="<?php echo esc_attr( $meta->key ) ?>" />
+							<textarea placeholder="<?php esc_attr_e( 'Value (required)', ATUM_TEXT_DOMAIN ) ?>" name="meta_value[<?php echo esc_attr( $item_id ) ?>][<?php echo esc_attr( $meta_id ) ?>]"><?php echo esc_textarea( rawurldecode( $meta->value ) ) ?></textarea>
 						</td>
 						<td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>
 					</tr>
@@ -78,8 +78,8 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 		<tfoot>
 			<tr>
 				<td colspan="4">
-					<button class="add-atum-order-item-meta button"><?php esc_html_e( 'Add&nbsp;meta', ATUM_TEXT_DOMAIN ); ?></button>
-					<?php do_action( 'atum/atum_order/item_meta_controls', $item ); ?>
+					<button class="add-atum-order-item-meta button"><?php esc_html_e( 'Add&nbsp;meta', ATUM_TEXT_DOMAIN ) ?></button>
+					<?php do_action( 'atum/atum_order/item_meta_controls', $item ) ?>
 				</td>
 			</tr>
 		</tfoot>

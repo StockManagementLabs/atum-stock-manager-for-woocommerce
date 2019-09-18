@@ -544,7 +544,7 @@ abstract class AtumOrderModel {
 				$item_data = array();
 
 				foreach ( $data_keys as $key => $default ) {
-					$item_data[ $key ] = ( isset( $items[ $key ][ $item_id ] ) ) ? wc_clean( wp_unslash( $items[ $key ][ $item_id ] ) ) : $default;
+					$item_data[ $key ] = isset( $items[ $key ][ $item_id ] ) ? wc_clean( wp_unslash( $items[ $key ][ $item_id ] ) ) : $default;
 				}
 
 				if ( '0' === $item_data['atum_order_item_qty'] ) {
@@ -571,7 +571,7 @@ abstract class AtumOrderModel {
 
 					foreach ( $items['meta_key'][ $item_id ] as $meta_id => $meta_key ) {
 
-						$meta_value = ( isset( $items['meta_value'][ $item_id ][ $meta_id ] ) ) ? wp_unslash( $items['meta_value'][ $item_id ][ $meta_id ] ) : '';
+						$meta_value = isset( $items['meta_value'][ $item_id ][ $meta_id ] ) ? wp_unslash( $items['meta_value'][ $item_id ][ $meta_id ] ) : '';
 
 						if ( '' === $meta_key && '' === $meta_value ) {
 							if ( ! strstr( $meta_id, 'new-' ) ) {
@@ -615,7 +615,7 @@ abstract class AtumOrderModel {
 				$item_data = array();
 
 				foreach ( $data_keys as $key => $default ) {
-					$item_data[ $key ] = ( isset( $items[ $key ][ $item_id ] ) ) ? wc_clean( wp_unslash( $items[ $key ][ $item_id ] ) ) : $default;
+					$item_data[ $key ] = isset( $items[ $key ][ $item_id ] ) ? wc_clean( wp_unslash( $items[ $key ][ $item_id ] ) ) : $default;
 				}
 
 				$item->set_props( array(
@@ -631,7 +631,7 @@ abstract class AtumOrderModel {
 
 					foreach ( $items['meta_key'][ $item_id ] as $meta_id => $meta_key ) {
 
-						$meta_value = ( isset( $items['meta_value'][ $item_id ][ $meta_id ] ) ) ? wp_unslash( $items['meta_value'][ $item_id ][ $meta_id ] ) : '';
+						$meta_value = isset( $items['meta_value'][ $item_id ][ $meta_id ] ) ? wp_unslash( $items['meta_value'][ $item_id ][ $meta_id ] ) : '';
 
 						if ( '' === $meta_key && '' === $meta_value ) {
 							if ( ! strstr( $meta_id, 'new-' ) ) {
