@@ -61,7 +61,7 @@ trait HelpersLegacyTrait {
 
 		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
 
-		return $wpdb->get_results( $sql, ARRAY_N ); // WPCS: unprepared SQL ok.
+		return $wpdb->get_results( $sql, ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	}
 

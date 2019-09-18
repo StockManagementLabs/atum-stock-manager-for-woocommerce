@@ -961,7 +961,8 @@ final class Ajax {
 		}
 		
 		$query_select = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
-		
+
+		// phpcs:disable
 		$where_clause = $wpdb->prepare( '
 			WHERE (
 				posts.post_title LIKE %s
@@ -973,7 +974,8 @@ final class Ajax {
 			" . $type_where . ' ',
 			$like_term,
 			$like_term
-		); // WPCS: unprepared SQL ok.
+		);
+		// phpcs:enable
 		
 		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
 		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
@@ -981,7 +983,7 @@ final class Ajax {
 		$query = "$query_select $where_clause
 			ORDER BY posts.post_parent ASC, posts.post_title ASC";
 
-		$product_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+		$product_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( is_numeric( $term ) ) {
 
@@ -1082,15 +1084,17 @@ final class Ajax {
 		global $wpdb;
 		$max_results = absint( apply_filters( 'atum/ajax/search_wc_orders/max_results', 10 ) );
 
+		// phpcs:disable
 		$query = $wpdb->prepare(
 			"SELECT DISTINCT ID from {$wpdb->posts} WHERE post_type = 'shop_order' 
 			AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
 			AND ID LIKE %s LIMIT %d",
 			"$order_id%",
 			$max_results
-		); // WPCS: unprepared SQL ok.
+		);
+		// phpcs:enable
 
-		$order_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+		$order_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $order_ids ) ) {
 			wp_die();
@@ -1140,6 +1144,7 @@ final class Ajax {
 		$max_results   = absint( apply_filters( 'atum/ajax/search_suppliers/max_results', 10 ) );
 		$post_statuses = AtumCapabilities::current_user_can( 'edit_private_suppliers' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
+		// phpcs:disable WordPress.DB.PreparedSQL
 		$query = $wpdb->prepare(
 			"SELECT DISTINCT ID, post_title from $wpdb->posts 
 			WHERE post_type = %s $where
@@ -1147,9 +1152,10 @@ final class Ajax {
 			LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results
-		); // WPCS: unprepared SQL ok.
+		);
+		// phpcs:enable
 
-		$suppliers = $wpdb->get_results( $query ); // WPCS: unprepared SQL ok.
+		$suppliers = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $suppliers ) ) {
 			wp_die();
@@ -2113,20 +2119,24 @@ final class Ajax {
 			$meta_value      = 'yes' === $status ? 1 : 0;
 			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$update_success = $wpdb->query( $wpdb->prepare( "
 				UPDATE $atum_data_table SET atum_controlled = %d		        		
             	WHERE atum_controlled != %d",
 				$meta_value,
 				$meta_value
-			) ); // WPCS: unprepared SQL ok.
+			) );
+			// phpcs:enable
 			
 			// Get product still not inserted.
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$update_success_2 = $wpdb->query( "
 				INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
 				FROM {$wpdb->posts} p
 				LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
 				WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL
-			" ); // WPCS: unprepared SQL ok.
+			" );
+			// phpcs:enable
 			
 			$update_success = FALSE !== $update_success && FALSE !== $update_success_2;
 			
@@ -2169,7 +2179,7 @@ final class Ajax {
 		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
 		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
 		                )
-		            " ); // WPCS: unprepared SQL ok.
+		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				}
 				else {
 
@@ -2180,7 +2190,7 @@ final class Ajax {
 		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
 		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
 		                )
-		            " ); // WPCS: unprepared SQL ok.
+		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				}
 				

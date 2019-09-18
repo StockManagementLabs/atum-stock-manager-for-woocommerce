@@ -451,9 +451,8 @@ class Suppliers {
 
 			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-			$where = $wpdb->prepare( "
-				WHERE apd.supplier_id = %d AND p.post_type IN ('" . implode( "','", $post_type ) . "')
-			", $supplier_id ); // WPCS: unprepared SQL ok.
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$where = $wpdb->prepare( "WHERE apd.supplier_id = %d AND p.post_type IN ('" . implode( "','", $post_type ) . "')", $supplier_id );
 
 			if ( $type_filter ) {
 
@@ -469,12 +468,14 @@ class Suppliers {
 
 			}
 
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$products = $wpdb->get_results( "
 				SELECT p.ID, p.post_parent FROM $wpdb->posts p
 				LEFT JOIN {$wpdb->prefix}wc_products wcp ON p.ID = wcp.product_id
 				LEFT JOIN $atum_data_table apd ON p.ID = apd.product_id 
 				$where
-			", ARRAY_A ); // WPCS: unprepared SQL ok.
+			", ARRAY_A );
+			// phpcs:enable
 
 			if ( $products ) {
 				// Merge the child and parent IDs.
@@ -549,6 +550,7 @@ class Suppliers {
 
 			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$found_product_id = $wpdb->get_var( $wpdb->prepare( "
 				SELECT p.ID
 				FROM $wpdb->posts p
@@ -557,7 +559,8 @@ class Suppliers {
 				LIMIT 1",
 				wp_slash( $supplier_sku ),
 				$product_id
-			) ); // WPCS: unprepared SQL ok.
+			) );
+			// phpcs:enable
 
 			AtumCache::set_cache( $cache_key, $found_product_id );
 

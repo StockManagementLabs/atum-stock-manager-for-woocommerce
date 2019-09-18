@@ -215,9 +215,9 @@ class Bootstrap {
 			$itemmeta_table     = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
 
 			// Delete the ATUM tables in db.
-			$wpdb->query( "DROP TABLE IF EXISTS $product_data_table" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "DROP TABLE IF EXISTS $items_table" ); // WPCS: unprepared SQL ok.
-			$wpdb->query( "DROP TABLE IF EXISTS $itemmeta_table" ); // WPCS: unprepared SQL ok.
+			$wpdb->query( "DROP TABLE IF EXISTS $product_data_table" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "DROP TABLE IF EXISTS $items_table" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "DROP TABLE IF EXISTS $itemmeta_table" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			// Delete all the posts of ATUM's custom post types and their meta.
 			$atum_post_types = array(
@@ -237,7 +237,7 @@ class Bootstrap {
 				$atum_posts = get_posts( $args );
 
 				if ( ! empty( $atum_posts ) ) {
-					$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN (" . implode( ',', $atum_posts ) . ')' ); // WPCS: unprepared SQL ok.
+					$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN (" . implode( ',', $atum_posts ) . ')' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					$wpdb->delete( $wpdb->posts, array( 'post_type' => $atum_post_type ) );
 				}
 
@@ -246,10 +246,10 @@ class Bootstrap {
 			$atum_prefix = 'atum_';
 
 			// Delete all the ATUM order notes.
-			$wpdb->query( "DELETE FROM $wpdb->comments WHERE comment_type LIKE '" . ATUM_PREFIX . "%'" ); // WPCS: unprepared SQL ok.
+			$wpdb->query( "DELETE FROM $wpdb->comments WHERE comment_type LIKE '" . ATUM_PREFIX . "%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			// Delete all the user meta related to ATUM.
-			$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE '" . ATUM_PREFIX . "%'" ); // WPCS: unprepared SQL ok.
+			$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE '" . ATUM_PREFIX . "%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			// Delete the ATUM options.
 			delete_option( ATUM_PREFIX . 'version' );

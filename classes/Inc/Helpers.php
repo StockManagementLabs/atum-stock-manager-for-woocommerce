@@ -49,14 +49,16 @@ final class Helpers {
 
 		global $wpdb;
 
+		// phpcs:disable WordPress.DB.PreparedSQL
 		$query = $wpdb->prepare( "
 			SELECT $wpdb->terms.term_id FROM $wpdb->terms 
             INNER JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
             WHERE $wpdb->term_taxonomy.taxonomy = %s
             AND $wpdb->terms.slug IN ('" . implode( "','", array_map( 'esc_attr', $slug_terms ) ) . "')
-        ", $taxonomy ); // WPCS: unprepared SQL ok.
+        ", $taxonomy );
+		// phpcs:enable
 
-		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+		$search_terms_ids = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$result           = array();
 
 		// Flat array.
@@ -496,7 +498,7 @@ final class Helpers {
 	 * @param int       $date_end   Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
 	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
 	 *
-	 * @return array
+	 * @return array|int|float
 	 */
 	public static function get_sold_last_days( $items, $date_start, $date_end = NULL, $colums = [ 'qty' ] ) {
 
@@ -565,11 +567,11 @@ final class Helpers {
 
 				// When only 1 single result is requested.
 				if ( count( $colums ) === 1 ) {
-					$items_sold = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+					$items_sold = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				}
 				// Multiple results requested.
 				else {
-					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				}
 
 			}
@@ -578,11 +580,11 @@ final class Helpers {
 
 				// When only 1 single result for each product is requested.
 				if ( count( $colums ) === 1 ) {
-					$items_sold = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+					$items_sold = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				}
 				// Multiple results requested for each product.
 				else {
-					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+					$items_sold = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				}
 
 			}
@@ -717,6 +719,7 @@ final class Helpers {
 					global $wpdb;
 
 					// Get the sum of quantities for the specified product in the logs of that type.
+					// phpcs:disable WordPress.DB.PreparedSQL
 					$query = $wpdb->prepare( "
 						SELECT SUM(meta_value) 				  
 					 	FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " om
@@ -727,9 +730,10 @@ final class Helpers {
 						    WHERE meta_key IN ('_product_id', '_variation_id') AND meta_value = %d
 						)",
 						$product->get_id()
-					); // WPCS: unprepared SQL ok.
+					);
+					// phpcs:enable
 
-					$qty = $wpdb->get_var( $query ); // WPCS: unprepared SQL ok.
+					$qty = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				}
 				else {
@@ -937,7 +941,7 @@ final class Helpers {
 		
 		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
 		
-		return $wpdb->get_results( $sql, ARRAY_N ); // WPCS: unprepared SQL ok.
+		return $wpdb->get_results( $sql, ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		
 	}
 	
@@ -1556,9 +1560,9 @@ final class Helpers {
 	public static function get_order_items( $order_id ) {
 
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT * FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d ORDER BY order_item_id', $order_id ); // WPCS: unprepared SQL ok.
+		$query = $wpdb->prepare( "SELECT * FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d ORDER BY order_item_id', $order_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		return $wpdb->get_results( $query ); // WPCS: unprepared SQL ok.
+		return $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	}
 
@@ -1622,6 +1626,7 @@ final class Helpers {
 				// Calculate the inbound stock from pending purchase orders.
 				global $wpdb;
 
+				// phpcs:disable WordPress.DB.PreparedSQL
 				$sql = $wpdb->prepare( "
 					SELECT SUM(oim2.`meta_value`) AS quantity 			
 					FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
@@ -1634,9 +1639,10 @@ final class Helpers {
 					GROUP BY oim.`meta_value`;",
 					PurchaseOrders::POST_TYPE,
 					$product_id
-				); // WPCS: unprepared SQL ok.
+				);
+				// phpcs:enable
 
-				$inbound_stock = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
+				$inbound_stock = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$inbound_stock = $inbound_stock ?: 0;
 
 				// Save it for future quicker access.
@@ -1692,7 +1698,7 @@ final class Helpers {
 					$product->get_id()
 				);
 
-				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // WPCS: unprepared SQL ok.
+				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				// Save it for future quicker access.
 				$product->set_stock_on_hold( $stock_on_hold );
@@ -1979,6 +1985,7 @@ final class Helpers {
 		// When disabling the "Out of stock threshold", we must restore the stock status to its correct value.
 		if ( $all ) {
 
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT ID FROM $wpdb->posts p
                 LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
@@ -1986,7 +1993,8 @@ final class Helpers {
                 WHERE p.post_status IN ('publish', 'future', 'private')
                 AND ap.out_stock_threshold > 0 AND ap.out_stock_threshold >= pm.meta_value
                 AND p.post_type IN ('product', 'product_variation');
-            " ); // WPCS: unprepared SQL ok.
+            " );
+			// phpcs:enable
 
 			foreach ( $ids_to_rebuild_stock_status as $id_to_rebuild ) {
 
@@ -2035,12 +2043,14 @@ final class Helpers {
 
 		global $wpdb;
 
+		// phpcs:disable WordPress.DB.PreparedSQL
 		$row_count = $wpdb->get_var( "
 			SELECT COUNT(*) FROM $wpdb->posts p
             LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id    
             WHERE p.post_status IN ('publish', 'future', 'private') AND p.post_type IN ('product', 'product_variation')
             AND ap.out_stock_threshold IS NOT NULL;
-		" ); // WPCS: unprepared SQL ok.
+		" );
+		// phpcs:enable
 
 		return $row_count > 0;
 	}
@@ -2814,6 +2824,7 @@ final class Helpers {
 		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
 		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
 
+		// phpcs:disable WordPress.DB.PreparedSQL
 		$wpdb->query( "
 			INSERT IGNORE INTO $atum_product_data_table (
 				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
@@ -2825,7 +2836,8 @@ final class Helpers {
 			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
 			lost_sales,has_location,update_date$fields
 			FROM $atum_product_data_table WHERE product_id = $original_id;
-		" ); // WPCS: unprepared SQL ok.
+		" );
+		// phpcs:enable
 	}
 
 	/**

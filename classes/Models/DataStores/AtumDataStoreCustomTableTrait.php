@@ -59,7 +59,7 @@ trait AtumDataStoreCustomTableTrait {
 
 			// Get the extra ATUM data for the product.
 			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // WPCS: unprepared SQL ok.
+			$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 			if ( ! empty( $atum_data ) ) {
 				$data = array_merge( $data, $atum_data );

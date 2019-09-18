@@ -388,7 +388,8 @@ class ListTable extends AtumListTable {
 
 		$order    = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
 		$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
-		
+
+		// phpcs:disable
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
 			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
@@ -400,9 +401,10 @@ class ListTable extends AtumListTable {
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",
 			PurchaseOrders::POST_TYPE
-		); // WPCS: unprepared SQL ok.
+		);
+		// phpcs:enable
 
-		$po_products = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
+		$po_products = $wpdb->get_results( $sql );// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! empty( $po_products ) ) {
 

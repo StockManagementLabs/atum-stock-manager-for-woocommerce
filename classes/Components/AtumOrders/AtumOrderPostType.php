@@ -265,8 +265,7 @@ abstract class AtumOrderPostType {
 
 			// Count all the orders with one of the ATUM Order's statuses.
 			if ( $object_types ) {
-				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
-				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", array_keys( $this->get_statuses() ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // WPCS: unprepared SQL ok.
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", array_keys( $this->get_statuses() ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // phpcs:ignore
 			}
 
 			// This action is documented in wp-includes/taxonomy.php.
@@ -1079,6 +1078,7 @@ abstract class AtumOrderPostType {
 
 		if ( ! empty( $search_fields ) ) {
 
+			// phpcs:disable
 			$atum_order_ids = array_unique( array_merge(
 				$atum_order_ids,
 				$wpdb->get_col(
@@ -1088,7 +1088,8 @@ abstract class AtumOrderPostType {
 				$wpdb->get_col(
 					"SELECT order_id FROM $wpdb->prefix" . self::ORDER_ITEMS_TABLE . " WHERE order_item_name LIKE '%" . $wpdb->esc_like( $term ) . "%'"
 				)
-			) ); // WPCS: unprepared SQL ok.
+			) );
+			// phpcs:enable
 
 		}
 

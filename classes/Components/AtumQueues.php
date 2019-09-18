@@ -98,10 +98,12 @@ class AtumQueues {
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		$date_max                = gmdate( 'Y-m-d H:i:s', strtotime( '3 hours ago' ) );
 
+		// phpcs:disable
 		$outdated_products = $wpdb->get_col( $wpdb->prepare( "
 			SELECT product_id FROM $atum_product_data_table
 			WHERE update_date <= %s
-		", $date_max ) ); // WPCS: unprepared SQL ok.
+		", $date_max ) );
+		// phpcs:enable
 
 		foreach ( $outdated_products as $product_id ) {
 

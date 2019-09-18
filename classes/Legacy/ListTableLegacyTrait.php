@@ -655,7 +655,7 @@ trait ListTableLegacyTrait {
 
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
-					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
+					$products_low_stock = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
 					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
 

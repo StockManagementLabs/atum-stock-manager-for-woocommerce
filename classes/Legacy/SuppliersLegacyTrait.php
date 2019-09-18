@@ -93,6 +93,7 @@ trait SuppliersLegacyTrait {
 				$child_ids = array();
 
 				// Get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id).
+				// phpcs:disable WordPress.DB.PreparedSQL
 				$query_parents = $wpdb->prepare( "
 					SELECT DISTINCT p.ID FROM $wpdb->posts p
 	                $term_join
@@ -107,12 +108,15 @@ trait SuppliersLegacyTrait {
 	                    AND apd.supplier_id = %d
 	                    AND sp.post_status IN ('publish', 'private')
 	                      
-	                )", $supplier_id ); // WPCS: unprepared SQL ok.
+	                )", $supplier_id );
+				// phpcs:enable
 
-				$parent_ids = $wpdb->get_col( $query_parents ); // WPCS: unprepared SQL ok.
+				$parent_ids = $wpdb->get_col( $query_parents ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				if ( ! empty( $parent_ids ) ) {
+
 					// Get rebel childs.
+					// phpcs:disable WordPress.DB.PreparedSQL
 					$query_childs = $wpdb->prepare( "
 		                SELECT DISTINCT p.ID FROM $wpdb->posts p
 		                INNER JOIN $atum_data_table AS apd ON (p.ID = apd.product_id)
@@ -120,9 +124,11 @@ trait SuppliersLegacyTrait {
 		                AND apd.supplier_id = %d
 		                AND p.post_parent IN ( " . implode( ',', $parent_ids ) . " )
 		                AND p.post_status IN ('publish', 'private')
-	                ", $supplier_id ); // WPCS: unprepared SQL ok.
+	                ", $supplier_id );
+					// phpcs:enable
 
-					$child_ids = $wpdb->get_col( $query_childs ); // WPCS: unprepared SQL ok.
+					$child_ids = $wpdb->get_col( $query_childs ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
 				}
 
 				$products = array_unique( array_merge( $products, $parent_ids, $child_ids ) );
