@@ -17,9 +17,11 @@ export default class SearchByColumn {
 			
 			this.setup();
 			
-			$('#adv-settings input:checkbox').change( () => {
-				setTimeout( () => this.setup(), 500 ); // Performance.
-			} );
+			// Rearrange the dropdown items when changing the visible columns from Screen Options.
+			$('#adv-settings input:checkbox').change( () => this.setup() );
+			
+			this.events();
+			
 		}
 		
 	}
@@ -29,19 +31,22 @@ export default class SearchByColumn {
 	 */
 	setup() {
 		
-		let $dropdownItem: JQuery = $('<a class="dropdown-item" href="#" />');
+		const $dropdownItem: JQuery = $('<a class="dropdown-item" href="#" />');
 		
 		this.globals.$searchColumnDropdown.empty();
 		
 		// Append the no column and the title items.
-		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', '').text( this.globals.$searchColumnDropdown.data('no-option') ) );
+		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', '').addClass('active').text( this.globals.$searchColumnDropdown.data('no-option') ) );
 		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data('value', 'title').text( this.globals.$searchColumnDropdown.data('product-title') ) );
+		
+		// Reset the button value.
+		this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['', this.globals.$searchColumnDropdown.data('no-option')]);
 		
 		$('#adv-settings input:checked').each( (index: number, elem: Element) => {
 			
-			let $elem: JQuery       = $(elem),
-			    optionVal: string   = $elem.val(),
-			    columnLabel: string = $elem.parent().text();
+			const $elem: JQuery       = $(elem),
+			      optionVal: string   = $elem.val(),
+			      columnLabel: string = $elem.parent().text();
 			
 			// Calc values are not searchable, also we can't search on thumb.
 			if (optionVal.search('calc_') < 0 && optionVal !== 'thumb') {
@@ -57,6 +62,13 @@ export default class SearchByColumn {
 			
 		});
 		
+	}
+	
+	/**
+	 * Bind events
+	 */
+	events() {
+		
 		this.globals.$searchColumnBtn
 		
 			// Bind clicks on search by column button.
@@ -68,8 +80,8 @@ export default class SearchByColumn {
 			// Set $searchColumnBtn data-value and label.
 			.on('atum-search-column-set-data', (evt: JQueryEventObject, value: string, label: string) => {
 				
-				let $searchColBtn: JQuery  = $(evt.currentTarget),
-				    $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children('a');
+				const $searchColBtn: JQuery  = $(evt.currentTarget),
+				      $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children('a');
 				
 				$searchColBtn.text(label);
 				$searchColBtn.data('value', value);
@@ -81,11 +93,11 @@ export default class SearchByColumn {
 			});
 		
 		// Bind clicks on dropdown menu items.
-		this.globals.$searchColumnDropdown.find('a').click( (evt: JQueryEventObject) => {
+		this.globals.$searchColumnDropdown.on('click', 'a', (evt: JQueryEventObject) => {
 			
 			evt.preventDefault();
 			
-			let $item: JQuery = $(evt.currentTarget);
+			const $item: JQuery = $(evt.currentTarget);
 			
 			this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [$item.data('value'), $item.text()]);
 			
@@ -104,9 +116,7 @@ export default class SearchByColumn {
 			
 		});
 		
-		$(document).click( () => {
-			this.globals.$searchColumnDropdown.hide();
-		});
+		$(document).click( () => this.globals.$searchColumnDropdown.hide() );
 		
 	}
 	
