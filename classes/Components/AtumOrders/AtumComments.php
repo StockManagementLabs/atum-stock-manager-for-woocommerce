@@ -109,12 +109,14 @@ class AtumComments {
 				$stats = array();
 
 				// *** The 'log_note' is deprecated and could be deleted in future versions ***
+				// phpcs:disable
 				$count = $wpdb->get_results( "
 					SELECT comment_approved, COUNT(*) AS num_comments
 					FROM {$wpdb->comments}
 					WHERE comment_type NOT IN ('order_note', 'webhook_delivery', 'log_note', '" . self::NOTES_KEY . "')
 					GROUP BY comment_approved
-				", ARRAY_A ); // WPCS: unprepared SQL ok.
+				", ARRAY_A );
+				// phpcs:enable
 
 				$total    = 0;
 				$approved = array(

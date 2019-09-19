@@ -190,7 +190,7 @@ class ProductDataQuery extends \WP_Meta_Query {
 				case 'IN':
 				case 'NOT IN':
 					$meta_compare_string = '(' . substr( str_repeat( ',%s', count( $meta_value ) ), 1 ) . ')';
-					$where               = $wpdb->prepare( $meta_compare_string, $meta_value ); // WPCS: unprepared SQL ok.
+					$where               = $wpdb->prepare( $meta_compare_string, $meta_value ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					break;
 
 				case 'BETWEEN':

@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.6.0 
+ * @version 1.6.1 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -5939,6 +5939,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .search-box #search-submit, p.search-box #search-submit {
   background-color: var(--secondary) !important;
   color: var(--main-text-expanded) !important;
+  border: none;
 }
 
 .search-box #post-search-input, p.search-box #post-search-input {
@@ -6324,13 +6325,13 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .tablenav .tablenav-pages a:not(.extend-list-table):active, .tablenav .tablenav-pages a:not(.extend-list-table):focus {
-  background-color: var(--secondary);
-  color: var(--white);
+  background-color: var(--secondary) !important;
+  color: var(--white) !important;
 }
 
 .tablenav .tablenav-pages a:not(.extend-list-table):hover {
   background-color: var(--secondary) !important;
-  color: var(--white);
+  color: var(--white) !important;
 }
 
 @media all and (max-width: 480px) {

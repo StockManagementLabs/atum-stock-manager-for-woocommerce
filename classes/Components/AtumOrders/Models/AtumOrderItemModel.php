@@ -101,8 +101,8 @@ abstract class AtumOrderItemModel {
 			$data      = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 			if ( ! $has_cache ) {
-				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d LIMIT 1;', $this->id ); // WPCS: unprepared SQL ok.
-				$data  = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
+				$query = $wpdb->prepare( "SELECT order_id, order_item_name FROM {$wpdb->prefix}" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d LIMIT 1;', $this->id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$data  = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				AtumCache::set_cache( $cache_key, $data );
 			}
@@ -322,7 +322,7 @@ abstract class AtumOrderItemModel {
 			ORDER BY meta_id
 		", $this->id );
 
-		$raw_meta_data = $wpdb->get_results( $query ); // WPCS: unprepared SQL ok.
+		$raw_meta_data = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( $raw_meta_data ) {
 			$this->meta = $raw_meta_data;

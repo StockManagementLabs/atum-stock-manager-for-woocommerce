@@ -2932,16 +2932,22 @@ abstract class AtumListTable extends \WP_List_Table {
 			$class   = array( 'manage-column', "column-$column_key" );
 			$colspan = '';
 
-			if ( in_array( $column_key, $hidden ) ) {
+			if ( in_array( $column_key, $hidden ) && 'cb' === $first_column ) {
 				$class[] = 'hidden';
 			}
 
 			if ( $first_column === $column_key ) {
-				$class[]        = 'totals-heading';
-				$colspan        = 'colspan="2"';
+
+				$class[] = 'totals-heading';
+
+				if ( 'cb' === $first_column ) {
+					$colspan = 'colspan="2"';
+				}
+
 				$column_display = '<span>' . __( 'Totals', ATUM_TEXT_DOMAIN ) . '</span>';
+
 			}
-			elseif ( $second_column === $column_key ) {
+			elseif ( 'cb' === $first_column && $second_column === $column_key ) {
 				continue; // Get rid of the second column as the first one will have a colspan.
 			}
 			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
@@ -3465,7 +3471,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		        AND $search_query
 	         ";
 
-			$search_terms_ids = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL ok.
+			$search_terms_ids = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			if ( empty( $search_terms_ids ) ) {
 				AtumCache::set_cache( $cache_key, $where_without_results );
@@ -3513,7 +3519,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					    AND post_type IN ('product', 'product_variation')
 				    ";
 
-					$search_term_id = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
+					$search_term_id = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( empty( $search_term_id ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
@@ -3561,9 +3567,9 @@ abstract class AtumListTable extends \WP_List_Table {
 						"SELECT ID FROM $wpdb->posts
 					    WHERE post_type = %s AND $search_query",
 						Suppliers::POST_TYPE
-					); // WPCS: unprepared SQL ok.
+					); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-					$search_supplier_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+					$search_supplier_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( empty( $search_supplier_ids ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
@@ -3720,7 +3726,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					}
 
-					$search_terms_ids = $wpdb->get_results( $query ); // WPCS: unprepared SQL ok.
+					$search_terms_ids = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( empty( $search_terms_ids ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
@@ -4160,7 +4166,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
 			WHERE $where AND pr.type = %s
 			GROUP BY p.ID
-		", $parent_type ) ); // WPCS: unprepared sql ok.
+		", $parent_type ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$parents_with_child = $grouped_products = $bundle_children = array();
 
@@ -4401,9 +4407,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				LEFT JOIN $wpdb->postmeta ON $join
 				WHERE $wpdb->posts.post_type = 'product_variation' AND $wpdb->posts.post_parent = %d
 				AND $where
-			", $product->get_id() ); // WPCS: unprepared SQL ok.
+			", $product->get_id() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-			$children_count = $wpdb->get_var( $sql ); // WPCS: unprepared SQL ok.
+			$children_count = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		}
 
@@ -4431,7 +4437,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			AND post_parent > 0 AND post_type = 'product_variation'	
 		";
 
-		return $wpdb->get_col( $parents ); // WPCS: unprepared SQL ok.
+		return $wpdb->get_col( $parents ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	}
 

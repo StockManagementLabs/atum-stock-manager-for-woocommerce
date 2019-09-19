@@ -56,7 +56,7 @@ trait AjaxLegacyTrait {
 
 		foreach ( $searched_metas as $searched_meta ) {
 			$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
-			$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // WPCS: unprepared SQL ok.
+			$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // phpcs:ignore WordPress.DB.PreparedSQL
 			$join_counter ++;
 		}
 
@@ -90,6 +90,7 @@ trait AjaxLegacyTrait {
 
 		$query_select = " SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
 
+		// phpcs:disable WordPress.DB.PreparedSQL
 		$where_clause = $wpdb->prepare( 'WHERE (
 				posts.post_title LIKE %s
 				OR posts.post_content LIKE %s
@@ -100,7 +101,8 @@ trait AjaxLegacyTrait {
 			" . $type_where . ' ',
 			$like_term,
 			$like_term
-		); // WPCS: unprepared SQL ok.
+		);
+		// phpcs:enable
 
 		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
 		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
@@ -108,7 +110,7 @@ trait AjaxLegacyTrait {
 		$query = "$query_select $where_clause
 			ORDER BY posts.post_parent ASC, posts.post_title ASC";
 
-		$product_ids = $wpdb->get_col( $query ); // WPCS: unprepared SQL ok.
+		$product_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( is_numeric( $term ) ) {
 

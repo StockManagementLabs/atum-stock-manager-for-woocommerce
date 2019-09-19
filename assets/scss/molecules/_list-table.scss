@@ -378,6 +378,7 @@
 	#search-submit {
 		background-color: var(--secondary) !important;
 		color: var(--main-text-expanded) !important;
+		border: none;
 	}
 	
 	#post-search-input {
@@ -670,12 +671,12 @@
 			line-height: 30px;
 			
 			&:active, &:focus {
-				background-color: var(--secondary);
-				color:  var(--white);
+				background-color: var(--secondary) !important;
+				color:  var(--white) !important;
 			}
 			&:hover {
 				background-color: var(--secondary) !important;
-				color:  var(--white);
+				color:  var(--white) !important;
 			}
 		}
 		

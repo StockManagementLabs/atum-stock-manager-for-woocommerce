@@ -665,7 +665,7 @@ final class WidgetHelpers {
 
 				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
-				$products_low_stock                = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
+				$products_low_stock                = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
 				$stock_counters['count_low_stock'] = count( $products_low_stock );
 
@@ -709,12 +709,14 @@ final class WidgetHelpers {
 			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
 		}
 
+		// phpcs:disable
 		$parents = $wpdb->get_col( $wpdb->prepare( "
 			SELECT p.ID FROM $wpdb->posts p  
 			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
 			WHERE $where AND pr.type = %s
 			GROUP BY p.ID
-		", $parent_type ) ); // WPCS: unprepared sql ok.
+		", $parent_type ) );
+		// phpcs:enable
 
 		if ( ! empty( $parents ) ) {
 

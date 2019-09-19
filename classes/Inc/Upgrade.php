@@ -116,7 +116,7 @@ class Upgrade {
 		$items_table    = $wpdb->prefix . ATUM_PREFIX . 'order_items';
 		$itemmeta_table = $wpdb->prefix . ATUM_PREFIX . 'order_itemmeta';
 
-		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$items_table';" ) ) { // WPCS: unprepared SQL ok.
+		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$items_table';" ) ) { // phpcs:ignore WordPress.DB.PreparedSQL
 
 			$collate = '';
 
@@ -180,7 +180,7 @@ class Upgrade {
 		global $wpdb;
 
 		// Ensure that the meta keys were not added previously.
-		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "'" ); // WPCS: unprepared SQL ok.
+		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( $meta_count > 0 ) {
 			return;
@@ -191,7 +191,7 @@ class Upgrade {
 				SELECT DISTINCT post_id, '" . Globals::ATUM_CONTROL_STOCK_KEY . "', meta_value FROM $wpdb->postmeta 
 				WHERE meta_key = '_manage_stock' AND meta_value = 'yes'";
 
-		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	}
 
@@ -205,7 +205,7 @@ class Upgrade {
 		global $wpdb;
 
 		// Ensure that the meta keys were not added previously.
-		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" ); // WPCS: unprepared SQL ok.
+		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( $meta_count > 0 ) {
 			return;
@@ -221,7 +221,7 @@ class Upgrade {
 				SELECT DISTINCT object_id, '" . Globals::IS_INHERITABLE_KEY . "', 'yes' FROM $wpdb->term_relationships 
 				WHERE term_taxonomy_id = $term->term_taxonomy_id";
 
-				$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+				$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			}
 
@@ -238,7 +238,7 @@ class Upgrade {
 
 		global $wpdb;
 
-		$inheritable_ids = $wpdb->get_col( "SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" ); // WPCS: unprepared SQL ok.
+		$inheritable_ids = $wpdb->get_col( "SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( $inheritable_ids ) {
 			foreach ( $inheritable_ids as $id ) {
@@ -267,7 +267,7 @@ class Upgrade {
 
 		foreach ( $hidden_columns as $hidden_column ) {
 
-			$user_ids = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key_sc' AND meta_value NOT LIKE '%{$hidden_column}%' AND meta_value <> ''" ); // WPCS: unprepared SQL ok.
+			$user_ids = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key_sc' AND meta_value NOT LIKE '%{$hidden_column}%' AND meta_value <> ''" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 			foreach ( $user_ids as $user_id ) {
 
@@ -302,7 +302,7 @@ class Upgrade {
 			AND pm.meta_value <> ''AND p.post_type IN ('product', 'product_variation');
 		";
 
-		$post_metas = $wpdb->get_results( $sql ); // WPCS: unprepared SQL ok.
+		$post_metas = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $post_metas as $post_meta ) {
 			$non_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
 
@@ -323,7 +323,7 @@ class Upgrade {
 
 		$product_meta_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
 
-		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$product_meta_table';" ) ) { // WPCS: unprepared SQL ok.
+		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$product_meta_table';" ) ) { // phpcs:ignore WordPress.DB.PreparedSQL
 
 			$collate = '';
 
@@ -467,7 +467,7 @@ class Upgrade {
 			pm.meta_key = '_status' AND pm.meta_value = 'completed'
 		";
 		
-		$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		
 	}
 
@@ -507,8 +507,9 @@ class Upgrade {
 			', $db_name, $atum_data_table, $column_name );
 
 			// Add the new column to the table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			if ( ! $wpdb->get_var( $column_exist ) ) {
-				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // WPCS: unprepared SQL ok.
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 			}
 
 		}
@@ -527,8 +528,9 @@ class Upgrade {
 			', $db_name, $atum_data_table, $index );
 
 			// Add the new index to the table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			if ( ! $wpdb->get_var( $index_exist ) ) {
-				$wpdb->query( "ALTER TABLE $atum_data_table ADD INDEX `$index` (`$index`)" ); // WPCS: unprepared SQL ok.
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD INDEX `$index` (`$index`)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 			}
 
 		}
@@ -547,7 +549,8 @@ class Upgrade {
 
 		$log_table = $wpdb->prefix . AtumLogs::get_log_table();
 
-		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$log_table';" ) ) { // WPCS: unprepared SQL ok.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$log_table';" ) ) {
 
 			$collate = '';
 

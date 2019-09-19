@@ -844,7 +844,7 @@ class ListTable extends AtumListTable {
 						GROUP BY product_id ORDER BY order_item_qty DESC
 					";
 
-					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( ! empty( $product_results ) ) {
 
@@ -863,11 +863,11 @@ class ListTable extends AtumListTable {
 					$dates_where = '';
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_where .= ' AND ord.post_date >= "' . $_REQUEST['date_from'] . '" ';
+						$dates_where .= ' AND ord.post_date >= "' . esc_attr( $_REQUEST['date_from'] ) . '" ';
 					}
 
 					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_where .= ' AND ord.post_date < "' . $_REQUEST['date_to'] . '" ';
+						$dates_where .= ' AND ord.post_date < "' . esc_attr( $_REQUEST['date_to'] ) . '" ';
 					}
 
 					$sql = "
@@ -883,7 +883,7 @@ class ListTable extends AtumListTable {
 						GROUP BY product_id order by qty ASC;
 					";
 
-					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( ! empty( $product_results ) ) {
 
@@ -902,6 +902,7 @@ class ListTable extends AtumListTable {
 					$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
 
 					// Get all the products within pending Purchase Orders.
+					// phpcs:disable WordPress.DB.PreparedSQL
 					$sql = $wpdb->prepare( "
 						SELECT product_id, SUM(qty) AS qty FROM (
 							SELECT MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty 
@@ -918,9 +919,10 @@ class ListTable extends AtumListTable {
 						GROUP BY product_id
 						ORDER by qty DESC;",
 						PurchaseOrders::POST_TYPE
-					); // WPCS: unprepared SQL ok.
+					);
+					// phpcs:enable
 
-					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( ! empty( $product_results ) ) {
 
@@ -952,7 +954,7 @@ class ListTable extends AtumListTable {
 						ORDER BY qty DESC;
 					";
 
-					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // WPCS: unprepared SQL ok.
+					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( ! empty( $product_results ) ) {
 
@@ -1168,7 +1170,8 @@ class ListTable extends AtumListTable {
 		global $wpdb;
 		$product_count_sql = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = 'product' AND post_status != 'trash'";
 
-		if ( 0 === absint( $wpdb->get_var( $product_count_sql ) ) ) { // WPCS: unprepared SQL ok.
+		// // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( 0 === absint( $wpdb->get_var( $product_count_sql ) ) ) {
 			return;
 		}
 

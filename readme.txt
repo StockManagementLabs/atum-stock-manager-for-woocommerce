@@ -7,7 +7,7 @@ Tested up to: 5.2.3
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.7.0
-Stable tag: 1.6.0.2
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,41 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.1`
+
+*2019-09-20*
+
+**Features**
+
+* Do not force an update on some cases when the filtering data has not changed in Stock Central.
+* DateTimePicker enhancements.
+* Improved AtumQueues component.
+* Allow searching Inventory Logs by "Order number", "Total amount", "Type", "Date" and "Custom Log Type Name".
+* Allow searching Purchase Orders by "Total amount", "Supplier Name", "Expected Date" and "Date".
+* Added the custom log type name to the "other" type cells on the Inventory Logs' ListTable.
+
+**Changes**
+
+* Adapted gulpfile code to work with Gulp 4.
+* Added new hook to be able to filter the search results externally.
+* Allow using the DateTimePicker’s today button when the maxDate is set to "moment+1".
+* Added new hook to "out of stock" rebuilding process.
+* Get rid of the ATUM's Update Date on products once an Order is saved to do the appropriate calculations again.
+* Do not change the stock status on the WooCommerce's products list for bundle products.
+* Do not add a colspan to totals row title on ListTables that have no checkboxes.
+
+**Fixes**
+
+* Fixed SearchByColumn component’s behavior.
+* Deduct the negative stock values from the total stock amount.
+* Fixed "Add meta" button on ATUM Orders.
+* Restore the correct stock status for the products that reached the ATUM's "Out of Stock Threshold" when enabling/disabling the option.
+* Fixed SearchByColumn component to not stop working when changing hidden columns from the Screen Options.
+* Refactory.
+* CSS fixes.
 
 ---
 

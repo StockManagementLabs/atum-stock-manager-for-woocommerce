@@ -688,13 +688,15 @@ class Wpml {
 			$product_id = (array) $product_id;
 			$post_type  = $post_type ? (array) $post_type : (array) get_post_type( $product_id[0] );
 			// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
-			$str_sql = "SELECT ori.element_id FROM {$wpdb->prefix}icl_translations tra
-							LEFT OUTER JOIN {$wpdb->prefix}icl_translations ori ON tra.trid = ori.trid
-  							WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
-  							AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
-  							 AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL";
+			$str_sql = "
+				SELECT ori.element_id FROM {$wpdb->prefix}icl_translations tra
+				LEFT OUTER JOIN {$wpdb->prefix}icl_translations ori ON tra.trid = ori.trid
+  				WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
+  				AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
+  				AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL
+            ";
 			
-			$results = $wpdb->get_col( $str_sql ); // WPCS: unprepared SQL ok.
+			$results = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			$results = array_map( 'intval', $results ?: $product_id );
 			
@@ -907,8 +909,7 @@ class Wpml {
 			// Don't need prepare, all are integers.
 			$translations_ids_str = implode( ',', $translations_ids );
 			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-			$in_atum              = $wpdb->get_col( "SELECT product_id FROM $table
-					WHERE product_id IN( $translations_ids_str )" ); // WPCS: unprepared SQL ok.
+			$in_atum              = $wpdb->get_col( "SELECT product_id FROM $table WHERE product_id IN( $translations_ids_str )" ); // phpcs:ignore WordPress.DB.PreparedSQL
 			
 			foreach ( $translations_ids as $translation_id ) {
 				
@@ -975,8 +976,7 @@ class Wpml {
 				$translations_ids_str = implode( ',', $translations_ids );
 				$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 				
-				$wpdb->query( "DELETE FROM $table
-						WHERE product_id IN( $translations_ids_str)"); // WPCS: unprepared SQL ok.
+				$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 			}
 		}
 		
@@ -996,26 +996,30 @@ class Wpml {
 		if ( version_compare( $old_version, '1.4.1.2', '<' ) ) {
 			
 			// Delete previous existent metas in translations to prevent duplicates.
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_delete = $wpdb->get_results( "
 				SELECT tr.element_id FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->prefix}icl_translations tr
  				ON pm.post_id = tr.element_id WHERE pm.meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "' AND
  				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
-            ", ARRAY_N ); // WPCS: unprepared SQL ok.
+            ", ARRAY_N );
+			// phpcs:enable
 			
 			if ( $ids_to_delete ) {
 				
 				$ids_to_delete = implode( ',', wp_list_pluck( $ids_to_delete, 0 ) );
+				// phpcs:disable WordPress.DB.PreparedSQL
 				$wpdb->query( "
 					DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('" . Globals::ATUM_CONTROL_STOCK_KEY . "', '" . Globals::IS_INHERITABLE_KEY . "', '" . Globals::OUT_OF_STOCK_DATE_KEY . "')
  					AND post_id IN({$ids_to_delete});
-                " ); // WPCS: unprepared SQL ok.
+                " );
+				// phpcs:enable
 				
 			}
 			
 			$ids_to_refresh = $wpdb->get_results("
 				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
 				WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN ('post_product', 'post_product_variation');
-			", ARRAY_N ); // WPCS: unprepared SQL ok.
+			", ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			if ( $ids_to_refresh ) {
 
@@ -1038,19 +1042,23 @@ class Wpml {
 		if ( version_compare( $old_version, '1.4.4', '<' ) ) {
 			
 			// Delete previous existent metas in translations to prevent duplicates.
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_delete = $wpdb->get_results( "
 				SELECT DISTINCT tr.element_id FROM $wpdb->postmeta pm LEFT JOIN {$wpdb->prefix}icl_translations tr
  				ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('" . Suppliers::SUPPLIER_META_KEY . "', '" . Suppliers::SUPPLIER_SKU_META_KEY . "') AND
  				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
-            ", ARRAY_N ); // WPCS: unprepared SQL ok.
+            ", ARRAY_N );
+			// phpcs:enable
 			
 			if ( $ids_to_delete ) {
 				
 				$ids_to_delete = implode( ',', wp_list_pluck( $ids_to_delete, 0 ) );
+				// phpcs:disable WordPress.DB.PreparedSQL
 				$wpdb->query( "
 					DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . Suppliers::SUPPLIER_META_KEY . "', '" . Suppliers::SUPPLIER_SKU_META_KEY . "')
  					AND post_id IN($ids_to_delete);
-                " ); // WPCS: unprepared SQL ok.
+                " );
+				// phpcs:enable
 				
 			}
 			
@@ -1078,12 +1086,14 @@ class Wpml {
 			
 			// Ensure all meta data in the ATUM table is properly copied to all translations.
 			$product_meta_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
-			
+
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$results = $wpdb->get_results("
 				SELECT DISTINCT t.trid, apd.* FROM {$wpdb->prefix}icl_translations t
 				INNER JOIN $product_meta_table apd ON (t.element_id = apd.product_id)
 				WHERE NULLIF(t.source_language_code, '') IS NULL AND t.element_type IN ('post_product', 'post_product_variation');
-			"); // WPCS: unprepared SQL ok.
+			");
+			// phpcs:enable
 			
 			if ( $results ) {
 				
@@ -1109,7 +1119,7 @@ class Wpml {
 							WHERE product_id IN ('" . implode( ',', $ids ) . "');
 						";
 						
-						$wpdb->query( $update ); // WPCS: unprepared SQL ok.
+						$wpdb->query( $update ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 						
 					}
 				}

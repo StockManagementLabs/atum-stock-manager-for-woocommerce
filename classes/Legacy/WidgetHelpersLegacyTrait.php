@@ -231,7 +231,7 @@ trait WidgetHelpersLegacyTrait {
 
 				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
-				$products_low_stock                = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
+				$products_low_stock                = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
 				$stock_counters['count_low_stock'] = count( $products_low_stock );
 
