@@ -2932,16 +2932,22 @@ abstract class AtumListTable extends \WP_List_Table {
 			$class   = array( 'manage-column', "column-$column_key" );
 			$colspan = '';
 
-			if ( in_array( $column_key, $hidden ) ) {
+			if ( in_array( $column_key, $hidden ) && 'cb' === $first_column ) {
 				$class[] = 'hidden';
 			}
 
 			if ( $first_column === $column_key ) {
-				$class[]        = 'totals-heading';
-				$colspan        = 'colspan="2"';
+
+				$class[] = 'totals-heading';
+
+				if ( 'cb' === $first_column ) {
+					$colspan = 'colspan="2"';
+				}
+
 				$column_display = '<span>' . __( 'Totals', ATUM_TEXT_DOMAIN ) . '</span>';
+
 			}
-			elseif ( $second_column === $column_key ) {
+			elseif ( 'cb' === $first_column && $second_column === $column_key ) {
 				continue; // Get rid of the second column as the first one will have a colspan.
 			}
 			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
