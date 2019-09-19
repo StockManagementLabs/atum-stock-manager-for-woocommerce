@@ -218,7 +218,7 @@ class Hooks {
 
 		if (
 			'yes' === Helpers::get_option( 'show_variations_stock', 'yes' ) &&
-			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ), TRUE )
+			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ), TRUE )
 		) {
 
 			// Get the variations within the variable.
