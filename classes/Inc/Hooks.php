@@ -132,6 +132,9 @@ class Hooks {
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
+		// Get rid of the Update Date on products once an Order is saved to make the appropriate calculations again.
+		add_action( 'woocommerce_after_order_object_save', array( $this, 'clean_up_update_date' ), 10, 2 );
+
 	}
 
 	/**
@@ -780,6 +783,34 @@ class Hooks {
 
 		if ( is_a( $product, '\WC_Product' ) ) {
 			$product->save_atum_data();
+		}
+
+	}
+
+	/**
+	 * Clean Up the ATUM's
+	 *
+	 * @param \WC_Order                $order
+	 * @param \WC_Order_Data_Store_CPT $data_store
+	 */
+	public function clean_up_update_date( $order, $data_store ) {
+
+		$items = $order->get_items();
+
+		foreach ( $items as $item ) {
+			/**
+			 * Variable definition
+			 *
+			 * @var \WC_Order_Item_Product $item
+			 */
+			$product_id = $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+				$product->set_update_date();
+				$product->save_atum_data();
+			}
+
 		}
 
 	}
