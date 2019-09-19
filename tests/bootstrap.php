@@ -22,15 +22,39 @@ require_once $_tests_dir . '/includes/functions.php';
 /**
  * Manually load the plugin being tested.
  */
-function _manually_load_plugin() {
-	//Woocommerce is required for ATUM
+function atum_manually_load_plugins() {
+	// Woocommerce is required for ATUM.
 	require dirname( dirname( dirname( __FILE__ ) ) ) . '/woocommerce/woocommerce.php';
-	//ATUM requires the manage stock option enabled
+	// ATUM requires the manage stock option enabled.
 	update_option( 'woocommerce_manage_stock', 'yes' );
-	//Load ATUM
+	// Load ATUM.
 	require dirname( dirname( __FILE__ ) ) . '/atum-stock-manager-for-woocommerce.php';
 }
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+
+/**
+ * Manually install the plugin being tested.
+ */
+function atum_manually_install_plugins() {
+	define( 'WP_UNINSTALL_PLUGIN', true );
+	define( 'WC_REMOVE_ALL_DATA', true );
+	include dirname( dirname( dirname( __FILE__ ) ) ) . '/woocommerce/uninstall.php';
+	WC_Install::install();
+	// Reload capabilities after install, see https://core.trac.wordpress.org/ticket/28374
+	if ( version_compare( $GLOBALS['wp_version'], '4.7', '<' ) ) {
+		$GLOBALS['wp_roles']->reinit();
+	} else {
+		$GLOBALS['wp_roles'] = null; // WPCS: override ok.
+		wp_roles();
+	}
+	echo esc_html( 'Installing WooCommerce...' . PHP_EOL );
+
+	\Atum\Bootstrap::get_instance();
+	echo esc_html( 'Installing ATUM...' . PHP_EOL );
+}
+
+
+tests_add_filter( 'muplugins_loaded', 'atum_manually_load_plugins' );
+tests_add_filter( 'setup_theme', 'atum_manually_install_plugins' );
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
