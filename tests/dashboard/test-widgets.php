@@ -22,15 +22,18 @@ use Atum\Dashboard\Widgets\Videos;
  */
 class WidgetsHelpersTest extends WP_UnitTestCase {
 
+	/**
+	 * Test method for get_sales_stats.
+	 */
 	public function test_get_sales_stats() {
 		$types       = [ 'sales', 'lost_sales' ];
-		$products    = Helpers::get_all_products( array( 'post_type' => [ 'product', 'product_variation' ], ), TRUE );
+		$products    = Helpers::get_all_products( array( 'post_type' => [ 'product', 'product_variation' ] ), TRUE );
 		$time_window = $this->get_time_window();
 
-		foreach($time_window as $time) {
+		foreach ( $time_window as $time ) {
 			$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-			$period      = $this->generate_period($time);
-			foreach($period as $dt) {
+			$period      = $this->generate_period( $time );
+			foreach ( $period as $dt ) {
 				$stats = WidgetHelpers::get_sales_stats( array(
 					'types'           => $types,
 					'products'        => $products,
@@ -48,15 +51,18 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Test method for get_promo_sales_stats.
+	 */
 	public function test_get_promo_sales_stats() {
 		$types       = [ 'sales', 'lost_sales' ];
-		$products    = Helpers::get_all_products( array( 'post_type' => [ 'product', 'product_variation' ], ), TRUE );
+		$products    = Helpers::get_all_products( array( 'post_type' => [ 'product', 'product_variation' ] ), TRUE );
 		$time_window = $this->get_time_window();
 
-		foreach($time_window as $time) {
+		foreach ( $time_window as $time ) {
 			$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-			$period      = $this->generate_period($time);
-			foreach($period as $dt) {
+			$period      = $this->generate_period( $time );
+			foreach ( $period as $dt ) {
 				$stats = WidgetHelpers::get_promo_sales_stats( array(
 					'types'           => $types,
 					'products'        => $products,
@@ -72,15 +78,18 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Test method for get_orders_stats.
+	 */
 	public function test_get_orders_stats() {
 		$types       = [ 'sales', 'lost_sales' ];
-		$products    = Helpers::get_all_products( array( 'post_type' => [ 'product', 'product_variation' ], ), TRUE );
+		$products    = Helpers::get_all_products( array( 'post_type' => [ 'product', 'product_variation' ] ), TRUE );
 		$time_window = $this->get_time_window();
 
-		foreach($time_window as $time) {
+		foreach ( $time_window as $time ) {
 			$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-			$period      = $this->generate_period($time);
-			foreach($period as $dt) {
+			$period      = $this->generate_period( $time );
+			foreach ( $period as $dt ) {
 				$stats = WidgetHelpers::get_orders_stats( array(
 					'types'           => $types,
 					'products'        => $products,
@@ -96,21 +105,27 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Test method for get_sales_chart_data.
+	 */
 	public function test_get_sales_chart_data() {
 		$types       = [ 'sales', 'lost_sales' ];
 		$time_window = $this->get_time_window();
 
-		foreach($time_window as $time) {
+		foreach ( $time_window as $time ) {
 			$stats = WidgetHelpers::get_sales_chart_data( $time, $types );
 
 			$this->assertIsArray( $stats );
 		}
 	}
 
+	/**
+	 * Test method for get_promo_sales_chart_data.
+	 */
 	public function test_get_promo_sales_chart_data() {
 		$time_window = $this->get_time_window();
 
-		foreach($time_window as $time) {
+		foreach ( $time_window as $time ) {
 			$stats = WidgetHelpers::get_promo_sales_chart_data( $time );
 
 			$this->assertIsArray( $stats );
@@ -119,10 +134,13 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Test method for get_orders_chart_data.
+	 */
 	public function test_get_orders_chart_data() {
 		$time_window = $this->get_time_window();
 
-		foreach($time_window as $time) {
+		foreach ( $time_window as $time ) {
 			$stats = WidgetHelpers::get_orders_chart_data( $time );
 
 			$this->assertIsArray( $stats );
@@ -131,6 +149,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Test method for get_stock_levels.
+	 */
 	public function test_get_stock_levels() {
 		$stats = WidgetHelpers::get_stock_levels();
 
@@ -142,18 +163,27 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'count_unmanaged', $stats );
 	}
 
+	/**
+	 * Test method for product_types_dropdown.
+	 */
 	public function test_product_types_dropdown() {
 		$dropdown = WidgetHelpers::product_types_dropdown();
 		$html     = new Crawler( $dropdown );
 
-		$this->assertEquals( 1, $html->filter('select.dropdown_product_type')->count() );
+		$this->assertEquals( 1, $html->filter( 'select.dropdown_product_type' )->count() );
 	}
 
+	/**
+	 * Test method for get_items_in_stock.
+	 */
 	public function test_get_items_in_stock() {
-		//Product needed
-		$p = $this->factory()->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+		// Product needed.
+		$p = $this->factory()->post->create( array(
+			'post_title' => 'Foo',
+			'post_type'  => 'product',
+		) );
 
-		if( $p > 0 ) {
+		if ( $p > 0 ) {
 			$stats = WidgetHelpers::get_items_in_stock();
 
 			$this->assertIsArray( $stats );
@@ -166,10 +196,16 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 
 	}
 
+	/**
+	 * Test method for stock_value_widget.
+	 */
 	public function test_current_stock_value_widget() {
 		$widget = new CurrentStockValue();
-		//Product needed
-		$this->factory()->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+		// Product needed.
+		$this->factory()->post->create( array(
+			'post_title' => 'Foo',
+			'post_type'  => 'product',
+		) );
 
 		ob_start();
 		$widget->render();
@@ -179,10 +215,16 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertEquals( 1, $html->filter( 'div.current-stock-value-filters' )->count() );
 	}
 
+	/**
+	 * Test method for lost_sales_widget.
+	 */
 	public function test_lost_sales_widget() {
 		$widget = new LostSales();
-		//Product needed
-		$this->factory()->post->create( array( 'post_title' => 'Foo', 'post_type' => 'product' ) );
+		// Product needed.
+		$this->factory()->post->create( array(
+			'post_title' => 'Foo',
+			'post_type'  => 'product',
+		) );
 
 		ob_start();
 		$widget->render();
@@ -192,6 +234,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertEquals( 1, $html->filter( 'div.stats-data-widget' )->count() );
 	}
 
+	/**
+	 * Test method for promo_sales_widget.
+	 */
 	public function test_promo_sales_widget() {
 		$widget = new PromoSales();
 
@@ -203,6 +248,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertEquals( 1, $html->filter( 'div.stats-data-widget' )->count() );
 	}
 
+	/**
+	 * Test method for orders_widget.
+	 */
 	public function test_orders_widget() {
 		$widget = new Orders();
 
@@ -214,6 +262,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertEquals( 1, $html->filter( 'div.stats-data-widget' )->count() );
 	}
 
+	/**
+	 * Test method for statistics_widget.
+	 */
 	public function test_statistics_widget() {
 		$widget = new Statistics();
 
@@ -225,6 +276,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertEquals( 1, $html->filter( 'div.statistics-widget' )->count() );
 	}
 
+	/**
+	 * Test method for stock_control_widget.
+	 */
 	public function test_stock_control_widget() {
 		$widget = new StockControl();
 
@@ -236,6 +290,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertEquals( 1, $html->filter( 'div.stock-control-widget' )->count() );
 	}
 
+	/**
+	 * Test method for videos_widget.
+	 */
 	public function test_videos_widget() {
 		$widget = new Videos();
 
@@ -249,12 +306,22 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 
 
 	/**
-	 * Aux methods.
+	 * Aux method.
 	 */
 	public function get_time_window() {
-		return [ "this_year", "previous_year", "this_month", "previous_month", "this_week", "previous_week" ];
+		return [
+			'this_year',
+			'previous_year',
+			'this_month',
+			'previous_month',
+			'this_week',
+			'previous_week',
+		];
 	}
 
+	/**
+	 * Aux method.
+	 */
 	public function generate_period( $time_window ) {
 		$which       = FALSE !== strpos( $time_window, 'previous' ) ? 'last' : 'this';
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );

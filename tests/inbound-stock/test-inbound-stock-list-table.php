@@ -20,7 +20,7 @@ use Atum\Models\Products\AtumProductSimple;
 class InboundStockListTableTest extends PHPUnit_Framework_TestCase { //WP_UnitTestCase {
 
 	public function test_get_instance() {
-		$hook = parse_url( 'atum-inbound-stock' );
+		$hook = wp_parse_url( 'atum-inbound-stock' );
 		$GLOBALS['hook_suffix'] = $hook['path'];
 
 		$_SERVER['QUERY_STRING'] = false;
