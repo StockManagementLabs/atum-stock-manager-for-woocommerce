@@ -224,6 +224,7 @@ class AtumColors {
 			--green-light: {$this->colors['primary_color_dark']};
 			--js-scroll-bg: {$this->colors['primary_color']};
 			--main-border: $border_color;
+			--main-dropdown-border: $border_color;
 			--main-text: $text_color;
 			--main-text-2: {$this->colors['text_color_2']};
 			--main-text-expanded: $text_color_expanded;
@@ -357,6 +358,7 @@ class AtumColors {
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color']};
 		    --main-border: rgba({$this->colors['border_color_rgb']}, 0.2);
+		    --main-dropdown-border: rgba({$this->colors['border_color_rgb']},0.5);
 			--main-text: {$this->colors['text_color']};
 			--main-text-2: {$this->colors['text_color_2']};
 			--main-text-expanded: {$this->colors['text_color_expanded']};
@@ -460,6 +462,7 @@ class AtumColors {
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color_2']};
 			--main-border: {$this->colors['border_color']};
+			--main-dropdown-border: {$this->colors['border_color']};
 			--main-text: {$this->colors['text_color']};
 			--main-text-2: {$this->colors['text_color_2']};
 			--main-text-expanded: {$this->colors['text_color_expanded']};

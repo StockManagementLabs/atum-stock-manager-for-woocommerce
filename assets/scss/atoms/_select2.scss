@@ -839,9 +839,9 @@ body {
 		}
 		
 		&.select2-container--open .select2-dropdown {
-			-webkit-box-shadow: 0 0 0 2px var(--main-border);
-			-moz-box-shadow: 0 0 0 2px var(--main-border);
-			box-shadow: 0 0 0 2px var(--main-border);
+			-webkit-box-shadow: 0 0 0 2px var(--main-dropdown-border);
+			-moz-box-shadow: 0 0 0 2px var(--main-dropdown-border);
+			box-shadow: 0 0 0 2px var(--main-dropdown-border);
 		}
 			
 	}
